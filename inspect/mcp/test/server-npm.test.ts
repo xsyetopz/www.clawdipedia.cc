@@ -27,13 +27,39 @@ writeFileSync(
 Bun.spawnSync(["tar", "-czf", join(src, "lib.tgz"), "-C", src, "package"]);
 const tgz = readFileSync(join(src, "lib.tgz"));
 const sum = `sha512-${createHash("sha512").update(tgz).digest("base64")}`;
+/** One ustar entry, written by hand: only bsdtar takes modes from an mtree spec, and the CI runner has GNU tar. */
+const ustar = (name: string, mode: number, type: "0" | "5", text = "") => {
+  const body = Buffer.from(text);
+  const head = Buffer.alloc(512);
+  const put = (at: number, s: string) => head.write(s, at, "ascii");
+  put(0, name);
+  put(100, `${mode.toString(8).padStart(7, "0")}\0`);
+  put(124, `${body.length.toString(8).padStart(11, "0")}\0`);
+  put(148, " ".repeat(8));
+  put(156, type);
+  put(257, "ustar\u000000");
+  put(
+    148,
+    `${head
+      .reduce((a, b) => a + b, 0)
+      .toString(8)
+      .padStart(6, "0")}\0 `,
+  );
+  return Buffer.concat([head, body, Buffer.alloc(-body.length & 511)]);
+};
 // A folder without the search bit, as pngjs 7.0.0 ships.
-writeFileSync(
-  join(src, "locked.mtree"),
-  "#mtree\npackage type=dir mode=0644\npackage/index.js type=file mode=0644 contents=package/dist/index.js\n",
+const locked = Bun.gzipSync(
+  Buffer.concat([
+    ustar("package/", 0o644, "5"),
+    ustar(
+      "package/index.js",
+      0o644,
+      "0",
+      readFileSync(join(src, "package", "dist", "index.js"), "utf8"),
+    ),
+    Buffer.alloc(1024),
+  ]),
 );
-Bun.spawnSync(["tar", "-czf", "locked.tgz", "@locked.mtree"], { cwd: src });
-const locked = readFileSync(join(src, "locked.tgz"));
 const lockedSum = `sha512-${createHash("sha512").update(locked).digest("base64")}`;
 
 const asked: string[] = [];
