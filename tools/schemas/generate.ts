@@ -99,7 +99,9 @@ for (const [name, json] of Object.entries(files))
 // Match the repo formatter so regenerating leaves a clean diff.
 const fmt = Bun.spawnSync(
   [
-    join(ROOT, "node_modules/.bin/biome"),
+    process.execPath,
+    "x",
+    "biome",
     "format",
     "--write",
     ...Object.keys(files).map((n) => join(SCHEMAS, n)),

@@ -49,7 +49,9 @@ for (const b of builders) {
   // Match the repo formatter so regenerating leaves a clean diff.
   const fmt = Bun.spawnSync(
     [
-      join(ROOT, "node_modules/.bin/biome"),
+      process.execPath,
+      "x",
+      "biome",
       "format",
       `--stdin-file-path=${join(ROOT, "schemas", file)}`,
     ],
