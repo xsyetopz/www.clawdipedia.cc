@@ -3,7 +3,7 @@ build
 .docusaurus
 captures/
 .env
-node_modules
+.DS_Store
 
 # check-examples scratch (removed after each run)
 tools/.examples-tmp/
