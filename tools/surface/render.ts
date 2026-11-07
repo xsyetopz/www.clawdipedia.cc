@@ -37,6 +37,7 @@ const TITLES: Record<string, string> = {
   "otel-event": "OpenTelemetry Events",
   "permission-rule": "Permission Rules",
   setting: "Settings",
+  "setting-key": "Nested Setting Keys",
   "slash-command": "Slash Commands",
   subcommand: "Subcommands",
   tool: "Tools",

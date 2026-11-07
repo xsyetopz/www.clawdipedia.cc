@@ -1,4 +1,24 @@
 {
+  "beta:claude-code-side-query-2026-09-29": {
+    "route": "/reference/api/betas",
+    "anchor": "registry"
+  },
+  "beta:program-use-case-ids-2026-09-17": {
+    "route": "/reference/api/betas",
+    "anchor": "registry"
+  },
+  "beta:request-tags-2026-08-21": {
+    "route": "/reference/api/betas",
+    "anchor": "other-beta-values-in-the-program"
+  },
+  "beta:tool-provenance-2026-10-26": {
+    "route": "/reference/api/betas",
+    "anchor": "registry"
+  },
+  "endpoint:/api/cowork/widgets_mcp": {
+    "route": "/reference/api/endpoints",
+    "anchor": "mcp-paths"
+  },
   "endpoint:/api/event_logging/": {
     "route": "/reference/api/endpoints",
     "anchor": "account-and-service-endpoints"
@@ -7,7 +27,15 @@
     "route": "/reference/api/endpoints",
     "anchor": "model-endpoints"
   },
+  "endpoint:/api/mcp/claude_ai": {
+    "route": "/reference/api/endpoints",
+    "anchor": "mcp-paths"
+  },
   "endpoint:/api/model_selector/${…}": {
+    "route": "/reference/api/endpoints",
+    "anchor": "account-and-service-endpoints"
+  },
+  "endpoint:/api/oauth/org": {
     "route": "/reference/api/endpoints",
     "anchor": "account-and-service-endpoints"
   },
@@ -23,6 +51,50 @@
     "route": "/reference/api/endpoints",
     "anchor": "model-endpoints"
   },
+  "endpoint:/v1/code": {
+    "route": "/reference/api/endpoints",
+    "anchor": "account-and-service-endpoints"
+  },
+  "endpoint:/v1/code/auth/refresh": {
+    "route": "/reference/api/endpoints",
+    "anchor": "self-hosted-runner-paths"
+  },
+  "endpoint:/v1/code/mcp/cowork": {
+    "route": "/reference/api/endpoints",
+    "anchor": "mcp-paths"
+  },
+  "endpoint:/v1/code/runners/self-hosted/deregister": {
+    "route": "/reference/api/endpoints",
+    "anchor": "self-hosted-runner-paths"
+  },
+  "endpoint:/v1/code/runners/self-hosted/runners/${…}/poll": {
+    "route": "/reference/api/endpoints",
+    "anchor": "self-hosted-runner-paths"
+  },
+  "endpoint:/v1/code/runners/self-hosted/runners/register": {
+    "route": "/reference/api/endpoints",
+    "anchor": "self-hosted-runner-paths"
+  },
+  "endpoint:/v1/code/runners/self-hosted/sessions/${…}/release": {
+    "route": "/reference/api/endpoints",
+    "anchor": "self-hosted-runner-paths"
+  },
+  "endpoint:/v1/code/runners/self-hosted/sessions/${…}/report-failure": {
+    "route": "/reference/api/endpoints",
+    "anchor": "self-hosted-runner-paths"
+  },
+  "endpoint:/v1/code/runners/self-hosted/spawn-hints/nack": {
+    "route": "/reference/api/endpoints",
+    "anchor": "self-hosted-runner-paths"
+  },
+  "endpoint:/v1/code/runners/self-hosted/spawn-hints/poll": {
+    "route": "/reference/api/endpoints",
+    "anchor": "self-hosted-runner-paths"
+  },
+  "endpoint:/v1/me": {
+    "route": "/reference/api/endpoints",
+    "anchor": "account-and-service-endpoints"
+  },
   "endpoint:/v1/messages": {
     "route": "/reference/api/endpoints",
     "anchor": "model-endpoints"
@@ -34,6 +106,10 @@
   "endpoint:/v1/models?limit=1000": {
     "route": "/reference/api/endpoints",
     "anchor": "model-endpoints"
+  },
+  "endpoint:/v1/organizations/analytics/cost": {
+    "route": "/reference/api/endpoints",
+    "anchor": "account-and-service-endpoints"
   },
   "endpoint:https://api.anthropic.com/api/event_logging/v2/batch": {
     "route": "/reference/api/endpoints",
@@ -747,10 +823,6 @@
     "route": "/extend/mod-api",
     "anchor": "errors"
   },
-  "error:${…}: $.tool.call: ${…} does not accept `consent` in this session. Call it without `consent`, and the normal permission check will decide.": {
-    "route": "/extend/mod-api",
-    "anchor": "errors"
-  },
   "error:${…}: $.tool.call: consent, when given, is a string": {
     "route": "/extend/mod-api",
     "anchor": "errors"
@@ -1447,6 +1519,10 @@
     "route": "/reference/tools/agents-and-tasks",
     "anchor": "errors"
   },
+  "error:A diskless session can only load its config through a storage backend (none was handed in, or CLAUDE_CODE_HOVER_REST is off)": {
+    "route": "/configure/env-vars/sessions-and-storage",
+    "anchor": "variables"
+  },
   "error:A file path cannot be attached here: this tool cannot read files in this session.": {
     "route": "/reference/tools/files",
     "anchor": "errors"
@@ -1607,12 +1683,24 @@
     "route": "/extend/plugins/marketplace",
     "anchor": "errors"
   },
+  "error:Cannot change .mcp.json here: this folder is in a connector-downloads folder, where Claude Code saves files from claude.ai connectors, and Claude Code doesn't read .mcp.json there. Move or rename the …": {
+    "route": "/extend/mcp/cli",
+    "anchor": "errors"
+  },
   "error:Cannot del*": {
+    "route": "/reference/tools/gated-and-other",
+    "anchor": "errors"
+  },
+  "error:Cannot delete paths outside the finalized plan: ${…}. ${…}": {
     "route": "/reference/tools/gated-and-other",
     "anchor": "errors"
   },
   "error:Cannot delete pe*": {
     "route": "/reference/tools/shell-and-web",
+    "anchor": "errors"
+  },
+  "error:Cannot delete reserved paths: ${…}. CLAUDE.md and .claude/ carry instructions to the design agent and are blocked regardless of the plan.": {
+    "route": "/reference/tools/gated-and-other",
     "anchor": "errors"
   },
   "error:Cannot ed*": {
@@ -1623,11 +1711,75 @@
     "route": "/reference/tools/agents-and-tasks",
     "anchor": "errors"
   },
+  "error:Cannot enter an existing worktree: the current directory is not in a git repository.": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
+  "error:Cannot enter worktree: ${…} belongs to another running Claude Code session (locked: ${…}). Wait for that session to finish or choose a different worktree.": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
+  "error:Cannot enter worktree: ${…} does not exist, so ${…} cannot be a worktree managed by Claude Code.": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
+  "error:Cannot enter worktree: ${…} is a UNC network path.": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
+  "error:Cannot enter worktree: ${…} is a network automount path.": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
+  "error:Cannot enter worktree: ${…} is marked prunable by git (its directory or administrative files are missing or broken).": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
+  "error:Cannot enter worktree: ${…} is not a linked worktree of ${…}.": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
+  "error:Cannot enter worktree: ${…} is not a registered worktree of ${…}. Run 'git -C ${…} worktree list' to see registered worktrees.": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
+  "error:Cannot enter worktree: ${…} is not under ${…}. Switching from this session is limited to worktrees managed by Claude Code (created under .claude/worktrees/ of this repository).": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
+  "error:Cannot enter worktree: ${…} is the current working directory.": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
+  "error:Cannot enter worktree: ${…} resolves to ${…}; the managed worktrees directory must not be a symlink.": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
+  "error:Cannot enter worktree: ${…} resolves to a UNC network path (${…}).": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
+  "error:Cannot enter worktree: ${…} resolves to a network automount path (${…}).": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
+  "error:Cannot enter worktree: ${…}: ${…}": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
   "error:Cannot fetch m*": {
     "route": "/extend/plugins/marketplace",
     "anchor": "errors"
   },
+  "error:Cannot fetch marketplace ${…}: the directory it would use as its backup (${…}) is the registered marketplace ${…}'s directory. Remove or rename that marketplace first (claude plugin marketplace remove…": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
   "error:Cannot fetch t*": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
+  "error:Cannot fetch this marketplace: its clone directory name ${…} is the registered marketplace ${…}'s directory. Remove or rename that marketplace first (claude plugin marketplace remove).": {
     "route": "/extend/plugins/marketplace",
     "anchor": "errors"
   },
@@ -1643,11 +1795,19 @@
     "route": "/configure/settings/auth",
     "anchor": "errors"
   },
+  "error:Cannot locate the Anthropic config directory. Set ANTHROPIC_CONFIG_DIR (or HOME) and try again.": {
+    "route": "/configure/settings/auth",
+    "anchor": "errors"
+  },
   "error:Cannot read t*": {
     "route": "/reference/tools/files",
     "anchor": "errors"
   },
   "error:Cannot register p*": {
+    "route": "/reference/tools/gated-and-other",
+    "anchor": "errors"
+  },
+  "error:Cannot register paths outside the finalized plan: ${…}. ${…}": {
     "route": "/reference/tools/gated-and-other",
     "anchor": "errors"
   },
@@ -1663,7 +1823,19 @@
     "route": "/reference/tools/shell-and-web",
     "anchor": "errors"
   },
+  "error:Cannot safely quote ${…} in a PowerShell single-quoted string literal: it contains U+${…}, which PowerShell's tokenizer treats as a quote delimiter": {
+    "route": "/reference/tools/shell-and-web",
+    "anchor": "errors"
+  },
+  "error:Cannot safely quote a Unicode single-quote variant (U+2018-U+201B) in a PowerShell path; install Windows Terminal (wt.exe).": {
+    "route": "/configure/cli/flags",
+    "anchor": "errors"
+  },
   "error:Cannot sea*": {
+    "route": "/configure/permissions/sandbox",
+    "anchor": "errors"
+  },
+  "error:Cannot search ${…}: the directory is not traversable (no execute permission).": {
     "route": "/configure/permissions/sandbox",
     "anchor": "errors"
   },
@@ -1671,11 +1843,23 @@
     "route": "/reference/tools/agents-and-tasks",
     "anchor": "errors"
   },
+  "error:Cannot self-heal orphaned worktree at ${…}: it could not be removed${…}. Remove manually to proceed.": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
   "error:Cannot transi*": {
     "route": "/reference/tools/agents-and-tasks",
     "anchor": "errors"
   },
+  "error:Cannot transition to auto mode: gate is not enabled": {
+    "route": "/extend/headless/control-protocol",
+    "anchor": "example"
+  },
   "error:Cannot unr*": {
+    "route": "/reference/tools/gated-and-other",
+    "anchor": "errors"
+  },
+  "error:Cannot unregister cards for paths outside the finalized plan's deletes: ${…}. ${…}": {
     "route": "/reference/tools/gated-and-other",
     "anchor": "errors"
   },
@@ -1691,7 +1875,15 @@
     "route": "/reference/tools/gated-and-other",
     "anchor": "errors"
   },
+  "error:Cannot write paths outside the finalized plan: ${…}. ${…}": {
+    "route": "/reference/tools/gated-and-other",
+    "anchor": "errors"
+  },
   "error:Cannot write r*": {
+    "route": "/reference/tools/gated-and-other",
+    "anchor": "errors"
+  },
+  "error:Cannot write reserved paths: ${…}. CLAUDE.md and .claude/ carry instructions to the design agent and are blocked regardless of the plan.": {
     "route": "/reference/tools/gated-and-other",
     "anchor": "errors"
   },
@@ -1823,7 +2015,43 @@
     "route": "/extend/plugins/marketplace",
     "anchor": "errors"
   },
+  "error:Could not prepare ${…} for its ${…} (it could not be examined: ${…}); retry the install.": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
+  "error:Could not prepare ${…} for its ${…}: it is no longer a plain version directory under its marketplace and plugin directories inside the plugin cache (it was removed or replaced after the copy); retry t…": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
+  "error:Could not prepare ${…} for its dependency install (the conversion marker could not be withdrawn); retry the install.": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
+  "error:Could not prepare ${…} for its dependency install (this session could not be recorded as its user); retry the install.": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
+  "error:Could not prepare the plugin cache folder of ${…}: the storage layer refused it (${…}); check that plugin cache folder — the plugin version was not cached — and then retry the install or the update.": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
   "error:Could not pu*": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
+  "error:Could not publish ${…} ${…} into the plugin cache (${…}); retry the load or the install.": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
+  "error:Could not publish ${…} ${…}: a link sits at its cache path and could not be removed; remove that link from the plugin cache, then retry the install.": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
+  "error:Could not publish ${…} ${…}: another session is recorded as using the entry at its cache path; retry the load or the install.": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
+  "error:Could not publish ${…} ${…}: its staged tree was replaced before publishing; retry the load or the install.": {
     "route": "/extend/plugins/marketplace",
     "anchor": "errors"
   },
@@ -1839,7 +2067,19 @@
     "route": "/configure/settings/auth",
     "anchor": "errors"
   },
+  "error:Could not resolve gateway host ${…}.": {
+    "route": "/configure/settings/auth",
+    "anchor": "errors"
+  },
+  "error:Could not resolve gateway host ${…}. Connect to your organization's network and try again.": {
+    "route": "/configure/settings/auth",
+    "anchor": "errors"
+  },
   "error:Could not resolve t*": {
+    "route": "/configure/settings/auth",
+    "anchor": "errors"
+  },
+  "error:Could not resolve the configured HTTP proxy. Connect to your organization's network and try again.": {
     "route": "/configure/settings/auth",
     "anchor": "errors"
   },
@@ -1971,6 +2211,10 @@
     "route": "/how-it-works/sessions-and-storage",
     "anchor": "errors"
   },
+  "error:Error: auto mode could not check some actions Claude tried, so they did not run. To run them, use another permission mode. Exiting with code 1.": {
+    "route": "/configure/cli/flags",
+    "anchor": "errors"
+  },
   "error:Error: s*": {
     "route": "/extend/headless",
     "anchor": "errors"
@@ -2003,7 +2247,19 @@
     "route": "/configure/cli/subcommands",
     "anchor": "errors"
   },
+  "error:Failed to check for updates": {
+    "route": "/configure/cli/subcommands",
+    "anchor": "errors"
+  },
   "error:Failed to cl*": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
+  "error:Failed to clean up a leftover marketplace staging directory. Please manually delete the directory at ${…} and try again. Technical details: ${…}": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
+  "error:Failed to clean up stale marketplace backup directory. Please manually delete the directory at ${…} and try again. Technical details: ${…}": {
     "route": "/extend/plugins/marketplace",
     "anchor": "errors"
   },
@@ -2011,7 +2267,15 @@
     "route": "/extend/plugins/marketplace",
     "anchor": "errors"
   },
+  "error:Failed to copy plugin ${…} to versioned cache: destination is empty after copy": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
   "error:Failed to cr*": {
+    "route": "/extend/skills-and-commands/slash-commands",
+    "anchor": "errors"
+  },
+  "error:Failed to create backup of Terminal.app preferences, bailing out": {
     "route": "/extend/skills-and-commands/slash-commands",
     "anchor": "errors"
   },
@@ -2019,8 +2283,28 @@
     "route": "/configure/permissions/sandbox",
     "anchor": "errors"
   },
+  "error:Failed to create bridge sockets after ${…} attempts": {
+    "route": "/configure/permissions/sandbox",
+    "anchor": "errors"
+  },
+  "error:Failed to create iTerm2 split pane: ${…}": {
+    "route": "/extend/subagents/runtime",
+    "anchor": "errors"
+  },
+  "error:Failed to create swarm session: ${…}": {
+    "route": "/extend/subagents/runtime",
+    "anchor": "errors"
+  },
+  "error:Failed to create swarm-view window: ${…}": {
+    "route": "/extend/subagents/runtime",
+    "anchor": "errors"
+  },
   "error:Failed to create w*": {
     "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
+  "error:Failed to create workflow file ${…}: ${…}${…}": {
+    "route": "/extend/skills-and-commands/slash-commands",
     "anchor": "errors"
   },
   "error:Failed to di*": {
@@ -2051,8 +2335,8 @@
     "route": "/configure/settings/auth",
     "anchor": "errors"
   },
-  "error:Failed to get m*": {
-    "route": "/configure/permissions/sandbox",
+  "error:Failed to get Grove settings: ${…}": {
+    "route": "/configure/settings/auth",
     "anchor": "errors"
   },
   "error:Failed to l*": {
@@ -2079,7 +2363,19 @@
     "route": "/configure/settings/auth",
     "anchor": "errors"
   },
+  "error:Failed to persist gateway TLS pin${…}": {
+    "route": "/configure/settings/auth",
+    "anchor": "errors"
+  },
   "error:Failed to read ca*": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
+  "error:Failed to read cached marketplace: ${…}": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
+  "error:Failed to read cached marketplace: the backend returned no item for the key": {
     "route": "/extend/plugins/marketplace",
     "anchor": "errors"
   },
@@ -2087,8 +2383,16 @@
     "route": "/extend/skills-and-commands/slash-commands",
     "anchor": "errors"
   },
+  "error:Failed to read default Terminal.app profile": {
+    "route": "/extend/skills-and-commands/slash-commands",
+    "anchor": "errors"
+  },
   "error:Failed to read e*": {
     "route": "/how-it-works/sessions-and-storage",
+    "anchor": "errors"
+  },
+  "error:Failed to read environment secret file ${…} (${…})": {
+    "route": "/configure/cli/subcommands",
     "anchor": "errors"
   },
   "error:Failed to read ex*": {
@@ -2096,6 +2400,10 @@
     "anchor": "errors"
   },
   "error:Failed to read s*": {
+    "route": "/extend/skills-and-commands/slash-commands",
+    "anchor": "errors"
+  },
+  "error:Failed to read startup Terminal.app profile": {
     "route": "/extend/skills-and-commands/slash-commands",
     "anchor": "errors"
   },
@@ -2107,11 +2415,31 @@
     "route": "/extend/plugins/marketplace",
     "anchor": "errors"
   },
+  "error:Failed to save marketplace configuration: ${…}": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
   "error:Failed to save s*": {
     "route": "/extend/plugins/loading",
     "anchor": "errors"
   },
+  "error:Failed to save sensitive config to secure storage for ${…}": {
+    "route": "/extend/plugins/loading",
+    "anchor": "errors"
+  },
   "error:Failed to sen*": {
+    "route": "/extend/skills-and-commands/slash-commands",
+    "anchor": "errors"
+  },
+  "error:Failed to send command to iTerm2 pane ${…}: ${…}": {
+    "route": "/extend/subagents/runtime",
+    "anchor": "errors"
+  },
+  "error:Failed to send command to pane ${…}: ${…}": {
+    "route": "/extend/subagents/runtime",
+    "anchor": "errors"
+  },
+  "error:Failed to set API key secret: ${…}${…}": {
     "route": "/extend/skills-and-commands/slash-commands",
     "anchor": "errors"
   },
@@ -2123,7 +2451,19 @@
     "route": "/how-it-works/sessions-and-storage",
     "anchor": "errors"
   },
+  "error:Failed to spawn runner${…}. Command: ${…}": {
+    "route": "/reference/tools/gated-and-other",
+    "anchor": "errors"
+  },
   "error:Failed to st*": {
+    "route": "/configure/permissions/sandbox",
+    "anchor": "errors"
+  },
+  "error:Failed to start HTTP bridge process": {
+    "route": "/configure/permissions/sandbox",
+    "anchor": "errors"
+  },
+  "error:Failed to start SOCKS bridge process": {
     "route": "/configure/permissions/sandbox",
     "anchor": "errors"
   },
@@ -2215,7 +2555,11 @@
     "route": "/extend/mcp/auth",
     "anchor": "errors"
   },
-  "error:Hook \"${…}\" *": {
+  "error:Hook ${…}has shell: 'powershell' but no PowerShell executable (pwsh or powershell) was found on PATH. Install PowerShell, or remove \"shell\": \"powershell\" to use bash.": {
+    "route": "/extend/hooks/configuration",
+    "anchor": "errors"
+  },
+  "error:Hook ${…}requires bash but Git Bash was not found. ${…}, or ${…}.": {
     "route": "/extend/hooks/configuration",
     "anchor": "errors"
   },
@@ -2279,7 +2623,15 @@
     "route": "/configure/settings/auth",
     "anchor": "errors"
   },
+  "error:Invalid API key format. API key must contain only alphanumeric characters, dashes, and underscores.": {
+    "route": "/configure/settings/auth",
+    "anchor": "errors"
+  },
   "error:Invalid Au*": {
+    "route": "/configure/settings/auth",
+    "anchor": "errors"
+  },
+  "error:Invalid Authorization header value${…}: ${…}.": {
     "route": "/configure/settings/auth",
     "anchor": "errors"
   },
@@ -2333,6 +2685,10 @@
   },
   "error:Invalid en*": {
     "route": "/extend/headless",
+    "anchor": "errors"
+  },
+  "error:Invalid environment variable format: ${…}, environment variables should be added as: -e KEY1=value1 -e KEY2=value2": {
+    "route": "/extend/mcp/cli",
     "anchor": "errors"
   },
   "error:Invalid ev*": {
@@ -2411,6 +2767,10 @@
     "route": "/extend/plugins/marketplace",
     "anchor": "errors"
   },
+  "error:Invalid target branch: ${…}": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "errors"
+  },
   "error:Invalid tr*": {
     "route": "/extend/mcp/cli",
     "anchor": "errors"
@@ -2420,6 +2780,10 @@
     "anchor": "errors"
   },
   "error:Invalid version *": {
+    "route": "/configure/cli/subcommands",
+    "anchor": "errors"
+  },
+  "error:Invalid version string from ${…}: not a well-formed version (${…} characters)": {
     "route": "/configure/cli/subcommands",
     "anchor": "errors"
   },
@@ -2531,6 +2895,10 @@
     "route": "/reference/tools/agents-and-tasks",
     "anchor": "errors"
   },
+  "error:Missing required parameter: task_id": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
   "error:Mode: ${…} requires a string input.": {
     "route": "/extend/headless",
     "anchor": "errors"
@@ -2571,6 +2939,10 @@
     "route": "/how-it-works/sessions-and-storage",
     "anchor": "errors"
   },
+  "error:No access token for polling": {
+    "route": "/configure/settings/auth",
+    "anchor": "errors"
+  },
   "error:No access token for*": {
     "route": "/how-it-works/sessions-and-storage",
     "anchor": "errors"
@@ -2590,6 +2962,10 @@
   "error:No background daemon is running. Installing it as a service keeps the background daemon running across reboot so 'claude agents' stays available.": {
     "route": "/configure/cli/subcommands",
     "anchor": "errors"
+  },
+  "error:No certificate authority to trust: CLAUDE_CODE_CERT_STORE=system (or NODE_OPTIONS --use-system-ca or --use-openssl-ca) leaves out the runtime's bundled roots, and ${…}. NODE_EXTRA_CA_CERTS only adds t…": {
+    "route": "/configure/env-vars/network-and-proxy",
+    "anchor": "variables"
   },
   "error:No claude.ai OAuth token *": {
     "route": "/extend/mcp/runtime",
@@ -2611,10 +2987,6 @@
     "route": "/reference/tools/gated-and-other",
     "anchor": "errors"
   },
-  "error:No hook callback found for ID: ${…}": {
-    "route": "/extend/headless",
-    "anchor": "errors"
-  },
   "error:No messages *": {
     "route": "/how-it-works/sessions-and-storage",
     "anchor": "errors"
@@ -2634,6 +3006,10 @@
   "error:No result rec*": {
     "route": "/reference/tools/shell-and-web",
     "anchor": "errors"
+  },
+  "error:No root certificates are left to trust: every root built into this runtime is on the CLI's deny list. Update Claude Code.": {
+    "route": "/configure/env-vars/network-and-proxy",
+    "anchor": "variables"
   },
   "error:No sed arguments": {
     "route": "/reference/tools/shell-and-web",
@@ -2704,6 +3080,10 @@
     "anchor": "errors"
   },
   "error:Onboarding guide unavailable: policy-disabled": {
+    "route": "/configure/settings/auth",
+    "anchor": "errors"
+  },
+  "error:Onboarding guide unavailable: status ${…}": {
     "route": "/configure/settings/auth",
     "anchor": "errors"
   },
@@ -2931,10 +3311,6 @@
     "route": "/reference/tools/shell-and-web",
     "anchor": "errors"
   },
-  "error:SDK MCP server not found: ${…}": {
-    "route": "/extend/headless",
-    "anchor": "errors"
-  },
   "error:SDK debug logs: ${…}": {
     "route": "/extend/headless",
     "anchor": "errors"
@@ -3103,6 +3479,10 @@
     "route": "/extend/mcp/runtime",
     "anchor": "errors"
   },
+  "error:Stopping. Any review that has launched goes on in the cloud and is billed.": {
+    "route": "/configure/cli/subcommands",
+    "anchor": "errors"
+  },
   "error:String n*": {
     "route": "/reference/tools/files",
     "anchor": "errors"
@@ -3177,6 +3557,10 @@
   },
   "error:The acco*": {
     "route": "/reference/tools/gated-and-other",
+    "anchor": "errors"
+  },
+  "error:The answer names another hook event": {
+    "route": "/extend/headless",
     "anchor": "errors"
   },
   "error:The approval arrived without the plan, so plan mode was not exited. Call this tool again with the whole plan in the `plan` argument.": {
@@ -3267,6 +3651,10 @@
     "route": "/reference/tools/shell-and-web",
     "anchor": "errors"
   },
+  "error:These settings files are not used: they are in a connector-downloads folder, where Claude Code saves files from claude.ai connectors: ${…}": {
+    "route": "/configure/settings",
+    "anchor": "errors"
+  },
   "error:This agent has been stopped and its stop is still completing; it cannot *": {
     "route": "/reference/tools/agents-and-tasks",
     "anchor": "errors"
@@ -3313,6 +3701,10 @@
   },
   "error:This profile *": {
     "route": "/configure/settings/auth",
+    "anchor": "errors"
+  },
+  "error:This server's configuration sets oauth.clientId or oauth.xaa, so sign-in may need a callback on this computer, which redirectUriOnly does not allow.": {
+    "route": "/extend/mcp/auth",
     "anchor": "errors"
   },
   "error:This session r*": {
@@ -3379,7 +3771,19 @@
     "route": "/reference/tools/files",
     "anchor": "errors"
   },
+  "error:Unable to compress image (${…}) to fit within ${…} — ${…}. ${…}": {
+    "route": "/reference/tools/files",
+    "anchor": "errors"
+  },
+  "error:Unable to compress image (${…}) to fit within ${…}. Please use a smaller image.": {
+    "route": "/reference/tools/files",
+    "anchor": "errors"
+  },
   "error:Unable to cr*": {
+    "route": "/configure/settings/auth",
+    "anchor": "errors"
+  },
+  "error:Unable to create API key. The server accepted the request but did not return a key.": {
     "route": "/configure/settings/auth",
     "anchor": "errors"
   },
@@ -3395,7 +3799,23 @@
     "route": "/configure/settings/auth",
     "anchor": "errors"
   },
+  "error:Unable to read managed policy settings, which may restrict the API providers this machine may use (allowedProviders). Contact your administrator.": {
+    "route": "/configure/settings/auth",
+    "anchor": "errors"
+  },
   "error:Unable to resi*": {
+    "route": "/reference/tools/files",
+    "anchor": "errors"
+  },
+  "error:Unable to resize image — ${…}, and ${…}, so it cannot be sent. ${…}": {
+    "route": "/reference/tools/files",
+    "anchor": "errors"
+  },
+  "error:Unable to resize image — could not verify image dimensions are within the ${…}x${…}px API limit.": {
+    "route": "/reference/tools/files",
+    "anchor": "errors"
+  },
+  "error:Unable to resize image — image processing is unavailable and dimensions could not be read from the file header. Please convert the image to PNG, JPEG, GIF, or WebP.": {
     "route": "/reference/tools/files",
     "anchor": "errors"
   },
@@ -3431,6 +3851,10 @@
     "route": "/configure/cli/flags",
     "anchor": "errors"
   },
+  "error:Unknown deep link action: \"${…}\"": {
+    "route": "/configure/cli/flags",
+    "anchor": "errors"
+  },
   "error:Unknown ex*": {
     "route": "/extend/headless",
     "anchor": "errors"
@@ -3443,13 +3867,37 @@
     "route": "/extend/headless",
     "anchor": "errors"
   },
+  "error:Unknown protocol set in OTEL_EXPORTER_OTLP_LOGS_PROTOCOL or OTEL_EXPORTER_OTLP_PROTOCOL env var: ${…}": {
+    "route": "/configure/env-vars/telemetry-and-debug",
+    "anchor": "errors"
+  },
+  "error:Unknown protocol set in OTEL_EXPORTER_OTLP_METRICS_PROTOCOL or OTEL_EXPORTER_OTLP_PROTOCOL env var: ${…}": {
+    "route": "/configure/env-vars/telemetry-and-debug",
+    "anchor": "errors"
+  },
+  "error:Unknown protocol set in OTEL_EXPORTER_OTLP_TRACES_PROTOCOL or OTEL_EXPORTER_OTLP_PROTOCOL env var: ${…}": {
+    "route": "/configure/env-vars/telemetry-and-debug",
+    "anchor": "errors"
+  },
   "error:Unknown sk*": {
     "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
+  "error:Unknown skill: ${…}": {
+    "route": "/extend/skills-and-commands/slash-commands",
     "anchor": "errors"
   },
   "error:Unsupported cont*": {
     "route": "/extend/headless",
     "anchor": "errors"
+  },
+  "error:Unsupported control request subtype": {
+    "route": "/extend/headless/control-protocol",
+    "anchor": "example"
+  },
+  "error:Unsupported control request subtype: ${…}": {
+    "route": "/extend/headless/control-protocol",
+    "anchor": "example"
   },
   "error:Unsupported g*": {
     "route": "/extend/plugins/marketplace",
@@ -3460,6 +3908,14 @@
     "anchor": "errors"
   },
   "error:Unsupported pl*": {
+    "route": "/extend/mcp/cli",
+    "anchor": "errors"
+  },
+  "error:Unsupported platform - Claude Desktop integration only works on macOS and WSL.": {
+    "route": "/extend/mcp/cli",
+    "anchor": "errors"
+  },
+  "error:Unsupported platform: ${…} - Claude Desktop integration only works on macOS and WSL.": {
     "route": "/extend/mcp/cli",
     "anchor": "errors"
   },
@@ -3476,6 +3932,10 @@
     "anchor": "errors"
   },
   "error:Unsupported ta*": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
+  "error:Unsupported task type: ${…}": {
     "route": "/reference/tools/agents-and-tasks",
     "anchor": "errors"
   },
@@ -3555,15 +4015,11 @@
     "route": "/reference/tools/gated-and-other",
     "anchor": "errors"
   },
-  "error:Write refused; nothing in the project was changed. A*": {
-    "route": "/reference/tools/gated-and-other",
-    "anchor": "errors"
-  },
   "error:Write refused; nothing in the project was changed. Th*": {
     "route": "/reference/tools/gated-and-other",
     "anchor": "errors"
   },
-  "error:Write to ${…} failed (${…}) after the target was truncated. The new content was preserved at ${…}.": {
+  "error:Write verification failed: ${…} does not hold what was written. The filesystem may have silently kept only part of the write, or another process may have changed the file.": {
     "route": "/reference/tools/files",
     "anchor": "errors"
   },
@@ -3639,12 +4095,32 @@
     "route": "/how-it-works/sessions-and-storage",
     "anchor": "errors"
   },
+  "error:Your account or API key may still be in the config file. Run claude auth logout.": {
+    "route": "/configure/cli/subcommands",
+    "anchor": "errors"
+  },
   "error:Your cloud-sessions sign-in could not be renewed (${…}). Try again.": {
     "route": "/how-it-works/sessions-and-storage",
     "anchor": "errors"
   },
   "error:Your session has expired*": {
     "route": "/configure/settings/auth",
+    "anchor": "errors"
+  },
+  "error:[${…}] ${…} not sent: a targeted call cannot raise a permission prompt": {
+    "route": "/configure/cli/flags",
+    "anchor": "errors"
+  },
+  "error:[${…}] ${…} not sent: its browser is no longer selected": {
+    "route": "/configure/cli/flags",
+    "anchor": "errors"
+  },
+  "error:[${…}] ${…} not sent: its tab's browser can't be confirmed": {
+    "route": "/configure/cli/flags",
+    "anchor": "errors"
+  },
+  "error:[${…}] ${…} not sent: only the paired browser may be used": {
+    "route": "/configure/cli/flags",
     "anchor": "errors"
   },
   "error:[${…}] All sockets failed for tabs_context_mcp": {
@@ -3668,6 +4144,10 @@
     "anchor": "errors"
   },
   "error:[${…}] Pa*": {
+    "route": "/configure/cli/flags",
+    "anchor": "errors"
+  },
+  "error:[${…}] Socket closed before the request was written": {
     "route": "/configure/cli/flags",
     "anchor": "errors"
   },
@@ -3697,10 +4177,6 @@
   },
   "error:[code review] Not starting: *": {
     "route": "/how-it-works/sessions-and-storage",
-    "anchor": "errors"
-  },
-  "error:[gateway] ${…} ${…} ${…}": {
-    "route": "/configure/cli/subcommands",
     "anchor": "errors"
   },
   "error:[preload] *": {
@@ -3753,10 +4229,6 @@
   },
   "error:`if_version` no longer matches the database write that was approved — nothing was written; retry so it is checked again": {
     "route": "/reference/tools/gated-and-other",
-    "anchor": "errors"
-  },
-  "error:`noop` is required when `stop` is not true.": {
-    "route": "/reference/tools/agents-and-tasks",
     "anchor": "errors"
   },
   "error:`out_dir` no longer names the destination this read was approved *": {
@@ -3915,6 +4387,10 @@
     "route": "/extend/plugins/cli",
     "anchor": "errors"
   },
+  "error:an --add-dir settings file names another host": {
+    "route": "/configure/cli/flags",
+    "anchor": "errors"
+  },
   "error:an Artifact *": {
     "route": "/reference/tools/gated-and-other",
     "anchor": "errors"
@@ -3941,6 +4417,10 @@
   },
   "error:asset_id (32 hex characters) is required for action \"${…}\"": {
     "route": "/reference/tools/gated-and-other",
+    "anchor": "errors"
+  },
+  "error:assume_role needs SigV4 source credentials (access keys or the ambient AWS chain); aws_bearer_token cannot call sts:AssumeRole": {
+    "route": "/configure/cli/subcommands",
     "anchor": "errors"
   },
   "error:atleast(N, pattern)*": {
@@ -4039,6 +4519,22 @@
     "route": "/extend/plugins/cli",
     "anchor": "errors"
   },
+  "error:ccr-gateway --sdk-url rejected: ${…}": {
+    "route": "/configure/cli/flags",
+    "anchor": "errors"
+  },
+  "error:ccr-gateway host requires --sdk-url": {
+    "route": "/configure/cli/flags",
+    "anchor": "errors"
+  },
+  "error:ccr-session --sdk-url rejected: ${…}": {
+    "route": "/configure/cli/flags",
+    "anchor": "errors"
+  },
+  "error:ccr-session host requires --sdk-url": {
+    "route": "/configure/cli/flags",
+    "anchor": "errors"
+  },
   "error:cd ~/.claude/local && npm update ${…}": {
     "route": "/configure/cli/subcommands",
     "anchor": "errors"
@@ -4069,14 +4565,6 @@
   },
   "error:claude.ai M*": {
     "route": "/extend/mcp/runtime",
-    "anchor": "errors"
-  },
-  "error:claudeAuthenticate: no authDelegate wired": {
-    "route": "/extend/headless",
-    "anchor": "errors"
-  },
-  "error:claudeOAuth*": {
-    "route": "/extend/headless",
     "anchor": "errors"
   },
   "error:claude_code_args agents is not a JSON object": {
@@ -4155,6 +4643,14 @@
     "route": "/reference/tools/shell-and-web",
     "anchor": "errors"
   },
+  "error:could not resolve ${…}": {
+    "route": "/reference/tools/shell-and-web",
+    "anchor": "errors"
+  },
+  "error:could not resolve ${…}: ${…}": {
+    "route": "/reference/tools/shell-and-web",
+    "anchor": "errors"
+  },
   "error:could not t*": {
     "route": "/reference/tools/shell-and-web",
     "anchor": "errors"
@@ -4197,6 +4693,10 @@
   },
   "error:cri.jwks_url *": {
     "route": "/configure/cli/subcommands",
+    "anchor": "errors"
+  },
+  "error:cursor is not in the form that get_run_log hands out for this session_id, so nothing was read. A next_cursor from an older version of this tool, a typed number, another run's cursor or an edited one c…": {
+    "route": "/reference/tools/gated-and-other",
     "anchor": "errors"
   },
   "error:cursor must be a cursor value named by a prior \"comments\" result": {
@@ -4459,6 +4959,10 @@
     "route": "/extend/plugins/marketplace",
     "anchor": "errors"
   },
+  "error:git ls-files failed": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "errors"
+  },
   "error:git metadata file \"${…}\" is *": {
     "route": "/extend/plugins/cli",
     "anchor": "errors"
@@ -4699,18 +5203,6 @@
     "route": "/reference/tools/agents-and-tasks",
     "anchor": "errors"
   },
-  "error:mcpAuthenticate: no mcpAuthDelegate wired (server: ${…})": {
-    "route": "/extend/headless",
-    "anchor": "errors"
-  },
-  "error:mcpClearAuth: no mcpAuthDelegate wired (server: ${…})": {
-    "route": "/extend/headless",
-    "anchor": "errors"
-  },
-  "error:mcpSubmitOAuthCallbackUrl: no mcpAuthDelegate wired (server: ${…})": {
-    "route": "/extend/headless",
-    "anchor": "errors"
-  },
   "error:mcp_reconnect: serverName must be a string": {
     "route": "/extend/headless",
     "anchor": "errors"
@@ -4884,6 +5376,10 @@
     "anchor": "errors"
   },
   "error:only a command hook runs on this machine": {
+    "route": "/extend/hooks/configuration",
+    "anchor": "errors"
+  },
+  "error:only an account plugin's http hooks are sent for another machine": {
     "route": "/extend/hooks/configuration",
     "anchor": "errors"
   },
@@ -5087,12 +5583,12 @@
     "route": "/reference/tools/gated-and-other",
     "anchor": "errors"
   },
-  "error:reconnectMcpServer: no mcpDelegate wired (server: ${…})": {
-    "route": "/extend/headless",
-    "anchor": "errors"
-  },
   "error:recording name components must be plain segments": {
     "route": "/extend/plugins/cli",
+    "anchor": "errors"
+  },
+  "error:redirectUriOnly is set and the request names no redirectUri.": {
+    "route": "/extend/mcp/auth",
     "anchor": "errors"
   },
   "error:refreshWorkSecret callback is not provided.": {
@@ -5140,10 +5636,6 @@
     "anchor": "errors"
   },
   "error:register_*": {
-    "route": "/extend/headless",
-    "anchor": "errors"
-  },
-  "error:reloadPlugins: no mcpDelegate wired": {
     "route": "/extend/headless",
     "anchor": "errors"
   },
@@ -5275,10 +5767,6 @@
     "route": "/how-it-works/sessions-and-storage",
     "anchor": "errors"
   },
-  "error:setMcpServers: no mcpDelegate wired (${…} server(s))": {
-    "route": "/extend/headless",
-    "anchor": "errors"
-  },
   "error:set_mcp_permission_mode_override: serverName must be a string": {
     "route": "/extend/headless",
     "anchor": "errors"
@@ -5301,6 +5789,10 @@
   },
   "error:snapshot copy failed: ${…}${…}": {
     "route": "/extend/mcp/cli",
+    "anchor": "errors"
+  },
+  "error:something that is not a directory is already named info there": {
+    "route": "/reference/tools/agents-and-tasks",
     "anchor": "errors"
   },
   "error:sparse arrays not allowed": {
@@ -5329,10 +5821,6 @@
   },
   "error:steeringVarTable has no row for tier family \"${…}\"": {
     "route": "/configure/settings/auth",
-    "anchor": "errors"
-  },
-  "error:stopTask: no turn received yet": {
-    "route": "/extend/headless",
     "anchor": "errors"
   },
   "error:stopped after ${…} redirects": {
@@ -5423,12 +5911,20 @@
     "route": "/configure/cli/subcommands",
     "anchor": "errors"
   },
+  "error:the bridge socket belongs to a different account, or nobody is signed in": {
+    "route": "/configure/cli/flags",
+    "anchor": "errors"
+  },
   "error:the built*": {
     "route": "/reference/tools/shell-and-web",
     "anchor": "errors"
   },
   "error:the call no longer names the files that were approved (one file where a list was approved*": {
     "route": "/reference/tools/gated-and-other",
+    "anchor": "errors"
+  },
+  "error:the call was cancelled before its hooks finished.": {
+    "route": "/extend/mcp/runtime",
     "anchor": "errors"
   },
   "error:the case's scaffold created ${…}/ in the run's working directory — that name is reserved for the run's artifact publishes; have the scaffold use another name": {
@@ -5497,6 +5993,10 @@
   },
   "error:the measurement returned *": {
     "route": "/reference/tools/gated-and-other",
+    "anchor": "errors"
+  },
+  "error:the new worktree's directory was replaced, or its .git file no longer names the git directory created for it; if this repeats, a command running in the sandbox may be changing .claude/worktrees": {
+    "route": "/reference/tools/agents-and-tasks",
     "anchor": "errors"
   },
   "error:the newest event could not be read": {
@@ -5643,6 +6143,10 @@
     "route": "/how-it-works/sessions-and-storage",
     "anchor": "errors"
   },
+  "error:this tool answers only the call the host asked for.": {
+    "route": "/extend/mcp/runtime",
+    "anchor": "errors"
+  },
   "error:this write *": {
     "route": "/reference/tools/gated-and-other",
     "anchor": "errors"
@@ -5663,10 +6167,6 @@
     "route": "/configure/permissions/sandbox",
     "anchor": "errors"
   },
-  "error:toggleMcpServer: no mcpDelegate wired (server: ${…})": {
-    "route": "/extend/headless",
-    "anchor": "errors"
-  },
   "error:too many stream-base spellings": {
     "route": "/reference/tools/files",
     "anchor": "errors"
@@ -5684,6 +6184,10 @@
     "anchor": "errors"
   },
   "error:unexpected ar*": {
+    "route": "/how-it-works/sessions-and-storage",
+    "anchor": "errors"
+  },
+  "error:unexpected argument '${…}' — this command takes no positional arguments": {
     "route": "/how-it-works/sessions-and-storage",
     "anchor": "errors"
   },
@@ -5964,6 +6468,10 @@
     "anchor": "flags"
   },
   "flag:add --transport": {
+    "route": "/extend/mcp/cli",
+    "anchor": "flags"
+  },
+  "flag:add --web": {
     "route": "/extend/mcp/cli",
     "anchor": "flags"
   },
@@ -6595,9 +7103,21 @@
     "route": "/configure/cli/subcommands",
     "anchor": "commands"
   },
+  "flag:ultrareview --list": {
+    "route": "/configure/cli/subcommands",
+    "anchor": "ultrareview-eval-flags"
+  },
+  "flag:ultrareview --max-cost": {
+    "route": "/configure/cli/subcommands",
+    "anchor": "ultrareview-eval-flags"
+  },
   "flag:ultrareview --no-post": {
     "route": "/configure/cli/subcommands",
     "anchor": "commands"
+  },
+  "flag:ultrareview --output": {
+    "route": "/configure/cli/subcommands",
+    "anchor": "ultrareview-eval-flags"
   },
   "flag:ultrareview --post": {
     "route": "/configure/cli/subcommands",
@@ -7271,6 +7791,182 @@
     "route": "/configure/models-and-providers/providers",
     "anchor": "provider-names"
   },
+  "setting-key:additionalMarketplaces.*.autoUpdate": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "settings-keys"
+  },
+  "setting-key:additionalMarketplaces.*.installLocation": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "settings-keys"
+  },
+  "setting-key:additionalMarketplaces.*.pluginDigests": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "plugin-digests"
+  },
+  "setting-key:additionalMarketplaces.*.source.headers": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.headersHelper": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.hostPattern": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.name": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.owner.email": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.owner.name": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.owner.url": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.package": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.path": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.pathPattern": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.plugins": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.ref": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.registry": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.repo": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.skipLfs": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.source": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.sparsePaths": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.url": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:additionalMarketplaces.*.source.version": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.autoUpdate": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "settings-keys"
+  },
+  "setting-key:extraKnownMarketplaces.*.installLocation": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "settings-keys"
+  },
+  "setting-key:extraKnownMarketplaces.*.pluginDigests": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "plugin-digests"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.headers": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.headersHelper": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.hostPattern": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.name": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.owner.email": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.owner.name": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.owner.url": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.package": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.path": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.pathPattern": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.plugins": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.ref": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.registry": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.repo": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.skipLfs": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.source": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.sparsePaths": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.url": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
+  "setting-key:extraKnownMarketplaces.*.source.version": {
+    "route": "/extend/plugins/marketplace",
+    "anchor": "marketplace-sources"
+  },
   "slash-command:/artifact-capabilities": {
     "route": "/extend/skills-and-commands/bundled-skills",
     "anchor": "skills"
@@ -7348,10 +8044,6 @@
     "anchor": "skills"
   },
   "slash-command:/loop": {
-    "route": "/extend/skills-and-commands/bundled-skills",
-    "anchor": "skills"
-  },
-  "slash-command:/memory-types": {
     "route": "/extend/skills-and-commands/bundled-skills",
     "anchor": "skills"
   },
@@ -7650,5 +8342,21 @@
   "subcommand:xaa show": {
     "route": "/extend/mcp/cli",
     "anchor": "subcommands"
+  },
+  "tool:ExitPlanMode": {
+    "route": "/reference/tools/agents-and-tasks",
+    "anchor": "enable-tests"
+  },
+  "tool:ReadWidgetContext": {
+    "route": "/reference/tools/gated-and-other",
+    "anchor": "gated-tools"
+  },
+  "tool:WrapUp": {
+    "route": "/reference/tools/gated-and-other",
+    "anchor": "gated-tools"
+  },
+  "tool:propose_skills": {
+    "route": "/reference/tools/gated-and-other",
+    "anchor": "gated-tools"
   }
 }

@@ -25,6 +25,7 @@ export const PAGES: Record<string, string[]> = {
     "docs/extend/skills-and-commands/slash-commands.md",
   ],
   setting: ["docs/configure/settings"],
+  "setting-key": ["docs/configure", "docs/extend"],
   "permission-rule": ["docs/configure/permissions"],
   "hook-event": ["docs/extend/hooks"],
   "mod-api": ["docs/extend/mod-api"],

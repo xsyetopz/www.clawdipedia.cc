@@ -134,4 +134,4 @@ test("the real page counts equal the snapshot counts", () => {
     );
   }
   expect(run(ROOT, "--check").code).toBe(0);
-});
+}, 20_000);

@@ -18,6 +18,7 @@
     "schemas:observe": "bun tools/schemas/observe/run.ts",
     "schemas:check": "bun tools/schemas/check.ts && bun tools/schemas/types.ts --check && bun tools/surface/snapshot.ts --check",
     "surface": "bun tools/surface/snapshot.ts --commit && bun tools/surface/render.ts",
+    "surface:audit": "CC_INSPECT_CACHE=$PWD/captures bun tools/surface/audit.ts",
     "surface:check": "bun tools/surface/render.ts --check && bun tools/surface/coverage.ts",
     "format": "biome format --write .",
     "lint:code": "biome check --formatter-enabled=false --error-on-warnings .",
