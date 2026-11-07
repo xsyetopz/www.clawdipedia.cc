@@ -4,16 +4,16 @@
   "owner": {
     "name": "xsyetopz"
   },
-  "description": "Anthropic documentation as plugins, from four sources: Clawdipedia (unofficial Claude Code docs, 2.1.316), platform.claude.com, code.claude.com, and claude.com/resources.",
+  "description": "Anthropic documentation as plugins, from four sources: Clawdipedia (unofficial Claude Code docs, 2.1.319), platform.claude.com, code.claude.com, and claude.com/resources.",
   "metadata": {
-    "version": "3.0.1"
+    "version": "3.0.2"
   },
   "plugins": [
     {
       "name": "clawdipedia-docs",
       "displayName": "Anthropic Docs",
       "source": "./plugin",
-      "description": "MCP server and skill for four doc sources: Clawdipedia (unofficial Claude Code docs, 2.1.316), platform.claude.com, code.claude.com, and claude.com/resources. Searches, reads pages, serves schemas.",
+      "description": "MCP server and skill for four doc sources: Clawdipedia (unofficial Claude Code docs, 2.1.319), platform.claude.com, code.claude.com, and claude.com/resources. Searches, reads pages, serves schemas.",
       "category": "documentation"
     },
     {

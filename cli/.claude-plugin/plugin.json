@@ -2,8 +2,8 @@
   "$schema": "https://clawdipedia.cc/schemas/claude-code-plugin-manifest.json",
   "name": "clawdipedia-docs-cli",
   "displayName": "Anthropic Docs CLI",
-  "version": "3.0.1",
-  "description": "Anthropic docs from four sources as a clawdipedia command for the Bash tool, plus a light skill. No MCP server, so it adds no tool list. Needs Bun. Claude Code only. Tracks 2.1.316.",
+  "version": "3.0.2",
+  "description": "Anthropic docs from four sources as a clawdipedia command for the Bash tool, plus a light skill. No MCP server, so it adds no tool list. Needs Bun. Claude Code only. Tracks 2.1.319.",
   "author": {
     "name": "xsyetopz"
   },
