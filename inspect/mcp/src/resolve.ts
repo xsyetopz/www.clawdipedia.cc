@@ -1,15 +1,15 @@
 // Finds the keys of the object an expression gives in a bundled program: object literals, their spreads,
 // the values a name is bound to, the arguments a parameter gets at each call, and what a called function
 // returns, across chunks. A value it cannot follow stays unknown.
-import type { Variable } from "eslint-scope";
-import type * as ES from "estree";
 import {
+  type CallNode,
   callsOf,
   type Fn,
   functionOf,
   type Module,
   type Node,
   returnsOf,
+  type Variable,
 } from "./ast.ts";
 import { bind, isVoid } from "./resolve/tables.ts";
 import {
@@ -33,7 +33,7 @@ export class Resolver extends ValueResolver {
 
   /** A parameter with no call to bind it: the argument at every call of its function. */
   param(m: Module, v: Variable, fn: Fn, depth: number): Entry[] | undefined {
-    const index = fn.params.indexOf(v.defs[0]?.name as ES.Pattern);
+    const index = (fn.params as Node[]).indexOf(v.defs[0]?.name as Node);
     if (index < 0) return undefined;
     if (this.#params.has(v)) return this.#params.get(v);
     this.#params.set(v, undefined);
@@ -85,12 +85,7 @@ export class Resolver extends ValueResolver {
    * an imported one. The parameters bind to this call's arguments; one it leaves out is undefined, and a
    * key whose value is undefined is dropped, as JSON drops it.
    */
-  call(
-    m: Module,
-    call: Node & ES.CallExpression,
-    env?: Env,
-    depth = 0,
-  ): Entry[] | undefined {
+  call(m: Module, call: CallNode, env?: Env, depth = 0): Entry[] | undefined {
     if (depth > 10) return undefined;
     const f = functionOf(m, call.callee as Node);
     if (!f) return undefined;
@@ -100,14 +95,14 @@ export class Resolver extends ValueResolver {
     const inner = bind(m, call, env, dm, fn);
     // Undefined, which JSON drops; null stays.
     const isUndef = (n: Node | null | undefined): boolean => {
-      if (n?.type === "Literal" && n.value === null) return false;
+      if (n?.type === "NullLiteral") return false;
       if (!n || isVoid(n)) return true;
       if (n.type === "Identifier") {
         const v = dm.variable(n);
         if (!v) return false;
         if (inner.has(v)) return inner.get(v) === null;
         const d = v.defs[0];
-        const writes = v.references.filter((r) => r.isWrite() && !r.init);
+        const writes = v.references.filter((r) => r.write && !r.init);
         return (
           d?.type === "Variable" &&
           writes.length === 0 &&
@@ -125,8 +120,7 @@ export class Resolver extends ValueResolver {
           t = t.left as Node;
         return isUndef(t) && isUndef(n.alternate as Node);
       }
-      if (n.type === "ChainExpression") return isUndef(n.expression as Node);
-      if (n.type === "MemberExpression" && n.optional)
+      if (n.type === "MemberExpression" && "optional" in n && n.optional)
         return isUndef(n.object as Node);
       return false;
     };

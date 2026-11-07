@@ -1,12 +1,16 @@
 // Shared parts of the surface extractors: the item type, the module scan, and literal readers.
 // Each extractor anchors on string literals and object shapes, never on minified names.
-import type * as ES from "estree";
+import type * as t from "@babel/types";
 import {
   type Bundle,
   children,
   constString,
+  isLit,
+  isMethod,
+  litValue,
   type Module,
   type Node,
+  valueStart,
 } from "../ast.ts";
 import type { BunModule } from "../bunfs.ts";
 
@@ -60,21 +64,30 @@ export const scan = (
 
 /** The key of a non-computed property (identifier or string), or undefined. */
 export const keyOf = (
-  p: ES.Property | ES.SpreadElement,
+  p: t.ObjectExpression["properties"][number],
 ): string | undefined => {
-  if (p.type !== "Property" || p.computed) return undefined;
+  if (p.type === "SpreadElement" || p.computed) return undefined;
   if (p.key.type === "Identifier") return p.key.name;
-  if (p.key.type === "Literal" && typeof p.key.value === "string")
-    return p.key.value;
+  if (p.key.type === "StringLiteral") return p.key.value;
   return undefined;
 };
 
-/** The property `key` of an object literal. */
-export const prop = (
-  o: ES.ObjectExpression,
-  key: string,
-): ES.Property | undefined =>
-  o.properties.find((p): p is ES.Property => keyOf(p) === key);
+/** A property of an object literal: a `key: value` pair, or a method. */
+export type Prop = t.ObjectProperty | t.ObjectMethod;
+
+/** What the property holds: the value of a pair, or the function of a method. */
+export const propValue = (p: Prop): Node =>
+  (p.type === "ObjectProperty" ? p.value : p) as Node;
+
+/** The source of a property value; a method gives its function from the parameters on, without the key. */
+export const valueSrc = (m: Module, n: Node): string =>
+  isMethod(n) ? m.text.slice(valueStart(m.text, n), n.end) : m.src(n);
+
+/** The value of the property `key` of an object literal. */
+export const prop = (o: t.ObjectExpression, key: string): Node | undefined => {
+  const p = o.properties.find((p): p is Prop => keyOf(p) === key);
+  return p && propValue(p);
+};
 
 /** The string items of an array literal, or undefined when one item is not a constant string. */
 export const strings = (
@@ -94,19 +107,19 @@ export const strings = (
 /** A literal as short text (`!0` is `true`), or "unknown" for computed code. */
 export const literal = (m: Module, n: Node | null | undefined): string => {
   if (!n) return "unknown";
-  if (n.type === "Literal") return JSON.stringify((n as ES.Literal).value);
+  if (isLit(n)) return JSON.stringify(litValue(n));
   if (
     n.type === "UnaryExpression" &&
     n.operator === "!" &&
-    n.argument.type === "Literal"
+    isLit(n.argument as Node)
   )
-    return String(!(n.argument as ES.Literal).value);
+    return String(!litValue(n.argument as Node));
   if (
     n.type === "UnaryExpression" &&
     n.operator === "-" &&
-    n.argument.type === "Literal"
+    isLit(n.argument as Node)
   )
-    return `-${(n.argument as ES.Literal).value}`;
+    return `-${litValue(n.argument as Node)}`;
   if (n.type === "Identifier" && n.name === "undefined") return "undefined";
   if (n.type === "UnaryExpression" && n.operator === "void") return "undefined";
   const s = constString(m, n);

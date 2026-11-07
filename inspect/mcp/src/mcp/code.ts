@@ -2,10 +2,11 @@ import { z } from "zod";
 import { listInstalls, program } from "../binary.ts";
 import { cut, lines as linesOf } from "../diff.ts";
 import { findUnits } from "../find.ts";
+import { fetchPackage, findText } from "../npm.ts";
 import { prepared } from "../prepare.ts";
 import { readable } from "../readable.ts";
 import { placesOf, resultText, toolNames } from "../requests.ts";
-import { runArgs, runPrompt, userText } from "../run.ts";
+import { API_HOST, runArgs, runPrompt, userText } from "../run.ts";
 import {
   type Args,
   clip,
@@ -40,10 +41,22 @@ group<
     env?: Record<string, string>;
     args?: string[];
     files?: Record<string, string>;
+    replies?: Record<string, unknown>;
+    login?: "key" | "oauth";
+    packageVersion?: string;
+    show?: string;
+    apiHost?: boolean;
+    baseUrl?: boolean;
+    calls?: {
+      name: string;
+      input: Record<string, unknown>;
+      safeguard?: "flagged" | "not_flagged";
+    }[];
   }
 >(
   "code",
-  "Read the code inside a Claude Code binary: list installs or modules, search literal text, find code by plain words, read a module slice, prepare a cleaned index for release diffs, run a prompt in an installed version against a local fake API to see the text it sends, or run it with other args (cli), such as a subcommand; with `query`, cli names each request, stream, and transcript file that holds that text.",
+  // biome-ignore lint/suspicious/noTemplateCurlyInString: ${…} is the hole marker of a query
+  "Read the code inside a Claude Code binary: list installs or modules, search literal text, find code by plain words, read a module slice, prepare a cleaned index for release diffs, run a prompt in an installed version against a local fake API to see the text it sends, or run it with other args (cli), such as a subcommand; check with `npm` whether a text (`query`, with ${…} holes) is in the published source of the npm package in `name`; with `query`, cli names each request, stream, and transcript file that holds that text.",
   "action",
   {
     installs: () => {
@@ -189,22 +202,54 @@ group<
         },
       );
     },
-    cli: async ({ args, files, version, env, query }) => {
+    cli: async ({
+      args,
+      files,
+      version,
+      env,
+      query,
+      replies,
+      login,
+      show,
+      apiHost,
+      baseUrl,
+      calls,
+    }) => {
       if (!args?.length)
         throw new Error('cli needs args, such as ["auto-mode", "config"]');
       const bin = installed(version);
       const r = await runArgs(bin.path, args, {
         env: env ?? {},
         files: files ?? {},
+        replies: replies ?? {},
+        login: login ?? "key",
+        apiHost: apiHost ?? false,
+        baseUrl: baseUrl ?? true,
+        ...(calls && { calls }),
       });
-      const sent = r.requests.map((x) => `${x.method} ${x.path}`);
+      const sent = r.requests.map(
+        (x) =>
+          `${x.method} ${x.host === API_HOST ? `https://${API_HOST}` : ""}${x.path}`,
+      );
       const tools = toolNames(r);
       const found = query === undefined ? undefined : placesOf(r, query);
       const stdout = clip(r.stdout, 4000);
       const stderr = clip(r.stderr, 2000);
+      const shown =
+        show === undefined
+          ? ""
+          : `\n${show}: ${show in r.files ? clip(r.files[show] as string, 8000) : "not written"}`;
       return text(
-        `${bin.version}: exit ${r.exit}, ${sent.length} requests, files: ${Object.keys(r.files).join(", ") || "none"}.${tools.length ? `\ntools: ${tools.map((t) => t.join(" ")).join(" | ")}` : ""}${found ? `\nquery found in: ${found.join("; ") || "nothing"}` : ""}\nstdout: ${stdout}\nstderr: ${stderr}`,
+        `${bin.version}: exit ${r.exit}, requests: ${sent.join(", ") || "none"}, files: ${Object.keys(r.files).join(", ") || "none"}.${tools.length ? `\ntools: ${tools.map((t) => t.join(" ")).join(" | ")}` : ""}${found ? `\nquery found in: ${found.join("; ") || "nothing"}` : ""}\nstdout: ${stdout}\nstderr: ${stderr}${shown}`,
         { exit: r.exit, requests: sent, tools, found, stdout, stderr },
+      );
+    },
+    npm: async ({ name, packageVersion, query }) => {
+      const pkg = await fetchPackage(need(name, "name"), packageVersion);
+      const r = findText(pkg.dir, need(query, "query"));
+      return text(
+        `${name}@${pkg.version}: ${r.file ? `text found in ${r.file}` : r.short ? "text too short to name a package" : "text not found"}`,
+        { package: name, version: pkg.version, ...r },
       );
     },
     prepare: ({ version }) => {
@@ -268,13 +313,61 @@ group<
       .array(z.string())
       .optional()
       .describe(
-        'With cli: the program args, such as ["--settings", "<project-dir>/s.json", "auto-mode", "config"]. `<project-dir>` becomes the temp project folder.',
+        'With cli: the program args, such as ["--settings", "<project-dir>/s.json", "auto-mode", "config"]. `<project-dir>` and `<config-dir>` become the temp project and config folders.',
       ),
     files: z
       .record(z.string(), z.string())
       .optional()
       .describe(
         'With cli: files to write in the temp project folder first, by relative path, such as {"s.json": "{}"}.',
+      ),
+    replies: z
+      .record(z.string(), z.unknown())
+      .optional()
+      .describe(
+        'With cli: JSON replies of the stub by "METHOD /path", such as {"GET /api/oauth/profile": {...}}. "<stub>" in an env value becomes the stub URL.',
+      ),
+    packageVersion: z
+      .string()
+      .optional()
+      .describe(
+        "With npm: the version of the package in `name`; default: the latest, looked up once and kept.",
+      ),
+    login: z
+      .enum(["key", "oauth"])
+      .optional()
+      .describe(
+        'With cli: "key" (default) sets the fake API key; "oauth" writes a fake claude.ai login to .credentials.json instead.',
+      ),
+    show: z
+      .string()
+      .optional()
+      .describe(
+        'With cli: a .json, .jsonl, or .log file of the config folder to print at exit, such as ".claude.json".',
+      ),
+    apiHost: z
+      .boolean()
+      .optional()
+      .describe(
+        "With cli: the stub also answers https://api.anthropic.com (through a local proxy and a throw-away CA), for requests that ignore ANTHROPIC_BASE_URL, such as GET /api/oauth/profile.",
+      ),
+    baseUrl: z
+      .boolean()
+      .optional()
+      .describe(
+        "With cli: false leaves ANTHROPIC_BASE_URL unset, so that with apiHost the Messages API requests also go to https://api.anthropic.com, as on a direct connection.",
+      ),
+    calls: z
+      .array(
+        z.object({
+          name: z.string(),
+          input: z.record(z.string(), z.unknown()),
+          safeguard: z.enum(["flagged", "not_flagged"]).optional(),
+        }),
+      )
+      .optional()
+      .describe(
+        'With cli: the model calls these tools in order, one per turn, such as [{"name": "Bash", "input": {"command": "echo hi"}}], then answers OK after the last result. safeguard ("flagged" or "not_flagged") adds the server-side auto mode verdict for that call.',
       ),
   },
   { ...WRITES_CACHE, openWorldHint: true },

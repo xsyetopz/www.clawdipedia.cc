@@ -1,5 +1,4 @@
-import type { Variable } from "eslint-scope";
-import type { Module, Node } from "../ast.ts";
+import type { Module, Node, Variable } from "../ast.ts";
 
 /** What a parameter is bound to in one call: the argument, or null when the call leaves it out. */
 export type Env = Map<Variable, Ref | null>;

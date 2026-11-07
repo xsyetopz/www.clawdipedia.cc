@@ -21,7 +21,7 @@ export const extractModels: Extractor = (bundle) => {
   const out: SurfaceItem[] = [];
   let aliases: { m: string; start: number; names: string[] } | undefined;
   scan(bundle, ['"claude-', '"opusplan"'], (m, n) => {
-    if (n.type === "Literal" && typeof n.value === "string" && ID.test(n.value))
+    if (n.type === "StringLiteral" && ID.test(n.value))
       out.push({
         kind: "model",
         name: n.value,

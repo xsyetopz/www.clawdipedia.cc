@@ -1,15 +1,9 @@
-// Reads the modules of a bundled program with a real parser (meriyah) and scope analysis (eslint-scope).
+// Reads the modules of a bundled program with a real parser and scope analysis (Babel).
 // Each module parses on first use. Bun chunks import each other as `/$bunfs/root/<chunk>`; a `Bundle`
 // follows those imports, so a name resolves to its declaration in any chunk.
-import {
-  analyze,
-  type Reference,
-  type Scope,
-  type ScopeManager,
-  type Variable,
-} from "eslint-scope";
-import type * as ES from "estree";
-import { parse } from "meriyah";
+import { parse } from "@babel/parser";
+import traverse, { type Binding, type NodePath } from "@babel/traverse";
+import * as t from "@babel/types";
 
 import { children, type Node } from "./ast/node.ts";
 
@@ -22,16 +16,152 @@ export {
   nameOf,
   returnsOf,
 } from "./ast/calls.ts";
-export { children, type Fn, isFn, type Node } from "./ast/node.ts";
+export {
+  children,
+  type Fn,
+  isFn,
+  isLit,
+  isMethod,
+  litValue,
+  type Node,
+  valueStart,
+} from "./ast/node.ts";
+
+/** Where a name is declared: the declarator, function, class, specifier, or catch clause. */
+export type Def = {
+  /** The identifier that declares the name. */
+  name: Node;
+  /** The declaration, import, or function around `node`. */
+  parent: Node;
+} & (
+  | { type: "Variable"; node: t.VariableDeclarator & Node }
+  | {
+      type:
+        | "Parameter"
+        | "FunctionName"
+        | "ClassName"
+        | "ImportBinding"
+        | "CatchClause";
+      node: Node;
+    }
+);
+/** A read or a write of a name; `init` marks the write that comes with the declaration. */
+export type Ref = {
+  identifier: Node;
+  write: boolean;
+  init: boolean;
+  writeExpr: Node | null;
+};
+export type Variable = {
+  name: string;
+  binding: Binding;
+  defs: Def[];
+  identifiers: Node[];
+  references: Ref[];
+};
+
+const PATTERN = new Set([
+  "ObjectPattern",
+  "ArrayPattern",
+  "ObjectProperty",
+  "RestElement",
+  "AssignmentPattern",
+]);
+
+const DEF = {
+  FunctionDeclaration: "FunctionName",
+  FunctionExpression: "FunctionName",
+  ClassDeclaration: "ClassName",
+  ClassExpression: "ClassName",
+  CatchClause: "CatchClause",
+} as const;
+
+/** The value a declarator starts with; a `for (x of y)` declarator starts with `y`. */
+const initOf = (p: NodePath): Node | null => {
+  const loop = p.parentPath?.parent;
+  return ((p.node as t.VariableDeclarator).init ??
+    ((loop?.type === "ForOfStatement" || loop?.type === "ForInStatement") &&
+    loop.left === p.parent
+      ? loop.right
+      : null)) as Node | null;
+};
+
+const variableOf = (
+  b: Binding,
+  parents: WeakMap<Node, Node>,
+): Variable | undefined => {
+  const name = b.identifier as Node;
+  const n = b.path.node as Node;
+  const parent = b.path.parent as Node;
+  const at = (type: string, node: Node) =>
+    ({ type, node, name, parent }) as Def;
+  const def =
+    b.kind === "param"
+      ? at("Parameter", b.scope.path.node as Node)
+      : b.kind === "module"
+        ? at("ImportBinding", n)
+        : n.type === "VariableDeclarator"
+          ? at("Variable", n)
+          : n.type in DEF
+            ? at(DEF[n.type as keyof typeof DEF], n)
+            : undefined;
+  if (!def) return undefined;
+  const v: Variable = {
+    name: (name as t.Identifier).name,
+    binding: b,
+    defs: [def],
+    identifiers: [name],
+    references: [],
+  };
+  const write = (identifier: Node, writeExpr: Node | null, init: boolean) =>
+    v.references.push({ identifier, write: true, init, writeExpr });
+  const init = def.type === "Variable" ? initOf(b.path) : null;
+  if (init) write(name, init, true);
+  // A default anywhere above the name in its pattern: `{now:s=f}`.
+  for (let c = name, p = parents.get(c); p; c = p, p = parents.get(c)) {
+    if (p.type === "AssignmentPattern" && p.left === c)
+      write(name, p.right as Node, true);
+    else if (!PATTERN.has(p.type)) break;
+  }
+  for (const p of b.referencePaths)
+    if (p.isIdentifier())
+      v.references.push({
+        identifier: p.node as Node,
+        write: false,
+        init: false,
+        writeExpr: null,
+      });
+  for (const c of b.constantViolations) {
+    const id = c.getBindingIdentifiers()[v.name] as Node | undefined;
+    if (!id) continue;
+    if (c.isVariableDeclarator()) {
+      v.defs.push({ ...def, node: c.node, name: id } as Def);
+      v.identifiers.push(id);
+      const i = initOf(c);
+      if (i) write(id, i, true);
+    } else
+      write(
+        id,
+        c.isUpdateExpression()
+          ? null
+          : ((c.node as t.AssignmentExpression).right as Node),
+        false,
+      );
+  }
+  v.references.sort((a, b) => a.identifier.start - b.identifier.start);
+  return v;
+};
 
 export class Module {
   readonly name: string;
   readonly text: string;
   readonly bundle: Bundle | undefined;
+  #file?: t.File;
   #ast?: Node;
   #parents = new WeakMap<Node, Node>();
-  #scopes?: ScopeManager;
-  #refs?: Map<ES.Node, Reference>;
+  #vars?: Map<Node, Variable>;
+  #top = new Map<string, Variable>();
+  #chains = new WeakSet<Node>();
 
   constructor(name: string, text: string, bundle?: Bundle) {
     this.name = name;
@@ -42,14 +172,33 @@ export class Module {
   /** The module's syntax tree; it throws when the text is not JavaScript. */
   get ast(): Node {
     if (!this.#ast) {
-      this.#ast = parse(this.text, {
+      this.#file = parse(this.text, {
         sourceType: "module",
-        next: true,
-        ranges: true,
-      }) as unknown as Node;
+        attachComment: false,
+      });
+      this.#ast = this.#file.program as Node;
       const stack: Node[] = [this.#ast];
+      const optional = new WeakSet<Node>();
       while (stack.length) {
         const n = stack.pop() as Node;
+        // `a?.b` stays a member expression with `optional` set, as in ESTree, so one type check finds both.
+        // The outermost link of a chain is what ESTree wraps in a `ChainExpression`.
+        if (
+          n.type === "OptionalMemberExpression" ||
+          n.type === "OptionalCallExpression"
+        ) {
+          const p = this.#parents.get(n) as Node;
+          const link =
+            optional.has(p) &&
+            ((p as t.OptionalMemberExpression).object === n ||
+              (p as t.OptionalCallExpression).callee === n);
+          if (!link) this.#chains.add(n);
+          optional.add(n);
+          (n as { type: string }).type =
+            n.type === "OptionalMemberExpression"
+              ? "MemberExpression"
+              : "CallExpression";
+        }
         for (const c of children(n)) {
           this.#parents.set(c, n);
           stack.push(c);
@@ -59,17 +208,36 @@ export class Module {
     return this.#ast;
   }
 
-  get scopes(): ScopeManager {
-    this.#scopes ??= analyze(this.ast as ES.Program, {
-      ecmaVersion: 2026,
-      sourceType: "module",
-    });
-    return this.#scopes;
+  /** Each declared variable, by every identifier that declares or uses it. */
+  get variables(): Map<Node, Variable> {
+    if (!this.#vars) {
+      this.ast;
+      const vars = new Map<Node, Variable>();
+      traverse(this.#file as t.File, {
+        Scope: (p) => {
+          for (const b of Object.values(p.scope.bindings)) {
+            const v = variableOf(b, this.#parents);
+            if (!v) continue;
+            for (const id of v.identifiers) vars.set(id, v);
+            for (const r of v.references) vars.set(r.identifier, v);
+            if (p.isProgram()) this.#top.set(v.name, v);
+          }
+        },
+      });
+      this.#vars = vars;
+    }
+    return this.#vars;
   }
 
   parent(n: Node): Node | undefined {
     this.ast;
     return this.#parents.get(n);
+  }
+
+  /** Whether `n` is the outermost link of an optional chain (`a?.b.c`). */
+  isChain(n: Node): boolean {
+    this.ast;
+    return this.#chains.has(n);
   }
 
   /** The source text of a node. */
@@ -99,53 +267,21 @@ export class Module {
     return found as Extract<Node, { type: T }> | undefined;
   }
 
-  /** The innermost scope that holds `n`. */
-  scopeOf(n: Node): Scope {
-    for (let x: Node | undefined = n; x; x = this.parent(x)) {
-      // A function's own scope holds its body and parameters, not its name.
-      const s = this.scopes.acquire(x, true);
-      if (s) return s;
-    }
-    return this.scopes.globalScope as Scope;
-  }
-
-  /** The reference that an identifier in code makes, or undefined for a declaration or a property key. */
-  reference(id: Node): Reference | undefined {
-    if (!this.#refs) {
-      this.#refs = new Map();
-      for (const s of this.scopes.scopes)
-        for (const r of s.references) this.#refs.set(r.identifier, r);
-    }
-    return this.#refs.get(id);
-  }
-
   /** The variable an identifier names: the one it refers to, or the one it declares. */
   variable(id: Node): Variable | undefined {
-    const r = this.reference(id);
-    if (r) return r.resolved ?? undefined;
-    if (id.type !== "Identifier") return undefined;
-    for (let s: Scope | null = this.scopeOf(id); s; s = s.upper) {
-      const v = s.set.get(id.name);
-      if (v?.identifiers.includes(id)) return v;
-    }
-    return undefined;
+    return this.variables.get(id);
   }
 
-  /** The variable that `name` means at node `n`, following the scope chain. */
-  lookup(n: Node, name: string): Variable | undefined {
-    for (let s: Scope | null = this.scopeOf(n); s; s = s.upper) {
-      const v = s.set.get(name);
-      if (v) return v;
-    }
-    return undefined;
+  /** Whether `id` reads a name that the module does not declare. */
+  isGlobal(id: Node): boolean {
+    const p = this.parent(id);
+    return !!p && !this.variable(id) && t.isReferenced(id, p, this.parent(p));
   }
 
   /** Module-scope variable named `name`. */
   topLevel(name: string): Variable | undefined {
-    const m = this.scopes.globalScope?.childScopes.find(
-      (s) => s.type === "module",
-    );
-    return m?.set.get(name);
+    this.variables;
+    return this.#top.get(name);
   }
 
   /** Exported name to local name, from `export{a as b}` and `export function`/`export const`. */
@@ -153,10 +289,14 @@ export class Module {
     if (this.#exports) return this.#exports;
     const out = new Map<string, string>();
     this.#exports = out;
-    for (const s of (this.ast as ES.Program).body) {
+    for (const s of (this.ast as t.Program).body) {
       if (s.type !== "ExportNamedDeclaration") continue;
       for (const sp of s.specifiers)
-        if (sp.local.type === "Identifier" && sp.exported.type === "Identifier")
+        if (
+          sp.type === "ExportSpecifier" &&
+          sp.local.type === "Identifier" &&
+          sp.exported.type === "Identifier"
+        )
           out.set(sp.exported.name, sp.local.name);
       const d = s.declaration;
       if (d?.type === "FunctionDeclaration" && d.id)
@@ -169,13 +309,13 @@ export class Module {
   }
 
   #exports?: Map<string, string>;
-  #imports?: Map<string, ES.ImportDeclaration[]>;
+  #imports?: Map<string, t.ImportDeclaration[]>;
 
   /** The import declarations of this module from the module path `source`. */
-  importsFrom(source: string): ES.ImportDeclaration[] {
+  importsFrom(source: string): t.ImportDeclaration[] {
     if (!this.#imports) {
       this.#imports = new Map();
-      for (const s of (this.ast as ES.Program).body)
+      for (const s of (this.ast as t.Program).body)
         if (s.type === "ImportDeclaration") {
           const k = String(s.source.value);
           this.#imports.set(k, [...(this.#imports.get(k) ?? []), s]);
@@ -221,7 +361,9 @@ export class Bundle {
     const def = v.defs[0];
     if (def?.type !== "ImportBinding") return { module: m, variable: v };
     if (seen > 8 || def.node.type !== "ImportSpecifier") return undefined;
-    const from = this.get(String(def.parent.source.value));
+    const from = this.get(
+      String((def.parent as t.ImportDeclaration).source.value),
+    );
     const imported =
       def.node.imported.type === "Identifier"
         ? def.node.imported.name

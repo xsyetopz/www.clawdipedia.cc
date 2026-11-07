@@ -15,7 +15,7 @@
 //   `--jq`, a key of the `gh api` flag map (`"-q":"--jq"`), not a flag of this program.
 // - subcommand: 71 paths, 56 old names. Only here: `apply-project-settings`, named by a constant
 //   (`.command(Hmn,{hidden:!0})`). None only there.
-import type * as ES from "estree";
+import type * as t from "@babel/types";
 import {
   constString,
   functionOf,
@@ -33,7 +33,7 @@ import {
 
 const SPEC = /^(?:-[\w-]+, ?)?--?[a-zA-Z][\w-]*/;
 
-type Call = Node & ES.CallExpression;
+type Call = Node & t.CallExpression;
 
 const method = (n: Node | undefined): string | undefined =>
   n?.type === "CallExpression" &&
@@ -111,10 +111,10 @@ const optionOf = (
   m: Module,
   n: Node,
   seen = new Set<unknown>(),
-): { m: Module; n: Node & ES.NewExpression } | undefined => {
+): { m: Module; n: Node & t.NewExpression } | undefined => {
   if (seen.has(n)) return undefined;
   seen.add(n);
-  if (n.type === "NewExpression") return { m, n: n as Node & ES.NewExpression };
+  if (n.type === "NewExpression") return { m, n: n as Node & t.NewExpression };
   if (n.type === "ConditionalExpression")
     return optionOf(m, n.consequent as Node, seen);
   if (n.type === "CallExpression" && n.callee.type === "MemberExpression")
@@ -188,7 +188,7 @@ export const extractFlags: Extractor = (bundle) => {
     const name = method(n);
     if (!name) return;
     const c = n as Call;
-    const owner = (c.callee as ES.MemberExpression).object as Node;
+    const owner = (c.callee as t.MemberExpression).object as Node;
     if (name === "option" || name === "requiredOption")
       add(m, n, owner, c.arguments as Node[]);
     else if (name === "addOption" && c.arguments[0]) {

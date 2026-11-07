@@ -19,7 +19,7 @@ const VERSION = /^(?:bedrock|vertex)-/;
 export const extractBetas: Extractor = (bundle) => {
   const out: SurfaceItem[] = [];
   scan(bundle, ["-20"], (m, n) => {
-    if (n.type !== "Literal" || typeof n.value !== "string") return;
+    if (n.type !== "StringLiteral") return;
     const dated = BETA.test(n.value) && !VERSION.test(n.value);
     const compact = COMPACT.test(n.value);
     if (!dated && !compact) return;

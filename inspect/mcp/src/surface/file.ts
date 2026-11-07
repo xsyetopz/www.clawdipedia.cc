@@ -6,8 +6,8 @@
 // "keybindings.json" as the last argument (in 2.1.309 both are `join(Le(),…)`). Joins to the project
 // folder or the home folder (other first arguments) are not listed.
 // The old `strings` heuristic has no file list, so there is nothing to compare.
-import type { Variable } from "eslint-scope";
-import { constString, type Node } from "../ast.ts";
+
+import { constString, type Node, type Variable } from "../ast.ts";
 import { type Extractor, type SurfaceItem, scan, unique } from "./common.ts";
 
 const ANCHORS = ["history.jsonl", "keybindings.json"];

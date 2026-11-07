@@ -15,7 +15,7 @@ import { extractModApi } from "./mod-api.ts";
 import { extractModels } from "./model.ts";
 import { extractOtelEvents } from "./otel-event.ts";
 import { extractPermissionRules } from "./permission-rule.ts";
-import { extractSettings } from "./setting.ts";
+import { extractSettingKeys, extractSettings } from "./setting.ts";
 import { extractSlashCommands } from "./slash-command.ts";
 import { extractTools } from "./tool.ts";
 
@@ -28,6 +28,7 @@ export const KINDS: Record<string, Extractor> = {
   subcommand: extractSubcommands,
   "slash-command": extractSlashCommands,
   setting: extractSettings,
+  "setting-key": extractSettingKeys,
   gate: extractGates,
   tool: extractTools,
   "otel-event": extractOtelEvents,

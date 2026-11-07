@@ -1,11 +1,11 @@
-import type * as ES from "estree";
+import type * as t from "@babel/types";
 import { constString, type Fn, type Module, type Node } from "../ast.ts";
 import type { Env, Ty } from "./types.ts";
 
 export const isVoid = (n: Node | null | undefined): boolean =>
   !n ||
   (n.type === "UnaryExpression" && n.operator === "void") ||
-  (n.type === "Literal" && n.value === null) ||
+  n.type === "NullLiteral" ||
   (n.type === "Identifier" && n.name === "undefined");
 
 /** The object, property names, and root name of `a.b.c`; undefined for anything else. */
@@ -31,7 +31,7 @@ export const memberPath = (
 /** The parameters of `fn` (in module `dm`) bound to the arguments of `call` (in `m`). */
 export const bind = (
   m: Module,
-  call: Node & (ES.CallExpression | ES.NewExpression),
+  call: Node & (t.CallExpression | t.NewExpression),
   env: Env | undefined,
   dm: Module,
   fn: Fn,

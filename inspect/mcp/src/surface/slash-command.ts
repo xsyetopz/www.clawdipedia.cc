@@ -14,7 +14,7 @@
 //   `/srun`, `/sleep`, `/count`), MCP tools (`/scan_secrets`), mod capability docs (`/cc-plugin-*`),
 //   and a template name (`/bg`). Known names absent from both: `/cost` and `/review` are aliases of
 //   `/usage` and `/code-review`; `/vim` is not in 2.1.309.
-import type * as ES from "estree";
+import type * as t from "@babel/types";
 import {
   callsOf,
   children,
@@ -33,6 +33,7 @@ import {
   short,
   strings,
   unique,
+  valueSrc,
 } from "./common.ts";
 
 const TYPES = new Set(["local", "local-jsx", "prompt"]);
@@ -53,8 +54,8 @@ const builderType = (m: Module, call: Node): string | undefined => {
       : p.type === "ObjectPattern"
         ? (() => {
             const v = p.properties.find(
-              (x): x is ES.AssignmentProperty =>
-                x.type === "Property" && keyOf(x) === "name",
+              (x): x is t.ObjectProperty =>
+                x.type === "ObjectProperty" && keyOf(x) === "name",
             )?.value;
             return v?.type === "Identifier" ? v.name : undefined;
           })()
@@ -64,11 +65,8 @@ const builderType = (m: Module, call: Node): string | undefined => {
   while (stack.length && !found && nameSrc) {
     const n = stack.pop() as Node;
     if (n.type === "ObjectExpression") {
-      const t = constString(
-        f.module,
-        prop(n, "type")?.value as Node | undefined,
-      );
-      const v = prop(n, "name")?.value as Node | undefined;
+      const t = constString(f.module, prop(n, "type"));
+      const v = prop(n, "name");
       if (t && TYPES.has(t) && v && f.module.src(v) === nameSrc) found = t;
     }
     stack.push(...children(n));
@@ -105,36 +103,26 @@ export const extractSlashCommands: Extractor = (bundle) => {
   const out: SurfaceItem[] = [];
   scan(bundle, ["name:"], (m, n) => {
     if (n.type !== "ObjectExpression") return;
-    const o = n as ES.ObjectExpression;
-    const name = constString(m, prop(o, "name")?.value as Node | undefined);
+    const o = n as t.ObjectExpression;
+    const name = constString(m, prop(o, "name"));
     if (!name || !NAME.test(name)) return;
     const parent = m.parent(n);
     const type =
-      constString(m, prop(o, "type")?.value as Node | undefined) ??
+      constString(m, prop(o, "type")) ??
       (parent?.type === "CallExpression" &&
       parent.arguments[0] === (n as unknown)
         ? builderType(m, parent)
         : factoryType(m, n));
     if (!type || !TYPES.has(type)) return;
-    const desc = constString(
-      m,
-      prop(o, "description")?.value as Node | undefined,
-    );
-    const aliases = strings(m, prop(o, "aliases")?.value as Node | undefined);
+    const desc = constString(m, prop(o, "description"));
+    const aliases = strings(m, prop(o, "aliases"));
     const gates: string[] = [];
-    if (
-      /^(!0|true)$/.test(
-        m.src((prop(o, "isHidden")?.value as Node | undefined) ?? n).trim(),
-      )
-    )
+    if (/^(!0|true)$/.test(m.src(prop(o, "isHidden") ?? n).trim()))
       gates.push("hidden");
-    const avail = strings(
-      m,
-      prop(o, "availability")?.value as Node | undefined,
-    );
+    const avail = strings(m, prop(o, "availability"));
     if (avail) gates.push(`availability ${avail.join(", ")}`);
-    const enabled = prop(o, "isEnabled")?.value as Node | undefined;
-    if (enabled) gates.push(`isEnabled ${short(m.src(enabled), 120)}`);
+    const enabled = prop(o, "isEnabled");
+    if (enabled) gates.push(`isEnabled ${short(valueSrc(m, enabled), 120)}`);
     out.push({
       kind: "slash-command",
       name: `/${name}`,

@@ -3,10 +3,10 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { RunResult } from "./run.ts";
 
-/** The text of each `.jsonl` file under `dir`, such as a session transcript, by path relative to `dir`. */
+/** The text of each `.json`, `.jsonl`, and `.log` file under `dir`, such as `.claude.json` or a session transcript, by path relative to `dir`. */
 export const filesOf = (dir: string): Record<string, string> =>
   Object.fromEntries(
-    [...new Bun.Glob("**/*.jsonl").scanSync({ cwd: dir, dot: true })]
+    [...new Bun.Glob("**/*.{json,jsonl,log}").scanSync({ cwd: dir, dot: true })]
       .sort()
       .map((p) => [p, readFileSync(join(dir, p), "utf8")]),
   );

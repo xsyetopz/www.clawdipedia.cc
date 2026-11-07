@@ -1,4 +1,4 @@
-import type * as ES from "estree";
+import type * as t from "@babel/types";
 import { z } from "zod";
 import type { Node } from "../ast.ts";
 import { program } from "../binary.ts";
@@ -96,7 +96,7 @@ group<Args & { kind?: string; anchor?: string }>(
       if (!obj) throw new Error(`no object literal around ${module}@${pos}`);
       const before = R.unresolved.length;
       const keys = entriesJson(
-        R.pin(R.entries(m, obj as Node & ES.ObjectExpression)),
+        R.pin(R.entries(m, obj as Node & t.ObjectExpression)),
       );
       const unresolved = [...new Set(R.unresolved.slice(before))];
       return text(

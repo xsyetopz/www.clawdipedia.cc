@@ -1,5 +1,5 @@
 // The env objects of kind `env`: `process.env`, proxies made from a registry, and what holds or returns them.
-import type * as ES from "estree";
+import type * as t from "@babel/types";
 import {
   callsOf,
   type Fn,
@@ -35,7 +35,7 @@ export const isProcessEnv = (n: Node): boolean =>
 const initOf = (v: Variable): Node | undefined => {
   const def = v.defs[0];
   if (def?.type !== "Variable" || !def.node.init) return undefined;
-  return v.references.every((r) => !r.isWrite() || r.init)
+  return v.references.every((r) => !r.write || r.init)
     ? (def.node.init as Node)
     : undefined;
 };
@@ -69,7 +69,7 @@ export class EnvObjects {
           }
         } else if (
           p?.type === "CallExpression" &&
-          p.arguments.includes(id as ES.Expression)
+          p.arguments.includes(id as t.Expression)
         ) {
           const f = functionOf(m, p.callee as Node);
           if (f) this.factories.add(f.fn);
@@ -117,14 +117,14 @@ export class EnvObjects {
     const known = this.#known.get(v);
     if (known !== undefined) return known;
     seen.add(v);
-    const r = this.#binding(m, n as Node & ES.Identifier, v, seen);
+    const r = this.#binding(m, n as Node & t.Identifier, v, seen);
     this.#known.set(v, r);
     return r;
   }
 
   #binding(
     m: Module,
-    n: Node & ES.Identifier,
+    n: Node & t.Identifier,
     v: Variable,
     seen: Set<unknown>,
   ): boolean {

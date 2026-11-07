@@ -21,6 +21,7 @@ describe("registry", () => {
       "otel-event",
       "permission-rule",
       "setting",
+      "setting-key",
       "slash-command",
       "subcommand",
       "tool",
@@ -130,10 +131,51 @@ var a=["--setenv","SANDBOX_VAR","1"];
     expect(by.get("SANDBOX_VAR")?.detail).toBe("set for a child process");
   });
 
+  test("a helper that passes its parameter on to another helper", () => {
+    const src = `
+function Su(e){return process.env[e]}
+function wt(e){let n=Su(e);return Number(n)}
+var a=wt("VIA_TWO_HELPERS"),b=Su("VIA_ONE_HELPER");
+`;
+    const n = names("env", src);
+    expect(n).toContain("VIA_TWO_HELPERS");
+    expect(n).toContain("VIA_ONE_HELPER");
+  });
+
+  // Claude Code 2.1.319 `plugin eval`: `ll.flatMap(Ct)` and `["KRB5CCNAME",...].flatMap((j)=>Ul(ce(j)))`.
+  test("a helper called on each name of a constant list", () => {
+    const src = `
+function Pt(j){return process.env[j]}
+var ce=(j)=>Pt(j);
+var ll=["VIA_LIST_A","VIA_LIST_B"];
+var x=ll.flatMap(ce);
+var y=["VIA_INLINE"].flatMap((j)=>[ce(j)]);
+var z=["NOT_READ"].map((j)=>j);
+var Ct=(j)=>Object.entries(process.env).filter(([k])=>k.toUpperCase()===j);
+var w=["VIA_ANY_CASE"].flatMap(Ct);
+`;
+    const n = names("env", src);
+    for (const x of ["VIA_LIST_A", "VIA_LIST_B", "VIA_INLINE", "VIA_ANY_CASE"])
+      expect(n).toContain(x);
+    expect(n).not.toContain("NOT_READ");
+  });
+
   test("a lowercase read of another object is not an env name", () => {
     const n = names("env", "var o={a:1};var x=o.FOO_BAR,y=o.low;");
     expect(n).not.toContain("FOO_BAR");
     expect(n).not.toContain("low");
+  });
+
+  test("a child env key whose value reads a build-constant object is an env name, the constant's own keys are not", () => {
+    const src = `
+var i=process.env;
+function b(){let e={USER_TYPE:"external",NODE_ENV:"production",VITALS_CLI_VERSION:{PACKAGE_URL:"p",VERSION:"1",GIT_SHA:"s"}.VERSION};return e}
+var u=i.USER_TYPE,n=i.NODE_ENV;
+`;
+    const n = names("env", src);
+    expect(n).toContain("VITALS_CLI_VERSION");
+    for (const k of ["PACKAGE_URL", "VERSION", "GIT_SHA"])
+      expect(n).not.toContain(k);
   });
 });
 
@@ -295,6 +337,52 @@ permissions:()=>z.object({}),
     expect(names("setting", "var o={apiKeyHelper:()=>z.string()};")).toEqual(
       [],
     );
+  });
+});
+
+describe("setting-key", () => {
+  const src = `
+import{lib}from"/$bunfs/root/lib.js";
+function obj(e){return new O({type:"object",shape:e})}
+function rec(e,t){return new R({type:"record",keyType:e,valueType:t})}
+function arr(e){return new A({type:"array",element:e})}
+function str(){return new S({type:"string"})}
+function memo(e){return lib.lazy(e)}
+var OS=["macos","linux"],ALL=[...OS,"default"];
+function entry(k){return k==="default"?str():obj({path:str()})}
+var helpers=memo(()=>obj(Object.fromEntries(ALL.map((k)=>[k,entry(k).optional()]))));
+function perms(e){return obj({allow:arr(obj({hidden:str()})).describe("Allowed rules")})}
+function s(){let wrap=(b)=>b.catch(void 0);return{
+$schema:()=>str().describe("JSON Schema reference for Claude Code settings").optional(),
+permissions:()=>perms(1).optional(),
+env:()=>rec(str(),str()),
+known:()=>rec(str(),obj({source:obj({repo:str()})})),
+helpers:()=>wrap(helpers().optional()),
+...i.X&&{gated:()=>obj({on:str()})}
+}}
+`;
+  const lib = "export{l as lib};var l={lazy:(e)=>e};";
+  const b = () =>
+    new Bundle([
+      { name: "/$bunfs/root/a.js", text: src },
+      { name: "/$bunfs/root/lib.js", text: lib },
+    ]);
+
+  test("gives the leaf keys through helpers, records, memoized schemas, and keys built from a list", () => {
+    expect(surface(b(), "setting-key").map((i) => i.name)).toEqual([
+      "gated.on",
+      "helpers.default",
+      "helpers.linux.path",
+      "helpers.macos.path",
+      "known.*.source.repo",
+      "permissions.allow",
+    ]);
+  });
+
+  test("keeps the describe text and the gate of the top-level key", () => {
+    const by = new Map(surface(b(), "setting-key").map((i) => [i.name, i]));
+    expect(by.get("permissions.allow")?.detail).toBe("Allowed rules");
+    expect(by.get("gated.on")?.gate).toBe("i.X");
   });
 });
 

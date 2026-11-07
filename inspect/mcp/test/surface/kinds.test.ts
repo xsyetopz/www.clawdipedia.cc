@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { Bundle } from "../../src/ast.ts";
 import { surface } from "../../src/surface/index.ts";
 import { bundle, items, names } from "./util.ts";
 
@@ -74,6 +75,21 @@ describe("tool", () => {
     expect(t.find((i) => i.name === "CronCreate")?.gate).toContain("L()");
     expect(t.find((i) => i.name === "Glob")?.detail).toContain("process.env.G");
     expect(t.every((i) => i.module === "a.js" && i.offset === null)).toBe(true);
+  });
+
+  test("a tool read from a chunk held in a local gets its name, not the local's", () => {
+    const a =
+      'function N(){let c=import.meta.require("/$bunfs/root/b.js");return c.reg(),c.EvalTool}function A(){let r=N();return[...(r?[r]:[])]}globalThis.api={getAllBaseTools:A};';
+    const b =
+      'const B=(d)=>({isEnabled:()=>!0,...d});const K="REPL";const E=B({name:K,aliases:["Eval"]});export{E as EvalTool};';
+    const t = surface(
+      new Bundle([
+        { name: "/$bunfs/root/a.js", text: a },
+        { name: "/$bunfs/root/b.js", text: b },
+      ]),
+      "tool",
+    );
+    expect(t.map((i) => i.name)).toEqual(["REPL"]);
   });
 });
 

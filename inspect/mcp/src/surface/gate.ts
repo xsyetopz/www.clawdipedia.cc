@@ -11,7 +11,7 @@
 // 2.1.309: 1101 names, 432 only here, 0 only there. Of the 432, 301 are two-word code names
 // (`tengu_calm_eagle`) and 224 have a literal default; the rest are reads with no default or with an
 // object option (`*_config`, `*_killswitch`, `*_ms`).
-import type * as ES from "estree";
+import type * as t from "@babel/types";
 import {
   children,
   constString,
@@ -29,7 +29,7 @@ import {
   unique,
 } from "./common.ts";
 
-type Site = { m: Module; n: Node & ES.CallExpression; name: string };
+type Site = { m: Module; n: Node & t.CallExpression; name: string };
 
 /** An object argument with a key other than `safe`: an event payload. */
 const payload = (n: Node | undefined): boolean =>
@@ -45,7 +45,7 @@ export const extractGates: Extractor = (bundle) => {
     const c = n.callee as Node;
     const key =
       functionOf(m, c)?.fn ??
-      (c.type === "MemberExpression" && c.property.type !== "PrivateIdentifier"
+      (c.type === "MemberExpression" && c.property.type !== "PrivateName"
         ? `.${m.src(c.property as Node)}`
         : m.src(c));
     const g = groups.get(key) ?? [];
@@ -81,7 +81,7 @@ export const extractGates: Extractor = (bundle) => {
           a0?.type === "Identifier" &&
           a0.name === p.name &&
           loggers.has(
-            functionOf(fm, (n as ES.CallExpression).callee as Node)?.fn,
+            functionOf(fm, (n as t.CallExpression).callee as Node)?.fn,
           )
         ) {
           loggers.add(k);

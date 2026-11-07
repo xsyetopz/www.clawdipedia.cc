@@ -1,8 +1,9 @@
 // Lists the built-in tools of the program: the array that `getAllBaseTools` returns, with the code that
 // gates each entry (`c?[T]:[]`, `[A,B].filter(f)`) and the source of the functions that code calls.
-import type * as ES from "estree";
+import type * as t from "@babel/types";
 import {
   type Bundle,
+  type CallNode,
   children,
   constString,
   type Fn,
@@ -13,6 +14,7 @@ import {
   returnsOf,
 } from "./ast.ts";
 import type { Resolver } from "./resolve.ts";
+import { keyOf, type Prop, propValue } from "./surface/common.ts";
 
 export type Tool = {
   name: string;
@@ -31,8 +33,7 @@ const initOf = (m: Module, id: Node): { m: Module; n: Node } | undefined => {
   const o = v0 && (m.bundle?.origin(m, v0) ?? { module: m, variable: v0 });
   const def = o?.variable.defs[0];
   if (!o || def?.type !== "Variable" || !def.node.init) return undefined;
-  if (o.variable.references.some((r) => r.isWrite() && !r.init))
-    return undefined;
+  if (o.variable.references.some((r) => r.write && !r.init)) return undefined;
   return { m: o.module, n: def.node.init as Node };
 };
 
@@ -43,14 +44,18 @@ const required = (
 ): { m: Module; n: Node } | string | undefined => {
   if (n.type !== "MemberExpression" || n.property.type !== "Identifier")
     return undefined;
-  const c = n.object as Node;
+  // The chunk may sit in a local: `let b=import.meta.require(...);return b.X`.
+  const i =
+    n.object.type === "Identifier" ? initOf(m, n.object as Node) : undefined;
+  const cm = i?.m ?? m;
+  const c = (i?.n ?? n.object) as Node;
   if (
     c.type !== "CallExpression" ||
-    !m.src(c.callee as Node).startsWith("import.meta.require")
+    !cm.src(c.callee as Node).startsWith("import.meta.require")
   )
     return undefined;
   const name = n.property.name;
-  const from = m.bundle?.get(String(constString(m, c.arguments[0] as Node)));
+  const from = m.bundle?.get(String(constString(cm, c.arguments[0] as Node)));
   const local = from?.exports.get(name);
   const v = local ? from?.topLevel(local) : undefined;
   const o = from && v && m.bundle?.origin(from, v);
@@ -61,7 +66,7 @@ const required = (
 };
 
 /** The function a call calls: a name, or an inline function such as `(()=>x)()`. */
-const calleeFn = (m: Module, call: Node & ES.CallExpression) =>
+const calleeFn = (m: Module, call: CallNode) =>
   isFn(call.callee as Node)
     ? { module: m, fn: call.callee as Fn }
     : functionOf(m, call.callee as Node);
@@ -69,7 +74,7 @@ const calleeFn = (m: Module, call: Node & ES.CallExpression) =>
 /** Always null: `null`, a name bound to it, or a call of null or of a function that only returns it. */
 const isNull = (m: Module, n: Node, depth = 0): boolean => {
   if (depth > 6) return false;
-  if (n.type === "Literal") return n.value === null;
+  if (n.type === "NullLiteral") return true;
   if (n.type === "Identifier") {
     const i = initOf(m, n);
     return !!i && isNull(i.m, i.n, depth + 1);
@@ -110,15 +115,11 @@ const toolName = (
         : undefined;
   const prop = (key: string) =>
     lit?.properties.find(
-      (x): x is ES.Property =>
-        x.type === "Property" &&
-        !x.computed &&
-        x.key.type === "Identifier" &&
-        x.key.name === key,
+      (x): x is Prop => x.type !== "SpreadElement" && keyOf(x) === key,
     );
   const p = prop("name");
   if (p) {
-    const name = constString(m, p.value as Node);
+    const name = constString(m, propValue(p));
     const e = prop("isEnabled");
     return name
       ? { name, ...(e && { enabled: { m, n: e as Node } }) }
@@ -234,7 +235,7 @@ const items = (
       return;
     }
     // `x?.()` with `x=null` gives no tool.
-    if (n.optional && isNull(m, c)) return;
+    if ("optional" in n && n.optional && isNull(m, c)) return;
     const f = calleeFn(m, n);
     if (f) {
       for (const ret of returnsOf(f.fn))
@@ -248,18 +249,16 @@ const items = (
   const r = required(m, n);
   const i = n.type === "Identifier" ? initOf(m, n) : undefined;
   const next =
-    n.type === "ChainExpression"
-      ? [{ m, n: n.expression as Node }]
-      : n.type === "LogicalExpression"
-        ? [
-            { m, n: n.left as Node },
-            { m, n: n.right as Node },
-          ]
-        : i
-          ? [i]
-          : r && typeof r !== "string"
-            ? [r]
-            : [];
+    n.type === "LogicalExpression"
+      ? [
+          { m, n: n.left as Node },
+          { m, n: n.right as Node },
+        ]
+      : i
+        ? [i]
+        : r && typeof r !== "string"
+          ? [r]
+          : [];
   for (const x of next) items(R, x.m, x.n, when, out, depth + 1);
   if (next.length) return;
   add({
@@ -284,7 +283,7 @@ const calledFns = (
     const id =
       x.type === "CallExpression"
         ? x.callee
-        : x.type === "Property" && x === n
+        : x.type === "ObjectProperty" && x === n
           ? x.value
           : undefined;
     if (id?.type !== "Identifier") continue;
@@ -314,7 +313,7 @@ export const baseTools = (
   if (!f) throw new Error("no getAllBaseTools function found");
   const out: (Tool & { conds: Cond[] })[] = [];
   for (const ret of returnsOf(f.fn))
-    if (ret) items(R, f.module, ret as Node & ES.Expression, [], out);
+    if (ret) items(R, f.module, ret as Node & t.Expression, [], out);
   const fns = new Map<string, string>();
   for (const t of out) for (const c of t.conds) calledFns(c.m, c.n, fns);
   return {

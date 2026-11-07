@@ -12,7 +12,7 @@
 // drops 507 of 4529 texts, leaving 4022 (OpenTelemetry protobuf, crypto, XML, CSS selector, JWT). Bundled ES modules have no such wrapper, and no
 // module or function marker tells them from app code without losing app texts, so the rest stay.
 // The old `strings` heuristic has no error list, so there is nothing to compare.
-import type * as ES from "estree";
+import type * as t from "@babel/types";
 import { constString, isFn, type Module, type Node } from "../ast.ts";
 import {
   type Extractor,
@@ -36,7 +36,7 @@ const errorClass = (m: Module, id: Node, depth = 0): string | undefined => {
   const o = m.bundle ? m.bundle.origin(m, v0) : { module: m, variable: v0 };
   if (!o) return undefined;
   const def = o.variable.defs[0];
-  const writes = o.variable.references.filter((r) => r.isWrite() && !r.init);
+  const writes = o.variable.references.filter((r) => r.write && !r.init);
   const cls: Node | null | undefined =
     def?.type === "ClassName"
       ? (def.node as Node)
@@ -103,10 +103,10 @@ const inLibrary = (m: Module, at: Node): boolean => {
   return false;
 };
 
-type Call = ES.NewExpression | ES.CallExpression;
+type Call = t.NewExpression | t.CallExpression;
 
 /** The constructions a throw can raise: both branches of `c ? new A(…) : new B(…)` raise one each. */
-const thrown = (a: ES.Expression): Call[] =>
+const thrown = (a: t.Expression): Call[] =>
   a.type === "ConditionalExpression"
     ? [...thrown(a.consequent), ...thrown(a.alternate)]
     : a.type === "NewExpression" || a.type === "CallExpression"
@@ -130,7 +130,7 @@ export const extractErrors: Extractor = (bundle) => {
   };
   scan(bundle, ["throw", "stderr"], (m, n) => {
     if (n.type === "ThrowStatement") {
-      for (const call of thrown(n.argument as ES.Expression)) {
+      for (const call of thrown(n.argument as t.Expression)) {
         const base = errorClass(m, call.callee as Node);
         if (base) add(m, call, `throw ${base}`);
       }

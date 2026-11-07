@@ -1,8 +1,7 @@
 // The types an expression can give in a bundled program. `expr` (the keys of an object) comes from the
 // class that extends this one.
-import type { Variable } from "eslint-scope";
-import type * as ES from "estree";
 import {
+  type CallNode,
   callsOf,
   constString,
   type Fn,
@@ -10,6 +9,7 @@ import {
   type Module,
   type Node,
   returnsOf,
+  type Variable,
 } from "../ast.ts";
 import {
   bind,
@@ -68,23 +68,28 @@ export abstract class TypeResolver {
   }
   #types = new Map<Node, Ty[] | undefined>();
 
-  #typeOf(m: Module, n: Node | null, env?: Env, depth = 0): Ty[] | undefined {
-    if (n?.type === "Literal" && n.value === null) return ["null"];
+  #typeOf(
+    m: Module,
+    n: Node | null,
+    env?: Env,
+    depth = 0,
+    chained = false,
+  ): Ty[] | undefined {
+    if (n?.type === "NullLiteral") return ["null"];
     if (!n || isVoid(n)) return ["absent"];
     if (depth > 12) return undefined;
+    // A chain gives "absent" when a link is nullish.
+    if (m.isChain(n) && !chained)
+      return union(this.#typeOf(m, n, env, depth + 1, true), ["absent"]);
     const t = (x: Node | null | undefined) =>
       this.typeOf(m, (x as Node) ?? null, env, depth + 1);
     switch (n.type) {
-      case "Literal":
-        return n.value === null
-          ? ["null"]
-          : typeof n.value === "string"
-            ? ["string"]
-            : typeof n.value === "number"
-              ? ["number"]
-              : typeof n.value === "boolean"
-                ? ["boolean"]
-                : undefined;
+      case "StringLiteral":
+        return ["string"];
+      case "NumericLiteral":
+        return ["number"];
+      case "BooleanLiteral":
+        return ["boolean"];
       case "TemplateLiteral":
         return ["string"];
       case "ArrayExpression":
@@ -125,17 +130,10 @@ export abstract class TypeResolver {
         return t(n.expressions.at(-1) as Node);
       case "AssignmentExpression":
         return n.operator === "=" ? t(n.right as Node) : undefined;
-      case "ChainExpression":
-        return union(t(n.expression as Node), ["absent"]);
       case "AwaitExpression":
-        return n.argument.type === "CallExpression"
-          ? this.#callType(
-              m,
-              n.argument as Node & ES.CallExpression,
-              env,
-              depth,
-              true,
-            )
+        return n.argument.type === "CallExpression" &&
+          !m.isChain(n.argument as Node)
+          ? this.#callType(m, n.argument as CallNode, env, depth, true)
           : t(n.argument as Node);
       case "CallExpression":
         return this.#callType(m, n, env, depth, false);
@@ -165,14 +163,13 @@ export abstract class TypeResolver {
 
   #callType(
     m: Module,
-    call: Node & ES.CallExpression,
+    call: CallNode,
     env: Env | undefined,
     depth: number,
     awaited: boolean,
   ): Ty[] | undefined {
     const c = call.callee as Node;
-    const isGlobal = (id: Node) =>
-      id.type === "Identifier" && m.reference(id)?.resolved === null;
+    const isGlobal = (id: Node) => id.type === "Identifier" && m.isGlobal(id);
     // Own keys only: `toString` and `constructor` are on every object's prototype.
     const own = <T>(o: Record<string, T> | undefined, k: string) =>
       o && Object.hasOwn(o, k) ? o[k] : undefined;
@@ -240,7 +237,7 @@ export abstract class TypeResolver {
     const def = v.defs[0];
     if (def?.type === "Parameter") {
       const fn = def.node as Fn;
-      const index = fn.params.indexOf(def.name as ES.Pattern);
+      const index = (fn.params as Node[]).indexOf(def.name);
       if (index < 0) return undefined;
       let out: Ty[] | undefined = [];
       for (const c of callsOf(m, fn)) {
@@ -263,16 +260,16 @@ export abstract class TypeResolver {
       return out?.length ? out : undefined;
     }
     if (def?.type !== "Variable" || def.node.id !== def.name) return undefined;
-    const loop = m.parent(def.parent as unknown as Node);
+    const loop = m.parent(def.parent);
     if (
       (loop?.type === "ForOfStatement" || loop?.type === "ForInStatement") &&
-      loop.left === (def.parent as unknown)
+      loop.left === def.parent
     )
       return undefined;
     let out: Ty[] | undefined = def.node.init ? [] : ["absent"];
     for (const r of v.references) {
-      if (!r.isWrite()) continue;
-      const p = m.parent(r.identifier as Node);
+      if (!r.write) continue;
+      const p = m.parent(r.identifier);
       const op = p?.type === "AssignmentExpression" ? p.operator : "=";
       const w =
         p?.type === "UpdateExpression"

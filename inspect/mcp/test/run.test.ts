@@ -201,3 +201,163 @@ test("runArgs refuses a file path outside the project", async () => {
       runArgs(argsProgram(), ["x"], { files: { [name]: "" } }),
     ).rejects.toThrow("outside the project");
 });
+
+// Reads the stored login, asks `PROBE_URL` and api.anthropic.com for the profile, and logs what it got.
+const profileProgram = () => {
+  const bin = join(tmp, `claude-profile-${n++}`);
+  writeFileSync(
+    bin,
+    `#!/usr/bin/env bun
+const cfg = process.env.CLAUDE_CONFIG_DIR;
+const token = (await Bun.file(cfg + "/.credentials.json").json()).claudeAiOauth.accessToken;
+const ask = async (url) => {
+  try {
+    const r = await fetch(url, { headers: { authorization: "Bearer " + token } });
+    return r.status + " " + r.headers.get("request-id") + " " + JSON.stringify(await r.json());
+  } catch (e) {
+    return "failed";
+  }
+};
+const lines = [
+  "args " + JSON.stringify(process.argv.slice(2)),
+  "apiKey " + (process.env.ANTHROPIC_API_KEY ?? "unset"),
+  "stub " + (await ask(process.env.PROBE_URL + "/api/oauth/profile")),
+  "api " + (await ask("https://api.anthropic.com/api/oauth/profile")),
+  "other " + (await ask("https://probe.invalid/")),
+];
+await Bun.write(cfg + "/out.log", lines.join("\\n"));
+`,
+  );
+  chmodSync(bin, 0o755);
+  return bin;
+};
+
+test("runArgs with an oauth login, stub replies, and <stub> and <config-dir> placeholders", async () => {
+  const { runArgs } = await import("../src/run.ts");
+  const r = await runArgs(profileProgram(), ["<config-dir>/x"], {
+    login: "oauth",
+    env: { PROBE_URL: "<stub>" },
+    replies: { "GET /api/oauth/profile": { account: { uuid: "u" } } },
+  });
+  expect(r.exit).toBe(0);
+  expect(r.files["out.log"]?.split("\n")).toEqual([
+    `args ["${r.dirs.config}/x"]`,
+    "apiKey unset",
+    'stub 200 req_probe {"account":{"uuid":"u"}}',
+    "api failed",
+    "other failed",
+  ]);
+  expect(r.requests.map((q) => `${q.method} ${q.path} ${q.fakeKey}`)).toEqual([
+    "GET /api/oauth/profile true",
+  ]);
+});
+
+test("runArgs with apiHost answers api.anthropic.com and still refuses other hosts", async () => {
+  const { API_HOST, runArgs } = await import("../src/run.ts");
+  const r = await runArgs(profileProgram(), [], {
+    login: "oauth",
+    env: { PROBE_URL: "<stub>" },
+    replies: { "GET /api/oauth/profile": { ok: 1 } },
+    apiHost: true,
+  });
+  expect(r.files["out.log"]?.split("\n").slice(2)).toEqual([
+    'stub 200 req_probe {"ok":1}',
+    'api 200 req_probe {"ok":1}',
+    "other failed",
+  ]);
+  expect(r.requests.map((q) => q.host)).toEqual([
+    expect.stringMatching(/^127\.0\.0\.1:\d+$/),
+    API_HOST,
+  ]);
+});
+
+// Sends a main turn with Read and Bash, a side request without tools, the turns after one and two tool results, then a streamed main turn.
+const toolProgram = () => {
+  const bin = join(tmp, `claude-tool-${n++}`);
+  writeFileSync(
+    bin,
+    `#!/usr/bin/env bun
+const ask = (stream, tools, content) =>
+  fetch(process.env.ANTHROPIC_BASE_URL + "/v1/messages", {
+    method: "POST",
+    headers: { "x-api-key": "sk-ant-fake-probe", "content-type": "application/json" },
+    body: JSON.stringify({ stream, tools, messages: [{ role: "user", content }] }),
+  }).then((r) => r.text());
+const tools = [{ name: "Read" }, { name: "Bash" }];
+const result = { type: "tool_result", tool_use_id: "toolu_probe", content: "hi" };
+const lines = [
+  await ask(false, tools, "hi"),
+  await ask(false, [], "title"),
+  await ask(false, tools, [result]),
+  await ask(false, tools, [result, result]),
+  (await ask(true, tools, "hi")).split("\\n").filter((l) => l.includes("tool_use") || l.includes("json_delta")).join("\\n"),
+];
+await Bun.write(process.env.CLAUDE_CONFIG_DIR + "/out.log", lines.join("\\n"));
+`,
+  );
+  chmodSync(bin, 0o755);
+  return bin;
+};
+
+test("runArgs with calls makes the main turn call them in order, in plain and streamed replies", async () => {
+  const { runArgs } = await import("../src/run.ts");
+  const read = { name: "Read", input: { file_path: "a.txt" } };
+  const bash = { name: "Bash", input: { command: "echo hi" } };
+  const r = await runArgs(toolProgram(), [], { calls: [read, bash] });
+  const [first, side, second, after, ...stream] =
+    r.files["out.log"]?.split("\n") ?? [];
+  expect(JSON.parse(first ?? "")).toMatchObject({
+    content: [{ type: "tool_use", id: "toolu_probe_0", ...read }],
+    stop_reason: "tool_use",
+  });
+  expect(JSON.parse(side ?? "").content).toEqual([
+    { type: "text", text: "OK" },
+  ]);
+  expect(JSON.parse(second ?? "").content).toMatchObject([
+    { id: "toolu_probe_1", ...bash },
+  ]);
+  expect(JSON.parse(after ?? "").stop_reason).toBe("end_turn");
+  expect(stream.join("\n")).toContain(
+    '"partial_json":"{\\"file_path\\":\\"a.txt\\"}"',
+  );
+  expect(stream.join("\n")).toContain('"stop_reason":"tool_use"');
+});
+
+test("runArgs with a call safeguard adds the auto mode verdict for that call id", async () => {
+  const { runArgs } = await import("../src/run.ts");
+  const bash = { name: "Bash", input: { command: "echo hi" } };
+  const r = await runArgs(toolProgram(), [], {
+    calls: [{ ...bash, safeguard: "flagged" }],
+  });
+  const [first, , , , ...stream] = r.files["out.log"]?.split("\n") ?? [];
+  const verdict = [
+    {
+      type: "dangerous_tool_use",
+      status: {
+        type: "available",
+        tool_uses: { toolu_probe_0: { type: "evaluated", outcome: "flagged" } },
+      },
+    },
+  ];
+  expect(JSON.parse(first ?? "").safeguard_results).toEqual(verdict);
+  const delta = stream.find((l) => l.includes("message_delta")) ?? "";
+  expect(
+    JSON.parse(delta.replace(/^data: /, "")).delta.safeguard_results,
+  ).toEqual(verdict);
+});
+
+test("runArgs with baseUrl false leaves ANTHROPIC_BASE_URL unset", async () => {
+  const { runArgs } = await import("../src/run.ts");
+  const bin = join(tmp, `claude-base-${n++}`);
+  writeFileSync(
+    bin,
+    "#!/usr/bin/env bun\nconsole.log(String(process.env.ANTHROPIC_BASE_URL));\n",
+  );
+  chmodSync(bin, 0o755);
+  expect((await runArgs(bin, [], { baseUrl: false })).stdout.trim()).toBe(
+    "undefined",
+  );
+  expect((await runArgs(bin, [])).stdout.trim()).toMatch(
+    /^http:\/\/127\.0\.0\.1:\d+$/,
+  );
+});

@@ -1,4 +1,6 @@
 import { describe, expect, test } from "bun:test";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { listInstalls, program } from "../../src/binary.ts";
 import { Resolver } from "../../src/resolve.ts";
 import { surface } from "../../src/surface/index.ts";
@@ -151,5 +153,58 @@ describe.skipIf(!has)("installed binary 2.1.309", () => {
     expect(n).toContain("Not connected");
     expect(n.some((x) => x.startsWith("Cloud gateway"))).toBe(true);
     expect(n.every((x) => x.length >= 10 && x.includes(" "))).toBe(true);
+  }, 300_000);
+});
+
+// The generated managed-settings schema comes from running the program's zod validators, so its nested
+// property paths are an oracle for the `setting-key` walk of the same version's code.
+const schema = JSON.parse(
+  readFileSync(
+    join(
+      import.meta.dir,
+      "../../../../schemas/claude-code-managed-settings.json",
+    ),
+    "utf8",
+  ),
+);
+const schemaVersion = /Claude Code ([\d.]+)\)/.exec(schema.title)?.[1];
+const hasSchema = installs.some((i) => i.version === schemaVersion);
+
+describe.skipIf(!hasSchema)("setting-key against the generated schema", () => {
+  test("names every nested leaf property path of the schema, and no other", () => {
+    const paths = new Set<string>();
+    type Node = {
+      $ref?: string;
+      anyOf?: Node[];
+      oneOf?: Node[];
+      allOf?: Node[];
+      properties?: Record<string, Node>;
+      additionalProperties?: Node | boolean;
+    };
+    const walk = (n: Node | undefined, path: string) => {
+      if (!n || typeof n !== "object") return;
+      const ref = n.$ref?.split("/").pop();
+      if (ref) walk(schema.$defs?.[ref] ?? schema.definitions?.[ref], path);
+      for (const x of [
+        ...(n.anyOf ?? []),
+        ...(n.oneOf ?? []),
+        ...(n.allOf ?? []),
+      ])
+        walk(x, path);
+      for (const [k, v] of Object.entries(n.properties ?? {})) {
+        const q = path ? `${path}.${k}` : k;
+        if (path) paths.add(q);
+        walk(v, q);
+      }
+      if (typeof n.additionalProperties === "object")
+        walk(n.additionalProperties, `${path}.*`);
+    };
+    walk(schema, "");
+    const p = program(schemaVersion);
+    const got = surface(p.bundle, "setting-key", p.modules).map((i) => i.name);
+    const leaves = [...paths].filter(
+      (q) => ![...paths].some((o) => o.startsWith(`${q}.`)),
+    );
+    expect(got).toEqual(leaves.sort());
   }, 300_000);
 });

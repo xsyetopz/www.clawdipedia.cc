@@ -32,23 +32,45 @@
 // - Only there, missed: `CLAUDE_CODE_DISABLE_HOME_SETTINGS_SEED` (read from a method result,
 //   `e.spawnEnv()`), `CLAUDE_RUNNER_CLAUDE_BIN` (set in an env object with no `env:` key or spread),
 //   and `CLAUDE_CODE_ARTIFACT_FD` (held in a constant; no read found).
-import type * as ES from "estree";
+import type * as t from "@babel/types";
 import {
   callsOf,
+  children,
   constString,
   type Fn,
   isFn,
   type Module,
   type Node,
+  nameOf,
 } from "../ast.ts";
 import {
   type Extractor,
   keyOf,
+  type Prop,
+  propValue,
   type SurfaceItem,
   scan,
   strings,
   unique,
 } from "./common.ts";
+
+const EACH = new Set(["map", "flatMap", "forEach", "filter", "some", "every"]);
+/** The names of a constant string list that `list.flatMap(f)` passes to `f`, when `f` is `n`. */
+const eachName = (m: Module, n: Node): string[] => {
+  const c = m.parent(n);
+  if (
+    c?.type !== "CallExpression" ||
+    c.arguments[0] !== n ||
+    c.callee.type !== "MemberExpression" ||
+    c.callee.property.type !== "Identifier" ||
+    !EACH.has(c.callee.property.name)
+  )
+    return [];
+  const list = c.callee.object as Node;
+  const def = list.type === "Identifier" ? m.variable(list)?.defs[0] : null;
+  const init = def?.type === "Variable" ? (def.node.init as Node) : list;
+  return strings(m, init) ?? [];
+};
 
 const NAME = /^[A-Za-z_][A-Za-z0-9_]*$/;
 const UPPER = /^[A-Z_][A-Z0-9_]*$/;
@@ -140,16 +162,16 @@ export const extractEnv: Extractor = (bundle) => {
       n.arguments[1]?.type !== "ObjectExpression"
     )
       return;
-    const o = n.arguments[1] as ES.ObjectExpression;
+    const o = n.arguments[1] as t.ObjectExpression;
     const keys = o.properties.map(keyOf);
     if (keys.length < 3 || !keys.every((k) => k && NAME.test(k))) return;
-    const types = (o.properties as ES.Property[]).map((p) =>
-      registryType(m, p.value as Node),
+    const types = (o.properties as Prop[]).map((p) =>
+      registryType(m, propValue(p)),
     );
     // An env registry: most getters are typed (`H.bool()`, ...); a constants namespace is not.
     if (types.filter((t) => t && TYPES.has(t.method)).length * 2 < types.length)
       return;
-    (o.properties as ES.Property[]).forEach((p, i) => {
+    (o.properties as Prop[]).forEach((p, i) => {
       const t = types[i];
       add(
         m,
@@ -202,15 +224,15 @@ export const extractEnv: Extractor = (bundle) => {
       env.is(m, n.init as Node)
     )
       for (const p of n.id.properties) {
-        const k = p.type === "Property" ? keyOf(p) : undefined;
+        const k = p.type === "ObjectProperty" ? keyOf(p) : undefined;
         if (k) add(m, p as unknown as Node, k);
       }
     if (n.type === "ObjectExpression") {
       const parent = m.parent(n);
       const option =
-        parent?.type === "Property" &&
-        keyOf(parent as ES.Property) === "env" &&
-        (parent as ES.Property).value === n;
+        parent?.type === "ObjectProperty" &&
+        keyOf(parent) === "env" &&
+        parent.value === n;
       if (option || env.is(m, n)) {
         const stack: Node[] = [n];
         while (stack.length) {
@@ -222,7 +244,7 @@ export const extractEnv: Extractor = (bundle) => {
             for (const p of o.properties) {
               if (p.type === "SpreadElement") stack.push(p.argument as Node);
               const k =
-                p.type !== "Property"
+                p.type === "SpreadElement"
                   ? undefined
                   : p.computed
                     ? constString(m, p.key as Node)
@@ -236,7 +258,7 @@ export const extractEnv: Extractor = (bundle) => {
       }
       if (n.properties.length >= 2) {
         const s = n.properties.map((p) =>
-          p.type === "Property" ? keyOf(p) : undefined,
+          p.type === "SpreadElement" ? undefined : keyOf(p),
         );
         if (s.every((x) => x && UPPER.test(x)))
           lists.push({ m, n, names: s as string[] });
@@ -256,6 +278,31 @@ export const extractEnv: Extractor = (bundle) => {
           : undefined;
       if (s !== undefined) add(m, n, s);
       else if (p) helpers.push({ m, ...p });
+    }
+    // `(j)=>Object.entries(process.env).filter(([k])=>k.toUpperCase()===j)`: a helper that matches its
+    // parameter against each name, in any case.
+    if (
+      n.type === "CallExpression" &&
+      n.callee.type === "MemberExpression" &&
+      n.callee.object.type === "Identifier" &&
+      n.callee.object.name === "Object" &&
+      n.callee.property.type === "Identifier" &&
+      ["entries", "keys"].includes(n.callee.property.name) &&
+      n.arguments[0] &&
+      env.is(m, n.arguments[0] as Node)
+    ) {
+      let fn = m.parent(n);
+      while (fn && !isFn(fn)) fn = m.parent(fn);
+      const stack: Node[] = fn ? [fn.body as Node] : [];
+      while (stack.length) {
+        const b = stack.pop() as Node;
+        stack.push(...children(b));
+        if (b.type !== "BinaryExpression" || b.operator !== "===") continue;
+        for (const side of [b.left, b.right] as Node[]) {
+          const p = paramOf(m, side);
+          if (p && p.fn === fn) helpers.push({ m, ...p });
+        }
+      }
     }
     // `"--setenv","NAME",v`: a name set for the sandboxed child (bubblewrap arguments)
     const args =
@@ -281,15 +328,24 @@ export const extractEnv: Extractor = (bundle) => {
         lists.push({ m, n, names: s });
     }
   });
+  // A helper may pass its parameter on to another helper (`wt(e)` -> `Su(e)` -> `process.env[e]`).
   const done = new Set<Fn>();
   for (const h of helpers) {
     if (done.has(h.fn)) continue;
     done.add(h.fn);
+    if (h.index === 0)
+      for (const u of [
+        h.fn as Node,
+        ...(nameOf(h.m, h.fn)?.references.map((r) => r.identifier as Node) ??
+          []),
+      ])
+        for (const s of eachName(h.m, u)) add(h.m, u, s);
     for (const c of callsOf(h.m, h.fn)) {
-      const s =
-        c &&
-        constString(c.module, c.call.arguments[h.index] as Node | undefined);
+      const a = c?.call.arguments[h.index] as Node | undefined;
+      const s = c && constString(c.module, a);
+      const p = c && a && s === undefined ? paramOf(c.module, a) : undefined;
       if (c && s !== undefined) add(c.module, c.call as Node, s);
+      else if (c && p) helpers.push({ m: c.module, ...p });
     }
   }
   // Names added from one list count for the next ones, until no list adds a name.

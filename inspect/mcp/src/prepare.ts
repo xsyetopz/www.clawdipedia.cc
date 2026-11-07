@@ -14,7 +14,14 @@ import {
 } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { basename, join } from "node:path";
-import { children, isFn, Module, type Node } from "./ast.ts";
+import {
+  children,
+  isFn,
+  isMethod,
+  Module,
+  type Node,
+  valueStart,
+} from "./ast.ts";
 import { listInstalls, program } from "./binary.ts";
 import { renameChunks, renamer } from "./clean.ts";
 
@@ -60,15 +67,15 @@ export const cacheRoot = (): string =>
 
 const labelOf = (m: Module, n: Node): string => {
   const p = m.parent(n);
-  if (!isFn(n)) return n.type;
+  if (!isFn(n)) return n.type === "Directive" ? "ExpressionStatement" : n.type;
   const key = (k: Node | undefined) =>
     k?.type === "Identifier"
       ? k.name
-      : k?.type === "Literal"
+      : k?.type === "StringLiteral" || k?.type === "NumericLiteral"
         ? String(k.value)
         : "";
-  if (p?.type === "Property" || p?.type === "MethodDefinition")
-    return key(p.key as Node) || "fn";
+  if (isMethod(n)) return key(n.key as Node) || "fn";
+  if (p?.type === "ObjectProperty") return key(p.key as Node) || "fn";
   if (p?.type === "VariableDeclarator" || p?.type === "AssignmentExpression")
     return "fn";
   return n.type === "FunctionDeclaration" ? "function" : "fn";
@@ -80,43 +87,49 @@ export const unitsOf = (
   m: Module,
   render = renamer(m),
 ): Unit[] => {
-  type Open = { n: Node; holes: Node[]; f: Set<string> };
+  type Open = { n: Node; start: number; holes: Span[]; f: Set<string> };
+  type Span = { start: number; end: number };
   const done: Open[] = [];
   const walk = (n: Node, cur: Open | undefined) => {
     let here = cur;
     if (!cur || isFn(n)) {
-      here = { n, holes: [], f: new Set() };
-      cur?.holes.push(n);
+      // A method's unit starts at its parameters, so the key stays in the unit around it.
+      const start = isMethod(n) ? valueStart(m.text, n) : n.start;
+      here = { n, start, holes: [], f: new Set() };
+      cur?.holes.push({ start, end: n.end });
       done.push(here);
     }
     const f = (here as Open).f;
-    if (n.type === "Literal" && typeof n.value === "string")
+    if (n.type === "StringLiteral" || n.type === "DirectiveLiteral")
       f.add(JSON.stringify(n.value.slice(0, 80)));
     else if (n.type === "TemplateElement" && n.value.cooked)
       f.add(JSON.stringify(n.value.cooked.slice(0, 80)));
     else if (
       (n.type === "MemberExpression" ||
-        n.type === "Property" ||
-        n.type === "MethodDefinition") &&
+        n.type === "ObjectProperty" ||
+        isMethod(n)) &&
       !n.computed
     ) {
       const k = (n.type === "MemberExpression" ? n.property : n.key) as Node;
-      if (k.type === "Identifier") f.add(`.${k.name}`);
+      if (k.type === "Identifier")
+        ((isMethod(n) ? cur : here) as Open).f.add(`.${k.name}`);
     }
-    for (const c of children(n)) walk(c, here);
+    for (const c of children(n))
+      walk(c, isMethod(n) && c === n.key ? cur : here);
   };
   for (const s of children(m.ast)) walk(s, undefined);
-  return done.map(({ n, holes, f }) => {
+  return done.map(({ n, start, holes, f }) => {
     let t = "";
-    let at = n.start;
-    for (const h of holes) {
+    let at = start;
+    // A function in a method key is found after the method, though it comes first in the text.
+    for (const h of holes.sort((a, b) => a.start - b.start)) {
       t += `${render(at, h.start)}ƒ`;
       at = h.end;
     }
     t += render(at, n.end);
     return {
       m: name,
-      s: n.start,
+      s: start,
       e: n.end,
       k: labelOf(m, n),
       t,

@@ -121,7 +121,7 @@ describe("names", () => {
   test("a destructured name, a catch parameter, or a loop variable is not followed", () => {
     for (const src of [
       "let x={};function f({x}){g({...x})}f({x:{a:1}})",
-      "let x={};let{x:y,x}=z;g({...x})",
+      "let x={};{let{x:y,x}=z;g({...x})}",
       "let x={};try{}catch(x){g({...x})}",
       "let x={};for(const x of y){g({...x})}",
     ])

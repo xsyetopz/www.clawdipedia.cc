@@ -1,8 +1,7 @@
 // The call and function queries of a module: who a callee is, who calls a function, what a name holds.
 
-import type { Variable } from "eslint-scope";
-import type * as ES from "estree";
-import type { Module } from "../ast.ts";
+import type * as t from "@babel/types";
+import type { Module, Variable } from "../ast.ts";
 import { children, type Fn, isFn, type Node } from "./node.ts";
 
 /** The function a callee names: a declaration, or a variable whose only value is a function. */
@@ -17,15 +16,15 @@ export const functionOf = (
   if (!o) return undefined;
   const { module, variable: v } = o;
   for (const d of v.defs) {
-    if (d.type === "FunctionName" && isFn(d.node as Node))
+    if (d.type === "FunctionName" && isFn(d.node))
       return { module, fn: d.node as Fn };
     if (d.type === "Variable" && isFn(d.node.init as Node | null)) {
-      const writes = v.references.filter((r) => r.isWrite());
+      const writes = v.references.filter((r) => r.write);
       if (writes.length <= 1) return { module, fn: d.node.init as Fn };
     }
   }
   // `var f; ... f=function(){}`: one write, of a function.
-  const writes = v.references.filter((r) => r.isWrite());
+  const writes = v.references.filter((r) => r.write);
   const w = writes[0]?.writeExpr as Node | null | undefined;
   if (writes.length === 1 && isFn(w)) return { module, fn: w };
   return undefined;
@@ -43,7 +42,7 @@ export const nameOf = (m: Module, fn: Fn): Variable | undefined => {
   return undefined;
 };
 
-export type CallNode = Node & ES.CallExpression;
+export type CallNode = Node & t.CallExpression;
 export type Call = { module: Module; call: CallNode };
 
 /**
@@ -56,11 +55,11 @@ export const callsOf = (m: Module, fn: Fn): (Call | undefined)[] => {
   const out: (Call | undefined)[] = [];
   const scan = (module: Module, variable: Variable) => {
     for (const r of variable.references) {
-      if (r.init || (r.isWrite() && r.writeExpr === fn)) continue;
+      if (r.init || (r.write && r.writeExpr === fn)) continue;
       const id = r.identifier as Node;
       const p = module.parent(id);
       if (p?.type === "CallExpression" && p.callee === id)
-        out.push({ module, call: p as Node & ES.CallExpression });
+        out.push({ module, call: p as Node & t.CallExpression });
       else if (p?.type !== "ExportSpecifier") out.push(undefined);
     }
   };
@@ -77,7 +76,7 @@ export const constString = (
   depth = 0,
 ): string | undefined => {
   if (!n || depth > 8) return undefined;
-  if (n.type === "Literal" && typeof n.value === "string") return n.value;
+  if (n.type === "StringLiteral") return n.value;
   if (n.type === "TemplateLiteral" && n.expressions.length === 0)
     return n.quasis[0]?.value.cooked ?? undefined;
   if (n.type !== "Identifier") return undefined;
@@ -85,7 +84,7 @@ export const constString = (
   const o =
     v0 && (m.bundle ? m.bundle.origin(m, v0) : { module: m, variable: v0 });
   if (!o) return undefined;
-  const writes = o.variable.references.filter((r) => r.isWrite());
+  const writes = o.variable.references.filter((r) => r.write);
   const def = o.variable.defs[0];
   const values = [
     ...(def?.type === "Variable" && def.node.init ? [def.node.init] : []),

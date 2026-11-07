@@ -39,7 +39,7 @@ export const extractEndpoints: Extractor = (bundle) => {
     bundle,
     ["https://", "BASE_API_URL", '"/api/', '"/v1/', "`/"],
     (m, n) => {
-      if (n.type === "Literal" && typeof n.value === "string") {
+      if (n.type === "StringLiteral") {
         const s = n.value;
         if (PATH.test(s)) add(s, n.start, m.name, "path");
         if (!s.startsWith("https://") || !HOST.test(hostOf(s) ?? "")) return;

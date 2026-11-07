@@ -1,8 +1,16 @@
 // The keys of the object an expression gives; the calls, parameters, and pins come from the class that
 // extends this one.
-import type { Variable } from "eslint-scope";
-import type * as ES from "estree";
-import { constString, type Fn, type Module, type Node } from "../ast.ts";
+import type * as t from "@babel/types";
+import {
+  type CallNode,
+  constString,
+  type Fn,
+  isLit,
+  type Module,
+  type Node,
+  type Variable,
+  valueStart,
+} from "../ast.ts";
 import { isVoid, memberPath } from "./tables.ts";
 import { TypeResolver } from "./typeof.ts";
 import { type Entry, type Env, mergeEntries, type Val } from "./types.ts";
@@ -18,7 +26,7 @@ export abstract class ValueResolver extends TypeResolver {
   ): Entry[] | undefined;
   abstract call(
     m: Module,
-    call: Node & ES.CallExpression,
+    call: CallNode,
     env?: Env,
     depth?: number,
   ): Entry[] | undefined;
@@ -31,7 +39,7 @@ export abstract class ValueResolver extends TypeResolver {
   }
 
   /** Entries of an object literal: keys (computed ones when they are constant strings) and spreads. */
-  entries(m: Module, obj: Node & ES.ObjectExpression, env?: Env): Entry[] {
+  entries(m: Module, obj: Node & t.ObjectExpression, env?: Env): Entry[] {
     const out: Entry[] = [];
     const spread = (n: Node, opt: boolean) => {
       if (n.type === "ObjectExpression")
@@ -48,51 +56,45 @@ export abstract class ValueResolver extends TypeResolver {
         spread(n.alternate as Node, true);
       } else if (
         !isVoid(n) &&
-        n.type !== "Literal" &&
+        !isLit(n) &&
         !(n.type === "UnaryExpression" && n.operator === "!")
       )
         out.push({ spread: m.src(n), opt, ref: { m, n, env } });
     };
     for (const p of obj.properties as (Node &
-      (ES.Property | ES.SpreadElement))[]) {
+      (t.ObjectProperty | t.ObjectMethod | t.SpreadElement))[]) {
       if (p.type === "SpreadElement") {
         spread(p.argument as Node, false);
         continue;
       }
+      const k = p.key as Node;
       const key = p.computed
-        ? constString(m, p.key as Node)
-        : p.key.type === "Identifier"
-          ? p.key.name
-          : p.key.type === "Literal"
-            ? String(p.key.value)
+        ? constString(m, k)
+        : k.type === "Identifier"
+          ? k.name
+          : isLit(k)
+            ? String((k as t.StringLiteral).value)
             : undefined;
       if (key === undefined) continue;
-      const v = p.value as Node;
       out.push({
         key,
         opt: false,
         val:
-          p.kind === "init" && !p.method
-            ? this.value(m, v, env)
-            : { k: "unk", text: m.src(v) },
+          p.type === "ObjectProperty"
+            ? this.value(m, p.value as Node, env)
+            : { k: "unk", text: m.text.slice(valueStart(m.text, p), p.end) },
       });
     }
     return out;
   }
 
   value(m: Module, n: Node, env?: Env): Val {
-    if (n.type === "Literal") {
-      if (typeof n.value === "string") return { k: "str", v: n.value };
-      if (typeof n.value === "number") return { k: "num", v: n.value };
-      if (typeof n.value === "boolean") return { k: "bool", v: n.value };
-    }
+    if (n.type === "StringLiteral") return { k: "str", v: n.value };
+    if (n.type === "NumericLiteral") return { k: "num", v: n.value };
+    if (n.type === "BooleanLiteral") return { k: "bool", v: n.value };
     if (n.type === "TemplateLiteral" && n.expressions.length === 0)
       return { k: "str", v: n.quasis[0]?.value.cooked ?? "" };
-    if (
-      n.type === "UnaryExpression" &&
-      n.argument.type === "Literal" &&
-      typeof n.argument.value === "number"
-    ) {
+    if (n.type === "UnaryExpression" && n.argument.type === "NumericLiteral") {
       if (n.operator === "!") return { k: "bool", v: !n.argument.value };
       if (n.operator === "-") return { k: "num", v: -n.argument.value };
     }
@@ -170,10 +172,10 @@ export abstract class ValueResolver extends TypeResolver {
     if (def?.type === "Parameter")
       return this.param(o.module, o.variable, def.node as Fn, depth);
     if (def?.type !== "Variable" || def.node.id !== def.name) return undefined;
-    const loop = o.module.parent(def.parent as unknown as Node);
+    const loop = o.module.parent(def.parent);
     if (
       (loop?.type === "ForOfStatement" || loop?.type === "ForInStatement") &&
-      loop.left === (def.parent as unknown)
+      loop.left === def.parent
     )
       return undefined;
     const cacheable = !env && o.module !== m;
@@ -186,10 +188,10 @@ export abstract class ValueResolver extends TypeResolver {
     const later: Entry[] = [];
     if (!def.node.init) lists.push([]);
     for (const r of o.variable.references) {
-      const at = (r.identifier as Node).start;
+      const at = r.identifier.start;
       if (at >= before) continue;
-      const p = o.module.parent(r.identifier as Node);
-      if (r.isWrite()) {
+      const p = o.module.parent(r.identifier);
+      if (r.write) {
         if (p?.type === "AssignmentExpression" && p.operator !== "=") continue;
         const got = this.expr(o.module, r.writeExpr as Node, env, depth + 1);
         if (!got) return undefined;

@@ -93,7 +93,7 @@ group<Args & { from?: string; to?: string }>(
       );
       const count = (k: string) => lines.filter((l) => l.status === k).length;
       return text(
-        `${b.index.version} notes against ${a.index.version}: ${lines.length} lines, ${count("matched")} matched, ${count("gated")} gated, ${count("unmatched")} unmatched. A match is a lead to read, not a proof.\n${lines
+        `${b.index.version} notes against ${a.index.version}: ${lines.length} lines, ${count("matched")} matched, ${count("gated")} gated, ${count("unmatched")} unmatched. Read the code of each match before you state it.\n${lines
           .map((l) => {
             const u = l.change && (l.change.to ?? l.change.from);
             const why = u
