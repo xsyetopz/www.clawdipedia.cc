@@ -28228,7 +28228,7 @@ var package_default = {
   },
   dependencies: {
     "@modelcontextprotocol/sdk": "^1.32.2",
-    "@rgrove/parse-xml": "^5.0.0",
+    "@rgrove/parse-xml": "^5.1.0",
     "node-html-markdown": "^2.0.0",
     "node-html-parser": "^9.0.5",
     zod: "^4.6.7"
@@ -28854,7 +28854,7 @@ class StringScanner {
     this.string = string;
     if (this.multiByteMode) {
       let charsToBytes = [];
-      for (let byteIndex = 0, charIndex = 0;charIndex < this.charCount; ++charIndex) {
+      for (let byteIndex = 0, charIndex = 0;charIndex <= this.charCount; ++charIndex) {
         charsToBytes[charIndex] = byteIndex;
         byteIndex += string.codePointAt(byteIndex) > 65535 ? 2 : 1;
       }
@@ -28939,6 +28939,7 @@ var attValueCharDoubleQuote = /["&<]/;
 var attValueCharSingleQuote = /['&<]/;
 var attValueNormalizedWhitespace = /\r\n|[\n\r\t]/g;
 var endCharData = /<|&|]]>/;
+var markupDeclarationDelimiter = /["'<>\]]|$/;
 var predefinedEntities = Object.freeze(Object.assign(Object.create(null), {
   amp: "&",
   apos: "'",
@@ -29357,7 +29358,7 @@ class Parser {
     }
     return this.addText(charData, startIndex);
   }
-  consumeComment() {
+  consumeComment(addToDocument = true) {
     let { scanner } = this;
     let startIndex = scanner.charIndex;
     if (!scanner.consumeString("<!--")) {
@@ -29371,7 +29372,7 @@ class Parser {
       }
       throw this.error("Unclosed comment");
     }
-    return this.options.preserveComments ? this.addNode(new XmlComment(normalizeLineBreaks(content)), startIndex) : true;
+    return addToDocument && this.options.preserveComments ? this.addNode(new XmlComment(normalizeLineBreaks(content)), startIndex) : true;
   }
   consumeContentReference() {
     let startIndex = this.scanner.charIndex;
@@ -29409,7 +29410,7 @@ class Parser {
     }
     let internalSubset;
     if (scanner.consumeString("[")) {
-      internalSubset = scanner.consumeUntilMatch(/\][\x20\t\r\n]*>/);
+      internalSubset = this.consumeInternalSubset();
       if (!scanner.consumeString("]")) {
         throw this.error("Unclosed internal subset");
       }
@@ -29465,13 +29466,58 @@ class Parser {
     }
     return false;
   }
+  consumeInternalSubset() {
+    let { scanner } = this;
+    let startByteIndex = scanner.charIndexToByteIndex();
+    while (this.consumeWhitespace() || this.consumeComment(false) || this.consumeProcessingInstruction(false) || this.consumeMarkupDeclaration() || this.consumeParameterEntityReference()) {}
+    return scanner.string.slice(startByteIndex, scanner.charIndexToByteIndex());
+  }
+  consumeMarkupDeclaration() {
+    let { scanner } = this;
+    let startIndex = scanner.charIndex;
+    if (scanner.consumeString("<!ATTLIST")) {
+      if (this.options.rejectAttributeListDeclarations) {
+        scanner.reset(startIndex);
+        throw this.error("Attribute-list declarations aren't allowed when `rejectAttributeListDeclarations` is enabled");
+      }
+    } else if (!scanner.consumeString("<!ELEMENT") && !scanner.consumeString("<!ENTITY") && !scanner.consumeString("<!NOTATION")) {
+      return false;
+    }
+    for (;; ) {
+      this.validateChars(scanner.consumeUntilMatch(markupDeclarationDelimiter));
+      let char = scanner.peek();
+      if (char === ">") {
+        scanner.advance();
+        return true;
+      }
+      if (char === '"' || char === "'") {
+        this.consumeSystemLiteral();
+        continue;
+      }
+      throw this.error("Unclosed markup declaration");
+    }
+  }
   consumeMisc() {
     return this.consumeComment() || this.consumeProcessingInstruction() || this.consumeWhitespace();
   }
   consumeName() {
     return isNameStartChar(this.scanner.peek()) ? this.scanner.consumeMatchFn(isNameChar) : emptyString2;
   }
-  consumeProcessingInstruction() {
+  consumeParameterEntityReference() {
+    let { scanner } = this;
+    if (scanner.peek() !== "%") {
+      return false;
+    }
+    if (this.options.rejectAttributeListDeclarations) {
+      throw this.error("Parameter entity references aren't allowed when `rejectAttributeListDeclarations` is enabled");
+    }
+    scanner.advance();
+    if (!this.consumeName() || !scanner.consumeString(";")) {
+      throw this.error("Invalid parameter entity reference");
+    }
+    return true;
+  }
+  consumeProcessingInstruction(addToDocument = true) {
     let { scanner } = this;
     let startIndex = scanner.charIndex;
     if (!scanner.consumeString("<?")) {
@@ -29488,7 +29534,7 @@ class Parser {
     }
     if (!this.consumeWhitespace()) {
       if (scanner.consumeString("?>")) {
-        return this.addNode(new XmlProcessingInstruction(name), startIndex);
+        return addToDocument ? this.addNode(new XmlProcessingInstruction(name), startIndex) : true;
       }
       throw this.error("Whitespace is required after a processing instruction name");
     }
@@ -29497,7 +29543,7 @@ class Parser {
     if (!scanner.consumeString("?>")) {
       throw this.error("Unterminated processing instruction");
     }
-    return this.addNode(new XmlProcessingInstruction(name, normalizeLineBreaks(content)), startIndex);
+    return addToDocument ? this.addNode(new XmlProcessingInstruction(name, normalizeLineBreaks(content)), startIndex) : true;
   }
   consumeProlog() {
     let { scanner } = this;
@@ -29639,7 +29685,7 @@ class Parser {
     for (let i = 0;i < length; ++i) {
       let cp = string.codePointAt(i);
       if (!isXmlCodePoint(cp)) {
-        this.scanner.reset(-([...string].length - i));
+        this.scanner.reset(-[...string.slice(i)].length);
         throw this.error("Invalid character");
       }
       if (cp > 65535) {
