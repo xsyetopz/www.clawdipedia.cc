@@ -39,11 +39,6 @@ pre-commit:
             glob: "{schemas,tools/schemas}/**/*"
             run: bun run schemas:check
 
-commit-msg:
-  jobs:
-    - name: commitlint
-      run: bunx commitlint --edit {1}
-
 pre-push:
   jobs:
     - name: verify-locked

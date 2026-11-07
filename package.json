@@ -22,7 +22,6 @@
     "surface:check": "bun tools/surface/render.ts --check && bun tools/surface/coverage.ts",
     "format": "biome format --write .",
     "lint:code": "biome check --formatter-enabled=false --error-on-warnings .",
-    "commitlint": "commitlint",
     "prepare": "sh tools/install-hooks.sh",
     "verify": "bun run typecheck && bun run format:check && bun run lint:code && bun run lint && bun run check:docs && bun run check:examples && bun run check:hosts && bun run schemas:check && bun run surface:check && bun run build && bun run llms:check && bun run plugin:check && bun run deploy:check",
     "verify:locked": "sh tools/build-locked.sh",
@@ -65,8 +64,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.4",
-    "@commitlint/cli": "^21.2.4",
-    "@commitlint/config-conventional": "^21.2.4",
     "@docusaurus/module-type-aliases": "^3.10.2",
     "@docusaurus/theme-classic": "^3.10.2",
     "@docusaurus/tsconfig": "^3.10.2",

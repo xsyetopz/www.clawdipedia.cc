@@ -17,6 +17,6 @@ Thank you for helping. Keep the site accurate, simple, and unofficial.
 - `lint`: markdownlint on docs.
 - `check:docs` and `schemas:check`: docs and schema checks, when those files change.
 
-The commit message must pass commitlint (Conventional Commits). `git push` runs `bun run verify:locked`. CI runs each gate as its own step.
+`git push` runs `bun run verify:locked`. CI runs each gate as its own step.
 
 Follow the [Code of Conduct](CODE_OF_CONDUCT.md). Notable changes are listed in the [Changelog](CHANGELOG.md).

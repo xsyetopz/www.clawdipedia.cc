@@ -29,32 +29,6 @@ jobs:
         run: |
           bun install --cwd plugin/mcp --frozen-lockfile
           bun install --cwd inspect/mcp --frozen-lockfile
-      - name: Commitlint
-        env:
-          EVENT: ${{ github.event_name }}
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-          BEFORE_SHA: ${{ github.event.before }}
-        run: |
-          if [ "$EVENT" = "pull_request" ]; then
-            from="$BASE_SHA"; to="$HEAD_SHA"
-          elif [ "$EVENT" = "push" ] && [ -n "$BEFORE_SHA" ] && ! echo "$BEFORE_SHA" | grep -qE '^0+$'; then
-            from="$BEFORE_SHA"; to="$GITHUB_SHA"
-          else
-            # First push: lint from the commit that added lefthook.yml (gates apply from then).
-            base="$(git log --diff-filter=A --format=%H -- lefthook.yml | tail -n 1)"
-            if [ -n "$base" ] && git rev-parse -q --verify "$base^" >/dev/null; then
-              from="$base^"
-            else
-              # No usable base: lint every commit, root included (a range would skip the root).
-              for sha in $(git rev-list --reverse "$GITHUB_SHA"); do
-                git log -1 --format=%B "$sha" | bunx commitlint || exit 1
-              done
-              exit 0
-            fi
-            to="$GITHUB_SHA"
-          fi
-          bunx commitlint --from "$from" --to "$to"
       - name: Typecheck
         run: bun run typecheck
       - name: Format
