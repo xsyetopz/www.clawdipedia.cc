@@ -166,9 +166,9 @@
       "anchors": [
         "«».push({type:\"mode\",mode:this.currentSessionMode,sessionId:«»})",
         "function «»(«»){«»().currentSessionMode=«»}",
-        "«»(«»()?\"coordinator\":\"normal\");let «»=«»();if(«»)«»(«»,«»);",
+        "«»(«».isCoordinatorMode()?\"coordinator\":\"normal\"),{messages:",
         "«»(«»()?\"coordinator\":\"normal\"),«»(«»);",
-        "«»(«»()?\"coordinator\":\"normal\"),«»(),«»(«»),"
+        "«»(«».isCoordinatorMode()?\"coordinator\":\"normal\"),«»(),«»(«»,«»),await"
       ],
       "note": "currentSessionMode is set by saveMode, which every caller calls with 'coordinator' or 'normal' (coordinator-mode flag). sessionId is a string."
     },
@@ -179,9 +179,9 @@
       "anchors": [
         "«».push({type:\"mode\",mode:this.currentSessionMode,sessionId:«»})",
         "function «»(«»){«»().currentSessionMode=«»}",
-        "«»(«»()?\"coordinator\":\"normal\");let «»=«»();if(«»)«»(«»,«»);",
+        "«»(«».isCoordinatorMode()?\"coordinator\":\"normal\"),{messages:",
         "«»(«»()?\"coordinator\":\"normal\"),«»(«»);",
-        "«»(«»()?\"coordinator\":\"normal\"),«»(),«»(«»),"
+        "«»(«».isCoordinatorMode()?\"coordinator\":\"normal\"),«»(),«»(«»,«»),await"
       ],
       "note": "currentSessionMode is set by saveMode, which every caller calls with 'coordinator' or 'normal' (coordinator-mode flag). sessionId is a string."
     },
@@ -586,7 +586,7 @@
       },
       "anchors": [
         "{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...h?.length&&{declaredDialogKinds:«»}",
-        "...w?.accountUuid&&{ownerAccountUuid:«».accountUuid},...w?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
+        "...«»?.accountUuid&&{ownerAccountUuid:«».accountUuid},...«»?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
       ],
       "note": "saveBridgeSession writes bridgeSessionId (a string; clearBridgeSession writes the empty string with lastSequenceNum 0), lastSequenceNum (the bridge sequence number, an integer), declaredDialogKinds (a non-empty array, added when length is truthy; the reader maps it through a string-kind normalizer), sessionGroupingId, ownerAccountUuid and ownerOrganizationUuid (strings added when truthy)."
     },
@@ -596,7 +596,7 @@
       },
       "anchors": [
         "{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...h?.length&&{declaredDialogKinds:«»}",
-        "...w?.accountUuid&&{ownerAccountUuid:«».accountUuid},...w?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
+        "...«»?.accountUuid&&{ownerAccountUuid:«».accountUuid},...«»?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
       ],
       "note": "saveBridgeSession writes bridgeSessionId (a string; clearBridgeSession writes the empty string with lastSequenceNum 0), lastSequenceNum (the bridge sequence number, an integer), declaredDialogKinds (a non-empty array, added when length is truthy; the reader maps it through a string-kind normalizer), sessionGroupingId, ownerAccountUuid and ownerOrganizationUuid (strings added when truthy)."
     },
@@ -606,7 +606,7 @@
       },
       "anchors": [
         "{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...h?.length&&{declaredDialogKinds:«»}",
-        "...w?.accountUuid&&{ownerAccountUuid:«».accountUuid},...w?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
+        "...«»?.accountUuid&&{ownerAccountUuid:«».accountUuid},...«»?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
       ],
       "note": "saveBridgeSession writes bridgeSessionId (a string; clearBridgeSession writes the empty string with lastSequenceNum 0), lastSequenceNum (the bridge sequence number, an integer), declaredDialogKinds (a non-empty array, added when length is truthy; the reader maps it through a string-kind normalizer), sessionGroupingId, ownerAccountUuid and ownerOrganizationUuid (strings added when truthy)."
     },
@@ -619,7 +619,7 @@
       },
       "anchors": [
         "{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...h?.length&&{declaredDialogKinds:«»}",
-        "...w?.accountUuid&&{ownerAccountUuid:«».accountUuid},...w?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
+        "...«»?.accountUuid&&{ownerAccountUuid:«».accountUuid},...«»?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
       ],
       "note": "saveBridgeSession writes bridgeSessionId (a string; clearBridgeSession writes the empty string with lastSequenceNum 0), lastSequenceNum (the bridge sequence number, an integer), declaredDialogKinds (a non-empty array, added when length is truthy; the reader maps it through a string-kind normalizer), sessionGroupingId, ownerAccountUuid and ownerOrganizationUuid (strings added when truthy)."
     },
@@ -629,7 +629,7 @@
       },
       "anchors": [
         "{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...h?.length&&{declaredDialogKinds:«»}",
-        "...w?.accountUuid&&{ownerAccountUuid:«».accountUuid},...w?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
+        "...«»?.accountUuid&&{ownerAccountUuid:«».accountUuid},...«»?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
       ],
       "note": "saveBridgeSession writes bridgeSessionId (a string; clearBridgeSession writes the empty string with lastSequenceNum 0), lastSequenceNum (the bridge sequence number, an integer), declaredDialogKinds (a non-empty array, added when length is truthy; the reader maps it through a string-kind normalizer), sessionGroupingId, ownerAccountUuid and ownerOrganizationUuid (strings added when truthy)."
     },
@@ -639,7 +639,7 @@
       },
       "anchors": [
         "{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...h?.length&&{declaredDialogKinds:«»}",
-        "...w?.accountUuid&&{ownerAccountUuid:«».accountUuid},...w?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
+        "...«»?.accountUuid&&{ownerAccountUuid:«».accountUuid},...«»?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
       ],
       "note": "saveBridgeSession writes bridgeSessionId (a string; clearBridgeSession writes the empty string with lastSequenceNum 0), lastSequenceNum (the bridge sequence number, an integer), declaredDialogKinds (a non-empty array, added when length is truthy; the reader maps it through a string-kind normalizer), sessionGroupingId, ownerAccountUuid and ownerOrganizationUuid (strings added when truthy)."
     },
@@ -649,7 +649,7 @@
       },
       "anchors": [
         "{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...h?.length&&{declaredDialogKinds:«»}",
-        "...w?.accountUuid&&{ownerAccountUuid:«».accountUuid},...w?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
+        "...«»?.accountUuid&&{ownerAccountUuid:«».accountUuid},...«»?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
       ],
       "note": "saveBridgeSession writes bridgeSessionId (a string; clearBridgeSession writes the empty string with lastSequenceNum 0), lastSequenceNum (the bridge sequence number, an integer), declaredDialogKinds (a non-empty array, added when length is truthy; the reader maps it through a string-kind normalizer), sessionGroupingId, ownerAccountUuid and ownerOrganizationUuid (strings added when truthy)."
     },
@@ -908,7 +908,7 @@
       },
       "anchors": [
         "{type:\"file-history-snapshot\",messageId:«»,snapshot:«»,isSnapshotUpdate:«»}",
-        "b={messageId:«».messageId,trackedFileBackups:«»,timestamp:«»,...n.preCheckpoint&&{preCheckpoint:!0}}"
+        "{messageId:«».messageId,trackedFileBackups:«»,timestamp:«»,...«».preCheckpoint&&{preCheckpoint:!0}}"
       ],
       "note": "insertFileHistorySnapshot(messageId, snapshot, isSnapshotUpdate) appends the line. The snapshot is {messageId: string, trackedFileBackups: map of file path to a backup object (see file-history-delta.backup), timestamp: a Date written as an ISO string, preCheckpoint: true (only when set)}. isSnapshotUpdate is a boolean (the callers pass !1)."
     },
@@ -918,7 +918,7 @@
       },
       "anchors": [
         "{type:\"file-history-snapshot\",messageId:«»,snapshot:«»,isSnapshotUpdate:«»}",
-        "b={messageId:«».messageId,trackedFileBackups:«»,timestamp:«»,...n.preCheckpoint&&{preCheckpoint:!0}}"
+        "{messageId:«».messageId,trackedFileBackups:«»,timestamp:«»,...«».preCheckpoint&&{preCheckpoint:!0}}"
       ],
       "note": "insertFileHistorySnapshot(messageId, snapshot, isSnapshotUpdate) appends the line. The snapshot is {messageId: string, trackedFileBackups: map of file path to a backup object (see file-history-delta.backup), timestamp: a Date written as an ISO string, preCheckpoint: true (only when set)}. isSnapshotUpdate is a boolean (the callers pass !1)."
     },
@@ -965,7 +965,7 @@
       },
       "anchors": [
         "{type:\"file-history-snapshot\",messageId:«»,snapshot:«»,isSnapshotUpdate:«»}",
-        "b={messageId:«».messageId,trackedFileBackups:«»,timestamp:«»,...n.preCheckpoint&&{preCheckpoint:!0}}"
+        "{messageId:«».messageId,trackedFileBackups:«»,timestamp:«»,...«».preCheckpoint&&{preCheckpoint:!0}}"
       ],
       "note": "insertFileHistorySnapshot(messageId, snapshot, isSnapshotUpdate) appends the line. The snapshot is {messageId: string, trackedFileBackups: map of file path to a backup object (see file-history-delta.backup), timestamp: a Date written as an ISO string, preCheckpoint: true (only when set)}. isSnapshotUpdate is a boolean (the callers pass !1)."
     },
@@ -1785,7 +1785,7 @@
       },
       "anchors": [
         "subtype:\"informational\",content:«»,isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:n",
-        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.submitUuid&&{submitUuid:«».submitUuid}",
+        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
         "subtype:\"permission_retry\",content:`${«»(«»)} ${e.join(\", \")}. ${«»(e.length)}`"
       ],
       "note": "The program builds system lines in the message constructors of the session code (createSystemMessage and the other subtype builders), and the remote-session path rebuilds some from stream-json frames. content is a string at every site: the caller's text (informational, local_command), a template string (permission_retry, bridge_status), the literal 'Conversation compacted', or the content string of a stream frame."
@@ -1943,11 +1943,11 @@
       "anchors": [
         "subtype:\"model_refusal_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction,...e.scope!==void 0&&{scope:«».scope},originalModel:«».original_model,fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation",
         "subtype:\"model_refusal_no_fallback\",content:«».content,level:\"warning\",originalModel:«».original_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation,refusedUserMessageUuid:«».refused_user_message_uuid",
-        "apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation,...«».saw_cyber_refusal&&{sawCyberRefusal:!0}",
+        "apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation,...«».api_refusal_cyber_verification!==void 0&&{apiRefusalCyberVerification:«».api_refusal_cyber_verification},...«».saw_cyber_refusal&&{sawCyberRefusal:!0}",
         "apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation,refusedUserMessageUuid:«».refused_user_message_uuid",
-        "apiRefusalCategory:«».apiRefusalCategory,apiRefusalExplanation:null,retractedMessageUuids:[...«».retractedMessageUuids]",
-        "apiRefusalCategory:«».apiRefusalCategory,apiRefusalExplanation:«».apiRefusalExplanation,retractedMessageUuids:«»",
-        "apiRefusalCategory:«».apiRefusalCategory,apiRefusalExplanation:null,isMeta:!1"
+        "apiRefusalExplanation:null,...«».apiRefusalCyberVerification!==void 0&&{apiRefusalCyberVerification:«».apiRefusalCyberVerification},retractedMessageUuids:[...«».retractedMessageUuids]",
+        "apiRefusalExplanation:«».apiRefusalExplanation,...«»&&«».apiRefusalCyberVerification!==void 0&&{apiRefusalCyberVerification:«».apiRefusalCyberVerification},retractedMessageUuids:«»",
+        "apiRefusalExplanation:null,...«»!==void 0&&{apiRefusalCyberVerification:«»},isMeta:!1"
       ],
       "note": "The explanation string of BetaRefusalStopDetails.explanation, or the literal null that the local fallback sites write."
     },
@@ -2174,7 +2174,7 @@
         }
       },
       "anchors": [
-        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.submitUuid&&{submitUuid:«».submitUuid}",
+        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
         "total_tokens:«».totalTokens,raw_max_tokens:«».rawMaxTokens,percentage:«».percentage"
       ],
       "note": "local_command: the /context command returns contextUsage from kdi(), an object built from the context breakdown (keys as listed; over_limit and skills appear only when they apply)."
@@ -2184,7 +2184,7 @@
         "type": "object"
       },
       "anchors": [
-        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.submitUuid&&{submitUuid:«».submitUuid}",
+        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
         "return{type:\"text\",value:«»,...«»!==void 0&&{usageReport:«»}}"
       ],
       "note": "local_command: the /usage command passes the parsed result of the usage-report schema (session and rate_limits data) as an object; its inner keys are set by that zod schema, not typed here."
@@ -2194,7 +2194,7 @@
         "type": "string"
       },
       "anchors": [
-        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.submitUuid&&{submitUuid:«».submitUuid}",
+        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
         "function «»(«»,«»,«»){let «»=«»??«».registeredBy;return{command:«»(«»),args:«»(«»,«»)?\"***\":n"
       ],
       "note": "local_command: command is the command name string (Lo(command))."
@@ -2204,7 +2204,7 @@
         "type": "string"
       },
       "anchors": [
-        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.submitUuid&&{submitUuid:«».submitUuid}",
+        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
         "args:«»(«»,«»)?\"***\":n"
       ],
       "note": "local_command: args is the argument string, or '***' when the command is marked sensitive."
@@ -2214,7 +2214,7 @@
         "type": "string"
       },
       "anchors": [
-        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.submitUuid&&{submitUuid:«».submitUuid}",
+        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
         "function «»(«»,«»,«»){let «»=«»??«».registeredBy;return{command:«»(«»),args:«»(«»,«»)?\"***\":«»,...«»!==void 0&&{plugin:«»}}}"
       ],
       "note": "local_command: plugin is the registeredBy string of the command or the plugin name; written only when defined."
@@ -2224,10 +2224,10 @@
         "type": "string"
       },
       "anchors": [
-        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.submitUuid&&{submitUuid:«».submitUuid}",
+        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
         "commandOutcome:«».outcome??(«».level===\"error\"?{kind:\"failed\"}:void 0)",
         "«»(`<local-command-stdout>${«»}</local-command-stdout>`,{commandOutcome:{kind:\"unavailable_headless\"}})],shouldQuery:!1,resultText:«»})",
-        "«»(`<local-command-stdout>${u}</local-command-stdout>`,{commandOutcome:{kind:\"unavailable_headless\"}})],shouldQuery:!1,command:«»,resultText:«»}"
+        "«»(`<local-command-stdout>${«»}</local-command-stdout>`,{commandOutcome:{kind:\"unavailable_headless\"}})],shouldQuery:!1,command:«»,resultText:«»}"
       ],
       "note": "local_command: kind is a string: 'failed', 'unavailable_headless', 'unknown', or the outcome.kind a command result returns."
     },
@@ -2236,7 +2236,7 @@
         "type": "string"
       },
       "anchors": [
-        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.submitUuid&&{submitUuid:«».submitUuid}",
+        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
         "{commandOutcome:{kind:\"unknown\",...«»!==void 0&&{suggestion:«»}}}"
       ],
       "note": "local_command: suggestion is the suggested command string, written only for kind 'unknown'."
@@ -2246,7 +2246,7 @@
         "type": "string"
       },
       "anchors": [
-        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.submitUuid&&{submitUuid:«».submitUuid}",
+        "subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
         "...n?.submitUuid&&{submitUuid:«».submitUuid}"
       ],
       "note": "local_command: submitUuid is the uuid string of the user message that submitted the command."
@@ -2519,8 +2519,8 @@
       },
       "anchors": [
         "...«».saw_cyber_refusal&&{sawCyberRefusal:!0},...«».retracted_message_uuids!==void 0&&{retractedMessageUuids:«».retracted_message_uuids}",
-        "apiRefusalExplanation:null,retractedMessageUuids:[...«».retractedMessageUuids]",
-        "apiRefusalExplanation:«».apiRefusalExplanation,retractedMessageUuids:«»"
+        "apiRefusalExplanation:null,...«».apiRefusalCyberVerification!==void 0&&{apiRefusalCyberVerification:«».apiRefusalCyberVerification},retractedMessageUuids:[...«».retractedMessageUuids]",
+        "apiRefusalExplanation:«».apiRefusalExplanation,...«»&&«».apiRefusalCyberVerification!==void 0&&{apiRefusalCyberVerification:«».apiRefusalCyberVerification},retractedMessageUuids:«»"
       ],
       "note": "model_refusal_fallback: an array of message uuid strings."
     },
@@ -2883,7 +2883,7 @@
       },
       "anchors": [
         "diagnostics:null,id:«»(),container:null,model:«»,role:\"assistant\",stop_details:null,stop_reason:\"stop_sequence\",stop_sequence:\"\",type:\"message\",usage:«»,content:«»,context_management:null",
-        "message:{...«»,content:«»,usage:«»(«»,«».usage),"
+        "message:{...«»,content:«»,usage:«»,...«»&&«».context_management&&{context_management:"
       ],
       "note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). Array<BetaContentBlock>: text, thinking, redacted_thinking, tool_use, server_tool_use, mcp_tool_use, the *_tool_result blocks and others; each block is an object, not typed per block here."
     },
@@ -3285,9 +3285,9 @@
         "attributionAgent:«».slice(14),...«»(«»)",
         "attributionSkill:«»,...«»&&{attributionPlugin:«»}",
         "attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
-        "apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-        "apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-        "apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+        "apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+        "apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+        "apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
       ],
       "note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionAgent is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
     },
@@ -3299,9 +3299,9 @@
         "attributionAgent:«».slice(14),...«»(«»)",
         "attributionSkill:«»,...«»&&{attributionPlugin:«»}",
         "attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
-        "apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-        "apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-        "apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+        "apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+        "apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+        "apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
       ],
       "note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionSkill is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
     },
@@ -3313,9 +3313,9 @@
         "attributionAgent:«».slice(14),...«»(«»)",
         "attributionSkill:«»,...«»&&{attributionPlugin:«»}",
         "attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
-        "apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-        "apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-        "apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+        "apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+        "apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+        "apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
       ],
       "note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionPlugin is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
     },
@@ -3327,9 +3327,9 @@
         "attributionAgent:«».slice(14),...«»(«»)",
         "attributionSkill:«»,...«»&&{attributionPlugin:«»}",
         "attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
-        "apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-        "apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-        "apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+        "apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+        "apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+        "apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
       ],
       "note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionMcpServer is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
     },
@@ -3341,9 +3341,9 @@
         "attributionAgent:«».slice(14),...«»(«»)",
         "attributionSkill:«»,...«»&&{attributionPlugin:«»}",
         "attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
-        "apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-        "apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-        "apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+        "apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+        "apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+        "apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
       ],
       "note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionMcpTool is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
     },
@@ -4001,7 +4001,7 @@
       },
       "anchors": [
         "«».turnOrigin=«»({origin:«»,isMeta:«»,wakeupSource:«»,promptSource:«»,hostInitiator:«»})",
-        "function «»({origin:«»,isMeta:«»,wakeupSource:«»,promptSource:«»,hostInitiator:«»}){if(«»!==void 0)return\"scheduled\";let «»=«»(«»);switch(«»?.kind){case\"human\":return «»??\"human\";case\"auto-continuation\":return\"auto_continuation\";case\"task-notification\":if(«».subkind===\"scheduled-trigger\")return\"scheduled\";if(«».subkind===\"peer-send-message\"||«».subkind===\"projects-relay\")return\"peer\";return\"task_notification\";case\"peer\":case\"channel\":case\"coordinator\":case\"observer\":case\"observer-activity\":case\"slack-ping\":return\"peer\";case\"unclassified\":return\"host_synthetic\";case\"plugin\":return\"system\";case void 0:break}if(«»)return\"system\";if(«»!==void 0)return «»;if(«»===\"sdk\")return\"sdk\";return\"unknown\"}",
+        "function «»({origin:«»,isMeta:«»,wakeupSource:«»,promptSource:«»,hostInitiator:«»}){if(«»!==void 0)return\"scheduled\";let «»=«»(«»);switch(«»?.kind){case\"human\":return «»??\"human\";case\"auto-continuation\":return\"auto_continuation\";case\"task-notification\":if(«».subkind===\"scheduled-trigger\")return\"scheduled\";if(«».subkind===\"peer-send-message\"||«».subkind===\"projects-relay\")return\"peer\";return\"task_notification\";case\"peer\":case\"channel\":case\"coordinator\":case\"observer\":case\"observer-activity\":case\"slack-ping\":return\"peer\";case\"unclassified\":case\"voice-call\":return\"host_synthetic\";case\"plugin\":return\"system\";case void 0:break}if(«»)return\"system\";if(«»!==void 0)return «»;if(«»===\"sdk\")return\"sdk\";return\"unknown\"}",
         "case\"scheduled-task\":return\"scheduled\";case\"sleep-auto-resume\":case\"quit-auto-resume\":case\"remote-restart-auto-resume\":case\"ci-monitor\":return\"auto_continuation\";case\"dispatch\":return\"peer\";case\"side-session-brief\":case\"side-session-start\":case\"side-session-wake\":case\"other\":return\"host_synthetic\"",
         "«»=[\"human\",\"sdk\",\"scheduled\",\"task_notification\",\"auto_continuation\",\"peer\",\"host_synthetic\",\"system\",\"unknown\"]"
       ],
@@ -4226,7 +4226,7 @@
       },
       "anchors": [
         "toolUseID:`bash-progress-${«»++}`",
-        "toolUseID:`${n}-heartbeat-${w++}`"
+        "toolUseID:`${«»}-heartbeat-${«»++}`"
       ],
       "note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. toolUseID is a string: the tool_use id, or a generated id such as 'bash-progress-N', 'workflow_log', 'agent_<message id>'."
     },
@@ -4259,7 +4259,7 @@
         ]
       },
       "anchors": [
-        "type:\"hook_progress\",hookEvent:«»,hookName:«»,command:«»(«»)",
+        "type:\"hook_progress\",hookEvent:«»,hookName:«»,command:«»(«»,«».get(«»))",
         "type:\"tool_heartbeat\",toolName:«»,elapsedTimeSeconds:Math.floor((Date.now()-«»)/1000)",
         "data:{type:\"bash_progress\",output:«».output,fullOutput:«».fullOutput,",
         "data:{type:\"powershell_progress\",output:«».output,fullOutput:«».fullOutput,",
@@ -4285,7 +4285,7 @@
         "type": "string"
       },
       "anchors": [
-        "type:\"hook_progress\",hookEvent:«»,hookName:«»,command:«»(«»)"
+        "type:\"hook_progress\",hookEvent:«»,hookName:«»,command:«»(«»,«».get(«»))"
       ],
       "note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. hookEvent (hook_progress) is the hook event name string."
     },
@@ -4294,7 +4294,7 @@
         "type": "string"
       },
       "anchors": [
-        "type:\"hook_progress\",hookEvent:«»,hookName:«»,command:«»(«»)"
+        "type:\"hook_progress\",hookEvent:«»,hookName:«»,command:«»(«»,«».get(«»))"
       ],
       "note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. hookName (hook_progress) is the string name 'Event:matcher'."
     },
@@ -4303,7 +4303,7 @@
         "type": "string"
       },
       "anchors": [
-        "type:\"hook_progress\",hookEvent:«»,hookName:«»,command:«»(«»)"
+        "type:\"hook_progress\",hookEvent:«»,hookName:«»,command:«»(«»,«».get(«»))"
       ],
       "note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. command (hook_progress) is the display string of the hook command."
     },
@@ -4982,34 +4982,6 @@
       "anchors": ["tokens:«»+«».tokens,toolCalls:«»+«».toolCalls"],
       "note": "workflow_agent progress: toolCalls is a sum of two call counts (ft + te.toolCalls), a number."
     },
-    "api-request.cut": {
-      "schema": {
-        "type": "object",
-        "properties": {
-          "kind": {
-            "const": "laptop-account-memory"
-          },
-          "cuts": {
-            "type": "integer"
-          },
-          "placeholders": {
-            "type": "integer"
-          },
-          "messages": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
-          }
-        },
-        "required": ["kind", "cuts", "placeholders", "messages"]
-      },
-      "anchors": [
-        "{cut:«».cut,cutRequestDigest:«»}",
-        "cut:{kind:\"laptop-account-memory\",cuts:«».hits,placeholders:«».placeholders,messages:«»}"
-      ],
-      "note": "vEt (request-replay capture) builds the api-request line xt; `...y===void 0?{requestDigest:xe}:{cut:y.cut,cutRequestDigest:xe}`. y is the result of XFe(...), registered by UCs(XFo) in chunk-3ghxrna3 (Ayt). XFo returns undefined (no cut key written) or {messages,cut:{kind:'laptop-account-memory',cuts:Z.hits,placeholders:Se.placeholders,messages:Ce}}. Z.hits comes from Ocr (chunk-axnb2fag), starts at 0 and counts; placeholders is a counter starting at 0; Ce collects message indexes (Ve from Array.map index)."
-    },
     "assistant.healsDistinctCarrier": {
       "schema": {
         "type": "boolean",
@@ -5242,7 +5214,7 @@
         "type": "string"
       },
       "anchors": [
-        "type:\"hook_progress\",hookEvent:«»,hookName:«»,command:«»(«»),...«».type===\"prompt\"&&{promptText:«»(«».prompt)}",
+        "type:\"hook_progress\",hookEvent:«»,hookName:«»,command:«»(«»,«».get(«»)),...«».type===\"prompt\"&&{promptText:«»(«».prompt)}",
         "function «»(«»){return «»(«»).replace(/\\n/g,\"\\u2424\").replace(/\\t/g,\"\\u2409\")}",
         "prompt:«»().describe(\"Prompt to evaluate with LLM."
       ],
@@ -5329,13 +5301,6 @@
         "toolUseID:«»,hookLabel:«»,totalDurationMs:«»}"
       ],
       "note": "Same as hookLabel: c0s argument q is void 0 at the only call site. The pndhv0fp merge that computes Math.max(totalDurationMs) runs only when hookLabel is defined (cS), which is never. Never written. The program never writes it, so no value is valid."
-    },
-    "system.upgradeNudge": {
-      "schema": {
-        "not": {}
-      },
-      "anchors": ["url:«»,upgradeNudge:«»,isMeta:!1,timestamp:new Date("],
-      "note": "Only writer is l0s(e,n) (bridge_status, upgradeNudge:n). Only caller is chunk-3ghxrna3 `l0s(Ls)`, one argument, so n is undefined. No other callers in any module. Never written. The program never writes it, so no value is valid."
     },
     "user.classifierMetaLines": {
       "schema": {
@@ -5631,7 +5596,7 @@
         "settleRequest(«»,«»){let «»=this.inFlight.get(«»);if(«»===void 0)return;this.inFlight.delete(«»);let «»={request:«»,context:«»};for(let «» of «»)this.judged.set(«»,«»)}",
         "historyFor(«»){return this.judged.get(«»)}",
         "function «»(«»){return{git_state:«».git_state,...«».chrome_navigation!==void 0&&{chrome_navigation:«».chrome_navigation},...«».live_cwd!==void 0&&{live_cwd:«».live_cwd},platform:«».platform}}",
-        "?«»(«»(),{artifacts:«»?.artifacts,thread:«»!==null,exactMcpAllowRules:",
+        "?«»(«»(),{artifacts:«»?.artifacts,thread:«»!==null,threadStoresNothing:«»!==null&&«»===null,exactMcpAllowRules:",
         "!==void 0)«»(«».key,«»(«»))}"
       ],
       "note": "The constructor sets serverClassifierContext:Cvt(tool_use_id) (only for a single tool_result in an array content). Cvt reads the judged Map filled by settleRequest(requestKey, toolUseIds), which stores {request:requestKey, context:inFlightContext}. The in-flight context is kpn(ac), recorded by wvt(Hg.key, kpn(ac)) where Hg.key is crypto.randomUUID() (string, passed through mKt(pee(),...) to Zqe.key). kpn picks git_state, chrome_navigation (if defined), live_cwd (if defined), platform from the auto-mode server context built by Lpr: git_state is the host git object (non-null, since Lpr reads its .visibility), chrome_navigation {enabled, baselines, tabs?}, live_cwd and platform strings (platform:O()). The reader (nio, MFe zod) takes request as a non-empty string and context as an object with those four optional keys. Inner property types of git_state come from the zod schema qso (reader side), not from a writer literal, so they are listed as that schema states. If never settled or no context is held, the key is undefined and dropped; never null."

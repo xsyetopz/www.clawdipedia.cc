@@ -2706,7 +2706,7 @@
         "type": "string"
       },
       "anchors": [
-        "grant_scope:«»(«».grantScope),circuit_breaker:«»(«».circuitBreaker)"
+        "grant_scope:«»(«».grantScope),circuit_breaker:«»(«»()&&«».circuitBreaker!==void 0&&«»[«».circuitBreaker]?.tenantTelemetryHidden===!0?void 0:«».circuitBreaker)"
       ],
       "note": "circuit_breaker:de(r.circuitBreaker): the string set in decisionReason (e.g. \"outsideReadsBlocked\", \"restrictedMode\", \"claudeSettingsFile\"). HMn(e,...) is called with c(...)/de(...)/OMn(...)/G1e(...) values, which are branded strings (identity casts In(e)); a decision record field that is undefined is dropped."
     },
@@ -3111,13 +3111,6 @@
       },
       "anchors": ["{type:\"added\",model:"],
       "note": "add(a,{type:\"added\",model:Jpn(n)}): model:Jpn(r): Jpn(r)=BQe()?wTe(r):r on the model name string r."
-    },
-    "metric:claude_code.session.count.start_type": {
-      "schema": {
-        "enum": ["resume", "continue", "fresh", "agents_view"]
-      },
-      "anchors": ["«»()?.add(1,{start_type:«»()})"],
-      "note": "add(1,{start_type:FJo()}): FJo() returns the launch option set by bEn(Yor(argv)) (Yor returns \"resume\", \"continue\" or \"fresh\") or bEn(\"agents_view\")."
     },
     "metric:claude_code.code_edit_tool.decision.decision": {
       "schema": {

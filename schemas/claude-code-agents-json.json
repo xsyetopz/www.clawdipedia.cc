@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://clawdipedia.cc/schemas/claude-code-agents-json.json",
-  "title": "Claude Code --agents JSON entry (Claude Code 2.1.316)",
-  "$comment": "For one subagent definition of the --agents JSON (and the SDK agents option). Generated from Claude Code 2.1.316 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, object described as \"Definition for a custom subagent that can be invoked via the Agent tool.\". Do not edit by hand: run \"bun run schemas\".",
+  "title": "Claude Code --agents JSON entry (Claude Code 2.1.319)",
+  "$comment": "For one subagent definition of the --agents JSON (and the SDK agents option). Generated from Claude Code 2.1.319 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, object described as \"Definition for a custom subagent that can be invoked via the Agent tool.\". Do not edit by hand: run \"bun run schemas\".",
   "type": "object",
   "properties": {
     "description": {
@@ -145,6 +145,10 @@
                       "exclusiveMinimum": 0,
                       "maximum": 9007199254740991
                     },
+                    "displayName": {
+                      "description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects.",
+                      "type": "string"
+                    },
                     "alwaysLoad": {
                       "description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built.",
                       "type": "boolean"
@@ -214,6 +218,10 @@
                       "exclusiveMinimum": 0,
                       "maximum": 9007199254740991
                     },
+                    "displayName": {
+                      "description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects.",
+                      "type": "string"
+                    },
                     "alwaysLoad": {
                       "description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built.",
                       "type": "boolean"
@@ -247,7 +255,7 @@
                       "type": "boolean"
                     },
                     "connectorId": {
-                      "description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered.",
+                      "description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. With or without that declaration, deny and ask rules, hook matchers and disallowed-tool lists that spell mcp__<connectorId> also reach this server's tools, and nothing that allows does; the id is read as a tool's name would spell it (a character other than a letter, a digit, '-' and '_' as '_'), and one that is then longer than 128 characters or holds '__' is not used for that. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered.",
                       "type": "string",
                       "minLength": 1
                     },

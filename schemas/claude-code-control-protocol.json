@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://clawdipedia.cc/schemas/claude-code-control-protocol.json",
-  "title": "Claude Code control protocol (Claude Code 2.1.316)",
-  "$comment": "For the request and response of each control_request subtype in stream-json mode (definitions <subtype>Request and <subtype>Response, direction in x-direction). Generated from Claude Code 2.1.316 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, table of rows {request, originator, response}; the request union is described as \"Control requests a client sends to drive the loop\". Do not edit by hand: run \"bun run schemas\".",
+  "title": "Claude Code control protocol (Claude Code 2.1.319)",
+  "$comment": "For the request and response of each control_request subtype in stream-json mode (definitions <subtype>Request and <subtype>Response, direction in x-direction). Generated from Claude Code 2.1.319 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, table of rows {request, originator, response}; the request union is described as \"Control requests a client sends to drive the loop\". Do not edit by hand: run \"bun run schemas\".",
   "$defs": {
     "apply_flag_settingsRequest": {
       "type": "object",
@@ -319,9 +319,13 @@
             "classifier_transcript_too_long",
             "outside_reads_blocked",
             "memory_paused",
+            "auto_mode_no_check_in_session",
+            "auto_mode_stop_no_check_in_session",
+            "auto_mode_stop_no_result_for_calls",
+            "auto_mode_stop_no_verdict",
             "org_ask_ceiling"
           ],
-          "description": "@internal A closed-set code for a reason a host can act on, beside decision_reason_type (whose values are unchanged, so type-keyed host policy decides as before): 'outside_reads_blocked', 'memory_paused', 'classifier_transcript_too_long', 'org_ask_ceiling' (the MCP tool's ceiling, toolPermissions, is 'ask', and an ask rule or the ceiling itself raised the ask: type 'rule' or 'other'). Absent for every other reason; new values are additive."
+          "description": "@internal A closed-set code for a reason a host can act on, beside decision_reason_type (whose values are unchanged, so type-keyed host policy decides as before): 'outside_reads_blocked', 'memory_paused', 'classifier_transcript_too_long', 'org_ask_ceiling' (the MCP tool's ceiling, toolPermissions, is 'ask', and an ask rule or the ceiling itself raised the ask: type 'rule' or 'other'). The type also lists auto_mode_ values, which are sent on system/permission_denied only, never on this request. Absent for every other reason; new values are additive."
         },
         "decision_reason_rule_source": {
           "type": "string",
@@ -350,7 +354,7 @@
         },
         "suppress_always_allow_rule": {
           "type": "boolean",
-          "description": "True when the dialog must not offer the persistent \"don't ask again\" row for this ask: accepting it would write a whole-tool allow rule broader than the ask's own verb (PermissionAskDecision.suppressAlwaysAllowRule). Hosts rendering approve options should omit any persistent-rule affordance when set."
+          "description": "True when the dialog must not offer the persistent \"don't ask again\" row for this ask: accepting it would write a whole-tool allow rule broader than the ask's own verb (PermissionAskDecision.suppressAlwaysAllowRule), or the ask comes from a run a plugin started, where Claude Code saves no rule from the answer, not even for the session. Hosts rendering approve options should omit any persistent-rule affordance when set."
         },
         "default_to_no": {
           "type": "boolean",
@@ -370,7 +374,7 @@
             }
           },
           "required": ["source", "tool_name"],
-          "description": "Set when a user-configured ask RULE (permissions.ask) forced this prompt but the ask carries the tool's own decision_reason — the ask-rule substitution keeps the richer tool-minted ask, so the rule rides here instead of decision_reason_type 'rule'. Hosts making policy on decision_reason_type (e.g. auto-deny safetyCheck) or running host-side auto-approval should treat asks carrying this field as rule-forced: the user's stated intent is a human prompt. Values are producer-authored but render-unsafe like decision_reason; sanitize before display."
+          "description": "Set when a user-configured ask RULE (permissions.ask) forced this prompt but the ask carries the tool's own decision_reason — the ask-rule substitution keeps the richer tool-minted ask, so the rule rides here instead of decision_reason_type 'rule'. May also be set, whatever the decision_reason, when an ask rule reaches an MCP tool only under another name of its server (such as a connector's id or its claude.ai name), not under the name in tool_name: a host that looks for the rule by that name does not find it. Hosts making policy on decision_reason_type (e.g. auto-deny safetyCheck) or running host-side auto-approval should treat asks carrying this field as rule-forced: the user's stated intent is a human prompt. Values are producer-authored but render-unsafe like decision_reason; sanitize before display."
         },
         "title": {
           "type": "string"
@@ -393,7 +397,7 @@
         },
         "requires_user_interaction": {
           "type": "boolean",
-          "description": "True when one-tap Approve/Deny must not be offered: the tool's approval card IS the user-interaction surface (Tool.requiresUserInteraction(): the user responds on the card itself), OR the pending ask is localDisplayOnly (its consent disclosure cannot ride this wire and only the local dialog renders it), OR the auto-mode classifier blocked the call and it was handed to a person (decision_reason_type 'classifier' on a person-only ask), which no stored grant or automatic approval may answer, OR the MCP server's name spells a claude.ai connector's key and the server came from neither claude.ai nor whoever launched the session, so a grant keyed on the tool name must not answer it, OR the SDK host worded the ask (title and description are its consent copy, which a push cannot carry whole), OR the ask is the one made before the first upload by file reference to a connector, which no stored grant or automatic approval may answer. In each case the user has to open the session to answer."
+          "description": "True when one-tap Approve/Deny must not be offered: the tool's approval card IS the user-interaction surface (Tool.requiresUserInteraction(): the user responds on the card itself), OR the pending ask is localDisplayOnly (its consent disclosure cannot ride this wire and only the local dialog renders it), OR the auto-mode classifier blocked the call and it was handed to a person (decision_reason_type 'classifier' on a person-only ask), which no stored grant or automatic approval may answer, OR a grant keyed on the tool name must not answer it: the MCP server's name spells a claude.ai connector's key and the server came from neither claude.ai nor whoever launched the session, or, while Claude Code enforces grants, two tools of the server get that name, OR the SDK host worded the ask (title and description are its consent copy, which a push cannot carry whole), OR the ask stands in for the classifier's verdict on a call to Claude Desktop's Cowork shell, which no stored grant or automatic approval may answer. In each case the user has to open the session to answer."
         },
         "server_prompt": {
           "type": "string",
@@ -1775,6 +1779,23 @@
               "type": "null"
             }
           ]
+        },
+        "coldResumeQuota": {
+          "type": "object",
+          "properties": {
+            "percentPerMillionTokens": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Percent of the 5-hour usage limit that one million re-sent tokens use. Above 0."
+            },
+            "minPercent": {
+              "type": "number",
+              "minimum": 1,
+              "description": "The smallest percent worth telling the person about. At least 1."
+            }
+          },
+          "required": ["percentPerMillionTokens", "minPercent"],
+          "description": "@internal How fast re-sending this session's context, once its prompt cache has expired, uses the account's 5-hour usage limit on `model`: the price behind the terminal's \"Resume this conversation?\" dialog, for a host UI that counts the tokens and decides when to speak itself (docs/desktop-host-contract.md D93). Absent when the price is not known: no subscription plan, no rate served for the model or plan, or prompt caching off. Absent too while idle compaction holds a finished summary that it wrote before the cache expired, because once the cache has expired the next turn sends that summary and not the context. Present only where the CLI answers on its own stdio and no server stores or forwards the reply."
         }
       },
       "required": [
@@ -2264,6 +2285,13 @@
         "overrides_locked": {
           "type": "boolean",
           "description": "Whether the unsandboxed-fallback override cannot be changed from the project: set by policy (locked, or unsandboxed commands forbidden), or held closed (allowUnsandboxedCommands: false) by a --settings file or user settings."
+        },
+        "policy_origins": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The managed (policy) settings sources at this read, as codes; empty when there are none. Absent from a Claude Code older than this field: treat that as another source. First the sources, highest precedence first. 'helper': a policy helper armed on this machine (one armed by server-managed settings counts as 'remote'); the codes after it are the sources beneath it, which may take no part. 'remote': server-managed settings. 'plist' or 'hklm': MDM. 'file': the managed settings file or its drop-ins. 'parent': --managed-settings or the SDK's managedSettings, where they take part; it stands for all the host passed: where that includes a hybrid organization's settings, the policy is not the host's alone. 'hkcu': the user's registry block, unless empty: listed where it serves and where 'parent', 'helper' or 'remote' displaces it; beneath 'hklm' or 'file' it is not read at all. Then two that say a source is missing. 'remote_unknown': this session counts as due server-managed settings and has none (the fetch failed, or is under way with no cached copy that holds settings); under any other verdict of the process on whether it is due them, or none, there is no code for what is missing, though its organization may have set some (desktop-host-contract.md D19a). 'unreadable': a document of the machine's administrator that exists and did not load (unreadable, or not valid JSON). Every administrator source that holds a setting is listed, even where a higher source leaves it unapplied; a source holding only the managedSourcesBehavior or wslInheritsWindowsSettings knob is not, nor one of whose policy this client reads nothing where another is listed, and one passed over for authoring nothing always has a listed one beneath it. New sources get new codes: treat an unknown code as another source."
         },
         "enabled": {
           "type": "boolean",
@@ -3507,7 +3535,7 @@
         }
       },
       "required": ["subtype"],
-      "description": "@internal Requests the workspace git diff for the thin-client /diff dialog. The worker resolves one base ref for both stats and hunks (the merge-base with the base branch the session names, else the default branch, when HEAD is on another branch with commits beyond it, so committed and uncommitted changes show together, uncommitted rows first; otherwise working tree vs HEAD) and applies the standard caps (5s git timeout, 50 files, 1MB/file).",
+      "description": "@internal Requests the workspace diff for the thin-client /diff dialog. The worker resolves one base ref for both stats and hunks (the merge-base with the base branch the session names, else the default branch, when HEAD is on another branch with commits beyond it, so committed and uncommitted changes show together, uncommitted rows first; otherwise working tree vs HEAD) and applies the standard caps (5s git timeout, 50 files, 1MB/file).",
       "x-direction": "client"
     },
     "get_workspace_diffResponse": {
@@ -3705,10 +3733,21 @@
               "type": "null"
             }
           ]
+        },
+        "noDiffReason": {
+          "type": "string",
+          "enum": [
+            "no-repository",
+            "repository-refused",
+            "repository-busy",
+            "diff-failed",
+            "root-moved"
+          ],
+          "description": "Why diff is null. Sent with every null diff, never with a diff. no-repository: no repository that could be used was found for the session's folder (today only git repositories are looked for), or an earlier check this session ruled the folder out. repository-refused: the repository chosen in a subfolder failed Claude Code's safety checks (in git: on its .git folder and on the copy Claude Code makes of its config and refs), or that copy could not be made. repository-busy: the repository is part-way through bringing in other changes (in git: a merge, rebase, cherry-pick or revert). diff-failed: a version-control command failed or timed out, or, for a repository chosen in a subfolder on a self-hosted runner, the comparison Claude Code makes itself in place of git diff could not read the repository or ran out of time. root-moved: the repository root changed, or could not be read again, during the request. Every value can change on a later request, so ask again; after no-repository, asking when a turn ends and on a new connection is enough. A Claude Code version that predates the field omits it: treat an absent or unknown value as 'ask again'."
         }
       },
       "required": ["diff"],
-      "description": "@internal Workspace git diff for the thin-client /diff dialog. diff is null when the workspace is not a git repo or is in a transient git state (merge/rebase/cherry-pick). Paths in skippedLarge carry no hunks entry at all — membership alone marks them as too large. An entirely empty hunks array with non-empty perFileStats is not by itself a failure signal: it is the normal shape when all changes are untracked (stats only — git diff emits no hunks for untracked files) or every file was withheld, and can also occur when the hunks fetch transiently failed and only stats are available.",
+      "description": "@internal Workspace diff for the thin-client /diff dialog. diff is null when no diff could be made; noDiffReason says why. Paths in skippedLarge carry no hunks entry at all — membership alone marks them as too large. An entirely empty hunks array with non-empty perFileStats is not by itself a failure signal: it is the normal shape when all changes are untracked (stats only: untracked files never carry hunks) or every file was withheld, and can also occur when the hunks fetch transiently failed and only stats are available.",
       "x-direction": "client"
     },
     "hook_callbackRequest": {
@@ -6077,6 +6116,11 @@
                 },
                 "timeout": {
                   "type": "number"
+                },
+                "onFailure": {
+                  "type": "string",
+                  "enum": ["continue", "block"],
+                  "description": "What a failure of these callbacks does: the client answered the hook_callback request with an error, or with an answer that fails validation. 'continue' (default): the failure is reported and the action goes ahead. 'block': the failure counts as a block, as it does for a command hook, so the action the event guards (a tool call, a permission request, a prompt) is blocked. Ignored on Stop, SubagentStop, TaskCompleted and TeammateIdle."
                 }
               },
               "required": ["hookCallbackIds"],
@@ -6144,12 +6188,10 @@
                 "description": "@internal When true, the CLI never moves a call to this server's tools to a background task on its own: not after the auto-background delay, and not early for a priority 'now' message, which instead interrupts the turn and so ends the call. Meant for a server whose calls wait on a person. The turn waits for the call's own result, up to the server's timeout, so set timeout too. A tool that advertises MCP task support can still run as a task. Any value but true counts as unset. Read when the server is first registered, from initialize, mcp_set_servers or --mcp-config."
               },
               "connectorId": {
-                "type": "string",
-                "minLength": 1,
-                "description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered."
+                "$ref": "#/$defs/initializeRequest____schema16"
               },
               "tools": {
-                "$ref": "#/$defs/initializeRequest____schema16"
+                "$ref": "#/$defs/initializeRequest____schema18"
               }
             }
           },
@@ -6392,6 +6434,10 @@
                                 "maximum": 9007199254740991,
                                 "description": "Per-server HTTP request timeout in milliseconds, set by the host on the mcp_set_servers control event. Raises the per-request fetch first-byte budget and the tool-call watchdog for this server. Capped at 5 minutes. Ignored when `timeout` is also set.\n@internal"
                               },
+                              "displayName": {
+                                "type": "string",
+                                "description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects."
+                              },
                               "alwaysLoad": {
                                 "type": "boolean",
                                 "description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built."
@@ -6461,6 +6507,10 @@
                                 "maximum": 9007199254740991,
                                 "description": "Per-server HTTP request timeout in milliseconds, set by the host on the mcp_set_servers control event. Raises the per-request fetch first-byte budget and the tool-call watchdog for this server. Capped at 5 minutes. Ignored when `timeout` is also set.\n@internal"
                               },
+                              "displayName": {
+                                "type": "string",
+                                "description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects."
+                              },
                               "alwaysLoad": {
                                 "type": "boolean",
                                 "description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built."
@@ -6494,12 +6544,10 @@
                                 "description": "@internal When true, the CLI never moves a call to this server's tools to a background task on its own: not after the auto-background delay, and not early for a priority 'now' message, which instead interrupts the turn and so ends the call. Meant for a server whose calls wait on a person. The turn waits for the call's own result, up to the server's timeout, so set timeout too. A tool that advertises MCP task support can still run as a task. Any value but true counts as unset. Read when the server is first registered, from initialize, mcp_set_servers or --mcp-config."
                               },
                               "connectorId": {
-                                "type": "string",
-                                "minLength": 1,
-                                "description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered."
+                                "$ref": "#/$defs/initializeRequest____schema16"
                               },
                               "tools": {
-                                "$ref": "#/$defs/initializeRequest____schema16"
+                                "$ref": "#/$defs/initializeRequest____schema18"
                               }
                             },
                             "required": ["type", "name"]
@@ -6697,6 +6745,11 @@
       "x-direction": "client"
     },
     "initializeRequest____schema16": {
+      "type": "string",
+      "minLength": 1,
+      "description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. With or without that declaration, deny and ask rules, hook matchers and disallowed-tool lists that spell mcp__<connectorId> also reach this server's tools, and nothing that allows does; the id is read as a tool's name would spell it (a character other than a letter, a digit, '-' and '_' as '_'), and one that is then longer than 128 characters or holds '__' is not used for that. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered."
+    },
+    "initializeRequest____schema18": {
       "type": "array",
       "items": {
         "type": "object",
@@ -6870,6 +6923,10 @@
         "hooks_applied": {
           "type": "boolean",
           "description": "Whether the `hooks` this initialize carried were registered: true on a session's first initialize, and on a repeated initialize from the process that owns the CLI's stdin (its set replaces the one registered earlier); false when a repeated initialize's hooks were ignored (a client joining a remote session another client configured). Absent when the request carried no hooks, and on CLIs that predate the field — those ignored `hooks` on every repeated initialize."
+        },
+        "hook_on_failure_supported": {
+          "type": "boolean",
+          "description": "True on every initialize reply from a CLI that honors `onFailure` on hook matchers. Absent on CLIs that predate the option, which ignore it (a failed callback set to \"block\" lets the action run), and from responders that do not run the host's hooks. A host that sets \"block\" must not go on without it; the TypeScript SDK refuses the session. It says nothing of this request's hooks: `hooks_applied` does, and the TypeScript SDK also refuses a first initialize that reads `hooks_applied: false` when a matcher sets \"block\"."
         },
         "code_running_mcp_tools_applied": {
           "type": "object",
@@ -7186,7 +7243,7 @@
           "items": {
             "type": "string"
           },
-          "description": "@internal One to eight uuids (case ignored) of user messages whose turn this Stop is for; any other value is read as absent. The current turn is the latest one dequeued for a client's message (it may be over, or not yet started), with every turn started and message taken in since. A Stop that names one of its messages is handled as a plain interrupt (if latched, see still_queued, only for pending work that it names or that answers no client's message), and so is any Stop while the CLI knows of no current turn. Other Stops do nothing and get turn: 'spared', except a few that name queued work (sparesCurrentTurn). Always include the message that opened the turn (user_message_uuid on its first frames, before any re-run): after a restart the CLI knows no other. A turn handed over by turn_handoff has no name: any Stop may stop it, so send a plain one. The uuids are only compared: never stored, logged, sent back or shown to the model. Not read beside cancel_queued:true or send_now:true, nor by older CLIs, which answer without turn."
+          "description": "@internal One to eight uuids (case ignored) of user messages whose turn this Stop is for; any other value is read as absent. The current turn is the latest one dequeued for a client's message (it may be over, or not yet started), with every turn started and message taken in since. A Stop that names one of its messages is handled as a plain interrupt (if latched, see still_queued, only for pending work that it names or that answers no client's message), and so is any Stop while the CLI knows of no current turn. Other Stops do nothing and get turn: 'spared', except a few that name work that is queued or, on claude -p, read and not yet queued (sparesCurrentTurn). Always include the message that opened the turn (user_message_uuid on its first frames, before any re-run): after a restart the CLI knows no other. A turn handed over by turn_handoff has no name: any Stop may stop it, so send a plain one. The uuids are only compared: never stored, logged, sent back or shown to the model. Not read beside cancel_queued:true or send_now:true, nor by older CLIs, which answer without turn."
         },
         "worker_epoch": {
           "type": "integer",
@@ -7207,7 +7264,7 @@
           "items": {
             "type": "string"
           },
-          "description": "Uuids of async user messages that survive this interrupt: commands still in the queue, plus any batch already dequeued for the imminent turn but not yet reachable by the abort. An interrupt — plain or cancel_queued:true — that lands during the FIRST-command prewait window (before the first turn of the session has armed a controller) is additionally LATCHED, scoped to the user-intent work pending at that instant — the batch already dequeued and parked for the imminent turn, plus the user-intent main-thread commands then in the queue (the work this list enumerates): the first turn to arm that carries any of that doomed work starts already aborted, exactly once, so the listed prewait batch is delivered into an immediately-aborted turn, its frames and result flowing through the normal abort path, instead of running to completion. A turn carrying none of it arms live and leaves the latch waiting: a system delivery turn (for example a replayed host event), or a prompt enqueued after the interrupt — post-interrupt work is never coalesced with the doomed work and never dies to the latch, so the Stop kills exactly what this receipt listed. The latch is released when the doomed work is retired without arming: if a parked prewait batch is entirely cancelled, the latch is released even when other queued commands remain (those arm and run normally); with nothing parked, it is released once none of the doomed commands remains queued — work enqueued after the interrupt neither holds it up nor is aborted by it. Survivors that ride any later turn run normally. These WILL run (subject to that latch) unless cancelled first (or unless the request set cancel_queued:true, in which case every uuid-stamped survivor this process holds is removed, emitted a terminal `cancelled` synchronously, and listed under `cancelled` instead — leaving here only what a client driving a hosted session can no longer recall: a send already in flight to that session, or the first prompt the session was created with; a send that client still holds on its own machine behind a send gate (it waits there until that session is ready to take it) has not gone out, so it is withdrawn and listed under `cancelled` like a queued one, and cancel_async_message can withdraw it too, while a plain interrupt leaves it held and lists it here). Cancellation granularity: uuids still in the queue are individually cancellable via cancel_async_message (the re-run of an interrupted turn that also answers for other client messages only if this interrupt was for it; see the response to that request); once a batch is dequeued and coalesced into one turn, cancelling a NON-representative member uuid is a no-op (its content still runs), while cancelling the batch-representative uuid drops the WHOLE coalesced batch — in both cases the cancel response reports cancelled:false because the message was no longer in the queue. Coverage caveats: only uuid-STAMPED messages appear (a message enqueued without a uuid still runs but is never listed, so [] does not mean \"nothing will run\"); only main-thread messages are listed (subagent-addressed messages are out of scope); and the list may include internally-enqueued uuids the client never sent (cron triggers, auto-resume continuations) — ignore unknown uuids rather than treating them as an error. Ordering: on a clean interrupt this receipt is written before the interrupted turn result; a turn that crashes during interrupt handling emits its error result on a direct-write path that may precede the receipt. Snapshot is taken synchronously with abort processing — probing the queue after the interrupted result instead always loses the race against the drain loop, which starts the next queued turn immediately."
+          "description": "Uuids of async user messages that survive this interrupt: commands still in the queue, plus any batch already dequeued for the imminent turn but not yet reachable by the abort, plus any user message this process has read but not yet queued, from its own input stream (held, for instance, while a model change is still being checked or behind start-up work; a message a Remote Control client sent that is still being ingested is not listed). An interrupt — plain or cancel_queued:true — that lands during the FIRST-command prewait window (before the first turn of the session has armed a controller) is additionally LATCHED, scoped to the user-intent work pending at that instant — the batch already dequeued and parked for the imminent turn, plus the user-intent main-thread commands then in the queue or held ahead of it (the work this list enumerates): the first turn to arm that carries any of that doomed work starts already aborted, exactly once, so the listed prewait batch is delivered into an immediately-aborted turn, its frames and result flowing through the normal abort path, instead of running to completion. A turn carrying none of it arms live and leaves the latch waiting: a system delivery turn (for example a replayed host event), or a prompt enqueued after the interrupt — post-interrupt work is never coalesced with the doomed work and never dies to the latch, so the Stop kills exactly what this receipt listed. The latch is released when the doomed work is retired without arming: if a parked prewait batch is entirely cancelled, the latch is released even when other queued commands remain (those arm and run normally); with nothing parked, it is released once none of the doomed commands remains queued or held — work enqueued after the interrupt neither holds it up nor is aborted by it. Survivors that ride any later turn run normally. These WILL run (subject to that latch) unless cancelled first (or unless the request set cancel_queued:true, in which case every uuid-stamped survivor this process holds is removed, emitted a terminal `cancelled` synchronously, and listed under `cancelled` instead — leaving here only what a client driving a hosted session can no longer recall: a send already in flight to that session, or the first prompt the session was created with; a send that client still holds on its own machine behind a send gate (it waits there until that session is ready to take it) has not gone out, so it is withdrawn and listed under `cancelled` like a queued one, and cancel_async_message can withdraw it too, while a plain interrupt leaves it held and lists it here). Cancellation granularity: uuids still in the queue are individually cancellable via cancel_async_message (the re-run of an interrupted turn that also answers for other client messages only if this interrupt was for it; see the response to that request); a listed uuid whose message the process running the session (never a client driving a hosted session) still keeps out of its queue, behind a model change or start-up work, is not yet cancellable that way: cancel_async_message answers cancelled:false for it and plants a cancel-pending mark, which the drain honours once the message is queued and the mid-turn fold of a running turn does not; once a batch is dequeued and coalesced into one turn, cancelling a NON-representative member uuid is a no-op (its content still runs), while cancelling the batch-representative uuid drops the WHOLE coalesced batch — in both cases the cancel response reports cancelled:false because the message was no longer in the queue. Coverage caveats: only uuid-STAMPED messages appear (a message enqueued without a uuid still runs but is never listed, so [] does not mean \"nothing will run\"); only main-thread messages are listed (subagent-addressed messages are out of scope); and the list may include internally-enqueued uuids the client never sent (cron triggers, auto-resume continuations) — ignore unknown uuids rather than treating them as an error. Ordering: on a clean interrupt this receipt is written before the interrupted turn result; a turn that crashes during interrupt handling emits its error result on a direct-write path that may precede the receipt. Snapshot is taken synchronously with abort processing — probing the queue after the interrupted result instead always loses the race against the drain loop, which starts the next queued turn immediately."
         },
         "put_back": {
           "type": "array",
@@ -7231,7 +7288,7 @@
           "items": {
             "type": "string"
           },
-          "description": "Present only when the request set cancel_queued:true — uuids of main-thread commands cancelled by this interrupt: every survivor that would otherwise have appeared under `still_queued`, including any uuid that was mid-fold at the interrupt instant (this request also aborts, so the fold never delivers it). Each listed uuid has been removed (queue-resident) or marked cancel-pending (the first-command prewait window, closed by the drain loop's backstop) and emits a terminal 'cancelled' lifecycle synchronously at the first such interrupt (a repeat interrupt over the same parked batch re-lists the uuid idempotently without re-emitting); none will run. Where one of them is the re-run of an interrupted turn that also answered for other client messages whose re-sent copies had been set aside for it, those messages' uuids are listed behind the commands' too: they were in no queue and never under `still_queued`, each has its terminal 'cancelled' lifecycle, and a repeat interrupt does not list them again. Same coverage caveats as `still_queued` (uuid-stamped main-thread only; internally-enqueued uuids may appear). Advertised by the `interrupt_cancel_queued_v1` capability."
+          "description": "Present only when the request set cancel_queued:true — uuids of main-thread commands cancelled by this interrupt: every survivor that would otherwise have appeared under `still_queued`, including any uuid that was mid-fold at the interrupt instant (this request also aborts, so the fold never delivers it). Each listed uuid has been removed (queue-resident), dropped before it was queued (a message this process had read and was still holding), or marked cancel-pending (the first-command prewait window, closed by the drain loop's backstop) and emits a terminal 'cancelled' lifecycle synchronously at the first such interrupt (a repeat interrupt over the same parked batch re-lists the uuid idempotently without re-emitting); none will run. Where one of them is the re-run of an interrupted turn that also answered for other client messages whose re-sent copies had been set aside for it, those messages' uuids are listed behind the commands' too: they were in no queue and never under `still_queued`, each has its terminal 'cancelled' lifecycle, and a repeat interrupt does not list them again. Same coverage caveats as `still_queued` (uuid-stamped main-thread only; internally-enqueued uuids may appear). Advertised by the `interrupt_cancel_queued_v1` capability."
         }
       },
       "required": ["still_queued"],
@@ -7666,11 +7723,15 @@
         },
         "timeout_ms": {
           "type": "number",
-          "description": "Tool-execution timeout (staging and collection have their own transport timeouts). Clamped to [1000, 600000]; default 120000. Sending timeout_ms routes the call through the staging engine — so it is always enforced when present and the response carries a staging result; omit it for a plain call. Staged calls are POSIX-worker-only: on a Windows worker any staged-field call fails with a typed staging refusal."
+          "description": "Tool-execution timeout (staging and collection have their own transport timeouts); with check_permissions it also bounds hooks and the wait for an answer. Clamped to [1000, 600000]; default 120000. Sending timeout_ms routes the call through the staging engine — so it is always enforced when present and the response carries a staging result; omit it for a plain call. Staged calls are POSIX-worker-only: on a Windows worker any staged-field call fails with a typed staging refusal."
         },
         "result_not_for_model": {
           "type": "boolean",
           "description": "The caller hands the result to a program (a host that renders it, a script), not to a model, and bounds it itself. content is then the server's own content blocks as MCP defines them (the MCP SDK drops members it does not define), not what a model turn would be handed: no image is resized or put in the Messages API's shape, nothing is saved under tool-results, no embedded resource is flattened, and text blocks beside structuredContent stay. They are untrusted third-party data: any mimeType, images neither re-encoded nor bounded in pixels, each block's annotations and _meta unfiltered. The size check that protects a model's context is skipped too: no count_tokens request (which uploads the result), no truncation, no note in place of the content. Instead a result over 10485760 characters (content with its base64, structuredContent and _meta together) fails though the tool ran: a plain call answers the error subtype, a staged call staging.error_code tool_error with the text in detail, before its outputs are collected. A legacy toolResult still comes back as a string. Does not route the call through the staging engine. Absent or false: as before. Honoured only for a host on this process's own pipes, not over a remote transport nor on a lane that redacts what it persists. Feature-detected as `mcp_call_result_not_for_model_v1` in system/init.capabilities and in the initialize response's capabilities; where it is not said, and by a CLI without it, the member is ignored."
+        },
+        "check_permissions": {
+          "type": "boolean",
+          "description": "The call is someone else's (a page a host renders), so it is decided as the model's own call to this tool is: permission rules under every spelling, the permission mode, requiresUserInteraction, managed settings, and PreToolUse and PostToolUse hooks, which see the arguments and the result. An ask reaches the host as a can_use_tool control request; where no host can answer, and in dontAsk or plan mode, it is refused. A refused call never reaches the server: on a plain call the error subtype, on a staged call staging error_code=tool_error, each with text starting 'The tool did not run: '. The other refusals of mcp_call come first and keep their own words. A PostToolUse hook's rewrite replaces content and drops structuredContent and _meta. The result stays out of the model's context. Only a CLI that says mcp_call_check_permissions_v1 honours this member: an older one ignores it and runs the tool with no check. Honoured only on the pipes of the host that spawned the process; elsewhere the call is refused. A value that is not a boolean is refused."
         },
         "input_files": {
           "maxItems": 64,
@@ -7718,7 +7779,7 @@
         }
       },
       "required": ["subtype", "tool"],
-      "description": "Invokes an MCP tool via the subprocess MCP client without a model turn. No permission check (control channel is trusted, same as other subtypes). SDK-type MCP servers (config.type === \"sdk\") are rejected — they are caller-provided, so the caller can invoke them directly without the subprocess round-trip. Result content passes through the same processing as model-turn MCP calls, unless result_not_for_model is set. Session expiry is not retried automatically; callers can mcp_reconnect and retry. UrlElicitationRequired (-32042) tries Elicitation hooks; if no hook resolves, the call errors with the URL in the message — open it out-of-band, then retry mcp_call. STAGED calls (input_files/output_files declared) additionally stage lane rows in/out around the call — see the input_files describe. Staged failures come back as a success-subtype response whose staging field carries a typed error_code; subtype:error is emitted only when the call could not be attempted at all (server not connected, kill switch, dispatch failure) and means nothing ran. A target server that is not yet connected is brought up on demand: dispatch runs the deferred plugin/MCP startup resolution (the work a first model turn would have done) and waits up to 30s — shortened by expires_at when that is sooner — for the server to connect before answering \"MCP server not connected\", so a dispatch that races plugin startup (e.g. after an idle-wake reattach) succeeds instead of failing until a turn runs. Standard RPC semantics: a redelivered request_id supersedes the in-flight run (it is aborted and its response suppressed — exactly one response per request_id); conversion is idempotent, so re-running is safe. Cancellable via control_cancel_request.",
+      "description": "Invokes an MCP tool via the subprocess MCP client without a model turn. No permission check (control channel is trusted, same as other subtypes) unless check_permissions is set. SDK-type MCP servers (config.type === \"sdk\") are rejected — they are caller-provided, so the caller can invoke them directly without the subprocess round-trip. Result content passes through the same processing as model-turn MCP calls, unless result_not_for_model is set. Session expiry is not retried automatically; callers can mcp_reconnect and retry. UrlElicitationRequired (-32042) tries Elicitation hooks; if no hook resolves, the call errors with the URL in the message — open it out-of-band, then retry mcp_call. STAGED calls (input_files/output_files declared) additionally stage lane rows in/out around the call — see the input_files describe. Staged failures come back as a success-subtype response whose staging field carries a typed error_code; subtype:error is emitted only when the call could not be attempted at all (server not connected, kill switch, dispatch failure) and means nothing ran. A target server that is not yet connected is brought up on demand: dispatch runs the deferred plugin/MCP startup resolution (the work a first model turn would have done) and waits up to 30s — shortened by expires_at when that is sooner — for the server to connect before answering \"MCP server not connected\", so a dispatch that races plugin startup (e.g. after an idle-wake reattach) succeeds instead of failing until a turn runs. Standard RPC semantics: a redelivered request_id supersedes the in-flight run (it is aborted and its response suppressed — exactly one response per request_id); conversion is idempotent, so re-running is safe. Cancellable via control_cancel_request.",
       "x-direction": "client"
     },
     "mcp_callResponse": {
@@ -7871,7 +7932,7 @@
         }
       },
       "required": ["subtype", "serverName", "uri"],
-      "description": "Reads one MCP Apps (SEP-1865) UI resource — a `ui://` URI, typically the `_meta.ui.resourceUri` a tool declares — from a connected MCP server the CLI itself dialed, with `resources/read`, for a host that renders it. Read-only and no model turn. The reply is untrusted third-party content (HTML): render it sandboxed. SDK-type MCP servers (config.type === \"sdk\") are rejected — they are caller-provided, so the caller can read them directly. Errors name the cause: a non-ui:// URI, an unknown server, a server that managed policy blocks, that is disabled or that the project has not approved (the refusals mcp_reconnect gives), a server that is not connected (failed, pending or needs-auth: send mcp_reconnect; a connected server, or one still listed from the discovery cache, is read through the same connect path a tool call takes), a response over the size limit, or the server's own resources/read error. Refused on a lane that redacts what it persists (a Remote Control bridge worker, a tenant worker) and by the client of a cloud-hosted session. Advertised as `mcp_read_resource_v1` in system/init.capabilities.",
+      "description": "Reads one MCP Apps (SEP-1865) UI resource — a `ui://` URI, typically the `_meta.ui.resourceUri` a tool declares — from a connected MCP server the CLI itself dialed, with `resources/read`, for a host that renders it. Read-only and no model turn. The reply is untrusted third-party content (HTML): render it sandboxed. SDK-type MCP servers (config.type === \"sdk\") are rejected — they are caller-provided, so the caller can read them directly. Errors name the cause: a non-ui:// URI, an unknown server, a server that managed policy blocks, that is disabled or that the project has not approved (the refusals mcp_reconnect gives), a server that is not connected (failed, pending or needs-auth: send mcp_reconnect; a connected server, or one still listed from the discovery cache, is read through the same connect path a tool call takes), a response over the size limit, or the server's own resources/read error (over a transport that stores frames, one fixed sentence in its place). Refused on a lane that redacts what it persists (a Remote Control bridge worker, a tenant worker) and by the client of a cloud-hosted session. Advertised as `mcp_read_resource_v1` in system/init.capabilities.",
       "x-direction": "client"
     },
     "mcp_read_resourceResponse": {
@@ -7901,7 +7962,7 @@
                   "type": "string"
                 },
                 "additionalProperties": {},
-                "description": "The content item's own `_meta` as the server sent it (MCP Apps puts the resource's `ui.csp` and `ui.permissions` here), minus keys under the CLI-reserved `com.anthropic/` prefix."
+                "description": "The content item's own `_meta` as the server sent it (MCP Apps puts the resource's `ui.csp` and `ui.permissions` here), minus keys under the CLI-reserved `com.anthropic/` prefix and `io.modelcontextprotocol/files` download targets: from a claude.ai connector, one that holds the download service's one-time token (every such target while connector downloads or their removal are on); from a server on a cloud session's MCP route, every such target."
               }
             },
             "required": ["uri"]
@@ -8037,6 +8098,10 @@
                     "maximum": 9007199254740991,
                     "description": "Per-server HTTP request timeout in milliseconds, set by the host on the mcp_set_servers control event. Raises the per-request fetch first-byte budget and the tool-call watchdog for this server. Capped at 5 minutes. Ignored when `timeout` is also set.\n@internal"
                   },
+                  "displayName": {
+                    "type": "string",
+                    "description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects."
+                  },
                   "alwaysLoad": {
                     "type": "boolean",
                     "description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built."
@@ -8102,6 +8167,10 @@
                     "maximum": 9007199254740991,
                     "description": "Per-server HTTP request timeout in milliseconds, set by the host on the mcp_set_servers control event. Raises the per-request fetch first-byte budget and the tool-call watchdog for this server. Capped at 5 minutes. Ignored when `timeout` is also set.\n@internal"
                   },
+                  "displayName": {
+                    "type": "string",
+                    "description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects."
+                  },
                   "alwaysLoad": {
                     "type": "boolean",
                     "description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built."
@@ -8137,7 +8206,7 @@
                   "connectorId": {
                     "type": "string",
                     "minLength": 1,
-                    "description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered."
+                    "description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. With or without that declaration, deny and ask rules, hook matchers and disallowed-tool lists that spell mcp__<connectorId> also reach this server's tools, and nothing that allows does; the id is read as a tool's name would spell it (a character other than a letter, a digit, '-' and '_' as '_'), and one that is then longer than 128 characters or holds '__' is not used for that. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered."
                   },
                   "tools": {
                     "type": "array",
@@ -8211,7 +8280,7 @@
         },
         "liveReply": {
           "type": "boolean",
-          "description": "When true and the CLI writes to the session through CCR (a cloud session's worker, or a Remote Control worker), the success reply is published only to the clients attached at that moment, as a control_response marked live_only: true on the session's unsequenced event stream, and is not stored with the session's events; on a cloud session's worker its rows embed each server's configuration (URLs, headers, OAuth settings). Set it only if your client reads control_response frames from that stream; a reply sent while its stream is down is lost and the request must be sent again, and a reply over the live size limit comes back as a live error instead. Error replies other than that size-limit error, and every reply from hosts that do not send live replies (stdio hosts, and CLIs older than this field), are ordinary stored replies, so a client that sets it must accept either."
+          "description": "When true and the CLI writes to the session through CCR (a cloud session's worker, or a Remote Control worker), the success reply is published only to the clients attached at that moment, as a control_response marked live_only: true on the session's unsequenced event stream, and is not stored with the session's events; a cloud session's worker that does not advertise `mcp_status_no_config_v1` embeds each server's configuration (URLs, headers, OAuth settings) in its rows. Set it only if your client reads control_response frames from that stream; a reply sent while its stream is down is lost and the request must be sent again; a reply too large to send in full leaves out each server's `tools`, `serverInfo` and `capabilities` and sends only how many tools it has, and one still over the live size limit comes back as a live error instead. Error replies other than that size-limit error, and every reply from hosts that do not send live replies (stdio hosts, and CLIs older than this field), are ordinary stored replies, so a client that sets it must accept either."
         }
       },
       "required": ["subtype"],
@@ -8266,7 +8335,7 @@
                   "APPROVAL_REQUIRED",
                   "CLIENT_REGISTRATION_UNAVAILABLE"
                 ],
-                "description": "@internal Why a row is not connected, where a host can act on it. On a 'failed' row: CLAUDEAI_BEARER_REJECTED (a claude.ai connector rejected the claude.ai login — sign in again), FIRST_PARTY_AUTH_REJECTED (a first-party Anthropic server rejected its credential — the claude.ai login, or for the Claude Design server its /design-login authorization; the row's error names which sign-in fixes it), APPROVAL_REQUIRED (a project-scoped server awaiting the user's approval). On a 'failed' or a 'needs-auth' row: CLIENT_REGISTRATION_UNAVAILABLE (the last look at the server's authorization server, under 30 days ago, found no way to register a client, so mcp_authenticate is expected to fail; the row keeps this value until the server is dialed again, for example by mcp_reconnect or a completed sign-in, so keep sign-in and reconnect available). Absent in every other case; new values are additive."
+                "description": "@internal Why a row is not connected, where a host can act on it. On a 'failed' row: CLAUDEAI_BEARER_REJECTED (a claude.ai connector rejected the claude.ai login — sign in again), FIRST_PARTY_AUTH_REJECTED (a first-party Anthropic server rejected its credential — the claude.ai login, or for the Claude Design server its /design-login authorization; the row's error names which sign-in fixes it, except over a transport that stores its frames, where it reads 'Connection failed'), APPROVAL_REQUIRED (a project-scoped server awaiting the user's approval). On a 'failed' or a 'needs-auth' row: CLIENT_REGISTRATION_UNAVAILABLE (the last look at the server's authorization server, under 30 days ago, found no way to register a client, so mcp_authenticate is expected to fail; the row keeps this value until the server is dialed again, for example by mcp_reconnect or a completed sign-in, so keep sign-in and reconnect available). Absent in every other case; new values are additive."
               },
               "config": {
                 "anyOf": [
@@ -8372,6 +8441,10 @@
                             "maximum": 9007199254740991,
                             "description": "Per-server HTTP request timeout in milliseconds, set by the host on the mcp_set_servers control event. Raises the per-request fetch first-byte budget and the tool-call watchdog for this server. Capped at 5 minutes. Ignored when `timeout` is also set.\n@internal"
                           },
+                          "displayName": {
+                            "type": "string",
+                            "description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects."
+                          },
                           "alwaysLoad": {
                             "type": "boolean",
                             "description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built."
@@ -8441,6 +8514,10 @@
                             "maximum": 9007199254740991,
                             "description": "Per-server HTTP request timeout in milliseconds, set by the host on the mcp_set_servers control event. Raises the per-request fetch first-byte budget and the tool-call watchdog for this server. Capped at 5 minutes. Ignored when `timeout` is also set.\n@internal"
                           },
+                          "displayName": {
+                            "type": "string",
+                            "description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects."
+                          },
                           "alwaysLoad": {
                             "type": "boolean",
                             "description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built."
@@ -8476,7 +8553,7 @@
                           "connectorId": {
                             "type": "string",
                             "minLength": 1,
-                            "description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered."
+                            "description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. With or without that declaration, deny and ask rules, hook matchers and disallowed-tool lists that spell mcp__<connectorId> also reach this server's tools, and nothing that allows does; the id is read as a tool's name would spell it (a character other than a letter, a digit, '-' and '_' as '_'), and one that is then longer than 128 characters or holds '__' is not used for that. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered."
                           },
                           "tools": {
                             "type": "array",
@@ -8549,7 +8626,7 @@
               },
               "urlHost": {
                 "type": "string",
-                "description": "@internal Host and port of an http or sse server's URL as its settings file wrote it, for display where `config` is withheld. Absent for other transports, for a server with no settings file (dynamic, plugin, sdk, agent, claudeai), for a server the session proxies (its host would be the session's own), when the file's host holds an environment-variable placeholder or the file can't be re-read, and on CLIs that predate the field."
+                "description": "@internal Host and port of an http or sse server's URL as its settings file wrote it, for display where `config` is withheld. Absent for other transports, for a server with no settings file (dynamic, plugin, sdk, agent, claudeai), for a server the session proxies (its host would be the session's own), outside a worker known to be Anthropic-hosted, where `config` is withheld (on a self-hosted runner, for one, it can name a machine in the customer's own network), when the file's host holds an environment-variable placeholder or the file can't be re-read, and on CLIs that predate the field."
               },
               "scope": {
                 "type": "string",
@@ -8597,6 +8674,10 @@
                 },
                 "description": "Tools provided by this server (available when connected)"
               },
+              "toolCount": {
+                "type": "number",
+                "description": "@internal How many tools the server has, sent in place of `tools` on each row that would carry them when a live `mcp_status` reply (`liveReply`) with every server's tools would be too large to send. Such a reply leaves out every row's `serverInfo` and `capabilities` too; read their absence there as unknown, not as none. Absent whenever `tools` is sent, and on CLIs that predate the field."
+              },
               "capabilities": {
                 "type": "object",
                 "properties": {
@@ -8608,7 +8689,7 @@
                     "additionalProperties": {}
                   }
                 },
-                "description": "@internal Server capabilities (available when connected). experimental['claude/channel'] is only present if the server's plugin is on the approved channels allowlist — use its presence to decide whether to show an Enable-channel prompt."
+                "description": "@internal Server capabilities (available when connected). experimental['claude/channel'] is only present if the server's plugin is on the approved channels allowlist — use its presence to decide whether to show an Enable-channel prompt. Left out of a live reply too large to send in full (see `toolCount`); there its absence means unknown."
               }
             },
             "required": ["name", "status"],
@@ -8772,7 +8853,7 @@
                 "kind": {
                   "type": "string",
                   "const": "as_written",
-                  "description": "For a path copied from one of Claude's replies, which may be relative to the cwd of an earlier moment or to the root of the repository, or may lack its leading directories. Send it only to a session whose newest system/init lists the capability read_file_as_written_v1, and send the text without a line suffix (`:12`, `#L12`) or URL scheme. The session tries the text against the live cwd, the git root above that and its working directories. If no file is there, it looks below them for a file whose path ends in the text, among the paths its file state has held: those the file tools of the main conversation have read or written since the process started, or in the transcript it started from, and what a host has seeded or staged. A file that only a sub-agent touched is not among them, nor one that only a shell command touched, unless the command did nothing but print single files plainly (`cat f`, `head f`, `sed -n 1,9p f` and the like, or a lone `grep` that matches), with no pipe or redirect. It reads a file only when exactly one fits or, of several that fit a directory, exactly one is among those paths. The response's `absPath` names the file read. Show that path: the file can be a namesake of the one meant. A text that is `~` or starts with `~/`, a text that fits no file or several, a file found in none of the folders of `within`, and a look-up that could not be finished are refused. From such a session a refusal is final for the `within` it was asked with: asking again with a directory of the client's own choosing would turn \"two files fit\" into \"the first one wins\". A CLI that has `anchor` but predates this kind refuses it."
+                  "description": "For a path copied from one of Claude's replies, which may be relative to the cwd of an earlier moment or to the root of the repository, or may lack its leading directories. Send it only to a session whose newest system/init lists the capability read_file_as_written_v1, and send the text without a line suffix (`:12`, `#L12`) or URL scheme. The session tries the text against the live cwd, the git root above that and its working directories. If no file is there, it looks below them for a file whose path ends in the text, among the paths its file state has held: those the file tools of the main conversation have read or written since the process started, or in the transcript it started from, and what a host has seeded or staged. A file that only a sub-agent touched is not among them, nor one that only a shell command touched, unless the command did nothing but print single files plainly (`cat f`, `head f`, `sed -n 1,9p f` and the like, or a lone `grep` that matches), with no pipe or redirect. If none of those paths ends in the text, some sessions on Linux then search the files below their working directories for one whose path ends in it, skipping `.git` and `node_modules` and following no symbolic link. It reads a file only when exactly one fits or, of several that fit a directory, exactly one is among those paths. The response's `absPath` names the file read. Show that path: the file can be a namesake of the one meant. A text that is `~` or starts with `~/`, a text that fits no file or several, a file found in none of the folders of `within`, and a look-up that could not be finished are refused. From such a session a refusal is final for the `within` it was asked with: asking again with a directory of the client's own choosing would turn \"two files fit\" into \"the first one wins\". A CLI that has `anchor` but predates this kind refuses it."
                 },
                 "within": {
                   "type": "array",
@@ -8808,6 +8889,10 @@
           "type": "string",
           "const": "base64",
           "description": "Set when the request asked for base64. Absent means utf-8 — including when an older CLI ignored the request's encoding field."
+        },
+        "lossy": {
+          "type": "boolean",
+          "description": "Present on every utf-8 answer. True when the bytes read were not all valid UTF-8, so `contents` has U+FFFD where bytes were replaced and is not the file's own text: a binary file, text in another encoding, or a read cut inside a character when `truncated` is set. False when `contents` is exactly the bytes read, decoded, even if the file itself contains U+FFFD. Absent on a base64 answer, which is exact, and from an older CLI or tool container: a client that sees neither this nor `encoding: 'base64'` cannot tell whether `contents` is exact."
         },
         "anchor": {
           "type": "string",
@@ -9398,7 +9483,7 @@
                   "APPROVAL_REQUIRED",
                   "CLIENT_REGISTRATION_UNAVAILABLE"
                 ],
-                "description": "@internal Why a row is not connected, where a host can act on it. On a 'failed' row: CLAUDEAI_BEARER_REJECTED (a claude.ai connector rejected the claude.ai login — sign in again), FIRST_PARTY_AUTH_REJECTED (a first-party Anthropic server rejected its credential — the claude.ai login, or for the Claude Design server its /design-login authorization; the row's error names which sign-in fixes it), APPROVAL_REQUIRED (a project-scoped server awaiting the user's approval). On a 'failed' or a 'needs-auth' row: CLIENT_REGISTRATION_UNAVAILABLE (the last look at the server's authorization server, under 30 days ago, found no way to register a client, so mcp_authenticate is expected to fail; the row keeps this value until the server is dialed again, for example by mcp_reconnect or a completed sign-in, so keep sign-in and reconnect available). Absent in every other case; new values are additive."
+                "description": "@internal Why a row is not connected, where a host can act on it. On a 'failed' row: CLAUDEAI_BEARER_REJECTED (a claude.ai connector rejected the claude.ai login — sign in again), FIRST_PARTY_AUTH_REJECTED (a first-party Anthropic server rejected its credential — the claude.ai login, or for the Claude Design server its /design-login authorization; the row's error names which sign-in fixes it, except over a transport that stores its frames, where it reads 'Connection failed'), APPROVAL_REQUIRED (a project-scoped server awaiting the user's approval). On a 'failed' or a 'needs-auth' row: CLIENT_REGISTRATION_UNAVAILABLE (the last look at the server's authorization server, under 30 days ago, found no way to register a client, so mcp_authenticate is expected to fail; the row keeps this value until the server is dialed again, for example by mcp_reconnect or a completed sign-in, so keep sign-in and reconnect available). Absent in every other case; new values are additive."
               },
               "config": {
                 "anyOf": [
@@ -9504,6 +9589,10 @@
                             "maximum": 9007199254740991,
                             "description": "Per-server HTTP request timeout in milliseconds, set by the host on the mcp_set_servers control event. Raises the per-request fetch first-byte budget and the tool-call watchdog for this server. Capped at 5 minutes. Ignored when `timeout` is also set.\n@internal"
                           },
+                          "displayName": {
+                            "type": "string",
+                            "description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects."
+                          },
                           "alwaysLoad": {
                             "type": "boolean",
                             "description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built."
@@ -9573,6 +9662,10 @@
                             "maximum": 9007199254740991,
                             "description": "Per-server HTTP request timeout in milliseconds, set by the host on the mcp_set_servers control event. Raises the per-request fetch first-byte budget and the tool-call watchdog for this server. Capped at 5 minutes. Ignored when `timeout` is also set.\n@internal"
                           },
+                          "displayName": {
+                            "type": "string",
+                            "description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects."
+                          },
                           "alwaysLoad": {
                             "type": "boolean",
                             "description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built."
@@ -9608,7 +9701,7 @@
                           "connectorId": {
                             "type": "string",
                             "minLength": 1,
-                            "description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered."
+                            "description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. With or without that declaration, deny and ask rules, hook matchers and disallowed-tool lists that spell mcp__<connectorId> also reach this server's tools, and nothing that allows does; the id is read as a tool's name would spell it (a character other than a letter, a digit, '-' and '_' as '_'), and one that is then longer than 128 characters or holds '__' is not used for that. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered."
                           },
                           "tools": {
                             "type": "array",
@@ -9681,7 +9774,7 @@
               },
               "urlHost": {
                 "type": "string",
-                "description": "@internal Host and port of an http or sse server's URL as its settings file wrote it, for display where `config` is withheld. Absent for other transports, for a server with no settings file (dynamic, plugin, sdk, agent, claudeai), for a server the session proxies (its host would be the session's own), when the file's host holds an environment-variable placeholder or the file can't be re-read, and on CLIs that predate the field."
+                "description": "@internal Host and port of an http or sse server's URL as its settings file wrote it, for display where `config` is withheld. Absent for other transports, for a server with no settings file (dynamic, plugin, sdk, agent, claudeai), for a server the session proxies (its host would be the session's own), outside a worker known to be Anthropic-hosted, where `config` is withheld (on a self-hosted runner, for one, it can name a machine in the customer's own network), when the file's host holds an environment-variable placeholder or the file can't be re-read, and on CLIs that predate the field."
               },
               "scope": {
                 "type": "string",
@@ -9729,6 +9822,10 @@
                 },
                 "description": "Tools provided by this server (available when connected)"
               },
+              "toolCount": {
+                "type": "number",
+                "description": "@internal How many tools the server has, sent in place of `tools` on each row that would carry them when a live `mcp_status` reply (`liveReply`) with every server's tools would be too large to send. Such a reply leaves out every row's `serverInfo` and `capabilities` too; read their absence there as unknown, not as none. Absent whenever `tools` is sent, and on CLIs that predate the field."
+              },
               "capabilities": {
                 "type": "object",
                 "properties": {
@@ -9740,7 +9837,7 @@
                     "additionalProperties": {}
                   }
                 },
-                "description": "@internal Server capabilities (available when connected). experimental['claude/channel'] is only present if the server's plugin is on the approved channels allowlist — use its presence to decide whether to show an Enable-channel prompt."
+                "description": "@internal Server capabilities (available when connected). experimental['claude/channel'] is only present if the server's plugin is on the approved channels allowlist — use its presence to decide whether to show an Enable-channel prompt. Left out of a live reply too large to send in full (see `toolCount`); there its absence means unknown."
               }
             },
             "required": ["name", "status"],
@@ -10177,7 +10274,24 @@
               "type": "null"
             }
           ],
-          "description": "@internal The wire version the worker will speak with this machine, or null when they have none in common: the machine stays listed and nothing is forwarded to it."
+          "description": "@internal The wire version the worker will speak with this machine, or null when the worker will forward nothing to it: no wire version in common, or interface version ranges that do not fit. The machine stays listed."
+        },
+        "tool_host_interface": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "min_version": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": ["version", "min_version"],
+          "description": "@internal The versions of the ToolHost interface that the session speaks, from min_version up to version, on an 'announced' answer to an offer of tools. Absent from an older worker."
         },
         "passthrough_adopted": {
           "type": "integer",
@@ -10297,6 +10411,10 @@
         "session_id": {
           "type": "string",
           "description": "The session the title is for. When given and this process has since moved to another session (/clear, an in-session resume), the request is refused instead of naming the new session."
+        },
+        "names_chrome_tab_group": {
+          "type": "boolean",
+          "description": "@internal True when the title may also name this session's Chrome tab group. Only the claude.ai chat backend sets it, and not for an organization that keeps titles out of Chrome."
         }
       },
       "required": ["subtype", "title"],
@@ -10585,6 +10703,29 @@
         }
       ],
       "description": "@internal Result of a set_cwd request. Every non-ok outcome leaves the working directory unchanged — but trust may already have been durably recorded when the request carried a valid attestation (a busy rejection or relocation failure after the latch does not unlatch it; the consent was for the directory, not the attempt). Internal failures (e.g. the transcript move failed and was rolled back) arrive as a control_response error instead.",
+      "x-direction": "client"
+    },
+    "set_has_subscribersRequest": {
+      "type": "object",
+      "properties": {
+        "subtype": {
+          "type": "string",
+          "const": "set_has_subscribers"
+        },
+        "has_subscribers": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "false: nobody watches now. true: somebody does. null: the host does not know, which counts as true."
+        }
+      },
+      "required": ["subtype", "has_subscribers"],
+      "description": "Tells the CLI whether anybody is watching the output that the host reads from stream-json stdout and passes on. It matters only in a CLI started with CLAUDE_CODE_STREAM_EVENT_HOLD_MS, which holds most content_block_delta and thinking_tokens lines on stdout to join them, and with CLAUDE_CODE_STREAM_EVENT_NO_SUBSCRIBER_HOLD_MS: after false, each new wait of that hold lasts the second variable's time, if longer; after true or null, the first variable's time again. No line is dropped. The reply is an empty success, also where nothing changes, and like any other line it comes after the lines held so far, so each request ends the wait that is running: send one only when the answer changes, not after each message from your server. A new CLI process starts as watched, so send the answer again to each new process. An older CLI answers with the unsupported-subtype error, and a CLI that drives a cloud-hosted session refuses the request.",
       "x-direction": "client"
     },
     "set_max_thinking_tokensRequest": {
@@ -11200,6 +11341,15 @@
             "description": "@internal A request the engine may send a remote client on a plugin's behalf, which the client says it answers when it attaches."
           },
           "description": "@internal The engine's requests this client answers on a plugin's behalf: `ui_copy` (its clipboard), `ui_prompt_read` / `ui_prompt_fill` / `ui_prompt_paint` / `ui_prompt_suggest` (its composer), `ui_read_selection` (what the person has selected in its page). The engine sends each only to a client that named it; a client that never names any (or names `[]`) is never asked, so `$.ui.copy` to its surface answers `no-clipboard`, the prompt calls the empty box / false and `$.ui.selection` nothing, as before. On a repeated ui_attach a given list (including `[]`) replaces the earlier one and an absent field keeps it: send `[]` to stop answering."
+        },
+        "draws": {
+          "maxItems": 16,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "description": "@internal What this client draws beyond what every client of its surface draws: `Backdrop` (the session's backdrop, drawn behind the whole conversation; only a `desktop` or `mobile` client's word counts), `Input` and `Select` (on `mobile`: a client that does not name one is sent an empty Box in its place, as is an ask with no `client_id`, since no attach can name its default id). Held per client like `answers`: a later `ui_attach` under the same id that names it replaces it, and it leaves with the client. A name this version does not know, or one said twice, is ignored, so a newer client keeps its attach; a list of more than 16 names, or a name of more than 64 characters, is refused with the attach. Absent: a client still attached, or one put back, keeps what it said, and a first attach draws none. Empty, or nothing known in it: none, and `$.theme.set` answers that nothing draws it."
         }
       },
       "required": ["subtype", "surface", "client_id"],
@@ -11249,7 +11399,8 @@
             "PromptHint",
             "AbovePrompt",
             "Pane",
-            "Placed"
+            "Placed",
+            "Backdrop"
           ],
           "description": "@internal A component a plugin may draw through `ui.render`: one name per render site of the hooks engine (src/plugins/functionHooks/types/render/render-component.ts)."
         },
@@ -11439,7 +11590,8 @@
             "PromptHint",
             "AbovePrompt",
             "Pane",
-            "Placed"
+            "Placed",
+            "Backdrop"
           ],
           "description": "@internal A component a plugin may draw through `ui.render`: one name per render site of the hooks engine (src/plugins/functionHooks/types/render/render-component.ts)."
         },
@@ -11817,7 +11969,8 @@
             "PromptHint",
             "AbovePrompt",
             "Pane",
-            "Placed"
+            "Placed",
+            "Backdrop"
           ],
           "description": "@internal The render site the Input was drawn in, as the ui_render that drew it named it; pairs with `key` for the re-resolve."
         },
@@ -11888,7 +12041,8 @@
             "PromptHint",
             "AbovePrompt",
             "Pane",
-            "Placed"
+            "Placed",
+            "Backdrop"
           ],
           "description": "@internal A component a plugin may draw through `ui.render`: one name per render site of the hooks engine (src/plugins/functionHooks/types/render/render-component.ts)."
         },
@@ -12233,7 +12387,8 @@
                 "PromptHint",
                 "AbovePrompt",
                 "Pane",
-                "Placed"
+                "Placed",
+                "Backdrop"
               ],
               "description": "@internal A component a plugin may draw through `ui.render`: one name per render site of the hooks engine (src/plugins/functionHooks/types/render/render-component.ts)."
             },
@@ -13483,7 +13638,8 @@
             "PromptHint",
             "AbovePrompt",
             "Pane",
-            "Placed"
+            "Placed",
+            "Backdrop"
           ],
           "description": "@internal A component a plugin may draw through `ui.render`: one name per render site of the hooks engine (src/plugins/functionHooks/types/render/render-component.ts)."
         },
@@ -14329,7 +14485,8 @@
             "PromptHint",
             "AbovePrompt",
             "Pane",
-            "Placed"
+            "Placed",
+            "Backdrop"
           ],
           "description": "@internal The render site the Select was drawn in, as the ui_render that drew it named it; pairs with `key` for the re-resolve."
         },

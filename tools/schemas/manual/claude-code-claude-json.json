@@ -64,7 +64,7 @@
       "schema": {
         "type": "boolean"
       },
-      "anchors": ["diffSidebarOpen!==«»)«»((«»)=>({...f,diffSidebarOpen:«»})"],
+      "anchors": ["diffSidebarOpen!==«»)«»((«»)=>({...«»,diffSidebarOpen:«»})"],
       "note": "Written as diffSidebarOpen:a with a=i===\"diff\" (a boolean); read as r===!1 / r===!0."
     },
     "showStatusInTerminalTab": {
@@ -215,7 +215,7 @@
         "type": "boolean"
       },
       "anchors": [
-        "function «»(«»){return «».remoteDialogSeen?«»:{...«»,remoteDialogSeen:!0}}",
+        "«»((«»)=>«».remoteDialogSeen?«»:{...«»,remoteDialogSeen:!0},«»)",
         "await «»((«»)=>{if(«».remoteDialogSeen)return «»;return{...«»,remoteDialogSeen:!0}},«»)"
       ],
       "note": "All write sites set it to !0."

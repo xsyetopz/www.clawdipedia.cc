@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://clawdipedia.cc/schemas/claude-code-keybindings.json",
-  "title": "Claude Code keybindings.json (Claude Code 2.1.316)",
-  "$comment": "For ~/.claude/keybindings.json. Generated from Claude Code 2.1.316 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
+  "title": "Claude Code keybindings.json (Claude Code 2.1.319)",
+  "$comment": "For ~/.claude/keybindings.json. Generated from Claude Code 2.1.319 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
   "type": "object",
   "properties": {
     "$schema": {
@@ -44,6 +44,7 @@
               "DiffDialog",
               "DiffPanel",
               "FeedbackSurvey",
+              "SessionTabs",
               "ModelPicker",
               "EffortSlider",
               "Select",
@@ -75,6 +76,7 @@
                     "app:diffFileListDown",
                     "app:toggleDiffPreSession",
                     "app:cycleDiffBase",
+                    "app:closeSession",
                     "app:toggleTerminal",
                     "app:redraw",
                     "app:openArtifact",

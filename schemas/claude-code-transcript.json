@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://clawdipedia.cc/schemas/claude-code-transcript.json",
-  "title": "Claude Code transcript JSONL entry (Claude Code 2.1.316)",
-  "$comment": "For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.316 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to \"transcript\"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:\"<entry type>\" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
+  "title": "Claude Code transcript JSONL entry (Claude Code 2.1.319)",
+  "$comment": "For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.319 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to \"transcript\"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:\"<entry type>\" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
   "type": "object",
   "oneOf": [
     {
@@ -109,6 +109,12 @@
     },
     {
       "$ref": "#/$defs/relocated"
+    },
+    {
+      "$ref": "#/$defs/resume-head-vouch"
+    },
+    {
+      "$ref": "#/$defs/session-owner"
     },
     {
       "$ref": "#/$defs/summary"
@@ -257,23 +263,22 @@
         "cut": {
           "type": "object",
           "properties": {
+            "markAddresses": {
+              "x-unverified": true
+            },
             "kind": {
-              "const": "laptop-account-memory"
+              "const": "tool-mark-address"
             },
             "cuts": {
-              "type": "integer"
+              "x-unverified": true
             },
             "placeholders": {
-              "type": "integer"
+              "x-unverified": true
             },
             "messages": {
-              "type": "array",
-              "items": {
-                "type": "integer"
-              }
+              "type": "array"
             }
-          },
-          "required": ["kind", "cuts", "placeholders", "messages"]
+          }
         },
         "cutRequestDigest": {
           "type": "string"
@@ -1034,6 +1039,9 @@
         "attributionMcpTool": {
           "type": "string"
         },
+        "cutInUnfinishedBlock": {
+          "x-unverified": true
+        },
         "healsDistinctCarrier": {
           "type": "boolean",
           "enum": [true]
@@ -1068,6 +1076,9 @@
         "serverClassifierResults": {
           "not": {}
         },
+        "serverClassifierContextWithheld": {
+          "type": "boolean"
+        },
         "apiBlockIndex": {
           "x-observed": true,
           "type": "integer"
@@ -1079,6 +1090,10 @@
         "requestedModel": {
           "x-observed": true,
           "type": "string"
+        },
+        "promptCacheRequested": {
+          "type": "string",
+          "x-observed": true
         },
         "effort": {
           "x-observed": true,
@@ -1100,6 +1115,10 @@
         },
         "thinkingDurationMs": {
           "type": "number"
+        },
+        "toolInputStreamMs": {
+          "type": "number",
+          "x-observed": true
         },
         "thinkingDisplay": {
           "type": "string"
@@ -1285,12 +1304,12 @@
           },
           "x-observed": true
         },
-        "rendered": {
-          "type": "array",
-          "x-observed": true
-        },
         "renderedRole": {
           "type": "string",
+          "x-observed": true
+        },
+        "rendered": {
+          "type": "array",
           "x-observed": true
         },
         "renderedBesideToolResult": {
@@ -2146,6 +2165,73 @@
             "remoteSessionId": {
               "type": "string"
             },
+            "toolInput": {
+              "properties": {
+                "query": {
+                  "x-unverified": true
+                },
+                "max": {
+                  "x-unverified": true
+                },
+                "name": {
+                  "x-unverified": true
+                }
+              }
+            },
+            "toolUseId": {
+              "x-unverified": true
+            },
+            "phase": {
+              "x-unverified": true
+            },
+            "result": {
+              "x-unverified": true
+            },
+            "scriptHelper": {
+              "x-unverified": true
+            },
+            "declined": {
+              "x-unverified": true
+            },
+            "permissionDecision": {
+              "x-unverified": true
+            },
+            "toolDenialKind": {
+              "x-unverified": true
+            },
+            "nativeTimeoutMs": {
+              "x-unverified": true
+            },
+            "executed": {
+              "x-unverified": true
+            },
+            "shellProgress": {
+              "x-unverified": true
+            },
+            "mcpContent": {
+              "x-unverified": true
+            },
+            "delegatedToolNames": {
+              "x-unverified": true
+            },
+            "notes": {
+              "x-unverified": true
+            },
+            "sandboxViolations": {
+              "x-unverified": true
+            },
+            "sandboxed": {
+              "x-unverified": true
+            },
+            "resultBeforeReadBack": {
+              "x-unverified": true
+            },
+            "servedText": {
+              "x-unverified": true
+            },
+            "scriptStartedAt": {
+              "x-unverified": true
+            },
             "status": {
               "type": ["string", "integer"],
               "enum": ["started", "completed", "failed", "progress", 429, 503]
@@ -2222,7 +2308,7 @@
           "type": "string"
         }
       },
-      "$comment": "Registry policy: boundary-cleared. Code sites used: 42."
+      "$comment": "Registry policy: boundary-cleared. Code sites used: 52."
     },
     "queue-operation": {
       "type": "object",
@@ -2273,6 +2359,39 @@
         }
       },
       "$comment": "Registry policy: last-wins. Code sites used: 5."
+    },
+    "resume-head-vouch": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "resume-head-vouch"
+        },
+        "sessionId": {
+          "x-unverified": true
+        },
+        "sum": {
+          "x-unverified": true
+        }
+      },
+      "$comment": "Registry policy: boundary-cleared. Code sites used: 1."
+    },
+    "session-owner": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "session-owner"
+        },
+        "sessionId": {
+          "x-unverified": true
+        },
+        "accountUuid": {
+          "x-unverified": true
+        },
+        "organizationUuid": {
+          "x-unverified": true
+        }
+      },
+      "$comment": "Registry policy: last-wins. Code sites used: 2."
     },
     "summary": {
       "type": "object",
@@ -2371,6 +2490,9 @@
             }
           ]
         },
+        "apiRefusalCyberVerification": {
+          "x-unverified": true
+        },
         "plugin": {
           "x-unverified": true
         },
@@ -2391,9 +2513,6 @@
         },
         "url": {
           "type": "string"
-        },
-        "upgradeNudge": {
-          "not": {}
         },
         "entry": {
           "type": "string"
@@ -2621,6 +2740,9 @@
               "type": "string"
             }
           }
+        },
+        "isDisplayOnly": {
+          "x-unverified": true
         },
         "submitUuid": {
           "type": "string"
@@ -2873,7 +2995,7 @@
           "type": "string"
         }
       },
-      "$comment": "Registry policy: transcript. Code sites used: 42."
+      "$comment": "Registry policy: transcript. Code sites used: 43."
     },
     "tag": {
       "type": "object",
@@ -2906,7 +3028,7 @@
           "x-observed": true
         }
       },
-      "$comment": "Registry policy: last-wins. Code sites used: 4."
+      "$comment": "Registry policy: last-wins. Code sites used: 5."
     },
     "user": {
       "type": "object",

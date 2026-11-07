@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://clawdipedia.cc/schemas/claude-code-tools.json",
-  "title": "Claude Code built-in tool payloads (Claude Code 2.1.316)",
-  "$comment": "For the input and result of each built-in tool (definitions <Tool>Input and <Tool>Result). Generated from Claude Code 2.1.316 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the tool factory that copies a tool definition's properties (getters included), read as inputSchema and outputSchema on each tool. Do not edit by hand: run \"bun run schemas\".",
+  "title": "Claude Code built-in tool payloads (Claude Code 2.1.319)",
+  "$comment": "For the input and result of each built-in tool (definitions <Tool>Input and <Tool>Result). Generated from Claude Code 2.1.319 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the tool factory that copies a tool definition's properties (getters included), read as inputSchema and outputSchema on each tool. Do not edit by hand: run \"bun run schemas\".",
   "description": "The program did not give these definitions: ObserverReportResult, TestingPermissionResult, ArtifactCommentsInput, ArtifactDataInput, ArtifactCheckInput, SendMessageResult, ArtifactInput.",
   "$defs": {
     "AgentInput": {
@@ -304,6 +304,24 @@
             "canContinueAgent": {
               "description": "@internal False when the calling agent cannot continue this agent with a follow-up message (it holds no messaging tool); absent means it can.",
               "type": "boolean"
+            },
+            "taskCalls": {
+              "description": "@internal The subagent's TaskCreate and TaskUpdate calls that succeeded, in order: each call's tool, its input as the model wrote it, and its result text. The subagent writes the session's task list, and no other row of the main transcript shows these calls. A missing member does not mean that no call ran. A host may read it, so a later build only adds keys to a call: see \"For another program that reads a sub-agent's task calls\" in docs/task-list-across-compaction.md",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "enum": ["TaskCreate", "TaskUpdate"]
+                  },
+                  "input": {},
+                  "result": {
+                    "type": "string"
+                  }
+                },
+                "required": ["name", "input", "result"]
+              }
             }
           },
           "required": [
@@ -1041,6 +1059,9 @@
             "total_at_least": {
               "type": "boolean",
               "const": true
+            },
+            "next_page_token": {
+              "type": "string"
             },
             "pins_enabled": {
               "type": "boolean"
@@ -4213,6 +4234,9 @@
               "type": "boolean",
               "const": true
             },
+            "next_page_token": {
+              "type": "string"
+            },
             "pins_enabled": {
               "type": "boolean"
             },
@@ -7383,6 +7407,9 @@
             "total_at_least": {
               "type": "boolean",
               "const": true
+            },
+            "next_page_token": {
+              "type": "string"
             },
             "pins_enabled": {
               "type": "boolean"
@@ -10555,6 +10582,9 @@
               "type": "boolean",
               "const": true
             },
+            "next_page_token": {
+              "type": "string"
+            },
             "pins_enabled": {
               "type": "boolean"
             },
@@ -13537,6 +13567,14 @@
           "description": "@internal True when stdout holds the first part of the persisted output, a line saying that the middle was left out, and then its last lines",
           "type": "boolean"
         },
+        "tailInputPath": {
+          "description": "@internal Path to a saved copy of the output that the command piped into tail",
+          "type": "string"
+        },
+        "tailInputNote": {
+          "description": "@internal Model-facing note about the file at tailInputPath",
+          "type": "string"
+        },
         "memoryLimitNote": {
           "description": "@internal Tells the model that the kernel killed a process for lack of memory while the command ran",
           "type": "string"
@@ -14128,6 +14166,10 @@
             },
             "canEdit": {
               "type": "boolean"
+            },
+            "moveState": {
+              "type": "string",
+              "enum": ["moving", "moved"]
             }
           },
           "required": ["method", "projectId", "name"]
@@ -14746,17 +14788,53 @@
                 "content": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string",
-                        "const": "text"
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "text"
+                          },
+                          "text": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["type", "text"]
                       },
-                      "text": {
-                        "type": "string"
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "image"
+                          },
+                          "source": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "base64"
+                              },
+                              "media_type": {
+                                "type": "string",
+                                "enum": [
+                                  "image/jpeg",
+                                  "image/png",
+                                  "image/gif",
+                                  "image/webp"
+                                ]
+                              },
+                              "data": {
+                                "type": "string"
+                              }
+                            },
+                            "required": ["type", "media_type", "data"]
+                          }
+                        },
+                        "required": ["type", "source"]
                       }
-                    },
-                    "required": ["type", "text"]
+                    ]
                   }
                 },
                 "isError": {
@@ -14890,6 +14968,10 @@
         "countIsComplete": {
           "description": "Whether totalMatches is the exact total (true) or a floor because the underlying search truncated its own output (false). Absent on results persisted by CLI versions predating this field.",
           "type": "boolean"
+        },
+        "timedOut": {
+          "description": "True when the time limit stopped the search after these paths were read, so more matches may exist. Absent otherwise.",
+          "type": "boolean"
         }
       },
       "required": ["durationMs", "numFiles", "filenames", "truncated"]
@@ -14998,6 +15080,9 @@
         },
         "appliedOffset": {
           "type": "number"
+        },
+        "timedOut": {
+          "type": "boolean"
         }
       },
       "required": ["numFiles", "filenames"]
@@ -16008,7 +16093,7 @@
               "type": "string"
             },
             "version": {
-              "description": "@internal Lowercase hex SHA-256 of the UTF-8 bytes of a text doc's whole text. Set only where docVersionsOffered.",
+              "description": "@internal Lowercase hex SHA-256 of the UTF-8 bytes of a text doc's whole text; never on a project_read that delivered only part of the doc. Set where docVersionsOffered; also, while tengu_lovely_rain and tengu_lucky_nebula are on, on a project_read that saved the whole text to a file and on a project_write by local_path in a checked call.",
               "type": "string"
             },
             "file_kind": {
@@ -16086,7 +16171,7 @@
               "type": "string"
             },
             "version": {
-              "description": "@internal Lowercase hex SHA-256 of the UTF-8 bytes of a text doc's whole text. Set only where docVersionsOffered.",
+              "description": "@internal Lowercase hex SHA-256 of the UTF-8 bytes of a text doc's whole text; never on a project_read that delivered only part of the doc. Set where docVersionsOffered; also, while tengu_lovely_rain and tengu_lucky_nebula are on, on a project_read that saved the whole text to a file and on a project_write by local_path in a checked call.",
               "type": "string"
             },
             "replaced": {
@@ -16505,7 +16590,7 @@
           "const": "proactive"
         }
       },
-      "required": ["message", "status"],
+      "required": ["message"],
       "additionalProperties": false
     },
     "PushNotificationResult": {
@@ -16530,6 +16615,167 @@
         }
       },
       "required": ["message"]
+    },
+    "REPLInput": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "JavaScript code to execute. Supports top-level await. State persists across calls."
+        },
+        "description": {
+          "description": "Clear, concise description of what this script does in active voice (5-10 words). E.g. \"Trace upgrade message to its GrowthBook flag\"",
+          "type": "string"
+        },
+        "timeout": {
+          "description": "Optional limit on the script's own running time in milliseconds; time spent inside the tool calls it awaits is not counted (default 30000, max 600000)",
+          "type": "number"
+        }
+      },
+      "required": ["code"],
+      "additionalProperties": false
+    },
+    "REPLResult": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "The code that was executed"
+        },
+        "result": {
+          "description": "Return value from the code execution"
+        },
+        "stdout": {
+          "type": "string",
+          "description": "What the script logged (self.log; console.log outside REPL mode)"
+        },
+        "stderr": {
+          "type": "string",
+          "description": "Captured console.error output"
+        },
+        "error": {
+          "description": "Error message if execution failed",
+          "type": "string"
+        },
+        "stoppedBy": {
+          "description": "Set when the user stopped the script: 'user' for Esc or a Stop from another client, 'refusal' for a No on one of its permission prompts. The error field then gives each tool call's state at the stop: finished, failed, declined, or still running. After the first 30 calls, the rest are counted by state and tool name.",
+          "type": "string",
+          "enum": ["user", "refusal"]
+        },
+        "asyncDispatched": {
+          "description": "True when this Output carries no execution output: the receipt of an async eval (its outcome arrives in a poll event), a refusal at the cap on unsettled evals, or an eval that was cancelled before it ran",
+          "type": "boolean"
+        },
+        "neverRan": {
+          "description": "Set when the eval was cancelled before its script ran: 'person' when the turn was cut (usually by a person's Esc or Stop), 'other' when a script, a TaskStop call or Claude Code cancelled it. The error field then holds the text written for the model",
+          "type": "string",
+          "enum": ["person", "other"]
+        },
+        "plainErrorLine": {
+          "description": "@internal Set for some errors that Claude Code wrote for the model. `text` is a short line shown to people instead of `replaces`, the line the error would otherwise show. If the error no longer shows `replaces`, for example because a PostToolUse hook rewrote it, the error's own line is shown",
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "replaces": {
+              "type": "string"
+            }
+          },
+          "required": ["text", "replaces"]
+        },
+        "keptByTurnAbort": {
+          "description": "@internal True when a plugin's turn abort made this call return its receipt early while the script kept running; resume treats a transcript that ends on it as a finished turn (conversationRecovery.ts)",
+          "type": "boolean"
+        },
+        "evalId": {
+          "description": "The eval's number on the async lane. On a result, the script ended inside the settle window, and its late output arrives under this number. On a receipt, its settle arrives under this number, or a lost event after a process exit (lostEvals.ts). On a batch of late output (late is true), the number of the eval whose script logged it",
+          "type": "number"
+        },
+        "ms": {
+          "description": "How long the script ran, in milliseconds (async lane)",
+          "type": "number"
+        },
+        "late": {
+          "description": "@internal True when this Output carries only an async eval's late output: stdout is the lines the script logged after its settle, delivered as one batch to the PostToolUse hooks before it reaches the model. Never set on a settle or a result",
+          "type": "boolean"
+        },
+        "images": {
+          "description": "Images returned by inner Read and MCP tool calls — surfaced as image content blocks",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string"
+              },
+              "mediaType": {
+                "type": "string"
+              }
+            },
+            "required": ["base64", "mediaType"]
+          }
+        },
+        "imagesOmitted": {
+          "description": "Count of images from inner tool calls dropped by the per-result image cap; surfaced as a note in the tool_result",
+          "type": "number"
+        },
+        "imagePagesFailed": {
+          "description": "Pages of inner page-range Reads that could not be processed as an image; surfaced as one note each in the tool_result",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "type": "number"
+              },
+              "file": {
+                "type": "string"
+              },
+              "error": {
+                "type": "string"
+              }
+            },
+            "required": ["page"]
+          }
+        },
+        "imagePagesFailedOmitted": {
+          "description": "Count of failed-page notes dropped by the per-result note cap; surfaced as a note in the tool_result",
+          "type": "number"
+        },
+        "documents": {
+          "description": "PDFs returned by inner Read calls — surfaced as document content blocks",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string"
+              }
+            },
+            "required": ["base64"]
+          }
+        },
+        "documentsOmitted": {
+          "description": "Count of inner-Read PDFs dropped by the per-result document cap; surfaced as a note in the tool_result",
+          "type": "number"
+        },
+        "notifications": {
+          "description": "The text of each ReadNotifications call the script made, as a direct call's result has it, whole; the first parts of the tool_result",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "toolsUsed": {
+          "description": "The tools the script called, and those its calls' results say their work called, whose names this conversation's prompt did not yet carry: a synchronous result's first line, or the first child of its <repl-output>, names them (an async settle's delivery names them instead)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["code", "stdout", "stderr"]
     },
     "ReadInput": {
       "type": "object",
@@ -16942,33 +17188,80 @@
             }
           },
           "required": ["type", "file"]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "const": "file_unchanged"
-            },
-            "file": {
-              "type": "object",
-              "properties": {
-                "filePath": {
-                  "type": "string",
-                  "description": "The path to the file"
-                }
-              },
-              "required": ["filePath"]
-            },
-            "source": {
-              "description": "Set when the dedup matched a startup-seeded entry (CLAUDE.md / nested memory) rather than a prior Read tool_result",
-              "type": "string",
-              "const": "seeded"
-            }
-          },
-          "required": ["type", "file"]
         }
       ]
+    },
+    "ReadWidgetContextInput": {
+      "type": "object",
+      "properties": {
+        "widget_id": {
+          "description": "A widget_id as a reminder or an earlier answer named it, to read only that view; omit it to read every held view.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ReadWidgetContextResult": {
+      "type": "object",
+      "properties": {
+        "blocks": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "text"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": ["type", "text"]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "image"
+                  },
+                  "source": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "base64"
+                      },
+                      "media_type": {
+                        "type": "string",
+                        "enum": [
+                          "image/png",
+                          "image/jpeg",
+                          "image/gif",
+                          "image/webp"
+                        ]
+                      },
+                      "data": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["type", "media_type", "data"]
+                  }
+                },
+                "required": ["type", "source"]
+              }
+            ]
+          },
+          "description": "The views' shared text and images, or a note."
+        },
+        "isError": {
+          "type": "boolean"
+        }
+      },
+      "required": ["blocks", "isError"]
     },
     "RefreshMcpToolsInput": {
       "type": "object",
@@ -17046,9 +17339,9 @@
           "pattern": "^[\\w-]+$"
         },
         "cursor": {
-          "description": "next_cursor from a previous list_runs or get_run_log page",
+          "description": "The next_cursor from the previous page of the same listing (list_runs with the same trigger_id, or get_run_log with the same session_id), passed back unchanged. Not an offset, a count or an event number.",
           "type": "string",
-          "maxLength": 1024
+          "maxLength": 1036
         },
         "body": {
           "description": "Required for create and update; optional for run",
@@ -18096,12 +18389,12 @@
       "properties": {
         "mode": {
           "default": "check",
-          "description": "'check' (default): if ONBOARDING.md is present locally, uploads it to the most-recent guide (creates one if none exist); otherwise reports the existing link without uploading. 'update': upload to a specific guide by short_code. 'create': always make a new link. 'delete': remove a guide.",
+          "description": "'check' (default): if ONBOARDING.md is present locally, uploads it to the most-recent guide (creates one if none exist); otherwise reports the existing link without uploading. 'update': upload to a specific guide by short_code. 'create': always make a new link. 'delete': remove the guide named by short_code; with no short_code, nothing is deleted and the user's guides are listed.",
           "type": "string",
           "enum": ["check", "update", "create", "delete"]
         },
         "short_code": {
-          "description": "Short code of a specific guide to target (returned by a previous call). Honored by check, update, and delete — skips the org-wide lookup and targets this guide directly.",
+          "description": "Short code of one guide, from an earlier call's result. Required by delete. With check or update, targets that guide instead of the most recently updated one.",
           "type": "string",
           "pattern": "^[A-Za-z0-9_-]{1,64}$"
         }
@@ -18511,6 +18804,10 @@
               "type": "string"
             },
             "subject": {
+              "type": "string"
+            },
+            "description": {
+              "description": "The task's description as saved. It can differ from the tool_use input if Claude Code corrects a malformed call or a PreToolUse hook changes the input. Absent in results from older Claude Code versions.",
               "type": "string"
             }
           },
@@ -18952,6 +19249,9 @@
             "type": "string"
           }
         },
+        "codeModeRouted": {
+          "type": "boolean"
+        },
         "unknown": {
           "type": "array",
           "items": {
@@ -19017,6 +19317,11 @@
         "url": {
           "type": "string",
           "description": "The URL that was fetched"
+        },
+        "citable": {
+          "description": "@internal The model may get the result as a search result that it can cite.",
+          "type": "boolean",
+          "const": true
         },
         "artifactRead": {
           "type": "object",
@@ -19207,6 +19512,72 @@
         }
       },
       "required": ["status", "taskId"]
+    },
+    "WrapUpInput": {
+      "type": "object",
+      "properties": {
+        "recap": {
+          "type": "string",
+          "description": "Two or three short sentences to the user, under 300 characters if you can: what is now true or changed, then where it stands, including what is not done or not verified."
+        },
+        "ask": {
+          "description": "The one decision that is the user's call, under 100 characters if you can: a choice, a go-ahead, an approval. No reason, no recommendation, no list of the options the buttons give.",
+          "type": "string"
+        },
+        "blocked": {
+          "description": "true when your work stops here until the user answers; omit when the answer can wait.",
+          "type": "boolean"
+        },
+        "actions": {
+          "description": "One or two buttons that answer ask, your recommendation first; a second only when it is a realistic alternative. Needs ask.",
+          "maxItems": 2,
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "description": "A reply: the button's text, which a click sends you as the user's message. 1-3 plain words, at most 24 characters (\"Yes, fix 1\", \"Not now\"). The first button is your pick, so no need to say so. Each word starts with a letter or digit. No quotes, code marks, arrows, emoji, @ or =. Write & only between blanks."
+                  }
+                },
+                "required": ["label"],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "enum": [
+                      "verify",
+                      "fix_ci",
+                      "address_comments",
+                      "resolve_conflicts"
+                    ],
+                    "description": "One of the app's own buttons, which asks you to check this turn's changes (verify) or, on an open pull request, to fix its failing checks, address its requested changes or resolve its merge conflicts. The app shows it only while that applies, so prefer a reply."
+                  }
+                },
+                "required": ["action"],
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      },
+      "required": ["recap"],
+      "additionalProperties": false
+    },
+    "WrapUpResult": {
+      "type": "object",
+      "properties": {
+        "asks": {
+          "type": "boolean",
+          "description": "Whether the call put a question to the user"
+        }
+      },
+      "required": ["asks"]
     },
     "WriteInput": {
       "type": "object",

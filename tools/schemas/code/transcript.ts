@@ -66,7 +66,7 @@ const laterWrite = (key: string): Json | undefined => {
       // A key of an object literal; `let{key:a,...rest}=line` is a pattern, which reads the key.
       const prop = m.parent(m.nodeAt(h.index + 1));
       const obj = prop && m.parent(prop);
-      if (prop?.type !== "Property" || obj?.type !== "ObjectExpression")
+      if (prop?.type !== "ObjectProperty" || obj?.type !== "ObjectExpression")
         continue;
       if (
         !copies(obj) &&
@@ -139,7 +139,7 @@ export const buildTranscript = (): { file: string; schema: Json } => {
       if (!types.includes(t)) continue;
       const prop = m.parent(m.nodeAt(h.index + 1));
       const obj = prop && m.parent(prop);
-      if (prop?.type !== "Property" || obj?.type !== "ObjectExpression")
+      if (prop?.type !== "ObjectProperty" || obj?.type !== "ObjectExpression")
         continue;
       const list = sites.get(t) ?? [];
       if (!list.some((x) => x.src === m && x.at === obj.start))
