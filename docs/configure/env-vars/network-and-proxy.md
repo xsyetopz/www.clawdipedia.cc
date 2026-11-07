@@ -8,7 +8,7 @@ These variables control how Claude Code reaches the network.
 They set the API base URL, proxies, custom certificates, timeouts, and retry counts.
 Use them behind a company proxy or when you route traffic through a gateway.
 
-This page lists 73 variables. `HTTPS_PROXY`, `NO_PROXY`, and `ANTHROPIC_BASE_URL` are the usual ones. Project settings cannot set some endpoint variables before you trust the folder.
+This page lists 74 variables. `HTTPS_PROXY`, `NO_PROXY`, and `ANTHROPIC_BASE_URL` are the usual ones. Project settings cannot set some endpoint variables before you trust the folder.
 
 ## Example
 
@@ -32,7 +32,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_DISABLE_SELF_NAMED_CERT_DROP` | <Undocumented /> | Keeps every certificate in the `NODE_EXTRA_CA_CERTS` file whose subject and issuer match, whoever signed it. Normally Claude Code drops such a certificate when its own key did not sign it, or it cannot check that, unless a kept certificate issued it or it is in the built-in root list. If all or none would be dropped, the list stays whole. The log says `CA certs: Dropped the certificate with SHA-256 fingerprint ...` at error level (the program). | On or off. Off by default. A client certificate also skips the drop | All sessions |
 | `all_proxy` | <Undocumented /> | Lower case proxy variable. It is the last fallback after `HTTPS_PROXY` and `ALL_PROXY` for git proxy settings. | Text. Non-empty string. Also listed with proxy names | All sessions |
 | `ANTHROPIC_BASE_URL` | <Documented /> | Overrides the API endpoint. A non-first-party host changes first-party checks, such as Remote Control. Since 2.1.304 tool search stays on behind a custom URL, and a 400 or 422 from the gateway is retried without it. | Text. An unset value or an Anthropic host counts as first party | All sessions. Not set from project `env` before trust |
-| `ANTHROPIC_CUSTOM_HEADERS` | <Documented /> | Adds custom request headers. | Text. Split on new lines, each `Name: Value` at the first colon. Claude Code drops bad header names or values with a warning | All sessions. Not set from project `env` before trust |
+| `ANTHROPIC_CUSTOM_HEADERS` | <Documented /> | Adds custom request headers. | Text. Split on new lines, each `Name: Value` at the first colon. Claude Code drops bad header names or values with a warning. A bad `Authorization` value stops each request instead (see [Errors](../settings/auth.md#errors)) | All sessions. Not set from project `env` before trust |
 | `ANTHROPIC_UNIX_SOCKET` | <Documented /> | Sends first-party API requests over this Unix socket path. | Text. Claude Code passes it as the `unix` fetch option. Also in the host-managed provider list with `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` | First-party API client, all. Not set from project `env` before trust |
 | `API_FORCE_IDLE_TIMEOUT` | <Documented /> | Forces the streaming body idle timeout on or off. | A number. A true value forces it on and a false value (`0`) turns the fetch timeout off | Anthropic API client, all. Not set from project `env` before trust |
 | `API_TIMEOUT_MS` | <Documented /> | Sets the API request timeout in milliseconds. | A number of milliseconds, `600000` (10 minutes) by default. Whole number. Errors show a hint to raise it | All sessions. Not set from project `env` before trust |
@@ -45,7 +45,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_ADDITIONAL_PROTECTION` | <Undocumented /> | Adds the `x-anthropic-additional-protection: true` header to API requests. | On or off. Read when Claude Code builds the API client | API requests. Not set from project `env` before trust |
 | `CLAUDE_CODE_API_BASE_URL` | <Undocumented /> | Gives a fallback API base URL. The Files API uses it when `ANTHROPIC_BASE_URL` is unset. Default `https://api.anthropic.com`. | Text. `ANTHROPIC_BASE_URL` wins when both are set. Credential checks also treat it as a base URL source | First-party API and Files API. Not set from project `env` before trust |
 | `CLAUDE_CODE_ATTRIBUTION_HEADER` | <Documented /> | Controls the attribution block at the start of the system prompt. A falsy value such as `0` omits it. | Text. Policy settings have a rule for it. Repo-committed settings may not re-point it | First-party API, not `CLAUDE_CODE_REMOTE` |
-| `CLAUDE_CODE_CERT_STORE` | <Documented /> | Chooses the CA certificate sources for TLS. | A comma-separated list, `bundled,system` by default | All sessions |
+| `CLAUDE_CODE_CERT_STORE` | <Documented /> | Chooses the CA certificate sources for TLS. | A comma-separated list, `bundled,system` by default. When no certificate authority is left, startup fails with `No certificate authority to trust: ...` or `No root certificates are left to trust: ...`. Some of these messages name this variable, `SSL_CERT_FILE`, or `SSL_CERT_DIR` (the program) | All sessions |
 | `CLAUDE_CODE_CLIENT_CERT` | <Documented /> | Gives the path of the client certificate file for mTLS. | Text. Claude Code reads the file and skips a cert and key that do not match | All sessions |
 | `CLAUDE_CODE_CLIENT_KEY` | <Documented /> | Gives the path of the client private key file for mTLS. | Text. Claude Code reads the file | All sessions |
 | `CLAUDE_CODE_CLIENT_KEY_PASSPHRASE` | <Documented /> | Gives the passphrase of an encrypted client key. | Text. Claude Code uses it for the key check and the TLS agent | All sessions |
@@ -70,7 +70,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_NONSTREAMING_TIMEOUT_RETRIES` | <Documented /> | Limits the re-sends of a non-streaming request that reaches its timeout. `0` fails on the first timeout. | A number. Whole number min `0`, digits only. Unset uses a built-in count only when the retry watchdog is on | All sessions |
 | `CLAUDE_CODE_OVERLOADED_RETRY_BASE_DELAY_MS` | <Documented /> | Sets the first delay of the exponential backoff for retries of an overloaded API error. | A number of milliseconds. Whole number from `500` to `32000` in plain digits, else unset. Used only on the overloaded branch of the retry loop | All API requests |
 | `CLAUDE_CODE_OVERLOADED_RETRY_MAX_DELAY_MS` | <Documented /> | Sets the ceiling of the backoff for retries of an overloaded API error. | A number of milliseconds. Whole number from `32000` to `64000` in plain digits, else unset. A longer wait than the ceiling plus a margin raises a retry-after error | All API requests |
-| `CLAUDE_CODE_PROXY_RESOLVES_HOSTS` | <Documented /> | Lets the proxy resolve DNS names. | On or off. When set the proxy agent `lookup` returns the host name as is | HTTP proxy setups |
+| `CLAUDE_CODE_PROXY_RESOLVES_HOSTS` | <Documented /> | Lets the proxy resolve DNS names. | On or off. When set the proxy agent `lookup` returns the host name as is. When `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` is set, the program ignores this variable from a settings file `env` and logs `Ignoring CLAUDE_CODE_PROXY_RESOLVES_HOSTS` (the program, 2.1.319, `chunk-54mt0b3d.js`; cases `print.env319a.proxy-resolves-hosts-from-settings.unset`, `.v1`) | HTTP proxy setups |
 | `CLAUDE_CODE_RETRY_WATCHDOG` | <Documented /> | Retries `429` and `529` capacity errors without end for unattended sessions. Docs match the code path that reads it. | On or off. The self-hosted runner sets it to `1` and also clears `CLAUDE_CODE_MAX_RETRIES`. Docs also cover the spend-limit rule | Unattended runs, CI, remote workers. Set by Claude Code for self-hosted runners |
 | `CLAUDE_CODE_RETRY_WATCHDOG_USAGE_LIMIT_RECHECK_MS` | <Documented /> | Lets the retry watchdog notice a usage limit that was lifted before its reset. Added in `2.1.305` ([v2.1.305 release](https://github.com/anthropics/claude-code/releases/tag/v2.1.305)). The program logs `[usage limit recheck]` lines when it sends or skips a probe request. | A number of milliseconds. The program shows no format check in the strings | Sessions with `CLAUDE_CODE_RETRY_WATCHDOG` |
 | `CLAUDE_CODE_RETRY_WATCHDOG_MAX_USAGE_LIMIT_WAIT_MS` | <Undocumented /> | Caps the total ms that the retry watchdog waits for usage-limit `429` errors to end. When the wait is longer than what is left, the request fails. | A number of milliseconds. Integer 1 or more, digits only. Unset means no limit | Sessions with the retry watchdog on |
@@ -94,12 +94,46 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `NIX_SSL_CERT_FILE` | <Undocumented /> | Claude Code sets it to the CA bundle path in sandboxed commands, with other CA variables. | A path | - |
 | `NO_PROXY` | <Documented /> | Lists hosts that skip the proxy. `*` skips it for all. | On or off | - |
 | `no_proxy` | <Documented /> | Lower case proxy bypass list. Claude Code reads it with `NO_PROXY`. | A comma-separated list. If both are set and differ, Claude Code joins them with a comma | All sessions |
-| `NODE_EXTRA_CA_CERTS` | <Documented /> | Adds extra CA certificates from a PEM file to the trusted set. | - | - |
+| `NODE_EXTRA_CA_CERTS` | <Documented /> | Adds extra CA certificates from a PEM file to the trusted set. Since `2.1.318`, a file that is empty, is not PEM, or starts with a damaged certificate no longer stops every connection. The program uses the certificates it can read and prints a warning on stderr. See [`NODE_EXTRA_CA_CERTS` File Faults](#node_extra_ca_certs-file-faults). | A path to a PEM file | All sessions |
 | `NODE_TLS_REJECT_UNAUTHORIZED` | <Documented /> | Set to `0` to turn off TLS certificate checks (Bun). Claude Code counts any value except `1` as a trust override. | - | - |
 | `NODE_USE_ENV_PROXY` | <Undocumented /> | A value other than empty or `0` makes the Bun `http` client use `HTTP_PROXY` and `HTTPS_PROXY`. A bundled proxy tip names it for Node 22.21 and later. | - | - |
 | `NODE_USE_SYSTEM_CA` | <Undocumented /> | The value `1` makes the Bun runtime add the OS CA store to the default CA list. | - | - |
 | `SSL_CERT_DIR` | <Undocumented /> | Gives the directory of CA certificates. Claude Code counts it as a custom CA setting. | Text. Raw string (`rawStr`). Together with `NODE_EXTRA_CA_CERTS` and `SSL_CERT_FILE`, it makes the TLS setup treat custom certs as set | All sessions |
 | `SSL_CERT_FILE` | <Documented /> | Gives the CA bundle file path. Claude Code treats it as a custom CA setting, and passes it to proxy helpers and the MCP agent proxy. | Text. Raw string. The MCP agent proxy fallback reads the file as PEM | All sessions |
+| `_CLAUDE_CODE_ASSUME_FIRST_PARTY_BASE_URL` | <Undocumented /> | Makes Claude Code treat a custom base URL as first party. A Probes run with it set raised the beta headers from 9 to 12 (added `prompt-caching-scope-2026-01-05`, `thinking-binding-controls-2026-08-01`, `cache-diagnosis-2026-04-07`) and added a `diagnostics` key to the request body. | Any set value. Not set by default | All sessions |
+
+## `NODE_EXTRA_CA_CERTS` File Faults
+
+The `2.1.318` release notes say: "Fixed every connection failing when the `NODE_EXTRA_CA_CERTS` file is empty, not PEM, or starts with a damaged certificate: readable certificates are now used, with a warning on stderr".
+Status: <Documented /> in the release notes the program shows. The behavior below is measured.
+
+Each file below was written to the sandbox `HOME` and named in `NODE_EXTRA_CA_CERTS`.
+The valid certificate is a throw-away CA made with `openssl`.
+Each case ran on `2.1.316` and on `2.1.319` with `--debug-file` set.
+
+| File Content | `2.1.316` | `2.1.319` |
+| --- | --- | --- |
+| One valid certificate | No warning | No warning |
+| Empty file | No warning on stderr. The debug log says the file was appended | Runtime line on stderr, then `Claude Code ignored all of the NODE_EXTRA_CA_CERTS file: it holds no certificate that Claude Code can read.` |
+| Text that is not PEM | No warning on stderr | The same two lines as the empty file |
+| One damaged certificate only | No warning on stderr | The same two lines as the empty file |
+| Damaged certificate, then a valid one | No warning on stderr with the HTTP stub. With the TLS stub, the runtime line only, and the run does not end in 60 s | Runtime line on stderr, then `Claude Code used only the certificates that it could read in full from the NODE_EXTRA_CA_CERTS file`. Connections work |
+| Valid certificate, then a damaged one | No warning on stderr | Runtime line on stderr only. The debug log says one certificate in the CA list "could not be read" |
+| A path with no file | No warning on stderr. The debug log says `Failed to read NODE_EXTRA_CA_CERTS file` | The same |
+
+**Source:** the program. The message texts are in `chunk-z5x6v2xz.js` of the cleaned `2.1.319` module dump, in the function that builds the CA list (`CA certs: The runtime cannot load ... the NODE_EXTRA_CA_CERTS file as one CA list entry`) and in the stderr texts that follow it.
+
+**Runs:** `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only cacerts319` (cases `extra-ca.*` and `extra-ca-tls.*`), repeated with `--from 2.1.316 --to 2.1.316`.
+
+**FAFO:**
+
+- Hypothesis: on `2.1.316`, a file that starts with a damaged certificate stops every TLS connection; on `2.1.319` it does not.
+  Prediction: with a TLS stub whose certificate chains to the valid CA at the end of the file, `2.1.316` makes no request to the stub, and `2.1.319` does.
+  Command: case `extra-ca-tls.damaged-first`. The program reaches `api.anthropic.com` through a local CONNECT proxy (`HTTPS_PROXY`) and the stub.
+  Result: on `2.1.316` the run did not end in 60 s, with 0 requests to the stub. On `2.1.319` the run exited with code 0, with 9 requests to the stub, and the stderr text above.
+- Control: the same case with a valid file (`extra-ca-tls.valid`) and with a first line of plain text (`extra-ca-tls.not-pem-first`) reached the stub on both versions, 9 requests each. Text before a valid block does not break the file.
+- Empty and not-PEM files did not stop the run on `2.1.316` against the plain HTTP stub (exit 0, 1 request). The stderr warning is the only change the cases show for them. A TLS stub cannot test them, because the file then holds no CA for the stub. The `2.1.318` and `2.1.319` runs gave the same results.
+- The first stderr line (`Warning: Ignoring extra certs from ..., load failed: ...`) comes from the runtime. On `2.1.316` it showed only in the TLS case. The `Claude Code ...` lines show only on `2.1.318` and later.
 
 ## How It Works
 

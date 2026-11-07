@@ -36,27 +36,39 @@ Claude Code reads the account and plan from one request.
 
 | Login | Request | Source |
 | --- | --- | --- |
-| claude.ai | `GET /api/oauth/profile`, with a 10 second timeout | `chunk-r1ht672j.js:16086` |
-| API key | `GET /api/claude_cli_profile` | `chunk-r1ht672j.js:16054` |
+| claude.ai | `GET https://api.anthropic.com/api/oauth/profile`, with a 10 second timeout | `chunk-d9t0b6zk.js@304276` (`2.1.319`) |
+| API key | `GET https://api.anthropic.com/api/claude_cli_profile` | `chunk-d9t0b6zk.js@303811` (`2.1.319`) |
 
-From the reply, Claude Code keeps these facts (`chunk-r1ht672j.js:16623`).
-`schemas/` has no schema for this reply, so these field names are unconfirmed.
+`ANTHROPIC_BASE_URL` does not change the host of these requests.
+Only `CLAUDE_CODE_CUSTOM_OAUTH_URL` changes it, and only to an approved Anthropic host. See [Auth and Accounts](../configure/env-vars/auth-and-accounts.md).
 
-| Reply field | What it is |
-| --- | --- |
-| `organization.organization_type` | The plan, mapped as above. |
-| `organization.rate_limit_tier` | The rate limit tier. |
-| `organization.seat_tier` | The seat tier of a Team or Enterprise seat. |
-| `organization.has_extra_usage_enabled` | Whether usage credits are on. |
-| `organization.billing_type` | How the organization pays. `usage_based` changes the model picker (see below). |
-| `organization.claude_code_trial_ends_at`, `organization.claude_code_trial_duration_days` | The Claude Code trial, when there is one. |
-| `organization.subscription_created_at`, `account.created_at` | When the plan and the account began. |
-| `account.display_name`, `account.full_name` | Your names. |
+The table below comes from a run of `2.1.319` (see [Account Probes](../reference/probes.md#account-probes)).
+A claude.ai login sent the profile request to a local copy of `api.anthropic.com`, which gave a reply with every field set.
+The right column shows where each value went.
+
+| Reply field | What it is | Where Claude Code keeps it |
+| --- | --- | --- |
+| `account.uuid` | The account id. | `oauthAccount.accountUuid` |
+| `account.email` | Your email. | `oauthAccount.emailAddress` |
+| `account.display_name`, `account.full_name` | Your names. | `oauthAccount.displayName`, `oauthAccount.fullName` |
+| `account.created_at` | When the account began. | `oauthAccount.accountCreatedAt` |
+| `organization.uuid` | The organization id. | `oauthAccount.organizationUuid` |
+| `organization.organization_type` | The plan, mapped as above. `claude_max` became `max`. | `subscriptionType` of the login, with `subscriptionTypeSource: "profile"` and `subscriptionTypeVerifiedAt` |
+| `organization.rate_limit_tier` | The rate limit tier. | `rateLimitTier` of the login |
+| `organization.seat_tier` | The seat tier of a Team or Enterprise seat. | `oauthAccount.seatTier` |
+| `organization.has_extra_usage_enabled` | Whether usage credits are on. | `oauthAccount.hasExtraUsageEnabled` |
+| `organization.billing_type` | How the organization pays. `usage_based` changes the model picker (see below). | `oauthAccount.billingType` |
+| `organization.claude_code_trial_ends_at`, `organization.claude_code_trial_duration_days` | The Claude Code trial, when there is one. | `oauthAccount.claudeCodeTrialEndsAt`, `oauthAccount.claudeCodeTrialDurationDays` |
+| `organization.subscription_created_at` | When the plan began. | `oauthAccount.subscriptionCreatedAt` |
+| `organization.cc_onboarding_flags` | Onboarding flags for Claude Code. | `oauthAccount.ccOnboardingFlags` (`{}` when the reply has none) |
+| `organization.plan_display_name` | The plan name to show. | `oauthAccount.planDisplayName` |
+| `organization.name` | The organization name. | Not kept. The run wrote no key for it. |
 
 ## Where Claude Code Keeps It
 
-- Claude Code saves the plan and the rate limit tier with the login (`chunk-r1ht672j.js:29142`). On macOS, Claude Code reads the login from the keychain with `security find-generic-password` (`chunk-03f64wch.js:389`). The file store is `~/.claude/.credentials.json` (`chunk-r1ht672j.js:29280`). See [Sessions and Storage](sessions-and-storage.md#where-files-live).
-- The account record is the `oauthAccount` key of `~/.claude.json`. It holds the account and organization ids, your email, the plan facts from the reply, and `profileFetchedAt`, the time of the last request (`chunk-r1ht672j.js:16758`). `schemas/claude-code-claude-json.json` does not list `oauthAccount`, so its key names are unconfirmed.
+- The account record is the `oauthAccount` key of `~/.claude.json`. It holds the keys in the table above and `profileFetchedAt`, the time of the last request in milliseconds.
+- Claude Code saves the plan and the rate limit tier with the login. On macOS, Claude Code reads the login from the keychain with `security find-generic-password` (`chunk-03f64wch.js:389`). The file store is `~/.claude/.credentials.json`. See [Sessions and Storage](sessions-and-storage.md#where-files-live).
+- Claude Code saves the plan with the login only when the reply has a `request-id` header that starts with `req_` (`chunk-yr5295pc.js@415`, `2.1.319`). In the run, a reply with no `request-id` header left the login as it was, and the debug log said `OAuth: stored login plan not recorded from the profile (unstamped)`. The `oauthAccount` record was written in both runs.
 - You can edit these records. The Mod API type file describes the account that Claude Code gives a mod. The account takes `organizationType` from the login record on disk. The person can edit that record (`schemas/claude-code.d.ts`).
 
 ## When It Asks Again

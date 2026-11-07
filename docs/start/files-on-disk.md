@@ -195,6 +195,11 @@ The program holds more names than this table lists. They are internal files, or 
 | `mcp-needs-auth-cache.json` | <Undocumented /> | `~/.claude/` | The MCP needs-auth cache. |
 | `my-closed-issues.json` | <Undocumented /> | `~/.claude/cache/` | A cached list of closed issues. Each entry has `number`, `title`, and `closedAt`. |
 | `startup-perf` | <Undocumented /> | `~/.claude/` | A `.json` and a `.txt` file that `CLAUDE_CODE_PROFILE_STARTUP=1` writes. See [Probes](../reference/probes.md). |
+| `daemon.json` | <Undocumented /> | `~/.claude/` | A file in the config folder that the file tools refuse to write. The program refuses the same writes to `daemon`, `jobs`, `shell-snapshots`, and `session-env`. |
+| `local` | <Undocumented /> | `~/.claude/` | The folder of a local npm install. After a failed auto-update, the program tells you to run `cd ~/.claude/local && npm update`. |
+| `loop.md` | <Undocumented /> | `.claude/`, `~/.claude/` | The task list of a `/loop` tick that has no prompt. The program reads the project file first, then the config folder file. It cuts the text to 25000 bytes and adds a warning. |
+| `personal` | <Undocumented /> | `~/.claude/memory/` | The folder of the personal memory store (`memory/personal`). The store takes only Markdown files. The model reads and writes it through a memory store named `personal`, when memory stores are on. |
+| `workflows` | <Undocumented /> | `.claude/` | Predefined workflows, as `.claude/workflows/<name>.js`. A workflow call that gives a `name` resolves it from here or from the built-in list. The save dialog writes a project workflow to this folder. |
 
 ## Managed Files
 

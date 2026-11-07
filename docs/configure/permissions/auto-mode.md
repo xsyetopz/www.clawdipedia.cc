@@ -23,7 +23,7 @@ Pick `auto` as the permission mode. `permissions.disableAutoMode: "disable"` tur
     ],
     "soft_deny": [
       "$defaults",
-      "Never run migrations against the shared staging database."
+      "Staging Migrations: Running database migrations against the shared staging database."
     ]
   }
 }
@@ -40,9 +40,33 @@ Run `claude auto-mode config` to see the result.
   `hard_deny` rules are security boundaries that your intent does not clear. Source: the `autoMode` schema text.
 - If the classifier cannot answer, Claude Code blocks the call or sends it to a person. Program texts: `Classifier unavailable`, and `Auto mode classifier transcript exceeded context window - falling back to manual approval`.
 - Repeated denials trip a circuit breaker.
-- A server-side classifier can review actions instead. See `CLAUDE_CODE_AUTO_MODE_SERVER`. Server lists can add rules. The program ignores server entries that are not strings, are blank, or hold control characters.
+- A server-side classifier can review actions instead. See [The Server-Side Check](#the-server-side-check). Server lists can add rules. The program ignores server entries that are not strings, are blank, or hold control characters.
 
 The default rule lists are on [Auto Mode Default Rules](auto-mode-rules.md).
+
+### The Server-Side Check
+
+Official page: [Server-Side Classifier Review](https://code.claude.com/docs/en/permission-modes#server-side-classifier-review). Source: the program, 2.1.319 (`chunk-nxrsh8va.js@24780` parses the verdict, `chunk-24jdhyyr.js@2954334` reads it from the stream, `chunk-24jdhyyr.js@3178200` acts on it).
+
+- In auto mode, each main request has a top-level `safeguards` field, `[{"type": "dangerous_tool_use", "classifier_context": …}]`, and the betas `dangerous-tool-use-2026-09-03` and `afk-mode-2026-01-31`.
+- The reply carries the verdict in `safeguard_results`, in `message_delta.delta` of a stream or at the top level of a plain reply. The verdict for each call is under the `tool_use` id.
+- `not_flagged` runs the call. `flagged` denies it with `The server-side auto mode classifier judged this action dangerous (it gave no explanation)`, and `PermissionDenied` fires.
+- With no verdict, the program refuses each call that needs the check. The text with a gateway is `Auto mode can't check actions in this session. Its safety check runs on the server, and your requests go through <host>, which doesn't pass it through.` On a direct connection it is `…and the server isn't running it for this session.` The debug log has `[server-classifier] Bash: the server-side classifier does not run for this session (server_no_result) and no local one judges in its place`.
+- `CLAUDE_CODE_AUTO_MODE_SERVER=0` and `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` each remove `safeguards` from the requests. Then the program sends its own classifier requests (stage `xml_s1`, model `claude-sonnet-5[1m]` in the run).
+- `CLAUDE_CODE_AUTO_MODE_SERVER=1` wins over `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1`: the requests keep `safeguards` and the beta `dangerous-tool-use-2026-09-03`. With both set and no verdict, the program logs `[server-classifier] the platform gave no classification for this request (server_no_result); treating that as this deployment's answer: auto mode classifies locally for the rest of this session and stops sending the classifier context`, and then sends its own classifier requests (stages `xml_s1` and `xml_s2`). With only `CLAUDE_CODE_AUTO_MODE_SERVER=1`, no verdict refuses the call and no local classifier runs. Cases: `print.automode.classifier-server.server-1`, `.server-1-betas-off`, `.betas-off`.
+- The gateway guide in the program tells a gateway to pass the `anthropic-beta` value, `safeguards`, and `safeguard_results` through. A gateway that cannot do this answers `400 invalid_request_error` with a message that names `safeguards`. The guide says the client then sends the request again without them and runs the check itself (`chunk-85d4q736.js@1494368`).
+
+| Run (2.1.319, `-p --permission-mode auto`, the model calls `Bash` with `curl -s http://127.0.0.1:9/x`) | Result |
+| --- | --- |
+| Direct connection (cc-inspect `apiHost: true, baseUrl: false`), verdict `not_flagged` | `curl` ran, `PostToolUse` fired |
+| Direct connection, verdict `flagged` | Denied by the classifier, `PermissionDenied` fired |
+| Direct connection, no verdict | Denied, `the server isn't running it for this session` |
+| Stub base URL (a gateway), verdict `not_flagged` | `curl` ran, `PostToolUse` fired |
+| Stub base URL, no verdict | Denied, `your requests go through 127.0.0.1:<port>, which doesn't pass it through` |
+| `CLAUDE_CODE_AUTO_MODE_SERVER=0`, or `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` with `CLAUDE_CODE_AUTO_MODE_SERVER` unset, verdict `not_flagged` | No `safeguards` field. Local classifier requests, and the `OK` stub reply gave `Auto mode could not evaluate this action and is blocking it for safety` |
+| `CLAUDE_CODE_AUTO_MODE_SERVER=1` and `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1`, no verdict | `safeguards` sent. After `server_no_result`, local classifier requests (`xml_s1`, `xml_s2`) for the rest of the session |
+
+The cc-inspect `code` action `cli` makes these runs: `calls: [{"name": "Bash", "input": {"command": "curl -s http://127.0.0.1:9/x"}, "safeguard": "not_flagged"}]`.
 
 ### The Two Stages
 
@@ -83,7 +107,7 @@ The program removes these allow rules:
 
 ### Classifier Billing Notice
 
-When auto mode falls back from the server-side classifier to its own classifier requests, which are billed, the program can show a notice. The title is `We're changing auto mode to no longer charge for classifier requests in Claude Code.` The text says `However, this session isn't eligible.` and links to [Auto Mode Classifier Billing](https://code.claude.com/docs/en/auto-mode-classifier-billing). Source: the program, `chunk-qd604jgh.js` and `chunk-zna5nvrm.js`.
+When auto mode falls back from the server-side classifier to its own classifier requests, which are billed, the program can show a notice. The title is `We're changing auto mode to no longer charge for classifier requests in Claude Code.` The text says `However, this session isn't eligible.` and links to [Auto Mode Classifier Billing](https://code.claude.com/docs/en/auto-mode-classifier-billing). Source: the program, `chunk-24jdhyyr.js@1361138` to `@1362125`, `chunk-kwsgydbx.js@4356`, and `chunk-q2yvfgx9.js@1905` (2.1.319).
 
 - When the program detects a gateway, the text names its host. It detects a base URL host outside `anthropic.com`, a custom provider base URL, or the gateway URL. It knows some gateways by name, such as LiteLLM, Helicone, Portkey, Cloudflare AI Gateway, Kong, Braintrust, Bifrost, and Databricks.
 - When the Claude desktop app manages the provider and turned the gateway check on, the title is `Auto mode switched to its built-in safety check for this session`. This form is new in `2.1.316`.
@@ -95,6 +119,14 @@ The program shows it only when all of these are true:
 - The hidden server-side flag `tengu_velvet_heron` is on. The default is on.
 - The plan is not Pro, Max, or Team.
 - No gateway was detected. Or there is a gateway, and you did not accept the notice (`autoModeClassifierBillingNoticeAcknowledgedAt`) in the last 24 hours.
+
+On 2.1.319, the program asks for the notice only after a refusal of the server-side check sets a latch for the rest of the session (the program, `chunk-24jdhyyr.js@3175783`). Three interactive runs with a custom base URL did not show the notice:
+
+| Setup | Hypothesis | Result |
+| --- | --- | --- |
+| No verdict from the stub (case `pty.notifications.agent-needs-input`) | The notice shows, as on 2.1.316. | The dialog `Auto mode can't check actions in this session` showed. The notice did not. |
+| HTTP 400 to the dangerous-tool-use beta (case `pty.notifications.agent-needs-input-refused`, `--debug-file`) | The refusal starts the local classifier and the notice. | The debug file logged `the platform rejected a beta on this request (HTTP 400) ... auto mode decides with the local classifier`. The dialog `Auto mode can't check actions in this session` showed. The notice did not. |
+| `CLAUDE_CODE_AUTO_MODE_SERVER=0` (case `pty.notifications.auto-mode-local`) | Local classifier requests start the notice. | No notice, no `Notification`, and no `safeguards` field in the requests. The local classifier got no usable answer from the stub, and the screen showed `Not run · auto mode's check had no usable answer`. |
 
 ## The `autoMode` Setting
 
@@ -159,7 +191,7 @@ It works in `-p` mode when `CLAUDE_CODE_REMOTE` is not set and a classifier mode
 
 | Variable | Status | What it does | How it works | Scope |
 | --- | --- | --- | --- | --- |
-| `CLAUDE_CODE_AUTO_MODE_SERVER` | <Documented /> | Server-side review of auto mode actions | `0` uses own classifier requests. Needs `2.1.271` | Env |
+| `CLAUDE_CODE_AUTO_MODE_SERVER` | <Documented /> | Server-side review of auto mode actions | `0` removes `safeguards` from the requests and uses own classifier requests. `1` keeps `safeguards` also when `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1`; then a reply with no verdict switches the session to the local classifier (runs on 2.1.319, see [The Server-Side Check](#the-server-side-check)). Needs `2.1.271` | Env |
 | `CLAUDE_CODE_DISABLE_DANGEROUS_RM_TIMEOUT` | <Documented /> | Removes the time limit of critical-path `rm` prompts | In auto mode these go to the classifier | Launch env only |
 | `CLAUDE_CODE_AUTO_MODE_MODEL` | <Undocumented /> | Model of the classifier | A server-configured classifier model wins, and the program logs `ignoring CLAUDE_CODE_AUTO_MODE_MODEL=`. The program refuses `claude-sonnet-5-5`, `claude-opus-5-5`, and `claude-opus-5` as the value. If `ANTHROPIC_DEFAULT_SONNET_MODEL` names a 5.5 model, the program uses the Sonnet 5 default instead and says so (`chunk-a8r9352h.js`) | Env |
 | `CLAUDE_CODE_AUTO_MODE_FULL_CONTEXT` | <Undocumented /> | Keeps the full context for the auto mode check when the check judges only a set of MCP tools in another permission mode. New in `2.1.316` | See [Tools and Bash](../env-vars/tools-and-bash.md) | Env |

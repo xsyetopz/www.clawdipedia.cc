@@ -85,14 +85,14 @@ Handlers: `command`, `http`, `mcp_tool`, and `prompt`. Claude Code skips an `age
 Fires only when auto mode denies a call, including a denial with no classifier verdict.
 It does not fire for manual denials, `PreToolUse` blocks, or deny rules.
 Claude Code ignores the exit code and `stderr`.
-We checked this in the interactive screen. An auto mode denial fired it. A manual "No" did not. With no classifier verdict (the classifier failed), `retry: true` changed nothing in the model's input. With a verdict (a stub answered the classifier with a block and the reason `[Data Exfiltration]`), the denial stood. The tool did not run. The model's next request got the extra text `The PermissionDenied hook indicated you may retry this tool call.` after the denied tool result. Without `retry` that text was absent. `systemMessage` was not shown.
+We checked this in the interactive screen. An auto mode denial fired it. A manual "No" did not. On 2.1.319, the stub gave the server-side check a `flagged` verdict for a `curl` call (cases `pty.hooks.permissiondenied.auto` and `.retry`). The hook got `reason: "The server-side auto mode classifier judged this action dangerous (it gave no explanation)"`. The tool did not run, and the turn went on. With `retry: true`, the model's next request got the extra text `The PermissionDenied hook indicated you may retry this tool call.` after the denied tool result. Without `retry` that text was absent. `PermissionRequest` did not fire, and `systemMessage` was not shown. The program adds the text only when the denial has a verdict and does not end the turn (the program, `chunk-24jdhyyr.js@4197885`). With no verdict through a custom base URL, the program showed the dialog `Auto mode can't check actions in this session` and `PermissionDenied` did not fire.
 This event accepts all five handler types. Claude Code drops output from `prompt` and `agent`.
 
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
 | `tool_name`, `tool_input`, `tool_use_id`, `mcp_server` | <Documented /> | Input | As in `PreToolUse`. |
-| `reason` | <Documented /> | Input | Why auto mode denied. A rule name in brackets, such as `[Data Exfiltration]`. |
-| `retry` | <Documented /> | Output, in `hookSpecificOutput` | `true` tells the model it may retry. The denial stands. Ignored for denials with no verdict. |
+| `reason` | <Documented /> | Input | Why auto mode denied. From the local classifier, a rule name in brackets, such as `[Data Exfiltration]`. From the server-side check, `The server-side auto mode classifier judged this action dangerous (it gave no explanation)`. |
+| `retry` | <Documented /> | Output, in `hookSpecificOutput` | `true` tells the model it may retry. The denial stands. Ignored for denials with no verdict and for denials that end the turn. |
 
 ## Tool Result Events
 
@@ -160,8 +160,20 @@ We logged the stdin of a `PostToolUse` command hook in `-p` on `2.1.305`, with o
 | `ListAgents` | <Undocumented /> | `listing` (text), `sections`, and `notes`. |
 | `CronCreate` | <Undocumented /> | `id`, `humanSchedule`, `recurring`, `durable`, and `nextFireAt`. |
 | `CronList` | <Undocumented /> | `jobs`. |
+| `Read` (notebook) | <Undocumented /> | `type` (`notebook`) and `file` with `filePath` and `cells` (items with `cellType`, `source`, `cell_id`, and `language`). Seen on 2.1.319. |
+| `Glob` | <Undocumented /> | `filenames`, `durationMs`, `numFiles`, `truncated`, `totalMatches`, and `countIsComplete`. Seen on 2.1.319. |
+| `Grep` (`files_with_matches`) | <Undocumented /> | `mode`, `filenames`, `numFiles`, and `totalFiles`. Seen on 2.1.319. |
+| `NotebookEdit` | <Undocumented /> | `new_source`, `old_source`, `cell_type`, `language`, `edit_mode`, `cell_id`, `error` (empty), `notebook_path`, `original_file`, and `updated_file`. Seen on 2.1.319, after a `Read` of the notebook. |
+| `WebSearch` | <Undocumented /> | `query`, `results`, `durationSeconds`, and `searchCount`. Seen on 2.1.319 against the stub, so `results` held the stub text and `searchCount` was `0`. |
 
-A second probe ran the same hook in the interactive screen (2.1.305, `acceptEdits`, one scripted call per tool). It confirmed the shapes of `Bash`, `Read`, `Write`, and `Edit` above, with one difference: the `Edit` result after a `Read` had no `contentNotInModelContext` key. It also confirmed that an MCP tool's `tool_response` is the array of content blocks the server returned (`[{"type":"text","text":"echo:OK"}]`), and that the hook input has `mcp_server`. Every `PostToolUse` input had `hook_event_name`, `tool_name`, `tool_input`, `tool_response`, `tool_use_id`, and `duration_ms`. On `2.1.305` an `Edit` of a file that was never read was not an error, in `acceptEdits` and in the default mode. The file changed, `PostToolUse` fired, and no `PostToolUseFailure` fired. That `tool_response` had `contentNotInModelContext: true`, which the `Edit` after a `Read` did not have. The interactive probe did not run `Glob`, `Grep`, `NotebookEdit`, `WebFetch`, or `WebSearch` (this build's tool list there had no `Glob` or `Grep`), and did not test whether `updatedToolOutput` accepts these shapes. See [Interactive Probes](../../reference/probes.md#interactive-probes).
+A second probe ran the same hook in the interactive screen (2.1.305, `acceptEdits`, one scripted call per tool). It confirmed the shapes of `Bash`, `Read`, `Write`, and `Edit` above, with one difference: the `Edit` result after a `Read` had no `contentNotInModelContext` key. It also confirmed that an MCP tool's `tool_response` is the array of content blocks the server returned (`[{"type":"text","text":"echo:OK"}]`), and that the hook input has `mcp_server`. Every `PostToolUse` input had `hook_event_name`, `tool_name`, `tool_input`, `tool_response`, `tool_use_id`, and `duration_ms`. On `2.1.305` an `Edit` of a file that was never read was not an error, in `acceptEdits` and in the default mode. The file changed, `PostToolUse` fired, and no `PostToolUseFailure` fired. That `tool_response` had `contentNotInModelContext: true`, which the `Edit` after a `Read` did not have. See [Interactive Probes](../../reference/probes.md#interactive-probes).
+
+A third probe (2.1.319, `-p`) ran `Read` of a notebook, `Glob`, `Grep`, `NotebookEdit`, `WebFetch`, and `WebSearch`, with `ENABLE_TOOL_SEARCH=false` so that no tool was deferred. The `Glob`, `Grep`, `NotebookEdit`, and `WebSearch` rows above come from it. These results do not show in the table:
+
+- `WebFetch` of `example.com` failed the domain check, so only `PostToolUseFailure` fired, with `is_interrupt: false` and the `error` `Unable to verify if domain example.com is safe to fetch. This may be due to network restrictions or enterprise security policies blocking claude.ai.`
+- `NotebookEdit` with no `Read` of the notebook first got the `tool_result` error `File has not been read yet. Read it first before writing to it.` Neither `PostToolUse` nor `PostToolUseFailure` fired.
+- `--allowedTools Glob` added `Glob` and `Grep` to the request tool list. Without it, the `-p` tool list had neither.
+- A `Glob` hook that returned `updatedToolOutput` with `filenames: ["REPLACED.txt"]`, `durationMs`, `numFiles`, and `truncated` changed the `tool_result` in the next request to `REPLACED.txt`. A hook that returned `{"bogus": "REPLACED"}` changed nothing: the model got `a.txt`, the real match. The ignored value was still written to the transcript.
 
 ## Related Pages
 

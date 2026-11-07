@@ -23,7 +23,7 @@ maxTurns: 20
 
 You are a careful code reviewer.
 Read the changed files and report bugs, with file and line.
-Do not edit files.
+Report only: the main session makes the fixes, so the user reviews each change there.
 ```
 
 Claude can now send review work to `reviewer`. You can also write `@reviewer check the last commit`.

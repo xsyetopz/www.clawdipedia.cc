@@ -67,6 +67,7 @@ These sources go in `extraKnownMarketplaces`, `strictKnownMarketplaces`, and `bl
 | `file`, `directory` | <Documented /> | `path` | Read in place. |
 | `settings` | <Documented /> | `name`, `plugins`, `owner` | An inline catalog in `extraKnownMarketplaces`. Entries need remote sources. |
 | `npm` | <Documented /> | `package` | Policy lists parse it, but loading fails with "NPM marketplace sources not yet implemented". |
+| `npm` | <Undocumented /> | `version`, `registry` | `version` is a version or range, such as `1.4.0` or `^1.4`. It defaults to the latest dist-tag. `registry` is a registry URL. When you add a marketplace, it overrides your npm configuration for that one add. In a policy entry, the resolved tarball URL must start with it. Source: the program (its bundled settings schema). The [Marketplace Reference](https://code.claude.com/docs/en/plugins/marketplace-reference#plugin-sources) lists `version` and `registry` for plugin sources only. |
 | `skills-dir`, `hostPattern`, `pathPattern` | <Documented /> | Policy-only values | `skills-dir` keeps skills-directory plugins loading under an allowlist. The patterns are regular expressions. |
 
 ## Plugin Digests
@@ -88,6 +89,13 @@ The `pluginDigests` field sits in an entry of `extraKnownMarketplaces` (and its 
 ## Settings Keys
 
 Source: [Manage Claude Code Plugins for Your Organization](https://code.claude.com/docs/en/plugins/org) and [Settings Reference](https://code.claude.com/docs/en/settings-reference).
+
+These keys sit in an entry of `extraKnownMarketplaces` and its alias `additionalMarketplaces`.
+
+| Key | Status | What It Does | How It Works |
+| --- | --- | --- | --- |
+| `extraKnownMarketplaces.*.autoUpdate`, `additionalMarketplaces.*.autoUpdate` | <Documented /> | Turns background updates on or off for this marketplace and its installed plugins. | Boolean. See [`extraKnownMarketplaces`](https://code.claude.com/docs/en/settings-reference#extraknownmarketplaces) and [Set update policy](https://code.claude.com/docs/en/plugins/org#set-update-policy). |
+| `extraKnownMarketplaces.*.installLocation`, `additionalMarketplaces.*.installLocation` | <Undocumented /> | Sets the local cache path where the marketplace manifest is stored. | Claude Code makes the path when you leave it out. Source: the program (its bundled settings schema). |
 
 The rows for these keys, with types, scopes, and details, are on [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plugins.md#keys).
 

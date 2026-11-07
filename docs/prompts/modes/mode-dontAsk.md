@@ -12,12 +12,12 @@ Starts in `dontAsk` permission mode. Run `claude --permission-mode dontAsk`.
 | --- | --- |
 | `system[0]` | 78 |
 | `system[1]` | 62 |
-| `system[2]` | 5,670 |
+| `system[2]` | 5,747 |
 | `messages[0].content[0]` | 592 |
 | `messages[0].content[1]` | 16 |
 | `messages[1].content[0]` | 9,005 |
-| System blocks only | 5,810 |
-| Everything shown here | 15,713 |
+| System blocks only | 5,887 |
+| Everything shown here | 15,790 |
 | Tools sent | 12 |
 
 Sizes count the text after the placeholders are in place. Each placeholder counts at its own length.

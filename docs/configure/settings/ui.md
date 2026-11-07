@@ -19,6 +19,10 @@ Where to Set It tells you which files may set the key. See [Settings Files and S
 | --- | --- | --- | --- | --- | --- |
 | `autoScrollEnabled` | <Documented /> | boolean | - | Follow new output to the bottom in fullscreen rendering. | Any settings file |
 | `breakReminder` | <Undocumented /> | object | - | Show a dismissible nudge after long continuous use. It never blocks. | Settings files |
+| `breakReminder.breakThresholdMinutes` | <Undocumented /> | integer | `10` | Set the minutes of inactivity that count as a break and reset the timer. | Settings files |
+| `breakReminder.enabled` | <Undocumented /> | boolean | `false` | Turn on the break reminder. The reminder fires only when this is `true`. | Settings files |
+| `breakReminder.intervalMinutes` | <Undocumented /> | integer | `30` | Set the minutes of continuous use before the reminder fires. It fires again every interval until you take a break. | Settings files |
+| `breakReminder.message` | <Undocumented /> | string | - | Set your own reminder text. Leave it unset for a rotating set of friendly nudges. | Settings files |
 | `companyAnnouncements` | <Documented /> | array of string | - | Show your organization's announcements at startup. | Any settings file |
 | `editorMode` | <Documented /> | string | - | Use vim key bindings in the input prompt. | Any settings file |
 | `emojiCompletionEnabled` | <Documented /> | boolean | - | Turn off `:shortcode:` emoji suggestions and replacement in the prompt input. | Any settings file |
@@ -31,13 +35,26 @@ Where to Set It tells you which files may set the key. See [Settings Files and S
 | `promptSuggestionEnabled` | <Documented /> | boolean | - | Hide the grayed-out prompt suggestions in the input box. | Any settings file |
 | `prUrlTemplate` | <Documented /> | string | - | Point PR links at an internal code-review tool instead of github.com. | Any settings file |
 | `quietHours` | <Undocumented /> | object | - | Show one soft nudge per session during a local-time window you set. It never blocks. | Settings files |
+| `quietHours.enabled` | <Undocumented /> | boolean | `false` | Show a one-time nudge when you start or keep using the CLI inside your quiet-hours window. | Settings files |
+| `quietHours.end` | <Undocumented /> | string | - | End of the quiet-hours window, in 24-hour local time `HH:MM`. It may be earlier than `start` for an overnight range. | Settings files |
+| `quietHours.start` | <Undocumented /> | string | - | Start of the quiet-hours window, in 24-hour local time `HH:MM`. | Settings files |
 | `showClearContextOnPlanAccept` | <Documented /> | boolean | `false` | Show a "clear context" option on the plan accept screen. | Any settings file |
 | `showMessageTimestamps` | <Undocumented /> | boolean | - | Stamp each message with its arrival time. The docs name a VS Code extension setting with this name, not this settings key. | Settings files |
 | `showTurnDuration` | <Documented /> | boolean | - | Hide the "Cooked for" duration after each response. | Any settings file |
 | `spellcheck` | <Documented /> | object | - | Underline misspelled words in the prompt input with a spell checker you install. | User or managed settings |
+| `spellcheck.checker` | <Documented /> | enum: `aspell`, `hunspell`, `ispell`, `auto` | `auto` | Pick the spell checker to run. `auto` uses the first of the three found on `PATH`. | User or managed settings |
+| `spellcheck.color` | <Documented /> | string | The theme's error color | Set the color of misspelled words. Use a color name, `#rrggbb`, `rgb(r,g,b)`, `ansi256(n)`, or `ansi:<name>`. Words stay underlined. | User or managed settings |
+| `spellcheck.enabled` | <Documented /> | boolean | `false` | Turn on spell checking of the prompt input. | User or managed settings |
+| `spellcheck.language` | <Documented /> | string | The checker's own dictionary | Pick the dictionary. Claude Code passes it to the checker as given, for example `en_GB`. Names depend on the checker. | User or managed settings |
 | `spinnerTipsEnabled` | <Documented /> | boolean | - | Hide tips in the spinner while Claude works. | Any settings file |
 | `spinnerTipsOverride` | <Documented /> | object | - | Add your own tips to the spinner rotation, or replace the built-in tips. | Any settings file |
+| `spinnerTipsOverride.excludeDefault` | <Documented /> | boolean | `false` | Set to `true` to hide the built-in tips and show only yours. | User settings, `--settings`, or managed settings |
+| `spinnerTipsOverride.label` | <Documented /> | string | `Tip` | Set the prefix shown before your tips in the spinner. | User settings, `--settings`, or managed settings |
+| `spinnerTipsOverride.tips` | <Documented /> | array of string or object | - | List your tips. Each item is a string or an object with `id`, `text`, and optional `cooldownSessions` and `priority`. | Any settings file. Project and local settings take plain strings only |
+| `spinnerTipsOverride.tipsFile` | <Documented /> | string | - | Path to a JSON file with an array of tips. Use an absolute path or a `~/` path. Claude Code reads it once per process. | User settings, `--settings`, or managed settings on disk |
 | `spinnerVerbs` | <Documented /> | object | - | Add or replace the verbs shown while a turn runs. | Any settings file |
+| `spinnerVerbs.mode` | <Documented /> | enum: `append`, `replace` | - | `append` adds your verbs to the defaults. `replace` uses only your verbs. | Any settings file |
+| `spinnerVerbs.verbs` | <Documented /> | array of string | - | List the verbs to show in the spinner. | Any settings file |
 | `syntaxHighlightingDisabled` | <Documented /> | boolean | - | Turn off syntax highlighting in diffs and code blocks. | Any settings file |
 | `terminalProgressBarEnabled` | <Documented /> | boolean | - | Hide the terminal progress bar in terminals that support it. | Any settings file |
 | `terminalTitleFromRename` | <Documented /> | boolean | `true` | Stop `/rename` and `--name` from changing the terminal tab title. | Any settings file |
@@ -49,6 +66,9 @@ Where to Set It tells you which files may set the key. See [Settings Files and S
 | `viewMode` | <Documented /> | enum: `default`, `verbose`, `focus` | - | Start every session in default, verbose, or focus view. | Any settings file |
 | `vimInsertModeRemaps` | <Documented /> | object | - | Map a two-key INSERT-mode sequence such as `jj` to Escape. | User or managed settings |
 | `voice` | <Documented /> | object | - | Turn on voice dictation and pick hold or tap mode. | Any settings file |
+| `voice.autoSubmit` | <Documented /> | boolean | - | Send the prompt when you release the key. Applies in hold mode only. | Any settings file |
+| `voice.enabled` | <Documented /> | boolean | - | Turn voice dictation on. | Any settings file |
+| `voice.mode` | <Documented /> | enum: `hold`, `tap` | `hold` | Hold the key to talk, or tap once to start and again to stop and send. | Any settings file |
 | `wheelScrollAccelerationEnabled` | <Documented /> | boolean | - | Turn off mouse-wheel acceleration in fullscreen rendering. | Any settings file |
 
 ## Example

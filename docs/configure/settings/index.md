@@ -170,6 +170,14 @@ These keys do nothing in `2.1.314`, so the pages do not list them.
 - `permissionExplainerEnabled` — Removed in v2.1.257.
 - `teammateDefaultModel` — Removed in v2.1.234.
 
+## Errors
+
+Each row is a family of messages. The backticked text is the start that every message in the family shares.
+
+| Start of Message | Status | What It Means | Cases |
+| --- | --- | --- | --- |
+| `These settings files are not used: they are in a connector-downloads folder` | <Undocumented /> | Claude Code skipped the settings files in the project folder. | The folder is a `connector-downloads` folder that has a `.gitignore`. Claude Code saves files from claude.ai connectors there. Probe case `print.err319.settings-connector-downloads` ran this setup. |
+
 ## Related Pages
 
 - [Environment Variable Groups](../env-vars/features-and-toggles.md) list the variables that pair with some keys.

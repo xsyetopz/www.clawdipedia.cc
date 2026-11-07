@@ -7,7 +7,7 @@ sidebar_position: 12
 Claude Code masks text that looks like a secret before it shows or records the text.
 It replaces the secret with `[REDACTED]`. This page describes the algorithm and the rule table.
 It does not list each pattern.
-Source: the program (`chunk-3cfs0sm8.js@53752` to `@67138`). Every row is <Undocumented />.
+Source: the program, 2.1.319 (`chunk-kd28gg0x.js`, rule table `@18612` to `@25289`). Every row is <Undocumented />.
 
 ## The Rule Table
 
@@ -41,7 +41,7 @@ It reads each block to its end and replaces the whole block with `[REDACTED]`. I
 
 ## High Tier Rule Names
 
-The `high` rules cover these vendors (`chunk-3cfs0sm8.js`). The `gitlab-*` family has 11 rules, such as `gitlab-pat`, `gitlab-deploy-token`, and `gitlab-ci-build-token`.
+The `high` rules cover these vendors (`chunk-kd28gg0x.js`). The `gitlab-*` family has 11 rules, such as `gitlab-pat`, `gitlab-deploy-token`, and `gitlab-ci-build-token`.
 
 | Vendor | Rule names |
 | --- | --- |
@@ -71,20 +71,36 @@ A name is sensitive when it holds one of these words, with no case check: `api_k
 ## Where It Applies
 
 No setting or environment variable that turns masking on or off was found in the program.
-The list shows the output that a caller masks. Each caller uses one function.
+The table shows the output that each caller masks in 2.1.319. All callers are in the program; offsets are in the cleaned code.
 
 | Output | Function | Source |
 | --- | --- | --- |
-| Lines that the program writes to the log files of an MCP server (error lines and debug lines) | `redact` | `chunk-fqdyq52e.js` |
-| The error list and the debug log text of a `/feedback` report | `redact` | `chunk-2vx8vjz4.js` |
-| Error message and stack fields of an error report that the program builds, cut to 2,000 and 4,000 characters | `redact` | `chunk-qd604jgh.js` |
-| The command, the description, and the reason in a permission request that the program sends to a connected client | `redactContext` and `redactTokens` | `chunk-yhkm4f9e.js`, `chunk-f2wjwatx.js`, `chunk-157f1pes.js` |
-| The path and the skill summary in a permission dialog that the program sends to a connected client | `redactForDisplay` | `chunk-157f1pes.js` |
-| The preview of tool input, including the field names | `redactForDisplay` | `chunk-f2ccw312.js` |
+| Each line of the debug log, and each line of the second log file (`[time] [level] message`, which turns over at 10 MiB) | `redact` | `chunk-mme81m53.js@34676`, `chunk-de3et2em.js@21846` |
+| The `error` and `debug` lines in the log files of an MCP server | `redact` | `chunk-bvq8kjak.js@2627`, `@2868` |
+| The `error_message` (cut to 2,000 characters) and `error_stack` (cut to 4,000 characters) of an error report | `redact` | `chunk-24jdhyyr.js@313134` to `@313712` |
+| The hook name and the stderr text of a hook that fails | `redact` | `chunk-24jdhyyr.js@999627` to `@999894` |
+| A `/feedback` report: the error list, the debug log text, the error messages and stacks, the upload error, the description, and the transcript in the bundle | `redact` | `chunk-bq79bypc.js@16200` to `@29097` |
+| The title and body of a bug report GitHub issue | `redact` | `chunk-bxdc5t3s.js@12992`, `@13004` |
+| The validation error of a plugin manifest | `redact` | `chunk-85rcwf88.js@10088` |
+| The roster name in a fork message | `redact` | `chunk-gd7wa3bp.js@25814`, `@26250` |
+| The debug line for data written to the stdin of a child process | `redact` | `chunk-yg0hdg9w.js@10483` |
+| A suggested reply. The program drops it when masking changes it. | `redact` | `chunk-696w1v07.js@4956` |
+| A web URL in `claude mcp add`. The program refuses it (`secret_in_url`) when masking changes it. | `redact` | `chunk-h0ta2a7x.js@22012` |
+| The auto mode check input. The program compares the masked text with the input to find the secret spans. | `redact` | `chunk-24jdhyyr.js@5172786` |
+| An MCP server config that the program shows | `redact`, on each key and value | `chunk-1r7kkhdn.js@31847` to `@32496` |
+| The preview of tool input, including the field names | `redactForDisplay` | `chunk-qxr8x9fj.js@2527` to `@5076` |
+| The path, the description, and the skill summary in a permission request that the program sends to a connected client | `redactForDisplay`, and `redactContext` then `redactTokens` | `chunk-780bk7ac.js@39941`, `@42212`, `@43970` |
+| The command, the description, and the plan reason in a remote or push permission notice | `redactContext` then `redactTokens` | `chunk-8b2awj16.js@91584`, `@91834`, `chunk-98sgs9zy.js@7377` to `@15664` |
+| The teammate description when a teammate starts (50 characters) | `redactContext` with tracked tokens | `chunk-xk3w6t9s.js@5288` |
+| The detail, intent, and latest question of a background job (1,000 and 600 characters), and the tail of its output | `redactContext` with tracked tokens, and `redactTokens` | `chunk-zgnnctek.js@21544` to `@32869` |
+
+More calls to `redact` are in `chunk-zgnnctek.js`, `chunk-5jn5zvx7.js`, `chunk-q6mw9g6n.js`, `chunk-w2nfcvzr.js`, `chunk-y8tnc31n.js`, `chunk-z33gs1zc.js`, `chunk-y6gwwqqx.js`, `chunk-15b3braa.js`, `chunk-qc265egn.js`, `chunk-yp2d4nk1.js`, and `chunk-9qkpemke.js`. These calls mask a job detail, a task summary line, or a session or job name. The masker class is the only copy in the program: its method names are in no other module.
+
+A probe (2.1.319, `-p --debug-file`) used a `UserPromptSubmit` hook that wrote `leak ghp_<token>` to stderr and exited `1`. The debug log had `leak [REDACTED]`, and the token was in no request. The transcript kept the full token.
 
 ### Outputs That Keep the Secret
 
-Masking does not apply to the text of your prompt in these outputs.
+Masking does not apply to the text of your prompt or to tool output in these outputs.
 A probe sent a prompt with a fake GitHub token in the `github-pat` shape (`ghp_` and 36 letters). That shape is a `high` rule.
 The full token stayed in each of these outputs:
 
@@ -93,15 +109,10 @@ The full token stayed in each of these outputs:
 | The Messages API request that goes to the model | `-p` against a local stub |
 | The session transcript, `projects/<project>/<session>.jsonl` in the config folder | The same run |
 | The OpenTelemetry `user_prompt` log event | `CLAUDE_CODE_ENABLE_TELEMETRY=1`, `OTEL_LOG_USER_PROMPTS=1`, and the `console` logs exporter. A run with no telemetry did not print the token. |
+| The `tool_result` in the next Messages API request, the `stream-json` output, and the transcript | 2.1.319, `-p --allowedTools Bash`. The stub made the model run `printf 'ghp_%s%s' <half> <half>`, so the full token was only in the tool output. A second run with `Read` of a file that holds the token gave the same result. |
 
-Source: a probe of 2.1.316 with cc-inspect `code` `cli` and `query`, which names each request, stream, and transcript file that holds a text.
-The probe covers only the prompt text. The stub cannot make the model call a tool, so tool output was not tested.
-To keep a secret out of these outputs, do not put it in a prompt. Without `OTEL_LOG_USER_PROMPTS`, the prompt is not in the OpenTelemetry events (see [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md)).
-
-:::note[Not Verified]
-This page does not list every caller of the masking functions.
-The program does not show where the error report fields go.
-:::
+Source: a probe of 2.1.316, and of 2.1.319, with cc-inspect `code` `cli` and `query`, which names each request, stream, and transcript file that holds a text. The tool runs used the `calls` option, which makes the stub call tools in order.
+To keep a secret out of these outputs, do not put it in a prompt, and do not let a tool print or read it. Without `OTEL_LOG_USER_PROMPTS`, the prompt is not in the OpenTelemetry events (see [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md)).
 
 ## Secret Scan
 
@@ -109,12 +120,14 @@ The `scan` function does not change text. It returns the label of each `high` ru
 A label comes from the rule name. The program spells some words in a fixed way: `GitHub`, `GitLab`, `OpenAI`, `HuggingFace`, `DigitalOcean`, `HashiCorp`, `SendGrid`, `NPM`, `PyPI`, `AWS`, `GCP`, `API`, `PAT`, `AD`, `TF`, `OAuth`, `JWT`, `CI`, and `SCIM`.
 Example: the rule `github-pat` has the label `GitHub PAT`.
 
-The program uses the scan in two places.
+The program uses the scan in four places.
 
 | Place | Result |
 | --- | --- |
-| A write to a memory file (`chunk-5nk5tezb.js`) | The write fails with `Content contains potential secrets (<labels>) and cannot be written to memory.` The text then names the reason. A team memory file says that team memory is shared with all repository collaborators. A memory file says that memory is synced to your account. |
-| A command in an auto mode denial notice (`chunk-80aypj4n.js`) | When the scan finds a secret in the command, the tool input, or the reason, the notice shows no command and no reason. The notice also shows none when the check itself fails. |
+| A write to a memory file (`chunk-5fy9hx01.js`) | The write fails with `Content contains potential secrets (<labels>) and cannot be written to memory.` The text then names the reason. A team memory file says that team memory is shared with all repository collaborators. A memory file says that memory is synced to your account. |
+| A command in an auto mode denial notice (`chunk-9qkpemke.js@1707212`) | When the scan finds a secret in the command, the tool input, or the reason, the notice shows no command and no reason. The notice also shows none when the check itself fails. |
+| Synced settings and config content (`chunk-3r4kmqkp.js@9141`) | The program checks the content for credentials. |
+| The files of a skill package folder (`chunk-7a90dyc6.js@34656`) | The program gets the labels for each file. All `anthropic-*` rules give one label. |
 
 ## Related Pages
 

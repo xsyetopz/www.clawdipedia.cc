@@ -8,7 +8,7 @@ These variables control what Claude Code reports and how much it logs.
 They turn telemetry on or off, configure OpenTelemetry (OTEL) exporters, and set debug output.
 Use them to opt out of reporting or to send metrics to your own collector.
 
-This page lists 141 variables. `DISABLE_TELEMETRY` opts out when it has any non-empty value, even `0` or `false`. Unset it to turn telemetry back on. `DO_NOT_TRACK=1` has the same effect. Set these in your shell or managed settings. OTEL exporter variables in project or local settings do not apply, apart from a few off values.
+This page lists 144 variables. `DISABLE_TELEMETRY` opts out when it has any non-empty value, even `0` or `false`. Unset it to turn telemetry back on. `DO_NOT_TRACK=1` has the same effect. Set these in your shell or managed settings. OTEL exporter variables in project or local settings do not apply, apart from a few off values.
 
 ## Example
 
@@ -111,6 +111,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `OTEL_EXPORTER_OTLP_LOGS_HEADERS` | <Documented /> | Sets OTLP headers for logs only. | - | - |
 | `OTEL_EXPORTER_OTLP_LOGS_INSECURE` | <Undocumented /> | Makes the gRPC OTLP logs exporter use an insecure channel when `true`. | - | - |
 | `OTEL_EXPORTER_OTLP_LOGS_PROTOCOL` | <Documented /> | Chooses the OTLP protocol for logs. Falls back to `OTEL_EXPORTER_OTLP_PROTOCOL`. | - | - |
+| `OTEL_EXPORTER_OTLP_LOGS_TIMEOUT` | <Undocumented /> | Sets the OTLP export timeout in ms for the logs signal. It wins over `OTEL_EXPORTER_OTLP_TIMEOUT`. | A number, read as text | Behind a proxy, Claude Code waits for the largest of the three signal timeouts to open the tunnel, 30000 ms at most (read in `chunk-km25z6s9.js@53333`). Run `env319b.otel-timeout.generic-500-logs-5000`: with the generic value `500` and this one `5000`, Claude Code stayed up past 500 ms and did not time out. Release note 2.1.317 describes the limits |
 | `OTEL_EXPORTER_OTLP_METRICS_CERTIFICATE` | <Undocumented /> | Gives the root CA file for the OTLP metrics exporter. | - | - |
 | `OTEL_EXPORTER_OTLP_METRICS_CLIENT_CERTIFICATE` | <Undocumented /> | Gives the client certificate file for the OTLP metrics exporter. | - | - |
 | `OTEL_EXPORTER_OTLP_METRICS_CLIENT_KEY` | <Documented /> | Gives the client key file for the OTLP metrics exporter. | Text (a secret) | - |
@@ -120,8 +121,9 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `OTEL_EXPORTER_OTLP_METRICS_INSECURE` | <Undocumented /> | Allows an insecure (non-TLS) connection for the OTLP metrics exporter. | Text | Metrics exporter. Ignored in project and local `env` |
 | `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` | <Documented /> | Picks the OTLP wire protocol for metrics. Falls back to `OTEL_EXPORTER_OTLP_PROTOCOL`. | Text. Another value throws an `Unknown protocol` error | Metrics exporter when `OTEL_METRICS_EXPORTER` has `otlp`. Ignored in project and local `env` |
 | `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` | <Documented /> | Chooses delta or cumulative temporality for exported OTLP metrics. | Text. When unset, Claude Code sets it to `delta` at telemetry start | Metrics exporter. Project `env` can set it before trust |
+| `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT` | <Undocumented /> | Sets the OTLP export timeout in ms for the metrics signal. It wins over `OTEL_EXPORTER_OTLP_TIMEOUT`. | A number, read as text | Behind a proxy, Claude Code waits for the largest of the three signal timeouts to open the tunnel, 30000 ms at most (read in `chunk-km25z6s9.js@53333`). Run `env319b.otel-timeout.generic-500-metrics-5000`: with the generic value `500` and this one `5000`, Claude Code stayed up past 500 ms and did not time out. Release note 2.1.317 describes the limits |
 | `OTEL_EXPORTER_OTLP_PROTOCOL` | <Documented /> | Sets the default OTLP wire protocol for metrics, logs and traces. | Text. A per-signal `..._PROTOCOL` wins | Telemetry exporters with `otlp`. Ignored in project and local `env` |
-| `OTEL_EXPORTER_OTLP_TIMEOUT` | <Undocumented /> | Sets the OTLP export timeout in ms for every signal. | A number. A per-signal `OTEL_EXPORTER_OTLP_<SIGNAL>_TIMEOUT` wins. A bad value logs a warning | OTLP exporters. Not set from project `env` before trust |
+| `OTEL_EXPORTER_OTLP_TIMEOUT` | <Undocumented /> | Sets the OTLP export timeout in ms for every signal. | A number, read as text, `10000` by default, 30000 at most. A per-signal `OTEL_EXPORTER_OTLP_<SIGNAL>_TIMEOUT` wins. A bad value logs a warning | Behind a proxy, the tunnel wait is the largest of the three signal timeouts (`chunk-km25z6s9.js@53333`). Run `env319b.otel-timeout.generic-500`: with `500` and a proxy that never answers, the export timed out and Claude Code exited in 1422 ms; run `env319b.otel-timeout.default` with no value exited in 2834 ms with no time-out line. Run `all-three-500` (generic `20000`, each signal `500`) timed out in 1383 ms |
 | `OTEL_EXPORTER_OTLP_TRACES_CERTIFICATE` | <Undocumented /> | Sets the root CA file that the OTLP traces exporter trusts. | Falls back to `OTEL_EXPORTER_OTLP_CERTIFICATE`. A read failure logs a warning | Traces exporter. Ignored in project and local `env` |
 | `OTEL_EXPORTER_OTLP_TRACES_CLIENT_CERTIFICATE` | <Undocumented /> | Sets the client certificate file for mTLS on the OTLP traces exporter. | Falls back to `OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE`. Needs the matching client key | Traces exporter. Ignored in project and local `env` |
 | `OTEL_EXPORTER_OTLP_TRACES_CLIENT_KEY` | <Undocumented /> | Sets the client private key file for mTLS on the OTLP traces exporter. | Text (a secret). Falls back to `OTEL_EXPORTER_OTLP_CLIENT_KEY`. Needs the matching client certificate | Traces exporter. Ignored in project and local `env` |
@@ -130,6 +132,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `OTEL_EXPORTER_OTLP_TRACES_HEADERS` | <Documented /> | Sets extra HTTP headers on the OTLP traces export. | Text. Overrides `OTEL_EXPORTER_OTLP_HEADERS` | Traces exporter. Ignored in project and local `env` |
 | `OTEL_EXPORTER_OTLP_TRACES_INSECURE` | <Undocumented /> | Allows an insecure (non-TLS) connection for the OTLP traces exporter. | Text | Traces exporter. Ignored in project and local `env` |
 | `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` | <Documented /> | Picks the OTLP wire protocol for traces. Falls back to `OTEL_EXPORTER_OTLP_PROTOCOL`. | Text. A valid remote `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` forces `http/protobuf` | Traces exporter when `OTEL_TRACES_EXPORTER` has `otlp`. Ignored in project and local `env` |
+| `OTEL_EXPORTER_OTLP_TRACES_TIMEOUT` | <Undocumented /> | Sets the OTLP export timeout in ms for the traces signal. It wins over `OTEL_EXPORTER_OTLP_TIMEOUT`. | A number, read as text | Behind a proxy, Claude Code waits for the largest of the three signal timeouts to open the tunnel, 30000 ms at most (read in `chunk-km25z6s9.js@53333`). Run `env319b.otel-timeout.generic-500-traces-5000`: with the generic value `500` and this one `5000`, Claude Code stayed up past 500 ms and did not time out. Release note 2.1.317 describes the limits |
 | `OTEL_EXPORTER_PROMETHEUS_HOST` | <Documented /> | Sets the host that the Prometheus metrics exporter binds to. | Falls back to the SDK default | Metrics exporter with `prometheus`. Ignored in project and local `env` |
 | `OTEL_EXPORTER_PROMETHEUS_PORT` | <Documented /> | Sets the port that the Prometheus metrics exporter listens on. | A number, port by default. Falls back to the SDK default port | Metrics exporter with `prometheus`. Ignored in project and local `env` |
 | `OTEL_LOG_ASSISTANT_RESPONSES` | <Documented /> | Includes the model response text in `assistant_response` log events. | On, off, or unset. When unset, the value of `OTEL_LOG_USER_PROMPTS` applies. `0` keeps responses redacted | All entrypoints. Ignored in project and local `env`. Project `env` may set only an off value |
@@ -186,6 +189,14 @@ When the output of a command shows a git commit, the `tool_result` event for tha
 
 Find the exact fields of each OpenTelemetry metric, span, and event at `https://clawdipedia.cc/schemas/claude-code-otel.json`. The program builds this payload in code, not with a validator. The schema comes from that code. A field marked `x-unverified` has a type the code does not show. The mark `x-observed` shows a field that a probe saw.
 It lists every field of this release. Build on the fields it names. Look each field up there before you rely on it.
+
+## Errors
+
+Each row is a family of messages. The backticked text is the start that every message in the family shares.
+
+| Start of Message | Status | What It Means | Cases |
+| --- | --- | --- | --- |
+| `Unknown protocol set in OTEL_EXPORTER_OTLP_` | <Undocumented /> | A `_PROTOCOL` variable of the logs, metrics, or traces exporter has a value that Claude Code does not know. | The text names the variable of the signal and `OTEL_EXPORTER_OTLP_PROTOCOL`, then the value. The program writes it to the debug log after `[3P telemetry] Telemetry init failed:`, and the session goes on. Run: `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL=bogus` gave `Unknown protocol set in OTEL_EXPORTER_OTLP_METRICS_PROTOCOL or OTEL_EXPORTER_OTLP_PROTOCOL env var: bogus` and exit code 0. Probe cases `print.env319b.otlp-protocol.logs`, `.metrics`, `.traces`, and `.logs-general`. |
 
 ## Related Pages
 

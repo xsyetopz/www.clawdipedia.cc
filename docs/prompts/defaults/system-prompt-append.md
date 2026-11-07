@@ -32,7 +32,7 @@ The text below is every part of the request that Claude Code builds before your 
 
 ```text
 === system[0] (no cache marker) ===
-x-anthropic-billing-header: cc_version=2.1.316.<build>; cc_entrypoint=sdk-cli;
+x-anthropic-billing-header: cc_version=2.1.319.<build>; cc_entrypoint=sdk-cli;
 
 === system[1] (cache marker: {"type":"ephemeral"}) ===
 You are Claude Code, Anthropic's official CLI for Claude, running within the Claude Agent SDK.
@@ -119,7 +119,7 @@ Lines added: 3. Lines removed: 1. Size change: +57 characters.
 --- system-prompt
 +++ system-prompt-append
 @@ -2,11 +2,13 @@
- x-anthropic-billing-header: cc_version=2.1.316.<build>; cc_entrypoint=sdk-cli;
+ x-anthropic-billing-header: cc_version=2.1.319.<build>; cc_entrypoint=sdk-cli;
 
  === system[1] (cache marker: {"type":"ephemeral"}) ===
 -You are a Claude agent, built on Anthropic's Claude Agent SDK.

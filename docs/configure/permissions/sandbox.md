@@ -65,7 +65,7 @@ Official pages: [Configure the Sandboxed Bash Tool](https://code.claude.com/docs
 | `sandbox.network.allowLocalBinding` | <Documented /> | macOS: bind to localhost ports | Boolean | Each scope |
 | `sandbox.network.allowMachLookup` | <Documented /> | macOS: extra XPC or Mach names | A trailing `*` gives a prefix match. It suits iOS Simulator or Playwright. Each entry lets a sandboxed command reach a service outside the sandbox. The sandbox does not confine what that service does for the command | Merged |
 | `sandbox.network.httpProxyPort`, `sandbox.network.socksProxyPort` | <Documented /> | Use your own proxy | Local TCP port | Each scope |
-| `sandbox.network.tlsTerminate.caCertPath`, `.caKeyPath` | <Gated note="Marked EXPERIMENTAL in the settings schema" /> <Experimental /> | Experimental TLS termination | It lets the filter see HTTPS bodies. Omit both for an ephemeral CA. The gate is the mark `[EXPERIMENTAL]` | User, managed, `--settings` |
+| `sandbox.network.tlsTerminate.caCertPath`, `sandbox.network.tlsTerminate.caKeyPath` | <Gated note="Marked EXPERIMENTAL in the settings schema" /> <Experimental /> | Experimental TLS termination | It lets the filter see HTTPS bodies. Omit both for an ephemeral CA. The gate is the mark `[EXPERIMENTAL]` | User, managed, `--settings` |
 
 ## Filesystem Keys
 
@@ -84,11 +84,14 @@ These keys hide secrets from commands. A command sees a placeholder. The proxy s
 
 | Key | Status | What it does | How it works | Scope |
 | --- | --- | --- | --- | --- |
-| `sandbox.credentials.files[]` | <Documented /> | Protects credential files or directories | Fields `path`, `mode` (`deny` or `mask`), `extract`, `onExtractNoMatch` (`warn`, `deny`, `error`), `decode` (`jwt`), `maskClaims`, `maskDuplicates`, `injectHosts`. | Merged |
-| `sandbox.credentials.envVars[]` | <Documented /> | Protects environment variables | Fields `name`, `mode`, `extract`, `onExtractNoMatch`, `decode`, `maskClaims`, `injectHosts`. You cannot combine `extract` and `decode` | Merged |
+| `sandbox.credentials.files` | <Documented /> | Protects credential files or directories | Fields `path`, `mode` (`deny` or `mask`), `extract`, `onExtractNoMatch` (`warn`, `deny`, `error`), `decode` (`jwt`), `maskClaims`, `maskDuplicates`, `injectHosts`. | Merged |
+| `sandbox.credentials.envVars` | <Documented /> | Protects environment variables | Fields `name`, `mode`, `extract`, `onExtractNoMatch`, `decode`, `maskClaims`, `injectHosts`. You cannot combine `extract` and `decode` | Merged |
 | `sandbox.credentials.allowPlaintextInject` | <Documented /> | Sentinel swap on the plain HTTP path | The default is `false` | User, managed, `--settings` |
 | `sandbox.credentials.awsPairs` | <Documented /> | Groups masked env vars into AWS pairs for SigV4 re-signing | The standard AWS trio pairs by itself | User, managed, `--settings` |
 | `sandbox.credentials.sigv4` | <Documented /> | Policy for SigV4 shapes the proxy cannot re-sign | `deny` (default) or `passthrough` | User, managed, `--settings` |
+| `sandbox.credentials.sigv4.streaming` | <Documented /> | Policy for aws-chunked streaming uploads (`x-amz-content-sha256: STREAMING-*`) | `deny` (default) fails closed. `passthrough` forwards the request unre-signed. See [Settings Reference](https://code.claude.com/docs/en/settings-reference#sandbox-credentials-sigv4) | User, managed, `--settings` |
+| `sandbox.credentials.sigv4.presigned` | <Documented /> | Policy for presigned URLs | `deny` (default) or `passthrough`. See [Settings Reference](https://code.claude.com/docs/en/settings-reference#sandbox-credentials-sigv4) | User, managed, `--settings` |
+| `sandbox.credentials.sigv4.sigv4a` | <Documented /> | Policy for SigV4A asymmetric signatures | `deny` (default) or `passthrough`. See [Settings Reference](https://code.claude.com/docs/en/settings-reference#sandbox-credentials-sigv4) | User, managed, `--settings` |
 
 ## Environment Variables
 
@@ -155,6 +158,7 @@ Each row is a family of messages. The backticked text is the start that every me
 | Start of Message | Status | What It Means | Cases |
 | --- | --- | --- | --- |
 | Various | <Undocumented /> | **Sandbox.** The sandbox could not start or run a command. | A dependency is not available. A bridge process did not start or died. The platform does not support the configuration. Windows needs a provisioned sandbox user (`npx sandbox-runtime windows-install`). A path is not allowed. A command-specific network list is invalid. |
+| `Cannot search` | <Undocumented /> | The `Grep` tool refused a search path. | The path is a directory without execute permission, so the program cannot go into it. The text is `Cannot search <path>: the directory is not traversable (no execute permission).` Probe case `print.err319.grep-untraversable-dir` printed this text for a directory with mode `0600`. |
 
 ## Related Pages
 

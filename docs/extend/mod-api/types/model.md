@@ -182,6 +182,7 @@ What one model call resolves to: the reply when the model answered (`isAnswered`
 | `isAnswered` | <Documented /> | True: the model answered, and `text` and `usage` are its reply. | Type: `true`. Example: `if (r.isAnswered) spent += r.usage.output_tokens`. |
 | `text` | <Documented /> | The text of the reply: for a completion, its text blocks joined. On a fork, the text of the non-error replies joined by newlines. | Type: `string`. |
 | `usage` | <Documented /> | What the call cost (ModelUsage). On a fork, the sum of its completions. | Type: `ModelUsage`. On a fork, `cache_read_input_tokens` near zero means the fork paid for the whole prefix. |
+| `effort` | <Documented /> | On a fork, the effort that the last response was asked for: the request's `effort` after the limits, or the level of the session when the request named none. | Type: `ModelEffort`. Optional. Not in `2.1.316`. Absent when the model takes no effort, when `CLAUDE_CODE_EFFORT_LEVEL` is `auto` or `unset` with no `maxEffortLevel` setting, or when the first request was the one refused (runs in the table above). |
 | `isAnswered` | <Documented /> | `false`: the model gave no text. | Type: `false`. |
 | `reason` | <Documented /> | The API answered with an error and no reply carried text. | Type: `'api-error'`. Example: `if (!r.isAnswered && r.reason === "api-error") retry(r.status)`. |
 | `status` | <Documented /> | The HTTP status of the error reply (429, 500, 529, ...). It is null when no response arrived at all (a dropped connection, a provider timeout). | Type: `number \| null`. |
@@ -201,10 +202,26 @@ What `$.model.fork` takes. Used by `$.model.fork`, `model.fork`.
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `prompt` | <Documented /> | The one user message, appended to the own transcript of the session as the main thread last sent it. | Type: `string`. The result says what happened: text and usage, or a `reason` such as `nothing-to-fork`. |
+| `effort` | <Documented /> | How hard the fork thinks about it (ModelEffort): `low` for a quick side job. The default is the level of the session. A fork may ask for more than the session runs at. | Type: `ModelEffort`. Optional. Not in `2.1.316`. A value outside `low`, `medium`, `high`, `xhigh`, `max` rejects the call, so does a missing `prompt` (see the run below). The level is held to what the person and the organization allow (see the limits below). The main thread keeps its own level. |
+
+Source: the type file of the program for `2.1.319` (its `ModelForkRequest` and `ModelForkResult`, which `2.1.316` lacks). Official page: [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference).
+Runs: cases `print.fork319.model-fork.*`. Each starts a mod whose `turn.complete` hook calls `$.model.fork` and logs the result. The stub API records the fork's own request. `top` below is `output_config.effort` of the request, and `trailer` is the effort on a closing `system` message after the prompt.
+
+Hypothesis: a named level reaches the request, and the result's `effort` shows what was sent. Prediction: on Opus 5.5 at the default (`medium`), `low` and `max` show in the result, and the request carries them.
+Result (`per-message`): `none` gave `effort: medium` with `top=medium trailer=none`. `low` gave `low` with `top=low trailer=low`. `medium` gave `medium` with no trailer. `max` gave `max` with `top=max trailer=max`. The trailer is a message `{"role":"system","content":[],"output_config":{"effort":"low"}}` after the prompt message. A level equal to the session level sends no trailer. With `--effort max` (`session-max`) the default fork gave `max`, and `low` and `high` were sent as named.
+
+Hypothesis: a bad request rejects the call and no request leaves. Prediction: five rejections, no fork request.
+Result (`bad-value`): `extreme`, `5`, an empty string, and `LOW` each rejected with `takes an effort that is one of low, medium, high, xhigh, max (got <value>) (host check)`. A request without `prompt` rejected with `takes { prompt, effort? } (a non-empty prompt) (host check)`. The stub saw `0` fork requests.
+
+Hypothesis: the limits lower what the fork asks. Prediction: a ceiling of `medium` turns `max` into `medium`.
+Result: with `maxEffortLevel: "medium"` in the settings (`max-effort-setting`) and with `CLAUDE_CODE_EFFORT_LEVEL=medium` (`env-ceiling`), `max` ran as `medium` with no trailer, and `low` ran as `low`. With `CLAUDE_CODE_EFFORT_LEVEL=auto` or `unset` (`env-auto`, `env-unset`) the main request and every fork carried no effort, the result had no `effort`, and `low` and `max` changed nothing. Claude Haiku 4.5 takes no effort (`no-effort-model`): the requests carried none and the result had no `effort`.
+
+Hypothesis: on a model that does not take the effort per message, the level goes in the whole request. Prediction: `top` changes and there is no trailer.
+Result (`whole-request`, Opus 4.8 at `high`): `low` was sent as `top=low trailer=none`, `max` as `top=max trailer=none`. With `CLAUDE_CODE_MODEL_CAPABILITIES=per_turn_effort` and a first-party base URL (`whole-request-capability`), `low` was sent as `top=low trailer=low`. The stub reports no cache use, so these runs show what the request carried, not what it cost.
 
 ### `ModelForkResult`
 
-What `$.model.fork` resolves to: a completion's result (ModelCompleteResult) or that there was nothing to fork yet. Union. Fields: `isAnswered`, `reason`. The completion's arms are the reply when the fork answered, else `api-error`, `empty-reply` or `aborted`, `usage` on each. Used by `$.model.fork`, `model.fork`.
+What `$.model.fork` resolves to: a completion's result (ModelCompleteResult) or that there was nothing to fork yet. Union. Fields: `isAnswered`, `reason`. The completion's arms are the reply when the fork answered, else `api-error`, `empty-reply` or `aborted`, `usage` on each and beside it, once a response came back at a named level, the `effort` it ran at. Used by `$.model.fork`, `model.fork`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |

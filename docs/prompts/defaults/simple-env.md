@@ -32,7 +32,7 @@ This variant sends exactly the same text and tools as [Bare Mode](./bare.md). Th
 
 The diff below starts from [Default, Lean Prompt](./default-lean.md). Lines that start with `-` are only in the baseline. Lines that start with `+` are only here.
 
-Lines added: 2. Lines removed: 114. Size change: -15,337 characters.
+Lines added: 2. Lines removed: 114. Size change: -15,414 characters.
 
 ````diff
 --- default-lean
@@ -95,7 +95,7 @@ Lines added: 2. Lines removed: 114. Size change: -15,337 characters.
 -
 -When you have enough information to act, act. Do not re-derive facts already established in the conversation, re-litigate a decision the user has already made, or narrate options you will not pursue. If you are weighing a choice, give a recommendation, not an exhaustive survey
 -
--Do build original games, games in a genre, and games from the user's own designs and assets. Don't build a recreation of a specific existing game, even if it is renamed or called original.
+-Do build original games, games in a genre or with similar mechanics, and games from the user's own designs and assets. Don't build a recreation of a specific existing game (its name, characters, art, music, levels or look), even if it is renamed or called original.
 -
  === messages[0].content[0] (role: user) ===
 -<system-reminder>

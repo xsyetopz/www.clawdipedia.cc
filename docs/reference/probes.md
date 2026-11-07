@@ -1,6 +1,6 @@
 ---
 title: Probes
-description: Facts checked by running Claude Code 2.1.305 against a local stub, and the env vars and settings that changed what the program sent.
+description: Facts checked by running Claude Code 2.1.305 and 2.1.319 against a local stub, and the env vars and settings that changed what the program sent.
 sidebar_position: 5
 ---
 
@@ -190,6 +190,19 @@ These runs used a live subscription login (`CLAUDE_CODE_OAUTH_TOKEN`) on `2.1.30
 | `claude -p "Reply with 'OK'."` with the login, compared with the same run using a fake API key against the stub | <Undocumented /> | The main request (the first one with tools) had the same 11 body keys (`context_management`, `diagnostics`, `max_tokens`, `messages`, `metadata`, `model`, `output_config`, `stream`, `system`, `thinking`, `tools`), the same tool names, and 4 system blocks on both sides. On `2.1.307` the system text was also the same once model names, temp paths, and the per-run billing hash were masked. On `2.1.314` one line is on the key side only. The model puts it there, not the login: the key side runs Opus 5.5, which gained the [`original_games` section](../how-it-works/system-prompt.md#sections) in that release, and the login side runs Sonnet 5.5, which did not. The probe keeps no body text, so it reports the count and not the line. The login sent 15 betas and the key sent 13. Only the login sent `oauth-2025-04-20` and `extended-cache-ttl-2025-04-11`. The default model was `claude-sonnet-5-5` with the login and `claude-opus-5-5` with the key. The login run also called `GET /api/claude_code/policy_limits` (`200`) and `GET /api/claude_code/settings` (`404`). The cache was warm, so no token counts are quoted. See [Betas](api/betas.md#observed-request). |
 | `/artifacts` typed in the interactive screen with the login, then Esc | <Undocumented /> | The screen showed `Unknown command: /artifacts` and no panel opened. This differs from the `2.1.305` run, where the panel opened with the same kind of login. `2.1.307`, `2.1.308`, `2.1.309`, `2.1.310`, `2.1.311`, and `2.1.312` showed the same. The run on `2.1.306` first showed it. The cause is not known. |
 
+## Account Probes
+
+These runs used the real `2.1.319` binary with the cc-inspect `code` tool, action `cli`. Each run had a fake claude.ai login in `.credentials.json` (`login: "oauth"`): the token was the fake key, with the scopes `user:inference` and `user:profile`. There was no API key. With `apiHost: true`, a local proxy sent `api.anthropic.com` to a TLS copy of the stub, with a throw-away CA that only the child trusted. The proxy refused every other host. The prompt was `Reply with 'OK'.`.
+
+The stub reply to `GET /api/oauth/profile` set every field: `account` with `uuid`, `email`, `display_name`, `full_name`, and `created_at`, and `organization` with `uuid`, `name`, `organization_type` (`claude_max`), `rate_limit_tier`, `seat_tier`, `has_extra_usage_enabled`, `billing_type`, `subscription_created_at`, `claude_code_trial_ends_at`, `claude_code_trial_duration_days`, `cc_onboarding_flags`, and `plan_display_name`.
+
+| Hypothesis | Prediction | Command | Status | Result |
+| --- | --- | --- | --- | --- |
+| `USE_LOCAL_OAUTH=1` and `CLAUDE_LOCAL_OAUTH_API_BASE` point the profile request at a local server. | The stub gets `GET /api/oauth/profile`. | `code {"action":"cli","login":"oauth","env":{"USE_LOCAL_OAUTH":"1","CLAUDE_LOCAL_OAUTH_API_BASE":"<stub>"},"args":["--debug-file","<config-dir>/debug.log","-p","Reply with 'OK'."],"show":"debug.log"}` | <Undocumented /> | Wrong. The stub got only `POST /v1/messages`. The debug log said `Failed to fetch oauth profile from OAuth token: ... connect ECONNREFUSED 127.0.0.1:9`, so the request went to the dead proxy. The program always picks the production OAuth config (`function E(){return"prod"}`, `chunk-frv6eg0h.js@415`). `2.1.316` has the same code. |
+| The profile request goes to `api.anthropic.com` whatever `ANTHROPIC_BASE_URL` says. | With `apiHost`, the request shows up with the host `api.anthropic.com`. | The same input with `"apiHost":true` and the profile reply in `replies` | <Undocumented /> | Right. The requests were `GET https://api.anthropic.com/api/oauth/profile` and `POST /v1/messages?beta=true` (the stub). Both carried the fake token. |
+| The reply fields land in `oauthAccount` of `.claude.json` under camelCase names. | `oauthAccount` holds a key for each field. | The same input with `"show":".claude.json"` | <Undocumented /> | `oauthAccount` had `accountUuid`, `emailAddress`, `organizationUuid`, `hasExtraUsageEnabled`, `billingType`, `accountCreatedAt`, `subscriptionCreatedAt`, `ccOnboardingFlags`, `claudeCodeTrialEndsAt`, `claudeCodeTrialDurationDays`, `seatTier`, `planDisplayName`, `displayName`, `fullName`, and `profileFetchedAt`. `organization.name`, `organization_type`, and `rate_limit_tier` were not in it. See [Account and Access](../how-it-works/account-and-access.md#the-profile-request). |
+| The plan and the rate limit tier go to the stored login. | `.credentials.json` gets `subscriptionType` and `rateLimitTier`. | The same input with `"show":".credentials.json"` | <Undocumented /> | With a reply that had no `request-id` header, the login did not change. The debug log said `OAuth: stored login plan not recorded from the profile (unstamped)`. The stub then sent `request-id: req_probe`, and the login got `subscriptionType: "max"`, `subscriptionTypeSource: "profile"`, `subscriptionTypeVerifiedAt`, and `rateLimitTier`. The check is the pattern `^req_[A-Za-z0-9_-]{1,36}$` (`chunk-yr5295pc.js@415`). |
+
 ## Static and Print Probes
 
 These runs used `2.1.305`, the same stub, a fake key, a temp home folder, and a dead proxy, plus static reading of the program. Nothing was run with a login or with `sudo`. The [Managed Folder Probe](#managed-folder-probe) is the one section that used `sudo`.
@@ -210,6 +223,30 @@ A hook inherits the environment of the probe, so a change in the probe environme
 | `CLAUDE_CODE_MANAGED_SETTINGS_PATH` | <Undocumented /> | Ignored. The log still read the machine default managed folder. |
 | `/status` size warning with a 45,000-character `CLAUDE.md` in `-p`, `claude doctor`, and `get_status` | <Undocumented /> | No warning in these three. It shows in the interactive screen (see [Interactive Probes](#interactive-probes)). |
 
+## Release Probes for 2.1.319
+
+The release toolkit runs the case files in `tools/release/probes/` against `2.1.319`. A print case uses the local stub and a fake key. A pty case drives the interactive screen. A live case runs through `tools/release/secret-runner.sh`, which loads the login inside the child process. The `2.1.319` captures are in `captures/2.1.319/`.
+
+| Layer | Group or Case | Status | What It Runs |
+| --- | --- | --- | --- |
+| Print | `api319` | <Undocumented /> | Betas and tools new in `2.1.319`: `beta.*` (plain, first-party, use-case ID, provenance, side query), `tool.wrap-up.*`, `tool.exit-plan.*`, `tool.propose-skills.*`, `tool.widget.*`, and the `gateway.*` cases (`assume-role-*`, `identity-retention-*`, cost route, `request-tags-billing-group`, `request-tags-plain`, `no-postgres`). |
+| Print | `cli319` | <Undocumented /> | `disableReplyCheck` (`reply-check.*`), the theme calls (`theme.engine`), `cowork-plugin.*`, `mcp-add-web`, `ultrareview-*`, the Chrome tool names (`chrome-tools.*`), and `CLAUDE_CODE_PLUGIN_DIR_WATCH` in print mode (`plugin-dir-watch.*`). |
+| Print | `cacerts319` | <Undocumented /> | The `NODE_EXTRA_CA_CERTS` file faults of `2.1.318`: `extra-ca.*` (valid, empty, not PEM, damaged, missing) and `extra-ca-tls.*` (a TLS stub that needs the CA at the end of the file). |
+| Print | `fork319` | <Undocumented /> | The `effort` option of the Mod API call `$.model.fork`: `model-fork.*`. |
+| Print | `notes319` | <Undocumented /> | The sign-in end date (`login-expiry.*`) and the `anthropic.*` OpenTelemetry attributes (`otel-attrs.*`). |
+| Print | `env319a` | <Undocumented /> | The first half of the new `2.1.319` environment variable names, among them `code-mode.*` and `config-lock-wait.*`. |
+| Print | `env319b` | <Undocumented /> | The second half: `curried-trinket.*`, `gateway.*`, `inert.*`, `memory-push.probe`, `offline.*`, `orchestrator.*`, `otel-timeout.*`, `personal-hooks-off.*`, `plain-delta.*`, `reply-gate.*`, `runner.*`, and `stream-hold.*`. |
+| Print | `err319` | <Undocumented /> | Error texts that a user can trigger, among them `auto-mode-print-refused`. |
+| Print | `evalcreds` | <Undocumented /> | The credential paths that `claude plugin eval` hides from its Bash sandbox. |
+| Pty | `cli319` | <Undocumented /> | `keybinding.session-tabs`, `keybinding.control-bad-action`, `keybinding.control-bad-context`, `slash.project`, `slash.use-case`, `slash.upgrade`, `typeahead.upgrade`, `typeahead.use-case`, `tmux-swarm-*`, `login-console-profile-no-dir`, `loop-keepalive.*`, `gateway-login-notice.*`, `plugin-dir-watch.*`, and the `hooks.permissiondenied.*`, `notifications.agent-needs-input*`, and `auto-mode-local` cases. |
+| Live | `api319.*` | <Undocumented /> | `api319.provenance`, `api319.provenance-mcp`, `api319.provenance-http`, `api319.startup`, `api319.auth-warm`, and `api319.org-pin`. |
+| Live | `err319` | <Undocumented /> | The error texts of the print group, against the live service. |
+| Live | `cli319.*` | <Undocumented /> | `cli319.upgrade-typeahead` and `cli319.attribution`. |
+| Live | `code-mode` | <Undocumented /> | Code Mode and the REPL tool with a live login. |
+
+The `gateway.*` cases start a `postgres:17-alpine` container, so they need Docker. The first run pulls the image. Without Docker they stop with an error that names the install step.
+The live `ultrareview` steps were removed by the owner's decision, so this site has no run of `ultrareview` on a live account. Read the official [Ultrareview](https://code.claude.com/docs/en/ultrareview) page for that command.
+
 ## Managed Folder Probe
 
 These runs used the real `2.1.306`, `2.1.307`, `2.1.308`, `2.1.309`, `2.1.310`, `2.1.311`, and `2.1.316` binaries on macOS with the stub, a fake key, and a temp home and config folder. The managed folder `/Library/Application Support/ClaudeCode` was made with `sudo` (owner `root:wheel`). It held `CLAUDE.md`, a rule, a skill, an output style, `managed-settings.json`, a `managed-settings.d/` drop-in, and `managed-mcp.json` with one stdio server. Each run also had a user server and a project `.mcp.json` server. A baseline ran without the folder. Runs used `-p --output-format stream-json`, plus `claude mcp list` and `claude mcp get`. Every row below was seen in the managed cases of `2.1.306`, and again in all 55 cases of `2.1.307`, of `2.1.309`, of `2.1.310`, of `2.1.311`, and of `2.1.316`: `mcp-run`, `mcp-list`, `mcp-get-managed`, `mcp-get-user`, `mcp-config-flag`, `outputstyle`, `skill-default`, `skill-disabled`, `claudemd-order`, `excludes-any-claude-md-user` and `-project`, `excludes-managed-abs-user` and `-project`, `excludes-managed-glob-user` and `-project`, `agent-mcp`, and `auto-mode-config`. The `NotebookEdit` deny is in `claudemd-order`. The only data that changed in `2.1.307`, `2.1.310`, `2.1.311`, and `2.1.316` is the order in which the baseline servers started, and no row depends on it.
@@ -226,7 +263,7 @@ These runs used the real `2.1.306`, `2.1.307`, `2.1.308`, `2.1.309`, `2.1.310`, 
 | `claudeMdExcludes` of the managed absolute path, or `<managed>/**`, in user or project settings | <Documented /> | Nothing was removed: user and project `CLAUDE.md` stayed, and the managed `CLAUDE.md` and the managed rule loaded. |
 | Managed `.claude/rules/*.md` | <Undocumented /> | It loaded, and `claudeMdExcludes` with `**/CLAUDE.md`, the managed absolute path, or `<managed>/**` did not remove it. |
 | A `managed-settings.d/` drop-in that denies `NotebookEdit` | <Documented /> | `NotebookEdit` left the `init` event tool list (present there in the baseline). It was not in the request tool list in either run (12 tools). |
-| The prompt note "not verified as your organization's policy" | <Undocumented /> | It did not appear with a root-owned folder. The program text says it is added for managed files that the session's own account could write (not run). |
+| The prompt note "not verified as your organization's policy" | <Undocumented /> | It did not appear with a root-owned folder. The program text says it is added for managed files that the session's own account could write. The `managed.owned.claudemd-order` case tests that with a folder that the user owns. That case needs sudo, so it runs with the managed probe. |
 | User agent with `mcpServers` frontmatter, no `--mcp-config` | <Undocumented /> | The agent ran, but its server did not start (without the managed folder it did). A notice said `probe-agent agent MCP server blocked by enterprise MCP config: agent_srv`. |
 | `autoMode` in `managed-settings.json` and a `managed-settings.d/` drop-in, with `claude auto-mode config` | <Documented /> | Both files applied. Lists from all sources join, with user or `--settings` rules first and managed rules after. `$defaults` expands where it sits. A list with no `$defaults` in any source has no defaults. See [Auto Mode](../configure/permissions/auto-mode.md). |
 
@@ -264,7 +301,6 @@ Not run, because they need a login, a cloud or remote session, or another host:
 - `callback` hook forwarding for cloud sessions.
 - The `Notification` types `auth_success`, `agent_completed`, `quota_auto_resume_fired`, `quota_auto_resume_stale`, and `quota_auto_resume_disabled`. The other types are in [Notification Types](#notification-types).
 - Cloud and Cowork memory variables.
-- `Glob`, `Grep`, `NotebookEdit`, `WebFetch`, and `WebSearch` in the `PostToolUse` shape probe.
 
 ## What We Did Not Probe
 

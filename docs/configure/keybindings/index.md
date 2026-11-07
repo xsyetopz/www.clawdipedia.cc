@@ -68,6 +68,7 @@ A context says where a block of bindings applies. `Global` bindings work everywh
 | `DiffDialog` | <Documented /> | When the diff dialog is open. |
 | `DiffPanel` | <Documented /> | When the diff sidebar panel is open. |
 | `FeedbackSurvey` | <Undocumented /> | When you type over the session feedback survey. |
+| `SessionTabs` | <Gated /> | When a session on screen can be closed under the session tabs. The program lists no default key for it and leaves it out of its own generated context list. |
 | `ModelPicker` | <Documented /> | When the model picker is open. |
 | `EffortSlider` | <Documented /> | When the effort slider is open. |
 | `Select` | <Documented /> | When a select or list component has focus. |

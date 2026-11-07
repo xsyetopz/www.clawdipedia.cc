@@ -6,7 +6,7 @@ sidebar_position: 1
 
 An environment variable is a named setting that a program reads when it starts.
 Claude Code `2.1.314` reads well over a thousand of them.
-This section lists 1480 variables that you can use. It splits them into groups, so you can find them.
+This section lists 1571 variables that you can use. It splits them into groups, so you can find them.
 The [official docs](https://code.claude.com/docs/en/env-vars) list a few of them. Only the program shows most of them.
 
 Set a variable in your shell, or under the `env` key of `~/.claude/settings.json`, `.claude/settings.json`, `.claude/settings.local.json`, or managed settings.
@@ -118,7 +118,7 @@ Numeric variables, such as timeouts and token budgets, accept forms like `2e3` (
 | [Features and Toggles](features-and-toggles.md) | Environment variables that turn single features on or off, including server-gated features | 67 |
 | [Remote and Cloud Sessions](remote-and-cloud-sessions.md) | Environment variables for cloud sessions, the bridge, the desktop app, Chrome, Cowork, and Slack | 188 |
 | [SDK and Automation](sdk-and-automation.md) | Environment variables for programs that host Claude Code, the Agent SDK, and automation | 27 |
-| [System and Third-Party](system-and-third-party.md) | Environment variables owned by your system or other tools that Claude Code reads, such as HOME, TERM, and ALL_PROXY | 130 |
+| [System and Third-Party](system-and-third-party.md) | Environment variables owned by your system or other tools that Claude Code reads, such as HOME, TERM, and ALL_PROXY | 221 |
 | [Bundled Libraries](bundled-libraries.md) | Environment variables read only by libraries bundled inside Claude Code, such as the AWS SDK, gRPC, and cloud detectors | 127 |
 
 ## How to Read the Tables

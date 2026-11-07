@@ -58,6 +58,8 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 | `ui.close` | <Documented /> | `$.ui.close({ id })` with `origin` `plugin`. The engine raises it too, for the person (`person`) and for an unload (`unload`). | Input `PaneCloseInput`. Value `void`. |
 | `ui.panes` | <Documented /> | `$.ui.panes()` | Input `NoArgs`. Value `readonly UiPane[]`. |
 | `ui.place` | <Undocumented /> | `$.ui.place({ id })` | Input `UiPlaceArgs`. Value `UiPlaceResult`. New in `2.1.314`. |
+| `theme.set` | <Undocumented /> | `$.theme.set({ backdrop })` | Input `ThemeSetArgs`. Value `ThemeResult`. New in `2.1.319`. Case: `print.cli319.theme.engine`. |
+| `theme.clear` | <Undocumented /> | `$.theme.clear()` | Input `NoArgs`. Value `ThemeResult`. New in `2.1.319`. Case: `print.cli319.theme.engine`. |
 | `ui.selection` | <Documented /> | `$.ui.selection()` | Input `NoArgs`. Value `UiSelection \| undefined`. |
 | `ui.copy` | <Documented /> | `$.ui.copy({ text, surface })`. `surface` takes the session's first surface when left out. | Input `UiCopyArgs`. Value `UiCopyResult`. |
 | `ui.view` | <Undocumented /> | `$.ui.view({ agentId })`: whose transcript the main view shows. None means the main conversation. | Input `SiteView`. Value `UiViewResult`. |

@@ -1,6 +1,6 @@
 ---
 title: Classic Events
-description: How each settings hook event also appears to a mod as a classic event, with the fields and results of all 33 events.
+description: How a mod gets each settings hook event as a classic event, with the fields and results of all 33 events.
 sidebar_position: 16
 ---
 

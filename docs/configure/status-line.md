@@ -153,7 +153,7 @@ The object `prompt_cache` appears after the first main-conversation response (ne
 | `prompt_cache.hit_ratio` | <Documented /> | Cache reads over all input tokens | The value is 0 to 1. It is `null` when counts are zero | Status line |
 | `prompt_cache.cache_write_tokens`, `.miss_recache_tokens` | <Documented /> | Tokens written | Totals for the session and for misses | Status line |
 | `prompt_cache.last_miss_at` | <Documented /> | Time of the last miss | Epoch seconds. `null` if none | Status line |
-| `prompt_cache.last_miss_cause` | <Documented /> | Likely cause | `causes` array (such as `tools_changed`, `system_prompt_changed`, `ttl_expired_5m`, `likely_server_side`), plus `tools_added`, `tools_removed`, `system_char_delta`. Needs `2.1.260` | Status line |
+| `prompt_cache.last_miss_cause` | <Documented /> | The cause that the program gives for the last miss | `causes` array (such as `tools_changed`, `system_prompt_changed`, `ttl_expired_5m`, `likely_server_side`), plus `tools_added`, `tools_removed`, `system_char_delta`. Needs `2.1.260` | Status line |
 | `prompt_cache.miss_causes` | <Documented /> | Count per cause | Map | Status line |
 | `prompt_cache.recache_tokens_if_cold` | <Documented /> | Tokens a cold cache re-caches | `null` after a compaction until the next request | Status line |
 

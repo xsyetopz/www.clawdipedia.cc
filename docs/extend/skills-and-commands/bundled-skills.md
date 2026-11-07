@@ -72,13 +72,12 @@ Source: the program (`chunk-qd604jgh.js`).
 | `/commit-push-pr` | <Undocumented /> | Makes a commit. Pushes it. Opens a pull request. | A `prompt` command. |
 | `/dataviz` | <Undocumented /> | Guides Claude when it makes a chart, graph, plot, dashboard, or other data visualization. | A `prompt` command. |
 | `/explain-usage` | <Undocumented /> <Gated note="An isEnabled check decides." /> | Explains where the tokens of this session went, with one simple chart. | A `prompt` command. |
-| `/memory-types` | <Undocumented /> <Gated note="An isEnabled check decides." /> | A full reference for the memory types: what each captures, when to save it, and how to write the body. | A `prompt` command. |
 | `/artifact-capabilities` | <Undocumented /> <Gated note="An isEnabled check decides." /> | A guide for Artifacts. The program gives no description. | A `prompt` command. |
 | `/artifact-design` | <Undocumented /> <Gated note="An isEnabled check decides." /> | Design guidance and fundamentals for Artifacts. | A `prompt` command. |
 | `/artifact-diagramming` | <Undocumented /> <Gated note="An isEnabled check decides." /> | Diagramming guidance for Artifacts: when a picture helps, and how to draw it with inline SVG in both themes. | A `prompt` command. |
 | `/design` | <Undocumented /> <Gated note="An isEnabled check decides." /> | A design command. The program gives no description. | A `prompt` command. |
 | `/claude-code-docs` | <Undocumented /> <Gated note="An isEnabled check decides, and it reads the server flag tengu_birch_kettle." /> | A command for questions about Claude Code. The program gives no description. | A `prompt` command. |
-| `/cowork-plugin` | <Undocumented /> <Gated note="An isEnabled check decides." /> | Creates a new Cowork plugin from scratch, or customizes an installed plugin for an organization. | A `prompt` command. |
+| `/cowork-plugin` | <Undocumented /> <Gated note="Shown in the `remote_cowork` entry point, or since `2.1.319` when `CLAUDE_CODE_COWORK_PLUGIN_SKILL` is set and neither `CLAUDE_CODE_CHILD_SESSION` nor `CLAUDECODE` is set. Cases: `print.cli319.cowork-plugin.none`, `.env`, `.env-child`: results: `.none` false, `.env` true, `.env-child` false (the skill shows in the request only for `.env`)." /> | Creates a new Cowork plugin from scratch, or customizes an installed plugin for an organization. | A `prompt` command. |
 | `/setup-claude` (alias `/setup-cowork`) | <Undocumented /> <Gated note="An isEnabled check decides." /> | A guided setup. You pick a role, install a matching plugin, try a skill, and connect tools. | A `prompt` command. |
 
 ## Related Pages

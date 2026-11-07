@@ -89,7 +89,7 @@ The dispatch skips the calling hook alone, so a plugin does not trap itself.
 | `disableSideloadFlags` | <Documented /> <ManagedOnly /> | Rejects `--plugin-dir` and `--plugin-url`. | Row: [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plugins.md#keys). | Managed settings. |
 | `--safe-mode`, `--bare` | <Documented /> | No installed hooks module loads. | The program says: installed plugins are disabled, none of their hooks or hooks modules load, built-in plugins load regardless. | CLI flags. |
 | Rollout switch | <Gated note="Remote flag, name not shown in the program strings" /> | Installed hooks modules wait for a rollout flag. A message says installed mods are turned off remotely. | Built-in plugins and organization plugins load regardless. | Installed plugins. |
-| `CLAUDE_CODE_PLUGIN_DIRS`, `CLAUDE_CODE_PLUGIN_DIR_WATCH` | <Documented /> | Load plugin dirs as `--plugin-dir` does. Reload on save in a non-interactive session. | None. | Environment. |
+| `CLAUDE_CODE_PLUGIN_DIRS`, `CLAUDE_CODE_PLUGIN_DIR_WATCH` | <Documented /> | Load plugin dirs as `--plugin-dir` does. Reload on save: on by default in interactive sessions, off in print mode unless set to `1`. | None. | Environment. |
 
 ## Limits
 

@@ -8,7 +8,7 @@ These variables point Claude Code at a cloud provider instead of the Anthropic A
 Switch a provider on with a `CLAUDE_CODE_USE_*` variable. Then set the region, credentials, and endpoints for it.
 They also cover LLM gateways that sit in front of a provider.
 
-This page lists 78 variables. Set `CLAUDE_CODE_USE_BEDROCK`, `CLAUDE_CODE_USE_VERTEX`, or the Foundry switch to `1`. Then set region, project, and endpoint variables. To turn one off, unset the `CLAUDE_CODE_USE_*` variable. You can override a stale shell export with an empty string in `settings.json` `env`.
+This page lists 79 variables. Set `CLAUDE_CODE_USE_BEDROCK`, `CLAUDE_CODE_USE_VERTEX`, or the Foundry switch to `1`. Then set region, project, and endpoint variables. To turn one off, unset the `CLAUDE_CODE_USE_*` variable. You can override a stale shell export with an empty string in `settings.json` `env`.
 
 ## Example
 
@@ -86,6 +86,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_USE_VERTEX` | <Documented /> | Selects Google Cloud's Agent Platform (Vertex) as the provider. | On or off. Last in the provider order before first party. Allowed in project `env` before trust | Google Vertex |
 | `CLAUDE_GATEWAY_ALLOW_LOOPBACK` | <Documented /> | Lets the gateway server reach loopback addresses. Otherwise it blocks them as SSRF. | On or off. The error text says to set `1` in the gateway environment | `claude gateway` server |
 | `CLAUDE_GATEWAY_DRAIN_TIMEOUT_MS` | <Documented /> | Sets how long open requests may finish after a shutdown signal. | A number of milliseconds, `25000` by default. Plain digits 1 to 2147000000 | `claude gateway` server |
+| `CLAUDE_GATEWAY_LOG_FORMAT` | <Undocumented /> | Sets the log line format of the gateway server. `json` writes each line to stderr as a JSON object with `severity`, `time`, and `message`, and drops the startup banner. | `json`, any case, turns it on. Any other value gives plain text. Unset gives plain text | `claude gateway` server. Read in `chunk-0wfv83qh.js@470`. Runs `env319b.gateway.bad-config-json` and `bad-config-JSON-upper` gave a JSON error line; `bad-config-default` and `bad-config-text` gave a plain line |
 | `CLAUDE_GATEWAY_LOG_LEVEL` | <Documented /> | Sets the log level of the gateway server. | `info` by default. `debug`, `info`, `warn`, or `error`, any case | `claude gateway` server |
 | `CLAUDE_GATEWAY_PROXY_IS_EGRESS_BOUNDARY` | <Documented /> | Treats the forward proxy as the egress boundary. The gateway passes hostnames and does not resolve them itself. | On or off. Needs `HTTPS_PROXY` or `HTTP_PROXY` and no `NO_PROXY`. Warns when it clashes with `CLAUDE_GATEWAY_ALLOW_LOOPBACK` | `claude gateway` server |
 | `CLOUD_ML_REGION` | <Documented /> | Sets the Vertex AI region. | - | - |

@@ -73,17 +73,36 @@ The program builds the list only while the server flag `tengu_silly_shore` is on
 
 ## Enable Tests
 
-Source: the program (`chunk-qd604jgh.js` and `chunk-8z3t1tjj.js` of `2.1.316`). Each tool object has an `isEnabled` function. Claude Code leaves the tool out of the request when it answers no.
+Source: the program (`chunk-qd604jgh.js` and `chunk-8z3t1tjj.js` of `2.1.316`; the `ExitPlanMode` and `AskUserQuestion` rows are from `2.1.319`). Each tool object has an `isEnabled` function. Claude Code leaves the tool out of the request when it answers no.
 
 | Tools | Test | Result |
 | --- | --- | --- |
-| `ExitPlanMode`, `AskUserQuestion` | One shared test. The run is not interactive and channels are allowed. | Off |
+| `ExitPlanMode` | The session is a teammate: an in-process teammate, or a dynamic team context with an agent ID and a team name. Then it uses the shared test below (`Fc()` picks the branch). | Shared test |
+| | Any other session. The `denyInsteadOfPrompting` setting is on in a settings source, or in a plugin's settings (`dee()`; always off when the host has no disk). | Off |
+| | Any other session without that setting. The shared test below (`cee()` is `!dee()` and the shared test). | Shared test |
+| `AskUserQuestion` | `cee()`: the second and third rows above, with no teammate branch. | Same as `ExitPlanMode` for a session that is not a teammate |
+| Shared test (`gws()`) | The run is not interactive and channels are allowed. | Off |
 | | The run is not interactive and no permission prompt tool is named (the name is empty or `none`). | Off |
 | | Anything else. An interactive session is always on. | On |
 | `EnterPlanMode` | It calls the `ExitPlanMode` test. | Same as `ExitPlanMode` |
 | `TodoWrite` | `CLAUDE_CODE_ENABLE_TASKS` is `false`, and the model test below passes. | On |
 | `TaskCreate`, `TaskGet`, `TaskUpdate`, `TaskList` | `CLAUDE_CODE_ENABLE_TASKS` is not `false`, and the model test below passes. | On |
 
+- `2.1.319` changed the `ExitPlanMode` test (`chunk-7y8y5zrr.js@10971`; the shared test is `chunk-7rjhtrcd.js@880`; the teammate test `Fc()` is `chunk-4d11x8r1.js@1729`). Before, `ExitPlanMode` used the shared test alone. Now a session that is not a teammate also turns it off when `permissions.denyInsteadOfPrompting` is `true`.
+- `ExitPlanMode` is a deferred tool. A `claude -p` request lists deferred tools only when `ENABLE_TOOL_SEARCH=false`. All runs below use `-p`, a stub API, and `--permission-prompt-tool` naming an MCP tool, unless the row says otherwise.
+
+| Case (`print.api319.tool.exit-plan.`) | Setup | `ExitPlanMode` in `tools` | `AskUserQuestion` in `tools` |
+| --- | --- | --- | --- |
+| `direct` | Tool search off. | Yes | Yes |
+| `direct-deny` | Tool search off. `denyInsteadOfPrompting: true`. | No | No |
+| `direct-no-prompt-tool` | Tool search off. No prompt tool. | No | No |
+| `teams-env-deny` | As `direct-deny`, plus `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. | No | No |
+| `teammate` | Tool search off. Teams env. `--agent-id`, `--agent-name` and `--team-name`. | Yes | Yes |
+| `teammate-deny` | As `teammate`, plus `denyInsteadOfPrompting: true`. | Yes | No |
+| `teammate-no-prompt-tool` | As `teammate`, with no prompt tool. | No | No |
+
+- The `teammate-deny` row is the `Fc()` branch: a teammate asks the shared test, so the deny setting does not remove `ExitPlanMode`. `AskUserQuestion` has no teammate branch, so it goes off. The program reads the three hidden flags only when agent teams are on (`chunk-02rsmwmx.js@110093`), and it refuses a run that gives only some of them.
+- Without tool search off, the cases `.prompt-tool`, `.prompt-tool-deny`, `.plan-mode` and `.plan-mode-deny` show the same split through `AskUserQuestion` alone (listed 13 tools, then 12), and `.print` (no prompt tool) lists neither.
 - A non-interactive run is `claude -p` or an SDK run. So a plain `claude -p` run has none of the three tools. Adding `--permission-prompt-tool <name>` turns them on, unless channels are allowed.
 - The model test passes when any of these holds: a launch test passes (one is a host option that opts in to the todo tools); the main-loop model is not known yet; the model name holds `application-inference-profile`; the model is one of `claude-3-opus`, `claude-3-sonnet`, `claude-3-haiku`, `claude-3-5-sonnet`, `claude-3-5-haiku`, `claude-3-7-sonnet`, `claude-opus-4-0`, `claude-opus-4-1`, `claude-opus-4-5`, `claude-opus-4-6`, `claude-opus-4-7`, `claude-sonnet-4-0`, `claude-sonnet-4-5`, `claude-sonnet-4-6`, or `claude-haiku-4-5`; or `CLAUDE_CODE_ENABLE_TODO_TOOLS` is `true`.
 - The probe `print.request.baseline-a` on `2.1.316` (Opus 5.5, `-p`) sends 12 tools. None of `TodoWrite`, `TaskCreate`, `AskUserQuestion`, or `EnterPlanMode` is among them. `Glob` and `Grep` are not among them either, because `Bash` is.
@@ -128,7 +147,7 @@ Each row is a family of messages. The backticked text is the start that every me
 | `WorktreeCreate hook failed` | <Undocumented /> | A `WorktreeCreate` hook did not give a worktree. | The hook errored. A configured hook did not run (workspace not trusted or matcher mismatch). The hook returned no worktree path. |
 | Various | <Undocumented /> | **ProposeGoal.** `ProposeGoal` refused a goal proposal. | It cannot be used in agent contexts. The goal condition is empty or too long once canonicalized for display. It cannot clear a goal (use `/goal clear`). No interactive session can render the prompt. A proposal already awaits the user's decision. |
 | Various | <Undocumented /> | **Workflow.** A `Workflow` run or workflow script was refused. | A script uses syntax that workflow scripts do not support (`with`, `import()`, `await using`, a reserved identifier, a `meta` statement with spread or computed keys). A `workflow()`, `agent()`, `parallel()`, or `pipeline()` call got wrong arguments. A named workflow does not exist. A permission rule denies `agentType`. A run was killed or was restored from the journal. A run hides its script and cannot be resumed. |
-| Various | <Undocumented /> | **Task tools.** A task, notification, or worktree tool call was refused. | A subagent called `ReadNotifications`. A task is not running, or another agent owns it. A task type or parameter is missing or not supported. `EnterWorktree` needs `path` or would give no write access. The session is already in a worktree. |
+| Various | <Undocumented /> | **Task tools.** A task, notification, or worktree tool call was refused. | A subagent called `ReadNotifications`. A task is not running, or another agent owns it. A task type or parameter is missing or not supported (`Missing required parameter: task_id`, `Unsupported task type: <type>`). `EnterWorktree` needs `path` or would give no write access. The session is already in a worktree. |
 | Various | <Undocumented /> | **Plan mode.** `ExitPlanMode` or `EnterPlanMode` was refused. | The approval arrived without the plan. No plan file was found. The request to the lead could not be written. An agent context used `EnterPlanMode`. |
 | Various | <Undocumented /> | **Worktree creation.** A worktree could not be created or reused. | A leftover worktree folder points to another location. A branch is already checked out elsewhere or already exists. The worktree already exists and cannot be reused. Workspace trust was not accepted yet (run `claude` once in the directory). A `WorktreeCreate` hook emitted a path that cannot be verified. |
 

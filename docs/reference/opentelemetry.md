@@ -55,6 +55,29 @@ Only `tool_decision` is marked <Documented />, because earlier pages of this sit
 
 Source: the program. The level in force is in `chunk-r5cyd28m.js` lines 135670, 136924, and 141434. The server name is in `chunk-3xe0k172.js` lines 44518 to 44531 and 48503 to 48514, with `custom` at line 42524. The `safety_event` gate is in `chunk-r5cyd28m.js` lines 186177, 186258, 186295, and 186356, and in `chunk-2ht8z368.js` line 184333 of `2.1.311`.
 
+## Account and Provider Attributes
+
+Since `2.1.318`, the program adds `anthropic.provider`, `anthropic.custom_base_url`, `anthropic.plan`, and `anthropic.seat_type` to OpenTelemetry metrics, events, and spans. The release notes say: "Added `anthropic.plan`, `anthropic.seat_type`, `anthropic.provider` and `anthropic.custom_base_url` to OTel metrics, events and spans".
+
+| Attribute | Status | Value | When It Is Set |
+| --- | --- | --- | --- |
+| `anthropic.provider` | <Undocumented /> | `firstParty` or `bedrock` in the runs below | Always |
+| `anthropic.custom_base_url` | <Undocumented /> | `true` or `false` (a boolean) | When the program can tell. `true` when the API base URL is not the default |
+| `anthropic.plan` | <Undocumented /> | `pro`, `max`, `team`, or `enterprise` | With a claude.ai subscriber login. A `free` plan sets none |
+| `anthropic.seat_type` | <Undocumented /> | `premium`, `standard`, `usage_based`, or `other` | With a claude.ai subscriber login and a stored seat tier. The program maps the tier name to one of the four values |
+
+**Source:** the program. The set is built in `chunk-b1j5pfqz.js` (function `$1d9e2a`, line 136). The plan list is on line 116, and the tier map follows it.
+
+**Runs:** `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only notes319.otel-attrs`. Each case exports metrics, logs, and traces to a local OTLP receiver (`tools/release/lib/otlp.ts`) with `http/json`.
+
+**FAFO:**
+
+- Hypothesis: all three signals carry the same four attributes, and the plan and seat type need a subscriber login.
+  Prediction: with an API key, only `provider` and `custom_base_url` appear. With a max login, `plan` is `max`. A `team_tier_1` seat gives `premium`, and `enterprise_usage_based` gives `usage_based`.
+  Command: cases `api-key`, `max-plan`, `team-premium`, `enterprise-usage-based`, `free-plan`.
+  Result: as predicted on metrics, logs, and traces alike. `team-premium` gave `plan=team` and `seat_type=premium`. `enterprise-usage-based` gave `plan=enterprise` and `seat_type=usage_based`. `free-plan` gave neither.
+- `custom_base_url` is `true` for the local stub URL, and `false` with `ANTHROPIC_BASE_URL=https://api.anthropic.com` (`default-api-url`). With `CLAUDE_CODE_USE_BEDROCK=1`, `provider` is `bedrock`, and `custom_base_url` is `false`, or `true` when `ANTHROPIC_BEDROCK_BASE_URL` is set (`bedrock`, `bedrock-custom-url`).
+
 ## Attributes on Every Event
 
 Every event carries these base attributes: `user.id`, `user.email`, `user.groups`, `event.name`, `event.timestamp`, `event.sequence`, `prompt.id`, and `workspace.host_paths`.

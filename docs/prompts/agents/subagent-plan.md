@@ -33,7 +33,7 @@ The text below is every part of the request that Claude Code builds before your 
 
 ```text
 === system[0] (no cache marker) ===
-x-anthropic-billing-header: cc_version=2.1.316.<build>; cc_entrypoint=sdk-cli; cc_is_subagent=true;
+x-anthropic-billing-header: cc_version=2.1.319.<build>; cc_entrypoint=sdk-cli; cc_is_subagent=true;
 
 === system[1] (cache marker: {"type":"ephemeral"}) ===
 You are a Claude agent, built on Anthropic's Claude Agent SDK.
@@ -157,15 +157,15 @@ Today's date is <date>.
 
 The diff below starts from [Default, Lean Prompt](../defaults/default-lean.md). Lines that start with `-` are only in the baseline. Lines that start with `+` are only here.
 
-Lines added: 56. Lines removed: 61. Size change: -3,792 characters.
+Lines added: 56. Lines removed: 61. Size change: -3,869 characters.
 
 ````diff
 --- default-lean
 +++ subagent-plan
 @@ -1,64 +1,70 @@
  === system[0] (no cache marker) ===
--x-anthropic-billing-header: cc_version=2.1.316.<build>; cc_entrypoint=sdk-cli;
-+x-anthropic-billing-header: cc_version=2.1.316.<build>; cc_entrypoint=sdk-cli; cc_is_subagent=true;
+-x-anthropic-billing-header: cc_version=2.1.319.<build>; cc_entrypoint=sdk-cli;
++x-anthropic-billing-header: cc_version=2.1.319.<build>; cc_entrypoint=sdk-cli; cc_is_subagent=true;
 
  === system[1] (cache marker: {"type":"ephemeral"}) ===
  You are a Claude agent, built on Anthropic's Claude Agent SDK.
@@ -268,7 +268,7 @@ Lines added: 56. Lines removed: 61. Size change: -3,792 characters.
 -
 -When you have enough information to act, act. Do not re-derive facts already established in the conversation, re-litigate a decision the user has already made, or narrate options you will not pursue. If you are weighing a choice, give a recommendation, not an exhaustive survey
 -
--Do build original games, games in a genre, and games from the user's own designs and assets. Don't build a recreation of a specific existing game, even if it is renamed or called original.
+-Do build original games, games in a genre or with similar mechanics, and games from the user's own designs and assets. Don't build a recreation of a specific existing game (its name, characters, art, music, levels or look), even if it is renamed or called original.
 -
  === messages[0].content[0] (role: user) ===
  <system-reminder>

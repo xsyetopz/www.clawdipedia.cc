@@ -137,7 +137,7 @@ The cache is per machine and per folder, because the prompt holds memory paths a
 | Expected rebuilds | `N expected rebuild (compaction or tool-result clearing)` | Shown only when above zero. A compaction or a tool-result clearing announced the drop. |
 | State | `warm (<ttl> TTL, last activity T ago)`, or `cold — idle T, next turn re-caches ~N tokens`, or `no prompt caching reported by the API` | The TTL of the last request and the time since it. When Claude Code has no token count after a compaction, the cold text reads `next turn re-caches the compacted prompt`. |
 
-The likely cause is a list with a comma between the items. A cause can add a count: `tool definitions changed (+2/-0)` or `system prompt changed (+120 chars)`.
+The `likely cause:` text is a list with a comma between the items. A cause can add a count: `tool definitions changed (+2/-0)` or `system prompt changed (+120 chars)`.
 
 | Cause text | Meaning |
 | --- | --- |

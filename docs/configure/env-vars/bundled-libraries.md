@@ -8,7 +8,7 @@ Claude Code ships with libraries inside its program.
 These libraries read their own environment variables, and Claude Code itself does not use them.
 A variable here only works when the library code runs. Setting one can change behavior in a way Claude Code does not plan for.
 
-This page lists 127 variables. The effect depends on the library and the feature that runs it. Set them in your shell.
+This page lists 128 variables. The effect depends on the library and the feature that runs it. Set them in your shell.
 
 ## Example
 
@@ -66,6 +66,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `BUN_DISABLE_DYNAMIC_CHUNK_SIZE` | <Undocumented /> | Bun runtime | Turns off dynamic chunk size tuning for native readable streams in the Bun runtime. |
 | `BUN_FEATURE_FLAG_VERBOSE_WARNINGS` | <Undocumented /> | Bun runtime | Shows the Bun runtime warning for unsupported `async_hooks` use. |
 | `BUN_INSPECT_NOTIFY` | <Undocumented /> | Bun runtime | Tells the Bun inspector where to report that it listens. |
+| `BUN_OPTIONS` | <Undocumented /> | Bun runtime | Adds Bun command-line options to every Bun process, including the child processes of MCP servers. A Probes run with a bad value made a plugin MCP server fail with `CONNECTION_CLOSED` and removed its tool. |
 | `BUN_PORT` | <Undocumented /> | Bun runtime | Gives a fallback port for the Bun dev server when the default port is busy. |
 | `CHOKIDAR_INTERVAL` | <Undocumented /> | chokidar | Sets the poll interval for the bundled `chokidar` file watcher when polling is on. |
 | `CHOKIDAR_USEPOLLING` | <Undocumented /> | chokidar | Forces the bundled `chokidar` file watcher to use polling or not. |

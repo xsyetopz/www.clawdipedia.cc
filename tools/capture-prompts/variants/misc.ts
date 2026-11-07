@@ -16,11 +16,13 @@ export const MISC_VARIANTS: Variant[] = [
     model: LEAN_MODEL,
     tool: riskyTool,
     args: autoArgs(),
+    // 2.1.319 asks the server-side check first and sends no local classifier request.
+    env: { CLAUDE_CODE_AUTO_MODE_SERVER: "0" },
     pick: "marker",
     marker: "probe-classifier-call",
     baseline: "default-lean",
     summary: "The request that the auto mode classifier sends for a tool call.",
-    how: "Run `claude --permission-mode auto`. The classifier runs when the model calls a tool that no rule already allows.",
+    how: "Run `claude --permission-mode auto` with `CLAUDE_CODE_AUTO_MODE_SERVER=0`. The classifier runs when the model calls a tool that no rule already allows.",
     select: "`--permission-mode auto`",
     status: "Documented",
     can: ovCan(
@@ -41,6 +43,8 @@ export const MISC_VARIANTS: Variant[] = [
       hard_deny: ["PROBE-AUTO-HARD", "$defaults"],
       environment: ["PROBE-AUTO-ENV", "$defaults"],
     }),
+    // 2.1.319 asks the server-side check first and sends no local classifier request.
+    env: { CLAUDE_CODE_AUTO_MODE_SERVER: "0" },
     pick: "marker",
     marker: "probe-classifier-call",
     baseline: "auto-classifier",

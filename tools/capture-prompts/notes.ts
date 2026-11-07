@@ -197,14 +197,14 @@ export const NOTES: Record<string, string[]> = {
     "Your `prompt` goes in the user message. The model defaults to Haiku, and you can set `model` in the hook.",
   ],
   "auto-classifier": [
-    "In auto mode, the program sends each tool call to a classifier. The first stage is a separate request with the system text `You are a security monitor for autonomous AI coding agents.` and no tools.",
-    "The main request also carries a `safeguards` field with a `classifier_context` object. It holds the rules and the `auto_mode` lists. This field is not part of the text shown here.",
-    "The stub gave no classifier result, so the program fell back to local classifier requests. It sent the same request more than once.",
+    "By default, the server checks each tool call: the main request carries a `safeguards` field with a `classifier_context` object that holds the rules and the `auto_mode` lists. See [The Server-Side Check](../../configure/permissions/auto-mode.md#the-server-side-check).",
+    "With `CLAUDE_CODE_AUTO_MODE_SERVER=0`, as in this capture, the program sends no `safeguards` field and asks its own classifier. The first stage is a separate request with the system text `You are a security monitor for autonomous AI coding agents.` and no tools.",
+    "The stub gave no classifier result that the program could parse, so it sent the same request more than once.",
   ],
   "auto-classifier-custom": [
     "Your `allow`, `hard_deny`, and `environment` entries are added at the place of `$defaults`. Entries before `$defaults` come first.",
     "`soft_deny` had no `$defaults`, so the built-in soft block rules were replaced. The diff shows them removed.",
-    "The same `auto_mode` object is also in `safeguards.classifier_context` of the main request.",
+    "Without `CLAUDE_CODE_AUTO_MODE_SERVER=0`, the same `auto_mode` object goes in `safeguards.classifier_context` of the main request.",
   ],
   "compact-custom": [
     "Text after `/compact` goes under `Additional Instructions:` at the end. Text that a `PreCompact` hook prints on stdout goes in the same place, after your text.",

@@ -18,7 +18,7 @@ Items that the docs name but describe wrongly are in [Behaves Differently From t
 | Group | Count |
 | --- | --- |
 | [Settings Keys](#settings-keys) | 25 |
-| [Environment Variables](#environment-variables) | 963 |
+| [Environment Variables](#environment-variables) | 1078 |
 | [CLI Flags and Subcommands](#cli-flags-and-subcommands) | 52 |
 | [Permissions](#permissions) | 121 |
 | [Hooks](#hooks) | 15 |
@@ -31,10 +31,10 @@ Items that the docs name but describe wrongly are in [Behaves Differently From t
 | [API Endpoints and Betas](#api-endpoints-and-betas) | 98 |
 | [System Prompt](#system-prompt) | 34 |
 | [Transcript and Sessions](#transcript-and-sessions) | 13 |
-| [Headless Protocol](#headless-protocol) | 192 |
+| [Headless Protocol](#headless-protocol) | 193 |
 | [Mod API](#mod-api) | 0 |
 | [Other](#other) | 106 |
-| Total | 1706 |
+| Total | 1822 |
 
 ## Settings Keys
 
@@ -74,24 +74,24 @@ Count: 25.
 
 There are too many to list one by one. Each page below holds a table, and every undocumented variable in it has the Undocumented badge. The pages sort variables by what they do.
 
-Count: 963.
+Count: 1078.
 
 | Page | Undocumented Rows |
 | --- | --- |
-| [Agents and Teams](../configure/env-vars/agents-and-teams.md) | 53 |
+| [Agents and Teams](../configure/env-vars/agents-and-teams.md) | 55 |
 | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) | 50 |
-| [Bundled Libraries](../configure/env-vars/bundled-libraries.md) | 122 |
-| [Cloud Providers](../configure/env-vars/cloud-providers.md) | 30 |
-| [Context and Compaction](../configure/env-vars/context-and-compaction.md) | 30 |
-| [Features and Toggles](../configure/env-vars/features-and-toggles.md) | 55 |
+| [Bundled Libraries](../configure/env-vars/bundled-libraries.md) | 123 |
+| [Cloud Providers](../configure/env-vars/cloud-providers.md) | 31 |
+| [Context and Compaction](../configure/env-vars/context-and-compaction.md) | 31 |
+| [Features and Toggles](../configure/env-vars/features-and-toggles.md) | 58 |
 | [Models and Effort](../configure/env-vars/models-and-effort.md) | 33 |
-| [Network and Proxy](../configure/env-vars/network-and-proxy.md) | 30 |
-| [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) | 59 |
-| [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) | 144 |
-| [SDK and Automation](../configure/env-vars/sdk-and-automation.md) | 26 |
-| [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) | 49 |
-| [System and Third-Party](../configure/env-vars/system-and-third-party.md) | 104 |
-| [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) | 79 |
+| [Network and Proxy](../configure/env-vars/network-and-proxy.md) | 31 |
+| [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) | 62 |
+| [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) | 147 |
+| [SDK and Automation](../configure/env-vars/sdk-and-automation.md) | 28 |
+| [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) | 52 |
+| [System and Third-Party](../configure/env-vars/system-and-third-party.md) | 195 |
+| [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) | 83 |
 | [Tools and Bash](../configure/env-vars/tools-and-bash.md) | 55 |
 | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) | 44 |
 
@@ -358,7 +358,7 @@ Count: 30.
 | `SuggestConnectors` | [Gated and Surface-Specific Tools](tools/gated-and-other.md#gated-tools) (Gated Tools) |
 | `ListConnectors` | [Gated and Surface-Specific Tools](tools/gated-and-other.md#gated-tools) (Gated Tools) |
 | `propose_skills` | [Gated and Surface-Specific Tools](tools/gated-and-other.md#gated-tools) (Gated Tools) |
-| `ListPlugins`, `ListSkills`, `SearchPlugins`, `SearchSkills`, `RefreshMcpTools`, `enable__mcp__claude-in-chrome`, `enable__mcp__remote-devices__Claude_Browser` | [Gated and Surface-Specific Tools](tools/gated-and-other.md#plugin-skill-and-browser-tools) (Plugin, Skill, and Browser Tools) |
+| `ListPlugins`, `ListSkills`, `SearchPlugins`, `SearchSkills`, `RefreshMcpTools`, `enable__mcp__claude-in-chrome`, `enable__mcp__remote-devices__Claude_Browser`, `enable__mcp__remote-devices__computer`, `request_computer` | [Gated and Surface-Specific Tools](tools/gated-and-other.md#plugin-skill-and-browser-tools) (Plugin, Skill, and Browser Tools) |
 | `StructuredOutput` | [Gated and Surface-Specific Tools](tools/gated-and-other.md#tools-without-an-inventory-row) (Tools without an Inventory Row) |
 | Query `select:A,B` | [Tools](tools/index.md#toolsearch) (ToolSearch) |
 | Query keywords | [Tools](tools/index.md#toolsearch) (ToolSearch) |
@@ -544,12 +544,12 @@ Count: 13.
 
 Message types of `--output-format stream-json` and of the control protocol. Nearly every row is undocumented, so this page links to the two pages with counts.
 
-Count: 192.
+Count: 193.
 
 | Page | Undocumented Rows |
 | --- | --- |
 | [Control Protocol](../extend/headless/control-protocol.md) | 95 |
-| [Stream JSON Messages](../extend/headless/stream-json.md) | 97 |
+| [Stream JSON Messages](../extend/headless/stream-json.md) | 98 |
 
 ## Mod API
 
@@ -723,29 +723,30 @@ These items exist in the official docs, but the program works in another way. Co
 
 ## In the Program
 
-The program of `2.1.316` holds 9194 items in 17 kinds, counted from `schemas/surface.json`.
+The program of `2.1.319` holds 9673 items in 18 kinds, counted from `schemas/surface.json`.
 [Surface Coverage](surface-coverage.md) lists each item with its page.
 
 | Kind | Items | Not on a Page Yet |
 | --- | --- | --- |
-| [Betas](surface-coverage.md#betas) | 50 | 0 |
-| [API Endpoints](surface-coverage.md#api-endpoints) | 445 | 0 |
-| [Environment Variables](surface-coverage.md#environment-variables) | 1909 | 0 |
-| [Error Texts](surface-coverage.md#error-texts) | 4093 | 0 |
+| [Betas](surface-coverage.md#betas) | 54 | 0 |
+| [API Endpoints](surface-coverage.md#api-endpoints) | 451 | 0 |
+| [Environment Variables](surface-coverage.md#environment-variables) | 1974 | 0 |
+| [Error Texts](surface-coverage.md#error-texts) | 4134 | 0 |
 | [Files](surface-coverage.md#files) | 78 | 0 |
-| [CLI Flags](surface-coverage.md#cli-flags) | 306 | 0 |
-| [Gates](surface-coverage.md#gates) | 1237 | 0 |
+| [CLI Flags](surface-coverage.md#cli-flags) | 310 | 0 |
+| [Gates](surface-coverage.md#gates) | 1389 | 0 |
 | [Hook Events](surface-coverage.md#hook-events) | 33 | 0 |
-| [Keybindings](surface-coverage.md#keybindings) | 205 | 0 |
-| [Mod API](surface-coverage.md#mod-api) | 233 | 0 |
+| [Keybindings](surface-coverage.md#keybindings) | 207 | 0 |
+| [Mod API](surface-coverage.md#mod-api) | 237 | 0 |
 | [Models](surface-coverage.md#models) | 74 | 0 |
 | [OpenTelemetry Events](surface-coverage.md#opentelemetry-events) | 28 | 0 |
 | [Permission Rules](surface-coverage.md#permission-rules) | 6 | 0 |
-| [Settings](surface-coverage.md#settings) | 195 | 0 |
+| [Settings](surface-coverage.md#settings) | 197 | 0 |
+| [Nested Setting Keys](surface-coverage.md#nested-setting-keys) | 196 | 0 |
 | [Slash Commands](surface-coverage.md#slash-commands) | 140 | 0 |
 | [Subcommands](surface-coverage.md#subcommands) | 71 | 0 |
-| [Tools](surface-coverage.md#tools) | 91 | 0 |
-| All kinds | 9194 | 0 |
+| [Tools](surface-coverage.md#tools) | 94 | 0 |
+| All kinds | 9673 | 0 |
 
 ## Related Pages
 

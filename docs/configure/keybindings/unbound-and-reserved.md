@@ -14,6 +14,7 @@ You can bind them in `keybindings.json`.
 | `app:toggleReplTab` | <Documented /> |
 | `app:toggleDiffNoiseFilter` | <Documented /> |
 | `app:toggleDiffPreSession` | <Documented /> |
+| `app:closeSession` | <Gated /> |
 | `app:toggleTerminal` | <Undocumented /> |
 | `app:redraw` | <Documented /> |
 | `strip:jump1` | <Undocumented /> |
@@ -48,6 +49,20 @@ You can bind them in `keybindings.json`.
 | `permission:toggleDebug` | <Documented /> |
 | `selection:clear` | <Documented /> |
 | `agents:setGroup` | <Undocumented /> |
+
+### `app:closeSession`
+
+New in `2.1.319`. Context: `SessionTabs`. Default key: none.
+The footer reads the key you bind for `app:closeSession` in `SessionTabs` and shows a close confirmation when you press it twice.
+The context is active only when the program draws session tabs. A plain terminal session does not.
+
+Hypothesis: `keybindings.json` accepts the binding but a plain terminal session never makes it active.
+Prediction: no validation warning, and no keybinding line after two presses of `ctrl+g`.
+Command: `bun run release:probe:pty -- --to 2.1.319 --only cli319.keybinding`.
+Result: with `{"context": "SessionTabs", "bindings": {"ctrl+g": "app:closeSession"}}` the debug log shows "Loaded 1 user bindings" and "0 warnings", and the log holds no keybinding line after the two presses of `ctrl+g`.
+Two controls warn: an unknown action ("Unknown action ... in SessionTabs - this binding is ignored") and an unknown context ("Unknown context ... Valid contexts: ...").
+Cases: `pty.cli319.keybinding.session-tabs`, `pty.cli319.keybinding.control-bad-action`, `pty.cli319.keybinding.control-bad-context`.
+Read site: the footer code calls `getDisplayText("app:closeSession", "SessionTabs")`, and the context list in the keybinding schema names `SessionTabs`.
 
 ## Keys You Cannot Rebind
 

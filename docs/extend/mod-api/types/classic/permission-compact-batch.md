@@ -112,7 +112,7 @@ Combines `PostModelSwitchHookInput`, `BaseHookInput`.
 | `requested_model` | <Documented /> | What was asked for (alias such as "opus", a full id, or null for "default") | Type: `string \| null`. |
 | `source` | <Documented /> | Why the model changed: `command` (/model or the /config Model row), `picker`, `sdk` (headless `set_model`), `auto` (fallback or other change), or `resume`. | Type: `'command' \| 'picker' \| 'sdk' \| 'auto' \| 'resume'`. |
 | `context_tokens` | <Documented /> | Prompt tokens that the next request re-sends: the input, cache read, cache creation, and output tokens of the last main-thread response. 0 before the first response. | Type: `number`. |
-| `prompt_cache_warm` | <Documented /> | Whether the prompt cache of the current model is likely still warm (a switch then forfeits it) | Type: `boolean`. |
+| `prompt_cache_warm` | <Documented /> | Whether the prompt cache of the current model is still warm, by the program's estimate (a switch then forfeits it) | Type: `boolean`. |
 | `cache_ttl` | <Documented /> | How long the prompt cache lasts: `5m` or `1h`. | Type: `'5m' \| '1h'`. |
 | `estimated_cache_write_usd` | <Documented /> | Estimated cost of re-caching context_tokens on to_model at its cache-write rate. It uses the managed modelPricing when set, otherwise list price. It excludes the response | Type: `number`. |
 | `pricing` | <Documented /> | configured: priced at the managed modelPricing setting. catalog: list price. default: to_model unknown, so the default tier was assumed | Type: `'configured' \| 'catalog' \| 'default'`. |
@@ -186,7 +186,7 @@ Combines `PreModelSwitchHookInput`, `BaseHookInput`.
 | `requested_model` | <Documented /> | What was asked for (alias such as "opus", a full id, or null for "default") | Type: `string \| null`. |
 | `source` | <Documented /> | command: /model &lt;name>, the /config Model row, or enabling fast mode when that promotes the model. picker: an interactive model picker. sdk: headless set_model (SDK, Remote Control, IDE) | Type: `'command' \| 'picker' \| 'sdk'`. |
 | `context_tokens` | <Documented /> | Prompt tokens that the next request re-sends: the input, cache read, cache creation, and output tokens of the last main-thread response. 0 before the first response. | Type: `number`. |
-| `prompt_cache_warm` | <Documented /> | Whether the prompt cache of the current model is likely still warm (a switch then forfeits it) | Type: `boolean`. |
+| `prompt_cache_warm` | <Documented /> | Whether the prompt cache of the current model is still warm, by the program's estimate (a switch then forfeits it) | Type: `boolean`. |
 | `cache_ttl` | <Documented /> | How long the prompt cache lasts: `5m` or `1h`. | Type: `'5m' \| '1h'`. |
 | `estimated_cache_write_usd` | <Documented /> | Estimated cost of re-caching context_tokens on to_model at its cache-write rate. It uses the managed modelPricing when set, otherwise list price. It excludes the response | Type: `number`. |
 | `pricing` | <Documented /> | configured: priced at the managed modelPricing setting. catalog: list price. default: to_model unknown, so the default tier was assumed | Type: `'configured' \| 'catalog' \| 'default'`. |

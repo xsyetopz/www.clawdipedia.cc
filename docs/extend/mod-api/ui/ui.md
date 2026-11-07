@@ -22,6 +22,24 @@ on("session.start", async ($, e, next) => {
 });
 ```
 
+A theme example, from the run of case `print.cli319.theme.engine`:
+
+```javascript
+on("session.start", async ($, e, next) => {
+  const r = await $.theme.set({
+    backdrop: {
+      id: "lagoon",
+      glass: { blur: 14, opacity: 0.55 },
+      colorScheme: "dark",
+    },
+  });
+  $.ui.log(JSON.stringify(r), { to: "debug" });
+  return next(e);
+});
+```
+
+In a `-p` run, with no app attached, the debug log shows `{"isDrawn":false,"requestId":"backdrop","reason":"no attached desktop or mobile client says it draws backdrops (an app with the backdrop layer does, on its ui_attach)"}`.
+
 ## Members
 
 | Item | Status | What it does | How it works | Where it can be used |
@@ -39,6 +57,8 @@ on("session.start", async ($, e, next) => {
 | `$.ui.close` | <Documented /> | Closes one of the open panes. The call ignores an id that is not open. | `(pane: PaneCloseArgs) => Promise<void>`. A `ui.close` hook can keep it open, except on an unload. | Run time. |
 | `$.ui.panes` | <Documented /> | Lists this plugin's own open panes: id, title, and whether each is shown, holds the keyboard, and is placed. | `() => Promise<readonly UiPane[]>`. In open order, placed ones first. Other plugins' panes are not listed. | Run time. |
 | `$.ui.place` | <Undocumented /> | Places one row at the end of the transcript. It scrolls with the conversation, and a `ui.render` hook draws it as the component `Placed`. Display only: the model and the transcript file never read it. | `(args: UiPlaceArgs) => Promise<UiPlaceResult>`. The `id` names the row among this plugin's rows. A second call with the same `id` answers the row that stands. A plugin holds at most 500 placed rows. Resolves `{ isPlaced: false, reason }` with no conversation. New in `2.1.314`. | Run time. |
+| `$.theme.set` | <Undocumented /> | Sets the one theme of the session from an object of named attributes. The only attribute is `backdrop`, drawn behind the conversation by a `ui.render` hook for the component `Backdrop`, on the desktop and mobile apps only. The latest set wins, whichever plugin set it. Display only: `--resume` brings none back, and a plugin that unloads takes its own with it. | `(attributes: { backdrop: { id: string, glass?: { blur?: number, tint?: string, opacity?: number } \| false, colorScheme?: 'light' \| 'dark' } }) => Promise<ThemeResult>`. `id` is 1 to 64 letters, digits, `_`, or `-`. `blur` is 0 to 64 CSS pixels (16 when left out). `opacity` is 0 to 1 (0.6 when left out). `tint` is a raw color: `#hex`, `rgb()`, `rgba()`, `hsl()`, or `hsla()`. Resolves `{ isDrawn: true, requestId: "backdrop" }`, or `{ isDrawn: false, requestId, reason }` when no surface draws backdrops. With no desktop or mobile client attached, the run gave `isDrawn: false`, `requestId: "backdrop"`, and the reason "no attached desktop or mobile client says it draws backdrops (an app with the backdrop layer does, on its ui_attach)". It rejects with the host check text: `theme.set does not know the attribute "palette": this build takes backdrop`, `theme.set takes backdrop: { id, glass?, colorScheme? }; $.theme.clear() clears the theme`, `glass.blur is a number of CSS pixels, 0 to 64`, `colorScheme is light or dark`, and `id is 1 to 64 of letters, digits, _ or - (host check)`. A second identical call also resolves `isDrawn: false` with the same reason. New in `2.1.319`. Run on the 2.1.319 program in a `-p` run, with a mod that calls the function from `session.start`: case `print.cli319.theme.engine`. Read site: the function table of the hooks engine (`theme.set` with a `check` and a `run`). | Run time. |
+| `$.theme.clear` | <Undocumented /> | Clears the theme of the session, back to the own look of the app. It clears whatever theme stands, whichever plugin set it, so call it on a person's ask and not at `session.start` or on a reload. | `() => Promise<ThemeResult>`. Always resolves `{ isDrawn: false, reason }`. The reason is "the theme is cleared" when a theme stood, and "no theme stood, so nothing was cleared" when none did. In the run, `clear` after a `set` gave the first, and a second `clear` and a first `clear` gave the second. New in `2.1.319`. Run on the 2.1.319 program in a `-p` run, with a mod that calls the function from `session.start`: case `print.cli319.theme.engine`. Read site: the function table of the hooks engine (`theme.set` with a `check` and a `run`). | Run time. |
 | `$.ui.scroll` | <Documented /> | Scrolls something into view, like the DOM's `scrollIntoView`: a render instance by `requestId`, an element by `key`, or the edge of a site. | `(args: UiScrollArgs) => Promise<UiScrollResult>`. `to` says where, `in` says which site, `block` says where it lands. | Run time. |
 | `$.ui.focus` | <Documented /> | Moves the focus ring of one of this plugin's sites to an element it drew there, like the DOM's `element.focus()`. | `(args: UiFocusArgs) => Promise<UiFocusResult>`. Takes the site `requestId` and the element `key`. Resolves `{}` or `{ deny }`. | Run time. |
 | `$.ui.copy` | <Documented /> | Puts `text` on the clipboard of a surface the session draws on, and says whether it took. | `(args: UiCopyArgs) => Promise<UiCopyResult>`. Resolves `{ isCopied: true }` or `{ isCopied: false, reason }`. | Run time. |

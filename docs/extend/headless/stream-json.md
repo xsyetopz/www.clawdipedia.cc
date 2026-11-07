@@ -179,6 +179,24 @@ The schema marks the `system` and `result` fields as `@internal`, so they can ch
 
 Source: the program (`chunk-7ew55hkc.js:9127` for the cache fields, `chunk-2ht8z368.js:53937` where the two counts add up, `chunk-7ew55hkc.js:11632` and `chunk-2ht8z368.js:96563` for the `api_error` values, `chunk-7ew55hkc.js:13578` and `chunk-143kpxm1.js:895` for `requires_rewind_request_id`, `chunk-7ew55hkc.js:13704` for `background_color`).
 
+## Field New in `2.1.318`
+
+| Field | Status | Where | Type | What It Means |
+| --- | --- | --- | --- | --- |
+| `credential_expires_at` | <Undocumented /> | `result` line, and the `result` object of `--output-format json` | String, an ISO 8601 date | The end of the stored claude.ai sign-in: the end of its refresh token. The real end can fall up to 3 days earlier, so treat it as the latest day. The key is absent when the program has no such date. |
+
+Source: the program. The field is built in `chunk-gx7hnvf9.js` (function `$f72fc0`) from the stored `refreshTokenExpiresAt` and set on the result in `chunk-khgpwghf.js`. The `2.1.318` release notes name it: "Added the date a stored claude.ai sign-in ends to `claude auth status` (`loginExpiresAt`) and to `claude -p` JSON results (`credential_expires_at`)".
+
+**Runs:** `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only notes319.login-expiry` (cases `result-stream-json`, `result-json`, `result-json-no-date`).
+
+**FAFO:**
+
+- Hypothesis: a stored claude.ai login with a refresh end date puts `credential_expires_at` on the `result` line only, with that date as an ISO string.
+  Prediction: the `result` line has the key and equals the stored date. The `system` / `init` and `assistant` lines do not have it.
+  Command: case `result-stream-json` (stub API, fake `.credentials.json` with `refreshTokenExpiresAt` set to 2030-01-15T12:00:00Z, first-party base URL assumed).
+  Result: the `result` line had the key and it equalled the stored date. The `system` / `init`, `assistant`, and `rate_limit_event` lines did not have it. Case `result-json` gave the same on the `result` object.
+- The key is missing, not `null`, when the access token ends more than 3 days after the refresh token (case `result-json-no-date`: the `result` object had no key). In `claude auth status`, the same login and four more (no stored refresh date, a Bedrock provider, a stored date before 2025-01-01, and a stored date over 10 years ahead) print `loginExpiresAt: null`. See [`claude auth status` Sign-In Date](../../configure/cli/subcommands.md#claude-auth-status-sign-in-date).
+
 ## Example
 
 ```json skip-lint title="Lines from a short run (shortened)"

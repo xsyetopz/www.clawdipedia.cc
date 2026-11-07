@@ -12,7 +12,7 @@ Run `bun run verify` before you open a pull request. It runs the type check, the
 
 1. Write only what a reader can use, change, or turn on and off.
 2. Rewrite sources in your own words. Do not copy.
-3. Never invent a fact. If you cannot check it, leave it out or put it in a Not Verified box.
+3. Never invent a fact. Check it with a run or the program text. If no check can settle it, leave it out.
 4. Use only the emojis that this guide allows (see Table Marks). Use badges for provenance.
 5. Do not use Anthropic or Claude logos, or any wording that says the site is official.
 
@@ -203,8 +203,8 @@ Each has one meaning. A provenance badge stays the primary status.
 Use `:::tip`, `:::note`, `:::warning`, and `:::danger`. Add a title in brackets if it helps.
 
 ```markdown
-:::note[Not Verified]
-We have not checked this on the newest release.
+:::tip[Use a Temp Folder]
+Run a probe with a temp `HOME` and `CLAUDE_CONFIG_DIR`.
 :::
 ```
 
@@ -262,7 +262,7 @@ Every fact needs a source.
 - The program: write "Source: the program" and name the string, key, or type in inline code.
 - Probe results: link to the Probes page.
 
-Put anything you could not check in a `:::note[Not Verified]` box, or leave it out.
+Leave out anything you could not check.
 
 ## Checks
 

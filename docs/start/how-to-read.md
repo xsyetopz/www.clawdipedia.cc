@@ -81,7 +81,7 @@ Every fact has a source.
 - The program: the page says "Source: the program" and names the string, key, or type in inline code.
 - Probes: some facts come from running the program against a local stub. No model call leaves the machine.
 
-If a fact is not checked, the page puts it in a "Not Verified" box or leaves it out.
+A fact that no check settles is left out.
 
 ## One Release Only
 

@@ -39,7 +39,7 @@ The type file is the full list of fields for this release. Build on the fields i
 
 - Search `schemas/claude-code.d.ts` for the type, call, or event name, and read its doc comment.
 - An AI agent with the docs plugin can call `get_schema` with `name: "types"` and `property` set to a type (`ToolCheckResult`), a member (`ToolCheckResult.plugin`), a call (`$.tool.check`), or an event (`tool.check`).
-- When a name is missing from the file, report it as unconfirmed for this release and look up the closest name the file has.
+- When a name is missing from the file, this release does not have it. Look up the closest name the file has.
 
 ## Related Pages
 

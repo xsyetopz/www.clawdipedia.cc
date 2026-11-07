@@ -8,7 +8,7 @@ These variables matter when Claude Code runs away from your terminal.
 They cover cloud sessions, the remote bridge, the desktop app, the Chrome extension, Cowork, and Slack.
 The host sets most of them, and Claude Code reads them. Set one yourself only when you run your own host.
 
-This page lists 186 variables. The host program that starts Claude Code sets many of them. You can change them only if you control that process. They live in the environment of the Claude Code process.
+This page lists 189 variables. The host program that starts Claude Code sets many of them. You can change them only if you control that process. They live in the environment of the Claude Code process.
 
 ## Example
 
@@ -145,11 +145,13 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_RUNNER_CORRELATION_ID` | <Undocumented /> | Gives the spawn-runner hook the correlation ID of the work order. | Text. Taken from the `correlation_id` claim | Self-hosted runner, orchestrator mode |
 | `CLAUDE_RUNNER_DEBUG_LOG_PATH` | <Undocumented /> | Gives the post-session hook the path of the debug log of the session. The help text of the runner says to copy the log from the hook if you need it locally. | A path | Self-hosted runner post-session hook |
 | `CLAUDE_RUNNER_DISABLE_AWAITING_ACTION_OVERRIDE` | <Undocumented /> | Stops the runner from reporting `awaiting-action` when the child waits at a prompt after a turn ends. | - | - |
+| `CLAUDE_RUNNER_DISABLE_RENEWAL_WARNING` | <Undocumented /> | Stops the runner from posting a warning to the session when the server refuses again and again to renew the access of the session to the model. Without it, the runner posts one warning after 5 refusals in a row. The warning says that messages fail until a renewal works. | Set it to `1`. Off by default | Self-hosted runner. Run `runner.renewal-unset` (1 warning event) and `runner.renewal-disabled` (0 warning events); in both runs the stub refused the session config fetch 5 times with HTTP 400. The program reads it in `chunk-twbnp9ps.js@144036` |
 | `CLAUDE_RUNNER_DISABLE_TURN_BEGAN_BEFORE_INIT` | <Undocumented /> | Stops the runner from treating a turn that starts before the child finishes starting up as activity. `--startup-timeout-min` then keeps counting from the start. | On or off, off by default. Since `2.1.309` | Self-hosted runner |
 | `CLAUDE_RUNNER_EXIT_REASON` | <Undocumented /> | Gives the post-session hook the reason that the session ended. | Text | Self-hosted runner post-session hook |
 | `CLAUDE_RUNNER_FETCH_DEPTH` | <Documented /> | Sets the `--depth` of the runner git fetch. | - | - |
 | `CLAUDE_RUNNER_FETCH_SERVER_PROGRESS_CAP_MS` | <Documented /> | Sets a cap in ms for the server-progress wait of the runner git fetch. | A number of milliseconds | - |
 | `CLAUDE_RUNNER_GIT_MOUNT_URL` | <Undocumented /> | Gives a checkout hook the address of the Anthropic-managed git mount of the session. It is not set for a session without one. | A URL | Self-hosted runner checkout hook |
+| `CLAUDE_RUNNER_OFFERS_NEW_MACHINE` | <Undocumented /> | The runner sets this in the environment of each session process. A session process uses it to learn if its host can move the session to a new machine. The self-hosted runner always sets it to an empty text, so a value in its own environment has no effect. | Empty text in the self-hosted runner. `1` is set only by a host that can move a session | Self-hosted runner. Run `runner.base` and `runner.offers-1`; the program sets it in `chunk-twbnp9ps.js@165077` and passes no move callback in `chunk-twbnp9ps.js@338942` |
 | `CLAUDE_RUNNER_ORDER_ID` | <Undocumented /> | Gives the spawn-runner hook the ID of the work order. | Text. Taken from the `jti` claim | Self-hosted runner, orchestrator mode |
 | `CLAUDE_RUNNER_ORDER_SERVER_TIME` | <Undocumented /> | Gives the spawn-runner hook the server time of the work order. | Text. Taken from the `server_time` claim | Self-hosted runner, orchestrator mode |
 | `CLAUDE_RUNNER_POOL_ID` | <Undocumented /> | Gives the spawn-runner hook the pool ID of the work order. | Text. Taken from the `pool_id` claim | Self-hosted runner, orchestrator mode |
@@ -161,6 +163,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_RUNNER_SESSION_ID` | <Documented /> | Gives lifecycle hooks the session ID. The code-sign helper reads it when `CLAUDE_CODE_REMOTE_SESSION_ID` is unset. | Text | - |
 | `CLAUDE_RUNNER_SESSION_UUID` | <Undocumented /> | Gives hooks the session ID in a second form, next to `CLAUDE_RUNNER_SESSION_ID`. | Text | Self-hosted runner hooks |
 | `CLAUDE_RUNNER_SKIP_GIT_VERIFY` | <Documented /> | Skips the check for a `.git` directory after the checkout hook ends. For non-git source control. | - | - |
+| `CLAUDE_RUNNER_SPAWN_REASON` | <Undocumented /> | Gives the spawn-runner hook the reason why Anthropic sent the spawn request. | Text from the `spawn_reason` field of the spawn hint, for example `runner_lost`. The program accepts lowercase letters and underscores here and leaves the variable unset for a value with an uppercase letter, a dot, a hyphen, a colon, a space, or a `!`, or for a text of 200 letters. It is unset when the request has no reason. A value in the environment of the orchestrator is replaced | Self-hosted runner, orchestrator mode. The [changelog](https://code.claude.com/docs/en/changelog) names this in `2.1.318`. Run `orchestrator.reason-set`, `reason-none`, `reason-bad`, `reason-token`, `reason-long`, `reason-upper-colon`; read site `chunk-eaw5jwdc.js@9090` |
 | `CLAUDE_RUNNER_TRUST_CANONICAL_PREWARM` | <Undocumented /> | Tells the runner to trust the prewarmed canonical checkout and skip its validation. | - | - |
 | `CLAUDE_RUNNER_USE_GIT_PROXY` | <Documented /> | Turns on the Anthropic git proxy for the self-hosted runner. | - | - |
 | `CLAUDE_RUNNER_WORK_ORDER_FILE` | <Undocumented /> | Gives the spawn-runner hook the path of the file that holds the work order. | A path | Self-hosted runner, orchestrator mode |

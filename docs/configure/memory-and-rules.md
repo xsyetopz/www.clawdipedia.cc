@@ -14,7 +14,7 @@ Write `CLAUDE.md` in your project, or run `/memory`. Auto memory lives in `~/.cl
 
 ```text title="CLAUDE.md"
 # Project Notes
-Use bun, not npm.
+Use bun: the lockfile is `bun.lock`.
 Run `bun test` before you say a task is done.
 @docs/architecture.md
 ```
@@ -24,7 +24,7 @@ Run `bun test` before you say a task is done.
 paths:
   - "src/api/**/*.ts"
 ---
-Every handler returns a typed error object. Never throw a plain string.
+Every handler returns a typed error object, so callers can branch on its `code` field.
 ```
 
 The first file loads in every session and imports `docs/architecture.md`. The second loads only after Claude touches a file that matches `src/api/**/*.ts`.
@@ -77,7 +77,7 @@ Auto memory is a folder of notes that Claude writes for itself. `MEMORY.md` is t
 | `/memory` | <Documented /> | Lists memory files, toggles auto memory, opens the folder | The editor opens a file | Interactive |
 | `autoDreamEnabled` | <Undocumented /> | Background memory consolidation (auto-dream) | It overrides the server default | Settings |
 | `/pause-memory` | <Undocumented /> | Pauses memory for the session | Only the user can turn it back on. The text is `memory access blocked by /pause-memory` | Interactive |
-| `CLAUDE_CODE_REMOTE_MEMORY_DIR`, `CLAUDE_CODE_POST_TURN_MEMORY`, `CLAUDE_COWORK_MEMORY_*`, `CLAUDE_MEMORY_STORES` | <Undocumented /> | Cloud, Cowork, and post-turn memory | `CLAUDE_CODE_REMOTE_MEMORY_DIR`: in a remote session (`CLAUDE_CODE_REMOTE=1`), auto memory is off unless you set this variable. It sets the memory folder. The value is a full path outside Claude temp folders. `CLAUDE_MEMORY_STORES` is a JSON list of `{"name","path"}` objects. The built-in memory section stays. Claude Code names each store as a `memory/team/<dir name>` folder marked "(shared with all users of this project)". Claude Code also adds a 4 KB limit note per memory file. A list of strings, `[]`, or text that is not JSON changes nothing. Set to `1`, it drops the `MEMORY.md` pointer rule and adds the 4 KB note. No `memory_*` tool was added. `CLAUDE_CODE_POST_TURN_MEMORY` needs `CLAUDE_CODE_POST_TURN_MEMORY_CONFIG` (JSON with a required `instruction`). Without a valid config, the pass is off. The pass also needs a cloud memory server. In a local run, the debug log says `skipping (mcp) - CCR memory server not mounted`. For this reason its live effect is not verified. The `CLAUDE_COWORK_MEMORY_*` variables take text. `_PATH_OVERRIDE` names the memory folder. It is an absolute path, and it lets auto memory stay on in a remote session. `_GUIDELINES` replaces the built-in memory instructions. `_EXTRA_GUIDELINES` adds to them. `_INDEX_CONTENT` replaces the `MEMORY.md` text. An empty string turns the index read off. We ran the four `CLAUDE_COWORK_MEMORY_*` variables in `-p` | Env |
+| `CLAUDE_CODE_REMOTE_MEMORY_DIR`, `CLAUDE_CODE_POST_TURN_MEMORY`, `CLAUDE_COWORK_MEMORY_*`, `CLAUDE_MEMORY_STORES` | <Undocumented /> | Cloud, Cowork, and post-turn memory | `CLAUDE_CODE_REMOTE_MEMORY_DIR`: in a remote session (`CLAUDE_CODE_REMOTE=1`), auto memory is off unless you set this variable. It sets the memory folder. The value is a full path outside Claude temp folders. `CLAUDE_MEMORY_STORES` is a JSON list of `{"name","path"}` objects. The built-in memory section stays. Claude Code names each store as a `memory/team/<dir name>` folder marked "(shared with all users of this project)". Claude Code also adds a 4 KB limit note per memory file. A list of strings, `[]`, or text that is not JSON changes nothing. Set to `1`, it drops the `MEMORY.md` pointer rule and adds the 4 KB note. No `memory_*` tool was added. `CLAUDE_CODE_POST_TURN_MEMORY` needs `CLAUDE_CODE_POST_TURN_MEMORY_CONFIG` (JSON with a required `instruction`). Without a valid config, the pass is off. The pass also needs the cloud memory server: an MCP server named `memory` that the cloud session adds (scope `dynamic`), with a URL on the session ingress host that the program read at startup and the path `/v2/ccr-sessions/<id>/memory/mcp` (the program, `chunk-1wx99z2y.js@5906` and `chunk-72bvnq63.js@35527`). The ingress host is `SESSION_INGRESS_URL`, or `ANTHROPIC_BASE_URL` when that is not set, so a local server at the base URL passes the check. In a local run with a valid config and no such server, the debug log says `skipping (mcp) - CCR memory server not mounted` and the pass does not run (case `print.configmem.cowork-memory.post-turn`). With `--mcp-config` that adds a `memory` server at `<base URL origin>/v2/ccr-sessions/<id>/memory/mcp`, the log says `[extractMemories] starting (mcp, idle_flush)`, the program sends the `instruction` text to the model, and it calls the server 5 times (case `print.configmem.cowork-memory.post-turn-mounted`). The `CLAUDE_COWORK_MEMORY_*` variables take text. `_PATH_OVERRIDE` names the memory folder. It is an absolute path, and it lets auto memory stay on in a remote session. `_GUIDELINES` replaces the built-in memory instructions. `_EXTRA_GUIDELINES` adds to them. `_INDEX_CONTENT` replaces the `MEMORY.md` text. An empty string turns the index read off. We ran the four `CLAUDE_COWORK_MEMORY_*` variables in `-p` | Env |
 | Subagent `memory` field | <Documented /> | A separate memory directory for a subagent | See [Subagents](../extend/subagents/frontmatter.md) | Agent frontmatter |
 
 ## Limits
@@ -135,7 +135,7 @@ Source: the program (read), and a probe of the interactive screen (2.1.305, loca
 - The total limit is the larger of 120,000 characters and the one-file limit. Only files under the one-file limit add to the total.
 - `User`, `Project`, `Local`, and `Managed` instruction files count, including the files they import. `MEMORY.md` does not count.
 - The messages are `Large <file> will impact performance (<n> chars > <limit>)` for one file, and `Instruction files will impact performance: <n> files, <total> chars in total > <limit>` for the total.
-- Since `2.1.309`, a nested `CLAUDE.md` over the size limit loads only its start, so reading files under it no longer makes the session compact again and again ([v2.1.309 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.309)). Which limit applies is unconfirmed.
+- Since `2.1.309`, a nested `CLAUDE.md` over the size limit loads only its start, so reading files under it no longer makes the session compact again and again ([v2.1.309 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.309)). The one-file limit applies: the program keeps the first 150,000 characters on `claude-opus-5-5` (1M window, 3 per token) and the first 40,000 on `claude-sonnet-4-5` (200k window). It then adds `> Only the start of this file is shown. For the rest, call Read on <path> with offset=1 and a limit.` (cases `print.misc.nested-claude-md-over-limit.*`, a 200,022-character `sub/CLAUDE.md` loaded by a Read under `sub/`).
 
 :::
 
