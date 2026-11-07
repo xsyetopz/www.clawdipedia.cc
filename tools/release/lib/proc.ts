@@ -80,14 +80,27 @@ export const runChild = async (
     cwd: string;
     env: Record<string, string>;
     stdin?: string;
+    stdinOpenMs?: number; // close stdin this long after writing it, so the child does not see the input end at once
     timeoutMs?: number;
     beforeReap?: () => void; // after the child exited, before its process group is signalled
   },
 ): Promise<ChildResult> => {
+  const text = o.stdin;
+  const ms = o.stdinOpenMs;
   const p = Bun.spawn(argv, {
     cwd: o.cwd,
     env: o.env, // exactly this; Bun does not merge process.env when env is given
-    stdin: o.stdin !== undefined ? new Blob([o.stdin]) : "ignore",
+    stdin:
+      text === undefined
+        ? "ignore"
+        : ms === undefined
+          ? new Blob([text])
+          : new ReadableStream({
+              start(c) {
+                c.enqueue(new TextEncoder().encode(text));
+                setTimeout(() => c.close(), ms);
+              },
+            }),
     stdout: "pipe",
     stderr: "pipe",
     detached: true,

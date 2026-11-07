@@ -54,6 +54,7 @@ export type LiveEnvOpts = {
   baseUrl?: string; // dry runs only: the local stub
   deadProxy?: boolean; // dry runs only: nothing can leave the machine
   allowNonessential?: boolean; // the /usage cases need the endpoint call that this variable blocks
+  featureGates?: boolean; // keep telemetry and nonessential traffic on so the program fetches its feature values (gate probes)
   extra?: Record<string, string>; // variable under test
   token?: string; // default liveToken()
 };
@@ -66,12 +67,12 @@ export const liveEnv = (o: LiveEnvOpts): Record<string, string> => {
     HOME: o.home,
     TMPDIR: join(o.home, "tmp"),
     CLAUDE_CONFIG_DIR: o.configDir,
-    DISABLE_TELEMETRY: "1",
+    ...(o.featureGates ? {} : { DISABLE_TELEMETRY: "1" }),
     GIT_CONFIG_GLOBAL: join(o.home, ".gitconfig"),
     GIT_CONFIG_NOSYSTEM: "1", // git's osxkeychain helper must not run
     [TOKEN_VAR]: token,
   };
-  if (!o.allowNonessential)
+  if (!o.allowNonessential && !o.featureGates)
     env["CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC"] = "1";
   if (o.baseUrl) env["ANTHROPIC_BASE_URL"] = o.baseUrl;
   if (o.deadProxy) {

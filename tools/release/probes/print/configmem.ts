@@ -158,6 +158,55 @@ const cowCase = ([name, env]: (typeof COW)[number]): CaseDef => ({
     }),
 });
 
+// The stub answers as the cloud memory server, at the origin that ANTHROPIC_BASE_URL names (the ingress host fallback).
+const postTurnMounted: CaseDef = {
+  name: "cowork-memory.post-turn-mounted",
+  run: (ctx) =>
+    withRun(
+      ctx,
+      {
+        env: {
+          CLAUDE_CODE_POST_TURN_MEMORY: "1",
+          CLAUDE_CODE_POST_TURN_MEMORY_CONFIG: json({
+            instruction: "ZZPOSTTURNZZ",
+          }),
+        },
+        args: [
+          "--debug-file",
+          "{CFG}/d.log",
+          "--mcp-config",
+          json({
+            mcpServers: { memory: { type: "http", url: "{MEMORY_MCP}" } },
+          }),
+        ],
+      },
+      (r) => {
+        const d = readCfg(r, "d.log");
+        return {
+          from: r,
+          data: {
+            precondition: msgs(r).length > 0 && d.length > 0,
+            memoryMcpRequests: r.reqs.filter((q) =>
+              q.path.endsWith("/memory/mcp"),
+            ).length,
+            memoryToolsListed: toolNames(msgs(r)[0] as never).filter((n) =>
+              n.startsWith("mcp__memory__"),
+            ),
+            notMounted: d.includes("CCR memory server not mounted"),
+            instructionSent: msgs(r).some((q) =>
+              json(q.body).includes("ZZPOSTTURNZZ"),
+            ),
+            messageRequests: msgs(r).length,
+            extractLines: d
+              .split("\n")
+              .filter((l) => l.includes("[extractMemories]"))
+              .map((l) => l.replace(/^\S+\s/, "").slice(0, 200)),
+          },
+        };
+      },
+    ),
+};
+
 const FORMS: [string, string][] = [
   ["object-name-path", json([{ name: "s1", path: "{HOME}/ZZMEMDIR2" }])],
   ["string-array", json(["s1", "s2"])],
@@ -214,6 +263,7 @@ export const configmem: PrintGroup = {
       outputStyle,
       ...MEM_ENVS.map(memCase),
       ...COW.map(cowCase),
+      postTurnMounted,
       ...FORMS.map(formCase),
       modeCase("rw"),
       modeCase("ro"),

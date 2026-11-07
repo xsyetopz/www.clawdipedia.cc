@@ -36,15 +36,17 @@ ANSI = re.compile(
     r"\x1b\[[0-?]*[ -/]*[@-~]|\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)|\x1b[PX^_][^\x1b]*(?:\x1b\\)?|\x1b[=>()][A-Z0-9]?|\x1b[78MDEHc]"
 )
 CSI_FWD = re.compile(r"\x1b\[(\d*)C")
+# Stands in for one cursor-forward step until the line is built: a terminal moves over the cells and leaves them as they are.
+FWD = "\x1c"
 # The full-screen UI moves down with CSI n B and jumps with CSI H / CSI r;c H: each becomes line breaks so rows stay apart.
 CSI_DOWN = re.compile(r"\x1b\[(\d*)B")
 CSI_HOME = re.compile(r"\x1b\[\d*(?:;\d*)?[Hf]")
 
 
 def render(data: bytes) -> str:
-    """Readable text: cursor-forward becomes spaces, cursor-down and home become line breaks, CR overwrites the line, other escapes are dropped, spaces collapse."""
+    """Readable text: cursor-forward moves over the line (spaces past its end), cursor-down and home become line breaks, CR overwrites the line, other escapes are dropped, spaces collapse."""
     s = data.decode("utf8", "replace")
-    s = CSI_FWD.sub(lambda m: " " * int(m.group(1) or 1), s)
+    s = CSI_FWD.sub(lambda m: FWD * int(m.group(1) or 1), s)
     s = CSI_DOWN.sub(lambda m: "\n" * min(int(m.group(1) or 1), 3), s)
     s = CSI_HOME.sub("\n", s)
     s = ANSI.sub("", s)
@@ -59,6 +61,10 @@ def render(data: bytes) -> str:
             col = 0
         elif ch == "\b":
             col = max(0, col - 1)
+        elif ch == FWD:
+            if col >= len(cur):
+                cur.append(" ")
+            col += 1
         elif ch < " " and ch != "\t":
             continue
         else:

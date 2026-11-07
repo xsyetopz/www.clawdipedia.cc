@@ -1,5 +1,6 @@
 // Print probe groups owned by chunk B2. index.ts runs these before groups/b.ts.
 import { controlGroup } from "../control.ts";
+import { env319a } from "../env319a.ts";
 import { ptuGroup } from "../hooks/posttooluse.ts";
 import { scriptGroup } from "../hooks/script.ts";
 import { perfettoGroup } from "../perfetto.ts";
@@ -16,5 +17,6 @@ export const groupsA: PrintGroup[] = [
   scriptGroup,
   perfettoGroup,
   transcriptsGroup,
+  env319a,
   sweepGroup,
 ];

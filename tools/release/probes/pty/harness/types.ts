@@ -22,6 +22,8 @@ export type PtyCase = {
   mode?: string; // --permission-mode, default "default"
   model?: string; // default claude-opus-5-5
   env?: Record<string, string>;
+  allowOverride?: string[]; // fixed env keys that `env` may replace
+  auth?: "none"; // no API key in the child env
   schedule: PtyStep[];
   secs: number;
   rows?: number;

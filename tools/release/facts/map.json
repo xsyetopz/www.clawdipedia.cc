@@ -115,6 +115,30 @@
     "kind": "command",
     "probes": []
   },
+  "docs/configure/cli/subcommands.md#gateway-pooled-budget-sign-in-notice-and-blocked-message-options:8116d3a1": {
+    "kind": "behaviour",
+    "probes": [
+      "print.api319.gateway.blocked-message-set",
+      "print.api319.gateway.blocked-message-unset",
+      "print.api319.gateway.example-all-four",
+      "print.api319.gateway.login-notice-no-oidc",
+      "print.api319.gateway.login-notice-served",
+      "print.api319.gateway.login-notice-too-long",
+      "print.api319.gateway.login-notice-unset",
+      "print.api319.gateway.pooled-order-duplicate",
+      "print.api319.gateway.pooled-order-ignored",
+      "print.api319.gateway.pooled-order-with-rule",
+      "print.api319.gateway.pooled-priority-list-empty",
+      "print.api319.gateway.pooled-rule-unknown"
+    ]
+  },
+  "docs/configure/permissions/rules.md#the-permissions-keys:93b8d954": {
+    "kind": "behaviour",
+    "probes": [
+      "print.api319.tool.exit-plan.direct-deny",
+      "print.api319.tool.exit-plan.teammate-deny"
+    ]
+  },
   "docs/configure/permissions/rules.md#related-top-level-keys:749df5b1": {
     "kind": "external",
     "probes": [],
@@ -553,9 +577,20 @@
       "pty.statusline.subagent-tick"
     ]
   },
-  "docs/extend/hooks/session-events.md#notification:1b152f75": {
+  "docs/extend/hooks/session-events.md#notification:8b61c366": {
     "kind": "behaviour",
-    "probes": ["pty.notifications.agent-needs-input"]
+    "probes": [
+      "pty.notifications.agent-needs-input",
+      "pty.notifications.agent-needs-input-refused"
+    ]
+  },
+  "docs/configure/permissions/auto-mode.md#classifier-billing-notice:916114ef": {
+    "kind": "behaviour",
+    "probes": [
+      "pty.notifications.agent-needs-input",
+      "pty.notifications.agent-needs-input-refused",
+      "pty.notifications.auto-mode-local"
+    ]
   },
   "docs/extend/hooks/session-events.md#notification:2d26f7b1": {
     "kind": "behaviour",
@@ -927,11 +962,6 @@
     "probes": [],
     "note": "cites the official release notes"
   },
-  "docs/extend/subagents/runtime.md#built-in-agents:adb4feaf": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the official release notes"
-  },
   "docs/how-it-works/agent-loop.md#how-a-turn-ends:8ecf02bb": {
     "kind": "external",
     "probes": [],
@@ -1164,11 +1194,6 @@
     "kind": "external",
     "probes": [],
     "note": "cites the v2.1.310 release notes; retry read in the program (2.1.310 chunk-31gxg38t.js:2834376)"
-  },
-  "docs/reference/tools/gated-and-other.md#gated-tools:5910d9d5": {
-    "kind": "manual",
-    "probes": [],
-    "note": "propose_skills enable check read in the 2.1.310 program; needs a remote or diskless host launch"
   },
   "docs/reference/tools/shell-and-web.md#how-it-works:2982c539": {
     "kind": "behaviour",
@@ -1407,10 +1432,10 @@
     "probes": [],
     "note": "the four conditions of the prompt-note flag read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:60684), against 2.1.311 (chunk-xnjmsx7r.js:57759, :57763, :59815, :60285)"
   },
-  "docs/configure/settings/auth.md#claude-apps-gateway-server-key:cbc3b683": {
+  "docs/configure/settings/auth.md#claude-apps-gateway-server-key:f496974f": {
     "kind": "manual",
     "probes": [],
-    "note": "oidc.user_id_claim and its sub fallback read in the cleaned 2.1.312 code (chunk-gs1pnh66.js:57717, :61506, :61545)"
+    "note": "oidc.user_id_claim as an optional non-empty string, its sub fallback, and its missing-claim error, read in 2.1.319 (chunk-85d4q736.js@1404154, @1522930, @1523795)"
   },
   "docs/extend/hooks/configuration.md#timeouts:8c674c0f": {
     "kind": "manual",
@@ -1530,7 +1555,7 @@
   "docs/configure/permissions/auto-mode.md#classifier-billing-notice:9fe44c8d": {
     "kind": "manual",
     "probes": [],
-    "note": "desktop form of the billing notice: in 2.1.316 chunk-qd604jgh.js, no match in 2.1.314 (cc-inspect code search)"
+    "note": "desktop form of the billing notice: in 2.1.316 chunk-qd604jgh.js and 2.1.319 chunk-24jdhyyr.js@1361138, no match in 2.1.314 (cc-inspect code search)"
   },
   "docs/extend/headless/control-protocol.md#subtypes:1086c6bf": {
     "kind": "schema",
@@ -1562,9 +1587,193 @@
     "probes": [],
     "note": "shell snapshot changes in 2.1.316 chunk-qd604jgh.js"
   },
-  "docs/start/what-changed.md#version-21316:49661234": {
-    "kind": "manual",
+  "docs/configure/cli/subcommands.md#gateway-role-and-retention-options:b502f73e": {
+    "kind": "behaviour",
+    "probes": [
+      "print.api319.gateway.assume-role-anthropic",
+      "print.api319.gateway.assume-role-bad-arn",
+      "print.api319.gateway.assume-role-bad-external-id",
+      "print.api319.gateway.assume-role-bad-session-name",
+      "print.api319.gateway.assume-role-bearer-token",
+      "print.api319.gateway.assume-role-mixed-session",
+      "print.api319.gateway.assume-role-none",
+      "print.api319.gateway.assume-role-session-email",
+      "print.api319.gateway.assume-role-session-sub",
+      "print.api319.gateway.assume-role-sts",
+      "print.api319.gateway.assume-role-sts-denied",
+      "print.api319.gateway.assume-role-sts-down",
+      "print.api319.gateway.identity-retention-30",
+      "print.api319.gateway.identity-retention-90",
+      "print.api319.gateway.identity-retention-default",
+      "print.api319.gateway.identity-retention-text",
+      "print.api319.gateway.identity-retention-zero"
+    ]
+  },
+  "docs/configure/cli/subcommands.md#claude-auth-status-sign-in-date:3ba274f7": {
+    "kind": "behaviour",
+    "probes": [
+      "print.notes319.login-expiry.access-outlives-refresh",
+      "print.notes319.login-expiry.before-2025",
+      "print.notes319.login-expiry.no-login-status",
+      "print.notes319.login-expiry.no-refresh-date",
+      "print.notes319.login-expiry.over-ten-years",
+      "print.notes319.login-expiry.past",
+      "print.notes319.login-expiry.result-json",
+      "print.notes319.login-expiry.result-json-no-date",
+      "print.notes319.login-expiry.result-stream-json",
+      "print.notes319.login-expiry.soon-print",
+      "print.notes319.login-expiry.status-json",
+      "print.notes319.login-expiry.status-text",
+      "print.notes319.login-expiry.third-party-provider"
+    ]
+  },
+  "docs/configure/cli/subcommands.md#claude-auth-status-sign-in-date:b9ca7cfa": {
+    "kind": "behaviour",
+    "probes": [
+      "print.notes319.login-expiry.access-outlives-refresh",
+      "print.notes319.login-expiry.before-2025",
+      "print.notes319.login-expiry.no-login-status",
+      "print.notes319.login-expiry.no-refresh-date",
+      "print.notes319.login-expiry.over-ten-years",
+      "print.notes319.login-expiry.past",
+      "print.notes319.login-expiry.result-json",
+      "print.notes319.login-expiry.result-json-no-date",
+      "print.notes319.login-expiry.result-stream-json",
+      "print.notes319.login-expiry.soon-print",
+      "print.notes319.login-expiry.status-json",
+      "print.notes319.login-expiry.status-text",
+      "print.notes319.login-expiry.third-party-provider"
+    ]
+  },
+  "docs/configure/env-vars/network-and-proxy.md#node_extra_ca_certs-file-faults:a39a0ee9": {
+    "kind": "behaviour",
+    "probes": [
+      "print.cacerts319.extra-ca-tls.damaged-first",
+      "print.cacerts319.extra-ca-tls.not-pem-first",
+      "print.cacerts319.extra-ca-tls.valid",
+      "print.cacerts319.extra-ca.damaged-first",
+      "print.cacerts319.extra-ca.damaged-last",
+      "print.cacerts319.extra-ca.damaged-only",
+      "print.cacerts319.extra-ca.empty",
+      "print.cacerts319.extra-ca.missing",
+      "print.cacerts319.extra-ca.not-pem",
+      "print.cacerts319.extra-ca.valid"
+    ]
+  },
+  "docs/configure/env-vars/network-and-proxy.md#node_extra_ca_certs-file-faults:2e8e56cb": {
+    "kind": "behaviour",
+    "probes": [
+      "print.cacerts319.extra-ca-tls.damaged-first",
+      "print.cacerts319.extra-ca-tls.not-pem-first",
+      "print.cacerts319.extra-ca-tls.valid",
+      "print.cacerts319.extra-ca.damaged-first",
+      "print.cacerts319.extra-ca.damaged-last",
+      "print.cacerts319.extra-ca.damaged-only",
+      "print.cacerts319.extra-ca.empty",
+      "print.cacerts319.extra-ca.missing",
+      "print.cacerts319.extra-ca.not-pem",
+      "print.cacerts319.extra-ca.valid"
+    ]
+  },
+  "docs/extend/headless/stream-json.md#field-new-in-21318:e8b3cb72": {
+    "kind": "behaviour",
+    "probes": [
+      "print.notes319.login-expiry.result-json",
+      "print.notes319.login-expiry.result-json-no-date",
+      "print.notes319.login-expiry.result-stream-json"
+    ]
+  },
+  "docs/extend/headless/stream-json.md#field-new-in-21318:d7b5eda8": {
+    "kind": "behaviour",
+    "probes": [
+      "print.notes319.login-expiry.result-json",
+      "print.notes319.login-expiry.result-json-no-date",
+      "print.notes319.login-expiry.result-stream-json"
+    ]
+  },
+  "docs/reference/opentelemetry.md#account-and-provider-attributes:19e479e0": {
+    "kind": "behaviour",
+    "probes": [
+      "print.notes319.otel-attrs.api-key",
+      "print.notes319.otel-attrs.bedrock",
+      "print.notes319.otel-attrs.bedrock-custom-url",
+      "print.notes319.otel-attrs.default-api-url",
+      "print.notes319.otel-attrs.enterprise-usage-based",
+      "print.notes319.otel-attrs.free-plan",
+      "print.notes319.otel-attrs.max-plan",
+      "print.notes319.otel-attrs.team-premium"
+    ]
+  },
+  "docs/reference/opentelemetry.md#account-and-provider-attributes:f60ab677": {
+    "kind": "behaviour",
+    "probes": [
+      "print.notes319.otel-attrs.api-key",
+      "print.notes319.otel-attrs.bedrock",
+      "print.notes319.otel-attrs.bedrock-custom-url",
+      "print.notes319.otel-attrs.default-api-url",
+      "print.notes319.otel-attrs.enterprise-usage-based",
+      "print.notes319.otel-attrs.free-plan",
+      "print.notes319.otel-attrs.max-plan",
+      "print.notes319.otel-attrs.team-premium"
+    ]
+  },
+  "docs/reference/probes.md#release-probes-for-21319:aac8b9d3": {
+    "kind": "static",
     "probes": [],
-    "note": "not-regular-file refusal new in 2.1.316 chunk-j4564a1j.js; prompt-free path in both versions"
+    "note": "table of the release probe groups; it changes when a group is added"
+  },
+  "docs/extend/subagents/runtime.md#built-in-agents:27411cf3": {
+    "kind": "external",
+    "probes": [],
+    "note": "cites the official release notes"
+  },
+  "docs/configure/cli/subcommands.md#ultrareview-eval-flags:f63ce40e": {
+    "kind": "flag",
+    "probes": [
+      "print.cli319.ultrareview-max-cost",
+      "print.cli319.ultrareview-list",
+      "print.cli319.ultrareview-output"
+    ]
+  },
+  "docs/configure/keybindings/unbound-and-reserved.md#appclosesession:e564c8ee": {
+    "kind": "behaviour",
+    "probes": ["pty.cli319.keybinding.session-tabs"]
+  },
+  "docs/extend/mod-api/ui/ui-events.md#events-raised-by-ui-calls:153928ad": {
+    "kind": "behaviour",
+    "probes": ["print.cli319.theme.engine"]
+  },
+  "docs/extend/mod-api/ui/ui-events.md#events-raised-by-ui-calls:5d1ef87c": {
+    "kind": "behaviour",
+    "probes": ["print.cli319.theme.engine"]
+  },
+  "docs/extend/mod-api/ui/ui.md#members:eea22d9a": {
+    "kind": "behaviour",
+    "probes": ["print.cli319.theme.engine"]
+  },
+  "docs/extend/mod-api/ui/ui.md#members:d66be794": {
+    "kind": "behaviour",
+    "probes": ["print.cli319.theme.engine"]
+  },
+  "docs/reference/tools/agents-and-tasks.md#enable-tests:c94626a9": {
+    "kind": "behaviour",
+    "probes": [
+      "print.api319.tool.exit-plan.direct",
+      "print.api319.tool.exit-plan.direct-deny",
+      "print.api319.tool.exit-plan.direct-no-prompt-tool",
+      "print.api319.tool.exit-plan.teams-env-deny",
+      "print.api319.tool.exit-plan.teammate",
+      "print.api319.tool.exit-plan.teammate-deny",
+      "print.api319.tool.exit-plan.teammate-no-prompt-tool"
+    ]
+  },
+  "docs/reference/tools/gated-and-other.md#gated-tools:b75030cc": {
+    "kind": "behaviour",
+    "probes": [
+      "print.api319.tool.propose-skills.cowork",
+      "print.api319.tool.propose-skills.trigger",
+      "print.api319.tool.propose-skills.trigger-chat",
+      "print.api319.tool.propose-skills.chat-only"
+    ]
   }
 }

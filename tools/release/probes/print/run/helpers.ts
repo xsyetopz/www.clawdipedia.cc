@@ -1,6 +1,6 @@
 // B3-specific helpers on top of run.ts (runCase, oneCase, baseResult, msgs, events, dispose).
 
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import type { CaseResult, Data } from "../../../lib/results.ts";
 import type { LoggedRequest } from "../../../lib/stub.ts";
 import {
@@ -85,6 +85,10 @@ export const fixed = (r: Run, s: string): string =>
     .split(r.sb.root.replace(/[^A-Za-z0-9]/g, "-"))
     .join("<SB>");
 
+/** Is the program under test older than `v`? A case may accept a missing feature as a result only there, so a failure on a version that has the feature stays invalid. */
+export const olderThan = (ctx: PrintCtx, v: string): boolean =>
+  ctx.version.localeCompare(v, undefined, { numeric: true }) < 0;
+
 // ---- case definitions ----------------------------------------------------------------------
 
 export type Out = {
@@ -95,6 +99,8 @@ export type Out = {
 };
 export type CaseDef = {
   name: string; // the case id is print.<group>.<name>
+  /** A file the case needs. When it is missing the case does not run: its result has `data.skipped` (the reason) and no `precondition: false`. */
+  requires?: { path: string; reason: string };
   run: (ctx: PrintCtx) => Promise<Out>;
 };
 
@@ -109,6 +115,12 @@ export const runCases = async (
     const id = `print.${group}.${d.name}`;
     out.push(
       ...(await oneCase(ctx, id, async () => {
+        if (d.requires && !existsSync(d.requires.path))
+          return baseResult(ctx, id, null, {
+            data: {
+              skipped: `${d.requires.reason} (missing ${d.requires.path})`,
+            },
+          });
         const o = await d.run(ctx);
         return baseResult(ctx, id, o.from ?? null, {
           data: o.data,

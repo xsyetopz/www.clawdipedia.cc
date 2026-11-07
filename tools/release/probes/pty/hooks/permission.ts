@@ -19,7 +19,6 @@ import {
   TOUCH,
   tolerant,
   toolResultText,
-  WAIT,
   waitAny,
 } from "../harness.ts";
 
@@ -111,12 +110,8 @@ export const permissionRequest = (c: PrCase): PtyCase => ({
   },
 });
 
-const classifierRequests = (x: PtyRun): number =>
-  x.messages.filter((q) =>
-    /security monitor for autonomous AI coding agents/.test(
-      JSON.stringify(obj(q.body)["system"] ?? ""),
-    ),
-  ).length;
+const serverChecks = (x: PtyRun): number =>
+  x.messages.filter((q) => obj(q.body)["safeguards"] !== undefined).length;
 
 export const deniedCase = (retry: boolean): PtyCase => ({
   id: `hooks.permissiondenied.${retry ? "retry" : "auto"}`,
@@ -125,7 +120,10 @@ export const deniedCase = (retry: boolean): PtyCase => ({
     ...hooks(["PermissionDenied", "PermissionRequest", "Notification"]),
     skipAutoPermissionPrompt: true,
   },
-  stub: TOUCH("ran-auto", "curl -s http://127.0.0.1:9/x"),
+  stub: {
+    ...TOUCH("ran-auto", "curl -s http://127.0.0.1:9/x"),
+    safeguard: "flagged",
+  },
   ...(retry
     ? {
         ctl: {
@@ -140,17 +138,11 @@ export const deniedCase = (retry: boolean): PtyCase => ({
         },
       }
     : {}),
-  schedule: [
-    READY,
-    ASK(),
-    { ...WAIT("Enter to continue", "ack-classifier-notice"), send: "\r" },
-    { ...WAIT("Shift+Tab to change mode", "ack-auto-notice"), send: "\r" },
-    ESC(22),
-  ],
-  secs: 24,
+  schedule: [READY, ASK(), ESC(12)],
+  secs: 14,
   facts: ["hooks.permissiondenied"],
   notes:
-    "Auto mode (opt-in notice skipped, classifier billing notice acknowledged with Enter); the stub answers the classifier with plain text it cannot parse, so the call is blocked after retries. No classifier verdict exists, so retry:true should change nothing.",
+    "Auto mode (opt-in notice skipped). The stub passes a server-side check verdict of flagged for the curl call, so the program denies it.",
   data: (x) => {
     const d = x.hook("PermissionDenied");
     const first = d[0]?.json ?? {};
@@ -167,9 +159,12 @@ export const deniedCase = (retry: boolean): PtyCase => ({
             .map((n) => String(n.json["notification_type"] ?? "")),
         ),
       ].sort(),
-      retryTextSeen: /may retry this tool call/.test(toolResultText(x)),
-      classifierRequested: classifierRequests(x) > 0,
+      retryTextSeen: x.messages.some((q) =>
+        JSON.stringify(q.body).includes("may retry this tool call"),
+      ),
+      toolResult: toolResultText(x).slice(0, 300),
+      serverCheckRequested: serverChecks(x) > 0,
     };
   },
-  samples: (x) => ({ classifierRequests: String(classifierRequests(x)) }),
+  samples: (x) => ({ serverChecks: String(serverChecks(x)) }),
 });

@@ -57,6 +57,7 @@ export type EnvOpts = {
   mitm?: Mitm;
   tty?: boolean;
   allowNonessential?: boolean;
+  featureGates?: boolean;
   /** Dry: route the program at the local stub (print cases). */
   caseId?: string;
 };
@@ -72,6 +73,7 @@ export const envFor = (
     token: x.token,
     ...(o.tty ? { tty: true } : {}),
     ...(o.allowNonessential ? { allowNonessential: true } : {}),
+    ...(o.featureGates ? { featureGates: true } : {}),
     ...(o.mitm
       ? { mitm: { proxyUrl: o.mitm.proxyUrl, caFile: o.mitm.caFile } }
       : {}),
@@ -113,6 +115,8 @@ export const runLivePty = async (
     secs: number;
     mitm?: Mitm;
     allowNonessential?: boolean;
+    featureGates?: boolean;
+    args?: string[];
   },
 ): Promise<PtyResult> => {
   const out = join(sb.root, "pty", "RAW");
@@ -121,6 +125,7 @@ export const runLivePty = async (
     cwd: sb.proj,
     env: envFor(x, sb, { tty: true, ...o }),
     bin: x.bin,
+    ...(o.args ? { args: o.args } : {}),
     schedule: [
       ...o.schedule,
       { t: o.secs, send: "/exit\r", label: "exit" },

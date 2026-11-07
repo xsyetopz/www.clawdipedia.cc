@@ -115,8 +115,7 @@ const runOnce = async (ctx: PtyCtx, c: PtyCase): Promise<CaseResult[]> => {
         : (JSON.parse(subst(JSON.stringify(x), sb as Sandbox)) as T);
     const base = stub.register(caseKey, {
       log,
-      ...(c.stub?.text !== undefined ? { text: c.stub.text } : {}),
-      ...(c.stub?.tool !== undefined ? { tool: c.stub.tool } : {}),
+      ...c.stub,
       ...(c.stub?.toolInput !== undefined
         ? { toolInput: sub(c.stub.toolInput) }
         : {}),
@@ -131,6 +130,8 @@ const runOnce = async (ctx: PtyCtx, c: PtyCase): Promise<CaseResult[]> => {
       baseUrl: base,
       extra,
       tty: true,
+      ...(c.allowOverride ? { allowOverride: c.allowOverride } : {}),
+      ...(c.auth ? { auth: c.auth } : {}),
     });
     const args = [
       "--permission-mode",

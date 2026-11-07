@@ -6,12 +6,12 @@ import { dirname, join } from "node:path";
 export const MANAGED_DIR = "/Library/Application Support/ClaudeCode";
 /** Marker file inside the managed folder. A folder without it is not ours and is never touched or probed. */
 export const MARKER = ".release-toolkit-probe";
-export const PHASES = ["baseline", "main", "true", "false"] as const;
+export const PHASES = ["baseline", "main", "true", "false", "owned"] as const;
 export type Phase = (typeof PHASES)[number];
 /** Root-owned file in the managed folder naming the installed variant; the tool polls it. */
 export const VARIANT_FILE = ".variant";
-/** Variants the script installs, in order. `main` has no classifyAllShell; `true`/`false` set it. */
-export const VARIANTS = ["main", "true", "false"] as const;
+/** Variants the script installs, in order. `main` has no classifyAllShell; `true`/`false` set it. `owned` is `main` in a folder that the sudo user owns. */
+export const VARIANTS = ["main", "true", "false", "owned"] as const;
 
 export const HERE = import.meta.dir;
 export const MCP_SERVER = join(HERE, "mcp", "server.js");

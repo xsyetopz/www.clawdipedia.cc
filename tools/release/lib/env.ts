@@ -29,7 +29,7 @@ export const SYSTEM_PATH =
 export const CREDENTIAL_NAME =
   /(^|_)(TOKEN|SECRET|PASSWORD|CREDENTIALS?|API_KEY)(_|$)/i;
 
-/** Names that match CREDENTIAL_NAME but are settings, not secrets (thresholds, TTLs, URLs, message codes). */
+/** Names that match CREDENTIAL_NAME but are settings, not secrets (thresholds, TTLs, URLs, message codes, file paths). */
 export const NON_SECRET_NAMES: ReadonlySet<string> = new Set([
   "CLAUDE_CODE_ENABLE_TOKEN_USAGE_ATTACHMENT",
   "CLAUDE_CODE_IDLE_TOKEN_THRESHOLD",
@@ -37,6 +37,23 @@ export const NON_SECRET_NAMES: ReadonlySet<string> = new Set([
   "CLAUDE_CODE_API_KEY_HELPER_TTL_MS",
   "API_KEY_URL",
   "NO_CREDENTIALS_FOUND",
+  // paths to credential files, read by the plugin eval probes
+  "ANSIBLE_VAULT_PASSWORD_FILE",
+  "HF_TOKEN_PATH",
+  "AWS_WEB_IDENTITY_TOKEN_FILE",
+  "CLAUDE_SESSION_INGRESS_TOKEN_FILE",
+  "AWS_CONTAINER_AUTHORIZATION_TOKEN_FILE",
+  "AZURE_FEDERATED_TOKEN_FILE",
+  "CONSUL_HTTP_TOKEN_FILE",
+  "ANTHROPIC_IDENTITY_TOKEN_FILE",
+  "CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE",
+  "CLOUDSDK_AUTH_ACCESS_TOKEN_FILE",
+  "CLOUDSDK_AUTH_AUTHORIZATION_TOKEN_FILE",
+  "AWS_SHARED_CREDENTIALS_FILE",
+  "GOOGLE_APPLICATION_CREDENTIALS",
+  "CREDENTIALS_DIRECTORY",
+  "SBT_CREDENTIALS",
+  "COURSIER_CREDENTIALS",
 ]);
 
 /** Throws on a credential-looking name (other than ANTHROPIC_API_KEY=FAKE_KEY) or a real-looking key value. */

@@ -23,6 +23,7 @@ The toolkit runs the program only against a local stub with a fake key. Results 
 ## Prerequisites
 
 - Bun `1.4.4`, `python3` 3.8 or newer, and `strings`. `openssl` is needed only for the live fault tests.
+- Docker, running, for `release:probe:print`. The `api319` gateway cases start a temporary `postgres:17-alpine` container and remove it after the case. The first run pulls the image, so it needs network access. Without Docker those cases stop with an error that names the install step. Install Docker from <https://docs.docker.com/get-docker/>.
 - The new binary is installed at `~/.local/share/claude/versions/<to>`. The user installs it. `release:check` fails without it.
 - The OLD binary is installed at `~/.local/share/claude/versions/<from>`. `release:diff` needs it. `release:check` only warns when it is missing.
 - For `compare`: toolkit results for `<from>` in `captures/<from>/` (`print/` and `pty/` from an earlier toolkit run). `release:diff` creates `captures/<from>/surface.json`, so the folder exists even with no results. Then every probed fact shows as `changed` (new case, no result for the old version). `compare` warns on stderr and at the top of `compare.md` when it finds none. If they are missing, run `bun run release:probe:print -- --to <from>` and `bun run release:probe:pty -- --to <from>` first, with the old binary still installed.
@@ -92,6 +93,7 @@ Steps 1 to 8 are unattended and safe in a fresh session. Steps 9 and 10 need the
 
 9. **Managed probes.** `bun run release:probe:managed`
    - The tool builds a stage in a temp dir and prints one `sudo /bin/bash <stage>/install.sh` command. Read the script first. The user runs it in a second terminal and types the password once. The tool then runs each phase and prints `sudo /bin/bash <stage>/cleanup.sh`. The user runs that too.
+   - The script installs the variants `main`, `true`, `false`, and `owned`. In `owned`, the user who ran sudo owns the folder, so the run shows the note that the program adds to managed files this account could have written.
    - Writes `captures/<to>/managed/<case>.json`.
    - User: yes (sudo and the password).
 

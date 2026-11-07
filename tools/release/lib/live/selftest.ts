@@ -12,6 +12,7 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { artifactsPanelShown } from "../../probes/live/artifacts.ts";
+import { headerOf, typeaheadLines } from "../../probes/live/cli319.ts";
 import { cacheMarker, planLive } from "../cache.ts";
 import { childEnv } from "../env.ts";
 import { startMitm, USAGE_PATH } from "../mitm.ts";
@@ -41,6 +42,18 @@ export const runLiveSelftest = async (
         !("ANTHROPIC_BASE_URL" in env) &&
         !("ANTHROPIC_API_KEY" in env) &&
         !("HTTPS_PROXY" in env),
+    );
+    const gates = liveEnv({
+      home: dir,
+      configDir: dir,
+      token: DRY_TOKEN,
+      featureGates: true,
+    });
+    step(
+      "liveEnv: featureGates keeps telemetry and nonessential traffic on",
+      env["DISABLE_TELEMETRY"] === "1" &&
+        !("DISABLE_TELEMETRY" in gates) &&
+        !("CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC" in gates),
     );
     step(
       "assertLiveEnv rejects other credentials and a different token",
@@ -81,6 +94,26 @@ export const runLiveSelftest = async (
       !artifactsPanelShown("> /artifacts\n") &&
         !artifactsPanelShown(unknownScreen) &&
         artifactsPanelShown("> /artifacts\n\n Artifacts\n No artifacts yet\n"),
+    );
+    const hdr = headerOf({
+      system: [
+        {
+          text: "x-anthropic-billing-header: cc_version=1.a; cc_entrypoint=cli; cc_project=claude_proj_01X; cc_project_src=user;\nrest",
+        },
+      ],
+    });
+    step(
+      "attribution probe: header keys and project fields, no header text kept",
+      hdr.keys.join() ===
+        "cc_version,cc_entrypoint,cc_project,cc_project_src" &&
+        hdr.project === "claude_proj_01X" &&
+        hdr.src === "user" &&
+        headerOf({ system: [{ text: "plain" }] }).keys.length === 0,
+    );
+    step(
+      "upgrade typeahead probe: the echoed input line is not a row",
+      typeaheadLines("> /upg\n  /upgrade  Upgrade your plan\n", "upgrade")
+        .length === 1 && typeaheadLines("> /upg\n", "upgrade").length === 0,
     );
 
     // pty with the live token: needs liveToken, the env file is gone after the run
@@ -155,6 +188,25 @@ export const runLiveSelftest = async (
       seen.join(" "),
     );
     step("mitm: throw-away CA deleted on stop", !existsSync(caFile));
+
+    // mitm hosts: a second host goes to the TLS stub under the same CA
+    const mh = await startMitm({
+      tunnelOthers: false,
+      hosts: ["sts.us-east-1.amazonaws.com"],
+      upstream: async () => new Response("sts", { status: 200 }),
+    });
+    const viaHost = await fetch("https://sts.us-east-1.amazonaws.com/", {
+      proxy: mh.proxyUrl,
+      tls: { ca: readFileSync(mh.caFile) },
+    } as RequestInit)
+      .then((r) => r.text())
+      .catch((e: Error) => `error:${e.message.slice(0, 60)}`);
+    mh.stop();
+    step(
+      "mitm: hosts option sends a second host to the TLS stub",
+      viaHost === "sts",
+      viaHost,
+    );
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

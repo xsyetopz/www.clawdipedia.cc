@@ -1,0 +1,6 @@
+{
+  "outputStyle": "managed-style",
+  "autoMode": {
+    "allow": ["PROBE-MANAGED-ALLOW", "$defaults"]
+  }
+}

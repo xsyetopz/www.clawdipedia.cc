@@ -2,17 +2,12 @@
 // (/api/oauth/usage) or a look at message bodies. Ports p305-lv/mitm2.ts and p305-live/proxy.ts.
 // The throw-away CA lives in a mkdtemp dir, reaches the child only through NODE_EXTRA_CA_CERTS, and is deleted on stop.
 // Never touches the system keychain or trust store. Logs method, path and status only: no headers, no bodies.
-import {
-  existsSync,
-  mkdtempSync,
-  realpathSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
+import { mkdtempSync, realpathSync, rmSync } from "node:fs";
 import http from "node:http";
 import net from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { makePki } from "../../../inspect/mcp/src/pki.ts";
 import { onCleanup } from "./cleanup.ts";
 
 export const USAGE_PATH = "/api/oauth/usage";
@@ -32,6 +27,8 @@ export type MitmOpts = {
   fault?: Fault; // for USAGE_PATH; default "pass"
   /** Where non-faulted requests go. Default: the real https://api.anthropic.com. Dry runs pass a local answer. */
   upstream?: (req: Request, url: URL) => Promise<Response>;
+  /** Hosts besides api.anthropic.com that the proxy sends to the TLS stub, with the same `upstream` answer. */
+  hosts?: string[];
   /** Tunnel CONNECT to hosts other than api.anthropic.com. Default true; dry runs say false (502). */
   tunnelOthers?: boolean;
   /** "Forward and log body": called with each parsed POST /v1/messages body (non-auth). Nothing else is read. */
@@ -44,96 +41,6 @@ export type Mitm = {
   log(): MitmLog[];
   connects(): string[];
   stop(): void;
-};
-
-const SSL_CANDIDATES = ["/opt/homebrew/bin/openssl", "/usr/bin/openssl"];
-const CA_CNF = `[req]
-distinguished_name=dn
-x509_extensions=v3
-prompt=no
-[dn]
-CN=release-toolkit throw-away CA
-[v3]
-basicConstraints=critical,CA:TRUE
-keyUsage=critical,keyCertSign,cRLSign
-`;
-const LEAF_CNF = `[req]
-distinguished_name=dn
-prompt=no
-[dn]
-CN=api.anthropic.com
-`;
-const LEAF_EXT = `basicConstraints=CA:FALSE
-keyUsage=critical,digitalSignature
-extendedKeyUsage=serverAuth
-subjectAltName=DNS:api.anthropic.com
-`;
-
-/** Make ca.pem + leaf.key + leaf.pem in `dir` with openssl (Homebrew OpenSSL, else the system LibreSSL). The CA key is deleted. */
-export const makePki = (
-  dir: string,
-): { ca: string; key: string; cert: string } => {
-  const ssl = SSL_CANDIDATES.find((p) => existsSync(p));
-  if (!ssl)
-    throw new Error("openssl not found (/opt/homebrew/bin or /usr/bin)");
-  const env = { PATH: "/usr/bin:/bin", HOME: dir };
-  const sh = (...args: string[]): void => {
-    const r = Bun.spawnSync([ssl, ...args], { cwd: dir, env });
-    if (r.exitCode !== 0)
-      throw new Error(
-        `openssl ${args[0]} failed: ${r.stderr.toString().slice(0, 300)}`,
-      );
-  };
-  const f = (n: string): string => join(dir, n);
-  writeFileSync(f("ca.cnf"), CA_CNF);
-  writeFileSync(f("leaf.cnf"), LEAF_CNF);
-  writeFileSync(f("leaf.ext"), LEAF_EXT);
-  const ec = ["-newkey", "ec", "-pkeyopt", "ec_paramgen_curve:prime256v1"];
-  sh(
-    "req",
-    "-x509",
-    ...ec,
-    "-nodes",
-    "-keyout",
-    f("ca.key"),
-    "-out",
-    f("ca.pem"),
-    "-days",
-    "2",
-    "-config",
-    f("ca.cnf"),
-  );
-  sh(
-    "req",
-    "-new",
-    ...ec,
-    "-nodes",
-    "-keyout",
-    f("leaf.key"),
-    "-out",
-    f("leaf.csr"),
-    "-config",
-    f("leaf.cnf"),
-  );
-  sh(
-    "x509",
-    "-req",
-    "-in",
-    f("leaf.csr"),
-    "-CA",
-    f("ca.pem"),
-    "-CAkey",
-    f("ca.key"),
-    "-CAcreateserial",
-    "-out",
-    f("leaf.pem"),
-    "-days",
-    "2",
-    "-extfile",
-    f("leaf.ext"),
-  );
-  rmSync(f("ca.key"), { force: true });
-  return { ca: f("ca.pem"), key: f("leaf.key"), cert: f("leaf.pem") };
 };
 
 const live = new Set<() => void>();
@@ -172,7 +79,7 @@ export const startMitm = async (opts: MitmOpts = {}): Promise<Mitm> => {
   };
   live.add(stop);
   try {
-    const pki = makePki(dir);
+    const pki = makePki(dir, opts.hosts);
     const upstream = opts.upstream ?? realUpstream;
     tls = Bun.serve({
       port: 0,
@@ -256,7 +163,8 @@ export const startMitm = async (opts: MitmOpts = {}): Promise<Mitm> => {
       const p = v6 ? (v6[2] ?? "443") : p0;
       connects.push(host);
       sock.on("error", () => sock.destroy());
-      const toTls = host === "api.anthropic.com";
+      const toTls =
+        host === "api.anthropic.com" || (opts.hosts ?? []).includes(host);
       if (!toTls && opts.tunnelOthers === false) {
         sock.end("HTTP/1.1 502 Bad Gateway\r\n\r\n");
         return;

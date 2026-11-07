@@ -196,6 +196,48 @@ const bigClaudeMd: CaseDef = {
     }),
 };
 
+// The nested file loads after a Read under its folder; a model with each window shows which limit cuts it.
+const nestedClaudeMd = (model: string): CaseDef => ({
+  name: `nested-claude-md-over-limit.${model}`,
+  run: (ctx) =>
+    withRun(
+      ctx,
+      {
+        model,
+        projFiles: {
+          "sub/CLAUDE.md": `NESTED-BEGIN${"y".repeat(200_000)}NESTED-END`,
+          "sub/f.txt": "x\n",
+        },
+        stub: {
+          seq: [{ name: "Read", input: { file_path: "{PROJ}/sub/f.txt" } }],
+        },
+      },
+      (r) => {
+        const body = JSON.stringify(msgs(r).at(-1)?.body ?? "");
+        const at = body.indexOf("NESTED-BEGIN");
+        return {
+          from: r,
+          data: {
+            precondition: msgs(r).length >= 2,
+            nestedLoaded: at >= 0,
+            endKept: body.includes("NESTED-END"),
+            charsKept:
+              at >= 0 ? (/^y*/.exec(body.slice(at + 12))?.[0].length ?? 0) : 0,
+          },
+          samples: {
+            after:
+              at >= 0
+                ? stripX(body.slice(at + 12).replace(/^y+/, "<ys>")).slice(
+                    0,
+                    300,
+                  )
+                : "",
+          },
+        };
+      },
+    ),
+});
+
 export const misc: PrintGroup = {
   id: "misc",
   title:
@@ -213,5 +255,7 @@ export const misc: PrintGroup = {
       contextCmd,
       managedPath,
       bigClaudeMd,
+      nestedClaudeMd("claude-opus-5-5"),
+      nestedClaudeMd("claude-sonnet-4-5"),
     ]),
 };

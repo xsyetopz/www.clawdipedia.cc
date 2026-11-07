@@ -1,6 +1,12 @@
 // Case runner shared by print probes: one program run against the local stub, in a temp sandbox, from a built env.
 // Port of p305-print/lib.ts runCase (placeholders, bad-auth check) on top of lib/*.
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+} from "node:fs";
 import { join } from "node:path";
 import { childEnv, PROMPT } from "../../lib/env.ts";
 import { allocPort } from "../../lib/ports.ts";
@@ -30,7 +36,7 @@ export type Seq = { name: string; input: unknown }[];
 export type Case = {
   prompt?: string; // anything but PROMPT needs promptReason
   promptReason?: string;
-  args?: string[]; // after the fixed -p/--output-format/--model part; {HOME} {CFG} {PROJ} allowed
+  args?: string[]; // after the fixed -p/--output-format/--model part; {HOME} {CFG} {PROJ} {MEMORY_MCP} {BASE} allowed
   env?: Record<string, string>; // variable under test
   cfgFiles?: Files;
   projFiles?: Files;
@@ -41,6 +47,7 @@ export type Case = {
   seq?: Seq;
   text?: string;
   stdin?: string;
+  stdinOpenMs?: number; // keep stdin open this long after `stdin` is written
   noPrompt?: boolean; // no -p prompt (stream-json input or control requests)
   argv?: string[]; // replaces the whole argument list after the binary
   timeoutMs?: number;
@@ -48,8 +55,22 @@ export type Case = {
   model?: string; // default claude-opus-5-5
   commit?: boolean; // git init plus one commit in the project dir
   setup?: (sb: Sandbox) => void; // after fixture files, before the run
+  auth?: "none"; // no API key in the child env
+  allowOverride?: string[]; // fixed env keys that `env` may replace
   fakeCredentials?: string[]; // credential-named env vars set to a sentinel (see lib/env.ts)
   afterExit?: (sb: Sandbox) => Record<string, unknown>; // read state after exit, before leftover children are killed
+  cwdSub?: string; // run in this subfolder of the project dir (created before the run)
+  safeguard?: "flagged" | "not_flagged"; // stub: server-side auto mode verdict for each tool call
+  refuseServerCheck?: boolean; // stub: HTTP 400 for the dangerous-tool-use beta
+  orchestrator?: {
+    secret: string;
+    hints: Record<string, unknown>[];
+    assignment?: string;
+    refuseRemote?: boolean;
+  }; // stub: self-hosted runner API with these spawn hints
+  tooLongOn?: number; // stub: the Nth messages request gets the prompt-is-too-long 400
+  gapMs?: number; // stub: wait between SSE events
+  deltas?: number; // stub: split a text block into this many deltas
 };
 
 export type Run = {
@@ -145,6 +166,12 @@ export const runCase = async (bin: string, c: Case): Promise<Run> => {
       ...(c.toolInput !== undefined ? { toolInput: sub(c.toolInput) } : {}),
       ...(c.seq ? { seq: sub(c.seq) } : {}),
       ...(c.respHeaders ? { respHeaders: c.respHeaders } : {}),
+      ...(c.safeguard ? { safeguard: c.safeguard } : {}),
+      ...(c.refuseServerCheck ? { refuseServerCheck: true } : {}),
+      ...(c.orchestrator ? { orchestrator: c.orchestrator } : {}),
+      ...(c.tooLongOn ? { tooLongOn: c.tooLongOn } : {}),
+      ...(c.gapMs ? { gapMs: c.gapMs } : {}),
+      ...(c.deltas ? { deltas: c.deltas } : {}),
     });
     const args = (
       c.argv ?? [
@@ -156,7 +183,13 @@ export const runCase = async (bin: string, c: Case): Promise<Run> => {
         c.model ?? "claude-opus-5-5",
         ...(c.args ?? []),
       ]
-    ).map((a) => subst(a, sb));
+    ).map((a) =>
+      subst(a, sb)
+        .split("{BASE}")
+        .join(baseUrl)
+        .split("{MEMORY_MCP}")
+        .join(`${new URL(baseUrl).origin}/v2/ccr-sessions/${id}/memory/mcp`),
+    );
     const extra = Object.fromEntries(
       Object.entries(c.env ?? {}).map(([k, v]) => [k, subst(v, sb)]),
     );
@@ -165,11 +198,14 @@ export const runCase = async (bin: string, c: Case): Promise<Run> => {
       configDir: sb.cfg,
       baseUrl,
       extra,
+      ...(c.auth ? { auth: c.auth } : {}),
+      ...(c.allowOverride ? { allowOverride: c.allowOverride } : {}),
       ...(c.fakeCredentials ? { fakeCredentials: c.fakeCredentials } : {}),
     });
     assertShimReady(childEnvVars);
+    if (c.cwdSub) mkdirSync(join(sb.proj, c.cwdSub), { recursive: true });
     const res = await runChild([bin, ...args], {
-      cwd: sb.proj,
+      cwd: c.cwdSub ? join(sb.proj, c.cwdSub) : sb.proj,
       env: childEnvVars,
       ...(c.afterExit
         ? {
@@ -179,6 +215,7 @@ export const runCase = async (bin: string, c: Case): Promise<Run> => {
           }
         : {}),
       ...(c.stdin !== undefined ? { stdin: c.stdin } : {}),
+      ...(c.stdinOpenMs !== undefined ? { stdinOpenMs: c.stdinOpenMs } : {}),
       timeoutMs: c.timeoutMs ?? 60_000,
     });
     const reqs = existsSync(log) ? readLog(log) : [];

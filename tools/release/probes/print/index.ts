@@ -64,6 +64,11 @@ export const runProbePrint = async (ctx: Ctx): Promise<number> => {
     writeCase(pctx.runDir, r);
     const bad = r.data["precondition"] === false;
     if (bad) invalid++;
+    const skipped = r.data["skipped"];
+    if (typeof skipped === "string") {
+      console.log(`  skipped ${r.id} (${skipped})`);
+      return;
+    }
     console.log(
       `  ${bad ? "INVALID" : "ok     "} ${r.id}${bad ? ` (${String(r.data["error"] ?? r.data["precondition.detail"] ?? "")})` : ""}`,
     );

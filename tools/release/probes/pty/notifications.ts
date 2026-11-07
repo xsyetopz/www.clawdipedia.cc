@@ -1,5 +1,7 @@
 // Notification types reachable offline (ported from p305-pty settings-t10/np1 and mcp-elicit.ts).
 // permission_prompt is covered by hooks.notification.*. worker_permission_prompt needs an out-of-process teammate: skipped.
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import {
   ASK,
   ELICIT_MCP,
@@ -11,8 +13,10 @@ import {
   pre,
   READY,
   round,
+  shows,
   TOUCH,
   WAIT,
+  waitAny,
 } from "./harness.ts";
 
 const MCP_SETTINGS = {
@@ -125,16 +129,16 @@ const autoMode: PtyCase = {
   mode: "auto",
   settings: { ...hooks(["Notification"]), skipAutoPermissionPrompt: true },
   stub: TOUCH("ran-an", "curl -s http://127.0.0.1:9/x"),
+  // 2.1.316 shows the billing notice where 2.1.319 shows "can't check actions"
   schedule: [
     READY,
     ASK(),
-    { ...WAIT("Enter to continue", "ack-classifier-notice"), send: "\r" },
+    waitAny(["can't check actions", "no longer charge"], "dialog"),
     ESC(14),
   ],
   secs: 16,
   facts: ["notifications.types"],
-  notes:
-    "Auto mode with a custom base URL: a classifier billing notice fires agent_needs_input.",
+  notes: `Auto mode with a custom base URL that does not pass the server-side check through: the dialog ("Auto mode can't check actions in this session", or the classifier billing notice) fires agent_needs_input.`,
   data: (x) => ({
     ...pre(
       x.hook("Notification").length > 0,
@@ -145,8 +149,57 @@ const autoMode: PtyCase = {
   }),
 };
 
+const autoModeRefused: PtyCase = {
+  ...autoMode,
+  id: "notifications.agent-needs-input-refused",
+  args: ["--debug-file", "{HOME}/debug.log"],
+  stub: { ...autoMode.stub, refuseServerCheck: true },
+  schedule: [
+    READY,
+    ASK(),
+    waitAny(["can't check actions", "no longer charge"], "dialog"),
+    ESC(14),
+  ],
+  notes:
+    "Auto mode with a custom base URL that answers HTTP 400 to the dangerous-tool-use beta: which dialog the program shows, and what it logs about the server-side check.",
+  data: (x) => {
+    const log = join(x.sb.home, "debug.log");
+    return {
+      ...autoMode.data?.(x),
+      serverClassifierLog: (existsSync(log) ? readFileSync(log, "utf8") : "")
+        .split("\n")
+        .filter((l) => l.includes("[server-classifier]"))
+        .map((l) => l.replace(/^\S+ /, "").slice(0, 400)),
+    };
+  },
+};
+
+const autoModeLocal: PtyCase = {
+  ...autoMode,
+  id: "notifications.auto-mode-local",
+  env: { CLAUDE_CODE_AUTO_MODE_SERVER: "0" },
+  schedule: [READY, ASK(), WAIT("usable answer", "outcome"), ESC(14)],
+  notes:
+    "Auto mode with a custom base URL and CLAUDE_CODE_AUTO_MODE_SERVER=0: the program sends its own classifier requests, and the stub gives them no usable answer.",
+  data: (x) => ({
+    notificationTypes: types(x),
+    billingNotice: shows(x, "no longer charge"),
+    serverCheckRequested: x.messages.some(
+      (q) =>
+        (q.body as { safeguards?: unknown } | null)?.safeguards !== undefined,
+    ),
+  }),
+};
+
 export const notificationsGroup: PtyGroup = {
   id: "notifications",
   title: "notification types seen in the interactive screen",
-  cases: () => [elicitationDialog, elicitationUrl, autoMode, idle],
+  cases: () => [
+    elicitationDialog,
+    elicitationUrl,
+    autoMode,
+    autoModeRefused,
+    autoModeLocal,
+    idle,
+  ],
 };

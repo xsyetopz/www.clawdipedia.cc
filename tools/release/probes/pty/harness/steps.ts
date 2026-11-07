@@ -87,13 +87,13 @@ export const ESC = (t: number, label = "esc"): PtyStep => ({
   label,
 });
 
-/** A wait_for step that matches any of several phrases (spaces ignored, see looseSrc). */
+/** A wait_for step that matches any of several phrases (spaces ignored, one missing letter accepted, see tolerant). */
 export const waitAny = (
   phrases: string[],
   label: string,
   timeout = 20,
 ): PtyStep => ({
-  wait_for: phrases.map(looseSrc).join("|"),
+  wait_for: phrases.map((p) => tolerant(p).source).join("|"),
   timeout,
   label,
 });

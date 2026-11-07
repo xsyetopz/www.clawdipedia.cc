@@ -10,6 +10,7 @@ import { type CaseResult, openRun, writeCase } from "../../lib/results.ts";
 import type { Ctx } from "../../util.ts";
 import { agentsGroup } from "./agents.ts";
 import { capturesGroup } from "./captures.ts";
+import { cli319Group } from "./cli319.ts";
 import {
   type PtyCtx,
   type PtyGroup,
@@ -31,6 +32,7 @@ export const GROUPS: PtyGroup[] = [
   agentsGroup,
   capturesGroup,
   perfettoGroup,
+  cli319Group,
 ];
 
 export const runProbePty = async (ctx: Ctx): Promise<number> => {

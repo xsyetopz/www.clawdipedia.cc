@@ -100,6 +100,14 @@ const SERVER_VARIANTS: [string, Record<string, string>][] = [
   ["default", {}],
   ["server-0", { CLAUDE_CODE_AUTO_MODE_SERVER: "0" }],
   ["server-1", { CLAUDE_CODE_AUTO_MODE_SERVER: "1" }],
+  ["betas-off", { CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS: "1" }],
+  [
+    "server-1-betas-off",
+    {
+      CLAUDE_CODE_AUTO_MODE_SERVER: "1",
+      CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS: "1",
+    },
+  ],
   ["two-stage-1", { CLAUDE_CODE_TWO_STAGE_CLASSIFIER: "1" }],
 ];
 
@@ -134,6 +142,9 @@ const serverCase = ([name, env]: [
             messages: msgs(r).length,
             stages: stages.join(","),
             serverNoResult: /server_no_result/.test(d),
+            safeguards: msgs(r)[0]
+              ? "safeguards" in bodyOf(msgs(r)[0] as never)
+              : null,
           },
           samples: {
             serverClassifierLine: line.slice(0, 300),

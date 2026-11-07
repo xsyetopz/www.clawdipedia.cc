@@ -1,7 +1,8 @@
 // Env var sweep, ported from p305-print/sweep.ts. Each name from the binary's strings is set to "1" in two
 // baseline runs (A plain, B tool+plugin+hooks); the result is which signature keys change, minus baseline noise.
 // The name list comes from release:diff's extractor over the cached strings dump, not from a saved file.
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import { extractEnv } from "../../diff/extract.ts";
 import { dumpStrings } from "../../diff/strings.ts";
 import { assertSafeEnv, binaryPath, childEnv, PROMPT } from "../../lib/env.ts";
@@ -33,9 +34,21 @@ const unsettable = (name: string, fixed: Set<string>): string | null => {
   return null;
 };
 
-export const sweepNames = (version: string): string[] => [
-  ...extractEnv(readFileSync(dumpStrings(version), "latin1")).keys(),
-];
+// The strings extractor misses names that only the AST finds (helper chains, tables), so the surface list joins it.
+export const sweepNames = (version: string): string[] => {
+  const surface = JSON.parse(
+    readFileSync(
+      join(import.meta.dir, "../../../..", "captures", version, "surface.json"),
+      "utf8",
+    ),
+  ) as { kinds: { env: { name: string }[] } };
+  return [
+    ...new Set([
+      ...extractEnv(readFileSync(dumpStrings(version), "latin1")).keys(),
+      ...surface.kinds.env.map((i) => i.name),
+    ]),
+  ];
+};
 
 type Out =
   | {
@@ -45,9 +58,55 @@ type Out =
     }
   | { err: string };
 
+/** A partial sweep over `names` replaces their entries in the full sweep `prev`; every other entry stays. */
+export const mergeSweep = (
+  prev: Pick<CaseResult, "data" | "samples">,
+  part: Record<string, Data>,
+  samples: Record<string, string>,
+  names: string[],
+): { data: Record<string, Data>; samples: Record<string, string> } => {
+  const own = (k: string) => names.some((n) => k.startsWith(`${n}.`));
+  const data = Object.fromEntries(
+    Object.entries(prev.data).filter(([k]) => !own(k)),
+  ) as Record<string, Data>;
+  for (const [k, v] of Object.entries(part)) if (own(k)) data[k] = v;
+  const skipped = new Set([
+    ...((prev.data["skipped"] as string[] | undefined) ?? []).filter(
+      (n) => !names.includes(n),
+    ),
+    ...((part["skipped"] as string[] | undefined) ?? []),
+  ]);
+  data["skipped"] = [...skipped].sort();
+  const swept = new Set(
+    Object.keys(data)
+      .filter((k) => /\.[AB]$/.test(k) && k !== "noise.A" && k !== "noise.B")
+      .map((k) => k.slice(0, -2)),
+  );
+  data["names"] = swept.size;
+  data["changed"] = [...swept].filter((n) =>
+    [`${n}.A`, `${n}.B`].some((k) => (data[k] as string[] | undefined)?.length),
+  );
+  data["errors"] = Object.keys(data).filter(
+    (k) =>
+      Array.isArray(data[k]) &&
+      (data[k] as unknown[]).some(
+        (x) => typeof x === "string" && x.startsWith("error:"),
+      ),
+  );
+  return {
+    data,
+    samples: {
+      ...Object.fromEntries(
+        Object.entries(prev.samples ?? {}).filter(([k]) => !own(k)),
+      ),
+      ...samples,
+    },
+  };
+};
+
 const run = async (ctx: PrintCtx): Promise<CaseResult[]> => {
   if (!selected(ctx, ID)) return [];
-  // `--only sweep.NAME` is a partial run: results go to print.sweep.<NAME>, never over the full sweep.
+  // `--only sweep.NAME` is a partial run: its names replace their entries in the existing print/sweep.json.
   const want = (ctx.only ?? [])
     .map((o) => o.replace(/^print\./, ""))
     .filter((o) => o.startsWith("sweep."))
@@ -179,29 +238,14 @@ const run = async (ctx: PrintCtx): Promise<CaseResult[]> => {
     const notes =
       "Each name set to 1. Data: NAME.A / NAME.B = signature keys that changed vs baseline (noise removed).";
     if (!want.length) return [base(data, { samples, notes })];
-    const common = [
-      "precondition",
-      "precondition.detail",
-      "noise.A",
-      "noise.B",
-    ];
-    return todo.map((v) =>
-      base(
-        {
-          ...Object.fromEntries(common.map((k) => [k, data[k] ?? null])),
-          ...Object.fromEntries(
-            Object.entries(data).filter(([k]) => k.startsWith(`${v}.`)),
-          ),
-        },
-        {
-          id: `${ID}.${v}`,
-          samples: Object.fromEntries(
-            Object.entries(samples).filter(([k]) => k.startsWith(`${v}.`)),
-          ),
-          notes,
-        },
-      ),
-    );
+    const file = join(ctx.runDir, "print", "sweep.json");
+    if (!existsSync(file))
+      throw new Error(
+        "no print/sweep.json to merge into; run the full sweep first (--only sweep)",
+      );
+    const prev = JSON.parse(readFileSync(file, "utf8")) as CaseResult;
+    const merged = mergeSweep(prev, data, samples, [...todo, ...skipped]);
+    return [base(merged.data, { samples: merged.samples, notes })];
   } catch (e) {
     return [
       base(
