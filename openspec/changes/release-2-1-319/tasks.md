@@ -14,7 +14,7 @@ The owner chose not to run `ultrareview` live, so its page links the official [U
 - [x] 1.4 Pty probes: group `cli319` (`tools/release/probes/pty/cli319.ts`).
 - [x] 1.5 Live probes: `api319.*`, `err319`, `cli319.*`, and `code-mode` (`tools/release/probes/live/cases.ts`).
   Captures are in `captures/2.1.319/live`. The live `ultrareview` steps were removed by the owner's decision.
-- [ ] 1.6 `bun run release:probe:managed`. It needs the user to run two `sudo` commands. The new `owned` variant tests the "not verified" note.
+- [x] 1.6 `bun run release:probe:managed`. It needs the user to run two `sudo` commands. The new `owned` variant tests the "not verified" note.
 - [x] 1.7 `bun run release:facts -- --check` and `bun run release:all`.
 
 ## 2. Pages from the Diff
