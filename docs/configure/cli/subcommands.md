@@ -29,9 +29,9 @@ Source: the text of `claude <command> --help` in `2.1.314`.
 | `claude attach <id\|name>` | <Documented /> | Opens a background session. |
 | `claude logs <id\|name>` | <Documented /> | Prints the recent output of a background session. |
 | `claude stop <id>` (alias `kill`) | <Documented /> | Stops a background session and keeps the conversation. |
-| `claude respawn <id>` or `--all` | <Documented /> | Restarts a background session on the current binary. |
-| `claude rm <id>` | <Documented /> | Deletes a background session and its worktree when that is safe. |
-| `claude daemon [run\|status\|logs\|stop\|uninstall]` | <Documented /> | Controls the supervisor of background sessions, which the root help does not list. |
+| `claude respawn <id>` or `--all` | <Documented /> | Restarts a background session, or all of them, so it uses the current Claude Code binary. |
+| `claude rm <id>` | <Documented /> | Deletes a background session and its worktree when that is safe. Unlike `stop`, it works on a session that already exited. In `2.1.321` it takes `--discard-unpushed <commit>@<worktree-id>` (also discards the unpushed commits and uncommitted changes of the worktree while it is still at that commit) and `--force-remove-worktree <worktree-id>` (deletes the worktree folder when the `WorktreeRemove` hook or git could not; the repository must list it as a worktree, with no uncommitted changes to tracked files; the branch stays). For both, pass the value that an earlier `claude rm <id>` printed. |
+| `claude daemon [run\|status\|logs\|stop\|uninstall]` | <Documented /> | Controls the supervisor of background sessions, which the root help does not list. See [`daemon` Subcommands](#daemon-subcommands). |
 | `claude auth login\|logout\|status` | <Documented /> | Signs you in and out. `status` exits with 1 when you are not signed in. `login` takes `--claudeai` (the default), `--console` (API usage billing), `--email <email>` (fills in the login page), and `--sso`. `status` prints JSON by default (`--json`). With `--text`, it prints text. `login` also has a hidden option, `--gateway-json`, for a program that shows the Cloud gateway sign-in to a person. It writes its questions as JSON lines and reads the answers from stdin. It cannot be combined with `--console`, `--claudeai`, `--sso`, or `--email`. It reads the gateway from the settings of the machine. It checks in this order: a clash with the other login flags, a gateway in the settings, a terminal on stdin, and a Claude Code session. Each failure prints one line to standard error and exits with code 1. See the errors on [Auth Settings](../settings/auth.md#errors) (the program). |
 | `claude setup-token` | <Documented /> | Makes a long-lived token. It needs a subscription. |
 | `claude auto-mode config\|critique\|defaults\|reset` | <Documented /> | Shows or resets the rules of the auto mode classifier. `critique` takes `--model <model>`. `defaults` takes `--label <prefix>` to keep only rules whose label starts with the prefix. `reset` takes `-y/--yes` to skip the confirmation. |
@@ -44,9 +44,9 @@ Source: the text of `claude <command> --help` in `2.1.314`.
 | `claude plugin ...` (alias `plugins`) | <Documented /> | Manages plugins (see [Plugins](../../extend/plugins/cli.md)). |
 | `claude plugin test [dir]` | <Documented /> | Runs the tests of a mod. |
 | `claude purge [path]` | <Documented /> <Caution note="Deletes the state of a project" /> | Deletes the state of a project, with `--all`, `--dry-run`, `-i/--interactive` (asks before each item), and `-y/--yes`. Since `2.1.311`, the purge plan ends with "Purging deletes data only on this computer, not anything stored by Anthropic" (`chunk-p3tkb5qf.js:1432`). |
-| `claude remote-control` (alias `rc`) | <Documented /> | Lets you control local sessions from `claude.ai` or the mobile app. |
+| `claude remote-control` (alias `rc`) | <Documented /> | Lets you control local sessions from `claude.ai` or the mobile app. See [Remote Control Server](remote-control.md). |
 | `claude ultrareview [target]` | <Documented /> | Starts a cloud review with many agents, with `--json`, `--post`, `--no-post` (the default), `--timeout`, and `--trust-workspace`. Since `2.1.309` it needs a trusted folder. It asks on a terminal. Without a terminal it may refuse, so scripts pass `--trust-workspace` after the target, or set `CLAUDE_CODE_DISABLE_ULTRAREVIEW_TRUST_CHECK=1`. |
-| `claude self-hosted-runner` | <Documented /> | Runs cloud sessions on your machine, and the root help does not list it. Since `2.1.311` it takes `--hold-idle-file <path>` and `--max-hold-min <n>` (see below). |
+| `claude self-hosted-runner` | <Documented /> | Runs cloud sessions on your machine, and the root help does not list it. Subcommands: `orchestrator`, `setup`, `doctor`, and `decode-token`. See [Self-Hosted Runner](self-hosted-runner.md) for every option and error. |
 | `claude sandbox` | <Undocumented /> | A hidden command with three subcommands for the Windows sandbox: `install` adds the sandbox user and network filters. It asks for elevation once. `status` prints the sandbox state and the Windows install state as one JSON line. `uninstall` removes them and lists what stays behind, with `--json`. |
 | `claude edit-hook`, `edit-permission-rules`, `edit-memory-settings`, `edit-skill-overrides`, `edit-sandbox-settings`, `edit-chrome-settings`, `drop-worktree-registrations`, `design-login` | <Undocumented /> | Hidden commands that read one JSON edit from stdin with `--json`. Their text says they serve the VS Code extension. `design-login --status` reports whether design-system access is authorized and exits. |
 | `claude apply-project-settings` | <Undocumented /> | A hidden command that shows how your user and project settings differ from what you accepted for cloud sessions on this computer. It lets you accept them. It needs a terminal. |
@@ -73,22 +73,24 @@ Run: case `print.cli319.ultrareview-max-cost`, `-list`, and `-output`. Hypothesi
 
 In eval mode, `--json`, `--timeout`, `--post`, `--no-post`, and `--trust-workspace` are refused with `--json, --timeout, --post, --no-post and --trust-workspace don't work with eval. Leave them out.` Every refusal ends with `Nothing was started.`
 
-### `self-hosted-runner` Hold Flags
+### `daemon` Subcommands
 
-Since `2.1.311`, the runner can keep an idle session while your host reports processes that the session left running, such as `nohup` or `tmux`.
-Source: the program (`chunk-n23je8vg.js:11266`, the help text, and `chunk-n23je8vg.js:10769`, the flag parser).
+`claude daemon --help` lists `run [json-path]`, `status`, `logs`, `uninstall`, and `stop` (with `--any` and `--keep-workers`), and the options `--json-path <p>` (default `~/.claude/daemon.json`) and `--log-file <p>` (default `~/.claude/daemon.log`). The help text says: "Service install is disabled in this version — the daemon runs on demand and exits when the last client disconnects."
+Source: the help text in `2.1.321` and the argument parser of the program (`chunk-k0rez7a5.js`, near offset 75628).
 
-| Flag | Status | What it does | Default |
-| --- | --- | --- | --- |
-| `--hold-idle-file <path>` | <Undocumented /> | Does not release an idle session (see `--release-idle-session-min`) while `<path>` is a regular file that changed in the last 180 seconds. Your host keeps the file fresh while the left-over process lives. The runner looks again every 30 seconds. The hold does not apply at startup, at `--retire-at`, at the `--defer-shutdown-max-min` ceiling, or at `--kill-session-after-min`. The variable is `SELF_HOSTED_RUNNER_HOLD_IDLE_FILE`. | Off |
-| `--max-hold-min <n>` | <Undocumented /> | With `--hold-idle-file`, it releases the session anyway `n` minutes after the session went idle. `0` turns the hold off. The maximum is 10080. The variable is `SELF_HOSTED_RUNNER_MAX_HOLD_MS`, in milliseconds. | 1440 minutes |
+- With no subcommand, the daemon opens the hub on a terminal, and runs in the foreground (`run`) when stdin is not a terminal.
+- `log` is an alias of `logs`. Both options also take the `--option=value` form.
+- A word that is not a subcommand and holds `.`, `/`, `\`, or `~` is read as `run <json-path>`. Any other word prints `unknown subcommand: <word>`, then the help text, and exits with code 1 (case `cli321.daemon-unknown`).
+- The parser also knows `install`, `start`, `restart`, `list`, `scheduled`, `remote-control`, and `hub`, which the help text does not list. The `cli321` probe ran each without a terminal:
 
-The runner refuses these values, with these messages:
+| Command | Status | Result (exit code 1 in each case) |
+| --- | --- | --- |
+| `claude daemon install`, `start`, `restart` | <Undocumented /> <Deprecated note="Service install is disabled" /> | ``claude daemon <name>` is disabled in this version — the daemon runs on demand and exits when the last client disconnects.`` |
+| `claude daemon list [--json]` | <Undocumented /> | `'daemon list' is not available in this environment.` |
+| `claude daemon scheduled`, `remote-control` | <Undocumented /> | `'daemon remote-control' is not available in this environment.` (case `cli321.daemon-remote-control`). `scheduled` uses the same handler and was not run. |
+| `claude daemon hub` | <Undocumented /> | Opens the interactive hub. It needs a terminal on stdin and stdout. With no daemon and no terminal, the run printed the status report (`not running`, then the socket folder, `control.sock`, the worker count, `roster.json`, and `daemon.log`). |
 
-- `--hold-idle-file requires a file path (a file your host keeps fresh while the session has processes left running)` when the path is missing, empty, or starts with `--` (`chunk-n23je8vg.js:10769`).
-- `--max-hold-min must be a non-negative number of minutes (0 disables, max 10080)` when the value is not a number in range (`chunk-n23je8vg.js:10779`).
-- `the path, or a link on the way to it, leads to a network location; point --hold-idle-file at a local file` when the path is on a network location (`chunk-n23je8vg.js:10360`).
-- `the path could not be checked for links to a network location: a folder or link on the way could not be read` when a folder on the way cannot be read (`chunk-n23je8vg.js:10356`).
+`--origin <service|transient|foreground>` and `--spawned-by <json>` are internal options. Claude Code passes them when it starts the daemon on demand (`daemon run --origin transient --spawned-by {"label","cwd","pid"}`), and `claude daemon status` shows them as the start reason.
 
 ### `gateway` Role and Retention Options
 
