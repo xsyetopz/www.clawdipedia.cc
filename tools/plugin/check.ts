@@ -1,228 +1,280 @@
 // Usage: bun tools/plugin/check.ts   (also: bun run plugin:check)
 // Validates each plugin manifest and the marketplace file against schemas/ with ajv, and checks
 // that each plugin's .mcp.json, skill, and committed server bundle exist, pass their tests, and are fresh.
-import {
-  existsSync,
-  mkdtempSync,
-  readdirSync,
-  readFileSync,
-  rmSync,
-} from "node:fs";
-import { tmpdir } from "node:os";
+import { readdir } from "node:fs/promises";
 import { join } from "node:path";
-import Ajv2020 from "ajv/dist/2020.js";
+
 import addFormats from "ajv-formats";
+import Ajv2020 from "ajv/dist/2020.js";
+
 import { SCHEMA_NAMES, TYPE_FILE } from "../../plugin/mcp/src/content.ts";
 import { CLAUDE_CODE_VERSION } from "../../src/version.ts";
-import { MARKETPLACE, SKILL_FILES, versionProblems } from "../version/bump.ts";
+import {
+	MARKETPLACE,
+	SKILL_FILES,
+	TARGETS,
+	versionProblems,
+} from "../version/bump.ts";
+import { bundleProblems, validateProblems } from "./bundle.ts";
+import { exists, manifestFile, PLUGINS, ROOT, text } from "./plugins.ts";
+import type { Plugin } from "./plugins.ts";
 
-const ROOT = join(import.meta.dir, "..", "..");
+type Json = Record<string, unknown>;
+
 const ajv = new Ajv2020({ strict: true, strictTypes: false, allErrors: true });
 addFormats(ajv);
-for (const f of ["starts_with", "ends_with"]) ajv.addFormat(f, true);
-ajv.addKeyword({ keyword: "x-managed-only", schemaType: "boolean" });
-const read = (p: string) => JSON.parse(readFileSync(join(ROOT, p), "utf8"));
-const problems: string[] = [];
-/** The plugins of the marketplace: folder, skill, bundle source and output, tests, and whether it has an MCP server. */
-const PLUGINS = [
-  {
-    dir: "plugin",
-    skill: "clawdipedia-docs",
-    src: "plugin/mcp/src/server.ts",
-    out: "plugin/mcp/dist/server.js",
-    test: "plugin/mcp/test",
-    mcp: true,
-  },
-  {
-    dir: "inspect",
-    skill: "cc-inspect",
-    src: "inspect/mcp/src/server.ts",
-    out: "inspect/mcp/dist/server.js",
-    test: "inspect/mcp/test",
-    mcp: true,
-  },
-  {
-    dir: "cli",
-    skill: "clawdipedia-docs-cli",
-    src: "cli/src/cli.ts",
-    out: "cli/bin/clawdipedia",
-    test: "cli/test",
-    mcp: false,
-  },
-];
-
-const targets: [string, string][] = [
-  ...PLUGINS.map((p): [string, string] => [
-    `${p.dir}/.claude-plugin/plugin.json`,
-    "claude-code-plugin-manifest",
-  ]),
-  [MARKETPLACE, "claude-code-marketplace"],
-];
-for (const [file, kind] of targets) {
-  const want = `https://clawdipedia.cc/schemas/${kind}.json`;
-  const check =
-    ajv.getSchema(want) ?? ajv.compile(read(`schemas/${kind}.json`));
-  const doc = read(file);
-  if (!check(doc))
-    for (const e of check.errors ?? [])
-      problems.push(`${file}: ${e.instancePath || "/"} ${e.message}`);
-  if (doc["$schema"] !== want)
-    problems.push(`${file}: $schema should be ${want}`);
+for (const f of ["starts_with", "ends_with"]) {
+	ajv.addFormat(f, true);
 }
+ajv.addKeyword({ keyword: "x-managed-only", schemaType: "boolean" });
+
+const isJson = (v: unknown): v is Json =>
+	typeof v === "object" && v !== null && !Array.isArray(v);
+
+/** The JSON files read so far; `read` serves the sync callers from it. */
+const cache = new Map<string, Json>();
+const load = async (p: string): Promise<Json> => {
+	const cached = cache.get(p);
+	if (cached) {
+		return cached;
+	}
+	const doc: unknown = JSON.parse(await text(p));
+	const json = isJson(doc) ? doc : {};
+	cache.set(p, json);
+	return json;
+};
+const read = (p: string): Json => cache.get(p) ?? {};
+
+const CC_VERSION_RE = /\b2\.\d+\.\d+\b/gu;
+
+const schemaProblems = async (): Promise<string[]> => {
+	const problems: string[] = [];
+	const targets: [string, string][] = [
+		...PLUGINS.map((p): [string, string] => [
+			manifestFile(p.dir),
+			"claude-code-plugin-manifest",
+		]),
+		[MARKETPLACE, "claude-code-marketplace"],
+	];
+	const loaded = await Promise.all(
+		targets.map(async ([file, kind]) => ({
+			file,
+			kind,
+			schema: await load(`schemas/${kind}.json`),
+			doc: await load(file),
+		})),
+	);
+	for (const { file, kind, schema, doc } of loaded) {
+		const want = `https://clawdipedia.cc/schemas/${kind}.json`;
+		const check = ajv.getSchema(want) ?? ajv.compile(schema);
+		if (check(doc) !== true) {
+			for (const e of check.errors ?? []) {
+				problems.push(`${file}: ${e.instancePath || "/"} ${e.message}`);
+			}
+		}
+		if (doc["$schema"] !== want) {
+			problems.push(`${file}: $schema should be ${want}`);
+		}
+	}
+	return problems;
+};
+
 // Reserved plugin names, per docs/extend/plugins/manifest.md (Top-Level Keys, `name`).
 const RESERVED =
-  /^(claude-|anthropic-|anthropics-|cc-plugin-)|^(claude|anthropic|claude-code|claude-mods)$/;
-const names = [
-  ...PLUGINS.map((p) => read(`${p.dir}/.claude-plugin/plugin.json`).name),
-  ...(read(MARKETPLACE).plugins as { name: string }[]).map((p) => p.name),
-];
-for (const n of names)
-  if (typeof n !== "string" || !n || /\s/.test(n) || RESERVED.test(n))
-    problems.push(
-      `plugin name "${String(n)}" is empty, has spaces, or is reserved`,
-    );
+	/^(claude-|anthropic-|anthropics-|cc-plugin-)|^(claude|anthropic|claude-code|claude-mods)$/u;
 
-problems.push(...versionProblems(read));
+const marketplacePlugins = (): Json[] => {
+	const plugins = read(MARKETPLACE)["plugins"];
+	return Array.isArray(plugins)
+		? plugins.filter((p): p is Json => isJson(p))
+		: [];
+};
 
-// A manifest description must not name a Claude Code version other than src/version.ts.
-for (const p of PLUGINS) {
-  const file = `${p.dir}/.claude-plugin/plugin.json`;
-  const text = String(read(file).description ?? "");
-  for (const v of new Set(text.match(/\b2\.\d+\.\d+\b/g) ?? []))
-    if (v !== CLAUDE_CODE_VERSION)
-      problems.push(
-        `${file}: description names Claude Code ${v}, but src/version.ts has ${CLAUDE_CODE_VERSION}: run "bun run version:bump"`,
-      );
-}
-// A skill body tells the model which version the `clawdipedia` source covers, so it must match too.
-for (const file of SKILL_FILES) {
-  const text = readFileSync(join(ROOT, file), "utf8");
-  for (const v of new Set(text.match(/\b2\.\d+\.\d+\b/g) ?? []))
-    if (v !== CLAUDE_CODE_VERSION)
-      problems.push(
-        `${file}: names Claude Code ${v}, but src/version.ts has ${CLAUDE_CODE_VERSION}: run "bun run version:bump"`,
-      );
-}
+const str = (v: unknown): string => (typeof v === "string" ? v : "");
+
+const nameProblems = (): string[] => {
+	const names = [
+		...PLUGINS.map((p) => read(manifestFile(p.dir))["name"]),
+		...marketplacePlugins().map((p) => p["name"]),
+	];
+	return names
+		.filter(
+			(n) => typeof n !== "string" || !n || /\s/u.test(n) || RESERVED.test(n),
+		)
+		.map(
+			(n) => `plugin name "${String(n)}" is empty, has spaces, or is reserved`,
+		);
+};
+
+const staleVersions = (file: string, body: string, prefix: string): string[] =>
+	[...new Set([...body.matchAll(CC_VERSION_RE)].map((m) => m[0]))]
+		.filter((v) => v !== CLAUDE_CODE_VERSION)
+		.map(
+			(v) =>
+				`${file}: ${prefix}names Claude Code ${v}, but src/version.ts has ${CLAUDE_CODE_VERSION}: run "bun run version:bump"`,
+		);
+
+const versionTextProblems = async (): Promise<string[]> => {
+	// A manifest description must not name a Claude Code version other than src/version.ts.
+	const problems = PLUGINS.flatMap((p) => {
+		const file = manifestFile(p.dir);
+		return staleVersions(file, str(read(file)["description"]), "description ");
+	});
+	// A skill body tells the model which version the `clawdipedia` source covers, so it must match too.
+	const skills = await Promise.all(
+		SKILL_FILES.map(async (file) => staleVersions(file, await text(file), "")),
+	);
+	return [...problems, ...skills.flat()];
+};
 
 // Every description goes into the model's context on each session, so each one stays short.
 const DESCRIPTION_MAX = 200;
-const market = read(MARKETPLACE) as {
-  description?: unknown;
-  plugins?: { name?: string; description?: unknown }[];
+
+const skillDescription = async (
+	p: Plugin,
+): Promise<readonly [string, string]> => {
+	const file = `${p.dir}/skills/${p.skill}/SKILL.md`;
+	const body = (await exists(file)) ? await text(file) : "";
+	return [file, /^description:[ \t]*(.*)$/mu.exec(body)?.[1]?.trim() ?? ""];
 };
-const descriptions: [where: string, text: string][] = [
-  [MARKETPLACE, String(market.description ?? "")],
-  ...(market.plugins ?? []).map((p): [string, string] => [
-    `${MARKETPLACE} ${String(p.name)}`,
-    String(p.description ?? ""),
-  ]),
-  ...PLUGINS.map((p): [string, string] => [
-    `${p.dir}/.claude-plugin/plugin.json`,
-    String(read(`${p.dir}/.claude-plugin/plugin.json`).description ?? ""),
-  ]),
-  ...PLUGINS.map((p): [string, string] => {
-    const file = `${p.dir}/skills/${p.skill}/SKILL.md`;
-    const body = existsSync(join(ROOT, file))
-      ? readFileSync(join(ROOT, file), "utf8")
-      : "";
-    return [file, /^description:[ \t]*(.*)$/m.exec(body)?.[1]?.trim() ?? ""];
-  }),
-];
-for (const [where, text] of descriptions)
-  if (text.length > DESCRIPTION_MAX)
-    problems.push(
-      `${where}: description is ${text.length} characters, over ${DESCRIPTION_MAX}`,
-    );
 
-for (const p of PLUGINS) {
-  for (const f of [`${p.dir}/skills/${p.skill}/SKILL.md`, p.out])
-    if (!existsSync(join(ROOT, f))) problems.push(`${f}: missing`);
-  // The CLI plugin adds no tool list, so it has no .mcp.json.
-  if (existsSync(join(ROOT, p.dir, ".mcp.json")) !== p.mcp)
-    problems.push(
-      `${p.dir}/.mcp.json: ${p.mcp ? "missing" : "must not exist (no MCP server)"}`,
-    );
-}
-// The command ships only in cli/, so the MCP plugin puts nothing on the Bash PATH.
-if (existsSync(join(ROOT, "plugin", "bin")))
-  problems.push("plugin/bin: must not exist (the command is in cli/)");
+const descriptionProblems = async (): Promise<string[]> => {
+	const market = read(MARKETPLACE);
+	const descriptions: (readonly [where: string, text: string])[] = [
+		[MARKETPLACE, str(market["description"])],
+		...marketplacePlugins().map((p): readonly [string, string] => [
+			`${MARKETPLACE} ${String(p["name"])}`,
+			str(p["description"]),
+		]),
+		...PLUGINS.map((p): readonly [string, string] => [
+			manifestFile(p.dir),
+			str(read(manifestFile(p.dir))["description"]),
+		]),
+		...(await Promise.all(PLUGINS.map((p) => skillDescription(p)))),
+	];
+	return descriptions
+		.filter(([, body]) => body.length > DESCRIPTION_MAX)
+		.map(
+			([where, body]) =>
+				`${where}: description is ${body.length} characters, over ${DESCRIPTION_MAX}`,
+		);
+};
 
-// The claude CLI validates both manifests offline when it is on PATH. No credentials are passed.
-if (Bun.which("claude")) {
-  for (const target of [".", ...PLUGINS.map((p) => `./${p.dir}`)]) {
-    const r = Bun.spawnSync(["claude", "plugin", "validate", target], {
-      cwd: ROOT,
-    });
-    if (r.exitCode !== 0)
-      problems.push(
-        `claude plugin validate ${target}: ${(r.stdout.toString() + r.stderr.toString()).trim()}`,
-      );
-  }
-} else
-  console.warn(
-    "plugin:check: claude CLI not on PATH, skipped claude plugin validate",
-  );
+const pluginFileProblems = async (p: Plugin): Promise<string[]> => {
+	const problems: string[] = [];
+	const files = [`${p.dir}/skills/${p.skill}/SKILL.md`, p.out];
+	const present = await Promise.all(files.map((f) => exists(f)));
+	for (const [i, f] of files.entries()) {
+		if (present[i] !== true) {
+			problems.push(`${f}: missing`);
+		}
+	}
+	// The CLI plugin adds no tool list, so it has no .mcp.json.
+	if ((await exists(`${p.dir}/.mcp.json`)) !== p.mcp) {
+		problems.push(
+			`${p.dir}/.mcp.json: ${p.mcp ? "missing" : "must not exist (no MCP server)"}`,
+		);
+	}
+	return problems;
+};
 
-for (const { dir, src, out: dist, test } of PLUGINS) {
-  // Tests run against the committed bundle.
-  if (existsSync(join(ROOT, dist))) {
-    const t = Bun.spawnSync(["bun", "test", test], { cwd: ROOT });
-    if (t.exitCode !== 0)
-      problems.push(`bun test ${test} failed:\n${t.stderr.toString().trim()}`);
-  }
-  // Freshness: the bundle must equal a fresh bundle of the sources (bun build is deterministic
-  // for the same inputs and versions).
-  const tmp = mkdtempSync(join(tmpdir(), "plugin-check-"));
-  try {
-    const bundle = join(tmp, "bundle.js");
-    const b = Bun.spawnSync(
-      ["bun", "build", src, "--target=bun", `--outfile=${bundle}`],
-      { cwd: ROOT },
-    );
-    if (b.exitCode !== 0)
-      problems.push(`bundle ${dir}: ${b.stderr.toString().trim()}`);
-    else if (!existsSync(join(ROOT, dist)))
-      problems.push(`${dist} is missing: run "bun run plugin:build"`);
-    else if (!readFileSync(bundle).equals(readFileSync(join(ROOT, dist))))
-      problems.push(`${dist} is stale: run "bun run plugin:build"`);
-  } finally {
-    rmSync(tmp, { recursive: true, force: true });
-  }
-}
+const fileProblems = async (): Promise<string[]> => {
+	const perPlugin = await Promise.all(
+		PLUGINS.map((p) => pluginFileProblems(p)),
+	);
+	const problems = perPlugin.flat();
+	// The command ships only in cli/, so the MCP plugin puts nothing on the Bash PATH.
+	if (await exists("plugin/bin")) {
+		problems.push("plugin/bin: must not exist (the command is in cli/)");
+	}
+	return problems;
+};
+
+const manifestRoutes = (parsed: unknown): string[] =>
+	Array.isArray(parsed)
+		? parsed.flatMap((e: unknown) =>
+				isJson(e) && typeof e["route"] === "string" ? [e["route"]] : [],
+			)
+		: [];
+
+const routeProblems = async (): Promise<string[]> => {
+	const raw = await text("build/llms-manifest.json");
+	const routes = manifestRoutes(JSON.parse(raw));
+	const rels = routes.map((route) =>
+		route === "/" ? "index" : route.replaceAll(/^\/+|\/+$/gu, ""),
+	);
+	const present = await Promise.all(
+		rels.map((rel) => exists(`build/${rel}.md`)),
+	);
+	return routes.flatMap((route, i) =>
+		present[i] === true
+			? []
+			: [`build/${rels[i]}.md: missing for manifest route ${route}`],
+	);
+};
+
+const schemaListProblems = async (): Promise<string[]> => {
+	const problems: string[] = [];
+	const dir = join(ROOT, "build", "schemas");
+	const files = (await exists("build/schemas")) ? await readdir(dir) : [];
+	const built = files
+		// surface.json is the item snapshot, not a schema that get_schema serves
+		.filter((f) => f.endsWith(".json") && f !== "surface.json")
+		.map((f) => f.slice(0, -5));
+	const names = new Set<string>(SCHEMA_NAMES);
+	if (built.length !== names.size || !built.every((n) => names.has(n))) {
+		problems.push(
+			`SCHEMA_NAMES (${[...SCHEMA_NAMES].join(", ")}) differs from build/schemas/ (${built.join(", ")})`,
+		);
+	}
+	if (!(await Bun.file(join(dir, TYPE_FILE)).exists())) {
+		problems.push(
+			`build/schemas/${TYPE_FILE}: missing, so get_schema "types" fails`,
+		);
+	}
+	return problems;
+};
 
 // Contract with the built site: what the server fetches must exist in build/.
-if (existsSync(join(ROOT, "build", "llms-manifest.json"))) {
-  const manifest = JSON.parse(
-    readFileSync(join(ROOT, "build", "llms-manifest.json"), "utf8"),
-  ) as { route: string }[];
-  for (const { route } of manifest) {
-    const rel = route === "/" ? "index" : route.replace(/^\/+|\/+$/g, "");
-    if (!existsSync(join(ROOT, "build", `${rel}.md`)))
-      problems.push(`build/${rel}.md: missing for manifest route ${route}`);
-  }
-  const dir = join(ROOT, "build", "schemas");
-  const built = existsSync(dir)
-    ? readdirSync(dir)
-        // surface.json is the item snapshot, not a schema that get_schema serves
-        .filter((f) => f.endsWith(".json") && f !== "surface.json")
-        .map((f) => f.slice(0, -5))
-        .sort()
-    : [];
-  if (JSON.stringify(built) !== JSON.stringify([...SCHEMA_NAMES].sort()))
-    problems.push(
-      `SCHEMA_NAMES (${[...SCHEMA_NAMES].sort().join(", ")}) differs from build/schemas/ (${built.join(", ")})`,
-    );
-  if (!existsSync(join(dir, TYPE_FILE)))
-    problems.push(
-      `build/schemas/${TYPE_FILE}: missing, so get_schema "types" fails`,
-    );
-} else
-  console.warn(
-    'plugin:check: build/ missing, skipped site contract check (run "bun run build")',
-  );
+const siteProblems = async (): Promise<string[]> => {
+	if (!(await exists("build/llms-manifest.json"))) {
+		console.warn(
+			'plugin:check: build/ missing, skipped site contract check (run "bun run build")',
+		);
+		return [];
+	}
+	return [...(await routeProblems()), ...(await schemaListProblems())];
+};
 
-if (problems.length) {
-  for (const p of problems) console.error(`plugin:check: ${p}`);
-  process.exit(1);
-}
-console.log("plugin:check: manifests valid, plugin files present");
+const main = async (): Promise<void> => {
+	const slotFiles = Object.values(TARGETS).flatMap((slots) =>
+		slots.map((s) => s.file),
+	);
+	await Promise.all([
+		...slotFiles.map((f) => load(f)),
+		...PLUGINS.map((p) => load(manifestFile(p.dir))),
+		load(MARKETPLACE),
+	]);
+	const bundles = await Promise.all(PLUGINS.map((p) => bundleProblems(p)));
+	const problems = [
+		...(await schemaProblems()),
+		...nameProblems(),
+		...versionProblems(read),
+		...(await versionTextProblems()),
+		...(await descriptionProblems()),
+		...(await fileProblems()),
+		...(await validateProblems()),
+		...bundles.flat(),
+		...(await siteProblems()),
+	];
+	if (problems.length > 0) {
+		for (const p of problems) {
+			console.error(`plugin:check: ${p}`);
+		}
+		process.exitCode = 1;
+		return;
+	}
+	console.info("plugin:check: manifests valid, plugin files present");
+};
+
+await main();

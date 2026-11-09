@@ -1,4 +1,4 @@
 {
-  "$schema": "https://clawdipedia.cc/schemas/claude-code-keybindings.json",
-  "bindings": [{ "context": "Chat", "bindings": { "ctrl+k": "chat:submit" } }]
+	"$schema": "https://clawdipedia.cc/schemas/claude-code-keybindings.json",
+	"bindings": [{ "context": "Chat", "bindings": { "ctrl+k": "chat:submit" } }]
 }

@@ -1,187 +1,255 @@
 // Usage: bun tools/capture-prompts/capture.ts [--only id,id] [--no-render]
 // Runs the installed Claude Code binary once per variant against a local fake Messages API.
 // Offline and free: fake API key, dead proxy, temp HOME/config/project. No request leaves the machine.
-import {
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  realpathSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
+import { mkdtemp, realpath, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { join } from "node:path";
+
 import { CLAUDE_CODE_VERSION } from "../../src/version.ts";
 import { assertShimReady, writeSecurityShim } from "../release/lib/shim.ts";
-import { FAKE_KEY, startStub } from "./stub.ts";
-import { SUB_MARK, VARIANTS, type Variant } from "./variants.ts";
+import { initGit, probeEnv, requireEnv } from "./env.ts";
+import { startStub } from "./stub.ts";
+import { SUB_MARK, type Variant, VARIANTS } from "./variants.ts";
 
 export const ROOT = join(import.meta.dir, "..", "..");
 export const DEFAULT_PROMPT = "Reply with 'OK'.";
 // `--out <dir>` (release:prompts) writes the per-variant folders there; render.ts reads the same place.
 const outArg = process.argv.indexOf("--out");
 export const CAPTURES =
-  outArg >= 0
-    ? (process.argv[outArg + 1] ?? "")
-    : join(ROOT, "captures", CLAUDE_CODE_VERSION, "prompts");
+	outArg === -1
+		? join(ROOT, "captures", CLAUDE_CODE_VERSION, "prompts")
+		: (process.argv[outArg + 1] ?? "");
 process.env["CAPTURE_OUT"] = CAPTURES;
-const requireEnv = (name: string): string => {
-  const v = process.env[name];
-  if (!v) throw new Error(`${name} is not set`);
-  return v;
-};
 
 const argv = process.argv.slice(2);
-// `--bin <path>` lets release:prompts point at another installed version.
-const BIN = argv.includes("--bin")
-  ? (argv[argv.indexOf("--bin") + 1] ?? "")
-  : join(
-      requireEnv("HOME"),
-      `.local/share/claude/versions/${CLAUDE_CODE_VERSION}`,
-    );
-const only = argv.includes("--only")
-  ? argv[argv.indexOf("--only") + 1].split(",")
-  : null;
+const argValue = (flag: string): string | undefined =>
+	argv.includes(flag) ? (argv[argv.indexOf(flag) + 1] ?? "") : undefined;
 
-const run = async (v: Variant) => {
-  const dir = join(CAPTURES, v.id);
-  mkdirSync(dir, { recursive: true });
-  const log = join(dir, "requests.jsonl");
-  writeFileSync(log, "");
-  const cfg = realpathSync(mkdtempSync(join(tmpdir(), "cap-cfg-")));
-  const home = realpathSync(mkdtempSync(join(tmpdir(), "cap-home-")));
-  const shimDir = writeSecurityShim(home);
-  const proj = realpathSync(mkdtempSync(join(tmpdir(), "cap-proj-")));
-  for (const [base, files] of [
-    [cfg, v.cfgFiles],
-    [proj, v.projFiles],
-  ] as const)
-    for (const [n, c] of Object.entries(files ?? {})) {
-      mkdirSync(dirname(join(base, n)), { recursive: true });
-      writeFileSync(join(base, n), c);
-    }
-  const genv = {
-    GIT_CONFIG_GLOBAL: join(home, ".gitconfig"),
-    GIT_AUTHOR_NAME: "t",
-    GIT_AUTHOR_EMAIL: "t@example.com",
-    GIT_COMMITTER_NAME: "t",
-    GIT_COMMITTER_EMAIL: "t@example.com",
-  };
-  if (v.git) {
-    for (const c of [
-      ["init", "-q"],
-      ["add", "-A"],
-      ["commit", "-q", "--allow-empty", "-m", "initial"],
-    ]) {
-      writeFileSync(join(proj, "README.md"), "probe\n");
-      Bun.spawnSync(["git", ...c], {
-        cwd: proj,
-        env: { PATH: requireEnv("PATH"), HOME: home, ...genv },
-      });
-    }
-    writeFileSync(join(proj, "dirty.txt"), "x\n"); // untracked file so the status is not empty
-  }
-  const stub = startStub({
-    port: Number(process.env["STUB_PORT"] ?? 0),
-    log,
-    tool: v.tool?.name,
-    toolInput: v.tool?.input,
-  });
-  const spawnOnce = async (prompt: string, extra: string[]) => {
-    const env: Record<string, string> = {
-      PATH: `${shimDir}:${requireEnv("PATH")}`,
-      HOME: home,
-      GIT_CONFIG_NOSYSTEM: "1",
-      TMPDIR: tmpdir(),
-      CLAUDE_CONFIG_DIR: cfg,
-      ANTHROPIC_API_KEY: FAKE_KEY,
-      ANTHROPIC_BASE_URL: `http://127.0.0.1:${stub.port}`,
-      CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1",
-      DISABLE_TELEMETRY: "1",
-      // fail-closed net: anything proxied or direct to the real API breaks
-      HTTPS_PROXY: "http://127.0.0.1:9",
-      HTTP_PROXY: "http://127.0.0.1:9",
-      NO_PROXY: "127.0.0.1,localhost",
-      ...genv,
-      ...(v.env ?? {}),
-    };
-    assertShimReady(env);
-    const p = Bun.spawn(
-      [
-        BIN,
-        "-p",
-        prompt,
-        "--output-format",
-        "stream-json",
-        "--verbose",
-        "--model",
-        v.model ?? "claude-opus-5-5",
-        ...extra,
-        ...(v.args ?? []),
-      ],
-      {
-        cwd: proj,
-        stdin: "ignore",
-        stdout: "pipe",
-        stderr: "pipe",
-        env,
-      },
-    );
-    const t = setTimeout(() => p.kill(), 60000);
-    const [so, se] = await Promise.all([
-      new Response(p.stdout).text(),
-      new Response(p.stderr).text(),
-    ]);
-    const code = await p.exited;
-    clearTimeout(t);
-    return { so, se, code };
-  };
-  let { so, se, code } = await spawnOnce(v.prompt ?? DEFAULT_PROMPT, []);
-  if (v.followUp) {
-    // second run in the same folders: gives the follow-up command a conversation to work on
-    writeFileSync(join(dir, "stdout-first.txt"), so);
-    ({ so, se, code } = await spawnOnce(v.followUp, ["--continue"]));
-  }
-  stub.stop(true);
-  writeFileSync(join(dir, "stdout.txt"), so);
-  writeFileSync(join(dir, "stderr.txt"), se);
-  writeFileSync(
-    join(dir, "meta.json"),
-    JSON.stringify({ id: v.id, exit: code, cwd: proj, cfg, home }, null, 1),
-  );
-  const reqs = readFileSync(log, "utf8")
-    .trim()
-    .split("\n")
-    .filter(Boolean)
-    .map((l) => JSON.parse(l));
-  const msgs = reqs.filter(
-    (r) => r.path?.startsWith("/v1/messages") && r.body?.messages,
-  );
-  const bad = reqs.filter((r) => r.authIsFakeKey === false);
-  const hosts = new Set(reqs.map((r) => r.headers?.host));
-  const leaked = [...hosts].filter(
-    (h) => h && !String(h).startsWith("127.0.0.1"),
-  );
-  console.log(
-    `${v.id}: exit=${code} requests=${reqs.length} messages=${msgs.length} authFake=${bad.length === 0} hosts=${[...hosts].join(",")}`,
-  );
-  if (leaked.length || bad.length) {
-    console.log("UNEXPECTED HOST OR CREDENTIAL");
-    process.exit(8);
-  }
-  if (!msgs.length)
-    console.log(`  WARNING: no message request. stderr: ${se.slice(0, 200)}`);
-  if (
-    v.pick === "subagent" &&
-    !msgs.some((r) => JSON.stringify(r.body.messages).includes(SUB_MARK))
-  )
-    console.log("  WARNING: no subagent request");
-  rmSync(cfg, { recursive: true, force: true });
-  rmSync(home, { recursive: true, force: true });
-  rmSync(proj, { recursive: true, force: true });
+// `--bin <path>` lets release:prompts point at another installed version.
+const BIN =
+	argValue("--bin") ??
+	join(
+		requireEnv("HOME"),
+		`.local/share/claude/versions/${CLAUDE_CODE_VERSION}`,
+	);
+const only = argValue("--only")?.split(",");
+
+type Rec = Record<string, unknown>;
+const isRec = (v: unknown): v is Rec =>
+	typeof v === "object" && v !== null && !Array.isArray(v);
+
+interface Dirs {
+	dir: string;
+	log: string;
+	cfg: string;
+	home: string;
+	proj: string;
+}
+
+const tempDir = async (prefix: string): Promise<string> =>
+	realpath(await mkdtemp(join(tmpdir(), prefix)));
+
+const prepare = async (v: Variant): Promise<Dirs> => {
+	const dir = join(CAPTURES, v.id);
+	const log = join(dir, "requests.jsonl");
+	await Bun.write(log, "");
+	const [cfg, home, proj] = await Promise.all([
+		tempDir("cap-cfg-"),
+		tempDir("cap-home-"),
+		tempDir("cap-proj-"),
+	]);
+	const writes = [
+		...Object.entries(v.cfgFiles ?? {}).map(([n, c]) =>
+			Bun.write(join(cfg, n), c),
+		),
+		...Object.entries(v.projFiles ?? {}).map(([n, c]) =>
+			Bun.write(join(proj, n), c),
+		),
+	];
+	await Promise.all(writes);
+	return { dir, log, cfg, home, proj };
+};
+
+interface Result {
+	so: string;
+	se: string;
+	code: number;
+}
+
+const spawnOnce = async (
+	v: Variant,
+	d: Dirs,
+	shimDir: string,
+	port: number,
+	prompt: string,
+	extra: string[],
+): Promise<Result> => {
+	const env = probeEnv(v, d, shimDir, port);
+	await assertShimReady(env);
+	const p = Bun.spawn(
+		[
+			BIN,
+			"-p",
+			prompt,
+			"--output-format",
+			"stream-json",
+			"--verbose",
+			"--model",
+			v.model ?? "claude-opus-5-5",
+			...extra,
+			...(v.args ?? []),
+		],
+		{
+			cwd: d.proj,
+			stdin: "ignore",
+			stdout: "pipe",
+			stderr: "pipe",
+			env,
+		},
+	);
+	const t = setTimeout(() => {
+		p.kill();
+	}, 60_000);
+	const [so, se] = await Promise.all([
+		new Response(p.stdout).text(),
+		new Response(p.stderr).text(),
+	]);
+	const code = await p.exited;
+	clearTimeout(t);
+	return { so, se, code };
+};
+
+const readLog = async (log: string): Promise<Rec[]> => {
+	const text = await Bun.file(log).text();
+	return text
+		.trim()
+		.split("\n")
+		.filter((l) => l !== "")
+		.map((l): unknown => JSON.parse(l))
+		.filter((r): r is Rec => isRec(r));
+};
+
+const bodyOf = (r: Rec): Rec => (isRec(r["body"]) ? r["body"] : {});
+
+const hostOf = (r: Rec): string => {
+	const h = isRec(r["headers"]) ? r["headers"]["host"] : undefined;
+	return typeof h === "string" ? h : "";
+};
+
+const isMessage = (r: Rec): boolean =>
+	typeof r["path"] === "string" &&
+	r["path"].startsWith("/v1/messages") &&
+	Boolean(bodyOf(r)["messages"]);
+
+/** Print the capture summary and warnings; false when a request left the local stub or used a real credential. */
+const report = (v: Variant, res: Result, reqs: Rec[]): boolean => {
+	const msgs = reqs.filter((r) => isMessage(r));
+	const bad = reqs.filter((r) => r["authIsFakeKey"] === false);
+	const hosts = new Set(reqs.map((r) => hostOf(r)));
+	const leaked = [...hosts].filter(
+		(h) => h !== "" && !h.startsWith("127.0.0.1"),
+	);
+	console.info(
+		`${v.id}: exit=${res.code} requests=${reqs.length} messages=${msgs.length} authFake=${bad.length === 0} hosts=${[...hosts].join(",")}`,
+	);
+	if (leaked.length > 0 || bad.length > 0) {
+		console.error("UNEXPECTED HOST OR CREDENTIAL");
+		return false;
+	}
+	if (msgs.length === 0) {
+		console.warn(
+			`  WARNING: no message request. stderr: ${res.se.slice(0, 200)}`,
+		);
+	}
+	if (
+		v.pick === "subagent" &&
+		!msgs.some((r) => JSON.stringify(bodyOf(r)["messages"]).includes(SUB_MARK))
+	) {
+		console.warn("  WARNING: no subagent request");
+	}
+	return true;
+};
+
+const writeResult = async (v: Variant, d: Dirs, res: Result): Promise<void> => {
+	await Promise.all([
+		Bun.write(join(d.dir, "stdout.txt"), res.so),
+		Bun.write(join(d.dir, "stderr.txt"), res.se),
+		Bun.write(
+			join(d.dir, "meta.json"),
+			JSON.stringify(
+				{ id: v.id, exit: res.code, cwd: d.proj, cfg: d.cfg, home: d.home },
+				null,
+				1,
+			),
+		),
+	]);
+};
+
+const runPrompts = async (
+	v: Variant,
+	d: Dirs,
+	shimDir: string,
+	port: number,
+): Promise<Result> => {
+	const res = await spawnOnce(
+		v,
+		d,
+		shimDir,
+		port,
+		v.prompt ?? DEFAULT_PROMPT,
+		[],
+	);
+	if (v.followUp === undefined || v.followUp === "") {
+		return res;
+	}
+	// second run in the same folders: gives the follow-up command a conversation to work on
+	await Bun.write(join(d.dir, "stdout-first.txt"), res.so);
+	return spawnOnce(v, d, shimDir, port, v.followUp, ["--continue"]);
+};
+
+/** Capture one variant; false means the run must stop with exit code 8. */
+const run = async (v: Variant): Promise<boolean> => {
+	const d = await prepare(v);
+	const shimDir = await writeSecurityShim(d.home);
+	if (v.git === true) {
+		await initGit(d);
+	}
+	const stub = startStub({
+		port: Number(process.env["STUB_PORT"] ?? 0),
+		log: d.log,
+		tool: v.tool?.name,
+		toolInput: v.tool?.input,
+	});
+	const res = await runPrompts(v, d, shimDir, stub.port ?? 0);
+	await stub.stop(true);
+	await writeResult(v, d, res);
+	if (!report(v, res, await readLog(d.log))) {
+		return false;
+	}
+	await Promise.all(
+		[d.cfg, d.home, d.proj].map((p) => rm(p, { recursive: true, force: true })),
+	);
+	return true;
+};
+
+/** Run the variants one after the other; each one uses the stub port and the shared captures folder. */
+const runAll = async (vs: readonly Variant[]): Promise<boolean> => {
+	const [v, ...rest] = vs;
+	if (v === undefined) {
+		return true;
+	}
+	if ((only === undefined || only.includes(v.id)) && !(await run(v))) {
+		return false;
+	}
+	return runAll(rest);
 };
 
 if (import.meta.main) {
-  for (const v of VARIANTS) if (!only || only.includes(v.id)) await run(v);
-  if (!argv.includes("--no-render")) await import("./render.ts");
+	if (await runAll(VARIANTS)) {
+		if (!argv.includes("--no-render")) {
+			await import("./render.ts");
+		}
+	} else {
+		process.exitCode = 8;
+	}
 }

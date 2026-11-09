@@ -1,641 +1,641 @@
 {
-  "$comment": "Value-free. Field path -> JSON types seen in real payloads (stub probes and local files) with a count each, capped at 100. Built by tools/schemas/observe/run.ts; tools/schemas/code.ts reads it. Do not edit by hand.",
-  "version": "2.1.310",
-  "fields": {
-    "ai-title.aiTitle": {
-      "string": 100
-    },
-    "ai-title.sessionId": {
-      "string": 100
-    },
-    "api-request-blob.agentId": {
-      "string": 100
-    },
-    "api-request-blob.hash": {
-      "string": 100
-    },
-    "api-request-blob.message": {
-      "object": 100
-    },
-    "api-request-blob.sessionId": {
-      "string": 100
-    },
-    "api-request-shape.agentId": {
-      "string": 100
-    },
-    "api-request-shape.sessionId": {
-      "string": 100
-    },
-    "api-request-shape.shape": {
-      "object": 100
-    },
-    "api-request-shape.shapeHash": {
-      "string": 100
-    },
-    "api-request-shape.timestamp": {
-      "string": 100
-    },
-    "api-request-shape.version": {
-      "string": 100
-    },
-    "api-request.agentId": {
-      "string": 100
-    },
-    "api-request.base": {
-      "string": 100
-    },
-    "api-request.id": {
-      "string": 100
-    },
-    "api-request.querySource": {
-      "string": 100
-    },
-    "api-request.requestDigest": {
-      "string": 100
-    },
-    "api-request.sessionId": {
-      "string": 100
-    },
-    "api-request.shapeHash": {
-      "string": 100
-    },
-    "api-request.tail": {
-      "array": 100
-    },
-    "assistant.advisorModel": {
-      "string": 100
-    },
-    "assistant.agentId": {
-      "string": 100
-    },
-    "assistant.apiBlockIndex": {
-      "integer": 100
-    },
-    "assistant.apiError": {
-      "string": 5
-    },
-    "assistant.apiErrorParams": {
-      "object": 5
-    },
-    "assistant.apiErrorStatus": {
-      "integer": 5
-    },
-    "assistant.attributionAgent": {
-      "string": 100
-    },
-    "assistant.attributionMcpServer": {
-      "string": 100
-    },
-    "assistant.attributionMcpTool": {
-      "string": 100
-    },
-    "assistant.attributionPlugin": {
-      "string": 100
-    },
-    "assistant.attributionSkill": {
-      "string": 100
-    },
-    "assistant.cwd": {
-      "string": 100
-    },
-    "assistant.effort": {
-      "string": 100
-    },
-    "assistant.entrypoint": {
-      "string": 100
-    },
-    "assistant.error": {
-      "string": 10
-    },
-    "assistant.gitBranch": {
-      "string": 100
-    },
-    "assistant.isApiErrorMessage": {
-      "boolean": 11
-    },
-    "assistant.isSidechain": {
-      "boolean": 100
-    },
-    "assistant.message.container": {
-      "null": 100
-    },
-    "assistant.message.content": {
-      "array": 100
-    },
-    "assistant.message.context_management": {
-      "null": 100
-    },
-    "assistant.message.diagnostics": {
-      "null": 100,
-      "object": 100
-    },
-    "assistant.message.id": {
-      "string": 100
-    },
-    "assistant.message.model": {
-      "string": 100
-    },
-    "assistant.message.role": {
-      "string": 100
-    },
-    "assistant.message.stop_details": {
-      "null": 100
-    },
-    "assistant.message.stop_reason": {
-      "null": 100,
-      "string": 100
-    },
-    "assistant.message.stop_sequence": {
-      "null": 100,
-      "string": 11
-    },
-    "assistant.message.type": {
-      "string": 100
-    },
-    "assistant.message.usage.cache_creation.ephemeral_1h_input_tokens": {
-      "integer": 100
-    },
-    "assistant.message.usage.cache_creation.ephemeral_5m_input_tokens": {
-      "integer": 100
-    },
-    "assistant.message.usage.cache_creation_input_tokens": {
-      "integer": 100
-    },
-    "assistant.message.usage.cache_read_input_tokens": {
-      "integer": 100
-    },
-    "assistant.message.usage.fallback_credit": {
-      "null": 100
-    },
-    "assistant.message.usage.inference_geo": {
-      "null": 11,
-      "string": 100
-    },
-    "assistant.message.usage.input_tokens": {
-      "integer": 100
-    },
-    "assistant.message.usage.iterations": {
-      "array": 100,
-      "null": 11
-    },
-    "assistant.message.usage.output_tokens": {
-      "integer": 100
-    },
-    "assistant.message.usage.output_tokens_details.thinking_tokens": {
-      "integer": 100
-    },
-    "assistant.message.usage.server_tool_use.web_fetch_requests": {
-      "integer": 100
-    },
-    "assistant.message.usage.server_tool_use.web_search_requests": {
-      "integer": 100
-    },
-    "assistant.message.usage.service_tier": {
-      "null": 11,
-      "string": 100
-    },
-    "assistant.message.usage.speed": {
-      "null": 11,
-      "string": 100
-    },
-    "assistant.parentUuid": {
-      "null": 1,
-      "string": 100
-    },
-    "assistant.perTurnEffort": {
-      "null": 1,
-      "string": 100
-    },
-    "assistant.quotaLimits": {
-      "object": 5
-    },
-    "assistant.requestId": {
-      "string": 100
-    },
-    "assistant.requestRef": {
-      "string": 100
-    },
-    "assistant.requestedModel": {
-      "string": 100
-    },
-    "assistant.serverClassifierRequest": {
-      "string": 100
-    },
-    "assistant.sessionId": {
-      "string": 100
-    },
-    "assistant.slug": {
-      "string": 100
-    },
-    "assistant.thinkingDisplay": {
-      "string": 100
-    },
-    "assistant.timestamp": {
-      "string": 100
-    },
-    "assistant.truncatedAfterOutput": {
-      "boolean": 1
-    },
-    "assistant.uuid": {
-      "string": 100
-    },
-    "assistant.wireIngestContext": {
-      "object": 100
-    },
-    "assistant.wireToolInputs": {
-      "object": 100
-    },
-    "atis-latch.atis": {
-      "string": 100
-    },
-    "atis-latch.sessionId": {
-      "string": 100
-    },
-    "attachment.agentId": {
-      "string": 100
-    },
-    "attachment.attachment.origin.kind": {
-      "string": 100
-    },
-    "attachment.attachment.prompt": {
-      "array": 8,
-      "string": 100
-    },
-    "attachment.attachment.source_uuid": {
-      "string": 100
-    },
-    "attachment.attachment.text": {
-      "string": 100
-    },
-    "attachment.attachment.type": {
-      "string": 100
-    },
-    "attachment.cwd": {
-      "string": 100
-    },
-    "attachment.entrypoint": {
-      "string": 100
-    },
-    "attachment.gitBranch": {
-      "string": 100
-    },
-    "attachment.isSidechain": {
-      "boolean": 100
-    },
-    "attachment.parentUuid": {
-      "null": 10,
-      "string": 100
-    },
-    "attachment.sessionId": {
-      "string": 100
-    },
-    "attachment.slug": {
-      "string": 100
-    },
-    "attachment.timestamp": {
-      "string": 100
-    },
-    "attachment.uuid": {
-      "string": 100
-    },
-    "cost-state.hasUnknownModelCost": {
-      "boolean": 100
-    },
-    "cost-state.modelUsage": {
-      "object": 100
-    },
-    "cost-state.sessionId": {
-      "string": 100
-    },
-    "cost-state.startTime": {
-      "integer": 100
-    },
-    "cost-state.totalAPIDuration": {
-      "integer": 100
-    },
-    "cost-state.totalAPIDurationWithoutRetries": {
-      "integer": 100
-    },
-    "cost-state.totalCostUSD": {
-      "integer": 21,
-      "number": 100
-    },
-    "cost-state.totalDuration": {
-      "integer": 100
-    },
-    "cost-state.totalLinesAdded": {
-      "integer": 100
-    },
-    "cost-state.totalLinesRemoved": {
-      "integer": 100
-    },
-    "cost-state.totalToolDuration": {
-      "integer": 100
-    },
-    "file-history-delta.backup": {
-      "object": 100
-    },
-    "file-history-delta.messageId": {
-      "string": 100
-    },
-    "file-history-delta.snapshotMessageId": {
-      "string": 100
-    },
-    "file-history-delta.trackingPath": {
-      "string": 100
-    },
-    "file-history-snapshot.isSnapshotUpdate": {
-      "boolean": 100
-    },
-    "file-history-snapshot.messageId": {
-      "string": 100
-    },
-    "file-history-snapshot.snapshot": {
-      "object": 100
-    },
-    "fork-context-ref.agentId": {
-      "string": 1
-    },
-    "fork-context-ref.parentLastUuid": {
-      "string": 1
-    },
-    "fork-context-ref.parentSessionId": {
-      "string": 1
-    },
-    "last-prompt.lastPrompt": {
-      "string": 100
-    },
-    "last-prompt.leafUuid": {
-      "string": 100
-    },
-    "last-prompt.sessionId": {
-      "string": 100
-    },
-    "mode.mode": {
-      "string": 100
-    },
-    "mode.sessionId": {
-      "string": 100
-    },
-    "permission-mode.permissionMode": {
-      "string": 100
-    },
-    "permission-mode.sessionId": {
-      "string": 100
-    },
-    "pr-link.prNumber": {
-      "integer": 60
-    },
-    "pr-link.prRepository": {
-      "string": 60
-    },
-    "pr-link.prUrl": {
-      "string": 60
-    },
-    "pr-link.sessionId": {
-      "string": 60
-    },
-    "queue-operation.commandUuid": {
-      "string": 100
-    },
-    "queue-operation.content": {
-      "string": 100
-    },
-    "queue-operation.deliveryId": {
-      "string": 100
-    },
-    "queue-operation.reason": {
-      "string": 100
-    },
-    "queue-operation.sessionId": {
-      "string": 100
-    },
-    "system.agentId": {
-      "string": 20
-    },
-    "system.commandRun.args": {
-      "string": 100
-    },
-    "system.commandRun.command": {
-      "string": 100
-    },
-    "system.commandRun.plugin": {
-      "string": 2
-    },
-    "system.compactMetadata.cumulativeDroppedTokens": {
-      "integer": 44
-    },
-    "system.compactMetadata.durationMs": {
-      "integer": 44
-    },
-    "system.compactMetadata.postTokens": {
-      "integer": 44
-    },
-    "system.compactMetadata.preTokens": {
-      "integer": 44
-    },
-    "system.compactMetadata.preservedMessages.anchorUuid": {
-      "string": 20
-    },
-    "system.compactMetadata.preservedSegment.anchorUuid": {
-      "string": 20
-    },
-    "system.compactMetadata.preservedSegment.headUuid": {
-      "string": 20
-    },
-    "system.compactMetadata.preservedSegment.tailUuid": {
-      "string": 20
-    },
-    "system.compactMetadata.trigger": {
-      "string": 44
-    },
-    "system.content": {
-      "string": 100
-    },
-    "system.contextUsage": {
-      "object": 13
-    },
-    "system.cwd": {
-      "string": 100
-    },
-    "system.durationMs": {
-      "integer": 100
-    },
-    "system.entrypoint": {
-      "string": 100
-    },
-    "system.error.connection.code": {
-      "string": 1
-    },
-    "system.error.connection.isSSLError": {
-      "boolean": 1
-    },
-    "system.error.connection.message": {
-      "string": 1
-    },
-    "system.error.formatted": {
-      "string": 1
-    },
-    "system.error.isNetworkDown": {
-      "boolean": 1
-    },
-    "system.error.message": {
-      "string": 1
-    },
-    "system.gitBranch": {
-      "string": 100
-    },
-    "system.isSidechain": {
-      "boolean": 100
-    },
-    "system.level": {
-      "string": 100
-    },
-    "system.logicalParentUuid": {
-      "string": 44
-    },
-    "system.maxRetries": {
-      "integer": 1
-    },
-    "system.parentUuid": {
-      "null": 46,
-      "string": 100
-    },
-    "system.pendingBackgroundAgentCount": {
-      "integer": 100
-    },
-    "system.retryAttempt": {
-      "integer": 1
-    },
-    "system.sessionId": {
-      "string": 100
-    },
-    "system.slug": {
-      "string": 100
-    },
-    "system.stopReason": {
-      "string": 100
-    },
-    "system.timestamp": {
-      "string": 100
-    },
-    "system.toolUseID": {
-      "string": 100
-    },
-    "system.uuid": {
-      "string": 100
-    },
-    "user.agentId": {
-      "string": 100
-    },
-    "user.cwd": {
-      "string": 100
-    },
-    "user.entrypoint": {
-      "string": 100
-    },
-    "user.gitBranch": {
-      "string": 100
-    },
-    "user.imagePasteIds": {
-      "array": 24
-    },
-    "user.interruptedMessageId": {
-      "string": 2
-    },
-    "user.isCompactSummary": {
-      "boolean": 20
-    },
-    "user.isMeta": {
-      "boolean": 100
-    },
-    "user.isSidechain": {
-      "boolean": 100
-    },
-    "user.isVisibleInTranscriptOnly": {
-      "boolean": 20
-    },
-    "user.mcpMeta": {
-      "object": 71
-    },
-    "user.message.content": {
-      "array": 100,
-      "string": 100
-    },
-    "user.message.role": {
-      "string": 100
-    },
-    "user.origin": {
-      "object": 100
-    },
-    "user.parentUuid": {
-      "null": 100,
-      "string": 100
-    },
-    "user.permissionDecision": {
-      "object": 100
-    },
-    "user.permissionMode": {
-      "string": 100
-    },
-    "user.promptId": {
-      "string": 100
-    },
-    "user.promptSource": {
-      "string": 100
-    },
-    "user.sandboxViolations": {
-      "array": 13
-    },
-    "user.sandboxed": {
-      "boolean": 100
-    },
-    "user.serverClassifierContext": {
-      "object": 100
-    },
-    "user.sessionId": {
-      "string": 100
-    },
-    "user.slug": {
-      "string": 100
-    },
-    "user.sourceToolAssistantUUID": {
-      "string": 100
-    },
-    "user.timestamp": {
-      "string": 100
-    },
-    "user.toolDenialKind": {
-      "string": 100
-    },
-    "user.toolEndsTurn": {
-      "boolean": 100
-    },
-    "user.toolUseResult.content": {
-      "array": 100,
-      "string": 100
-    },
-    "user.toolUseResult.filePath": {
-      "string": 100
-    },
-    "user.toolUseResult.originalFile": {
-      "null": 100,
-      "string": 100
-    },
-    "user.toolUseResult.structuredPatch": {
-      "array": 100
-    },
-    "user.toolUseResult.type": {
-      "string": 100
-    },
-    "user.turnCompanion": {
-      "boolean": 98
-    },
-    "user.turnOrigin": {
-      "string": 100
-    },
-    "user.uuid": {
-      "string": 100
-    }
-  }
+	"$comment": "Value-free. Field path -> JSON types seen in real payloads (stub probes and local files) with a count each, capped at 100. Built by tools/schemas/observe/run.ts; tools/schemas/code.ts reads it. Do not edit by hand.",
+	"version": "2.1.310",
+	"fields": {
+		"ai-title.aiTitle": {
+			"string": 100
+		},
+		"ai-title.sessionId": {
+			"string": 100
+		},
+		"api-request-blob.agentId": {
+			"string": 100
+		},
+		"api-request-blob.hash": {
+			"string": 100
+		},
+		"api-request-blob.message": {
+			"object": 100
+		},
+		"api-request-blob.sessionId": {
+			"string": 100
+		},
+		"api-request-shape.agentId": {
+			"string": 100
+		},
+		"api-request-shape.sessionId": {
+			"string": 100
+		},
+		"api-request-shape.shape": {
+			"object": 100
+		},
+		"api-request-shape.shapeHash": {
+			"string": 100
+		},
+		"api-request-shape.timestamp": {
+			"string": 100
+		},
+		"api-request-shape.version": {
+			"string": 100
+		},
+		"api-request.agentId": {
+			"string": 100
+		},
+		"api-request.base": {
+			"string": 100
+		},
+		"api-request.id": {
+			"string": 100
+		},
+		"api-request.querySource": {
+			"string": 100
+		},
+		"api-request.requestDigest": {
+			"string": 100
+		},
+		"api-request.sessionId": {
+			"string": 100
+		},
+		"api-request.shapeHash": {
+			"string": 100
+		},
+		"api-request.tail": {
+			"array": 100
+		},
+		"assistant.advisorModel": {
+			"string": 100
+		},
+		"assistant.agentId": {
+			"string": 100
+		},
+		"assistant.apiBlockIndex": {
+			"integer": 100
+		},
+		"assistant.apiError": {
+			"string": 5
+		},
+		"assistant.apiErrorParams": {
+			"object": 5
+		},
+		"assistant.apiErrorStatus": {
+			"integer": 5
+		},
+		"assistant.attributionAgent": {
+			"string": 100
+		},
+		"assistant.attributionMcpServer": {
+			"string": 100
+		},
+		"assistant.attributionMcpTool": {
+			"string": 100
+		},
+		"assistant.attributionPlugin": {
+			"string": 100
+		},
+		"assistant.attributionSkill": {
+			"string": 100
+		},
+		"assistant.cwd": {
+			"string": 100
+		},
+		"assistant.effort": {
+			"string": 100
+		},
+		"assistant.entrypoint": {
+			"string": 100
+		},
+		"assistant.error": {
+			"string": 10
+		},
+		"assistant.gitBranch": {
+			"string": 100
+		},
+		"assistant.isApiErrorMessage": {
+			"boolean": 11
+		},
+		"assistant.isSidechain": {
+			"boolean": 100
+		},
+		"assistant.message.container": {
+			"null": 100
+		},
+		"assistant.message.content": {
+			"array": 100
+		},
+		"assistant.message.context_management": {
+			"null": 100
+		},
+		"assistant.message.diagnostics": {
+			"null": 100,
+			"object": 100
+		},
+		"assistant.message.id": {
+			"string": 100
+		},
+		"assistant.message.model": {
+			"string": 100
+		},
+		"assistant.message.role": {
+			"string": 100
+		},
+		"assistant.message.stop_details": {
+			"null": 100
+		},
+		"assistant.message.stop_reason": {
+			"null": 100,
+			"string": 100
+		},
+		"assistant.message.stop_sequence": {
+			"null": 100,
+			"string": 11
+		},
+		"assistant.message.type": {
+			"string": 100
+		},
+		"assistant.message.usage.cache_creation.ephemeral_1h_input_tokens": {
+			"integer": 100
+		},
+		"assistant.message.usage.cache_creation.ephemeral_5m_input_tokens": {
+			"integer": 100
+		},
+		"assistant.message.usage.cache_creation_input_tokens": {
+			"integer": 100
+		},
+		"assistant.message.usage.cache_read_input_tokens": {
+			"integer": 100
+		},
+		"assistant.message.usage.fallback_credit": {
+			"null": 100
+		},
+		"assistant.message.usage.inference_geo": {
+			"null": 11,
+			"string": 100
+		},
+		"assistant.message.usage.input_tokens": {
+			"integer": 100
+		},
+		"assistant.message.usage.iterations": {
+			"array": 100,
+			"null": 11
+		},
+		"assistant.message.usage.output_tokens": {
+			"integer": 100
+		},
+		"assistant.message.usage.output_tokens_details.thinking_tokens": {
+			"integer": 100
+		},
+		"assistant.message.usage.server_tool_use.web_fetch_requests": {
+			"integer": 100
+		},
+		"assistant.message.usage.server_tool_use.web_search_requests": {
+			"integer": 100
+		},
+		"assistant.message.usage.service_tier": {
+			"null": 11,
+			"string": 100
+		},
+		"assistant.message.usage.speed": {
+			"null": 11,
+			"string": 100
+		},
+		"assistant.parentUuid": {
+			"null": 1,
+			"string": 100
+		},
+		"assistant.perTurnEffort": {
+			"null": 1,
+			"string": 100
+		},
+		"assistant.quotaLimits": {
+			"object": 5
+		},
+		"assistant.requestId": {
+			"string": 100
+		},
+		"assistant.requestRef": {
+			"string": 100
+		},
+		"assistant.requestedModel": {
+			"string": 100
+		},
+		"assistant.serverClassifierRequest": {
+			"string": 100
+		},
+		"assistant.sessionId": {
+			"string": 100
+		},
+		"assistant.slug": {
+			"string": 100
+		},
+		"assistant.thinkingDisplay": {
+			"string": 100
+		},
+		"assistant.timestamp": {
+			"string": 100
+		},
+		"assistant.truncatedAfterOutput": {
+			"boolean": 1
+		},
+		"assistant.uuid": {
+			"string": 100
+		},
+		"assistant.wireIngestContext": {
+			"object": 100
+		},
+		"assistant.wireToolInputs": {
+			"object": 100
+		},
+		"atis-latch.atis": {
+			"string": 100
+		},
+		"atis-latch.sessionId": {
+			"string": 100
+		},
+		"attachment.agentId": {
+			"string": 100
+		},
+		"attachment.attachment.origin.kind": {
+			"string": 100
+		},
+		"attachment.attachment.prompt": {
+			"array": 8,
+			"string": 100
+		},
+		"attachment.attachment.source_uuid": {
+			"string": 100
+		},
+		"attachment.attachment.text": {
+			"string": 100
+		},
+		"attachment.attachment.type": {
+			"string": 100
+		},
+		"attachment.cwd": {
+			"string": 100
+		},
+		"attachment.entrypoint": {
+			"string": 100
+		},
+		"attachment.gitBranch": {
+			"string": 100
+		},
+		"attachment.isSidechain": {
+			"boolean": 100
+		},
+		"attachment.parentUuid": {
+			"null": 10,
+			"string": 100
+		},
+		"attachment.sessionId": {
+			"string": 100
+		},
+		"attachment.slug": {
+			"string": 100
+		},
+		"attachment.timestamp": {
+			"string": 100
+		},
+		"attachment.uuid": {
+			"string": 100
+		},
+		"cost-state.hasUnknownModelCost": {
+			"boolean": 100
+		},
+		"cost-state.modelUsage": {
+			"object": 100
+		},
+		"cost-state.sessionId": {
+			"string": 100
+		},
+		"cost-state.startTime": {
+			"integer": 100
+		},
+		"cost-state.totalAPIDuration": {
+			"integer": 100
+		},
+		"cost-state.totalAPIDurationWithoutRetries": {
+			"integer": 100
+		},
+		"cost-state.totalCostUSD": {
+			"integer": 21,
+			"number": 100
+		},
+		"cost-state.totalDuration": {
+			"integer": 100
+		},
+		"cost-state.totalLinesAdded": {
+			"integer": 100
+		},
+		"cost-state.totalLinesRemoved": {
+			"integer": 100
+		},
+		"cost-state.totalToolDuration": {
+			"integer": 100
+		},
+		"file-history-delta.backup": {
+			"object": 100
+		},
+		"file-history-delta.messageId": {
+			"string": 100
+		},
+		"file-history-delta.snapshotMessageId": {
+			"string": 100
+		},
+		"file-history-delta.trackingPath": {
+			"string": 100
+		},
+		"file-history-snapshot.isSnapshotUpdate": {
+			"boolean": 100
+		},
+		"file-history-snapshot.messageId": {
+			"string": 100
+		},
+		"file-history-snapshot.snapshot": {
+			"object": 100
+		},
+		"fork-context-ref.agentId": {
+			"string": 1
+		},
+		"fork-context-ref.parentLastUuid": {
+			"string": 1
+		},
+		"fork-context-ref.parentSessionId": {
+			"string": 1
+		},
+		"last-prompt.lastPrompt": {
+			"string": 100
+		},
+		"last-prompt.leafUuid": {
+			"string": 100
+		},
+		"last-prompt.sessionId": {
+			"string": 100
+		},
+		"mode.mode": {
+			"string": 100
+		},
+		"mode.sessionId": {
+			"string": 100
+		},
+		"permission-mode.permissionMode": {
+			"string": 100
+		},
+		"permission-mode.sessionId": {
+			"string": 100
+		},
+		"pr-link.prNumber": {
+			"integer": 60
+		},
+		"pr-link.prRepository": {
+			"string": 60
+		},
+		"pr-link.prUrl": {
+			"string": 60
+		},
+		"pr-link.sessionId": {
+			"string": 60
+		},
+		"queue-operation.commandUuid": {
+			"string": 100
+		},
+		"queue-operation.content": {
+			"string": 100
+		},
+		"queue-operation.deliveryId": {
+			"string": 100
+		},
+		"queue-operation.reason": {
+			"string": 100
+		},
+		"queue-operation.sessionId": {
+			"string": 100
+		},
+		"system.agentId": {
+			"string": 20
+		},
+		"system.commandRun.args": {
+			"string": 100
+		},
+		"system.commandRun.command": {
+			"string": 100
+		},
+		"system.commandRun.plugin": {
+			"string": 2
+		},
+		"system.compactMetadata.cumulativeDroppedTokens": {
+			"integer": 44
+		},
+		"system.compactMetadata.durationMs": {
+			"integer": 44
+		},
+		"system.compactMetadata.postTokens": {
+			"integer": 44
+		},
+		"system.compactMetadata.preTokens": {
+			"integer": 44
+		},
+		"system.compactMetadata.preservedMessages.anchorUuid": {
+			"string": 20
+		},
+		"system.compactMetadata.preservedSegment.anchorUuid": {
+			"string": 20
+		},
+		"system.compactMetadata.preservedSegment.headUuid": {
+			"string": 20
+		},
+		"system.compactMetadata.preservedSegment.tailUuid": {
+			"string": 20
+		},
+		"system.compactMetadata.trigger": {
+			"string": 44
+		},
+		"system.content": {
+			"string": 100
+		},
+		"system.contextUsage": {
+			"object": 13
+		},
+		"system.cwd": {
+			"string": 100
+		},
+		"system.durationMs": {
+			"integer": 100
+		},
+		"system.entrypoint": {
+			"string": 100
+		},
+		"system.error.connection.code": {
+			"string": 1
+		},
+		"system.error.connection.isSSLError": {
+			"boolean": 1
+		},
+		"system.error.connection.message": {
+			"string": 1
+		},
+		"system.error.formatted": {
+			"string": 1
+		},
+		"system.error.isNetworkDown": {
+			"boolean": 1
+		},
+		"system.error.message": {
+			"string": 1
+		},
+		"system.gitBranch": {
+			"string": 100
+		},
+		"system.isSidechain": {
+			"boolean": 100
+		},
+		"system.level": {
+			"string": 100
+		},
+		"system.logicalParentUuid": {
+			"string": 44
+		},
+		"system.maxRetries": {
+			"integer": 1
+		},
+		"system.parentUuid": {
+			"null": 46,
+			"string": 100
+		},
+		"system.pendingBackgroundAgentCount": {
+			"integer": 100
+		},
+		"system.retryAttempt": {
+			"integer": 1
+		},
+		"system.sessionId": {
+			"string": 100
+		},
+		"system.slug": {
+			"string": 100
+		},
+		"system.stopReason": {
+			"string": 100
+		},
+		"system.timestamp": {
+			"string": 100
+		},
+		"system.toolUseID": {
+			"string": 100
+		},
+		"system.uuid": {
+			"string": 100
+		},
+		"user.agentId": {
+			"string": 100
+		},
+		"user.cwd": {
+			"string": 100
+		},
+		"user.entrypoint": {
+			"string": 100
+		},
+		"user.gitBranch": {
+			"string": 100
+		},
+		"user.imagePasteIds": {
+			"array": 24
+		},
+		"user.interruptedMessageId": {
+			"string": 2
+		},
+		"user.isCompactSummary": {
+			"boolean": 20
+		},
+		"user.isMeta": {
+			"boolean": 100
+		},
+		"user.isSidechain": {
+			"boolean": 100
+		},
+		"user.isVisibleInTranscriptOnly": {
+			"boolean": 20
+		},
+		"user.mcpMeta": {
+			"object": 71
+		},
+		"user.message.content": {
+			"array": 100,
+			"string": 100
+		},
+		"user.message.role": {
+			"string": 100
+		},
+		"user.origin": {
+			"object": 100
+		},
+		"user.parentUuid": {
+			"null": 100,
+			"string": 100
+		},
+		"user.permissionDecision": {
+			"object": 100
+		},
+		"user.permissionMode": {
+			"string": 100
+		},
+		"user.promptId": {
+			"string": 100
+		},
+		"user.promptSource": {
+			"string": 100
+		},
+		"user.sandboxViolations": {
+			"array": 13
+		},
+		"user.sandboxed": {
+			"boolean": 100
+		},
+		"user.serverClassifierContext": {
+			"object": 100
+		},
+		"user.sessionId": {
+			"string": 100
+		},
+		"user.slug": {
+			"string": 100
+		},
+		"user.sourceToolAssistantUUID": {
+			"string": 100
+		},
+		"user.timestamp": {
+			"string": 100
+		},
+		"user.toolDenialKind": {
+			"string": 100
+		},
+		"user.toolEndsTurn": {
+			"boolean": 100
+		},
+		"user.toolUseResult.content": {
+			"array": 100,
+			"string": 100
+		},
+		"user.toolUseResult.filePath": {
+			"string": 100
+		},
+		"user.toolUseResult.originalFile": {
+			"null": 100,
+			"string": 100
+		},
+		"user.toolUseResult.structuredPatch": {
+			"array": 100
+		},
+		"user.toolUseResult.type": {
+			"string": 100
+		},
+		"user.turnCompanion": {
+			"boolean": 98
+		},
+		"user.turnOrigin": {
+			"string": 100
+		},
+		"user.uuid": {
+			"string": 100
+		}
+	}
 }

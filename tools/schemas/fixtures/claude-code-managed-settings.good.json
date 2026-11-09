@@ -1,6 +1,6 @@
 {
-  "$schema": "https://clawdipedia.cc/schemas/claude-code-managed-settings.json",
-  "allowManagedHooksOnly": true,
-  "permissions": { "deny": ["Bash(curl *)"] },
-  "env": { "HTTPS_PROXY": "http://proxy.example:3128" }
+	"$schema": "https://clawdipedia.cc/schemas/claude-code-managed-settings.json",
+	"allowManagedHooksOnly": true,
+	"permissions": { "deny": ["Bash(curl *)"] },
+	"env": { "HTTPS_PROXY": "http://proxy.example:3128" }
 }

@@ -1,224 +1,224 @@
 {
-  "$comment": "Types read by hand from the Claude Code 2.1.308 program for the status line input fields that tools/schemas/code.ts leaves x-unverified.",
-  "version": "2.1.308",
-  "fields": {
-    "scratchpad_dir": {
-      "schema": {
-        "type": "string"
-      },
-      "anchors": ["scratchpad_dir:«»()?«»(«».id)??void 0:void 0,prompt_id:"],
-      "note": "Function ku (the shared hook and status line base input) sets scratchpad_dir:bC()?TT(e.id)??void 0:void 0. TT builds the path with node path.join (ve(MA(),e,\"scratchpad\")) or returns null; ?? void 0 turns null into undefined, which JSON drops. So a string when present."
-    },
-    "agent_type": {
-      "schema": {
-        "type": "string"
-      },
-      "anchors": ["agent_type:«»,effort:«»"],
-      "note": "ku sets agent_type:h with h=s?.agentType??qk(). qk() returns the main thread agent type from the hook registry, a string agent type name (undefined when none, which JSON drops)."
-    },
-    "subagentStatusLineInput.scratchpad_dir": {
-      "schema": {
-        "type": "string"
-      },
-      "anchors": ["scratchpad_dir:«»()?«»(«».id)??void 0:void 0,prompt_id:"],
-      "note": "Function ku (the shared hook and status line base input) sets scratchpad_dir:bC()?TT(e.id)??void 0:void 0. TT builds the path with node path.join (ve(MA(),e,\"scratchpad\")) or returns null; ?? void 0 turns null into undefined, which JSON drops. So a string when present."
-    },
-    "subagentStatusLineInput.agent_type": {
-      "schema": {
-        "type": "string"
-      },
-      "anchors": ["agent_type:«»,effort:«»"],
-      "note": "ku sets agent_type:h with h=s?.agentType??qk(). qk() returns the main thread agent type from the hook registry, a string agent type name (undefined when none, which JSON drops)."
-    },
-    "cost.total_cost_usd": {
-      "schema": {
-        "type": "number"
-      },
-      "anchors": [
-        "total_cost_usd:«»(),...!1",
-        "total_cost_usd:«»(),total_api_duration_ms:«»(),total_duration_ms:«»()"
-      ],
-      "note": "ZUr builds cost:{total_cost_usd:Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalCostUSD() returns #e, a running sum (#e+=e in recordCost) that starts at 0, so a number (a float: US dollars)."
-    },
-    "cost.total_duration_ms": {
-      "schema": {
-        "type": "number"
-      },
-      "anchors": [
-        "...!1,total_duration_ms:«»()",
-        "total_api_duration_ms:«»(),total_duration_ms:«»()"
-      ],
-      "note": "ZUr builds cost:{total_cost_usd:Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalDuration() returns Math.max(0,Date.now()-#r): a number of milliseconds."
-    },
-    "cost.total_api_duration_ms": {
-      "schema": {
-        "type": "number"
-      },
-      "anchors": [
-        "total_duration_ms:«»(),total_api_duration_ms:«»()",
-        "total_cost_usd:«»(),total_api_duration_ms:«»(),total_duration_ms:«»()"
-      ],
-      "note": "ZUr builds cost:{total_cost_usd:Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalAPIDuration() returns #t, a running sum of the durations passed to recordApiDuration (#t+=e), starting at 0: a number of milliseconds."
-    },
-    "cost.total_lines_added": {
-      "schema": {
-        "type": "number"
-      },
-      "anchors": [
-        "total_api_duration_ms:«»(),total_lines_added:«»()",
-        "total_duration_ms:«»(),total_lines_added:«»()"
-      ],
-      "note": "ZUr builds cost:{total_cost_usd:Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalLinesAdded() returns #i, a running count (#i+=e in recordLinesChanged), starting at 0: a number."
-    },
-    "cost.total_lines_removed": {
-      "schema": {
-        "type": "number"
-      },
-      "anchors": [
-        "total_cost_usd:«»(),...!1,total_duration_ms:«»(),total_api_duration_ms:«»(),total_lines_added:«»(),total_lines_removed:«»()",
-        "total_cost_usd:«»(),total_api_duration_ms:«»(),total_duration_ms:«»(),total_lines_added:«»(),total_lines_removed:«»()"
-      ],
-      "note": "ZUr builds cost:{total_cost_usd:Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalLinesRemoved() returns #l, a running count (#l+=t in recordLinesChanged), starting at 0: a number."
-    },
-    "exceeds_200k_tokens": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": ["exceeds_200k_tokens:«»,"],
-      "note": "ZUr takes exceeds200kTokens:r. Its caller passes s=this.#f=jEe(messages). jEe returns !1 or iO(usage)>200000, a boolean."
-    },
-    "fast_mode": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": ["...«»(),fast_mode:«»"],
-      "note": "ZUr takes fastMode:s from the app state field fastMode, which starts as fastMode:!1 and is only set to !1 or a boolean (Y((h)=>({...h,fastMode:!1})))."
-    },
-    "remote.session_id": {
-      "schema": {
-        "type": "string"
-      },
-      "anchors": ["{remote:{session_id:«».id}}"],
-      "note": "...Zn()!==null&&{remote:{session_id:e.id}}: e is the session object; its id is the session id string (V() / randomUUID)."
-    },
-    "subagentStatusLineInput.tasks[].id": {
-      "schema": {
-        "type": "string"
-      },
-      "anchors": ["tasks:«».map((«»)=>({id:«».id,name:«».get(«».id)"],
-      "note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). id is the agent id string."
-    },
-    "subagentStatusLineInput.tasks[].name": {
-      "schema": {
-        "type": "string"
-      },
-      "anchors": ["id:«».id,name:«».get(«».id)"],
-      "note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). name comes from L.get(id), the reverse map of agentNameRegistry (name -> id, built as Pt.set(xt,_t) from [_t,xt] of lt.agentNameRegistry): a string name, or undefined (dropped) when the agent has no name."
-    },
-    "subagentStatusLineInput.tasks[].type": {
-      "schema": {
-        "const": "local_agent"
-      },
-      "anchors": ["type:«».type,agentType:«».agentType"],
-      "note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). The filter Cn(e) is e.type===\"local_agent\" so the value is always that literal."
-    },
-    "subagentStatusLineInput.tasks[].agentType": {
-      "schema": {
-        "type": "string"
-      },
-      "anchors": ["type:«».type,agentType:«».agentType"],
-      "note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). agentType is set from w.agentType??\"general-purpose\" or e.agentType??\"general-purpose\": a string."
-    },
-    "subagentStatusLineInput.tasks[].status": {
-      "schema": {
-        "enum": [
-          "pending",
-          "running",
-          "completed",
-          "failed",
-          "killed",
-          "paused"
-        ]
-      },
-      "anchors": [
-        "id:«».id,name:«».get(«».id),type:«».type,agentType:«».agentType,status:«».status"
-      ],
-      "note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). The program's task_updated patch schema lists the task statuses: U([\"pending\",\"running\",\"completed\",\"failed\",\"killed\",\"paused\"]); is(status) is true for completed, failed and killed."
-    },
-    "subagentStatusLineInput.tasks[].description": {
-      "schema": {
-        "type": "string"
-      },
-      "anchors": ["description:«».description,label:"],
-      "note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). description is the string passed to the task factory (h, or \"(resumed agent)\")."
-    },
-    "subagentStatusLineInput.tasks[].label": {
-      "schema": {
-        "type": "string"
-      },
-      "anchors": ["label:«»(«»)||«».description"],
-      "note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). label:h6t(Pt)||Pt.description. h6t returns h.label when it is a string, else h.progress?.summary (a string); the || falls back to the description string."
-    },
-    "subagentStatusLineInput.tasks[].startTime": {
-      "schema": {
-        "type": "number"
-      },
-      "anchors": ["startTime:«».startTime,model:«».model"],
-      "note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). startTime is Date.now() in LS (a number of milliseconds since the epoch); a resumed agent takes e.startTime??r.startTime."
-    },
-    "subagentStatusLineInput.tasks[].model": {
-      "schema": {
-        "type": "string"
-      },
-      "anchors": ["startTime:«».startTime,model:«».model"],
-      "note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). model is the agent model name string; undefined (dropped) for resumed agents, whose state has no model."
-    },
-    "subagentStatusLineInput.tasks[].effort": {
-      "schema": {
-        "anyOf": [
-          {
-            "enum": ["low", "medium", "high", "xhigh", "max"]
-          },
-          {
-            "type": "integer"
-          }
-        ]
-      },
-      "anchors": ["effort:«».effort,contextWindowSize:"],
-      "note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). effort:w.effort is the effort of the selected agent definition. The program's agent definition schema declares it as Ue([U([\"low\",\"medium\",\"high\",\"xhigh\",\"max\"]),E().int()]): a level name or an integer. undefined (dropped) when the agent sets none."
-    },
-    "subagentStatusLineInput.tasks[].contextWindowSize": {
-      "schema": {
-        "type": "number"
-      },
-      "anchors": ["contextWindowSize:«».model?«»(«».model,«»()):void 0"],
-      "note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). Om(model,betas) returns the context window size in tokens, a number; undefined when the task has no model."
-    },
-    "subagentStatusLineInput.tasks[].tokenCount": {
-      "schema": {
-        "type": "number"
-      },
-      "anchors": [
-        "contextWindowSize:«».model?«»(«».model,«»()):void 0,tokenCount:«».progress?.tokenCount??0"
-      ],
-      "note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). Pt.progress?.tokenCount??0: a number."
-    },
-    "subagentStatusLineInput.tasks[].tokenSamples": {
-      "schema": {
-        "type": "array",
-        "items": {
-          "type": "number"
-        }
-      },
-      "anchors": ["tokenSamples:«».get(«».id)??[]"],
-      "note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). X2e keeps for each task id an array of tokenCount numbers (ne.push(Z), at most J2e=16 kept), or [] when none."
-    },
-    "subagentStatusLineInput.tasks[].cwd": {
-      "schema": {
-        "type": "string"
-      },
-      "anchors": ["tokenSamples:«».get(«».id)??[],cwd:«».cwd??«»"],
-      "note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). cwd:Pt.cwd??ne, where ne=pe() is the current working directory string."
-    }
-  }
+	"$comment": "Types read by hand from the Claude Code 2.1.308 program for the status line input fields that tools/schemas/code.ts leaves x-unverified.",
+	"version": "2.1.308",
+	"fields": {
+		"scratchpad_dir": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["scratchpad_dir:«»()?«»(«».id)??void 0:void 0,prompt_id:"],
+			"note": "Function ku (the shared hook and status line base input) sets scratchpad_dir:bC()?TT(e.id)??void 0:void 0. TT builds the path with node path.join (ve(MA(),e,\"scratchpad\")) or returns null; ?? void 0 turns null into undefined, which JSON drops. So a string when present."
+		},
+		"agent_type": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["agent_type:«»,effort:«»"],
+			"note": "ku sets agent_type:h with h=s?.agentType??qk(). qk() returns the main thread agent type from the hook registry, a string agent type name (undefined when none, which JSON drops)."
+		},
+		"subagentStatusLineInput.scratchpad_dir": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["scratchpad_dir:«»()?«»(«».id)??void 0:void 0,prompt_id:"],
+			"note": "Function ku (the shared hook and status line base input) sets scratchpad_dir:bC()?TT(e.id)??void 0:void 0. TT builds the path with node path.join (ve(MA(),e,\"scratchpad\")) or returns null; ?? void 0 turns null into undefined, which JSON drops. So a string when present."
+		},
+		"subagentStatusLineInput.agent_type": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["agent_type:«»,effort:«»"],
+			"note": "ku sets agent_type:h with h=s?.agentType??qk(). qk() returns the main thread agent type from the hook registry, a string agent type name (undefined when none, which JSON drops)."
+		},
+		"cost.total_cost_usd": {
+			"schema": {
+				"type": "number"
+			},
+			"anchors": [
+				"total_cost_usd:«»(),...!1",
+				"total_cost_usd:«»(),total_api_duration_ms:«»(),total_duration_ms:«»()"
+			],
+			"note": "ZUr builds cost:{total_cost_usd:Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalCostUSD() returns #e, a running sum (#e+=e in recordCost) that starts at 0, so a number (a float: US dollars)."
+		},
+		"cost.total_duration_ms": {
+			"schema": {
+				"type": "number"
+			},
+			"anchors": [
+				"...!1,total_duration_ms:«»()",
+				"total_api_duration_ms:«»(),total_duration_ms:«»()"
+			],
+			"note": "ZUr builds cost:{total_cost_usd:Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalDuration() returns Math.max(0,Date.now()-#r): a number of milliseconds."
+		},
+		"cost.total_api_duration_ms": {
+			"schema": {
+				"type": "number"
+			},
+			"anchors": [
+				"total_duration_ms:«»(),total_api_duration_ms:«»()",
+				"total_cost_usd:«»(),total_api_duration_ms:«»(),total_duration_ms:«»()"
+			],
+			"note": "ZUr builds cost:{total_cost_usd:Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalAPIDuration() returns #t, a running sum of the durations passed to recordApiDuration (#t+=e), starting at 0: a number of milliseconds."
+		},
+		"cost.total_lines_added": {
+			"schema": {
+				"type": "number"
+			},
+			"anchors": [
+				"total_api_duration_ms:«»(),total_lines_added:«»()",
+				"total_duration_ms:«»(),total_lines_added:«»()"
+			],
+			"note": "ZUr builds cost:{total_cost_usd:Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalLinesAdded() returns #i, a running count (#i+=e in recordLinesChanged), starting at 0: a number."
+		},
+		"cost.total_lines_removed": {
+			"schema": {
+				"type": "number"
+			},
+			"anchors": [
+				"total_cost_usd:«»(),...!1,total_duration_ms:«»(),total_api_duration_ms:«»(),total_lines_added:«»(),total_lines_removed:«»()",
+				"total_cost_usd:«»(),total_api_duration_ms:«»(),total_duration_ms:«»(),total_lines_added:«»(),total_lines_removed:«»()"
+			],
+			"note": "ZUr builds cost:{total_cost_usd:Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalLinesRemoved() returns #l, a running count (#l+=t in recordLinesChanged), starting at 0: a number."
+		},
+		"exceeds_200k_tokens": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": ["exceeds_200k_tokens:«»,"],
+			"note": "ZUr takes exceeds200kTokens:r. Its caller passes s=this.#f=jEe(messages). jEe returns !1 or iO(usage)>200000, a boolean."
+		},
+		"fast_mode": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": ["...«»(),fast_mode:«»"],
+			"note": "ZUr takes fastMode:s from the app state field fastMode, which starts as fastMode:!1 and is only set to !1 or a boolean (Y((h)=>({...h,fastMode:!1})))."
+		},
+		"remote.session_id": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["{remote:{session_id:«».id}}"],
+			"note": "...Zn()!==null&&{remote:{session_id:e.id}}: e is the session object; its id is the session id string (V() / randomUUID)."
+		},
+		"subagentStatusLineInput.tasks[].id": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["tasks:«».map((«»)=>({id:«».id,name:«».get(«».id)"],
+			"note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). id is the agent id string."
+		},
+		"subagentStatusLineInput.tasks[].name": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["id:«».id,name:«».get(«».id)"],
+			"note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). name comes from L.get(id), the reverse map of agentNameRegistry (name -> id, built as Pt.set(xt,_t) from [_t,xt] of lt.agentNameRegistry): a string name, or undefined (dropped) when the agent has no name."
+		},
+		"subagentStatusLineInput.tasks[].type": {
+			"schema": {
+				"const": "local_agent"
+			},
+			"anchors": ["type:«».type,agentType:«».agentType"],
+			"note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). The filter Cn(e) is e.type===\"local_agent\" so the value is always that literal."
+		},
+		"subagentStatusLineInput.tasks[].agentType": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["type:«».type,agentType:«».agentType"],
+			"note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). agentType is set from w.agentType??\"general-purpose\" or e.agentType??\"general-purpose\": a string."
+		},
+		"subagentStatusLineInput.tasks[].status": {
+			"schema": {
+				"enum": [
+					"pending",
+					"running",
+					"completed",
+					"failed",
+					"killed",
+					"paused"
+				]
+			},
+			"anchors": [
+				"id:«».id,name:«».get(«».id),type:«».type,agentType:«».agentType,status:«».status"
+			],
+			"note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). The program's task_updated patch schema lists the task statuses: U([\"pending\",\"running\",\"completed\",\"failed\",\"killed\",\"paused\"]); is(status) is true for completed, failed and killed."
+		},
+		"subagentStatusLineInput.tasks[].description": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["description:«».description,label:"],
+			"note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). description is the string passed to the task factory (h, or \"(resumed agent)\")."
+		},
+		"subagentStatusLineInput.tasks[].label": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["label:«»(«»)||«».description"],
+			"note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). label:h6t(Pt)||Pt.description. h6t returns h.label when it is a string, else h.progress?.summary (a string); the || falls back to the description string."
+		},
+		"subagentStatusLineInput.tasks[].startTime": {
+			"schema": {
+				"type": "number"
+			},
+			"anchors": ["startTime:«».startTime,model:«».model"],
+			"note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). startTime is Date.now() in LS (a number of milliseconds since the epoch); a resumed agent takes e.startTime??r.startTime."
+		},
+		"subagentStatusLineInput.tasks[].model": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["startTime:«».startTime,model:«».model"],
+			"note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). model is the agent model name string; undefined (dropped) for resumed agents, whose state has no model."
+		},
+		"subagentStatusLineInput.tasks[].effort": {
+			"schema": {
+				"anyOf": [
+					{
+						"enum": ["low", "medium", "high", "xhigh", "max"]
+					},
+					{
+						"type": "integer"
+					}
+				]
+			},
+			"anchors": ["effort:«».effort,contextWindowSize:"],
+			"note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). effort:w.effort is the effort of the selected agent definition. The program's agent definition schema declares it as Ue([U([\"low\",\"medium\",\"high\",\"xhigh\",\"max\"]),E().int()]): a level name or an integer. undefined (dropped) when the agent sets none."
+		},
+		"subagentStatusLineInput.tasks[].contextWindowSize": {
+			"schema": {
+				"type": "number"
+			},
+			"anchors": ["contextWindowSize:«».model?«»(«».model,«»()):void 0"],
+			"note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). Om(model,betas) returns the context window size in tokens, a number; undefined when the task has no model."
+		},
+		"subagentStatusLineInput.tasks[].tokenCount": {
+			"schema": {
+				"type": "number"
+			},
+			"anchors": [
+				"contextWindowSize:«».model?«»(«».model,«»()):void 0,tokenCount:«».progress?.tokenCount??0"
+			],
+			"note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). Pt.progress?.tokenCount??0: a number."
+		},
+		"subagentStatusLineInput.tasks[].tokenSamples": {
+			"schema": {
+				"type": "array",
+				"items": {
+					"type": "number"
+				}
+			},
+			"anchors": ["tokenSamples:«».get(«».id)??[]"],
+			"note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). X2e keeps for each task id an array of tokenCount numbers (ne.push(Z), at most J2e=16 kept), or [] when none."
+		},
+		"subagentStatusLineInput.tasks[].cwd": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["tokenSamples:«».get(«».id)??[],cwd:«».cwd??«»"],
+			"note": "Z2e builds tasks:h.map((Pt)=>({id,name,type,agentType,status,description,label,startTime,model,effort,contextWindowSize,tokenCount,tokenSamples,cwd})). The tasks come from Qfe(), which keeps tasks that pass Tft = Cn(e) && agentType!==\"main-session\" && !forkWorker && evictAfter!==0, where Cn(e) is e.type===\"local_agent\". So every task is a local agent task state, created by the local agent task factory (type:\"local_agent\", status:\"running\"; the base task LS(id,type,description,toolUseId) gives status:\"pending\", startTime:Date.now()). cwd:Pt.cwd??ne, where ne=pe() is the current working directory string."
+		}
+	}
 }

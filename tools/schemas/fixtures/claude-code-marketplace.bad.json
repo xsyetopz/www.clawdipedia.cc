@@ -1,5 +1,5 @@
 {
-  "name": "m",
-  "owner": { "name": "me" },
-  "plugins": [{ "name": "p", "source": "./p", "tags": "x" }]
+	"name": "m",
+	"owner": { "name": "me" },
+	"plugins": [{ "name": "p", "source": "./p", "tags": "x" }]
 }

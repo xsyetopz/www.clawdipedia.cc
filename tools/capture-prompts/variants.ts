@@ -10,18 +10,18 @@ import { MISC_VARIANTS } from "./variants/misc.ts";
 import { STYLE_VARIANTS } from "./variants/style.ts";
 
 export {
-  LEAN_MODEL,
-  type PromptGroup,
-  SUB_MARK,
-  type Variant,
+	LEAN_MODEL,
+	type PromptGroup,
+	SUB_MARK,
+	type Variant,
 } from "./variants/base.ts";
 
 export const VARIANTS: Variant[] = [
-  ...DEFAULT_VARIANTS,
-  ...STYLE_VARIANTS,
-  ...CONTEXT_VARIANTS,
-  ...AGENT_VARIANTS,
-  ...COMMAND_VARIANTS,
-  ...HOOK_VARIANTS,
-  ...MISC_VARIANTS,
+	...DEFAULT_VARIANTS,
+	...STYLE_VARIANTS,
+	...CONTEXT_VARIANTS,
+	...AGENT_VARIANTS,
+	...COMMAND_VARIANTS,
+	...HOOK_VARIANTS,
+	...MISC_VARIANTS,
 ];

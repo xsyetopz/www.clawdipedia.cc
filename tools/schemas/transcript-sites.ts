@@ -6,15 +6,15 @@
  * `before` is the source text just before the literal.
  */
 export const isTranscriptSite = (
-  type: string,
-  keys: string[],
-  streamKeys: ReadonlySet<string>,
-  before = "",
+	type: string,
+	keys: string[],
+	streamKeys: ReadonlySet<string>,
+	before = "",
 ): boolean => {
-  const ok = keys.includes("uuid") || keys.includes("toolUseID");
-  const stream = keys.some((k) => k.includes("_") && streamKeys.has(k));
-  const payload = /payload:$/.test(before);
-  return (
-    ok && !stream && !payload && (type !== "system" || keys.includes("subtype"))
-  );
+	const ok = keys.includes("uuid") || keys.includes("toolUseID");
+	const stream = keys.some((k) => k.includes("_") && streamKeys.has(k));
+	const payload = before.endsWith("payload:");
+	return (
+		ok && !stream && !payload && (type !== "system" || keys.includes("subtype"))
+	);
 };

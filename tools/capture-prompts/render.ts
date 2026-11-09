@@ -11,15 +11,15 @@ import { findDups, loadCaps } from "./render/load.ts";
 import { toolsPage, toolsPerVariantPage } from "./render/tools.ts";
 import { variantPages } from "./render/variant.ts";
 
-loadCaps();
-loadHand();
-writeCategories();
+await loadCaps();
+await loadHand();
+await writeCategories();
 findDups();
-variantPages();
-toolsPerVariantPage();
-toolsPage();
-listingPages();
-indexPage();
-console.log(
-  `rendered ${ctx.caps.size} variants, ${ctx.dupOf.size} duplicates: ${[...ctx.dupOf].map(([a, b]) => `${a}=${b}`).join(" ")}`,
+await variantPages();
+await toolsPerVariantPage();
+await toolsPage();
+await listingPages();
+await indexPage();
+console.info(
+	`rendered ${ctx.caps.size} variants, ${ctx.dupOf.size} duplicates: ${[...ctx.dupOf].map(([a, b]) => `${a}=${b}`).join(" ")}`,
 );

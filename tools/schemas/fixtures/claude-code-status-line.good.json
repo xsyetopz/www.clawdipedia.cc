@@ -1,5 +1,5 @@
 {
-  "session_id": "s1",
-  "transcript_path": "/tmp/t.jsonl",
-  "cwd": "/tmp"
+	"session_id": "s1",
+	"transcript_path": "/tmp/t.jsonl",
+	"cwd": "/tmp"
 }

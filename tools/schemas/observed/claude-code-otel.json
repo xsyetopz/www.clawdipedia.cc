@@ -1,438 +1,438 @@
 {
-  "$comment": "Value-free. Field path -> JSON types seen in real payloads (stub probes and local files) with a count each, capped at 100. Built by tools/schemas/observe/run.ts; tools/schemas/code.ts reads it. Do not edit by hand.",
-  "version": "2.1.310",
-  "fields": {
-    "event:api_error.attempt": {
-      "integer": 1
-    },
-    "event:api_error.duration_ms": {
-      "integer": 1
-    },
-    "event:api_error.effort": {
-      "string": 1
-    },
-    "event:api_error.error": {
-      "string": 1
-    },
-    "event:api_error.model": {
-      "string": 1
-    },
-    "event:api_error.prompt.id": {
-      "string": 1
-    },
-    "event:api_error.query_source": {
-      "string": 1
-    },
-    "event:api_error.user.id": {
-      "string": 1
-    },
-    "event:api_request.agent.name": {
-      "string": 26
-    },
-    "event:api_request.cache_creation_1h_tokens": {
-      "integer": 55
-    },
-    "event:api_request.cache_creation_5m_tokens": {
-      "integer": 55
-    },
-    "event:api_request.cache_creation_tokens": {
-      "integer": 55
-    },
-    "event:api_request.cache_read_tokens": {
-      "integer": 55
-    },
-    "event:api_request.cost_usd": {
-      "number": 55
-    },
-    "event:api_request.duration_ms": {
-      "integer": 55
-    },
-    "event:api_request.effort": {
-      "string": 55
-    },
-    "event:api_request.input_tokens": {
-      "integer": 55
-    },
-    "event:api_request.model": {
-      "string": 55
-    },
-    "event:api_request.output_tokens": {
-      "integer": 55
-    },
-    "event:api_request.prompt.id": {
-      "string": 55
-    },
-    "event:api_request.query_source": {
-      "string": 55
-    },
-    "event:api_request.skill.name": {
-      "string": 28
-    },
-    "event:api_request.ttft_ms": {
-      "integer": 55
-    },
-    "event:api_request.user.id": {
-      "string": 55
-    },
-    "event:api_retries_exhausted.effort": {
-      "string": 1
-    },
-    "event:api_retries_exhausted.error": {
-      "string": 1
-    },
-    "event:api_retries_exhausted.model": {
-      "string": 1
-    },
-    "event:api_retries_exhausted.prompt.id": {
-      "string": 1
-    },
-    "event:api_retries_exhausted.query_source": {
-      "string": 1
-    },
-    "event:api_retries_exhausted.total_attempts": {
-      "integer": 1
-    },
-    "event:api_retries_exhausted.total_retry_duration_ms": {
-      "integer": 1
-    },
-    "event:api_retries_exhausted.user.id": {
-      "string": 1
-    },
-    "event:assistant_response.message.uuid": {
-      "string": 12
-    },
-    "event:assistant_response.model": {
-      "string": 12
-    },
-    "event:assistant_response.prompt.id": {
-      "string": 12
-    },
-    "event:assistant_response.query_source": {
-      "string": 12
-    },
-    "event:assistant_response.response": {
-      "string": 12
-    },
-    "event:assistant_response.user.id": {
-      "string": 12
-    },
-    "event:at_mention.prompt.id": {
-      "string": 1
-    },
-    "event:at_mention.user.id": {
-      "string": 1
-    },
-    "event:compaction.error": {
-      "string": 1
-    },
-    "event:compaction.prompt.id": {
-      "string": 1
-    },
-    "event:compaction.user.id": {
-      "string": 1
-    },
-    "event:hook_execution_complete.hook_event": {
-      "string": 100
-    },
-    "event:hook_execution_complete.hook_name": {
-      "string": 100
-    },
-    "event:hook_execution_complete.prompt.id": {
-      "string": 99
-    },
-    "event:hook_execution_complete.user.id": {
-      "string": 100
-    },
-    "event:hook_execution_start.hook_event": {
-      "string": 100
-    },
-    "event:hook_execution_start.hook_name": {
-      "string": 100
-    },
-    "event:hook_execution_start.prompt.id": {
-      "string": 99
-    },
-    "event:hook_execution_start.user.id": {
-      "string": 100
-    },
-    "event:hook_registered.hook_event": {
-      "string": 40
-    },
-    "event:hook_registered.hook_source": {
-      "string": 40
-    },
-    "event:hook_registered.hook_type": {
-      "string": 40
-    },
-    "event:hook_registered.user.id": {
-      "string": 40
-    },
-    "event:managed_settings_resolved.managed_settings.helper.state": {
-      "string": 10
-    },
-    "event:managed_settings_resolved.managed_settings.source_behavior": {
-      "string": 10
-    },
-    "event:managed_settings_resolved.managed_settings.sources": {
-      "array": 10
-    },
-    "event:managed_settings_resolved.user.id": {
-      "string": 10
-    },
-    "event:mcp_server_connection.error": {
-      "string": 1
-    },
-    "event:mcp_server_connection.server_name": {
-      "string": 1
-    },
-    "event:mcp_server_connection.server_scope": {
-      "string": 1
-    },
-    "event:mcp_server_connection.transport_type": {
-      "string": 1
-    },
-    "event:mcp_server_connection.user.id": {
-      "string": 1
-    },
-    "event:plugin_loaded.marketplace.name": {
-      "string": 30
-    },
-    "event:plugin_loaded.plugin.name": {
-      "string": 30
-    },
-    "event:plugin_loaded.plugin_id_hash": {
-      "string": 30
-    },
-    "event:plugin_loaded.user.id": {
-      "string": 30
-    },
-    "event:skill_activated.prompt.id": {
-      "string": 4
-    },
-    "event:skill_activated.skill.name": {
-      "string": 4
-    },
-    "event:skill_activated.skill.source": {
-      "string": 4
-    },
-    "event:skill_activated.user.id": {
-      "string": 4
-    },
-    "event:subagent_completed.agent.source": {
-      "string": 3
-    },
-    "event:subagent_completed.agent_type": {
-      "string": 3
-    },
-    "event:subagent_completed.final_model": {
-      "string": 3
-    },
-    "event:subagent_completed.is_async": {
-      "boolean": 3
-    },
-    "event:subagent_completed.is_built_in": {
-      "boolean": 3
-    },
-    "event:subagent_completed.model": {
-      "string": 3
-    },
-    "event:subagent_completed.prompt.id": {
-      "string": 3
-    },
-    "event:subagent_completed.total_tokens": {
-      "integer": 3
-    },
-    "event:subagent_completed.user.id": {
-      "string": 3
-    },
-    "event:tool_decision.decision": {
-      "string": 42
-    },
-    "event:tool_decision.permission_mode": {
-      "string": 42
-    },
-    "event:tool_decision.prompt.id": {
-      "string": 42
-    },
-    "event:tool_decision.source": {
-      "string": 42
-    },
-    "event:tool_decision.tool_name": {
-      "string": 42
-    },
-    "event:tool_decision.tool_use_id": {
-      "string": 42
-    },
-    "event:tool_decision.user.id": {
-      "string": 42
-    },
-    "event:tool_result.prompt.id": {
-      "string": 41
-    },
-    "event:tool_result.tool_name": {
-      "string": 41
-    },
-    "event:tool_result.tool_use_id": {
-      "string": 41
-    },
-    "event:tool_result.user.id": {
-      "string": 41
-    },
-    "event:tool_result.vcs.ref.head.name": {
-      "string": 1
-    },
-    "event:tool_result.vcs.ref.head.revision": {
-      "string": 1
-    },
-    "event:user_prompt.prompt": {
-      "string": 11
-    },
-    "event:user_prompt.prompt.id": {
-      "string": 11
-    },
-    "event:user_prompt.prompt_text": {
-      "string": 11
-    },
-    "event:user_prompt.user.id": {
-      "string": 11
-    },
-    "metric:claude_code.active_time.total.user.id": {
-      "string": 11
-    },
-    "metric:claude_code.code_edit_tool.decision.decision": {
-      "string": 10
-    },
-    "metric:claude_code.code_edit_tool.decision.language": {
-      "string": 10
-    },
-    "metric:claude_code.code_edit_tool.decision.tool_name": {
-      "string": 10
-    },
-    "metric:claude_code.code_edit_tool.decision.user.id": {
-      "string": 10
-    },
-    "metric:claude_code.commit.count.user.id": {
-      "string": 1
-    },
-    "metric:claude_code.cost.usage.agent.name": {
-      "string": 4
-    },
-    "metric:claude_code.cost.usage.effort": {
-      "string": 14
-    },
-    "metric:claude_code.cost.usage.model": {
-      "string": 14
-    },
-    "metric:claude_code.cost.usage.skill.name": {
-      "string": 5
-    },
-    "metric:claude_code.cost.usage.user.id": {
-      "string": 14
-    },
-    "metric:claude_code.lines_of_code.count.model": {
-      "string": 10
-    },
-    "metric:claude_code.lines_of_code.count.user.id": {
-      "string": 10
-    },
-    "metric:claude_code.session.count.start_type": {
-      "string": 10
-    },
-    "metric:claude_code.session.count.user.id": {
-      "string": 10
-    },
-    "metric:claude_code.token.usage.agent.name": {
-      "string": 16
-    },
-    "metric:claude_code.token.usage.effort": {
-      "string": 56
-    },
-    "metric:claude_code.token.usage.model": {
-      "string": 56
-    },
-    "metric:claude_code.token.usage.skill.name": {
-      "string": 20
-    },
-    "metric:claude_code.token.usage.user.id": {
-      "string": 56
-    },
-    "span:claude_code.interaction.gen_ai.conversation.id": {
-      "string": 1
-    },
-    "span:claude_code.interaction.gen_ai.provider.name": {
-      "string": 1
-    },
-    "span:claude_code.interaction.parent.source": {
-      "string": 1
-    },
-    "span:claude_code.interaction.queued_sends": {
-      "integer": 1
-    },
-    "span:claude_code.interaction.user.id": {
-      "string": 1
-    },
-    "span:claude_code.interaction.user_prompt": {
-      "string": 1
-    },
-    "span:claude_code.llm_request.gen_ai.conversation.id": {
-      "string": 5
-    },
-    "span:claude_code.llm_request.gen_ai.provider.name": {
-      "string": 5
-    },
-    "span:claude_code.llm_request.gen_ai.request.model": {
-      "string": 5
-    },
-    "span:claude_code.llm_request.model": {
-      "string": 5
-    },
-    "span:claude_code.llm_request.user.id": {
-      "string": 5
-    },
-    "span:claude_code.tool.bash_argv0": {
-      "string": 1
-    },
-    "span:claude_code.tool.bash_command_class": {
-      "string": 1
-    },
-    "span:claude_code.tool.blocked_on_user.gen_ai.conversation.id": {
-      "string": 4
-    },
-    "span:claude_code.tool.blocked_on_user.gen_ai.provider.name": {
-      "string": 4
-    },
-    "span:claude_code.tool.blocked_on_user.user.id": {
-      "string": 4
-    },
-    "span:claude_code.tool.execution.gen_ai.conversation.id": {
-      "string": 4
-    },
-    "span:claude_code.tool.execution.gen_ai.provider.name": {
-      "string": 4
-    },
-    "span:claude_code.tool.execution.user.id": {
-      "string": 4
-    },
-    "span:claude_code.tool.full_command": {
-      "string": 1
-    },
-    "span:claude_code.tool.gen_ai.conversation.id": {
-      "string": 4
-    },
-    "span:claude_code.tool.gen_ai.provider.name": {
-      "string": 4
-    },
-    "span:claude_code.tool.gen_ai.tool.name": {
-      "string": 4
-    },
-    "span:claude_code.tool.tool_name": {
-      "string": 4
-    },
-    "span:claude_code.tool.tool_name_safe": {
-      "string": 4
-    },
-    "span:claude_code.tool.user.id": {
-      "string": 4
-    }
-  }
+	"$comment": "Value-free. Field path -> JSON types seen in real payloads (stub probes and local files) with a count each, capped at 100. Built by tools/schemas/observe/run.ts; tools/schemas/code.ts reads it. Do not edit by hand.",
+	"version": "2.1.310",
+	"fields": {
+		"event:api_error.attempt": {
+			"integer": 1
+		},
+		"event:api_error.duration_ms": {
+			"integer": 1
+		},
+		"event:api_error.effort": {
+			"string": 1
+		},
+		"event:api_error.error": {
+			"string": 1
+		},
+		"event:api_error.model": {
+			"string": 1
+		},
+		"event:api_error.prompt.id": {
+			"string": 1
+		},
+		"event:api_error.query_source": {
+			"string": 1
+		},
+		"event:api_error.user.id": {
+			"string": 1
+		},
+		"event:api_request.agent.name": {
+			"string": 26
+		},
+		"event:api_request.cache_creation_1h_tokens": {
+			"integer": 55
+		},
+		"event:api_request.cache_creation_5m_tokens": {
+			"integer": 55
+		},
+		"event:api_request.cache_creation_tokens": {
+			"integer": 55
+		},
+		"event:api_request.cache_read_tokens": {
+			"integer": 55
+		},
+		"event:api_request.cost_usd": {
+			"number": 55
+		},
+		"event:api_request.duration_ms": {
+			"integer": 55
+		},
+		"event:api_request.effort": {
+			"string": 55
+		},
+		"event:api_request.input_tokens": {
+			"integer": 55
+		},
+		"event:api_request.model": {
+			"string": 55
+		},
+		"event:api_request.output_tokens": {
+			"integer": 55
+		},
+		"event:api_request.prompt.id": {
+			"string": 55
+		},
+		"event:api_request.query_source": {
+			"string": 55
+		},
+		"event:api_request.skill.name": {
+			"string": 28
+		},
+		"event:api_request.ttft_ms": {
+			"integer": 55
+		},
+		"event:api_request.user.id": {
+			"string": 55
+		},
+		"event:api_retries_exhausted.effort": {
+			"string": 1
+		},
+		"event:api_retries_exhausted.error": {
+			"string": 1
+		},
+		"event:api_retries_exhausted.model": {
+			"string": 1
+		},
+		"event:api_retries_exhausted.prompt.id": {
+			"string": 1
+		},
+		"event:api_retries_exhausted.query_source": {
+			"string": 1
+		},
+		"event:api_retries_exhausted.total_attempts": {
+			"integer": 1
+		},
+		"event:api_retries_exhausted.total_retry_duration_ms": {
+			"integer": 1
+		},
+		"event:api_retries_exhausted.user.id": {
+			"string": 1
+		},
+		"event:assistant_response.message.uuid": {
+			"string": 12
+		},
+		"event:assistant_response.model": {
+			"string": 12
+		},
+		"event:assistant_response.prompt.id": {
+			"string": 12
+		},
+		"event:assistant_response.query_source": {
+			"string": 12
+		},
+		"event:assistant_response.response": {
+			"string": 12
+		},
+		"event:assistant_response.user.id": {
+			"string": 12
+		},
+		"event:at_mention.prompt.id": {
+			"string": 1
+		},
+		"event:at_mention.user.id": {
+			"string": 1
+		},
+		"event:compaction.error": {
+			"string": 1
+		},
+		"event:compaction.prompt.id": {
+			"string": 1
+		},
+		"event:compaction.user.id": {
+			"string": 1
+		},
+		"event:hook_execution_complete.hook_event": {
+			"string": 100
+		},
+		"event:hook_execution_complete.hook_name": {
+			"string": 100
+		},
+		"event:hook_execution_complete.prompt.id": {
+			"string": 99
+		},
+		"event:hook_execution_complete.user.id": {
+			"string": 100
+		},
+		"event:hook_execution_start.hook_event": {
+			"string": 100
+		},
+		"event:hook_execution_start.hook_name": {
+			"string": 100
+		},
+		"event:hook_execution_start.prompt.id": {
+			"string": 99
+		},
+		"event:hook_execution_start.user.id": {
+			"string": 100
+		},
+		"event:hook_registered.hook_event": {
+			"string": 40
+		},
+		"event:hook_registered.hook_source": {
+			"string": 40
+		},
+		"event:hook_registered.hook_type": {
+			"string": 40
+		},
+		"event:hook_registered.user.id": {
+			"string": 40
+		},
+		"event:managed_settings_resolved.managed_settings.helper.state": {
+			"string": 10
+		},
+		"event:managed_settings_resolved.managed_settings.source_behavior": {
+			"string": 10
+		},
+		"event:managed_settings_resolved.managed_settings.sources": {
+			"array": 10
+		},
+		"event:managed_settings_resolved.user.id": {
+			"string": 10
+		},
+		"event:mcp_server_connection.error": {
+			"string": 1
+		},
+		"event:mcp_server_connection.server_name": {
+			"string": 1
+		},
+		"event:mcp_server_connection.server_scope": {
+			"string": 1
+		},
+		"event:mcp_server_connection.transport_type": {
+			"string": 1
+		},
+		"event:mcp_server_connection.user.id": {
+			"string": 1
+		},
+		"event:plugin_loaded.marketplace.name": {
+			"string": 30
+		},
+		"event:plugin_loaded.plugin.name": {
+			"string": 30
+		},
+		"event:plugin_loaded.plugin_id_hash": {
+			"string": 30
+		},
+		"event:plugin_loaded.user.id": {
+			"string": 30
+		},
+		"event:skill_activated.prompt.id": {
+			"string": 4
+		},
+		"event:skill_activated.skill.name": {
+			"string": 4
+		},
+		"event:skill_activated.skill.source": {
+			"string": 4
+		},
+		"event:skill_activated.user.id": {
+			"string": 4
+		},
+		"event:subagent_completed.agent.source": {
+			"string": 3
+		},
+		"event:subagent_completed.agent_type": {
+			"string": 3
+		},
+		"event:subagent_completed.final_model": {
+			"string": 3
+		},
+		"event:subagent_completed.is_async": {
+			"boolean": 3
+		},
+		"event:subagent_completed.is_built_in": {
+			"boolean": 3
+		},
+		"event:subagent_completed.model": {
+			"string": 3
+		},
+		"event:subagent_completed.prompt.id": {
+			"string": 3
+		},
+		"event:subagent_completed.total_tokens": {
+			"integer": 3
+		},
+		"event:subagent_completed.user.id": {
+			"string": 3
+		},
+		"event:tool_decision.decision": {
+			"string": 42
+		},
+		"event:tool_decision.permission_mode": {
+			"string": 42
+		},
+		"event:tool_decision.prompt.id": {
+			"string": 42
+		},
+		"event:tool_decision.source": {
+			"string": 42
+		},
+		"event:tool_decision.tool_name": {
+			"string": 42
+		},
+		"event:tool_decision.tool_use_id": {
+			"string": 42
+		},
+		"event:tool_decision.user.id": {
+			"string": 42
+		},
+		"event:tool_result.prompt.id": {
+			"string": 41
+		},
+		"event:tool_result.tool_name": {
+			"string": 41
+		},
+		"event:tool_result.tool_use_id": {
+			"string": 41
+		},
+		"event:tool_result.user.id": {
+			"string": 41
+		},
+		"event:tool_result.vcs.ref.head.name": {
+			"string": 1
+		},
+		"event:tool_result.vcs.ref.head.revision": {
+			"string": 1
+		},
+		"event:user_prompt.prompt": {
+			"string": 11
+		},
+		"event:user_prompt.prompt.id": {
+			"string": 11
+		},
+		"event:user_prompt.prompt_text": {
+			"string": 11
+		},
+		"event:user_prompt.user.id": {
+			"string": 11
+		},
+		"metric:claude_code.active_time.total.user.id": {
+			"string": 11
+		},
+		"metric:claude_code.code_edit_tool.decision.decision": {
+			"string": 10
+		},
+		"metric:claude_code.code_edit_tool.decision.language": {
+			"string": 10
+		},
+		"metric:claude_code.code_edit_tool.decision.tool_name": {
+			"string": 10
+		},
+		"metric:claude_code.code_edit_tool.decision.user.id": {
+			"string": 10
+		},
+		"metric:claude_code.commit.count.user.id": {
+			"string": 1
+		},
+		"metric:claude_code.cost.usage.agent.name": {
+			"string": 4
+		},
+		"metric:claude_code.cost.usage.effort": {
+			"string": 14
+		},
+		"metric:claude_code.cost.usage.model": {
+			"string": 14
+		},
+		"metric:claude_code.cost.usage.skill.name": {
+			"string": 5
+		},
+		"metric:claude_code.cost.usage.user.id": {
+			"string": 14
+		},
+		"metric:claude_code.lines_of_code.count.model": {
+			"string": 10
+		},
+		"metric:claude_code.lines_of_code.count.user.id": {
+			"string": 10
+		},
+		"metric:claude_code.session.count.start_type": {
+			"string": 10
+		},
+		"metric:claude_code.session.count.user.id": {
+			"string": 10
+		},
+		"metric:claude_code.token.usage.agent.name": {
+			"string": 16
+		},
+		"metric:claude_code.token.usage.effort": {
+			"string": 56
+		},
+		"metric:claude_code.token.usage.model": {
+			"string": 56
+		},
+		"metric:claude_code.token.usage.skill.name": {
+			"string": 20
+		},
+		"metric:claude_code.token.usage.user.id": {
+			"string": 56
+		},
+		"span:claude_code.interaction.gen_ai.conversation.id": {
+			"string": 1
+		},
+		"span:claude_code.interaction.gen_ai.provider.name": {
+			"string": 1
+		},
+		"span:claude_code.interaction.parent.source": {
+			"string": 1
+		},
+		"span:claude_code.interaction.queued_sends": {
+			"integer": 1
+		},
+		"span:claude_code.interaction.user.id": {
+			"string": 1
+		},
+		"span:claude_code.interaction.user_prompt": {
+			"string": 1
+		},
+		"span:claude_code.llm_request.gen_ai.conversation.id": {
+			"string": 5
+		},
+		"span:claude_code.llm_request.gen_ai.provider.name": {
+			"string": 5
+		},
+		"span:claude_code.llm_request.gen_ai.request.model": {
+			"string": 5
+		},
+		"span:claude_code.llm_request.model": {
+			"string": 5
+		},
+		"span:claude_code.llm_request.user.id": {
+			"string": 5
+		},
+		"span:claude_code.tool.bash_argv0": {
+			"string": 1
+		},
+		"span:claude_code.tool.bash_command_class": {
+			"string": 1
+		},
+		"span:claude_code.tool.blocked_on_user.gen_ai.conversation.id": {
+			"string": 4
+		},
+		"span:claude_code.tool.blocked_on_user.gen_ai.provider.name": {
+			"string": 4
+		},
+		"span:claude_code.tool.blocked_on_user.user.id": {
+			"string": 4
+		},
+		"span:claude_code.tool.execution.gen_ai.conversation.id": {
+			"string": 4
+		},
+		"span:claude_code.tool.execution.gen_ai.provider.name": {
+			"string": 4
+		},
+		"span:claude_code.tool.execution.user.id": {
+			"string": 4
+		},
+		"span:claude_code.tool.full_command": {
+			"string": 1
+		},
+		"span:claude_code.tool.gen_ai.conversation.id": {
+			"string": 4
+		},
+		"span:claude_code.tool.gen_ai.provider.name": {
+			"string": 4
+		},
+		"span:claude_code.tool.gen_ai.tool.name": {
+			"string": 4
+		},
+		"span:claude_code.tool.tool_name": {
+			"string": 4
+		},
+		"span:claude_code.tool.tool_name_safe": {
+			"string": 4
+		},
+		"span:claude_code.tool.user.id": {
+			"string": 4
+		}
+	}
 }

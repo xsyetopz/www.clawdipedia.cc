@@ -1,7 +1,7 @@
 {
-  "$def": "skill",
-  "value": {
-    "name": "deploy",
-    "context": "elsewhere"
-  }
+	"$def": "skill",
+	"value": {
+		"name": "deploy",
+		"context": "elsewhere"
+	}
 }

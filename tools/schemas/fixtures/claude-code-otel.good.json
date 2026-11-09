@@ -1,8 +1,8 @@
 {
-  "$def": "event:api_error",
-  "value": {
-    "event.name": "api_error",
-    "event.timestamp": "2026-10-22T00:00:00Z",
-    "event.sequence": 1
-  }
+	"$def": "event:api_error",
+	"value": {
+		"event.name": "api_error",
+		"event.timestamp": "2026-10-22T00:00:00Z",
+		"event.sequence": 1
+	}
 }

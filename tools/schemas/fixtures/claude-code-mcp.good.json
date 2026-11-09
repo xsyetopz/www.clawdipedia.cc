@@ -1,18 +1,18 @@
 {
-  "mcpServers": {
-    "local": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
-      "env": { "DEBUG": "1" }
-    },
-    "remote": {
-      "type": "http",
-      "url": "https://example.com/mcp",
-      "headers": { "Authorization": "Bearer token" },
-      "oauth": {
-        "authServerMetadataUrl": "https://example.com/.well-known/oauth"
-      }
-    },
-    "events": { "type": "sse", "url": "https://example.com/sse" }
-  }
+	"mcpServers": {
+		"local": {
+			"command": "npx",
+			"args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
+			"env": { "DEBUG": "1" }
+		},
+		"remote": {
+			"type": "http",
+			"url": "https://example.com/mcp",
+			"headers": { "Authorization": "Bearer token" },
+			"oauth": {
+				"authServerMetadataUrl": "https://example.com/.well-known/oauth"
+			}
+		},
+		"events": { "type": "sse", "url": "https://example.com/sse" }
+	}
 }

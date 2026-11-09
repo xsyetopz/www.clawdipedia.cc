@@ -1,6 +1,6 @@
 {
-  "mcpServers": {
-    "empty-command": { "command": "" },
-    "no-url": { "type": "http" }
-  }
+	"mcpServers": {
+		"empty-command": { "command": "" },
+		"no-url": { "type": "http" }
+	}
 }

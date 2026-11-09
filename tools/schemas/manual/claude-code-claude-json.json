@@ -1,248 +1,248 @@
 {
-  "$comment": "Types read by hand from the Claude Code 2.1.308 program for ~/.claude.json keys that tools/schemas/code.ts leaves x-unverified.",
-  "version": "2.1.308",
-  "fields": {
-    "installMethod": {
-      "schema": {
-        "enum": ["local", "global", "native", "unknown", "development"]
-      },
-      "anchors": [
-        "installMethod:\"native\",autoUpdates:!1",
-        "installMethod:\"local\"}",
-        "e=\"unknown\";switch(«».installationType)",
-        "\"npm-local\":\"local\",\"npm-global\":\"global\",native:\"native\",development:\"development\",unknown:\"unknown\"",
-        "if(«».outcome===\"landed\")return await «»((«»)=>({...«»,installMethod:\"global\"}),«»)",
-        "case\"landed\":«»}return await «»((«»)=>({...«»,installMethod:\"global\"}),«»)"
-      ],
-      "note": "Write sites: the native installer sets \"native\"; npm update sets \"global\" or \"local\"; the migration Wo sets \"unknown\", \"local\" or \"global\" (r=\"unknown\", then \"local\"/\"global\" by autoUpdaterStatus); claude update sets e from the installation type (\"local\", \"native\", \"global\", \"unknown\") or k from the map {\"npm-local\":\"local\",\"npm-global\":\"global\",native:\"native\",development:\"development\",unknown:\"unknown\"}. The default is installMethod:void 0, which JSON drops."
-    },
-    "autoUpdates": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": [
-        "installMethod:\"native\",autoUpdates:!1,autoUpdatesProtectedForNative:!0",
-        "s=«».autoUpdates??!0"
-      ],
-      "note": "Write sites: the native installer sets autoUpdates:!1; the migration Wo sets s=e.autoUpdates??!0 or s=!1 (disabled); the test config sets autoUpdates:!1. The default is void 0. Always a boolean."
-    },
-    "autoUpdatesProtectedForNative": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": [
-        "autoUpdatesProtectedForNative:!0",
-        "r.autoUpdatesProtectedForNative!==!0"
-      ],
-      "note": "Only written as !0 (installMethod native) and compared with !==!0; the migration to settings deletes it."
-    },
-    "apiKeyHelper": {
-      "schema": {
-        "type": "string"
-      },
-      "anchors": [
-        "apiKeyHelper:()=>«»().optional().describe(\"Path to a script that outputs authentication values\")",
-        "\"apiKeyHelper\",\"installMethod\",\"autoUpdates\""
-      ],
-      "note": "The program lists it in the global config keys, and the settings schema key of the same name is a string (zod o().optional(): \"Path to a script that outputs authentication values\"). No write into ~/.claude.json other than through the config command was found, which stores that string."
-    },
-    "shiftEnterKeyBindingInstalled": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": ["shiftEnterKeyBindingInstalled:!0"],
-      "note": "Only write site sets it to !0."
-    },
-    "hasUsedBackslashReturn": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": ["hasUsedBackslashReturn:!0"],
-      "note": "Only write site sets it to !0."
-    },
-    "diffSidebarOpen": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": ["diffSidebarOpen!==«»)«»((«»)=>({...«»,diffSidebarOpen:«»})"],
-      "note": "Written as diffSidebarOpen:a with a=i===\"diff\" (a boolean); read as r===!1 / r===!0."
-    },
-    "showStatusInTerminalTab": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": [
-        "value:«».showStatusInTerminalTab??!1,type:\"boolean\",«»(«»){«»((«»)=>({...«»,showStatusInTerminalTab:«»}))"
-      ],
-      "note": "The /config toggle writes the boolean e (a type:\"boolean\" setting) and readers use ??!1."
-    },
-    "inputNeededNotifEnabled": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": [
-        "inputNeededNotifEnabled:(",
-        "inputNeededNotifEnabled:()=>«»().optional().describe(\"Push to mobile when a permission prompt or question is waiting\")",
-        "function «»(«»){«»(\"inputNeededNotifEnabled\",«»),«»((«»)=>({...«»,inputNeededNotifEnabled:«»}))"
-      ],
-      "note": "The settings schema key is a boolean (zod M().optional()) and readers use ??!1; the toggle writes the boolean e."
-    },
-    "agentPushNotifEnabled": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": [
-        "agentPushNotifEnabled:(",
-        "agentPushNotifEnabled:()=>«»().op",
-        "function «»(«»){«»(\"agentPushNotifEnabled\",«»),«»((«»)=>({...«»,agentPushNotifEnabled:«»}))"
-      ],
-      "note": "The settings schema key is a boolean (zod M().optional()) and readers use ??!1; the toggle writes the boolean e."
-    },
-    "claudeInChromeDefaultEnabled": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": [
-        "claudeInChromeDefaultEnabled:«».enabledByDefault",
-        "«»({enabledByDefault:«»()})",
-        "value:«».claudeInChromeDefaultEnabled??!1,type:\"boolean\",«»(«»){«»((«»)=>({...«»,claudeInChromeDefaultEnabled:«»}))"
-      ],
-      "note": "Written from enabledByDefault, which the program validates as a boolean (zod object Ne({enabledByDefault:M()})); readers use ??!1."
-    },
-    "hasCompletedClaudeInChromeOnboarding": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": [
-        "function «»(«»){return{...«»,hasCompletedClaudeInChromeOnboarding:!0}}",
-        "{...«»,claudeInChromeDefaultEnabled:!0,hasCompletedClaudeInChromeOnboarding:!0,cachedChromeExtensionInstalled:!0}",
-        "claudeInChromeDefaultEnabled:«»,...«»&&{hasCompletedClaudeInChromeOnboarding:!0}}"
-      ],
-      "note": "All three write sites set it to !0."
-    },
-    "lspRecommendationDisabled": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": [
-        "lspRecommendationDisabled:!0",
-        "h.lspRecommendationDisabled===!0"
-      ],
-      "note": "Only write site sets it to !0."
-    },
-    "lspRecommendationNeverPlugins": {
-      "schema": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      },
-      "anchors": [
-        "lspRecommendationNeverPlugins:[...H,«»]",
-        "«».lspRecommendationNeverPlugins??[]"
-      ],
-      "note": "Dvt(h) appends the plugin id string h to the array: [...H,h] with H=lspRecommendationNeverPlugins??[] and a includes(h) check."
-    },
-    "lspRecommendationIgnoredCount": {
-      "schema": {
-        "type": "integer"
-      },
-      "anchors": [
-        "lspRecommendationIgnoredCount??0)+1",
-        "lspRecommendationIgnoredCount:«»"
-      ],
-      "note": "Ovt writes L=(lspRecommendationIgnoredCount??0)+1, a counter that starts at 0 and adds 1."
-    },
-    "copyOnSelect": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": [
-        "value:«».copyOnSelect??!0,type:\"boolean\",«»(«»){«»((«»)=>({...«»,copyOnSelect:«»}))"
-      ],
-      "note": "The /config boolean toggle writes copyOnSelect:e; readers use ??!0."
-    },
-    "leftArrowOpensAgents": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": [
-        "value:«».leftArrowOpensAgents??!0,type:\"boolean\",«»(«»){«»((«»)=>({...«»,leftArrowOpensAgents:«»}))"
-      ],
-      "note": "The /config toggle writes a boolean; readers use ??!0."
-    },
-    "defaultToAgentsView": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": [
-        "value:«».defaultToAgentsView??!1,type:\"boolean\",«»(«»){«»((«»)=>({...«»,defaultToAgentsView:«»}))"
-      ],
-      "note": "The /config toggle writes a boolean; readers use ??!1."
-    },
-    "prStatusFooterEnabled": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": [
-        "value:«».prStatusFooterEnabled??!0,type:\"boolean\",«»(«»){«»((«»)=>{if(«».prStatusFooterEnabled===«»)return «»;return{...«»,prStatusFooterEnabled:«»}})"
-      ],
-      "note": "The /config toggle writes a boolean; readers use ??!0."
-    },
-    "remoteControlAtStartup": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": [
-        "remoteControlAtStartup:Boolean(«»)",
-        "let «»=«»===\"true\";«»(\"remoteControlAtStartup\",«»)",
-        "remoteControlAtStartup:()=>«»().optional().describe(\"Start Remote Control bridge automatically each session\")"
-      ],
-      "note": "Writers: the /config choice (\"true\" -> !0, \"false\" -> !1, \"default\" deletes the key) and the migration Ft, remoteControlAtStartup:Boolean(replBridgeEnabled). The settings schema key is a boolean (zod M().optional())."
-    },
-    "autoUploadSessions": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": [
-        "autoUploadSessions:()=>«»().optional().describe(\"Mirror local sessions to claude.ai as view-only (no remote control)\")",
-        "«»(\"autoUploadSessions\""
-      ],
-      "note": "The settings schema key is a boolean (zod M().optional()); w2t returns r??!1 of the resolved boolean."
-    },
-    "remoteDialogSeen": {
-      "schema": {
-        "type": "boolean"
-      },
-      "anchors": [
-        "«»((«»)=>«».remoteDialogSeen?«»:{...«»,remoteDialogSeen:!0},«»)",
-        "await «»((«»)=>{if(«».remoteDialogSeen)return «»;return{...«»,remoteDialogSeen:!0}},«»)"
-      ],
-      "note": "All write sites set it to !0."
-    },
-    "workflowSizeGuideline": {
-      "schema": {
-        "enum": ["unrestricted", "small", "medium", "large"]
-      },
-      "anchors": [
-        "«»=[\"unrestricted\",\"small\",\"medium\",\"large\"]",
-        "let «»=«»(«»)??\"unrestricted\";«»((«»)=>{if(«».workflowSizeGuideline===«»)return «»;return{...«»,workflowSizeGuideline:«»}})"
-      ],
-      "note": "The /config picker writes o=lpn(e)??\"unrestricted\"; lpn(e) returns e only when it is in V$o=[\"unrestricted\",\"small\",\"medium\",\"large\"]."
-    },
-    "taskCompleteNotifEnabled": {
-      "schema": {},
-      "anchors": [
-        "\"showStatusInTerminalTab\",\"taskCompleteNotifEnabled\",\"inputNeededNotifEnabled\""
-      ],
-      "note": "Only a name in the global config key list (xzr, tested by isGlobalConfigKey). No code in this build reads or writes the key as a property, so the program gives it no type and keeps any value a user writes."
-    },
-    "autoAddRemoteControlDaemonWorker": {
-      "schema": {},
-      "anchors": [
-        "\"autoUploadSessions\",\"autoAddRemoteControlDaemonWorker\",\"remoteDialogSeen\""
-      ],
-      "note": "Only a name in the global config key list (xzr, tested by isGlobalConfigKey). No code in this build reads or writes the key as a property, so the program gives it no type and keeps any value a user writes."
-    }
-  }
+	"$comment": "Types read by hand from the Claude Code 2.1.308 program for ~/.claude.json keys that tools/schemas/code.ts leaves x-unverified.",
+	"version": "2.1.308",
+	"fields": {
+		"installMethod": {
+			"schema": {
+				"enum": ["local", "global", "native", "unknown", "development"]
+			},
+			"anchors": [
+				"installMethod:\"native\",autoUpdates:!1",
+				"installMethod:\"local\"}",
+				"e=\"unknown\";switch(«».installationType)",
+				"\"npm-local\":\"local\",\"npm-global\":\"global\",native:\"native\",development:\"development\",unknown:\"unknown\"",
+				"if(«».outcome===\"landed\")return await «»((«»)=>({...«»,installMethod:\"global\"}),«»)",
+				"case\"landed\":«»}return await «»((«»)=>({...«»,installMethod:\"global\"}),«»)"
+			],
+			"note": "Write sites: the native installer sets \"native\"; npm update sets \"global\" or \"local\"; the migration Wo sets \"unknown\", \"local\" or \"global\" (r=\"unknown\", then \"local\"/\"global\" by autoUpdaterStatus); claude update sets e from the installation type (\"local\", \"native\", \"global\", \"unknown\") or k from the map {\"npm-local\":\"local\",\"npm-global\":\"global\",native:\"native\",development:\"development\",unknown:\"unknown\"}. The default is installMethod:void 0, which JSON drops."
+		},
+		"autoUpdates": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"installMethod:\"native\",autoUpdates:!1,autoUpdatesProtectedForNative:!0",
+				"s=«».autoUpdates??!0"
+			],
+			"note": "Write sites: the native installer sets autoUpdates:!1; the migration Wo sets s=e.autoUpdates??!0 or s=!1 (disabled); the test config sets autoUpdates:!1. The default is void 0. Always a boolean."
+		},
+		"autoUpdatesProtectedForNative": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"autoUpdatesProtectedForNative:!0",
+				"r.autoUpdatesProtectedForNative!==!0"
+			],
+			"note": "Only written as !0 (installMethod native) and compared with !==!0; the migration to settings deletes it."
+		},
+		"apiKeyHelper": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": [
+				"apiKeyHelper:()=>«»().optional().describe(\"Path to a script that outputs authentication values\")",
+				"\"apiKeyHelper\",\"installMethod\",\"autoUpdates\""
+			],
+			"note": "The program lists it in the global config keys, and the settings schema key of the same name is a string (zod o().optional(): \"Path to a script that outputs authentication values\"). No write into ~/.claude.json other than through the config command was found, which stores that string."
+		},
+		"shiftEnterKeyBindingInstalled": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": ["shiftEnterKeyBindingInstalled:!0"],
+			"note": "Only write site sets it to !0."
+		},
+		"hasUsedBackslashReturn": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": ["hasUsedBackslashReturn:!0"],
+			"note": "Only write site sets it to !0."
+		},
+		"diffSidebarOpen": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": ["diffSidebarOpen!==«»)«»((«»)=>({...«»,diffSidebarOpen:«»})"],
+			"note": "Written as diffSidebarOpen:a with a=i===\"diff\" (a boolean); read as r===!1 / r===!0."
+		},
+		"showStatusInTerminalTab": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"value:«».showStatusInTerminalTab??!1,type:\"boolean\",«»(«»){«»((«»)=>({...«»,showStatusInTerminalTab:«»}))"
+			],
+			"note": "The /config toggle writes the boolean e (a type:\"boolean\" setting) and readers use ??!1."
+		},
+		"inputNeededNotifEnabled": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"inputNeededNotifEnabled:(",
+				"inputNeededNotifEnabled:()=>«»().optional().describe(\"Push to mobile when a permission prompt or question is waiting\")",
+				"function «»(«»){«»(\"inputNeededNotifEnabled\",«»),«»((«»)=>({...«»,inputNeededNotifEnabled:«»}))"
+			],
+			"note": "The settings schema key is a boolean (zod M().optional()) and readers use ??!1; the toggle writes the boolean e."
+		},
+		"agentPushNotifEnabled": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"agentPushNotifEnabled:(",
+				"agentPushNotifEnabled:()=>«»().op",
+				"function «»(«»){«»(\"agentPushNotifEnabled\",«»),«»((«»)=>({...«»,agentPushNotifEnabled:«»}))"
+			],
+			"note": "The settings schema key is a boolean (zod M().optional()) and readers use ??!1; the toggle writes the boolean e."
+		},
+		"claudeInChromeDefaultEnabled": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"claudeInChromeDefaultEnabled:«».enabledByDefault",
+				"«»({enabledByDefault:«»()})",
+				"value:«».claudeInChromeDefaultEnabled??!1,type:\"boolean\",«»(«»){«»((«»)=>({...«»,claudeInChromeDefaultEnabled:«»}))"
+			],
+			"note": "Written from enabledByDefault, which the program validates as a boolean (zod object Ne({enabledByDefault:M()})); readers use ??!1."
+		},
+		"hasCompletedClaudeInChromeOnboarding": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"function «»(«»){return{...«»,hasCompletedClaudeInChromeOnboarding:!0}}",
+				"{...«»,claudeInChromeDefaultEnabled:!0,hasCompletedClaudeInChromeOnboarding:!0,cachedChromeExtensionInstalled:!0}",
+				"claudeInChromeDefaultEnabled:«»,...«»&&{hasCompletedClaudeInChromeOnboarding:!0}}"
+			],
+			"note": "All three write sites set it to !0."
+		},
+		"lspRecommendationDisabled": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"lspRecommendationDisabled:!0",
+				"h.lspRecommendationDisabled===!0"
+			],
+			"note": "Only write site sets it to !0."
+		},
+		"lspRecommendationNeverPlugins": {
+			"schema": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
+			},
+			"anchors": [
+				"lspRecommendationNeverPlugins:[...H,«»]",
+				"«».lspRecommendationNeverPlugins??[]"
+			],
+			"note": "Dvt(h) appends the plugin id string h to the array: [...H,h] with H=lspRecommendationNeverPlugins??[] and a includes(h) check."
+		},
+		"lspRecommendationIgnoredCount": {
+			"schema": {
+				"type": "integer"
+			},
+			"anchors": [
+				"lspRecommendationIgnoredCount??0)+1",
+				"lspRecommendationIgnoredCount:«»"
+			],
+			"note": "Ovt writes L=(lspRecommendationIgnoredCount??0)+1, a counter that starts at 0 and adds 1."
+		},
+		"copyOnSelect": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"value:«».copyOnSelect??!0,type:\"boolean\",«»(«»){«»((«»)=>({...«»,copyOnSelect:«»}))"
+			],
+			"note": "The /config boolean toggle writes copyOnSelect:e; readers use ??!0."
+		},
+		"leftArrowOpensAgents": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"value:«».leftArrowOpensAgents??!0,type:\"boolean\",«»(«»){«»((«»)=>({...«»,leftArrowOpensAgents:«»}))"
+			],
+			"note": "The /config toggle writes a boolean; readers use ??!0."
+		},
+		"defaultToAgentsView": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"value:«».defaultToAgentsView??!1,type:\"boolean\",«»(«»){«»((«»)=>({...«»,defaultToAgentsView:«»}))"
+			],
+			"note": "The /config toggle writes a boolean; readers use ??!1."
+		},
+		"prStatusFooterEnabled": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"value:«».prStatusFooterEnabled??!0,type:\"boolean\",«»(«»){«»((«»)=>{if(«».prStatusFooterEnabled===«»)return «»;return{...«»,prStatusFooterEnabled:«»}})"
+			],
+			"note": "The /config toggle writes a boolean; readers use ??!0."
+		},
+		"remoteControlAtStartup": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"remoteControlAtStartup:Boolean(«»)",
+				"let «»=«»===\"true\";«»(\"remoteControlAtStartup\",«»)",
+				"remoteControlAtStartup:()=>«»().optional().describe(\"Start Remote Control bridge automatically each session\")"
+			],
+			"note": "Writers: the /config choice (\"true\" -> !0, \"false\" -> !1, \"default\" deletes the key) and the migration Ft, remoteControlAtStartup:Boolean(replBridgeEnabled). The settings schema key is a boolean (zod M().optional())."
+		},
+		"autoUploadSessions": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"autoUploadSessions:()=>«»().optional().describe(\"Mirror local sessions to claude.ai as view-only (no remote control)\")",
+				"«»(\"autoUploadSessions\""
+			],
+			"note": "The settings schema key is a boolean (zod M().optional()); w2t returns r??!1 of the resolved boolean."
+		},
+		"remoteDialogSeen": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"«»((«»)=>«».remoteDialogSeen?«»:{...«»,remoteDialogSeen:!0},«»)",
+				"await «»((«»)=>{if(«».remoteDialogSeen)return «»;return{...«»,remoteDialogSeen:!0}},«»)"
+			],
+			"note": "All write sites set it to !0."
+		},
+		"workflowSizeGuideline": {
+			"schema": {
+				"enum": ["unrestricted", "small", "medium", "large"]
+			},
+			"anchors": [
+				"«»=[\"unrestricted\",\"small\",\"medium\",\"large\"]",
+				"let «»=«»(«»)??\"unrestricted\";«»((«»)=>{if(«».workflowSizeGuideline===«»)return «»;return{...«»,workflowSizeGuideline:«»}})"
+			],
+			"note": "The /config picker writes o=lpn(e)??\"unrestricted\"; lpn(e) returns e only when it is in V$o=[\"unrestricted\",\"small\",\"medium\",\"large\"]."
+		},
+		"taskCompleteNotifEnabled": {
+			"schema": {},
+			"anchors": [
+				"\"showStatusInTerminalTab\",\"taskCompleteNotifEnabled\",\"inputNeededNotifEnabled\""
+			],
+			"note": "Only a name in the global config key list (xzr, tested by isGlobalConfigKey). No code in this build reads or writes the key as a property, so the program gives it no type and keeps any value a user writes."
+		},
+		"autoAddRemoteControlDaemonWorker": {
+			"schema": {},
+			"anchors": [
+				"\"autoUploadSessions\",\"autoAddRemoteControlDaemonWorker\",\"remoteDialogSeen\""
+			],
+			"note": "Only a name in the global config key list (xzr, tested by isGlobalConfigKey). No code in this build reads or writes the key as a property, so the program gives it no type and keeps any value a user writes."
+		}
+	}
 }

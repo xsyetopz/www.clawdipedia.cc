@@ -1,763 +1,763 @@
 {
-  "$comment": "Types read by hand from the Claude Code 2.1.308 program for frontmatter keys that tools/schemas/code.ts leaves x-unverified. Source: the program's own strict zod validators for skill, agent and output-style frontmatter.",
-  "version": "2.1.308",
-  "fields": {
-    "skill.name": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "name:«»().optional().describe(\"Display name. Defaults to the",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares name as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.description": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "description:«»().optional().describe(\"One-line summary shown in lis",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares description as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.model": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "model:«»().optional().describe(\"Model override (`haiku`, `son",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares model as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.allowed-tools": {
-      "schema": {
-        "anyOf": [
-          {
-            "type": ["string", "number", "boolean", "null"]
-          },
-          {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        ]
-      },
-      "anchors": [
-        "\"allowed-tools\":«»().optional().describe(\"Tools available to the model ",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares allowed-tools as string, number, boolean, null, or an array of strings (zod CI). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.disallowed-tools": {
-      "schema": {
-        "anyOf": [
-          {
-            "type": ["string", "number", "boolean", "null"]
-          },
-          {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        ]
-      },
-      "anchors": [
-        "\"disallowed-tools\":«»().optional().describe(\"Tools removed from the model ",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares disallowed-tools as string, number, boolean, null, or an array of strings (zod CI). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.disallowedTools": {
-      "schema": {
-        "anyOf": [
-          {
-            "type": ["string", "number", "boolean", "null"]
-          },
-          {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        ]
-      },
-      "anchors": [
-        "disallowedTools:«»().optional().describe(\"Canonical (normalized) alias ",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares disallowedTools as string, number, boolean, null, or an array of strings (zod CI). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.argument-hint": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "\"argument-hint\":«»().optional().describe(\"Placeholder text shown after the slash command name.\")",
-        "{description:«»??«»(«»,«»?\"Plugin skill\":\"Plugin command\"),argumentHint:«»[\"argument-hint\"]!=null?String(«»[\"argument-hint\"]):void 0",
-        "hasUserSpecifiedDescription:«»!==null,allowedTools:«»,disallowedTools:«»(«»),argumentHint:«»[\"argument-hint\"]!=null?String(«»[\"argument-hint\"]):void 0"
-      ],
-      "note": "The skill loader reads argumentHint:q[\"argument-hint\"]!=null?String(q[\"argument-hint\"]):void 0, so it takes any YAML value that is not null and turns it into a string (a list becomes a comma list). The program's own validator AI declares the key as mg() (string, number, boolean, null) and reports a mismatch for a list; real skills use a list, so the loader is the wider and right source."
-    },
-    "skill.arguments": {
-      "schema": {
-        "anyOf": [
-          {
-            "type": ["string", "number", "boolean", "null"]
-          },
-          {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        ]
-      },
-      "anchors": [
-        "arguments:«»().optional().describe(\"@internal \\u2014 typed varian",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares arguments as string, number, boolean, null, or an array of strings (zod CI). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.disable-model-invocation": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "\"disable-model-invocation\":«»().optional().describe(\"If true, the model cannot inv",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares disable-model-invocation as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.user-invocable": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "\"user-invocable\":«»().optional().describe(\"If false, hides the slash com",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares user-invocable as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.effort": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "effort:«»().optional().describe(\"Thinking effort for the model",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares effort as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.shell": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "shell:«»().optional().describe(\"Shell for `!`-command blocks:",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares shell as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.version": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "version:«»().optional().describe(\"@internal \\u2014 bookkeeping,",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares version as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.when_to_use": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "when_to_use:«»().optional().describe(\"Guidance for when the model s",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares when_to_use as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.paths": {
-      "schema": {
-        "anyOf": [
-          {
-            "type": ["string", "number", "boolean", "null"]
-          },
-          {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        ]
-      },
-      "anchors": [
-        "paths:«»().optional().describe(\"Glob patterns this skill appl",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares paths as string, number, boolean, null, or an array of strings (zod CI). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.hooks": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "hooks:«»().optional().describe(\"Hooks registered while this s",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares hooks as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.agent": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "agent:«»().optional().describe(\"Agent type to spawn when `con",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares agent as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.background": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "background:«»().optional().describe(\"Only for `context: fork`. For",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares background as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.fallback": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "fallback:«»().optional().describe(\"@internal \\u2014 interim defe",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares fallback as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.created_by": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "created_by:«»().optional().describe(\"@internal \\u2014 provenance m",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares created_by as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.improved_by": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "improved_by:«»().optional().describe(\"@internal \\u2014 provenance m",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares improved_by as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "skill.mcpServers": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "mcpServers:«»().optional().describe(\"@internal\"),lspServers:«»().o",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares mcpServers as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.lspServers": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "lspServers:«»().optional().describe(\"@internal\"),agents:«»().optio",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares lspServers as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.agents": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "agents:«»().optional().describe(\"@internal\"),outputStyles:«»()",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares agents as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.outputStyles": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "outputStyles:«»().optional().describe(\"@internal\"),themes:«»().optio",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares outputStyles as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.themes": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "themes:«»().optional().describe(\"@internal\"),workflows:«»().op",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares themes as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.workflows": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "workflows:«»().optional().describe(\"@internal\"),channels:«»().opt",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares workflows as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.channels": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "channels:«»().optional().describe(\"@internal\"),monitors:«»().opt",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares channels as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.monitors": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "monitors:«»().optional().describe(\"@internal\"),settings:«»().opt",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares monitors as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.settings": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "settings:«»().optional().describe(\"@internal\"),userConfig:«»().o",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares settings as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.userConfig": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "userConfig:«»().optional().describe(\"@internal\"),defaultEnabled:oe",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares userConfig as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.defaultEnabled": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "defaultEnabled:«»().optional().describe(\"@internal\"),experimental:«»()",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares defaultEnabled as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.experimental": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "experimental:«»().optional().describe(\"@internal\"),dependencies:«»()",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares experimental as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.dependencies": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "dependencies:«»().optional().describe(\"@internal\"),metadata:«»().opt",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares dependencies as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.metadata": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "metadata:«»().optional().describe(\"Free-form map for the skill a",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares metadata as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.displayName": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "displayName:«»().optional().describe(\"@internal\"),author:«»().optio",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares displayName as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.author": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "author:«»().optional().describe(\"@internal\"),homepage:«»().opt",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares author as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.homepage": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "homepage:«»().optional().describe(\"@internal\"),repository:«»().o",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares homepage as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.repository": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "repository:«»().optional().describe(\"@internal\"),license:«»().opti",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares repository as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.license": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "license:«»().optional().describe(\"@internal\"),keywords:«»().opt",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares license as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "skill.keywords": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "keywords:«»().optional().describe(\"@internal\")})),",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares keywords as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "agent.name": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "name:«»().describe(\"Agent identifier. Required \\u",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares name as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.description": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "description:«»().describe(\"When to use this agent. Requi",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares description as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.model": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "model:«»().optional().describe(\"Model override for this agent",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares model as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.tools": {
-      "schema": {
-        "anyOf": [
-          {
-            "type": ["string", "number", "boolean", "null"]
-          },
-          {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        ]
-      },
-      "anchors": [
-        "tools:«»().optional().describe(\"Tools available to this agent",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares tools as string, number, boolean, null, or an array of strings (zod CI). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.disallowedTools": {
-      "schema": {
-        "anyOf": [
-          {
-            "type": ["string", "number", "boolean", "null"]
-          },
-          {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        ]
-      },
-      "anchors": [
-        "disallowedTools:«»().optional().describe(\"Tools removed from the defaul",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares disallowedTools as string, number, boolean, null, or an array of strings (zod CI). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.color": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "color:«»().optional().describe(\"@internal \\u2014 display colo",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares color as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.effort": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "effort:«»().optional().describe(\"Thinking effort: `low`, `medi",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares effort as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.permissionMode": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "permissionMode:«»().optional().describe(\"Permission mode the agent run",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares permissionMode as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.mcpServers": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "mcpServers:«»().optional().describe(\"MCP servers to connect when t",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares mcpServers as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "agent.hooks": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null", "array", "object"]
-      },
-      "anchors": [
-        "hooks:«»().optional().describe(\"Hooks registered while this a",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares hooks as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
-    },
-    "agent.maxTurns": {
-      "schema": {
-        "type": ["number", "string", "null"]
-      },
-      "anchors": [
-        "maxTurns:«»([«»(),«»(),«»()]).optional().describe(\"Maximum conversation turns be",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares maxTurns as number, string or null (zod Ue([E(),o(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.autoCompactWindow": {
-      "schema": {
-        "type": ["number", "string", "null"]
-      },
-      "anchors": [
-        "autoCompactWindow:«»([«»(),«»(),«»()]).optional().describe(`Auto-compact window for this ",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares autoCompactWindow as number, string or null (zod Ue([E(),o(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.skills": {
-      "schema": {
-        "anyOf": [
-          {
-            "type": ["string", "number", "boolean", "null"]
-          },
-          {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        ]
-      },
-      "anchors": [
-        "skills:«»().optional().describe(\"Skills preloaded for this age",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares skills as string, number, boolean, null, or an array of strings (zod CI). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.initialPrompt": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "initialPrompt:«»().optional().describe(\"Auto-submitted first message ",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares initialPrompt as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.memory": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "memory:«»().optional().describe(\"Memory scope: `user`, `projec",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares memory as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.background": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "background:«»().optional().describe(\"If true, the agent runs in th",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares background as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.omitClaudeMd": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "omitClaudeMd:«»().optional().describe(\"If true, the agent runs witho",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares omitClaudeMd as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.isolation": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "isolation:«»().optional().describe(\"Filesystem isolation: `worktr",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares isolation as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.observer": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}",
-        "observer:«»().optional().describe(\"Agent type auto-spawned as a background observer whenever this agent runs.\"),observerMessage:"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares observer as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.observerMessage": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}",
-        "observerMessage:«»().optional().describe(\"Supplemental postamble appended (after the harness-owned default) to each activity digest sent to the observer.\"),observeSubagents:"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares observerMessage as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.observeSubagents": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "observeSubagents:«»().optional().describe(\"If false, subagents this agen",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares observeSubagents as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "agent.experimental": {
-      "schema": {
-        "type": ["object", "null"],
-        "properties": {
-          "cacheTtl": {
-            "type": ["string", "number", "boolean", "null"]
-          }
-        },
-        "additionalProperties": true
-      },
-      "anchors": [
-        "experimental:«»({cacheTtl:«»().optional().describe('Prompt cache TTL for this age",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares experimental as object with an optional cacheTtl, other keys allowed, or null (zod u({cacheTtl:mg().optional()}).loose().nullable()). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "output-style.name": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "name:«»().optional().describe(\"Style name used in the Output",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.output-style (a strict zod object). That declares name as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "output-style.description": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "description:«»().optional().describe(\"Shown in the Output style pic",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.output-style (a strict zod object). That declares description as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "output-style.keep-coding-instructions": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "\"keep-coding-instructions\":«»().optional().describe(\"If true, the default coding i",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.output-style (a strict zod object). That declares keep-coding-instructions as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    },
-    "output-style.force-for-plugin": {
-      "schema": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "anchors": [
-        "\"force-for-plugin\":«»().optional().describe(\"@internal \\u2014 only meaning",
-        "«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
-      ],
-      "note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.output-style (a strict zod object). That declares force-for-plugin as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
-    }
-  }
+	"$comment": "Types read by hand from the Claude Code 2.1.308 program for frontmatter keys that tools/schemas/code.ts leaves x-unverified. Source: the program's own strict zod validators for skill, agent and output-style frontmatter.",
+	"version": "2.1.308",
+	"fields": {
+		"skill.name": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"name:«»().optional().describe(\"Display name. Defaults to the",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares name as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.description": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"description:«»().optional().describe(\"One-line summary shown in lis",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares description as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.model": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"model:«»().optional().describe(\"Model override (`haiku`, `son",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares model as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.allowed-tools": {
+			"schema": {
+				"anyOf": [
+					{
+						"type": ["string", "number", "boolean", "null"]
+					},
+					{
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"anchors": [
+				"\"allowed-tools\":«»().optional().describe(\"Tools available to the model ",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares allowed-tools as string, number, boolean, null, or an array of strings (zod CI). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.disallowed-tools": {
+			"schema": {
+				"anyOf": [
+					{
+						"type": ["string", "number", "boolean", "null"]
+					},
+					{
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"anchors": [
+				"\"disallowed-tools\":«»().optional().describe(\"Tools removed from the model ",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares disallowed-tools as string, number, boolean, null, or an array of strings (zod CI). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.disallowedTools": {
+			"schema": {
+				"anyOf": [
+					{
+						"type": ["string", "number", "boolean", "null"]
+					},
+					{
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"anchors": [
+				"disallowedTools:«»().optional().describe(\"Canonical (normalized) alias ",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares disallowedTools as string, number, boolean, null, or an array of strings (zod CI). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.argument-hint": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"\"argument-hint\":«»().optional().describe(\"Placeholder text shown after the slash command name.\")",
+				"{description:«»??«»(«»,«»?\"Plugin skill\":\"Plugin command\"),argumentHint:«»[\"argument-hint\"]!=null?String(«»[\"argument-hint\"]):void 0",
+				"hasUserSpecifiedDescription:«»!==null,allowedTools:«»,disallowedTools:«»(«»),argumentHint:«»[\"argument-hint\"]!=null?String(«»[\"argument-hint\"]):void 0"
+			],
+			"note": "The skill loader reads argumentHint:q[\"argument-hint\"]!=null?String(q[\"argument-hint\"]):void 0, so it takes any YAML value that is not null and turns it into a string (a list becomes a comma list). The program's own validator AI declares the key as mg() (string, number, boolean, null) and reports a mismatch for a list; real skills use a list, so the loader is the wider and right source."
+		},
+		"skill.arguments": {
+			"schema": {
+				"anyOf": [
+					{
+						"type": ["string", "number", "boolean", "null"]
+					},
+					{
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"anchors": [
+				"arguments:«»().optional().describe(\"@internal \\u2014 typed varian",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares arguments as string, number, boolean, null, or an array of strings (zod CI). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.disable-model-invocation": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"\"disable-model-invocation\":«»().optional().describe(\"If true, the model cannot inv",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares disable-model-invocation as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.user-invocable": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"\"user-invocable\":«»().optional().describe(\"If false, hides the slash com",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares user-invocable as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.effort": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"effort:«»().optional().describe(\"Thinking effort for the model",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares effort as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.shell": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"shell:«»().optional().describe(\"Shell for `!`-command blocks:",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares shell as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.version": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"version:«»().optional().describe(\"@internal \\u2014 bookkeeping,",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares version as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.when_to_use": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"when_to_use:«»().optional().describe(\"Guidance for when the model s",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares when_to_use as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.paths": {
+			"schema": {
+				"anyOf": [
+					{
+						"type": ["string", "number", "boolean", "null"]
+					},
+					{
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"anchors": [
+				"paths:«»().optional().describe(\"Glob patterns this skill appl",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares paths as string, number, boolean, null, or an array of strings (zod CI). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.hooks": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"hooks:«»().optional().describe(\"Hooks registered while this s",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares hooks as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.agent": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"agent:«»().optional().describe(\"Agent type to spawn when `con",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares agent as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.background": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"background:«»().optional().describe(\"Only for `context: fork`. For",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares background as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.fallback": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"fallback:«»().optional().describe(\"@internal \\u2014 interim defe",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares fallback as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.created_by": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"created_by:«»().optional().describe(\"@internal \\u2014 provenance m",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares created_by as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.improved_by": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"improved_by:«»().optional().describe(\"@internal \\u2014 provenance m",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares improved_by as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"skill.mcpServers": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"mcpServers:«»().optional().describe(\"@internal\"),lspServers:«»().o",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares mcpServers as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.lspServers": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"lspServers:«»().optional().describe(\"@internal\"),agents:«»().optio",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares lspServers as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.agents": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"agents:«»().optional().describe(\"@internal\"),outputStyles:«»()",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares agents as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.outputStyles": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"outputStyles:«»().optional().describe(\"@internal\"),themes:«»().optio",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares outputStyles as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.themes": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"themes:«»().optional().describe(\"@internal\"),workflows:«»().op",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares themes as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.workflows": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"workflows:«»().optional().describe(\"@internal\"),channels:«»().opt",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares workflows as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.channels": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"channels:«»().optional().describe(\"@internal\"),monitors:«»().opt",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares channels as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.monitors": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"monitors:«»().optional().describe(\"@internal\"),settings:«»().opt",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares monitors as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.settings": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"settings:«»().optional().describe(\"@internal\"),userConfig:«»().o",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares settings as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.userConfig": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"userConfig:«»().optional().describe(\"@internal\"),defaultEnabled:oe",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares userConfig as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.defaultEnabled": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"defaultEnabled:«»().optional().describe(\"@internal\"),experimental:«»()",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares defaultEnabled as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.experimental": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"experimental:«»().optional().describe(\"@internal\"),dependencies:«»()",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares experimental as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.dependencies": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"dependencies:«»().optional().describe(\"@internal\"),metadata:«»().opt",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares dependencies as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.metadata": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"metadata:«»().optional().describe(\"Free-form map for the skill a",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares metadata as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.displayName": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"displayName:«»().optional().describe(\"@internal\"),author:«»().optio",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares displayName as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.author": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"author:«»().optional().describe(\"@internal\"),homepage:«»().opt",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares author as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.homepage": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"homepage:«»().optional().describe(\"@internal\"),repository:«»().o",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares homepage as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.repository": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"repository:«»().optional().describe(\"@internal\"),license:«»().opti",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares repository as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.license": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"license:«»().optional().describe(\"@internal\"),keywords:«»().opt",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares license as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"skill.keywords": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"keywords:«»().optional().describe(\"@internal\")})),",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares keywords as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"agent.name": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"name:«»().describe(\"Agent identifier. Required \\u",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares name as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.description": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"description:«»().describe(\"When to use this agent. Requi",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares description as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.model": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"model:«»().optional().describe(\"Model override for this agent",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares model as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.tools": {
+			"schema": {
+				"anyOf": [
+					{
+						"type": ["string", "number", "boolean", "null"]
+					},
+					{
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"anchors": [
+				"tools:«»().optional().describe(\"Tools available to this agent",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares tools as string, number, boolean, null, or an array of strings (zod CI). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.disallowedTools": {
+			"schema": {
+				"anyOf": [
+					{
+						"type": ["string", "number", "boolean", "null"]
+					},
+					{
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"anchors": [
+				"disallowedTools:«»().optional().describe(\"Tools removed from the defaul",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares disallowedTools as string, number, boolean, null, or an array of strings (zod CI). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.color": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"color:«»().optional().describe(\"@internal \\u2014 display colo",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares color as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.effort": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"effort:«»().optional().describe(\"Thinking effort: `low`, `medi",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares effort as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.permissionMode": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"permissionMode:«»().optional().describe(\"Permission mode the agent run",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares permissionMode as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.mcpServers": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"mcpServers:«»().optional().describe(\"MCP servers to connect when t",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares mcpServers as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"agent.hooks": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null", "array", "object"]
+			},
+			"anchors": [
+				"hooks:«»().optional().describe(\"Hooks registered while this a",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares hooks as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."
+		},
+		"agent.maxTurns": {
+			"schema": {
+				"type": ["number", "string", "null"]
+			},
+			"anchors": [
+				"maxTurns:«»([«»(),«»(),«»()]).optional().describe(\"Maximum conversation turns be",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares maxTurns as number, string or null (zod Ue([E(),o(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.autoCompactWindow": {
+			"schema": {
+				"type": ["number", "string", "null"]
+			},
+			"anchors": [
+				"autoCompactWindow:«»([«»(),«»(),«»()]).optional().describe(`Auto-compact window for this ",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares autoCompactWindow as number, string or null (zod Ue([E(),o(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.skills": {
+			"schema": {
+				"anyOf": [
+					{
+						"type": ["string", "number", "boolean", "null"]
+					},
+					{
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"anchors": [
+				"skills:«»().optional().describe(\"Skills preloaded for this age",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares skills as string, number, boolean, null, or an array of strings (zod CI). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.initialPrompt": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"initialPrompt:«»().optional().describe(\"Auto-submitted first message ",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares initialPrompt as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.memory": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"memory:«»().optional().describe(\"Memory scope: `user`, `projec",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares memory as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.background": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"background:«»().optional().describe(\"If true, the agent runs in th",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares background as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.omitClaudeMd": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"omitClaudeMd:«»().optional().describe(\"If true, the agent runs witho",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares omitClaudeMd as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.isolation": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"isolation:«»().optional().describe(\"Filesystem isolation: `worktr",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares isolation as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.observer": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}",
+				"observer:«»().optional().describe(\"Agent type auto-spawned as a background observer whenever this agent runs.\"),observerMessage:"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares observer as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.observerMessage": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}",
+				"observerMessage:«»().optional().describe(\"Supplemental postamble appended (after the harness-owned default) to each activity digest sent to the observer.\"),observeSubagents:"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares observerMessage as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.observeSubagents": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"observeSubagents:«»().optional().describe(\"If false, subagents this agen",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares observeSubagents as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"agent.experimental": {
+			"schema": {
+				"type": ["object", "null"],
+				"properties": {
+					"cacheTtl": {
+						"type": ["string", "number", "boolean", "null"]
+					}
+				},
+				"additionalProperties": true
+			},
+			"anchors": [
+				"experimental:«»({cacheTtl:«»().optional().describe('Prompt cache TTL for this age",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares experimental as object with an optional cacheTtl, other keys allowed, or null (zod u({cacheTtl:mg().optional()}).loose().nullable()). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"output-style.name": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"name:«»().optional().describe(\"Style name used in the Output",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.output-style (a strict zod object). That declares name as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"output-style.description": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"description:«»().optional().describe(\"Shown in the Output style pic",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.output-style (a strict zod object). That declares description as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"output-style.keep-coding-instructions": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"\"keep-coding-instructions\":«»().optional().describe(\"If true, the default coding i",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.output-style (a strict zod object). That declares keep-coding-instructions as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		},
+		"output-style.force-for-plugin": {
+			"schema": {
+				"type": ["string", "number", "boolean", "null"]
+			},
+			"anchors": [
+				"\"force-for-plugin\":«»().optional().describe(\"@internal \\u2014 only meaning",
+				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
+			],
+			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.output-style (a strict zod object). That declares force-for-plugin as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
+		}
+	}
 }

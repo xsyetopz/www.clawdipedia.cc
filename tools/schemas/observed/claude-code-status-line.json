@@ -1,64 +1,64 @@
 {
-  "$comment": "Value-free. Field path -> JSON types seen in real payloads (stub probes and local files) with a count each, capped at 100. Built by tools/schemas/observe/run.ts; tools/schemas/code.ts reads it. Do not edit by hand.",
-  "version": "2.1.310",
-  "fields": {
-    "cost.total_api_duration_ms": {
-      "integer": 20
-    },
-    "cost.total_cost_usd": {
-      "integer": 11,
-      "number": 9
-    },
-    "cost.total_duration_ms": {
-      "integer": 20
-    },
-    "cost.total_lines_added": {
-      "integer": 20
-    },
-    "cost.total_lines_removed": {
-      "integer": 20
-    },
-    "exceeds_200k_tokens": {
-      "boolean": 20
-    },
-    "fast_mode": {
-      "boolean": 20
-    },
-    "subagentStatusLineInput.tasks[].agentType": {
-      "string": 21
-    },
-    "subagentStatusLineInput.tasks[].contextWindowSize": {
-      "integer": 21
-    },
-    "subagentStatusLineInput.tasks[].cwd": {
-      "string": 21
-    },
-    "subagentStatusLineInput.tasks[].description": {
-      "string": 21
-    },
-    "subagentStatusLineInput.tasks[].id": {
-      "string": 21
-    },
-    "subagentStatusLineInput.tasks[].label": {
-      "string": 21
-    },
-    "subagentStatusLineInput.tasks[].model": {
-      "string": 21
-    },
-    "subagentStatusLineInput.tasks[].startTime": {
-      "integer": 21
-    },
-    "subagentStatusLineInput.tasks[].status": {
-      "string": 21
-    },
-    "subagentStatusLineInput.tasks[].tokenCount": {
-      "integer": 21
-    },
-    "subagentStatusLineInput.tasks[].tokenSamples": {
-      "array": 21
-    },
-    "subagentStatusLineInput.tasks[].type": {
-      "string": 21
-    }
-  }
+	"$comment": "Value-free. Field path -> JSON types seen in real payloads (stub probes and local files) with a count each, capped at 100. Built by tools/schemas/observe/run.ts; tools/schemas/code.ts reads it. Do not edit by hand.",
+	"version": "2.1.310",
+	"fields": {
+		"cost.total_api_duration_ms": {
+			"integer": 20
+		},
+		"cost.total_cost_usd": {
+			"integer": 11,
+			"number": 9
+		},
+		"cost.total_duration_ms": {
+			"integer": 20
+		},
+		"cost.total_lines_added": {
+			"integer": 20
+		},
+		"cost.total_lines_removed": {
+			"integer": 20
+		},
+		"exceeds_200k_tokens": {
+			"boolean": 20
+		},
+		"fast_mode": {
+			"boolean": 20
+		},
+		"subagentStatusLineInput.tasks[].agentType": {
+			"string": 21
+		},
+		"subagentStatusLineInput.tasks[].contextWindowSize": {
+			"integer": 21
+		},
+		"subagentStatusLineInput.tasks[].cwd": {
+			"string": 21
+		},
+		"subagentStatusLineInput.tasks[].description": {
+			"string": 21
+		},
+		"subagentStatusLineInput.tasks[].id": {
+			"string": 21
+		},
+		"subagentStatusLineInput.tasks[].label": {
+			"string": 21
+		},
+		"subagentStatusLineInput.tasks[].model": {
+			"string": 21
+		},
+		"subagentStatusLineInput.tasks[].startTime": {
+			"integer": 21
+		},
+		"subagentStatusLineInput.tasks[].status": {
+			"string": 21
+		},
+		"subagentStatusLineInput.tasks[].tokenCount": {
+			"integer": 21
+		},
+		"subagentStatusLineInput.tasks[].tokenSamples": {
+			"array": 21
+		},
+		"subagentStatusLineInput.tasks[].type": {
+			"string": 21
+		}
+	}
 }

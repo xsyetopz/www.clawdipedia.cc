@@ -1,19 +1,19 @@
 {
-  "$schema": "https://clawdipedia.cc/schemas/claude-code-settings.json",
-  "env": { "FOO": "1" },
-  "permissions": {
-    "allow": ["Bash(npm test)"],
-    "deny": ["Read(./.env)"],
-    "defaultMode": "acceptEdits"
-  },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit",
-        "hooks": [{ "type": "command", "command": "echo edited" }]
-      }
-    ]
-  },
-  "syncClaudeAiSkills": true,
-  "aKeyFromANewerRelease": 1
+	"$schema": "https://clawdipedia.cc/schemas/claude-code-settings.json",
+	"env": { "FOO": "1" },
+	"permissions": {
+		"allow": ["Bash(npm test)"],
+		"deny": ["Read(./.env)"],
+		"defaultMode": "acceptEdits"
+	},
+	"hooks": {
+		"PostToolUse": [
+			{
+				"matcher": "Edit",
+				"hooks": [{ "type": "command", "command": "echo edited" }]
+			}
+		]
+	},
+	"syncClaudeAiSkills": true,
+	"aKeyFromANewerRelease": 1
 }

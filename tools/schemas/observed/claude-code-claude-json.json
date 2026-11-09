@@ -1,15 +1,15 @@
 {
-  "$comment": "Value-free. Field path -> JSON types seen in real payloads (stub probes and local files) with a count each, capped at 100. Built by tools/schemas/observe/run.ts; tools/schemas/code.ts reads it. Do not edit by hand.",
-  "version": "2.1.310",
-  "fields": {
-    "autoUpdates": {
-      "boolean": 1
-    },
-    "autoUpdatesProtectedForNative": {
-      "boolean": 1
-    },
-    "installMethod": {
-      "string": 1
-    }
-  }
+	"$comment": "Value-free. Field path -> JSON types seen in real payloads (stub probes and local files) with a count each, capped at 100. Built by tools/schemas/observe/run.ts; tools/schemas/code.ts reads it. Do not edit by hand.",
+	"version": "2.1.310",
+	"fields": {
+		"autoUpdates": {
+			"boolean": 1
+		},
+		"autoUpdatesProtectedForNative": {
+			"boolean": 1
+		},
+		"installMethod": {
+			"string": 1
+		}
+	}
 }
