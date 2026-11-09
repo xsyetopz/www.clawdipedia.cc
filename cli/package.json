@@ -1,15 +1,15 @@
 {
-  "name": "clawdipedia-docs",
-  "version": "3.0.2",
-  "license": "MIT",
-  "type": "module",
-  "description": "Four doc sources (clawdipedia, platform, code, claude-resources) from a shell: search, read, list, and schema. Runs on Bun with no install step.",
-  "homepage": "https://clawdipedia.cc/",
-  "repository": "https://github.com/xsyetopz/www.clawdipedia.cc",
-  "bin": {
-    "clawdipedia": "bin/clawdipedia"
-  },
-  "files": [
-    "bin/"
-  ]
+	"name": "clawdipedia-docs",
+	"version": "3.0.2",
+	"description": "Four doc sources (clawdipedia, platform, code, claude-resources) from a shell: search, read, list, and schema. Runs on Bun with no install step.",
+	"homepage": "https://clawdipedia.cc/",
+	"license": "MIT",
+	"repository": "https://github.com/xsyetopz/www.clawdipedia.cc",
+	"bin": {
+		"clawdipedia": "bin/clawdipedia"
+	},
+	"files": [
+		"bin/"
+	],
+	"type": "module"
 }

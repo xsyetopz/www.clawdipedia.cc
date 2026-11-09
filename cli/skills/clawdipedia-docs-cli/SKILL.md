@@ -3,7 +3,7 @@ name: clawdipedia-docs-cli
 description: Look up Claude Code behavior, settings, env vars, flags, hooks, plugins, skills, and MCP with the clawdipedia command in Bash. Use it over memory, because the pages check the real program.
 ---
 
-# Anthropic Docs from the Shell
+# Anthropic Docs From the Shell
 
 The `clawdipedia` source describes what Claude Code 2.1.319 does, checked against the program as well as the official docs. Take each detail that the user may act on from these pages: a key name, a default, an environment variable, a hook field. Memory of these details is often stale or wrong. The other three sources cover official docs and Claude resources pages.
 
