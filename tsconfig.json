@@ -1,44 +1,27 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "compilerOptions": {
-    "allowArbitraryExtensions": true,
-    "allowImportingTsExtensions": true,
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "allowUmdGlobalAccess": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "checkJs": true,
-    "esModuleInterop": true,
-    "exactOptionalPropertyTypes": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "lib": ["ES2022", "DOM"],
-    "module": "esnext",
-    "moduleDetection": "force",
-    "moduleResolution": "bundler",
-    "noEmit": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noUncheckedSideEffectImports": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "paths": {
-      "@site/*": ["./*"]
-    },
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "es2022",
-    "types": [
-      "@docusaurus/module-type-aliases",
-      "@docusaurus/theme-classic",
-      "bun"
-    ],
-    "useDefineForClassFields": true
-  },
-  "exclude": [".docusaurus", "build", "captures", "**/dist"]
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"compilerOptions": {
+		"allowUmdGlobalAccess": true,
+		"jsx": "preserve",
+		"lib": ["ESNext", "DOM"],
+		"paths": {
+			"@site/*": ["./*"]
+		},
+		"types": [
+			"@docusaurus/module-type-aliases",
+			"@docusaurus/theme-classic",
+			"bun"
+		]
+	},
+	"exclude": [
+		".docusaurus",
+		"build",
+		"captures",
+		"**/dist",
+		"**/.build",
+		"**/build",
+		"**/coverage",
+		"**/target"
+	],
+	"extends": "typescript-bedrock/tsconfig.base.json"
 }

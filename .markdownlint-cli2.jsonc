@@ -1,27 +1,12 @@
 {
-  "config": {
-    "default": true,
-    // Pages use `title` front matter, so the body starts at H2.
-    "MD041": false,
-    "MD025": { "front_matter_title": "" },
-    // Long lines are fine in tables and code. Prose is one sentence per line.
-    "MD013": false,
-    // Sibling sections repeat names such as "Example" and "Default".
-    "MD024": { "siblings_only": true },
-    // MDX uses inline JSX and HTML (badges, admonition-like blocks).
-    "MD033": false,
-    // Admonitions (:::note) and mermaid blocks are not plain Markdown.
-    "MD031": true,
-    "MD040": true,
-    "MD046": { "style": "fenced" },
-    "MD060": false
-  },
-  "globs": ["docs/**/*.{md,mdx}"],
-  "ignores": [
-    "**/build/**",
-    "**/node_modules/**",
-    "**/.agents/**",
-    "**/.claude/**",
-    "**/.openspec/**"
-  ]
+	"$schema": "https://raw.githubusercontent.com/DavidAnson/markdownlint-cli2/v0.24.0/schema/markdownlint-cli2-config-schema.json",
+	"globs": ["**/*.md"],
+	"gitignore": true,
+	// A repo without a .gitignore must not have its dependencies linted or fixed.
+	"ignores": ["**/node_modules/**"],
+	// The rules come from typescript-bedrock; a custom rule must be named here to load.
+	"customRules": ["markdownlint-rule-title-case-style"],
+	"config": {
+		"extends": "./node_modules/typescript-bedrock/markdownlint.jsonc",
+	},
 }

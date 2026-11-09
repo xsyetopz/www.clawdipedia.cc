@@ -1,0 +1,8 @@
+{
+	"extends": "../node_modules/typescript-bedrock/markdownlint.jsonc",
+	// Pages use `title` front matter, so the body starts at H2.
+	"first-line-heading": false,
+	"single-title": { "front_matter_title": "" },
+	// MDX pages use the status components and other JSX inline.
+	"no-inline-html": false,
+}

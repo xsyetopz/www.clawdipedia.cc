@@ -5,9 +5,6 @@ captures/
 .env
 .DS_Store
 
-# check-examples scratch (removed after each run)
-tools/.examples-tmp/
-
 # Python bytecode from the pty driver
 __pycache__/
 *.pyc
@@ -17,8 +14,73 @@ __pycache__/
 # Wrangler's local cache and dev state
 .wrangler/
 
-# Agent worktrees of Claude Code (each has its own biome.json)
+# Agent worktrees of Claude Code
 .claude/worktrees/
 
 # Local state, cache, and scratch files of claudetto, not for the public repository.
 /.claude/claudetto/
+
+# >>> bedrock
+# Adapted from github/gitignore@41862c8 (CC0-1.0): Global/macOS, Global/VisualStudioCode,
+# Global/JetBrains.
+.env
+.env.*
+!.env.example
+*.bak
+*.log
+*.tmp
+*.swp
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.apdisk
+
+# Editors: shared settings stay tracked, personal state does not.
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+*.vsix
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/aws.xml
+.idea/**/dataSources/
+.idea/**/dataSources.local.xml
+.idea/httpRequests
+*.iws
+.zed/
+# <<< bedrock
+
+# >>> typescript-bedrock
+# Adapted from github/gitignore@41862c8 (CC0-1.0): Node.
+node_modules/
+dist/
+coverage/
+.nyc_output/
+*.lcov
+*.tsbuildinfo
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+.npm/
+*.tgz
+.node_repl_history
+.tern-port
+.vscode-test/
+# <<< typescript-bedrock
