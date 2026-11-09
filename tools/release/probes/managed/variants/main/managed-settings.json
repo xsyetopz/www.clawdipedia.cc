@@ -1,6 +1,6 @@
 {
-  "outputStyle": "managed-style",
-  "autoMode": {
-    "allow": ["PROBE-MANAGED-ALLOW", "$defaults"]
-  }
+	"outputStyle": "managed-style",
+	"autoMode": {
+		"allow": ["PROBE-MANAGED-ALLOW", "$defaults"]
+	}
 }

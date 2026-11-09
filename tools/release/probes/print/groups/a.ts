@@ -11,12 +11,12 @@ import type { PrintGroup } from "../types.ts";
 
 // Named probes first (fast), then the sweep (long).
 export const groupsA: PrintGroup[] = [
-  requestGroup,
-  controlGroup,
-  ptuGroup,
-  scriptGroup,
-  perfettoGroup,
-  transcriptsGroup,
-  env319a,
-  sweepGroup,
+	requestGroup,
+	controlGroup,
+	ptuGroup,
+	scriptGroup,
+	perfettoGroup,
+	transcriptsGroup,
+	env319a,
+	sweepGroup,
 ];

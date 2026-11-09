@@ -185,5 +185,4 @@ The same check runs as `bun run release:check -- --selftest`. It checks that a p
 
 ## Lint
 
-- Markdownlint for this file: `bunx markdownlint-cli2 tools/release/README.md`. The `lint` script covers only `docs/`.
-- Biome does not check Markdown files.
+- Markdownlint for this file: `bunx markdownlint-cli2 tools/release/README.md`. The `lint` script checks it too.

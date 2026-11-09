@@ -1,1779 +1,1779 @@
 {
-  "docs/reference/tools/files.md#when-glob-and-grep-are-offered:3ddf733a": {
-    "kind": "manual",
-    "probes": [],
-    "note": "embedded bfs and ugrep gate read in the cleaned 2.1.316 code (chunk-qd604jgh.js); tool lists checked with cc-inspect code cli against the local stub for 2.1.314 and 2.1.316"
-  },
-  "docs/how-it-works/account-and-access.md#when-it-asks-again:7d66fe76": {
-    "kind": "manual",
-    "probes": [],
-    "note": "groveChoiceSeenAt 1 h window read in the cleaned 2.1.311 code"
-  },
-  "docs/how-it-works/account-and-access.md#what-a-refusal-says:64ecc432": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the official release notes"
-  },
-  "docs/configure/env-vars/context-and-compaction.md#variables:ff4e5b79": {
-    "kind": "env",
-    "probes": ["print.sweep"]
-  },
-  "docs/configure/env-vars/models-and-effort.md#variables:5ad3d32b": {
-    "kind": "env",
-    "probes": ["print.sweep"]
-  },
-  "docs/configure/env-vars/network-and-proxy.md#variables:69a02397": {
-    "kind": "env",
-    "probes": ["print.sweep"]
-  },
-  "docs/configure/env-vars/network-and-proxy.md#variables:ad52476a": {
-    "kind": "env",
-    "probes": ["print.sweep"]
-  },
-  "docs/configure/env-vars/network-and-proxy.md#variables:4f633750": {
-    "kind": "env",
-    "probes": ["print.sweep"]
-  },
-  "docs/configure/env-vars/plugins-and-mcp.md#variables:ba5ee169": {
-    "kind": "env",
-    "probes": ["print.sweep"]
-  },
-  "docs/configure/env-vars/plugins-and-mcp.md#variables:e236bfd3": {
-    "kind": "env",
-    "probes": ["print.sweep"]
-  },
-  "docs/configure/env-vars/plugins-and-mcp.md#variables:dfd0d592": {
-    "kind": "env",
-    "probes": ["print.sweep"]
-  },
-  "docs/configure/env-vars/plugins-and-mcp.md#variables:16f1ccc0": {
-    "kind": "env",
-    "probes": ["print.sweep"]
-  },
-  "docs/configure/env-vars/telemetry-and-debug.md#variables:42614a05": {
-    "kind": "env",
-    "probes": [
-      "print.sweep",
-      "print.perfetto.one",
-      "print.perfetto.path",
-      "print.perfetto.pathdir",
-      "pty.perfetto.interactive-one",
-      "pty.perfetto.interactive-path"
-    ]
-  },
-  "docs/configure/env-vars/sdk-and-automation.md#variables:3b3ce8c4": {
-    "kind": "env",
-    "probes": ["print.sweep"]
-  },
-  "docs/configure/env-vars/tools-and-bash.md#variables:f2f64fed": {
-    "kind": "env",
-    "probes": ["print.sweep"]
-  },
-  "docs/configure/env-vars/tools-and-bash.md#variables:6039177c": {
-    "kind": "env",
-    "probes": ["print.sweep"]
-  },
-  "docs/configure/env-vars/tools-and-bash.md#variables:4b4957ad": {
-    "kind": "env",
-    "probes": ["print.sweep"]
-  },
-  "docs/configure/memory-and-rules.md#imports-and-rule-files:edb805a0": {
-    "kind": "manual",
-    "probes": [],
-    "note": "plugin option; the `/config` match is a label, not a command"
-  },
-  "docs/configure/memory-and-rules.md#how-it-works:af891277": {
-    "kind": "behaviour",
-    "probes": [
-      "pty.sizes.opus-116k",
-      "pty.sizes.opus-156k",
-      "pty.sizes.opus-45k",
-      "pty.sizes.sonnet-45k",
-      "pty.sizes.sonnet-4x34k"
-    ]
-  },
-  "docs/configure/memory-and-rules.md#auto-memory:97437ff5": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/configure/models-and-providers/model-catalog.md#choose-a-model:37f6c029": {
-    "kind": "setting",
-    "probes": []
-  },
-  "docs/configure/models-and-providers/model-catalog.md#aliases:9f9af634": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/configure/output-styles.md#the-outputstyle-setting-and-switching:6e63c269": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/configure/permissions/auto-mode.md#the-claude-auto-mode-commands:631a5e2f": {
-    "kind": "command",
-    "probes": []
-  },
-  "docs/configure/cli/subcommands.md#gateway-pooled-budget-sign-in-notice-and-blocked-message-options:8116d3a1": {
-    "kind": "behaviour",
-    "probes": [
-      "print.api319.gateway.blocked-message-set",
-      "print.api319.gateway.blocked-message-unset",
-      "print.api319.gateway.example-all-four",
-      "print.api319.gateway.login-notice-no-oidc",
-      "print.api319.gateway.login-notice-served",
-      "print.api319.gateway.login-notice-too-long",
-      "print.api319.gateway.login-notice-unset",
-      "print.api319.gateway.pooled-order-duplicate",
-      "print.api319.gateway.pooled-order-ignored",
-      "print.api319.gateway.pooled-order-with-rule",
-      "print.api319.gateway.pooled-priority-list-empty",
-      "print.api319.gateway.pooled-rule-unknown"
-    ]
-  },
-  "docs/configure/permissions/rules.md#the-permissions-keys:93b8d954": {
-    "kind": "behaviour",
-    "probes": [
-      "print.api319.tool.exit-plan.direct-deny",
-      "print.api319.tool.exit-plan.teammate-deny"
-    ]
-  },
-  "docs/configure/permissions/rules.md#related-top-level-keys:749df5b1": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the official release notes"
-  },
-  "docs/configure/permissions/sandbox.md#other-behavior:4810bc2c": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the official release notes"
-  },
-  "docs/configure/settings/enterprise.md#require-a-version-range:bba38eb3": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/configure/settings/extra-keys.md#auto-mode-voice-and-display-keys:6b723237": {
-    "kind": "setting",
-    "probes": []
-  },
-  "docs/configure/settings/hooks-and-plugins.md#keys:4004381f": {
-    "kind": "setting",
-    "probes": []
-  },
-  "docs/configure/settings/hooks-and-plugins.md#keys:39aba15f": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/configure/settings/hooks-and-plugins.md#keys:e49b1181": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the official release notes"
-  },
-  "docs/configure/settings/index.md#where-settings-live:4bd22d12": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/configure/settings/index.md#how-lists-and-model-keys-merge:ea06b51d": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/configure/settings/index.md#exceptions-to-managed-precedence:4be3bfd3": {
-    "kind": "setting",
-    "probes": []
-  },
-  "docs/configure/settings/index.md#left-out-on-purpose:a0efb02a": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/configure/settings/index.md#left-out-on-purpose:b977ba78": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/configure/settings/index.md#managed-settings:9d468c67": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/configure/settings/index.md#where-settings-live:8cf3097d": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/configure/settings/mcp-and-channels.md#keys:85755270": {
-    "kind": "setting",
-    "probes": []
-  },
-  "docs/configure/settings/model.md#keys:0fd378de": {
-    "kind": "setting",
-    "probes": []
-  },
-  "docs/extend/hooks/configuration.md#the-if-filter:ec074a99": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/hooks/configuration.md#environment-variables-for-hooks:335ac6d4": {
-    "kind": "env",
-    "probes": ["print.sweep"]
-  },
-  "docs/extend/hooks/agent-events.md#elicitation-and-elicitationresult:aac08a8b": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/mcp/auth.md#headershelper:d1084239": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/mcp/cli.md#the-mcp-command:399098f2": {
-    "kind": "static",
-    "probes": [],
-    "note": "history: needs 2.1.284 or later"
-  },
-  "docs/extend/mcp/config.md#server-options:9de35760": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mcp/config.md#precedence:a75f98fb": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the official release notes"
-  },
-  "docs/extend/mcp/index.md#transports:452d3528": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/mcp/index.md#scopes:a724f45b": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/mcp/runtime.md#limits:11085191": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/mcp/runtime.md#timing-and-recovery:5794e73f": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the official release notes"
-  },
-  "docs/extend/mcp/settings.md#files-and-flags:e17a496e": {
-    "kind": "flag",
-    "probes": []
-  },
-  "docs/extend/mcp/settings.md#approval-rules:891e26db": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/mod-api/calls/clock-http-process-env-settings.md#members:4aa0ff1a": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/calls/clock-http-process-env-settings.md#events-raised-by-these-calls:53bdc14e": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/events/hooks.md#failure-behavior:313afbf3": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/index.md#known-gaps:313a0dba": {
-    "kind": "external",
-    "probes": [],
-    "note": "compares the published type file with the official mods docs; no probe checks it"
-  },
-  "docs/extend/mod-api/calls/tool-command-config.md#engine-events:1091aee3": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/calls/turn-prompt.md#engine-events:5a8a6a40": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/types/infra/index.md#types-without-fields:9ff82136": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolcheckinput:88ec56be": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolcheckresult:368947cc": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolcheckresult:06a4112b": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet; the decider code reads the same in 2.1.307, 2.1.308, and 2.1.309"
-  },
-  "docs/extend/mod-api/types/turn-prompt/index.md#example:c79d0a53": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectioninput:c79d0a53": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectioninput:5fcdbdfc": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/types/ui/element-props.md#imageprops:09ae9a1f": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/types/ui/input-pane-render.md#paneopenargs:62d7a428": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour (also in the release notes); no probe checks it yet"
-  },
-  "docs/extend/mod-api/ui/ui-elements.md#surfaces:ce5563fb": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/ui/ui-elements.md#placed:5e7079b0": {
-    "kind": "schema",
-    "probes": [],
-    "note": "RenderInput Placed.id in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/ui/ui-elements.md#placed:698d8c1d": {
-    "kind": "schema",
-    "probes": [],
-    "note": "RenderInput Placed.plugin in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/ui/ui-elements.md#placed:a8649054": {
-    "kind": "schema",
-    "probes": [],
-    "note": "RenderInput Placed.onScreen in schemas/claude-code.d.ts"
-  },
-  "docs/extend/plugins/cli.md#subcommands:ae6630e1": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/plugins/cli.md#subcommands:b4c4d15b": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/plugins/manifest.md#userconfig-option-keys:e2d3923d": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/plugins/marketplace.md#top-level-keys:831397d4": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/plugins/marketplace.md#plugin-entry-keys:021133fc": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/plugins/marketplace.md#plugin-sources:e2716f9c": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/skills-and-commands/bundled-skills.md#skills:0142f207": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the official release notes"
-  },
-  "docs/extend/skills-and-commands/bundled-skills.md#skills:86834214": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the official release notes"
-  },
-  "docs/extend/skills-and-commands/frontmatter.md#rules:24090c40": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/skills-and-commands/frontmatter.md#keys:d23f9847": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the official release notes"
-  },
-  "docs/extend/skills-and-commands/frontmatter.md#keys:0947a0e6": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/skills-and-commands/index.md#skill-locations:0ff0459a": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/skills-and-commands/index.md#skill-locations:e20ae4eb": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/skills-and-commands/index.md#loading-and-controls:92e9dc19": {
-    "kind": "flag",
-    "probes": []
-  },
-  "docs/extend/skills-and-commands/slash-commands.md#session-and-conversation-commands:4b2fb94f": {
-    "kind": "command",
-    "probes": []
-  },
-  "docs/extend/skills-and-commands/slash-commands.md#session-and-conversation-commands:6f12d364": {
-    "kind": "command",
-    "probes": []
-  },
-  "docs/extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands:77d4f222": {
-    "kind": "command",
-    "probes": []
-  },
-  "docs/extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands:5517ad3b": {
-    "kind": "command",
-    "probes": []
-  },
-  "docs/extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands:82e5e57f": {
-    "kind": "manual",
-    "probes": [],
-    "note": "texts seen only against the local stub; live.usage.429* never reach the usage endpoint; again on 2.1.307 and 2.1.308, whose text fragments match 2.1.306"
-  },
-  "docs/extend/skills-and-commands/slash-commands.md#account-cloud-and-other-commands:5180841c": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the official release notes"
-  },
-  "docs/extend/skills-and-commands/slash-commands.md#account-cloud-and-other-commands:ef1e5797": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/skills-and-commands/slash-commands.md#how-usage-and-artifacts-work:ed40969f": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/skills-and-commands/slash-commands.md#how-usage-and-artifacts-work:ca2acac0": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the official release notes"
-  },
-  "docs/extend/skills-and-commands/slash-commands.md#how-usage-and-artifacts-work:3bfd871d": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/skills-and-commands/slash-commands.md#how-usage-and-artifacts-work:08f56e6b": {
-    "kind": "static",
-    "probes": [],
-    "note": "reading only: captures/2.1.312/strings.txt holds the two new texts and captures/2.1.311/strings.txt holds the two old ones. No 2.1.312 run reached the usage endpoint"
-  },
-  "docs/extend/subagents/frontmatter.md#the---agents-json:df1ddbef": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/subagents/index.md#overview:780fb0f0": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/subagents/runtime.md#limits-and-switches:70b4dc60": {
-    "kind": "env",
-    "probes": ["print.sweep"]
-  },
-  "docs/how-it-works/context-and-compaction.md#controls:26caffcc": {
-    "kind": "env",
-    "probes": ["print.sweep"]
-  },
-  "docs/how-it-works/context-and-compaction.md#the-summary-prompt:ce2a0e68": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/how-it-works/permission-flow.md#step-by-step:4b10b522": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/how-it-works/system-prompt.md#ways-to-change-it:f3d51160": {
-    "kind": "flag",
-    "probes": []
-  },
-  "docs/how-it-works/system-prompt.md#ways-to-change-it:5488df9f": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/how-it-works/system-prompt.md#shared-sections:1a54cb12": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/reference/api/endpoints.md#request-headers:cdde4fd1": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/reference/tools/agents-and-tasks.md#agent-parameters:4ec0043c": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/reference/tools/files.md#tools:5c10ad8a": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/reference/tools/index.md#switches-for-tool-search:0c33dfc5": {
-    "kind": "env",
-    "probes": ["print.sweep"]
-  },
-  "docs/extend/plugins/loading.md#variables:a80e94bf": {
-    "kind": "behaviour",
-    "probes": ["print.plugindata.bash-bin"]
-  },
-  "docs/reference/tools/shell-and-web.md#tools:1fb4f438": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/reference/tools/shell-and-web.md#how-it-works:af1c8f0f": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/configure/status-line.md#how-it-works:fc4602b6": {
-    "kind": "behaviour",
-    "probes": [
-      "pty.statusline.debounce",
-      "pty.statusline.dialog-pause",
-      "pty.statusline.idle-no-tick",
-      "pty.statusline.refresh-interval",
-      "pty.statusline.subagent-tick"
-    ]
-  },
-  "docs/extend/hooks/session-events.md#notification:8b61c366": {
-    "kind": "behaviour",
-    "probes": [
-      "pty.notifications.agent-needs-input",
-      "pty.notifications.agent-needs-input-refused"
-    ]
-  },
-  "docs/configure/permissions/auto-mode.md#classifier-billing-notice:916114ef": {
-    "kind": "behaviour",
-    "probes": [
-      "pty.notifications.agent-needs-input",
-      "pty.notifications.agent-needs-input-refused",
-      "pty.notifications.auto-mode-local"
-    ]
-  },
-  "docs/extend/hooks/session-events.md#notification:2d26f7b1": {
-    "kind": "behaviour",
-    "probes": [
-      "pty.hooks.notification.permission-prompt",
-      "pty.hooks.notification.continue-false"
-    ]
-  },
-  "docs/extend/hooks/tool-events.md#posttooluse-tool_response-shapes:02779c22": {
-    "kind": "behaviour",
-    "probes": [
-      "print.hooks.posttooluse.agent",
-      "print.hooks.posttooluse.agent-bg",
-      "print.hooks.posttooluse.bash",
-      "print.hooks.posttooluse.croncreate",
-      "print.hooks.posttooluse.cronlist",
-      "print.hooks.posttooluse.edit",
-      "print.hooks.posttooluse.edit-after-bash",
-      "print.hooks.posttooluse.edit-after-write",
-      "print.hooks.posttooluse.edit-no-read",
-      "print.hooks.posttooluse.edit-partial-read",
-      "print.hooks.posttooluse.glob",
-      "print.hooks.posttooluse.grep",
-      "print.hooks.posttooluse.listagents",
-      "print.hooks.posttooluse.notebookedit",
-      "print.hooks.posttooluse.read",
-      "print.hooks.posttooluse.toolsearch",
-      "print.hooks.posttooluse.webfetch",
-      "print.hooks.posttooluse.websearch",
-      "print.hooks.posttooluse.write"
-    ],
-    "note": "croncreate, cronlist, glob, grep, notebookedit, webfetch, websearch: not offered in -p since 2.1.306; the CronCreate and CronList rows are from 2.1.305"
-  },
-  "docs/extend/hooks/tool-events.md#posttooluse-tool_response-shapes:eab8eda3": {
-    "kind": "behaviour",
-    "probes": ["print.hooks.posttooluse.edit-no-read"]
-  },
-  "docs/extend/hooks/handlers.md#handler-types:d51c0b14": {
-    "kind": "behaviour",
-    "probes": [
-      "print.hooks.script.no-script",
-      "print.hooks.script.post-script",
-      "print.hooks.script.pre-script",
-      "print.hooks.script.pre-script-only"
-    ]
-  },
-  "docs/extend/hooks/handlers.md#handler-types:e0941b31": {
-    "kind": "behaviour",
-    "probes": [
-      "print.hooks.script.no-script",
-      "print.hooks.script.post-script",
-      "print.hooks.script.pre-script",
-      "print.hooks.script.pre-script-only"
-    ]
-  },
-  "docs/extend/hooks/input-and-output.md#what-continue-and-systemmessage-do-per-event:17b067b6": {
-    "kind": "behaviour",
-    "probes": [
-      "pty.hooks.notification.continue-false",
-      "pty.hooks.notification.permission-prompt",
-      "pty.hooks.permissiondenied.auto",
-      "pty.hooks.permissiondenied.retry",
-      "pty.hooks.permissionrequest.allow",
-      "pty.hooks.permissionrequest.block",
-      "pty.hooks.permissionrequest.deny",
-      "pty.hooks.permissionrequest.empty",
-      "pty.hooks.permissionrequest.exit2",
-      "pty.hooks.permissionrequest.interrupt",
-      "pty.hooks.precompact.block",
-      "pty.hooks.precompact.exit2",
-      "pty.hooks.precompact.sysmsg"
-    ]
-  },
-  "docs/extend/skills-and-commands/slash-commands.md#how-usage-and-artifacts-work:e9b314dd": {
-    "kind": "behaviour",
-    "probes": [
-      "live.usage.429",
-      "live.usage.429-retry-after",
-      "live.usage.envelope"
-    ]
-  },
-  "docs/how-it-works/context-budget.md#what-an-empty-session-holds:c0ef5ecc": {
-    "kind": "behaviour",
-    "probes": ["live.context-budget"]
-  },
-  "docs/prompts/other/override.md#:15eac422": {
-    "kind": "behaviour",
-    "probes": ["live.oauth-parity"]
-  },
-  "docs/prompts/skills/skill-insights.md#where-it-comes-from:b79f0f67": {
-    "kind": "behaviour",
-    "probes": ["pty.captures.skill-insights"]
-  },
-  "docs/prompts/agents/subagent-claude-code-guide.md#where-it-comes-from:aa19dfb2": {
-    "kind": "behaviour",
-    "probes": ["pty.captures.guide"]
-  },
-  "docs/prompts/agents/subagent-claude-code-guide.md#where-it-comes-from:ee124afa": {
-    "kind": "behaviour",
-    "probes": ["pty.captures.guide"]
-  },
-  "docs/reference/probes.md#how-we-probed:8b26f1c1": {
-    "kind": "behaviour",
-    "probes": [
-      "print.briefresume.brief.compare",
-      "print.briefresume.resume.same-session",
-      "print.request.baseline-a",
-      "print.request.baseline-b"
-    ]
-  },
-  "docs/reference/probes.md#auto-mode:413602d2": {
-    "kind": "behaviour",
-    "probes": [
-      "print.automode.classifier-server.default",
-      "print.automode.classifier-server.server-0",
-      "print.automode.classifier-server.server-1",
-      "print.automode.classifier-server.two-stage-1"
-    ]
-  },
-  "docs/reference/probes.md#request-details:96582cfa": {
-    "kind": "behaviour",
-    "probes": [
-      "print.cachetouch.cache-touch.no-override",
-      "print.cachetouch.cache-touch.override"
-    ]
-  },
-  "docs/reference/probes.md#request-details:60c827b5": {
-    "kind": "behaviour",
-    "probes": ["print.request.baseline-a", "print.request.baseline-b"]
-  },
-  "docs/reference/probes.md#automodeclassifyallshell:cb82b287": {
-    "kind": "behaviour",
-    "probes": [
-      "print.automode.classify-all-shell.allow-settings-flag-false",
-      "print.automode.classify-all-shell.allow-settings-flag-true",
-      "print.automode.classify-all-shell.allow-unset",
-      "print.automode.classify-all-shell.allow-user-false",
-      "print.automode.classify-all-shell.allow-user-true",
-      "print.automode.classify-all-shell.local-true",
-      "print.automode.classify-all-shell.no-allow-rule",
-      "print.automode.classify-all-shell.project-true",
-      "print.automode.classify-all-shell.user-false-flag-true",
-      "print.automode.classify-all-shell.user-true-flag-false",
-      "managed.false.classify-flag-false",
-      "managed.false.classify-flag-true",
-      "managed.false.classify-neither",
-      "managed.false.classify-user-false",
-      "managed.false.classify-user-false-and-flag-true",
-      "managed.false.classify-user-true",
-      "managed.false.classify-user-true-and-flag-false",
-      "managed.main.classify-flag-false",
-      "managed.main.classify-flag-true",
-      "managed.main.classify-neither",
-      "managed.main.classify-user-false",
-      "managed.main.classify-user-false-and-flag-true",
-      "managed.main.classify-user-true",
-      "managed.main.classify-user-true-and-flag-false",
-      "managed.true.classify-flag-false",
-      "managed.true.classify-flag-true",
-      "managed.true.classify-neither",
-      "managed.true.classify-user-false",
-      "managed.true.classify-user-false-and-flag-true",
-      "managed.true.classify-user-true",
-      "managed.true.classify-user-true-and-flag-false"
-    ]
-  },
-  "docs/reference/probes.md#subagents-and-hooks:d77527b1": {
-    "kind": "behaviour",
-    "probes": [
-      "print.subagents.append-subagent-prompt.env-append-subagent-system-prompt",
-      "print.subagents.append-subagent-prompt.env-enable-append-subagent-prompt",
-      "print.subagents.append-subagent-prompt.flag",
-      "print.subagents.frontmatter.camel-disallowedTools",
-      "print.subagents.frontmatter.capital-tools-hyphen-disallowed",
-      "print.subagents.isolation.none",
-      "print.subagents.isolation.remote",
-      "print.subagents.isolation.worktree",
-      "print.subagents.observer.off",
-      "print.subagents.observer.on",
-      "print.subagents.setup-hook.init",
-      "print.subagents.setup-hook.init-only",
-      "print.subagents.setup-hook.maintenance",
-      "print.subagents.type.claude",
-      "print.subagents.type.claude-code-guide",
-      "print.subagents.type.comment-thread-analyst",
-      "print.subagents.type.Explore",
-      "print.subagents.type.fork",
-      "print.subagents.type.general-purpose",
-      "print.subagents.type.observer",
-      "print.subagents.type.Plan",
-      "print.subagents.type.statusline-setup",
-      "print.subagents.type.workflow-subagent",
-      "print.subagents.web-fetch",
-      "print.workflow.model-order.none",
-      "print.workflow.model-order.opt-haiku",
-      "print.workflow.model-order.sub-haiku-no-opt",
-      "print.workflow.model-order.sub-haiku-opt-sonnet",
-      "print.workflow.model-order.wf-inherit-sub-haiku",
-      "print.workflow.model-order.wf-sonnet-opt-haiku",
-      "print.workflow.model-order.wf-sonnet-sub-haiku",
-      "print.workflow.model-order.wf-sonnet-sub-haiku-force"
-    ]
-  },
-  "docs/reference/probes.md#subagents-and-hooks:82ca9e81": {
-    "kind": "behaviour",
-    "probes": ["print.subagents.observer.off", "print.subagents.observer.on"]
-  },
-  "docs/reference/probes.md#configure-and-memory:cbebf627": {
-    "kind": "behaviour",
-    "probes": [
-      "print.automode.config.local",
-      "print.automode.config.project",
-      "print.automode.config.settings-flag",
-      "print.automode.config.user",
-      "print.configmem.memory-stores.empty-array",
-      "print.configmem.memory-stores.garbage",
-      "print.configmem.memory-stores.id-mount-form",
-      "print.configmem.memory-stores.mode-ro",
-      "print.configmem.memory-stores.mode-rw",
-      "print.configmem.memory-stores.object-name-path",
-      "print.configmem.memory-stores.string-array",
-      "print.configmem.memory.plain",
-      "print.configmem.memory.remote",
-      "print.configmem.memory.remote-dir",
-      "print.configmem.memory.stores-object",
-      "print.configmem.output-style.plugin-forced"
-    ]
-  },
-  "docs/reference/probes.md#configure-and-memory:316e22a7": {
-    "kind": "env",
-    "probes": [
-      "print.sweep",
-      "print.configmem.memory-stores.empty-array",
-      "print.configmem.memory-stores.garbage",
-      "print.configmem.memory-stores.id-mount-form",
-      "print.configmem.memory-stores.mode-ro",
-      "print.configmem.memory-stores.mode-rw",
-      "print.configmem.memory-stores.object-name-path",
-      "print.configmem.memory-stores.string-array",
-      "print.configmem.memory.stores-object"
-    ]
-  },
-  "docs/reference/probes.md#context-budget:26c7e510": {
-    "kind": "behaviour",
-    "probes": ["live.context-budget"]
-  },
-  "docs/reference/probes.md#context-budget:bf9bda18": {
-    "kind": "behaviour",
-    "probes": ["live.context-budget"]
-  },
-  "docs/reference/probes.md#static-and-print-probes:3c918190": {
-    "kind": "behaviour",
-    "probes": [
-      "print.configmem.cowork-memory.extra-guidelines",
-      "print.configmem.cowork-memory.guidelines",
-      "print.configmem.cowork-memory.index-content",
-      "print.configmem.cowork-memory.path-override",
-      "print.configmem.cowork-memory.plain",
-      "print.configmem.cowork-memory.post-turn",
-      "print.configmem.cowork-memory.remote-path-override",
-      "print.hooks.posttooluse.agent",
-      "print.hooks.posttooluse.agent-bg",
-      "print.hooks.posttooluse.bash",
-      "print.hooks.posttooluse.edit",
-      "print.hooks.posttooluse.edit-after-bash",
-      "print.hooks.posttooluse.edit-after-write",
-      "print.hooks.posttooluse.edit-no-read",
-      "print.hooks.posttooluse.edit-partial-read",
-      "print.hooks.posttooluse.listagents",
-      "print.hooks.posttooluse.read",
-      "print.hooks.posttooluse.toolsearch",
-      "print.hooks.posttooluse.write",
-      "print.misc.agent-mcp-servers.project",
-      "print.misc.agent-mcp-servers.user",
-      "print.misc.context-slash-command",
-      "print.misc.large-claude-md",
-      "print.misc.managed-settings-path",
-      "print.misc.plugin-validate.version-array",
-      "print.misc.plugin-validate.version-empty-string",
-      "print.misc.plugin-validate.version-empty-string-with-author",
-      "print.misc.plugin-validate.version-null",
-      "print.misc.plugin-validate.version-number",
-      "print.misc.plugin-validate.version-semver",
-      "print.misc.plugin-validate.version-string",
-      "print.misc.subprocess-env-scrub.bypass-allowedtools-scrub0",
-      "print.misc.subprocess-env-scrub.bypass-allowedtools-scrub1",
-      "print.misc.subprocess-env-scrub.bypass-scrub0",
-      "print.misc.subprocess-env-scrub.bypass-scrub1",
-      "print.misc.subprocess-env-scrub.names",
-      "print.models.matrix"
-    ]
-  },
-  "docs/reference/probes.md#interactive-probes:1f325add": {
-    "kind": "behaviour",
-    "probes": [
-      "pty.agents.fork",
-      "pty.agents.general-purpose",
-      "pty.agents.unknown-type",
-      "pty.hooks.elicitation.hook-accept",
-      "pty.hooks.notification.continue-false",
-      "pty.hooks.notification.permission-prompt",
-      "pty.hooks.permissiondenied.auto",
-      "pty.hooks.permissiondenied.retry",
-      "pty.hooks.permissionrequest.allow",
-      "pty.hooks.permissionrequest.block",
-      "pty.hooks.permissionrequest.deny",
-      "pty.hooks.permissionrequest.empty",
-      "pty.hooks.permissionrequest.exit2",
-      "pty.hooks.permissionrequest.interrupt",
-      "pty.hooks.precompact.block",
-      "pty.hooks.precompact.exit2",
-      "pty.hooks.precompact.sysmsg",
-      "pty.notifications.agent-needs-input",
-      "pty.notifications.elicitation-dialog",
-      "pty.notifications.elicitation-url",
-      "pty.notifications.idle-prompt",
-      "pty.sizes.opus-116k",
-      "pty.sizes.opus-156k",
-      "pty.sizes.opus-45k",
-      "pty.sizes.sonnet-45k",
-      "pty.sizes.sonnet-4x34k",
-      "pty.statusline.debounce",
-      "pty.statusline.dialog-pause",
-      "pty.statusline.idle-no-tick",
-      "pty.statusline.refresh-interval",
-      "pty.statusline.subagent-tick",
-      "pty.captures.guide"
-    ]
-  },
-  "docs/reference/probes.md#interactive-probes:87f7640b": {
-    "kind": "behaviour",
-    "probes": ["pty.captures.guide"]
-  },
-  "docs/reference/probes.md#interactive-probes:c0b46e97": {
-    "kind": "behaviour",
-    "probes": [
-      "live.usage.429",
-      "live.usage.429-retry-after",
-      "live.usage.envelope"
-    ],
-    "note": "texts seen only against the local stub; live.usage.429* never reach the usage endpoint; again on 2.1.307 and 2.1.308, whose text fragments match 2.1.306"
-  },
-  "docs/configure/env-vars/remote-and-cloud-sessions.md#variables:a42e211e": {
-    "kind": "flag",
-    "probes": [],
-    "note": "runner flag --checkout-hook-timeout-min, also in the release notes"
-  },
-  "docs/configure/env-vars/remote-and-cloud-sessions.md#variables:3bdc2c44": {
-    "kind": "flag",
-    "probes": [],
-    "note": "runner flag --diff-finds-nested-repository"
-  },
-  "docs/configure/env-vars/telemetry-and-debug.md#how-it-works:feff7747": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the official release notes"
-  },
-  "docs/configure/permissions/sandbox.md#core-keys:f1d7177e": {
-    "kind": "schema",
-    "probes": [],
-    "note": "dotted key sandbox.allowNestedUserNamespaces in schemas/"
-  },
-  "docs/extend/headless/control-protocol.md#example:7f6c8d23": {
-    "kind": "behaviour",
-    "probes": ["print.control.requests"]
-  },
-  "docs/extend/headless/control-protocol.md#example:c9792ab1": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the official release notes"
-  },
-  "docs/how-it-works/agent-loop.md#how-a-turn-ends:8ecf02bb": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the official release notes"
-  },
-  "docs/reference/api/betas.md#registry:4fa6b792": {
-    "kind": "behaviour",
-    "probes": ["print.transcripts.lines"]
-  },
-  "docs/reference/api/betas.md#observed-request:16609b8a": {
-    "kind": "behaviour",
-    "probes": ["print.request.baseline-a", "print.request.baseline-b"]
-  },
-  "docs/reference/api/betas.md#observed-request:736e669d": {
-    "kind": "behaviour",
-    "probes": ["live.oauth-parity"]
-  },
-  "docs/reference/transcript-format.md#line-types:09cfbabe": {
-    "kind": "schema",
-    "probes": [],
-    "note": "cost-state.modelUsage keys in schemas/claude-code-transcript.json"
-  },
-  "docs/reference/transcript-format.md#line-types:f817762b": {
-    "kind": "behaviour",
-    "probes": ["print.transcripts.lines"]
-  },
-  "docs/reference/transcript-format.md#attachment-types:cb70dfea": {
-    "kind": "behaviour",
-    "probes": ["print.transcripts.attachments"]
-  },
-  "docs/extend/headless/control-protocol.md#subtypes:42d5eb73": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/headless/control-protocol.md#subtypes:94afba44": {
-    "kind": "static",
-    "probes": [],
-    "note": "release history: when it started; recheck only if the feature is removed"
-  },
-  "docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolcheckinput:1d637a36": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour (approver set next to tool.check); no probe checks it yet"
-  },
-  "docs/reference/probes.md#managed-folder-probe:4ab664b7": {
-    "kind": "behaviour",
-    "probes": [
-      "managed.baseline.agent-mcp",
-      "managed.baseline.auto-mode-config",
-      "managed.baseline.claudemd-order",
-      "managed.baseline.excludes-any-claude-md-project",
-      "managed.baseline.excludes-any-claude-md-user",
-      "managed.baseline.excludes-managed-abs-project",
-      "managed.baseline.excludes-managed-abs-user",
-      "managed.baseline.excludes-managed-glob-project",
-      "managed.baseline.excludes-managed-glob-user",
-      "managed.baseline.mcp-config-flag",
-      "managed.baseline.mcp-get-managed",
-      "managed.baseline.mcp-get-user",
-      "managed.baseline.mcp-list",
-      "managed.baseline.mcp-run",
-      "managed.baseline.outputstyle",
-      "managed.baseline.skill-default",
-      "managed.baseline.skill-disabled",
-      "managed.false.classify-flag-false",
-      "managed.false.classify-flag-true",
-      "managed.false.classify-neither",
-      "managed.false.classify-user-false",
-      "managed.false.classify-user-false-and-flag-true",
-      "managed.false.classify-user-true",
-      "managed.false.classify-user-true-and-flag-false",
-      "managed.main.agent-mcp",
-      "managed.main.auto-mode-config",
-      "managed.main.classify-flag-false",
-      "managed.main.classify-flag-true",
-      "managed.main.classify-neither",
-      "managed.main.classify-user-false",
-      "managed.main.classify-user-false-and-flag-true",
-      "managed.main.classify-user-true",
-      "managed.main.classify-user-true-and-flag-false",
-      "managed.main.claudemd-order",
-      "managed.main.excludes-any-claude-md-project",
-      "managed.main.excludes-any-claude-md-user",
-      "managed.main.excludes-managed-abs-project",
-      "managed.main.excludes-managed-abs-user",
-      "managed.main.excludes-managed-glob-project",
-      "managed.main.excludes-managed-glob-user",
-      "managed.main.mcp-config-flag",
-      "managed.main.mcp-get-managed",
-      "managed.main.mcp-get-user",
-      "managed.main.mcp-list",
-      "managed.main.mcp-run",
-      "managed.main.outputstyle",
-      "managed.main.skill-default",
-      "managed.main.skill-disabled",
-      "managed.true.classify-flag-false",
-      "managed.true.classify-flag-true",
-      "managed.true.classify-neither",
-      "managed.true.classify-user-false",
-      "managed.true.classify-user-false-and-flag-true",
-      "managed.true.classify-user-true",
-      "managed.true.classify-user-true-and-flag-false"
-    ]
-  },
-  "docs/reference/probes.md#live-login-probes:00ecb1d0": {
-    "kind": "behaviour",
-    "probes": ["live.oauth-parity", "live.artifacts"]
-  },
-  "docs/reference/probes.md#live-login-probes:0c9830b1": {
-    "kind": "behaviour",
-    "probes": ["live.oauth-parity"],
-    "note": "was dce7a0da until the row explained the 2.1.314 difference"
-  },
-  "docs/reference/probes.md#live-login-probes:437f2b6b": {
-    "kind": "behaviour",
-    "probes": ["live.oauth-parity", "live.artifacts"],
-    "note": "was 21e6589e until the paragraph named 2.1.314"
-  },
-  "docs/reference/probes.md#live-login-probes:da2034b4": {
-    "kind": "behaviour",
-    "probes": ["live.oauth-parity"]
-  },
-  "docs/reference/probes.md#live-login-probes:fc59136f": {
-    "kind": "behaviour",
-    "probes": ["live.artifacts"],
-    "note": "was 82b311c0 until the row dropped its link to the deleted Release Archive page"
-  },
-  "docs/extend/mod-api/calls/session.md#members:5bea862d": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/calls/session.md#events-raised-by-session-calls:99a6b941": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/calls/testing.md#exports:8f8b57a8": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/types/testing/index.md#types-without-fields:e66d89ad": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/types/tool-command-config/index.md#types-without-fields:41f72ee2": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/extend/mod-api/types/ui/input-pane-render.md#renderelement:2503ee1f": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour; no probe checks it yet"
-  },
-  "docs/configure/cli/subcommands.md#commands:16cc755f": {
-    "kind": "command",
-    "probes": [],
-    "note": "claude ultrareview --help in 2.1.309 lists --trust-workspace; trust check read in the program"
-  },
-  "docs/configure/memory-and-rules.md#how-it-works:0e4f9078": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the v2.1.309 release notes; was 876ddeba until the row gained the 2.1.314 match rule"
-  },
-  "docs/configure/permissions/modes.md#safety-checks:172f7afa": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the v2.1.309 release notes"
-  },
-  "docs/configure/permissions/sandbox.md#core-keys:d9805295": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the v2.1.309 release notes"
-  },
-  "docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptfillargs:2847c0a4": {
-    "kind": "schema",
-    "probes": [],
-    "note": "PromptFillArgs cursor in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptfillinput:fbddf98e": {
-    "kind": "schema",
-    "probes": [],
-    "note": "PromptFillInput cursor in schemas/claude-code.d.ts"
-  },
-  "docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:65f09f9d": {
-    "kind": "manual",
-    "probes": [],
-    "note": "effort retry read in the program (2.1.310 chunk-31gxg38t.js:2834376); needs a server that refuses effort"
-  },
-  "docs/configure/permissions/sandbox.md#other-behavior:0a2f2baf": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the v2.1.310 release notes; warning text read in the program (2.1.310 chunk-aet23r5k.js:919487), Linux only"
-  },
-  "docs/configure/permissions/sandbox.md#other-behavior:b4d4ce4f": {
-    "kind": "manual",
-    "probes": [],
-    "note": "startup warning read in the program (2.1.310 chunk-8a19274q.js); needs deny paths on another computer"
-  },
-  "docs/extend/mod-api/index.md#errors:8cd47ec3": {
-    "kind": "manual",
-    "probes": [],
-    "note": "the ui.resolve error text names a vm context in the 2.1.310 program strings"
-  },
-  "docs/extend/mod-api/types/ui/element-props.md#imageprops:9c581f61": {
-    "kind": "schema",
-    "probes": [],
-    "note": "ImageProps doc in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/types/ui/select-text-focus.md#uiblitresult:dcf78d34": {
-    "kind": "schema",
-    "probes": [],
-    "note": "UiBlitResult.fix in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/types/ui/select-text-focus.md#svgprops:1bcc9847": {
-    "kind": "schema",
-    "probes": [],
-    "note": "SvgProps.isInteractive doc in schemas/claude-code.d.ts"
-  },
-  "docs/extend/plugins/manifest.md#top-level-keys:72274c47": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the v2.1.310 release notes; tengu_amber_sentinel gate on plugin monitors gone (2.1.309 chunk-smka8wcm.js:222106)"
-  },
-  "docs/reference/api/betas.md#registry:49f0736a": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the v2.1.310 release notes; retry read in the program (2.1.310 chunk-31gxg38t.js:2834376)"
-  },
-  "docs/reference/tools/shell-and-web.md#how-it-works:2982c539": {
-    "kind": "behaviour",
-    "probes": ["print.request.baseline-a", "print.request.baseline-b"]
-  },
-  "docs/reference/tools/shell-and-web.md#how-it-works:44d3082c": {
-    "kind": "manual",
-    "probes": [],
-    "note": "sleep check read in the program (2.1.310 chunk-31gxg38t.js:4972903, limit 25 s); needs the model to run a leading sleep"
-  },
-  "docs/how-it-works/context-budget.md#what-else-changes-the-budget:251dc99e": {
-    "kind": "behaviour",
-    "probes": ["print.dsc.sizes"]
-  },
-  "docs/reference/tools/index.md#which-built-in-tools-are-deferred:5ab932bd": {
-    "kind": "behaviour",
-    "probes": ["print.hooks.posttooluse.glob", "print.hooks.posttooluse.grep"]
-  },
-  "docs/configure/cli/subcommands.md#commands:0c368a3a": {
-    "kind": "manual",
-    "probes": [],
-    "note": "purge plan text read in the program (2.1.311 chunk-p3tkb5qf.js:1432)"
-  },
-  "docs/configure/cli/subcommands.md#commands:e1a44892": {
-    "kind": "flag",
-    "probes": [],
-    "note": "runner flags --hold-idle-file and --max-hold-min, also in the release notes"
-  },
-  "docs/configure/cli/subcommands.md#self-hosted-runner-hold-flags:92ec7417": {
-    "kind": "flag",
-    "probes": [],
-    "note": "runner flags --hold-idle-file and --max-hold-min, help text read in the program (2.1.311 chunk-n23je8vg.js:11266)"
-  },
-  "docs/configure/models-and-providers/model-catalog.md#aliases:283669f9": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour (also in the release notes); [1m] label read in the program (2.1.311 chunk-r1ht672j.js:23699)"
-  },
-  "docs/configure/models-and-providers/model-catalog.md#catalog:47681d08": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour (also in the release notes); the signed catalog needs a cloud provider login"
-  },
-  "docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:856cbc71": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour (also in the release notes); ultrathink needs the interactive terminal and the Anthropic API"
-  },
-  "docs/how-it-works/context-and-compaction.md#kinds-of-compaction:de126544": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour (also in the release notes); needs a server that refuses with the 1M context error"
-  },
-  "docs/how-it-works/context-and-compaction.md#kinds-of-compaction:9cd5a162": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour (also in the release notes); needs a compaction reply with no summary"
-  },
-  "docs/how-it-works/models.md#retries-and-timeouts:6772245d": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour (also in the release notes); needs a server that sends x-should-retry: false"
-  },
-  "docs/how-it-works/models.md#retries-and-timeouts:83d5f489": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour (also in the release notes); needs a server that refuses with the 1M context error"
-  },
-  "docs/how-it-works/permission-flow.md#step-by-step:16acecf5": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour (also in the release notes); seenSecurityWarnings read in the program (2.1.311 chunk-ytgxgfq5.js:1174)"
-  },
-  "docs/reference/tools/shell-and-web.md#how-it-works:cd9ccd01": {
-    "kind": "manual",
-    "probes": [],
-    "note": "program behaviour (also in the release notes); needs a Bash command that reaches its timeout"
-  },
-  "docs/reference/tools/shell-and-web.md#how-it-works:e752c532": {
-    "kind": "schema",
-    "probes": [],
-    "note": "subagentCapApplied in schemas/claude-code-tools.json"
-  },
-  "docs/reference/tools/agents-and-tasks.md#result-fields-new-in-21311:c23fd723": {
-    "kind": "schema",
-    "probes": [],
-    "note": "toolsUsed in schemas/claude-code-tools.json"
-  },
-  "docs/reference/tools/agents-and-tasks.md#result-fields-new-in-21311:1b7e480d": {
-    "kind": "schema",
-    "probes": [],
-    "note": "toolsUsedLine in schemas/claude-code-tools.json"
-  },
-  "docs/reference/tools/gated-and-other.md#result-fields-new-in-21311:c23fd723": {
-    "kind": "schema",
-    "probes": [],
-    "note": "toolsUsed in schemas/claude-code-tools.json"
-  },
-  "docs/extend/headless/stream-json.md#undocumented-types:09776c4d": {
-    "kind": "schema",
-    "probes": [],
-    "note": "turn_handoff_available requires_rewind_request_id in schemas/claude-code-stream-json.json"
-  },
-  "docs/extend/headless/stream-json.md#undocumented-types:abcd80f3": {
-    "kind": "schema",
-    "probes": [],
-    "note": "inherited_asks_settled in schemas/claude-code-stream-json.json"
-  },
-  "docs/extend/headless/stream-json.md#fields-new-in-21311:c6722b21": {
-    "kind": "schema",
-    "probes": [],
-    "note": "fields new in 2.1.311 in schemas/claude-code-stream-json.json"
-  },
-  "docs/extend/headless/stream-json.md#capabilities-of-the-init-line:1caf39c2": {
-    "kind": "schema",
-    "probes": [],
-    "note": "ask_user_question_unanswered_v1 in schemas/claude-code-stream-json.json"
-  },
-  "docs/extend/mod-api/events/hooks.md#arguments-of-a-hook:cce16fea": {
-    "kind": "schema",
-    "probes": [],
-    "note": "next.to TargetTier in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/calls/turn-prompt.md#members:9d1a8578": {
-    "kind": "schema",
-    "probes": [],
-    "note": "$.prompt.paint in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/calls/turn-prompt.md#engine-events:8e3bd065": {
-    "kind": "schema",
-    "probes": [],
-    "note": "prompt.paint event in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/calls/turn-prompt.md#events-raised-by-these-calls:7b66be14": {
-    "kind": "schema",
-    "probes": [],
-    "note": "prompt.paint event in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/types/hooks.md#types-without-fields:fcb37e54": {
-    "kind": "schema",
-    "probes": [],
-    "note": "TargetTier in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptpaintargs:1efe1de5": {
-    "kind": "schema",
-    "probes": [],
-    "note": "PromptPaintArgs in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptpainted:1efe1de5": {
-    "kind": "schema",
-    "probes": [],
-    "note": "PromptPainted in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/types/ui/input-pane-render.md#paneopenargs:8dcf3aaa": {
-    "kind": "schema",
-    "probes": [],
-    "note": "PaneOpenArgs backgroundColor in schemas/claude-code.d.ts"
-  },
-  "docs/extend/headless/control-protocol.md#subtypes:9de15a9d": {
-    "kind": "schema",
-    "probes": [],
-    "note": "control request fields in schemas/claude-code-control-protocol.json"
-  },
-  "docs/extend/headless/control-protocol.md#subtypes:77d7c5a1": {
-    "kind": "schema",
-    "probes": [],
-    "note": "control request fields in schemas/claude-code-control-protocol.json"
-  },
-  "docs/extend/headless/control-protocol.md#subtypes:381691c8": {
-    "kind": "schema",
-    "probes": [],
-    "note": "control request fields in schemas/claude-code-control-protocol.json"
-  },
-  "docs/extend/headless/control-protocol.md#subtypes:e9c487dd": {
-    "kind": "schema",
-    "probes": [],
-    "note": "control request fields in schemas/claude-code-control-protocol.json"
-  },
-  "docs/extend/headless/control-protocol.md#subtypes:702c1123": {
-    "kind": "schema",
-    "probes": [],
-    "note": "control request fields in schemas/claude-code-control-protocol.json"
-  },
-  "docs/extend/headless/control-protocol.md#subtypes:43c9bb5e": {
-    "kind": "schema",
-    "probes": [],
-    "note": "control request fields in schemas/claude-code-control-protocol.json"
-  },
-  "docs/extend/headless/control-protocol.md#subtypes:cf624cd6": {
-    "kind": "schema",
-    "probes": [],
-    "note": "control request fields in schemas/claude-code-control-protocol.json"
-  },
-  "docs/extend/headless/control-protocol.md#subtypes:d0382cbf": {
-    "kind": "schema",
-    "probes": [],
-    "note": "control request fields in schemas/claude-code-control-protocol.json"
-  },
-  "docs/prompts/skills/skill-claude-api.md#full-text:f6fd98e8": {
-    "kind": "manual",
-    "probes": [],
-    "note": "cc-inspect code run of /claude-api PROBE-ARG on 2.1.308 to 2.1.311"
-  },
-  "docs/configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message:b1f3f04e": {
-    "kind": "manual",
-    "probes": [],
-    "note": "chat:sendNowHintPress and the mouse-mode test read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:8976, :9363-9396)"
-  },
-  "docs/configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message:872ca5a8": {
-    "kind": "manual",
-    "probes": [],
-    "note": "hint text and its no-key branch read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:9370-9394)"
-  },
-  "docs/configure/keybindings/unbound-and-reserved.md#vim-mode-operators-with-gj-and-gk:ac3ccbab": {
-    "kind": "manual",
-    "probes": [],
-    "note": "the gj/gk count clamp read in the cleaned 2.1.312 code (chunk-hz2c9q6k.js:316-321, :784)"
-  },
-  "docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:2891b1b0": {
-    "kind": "manual",
-    "probes": [],
-    "note": "the cache warning text read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:58010, :58046-58051)"
-  },
-  "docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:7469c572": {
-    "kind": "manual",
-    "probes": [],
-    "note": "the prompt effort note and its flag read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:11353, :60684, :60697)"
-  },
-  "docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:8f3b2c97": {
-    "kind": "manual",
-    "probes": [],
-    "note": "the spinner reads the sent level first in the cleaned 2.1.312 code (chunk-zgj89n5s.js:1465, chunk-8h49xv0g.js:1512-1516)"
-  },
-  "docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:5e598493": {
-    "kind": "manual",
-    "probes": [],
-    "note": "the four conditions of the prompt-note flag read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:60684), against 2.1.311 (chunk-xnjmsx7r.js:57759, :57763, :59815, :60285)"
-  },
-  "docs/configure/settings/auth.md#claude-apps-gateway-server-key:f496974f": {
-    "kind": "manual",
-    "probes": [],
-    "note": "oidc.user_id_claim as an optional non-empty string, its sub fallback, and its missing-claim error, read in 2.1.319 (chunk-85d4q736.js@1404154, @1522930, @1523795)"
-  },
-  "docs/extend/hooks/configuration.md#timeouts:8c674c0f": {
-    "kind": "manual",
-    "probes": [],
-    "note": "the larger of timeout and 1 second for prompt and agent hooks, read in the cleaned 2.1.312 code (chunk-r5cyd28m.js, the model hooks timeout)"
-  },
-  "docs/extend/hooks/handlers.md#prompt-and-agent-concurrency:823090f7": {
-    "kind": "manual",
-    "probes": [],
-    "note": "the 24, 12, and 12 limits read in the cleaned 2.1.312 code (chunk-r5cyd28m.js, the model hooks and overdue model hooks counts)"
-  },
-  "docs/extend/mod-api/types/ui/call-arguments.md#uiplaceargs:a9056167": {
-    "kind": "schema",
-    "probes": [],
-    "note": "UiPlaceArgs.id in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/types/ui/call-arguments.md#uiplaceresult:37923882": {
-    "kind": "schema",
-    "probes": [],
-    "note": "UiPlaceResult.reason in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/types/ui/call-arguments.md#uiplaceresult:7a65e3fe": {
-    "kind": "schema",
-    "probes": [],
-    "note": "UiPlaceResult.isPlaced (false) in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/types/ui/call-arguments.md#uiplaceresult:7b0d4026": {
-    "kind": "schema",
-    "probes": [],
-    "note": "UiPlaceResult.requestId (not placed, optional) in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/types/ui/call-arguments.md#uiplaceresult:7b86e471": {
-    "kind": "schema",
-    "probes": [],
-    "note": "UiPlaceResult.isPlaced (true) in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/types/ui/call-arguments.md#uiplaceresult:92b79a90": {
-    "kind": "schema",
-    "probes": [],
-    "note": "UiPlaceResult.requestId (placed) in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/ui/ui-events.md#events-raised-by-ui-calls:c2e85d78": {
-    "kind": "schema",
-    "probes": [],
-    "note": "ui.place event in schemas/claude-code.d.ts"
-  },
-  "docs/extend/mod-api/ui/ui.md#members:7f79eb81": {
-    "kind": "schema",
-    "probes": [],
-    "note": "$.ui.place in schemas/claude-code.d.ts"
-  },
-  "docs/extend/skills-and-commands/frontmatter.md#skill-discovery-with-bash-cd:a4b976c0": {
-    "kind": "manual",
-    "probes": [],
-    "note": "the deeper-directory skill search read in the cleaned 2.1.312 code (chunk-r5cyd28m.js:156298-156312, :156113-156170)"
-  },
-  "docs/extend/skills-and-commands/slash-commands.md#when-a-command-name-is-not-valid:c73580ac": {
-    "kind": "manual",
-    "probes": [],
-    "note": "the name-type check read in the cleaned 2.1.312 code (chunk-r5cyd28m.js:53519), absent in 2.1.311 (chunk-2ht8z368.js:53427)"
-  },
-  "docs/how-it-works/account-and-access.md#what-the-usage-limits-are-called:b7ddbb93": {
-    "kind": "manual",
-    "probes": [],
-    "note": "the 5-hour limit wording read in the cleaned 2.1.312 code (chunk-srq4mvaf.js:595, chunk-vwa2y0xv.js:2546), against session limit in 2.1.311 (chunk-ntqtfy8b.js:1107)"
-  },
-  "docs/how-it-works/context-and-compaction.md#when-compaction-runs:4aa0724e": {
-    "kind": "manual",
-    "probes": [],
-    "note": "the subagent autoCompactWindow lowering the env window, read in the cleaned 2.1.312 code (chunk-r5cyd28m.js:83915, chunk-1wgxyh0t.js:6088)"
-  },
-  "docs/how-it-works/system-prompt.md#names-that-claude-code-does-not-recognize:e18e165c": {
-    "kind": "manual",
-    "probes": [],
-    "note": "the unknown-model branch read in the cleaned 2.1.312 code (chunk-9wgj206m.js:334-363, chunk-3xe0k172.js:24698-24717), against 2.1.311 (chunk-rww18cjm.js, no deterministic option)"
-  },
-  "docs/how-it-works/system-prompt.md#session-sections:ae1d3f64": {
-    "kind": "behaviour",
-    "probes": ["print.models.matrix"],
-    "note": "the Opus 5.5 capture grows by the original_games text; the section name comes from the program (chunk-sq7yspzm.js:117139, :117439)"
-  },
-  "docs/reference/opentelemetry.md#events:e3080430": {
-    "kind": "manual",
-    "probes": [],
-    "note": "the tengu_snoopy_creek default false and its two call sites read in the cleaned 2.1.312 code (chunk-r5cyd28m.js:186177, :186258, :186295, :186356)"
-  },
-  "docs/reference/opentelemetry.md#what-two-attributes-report:498bfcde": {
-    "kind": "manual",
-    "probes": [],
-    "note": "the effort attribute taken from the level in force, read in the cleaned 2.1.312 code (chunk-r5cyd28m.js:135670, :136924, :141434)"
-  },
-  "docs/reference/opentelemetry.md#what-two-attributes-report:c99c0c1f": {
-    "kind": "manual",
-    "probes": [],
-    "note": "the mcp_server.name branches read in the cleaned 2.1.312 code (chunk-3xe0k172.js:44518-44531, :48503-48514, custom at :42524)"
-  },
-  "docs/reference/tools/files.md#write-on-a-file-that-claude-read-only-in-part:99fb7bcb": {
-    "kind": "manual",
-    "probes": [],
-    "note": "the partial-read refusal of Write read in the cleaned 2.1.312 code (chunk-r5cyd28m.js:164229-164274, :73050-73054, :9596-9609, :77622; chunk-s2tghjwy.js:4530; chunk-b09ckz08.js:8515)"
-  },
-  "docs/reference/transcript-format.md#assistant-line-fields:8da0a637": {
-    "kind": "manual",
-    "probes": [],
-    "note": "effort read from output_config.effort of the built request in the cleaned 2.1.312 code (chunk-r5cyd28m.js:135670, :136924), against 2.1.311 (chunk-2ht8z368.js:134537)"
-  },
-  "docs/reference/transcript-format.md#attachment-types:d106223c": {
-    "kind": "manual",
-    "probes": [],
-    "note": "an absence: the builder of the attachment is gone in the 2.1.314 program and only the reader, the renderer and the kind lists are left, so no probe can show the kind"
-  },
-  "docs/configure/models-and-providers/model-catalog.md#catalog:f4ea2594": {
-    "kind": "manual",
-    "probes": [],
-    "note": "/model unknown-id warning, 2.1.316 release notes and a -p probe of /model claude-zeta-9"
-  },
-  "docs/configure/permissions/auto-mode.md#classifier-billing-notice:9fe44c8d": {
-    "kind": "manual",
-    "probes": [],
-    "note": "desktop form of the billing notice: in 2.1.316 chunk-qd604jgh.js and 2.1.319 chunk-24jdhyyr.js@1361138, no match in 2.1.314 (cc-inspect code search)"
-  },
-  "docs/extend/headless/control-protocol.md#subtypes:1086c6bf": {
-    "kind": "schema",
-    "probes": [],
-    "note": "mcp_status cloudServiceProvided in the 2.1.316 control schema (chunk-fbth6v0w.js)"
-  },
-  "docs/extend/headless/control-protocol.md#subtypes:5a47b1ae": {
-    "kind": "schema",
-    "probes": [],
-    "note": "pending_elicitation_requests in the 2.1.316 control schema (chunk-fbth6v0w.js)"
-  },
-  "docs/extend/hooks/handlers.md#command-fields:a80d78e8": {
-    "kind": "manual",
-    "probes": [],
-    "note": "PowerShell exit code 2 prefixes: 2.1.314 chunk-sq7yspzm.js against 2.1.316 chunk-qd604jgh.js"
-  },
-  "docs/how-it-works/context-budget.md#definition-sizes-in-characters:812766d1": {
-    "kind": "static",
-    "probes": [],
-    "note": "a measured number kept with its version"
-  },
-  "docs/reference/tools/files.md#how-it-works:5de184af": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the 2.1.316 release notes; code in chunk-md79t6ar.js"
-  },
-  "docs/reference/tools/shell-and-web.md#how-it-works:c60f237e": {
-    "kind": "manual",
-    "probes": [],
-    "note": "shell snapshot changes in 2.1.316 chunk-qd604jgh.js"
-  },
-  "docs/configure/cli/subcommands.md#gateway-role-and-retention-options:b502f73e": {
-    "kind": "behaviour",
-    "probes": [
-      "print.api319.gateway.assume-role-anthropic",
-      "print.api319.gateway.assume-role-bad-arn",
-      "print.api319.gateway.assume-role-bad-external-id",
-      "print.api319.gateway.assume-role-bad-session-name",
-      "print.api319.gateway.assume-role-bearer-token",
-      "print.api319.gateway.assume-role-mixed-session",
-      "print.api319.gateway.assume-role-none",
-      "print.api319.gateway.assume-role-session-email",
-      "print.api319.gateway.assume-role-session-sub",
-      "print.api319.gateway.assume-role-sts",
-      "print.api319.gateway.assume-role-sts-denied",
-      "print.api319.gateway.assume-role-sts-down",
-      "print.api319.gateway.identity-retention-30",
-      "print.api319.gateway.identity-retention-90",
-      "print.api319.gateway.identity-retention-default",
-      "print.api319.gateway.identity-retention-text",
-      "print.api319.gateway.identity-retention-zero"
-    ]
-  },
-  "docs/configure/cli/subcommands.md#claude-auth-status-sign-in-date:3ba274f7": {
-    "kind": "behaviour",
-    "probes": [
-      "print.notes319.login-expiry.access-outlives-refresh",
-      "print.notes319.login-expiry.before-2025",
-      "print.notes319.login-expiry.no-login-status",
-      "print.notes319.login-expiry.no-refresh-date",
-      "print.notes319.login-expiry.over-ten-years",
-      "print.notes319.login-expiry.past",
-      "print.notes319.login-expiry.result-json",
-      "print.notes319.login-expiry.result-json-no-date",
-      "print.notes319.login-expiry.result-stream-json",
-      "print.notes319.login-expiry.soon-print",
-      "print.notes319.login-expiry.status-json",
-      "print.notes319.login-expiry.status-text",
-      "print.notes319.login-expiry.third-party-provider"
-    ]
-  },
-  "docs/configure/cli/subcommands.md#claude-auth-status-sign-in-date:b9ca7cfa": {
-    "kind": "behaviour",
-    "probes": [
-      "print.notes319.login-expiry.access-outlives-refresh",
-      "print.notes319.login-expiry.before-2025",
-      "print.notes319.login-expiry.no-login-status",
-      "print.notes319.login-expiry.no-refresh-date",
-      "print.notes319.login-expiry.over-ten-years",
-      "print.notes319.login-expiry.past",
-      "print.notes319.login-expiry.result-json",
-      "print.notes319.login-expiry.result-json-no-date",
-      "print.notes319.login-expiry.result-stream-json",
-      "print.notes319.login-expiry.soon-print",
-      "print.notes319.login-expiry.status-json",
-      "print.notes319.login-expiry.status-text",
-      "print.notes319.login-expiry.third-party-provider"
-    ]
-  },
-  "docs/configure/env-vars/network-and-proxy.md#node_extra_ca_certs-file-faults:a39a0ee9": {
-    "kind": "behaviour",
-    "probes": [
-      "print.cacerts319.extra-ca-tls.damaged-first",
-      "print.cacerts319.extra-ca-tls.not-pem-first",
-      "print.cacerts319.extra-ca-tls.valid",
-      "print.cacerts319.extra-ca.damaged-first",
-      "print.cacerts319.extra-ca.damaged-last",
-      "print.cacerts319.extra-ca.damaged-only",
-      "print.cacerts319.extra-ca.empty",
-      "print.cacerts319.extra-ca.missing",
-      "print.cacerts319.extra-ca.not-pem",
-      "print.cacerts319.extra-ca.valid"
-    ]
-  },
-  "docs/configure/env-vars/network-and-proxy.md#node_extra_ca_certs-file-faults:2e8e56cb": {
-    "kind": "behaviour",
-    "probes": [
-      "print.cacerts319.extra-ca-tls.damaged-first",
-      "print.cacerts319.extra-ca-tls.not-pem-first",
-      "print.cacerts319.extra-ca-tls.valid",
-      "print.cacerts319.extra-ca.damaged-first",
-      "print.cacerts319.extra-ca.damaged-last",
-      "print.cacerts319.extra-ca.damaged-only",
-      "print.cacerts319.extra-ca.empty",
-      "print.cacerts319.extra-ca.missing",
-      "print.cacerts319.extra-ca.not-pem",
-      "print.cacerts319.extra-ca.valid"
-    ]
-  },
-  "docs/extend/headless/stream-json.md#field-new-in-21318:e8b3cb72": {
-    "kind": "behaviour",
-    "probes": [
-      "print.notes319.login-expiry.result-json",
-      "print.notes319.login-expiry.result-json-no-date",
-      "print.notes319.login-expiry.result-stream-json"
-    ]
-  },
-  "docs/extend/headless/stream-json.md#field-new-in-21318:d7b5eda8": {
-    "kind": "behaviour",
-    "probes": [
-      "print.notes319.login-expiry.result-json",
-      "print.notes319.login-expiry.result-json-no-date",
-      "print.notes319.login-expiry.result-stream-json"
-    ]
-  },
-  "docs/reference/opentelemetry.md#account-and-provider-attributes:19e479e0": {
-    "kind": "behaviour",
-    "probes": [
-      "print.notes319.otel-attrs.api-key",
-      "print.notes319.otel-attrs.bedrock",
-      "print.notes319.otel-attrs.bedrock-custom-url",
-      "print.notes319.otel-attrs.default-api-url",
-      "print.notes319.otel-attrs.enterprise-usage-based",
-      "print.notes319.otel-attrs.free-plan",
-      "print.notes319.otel-attrs.max-plan",
-      "print.notes319.otel-attrs.team-premium"
-    ]
-  },
-  "docs/reference/opentelemetry.md#account-and-provider-attributes:f60ab677": {
-    "kind": "behaviour",
-    "probes": [
-      "print.notes319.otel-attrs.api-key",
-      "print.notes319.otel-attrs.bedrock",
-      "print.notes319.otel-attrs.bedrock-custom-url",
-      "print.notes319.otel-attrs.default-api-url",
-      "print.notes319.otel-attrs.enterprise-usage-based",
-      "print.notes319.otel-attrs.free-plan",
-      "print.notes319.otel-attrs.max-plan",
-      "print.notes319.otel-attrs.team-premium"
-    ]
-  },
-  "docs/reference/probes.md#release-probes-for-21319:aac8b9d3": {
-    "kind": "static",
-    "probes": [],
-    "note": "table of the release probe groups; it changes when a group is added"
-  },
-  "docs/extend/subagents/runtime.md#built-in-agents:27411cf3": {
-    "kind": "external",
-    "probes": [],
-    "note": "cites the official release notes"
-  },
-  "docs/configure/cli/subcommands.md#ultrareview-eval-flags:f63ce40e": {
-    "kind": "flag",
-    "probes": [
-      "print.cli319.ultrareview-max-cost",
-      "print.cli319.ultrareview-list",
-      "print.cli319.ultrareview-output"
-    ]
-  },
-  "docs/configure/keybindings/unbound-and-reserved.md#appclosesession:e564c8ee": {
-    "kind": "behaviour",
-    "probes": ["pty.cli319.keybinding.session-tabs"]
-  },
-  "docs/extend/mod-api/ui/ui-events.md#events-raised-by-ui-calls:153928ad": {
-    "kind": "behaviour",
-    "probes": ["print.cli319.theme.engine"]
-  },
-  "docs/extend/mod-api/ui/ui-events.md#events-raised-by-ui-calls:5d1ef87c": {
-    "kind": "behaviour",
-    "probes": ["print.cli319.theme.engine"]
-  },
-  "docs/extend/mod-api/ui/ui.md#members:eea22d9a": {
-    "kind": "behaviour",
-    "probes": ["print.cli319.theme.engine"]
-  },
-  "docs/extend/mod-api/ui/ui.md#members:d66be794": {
-    "kind": "behaviour",
-    "probes": ["print.cli319.theme.engine"]
-  },
-  "docs/reference/tools/agents-and-tasks.md#enable-tests:c94626a9": {
-    "kind": "behaviour",
-    "probes": [
-      "print.api319.tool.exit-plan.direct",
-      "print.api319.tool.exit-plan.direct-deny",
-      "print.api319.tool.exit-plan.direct-no-prompt-tool",
-      "print.api319.tool.exit-plan.teams-env-deny",
-      "print.api319.tool.exit-plan.teammate",
-      "print.api319.tool.exit-plan.teammate-deny",
-      "print.api319.tool.exit-plan.teammate-no-prompt-tool"
-    ]
-  },
-  "docs/reference/tools/gated-and-other.md#gated-tools:b75030cc": {
-    "kind": "behaviour",
-    "probes": [
-      "print.api319.tool.propose-skills.cowork",
-      "print.api319.tool.propose-skills.trigger",
-      "print.api319.tool.propose-skills.trigger-chat",
-      "print.api319.tool.propose-skills.chat-only"
-    ]
-  }
+	"docs/reference/tools/files.md#when-glob-and-grep-are-offered:3ddf733a": {
+		"kind": "manual",
+		"probes": [],
+		"note": "embedded bfs and ugrep gate read in the cleaned 2.1.316 code (chunk-qd604jgh.js); tool lists checked with cc-inspect code cli against the local stub for 2.1.314 and 2.1.316"
+	},
+	"docs/how-it-works/account-and-access.md#when-it-asks-again:7d66fe76": {
+		"kind": "manual",
+		"probes": [],
+		"note": "groveChoiceSeenAt 1 h window read in the cleaned 2.1.311 code"
+	},
+	"docs/how-it-works/account-and-access.md#what-a-refusal-says:64ecc432": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the official release notes"
+	},
+	"docs/configure/env-vars/context-and-compaction.md#variables:ff4e5b79": {
+		"kind": "env",
+		"probes": ["print.sweep"]
+	},
+	"docs/configure/env-vars/models-and-effort.md#variables:5ad3d32b": {
+		"kind": "env",
+		"probes": ["print.sweep"]
+	},
+	"docs/configure/env-vars/network-and-proxy.md#variables:69a02397": {
+		"kind": "env",
+		"probes": ["print.sweep"]
+	},
+	"docs/configure/env-vars/network-and-proxy.md#variables:ad52476a": {
+		"kind": "env",
+		"probes": ["print.sweep"]
+	},
+	"docs/configure/env-vars/network-and-proxy.md#variables:4f633750": {
+		"kind": "env",
+		"probes": ["print.sweep"]
+	},
+	"docs/configure/env-vars/plugins-and-mcp.md#variables:ba5ee169": {
+		"kind": "env",
+		"probes": ["print.sweep"]
+	},
+	"docs/configure/env-vars/plugins-and-mcp.md#variables:e236bfd3": {
+		"kind": "env",
+		"probes": ["print.sweep"]
+	},
+	"docs/configure/env-vars/plugins-and-mcp.md#variables:dfd0d592": {
+		"kind": "env",
+		"probes": ["print.sweep"]
+	},
+	"docs/configure/env-vars/plugins-and-mcp.md#variables:16f1ccc0": {
+		"kind": "env",
+		"probes": ["print.sweep"]
+	},
+	"docs/configure/env-vars/telemetry-and-debug.md#variables:42614a05": {
+		"kind": "env",
+		"probes": [
+			"print.sweep",
+			"print.perfetto.one",
+			"print.perfetto.path",
+			"print.perfetto.pathdir",
+			"pty.perfetto.interactive-one",
+			"pty.perfetto.interactive-path"
+		]
+	},
+	"docs/configure/env-vars/sdk-and-automation.md#variables:3b3ce8c4": {
+		"kind": "env",
+		"probes": ["print.sweep"]
+	},
+	"docs/configure/env-vars/tools-and-bash.md#variables:f2f64fed": {
+		"kind": "env",
+		"probes": ["print.sweep"]
+	},
+	"docs/configure/env-vars/tools-and-bash.md#variables:6039177c": {
+		"kind": "env",
+		"probes": ["print.sweep"]
+	},
+	"docs/configure/env-vars/tools-and-bash.md#variables:4b4957ad": {
+		"kind": "env",
+		"probes": ["print.sweep"]
+	},
+	"docs/configure/memory-and-rules.md#imports-and-rule-files:edb805a0": {
+		"kind": "manual",
+		"probes": [],
+		"note": "plugin option; the `/config` match is a label, not a command"
+	},
+	"docs/configure/memory-and-rules.md#how-it-works:af891277": {
+		"kind": "behaviour",
+		"probes": [
+			"pty.sizes.opus-116k",
+			"pty.sizes.opus-156k",
+			"pty.sizes.opus-45k",
+			"pty.sizes.sonnet-45k",
+			"pty.sizes.sonnet-4x34k"
+		]
+	},
+	"docs/configure/memory-and-rules.md#auto-memory:97437ff5": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/configure/models-and-providers/model-catalog.md#choose-a-model:37f6c029": {
+		"kind": "setting",
+		"probes": []
+	},
+	"docs/configure/models-and-providers/model-catalog.md#aliases:9f9af634": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/configure/output-styles.md#the-outputstyle-setting-and-switching:6e63c269": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/configure/permissions/auto-mode.md#the-claude-auto-mode-commands:631a5e2f": {
+		"kind": "command",
+		"probes": []
+	},
+	"docs/configure/cli/subcommands.md#gateway-pooled-budget-sign-in-notice-and-blocked-message-options:8116d3a1": {
+		"kind": "behaviour",
+		"probes": [
+			"print.api319.gateway.blocked-message-set",
+			"print.api319.gateway.blocked-message-unset",
+			"print.api319.gateway.example-all-four",
+			"print.api319.gateway.login-notice-no-oidc",
+			"print.api319.gateway.login-notice-served",
+			"print.api319.gateway.login-notice-too-long",
+			"print.api319.gateway.login-notice-unset",
+			"print.api319.gateway.pooled-order-duplicate",
+			"print.api319.gateway.pooled-order-ignored",
+			"print.api319.gateway.pooled-order-with-rule",
+			"print.api319.gateway.pooled-priority-list-empty",
+			"print.api319.gateway.pooled-rule-unknown"
+		]
+	},
+	"docs/configure/permissions/rules.md#the-permissions-keys:93b8d954": {
+		"kind": "behaviour",
+		"probes": [
+			"print.api319.tool.exit-plan.direct-deny",
+			"print.api319.tool.exit-plan.teammate-deny"
+		]
+	},
+	"docs/configure/permissions/rules.md#related-top-level-keys:749df5b1": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the official release notes"
+	},
+	"docs/configure/permissions/sandbox.md#other-behavior:4810bc2c": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the official release notes"
+	},
+	"docs/configure/settings/enterprise.md#require-a-version-range:bba38eb3": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/configure/settings/extra-keys.md#auto-mode-voice-and-display-keys:6b723237": {
+		"kind": "setting",
+		"probes": []
+	},
+	"docs/configure/settings/hooks-and-plugins.md#keys:4004381f": {
+		"kind": "setting",
+		"probes": []
+	},
+	"docs/configure/settings/hooks-and-plugins.md#keys:39aba15f": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/configure/settings/hooks-and-plugins.md#keys:e49b1181": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the official release notes"
+	},
+	"docs/configure/settings/index.md#where-settings-live:4bd22d12": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/configure/settings/index.md#how-lists-and-model-keys-merge:ea06b51d": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/configure/settings/index.md#exceptions-to-managed-precedence:4be3bfd3": {
+		"kind": "setting",
+		"probes": []
+	},
+	"docs/configure/settings/index.md#left-out-on-purpose:a0efb02a": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/configure/settings/index.md#left-out-on-purpose:b977ba78": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/configure/settings/index.md#managed-settings:9d468c67": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/configure/settings/index.md#where-settings-live:8cf3097d": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/configure/settings/mcp-and-channels.md#keys:85755270": {
+		"kind": "setting",
+		"probes": []
+	},
+	"docs/configure/settings/model.md#keys:0fd378de": {
+		"kind": "setting",
+		"probes": []
+	},
+	"docs/extend/hooks/configuration.md#the-if-filter:ec074a99": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/hooks/configuration.md#environment-variables-for-hooks:335ac6d4": {
+		"kind": "env",
+		"probes": ["print.sweep"]
+	},
+	"docs/extend/hooks/agent-events.md#elicitation-and-elicitationresult:aac08a8b": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/mcp/auth.md#headershelper:d1084239": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/mcp/cli.md#the-mcp-command:399098f2": {
+		"kind": "static",
+		"probes": [],
+		"note": "history: needs 2.1.284 or later"
+	},
+	"docs/extend/mcp/config.md#server-options:9de35760": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mcp/config.md#precedence:a75f98fb": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the official release notes"
+	},
+	"docs/extend/mcp/index.md#transports:452d3528": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/mcp/index.md#scopes:a724f45b": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/mcp/runtime.md#limits:11085191": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/mcp/runtime.md#timing-and-recovery:5794e73f": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the official release notes"
+	},
+	"docs/extend/mcp/settings.md#files-and-flags:e17a496e": {
+		"kind": "flag",
+		"probes": []
+	},
+	"docs/extend/mcp/settings.md#approval-rules:891e26db": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#members:4aa0ff1a": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#events-raised-by-these-calls:53bdc14e": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/events/hooks.md#failure-behavior:313afbf3": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/index.md#known-gaps:313a0dba": {
+		"kind": "external",
+		"probes": [],
+		"note": "compares the published type file with the official mods docs; no probe checks it"
+	},
+	"docs/extend/mod-api/calls/tool-command-config.md#engine-events:1091aee3": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/calls/turn-prompt.md#engine-events:5a8a6a40": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/infra/index.md#types-without-fields:9ff82136": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolcheckinput:88ec56be": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolcheckresult:368947cc": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolcheckresult:06a4112b": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet; the decider code reads the same in 2.1.307, 2.1.308, and 2.1.309"
+	},
+	"docs/extend/mod-api/types/turn-prompt/index.md#example:c79d0a53": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectioninput:c79d0a53": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectioninput:5fcdbdfc": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/ui/element-props.md#imageprops:09ae9a1f": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/ui/input-pane-render.md#paneopenargs:62d7a428": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour (also in the release notes); no probe checks it yet"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#surfaces:ce5563fb": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#placed:5e7079b0": {
+		"kind": "schema",
+		"probes": [],
+		"note": "RenderInput Placed.id in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#placed:698d8c1d": {
+		"kind": "schema",
+		"probes": [],
+		"note": "RenderInput Placed.plugin in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#placed:a8649054": {
+		"kind": "schema",
+		"probes": [],
+		"note": "RenderInput Placed.onScreen in schemas/claude-code.d.ts"
+	},
+	"docs/extend/plugins/cli.md#subcommands:ae6630e1": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/plugins/cli.md#subcommands:b4c4d15b": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/plugins/manifest.md#userconfig-option-keys:e2d3923d": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/plugins/marketplace.md#top-level-keys:831397d4": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/plugins/marketplace.md#plugin-entry-keys:021133fc": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/plugins/marketplace.md#plugin-sources:e2716f9c": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/skills-and-commands/bundled-skills.md#skills:0142f207": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the official release notes"
+	},
+	"docs/extend/skills-and-commands/bundled-skills.md#skills:86834214": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the official release notes"
+	},
+	"docs/extend/skills-and-commands/frontmatter.md#rules:24090c40": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/skills-and-commands/frontmatter.md#keys:d23f9847": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the official release notes"
+	},
+	"docs/extend/skills-and-commands/frontmatter.md#keys:0947a0e6": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/skills-and-commands/index.md#skill-locations:0ff0459a": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/skills-and-commands/index.md#skill-locations:e20ae4eb": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/skills-and-commands/index.md#loading-and-controls:92e9dc19": {
+		"kind": "flag",
+		"probes": []
+	},
+	"docs/extend/skills-and-commands/slash-commands.md#session-and-conversation-commands:4b2fb94f": {
+		"kind": "command",
+		"probes": []
+	},
+	"docs/extend/skills-and-commands/slash-commands.md#session-and-conversation-commands:6f12d364": {
+		"kind": "command",
+		"probes": []
+	},
+	"docs/extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands:77d4f222": {
+		"kind": "command",
+		"probes": []
+	},
+	"docs/extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands:5517ad3b": {
+		"kind": "command",
+		"probes": []
+	},
+	"docs/extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands:82e5e57f": {
+		"kind": "manual",
+		"probes": [],
+		"note": "texts seen only against the local stub; live.usage.429* never reach the usage endpoint; again on 2.1.307 and 2.1.308, whose text fragments match 2.1.306"
+	},
+	"docs/extend/skills-and-commands/slash-commands.md#account-cloud-and-other-commands:5180841c": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the official release notes"
+	},
+	"docs/extend/skills-and-commands/slash-commands.md#account-cloud-and-other-commands:ef1e5797": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/skills-and-commands/slash-commands.md#how-usage-and-artifacts-work:ed40969f": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/skills-and-commands/slash-commands.md#how-usage-and-artifacts-work:ca2acac0": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the official release notes"
+	},
+	"docs/extend/skills-and-commands/slash-commands.md#how-usage-and-artifacts-work:3bfd871d": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/skills-and-commands/slash-commands.md#how-usage-and-artifacts-work:08f56e6b": {
+		"kind": "static",
+		"probes": [],
+		"note": "reading only: captures/2.1.312/strings.txt holds the two new texts and captures/2.1.311/strings.txt holds the two old ones. No 2.1.312 run reached the usage endpoint"
+	},
+	"docs/extend/subagents/frontmatter.md#the---agents-json:df1ddbef": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/subagents/index.md#overview:780fb0f0": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/subagents/runtime.md#limits-and-switches:70b4dc60": {
+		"kind": "env",
+		"probes": ["print.sweep"]
+	},
+	"docs/how-it-works/context-and-compaction.md#controls:26caffcc": {
+		"kind": "env",
+		"probes": ["print.sweep"]
+	},
+	"docs/how-it-works/context-and-compaction.md#the-summary-prompt:ce2a0e68": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/how-it-works/permission-flow.md#step-by-step:4b10b522": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/how-it-works/system-prompt.md#ways-to-change-it:f3d51160": {
+		"kind": "flag",
+		"probes": []
+	},
+	"docs/how-it-works/system-prompt.md#ways-to-change-it:5488df9f": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/how-it-works/system-prompt.md#shared-sections:1a54cb12": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/reference/api/endpoints.md#request-headers:cdde4fd1": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/reference/tools/agents-and-tasks.md#agent-parameters:4ec0043c": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/reference/tools/files.md#tools:5c10ad8a": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/reference/tools/index.md#switches-for-tool-search:0c33dfc5": {
+		"kind": "env",
+		"probes": ["print.sweep"]
+	},
+	"docs/extend/plugins/loading.md#variables:a80e94bf": {
+		"kind": "behaviour",
+		"probes": ["print.plugindata.bash-bin"]
+	},
+	"docs/reference/tools/shell-and-web.md#tools:1fb4f438": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/reference/tools/shell-and-web.md#how-it-works:af1c8f0f": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/configure/status-line.md#how-it-works:fc4602b6": {
+		"kind": "behaviour",
+		"probes": [
+			"pty.statusline.debounce",
+			"pty.statusline.dialog-pause",
+			"pty.statusline.idle-no-tick",
+			"pty.statusline.refresh-interval",
+			"pty.statusline.subagent-tick"
+		]
+	},
+	"docs/extend/hooks/session-events.md#notification:8b61c366": {
+		"kind": "behaviour",
+		"probes": [
+			"pty.notifications.agent-needs-input",
+			"pty.notifications.agent-needs-input-refused"
+		]
+	},
+	"docs/configure/permissions/auto-mode.md#classifier-billing-notice:916114ef": {
+		"kind": "behaviour",
+		"probes": [
+			"pty.notifications.agent-needs-input",
+			"pty.notifications.agent-needs-input-refused",
+			"pty.notifications.auto-mode-local"
+		]
+	},
+	"docs/extend/hooks/session-events.md#notification:2d26f7b1": {
+		"kind": "behaviour",
+		"probes": [
+			"pty.hooks.notification.permission-prompt",
+			"pty.hooks.notification.continue-false"
+		]
+	},
+	"docs/extend/hooks/tool-events.md#posttooluse-tool_response-shapes:02779c22": {
+		"kind": "behaviour",
+		"probes": [
+			"print.hooks.posttooluse.agent",
+			"print.hooks.posttooluse.agent-bg",
+			"print.hooks.posttooluse.bash",
+			"print.hooks.posttooluse.croncreate",
+			"print.hooks.posttooluse.cronlist",
+			"print.hooks.posttooluse.edit",
+			"print.hooks.posttooluse.edit-after-bash",
+			"print.hooks.posttooluse.edit-after-write",
+			"print.hooks.posttooluse.edit-no-read",
+			"print.hooks.posttooluse.edit-partial-read",
+			"print.hooks.posttooluse.glob",
+			"print.hooks.posttooluse.grep",
+			"print.hooks.posttooluse.listagents",
+			"print.hooks.posttooluse.notebookedit",
+			"print.hooks.posttooluse.read",
+			"print.hooks.posttooluse.toolsearch",
+			"print.hooks.posttooluse.webfetch",
+			"print.hooks.posttooluse.websearch",
+			"print.hooks.posttooluse.write"
+		],
+		"note": "croncreate, cronlist, glob, grep, notebookedit, webfetch, websearch: not offered in -p since 2.1.306; the CronCreate and CronList rows are from 2.1.305"
+	},
+	"docs/extend/hooks/tool-events.md#posttooluse-tool_response-shapes:eab8eda3": {
+		"kind": "behaviour",
+		"probes": ["print.hooks.posttooluse.edit-no-read"]
+	},
+	"docs/extend/hooks/handlers.md#handler-types:d51c0b14": {
+		"kind": "behaviour",
+		"probes": [
+			"print.hooks.script.no-script",
+			"print.hooks.script.post-script",
+			"print.hooks.script.pre-script",
+			"print.hooks.script.pre-script-only"
+		]
+	},
+	"docs/extend/hooks/handlers.md#handler-types:e0941b31": {
+		"kind": "behaviour",
+		"probes": [
+			"print.hooks.script.no-script",
+			"print.hooks.script.post-script",
+			"print.hooks.script.pre-script",
+			"print.hooks.script.pre-script-only"
+		]
+	},
+	"docs/extend/hooks/input-and-output.md#what-continue-and-systemmessage-do-per-event:17b067b6": {
+		"kind": "behaviour",
+		"probes": [
+			"pty.hooks.notification.continue-false",
+			"pty.hooks.notification.permission-prompt",
+			"pty.hooks.permissiondenied.auto",
+			"pty.hooks.permissiondenied.retry",
+			"pty.hooks.permissionrequest.allow",
+			"pty.hooks.permissionrequest.block",
+			"pty.hooks.permissionrequest.deny",
+			"pty.hooks.permissionrequest.empty",
+			"pty.hooks.permissionrequest.exit2",
+			"pty.hooks.permissionrequest.interrupt",
+			"pty.hooks.precompact.block",
+			"pty.hooks.precompact.exit2",
+			"pty.hooks.precompact.sysmsg"
+		]
+	},
+	"docs/extend/skills-and-commands/slash-commands.md#how-usage-and-artifacts-work:e9b314dd": {
+		"kind": "behaviour",
+		"probes": [
+			"live.usage.429",
+			"live.usage.429-retry-after",
+			"live.usage.envelope"
+		]
+	},
+	"docs/how-it-works/context-budget.md#what-an-empty-session-holds:c0ef5ecc": {
+		"kind": "behaviour",
+		"probes": ["live.context-budget"]
+	},
+	"docs/prompts/other/override.md#:15eac422": {
+		"kind": "behaviour",
+		"probes": ["live.oauth-parity"]
+	},
+	"docs/prompts/skills/skill-insights.md#where-it-comes-from:b79f0f67": {
+		"kind": "behaviour",
+		"probes": ["pty.captures.skill-insights"]
+	},
+	"docs/prompts/agents/subagent-claude-code-guide.md#where-it-comes-from:aa19dfb2": {
+		"kind": "behaviour",
+		"probes": ["pty.captures.guide"]
+	},
+	"docs/prompts/agents/subagent-claude-code-guide.md#where-it-comes-from:ee124afa": {
+		"kind": "behaviour",
+		"probes": ["pty.captures.guide"]
+	},
+	"docs/reference/probes.md#how-we-probed:8b26f1c1": {
+		"kind": "behaviour",
+		"probes": [
+			"print.briefresume.brief.compare",
+			"print.briefresume.resume.same-session",
+			"print.request.baseline-a",
+			"print.request.baseline-b"
+		]
+	},
+	"docs/reference/probes.md#auto-mode:413602d2": {
+		"kind": "behaviour",
+		"probes": [
+			"print.automode.classifier-server.default",
+			"print.automode.classifier-server.server-0",
+			"print.automode.classifier-server.server-1",
+			"print.automode.classifier-server.two-stage-1"
+		]
+	},
+	"docs/reference/probes.md#request-details:96582cfa": {
+		"kind": "behaviour",
+		"probes": [
+			"print.cachetouch.cache-touch.no-override",
+			"print.cachetouch.cache-touch.override"
+		]
+	},
+	"docs/reference/probes.md#request-details:60c827b5": {
+		"kind": "behaviour",
+		"probes": ["print.request.baseline-a", "print.request.baseline-b"]
+	},
+	"docs/reference/probes.md#automodeclassifyallshell:cb82b287": {
+		"kind": "behaviour",
+		"probes": [
+			"print.automode.classify-all-shell.allow-settings-flag-false",
+			"print.automode.classify-all-shell.allow-settings-flag-true",
+			"print.automode.classify-all-shell.allow-unset",
+			"print.automode.classify-all-shell.allow-user-false",
+			"print.automode.classify-all-shell.allow-user-true",
+			"print.automode.classify-all-shell.local-true",
+			"print.automode.classify-all-shell.no-allow-rule",
+			"print.automode.classify-all-shell.project-true",
+			"print.automode.classify-all-shell.user-false-flag-true",
+			"print.automode.classify-all-shell.user-true-flag-false",
+			"managed.false.classify-flag-false",
+			"managed.false.classify-flag-true",
+			"managed.false.classify-neither",
+			"managed.false.classify-user-false",
+			"managed.false.classify-user-false-and-flag-true",
+			"managed.false.classify-user-true",
+			"managed.false.classify-user-true-and-flag-false",
+			"managed.main.classify-flag-false",
+			"managed.main.classify-flag-true",
+			"managed.main.classify-neither",
+			"managed.main.classify-user-false",
+			"managed.main.classify-user-false-and-flag-true",
+			"managed.main.classify-user-true",
+			"managed.main.classify-user-true-and-flag-false",
+			"managed.true.classify-flag-false",
+			"managed.true.classify-flag-true",
+			"managed.true.classify-neither",
+			"managed.true.classify-user-false",
+			"managed.true.classify-user-false-and-flag-true",
+			"managed.true.classify-user-true",
+			"managed.true.classify-user-true-and-flag-false"
+		]
+	},
+	"docs/reference/probes.md#subagents-and-hooks:d77527b1": {
+		"kind": "behaviour",
+		"probes": [
+			"print.subagents.append-subagent-prompt.env-append-subagent-system-prompt",
+			"print.subagents.append-subagent-prompt.env-enable-append-subagent-prompt",
+			"print.subagents.append-subagent-prompt.flag",
+			"print.subagents.frontmatter.camel-disallowedTools",
+			"print.subagents.frontmatter.capital-tools-hyphen-disallowed",
+			"print.subagents.isolation.none",
+			"print.subagents.isolation.remote",
+			"print.subagents.isolation.worktree",
+			"print.subagents.observer.off",
+			"print.subagents.observer.on",
+			"print.subagents.setup-hook.init",
+			"print.subagents.setup-hook.init-only",
+			"print.subagents.setup-hook.maintenance",
+			"print.subagents.type.claude",
+			"print.subagents.type.claude-code-guide",
+			"print.subagents.type.comment-thread-analyst",
+			"print.subagents.type.Explore",
+			"print.subagents.type.fork",
+			"print.subagents.type.general-purpose",
+			"print.subagents.type.observer",
+			"print.subagents.type.Plan",
+			"print.subagents.type.statusline-setup",
+			"print.subagents.type.workflow-subagent",
+			"print.subagents.web-fetch",
+			"print.workflow.model-order.none",
+			"print.workflow.model-order.opt-haiku",
+			"print.workflow.model-order.sub-haiku-no-opt",
+			"print.workflow.model-order.sub-haiku-opt-sonnet",
+			"print.workflow.model-order.wf-inherit-sub-haiku",
+			"print.workflow.model-order.wf-sonnet-opt-haiku",
+			"print.workflow.model-order.wf-sonnet-sub-haiku",
+			"print.workflow.model-order.wf-sonnet-sub-haiku-force"
+		]
+	},
+	"docs/reference/probes.md#subagents-and-hooks:82ca9e81": {
+		"kind": "behaviour",
+		"probes": ["print.subagents.observer.off", "print.subagents.observer.on"]
+	},
+	"docs/reference/probes.md#configure-and-memory:cbebf627": {
+		"kind": "behaviour",
+		"probes": [
+			"print.automode.config.local",
+			"print.automode.config.project",
+			"print.automode.config.settings-flag",
+			"print.automode.config.user",
+			"print.configmem.memory-stores.empty-array",
+			"print.configmem.memory-stores.garbage",
+			"print.configmem.memory-stores.id-mount-form",
+			"print.configmem.memory-stores.mode-ro",
+			"print.configmem.memory-stores.mode-rw",
+			"print.configmem.memory-stores.object-name-path",
+			"print.configmem.memory-stores.string-array",
+			"print.configmem.memory.plain",
+			"print.configmem.memory.remote",
+			"print.configmem.memory.remote-dir",
+			"print.configmem.memory.stores-object",
+			"print.configmem.output-style.plugin-forced"
+		]
+	},
+	"docs/reference/probes.md#configure-and-memory:316e22a7": {
+		"kind": "env",
+		"probes": [
+			"print.sweep",
+			"print.configmem.memory-stores.empty-array",
+			"print.configmem.memory-stores.garbage",
+			"print.configmem.memory-stores.id-mount-form",
+			"print.configmem.memory-stores.mode-ro",
+			"print.configmem.memory-stores.mode-rw",
+			"print.configmem.memory-stores.object-name-path",
+			"print.configmem.memory-stores.string-array",
+			"print.configmem.memory.stores-object"
+		]
+	},
+	"docs/reference/probes.md#context-budget:26c7e510": {
+		"kind": "behaviour",
+		"probes": ["live.context-budget"]
+	},
+	"docs/reference/probes.md#context-budget:bf9bda18": {
+		"kind": "behaviour",
+		"probes": ["live.context-budget"]
+	},
+	"docs/reference/probes.md#static-and-print-probes:3c918190": {
+		"kind": "behaviour",
+		"probes": [
+			"print.configmem.cowork-memory.extra-guidelines",
+			"print.configmem.cowork-memory.guidelines",
+			"print.configmem.cowork-memory.index-content",
+			"print.configmem.cowork-memory.path-override",
+			"print.configmem.cowork-memory.plain",
+			"print.configmem.cowork-memory.post-turn",
+			"print.configmem.cowork-memory.remote-path-override",
+			"print.hooks.posttooluse.agent",
+			"print.hooks.posttooluse.agent-bg",
+			"print.hooks.posttooluse.bash",
+			"print.hooks.posttooluse.edit",
+			"print.hooks.posttooluse.edit-after-bash",
+			"print.hooks.posttooluse.edit-after-write",
+			"print.hooks.posttooluse.edit-no-read",
+			"print.hooks.posttooluse.edit-partial-read",
+			"print.hooks.posttooluse.listagents",
+			"print.hooks.posttooluse.read",
+			"print.hooks.posttooluse.toolsearch",
+			"print.hooks.posttooluse.write",
+			"print.misc.agent-mcp-servers.project",
+			"print.misc.agent-mcp-servers.user",
+			"print.misc.context-slash-command",
+			"print.misc.large-claude-md",
+			"print.misc.managed-settings-path",
+			"print.misc.plugin-validate.version-array",
+			"print.misc.plugin-validate.version-empty-string",
+			"print.misc.plugin-validate.version-empty-string-with-author",
+			"print.misc.plugin-validate.version-null",
+			"print.misc.plugin-validate.version-number",
+			"print.misc.plugin-validate.version-semver",
+			"print.misc.plugin-validate.version-string",
+			"print.misc.subprocess-env-scrub.bypass-allowedtools-scrub0",
+			"print.misc.subprocess-env-scrub.bypass-allowedtools-scrub1",
+			"print.misc.subprocess-env-scrub.bypass-scrub0",
+			"print.misc.subprocess-env-scrub.bypass-scrub1",
+			"print.misc.subprocess-env-scrub.names",
+			"print.models.matrix"
+		]
+	},
+	"docs/reference/probes.md#interactive-probes:1f325add": {
+		"kind": "behaviour",
+		"probes": [
+			"pty.agents.fork",
+			"pty.agents.general-purpose",
+			"pty.agents.unknown-type",
+			"pty.hooks.elicitation.hook-accept",
+			"pty.hooks.notification.continue-false",
+			"pty.hooks.notification.permission-prompt",
+			"pty.hooks.permissiondenied.auto",
+			"pty.hooks.permissiondenied.retry",
+			"pty.hooks.permissionrequest.allow",
+			"pty.hooks.permissionrequest.block",
+			"pty.hooks.permissionrequest.deny",
+			"pty.hooks.permissionrequest.empty",
+			"pty.hooks.permissionrequest.exit2",
+			"pty.hooks.permissionrequest.interrupt",
+			"pty.hooks.precompact.block",
+			"pty.hooks.precompact.exit2",
+			"pty.hooks.precompact.sysmsg",
+			"pty.notifications.agent-needs-input",
+			"pty.notifications.elicitation-dialog",
+			"pty.notifications.elicitation-url",
+			"pty.notifications.idle-prompt",
+			"pty.sizes.opus-116k",
+			"pty.sizes.opus-156k",
+			"pty.sizes.opus-45k",
+			"pty.sizes.sonnet-45k",
+			"pty.sizes.sonnet-4x34k",
+			"pty.statusline.debounce",
+			"pty.statusline.dialog-pause",
+			"pty.statusline.idle-no-tick",
+			"pty.statusline.refresh-interval",
+			"pty.statusline.subagent-tick",
+			"pty.captures.guide"
+		]
+	},
+	"docs/reference/probes.md#interactive-probes:87f7640b": {
+		"kind": "behaviour",
+		"probes": ["pty.captures.guide"]
+	},
+	"docs/reference/probes.md#interactive-probes:c0b46e97": {
+		"kind": "behaviour",
+		"probes": [
+			"live.usage.429",
+			"live.usage.429-retry-after",
+			"live.usage.envelope"
+		],
+		"note": "texts seen only against the local stub; live.usage.429* never reach the usage endpoint; again on 2.1.307 and 2.1.308, whose text fragments match 2.1.306"
+	},
+	"docs/configure/env-vars/remote-and-cloud-sessions.md#variables:a42e211e": {
+		"kind": "flag",
+		"probes": [],
+		"note": "runner flag --checkout-hook-timeout-min, also in the release notes"
+	},
+	"docs/configure/env-vars/remote-and-cloud-sessions.md#variables:3bdc2c44": {
+		"kind": "flag",
+		"probes": [],
+		"note": "runner flag --diff-finds-nested-repository"
+	},
+	"docs/configure/env-vars/telemetry-and-debug.md#how-it-works:feff7747": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the official release notes"
+	},
+	"docs/configure/permissions/sandbox.md#core-keys:f1d7177e": {
+		"kind": "schema",
+		"probes": [],
+		"note": "dotted key sandbox.allowNestedUserNamespaces in schemas/"
+	},
+	"docs/extend/headless/control-protocol.md#example:7f6c8d23": {
+		"kind": "behaviour",
+		"probes": ["print.control.requests"]
+	},
+	"docs/extend/headless/control-protocol.md#example:c9792ab1": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the official release notes"
+	},
+	"docs/how-it-works/agent-loop.md#how-a-turn-ends:8ecf02bb": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the official release notes"
+	},
+	"docs/reference/api/betas.md#registry:4fa6b792": {
+		"kind": "behaviour",
+		"probes": ["print.transcripts.lines"]
+	},
+	"docs/reference/api/betas.md#observed-request:16609b8a": {
+		"kind": "behaviour",
+		"probes": ["print.request.baseline-a", "print.request.baseline-b"]
+	},
+	"docs/reference/api/betas.md#observed-request:736e669d": {
+		"kind": "behaviour",
+		"probes": ["live.oauth-parity"]
+	},
+	"docs/reference/transcript-format.md#line-types:09cfbabe": {
+		"kind": "schema",
+		"probes": [],
+		"note": "cost-state.modelUsage keys in schemas/claude-code-transcript.json"
+	},
+	"docs/reference/transcript-format.md#line-types:f817762b": {
+		"kind": "behaviour",
+		"probes": ["print.transcripts.lines"]
+	},
+	"docs/reference/transcript-format.md#attachment-types:cb70dfea": {
+		"kind": "behaviour",
+		"probes": ["print.transcripts.attachments"]
+	},
+	"docs/extend/headless/control-protocol.md#subtypes:42d5eb73": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/headless/control-protocol.md#subtypes:94afba44": {
+		"kind": "static",
+		"probes": [],
+		"note": "release history: when it started; recheck only if the feature is removed"
+	},
+	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolcheckinput:1d637a36": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour (approver set next to tool.check); no probe checks it yet"
+	},
+	"docs/reference/probes.md#managed-folder-probe:4ab664b7": {
+		"kind": "behaviour",
+		"probes": [
+			"managed.baseline.agent-mcp",
+			"managed.baseline.auto-mode-config",
+			"managed.baseline.claudemd-order",
+			"managed.baseline.excludes-any-claude-md-project",
+			"managed.baseline.excludes-any-claude-md-user",
+			"managed.baseline.excludes-managed-abs-project",
+			"managed.baseline.excludes-managed-abs-user",
+			"managed.baseline.excludes-managed-glob-project",
+			"managed.baseline.excludes-managed-glob-user",
+			"managed.baseline.mcp-config-flag",
+			"managed.baseline.mcp-get-managed",
+			"managed.baseline.mcp-get-user",
+			"managed.baseline.mcp-list",
+			"managed.baseline.mcp-run",
+			"managed.baseline.outputstyle",
+			"managed.baseline.skill-default",
+			"managed.baseline.skill-disabled",
+			"managed.false.classify-flag-false",
+			"managed.false.classify-flag-true",
+			"managed.false.classify-neither",
+			"managed.false.classify-user-false",
+			"managed.false.classify-user-false-and-flag-true",
+			"managed.false.classify-user-true",
+			"managed.false.classify-user-true-and-flag-false",
+			"managed.main.agent-mcp",
+			"managed.main.auto-mode-config",
+			"managed.main.classify-flag-false",
+			"managed.main.classify-flag-true",
+			"managed.main.classify-neither",
+			"managed.main.classify-user-false",
+			"managed.main.classify-user-false-and-flag-true",
+			"managed.main.classify-user-true",
+			"managed.main.classify-user-true-and-flag-false",
+			"managed.main.claudemd-order",
+			"managed.main.excludes-any-claude-md-project",
+			"managed.main.excludes-any-claude-md-user",
+			"managed.main.excludes-managed-abs-project",
+			"managed.main.excludes-managed-abs-user",
+			"managed.main.excludes-managed-glob-project",
+			"managed.main.excludes-managed-glob-user",
+			"managed.main.mcp-config-flag",
+			"managed.main.mcp-get-managed",
+			"managed.main.mcp-get-user",
+			"managed.main.mcp-list",
+			"managed.main.mcp-run",
+			"managed.main.outputstyle",
+			"managed.main.skill-default",
+			"managed.main.skill-disabled",
+			"managed.true.classify-flag-false",
+			"managed.true.classify-flag-true",
+			"managed.true.classify-neither",
+			"managed.true.classify-user-false",
+			"managed.true.classify-user-false-and-flag-true",
+			"managed.true.classify-user-true",
+			"managed.true.classify-user-true-and-flag-false"
+		]
+	},
+	"docs/reference/probes.md#live-login-probes:00ecb1d0": {
+		"kind": "behaviour",
+		"probes": ["live.oauth-parity", "live.artifacts"]
+	},
+	"docs/reference/probes.md#live-login-probes:0c9830b1": {
+		"kind": "behaviour",
+		"probes": ["live.oauth-parity"],
+		"note": "was dce7a0da until the row explained the 2.1.314 difference"
+	},
+	"docs/reference/probes.md#live-login-probes:437f2b6b": {
+		"kind": "behaviour",
+		"probes": ["live.oauth-parity", "live.artifacts"],
+		"note": "was 21e6589e until the paragraph named 2.1.314"
+	},
+	"docs/reference/probes.md#live-login-probes:da2034b4": {
+		"kind": "behaviour",
+		"probes": ["live.oauth-parity"]
+	},
+	"docs/reference/probes.md#live-login-probes:fc59136f": {
+		"kind": "behaviour",
+		"probes": ["live.artifacts"],
+		"note": "was 82b311c0 until the row dropped its link to the deleted Release Archive page"
+	},
+	"docs/extend/mod-api/calls/session.md#members:5bea862d": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/calls/session.md#events-raised-by-session-calls:99a6b941": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/calls/testing.md#exports:8f8b57a8": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/testing/index.md#types-without-fields:e66d89ad": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/tool-command-config/index.md#types-without-fields:41f72ee2": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/ui/input-pane-render.md#renderelement:2503ee1f": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/configure/cli/subcommands.md#commands:16cc755f": {
+		"kind": "command",
+		"probes": [],
+		"note": "claude ultrareview --help in 2.1.309 lists --trust-workspace; trust check read in the program"
+	},
+	"docs/configure/memory-and-rules.md#how-it-works:0e4f9078": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the v2.1.309 release notes; was 876ddeba until the row gained the 2.1.314 match rule"
+	},
+	"docs/configure/permissions/modes.md#safety-checks:172f7afa": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the v2.1.309 release notes"
+	},
+	"docs/configure/permissions/sandbox.md#core-keys:d9805295": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the v2.1.309 release notes"
+	},
+	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptfillargs:2847c0a4": {
+		"kind": "schema",
+		"probes": [],
+		"note": "PromptFillArgs cursor in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptfillinput:fbddf98e": {
+		"kind": "schema",
+		"probes": [],
+		"note": "PromptFillInput cursor in schemas/claude-code.d.ts"
+	},
+	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:65f09f9d": {
+		"kind": "manual",
+		"probes": [],
+		"note": "effort retry read in the program (2.1.310 chunk-31gxg38t.js:2834376); needs a server that refuses effort"
+	},
+	"docs/configure/permissions/sandbox.md#other-behavior:0a2f2baf": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the v2.1.310 release notes; warning text read in the program (2.1.310 chunk-aet23r5k.js:919487), Linux only"
+	},
+	"docs/configure/permissions/sandbox.md#other-behavior:b4d4ce4f": {
+		"kind": "manual",
+		"probes": [],
+		"note": "startup warning read in the program (2.1.310 chunk-8a19274q.js); needs deny paths on another computer"
+	},
+	"docs/extend/mod-api/index.md#errors:8cd47ec3": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the ui.resolve error text names a vm context in the 2.1.310 program strings"
+	},
+	"docs/extend/mod-api/types/ui/element-props.md#imageprops:9c581f61": {
+		"kind": "schema",
+		"probes": [],
+		"note": "ImageProps doc in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/types/ui/select-text-focus.md#uiblitresult:dcf78d34": {
+		"kind": "schema",
+		"probes": [],
+		"note": "UiBlitResult.fix in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/types/ui/select-text-focus.md#svgprops:1bcc9847": {
+		"kind": "schema",
+		"probes": [],
+		"note": "SvgProps.isInteractive doc in schemas/claude-code.d.ts"
+	},
+	"docs/extend/plugins/manifest.md#top-level-keys:72274c47": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the v2.1.310 release notes; tengu_amber_sentinel gate on plugin monitors gone (2.1.309 chunk-smka8wcm.js:222106)"
+	},
+	"docs/reference/api/betas.md#registry:49f0736a": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the v2.1.310 release notes; retry read in the program (2.1.310 chunk-31gxg38t.js:2834376)"
+	},
+	"docs/reference/tools/shell-and-web.md#how-it-works:2982c539": {
+		"kind": "behaviour",
+		"probes": ["print.request.baseline-a", "print.request.baseline-b"]
+	},
+	"docs/reference/tools/shell-and-web.md#how-it-works:44d3082c": {
+		"kind": "manual",
+		"probes": [],
+		"note": "sleep check read in the program (2.1.310 chunk-31gxg38t.js:4972903, limit 25 s); needs the model to run a leading sleep"
+	},
+	"docs/how-it-works/context-budget.md#what-else-changes-the-budget:251dc99e": {
+		"kind": "behaviour",
+		"probes": ["print.dsc.sizes"]
+	},
+	"docs/reference/tools/index.md#which-built-in-tools-are-deferred:5ab932bd": {
+		"kind": "behaviour",
+		"probes": ["print.hooks.posttooluse.glob", "print.hooks.posttooluse.grep"]
+	},
+	"docs/configure/cli/subcommands.md#commands:0c368a3a": {
+		"kind": "manual",
+		"probes": [],
+		"note": "purge plan text read in the program (2.1.311 chunk-p3tkb5qf.js:1432)"
+	},
+	"docs/configure/cli/subcommands.md#commands:e1a44892": {
+		"kind": "flag",
+		"probes": [],
+		"note": "runner flags --hold-idle-file and --max-hold-min, also in the release notes"
+	},
+	"docs/configure/cli/subcommands.md#self-hosted-runner-hold-flags:92ec7417": {
+		"kind": "flag",
+		"probes": [],
+		"note": "runner flags --hold-idle-file and --max-hold-min, help text read in the program (2.1.311 chunk-n23je8vg.js:11266)"
+	},
+	"docs/configure/models-and-providers/model-catalog.md#aliases:283669f9": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour (also in the release notes); [1m] label read in the program (2.1.311 chunk-r1ht672j.js:23699)"
+	},
+	"docs/configure/models-and-providers/model-catalog.md#catalog:47681d08": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour (also in the release notes); the signed catalog needs a cloud provider login"
+	},
+	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:856cbc71": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour (also in the release notes); ultrathink needs the interactive terminal and the Anthropic API"
+	},
+	"docs/how-it-works/context-and-compaction.md#kinds-of-compaction:de126544": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour (also in the release notes); needs a server that refuses with the 1M context error"
+	},
+	"docs/how-it-works/context-and-compaction.md#kinds-of-compaction:9cd5a162": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour (also in the release notes); needs a compaction reply with no summary"
+	},
+	"docs/how-it-works/models.md#retries-and-timeouts:6772245d": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour (also in the release notes); needs a server that sends x-should-retry: false"
+	},
+	"docs/how-it-works/models.md#retries-and-timeouts:83d5f489": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour (also in the release notes); needs a server that refuses with the 1M context error"
+	},
+	"docs/how-it-works/permission-flow.md#step-by-step:16acecf5": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour (also in the release notes); seenSecurityWarnings read in the program (2.1.311 chunk-ytgxgfq5.js:1174)"
+	},
+	"docs/reference/tools/shell-and-web.md#how-it-works:cd9ccd01": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour (also in the release notes); needs a Bash command that reaches its timeout"
+	},
+	"docs/reference/tools/shell-and-web.md#how-it-works:e752c532": {
+		"kind": "schema",
+		"probes": [],
+		"note": "subagentCapApplied in schemas/claude-code-tools.json"
+	},
+	"docs/reference/tools/agents-and-tasks.md#result-fields-new-in-21311:c23fd723": {
+		"kind": "schema",
+		"probes": [],
+		"note": "toolsUsed in schemas/claude-code-tools.json"
+	},
+	"docs/reference/tools/agents-and-tasks.md#result-fields-new-in-21311:1b7e480d": {
+		"kind": "schema",
+		"probes": [],
+		"note": "toolsUsedLine in schemas/claude-code-tools.json"
+	},
+	"docs/reference/tools/gated-and-other.md#result-fields-new-in-21311:c23fd723": {
+		"kind": "schema",
+		"probes": [],
+		"note": "toolsUsed in schemas/claude-code-tools.json"
+	},
+	"docs/extend/headless/stream-json.md#undocumented-types:09776c4d": {
+		"kind": "schema",
+		"probes": [],
+		"note": "turn_handoff_available requires_rewind_request_id in schemas/claude-code-stream-json.json"
+	},
+	"docs/extend/headless/stream-json.md#undocumented-types:abcd80f3": {
+		"kind": "schema",
+		"probes": [],
+		"note": "inherited_asks_settled in schemas/claude-code-stream-json.json"
+	},
+	"docs/extend/headless/stream-json.md#fields-new-in-21311:c6722b21": {
+		"kind": "schema",
+		"probes": [],
+		"note": "fields new in 2.1.311 in schemas/claude-code-stream-json.json"
+	},
+	"docs/extend/headless/stream-json.md#capabilities-of-the-init-line:1caf39c2": {
+		"kind": "schema",
+		"probes": [],
+		"note": "ask_user_question_unanswered_v1 in schemas/claude-code-stream-json.json"
+	},
+	"docs/extend/mod-api/events/hooks.md#arguments-of-a-hook:cce16fea": {
+		"kind": "schema",
+		"probes": [],
+		"note": "next.to TargetTier in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/calls/turn-prompt.md#members:9d1a8578": {
+		"kind": "schema",
+		"probes": [],
+		"note": "$.prompt.paint in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/calls/turn-prompt.md#engine-events:8e3bd065": {
+		"kind": "schema",
+		"probes": [],
+		"note": "prompt.paint event in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/calls/turn-prompt.md#events-raised-by-these-calls:7b66be14": {
+		"kind": "schema",
+		"probes": [],
+		"note": "prompt.paint event in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/types/hooks.md#types-without-fields:fcb37e54": {
+		"kind": "schema",
+		"probes": [],
+		"note": "TargetTier in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptpaintargs:1efe1de5": {
+		"kind": "schema",
+		"probes": [],
+		"note": "PromptPaintArgs in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptpainted:1efe1de5": {
+		"kind": "schema",
+		"probes": [],
+		"note": "PromptPainted in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/types/ui/input-pane-render.md#paneopenargs:8dcf3aaa": {
+		"kind": "schema",
+		"probes": [],
+		"note": "PaneOpenArgs backgroundColor in schemas/claude-code.d.ts"
+	},
+	"docs/extend/headless/control-protocol.md#subtypes:9de15a9d": {
+		"kind": "schema",
+		"probes": [],
+		"note": "control request fields in schemas/claude-code-control-protocol.json"
+	},
+	"docs/extend/headless/control-protocol.md#subtypes:77d7c5a1": {
+		"kind": "schema",
+		"probes": [],
+		"note": "control request fields in schemas/claude-code-control-protocol.json"
+	},
+	"docs/extend/headless/control-protocol.md#subtypes:381691c8": {
+		"kind": "schema",
+		"probes": [],
+		"note": "control request fields in schemas/claude-code-control-protocol.json"
+	},
+	"docs/extend/headless/control-protocol.md#subtypes:e9c487dd": {
+		"kind": "schema",
+		"probes": [],
+		"note": "control request fields in schemas/claude-code-control-protocol.json"
+	},
+	"docs/extend/headless/control-protocol.md#subtypes:702c1123": {
+		"kind": "schema",
+		"probes": [],
+		"note": "control request fields in schemas/claude-code-control-protocol.json"
+	},
+	"docs/extend/headless/control-protocol.md#subtypes:43c9bb5e": {
+		"kind": "schema",
+		"probes": [],
+		"note": "control request fields in schemas/claude-code-control-protocol.json"
+	},
+	"docs/extend/headless/control-protocol.md#subtypes:cf624cd6": {
+		"kind": "schema",
+		"probes": [],
+		"note": "control request fields in schemas/claude-code-control-protocol.json"
+	},
+	"docs/extend/headless/control-protocol.md#subtypes:d0382cbf": {
+		"kind": "schema",
+		"probes": [],
+		"note": "control request fields in schemas/claude-code-control-protocol.json"
+	},
+	"docs/prompts/skills/skill-claude-api.md#full-text:f6fd98e8": {
+		"kind": "manual",
+		"probes": [],
+		"note": "cc-inspect code run of /claude-api PROBE-ARG on 2.1.308 to 2.1.311"
+	},
+	"docs/configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message:b1f3f04e": {
+		"kind": "manual",
+		"probes": [],
+		"note": "chat:sendNowHintPress and the mouse-mode test read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:8976, :9363-9396)"
+	},
+	"docs/configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message:872ca5a8": {
+		"kind": "manual",
+		"probes": [],
+		"note": "hint text and its no-key branch read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:9370-9394)"
+	},
+	"docs/configure/keybindings/unbound-and-reserved.md#vim-mode-operators-with-gj-and-gk:ac3ccbab": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the gj/gk count clamp read in the cleaned 2.1.312 code (chunk-hz2c9q6k.js:316-321, :784)"
+	},
+	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:2891b1b0": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the cache warning text read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:58010, :58046-58051)"
+	},
+	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:7469c572": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the prompt effort note and its flag read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:11353, :60684, :60697)"
+	},
+	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:8f3b2c97": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the spinner reads the sent level first in the cleaned 2.1.312 code (chunk-zgj89n5s.js:1465, chunk-8h49xv0g.js:1512-1516)"
+	},
+	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:5e598493": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the four conditions of the prompt-note flag read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:60684), against 2.1.311 (chunk-xnjmsx7r.js:57759, :57763, :59815, :60285)"
+	},
+	"docs/configure/settings/auth.md#claude-apps-gateway-server-key:f496974f": {
+		"kind": "manual",
+		"probes": [],
+		"note": "oidc.user_id_claim as an optional non-empty string, its sub fallback, and its missing-claim error, read in 2.1.319 (chunk-85d4q736.js@1404154, @1522930, @1523795)"
+	},
+	"docs/extend/hooks/configuration.md#timeouts:8c674c0f": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the larger of timeout and 1 second for prompt and agent hooks, read in the cleaned 2.1.312 code (chunk-r5cyd28m.js, the model hooks timeout)"
+	},
+	"docs/extend/hooks/handlers.md#prompt-and-agent-concurrency:823090f7": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the 24, 12, and 12 limits read in the cleaned 2.1.312 code (chunk-r5cyd28m.js, the model hooks and overdue model hooks counts)"
+	},
+	"docs/extend/mod-api/types/ui/call-arguments.md#uiplaceargs:a9056167": {
+		"kind": "schema",
+		"probes": [],
+		"note": "UiPlaceArgs.id in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/types/ui/call-arguments.md#uiplaceresult:37923882": {
+		"kind": "schema",
+		"probes": [],
+		"note": "UiPlaceResult.reason in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/types/ui/call-arguments.md#uiplaceresult:7a65e3fe": {
+		"kind": "schema",
+		"probes": [],
+		"note": "UiPlaceResult.isPlaced (false) in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/types/ui/call-arguments.md#uiplaceresult:7b0d4026": {
+		"kind": "schema",
+		"probes": [],
+		"note": "UiPlaceResult.requestId (not placed, optional) in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/types/ui/call-arguments.md#uiplaceresult:7b86e471": {
+		"kind": "schema",
+		"probes": [],
+		"note": "UiPlaceResult.isPlaced (true) in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/types/ui/call-arguments.md#uiplaceresult:92b79a90": {
+		"kind": "schema",
+		"probes": [],
+		"note": "UiPlaceResult.requestId (placed) in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/ui/ui-events.md#events-raised-by-ui-calls:c2e85d78": {
+		"kind": "schema",
+		"probes": [],
+		"note": "ui.place event in schemas/claude-code.d.ts"
+	},
+	"docs/extend/mod-api/ui/ui.md#members:7f79eb81": {
+		"kind": "schema",
+		"probes": [],
+		"note": "$.ui.place in schemas/claude-code.d.ts"
+	},
+	"docs/extend/skills-and-commands/frontmatter.md#skill-discovery-with-bash-cd:a4b976c0": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the deeper-directory skill search read in the cleaned 2.1.312 code (chunk-r5cyd28m.js:156298-156312, :156113-156170)"
+	},
+	"docs/extend/skills-and-commands/slash-commands.md#when-a-command-name-is-not-valid:c73580ac": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the name-type check read in the cleaned 2.1.312 code (chunk-r5cyd28m.js:53519), absent in 2.1.311 (chunk-2ht8z368.js:53427)"
+	},
+	"docs/how-it-works/account-and-access.md#what-the-usage-limits-are-called:b7ddbb93": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the 5-hour limit wording read in the cleaned 2.1.312 code (chunk-srq4mvaf.js:595, chunk-vwa2y0xv.js:2546), against session limit in 2.1.311 (chunk-ntqtfy8b.js:1107)"
+	},
+	"docs/how-it-works/context-and-compaction.md#when-compaction-runs:4aa0724e": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the subagent autoCompactWindow lowering the env window, read in the cleaned 2.1.312 code (chunk-r5cyd28m.js:83915, chunk-1wgxyh0t.js:6088)"
+	},
+	"docs/how-it-works/system-prompt.md#names-that-claude-code-does-not-recognize:e18e165c": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the unknown-model branch read in the cleaned 2.1.312 code (chunk-9wgj206m.js:334-363, chunk-3xe0k172.js:24698-24717), against 2.1.311 (chunk-rww18cjm.js, no deterministic option)"
+	},
+	"docs/how-it-works/system-prompt.md#session-sections:ae1d3f64": {
+		"kind": "behaviour",
+		"probes": ["print.models.matrix"],
+		"note": "the Opus 5.5 capture grows by the original_games text; the section name comes from the program (chunk-sq7yspzm.js:117139, :117439)"
+	},
+	"docs/reference/opentelemetry.md#events:e3080430": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the tengu_snoopy_creek default false and its two call sites read in the cleaned 2.1.312 code (chunk-r5cyd28m.js:186177, :186258, :186295, :186356)"
+	},
+	"docs/reference/opentelemetry.md#what-two-attributes-report:498bfcde": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the effort attribute taken from the level in force, read in the cleaned 2.1.312 code (chunk-r5cyd28m.js:135670, :136924, :141434)"
+	},
+	"docs/reference/opentelemetry.md#what-two-attributes-report:c99c0c1f": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the mcp_server.name branches read in the cleaned 2.1.312 code (chunk-3xe0k172.js:44518-44531, :48503-48514, custom at :42524)"
+	},
+	"docs/reference/tools/files.md#write-on-a-file-that-claude-read-only-in-part:99fb7bcb": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the partial-read refusal of Write read in the cleaned 2.1.312 code (chunk-r5cyd28m.js:164229-164274, :73050-73054, :9596-9609, :77622; chunk-s2tghjwy.js:4530; chunk-b09ckz08.js:8515)"
+	},
+	"docs/reference/transcript-format.md#assistant-line-fields:8da0a637": {
+		"kind": "manual",
+		"probes": [],
+		"note": "effort read from output_config.effort of the built request in the cleaned 2.1.312 code (chunk-r5cyd28m.js:135670, :136924), against 2.1.311 (chunk-2ht8z368.js:134537)"
+	},
+	"docs/reference/transcript-format.md#attachment-types:d106223c": {
+		"kind": "manual",
+		"probes": [],
+		"note": "an absence: the builder of the attachment is gone in the 2.1.314 program and only the reader, the renderer and the kind lists are left, so no probe can show the kind"
+	},
+	"docs/configure/models-and-providers/model-catalog.md#catalog:f4ea2594": {
+		"kind": "manual",
+		"probes": [],
+		"note": "/model unknown-id warning, 2.1.316 release notes and a -p probe of /model claude-zeta-9"
+	},
+	"docs/configure/permissions/auto-mode.md#classifier-billing-notice:9fe44c8d": {
+		"kind": "manual",
+		"probes": [],
+		"note": "desktop form of the billing notice: in 2.1.316 chunk-qd604jgh.js and 2.1.319 chunk-24jdhyyr.js@1361138, no match in 2.1.314 (cc-inspect code search)"
+	},
+	"docs/extend/headless/control-protocol.md#subtypes:1086c6bf": {
+		"kind": "schema",
+		"probes": [],
+		"note": "mcp_status cloudServiceProvided in the 2.1.316 control schema (chunk-fbth6v0w.js)"
+	},
+	"docs/extend/headless/control-protocol.md#subtypes:5a47b1ae": {
+		"kind": "schema",
+		"probes": [],
+		"note": "pending_elicitation_requests in the 2.1.316 control schema (chunk-fbth6v0w.js)"
+	},
+	"docs/extend/hooks/handlers.md#command-fields:a80d78e8": {
+		"kind": "manual",
+		"probes": [],
+		"note": "PowerShell exit code 2 prefixes: 2.1.314 chunk-sq7yspzm.js against 2.1.316 chunk-qd604jgh.js"
+	},
+	"docs/how-it-works/context-budget.md#definition-sizes-in-characters:812766d1": {
+		"kind": "static",
+		"probes": [],
+		"note": "a measured number kept with its version"
+	},
+	"docs/reference/tools/files.md#how-it-works:5de184af": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the 2.1.316 release notes; code in chunk-md79t6ar.js"
+	},
+	"docs/reference/tools/shell-and-web.md#how-it-works:c60f237e": {
+		"kind": "manual",
+		"probes": [],
+		"note": "shell snapshot changes in 2.1.316 chunk-qd604jgh.js"
+	},
+	"docs/configure/cli/subcommands.md#gateway-role-and-retention-options:b502f73e": {
+		"kind": "behaviour",
+		"probes": [
+			"print.api319.gateway.assume-role-anthropic",
+			"print.api319.gateway.assume-role-bad-arn",
+			"print.api319.gateway.assume-role-bad-external-id",
+			"print.api319.gateway.assume-role-bad-session-name",
+			"print.api319.gateway.assume-role-bearer-token",
+			"print.api319.gateway.assume-role-mixed-session",
+			"print.api319.gateway.assume-role-none",
+			"print.api319.gateway.assume-role-session-email",
+			"print.api319.gateway.assume-role-session-sub",
+			"print.api319.gateway.assume-role-sts",
+			"print.api319.gateway.assume-role-sts-denied",
+			"print.api319.gateway.assume-role-sts-down",
+			"print.api319.gateway.identity-retention-30",
+			"print.api319.gateway.identity-retention-90",
+			"print.api319.gateway.identity-retention-default",
+			"print.api319.gateway.identity-retention-text",
+			"print.api319.gateway.identity-retention-zero"
+		]
+	},
+	"docs/configure/cli/subcommands.md#claude-auth-status-sign-in-date:3ba274f7": {
+		"kind": "behaviour",
+		"probes": [
+			"print.notes319.login-expiry.access-outlives-refresh",
+			"print.notes319.login-expiry.before-2025",
+			"print.notes319.login-expiry.no-login-status",
+			"print.notes319.login-expiry.no-refresh-date",
+			"print.notes319.login-expiry.over-ten-years",
+			"print.notes319.login-expiry.past",
+			"print.notes319.login-expiry.result-json",
+			"print.notes319.login-expiry.result-json-no-date",
+			"print.notes319.login-expiry.result-stream-json",
+			"print.notes319.login-expiry.soon-print",
+			"print.notes319.login-expiry.status-json",
+			"print.notes319.login-expiry.status-text",
+			"print.notes319.login-expiry.third-party-provider"
+		]
+	},
+	"docs/configure/cli/subcommands.md#claude-auth-status-sign-in-date:b9ca7cfa": {
+		"kind": "behaviour",
+		"probes": [
+			"print.notes319.login-expiry.access-outlives-refresh",
+			"print.notes319.login-expiry.before-2025",
+			"print.notes319.login-expiry.no-login-status",
+			"print.notes319.login-expiry.no-refresh-date",
+			"print.notes319.login-expiry.over-ten-years",
+			"print.notes319.login-expiry.past",
+			"print.notes319.login-expiry.result-json",
+			"print.notes319.login-expiry.result-json-no-date",
+			"print.notes319.login-expiry.result-stream-json",
+			"print.notes319.login-expiry.soon-print",
+			"print.notes319.login-expiry.status-json",
+			"print.notes319.login-expiry.status-text",
+			"print.notes319.login-expiry.third-party-provider"
+		]
+	},
+	"docs/configure/env-vars/network-and-proxy.md#node_extra_ca_certs-file-faults:a39a0ee9": {
+		"kind": "behaviour",
+		"probes": [
+			"print.cacerts319.extra-ca-tls.damaged-first",
+			"print.cacerts319.extra-ca-tls.not-pem-first",
+			"print.cacerts319.extra-ca-tls.valid",
+			"print.cacerts319.extra-ca.damaged-first",
+			"print.cacerts319.extra-ca.damaged-last",
+			"print.cacerts319.extra-ca.damaged-only",
+			"print.cacerts319.extra-ca.empty",
+			"print.cacerts319.extra-ca.missing",
+			"print.cacerts319.extra-ca.not-pem",
+			"print.cacerts319.extra-ca.valid"
+		]
+	},
+	"docs/configure/env-vars/network-and-proxy.md#node_extra_ca_certs-file-faults:2e8e56cb": {
+		"kind": "behaviour",
+		"probes": [
+			"print.cacerts319.extra-ca-tls.damaged-first",
+			"print.cacerts319.extra-ca-tls.not-pem-first",
+			"print.cacerts319.extra-ca-tls.valid",
+			"print.cacerts319.extra-ca.damaged-first",
+			"print.cacerts319.extra-ca.damaged-last",
+			"print.cacerts319.extra-ca.damaged-only",
+			"print.cacerts319.extra-ca.empty",
+			"print.cacerts319.extra-ca.missing",
+			"print.cacerts319.extra-ca.not-pem",
+			"print.cacerts319.extra-ca.valid"
+		]
+	},
+	"docs/extend/headless/stream-json.md#field-new-in-21318:e8b3cb72": {
+		"kind": "behaviour",
+		"probes": [
+			"print.notes319.login-expiry.result-json",
+			"print.notes319.login-expiry.result-json-no-date",
+			"print.notes319.login-expiry.result-stream-json"
+		]
+	},
+	"docs/extend/headless/stream-json.md#field-new-in-21318:d7b5eda8": {
+		"kind": "behaviour",
+		"probes": [
+			"print.notes319.login-expiry.result-json",
+			"print.notes319.login-expiry.result-json-no-date",
+			"print.notes319.login-expiry.result-stream-json"
+		]
+	},
+	"docs/reference/opentelemetry.md#account-and-provider-attributes:19e479e0": {
+		"kind": "behaviour",
+		"probes": [
+			"print.notes319.otel-attrs.api-key",
+			"print.notes319.otel-attrs.bedrock",
+			"print.notes319.otel-attrs.bedrock-custom-url",
+			"print.notes319.otel-attrs.default-api-url",
+			"print.notes319.otel-attrs.enterprise-usage-based",
+			"print.notes319.otel-attrs.free-plan",
+			"print.notes319.otel-attrs.max-plan",
+			"print.notes319.otel-attrs.team-premium"
+		]
+	},
+	"docs/reference/opentelemetry.md#account-and-provider-attributes:f60ab677": {
+		"kind": "behaviour",
+		"probes": [
+			"print.notes319.otel-attrs.api-key",
+			"print.notes319.otel-attrs.bedrock",
+			"print.notes319.otel-attrs.bedrock-custom-url",
+			"print.notes319.otel-attrs.default-api-url",
+			"print.notes319.otel-attrs.enterprise-usage-based",
+			"print.notes319.otel-attrs.free-plan",
+			"print.notes319.otel-attrs.max-plan",
+			"print.notes319.otel-attrs.team-premium"
+		]
+	},
+	"docs/reference/probes.md#release-probes-for-21319:aac8b9d3": {
+		"kind": "static",
+		"probes": [],
+		"note": "table of the release probe groups; it changes when a group is added"
+	},
+	"docs/extend/subagents/runtime.md#built-in-agents:27411cf3": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the official release notes"
+	},
+	"docs/configure/cli/subcommands.md#ultrareview-eval-flags:f63ce40e": {
+		"kind": "flag",
+		"probes": [
+			"print.cli319.ultrareview-max-cost",
+			"print.cli319.ultrareview-list",
+			"print.cli319.ultrareview-output"
+		]
+	},
+	"docs/configure/keybindings/unbound-and-reserved.md#appclosesession:e564c8ee": {
+		"kind": "behaviour",
+		"probes": ["pty.cli319.keybinding.session-tabs"]
+	},
+	"docs/extend/mod-api/ui/ui-events.md#events-raised-by-ui-calls:153928ad": {
+		"kind": "behaviour",
+		"probes": ["print.cli319.theme.engine"]
+	},
+	"docs/extend/mod-api/ui/ui-events.md#events-raised-by-ui-calls:5d1ef87c": {
+		"kind": "behaviour",
+		"probes": ["print.cli319.theme.engine"]
+	},
+	"docs/extend/mod-api/ui/ui.md#members:eea22d9a": {
+		"kind": "behaviour",
+		"probes": ["print.cli319.theme.engine"]
+	},
+	"docs/extend/mod-api/ui/ui.md#members:d66be794": {
+		"kind": "behaviour",
+		"probes": ["print.cli319.theme.engine"]
+	},
+	"docs/reference/tools/agents-and-tasks.md#enable-tests:c94626a9": {
+		"kind": "behaviour",
+		"probes": [
+			"print.api319.tool.exit-plan.direct",
+			"print.api319.tool.exit-plan.direct-deny",
+			"print.api319.tool.exit-plan.direct-no-prompt-tool",
+			"print.api319.tool.exit-plan.teams-env-deny",
+			"print.api319.tool.exit-plan.teammate",
+			"print.api319.tool.exit-plan.teammate-deny",
+			"print.api319.tool.exit-plan.teammate-no-prompt-tool"
+		]
+	},
+	"docs/reference/tools/gated-and-other.md#gated-tools:b75030cc": {
+		"kind": "behaviour",
+		"probes": [
+			"print.api319.tool.propose-skills.cowork",
+			"print.api319.tool.propose-skills.trigger",
+			"print.api319.tool.propose-skills.trigger-chat",
+			"print.api319.tool.propose-skills.chat-only"
+		]
+	}
 }

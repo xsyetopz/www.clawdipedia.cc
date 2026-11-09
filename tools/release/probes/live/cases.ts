@@ -11,23 +11,23 @@ import { oauthParity } from "./oauth-parity.ts";
 import { usageCases } from "./usage.ts";
 
 export const LIVE_CASES: LiveCase[] = planLive([
-  oauthParity,
-  ...usageCases,
-  ...api319Cases,
-  artifactsCase,
-  contextBudget,
-  err319Live,
-  ...cli319Cases,
-  codeModeCase,
+	oauthParity,
+	...usageCases,
+	...api319Cases,
+	artifactsCase,
+	contextBudget,
+	err319Live,
+	...cli319Cases,
+	codeModeCase,
 ]);
 
 /** --only: exact id, prefix on dotted segments (usage matches usage.429), with or without the `live.` prefix. */
 export const pick = (only: string[] | null): LiveCase[] =>
-  LIVE_CASES.filter(
-    (c) =>
-      !only ||
-      only.some((raw) => {
-        const o = raw.replace(/^live\./, "");
-        return c.id === o || c.id.startsWith(`${o}.`);
-      }),
-  );
+	LIVE_CASES.filter(
+		(c) =>
+			only === null ||
+			only.some((raw) => {
+				const o = raw.replace(/^live\./u, "");
+				return c.id === o || c.id.startsWith(`${o}.`);
+			}),
+	);
