@@ -89,6 +89,20 @@ describe("types", () => {
 			),
 		).toEqual({ a: ["number"], b: ["number"] });
 	});
+	test("a function imported from a Node built-in module, and the global `crypto`", () => {
+		expect(
+			types(
+				'import{randomUUID as U,createHash as H}from"crypto";import{randomUUID as V}from"node:crypto";import{randomUUID as W}from"/$bunfs/root/b.js";let o={a:U(),b:V(),c:H(x),d:W(),e:crypto.randomUUID()}',
+				{ "b.js": "function randomUUID(){return 1}export{randomUUID};" },
+			),
+		).toEqual({
+			a: ["string"],
+			b: ["string"],
+			c: undefined,
+			d: ["number"],
+			e: ["string"],
+		});
+	});
 	test("merging sites of different kinds keeps both types", () => {
 		expect(
 			mergedTypes([

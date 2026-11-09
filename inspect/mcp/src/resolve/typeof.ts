@@ -15,6 +15,7 @@ import {
 	bind,
 	COMPARE,
 	globalCallType,
+	importedCallType,
 	isVoid,
 	keyOf,
 	memberCallType,
@@ -222,8 +223,8 @@ export abstract class TypeResolver extends VarTypes {
 		if (!c) {
 			return undefined;
 		}
-		if (c.type === "Identifier" && m.isGlobal(c)) {
-			const g = globalCallType(c.name);
+		if (c.type === "Identifier") {
+			const g = m.isGlobal(c) ? globalCallType(c.name) : importedCallType(m, c);
 			if (g) {
 				return [g];
 			}

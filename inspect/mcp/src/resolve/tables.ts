@@ -93,6 +93,12 @@ export const STATIC_CALLS: Record<string, Record<string, Ty>> = {
 		parseFloat: "number",
 	},
 	performance: { now: "number" },
+	crypto: { randomUUID: "string" },
+};
+// Functions of Node built-in modules, by module name without `node:`. The program imports these by
+// their real names, so the import specifier tells which one a minified local name is.
+const NODE_CALLS: Record<string, Record<string, Ty>> = {
+	crypto: { randomUUID: "string" },
 };
 export const METHODS: Record<string, Ty> = {
 	toISOString: "string",
@@ -243,6 +249,22 @@ export const unaryType = (operator: string): Ty => {
 /** The type of a built-in function called as a bare name, such as `String(x)`; own keys only, as `toString` is on every object. */
 export const globalCallType = (name: string): Ty | undefined =>
 	Object.hasOwn(GLOBAL_CALLS, name) ? GLOBAL_CALLS[name] : undefined;
+
+/** The type of a call of a name imported from a Node built-in module, such as `randomUUID` from `"crypto"`. */
+export const importedCallType = (m: Module, id: Node): Ty | undefined => {
+	const def = m.variable(id)?.defs[0];
+	if (
+		def?.type !== "ImportBinding" ||
+		def.node.type !== "ImportSpecifier" ||
+		def.parent.type !== "ImportDeclaration"
+	) {
+		return undefined;
+	}
+	const calls = NODE_CALLS[def.parent.source.value.replace(/^node:/u, "")];
+	const sp = def.node.imported;
+	const name = sp.type === "Identifier" ? sp.name : sp.value;
+	return calls && Object.hasOwn(calls, name) ? calls[name] : undefined;
+};
 
 /** The type of `object.name(...)`: a static of a built-in object, or a method by name. */
 export const memberCallType = (
