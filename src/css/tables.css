@@ -1,46 +1,46 @@
 /* Tables */
 .markdown table {
-  width: 100%;
-  border-radius: 0;
-  border: 0;
-  font-variant-numeric: tabular-nums;
+	width: 100%;
+	border-radius: 0;
+	border: 0;
+	font-variant-numeric: tabular-nums;
 }
 
 .markdown table th {
-  text-align: left;
-  font-family: var(--ifm-heading-font-family);
-  font-weight: 600;
-  font-size: 0.8rem;
-  background: transparent;
-  border: 0;
-  border-bottom: 2px solid var(--ifm-color-emphasis-300);
+	text-align: left;
+	font-family: var(--ifm-heading-font-family);
+	font-weight: 600;
+	font-size: 0.8rem;
+	background: transparent;
+	border: 0;
+	border-bottom: 2px solid var(--ifm-color-emphasis-300);
 }
 
 .markdown table td {
-  border: 0;
-  border-bottom: 1px solid var(--ifm-table-border-color);
+	border: 0;
+	border-bottom: 1px solid var(--ifm-table-border-color);
 }
 
 .markdown table thead {
-  background: transparent;
+	background: transparent;
 }
 
 .markdown td code {
-  overflow-wrap: normal;
-  word-break: normal;
+	overflow-wrap: normal;
+	word-break: normal;
 }
 
 /* A rehype step adds <wbr> after _ . / - : and before camelCase humps. */
 .markdown td:first-child {
-  min-width: 16ch;
+	min-width: 16ch;
 }
 
 /* Keep prose columns readable next to long identifiers. */
 .markdown td:not(:first-child) {
-  min-width: 14ch;
+	min-width: 14ch;
 }
 
 .markdown table tr {
-  background: transparent;
-  border: 0;
+	background: transparent;
+	border: 0;
 }

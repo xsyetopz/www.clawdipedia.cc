@@ -1,11 +1,11 @@
 /* Sidebar */
 .theme-doc-sidebar-container .menu__link--active:not(.menu__link--sublist) {
-  background: transparent;
-  color: var(--ifm-font-color-base);
-  font-weight: 600;
-  box-shadow: inset 2px 0 0 var(--cc-orange);
+	background: transparent;
+	color: var(--ifm-font-color-base);
+	font-weight: 600;
+	box-shadow: inset 2px 0 0 var(--cc-orange);
 }
 
 .theme-doc-sidebar-container .menu__link:hover {
-  background: var(--ifm-menu-color-background-hover);
+	background: var(--ifm-menu-color-background-hover);
 }

@@ -3,76 +3,76 @@ a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 .cc-badge:focus-visible {
-  outline: 2px solid var(--ifm-link-color);
-  outline-offset: 2px;
+	outline: 2px solid var(--ifm-link-color);
+	outline-offset: 2px;
 }
 
 /* Provenance badges: the glyph is a decorative pseudo-element. */
 .cc-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em;
-  height: auto;
-  padding: 0.05rem 0.55rem;
-  border-radius: 3px;
-  font-family: var(--ifm-heading-font-family);
-  font-size: 0.72rem;
-  font-weight: 600;
-  line-height: 1.6;
-  white-space: nowrap;
-  vertical-align: middle;
-  cursor: help;
-  margin-right: 0.25rem;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
+	height: auto;
+	padding: 0.05rem 0.55rem;
+	border-radius: 3px;
+	font-family: var(--ifm-heading-font-family);
+	font-size: 0.72rem;
+	font-weight: 600;
+	line-height: 1.6;
+	white-space: nowrap;
+	vertical-align: middle;
+	cursor: help;
+	margin-right: 0.25rem;
 }
 
 .cc-badge__glyph {
-  display: block;
-  flex: none;
-  box-sizing: border-box;
-  width: 0.6em;
-  height: 0.6em;
-  border-radius: 50%;
-  background: currentColor;
+	display: block;
+	flex: none;
+	box-sizing: border-box;
+	width: 0.6em;
+	height: 0.6em;
+	border-radius: 50%;
+	background: currentColor;
 }
 
 .cc-badge--undocumented .cc-badge__glyph {
-  background: transparent;
-  border: 0.12em solid currentColor;
+	background: transparent;
+	border: 0.12em solid currentColor;
 }
 
 .cc-badge--differs .cc-badge__glyph {
-  background: linear-gradient(90deg, currentColor 50%, transparent 50%);
-  border: 0.12em solid currentColor;
+	background: linear-gradient(90deg, currentColor 50%, transparent 50%);
+	border: 0.12em solid currentColor;
 }
 
 .cc-badge--gated .cc-badge__glyph {
-  background: transparent;
-  border: 0.12em dashed currentColor;
-  border-radius: 0;
+	background: transparent;
+	border: 0.12em dashed currentColor;
+	border-radius: 0;
 }
 
 /* Label badges have a square, diamond, bar, or triangle glyph. */
 .cc-badge--managed-only .cc-badge__glyph {
-  border-radius: 0;
+	border-radius: 0;
 }
 
 .cc-badge--experimental .cc-badge__glyph {
-  border-radius: 0;
-  transform: rotate(45deg) scale(0.85);
+	border-radius: 0;
+	transform: rotate(45deg) scale(0.85);
 }
 
 .cc-badge--deprecated .cc-badge__glyph {
-  height: 0.15em;
-  width: 0.7em;
-  border-radius: 0;
+	height: 0.15em;
+	width: 0.7em;
+	border-radius: 0;
 }
 
 .cc-badge--caution .cc-badge__glyph {
-  border-radius: 0;
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+	border-radius: 0;
+	clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }
 
 /* Yes/No glyphs from rehype/table-marks. */
 .cc-mark {
-  font-style: normal;
+	font-style: normal;
 }

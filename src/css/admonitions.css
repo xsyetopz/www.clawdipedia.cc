@@ -1,50 +1,50 @@
 /* Admonitions */
 .theme-admonition {
-  --ifm-alert-border-radius: 6px;
-  --ifm-alert-border-left-width: 3px;
-  --ifm-alert-foreground-color: var(--ifm-font-color-base);
-  border: 0;
-  border-left: 3px solid var(--ifm-alert-border-color);
-  border-radius: 6px;
-  box-shadow: none;
+	--ifm-alert-border-radius: 6px;
+	--ifm-alert-border-left-width: 3px;
+	--ifm-alert-foreground-color: var(--ifm-font-color-base);
+	border: 0;
+	border-left: 3px solid var(--ifm-alert-border-color);
+	border-radius: 6px;
+	box-shadow: none;
 }
 
-.theme-admonition [class*='admonitionHeading'] {
-  font-family: var(--ifm-heading-font-family);
-  font-weight: 600;
-  font-size: 0.95rem;
-  text-transform: none;
-  letter-spacing: 0;
+.theme-admonition [class*="admonitionHeading"] {
+	font-family: var(--ifm-heading-font-family);
+	font-weight: 600;
+	font-size: 0.95rem;
+	text-transform: none;
+	letter-spacing: 0;
 }
 
 .alert--info {
-  --ifm-alert-background-color: rgba(106, 155, 204, 0.14);
-  --ifm-alert-border-color: #6a9bcc;
+	--ifm-alert-background-color: rgba(106, 155, 204, 0.14);
+	--ifm-alert-border-color: #6a9bcc;
 }
 
 .alert--success {
-  --ifm-alert-background-color: rgba(120, 140, 93, 0.16);
-  --ifm-alert-border-color: #788c5d;
+	--ifm-alert-background-color: rgba(120, 140, 93, 0.16);
+	--ifm-alert-border-color: #788c5d;
 }
 
 .alert--secondary {
-  --ifm-alert-background-color: rgba(176, 174, 165, 0.2);
-  --ifm-alert-border-color: #b0aea5;
+	--ifm-alert-background-color: rgba(176, 174, 165, 0.2);
+	--ifm-alert-border-color: #b0aea5;
 }
 
 .alert--warning {
-  --ifm-alert-background-color: rgba(217, 119, 87, 0.14);
-  --ifm-alert-border-color: #d97757;
-  --ifm-alert-foreground-color: var(--ifm-font-color-base);
+	--ifm-alert-background-color: rgba(217, 119, 87, 0.14);
+	--ifm-alert-border-color: #d97757;
+	--ifm-alert-foreground-color: var(--ifm-font-color-base);
 }
 
 .alert--danger {
-  --ifm-alert-background-color: rgba(168, 48, 40, 0.12);
-  --ifm-alert-border-color: #a83028;
-  --ifm-alert-foreground-color: var(--ifm-font-color-base);
+	--ifm-alert-background-color: rgba(168, 48, 40, 0.12);
+	--ifm-alert-border-color: #a83028;
+	--ifm-alert-foreground-color: var(--ifm-font-color-base);
 }
 
-html[data-theme='dark'] .alert--danger {
-  --ifm-alert-background-color: rgba(200, 70, 60, 0.18);
-  --ifm-alert-border-color: #c8463c;
+html[data-theme="dark"] .alert--danger {
+	--ifm-alert-background-color: rgba(200, 70, 60, 0.18);
+	--ifm-alert-border-color: #c8463c;
 }

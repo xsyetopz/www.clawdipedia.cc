@@ -1,22 +1,22 @@
 /* Type scale */
 .markdown h1,
 h1.hero__title {
-  font-size: clamp(2.2rem, 4vw, 3rem);
-  font-weight: 600;
-  letter-spacing: -0.015em;
+	font-size: clamp(2.2rem, 4vw, 3rem);
+	font-weight: 600;
+	letter-spacing: -0.015em;
 }
 
 .markdown h2 {
-  font-size: 1.75rem;
-  margin-top: 2.5em;
+	font-size: 1.75rem;
+	margin-top: 2.5em;
 }
 
 .markdown h3 {
-  font-size: 1.25rem;
+	font-size: 1.25rem;
 }
 
 .markdown h4 {
-  font-size: 1.05rem;
+	font-size: 1.05rem;
 }
 
 /* Prose measure */
@@ -25,5 +25,5 @@ h1.hero__title {
 .markdown > ol,
 .markdown > blockquote,
 .markdown > .theme-admonition {
-  max-width: 70ch;
+	max-width: 70ch;
 }

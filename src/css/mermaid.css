@@ -2,24 +2,24 @@
    Mermaid measures labels, and keeps a diagram from shrinking below about 12px
    text: wider ones scroll inside this box. */
 .cc-mermaid-scroll {
-  overflow-x: auto;
-  margin: 0;
-  margin-bottom: var(--ifm-leading);
-  overscroll-behavior-x: contain;
-  -webkit-overflow-scrolling: touch;
+	overflow-x: auto;
+	margin: 0;
+	margin-bottom: var(--ifm-leading);
+	overscroll-behavior-x: contain;
+	-webkit-overflow-scrolling: touch;
 }
 
 .cc-mermaid-scroll:focus-visible {
-  outline: 2px solid var(--ifm-color-primary);
-  outline-offset: 2px;
+	outline: 2px solid var(--ifm-color-primary);
+	outline-offset: 2px;
 }
 
 .cc-mermaid-scroll .docusaurus-mermaid-container {
-  margin: 0;
+	margin: 0;
 }
 
 .cc-mermaid-scroll .docusaurus-mermaid-container svg {
-  height: auto;
+	height: auto;
 }
 
 /* A lifeline can cross a message label that spans two gaps. A halo in the page
@@ -28,10 +28,10 @@
 .docusaurus-mermaid-container .messageText,
 .docusaurus-mermaid-container .loopText,
 .docusaurus-mermaid-container .loopText > tspan {
-  paint-order: stroke;
-  stroke: var(--ifm-background-color);
-  stroke-width: 5px;
-  stroke-linejoin: round;
+	paint-order: stroke;
+	stroke: var(--ifm-background-color);
+	stroke-width: 5px;
+	stroke-linejoin: round;
 }
 
 /* Mermaid measures a label in a scratch element on the page, then paints it
@@ -39,16 +39,16 @@
    the two places, which made code spans 5px wider at paint than at measure and
    clipped the label. Give code the same plain style in both places. */
 .docusaurus-mermaid-container.docusaurus-mermaid-container code,
-[id^='dmermaid'][id^='dmermaid'] code,
-[id^='mermaid'][id^='mermaid'] code {
-  padding: 0;
-  margin: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  font-family: var(--ifm-font-family-monospace);
-  font-size: 0.9em;
-  font-weight: 400;
-  letter-spacing: normal;
-  white-space: nowrap;
+[id^="dmermaid"][id^="dmermaid"] code,
+[id^="mermaid"][id^="mermaid"] code {
+	padding: 0;
+	margin: 0;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	font-family: var(--ifm-font-family-monospace);
+	font-size: 0.9em;
+	font-weight: 400;
+	letter-spacing: normal;
+	white-space: nowrap;
 }

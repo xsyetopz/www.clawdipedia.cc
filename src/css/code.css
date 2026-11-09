@@ -1,17 +1,17 @@
 /* Code */
 .markdown :not(pre) > code {
-  padding: 0.1rem 0.3rem;
-  border: 0;
+	padding: 0.1rem 0.3rem;
+	border: 0;
 }
 
-div[class*='codeBlockContainer'] {
-  border: 1px solid var(--ifm-color-emphasis-200);
-  border-radius: 6px;
-  box-shadow: none;
+div[class*="codeBlockContainer"] {
+	border: 1px solid var(--ifm-color-emphasis-200);
+	border-radius: 6px;
+	box-shadow: none;
 }
 
 code,
 kbd,
 pre {
-  font-family: var(--ifm-font-family-monospace);
+	font-family: var(--ifm-font-family-monospace);
 }

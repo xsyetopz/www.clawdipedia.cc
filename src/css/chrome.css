@@ -6,37 +6,37 @@
 .pagination-nav__label,
 .footer__title,
 .button {
-  font-family: var(--ifm-heading-font-family);
+	font-family: var(--ifm-heading-font-family);
 }
 
 .navbar__title {
-  font-weight: 600;
+	font-weight: 600;
 }
 
 .theme-doc-sidebar-container .menu__link {
-  font-size: 0.9rem;
+	font-size: 0.9rem;
 }
 
-html[data-theme='light'] .theme-doc-sidebar-container {
-  --ifm-menu-color-background-hover: #e8e6dc;
-  --ifm-menu-color-background-active: #e8e6dc;
+html[data-theme="light"] .theme-doc-sidebar-container {
+	--ifm-menu-color-background-hover: #e8e6dc;
+	--ifm-menu-color-background-active: #e8e6dc;
 }
 
 .theme-announcement-bar {
-  font-weight: 600;
-  font-family: var(--ifm-heading-font-family);
+	font-weight: 600;
+	font-family: var(--ifm-heading-font-family);
 }
 
 /* Config sets an inline background, so the dark lift needs !important. */
-html[data-theme='dark'] .theme-announcement-bar {
-  background-color: #1f1f1d !important;
+html[data-theme="dark"] .theme-announcement-bar {
+	background-color: #1f1f1d !important;
 }
 
 .navbar-version {
-  font-family: var(--ifm-font-family-monospace);
-  font-size: 0.85rem;
+	font-family: var(--ifm-font-family-monospace);
+	font-size: 0.85rem;
 }
 
 .footer--dark {
-  --ifm-footer-background-color: #141413;
+	--ifm-footer-background-color: #141413;
 }

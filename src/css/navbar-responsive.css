@@ -1,11 +1,11 @@
 /* Below 997px the title is visually hidden but still names the home link. */
 @media (max-width: 996px) {
-  .navbar__title {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
+	.navbar__title {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
 }
