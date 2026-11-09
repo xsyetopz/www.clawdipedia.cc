@@ -1,10 +1,10 @@
 {
-  "label": "Hooks",
-  "position": 7,
-  "link": {
-    "type": "generated-index",
-    "slug": "/prompts/hooks",
-    "title": "Hooks",
-    "description": "The prompts that prompt hooks and agent hooks send."
-  }
+	"label": "Hooks",
+	"position": 7,
+	"link": {
+		"type": "generated-index",
+		"slug": "/prompts/hooks",
+		"title": "Hooks",
+		"description": "The prompts that prompt hooks and agent hooks send."
+	}
 }

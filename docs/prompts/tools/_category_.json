@@ -1,8 +1,8 @@
 {
-  "label": "Tools",
-  "position": 10,
-  "link": {
-    "type": "doc",
-    "id": "prompts/tools/tools"
-  }
+	"label": "Tools",
+	"position": 10,
+	"link": {
+		"type": "doc",
+		"id": "prompts/tools/tools"
+	}
 }

@@ -1,10 +1,10 @@
 {
-  "label": "Defaults",
-  "position": 2,
-  "link": {
-    "type": "generated-index",
-    "slug": "/prompts/defaults",
-    "title": "Defaults",
-    "description": "The base prompts and the whole-prompt views, with the switches that change them."
-  }
+	"label": "Defaults",
+	"position": 2,
+	"link": {
+		"type": "generated-index",
+		"slug": "/prompts/defaults",
+		"title": "Defaults",
+		"description": "The base prompts and the whole-prompt views, with the switches that change them."
+	}
 }

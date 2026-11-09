@@ -1,10 +1,10 @@
 {
-  "label": "Output Styles",
-  "position": 3,
-  "link": {
-    "type": "generated-index",
-    "slug": "/prompts/output-styles",
-    "title": "Output Styles",
-    "description": "The prompt that each built-in or custom output style adds."
-  }
+	"label": "Output Styles",
+	"position": 3,
+	"link": {
+		"type": "generated-index",
+		"slug": "/prompts/output-styles",
+		"title": "Output Styles",
+		"description": "The prompt that each built-in or custom output style adds."
+	}
 }
