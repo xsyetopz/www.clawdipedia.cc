@@ -44,8 +44,10 @@ In `2.1.311`, the spinner function took no sent level (`chunk-a4650erw.js:1503-1
 | --- | --- | --- |
 | `claude-fable-5` | high | 0.6, 0.77, 1, 1.74, 1.91 |
 | `claude-fable-5-1` | high | 0.75, 0.86, 1, 1.38, 1.74 |
+| `claude-fable-5-2` | medium | none |
 | `claude-haiku-5-5` | medium | 0.38, 0.52, 1, 2.03, 4.34 |
 | `claude-mythos-5-1` | high | 0.75, 0.86, 1, 1.38, 1.74 |
+| `claude-mythos-5-2` | medium | none |
 | `claude-opus-4-7` | xhigh | none |
 | `claude-opus-4-8` | high | 0.72, 0.9, 1, 1.65, 1.88 |
 | `claude-opus-5` | high | 0.67, 0.76, 1, 1.6, 1.7 |

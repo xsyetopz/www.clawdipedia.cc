@@ -64,6 +64,7 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 | `ui.copy` | <Documented /> | `$.ui.copy({ text, surface })`. `surface` takes the session's first surface when left out. | Input `UiCopyArgs`. Value `UiCopyResult`. |
 | `ui.view` | <Undocumented /> | `$.ui.view({ agentId })`: whose transcript the main view shows. None means the main conversation. | Input `SiteView`. Value `UiViewResult`. |
 | `ui.notify` | <Documented /> | `$.ui.notify(text, { title })`. `title` is the plugin's name when left out. Two mods that notify again on hearing a notification can echo each other without end. | Input `{ text: string, title?: string }`. Value `UiNotifyResult`. |
+| `ui.cancelNotify` | <Undocumented /> | `$.ui.cancelNotify(key)` | Input `{ key: string }`. Value `{ isSent: boolean }`. New in `2.1.321`. Read site: `chunk-ne1755n5.js:4379223`. |
 | `ui.blit` | <Documented /> | `$.ui.blit(...)`: the `cells` of a `Raster` or the `source` of a keyed `Image`. A hook above may rewrite either, or `{ deny }`. | Input `UiBlitArgs`. Value `UiBlitResult`. |
 
 ## Related Pages

@@ -68,8 +68,10 @@ A row is <Documented /> when a docs page such as Amazon Bedrock or Model Configu
 | `claude-opus-5-5` | <Documented /> | `claude-opus-5-5` | `us.anthropic.claude-opus-5-5` | `claude-opus-5-5` | `claude-opus-5-5` | `anthropic.claude-opus-5-5` |
 | `claude-fable-5` | <Documented /> | `claude-fable-5` | `us.anthropic.claude-fable-5` | `claude-fable-5` | `claude-fable-5` | `anthropic.claude-fable-5` |
 | `claude-fable-5-1` | <Documented /> | `claude-fable-5-1` | `us.anthropic.claude-fable-5-1` | `claude-fable-5-1` | `claude-fable-5-1` | `anthropic.claude-fable-5-1` |
+| `claude-fable-5-2` | <Documented /> | `claude-fable-5-2` | `us.anthropic.claude-fable-5-2` | `claude-fable-5-2` | `claude-fable-5-2` | `anthropic.claude-fable-5-2` |
 | `claude-mythos-5` | <Documented /> | `claude-mythos-5` | - | - | - | - |
 | `claude-mythos-5-1` | <Undocumented /> | `claude-mythos-5-1` | - | - | - | - |
+| `claude-mythos-5-2` | <Undocumented /> | `claude-mythos-5-2` | - | - | - | - |
 
 ### Vertex Region Variables
 
@@ -98,6 +100,7 @@ The Mythos models have none, because they have no Vertex name.
 | `claude-opus-5-5` | <Documented /> | `VERTEX_REGION_CLAUDE_5_5_OPUS` |
 | `claude-fable-5` | <Documented /> | `VERTEX_REGION_CLAUDE_FABLE_5` |
 | `claude-fable-5-1` | <Documented /> | `VERTEX_REGION_CLAUDE_FABLE_5_1` |
+| `claude-fable-5-2` | <Undocumented /> | `VERTEX_REGION_CLAUDE_FABLE_5_2` |
 
 ### Gateways
 

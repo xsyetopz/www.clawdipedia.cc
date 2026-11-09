@@ -8,7 +8,7 @@ These variables control subagents, agent teams, background tasks, and workflows.
 They set limits, switch features on, and change how child agents behave.
 Several are experimental and may change without notice.
 
-This page lists 84 variables. Switch rows take `1` or `0`.
+This page lists 85 variables. Switch rows take `1` or `0`.
 
 ## Example
 
@@ -31,6 +31,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_AUTO_BACKGROUND_TASKS` | <Documented /> | Moves a subagent to the background after about two minutes. | On or off. When set, the code uses a `120000` ms delay. It also turns on the worker check-in schedule. Set it to `1` to allow auto background in `-p`, including MCP auto background | Subagents and non-interactive mode. Project `env` can set it before trust |
 | `CLAUDE_BG_BACKEND` | <Undocumented /> | Marks a session that runs under the background daemon. A daemon session handles `SIGHUP` and color output in its own way. | Text. The value `daemon` turns on the daemon paths. Claude Code sets it when it starts a background session | Background sessions. Not set from project `env` before trust |
 | `CLAUDE_BG_CARRIED_PROMPTS_SHA256` | <Undocumented /> | Holds the hash of the carried prompts file for a respawned background session. | Text. Claude Code reads it once, then unsets it. The code checks the hash against the carried prompts file | Background sessions. Not set from project `env` before trust |
+| `CLAUDE_BG_DISPATCH_ENTRYPOINT` | <Undocumented /> | Tells a background session which app started the dispatcher. Claude Code then uses this value as the entrypoint of the session, before `CLAUDE_CODE_ENTRYPOINT`. Added in `2.1.321`. | Text. Used only when `CLAUDE_CODE_SESSION_KIND` is `bg` and the value is `claude-vscode`, `claude-desktop`, or `claude-desktop-3p`. Any other value is ignored. No default | Background sessions. Read at `chunk-qfakytpa.js:142745`. The list of valid values is at `chunk-kkd2b3a7.js:1348`. The program did not show which code sets it |
 | `CLAUDE_BG_ISOLATION` | <Undocumented /> | Sets worktree isolation for a background session. | Text. Otherwise the job or the `worktree.bgIsolation` setting decides. It changes the prompt text | Background sessions. Not set from project `env` before trust |
 | `CLAUDE_BG_POST_CLEAR_RESPAWN` | <Undocumented /> | Marks a respawn after a clear. The session then skips the `--agent` not-found check and the agent prompt step. | On or off. Claude Code sets `1` on respawn attempts after the first when the session id changed | Background sessions. Not set from project `env` before trust |
 | `CLAUDE_BG_RENDEZVOUS_SOCK` | <Undocumented /> | Gives the path of the rendezvous socket for a background session. The session starts a server on it. | Text. Claude Code reads it once, deletes it, and removes the socket file | Background sessions. Not set from project `env` before trust |

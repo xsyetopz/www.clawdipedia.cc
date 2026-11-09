@@ -56,6 +56,7 @@ Each row is a family of messages. The backticked text is the start that every me
 | `claude plugin test:` | <Undocumented /> | `claude plugin test` could not run. | A folder is not in the plugin, holds no `*.test.ts` or `*.test.tsx` files, or holds more test files than the limit. |
 | `the kit's` | <Undocumented /> | The test kit imports a module that is not part of it. | The text names the file and the import. |
 | Various | <Undocumented /> | **Plugin evals.** A plugin eval suite or its mocks did not run. | The eval directory, a case, a mock, or a fixture is not a plain readable directory or file. Examples are a symbolic link, a hard link, a name that differs only by letter case, or a path that escapes the plugin. A `tools:`, `error:`, or `abort_when:` key appears where it does not apply. Or a saved `tools/list` response is not valid JSON. |
+| `keepsBeneath: this test has its own ui.render hook at this site` | <Undocumented /> | A test called `keepsBeneath` on a drawing, and the test itself has a `ui.render` hook at that site. | The drawing at that site is a stub, not what the plugin drew. The text goes on: `so look for what it drew with find`. Use `find` to look for the element that the hook drew. Source: the program (`chunk-hm7gq4t6.js:36602`). |
 
 ## Related Pages
 

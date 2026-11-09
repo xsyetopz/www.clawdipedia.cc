@@ -45,14 +45,14 @@ The catalog holds `opus`, `sonnet`, `haiku`, and `fable`. The help text of `--mo
 | `opus` | <Documented /> | `claude-opus-5-5` | Foundry uses `claude-opus-4-6`. Gateways use `claude-opus-4-7`. |
 | `sonnet` | <Documented /> | `claude-sonnet-5-5` | Bedrock, Vertex, Foundry, and Mantle use `claude-sonnet-4-5`. Claude Platform on AWS and gateways use `claude-sonnet-4-6`. |
 | `haiku` | <Documented /> | `claude-haiku-5-5` | Every other provider uses `claude-haiku-4-5`. |
-| `fable` | <Documented /> | `claude-fable-5-1` | Gateways use `claude-fable-5`. In Claude apps gateway sessions, `fable` and `best` resolve to Fable 5. |
-| `best` | <Documented /> | The model that `fable` resolves to, where you have Fable. Otherwise it is the same as `opus`. | |
+| `fable` | <Documented /> | `claude-fable-5-2` | Gateways use `claude-fable-5`. In Claude apps gateway sessions, `fable` resolves to Fable 5. Before `2.1.321`, it resolved to `claude-fable-5-1`. |
+| `best` | <Documented /> | The same model as `opus`. Before `2.1.321`, it was the model that `fable` resolves to, where you have Fable. | In the program, the alias table sets `best` to `opus` (`chunk-vcsr0mgr.js:22480`). |
 | `opusplan` | <Documented /> | `opus` in plan mode, then `sonnet` to run the plan. | |
 | `sonnet[1m]`, `opus[1m]`, `fable[1m]` | <Documented /> | The alias with a 1M window. | No effect when the alias already has a native 1M window. Since `2.1.311`, Claude Code drops the suffix from the names and IDs it shows, and the `(1M context)` label, where the suffix has no effect. It still accepts the suffix. |
 
 Sources: [Model Configuration](https://code.claude.com/docs/en/model-config) for the aliases, and the program for the exceptions.
 The `[1m]` change is in the [Claude Code changelog](https://code.claude.com/docs/en/changelog). In the program, `chunk-r1ht672j.js:23699` removes the tag when the name without it has a known window on its own. `chunk-r1ht672j.js:24801` and `:25045` add the `(1M context)` label only when the tag remains and the model allows the suffix.
-Opus 5.5 needs Claude Code v2.1.280 or later, Sonnet 5.5 needs v2.1.284, Haiku 5.5 needs v2.1.293, and Fable 5.1 needs v2.1.257.
+Opus 5.5 needs Claude Code v2.1.280 or later, Sonnet 5.5 needs v2.1.284, Haiku 5.5 needs v2.1.293, Fable 5.1 needs v2.1.257, and Fable 5.2 needs v2.1.321. The [Version History](https://code.claude.com/docs/en/model-config#version-history) in the official docs lists the `2.1.321` changes to `fable` and `best`.
 
 ### Pin the Models Behind an Alias
 
@@ -104,14 +104,16 @@ The docs do not list the catalog fields, so the window, the limits, and the pric
 | `claude-opus-5-5` | <Documented /> | Opus 5.5 | June 2026 | 1,000,000 | native 1M, `context-1m`, `[1m]` | 128,000 / 128,000 |
 | `claude-fable-5` | <Documented /> | Fable 5 | January 2026 | 1,000,000 | native 1M, `context-1m` | 64,000 / 128,000 |
 | `claude-fable-5-1` | <Documented /> | Fable 5.1 | June 2026 | 1,000,000 | native 1M, `context-1m` | 64,000 / 128,000 |
+| `claude-fable-5-2` | <Documented /> | Fable 5.2 | June 2026 | 1,000,000 | native 1M, `context-1m` | 128,000 / 128,000 |
 | `claude-mythos-5` | <Documented /> | Mythos 5 | January 2026 | 1,000,000 | native 1M, `context-1m` | 64,000 / 128,000 |
 | `claude-mythos-5-1` | <Undocumented /> | Mythos 5.1 | June 2026 | 1,000,000 | native 1M, `context-1m` | 64,000 / 128,000 |
+| `claude-mythos-5-2` | <Undocumented /> | Mythos 5.2 | June 2026 | 1,000,000 | native 1M, `context-1m` | 128,000 / 128,000 |
 
 Notes:
 
 - A model with no window in the table has no `context` entry in the catalog.
-- The catalog keeps a rank for each model for the advisor tool (`--advisor`). The ranks run from `1` for `claude-haiku-4-5` to `9` for `claude-fable-5-1` and `claude-mythos-5-1`.
-- A model can name a model to use instead on a third-party provider. For example, `claude-opus-5-5` falls back to `claude-opus-5`, and `claude-fable-5-1` falls back to `claude-fable-5`.
+- The catalog keeps a rank for each model for the advisor tool (`--advisor`). The ranks run from `1` for `claude-haiku-4-5` to `10` for `claude-fable-5-2` and `claude-mythos-5-2`. `claude-fable-5-1` and `claude-mythos-5-1` have `9`.
+- A model can name a model to use instead on a third-party provider. For example, `claude-opus-5-5` falls back to `claude-opus-5`, `claude-fable-5-1` falls back to `claude-fable-5`, and `claude-fable-5-2` falls back to `claude-fable-5-1` (`fallback_3p`, `chunk-vcsr0mgr.js:19380`). The catalog row of `claude-fable-5-2` has the Vertex region variable `VERTEX_REGION_CLAUDE_FABLE_5_2`; see [Providers](providers.md#vertex-region-variables).
 - The Mythos models have a name on the Anthropic API only, and none on the cloud providers.
 - For an ID that is not in the catalog, Claude Code assumes a 200K window. Since `2.1.316`, `/model <id>` says so: a probe ran `/model claude-zeta-9` with `-p`. The program replied "Set model to `claude-zeta-9` for this session only", then "Claude Code doesn't recognize the model "claude-zeta-9", so it assumes a context window of 200k tokens", with a link to [Model Configuration: Correct the Window for a Gateway or Custom Model ID](https://code.claude.com/docs/en/model-config#correct-the-window-for-a-gateway-or-custom-model-id). `2.1.314` gave the first line only. A known ID, such as `claude-opus-5-5`, gives no warning. At startup, a status notice says the same thing ("Model "…" isn't recognized").
 
@@ -125,7 +127,7 @@ These IDs are not catalog rows. The program names them for one task each. All ro
 | `claude-haiku-3-5`, `claude-sonnet-3-7` | <Undocumented /> | Short names in a table that shortens a model name for the commit and pull request attribution line. A name that contains `haiku-3-5` or `sonnet-3-7` maps to the ID. |
 | `claude-mythos-preview` | <Undocumented /> | The model-name validation accepts it as a known name, next to the aliases. It has no catalog row. |
 | `claude-sonnet-4-5-20250929[1m]` | <Undocumented /> | On the Anthropic API, a startup migration changes a user-settings `model` of this value to `sonnet[1m]`. |
-| `claude-fable-5[1m]` | <Undocumented /> | A startup migration changes a user-settings `model` of this value to `fable[1m]`. |
+| `claude-fable-5-1[1m]` | <Undocumented /> | A startup migration changes a user-settings `model` of this value, or of `claude-fable-5-1`, to `fable[1m]` (or `fable`) (`chunk-5dx6x1b3.js:80978`). `2.1.321` replaced the older migration of `claude-fable-5[1m]` (`2.1.319`, `chunk-vr78knpg.js:10485`). The release notes say Pro and Max plans move at once, and Team and Enterprise plans move once the organization allows it. A deferred move for those plans stops at 15 December 2026 (`chunk-5dx6x1b3.js:81200`). `/model claude-fable-5-1` switches back. |
 | `claude-sonnet-4-6[1m]`, `claude-opus-4-6[1m]` | <Undocumented /> | The value of the "1M context" entries in the `/model` picker on the Anthropic API. |
 | `claude-opus-5[1m]`, `claude-opus-5-5[1m]`, `claude-sonnet-5-5[1m]` | <Undocumented /> | The refusal fallback table treats each like the ID without `[1m]`. |
 | `claude-sonnet-5[1m]`, `claude-opus-4-8[1m]` | <Undocumented /> | Keys of a built-in per-model threshold table (`severityByModel`), next to the same IDs without `[1m]`. |
@@ -145,6 +147,7 @@ All rows are <Undocumented />.
 | `claude-opus-4-0`, `claude-opus-4-1` | 15 | 75 | 18.75 | 30 | 1.5 |
 | `claude-fable-5`, `claude-mythos-5` | 10 | 50 | 12.5 | 20 | 1 |
 | `claude-fable-5-1`, `claude-mythos-5-1` | 10 | 50 | 12.5 | 20 | 0.25 |
+| `claude-fable-5-2`, `claude-mythos-5-2` | 8 | 40 | 10 | 16 | 0.2 |
 | `claude-opus-5-5` | 4 | 20 | 5 | 8 | 0.2 |
 | `claude-3-5-haiku` | 0.8 | 4 | 1 | 1.6 | 0.08 |
 | `claude-haiku-4-5` | 1 | 5 | 1.25 | 2 | 0.1 |
@@ -181,6 +184,7 @@ For pinned models on third-party providers, you can state the capabilities yours
 | `opus_5_5_prompt_bundle` | <Undocumented /> | The model gets the prompt sections for Opus 5.5. | 1 |
 | `fable_5_mitigations` | <Undocumented /> | The model gets extra safety text for Fable 5. | 3 |
 | `fable_5_1_prompt_bundle` | <Undocumented /> | The model gets the prompt sections for Fable 5.1. | 2 |
+| `fable_5_2_prompt_bundle` | <Undocumented /> | The model gets the prompt sections for Fable 5.2. | 2 |
 
 The flags `effort`, `max_effort`, `xhigh_effort`, and `adaptive_thinking` say which effort levels and which thinking mode a model accepts.
 The betas `per-turn-control-2026-07-01` and `timing-2026-09-09` match the flags `per_turn_effort` and `per_turn_timing`.

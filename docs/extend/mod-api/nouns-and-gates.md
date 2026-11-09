@@ -48,7 +48,7 @@ The dispatch skips the calling hook alone, so a plugin does not trap itself.
 | Item | Status | What it does | Members | Page |
 | --- | --- | --- | --- | --- |
 | `$.plugin` | <Documented /> | This plugin as loaded: its manifest name and its directory. | `name`, `root` | [Plugin](calls/plugin.md) |
-| `$.ui` | <Documented /> | Display: a line under an open dialog, redraws, log lines, panes, scroll, focus, the clipboard. | `notice`, `invalidate`, `blit`, `resolve`, `log`, `ask`, `toast`, `notify`, `status`, `open`, `close`, `panes`, `scroll`, `focus`, `copy`, `selection`, `view` | [UI](ui/ui.md) |
+| `$.ui` | <Documented /> | Display: a line under an open dialog, redraws, log lines, panes, scroll, focus, the clipboard. | `notice`, `invalidate`, `blit`, `resolve`, `log`, `ask`, `toast`, `notify`, `cancelNotify`, `status`, `open`, `close`, `panes`, `scroll`, `focus`, `copy`, `selection`, `view` | [UI](ui/ui.md) |
 | `$.model` | <Documented /> | Completions through the session's own client. | `complete`, `fork`, `classify` | [Model, Audio, and MCP](calls/model-audio-mcp.md) |
 | `$.audio` | <Documented /> | Sound: clip playback and platform speech. | `play`, `speak` | [Model, Audio, and MCP](calls/model-audio-mcp.md) |
 | `$.mcp` | <Documented /> | The engine's MCP servers: call a tool of a connected one, or connect one the plugin lists. | `call`, `connect` | [Model, Audio, and MCP](calls/model-audio-mcp.md) |

@@ -62,6 +62,16 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 | `env.get` | <Documented /> | `$.env.get(name)`. The type pins `name`. | Input `{ name: string }`. Value `string \| undefined`. |
 | `env.set` | <Documented /> | `$.env.set(name, value)`. The type pins `name`. No `value` unsets. | Input `{ name: string, value?: string }`. Value `EnvSetResult`. |
 
+## Errors
+
+Each row is a family of messages. The backticked text is the start that every message in the family shares.
+
+| Start of Message | Status | What It Means | Cases |
+| --- | --- | --- | --- |
+| `${…}: http.fetch: ${…}`, `http.fetch: ${…}` | <Undocumented /> | A `$.http.fetch` call was refused. The text is the plugin name, `http.fetch:`, and the reason. A request from the engine itself has no plugin name. | The reason is one of these. `refused:` and the reason of the auth check. `unknown auth handle; $.session.authorize() mints one`. A request body over the character limit, or an answer body over the byte limit. Source: the program (`chunk-ne1755n5.js:4035859`). |
+| `a body of bytes and compress ride engine requests alone` | <Undocumented /> | A plugin passed a body that is not a string, or passed `compress`, to `$.http.fetch`. | Full text: `${plugin}: http.fetch: a body of bytes and compress ride engine requests alone`. Only requests of the engine itself may carry bytes or `compress`. Pass the body as a string and drop `compress`. Source: the program (`chunk-ne1755n5.js:4035859`). |
+| `http.fetch: a body of bytes cannot be redacted` | <Undocumented /> | A request of the engine to an event endpoint has a body of bytes, and the program cannot redact bytes. | The program passes a string body through the `http.fetch` hooks to redact it. It refuses a body of bytes sent to that path. The text has no plugin name. Source: the program (`chunk-ne1755n5.js:4029149`). |
+
 ## Related Pages
 
 - [Mod API Overview](../index.md)

@@ -33,8 +33,8 @@ Items that the docs name but describe wrongly are in [Behaves Differently From t
 | [Transcript and Sessions](#transcript-and-sessions) | 13 |
 | [Headless Protocol](#headless-protocol) | 193 |
 | [Mod API](#mod-api) | 0 |
-| [Other](#other) | 106 |
-| Total | 1822 |
+| [Other](#other) | 108 |
+| Total | 1824 |
 
 ## Settings Keys
 
@@ -561,7 +561,7 @@ Count: 0.
 
 Items that fit no group above: memory, output styles, the status line, models, and how the harness works inside.
 
-Count: 106.
+Count: 108.
 
 | Item | Where |
 | --- | --- |
@@ -575,11 +575,12 @@ Count: 106.
 | `claude-sonnet-4-0` | [Models and Providers](../configure/models-and-providers/model-catalog.md#catalog) (Catalog); [Models and Providers](../configure/models-and-providers/providers.md#provider-names) (Provider Names) |
 | `claude-opus-4-0` | [Models and Providers](../configure/models-and-providers/model-catalog.md#catalog) (Catalog); [Models and Providers](../configure/models-and-providers/providers.md#provider-names) (Provider Names) |
 | `claude-mythos-5-1` | [Models and Providers](../configure/models-and-providers/model-catalog.md#catalog) (Catalog); [Models and Providers](../configure/models-and-providers/providers.md#provider-names) (Provider Names) |
+| `claude-mythos-5-2` | [Models and Providers](../configure/models-and-providers/model-catalog.md#catalog) (Catalog); [Models and Providers](../configure/models-and-providers/providers.md#provider-names) (Provider Names) |
 | `claude-3-opus`, `claude-3-sonnet`, `claude-3-haiku` | [Models and Providers](../configure/models-and-providers/model-catalog.md#other-model-ids-in-the-program) (Other Model IDs in the Program) |
 | `claude-haiku-3-5`, `claude-sonnet-3-7` | [Models and Providers](../configure/models-and-providers/model-catalog.md#other-model-ids-in-the-program) (Other Model IDs in the Program) |
 | `claude-mythos-preview` | [Models and Providers](../configure/models-and-providers/model-catalog.md#other-model-ids-in-the-program) (Other Model IDs in the Program) |
 | `claude-sonnet-4-5-20250929[1m]` | [Models and Providers](../configure/models-and-providers/model-catalog.md#other-model-ids-in-the-program) (Other Model IDs in the Program) |
-| `claude-fable-5[1m]` | [Models and Providers](../configure/models-and-providers/model-catalog.md#other-model-ids-in-the-program) (Other Model IDs in the Program) |
+| `claude-fable-5-1[1m]` | [Models and Providers](../configure/models-and-providers/model-catalog.md#other-model-ids-in-the-program) (Other Model IDs in the Program) |
 | `claude-sonnet-4-6[1m]`, `claude-opus-4-6[1m]` | [Models and Providers](../configure/models-and-providers/model-catalog.md#other-model-ids-in-the-program) (Other Model IDs in the Program) |
 | `claude-opus-5[1m]`, `claude-opus-5-5[1m]`, `claude-sonnet-5-5[1m]` | [Models and Providers](../configure/models-and-providers/model-catalog.md#other-model-ids-in-the-program) (Other Model IDs in the Program) |
 | `claude-sonnet-5[1m]`, `claude-opus-4-8[1m]` | [Models and Providers](../configure/models-and-providers/model-catalog.md#other-model-ids-in-the-program) (Other Model IDs in the Program) |
@@ -653,6 +654,7 @@ Count: 106.
 | `opus_5_5_prompt_bundle` | [Models and Providers](../configure/models-and-providers/model-catalog.md#capabilities) (Capabilities) |
 | `fable_5_mitigations` | [Models and Providers](../configure/models-and-providers/model-catalog.md#capabilities) (Capabilities) |
 | `fable_5_1_prompt_bundle` | [Models and Providers](../configure/models-and-providers/model-catalog.md#capabilities) (Capabilities) |
+| `fable_5_2_prompt_bundle` | [Models and Providers](../configure/models-and-providers/model-catalog.md#capabilities) (Capabilities) |
 | `safeguards` | [Request and Cache](../how-it-works/request-and-cache.md#body-fields) (Body Fields) |
 | `system[0]` (attribution line) | [Request and Cache](../how-it-works/request-and-cache.md#system-blocks-and-cache-markers) (System Blocks and Cache Markers) |
 | `system[1]` (identity line) | [Request and Cache](../how-it-works/request-and-cache.md#system-blocks-and-cache-markers) (System Blocks and Cache Markers) |

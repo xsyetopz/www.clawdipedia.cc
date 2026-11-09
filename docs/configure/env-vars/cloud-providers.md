@@ -8,7 +8,7 @@ These variables point Claude Code at a cloud provider instead of the Anthropic A
 Switch a provider on with a `CLAUDE_CODE_USE_*` variable. Then set the region, credentials, and endpoints for it.
 They also cover LLM gateways that sit in front of a provider.
 
-This page lists 79 variables. Set `CLAUDE_CODE_USE_BEDROCK`, `CLAUDE_CODE_USE_VERTEX`, or the Foundry switch to `1`. Then set region, project, and endpoint variables. To turn one off, unset the `CLAUDE_CODE_USE_*` variable. You can override a stale shell export with an empty string in `settings.json` `env`.
+This page lists 80 variables. Set `CLAUDE_CODE_USE_BEDROCK`, `CLAUDE_CODE_USE_VERTEX`, or the Foundry switch to `1`. Then set region, project, and endpoint variables. To turn one off, unset the `CLAUDE_CODE_USE_*` variable. You can override a stale shell export with an empty string in `settings.json` `env`.
 
 ## Example
 
@@ -109,6 +109,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `K_SERVICE` | <Undocumented /> | Detects Google Cloud Run in the bundled Google auth library and in Claude Code's environment report. | - | - |
 | `METADATA_SERVER_DETECTION` | <Undocumented /> | Controls how the bundled Google auth library detects the GCE metadata server. | - | - |
 | `VERTEX_REGION_CLAUDE_*` | <Undocumented /> | Sets the Google Cloud region for one model family. One variable exists for each suffix. | Text. The first table entry whose model prefix matches the model id wins, then `CLOUD_ML_REGION`, then `us-east5` | Google Cloud Agent Platform (`CLAUDE_CODE_USE_VERTEX`) |
+| `VERTEX_REGION_CLAUDE_FABLE_5_2` | <Documented /> | Overrides the Google Cloud region for Claude Fable 5.2 on Vertex. It is the variable that the model entry names for the model id `claude-fable-5-2`. Added in `2.1.321`. | Text. It comes before `CLOUD_ML_REGION`, then `us-east5` | Google Cloud Agent Platform (`CLAUDE_CODE_USE_VERTEX`). Listed on the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs. The model entry is at `chunk-vcsr0mgr.js:19206`. The match table is at `chunk-wtn80773.js:1804` |
 
 ## How It Works
 
