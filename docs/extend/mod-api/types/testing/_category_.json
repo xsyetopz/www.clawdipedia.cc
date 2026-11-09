@@ -1,8 +1,8 @@
 {
-  "label": "Testing Types",
-  "position": 8,
-  "link": {
-    "type": "doc",
-    "id": "extend/mod-api/types/testing/index"
-  }
+	"label": "Testing Types",
+	"position": 8,
+	"link": {
+		"type": "doc",
+		"id": "extend/mod-api/types/testing/index"
+	}
 }

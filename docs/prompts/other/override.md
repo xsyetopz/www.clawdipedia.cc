@@ -45,7 +45,7 @@ Agents are merged by name. The later source wins: built-in, plugin, user (`~/.cl
 | Resume prompt (`Continue from where you left off.`) | Replace | `CLAUDE_CODE_RESUME_PROMPT=<text>`. | The program |
 | Managed memory | Append | `claudeMd` in managed settings only. CLAUDE.md-style text is added as org memory. | The program |
 
-## Subagents and Built-in Agents
+## Subagents and Built-In Agents
 
 | Prompt | Override | How | Source |
 | --- | --- | --- | --- |

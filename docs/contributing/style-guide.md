@@ -6,7 +6,7 @@ sidebar_position: 2
 
 This guide tells you how to write a page for this site.
 Follow it so every page looks and reads the same.
-Run `bun run verify` before you open a pull request. It runs the type check, the format check, the code lint, markdownlint, the docs check, the schema check, and the build. Git hooks run on every commit. Commitlint checks the message.
+Run `just verify verify-project` before you open a pull request. It runs the format check, the type check, the code lint, markdownlint, the tests, the docs check, the schema check, and the build. Git hooks run on every commit. The `commit-msg` hook checks that the message is a Conventional Commit.
 
 ## Core Rules
 
@@ -35,11 +35,12 @@ Write like Simple English Wikipedia.
 
 ## Title Case
 
-Use Chicago-style Title Case for every heading, page title, and sidebar label.
+Use Title Case for every heading, page title, and sidebar label.
 
 - Capitalize the first and last word.
 - Capitalize nouns, verbs, adjectives, adverbs, and pronouns.
-- Keep articles, short conjunctions, and prepositions lowercase: `a`, `an`, `the`, `and`, `but`, `or`, `for`, `in`, `of`, `on`, `to`, `with`, `from`, `at`, `by`.
+- Keep articles, short conjunctions, and short prepositions lowercase: `a`, `an`, `the`, `and`, `but`, `or`, `for`, `in`, `of`, `on`, `to`, `with`, `at`, `by`.
+- Capitalize longer prepositions, such as `From`, `Behind`, and `Without`. The `title-case-style` rule of `just lint` sets the case of each heading word; run `bun run markdownlint-cli2 --fix` to apply it.
 - Words in inline code keep their exact spelling.
 - Put code identifiers in headings in backticks (flags, env vars, keys, tool, event, and type names, file names). Page titles and sidebar labels stay plain text.
 
@@ -49,7 +50,7 @@ Use Chicago-style Title Case for every heading, page title, and sidebar label.
 | Skills And Commands | Skills and Commands |
 | Setting Up `settings.json` | Setting Up `settings.json` |
 
-The check script flags lowercase words that are not on the small-word list.
+`bun run check:docs` checks page titles and sidebar labels too. It flags lowercase words that are not on the small-word list.
 It skips text in code spans.
 
 ## Front Matter
@@ -222,7 +223,7 @@ Give a code block a language and, when useful, a title.
 
 Every surface page has at least one worked example.
 
-Examples in `ts`, `tsx`, `js`, `jsx`, `json`, and `jsonc` blocks follow `biome.json`. This covers formatting, lint rules, and typed const arrows instead of `function` declarations. Run `bun run check:examples` (add `--fix` for safe fixes). To skip a block that must stay verbatim, such as program output or a wire format, add `skip-lint` to its fence: ` ```json skip-lint title="..." `. The check skips blocks in `docs/prompts/`.
+Examples in `ts`, `tsx`, `js`, `jsx`, `json`, and `jsonc` blocks follow the repo `.oxlintrc.json` and `bun fmt`. This covers formatting, lint rules, and typed const arrows instead of `function` declarations. Run `bun run check:examples` (add `--fix` for safe fixes). To skip a block that must stay verbatim, such as program output or a wire format, add `skip-lint` to its fence: ` ```json skip-lint title="..." `. The check skips blocks in `docs/prompts/`.
 
 ### Example Hosts
 
@@ -268,7 +269,8 @@ Leave out anything you could not check.
 
 | Command | What it does |
 | --- | --- |
-| `bun run lint` | Runs markdownlint on `docs/**/*.{md,mdx}`. |
+| `bun run lint` | Runs oxlint on the code and markdownlint on the Markdown files. |
 | `bun run check:docs` | Finds emojis that are not allowed, unlinked sources, missing front matter, and Title Case errors. It prints `file:line`. |
 | `bun run build` | Builds the site. Broken links and anchors fail the build. |
-| `bun run verify` | Runs every check above, the type check, the format and code lint, the schema check, and the build. |
+| `just verify` | Runs the format check, the type check, `bun run lint`, the guard, and the tests. |
+| `just verify-project` | Runs `bun run check:docs`, the example, schema, and surface checks, the build, and the plugin and deploy checks. |

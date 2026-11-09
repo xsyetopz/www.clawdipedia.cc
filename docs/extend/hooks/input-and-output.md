@@ -69,7 +69,7 @@ Every event accepts these keys. Some events drop them. [Events](events.md) says 
 | `{"async":true,"asyncTimeout":n}` | <Undocumented /> | A first reply that moves the hook to the background. | See [Configuration](configuration.md#timeouts). Command hooks only. |
 | 10,000 character cap | <Documented /> | Applies to `additionalContext`, `systemMessage`, `initialUserMessage`, and plain `stdout`. | Each string alone. If a string is over the cap, Claude Code saves it to a file. The model gets the path and the first 2,000 characters. |
 
-### What `continue` and `systemMessage` Do per Event
+### What `continue` And `systemMessage` Do per Event
 
 A probe ran a command hook on each event in `-p` mode. "Stops" means the model made no more requests. Some messages show only in the interactive screen, so "Not shown" means not shown in `-p` `stream-json`. Source: [Probes](../../reference/probes.md#subagents-and-hooks).
 

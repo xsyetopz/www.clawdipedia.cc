@@ -1,8 +1,8 @@
 {
-  "label": "Tool, Command, and Config Types",
-  "position": 9,
-  "link": {
-    "type": "doc",
-    "id": "extend/mod-api/types/tool-command-config/index"
-  }
+	"label": "Tool, Command, and Config Types",
+	"position": 9,
+	"link": {
+		"type": "doc",
+		"id": "extend/mod-api/types/tool-command-config/index"
+	}
 }

@@ -1,6 +1,7 @@
 # Docs-Mcp-Server Specification
 
 ## Purpose
+
 Serve four doc sources (clawdipedia, platform, code, and claude-resources) to agents over MCP with a small tool list, fast first answers, and an offline fallback.
 
 ## Requirements
@@ -26,7 +27,7 @@ default, the unofficial Claude Code Docs), `"platform"` (platform.claude.com/doc
 The server SHALL NOT serve `www.anthropic.com`, and SHALL NOT accept `"anthropic"` as a source or as
 an alias. A call with a source that is not in `DOC_SOURCES` SHALL fail with the list of valid values.
 
-#### Scenario: Platform Search through Source
+#### Scenario: Platform Search Through Source
 
 - **WHEN** an agent calls `search_docs` with `query: "prompt caching"` and `source: "platform"`
 - **THEN** the reply lists platform.claude.com pages
@@ -115,7 +116,7 @@ section of its own. The path `resources`, which has no second segment, SHALL be 
 - **WHEN** the sitemap holds `https://claude.com/marketplace/connectors/x`
 - **THEN** no entry of the index has that path
 
-#### Scenario: Section from the Second Segment
+#### Scenario: Section From the Second Segment
 
 - **WHEN** the sitemap holds `https://claude.com/resources/guides/claude-cowork-product-guide`
 - **THEN** the entry's section is `guides`, and `list_pages` with `section: "guides"` lists it

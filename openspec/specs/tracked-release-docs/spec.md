@@ -1,6 +1,7 @@
 # Tracked-Release-Docs Specification
 
 ## Purpose
+
 Keep the site in step with the one Claude Code version named in `src/version.ts`, so each user-facing change of that version is on its page with a source, and no page states a fact the program does not hold.
 
 ## Requirements

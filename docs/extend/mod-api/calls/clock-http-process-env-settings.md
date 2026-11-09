@@ -22,7 +22,9 @@ on("session.start", async ($, e, next) => {
     "status",
     "--short",
   ]);
-  if (exitCode === 0) $.ui.log(stdout);
+  if (exitCode === 0) {
+    $.ui.log(stdout);
+  }
   $.clock.every(1000, () => $.ui.status("polling"));
   return next(e);
 });

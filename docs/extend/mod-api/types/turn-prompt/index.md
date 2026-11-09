@@ -22,7 +22,9 @@ The first line reads the prompt box. The second submits text as if the user type
 ```ts
 const { text, cursor } = await $.prompt.read();
 await $.prompt.submit({ text: "what the person typed", asUser: true });
-for (const use of response.serverToolUses ?? []) $.ui.log(use.name);
+for (const use of response.serverToolUses ?? []) {
+  $.ui.log(use.name);
+}
 ```
 
 :::note[Shared Sections Skip `prompt.section`]

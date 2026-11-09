@@ -175,7 +175,7 @@ Source: the program, `chunk-ncc3yyk3.js`.
 - A long review can end in the middle of a word, because the reply stops at the 4096 token limit. The program does not ask for the rest.
 - If the request fails, the program prints `Failed to analyze rules:` and the error text. A missing login shows the error of the request, for example `Could not resolve authentication method`.
 
-### `/auto-mode-setup` without the Dialog
+### `/auto-mode-setup` Without the Dialog
 
 The program also has a non-interactive form of `/auto-mode-setup`. It is the same in `2.1.314` and `2.1.316`. Source: the program, `chunk-j7pd2cdk.js` and `chunk-qd604jgh.js`.
 

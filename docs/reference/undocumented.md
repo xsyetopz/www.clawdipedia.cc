@@ -672,7 +672,7 @@ Count: 106.
 | `CLAUDE_CODE_SYNC_PLUGIN_INSTALL` | [Probes](probes.md#effects-and-differences) (Effects and Differences) |
 | `CLAUDE_CODE_USE_COWORK_PLUGINS` | [Probes](probes.md#effects-and-differences) (Effects and Differences) |
 
-## Behaves Differently from the Docs
+## Behaves Differently From the Docs
 
 These items exist in the official docs, but the program works in another way. Count: 42. The badge on each page says how.
 

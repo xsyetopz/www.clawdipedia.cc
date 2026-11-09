@@ -189,7 +189,7 @@ After an auto-update installs a new version, the prompt area shows a green notic
 
 Background sessions use `claude respawn <id>` instead.
 
-## How `/usage` and `/artifacts` Work
+## How `/usage` And `/artifacts` Work
 
 `/artifacts` has four tabs: `All`, `Mine`, `Shared`, and `Pinned`. `Pinned` shows only when you have pins.
 The footer lists the keys. `Enter` attaches the selected artifact to the session. The panel shows `Attaching <title>…`. `Enter` opens an artifact that is already attached instead. `x` dismisses, `c` copies the URL, `Ctrl+R` renames, `d` deletes, `p` pins, `/` searches, and `r` refreshes.

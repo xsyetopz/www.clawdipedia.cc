@@ -90,7 +90,7 @@ Block reads of secret files and all edits to lock files.
 - In a `--restricted` session, a file outside the working directories is refused for a file reference or an upload, even when a `Read` allow rule covers it. Before 2.1.316 such a rule could open the file for an upload (the program, and the 2.1.316 release notes).
 - `Read` has no result size cap. So use `offset` and `limit` for large files.
 
-## When `Glob` and `Grep` Are Offered
+## When `Glob` And `Grep` Are Offered
 
 Source: the program (`chunk-qd604jgh.js` of `2.1.316`). The build embeds `bfs` and `ugrep`. It shadows `find` and `grep` in `Bash` with them. So it takes `Glob` and `Grep` out of the tool list, and the `Bash` prompt points Claude to `find` and `grep`. A probe with the local stub got the same default tool list, with no `Glob` and no `Grep`, from `2.1.314` and `2.1.316`. The tests below decide this, in order.
 

@@ -113,7 +113,7 @@ Claude Code skips a hook that is too slow.
 | Names of commands, tools, subagent types, and panes | Letters, digits, `_`, and `-`, up to 64 characters |
 | One `claude plugin test` test | 5 seconds unless the test sets `timeoutMs` |
 
-## Built-in Mods
+## Built-In Mods
 
 Claude Code 2.1.316 registers up to 13 built-in plugins at start (the program).
 Each id is `cc-plugin-<name>@builtin`.

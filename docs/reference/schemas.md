@@ -101,7 +101,7 @@ The check runs as part of `bun run verify`.
 - The program uses `starts_with` and `ends_with` as `format` values for some path fields. They are not standard JSON Schema formats, so editors ignore them. They do not check those rules.
 - A few values the program accepts, such as `undefined`, cannot be written in JSON. The generator drops them.
 
-## Differences from SchemaStore
+## Differences From SchemaStore
 
 We compared the files with the copies on [SchemaStore](https://json.schemastore.org/claude-code-settings.json) on 2026-10-30. Key counts are top-level keys.
 

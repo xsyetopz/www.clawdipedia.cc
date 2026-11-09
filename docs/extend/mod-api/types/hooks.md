@@ -13,9 +13,7 @@ They help when a type error is hard to read.
 The editor gives `e` and `next` their types here from the machinery types below. This sketch shows only the call shape. See the Hooks page for the full rules.
 
 ```ts
-on("tool.call", { tool: "Bash" }, async ($, e, next) => {
-  return next(e);
-});
+on("tool.call", { tool: "Bash" }, async ($, e, next) => next(e));
 ```
 
 ## Types without Fields

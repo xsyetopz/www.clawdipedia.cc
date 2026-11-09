@@ -41,7 +41,7 @@ on("turn.complete", async ($, e, next) => {
 | `$.state.get` | <Documented /> | Resolves the value under `ref` and its version. A value never written is `undefined` at version 0. | `(ref) => Promise<StateRead>`. `plugin` and `key` must be literals in the source. Resolves `{ value, version }`. | Run time. |
 | `$.state.set` | <Documented /> | Writes `value` under `ref`, which must be this plugin's own. The engine draws again the sites that read it while drawing, at the redraw rate. | `(ref, value, options?) => Promise<StateSetResult>`. `ifVersion` writes only at that version. Resolves `{ isSet, version }`. | Not while a `ui.render` hook draws. |
 
-## State Helpers Imported from `claude-code`
+## State Helpers Imported From `claude-code`
 
 These helpers are pure code. They run in the plugin's own environment.
 

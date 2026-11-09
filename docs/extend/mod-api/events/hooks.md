@@ -19,7 +19,7 @@ This mod refuses every Bash command that contains `rm -rf`.
 
 ```javascript title="hooks/register.js"
 export const register = (on) => {
-  on("tool.call", { tool: "Bash", command: /rm -rf/ }, async () => ({
+  on("tool.call", { tool: "Bash", command: /rm -rf/u }, async () => ({
     deny: "No rm -rf here.",
   }));
 };

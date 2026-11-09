@@ -28,7 +28,7 @@ on("session.start", async ($, e, next) => {
   return next(e);
 });
 on("command.run", { command: "standup" }, async ($, e) => ({
-  text: `Summary for ${e.args || "1"} day(s)`,
+  text: `Summary for ${e.args === "" ? "1" : e.args} day(s)`,
 }));
 ```
 

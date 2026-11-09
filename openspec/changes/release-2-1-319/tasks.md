@@ -17,7 +17,7 @@ The owner chose not to run `ultrareview` live, so its page links the official [U
 - [x] 1.6 `bun run release:probe:managed`. It needs the user to run two `sudo` commands. The new `owned` variant tests the "not verified" note.
 - [x] 1.7 `bun run release:facts -- --check` and `bun run release:all`.
 
-## 2. Pages from the Diff
+## 2. Pages From the Diff
 
 Source: `captures/2.1.319/diff/report.md`.
 

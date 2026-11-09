@@ -1,6 +1,7 @@
-# account-access-docs Specification
+# Account-Access-Docs Specification
 
 ## Purpose
+
 Document how Claude Code learns the user's account and plan, and how it decides which models and features that account may use, from the program alone and without publishing its source or any secret.
 
 ## Requirements

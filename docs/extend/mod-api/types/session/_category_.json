@@ -1,8 +1,8 @@
 {
-  "label": "Session Types",
-  "position": 7,
-  "link": {
-    "type": "doc",
-    "id": "extend/mod-api/types/session/index"
-  }
+	"label": "Session Types",
+	"position": 7,
+	"link": {
+		"type": "doc",
+		"id": "extend/mod-api/types/session/index"
+	}
 }

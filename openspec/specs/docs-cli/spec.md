@@ -1,6 +1,7 @@
 # Docs-Cli Specification
 
 ## Purpose
+
 Let people and agents query the four doc sources (clawdipedia, platform, code, and claude-resources) from a shell with one command, without the MCP server, through `bunx clawdipedia-docs` or the `clawdipedia-docs-cli` plugin.
 
 ## Requirements

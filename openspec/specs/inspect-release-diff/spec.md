@@ -1,6 +1,7 @@
-# inspect-release-diff Specification
+# Inspect-Release-Diff Specification
 
 ## Purpose
+
 Let one cc-inspect run show what changed in the code between two Claude Code installs, and how each change behaves, with no model call and few tokens.
 
 ## Requirements

@@ -1,8 +1,8 @@
 {
-  "label": "Keybindings",
-  "position": 9,
-  "link": {
-    "type": "doc",
-    "id": "configure/keybindings/index"
-  }
+	"label": "Keybindings",
+	"position": 9,
+	"link": {
+		"type": "doc",
+		"id": "configure/keybindings/index"
+	}
 }

@@ -54,7 +54,7 @@ Sources: [Model Configuration](https://code.claude.com/docs/en/model-config) for
 The `[1m]` change is in the [Claude Code changelog](https://code.claude.com/docs/en/changelog). In the program, `chunk-r1ht672j.js:23699` removes the tag when the name without it has a known window on its own. `chunk-r1ht672j.js:24801` and `:25045` add the `(1M context)` label only when the tag remains and the model allows the suffix.
 Opus 5.5 needs Claude Code v2.1.280 or later, Sonnet 5.5 needs v2.1.284, Haiku 5.5 needs v2.1.293, and Fable 5.1 needs v2.1.257.
 
-### Pin the Models behind an Alias
+### Pin the Models Behind an Alias
 
 | Environment variable | Status | Effect |
 | --- | --- | --- |

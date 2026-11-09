@@ -35,7 +35,7 @@ Where to Set It tells you which files may set the key. See [Settings Files and S
 
 ## Example
 
-### Get the API Key from a Script
+### Get the API Key From a Script
 
 The first key runs `~/bin/get-key.sh` to get the API key. The second limits sign-in to Claude Console.
 

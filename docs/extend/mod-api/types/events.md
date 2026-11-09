@@ -28,7 +28,7 @@ To add your own noun, merge into `EngineInterface`:
 ```ts title="types.d.ts"
 declare module "claude-code" {
   interface EngineInterface {
-    voice: { say(text: string): Promise<void> };
+    voice: { say: (text: string) => Promise<void> };
   }
 }
 ```

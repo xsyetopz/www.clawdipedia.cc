@@ -113,7 +113,7 @@ On observer events, it does not wait.
 | `reason` (model reply) | <Documented /> | Why the model blocked. | Required when `ok` is `false`. |
 | `impossible` (model reply) | <Documented /> | The condition can never be met. | On `Stop` and `SubagentStop` the turn ends. Agents ignore it. `prompt` only. |
 
-## Prompt Hooks on `Stop` and `SubagentStop`
+## Prompt Hooks on `Stop` And `SubagentStop`
 
 On `Stop` and `SubagentStop`, the program wraps the `prompt` as a stopping condition that the model judges on transcript evidence only (the program, `chunk-qd604jgh.js`).
 The model must answer with a JSON object. `ok` and `reason` are required, and `impossible` is optional.
@@ -124,7 +124,7 @@ The turn ends after a number of consecutive blocks. The default is 8. `CLAUDE_CO
 When the cap ends the turn in a subagent or a teammate, Claude Code does not show the notice to you. Only the main session shows it (the program, `chunk-n6xbt9zz.js`). So a subagent can end with no sign in the parent.
 A timeout, an API error, a reply that is not JSON, and a reply that fails the schema all leave the stop alone. The hook fails open. See the next section.
 
-## Calls of `prompt` and `agent` Hooks
+## Calls of `prompt` And `agent` Hooks
 
 Source: the program (`chunk-qd604jgh.js`). All rows are <Undocumented />, except where a note says otherwise.
 

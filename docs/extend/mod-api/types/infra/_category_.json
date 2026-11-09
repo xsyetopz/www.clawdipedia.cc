@@ -1,8 +1,8 @@
 {
-  "label": "Files, State, Clock, HTTP, Process, and Settings Types",
-  "position": 5,
-  "link": {
-    "type": "doc",
-    "id": "extend/mod-api/types/infra/index"
-  }
+	"label": "Files, State, Clock, HTTP, Process, and Settings Types",
+	"position": 5,
+	"link": {
+		"type": "doc",
+		"id": "extend/mod-api/types/infra/index"
+	}
 }

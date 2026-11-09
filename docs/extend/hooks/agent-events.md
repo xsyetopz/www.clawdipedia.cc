@@ -80,7 +80,7 @@ Handlers: all five types.
 These events cover compaction, model switches, MCP questions, and worktrees.
 None of them accepts `prompt` or `agent` handlers.
 
-### `PreCompact` and `PostCompact`
+### `PreCompact` And `PostCompact`
 
 `PreCompact` fires before a compaction. `PostCompact` fires after it.
 The matcher is `trigger`.
@@ -96,7 +96,7 @@ For the compaction process, see [Context and Compaction](../../how-it-works/cont
 | `custom_instructions` | <Documented /> | `PreCompact`, input | The text after `/compact`. `null` for `auto` or when empty. |
 | `compact_summary` | <Documented /> | `PostCompact`, input | The summary that Claude Code made. |
 
-### `PreModelSwitch` and `PostModelSwitch`
+### `PreModelSwitch` And `PostModelSwitch`
 
 Both need 2.1.251.
 The matcher is the canonical name of `to_model`.
@@ -121,7 +121,7 @@ Plain `stdout` is context. Exit 2 shows `stderr` as a notice.
 | `permissionDecision`, `permissionDecisionReason` | <Documented /> | Output, `PreModelSwitch` | `allow`, `deny`, `ask`, and the reason. `ask` works only in interactive `/model`. Otherwise it is a refusal. No `defer`, `updatedInput`, or `additionalContext`. Strength order: `deny`, `ask`, `allow`. |
 | `additionalContext` | <Documented /> | Output, `PostModelSwitch` | Text for the next request. If the hook is late by 5 seconds, it goes to the request after. |
 
-### `Elicitation` and `ElicitationResult`
+### `Elicitation` And `ElicitationResult`
 
 An elicitation is a question that an MCP server asks you.
 The matcher for both events is the server name.
@@ -142,7 +142,7 @@ Claude Code drops `reason`, `systemMessage`, and `continue`.
 
 Both events fired in an interactive probe for an MCP server that asked for input in form mode and in URL mode. The `Elicitation` input had `mcp_server_name`, `message`, `mode`, and `requested_schema`. The `ElicitationResult` input had `action` and `content`. See [Interactive Probes](../../reference/probes.md#interactive-probes).
 
-### `WorktreeCreate` and `WorktreeRemove`
+### `WorktreeCreate` And `WorktreeRemove`
 
 `WorktreeCreate` replaces the default `git worktree` step.
 It fires for `--worktree`, `EnterWorktree`, `isolation: "worktree"`, workflows, background sessions, and remote control.

@@ -89,7 +89,7 @@ A queued message shows a hint under the prompt. In fullscreen rendering with mou
 | Click on the "send now" hint | <Undocumented /> | Sends the queued message at once. | Since `2.1.312`. The program needs mouse mode `full`, so `CLAUDE_CODE_DISABLE_MOUSE` and `CLAUDE_CODE_DISABLE_MOUSE_CLICKS` both stop the click. The program reports the click as `chat:sendNowHintPress`. Source: `chunk-7ss0ryz6.js` lines 8976 and 9363 to 9396. |
 | Hint text | <Undocumented /> | Names the key for `chat:sendNow`, or reads "click to send now" when no key is bound to it. | Since `2.1.312`. With no key bound, the hint shows only in mouse mode `full`. Source: `chunk-7ss0ryz6.js` lines 9370 to 9394. |
 
-## Vim Mode Operators with `gj` and `gk`
+## Vim Mode Operators with `gj` And `gk`
 
 Vim keys of the input prompt are not in `keybindings.json`. The setting `editorMode` turns them on. See [Interface Settings](../settings/ui.md).
 

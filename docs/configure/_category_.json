@@ -1,10 +1,10 @@
 {
-  "label": "Configure",
-  "position": 4,
-  "link": {
-    "type": "generated-index",
-    "slug": "/configure",
-    "title": "Configure",
-    "description": "Settings, environment variables, CLI flags, permissions, models, memory, and more."
-  }
+	"label": "Configure",
+	"position": 4,
+	"link": {
+		"type": "generated-index",
+		"slug": "/configure",
+		"title": "Configure",
+		"description": "Settings, environment variables, CLI flags, permissions, models, memory, and more."
+	}
 }

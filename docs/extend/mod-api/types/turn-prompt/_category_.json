@@ -1,8 +1,8 @@
 {
-  "label": "Turn and Prompt Types",
-  "position": 10,
-  "link": {
-    "type": "doc",
-    "id": "extend/mod-api/types/turn-prompt/index"
-  }
+	"label": "Turn and Prompt Types",
+	"position": 10,
+	"link": {
+		"type": "doc",
+		"id": "extend/mod-api/types/turn-prompt/index"
+	}
 }
