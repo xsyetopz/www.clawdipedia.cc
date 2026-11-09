@@ -1,18 +1,18 @@
 {
-  "name": "clawdipedia-docs-mcp",
-  "version": "3.0.2",
-  "private": true,
-  "license": "MIT",
-  "type": "module",
-  "description": "MCP server for the Anthropic docs (clawdipedia, platform, code, and claude-resources sources). Source for dist/server.js, which is committed.",
-  "scripts": {
-    "build": "bun build src/server.ts --target=bun --outfile=dist/server.js"
-  },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.32.2",
-    "@rgrove/parse-xml": "^5.1.0",
-    "node-html-markdown": "^2.0.0",
-    "node-html-parser": "^9.0.5",
-    "zod": "^4.6.7"
-  }
+	"name": "clawdipedia-docs-mcp",
+	"version": "3.0.2",
+	"private": true,
+	"description": "MCP server for the Anthropic docs (clawdipedia, platform, code, and claude-resources sources). Source for dist/server.js, which is committed.",
+	"license": "MIT",
+	"type": "module",
+	"scripts": {
+		"build": "bun build src/server.ts --target=bun --outfile=dist/server.js"
+	},
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "^1.32.2",
+		"@rgrove/parse-xml": "^5.1.0",
+		"node-html-markdown": "^2.0.0",
+		"node-html-parser": "^9.0.5",
+		"zod": "^4.6.7"
+	}
 }

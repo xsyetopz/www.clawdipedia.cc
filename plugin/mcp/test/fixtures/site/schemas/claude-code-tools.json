@@ -1,17 +1,17 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://clawdipedia.cc/schemas/claude-code-tools.json",
-  "title": "Claude Code built-in tool inputs and results (Claude Code 2.1.307)",
-  "$defs": {
-    "BashInput": {
-      "type": "object",
-      "properties": {
-        "command": {
-          "type": "string",
-          "description": "The command to run"
-        }
-      },
-      "required": ["command"]
-    }
-  }
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://clawdipedia.cc/schemas/claude-code-tools.json",
+	"title": "Claude Code built-in tool inputs and results (Claude Code 2.1.307)",
+	"$defs": {
+		"BashInput": {
+			"type": "object",
+			"properties": {
+				"command": {
+					"type": "string",
+					"description": "The command to run"
+				}
+			},
+			"required": ["command"]
+		}
+	}
 }

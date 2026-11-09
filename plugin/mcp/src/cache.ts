@@ -5,296 +5,251 @@
 //   claude-resources/sitemap.xml, claude-resources/pages/<path>.html
 // Every body file has a sibling <file>.meta.json. Writes are atomic (temp file, then rename).
 // If the folder cannot be written, the cache lives in memory only.
-import { createHash } from "node:crypto";
 import {
-  mkdirSync,
-  readdirSync,
-  readFileSync,
-  renameSync,
-  rmSync,
-  statSync,
-  writeFileSync,
-} from "node:fs";
-import { homedir } from "node:os";
-import { dirname, join, resolve, sep } from "node:path";
+	mkdir,
+	readdir,
+	readFile,
+	rename,
+	rm,
+	stat,
+	writeFile,
+} from "node:fs/promises";
+import { dirname, join } from "node:path";
 
-export type Meta = {
-  url: string;
-  etag?: string;
-  lastModified?: string;
-  fetchedAt: string;
-  status: 200;
-  bytes: number;
-  sha256: string;
+import {
+	type Cached,
+	cacheRoot,
+	capBytes,
+	type FileInfo,
+	inside,
+	isMeta,
+	type Meta,
+	pickVictims,
+	sha,
+} from "./cache-meta.ts";
+
+const readMeta = async (file: string): Promise<Meta | undefined> => {
+	try {
+		const m: unknown = JSON.parse(await readFile(`${file}.meta.json`, "utf8"));
+		return isMeta(m) ? m : undefined;
+	} catch {
+		// A body without a valid meta stays usable but has no validators.
+		return undefined;
+	}
 };
 
-export type Cached = { body: string; meta: Meta | undefined };
-
-export const CACHE_CAP_BYTES = 60 * 1024 * 1024;
-
-/** Total cache cap. CLAWDIPEDIA_CACHE_CAP_BYTES overrides it (a user setting; tests also use it). */
-const capBytes = (): number => {
-  const n = Number(process.env["CLAWDIPEDIA_CACHE_CAP_BYTES"]);
-  return process.env["CLAWDIPEDIA_CACHE_CAP_BYTES"] !== undefined &&
-    Number.isFinite(n) &&
-    n >= 0
-    ? n
-    : CACHE_CAP_BYTES;
-};
-
-/** Cache root, first match wins: CLAWDIPEDIA_CACHE_DIR, ${CLAUDE_PLUGIN_DATA}/cache, then the XDG cache dir. */
-export const cacheRoot = (): string => {
-  const env = process.env;
-  if (env["CLAWDIPEDIA_CACHE_DIR"])
-    return resolve(env["CLAWDIPEDIA_CACHE_DIR"]);
-  if (env["CLAUDE_PLUGIN_DATA"])
-    return resolve(env["CLAUDE_PLUGIN_DATA"], "cache");
-  return join(
-    env["XDG_CACHE_HOME"] || join(homedir(), ".cache"),
-    "clawdipedia",
-  );
-};
-
-/** Joins and checks that the result stays inside base. Returns undefined otherwise. */
-export const inside = (
-  base: string,
-  ...parts: string[]
-): string | undefined => {
-  const root = resolve(base);
-  const p = resolve(root, ...parts);
-  return p.startsWith(root + sep) ? p : undefined;
-};
-
-const sha = (b: Buffer | string): string =>
-  createHash("sha256").update(b).digest("hex");
-
-const isMeta = (m: unknown): m is Meta => {
-  if (typeof m !== "object" || m === null) return false;
-  const o = m as Record<string, unknown>;
-  return (
-    typeof o["url"] === "string" &&
-    typeof o["fetchedAt"] === "string" &&
-    typeof o["bytes"] === "number" &&
-    typeof o["sha256"] === "string"
-  );
-};
-
-/** Files pruned first to last when the cache is over the cap. Index files are never pruned. */
-const pruneRank = (relPath: string): number => {
-  const rel = relPath.replaceAll("\\", "/");
-  if (
-    rel.startsWith("platform/pages/") ||
-    rel.startsWith("code/pages/") ||
-    rel.startsWith("claude-resources/pages/")
-  )
-    return 0;
-  if (rel.startsWith("site/pages/") || rel.startsWith("site/schemas/"))
-    return 1;
-  return 2;
-};
+const present = (v: string | undefined): v is string =>
+	v !== undefined && v !== "";
 
 export class DiskCache {
-  private root: string;
-  private memory: Map<string, Cached> | undefined;
-  private approx: number | undefined;
+	private readonly root: string;
+	private readonly memory: Map<string, Cached> | undefined;
+	private approx: number | undefined;
 
-  constructor(root = cacheRoot()) {
-    this.root = root;
-    try {
-      mkdirSync(root, { recursive: true });
-      const probe = join(root, `.probe.${process.pid}`);
-      writeFileSync(probe, "");
-      rmSync(probe);
-    } catch {
-      this.memory = new Map();
-    }
-  }
+	private constructor(root: string, memory: Map<string, Cached> | undefined) {
+		this.root = root;
+		this.memory = memory;
+	}
 
-  private file(rel: string): string | undefined {
-    return inside(this.root, rel);
-  }
+	/** Opens the cache. If the folder cannot be written, the cache lives in memory only. */
+	static async open(root = cacheRoot()): Promise<DiskCache> {
+		try {
+			await mkdir(root, { recursive: true });
+			const probe = join(root, `.probe.${process.pid}`);
+			await writeFile(probe, "");
+			await rm(probe);
+			return new DiskCache(root, undefined);
+		} catch {
+			return new DiskCache(root, new Map());
+		}
+	}
 
-  /** The cached body, or undefined for a miss. A corrupt entry is deleted and counts as a miss. */
-  get(rel: string): Cached | undefined {
-    if (this.memory) return this.memory.get(rel);
-    const file = this.file(rel);
-    if (!file) return undefined;
-    let buf: Buffer;
-    try {
-      buf = readFileSync(file);
-    } catch {
-      return undefined;
-    }
-    let meta: Meta | undefined;
-    try {
-      const m: unknown = JSON.parse(readFileSync(`${file}.meta.json`, "utf8"));
-      if (!isMeta(m)) throw new Error("bad meta");
-      meta = m;
-    } catch {
-      // A body without a valid meta stays usable but has no validators.
-      meta = undefined;
-    }
-    if (meta && (buf.length !== meta.bytes || sha(buf) !== meta.sha256)) {
-      this.delete(rel);
-      return undefined;
-    }
-    return { body: buf.toString("utf8"), meta };
-  }
+	private file(rel: string): string | undefined {
+		return inside(this.root, rel);
+	}
 
-  /** Replaces body and meta. Never throws. */
-  put(
-    rel: string,
-    body: string,
-    v: { url: string; etag?: string; lastModified?: string },
-  ): void {
-    const buf = Buffer.from(body, "utf8");
-    const meta: Meta = {
-      url: v.url,
-      ...(v.etag ? { etag: v.etag } : {}),
-      ...(v.lastModified ? { lastModified: v.lastModified } : {}),
-      fetchedAt: new Date().toISOString(),
-      status: 200,
-      bytes: buf.length,
-      sha256: sha(buf),
-    };
-    if (this.memory) {
-      this.memory.set(rel, { body, meta });
-      this.pruneMemory(rel);
-      return;
-    }
-    const file = this.file(rel);
-    if (!file) return;
-    try {
-      let before = 0;
-      try {
-        before = statSync(file).size;
-      } catch {
-        // New file.
-      }
-      this.atomic(file, buf);
-      this.atomic(`${file}.meta.json`, JSON.stringify(meta));
-      if (this.approx === undefined) this.approx = this.total();
-      else this.approx += buf.length - before;
-      if (this.approx > capBytes()) this.prune(rel);
-    } catch {
-      // A read-only cache only costs the cache.
-    }
-  }
+	/** The cached body, or undefined for a miss. A corrupt entry is deleted and counts as a miss. */
+	async get(rel: string): Promise<Cached | undefined> {
+		if (this.memory) {
+			return this.memory.get(rel);
+		}
+		const file = this.file(rel);
+		if (file === undefined) {
+			return undefined;
+		}
+		let buf: Buffer;
+		try {
+			buf = await readFile(file);
+		} catch {
+			return undefined;
+		}
+		const meta = await readMeta(file);
+		if (meta && (buf.length !== meta.bytes || sha(buf) !== meta.sha256)) {
+			await this.delete(rel);
+			return undefined;
+		}
+		return { body: buf.toString("utf8"), meta };
+	}
 
-  /** 304: the body is still good. Only fetchedAt moves. */
-  touch(rel: string): void {
-    const c = this.get(rel);
-    if (!c?.meta) return;
-    const meta = { ...c.meta, fetchedAt: new Date().toISOString() };
-    if (this.memory) {
-      this.memory.set(rel, { body: c.body, meta });
-      return;
-    }
-    const file = this.file(rel);
-    if (!file) return;
-    try {
-      this.atomic(`${file}.meta.json`, JSON.stringify(meta));
-    } catch {
-      // Ignore.
-    }
-  }
+	/** Replaces body and meta. Never throws. */
+	async put(
+		rel: string,
+		body: string,
+		v: { url: string; etag?: string; lastModified?: string },
+	): Promise<void> {
+		const buf = Buffer.from(body, "utf8");
+		const meta: Meta = {
+			url: v.url,
+			...(present(v.etag) ? { etag: v.etag } : {}),
+			...(present(v.lastModified) ? { lastModified: v.lastModified } : {}),
+			fetchedAt: new Date().toISOString(),
+			status: 200,
+			bytes: buf.length,
+			sha256: sha(buf),
+		};
+		if (this.memory) {
+			this.memory.set(rel, { body, meta });
+			this.pruneMemory(rel);
+			return;
+		}
+		const file = this.file(rel);
+		if (file === undefined) {
+			return;
+		}
+		try {
+			let before = 0;
+			try {
+				const st = await stat(file);
+				before = st.size;
+			} catch {
+				// New file.
+			}
+			await this.atomic(file, buf);
+			await this.atomic(`${file}.meta.json`, JSON.stringify(meta));
+			this.approx =
+				this.approx === undefined
+					? await this.total()
+					: this.approx + buf.length - before;
+			if (this.approx > capBytes()) {
+				await this.prune(rel);
+			}
+		} catch {
+			// A read-only cache only costs the cache.
+		}
+	}
 
-  delete(rel: string): void {
-    if (this.memory) {
-      this.memory.delete(rel);
-      return;
-    }
-    const file = this.file(rel);
-    if (!file) return;
-    try {
-      rmSync(file, { force: true });
-      rmSync(`${file}.meta.json`, { force: true });
-    } catch {
-      // Ignore.
-    }
-  }
+	/** 304: the body is still good. Only fetchedAt moves. */
+	async touch(rel: string): Promise<void> {
+		const c = await this.get(rel);
+		if (!c?.meta) {
+			return;
+		}
+		const meta = { ...c.meta, fetchedAt: new Date().toISOString() };
+		if (this.memory) {
+			this.memory.set(rel, { body: c.body, meta });
+			return;
+		}
+		const file = this.file(rel);
+		if (file === undefined) {
+			return;
+		}
+		try {
+			await this.atomic(`${file}.meta.json`, JSON.stringify(meta));
+		} catch {
+			// Ignore.
+		}
+	}
 
-  private atomic(file: string, data: Buffer | string): void {
-    mkdirSync(dirname(file), { recursive: true });
-    const tmp = `${file}.${process.pid}.tmp`;
-    try {
-      writeFileSync(tmp, data);
-      renameSync(tmp, file);
-    } catch (e) {
-      rmSync(tmp, { force: true });
-      throw e;
-    }
-  }
+	async delete(rel: string): Promise<void> {
+		if (this.memory) {
+			this.memory.delete(rel);
+			return;
+		}
+		const file = this.file(rel);
+		if (file === undefined) {
+			return;
+		}
+		try {
+			await rm(file, { force: true });
+			await rm(`${file}.meta.json`, { force: true });
+		} catch {
+			// Ignore.
+		}
+	}
 
-  private files(): { rel: string; size: number; at: number }[] {
-    const out: { rel: string; size: number; at: number }[] = [];
-    let names: string[];
-    try {
-      names = readdirSync(this.root, { recursive: true }) as string[];
-    } catch {
-      return out;
-    }
-    for (const rel of names) {
-      if (rel.endsWith(".meta.json") || rel.endsWith(".tmp")) continue;
-      try {
-        const s = statSync(join(this.root, rel));
-        if (!s.isFile()) continue;
-        let at = s.mtimeMs;
-        try {
-          at = Date.parse(
-            (
-              JSON.parse(
-                readFileSync(join(this.root, `${rel}.meta.json`), "utf8"),
-              ) as Meta
-            ).fetchedAt,
-          );
-        } catch {
-          // Use mtime.
-        }
-        out.push({ rel, size: s.size, at });
-      } catch {
-        // Gone already.
-      }
-    }
-    return out;
-  }
+	private async atomic(file: string, data: Buffer | string): Promise<void> {
+		await mkdir(dirname(file), { recursive: true });
+		const tmp = `${file}.${process.pid}.tmp`;
+		try {
+			await writeFile(tmp, data);
+			await rename(tmp, file);
+		} catch (error) {
+			await rm(tmp, { force: true });
+			throw error;
+		}
+	}
 
-  private total(): number {
-    return this.files().reduce((n, f) => n + f.size, 0);
-  }
+	private async fileInfo(rel: string): Promise<FileInfo | undefined> {
+		try {
+			const path = join(this.root, rel);
+			const s = await stat(path);
+			if (!s.isFile()) {
+				return undefined;
+			}
+			const meta = await readMeta(path);
+			return {
+				rel,
+				size: s.size,
+				at: meta ? Date.parse(meta.fetchedAt) : s.mtimeMs,
+			};
+		} catch {
+			// Gone already.
+			return undefined;
+		}
+	}
 
-  /** Same rules as prune(), for the in-memory fallback. */
-  private pruneMemory(keep: string): void {
-    const mem = this.memory;
-    if (!mem) return;
-    const all = [...mem].map(([rel, c]) => ({
-      rel,
-      size: Buffer.byteLength(c.body),
-      at: c.meta ? Date.parse(c.meta.fetchedAt) : 0,
-    }));
-    let size = all.reduce((n, f) => n + f.size, 0);
-    const victims = all
-      .filter((f) => pruneRank(f.rel) < 2 && f.rel !== keep)
-      .sort((a, b) => pruneRank(a.rel) - pruneRank(b.rel) || a.at - b.at);
-    for (const f of victims) {
-      if (size <= capBytes()) break;
-      mem.delete(f.rel);
-      size -= f.size;
-    }
-  }
+	private async files(): Promise<FileInfo[]> {
+		let names: string[];
+		try {
+			names = await readdir(this.root, { recursive: true });
+		} catch {
+			return [];
+		}
+		const wanted = names.filter(
+			(rel) => !rel.endsWith(".meta.json") && !rel.endsWith(".tmp"),
+		);
+		const infos = await Promise.all(wanted.map((rel) => this.fileInfo(rel)));
+		return infos.filter((i) => i !== undefined);
+	}
 
-  /** Deletes the least recently fetched files (pages of platform, code, and claude-resources first, then site pages) until under the cap. */
-  private prune(keep: string): void {
-    const all = this.files();
-    let size = all.reduce((n, f) => n + f.size, 0);
-    const victims = all
-      .filter((f) => pruneRank(f.rel) < 2 && f.rel !== keep)
-      .sort((a, b) => pruneRank(a.rel) - pruneRank(b.rel) || a.at - b.at);
-    for (const f of victims) {
-      if (size <= capBytes()) break;
-      this.delete(f.rel);
-      size -= f.size;
-    }
-    this.approx = size;
-  }
+	private async total(): Promise<number> {
+		const all = await this.files();
+		return all.reduce((n, f) => n + f.size, 0);
+	}
+
+	/** Same rules as prune(), for the in-memory fallback. */
+	private pruneMemory(keep: string): void {
+		const mem = this.memory;
+		if (!mem) {
+			return;
+		}
+		const all = [...mem].map(([rel, c]) => ({
+			rel,
+			size: Buffer.byteLength(c.body),
+			at: c.meta ? Date.parse(c.meta.fetchedAt) : 0,
+		}));
+		for (const f of pickVictims(all, keep)) {
+			mem.delete(f.rel);
+		}
+	}
+
+	/** Deletes the least recently fetched files (pages of platform, code, and claude-resources first, then site pages) until under the cap. */
+	private async prune(keep: string): Promise<void> {
+		const all = await this.files();
+		const victims = pickVictims(all, keep);
+		await Promise.all(victims.map((f) => this.delete(f.rel)));
+		this.approx =
+			all.reduce((n, f) => n + f.size, 0) -
+			victims.reduce((n, f) => n + f.size, 0);
+	}
 }

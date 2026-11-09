@@ -1,7 +1,4 @@
 // The Claude Code 2.1.307 Mod API type file, as the program embeds it.
-// biome-ignore-all format: verbatim from the program
-// biome-ignore-all lint: verbatim from the program
-// biome-ignore-all assist: verbatim from the program
 declare module 'claude-code' {
   /**
    * What a `tool.check` hook returns.

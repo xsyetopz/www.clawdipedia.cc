@@ -1,0 +1,4 @@
+// Fixtures copy pages from the doc sources as the server reads them.
+{
+	"default": false,
+}
