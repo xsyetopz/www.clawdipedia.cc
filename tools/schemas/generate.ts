@@ -6,7 +6,7 @@ import { mkdir } from "node:fs/promises";
 import { join } from "node:path";
 
 import { CLAUDE_CODE_VERSION } from "../../src/version.ts";
-import { buildFiles, isRawSchemas } from "./build.ts";
+import { buildFiles } from "./build.ts";
 import { type Capture, findBinary, ID, runCapture } from "./capture.ts";
 import { formatJson } from "./format.ts";
 import { PAYLOAD_CAPTURES } from "./payloads/capture.ts";
@@ -98,9 +98,6 @@ const { raw, lossy, found } = await runCapture(await findBinary(), [
 	...CAPTURES,
 	...PAYLOAD_CAPTURES,
 ]);
-if (!isRawSchemas(raw)) {
-	throw new TypeError("the capture gave raw schemas that are not objects");
-}
 await mkdir(SCHEMAS, { recursive: true });
 const files = buildFiles(raw, CLAUDE_CODE_VERSION);
 // Format as `bun fmt` does so regenerating leaves a clean diff.

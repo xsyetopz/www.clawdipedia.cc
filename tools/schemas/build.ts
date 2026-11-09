@@ -11,7 +11,8 @@ export { CODE_FILES, FILES, KINDS } from "./files.ts";
 
 // Turns the raw toJSONSchema output into the published files (design D2).
 export type Json = Record<string, unknown>;
-export type RawSchemas = Record<string, Json>;
+// A kind holds one schema, or a list of rows (control, tools) that the payload builders check themselves.
+export type RawSchemas = Record<string, unknown>;
 
 export const BASE_URL = "https://clawdipedia.cc/schemas";
 
@@ -168,8 +169,7 @@ const withHeader = (
 	};
 };
 
-export const isRawSchemas = (v: unknown): v is RawSchemas =>
-	isObject(v) && Object.values(v).every((x) => isObject(x));
+export const isRawSchemas = (v: unknown): v is RawSchemas => isObject(v);
 
 type Need = (k: string) => Json;
 
