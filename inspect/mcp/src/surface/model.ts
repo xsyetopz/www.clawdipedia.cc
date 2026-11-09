@@ -7,44 +7,49 @@
 // (`["sonnet","opus","haiku","fable","best",…,"opusplan"]`); `detail` is "alias".
 // The old `strings` heuristic has no model list, so there is nothing to compare.
 import {
-  type Extractor,
-  type SurfaceItem,
-  scan,
-  strings,
-  unique,
+	type Extractor,
+	scan,
+	strings,
+	type SurfaceItem,
+	unique,
 } from "./common.ts";
 
 const ID =
-  /^claude-(?:\d[\d-]*-)?(?:opus|sonnet|haiku|fable|mythos)(?:-[a-z0-9]+)*(?:@\d+)?(?:\[1m\])?$/;
+	/^claude-(?:\d[\d-]*-)?(?:opus|sonnet|haiku|fable|mythos)(?:-[a-z0-9]+)*(?:@\d+)?(?:\[1m\])?$/u;
 
 export const extractModels: Extractor = (bundle) => {
-  const out: SurfaceItem[] = [];
-  let aliases: { m: string; start: number; names: string[] } | undefined;
-  scan(bundle, ['"claude-', '"opusplan"'], (m, n) => {
-    if (n.type === "StringLiteral" && ID.test(n.value))
-      out.push({
-        kind: "model",
-        name: n.value,
-        module: m.name,
-        offset: n.start,
-        detail: "id",
-      });
-    if (n.type !== "ArrayExpression") return;
-    const s = strings(m, n);
-    if (
-      s?.includes("opusplan") &&
-      s.includes("sonnet") &&
-      (!aliases || s.length > aliases.names.length)
-    )
-      aliases = { m: m.name, start: n.start, names: s };
-  });
-  for (const name of aliases?.names ?? [])
-    out.push({
-      kind: "model",
-      name,
-      module: aliases?.m ?? null,
-      offset: aliases?.start ?? null,
-      detail: "alias",
-    });
-  return unique(out);
+	const out: SurfaceItem[] = [];
+	let aliases: { m: string; start: number; names: string[] } | undefined;
+	scan(bundle, ['"claude-', '"opusplan"'], (m, n) => {
+		if (n.type === "StringLiteral" && ID.test(n.value)) {
+			out.push({
+				kind: "model",
+				name: n.value,
+				module: m.name,
+				offset: n.start,
+				detail: "id",
+			});
+		}
+		if (n.type !== "ArrayExpression") {
+			return;
+		}
+		const s = strings(m, n);
+		if (
+			s?.includes("opusplan") === true &&
+			s.includes("sonnet") &&
+			(!aliases || s.length > aliases.names.length)
+		) {
+			aliases = { m: m.name, start: n.start, names: s };
+		}
+	});
+	for (const name of aliases?.names ?? []) {
+		out.push({
+			kind: "model",
+			name,
+			module: aliases?.m ?? null,
+			offset: aliases?.start ?? null,
+			detail: "alias",
+		});
+	}
+	return unique(out);
 };

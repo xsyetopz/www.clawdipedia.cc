@@ -12,104 +12,146 @@
 // (`tengu_calm_eagle`) and 224 have a literal default; the rest are reads with no default or with an
 // object option (`*_config`, `*_killswitch`, `*_ms`).
 import type * as t from "@babel/types";
+
 import {
-  children,
-  constString,
-  type Fn,
-  functionOf,
-  type Module,
-  type Node,
+	children,
+	constString,
+	type Fn,
+	functionOf,
+	type Module,
+	type Node,
 } from "../ast.ts";
 import {
-  type Extractor,
-  keyOf,
-  literal,
-  type SurfaceItem,
-  scan,
-  unique,
+	asNode,
+	type Extractor,
+	keyOf,
+	literal,
+	scan,
+	type SurfaceItem,
+	unique,
 } from "./common.ts";
 
-type Site = { m: Module; n: Node & t.CallExpression; name: string };
+interface Site {
+	m: Module;
+	n: Node & t.CallExpression;
+	name: string;
+}
+
+/** A group is the function the calls reach, or `.name` for a member call, or the callee text. */
+type Group = Fn | string;
 
 /** An object argument with a key other than `safe`: an event payload. */
 const payload = (n: Node | undefined): boolean =>
-  n?.type === "ObjectExpression" &&
-  n.properties.some((p) => keyOf(p) !== "safe");
+	n?.type === "ObjectExpression" &&
+	n.properties.some((p) => keyOf(p) !== "safe");
+
+const groupOf = (m: Module, c: Node): Group => {
+	const fn = functionOf(m, c)?.fn;
+	if (fn) {
+		return fn;
+	}
+	const prop =
+		c.type === "MemberExpression" && c.property.type !== "PrivateName"
+			? asNode(c.property)
+			: undefined;
+	return prop ? `.${m.src(prop)}` : m.src(c);
+};
+
+/** Does `fn` call a logger with its first parameter `name` as the first argument? */
+const forwards = (
+	fm: Module,
+	fn: Fn,
+	name: string,
+	loggers: Set<Group>,
+): boolean => {
+	const root = asNode(fn.body);
+	const stack: Node[] = root ? [root] : [];
+	for (let n = stack.pop(); n !== undefined; n = stack.pop()) {
+		if (n.type === "CallExpression") {
+			const a0 = n.arguments[0];
+			const callee = asNode(n.callee);
+			const target = callee && functionOf(fm, callee)?.fn;
+			if (
+				a0?.type === "Identifier" &&
+				a0.name === name &&
+				target !== undefined &&
+				loggers.has(target)
+			) {
+				return true;
+			}
+		}
+		stack.push(...children(n));
+	}
+	return false;
+};
+
+/** A wrapper `fo(e){…a(e,{…})…}` that passes its first parameter on to a logger is a logger too. Did one join? */
+const growLoggers = (
+	groups: Map<Group, Site[]>,
+	loggers: Set<Group>,
+): boolean => {
+	let grew = false;
+	for (const [k, sites] of groups) {
+		if (loggers.has(k) || typeof k === "string") {
+			continue;
+		}
+		const p = k.params[0];
+		const first = sites[0];
+		const callee = first && asNode(first.n.callee);
+		const fm = first && callee && functionOf(first.m, callee)?.module;
+		if (p?.type === "Identifier" && fm && forwards(fm, k, p.name, loggers)) {
+			loggers.add(k);
+			grew = true;
+		}
+	}
+	return grew;
+};
 
 export const extractGates: Extractor = (bundle) => {
-  const groups = new Map<unknown, Site[]>();
-  scan(bundle, ['"tengu_'], (m, n) => {
-    if (n.type !== "CallExpression") return;
-    const name = constString(m, n.arguments[0] as Node | undefined);
-    if (!name || !/^tengu_[a-z0-9_]*[a-z0-9]$/.test(name)) return;
-    const c = n.callee as Node;
-    const key =
-      functionOf(m, c)?.fn ??
-      (c.type === "MemberExpression" && c.property.type !== "PrivateName"
-        ? `.${m.src(c.property as Node)}`
-        : m.src(c));
-    const g = groups.get(key) ?? [];
-    g.push({ m, n: n as Site["n"], name });
-    groups.set(key, g);
-  });
-  const loggers = new Set(
-    [...groups]
-      .filter(
-        ([, s]) =>
-          s.filter((x) => payload(x.n.arguments[1] as Node | undefined))
-            .length *
-            2 >
-          s.length,
-      )
-      .map(([k]) => k),
-  );
-  // A wrapper `fo(e){…a(e,{…})…}` that passes its first parameter on to a logger is a logger too.
-  for (let grew = true; grew; ) {
-    grew = false;
-    for (const [k, sites] of groups) {
-      if (loggers.has(k) || typeof k === "string") continue;
-      const fn = k as Fn;
-      const p = fn.params[0];
-      const m = sites[0]?.m;
-      const fm = m && functionOf(m, sites[0]?.n.callee as Node)?.module;
-      if (p?.type !== "Identifier" || !fm) continue;
-      const stack: Node[] = [fn.body as Node];
-      while (stack.length) {
-        const n = stack.pop() as Node;
-        const a0 = n.type === "CallExpression" ? n.arguments[0] : undefined;
-        if (
-          a0?.type === "Identifier" &&
-          a0.name === p.name &&
-          loggers.has(
-            functionOf(fm, (n as t.CallExpression).callee as Node)?.fn,
-          )
-        ) {
-          loggers.add(k);
-          grew = true;
-          break;
-        }
-        stack.push(...children(n));
-      }
-    }
-  }
-  const out: SurfaceItem[] = [];
-  for (const [k, sites] of groups) {
-    if (loggers.has(k)) continue;
-    for (const { m, n, name } of sites) {
-      const d = n.arguments[1] as Node | undefined;
-      const def = !d
-        ? undefined
-        : d.type === "ObjectExpression"
-          ? undefined
-          : literal(m, d);
-      out.push({
-        kind: "gate",
-        name,
-        module: m.name,
-        offset: n.start,
-        ...(def && { default: def }),
-      });
-    }
-  }
-  return unique(out);
+	const groups = new Map<Group, Site[]>();
+	scan(bundle, ['"tengu_'], (m, n) => {
+		if (n.type !== "CallExpression") {
+			return;
+		}
+		const name = constString(m, asNode(n.arguments[0]));
+		const c = asNode(n.callee);
+		if (name === undefined || !c || !/^tengu_[a-z0-9_]*[a-z0-9]$/u.test(name)) {
+			return;
+		}
+		const key = groupOf(m, c);
+		const g = groups.get(key) ?? [];
+		g.push({ m, n, name });
+		groups.set(key, g);
+	});
+	const loggers = new Set<Group>(
+		[...groups]
+			.filter(
+				([, s]) =>
+					s.filter((x) => payload(asNode(x.n.arguments[1]))).length * 2 >
+					s.length,
+			)
+			.map(([k]) => k),
+	);
+	for (let grew = true; grew;) {
+		grew = growLoggers(groups, loggers);
+	}
+	const out: SurfaceItem[] = [];
+	for (const [k, sites] of groups) {
+		if (loggers.has(k)) {
+			continue;
+		}
+		for (const { m, n, name } of sites) {
+			const d = asNode(n.arguments[1]);
+			const def =
+				d && d.type !== "ObjectExpression" ? literal(m, d) : undefined;
+			out.push({
+				kind: "gate",
+				name,
+				module: m.name,
+				offset: n.start,
+				...(def !== undefined && { default: def }),
+			});
+		}
+	}
+	return unique(out);
 };

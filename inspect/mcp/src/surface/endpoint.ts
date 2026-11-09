@@ -10,57 +10,76 @@
 // `example.com` and `.invalid`) are left out: they are bundled library code or links, not endpoints of
 // the program's own service.
 // The old `strings` heuristic has no endpoint list, so there is nothing to compare.
+import type * as t from "@babel/types";
+
 import {
-  type Extractor,
-  type SurfaceItem,
-  scan,
-  short,
-  unique,
+	type Extractor,
+	scan,
+	short,
+	type SurfaceItem,
+	unique,
 } from "./common.ts";
 
 const HOST =
-  /(?:^|\.)(?:anthropic\.com|claude\.(?:ai|com)|clau\.de|ant\.dev|claude\.fedstart\.com)$/;
+	/(?:^|\.)(?:anthropic\.com|claude\.(?:ai|com)|clau\.de|ant\.dev|claude\.fedstart\.com)$/u;
 
 const hostOf = (s: string): string | undefined => {
-  try {
-    return new URL(s).hostname;
-  } catch {
-    return undefined;
-  }
+	try {
+		return new URL(s).hostname;
+	} catch {
+		return undefined;
+	}
 };
 
-const PATH = /^\/(?:api|v1|model)\/[\w./{}?=*%-]*$/;
+const PATH = /^\/(?:api|v1|model)\/[\w./{}?=*%-]*$/u;
+
+type Add = (name: string, offset: number, detail: string) => void;
+
+const addString = (s: string, offset: number, add: Add): void => {
+	if (PATH.test(s)) {
+		add(s, offset, "path");
+	}
+	if (!s.startsWith("https://") || !HOST.test(hostOf(s) ?? "")) {
+		return;
+	}
+	add(s, offset, "url");
+	const p = new URL(s).pathname;
+	if (PATH.test(p)) {
+		add(p, offset, "path");
+	}
+};
+
+const addTemplate = (n: t.TemplateLiteral, offset: number, add: Add): void => {
+	const parts = n.quasis.map((q) => q.value.cooked ?? q.value.raw);
+	const e = n.expressions[0];
+	const base =
+		e?.type === "MemberExpression" &&
+		!e.computed &&
+		e.property.type === "Identifier" &&
+		e.property.name === "BASE_API_URL";
+	// `/v1/x/${id}`, or `${base}/v1/x`; after BASE_API_URL any path counts.
+	const rest = parts[0] === "" && e ? parts.slice(1) : parts;
+	const path = short(rest.join(`\${}`));
+	if (base ? path.startsWith("/") : PATH.test(rest[0] ?? "x")) {
+		add(path, offset, "path");
+	}
+};
 
 export const extractEndpoints: Extractor = (bundle) => {
-  const out: SurfaceItem[] = [];
-  const add = (name: string, offset: number, m: string, detail: string) =>
-    out.push({ kind: "endpoint", name, module: m, offset, detail });
-  scan(
-    bundle,
-    ["https://", "BASE_API_URL", '"/api/', '"/v1/', "`/"],
-    (m, n) => {
-      if (n.type === "StringLiteral") {
-        const s = n.value;
-        if (PATH.test(s)) add(s, n.start, m.name, "path");
-        if (!s.startsWith("https://") || !HOST.test(hostOf(s) ?? "")) return;
-        add(s, n.start, m.name, "url");
-        const p = new URL(s).pathname;
-        if (PATH.test(p)) add(p, n.start, m.name, "path");
-      } else if (n.type === "TemplateLiteral") {
-        const t = n.quasis.map((q) => q.value.cooked ?? q.value.raw);
-        const e = n.expressions[0];
-        const base =
-          e?.type === "MemberExpression" &&
-          !e.computed &&
-          e.property.type === "Identifier" &&
-          e.property.name === "BASE_API_URL";
-        // `/v1/x/${id}`, or `${base}/v1/x`; after BASE_API_URL any path counts.
-        const rest = t[0] === "" && e ? t.slice(1) : t;
-        const path = short(rest.join(`\${}`));
-        if (base ? path.startsWith("/") : PATH.test(rest[0] ?? "x"))
-          add(path, n.start, m.name, "path");
-      }
-    },
-  );
-  return unique(out);
+	const out: SurfaceItem[] = [];
+	scan(
+		bundle,
+		["https://", "BASE_API_URL", '"/api/', '"/v1/', "`/"],
+		(m, n) => {
+			const add: Add = (name, offset, detail) => {
+				out.push({ kind: "endpoint", name, module: m.name, offset, detail });
+			};
+			if (n.type === "StringLiteral") {
+				addString(n.value, n.start, add);
+			} else if (n.type === "TemplateLiteral") {
+				addTemplate(n, n.start, add);
+			}
+		},
+	);
+	return unique(out);
 };

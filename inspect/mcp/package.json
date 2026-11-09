@@ -1,18 +1,18 @@
 {
-  "name": "cc-inspect-mcp",
-  "version": "0.14.0",
-  "private": true,
-  "license": "MIT",
-  "type": "module",
-  "description": "MCP server that reads Claude Code session transcripts and the modules inside the Claude Code binary. Source for dist/server.js, which is committed.",
-  "scripts": {
-    "build": "bun build src/server.ts --target=bun --outfile=dist/server.js"
-  },
-  "dependencies": {
-    "@babel/parser": "8.1.0",
-    "@babel/traverse": "8.1.0",
-    "@babel/types": "8.1.0",
-    "@modelcontextprotocol/sdk": "^1.32.2",
-    "zod": "^4.6.7"
-  }
+	"name": "cc-inspect-mcp",
+	"version": "0.14.0",
+	"private": true,
+	"description": "MCP server that reads Claude Code session transcripts and the modules inside the Claude Code binary. Source for dist/server.js, which is committed.",
+	"license": "MIT",
+	"type": "module",
+	"scripts": {
+		"build": "bun build src/server.ts --target=bun --outfile=dist/server.js"
+	},
+	"dependencies": {
+		"@babel/parser": "8.1.0",
+		"@babel/traverse": "8.1.0",
+		"@babel/types": "8.1.0",
+		"@modelcontextprotocol/sdk": "^1.32.2",
+		"zod": "^4.6.7"
+	}
 }

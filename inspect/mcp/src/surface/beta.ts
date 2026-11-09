@@ -9,33 +9,46 @@
 // Left out: `bedrock-2023-05-31` and `vertex-2023-10-16`, which have the same form but are values of
 // `anthropic_version`, not betas.
 // The old `strings` heuristic has no beta list, so there is nothing to compare.
-import { constString, type Node } from "../ast.ts";
-import { type Extractor, type SurfaceItem, scan, unique } from "./common.ts";
+import { constString } from "../ast.ts";
+import {
+	asNode,
+	type Extractor,
+	scan,
+	type SurfaceItem,
+	unique,
+} from "./common.ts";
 
-const BETA = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*-\d{4}-\d\d-\d\d$/;
-const COMPACT = /^[a-z]+(?:-[a-z]+)*-\d{8}$/;
-const VERSION = /^(?:bedrock|vertex)-/;
+const BETA = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*-\d{4}-\d\d-\d\d$/u;
+const COMPACT = /^[a-z]+(?:-[a-z]+)*-\d{8}$/u;
+const VERSION = /^(?:bedrock|vertex)-/u;
 
 export const extractBetas: Extractor = (bundle) => {
-  const out: SurfaceItem[] = [];
-  scan(bundle, ["-20"], (m, n) => {
-    if (n.type !== "StringLiteral") return;
-    const dated = BETA.test(n.value) && !VERSION.test(n.value);
-    const compact = COMPACT.test(n.value);
-    if (!dated && !compact) return;
-    const p = m.parent(n);
-    const group =
-      p?.type === "CallExpression" && p.arguments[1] === n
-        ? constString(m, p.arguments[0] as Node)
-        : undefined;
-    if (!dated && !group) return;
-    out.push({
-      kind: "beta",
-      name: n.value,
-      module: m.name,
-      offset: n.start,
-      ...(group && { detail: group }),
-    });
-  });
-  return unique(out);
+	const out: SurfaceItem[] = [];
+	scan(bundle, ["-20"], (m, n) => {
+		if (n.type !== "StringLiteral") {
+			return;
+		}
+		const dated = BETA.test(n.value) && !VERSION.test(n.value);
+		const compact = COMPACT.test(n.value);
+		if (!dated && !compact) {
+			return;
+		}
+		const p = m.parent(n);
+		const group =
+			p?.type === "CallExpression" && p.arguments[1] === n
+				? constString(m, asNode(p.arguments[0]))
+				: undefined;
+		const hasGroup = group !== undefined && group !== "";
+		if (!dated && !hasGroup) {
+			return;
+		}
+		out.push({
+			kind: "beta",
+			name: n.value,
+			module: m.name,
+			offset: n.start,
+			...(hasGroup && { detail: group }),
+		});
+	});
+	return unique(out);
 };

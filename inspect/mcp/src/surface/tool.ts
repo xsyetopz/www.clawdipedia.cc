@@ -4,18 +4,25 @@
 // The old `strings` heuristic has no tool list, so there is nothing to compare.
 import { Resolver } from "../resolve.ts";
 import { baseTools } from "../tools.ts";
-import { type Extractor, short, unique } from "./common.ts";
+import { type Extractor, short, type SurfaceItem, unique } from "./common.ts";
 
 export const extractTools: Extractor = (bundle) => {
-  const r = baseTools(bundle, new Resolver());
-  return unique(
-    r.tools.map((t) => ({
-      kind: "tool",
-      name: t.name,
-      module: r.module,
-      offset: null,
-      ...(t.when.length > 0 && { gate: t.when.join(" && ") }),
-      ...(t.enabled && { detail: short(t.enabled) }),
-    })),
-  );
+	const r = baseTools(bundle, new Resolver());
+	const items: SurfaceItem[] = [];
+	for (const t of r.tools) {
+		const item: SurfaceItem = {
+			kind: "tool",
+			name: t.name,
+			module: r.module,
+			offset: null,
+		};
+		if (t.when.length > 0) {
+			item.gate = t.when.join(" && ");
+		}
+		if (t.enabled !== undefined && t.enabled !== "") {
+			item.detail = short(t.enabled);
+		}
+		items.push(item);
+	}
+	return unique(items);
 };

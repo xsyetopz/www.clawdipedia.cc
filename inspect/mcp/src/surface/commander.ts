@@ -16,195 +16,263 @@
 // - subcommand: 71 paths, 56 old names. Only here: `apply-project-settings`, named by a constant
 //   (`.command(Hmn,{hidden:!0})`). None only there.
 import type * as t from "@babel/types";
+
 import {
-  constString,
-  functionOf,
-  type Module,
-  type Node,
-  returnsOf,
+	constString,
+	functionOf,
+	type Module,
+	type Node,
+	returnsOf,
 } from "../ast.ts";
 import {
-  type Extractor,
-  type SurfaceItem,
-  scan,
-  short,
-  unique,
+	asNode,
+	type Extractor,
+	scan,
+	short,
+	type SurfaceItem,
+	unique,
 } from "./common.ts";
 
-const SPEC = /^(?:-[\w-]+, ?)?--?[a-zA-Z][\w-]*/;
-
-type Call = Node & t.CallExpression;
+const SPEC = /^(?:-[\w-]+, ?)?--?[a-zA-Z][\w-]*/u;
 
 const method = (n: Node | undefined): string | undefined =>
-  n?.type === "CallExpression" &&
-  n.callee.type === "MemberExpression" &&
-  n.callee.property.type === "Identifier"
-    ? n.callee.property.name
-    : undefined;
+	n?.type === "CallExpression" &&
+	n.callee.type === "MemberExpression" &&
+	n.callee.property.type === "Identifier"
+		? n.callee.property.name
+		: undefined;
+
+/** The initializer of the variable `n` names, when its first declaration is a `let`/`const`/`var`. */
+const initOf = (m: Module, n: Node): Node | undefined => {
+	const def = m.variable(n)?.defs[0];
+	return def?.type === "Variable" ? asNode(def.node.init) : undefined;
+};
 
 /** The command words of `.command("x")` calls below `n` in its chain, outermost last. */
 const chainCommands = (
-  m: Module,
-  n: Node,
-  seen = new Set<unknown>(),
+	m: Module,
+	n: Node,
+	seen = new Set<unknown>(),
 ): string[] => {
-  const out: string[] = [];
-  let cur: Node | undefined = n;
-  while (cur) {
-    if (
-      cur.type === "CallExpression" &&
-      cur.callee.type === "MemberExpression"
-    ) {
-      if (method(cur) === "command") {
-        const s = constString(m, cur.arguments[0] as Node | undefined);
-        if (s) out.unshift(s.split(/\s/)[0] as string);
-      }
-      cur = cur.callee.object as Node;
-    } else if (cur.type === "Identifier" && !seen.has(cur.name)) {
-      // `let x=program.command("mcp")…; x.command("add")`
-      seen.add(cur.name);
-      const def = m.variable(cur)?.defs[0];
-      const init =
-        def?.type === "Variable" ? (def.node.init as Node | null) : null;
-      return init ? [...chainCommands(m, init, seen), ...out] : out;
-    } else return out;
-  }
-  return out;
+	const out: string[] = [];
+	let cur: Node | undefined = n;
+	while (cur) {
+		if (
+			cur.type === "CallExpression" &&
+			cur.callee.type === "MemberExpression"
+		) {
+			if (method(cur) === "command") {
+				const s = constString(m, asNode(cur.arguments[0]));
+				if (s !== undefined && s !== "") {
+					out.unshift(s.split(/\s/u)[0] ?? "");
+				}
+			}
+			cur = asNode(cur.callee.object);
+		} else if (cur.type === "Identifier" && !seen.has(cur.name)) {
+			// `let x=program.command("mcp")…; x.command("add")`
+			seen.add(cur.name);
+			const init = initOf(m, cur);
+			return init ? [...chainCommands(m, init, seen), ...out] : out;
+		} else {
+			return out;
+		}
+	}
+	return out;
 };
 
 /** The calls chained on `call`: `call.a().b()`. */
 const chainedAfter = (m: Module, call: Node): string[] => {
-  const out: string[] = [];
-  let cur = call;
-  for (;;) {
-    const mem = m.parent(cur);
-    const next = mem?.type === "MemberExpression" ? m.parent(mem) : undefined;
-    const name = next && method(next);
-    if (!next || !name) return out;
-    out.push(name);
-    cur = next;
-  }
+	const out: string[] = [];
+	let cur = call;
+	for (;;) {
+		const mem = m.parent(cur);
+		const next = mem?.type === "MemberExpression" ? m.parent(mem) : undefined;
+		const name = method(next);
+		if (!next || name === undefined) {
+			return out;
+		}
+		out.push(name);
+		cur = next;
+	}
 };
 
 /** Does this option expression call `.hideHelp()` in its own chain, or (a variable) in another statement? */
 const hides = (m: Module, n: Node, skip?: Node): boolean => {
-  if (n.type === "Identifier")
-    return !!m.variable(n)?.references.some((r) => {
-      const id = r.identifier as Node;
-      if (skip && id.start >= skip.start && id.end <= skip.end) return false;
-      const p = m.parent(id);
-      return (
-        p?.type === "MemberExpression" && method(m.parent(p)) === "hideHelp"
-      );
-    });
-  for (
-    let cur: Node = n;
-    cur.type === "CallExpression" && cur.callee.type === "MemberExpression";
-    cur = cur.callee.object as Node
-  )
-    if (method(cur) === "hideHelp") return true;
-  return false;
+	if (n.type === "Identifier") {
+		const refs = m.variable(n)?.references ?? [];
+		return refs.some((r) => {
+			const id = r.identifier;
+			if (skip && id.start >= skip.start && id.end <= skip.end) {
+				return false;
+			}
+			const p = m.parent(id);
+			return (
+				p?.type === "MemberExpression" && method(m.parent(p)) === "hideHelp"
+			);
+		});
+	}
+	let cur: Node | undefined = n;
+	while (
+		cur?.type === "CallExpression" &&
+		cur.callee.type === "MemberExpression"
+	) {
+		if (method(cur) === "hideHelp") {
+			return true;
+		}
+		cur = asNode(cur.callee.object);
+	}
+	return false;
 };
 
 /** The `new Option(...)` behind an `addOption` argument: through call chains, `a?b:c`, variables, and factories. */
 const optionOf = (
-  m: Module,
-  n: Node,
-  seen = new Set<unknown>(),
+	m: Module,
+	n: Node,
+	seen = new Set<unknown>(),
 ): { m: Module; n: Node & t.NewExpression } | undefined => {
-  if (seen.has(n)) return undefined;
-  seen.add(n);
-  if (n.type === "NewExpression") return { m, n: n as Node & t.NewExpression };
-  if (n.type === "ConditionalExpression")
-    return optionOf(m, n.consequent as Node, seen);
-  if (n.type === "CallExpression" && n.callee.type === "MemberExpression")
-    return optionOf(m, n.callee.object as Node, seen);
-  if (n.type === "CallExpression") {
-    const f = functionOf(m, n.callee as Node);
-    const r = f && returnsOf(f.fn)[0];
-    return r ? optionOf(f.module, r, seen) : undefined;
-  }
-  if (n.type === "Identifier") {
-    const def = m.variable(n)?.defs[0];
-    const init =
-      def?.type === "Variable" ? (def.node.init as Node | null) : null;
-    return init ? optionOf(m, init, seen) : undefined;
-  }
-  return undefined;
+	if (seen.has(n)) {
+		return undefined;
+	}
+	seen.add(n);
+	const via = (next: t.Node | null | undefined) => {
+		const x = asNode(next);
+		return x ? optionOf(m, x, seen) : undefined;
+	};
+	if (n.type === "NewExpression") {
+		return { m, n };
+	}
+	if (n.type === "ConditionalExpression") {
+		return via(n.consequent);
+	}
+	if (n.type === "CallExpression" && n.callee.type === "MemberExpression") {
+		return via(n.callee.object);
+	}
+	if (n.type === "CallExpression") {
+		const callee = asNode(n.callee);
+		const f = callee && functionOf(m, callee);
+		const r = f && returnsOf(f.fn)[0];
+		return r ? optionOf(f.module, r, seen) : undefined;
+	}
+	if (n.type === "Identifier") {
+		const init = initOf(m, n);
+		return init ? optionOf(m, init, seen) : undefined;
+	}
+	return undefined;
 };
 
 export const extractSubcommands: Extractor = (bundle) => {
-  const out: SurfaceItem[] = [];
-  scan(bundle, [".command("], (m, n) => {
-    if (method(n) !== "command") return;
-    const spec = constString(m, (n as Call).arguments[0] as Node | undefined);
-    if (!spec || !/^[a-z][\w-]*/.test(spec)) return;
-    const path = chainCommands(m, n).join(" ");
-    const args = spec.slice(spec.split(/\s/)[0]?.length).trim();
-    const opts = (n as Call).arguments[1];
-    const hidden =
-      opts?.type === "ObjectExpression" &&
-      /\bhidden:(!0|true)/.test(m.src(opts as Node));
-    out.push({
-      kind: "subcommand",
-      name: path,
-      module: m.name,
-      offset: n.start,
-      ...(args && { detail: args }),
-      ...(hidden && { gate: "hidden" }),
-    });
-  });
-  return unique(out);
+	const out: SurfaceItem[] = [];
+	scan(bundle, [".command("], (m, n) => {
+		if (n.type !== "CallExpression" || method(n) !== "command") {
+			return;
+		}
+		const spec = constString(m, asNode(n.arguments[0]));
+		if (spec === undefined || !/^[a-z][\w-]*/u.test(spec)) {
+			return;
+		}
+		const path = chainCommands(m, n).join(" ");
+		const args = spec.slice(spec.split(/\s/u)[0]?.length).trim();
+		const opts = asNode(n.arguments[1]);
+		const hidden =
+			opts?.type === "ObjectExpression" &&
+			/\bhidden:(!0|true)/u.test(m.src(opts));
+		out.push({
+			kind: "subcommand",
+			name: path,
+			module: m.name,
+			offset: n.start,
+			...(args !== "" && { detail: args }),
+			...(hidden && { gate: "hidden" }),
+		});
+	});
+	return unique(out);
+};
+
+/** The gate of an `addOption` argument: `hidden`, `hidden unless <condition>`, or none. */
+const optionGate = (
+	m: Module,
+	arg: Node,
+	o: { m: Module; n: Node },
+): string | undefined => {
+	if (arg.type === "ConditionalExpression") {
+		const alternate = asNode(arg.alternate);
+		const consequent = asNode(arg.consequent);
+		const test = asNode(arg.test);
+		if (
+			alternate &&
+			consequent &&
+			test &&
+			hides(m, alternate) &&
+			!hides(m, consequent, arg)
+		) {
+			return `hidden unless ${m.src(test)}`;
+		}
+	}
+	return hides(m, arg) || chainedAfter(o.m, o.n).includes("hideHelp")
+		? "hidden"
+		: undefined;
+};
+
+/** `at` and `args` are in `m`; `owner` (the command chain) is in `om`. */
+const addFlag = (
+	out: SurfaceItem[],
+	m: Module,
+	at: Node,
+	owner: Node,
+	args: readonly (t.Node | null | undefined)[],
+	gate?: string,
+	om = m,
+): void => {
+	const spec = constString(m, asNode(args[0]));
+	if (spec === undefined || !SPEC.test(spec)) {
+		return;
+	}
+	const name =
+		/--[a-zA-Z][\w-]*/u.exec(spec)?.[0] ?? /-[\w-]+/u.exec(spec)?.[0];
+	if (name === undefined) {
+		return;
+	}
+	const desc = constString(m, asNode(args[1]));
+	const cmd = chainCommands(om, owner).join(" ");
+	out.push({
+		kind: "flag",
+		name: cmd === "" ? name : `${cmd} ${name}`,
+		module: m.name,
+		offset: at.start,
+		detail: short(
+			`${spec}${desc !== undefined && desc !== "" ? ` | ${desc}` : ""}`,
+		),
+		...(gate !== undefined && { gate }),
+	});
 };
 
 export const extractFlags: Extractor = (bundle) => {
-  const out: SurfaceItem[] = [];
-  /** `at` and `args` are in `m`; `owner` (the command chain) is in `om`. */
-  const add = (
-    m: Module,
-    at: Node,
-    owner: Node,
-    args: Node[],
-    gate?: string,
-    om = m,
-  ) => {
-    const spec = constString(m, args[0]);
-    if (!spec || !SPEC.test(spec)) return;
-    const name =
-      spec.match(/--[a-zA-Z][\w-]*/)?.[0] ?? spec.match(/-[\w-]+/)?.[0];
-    if (!name) return;
-    const desc = constString(m, args[1]);
-    const cmd = chainCommands(om, owner).join(" ");
-    out.push({
-      kind: "flag",
-      name: cmd ? `${cmd} ${name}` : name,
-      module: m.name,
-      offset: at.start,
-      detail: short(`${spec}${desc ? ` | ${desc}` : ""}`),
-      ...(gate && { gate }),
-    });
-  };
-  scan(bundle, [".option(", ".requiredOption(", ".addOption("], (m, n) => {
-    const name = method(n);
-    if (!name) return;
-    const c = n as Call;
-    const owner = (c.callee as t.MemberExpression).object as Node;
-    if (name === "option" || name === "requiredOption")
-      add(m, n, owner, c.arguments as Node[]);
-    else if (name === "addOption" && c.arguments[0]) {
-      const arg = c.arguments[0] as Node;
-      const o = optionOf(m, arg);
-      if (!o) return;
-      const gate =
-        arg.type === "ConditionalExpression" &&
-        hides(m, arg.alternate as Node) &&
-        !hides(m, arg.consequent as Node, arg)
-          ? `hidden unless ${m.src(arg.test as Node)}`
-          : hides(m, arg) || chainedAfter(o.m, o.n).includes("hideHelp")
-            ? "hidden"
-            : undefined;
-      add(o.m, o.n, owner, o.n.arguments as Node[], gate, m);
-    }
-  });
-  return unique(out);
+	const out: SurfaceItem[] = [];
+	scan(bundle, [".option(", ".requiredOption(", ".addOption("], (m, n) => {
+		const name = method(n);
+		if (
+			n.type !== "CallExpression" ||
+			n.callee.type !== "MemberExpression" ||
+			name === undefined
+		) {
+			return;
+		}
+		const owner = asNode(n.callee.object);
+		if (!owner) {
+			return;
+		}
+		if (name === "option" || name === "requiredOption") {
+			addFlag(out, m, n, owner, n.arguments);
+			return;
+		}
+		const arg = asNode(n.arguments[0]);
+		if (name !== "addOption" || !arg) {
+			return;
+		}
+		const o = optionOf(m, arg);
+		if (o) {
+			addFlag(out, o.m, o.n, owner, o.n.arguments, optionGate(m, arg, o), m);
+		}
+	});
+	return unique(out);
 };

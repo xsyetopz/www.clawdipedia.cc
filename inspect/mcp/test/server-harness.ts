@@ -2,18 +2,13 @@
 // Needs inspect/mcp/dist/server.js; part of plugin:check.
 // Builds a small Bun single-file executable as the "Claude Code" binary, and a config dir with one session.
 import { afterAll, beforeAll } from "bun:test";
-import {
-  chmodSync,
-  mkdirSync,
-  mkdtempSync,
-  rmSync,
-  symlinkSync,
-  writeFileSync,
-} from "node:fs";
+import { access, chmod, mkdir, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import { z } from "zod";
 
 const SERVER = join(import.meta.dir, "..", "dist", "server.js");
 export const SESSION = "11111111-2222-3333-4444-555555555555";
@@ -46,85 +41,153 @@ globalThis.envs = [process.env.CLAUDE_CODE_USE_BEDROCK, process.env.ANTHROPIC_BE
 
 /** 400 env reads with 150-character names: one page of them is over the reply cap. */
 const LONG_ENV = Array.from(
-  { length: 400 },
-  (_, i) =>
-    `process.env.FIXTURE_LONG_${String(i).padStart(3, "0")}_${"X".repeat(130)}`,
+	{ length: 400 },
+	(_, i) =>
+		`process.env.FIXTURE_LONG_${String(i).padStart(3, "0")}_${"X".repeat(130)}`,
 ).join(",");
 
 const LINES = [
-  { type: "custom-title", customTitle: "Fixture", sessionId: SESSION },
-  { type: "last-prompt", explicit: "yes", sessionId: SESSION },
-  { type: "no-such-type" },
+	{ type: "custom-title", customTitle: "Fixture", sessionId: SESSION },
+	{ type: "last-prompt", explicit: "yes", sessionId: SESSION },
+	{ type: "no-such-type" },
 ];
 
-export type Result = {
-  content: { type: string; text: string }[];
-  structuredContent?: Record<string, unknown>;
-  isError?: boolean;
+const ResultSchema = z.object({
+	content: z.array(z.object({ type: z.string(), text: z.string() })),
+	structuredContent: z.record(z.string(), z.unknown()).optional(),
+	isError: z.boolean().optional(),
+});
+
+export type Result = z.infer<typeof ResultSchema>;
+
+/** Compares strings by code unit, as the default `sort` does. */
+export const byCode = (a: string, b: string) => Number(a > b) - Number(a < b);
+
+/** Sorts a copy of the strings by code unit. */
+export const sorted = (xs: string[]) => xs.toSorted(byCode);
+
+/** The text of the first content item, or an empty string. */
+export const text = (r: Result) => r.content[0]?.text ?? "";
+
+/** The structured content of a reply, or an empty object. */
+export const structured = (r: Result) => r.structuredContent ?? {};
+
+/** What the model sees: the structured content when set, else the text. */
+export const seen = (r: Result) =>
+	r.structuredContent ? JSON.stringify(r.structuredContent) : text(r);
+
+/** Reads one structured field as an array of items that match the schema. */
+export const listOf = <T extends z.ZodType>(
+	r: Result,
+	key: string,
+	item: T,
+): z.infer<T>[] => z.array(item).parse(structured(r)[key] ?? []);
+
+/** Reads one structured field as an object with string keys. */
+export const recordOf = (r: Result, key: string) =>
+	z.record(z.string(), z.unknown()).parse(structured(r)[key]);
+
+/** The item at an index; fails the test run when it is missing. */
+export const at = <T>(xs: readonly T[], i: number): T => {
+	const v = xs[i];
+	if (v === undefined) {
+		throw new Error(`no item at ${i} of ${xs.length}`);
+	}
+	return v;
+};
+
+/** Whether a path exists, a file or a folder. */
+export const exists = async (path: string) => {
+	try {
+		await access(path);
+		return true;
+	} catch {
+		return false;
+	}
+};
+
+/** Builds a Bun single-file executable from a module, and fails with the build's stderr. */
+export const compile = async (entry: string, outfile: string) => {
+	const proc = Bun.spawn(
+		["bun", "build", "--compile", "--minify", entry, `--outfile=${outfile}`],
+		{ stderr: "pipe", stdout: "ignore" },
+	);
+	const [err, code] = await Promise.all([
+		new Response(proc.stderr).text(),
+		proc.exited,
+	]);
+	if (code !== 0) {
+		throw new Error(err);
+	}
+};
+
+const STUB = (tmp: string) =>
+	`#!/bin/sh\necho run >> "${tmp}/wakaru-runs"\nenv > "${tmp}/wakaru-env"\npwd > "${tmp}/wakaru-cwd"\ntouch out\n[ -e "${tmp}/wakaru-fail" ] && { echo "stub broke" >&2; exit 3; }\n[ -e "${tmp}/wakaru-empty" ] && exit 0\n[ -e "${tmp}/wakaru-slow" ] && sleep 2\necho "// readable: $*"\nfor last; do :; done\ncat "$last"\n`;
+
+const writeFixtures = async (tmp: string, config: string, versions: string) => {
+	const project = join(config, "projects", "-tmp-demo");
+	await mkdir(project, { recursive: true });
+	await writeFile(
+		join(project, `${SESSION}.jsonl`),
+		`${LINES.map((l) => JSON.stringify(l)).join("\n")}\nnot json\n`,
+	);
+	await mkdir(versions);
+	await writeFile(
+		join(tmp, "app.mjs"),
+		`${APP}\nglobalThis.longs = [${LONG_ENV}];\nexport * from ${JSON.stringify(join(import.meta.dir, "fixtures/clean-app.ts"))};\n`,
+	);
+	await compile(join(tmp, "app.mjs"), join(tmp, "app.js"));
+	await symlink(join(tmp, "app.js"), join(versions, "9.9.9"));
+	// Stands in for `bunx @wakaru/cli@1.14.0`: counts its runs, records its env and cwd and leaves a file there,
+	// fails while `wakaru-fail` exists, prints nothing while `wakaru-empty` exists, waits while `wakaru-slow` exists,
+	// else prints a marker and the input.
+	await writeFile(join(tmp, "wakaru-stub"), STUB(tmp));
+	await chmod(join(tmp, "wakaru-stub"), 0o755);
+};
+
+const serverEnv = (tmp: string, config: string, versions: string) => {
+	const env: Record<string, string> = {};
+	for (const [k, v] of Object.entries(process.env)) {
+		if (v !== undefined) {
+			env[k] = v;
+		}
+	}
+	return {
+		...env,
+		CLAUDE_CONFIG_DIR: config,
+		CC_INSPECT_VERSIONS_DIR: versions,
+		CC_INSPECT_LAUNCHER: join(tmp, "no-launcher"),
+		CC_INSPECT_CACHE: join(tmp, "cache"),
+		CC_INSPECT_WAKARU: join(tmp, "wakaru-stub"),
+		CC_INSPECT_TEST_SECRET: "do-not-pass",
+	};
 };
 
 /** Registers the setup and teardown hooks of the calling file and gives it the server's client. */
 export const startServer = () => {
-  const tmp = mkdtempSync(join(tmpdir(), "cc-inspect-test-"));
-  const config = join(tmp, "config");
-  const versions = join(tmp, "versions");
-  const client = new Client({ name: "test", version: "0" });
-  const call = async (name: string, args: Record<string, unknown> = {}) =>
-    (await client.callTool({ name, arguments: args })) as Result;
+	const tmp = join(tmpdir(), `cc-inspect-test-${crypto.randomUUID()}`);
+	const config = join(tmp, "config");
+	const versions = join(tmp, "versions");
+	const client = new Client({ name: "test", version: "0" });
+	const call = async (name: string, args: Record<string, unknown> = {}) =>
+		ResultSchema.parse(await client.callTool({ name, arguments: args }));
 
-  beforeAll(async () => {
-    const project = join(config, "projects", "-tmp-demo");
-    mkdirSync(project, { recursive: true });
-    writeFileSync(
-      join(project, `${SESSION}.jsonl`),
-      `${LINES.map((l) => JSON.stringify(l)).join("\n")}\nnot json\n`,
-    );
-    mkdirSync(versions);
-    writeFileSync(
-      join(tmp, "app.mjs"),
-      `${APP}\nglobalThis.longs = [${LONG_ENV}];\nexport * from ${JSON.stringify(join(import.meta.dir, "fixtures/clean-app.ts"))};\n`,
-    );
-    const b = Bun.spawnSync([
-      "bun",
-      "build",
-      "--compile",
-      "--minify",
-      join(tmp, "app.mjs"),
-      `--outfile=${join(tmp, "app.js")}`,
-    ]);
-    if (b.exitCode !== 0) throw new Error(b.stderr.toString());
-    symlinkSync(join(tmp, "app.js"), join(versions, "9.9.9"));
-    // Stands in for `bunx @wakaru/cli@1.14.0`: counts its runs, records its env and cwd and leaves a file there,
-    // fails while `wakaru-fail` exists, prints nothing while `wakaru-empty` exists, waits while `wakaru-slow` exists,
-    // else prints a marker and the input.
-    writeFileSync(
-      join(tmp, "wakaru-stub"),
-      `#!/bin/sh\necho run >> "${tmp}/wakaru-runs"\nenv > "${tmp}/wakaru-env"\npwd > "${tmp}/wakaru-cwd"\ntouch out\n[ -e "${tmp}/wakaru-fail" ] && { echo "stub broke" >&2; exit 3; }\n[ -e "${tmp}/wakaru-empty" ] && exit 0\n[ -e "${tmp}/wakaru-slow" ] && sleep 2\necho "// readable: $*"\nfor last; do :; done\ncat "$last"\n`,
-    );
-    chmodSync(join(tmp, "wakaru-stub"), 0o755);
-    await client.connect(
-      new StdioClientTransport({
-        command: "bun",
-        args: [SERVER],
-        env: {
-          ...(Object.fromEntries(
-            Object.entries(process.env).filter(([, v]) => v !== undefined),
-          ) as Record<string, string>),
-          CLAUDE_CONFIG_DIR: config,
-          CC_INSPECT_VERSIONS_DIR: versions,
-          CC_INSPECT_LAUNCHER: join(tmp, "no-launcher"),
-          CC_INSPECT_CACHE: join(tmp, "cache"),
-          CC_INSPECT_WAKARU: join(tmp, "wakaru-stub"),
-          CC_INSPECT_TEST_SECRET: "do-not-pass",
-        },
-      }),
-    );
-  }, 60000);
+	beforeAll(async () => {
+		await mkdir(tmp, { recursive: true });
+		await writeFixtures(tmp, config, versions);
+		await client.connect(
+			new StdioClientTransport({
+				command: "bun",
+				args: [SERVER],
+				env: serverEnv(tmp, config, versions),
+			}),
+		);
+	}, 60_000);
 
-  afterAll(async () => {
-    await client?.close();
-    rmSync(tmp, { recursive: true, force: true });
-  });
+	afterAll(async () => {
+		await client.close();
+		await rm(tmp, { recursive: true, force: true });
+	});
 
-  return { tmp, client, call };
+	return { tmp, client, call };
 };

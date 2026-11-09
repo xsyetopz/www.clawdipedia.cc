@@ -6,36 +6,39 @@ import type { Index, Unit } from "./prepare.ts";
  * text only (such as a regular expression). Ties go to the shorter unit.
  */
 export const findUnits = (ix: Index, query: string, limit = 10) => {
-  const words = [
-    ...new Set(
-      query
-        .toLowerCase()
-        .split(/\s+/)
-        .filter((w) => w.length >= 2),
-    ),
-  ];
-  const score = (u: Unit) => {
-    const f = u.f.map((x) => x.toLowerCase());
-    const k = u.k.toLowerCase();
-    const t = u.t.toLowerCase();
-    let n = 0;
-    const hits: string[] = [];
-    for (const w of words) {
-      const s = f.includes(`.${w}`)
-        ? 2
-        : f.some((x) => x.includes(w)) || k.includes(w)
-          ? 1
-          : t.includes(w)
-            ? 0.5
-            : 0;
-      if (s) hits.push(w);
-      n += s;
-    }
-    return { u, n, hits };
-  };
-  return ix.units
-    .map(score)
-    .filter((x) => x.n > 0)
-    .sort((a, b) => b.n - a.n || a.u.t.length - b.u.t.length)
-    .slice(0, limit);
+	const words = [
+		...new Set(
+			query
+				.toLowerCase()
+				.split(/\s+/u)
+				.filter((w) => w.length >= 2),
+		),
+	];
+	const score = (u: Unit) => {
+		const f = u.f.map((x) => x.toLowerCase());
+		const k = u.k.toLowerCase();
+		const t = u.t.toLowerCase();
+		let n = 0;
+		const hits: string[] = [];
+		for (const w of words) {
+			let s = 0;
+			if (f.includes(`.${w}`)) {
+				s = 2;
+			} else if (f.some((x) => x.includes(w)) || k.includes(w)) {
+				s = 1;
+			} else if (t.includes(w)) {
+				s = 0.5;
+			}
+			if (s) {
+				hits.push(w);
+			}
+			n += s;
+		}
+		return { u, n, hits };
+	};
+	return ix.units
+		.map(score)
+		.filter((x) => x.n > 0)
+		.toSorted((a, b) => b.n - a.n || a.u.t.length - b.u.t.length)
+		.slice(0, limit);
 };

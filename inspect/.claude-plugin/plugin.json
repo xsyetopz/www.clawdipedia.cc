@@ -1,13 +1,13 @@
 {
-  "$schema": "https://clawdipedia.cc/schemas/claude-code-plugin-manifest.json",
-  "name": "cc-inspect",
-  "version": "0.14.0",
-  "description": "MCP server with four tools: sessions (your transcripts), code and surface (the installed Claude Code binary), and release (diffs between two versions). Local, and writes only its own cache.",
-  "author": {
-    "name": "xsyetopz"
-  },
-  "homepage": "https://clawdipedia.cc/",
-  "repository": "https://github.com/xsyetopz/www.clawdipedia.cc",
-  "license": "MIT",
-  "keywords": ["claude-code", "sessions", "transcripts", "binary", "mcp"]
+	"$schema": "https://clawdipedia.cc/schemas/claude-code-plugin-manifest.json",
+	"name": "cc-inspect",
+	"version": "0.14.0",
+	"description": "MCP server with four tools: sessions (your transcripts), code and surface (the installed Claude Code binary), and release (diffs between two versions). Local, and writes only its own cache.",
+	"author": {
+		"name": "xsyetopz"
+	},
+	"homepage": "https://clawdipedia.cc/",
+	"repository": "https://github.com/xsyetopz/www.clawdipedia.cc",
+	"license": "MIT",
+	"keywords": ["claude-code", "sessions", "transcripts", "binary", "mcp"]
 }
