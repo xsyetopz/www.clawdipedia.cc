@@ -5,10 +5,14 @@ import type * as t from "@babel/types";
 import type { Module, Variable } from "../ast.ts";
 import { asNode, children, type Fn, isFn, type Node } from "./node.ts";
 
-/** The function a callee names: a declaration, or a variable whose only value is a function. */
+/**
+ * The function a callee names: a declaration, a variable whose only value is a function, or one whose
+ * only value is the parameter of a setter (`var f;function set(e){f=e}set(g)`) that has one known call.
+ */
 export const functionOf = (
 	m: Module,
 	callee: Node,
+	depth = 0,
 ): { module: Module; fn: Fn } | undefined => {
 	if (callee.type !== "Identifier") {
 		return undefined;
@@ -20,25 +24,55 @@ export const functionOf = (
 		return undefined;
 	}
 	const { module, variable: v } = o;
+	const writes = v.references.filter((r) => r.write);
 	for (const d of v.defs) {
 		if (d.type === "FunctionName" && isFn(d.node)) {
 			return { module, fn: d.node };
 		}
 		const init = d.type === "Variable" ? asNode(d.node.init) : undefined;
-		if (isFn(init)) {
-			const writes = v.references.filter((r) => r.write);
-			if (writes.length <= 1) {
-				return { module, fn: init };
-			}
+		if (isFn(init) && writes.length <= 1) {
+			return { module, fn: init };
 		}
 	}
-	// `var f; ... f=function(){}`: one write, of a function.
-	const writes = v.references.filter((r) => r.write);
-	const w = writes[0]?.writeExpr;
-	if (writes.length === 1 && isFn(w)) {
+	return writes.length === 1
+		? writtenFunction(module, writes[0]?.writeExpr ?? null, depth)
+		: undefined;
+};
+
+/** `var f; ... f=function(){}` or `f=e` in a setter: the function of the one write. */
+const writtenFunction = (
+	module: Module,
+	w: Node | null,
+	depth: number,
+): { module: Module; fn: Fn } | undefined => {
+	if (isFn(w)) {
 		return { module, fn: w };
 	}
-	return undefined;
+	return w?.type === "Identifier"
+		? setterArgument(module, w, depth)
+		: undefined;
+};
+
+/** The function passed for parameter `p` at the one known call of the function that declares it. */
+const setterArgument = (
+	m: Module,
+	p: Node,
+	depth: number,
+): { module: Module; fn: Fn } | undefined => {
+	const def = m.variable(p)?.defs[0];
+	if (depth > 4 || def?.type !== "Parameter" || !isFn(def.node)) {
+		return undefined;
+	}
+	const at = def.node.params.map((x) => asNode(x)).indexOf(def.name);
+	const calls = callsOf(m, def.node);
+	const call = calls.length === 1 ? calls[0] : undefined;
+	const arg = asNode(call?.call.arguments[at]);
+	if (!call || !arg) {
+		return undefined;
+	}
+	return isFn(arg)
+		? { module: call.module, fn: arg }
+		: functionOf(call.module, arg, depth + 1);
 };
 
 /** The variable that names a function: its declaration, `const f=()=>`, or `f=function(){}`. */

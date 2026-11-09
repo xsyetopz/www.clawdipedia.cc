@@ -142,6 +142,27 @@ describe("calls", () => {
 			}),
 		).toEqual(["z"]);
 	});
+	test("a function a setter stores, when the setter has one known call", () => {
+		const use = "function f(){let y=G();g({...y.c})}";
+		expect(
+			spreadKeys(`var G;function S(e){G=e}${use}export{S};`, "y.c", {
+				"b.js":
+					'import{S as T}from"/$bunfs/root/a.js";function W(){return{c:{k:1}}}T(W);',
+			}),
+		).toEqual(["k"]);
+		expect(
+			spreadKeys(
+				`var G;function S(e){G=e}function W(){return{c:{k:1}}}S(W);${use}`,
+				"y.c",
+			),
+		).toEqual(["k"]);
+		expect(
+			spreadKeys(
+				`var G;function S(e){G=e}function W(){return{c:{k:1}}}S(W);S(h);${use}`,
+				"y.c",
+			),
+		).toBeUndefined();
+	});
 	test("`a ?? {...}` spreads give the keys of both sides, optional", () => {
 		expect(coalesceKeys("let a={x:1};g({...a??{y:2}})")).toEqual(["x?", "y?"]);
 	});
