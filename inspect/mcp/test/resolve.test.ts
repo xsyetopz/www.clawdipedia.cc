@@ -113,6 +113,28 @@ describe("names", () => {
 				"b.js": "let o={};o.cutErr={a:1};p.cutErr=q();",
 			}),
 		).toBeUndefined();
+		expect(
+			spreadKeys(src, "s.cutErr", {
+				"b.js": "o.cutErr={a:1};let p={cutErr:n};",
+			}),
+		).toBeUndefined();
+		expect(
+			spreadKeys(src, "s.cutErr", {
+				"b.js": "o.cutErr={a:1};let p={cutErr:{b:1}};",
+			}),
+		).toEqual(["a?", "b?"]);
+	});
+	test("a `.key` lookup that takes more steps than its cap stays unknown", () => {
+		// 2^15 - 1 expressions, more than the cap of 20,000 steps.
+		let tree = "{a:1}";
+		for (let k = 0; k < 14; k++) {
+			tree = `(c?${tree}:${tree})`;
+		}
+		expect(
+			spreadKeys("function g(s){h({...s.cutErr})}k(g)", "s.cutErr", {
+				"b.js": `o.cutErr=${tree};`,
+			}),
+		).toBeUndefined();
 	});
 });
 

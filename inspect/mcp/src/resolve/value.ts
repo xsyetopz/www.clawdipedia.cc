@@ -25,11 +25,11 @@ import {
 	unwrapped,
 } from "./tables.ts";
 import { type Entry, type Env, mergeEntries, type Val } from "./types.ts";
-import { propertyWrites } from "./writes.ts";
+import { Writes } from "./writes.ts";
 
 export abstract class ValueResolver extends HeldEntries {
 	readonly #names = new Map<Node, Entry[] | undefined>();
-	readonly #writes = new Map<string, Entry[] | undefined>();
+	readonly #writes = new Writes();
 
 	abstract param(
 		m: Module,
@@ -166,7 +166,7 @@ export abstract class ValueResolver extends HeldEntries {
 		if (!n || isVoid(n)) {
 			return [];
 		}
-		if (depth > 12) {
+		if (!this.#within(depth)) {
 			return undefined;
 		}
 		const inner = unwrapped(n);
@@ -214,27 +214,18 @@ export abstract class ValueResolver extends HeldEntries {
 		);
 	}
 
-	/**
-	 * `o.key` whose object cannot be followed (a parameter of a function called with state, say): the values
-	 * of every `x.key=value` in the program, because minified code keeps property names. One write that does
-	 * not resolve makes the whole read unknown, so a common name with unrelated writes stays unknown.
-	 */
+	/** `o.key` whose object cannot be followed (a parameter of a function called with state, say): every write of `.key`, as minified code keeps property names. */
 	#assigned(m: Module, key: string, depth: number): Entry[] | undefined {
-		if (this.#writes.has(key)) {
-			return this.#writes.get(key);
-		}
-		this.#writes.set(key, undefined);
-		const lists: Entry[][] = [];
-		for (const w of propertyWrites(m, key)) {
-			const got = this.expr(w.mod, w.value, undefined, depth + 1);
-			if (!got) {
-				return undefined;
-			}
-			lists.push(got);
-		}
-		const out = lists.length > 0 ? mergeEntries(lists, this.ty) : undefined;
-		this.#writes.set(key, out);
-		return out;
+		return this.#writes.entries(
+			m,
+			key,
+			(mod, value) => this.expr(mod, value, undefined, depth + 1),
+			(lists) => mergeEntries(lists, this.ty),
+		);
+	}
+
+	#within(depth: number): boolean {
+		return depth <= 12 && this.#writes.step();
 	}
 
 	/**
