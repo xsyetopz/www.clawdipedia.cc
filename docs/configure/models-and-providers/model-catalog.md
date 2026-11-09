@@ -164,27 +164,29 @@ For pinned models on third-party providers, you can state the capabilities yours
 
 | Flag | Status | What it does | Models |
 | --- | --- | --- | --- |
-| `context_management` | <Undocumented /> | The model works with the `context-management-2025-06-27` beta. | 18 |
-| `effort` | <Undocumented /> | The model accepts the `effort` setting. | 12 |
-| `max_effort` | <Undocumented /> | The model accepts the level `max`. | 12 |
-| `xhigh_effort` | <Undocumented /> | The model accepts the level `xhigh`. | 10 |
-| `adaptive_thinking` | <Undocumented /> | The model accepts adaptive thinking. | 12 |
-| `mid_conv_tool_change` | <Undocumented /> | The tool list can change in the middle of a conversation. | 8 |
-| `rejects_disabled_thinking` | <Undocumented /> | Thinking cannot be turned off, as the docs say for `MAX_THINKING_TOKENS`. | 6 |
-| `per_turn_effort` | <Undocumented /> | The model can take the effort with each message. | 4 |
-| `per_turn_timing` | <Undocumented /> | The model can take the current time with each message. | 4 |
-| `lean_prompt` | <Undocumented /> | The model-side input for the short system prompt. See [The System Prompt](../../how-it-works/system-prompt.md#short-or-full-prompt). | 8 |
-| `org_locked_thinking` | <Undocumented /> | The organization locks the thinking setting. | 2 |
+| `context_management` | <Undocumented /> | The model works with the `context-management-2025-06-27` beta. | 20 |
+| `effort` | <Undocumented /> | The model accepts the `effort` setting. | 14 |
+| `max_effort` | <Undocumented /> | The model accepts the level `max`. | 14 |
+| `xhigh_effort` | <Undocumented /> | The model accepts the level `xhigh`. | 12 |
+| `adaptive_thinking` | <Undocumented /> | The model accepts adaptive thinking. | 14 |
+| `mid_conv_tool_change` | <Undocumented /> | The tool list can change in the middle of a conversation. | 10 |
+| `rejects_disabled_thinking` | <Undocumented /> | Thinking cannot be turned off, as the docs say for `MAX_THINKING_TOKENS`. | 8 |
+| `per_turn_effort` | <Undocumented /> | The model can take the effort with each message. | 6 |
+| `per_turn_timing` | <Undocumented /> | The model can take the current time with each message. | 6 |
+| `lean_prompt` | <Undocumented /> | The model-side input for the short system prompt. See [The System Prompt](../../how-it-works/system-prompt.md#short-or-full-prompt). | 10 |
+| `org_locked_thinking` | <Undocumented /> | The organization locks the thinking setting. | 4 |
 | `haiku_5_5_early_stopping_guidance` | <Undocumented /> | Claude Code adds guidance against early stopping. | 1 |
-| `refusal_fallback` | <Undocumented /> | A refused request can run again on a fallback model. | 5 |
+| `refusal_fallback` | <Undocumented /> | A refused request can run again on a fallback model. | 6 |
 | `silent_turn_reminder` | <Undocumented /> | Claude Code adds a reminder after a turn with no text. | 1 |
-| `fast_mode` | <Undocumented /> | The model supports `/fast`. | 3 |
+| `fast_mode` | <Undocumented /> | The model supports `/fast`. | 5 |
 | `thinking_disabled_effort_cap` | <Undocumented /> | The program does not state the purpose. | 1 |
 | `opus_5_prompt_bundle` | <Undocumented /> | The model gets the prompt sections for Opus 5. | 1 |
 | `opus_5_5_prompt_bundle` | <Undocumented /> | The model gets the prompt sections for Opus 5.5. | 1 |
 | `fable_5_mitigations` | <Undocumented /> | The model gets extra safety text for Fable 5. | 3 |
 | `fable_5_1_prompt_bundle` | <Undocumented /> | The model gets the prompt sections for Fable 5.1. | 2 |
 | `fable_5_2_prompt_bundle` | <Undocumented /> | The model gets the prompt sections for Fable 5.2. | 2 |
+| `total_tokens_reminder` | <Undocumented /> | Claude Code adds the `total_tokens` reminder of the tokens left. See [`totalTokensReminder`](../settings/model.md). Fable 5.2 and Mythos 5.2 do not have it. | 20 |
+| `tool_loaded_text` | <Undocumented /> | The program does not state the purpose. Fable 5.2 and Mythos 5.2 are the only models without it. | 22 |
 
 The flags `effort`, `max_effort`, `xhigh_effort`, and `adaptive_thinking` say which effort levels and which thinking mode a model accepts.
 The betas `per-turn-control-2026-07-01` and `timing-2026-09-09` match the flags `per_turn_effort` and `per_turn_timing`.

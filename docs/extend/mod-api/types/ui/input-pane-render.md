@@ -63,6 +63,18 @@ Options of `$.ui.notify`. Used by `$.ui.notify`.
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `title` | <Documented /> | What heads the notification, sent as the mod gives it. The engine puts no name of its own beside it. If left out or empty, the name of the plugin. | Type: `string`. Optional. |
+| `key` | <Undocumented /> | A name for this notification. A new notification with the same key from the same plugin replaces the last one. `$.ui.cancelNotify(key)` takes it back. If left out, each call is its own notification. | Type: `string`. Optional. 1 to 64 characters, with no hidden characters or stray spaces, and not a name that every object has, such as `constructor`. Since `2.1.321`. |
+| `delayMs` | <Undocumented /> | How long to wait before the notification shows. The client holds it, so it can show after the session ends. | Type: `number`. Optional. A whole number from 0 to 604800000 (7 days). Do not give it with `at`. Since `2.1.321`. |
+| `at` | <Undocumented /> | The clock time to show the notification. | Type: `number`. Optional. Epoch milliseconds, a whole number from 0 to 7 days from now. Do not give it with `delayMs`. Since `2.1.321`. |
+| `untilBack` | <Undocumented /> | With `delayMs` or `at`: the client drops the notification if the person comes back to the session before it shows. | Type: `boolean`. Optional. Since `2.1.321`. |
+
+The engine sends `key`, `delayMs`, `at`, and `untilBack` to the client in the `ui_notify` stream message, as `key`, `delay_ms`, `at`, and `until_back`. In the program, only that message reads the timing fields; the terminal notification channels do not. A bad option makes the call fail with one of these texts:
+
+- `key is a string of 1 to 64 characters, with no hidden characters or stray spaces, and not a name every object has, such as constructor`
+- `give delayMs or at, not both. Each is a whole number of 0 or more: delayMs in milliseconds, up to 7 days, and at in epoch milliseconds, up to 7 days from now`
+- `untilBack is a boolean, when given`
+
+Read sites: the checks `chunk-ne1755n5.js:4349300` (`BEs`), the call `chunk-agdd3hhp.js:278631`, and the `ui_notify` message `chunk-sspw8v4n.js:514787`.
 
 ### `OnScreen`
 
