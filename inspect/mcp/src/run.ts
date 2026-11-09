@@ -34,7 +34,9 @@ export type RunResult = {
   stderr: string;
   /** The stream-json events the program wrote to stdout. */
   events: Record<string, unknown>[];
-  files: Record<string, string>; // The `.jsonl` files of the config folder at exit, such as the transcript.
+  files: Record<string, string>; // The `.json`, `.jsonl`, and `.log` files of the config folder at exit, such as the transcript.
+  /** The same for the project folder, where a relative path such as `--debug-file d.log` lands. */
+  projectFiles: Record<string, string>;
   dirs: Dirs;
 };
 
@@ -165,7 +167,10 @@ export const runArgs = async (
     apiHost = false,
     baseUrl = true,
     calls,
+    input,
   }: {
+    /** Text for the program's stdin, such as stream-json user messages; without it stdin is closed. */
+    input?: string;
     timeoutMs?: number;
     env?: Record<string, string>;
     files?: Record<string, string>;
@@ -352,7 +357,7 @@ export const runArgs = async (
       ],
       {
         cwd: dirs.project,
-        stdin: "ignore",
+        stdin: input === undefined ? "ignore" : Buffer.from(input),
         stdout: "pipe",
         stderr: "pipe",
         env: {
@@ -410,8 +415,16 @@ export const runArgs = async (
       throw new Error(
         `a request had another host or key: ${bad.map((r) => `${r.host}${r.path}`).join(", ")}`,
       );
-    const wrote = filesOf(dirs.config);
-    return { exit, requests, stdout: out, stderr, events, files: wrote, dirs };
+    return {
+      exit,
+      requests,
+      stdout: out,
+      stderr,
+      events,
+      files: filesOf(dirs.config),
+      projectFiles: filesOf(dirs.project),
+      dirs,
+    };
   } finally {
     stub?.stop(true);
     tls?.stop(true);

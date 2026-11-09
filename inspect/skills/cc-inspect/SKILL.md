@@ -25,7 +25,7 @@ Transcripts can hold secrets and private text. Quote only what the user asks for
 1. `code` `installs` shows the versions in `~/.local/share/claude/versions` and which one `claude` runs.
 2. `surface` with a `kind` lists the items of that kind (environment variables, flags, settings, gates, slash commands, and more), each with its default, gate, module, and offset when the code shows them. Use `name` to filter and `offset` to page. Without `kind`, it lists every kind with its count. Use it before `code` `search` when the question is "which X does the program have" or "does it read X".
 3. `code` `search` with a literal anchor as `query`: a string such as a setting key, an environment variable, or an event name. Minified names (`Cui`, `bi`) change between versions, so search one only in the version where you found it, and follow code across versions by its literal anchors.
-4. `code` `read` with the `module` and `offset` of a hit to read the code around it.
+4. `code` `read` with the `module` and `offset` of a hit to read the code around it. The `offset` of a hit is where the match starts, not where its snippet starts.
    Add `view: "readable"` for a version of the module that is easier to read. The first call for a module runs Wakaru (`bunx @wakaru/cli@1.14.0`, a few seconds on a large module), and later calls read the cache.
    When you have only plain words, such as a line of the release notes, `code` `find` with them as `query` ranks the functions of a prepared version by those words.
    `find` and each `release` action prepare a version on first use, which takes about 14 seconds and a few GB of memory for each version.

@@ -26006,7 +26006,7 @@ var EMPTY_COMPLETION_RESULT = {
 // inspect/mcp/package.json
 var package_default = {
   name: "cc-inspect-mcp",
-  version: "0.13.0",
+  version: "0.14.0",
   private: true,
   license: "MIT",
   type: "module",
@@ -70664,12 +70664,38 @@ import { readFileSync as readFileSync6 } from "fs";
 import { join as join6 } from "path";
 var filesOf = (dir) => Object.fromEntries([...new Bun.Glob("**/*.{json,jsonl,log}").scanSync({ cwd: dir, dot: true })].sort().map((p) => [p, readFileSync6(join6(dir, p), "utf8")]));
 var placesOf = (r, q) => [
-  ...r.requests.flatMap((x, i) => JSON.stringify(x.body ?? "").includes(q) ? [`request ${i + 1} ${x.method} ${x.path}`] : []),
-  ...r.stdout.includes(q) ? ["stdout"] : [],
-  ...r.stderr.includes(q) ? ["stderr"] : [],
-  ...Object.entries(r.files).filter(([, t]) => t.includes(q)).map(([p]) => `file ${p}`)
+  ...r.requests.flatMap((x, i) => q.test(JSON.stringify(x.body ?? "")) ? [`request ${i + 1} ${x.method} ${x.path}`] : []),
+  ...q.test(r.stdout) ? ["stdout"] : [],
+  ...q.test(r.stderr) ? ["stderr"] : [],
+  ...Object.entries(r.files).filter(([, t]) => q.test(t)).map(([p]) => `file ${p}`)
 ];
+var bytes = (v) => v === undefined ? 0 : Buffer.byteLength(JSON.stringify(v));
+var bodyOf = (body) => {
+  const b = body && typeof body === "object" ? body : {};
+  const cacheControl = [];
+  const walk = (v, path) => {
+    if (Array.isArray(v))
+      v.forEach((x, i) => walk(x, `${path}[${i}]`));
+    else if (v && typeof v === "object") {
+      if ("cache_control" in v)
+        cacheControl.push(path);
+      for (const [k, x] of Object.entries(v))
+        if (k !== "cache_control")
+          walk(x, `${path}.${k}`);
+    }
+  };
+  for (const [k, v] of Object.entries(b))
+    walk(v, k);
+  return {
+    bytes: typeof body === "string" ? Buffer.byteLength(body) : bytes(body),
+    tools: bytes(b["tools"]),
+    system: bytes(b["system"]),
+    messages: bytes(b["messages"]),
+    cacheControl
+  };
+};
 var isTurn = (path) => path.startsWith("/v1/messages") && !path.includes("count_tokens");
+var toolEntry = (r, name) => r.requests.filter((q) => isTurn(q.path)).flatMap((q) => q.body?.tools ?? []).reverse().find((t) => t["name"] === name);
 var toolNames = (r) => r.requests.filter((q) => isTurn(q.path)).map((q) => (q.body?.tools ?? []).map((t) => t.name).filter((n) => typeof n === "string"));
 var resultText = (r) => {
   const last = [...r.events].reverse().find((e) => e["type"] === "result");
@@ -70813,7 +70839,8 @@ var runArgs = async (bin, args, {
   login = "key",
   apiHost = false,
   baseUrl = true,
-  calls
+  calls,
+  input
 } = {}) => {
   for (const name of Object.keys(files))
     if (isAbsolute(name) || normalize(name).startsWith(".."))
@@ -70963,7 +70990,7 @@ exit 44
       ...args.map((a) => a.replaceAll("<project-dir>", dirs.project).replaceAll("<config-dir>", dirs.config))
     ], {
       cwd: dirs.project,
-      stdin: "ignore",
+      stdin: input === undefined ? "ignore" : Buffer.from(input),
       stdout: "pipe",
       stderr: "pipe",
       env: {
@@ -71010,8 +71037,16 @@ exit 44
     const bad = requests.filter((r) => r.fakeKey === false || r.host !== self && !(apiHost && r.host === API_HOST));
     if (bad.length)
       throw new Error(`a request had another host or key: ${bad.map((r) => `${r.host}${r.path}`).join(", ")}`);
-    const wrote = filesOf(dirs.config);
-    return { exit, requests, stdout: out, stderr, events, files: wrote, dirs };
+    return {
+      exit,
+      requests,
+      stdout: out,
+      stderr,
+      events,
+      files: filesOf(dirs.config),
+      projectFiles: filesOf(dirs.project),
+      dirs
+    };
   } finally {
     stub?.stop(true);
     tls?.stop(true);
@@ -71167,42 +71202,93 @@ ${t.slice(start, end)}${said}`, {
     });
   },
   cli: async ({
-    args,
+    args = [],
+    prompts,
     files,
     version,
     env,
     query,
+    regex: isRegex = false,
     replies,
     login,
     show,
     apiHost,
     baseUrl,
-    calls
+    calls,
+    request,
+    tool,
+    offset = 0,
+    length = 4000
   }) => {
-    if (!args?.length)
+    if (!args.length && !prompts)
       throw new Error('cli needs args, such as ["auto-mode", "config"]');
     const bin = installed(version);
-    const r = await runArgs(bin.path, args, {
+    const r = await runArgs(bin.path, prompts ? [
+      "-p",
+      "--input-format",
+      "stream-json",
+      "--output-format",
+      "stream-json",
+      "--verbose",
+      ...args
+    ] : args, {
       env: env ?? {},
       files: files ?? {},
       replies: replies ?? {},
       login: login ?? "key",
       apiHost: apiHost ?? false,
       baseUrl: baseUrl ?? true,
-      ...calls && { calls }
+      ...calls && { calls },
+      ...prompts && {
+        input: prompts.map((content) => `${JSON.stringify({ type: "user", message: { role: "user", content } })}
+`).join("")
+      }
     });
     const sent = r.requests.map((x) => `${x.method} ${x.host === API_HOST ? `https://${API_HOST}` : ""}${x.path}`);
     const tools = toolNames(r);
-    const found = query === undefined ? undefined : placesOf(r, query);
+    const found = query === undefined ? undefined : placesOf(r, regex(query, isRegex));
     const stdout = clip(r.stdout, 4000);
     const stderr = clip(r.stderr, 2000);
+    const file = show === undefined ? undefined : r.files[show] ?? r.projectFiles[show];
     const shown = show === undefined ? "" : `
-${show}: ${show in r.files ? clip(r.files[show], 8000) : "not written"}`;
+${show}: ${file === undefined ? "not written" : clip(file, 8000)}`;
+    let body;
+    if (request !== undefined) {
+      const q = r.requests[request - 1];
+      if (!q)
+        throw new Error(`no request ${request}; the run sent ${r.requests.length}`);
+      const json = typeof q.body === "string" ? q.body : JSON.stringify(q.body);
+      const start = Math.min(offset, json.length);
+      const end = Math.min(json.length, start + length);
+      body = {
+        request,
+        ...bodyOf(q.body),
+        offset: start,
+        end,
+        total: json.length,
+        text: json.slice(start, end)
+      };
+    }
+    const entry = tool === undefined ? undefined : toolEntry(r, tool);
+    const entryBytes = entry && Buffer.byteLength(JSON.stringify(entry));
     return text(`${bin.version}: exit ${r.exit}, requests: ${sent.join(", ") || "none"}, files: ${Object.keys(r.files).join(", ") || "none"}.${tools.length ? `
 tools: ${tools.map((t) => t.join(" ")).join(" | ")}` : ""}${found ? `
 query found in: ${found.join("; ") || "nothing"}` : ""}
 stdout: ${stdout}
-stderr: ${stderr}${shown}`, { exit: r.exit, requests: sent, tools, found, stdout, stderr });
+stderr: ${stderr}${shown}${body ? `
+request ${request}: ${body["bytes"]} bytes (tools ${body["tools"]}, system ${body["system"]}, messages ${body["messages"]}), cache_control at: ${body["cacheControl"].join(", ") || "none"}
+body [${body["offset"]}, ${body["end"]}) of ${body["total"]}: ${body["text"]}` : ""}${tool === undefined ? "" : `
+tool ${tool}: ${entry ? `${entryBytes} bytes
+${JSON.stringify(entry)}` : "not sent"}`}`, {
+      exit: r.exit,
+      requests: sent,
+      tools,
+      found,
+      stdout,
+      stderr,
+      ...body && { body },
+      ...tool !== undefined && { tool: entry ?? null }
+    });
   },
   npm: async ({ name, packageVersion, query }) => {
     const pkg = await fetchPackage(need(name, "name"), packageVersion);
@@ -71230,9 +71316,9 @@ Not JavaScript: ${skipped.join(", ")}` : ""}`, {
   module: P.module,
   offset: P.offset,
   limit: P.limit,
-  context: number2().int().min(0).max(2000).optional().describe("Characters shown around a search hit (default 150)."),
+  context: number2().int().min(0).max(2000).optional().describe("Characters shown around a search hit (default 150). A hit's `offset` is where the match starts in the module, the offset `read` takes; the snippet starts up to `context` characters before it."),
   view: string2().optional().describe('With read: "readable" gives the module through Wakaru (the first call per module runs it, then it is cached).'),
-  length: number2().int().min(1).max(MAX_CHARS).optional().describe("Characters to read (default 4000)."),
+  length: number2().int().min(1).max(MAX_CHARS).optional().describe("Characters to read (default 4000); with cli and `request`, of the body JSON from `offset`."),
   prompt: string2().min(1).optional().describe('With run: the prompt or slash command, such as "/verify ARG". `name` is the text that picks the user turn (default: the command tag).'),
   env: record(string2(), string2()).optional().describe('With run or cli: extra environment variables, such as {"CLAUDE_CODE_USE_BEDROCK": "1"}. Names that run fixes (key, base URL, proxies, folders), and names or values that could carry a credential or route a request, are refused.'),
   args: array(string2()).optional().describe('With cli: the program args, such as ["--settings", "<project-dir>/s.json", "auto-mode", "config"]. `<project-dir>` and `<config-dir>` become the temp project and config folders.'),
@@ -71240,14 +71326,17 @@ Not JavaScript: ${skipped.join(", ")}` : ""}`, {
   replies: record(string2(), unknown()).optional().describe('With cli: JSON replies of the stub by "METHOD /path", such as {"GET /api/oauth/profile": {...}}. "<stub>" in an env value becomes the stub URL.'),
   packageVersion: string2().optional().describe("With npm: the version of the package in `name`; default: the latest, looked up once and kept."),
   login: _enum(["key", "oauth"]).optional().describe('With cli: "key" (default) sets the fake API key; "oauth" writes a fake claude.ai login to .credentials.json instead.'),
-  show: string2().optional().describe('With cli: a .json, .jsonl, or .log file of the config folder to print at exit, such as ".claude.json".'),
+  show: string2().optional().describe('With cli: a .json, .jsonl, or .log file of the config folder, else of the project folder, to print at exit, such as ".claude.json", or "d.log" after `--debug-file d.log`.'),
   apiHost: boolean2().optional().describe("With cli: the stub also answers https://api.anthropic.com (through a local proxy and a throw-away CA), for requests that ignore ANTHROPIC_BASE_URL, such as GET /api/oauth/profile."),
   baseUrl: boolean2().optional().describe("With cli: false leaves ANTHROPIC_BASE_URL unset, so that with apiHost the Messages API requests also go to https://api.anthropic.com, as on a direct connection."),
   calls: array(object({
     name: string2(),
     input: record(string2(), unknown()),
     safeguard: _enum(["flagged", "not_flagged"]).optional()
-  })).optional().describe('With cli: the model calls these tools in order, one per turn, such as [{"name": "Bash", "input": {"command": "echo hi"}}], then answers OK after the last result. safeguard ("flagged" or "not_flagged") adds the server-side auto mode verdict for that call.')
+  })).optional().describe('With cli: the model calls these tools in order, one per turn, such as [{"name": "Bash", "input": {"command": "echo hi"}}], then answers OK after the last result. safeguard ("flagged" or "not_flagged") adds the server-side auto mode verdict for that call.'),
+  prompts: array(string2()).min(1).optional().describe('With cli: prompts sent in one session, as stream-json user messages on stdin; cli adds "-p --input-format stream-json --output-format stream-json --verbose" before `args`, so a hook that acts from the second prompt on runs.'),
+  request: number2().int().min(1).optional().describe("With cli: the number of a request in `requests`; gives the UTF-8 bytes of its body as compact JSON and of its tools, system, and messages, the path of each block with a cache_control, and the body JSON from `offset` for `length` characters."),
+  tool: string2().optional().describe('With cli: a tool name; gives its entry (name, description, input_schema, ...) from the last Messages API request that sends it, and its size in bytes. A deferred tool is sent only after a ToolSearch call, such as calls [{"name": "ToolSearch", "input": {"query": "select:WebFetch"}}]. In print mode the program sends AskUserQuestion only with "--permission-prompt-tool" (such as "stdio") in `args`.')
 }, { ...WRITES_CACHE, openWorldHint: true });
 
 // inspect/mcp/src/events.ts

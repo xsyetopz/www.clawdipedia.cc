@@ -194,6 +194,22 @@ test("runArgs passes the args, writes files in the project, and keeps plain stdo
   expect(existsSync(p)).toBe(false);
 });
 
+test("runArgs writes input to stdin and keeps the files the run wrote in the project", async () => {
+  const { runArgs } = await import("../src/run.ts");
+  const bin = join(tmp, `claude-stdin-${n++}`);
+  writeFileSync(
+    bin,
+    '#!/usr/bin/env bun\nawait Bun.write("d.log", await Bun.stdin.text());\n',
+  );
+  chmodSync(bin, 0o755);
+  const r = await runArgs(bin, [], {
+    input: "one\ntwo\n",
+    files: { "s.json": "{}" },
+  });
+  expect(r.projectFiles).toEqual({ "d.log": "one\ntwo\n", "s.json": "{}" });
+  expect(r.files["d.log"]).toBeUndefined();
+});
+
 test("runArgs refuses a file path outside the project", async () => {
   const { runArgs } = await import("../src/run.ts");
   for (const name of ["/etc/x", "../x", "a/../../x"])

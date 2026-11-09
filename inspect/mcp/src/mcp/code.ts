@@ -5,7 +5,13 @@ import { findUnits } from "../find.ts";
 import { fetchPackage, findText } from "../npm.ts";
 import { prepared } from "../prepare.ts";
 import { readable } from "../readable.ts";
-import { placesOf, resultText, toolNames } from "../requests.ts";
+import {
+  bodyOf,
+  placesOf,
+  resultText,
+  toolEntry,
+  toolNames,
+} from "../requests.ts";
 import { API_HOST, runArgs, runPrompt, userText } from "../run.ts";
 import {
   type Args,
@@ -40,6 +46,9 @@ group<
     prompt?: string;
     env?: Record<string, string>;
     args?: string[];
+    prompts?: string[];
+    request?: number;
+    tool?: string;
     files?: Record<string, string>;
     replies?: Record<string, unknown>;
     login?: "key" | "oauth";
@@ -203,45 +212,116 @@ group<
       );
     },
     cli: async ({
-      args,
+      args = [],
+      prompts,
       files,
       version,
       env,
       query,
+      regex: isRegex = false,
       replies,
       login,
       show,
       apiHost,
       baseUrl,
       calls,
+      request,
+      tool,
+      offset = 0,
+      length = 4000,
     }) => {
-      if (!args?.length)
+      if (!args.length && !prompts)
         throw new Error('cli needs args, such as ["auto-mode", "config"]');
       const bin = installed(version);
-      const r = await runArgs(bin.path, args, {
-        env: env ?? {},
-        files: files ?? {},
-        replies: replies ?? {},
-        login: login ?? "key",
-        apiHost: apiHost ?? false,
-        baseUrl: baseUrl ?? true,
-        ...(calls && { calls }),
-      });
+      const r = await runArgs(
+        bin.path,
+        prompts
+          ? [
+              "-p",
+              "--input-format",
+              "stream-json",
+              "--output-format",
+              "stream-json",
+              "--verbose",
+              ...args,
+            ]
+          : args,
+        {
+          env: env ?? {},
+          files: files ?? {},
+          replies: replies ?? {},
+          login: login ?? "key",
+          apiHost: apiHost ?? false,
+          baseUrl: baseUrl ?? true,
+          ...(calls && { calls }),
+          ...(prompts && {
+            input: prompts
+              .map(
+                (content) =>
+                  `${JSON.stringify({ type: "user", message: { role: "user", content } })}\n`,
+              )
+              .join(""),
+          }),
+        },
+      );
       const sent = r.requests.map(
         (x) =>
           `${x.method} ${x.host === API_HOST ? `https://${API_HOST}` : ""}${x.path}`,
       );
       const tools = toolNames(r);
-      const found = query === undefined ? undefined : placesOf(r, query);
+      const found =
+        query === undefined ? undefined : placesOf(r, regex(query, isRegex));
       const stdout = clip(r.stdout, 4000);
       const stderr = clip(r.stderr, 2000);
+      const file =
+        show === undefined ? undefined : (r.files[show] ?? r.projectFiles[show]);
       const shown =
         show === undefined
           ? ""
-          : `\n${show}: ${show in r.files ? clip(r.files[show] as string, 8000) : "not written"}`;
+          : `\n${show}: ${file === undefined ? "not written" : clip(file, 8000)}`;
+      let body: Record<string, unknown> | undefined;
+      if (request !== undefined) {
+        const q = r.requests[request - 1];
+        if (!q)
+          throw new Error(
+            `no request ${request}; the run sent ${r.requests.length}`,
+          );
+        const json =
+          typeof q.body === "string" ? q.body : JSON.stringify(q.body);
+        const start = Math.min(offset, json.length);
+        const end = Math.min(json.length, start + length);
+        body = {
+          request,
+          ...bodyOf(q.body),
+          offset: start,
+          end,
+          total: json.length,
+          text: json.slice(start, end),
+        };
+      }
+      const entry = tool === undefined ? undefined : toolEntry(r, tool);
+      const entryBytes =
+        entry && Buffer.byteLength(JSON.stringify(entry));
       return text(
-        `${bin.version}: exit ${r.exit}, requests: ${sent.join(", ") || "none"}, files: ${Object.keys(r.files).join(", ") || "none"}.${tools.length ? `\ntools: ${tools.map((t) => t.join(" ")).join(" | ")}` : ""}${found ? `\nquery found in: ${found.join("; ") || "nothing"}` : ""}\nstdout: ${stdout}\nstderr: ${stderr}${shown}`,
-        { exit: r.exit, requests: sent, tools, found, stdout, stderr },
+        `${bin.version}: exit ${r.exit}, requests: ${sent.join(", ") || "none"}, files: ${Object.keys(r.files).join(", ") || "none"}.${tools.length ? `\ntools: ${tools.map((t) => t.join(" ")).join(" | ")}` : ""}${found ? `\nquery found in: ${found.join("; ") || "nothing"}` : ""}\nstdout: ${stdout}\nstderr: ${stderr}${shown}${
+          body
+            ? `\nrequest ${request}: ${body["bytes"]} bytes (tools ${body["tools"]}, system ${body["system"]}, messages ${body["messages"]}), cache_control at: ${(body["cacheControl"] as string[]).join(", ") || "none"}\nbody [${body["offset"]}, ${body["end"]}) of ${body["total"]}: ${body["text"]}`
+            : ""
+        }${
+          tool === undefined
+            ? ""
+            : `\ntool ${tool}: ${entry ? `${entryBytes} bytes\n${JSON.stringify(entry)}` : "not sent"}`
+        }`,
+        {
+          exit: r.exit,
+          requests: sent,
+          tools,
+          found,
+          stdout,
+          stderr,
+          ...(body && { body }),
+          ...(tool !== undefined && { tool: entry ?? null }),
+        },
       );
     },
     npm: async ({ name, packageVersion, query }) => {
@@ -282,7 +362,9 @@ group<
       .min(0)
       .max(2000)
       .optional()
-      .describe("Characters shown around a search hit (default 150)."),
+      .describe(
+        "Characters shown around a search hit (default 150). A hit's `offset` is where the match starts in the module, the offset `read` takes; the snippet starts up to `context` characters before it.",
+      ),
     view: z
       .string()
       .optional()
@@ -295,7 +377,9 @@ group<
       .min(1)
       .max(MAX_CHARS)
       .optional()
-      .describe("Characters to read (default 4000)."),
+      .describe(
+        "Characters to read (default 4000); with cli and `request`, of the body JSON from `offset`.",
+      ),
     prompt: z
       .string()
       .min(1)
@@ -343,7 +427,7 @@ group<
       .string()
       .optional()
       .describe(
-        'With cli: a .json, .jsonl, or .log file of the config folder to print at exit, such as ".claude.json".',
+        'With cli: a .json, .jsonl, or .log file of the config folder, else of the project folder, to print at exit, such as ".claude.json", or "d.log" after `--debug-file d.log`.',
       ),
     apiHost: z
       .boolean()
@@ -368,6 +452,27 @@ group<
       .optional()
       .describe(
         'With cli: the model calls these tools in order, one per turn, such as [{"name": "Bash", "input": {"command": "echo hi"}}], then answers OK after the last result. safeguard ("flagged" or "not_flagged") adds the server-side auto mode verdict for that call.',
+      ),
+    prompts: z
+      .array(z.string())
+      .min(1)
+      .optional()
+      .describe(
+        'With cli: prompts sent in one session, as stream-json user messages on stdin; cli adds "-p --input-format stream-json --output-format stream-json --verbose" before `args`, so a hook that acts from the second prompt on runs.',
+      ),
+    request: z
+      .number()
+      .int()
+      .min(1)
+      .optional()
+      .describe(
+        "With cli: the number of a request in `requests`; gives the UTF-8 bytes of its body as compact JSON and of its tools, system, and messages, the path of each block with a cache_control, and the body JSON from `offset` for `length` characters.",
+      ),
+    tool: z
+      .string()
+      .optional()
+      .describe(
+        'With cli: a tool name; gives its entry (name, description, input_schema, ...) from the last Messages API request that sends it, and its size in bytes. A deferred tool is sent only after a ToolSearch call, such as calls [{"name": "ToolSearch", "input": {"query": "select:WebFetch"}}]. In print mode the program sends AskUserQuestion only with "--permission-prompt-tool" (such as "stdio") in `args`.',
       ),
   },
   { ...WRITES_CACHE, openWorldHint: true },
