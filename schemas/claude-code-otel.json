@@ -1,2226 +1,2226 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://clawdipedia.cc/schemas/claude-code-otel.json",
-  "title": "Claude Code OpenTelemetry metrics, spans, and events (Claude Code 2.1.319)",
-  "$comment": "For the OpenTelemetry data Claude Code emits. Each $defs entry is one metric, span, or event; the kind is in x-otel-kind and the properties are its attributes. Generated from Claude Code 2.1.319 by tools/schemas/code.ts. Anchors: \"Count of CLI sessions started\" (the meter setup that registers each metric with its description and unit) with the counter accessor functions and their .add(value, attributes) call sites; the span helpers (startSpan(\"claude_code.<name>\") with the attribute literal built just before it, and the wrapper that takes {spanType, attrs, contentAttrs}); the event emitter that sets \"event.name\", \"event.timestamp\", \"event.sequence\" and its call sites with the attribute literal; the base attribute builder behind \"OTEL_METRICS_INCLUDE_SESSION_ID\". No probe in captures/ records telemetry, so nothing is marked x-observed. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
-  "$defs": {
-    "event:api_error": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "api_error"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "model": {
-          "type": "string"
-        },
-        "error": {
-          "type": "string"
-        },
-        "status_code": {
-          "type": "number"
-        },
-        "duration_ms": {
-          "type": "number"
-        },
-        "attempt": {
-          "type": "number"
-        },
-        "request_id": {
-          "type": "string"
-        },
-        "client_request_id": {
-          "type": "string"
-        },
-        "speed": {
-          "enum": ["fast", "normal"]
-        },
-        "query_source": {
-          "type": "string"
-        },
-        "effort": {
-          "enum": ["low", "medium", "high", "xhigh", "max"]
-        },
-        "agent.name": {
-          "type": "string"
-        },
-        "skill.name": {
-          "type": "string"
-        },
-        "plugin.name": {
-          "type": "string"
-        },
-        "marketplace.name": {
-          "type": "string"
-        },
-        "mcp_server.name": {
-          "type": "string"
-        },
-        "mcp_tool.name": {
-          "type": "string"
-        }
-      }
-    },
-    "event:api_refusal": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "api_refusal"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "model": {
-          "type": "string"
-        },
-        "request_id": {
-          "type": "string"
-        },
-        "speed": {
-          "enum": ["fast", "normal"]
-        },
-        "attempt": {
-          "type": "number"
-        },
-        "server_fallback_hop": {
-          "type": "boolean"
-        },
-        "query_source": {
-          "type": "string"
-        },
-        "effort": {
-          "enum": ["low", "medium", "high", "xhigh", "max"]
-        },
-        "has_category": {
-          "type": "boolean"
-        },
-        "has_explanation": {
-          "type": "boolean"
-        },
-        "category": {
-          "enum": ["cyber", "bio", "frontier_llm", "reasoning_extraction"]
-        },
-        "agent.name": {
-          "type": "string"
-        },
-        "skill.name": {
-          "type": "string"
-        },
-        "plugin.name": {
-          "type": "string"
-        },
-        "marketplace.name": {
-          "type": "string"
-        },
-        "mcp_server.name": {
-          "type": "string"
-        },
-        "mcp_tool.name": {
-          "type": "string"
-        }
-      }
-    },
-    "event:api_request": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "api_request"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "model": {
-          "type": "string"
-        },
-        "input_tokens": {
-          "type": "number"
-        },
-        "output_tokens": {
-          "type": "number"
-        },
-        "cache_read_tokens": {
-          "type": "number"
-        },
-        "cache_creation_tokens": {
-          "type": "number"
-        },
-        "cache_creation_5m_tokens": {
-          "type": "number"
-        },
-        "cache_creation_1h_tokens": {
-          "type": "number"
-        },
-        "cost_usd": {
-          "type": "number"
-        },
-        "cost_usd_micros": {
-          "type": "number"
-        },
-        "duration_ms": {
-          "x-unverified": true,
-          "x-observed-type": ["number"]
-        },
-        "ttft_ms": {
-          "type": "number"
-        },
-        "request_id": {
-          "type": "string"
-        },
-        "client_request_id": {
-          "type": "string"
-        },
-        "speed": {
-          "enum": ["fast", "normal"]
-        },
-        "query_source": {
-          "type": "string"
-        },
-        "effort": {
-          "enum": ["low", "medium", "high", "xhigh", "max"]
-        },
-        "agent.name": {
-          "type": "string"
-        },
-        "skill.name": {
-          "type": "string"
-        },
-        "plugin.name": {
-          "type": "string"
-        },
-        "marketplace.name": {
-          "type": "string"
-        },
-        "mcp_server.name": {
-          "type": "string"
-        },
-        "mcp_tool.name": {
-          "type": "string"
-        }
-      }
-    },
-    "event:api_retries_exhausted": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "api_retries_exhausted"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "model": {
-          "type": "string"
-        },
-        "error": {
-          "type": "string"
-        },
-        "status_code": {
-          "type": "number"
-        },
-        "total_attempts": {
-          "type": "number"
-        },
-        "total_retry_duration_ms": {
-          "type": "number"
-        },
-        "speed": {
-          "enum": ["fast", "normal"]
-        },
-        "query_source": {
-          "type": "string"
-        },
-        "effort": {
-          "enum": ["low", "medium", "high", "xhigh", "max"]
-        }
-      }
-    },
-    "event:assistant_response": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "assistant_response"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "response_length": {
-          "type": "number"
-        },
-        "response": {
-          "type": "string"
-        },
-        "request_id": {
-          "type": "string"
-        },
-        "message.uuid": {
-          "type": "string"
-        },
-        "model": {
-          "type": "string"
-        },
-        "query_source": {
-          "type": "string"
-        }
-      }
-    },
-    "event:at_mention": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "at_mention"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "mention_type": {
-          "type": "string"
-        },
-        "success": {
-          "type": "string"
-        }
-      }
-    },
-    "event:auth": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "auth"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "action": {
-          "type": "string"
-        },
-        "success": {
-          "type": "string"
-        },
-        "auth_method": {
-          "type": "string"
-        },
-        "error_category": {
-          "type": "string"
-        },
-        "status_code": {
-          "type": "string"
-        }
-      }
-    },
-    "event:compaction": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "compaction"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "trigger": {
-          "type": "string"
-        },
-        "success": {
-          "type": "string"
-        },
-        "duration_ms": {
-          "type": "string"
-        },
-        "pre_tokens": {
-          "type": "string"
-        },
-        "post_tokens": {
-          "type": "string"
-        },
-        "error": {
-          "type": "string"
-        },
-        "precompute_reuse": {
-          "type": "string"
-        }
-      }
-    },
-    "event:feedback_survey": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 17. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "feedback_survey"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "event_type": {
-          "type": "string"
-        },
-        "appearance_id": {
-          "type": "string"
-        },
-        "response": {
-          "type": "string"
-        },
-        "survey_type": {
-          "type": "string"
-        },
-        "enabled_via_override": {
-          "type": "boolean"
-        },
-        "event_origin": {
-          "const": "sdk_host"
-        },
-        "event_origin_server": {
-          "type": "string"
-        },
-        "trigger_type": {
-          "type": "string"
-        },
-        "plugin_id_hash": {
-          "type": "string"
-        },
-        "plugin.name": {
-          "type": "string"
-        }
-      }
-    },
-    "event:hook_execution_complete": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "hook_execution_complete"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "hook_event": {
-          "type": "string"
-        },
-        "hook_name": {
-          "type": "string"
-        },
-        "num_hooks": {
-          "type": "string"
-        },
-        "num_success": {
-          "type": "string"
-        },
-        "num_blocking": {
-          "type": "string"
-        },
-        "num_non_blocking_error": {
-          "type": "string"
-        },
-        "num_cancelled": {
-          "type": "string"
-        },
-        "total_duration_ms": {
-          "type": "string"
-        },
-        "stdout_chars": {
-          "type": "string"
-        },
-        "additional_context_chars": {
-          "type": "string"
-        },
-        "system_message_chars": {
-          "type": "string"
-        },
-        "initial_user_message_chars": {
-          "type": "string"
-        },
-        "num_outputs_persisted": {
-          "type": "string"
-        },
-        "managed_only": {
-          "type": "string"
-        },
-        "hook_source": {
-          "enum": ["policySettings", "merged"]
-        },
-        "safe_mode": {
-          "type": "string"
-        },
-        "hook_definitions": {
-          "type": "string"
-        }
-      }
-    },
-    "event:hook_execution_start": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "hook_execution_start"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "hook_event": {
-          "type": "string"
-        },
-        "hook_name": {
-          "type": "string"
-        },
-        "num_hooks": {
-          "type": "string"
-        },
-        "managed_only": {
-          "type": "string"
-        },
-        "hook_source": {
-          "enum": ["policySettings", "merged"]
-        },
-        "safe_mode": {
-          "type": "string"
-        },
-        "hook_definitions": {
-          "type": "string"
-        }
-      }
-    },
-    "event:hook_plugin_metrics": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "hook_plugin_metrics"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "plugin_id": {
-          "type": "string"
-        },
-        "hook_event": {
-          "type": "string"
-        }
-      }
-    },
-    "event:hook_registered": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 2. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "hook_registered"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "hook_event": {
-          "type": "string"
-        },
-        "hook_type": {
-          "type": "string"
-        },
-        "hook_source": {
-          "type": "string"
-        },
-        "safe_mode": {
-          "type": "string"
-        },
-        "hook_matcher": {
-          "type": "string"
-        },
-        "plugin.name": {
-          "type": "string"
-        },
-        "plugin_id_hash": {
-          "type": "string"
-        }
-      }
-    },
-    "event:internal_error": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "internal_error"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "error_name": {
-          "type": "string"
-        },
-        "error_code": {
-          "type": "string"
-        }
-      }
-    },
-    "event:managed_settings_resolved": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 2. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "managed_settings_resolved"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "managed_settings.trigger": {
-          "type": "string"
-        },
-        "managed_settings.sources": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "managed_settings.source_behavior": {
-          "enum": ["merge", "first-wins"]
-        },
-        "managed_settings.helper.state": {
-          "type": "string"
-        },
-        "managed_settings.helper.applied": {
-          "type": "string"
-        },
-        "managed_settings.helper.entry": {
-          "type": "string"
-        },
-        "managed_settings.helper.path": {
-          "type": "string"
-        },
-        "managed_settings.helper.script_sha256": {
-          "type": "string"
-        },
-        "managed_settings.resolved_sha256": {
-          "type": "string"
-        },
-        "managed_settings.settings": {
-          "type": "string"
-        },
-        "managed_settings.settings_truncated": {
-          "type": "boolean"
-        },
-        "error.type": {
-          "type": "string"
-        }
-      }
-    },
-    "event:mcp_server_connection": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 2. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "mcp_server_connection"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "status": {
-          "type": "string"
-        },
-        "transport_type": {
-          "type": "string"
-        },
-        "server_scope": {
-          "type": "string"
-        },
-        "duration_ms": {
-          "type": "string"
-        },
-        "is_plugin": {
-          "type": "boolean"
-        },
-        "plugin_id_hash": {
-          "type": "string"
-        },
-        "plugin.name": {
-          "type": "string"
-        },
-        "error_code": {
-          "type": "string"
-        },
-        "server_name": {
-          "type": "string"
-        },
-        "error": {
-          "type": "string"
-        }
-      }
-    },
-    "event:permission_mode_changed": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "permission_mode_changed"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "from_mode": {
-          "type": "string"
-        },
-        "to_mode": {
-          "type": "string"
-        },
-        "trigger": {
-          "type": "string"
-        }
-      }
-    },
-    "event:plugin_installed": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "plugin_installed"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "plugin.name": {
-          "type": "string"
-        },
-        "plugin.version": {
-          "type": "string"
-        },
-        "marketplace.name": {
-          "type": "string"
-        },
-        "marketplace.is_official": {
-          "type": "string"
-        },
-        "install.trigger": {
-          "type": "string"
-        },
-        "install.disabled_by_default": {
-          "const": "true"
-        }
-      }
-    },
-    "event:plugin_loaded": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "plugin_loaded"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "plugin.name": {
-          "type": "string"
-        },
-        "marketplace.name": {
-          "type": "string"
-        },
-        "plugin.version": {
-          "type": "string"
-        },
-        "plugin.scope": {
-          "type": "string"
-        },
-        "enabled_via": {
-          "type": "string"
-        },
-        "plugin_id_hash": {
-          "type": "string"
-        },
-        "has_hooks": {
-          "type": "boolean"
-        },
-        "has_mcp": {
-          "type": "boolean"
-        },
-        "host_owned_mcp": {
-          "type": "boolean"
-        },
-        "skill_path_count": {
-          "type": "number"
-        },
-        "command_path_count": {
-          "type": "number"
-        },
-        "agent_path_count": {
-          "type": "number"
-        },
-        "safe_mode": {
-          "type": "string"
-        }
-      }
-    },
-    "event:retention_sweep": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "retention_sweep"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "result": {
-          "type": "string"
-        },
-        "period_days": {
-          "type": "string"
-        },
-        "used_default": {
-          "type": "string"
-        },
-        "skip_reason": {
-          "type": ["null", "string"]
-        },
-        "transcripts_deleted": {
-          "type": "string"
-        },
-        "transcripts_exempted_desktop": {
-          "type": "string"
-        },
-        "session_files_deleted": {
-          "type": "string"
-        },
-        "artifacts_deleted": {
-          "type": "string"
-        },
-        "files_retained_fresh": {
-          "type": "string"
-        },
-        "files_past_cutoff": {
-          "type": "string"
-        },
-        "error_count": {
-          "type": "string"
-        },
-        "history_entries_pruned": {
-          "type": "string"
-        }
-      }
-    },
-    "event:safety_event": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "safety_event"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "category": {
-          "type": "string"
-        },
-        "decision": {
-          "type": "string"
-        },
-        "decision_source": {
-          "type": "string"
-        },
-        "reason_type": {
-          "type": "string"
-        },
-        "reason_code": {
-          "type": "string"
-        },
-        "rule_source": {
-          "type": "string"
-        },
-        "grant_scope": {
-          "type": "string"
-        },
-        "circuit_breaker": {
-          "type": "string"
-        },
-        "classifier_category": {
-          "type": "string"
-        },
-        "hook_event": {
-          "type": "string"
-        },
-        "tool_class": {
-          "type": "string"
-        },
-        "tool_name": {
-          "type": "string"
-        },
-        "tool_source": {
-          "type": "string"
-        },
-        "permission_mode": {
-          "type": "string"
-        },
-        "tool_use_id": {
-          "type": "string"
-        },
-        "sandbox_violation_count": {
-          "type": "string"
-        },
-        "sandbox_enabled": {
-          "type": "string"
-        }
-      }
-    },
-    "event:skill_activated": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "skill_activated"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "skill.name": {
-          "type": "string"
-        },
-        "invocation_trigger": {
-          "type": "string"
-        },
-        "skill.source": {
-          "type": "string"
-        },
-        "skill.kind": {
-          "type": "string"
-        },
-        "plugin.name": {
-          "type": "string"
-        },
-        "marketplace.name": {
-          "type": "string"
-        }
-      }
-    },
-    "event:subagent_completed": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "subagent_completed"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "agent_type": {
-          "type": "string"
-        },
-        "agent.source": {
-          "type": "string"
-        },
-        "is_built_in": {
-          "type": "boolean"
-        },
-        "is_async": {
-          "type": "boolean"
-        },
-        "total_tokens": {
-          "type": "number"
-        },
-        "total_tool_uses": {
-          "type": "number"
-        },
-        "duration_ms": {
-          "type": "number"
-        },
-        "model": {
-          "type": "string"
-        },
-        "final_model": {
-          "type": "string"
-        },
-        "model_swapped": {
-          "type": "boolean"
-        },
-        "plugin_id_hash": {
-          "type": "string"
-        },
-        "plugin.name": {
-          "type": "string"
-        }
-      }
-    },
-    "event:system_prompt": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "system_prompt"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "system_prompt_hash": {
-          "type": "string"
-        },
-        "system_prompt": {
-          "type": "string"
-        },
-        "system_prompt_length": {
-          "type": "string"
-        },
-        "system_prompt_truncated": {
-          "const": "true"
-        }
-      }
-    },
-    "event:tool": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "tool"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "tool_name": {
-          "type": "string"
-        },
-        "tool_hash": {
-          "type": "string"
-        },
-        "tool": {
-          "type": "string"
-        },
-        "tool_truncated": {
-          "const": "true"
-        }
-      }
-    },
-    "event:tool_decision": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 2. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "tool_decision"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "decision": {
-          "enum": ["accept", "reject"]
-        },
-        "source": {
-          "type": "string"
-        },
-        "tool_name": {
-          "type": "string"
-        },
-        "tool_use_id": {
-          "type": "string"
-        },
-        "tool_source": {
-          "type": "string"
-        },
-        "tool_parameters": {
-          "type": "string"
-        },
-        "classifier_verdict": {
-          "type": "string"
-        },
-        "classifier_category": {
-          "type": "string"
-        },
-        "permission_mode": {
-          "type": "string"
-        },
-        "request_id": {
-          "x-unverified": true
-        }
-      }
-    },
-    "event:tool_result": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 2. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "tool_result"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "tool_name": {
-          "type": "string"
-        },
-        "tool_use_id": {
-          "type": "string"
-        },
-        "success": {
-          "enum": ["true", "false"]
-        },
-        "duration_ms": {
-          "type": "string"
-        },
-        "tool_parameters": {
-          "type": "string"
-        },
-        "tool_input": {
-          "type": "string"
-        },
-        "tool_input_size_bytes": {
-          "type": "string"
-        },
-        "tool_result_size_bytes": {
-          "type": "string"
-        },
-        "decision_source": {
-          "type": "string"
-        },
-        "decision_type": {
-          "type": "string"
-        },
-        "mcp_server_scope": {
-          "type": "string"
-        },
-        "vcs.ref.head.revision": {
-          "type": "string"
-        },
-        "vcs.ref.head.name": {
-          "type": "string"
-        },
-        "vcs.ref.head.type": {
-          "const": "branch"
-        },
-        "request_id": {
-          "x-unverified": true
-        },
-        "error_type": {
-          "type": "string"
-        },
-        "error": {
-          "type": "string"
-        }
-      }
-    },
-    "event:user_prompt": {
-      "x-otel-kind": "event",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "event.name": {
-          "const": "user_prompt"
-        },
-        "event.timestamp": {
-          "type": "string"
-        },
-        "event.sequence": {
-          "type": "number"
-        },
-        "prompt.id": {
-          "type": "string"
-        },
-        "workspace.host_paths": {
-          "type": "array"
-        },
-        "prompt_length": {
-          "type": "string"
-        },
-        "prompt": {
-          "type": "string"
-        },
-        "prompt_text": {
-          "type": "string"
-        }
-      }
-    },
-    "metric:claude_code.active_time.total": {
-      "x-otel-kind": "metric",
-      "type": "object",
-      "description": "Total active time in seconds",
-      "$comment": "Unit: s. Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        }
-      }
-    },
-    "metric:claude_code.code_edit_tool.decision": {
-      "x-otel-kind": "metric",
-      "type": "object",
-      "description": "Count of code editing tool permission decisions (accept/reject) for Edit, Write, and NotebookEdit tools",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "decision": {
-          "enum": ["accept", "reject"]
-        },
-        "source": {
-          "type": "string"
-        },
-        "tool_name": {
-          "type": "string"
-        },
-        "language": {
-          "type": "string"
-        }
-      }
-    },
-    "metric:claude_code.commit.count": {
-      "x-otel-kind": "metric",
-      "type": "object",
-      "description": "Number of git commits created",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        }
-      }
-    },
-    "metric:claude_code.cost.usage": {
-      "x-otel-kind": "metric",
-      "type": "object",
-      "description": "Cost of the Claude Code session",
-      "$comment": "Unit: USD. Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "model": {
-          "type": "string"
-        },
-        "speed": {
-          "const": "fast"
-        },
-        "query_source": {
-          "type": "string"
-        },
-        "effort": {
-          "enum": ["low", "medium", "high", "xhigh", "max"]
-        },
-        "agent.name": {
-          "type": "string"
-        },
-        "skill.name": {
-          "type": "string"
-        },
-        "plugin.name": {
-          "type": "string"
-        },
-        "marketplace.name": {
-          "type": "string"
-        },
-        "mcp_server.name": {
-          "type": "string"
-        },
-        "mcp_tool.name": {
-          "type": "string"
-        }
-      }
-    },
-    "metric:claude_code.lines_of_code.count": {
-      "x-otel-kind": "metric",
-      "type": "object",
-      "description": "Count of lines of code modified, with the 'type' attribute indicating whether lines were added or removed and the 'model' attribute indicating which model made the change",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "type": {
-          "const": "added"
-        },
-        "model": {
-          "type": "string"
-        }
-      }
-    },
-    "metric:claude_code.pull_request.count": {
-      "x-otel-kind": "metric",
-      "type": "object",
-      "description": "Number of pull requests created",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        }
-      }
-    },
-    "metric:claude_code.session.count": {
-      "x-otel-kind": "metric",
-      "type": "object",
-      "description": "Count of CLI sessions started",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        }
-      }
-    },
-    "metric:claude_code.token.usage": {
-      "x-otel-kind": "metric",
-      "type": "object",
-      "description": "Number of tokens used",
-      "$comment": "Unit: tokens. Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "model": {
-          "type": "string"
-        },
-        "speed": {
-          "const": "fast"
-        },
-        "query_source": {
-          "type": "string"
-        },
-        "effort": {
-          "enum": ["low", "medium", "high", "xhigh", "max"]
-        },
-        "agent.name": {
-          "type": "string"
-        },
-        "skill.name": {
-          "type": "string"
-        },
-        "plugin.name": {
-          "type": "string"
-        },
-        "marketplace.name": {
-          "type": "string"
-        },
-        "mcp_server.name": {
-          "type": "string"
-        },
-        "mcp_tool.name": {
-          "type": "string"
-        },
-        "type": {
-          "const": "input"
-        }
-      }
-    },
-    "span:claude_code.bash.subprocess": {
-      "x-otel-kind": "span",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (contentAttrs: command).",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "gen_ai.provider.name": {
-          "enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
-        },
-        "shell.type": {
-          "type": "string"
-        },
-        "command_length": {
-          "type": "number"
-        },
-        "timeout_ms": {
-          "type": "number"
-        },
-        "command": {
-          "type": "string"
-        },
-        "span.type": {
-          "const": "bash.subprocess"
-        }
-      }
-    },
-    "span:claude_code.compaction": {
-      "x-otel-kind": "span",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1.",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "gen_ai.provider.name": {
-          "enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
-        },
-        "trigger": {
-          "enum": ["auto", "manual"]
-        },
-        "message_count": {
-          "type": "number"
-        },
-        "span.type": {
-          "const": "compaction"
-        }
-      }
-    },
-    "span:claude_code.hook": {
-      "x-otel-kind": "span",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "gen_ai.provider.name": {
-          "enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
-        },
-        "gen_ai.conversation.id": {
-          "type": "string"
-        },
-        "hook_event": {
-          "type": "string"
-        },
-        "hook_name": {
-          "type": "string"
-        },
-        "num_hooks": {
-          "type": "number"
-        },
-        "hook_definitions": {
-          "type": "string"
-        },
-        "span.type": {
-          "const": "hook"
-        }
-      }
-    },
-    "span:claude_code.interaction": {
-      "x-otel-kind": "span",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "gen_ai.provider.name": {
-          "enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
-        },
-        "gen_ai.operation.name": {
-          "const": "invoke_agent"
-        },
-        "gen_ai.conversation.id": {
-          "type": "string"
-        },
-        "user_prompt": {
-          "type": "string"
-        },
-        "user_prompt_length": {
-          "type": "number"
-        },
-        "interaction.sequence": {
-          "type": "number"
-        },
-        "parent.source": {
-          "enum": ["event", "env", "none"]
-        },
-        "queued_sends": {
-          "type": "number"
-        },
-        "span.type": {
-          "const": "interaction"
-        }
-      }
-    },
-    "span:claude_code.llm_request": {
-      "x-otel-kind": "span",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "gen_ai.provider.name": {
-          "enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
-        },
-        "model": {
-          "type": "string"
-        },
-        "gen_ai.system": {
-          "const": "anthropic"
-        },
-        "gen_ai.request.model": {
-          "type": "string"
-        },
-        "llm_request.context": {
-          "enum": ["tool", "interaction", "standalone"]
-        },
-        "speed": {
-          "enum": ["fast", "normal"]
-        },
-        "gen_ai.conversation.id": {
-          "type": "string"
-        },
-        "span.type": {
-          "const": "llm_request"
-        }
-      }
-    },
-    "span:claude_code.mcp.rpc": {
-      "x-otel-kind": "span",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 2. Added only when content logging is on (contentAttrs: mcp_args; contentAttrs: mcp_args).",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "gen_ai.provider.name": {
-          "enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
-        },
-        "rpc.system": {
-          "const": "mcp"
-        },
-        "rpc.service": {
-          "type": "string"
-        },
-        "rpc.method": {
-          "const": "tools/call"
-        },
-        "mcp_tool": {
-          "type": "string"
-        },
-        "attempt": {
-          "type": "number"
-        },
-        "mcp_args": {
-          "type": "string"
-        },
-        "span.type": {
-          "const": "mcp.rpc"
-        }
-      }
-    },
-    "span:claude_code.subagent.spawn": {
-      "x-otel-kind": "span",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "gen_ai.provider.name": {
-          "enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
-        },
-        "agent_id": {
-          "type": "string"
-        },
-        "agent_type": {
-          "type": "string"
-        },
-        "parent_agent_id": {
-          "type": "string"
-        },
-        "span.type": {
-          "const": "subagent.spawn"
-        }
-      }
-    },
-    "span:claude_code.tool": {
-      "x-otel-kind": "span",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "gen_ai.provider.name": {
-          "enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
-        },
-        "tool_name": {
-          "type": "string"
-        },
-        "tool_name_safe": {
-          "type": "string"
-        },
-        "gen_ai.operation.name": {
-          "const": "execute_tool"
-        },
-        "gen_ai.tool.name": {
-          "type": "string"
-        },
-        "anthropic.mcp.server.name": {
-          "type": "string"
-        },
-        "gen_ai.conversation.id": {
-          "type": "string"
-        },
-        "file_path": {
-          "type": "string"
-        },
-        "full_command": {
-          "type": "string"
-        },
-        "skill_name": {
-          "type": "string"
-        },
-        "subagent_type": {
-          "type": "string"
-        },
-        "bash_command_class": {
-          "type": "string"
-        },
-        "bash_argv0": {
-          "type": "string"
-        },
-        "span.type": {
-          "const": "tool"
-        }
-      }
-    },
-    "span:claude_code.tool.blocked_on_user": {
-      "x-otel-kind": "span",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "gen_ai.provider.name": {
-          "enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
-        },
-        "gen_ai.conversation.id": {
-          "type": "string"
-        },
-        "span.type": {
-          "const": "tool.blocked_on_user"
-        }
-      }
-    },
-    "span:claude_code.tool.execution": {
-      "x-otel-kind": "span",
-      "type": "object",
-      "$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
-      "properties": {
-        "user.id": {
-          "type": "string"
-        },
-        "user.email": {
-          "type": "string"
-        },
-        "user.groups": {
-          "type": "string"
-        },
-        "gen_ai.provider.name": {
-          "enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
-        },
-        "gen_ai.conversation.id": {
-          "type": "string"
-        },
-        "span.type": {
-          "const": "tool.execution"
-        }
-      }
-    }
-  }
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://clawdipedia.cc/schemas/claude-code-otel.json",
+	"title": "Claude Code OpenTelemetry metrics, spans, and events (Claude Code 2.1.319)",
+	"$comment": "For the OpenTelemetry data Claude Code emits. Each $defs entry is one metric, span, or event; the kind is in x-otel-kind and the properties are its attributes. Generated from Claude Code 2.1.319 by tools/schemas/code.ts. Anchors: \"Count of CLI sessions started\" (the meter setup that registers each metric with its description and unit) with the counter accessor functions and their .add(value, attributes) call sites; the span helpers (startSpan(\"claude_code.<name>\") with the attribute literal built just before it, and the wrapper that takes {spanType, attrs, contentAttrs}); the event emitter that sets \"event.name\", \"event.timestamp\", \"event.sequence\" and its call sites with the attribute literal; the base attribute builder behind \"OTEL_METRICS_INCLUDE_SESSION_ID\". No probe in captures/ records telemetry, so nothing is marked x-observed. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
+	"$defs": {
+		"event:api_error": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "api_error"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"model": {
+					"type": "string"
+				},
+				"error": {
+					"type": "string"
+				},
+				"status_code": {
+					"type": "number"
+				},
+				"duration_ms": {
+					"type": "number"
+				},
+				"attempt": {
+					"type": "number"
+				},
+				"request_id": {
+					"type": "string"
+				},
+				"client_request_id": {
+					"type": "string"
+				},
+				"speed": {
+					"enum": ["fast", "normal"]
+				},
+				"query_source": {
+					"type": "string"
+				},
+				"effort": {
+					"enum": ["low", "medium", "high", "xhigh", "max"]
+				},
+				"agent.name": {
+					"type": "string"
+				},
+				"skill.name": {
+					"type": "string"
+				},
+				"plugin.name": {
+					"type": "string"
+				},
+				"marketplace.name": {
+					"type": "string"
+				},
+				"mcp_server.name": {
+					"type": "string"
+				},
+				"mcp_tool.name": {
+					"type": "string"
+				}
+			}
+		},
+		"event:api_refusal": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "api_refusal"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"model": {
+					"type": "string"
+				},
+				"request_id": {
+					"type": "string"
+				},
+				"speed": {
+					"enum": ["fast", "normal"]
+				},
+				"attempt": {
+					"type": "number"
+				},
+				"server_fallback_hop": {
+					"type": "boolean"
+				},
+				"query_source": {
+					"type": "string"
+				},
+				"effort": {
+					"enum": ["low", "medium", "high", "xhigh", "max"]
+				},
+				"has_category": {
+					"type": "boolean"
+				},
+				"has_explanation": {
+					"type": "boolean"
+				},
+				"category": {
+					"enum": ["cyber", "bio", "frontier_llm", "reasoning_extraction"]
+				},
+				"agent.name": {
+					"type": "string"
+				},
+				"skill.name": {
+					"type": "string"
+				},
+				"plugin.name": {
+					"type": "string"
+				},
+				"marketplace.name": {
+					"type": "string"
+				},
+				"mcp_server.name": {
+					"type": "string"
+				},
+				"mcp_tool.name": {
+					"type": "string"
+				}
+			}
+		},
+		"event:api_request": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "api_request"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"model": {
+					"type": "string"
+				},
+				"input_tokens": {
+					"type": "number"
+				},
+				"output_tokens": {
+					"type": "number"
+				},
+				"cache_read_tokens": {
+					"type": "number"
+				},
+				"cache_creation_tokens": {
+					"type": "number"
+				},
+				"cache_creation_5m_tokens": {
+					"type": "number"
+				},
+				"cache_creation_1h_tokens": {
+					"type": "number"
+				},
+				"cost_usd": {
+					"type": "number"
+				},
+				"cost_usd_micros": {
+					"type": "number"
+				},
+				"duration_ms": {
+					"x-unverified": true,
+					"x-observed-type": ["number"]
+				},
+				"ttft_ms": {
+					"type": "number"
+				},
+				"request_id": {
+					"type": "string"
+				},
+				"client_request_id": {
+					"type": "string"
+				},
+				"speed": {
+					"enum": ["fast", "normal"]
+				},
+				"query_source": {
+					"type": "string"
+				},
+				"effort": {
+					"enum": ["low", "medium", "high", "xhigh", "max"]
+				},
+				"agent.name": {
+					"type": "string"
+				},
+				"skill.name": {
+					"type": "string"
+				},
+				"plugin.name": {
+					"type": "string"
+				},
+				"marketplace.name": {
+					"type": "string"
+				},
+				"mcp_server.name": {
+					"type": "string"
+				},
+				"mcp_tool.name": {
+					"type": "string"
+				}
+			}
+		},
+		"event:api_retries_exhausted": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "api_retries_exhausted"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"model": {
+					"type": "string"
+				},
+				"error": {
+					"type": "string"
+				},
+				"status_code": {
+					"type": "number"
+				},
+				"total_attempts": {
+					"type": "number"
+				},
+				"total_retry_duration_ms": {
+					"type": "number"
+				},
+				"speed": {
+					"enum": ["fast", "normal"]
+				},
+				"query_source": {
+					"type": "string"
+				},
+				"effort": {
+					"enum": ["low", "medium", "high", "xhigh", "max"]
+				}
+			}
+		},
+		"event:assistant_response": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "assistant_response"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"response_length": {
+					"type": "number"
+				},
+				"response": {
+					"type": "string"
+				},
+				"request_id": {
+					"type": "string"
+				},
+				"message.uuid": {
+					"type": "string"
+				},
+				"model": {
+					"type": "string"
+				},
+				"query_source": {
+					"type": "string"
+				}
+			}
+		},
+		"event:at_mention": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "at_mention"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"mention_type": {
+					"type": "string"
+				},
+				"success": {
+					"type": "string"
+				}
+			}
+		},
+		"event:auth": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "auth"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"action": {
+					"type": "string"
+				},
+				"success": {
+					"type": "string"
+				},
+				"auth_method": {
+					"type": "string"
+				},
+				"error_category": {
+					"type": "string"
+				},
+				"status_code": {
+					"type": "string"
+				}
+			}
+		},
+		"event:compaction": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "compaction"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"trigger": {
+					"type": "string"
+				},
+				"success": {
+					"type": "string"
+				},
+				"duration_ms": {
+					"type": "string"
+				},
+				"pre_tokens": {
+					"type": "string"
+				},
+				"post_tokens": {
+					"type": "string"
+				},
+				"error": {
+					"type": "string"
+				},
+				"precompute_reuse": {
+					"type": "string"
+				}
+			}
+		},
+		"event:feedback_survey": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 17. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "feedback_survey"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"event_type": {
+					"type": "string"
+				},
+				"appearance_id": {
+					"type": "string"
+				},
+				"response": {
+					"type": "string"
+				},
+				"survey_type": {
+					"type": "string"
+				},
+				"enabled_via_override": {
+					"type": "boolean"
+				},
+				"event_origin": {
+					"const": "sdk_host"
+				},
+				"event_origin_server": {
+					"type": "string"
+				},
+				"trigger_type": {
+					"type": "string"
+				},
+				"plugin_id_hash": {
+					"type": "string"
+				},
+				"plugin.name": {
+					"type": "string"
+				}
+			}
+		},
+		"event:hook_execution_complete": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "hook_execution_complete"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"hook_event": {
+					"type": "string"
+				},
+				"hook_name": {
+					"type": "string"
+				},
+				"num_hooks": {
+					"type": "string"
+				},
+				"num_success": {
+					"type": "string"
+				},
+				"num_blocking": {
+					"type": "string"
+				},
+				"num_non_blocking_error": {
+					"type": "string"
+				},
+				"num_cancelled": {
+					"type": "string"
+				},
+				"total_duration_ms": {
+					"type": "string"
+				},
+				"stdout_chars": {
+					"type": "string"
+				},
+				"additional_context_chars": {
+					"type": "string"
+				},
+				"system_message_chars": {
+					"type": "string"
+				},
+				"initial_user_message_chars": {
+					"type": "string"
+				},
+				"num_outputs_persisted": {
+					"type": "string"
+				},
+				"managed_only": {
+					"type": "string"
+				},
+				"hook_source": {
+					"enum": ["policySettings", "merged"]
+				},
+				"safe_mode": {
+					"type": "string"
+				},
+				"hook_definitions": {
+					"type": "string"
+				}
+			}
+		},
+		"event:hook_execution_start": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "hook_execution_start"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"hook_event": {
+					"type": "string"
+				},
+				"hook_name": {
+					"type": "string"
+				},
+				"num_hooks": {
+					"type": "string"
+				},
+				"managed_only": {
+					"type": "string"
+				},
+				"hook_source": {
+					"enum": ["policySettings", "merged"]
+				},
+				"safe_mode": {
+					"type": "string"
+				},
+				"hook_definitions": {
+					"type": "string"
+				}
+			}
+		},
+		"event:hook_plugin_metrics": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "hook_plugin_metrics"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"plugin_id": {
+					"type": "string"
+				},
+				"hook_event": {
+					"type": "string"
+				}
+			}
+		},
+		"event:hook_registered": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 2. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "hook_registered"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"hook_event": {
+					"type": "string"
+				},
+				"hook_type": {
+					"type": "string"
+				},
+				"hook_source": {
+					"type": "string"
+				},
+				"safe_mode": {
+					"type": "string"
+				},
+				"hook_matcher": {
+					"type": "string"
+				},
+				"plugin.name": {
+					"type": "string"
+				},
+				"plugin_id_hash": {
+					"type": "string"
+				}
+			}
+		},
+		"event:internal_error": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "internal_error"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"error_name": {
+					"type": "string"
+				},
+				"error_code": {
+					"type": "string"
+				}
+			}
+		},
+		"event:managed_settings_resolved": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 2. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "managed_settings_resolved"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"managed_settings.trigger": {
+					"type": "string"
+				},
+				"managed_settings.sources": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"managed_settings.source_behavior": {
+					"enum": ["merge", "first-wins"]
+				},
+				"managed_settings.helper.state": {
+					"type": "string"
+				},
+				"managed_settings.helper.applied": {
+					"type": "string"
+				},
+				"managed_settings.helper.entry": {
+					"type": "string"
+				},
+				"managed_settings.helper.path": {
+					"type": "string"
+				},
+				"managed_settings.helper.script_sha256": {
+					"type": "string"
+				},
+				"managed_settings.resolved_sha256": {
+					"type": "string"
+				},
+				"managed_settings.settings": {
+					"type": "string"
+				},
+				"managed_settings.settings_truncated": {
+					"type": "boolean"
+				},
+				"error.type": {
+					"type": "string"
+				}
+			}
+		},
+		"event:mcp_server_connection": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 2. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "mcp_server_connection"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"status": {
+					"type": "string"
+				},
+				"transport_type": {
+					"type": "string"
+				},
+				"server_scope": {
+					"type": "string"
+				},
+				"duration_ms": {
+					"type": "string"
+				},
+				"is_plugin": {
+					"type": "boolean"
+				},
+				"plugin_id_hash": {
+					"type": "string"
+				},
+				"plugin.name": {
+					"type": "string"
+				},
+				"error_code": {
+					"type": "string"
+				},
+				"server_name": {
+					"type": "string"
+				},
+				"error": {
+					"type": "string"
+				}
+			}
+		},
+		"event:permission_mode_changed": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "permission_mode_changed"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"from_mode": {
+					"type": "string"
+				},
+				"to_mode": {
+					"type": "string"
+				},
+				"trigger": {
+					"type": "string"
+				}
+			}
+		},
+		"event:plugin_installed": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "plugin_installed"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"plugin.name": {
+					"type": "string"
+				},
+				"plugin.version": {
+					"type": "string"
+				},
+				"marketplace.name": {
+					"type": "string"
+				},
+				"marketplace.is_official": {
+					"type": "string"
+				},
+				"install.trigger": {
+					"type": "string"
+				},
+				"install.disabled_by_default": {
+					"const": "true"
+				}
+			}
+		},
+		"event:plugin_loaded": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "plugin_loaded"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"plugin.name": {
+					"type": "string"
+				},
+				"marketplace.name": {
+					"type": "string"
+				},
+				"plugin.version": {
+					"type": "string"
+				},
+				"plugin.scope": {
+					"type": "string"
+				},
+				"enabled_via": {
+					"type": "string"
+				},
+				"plugin_id_hash": {
+					"type": "string"
+				},
+				"has_hooks": {
+					"type": "boolean"
+				},
+				"has_mcp": {
+					"type": "boolean"
+				},
+				"host_owned_mcp": {
+					"type": "boolean"
+				},
+				"skill_path_count": {
+					"type": "number"
+				},
+				"command_path_count": {
+					"type": "number"
+				},
+				"agent_path_count": {
+					"type": "number"
+				},
+				"safe_mode": {
+					"type": "string"
+				}
+			}
+		},
+		"event:retention_sweep": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "retention_sweep"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"result": {
+					"type": "string"
+				},
+				"period_days": {
+					"type": "string"
+				},
+				"used_default": {
+					"type": "string"
+				},
+				"skip_reason": {
+					"type": ["null", "string"]
+				},
+				"transcripts_deleted": {
+					"type": "string"
+				},
+				"transcripts_exempted_desktop": {
+					"type": "string"
+				},
+				"session_files_deleted": {
+					"type": "string"
+				},
+				"artifacts_deleted": {
+					"type": "string"
+				},
+				"files_retained_fresh": {
+					"type": "string"
+				},
+				"files_past_cutoff": {
+					"type": "string"
+				},
+				"error_count": {
+					"type": "string"
+				},
+				"history_entries_pruned": {
+					"type": "string"
+				}
+			}
+		},
+		"event:safety_event": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "safety_event"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"category": {
+					"type": "string"
+				},
+				"decision": {
+					"type": "string"
+				},
+				"decision_source": {
+					"type": "string"
+				},
+				"reason_type": {
+					"type": "string"
+				},
+				"reason_code": {
+					"type": "string"
+				},
+				"rule_source": {
+					"type": "string"
+				},
+				"grant_scope": {
+					"type": "string"
+				},
+				"circuit_breaker": {
+					"type": "string"
+				},
+				"classifier_category": {
+					"type": "string"
+				},
+				"hook_event": {
+					"type": "string"
+				},
+				"tool_class": {
+					"type": "string"
+				},
+				"tool_name": {
+					"type": "string"
+				},
+				"tool_source": {
+					"type": "string"
+				},
+				"permission_mode": {
+					"type": "string"
+				},
+				"tool_use_id": {
+					"type": "string"
+				},
+				"sandbox_violation_count": {
+					"type": "string"
+				},
+				"sandbox_enabled": {
+					"type": "string"
+				}
+			}
+		},
+		"event:skill_activated": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "skill_activated"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"skill.name": {
+					"type": "string"
+				},
+				"invocation_trigger": {
+					"type": "string"
+				},
+				"skill.source": {
+					"type": "string"
+				},
+				"skill.kind": {
+					"type": "string"
+				},
+				"plugin.name": {
+					"type": "string"
+				},
+				"marketplace.name": {
+					"type": "string"
+				}
+			}
+		},
+		"event:subagent_completed": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "subagent_completed"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"agent_type": {
+					"type": "string"
+				},
+				"agent.source": {
+					"type": "string"
+				},
+				"is_built_in": {
+					"type": "boolean"
+				},
+				"is_async": {
+					"type": "boolean"
+				},
+				"total_tokens": {
+					"type": "number"
+				},
+				"total_tool_uses": {
+					"type": "number"
+				},
+				"duration_ms": {
+					"type": "number"
+				},
+				"model": {
+					"type": "string"
+				},
+				"final_model": {
+					"type": "string"
+				},
+				"model_swapped": {
+					"type": "boolean"
+				},
+				"plugin_id_hash": {
+					"type": "string"
+				},
+				"plugin.name": {
+					"type": "string"
+				}
+			}
+		},
+		"event:system_prompt": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "system_prompt"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"system_prompt_hash": {
+					"type": "string"
+				},
+				"system_prompt": {
+					"type": "string"
+				},
+				"system_prompt_length": {
+					"type": "string"
+				},
+				"system_prompt_truncated": {
+					"const": "true"
+				}
+			}
+		},
+		"event:tool": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "tool"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"tool_name": {
+					"type": "string"
+				},
+				"tool_hash": {
+					"type": "string"
+				},
+				"tool": {
+					"type": "string"
+				},
+				"tool_truncated": {
+					"const": "true"
+				}
+			}
+		},
+		"event:tool_decision": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 2. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "tool_decision"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"decision": {
+					"enum": ["accept", "reject"]
+				},
+				"source": {
+					"type": "string"
+				},
+				"tool_name": {
+					"type": "string"
+				},
+				"tool_use_id": {
+					"type": "string"
+				},
+				"tool_source": {
+					"type": "string"
+				},
+				"tool_parameters": {
+					"type": "string"
+				},
+				"classifier_verdict": {
+					"type": "string"
+				},
+				"classifier_category": {
+					"type": "string"
+				},
+				"permission_mode": {
+					"type": "string"
+				},
+				"request_id": {
+					"x-unverified": true
+				}
+			}
+		},
+		"event:tool_result": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 2. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "tool_result"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"tool_name": {
+					"type": "string"
+				},
+				"tool_use_id": {
+					"type": "string"
+				},
+				"success": {
+					"enum": ["true", "false"]
+				},
+				"duration_ms": {
+					"type": "string"
+				},
+				"tool_parameters": {
+					"type": "string"
+				},
+				"tool_input": {
+					"type": "string"
+				},
+				"tool_input_size_bytes": {
+					"type": "string"
+				},
+				"tool_result_size_bytes": {
+					"type": "string"
+				},
+				"decision_source": {
+					"type": "string"
+				},
+				"decision_type": {
+					"type": "string"
+				},
+				"mcp_server_scope": {
+					"type": "string"
+				},
+				"vcs.ref.head.revision": {
+					"type": "string"
+				},
+				"vcs.ref.head.name": {
+					"type": "string"
+				},
+				"vcs.ref.head.type": {
+					"const": "branch"
+				},
+				"request_id": {
+					"x-unverified": true
+				},
+				"error_type": {
+					"type": "string"
+				},
+				"error": {
+					"type": "string"
+				}
+			}
+		},
+		"event:user_prompt": {
+			"x-otel-kind": "event",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"event.name": {
+					"const": "user_prompt"
+				},
+				"event.timestamp": {
+					"type": "string"
+				},
+				"event.sequence": {
+					"type": "number"
+				},
+				"prompt.id": {
+					"type": "string"
+				},
+				"workspace.host_paths": {
+					"type": "array"
+				},
+				"prompt_length": {
+					"type": "string"
+				},
+				"prompt": {
+					"type": "string"
+				},
+				"prompt_text": {
+					"type": "string"
+				}
+			}
+		},
+		"metric:claude_code.active_time.total": {
+			"x-otel-kind": "metric",
+			"type": "object",
+			"description": "Total active time in seconds",
+			"$comment": "Unit: s. Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				}
+			}
+		},
+		"metric:claude_code.code_edit_tool.decision": {
+			"x-otel-kind": "metric",
+			"type": "object",
+			"description": "Count of code editing tool permission decisions (accept/reject) for Edit, Write, and NotebookEdit tools",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"decision": {
+					"enum": ["accept", "reject"]
+				},
+				"source": {
+					"type": "string"
+				},
+				"tool_name": {
+					"type": "string"
+				},
+				"language": {
+					"type": "string"
+				}
+			}
+		},
+		"metric:claude_code.commit.count": {
+			"x-otel-kind": "metric",
+			"type": "object",
+			"description": "Number of git commits created",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				}
+			}
+		},
+		"metric:claude_code.cost.usage": {
+			"x-otel-kind": "metric",
+			"type": "object",
+			"description": "Cost of the Claude Code session",
+			"$comment": "Unit: USD. Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"model": {
+					"type": "string"
+				},
+				"speed": {
+					"const": "fast"
+				},
+				"query_source": {
+					"type": "string"
+				},
+				"effort": {
+					"enum": ["low", "medium", "high", "xhigh", "max"]
+				},
+				"agent.name": {
+					"type": "string"
+				},
+				"skill.name": {
+					"type": "string"
+				},
+				"plugin.name": {
+					"type": "string"
+				},
+				"marketplace.name": {
+					"type": "string"
+				},
+				"mcp_server.name": {
+					"type": "string"
+				},
+				"mcp_tool.name": {
+					"type": "string"
+				}
+			}
+		},
+		"metric:claude_code.lines_of_code.count": {
+			"x-otel-kind": "metric",
+			"type": "object",
+			"description": "Count of lines of code modified, with the 'type' attribute indicating whether lines were added or removed and the 'model' attribute indicating which model made the change",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"type": {
+					"const": "added"
+				},
+				"model": {
+					"type": "string"
+				}
+			}
+		},
+		"metric:claude_code.pull_request.count": {
+			"x-otel-kind": "metric",
+			"type": "object",
+			"description": "Number of pull requests created",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				}
+			}
+		},
+		"metric:claude_code.session.count": {
+			"x-otel-kind": "metric",
+			"type": "object",
+			"description": "Count of CLI sessions started",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				}
+			}
+		},
+		"metric:claude_code.token.usage": {
+			"x-otel-kind": "metric",
+			"type": "object",
+			"description": "Number of tokens used",
+			"$comment": "Unit: tokens. Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"model": {
+					"type": "string"
+				},
+				"speed": {
+					"const": "fast"
+				},
+				"query_source": {
+					"type": "string"
+				},
+				"effort": {
+					"enum": ["low", "medium", "high", "xhigh", "max"]
+				},
+				"agent.name": {
+					"type": "string"
+				},
+				"skill.name": {
+					"type": "string"
+				},
+				"plugin.name": {
+					"type": "string"
+				},
+				"marketplace.name": {
+					"type": "string"
+				},
+				"mcp_server.name": {
+					"type": "string"
+				},
+				"mcp_tool.name": {
+					"type": "string"
+				},
+				"type": {
+					"const": "input"
+				}
+			}
+		},
+		"span:claude_code.bash.subprocess": {
+			"x-otel-kind": "span",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (contentAttrs: command).",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"gen_ai.provider.name": {
+					"enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
+				},
+				"shell.type": {
+					"type": "string"
+				},
+				"command_length": {
+					"type": "number"
+				},
+				"timeout_ms": {
+					"type": "number"
+				},
+				"command": {
+					"type": "string"
+				},
+				"span.type": {
+					"const": "bash.subprocess"
+				}
+			}
+		},
+		"span:claude_code.compaction": {
+			"x-otel-kind": "span",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1.",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"gen_ai.provider.name": {
+					"enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
+				},
+				"trigger": {
+					"enum": ["auto", "manual"]
+				},
+				"message_count": {
+					"type": "number"
+				},
+				"span.type": {
+					"const": "compaction"
+				}
+			}
+		},
+		"span:claude_code.hook": {
+			"x-otel-kind": "span",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"gen_ai.provider.name": {
+					"enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
+				},
+				"gen_ai.conversation.id": {
+					"type": "string"
+				},
+				"hook_event": {
+					"type": "string"
+				},
+				"hook_name": {
+					"type": "string"
+				},
+				"num_hooks": {
+					"type": "number"
+				},
+				"hook_definitions": {
+					"type": "string"
+				},
+				"span.type": {
+					"const": "hook"
+				}
+			}
+		},
+		"span:claude_code.interaction": {
+			"x-otel-kind": "span",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"gen_ai.provider.name": {
+					"enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
+				},
+				"gen_ai.operation.name": {
+					"const": "invoke_agent"
+				},
+				"gen_ai.conversation.id": {
+					"type": "string"
+				},
+				"user_prompt": {
+					"type": "string"
+				},
+				"user_prompt_length": {
+					"type": "number"
+				},
+				"interaction.sequence": {
+					"type": "number"
+				},
+				"parent.source": {
+					"enum": ["event", "env", "none"]
+				},
+				"queued_sends": {
+					"type": "number"
+				},
+				"span.type": {
+					"const": "interaction"
+				}
+			}
+		},
+		"span:claude_code.llm_request": {
+			"x-otel-kind": "span",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"gen_ai.provider.name": {
+					"enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
+				},
+				"model": {
+					"type": "string"
+				},
+				"gen_ai.system": {
+					"const": "anthropic"
+				},
+				"gen_ai.request.model": {
+					"type": "string"
+				},
+				"llm_request.context": {
+					"enum": ["tool", "interaction", "standalone"]
+				},
+				"speed": {
+					"enum": ["fast", "normal"]
+				},
+				"gen_ai.conversation.id": {
+					"type": "string"
+				},
+				"span.type": {
+					"const": "llm_request"
+				}
+			}
+		},
+		"span:claude_code.mcp.rpc": {
+			"x-otel-kind": "span",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 2. Added only when content logging is on (contentAttrs: mcp_args; contentAttrs: mcp_args).",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"gen_ai.provider.name": {
+					"enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
+				},
+				"rpc.system": {
+					"const": "mcp"
+				},
+				"rpc.service": {
+					"type": "string"
+				},
+				"rpc.method": {
+					"const": "tools/call"
+				},
+				"mcp_tool": {
+					"type": "string"
+				},
+				"attempt": {
+					"type": "number"
+				},
+				"mcp_args": {
+					"type": "string"
+				},
+				"span.type": {
+					"const": "mcp.rpc"
+				}
+			}
+		},
+		"span:claude_code.subagent.spawn": {
+			"x-otel-kind": "span",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"gen_ai.provider.name": {
+					"enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
+				},
+				"agent_id": {
+					"type": "string"
+				},
+				"agent_type": {
+					"type": "string"
+				},
+				"parent_agent_id": {
+					"type": "string"
+				},
+				"span.type": {
+					"const": "subagent.spawn"
+				}
+			}
+		},
+		"span:claude_code.tool": {
+			"x-otel-kind": "span",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"gen_ai.provider.name": {
+					"enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
+				},
+				"tool_name": {
+					"type": "string"
+				},
+				"tool_name_safe": {
+					"type": "string"
+				},
+				"gen_ai.operation.name": {
+					"const": "execute_tool"
+				},
+				"gen_ai.tool.name": {
+					"type": "string"
+				},
+				"anthropic.mcp.server.name": {
+					"type": "string"
+				},
+				"gen_ai.conversation.id": {
+					"type": "string"
+				},
+				"file_path": {
+					"type": "string"
+				},
+				"full_command": {
+					"type": "string"
+				},
+				"skill_name": {
+					"type": "string"
+				},
+				"subagent_type": {
+					"type": "string"
+				},
+				"bash_command_class": {
+					"type": "string"
+				},
+				"bash_argv0": {
+					"type": "string"
+				},
+				"span.type": {
+					"const": "tool"
+				}
+			}
+		},
+		"span:claude_code.tool.blocked_on_user": {
+			"x-otel-kind": "span",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"gen_ai.provider.name": {
+					"enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
+				},
+				"gen_ai.conversation.id": {
+					"type": "string"
+				},
+				"span.type": {
+					"const": "tool.blocked_on_user"
+				}
+			}
+		},
+		"span:claude_code.tool.execution": {
+			"x-otel-kind": "span",
+			"type": "object",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
+			"properties": {
+				"user.id": {
+					"type": "string"
+				},
+				"user.email": {
+					"type": "string"
+				},
+				"user.groups": {
+					"type": "string"
+				},
+				"gen_ai.provider.name": {
+					"enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
+				},
+				"gen_ai.conversation.id": {
+					"type": "string"
+				},
+				"span.type": {
+					"const": "tool.execution"
+				}
+			}
+		}
+	}
 }

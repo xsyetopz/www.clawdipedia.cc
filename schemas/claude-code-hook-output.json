@@ -1,751 +1,751 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://clawdipedia.cc/schemas/claude-code-hook-output.json",
-  "title": "Claude Code hook output (Claude Code 2.1.319)",
-  "$comment": "For the JSON a classic command hook prints on stdout (common fields and one hookSpecificOutput variant per event). Generated from Claude Code 2.1.319 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, object with continue, suppressOutput, stopReason, decision, systemMessage and the description \"A terminal escape sequence\". Do not edit by hand: run \"bun run schemas\".",
-  "type": "object",
-  "properties": {
-    "continue": {
-      "type": "boolean"
-    },
-    "suppressOutput": {
-      "type": "boolean"
-    },
-    "stopReason": {
-      "type": "string"
-    },
-    "decision": {
-      "type": "string",
-      "enum": ["approve", "block"]
-    },
-    "systemMessage": {
-      "type": "string"
-    },
-    "terminalSequence": {
-      "description": "A terminal escape sequence (e.g. OSC 9 / OSC 777 desktop-notification) for Claude Code to emit on your behalf. Only notification/title OSCs (0, 1, 2, 9, 99, 777) and BEL are permitted; anything else is dropped.",
-      "type": "string"
-    },
-    "reason": {
-      "type": "string"
-    },
-    "hookSpecificOutput": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/PreToolUseHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/UserPromptSubmitHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/UserPromptExpansionHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/SessionStartHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/SetupHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/PreModelSwitchHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/PostModelSwitchHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/SubagentStartHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/PostToolUseHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/PostToolUseFailureHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/PostToolBatchHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/StopHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/SubagentStopHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/PermissionDeniedHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/NotificationHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/PermissionRequestHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/ElicitationHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/ElicitationResultHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/CwdChangedHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/FileChangedHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/WorktreeCreateHookSpecificOutput"
-        },
-        {
-          "$ref": "#/$defs/MessageDisplayHookSpecificOutput"
-        }
-      ]
-    }
-  },
-  "$defs": {
-    "AsyncHookOutput": {
-      "type": "object",
-      "properties": {
-        "async": {
-          "type": "boolean",
-          "const": true
-        },
-        "asyncTimeout": {
-          "type": "number"
-        }
-      },
-      "required": ["async"]
-    },
-    "CwdChangedHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "CwdChanged"
-        },
-        "watchPaths": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "required": ["hookEventName"]
-    },
-    "ElicitationHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "Elicitation"
-        },
-        "action": {
-          "type": "string",
-          "enum": ["accept", "decline", "cancel"]
-        },
-        "content": {
-          "type": "object",
-          "propertyNames": {
-            "type": "string"
-          },
-          "additionalProperties": {}
-        }
-      },
-      "required": ["hookEventName"],
-      "description": "Hook-specific output for the Elicitation event. Return this to programmatically accept or decline an MCP elicitation request."
-    },
-    "ElicitationResultHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "ElicitationResult"
-        },
-        "action": {
-          "type": "string",
-          "enum": ["accept", "decline", "cancel"]
-        },
-        "content": {
-          "type": "object",
-          "propertyNames": {
-            "type": "string"
-          },
-          "additionalProperties": {}
-        }
-      },
-      "required": ["hookEventName"],
-      "description": "Hook-specific output for the ElicitationResult event. Return this to override the action or content before the response is sent to the MCP server."
-    },
-    "FileChangedHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "FileChanged"
-        },
-        "watchPaths": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "required": ["hookEventName"]
-    },
-    "MessageDisplayHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "MessageDisplay"
-        },
-        "displayContent": {
-          "description": "Text displayed in place of the delta. Omit (or return the delta unchanged) to display the original.",
-          "type": "string"
-        }
-      },
-      "required": ["hookEventName"],
-      "description": "Hook-specific output for the MessageDisplay event. Display-only: replaces the delta on screen without changing the stored message."
-    },
-    "NotificationHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "Notification"
-        },
-        "additionalContext": {
-          "type": "string"
-        }
-      },
-      "required": ["hookEventName"]
-    },
-    "PermissionDeniedHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "PermissionDenied"
-        },
-        "retry": {
-          "type": "boolean"
-        }
-      },
-      "required": ["hookEventName"]
-    },
-    "PermissionRequestHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "PermissionRequest"
-        },
-        "decision": {
-          "anyOf": [
-            {
-              "type": "object",
-              "properties": {
-                "behavior": {
-                  "type": "string",
-                  "const": "allow"
-                },
-                "updatedInput": {
-                  "type": "object",
-                  "propertyNames": {
-                    "type": "string"
-                  },
-                  "additionalProperties": {}
-                },
-                "updatedPermissions": {
-                  "type": "array",
-                  "items": {
-                    "oneOf": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "type": {
-                            "type": "string",
-                            "const": "addRules"
-                          },
-                          "rules": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "toolName": {
-                                  "type": "string"
-                                },
-                                "ruleContent": {
-                                  "type": "string"
-                                }
-                              },
-                              "required": ["toolName"]
-                            }
-                          },
-                          "behavior": {
-                            "type": "string",
-                            "enum": ["allow", "deny", "ask"]
-                          },
-                          "destination": {
-                            "type": "string",
-                            "enum": [
-                              "userSettings",
-                              "projectSettings",
-                              "localSettings",
-                              "session",
-                              "cliArg"
-                            ]
-                          }
-                        },
-                        "required": ["type", "rules", "behavior", "destination"]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "type": {
-                            "type": "string",
-                            "const": "replaceRules"
-                          },
-                          "rules": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "toolName": {
-                                  "type": "string"
-                                },
-                                "ruleContent": {
-                                  "type": "string"
-                                }
-                              },
-                              "required": ["toolName"]
-                            }
-                          },
-                          "behavior": {
-                            "type": "string",
-                            "enum": ["allow", "deny", "ask"]
-                          },
-                          "destination": {
-                            "type": "string",
-                            "enum": [
-                              "userSettings",
-                              "projectSettings",
-                              "localSettings",
-                              "session",
-                              "cliArg"
-                            ]
-                          }
-                        },
-                        "required": ["type", "rules", "behavior", "destination"]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "type": {
-                            "type": "string",
-                            "const": "removeRules"
-                          },
-                          "rules": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "toolName": {
-                                  "type": "string"
-                                },
-                                "ruleContent": {
-                                  "type": "string"
-                                }
-                              },
-                              "required": ["toolName"]
-                            }
-                          },
-                          "behavior": {
-                            "type": "string",
-                            "enum": ["allow", "deny", "ask"]
-                          },
-                          "destination": {
-                            "type": "string",
-                            "enum": [
-                              "userSettings",
-                              "projectSettings",
-                              "localSettings",
-                              "session",
-                              "cliArg"
-                            ]
-                          }
-                        },
-                        "required": ["type", "rules", "behavior", "destination"]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "type": {
-                            "type": "string",
-                            "const": "setMode"
-                          },
-                          "mode": {
-                            "description": "Permission mode for controlling how tool executions are handled. 'default' - Standard behavior, prompts for dangerous operations. 'acceptEdits' - Auto-accept file edit operations. 'bypassPermissions' - Bypass all permission checks (requires allowDangerouslySkipPermissions). 'plan' - Planning mode, no actual tool execution. 'dontAsk' - Don't prompt for permissions, deny if not pre-approved. 'auto' - Use a model classifier to approve/deny permission prompts.",
-                            "type": "string",
-                            "enum": [
-                              "default",
-                              "acceptEdits",
-                              "bypassPermissions",
-                              "plan",
-                              "dontAsk",
-                              "auto"
-                            ]
-                          },
-                          "destination": {
-                            "type": "string",
-                            "enum": [
-                              "userSettings",
-                              "projectSettings",
-                              "localSettings",
-                              "session",
-                              "cliArg"
-                            ]
-                          }
-                        },
-                        "required": ["type", "destination"]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "type": {
-                            "type": "string",
-                            "const": "addDirectories"
-                          },
-                          "directories": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
-                          "destination": {
-                            "type": "string",
-                            "enum": [
-                              "userSettings",
-                              "projectSettings",
-                              "localSettings",
-                              "session",
-                              "cliArg"
-                            ]
-                          }
-                        },
-                        "required": ["type", "directories", "destination"]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "type": {
-                            "type": "string",
-                            "const": "removeDirectories"
-                          },
-                          "directories": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
-                          "destination": {
-                            "type": "string",
-                            "enum": [
-                              "userSettings",
-                              "projectSettings",
-                              "localSettings",
-                              "session",
-                              "cliArg"
-                            ]
-                          }
-                        },
-                        "required": ["type", "directories", "destination"]
-                      }
-                    ]
-                  }
-                }
-              },
-              "required": ["behavior"]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "behavior": {
-                  "type": "string",
-                  "const": "deny"
-                },
-                "message": {
-                  "type": "string"
-                },
-                "interrupt": {
-                  "type": "boolean"
-                }
-              },
-              "required": ["behavior"]
-            }
-          ]
-        }
-      },
-      "required": ["hookEventName", "decision"]
-    },
-    "PostModelSwitchHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "PostModelSwitch"
-        },
-        "additionalContext": {
-          "description": "Reaches the model with the next request the new model serves",
-          "type": "string"
-        }
-      },
-      "required": ["hookEventName"]
-    },
-    "PostToolBatchHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "PostToolBatch"
-        },
-        "additionalContext": {
-          "type": "string"
-        }
-      },
-      "required": ["hookEventName"]
-    },
-    "PostToolUseFailureHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "PostToolUseFailure"
-        },
-        "additionalContext": {
-          "type": "string"
-        }
-      },
-      "required": ["hookEventName"]
-    },
-    "PostToolUseHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "PostToolUse"
-        },
-        "additionalContext": {
-          "type": "string"
-        },
-        "classifierContext": {
-          "description": "Host-asserted context shown to the auto-mode permission classifier alongside this tool call's result. In the live session the classifier may weigh a user statement relayed here as user intent (it can satisfy a consent bar a user turn would satisfy, never a hard boundary); values restored from saved session state are treated as unverified context only. Relay discipline is the host's obligation: put ONLY genuine user statements in intent-bearing positions — never tool output or model text dressed as one. Capped at 2000 UTF-16 code units, a budget shared across all hooks that contribute to one call (surrogate-pair-safe; emoji and other astral characters count as two). Honored on synchronous hook responses only: an async hook's late response arrives after the result message is frozen and this field in it is silently ignored. Security note: do not copy untrusted tool output or third-party text into it blindly — content placed here reaches the permission classifier with host-application framing. Applies only to calls the classifier transcript shows: read-only lookups the transcript omits (file reads, searches) and remote-engine shells produce no per-result line, and context attached to them is silently unused. Not a delivery channel: it is bound to a single call id and sized for a short assertion, not for relaying messages or events. Rewrite integrity: if this assertion describes output you are rewriting, return it in the SAME hook result as the rewrite — it is then dropped automatically if your rewrite is rejected or superseded by a later hook's rewrite; assertions returned without a rewrite are never invalidated by other hooks' rewrites, so a non-rewriting hook should assert only what holds regardless of other hooks' rewrites — hosts that need an assertion bound to exact output bytes should make it in the hook that produces those bytes. (Do NOT return an identity rewrite just to pair an assertion: hooks run in parallel on the ORIGINAL output, so an identity rewrite competes last-write-wins with sibling rewrites and can clobber a real redaction.)",
-          "type": "string"
-        },
-        "updatedToolOutput": {
-          "description": "Replaces the tool output before it is sent to the model"
-        },
-        "updatedMCPToolOutput": {
-          "description": "Replaces the output for MCP tools only. Prefer updatedToolOutput, which works for all tools"
-        }
-      },
-      "required": ["hookEventName"]
-    },
-    "PreModelSwitchHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "PreModelSwitch"
-        },
-        "permissionDecision": {
-          "description": "Same contract as PreToolUse: allow proceeds (skipping the interactive cache-miss confirm), deny cancels the switch, ask asks the user to confirm (a headless session refuses instead)",
-          "type": "string",
-          "enum": ["allow", "deny", "ask"]
-        },
-        "permissionDecisionReason": {
-          "type": "string"
-        }
-      },
-      "required": ["hookEventName"]
-    },
-    "PreToolUseHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "PreToolUse"
-        },
-        "permissionDecision": {
-          "type": "string",
-          "enum": ["allow", "deny", "ask", "defer"]
-        },
-        "permissionDecisionReason": {
-          "type": "string"
-        },
-        "updatedInput": {
-          "type": "object",
-          "propertyNames": {
-            "type": "string"
-          },
-          "additionalProperties": {}
-        },
-        "additionalContext": {
-          "type": "string"
-        },
-        "permissionDisplay": {
-          "description": "@internal Desktop host only: the words for this ask's permission card. Read only beside permissionDecision 'ask' from the hook the SDK host registered in its stdio initialize; send it only when the initialize response carried host_worded_asks. Only an answer on a card approves such an ask: no one-tap approve, allow rule, permission mode, PermissionRequest hook allow or plugin tool.check allow does. The CLI may send the ask without these words (another hook also asked, or the input changed), or refuse the call (its own permission check also asks or cannot run, or the ask reached a path with no card that can show the words, such as an in-process teammate). Ignored whole when malformed, blank, over length (title 200, description 2000, displayName 64 UTF-16 code units), or holding a control or invisible character other than a line feed in description.",
-          "type": "object",
-          "properties": {
-            "title": {
-              "type": "string",
-              "maxLength": 200
-            },
-            "description": {
-              "type": "string",
-              "maxLength": 2000,
-              "pattern": "\\S"
-            },
-            "displayName": {
-              "type": "string",
-              "maxLength": 64
-            }
-          },
-          "required": ["title", "description", "displayName"]
-        }
-      },
-      "required": ["hookEventName"]
-    },
-    "SessionStartHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "SessionStart"
-        },
-        "additionalContext": {
-          "type": "string"
-        },
-        "initialUserMessage": {
-          "type": "string"
-        },
-        "sessionTitle": {
-          "type": "string"
-        },
-        "watchPaths": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "reloadSkills": {
-          "description": "Re-scan skill and command directories after SessionStart hooks complete, so skills installed by the hook are available in the same session",
-          "type": "boolean"
-        }
-      },
-      "required": ["hookEventName"]
-    },
-    "SetupHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "Setup"
-        },
-        "additionalContext": {
-          "type": "string"
-        }
-      },
-      "required": ["hookEventName"]
-    },
-    "StopHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "Stop"
-        },
-        "additionalContext": {
-          "type": "string"
-        }
-      },
-      "required": ["hookEventName"],
-      "description": "Hook-specific output for the Stop event. additionalContext is non-error feedback delivered to the model; the conversation continues so the model can act on it."
-    },
-    "SubagentStartHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "SubagentStart"
-        },
-        "additionalContext": {
-          "type": "string"
-        }
-      },
-      "required": ["hookEventName"]
-    },
-    "SubagentStopHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "SubagentStop"
-        },
-        "additionalContext": {
-          "type": "string"
-        }
-      },
-      "required": ["hookEventName"],
-      "description": "Hook-specific output for the SubagentStop event. additionalContext is non-error feedback delivered to the subagent; the subagent continues so it can act on it."
-    },
-    "UserPromptExpansionHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "UserPromptExpansion"
-        },
-        "additionalContext": {
-          "type": "string"
-        },
-        "suppressOriginalPrompt": {
-          "description": "When decision is \"block\", omit the original prompt from the block message",
-          "type": "boolean"
-        }
-      },
-      "required": ["hookEventName"]
-    },
-    "UserPromptSubmitHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "UserPromptSubmit"
-        },
-        "additionalContext": {
-          "type": "string"
-        },
-        "sessionTitle": {
-          "type": "string"
-        },
-        "suppressOriginalPrompt": {
-          "description": "When decision is \"block\", omit the original prompt from the block message",
-          "type": "boolean"
-        }
-      },
-      "required": ["hookEventName"]
-    },
-    "WorktreeCreateHookSpecificOutput": {
-      "type": "object",
-      "properties": {
-        "hookEventName": {
-          "type": "string",
-          "const": "WorktreeCreate"
-        },
-        "worktreePath": {
-          "type": "string"
-        }
-      },
-      "required": ["hookEventName", "worktreePath"],
-      "description": "Hook-specific output for the WorktreeCreate event. Provides the absolute path to the created worktree directory. Command hooks print the path on stdout instead."
-    }
-  }
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://clawdipedia.cc/schemas/claude-code-hook-output.json",
+	"title": "Claude Code hook output (Claude Code 2.1.319)",
+	"$comment": "For the JSON a classic command hook prints on stdout (common fields and one hookSpecificOutput variant per event). Generated from Claude Code 2.1.319 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, object with continue, suppressOutput, stopReason, decision, systemMessage and the description \"A terminal escape sequence\". Do not edit by hand: run \"bun run schemas\".",
+	"type": "object",
+	"properties": {
+		"continue": {
+			"type": "boolean"
+		},
+		"suppressOutput": {
+			"type": "boolean"
+		},
+		"stopReason": {
+			"type": "string"
+		},
+		"decision": {
+			"type": "string",
+			"enum": ["approve", "block"]
+		},
+		"systemMessage": {
+			"type": "string"
+		},
+		"terminalSequence": {
+			"description": "A terminal escape sequence (e.g. OSC 9 / OSC 777 desktop-notification) for Claude Code to emit on your behalf. Only notification/title OSCs (0, 1, 2, 9, 99, 777) and BEL are permitted; anything else is dropped.",
+			"type": "string"
+		},
+		"reason": {
+			"type": "string"
+		},
+		"hookSpecificOutput": {
+			"oneOf": [
+				{
+					"$ref": "#/$defs/PreToolUseHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/UserPromptSubmitHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/UserPromptExpansionHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/SessionStartHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/SetupHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/PreModelSwitchHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/PostModelSwitchHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/SubagentStartHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/PostToolUseHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/PostToolUseFailureHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/PostToolBatchHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/StopHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/SubagentStopHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/PermissionDeniedHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/NotificationHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/PermissionRequestHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/ElicitationHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/ElicitationResultHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/CwdChangedHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/FileChangedHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/WorktreeCreateHookSpecificOutput"
+				},
+				{
+					"$ref": "#/$defs/MessageDisplayHookSpecificOutput"
+				}
+			]
+		}
+	},
+	"$defs": {
+		"AsyncHookOutput": {
+			"type": "object",
+			"properties": {
+				"async": {
+					"type": "boolean",
+					"const": true
+				},
+				"asyncTimeout": {
+					"type": "number"
+				}
+			},
+			"required": ["async"]
+		},
+		"CwdChangedHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "CwdChanged"
+				},
+				"watchPaths": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"required": ["hookEventName"]
+		},
+		"ElicitationHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "Elicitation"
+				},
+				"action": {
+					"type": "string",
+					"enum": ["accept", "decline", "cancel"]
+				},
+				"content": {
+					"type": "object",
+					"propertyNames": {
+						"type": "string"
+					},
+					"additionalProperties": {}
+				}
+			},
+			"required": ["hookEventName"],
+			"description": "Hook-specific output for the Elicitation event. Return this to programmatically accept or decline an MCP elicitation request."
+		},
+		"ElicitationResultHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "ElicitationResult"
+				},
+				"action": {
+					"type": "string",
+					"enum": ["accept", "decline", "cancel"]
+				},
+				"content": {
+					"type": "object",
+					"propertyNames": {
+						"type": "string"
+					},
+					"additionalProperties": {}
+				}
+			},
+			"required": ["hookEventName"],
+			"description": "Hook-specific output for the ElicitationResult event. Return this to override the action or content before the response is sent to the MCP server."
+		},
+		"FileChangedHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "FileChanged"
+				},
+				"watchPaths": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"required": ["hookEventName"]
+		},
+		"MessageDisplayHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "MessageDisplay"
+				},
+				"displayContent": {
+					"description": "Text displayed in place of the delta. Omit (or return the delta unchanged) to display the original.",
+					"type": "string"
+				}
+			},
+			"required": ["hookEventName"],
+			"description": "Hook-specific output for the MessageDisplay event. Display-only: replaces the delta on screen without changing the stored message."
+		},
+		"NotificationHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "Notification"
+				},
+				"additionalContext": {
+					"type": "string"
+				}
+			},
+			"required": ["hookEventName"]
+		},
+		"PermissionDeniedHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "PermissionDenied"
+				},
+				"retry": {
+					"type": "boolean"
+				}
+			},
+			"required": ["hookEventName"]
+		},
+		"PermissionRequestHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "PermissionRequest"
+				},
+				"decision": {
+					"anyOf": [
+						{
+							"type": "object",
+							"properties": {
+								"behavior": {
+									"type": "string",
+									"const": "allow"
+								},
+								"updatedInput": {
+									"type": "object",
+									"propertyNames": {
+										"type": "string"
+									},
+									"additionalProperties": {}
+								},
+								"updatedPermissions": {
+									"type": "array",
+									"items": {
+										"oneOf": [
+											{
+												"type": "object",
+												"properties": {
+													"type": {
+														"type": "string",
+														"const": "addRules"
+													},
+													"rules": {
+														"type": "array",
+														"items": {
+															"type": "object",
+															"properties": {
+																"toolName": {
+																	"type": "string"
+																},
+																"ruleContent": {
+																	"type": "string"
+																}
+															},
+															"required": ["toolName"]
+														}
+													},
+													"behavior": {
+														"type": "string",
+														"enum": ["allow", "deny", "ask"]
+													},
+													"destination": {
+														"type": "string",
+														"enum": [
+															"userSettings",
+															"projectSettings",
+															"localSettings",
+															"session",
+															"cliArg"
+														]
+													}
+												},
+												"required": ["type", "rules", "behavior", "destination"]
+											},
+											{
+												"type": "object",
+												"properties": {
+													"type": {
+														"type": "string",
+														"const": "replaceRules"
+													},
+													"rules": {
+														"type": "array",
+														"items": {
+															"type": "object",
+															"properties": {
+																"toolName": {
+																	"type": "string"
+																},
+																"ruleContent": {
+																	"type": "string"
+																}
+															},
+															"required": ["toolName"]
+														}
+													},
+													"behavior": {
+														"type": "string",
+														"enum": ["allow", "deny", "ask"]
+													},
+													"destination": {
+														"type": "string",
+														"enum": [
+															"userSettings",
+															"projectSettings",
+															"localSettings",
+															"session",
+															"cliArg"
+														]
+													}
+												},
+												"required": ["type", "rules", "behavior", "destination"]
+											},
+											{
+												"type": "object",
+												"properties": {
+													"type": {
+														"type": "string",
+														"const": "removeRules"
+													},
+													"rules": {
+														"type": "array",
+														"items": {
+															"type": "object",
+															"properties": {
+																"toolName": {
+																	"type": "string"
+																},
+																"ruleContent": {
+																	"type": "string"
+																}
+															},
+															"required": ["toolName"]
+														}
+													},
+													"behavior": {
+														"type": "string",
+														"enum": ["allow", "deny", "ask"]
+													},
+													"destination": {
+														"type": "string",
+														"enum": [
+															"userSettings",
+															"projectSettings",
+															"localSettings",
+															"session",
+															"cliArg"
+														]
+													}
+												},
+												"required": ["type", "rules", "behavior", "destination"]
+											},
+											{
+												"type": "object",
+												"properties": {
+													"type": {
+														"type": "string",
+														"const": "setMode"
+													},
+													"mode": {
+														"description": "Permission mode for controlling how tool executions are handled. 'default' - Standard behavior, prompts for dangerous operations. 'acceptEdits' - Auto-accept file edit operations. 'bypassPermissions' - Bypass all permission checks (requires allowDangerouslySkipPermissions). 'plan' - Planning mode, no actual tool execution. 'dontAsk' - Don't prompt for permissions, deny if not pre-approved. 'auto' - Use a model classifier to approve/deny permission prompts.",
+														"type": "string",
+														"enum": [
+															"default",
+															"acceptEdits",
+															"bypassPermissions",
+															"plan",
+															"dontAsk",
+															"auto"
+														]
+													},
+													"destination": {
+														"type": "string",
+														"enum": [
+															"userSettings",
+															"projectSettings",
+															"localSettings",
+															"session",
+															"cliArg"
+														]
+													}
+												},
+												"required": ["type", "destination"]
+											},
+											{
+												"type": "object",
+												"properties": {
+													"type": {
+														"type": "string",
+														"const": "addDirectories"
+													},
+													"directories": {
+														"type": "array",
+														"items": {
+															"type": "string"
+														}
+													},
+													"destination": {
+														"type": "string",
+														"enum": [
+															"userSettings",
+															"projectSettings",
+															"localSettings",
+															"session",
+															"cliArg"
+														]
+													}
+												},
+												"required": ["type", "directories", "destination"]
+											},
+											{
+												"type": "object",
+												"properties": {
+													"type": {
+														"type": "string",
+														"const": "removeDirectories"
+													},
+													"directories": {
+														"type": "array",
+														"items": {
+															"type": "string"
+														}
+													},
+													"destination": {
+														"type": "string",
+														"enum": [
+															"userSettings",
+															"projectSettings",
+															"localSettings",
+															"session",
+															"cliArg"
+														]
+													}
+												},
+												"required": ["type", "directories", "destination"]
+											}
+										]
+									}
+								}
+							},
+							"required": ["behavior"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"behavior": {
+									"type": "string",
+									"const": "deny"
+								},
+								"message": {
+									"type": "string"
+								},
+								"interrupt": {
+									"type": "boolean"
+								}
+							},
+							"required": ["behavior"]
+						}
+					]
+				}
+			},
+			"required": ["hookEventName", "decision"]
+		},
+		"PostModelSwitchHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "PostModelSwitch"
+				},
+				"additionalContext": {
+					"description": "Reaches the model with the next request the new model serves",
+					"type": "string"
+				}
+			},
+			"required": ["hookEventName"]
+		},
+		"PostToolBatchHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "PostToolBatch"
+				},
+				"additionalContext": {
+					"type": "string"
+				}
+			},
+			"required": ["hookEventName"]
+		},
+		"PostToolUseFailureHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "PostToolUseFailure"
+				},
+				"additionalContext": {
+					"type": "string"
+				}
+			},
+			"required": ["hookEventName"]
+		},
+		"PostToolUseHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "PostToolUse"
+				},
+				"additionalContext": {
+					"type": "string"
+				},
+				"classifierContext": {
+					"description": "Host-asserted context shown to the auto-mode permission classifier alongside this tool call's result. In the live session the classifier may weigh a user statement relayed here as user intent (it can satisfy a consent bar a user turn would satisfy, never a hard boundary); values restored from saved session state are treated as unverified context only. Relay discipline is the host's obligation: put ONLY genuine user statements in intent-bearing positions — never tool output or model text dressed as one. Capped at 2000 UTF-16 code units, a budget shared across all hooks that contribute to one call (surrogate-pair-safe; emoji and other astral characters count as two). Honored on synchronous hook responses only: an async hook's late response arrives after the result message is frozen and this field in it is silently ignored. Security note: do not copy untrusted tool output or third-party text into it blindly — content placed here reaches the permission classifier with host-application framing. Applies only to calls the classifier transcript shows: read-only lookups the transcript omits (file reads, searches) and remote-engine shells produce no per-result line, and context attached to them is silently unused. Not a delivery channel: it is bound to a single call id and sized for a short assertion, not for relaying messages or events. Rewrite integrity: if this assertion describes output you are rewriting, return it in the SAME hook result as the rewrite — it is then dropped automatically if your rewrite is rejected or superseded by a later hook's rewrite; assertions returned without a rewrite are never invalidated by other hooks' rewrites, so a non-rewriting hook should assert only what holds regardless of other hooks' rewrites — hosts that need an assertion bound to exact output bytes should make it in the hook that produces those bytes. (Do NOT return an identity rewrite just to pair an assertion: hooks run in parallel on the ORIGINAL output, so an identity rewrite competes last-write-wins with sibling rewrites and can clobber a real redaction.)",
+					"type": "string"
+				},
+				"updatedToolOutput": {
+					"description": "Replaces the tool output before it is sent to the model"
+				},
+				"updatedMCPToolOutput": {
+					"description": "Replaces the output for MCP tools only. Prefer updatedToolOutput, which works for all tools"
+				}
+			},
+			"required": ["hookEventName"]
+		},
+		"PreModelSwitchHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "PreModelSwitch"
+				},
+				"permissionDecision": {
+					"description": "Same contract as PreToolUse: allow proceeds (skipping the interactive cache-miss confirm), deny cancels the switch, ask asks the user to confirm (a headless session refuses instead)",
+					"type": "string",
+					"enum": ["allow", "deny", "ask"]
+				},
+				"permissionDecisionReason": {
+					"type": "string"
+				}
+			},
+			"required": ["hookEventName"]
+		},
+		"PreToolUseHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "PreToolUse"
+				},
+				"permissionDecision": {
+					"type": "string",
+					"enum": ["allow", "deny", "ask", "defer"]
+				},
+				"permissionDecisionReason": {
+					"type": "string"
+				},
+				"updatedInput": {
+					"type": "object",
+					"propertyNames": {
+						"type": "string"
+					},
+					"additionalProperties": {}
+				},
+				"additionalContext": {
+					"type": "string"
+				},
+				"permissionDisplay": {
+					"description": "@internal Desktop host only: the words for this ask's permission card. Read only beside permissionDecision 'ask' from the hook the SDK host registered in its stdio initialize; send it only when the initialize response carried host_worded_asks. Only an answer on a card approves such an ask: no one-tap approve, allow rule, permission mode, PermissionRequest hook allow or plugin tool.check allow does. The CLI may send the ask without these words (another hook also asked, or the input changed), or refuse the call (its own permission check also asks or cannot run, or the ask reached a path with no card that can show the words, such as an in-process teammate). Ignored whole when malformed, blank, over length (title 200, description 2000, displayName 64 UTF-16 code units), or holding a control or invisible character other than a line feed in description.",
+					"type": "object",
+					"properties": {
+						"title": {
+							"type": "string",
+							"maxLength": 200
+						},
+						"description": {
+							"type": "string",
+							"maxLength": 2000,
+							"pattern": "\\S"
+						},
+						"displayName": {
+							"type": "string",
+							"maxLength": 64
+						}
+					},
+					"required": ["title", "description", "displayName"]
+				}
+			},
+			"required": ["hookEventName"]
+		},
+		"SessionStartHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "SessionStart"
+				},
+				"additionalContext": {
+					"type": "string"
+				},
+				"initialUserMessage": {
+					"type": "string"
+				},
+				"sessionTitle": {
+					"type": "string"
+				},
+				"watchPaths": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"reloadSkills": {
+					"description": "Re-scan skill and command directories after SessionStart hooks complete, so skills installed by the hook are available in the same session",
+					"type": "boolean"
+				}
+			},
+			"required": ["hookEventName"]
+		},
+		"SetupHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "Setup"
+				},
+				"additionalContext": {
+					"type": "string"
+				}
+			},
+			"required": ["hookEventName"]
+		},
+		"StopHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "Stop"
+				},
+				"additionalContext": {
+					"type": "string"
+				}
+			},
+			"required": ["hookEventName"],
+			"description": "Hook-specific output for the Stop event. additionalContext is non-error feedback delivered to the model; the conversation continues so the model can act on it."
+		},
+		"SubagentStartHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "SubagentStart"
+				},
+				"additionalContext": {
+					"type": "string"
+				}
+			},
+			"required": ["hookEventName"]
+		},
+		"SubagentStopHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "SubagentStop"
+				},
+				"additionalContext": {
+					"type": "string"
+				}
+			},
+			"required": ["hookEventName"],
+			"description": "Hook-specific output for the SubagentStop event. additionalContext is non-error feedback delivered to the subagent; the subagent continues so it can act on it."
+		},
+		"UserPromptExpansionHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "UserPromptExpansion"
+				},
+				"additionalContext": {
+					"type": "string"
+				},
+				"suppressOriginalPrompt": {
+					"description": "When decision is \"block\", omit the original prompt from the block message",
+					"type": "boolean"
+				}
+			},
+			"required": ["hookEventName"]
+		},
+		"UserPromptSubmitHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "UserPromptSubmit"
+				},
+				"additionalContext": {
+					"type": "string"
+				},
+				"sessionTitle": {
+					"type": "string"
+				},
+				"suppressOriginalPrompt": {
+					"description": "When decision is \"block\", omit the original prompt from the block message",
+					"type": "boolean"
+				}
+			},
+			"required": ["hookEventName"]
+		},
+		"WorktreeCreateHookSpecificOutput": {
+			"type": "object",
+			"properties": {
+				"hookEventName": {
+					"type": "string",
+					"const": "WorktreeCreate"
+				},
+				"worktreePath": {
+					"type": "string"
+				}
+			},
+			"required": ["hookEventName", "worktreePath"],
+			"description": "Hook-specific output for the WorktreeCreate event. Provides the absolute path to the created worktree directory. Command hooks print the path on stdout instead."
+		}
+	}
 }

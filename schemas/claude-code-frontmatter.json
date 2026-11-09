@@ -1,383 +1,383 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://clawdipedia.cc/schemas/claude-code-frontmatter.json",
-  "title": "Claude Code frontmatter of skills, subagents, and output styles (Claude Code 2.1.319)",
-  "$comment": "For the YAML header of skill/command, subagent, and output style .md files. Generated from Claude Code 2.1.319 by tools/schemas/code.ts. Anchors: \"tengu_frontmatter_shadow_unknown_key\" and the table {skill, agent, \"output-style\"} of strict zod objects next to it; descriptions are the program's .describe() text; the loose value type of most keys (string, number, boolean, or null) is why they are x-unverified. Keys with a description that starts with \"@internal\" are internal. No probe in captures/ records frontmatter keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
-  "$defs": {
-    "skill": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "description": "Display name. Defaults to the filename without extension.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "description": {
-          "description": "One-line summary shown in listings and the Skill tool.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "model": {
-          "description": "Model override (`haiku`, `sonnet`, `opus`, `fable`, or a full ID). Use `inherit` to match the parent conversation.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "allowed-tools": {
-          "description": "Tools available to the model while this file is active. Comma-separated string or YAML list.",
-          "anyOf": [
-            {
-              "type": ["string", "number", "boolean", "null"]
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          ]
-        },
-        "disallowed-tools": {
-          "description": "Tools removed from the model while this file is active. Comma-separated string or YAML list. Cleared when the user sends the next message.",
-          "anyOf": [
-            {
-              "type": ["string", "number", "boolean", "null"]
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          ]
-        },
-        "disallowedTools": {
-          "description": "Canonical (normalized) alias of `disallowed-tools`.",
-          "anyOf": [
-            {
-              "type": ["string", "number", "boolean", "null"]
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          ]
-        },
-        "argument-hint": {
-          "description": "Placeholder text shown after the slash command name.",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "arguments": {
-          "description": "@internal — typed variant of argument-hint; argument-hint is the documented form",
-          "anyOf": [
-            {
-              "type": ["string", "number", "boolean", "null"]
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          ]
-        },
-        "disable-model-invocation": {
-          "description": "If true, the model cannot invoke this via the Skill tool; only users can type the slash command.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "user-invocable": {
-          "description": "If false, hides the slash command from users; only the model can invoke it via the Skill tool.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "effort": {
-          "description": "Thinking effort for the model: `low`, `medium`, `high`, `max`, or an integer.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "shell": {
-          "description": "Shell for `!`-command blocks: `bash` or `powershell`. Defaults to bash regardless of platform.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "version": {
-          "description": "@internal — bookkeeping, not surfaced to users",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "when_to_use": {
-          "description": "Guidance for when the model should reach for this skill. Becomes part of the tool description.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "paths": {
-          "description": "Glob patterns this skill applies to. The skill only loads when the model touches matching files.",
-          "anyOf": [
-            {
-              "type": ["string", "number", "boolean", "null"]
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          ]
-        },
-        "hooks": {
-          "description": "Hooks registered while this skill is active. Same shape as settings.json `hooks`.",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "context": {
-          "description": "Where the skill runs: `inline` expands into the current conversation; `fork` spawns a subagent.",
-          "enum": ["inline", "fork", null]
-        },
-        "agent": {
-          "description": "Agent type to spawn when `context: fork`.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "background": {
-          "description": "Only for `context: fork`. Forks run as background agents that report back as a task notification instead of blocking the turn; set `false` to keep the caller waiting for the result in-line.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "fallback": {
-          "description": "@internal — interim defense-in-depth for thin-pointer skill stubs. If true, this skill yields to a same-suffix plugin or MCP skill (`<plugin>:<name>` / `<server>:<name>`) when one is loaded. Stubs carrying this should be deleted once their canonical plugin/MCP skill ships, not maintained.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "created_by": {
-          "description": "@internal — provenance marker (e.g. dream-proposal)",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "improved_by": {
-          "description": "@internal — provenance marker (e.g. dream-proposal)",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "mcpServers": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "lspServers": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "agents": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "outputStyles": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "themes": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "workflows": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "channels": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "monitors": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "settings": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "userConfig": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "defaultEnabled": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "experimental": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "dependencies": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "metadata": {
-          "description": "Free-form map for the skill author's own use (e.g. entitlement or catalog fields). Preserved on the loaded skill.",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "displayName": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "author": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "homepage": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "repository": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "license": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "keywords": {
-          "description": "@internal",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        }
-      },
-      "$comment": "Skills and commands (.md files with a YAML header)."
-    },
-    "agent": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "description": "Agent identifier. Required — this is how the Agent tool and `--agent` flag address it.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "description": {
-          "description": "When to use this agent. Required — shown in the Agent tool listing.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "model": {
-          "description": "Model override for this agent. Use `inherit` to match the spawning conversation.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "tools": {
-          "description": "Tools available to this agent. Replaces the default set.",
-          "anyOf": [
-            {
-              "type": ["string", "number", "boolean", "null"]
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          ]
-        },
-        "disallowedTools": {
-          "description": "Tools removed from the default set. Ignored if `tools` is set.",
-          "anyOf": [
-            {
-              "type": ["string", "number", "boolean", "null"]
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          ]
-        },
-        "color": {
-          "description": "@internal — display color in the agents UI",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "effort": {
-          "description": "Thinking effort: `low`, `medium`, `high`, `max`, or an integer.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "permissionMode": {
-          "description": "Permission mode the agent runs in.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "mcpServers": {
-          "description": "MCP servers to connect when this agent runs.",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "hooks": {
-          "description": "Hooks registered while this agent runs.",
-          "type": ["string", "number", "boolean", "null", "array", "object"]
-        },
-        "maxTurns": {
-          "description": "Maximum conversation turns before the agent stops.",
-          "type": ["number", "string", "null"]
-        },
-        "autoCompactWindow": {
-          "type": ["number", "string", "null"]
-        },
-        "skills": {
-          "description": "Skills preloaded for this agent.",
-          "anyOf": [
-            {
-              "type": ["string", "number", "boolean", "null"]
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          ]
-        },
-        "initialPrompt": {
-          "description": "Auto-submitted first message when this agent runs as the main session (via `--agent` or settings). Not read when spawned as a subagent.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "memory": {
-          "description": "Memory scope: `user`, `project`, or `local`.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "background": {
-          "description": "If true, the agent runs in the background by default.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "omitClaudeMd": {
-          "description": "If true, the agent runs without the user, project and local CLAUDE.md instruction files when spawned as a subagent; managed policy files are kept. For agents that take everything they need from the delegation prompt.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "isolation": {
-          "description": "Filesystem isolation: `worktree` runs in a temporary git worktree.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "observer": {
-          "description": "Agent type auto-spawned as a background observer whenever this agent runs.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "observerMessage": {
-          "description": "Supplemental postamble appended (after the harness-owned default) to each activity digest sent to the observer.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "observeSubagents": {
-          "description": "If false, subagents this agent spawns do not inherit its observer. Defaults to true.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "experimental": {
-          "description": "Experimental per-agent options; unknown keys are ignored.",
-          "type": ["object", "null"],
-          "properties": {
-            "cacheTtl": {
-              "type": ["string", "number", "boolean", "null"]
-            }
-          },
-          "additionalProperties": true
-        }
-      },
-      "$comment": "Subagent files (.md with a YAML header)."
-    },
-    "output-style": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "description": "Style name used in the Output style picker in `/config` and in settings. Defaults to the filename.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "description": {
-          "description": "Shown in the Output style picker in `/config`.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "keep-coding-instructions": {
-          "description": "If true, the default coding instructions stay in the system prompt alongside this style.",
-          "type": ["string", "number", "boolean", "null"]
-        },
-        "force-for-plugin": {
-          "description": "@internal — only meaningful for plugin-bundled styles; ignored for user styles",
-          "type": ["string", "number", "boolean", "null"]
-        }
-      },
-      "$comment": "Output style files (.md with a YAML header)."
-    }
-  }
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://clawdipedia.cc/schemas/claude-code-frontmatter.json",
+	"title": "Claude Code frontmatter of skills, subagents, and output styles (Claude Code 2.1.319)",
+	"$comment": "For the YAML header of skill/command, subagent, and output style .md files. Generated from Claude Code 2.1.319 by tools/schemas/code.ts. Anchors: \"tengu_frontmatter_shadow_unknown_key\" and the table {skill, agent, \"output-style\"} of strict zod objects next to it; descriptions are the program's .describe() text; the loose value type of most keys (string, number, boolean, or null) is why they are x-unverified. Keys with a description that starts with \"@internal\" are internal. No probe in captures/ records frontmatter keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
+	"$defs": {
+		"skill": {
+			"type": "object",
+			"properties": {
+				"name": {
+					"description": "Display name. Defaults to the filename without extension.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"description": {
+					"description": "One-line summary shown in listings and the Skill tool.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"model": {
+					"description": "Model override (`haiku`, `sonnet`, `opus`, `fable`, or a full ID). Use `inherit` to match the parent conversation.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"allowed-tools": {
+					"description": "Tools available to the model while this file is active. Comma-separated string or YAML list.",
+					"anyOf": [
+						{
+							"type": ["string", "number", "boolean", "null"]
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					]
+				},
+				"disallowed-tools": {
+					"description": "Tools removed from the model while this file is active. Comma-separated string or YAML list. Cleared when the user sends the next message.",
+					"anyOf": [
+						{
+							"type": ["string", "number", "boolean", "null"]
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					]
+				},
+				"disallowedTools": {
+					"description": "Canonical (normalized) alias of `disallowed-tools`.",
+					"anyOf": [
+						{
+							"type": ["string", "number", "boolean", "null"]
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					]
+				},
+				"argument-hint": {
+					"description": "Placeholder text shown after the slash command name.",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"arguments": {
+					"description": "@internal — typed variant of argument-hint; argument-hint is the documented form",
+					"anyOf": [
+						{
+							"type": ["string", "number", "boolean", "null"]
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					]
+				},
+				"disable-model-invocation": {
+					"description": "If true, the model cannot invoke this via the Skill tool; only users can type the slash command.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"user-invocable": {
+					"description": "If false, hides the slash command from users; only the model can invoke it via the Skill tool.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"effort": {
+					"description": "Thinking effort for the model: `low`, `medium`, `high`, `max`, or an integer.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"shell": {
+					"description": "Shell for `!`-command blocks: `bash` or `powershell`. Defaults to bash regardless of platform.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"version": {
+					"description": "@internal — bookkeeping, not surfaced to users",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"when_to_use": {
+					"description": "Guidance for when the model should reach for this skill. Becomes part of the tool description.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"paths": {
+					"description": "Glob patterns this skill applies to. The skill only loads when the model touches matching files.",
+					"anyOf": [
+						{
+							"type": ["string", "number", "boolean", "null"]
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					]
+				},
+				"hooks": {
+					"description": "Hooks registered while this skill is active. Same shape as settings.json `hooks`.",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"context": {
+					"description": "Where the skill runs: `inline` expands into the current conversation; `fork` spawns a subagent.",
+					"enum": ["inline", "fork", null]
+				},
+				"agent": {
+					"description": "Agent type to spawn when `context: fork`.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"background": {
+					"description": "Only for `context: fork`. Forks run as background agents that report back as a task notification instead of blocking the turn; set `false` to keep the caller waiting for the result in-line.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"fallback": {
+					"description": "@internal — interim defense-in-depth for thin-pointer skill stubs. If true, this skill yields to a same-suffix plugin or MCP skill (`<plugin>:<name>` / `<server>:<name>`) when one is loaded. Stubs carrying this should be deleted once their canonical plugin/MCP skill ships, not maintained.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"created_by": {
+					"description": "@internal — provenance marker (e.g. dream-proposal)",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"improved_by": {
+					"description": "@internal — provenance marker (e.g. dream-proposal)",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"mcpServers": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"lspServers": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"agents": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"outputStyles": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"themes": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"workflows": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"channels": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"monitors": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"settings": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"userConfig": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"defaultEnabled": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"experimental": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"dependencies": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"metadata": {
+					"description": "Free-form map for the skill author's own use (e.g. entitlement or catalog fields). Preserved on the loaded skill.",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"displayName": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"author": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"homepage": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"repository": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"license": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"keywords": {
+					"description": "@internal",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				}
+			},
+			"$comment": "Skills and commands (.md files with a YAML header)."
+		},
+		"agent": {
+			"type": "object",
+			"properties": {
+				"name": {
+					"description": "Agent identifier. Required — this is how the Agent tool and `--agent` flag address it.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"description": {
+					"description": "When to use this agent. Required — shown in the Agent tool listing.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"model": {
+					"description": "Model override for this agent. Use `inherit` to match the spawning conversation.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"tools": {
+					"description": "Tools available to this agent. Replaces the default set.",
+					"anyOf": [
+						{
+							"type": ["string", "number", "boolean", "null"]
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					]
+				},
+				"disallowedTools": {
+					"description": "Tools removed from the default set. Ignored if `tools` is set.",
+					"anyOf": [
+						{
+							"type": ["string", "number", "boolean", "null"]
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					]
+				},
+				"color": {
+					"description": "@internal — display color in the agents UI",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"effort": {
+					"description": "Thinking effort: `low`, `medium`, `high`, `max`, or an integer.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"permissionMode": {
+					"description": "Permission mode the agent runs in.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"mcpServers": {
+					"description": "MCP servers to connect when this agent runs.",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"hooks": {
+					"description": "Hooks registered while this agent runs.",
+					"type": ["string", "number", "boolean", "null", "array", "object"]
+				},
+				"maxTurns": {
+					"description": "Maximum conversation turns before the agent stops.",
+					"type": ["number", "string", "null"]
+				},
+				"autoCompactWindow": {
+					"type": ["number", "string", "null"]
+				},
+				"skills": {
+					"description": "Skills preloaded for this agent.",
+					"anyOf": [
+						{
+							"type": ["string", "number", "boolean", "null"]
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					]
+				},
+				"initialPrompt": {
+					"description": "Auto-submitted first message when this agent runs as the main session (via `--agent` or settings). Not read when spawned as a subagent.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"memory": {
+					"description": "Memory scope: `user`, `project`, or `local`.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"background": {
+					"description": "If true, the agent runs in the background by default.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"omitClaudeMd": {
+					"description": "If true, the agent runs without the user, project and local CLAUDE.md instruction files when spawned as a subagent; managed policy files are kept. For agents that take everything they need from the delegation prompt.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"isolation": {
+					"description": "Filesystem isolation: `worktree` runs in a temporary git worktree.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"observer": {
+					"description": "Agent type auto-spawned as a background observer whenever this agent runs.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"observerMessage": {
+					"description": "Supplemental postamble appended (after the harness-owned default) to each activity digest sent to the observer.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"observeSubagents": {
+					"description": "If false, subagents this agent spawns do not inherit its observer. Defaults to true.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"experimental": {
+					"description": "Experimental per-agent options; unknown keys are ignored.",
+					"type": ["object", "null"],
+					"properties": {
+						"cacheTtl": {
+							"type": ["string", "number", "boolean", "null"]
+						}
+					},
+					"additionalProperties": true
+				}
+			},
+			"$comment": "Subagent files (.md with a YAML header)."
+		},
+		"output-style": {
+			"type": "object",
+			"properties": {
+				"name": {
+					"description": "Style name used in the Output style picker in `/config` and in settings. Defaults to the filename.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"description": {
+					"description": "Shown in the Output style picker in `/config`.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"keep-coding-instructions": {
+					"description": "If true, the default coding instructions stay in the system prompt alongside this style.",
+					"type": ["string", "number", "boolean", "null"]
+				},
+				"force-for-plugin": {
+					"description": "@internal — only meaningful for plugin-bundled styles; ignored for user styles",
+					"type": ["string", "number", "boolean", "null"]
+				}
+			},
+			"$comment": "Output style files (.md with a YAML header)."
+		}
+	}
 }

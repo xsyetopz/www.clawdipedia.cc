@@ -1,343 +1,343 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://clawdipedia.cc/schemas/claude-code-plugin-hooks.json",
-  "title": "Claude Code plugin hooks.json (Claude Code 2.1.319)",
-  "$comment": "For hooks/hooks.json inside a plugin. Generated from Claude Code 2.1.319 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
-  "type": "object",
-  "properties": {
-    "$schema": {
-      "description": "JSON Schema reference for editor autocomplete/validation; ignored at load time",
-      "type": "string"
-    },
-    "description": {
-      "description": "Brief, user-facing explanation of what these hooks provide",
-      "type": "string"
-    },
-    "hooks": {
-      "description": "The hooks provided by the plugin, in the same format as the one used for settings",
-      "type": "object",
-      "propertyNames": {
-        "type": "string",
-        "enum": [
-          "PreToolUse",
-          "PostToolUse",
-          "PostToolUseFailure",
-          "PostToolBatch",
-          "Notification",
-          "UserPromptSubmit",
-          "UserPromptExpansion",
-          "SessionStart",
-          "SessionEnd",
-          "Stop",
-          "StopFailure",
-          "SubagentStart",
-          "SubagentStop",
-          "PreCompact",
-          "PostCompact",
-          "PreModelSwitch",
-          "PostModelSwitch",
-          "PermissionRequest",
-          "PermissionDenied",
-          "Setup",
-          "TeammateIdle",
-          "TaskCreated",
-          "TaskCompleted",
-          "Elicitation",
-          "ElicitationResult",
-          "ConfigChange",
-          "WorktreeCreate",
-          "WorktreeRemove",
-          "InstructionsLoaded",
-          "CwdChanged",
-          "FileChanged",
-          "DirectoryAdded",
-          "MessageDisplay"
-        ]
-      },
-      "additionalProperties": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "matcher": {
-              "description": "String pattern to match (e.g. tool names like \"Write\")",
-              "type": "string"
-            },
-            "hooks": {
-              "type": "array",
-              "items": {
-                "oneOf": [
-                  {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string",
-                        "const": "command",
-                        "description": "Shell command hook type"
-                      },
-                      "command": {
-                        "type": "string",
-                        "description": "Shell command to execute"
-                      },
-                      "args": {
-                        "description": "Argument list for exec form. When present, `command` is resolved as an executable and spawned directly with these arguments — no shell. Path placeholders like ${CLAUDE_PLUGIN_ROOT} are substituted per-element as plain strings, so paths with quotes, $, or backticks never reach a shell parser. When absent, `command` runs through a shell (bash on POSIX, PowerShell on Windows without Git Bash).",
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "if": {
-                        "description": "Permission rule syntax to filter when this hook runs (e.g., \"Bash(git *)\"). Only runs if the tool call matches the pattern. Avoids spawning hooks for non-matching commands.",
-                        "type": "string"
-                      },
-                      "shell": {
-                        "description": "Shell interpreter. 'bash' uses your $SHELL (bash/zsh/sh); 'powershell' uses pwsh. Defaults to bash (powershell on Windows without Git Bash).",
-                        "type": "string",
-                        "enum": ["bash", "powershell"]
-                      },
-                      "timeout": {
-                        "description": "Timeout in seconds for this specific command",
-                        "type": "number",
-                        "exclusiveMinimum": 0
-                      },
-                      "onFailure": {
-                        "description": "What a failure of this hook does: it could not start (a missing script or plugin directory), timed out, exited with a code other than 0 or 2, or printed JSON that is invalid or fails validation. 'continue' (default): the failure is reported and the action goes ahead. 'block': the failure counts as exit code 2, so the action the event guards (a tool call, a permission request, a prompt) is blocked. Ignored for async hooks and on Stop, SubagentStop, TaskCompleted and TeammateIdle.",
-                        "type": "string",
-                        "enum": ["continue", "block"]
-                      },
-                      "statusMessage": {
-                        "description": "Custom status message to display in spinner while hook runs",
-                        "type": "string"
-                      },
-                      "once": {
-                        "description": "If true, hook runs once and is removed after execution",
-                        "type": "boolean"
-                      },
-                      "async": {
-                        "description": "If true, hook runs in background without blocking",
-                        "type": "boolean"
-                      },
-                      "asyncRewake": {
-                        "description": "If true, hook runs in background and wakes the model on exit code 2 (blocking error). Implies async.",
-                        "type": "boolean"
-                      },
-                      "rewakeMessage": {
-                        "description": "@internal Custom prefix for the system-reminder shown to the model when an asyncRewake hook exits with code 2. The hook output is appended after this prefix.",
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "rewakeSummary": {
-                        "description": "@internal One-line summary shown to the user in the terminal when an asyncRewake hook exits with code 2. Defaults to \"Stop hook feedback\".",
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "cloud": {
-                        "description": "@internal Where this hook may run when a cloud session is driven from this machine. 'device': offer it to the cloud session and run it here even when its script sits where the cloud session can write on this machine or cannot be pinned — the author accepts that the session may have changed files this hook executes. 'skip': never offer it to cloud sessions. Omit for the default: a command hook whose script could be read and pinned and lies outside everything the cloud session can write here is offered; other command hooks are not. Applies to this entry only: the same hook written in another settings scope keeps its own setting. An unrecognised value reads as 'skip' (the file still loads; the hook stays on this machine).",
-                        "type": "string",
-                        "enum": ["device", "skip"]
-                      }
-                    },
-                    "required": ["type", "command"]
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string",
-                        "const": "prompt",
-                        "description": "LLM prompt hook type"
-                      },
-                      "prompt": {
-                        "type": "string",
-                        "description": "Prompt to evaluate with LLM. Use $ARGUMENTS placeholder for hook input JSON."
-                      },
-                      "if": {
-                        "description": "Permission rule syntax to filter when this hook runs (e.g., \"Bash(git *)\"). Only runs if the tool call matches the pattern. Avoids spawning hooks for non-matching commands.",
-                        "type": "string"
-                      },
-                      "timeout": {
-                        "description": "Timeout in seconds for this specific prompt evaluation",
-                        "type": "number",
-                        "exclusiveMinimum": 0
-                      },
-                      "model": {
-                        "description": "Model to use for this prompt hook (e.g., \"claude-sonnet-5\"). If not specified, uses the default small fast model.",
-                        "type": "string"
-                      },
-                      "continueOnBlock": {
-                        "description": "Sets the continue value for the decision:\"block\" produced when ok is false. Default false (turn ends). Whether continue:true lets the turn proceed depends on the event's decision:\"block\" semantics. On PostToolUse, the reason is fed back to Claude and the turn continues.",
-                        "type": "boolean"
-                      },
-                      "statusMessage": {
-                        "description": "Custom status message to display in spinner while hook runs",
-                        "type": "string"
-                      },
-                      "once": {
-                        "description": "If true, hook runs once and is removed after execution",
-                        "type": "boolean"
-                      }
-                    },
-                    "required": ["type", "prompt"]
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string",
-                        "const": "agent",
-                        "description": "Agentic verifier hook type"
-                      },
-                      "prompt": {
-                        "type": "string",
-                        "description": "Prompt describing what to verify (e.g. \"Verify that unit tests ran and passed.\"). Use $ARGUMENTS placeholder for hook input JSON."
-                      },
-                      "if": {
-                        "description": "Permission rule syntax to filter when this hook runs (e.g., \"Bash(git *)\"). Only runs if the tool call matches the pattern. Avoids spawning hooks for non-matching commands.",
-                        "type": "string"
-                      },
-                      "timeout": {
-                        "description": "Timeout in seconds for agent execution (default 60)",
-                        "type": "number",
-                        "exclusiveMinimum": 0
-                      },
-                      "model": {
-                        "description": "Model to use for this agent hook (e.g., \"claude-sonnet-5\"). If not specified, uses Haiku.",
-                        "type": "string"
-                      },
-                      "statusMessage": {
-                        "description": "Custom status message to display in spinner while hook runs",
-                        "type": "string"
-                      },
-                      "once": {
-                        "description": "If true, hook runs once and is removed after execution",
-                        "type": "boolean"
-                      }
-                    },
-                    "required": ["type", "prompt"]
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string",
-                        "const": "http",
-                        "description": "HTTP hook type"
-                      },
-                      "url": {
-                        "type": "string",
-                        "format": "uri",
-                        "description": "URL to POST the hook input JSON to"
-                      },
-                      "if": {
-                        "description": "Permission rule syntax to filter when this hook runs (e.g., \"Bash(git *)\"). Only runs if the tool call matches the pattern. Avoids spawning hooks for non-matching commands.",
-                        "type": "string"
-                      },
-                      "timeout": {
-                        "description": "Timeout in seconds for this specific request",
-                        "type": "number",
-                        "exclusiveMinimum": 0
-                      },
-                      "onFailure": {
-                        "description": "What a failure of this hook does: it could not start (a missing script or plugin directory), timed out, exited with a code other than 0 or 2, or printed JSON that is invalid or fails validation. 'continue' (default): the failure is reported and the action goes ahead. 'block': the failure counts as exit code 2, so the action the event guards (a tool call, a permission request, a prompt) is blocked. Ignored for async hooks and on Stop, SubagentStop, TaskCompleted and TeammateIdle.",
-                        "type": "string",
-                        "enum": ["continue", "block"]
-                      },
-                      "headers": {
-                        "description": "Additional headers to include in the request. Values may reference environment variables using $VAR_NAME or ${VAR_NAME} syntax (e.g., \"Authorization\": \"Bearer $MY_TOKEN\"). Only variables listed in allowedEnvVars will be interpolated.",
-                        "type": "object",
-                        "propertyNames": {
-                          "type": "string"
-                        },
-                        "additionalProperties": {
-                          "type": "string"
-                        }
-                      },
-                      "allowedEnvVars": {
-                        "description": "Explicit list of environment variable names that may be interpolated in header values. Only variables listed here will be resolved; all other $VAR references are left as empty strings. Required for env var interpolation to work.",
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
-                      "statusMessage": {
-                        "description": "Custom status message to display in spinner while hook runs",
-                        "type": "string"
-                      },
-                      "once": {
-                        "description": "If true, hook runs once and is removed after execution",
-                        "type": "boolean"
-                      },
-                      "cloud": {
-                        "description": "@internal Where this hook may run when a cloud session is driven from this machine. 'skip': never offer it to cloud sessions; 'device' or omitted: offered (an HTTP hook has no script to pin). Applies to this entry only. An unrecognised value reads as 'skip' (the file still loads).",
-                        "type": "string",
-                        "enum": ["device", "skip"]
-                      }
-                    },
-                    "required": ["type", "url"]
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string",
-                        "const": "mcp_tool",
-                        "description": "MCP tool hook type"
-                      },
-                      "server": {
-                        "type": "string",
-                        "description": "Name of an already-configured MCP server to invoke"
-                      },
-                      "tool": {
-                        "type": "string",
-                        "description": "Name of the tool on that server to call"
-                      },
-                      "input": {
-                        "description": "Arguments passed to the MCP tool. String values support ${path} interpolation from the hook input JSON (e.g. \"${tool_input.file_path}\").",
-                        "type": "object",
-                        "propertyNames": {
-                          "type": "string"
-                        },
-                        "additionalProperties": {}
-                      },
-                      "if": {
-                        "description": "Permission rule syntax to filter when this hook runs (e.g., \"Bash(git *)\"). Only runs if the tool call matches the pattern. Avoids spawning hooks for non-matching commands.",
-                        "type": "string"
-                      },
-                      "timeout": {
-                        "description": "Timeout in seconds for this specific tool call",
-                        "type": "number",
-                        "exclusiveMinimum": 0
-                      },
-                      "statusMessage": {
-                        "description": "Custom status message to display in spinner while hook runs",
-                        "type": "string"
-                      },
-                      "once": {
-                        "description": "If true, hook runs once and is removed after execution",
-                        "type": "boolean"
-                      }
-                    },
-                    "required": ["type", "server", "tool"]
-                  }
-                ]
-              },
-              "description": "List of hooks to execute when the matcher matches"
-            }
-          },
-          "required": ["hooks"]
-        }
-      }
-    },
-    "modules": {
-      "description": "The hooks module: one path, relative to this hooks.json, of a module exporting register(on). The module, and every file it imports from the plugin, is named like code (.ts, .tsx, .jsx, .js, .mjs, .cjs, .mts or .cts; a file named otherwise is not loaded) and is an ES module whatever its suffix. What it hooks and calls is read from its source before it loads; `claude plugin validate` shows the result.",
-      "maxItems": 1,
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "surface": {
-      "not": {}
-    }
-  }
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://clawdipedia.cc/schemas/claude-code-plugin-hooks.json",
+	"title": "Claude Code plugin hooks.json (Claude Code 2.1.319)",
+	"$comment": "For hooks/hooks.json inside a plugin. Generated from Claude Code 2.1.319 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
+	"type": "object",
+	"properties": {
+		"$schema": {
+			"description": "JSON Schema reference for editor autocomplete/validation; ignored at load time",
+			"type": "string"
+		},
+		"description": {
+			"description": "Brief, user-facing explanation of what these hooks provide",
+			"type": "string"
+		},
+		"hooks": {
+			"description": "The hooks provided by the plugin, in the same format as the one used for settings",
+			"type": "object",
+			"propertyNames": {
+				"type": "string",
+				"enum": [
+					"PreToolUse",
+					"PostToolUse",
+					"PostToolUseFailure",
+					"PostToolBatch",
+					"Notification",
+					"UserPromptSubmit",
+					"UserPromptExpansion",
+					"SessionStart",
+					"SessionEnd",
+					"Stop",
+					"StopFailure",
+					"SubagentStart",
+					"SubagentStop",
+					"PreCompact",
+					"PostCompact",
+					"PreModelSwitch",
+					"PostModelSwitch",
+					"PermissionRequest",
+					"PermissionDenied",
+					"Setup",
+					"TeammateIdle",
+					"TaskCreated",
+					"TaskCompleted",
+					"Elicitation",
+					"ElicitationResult",
+					"ConfigChange",
+					"WorktreeCreate",
+					"WorktreeRemove",
+					"InstructionsLoaded",
+					"CwdChanged",
+					"FileChanged",
+					"DirectoryAdded",
+					"MessageDisplay"
+				]
+			},
+			"additionalProperties": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"matcher": {
+							"description": "String pattern to match (e.g. tool names like \"Write\")",
+							"type": "string"
+						},
+						"hooks": {
+							"type": "array",
+							"items": {
+								"oneOf": [
+									{
+										"type": "object",
+										"properties": {
+											"type": {
+												"type": "string",
+												"const": "command",
+												"description": "Shell command hook type"
+											},
+											"command": {
+												"type": "string",
+												"description": "Shell command to execute"
+											},
+											"args": {
+												"description": "Argument list for exec form. When present, `command` is resolved as an executable and spawned directly with these arguments — no shell. Path placeholders like ${CLAUDE_PLUGIN_ROOT} are substituted per-element as plain strings, so paths with quotes, $, or backticks never reach a shell parser. When absent, `command` runs through a shell (bash on POSIX, PowerShell on Windows without Git Bash).",
+												"type": "array",
+												"items": {
+													"type": "string"
+												}
+											},
+											"if": {
+												"description": "Permission rule syntax to filter when this hook runs (e.g., \"Bash(git *)\"). Only runs if the tool call matches the pattern. Avoids spawning hooks for non-matching commands.",
+												"type": "string"
+											},
+											"shell": {
+												"description": "Shell interpreter. 'bash' uses your $SHELL (bash/zsh/sh); 'powershell' uses pwsh. Defaults to bash (powershell on Windows without Git Bash).",
+												"type": "string",
+												"enum": ["bash", "powershell"]
+											},
+											"timeout": {
+												"description": "Timeout in seconds for this specific command",
+												"type": "number",
+												"exclusiveMinimum": 0
+											},
+											"onFailure": {
+												"description": "What a failure of this hook does: it could not start (a missing script or plugin directory), timed out, exited with a code other than 0 or 2, or printed JSON that is invalid or fails validation. 'continue' (default): the failure is reported and the action goes ahead. 'block': the failure counts as exit code 2, so the action the event guards (a tool call, a permission request, a prompt) is blocked. Ignored for async hooks and on Stop, SubagentStop, TaskCompleted and TeammateIdle.",
+												"type": "string",
+												"enum": ["continue", "block"]
+											},
+											"statusMessage": {
+												"description": "Custom status message to display in spinner while hook runs",
+												"type": "string"
+											},
+											"once": {
+												"description": "If true, hook runs once and is removed after execution",
+												"type": "boolean"
+											},
+											"async": {
+												"description": "If true, hook runs in background without blocking",
+												"type": "boolean"
+											},
+											"asyncRewake": {
+												"description": "If true, hook runs in background and wakes the model on exit code 2 (blocking error). Implies async.",
+												"type": "boolean"
+											},
+											"rewakeMessage": {
+												"description": "@internal Custom prefix for the system-reminder shown to the model when an asyncRewake hook exits with code 2. The hook output is appended after this prefix.",
+												"type": "string",
+												"minLength": 1
+											},
+											"rewakeSummary": {
+												"description": "@internal One-line summary shown to the user in the terminal when an asyncRewake hook exits with code 2. Defaults to \"Stop hook feedback\".",
+												"type": "string",
+												"minLength": 1
+											},
+											"cloud": {
+												"description": "@internal Where this hook may run when a cloud session is driven from this machine. 'device': offer it to the cloud session and run it here even when its script sits where the cloud session can write on this machine or cannot be pinned — the author accepts that the session may have changed files this hook executes. 'skip': never offer it to cloud sessions. Omit for the default: a command hook whose script could be read and pinned and lies outside everything the cloud session can write here is offered; other command hooks are not. Applies to this entry only: the same hook written in another settings scope keeps its own setting. An unrecognised value reads as 'skip' (the file still loads; the hook stays on this machine).",
+												"type": "string",
+												"enum": ["device", "skip"]
+											}
+										},
+										"required": ["type", "command"]
+									},
+									{
+										"type": "object",
+										"properties": {
+											"type": {
+												"type": "string",
+												"const": "prompt",
+												"description": "LLM prompt hook type"
+											},
+											"prompt": {
+												"type": "string",
+												"description": "Prompt to evaluate with LLM. Use $ARGUMENTS placeholder for hook input JSON."
+											},
+											"if": {
+												"description": "Permission rule syntax to filter when this hook runs (e.g., \"Bash(git *)\"). Only runs if the tool call matches the pattern. Avoids spawning hooks for non-matching commands.",
+												"type": "string"
+											},
+											"timeout": {
+												"description": "Timeout in seconds for this specific prompt evaluation",
+												"type": "number",
+												"exclusiveMinimum": 0
+											},
+											"model": {
+												"description": "Model to use for this prompt hook (e.g., \"claude-sonnet-5\"). If not specified, uses the default small fast model.",
+												"type": "string"
+											},
+											"continueOnBlock": {
+												"description": "Sets the continue value for the decision:\"block\" produced when ok is false. Default false (turn ends). Whether continue:true lets the turn proceed depends on the event's decision:\"block\" semantics. On PostToolUse, the reason is fed back to Claude and the turn continues.",
+												"type": "boolean"
+											},
+											"statusMessage": {
+												"description": "Custom status message to display in spinner while hook runs",
+												"type": "string"
+											},
+											"once": {
+												"description": "If true, hook runs once and is removed after execution",
+												"type": "boolean"
+											}
+										},
+										"required": ["type", "prompt"]
+									},
+									{
+										"type": "object",
+										"properties": {
+											"type": {
+												"type": "string",
+												"const": "agent",
+												"description": "Agentic verifier hook type"
+											},
+											"prompt": {
+												"type": "string",
+												"description": "Prompt describing what to verify (e.g. \"Verify that unit tests ran and passed.\"). Use $ARGUMENTS placeholder for hook input JSON."
+											},
+											"if": {
+												"description": "Permission rule syntax to filter when this hook runs (e.g., \"Bash(git *)\"). Only runs if the tool call matches the pattern. Avoids spawning hooks for non-matching commands.",
+												"type": "string"
+											},
+											"timeout": {
+												"description": "Timeout in seconds for agent execution (default 60)",
+												"type": "number",
+												"exclusiveMinimum": 0
+											},
+											"model": {
+												"description": "Model to use for this agent hook (e.g., \"claude-sonnet-5\"). If not specified, uses Haiku.",
+												"type": "string"
+											},
+											"statusMessage": {
+												"description": "Custom status message to display in spinner while hook runs",
+												"type": "string"
+											},
+											"once": {
+												"description": "If true, hook runs once and is removed after execution",
+												"type": "boolean"
+											}
+										},
+										"required": ["type", "prompt"]
+									},
+									{
+										"type": "object",
+										"properties": {
+											"type": {
+												"type": "string",
+												"const": "http",
+												"description": "HTTP hook type"
+											},
+											"url": {
+												"type": "string",
+												"format": "uri",
+												"description": "URL to POST the hook input JSON to"
+											},
+											"if": {
+												"description": "Permission rule syntax to filter when this hook runs (e.g., \"Bash(git *)\"). Only runs if the tool call matches the pattern. Avoids spawning hooks for non-matching commands.",
+												"type": "string"
+											},
+											"timeout": {
+												"description": "Timeout in seconds for this specific request",
+												"type": "number",
+												"exclusiveMinimum": 0
+											},
+											"onFailure": {
+												"description": "What a failure of this hook does: it could not start (a missing script or plugin directory), timed out, exited with a code other than 0 or 2, or printed JSON that is invalid or fails validation. 'continue' (default): the failure is reported and the action goes ahead. 'block': the failure counts as exit code 2, so the action the event guards (a tool call, a permission request, a prompt) is blocked. Ignored for async hooks and on Stop, SubagentStop, TaskCompleted and TeammateIdle.",
+												"type": "string",
+												"enum": ["continue", "block"]
+											},
+											"headers": {
+												"description": "Additional headers to include in the request. Values may reference environment variables using $VAR_NAME or ${VAR_NAME} syntax (e.g., \"Authorization\": \"Bearer $MY_TOKEN\"). Only variables listed in allowedEnvVars will be interpolated.",
+												"type": "object",
+												"propertyNames": {
+													"type": "string"
+												},
+												"additionalProperties": {
+													"type": "string"
+												}
+											},
+											"allowedEnvVars": {
+												"description": "Explicit list of environment variable names that may be interpolated in header values. Only variables listed here will be resolved; all other $VAR references are left as empty strings. Required for env var interpolation to work.",
+												"type": "array",
+												"items": {
+													"type": "string"
+												}
+											},
+											"statusMessage": {
+												"description": "Custom status message to display in spinner while hook runs",
+												"type": "string"
+											},
+											"once": {
+												"description": "If true, hook runs once and is removed after execution",
+												"type": "boolean"
+											},
+											"cloud": {
+												"description": "@internal Where this hook may run when a cloud session is driven from this machine. 'skip': never offer it to cloud sessions; 'device' or omitted: offered (an HTTP hook has no script to pin). Applies to this entry only. An unrecognised value reads as 'skip' (the file still loads).",
+												"type": "string",
+												"enum": ["device", "skip"]
+											}
+										},
+										"required": ["type", "url"]
+									},
+									{
+										"type": "object",
+										"properties": {
+											"type": {
+												"type": "string",
+												"const": "mcp_tool",
+												"description": "MCP tool hook type"
+											},
+											"server": {
+												"type": "string",
+												"description": "Name of an already-configured MCP server to invoke"
+											},
+											"tool": {
+												"type": "string",
+												"description": "Name of the tool on that server to call"
+											},
+											"input": {
+												"description": "Arguments passed to the MCP tool. String values support ${path} interpolation from the hook input JSON (e.g. \"${tool_input.file_path}\").",
+												"type": "object",
+												"propertyNames": {
+													"type": "string"
+												},
+												"additionalProperties": {}
+											},
+											"if": {
+												"description": "Permission rule syntax to filter when this hook runs (e.g., \"Bash(git *)\"). Only runs if the tool call matches the pattern. Avoids spawning hooks for non-matching commands.",
+												"type": "string"
+											},
+											"timeout": {
+												"description": "Timeout in seconds for this specific tool call",
+												"type": "number",
+												"exclusiveMinimum": 0
+											},
+											"statusMessage": {
+												"description": "Custom status message to display in spinner while hook runs",
+												"type": "string"
+											},
+											"once": {
+												"description": "If true, hook runs once and is removed after execution",
+												"type": "boolean"
+											}
+										},
+										"required": ["type", "server", "tool"]
+									}
+								]
+							},
+							"description": "List of hooks to execute when the matcher matches"
+						}
+					},
+					"required": ["hooks"]
+				}
+			}
+		},
+		"modules": {
+			"description": "The hooks module: one path, relative to this hooks.json, of a module exporting register(on). The module, and every file it imports from the plugin, is named like code (.ts, .tsx, .jsx, .js, .mjs, .cjs, .mts or .cts; a file named otherwise is not loaded) and is an ES module whatever its suffix. What it hooks and calls is read from its source before it loads; `claude plugin validate` shows the result.",
+			"maxItems": 1,
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"surface": {
+			"not": {}
+		}
+	}
 }

@@ -1,3862 +1,3862 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://clawdipedia.cc/schemas/claude-code-transcript.json",
-  "title": "Claude Code transcript JSONL entry (Claude Code 2.1.319)",
-  "$comment": "For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.319 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to \"transcript\"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:\"<entry type>\" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
-  "type": "object",
-  "oneOf": [
-    {
-      "$ref": "#/$defs/agent-color"
-    },
-    {
-      "$ref": "#/$defs/agent-name"
-    },
-    {
-      "$ref": "#/$defs/agent-setting"
-    },
-    {
-      "$ref": "#/$defs/ai-title"
-    },
-    {
-      "$ref": "#/$defs/api-request"
-    },
-    {
-      "$ref": "#/$defs/api-request-blob"
-    },
-    {
-      "$ref": "#/$defs/api-request-shape"
-    },
-    {
-      "$ref": "#/$defs/artifact-autoreact-ledger"
-    },
-    {
-      "$ref": "#/$defs/artifact-comment-monitor"
-    },
-    {
-      "$ref": "#/$defs/assistant"
-    },
-    {
-      "$ref": "#/$defs/atis-latch"
-    },
-    {
-      "$ref": "#/$defs/attachment"
-    },
-    {
-      "$ref": "#/$defs/attribution-snapshot"
-    },
-    {
-      "$ref": "#/$defs/bridge-session"
-    },
-    {
-      "$ref": "#/$defs/content-replacement"
-    },
-    {
-      "$ref": "#/$defs/continued-in"
-    },
-    {
-      "$ref": "#/$defs/cost-state"
-    },
-    {
-      "$ref": "#/$defs/custom-title"
-    },
-    {
-      "$ref": "#/$defs/dev-mods"
-    },
-    {
-      "$ref": "#/$defs/ended-by-model"
-    },
-    {
-      "$ref": "#/$defs/file-history-delta"
-    },
-    {
-      "$ref": "#/$defs/file-history-snapshot"
-    },
-    {
-      "$ref": "#/$defs/fork-context-ref"
-    },
-    {
-      "$ref": "#/$defs/frame-link"
-    },
-    {
-      "$ref": "#/$defs/history-suppression"
-    },
-    {
-      "$ref": "#/$defs/isolation-latch"
-    },
-    {
-      "$ref": "#/$defs/last-prompt"
-    },
-    {
-      "$ref": "#/$defs/memory-mode"
-    },
-    {
-      "$ref": "#/$defs/mode"
-    },
-    {
-      "$ref": "#/$defs/observer-ref"
-    },
-    {
-      "$ref": "#/$defs/permission-mode"
-    },
-    {
-      "$ref": "#/$defs/pr-link"
-    },
-    {
-      "$ref": "#/$defs/progress"
-    },
-    {
-      "$ref": "#/$defs/queue-operation"
-    },
-    {
-      "$ref": "#/$defs/relocated"
-    },
-    {
-      "$ref": "#/$defs/resume-head-vouch"
-    },
-    {
-      "$ref": "#/$defs/session-owner"
-    },
-    {
-      "$ref": "#/$defs/summary"
-    },
-    {
-      "$ref": "#/$defs/system"
-    },
-    {
-      "$ref": "#/$defs/tag"
-    },
-    {
-      "$ref": "#/$defs/tools-used"
-    },
-    {
-      "$ref": "#/$defs/user"
-    },
-    {
-      "$ref": "#/$defs/worktree-state"
-    }
-  ],
-  "$defs": {
-    "agent-color": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "agent-color"
-        },
-        "agentColor": {
-          "type": "string"
-        },
-        "sessionId": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 2."
-    },
-    "agent-name": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "agent-name"
-        },
-        "agentName": {
-          "type": "string"
-        },
-        "sessionId": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 2."
-    },
-    "agent-setting": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "agent-setting"
-        },
-        "agentSetting": {
-          "type": "string"
-        },
-        "sessionId": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 1."
-    },
-    "ai-title": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "ai-title"
-        },
-        "aiTitle": {
-          "type": "string"
-        },
-        "sessionId": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 2."
-    },
-    "api-request": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "api-request",
-          "x-observed": true
-        },
-        "sessionId": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "agentId": {
-          "type": "string"
-        },
-        "id": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "timestamp": {
-          "type": "string",
-          "x-observed": true
-        },
-        "version": {
-          "type": "string",
-          "x-observed": true
-        },
-        "querySource": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "shapeHash": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "params": {
-          "type": "object",
-          "x-observed": true
-        },
-        "withheld": {
-          "type": "array"
-        },
-        "base": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "keep": {
-          "type": "number",
-          "x-observed": true
-        },
-        "tail": {
-          "x-observed": true,
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "cacheControl": {
-          "type": "array",
-          "x-observed": true
-        },
-        "requestDigest": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "cut": {
-          "type": "object",
-          "properties": {
-            "markAddresses": {
-              "x-unverified": true
-            },
-            "kind": {
-              "const": "tool-mark-address"
-            },
-            "cuts": {
-              "x-unverified": true
-            },
-            "placeholders": {
-              "x-unverified": true
-            },
-            "messages": {
-              "type": "array"
-            }
-          }
-        },
-        "cutRequestDigest": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: boundary-cleared. Code sites used: 1."
-    },
-    "api-request-blob": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "api-request-blob",
-          "x-observed": true
-        },
-        "sessionId": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "agentId": {
-          "type": "string"
-        },
-        "hash": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "message": {
-          "x-observed": true,
-          "type": "object"
-        }
-      },
-      "$comment": "Registry policy: boundary-cleared. Code sites used: 1."
-    },
-    "api-request-shape": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "api-request-shape",
-          "x-observed": true
-        },
-        "sessionId": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "agentId": {
-          "type": "string"
-        },
-        "shapeHash": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "timestamp": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "version": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "shape": {
-          "x-observed": true,
-          "type": "object"
-        }
-      },
-      "$comment": "Registry policy: boundary-cleared. Code sites used: 1."
-    },
-    "artifact-autoreact-ledger": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "artifact-autoreact-ledger"
-        },
-        "sessionId": {
-          "type": "string"
-        },
-        "accountUuid": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "artifacts": {
-          "type": "object"
-        },
-        "v": {
-          "type": "number"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 2."
-    },
-    "artifact-comment-monitor": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "artifact-comment-monitor"
-        },
-        "v": {
-          "type": "number"
-        },
-        "sessionId": {
-          "type": "string"
-        },
-        "artifacts": {
-          "type": "object"
-        }
-      },
-      "$comment": "Registry policy: accumulate. Code sites used: 7."
-    },
-    "assistant": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "assistant",
-          "x-observed": true
-        },
-        "uuid": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "timestamp": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "message": {
-          "properties": {
-            "diagnostics": {
-              "anyOf": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "cache_miss_reason": {
-                      "anyOf": [
-                        {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "enum": [
-                                "model_changed",
-                                "system_changed",
-                                "tools_changed",
-                                "messages_changed",
-                                "previous_message_not_found",
-                                "unavailable"
-                              ]
-                            },
-                            "cache_missed_input_tokens": {
-                              "type": "integer"
-                            }
-                          }
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    }
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "id": {
-              "type": "string"
-            },
-            "container": {
-              "anyOf": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "expires_at": {
-                      "type": "string"
-                    },
-                    "skills": {
-                      "anyOf": [
-                        {
-                          "type": "array",
-                          "items": {
-                            "type": "object"
-                          }
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    }
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "model": {
-              "type": "string"
-            },
-            "role": {
-              "const": "assistant"
-            },
-            "stop_details": {
-              "anyOf": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "const": "refusal"
-                    },
-                    "category": {
-                      "anyOf": [
-                        {
-                          "enum": [
-                            "cyber",
-                            "bio",
-                            "frontier_llm",
-                            "reasoning_extraction",
-                            "general_harms"
-                          ]
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    },
-                    "explanation": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    },
-                    "fallback_credit_token": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    },
-                    "fallback_has_prefill_claim": {
-                      "anyOf": [
-                        {
-                          "type": "boolean"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    },
-                    "recommended_model": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    }
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "stop_reason": {
-              "anyOf": [
-                {
-                  "enum": [
-                    "end_turn",
-                    "max_tokens",
-                    "stop_sequence",
-                    "tool_use",
-                    "pause_turn",
-                    "compaction",
-                    "refusal",
-                    "model_context_window_exceeded"
-                  ]
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "stop_sequence": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "type": {
-              "const": "message"
-            },
-            "usage": {
-              "properties": {
-                "output_tokens_details": {
-                  "properties": {
-                    "thinking_tokens": {
-                      "type": "integer"
-                    }
-                  }
-                },
-                "input_tokens": {
-                  "type": "integer"
-                },
-                "cache_creation_input_tokens": {
-                  "type": "integer"
-                },
-                "cache_read_input_tokens": {
-                  "type": "integer"
-                },
-                "output_tokens": {
-                  "type": "integer"
-                },
-                "server_tool_use": {
-                  "properties": {
-                    "web_search_requests": {
-                      "type": "integer"
-                    },
-                    "web_fetch_requests": {
-                      "type": "integer"
-                    }
-                  }
-                },
-                "service_tier": {
-                  "anyOf": [
-                    {
-                      "enum": ["standard", "priority", "batch"]
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "cache_creation": {
-                  "properties": {
-                    "ephemeral_1h_input_tokens": {
-                      "type": "integer"
-                    },
-                    "ephemeral_5m_input_tokens": {
-                      "type": "integer"
-                    }
-                  }
-                },
-                "inference_geo": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "iterations": {
-                  "anyOf": [
-                    {
-                      "type": "array",
-                      "items": {
-                        "anyOf": [
-                          {
-                            "type": "object",
-                            "properties": {
-                              "cache_creation": {
-                                "anyOf": [
-                                  {
-                                    "type": "object",
-                                    "properties": {
-                                      "ephemeral_1h_input_tokens": {
-                                        "type": "integer"
-                                      },
-                                      "ephemeral_5m_input_tokens": {
-                                        "type": "integer"
-                                      }
-                                    }
-                                  },
-                                  {
-                                    "type": "null"
-                                  }
-                                ]
-                              },
-                              "cache_creation_input_tokens": {
-                                "type": "integer"
-                              },
-                              "cache_read_input_tokens": {
-                                "type": "integer"
-                              },
-                              "input_tokens": {
-                                "type": "integer"
-                              },
-                              "output_tokens": {
-                                "type": "integer"
-                              },
-                              "type": {
-                                "const": "message"
-                              },
-                              "model": {
-                                "anyOf": [
-                                  {
-                                    "type": "string"
-                                  },
-                                  {
-                                    "type": "null"
-                                  }
-                                ]
-                              }
-                            }
-                          },
-                          {
-                            "type": "object",
-                            "properties": {
-                              "cache_creation": {
-                                "anyOf": [
-                                  {
-                                    "type": "object",
-                                    "properties": {
-                                      "ephemeral_1h_input_tokens": {
-                                        "type": "integer"
-                                      },
-                                      "ephemeral_5m_input_tokens": {
-                                        "type": "integer"
-                                      }
-                                    }
-                                  },
-                                  {
-                                    "type": "null"
-                                  }
-                                ]
-                              },
-                              "cache_creation_input_tokens": {
-                                "type": "integer"
-                              },
-                              "cache_read_input_tokens": {
-                                "type": "integer"
-                              },
-                              "input_tokens": {
-                                "type": "integer"
-                              },
-                              "output_tokens": {
-                                "type": "integer"
-                              },
-                              "type": {
-                                "const": "compaction"
-                              }
-                            }
-                          },
-                          {
-                            "type": "object",
-                            "properties": {
-                              "cache_creation": {
-                                "anyOf": [
-                                  {
-                                    "type": "object",
-                                    "properties": {
-                                      "ephemeral_1h_input_tokens": {
-                                        "type": "integer"
-                                      },
-                                      "ephemeral_5m_input_tokens": {
-                                        "type": "integer"
-                                      }
-                                    }
-                                  },
-                                  {
-                                    "type": "null"
-                                  }
-                                ]
-                              },
-                              "cache_creation_input_tokens": {
-                                "type": "integer"
-                              },
-                              "cache_read_input_tokens": {
-                                "type": "integer"
-                              },
-                              "input_tokens": {
-                                "type": "integer"
-                              },
-                              "output_tokens": {
-                                "type": "integer"
-                              },
-                              "type": {
-                                "const": "advisor_message"
-                              },
-                              "model": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          {
-                            "type": "object",
-                            "properties": {
-                              "cache_creation": {
-                                "anyOf": [
-                                  {
-                                    "type": "object",
-                                    "properties": {
-                                      "ephemeral_1h_input_tokens": {
-                                        "type": "integer"
-                                      },
-                                      "ephemeral_5m_input_tokens": {
-                                        "type": "integer"
-                                      }
-                                    }
-                                  },
-                                  {
-                                    "type": "null"
-                                  }
-                                ]
-                              },
-                              "cache_creation_input_tokens": {
-                                "type": "integer"
-                              },
-                              "cache_read_input_tokens": {
-                                "type": "integer"
-                              },
-                              "input_tokens": {
-                                "type": "integer"
-                              },
-                              "output_tokens": {
-                                "type": "integer"
-                              },
-                              "type": {
-                                "const": "fallback_message"
-                              },
-                              "model": {
-                                "type": "string"
-                              }
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "speed": {
-                  "anyOf": [
-                    {
-                      "enum": ["standard", "fast"]
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "fallback_credit": {
-                  "anyOf": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "status": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "enum": ["redeemed", "not_applied"]
-                            },
-                            "reason": {
-                              "type": "string"
-                            },
-                            "remove_to_redeem": {
-                              "type": "boolean"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                }
-              }
-            },
-            "content": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
-            },
-            "context_management": {
-              "anyOf": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "applied_edits": {
-                      "type": "array",
-                      "items": {
-                        "type": "object"
-                      }
-                    }
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            }
-          },
-          "x-observed": true
-        },
-        "requestId": {
-          "type": "string"
-        },
-        "apiError": {
-          "enum": [
-            "max_output_tokens",
-            "dlp_request_denied",
-            "claude_code_version_too_old",
-            "safety_monitor_blocked",
-            "effort_requires_thinking",
-            "advisor_incompatible",
-            "tool_history_mismatch",
-            "autocompact_thrashing",
-            "pdf_too_large",
-            "pdf_password_protected",
-            "media_removed",
-            "no_response",
-            "tls_untrusted_ca",
-            "gateway_content_type",
-            "provider_credentials",
-            "gateway_signin_required",
-            "gateway_session_expired",
-            "api_key_auth_disabled",
-            "org_disabled_credential",
-            "invalid_credential_header",
-            "model_requires_usage_credits",
-            "long_context_credits_required",
-            "consent_unanswered",
-            "no_allowed_fallback",
-            "model_substitution_disabled",
-            "field_not_granted",
-            "usage_limit_reached",
-            "empty_completion"
-          ]
-        },
-        "apiErrorParams": {
-          "type": "object",
-          "properties": {
-            "effort": {
-              "type": "string"
-            },
-            "provider": {
-              "enum": [
-                "bedrock",
-                "anthropicAws",
-                "mantle",
-                "anthropicGoogleCloud",
-                "vertex",
-                "foundry",
-                "gateway"
-              ]
-            },
-            "remedy": {
-              "enum": [
-                "refresh_command",
-                "refresh_credentials",
-                "adc",
-                "gateway_token",
-                "host_managed",
-                "model_access"
-              ]
-            },
-            "media": {
-              "enum": ["image", "document"]
-            },
-            "media_reason": {
-              "enum": ["unprocessable", "unsupported_by_model", "media_budget"]
-            },
-            "rate_limit_info": {
-              "type": "object"
-            }
-          }
-        },
-        "apiErrorIsTransient": {
-          "type": "boolean"
-        },
-        "quotaLimits": {
-          "type": "object"
-        },
-        "error": {
-          "enum": [
-            "authentication_failed",
-            "oauth_org_not_allowed",
-            "account_on_hold",
-            "verification_required",
-            "billing_error",
-            "rate_limit",
-            "overloaded",
-            "invalid_request",
-            "model_not_found",
-            "server_error",
-            "unknown",
-            "max_output_tokens",
-            "cloud_credential_error"
-          ]
-        },
-        "errorDetails": {
-          "type": "string"
-        },
-        "truncatedAfterOutput": {
-          "type": "boolean"
-        },
-        "isApiErrorMessage": {
-          "type": "boolean"
-        },
-        "isVirtual": {
-          "type": "boolean"
-        },
-        "isMeta": {
-          "not": {}
-        },
-        "isUnmetered": {
-          "type": "boolean"
-        },
-        "cloudMemoryToolUseIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "apiErrorCode": {
-          "type": "string"
-        },
-        "sessionFailureNotice": {
-          "type": "boolean"
-        },
-        "advisorModel": {
-          "type": "string"
-        },
-        "attributionAgent": {
-          "type": "string"
-        },
-        "attributionSkill": {
-          "type": "string"
-        },
-        "attributionPlugin": {
-          "type": "string"
-        },
-        "attributionMcpServer": {
-          "type": "string"
-        },
-        "attributionMcpTool": {
-          "type": "string"
-        },
-        "cutInUnfinishedBlock": {
-          "x-unverified": true
-        },
-        "healsDistinctCarrier": {
-          "type": "boolean",
-          "enum": [true]
-        },
-        "isAbortedMidStream": {
-          "type": "boolean"
-        },
-        "batchToolUses": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "wireToolInputs": {
-          "type": "object"
-        },
-        "wireIngestContext": {
-          "type": "object"
-        },
-        "serverClassifierRequest": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "serverClassifierResults": {
-          "not": {}
-        },
-        "serverClassifierContextWithheld": {
-          "type": "boolean"
-        },
-        "apiBlockIndex": {
-          "x-observed": true,
-          "type": "integer"
-        },
-        "requestRef": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "requestedModel": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "promptCacheRequested": {
-          "type": "string",
-          "x-observed": true
-        },
-        "effort": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "perTurnEffort": {
-          "x-observed": true,
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "perTurnTiming": {
-          "type": "string"
-        },
-        "thinkingDurationMs": {
-          "type": "number"
-        },
-        "toolInputStreamMs": {
-          "type": "number",
-          "x-observed": true
-        },
-        "thinkingDisplay": {
-          "type": "string"
-        },
-        "resumedFromIncompleteThinking": {
-          "type": "boolean"
-        },
-        "apiErrorStatus": {
-          "type": "integer"
-        },
-        "remoteSourced": {
-          "type": "boolean"
-        },
-        "parentUuid": {
-          "x-observed": true,
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "logicalParentUuid": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "isSidechain": {
-          "x-observed": true,
-          "type": "boolean"
-        },
-        "teamName": {
-          "type": "string"
-        },
-        "agentName": {
-          "type": "string"
-        },
-        "promptId": {
-          "type": "string"
-        },
-        "agentId": {
-          "type": "string"
-        },
-        "sessionKind": {
-          "enum": ["bg", "daemon", "daemon-worker"]
-        },
-        "userType": {
-          "type": "string",
-          "x-observed": true
-        },
-        "entrypoint": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "cwd": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "sessionId": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "version": {
-          "type": "string",
-          "x-observed": true
-        },
-        "gitBranch": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "slug": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: transcript. Code sites used: 10."
-    },
-    "atis-latch": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "atis-latch",
-          "x-observed": true
-        },
-        "atis": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "sessionId": {
-          "x-observed": true,
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 4."
-    },
-    "attachment": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "attachment",
-          "x-observed": true
-        },
-        "uuid": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "timestamp": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "attachment": {
-          "properties": {
-            "type": {
-              "type": "string"
-            },
-            "prompt": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
-                }
-              ]
-            },
-            "source_uuid": {
-              "type": "string"
-            },
-            "origin": {
-              "properties": {
-                "kind": {
-                  "type": "string"
-                }
-              }
-            },
-            "timestamp": {
-              "type": "string"
-            },
-            "isMeta": {
-              "type": "boolean"
-            },
-            "forwardedIntent": {
-              "properties": {
-                "lineage": {
-                  "type": "string"
-                },
-                "source": {
-                  "type": "string",
-                  "enum": ["typed", "relay", "owner", "unattributed"]
-                }
-              }
-            },
-            "reminderId": {
-              "type": "string"
-            },
-            "met": {
-              "type": "boolean"
-            },
-            "sentinel": {
-              "type": "boolean"
-            },
-            "condition": {
-              "type": "string"
-            },
-            "text": {
-              "type": ["string", "null"]
-            },
-            "hooks": {
-              "type": "array"
-            },
-            "count": {
-              "type": "number"
-            }
-          },
-          "x-observed": true
-        },
-        "renderedRole": {
-          "type": "string",
-          "x-observed": true
-        },
-        "rendered": {
-          "type": "array",
-          "x-observed": true
-        },
-        "renderedBesideToolResult": {
-          "type": "boolean",
-          "x-observed": true
-        },
-        "renderedInHumanTurn": {
-          "type": "array"
-        },
-        "parentUuid": {
-          "x-observed": true,
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "logicalParentUuid": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "isSidechain": {
-          "x-observed": true,
-          "type": "boolean"
-        },
-        "teamName": {
-          "type": "string"
-        },
-        "agentName": {
-          "type": "string"
-        },
-        "promptId": {
-          "type": "string"
-        },
-        "agentId": {
-          "type": "string"
-        },
-        "sessionKind": {
-          "enum": ["bg", "daemon", "daemon-worker"]
-        },
-        "userType": {
-          "type": "string",
-          "x-observed": true
-        },
-        "entrypoint": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "cwd": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "sessionId": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "version": {
-          "type": "string",
-          "x-observed": true
-        },
-        "gitBranch": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "slug": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: transcript. Code sites used: 7."
-    },
-    "attribution-snapshot": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "attribution-snapshot"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 0. The program reads this type, and no code in this build writes it, so only `type` is known."
-    },
-    "bridge-session": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "bridge-session"
-        },
-        "sessionId": {
-          "type": "string"
-        },
-        "bridgeSessionId": {
-          "type": "string"
-        },
-        "lastSequenceNum": {
-          "type": "integer"
-        },
-        "declaredDialogKinds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "sessionGroupingId": {
-          "type": "string"
-        },
-        "noHistoryBackfill": {
-          "type": "boolean"
-        },
-        "ownerAccountUuid": {
-          "type": "string"
-        },
-        "ownerOrganizationUuid": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 3."
-    },
-    "content-replacement": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "content-replacement"
-        },
-        "sessionId": {
-          "type": "string"
-        },
-        "agentId": {
-          "type": "string"
-        },
-        "replacements": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "kind": {
-                "enum": ["tool-result"]
-              },
-              "toolUseId": {
-                "type": "string"
-              },
-              "replacement": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      },
-      "$comment": "Registry policy: accumulate. Code sites used: 3."
-    },
-    "continued-in": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "continued-in"
-        },
-        "timestamp": {
-          "type": "string"
-        },
-        "sessionId": {
-          "type": "string"
-        },
-        "continuedInSessionId": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: boundary-cleared. Code sites used: 1."
-    },
-    "cost-state": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "cost-state",
-          "x-observed": true
-        },
-        "sessionId": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "totalCostUSD": {
-          "x-observed": true,
-          "type": "number"
-        },
-        "totalAPIDuration": {
-          "x-observed": true,
-          "type": "number"
-        },
-        "totalAPIDurationWithoutRetries": {
-          "x-observed": true,
-          "type": "number"
-        },
-        "totalToolDuration": {
-          "x-observed": true,
-          "type": "number"
-        },
-        "totalLinesAdded": {
-          "x-observed": true,
-          "type": "number"
-        },
-        "totalLinesRemoved": {
-          "x-observed": true,
-          "type": "number"
-        },
-        "totalDuration": {
-          "x-observed": true,
-          "type": "number"
-        },
-        "startTime": {
-          "x-observed": true,
-          "type": "number"
-        },
-        "modelUsage": {
-          "x-observed": true,
-          "type": "object",
-          "additionalProperties": {
-            "type": "object",
-            "properties": {
-              "inputTokens": {
-                "type": "number"
-              },
-              "outputTokens": {
-                "type": "number"
-              },
-              "thinkingTokens": {
-                "type": "number"
-              },
-              "cacheReadInputTokens": {
-                "type": "number"
-              },
-              "cacheCreationInputTokens": {
-                "type": "number"
-              },
-              "cacheCreationEphemeral5mInputTokens": {
-                "type": "number"
-              },
-              "cacheCreationEphemeral1hInputTokens": {
-                "type": "number"
-              },
-              "webSearchRequests": {
-                "type": "number"
-              },
-              "costUSD": {
-                "type": "number"
-              }
-            }
-          }
-        },
-        "hasUnknownModelCost": {
-          "x-observed": true,
-          "type": "boolean"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 1."
-    },
-    "custom-title": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "custom-title"
-        },
-        "customTitle": {
-          "type": "string"
-        },
-        "sessionId": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 4."
-    },
-    "dev-mods": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "dev-mods"
-        },
-        "folder": {
-          "type": "string"
-        },
-        "sessionId": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 2."
-    },
-    "ended-by-model": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "ended-by-model"
-        },
-        "timestamp": {
-          "type": "string"
-        },
-        "sessionId": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 1."
-    },
-    "file-history-delta": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "file-history-delta"
-        },
-        "messageId": {
-          "type": "string"
-        },
-        "snapshotMessageId": {
-          "type": "string"
-        },
-        "trackingPath": {
-          "type": "string"
-        },
-        "backup": {
-          "type": "object",
-          "properties": {
-            "backupFileName": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "version": {
-              "type": "integer"
-            },
-            "backupTime": {
-              "type": "string",
-              "format": "date-time"
-            }
-          }
-        },
-        "timestamp": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: boundary-cleared. Code sites used: 1."
-    },
-    "file-history-snapshot": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "file-history-snapshot"
-        },
-        "messageId": {
-          "type": "string"
-        },
-        "snapshot": {
-          "type": "object",
-          "properties": {
-            "messageId": {
-              "type": "string"
-            },
-            "trackedFileBackups": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object",
-                "properties": {
-                  "backupFileName": {
-                    "anyOf": [
-                      {
-                        "type": "string"
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  },
-                  "version": {
-                    "type": "integer"
-                  },
-                  "backupTime": {
-                    "type": "string",
-                    "format": "date-time"
-                  }
-                }
-              }
-            },
-            "timestamp": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "preCheckpoint": {
-              "enum": [true]
-            }
-          }
-        },
-        "isSnapshotUpdate": {
-          "type": "boolean"
-        }
-      },
-      "$comment": "Registry policy: boundary-cleared. Code sites used: 1."
-    },
-    "fork-context-ref": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "fork-context-ref"
-        },
-        "agentId": {
-          "type": "string"
-        },
-        "parentSessionId": {
-          "type": "string"
-        },
-        "parentLastUuid": {
-          "type": "string"
-        },
-        "contextLength": {
-          "type": "number"
-        }
-      },
-      "$comment": "Registry policy: accumulate. Code sites used: 1."
-    },
-    "frame-link": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "frame-link"
-        },
-        "artifactCount": {
-          "type": "integer"
-        },
-        "sessionId": {
-          "type": "string"
-        },
-        "timestamp": {
-          "type": "string"
-        },
-        "path": {
-          "type": "string"
-        },
-        "frameUrl": {
-          "type": "string"
-        },
-        "title": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: accumulate. Code sites used: 2."
-    },
-    "history-suppression": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "history-suppression"
-        },
-        "sessionId": {
-          "type": "string"
-        },
-        "cause": {
-          "type": "string"
-        },
-        "vetoedAgainstAccountUuid": {
-          "type": "string"
-        },
-        "ts": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 1."
-    },
-    "isolation-latch": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "isolation-latch"
-        },
-        "side": {
-          "type": "string"
-        },
-        "sessionId": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 2."
-    },
-    "last-prompt": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "last-prompt",
-          "x-observed": true
-        },
-        "lastPrompt": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "leafUuid": {
-          "x-observed": true,
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "sessionId": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "explicit": {
-          "type": "boolean"
-        }
-      },
-      "$comment": "Registry policy: boundary-cleared. Code sites used: 6."
-    },
-    "memory-mode": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "memory-mode"
-        },
-        "mode": {
-          "enum": ["on", "off"]
-        },
-        "afterUuid": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "timestamp": {
-          "type": "string"
-        },
-        "reason": {
-          "enum": [
-            "paused",
-            "account_off",
-            "account_read_only",
-            "session_shape",
-            "server_off"
-          ]
-        },
-        "account": {
-          "type": "string"
-        },
-        "accountChoice": {
-          "enum": ["on", "read_only", "off"]
-        },
-        "sessionId": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: accumulate. Code sites used: 2."
-    },
-    "mode": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "mode"
-        },
-        "mode": {
-          "enum": ["coordinator", "normal"]
-        },
-        "sessionId": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 1."
-    },
-    "observer-ref": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "observer-ref"
-        },
-        "agentId": {
-          "type": "string"
-        },
-        "observerTaskId": {
-          "type": "string"
-        },
-        "observerAgentType": {
-          "type": "string"
-        },
-        "timestamp": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 1."
-    },
-    "permission-mode": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "permission-mode"
-        },
-        "permissionMode": {
-          "type": "string"
-        },
-        "sessionId": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 1."
-    },
-    "pr-link": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "pr-link"
-        },
-        "sessionId": {
-          "type": "string"
-        },
-        "prNumber": {
-          "type": "integer"
-        },
-        "prUrl": {
-          "type": "string"
-        },
-        "prRepository": {
-          "type": "string"
-        },
-        "timestamp": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 2."
-    },
-    "progress": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "progress"
-        },
-        "toolUseID": {
-          "type": "string"
-        },
-        "parentToolUseID": {
-          "type": "string"
-        },
-        "data": {
-          "properties": {
-            "type": {
-              "enum": [
-                "hook_progress",
-                "tool_heartbeat",
-                "bash_progress",
-                "powershell_progress",
-                "mcp_progress",
-                "agent_progress",
-                "skill_progress",
-                "agent_api_retry",
-                "search_results_received",
-                "query_update",
-                "workflow_log",
-                "workflow_phase",
-                "workflow_agent",
-                "artifact_publish_retry"
-              ]
-            },
-            "hookEvent": {
-              "type": "string"
-            },
-            "hookName": {
-              "type": "string"
-            },
-            "command": {
-              "type": "string"
-            },
-            "promptText": {
-              "type": "string"
-            },
-            "statusMessage": {
-              "type": "string"
-            },
-            "toolName": {
-              "type": "string"
-            },
-            "elapsedTimeSeconds": {
-              "type": "number"
-            },
-            "output": {
-              "type": "string"
-            },
-            "fullOutput": {
-              "type": "string"
-            },
-            "totalLines": {
-              "type": "number"
-            },
-            "totalBytes": {
-              "type": "number"
-            },
-            "taskId": {
-              "type": "string"
-            },
-            "timeoutMs": {
-              "type": "number"
-            },
-            "message": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "object"
-                }
-              ]
-            },
-            "prompt": {
-              "type": "string"
-            },
-            "agentId": {
-              "type": "string"
-            },
-            "agentType": {
-              "type": "string"
-            },
-            "isBuiltIn": {
-              "type": "boolean"
-            },
-            "description": {
-              "type": "string"
-            },
-            "resolvedModel": {
-              "type": "string"
-            },
-            "modelsUsed": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "resolved": {
-              "type": "boolean"
-            },
-            "attempt": {
-              "type": "number"
-            },
-            "maxRetries": {
-              "type": "number"
-            },
-            "retryDelayMs": {
-              "type": "number"
-            },
-            "errorStatus": {
-              "type": "number"
-            },
-            "errorCategory": {
-              "enum": [
-                "overloaded",
-                "rate_limit",
-                "authentication_failed",
-                "server_error",
-                "cloud_credential_error",
-                "unknown"
-              ]
-            },
-            "resultCount": {
-              "type": "number"
-            },
-            "query": {
-              "type": "string"
-            },
-            "index": {
-              "type": "integer"
-            },
-            "title": {
-              "type": "string"
-            },
-            "kind": {
-              "type": "string"
-            },
-            "label": {
-              "type": "string"
-            },
-            "phaseIndex": {
-              "type": "number"
-            },
-            "phaseTitle": {
-              "type": "string"
-            },
-            "isolation": {
-              "enum": ["worktree", "remote"]
-            },
-            "model": {
-              "type": "string"
-            },
-            "state": {
-              "enum": ["start", "progress", "done", "error"]
-            },
-            "blocked": {
-              "type": "boolean"
-            },
-            "error": {
-              "type": "string"
-            },
-            "queuedAt": {
-              "type": "number"
-            },
-            "promptPreview": {
-              "type": "string"
-            },
-            "lastProgressAt": {
-              "type": "number"
-            },
-            "startedAt": {
-              "type": "number"
-            },
-            "cached": {
-              "type": "boolean"
-            },
-            "resultPreview": {
-              "type": "string"
-            },
-            "fallbackModel": {
-              "type": "string"
-            },
-            "lastAttemptReason": {
-              "enum": ["stalled", "throttled", "user-retry"]
-            },
-            "lastToolName": {
-              "type": "string"
-            },
-            "lastToolSummary": {
-              "type": "string"
-            },
-            "promptFramed": {
-              "type": "boolean"
-            },
-            "tokens": {
-              "type": "number"
-            },
-            "toolCalls": {
-              "type": "number"
-            },
-            "durationMs": {
-              "type": "number"
-            },
-            "skipped": {
-              "type": "boolean",
-              "const": true
-            },
-            "remoteSessionId": {
-              "type": "string"
-            },
-            "toolInput": {
-              "properties": {
-                "query": {
-                  "x-unverified": true
-                },
-                "max": {
-                  "x-unverified": true
-                },
-                "name": {
-                  "x-unverified": true
-                }
-              }
-            },
-            "toolUseId": {
-              "x-unverified": true
-            },
-            "phase": {
-              "x-unverified": true
-            },
-            "result": {
-              "x-unverified": true
-            },
-            "scriptHelper": {
-              "x-unverified": true
-            },
-            "declined": {
-              "x-unverified": true
-            },
-            "permissionDecision": {
-              "x-unverified": true
-            },
-            "toolDenialKind": {
-              "x-unverified": true
-            },
-            "nativeTimeoutMs": {
-              "x-unverified": true
-            },
-            "executed": {
-              "x-unverified": true
-            },
-            "shellProgress": {
-              "x-unverified": true
-            },
-            "mcpContent": {
-              "x-unverified": true
-            },
-            "delegatedToolNames": {
-              "x-unverified": true
-            },
-            "notes": {
-              "x-unverified": true
-            },
-            "sandboxViolations": {
-              "x-unverified": true
-            },
-            "sandboxed": {
-              "x-unverified": true
-            },
-            "resultBeforeReadBack": {
-              "x-unverified": true
-            },
-            "servedText": {
-              "x-unverified": true
-            },
-            "scriptStartedAt": {
-              "x-unverified": true
-            },
-            "status": {
-              "type": ["string", "integer"],
-              "enum": ["started", "completed", "failed", "progress", 429, 503]
-            },
-            "maxAttempts": {
-              "type": "integer",
-              "enum": [2, 3]
-            }
-          }
-        },
-        "timestamp": {
-          "type": "string"
-        },
-        "uuid": {
-          "type": "string"
-        },
-        "parentUuid": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "logicalParentUuid": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "isSidechain": {
-          "type": "boolean"
-        },
-        "teamName": {
-          "type": "string"
-        },
-        "agentName": {
-          "type": "string"
-        },
-        "promptId": {
-          "type": "string"
-        },
-        "agentId": {
-          "type": "string"
-        },
-        "sessionKind": {
-          "enum": ["bg", "daemon", "daemon-worker"]
-        },
-        "userType": {
-          "type": "string"
-        },
-        "entrypoint": {
-          "type": "string"
-        },
-        "cwd": {
-          "type": "string"
-        },
-        "sessionId": {
-          "type": "string"
-        },
-        "version": {
-          "type": "string"
-        },
-        "gitBranch": {
-          "type": "string"
-        },
-        "slug": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: boundary-cleared. Code sites used: 52."
-    },
-    "queue-operation": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "queue-operation",
-          "x-observed": true
-        },
-        "operation": {
-          "type": "string",
-          "x-observed": true
-        },
-        "timestamp": {
-          "type": "string",
-          "x-observed": true
-        },
-        "sessionId": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "content": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "reason": {
-          "type": "string"
-        },
-        "commandUuid": {
-          "type": "string"
-        },
-        "deliveryId": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 1."
-    },
-    "relocated": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "relocated"
-        },
-        "relocatedCwd": {
-          "type": "string"
-        },
-        "sessionId": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 5."
-    },
-    "resume-head-vouch": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "resume-head-vouch"
-        },
-        "sessionId": {
-          "x-unverified": true
-        },
-        "sum": {
-          "x-unverified": true
-        }
-      },
-      "$comment": "Registry policy: boundary-cleared. Code sites used: 1."
-    },
-    "session-owner": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "session-owner"
-        },
-        "sessionId": {
-          "x-unverified": true
-        },
-        "accountUuid": {
-          "x-unverified": true
-        },
-        "organizationUuid": {
-          "x-unverified": true
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 2."
-    },
-    "summary": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "summary"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 0. The program reads this type, and no code in this build writes it, so only `type` is known."
-    },
-    "system": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "system",
-          "x-observed": true
-        },
-        "subtype": {
-          "type": "string",
-          "x-observed": true
-        },
-        "content": {
-          "type": "string"
-        },
-        "isMeta": {
-          "type": "boolean"
-        },
-        "timestamp": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "uuid": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "level": {
-          "x-observed": true,
-          "enum": ["info", "notice", "suggestion", "warning", "error"]
-        },
-        "highlight": {
-          "not": {}
-        },
-        "snapshotFiles": {
-          "type": "array"
-        },
-        "direction": {
-          "enum": ["retry", "revert", "sticky"]
-        },
-        "scope": {
-          "enum": ["session", "local"]
-        },
-        "trigger": {
-          "enum": [
-            "refusal",
-            "model_not_found",
-            "permission_denied",
-            "overloaded",
-            "server_error",
-            "last_resort",
-            "model_blocked"
-          ]
-        },
-        "originalModel": {
-          "type": "string"
-        },
-        "fallbackModel": {
-          "type": "string"
-        },
-        "requestId": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "apiRefusalCategory": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "apiRefusalExplanation": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "apiRefusalCyberVerification": {
-          "x-unverified": true
-        },
-        "plugin": {
-          "x-unverified": true
-        },
-        "id": {
-          "x-unverified": true
-        },
-        "persist": {
-          "type": "boolean"
-        },
-        "commands": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "heardAtNextPrompt": {
-          "type": "boolean"
-        },
-        "url": {
-          "type": "string"
-        },
-        "entry": {
-          "type": "string"
-        },
-        "taskId": {
-          "type": "string"
-        },
-        "cron": {
-          "type": "string"
-        },
-        "prompt": {
-          "type": "string"
-        },
-        "taskKind": {
-          "const": "loop"
-        },
-        "cronKind": {
-          "type": "string"
-        },
-        "noOpStreak": {
-          "type": "number"
-        },
-        "streakStartedAt": {
-          "type": "string"
-        },
-        "foldedUuids": {
-          "type": "array"
-        },
-        "hookCount": {
-          "type": "number",
-          "x-observed": true
-        },
-        "hookInfos": {
-          "type": "array",
-          "x-observed": true
-        },
-        "hookErrors": {
-          "type": "array",
-          "x-observed": true
-        },
-        "hookAdditionalContext": {
-          "type": "array",
-          "x-observed": true
-        },
-        "preventedContinuation": {
-          "type": "boolean",
-          "x-observed": true
-        },
-        "stopReason": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "hasOutput": {
-          "type": "boolean",
-          "x-observed": true
-        },
-        "toolUseID": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "hookLabel": {
-          "not": {}
-        },
-        "totalDurationMs": {
-          "not": {}
-        },
-        "durationMs": {
-          "type": "number"
-        },
-        "messageCount": {
-          "type": "number"
-        },
-        "pendingBackgroundAgentCount": {
-          "type": "number"
-        },
-        "pendingWorkflowCount": {
-          "type": "number"
-        },
-        "writtenPaths": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "contextUsage": {
-          "type": "object",
-          "properties": {
-            "model": {
-              "type": "string"
-            },
-            "total_tokens": {
-              "type": "number"
-            },
-            "raw_max_tokens": {
-              "type": "number"
-            },
-            "percentage": {
-              "type": "number"
-            },
-            "over_limit": {
-              "type": "object",
-              "properties": {
-                "tokens_over": {
-                  "type": "number"
-                },
-                "kind": {
-                  "type": "string"
-                }
-              }
-            },
-            "categories": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "tokens": {
-                    "type": "number"
-                  },
-                  "kind": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "mcp_tools": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "server_name": {
-                    "type": "string"
-                  },
-                  "tokens": {
-                    "type": "number"
-                  }
-                }
-              }
-            },
-            "memory_files": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "path": {
-                    "type": "string"
-                  },
-                  "type": {
-                    "type": "string"
-                  },
-                  "tokens": {
-                    "type": "number"
-                  }
-                }
-              }
-            },
-            "agents": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "agent_type": {
-                    "type": "string"
-                  },
-                  "source": {
-                    "type": "string"
-                  },
-                  "tokens": {
-                    "type": "number"
-                  }
-                }
-              }
-            },
-            "skills": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "source": {
-                    "type": "string"
-                  },
-                  "plugin_name": {
-                    "type": "string"
-                  },
-                  "tokens": {
-                    "type": "number"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "usageReport": {
-          "type": "object"
-        },
-        "commandRun": {
-          "type": "object",
-          "properties": {
-            "command": {
-              "type": "string"
-            },
-            "args": {
-              "type": "string"
-            },
-            "plugin": {
-              "type": "string"
-            }
-          }
-        },
-        "commandOutcome": {
-          "type": "object",
-          "properties": {
-            "kind": {
-              "type": "string"
-            },
-            "suggestion": {
-              "type": "string"
-            }
-          }
-        },
-        "isDisplayOnly": {
-          "x-unverified": true
-        },
-        "submitUuid": {
-          "type": "string"
-        },
-        "compactMetadata": {
-          "type": "object",
-          "properties": {
-            "trigger": {
-              "enum": ["manual", "auto"]
-            },
-            "preTokens": {
-              "type": "number"
-            },
-            "userContext": {
-              "type": "string"
-            },
-            "messagesSummarized": {
-              "type": "number"
-            },
-            "postTokens": {
-              "type": "number"
-            },
-            "cumulativeDroppedTokens": {
-              "type": "number"
-            },
-            "durationMs": {
-              "type": "number"
-            },
-            "precomputed": {
-              "type": "boolean"
-            },
-            "preCompactDiscoveredTools": {
-              "type": "array"
-            },
-            "preCompactArtifactReadVersions": {
-              "type": "array"
-            },
-            "preservedSegment": {
-              "type": "object",
-              "properties": {
-                "headUuid": {
-                  "type": "string"
-                },
-                "anchorUuid": {
-                  "type": "string"
-                },
-                "tailUuid": {
-                  "type": "string"
-                }
-              }
-            },
-            "preservedMessages": {
-              "type": "object",
-              "properties": {
-                "anchorUuid": {
-                  "type": "string"
-                },
-                "uuids": {
-                  "type": "array"
-                },
-                "allUuids": {
-                  "type": "array"
-                }
-              }
-            }
-          }
-        },
-        "logicalParentUuid": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "error": {
-          "type": "object",
-          "properties": {
-            "message": {
-              "type": "string"
-            },
-            "status": {
-              "type": "number"
-            },
-            "requestId": {
-              "type": "string"
-            },
-            "formatted": {
-              "type": "string"
-            },
-            "connection": {
-              "properties": {
-                "code": {
-                  "type": "string"
-                },
-                "message": {
-                  "type": "string"
-                },
-                "isSSLError": {
-                  "type": "boolean"
-                }
-              }
-            },
-            "isNetworkDown": {
-              "type": "boolean"
-            },
-            "rateLimits": {
-              "properties": {
-                "rateLimitType": {
-                  "type": "string"
-                },
-                "resetsAt": {
-                  "type": "integer"
-                }
-              }
-            },
-            "noResponse": {
-              "properties": {
-                "waitedMs": {
-                  "type": "number"
-                },
-                "retryWaitMs": {
-                  "type": "number"
-                }
-              }
-            },
-            "isCloudCredentialError": {
-              "type": "boolean"
-            }
-          }
-        },
-        "retryInMs": {
-          "type": "number"
-        },
-        "retryAttempt": {
-          "type": "number"
-        },
-        "maxRetries": {
-          "type": "number"
-        },
-        "source": {
-          "type": "string"
-        },
-        "message": {
-          "type": "string"
-        },
-        "remoteSourced": {
-          "type": "boolean"
-        },
-        "sawCyberRefusal": {
-          "type": "boolean"
-        },
-        "retractedMessageUuids": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "refusedUserMessageUuid": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "provisional": {
-          "type": "boolean"
-        },
-        "choice": {
-          "enum": ["consent", "switch_default", "cancelled"]
-        },
-        "originalModelName": {
-          "type": "string"
-        },
-        "persistedAsDefault": {
-          "type": "boolean"
-        },
-        "launchedAgentId": {
-          "type": "string"
-        },
-        "source_uuid": {
-          "type": "string"
-        },
-        "fromRemoteErrorResult": {
-          "type": "boolean"
-        },
-        "preventContinuation": {
-          "type": "boolean"
-        },
-        "parentUuid": {
-          "x-observed": true,
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "isSidechain": {
-          "x-observed": true,
-          "type": "boolean"
-        },
-        "teamName": {
-          "type": "string"
-        },
-        "agentName": {
-          "type": "string"
-        },
-        "promptId": {
-          "type": "string"
-        },
-        "agentId": {
-          "type": "string"
-        },
-        "sessionKind": {
-          "enum": ["bg", "daemon", "daemon-worker"]
-        },
-        "userType": {
-          "type": "string",
-          "x-observed": true
-        },
-        "entrypoint": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "cwd": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "sessionId": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "version": {
-          "type": "string",
-          "x-observed": true
-        },
-        "gitBranch": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "slug": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: transcript. Code sites used: 43."
-    },
-    "tag": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "tag"
-        },
-        "tag": {
-          "type": "string"
-        },
-        "sessionId": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 1."
-    },
-    "tools-used": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "tools-used",
-          "x-observed": true
-        },
-        "tools": {
-          "x-unverified": true,
-          "x-observed": true
-        },
-        "sessionId": {
-          "x-unverified": true,
-          "x-observed": true
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 5."
-    },
-    "user": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "user",
-          "x-observed": true
-        },
-        "message": {
-          "properties": {
-            "role": {
-              "const": "user"
-            },
-            "content": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
-                }
-              ]
-            }
-          },
-          "x-observed": true
-        },
-        "isMeta": {
-          "type": "boolean"
-        },
-        "promptShellHandOff": {
-          "type": "object",
-          "properties": {
-            "agentId": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "commands": {
-              "type": "array"
-            }
-          }
-        },
-        "mcpSkill": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string"
-            }
-          }
-        },
-        "ephemeral": {
-          "type": "boolean"
-        },
-        "turnCompanion": {
-          "type": "boolean"
-        },
-        "usageLimitNote": {
-          "enum": ["wrap_up", "release", "near_limit"]
-        },
-        "replacesSpan": {
-          "not": {}
-        },
-        "isVisibleInTranscriptOnly": {
-          "type": "boolean"
-        },
-        "isVirtual": {
-          "type": "boolean"
-        },
-        "isCompactSummary": {
-          "type": "boolean"
-        },
-        "invokedSkill": {
-          "x-unverified": true
-        },
-        "repeatsCompactSummary": {
-          "type": "boolean"
-        },
-        "modelOnlyText": {
-          "not": {}
-        },
-        "summarizeMetadata": {
-          "type": "object",
-          "properties": {
-            "messagesSummarized": {
-              "type": "integer"
-            },
-            "userContext": {
-              "type": "string"
-            },
-            "direction": {
-              "type": "string"
-            }
-          }
-        },
-        "uuid": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "timestamp": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "toolUseResult": {
-          "properties": {
-            "type": {
-              "type": "string"
-            },
-            "filePath": {
-              "type": "string"
-            },
-            "content": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "array"
-                }
-              ]
-            },
-            "structuredPatch": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "oldStart": {
-                    "type": "integer"
-                  },
-                  "oldLines": {
-                    "type": "integer"
-                  },
-                  "newStart": {
-                    "type": "integer"
-                  },
-                  "newLines": {
-                    "type": "integer"
-                  },
-                  "lines": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            },
-            "originalFile": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            }
-          },
-          "type": ["object", "string", "array"],
-          "x-observed": true
-        },
-        "classifierMetaLines": {
-          "type": "string"
-        },
-        "classifierBoundary": {
-          "type": "boolean"
-        },
-        "serverClassifierContext": {
-          "type": "object",
-          "properties": {
-            "request": {
-              "type": "string"
-            },
-            "context": {
-              "type": "object",
-              "properties": {
-                "git_state": {
-                  "type": "object",
-                  "properties": {
-                    "cwd": {
-                      "type": ["string", "null"]
-                    },
-                    "root": {
-                      "type": ["string", "null"]
-                    },
-                    "branch": {
-                      "type": ["string", "null"]
-                    },
-                    "default_branch": {
-                      "type": ["string", "null"]
-                    },
-                    "status": {
-                      "type": ["object", "null"]
-                    },
-                    "visibility": {
-                      "type": ["object", "null"]
-                    },
-                    "error": {
-                      "type": "string",
-                      "enum": ["timeout", "not_a_repo", "error", "pending"]
-                    },
-                    "truncated": {
-                      "type": "boolean"
-                    }
-                  }
-                },
-                "chrome_navigation": {
-                  "type": "object",
-                  "properties": {
-                    "enabled": {
-                      "type": "boolean"
-                    },
-                    "baselines": {
-                      "type": "object"
-                    },
-                    "tabs": {
-                      "type": "object"
-                    }
-                  }
-                },
-                "live_cwd": {
-                  "type": "string"
-                },
-                "platform": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        },
-        "hostClassifierContext": {
-          "type": "string"
-        },
-        "toolDenialKind": {
-          "type": "string"
-        },
-        "toolDenialEndsTurn": {
-          "type": "boolean"
-        },
-        "toolDenialMonitorBlocked": {
-          "type": "boolean"
-        },
-        "toolDenialUnanswered": {
-          "enum": ["stream-closed"]
-        },
-        "toolDenialAfterRun": {
-          "x-unverified": true
-        },
-        "toolDenialFromHost": {
-          "x-unverified": true
-        },
-        "userFeedback": {
-          "type": "string"
-        },
-        "toolResultRemedy": {
-          "anyOf": [
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "const": "mcp_needs_auth"
-                },
-                "servers": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              },
-              "required": ["kind", "servers"]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "const": "mcp_disabled"
-                },
-                "servers": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              },
-              "required": ["kind", "servers"]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "const": "mcp_required_missing"
-                },
-                "servers": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              },
-              "required": ["kind", "servers"]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "const": "auth_expired"
-                },
-                "provider": {
-                  "enum": ["claude_ai", "claude_design"]
-                }
-              },
-              "required": ["kind", "provider"]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "const": "auth_overridden"
-                },
-                "provider": {
-                  "const": "claude_ai"
-                },
-                "managed": {
-                  "type": "boolean"
-                }
-              },
-              "required": ["kind", "provider", "managed"]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "const": "auth_missing_scope"
-                },
-                "provider": {
-                  "const": "claude_design"
-                }
-              },
-              "required": ["kind", "provider"]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "const": "design_needs_authorization"
-                },
-                "provider": {
-                  "const": "claude_design"
-                }
-              },
-              "required": ["kind", "provider"]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "const": "sandbox_violation"
-                }
-              },
-              "required": ["kind"]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "const": "outside_reads_blocked"
-                },
-                "path": {
-                  "type": "string"
-                },
-                "managed": {
-                  "type": "boolean"
-                }
-              },
-              "required": ["kind", "managed"]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "const": "memory_paused"
-                }
-              },
-              "required": ["kind"]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "const": "feature_disabled"
-                },
-                "feature": {
-                  "const": "workflows"
-                },
-                "cause": {
-                  "enum": [
-                    "managed_settings",
-                    "org_policy",
-                    "unavailable",
-                    "user_setting",
-                    "unsupported_runtime"
-                  ]
-                }
-              },
-              "required": ["kind", "feature", "cause"]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "const": "policy_denied"
-                },
-                "feature": {
-                  "const": "artifacts"
-                },
-                "policy_kind": {
-                  "enum": ["org_denied", "latched"]
-                }
-              },
-              "required": ["kind", "feature", "policy_kind"]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "const": "spawn_arg_limit"
-                }
-              },
-              "required": ["kind"]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "const": "staged_for_review"
-                },
-                "path": {
-                  "type": "string"
-                }
-              },
-              "required": ["kind", "path"]
-            }
-          ]
-        },
-        "permissionDecision": {
-          "x-observed": true,
-          "type": "object",
-          "properties": {
-            "decision": {
-              "enum": ["accept", "reject", "cancelled"]
-            },
-            "source": {
-              "enum": [
-                "config",
-                "classifier",
-                "hook",
-                "user_temporary",
-                "user_permanent",
-                "user_reject",
-                "user_abort",
-                "unknown",
-                "server_fallback_tombstone",
-                "invalid_input",
-                "permission_updated_input_invalid"
-              ]
-            },
-            "reasonType": {
-              "enum": [
-                "rule",
-                "mode",
-                "hook",
-                "classifier",
-                "other",
-                "safetyCheck",
-                "workingDir",
-                "asyncAgent",
-                "sandboxOverride",
-                "subcommandResults",
-                "permissionPromptTool"
-              ]
-            },
-            "ruleSource": {
-              "type": "string"
-            },
-            "grantScope": {
-              "enum": ["once", "session"]
-            },
-            "reasonCode": {
-              "type": "string"
-            },
-            "circuitBreaker": {
-              "enum": [
-                "dangerousRemoval",
-                "backgroundOperator",
-                "suspiciousWindowsPath",
-                "isolatePeerMachines",
-                "restrictedMode",
-                "outsideReadsBlocked",
-                "claudeSettingsFile",
-                "internalHardDeny",
-                "unfinishedCheck"
-              ]
-            },
-            "classifierCategory": {
-              "enum": [
-                "account_standing_rule_changes",
-                "auto_mode_bypass",
-                "blind_apply",
-                "browser_file_upload_exfil",
-                "browser_input_exfil",
-                "browser_js_exfil",
-                "browser_navigate_exfil",
-                "browser_shortcut_execution",
-                "chatops_trigger_comments",
-                "ci_bypass",
-                "cloud_storage_mass_delete",
-                "cluster_wide_workload_creation",
-                "code_from_external",
-                "code_that_leaks_when_run",
-                "command_network_lists",
-                "containment_escape",
-                "create_public_surface",
-                "create_rce_surface",
-                "create_unsafe_agents",
-                "credential_exploration",
-                "credential_leakage",
-                "credential_materialization",
-                "data_exfiltration",
-                "dns_domain_cert_changes",
-                "excess_sensitive_detail",
-                "exfil_scouting",
-                "expose_local_services",
-                "external_ingress_tunnel",
-                "external_system_writes",
-                "feature_flag_writes",
-                "git_destructive",
-                "instruction_poisoning",
-                "interfere_with_workloads",
-                "irreversible_deletion_general",
-                "irreversible_local_destruction",
-                "live_shared_artifact_sensitive_delta",
-                "logging_audit_tampering",
-                "merge_without_review",
-                "modify_shared_resources",
-                "node_lifecycle_operations",
-                "out_of_place_publication",
-                "package_registry_bypass",
-                "permission_grant",
-                "pii_data_handling",
-                "production_deploy",
-                "production_reads",
-                "protected_scope_iac_apply",
-                "public_data_sharing_upload",
-                "real_world_transactions",
-                "remote_repoint",
-                "remote_shell_writes",
-                "safety_bypass_flag",
-                "sandbox_network_callback",
-                "secret_store_writes",
-                "security_test_removal",
-                "security_weaken",
-                "self_approval",
-                "self_modification",
-                "sensitive_remote_exec",
-                "sensitive_source_provenance",
-                "session_transcript_tampering",
-                "shared_cluster_mutation",
-                "shared_scratch_sweep",
-                "third_party_attack",
-                "tls_auth_weaken",
-                "tmux_self_drive",
-                "traffic_redirection",
-                "unauthorized_persistence",
-                "unrequested_artifact_publish",
-                "unrequested_commit_in_a_connected_app",
-                "untrusted_code_integration",
-                "unverifiable_deletion_scope",
-                "unverifiable_deletion_target",
-                "cowork_delete_grant",
-                "cowork_folder_access",
-                "cowork_run_routine_now",
-                "cowork_scheduled_task_delete",
-                "cowork_scheduled_task_write",
-                "cowork_skill_persistence"
-              ]
-            }
-          },
-          "required": ["decision", "source"]
-        },
-        "sandboxViolations": {
-          "type": "array"
-        },
-        "sandboxed": {
-          "x-observed": true,
-          "type": "boolean"
-        },
-        "mcpMeta": {
-          "type": "object",
-          "properties": {
-            "_meta": {
-              "type": "object"
-            },
-            "structuredContent": {
-              "type": "object"
-            }
-          }
-        },
-        "toolEndsTurn": {
-          "type": "boolean"
-        },
-        "imagePasteIds": {
-          "type": "array",
-          "items": {
-            "type": "integer"
-          }
-        },
-        "sourceToolAssistantUUID": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "permissionMode": {
-          "x-observed": true,
-          "enum": [
-            "acceptEdits",
-            "auto",
-            "bypassPermissions",
-            "default",
-            "dontAsk",
-            "plan"
-          ]
-        },
-        "origin": {
-          "type": "object",
-          "properties": {
-            "kind": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "asUser": {
-              "type": "boolean"
-            },
-            "server": {
-              "type": "string"
-            },
-            "subkind": {
-              "type": "string"
-            },
-            "plugin": {
-              "type": "string"
-            }
-          }
-        },
-        "promptSource": {
-          "x-observed": true,
-          "enum": ["typed", "queued", "suggestion_accepted", "sdk", "system"]
-        },
-        "promptId": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "interruptedMessageId": {
-          "type": "string"
-        },
-        "refusedMessageId": {
-          "type": "string"
-        },
-        "interruptedByShutdown": {
-          "type": "boolean"
-        },
-        "remoteToolDenialKind": {
-          "enum": [
-            "user-rejected",
-            "permission-rule",
-            "automode-blocked",
-            "automode-unavailable",
-            "automode-parsing-error",
-            "interrupted",
-            "cancelled"
-          ]
-        },
-        "parentUuid": {
-          "x-observed": true,
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "logicalParentUuid": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "isSidechain": {
-          "x-observed": true,
-          "type": "boolean"
-        },
-        "teamName": {
-          "type": "string"
-        },
-        "agentName": {
-          "type": "string"
-        },
-        "agentId": {
-          "type": "string"
-        },
-        "sessionKind": {
-          "enum": ["bg", "daemon", "daemon-worker"]
-        },
-        "userType": {
-          "type": "string",
-          "x-observed": true
-        },
-        "entrypoint": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "cwd": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "sessionId": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "version": {
-          "type": "string",
-          "x-observed": true
-        },
-        "gitBranch": {
-          "x-observed": true,
-          "type": "string"
-        },
-        "slug": {
-          "type": "string"
-        },
-        "turnOrigin": {
-          "$comment": "Added after the line is built, by a copy of the line or a spread into one.",
-          "x-observed": true,
-          "type": "string",
-          "enum": [
-            "human",
-            "sdk",
-            "scheduled",
-            "task_notification",
-            "auto_continuation",
-            "peer",
-            "host_synthetic",
-            "system",
-            "unknown"
-          ]
-        },
-        "turnPosition": {
-          "type": ["object", "string"],
-          "$comment": "Added after the line is built, by a copy of the line or a spread into one.",
-          "x-observed": true
-        }
-      },
-      "$comment": "Registry policy: transcript. Code sites used: 5."
-    },
-    "worktree-state": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "worktree-state"
-        },
-        "worktreeSession": {
-          "properties": {
-            "originalCwd": {
-              "type": "string"
-            },
-            "preEnterOriginalCwd": {
-              "type": "string"
-            },
-            "worktreePath": {
-              "type": "string"
-            },
-            "worktreeName": {
-              "type": "string"
-            },
-            "worktreeBranch": {
-              "type": "string"
-            },
-            "originalBranch": {
-              "type": "string"
-            },
-            "originalHeadCommit": {
-              "type": "string"
-            },
-            "sessionId": {
-              "type": "string"
-            },
-            "tmuxSessionName": {
-              "type": "string"
-            },
-            "hookBased": {
-              "type": "boolean"
-            },
-            "enteredExisting": {
-              "type": "boolean"
-            },
-            "madeElsewhere": {
-              "enum": ["resumedByName", "enteredByPath"]
-            }
-          }
-        },
-        "sessionId": {
-          "type": "string"
-        }
-      },
-      "$comment": "Registry policy: last-wins. Code sites used: 2."
-    }
-  }
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://clawdipedia.cc/schemas/claude-code-transcript.json",
+	"title": "Claude Code transcript JSONL entry (Claude Code 2.1.319)",
+	"$comment": "For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.319 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to \"transcript\"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:\"<entry type>\" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
+	"type": "object",
+	"oneOf": [
+		{
+			"$ref": "#/$defs/agent-color"
+		},
+		{
+			"$ref": "#/$defs/agent-name"
+		},
+		{
+			"$ref": "#/$defs/agent-setting"
+		},
+		{
+			"$ref": "#/$defs/ai-title"
+		},
+		{
+			"$ref": "#/$defs/api-request"
+		},
+		{
+			"$ref": "#/$defs/api-request-blob"
+		},
+		{
+			"$ref": "#/$defs/api-request-shape"
+		},
+		{
+			"$ref": "#/$defs/artifact-autoreact-ledger"
+		},
+		{
+			"$ref": "#/$defs/artifact-comment-monitor"
+		},
+		{
+			"$ref": "#/$defs/assistant"
+		},
+		{
+			"$ref": "#/$defs/atis-latch"
+		},
+		{
+			"$ref": "#/$defs/attachment"
+		},
+		{
+			"$ref": "#/$defs/attribution-snapshot"
+		},
+		{
+			"$ref": "#/$defs/bridge-session"
+		},
+		{
+			"$ref": "#/$defs/content-replacement"
+		},
+		{
+			"$ref": "#/$defs/continued-in"
+		},
+		{
+			"$ref": "#/$defs/cost-state"
+		},
+		{
+			"$ref": "#/$defs/custom-title"
+		},
+		{
+			"$ref": "#/$defs/dev-mods"
+		},
+		{
+			"$ref": "#/$defs/ended-by-model"
+		},
+		{
+			"$ref": "#/$defs/file-history-delta"
+		},
+		{
+			"$ref": "#/$defs/file-history-snapshot"
+		},
+		{
+			"$ref": "#/$defs/fork-context-ref"
+		},
+		{
+			"$ref": "#/$defs/frame-link"
+		},
+		{
+			"$ref": "#/$defs/history-suppression"
+		},
+		{
+			"$ref": "#/$defs/isolation-latch"
+		},
+		{
+			"$ref": "#/$defs/last-prompt"
+		},
+		{
+			"$ref": "#/$defs/memory-mode"
+		},
+		{
+			"$ref": "#/$defs/mode"
+		},
+		{
+			"$ref": "#/$defs/observer-ref"
+		},
+		{
+			"$ref": "#/$defs/permission-mode"
+		},
+		{
+			"$ref": "#/$defs/pr-link"
+		},
+		{
+			"$ref": "#/$defs/progress"
+		},
+		{
+			"$ref": "#/$defs/queue-operation"
+		},
+		{
+			"$ref": "#/$defs/relocated"
+		},
+		{
+			"$ref": "#/$defs/resume-head-vouch"
+		},
+		{
+			"$ref": "#/$defs/session-owner"
+		},
+		{
+			"$ref": "#/$defs/summary"
+		},
+		{
+			"$ref": "#/$defs/system"
+		},
+		{
+			"$ref": "#/$defs/tag"
+		},
+		{
+			"$ref": "#/$defs/tools-used"
+		},
+		{
+			"$ref": "#/$defs/user"
+		},
+		{
+			"$ref": "#/$defs/worktree-state"
+		}
+	],
+	"$defs": {
+		"agent-color": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "agent-color"
+				},
+				"agentColor": {
+					"type": "string"
+				},
+				"sessionId": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 2."
+		},
+		"agent-name": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "agent-name"
+				},
+				"agentName": {
+					"type": "string"
+				},
+				"sessionId": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 2."
+		},
+		"agent-setting": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "agent-setting"
+				},
+				"agentSetting": {
+					"type": "string"
+				},
+				"sessionId": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 1."
+		},
+		"ai-title": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "ai-title"
+				},
+				"aiTitle": {
+					"type": "string"
+				},
+				"sessionId": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 2."
+		},
+		"api-request": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "api-request",
+					"x-observed": true
+				},
+				"sessionId": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"agentId": {
+					"type": "string"
+				},
+				"id": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"timestamp": {
+					"type": "string",
+					"x-observed": true
+				},
+				"version": {
+					"type": "string",
+					"x-observed": true
+				},
+				"querySource": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"shapeHash": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"params": {
+					"type": "object",
+					"x-observed": true
+				},
+				"withheld": {
+					"type": "array"
+				},
+				"base": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"keep": {
+					"type": "number",
+					"x-observed": true
+				},
+				"tail": {
+					"x-observed": true,
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"cacheControl": {
+					"type": "array",
+					"x-observed": true
+				},
+				"requestDigest": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"cut": {
+					"type": "object",
+					"properties": {
+						"markAddresses": {
+							"x-unverified": true
+						},
+						"kind": {
+							"const": "tool-mark-address"
+						},
+						"cuts": {
+							"x-unverified": true
+						},
+						"placeholders": {
+							"x-unverified": true
+						},
+						"messages": {
+							"type": "array"
+						}
+					}
+				},
+				"cutRequestDigest": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: boundary-cleared. Code sites used: 1."
+		},
+		"api-request-blob": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "api-request-blob",
+					"x-observed": true
+				},
+				"sessionId": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"agentId": {
+					"type": "string"
+				},
+				"hash": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"message": {
+					"x-observed": true,
+					"type": "object"
+				}
+			},
+			"$comment": "Registry policy: boundary-cleared. Code sites used: 1."
+		},
+		"api-request-shape": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "api-request-shape",
+					"x-observed": true
+				},
+				"sessionId": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"agentId": {
+					"type": "string"
+				},
+				"shapeHash": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"timestamp": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"version": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"shape": {
+					"x-observed": true,
+					"type": "object"
+				}
+			},
+			"$comment": "Registry policy: boundary-cleared. Code sites used: 1."
+		},
+		"artifact-autoreact-ledger": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "artifact-autoreact-ledger"
+				},
+				"sessionId": {
+					"type": "string"
+				},
+				"accountUuid": {
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"artifacts": {
+					"type": "object"
+				},
+				"v": {
+					"type": "number"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 2."
+		},
+		"artifact-comment-monitor": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "artifact-comment-monitor"
+				},
+				"v": {
+					"type": "number"
+				},
+				"sessionId": {
+					"type": "string"
+				},
+				"artifacts": {
+					"type": "object"
+				}
+			},
+			"$comment": "Registry policy: accumulate. Code sites used: 7."
+		},
+		"assistant": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "assistant",
+					"x-observed": true
+				},
+				"uuid": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"timestamp": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"message": {
+					"properties": {
+						"diagnostics": {
+							"anyOf": [
+								{
+									"type": "object",
+									"properties": {
+										"cache_miss_reason": {
+											"anyOf": [
+												{
+													"type": "object",
+													"properties": {
+														"type": {
+															"enum": [
+																"model_changed",
+																"system_changed",
+																"tools_changed",
+																"messages_changed",
+																"previous_message_not_found",
+																"unavailable"
+															]
+														},
+														"cache_missed_input_tokens": {
+															"type": "integer"
+														}
+													}
+												},
+												{
+													"type": "null"
+												}
+											]
+										}
+									}
+								},
+								{
+									"type": "null"
+								}
+							]
+						},
+						"id": {
+							"type": "string"
+						},
+						"container": {
+							"anyOf": [
+								{
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string"
+										},
+										"expires_at": {
+											"type": "string"
+										},
+										"skills": {
+											"anyOf": [
+												{
+													"type": "array",
+													"items": {
+														"type": "object"
+													}
+												},
+												{
+													"type": "null"
+												}
+											]
+										}
+									}
+								},
+								{
+									"type": "null"
+								}
+							]
+						},
+						"model": {
+							"type": "string"
+						},
+						"role": {
+							"const": "assistant"
+						},
+						"stop_details": {
+							"anyOf": [
+								{
+									"type": "object",
+									"properties": {
+										"type": {
+											"const": "refusal"
+										},
+										"category": {
+											"anyOf": [
+												{
+													"enum": [
+														"cyber",
+														"bio",
+														"frontier_llm",
+														"reasoning_extraction",
+														"general_harms"
+													]
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"explanation": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"fallback_credit_token": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"fallback_has_prefill_claim": {
+											"anyOf": [
+												{
+													"type": "boolean"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"recommended_model": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										}
+									}
+								},
+								{
+									"type": "null"
+								}
+							]
+						},
+						"stop_reason": {
+							"anyOf": [
+								{
+									"enum": [
+										"end_turn",
+										"max_tokens",
+										"stop_sequence",
+										"tool_use",
+										"pause_turn",
+										"compaction",
+										"refusal",
+										"model_context_window_exceeded"
+									]
+								},
+								{
+									"type": "null"
+								}
+							]
+						},
+						"stop_sequence": {
+							"anyOf": [
+								{
+									"type": "string"
+								},
+								{
+									"type": "null"
+								}
+							]
+						},
+						"type": {
+							"const": "message"
+						},
+						"usage": {
+							"properties": {
+								"output_tokens_details": {
+									"properties": {
+										"thinking_tokens": {
+											"type": "integer"
+										}
+									}
+								},
+								"input_tokens": {
+									"type": "integer"
+								},
+								"cache_creation_input_tokens": {
+									"type": "integer"
+								},
+								"cache_read_input_tokens": {
+									"type": "integer"
+								},
+								"output_tokens": {
+									"type": "integer"
+								},
+								"server_tool_use": {
+									"properties": {
+										"web_search_requests": {
+											"type": "integer"
+										},
+										"web_fetch_requests": {
+											"type": "integer"
+										}
+									}
+								},
+								"service_tier": {
+									"anyOf": [
+										{
+											"enum": ["standard", "priority", "batch"]
+										},
+										{
+											"type": "null"
+										}
+									]
+								},
+								"cache_creation": {
+									"properties": {
+										"ephemeral_1h_input_tokens": {
+											"type": "integer"
+										},
+										"ephemeral_5m_input_tokens": {
+											"type": "integer"
+										}
+									}
+								},
+								"inference_geo": {
+									"anyOf": [
+										{
+											"type": "string"
+										},
+										{
+											"type": "null"
+										}
+									]
+								},
+								"iterations": {
+									"anyOf": [
+										{
+											"type": "array",
+											"items": {
+												"anyOf": [
+													{
+														"type": "object",
+														"properties": {
+															"cache_creation": {
+																"anyOf": [
+																	{
+																		"type": "object",
+																		"properties": {
+																			"ephemeral_1h_input_tokens": {
+																				"type": "integer"
+																			},
+																			"ephemeral_5m_input_tokens": {
+																				"type": "integer"
+																			}
+																		}
+																	},
+																	{
+																		"type": "null"
+																	}
+																]
+															},
+															"cache_creation_input_tokens": {
+																"type": "integer"
+															},
+															"cache_read_input_tokens": {
+																"type": "integer"
+															},
+															"input_tokens": {
+																"type": "integer"
+															},
+															"output_tokens": {
+																"type": "integer"
+															},
+															"type": {
+																"const": "message"
+															},
+															"model": {
+																"anyOf": [
+																	{
+																		"type": "string"
+																	},
+																	{
+																		"type": "null"
+																	}
+																]
+															}
+														}
+													},
+													{
+														"type": "object",
+														"properties": {
+															"cache_creation": {
+																"anyOf": [
+																	{
+																		"type": "object",
+																		"properties": {
+																			"ephemeral_1h_input_tokens": {
+																				"type": "integer"
+																			},
+																			"ephemeral_5m_input_tokens": {
+																				"type": "integer"
+																			}
+																		}
+																	},
+																	{
+																		"type": "null"
+																	}
+																]
+															},
+															"cache_creation_input_tokens": {
+																"type": "integer"
+															},
+															"cache_read_input_tokens": {
+																"type": "integer"
+															},
+															"input_tokens": {
+																"type": "integer"
+															},
+															"output_tokens": {
+																"type": "integer"
+															},
+															"type": {
+																"const": "compaction"
+															}
+														}
+													},
+													{
+														"type": "object",
+														"properties": {
+															"cache_creation": {
+																"anyOf": [
+																	{
+																		"type": "object",
+																		"properties": {
+																			"ephemeral_1h_input_tokens": {
+																				"type": "integer"
+																			},
+																			"ephemeral_5m_input_tokens": {
+																				"type": "integer"
+																			}
+																		}
+																	},
+																	{
+																		"type": "null"
+																	}
+																]
+															},
+															"cache_creation_input_tokens": {
+																"type": "integer"
+															},
+															"cache_read_input_tokens": {
+																"type": "integer"
+															},
+															"input_tokens": {
+																"type": "integer"
+															},
+															"output_tokens": {
+																"type": "integer"
+															},
+															"type": {
+																"const": "advisor_message"
+															},
+															"model": {
+																"type": "string"
+															}
+														}
+													},
+													{
+														"type": "object",
+														"properties": {
+															"cache_creation": {
+																"anyOf": [
+																	{
+																		"type": "object",
+																		"properties": {
+																			"ephemeral_1h_input_tokens": {
+																				"type": "integer"
+																			},
+																			"ephemeral_5m_input_tokens": {
+																				"type": "integer"
+																			}
+																		}
+																	},
+																	{
+																		"type": "null"
+																	}
+																]
+															},
+															"cache_creation_input_tokens": {
+																"type": "integer"
+															},
+															"cache_read_input_tokens": {
+																"type": "integer"
+															},
+															"input_tokens": {
+																"type": "integer"
+															},
+															"output_tokens": {
+																"type": "integer"
+															},
+															"type": {
+																"const": "fallback_message"
+															},
+															"model": {
+																"type": "string"
+															}
+														}
+													}
+												]
+											}
+										},
+										{
+											"type": "null"
+										}
+									]
+								},
+								"speed": {
+									"anyOf": [
+										{
+											"enum": ["standard", "fast"]
+										},
+										{
+											"type": "null"
+										}
+									]
+								},
+								"fallback_credit": {
+									"anyOf": [
+										{
+											"type": "object",
+											"properties": {
+												"status": {
+													"type": "object",
+													"properties": {
+														"type": {
+															"enum": ["redeemed", "not_applied"]
+														},
+														"reason": {
+															"type": "string"
+														},
+														"remove_to_redeem": {
+															"type": "boolean"
+														}
+													}
+												}
+											}
+										},
+										{
+											"type": "null"
+										}
+									]
+								}
+							}
+						},
+						"content": {
+							"type": "array",
+							"items": {
+								"type": "object"
+							}
+						},
+						"context_management": {
+							"anyOf": [
+								{
+									"type": "object",
+									"properties": {
+										"applied_edits": {
+											"type": "array",
+											"items": {
+												"type": "object"
+											}
+										}
+									}
+								},
+								{
+									"type": "null"
+								}
+							]
+						}
+					},
+					"x-observed": true
+				},
+				"requestId": {
+					"type": "string"
+				},
+				"apiError": {
+					"enum": [
+						"max_output_tokens",
+						"dlp_request_denied",
+						"claude_code_version_too_old",
+						"safety_monitor_blocked",
+						"effort_requires_thinking",
+						"advisor_incompatible",
+						"tool_history_mismatch",
+						"autocompact_thrashing",
+						"pdf_too_large",
+						"pdf_password_protected",
+						"media_removed",
+						"no_response",
+						"tls_untrusted_ca",
+						"gateway_content_type",
+						"provider_credentials",
+						"gateway_signin_required",
+						"gateway_session_expired",
+						"api_key_auth_disabled",
+						"org_disabled_credential",
+						"invalid_credential_header",
+						"model_requires_usage_credits",
+						"long_context_credits_required",
+						"consent_unanswered",
+						"no_allowed_fallback",
+						"model_substitution_disabled",
+						"field_not_granted",
+						"usage_limit_reached",
+						"empty_completion"
+					]
+				},
+				"apiErrorParams": {
+					"type": "object",
+					"properties": {
+						"effort": {
+							"type": "string"
+						},
+						"provider": {
+							"enum": [
+								"bedrock",
+								"anthropicAws",
+								"mantle",
+								"anthropicGoogleCloud",
+								"vertex",
+								"foundry",
+								"gateway"
+							]
+						},
+						"remedy": {
+							"enum": [
+								"refresh_command",
+								"refresh_credentials",
+								"adc",
+								"gateway_token",
+								"host_managed",
+								"model_access"
+							]
+						},
+						"media": {
+							"enum": ["image", "document"]
+						},
+						"media_reason": {
+							"enum": ["unprocessable", "unsupported_by_model", "media_budget"]
+						},
+						"rate_limit_info": {
+							"type": "object"
+						}
+					}
+				},
+				"apiErrorIsTransient": {
+					"type": "boolean"
+				},
+				"quotaLimits": {
+					"type": "object"
+				},
+				"error": {
+					"enum": [
+						"authentication_failed",
+						"oauth_org_not_allowed",
+						"account_on_hold",
+						"verification_required",
+						"billing_error",
+						"rate_limit",
+						"overloaded",
+						"invalid_request",
+						"model_not_found",
+						"server_error",
+						"unknown",
+						"max_output_tokens",
+						"cloud_credential_error"
+					]
+				},
+				"errorDetails": {
+					"type": "string"
+				},
+				"truncatedAfterOutput": {
+					"type": "boolean"
+				},
+				"isApiErrorMessage": {
+					"type": "boolean"
+				},
+				"isVirtual": {
+					"type": "boolean"
+				},
+				"isMeta": {
+					"not": {}
+				},
+				"isUnmetered": {
+					"type": "boolean"
+				},
+				"cloudMemoryToolUseIds": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"apiErrorCode": {
+					"type": "string"
+				},
+				"sessionFailureNotice": {
+					"type": "boolean"
+				},
+				"advisorModel": {
+					"type": "string"
+				},
+				"attributionAgent": {
+					"type": "string"
+				},
+				"attributionSkill": {
+					"type": "string"
+				},
+				"attributionPlugin": {
+					"type": "string"
+				},
+				"attributionMcpServer": {
+					"type": "string"
+				},
+				"attributionMcpTool": {
+					"type": "string"
+				},
+				"cutInUnfinishedBlock": {
+					"x-unverified": true
+				},
+				"healsDistinctCarrier": {
+					"type": "boolean",
+					"enum": [true]
+				},
+				"isAbortedMidStream": {
+					"type": "boolean"
+				},
+				"batchToolUses": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"wireToolInputs": {
+					"type": "object"
+				},
+				"wireIngestContext": {
+					"type": "object"
+				},
+				"serverClassifierRequest": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"serverClassifierResults": {
+					"not": {}
+				},
+				"serverClassifierContextWithheld": {
+					"type": "boolean"
+				},
+				"apiBlockIndex": {
+					"x-observed": true,
+					"type": "integer"
+				},
+				"requestRef": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"requestedModel": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"promptCacheRequested": {
+					"type": "string",
+					"x-observed": true
+				},
+				"effort": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"perTurnEffort": {
+					"x-observed": true,
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"perTurnTiming": {
+					"type": "string"
+				},
+				"thinkingDurationMs": {
+					"type": "number"
+				},
+				"toolInputStreamMs": {
+					"type": "number",
+					"x-observed": true
+				},
+				"thinkingDisplay": {
+					"type": "string"
+				},
+				"resumedFromIncompleteThinking": {
+					"type": "boolean"
+				},
+				"apiErrorStatus": {
+					"type": "integer"
+				},
+				"remoteSourced": {
+					"type": "boolean"
+				},
+				"parentUuid": {
+					"x-observed": true,
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"logicalParentUuid": {
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"isSidechain": {
+					"x-observed": true,
+					"type": "boolean"
+				},
+				"teamName": {
+					"type": "string"
+				},
+				"agentName": {
+					"type": "string"
+				},
+				"promptId": {
+					"type": "string"
+				},
+				"agentId": {
+					"type": "string"
+				},
+				"sessionKind": {
+					"enum": ["bg", "daemon", "daemon-worker"]
+				},
+				"userType": {
+					"type": "string",
+					"x-observed": true
+				},
+				"entrypoint": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"cwd": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"sessionId": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"version": {
+					"type": "string",
+					"x-observed": true
+				},
+				"gitBranch": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"slug": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: transcript. Code sites used: 10."
+		},
+		"atis-latch": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "atis-latch",
+					"x-observed": true
+				},
+				"atis": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"sessionId": {
+					"x-observed": true,
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 4."
+		},
+		"attachment": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "attachment",
+					"x-observed": true
+				},
+				"uuid": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"timestamp": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"attachment": {
+					"properties": {
+						"type": {
+							"type": "string"
+						},
+						"prompt": {
+							"anyOf": [
+								{
+									"type": "string"
+								},
+								{
+									"type": "array",
+									"items": {
+										"type": "object"
+									}
+								}
+							]
+						},
+						"source_uuid": {
+							"type": "string"
+						},
+						"origin": {
+							"properties": {
+								"kind": {
+									"type": "string"
+								}
+							}
+						},
+						"timestamp": {
+							"type": "string"
+						},
+						"isMeta": {
+							"type": "boolean"
+						},
+						"forwardedIntent": {
+							"properties": {
+								"lineage": {
+									"type": "string"
+								},
+								"source": {
+									"type": "string",
+									"enum": ["typed", "relay", "owner", "unattributed"]
+								}
+							}
+						},
+						"reminderId": {
+							"type": "string"
+						},
+						"met": {
+							"type": "boolean"
+						},
+						"sentinel": {
+							"type": "boolean"
+						},
+						"condition": {
+							"type": "string"
+						},
+						"text": {
+							"type": ["string", "null"]
+						},
+						"hooks": {
+							"type": "array"
+						},
+						"count": {
+							"type": "number"
+						}
+					},
+					"x-observed": true
+				},
+				"renderedRole": {
+					"type": "string",
+					"x-observed": true
+				},
+				"rendered": {
+					"type": "array",
+					"x-observed": true
+				},
+				"renderedBesideToolResult": {
+					"type": "boolean",
+					"x-observed": true
+				},
+				"renderedInHumanTurn": {
+					"type": "array"
+				},
+				"parentUuid": {
+					"x-observed": true,
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"logicalParentUuid": {
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"isSidechain": {
+					"x-observed": true,
+					"type": "boolean"
+				},
+				"teamName": {
+					"type": "string"
+				},
+				"agentName": {
+					"type": "string"
+				},
+				"promptId": {
+					"type": "string"
+				},
+				"agentId": {
+					"type": "string"
+				},
+				"sessionKind": {
+					"enum": ["bg", "daemon", "daemon-worker"]
+				},
+				"userType": {
+					"type": "string",
+					"x-observed": true
+				},
+				"entrypoint": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"cwd": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"sessionId": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"version": {
+					"type": "string",
+					"x-observed": true
+				},
+				"gitBranch": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"slug": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: transcript. Code sites used: 7."
+		},
+		"attribution-snapshot": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "attribution-snapshot"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 0. The program reads this type, and no code in this build writes it, so only `type` is known."
+		},
+		"bridge-session": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "bridge-session"
+				},
+				"sessionId": {
+					"type": "string"
+				},
+				"bridgeSessionId": {
+					"type": "string"
+				},
+				"lastSequenceNum": {
+					"type": "integer"
+				},
+				"declaredDialogKinds": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"sessionGroupingId": {
+					"type": "string"
+				},
+				"noHistoryBackfill": {
+					"type": "boolean"
+				},
+				"ownerAccountUuid": {
+					"type": "string"
+				},
+				"ownerOrganizationUuid": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 3."
+		},
+		"content-replacement": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "content-replacement"
+				},
+				"sessionId": {
+					"type": "string"
+				},
+				"agentId": {
+					"type": "string"
+				},
+				"replacements": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"kind": {
+								"enum": ["tool-result"]
+							},
+							"toolUseId": {
+								"type": "string"
+							},
+							"replacement": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			},
+			"$comment": "Registry policy: accumulate. Code sites used: 3."
+		},
+		"continued-in": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "continued-in"
+				},
+				"timestamp": {
+					"type": "string"
+				},
+				"sessionId": {
+					"type": "string"
+				},
+				"continuedInSessionId": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: boundary-cleared. Code sites used: 1."
+		},
+		"cost-state": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "cost-state",
+					"x-observed": true
+				},
+				"sessionId": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"totalCostUSD": {
+					"x-observed": true,
+					"type": "number"
+				},
+				"totalAPIDuration": {
+					"x-observed": true,
+					"type": "number"
+				},
+				"totalAPIDurationWithoutRetries": {
+					"x-observed": true,
+					"type": "number"
+				},
+				"totalToolDuration": {
+					"x-observed": true,
+					"type": "number"
+				},
+				"totalLinesAdded": {
+					"x-observed": true,
+					"type": "number"
+				},
+				"totalLinesRemoved": {
+					"x-observed": true,
+					"type": "number"
+				},
+				"totalDuration": {
+					"x-observed": true,
+					"type": "number"
+				},
+				"startTime": {
+					"x-observed": true,
+					"type": "number"
+				},
+				"modelUsage": {
+					"x-observed": true,
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"properties": {
+							"inputTokens": {
+								"type": "number"
+							},
+							"outputTokens": {
+								"type": "number"
+							},
+							"thinkingTokens": {
+								"type": "number"
+							},
+							"cacheReadInputTokens": {
+								"type": "number"
+							},
+							"cacheCreationInputTokens": {
+								"type": "number"
+							},
+							"cacheCreationEphemeral5mInputTokens": {
+								"type": "number"
+							},
+							"cacheCreationEphemeral1hInputTokens": {
+								"type": "number"
+							},
+							"webSearchRequests": {
+								"type": "number"
+							},
+							"costUSD": {
+								"type": "number"
+							}
+						}
+					}
+				},
+				"hasUnknownModelCost": {
+					"x-observed": true,
+					"type": "boolean"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 1."
+		},
+		"custom-title": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "custom-title"
+				},
+				"customTitle": {
+					"type": "string"
+				},
+				"sessionId": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 4."
+		},
+		"dev-mods": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "dev-mods"
+				},
+				"folder": {
+					"type": "string"
+				},
+				"sessionId": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 2."
+		},
+		"ended-by-model": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "ended-by-model"
+				},
+				"timestamp": {
+					"type": "string"
+				},
+				"sessionId": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 1."
+		},
+		"file-history-delta": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "file-history-delta"
+				},
+				"messageId": {
+					"type": "string"
+				},
+				"snapshotMessageId": {
+					"type": "string"
+				},
+				"trackingPath": {
+					"type": "string"
+				},
+				"backup": {
+					"type": "object",
+					"properties": {
+						"backupFileName": {
+							"anyOf": [
+								{
+									"type": "string"
+								},
+								{
+									"type": "null"
+								}
+							]
+						},
+						"version": {
+							"type": "integer"
+						},
+						"backupTime": {
+							"type": "string",
+							"format": "date-time"
+						}
+					}
+				},
+				"timestamp": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: boundary-cleared. Code sites used: 1."
+		},
+		"file-history-snapshot": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "file-history-snapshot"
+				},
+				"messageId": {
+					"type": "string"
+				},
+				"snapshot": {
+					"type": "object",
+					"properties": {
+						"messageId": {
+							"type": "string"
+						},
+						"trackedFileBackups": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "object",
+								"properties": {
+									"backupFileName": {
+										"anyOf": [
+											{
+												"type": "string"
+											},
+											{
+												"type": "null"
+											}
+										]
+									},
+									"version": {
+										"type": "integer"
+									},
+									"backupTime": {
+										"type": "string",
+										"format": "date-time"
+									}
+								}
+							}
+						},
+						"timestamp": {
+							"type": "string",
+							"format": "date-time"
+						},
+						"preCheckpoint": {
+							"enum": [true]
+						}
+					}
+				},
+				"isSnapshotUpdate": {
+					"type": "boolean"
+				}
+			},
+			"$comment": "Registry policy: boundary-cleared. Code sites used: 1."
+		},
+		"fork-context-ref": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "fork-context-ref"
+				},
+				"agentId": {
+					"type": "string"
+				},
+				"parentSessionId": {
+					"type": "string"
+				},
+				"parentLastUuid": {
+					"type": "string"
+				},
+				"contextLength": {
+					"type": "number"
+				}
+			},
+			"$comment": "Registry policy: accumulate. Code sites used: 1."
+		},
+		"frame-link": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "frame-link"
+				},
+				"artifactCount": {
+					"type": "integer"
+				},
+				"sessionId": {
+					"type": "string"
+				},
+				"timestamp": {
+					"type": "string"
+				},
+				"path": {
+					"type": "string"
+				},
+				"frameUrl": {
+					"type": "string"
+				},
+				"title": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: accumulate. Code sites used: 2."
+		},
+		"history-suppression": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "history-suppression"
+				},
+				"sessionId": {
+					"type": "string"
+				},
+				"cause": {
+					"type": "string"
+				},
+				"vetoedAgainstAccountUuid": {
+					"type": "string"
+				},
+				"ts": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 1."
+		},
+		"isolation-latch": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "isolation-latch"
+				},
+				"side": {
+					"type": "string"
+				},
+				"sessionId": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 2."
+		},
+		"last-prompt": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "last-prompt",
+					"x-observed": true
+				},
+				"lastPrompt": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"leafUuid": {
+					"x-observed": true,
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"sessionId": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"explicit": {
+					"type": "boolean"
+				}
+			},
+			"$comment": "Registry policy: boundary-cleared. Code sites used: 6."
+		},
+		"memory-mode": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "memory-mode"
+				},
+				"mode": {
+					"enum": ["on", "off"]
+				},
+				"afterUuid": {
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"timestamp": {
+					"type": "string"
+				},
+				"reason": {
+					"enum": [
+						"paused",
+						"account_off",
+						"account_read_only",
+						"session_shape",
+						"server_off"
+					]
+				},
+				"account": {
+					"type": "string"
+				},
+				"accountChoice": {
+					"enum": ["on", "read_only", "off"]
+				},
+				"sessionId": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: accumulate. Code sites used: 2."
+		},
+		"mode": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "mode"
+				},
+				"mode": {
+					"enum": ["coordinator", "normal"]
+				},
+				"sessionId": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 1."
+		},
+		"observer-ref": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "observer-ref"
+				},
+				"agentId": {
+					"type": "string"
+				},
+				"observerTaskId": {
+					"type": "string"
+				},
+				"observerAgentType": {
+					"type": "string"
+				},
+				"timestamp": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 1."
+		},
+		"permission-mode": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "permission-mode"
+				},
+				"permissionMode": {
+					"type": "string"
+				},
+				"sessionId": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 1."
+		},
+		"pr-link": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "pr-link"
+				},
+				"sessionId": {
+					"type": "string"
+				},
+				"prNumber": {
+					"type": "integer"
+				},
+				"prUrl": {
+					"type": "string"
+				},
+				"prRepository": {
+					"type": "string"
+				},
+				"timestamp": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 2."
+		},
+		"progress": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "progress"
+				},
+				"toolUseID": {
+					"type": "string"
+				},
+				"parentToolUseID": {
+					"type": "string"
+				},
+				"data": {
+					"properties": {
+						"type": {
+							"enum": [
+								"hook_progress",
+								"tool_heartbeat",
+								"bash_progress",
+								"powershell_progress",
+								"mcp_progress",
+								"agent_progress",
+								"skill_progress",
+								"agent_api_retry",
+								"search_results_received",
+								"query_update",
+								"workflow_log",
+								"workflow_phase",
+								"workflow_agent",
+								"artifact_publish_retry"
+							]
+						},
+						"hookEvent": {
+							"type": "string"
+						},
+						"hookName": {
+							"type": "string"
+						},
+						"command": {
+							"type": "string"
+						},
+						"promptText": {
+							"type": "string"
+						},
+						"statusMessage": {
+							"type": "string"
+						},
+						"toolName": {
+							"type": "string"
+						},
+						"elapsedTimeSeconds": {
+							"type": "number"
+						},
+						"output": {
+							"type": "string"
+						},
+						"fullOutput": {
+							"type": "string"
+						},
+						"totalLines": {
+							"type": "number"
+						},
+						"totalBytes": {
+							"type": "number"
+						},
+						"taskId": {
+							"type": "string"
+						},
+						"timeoutMs": {
+							"type": "number"
+						},
+						"message": {
+							"anyOf": [
+								{
+									"type": "string"
+								},
+								{
+									"type": "object"
+								}
+							]
+						},
+						"prompt": {
+							"type": "string"
+						},
+						"agentId": {
+							"type": "string"
+						},
+						"agentType": {
+							"type": "string"
+						},
+						"isBuiltIn": {
+							"type": "boolean"
+						},
+						"description": {
+							"type": "string"
+						},
+						"resolvedModel": {
+							"type": "string"
+						},
+						"modelsUsed": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"resolved": {
+							"type": "boolean"
+						},
+						"attempt": {
+							"type": "number"
+						},
+						"maxRetries": {
+							"type": "number"
+						},
+						"retryDelayMs": {
+							"type": "number"
+						},
+						"errorStatus": {
+							"type": "number"
+						},
+						"errorCategory": {
+							"enum": [
+								"overloaded",
+								"rate_limit",
+								"authentication_failed",
+								"server_error",
+								"cloud_credential_error",
+								"unknown"
+							]
+						},
+						"resultCount": {
+							"type": "number"
+						},
+						"query": {
+							"type": "string"
+						},
+						"index": {
+							"type": "integer"
+						},
+						"title": {
+							"type": "string"
+						},
+						"kind": {
+							"type": "string"
+						},
+						"label": {
+							"type": "string"
+						},
+						"phaseIndex": {
+							"type": "number"
+						},
+						"phaseTitle": {
+							"type": "string"
+						},
+						"isolation": {
+							"enum": ["worktree", "remote"]
+						},
+						"model": {
+							"type": "string"
+						},
+						"state": {
+							"enum": ["start", "progress", "done", "error"]
+						},
+						"blocked": {
+							"type": "boolean"
+						},
+						"error": {
+							"type": "string"
+						},
+						"queuedAt": {
+							"type": "number"
+						},
+						"promptPreview": {
+							"type": "string"
+						},
+						"lastProgressAt": {
+							"type": "number"
+						},
+						"startedAt": {
+							"type": "number"
+						},
+						"cached": {
+							"type": "boolean"
+						},
+						"resultPreview": {
+							"type": "string"
+						},
+						"fallbackModel": {
+							"type": "string"
+						},
+						"lastAttemptReason": {
+							"enum": ["stalled", "throttled", "user-retry"]
+						},
+						"lastToolName": {
+							"type": "string"
+						},
+						"lastToolSummary": {
+							"type": "string"
+						},
+						"promptFramed": {
+							"type": "boolean"
+						},
+						"tokens": {
+							"type": "number"
+						},
+						"toolCalls": {
+							"type": "number"
+						},
+						"durationMs": {
+							"type": "number"
+						},
+						"skipped": {
+							"type": "boolean",
+							"const": true
+						},
+						"remoteSessionId": {
+							"type": "string"
+						},
+						"toolInput": {
+							"properties": {
+								"query": {
+									"x-unverified": true
+								},
+								"max": {
+									"x-unverified": true
+								},
+								"name": {
+									"x-unverified": true
+								}
+							}
+						},
+						"toolUseId": {
+							"x-unverified": true
+						},
+						"phase": {
+							"x-unverified": true
+						},
+						"result": {
+							"x-unverified": true
+						},
+						"scriptHelper": {
+							"x-unverified": true
+						},
+						"declined": {
+							"x-unverified": true
+						},
+						"permissionDecision": {
+							"x-unverified": true
+						},
+						"toolDenialKind": {
+							"x-unverified": true
+						},
+						"nativeTimeoutMs": {
+							"x-unverified": true
+						},
+						"executed": {
+							"x-unverified": true
+						},
+						"shellProgress": {
+							"x-unverified": true
+						},
+						"mcpContent": {
+							"x-unverified": true
+						},
+						"delegatedToolNames": {
+							"x-unverified": true
+						},
+						"notes": {
+							"x-unverified": true
+						},
+						"sandboxViolations": {
+							"x-unverified": true
+						},
+						"sandboxed": {
+							"x-unverified": true
+						},
+						"resultBeforeReadBack": {
+							"x-unverified": true
+						},
+						"servedText": {
+							"x-unverified": true
+						},
+						"scriptStartedAt": {
+							"x-unverified": true
+						},
+						"status": {
+							"type": ["string", "integer"],
+							"enum": ["started", "completed", "failed", "progress", 429, 503]
+						},
+						"maxAttempts": {
+							"type": "integer",
+							"enum": [2, 3]
+						}
+					}
+				},
+				"timestamp": {
+					"type": "string"
+				},
+				"uuid": {
+					"type": "string"
+				},
+				"parentUuid": {
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"logicalParentUuid": {
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"isSidechain": {
+					"type": "boolean"
+				},
+				"teamName": {
+					"type": "string"
+				},
+				"agentName": {
+					"type": "string"
+				},
+				"promptId": {
+					"type": "string"
+				},
+				"agentId": {
+					"type": "string"
+				},
+				"sessionKind": {
+					"enum": ["bg", "daemon", "daemon-worker"]
+				},
+				"userType": {
+					"type": "string"
+				},
+				"entrypoint": {
+					"type": "string"
+				},
+				"cwd": {
+					"type": "string"
+				},
+				"sessionId": {
+					"type": "string"
+				},
+				"version": {
+					"type": "string"
+				},
+				"gitBranch": {
+					"type": "string"
+				},
+				"slug": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: boundary-cleared. Code sites used: 52."
+		},
+		"queue-operation": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "queue-operation",
+					"x-observed": true
+				},
+				"operation": {
+					"type": "string",
+					"x-observed": true
+				},
+				"timestamp": {
+					"type": "string",
+					"x-observed": true
+				},
+				"sessionId": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"content": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"reason": {
+					"type": "string"
+				},
+				"commandUuid": {
+					"type": "string"
+				},
+				"deliveryId": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 1."
+		},
+		"relocated": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "relocated"
+				},
+				"relocatedCwd": {
+					"type": "string"
+				},
+				"sessionId": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 5."
+		},
+		"resume-head-vouch": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "resume-head-vouch"
+				},
+				"sessionId": {
+					"x-unverified": true
+				},
+				"sum": {
+					"x-unverified": true
+				}
+			},
+			"$comment": "Registry policy: boundary-cleared. Code sites used: 1."
+		},
+		"session-owner": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "session-owner"
+				},
+				"sessionId": {
+					"x-unverified": true
+				},
+				"accountUuid": {
+					"x-unverified": true
+				},
+				"organizationUuid": {
+					"x-unverified": true
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 2."
+		},
+		"summary": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "summary"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 0. The program reads this type, and no code in this build writes it, so only `type` is known."
+		},
+		"system": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "system",
+					"x-observed": true
+				},
+				"subtype": {
+					"type": "string",
+					"x-observed": true
+				},
+				"content": {
+					"type": "string"
+				},
+				"isMeta": {
+					"type": "boolean"
+				},
+				"timestamp": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"uuid": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"level": {
+					"x-observed": true,
+					"enum": ["info", "notice", "suggestion", "warning", "error"]
+				},
+				"highlight": {
+					"not": {}
+				},
+				"snapshotFiles": {
+					"type": "array"
+				},
+				"direction": {
+					"enum": ["retry", "revert", "sticky"]
+				},
+				"scope": {
+					"enum": ["session", "local"]
+				},
+				"trigger": {
+					"enum": [
+						"refusal",
+						"model_not_found",
+						"permission_denied",
+						"overloaded",
+						"server_error",
+						"last_resort",
+						"model_blocked"
+					]
+				},
+				"originalModel": {
+					"type": "string"
+				},
+				"fallbackModel": {
+					"type": "string"
+				},
+				"requestId": {
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"apiRefusalCategory": {
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"apiRefusalExplanation": {
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"apiRefusalCyberVerification": {
+					"x-unverified": true
+				},
+				"plugin": {
+					"x-unverified": true
+				},
+				"id": {
+					"x-unverified": true
+				},
+				"persist": {
+					"type": "boolean"
+				},
+				"commands": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"heardAtNextPrompt": {
+					"type": "boolean"
+				},
+				"url": {
+					"type": "string"
+				},
+				"entry": {
+					"type": "string"
+				},
+				"taskId": {
+					"type": "string"
+				},
+				"cron": {
+					"type": "string"
+				},
+				"prompt": {
+					"type": "string"
+				},
+				"taskKind": {
+					"const": "loop"
+				},
+				"cronKind": {
+					"type": "string"
+				},
+				"noOpStreak": {
+					"type": "number"
+				},
+				"streakStartedAt": {
+					"type": "string"
+				},
+				"foldedUuids": {
+					"type": "array"
+				},
+				"hookCount": {
+					"type": "number",
+					"x-observed": true
+				},
+				"hookInfos": {
+					"type": "array",
+					"x-observed": true
+				},
+				"hookErrors": {
+					"type": "array",
+					"x-observed": true
+				},
+				"hookAdditionalContext": {
+					"type": "array",
+					"x-observed": true
+				},
+				"preventedContinuation": {
+					"type": "boolean",
+					"x-observed": true
+				},
+				"stopReason": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"hasOutput": {
+					"type": "boolean",
+					"x-observed": true
+				},
+				"toolUseID": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"hookLabel": {
+					"not": {}
+				},
+				"totalDurationMs": {
+					"not": {}
+				},
+				"durationMs": {
+					"type": "number"
+				},
+				"messageCount": {
+					"type": "number"
+				},
+				"pendingBackgroundAgentCount": {
+					"type": "number"
+				},
+				"pendingWorkflowCount": {
+					"type": "number"
+				},
+				"writtenPaths": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"contextUsage": {
+					"type": "object",
+					"properties": {
+						"model": {
+							"type": "string"
+						},
+						"total_tokens": {
+							"type": "number"
+						},
+						"raw_max_tokens": {
+							"type": "number"
+						},
+						"percentage": {
+							"type": "number"
+						},
+						"over_limit": {
+							"type": "object",
+							"properties": {
+								"tokens_over": {
+									"type": "number"
+								},
+								"kind": {
+									"type": "string"
+								}
+							}
+						},
+						"categories": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"tokens": {
+										"type": "number"
+									},
+									"kind": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						"mcp_tools": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"server_name": {
+										"type": "string"
+									},
+									"tokens": {
+										"type": "number"
+									}
+								}
+							}
+						},
+						"memory_files": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"path": {
+										"type": "string"
+									},
+									"type": {
+										"type": "string"
+									},
+									"tokens": {
+										"type": "number"
+									}
+								}
+							}
+						},
+						"agents": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"agent_type": {
+										"type": "string"
+									},
+									"source": {
+										"type": "string"
+									},
+									"tokens": {
+										"type": "number"
+									}
+								}
+							}
+						},
+						"skills": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"source": {
+										"type": "string"
+									},
+									"plugin_name": {
+										"type": "string"
+									},
+									"tokens": {
+										"type": "number"
+									}
+								}
+							}
+						}
+					}
+				},
+				"usageReport": {
+					"type": "object"
+				},
+				"commandRun": {
+					"type": "object",
+					"properties": {
+						"command": {
+							"type": "string"
+						},
+						"args": {
+							"type": "string"
+						},
+						"plugin": {
+							"type": "string"
+						}
+					}
+				},
+				"commandOutcome": {
+					"type": "object",
+					"properties": {
+						"kind": {
+							"type": "string"
+						},
+						"suggestion": {
+							"type": "string"
+						}
+					}
+				},
+				"isDisplayOnly": {
+					"x-unverified": true
+				},
+				"submitUuid": {
+					"type": "string"
+				},
+				"compactMetadata": {
+					"type": "object",
+					"properties": {
+						"trigger": {
+							"enum": ["manual", "auto"]
+						},
+						"preTokens": {
+							"type": "number"
+						},
+						"userContext": {
+							"type": "string"
+						},
+						"messagesSummarized": {
+							"type": "number"
+						},
+						"postTokens": {
+							"type": "number"
+						},
+						"cumulativeDroppedTokens": {
+							"type": "number"
+						},
+						"durationMs": {
+							"type": "number"
+						},
+						"precomputed": {
+							"type": "boolean"
+						},
+						"preCompactDiscoveredTools": {
+							"type": "array"
+						},
+						"preCompactArtifactReadVersions": {
+							"type": "array"
+						},
+						"preservedSegment": {
+							"type": "object",
+							"properties": {
+								"headUuid": {
+									"type": "string"
+								},
+								"anchorUuid": {
+									"type": "string"
+								},
+								"tailUuid": {
+									"type": "string"
+								}
+							}
+						},
+						"preservedMessages": {
+							"type": "object",
+							"properties": {
+								"anchorUuid": {
+									"type": "string"
+								},
+								"uuids": {
+									"type": "array"
+								},
+								"allUuids": {
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"logicalParentUuid": {
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"error": {
+					"type": "object",
+					"properties": {
+						"message": {
+							"type": "string"
+						},
+						"status": {
+							"type": "number"
+						},
+						"requestId": {
+							"type": "string"
+						},
+						"formatted": {
+							"type": "string"
+						},
+						"connection": {
+							"properties": {
+								"code": {
+									"type": "string"
+								},
+								"message": {
+									"type": "string"
+								},
+								"isSSLError": {
+									"type": "boolean"
+								}
+							}
+						},
+						"isNetworkDown": {
+							"type": "boolean"
+						},
+						"rateLimits": {
+							"properties": {
+								"rateLimitType": {
+									"type": "string"
+								},
+								"resetsAt": {
+									"type": "integer"
+								}
+							}
+						},
+						"noResponse": {
+							"properties": {
+								"waitedMs": {
+									"type": "number"
+								},
+								"retryWaitMs": {
+									"type": "number"
+								}
+							}
+						},
+						"isCloudCredentialError": {
+							"type": "boolean"
+						}
+					}
+				},
+				"retryInMs": {
+					"type": "number"
+				},
+				"retryAttempt": {
+					"type": "number"
+				},
+				"maxRetries": {
+					"type": "number"
+				},
+				"source": {
+					"type": "string"
+				},
+				"message": {
+					"type": "string"
+				},
+				"remoteSourced": {
+					"type": "boolean"
+				},
+				"sawCyberRefusal": {
+					"type": "boolean"
+				},
+				"retractedMessageUuids": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"refusedUserMessageUuid": {
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"provisional": {
+					"type": "boolean"
+				},
+				"choice": {
+					"enum": ["consent", "switch_default", "cancelled"]
+				},
+				"originalModelName": {
+					"type": "string"
+				},
+				"persistedAsDefault": {
+					"type": "boolean"
+				},
+				"launchedAgentId": {
+					"type": "string"
+				},
+				"source_uuid": {
+					"type": "string"
+				},
+				"fromRemoteErrorResult": {
+					"type": "boolean"
+				},
+				"preventContinuation": {
+					"type": "boolean"
+				},
+				"parentUuid": {
+					"x-observed": true,
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"isSidechain": {
+					"x-observed": true,
+					"type": "boolean"
+				},
+				"teamName": {
+					"type": "string"
+				},
+				"agentName": {
+					"type": "string"
+				},
+				"promptId": {
+					"type": "string"
+				},
+				"agentId": {
+					"type": "string"
+				},
+				"sessionKind": {
+					"enum": ["bg", "daemon", "daemon-worker"]
+				},
+				"userType": {
+					"type": "string",
+					"x-observed": true
+				},
+				"entrypoint": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"cwd": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"sessionId": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"version": {
+					"type": "string",
+					"x-observed": true
+				},
+				"gitBranch": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"slug": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: transcript. Code sites used: 43."
+		},
+		"tag": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "tag"
+				},
+				"tag": {
+					"type": "string"
+				},
+				"sessionId": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 1."
+		},
+		"tools-used": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "tools-used",
+					"x-observed": true
+				},
+				"tools": {
+					"x-unverified": true,
+					"x-observed": true
+				},
+				"sessionId": {
+					"x-unverified": true,
+					"x-observed": true
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 5."
+		},
+		"user": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "user",
+					"x-observed": true
+				},
+				"message": {
+					"properties": {
+						"role": {
+							"const": "user"
+						},
+						"content": {
+							"anyOf": [
+								{
+									"type": "string"
+								},
+								{
+									"type": "array",
+									"items": {
+										"type": "object"
+									}
+								}
+							]
+						}
+					},
+					"x-observed": true
+				},
+				"isMeta": {
+					"type": "boolean"
+				},
+				"promptShellHandOff": {
+					"type": "object",
+					"properties": {
+						"agentId": {
+							"anyOf": [
+								{
+									"type": "string"
+								},
+								{
+									"type": "null"
+								}
+							]
+						},
+						"commands": {
+							"type": "array"
+						}
+					}
+				},
+				"mcpSkill": {
+					"type": "object",
+					"properties": {
+						"name": {
+							"type": "string"
+						}
+					}
+				},
+				"ephemeral": {
+					"type": "boolean"
+				},
+				"turnCompanion": {
+					"type": "boolean"
+				},
+				"usageLimitNote": {
+					"enum": ["wrap_up", "release", "near_limit"]
+				},
+				"replacesSpan": {
+					"not": {}
+				},
+				"isVisibleInTranscriptOnly": {
+					"type": "boolean"
+				},
+				"isVirtual": {
+					"type": "boolean"
+				},
+				"isCompactSummary": {
+					"type": "boolean"
+				},
+				"invokedSkill": {
+					"x-unverified": true
+				},
+				"repeatsCompactSummary": {
+					"type": "boolean"
+				},
+				"modelOnlyText": {
+					"not": {}
+				},
+				"summarizeMetadata": {
+					"type": "object",
+					"properties": {
+						"messagesSummarized": {
+							"type": "integer"
+						},
+						"userContext": {
+							"type": "string"
+						},
+						"direction": {
+							"type": "string"
+						}
+					}
+				},
+				"uuid": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"timestamp": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"toolUseResult": {
+					"properties": {
+						"type": {
+							"type": "string"
+						},
+						"filePath": {
+							"type": "string"
+						},
+						"content": {
+							"anyOf": [
+								{
+									"type": "string"
+								},
+								{
+									"type": "array"
+								}
+							]
+						},
+						"structuredPatch": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"oldStart": {
+										"type": "integer"
+									},
+									"oldLines": {
+										"type": "integer"
+									},
+									"newStart": {
+										"type": "integer"
+									},
+									"newLines": {
+										"type": "integer"
+									},
+									"lines": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						},
+						"originalFile": {
+							"anyOf": [
+								{
+									"type": "string"
+								},
+								{
+									"type": "null"
+								}
+							]
+						}
+					},
+					"type": ["object", "string", "array"],
+					"x-observed": true
+				},
+				"classifierMetaLines": {
+					"type": "string"
+				},
+				"classifierBoundary": {
+					"type": "boolean"
+				},
+				"serverClassifierContext": {
+					"type": "object",
+					"properties": {
+						"request": {
+							"type": "string"
+						},
+						"context": {
+							"type": "object",
+							"properties": {
+								"git_state": {
+									"type": "object",
+									"properties": {
+										"cwd": {
+											"type": ["string", "null"]
+										},
+										"root": {
+											"type": ["string", "null"]
+										},
+										"branch": {
+											"type": ["string", "null"]
+										},
+										"default_branch": {
+											"type": ["string", "null"]
+										},
+										"status": {
+											"type": ["object", "null"]
+										},
+										"visibility": {
+											"type": ["object", "null"]
+										},
+										"error": {
+											"type": "string",
+											"enum": ["timeout", "not_a_repo", "error", "pending"]
+										},
+										"truncated": {
+											"type": "boolean"
+										}
+									}
+								},
+								"chrome_navigation": {
+									"type": "object",
+									"properties": {
+										"enabled": {
+											"type": "boolean"
+										},
+										"baselines": {
+											"type": "object"
+										},
+										"tabs": {
+											"type": "object"
+										}
+									}
+								},
+								"live_cwd": {
+									"type": "string"
+								},
+								"platform": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				},
+				"hostClassifierContext": {
+					"type": "string"
+				},
+				"toolDenialKind": {
+					"type": "string"
+				},
+				"toolDenialEndsTurn": {
+					"type": "boolean"
+				},
+				"toolDenialMonitorBlocked": {
+					"type": "boolean"
+				},
+				"toolDenialUnanswered": {
+					"enum": ["stream-closed"]
+				},
+				"toolDenialAfterRun": {
+					"x-unverified": true
+				},
+				"toolDenialFromHost": {
+					"x-unverified": true
+				},
+				"userFeedback": {
+					"type": "string"
+				},
+				"toolResultRemedy": {
+					"anyOf": [
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "mcp_needs_auth"
+								},
+								"servers": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								}
+							},
+							"required": ["kind", "servers"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "mcp_disabled"
+								},
+								"servers": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								}
+							},
+							"required": ["kind", "servers"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "mcp_required_missing"
+								},
+								"servers": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								}
+							},
+							"required": ["kind", "servers"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "auth_expired"
+								},
+								"provider": {
+									"enum": ["claude_ai", "claude_design"]
+								}
+							},
+							"required": ["kind", "provider"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "auth_overridden"
+								},
+								"provider": {
+									"const": "claude_ai"
+								},
+								"managed": {
+									"type": "boolean"
+								}
+							},
+							"required": ["kind", "provider", "managed"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "auth_missing_scope"
+								},
+								"provider": {
+									"const": "claude_design"
+								}
+							},
+							"required": ["kind", "provider"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "design_needs_authorization"
+								},
+								"provider": {
+									"const": "claude_design"
+								}
+							},
+							"required": ["kind", "provider"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "sandbox_violation"
+								}
+							},
+							"required": ["kind"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "outside_reads_blocked"
+								},
+								"path": {
+									"type": "string"
+								},
+								"managed": {
+									"type": "boolean"
+								}
+							},
+							"required": ["kind", "managed"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "memory_paused"
+								}
+							},
+							"required": ["kind"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "feature_disabled"
+								},
+								"feature": {
+									"const": "workflows"
+								},
+								"cause": {
+									"enum": [
+										"managed_settings",
+										"org_policy",
+										"unavailable",
+										"user_setting",
+										"unsupported_runtime"
+									]
+								}
+							},
+							"required": ["kind", "feature", "cause"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "policy_denied"
+								},
+								"feature": {
+									"const": "artifacts"
+								},
+								"policy_kind": {
+									"enum": ["org_denied", "latched"]
+								}
+							},
+							"required": ["kind", "feature", "policy_kind"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "spawn_arg_limit"
+								}
+							},
+							"required": ["kind"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "staged_for_review"
+								},
+								"path": {
+									"type": "string"
+								}
+							},
+							"required": ["kind", "path"]
+						}
+					]
+				},
+				"permissionDecision": {
+					"x-observed": true,
+					"type": "object",
+					"properties": {
+						"decision": {
+							"enum": ["accept", "reject", "cancelled"]
+						},
+						"source": {
+							"enum": [
+								"config",
+								"classifier",
+								"hook",
+								"user_temporary",
+								"user_permanent",
+								"user_reject",
+								"user_abort",
+								"unknown",
+								"server_fallback_tombstone",
+								"invalid_input",
+								"permission_updated_input_invalid"
+							]
+						},
+						"reasonType": {
+							"enum": [
+								"rule",
+								"mode",
+								"hook",
+								"classifier",
+								"other",
+								"safetyCheck",
+								"workingDir",
+								"asyncAgent",
+								"sandboxOverride",
+								"subcommandResults",
+								"permissionPromptTool"
+							]
+						},
+						"ruleSource": {
+							"type": "string"
+						},
+						"grantScope": {
+							"enum": ["once", "session"]
+						},
+						"reasonCode": {
+							"type": "string"
+						},
+						"circuitBreaker": {
+							"enum": [
+								"dangerousRemoval",
+								"backgroundOperator",
+								"suspiciousWindowsPath",
+								"isolatePeerMachines",
+								"restrictedMode",
+								"outsideReadsBlocked",
+								"claudeSettingsFile",
+								"internalHardDeny",
+								"unfinishedCheck"
+							]
+						},
+						"classifierCategory": {
+							"enum": [
+								"account_standing_rule_changes",
+								"auto_mode_bypass",
+								"blind_apply",
+								"browser_file_upload_exfil",
+								"browser_input_exfil",
+								"browser_js_exfil",
+								"browser_navigate_exfil",
+								"browser_shortcut_execution",
+								"chatops_trigger_comments",
+								"ci_bypass",
+								"cloud_storage_mass_delete",
+								"cluster_wide_workload_creation",
+								"code_from_external",
+								"code_that_leaks_when_run",
+								"command_network_lists",
+								"containment_escape",
+								"create_public_surface",
+								"create_rce_surface",
+								"create_unsafe_agents",
+								"credential_exploration",
+								"credential_leakage",
+								"credential_materialization",
+								"data_exfiltration",
+								"dns_domain_cert_changes",
+								"excess_sensitive_detail",
+								"exfil_scouting",
+								"expose_local_services",
+								"external_ingress_tunnel",
+								"external_system_writes",
+								"feature_flag_writes",
+								"git_destructive",
+								"instruction_poisoning",
+								"interfere_with_workloads",
+								"irreversible_deletion_general",
+								"irreversible_local_destruction",
+								"live_shared_artifact_sensitive_delta",
+								"logging_audit_tampering",
+								"merge_without_review",
+								"modify_shared_resources",
+								"node_lifecycle_operations",
+								"out_of_place_publication",
+								"package_registry_bypass",
+								"permission_grant",
+								"pii_data_handling",
+								"production_deploy",
+								"production_reads",
+								"protected_scope_iac_apply",
+								"public_data_sharing_upload",
+								"real_world_transactions",
+								"remote_repoint",
+								"remote_shell_writes",
+								"safety_bypass_flag",
+								"sandbox_network_callback",
+								"secret_store_writes",
+								"security_test_removal",
+								"security_weaken",
+								"self_approval",
+								"self_modification",
+								"sensitive_remote_exec",
+								"sensitive_source_provenance",
+								"session_transcript_tampering",
+								"shared_cluster_mutation",
+								"shared_scratch_sweep",
+								"third_party_attack",
+								"tls_auth_weaken",
+								"tmux_self_drive",
+								"traffic_redirection",
+								"unauthorized_persistence",
+								"unrequested_artifact_publish",
+								"unrequested_commit_in_a_connected_app",
+								"untrusted_code_integration",
+								"unverifiable_deletion_scope",
+								"unverifiable_deletion_target",
+								"cowork_delete_grant",
+								"cowork_folder_access",
+								"cowork_run_routine_now",
+								"cowork_scheduled_task_delete",
+								"cowork_scheduled_task_write",
+								"cowork_skill_persistence"
+							]
+						}
+					},
+					"required": ["decision", "source"]
+				},
+				"sandboxViolations": {
+					"type": "array"
+				},
+				"sandboxed": {
+					"x-observed": true,
+					"type": "boolean"
+				},
+				"mcpMeta": {
+					"type": "object",
+					"properties": {
+						"_meta": {
+							"type": "object"
+						},
+						"structuredContent": {
+							"type": "object"
+						}
+					}
+				},
+				"toolEndsTurn": {
+					"type": "boolean"
+				},
+				"imagePasteIds": {
+					"type": "array",
+					"items": {
+						"type": "integer"
+					}
+				},
+				"sourceToolAssistantUUID": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"permissionMode": {
+					"x-observed": true,
+					"enum": [
+						"acceptEdits",
+						"auto",
+						"bypassPermissions",
+						"default",
+						"dontAsk",
+						"plan"
+					]
+				},
+				"origin": {
+					"type": "object",
+					"properties": {
+						"kind": {
+							"type": "string"
+						},
+						"name": {
+							"type": "string"
+						},
+						"asUser": {
+							"type": "boolean"
+						},
+						"server": {
+							"type": "string"
+						},
+						"subkind": {
+							"type": "string"
+						},
+						"plugin": {
+							"type": "string"
+						}
+					}
+				},
+				"promptSource": {
+					"x-observed": true,
+					"enum": ["typed", "queued", "suggestion_accepted", "sdk", "system"]
+				},
+				"promptId": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"interruptedMessageId": {
+					"type": "string"
+				},
+				"refusedMessageId": {
+					"type": "string"
+				},
+				"interruptedByShutdown": {
+					"type": "boolean"
+				},
+				"remoteToolDenialKind": {
+					"enum": [
+						"user-rejected",
+						"permission-rule",
+						"automode-blocked",
+						"automode-unavailable",
+						"automode-parsing-error",
+						"interrupted",
+						"cancelled"
+					]
+				},
+				"parentUuid": {
+					"x-observed": true,
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"logicalParentUuid": {
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"isSidechain": {
+					"x-observed": true,
+					"type": "boolean"
+				},
+				"teamName": {
+					"type": "string"
+				},
+				"agentName": {
+					"type": "string"
+				},
+				"agentId": {
+					"type": "string"
+				},
+				"sessionKind": {
+					"enum": ["bg", "daemon", "daemon-worker"]
+				},
+				"userType": {
+					"type": "string",
+					"x-observed": true
+				},
+				"entrypoint": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"cwd": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"sessionId": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"version": {
+					"type": "string",
+					"x-observed": true
+				},
+				"gitBranch": {
+					"x-observed": true,
+					"type": "string"
+				},
+				"slug": {
+					"type": "string"
+				},
+				"turnOrigin": {
+					"$comment": "Added after the line is built, by a copy of the line or a spread into one.",
+					"x-observed": true,
+					"type": "string",
+					"enum": [
+						"human",
+						"sdk",
+						"scheduled",
+						"task_notification",
+						"auto_continuation",
+						"peer",
+						"host_synthetic",
+						"system",
+						"unknown"
+					]
+				},
+				"turnPosition": {
+					"type": ["object", "string"],
+					"$comment": "Added after the line is built, by a copy of the line or a spread into one.",
+					"x-observed": true
+				}
+			},
+			"$comment": "Registry policy: transcript. Code sites used: 5."
+		},
+		"worktree-state": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "worktree-state"
+				},
+				"worktreeSession": {
+					"properties": {
+						"originalCwd": {
+							"type": "string"
+						},
+						"preEnterOriginalCwd": {
+							"type": "string"
+						},
+						"worktreePath": {
+							"type": "string"
+						},
+						"worktreeName": {
+							"type": "string"
+						},
+						"worktreeBranch": {
+							"type": "string"
+						},
+						"originalBranch": {
+							"type": "string"
+						},
+						"originalHeadCommit": {
+							"type": "string"
+						},
+						"sessionId": {
+							"type": "string"
+						},
+						"tmuxSessionName": {
+							"type": "string"
+						},
+						"hookBased": {
+							"type": "boolean"
+						},
+						"enteredExisting": {
+							"type": "boolean"
+						},
+						"madeElsewhere": {
+							"enum": ["resumedByName", "enteredByPath"]
+						}
+					}
+				},
+				"sessionId": {
+					"type": "string"
+				}
+			},
+			"$comment": "Registry policy: last-wins. Code sites used: 2."
+		}
+	}
 }

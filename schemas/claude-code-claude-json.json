@@ -1,313 +1,313 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://clawdipedia.cc/schemas/claude-code-claude-json.json",
-  "title": "Claude Code ~/.claude.json (Claude Code 2.1.319)",
-  "$comment": "For ~/.claude.json (the global state file). Generated from Claude Code 2.1.319 by tools/schemas/code.ts. Anchors: the defaults function (first key numStartups:0), the per-project defaults object (allowedTools:[],mcpContextUris:[],mcpServers:{}) used as the fallback for projects[<path>], and the list of user-settable keys (starts \"apiKeyHelper\",\"installMethod\",\"autoUpdates\"). \"default\" is the value in the code's defaults; \"x-user-settable\" marks keys in that list. Keys with no default value in the code (undefined, or only in the list) are x-unverified. The file holds more keys than these (the program writes others on demand); only keys the code names are listed. No probe in captures/ records this file's keys, so nothing is marked x-observed. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
-  "type": "object",
-  "properties": {
-    "numStartups": {
-      "type": "number",
-      "default": 0
-    },
-    "installMethod": {
-      "x-user-settable": true,
-      "enum": ["local", "global", "native", "unknown", "development"]
-    },
-    "autoUpdates": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "theme": {
-      "type": "string",
-      "default": "dark",
-      "x-user-settable": true
-    },
-    "preferredNotifChannel": {
-      "type": "string",
-      "default": "auto",
-      "x-user-settable": true
-    },
-    "verbose": {
-      "type": "boolean",
-      "default": false,
-      "x-user-settable": true
-    },
-    "editorMode": {
-      "type": "string",
-      "default": "normal",
-      "x-user-settable": true
-    },
-    "autoCompactEnabled": {
-      "type": "boolean",
-      "default": true,
-      "x-user-settable": true
-    },
-    "autoScrollEnabled": {
-      "type": "boolean",
-      "default": true,
-      "x-user-settable": true
-    },
-    "showTurnDuration": {
-      "type": "boolean",
-      "default": true,
-      "x-user-settable": true
-    },
-    "externalEditorContext": {
-      "type": "boolean",
-      "default": false,
-      "x-user-settable": true
-    },
-    "showMessageTimestamps": {
-      "type": "boolean",
-      "default": false,
-      "x-user-settable": true
-    },
-    "hasSeenTasksHint": {
-      "type": "boolean",
-      "default": false
-    },
-    "hasUsedStash": {
-      "type": "boolean",
-      "default": false
-    },
-    "hasUsedBackgroundTask": {
-      "type": "boolean",
-      "default": false
-    },
-    "queuedCommandUpHintCount": {
-      "type": "number",
-      "default": 0
-    },
-    "diffTool": {
-      "type": "string",
-      "default": "auto",
-      "x-user-settable": true
-    },
-    "customApiKeyResponses": {
-      "type": "object",
-      "properties": {
-        "approved": {
-          "type": "array"
-        },
-        "rejected": {
-          "type": "array"
-        }
-      }
-    },
-    "env": {
-      "type": "object",
-      "properties": {},
-      "x-user-settable": true
-    },
-    "tipsHistory": {
-      "type": "object",
-      "properties": {},
-      "x-user-settable": true
-    },
-    "memoryUsageCount": {
-      "type": "number",
-      "default": 0
-    },
-    "promptQueueUseCount": {
-      "type": "number",
-      "default": 0
-    },
-    "btwUseCount": {
-      "type": "number",
-      "default": 0
-    },
-    "todoFeatureEnabled": {
-      "type": "boolean",
-      "default": true,
-      "x-user-settable": true
-    },
-    "showExpandedTodos": {
-      "type": "boolean",
-      "default": false,
-      "x-user-settable": true
-    },
-    "briefTranscript": {
-      "type": "boolean",
-      "default": false,
-      "x-user-settable": true
-    },
-    "messageIdleNotifThresholdMs": {
-      "type": "number",
-      "default": 60000,
-      "x-user-settable": true
-    },
-    "autoConnectIde": {
-      "type": "boolean",
-      "default": false,
-      "x-user-settable": true
-    },
-    "autoInstallIdeExtension": {
-      "type": "boolean",
-      "default": true,
-      "x-user-settable": true
-    },
-    "fileCheckpointingEnabled": {
-      "type": "boolean",
-      "default": true,
-      "x-user-settable": true
-    },
-    "terminalProgressBarEnabled": {
-      "type": "boolean",
-      "default": true,
-      "x-user-settable": true
-    },
-    "cachedDynamicConfigs": {
-      "type": "object",
-      "properties": {}
-    },
-    "cachedGrowthBookFeatures": {
-      "type": "object",
-      "properties": {}
-    },
-    "respectGitignore": {
-      "type": "boolean",
-      "default": true,
-      "x-user-settable": true
-    },
-    "copyFullResponse": {
-      "type": "boolean",
-      "default": false,
-      "x-user-settable": true
-    },
-    "apiKeyHelper": {
-      "x-user-settable": true,
-      "type": "string"
-    },
-    "autoUpdatesProtectedForNative": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "shiftEnterKeyBindingInstalled": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "hasUsedBackslashReturn": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "diffSidebarOpen": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "showStatusInTerminalTab": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "taskCompleteNotifEnabled": {
-      "x-user-settable": true
-    },
-    "inputNeededNotifEnabled": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "agentPushNotifEnabled": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "claudeInChromeDefaultEnabled": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "hasCompletedClaudeInChromeOnboarding": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "lspRecommendationDisabled": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "lspRecommendationNeverPlugins": {
-      "x-user-settable": true,
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "lspRecommendationIgnoredCount": {
-      "x-user-settable": true,
-      "type": "integer"
-    },
-    "copyOnSelect": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "leftArrowOpensAgents": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "defaultToAgentsView": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "prStatusFooterEnabled": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "remoteControlAtStartup": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "autoUploadSessions": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "autoAddRemoteControlDaemonWorker": {
-      "x-user-settable": true
-    },
-    "remoteDialogSeen": {
-      "x-user-settable": true,
-      "type": "boolean"
-    },
-    "workflowSizeGuideline": {
-      "x-user-settable": true,
-      "enum": ["unrestricted", "small", "medium", "large"]
-    },
-    "projects": {
-      "type": "object",
-      "additionalProperties": {
-        "$ref": "#/$defs/project"
-      }
-    }
-  },
-  "$defs": {
-    "project": {
-      "type": "object",
-      "properties": {
-        "allowedTools": {
-          "type": "array"
-        },
-        "mcpContextUris": {
-          "type": "array"
-        },
-        "mcpServers": {
-          "type": "object",
-          "properties": {}
-        },
-        "enabledMcpjsonServers": {
-          "type": "array"
-        },
-        "disabledMcpjsonServers": {
-          "type": "array"
-        },
-        "hasTrustDialogAccepted": {
-          "type": "boolean",
-          "default": false
-        },
-        "hasClaudeMdExternalIncludesApproved": {
-          "type": "boolean",
-          "default": false
-        },
-        "hasClaudeMdExternalIncludesWarningShown": {
-          "type": "boolean",
-          "default": false
-        }
-      },
-      "$comment": "Value of projects[<absolute path>]."
-    }
-  }
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://clawdipedia.cc/schemas/claude-code-claude-json.json",
+	"title": "Claude Code ~/.claude.json (Claude Code 2.1.319)",
+	"$comment": "For ~/.claude.json (the global state file). Generated from Claude Code 2.1.319 by tools/schemas/code.ts. Anchors: the defaults function (first key numStartups:0), the per-project defaults object (allowedTools:[],mcpContextUris:[],mcpServers:{}) used as the fallback for projects[<path>], and the list of user-settable keys (starts \"apiKeyHelper\",\"installMethod\",\"autoUpdates\"). \"default\" is the value in the code's defaults; \"x-user-settable\" marks keys in that list. Keys with no default value in the code (undefined, or only in the list) are x-unverified. The file holds more keys than these (the program writes others on demand); only keys the code names are listed. No probe in captures/ records this file's keys, so nothing is marked x-observed. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
+	"type": "object",
+	"properties": {
+		"numStartups": {
+			"type": "number",
+			"default": 0
+		},
+		"installMethod": {
+			"x-user-settable": true,
+			"enum": ["local", "global", "native", "unknown", "development"]
+		},
+		"autoUpdates": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"theme": {
+			"type": "string",
+			"default": "dark",
+			"x-user-settable": true
+		},
+		"preferredNotifChannel": {
+			"type": "string",
+			"default": "auto",
+			"x-user-settable": true
+		},
+		"verbose": {
+			"type": "boolean",
+			"default": false,
+			"x-user-settable": true
+		},
+		"editorMode": {
+			"type": "string",
+			"default": "normal",
+			"x-user-settable": true
+		},
+		"autoCompactEnabled": {
+			"type": "boolean",
+			"default": true,
+			"x-user-settable": true
+		},
+		"autoScrollEnabled": {
+			"type": "boolean",
+			"default": true,
+			"x-user-settable": true
+		},
+		"showTurnDuration": {
+			"type": "boolean",
+			"default": true,
+			"x-user-settable": true
+		},
+		"externalEditorContext": {
+			"type": "boolean",
+			"default": false,
+			"x-user-settable": true
+		},
+		"showMessageTimestamps": {
+			"type": "boolean",
+			"default": false,
+			"x-user-settable": true
+		},
+		"hasSeenTasksHint": {
+			"type": "boolean",
+			"default": false
+		},
+		"hasUsedStash": {
+			"type": "boolean",
+			"default": false
+		},
+		"hasUsedBackgroundTask": {
+			"type": "boolean",
+			"default": false
+		},
+		"queuedCommandUpHintCount": {
+			"type": "number",
+			"default": 0
+		},
+		"diffTool": {
+			"type": "string",
+			"default": "auto",
+			"x-user-settable": true
+		},
+		"customApiKeyResponses": {
+			"type": "object",
+			"properties": {
+				"approved": {
+					"type": "array"
+				},
+				"rejected": {
+					"type": "array"
+				}
+			}
+		},
+		"env": {
+			"type": "object",
+			"properties": {},
+			"x-user-settable": true
+		},
+		"tipsHistory": {
+			"type": "object",
+			"properties": {},
+			"x-user-settable": true
+		},
+		"memoryUsageCount": {
+			"type": "number",
+			"default": 0
+		},
+		"promptQueueUseCount": {
+			"type": "number",
+			"default": 0
+		},
+		"btwUseCount": {
+			"type": "number",
+			"default": 0
+		},
+		"todoFeatureEnabled": {
+			"type": "boolean",
+			"default": true,
+			"x-user-settable": true
+		},
+		"showExpandedTodos": {
+			"type": "boolean",
+			"default": false,
+			"x-user-settable": true
+		},
+		"briefTranscript": {
+			"type": "boolean",
+			"default": false,
+			"x-user-settable": true
+		},
+		"messageIdleNotifThresholdMs": {
+			"type": "number",
+			"default": 60000,
+			"x-user-settable": true
+		},
+		"autoConnectIde": {
+			"type": "boolean",
+			"default": false,
+			"x-user-settable": true
+		},
+		"autoInstallIdeExtension": {
+			"type": "boolean",
+			"default": true,
+			"x-user-settable": true
+		},
+		"fileCheckpointingEnabled": {
+			"type": "boolean",
+			"default": true,
+			"x-user-settable": true
+		},
+		"terminalProgressBarEnabled": {
+			"type": "boolean",
+			"default": true,
+			"x-user-settable": true
+		},
+		"cachedDynamicConfigs": {
+			"type": "object",
+			"properties": {}
+		},
+		"cachedGrowthBookFeatures": {
+			"type": "object",
+			"properties": {}
+		},
+		"respectGitignore": {
+			"type": "boolean",
+			"default": true,
+			"x-user-settable": true
+		},
+		"copyFullResponse": {
+			"type": "boolean",
+			"default": false,
+			"x-user-settable": true
+		},
+		"apiKeyHelper": {
+			"x-user-settable": true,
+			"type": "string"
+		},
+		"autoUpdatesProtectedForNative": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"shiftEnterKeyBindingInstalled": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"hasUsedBackslashReturn": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"diffSidebarOpen": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"showStatusInTerminalTab": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"taskCompleteNotifEnabled": {
+			"x-user-settable": true
+		},
+		"inputNeededNotifEnabled": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"agentPushNotifEnabled": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"claudeInChromeDefaultEnabled": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"hasCompletedClaudeInChromeOnboarding": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"lspRecommendationDisabled": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"lspRecommendationNeverPlugins": {
+			"x-user-settable": true,
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"lspRecommendationIgnoredCount": {
+			"x-user-settable": true,
+			"type": "integer"
+		},
+		"copyOnSelect": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"leftArrowOpensAgents": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"defaultToAgentsView": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"prStatusFooterEnabled": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"remoteControlAtStartup": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"autoUploadSessions": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"autoAddRemoteControlDaemonWorker": {
+			"x-user-settable": true
+		},
+		"remoteDialogSeen": {
+			"x-user-settable": true,
+			"type": "boolean"
+		},
+		"workflowSizeGuideline": {
+			"x-user-settable": true,
+			"enum": ["unrestricted", "small", "medium", "large"]
+		},
+		"projects": {
+			"type": "object",
+			"additionalProperties": {
+				"$ref": "#/$defs/project"
+			}
+		}
+	},
+	"$defs": {
+		"project": {
+			"type": "object",
+			"properties": {
+				"allowedTools": {
+					"type": "array"
+				},
+				"mcpContextUris": {
+					"type": "array"
+				},
+				"mcpServers": {
+					"type": "object",
+					"properties": {}
+				},
+				"enabledMcpjsonServers": {
+					"type": "array"
+				},
+				"disabledMcpjsonServers": {
+					"type": "array"
+				},
+				"hasTrustDialogAccepted": {
+					"type": "boolean",
+					"default": false
+				},
+				"hasClaudeMdExternalIncludesApproved": {
+					"type": "boolean",
+					"default": false
+				},
+				"hasClaudeMdExternalIncludesWarningShown": {
+					"type": "boolean",
+					"default": false
+				}
+			},
+			"$comment": "Value of projects[<absolute path>]."
+		}
+	}
 }

@@ -1,375 +1,375 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://clawdipedia.cc/schemas/claude-code-agents-json.json",
-  "title": "Claude Code --agents JSON entry (Claude Code 2.1.319)",
-  "$comment": "For one subagent definition of the --agents JSON (and the SDK agents option). Generated from Claude Code 2.1.319 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, object described as \"Definition for a custom subagent that can be invoked via the Agent tool.\". Do not edit by hand: run \"bun run schemas\".",
-  "type": "object",
-  "properties": {
-    "description": {
-      "type": "string",
-      "description": "Natural language description of when to use this agent"
-    },
-    "tools": {
-      "description": "Array of allowed tool names. If omitted, inherits all tools from parent. Note: passing 'Skill' here is deprecated — use the `skills` field instead.",
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "disallowedTools": {
-      "description": "Array of tool names to explicitly disallow for this agent. MCP server-level specs (mcp__server, mcp__server__*, mcp__*) remove every tool from the named server (or all MCP tools).",
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "prompt": {
-      "type": "string",
-      "description": "The agent's system prompt"
-    },
-    "model": {
-      "description": "Model alias (e.g. 'fable', 'opus', 'sonnet', 'haiku') or full model ID (e.g. 'claude-fable-5'). 'inherit' uses the main model; if omitted, uses the default subagent model when one is configured, else the main model",
-      "type": "string"
-    },
-    "mcpServers": {
-      "type": "array",
-      "items": {
-        "anyOf": [
-          {
-            "type": "string"
-          },
-          {
-            "type": "object",
-            "propertyNames": {
-              "type": "string"
-            },
-            "additionalProperties": {
-              "anyOf": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "const": "stdio"
-                    },
-                    "command": {
-                      "type": "string"
-                    },
-                    "args": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "env": {
-                      "type": "object",
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "additionalProperties": {
-                        "type": "string"
-                      }
-                    },
-                    "timeout": {
-                      "description": "Per-server tool-call timeout in milliseconds. Overrides the MCP_TOOL_TIMEOUT environment variable for this server. Hard wall-clock limit per call; progress notifications do not extend it. Values below 1000ms are ignored (falls through to MCP_TOOL_TIMEOUT or the default).",
-                      "type": "integer",
-                      "exclusiveMinimum": 0,
-                      "maximum": 9007199254740991
-                    },
-                    "alwaysLoad": {
-                      "description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built.",
-                      "type": "boolean"
-                    },
-                    "role": {
-                      "description": "@internal Coordinator-mode role for this MCP server. 'comms' marks the server the coordinator uses to address the user; the coordinator tool filter lets comms-roled servers' tools through. Claude Code extension to .mcp.json — host-side config, not part of the MCP wire protocol. Coordinator mode is activated via the CLAUDE_CODE_COORDINATOR_MODE environment variable; this field only takes effect when coordinator mode is active.",
-                      "type": "string",
-                      "const": "comms"
-                    }
-                  },
-                  "required": ["command"]
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "const": "sse"
-                    },
-                    "url": {
-                      "type": "string"
-                    },
-                    "headers": {
-                      "type": "object",
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "additionalProperties": {
-                        "type": "string"
-                      }
-                    },
-                    "tools": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string"
-                          },
-                          "permission_policy": {
-                            "type": "string",
-                            "enum": [
-                              "always_allow",
-                              "always_ask",
-                              "always_deny"
-                            ]
-                          },
-                          "org_max_permission": {
-                            "description": "Org admin's per-tool ceiling. Drives the auto-mode isOrgAskCeiling gate so an admin 'ask' cap forces a user prompt even in auto mode.",
-                            "type": "string",
-                            "enum": ["allow", "ask", "blocked"]
-                          }
-                        },
-                        "required": ["name"],
-                        "description": "Per-tool permission policy for an MCP server: carried on mcp_set_servers for remote (http/sse) servers, and on mcp_set_servers or initialize (sdkMcpServerConfigs) for host-registered sdk servers, where only always_ask and always_deny take effect."
-                      }
-                    },
-                    "timeout": {
-                      "description": "Per-server tool-call timeout in milliseconds. Overrides the MCP_TOOL_TIMEOUT environment variable for this server. Hard wall-clock limit per call; progress notifications do not extend it. Values below 1000ms are ignored (falls through to MCP_TOOL_TIMEOUT or the default).",
-                      "type": "integer",
-                      "exclusiveMinimum": 0,
-                      "maximum": 9007199254740991
-                    },
-                    "request_timeout_ms": {
-                      "description": "Per-server HTTP request timeout in milliseconds, set by the host on the mcp_set_servers control event. Raises the per-request fetch first-byte budget and the tool-call watchdog for this server. Capped at 5 minutes. Ignored when `timeout` is also set.\n@internal",
-                      "type": "integer",
-                      "exclusiveMinimum": 0,
-                      "maximum": 9007199254740991
-                    },
-                    "displayName": {
-                      "description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects.",
-                      "type": "string"
-                    },
-                    "alwaysLoad": {
-                      "description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built.",
-                      "type": "boolean"
-                    },
-                    "role": {
-                      "description": "@internal Coordinator-mode role for this MCP server. 'comms' marks the server the coordinator uses to address the user; the coordinator tool filter lets comms-roled servers' tools through. Claude Code extension to .mcp.json — host-side config, not part of the MCP wire protocol. Coordinator mode is activated via the CLAUDE_CODE_COORDINATOR_MODE environment variable; this field only takes effect when coordinator mode is active.",
-                      "type": "string",
-                      "const": "comms"
-                    }
-                  },
-                  "required": ["type", "url"]
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "const": "http"
-                    },
-                    "url": {
-                      "type": "string"
-                    },
-                    "headers": {
-                      "type": "object",
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "additionalProperties": {
-                        "type": "string"
-                      }
-                    },
-                    "tools": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string"
-                          },
-                          "permission_policy": {
-                            "type": "string",
-                            "enum": [
-                              "always_allow",
-                              "always_ask",
-                              "always_deny"
-                            ]
-                          },
-                          "org_max_permission": {
-                            "description": "Org admin's per-tool ceiling. Drives the auto-mode isOrgAskCeiling gate so an admin 'ask' cap forces a user prompt even in auto mode.",
-                            "type": "string",
-                            "enum": ["allow", "ask", "blocked"]
-                          }
-                        },
-                        "required": ["name"],
-                        "description": "Per-tool permission policy for an MCP server: carried on mcp_set_servers for remote (http/sse) servers, and on mcp_set_servers or initialize (sdkMcpServerConfigs) for host-registered sdk servers, where only always_ask and always_deny take effect."
-                      }
-                    },
-                    "timeout": {
-                      "description": "Per-server tool-call timeout in milliseconds. Overrides the MCP_TOOL_TIMEOUT environment variable for this server. Hard wall-clock limit per call; progress notifications do not extend it. Values below 1000ms are ignored (falls through to MCP_TOOL_TIMEOUT or the default).",
-                      "type": "integer",
-                      "exclusiveMinimum": 0,
-                      "maximum": 9007199254740991
-                    },
-                    "request_timeout_ms": {
-                      "description": "Per-server HTTP request timeout in milliseconds, set by the host on the mcp_set_servers control event. Raises the per-request fetch first-byte budget and the tool-call watchdog for this server. Capped at 5 minutes. Ignored when `timeout` is also set.\n@internal",
-                      "type": "integer",
-                      "exclusiveMinimum": 0,
-                      "maximum": 9007199254740991
-                    },
-                    "displayName": {
-                      "description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects.",
-                      "type": "string"
-                    },
-                    "alwaysLoad": {
-                      "description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built.",
-                      "type": "boolean"
-                    },
-                    "role": {
-                      "description": "@internal Coordinator-mode role for this MCP server. 'comms' marks the server the coordinator uses to address the user; the coordinator tool filter lets comms-roled servers' tools through. Claude Code extension to .mcp.json — host-side config, not part of the MCP wire protocol. Coordinator mode is activated via the CLAUDE_CODE_COORDINATOR_MODE environment variable; this field only takes effect when coordinator mode is active.",
-                      "type": "string",
-                      "const": "comms"
-                    }
-                  },
-                  "required": ["type", "url"]
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "const": "sdk"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "timeout": {
-                      "description": "Per-server tool-call timeout in milliseconds. Overrides the MCP_TOOL_TIMEOUT environment variable for this server. Hard wall-clock limit per call; progress notifications do not extend it. Values below 1000ms are ignored (falls through to MCP_TOOL_TIMEOUT or the default). Applies when the server is first registered; changing it for an already-registered server has no effect until it is removed and re-added.",
-                      "type": "integer",
-                      "exclusiveMinimum": 0,
-                      "maximum": 9007199254740991
-                    },
-                    "disableAutoBackground": {
-                      "description": "@internal When true, the CLI never moves a call to this server's tools to a background task on its own: not after the auto-background delay, and not early for a priority 'now' message, which instead interrupts the turn and so ends the call. Meant for a server whose calls wait on a person. The turn waits for the call's own result, up to the server's timeout, so set timeout too. A tool that advertises MCP task support can still run as a task. Any value but true counts as unset. Read when the server is first registered, from initialize, mcp_set_servers or --mcp-config.",
-                      "type": "boolean"
-                    },
-                    "connectorId": {
-                      "description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. With or without that declaration, deny and ask rules, hook matchers and disallowed-tool lists that spell mcp__<connectorId> also reach this server's tools, and nothing that allows does; the id is read as a tool's name would spell it (a character other than a letter, a digit, '-' and '_' as '_'), and one that is then longer than 128 characters or holds '__' is not used for that. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered.",
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "tools": {
-                      "description": "Per-tool permission policy the host declares for this server's tools (not the tool definitions passed to createSdkMcpServer). always_ask: the CLI asks the host (canUseTool or the permission prompt tool) before each call, even where an allow rule or allowedTools covers the tool, and under bypassPermissions outside a hosted remote session (CLAUDE_CODE_REMOTE); under dontAsk the call is denied; in auto mode the classifier decides, except that by default a tool annotated destructiveHint still asks. always_deny: calls are denied. always_allow and org_max_permission are ignored on sdk servers; grant allows with allowedTools or canUseTool. Read from initialize (sdkMcpServerConfigs) and from each mcp_set_servers entry that names the server. On the wire an entry without tools states no policy: on initialize the stored list and the rules stand; on mcp_set_servers the rules are replaced without them. The Agent SDK always re-sends the registered list. An entry whose policy is not one of the three asks; an entry without a string name is dropped and the rest apply; a value that is not a list reads as absent.",
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string"
-                          },
-                          "permission_policy": {
-                            "type": "string",
-                            "enum": [
-                              "always_allow",
-                              "always_ask",
-                              "always_deny"
-                            ]
-                          },
-                          "org_max_permission": {
-                            "description": "Org admin's per-tool ceiling. Drives the auto-mode isOrgAskCeiling gate so an admin 'ask' cap forces a user prompt even in auto mode.",
-                            "type": "string",
-                            "enum": ["allow", "ask", "blocked"]
-                          }
-                        },
-                        "required": ["name"],
-                        "description": "Per-tool permission policy for an MCP server: carried on mcp_set_servers for remote (http/sse) servers, and on mcp_set_servers or initialize (sdkMcpServerConfigs) for host-registered sdk servers, where only always_ask and always_deny take effect."
-                      }
-                    }
-                  },
-                  "required": ["type", "name"]
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    "criticalSystemReminder_EXPERIMENTAL": {
-      "description": "Experimental: Critical reminder added to system prompt",
-      "type": "string"
-    },
-    "skills": {
-      "description": "Array of skill names to preload into the agent context",
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "initialPrompt": {
-      "description": "Auto-submitted as the first user turn when this agent is the main thread agent. Slash commands are processed. Prepended to any user-provided prompt.",
-      "type": "string"
-    },
-    "maxTurns": {
-      "description": "Maximum number of agentic turns (API round-trips) before stopping",
-      "type": "integer",
-      "exclusiveMinimum": 0,
-      "maximum": 9007199254740991
-    },
-    "autoCompactWindow": {
-      "description": "Token count at which this agent compacts its own conversation when it runs as a subagent. It only lowers the window the subagent would otherwise inherit. No effect on the main session agent.",
-      "type": "integer",
-      "minimum": 100000,
-      "maximum": 1000000
-    },
-    "background": {
-      "description": "Run this agent as a background task (non-blocking, fire-and-forget) when invoked",
-      "type": "boolean"
-    },
-    "omitClaudeMd": {
-      "description": "Run this agent without the user, project and local CLAUDE.md instruction files when it runs as a subagent; managed policy files are kept. For agents that take everything they need from the delegation prompt. No effect on the main session agent.",
-      "type": "boolean"
-    },
-    "memory": {
-      "description": "Scope for auto-loading agent memory files. 'user' - ~/.claude/agent-memory/<agentType>/, 'project' - .claude/agent-memory/<agentType>/, 'local' - .claude/agent-memory-local/<agentType>/",
-      "type": "string",
-      "enum": ["user", "project", "local"]
-    },
-    "effort": {
-      "description": "Reasoning effort level for this agent. Either a named level or an integer",
-      "anyOf": [
-        {
-          "type": "string",
-          "enum": ["low", "medium", "high", "xhigh", "max"]
-        },
-        {
-          "type": "integer",
-          "minimum": -9007199254740991,
-          "maximum": 9007199254740991
-        }
-      ]
-    },
-    "permissionMode": {
-      "description": "Permission mode controlling how tool executions are handled",
-      "type": "string",
-      "enum": [
-        "default",
-        "acceptEdits",
-        "bypassPermissions",
-        "plan",
-        "dontAsk",
-        "auto"
-      ]
-    },
-    "observer": {
-      "description": "Agent type auto-spawned as a background observer whenever this agent runs. The observer receives read-only activity digests and reports via the ObserverReport tool; it never participates in the task.",
-      "type": "string"
-    },
-    "observerMessage": {
-      "description": "Supplemental postamble appended (after the harness-owned default) to each activity digest sent to the observer. Blank values are ignored.",
-      "type": "string"
-    }
-  },
-  "required": ["description", "prompt"],
-  "description": "Definition for a custom subagent that can be invoked via the Agent tool."
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://clawdipedia.cc/schemas/claude-code-agents-json.json",
+	"title": "Claude Code --agents JSON entry (Claude Code 2.1.319)",
+	"$comment": "For one subagent definition of the --agents JSON (and the SDK agents option). Generated from Claude Code 2.1.319 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, object described as \"Definition for a custom subagent that can be invoked via the Agent tool.\". Do not edit by hand: run \"bun run schemas\".",
+	"type": "object",
+	"properties": {
+		"description": {
+			"type": "string",
+			"description": "Natural language description of when to use this agent"
+		},
+		"tools": {
+			"description": "Array of allowed tool names. If omitted, inherits all tools from parent. Note: passing 'Skill' here is deprecated — use the `skills` field instead.",
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"disallowedTools": {
+			"description": "Array of tool names to explicitly disallow for this agent. MCP server-level specs (mcp__server, mcp__server__*, mcp__*) remove every tool from the named server (or all MCP tools).",
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"prompt": {
+			"type": "string",
+			"description": "The agent's system prompt"
+		},
+		"model": {
+			"description": "Model alias (e.g. 'fable', 'opus', 'sonnet', 'haiku') or full model ID (e.g. 'claude-fable-5'). 'inherit' uses the main model; if omitted, uses the default subagent model when one is configured, else the main model",
+			"type": "string"
+		},
+		"mcpServers": {
+			"type": "array",
+			"items": {
+				"anyOf": [
+					{
+						"type": "string"
+					},
+					{
+						"type": "object",
+						"propertyNames": {
+							"type": "string"
+						},
+						"additionalProperties": {
+							"anyOf": [
+								{
+									"type": "object",
+									"properties": {
+										"type": {
+											"type": "string",
+											"const": "stdio"
+										},
+										"command": {
+											"type": "string"
+										},
+										"args": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"env": {
+											"type": "object",
+											"propertyNames": {
+												"type": "string"
+											},
+											"additionalProperties": {
+												"type": "string"
+											}
+										},
+										"timeout": {
+											"description": "Per-server tool-call timeout in milliseconds. Overrides the MCP_TOOL_TIMEOUT environment variable for this server. Hard wall-clock limit per call; progress notifications do not extend it. Values below 1000ms are ignored (falls through to MCP_TOOL_TIMEOUT or the default).",
+											"type": "integer",
+											"exclusiveMinimum": 0,
+											"maximum": 9007199254740991
+										},
+										"alwaysLoad": {
+											"description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built.",
+											"type": "boolean"
+										},
+										"role": {
+											"description": "@internal Coordinator-mode role for this MCP server. 'comms' marks the server the coordinator uses to address the user; the coordinator tool filter lets comms-roled servers' tools through. Claude Code extension to .mcp.json — host-side config, not part of the MCP wire protocol. Coordinator mode is activated via the CLAUDE_CODE_COORDINATOR_MODE environment variable; this field only takes effect when coordinator mode is active.",
+											"type": "string",
+											"const": "comms"
+										}
+									},
+									"required": ["command"]
+								},
+								{
+									"type": "object",
+									"properties": {
+										"type": {
+											"type": "string",
+											"const": "sse"
+										},
+										"url": {
+											"type": "string"
+										},
+										"headers": {
+											"type": "object",
+											"propertyNames": {
+												"type": "string"
+											},
+											"additionalProperties": {
+												"type": "string"
+											}
+										},
+										"tools": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"name": {
+														"type": "string"
+													},
+													"permission_policy": {
+														"type": "string",
+														"enum": [
+															"always_allow",
+															"always_ask",
+															"always_deny"
+														]
+													},
+													"org_max_permission": {
+														"description": "Org admin's per-tool ceiling. Drives the auto-mode isOrgAskCeiling gate so an admin 'ask' cap forces a user prompt even in auto mode.",
+														"type": "string",
+														"enum": ["allow", "ask", "blocked"]
+													}
+												},
+												"required": ["name"],
+												"description": "Per-tool permission policy for an MCP server: carried on mcp_set_servers for remote (http/sse) servers, and on mcp_set_servers or initialize (sdkMcpServerConfigs) for host-registered sdk servers, where only always_ask and always_deny take effect."
+											}
+										},
+										"timeout": {
+											"description": "Per-server tool-call timeout in milliseconds. Overrides the MCP_TOOL_TIMEOUT environment variable for this server. Hard wall-clock limit per call; progress notifications do not extend it. Values below 1000ms are ignored (falls through to MCP_TOOL_TIMEOUT or the default).",
+											"type": "integer",
+											"exclusiveMinimum": 0,
+											"maximum": 9007199254740991
+										},
+										"request_timeout_ms": {
+											"description": "Per-server HTTP request timeout in milliseconds, set by the host on the mcp_set_servers control event. Raises the per-request fetch first-byte budget and the tool-call watchdog for this server. Capped at 5 minutes. Ignored when `timeout` is also set.\n@internal",
+											"type": "integer",
+											"exclusiveMinimum": 0,
+											"maximum": 9007199254740991
+										},
+										"displayName": {
+											"description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects.",
+											"type": "string"
+										},
+										"alwaysLoad": {
+											"description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built.",
+											"type": "boolean"
+										},
+										"role": {
+											"description": "@internal Coordinator-mode role for this MCP server. 'comms' marks the server the coordinator uses to address the user; the coordinator tool filter lets comms-roled servers' tools through. Claude Code extension to .mcp.json — host-side config, not part of the MCP wire protocol. Coordinator mode is activated via the CLAUDE_CODE_COORDINATOR_MODE environment variable; this field only takes effect when coordinator mode is active.",
+											"type": "string",
+											"const": "comms"
+										}
+									},
+									"required": ["type", "url"]
+								},
+								{
+									"type": "object",
+									"properties": {
+										"type": {
+											"type": "string",
+											"const": "http"
+										},
+										"url": {
+											"type": "string"
+										},
+										"headers": {
+											"type": "object",
+											"propertyNames": {
+												"type": "string"
+											},
+											"additionalProperties": {
+												"type": "string"
+											}
+										},
+										"tools": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"name": {
+														"type": "string"
+													},
+													"permission_policy": {
+														"type": "string",
+														"enum": [
+															"always_allow",
+															"always_ask",
+															"always_deny"
+														]
+													},
+													"org_max_permission": {
+														"description": "Org admin's per-tool ceiling. Drives the auto-mode isOrgAskCeiling gate so an admin 'ask' cap forces a user prompt even in auto mode.",
+														"type": "string",
+														"enum": ["allow", "ask", "blocked"]
+													}
+												},
+												"required": ["name"],
+												"description": "Per-tool permission policy for an MCP server: carried on mcp_set_servers for remote (http/sse) servers, and on mcp_set_servers or initialize (sdkMcpServerConfigs) for host-registered sdk servers, where only always_ask and always_deny take effect."
+											}
+										},
+										"timeout": {
+											"description": "Per-server tool-call timeout in milliseconds. Overrides the MCP_TOOL_TIMEOUT environment variable for this server. Hard wall-clock limit per call; progress notifications do not extend it. Values below 1000ms are ignored (falls through to MCP_TOOL_TIMEOUT or the default).",
+											"type": "integer",
+											"exclusiveMinimum": 0,
+											"maximum": 9007199254740991
+										},
+										"request_timeout_ms": {
+											"description": "Per-server HTTP request timeout in milliseconds, set by the host on the mcp_set_servers control event. Raises the per-request fetch first-byte budget and the tool-call watchdog for this server. Capped at 5 minutes. Ignored when `timeout` is also set.\n@internal",
+											"type": "integer",
+											"exclusiveMinimum": 0,
+											"maximum": 9007199254740991
+										},
+										"displayName": {
+											"description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects.",
+											"type": "string"
+										},
+										"alwaysLoad": {
+											"description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built.",
+											"type": "boolean"
+										},
+										"role": {
+											"description": "@internal Coordinator-mode role for this MCP server. 'comms' marks the server the coordinator uses to address the user; the coordinator tool filter lets comms-roled servers' tools through. Claude Code extension to .mcp.json — host-side config, not part of the MCP wire protocol. Coordinator mode is activated via the CLAUDE_CODE_COORDINATOR_MODE environment variable; this field only takes effect when coordinator mode is active.",
+											"type": "string",
+											"const": "comms"
+										}
+									},
+									"required": ["type", "url"]
+								},
+								{
+									"type": "object",
+									"properties": {
+										"type": {
+											"type": "string",
+											"const": "sdk"
+										},
+										"name": {
+											"type": "string"
+										},
+										"timeout": {
+											"description": "Per-server tool-call timeout in milliseconds. Overrides the MCP_TOOL_TIMEOUT environment variable for this server. Hard wall-clock limit per call; progress notifications do not extend it. Values below 1000ms are ignored (falls through to MCP_TOOL_TIMEOUT or the default). Applies when the server is first registered; changing it for an already-registered server has no effect until it is removed and re-added.",
+											"type": "integer",
+											"exclusiveMinimum": 0,
+											"maximum": 9007199254740991
+										},
+										"disableAutoBackground": {
+											"description": "@internal When true, the CLI never moves a call to this server's tools to a background task on its own: not after the auto-background delay, and not early for a priority 'now' message, which instead interrupts the turn and so ends the call. Meant for a server whose calls wait on a person. The turn waits for the call's own result, up to the server's timeout, so set timeout too. A tool that advertises MCP task support can still run as a task. Any value but true counts as unset. Read when the server is first registered, from initialize, mcp_set_servers or --mcp-config.",
+											"type": "boolean"
+										},
+										"connectorId": {
+											"description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. With or without that declaration, deny and ask rules, hook matchers and disallowed-tool lists that spell mcp__<connectorId> also reach this server's tools, and nothing that allows does; the id is read as a tool's name would spell it (a character other than a letter, a digit, '-' and '_' as '_'), and one that is then longer than 128 characters or holds '__' is not used for that. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered.",
+											"type": "string",
+											"minLength": 1
+										},
+										"tools": {
+											"description": "Per-tool permission policy the host declares for this server's tools (not the tool definitions passed to createSdkMcpServer). always_ask: the CLI asks the host (canUseTool or the permission prompt tool) before each call, even where an allow rule or allowedTools covers the tool, and under bypassPermissions outside a hosted remote session (CLAUDE_CODE_REMOTE); under dontAsk the call is denied; in auto mode the classifier decides, except that by default a tool annotated destructiveHint still asks. always_deny: calls are denied. always_allow and org_max_permission are ignored on sdk servers; grant allows with allowedTools or canUseTool. Read from initialize (sdkMcpServerConfigs) and from each mcp_set_servers entry that names the server. On the wire an entry without tools states no policy: on initialize the stored list and the rules stand; on mcp_set_servers the rules are replaced without them. The Agent SDK always re-sends the registered list. An entry whose policy is not one of the three asks; an entry without a string name is dropped and the rest apply; a value that is not a list reads as absent.",
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"name": {
+														"type": "string"
+													},
+													"permission_policy": {
+														"type": "string",
+														"enum": [
+															"always_allow",
+															"always_ask",
+															"always_deny"
+														]
+													},
+													"org_max_permission": {
+														"description": "Org admin's per-tool ceiling. Drives the auto-mode isOrgAskCeiling gate so an admin 'ask' cap forces a user prompt even in auto mode.",
+														"type": "string",
+														"enum": ["allow", "ask", "blocked"]
+													}
+												},
+												"required": ["name"],
+												"description": "Per-tool permission policy for an MCP server: carried on mcp_set_servers for remote (http/sse) servers, and on mcp_set_servers or initialize (sdkMcpServerConfigs) for host-registered sdk servers, where only always_ask and always_deny take effect."
+											}
+										}
+									},
+									"required": ["type", "name"]
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		"criticalSystemReminder_EXPERIMENTAL": {
+			"description": "Experimental: Critical reminder added to system prompt",
+			"type": "string"
+		},
+		"skills": {
+			"description": "Array of skill names to preload into the agent context",
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"initialPrompt": {
+			"description": "Auto-submitted as the first user turn when this agent is the main thread agent. Slash commands are processed. Prepended to any user-provided prompt.",
+			"type": "string"
+		},
+		"maxTurns": {
+			"description": "Maximum number of agentic turns (API round-trips) before stopping",
+			"type": "integer",
+			"exclusiveMinimum": 0,
+			"maximum": 9007199254740991
+		},
+		"autoCompactWindow": {
+			"description": "Token count at which this agent compacts its own conversation when it runs as a subagent. It only lowers the window the subagent would otherwise inherit. No effect on the main session agent.",
+			"type": "integer",
+			"minimum": 100000,
+			"maximum": 1000000
+		},
+		"background": {
+			"description": "Run this agent as a background task (non-blocking, fire-and-forget) when invoked",
+			"type": "boolean"
+		},
+		"omitClaudeMd": {
+			"description": "Run this agent without the user, project and local CLAUDE.md instruction files when it runs as a subagent; managed policy files are kept. For agents that take everything they need from the delegation prompt. No effect on the main session agent.",
+			"type": "boolean"
+		},
+		"memory": {
+			"description": "Scope for auto-loading agent memory files. 'user' - ~/.claude/agent-memory/<agentType>/, 'project' - .claude/agent-memory/<agentType>/, 'local' - .claude/agent-memory-local/<agentType>/",
+			"type": "string",
+			"enum": ["user", "project", "local"]
+		},
+		"effort": {
+			"description": "Reasoning effort level for this agent. Either a named level or an integer",
+			"anyOf": [
+				{
+					"type": "string",
+					"enum": ["low", "medium", "high", "xhigh", "max"]
+				},
+				{
+					"type": "integer",
+					"minimum": -9007199254740991,
+					"maximum": 9007199254740991
+				}
+			]
+		},
+		"permissionMode": {
+			"description": "Permission mode controlling how tool executions are handled",
+			"type": "string",
+			"enum": [
+				"default",
+				"acceptEdits",
+				"bypassPermissions",
+				"plan",
+				"dontAsk",
+				"auto"
+			]
+		},
+		"observer": {
+			"description": "Agent type auto-spawned as a background observer whenever this agent runs. The observer receives read-only activity digests and reports via the ObserverReport tool; it never participates in the task.",
+			"type": "string"
+		},
+		"observerMessage": {
+			"description": "Supplemental postamble appended (after the harness-owned default) to each activity digest sent to the observer. Blank values are ignored.",
+			"type": "string"
+		}
+	},
+	"required": ["description", "prompt"],
+	"description": "Definition for a custom subagent that can be invoked via the Agent tool."
 }
