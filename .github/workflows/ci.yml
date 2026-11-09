@@ -24,31 +24,15 @@ jobs:
       - uses: oven-sh/setup-bun@v2.2.0
         with:
           bun-version: 1.4.4
-      - run: bun install --frozen-lockfile
-      - name: Install plugin server dependencies
-        run: |
-          bun install --cwd plugin/mcp --frozen-lockfile
-          bun install --cwd inspect/mcp --frozen-lockfile
-      - name: Typecheck
-        run: bun run typecheck
-      - name: Format
-        run: bun run format:check
-      - name: Lint code
-        run: bun run lint:code
-      - name: Lint markdown
-        run: bun run lint
-      - name: Docs check
-        run: bun run check:docs
-      - name: Schemas check
-        run: bun run schemas:check
-      - name: Build
-        run: bun run build
-      - name: Llms check
-        run: bun run llms:check
-      - name: Plugin check
-        run: bun run plugin:check
-      - name: Deploy config check
-        run: bun run deploy:check
+      - uses: taiki-e/install-action@3a3daafd3b7f23b8f65d9f5ba2db203fb59b79e2 # v2.90.2
+        with:
+          tool: just@1.59.0
+      - name: Setup
+        run: just setup setup-project
+      - name: Verify
+        run: just verify
+      - name: Site checks
+        run: just verify-project
       # Every step above must pass before this one runs, so a failed check stops the deploy.
       # A pull request never reaches it. See the Deploy section of README.md.
       - name: Deploy to Cloudflare Workers
