@@ -2,7 +2,9 @@
 // Anchors (checked on 2.1.309, task 1.1): Commander keeps its method names when minified.
 // - `subcommand`: `.command("name [args]")` with a constant string. The full path joins the
 //   `.command()` calls of the chain and of the variable it is called on (`mcp add`). `{hidden:!0}` as
-//   the second argument marks it hidden.
+//   the second argument marks it hidden. A command built in a function on its parameter gets the
+//   path of the argument at the one call of that function (`E(mcp)`, checked on 2.1.321).
+// - Hand-parsed commands and their flags come from their help texts (`help.ts`).
 // - `flag`: `.option("-d, --debug [filter]","desc")`, `.requiredOption(...)`, and
 //   `.addOption(new X("--init","desc"))` (the Option class name is minified, so the anchor is the flag
 //   spec as the first argument). The Option may sit in a variable (`let h=new X(...)`), a factory
@@ -18,8 +20,10 @@
 import type * as t from "@babel/types";
 
 import {
+	callsOf,
 	constString,
 	functionOf,
+	isFn,
 	type Module,
 	type Node,
 	returnsOf,
@@ -32,6 +36,7 @@ import {
 	type SurfaceItem,
 	unique,
 } from "./common.ts";
+import { helpKind } from "./help.ts";
 
 const SPEC = /^(?:-[\w-]+, ?)?--?[a-zA-Z][\w-]*/u;
 
@@ -46,6 +51,19 @@ const method = (n: Node | undefined): string | undefined =>
 const initOf = (m: Module, n: Node): Node | undefined => {
 	const def = m.variable(n)?.defs[0];
 	return def?.type === "Variable" ? asNode(def.node.init) : undefined;
+};
+
+/** The argument that parameter `p` gets at the one known call of its function (`function E(C){C.command("add")}E(mcp)`). */
+const argumentOf = (m: Module, p: Node): { m: Module; n: Node } | undefined => {
+	const def = m.variable(p)?.defs[0];
+	if (def?.type !== "Parameter" || !isFn(def.node)) {
+		return undefined;
+	}
+	const at = def.node.params.map((x) => asNode(x)).indexOf(def.name);
+	const calls = callsOf(m, def.node);
+	const call = calls.length === 1 ? calls[0] : undefined;
+	const arg = asNode(call?.call.arguments[at]);
+	return call && arg ? { m: call.module, n: arg } : undefined;
 };
 
 /** The command words of `.command("x")` calls below `n` in its chain, outermost last. */
@@ -68,11 +86,12 @@ const chainCommands = (
 				}
 			}
 			cur = asNode(cur.callee.object);
-		} else if (cur.type === "Identifier" && !seen.has(cur.name)) {
+		} else if (cur.type === "Identifier" && !seen.has(m.variable(cur))) {
 			// `let x=program.command("mcp")…; x.command("add")`
-			seen.add(cur.name);
+			seen.add(m.variable(cur));
 			const init = initOf(m, cur);
-			return init ? [...chainCommands(m, init, seen), ...out] : out;
+			const from = init ? { m, n: init } : argumentOf(m, cur);
+			return from ? [...chainCommands(from.m, from.n, seen), ...out] : out;
 		} else {
 			return out;
 		}
@@ -185,7 +204,7 @@ export const extractSubcommands: Extractor = (bundle) => {
 			...(hidden && { gate: "hidden" }),
 		});
 	});
-	return unique(out);
+	return unique([...out, ...helpKind(bundle, "subcommand")]);
 };
 
 /** The gate of an `addOption` argument: `hidden`, `hidden unless <condition>`, or none. */
@@ -274,5 +293,5 @@ export const extractFlags: Extractor = (bundle) => {
 			addFlag(out, o.m, o.n, owner, o.n.arguments, optionGate(m, arg, o), m);
 		}
 	});
-	return unique(out);
+	return unique([...out, ...helpKind(bundle, "flag")]);
 };

@@ -1,5 +1,7 @@
 import { describe, expect, test } from "bun:test";
 
+import { Bundle } from "../../src/ast.ts";
+import { surface } from "../../src/surface/index.ts";
 import { byName, names } from "./util.ts";
 
 describe("flag", () => {
@@ -47,6 +49,27 @@ p.addOption(k?h2:h2.hideHelp());
 		expect(by.get("--cond-opt")?.gate).toBe("hidden unless k");
 	});
 
+	test("a subcommand built in a function through its parameter", async () => {
+		const src = `
+var p=new C();
+function E(C){C.command("add <n>").option("--transport <t>","T")}
+var m=p.command("mcp");
+E(m);
+`;
+		expect(await names("flag", src)).toEqual(["mcp add --transport"]);
+		expect(await names("subcommand", src)).toEqual(["mcp", "mcp add"]);
+	});
+
+	// Claude Code 2.1.321 names both the `xaa` command and the `mcp` argument `a`, in other scopes.
+	test("a parameter whose argument has the name of a variable on the path", async () => {
+		const src = `
+var p=new C();
+function T(C){let a=C.command("xaa");a.command("setup")}
+function U(){let a=p.command("mcp");T(a)}
+`;
+		expect(await names("subcommand", src)).toContain("mcp xaa setup");
+	});
+
 	test("a non-flag first argument is dropped", async () => {
 		expect(
 			await names("flag", 'o.option("plain","x");o.option(1,"y");'),
@@ -80,6 +103,136 @@ p.command("auth").command("login");
 		expect(
 			await names("subcommand", 'p.command("-x");p.command(f());'),
 		).toEqual([]);
+	});
+});
+
+// Claude Code 2.1.321 parses the arguments of `remote-control`, `self-hosted-runner`, and `rm` by hand.
+describe("a hand-written help text", () => {
+	const src = `
+var p=new C();
+p.command("remote-control",{hidden:!0});
+var a=\`USAGE
+  claude remote-control [options]
+OPTIONS
+  --settings <file>                JSON settings file for \${s}.
+                                   Read once.
+  --[no-]chrome                    Claude in Chrome
+  -d, --debug[=<filter>]           Enable debug mode
+  -h, --help                       Show this help
+\`;
+var b=\`Usage: claude self-hosted-runner decode-token [token] [options]
+
+Options:
+  --environment-secret-file <path>
+                              Path to environment secret file
+  --help, -h         Show this help.
+\`;
+var c="Usage: claude rm <id> [--discard-unpushed <commit>]";
+var d=\`Usage: claude \${u}\`, e="Usage: claude -p --resume <id>";
+`;
+	test("gives its subcommand, also a hidden one", async () => {
+		const by = await byName("subcommand", src);
+		expect([...by.keys()].toSorted((x, y) => x.localeCompare(y))).toEqual([
+			"remote-control",
+			"rm",
+			"self-hosted-runner decode-token",
+		]);
+		expect(by.get("remote-control")?.gate).toBe("hidden");
+		expect(by.get("rm")?.detail).toBe("<id> [--discard-unpushed <commit>]");
+	});
+	test("gives the flags of its option lines and its usage line", async () => {
+		const by = await byName("flag", src);
+		expect([...by.keys()].toSorted((x, y) => x.localeCompare(y))).toEqual([
+			"remote-control --chrome",
+			"remote-control --debug",
+			"remote-control --help",
+			"remote-control --settings",
+			"rm --discard-unpushed",
+			"self-hosted-runner decode-token --environment-secret-file",
+			"self-hosted-runner decode-token --help",
+		]);
+		expect(by.get("remote-control --settings")?.detail).toBe(
+			`--settings <file> | JSON settings file for \${…}.`,
+		);
+		expect(by.get("remote-control --chrome")?.detail).toBe(
+			"--[no-]chrome | Claude in Chrome",
+		);
+		expect(by.get("remote-control --debug")?.detail).toBe(
+			"--debug[=<filter>] | Enable debug mode",
+		);
+		expect(
+			by.get("self-hosted-runner decode-token --environment-secret-file")
+				?.detail,
+		).toBe(
+			"--environment-secret-file <path> | Path to environment secret file",
+		);
+	});
+
+	test("a one-space description, a multi-part argument, and a joined options literal", async () => {
+		const joined = `
+var a=\`Usage: claude self-hosted-runner orchestrator [options]
+
+Options:
+  --scm-connector-ca-file <path> Extra CA bundle
+  --git-host-rewrite <from>=<to_host:to_port>  Rewrite a host
+\`;
+var rn="Usage: claude daemon [options]\\n", ln=\`Options:
+  --json-path <p>   Write JSON here
+\`;
+var t=rn+(c?x:y)+ln;
+`;
+		const by = await byName("flag", joined);
+		expect(
+			by.get("self-hosted-runner orchestrator --scm-connector-ca-file")?.detail,
+		).toBe("--scm-connector-ca-file <path> | Extra CA bundle");
+		expect(
+			by.get("self-hosted-runner orchestrator --git-host-rewrite")?.detail,
+		).toBe("--git-host-rewrite <from>=<to_host:to_port> | Rewrite a host");
+		expect(by.get("daemon --json-path")?.detail).toBe(
+			"--json-path <p> | Write JSON here",
+		);
+	});
+
+	test("a parser that shares most flags with a help text gives its other flags as hidden", async () => {
+		const parsed = `
+var h=\`Usage: claude respawn [options]
+Options:
+  --all     All
+  --force   Force
+  --quiet   Quiet
+  --[no-]color  Color
+\`;
+function parse(a){for(let x of a){if(x==="--all");else if(x.startsWith("--quiet="));else if(x==="--no-color");else switch(x){case"--secret":case"--late":break}}}
+function git(a){if(a==="--all"||a==="--other")return 1}
+`;
+		const by = await byName("flag", parsed);
+		expect(by.get("respawn --secret")?.gate).toBe("hidden");
+		expect(by.get("respawn --late")?.gate).toBe("hidden");
+		expect(by.has("respawn --other")).toBe(false);
+		expect(by.has("respawn --no-color")).toBe(false);
+		expect(by.get("respawn --all")?.gate).toBeUndefined();
+	});
+
+	test("a parser in another module needs 3 shared flags", async () => {
+		const help = `var h=\`USAGE
+  claude remote-control [options]
+  --resume <id>   Resume
+  --continue      Continue
+  --name <n>      Name
+\`;`;
+		const parsers = `
+function rc(a){if(a==="--resume"||a==="--continue"||a==="--name"||a==="--sandbox")return 1}
+function filter(a){if(a==="--resume"||a==="--continue"||a==="--fork-session")return 1}
+`;
+		const found = await surface(
+			new Bundle([
+				{ name: "/$bunfs/root/a.js", text: help },
+				{ name: "/$bunfs/root/b.js", text: parsers },
+			]),
+			"flag",
+		);
+		const hidden = found.filter((i) => i.gate === "hidden").map((i) => i.name);
+		expect(hidden).toEqual(["remote-control --sandbox"]);
 	});
 });
 
