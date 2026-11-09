@@ -459,6 +459,10 @@
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
 	},
+	"error:${…} invalid: ${…}: unknown to the apps gateway's bundled Claude Desktop schema*": {
+		"route": "/configure/settings/auth",
+		"anchor": "errors"
+	},
 	"error:${…} invalid: expected a mapping of desktop keys": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
@@ -951,6 +955,10 @@
 		"route": "/extend/mod-api",
 		"anchor": "errors"
 	},
+	"error:${…}: ${…}: a body of bytes and compress ride engine requests alone": {
+		"route": "/extend/mod-api/calls/clock-http-process-env-settings",
+		"anchor": "errors"
+	},
 	"error:${…}: ${…}: its environment was unloaded": {
 		"route": "/extend/mod-api",
 		"anchor": "errors"
@@ -1033,6 +1041,10 @@
 	},
 	"error:${…}: a baseline grader's reference file is hard-linked (has another name) — keep a single copy": {
 		"route": "/extend/mod-api/calls/testing",
+		"anchor": "errors"
+	},
+	"error:${…}: a body of bytes cannot be redacted": {
+		"route": "/extend/mod-api/calls/clock-http-process-env-settings",
 		"anchor": "errors"
 	},
 	"error:${…}: a file in the plugin has more than one name (a hard link) — case definitions must not be reachable by another name; replace it with a copy": {
@@ -1699,7 +1711,7 @@
 		"route": "/reference/tools/shell-and-web",
 		"anchor": "errors"
 	},
-	"error:Cannot delete reserved paths: ${…}. CLAUDE.md and .claude/ carry instructions to the design agent and are blocked regardless of the plan.": {
+	"error:Cannot delete reserved paths: ${…}. CLAUDE.md, CLAUDE.local.md and .claude/ carry agent instructions and are blocked regardless of the plan.": {
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
 	},
@@ -1883,7 +1895,7 @@
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
 	},
-	"error:Cannot write reserved paths: ${…}. CLAUDE.md and .claude/ carry instructions to the design agent and are blocked regardless of the plan.": {
+	"error:Cannot write reserved paths: ${…}. CLAUDE.md, CLAUDE.local.md and .claude/ carry agent instructions and are blocked regardless of the plan.": {
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
 	},
@@ -2091,6 +2103,10 @@
 		"route": "/extend/plugins/marketplace",
 		"anchor": "errors"
 	},
+	"error:Could not withdraw the cached plugins of marketplace*": {
+		"route": "/extend/plugins/marketplace",
+		"anchor": "errors"
+	},
 	"error:Couldn't *": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
@@ -2133,6 +2149,10 @@
 	},
 	"error:ECONNREFUSED_SSRF: blocked loopback/metadata host via proxy": {
 		"route": "/configure/cli/subcommands",
+		"anchor": "errors"
+	},
+	"error:Edit rejected: the updated notebook would exceed the maximum size this tool can read*": {
+		"route": "/reference/tools/files",
 		"anchor": "errors"
 	},
 	"error:Edit: a call needs the message that issued it": {
@@ -3019,6 +3039,10 @@
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
+	"error:No task found with ID: ${…}. An ID of this shape is not looked up*": {
+		"route": "/reference/tools/shell-and-web",
+		"anchor": "errors"
+	},
 	"error:No valid c*": {
 		"route": "/extend/skills-and-commands/slash-commands",
 		"anchor": "errors"
@@ -3247,10 +3271,6 @@
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
-	"error:Refused a redirect to another origin": {
-		"route": "/reference/tools/shell-and-web",
-		"anchor": "errors"
-	},
 	"error:Refusing g*": {
 		"route": "/extend/plugins/marketplace",
 		"anchor": "errors"
@@ -3475,6 +3495,10 @@
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
 	},
+	"error:Starting with default settings. The application that started Claude Code manages*": {
+		"route": "/configure/env-vars/sessions-and-storage",
+		"anchor": "variables"
+	},
 	"error:StdioClientTransport already started! If using Client class, note that connect() calls start() automatically.": {
 		"route": "/extend/mcp/runtime",
 		"anchor": "errors"
@@ -3611,6 +3635,10 @@
 		"route": "/extend/plugins/marketplace",
 		"anchor": "errors"
 	},
+	"error:The list of installed plugins (installed_plugins.json) could not be read*": {
+		"route": "/extend/plugins/marketplace",
+		"anchor": "errors"
+	},
 	"error:The listi*": {
 		"route": "/extend/hooks/configuration",
 		"anchor": "errors"
@@ -3631,12 +3659,12 @@
 		"route": "/extend/hooks/configuration",
 		"anchor": "errors"
 	},
-	"error:The result of MCP tool \"${…}\" on server \"${…}\" arrived without its text. A result that is too large arrives this way. The tool may have run: check whether it did before running it again, and when you …": {
-		"route": "/extend/mcp/runtime",
-		"anchor": "errors"
-	},
 	"error:The skill \"${…}\" was not loaded because of a fault in Claude Code: it has no record of the files that the skill was verified against. Do not try again.": {
 		"route": "/reference/tools/agents-and-tasks",
+		"anchor": "errors"
+	},
+	"error:The small, fast model that reads the content gave no answer*": {
+		"route": "/reference/tools/shell-and-web",
 		"anchor": "errors"
 	},
 	"error:The temp directory is unavailable in a diskless session: nothing is created, verified or written under the shared per-uid temp root": {
@@ -3792,14 +3820,6 @@
 		"anchor": "errors"
 	},
 	"error:Unable to g*": {
-		"route": "/configure/settings/auth",
-		"anchor": "errors"
-	},
-	"error:Unable to rea*": {
-		"route": "/configure/settings/auth",
-		"anchor": "errors"
-	},
-	"error:Unable to read managed policy settings, which may restrict the API providers this machine may use (allowedProviders). Contact your administrator.": {
 		"route": "/configure/settings/auth",
 		"anchor": "errors"
 	},
@@ -4011,11 +4031,11 @@
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
 	},
-	"error:Write not done; nothing in the project was changed. B*": {
+	"error:Write refused; nothing in the project was changed. Th*": {
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
 	},
-	"error:Write refused; nothing in the project was changed. Th*": {
+	"error:Write refused; nothing in the project was changed. if_version does not name the copy*": {
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
 	},
@@ -5133,6 +5153,10 @@
 	},
 	"error:judge call failed: ${…}${…}": {
 		"route": "/extend/plugins/cli",
+		"anchor": "errors"
+	},
+	"error:keepsBeneath: this test has its own ui.render hook at this site*": {
+		"route": "/extend/mod-api/calls/testing",
 		"anchor": "errors"
 	},
 	"error:kernel or device path, or one of Claude Code's credentials: ${…}": {
@@ -6443,42 +6467,6 @@
 		"route": "/configure/cli/flags",
 		"anchor": "sessions-and-worktrees"
 	},
-	"flag:add --callback-port": {
-		"route": "/extend/mcp/cli",
-		"anchor": "flags"
-	},
-	"flag:add --client-id": {
-		"route": "/extend/mcp/cli",
-		"anchor": "flags"
-	},
-	"flag:add --client-secret": {
-		"route": "/extend/mcp/cli",
-		"anchor": "flags"
-	},
-	"flag:add --env": {
-		"route": "/extend/mcp/cli",
-		"anchor": "flags"
-	},
-	"flag:add --header": {
-		"route": "/extend/mcp/cli",
-		"anchor": "flags"
-	},
-	"flag:add --scope": {
-		"route": "/extend/mcp/cli",
-		"anchor": "flags"
-	},
-	"flag:add --transport": {
-		"route": "/extend/mcp/cli",
-		"anchor": "flags"
-	},
-	"flag:add --web": {
-		"route": "/extend/mcp/cli",
-		"anchor": "flags"
-	},
-	"flag:add --xaa": {
-		"route": "/extend/mcp/cli",
-		"anchor": "flags"
-	},
 	"flag:agents --add-dir": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
@@ -6595,6 +6583,34 @@
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
 	},
+	"flag:daemon --any": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "daemon-subcommands"
+	},
+	"flag:daemon --help": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "daemon-subcommands"
+	},
+	"flag:daemon --json-path": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "daemon-subcommands"
+	},
+	"flag:daemon --keep-workers": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "daemon-subcommands"
+	},
+	"flag:daemon --log-file": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "daemon-subcommands"
+	},
+	"flag:daemon --origin": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "daemon-subcommands"
+	},
+	"flag:daemon --spawned-by": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "daemon-subcommands"
+	},
 	"flag:design-login --json": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
@@ -6655,6 +6671,42 @@
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
 	},
+	"flag:mcp add --callback-port": {
+		"route": "/extend/mcp/cli",
+		"anchor": "flags"
+	},
+	"flag:mcp add --client-id": {
+		"route": "/extend/mcp/cli",
+		"anchor": "flags"
+	},
+	"flag:mcp add --client-secret": {
+		"route": "/extend/mcp/cli",
+		"anchor": "flags"
+	},
+	"flag:mcp add --env": {
+		"route": "/extend/mcp/cli",
+		"anchor": "flags"
+	},
+	"flag:mcp add --header": {
+		"route": "/extend/mcp/cli",
+		"anchor": "flags"
+	},
+	"flag:mcp add --scope": {
+		"route": "/extend/mcp/cli",
+		"anchor": "flags"
+	},
+	"flag:mcp add --transport": {
+		"route": "/extend/mcp/cli",
+		"anchor": "flags"
+	},
+	"flag:mcp add --web": {
+		"route": "/extend/mcp/cli",
+		"anchor": "flags"
+	},
+	"flag:mcp add --xaa": {
+		"route": "/extend/mcp/cli",
+		"anchor": "flags"
+	},
 	"flag:mcp add-from-claude-desktop --scope": {
 		"route": "/extend/mcp/cli",
 		"anchor": "flags"
@@ -6698,6 +6750,30 @@
 	"flag:mcp serve --verbose": {
 		"route": "/extend/mcp/cli",
 		"anchor": "flags"
+	},
+	"flag:mcp xaa login --force": {
+		"route": "/extend/mcp/cli",
+		"anchor": "subcommands"
+	},
+	"flag:mcp xaa login --id-token": {
+		"route": "/extend/mcp/cli",
+		"anchor": "subcommands"
+	},
+	"flag:mcp xaa setup --callback-port": {
+		"route": "/extend/mcp/cli",
+		"anchor": "subcommands"
+	},
+	"flag:mcp xaa setup --client-id": {
+		"route": "/extend/mcp/cli",
+		"anchor": "subcommands"
+	},
+	"flag:mcp xaa setup --client-secret": {
+		"route": "/extend/mcp/cli",
+		"anchor": "subcommands"
+	},
+	"flag:mcp xaa setup --issuer": {
+		"route": "/extend/mcp/cli",
+		"anchor": "subcommands"
 	},
 	"flag:plugin configure --cowork": {
 		"route": "/extend/plugins/cli",
@@ -6999,6 +7075,14 @@
 		"route": "/extend/plugins/cli",
 		"anchor": "subcommands"
 	},
+	"flag:plugin restore-set-aside --cowork": {
+		"route": "/extend/plugins/cli",
+		"anchor": "subcommands"
+	},
+	"flag:plugin restore-set-aside --discard": {
+		"route": "/extend/plugins/cli",
+		"anchor": "subcommands"
+	},
 	"flag:plugin tag --dry-run": {
 		"route": "/extend/plugins/cli",
 		"anchor": "subcommands"
@@ -7095,9 +7179,377 @@
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
 	},
+	"flag:remote-control --allow-unattended-tool-calls": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --capacity": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --chrome": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --continue": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --create-session-in-dir": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --debug": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --debug-file": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --enable-live-preview": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --help": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --name": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --no-sandbox": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --permission-mode": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --preview-port": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --remote-control-session-name-prefix": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --sandbox": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --session-id": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --settings": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --spawn": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:remote-control --verbose": {
+		"route": "/configure/cli/remote-control",
+		"anchor": "options"
+	},
+	"flag:respawn --all": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "commands"
+	},
+	"flag:rm --discard-unpushed": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "commands"
+	},
+	"flag:rm --force-remove-worktree": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "commands"
+	},
+	"flag:rm --help": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "commands"
+	},
 	"flag:sandbox uninstall --json": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
+	},
+	"flag:self-hosted-runner --agent-proxy-url": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "connection-options"
+	},
+	"flag:self-hosted-runner --api-url": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "connection-options"
+	},
+	"flag:self-hosted-runner --base-dir": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --capacity": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --checkout-hook-timeout-min": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --client-label": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "connection-options"
+	},
+	"flag:self-hosted-runner --configure-git": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --confine-repo-settings": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --debug-token-dir": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "per-session-watchdog-options"
+	},
+	"flag:self-hosted-runner --defer-shutdown-max-min": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "lifecycle-options"
+	},
+	"flag:self-hosted-runner --diff-finds-nested-repository": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --drain-grace-sec": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "lifecycle-options"
+	},
+	"flag:self-hosted-runner --drain-marker-file": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --drain-wait-bg-tasks-sec": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --drain-wait-sec": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --environment-secret-file": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "connection-options"
+	},
+	"flag:self-hosted-runner --exec-path": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --exit-if-unused-min": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "lifecycle-options"
+	},
+	"flag:self-hosted-runner --git-host-rewrite": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --git-ssh-rewrite": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --health-port": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --help": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "per-session-watchdog-options"
+	},
+	"flag:self-hosted-runner --hold-idle-file": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "per-session-watchdog-options"
+	},
+	"flag:self-hosted-runner --hooks-dir": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --host-config-snapshot": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --kill-session-after-min": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "per-session-watchdog-options"
+	},
+	"flag:self-hosted-runner --lock-to-account": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "connection-options"
+	},
+	"flag:self-hosted-runner --log-file": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --log-level": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --max-hold-min": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "per-session-watchdog-options"
+	},
+	"flag:self-hosted-runner --pool-secret-file": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "connection-options"
+	},
+	"flag:self-hosted-runner --post-session-hook-timeout-sec": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --proxy-authorization-command": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "connection-options"
+	},
+	"flag:self-hosted-runner --proxy-authorization-file": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "connection-options"
+	},
+	"flag:self-hosted-runner --push-outcome-on-release": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --release-idle-session-min": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "per-session-watchdog-options"
+	},
+	"flag:self-hosted-runner --remove-session-state": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --retire-at": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "lifecycle-options"
+	},
+	"flag:self-hosted-runner --server-auto-mode-lists": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --session-stop-grace-sec": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --sigkill-timeout-sec": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --startup-timeout-min": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "per-session-watchdog-options"
+	},
+	"flag:self-hosted-runner --trust-workspace": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --use-anthropic-git-proxy": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner decode-token --api-url": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "decode-token"
+	},
+	"flag:self-hosted-runner decode-token --header": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "decode-token"
+	},
+	"flag:self-hosted-runner decode-token --help": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "decode-token"
+	},
+	"flag:self-hosted-runner decode-token --no-check-expiry": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "decode-token"
+	},
+	"flag:self-hosted-runner decode-token --no-verify": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "decode-token"
+	},
+	"flag:self-hosted-runner decode-token --verify": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "decode-token"
+	},
+	"flag:self-hosted-runner orchestrator --agent-proxy-url": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --api-url": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --debug-dir": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --environment-secret-file": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --expected-spawn-seconds": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --health-port": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --help": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --hook-concurrency": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --hook-timeout": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --hooks-dir": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --log-level": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --min-idle": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --pool-secret-file": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --scm-connector-ca-file": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --scm-connector-host": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --scm-connector-host-rewrite": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --scm-connector-id": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --scm-connector-provider": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --shutdown-drain-sec": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
 	},
 	"flag:ultrareview --json": {
 		"route": "/configure/cli/subcommands",
@@ -7130,30 +7582,6 @@
 	"flag:ultrareview --trust-workspace": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
-	},
-	"flag:xaa login --force": {
-		"route": "/extend/mcp/cli",
-		"anchor": "subcommands"
-	},
-	"flag:xaa login --id-token": {
-		"route": "/extend/mcp/cli",
-		"anchor": "subcommands"
-	},
-	"flag:xaa setup --callback-port": {
-		"route": "/extend/mcp/cli",
-		"anchor": "subcommands"
-	},
-	"flag:xaa setup --client-id": {
-		"route": "/extend/mcp/cli",
-		"anchor": "subcommands"
-	},
-	"flag:xaa setup --client-secret": {
-		"route": "/extend/mcp/cli",
-		"anchor": "subcommands"
-	},
-	"flag:xaa setup --issuer": {
-		"route": "/extend/mcp/cli",
-		"anchor": "subcommands"
 	},
 	"keybinding:abovePrompt:focus": {
 		"route": "/configure/keybindings/default-keys",
@@ -8087,10 +8515,6 @@
 		"route": "/extend/skills-and-commands/bundled-skills",
 		"anchor": "skills"
 	},
-	"subcommand:add": {
-		"route": "/extend/mcp/cli",
-		"anchor": "subcommands"
-	},
 	"subcommand:agents": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
@@ -8135,6 +8559,10 @@
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
 	},
+	"subcommand:daemon": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "daemon-subcommands"
+	},
 	"subcommand:doctor": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
@@ -8160,6 +8588,10 @@
 		"anchor": "commands"
 	},
 	"subcommand:mcp": {
+		"route": "/extend/mcp/cli",
+		"anchor": "subcommands"
+	},
+	"subcommand:mcp add": {
 		"route": "/extend/mcp/cli",
 		"anchor": "subcommands"
 	},
@@ -8196,6 +8628,26 @@
 		"anchor": "subcommands"
 	},
 	"subcommand:mcp serve": {
+		"route": "/extend/mcp/cli",
+		"anchor": "subcommands"
+	},
+	"subcommand:mcp xaa": {
+		"route": "/extend/mcp/cli",
+		"anchor": "subcommands"
+	},
+	"subcommand:mcp xaa clear": {
+		"route": "/extend/mcp/cli",
+		"anchor": "subcommands"
+	},
+	"subcommand:mcp xaa login": {
+		"route": "/extend/mcp/cli",
+		"anchor": "subcommands"
+	},
+	"subcommand:mcp xaa setup": {
+		"route": "/extend/mcp/cli",
+		"anchor": "subcommands"
+	},
+	"subcommand:mcp xaa show": {
 		"route": "/extend/mcp/cli",
 		"anchor": "subcommands"
 	},
@@ -8263,6 +8715,10 @@
 		"route": "/extend/plugins/cli",
 		"anchor": "subcommands"
 	},
+	"subcommand:plugin restore-set-aside": {
+		"route": "/extend/plugins/cli",
+		"anchor": "subcommands"
+	},
 	"subcommand:plugin tag": {
 		"route": "/extend/plugins/cli",
 		"anchor": "subcommands"
@@ -8295,6 +8751,14 @@
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
 	},
+	"subcommand:respawn": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "commands"
+	},
+	"subcommand:rm": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "commands"
+	},
 	"subcommand:sandbox": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
@@ -8311,6 +8775,26 @@
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
 	},
+	"subcommand:self-hosted-runner": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "commands"
+	},
+	"subcommand:self-hosted-runner decode-token": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "decode-token"
+	},
+	"subcommand:self-hosted-runner doctor": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "setup-and-doctor"
+	},
+	"subcommand:self-hosted-runner orchestrator": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"subcommand:self-hosted-runner setup": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "setup-and-doctor"
+	},
 	"subcommand:setup-token": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
@@ -8322,26 +8806,6 @@
 	"subcommand:update": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
-	},
-	"subcommand:xaa": {
-		"route": "/extend/mcp/cli",
-		"anchor": "subcommands"
-	},
-	"subcommand:xaa clear": {
-		"route": "/extend/mcp/cli",
-		"anchor": "subcommands"
-	},
-	"subcommand:xaa login": {
-		"route": "/extend/mcp/cli",
-		"anchor": "subcommands"
-	},
-	"subcommand:xaa setup": {
-		"route": "/extend/mcp/cli",
-		"anchor": "subcommands"
-	},
-	"subcommand:xaa show": {
-		"route": "/extend/mcp/cli",
-		"anchor": "subcommands"
 	},
 	"tool:ExitPlanMode": {
 		"route": "/reference/tools/agents-and-tasks",
