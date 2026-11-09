@@ -138,15 +138,44 @@ const reportSchemas = async (
 	return Object.fromEntries(entries);
 };
 
+/**
+ * The generators of `schemas/`, in order. `code.ts` reads the probes of `from`, because the probes of the new
+ * version run after this step: with none, it would drop every `x-observed` mark and bury the code changes.
+ */
+export const schemaGenerators = (bin: string, from: string): string[][] => [
+	[bunPath, "tools/schemas/generate.ts", "--bin", bin],
+	[
+		bunPath,
+		"tools/schemas/code.ts",
+		"--bin",
+		bin,
+		"--captures",
+		versionDir(from),
+	],
+	// The Mod API type file: a text diff against git HEAD, kept beside the schema diff.
+	[bunPath, "tools/schemas/types.ts", "--bin", bin],
+];
+
+/** Runs each command after the last one exits 0, because code.ts reads the stream-json schema generate.ts writes. */
+const runInOrder = async ([argv, ...rest]: string[][]): Promise<number> => {
+	if (argv === undefined) {
+		return 0;
+	}
+	const code = await runInherit("release:schemas", argv);
+	return code === 0 ? runInOrder(rest) : code;
+};
+
 export const runSchemas = async (ctx: Ctx): Promise<number> => {
 	const bin = await needBinary(ctx.to);
-	const argv = [bunPath, "tools/schemas/generate.ts", "--bin", bin];
+	const scripts = schemaGenerators(bin, ctx.from);
 	if (CLAUDE_CODE_VERSION !== ctx.to) {
 		console.warn(
 			`warning: the generator stamps src/version.ts (${CLAUDE_CODE_VERSION}) into the schemas, not --to ${ctx.to}. Bump src/version.ts before committing them.`,
 		);
 	}
-	console.info(`release:schemas -> ${argv.slice(1).join(" ")}`);
+	for (const argv of scripts) {
+		console.info(`release:schemas -> ${argv.slice(1).join(" ")}`);
+	}
 	if (ctx.dry) {
 		return 0;
 	}
@@ -157,19 +186,9 @@ export const runSchemas = async (ctx: Ctx): Promise<number> => {
 			files.map(async (n) => [n, await gitHead(`schemas/${n}`)] as const),
 		),
 	);
-	const code = await runInherit("release:schemas", argv);
+	const code = await runInOrder(scripts);
 	if (code !== 0) {
 		return code;
-	}
-	// The Mod API type file: a text diff against git HEAD, kept beside the schema diff.
-	const typesCode = await runInherit("release:schemas", [
-		bunPath,
-		"tools/schemas/types.ts",
-		"--bin",
-		bin,
-	]);
-	if (typesCode !== 0) {
-		return typesCode;
 	}
 	const typesDiff = await gitTypesDiff();
 	await Bun.write(join(versionDir(ctx.to), "types.diff"), typesDiff);

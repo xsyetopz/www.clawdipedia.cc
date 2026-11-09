@@ -56,8 +56,10 @@ Steps 1 to 8 are unattended and safe in a fresh session. Steps 9 and 10 need the
 2. **Hold the version.** No command. Keep `src/version.ts` at the old version until step 12.
 
 3. **Schemas.** `bun run release:schemas`, then `bun run schemas:check`.
-   - Regenerates `schemas/*.json` in the working tree.
-     Writes `captures/<to>/schemas-diff.json` (git HEAD against the new files).
+   - Regenerates `schemas/*.json` in the working tree: the zod schemas (`generate.ts`), the code-derived schemas
+     (`code.ts`: status line, transcript, OpenTelemetry, frontmatter, `~/.claude.json`), and `claude-code.d.ts`.
+     `code.ts` reads the probes of `<from>`, so `x-observed` marks stay and the diff shows code changes only.
+     Writes `captures/<to>/schemas-diff.json` (git HEAD against the new files) and `types.diff`.
    - To refresh the `x-observed-type` notes first, run `bun run schemas:observe` (add `-- --user` to also read your own `~/.claude` files, types only).
      It rewrites `tools/schemas/observed/`.
    - User: no.
