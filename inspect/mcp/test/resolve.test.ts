@@ -101,6 +101,19 @@ describe("names", () => {
 			spreadKeys("function f(){return{a:1}}f().then((v)=>g({...v}))", "v"),
 		).toEqual(["a"]);
 	});
+	test("`o.key` of an object that cannot be followed is what the program assigns to `.key`", () => {
+		const src = "function g(s){h({...s.cutErr})}k(g)";
+		expect(
+			spreadKeys(src, "s.cutErr", {
+				"b.js": "let o={};if(o.cutErr==null)o.cutErr={a:1,...{b:2}};",
+			}),
+		).toEqual(["a", "b"]);
+		expect(
+			spreadKeys(src, "s.cutErr", {
+				"b.js": "let o={};o.cutErr={a:1};p.cutErr=q();",
+			}),
+		).toBeUndefined();
+	});
 });
 
 describe("calls", () => {

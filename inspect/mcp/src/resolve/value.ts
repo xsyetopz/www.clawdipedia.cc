@@ -25,9 +25,11 @@ import {
 	unwrapped,
 } from "./tables.ts";
 import { type Entry, type Env, mergeEntries, type Val } from "./types.ts";
+import { propertyWrites } from "./writes.ts";
 
 export abstract class ValueResolver extends HeldEntries {
 	readonly #names = new Map<Node, Entry[] | undefined>();
+	readonly #writes = new Map<string, Entry[] | undefined>();
 
 	abstract param(
 		m: Module,
@@ -206,7 +208,33 @@ export abstract class ValueResolver extends HeldEntries {
 			const e = got?.find((x) => "key" in x && x.key === k);
 			got = e && "key" in e && e.val.k === "obj" ? e.val.e : undefined;
 		}
-		return got;
+		const last = p.path.at(-1);
+		return (
+			got ?? (last === undefined ? undefined : this.#assigned(m, last, depth))
+		);
+	}
+
+	/**
+	 * `o.key` whose object cannot be followed (a parameter of a function called with state, say): the values
+	 * of every `x.key=value` in the program, because minified code keeps property names. One write that does
+	 * not resolve makes the whole read unknown, so a common name with unrelated writes stays unknown.
+	 */
+	#assigned(m: Module, key: string, depth: number): Entry[] | undefined {
+		if (this.#writes.has(key)) {
+			return this.#writes.get(key);
+		}
+		this.#writes.set(key, undefined);
+		const lists: Entry[][] = [];
+		for (const w of propertyWrites(m, key)) {
+			const got = this.expr(w.mod, w.value, undefined, depth + 1);
+			if (!got) {
+				return undefined;
+			}
+			lists.push(got);
+		}
+		const out = lists.length > 0 ? mergeEntries(lists, this.ty) : undefined;
+		this.#writes.set(key, out);
+		return out;
 	}
 
 	/**
