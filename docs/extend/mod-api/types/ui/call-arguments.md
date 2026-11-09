@@ -67,9 +67,9 @@ What `$.ui.notify` resolves to and what the `{ value }` of a `ui.notify` hook ho
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `isSent` | <Documented /> | True: the notification channel of the person wrote it to their terminal, as its notification sequence, its bell, or both. | Type: `true`. A terminal does not report back. One that drops the sequence, or a system that mutes its banners, still reads true. |
-| `channel` | <Documented /> | Which channel sent it, spelt as the `preferredNotifChannel` setting spells it. Under `auto`, it is the one that their terminal resolved to. | Type: `'iterm2' \| 'iterm2_with_bell' \| 'kitty' \| 'ghostty' \| 'terminal_bell'`. `terminal_bell` rings and displays neither the text nor the title. |
+| `channel` | <Documented /> | Which channel sent it, spelt as the `preferredNotifChannel` setting spells it. Under `auto`, it is the one that their terminal resolved to. | Type: `'iterm2' \| 'iterm2_with_bell' \| 'kitty' \| 'ghostty' \| 'terminal_bell' \| 'client'`. `terminal_bell` rings and displays neither the text nor the title. Since `2.1.321`, `client` means a host that raises notifications was handed it to raise, and it does not report back. A terminal sends the text as given. A host gets it cleaned and cut to 1,000 characters. With no terminal, the `Notification` hooks run, then such a host is handed it (`captures/2.1.321/types.diff`). |
 | `isSent` | <Documented /> | False: no channel sent it. | Type: `false`. |
-| `reason` | <Documented /> | Why not. It is a closed set: `disabled`, `no-channel`, `no-surface` or `refused`. A hook above says `refused` when it answers without sending. | Type: `'disabled' \| 'no-channel' \| 'no-surface' \| 'refused'`. `disabled` means `notifications_disabled` is set. `no-channel` means no terminal that notifies. |
+| `reason` | <Documented /> | Why not. It is a closed set: `disabled`, `no-channel`, `no-surface` or `refused`. A hook above says `refused` when it answers without sending. | Type: `'disabled' \| 'no-channel' \| 'no-surface' \| 'refused'`. `disabled` means `notifications_disabled` is set. `no-channel` means no terminal that notifies. Since `2.1.321`, `no-surface` means no terminal and no host that raises notifications (a `-p` run, the SDK, a cloud session), no session bound yet, the session is exiting, or the mod unloaded before the notification went out. |
 
 ### `UiOpenResult`
 
@@ -180,7 +180,7 @@ The cell that the pointer was over when the wheel of the person raised `ui.scrol
 
 ### `UiScrollResult`
 
-What a `ui.scroll` hook returns, what `next(e)` resolves to, and what `$.ui.scroll` hands back: `{}` once the window moved, or why it did not. Used by `$.ui.scroll`, `ui.scroll`.
+What a `ui.scroll` hook returns, what `next(e)` resolves to, and what `$.ui.scroll` hands back: `{}` once the window moved, or why it did not. Used by `$.ui.scroll`, `ui.scroll`. Since `2.1.321`, `{}` does not say the person saw the move: a band folded away shows nothing, and the closed Mods sheet of a mobile app shows nothing and keeps nothing (`captures/2.1.321/types.diff`).
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |

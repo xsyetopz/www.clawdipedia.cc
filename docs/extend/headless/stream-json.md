@@ -81,6 +81,8 @@ Only the program shows these. They can change without notice.
 | `system` / `turn_handoff_available` | <Undocumented /> | Sent once by a cloud worker that accepts the `turn_handoff` control request. It carries what the worker wrote to `external_metadata.turn_handoff`. Since `2.1.311` it can have `requires_rewind_request_id` (see [Fields New in `2.1.311`](#fields-new-in-21311)). |
 | `system` / `ui_invalidate` | <Undocumented /> | No description in the program schema. |
 | `system` / `ui_log` | <Undocumented /> | A plugin called `$.ui.log(text)`, and the screen adds a dim notice under the name of the plugin. |
+| `system` / `ui_notify` | <Undocumented /> | New in `2.1.321`. A plugin called `$.ui.notify(text)`, and the client raises a notification under the name of the plugin. The line has `plugin`, `source` (`name@marketplace`), `title`, `text`, and `rewritten`. It can have `key`, `delay_ms`, `at`, and `until_back`. Source: the program (`chunk-sspw8v4n.js:513591`, `2.1.321`). |
+| `system` / `ui_notify_cancel` | <Undocumented /> | New in `2.1.321`. A plugin called `$.ui.cancelNotify(key)`, or the engine removed the plugin. The client removes the notification with this `source` and `key`. Source: the program (`chunk-sspw8v4n.js:514400`, `2.1.321`). |
 | `system` / `ui_toast` | <Undocumented /> | A plugin called `$.ui.toast(text)`, and the screen shows a short note under the prompt. |
 | `system` / `ui_status` | <Undocumented /> | A plugin called `$.ui.status(text)`, and the screen pins a line under the prompt. |
 | `system` / `ui_scroll` | <Undocumented /> | A plugin scrolled a site that a remote screen draws. |

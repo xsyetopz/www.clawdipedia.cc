@@ -43,7 +43,7 @@ Claude Code fills only names in `allowedEnvVars` into headers. Other references 
 | --- | --- | --- | --- |
 | `command` | <Documented /> | Runs a shell command or an executable. Input on `stdin`. Result by exit code, `stdout`, and `stderr`. | All 33 events. |
 | `http` | <Documented /> | Sends the input as JSON in a POST to a URL. The result is the response body, and needs a 2xx status. | 31 events. Not `SessionStart` and not `Setup`. |
-| `mcp_tool` | <Documented /> | Calls a tool on a configured MCP server. Claude Code reads the text result like `stdout`. A result with `isError: true` is a non-blocking error. | 33 events. Claude Code skips it on `Setup`, and on `SessionStart` when Claude Code starts. |
+| `mcp_tool` | <Documented /> | Calls a tool on a configured MCP server. Claude Code reads the text result like `stdout`. A result with `isError: true` is a non-blocking error. A `PreToolUse` hook on a stdio or HTTP MCP server whose answer is over 16 MiB now makes Claude Code refuse the tool call, not skip the hook ([2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321)). The program has an MCP answer limit of `16777216` bytes (`chunk-fjwgd7a4.js:1108`), and the hook error path reports a message from the server that was too large (`chunk-ne1755n5.js:3692487`). | 33 events. Claude Code skips it on `Setup`, and on `SessionStart` when Claude Code starts. |
 | `prompt` | <Documented /> | One model call that returns `ok`. | 12 events, plus `PermissionRequest`. |
 | `agent` | <Documented /> <Experimental /> | A subagent that checks a condition. Up to 50 turns. Experimental, and the docs say it may change. | 12 events. Not `PermissionRequest`. |
 | `callback` | <Undocumented /> | A function that an SDK host or a mod registers. | Events that run device hooks. It is not a config key. |
@@ -157,7 +157,7 @@ The limits do not cover `command`, `http`, or `mcp_tool` hooks.
 | 12 overdue | <Documented /> | At most 12 more run when they waited longer than the timeout of their event. | These hooks use a second count of 12. It is separate from the first. |
 | 12 per event | <Undocumented /> | When one event starts several of these hooks, at most 12 start together. | The program also uses this number to size the time budget of the event. |
 
-Source: the program (`chunk-r5cyd28m.js`, the `model hooks` and `overdue model hooks` counts).
+Source: the program (`chunk-ne1755n5.js:3658243` in `2.1.321`, the constants 12, 24, and 12 and the `model hooks` and `overdue model hooks` counts; older versions put them in `chunk-r5cyd28m.js`).
 We did not trace that a subagent shares the session host of its parent.
 
 ## Related Pages

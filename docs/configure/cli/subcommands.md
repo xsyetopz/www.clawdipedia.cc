@@ -43,7 +43,7 @@ Source: the text of `claude <command> --help` in `2.1.314`.
 | `claude mcp ...` | <Documented /> | Manages MCP servers (see [MCP](../../extend/mcp/cli.md)). |
 | `claude plugin ...` (alias `plugins`) | <Documented /> | Manages plugins (see [Plugins](../../extend/plugins/cli.md)). |
 | `claude plugin test [dir]` | <Documented /> | Runs the tests of a mod. |
-| `claude purge [path]` | <Documented /> <Caution note="Deletes the state of a project" /> | Deletes the state of a project, with `--all`, `--dry-run`, `-i/--interactive` (asks before each item), and `-y/--yes`. Since `2.1.311`, the purge plan ends with "Purging deletes data only on this computer, not anything stored by Anthropic" (`chunk-p3tkb5qf.js:1432`). |
+| `claude purge [path]` | <Documented /> <Caution note="Deletes the state of a project" /> | Deletes the state of a project, with `--all`, `--dry-run`, `-i/--interactive` (asks before each item), and `-y/--yes`. Since `2.1.311`, the purge plan ends with "Purging deletes data only on this computer, not anything stored by Anthropic" (`chunk-p3tkb5qf.js:1432` in `2.1.311`; the same text is at `chunk-dq6ghgb6.js:38178` in `2.1.321`, with the same options in `claude purge --help`). |
 | `claude remote-control` (alias `rc`) | <Documented /> | Lets you control local sessions from `claude.ai` or the mobile app. See [Remote Control Server](remote-control.md). |
 | `claude ultrareview [target]` | <Documented /> | Starts a cloud review with many agents, with `--json`, `--post`, `--no-post` (the default), `--timeout`, and `--trust-workspace`. Since `2.1.309` it needs a trusted folder. It asks on a terminal. Without a terminal it may refuse, so scripts pass `--trust-workspace` after the target, or set `CLAUDE_CODE_DISABLE_ULTRAREVIEW_TRUST_CHECK=1`. |
 | `claude self-hosted-runner` | <Documented /> | Runs cloud sessions on your machine, and the root help does not list it. Subcommands: `orchestrator`, `setup`, `doctor`, and `decode-token`. See [Self-Hosted Runner](self-hosted-runner.md) for every option and error. |
@@ -76,7 +76,7 @@ In eval mode, `--json`, `--timeout`, `--post`, `--no-post`, and `--trust-workspa
 ### `daemon` Subcommands
 
 `claude daemon --help` lists `run [json-path]`, `status`, `logs`, `uninstall`, and `stop` (with `--any` and `--keep-workers`), and the options `--json-path <p>` (default `~/.claude/daemon.json`) and `--log-file <p>` (default `~/.claude/daemon.log`). The help text says: "Service install is disabled in this version — the daemon runs on demand and exits when the last client disconnects."
-Source: the help text in `2.1.321` and the argument parser of the program (`chunk-k0rez7a5.js`, near offset 75628).
+Source: the program, in its help text in `2.1.321` and its argument parser (`chunk-k0rez7a5.js`, near offset 75628).
 
 - With no subcommand, the daemon opens the hub on a terminal, and runs in the foreground (`run`) when stdin is not a terminal.
 - `log` is an alias of `logs`. Both options also take the `--option=value` form.
@@ -165,6 +165,16 @@ Result (pty cases `cli319.gateway-login-notice.set` and `.unset`): a stand-in ga
 
 Hypothesis: `admin.blocked_message` is appended to the spend-limit error. Prediction: `429` with `spend limit reached · <message>`; without the option, `spend limit reached`.
 Result (`blocked-message-set`, `blocked-message-unset`): with an organization limit of `0`, the request got `429`, error type `billing_error`, and no call reached the upstream. The message was `spend limit reached · request an increase at https://go.probe.invalid/claude-limits` with the option and `spend limit reached` without it. A limit of `0` has no reset date, so the run does not show the `resets Dec 1` form.
+
+### `gateway` Policy Mode and Upstream Endpoint Changes
+
+Source: the [2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321) and the program.
+
+| Item | Status | What it does |
+| --- | --- | --- |
+| `managed.policy_mode: layered` | <Documented /> | Every managed policy that matches a developer applies, each merged over the ones listed below it. Managed MCP servers now add up over every matching policy, and a catch-all policy (`match: {}`) counts as one. A gateway that is on `layered` serves more MCP servers after the upgrade. The program warns when a catch-all is not the last entry, because the policies after it never match (`chunk-dbyxjq34.js:1425771`). |
+| `base_url` on an upstream, and `ANTHROPIC_BEDROCK_BASE_URL`, `ANTHROPIC_VERTEX_BASE_URL`, `ANTHROPIC_FOUNDRY_BASE_URL` | <Documented /> | The gateway does not read these variables from its own environment. Model requests to each `bedrock`, `vertex`, or `foundry` upstream that has no `base_url` go to the provider's default endpoint. At start, the gateway warns that it does not read the variable, and says to copy the URL into `base_url` on each such upstream, or remove the variable (`chunk-dbyxjq34.js:1563405`). |
+| Spend limit reset time, gateway address in errors, sign-in limit messages, and the `desktop` setting | <Undocumented /> | The notes say that the spend limit error shows the reset in your local time, such as `resets 4pm (America/Los_Angeles)`. Gateway error messages show the gateway address without a user name or password. The sign-in limit messages in Claude Code and on the `/device` page no longer name gateway settings, and the gateway's own log still does. A `desktop` setting with a field newer than the gateway now gives a warning, and the gateway serves it. I found no program text for these four items, so they rest on the notes alone. |
 
 ### `claude auth status` Sign-In Date
 

@@ -69,6 +69,7 @@ Source: the program text `tool name case-sensitive, non-empty content with no le
 | `mcp__server`, `mcp__server__tool` | <Undocumented /> | All tools of one MCP server, or one tool. | The program pattern is `^mcp__[\w-]+(?:__(?:[\w.-]+\|\*))?$`. |
 | `Skill(name)` | <Documented /> | One skill. | The program text is `Skill execution blocked by permission rules`. |
 | `Bash` (no content) | <Documented /> | The whole tool. | In `deny`, a bare tool name hides the tool from the model. |
+| `cp` and `mv` in a `Bash` command | <Documented /> | The path checks for `cp`, `mv`, `rm`, `rmdir`, and `tee`. | Since `2.1.321`, a command name spelled with a path, such as `/bin/cp`, gets the same path checks as `cp`. The program cuts the command name to the text after the last `/` or `\` and tests it against that list (`chunk-ne1755n5.js:1200370`, used at `:1196787` and `:1197137`). Also since `2.1.321`, deny rules and the protected-file prompt apply to the file that `cp` or `mv` writes when the last argument is a directory ([2.1.321 release](https://github.com/anthropics/claude-code/releases/tag/v2.1.321)). For `cp` and `mv`, the program counts every argument but the last as a path to read (`chunk-ne1755n5.js:1187460`). The page did not read the code that builds the written file for a directory target. |
 
 :::tip
 Explicit `deny` and `ask` rules apply before `allow` rules.

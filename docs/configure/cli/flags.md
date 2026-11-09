@@ -167,7 +167,7 @@ Flags that add agents, plugins, MCP servers, folders, and files.
 | `--agents` `<json-or-file>` | <Documented /> | ✅ | Defines custom agents with JSON or a file. |
 | `--mcp-config <configs...>` | <Documented /> | ✅ | Loads MCP servers from JSON files or strings. |
 | `--strict-mcp-config` | <Documented /> | ✅ | Uses only the MCP servers from `--mcp-config`. |
-| `--plugin-dir <path>` | <Documented /> | ✅ | Loads a plugin from a folder or a `.zip` file for this session only. |
+| `--plugin-dir <path>` | <Documented /> | ✅ | Loads a plugin from a folder or a `.zip` file for this session only. `--plugin-dir .` and `--plugin-dir ./builtin` no longer write type files for the built-in plugins into a `builtin` folder (fixed in `2.1.321`, per the [2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321)). |
 | `--plugin-url` `<url>` | <Documented /> | ✅ | Fetches a plugin `.zip` file from a URL for this session only. |
 | `--plugin-dir-no-mcp` `<path>` | <Undocumented /> | ❌ | Works like `--plugin-dir` but does not read the `.mcp.json` of the plugin. |
 | `--disable-slash-commands` | <Documented /> | ✅ | Turns off all skills and commands. |

@@ -101,11 +101,6 @@
 		"kind": "setting",
 		"probes": []
 	},
-	"docs/configure/models-and-providers/model-catalog.md#aliases:9f9af634": {
-		"kind": "static",
-		"probes": [],
-		"note": "release history: when it started; recheck only if the feature is removed"
-	},
 	"docs/configure/output-styles.md#the-outputstyle-setting-and-switching:6e63c269": {
 		"kind": "static",
 		"probes": [],
@@ -297,16 +292,6 @@
 		"probes": [],
 		"note": "compares the published type file with the official mods docs; no probe checks it"
 	},
-	"docs/extend/mod-api/calls/tool-command-config.md#engine-events:1091aee3": {
-		"kind": "manual",
-		"probes": [],
-		"note": "program behaviour; no probe checks it yet"
-	},
-	"docs/extend/mod-api/calls/turn-prompt.md#engine-events:5a8a6a40": {
-		"kind": "manual",
-		"probes": [],
-		"note": "program behaviour; no probe checks it yet"
-	},
 	"docs/extend/mod-api/types/infra/index.md#types-without-fields:9ff82136": {
 		"kind": "manual",
 		"probes": [],
@@ -326,21 +311,6 @@
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet; the decider code reads the same in 2.1.307, 2.1.308, and 2.1.309"
-	},
-	"docs/extend/mod-api/types/turn-prompt/index.md#example:c79d0a53": {
-		"kind": "manual",
-		"probes": [],
-		"note": "program behaviour; no probe checks it yet"
-	},
-	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectioninput:c79d0a53": {
-		"kind": "manual",
-		"probes": [],
-		"note": "program behaviour; no probe checks it yet"
-	},
-	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectioninput:5fcdbdfc": {
-		"kind": "manual",
-		"probes": [],
-		"note": "program behaviour; no probe checks it yet"
 	},
 	"docs/extend/mod-api/types/ui/element-props.md#imageprops:09ae9a1f": {
 		"kind": "manual",
@@ -529,11 +499,6 @@
 		"probes": [],
 		"note": "release history: when it started; recheck only if the feature is removed"
 	},
-	"docs/how-it-works/system-prompt.md#shared-sections:1a54cb12": {
-		"kind": "manual",
-		"probes": [],
-		"note": "program behaviour; no probe checks it yet"
-	},
 	"docs/reference/api/endpoints.md#request-headers:cdde4fd1": {
 		"kind": "static",
 		"probes": [],
@@ -563,6 +528,155 @@
 		"note": "release history: when it started; recheck only if the feature is removed"
 	},
 	"docs/reference/tools/shell-and-web.md#how-it-works:af1c8f0f": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/configure/permissions/rules.md#rule-syntax:3abd65f8": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/headless/index.md#errors:0ee1be46": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#events-raised-by-these-calls:812defcc": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/calls/model-audio-mcp.md#members:963cce0d": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/calls/tool-command-config.md#members:c06bc242": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/calls/tool-command-config.md#engine-events:3a98b3db": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/calls/tool-command-config.md#engine-events:19683544": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/calls/turn-prompt.md#engine-events:4a26583a": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/nouns-and-gates.md#built-in-mods:5adda9c6": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/infra/atoms-files-http.md#httpinit:7444a68a": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/infra/atoms-files-http.md#httpinit:81a47b18": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/infra/atoms-files-http.md#httpresponse:dc39aaee": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/infra/atoms-files-http.md#httpresponse:1ee88cb2": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/infra/atoms-files-http.md#httpresponse:658bec24": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/testing/mocks-mounts.md#mountedmembers:37b6ec66": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#tooldescriberesult:67364136": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectioninput:beccb490": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectioninput:78882f0f": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectionresult:020d0877": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/turn-prompt/index.md#example:737507f7": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/turn-prompt/suggest-skill-turn.md#skillpromptinput:b8a883e6": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/turn-prompt/suggest-skill-turn.md#turnstepinput:9fce5506": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/ui/call-arguments.md#uinotifyresult:4fbb0684": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/ui/call-arguments.md#uinotifyresult:1ecaa7bc": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/ui/call-arguments.md#uiscrollresult:7348b040": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#aboveprompt:2bb8d672": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/ui/ui.md#members:c909d5e8": {
+		"kind": "behaviour",
+		"probes": ["print.cli319.theme.engine"]
+	},
+	"docs/how-it-works/system-prompt.md#shared-sections:04141d55": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/reference/opentelemetry.md#events:ca85f00c": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/reference/tools/shell-and-web.md#how-it-works:dd208381": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
@@ -1212,21 +1326,6 @@
 		"kind": "behaviour",
 		"probes": ["print.hooks.posttooluse.glob", "print.hooks.posttooluse.grep"]
 	},
-	"docs/configure/cli/subcommands.md#commands:0c368a3a": {
-		"kind": "manual",
-		"probes": [],
-		"note": "purge plan text read in the program (2.1.311 chunk-p3tkb5qf.js:1432)"
-	},
-	"docs/configure/cli/subcommands.md#commands:e1a44892": {
-		"kind": "flag",
-		"probes": [],
-		"note": "runner flags --hold-idle-file and --max-hold-min, also in the release notes"
-	},
-	"docs/configure/cli/subcommands.md#self-hosted-runner-hold-flags:92ec7417": {
-		"kind": "flag",
-		"probes": [],
-		"note": "runner flags --hold-idle-file and --max-hold-min, help text read in the program (2.1.311 chunk-n23je8vg.js:11266)"
-	},
 	"docs/configure/models-and-providers/model-catalog.md#aliases:283669f9": {
 		"kind": "manual",
 		"probes": [],
@@ -1236,11 +1335,6 @@
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour (also in the release notes); the signed catalog needs a cloud provider login"
-	},
-	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:856cbc71": {
-		"kind": "manual",
-		"probes": [],
-		"note": "program behaviour (also in the release notes); ultrathink needs the interactive terminal and the Anthropic API"
 	},
 	"docs/how-it-works/context-and-compaction.md#kinds-of-compaction:de126544": {
 		"kind": "manual",
@@ -1747,10 +1841,6 @@
 		"kind": "behaviour",
 		"probes": ["print.cli319.theme.engine"]
 	},
-	"docs/extend/mod-api/ui/ui.md#members:eea22d9a": {
-		"kind": "behaviour",
-		"probes": ["print.cli319.theme.engine"]
-	},
 	"docs/extend/mod-api/ui/ui.md#members:d66be794": {
 		"kind": "behaviour",
 		"probes": ["print.cli319.theme.engine"]
@@ -1775,5 +1865,150 @@
 			"print.api319.tool.propose-skills.trigger-chat",
 			"print.api319.tool.propose-skills.chat-only"
 		]
+	},
+	"docs/configure/cli/remote-control.md#options:b9b60d00": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/configure/cli/self-hosted-runner.md#per-session-watchdog-options:7b1a3f0b": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/configure/cli/subcommands.md#commands:386f73b1": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/configure/cli/remote-control.md#options:12535aed": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes only; no program text found"
+	},
+	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:e2b1496a": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/configure/models-and-providers/model-catalog.md#aliases:53b79262": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/configure/models-and-providers/model-catalog.md#aliases:9989868f": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/configure/models-and-providers/model-catalog.md#aliases:7f10cfb5": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/configure/settings/auth.md#errors:100a9b9e": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/extend/headless/stream-json.md#undocumented-types:b2a405ac": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/extend/headless/stream-json.md#undocumented-types:26943fe0": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#errors:a2855c24": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#errors:c90eaf7b": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/extend/mod-api/calls/testing.md#errors:064d22c3": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/extend/mod-api/types/ui/input-pane-render.md#notifyoptions:ebe344f8": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/extend/mod-api/types/ui/input-pane-render.md#notifyoptions:92a6c01c": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/extend/mod-api/types/ui/input-pane-render.md#notifyoptions:fb8c12f0": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/extend/mod-api/types/ui/input-pane-render.md#notifyoptions:ea4937c3": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/extend/mod-api/ui/ui-events.md#events-raised-by-ui-calls:96de9792": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/extend/mod-api/ui/ui-events.md#events-raised-by-ui-calls:66509ba0": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/extend/mod-api/ui/ui.md#members:4818e0d9": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/extend/plugins/cli.md#subcommands:d564ecff": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/extend/plugins/marketplace.md#errors:cecc700d": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/extend/plugins/marketplace.md#errors:20920b25": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/extend/skills-and-commands/index.md#skill-locations:c1c0a341": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/reference/tools/gated-and-other.md#errors:097935a0": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/reference/tools/gated-and-other.md#errors:1fa9ecf7": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/reference/tools/shell-and-web.md#errors:c7959e9a": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/reference/tools/shell-and-web.md#errors:94acea57": {
+		"kind": "manual",
+		"probes": [],
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	}
 }

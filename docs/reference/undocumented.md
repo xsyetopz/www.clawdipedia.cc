@@ -18,7 +18,7 @@ Items that the docs name but describe wrongly are in [Behaves Differently From t
 | Group | Count |
 | --- | --- |
 | [Settings Keys](#settings-keys) | 25 |
-| [Environment Variables](#environment-variables) | 1078 |
+| [Environment Variables](#environment-variables) | 1091 |
 | [CLI Flags and Subcommands](#cli-flags-and-subcommands) | 52 |
 | [Permissions](#permissions) | 121 |
 | [Hooks](#hooks) | 15 |
@@ -31,10 +31,10 @@ Items that the docs name but describe wrongly are in [Behaves Differently From t
 | [API Endpoints and Betas](#api-endpoints-and-betas) | 98 |
 | [System Prompt](#system-prompt) | 34 |
 | [Transcript and Sessions](#transcript-and-sessions) | 13 |
-| [Headless Protocol](#headless-protocol) | 193 |
+| [Headless Protocol](#headless-protocol) | 195 |
 | [Mod API](#mod-api) | 0 |
 | [Other](#other) | 108 |
-| Total | 1824 |
+| Total | 1839 |
 
 ## Settings Keys
 
@@ -74,26 +74,26 @@ Count: 25.
 
 There are too many to list one by one. Each page below holds a table, and every undocumented variable in it has the Undocumented badge. The pages sort variables by what they do.
 
-Count: 1078.
+Count: 1091.
 
 | Page | Undocumented Rows |
 | --- | --- |
-| [Agents and Teams](../configure/env-vars/agents-and-teams.md) | 55 |
-| [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) | 50 |
+| [Agents and Teams](../configure/env-vars/agents-and-teams.md) | 56 |
+| [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) | 52 |
 | [Bundled Libraries](../configure/env-vars/bundled-libraries.md) | 123 |
 | [Cloud Providers](../configure/env-vars/cloud-providers.md) | 31 |
 | [Context and Compaction](../configure/env-vars/context-and-compaction.md) | 31 |
 | [Features and Toggles](../configure/env-vars/features-and-toggles.md) | 58 |
 | [Models and Effort](../configure/env-vars/models-and-effort.md) | 33 |
 | [Network and Proxy](../configure/env-vars/network-and-proxy.md) | 31 |
-| [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) | 62 |
-| [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) | 147 |
+| [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) | 64 |
+| [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) | 151 |
 | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) | 28 |
-| [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) | 52 |
+| [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) | 53 |
 | [System and Third-Party](../configure/env-vars/system-and-third-party.md) | 195 |
 | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) | 83 |
-| [Tools and Bash](../configure/env-vars/tools-and-bash.md) | 55 |
-| [UI and Terminal](../configure/env-vars/ui-and-terminal.md) | 44 |
+| [Tools and Bash](../configure/env-vars/tools-and-bash.md) | 56 |
+| [UI and Terminal](../configure/env-vars/ui-and-terminal.md) | 46 |
 
 ## CLI Flags and Subcommands
 
@@ -544,12 +544,12 @@ Count: 13.
 
 Message types of `--output-format stream-json` and of the control protocol. Nearly every row is undocumented, so this page links to the two pages with counts.
 
-Count: 193.
+Count: 195.
 
 | Page | Undocumented Rows |
 | --- | --- |
 | [Control Protocol](../extend/headless/control-protocol.md) | 95 |
-| [Stream JSON Messages](../extend/headless/stream-json.md) | 98 |
+| [Stream JSON Messages](../extend/headless/stream-json.md) | 100 |
 
 ## Mod API
 

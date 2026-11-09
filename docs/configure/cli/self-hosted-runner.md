@@ -29,6 +29,7 @@ The command has its own parser. It does not use the parser of the root `claude` 
 - An unknown flag stops the runner with `unknown flag <flag>`. An empty argument stops it with `empty argument — a flag value may be unset (failed env/K8s substitution?)`. Any other word stops it with `unexpected argument '<word>' — this command takes no positional arguments`.
 - A flag wins over its variable. Times in variables are in milliseconds; the flags take seconds or minutes, as their names say.
 - Each parser error prints `error: <message>`, then `Run 'claude self-hosted-runner --help' for usage.`, and the runner exits with code 2. The `cli321` probe runs confirmed this.
+- An on-demand runner that the server refuses because it is not needed (the session ended or paused, or a work order was superseded) exits with code 0, not 1 ([2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321)). The program maps the refusal reasons `superseded`, `session_paused`, `queue_entry_gone`, `pool_moved`, and `standby_gone` to exit code 0. A work order that was already used (`already_registered`, `standby_already_redeemed`) and any other reason still exit with code 1 (`chunk-1zgjgb31.js:235932` to `236468`).
 
 ## Connection Options
 
@@ -98,7 +99,7 @@ The host config folder has no flag. Set `SELF_HOSTED_RUNNER_HOST_CONFIG_DIR`; `-
 
 ## Runner Errors
 
-Source: the parser (`chunk-1zgjgb31.js`, offsets 245200–255000). The `cli321` probe ran the cases with a probe name.
+Source: the program, in its parser (`chunk-1zgjgb31.js`, offsets 245200–255000). The `cli321` probe ran the cases with a probe name.
 
 | Message | When | Probe |
 | --- | --- | --- |
@@ -134,7 +135,7 @@ Source: the parser (`chunk-1zgjgb31.js`, offsets 245200–255000). The `cli321` 
 
 `claude self-hosted-runner orchestrator` polls the spawn-hints queue and runs the `spawn-runner` hook in `--hooks-dir` once for each hint. The hook must start the work and exit within `--hook-timeout`. Exit code `0` is success, `1` is a failure to retry, and `2` or more stops further tries. See [On-Demand Runners](https://code.claude.com/docs/en/self-hosted-environments-configuration#on-demand-runners) and [The Spawn-Runner Hook](https://code.claude.com/docs/en/self-hosted-environments-configuration#the-spawn-runner-hook).
 
-Source: the help text and the orchestrator parser (`chunk-pcy41rk0.js`, near offset 24075).
+Source: the program, in its help text and its orchestrator parser (`chunk-pcy41rk0.js`, near offset 24075).
 
 | Option | Status | What it does | Default |
 | --- | --- | --- | --- |

@@ -163,7 +163,7 @@ The names matter because of this. A `prompt.compose` hook sees all of them. A `p
 ### Shared Sections
 
 These come first. Claude Code uses either the short row or the full rows.
-From 2.1.302 to 2.1.307, no shared section (`lean_body`, `intro`, `tone`, `doing_tasks`, `memory_static`, and the others) fires `prompt.section`, so a `prompt.section` hook does not see them.
+From 2.1.302 to 2.1.321, no shared section (`lean_body`, `intro`, `tone`, `doing_tasks`, `memory_static`, and the others) fires `prompt.section`, so a `prompt.section` hook does not see them.
 Only a `prompt.compose` hook sees them.
 
 | Section | Status | When | Content |

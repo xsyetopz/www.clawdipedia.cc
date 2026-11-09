@@ -43,7 +43,7 @@ Review the changes under $ARGUMENTS and list the bugs you find.
 
 | Key | Status | What it does | Notes |
 | --- | --- | --- | --- |
-| `name` | <Documented /> | The command name. | Defaults to the folder name. At most 256 characters. Skills and plugin skills only, not command files. |
+| `name` | <Documented /> | The command name. | Defaults to the folder name. At most 256 characters. Skills and plugin skills only, not command files. Claude Code refuses a skill or command name with a Bamum letter, which some fonts draw as blank ([2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321)). The program's set of blank-looking characters holds `U+16910`, a Bamum letter (`chunk-6nmgrknh.js:5943`). I did not trace the call from the skill name check. |
 | `description` | <Documented /> | Tells Claude when to use the skill. | Numbers and booleans become strings. The listing cuts it at 1,536 characters. |
 | `when_to_use` | <Documented /> | More trigger text. | Claude Code adds it after `description`. Counts toward the 1,536 limit. The only documented key with an underscore. |
 | `argument-hint` | <Documented /> | An autocomplete hint. | Text, for example `[issue-number]`. |

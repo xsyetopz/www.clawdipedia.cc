@@ -203,6 +203,7 @@ The band directly above the prompt input, where surveys draw. The engine draws a
 | Item | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
 | `hasSurvey` | <Documented /> | True while a survey holds the band. A hook yields to it. | `boolean`. Read-only. |
+| `isCollapsed` | <Documented /> | True while the person has collapsed the band: a tree still returns, and nothing of it is on screen. False where the band cannot collapse. | `boolean`. Read-only. Since `2.1.321`. The program passes it in the props of `AbovePrompt` (`chunk-d3btef94.js:533503`). |
 | `isWorking` | <Documented /> | True while a model turn is running. | `boolean`. Read-only. |
 | `maxRows` | <Documented /> | Rows the band may take. In fullscreen, what remains of the bottom slot above the prompt. Otherwise the terminal's height. | `number`. Read-only. The slot has a cap of half the terminal's rows. A taller tree scrolls in a window of `scroll.bodyRows`. |
 | `bodyColumns` | <Documented /> | Cells the tree is laid out in. | `number`. Read-only. Size a table to this value, not to `viewport.columns`. |

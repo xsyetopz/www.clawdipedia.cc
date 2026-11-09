@@ -28,7 +28,7 @@ for (const use of response.serverToolUses ?? []) {
 ```
 
 :::note[Shared Sections Skip `prompt.section`]
-A `prompt.section` hook does not fire once per named section. From 2.1.302 to 2.1.307, the engine builds shared sections such as `lean_body` without a `prompt.section` call, so a hook does not see them.
+A `prompt.section` hook does not fire once per named section. From 2.1.302 to 2.1.321, the engine builds shared sections such as `lean_body` without a `prompt.section` call, so a hook does not see them.
 A `prompt.compose` hook does see them. See [System Prompt](../../../../how-it-works/system-prompt.md).
 :::
 

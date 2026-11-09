@@ -247,6 +247,14 @@ The release toolkit runs the case files in `tools/release/probes/` against `2.1.
 The `gateway.*` cases start a `postgres:17-alpine` container, so they need Docker. The first run pulls the image. Without Docker they stop with an error that names the install step.
 The live `ultrareview` steps were removed by the owner's decision, so this site has no run of `ultrareview` on a live account. Read the official [Ultrareview](https://code.claude.com/docs/en/ultrareview) page for that command.
 
+## Release Probes for 2.1.321
+
+The `cli321` group runs against `2.1.321` with the local stub and a fake key. It covers the subcommands that parse their own arguments. The `remote-control` cases carry a fake max login with an organization, the real base URL, and no API key. The sandbox proxy is a dead port, so no request leaves the machine. The captures are in `captures/2.1.321/print/`.
+
+| Layer | Group or Case | Status | What It Runs |
+| --- | --- | --- | --- |
+| Print | `cli321` | <Undocumented /> | `rc-*` runs `claude remote-control` with `--sandbox`, `--settings`, `--spawn`, `--capacity`, `--continue`, `--session-id`, `--allow-unattended-tool-calls`, `--enable-live-preview`, and `--preview-port`. `runner-*` runs `claude self-hosted-runner` and its `orchestrator` with bad or odd values. `daemon-*` runs `list`, `hub`, `install`, `start`, `restart`, `remote-control list`, and an unknown name. Each case records the lines the program printed. |
+
 ## Managed Folder Probe
 
 These runs used the real `2.1.306`, `2.1.307`, `2.1.308`, `2.1.309`, `2.1.310`, `2.1.311`, and `2.1.316` binaries on macOS with the stub, a fake key, and a temp home and config folder. The managed folder `/Library/Application Support/ClaudeCode` was made with `sudo` (owner `root:wheel`). It held `CLAUDE.md`, a rule, a skill, an output style, `managed-settings.json`, a `managed-settings.d/` drop-in, and `managed-mcp.json` with one stdio server. Each run also had a user server and a project `.mcp.json` server. A baseline ran without the folder. Runs used `-p --output-format stream-json`, plus `claude mcp list` and `claude mcp get`. Every row below was seen in the managed cases of `2.1.306`, and again in all 55 cases of `2.1.307`, of `2.1.309`, of `2.1.310`, of `2.1.311`, and of `2.1.316`: `mcp-run`, `mcp-list`, `mcp-get-managed`, `mcp-get-user`, `mcp-config-flag`, `outputstyle`, `skill-default`, `skill-disabled`, `claudemd-order`, `excludes-any-claude-md-user` and `-project`, `excludes-managed-abs-user` and `-project`, `excludes-managed-glob-user` and `-project`, `agent-mcp`, and `auto-mode-config`. The `NotebookEdit` deny is in `claudemd-order`. The only data that changed in `2.1.307`, `2.1.310`, `2.1.311`, and `2.1.316` is the order in which the baseline servers started, and no row depends on it.

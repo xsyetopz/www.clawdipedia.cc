@@ -145,7 +145,8 @@ Options of `$.http.fetch`. Object with fields `method?`, `headers?`, `body?`, `a
 | --- | --- | --- | --- |
 | `method` | <Documented /> | `GET` (default), `POST`, ... | Type: `string`. Optional. |
 | `headers` | <Documented /> | Request headers. | Type: `Record<string, string>`. Optional. |
-| `body` | <Documented /> | The request body, as text. | Type: `string`. Optional. |
+| `body` | <Documented /> | The request body, as text. Since `2.1.321`, bytes that are not UTF-8 go as `{ base64 }`, which only an engine request carries. | Type: `HttpBody`, which is `string \| { base64: string }`. Optional. |
+| `compress` | <Documented /> | Since `2.1.321`: what the engine does to the body beneath the hooks, on an engine request alone. `body` is the plain body. Delete this and the body leaves as written. Set this and the engine compresses it. For exact bytes, delete this and write them with your own `content-encoding` header. | Type: `HttpCompress`, which is `boolean \| 'gzip' \| 'deflate' \| 'br' \| 'zstd' \| { encoding, level?: number }`. Optional. Example: `next({ ...e, init: { ...e.init, compress: undefined } })` (`captures/2.1.321/types.diff`; the program rejects a plugin call with `a body of bytes and compress ride engine requests alone`). |
 | `auth` | <Documented /> | The handle that `$.session.authorize()` answered: the engine sets the credential header of the session itself, only for a first-party host. | Type: `string`. Optional. It rides https only. While `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set, a request that carries it is refused, whichever plugin asks. |
 | `socketPath` | <Documented /> | The absolute path of a Unix domain socket that the request goes over instead of TCP (near 100 B at most). There is one for each session, in a private directory. | Type: `string`. Optional. A Unix socket to use instead of TCP. The URL still gives the path, query, and Host. No proxy. No relative path. |
 
@@ -158,7 +159,9 @@ What `$.http.fetch` resolves with. Object with fields `status`, `ok`, `headers`,
 | `status` | <Documented /> | The HTTP status code. | Type: `number`. |
 | `ok` | <Documented /> | True for a 2xx status. | Type: `boolean`. |
 | `headers` | <Documented /> | Response headers, lower-cased names. | Type: `Record<string, string>`. |
-| `text` | <Documented /> | The body, as text. | Type: `string`. |
+| `text` | <Documented /> | The body, as text. Since `2.1.321`, it is empty while `isStreaming` is set. | Type: `string`. |
+| `isStreaming` | <Documented /> | Since `2.1.321`: set on what `next(e)` gives for an engine request. The body stays the engine's and streams to its reader, and hooks read the status and headers. Pass it on, with other headers or status if you like, and the body goes on under them. Answer without it and `text` is the body instead. | Type: `true`. Optional. |
+| `sendIndex` | <Documented /> | Since `2.1.321`: set beside `isStreaming`. It says which of the request's sends gave this answer. Pass it on, and the body of that send is the one that goes on. | Type: `number`. Optional. |
 
 ### `JsonValue`
 

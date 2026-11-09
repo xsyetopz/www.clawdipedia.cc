@@ -18,14 +18,14 @@ It comes from the catalog (<Undocumented />). `claude-opus-4-7` has the default 
 | `effortLevel`, `maxEffortLevel`, `modelSettings` | <Documented /> | Settings for the default level and a cap. |
 | `output_config.effort` | <Documented /> | The request field that carries the level. Since `2.1.310`, when the server refuses it, the request goes again without it, and it stays off for that model until the process ends (the program). |
 | `per-turn-control-2026-07-01` | <Undocumented /> | A beta that lets some models take the effort with each message. |
-| `ultrathink` | <Documented /> | A word in a prompt that asks for deeper thinking on that turn only. Since `2.1.311`, in the interactive terminal on the Anthropic API, it runs the turn at `xhigh` effort on Opus 5.5, Sonnet 5.5, Haiku 5.5, and Fable 5.1. Typed while Claude is working, it raises the rest of that turn. The rainbow on the word shows only where it can raise effort (see the note below). |
-| Default effort | <Documented /> | The default is `high`, except `medium` for Opus 5.5, Sonnet 5.5, and Haiku 5.5, and `xhigh` for Opus 4.7. |
+| `ultrathink` | <Documented /> | A word in a prompt that asks for deeper thinking on that turn only. Since `2.1.311`, in the interactive terminal on the Anthropic API, it runs the turn at `xhigh` effort on Opus 5.5, Sonnet 5.5, Haiku 5.5, and Fable 5.1. Since `2.1.321`, it does so on Fable 5.2 and Mythos 5.2 too. Typed while Claude is working, it raises the rest of that turn. The rainbow on the word shows only where it can raise effort (see the note below). |
+| Default effort | <Documented /> | The default is `high`, except `medium` for Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.2, and Mythos 5.2, and `xhigh` for Opus 4.7. |
 | Cache warning | <Undocumented /> | Since `2.1.312`, the dialog `Switch model?` or `Change effort level?` says `This conversation is cached for the current model. Switching to` the new value in bold `means the full history gets re-read.` (the program, `chunk-7ss0ryz6.js:58010`, `:58046-58051`). The old text ended with `on your next message`. |
 | Effort note in the prompt | <Undocumented /> | The prompt shows the level and `/effort`. Since `2.1.312`, it shows `may wait for your next message` in place of `/effort` only while the request has not yet carried the shown level (see the note below). |
 | Spinner effort | <Undocumented /> | The spinner adds the text `with <level> effort`. Since `2.1.312`, the level is the one the request carried (see the note below). |
 
 Source for `ultrathink`: the [Claude Code changelog](https://code.claude.com/docs/en/changelog) and the program.
-These four models are the ones whose catalog entry has the capability `per_turn_effort` (`chunk-dmakgjeg.js:207`, `:423`, `:712`, `:805`).
+These models are the ones whose catalog entry has the capability `per_turn_effort`. In `2.1.319` they were four. In `2.1.321` they are six, with Fable 5.2 and Mythos 5.2 added (`chunk-vcsr0mgr.js:4264`, `:9687`, `:16328`, `:18418`, `:19530`, `:21634` of `2.1.321`).
 At submit, `chunk-8qajn51r.js:4138` sets the turn effort to `xhigh`. A prompt typed during a turn gets the same level (`chunk-qw7sm5zw.js:3626`).
 The gate that decides whether a model can take the boost is `chunk-r1ht672j.js:18693`. The prompt colors the word only when it passes (`chunk-xnjmsx7r.js:54917`).
 

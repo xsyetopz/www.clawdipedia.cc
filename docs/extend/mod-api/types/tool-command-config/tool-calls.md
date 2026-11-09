@@ -94,6 +94,7 @@ What a `tool.describe` hook returns: the description that the model sees for tha
 | --- | --- | --- | --- |
 | `description` | <Documented /> | The description the model sees for the tool. | Type: `string`. |
 | `isDeferred` | <Documented /> | Where the tool waits. `true` puts it behind ToolSearch. | Type: `ToolDeferral`. Optional. |
+| `breakPromptCache` | <Documented /> | Sends a changed description or placement at the next turn. It rewrites the whole prompt cache and drops the earlier thinking of the model. | Type: `boolean`. Optional. Since `2.1.321`. Left out, a changed description waits for a new thread or a compaction, and a changed placement for a new thread or `/clear`, as a compaction keeps the tool block. Before `2.1.321`, a changed answer for a tool that a thread had sent went out at the next turn (`captures/2.1.321/types.diff`). |
 
 ### `ToolEnvelope`
 

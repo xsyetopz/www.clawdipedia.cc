@@ -89,7 +89,8 @@ The dispatch skips the calling hook alone, so a plugin does not trap itself.
 | `disableSideloadFlags` | <Documented /> <ManagedOnly /> | Rejects `--plugin-dir` and `--plugin-url`. | Row: [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plugins.md#keys). | Managed settings. |
 | `--safe-mode`, `--bare` | <Documented /> | No installed hooks module loads. | The program says: installed plugins are disabled, none of their hooks or hooks modules load, built-in plugins load regardless. | CLI flags. |
 | Rollout switch | <Gated note="Remote flag, name not shown in the program strings" /> | Installed hooks modules wait for a rollout flag. A message says installed mods are turned off remotely. | Built-in plugins and organization plugins load regardless. | Installed plugins. |
-| `CLAUDE_CODE_PLUGIN_DIRS`, `CLAUDE_CODE_PLUGIN_DIR_WATCH` | <Documented /> | Load plugin dirs as `--plugin-dir` does. Reload on save: on by default in interactive sessions, off in print mode unless set to `1`. | None. | Environment. |
+| `CLAUDE_CODE_PLUGIN_DIRS`, `CLAUDE_CODE_PLUGIN_DIR_WATCH` | <Documented /> | Load plugin dirs as `--plugin-dir` does. Reload on save: on by default in interactive sessions, off in print mode for `--plugin-dir` folders unless set to `1`. Print mode reloads mods in `.claude/skills` unless set to `0` ([2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321)). | None. | Environment. |
+| Mods that Claude writes | <Documented /> | A mod that Claude writes into the project turns on without a question in `auto` and `bypassPermissions` modes, also under managed `allowUnsandboxedCommands: false` or `allowManagedDomainsOnly`. It does not load in `dontAsk` mode. | Source: the [2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321) and the program (`chunk-dhfvatv3.js:5659`). | Project mods, by permission mode. |
 
 ## Limits
 
@@ -134,6 +135,9 @@ The settings and flags that stop installed mods do not stop them.
 | `cc-plugin-easel` | Draws charts in the transcript. | Normal run, or the `remote_cowork` entry point |
 | `cc-plugin-claude-platform` | A built-in plugin of the same registry. | Normal run |
 | `cc-plugin-claude-test` | A built-in plugin of the same registry. | Normal run |
+| `cc-plugin-privacy` | Since `2.1.321`, refuses a `Bash`, `Monitor`, or `PowerShell` call when its text holds your account email and names a User-Agent. It refuses with a deny and does not ask you. The refusal tells Claude to run the call again without the address (with a generic client name), without the User-Agent setting, or as two calls. A call that holds the email but no User-Agent runs on. | The `tengu_wise_newt` gate, which is on by default |
+
+The `cc-plugin-privacy` check is a `tool.check` hook, and the program reads the account email with `session.identity`. It looks for `curl -A`, `wget -U`, a `--user-agent` or `-user` option, and `user-agent`, `user_agent`, or `ua:` text, and it also tests the percent-encoded `%40` form of the address. The plugin sets `defaultEnabled: true` and `enabledFromTrustedSettingsOnly` (the program: `chunk-f51h052a.js:6400` for the match, the refusal text at `:6624`, the hook at `:6900`).
 
 Source: the program, `chunk-bxdwwc5h.js@0`, the start function that calls the registry one plugin at a time. "Normal run" means the entry point is not `local-agent` and does not start with `remote`.
 A plugin can also hide itself with its own `isAvailable` test.

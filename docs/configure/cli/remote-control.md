@@ -36,7 +36,7 @@ The command has its own parser. It does not use the parser of the root `claude` 
 | `-h`, `--help` | <Documented /> | Prints the help text. | |
 | `--spawn <mode>` | <Documented /> | Sets how the server makes sessions: `same-dir`, `worktree`, or `session` (one session; the server exits when it ends). Give it only once. Press `w` while the server runs to switch between `same-dir` and `worktree`. | `same-dir`, or the mode saved for this project |
 | `--capacity <N>` | <Documented /> | Sets the maximum number of sessions at the same time in `same-dir` or `worktree` mode. Give it only once. | `32` |
-| `--create-session-in-dir`, `--no-create-session-in-dir` | <Documented /> | Makes one session in the current folder when the server starts. In `worktree` mode, this session stays in the current folder and the other sessions get worktrees. | On |
+| `--create-session-in-dir`, `--no-create-session-in-dir` | <Documented /> | Makes one session in the current folder when the server starts. In `worktree` mode, this session stays in the current folder and the other sessions get worktrees. A session keeps the folder it started in: a connected client cannot move it to another folder (changed in `2.1.321`, per the [2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321)). | On |
 | `--allow-unattended-tool-calls` | <Undocumented /> | A hidden option. The help text does not show it. See [Unattended Tool Calls](#unattended-tool-calls). | Off |
 | `--enable-live-preview`, `--preview-port <port>` | <Undocumented /> | Hidden options for a preview tunnel. In `2.1.321` the parser always refuses them with `--enable-live-preview and --preview-port are not available in this build.` | Not available |
 | `--sandbox`, `--no-sandbox` | <Documented /> <Deprecated note="Removed in 2.1.300" /> | Removed. The server does not start. See [Errors](#errors). To sandbox the sessions, set `sandbox.enabled` to `true` in settings. | |
@@ -89,7 +89,7 @@ The probe group `cli321` (`rc-*` cases) ran each option error below with a fake 
 
 ### Option Errors
 
-Source: the option parser (`chunk-04vb3pmq.js:103038`, function `Ai`) and the `cli321` probe runs.
+Source: the program, in its option parser (`chunk-04vb3pmq.js:103038`, function `Ai`), and the `cli321` probe runs.
 
 | Message | Status | When |
 | --- | --- | --- |
