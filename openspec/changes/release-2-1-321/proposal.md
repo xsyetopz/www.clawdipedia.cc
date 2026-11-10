@@ -43,7 +43,8 @@ None.
 
 ### Modified Capabilities
 
-None. The `tracked-release-docs` requirements already describe this release.
+- `tracked-release-docs`: the tasks list each left-out release-notes item by its notes line, with its reason.
+  The prompt pages in `docs/prompts/` name the tracked version too, because `release:all` does not render them.
 
 ## Impact
 

@@ -28,13 +28,38 @@ Source: `captures/2.1.321/diff/report.md`.
 ## 3. Release-Notes Items
 
 Source: the notes of [`2.1.321`](https://github.com/anthropics/claude-code/releases/tag/v2.1.321).
-Leave out VS Code, cloud sessions, and the Claude apps gateway.
+Each item line of `captures/2.1.321/notes.md` (lines 3 to 120) is in 3.6 or in 3.7.
 
 - [x] 3.1 The self-hosted runner page, with the exit 0 for a refused on-demand runner: `configure/cli/self-hosted-runner.md`.
 - [x] 3.2 The `daemon` subcommands and `rm` flags: `configure/cli/subcommands.md`.
 - [x] 3.3 `claude-fable-5-2` as the default Fable model, and saved Fable 5.1 picks that move to `fable`.
 - [x] 3.4 `CLAUDE_CODE_PLUGIN_DIR_WATCH=0` for the mod reload in headless sessions.
 - [x] 3.5 Managed `extraKnownMarketplaces` take-overs: set-aside data and `claude plugin restore-set-aside`.
+- [x] 3.6 Stated items, by notes line:
+  - 3: `configure/models-and-providers/model-catalog.md` (the price is left out).
+  - 4: `configure/cli/remote-control.md`.
+  - 14, 78, 99: `extend/skills-and-commands/slash-commands.md`.
+  - 15: `extend/hooks/session-events.md`.
+  - 16: `configure/cli/flags.md`.
+  - 32: `reference/tools/shell-and-web.md` (the new error text).
+  - 59, 80, 90, 91: `configure/cli/subcommands.md`, the gateway row marked `<Undocumented />` that rests on the notes alone.
+  - 63: `extend/hooks/input-and-output.md`.
+  - 68, 97, 98, 100, 101, 103, 105, 106, 114: `start/what-changed.md`.
+  - 69: `extend/skills-and-commands/frontmatter.md`.
+  - 93: `configure/settings/auth.md` (the `forceLoginMethod` part only).
+  - 96, 110, 116: `extend/mod-api/nouns-and-gates.md`.
+  - 108, 109: `configure/cli/subcommands.md`.
+  - 113: `configure/permissions/rules.md`.
+  - 117: `configure/cli/remote-control.md`.
+  - 118: `extend/plugins/cli.md`.
+- [x] 3.7 Left-out items, by notes line, with the reason:
+  - Cloud sessions, left out by the spec: 23, 46, 50, 71, 75, 76, 112.
+  - VS Code, left out by the spec: 119, 120.
+  - No check in the program and no probe case for the item: 5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 18, 19, 20, 21,
+    22, 24, 25, 26, 27, 28, 29, 30, 31, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 47, 48, 49, 51, 52,
+    53, 54, 55, 56, 57, 58, 60, 61, 62, 64, 65, 66, 67, 70, 72, 73, 74, 77, 79, 81, 82, 83, 84, 85, 86, 87, 88,
+    89, 92, 94, 95, 102, 104, 107, 111, 115.
+  - 93: the Ultra words in the session-feedback message and the `allowedProviders` description have no check.
 
 ## 4. What Changed
 
