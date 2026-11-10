@@ -1,5 +1,5 @@
 // Reads the modules of a bundled program with a real parser (oxc-parser) and scope analysis (eslint-scope).
-// Each module parses on first use. Bun chunks import each other as `/$bunfs/root/<chunk>`; a `Bundle`
+// A `Bundle` parses its modules at once, on the parser's threads. Bun chunks import each other as `/$bunfs/root/<chunk>`; a `Bundle`
 // follows those imports, so a name resolves to its declaration in any chunk.
 export { Bundle } from "./ast/bundle.ts";
 export {

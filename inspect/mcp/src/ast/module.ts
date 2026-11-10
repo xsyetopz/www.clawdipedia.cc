@@ -1,5 +1,4 @@
-// Each reader of the tree is synchronous, and the parser's async form only moves the same work to a thread; the sync form does no I/O.
-import { parseSync as parse } from "oxc-parser";
+import { parse } from "oxc-parser";
 
 import type { Bundle } from "./bundle.ts";
 import { children, isNode, type Node, type NodeOf } from "./node.ts";
@@ -8,30 +7,46 @@ import { type Variable, type Variables, variablesOf } from "./variables.ts";
 // The parser's `Severity` is an ambient const enum, which `verbatimModuleSyntax` cannot import.
 const isError = (severity: string): boolean => severity === "Error";
 
-/** One module of a bundle: parsed on first use, with its parents, optional chains, scopes, exports, and imports. */
+/** One parsed module of a bundle, with its parents, optional chains, scopes, exports, and imports. */
 export class Module {
 	readonly name: string;
 	readonly text: string;
 	readonly bundle: Bundle | undefined;
-	#ast?: NodeOf<"Program">;
+	/** The module's syntax tree, with each `ChainExpression` taken out. */
+	readonly ast: NodeOf<"Program">;
 	readonly #parents = new WeakMap<Node, Node>();
 	#vars?: Variables;
 	readonly #chains = new WeakSet<Node>();
 	#exports?: Map<string, string>;
 	#imports?: Map<string, NodeOf<"ImportDeclaration">[]>;
 
-	constructor(name: string, text: string, bundle?: Bundle) {
+	private constructor(
+		name: string,
+		text: string,
+		ast: NodeOf<"Program">,
+		bundle?: Bundle,
+	) {
 		this.name = name;
 		this.text = text;
+		this.ast = ast;
 		this.bundle = bundle;
+		const stack: Node[] = [];
+		for (let n: Node | undefined = ast; n; n = stack.pop()) {
+			this.#unwrapChains(n);
+			for (const c of children(n)) {
+				this.#parents.set(c, n);
+				stack.push(c);
+			}
+		}
 	}
 
-	/** Parses once, links each node to its parent, and takes each `ChainExpression` out of the tree. */
-	#load(): NodeOf<"Program"> {
-		if (this.#ast) {
-			return this.#ast;
-		}
-		const { program, errors } = parse(this.name, this.text, {
+	/** Parses `text` on a thread of the parser. It rejects with a `SyntaxError` when the text is not JavaScript. */
+	static async parse(
+		name: string,
+		text: string,
+		bundle?: Bundle,
+	): Promise<Module> {
+		const { program, errors } = await parse(name, text, {
 			lang: "js",
 			sourceType: "module",
 			range: true,
@@ -41,16 +56,7 @@ export class Module {
 		if (error) {
 			throw new SyntaxError(error.message);
 		}
-		this.#ast = program;
-		const stack: Node[] = [];
-		for (let n: Node | undefined = program; n; n = stack.pop()) {
-			this.#unwrapChains(n);
-			for (const c of children(n)) {
-				this.#parents.set(c, n);
-				stack.push(c);
-			}
-		}
-		return program;
+		return new Module(name, text, program, bundle);
 	}
 
 	/**
@@ -82,13 +88,8 @@ export class Module {
 		}
 	}
 
-	/** The module's syntax tree; it throws when the text is not JavaScript. */
-	get ast(): Node {
-		return this.#load();
-	}
-
 	#analyze(): Variables {
-		this.#vars ??= variablesOf(this.#load());
+		this.#vars ??= variablesOf(this.ast);
 		return this.#vars;
 	}
 
@@ -98,13 +99,11 @@ export class Module {
 	}
 
 	parent(n: Node): Node | undefined {
-		this.#load();
 		return this.#parents.get(n);
 	}
 
 	/** Whether `n` is the outermost link of an optional chain (`a?.b.c`). */
 	isChain(n: Node): boolean {
-		this.#load();
 		return this.#chains.has(n);
 	}
 
@@ -115,9 +114,11 @@ export class Module {
 
 	/** The innermost node that holds index `pos`. */
 	nodeAt(pos: number): Node {
-		let n = this.ast;
+		let n: Node = this.ast;
 		for (;;) {
-			const next = children(n).find((c) => c.start <= pos && pos < c.end);
+			const next: Node | undefined = children(n).find(
+				(c) => c.start <= pos && pos < c.end,
+			);
 			if (!next) {
 				return n;
 			}
@@ -161,7 +162,7 @@ export class Module {
 		}
 		const out = new Map<string, string>();
 		this.#exports = out;
-		for (const s of this.#load().body) {
+		for (const s of this.ast.body) {
 			if (s.type !== "ExportNamedDeclaration") {
 				continue;
 			}
@@ -192,7 +193,7 @@ export class Module {
 	importsFrom(source: string): NodeOf<"ImportDeclaration">[] {
 		if (!this.#imports) {
 			const imports = new Map<string, NodeOf<"ImportDeclaration">[]>();
-			for (const s of this.#load().body) {
+			for (const s of this.ast.body) {
 				if (s.type === "ImportDeclaration") {
 					const k = s.source.value;
 					imports.set(k, [...(imports.get(k) ?? []), s]);

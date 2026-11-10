@@ -1,5 +1,5 @@
 import { listInstalls, program } from "../binary.ts";
-import { cut, lines as linesOf } from "../diff.ts";
+import { cut, lines } from "../diff.ts";
 import { findUnits } from "../find.ts";
 import { fetchPackage, findText } from "../npm.ts";
 import { prepared } from "../prepare.ts";
@@ -55,16 +55,17 @@ group(
 		}) => {
 			const re = new RegExp(regex(need(query, "query"), isRegex).source, "gu");
 			const hits: { module: string; offset: number; snippet: string }[] = [];
-			const { bundle } = await program(version);
-			for (const m of bundle.modules.values()) {
-				if (has(module) && !m.name.includes(module)) {
+			const p = await program(version);
+			for (const m of p.modules) {
+				const name = m.name.split("/").pop() ?? m.name;
+				if (!/\.m?js$/u.test(name) || (has(module) && !name.includes(module))) {
 					continue;
 				}
-				for (const h of m.text.matchAll(re)) {
+				for (const h of m.source.matchAll(re)) {
 					hits.push({
-						module: m.name,
+						module: name,
 						offset: h.index,
-						snippet: m.text.slice(
+						snippet: m.source.slice(
 							Math.max(0, h.index - context),
 							h.index + h[0].length + context,
 						),
@@ -119,7 +120,7 @@ group(
 				u: f.u,
 				n: f.n,
 				hits: f.hits,
-				excerpt: linesOf(f.u.t)
+				excerpt: lines(f.u.t)
 					.slice(0, 4)
 					.map((line) => cut(line)),
 			}));

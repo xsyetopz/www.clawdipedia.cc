@@ -103,7 +103,8 @@ export const binaryPath = async (binary?: string): Promise<string> => {
 export interface Program {
 	path: string;
 	modules: BunModule[];
-	bundle: Bundle;
+	/** The parsed JS modules. The first call parses them, so an action that reads only text does not pay for it. */
+	bundle: () => Promise<Bundle>;
 	resolver: Resolver;
 }
 const programs = new Map<string, Program>();
@@ -113,14 +114,18 @@ export const program = async (binary?: string): Promise<Program> => {
 	let p = programs.get(path);
 	if (!p) {
 		const { modules } = await extractModules(path);
+		let bundle: Promise<Bundle> | undefined;
 		p = {
 			path,
 			modules,
-			bundle: new Bundle(
-				modules
-					.filter((m) => /\.m?js$/u.test(m.name))
-					.map((m) => ({ name: m.name, text: m.source })),
-			),
+			bundle: () => {
+				bundle ??= Bundle.parse(
+					modules
+						.filter((m) => /\.m?js$/u.test(m.name))
+						.map((m) => ({ name: m.name, text: m.source })),
+				);
+				return bundle;
+			},
 			resolver: new Resolver(),
 		};
 		programs.set(path, p);

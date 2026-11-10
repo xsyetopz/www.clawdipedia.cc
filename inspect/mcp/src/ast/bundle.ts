@@ -8,15 +8,35 @@ const ROOT = "/$bunfs/root/";
 const importedName = (sp: NodeOf<"ImportSpecifier">): string =>
 	sp.imported.type === "Identifier" ? sp.imported.name : sp.imported.value;
 
-/** The modules of one program, by file name (`chunk-abc.js`). */
+/** The parsed modules of one program, by file name (`chunk-abc.js`). */
 export class Bundle {
 	readonly modules = new Map<string, Module>();
 
-	constructor(files: { name: string; text: string }[]) {
-		for (const f of files) {
-			const name = f.name.split("/").pop() ?? f.name;
-			this.modules.set(name, new Module(name, f.text, this));
+	/** Parses every file at once. It leaves out a file whose text is not JavaScript. */
+	static async parse(files: { name: string; text: string }[]): Promise<Bundle> {
+		const bundle = new Bundle();
+		const parsed = await Promise.all(
+			files.map(async (f) => {
+				try {
+					return await Module.parse(
+						f.name.split("/").pop() ?? f.name,
+						f.text,
+						bundle,
+					);
+				} catch (error) {
+					if (error instanceof SyntaxError) {
+						return null;
+					}
+					throw error;
+				}
+			}),
+		);
+		for (const m of parsed) {
+			if (m) {
+				bundle.modules.set(m.name, m);
+			}
 		}
+		return bundle;
 	}
 
 	get(name: string): Module | undefined {

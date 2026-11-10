@@ -1,5 +1,5 @@
 // Types and helpers that the modules of the exclusions audit (audit.ts) share.
-import type { program } from "../../inspect/mcp/src/binary.ts";
+import type { Bundle } from "../../inspect/mcp/src/ast.ts";
 import type { SurfaceItem } from "../../inspect/mcp/src/surface/common.ts";
 import { compare } from "./coverage.ts";
 
@@ -20,7 +20,7 @@ export interface Found {
 export interface Ctx {
 	version: string;
 	root: string;
-	bundle: Awaited<ReturnType<typeof program>>["bundle"];
+	bundle: Bundle;
 	items: Map<string, SurfaceItem>;
 	sweep: Record<string, unknown>;
 	endpointRows: Map<string, string>;

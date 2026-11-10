@@ -125,11 +125,11 @@ export const audit = async (version: string, root: string) => {
 	const items = itemsOf(
 		await readJson(join(root, "captures", version, "surface.json")),
 	);
-	const { bundle } = await program(version);
+	const p = await program(version);
 	const c: Ctx = {
 		version,
 		root,
-		bundle,
+		bundle: await p.bundle(),
 		items,
 		sweep: sweepOf(
 			await readJson(join(root, "captures", version, "print", "sweep.json")),

@@ -19,13 +19,15 @@ const build = async (minifyNames: boolean): Promise<string> => {
 
 test("two builds of the same code have no change, and an edited method has one", async () => {
 	const [short, long] = await Promise.all([build(true), build(false)]);
-	expect(diffIndexes(indexOf(short), indexOf(long)).counts).toEqual({
-		changed: 0,
-		added: 0,
-		gone: 0,
-	});
+	expect(diffIndexes(await indexOf(short), await indexOf(long)).counts).toEqual(
+		{
+			changed: 0,
+			added: 0,
+			gone: 0,
+		},
+	);
 	const edited = long.replace('"tengu_example_gate"', '"tengu_other_gate"');
-	const d = diffIndexes(indexOf(short), indexOf(edited));
+	const d = diffIndexes(await indexOf(short), await indexOf(edited));
 	expect(d.counts).toEqual({ changed: 1, added: 0, gone: 0 });
 	expect(d.changes[0]?.to?.k).toBe("isEnabled");
 	const lines = d.changes.flatMap((x) => unitDiff(x));
@@ -44,11 +46,11 @@ test("two builds of the same code have no change, and an edited method has one",
 const app = (version: string, time: string, sha: string, chunk: string) =>
 	`export const about=()=>({VERSION:"${version}",BUILD_TIME:"${time}",GIT_SHA:"${sha}"}).VERSION;export const load=()=>import("/$bunfs/root/chunk-${chunk}.js");`;
 
-test("a build stamp and a chunk name are not a change", () => {
-	const from = indexOf(
+test("a build stamp and a chunk name are not a change", async () => {
+	const from = await indexOf(
 		app("2.1.321", "2026-11-09T00:00:00Z", "aaaa", "39pr5kn3"),
 	);
-	const to = indexOf(
+	const to = await indexOf(
 		app("2.1.322", "2026-11-10T00:15:08Z", "bbbb", "bq6gz2p6"),
 	);
 	expect(diffIndexes(from, to).counts).toEqual({

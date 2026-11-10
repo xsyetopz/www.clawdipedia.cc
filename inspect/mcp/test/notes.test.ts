@@ -18,8 +18,8 @@ const NOTES = `## 2.1.310
 - [Cloud sessions] Improved the checklist view
 `;
 
-test("notes lines are matched by a code span, gated by a subject, or left unmatched", () => {
-	const d = diffIndexes(indexOf(before), indexOf(after));
+test("notes lines are matched by a code span, gated by a subject, or left unmatched", async () => {
+	const d = diffIndexes(await indexOf(before), await indexOf(after));
 	const lines = checkNotes(NOTES, d, ["- env CLAUDE_CODE_FOO (added)"]);
 	expect(lines.map((l) => l.status)).toEqual([
 		"gated",

@@ -20,8 +20,9 @@ const firstArray = (n: Node): Node | undefined => {
 	return undefined;
 };
 
-const arrayLiterals = (src: string): string[] => {
-	const m = bundle(src).get("a.js");
+const arrayLiterals = async (src: string): Promise<string[]> => {
+	const parsed = await bundle(src);
+	const m = parsed.get("a.js");
 	if (m === undefined) {
 		throw new Error("module a.js missing");
 	}
@@ -59,7 +60,7 @@ describe("registry", () => {
 	});
 
 	test("throws on an unknown kind", async () => {
-		const error = await surface(bundle("var a=1"), "nope").catch(
+		const error = await surface(await bundle("var a=1"), "nope").catch(
 			(error_: unknown) => error_,
 		);
 		expect(error).toHaveProperty(
@@ -69,7 +70,7 @@ describe("registry", () => {
 	});
 
 	test("computes a kind once per bundle", async () => {
-		const b = bundle('var a=["PreToolUse","PostToolUse"]');
+		const b = await bundle('var a=["PreToolUse","PostToolUse"]');
 		expect(await surface(b, "hook-event")).toBe(await surface(b, "hook-event"));
 	});
 });
@@ -88,7 +89,7 @@ describe("common helpers", () => {
 
 	test("a repeated name keeps its first module and its last offset in it", async () => {
 		const a = "var x=process.env.AAA_ONE;var y=process.env.AAA_ONE;";
-		const b = new Bundle([
+		const b = await Bundle.parse([
 			{ name: "/$bunfs/root/a.js", text: a },
 			{ name: "/$bunfs/root/b.js", text: a },
 		]);
@@ -105,8 +106,8 @@ describe("common helpers", () => {
 		expect(short("x".repeat(10), 4)).toBe("xxxx…");
 	});
 
-	test("literal reads short literals", () => {
-		const out = arrayLiterals("var a=[!0,!1,-1,void 0,'s',f(),[1,2]]");
+	test("literal reads short literals", async () => {
+		const out = await arrayLiterals("var a=[!0,!1,-1,void 0,'s',f(),[1,2]]");
 		expect(out).toEqual([
 			"true",
 			"false",
@@ -196,7 +197,7 @@ var w=["VIA_ANY_CASE"].flatMap(Ct);
 	});
 
 	// Claude Code 2.1.322 bridge inbox: `D.some((n)=>process.env[n]!==e[n])` over a list of registry names.
-	test("every place of a name: its registry entry and its read through a list", () => {
+	test("every place of a name: its registry entry and its read through a list", async () => {
 		const src = `
 var H={str:()=>1};
 var v=H.str();
@@ -205,7 +206,7 @@ var D=["VIA_COMPARE_A","VIA_COMPARE_B"];
 function L(e){return D.some((n)=>process.env[n]!==e[n])}
 var K=["ONLY_LISTED_A","VIA_COMPARE_A","VIA_COMPARE_B"];
 `;
-		const places = envPlaces(bundle(src));
+		const places = envPlaces(await bundle(src));
 		const of = (name: string) =>
 			places.filter((p) => p.name === name).map((p) => p.detail);
 		expect(of("VIA_COMPARE_A")).toEqual(["str", undefined]);

@@ -38,7 +38,7 @@ export const note = (s: string) => report.push(s);
 // ---------------------------------------------------------------- program access
 
 const { modules: binModules } = await extractModules(BIN);
-export const bundle = new Bundle(
+export const bundle = await Bundle.parse(
 	binModules
 		.filter((m) => /\.m?js$/u.test(m.name))
 		.map((m) => ({ name: m.name, text: m.source })),

@@ -15,8 +15,8 @@ export const unk = (key: string, text: string): Entry => ({
 });
 
 /** The bundle of one or more chunks, and a resolver for it. */
-export const load = (files: Record<string, string>) => {
-	const b = new Bundle(
+export const load = async (files: Record<string, string>) => {
+	const b = await Bundle.parse(
 		Object.entries(files).map(([name, text]) => ({
 			name: `/$bunfs/root/${name}`,
 			text,
@@ -26,8 +26,8 @@ export const load = (files: Record<string, string>) => {
 };
 
 /** The module `a.js` of the bundle, which the files must hold. */
-export const moduleA = (files: Record<string, string>) => {
-	const { b, r } = load(files);
+export const moduleA = async (files: Record<string, string>) => {
+	const { b, r } = await load(files);
 	const m = b.get("a.js");
 	if (m === undefined) {
 		throw new Error("no module");
@@ -36,12 +36,12 @@ export const moduleA = (files: Record<string, string>) => {
 };
 
 /** Keys (with `?` when optional) of the object at the last `...id` spread in `src`. */
-export const spreadKeys = (
+export const spreadKeys = async (
 	src: string,
 	id: string,
 	extra: Record<string, string> = {},
 ) => {
-	const { m, r } = moduleA({ "a.js": src, ...extra });
+	const { m, r } = await moduleA({ "a.js": src, ...extra });
 	const spread = m.at(src.lastIndexOf(`...${id}`), "SpreadElement");
 	const arg = asNode(spread?.argument);
 	const got = arg && r.expr(m, arg);
@@ -61,8 +61,8 @@ export const mergedTypes = (lists: Entry[][]) => {
 };
 
 /** Keys (with `?` when optional) that a spread of `a ?? {...}` gives. */
-export const coalesceKeys = (src: string) => {
-	const { m, r } = moduleA({ "a.js": src });
+export const coalesceKeys = async (src: string) => {
+	const { m, r } = await moduleA({ "a.js": src });
 	const o = m.at(m.text.indexOf("{..."), "ObjectExpression");
 	return (
 		o &&
@@ -73,30 +73,33 @@ export const coalesceKeys = (src: string) => {
 };
 
 /** The keys of the object literal at `{[` in `files["a.js"]`. */
-export const computedKeys = (files: Record<string, string>) => {
-	const { m, r } = moduleA(files);
+export const computedKeys = async (files: Record<string, string>) => {
+	const { m, r } = await moduleA(files);
 	return r
 		.objectAt(m, m.text.indexOf("{["))
 		.map((e) => ("key" in e ? e.key : ""));
 };
 
 /** The constant string of the last name in `src`, or undefined. */
-export const lastConst = (src: string) => {
-	const { m } = moduleA({ "a.js": src });
+export const lastConst = async (src: string) => {
+	const { m } = await moduleA({ "a.js": src });
 	return constString(m, m.nodeAt(m.text.length - 1));
 };
 
 /** The key, kind, and string values of each key of the first object literal in `src`. */
-export const valsOf = (src: string) => {
-	const { m, r } = moduleA({ "a.js": src });
+export const valsOf = async (src: string) => {
+	const { m, r } = await moduleA({ "a.js": src });
 	return r
 		.objectAt(m, m.text.indexOf("{"))
 		.map((e) => ("key" in e ? [e.key, e.val.k, "v" in e.val && e.val.v] : []));
 };
 
 /** The JSON type of each key of the object literal `o={...}`. */
-export const types = (src: string, extra: Record<string, string> = {}) => {
-	const { m, r } = moduleA({ "a.js": src, ...extra });
+export const types = async (
+	src: string,
+	extra: Record<string, string> = {},
+) => {
+	const { m, r } = await moduleA({ "a.js": src, ...extra });
 	return Object.fromEntries(
 		r
 			.objectAt(m, src.lastIndexOf("o={") + 2)
@@ -105,12 +108,12 @@ export const types = (src: string, extra: Record<string, string> = {}) => {
 };
 
 /** The source of each return of the function of `type` that starts at `find`; null for a bare return. */
-export const returnSources = (
+export const returnSources = async (
 	src: string,
 	find: string,
 	type: "FunctionDeclaration" | "ArrowFunctionExpression",
 ) => {
-	const { m } = moduleA({ "a.js": src });
+	const { m } = await moduleA({ "a.js": src });
 	const fn: Fn | undefined = m.at(m.text.indexOf(find), type);
 	return fn && returnsOf(fn).map((n) => (n ? m.src(n) : null));
 };

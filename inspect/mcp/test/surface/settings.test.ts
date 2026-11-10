@@ -63,13 +63,13 @@ helpers:()=>wrap(helpers().optional()),
 `;
 	const lib = "export{l as lib};var l={lazy:(e)=>e};";
 	const b = () =>
-		new Bundle([
+		Bundle.parse([
 			{ name: "/$bunfs/root/a.js", text: src },
 			{ name: "/$bunfs/root/lib.js", text: lib },
 		]);
 
 	test("gives the leaf keys through helpers, records, memoized schemas, and keys built from a list", async () => {
-		const found = await surface(b(), "setting-key");
+		const found = await surface(await b(), "setting-key");
 		expect(found.map((i) => i.name)).toEqual([
 			"gated.on",
 			"helpers.default",
@@ -81,7 +81,7 @@ helpers:()=>wrap(helpers().optional()),
 	});
 
 	test("keeps the describe text and the gate of the top-level key", async () => {
-		const found = await surface(b(), "setting-key");
+		const found = await surface(await b(), "setting-key");
 		const by = new Map(found.map((i) => [i.name, i]));
 		expect(by.get("permissions.allow")?.detail).toBe("Allowed rules");
 		expect(by.get("gated.on")?.gate).toBe("i.X");

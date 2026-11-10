@@ -82,11 +82,13 @@ interface Cleaned {
 	skipped: Record<string, string>;
 }
 
-const parseError = (m: Module): string | undefined => {
+/** The parsed module, or the parser's message when the text is not JavaScript. */
+const parsed = async (x: {
+	name: string;
+	text: string;
+}): Promise<Module | string> => {
 	try {
-		// Reading `ast` parses the text.
-		Reflect.get(m, "ast");
-		return undefined;
+		return await Module.parse(x.name, x.text);
 	} catch (error) {
 		return (error instanceof Error ? error.message : String(error)).slice(
 			0,
@@ -95,27 +97,39 @@ const parseError = (m: Module): string | undefined => {
 	}
 };
 
-const cleanModules = (js: { name: string; text: string }[]): Cleaned => {
+const cleanModules = async (
+	js: { name: string; text: string }[],
+): Promise<Cleaned> => {
 	const out: Cleaned = {
 		units: [],
 		texts: new Map(),
 		literals: new Map(),
 		skipped: {},
 	};
-	for (const x of js) {
-		const name = x.name.split("/").pop() ?? x.name;
-		// Each module on its own, so its syntax tree is freed after use.
-		const m = new Module(x.name, x.text);
-		const error = parseError(m);
-		if (error !== undefined) {
-			out.skipped[name] = error;
+	const cleaned = await Promise.all(
+		js.map(async (x) => {
+			const name = x.name.split("/").pop() ?? x.name;
+			// The module stays inside this call, so its syntax tree is freed after use.
+			const m = await parsed(x);
+			if (typeof m === "string") {
+				return { name, error: m };
+			}
+			const render = renamer(m);
+			const units = unitsOf(name, m, render);
+			return { name, units, text: render(0, m.text.length) };
+		}),
+	);
+	for (const c of cleaned) {
+		if ("error" in c) {
+			out.skipped[c.name] = c.error;
 			continue;
 		}
-		const render = renamer(m);
-		const us = unitsOf(name, m, render);
-		out.units.push(...us);
-		out.texts.set(name, render(0, m.text.length));
-		out.literals.set(name, [...new Set(us.flatMap((u) => u.f))].toSorted());
+		out.units.push(...c.units);
+		out.texts.set(c.name, c.text);
+		out.literals.set(
+			c.name,
+			[...new Set(c.units.flatMap((u) => u.f))].toSorted(),
+		);
 	}
 	return out;
 };
@@ -178,7 +192,7 @@ export const prepare = async (
 		};
 	}
 	const js = modules.filter((x) => /\.m?js$/u.test(x.name));
-	const { units, texts, literals, skipped } = cleanModules(js);
+	const { units, texts, literals, skipped } = await cleanModules(js);
 	const chunks = chunkNames(literals);
 	for (const u of units) {
 		u.t = renameChunks(u.t, chunks);

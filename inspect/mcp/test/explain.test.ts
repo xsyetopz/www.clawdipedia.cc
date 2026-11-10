@@ -26,8 +26,8 @@ test("how: no-op, stub, and handled", () => {
 	});
 });
 
-test("explains a command, a stubbed call, and a gated handled tool", () => {
-	const ix = indexOf(APP);
+test("explains a command, a stubbed call, and a gated handled tool", async () => {
+	const ix = await indexOf(APP);
 	const loops = explain(ix, "/loops");
 	expect(loops?.holder.t).toContain('name:"loops"');
 	expect(loops?.how).toEqual([
@@ -56,8 +56,8 @@ test("explains a command, a stubbed call, and a gated handled tool", () => {
 	]);
 });
 
-test("an unknown name explains nothing", () => {
-	expect(explain(indexOf(APP), "no-such-name")).toBeUndefined();
+test("an unknown name explains nothing", async () => {
+	expect(explain(await indexOf(APP), "no-such-name")).toBeUndefined();
 });
 
 // The shapes the program uses: a pass-through list of env names, an export map whose keys are the names,
@@ -71,8 +71,8 @@ const ENV = [
 	"var x=1,y=2,z=3;function Opt(a,b){return[a,b]}",
 ].join("\n");
 
-test("an env name: the unit that reads it is the holder, the lists are 'also in'", () => {
-	const ix = indexOf(ENV);
+test("an env name: the unit that reads it is the holder, the lists are 'also in'", async () => {
+	const ix = await indexOf(ENV);
 	const e = explain(ix, "MY_SETTING");
 	expect(e?.holder.t).toContain(".MY_SETTING");
 	expect(e?.holder.t).not.toContain('"A_ONE"');
@@ -82,8 +82,8 @@ test("an env name: the unit that reads it is the holder, the lists are 'also in'
 	expect(explain(ix, "KEY_ONLY")?.holder.t).toContain("KEY_ONLY:");
 });
 
-test("a flag is found with or without its leading dashes and placeholder", () => {
-	const ix = indexOf(ENV);
+test("a flag is found with or without its leading dashes and placeholder", async () => {
+	const ix = await indexOf(ENV);
 	for (const n of [
 		"began-as-copy",
 		"--began-as-copy",
@@ -95,8 +95,8 @@ test("a flag is found with or without its leading dashes and placeholder", () =>
 	expect(explain(ix, "began-as")).toBeUndefined();
 });
 
-test("a name only in code text is found by text search and says so", () => {
-	const e = explain(indexOf(ENV), "ZETA_NAME");
+test("a name only in code text is found by text search and says so", async () => {
+	const e = explain(await indexOf(ENV), "ZETA_NAME");
 	expect(e?.via).toBe("text");
 	expect(e?.holder.t).toContain("ZETA_NAME");
 });

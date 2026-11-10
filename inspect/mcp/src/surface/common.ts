@@ -53,14 +53,7 @@ export const scan = (
 		if (!needles.some((s) => m.text.includes(s))) {
 			continue;
 		}
-		let ast: Node;
-		try {
-			ast = m.ast;
-		} catch {
-			// Not JavaScript.
-			continue;
-		}
-		const stack: Node[] = [ast];
+		const stack: Node[] = [m.ast];
 		for (let n = stack.pop(); n !== undefined; n = stack.pop()) {
 			visit(m, n);
 			stack.push(...children(n));

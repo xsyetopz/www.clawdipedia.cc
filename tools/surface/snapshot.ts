@@ -166,10 +166,11 @@ export const snapshot = async (
 			);
 		}
 	}
-	const { bundle, modules } = await program(binary);
+	const p = await program(binary);
+	const bundle = await p.bundle();
 	const byKind: Record<string, SurfaceItem[]> = {};
 	const runs = await Promise.all(
-		kinds.map(async (k) => [k, await surface(bundle, k, modules)] as const),
+		kinds.map(async (k) => [k, await surface(bundle, k, p.modules)] as const),
 	);
 	for (const [k, items] of runs) {
 		byKind[k] = items;

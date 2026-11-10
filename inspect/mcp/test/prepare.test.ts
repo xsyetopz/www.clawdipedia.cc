@@ -8,18 +8,21 @@ import { z } from "zod";
 import { Bundle } from "../src/ast.ts";
 import { prepare, unitsOf } from "../src/prepare.ts";
 
-const mod = (text: string): NonNullable<ReturnType<Bundle["get"]>> => {
-	const found = new Bundle([{ name: "/$bunfs/root/a.js", text }]).get("a.js");
+const mod = async (
+	text: string,
+): Promise<NonNullable<ReturnType<Bundle["get"]>>> => {
+	const bundle = await Bundle.parse([{ name: "/$bunfs/root/a.js", text }]);
+	const found = bundle.get("a.js");
 	if (found === undefined) {
 		throw new Error("the bundle holds no a.js");
 	}
 	return found;
 };
 
-test("a unit cuts out the functions inside it", () => {
+test("a unit cuts out the functions inside it", async () => {
 	const units = unitsOf(
 		"a.js",
-		mod(
+		await mod(
 			'var t={name:"Monitor",isEnabled(){return g("tengu_x")}};function g(k){return k.length}',
 		),
 	);

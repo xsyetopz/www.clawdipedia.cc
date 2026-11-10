@@ -41,13 +41,14 @@ if (import.meta.main) {
 			json: { type: "boolean" },
 		},
 	});
-	const { bundle, modules } = await program(a.binary);
+	const p = await program(a.binary);
+	const bundle = await p.bundle();
 	const kinds =
 		a.kind === undefined || a.kind === "" ? Object.keys(KINDS) : [a.kind];
 	const runs = await Promise.all(
 		kinds.map(async (kind) => {
 			const t = performance.now();
-			const items = await surface(bundle, kind, modules);
+			const items = await surface(bundle, kind, p.modules);
 			return { kind, items, ms: Math.round(performance.now() - t) };
 		}),
 	);

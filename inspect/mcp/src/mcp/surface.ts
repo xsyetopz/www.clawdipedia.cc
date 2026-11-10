@@ -70,15 +70,16 @@ const listKind = async (
 	kind: string,
 	{ name, offset = 0, limit = SURFACE_LIMIT, version }: Args,
 ) => {
-	const { bundle, modules } = await program(version);
+	const p = await program(version);
+	const bundle = await p.bundle();
 	if (kind === "") {
 		const rows = await Promise.all(
-			Object.keys(KINDS).map((k) => kindCount(bundle, modules, k)),
+			Object.keys(KINDS).map((k) => kindCount(bundle, p.modules, k)),
 		);
 		return text(rows.join("\n"));
 	}
 	const q = name?.toLowerCase();
-	const found = await surface(bundle, kind, modules);
+	const found = await surface(bundle, kind, p.modules);
 	const all = found.filter((i) => !has(q) || i.name.toLowerCase().includes(q));
 	const budget = MAX_CHARS - SURFACE_HEADER_CHARS;
 	let used = 0;
@@ -109,7 +110,9 @@ group(
 			["", ...Object.keys(KINDS)].map((k) => [k, (a: Args) => listKind(k, a)]),
 		),
 		"object-keys": async ({ module, offset, anchor, version }) => {
-			const { bundle, resolver: R } = await program(version);
+			const p = await program(version);
+			const R = p.resolver;
+			const bundle = await p.bundle();
 			const modName = need(module, "module");
 			const m = bundle.get(modName);
 			if (!m) {
@@ -137,8 +140,8 @@ group(
 			);
 		},
 		"event-keys": async ({ name, version }) => {
-			const { bundle, resolver } = await program(version);
-			const events = eventSites(bundle, resolver);
+			const p = await program(version);
+			const events = eventSites(await p.bundle(), p.resolver);
 			if (!has(name)) {
 				return text(
 					[...events]
@@ -168,7 +171,8 @@ group(
 			);
 		},
 		"env-places": async ({ name, version }) => {
-			const { bundle } = await program(version);
+			const p = await program(version);
+			const bundle = await p.bundle();
 			const wanted = need(name, "name");
 			const places = envPlaces(bundle).filter((i) => i.name === wanted);
 			return text(
@@ -184,8 +188,8 @@ group(
 			);
 		},
 		"tool-gates": async ({ version }) => {
-			const { bundle, resolver } = await program(version);
-			const r = baseTools(bundle, resolver);
+			const p = await program(version);
+			const r = baseTools(await p.bundle(), p.resolver);
 			return text(
 				`${r.module}: ${r.tools.length} tools\n${r.tools
 					.map(
