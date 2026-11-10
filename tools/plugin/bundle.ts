@@ -21,7 +21,7 @@ const run = async (cmd: string[]): Promise<Run> => {
 	return { exitCode, out, err };
 };
 
-/** The claude CLI validates both manifests offline when it is on PATH. No credentials are passed. */
+/** The claude CLI validates each plugin manifest offline when it is on PATH. No credentials are passed. */
 export const validateProblems = async (): Promise<string[]> => {
 	if (Bun.which("claude") === null) {
 		console.warn(
@@ -29,7 +29,7 @@ export const validateProblems = async (): Promise<string[]> => {
 		);
 		return [];
 	}
-	const targets = [".", ...PLUGINS.map((p) => `./${p.dir}`)];
+	const targets = PLUGINS.map((p) => `./${p.dir}`);
 	const runs = await Promise.all(
 		targets.map((target) => run(["claude", "plugin", "validate", target])),
 	);

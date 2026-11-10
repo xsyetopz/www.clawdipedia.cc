@@ -1,6 +1,6 @@
 // Usage: bun tools/version/bump.ts <site|clawdipedia-docs|clawdipedia-docs-cli|cc-inspect|all> <patch|minor|major>
 //        (also: bun run version:bump -- <target> <level>, or: just bump <target> <level>)
-// Bumps the version in every file of a target, and sets the Claude Code version that the marketplace
+// Bumps the version in every file of a target, and sets the Claude Code version that the plugin
 // texts name to CLAUDE_CODE_VERSION. plugin:check runs versionProblems, so a missed file fails verify.
 import { join } from "node:path";
 
@@ -14,7 +14,6 @@ interface Slot {
 	path: string[];
 }
 
-export const MARKETPLACE = ".claude-plugin/marketplace.json";
 /** Plugin manifests whose description names the Claude Code version. */
 const PLUGIN_MANIFESTS = [
 	"plugin/.claude-plugin/plugin.json",
@@ -30,7 +29,6 @@ export const TARGETS: Record<string, Slot[]> = {
 	"clawdipedia-docs": [
 		{ file: "plugin/.claude-plugin/plugin.json", path: ["version"] },
 		{ file: "plugin/mcp/package.json", path: ["version"] },
-		{ file: MARKETPLACE, path: ["metadata", "version"] },
 	],
 	"clawdipedia-docs-cli": [
 		{ file: "cli/.claude-plugin/plugin.json", path: ["version"] },
@@ -80,12 +78,6 @@ const get = (doc: Json, path: string[]): unknown => {
 	return node;
 };
 
-/** The Claude Code versions (`2.1.x`) named in the marketplace texts. */
-const ccVersions = (market: Json): string[] =>
-	JSON.stringify([market["description"], market["plugins"]]).match(
-		/\b2\.\d+\.\d+\b/gu,
-	) ?? [];
-
 const CC_VERSION_RE = /\b2\.\d+\.\d+\b/gu;
 
 /**
@@ -101,7 +93,7 @@ export const syncDescriptions = (text: string): string =>
 export const syncVersions = (text: string): string =>
 	text.replaceAll(CC_VERSION_RE, CLAUDE_CODE_VERSION);
 
-/** Each target whose files hold different versions, and each marketplace text with an old Claude Code version. */
+/** Each target whose files hold different versions. */
 export const versionProblems = (read: (file: string) => Json): string[] => {
 	const out: string[] = [];
 	for (const [name, slots] of Object.entries(TARGETS)) {
@@ -110,13 +102,6 @@ export const versionProblems = (read: (file: string) => Json): string[] => {
 		);
 		if (new Set(got.map((g) => g.split("=")[1])).size > 1) {
 			out.push(`${name} versions differ: ${got.join(", ")}`);
-		}
-	}
-	for (const v of new Set(ccVersions(read(MARKETPLACE)))) {
-		if (v !== CLAUDE_CODE_VERSION) {
-			out.push(
-				`${MARKETPLACE} names Claude Code ${v}, not ${CLAUDE_CODE_VERSION}: run "bun run version:bump"`,
-			);
 		}
 	}
 	return out;
@@ -148,15 +133,15 @@ const bumpTargets = (
 	}
 };
 
-/** Set the Claude Code version in the marketplace, the manifests, and the skill bodies. */
+/** Set the Claude Code version in the manifests and the skill bodies. */
 const syncClaudeCode = (
 	text: (f: string) => string,
 	texts: Map<string, string>,
 ): void => {
-	// The marketplace and the plugin manifests name the Claude Code version in their descriptions.
+	// The plugin manifests name the Claude Code version in their descriptions.
 	// A skill body names it in prose, and the model repeats it to the user.
 	const sync: [files: string[], fn: (t: string) => string][] = [
-		[[MARKETPLACE, ...PLUGIN_MANIFESTS], syncDescriptions],
+		[PLUGIN_MANIFESTS, syncDescriptions],
 		[SKILL_FILES, syncVersions],
 	];
 	for (const [files, fn] of sync) {
@@ -188,7 +173,6 @@ const main = async (): Promise<void> => {
 	// Files keep their text; only the version values change, so the formatting stays.
 	const files = [
 		...new Set([
-			MARKETPLACE,
 			...PLUGIN_MANIFESTS,
 			...SKILL_FILES,
 			...Object.values(TARGETS).flatMap((slots) => slots.map((s) => s.file)),

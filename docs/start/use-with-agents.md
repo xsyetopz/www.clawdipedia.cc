@@ -26,12 +26,18 @@ An agent with a web fetch tool can start at `llms.txt`. It can pick a page and f
 
 ## Install the Plugin
 
-The plugin has the name `clawdipedia-docs`. Its display name is Anthropic Docs. The name `clawdipedia` is the marketplace.
+The plugin has the name `clawdipedia-docs`. Its display name is Anthropic Docs. The name `xsyetopz` is the marketplace. Its list is in the repository [xsyetopz/bedrock](https://github.com/xsyetopz/bedrock), and the plugin code is in the repository of this site.
 
 ```text
-/plugin marketplace add xsyetopz/www.clawdipedia.cc
-/plugin install clawdipedia-docs@clawdipedia
+/plugin marketplace add xsyetopz/bedrock
+/plugin install clawdipedia-docs@xsyetopz
 ```
+
+:::warning[Breaking Marketplace Move]
+The repository of this site was the marketplace `clawdipedia`. It is not a marketplace now. The old name is gone, with no alias.
+Uninstall each plugin of the old marketplace. Then run `/plugin marketplace remove clawdipedia`. Add `xsyetopz/bedrock`, and install the plugins from `@xsyetopz`.
+An `enabledPlugins` key such as `clawdipedia-docs@clawdipedia` is now `clawdipedia-docs@xsyetopz`. The plugin names and the tool names did not change.
+:::
 
 :::warning[Breaking Rename]
 The plugin had the name `cc-docs`. Its marketplace had the name `claude-code-docs`. The old names are gone, with no alias.
@@ -55,7 +61,7 @@ The plugin `clawdipedia-docs-cli` (display name Anthropic Docs CLI) gives the sa
 It works only in Claude Code. It needs Bun.
 
 ```text
-/plugin install clawdipedia-docs-cli@clawdipedia
+/plugin install clawdipedia-docs-cli@xsyetopz
 ```
 
 The command is `clawdipedia`. The Bash tool runs it. The skill `clawdipedia-docs-cli` tells Claude when.
@@ -162,7 +168,7 @@ It writes only its cache of cleaned code. The cache is under `CC_INSPECT_CACHE`.
 `code` `run` also starts the program once, offline, with temp folders that it removes after the run.
 
 ```text
-/plugin install cc-inspect@clawdipedia
+/plugin install cc-inspect@xsyetopz
 ```
 
 It adds the MCP server `cc-inspect`. This server runs with plain `bun`. It also adds the skill `cc-inspect`. The skill tells Claude when to use the server.

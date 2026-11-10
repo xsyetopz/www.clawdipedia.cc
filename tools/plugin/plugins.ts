@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 export const ROOT = join(import.meta.dir, "..", "..");
 
-/** The plugins of the marketplace: folder, skill, bundle source and output, tests, and whether it has an MCP server. */
+/** The plugins of this repo: folder, skill, bundle source and output, tests, and whether it has an MCP server. */
 export const PLUGINS = [
 	{
 		dir: "plugin",

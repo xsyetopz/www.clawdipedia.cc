@@ -58,15 +58,15 @@ together, then run `bun run schemas`.
 
 ## Plugins
 
-The repo is also a Claude Code plugin marketplace, `clawdipedia`, with three plugins:
+The repo also holds three Claude Code plugins. The marketplace `xsyetopz`, in the repo [xsyetopz/bedrock](https://github.com/xsyetopz/bedrock), lists them:
 
 - `clawdipedia-docs`: an MCP server with four tools (`search_docs`, `read_page`, `list_pages`, `get_schema`) and a skill. It reads four sources, picked with `source`: `clawdipedia` (this site, the default), `platform` (platform.claude.com/docs), `code` (code.claude.com/docs), and `claude-resources` (claude.com/resources).
 - `clawdipedia-docs-cli`: the same lookups as an `clawdipedia-docs` command that the Bash tool runs, plus a skill. It has no MCP server, so it adds no tool list to the context. It works only in Claude Code and needs Bun.
 - `cc-inspect`: an MCP server and a skill that read your session transcripts and the installed Claude Code program.
 
 ```sh
-claude plugin marketplace add xsyetopz/www.clawdipedia.cc
-claude plugin install clawdipedia-docs@clawdipedia   # or clawdipedia-docs-cli, or cc-inspect
+claude plugin marketplace add xsyetopz/bedrock
+claude plugin install clawdipedia-docs@xsyetopz   # or clawdipedia-docs-cli, or cc-inspect
 ```
 
 ## Contribute
