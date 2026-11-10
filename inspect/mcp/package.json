@@ -1,6 +1,6 @@
 {
 	"name": "cc-inspect-mcp",
-	"version": "0.16.4",
+	"version": "0.17.0",
 	"private": true,
 	"description": "MCP server that reads Claude Code session transcripts and the modules inside the Claude Code binary. Source for dist/server.js, which is committed.",
 	"license": "MIT",
