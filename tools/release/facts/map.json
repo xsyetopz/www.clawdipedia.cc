@@ -562,7 +562,7 @@
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/calls/tool-command-config.md#engine-events:19683544": {
+	"docs/extend/mod-api/calls/tool-command-config.md#engine-events:5623db5d": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
@@ -698,7 +698,7 @@
 			"pty.notifications.agent-needs-input-refused"
 		]
 	},
-	"docs/configure/permissions/auto-mode.md#classifier-billing-notice:916114ef": {
+	"docs/configure/permissions/auto-mode.md#classifier-billing-notice:1f537abf": {
 		"kind": "behaviour",
 		"probes": [
 			"pty.notifications.agent-needs-input",
@@ -1376,12 +1376,12 @@
 		"probes": [],
 		"note": "program behaviour (also in the release notes); the signed catalog needs a cloud provider login"
 	},
-	"docs/how-it-works/context-and-compaction.md#kinds-of-compaction:de126544": {
+	"docs/how-it-works/context-and-compaction.md#kinds-of-compaction:f38b902f": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour (also in the release notes); needs a server that refuses with the 1M context error"
 	},
-	"docs/how-it-works/context-and-compaction.md#kinds-of-compaction:9cd5a162": {
+	"docs/how-it-works/context-and-compaction.md#kinds-of-compaction:d21c8c19": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour (also in the release notes); needs a compaction reply with no summary"
@@ -1431,7 +1431,7 @@
 		"probes": [],
 		"note": "turn_handoff_available requires_rewind_request_id in schemas/claude-code-stream-json.json"
 	},
-	"docs/extend/headless/stream-json.md#undocumented-types:abcd80f3": {
+	"docs/extend/headless/stream-json.md#undocumented-types:2d8e44b2": {
 		"kind": "schema",
 		"probes": [],
 		"note": "inherited_asks_settled in schemas/claude-code-stream-json.json"
@@ -1531,22 +1531,22 @@
 		"probes": [],
 		"note": "cc-inspect code run of /claude-api PROBE-ARG on 2.1.308 to 2.1.311"
 	},
-	"docs/configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message:b1f3f04e": {
+	"docs/configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message:b670897f": {
 		"kind": "manual",
 		"probes": [],
 		"note": "chat:sendNowHintPress and the mouse-mode test read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:8976, :9363-9396)"
 	},
-	"docs/configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message:872ca5a8": {
+	"docs/configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message:117ca5d3": {
 		"kind": "manual",
 		"probes": [],
 		"note": "hint text and its no-key branch read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:9370-9394)"
 	},
-	"docs/configure/keybindings/unbound-and-reserved.md#vim-mode-operators-with-gj-and-gk:ac3ccbab": {
+	"docs/configure/keybindings/unbound-and-reserved.md#vim-mode-operators-with-gj-and-gk:ca3d0d3e": {
 		"kind": "manual",
 		"probes": [],
 		"note": "the gj/gk count clamp read in the cleaned 2.1.312 code (chunk-hz2c9q6k.js:316-321, :784)"
 	},
-	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:2891b1b0": {
+	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:6665ab9c": {
 		"kind": "manual",
 		"probes": [],
 		"note": "the cache warning text read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:58010, :58046-58051)"
@@ -1561,12 +1561,12 @@
 		"probes": [],
 		"note": "the spinner reads the sent level first in the cleaned 2.1.312 code (chunk-zgj89n5s.js:1465, chunk-8h49xv0g.js:1512-1516)"
 	},
-	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:5e598493": {
+	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:d691c53f": {
 		"kind": "manual",
 		"probes": [],
 		"note": "the four conditions of the prompt-note flag read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:60684), against 2.1.311 (chunk-xnjmsx7r.js:57759, :57763, :59815, :60285)"
 	},
-	"docs/configure/settings/auth.md#claude-apps-gateway-server-key:f496974f": {
+	"docs/configure/settings/auth.md#claude-apps-gateway-server-key:1d48213a": {
 		"kind": "manual",
 		"probes": [],
 		"note": "oidc.user_id_claim as an optional non-empty string, its sub fallback, and its missing-claim error, read in 2.1.319 (chunk-85d4q736.js@1404154, @1522930, @1523795)"
@@ -1671,7 +1671,7 @@
 		"probes": [],
 		"note": "the partial-read refusal of Write read in the cleaned 2.1.312 code (chunk-r5cyd28m.js:164229-164274, :73050-73054, :9596-9609, :77622; chunk-s2tghjwy.js:4530; chunk-b09ckz08.js:8515)"
 	},
-	"docs/reference/transcript-format.md#assistant-line-fields:8da0a637": {
+	"docs/reference/transcript-format.md#assistant-line-fields:f8041464": {
 		"kind": "manual",
 		"probes": [],
 		"note": "effort read from output_config.effort of the built request in the cleaned 2.1.312 code (chunk-r5cyd28m.js:135670, :136924), against 2.1.311 (chunk-2ht8z368.js:134537)"
@@ -1701,7 +1701,7 @@
 		"probes": [],
 		"note": "pending_elicitation_requests in the 2.1.316 control schema (chunk-fbth6v0w.js)"
 	},
-	"docs/extend/hooks/handlers.md#command-fields:a80d78e8": {
+	"docs/extend/hooks/handlers.md#command-fields:1190160e": {
 		"kind": "manual",
 		"probes": [],
 		"note": "PowerShell exit code 2 prefixes: 2.1.314 chunk-sq7yspzm.js against 2.1.316 chunk-qd604jgh.js"
@@ -1885,7 +1885,7 @@
 		"kind": "behaviour",
 		"probes": ["print.cli319.theme.engine"]
 	},
-	"docs/reference/tools/agents-and-tasks.md#enable-tests:c94626a9": {
+	"docs/reference/tools/agents-and-tasks.md#enable-tests:913d2596": {
 		"kind": "behaviour",
 		"probes": [
 			"print.api319.tool.exit-plan.direct",
@@ -1897,7 +1897,7 @@
 			"print.api319.tool.exit-plan.teammate-no-prompt-tool"
 		]
 	},
-	"docs/reference/tools/gated-and-other.md#gated-tools:b75030cc": {
+	"docs/reference/tools/gated-and-other.md#gated-tools:5395136f": {
 		"kind": "behaviour",
 		"probes": [
 			"print.api319.tool.propose-skills.cowork",
@@ -1916,7 +1916,7 @@
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/configure/cli/subcommands.md#commands:386f73b1": {
+	"docs/configure/cli/subcommands.md#commands:6d606fe0": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"

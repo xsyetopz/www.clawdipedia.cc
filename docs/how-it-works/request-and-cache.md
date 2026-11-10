@@ -84,7 +84,7 @@ sequenceDiagram
 
 ### The Attribution Line
 
-`system[0]` is a text block that starts with `x-anthropic-billing-header:`. Claude Code builds it for each request (the program, `chunk-9k4ptx80.js@2851`). The text after the colon is a list of `name=value;` pairs.
+`system[0]` is a text block that starts with `x-anthropic-billing-header:`. Claude Code builds it for each request (the program, `chunk-03kh7s1m.js@2946`). The text after the colon is a list of `name=value;` pairs.
 The `cc_` names say which client, entry point, and turn made the request.
 
 | Pair | When it appears |
@@ -118,16 +118,16 @@ Sources: [How Claude Code Uses Prompt Caching: Cache Lifetime](https://code.clau
 | `FORCE_PROMPT_CACHING_5M` | <Documented /> | Forces five minutes. It wins over the other items. |
 | `DISABLE_PROMPT_CACHING` | <Documented /> | Turns caching off. The suffixes `_HAIKU`, `_SONNET`, `_OPUS`, and `_FABLE` turn it off for one model family. |
 | `DISABLE_PROMPT_CACHING_MYTHOS` | <Undocumented /> | Turns caching off for the Mythos models. |
-| `experimental.cacheTtl` in an agent definition | <Undocumented /> | Sets `5m` or `1h` for the requests of that agent when no `subagentPromptCacheTtl` setting or variable is set. The program ignores `1h` while a Claude subscription is in overage (the program, `chunk-qd604jgh.js@800717`). |
+| `experimental.cacheTtl` in an agent definition | <Undocumented /> | Sets `5m` or `1h` for the requests of that agent when no `subagentPromptCacheTtl` setting or variable is set. The program ignores `1h` while a Claude subscription is in overage (the program, `chunk-ne1755n5.js@891524`). |
 | `CLAUDE_CODE_MESSAGES_PROMPT_CACHE_TTL` | <Undocumented /> | Appears in the env schema. No source states what it does. |
 
-Unset, `promptCacheTtl` means one hour on a Claude subscription within its usage limits and five minutes on an API key, Bedrock, Vertex, or Foundry. Unset, `subagentPromptCacheTtl` means five minutes unless `ENABLE_PROMPT_CACHING_1H=1`. Each environment variable wins over its setting (the program, `chunk-j4564a1j.js@294694`). The cache ledger counts a TTL of `5m` as 300,000 ms and `1h` as 3,600,000 ms (`chunk-v055v41g.js@4128`).
+Unset, `promptCacheTtl` means one hour on a Claude subscription within its usage limits and five minutes on an API key, Bedrock, Vertex, or Foundry. Unset, `subagentPromptCacheTtl` means five minutes unless `ENABLE_PROMPT_CACHING_1H=1`. Each environment variable wins over its setting (the program, `chunk-413pygry.js@290529`). The cache ledger counts a TTL of `5m` as 300,000 ms and `1h` as 3,600,000 ms (`chunk-f0mkstkr.js@207`).
 
 The cache is per machine and per folder, because the prompt holds memory paths and the working directory.
 
 ## The Cache Line of `/usage`
 
-`/usage` prints one line that starts with `Prompt cache (main):`. It shows only after the session sent a request (the program, `chunk-qd604jgh.js@974753`). Claude Code joins the parts below with ` · `.
+`/usage` prints one line that starts with `Prompt cache (main):`. It shows only after the session sent a request (the program, `chunk-ne1755n5.js@1071658`). Claude Code joins the parts below with ` · `.
 
 | Part | Text | Source of the number |
 | --- | --- | --- |
@@ -154,7 +154,7 @@ The `likely cause:` text is a list with a comma between the items. A cause can a
 | `prompt unchanged — likely server-side` | Nothing differs and the gap is under five minutes. |
 | `unknown` | No cause matched. |
 
-Source: the program, `chunk-v055v41g.js@4128` (the cause names and texts).
+Source: the program, `chunk-pm9gdgx7.js@46284` (the cause names and texts).
 
 ## What Breaks the Cache
 

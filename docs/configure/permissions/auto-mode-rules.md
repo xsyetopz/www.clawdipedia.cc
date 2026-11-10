@@ -22,7 +22,7 @@ In the JSON, some labels end in `[named+specifics ...]`. For those rules, your r
 
 Rule summaries below are short. Official page: [Configure Auto Mode](https://code.claude.com/docs/en/auto-mode-config). Rules marked <Undocumented /> come from `claude auto-mode defaults`.
 
-A run of `claude auto-mode defaults` on `2.1.316` printed 16 `allow` entries, 72 `soft_deny` entries, 1 `hard_deny` entry, and 21 `environment` entries. The `Scheduled-Task Fires` rule is not in that output. The program reads it from its own template and keeps it when an `allow` list replaces the defaults (`chunk-k83gbg21.js`).
+A run of `claude auto-mode defaults` on `2.1.316` printed 16 `allow` entries, 72 `soft_deny` entries, 1 `hard_deny` entry, and 21 `environment` entries. The `Scheduled-Task Fires` rule is not in that output. The program reads it from its own template and keeps it when an `allow` list replaces the defaults (`chunk-dgc8shqt.js`).
 
 ## Allow Rules
 
@@ -41,7 +41,7 @@ Each `allow` rule is an exception to the soft deny rules.
 | `Session-Created Job Cleanup` | <Undocumented /> | Deleting the jobs that the agent itself made in this session is fine. |
 | `Git Push Destination` | <Undocumented /> | Pushing to any branch of the session repo is normal, also the default branch. |
 | `Trusted Internal Infra (Data Flow)` | <Undocumented /> | Domains, buckets, and services in `Environment` count as internal, not external. |
-| `Scheduled-Task Fires` | <Undocumented /> | A scheduled-task prompt is not a live human instruction. This rule is not in the `claude auto-mode defaults` output. The program adds it from its own template (`chunk-k83gbg21.js`). |
+| `Scheduled-Task Fires` | <Undocumented /> | A scheduled-task prompt is not a live human instruction. This rule is not in the `claude auto-mode defaults` output. The program adds it from its own template (`chunk-dgc8shqt.js`). |
 | `Multi-Agent Coordination` | <Undocumented /> | Messages between teammates and subagents are normal traffic. |
 | `Memory Directory` | <Undocumented /> | Routine writes to and deletes from the memory directory are fine. |
 | `CLAUDE.md Content` | <Undocumented /> | Editing `CLAUDE.md` is fine when the text does not change permissions or auto mode. |
@@ -59,7 +59,7 @@ A scoped exception sends commits and pushes of sensitive material to the `Sensit
 ## Environment Fields
 
 Most fields say `None configured`. Fill them with `autoMode.environment`.
-The built-in list has the 21 entries below, one per field label. Write each entry of your own as `Field: text`. With `$defaults` in the list, the program puts the built-in entries where `$defaults` is and adds each of your entries as a separate line. It does not compare field labels, so your entry does not replace the built-in entry for the same field (the program, `chunk-j4564a1j.js`).
+The built-in list has the 21 entries below, one per field label. Write each entry of your own as `Field: text`. With `$defaults` in the list, the program puts the built-in entries where `$defaults` is and adds each of your entries as a separate line. It does not compare field labels, so your entry does not replace the built-in entry for the same field (the program, `chunk-413pygry.js`).
 
 | Field | Status | Default text |
 | --- | --- | --- |

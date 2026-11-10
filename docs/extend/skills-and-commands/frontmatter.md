@@ -81,7 +81,7 @@ The base is now the directory where the session started, when all of these are t
 
 In any other case, the base is the working directory.
 For a file outside the working directory, the program skips a `.claude/skills` folder that git ignores or that it cannot confirm.
-Source: the program (`chunk-r5cyd28m.js` lines 156298 to 156312 and 156113 to 156170).
+Source: the program (`chunk-ne1755n5.js` lines 172189 to 172203 and 171993 to 172054).
 
 ## Outside Claude Code
 

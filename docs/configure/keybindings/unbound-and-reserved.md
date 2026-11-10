@@ -86,8 +86,8 @@ A queued message shows a hint under the prompt. In fullscreen rendering with mou
 
 | Input | Status | What it does | Notes |
 | --- | --- | --- | --- |
-| Click on the "send now" hint | <Undocumented /> | Sends the queued message at once. | Since `2.1.312`. The program needs mouse mode `full`, so `CLAUDE_CODE_DISABLE_MOUSE` and `CLAUDE_CODE_DISABLE_MOUSE_CLICKS` both stop the click. The program reports the click as `chat:sendNowHintPress`. Source: `chunk-7ss0ryz6.js` lines 8976 and 9363 to 9396. |
-| Hint text | <Undocumented /> | Names the key for `chat:sendNow`, or reads "click to send now" when no key is bound to it. | Since `2.1.312`. With no key bound, the hint shows only in mouse mode `full`. Source: `chunk-7ss0ryz6.js` lines 9370 to 9394. |
+| Click on the "send now" hint | <Undocumented /> | Sends the queued message at once. | Since `2.1.312`. The program needs mouse mode `full`, so `CLAUDE_CODE_DISABLE_MOUSE` and `CLAUDE_CODE_DISABLE_MOUSE_CLICKS` both stop the click. The program reports the click as `chat:sendNowHintPress`. Source: `chunk-d3btef94.js` lines 8948 and 9341 to 9374. |
+| Hint text | <Undocumented /> | Names the key for `chat:sendNow`, or reads "click to send now" when no key is bound to it. | Since `2.1.312`. With no key bound, the hint shows only in mouse mode `full`. Source: `chunk-d3btef94.js` lines 9348 to 9372. |
 
 ## Vim Mode Operators with `gj` And `gk`
 
@@ -95,7 +95,7 @@ Vim keys of the input prompt are not in `keybindings.json`. The setting `editorM
 
 | Input | Status | What it does | Notes |
 | --- | --- | --- | --- |
-| `d`, `c`, or `y` with `gj` or `gk` and a count | <Undocumented /> | When the count is larger than the display lines left, the keys only move the cursor. | Since `2.1.312`. Before, the keys could delete or copy text. The program tests the count against the wrapped lines below the cursor for `gj` and above it for `gk`. Source: `chunk-hz2c9q6k.js` lines 316 to 321 and 784. |
+| `d`, `c`, or `y` with `gj` or `gk` and a count | <Undocumented /> | When the count is larger than the display lines left, the keys only move the cursor. | Since `2.1.312`. Before, the keys could delete or copy text. The program tests the count against the wrapped lines below the cursor for `gj` and above it for `gk`. Source: `chunk-4cdjx756.js` lines 327 to 332 and 812. |
 
 ## Related Pages
 

@@ -96,11 +96,11 @@ The variables, with their defaults, are in [Fallback and Retries](../configure/m
 
 Since `2.1.311`, Claude Code does not retry a `429` or `529` that the API marked with `x-should-retry: false`, and that includes unattended mode (`CLAUDE_CODE_RETRY_WATCHDOG`).
 Before, such a request could hold a turn for minutes, or for good in that mode.
-Source: the [Claude Code changelog](https://code.claude.com/docs/en/changelog), and the program (`chunk-2ht8z368.js:131464`; the old rule is `chunk-31gxg38t.js:137298` in the 2.1.310 program).
+Source: the [Claude Code changelog](https://code.claude.com/docs/en/changelog), and the program (`chunk-ne1755n5.js:145756`; the old rule was in the 2.1.310 program, which is not in the `2.1.321` capture).
 
 When a request is too long for the context, Claude Code tries again with a smaller `max_tokens`. It compacts when that is not enough.
 Since `2.1.311`, a session on a standard window (not 1M) that sends more than 200K tokens and gets the error "Usage credits required for 1M context" compacts the conversation and goes on, where it stopped before.
-Source: the [Claude Code changelog](https://code.claude.com/docs/en/changelog), and the program (`chunk-8qajn51r.js:6009` checks for that refusal on a model whose window is standard, then the code at `chunk-8qajn51r.js:11603` to `:11700` runs the reactive compaction).
+Source: the [Claude Code changelog](https://code.claude.com/docs/en/changelog), and the program (`chunk-mf088szq.js:6999` checks for that refusal on a model whose window is standard, then the code at `chunk-mf088szq.js:12899` to `:13003` runs the reactive compaction).
 The loop also recovers from a stop at `max_tokens` and from a bad tool call. See [The Agent Loop](agent-loop.md#recovery-inside-the-loop).
 
 ## Example

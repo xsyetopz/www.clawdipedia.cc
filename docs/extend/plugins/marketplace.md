@@ -72,7 +72,7 @@ These sources go in `extraKnownMarketplaces`, `strictKnownMarketplaces`, and `bl
 
 ## Plugin Digests
 
-The `pluginDigests` field sits in an entry of `extraKnownMarketplaces` (and its alias `additionalMarketplaces`). The settings schema marks it as managed settings only. Source: the settings schema and the program (`chunk-h3fwwdey.js:134`, `chunk-2ht8z368.js:43946`, `2.1.311`).
+The `pluginDigests` field sits in an entry of `extraKnownMarketplaces` (and its alias `additionalMarketplaces`). The settings schema marks it as managed settings only. Source: the settings schema and the program (`chunk-tr6h1dpx.js:141`, `chunk-ne1755n5.js:49449`).
 
 | Field | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
@@ -82,9 +82,9 @@ The `pluginDigests` field sits in an entry of `extraKnownMarketplaces` (and its 
 - The plugin keeps its manifest at `.claude-plugin/plugin.json` and names one module in `hooks/hooks.json`.
 - A string of any other form, or a list that is empty or of any other shape, matches no folder. A symbolic link, or a surface module, proves nothing.
 - A proved plugin ships bundled with no install step. The digest covers the whole folder, `node_modules` included. A checkout whose line endings were converted proves nothing.
-- Claude Code reads the folder with a limit of 4096 files and 32 MiB in all. One file may hold at most 32 MiB (`chunk-2ht8z368.js:43865`, `43890`, `43943`). A name that is not UTF-8, a file that is not regular, or a file that changed during the read refuses the folder.
-- When a plugin is refused, Claude Code warns that the plugin "is not treated as the organization's, and does not load", with the reason (`chunk-2ht8z368.js:44009`).
-- A line that the program builds for a `pluginDigests` key reads "code from your organization will run" (`chunk-z1xn9dp7.js:10388`). No source states where Claude Code displays it.
+- Claude Code reads the folder with a limit of 4096 files and 32 MiB in all. One file may hold at most 32 MiB (`chunk-ne1755n5.js:49352`, `49376`, `49446`). A name that is not UTF-8, a file that is not regular, or a file that changed during the read refuses the folder.
+- When a plugin is refused, Claude Code warns that the plugin "is not treated as the organization's, and does not load", with the reason (`chunk-ne1755n5.js:49512`).
+- A line that the program builds for a `pluginDigests` key reads "code from your organization will run" (`chunk-413pygry.js:14948`). No source states where Claude Code displays it.
 
 ## Settings Keys
 

@@ -15,7 +15,7 @@ The protocol is on whenever you start `claude -p --input-format stream-json --ou
 
 The schema does not mark the direction of each request.
 Only the Agent SDK pages describe most of them, and no other docs page does, so every row has the status <Undocumented />.
-Source: the program (the bundled schema of `2.1.311`; for the `2.1.311` additions, `chunk-7ew55hkc.js:19068` for `ui_prompt_paint`, `chunk-7ew55hkc.js:18942` for the `ui_attach` list, `chunk-7ew55hkc.js:17074` for `turn_handoff`, `chunk-7ew55hkc.js:17966` for `oauth_token_refresh`, `chunk-7ew55hkc.js:17747` for `mcpMount`, `chunk-7ew55hkc.js:13704` for `background_color`, and `chunk-7ew55hkc.js:15654` for the transcript note).
+Source: the program (the bundled schema of `2.1.311`; for the `2.1.311` additions, `chunk-sspw8v4n.js:21007` for `ui_prompt_paint`, `chunk-sspw8v4n.js:20879` for the `ui_attach` list, `chunk-sspw8v4n.js:18933` for `turn_handoff`, `chunk-sspw8v4n.js:19893` for `oauth_token_refresh`, `chunk-sspw8v4n.js:19674` for `mcpMount`, `chunk-sspw8v4n.js:15424` for `background_color`, and `chunk-sspw8v4n.js:17463` for the transcript note).
 
 | `subtype` | Status | What It Does |
 | --- | --- | --- |

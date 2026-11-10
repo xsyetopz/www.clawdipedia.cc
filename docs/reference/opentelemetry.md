@@ -53,7 +53,7 @@ Only `tool_decision` is marked <Documented />, because earlier pages of this sit
 | `effort` | <Undocumented /> | The effort level in force for the request. | Since `2.1.312`. Before, it could name a newly picked level before the model applied it. The program takes the level from the last effort change that the conversation holds, and uses the new pick only when there is none. The `api_request` event reads it from `output_config.effort` of the request, and the refusal path passes the same level. We did not trace `api_error` and `api_retries_exhausted` one by one. |
 | `mcp_server.name` | <Undocumented /> | The server name. For most servers that a plugin declares it reports `custom`. | Since `2.1.312`, it reports the real name for a remote MCP server with a fixed URL of type `http`, `sse`, or `ws` that a plugin declares, when the plugin comes from an official marketplace that the program vouches for. A server whose endpoint is a template still reports `custom`. |
 
-Source: the program. The level in force is in `chunk-r5cyd28m.js` lines 135670, 136924, and 141434. The server name is in `chunk-3xe0k172.js` lines 44518 to 44531 and 48503 to 48514, with `custom` at line 42524. The `safety_event` gate is in `chunk-r5cyd28m.js` lines 186177, 186258, 186295, and 186356, and in `chunk-2ht8z368.js` line 184333 of `2.1.311`.
+Source: the program. The level in force is in `chunk-ne1755n5.js` lines 148959, 150468, and 155307. The server name is in `chunk-qfakytpa.js` lines 48128 to 48141 and 52520 to 52531, with `custom` at line 46109. The `safety_event` gate is in `chunk-ne1755n5.js` lines 203596, 203677, 203720, and 203781.
 
 ## Account and Provider Attributes
 
@@ -66,7 +66,7 @@ Since `2.1.318`, the program adds `anthropic.provider`, `anthropic.custom_base_u
 | `anthropic.plan` | <Undocumented /> | `pro`, `max`, `team`, or `enterprise` | With a claude.ai subscriber login. A `free` plan sets none |
 | `anthropic.seat_type` | <Undocumented /> | `premium`, `standard`, `usage_based`, or `other` | With a claude.ai subscriber login and a stored seat tier. The program maps the tier name to one of the four values |
 
-**Source:** the program. The set is built in `chunk-b1j5pfqz.js` (function `$1d9e2a`, line 136). The plan list is on line 116, and the tier map follows it.
+**Source:** the program. The set is built in `chunk-gntt3p4g.js` (function `$1d9e2a`, line 136). The plan list is on line 116, and the tier map follows it.
 
 **Runs:** `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only notes319.otel-attrs`. Each case exports metrics, logs, and traces to a local OTLP receiver (`tools/release/lib/otlp.ts`) with `http/json`.
 

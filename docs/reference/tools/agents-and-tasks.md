@@ -66,10 +66,10 @@ Two result fields are new in `2.1.311`. Source: `AgentResult` and `SkillResult` 
 
 | Field | Status | Tool and Result | Type | What It Means |
 | --- | --- | --- | --- | --- |
-| `toolsUsed` | <Undocumented /> | `Agent`, the completed result | Array of strings | A list of tool names that the program builds from the messages of the subagent. The program leaves the field out when the list is empty (`chunk-hc20vcf0.js:8021`, `chunk-hc20vcf0.js:8286`). `Skill` turns the same list into `toolsUsedLine`. |
-| `toolsUsedLine` | <Undocumented /> | `Skill`, the forked result | String | The line that the `tool_result` text opens with. It names the tools that the subagent called and that the requests of this conversation did not yet name. The program leaves the field out when there is no such tool (`chunk-sr9nzxgx.js:587`, `chunk-sr9nzxgx.js:1265`). |
+| `toolsUsed` | <Undocumented /> | `Agent`, the completed result | Array of strings | A list of tool names that the program builds from the messages of the subagent. The program leaves the field out when the list is empty (`chunk-6av2ww92.js:9135`, `chunk-6av2ww92.js:9412`). `Skill` turns the same list into `toolsUsedLine`. |
+| `toolsUsedLine` | <Undocumented /> | `Skill`, the forked result | String | The line that the `tool_result` text opens with. It names the tools that the subagent called and that the requests of this conversation did not yet name. The program leaves the field out when there is no such tool (`chunk-5qk4ktjf.js:600`, `chunk-5qk4ktjf.js:1328`). |
 
-The program builds the list only while the server flag `tengu_silly_shore` is on (default on). When it is off, the list is empty (`chunk-35qty13k.js:101`, `chunk-2ht8z368.js:12649`).
+In `2.1.321` the program has no server flag for this list. It builds the list from the tools that each agent recorded, and it leaves the field out when the list is empty (`chunk-0fykeszx.js:1854`, `chunk-0fykeszx.js:4271`, `chunk-0fykeszx.js:4634`).
 
 ## Result Fields New in `2.1.321`
 
@@ -81,7 +81,7 @@ Source: `CronDeleteResult` in [`claude-code-tools.json`](../schemas.md), and the
 
 ## Enable Tests
 
-Source: the program (`chunk-qd604jgh.js` and `chunk-8z3t1tjj.js` of `2.1.316`; the `ExitPlanMode` and `AskUserQuestion` rows are from `2.1.319`). Each tool object has an `isEnabled` function. Claude Code leaves the tool out of the request when it answers no.
+Source: the program (`chunk-ne1755n5.js` and `chunk-q96agkc9.js` of `2.1.316`; the `ExitPlanMode` and `AskUserQuestion` rows are from `2.1.319`). Each tool object has an `isEnabled` function. Claude Code leaves the tool out of the request when it answers no.
 
 | Tools | Test | Result |
 | --- | --- | --- |
@@ -96,7 +96,7 @@ Source: the program (`chunk-qd604jgh.js` and `chunk-8z3t1tjj.js` of `2.1.316`; t
 | `TodoWrite` | `CLAUDE_CODE_ENABLE_TASKS` is `false`, and the model test below passes. | On |
 | `TaskCreate`, `TaskGet`, `TaskUpdate`, `TaskList` | `CLAUDE_CODE_ENABLE_TASKS` is not `false`, and the model test below passes. | On |
 
-- `2.1.319` changed the `ExitPlanMode` test (`chunk-7y8y5zrr.js@10971`; the shared test is `chunk-7rjhtrcd.js@880`; the teammate test `Fc()` is `chunk-4d11x8r1.js@1729`). Before, `ExitPlanMode` used the shared test alone. Now a session that is not a teammate also turns it off when `permissions.denyInsteadOfPrompting` is `true`.
+- `2.1.319` changed the `ExitPlanMode` test (`chunk-9sy4gs4j.js:325`; the shared test is `chunk-zyxy63dk.js:63`; the teammate test is `chunk-hrevs08j.js:81`). Before, `ExitPlanMode` used the shared test alone. Now a session that is not a teammate also turns it off when `permissions.denyInsteadOfPrompting` is `true`.
 - `ExitPlanMode` is a deferred tool. A `claude -p` request lists deferred tools only when `ENABLE_TOOL_SEARCH=false`. All runs below use `-p`, a stub API, and `--permission-prompt-tool` naming an MCP tool, unless the row says otherwise.
 
 | Case (`print.api319.tool.exit-plan.`) | Setup | `ExitPlanMode` in `tools` | `AskUserQuestion` in `tools` |
@@ -109,7 +109,7 @@ Source: the program (`chunk-qd604jgh.js` and `chunk-8z3t1tjj.js` of `2.1.316`; t
 | `teammate-deny` | As `teammate`, plus `denyInsteadOfPrompting: true`. | Yes | No |
 | `teammate-no-prompt-tool` | As `teammate`, with no prompt tool. | No | No |
 
-- The `teammate-deny` row is the `Fc()` branch: a teammate asks the shared test, so the deny setting does not remove `ExitPlanMode`. `AskUserQuestion` has no teammate branch, so it goes off. The program reads the three hidden flags only when agent teams are on (`chunk-02rsmwmx.js@110093`), and it refuses a run that gives only some of them.
+- The `teammate-deny` row is the `Fc()` branch: a teammate asks the shared test, so the deny setting does not remove `ExitPlanMode`. `AskUserQuestion` has no teammate branch, so it goes off. The program reads the three hidden flags only when agent teams are on (`chunk-5dx6x1b3.js@113923`), and it refuses a run that gives only some of them.
 - Without tool search off, the cases `.prompt-tool`, `.prompt-tool-deny`, `.plan-mode` and `.plan-mode-deny` show the same split through `AskUserQuestion` alone (listed 13 tools, then 12), and `.print` (no prompt tool) lists neither.
 - A non-interactive run is `claude -p` or an SDK run. So a plain `claude -p` run has none of the three tools. Adding `--permission-prompt-tool <name>` turns them on, unless channels are allowed.
 - The model test passes when any of these holds: a launch test passes (one is a host option that opts in to the todo tools); the main-loop model is not known yet; the model name holds `application-inference-profile`; the model is one of `claude-3-opus`, `claude-3-sonnet`, `claude-3-haiku`, `claude-3-5-sonnet`, `claude-3-5-haiku`, `claude-3-7-sonnet`, `claude-opus-4-0`, `claude-opus-4-1`, `claude-opus-4-5`, `claude-opus-4-6`, `claude-opus-4-7`, `claude-sonnet-4-0`, `claude-sonnet-4-5`, `claude-sonnet-4-6`, or `claude-haiku-4-5`; or `CLAUDE_CODE_ENABLE_TODO_TOOLS` is `true`.

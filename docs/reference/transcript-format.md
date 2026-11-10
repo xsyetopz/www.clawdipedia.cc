@@ -179,7 +179,7 @@ Content block types seen: `text`, `thinking`, `tool_use` (in `assistant` lines),
 | `requestId` | The request ID from the API. |
 | `requestRef` | A reference to the matching `api-request` line. |
 | `requestedModel` | The model Claude Code asked for. The `message.model` field shows the model that answered. |
-| `effort`, `perTurnEffort` | The effort level of the call. Since `2.1.312`, `effort` is the level in force: if the conversation already holds an effort change that the model applied, the request uses that level, not a newly picked one. The program reads `effort` from `output_config.effort` of the request it built (`chunk-r5cyd28m.js` lines 135670 and 136924). In `2.1.311` it was built from the new pick (`chunk-2ht8z368.js` line 134537). |
+| `effort`, `perTurnEffort` | The effort level of the call. Since `2.1.312`, `effort` is the level in force: if the conversation already holds an effort change that the model applied, the request uses that level, not a newly picked one. The program reads `effort` from `output_config.effort` of the request it built (`chunk-ne1755n5.js` lines 148959 and 150468). In `2.1.311` it was built from the new pick. The `2.1.311` build is not in the `2.1.321` capture, so this page cites no line for it. |
 | `advisorModel` | The advisor model, if the advisor tool was on. |
 | `apiBlockIndex` | The index of this block in the API reply. One reply can produce several lines. |
 | `thinkingDisplay`, `thinkingDurationMs` | How Claude Code showed the thinking text, and how long it took. |
@@ -196,7 +196,7 @@ Content block types seen: `text`, `thinking`, `tool_use` (in `assistant` lines),
 
 ## Compaction Rows
 
-Source: the program (`chunk-qd604jgh.js@5027313` and `@2423336`).
+Source: the program (`chunk-ne1755n5.js@5452531` and `@2631638`).
 
 A compaction writes a `system` line with `subtype: compact_boundary` and the content `Conversation compacted`. Its `compactMetadata` object holds these keys.
 
@@ -208,7 +208,7 @@ A compaction writes a `system` line with `subtype: compact_boundary` and the con
 | `messagesSummarized` | At creation | How many messages the summary covers. |
 | `postTokens` | After the summary exists | The token count of the new context. |
 | `durationMs` | After the summary exists | The time the compaction took. |
-| `cumulativeDroppedTokens` | After the summary exists | The tokens dropped by all compactions so far. It adds `preTokens - postTokens` to the largest earlier value (`chunk-qd604jgh.js`). |
+| `cumulativeDroppedTokens` | After the summary exists | The tokens dropped by all compactions so far. It adds `preTokens - postTokens` to the largest earlier value (`chunk-ne1755n5.js`). |
 | `preservedSegment` | Partial compaction | The `headUuid` and `tailUuid` of the kept messages. |
 | `preservedMessages` | Hook-built compaction | The `uuids` of the kept messages. |
 
@@ -219,7 +219,7 @@ If a listed `uuid` is missing, or the walk does not reach `headUuid`, the load a
 
 ## Subagent Lines
 
-A subagent writes its lines to its own file, `<session>/subagents/agent-<agentId>.jsonl`, and not to the session transcript. A search of the session file alone finds no subagent line. A line in that file can carry `attributionAgent`. It holds the agent name, for the sources `agent:builtin:<name>` and `agent:custom:<name>`. Lines caused by a skill carry `attributionSkill`, and `attributionPlugin` when the skill belongs to a plugin (the program, `chunk-a8r9352h.js@823642`).
+A subagent writes its lines to its own file, `<session>/subagents/agent-<agentId>.jsonl`, and not to the session transcript. A search of the session file alone finds no subagent line. A line in that file can carry `attributionAgent`. It holds the agent name, for the sources `agent:builtin:<name>` and `agent:custom:<name>`. Lines caused by a skill carry `attributionSkill`, and `attributionPlugin` when the skill belongs to a plugin (the program, `chunk-qfakytpa.js@878685`).
 
 ## `attachment` Types
 

@@ -32,7 +32,7 @@ Official pages: [Mods Reference](https://code.claude.com/docs/en/plugins/mods/re
 | Manifest key `types` | <Documented /> | Path to the type contract of the plugin. It starts with `./`. | A self-contained `.d.ts` with no import, export-from, require, or reference. It declares the noun in `declare module 'claude-code' { interface EngineInterface { ... } }` and the `PluginState` values. `claude plugin validate` checks it. | `plugin.json` |
 | Manifest key `dependencies` | <Documented /> | Plugins that must be enabled. | A mod that lists a plugin here gets its contract at `.claude-plugin/types/<plugin>/index.d.ts` when the engine loads the mod from a folder the person owns. | `plugin.json` |
 | Manifest key `userConfig` | <Documented /> | Fields whose values reach `register` as `options`. | The engine fills in defaults. Values are in `pluginConfigs` of settings. A required field with no value fails the load. `PluginOptions` is a read-only record of string, number, boolean, or string list. | `plugin.json` |
-| `.claude-plugin/types/` | <Documented /> | The engine writes `claude-code/index.d.ts`, `claude-code-tools/`, `claude-code-mcp/`, and one folder for each dependency here. | The engine writes them again after an update. The engine skips a file whose text already matches, and replaces a folder that stands where a file belongs. A mod that has no tsconfig gets one that extends `.claude-plugin/types/tsconfig.json`. A mod that has a `jsconfig.json` gets no new `tsconfig.json`, and an existing `tsconfig.json` stays as it is (the program, `chunk-qd604jgh.js@4156331`). | A mod loaded from a folder the person owns. |
+| `.claude-plugin/types/` | <Documented /> | The engine writes `claude-code/index.d.ts`, `claude-code-tools/`, `claude-code-mcp/`, and one folder for each dependency here. | The engine writes them again after an update. The engine skips a file whose text already matches, and replaces a folder that stands where a file belongs. A mod that has no tsconfig gets one that extends `.claude-plugin/types/tsconfig.json`. A mod that has a `jsconfig.json` gets no new `tsconfig.json`, and an existing `tsconfig.json` stays as it is (the program, `chunk-ne1755n5.js@4499263`). | A mod loaded from a folder the person owns. |
 | Tests `*.test.ts`, `*.test.tsx` | <Documented /> | `claude plugin test [dir]` runs them. | See [Testing](calls/testing.md). | Plugin folder. |
 
 ## The Dollar Object
@@ -139,13 +139,13 @@ The settings and flags that stop installed mods do not stop them.
 
 The `cc-plugin-privacy` check is a `tool.check` hook, and the program reads the account email with `session.identity`. It looks for `curl -A`, `wget -U`, a `--user-agent` or `-user` option, and `user-agent`, `user_agent`, or `ua:` text, and it also tests the percent-encoded `%40` form of the address. The plugin sets `defaultEnabled: true` and `enabledFromTrustedSettingsOnly` (the program: `chunk-f51h052a.js:6400` for the match, the refusal text at `:6624`, the hook at `:6900`).
 
-Source: the program, `chunk-bxdwwc5h.js@0`, the start function that calls the registry one plugin at a time. "Normal run" means the entry point is not `local-agent` and does not start with `remote`.
+Source: the program, `chunk-6qhg5jwg.js@0`, the start function that calls the registry one plugin at a time. "Normal run" means the entry point is not `local-agent` and does not start with `remote`.
 A plugin can also hide itself with its own `isAvailable` test.
 For example, `cc-plugin-easel` needs Linux or macOS and no `hipaa` or `zdr` data policy (the program).
 
 ### Enable Test
 
-The program decides each built-in plugin in this order (`chunk-c27zh2rw.js@76952`).
+The program decides each built-in plugin in this order (`chunk-xy1pr5mn.js@77312`).
 
 1. A plugin that fails `isAvailable`, or that failed to load, is not listed.
 2. With `enabledFromPolicyOnly`, only the policy settings value of `cc-plugin-<name>@builtin` counts.
@@ -165,7 +165,7 @@ Only `cc-plugin-sec-default` sets the two policy-only flags in `2.1.316`. The ot
 
 See [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plugins.md#keys) for `enabledPlugins`.
 
-`cc-plugin-responsive-mode` sets `defaultEnabled: false`. It is also available only outside the Teams surface, and only while a server gate that you cannot set is on (the program, `chunk-mdwf4s3v.js@627`). So turn it on with `enabledPlugins` and expect it to be missing when the gate is off.
+`cc-plugin-responsive-mode` sets `defaultEnabled: false`. It is also available only outside the Teams surface, and only while a server gate that you cannot set is on (the program, `chunk-5hxjzf0d.js@583`). So turn it on with `enabledPlugins` and expect it to be missing when the gate is off.
 
 ## Related Pages
 

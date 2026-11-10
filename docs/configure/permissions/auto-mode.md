@@ -46,7 +46,7 @@ The default rule lists are on [Auto Mode Default Rules](auto-mode-rules.md).
 
 ### The Server-Side Check
 
-Official page: [Server-Side Classifier Review](https://code.claude.com/docs/en/permission-modes#server-side-classifier-review). Source: the program, 2.1.319 (`chunk-nxrsh8va.js@24780` parses the verdict, `chunk-24jdhyyr.js@2954334` reads it from the stream, `chunk-24jdhyyr.js@3178200` acts on it).
+Official page: [Server-Side Classifier Review](https://code.claude.com/docs/en/permission-modes#server-side-classifier-review). Source: the program, 2.1.319 (`chunk-b6d7kq9m.js@26476` parses the verdict, `chunk-ne1755n5.js@3011757` reads it from the stream, `chunk-ne1755n5.js@3239577` acts on it).
 
 - In auto mode, each main request has a top-level `safeguards` field, `[{"type": "dangerous_tool_use", "classifier_context": …}]`, and the betas `dangerous-tool-use-2026-09-03` and `afk-mode-2026-01-31`.
 - The reply carries the verdict in `safeguard_results`, in `message_delta.delta` of a stream or at the top level of a plain reply. The verdict for each call is under the `tool_use` id.
@@ -54,7 +54,7 @@ Official page: [Server-Side Classifier Review](https://code.claude.com/docs/en/p
 - With no verdict, the program refuses each call that needs the check. The text with a gateway is `Auto mode can't check actions in this session. Its safety check runs on the server, and your requests go through <host>, which doesn't pass it through.` On a direct connection it is `…and the server isn't running it for this session.` The debug log has `[server-classifier] Bash: the server-side classifier does not run for this session (server_no_result) and no local one judges in its place`.
 - `CLAUDE_CODE_AUTO_MODE_SERVER=0` and `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` each remove `safeguards` from the requests. Then the program sends its own classifier requests (stage `xml_s1`, model `claude-sonnet-5[1m]` in the run).
 - `CLAUDE_CODE_AUTO_MODE_SERVER=1` wins over `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1`: the requests keep `safeguards` and the beta `dangerous-tool-use-2026-09-03`. With both set and no verdict, the program logs `[server-classifier] the platform gave no classification for this request (server_no_result); treating that as this deployment's answer: auto mode classifies locally for the rest of this session and stops sending the classifier context`, and then sends its own classifier requests (stages `xml_s1` and `xml_s2`). With only `CLAUDE_CODE_AUTO_MODE_SERVER=1`, no verdict refuses the call and no local classifier runs. Cases: `print.automode.classifier-server.server-1`, `.server-1-betas-off`, `.betas-off`.
-- The gateway guide in the program tells a gateway to pass the `anthropic-beta` value, `safeguards`, and `safeguard_results` through. A gateway that cannot do this answers `400 invalid_request_error` with a message that names `safeguards`. The guide says the client then sends the request again without them and runs the check itself (`chunk-85d4q736.js@1494368`).
+- The gateway guide in the program tells a gateway to pass the `anthropic-beta` value, `safeguards`, and `safeguard_results` through. A gateway that cannot do this answers `400 invalid_request_error` with a message that names `safeguards`. The guide says the client then sends the request again without them and runs the check itself (`chunk-dbyxjq34.js@1496289`).
 
 | Run (2.1.319, `-p --permission-mode auto`, the model calls `Bash` with `curl -s http://127.0.0.1:9/x`) | Result |
 | --- | --- |
@@ -70,7 +70,7 @@ The cc-inspect `code` action `cli` makes these runs: `calls: [{"name": "Bash", "
 
 ### The Two Stages
 
-Source: the program, `chunk-qd604jgh.js` (the classifier) and `chunk-jr2w4rm8.js` (the defaults). A probe captured the requests. See [Probes](../../reference/probes.md#auto-mode).
+Source: the program, `chunk-ne1755n5.js` (the classifier) and `chunk-cgde6bdd.js` (the defaults). A probe captured the requests. See [Probes](../../reference/probes.md#auto-mode).
 
 1. Server config `tengu_auto_mode_config.twoStageClassifier` picks the mode: `fast` (stage 1 only), `thinking` (stage 2 only), or `both`. The default is `both`. A site that uses severity scores always uses `both`.
 2. Stage 1 is a short request. `max_tokens` is 64, or 256 in `fast` mode, plus the thinking budget. The stop sequence is `</severity>` in severity mode and `</block>` in block mode. `fast` mode sends no stop sequence. The prompt tells the model that stage 1 does not apply user intent.
@@ -80,12 +80,12 @@ Source: the program, `chunk-qd604jgh.js` (the classifier) and `chunk-jr2w4rm8.js
 
 | Item | Value | Source |
 | --- | --- | --- |
-| Severity thresholds | Server config `severityByModel` or `severityBySite`. With the feature-flag client off, the built-in values apply: `claude-sonnet-5` stage 1 `25`, stage 2 `35`. `claude-opus-4-8` stage 1 `45`, stage 2 `35`. The `[1m]` forms have the same values. The fallback values are `15` and `20` | `chunk-jr2w4rm8.js` |
-| Models with no threshold | Block mode (`<block>yes` or `no`), for example Haiku models | `chunk-qd604jgh.js` |
-| Thinking | Models in a built-in list get `thinking: {type: "disabled"}` and budget `0`. The list holds the Claude 3 models, Opus 4 to 4.8, Opus 5, Sonnet 4 to 4.6, Sonnet 5, and Haiku 4.5. Other models get no `thinking` field and 2048 more tokens. For example, stage 1 on Haiku 5.5 asks for 2112 tokens | `chunk-a8r9352h.js` |
-| Retries | Server config `maxRetries`, default `4`. A stage sends its request again while the reply cannot be parsed, so a stage sends up to 5 requests. A capture with an unparseable stub reply showed 5 stage 1 requests at 64 tokens and 5 stage 2 requests at 8192 tokens | `chunk-qd604jgh.js` |
-| Time limits | 60 seconds per request. For a long transcript, 10 more seconds per 50,000 tokens over 50,000, with a maximum of 120 seconds. Stage 2 has a deadline of 120 seconds | `chunk-qd604jgh.js` |
-| Errors | Stage 1 error: `Classifier unavailable - blocking for safety`. Stage 2 error: `Stage 2 classifier error - blocking based on stage 1 assessment`. Transcript too long: `Classifier transcript exceeded context window` | `chunk-qd604jgh.js` |
+| Severity thresholds | Server config `severityByModel` or `severityBySite`. With the feature-flag client off, the built-in values apply: `claude-sonnet-5` stage 1 `25`, stage 2 `35`. `claude-opus-4-8` stage 1 `45`, stage 2 `35`. The `[1m]` forms have the same values. The fallback values are `15` and `20` | `chunk-cgde6bdd.js` |
+| Models with no threshold | Block mode (`<block>yes` or `no`), for example Haiku models | `chunk-ne1755n5.js` |
+| Thinking | Models in a built-in list get `thinking: {type: "disabled"}` and budget `0`. The list holds the Claude 3 models, Opus 4 to 4.8, Opus 5, Sonnet 4 to 4.6, Sonnet 5, and Haiku 4.5. Other models get no `thinking` field and 2048 more tokens. For example, stage 1 on Haiku 5.5 asks for 2112 tokens | `chunk-qfakytpa.js` |
+| Retries | Server config `maxRetries`, default `4`. A stage sends its request again while the reply cannot be parsed, so a stage sends up to 5 requests. A capture with an unparseable stub reply showed 5 stage 1 requests at 64 tokens and 5 stage 2 requests at 8192 tokens | `chunk-ne1755n5.js` |
+| Time limits | 60 seconds per request. For a long transcript, 10 more seconds per 50,000 tokens over 50,000, with a maximum of 120 seconds. Stage 2 has a deadline of 120 seconds | `chunk-ne1755n5.js` |
+| Errors | Stage 1 error: `Classifier unavailable - blocking for safety`. Stage 2 error: `Stage 2 classifier error - blocking based on stage 1 assessment`. Transcript too long: `Classifier transcript exceeded context window` | `chunk-ne1755n5.js` |
 
 :::note[Prompt Text and Thresholds]
 The classifier prompt names 50 as the block boundary. The program compares the score with the thresholds in the table, not with 50.
@@ -95,7 +95,7 @@ The classifier prompt names 50 as the block boundary. The program compares the s
 
 ### Broad Allow Rules in Auto Mode
 
-When a session enters auto mode, the program removes allow rules that would let calls skip the classifier. It removes them from all sources and logs `Ignoring dangerous permission <rule> from <source> (bypasses classifier)`. It puts them back when the session leaves auto mode. Source: the program, `chunk-dkwwxw5t.js` and `chunk-5jx7zq06.js`. The official page [How Auto Mode Evaluates Actions](https://code.claude.com/docs/en/permission-modes#how-auto-mode-evaluates-actions) gives a shorter list.
+When a session enters auto mode, the program removes allow rules that would let calls skip the classifier. It removes them from all sources and logs `Ignoring dangerous permission <rule> from <source> (bypasses classifier)`. It puts them back when the session leaves auto mode. Source: the program, `chunk-4kcycapx.js` and `chunk-rajek17f.js`. The official page [How Auto Mode Evaluates Actions](https://code.claude.com/docs/en/permission-modes#how-auto-mode-evaluates-actions) gives a shorter list.
 
 The program removes these allow rules:
 
@@ -107,7 +107,7 @@ The program removes these allow rules:
 
 ### Classifier Billing Notice
 
-When auto mode falls back from the server-side classifier to its own classifier requests, which are billed, the program can show a notice. The title is `We're changing auto mode to no longer charge for classifier requests in Claude Code.` The text says `However, this session isn't eligible.` and links to [Auto Mode Classifier Billing](https://code.claude.com/docs/en/auto-mode-classifier-billing). Source: the program, `chunk-24jdhyyr.js@1361138` to `@1362125`, `chunk-kwsgydbx.js@4356`, and `chunk-q2yvfgx9.js@1905` (2.1.319).
+When auto mode falls back from the server-side classifier to its own classifier requests, which are billed, the program can show a notice. The title is `We're changing auto mode to no longer charge for classifier requests in Claude Code.` The text says `However, this session isn't eligible.` and links to [Auto Mode Classifier Billing](https://code.claude.com/docs/en/auto-mode-classifier-billing). Source: the program, `chunk-ne1755n5.js@1396978` to `@1397965`, `chunk-rptjv0qg.js@4356`, and `chunk-9e2me76t.js@1905` (2.1.319).
 
 - When the program detects a gateway, the text names its host. It detects a base URL host outside `anthropic.com`, a custom provider base URL, or the gateway URL. It knows some gateways by name, such as LiteLLM, Helicone, Portkey, Cloudflare AI Gateway, Kong, Braintrust, Bifrost, and Databricks.
 - When the Claude desktop app manages the provider and turned the gateway check on, the title is `Auto mode switched to its built-in safety check for this session`. This form is new in `2.1.316`.
@@ -120,7 +120,7 @@ The program shows it only when all of these are true:
 - The plan is not Pro, Max, or Team.
 - No gateway was detected. Or there is a gateway, and you did not accept the notice (`autoModeClassifierBillingNoticeAcknowledgedAt`) in the last 24 hours.
 
-On 2.1.319, the program asks for the notice only after a refusal of the server-side check sets a latch for the rest of the session (the program, `chunk-24jdhyyr.js@3175783`). Three interactive runs with a custom base URL did not show the notice:
+On 2.1.319, the program asks for the notice only after a refusal of the server-side check sets a latch for the rest of the session (the program, `chunk-ne1755n5.js@3237093`). Three interactive runs with a custom base URL did not show the notice:
 
 | Setup | Hypothesis | Result |
 | --- | --- | --- |
@@ -148,7 +148,7 @@ The plugin `settings.json` does not accept `autoMode`.
 
 :::note[Which Sources Count]
 A probe ran `claude auto-mode config` with `autoMode.allow` set in each source. Rules from user settings and from a `--settings` file applied. The program ignored rules in `.claude/settings.json` and `.claude/settings.local.json`. The program logs `tengu_settings_auto_mode_rules_untrusted_source_ignored` for them. Its message says only policy, user, and flag settings may set the rules. Managed settings also applied, from `managed-settings.json` and `managed-settings.d/`. The program joins lists from all sources. User or `--settings` rules come first, and managed rules come after. `$defaults` expands where it sits. A list with no `$defaults` in any source has no built-in rules. `classifyAllShell` is not in the `auto-mode config` output, so this run did not check it. See [Probes](../../reference/probes.md#configure-and-memory).
-A managed `autoMode.allow` list with no `$defaults` replaces the built-in allow rules. Then the program strips `$defaults` from the `autoMode.allow` list of a `--settings` file, so that file cannot add the built-ins back. The program also strips it when a managed settings file has a load error at `autoMode` or `autoMode.allow`, or fails to load as a whole. No probe checked this case, because managed settings need a root-owned folder. The "Scheduled-Task Fires" allow rule stays when an allow list replaces the defaults (the program, `chunk-k83gbg21.js` and `chunk-n6xbt9zz.js`).
+A managed `autoMode.allow` list with no `$defaults` replaces the built-in allow rules. Then the program strips `$defaults` from the `autoMode.allow` list of a `--settings` file, so that file cannot add the built-ins back. The program also strips it when a managed settings file has a load error at `autoMode` or `autoMode.allow`, or fails to load as a whole. No probe checked this case, because managed settings need a root-owned folder. The "Scheduled-Task Fires" allow rule stays when an allow list replaces the defaults (the program, `chunk-dgc8shqt.js` and `chunk-mf088szq.js`).
 The [official docs](https://code.claude.com/docs/en/auto-mode-config) confirm this only for `classifyAllShell` (user and `--settings`). A separate probe checked `classifyAllShell` by counting classifier requests for a `curl` command that a user allow rule covered. The count was 1 with `true` in user settings or `--settings`, and 0 with `false` or unset. A managed `false` with `true` in user settings or `--settings` gave 1. A managed `true` gave 1 in every case, even with `false` in user settings or `--settings`. The program reads no other source. See [Probes](../../reference/probes.md#auto-mode).
 :::
 
@@ -168,7 +168,7 @@ Put `--settings <file>` before the subcommand: `claude --settings f.json auto-mo
 
 ### `claude auto-mode critique` Details
 
-Source: the program, `chunk-ncc3yyk3.js`.
+Source: the program, `chunk-p5xv2adk.js`.
 
 - With no custom rules in `allow`, `soft_deny`, `hard_deny`, or `environment`, the command prints `No custom auto mode rules found.` and sends no request.
 - Otherwise it sends one request to the model with the full classifier system prompt and your custom rules. `max_tokens` is 4096. The program prints the first text block of the reply.
@@ -177,7 +177,7 @@ Source: the program, `chunk-ncc3yyk3.js`.
 
 ### `/auto-mode-setup` Without the Dialog
 
-The program also has a non-interactive form of `/auto-mode-setup`. It is the same in `2.1.314` and `2.1.316`. Source: the program, `chunk-j7pd2cdk.js` and `chunk-qd604jgh.js`.
+The program also has a non-interactive form of `/auto-mode-setup`. It is the same in `2.1.314` and `2.1.316`. Source: the program, `chunk-mejsa1x7.js` and `chunk-ne1755n5.js:101010`.
 
 It works in `-p` mode when `CLAUDE_CODE_REMOTE` is not set and a classifier model is set. The interactive command also needs the server-side auto mode config `envOnboarding: true`.
 
@@ -193,7 +193,7 @@ It works in `-p` mode when `CLAUDE_CODE_REMOTE` is not set and a classifier mode
 | --- | --- | --- | --- | --- |
 | `CLAUDE_CODE_AUTO_MODE_SERVER` | <Documented /> | Server-side review of auto mode actions | `0` removes `safeguards` from the requests and uses own classifier requests. `1` keeps `safeguards` also when `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1`; then a reply with no verdict switches the session to the local classifier (runs on 2.1.319, see [The Server-Side Check](#the-server-side-check)). Needs `2.1.271` | Env |
 | `CLAUDE_CODE_DISABLE_DANGEROUS_RM_TIMEOUT` | <Documented /> | Removes the time limit of critical-path `rm` prompts | In auto mode these go to the classifier | Launch env only |
-| `CLAUDE_CODE_AUTO_MODE_MODEL` | <Undocumented /> | Model of the classifier | A server-configured classifier model wins, and the program logs `ignoring CLAUDE_CODE_AUTO_MODE_MODEL=`. The program refuses `claude-sonnet-5-5`, `claude-opus-5-5`, and `claude-opus-5` as the value. If `ANTHROPIC_DEFAULT_SONNET_MODEL` names a 5.5 model, the program uses the Sonnet 5 default instead and says so (`chunk-a8r9352h.js`) | Env |
+| `CLAUDE_CODE_AUTO_MODE_MODEL` | <Undocumented /> | Model of the classifier | A server-configured classifier model wins, and the program logs `ignoring CLAUDE_CODE_AUTO_MODE_MODEL=`. The program refuses `claude-sonnet-5-5`, `claude-opus-5-5`, and `claude-opus-5` as the value. If `ANTHROPIC_DEFAULT_SONNET_MODEL` names a 5.5 model, the program uses the Sonnet 5 default instead and says so (`chunk-qfakytpa.js`) | Env |
 | `CLAUDE_CODE_AUTO_MODE_FULL_CONTEXT` | <Undocumented /> | Keeps the full context for the auto mode check when the check judges only a set of MCP tools in another permission mode. New in `2.1.316` | See [Tools and Bash](../env-vars/tools-and-bash.md) | Env |
 | `CLAUDE_CODE_BG_CLASSIFIER_MODEL` | <Undocumented /> | Classifier model for background sessions | Listed with the model env vars | Env |
 | `CLAUDE_CODE_AUTO_MODE_TIER` | <Undocumented /> | Any value sets the tier to `strict` | Source `env` | Env |
