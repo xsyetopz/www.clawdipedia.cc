@@ -1098,9 +1098,49 @@
 		"probes": [],
 		"note": "cost-state.modelUsage keys in schemas/claude-code-transcript.json"
 	},
-	"docs/reference/transcript-format.md#line-types:f817762b": {
+	"docs/reference/transcript-format.md#line-types:fe1c749c": {
 		"kind": "behaviour",
 		"probes": ["print.transcripts.lines"]
+	},
+	"docs/reference/transcript-format.md#other-types-in-the-writer:75b8f778": {
+		"kind": "schema",
+		"probes": [],
+		"note": "worktree-state worktreeSession.extensionRoot in schemas/claude-code-transcript.json"
+	},
+	"docs/reference/transcript-format.md#other-types-in-the-writer:342c4578": {
+		"kind": "schema",
+		"probes": [],
+		"note": "tools-used uuid in schemas/claude-code-transcript.json"
+	},
+	"docs/extend/headless/control-protocol.md#subtypes:0bb07f34": {
+		"kind": "schema",
+		"probes": [],
+		"note": "initialize auth_conflict and other_hook_ask_outranks_host in schemas/claude-code-control-protocol.json"
+	},
+	"docs/extend/headless/control-protocol.md#subtypes:7d641d5d": {
+		"kind": "schema",
+		"probes": [],
+		"note": "interrupt spare_background_tasks in schemas/claude-code-control-protocol.json"
+	},
+	"docs/extend/headless/control-protocol.md#subtypes:60747ce1": {
+		"kind": "schema",
+		"probes": [],
+		"note": "mcp_set_servers denied_tools in schemas/claude-code-control-protocol.json"
+	},
+	"docs/reference/tools/shell-and-web.md#how-it-works:a0227744": {
+		"kind": "schema",
+		"probes": [],
+		"note": "backgroundCalledBackWithinMs in schemas/claude-code-tools.json"
+	},
+	"docs/reference/tools/agents-and-tasks.md#result-fields-new-in-21321:69df7b11": {
+		"kind": "schema",
+		"probes": [],
+		"note": "endedLoopWakeup in schemas/claude-code-tools.json"
+	},
+	"docs/reference/tools/gated-and-other.md#result-fields-new-in-21321:69df7b11": {
+		"kind": "schema",
+		"probes": [],
+		"note": "SendUserFile attachments thumbnail in schemas/claude-code-tools.json"
 	},
 	"docs/reference/transcript-format.md#attachment-types:cb70dfea": {
 		"kind": "behaviour",

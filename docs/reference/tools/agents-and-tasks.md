@@ -71,6 +71,14 @@ Two result fields are new in `2.1.311`. Source: `AgentResult` and `SkillResult` 
 
 The program builds the list only while the server flag `tengu_silly_shore` is on (default on). When it is off, the list is empty (`chunk-35qty13k.js:101`, `chunk-2ht8z368.js:12649`).
 
+## Result Fields New in `2.1.321`
+
+Source: `CronDeleteResult` in [`claude-code-tools.json`](../schemas.md), and the program.
+
+| Field | Status | Tool and Result | Type | What It Means |
+| --- | --- | --- | --- | --- |
+| `endedLoopWakeup` | <Undocumented /> | `CronDelete` | `true` or left out | `true` when the job that `CronDelete` removed was a loop job (its `kind` is `loop`). The program then also emits a signal that a loop wakeup ended. When the program reads the lines of a session, it uses the time of a result with this field as the time the loop wakeup ended. The program leaves the field out for any other job (`chunk-kwsyv2g0.js:7463`, `chunk-de24qy0c.js:20423`). |
+
 ## Enable Tests
 
 Source: the program (`chunk-qd604jgh.js` and `chunk-8z3t1tjj.js` of `2.1.316`; the `ExitPlanMode` and `AskUserQuestion` rows are from `2.1.319`). Each tool object has an `isEnabled` function. Claude Code leaves the tool out of the request when it answers no.

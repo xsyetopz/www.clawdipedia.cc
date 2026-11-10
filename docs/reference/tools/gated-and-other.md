@@ -142,6 +142,16 @@ Source: `AppifactReplResult`, `PollResult`, and `ProjectsResult` in [`claude-cod
 
 The `toolsUsed` list is empty while the server flag `tengu_silly_shore` is off (default on) (`chunk-35qty13k.js:101`, `chunk-2ht8z368.js:12649`).
 
+## Result Fields New In `2.1.321`
+
+Source: `SendUserFileResult` in [`claude-code-tools.json`](../schemas.md), and the program.
+
+| Field | Status | Tool and Result | Type | What It Means |
+| --- | --- | --- | --- | --- |
+| `attachments[].thumbnail` | <Undocumented /> | `SendUserFile` | Object `{width, height}` of numbers | The size of a thumbnail of the file. The schema gives no description. When a result arrives from another process, the program keeps `thumbnail` only if the attachment has a `file_uuid` and both numbers are integers from 1 to 1000000. Otherwise it drops the field (`chunk-9d8mqfzx.js:12754`, `chunk-9d8mqfzx.js:11084`). |
+
+`REPLResult.imagesRefused` is not listed. The `REPL` tool is not user-reachable, so no page covers it (see [Surface Coverage](../surface-coverage.md)).
+
 ## Example
 
 Turn on skill proposals for one session. The tool also needs a remote environment (see the `propose_skills` row). So in a local terminal this line alone does not turn it on.
