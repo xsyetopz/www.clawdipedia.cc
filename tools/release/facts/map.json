@@ -835,6 +835,43 @@
 		"kind": "behaviour",
 		"probes": ["print.request.baseline-a", "print.request.baseline-b"]
 	},
+	"docs/configure/permissions/auto-mode.md#the-automode-setting:2d9c43cc": {
+		"kind": "behaviour",
+		"probes": [
+			"print.automode.classifier-server.default",
+			"print.automode.classifier-server.server-0",
+			"print.automode.classify-all-shell.allow-user-true",
+			"print.automode.classify-all-shell.no-allow-rule"
+		]
+	},
+	"docs/reference/probes.md#automodeclassifyallshell:3fdc454b": {
+		"kind": "behaviour",
+		"probes": [
+			"print.automode.classifier-server.default",
+			"print.automode.classifier-server.server-0",
+			"print.automode.classify-all-shell.allow-settings-flag-false",
+			"print.automode.classify-all-shell.allow-settings-flag-true",
+			"print.automode.classify-all-shell.allow-unset",
+			"print.automode.classify-all-shell.allow-user-false",
+			"print.automode.classify-all-shell.allow-user-true",
+			"print.automode.classify-all-shell.local-true",
+			"print.automode.classify-all-shell.no-allow-rule",
+			"print.automode.classify-all-shell.project-true",
+			"print.automode.classify-all-shell.user-false-flag-true",
+			"print.automode.classify-all-shell.user-true-flag-false"
+		]
+	},
+	"docs/reference/probes.md#automodeclassifyallshell:a42bb8a0": {
+		"kind": "behaviour",
+		"probes": [
+			"managed.false.classify-flag-true",
+			"managed.false.classify-neither",
+			"managed.false.classify-user-true",
+			"managed.true.classify-flag-false",
+			"managed.true.classify-neither",
+			"managed.true.classify-user-false"
+		]
+	},
 	"docs/reference/probes.md#automodeclassifyallshell:cb82b287": {
 		"kind": "behaviour",
 		"probes": [
