@@ -117,7 +117,7 @@ Flags that pick the model and set how hard it thinks.
 | `--thinking-display` `<display>` | <Undocumented /> | ❌ | Sets how the thinking text appears in the response. |
 | `--max-thinking-tokens` `<tokens>` | <Undocumented /> <Deprecated note="Use --thinking" /> | ❌ | Sets a thinking token limit. The flag is deprecated. Use `--thinking` instead. |
 | `--task-budget` `<tokens>` | <Undocumented /> | ❌ | Sets a task budget in tokens on the API side (`output_config.task_budget`). |
-| `--fast-mode` `<on\|off>` | <Undocumented /> | ❌ | Turns fast mode on or off. |
+| `--fast-mode` `<on\|off>` | <Undocumented /> | ❌ | Turns fast mode on or off. It sets `fastMode` in the flag settings of the session, so it also works on Vertex (case `print.cli322.fast-vertex-flag`). See [Fast Mode](../models-and-providers/fast-mode.md#controls). |
 | `--include-unsupported-models` | <Undocumented /> | ❌ | Offers models that your account can use and this version does not know. |
 | `--autocompact` `<auto\|tokens>` | <Documented /> | ✅ | Sets the auto-compact window to `auto` or to 100k to 1M tokens. |
 

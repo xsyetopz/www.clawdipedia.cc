@@ -65,7 +65,7 @@ The Registry Name column is the internal name of the value in the program.
 | `prompt-caching-evict-2026-05-12` | <Undocumented /> | `prompt_caching_evict` | When a message has the `evict_on_complete` cache control. |
 | `cache-keepalive-2026-09-03` | <Undocumented /> | `cache_keepalive` | When the keep-alive switch is on. It needs a subscriber login (see [Probes](../probes.md)). |
 | `extended-cache-ttl-2025-04-11` | <Documented /> | `extended_cache_ttl` | When the cache time is `1h` on the Anthropic API. The docs name it as `extended-cache-ttl`. |
-| `fast-mode-2026-02-01` | <Undocumented /> | `speed` | The program lists it, and no source states when it is sent. |
+| `fast-mode-2026-02-01` | <Undocumented /> | `speed` | On the Anthropic API, with each request that has `speed: "fast"` (cases `print.cli322.fast-request-first-party`, `.fast-request-first-party-off`). A Vertex request with `speed: "fast"` does not have it. See [Fast Mode](../../configure/models-and-providers/fast-mode.md#request). |
 | `redact-thinking-2026-02-12` | <Undocumented /> | `redact_thinking` | On the Anthropic API when interleaved thinking is on and the session is interactive. |
 | `thinking-resumption-2026-07-17` | <Undocumented /> | `thinking_resumption` | The program lists it, and no source states when it is sent. |
 | `thinking-token-count-2026-05-13` | <Undocumented /> | `thinking_token_count` | With interleaved thinking on the Anthropic API, and on Bedrock and Mantle for some models. |

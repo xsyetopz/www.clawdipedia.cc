@@ -77,6 +77,7 @@ A row is <Documented /> when a docs page such as Amazon Bedrock or Model Configu
 
 Each model has an environment variable that sets its region on Vertex. [Environment Variables](https://code.claude.com/docs/en/env-vars) in the official docs lists them.
 The Mythos models have none, because they have no Vertex name.
+Since `2.1.322`, fast mode on Vertex needs the region `global`, `us`, or `eu`. See [Fast Mode](fast-mode.md#vertex-regions).
 
 | `id` | Status | Env var |
 | --- | --- | --- |

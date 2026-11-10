@@ -19,6 +19,7 @@ The pages below list every model, alias, and provider switch. To see how Claude 
 | [Model Catalog, Aliases, and Pricing](model-catalog.md) | How to choose a model, the aliases, the catalog, other model IDs, pricing, and capability flags. |
 | [Effort, Thinking, and Fallback](effort-thinking-and-fallback.md) | The effort levels, the thinking controls, fallback models, retries, and automatic switches. |
 | [Providers and Gateways](providers.md) | The provider switches, endpoint and region variables, provider model names, Vertex regions, and gateways. |
+| [Fast Mode](fast-mode.md) | Where fast mode works, its controls, models, Vertex regions, texts, fallback to standard speed, and request field. |
 
 ## Example
 

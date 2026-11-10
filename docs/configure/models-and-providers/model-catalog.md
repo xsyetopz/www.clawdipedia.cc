@@ -178,7 +178,8 @@ For pinned models on third-party providers, you can state the capabilities yours
 | `haiku_5_5_early_stopping_guidance` | <Undocumented /> | Claude Code adds guidance against early stopping. | 1 |
 | `refusal_fallback` | <Undocumented /> | A refused request can run again on a fallback model. | 6 |
 | `silent_turn_reminder` | <Undocumented /> | Claude Code adds a reminder after a turn with no text. | 1 |
-| `fast_mode` | <Undocumented /> | The model supports `/fast`. | 5 |
+| `fast_mode` | <Undocumented /> | The model supports `/fast` on the Anthropic API. See [Fast Mode](fast-mode.md#models). | 5 |
+| `vertex_fast_mode` | <Undocumented /> | The model supports `/fast` on Vertex. New in `2.1.322`. `claude-fable-5-2` and `claude-mythos-5-2` have it. | 2 |
 | `thinking_disabled_effort_cap` | <Undocumented /> | The program does not state the purpose. | 1 |
 | `opus_5_prompt_bundle` | <Undocumented /> | The model gets the prompt sections for Opus 5. | 1 |
 | `opus_5_5_prompt_bundle` | <Undocumented /> | The model gets the prompt sections for Opus 5.5. | 1 |

@@ -25,7 +25,7 @@ Where to Set It tells you which files may set the key. See [Settings Files and S
 | `effortLevel` | <Documented /> | enum: `low`, `medium`, `high`, `xhigh` | - | Set a default effort level for models without a saved level of their own. Claude Code saves levels for supported models. | Any settings file |
 | `enforceAvailableModels` | <Documented /> | boolean | - | Keep the `/model` Default choice inside your `availableModels` allowlist. It has no effect when `availableModels` is unset or empty. | Any settings file |
 | `fallbackModel` | <Documented /> | array of string | - | Name backup models for when the primary is overloaded. Claude Code tries the models in order. The `--fallback-model` flag wins. `default` expands to the default model. | Any settings file |
-| `fastMode` | <Documented /> | boolean | - | Turn fast mode on for sessions where it's available. | Any settings file |
+| `fastMode` | <Differs /> | boolean | - | Turn fast mode on for sessions where it's available. On Vertex, the program ignores a saved value: use `/fast`, `--fast-mode on`, or `--settings '{"fastMode": true}'` in each session. The docs do not state the Vertex rule. See [Fast Mode](../models-and-providers/fast-mode.md#controls). | Any settings file |
 | `fastModePerSessionOptIn` | <Documented /> | boolean | - | Require people to turn fast mode on each session. Each session starts with fast mode off. | Any settings file |
 | `maxEffortLevel` | <Documented /> | string | - | Cap the effort level for every model or per model, on every provider. The lowest value across files wins. Claude Code does not clamp an effort set through `CLAUDE_CODE_EXTRA_BODY`. | Any settings file |
 | `model` | <Documented /> | string | - | Change the model Claude Code starts with. | Any settings file |

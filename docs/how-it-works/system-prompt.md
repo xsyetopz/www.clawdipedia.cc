@@ -191,7 +191,7 @@ They follow in this order. Claude Code omits a section that has no text. Session
 | `session_guidance` | <Undocumented /> | When any of its items applies | The `! <command>` tip, the `Agent` tool and forks, skills by `/name`, and `ultrareview`. |
 | `memory` | <Undocumented /> | Not with `--exclude-dynamic-system-prompt-sections` | Instructions for auto memory. |
 | `surface:<kind>`, `system_messages` | <Gated note="An experiment form of the prompt" /> | An experiment form of the prompt | Where Claude Code runs, such as `desktop`, `vscode`, `web`, or `terminal`. |
-| `env_info_simple` | <Undocumented /> | Normally | The latest model IDs, where Claude Code runs, and a note about `/fast`. |
+| `env_info_simple` | <Undocumented /> | Normally | The latest model IDs, where Claude Code runs, and a note about `/fast`. Since `2.1.322`, the note differs on Vertex (see [Fast Mode](../configure/models-and-providers/fast-mode.md#request)). |
 | `env_info_static` | <Undocumented /> | With `--exclude-dynamic-system-prompt-sections` | The same text, without data of the machine. |
 | `bg-session` | <Gated note="CLAUDE_CODE_SESSION_KIND=bg and CLAUDE_JOB_DIR set" /> | `CLAUDE_CODE_SESSION_KIND=bg` and `CLAUDE_JOB_DIR` set | Rules for background jobs: use `$CLAUDE_JOB_DIR/tmp`, use `EnterWorktree`, and end with a report. |
 | `context_management` | <Undocumented /> | Always | Old context gets summarized, so do not finish early. |
