@@ -197,7 +197,7 @@ export const NOTES: Record<string, string[]> = {
 		"Your `prompt` goes in the user message. The model defaults to Haiku, and you can set `model` in the hook.",
 	],
 	"auto-classifier": [
-		"By default, the server checks each tool call: the main request carries a `safeguards` field with a `classifier_context` object that holds the rules and the `auto_mode` lists. See [The Server-Side Check](../../configure/permissions/auto-mode.md#the-server-side-check).",
+		"By default, the server checks each tool call: the main request carries a `safeguards` field with a `classifier_context` object that holds the rules and the `auto_mode` lists. See [The Server-Side Check](../configure/permissions/auto-mode.md#the-server-side-check).",
 		"With `CLAUDE_CODE_AUTO_MODE_SERVER=0`, as in this capture, the program sends no `safeguards` field and asks its own classifier. The first stage is a separate request with the system text `You are a security monitor for autonomous AI coding agents.` and no tools.",
 		"The stub gave no classifier result that the program could parse, so it sent the same request more than once.",
 	],
