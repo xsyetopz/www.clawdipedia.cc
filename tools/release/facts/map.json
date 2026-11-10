@@ -861,17 +861,6 @@
 			"print.automode.classify-all-shell.user-true-flag-false"
 		]
 	},
-	"docs/reference/probes.md#automodeclassifyallshell:a42bb8a0": {
-		"kind": "behaviour",
-		"probes": [
-			"managed.false.classify-flag-true",
-			"managed.false.classify-neither",
-			"managed.false.classify-user-true",
-			"managed.true.classify-flag-false",
-			"managed.true.classify-neither",
-			"managed.true.classify-user-false"
-		]
-	},
 	"docs/reference/probes.md#automodeclassifyallshell:cb82b287": {
 		"kind": "behaviour",
 		"probes": [
