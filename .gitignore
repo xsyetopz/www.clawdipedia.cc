@@ -84,3 +84,7 @@ coverage/
 .tern-port
 .vscode-test/
 # <<< typescript-bedrock
+
+# The plugin server bundles are committed, because a plugin install runs no build.
+!/inspect/mcp/dist/
+!/plugin/mcp/dist/
