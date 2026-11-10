@@ -33,6 +33,7 @@
 //   `e.spawnEnv()`), `CLAUDE_RUNNER_CLAUDE_BIN` (set in an env object with no `env:` key or spread),
 //   and `CLAUDE_CODE_ARTIFACT_FD` (held in a constant; no read found).
 
+import type { Bundle } from "../ast.ts";
 import { type Extractor, scan, type SurfaceItem, unique } from "./common.ts";
 import { growLists, resolveHelpers } from "./env/helpers.ts";
 import { EnvObjects } from "./env/objects.ts";
@@ -40,7 +41,8 @@ import { readNode } from "./env/reads.ts";
 import { scanRegistries } from "./env/registry.ts";
 import { type Ctx, NAME } from "./env/shared.ts";
 
-export const extractEnv: Extractor = (bundle) => {
+/** Every place that names an env variable, in the order found; `extractEnv` keeps the first of each name. */
+export const envPlaces = (bundle: Bundle): SurfaceItem[] => {
 	const out: SurfaceItem[] = [];
 	const add: Ctx["add"] = (m, n, name, extra = {}) => {
 		if (NAME.test(name)) {
@@ -61,5 +63,7 @@ export const extractEnv: Extractor = (bundle) => {
 	});
 	resolveHelpers(c);
 	growLists(c, out);
-	return unique(out);
+	return out;
 };
+
+export const extractEnv: Extractor = (bundle) => unique(envPlaces(bundle));

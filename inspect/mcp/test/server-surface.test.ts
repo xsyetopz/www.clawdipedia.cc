@@ -80,6 +80,19 @@ describe("surface", () => {
 		expect(shown).not.toContain(at(more, 0));
 	});
 
+	test("surface env-places gives each place of one name with its source", async () => {
+		const r = await call("surface", {
+			kind: "env-places",
+			name: "FIXTURE_OTHER",
+		});
+		const [head, place, src] = text(r).split("\n");
+		expect(head).toBe("FIXTURE_OTHER: places 1");
+		expect(place).toMatch(/^- read {2}\S+\.js:\d+$/u);
+		expect(src).toContain("process.env.FIXTURE_OTHER");
+		const none = await call("surface", { kind: "env-places", name: "OTHER" });
+		expect(text(none)).toBe("OTHER: places 0\n");
+	});
+
 	test("surface without kind gives each kind with its count", async () => {
 		const r = await call("surface");
 		const t = text(r);

@@ -1,6 +1,7 @@
-// Chunk citations in docs/ must name a module of the build of src/version.ts.
+// Chunk citations in docs/ and tools/surface/exclusions.json must name a module of the build of src/version.ts.
 // Run with: bun tools/check/citations.ts [--bin <binary>]
-// With --move-from <older binary>, it instead writes the docs/ files with each stale citation moved to the build of --bin (or of src/version.ts).
+// With --move-from <older binary>, it instead writes those files with each stale citation moved to the build of --bin (or of src/version.ts).
+// A move cleans each build once (about 14 seconds and a few GB of memory for each), because a `:N` can be a line of the cleaned module.
 import { homedir } from "node:os";
 import { join } from "node:path";
 
@@ -9,6 +10,7 @@ import {
 	moveCitations,
 	staleCitations,
 } from "../../inspect/mcp/src/citations.ts";
+import { sources } from "../../inspect/mcp/src/sources.ts";
 import { CLAUDE_CODE_VERSION } from "../../src/version.ts";
 
 const ROOT = join(import.meta.dir, "..", "..");
@@ -19,15 +21,15 @@ const bin =
 		: (process.argv[flag + 1] ?? "");
 
 const { modules } = await extractModules(bin);
-const files: Record<string, string> = {};
+// The Surface Coverage page renders the exclusions, so a citation there must move at its source.
+const EXCLUSIONS = "tools/surface/exclusions.json";
+const files: Record<string, string> = {
+	[EXCLUSIONS]: await Bun.file(join(ROOT, EXCLUSIONS)).text(),
+};
 for await (const f of new Bun.Glob("docs/**/*.md").scan(ROOT)) {
 	files[f] = await Bun.file(join(ROOT, f)).text();
 }
 const moveFlag = process.argv.indexOf("--move-from");
-const sources = async (binary: string) => {
-	const { modules: mods } = await extractModules(binary);
-	return mods.map((m) => ({ name: m.name, text: m.source }));
-};
 if (moveFlag === -1) {
 	const stale = staleCitations(
 		files,

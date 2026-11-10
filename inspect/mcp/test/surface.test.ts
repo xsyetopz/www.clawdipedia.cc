@@ -3,6 +3,7 @@ import { describe, expect, test } from "bun:test";
 import { Bundle, children, type Node } from "../src/ast.ts";
 import { isNode } from "../src/ast/node.ts";
 import { literal, short, unique } from "../src/surface/common.ts";
+import { envPlaces } from "../src/surface/env.ts";
 import { KINDS, surface } from "../src/surface/index.ts";
 import { bundle, byName, items, names } from "./surface/util.ts";
 
@@ -192,6 +193,24 @@ var w=["VIA_ANY_CASE"].flatMap(Ct);
 			expect(n).toContain(x);
 		}
 		expect(n).not.toContain("NOT_READ");
+	});
+
+	// Claude Code 2.1.322 bridge inbox: `D.some((n)=>process.env[n]!==e[n])` over a list of registry names.
+	test("every place of a name: its registry entry and its read through a list", () => {
+		const src = `
+var H={str:()=>1};
+var v=H.str();
+var ns=reg("x",{VIA_COMPARE_A:()=>v,REG_OTHER_A:()=>v,REG_OTHER_B:()=>v});
+var D=["VIA_COMPARE_A","VIA_COMPARE_B"];
+function L(e){return D.some((n)=>process.env[n]!==e[n])}
+var K=["ONLY_LISTED_A","VIA_COMPARE_A","VIA_COMPARE_B"];
+`;
+		const places = envPlaces(bundle(src));
+		const of = (name: string) =>
+			places.filter((p) => p.name === name).map((p) => p.detail);
+		expect(of("VIA_COMPARE_A")).toEqual(["str", undefined]);
+		expect(of("VIA_COMPARE_B")).toEqual([undefined]);
+		expect(of("ONLY_LISTED_A")).toEqual(["listed"]);
 	});
 
 	test("a lowercase read of another object is not an env name", async () => {

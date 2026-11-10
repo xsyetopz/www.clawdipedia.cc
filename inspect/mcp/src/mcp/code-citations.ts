@@ -3,6 +3,7 @@ import { basename, join } from "node:path";
 import { program } from "../binary.ts";
 import { moveCitations, staleCitations } from "../citations.ts";
 import { claimTerms, relocate } from "../relocate.ts";
+import { sources } from "../sources.ts";
 import { type Args, need, type Out, text } from "./app.ts";
 
 /** The `citations` action: the chunk citations in the Markdown files of `dir` that name no module of the build; with `from`, where each moves to in the build. */
@@ -14,12 +15,10 @@ export const citations = async ({ dir, from, version }: Args): Promise<Out> => {
 		files[f] = await Bun.file(join(root, f)).text();
 	}
 	if (from !== undefined) {
-		const sources = (b: typeof p) =>
-			b.modules.map((m) => ({ name: m.name, text: m.source }));
 		const { moves } = moveCitations(
 			files,
-			sources(await program(from)),
-			sources(p),
+			await sources(from),
+			await sources(version),
 		);
 		const count = (how: string) => moves.filter((m) => m.how === how).length;
 		return text(

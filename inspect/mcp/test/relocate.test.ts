@@ -57,6 +57,23 @@ test("relocate puts the module with the same code before one whose code changed"
 	]);
 });
 
+test("relocate takes the nearer of two places with the same code in one module", () => {
+	const caps = `capabilities:["effort","max_effort","adaptive_thinking","per_turn_effort","per_turn_timing","context_management","fast_mode",`;
+	const fill = "var s=3;".repeat(60);
+	const before = `${PAD}{id:"one",${caps}"lean_prompt","refusal_fallback"]},${fill}{id:"two",${caps}"lean_prompt","org_locked_thinking"]}`;
+	// The first entry lost a word that the second one now holds, so the words around the second one match better.
+	const after = `${PAD}{id:"one",${caps}"vertex_fast_mode","lean_prompt"]},${fill}{id:"two",${caps}"lean_prompt","refusal_fallback","org_locked_thinking"]}`;
+	const at = before.indexOf("per_turn_effort");
+	expect(
+		relocate(
+			before,
+			at,
+			["per_turn_effort"],
+			[{ name: "chunk-eeeeeeee.js", text: after }],
+		),
+	).toMatchObject([{ offset: at, same: true }]);
+});
+
 test("relocate gives nothing when no anchor stands near the offset", () => {
 	expect(
 		relocate(

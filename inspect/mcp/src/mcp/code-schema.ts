@@ -37,7 +37,7 @@ export const CODE_SHAPE = {
 		'With cli: JSON replies of the stub by "METHOD /path", such as {"GET /api/oauth/profile": {...}}. "<stub>" in an env value becomes the stub URL.',
 	),
 	from: ARGS.from.describe(
-		"With relocate: the version or path of the build that holds `module`, the older one; with citations: the older build, so that the report lists where each stale citation moves to in `version`.",
+		"With relocate: the version or path of the build that holds `module`, the older one; with citations: the older build, so that the report lists where each stale citation moves to in `version`. A `:N` is a line of the cleaned module when the words of its sentence are on that line, else a raw offset; of two places with the same code, the one nearer to the old number wins.",
 	),
 	dir: ARGS.dir.describe(
 		"With citations: the folder whose `**/*.md` files are checked for `chunk-xxxxxxxx.js` citations (`:N`, `@N`, or `lines A to B` after the name) that name no module of the build.",

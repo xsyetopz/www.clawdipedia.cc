@@ -2,6 +2,7 @@ import type { Node } from "../ast.ts";
 import { program } from "../binary.ts";
 import { eventSites } from "../events.ts";
 import { type Entry, mergeEntries, type Val } from "../resolve.ts";
+import { envPlaces } from "../surface/env.ts";
 import { KINDS, surface, type SurfaceItem } from "../surface/index.ts";
 import { baseTools } from "../tools.ts";
 import {
@@ -46,6 +47,9 @@ const SURFACE_LIMIT = 200;
 const SURFACE_NAME_CHARS = 120;
 /** Room kept in the reply for the header line (it names the filter and the next offset). */
 const SURFACE_HEADER_CHARS = 300;
+/** A read through a list starts at the callback, so the list name is in the text before it. */
+const PLACE_BEFORE = 60;
+const PLACE_AFTER = 200;
 const surfaceLine = (i: SurfaceItem) =>
 	`- ${clip(i.name, SURFACE_NAME_CHARS)}${i.default === undefined ? "" : `  default ${i.default}`}${i.values ? `  values ${i.values.join("|")}` : ""}${has(i.gate) ? `  gate ${clip(i.gate, 120)}` : ""}${has(i.detail) ? `  (${clip(i.detail, 120)})` : ""}  ${i.module ?? "-"}:${i.offset ?? "-"}`;
 
@@ -98,7 +102,7 @@ const listKind = async (
 
 group(
 	"surface",
-	`List what a Claude Code binary exposes by kind (${Object.keys(KINDS).join(", ")}), or resolve object-keys, event-keys, or tool-gates from its code.`,
+	`List what a Claude Code binary exposes by kind (${Object.keys(KINDS).join(", ")}), or resolve object-keys, event-keys, tool-gates, or env-places (every place that names the environment variable \`name\`: a typed registry entry, a read, a name set for a child process, or a list entry) from its code.`,
 	"kind",
 	{
 		...Object.fromEntries(
@@ -161,6 +165,22 @@ group(
 					sites: lists.length,
 					keys,
 				},
+			);
+		},
+		"env-places": async ({ name, version }) => {
+			const { bundle } = await program(version);
+			const wanted = need(name, "name");
+			const places = envPlaces(bundle).filter((i) => i.name === wanted);
+			return text(
+				`${wanted}: places ${places.length}\n${places
+					.map((i) => {
+						const at = i.offset ?? 0;
+						const src = bundle
+							.get(i.module ?? "")
+							?.text.slice(Math.max(0, at - PLACE_BEFORE), at + PLACE_AFTER);
+						return `- ${i.detail ?? "read"}  ${i.module}:${at}\n  ${src?.replaceAll("\n", " ")}`;
+					})
+					.join("\n")}`,
 			);
 		},
 		"tool-gates": async ({ version }) => {
