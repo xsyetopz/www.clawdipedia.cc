@@ -6,7 +6,7 @@
 	"license": "MIT",
 	"type": "module",
 	"scripts": {
-		"build": "bun build src/server.ts --target=bun --outfile=dist/server.js"
+		"build": "bun build src/server.ts --target=bun --external=oxc-parser --outfile=dist/server.js"
 	},
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "^1.32.2",

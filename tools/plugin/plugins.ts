@@ -3,7 +3,10 @@ import { join } from "node:path";
 
 export const ROOT = join(import.meta.dir, "..", "..");
 
-/** The plugins of this repo: folder, skill, bundle source and output, tests, and whether it has an MCP server. */
+/**
+ * The plugins of this repo: folder, skill, bundle source and output, tests, whether it has an MCP server,
+ * and the packages its bundle leaves out (a native package, which Bun installs on first run).
+ */
 export const PLUGINS = [
 	{
 		dir: "plugin",
@@ -12,6 +15,7 @@ export const PLUGINS = [
 		out: "plugin/mcp/dist/server.js",
 		test: "plugin/mcp/test",
 		mcp: true,
+		external: [],
 	},
 	{
 		dir: "inspect",
@@ -20,6 +24,7 @@ export const PLUGINS = [
 		out: "inspect/mcp/dist/server.js",
 		test: "inspect/mcp/test",
 		mcp: true,
+		external: ["oxc-parser"],
 	},
 	{
 		dir: "cli",
@@ -28,6 +33,7 @@ export const PLUGINS = [
 		out: "cli/bin/clawdipedia",
 		test: "cli/test",
 		mcp: false,
+		external: [],
 	},
 ];
 export type Plugin = (typeof PLUGINS)[number];

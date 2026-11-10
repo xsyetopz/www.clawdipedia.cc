@@ -144,9 +144,22 @@ const pluginFileProblems = async (p: Plugin): Promise<string[]> => {
 		}
 	}
 	// The CLI plugin adds no tool list, so it has no .mcp.json.
-	if ((await exists(`${p.dir}/.mcp.json`)) !== p.mcp) {
+	const mcp = `${p.dir}/.mcp.json`;
+	const hasMcp = await exists(mcp);
+	if (hasMcp !== p.mcp) {
 		problems.push(
-			`${p.dir}/.mcp.json: ${p.mcp ? "missing" : "must not exist (no MCP server)"}`,
+			`${mcp}: ${p.mcp ? "missing" : "must not exist (no MCP server)"}`,
+		);
+	}
+	// Bun installs a package the bundle leaves out only with this flag when a `node_modules` folder is above the plugin.
+	const launch = hasMcp ? await text(mcp) : "";
+	if (
+		hasMcp &&
+		p.external.length > 0 &&
+		!launch.includes('"--install=fallback"')
+	) {
+		problems.push(
+			`${mcp}: args need "--install=fallback", because the bundle leaves out ${p.external.join(", ")}`,
 		);
 	}
 	return problems;

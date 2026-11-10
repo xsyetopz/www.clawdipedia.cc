@@ -31,7 +31,7 @@
 		"lint:code": "oxlint",
 		"lint:fix": "bun run --sequential --no-exit-on-error 'oxlint --fix' 'markdownlint-cli2 --fix'",
 		"llms:check": "bun tools/llms/check.ts",
-		"plugin:build": "bun build plugin/mcp/src/server.ts --target=bun --outfile=plugin/mcp/dist/server.js && bun build cli/src/cli.ts --target=bun --outfile=cli/bin/clawdipedia && bun build inspect/mcp/src/server.ts --target=bun --outfile=inspect/mcp/dist/server.js",
+		"plugin:build": "bun build plugin/mcp/src/server.ts --target=bun --outfile=plugin/mcp/dist/server.js && bun build cli/src/cli.ts --target=bun --outfile=cli/bin/clawdipedia && bun build inspect/mcp/src/server.ts --target=bun --external=oxc-parser --outfile=inspect/mcp/dist/server.js",
 		"plugin:check": "bun tools/plugin/check.ts",
 		"plugin:smoke": "bun tools/plugin/smoke.ts",
 		"release:all": "bun tools/release/cli.ts all",

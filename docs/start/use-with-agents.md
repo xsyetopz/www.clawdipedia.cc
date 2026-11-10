@@ -163,7 +163,7 @@ It does not send or keep cookies.
 
 The same marketplace has a second plugin, `cc-inspect`.
 It reads your session transcripts and the installed Claude Code binary.
-It makes two kinds of network request. `release` `notes` runs `gh release view` to get the release notes, once for each version. `code` `read` with `view: "readable"` runs `bunx @wakaru/cli@1.14.0`, once for each module.
+It makes three kinds of network request. On the first start, Bun downloads the parser package `oxc-parser@0.158.0` and its binary for your platform from the npm registry into the Bun cache (about 5 MB). `release` `notes` runs `gh release view` to get the release notes, once for each version. `code` `read` with `view: "readable"` runs `bunx @wakaru/cli@1.14.0`, once for each module.
 It writes only its cache of cleaned code. The cache is under `CC_INSPECT_CACHE`. If that is unset, it is under `./captures` when that folder exists. Otherwise it is under `~/.cache/cc-inspect`.
 `code` `run` also starts the program once, offline, with temp folders that it removes after the run.
 
@@ -171,7 +171,7 @@ It writes only its cache of cleaned code. The cache is under `CC_INSPECT_CACHE`.
 /plugin install cc-inspect@xsyetopz
 ```
 
-It adds the MCP server `cc-inspect`. This server runs with plain `bun`. It also adds the skill `cc-inspect`. The skill tells Claude when to use the server.
+It adds the MCP server `cc-inspect`. This server runs with `bun --install=fallback`, so you need no `bun install`, but the first start needs a network. It also adds the skill `cc-inspect`. The skill tells Claude when to use the server.
 The server has 4 tools. Each takes an `action` or a `kind` that picks what it does. Each also takes the same parameter names: `version` (a version or a binary path), `query`, `name`, `offset`, and `limit`.
 
 | Tool | Choice | What it does |

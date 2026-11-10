@@ -5,7 +5,7 @@ description: Look into the user's Claude Code sessions and the installed program
 
 # Inspect Claude Code
 
-The `cc-inspect` MCP server reads local files, except `release` `notes` (`gh release view`) and `code` `read` with `view: "readable"` (`bunx @wakaru/cli`). It writes only its cache of cleaned code, and the temp folders of `code` `run`, which it removes.
+The `cc-inspect` MCP server reads local files, except `release` `notes` (`gh release view`) and `code` `read` with `view: "readable"` (`bunx @wakaru/cli`). On its first start, Bun downloads the `oxc-parser` package from the npm registry. It writes only its cache of cleaned code, and the temp folders of `code` `run`, which it removes.
 It has 4 tools, `sessions`, `code`, `surface`, and `release`. Each takes an `action` (or, for `surface`, a `kind`), and the same parameter names: `version` (a version or a binary path), `query`, `name`, `offset`, and `limit`.
 
 ## Sessions
@@ -29,7 +29,7 @@ Transcripts can hold secrets and private text. Quote only what the user asks for
 4. `code` `read` with the `module` and `offset` of a hit to read the code around it. The `offset` of a hit is where the match starts, not where its snippet starts.
    Add `view: "readable"` for a version of the module that is easier to read. The first call for a module runs Wakaru (`bunx @wakaru/cli@1.14.0`, a few seconds on a large module), and later calls read the cache.
    When you have only plain words, such as a line of the release notes, `code` `find` with them as `query` ranks the functions of a prepared version by those words.
-   `find` and each `release` action prepare a version on first use, which takes about 14 seconds and a few GB of memory for each version.
+   `find` and each `release` action prepare a version on first use, which takes about 30 seconds and 6 GB of memory for each version.
 5. `surface` `object-keys` with the `module` and an `anchor` (or `offset`) gives the keys of an object literal, with spreads followed across functions and modules.
 6. `surface` `event-keys` lists the OpenTelemetry events, and with `name` gives the attributes of one event.
 7. `surface` `tool-gates` lists the built-in tools of a version, with the code that gates each one in the list, its own `isEnabled()` when it has one, and the source of the functions they call. It leaves out the per-session filters, which can turn a listed tool off: confirm with a probe before you say a tool is available.

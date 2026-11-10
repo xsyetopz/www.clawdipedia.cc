@@ -45,6 +45,7 @@ const freshnessProblems = async ({
 	dir,
 	src,
 	out: dist,
+	external,
 }: Plugin): Promise<string[]> => {
 	// bun build is deterministic for the same inputs and versions.
 	const tmp = await mkdtemp(join(tmpdir(), "plugin-check-"));
@@ -55,6 +56,7 @@ const freshnessProblems = async ({
 			"build",
 			src,
 			"--target=bun",
+			...external.map((x) => `--external=${x}`),
 			`--outfile=${bundle}`,
 		]);
 		if (b.exitCode !== 0) {
