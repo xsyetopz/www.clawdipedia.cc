@@ -2050,5 +2050,58 @@
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
+	},
+	"docs/configure/models-and-providers/fast-mode.md#:18544c54": {
+		"kind": "behaviour",
+		"probes": [
+			"print.cli322.fast-vertex-global",
+			"print.cli322.fast-vertex-us",
+			"print.cli322.fast-vertex-eu"
+		]
+	},
+	"docs/configure/models-and-providers/fast-mode.md#where-fast-mode-works:70261b19": {
+		"kind": "behaviour",
+		"probes": ["print.cli322.fast-bedrock", "print.cli322.fast-foundry"]
+	},
+	"docs/configure/models-and-providers/fast-mode.md#availability-reasons-and-texts:b9da923e": {
+		"kind": "behaviour",
+		"probes": [
+			"print.cli322.fast-vertex-us-east5",
+			"print.cli322.fast-vertex-model-region-bad"
+		]
+	},
+	"docs/configure/models-and-providers/fast-mode.md#fallback-to-standard-speed:ab8aa05a": {
+		"kind": "manual",
+		"probes": [],
+		"note": "panel and notice text read in the cleaned 2.1.322 code (chunk-vr3fdvn1.js:1832203 and :557099); no match in 2.1.321 (cc-inspect release diff)"
+	},
+	"docs/configure/models-and-providers/fast-mode.md#fallback-to-standard-speed:8e6b7dd0": {
+		"kind": "manual",
+		"probes": [],
+		"note": "notice text read in the cleaned 2.1.322 code (chunk-vr3fdvn1.js:1832005); no match in 2.1.321 (cc-inspect release diff)"
+	},
+	"docs/configure/models-and-providers/fast-mode.md#request:205e19b5": {
+		"kind": "manual",
+		"probes": [],
+		"note": "system prompt sentence read in the cleaned 2.1.322 code (chunk-9r1hbf9p.js:2502794); the 2.1.321 function has one text for all providers (cc-inspect release diff)"
+	},
+	"docs/configure/models-and-providers/model-catalog.md#capabilities:a019832f": {
+		"kind": "behaviour",
+		"probes": [
+			"print.cli322.fast-vertex-capability-on",
+			"print.cli322.fast-vertex-capability-off"
+		]
+	},
+	"docs/configure/models-and-providers/providers.md#vertex-region-variables:0bbd62b7": {
+		"kind": "behaviour",
+		"probes": [
+			"print.cli322.fast-vertex-global",
+			"print.cli322.fast-vertex-us-east5"
+		]
+	},
+	"docs/how-it-works/system-prompt.md#session-sections:5b097514": {
+		"kind": "manual",
+		"probes": [],
+		"note": "system prompt sentence read in the cleaned 2.1.322 code (chunk-9r1hbf9p.js:2502794); the 2.1.321 function has one text for all providers (cc-inspect release diff)"
 	}
 }
