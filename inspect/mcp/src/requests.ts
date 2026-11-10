@@ -36,6 +36,13 @@ export const placesOf = (
 		.map(([p]) => `file ${p}`),
 ];
 
+/** The lines of `text` that `q` (without the `g` flag) matches. */
+export const linesWith = (text: string, q: RegExp): string =>
+	text
+		.split("\n")
+		.filter((l) => q.test(l))
+		.join("\n");
+
 const bytes = (v: unknown): number =>
 	v === undefined ? 0 : Buffer.byteLength(JSON.stringify(v));
 

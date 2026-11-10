@@ -72121,7 +72121,9 @@ var filesOf = async (dir) => {
   ...q.test(r.stdout) ? ["stdout"] : [],
   ...q.test(r.stderr) ? ["stderr"] : [],
   ...Object.entries(r.files).filter(([, t]) => q.test(t)).map(([p]) => `file ${p}`)
-], bytes = (v) => v === undefined ? 0 : Buffer.byteLength(JSON.stringify(v)), bodyOf = (body) => {
+], linesWith = (text, q) => text.split(`
+`).filter((l) => q.test(l)).join(`
+`), bytes = (v) => v === undefined ? 0 : Buffer.byteLength(JSON.stringify(v)), bodyOf = (body) => {
   const b = isRecord(body) ? body : {};
   const cacheControl = [];
   const walk = (v, path) => {
@@ -72648,13 +72650,18 @@ var STREAM_FLAGS, STDOUT_CHARS = 4000, STDERR_CHARS = 2000, SHOW_CHARS = 8000, P
     total: json.length,
     text: json.slice(start, end)
   };
-}, shownFile = (r, show) => {
+}, shownFile = (r, { show, query, regex: isRegex }) => {
   if (show === undefined) {
     return "";
   }
   const file = r.files[show] ?? r.projectFiles[show];
-  return `
-${show}: ${file === undefined ? "not written" : clip(file, SHOW_CHARS)}`;
+  if (file === undefined) {
+    return `
+${show}: not written`;
+  }
+  return query === undefined ? `
+${show}: ${clip(file, SHOW_CHARS)}` : `
+${show}, lines with the query: ${clip(linesWith(file, regex(query, isRegex ?? false)), SHOW_CHARS)}`;
 }, toolText = (tool, entry) => {
   if (tool === undefined) {
     return "";
@@ -72690,7 +72697,7 @@ query found in: ${found.join("; ") || "nothing"}` : "";
     line: `exit ${r.exit}, requests: ${sent.join(", ") || "none"}, files: ${files}.${toolsLine}${foundLine}`
   };
 }, cli = async (a) => {
-  const { args = [], prompts, version, show, tool } = a;
+  const { args = [], prompts, version, tool } = a;
   if (args.length === 0 && !prompts) {
     throw new Error('cli needs args, such as ["auto-mode", "config"]');
   }
@@ -72704,7 +72711,7 @@ query found in: ${found.join("; ") || "nothing"}` : "";
   return text(`${bin.version}: ${line}${outcomes.map((l) => `
 ${l}`).join("")}
 stdout: ${stdout}
-stderr: ${stderr}${shownFile(r, show)}${bodyText(body)}${toolText(tool, entry)}`, {
+stderr: ${stderr}${shownFile(r, a)}${bodyText(body)}${toolText(tool, entry)}`, {
     exit: r.exit,
     requests: sent,
     tools,
@@ -72795,7 +72802,7 @@ var init_code_schema = __esm(() => {
     dir: ARGS.dir.describe("With citations: the folder whose `**/*.md` files are checked for `chunk-xxxxxxxx.js` citations (`:N`, `@N`, or `lines A to B` after the name) that name no module of the build."),
     packageVersion: ARGS.packageVersion.describe("With npm: the version of the package in `name`; default: the latest, looked up once and kept."),
     login: ARGS.login.describe('With cli: "key" (default) sets the fake API key; "oauth" writes a fake claude.ai login to .credentials.json instead.'),
-    show: ARGS.show.describe('With cli: a .json, .jsonl, or .log file of the config folder, else of the project folder, to print at exit, such as ".claude.json", or "d.log" after `--debug-file d.log`.'),
+    show: ARGS.show.describe('With cli: a .json, .jsonl, or .log file of the config folder, else of the project folder, to print at exit, such as ".claude.json", or "d.log" after `--debug-file d.log`. With `query`, only its lines that hold that text.'),
     apiHost: ARGS.apiHost.describe("With cli: the stub also answers https://api.anthropic.com (through a local proxy and a throw-away CA), for requests that ignore ANTHROPIC_BASE_URL, such as GET /api/oauth/profile."),
     baseUrl: ARGS.baseUrl.describe("With cli: false leaves ANTHROPIC_BASE_URL unset, so that with apiHost the Messages API requests also go to https://api.anthropic.com, as on a direct connection."),
     provider: ARGS.provider.describe('With cli: "vertex" runs the program as a Vertex AI client whose base URL is the stub, with a fake project and no Google sign-in. The model is then in the request path (\u2026/models/<model>:streamRawPredict), not in the body.'),

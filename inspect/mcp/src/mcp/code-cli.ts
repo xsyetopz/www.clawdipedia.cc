@@ -1,6 +1,7 @@
 import { listInstalls } from "../binary.ts";
 import {
 	bodyOf,
+	linesWith,
 	outcomeLines,
 	placesOf,
 	resultText,
@@ -111,12 +112,17 @@ const requestBody = (
 	};
 };
 
-const shownFile = (r: RunResult, show: string | undefined) => {
+const shownFile = (r: RunResult, { show, query, regex: isRegex }: Args) => {
 	if (show === undefined) {
 		return "";
 	}
 	const file = r.files[show] ?? r.projectFiles[show];
-	return `\n${show}: ${file === undefined ? "not written" : clip(file, SHOW_CHARS)}`;
+	if (file === undefined) {
+		return `\n${show}: not written`;
+	}
+	return query === undefined
+		? `\n${show}: ${clip(file, SHOW_CHARS)}`
+		: `\n${show}, lines with the query: ${clip(linesWith(file, regex(query, isRegex ?? false)), SHOW_CHARS)}`;
 };
 
 const toolText = (tool: string | undefined, entry: object | undefined) => {
@@ -176,7 +182,7 @@ const summary = (r: RunResult, found: string[] | undefined) => {
 
 /** The `cli` action: run the installed program with other args and report what it sent and wrote. */
 export const cli = async (a: Args): Promise<Out> => {
-	const { args = [], prompts, version, show, tool } = a;
+	const { args = [], prompts, version, tool } = a;
 	if (args.length === 0 && !prompts) {
 		throw new Error('cli needs args, such as ["auto-mode", "config"]');
 	}
@@ -192,7 +198,7 @@ export const cli = async (a: Args): Promise<Out> => {
 	const stderr = clip(r.stderr, STDERR_CHARS);
 	const outcomes = outcomeLines(r).map((l) => clip(l, OUTCOME_CHARS));
 	return text(
-		`${bin.version}: ${line}${outcomes.map((l) => `\n${l}`).join("")}\nstdout: ${stdout}\nstderr: ${stderr}${shownFile(r, show)}${bodyText(body)}${toolText(tool, entry)}`,
+		`${bin.version}: ${line}${outcomes.map((l) => `\n${l}`).join("")}\nstdout: ${stdout}\nstderr: ${stderr}${shownFile(r, a)}${bodyText(body)}${toolText(tool, entry)}`,
 		{
 			exit: r.exit,
 			requests: sent,

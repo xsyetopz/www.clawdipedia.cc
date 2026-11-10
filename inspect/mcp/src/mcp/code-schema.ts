@@ -49,7 +49,7 @@ export const CODE_SHAPE = {
 		'With cli: "key" (default) sets the fake API key; "oauth" writes a fake claude.ai login to .credentials.json instead.',
 	),
 	show: ARGS.show.describe(
-		'With cli: a .json, .jsonl, or .log file of the config folder, else of the project folder, to print at exit, such as ".claude.json", or "d.log" after `--debug-file d.log`.',
+		'With cli: a .json, .jsonl, or .log file of the config folder, else of the project folder, to print at exit, such as ".claude.json", or "d.log" after `--debug-file d.log`. With `query`, only its lines that hold that text.',
 	),
 	apiHost: ARGS.apiHost.describe(
 		"With cli: the stub also answers https://api.anthropic.com (through a local proxy and a throw-away CA), for requests that ignore ANTHROPIC_BASE_URL, such as GET /api/oauth/profile.",

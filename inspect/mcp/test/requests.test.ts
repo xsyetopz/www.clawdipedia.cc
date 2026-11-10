@@ -6,6 +6,7 @@ import { join } from "node:path";
 import {
 	bodyOf,
 	filesOf,
+	linesWith,
 	outcomeLines,
 	placesOf,
 	resultText,
@@ -70,6 +71,13 @@ test("placesOf with a regular expression matches the same places as a plain text
 		"request 2 POST /v1/messages",
 	]);
 	expect(placesOf(r, /Budget: \d+%/u)).toEqual(["stderr"]);
+});
+
+test("linesWith keeps the lines that hold the text", () => {
+	expect(linesWith("a\nFast mode x\nb\nfast mode y", /fast mode/iu)).toBe(
+		"Fast mode x\nfast mode y",
+	);
+	expect(linesWith("a\nb", /c/u)).toBe("");
 });
 
 test("bodyOf gives the JSON size of each part and where each cache_control is", () => {

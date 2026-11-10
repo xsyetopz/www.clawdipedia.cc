@@ -99,6 +99,21 @@ export const CASES: CaseDef[] = [
 	vertex("disabled", "global", { env: { CLAUDE_CODE_DISABLE_FAST_MODE: "1" } }),
 	vertex("off", "global", { prompt: "/fast off" }),
 	vertex("bad-argument", "global", { prompt: "/fast maybe" }),
+	vertex("capability-on", "global", {
+		env: { CLAUDE_CODE_MODEL_CAPABILITIES: "claude-opus-5-5=vertex_fast_mode" },
+	}),
+	vertex("capability-off", "global", {
+		model: "claude-fable-5-2",
+		env: {
+			CLAUDE_CODE_MODEL_CAPABILITIES: "claude-fable-5-2=-vertex_fast_mode",
+		},
+	}),
+	vertex("fable", "global", { model: "claude-fable-5-2" }),
+	fast("capability-first-party", {
+		model: "claude-sonnet-5",
+		env: { CLAUDE_CODE_MODEL_CAPABILITIES: "claude-sonnet-5=fast_mode" },
+	}),
+	fast("first-party-sonnet", { model: "claude-sonnet-5", env: {} }),
 	fast("request-first-party", { prompt: PROMPT, env: {} }),
 	fast("request-first-party-off", { prompt: PROMPT, env: {}, args: [] }),
 	fast("request-first-party-disabled", {
