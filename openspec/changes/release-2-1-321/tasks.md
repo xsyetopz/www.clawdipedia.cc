@@ -9,7 +9,7 @@ Do not let a page state a `(proposed)` item.
 - [x] 1.2 `bun tools/surface/coverage.ts --all`: 0 unmapped.
 - [x] 1.3 Print probes: group `cli321` (`tools/release/probes/print/`).
 - [x] 1.4 `bun run release:probe:managed -- --to 2.1.321`. It needs the user to run the `sudo` install command.
-- [ ] 1.5 `bun run release:facts -- --check`.
+- [x] 1.5 `bun run release:facts -- --check`.
 
 ## 2. Pages From the Diff
 
@@ -39,13 +39,13 @@ Leave out VS Code, cloud sessions, and the Claude apps gateway.
 ## 4. What Changed
 
 - [x] 4.1 `docs/start/what-changed.md` holds only the `2.1.321` section, compared with `2.1.319`.
-- [ ] 4.2 Drop the `2.1.319` fact ids from `tools/release/facts/map.json`, and map the new facts.
+- [x] 4.2 Drop the `2.1.319` fact ids from `tools/release/facts/map.json`, and map the new facts.
 - [x] 4.3 `docs/reference/probes.md` lists the `cli321` print cases.
 
 ## 5. Release
 
-- [ ] 5.1 `src/version.ts` reads `2.1.321`.
-- [ ] 5.2 `bun run schemas` and `bun run surface`.
-- [ ] 5.3 `bun run version:bump` for the affected plugins.
-- [ ] 5.4 One `CHANGELOG.md` entry for `2.1.321`.
-- [ ] 5.5 `bun run schemas:check`, `bun run verify:locked`, `just verify`, then commit.
+- [x] 5.1 `src/version.ts` reads `2.1.321`.
+- [x] 5.2 `bun run schemas` and `bun run surface`.
+- [x] 5.3 `bun run version:bump` for the affected plugins.
+- [x] 5.4 One `CHANGELOG.md` entry for `2.1.321`.
+- [x] 5.5 `bun run schemas:check`, `bun run verify:locked`, `just verify`, then commit.

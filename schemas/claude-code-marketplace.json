@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-marketplace.json",
-	"title": "Claude Code marketplace.json (Claude Code 2.1.319)",
-	"$comment": "For .claude-plugin/marketplace.json. Generated from Claude Code 2.1.319 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code marketplace.json (Claude Code 2.1.321)",
+	"$comment": "For .claude-plugin/marketplace.json. Generated from Claude Code 2.1.321 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
 	"type": "object",
 	"properties": {
 		"$schema": {
@@ -1605,6 +1605,12 @@
 												"connectorId": {
 													"type": "string",
 													"minLength": 1
+												},
+												"autoModeVerdictTools": {
+													"type": "array",
+													"items": {
+														"type": "string"
+													}
 												}
 											},
 											"required": ["type", "name"]
@@ -2152,6 +2158,12 @@
 															"connectorId": {
 																"type": "string",
 																"minLength": 1
+															},
+															"autoModeVerdictTools": {
+																"type": "array",
+																"items": {
+																	"type": "string"
+																}
 															}
 														},
 														"required": ["type", "name"]

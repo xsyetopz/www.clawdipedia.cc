@@ -358,7 +358,7 @@
 				"type": ["string", "number", "boolean", "null", "array", "object"]
 			},
 			"anchors": [
-				"userConfig:«»().optional().describe(\"@internal\"),defaultEnabled:oe",
+				"userConfig:«»().optional().describe(\"@internal\"),defaultEnabled:«»",
 				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}"
 			],
 			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.skill (a strict zod object). That declares userConfig as unknown (zod oe(), which accepts any YAML value). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types. The zod type does not restrict it, so the loader or consumer sets the real shape."

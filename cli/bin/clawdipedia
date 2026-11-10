@@ -6920,7 +6920,7 @@ class DiskCache {
 // plugin/mcp/package.json
 var package_default = {
   name: "clawdipedia-docs-mcp",
-  version: "3.0.2",
+  version: "3.0.3",
   private: true,
   description: "MCP server for the Anthropic docs (clawdipedia, platform, code, and claude-resources sources). Source for dist/server.js, which is committed.",
   license: "MIT",

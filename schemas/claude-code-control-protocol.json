@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-control-protocol.json",
-	"title": "Claude Code control protocol (Claude Code 2.1.319)",
-	"$comment": "For the request and response of each control_request subtype in stream-json mode (definitions <subtype>Request and <subtype>Response, direction in x-direction). Generated from Claude Code 2.1.319 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, table of rows {request, originator, response}; the request union is described as \"Control requests a client sends to drive the loop\". Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code control protocol (Claude Code 2.1.321)",
+	"$comment": "For the request and response of each control_request subtype in stream-json mode (definitions <subtype>Request and <subtype>Response, direction in x-direction). Generated from Claude Code 2.1.321 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, table of rows {request, originator, response}; the request union is described as \"Control requests a client sends to drive the loop\". Do not edit by hand: run \"bun run schemas\".",
 	"$defs": {
 		"apply_flag_settingsRequest": {
 			"type": "object",
@@ -390,7 +390,7 @@
 				},
 				"plugin": {
 					"type": "string",
-					"description": "@internal The plugin whose `$` call (`$.ui.ask`, `$.tool.call`, `$.agent.spawn`) started the run this ask belongs to, by the name it is loaded under: who the terminal's dialog says the ask is from. The engine's word, which no plugin sets. Empty on a run resumed from an agent a plugin steered, whose name was not kept (the terminal says `from a plugin`). Absent for the model's own calls. Untrusted text; escape before display."
+					"description": "@internal The plugin whose `$` call (`$.ui.ask`, `$.tool.call`, `$.agent.spawn`) started the run this ask belongs to, by the name it is loaded under: who the terminal's dialog says the ask is from. The engine's word, which no plugin sets. Empty when no name can be sent: on a run resumed from an agent a plugin steered, whose name was not kept, and for a name that fails the shown-name rule (docs/shown-name-rule.md), such as one with a hidden character. Show `from a plugin` for it. Absent for the model's own calls. Untrusted text; escape before display."
 				},
 				"description": {
 					"type": "string"
@@ -6190,12 +6190,20 @@
 							"connectorId": {
 								"$ref": "#/$defs/initializeRequest____schema16"
 							},
+							"autoModeVerdictTools": {
+								"maxItems": 64,
+								"type": "array",
+								"items": {
+									"type": "string"
+								},
+								"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+							},
 							"tools": {
-								"$ref": "#/$defs/initializeRequest____schema18"
+								"$ref": "#/$defs/initializeRequest____schema21"
 							}
 						}
 					},
-					"description": "Settings for the SDK-hosted MCP servers named in sdkMcpServers, keyed by server name. Sent as a separate field so a CLI that predates it ignores it; entries whose name is not in sdkMcpServers, and values that do not match this shape, are ignored rather than rejected. timeout, disableAutoBackground and connectorId apply when the server is first registered; tools (the per-tool permission policy) adds its ask and deny rules on every initialize that names the server. An initialize never removes a rule; mcp_set_servers replaces them."
+					"description": "Settings for the SDK-hosted MCP servers named in sdkMcpServers, keyed by server name. Sent as a separate field so a CLI that predates it ignores it; entries whose name is not in sdkMcpServers, and values that do not match this shape, are ignored rather than rejected. timeout, disableAutoBackground, connectorId and autoModeVerdictTools apply when the server is first registered; tools (the per-tool permission policy) adds its ask and deny rules on every initialize that names the server. An initialize never removes a rule; mcp_set_servers replaces them."
 				},
 				"sdkMcpServerManifests": {
 					"type": "object",
@@ -6546,8 +6554,16 @@
 															"connectorId": {
 																"$ref": "#/$defs/initializeRequest____schema16"
 															},
+															"autoModeVerdictTools": {
+																"maxItems": 64,
+																"type": "array",
+																"items": {
+																	"type": "string"
+																},
+																"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+															},
 															"tools": {
-																"$ref": "#/$defs/initializeRequest____schema18"
+																"$ref": "#/$defs/initializeRequest____schema21"
 															}
 														},
 														"required": ["type", "name"]
@@ -6749,7 +6765,7 @@
 			"minLength": 1,
 			"description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. With or without that declaration, deny and ask rules, hook matchers and disallowed-tool lists that spell mcp__<connectorId> also reach this server's tools, and nothing that allows does; the id is read as a tool's name would spell it (a character other than a letter, a digit, '-' and '_' as '_'), and one that is then longer than 128 characters or holds '__' is not used for that. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered."
 		},
-		"initializeRequest____schema18": {
+		"initializeRequest____schema21": {
 			"type": "array",
 			"items": {
 				"type": "object",
@@ -6895,6 +6911,19 @@
 					},
 					"description": "Information about the logged in user's account."
 				},
+				"auth_conflict": {
+					"type": "object",
+					"properties": {
+						"token_source": {
+							"type": "string"
+						},
+						"api_key_source": {
+							"type": "string"
+						}
+					},
+					"required": ["token_source", "api_key_source"],
+					"description": "@internal Where the auth token and the API key come from when both are configured (for example ANTHROPIC_AUTH_TOKEN and '/login managed key'); the terminal then warns that auth may not work as expected. Source names only, never credential values. Absent when at most one is configured, when one apiKeyHelper supplies both, and from CLIs older than this field."
+				},
 				"current_model": {
 					"type": "string",
 					"description": "@internal The CLI's active model at connect time. Remote Control clients (web/mobile) sync their model dropdown TO this value on connect instead of sending set_model with their own default — without it, connecting from a phone silently switches the terminal's model (CC-2659)."
@@ -6927,6 +6956,10 @@
 				"hook_on_failure_supported": {
 					"type": "boolean",
 					"description": "True on every initialize reply from a CLI that honors `onFailure` on hook matchers. Absent on CLIs that predate the option, which ignore it (a failed callback set to \"block\" lets the action run), and from responders that do not run the host's hooks. A host that sets \"block\" must not go on without it; the TypeScript SDK refuses the session. It says nothing of this request's hooks: `hooks_applied` does, and the TypeScript SDK also refuses a first initialize that reads `hooks_applied: false` when a matcher sets \"block\"."
+				},
+				"other_hook_ask_outranks_host": {
+					"type": "boolean",
+					"description": "@internal True on an initialize reply that goes over the pipes of the host that spawned this CLI, from a CLI that ranks another PreToolUse hook's ask above the host's own: where a hook that this host registered asks, and any other hook asks on the same call, the can_use_tool request carries the other hook's reason, whichever finished first. A plugin's hooks module may still re-word an ask, and a hook may copy the host's words (docs/desktop-host-contract.md D65a). Absent for a remote client, whose hooks are never the host's own, in a Cowork cloud session or a Code cloud worker, and on CLIs that predate it, which may send the host's own reason even when another hook asked: there a host must not take its own reason to mean that nobody else asked."
 				},
 				"code_running_mcp_tools_applied": {
 					"type": "object",
@@ -7078,7 +7111,7 @@
 					"properties": {
 						"transcript_allowed": {
 							"type": "boolean",
-							"description": "Whether the box may send this sign-in's session transcript, and so may open: true for Pro and Max only. Read at session start."
+							"description": "Whether the box may send this sign-in's session transcript, and so may open: true only for individual plans (Pro, Max, and Ultra). Read at session start."
 						},
 						"logs_followup": {
 							"type": "boolean",
@@ -7245,6 +7278,10 @@
 					},
 					"description": "@internal One to eight uuids (case ignored) of user messages whose turn this Stop is for; any other value is read as absent. The current turn is the latest one dequeued for a client's message (it may be over, or not yet started), with every turn started and message taken in since. A Stop that names one of its messages is handled as a plain interrupt (if latched, see still_queued, only for pending work that it names or that answers no client's message), and so is any Stop while the CLI knows of no current turn. Other Stops do nothing and get turn: 'spared', except a few that name work that is queued or, on claude -p, read and not yet queued (sparesCurrentTurn). Always include the message that opened the turn (user_message_uuid on its first frames, before any re-run): after a restart the CLI knows no other. A turn handed over by turn_handoff has no name: any Stop may stop it, so send a plain one. The uuids are only compared: never stored, logged, sent back or shown to the model. Not read beside cancel_queued:true or send_now:true, nor by older CLIs, which answer without turn."
 				},
+				"spare_background_tasks": {
+					"type": "boolean",
+					"description": "@internal True: this Stop ends the turn and leaves running background agents and workflows alone, as a Stop does for a client that declared perTaskStopAffordance. A running observer still stops. Written by a client that has its own stop for each task, for a person's Stop that should end only the turn. Holds for this request alone, whatever a client declared at initialize. A CLI that does not read it treats the request as it treats any other, and a claude-code-server tenant ends those tasks whatever this says."
+				},
 				"worker_epoch": {
 					"type": "integer",
 					"minimum": 1,
@@ -7288,7 +7325,7 @@
 					"items": {
 						"type": "string"
 					},
-					"description": "Present only when the request set cancel_queued:true — uuids of main-thread commands cancelled by this interrupt: every survivor that would otherwise have appeared under `still_queued`, including any uuid that was mid-fold at the interrupt instant (this request also aborts, so the fold never delivers it). Each listed uuid has been removed (queue-resident), dropped before it was queued (a message this process had read and was still holding), or marked cancel-pending (the first-command prewait window, closed by the drain loop's backstop) and emits a terminal 'cancelled' lifecycle synchronously at the first such interrupt (a repeat interrupt over the same parked batch re-lists the uuid idempotently without re-emitting); none will run. Where one of them is the re-run of an interrupted turn that also answered for other client messages whose re-sent copies had been set aside for it, those messages' uuids are listed behind the commands' too: they were in no queue and never under `still_queued`, each has its terminal 'cancelled' lifecycle, and a repeat interrupt does not list them again. Same coverage caveats as `still_queued` (uuid-stamped main-thread only; internally-enqueued uuids may appear). Advertised by the `interrupt_cancel_queued_v1` capability."
+					"description": "Present only when the request set cancel_queued:true, with one exception that the last sentence names — uuids of main-thread commands cancelled by this interrupt: every survivor that would otherwise have appeared under `still_queued`, including any uuid that was mid-fold at the interrupt instant (this request also aborts, so the fold never delivers it). Each listed uuid has been removed (queue-resident), dropped before it was queued (a message this process had read and was still holding), or marked cancel-pending (the first-command prewait window, closed by the drain loop's backstop) and emits a terminal 'cancelled' lifecycle synchronously at the first such interrupt (a repeat interrupt over the same parked batch re-lists the uuid idempotently without re-emitting); none will run. Where one of them is the re-run of an interrupted turn that also answered for other client messages whose re-sent copies had been set aside for it, those messages' uuids are listed behind the commands' too: they were in no queue and never under `still_queued`, each has its terminal 'cancelled' lifecycle, and a repeat interrupt does not list them again. Same coverage caveats as `still_queued` (uuid-stamped main-thread only; internally-enqueued uuids may appear). Advertised by the `interrupt_cancel_queued_v1` capability. The exception, in a remote session and behind a flag: an interrupt with neither cancel_queued nor for_user_message_uuids, which no service wrote, also carries this field where it cancelled messages that the server had sent again and that this process held aside to run later; it then lists those alone, and no capability advertises it."
 				}
 			},
 			"required": ["still_queued"],
@@ -8208,6 +8245,14 @@
 										"minLength": 1,
 										"description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. With or without that declaration, deny and ask rules, hook matchers and disallowed-tool lists that spell mcp__<connectorId> also reach this server's tools, and nothing that allows does; the id is read as a tool's name would spell it (a character other than a letter, a digit, '-' and '_' as '_'), and one that is then longer than 128 characters or holds '__' is not used for that. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered."
 									},
+									"autoModeVerdictTools": {
+										"maxItems": 64,
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+									},
 									"tools": {
 										"type": "array",
 										"items": {
@@ -8236,6 +8281,13 @@
 							}
 						]
 					}
+				},
+				"denied_tools": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "@internal Deny rules on single MCP tools, each as mcp__<server>__<tool>. They hold whatever kind of server lists the tool, also one that `servers` leaves out. The list replaces the one that the session holds; a claude-code-server worker reads it only from the session service's own push of a newer stored server set. A request without the list keeps the held one, and so does a list of more than 2,048 names or with an entry in another form."
 				}
 			},
 			"required": ["subtype", "servers"],
@@ -8554,6 +8606,14 @@
 														"type": "string",
 														"minLength": 1,
 														"description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. With or without that declaration, deny and ask rules, hook matchers and disallowed-tool lists that spell mcp__<connectorId> also reach this server's tools, and nothing that allows does; the id is read as a tool's name would spell it (a character other than a letter, a digit, '-' and '_' as '_'), and one that is then longer than 128 characters or holds '__' is not used for that. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered."
+													},
+													"autoModeVerdictTools": {
+														"maxItems": 64,
+														"type": "array",
+														"items": {
+															"type": "string"
+														},
+														"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 													},
 													"tools": {
 														"type": "array",
@@ -9703,6 +9763,14 @@
 														"minLength": 1,
 														"description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. With or without that declaration, deny and ask rules, hook matchers and disallowed-tool lists that spell mcp__<connectorId> also reach this server's tools, and nothing that allows does; the id is read as a tool's name would spell it (a character other than a letter, a digit, '-' and '_' as '_'), and one that is then longer than 128 characters or holds '__' is not used for that. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered."
 													},
+													"autoModeVerdictTools": {
+														"maxItems": 64,
+														"type": "array",
+														"items": {
+															"type": "string"
+														},
+														"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+													},
 													"tools": {
 														"type": "array",
 														"items": {
@@ -10631,7 +10699,7 @@
 				}
 			},
 			"required": ["subtype", "path"],
-			"description": "@internal Moves the session to a new working directory — the headless twin of /cd, for SDK hosts like Claude Desktop. Runs the same validation, Cd(...) permission rules, and relocation path as the interactive command, with the trust prompt delegated to the host via the needs_trust response arm. Before the first turn the move re-anchors start-of-session state (the first request is built as for a start in the new directory, no move notice); after a turn the prefix is preserved and the move arrives as an appended notice. SessionStart hooks are never re-run by set_cwd (those of the launch directory already ran and their output stays in the session); a host that starts the process before its directory is known should use --await-claim and claim_session, which run them in the bound directory instead. Rejected while a turn is in flight.",
+			"description": "@internal Moves the session to a new working directory — the headless twin of /cd, for SDK hosts like Claude Desktop. Runs the same validation, Cd(...) permission rules, and relocation path as the interactive command, with the trust prompt delegated to the host via the needs_trust response arm. Before the first turn the move re-anchors start-of-session state (the first request is built as for a start in the new directory, no move notice); after a turn the prefix is preserved and the move arrives as an appended notice. SessionStart hooks are never re-run by set_cwd (those of the launch directory already ran and their output stays in the session); a host that starts the process before its directory is known should use --await-claim and claim_session, which run them in the bound directory instead. Rejected while a turn is in flight, and, on a Remote Control session, when it comes from a remote client rather than from the process that owns the CLI's stdin.",
 			"x-direction": "client"
 		},
 		"set_cwdResponse": {
@@ -10653,7 +10721,7 @@
 						},
 						"transcript_relocated": {
 							"type": "boolean",
-							"description": "True when the transcript lives in the project slot derived from cwd (the normal case, and the no-op case). False only on the documented edge where the move completed but the transcript move failed AND the rollback chdir failed — a cwd-derived resume lookup will then miss the session."
+							"description": "True when the transcript lives in the project slot derived from cwd (the normal case, and the no-op case). False only when the transcript move failed and the directory change could not be undone, so the move was kept — a cwd-derived resume lookup will then miss the session."
 						}
 					},
 					"required": ["status", "cwd", "changed", "transcript_relocated"]
@@ -10690,9 +10758,10 @@
 								"not_a_directory",
 								"blocked_by_rule",
 								"busy",
-								"unsafe_path"
+								"unsafe_path",
+								"remote_origin"
 							],
-							"description": "unsafe_path: the target's canonical path contains characters that do not render as visible, space-distinguishable glyphs — control (Cc), format (Cf), default-ignorable, line/paragraph-separator (Zl/Zp), non-ASCII-space Zs, or braille-blank code points; rejected fail-closed before the trust round-trip, and the offending path is never echoed back."
+							"description": "unsafe_path: the target's canonical path contains characters that do not render as visible, space-distinguishable glyphs — control (Cc), format (Cf), default-ignorable, line/paragraph-separator (Zl/Zp), non-ASCII-space Zs, or braille-blank code points; rejected fail-closed before the trust round-trip, and the offending path is never echoed back. remote_origin: the request reached a Remote Control session (claude remote-control) from a remote client rather than from the process that owns the CLI's stdin; such a session keeps the working directory it was started in, and nothing was resolved or recorded."
 						},
 						"message": {
 							"type": "string",
@@ -12370,27 +12439,36 @@
 							"description": "@internal The asking client, as its ui_attach named it. The ask puts it on the roster when it is not there: the id given, else `<surface>:default`."
 						},
 						"component": {
-							"type": "string",
-							"enum": [
-								"AskUserQuestion",
-								"UserMessage",
-								"AssistantMessage",
-								"ToolUse",
-								"ToolResult",
-								"ToolGroup",
-								"ToolProgress",
-								"CommandOutput",
-								"Spinner",
-								"TurnDuration",
-								"InfoNotice",
-								"SessionMode",
-								"PromptHint",
-								"AbovePrompt",
-								"Pane",
-								"Placed",
-								"Backdrop"
+							"anyOf": [
+								{
+									"type": "string",
+									"enum": [
+										"AskUserQuestion",
+										"UserMessage",
+										"AssistantMessage",
+										"ToolUse",
+										"ToolResult",
+										"ToolGroup",
+										"ToolProgress",
+										"CommandOutput",
+										"Spinner",
+										"TurnDuration",
+										"InfoNotice",
+										"SessionMode",
+										"PromptHint",
+										"AbovePrompt",
+										"Pane",
+										"Placed",
+										"Backdrop"
+									],
+									"description": "@internal A component a plugin may draw through `ui.render`: one name per render site of the hooks engine (src/plugins/functionHooks/types/render/render-component.ts)."
+								},
+								{
+									"type": "string",
+									"const": "Theme"
+								}
 							],
-							"description": "@internal A component a plugin may draw through `ui.render`: one name per render site of the hooks engine (src/plugins/functionHooks/types/render/render-component.ts)."
+							"description": "@internal What to draw, or `Theme`: the session's colors, under the `instance_id` `theme`. No hook draws them: the engine answers itself, `props` of `plugin` and `colors` to `desktop` and `mobile`, and `{}` with none standing, under another id or to any other surface."
 						},
 						"instance_id": {
 							"type": "string",
@@ -12546,7 +12624,7 @@
 						},
 						"hooked": {
 							"type": "boolean",
-							"description": "@internal Whether any loaded plugin hooks `ui.render` for this component; false means the surface may stop asking for it until the next ui_invalidate."
+							"description": "@internal Whether any loaded plugin hooks `ui.render` for this component, and always true for `Theme`, which the engine answers itself; false means the surface may stop asking for it until the next ui_invalidate."
 						},
 						"client_modules": {
 							"type": "object",
@@ -13621,27 +13699,36 @@
 					"description": "@internal The asking client, as its ui_attach named it. The ask puts it on the roster when it is not there: the id given, else `<surface>:default`."
 				},
 				"component": {
-					"type": "string",
-					"enum": [
-						"AskUserQuestion",
-						"UserMessage",
-						"AssistantMessage",
-						"ToolUse",
-						"ToolResult",
-						"ToolGroup",
-						"ToolProgress",
-						"CommandOutput",
-						"Spinner",
-						"TurnDuration",
-						"InfoNotice",
-						"SessionMode",
-						"PromptHint",
-						"AbovePrompt",
-						"Pane",
-						"Placed",
-						"Backdrop"
+					"anyOf": [
+						{
+							"type": "string",
+							"enum": [
+								"AskUserQuestion",
+								"UserMessage",
+								"AssistantMessage",
+								"ToolUse",
+								"ToolResult",
+								"ToolGroup",
+								"ToolProgress",
+								"CommandOutput",
+								"Spinner",
+								"TurnDuration",
+								"InfoNotice",
+								"SessionMode",
+								"PromptHint",
+								"AbovePrompt",
+								"Pane",
+								"Placed",
+								"Backdrop"
+							],
+							"description": "@internal A component a plugin may draw through `ui.render`: one name per render site of the hooks engine (src/plugins/functionHooks/types/render/render-component.ts)."
+						},
+						{
+							"type": "string",
+							"const": "Theme"
+						}
 					],
-					"description": "@internal A component a plugin may draw through `ui.render`: one name per render site of the hooks engine (src/plugins/functionHooks/types/render/render-component.ts)."
+					"description": "@internal What to draw, or `Theme`: the session's colors, under the `instance_id` `theme`. No hook draws them: the engine answers itself, `props` of `plugin` and `colors` to `desktop` and `mobile`, and `{}` with none standing, under another id or to any other surface."
 				},
 				"instance_id": {
 					"type": "string",
@@ -13782,7 +13869,7 @@
 				},
 				"hooked": {
 					"type": "boolean",
-					"description": "@internal Whether any loaded plugin hooks `ui.render` for this component; false means the surface may stop asking for it until the next ui_invalidate."
+					"description": "@internal Whether any loaded plugin hooks `ui.render` for this component, and always true for `Theme`, which the engine answers itself; false means the surface may stop asking for it until the next ui_invalidate."
 				},
 				"client_modules": {
 					"type": "object",

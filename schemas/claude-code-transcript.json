@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-transcript.json",
-	"title": "Claude Code transcript JSONL entry (Claude Code 2.1.319)",
-	"$comment": "For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.319 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to \"transcript\"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:\"<entry type>\" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
+	"title": "Claude Code transcript JSONL entry (Claude Code 2.1.321)",
+	"$comment": "For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.321 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to \"transcript\"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:\"<entry type>\" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
 	"type": "object",
 	"oneOf": [
 		{
@@ -211,8 +211,8 @@
 					"type": "string"
 				},
 				"id": {
-					"x-observed": true,
-					"type": "string"
+					"type": "string",
+					"x-observed": true
 				},
 				"timestamp": {
 					"type": "string",
@@ -263,11 +263,8 @@
 				"cut": {
 					"type": "object",
 					"properties": {
-						"markAddresses": {
-							"x-unverified": true
-						},
 						"kind": {
-							"const": "tool-mark-address"
+							"enum": ["laptop-account-memory", "tool-mark-address"]
 						},
 						"cuts": {
 							"x-unverified": true
@@ -276,7 +273,10 @@
 							"x-unverified": true
 						},
 						"messages": {
-							"type": "array"
+							"x-unverified": true
+						},
+						"markAddresses": {
+							"x-unverified": true
 						}
 					}
 				},
@@ -1084,8 +1084,8 @@
 					"type": "integer"
 				},
 				"requestRef": {
-					"x-observed": true,
-					"type": "string"
+					"type": "string",
+					"x-observed": true
 				},
 				"requestedModel": {
 					"x-observed": true,
@@ -1116,12 +1116,12 @@
 				"thinkingDurationMs": {
 					"type": "number"
 				},
+				"thinkingDisplay": {
+					"type": "string"
+				},
 				"toolInputStreamMs": {
 					"type": "number",
 					"x-observed": true
-				},
-				"thinkingDisplay": {
-					"type": "string"
 				},
 				"resumedFromIncompleteThinking": {
 					"type": "boolean"
@@ -2308,7 +2308,7 @@
 					"type": "string"
 				}
 			},
-			"$comment": "Registry policy: boundary-cleared. Code sites used: 52."
+			"$comment": "Registry policy: boundary-cleared. Code sites used: 53."
 		},
 		"queue-operation": {
 			"type": "object",
@@ -2928,14 +2928,14 @@
 				"launchedAgentId": {
 					"type": "string"
 				},
-				"source_uuid": {
-					"type": "string"
-				},
 				"fromRemoteErrorResult": {
 					"type": "boolean"
 				},
 				"preventContinuation": {
 					"type": "boolean"
+				},
+				"source_uuid": {
+					"type": "string"
 				},
 				"parentUuid": {
 					"x-observed": true,
@@ -3026,6 +3026,9 @@
 				"sessionId": {
 					"x-unverified": true,
 					"x-observed": true
+				},
+				"uuid": {
+					"type": "string"
 				}
 			},
 			"$comment": "Registry policy: last-wins. Code sites used: 5."
@@ -3632,6 +3635,76 @@
 					"x-observed": true,
 					"type": "boolean"
 				},
+				"connectorFileLines": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"direction": {
+								"enum": ["fetching", "sending"]
+							},
+							"state": {
+								"anyOf": [
+									{
+										"enum": ["done", "stopped", "stopped-maybe-saved"]
+									},
+									{
+										"type": "object",
+										"properties": {
+											"refused": {
+												"type": "string"
+											},
+											"leftBehind": {
+												"const": true
+											}
+										},
+										"required": ["refused"]
+									}
+								]
+							},
+							"fileName": {
+								"type": "string"
+							},
+							"bytesDone": {
+								"type": "number"
+							},
+							"bytesTotal": {
+								"type": "number"
+							},
+							"connectorName": {
+								"type": "string"
+							},
+							"place": {
+								"type": "string"
+							},
+							"savedAs": {
+								"type": "string"
+							},
+							"fileIndex": {
+								"type": "integer",
+								"minimum": 1
+							},
+							"fileCount": {
+								"type": "integer",
+								"minimum": 1
+							},
+							"groupedFiles": {
+								"type": "integer",
+								"minimum": 2
+							}
+						},
+						"required": [
+							"direction",
+							"state",
+							"fileName",
+							"bytesDone",
+							"bytesTotal",
+							"connectorName",
+							"fileIndex",
+							"fileCount"
+						]
+					}
+				},
 				"mcpMeta": {
 					"type": "object",
 					"properties": {
@@ -3849,6 +3922,9 @@
 						},
 						"madeElsewhere": {
 							"enum": ["resumedByName", "enteredByPath"]
+						},
+						"extensionRoot": {
+							"x-unverified": true
 						}
 					}
 				},

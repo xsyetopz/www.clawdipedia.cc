@@ -725,30 +725,30 @@ These items exist in the official docs, but the program works in another way. Co
 
 ## In the Program
 
-The program of `2.1.319` holds 9673 items in 18 kinds, counted from `schemas/surface.json`.
+The program of `2.1.321` holds 9849 items in 18 kinds, counted from `schemas/surface.json`.
 [Surface Coverage](surface-coverage.md) lists each item with its page.
 
 | Kind | Items | Not on a Page Yet |
 | --- | --- | --- |
 | [Betas](surface-coverage.md#betas) | 54 | 0 |
-| [API Endpoints](surface-coverage.md#api-endpoints) | 451 | 0 |
-| [Environment Variables](surface-coverage.md#environment-variables) | 1974 | 0 |
-| [Error Texts](surface-coverage.md#error-texts) | 4134 | 0 |
+| [API Endpoints](surface-coverage.md#api-endpoints) | 454 | 0 |
+| [Environment Variables](surface-coverage.md#environment-variables) | 1988 | 0 |
+| [Error Texts](surface-coverage.md#error-texts) | 4148 | 0 |
 | [Files](surface-coverage.md#files) | 78 | 0 |
-| [CLI Flags](surface-coverage.md#cli-flags) | 310 | 0 |
-| [Gates](surface-coverage.md#gates) | 1389 | 0 |
+| [CLI Flags](surface-coverage.md#cli-flags) | 411 | 0 |
+| [Gates](surface-coverage.md#gates) | 1420 | 0 |
 | [Hook Events](surface-coverage.md#hook-events) | 33 | 0 |
 | [Keybindings](surface-coverage.md#keybindings) | 207 | 0 |
-| [Mod API](surface-coverage.md#mod-api) | 237 | 0 |
-| [Models](surface-coverage.md#models) | 74 | 0 |
+| [Mod API](surface-coverage.md#mod-api) | 239 | 0 |
+| [Models](surface-coverage.md#models) | 76 | 0 |
 | [OpenTelemetry Events](surface-coverage.md#opentelemetry-events) | 28 | 0 |
 | [Permission Rules](surface-coverage.md#permission-rules) | 6 | 0 |
 | [Settings](surface-coverage.md#settings) | 197 | 0 |
 | [Nested Setting Keys](surface-coverage.md#nested-setting-keys) | 196 | 0 |
 | [Slash Commands](surface-coverage.md#slash-commands) | 140 | 0 |
-| [Subcommands](surface-coverage.md#subcommands) | 71 | 0 |
+| [Subcommands](surface-coverage.md#subcommands) | 80 | 0 |
 | [Tools](surface-coverage.md#tools) | 94 | 0 |
-| All kinds | 9673 | 0 |
+| All kinds | 9849 | 0 |
 
 ## Related Pages
 

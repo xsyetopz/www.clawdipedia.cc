@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-tools.json",
-	"title": "Claude Code built-in tool payloads (Claude Code 2.1.319)",
-	"$comment": "For the input and result of each built-in tool (definitions <Tool>Input and <Tool>Result). Generated from Claude Code 2.1.319 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the tool factory that copies a tool definition's properties (getters included), read as inputSchema and outputSchema on each tool. Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code built-in tool payloads (Claude Code 2.1.321)",
+	"$comment": "For the input and result of each built-in tool (definitions <Tool>Input and <Tool>Result). Generated from Claude Code 2.1.321 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the tool factory that copies a tool definition's properties (getters included), read as inputSchema and outputSchema on each tool. Do not edit by hand: run \"bun run schemas\".",
 	"description": "The program did not give these definitions: ObserverReportResult, TestingPermissionResult, ArtifactCommentsInput, ArtifactDataInput, ArtifactCheckInput, SendMessageResult, ArtifactInput.",
 	"$defs": {
 		"AgentInput": {
@@ -2795,7 +2795,7 @@
 											},
 											"content_type": {
 												"type": "string",
-												"maxLength": 40,
+												"maxLength": 73,
 												"pattern": "^[a-z0-9]{1,24}\\/[a-z0-9.+-]{1,80}$"
 											},
 											"size_bytes": {
@@ -5969,7 +5969,7 @@
 											},
 											"content_type": {
 												"type": "string",
-												"maxLength": 40,
+												"maxLength": 73,
 												"pattern": "^[a-z0-9]{1,24}\\/[a-z0-9.+-]{1,80}$"
 											},
 											"size_bytes": {
@@ -9143,7 +9143,7 @@
 											},
 											"content_type": {
 												"type": "string",
-												"maxLength": 40,
+												"maxLength": 73,
 												"pattern": "^[a-z0-9]{1,24}\\/[a-z0-9.+-]{1,80}$"
 											},
 											"size_bytes": {
@@ -12317,7 +12317,7 @@
 											},
 											"content_type": {
 												"type": "string",
-												"maxLength": 40,
+												"maxLength": 73,
 												"pattern": "^[a-z0-9]{1,24}\\/[a-z0-9.+-]{1,80}$"
 											},
 											"size_bytes": {
@@ -13538,6 +13538,10 @@
 					"type": "boolean",
 					"const": true
 				},
+				"backgroundCalledBackWithinMs": {
+					"description": "@internal Milliseconds, a whole number of minutes, from this result within which the end of this backgrounded command normally opens a turn even after the reply; absent where no such turn is promised",
+					"type": "number"
+				},
 				"dangerouslyDisableSandbox": {
 					"description": "Flag to indicate if sandbox mode was overridden",
 					"type": "boolean"
@@ -13850,6 +13854,10 @@
 			"properties": {
 				"id": {
 					"type": "string"
+				},
+				"endedLoopWakeup": {
+					"type": "boolean",
+					"const": true
 				}
 			},
 			"required": ["id"]
@@ -16720,6 +16728,10 @@
 					"description": "Count of images from inner tool calls dropped by the per-result image cap; surfaced as a note in the tool_result",
 					"type": "number"
 				},
+				"imagesRefused": {
+					"description": "Note for images of inner Reads that are left out because their files were shown often and have not changed; surfaced in the tool_result",
+					"type": "string"
+				},
 				"imagePagesFailed": {
 					"description": "Pages of inner page-range Reads that could not be processed as an image; surfaced as one note each in the tool_result",
 					"type": "array",
@@ -18279,6 +18291,18 @@
 									"original_width",
 									"original_height"
 								]
+							},
+							"thumbnail": {
+								"type": "object",
+								"properties": {
+									"width": {
+										"type": "number"
+									},
+									"height": {
+										"type": "number"
+									}
+								},
+								"required": ["width", "height"]
 							},
 							"project_path": {
 								"type": "string"

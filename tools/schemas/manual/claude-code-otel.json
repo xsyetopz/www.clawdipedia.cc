@@ -2607,7 +2607,7 @@
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["\"plugin_loaded\",{...«»(«».name,«»,«»)"],
+			"anchors": ["\"plugin_loaded\",{...«»(«».name,«».marketplace,«»)"],
 			"note": "\"plugin.name\":T?d.name:cv: the plugin name or \"third-party\"."
 		},
 		"event:plugin_loaded.marketplace.name": {
@@ -2623,16 +2623,16 @@
 			"schema": {
 				"type": "string"
 			},
-			"anchors": [
-				"...«»&&«».manifest.version&&{\"plugin.version\":«».manifest.version}"
-			],
+			"anchors": ["...«»&&«».version&&{\"plugin.version\":«».version}"],
 			"note": "Added when d.manifest.version is truthy: the manifest version string."
 		},
 		"event:plugin_loaded.plugin_id_hash": {
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["enabled_via:«»,plugin_id_hash:«»(«».name,«»)"],
+			"anchors": [
+				"enabled_via:«».enabledVia,plugin_id_hash:«»(«».name,«».marketplace)"
+			],
 			"note": "plugin_id_hash:VR(d.name,I): a 16-character hex string."
 		},
 		"event:safety_event.category": {

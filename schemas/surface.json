@@ -1,5 +1,5 @@
 {
-	"version": "2.1.319",
+	"version": "2.1.321",
 	"kinds": {
 		"beta": [
 			{ "name": "advanced-tool-use-2025-11-20", "detail": "tool_search" },
@@ -266,6 +266,11 @@
 			{ "name": "/v1/code/channels/${…}${…}", "detail": "path" },
 			{ "name": "/v1/code/channels/${…}/messages", "detail": "path" },
 			{ "name": "/v1/code/channels?${…}", "detail": "path" },
+			{ "name": "/v1/code/environments/${…}/host_requests", "detail": "path" },
+			{
+				"name": "/v1/code/environments/${…}/host_requests/${…}/result",
+				"detail": "path"
+			},
 			{ "name": "/v1/code/github/${…}-pull-request", "detail": "path" },
 			{ "name": "/v1/code/github/get-batch-branch-status", "detail": "path" },
 			{ "name": "/v1/code/github/import-token", "detail": "path" },
@@ -593,6 +598,7 @@
 			},
 			{ "name": "/v1/organizations/workspaces?beta=true", "detail": "path" },
 			{ "name": "/v1/pages/mcp", "detail": "path" },
+			{ "name": "/v1/privacy-consents/checkup", "detail": "path" },
 			{ "name": "/v1/session_ingress/session/${…}", "detail": "path" },
 			{
 				"name": "/v1/session_ingress/session/${…}/git_proxy/${…}/${…}.git",
@@ -1221,6 +1227,7 @@
 			{ "name": "CLAUDE_BG_CLAIM_AUTH", "detail": "str" },
 			{ "name": "CLAUDE_BG_DISPATCHER_RATE_LIMIT_TIER", "detail": "str" },
 			{ "name": "CLAUDE_BG_DISPATCHER_SUBSCRIPTION_TYPE", "detail": "str" },
+			{ "name": "CLAUDE_BG_DISPATCH_ENTRYPOINT", "detail": "str" },
 			{ "name": "CLAUDE_BG_GATEWAY_WITHHELD", "detail": "str" },
 			{ "name": "CLAUDE_BG_ISOLATION", "detail": "str" },
 			{ "name": "CLAUDE_BG_MEMORY_TOGGLED_OFF", "detail": "str" },
@@ -1412,6 +1419,7 @@
 				"name": "CLAUDE_CODE_BRIDGE_CHILD_PROJECTS_ENTRYPOINT",
 				"detail": "bool"
 			},
+			{ "name": "CLAUDE_CODE_BRIDGE_CHILD_START_DIR", "detail": "str" },
 			{
 				"name": "CLAUDE_CODE_BRIDGE_MCP_CARRIER",
 				"values": ["1", "spent"],
@@ -1421,6 +1429,7 @@
 			{ "name": "CLAUDE_CODE_BRIDGE_OWNER_ORG_UUID", "detail": "str" },
 			{ "name": "CLAUDE_CODE_BRIDGE_PROMPT_SHA256", "detail": "str" },
 			{ "name": "CLAUDE_CODE_BRIDGE_SESSION_ID", "detail": "str" },
+			{ "name": "CLAUDE_CODE_BRIDGE_SETTINGS_BINDING", "detail": "rawStr" },
 			{ "name": "CLAUDE_CODE_BRIDGE_SOURCE_DIR", "detail": "str" },
 			{ "name": "CLAUDE_CODE_BRIEF", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_BRIEF_UPLOAD", "detail": "bool" },
@@ -1444,6 +1453,7 @@
 				"detail": "bool"
 			},
 			{ "name": "CLAUDE_CODE_CCR_OWN_CONNECTION_POOL", "detail": "bool" },
+			{ "name": "CLAUDE_CODE_CCR_REQUESTS_BY_FETCH", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_CCR_SKIP_FRESH_MIGRATIONS", "detail": "bool" },
 			{
 				"name": "CLAUDE_CODE_CCR_SKIP_HYDRATE_ON_CURRENT_TIP",
@@ -1853,6 +1863,7 @@
 			{ "name": "CLAUDE_CODE_GB_REFRESH_INTERVAL_MS", "detail": "int" },
 			{ "name": "CLAUDE_CODE_GENTLE_PARASOL", "detail": "str" },
 			{ "name": "CLAUDE_CODE_GIT_BASH_PATH", "detail": "str" },
+			{ "name": "CLAUDE_CODE_GIT_CHECK_ONLY_IN_REPOSITORY", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_GLOB_HIDDEN", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_GLOB_NO_IGNORE", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_GLOB_TIMEOUT_SECONDS", "detail": "int{min:1}" },
@@ -1906,6 +1917,7 @@
 				"name": "CLAUDE_CODE_HOST_HTTP_PROXY_PORT",
 				"detail": "set for a child process"
 			},
+			{ "name": "CLAUDE_CODE_HOST_OWNED_CONFIG_DIR", "detail": "rawStr" },
 			{ "name": "CLAUDE_CODE_HOST_PLATFORM", "detail": "str" },
 			{ "name": "CLAUDE_CODE_HOST_PROMPT_SUPERSEDES_RECORD", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_HOST_SCHEDULED_RUN", "detail": "bool" },
@@ -2027,6 +2039,7 @@
 			},
 			{ "name": "CLAUDE_CODE_MCP_SERVE_AUTH_TOKEN", "detail": "rawStr" },
 			{ "name": "CLAUDE_CODE_MCP_SERVE_ENABLED_PLUGINS", "detail": "rawStr" },
+			{ "name": "CLAUDE_CODE_MCP_SERVE_GARBAGE_COLLECTIONS", "detail": "str" },
 			{
 				"name": "CLAUDE_CODE_MCP_SERVE_INTERFACE_MIN_VERSION",
 				"detail": "int{min:1,digitsOnly:!0}"
@@ -2073,6 +2086,7 @@
 			},
 			{ "name": "CLAUDE_CODE_NORMALIZE_PREFIX_CACHE", "detail": "triBool" },
 			{ "name": "CLAUDE_CODE_NORMALIZE_PREFIX_CACHE_VERIFY", "detail": "bool" },
+			{ "name": "CLAUDE_CODE_NOTIFICATIONS_HOST", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_NO_FLICKER", "detail": "triBool" },
 			{ "name": "CLAUDE_CODE_NO_MODEL_FALLBACK", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_OAUTH_401_WAIT_MS", "detail": "int{min:0}" },
@@ -2500,6 +2514,7 @@
 			},
 			{ "name": "CLAUDE_CODE_TOOL_MEMORY_CGROUP_EXCLUDE", "detail": "str" },
 			{ "name": "CLAUDE_CODE_TOOL_MEMORY_LIMIT", "detail": "str" },
+			{ "name": "CLAUDE_CODE_TOOL_PICTURE_SERVERS", "detail": "str" },
 			{ "name": "CLAUDE_CODE_TOOL_USE_ID", "detail": "listed" },
 			{ "name": "CLAUDE_CODE_TOTAL_TOKENS_REMINDER", "detail": "str" },
 			{
@@ -2521,12 +2536,21 @@
 			{ "name": "CLAUDE_CODE_TWO_STAGE_CLASSIFIER", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_ULTRAREVIEW_LAUNCH_RECORD", "detail": "str" },
 			{ "name": "CLAUDE_CODE_ULTRAREVIEW_PREFLIGHT_FIXTURE", "detail": "str" },
+			{ "name": "CLAUDE_CODE_ULTRAREVIEW_PR_AS_MERGED", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_ULTRAREVIEW_QUOTA_FIXTURE", "detail": "str" },
 			{
 				"name": "CLAUDE_CODE_UNWATCHED_REPLY_HOLD_MS",
 				"detail": "int{min:1,max:2000,digitsOnly:!0}"
 			},
 			{ "name": "CLAUDE_CODE_UPFRONT_TOOLS", "detail": "names" },
+			{
+				"name": "CLAUDE_CODE_USER_DELEGATED_SESSION_ALLOWED_CHECK_MODELS",
+				"detail": "names"
+			},
+			{
+				"name": "CLAUDE_CODE_USER_DELEGATED_SESSION_DIRECT_API",
+				"detail": "bool"
+			},
 			{
 				"name": "CLAUDE_CODE_USER_DIALOG_TIMEOUT_MS",
 				"detail": "int{wholeValue:!0}"
@@ -2598,6 +2622,7 @@
 			},
 			{ "name": "CLAUDE_CODE_WORKFLOW_SUBAGENT_MODEL", "detail": "str" },
 			{ "name": "CLAUDE_CODE_WORKSPACE_HOST_PATHS", "detail": "str" },
+			{ "name": "CLAUDE_CODE_YOU_SHOULD_KNOW_AUTO_SEND", "detail": "listed" },
 			{ "name": "CLAUDE_CODE_YOU_SHOULD_KNOW_DEBUG", "detail": "listed" },
 			{ "name": "CLAUDE_CONFIG_DIR", "detail": "str" },
 			{ "name": "CLAUDE_COWORK_MEMORY_EXTRA_GUIDELINES", "detail": "str" },
@@ -2963,7 +2988,7 @@
 			{ "name": "GIT_DIR", "detail": "str" },
 			{ "name": "GIT_DISCOVERY_ACROSS_FILESYSTEM", "detail": "listed" },
 			{ "name": "GIT_EDITOR", "detail": "set for a child process" },
-			{ "name": "GIT_EXEC_PATH", "detail": "listed" },
+			{ "name": "GIT_EXEC_PATH", "detail": "set for a child process" },
 			{ "name": "GIT_EXTERNAL_DIFF", "detail": "listed" },
 			{ "name": "GIT_GLOB_PATHSPECS", "detail": "set for a child process" },
 			{ "name": "GIT_GRAFT_FILE", "detail": "listed" },
@@ -3494,6 +3519,7 @@
 			{ "name": "VERTEX_REGION_CLAUDE_5_SONNET", "detail": "listed" },
 			{ "name": "VERTEX_REGION_CLAUDE_FABLE_5", "detail": "listed" },
 			{ "name": "VERTEX_REGION_CLAUDE_FABLE_5_1", "detail": "listed" },
+			{ "name": "VERTEX_REGION_CLAUDE_FABLE_5_2", "detail": "listed" },
 			{ "name": "VERTEX_REGION_CLAUDE_HAIKU_4_5", "detail": "listed" },
 			{ "name": "VERTEX_REGION_CLAUDE_HAIKU_5_5", "detail": "listed" },
 			{ "name": "VISUAL", "detail": "str" },
@@ -4008,6 +4034,10 @@
 				"detail": "throw TypeError"
 			},
 			{ "name": "${…} invalid: ${…}", "detail": "throw Error" },
+			{
+				"name": "${…} invalid: ${…}: unknown to the apps gateway's bundled Claude Desktop schema, and Claude Desktop would drop or misread the entry or key that holds such a field; check the spelling, or upgrade the g…",
+				"detail": "throw Error"
+			},
 			{
 				"name": "${…} invalid: expected a mapping of desktop keys",
 				"detail": "throw Error"
@@ -4556,6 +4586,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "${…}: ${…}: a body of bytes and compress ride engine requests alone",
+				"detail": "throw Error"
+			},
+			{
 				"name": "${…}: ${…}: its environment was unloaded",
 				"detail": "throw Error"
 			},
@@ -4654,6 +4688,10 @@
 			},
 			{
 				"name": "${…}: a baseline grader's reference file is hard-linked (has another name) — keep a single copy",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…}: a body of bytes cannot be redacted",
 				"detail": "throw Error"
 			},
 			{
@@ -6194,7 +6232,7 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "Cannot delete reserved paths: ${…}. CLAUDE.md and .claude/ carry instructions to the design agent and are blocked regardless of the plan.",
+				"name": "Cannot delete reserved paths: ${…}. CLAUDE.md, CLAUDE.local.md and .claude/ carry agent instructions and are blocked regardless of the plan.",
 				"detail": "throw Error"
 			},
 			{ "name": "Cannot drain port 0", "detail": "throw Error" },
@@ -6420,7 +6458,7 @@
 				"detail": "throw TypeError"
 			},
 			{
-				"name": "Cannot write reserved paths: ${…}. CLAUDE.md and .claude/ carry instructions to the design agent and are blocked regardless of the plan.",
+				"name": "Cannot write reserved paths: ${…}. CLAUDE.md, CLAUDE.local.md and .claude/ carry agent instructions and are blocked regardless of the plan.",
 				"detail": "throw Error"
 			},
 			{ "name": "Cannot write to terminated process", "detail": "throw Error" },
@@ -6811,6 +6849,14 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "Could not check \"${…}\" against your organization's connector list in time. Try signing in again later.",
+				"detail": "throw Error"
+			},
+			{
+				"name": "Could not check this MCP server against your organization's connector settings, so the sign-in was stopped.",
+				"detail": "throw Error"
+			},
+			{
 				"name": "Could not confirm the Artifact at ${…} (${…}). ${…}",
 				"detail": "throw Error"
 			},
@@ -6950,6 +6996,10 @@
 			},
 			{
 				"name": "Could not vouch for ${…} after its dependency install, and the conversion marker could not be withdrawn; retry the install.",
+				"detail": "throw Error"
+			},
+			{
+				"name": "Could not withdraw the cached plugins of marketplace ${…}: ${…}",
 				"detail": "throw Error"
 			},
 			{ "name": "Couldn't attach to ${…} — ${…}", "detail": "stderr" },
@@ -7114,6 +7164,10 @@
 			},
 			{
 				"name": "ECONNREFUSED_SSRF: blocked loopback/metadata host via proxy",
+				"detail": "throw Error"
+			},
+			{
+				"name": "Edit rejected: the updated notebook would exceed the maximum size this tool can read (${…}). The file was left unchanged.",
 				"detail": "throw Error"
 			},
 			{
@@ -9075,6 +9129,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "Marketplace ${…}, which managed settings declare, stands from another source and cannot be taken back while its declared source is unreachable. It will be tried again.",
+				"detail": "throw Error"
+			},
+			{
 				"name": "Marketplace '${…}' has a corrupted installLocation (${…}) — expected a path inside ${…}. This can happen after cross-platform path writes or manual edits to known_marketplaces.json. ${…} and re-add it…",
 				"detail": "throw Error"
 			},
@@ -9395,6 +9453,10 @@
 				"name": "No socket was returned in the `connect()` function",
 				"detail": "throw Error"
 			},
+			{
+				"name": "No task found with ID: ${…}. An ID of this shape is not looked up as an agent's name: send the agent's task ID.",
+				"detail": "throw Error"
+			},
 			{ "name": "No task store configured", "detail": "throw Error" },
 			{ "name": "No timeoutMillis provided.", "detail": "throw Error" },
 			{ "name": "No transporter set.", "detail": "throw Error" },
@@ -9471,6 +9533,7 @@
 				"name": "Notebook content (${…}) exceeds maximum allowed size (${…}). ${…}",
 				"detail": "throw Error"
 			},
+			{ "name": "Notebook file does not exist.", "detail": "throw Error" },
 			{
 				"name": "Notebook file is not a valid Jupyter notebook (top-level \"cells\" must be an array of cell objects, each with a string or string-array \"source\").",
 				"detail": "throw Error"
@@ -9479,6 +9542,7 @@
 				"name": "Notebook file is not valid JSON (it may be truncated, corrupted, or still being written): ${…}",
 				"detail": "throw Error"
 			},
+			{ "name": "Notebook is not valid JSON.", "detail": "throw Error" },
 			{
 				"name": "Notebook path is not a regular file (device, FIFO, or socket).",
 				"detail": "throw Error"
@@ -10079,10 +10143,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "Refused a redirect to another origin",
-				"detail": "throw Error"
-			},
-			{
 				"name": "Refusing git URL ${…}: a file: URL must name a local path (no host, no network-shaped path).${…}",
 				"detail": "throw Error"
 			},
@@ -10577,6 +10637,10 @@
 			},
 			{ "name": "Starting ${…}…", "detail": "stderr" },
 			{
+				"name": "Starting with default settings. The application that started Claude Code manages ${…}, as CLAUDE_CODE_HOST_OWNED_CONFIG_DIR says, so nothing needs to be done: a later save overwrites ${…}.",
+				"detail": "stderr"
+			},
+			{
 				"name": "Stateless transport cannot be reused across requests. Create a new transport per request.",
 				"detail": "throw Error"
 			},
@@ -10928,6 +10992,14 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "The list of installed plugins (installed_plugins.json) could not be read, so marketplace ${…}, which managed settings declare, cannot be taken back from another source. Repair or restore that file and…",
+				"detail": "throw Error"
+			},
+			{
+				"name": "The list of installed plugins (installed_plugins.json) could not be read, so the plugins of marketplace ${…} cannot be withdrawn. Repair or restore that file and try again.",
+				"detail": "throw Error"
+			},
+			{
 				"name": "The listing has no server of that name",
 				"detail": "throw Error"
 			},
@@ -11000,10 +11072,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "The result of MCP tool \"${…}\" on server \"${…}\" arrived without its text. A result that is too large arrives this way. The tool may have run: check whether it did before running it again, and when you …",
-				"detail": "throw Error"
-			},
-			{
 				"name": "The search did not run: ripgrep was found by name rather than at a full path, and starting it that way inside the search folder could run a program planted there. This is an internal error; report it …",
 				"detail": "throw Error"
 			},
@@ -11021,6 +11089,10 @@
 			},
 			{
 				"name": "The skill \"${…}\" was not loaded because of a fault in Claude Code: it has no record of the files that the skill was verified against. Do not try again.",
+				"detail": "throw Error"
+			},
+			{
+				"name": "The small, fast model that reads the content gave no answer. Trying again may work.",
 				"detail": "throw Error"
 			},
 			{
@@ -11141,6 +11213,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "This request would go to a model that is not allowed",
+				"detail": "throw Error"
+			},
+			{
 				"name": "This runtime has no Bun.ant.CellSegmenter. Run Claude Code on the @anthropic-ai/bun-internal version pinned in package.json.",
 				"detail": "throw Error"
 			},
@@ -11224,6 +11300,7 @@
 				"detail": "throw Error"
 			},
 			{ "name": "Too few arguments provided", "detail": "throw Error" },
+			{ "name": "Too many named hosts", "detail": "throw Error" },
 			{ "name": "Tool ${…} not found", "detail": "throw Error" },
 			{
 				"name": "Tool use input must be a string or object",
@@ -11333,10 +11410,6 @@
 			},
 			{
 				"name": "Unable to parse the subject_token from the credential_source file",
-				"detail": "throw Error"
-			},
-			{
-				"name": "Unable to read managed policy settings, which may restrict the API providers this machine may use (allowedProviders). Contact your administrator.",
 				"detail": "throw Error"
 			},
 			{
@@ -11720,19 +11793,11 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "Write not done; nothing in the project was changed. Before it replaces a doc, this tool reads the doc's current text, and that read failed: ${…}. Try the same write once more. Do not delete the doc to…",
-				"detail": "throw Error"
-			},
-			{
-				"name": "Write refused; nothing in the project was changed. The doc at this path is no longer the version in if_version: someone else, another session, or an earlier save of yours has changed it. Call project_…",
-				"detail": "throw Error"
-			},
-			{
-				"name": "Write refused; nothing in the project was changed. This session cannot check if_version. Call project_read on this path, make your change in the text that it returns, and write again without if_versio…",
-				"detail": "throw Error"
-			},
-			{
 				"name": "Write refused; nothing in the project was changed. This write would put the project over its maximum size. Any doc already at this path still holds its old content; do not delete it to retry, because …",
+				"detail": "throw Error"
+			},
+			{
+				"name": "Write refused; nothing in the project was changed. if_version does not name the copy of this doc that this write is checked against: the last whole text of it that you were shown or typed in this conv…",
 				"detail": "throw Error"
 			},
 			{
@@ -14315,6 +14380,7 @@
 				"name": "hostMatchesAny: non-string pattern in list",
 				"detail": "throw Error"
 			},
+			{ "name": "http.fetch: ${…}", "detail": "throw Error" },
 			{
 				"name": "iTerm2 image: RGBA bytes do not match the size",
 				"detail": "throw TypeError"
@@ -14536,6 +14602,10 @@
 				"detail": "throw Error"
 			},
 			{ "name": "judge call failed: ${…}${…}", "detail": "throw Error" },
+			{
+				"name": "keepsBeneath: this test has its own ui.render hook at this site, so look for what it drew with find",
+				"detail": "throw Error"
+			},
 			{
 				"name": "kernel or device path, or one of Claude Code's credentials: ${…}",
 				"detail": "throw Error"
@@ -16602,6 +16672,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "the path in the tool's input could not be made absolute for the hook",
+				"detail": "throw Error"
+			},
+			{
 				"name": "the path is taken again, or could not be checked",
 				"detail": "throw Error"
 			},
@@ -16640,6 +16714,10 @@
 			{
 				"name": "the record of attached computers gave no list",
 				"detail": "throw TypeError"
+			},
+			{
+				"name": "the registry answered ${…} with no readable list",
+				"detail": "throw Error"
 			},
 			{
 				"name": "the remote sent a context breakdown this version can't read",
@@ -16824,10 +16902,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "this machine's policy cannot be read for now",
-				"detail": "throw Error"
-			},
-			{
 				"name": "this machine's settings hold account plugins for now",
 				"detail": "throw Error"
 			},
@@ -16976,10 +17050,6 @@
 			},
 			{ "name": "transcript stream append failed", "detail": "throw Error" },
 			{ "name": "transcript stream replace failed", "detail": "throw Error" },
-			{
-				"name": "transcriptLines takes text: open the stream with an encoding",
-				"detail": "throw TypeError"
-			},
 			{ "name": "tree anchor is closed", "detail": "throw Error" },
 			{
 				"name": "tryAppend: short write to ${…} stalled with ${…} bytes remaining",
@@ -17956,7 +18026,7 @@
 			},
 			{
 				"name": "--proactivity",
-				"gate": "hidden unless $_e()",
+				"gate": "hidden unless JSe()",
 				"detail": "--proactivity <level>"
 			},
 			{
@@ -18134,44 +18204,6 @@
 				"detail": "-w, --worktree [name] | Create a new git worktree for this session (optionally specify a name)"
 			},
 			{
-				"name": "add --callback-port",
-				"detail": "--callback-port <port> | Fixed port for OAuth callback (for servers requiring pre-registered redirect URIs)"
-			},
-			{
-				"name": "add --client-id",
-				"detail": "--client-id <clientId> | OAuth client ID for HTTP/SSE servers"
-			},
-			{
-				"name": "add --client-secret",
-				"detail": "--client-secret | Prompt for OAuth client secret (or set MCP_CLIENT_SECRET env var)"
-			},
-			{
-				"name": "add --env",
-				"detail": "-e, --env <env...> | Set environment variables (e.g. -e KEY=value)"
-			},
-			{
-				"name": "add --header",
-				"detail": "-H, --header <header...> | Set headers for HTTP/SSE servers (e.g. -H \"X-Api-Key: abc123\" -H \"X-Custom: value\")"
-			},
-			{
-				"name": "add --scope",
-				"detail": "-s, --scope <scope> | Configuration scope (local, user, or project)"
-			},
-			{
-				"name": "add --transport",
-				"detail": "-t, --transport <transport> | Transport type (stdio, sse, http). Defaults to stdio if not specified."
-			},
-			{
-				"name": "add --web",
-				"gate": "hidden",
-				"detail": "--web | Add the server as a claude.ai connector instead of to local config"
-			},
-			{
-				"name": "add --xaa",
-				"gate": "hidden",
-				"detail": "--xaa | Enable XAA (SEP-990) for this server. Requires 'claude mcp xaa setup' first. Also requires --client-id and --client-secret (for the MCP server's AS)."
-			},
-			{
 				"name": "agents --add-dir",
 				"detail": "--add-dir <directory> | Additional directory to allow tool access to in dispatched sessions (repeatable)"
 			},
@@ -18289,6 +18321,25 @@
 				"detail": "-y, --yes | Skip the confirmation prompt"
 			},
 			{
+				"name": "daemon --any",
+				"detail": "--any | also stop a transient (non-service) daemon"
+			},
+			{ "name": "daemon --help", "detail": "--help | Show this help" },
+			{
+				"name": "daemon --json-path",
+				"detail": "--json-path <p> | Config file (default: ~/.claude/daemon.json)"
+			},
+			{
+				"name": "daemon --keep-workers",
+				"detail": "--keep-workers | leave detached sessions running"
+			},
+			{
+				"name": "daemon --log-file",
+				"detail": "--log-file <p> | Log file (default: ~/.claude/daemon.log)"
+			},
+			{ "name": "daemon --origin", "gate": "hidden" },
+			{ "name": "daemon --spawned-by", "gate": "hidden" },
+			{
 				"name": "design-login --json",
 				"detail": "--json | Write JSON lines to stdout"
 			},
@@ -18349,6 +18400,44 @@
 				"detail": "--force | Force installation even if already installed"
 			},
 			{
+				"name": "mcp add --callback-port",
+				"detail": "--callback-port <port> | Fixed port for OAuth callback (for servers requiring pre-registered redirect URIs)"
+			},
+			{
+				"name": "mcp add --client-id",
+				"detail": "--client-id <clientId> | OAuth client ID for HTTP/SSE servers"
+			},
+			{
+				"name": "mcp add --client-secret",
+				"detail": "--client-secret | Prompt for OAuth client secret (or set MCP_CLIENT_SECRET env var)"
+			},
+			{
+				"name": "mcp add --env",
+				"detail": "-e, --env <env...> | Set environment variables (e.g. -e KEY=value)"
+			},
+			{
+				"name": "mcp add --header",
+				"detail": "-H, --header <header...> | Set headers for HTTP/SSE servers (e.g. -H \"X-Api-Key: abc123\" -H \"X-Custom: value\")"
+			},
+			{
+				"name": "mcp add --scope",
+				"detail": "-s, --scope <scope> | Configuration scope (local, user, or project)"
+			},
+			{
+				"name": "mcp add --transport",
+				"detail": "-t, --transport <transport> | Transport type (stdio, sse, http). Defaults to stdio if not specified."
+			},
+			{
+				"name": "mcp add --web",
+				"gate": "hidden",
+				"detail": "--web | Add the server as a claude.ai connector instead of to local config"
+			},
+			{
+				"name": "mcp add --xaa",
+				"gate": "hidden",
+				"detail": "--xaa | Enable XAA (SEP-990) for this server. Requires 'claude mcp xaa setup' first. Also requires --client-id and --client-secret (for the MCP server's AS)."
+			},
+			{
 				"name": "mcp add-from-claude-desktop --scope",
 				"detail": "-s, --scope <scope> | Configuration scope (local, user, or project)"
 			},
@@ -18391,6 +18480,30 @@
 			{
 				"name": "mcp serve --verbose",
 				"detail": "--verbose | Override verbose mode setting from config"
+			},
+			{
+				"name": "mcp xaa login --force",
+				"detail": "--force | Ignore any cached id_token and re-login (useful after IdP-side revocation)"
+			},
+			{
+				"name": "mcp xaa login --id-token",
+				"detail": "--id-token <jwt> | Write this pre-obtained id_token directly to cache, skipping the OIDC browser login"
+			},
+			{
+				"name": "mcp xaa setup --callback-port",
+				"detail": "--callback-port <port> | Fixed loopback callback port (only if IdP does not honor RFC 8252 port-any matching)"
+			},
+			{
+				"name": "mcp xaa setup --client-id",
+				"detail": "--client-id <id> | Claude Code's client_id at the IdP"
+			},
+			{
+				"name": "mcp xaa setup --client-secret",
+				"detail": "--client-secret | Read IdP client secret from MCP_XAA_IDP_CLIENT_SECRET env var"
+			},
+			{
+				"name": "mcp xaa setup --issuer",
+				"detail": "--issuer <url> | IdP issuer URL (OIDC discovery)"
 			},
 			{
 				"name": "plugin configure --cowork",
@@ -18696,6 +18809,15 @@
 				"detail": "-y, --yes | Skip the confirmation prompt (required when stdin or stdout is not a TTY)"
 			},
 			{
+				"name": "plugin restore-set-aside --cowork",
+				"gate": "hidden",
+				"detail": "--cowork | Use cowork_plugins directory"
+			},
+			{
+				"name": "plugin restore-set-aside --discard",
+				"detail": "--discard | Delete what is set aside instead of restoring it"
+			},
+			{
 				"name": "plugin tag --dry-run",
 				"detail": "--dry-run | Print what would be tagged without creating it"
 			},
@@ -18792,8 +18914,346 @@
 				"detail": "-y, --yes | Skip confirmation prompt"
 			},
 			{
+				"name": "remote-control --allow-unattended-tool-calls",
+				"gate": "hidden"
+			},
+			{
+				"name": "remote-control --capacity",
+				"detail": "--capacity <N> | Max concurrent sessions in worktree or"
+			},
+			{
+				"name": "remote-control --chrome",
+				"detail": "--[no-]chrome | Claude in Chrome for spawned sessions"
+			},
+			{
+				"name": "remote-control --continue",
+				"detail": "--continue | Reattach to the session `claude remote-control`"
+			},
+			{
+				"name": "remote-control --create-session-in-dir",
+				"detail": "--[no-]create-session-in-dir | Pre-create a session in the current"
+			},
+			{
+				"name": "remote-control --debug",
+				"detail": "--debug[=<filter>] | Enable debug mode for this process, with"
+			},
+			{
+				"name": "remote-control --debug-file",
+				"detail": "--debug-file <path> | Write debug logs to file"
+			},
+			{ "name": "remote-control --enable-live-preview", "gate": "hidden" },
+			{ "name": "remote-control --help", "detail": "--help | Show this help" },
+			{
+				"name": "remote-control --name",
+				"detail": "--name <name> | Name for the session (shown in claude.ai/code)"
+			},
+			{ "name": "remote-control --no-sandbox", "gate": "hidden" },
+			{
+				"name": "remote-control --permission-mode",
+				"detail": "--permission-mode <mode> | Permission mode for spawned sessions"
+			},
+			{ "name": "remote-control --preview-port", "gate": "hidden" },
+			{
+				"name": "remote-control --remote-control-session-name-prefix",
+				"detail": "--remote-control-session-name-prefix <prefix> | Prefix for auto-generated session names"
+			},
+			{ "name": "remote-control --sandbox", "gate": "hidden" },
+			{
+				"name": "remote-control --session-id",
+				"detail": "--session-id <id> | Reattach to a specific session by ID (cannot be"
+			},
+			{
+				"name": "remote-control --settings",
+				"detail": "--settings <file> | JSON settings file for spawned sessions."
+			},
+			{
+				"name": "remote-control --spawn",
+				"detail": "--spawn <mode> | Spawn mode: same-dir, worktree, session"
+			},
+			{
+				"name": "remote-control --verbose",
+				"detail": "--verbose | Enable verbose output"
+			},
+			{ "name": "respawn --all", "detail": "--all" },
+			{ "name": "rm --discard-unpushed", "detail": "--discard-unpushed" },
+			{
+				"name": "rm --force-remove-worktree",
+				"detail": "--force-remove-worktree"
+			},
+			{ "name": "rm --help", "gate": "hidden" },
+			{
 				"name": "sandbox uninstall --json",
 				"detail": "--json | Print one JSON line: {status, message, leftBehind, filtersChecked}"
+			},
+			{
+				"name": "self-hosted-runner --agent-proxy-url",
+				"detail": "--agent-proxy-url <url> | Route every session this runner runs through the agent proxy at <url>"
+			},
+			{
+				"name": "self-hosted-runner --api-url",
+				"detail": "--api-url <url> | API base URL (default: ${…})"
+			},
+			{
+				"name": "self-hosted-runner --base-dir",
+				"detail": "--base-dir | and verified against an in-memory manifest at every"
+			},
+			{
+				"name": "self-hosted-runner --capacity",
+				"detail": "--capacity <n> | Max concurrent sessions (default: ${…})"
+			},
+			{
+				"name": "self-hosted-runner --checkout-hook-timeout-min",
+				"detail": "--checkout-hook-timeout-min <n> | Wall-clock budget for each run of the checkout lifecycle hook. A hook"
+			},
+			{
+				"name": "self-hosted-runner --client-label",
+				"detail": "--client-label <label> | Observability label sent at registration (default: hostname). Shown"
+			},
+			{
+				"name": "self-hosted-runner --configure-git",
+				"detail": "--configure-git | Set global git identity to Claude <noreply@anthropic.com> and enable"
+			},
+			{
+				"name": "self-hosted-runner --confine-repo-settings",
+				"detail": "--confine-repo-settings <mode> | Repo-committed-settings confine guard mode: warn (default) logs"
+			},
+			{
+				"name": "self-hosted-runner --debug-token-dir",
+				"detail": "--debug-token-dir <path> | DEBUG ONLY — writes live tokens to disk. Do not use in production."
+			},
+			{
+				"name": "self-hosted-runner --defer-shutdown-max-min",
+				"detail": "--defer-shutdown-max-min <m> | On the FIRST SIGTERM/SIGINT, do not drain: stop taking new work (the runner"
+			},
+			{
+				"name": "self-hosted-runner --diff-finds-nested-repository",
+				"detail": "--diff-finds-nested-repository [bool] | Let the web session's Changes pane show the changes in a repository"
+			},
+			{
+				"name": "self-hosted-runner --drain-grace-sec",
+				"detail": "--drain-grace-sec <n> | Default: 0 — exit immediately after active sessions finish, WITHOUT"
+			},
+			{
+				"name": "self-hosted-runner --drain-marker-file",
+				"detail": "--drain-marker-file <path> | For hosts that announce a graceful drain by writing a marker file"
+			},
+			{
+				"name": "self-hosted-runner --drain-wait-bg-tasks-sec",
+				"gate": "hidden"
+			},
+			{
+				"name": "self-hosted-runner --drain-wait-sec",
+				"detail": "--drain-wait-sec <n> | On SIGTERM/SIGINT, wait up to N seconds for each session's in-flight"
+			},
+			{
+				"name": "self-hosted-runner --environment-secret-file",
+				"detail": "--environment-secret-file <path> | Path to environment secret file (or set SELF_HOSTED_RUNNER_ENVIRONMENT_SECRET)"
+			},
+			{
+				"name": "self-hosted-runner --exec-path",
+				"detail": "--exec-path <path> | Binary to spawn for child sessions. Default: this process's own binary."
+			},
+			{
+				"name": "self-hosted-runner --exit-if-unused-min",
+				"detail": "--exit-if-unused-min <n> | Exit the runner if never assigned work for N min (autoscaler scale-down)."
+			},
+			{
+				"name": "self-hosted-runner --git-host-rewrite",
+				"detail": "--git-host-rewrite <f>=<t> | Rewrite https://<f>/... source URLs to https://<t>/... (repeatable)."
+			},
+			{
+				"name": "self-hosted-runner --git-ssh-rewrite",
+				"detail": "--git-ssh-rewrite <host> | Rewrite https://<host>/... source URLs to git@<host>:... (repeatable)."
+			},
+			{
+				"name": "self-hosted-runner --health-port",
+				"detail": "--health-port <port> | Port for /healthz HTTP listener (default: ${…}). 0 disables."
+			},
+			{
+				"name": "self-hosted-runner --help",
+				"detail": "--help | Show this help message"
+			},
+			{
+				"name": "self-hosted-runner --hold-idle-file",
+				"detail": "--hold-idle-file <path> | Do not release an idle session (--release-idle-session-min, or an"
+			},
+			{
+				"name": "self-hosted-runner --hooks-dir",
+				"detail": "--hooks-dir <path> | Directory of lifecycle hook scripts (checkout, command, post-session)."
+			},
+			{
+				"name": "self-hosted-runner --host-config-snapshot",
+				"detail": "--host-config-snapshot <disk|memory> | Where the startup snapshot of that directory is held. disk"
+			},
+			{
+				"name": "self-hosted-runner --kill-session-after-min",
+				"detail": "--kill-session-after-min <n> | Cap a session child's wall-clock life at N min (runaway backstop)."
+			},
+			{
+				"name": "self-hosted-runner --lock-to-account",
+				"detail": "--lock-to-account <id> | Lock runner to a single account at registration (webhook-driven on-demand"
+			},
+			{
+				"name": "self-hosted-runner --log-file",
+				"detail": "--log-file <path> | Tee runner logs to a file in append mode. Stdout is unchanged."
+			},
+			{
+				"name": "self-hosted-runner --log-level",
+				"detail": "--log-level <level> | Log level: info or debug (default: info)"
+			},
+			{
+				"name": "self-hosted-runner --max-hold-min",
+				"detail": "--max-hold-min <n> | With --hold-idle-file: hold a session no longer than N min after it"
+			},
+			{ "name": "self-hosted-runner --pool-secret-file", "gate": "hidden" },
+			{
+				"name": "self-hosted-runner --post-session-hook-timeout-sec",
+				"detail": "--post-session-hook-timeout-sec <n> | SIGTERM budget for the post-session lifecycle hook, on every session"
+			},
+			{
+				"name": "self-hosted-runner --proxy-authorization-command",
+				"detail": "--proxy-authorization-command | or --proxy-authorization-file. Sessions"
+			},
+			{
+				"name": "self-hosted-runner --proxy-authorization-file",
+				"detail": "--proxy-authorization-file <path> | Same, but the header value is read from a file (re-read for each new"
+			},
+			{
+				"name": "self-hosted-runner --push-outcome-on-release",
+				"detail": "--push-outcome-on-release | On a runner-initiated non-completed session end (SIGTERM drain,"
+			},
+			{
+				"name": "self-hosted-runner --release-idle-session-min",
+				"detail": "--release-idle-session-min | takes over. Default: 15. 0 disables."
+			},
+			{
+				"name": "self-hosted-runner --remove-session-state",
+				"detail": "--remove-session-state [bool] | Remove a session's per-session state under <base-dir>/_sessions/"
+			},
+			{
+				"name": "self-hosted-runner --retire-at",
+				"detail": "--retire-at <epoch-seconds> | Retire the runner at the given wall-clock time (absolute Unix timestamp, in"
+			},
+			{
+				"name": "self-hosted-runner --server-auto-mode-lists",
+				"detail": "--server-auto-mode-lists <mode> | Which of the server's auto mode classifier lists a session may"
+			},
+			{
+				"name": "self-hosted-runner --session-stop-grace-sec",
+				"detail": "--session-stop-grace-sec <n> | How long to wait for the Claude process to exit cleanly after a"
+			},
+			{ "name": "self-hosted-runner --sigkill-timeout-sec", "gate": "hidden" },
+			{
+				"name": "self-hosted-runner --startup-timeout-min",
+				"detail": "--startup-timeout-min <n> | Release a session slot if the child has not finished starting up"
+			},
+			{
+				"name": "self-hosted-runner --trust-workspace",
+				"detail": "--trust-workspace [bool] | Seed persisted trust for each session's repo paths so repo-level"
+			},
+			{
+				"name": "self-hosted-runner --use-anthropic-git-proxy",
+				"detail": "--use-anthropic-git-proxy | Opt this runner into Anthropic-managed git (clones are authenticated"
+			},
+			{
+				"name": "self-hosted-runner decode-token --api-url",
+				"detail": "--api-url <url> | API base URL for JWKS fetch (default: $ANTHROPIC_BASE_URL"
+			},
+			{
+				"name": "self-hosted-runner decode-token --header",
+				"detail": "--header | Print the JWT header instead of the claims."
+			},
+			{
+				"name": "self-hosted-runner decode-token --help",
+				"detail": "--help | Show this help."
+			},
+			{
+				"name": "self-hosted-runner decode-token --no-check-expiry",
+				"detail": "--no-check-expiry | Skip the exp/nbf check (signature still verified). For"
+			},
+			{
+				"name": "self-hosted-runner decode-token --no-verify",
+				"detail": "--no-verify | Skip signature verification and the JWKS fetch. For"
+			},
+			{
+				"name": "self-hosted-runner decode-token --verify",
+				"detail": "--verify | (Deprecated — verification is the default. Kept so older"
+			},
+			{
+				"name": "self-hosted-runner orchestrator --agent-proxy-url",
+				"detail": "--agent-proxy-url <url> | Agent proxy for the runners the spawn-runner hook starts. Passed to the"
+			},
+			{
+				"name": "self-hosted-runner orchestrator --api-url",
+				"detail": "--api-url <url> | API base URL (default: ${…})"
+			},
+			{
+				"name": "self-hosted-runner orchestrator --debug-dir",
+				"detail": "--debug-dir <path> | DEV ONLY — writes each work-order JWT + decoded JSON + hook stderr to"
+			},
+			{
+				"name": "self-hosted-runner orchestrator --environment-secret-file",
+				"detail": "--environment-secret-file <path> | Path to environment secret file (or set SELF_HOSTED_RUNNER_ENVIRONMENT_SECRET)"
+			},
+			{
+				"name": "self-hosted-runner orchestrator --expected-spawn-seconds",
+				"detail": "--expected-spawn-seconds <n> | p99 boot time for runners this orchestrator spawns"
+			},
+			{
+				"name": "self-hosted-runner orchestrator --health-port",
+				"detail": "--health-port <port> | Port for /healthz HTTP listener (default: ${…}). 0 disables."
+			},
+			{
+				"name": "self-hosted-runner orchestrator --help",
+				"detail": "--help | Show this help message"
+			},
+			{
+				"name": "self-hosted-runner orchestrator --hook-concurrency",
+				"detail": "--hook-concurrency <n> | Max spawn-runner hooks running in parallel (default: ${…})."
+			},
+			{
+				"name": "self-hosted-runner orchestrator --hook-timeout",
+				"detail": "--hook-timeout | + 10, and the process manager's kill delay to at least"
+			},
+			{
+				"name": "self-hosted-runner orchestrator --hooks-dir",
+				"detail": "--hooks-dir <path> | Directory containing the spawn-runner hook (REQUIRED)."
+			},
+			{
+				"name": "self-hosted-runner orchestrator --log-level",
+				"detail": "--log-level <level> | Log level: info or debug (default: info)"
+			},
+			{
+				"name": "self-hosted-runner orchestrator --min-idle",
+				"detail": "--min-idle <n> | Keep at least <n> idle slots free (free capacity across runners, not"
+			},
+			{
+				"name": "self-hosted-runner orchestrator --pool-secret-file",
+				"gate": "hidden"
+			},
+			{
+				"name": "self-hosted-runner orchestrator --scm-connector-ca-file",
+				"detail": "--scm-connector-ca-file <path> | Extra CA bundle (PEM) for TLS to the GHES host."
+			},
+			{
+				"name": "self-hosted-runner orchestrator --scm-connector-host",
+				"detail": "--scm-connector-host <h[:p]> | GHES hostname to forward to (port defaults to 443)."
+			},
+			{
+				"name": "self-hosted-runner orchestrator --scm-connector-host-rewrite",
+				"detail": "--scm-connector-host-rewrite <from>=<to_host:to_port> | e2e only — redirect the TCP connect while keeping"
+			},
+			{
+				"name": "self-hosted-runner orchestrator --scm-connector-id",
+				"detail": "--scm-connector-id <n> | ghe_configurations.id for this org (REQUIRED with --scm-connector-host)."
+			},
+			{
+				"name": "self-hosted-runner orchestrator --scm-connector-provider",
+				"detail": "--scm-connector-provider <s> | Provider slug (default: ghe)."
+			},
+			{
+				"name": "self-hosted-runner orchestrator --shutdown-drain-sec",
+				"detail": "--shutdown-drain-sec <n> | On SIGTERM, stop polling but give the poll in flight and the running hooks"
 			},
 			{
 				"name": "ultrareview --json",
@@ -18829,30 +19289,6 @@
 			{
 				"name": "ultrareview --trust-workspace",
 				"detail": "--trust-workspace | Trust the current folder for this run only, without asking (for scripts and CI). Takes no value: put a PR number or base branch before it. Use it only on folders you trust: the fol…"
-			},
-			{
-				"name": "xaa login --force",
-				"detail": "--force | Ignore any cached id_token and re-login (useful after IdP-side revocation)"
-			},
-			{
-				"name": "xaa login --id-token",
-				"detail": "--id-token <jwt> | Write this pre-obtained id_token directly to cache, skipping the OIDC browser login"
-			},
-			{
-				"name": "xaa setup --callback-port",
-				"detail": "--callback-port <port> | Fixed loopback callback port (only if IdP does not honor RFC 8252 port-any matching)"
-			},
-			{
-				"name": "xaa setup --client-id",
-				"detail": "--client-id <id> | Claude Code's client_id at the IdP"
-			},
-			{
-				"name": "xaa setup --client-secret",
-				"detail": "--client-secret | Read IdP client secret from MCP_XAA_IDP_CLIENT_SECRET env var"
-			},
-			{
-				"name": "xaa setup --issuer",
-				"detail": "--issuer <url> | IdP issuer URL (OIDC discovery)"
 			}
 		],
 		"gate": [
@@ -18887,12 +19323,14 @@
 			{ "name": "tengu_amber_sluice", "default": "false" },
 			{ "name": "tengu_amber_tally" },
 			{ "name": "tengu_amber_thimble" },
+			{ "name": "tengu_amber_thistle", "default": "true" },
 			{ "name": "tengu_amber_tollgate", "default": "false" },
 			{ "name": "tengu_amber_trellis", "default": "false" },
 			{ "name": "tengu_amber_tributary_dotterel", "default": "false" },
 			{ "name": "tengu_amber_tributary_sandpiper", "default": "false" },
 			{ "name": "tengu_anchored_lantern" },
 			{ "name": "tengu_ancient_axolotl", "default": "false" },
+			{ "name": "tengu_ancient_thompson" },
 			{ "name": "tengu_ant_yolo_equiv_strip_config" },
 			{ "name": "tengu_async_goblet", "default": "true" },
 			{ "name": "tengu_async_snowglobe" },
@@ -18971,13 +19409,16 @@
 			{ "name": "tengu_bridge_signed_out_neutral", "default": "true" },
 			{ "name": "tengu_bridge_subagent_frames", "default": "true" },
 			{ "name": "tengu_bridge_subagent_text", "default": "false" },
-			{ "name": "tengu_bridge_unarchive_on_resume", "default": "true" },
 			{ "name": "tengu_bright_fog", "default": "true" },
 			{ "name": "tengu_bright_kettle", "default": "unknown" },
 			{ "name": "tengu_bright_lake", "default": "true" },
 			{ "name": "tengu_bright_wall", "default": "true" },
 			{ "name": "tengu_brindle_causeway", "default": "true" },
+			{ "name": "tengu_brindle_otter", "default": "false" },
+			{ "name": "tengu_brisk_kiwi" },
 			{ "name": "tengu_brisk_meadow" },
+			{ "name": "tengu_brisk_otter" },
+			{ "name": "tengu_brisk_pebble", "default": "false" },
 			{ "name": "tengu_bubbly_fountain", "default": "false" },
 			{ "name": "tengu_bubbly_harbor", "default": "true" },
 			{ "name": "tengu_bubbly_meteor", "default": "true" },
@@ -19034,7 +19475,6 @@
 			{ "name": "tengu_ccr_skip_redundant_heartbeat", "default": "false" },
 			{ "name": "tengu_ccr_sse_keepalive_max_interval_s", "default": "0" },
 			{ "name": "tengu_ccr_sse_long_poll_fallback", "default": "true" },
-			{ "name": "tengu_ccr_stored_gap_bridge_enabled" },
 			{ "name": "tengu_ccr_stream_event_flush_ms", "default": "unknown" },
 			{ "name": "tengu_ccr_stream_first_flush_ms", "default": "0" },
 			{ "name": "tengu_ccr_subagent_skip_on_delta", "default": "false" },
@@ -19061,7 +19501,6 @@
 			{ "name": "tengu_cinder_plover", "default": "\"\"" },
 			{ "name": "tengu_cinder_relay", "default": "false" },
 			{ "name": "tengu_cinder_swift", "default": "\"off\"" },
-			{ "name": "tengu_cinder_wren", "default": "\"\"" },
 			{ "name": "tengu_classifier_disabled_surfaces", "default": "\"\"" },
 			{ "name": "tengu_classifier_summary_kill", "default": "false" },
 			{ "name": "tengu_classifier_summary_llm_emit", "default": "false" },
@@ -19112,10 +19551,10 @@
 			{ "name": "tengu_cobalt_wren", "default": "false" },
 			{ "name": "tengu_compact_cache_prefix", "default": "true" },
 			{ "name": "tengu_compiled_acorn", "default": "false" },
+			{ "name": "tengu_composed_beacon", "default": "false" },
 			{ "name": "tengu_composed_kite" },
 			{ "name": "tengu_composed_quail", "default": "true" },
 			{ "name": "tengu_composed_quilt" },
-			{ "name": "tengu_composed_teacup" },
 			{ "name": "tengu_composed_treehouse", "default": "false" },
 			{ "name": "tengu_compressed_river", "default": "true" },
 			{ "name": "tengu_concurrent_candle", "default": "unknown" },
@@ -19161,6 +19600,7 @@
 			{ "name": "tengu_cuddly_willow", "default": "true" },
 			{ "name": "tengu_curious_lake", "default": "true" },
 			{ "name": "tengu_curious_river", "default": "unknown" },
+			{ "name": "tengu_curious_rivest", "default": "unknown" },
 			{ "name": "tengu_curious_tower", "default": "false" },
 			{ "name": "tengu_curious_tower_stateless_models", "default": "\"\"" },
 			{ "name": "tengu_curried_sparrow", "default": "false" },
@@ -19176,15 +19616,18 @@
 			{ "name": "tengu_dapper_dawn", "default": "false" },
 			{ "name": "tengu_dapper_dusk", "default": "false" },
 			{ "name": "tengu_dapper_fountain", "default": "true" },
+			{ "name": "tengu_dapper_pancake", "default": "false" },
 			{ "name": "tengu_dapper_platypus", "default": "false" },
 			{ "name": "tengu_dapper_truffle", "default": "unknown" },
+			{ "name": "tengu_dappled_gourd", "default": "false" },
 			{ "name": "tengu_dash_flame", "default": "false" },
 			{ "name": "tengu_dazzling_garden", "default": "true" },
-			{ "name": "tengu_deep_dusk" },
+			{ "name": "tengu_deep_acorn", "default": "false" },
 			{ "name": "tengu_deep_feather", "default": "true" },
 			{ "name": "tengu_deep_locket" },
 			{ "name": "tengu_deep_plum", "default": "true" },
 			{ "name": "tengu_deep_shore", "default": "true" },
+			{ "name": "tengu_deep_sphinx", "default": "false" },
 			{ "name": "tengu_deep_twilight", "default": "false" },
 			{ "name": "tengu_defer_cap_ms", "default": "10000" },
 			{ "name": "tengu_deferred_stub_tool", "default": "true" },
@@ -19200,13 +19643,14 @@
 			},
 			{ "name": "tengu_distributed_adleman", "default": "true" },
 			{ "name": "tengu_doorbell_agave", "default": "true" },
+			{ "name": "tengu_dreamy_flute", "default": "false" },
 			{ "name": "tengu_dreamy_frost", "default": "false" },
 			{ "name": "tengu_dreamy_lobster" },
+			{ "name": "tengu_dreamy_sunbeam", "default": "true" },
 			{ "name": "tengu_dreamy_sundae", "default": "true" },
 			{ "name": "tengu_drift_lantern", "default": "false" },
 			{ "name": "tengu_drifting_dream", "default": "false" },
 			{ "name": "tengu_drifting_heron", "default": "true" },
-			{ "name": "tengu_drifting_lemur" },
 			{ "name": "tengu_drifting_nova", "default": "false" },
 			{ "name": "tengu_drifting_reef", "default": "unknown" },
 			{ "name": "tengu_drifting_seahorse" },
@@ -19216,12 +19660,12 @@
 			{ "name": "tengu_dusky_sorrel" },
 			{ "name": "tengu_eager_balloon" },
 			{ "name": "tengu_eager_brooks", "default": "false" },
-			{ "name": "tengu_eager_charm" },
 			{ "name": "tengu_eager_lighthouse" },
 			{ "name": "tengu_eager_pillow", "default": "false" },
 			{ "name": "tengu_eager_quilt", "default": "false" },
 			{ "name": "tengu_eager_raccoon", "default": "false" },
 			{ "name": "tengu_eager_rain", "default": "true" },
+			{ "name": "tengu_eager_reef", "default": "false" },
 			{ "name": "tengu_ebbing_tide" },
 			{ "name": "tengu_edit_minimalanchor_jrn", "default": "false" },
 			{ "name": "tengu_elegant_meadow", "default": "true" },
@@ -19249,6 +19693,7 @@
 			{ "name": "tengu_expressive_whistle_config" },
 			{ "name": "tengu_fallow_lantern" },
 			{ "name": "tengu_fallow_plover", "default": "false" },
+			{ "name": "tengu_fancy_canyon", "default": "false" },
 			{ "name": "tengu_fancy_crab", "default": "0" },
 			{ "name": "tengu_fancy_milner", "default": "true" },
 			{ "name": "tengu_fancy_wand", "default": "false" },
@@ -19261,7 +19706,6 @@
 			{ "name": "tengu_feedback_survey_config", "default": "unknown" },
 			{ "name": "tengu_fennel_godwit", "default": "false" },
 			{ "name": "tengu_fern_plover" },
-			{ "name": "tengu_ferrous_almanac" },
 			{ "name": "tengu_fgts", "default": "false" },
 			{
 				"name": "tengu_fine_survey_transcript_ask_config",
@@ -19280,6 +19724,7 @@
 			{ "name": "tengu_flint_harbor_prompt" },
 			{ "name": "tengu_flint_harbor_share", "default": "false" },
 			{ "name": "tengu_floating_lagoon", "default": "false" },
+			{ "name": "tengu_floating_steele", "default": "0" },
 			{ "name": "tengu_floofy_haven", "default": "unknown" },
 			{ "name": "tengu_fluttering_rose", "default": "false" },
 			{ "name": "tengu_fluttering_scone" },
@@ -19288,7 +19733,6 @@
 			{ "name": "tengu_foamy_pelican", "default": "\"off\"" },
 			{ "name": "tengu_foamy_sedgewick", "default": "false" },
 			{ "name": "tengu_foamy_spring" },
-			{ "name": "tengu_foamy_waterfall" },
 			{ "name": "tengu_framed_osprey", "default": "false" },
 			{ "name": "tengu_fresh_heron", "default": "unknown" },
 			{ "name": "tengu_frolicking_nest", "default": "true" },
@@ -19305,21 +19749,21 @@
 			{ "name": "tengu_gentle_frost", "default": "false" },
 			{ "name": "tengu_gentle_grove" },
 			{ "name": "tengu_gentle_hammock", "default": "false" },
+			{ "name": "tengu_gentle_harbor" },
 			{ "name": "tengu_gentle_hummingbird", "default": "true" },
+			{ "name": "tengu_gentle_ocean", "default": "false" },
 			{ "name": "tengu_gentle_orchard", "default": "true" },
+			{ "name": "tengu_gentle_wagtail" },
 			{ "name": "tengu_giggly_dragonfly", "default": "true" },
 			{ "name": "tengu_giggly_oasis" },
-			{ "name": "tengu_gilded_sundial" },
 			{ "name": "tengu_gleaming_creek", "default": "null" },
 			{ "name": "tengu_gleaming_cupcake", "default": "true" },
 			{ "name": "tengu_gleaming_fair", "default": "false" },
 			{ "name": "tengu_gleaming_fair_reuse", "default": "false" },
 			{ "name": "tengu_glimmering_firefly", "default": "false" },
+			{ "name": "tengu_glimmering_glacier", "default": "true" },
 			{ "name": "tengu_glimmering_glade", "default": "true" },
 			{ "name": "tengu_glimmering_newt" },
-			{ "name": "tengu_glistening_willow", "default": "false" },
-			{ "name": "tengu_glittery_crayon", "default": "false" },
-			{ "name": "tengu_glittery_fern", "default": "0" },
 			{ "name": "tengu_glittery_mitten", "default": "true" },
 			{ "name": "tengu_glittery_tower_killswitch", "default": "false" },
 			{ "name": "tengu_glowing_lark", "default": "unknown" },
@@ -19379,6 +19823,7 @@
 			{ "name": "tengu_hazel_plover", "default": "false" },
 			{ "name": "tengu_hazel_sluice" },
 			{ "name": "tengu_hazel_trellis", "default": "unknown" },
+			{ "name": "tengu_hazy_boole", "default": "false" },
 			{ "name": "tengu_hazy_cosmos", "default": "true" },
 			{ "name": "tengu_hazy_hamster" },
 			{ "name": "tengu_hazy_nova", "default": "false" },
@@ -19393,7 +19838,7 @@
 			{ "name": "tengu_hidden_volcano", "default": "null" },
 			{ "name": "tengu_hidden_wind" },
 			{ "name": "tengu_hipaa_history_retention_prune", "default": "true" },
-			{ "name": "tengu_hollow_sandpiper" },
+			{ "name": "tengu_hollow_curlew", "default": "false" },
 			{ "name": "tengu_homing_swift" },
 			{ "name": "tengu_hover_rest", "default": "false" },
 			{ "name": "tengu_humble_bumblebee" },
@@ -19403,7 +19848,6 @@
 			{ "name": "tengu_humble_hartmanis" },
 			{ "name": "tengu_humble_petal", "default": "true" },
 			{ "name": "tengu_humble_wand", "default": "true" },
-			{ "name": "tengu_humble_whale" },
 			{ "name": "tengu_humble_zephyr", "default": "false" },
 			{ "name": "tengu_humming_locket", "default": "true" },
 			{ "name": "tengu_humming_star", "default": "true" },
@@ -19419,9 +19863,11 @@
 			},
 			{ "name": "tengu_hushed_plover", "default": "true" },
 			{ "name": "tengu_ide_rc_auto_enable", "default": "false" },
+			{ "name": "tengu_idempotent_blossom" },
 			{ "name": "tengu_idempotent_pine", "default": "0" },
 			{ "name": "tengu_idempotent_wolf", "default": "true" },
 			{ "name": "tengu_idle_amber_finch", "default": "false" },
+			{ "name": "tengu_immutable_falcon", "default": "false" },
 			{ "name": "tengu_immutable_ladybug" },
 			{ "name": "tengu_immutable_tide", "default": "0" },
 			{ "name": "tengu_imperative_spindle", "default": "false" },
@@ -19447,9 +19893,7 @@
 			{ "name": "tengu_jaunty_alpaca", "default": "true" },
 			{ "name": "tengu_jaunty_charm" },
 			{ "name": "tengu_jaunty_ember", "default": "false" },
-			{ "name": "tengu_jaunty_forest" },
 			{ "name": "tengu_jaunty_honey" },
-			{ "name": "tengu_jaunty_pike", "default": "false" },
 			{ "name": "tengu_jaunty_snowglobe", "default": "false" },
 			{ "name": "tengu_jaunty_umbrella" },
 			{ "name": "tengu_jazzy_goblet", "default": "false" },
@@ -19463,7 +19907,6 @@
 			{ "name": "tengu_jolly_aurora", "default": "false" },
 			{ "name": "tengu_jolly_candy", "default": "0" },
 			{ "name": "tengu_jolly_pudding" },
-			{ "name": "tengu_jolly_sparrow_enabled", "default": "false" },
 			{ "name": "tengu_jolly_wreath", "default": "false" },
 			{ "name": "tengu_jolly_wren", "default": "true" },
 			{ "name": "tengu_joyful_anchor", "default": "null" },
@@ -19516,9 +19959,11 @@
 			{ "name": "tengu_lapis_anchor_budget", "default": "unknown" },
 			{ "name": "tengu_lapis_anchor_user_turn", "default": "true" },
 			{ "name": "tengu_lazy_dove", "default": "false" },
+			{ "name": "tengu_lazy_pumpkin", "default": "false" },
+			{ "name": "tengu_lazy_spindle", "default": "false" },
 			{ "name": "tengu_left_arrow_carries_queued", "default": "true" },
 			{ "name": "tengu_left_arrow_editing_guard", "default": "true" },
-			{ "name": "tengu_level_plover", "default": "unknown" },
+			{ "name": "tengu_level_dunlin", "default": "true" },
 			{ "name": "tengu_level_wren", "default": "true" },
 			{ "name": "tengu_lexical_crystal", "default": "true" },
 			{ "name": "tengu_lexical_dragonfly", "default": "false" },
@@ -19619,13 +20064,14 @@
 			{ "name": "tengu_mcp_url_elicitation", "default": "true" },
 			{ "name": "tengu_measured_shelf", "default": "0" },
 			{ "name": "tengu_media_byte_cap" },
-			{ "name": "tengu_mellow_anchor", "default": "false" },
 			{ "name": "tengu_mellow_beacon", "default": "false" },
 			{ "name": "tengu_mellow_ember", "default": "false" },
 			{ "name": "tengu_mellow_heron", "default": "false" },
+			{ "name": "tengu_mellow_kestrel", "default": "false" },
 			{ "name": "tengu_mellow_minsky", "default": "true" },
 			{ "name": "tengu_mellow_rainbow" },
 			{ "name": "tengu_mellow_sunset", "default": "true" },
+			{ "name": "tengu_mellow_thistle", "default": "false" },
 			{ "name": "tengu_melodic_ember", "default": "true" },
 			{ "name": "tengu_melodic_octopus", "default": "true" },
 			{ "name": "tengu_melodic_wolf", "default": "true" },
@@ -19643,9 +20089,11 @@
 			{ "name": "tengu_mended_ribbon", "default": "unknown" },
 			{ "name": "tengu_mermaid_mod", "default": "unknown" },
 			{ "name": "tengu_merry_boot" },
+			{ "name": "tengu_merry_kite", "default": "1" },
 			{ "name": "tengu_merry_popcorn", "default": "true" },
 			{ "name": "tengu_merry_thunder", "default": "false" },
 			{ "name": "tengu_merry_tide", "default": "false" },
+			{ "name": "tengu_mighty_brook", "default": "true" },
 			{ "name": "tengu_mighty_flask", "default": "false" },
 			{ "name": "tengu_mighty_sprout" },
 			{ "name": "tengu_mighty_thimble", "default": "true" },
@@ -19666,6 +20114,7 @@
 			{ "name": "tengu_moonlit_locket" },
 			{ "name": "tengu_moonlit_panda", "default": "false" },
 			{ "name": "tengu_moonlit_toucan", "default": "false" },
+			{ "name": "tengu_moonlit_wreath" },
 			{ "name": "tengu_moss_anchor", "default": "false" },
 			{ "name": "tengu_mossy_anvil", "default": "true" },
 			{ "name": "tengu_mossy_crayon" },
@@ -19673,10 +20122,10 @@
 			{ "name": "tengu_mossy_dijkstra", "default": "true" },
 			{ "name": "tengu_mossy_gray", "default": "false" },
 			{ "name": "tengu_mossy_kepler", "default": "false" },
-			{ "name": "tengu_mossy_kestrel" },
 			{ "name": "tengu_mossy_knuth" },
 			{ "name": "tengu_mossy_lathe", "default": "true" },
 			{ "name": "tengu_mossy_melody", "default": "false" },
+			{ "name": "tengu_mossy_sky", "default": "false" },
 			{ "name": "tengu_mossy_squid", "default": "false" },
 			{ "name": "tengu_mossy_thrush", "default": "false" },
 			{ "name": "tengu_mossy_wirth", "default": "false" },
@@ -19697,6 +20146,7 @@
 			{ "name": "tengu_noble_mountain", "default": "true" },
 			{ "name": "tengu_noble_piglet", "default": "null" },
 			{ "name": "tengu_noble_snowflake", "default": "null" },
+			{ "name": "tengu_noble_spring", "default": "false" },
 			{ "name": "tengu_noble_wozniak", "default": "true" },
 			{ "name": "tengu_non_deferrable_builtins", "default": "null" },
 			{ "name": "tengu_observer_agents_enabled", "default": "true" },
@@ -19721,6 +20171,7 @@
 			{ "name": "tengu_pale_kestrel", "default": "true" },
 			{ "name": "tengu_paper_halyard", "default": "false" },
 			{ "name": "tengu_parallel_lantern", "default": "null" },
+			{ "name": "tengu_parallel_llama", "default": "true" },
 			{ "name": "tengu_parallel_sunrise", "default": "false" },
 			{ "name": "tengu_parallel_trinket", "default": "true" },
 			{ "name": "tengu_parsed_creek" },
@@ -19733,7 +20184,6 @@
 			{ "name": "tengu_patient_harbor_killswitch" },
 			{ "name": "tengu_patient_lamport" },
 			{ "name": "tengu_patient_ledger", "default": "false" },
-			{ "name": "tengu_patient_meteor", "default": "false" },
 			{ "name": "tengu_patient_raccoon", "default": "false" },
 			{ "name": "tengu_patient_tide", "default": "0" },
 			{ "name": "tengu_patient_walnut", "default": "false" },
@@ -19763,6 +20213,8 @@
 			{ "name": "tengu_playful_hare", "default": "true" },
 			{ "name": "tengu_playful_lobster", "default": "true" },
 			{ "name": "tengu_playful_panda", "default": "true" },
+			{ "name": "tengu_playful_puzzle", "default": "false" },
+			{ "name": "tengu_playful_snail" },
 			{ "name": "tengu_plugin_binary_assets", "default": "false" },
 			{ "name": "tengu_plugin_command_source_refresh", "default": "true" },
 			{ "name": "tengu_plugin_feedback_survey_config", "default": "unknown" },
@@ -19784,8 +20236,10 @@
 			{ "name": "tengu_post_compact_survey", "default": "false" },
 			{ "name": "tengu_prancy_charm", "default": "false" },
 			{ "name": "tengu_prancy_lantern" },
+			{ "name": "tengu_prancy_pebble", "default": "false" },
 			{ "name": "tengu_precious_ember", "default": "true" },
 			{ "name": "tengu_precious_koala", "default": "\"off\"" },
+			{ "name": "tengu_precious_sprout", "default": "unknown" },
 			{ "name": "tengu_print_ceiling_stop_agents", "default": "true" },
 			{ "name": "tengu_proactivity_selector", "default": "true" },
 			{
@@ -19804,6 +20258,7 @@
 			{ "name": "tengu_projects_thread_state_stamp", "default": "false" },
 			{ "name": "tengu_prompt_cache_1h_config" },
 			{ "name": "tengu_propose_goal", "default": "false" },
+			{ "name": "tengu_proud_book" },
 			{ "name": "tengu_proud_clover", "default": "false" },
 			{ "name": "tengu_proud_flurry_enabled", "default": "false" },
 			{ "name": "tengu_proud_honey" },
@@ -19812,8 +20267,10 @@
 			{ "name": "tengu_purring_aurora", "default": "false" },
 			{ "name": "tengu_purring_micali", "default": "true" },
 			{ "name": "tengu_purring_pine", "default": "true" },
+			{ "name": "tengu_purring_reef", "default": "false" },
 			{ "name": "tengu_quartz_pipit", "default": "true" },
 			{ "name": "tengu_quartz_thimble", "default": "true" },
+			{ "name": "tengu_quiet_almanac", "default": "unknown" },
 			{ "name": "tengu_quiet_badger", "default": "false" },
 			{ "name": "tengu_quiet_elephant", "default": "true" },
 			{ "name": "tengu_quiet_ember", "default": "unknown" },
@@ -19829,7 +20286,7 @@
 			{ "name": "tengu_quiet_sextant" },
 			{ "name": "tengu_quiet_turnstile", "default": "true" },
 			{ "name": "tengu_quill_marten", "default": "false" },
-			{ "name": "tengu_quilted_lantern" },
+			{ "name": "tengu_quill_meadow", "default": "\"today\"" },
 			{ "name": "tengu_quirky_shore", "default": "\"off\"" },
 			{ "name": "tengu_quirky_sketch", "default": "false" },
 			{ "name": "tengu_quirky_teacup", "default": "true" },
@@ -19842,6 +20299,7 @@
 			{ "name": "tengu_quizzical_wirth", "default": "true" },
 			{ "name": "tengu_quizzical_zebra" },
 			{ "name": "tengu_radiant_fern", "default": "[]" },
+			{ "name": "tengu_radiant_finch", "default": "false" },
 			{ "name": "tengu_radiant_fox", "default": "false" },
 			{ "name": "tengu_radiant_hare", "default": "false" },
 			{ "name": "tengu_radiant_heron", "default": "false" },
@@ -19859,7 +20317,6 @@
 			{ "name": "tengu_recursive_puddle", "default": "false" },
 			{ "name": "tengu_refactored_gadget" },
 			{ "name": "tengu_reflective_bee", "default": "\"off\"" },
-			{ "name": "tengu_reflective_donut", "default": "false" },
 			{ "name": "tengu_reflective_wolf", "default": "true" },
 			{
 				"name": "tengu_remote_auto_mode_include_destructive_mcp",
@@ -19871,12 +20328,12 @@
 			{ "name": "tengu_repl_mcp_undeclared_args_refuse", "default": "true" },
 			{ "name": "tengu_repl_unwritable_args_refuse", "default": "true" },
 			{ "name": "tengu_resilient_adleman" },
-			{ "name": "tengu_resilient_galaxy", "default": "false" },
 			{ "name": "tengu_resume_cache_warm_config" },
 			{ "name": "tengu_resume_open_live_bg", "default": "true" },
 			{ "name": "tengu_review_bughunter_config", "default": "null" },
 			{ "name": "tengu_rippling_map", "default": "true" },
 			{ "name": "tengu_rippling_orbit", "default": "false" },
+			{ "name": "tengu_rippling_sketch", "default": "true" },
 			{ "name": "tengu_rippling_stream" },
 			{ "name": "tengu_rippling_tulip", "default": "unknown" },
 			{ "name": "tengu_riveted_lantern" },
@@ -19887,12 +20344,11 @@
 			{ "name": "tengu_rosy_flute", "default": "true" },
 			{ "name": "tengu_rosy_llama", "default": "false" },
 			{ "name": "tengu_rosy_pebble", "default": "false" },
-			{ "name": "tengu_rosy_puddle", "default": "true" },
+			{ "name": "tengu_russet_abacus", "default": "false" },
 			{ "name": "tengu_russet_whimbrel", "default": "0" },
 			{ "name": "tengu_rustling_blossom", "default": "false" },
 			{ "name": "tengu_rustling_crescent", "default": "true" },
 			{ "name": "tengu_rustling_gizmo", "default": "0" },
-			{ "name": "tengu_rustling_lighthouse" },
 			{ "name": "tengu_rustling_orbit", "default": "false" },
 			{ "name": "tengu_rustling_pixel", "default": "\"all\"" },
 			{ "name": "tengu_rustling_sunset", "default": "true" },
@@ -19921,7 +20377,6 @@
 			{ "name": "tengu_serene_curry", "default": "unknown" },
 			{ "name": "tengu_serene_flurry" },
 			{ "name": "tengu_serene_frog", "default": "false" },
-			{ "name": "tengu_serene_possum" },
 			{ "name": "tengu_serene_rain", "default": "false" },
 			{ "name": "tengu_serene_teacup", "default": "true" },
 			{ "name": "tengu_serene_teapot", "default": "true" },
@@ -19937,6 +20392,7 @@
 				"name": "tengu_sessions_elevated_auth_enforcement",
 				"default": "false"
 			},
+			{ "name": "tengu_settled_wren", "default": "false" },
 			{ "name": "tengu_sharded_beacon", "default": "true" },
 			{ "name": "tengu_sharded_globe", "default": "false" },
 			{ "name": "tengu_sharded_moonbeam", "default": "true" },
@@ -19944,7 +20400,6 @@
 			{ "name": "tengu_shell_task_rows_live_only_enabled", "default": "false" },
 			{ "name": "tengu_shimmering_cherny", "default": "null" },
 			{ "name": "tengu_shimmering_firefly", "default": "false" },
-			{ "name": "tengu_shimmying_mochi", "default": "true" },
 			{ "name": "tengu_shimmying_stardust", "default": "false" },
 			{ "name": "tengu_shimmying_willow", "default": "30" },
 			{ "name": "tengu_shining_fractals", "default": "false" },
@@ -19970,6 +20425,7 @@
 			{ "name": "tengu_sleepy_snowflake", "default": "\"all\"" },
 			{ "name": "tengu_smooth_chipmunk", "default": "true" },
 			{ "name": "tengu_smooth_harbor", "default": "false" },
+			{ "name": "tengu_smooth_quiche" },
 			{ "name": "tengu_snappy_noodle", "default": "unknown" },
 			{ "name": "tengu_snappy_pelican", "default": "false" },
 			{ "name": "tengu_snappy_plum", "default": "false" },
@@ -19977,6 +20433,7 @@
 			{ "name": "tengu_snappy_tower" },
 			{ "name": "tengu_snazzy_starlight", "default": "unknown" },
 			{ "name": "tengu_snoopy_creek", "default": "false" },
+			{ "name": "tengu_snoopy_thimble", "default": "false" },
 			{ "name": "tengu_snug_orbit", "default": "[]" },
 			{ "name": "tengu_snug_platypus" },
 			{ "name": "tengu_snug_puddle" },
@@ -20001,20 +20458,22 @@
 			{ "name": "tengu_sorted_otter", "default": "false" },
 			{ "name": "tengu_sorted_thimble", "default": "false" },
 			{ "name": "tengu_sorted_truffle", "default": "true" },
+			{ "name": "tengu_sorted_willow", "default": "false" },
 			{ "name": "tengu_sorted_zebra", "default": "false" },
 			{ "name": "tengu_spare_attic", "default": "0" },
+			{ "name": "tengu_sparkling_hanrahan", "default": "false" },
 			{ "name": "tengu_spicy_blossom", "default": "false" },
 			{ "name": "tengu_splendid_horizon" },
 			{ "name": "tengu_splendid_lynx" },
 			{ "name": "tengu_splendid_sutton", "default": "false" },
 			{ "name": "tengu_sprightly_orbit", "default": "true" },
+			{ "name": "tengu_sprightly_pebble", "default": "false" },
 			{ "name": "tengu_squishy_spring", "default": "true" },
 			{ "name": "tengu_squishy_ullman", "default": "false" },
 			{ "name": "tengu_staged_ladybug", "default": "true" },
 			{ "name": "tengu_staged_pumpkin", "default": "true" },
 			{ "name": "tengu_starry_balloon", "default": "null" },
 			{ "name": "tengu_starry_crescent", "default": "false" },
-			{ "name": "tengu_starry_locket", "default": "false" },
 			{ "name": "tengu_starry_squid", "default": "true" },
 			{ "name": "tengu_starry_waterfall" },
 			{ "name": "tengu_startup_announcements", "default": "unknown" },
@@ -20033,12 +20492,12 @@
 			{ "name": "tengu_steady_scroll", "default": "null" },
 			{ "name": "tengu_steady_sunbeam" },
 			{ "name": "tengu_steady_treehouse" },
+			{ "name": "tengu_steady_wilkes", "default": "false" },
 			{ "name": "tengu_stellar_drift", "default": "false" },
 			{ "name": "tengu_still_heron", "default": "true" },
 			{ "name": "tengu_stream_watchdog_default_on", "default": "true" },
 			{ "name": "tengu_streamed_bumblebee", "default": "unknown" },
 			{ "name": "tengu_streamed_bumblebee_text", "default": "unknown" },
-			{ "name": "tengu_streamed_gem" },
 			{ "name": "tengu_streamed_thimble", "default": "true" },
 			{ "name": "tengu_streamed_yeti" },
 			{ "name": "tengu_structured_blossom" },
@@ -20046,10 +20505,11 @@
 			{ "name": "tengu_sturdy_lantern", "default": "true" },
 			{ "name": "tengu_subagent_cache_evict", "default": "false" },
 			{ "name": "tengu_sunny_anchor" },
-			{ "name": "tengu_sunny_garden", "default": "false" },
 			{ "name": "tengu_sunny_moon" },
 			{ "name": "tengu_sunset_penguin_opus48", "default": "\"2026-11-30\"" },
 			{ "name": "tengu_surface_failed_mcp_servers", "default": "true" },
+			{ "name": "tengu_swift_bear", "default": "true" },
+			{ "name": "tengu_swift_glade" },
 			{ "name": "tengu_swift_pelican", "default": "null" },
 			{ "name": "tengu_swift_whistle", "default": "false" },
 			{ "name": "tengu_swirling_boot", "default": "0" },
@@ -20076,7 +20536,6 @@
 			{ "name": "tengu_terminal_sidebar", "default": "false" },
 			{ "name": "tengu_thinking_block_resumption", "default": "false" },
 			{ "name": "tengu_thistle_grebe", "default": "null" },
-			{ "name": "tengu_thistle_orrery", "default": "\"\"" },
 			{ "name": "tengu_thrifty_sonic", "default": "false" },
 			{ "name": "tengu_ticklish_pnueli", "default": "false" },
 			{ "name": "tengu_ticklish_whisper", "default": "false" },
@@ -20116,6 +20575,7 @@
 			{ "name": "tengu_tranquil_fern", "default": "true" },
 			{ "name": "tengu_tranquil_starlight", "default": "false" },
 			{ "name": "tengu_transcript_local_gc", "default": "false" },
+			{ "name": "tengu_transient_cocoa", "default": "false" },
 			{ "name": "tengu_truncated_response_recovery", "default": "true" },
 			{ "name": "tengu_truthful_wren", "default": "true" },
 			{ "name": "tengu_turtle_carbon", "default": "true" },
@@ -20126,6 +20586,7 @@
 			{ "name": "tengu_twinkling_cosmos", "default": "false" },
 			{ "name": "tengu_twinkling_globe" },
 			{ "name": "tengu_twinkling_hoare", "default": "false" },
+			{ "name": "tengu_twinkly_babbage", "default": "false" },
 			{ "name": "tengu_twinkly_breeze" },
 			{ "name": "tengu_twinkly_clover" },
 			{ "name": "tengu_twinkly_prism", "default": "false" },
@@ -20161,6 +20622,8 @@
 			{ "name": "tengu_vast_puddle" },
 			{ "name": "tengu_vast_sunset", "default": "true" },
 			{ "name": "tengu_vast_tulip", "default": "false" },
+			{ "name": "tengu_vast_wave" },
+			{ "name": "tengu_vectorized_mitten", "default": "false" },
 			{ "name": "tengu_vellum_anchor", "default": "false" },
 			{ "name": "tengu_vellum_siding", "default": "false" },
 			{ "name": "tengu_velvet_cairn", "default": "true" },
@@ -20174,9 +20637,12 @@
 			{ "name": "tengu_velvet_panda", "default": "true" },
 			{ "name": "tengu_velvet_tide", "default": "false" },
 			{ "name": "tengu_velvety_aurora", "default": "true" },
+			{ "name": "tengu_velvety_galaxy", "default": "false" },
+			{ "name": "tengu_velvety_hare" },
 			{ "name": "tengu_velvety_kay", "default": "false" },
 			{ "name": "tengu_velvety_mango", "default": "true" },
 			{ "name": "tengu_velvety_ripple", "default": "false" },
+			{ "name": "tengu_velvety_robin", "default": "false" },
 			{ "name": "tengu_velvety_sprout", "default": "false" },
 			{ "name": "tengu_verified_vs_assumed", "default": "false" },
 			{ "name": "tengu_version_config" },
@@ -20235,6 +20701,7 @@
 			{ "name": "tengu_virtual_parasol", "default": "unknown" },
 			{ "name": "tengu_virtual_pine" },
 			{ "name": "tengu_virtual_toast", "default": "false" },
+			{ "name": "tengu_vivid_alpaca" },
 			{ "name": "tengu_vivid_crayon", "default": "true" },
 			{ "name": "tengu_vivid_crown", "default": "false" },
 			{ "name": "tengu_vivid_peach", "default": "undefined" },
@@ -20266,7 +20733,6 @@
 			{ "name": "tengu_wiggly_dove", "default": "false" },
 			{ "name": "tengu_wiggly_gray", "default": "false" },
 			{ "name": "tengu_wiggly_locket", "default": "false" },
-			{ "name": "tengu_wild_beacon" },
 			{ "name": "tengu_wild_gosling", "default": "false" },
 			{ "name": "tengu_wild_octopus" },
 			{ "name": "tengu_wild_tome", "default": "false" },
@@ -20277,6 +20743,7 @@
 			{ "name": "tengu_wise_newt", "default": "unknown" },
 			{ "name": "tengu_wise_origami", "default": "false" },
 			{ "name": "tengu_wise_salamander", "default": "0" },
+			{ "name": "tengu_wise_starlight", "default": "false" },
 			{ "name": "tengu_witty_hearth", "default": "true" },
 			{ "name": "tengu_witty_kay", "default": "false" },
 			{ "name": "tengu_witty_teapot", "default": "false" },
@@ -20288,6 +20755,7 @@
 			{ "name": "tengu_wondrous_acorn", "default": "null" },
 			{ "name": "tengu_wondrous_haven", "default": "false" },
 			{ "name": "tengu_wondrous_island", "default": "false" },
+			{ "name": "tengu_wondrous_oasis", "default": "false" },
 			{ "name": "tengu_wondrous_tulip" },
 			{ "name": "tengu_woolly_blanket", "default": "false" },
 			{ "name": "tengu_woolly_emerson", "default": "true" },
@@ -20295,7 +20763,6 @@
 			{ "name": "tengu_woolly_leaf", "default": "false" },
 			{ "name": "tengu_woolly_owl", "default": "false" },
 			{ "name": "tengu_woolly_toast", "default": "false" },
-			{ "name": "tengu_woolly_wall" },
 			{ "name": "tengu_worker_owner_rows_killswitch", "default": "false" },
 			{ "name": "tengu_workflow_schema_lint_enforce", "default": "true" },
 			{ "name": "tengu_workflows_enabled", "default": "true" },
@@ -20633,6 +21100,7 @@
 			{ "name": "$.turn.abort", "detail": "call" },
 			{ "name": "$.ui.ask", "detail": "call" },
 			{ "name": "$.ui.blit", "detail": "call" },
+			{ "name": "$.ui.cancelNotify", "detail": "call" },
 			{ "name": "$.ui.close", "detail": "call" },
 			{ "name": "$.ui.copy", "detail": "call" },
 			{ "name": "$.ui.focus", "detail": "call" },
@@ -20775,6 +21243,7 @@
 			{ "name": "turn.start", "detail": "event" },
 			{ "name": "turn.step", "detail": "event" },
 			{ "name": "ui.blit", "detail": "event" },
+			{ "name": "ui.cancelNotify", "detail": "event" },
 			{ "name": "ui.close", "detail": "event" },
 			{ "name": "ui.copy", "detail": "event" },
 			{ "name": "ui.fault", "detail": "event" },
@@ -20822,7 +21291,8 @@
 			{ "name": "claude-3-sonnet-20240229", "detail": "id" },
 			{ "name": "claude-fable-5", "detail": "id" },
 			{ "name": "claude-fable-5-1", "detail": "id" },
-			{ "name": "claude-fable-5[1m]", "detail": "id" },
+			{ "name": "claude-fable-5-1[1m]", "detail": "id" },
+			{ "name": "claude-fable-5-2", "detail": "id" },
 			{ "name": "claude-haiku-3-5", "detail": "id" },
 			{ "name": "claude-haiku-4-5", "detail": "id" },
 			{ "name": "claude-haiku-4-5-20251001", "detail": "id" },
@@ -20830,6 +21300,7 @@
 			{ "name": "claude-haiku-5-5", "detail": "id" },
 			{ "name": "claude-mythos-5", "detail": "id" },
 			{ "name": "claude-mythos-5-1", "detail": "id" },
+			{ "name": "claude-mythos-5-2", "detail": "id" },
 			{ "name": "claude-mythos-preview", "detail": "id" },
 			{ "name": "claude-opus-4", "detail": "id" },
 			{ "name": "claude-opus-4-0", "detail": "id" },
@@ -21253,7 +21724,7 @@
 			},
 			{
 				"name": "forceLoginMethod",
-				"detail": "Force a specific login method: \"claudeai\" for Claude Pro/Max, \"console\" for Console billing, \"gateway\" for the Cloud gateway OIDC device flow"
+				"detail": "Force a specific login method: \"claudeai\" for a Claude subscription (individual, Team, or Enterprise plans), \"console\" for Console billing, \"gateway\" for the Cloud gateway OIDC device flow"
 			},
 			{
 				"name": "forceLoginOrgUUID",
@@ -22156,12 +22627,12 @@
 		"slash-command": [
 			{
 				"name": "/add-dir",
-				"gate": "isEnabled ()=>ye()&&TFr()",
+				"gate": "isEnabled ()=>ye()&&Ijr()",
 				"detail": "local-jsx | Add a new working directory"
 			},
 			{
 				"name": "/advisor",
-				"gate": "isEnabled ()=>ye()&&pR()",
+				"gate": "isEnabled ()=>ye()&&HR()",
 				"detail": "local | Let Claude consult a stronger model at key moments"
 			},
 			{
@@ -22186,22 +22657,22 @@
 			},
 			{
 				"name": "/artifacts",
-				"gate": "isEnabled ()=>CR()&&au()===null",
+				"gate": "isEnabled ()=>KR()&&gu()===null",
 				"detail": "local-jsx | Browse your published and shared artifacts"
 			},
 			{
 				"name": "/auto-mode-setup",
-				"gate": "isEnabled ()=>gZe()&&!ye()",
+				"gate": "isEnabled ()=>vnt()&&!ye()",
 				"detail": "local-jsx | Teach auto mode about your environment, plus optional rule tweaks"
 			},
 			{
 				"name": "/autocompact",
-				"gate": "isEnabled (){return ye()||xn()}",
+				"gate": "isEnabled (){return ye()||Rn()}",
 				"detail": "local | Configure the auto-compact window size"
 			},
 			{
 				"name": "/autofix-pr",
-				"gate": "availability claude-ai, console-profile; isEnabled ()=>Yun()&&!ye()",
+				"gate": "availability claude-ai, console-profile; isEnabled ()=>Jgn()&&!ye()",
 				"detail": "local | Monitor and autofix any issues with the current PR"
 			},
 			{
@@ -22236,7 +22707,7 @@
 			},
 			{
 				"name": "/chrome",
-				"gate": "availability claude-ai; isEnabled ()=>!ye()&&WP()",
+				"gate": "availability claude-ai; isEnabled ()=>!ye()&&hO()",
 				"detail": "local-jsx | Open Claude in Chrome settings"
 			},
 			{ "name": "/claude-api", "gate": "isEnabled ()=>!n", "detail": "prompt" },
@@ -22247,7 +22718,7 @@
 			},
 			{
 				"name": "/claude-in-chrome",
-				"gate": "isEnabled ()=>!e&&(K0e()||Nt())",
+				"gate": "isEnabled ()=>!e&&(TLe()||Dt())",
 				"detail": "prompt | Automates your Chrome browser to interact with web pages - clicking elements, filling forms, capturing screenshots, reading console logs, and navigating sites. Opens pages in new tabs within …"
 			},
 			{
@@ -22256,7 +22727,7 @@
 			},
 			{
 				"name": "/cloud-plugins",
-				"gate": "isEnabled ()=>oUn()&&!i.CLAUDE_CODE_DISABLE_PLUGIN_FORWARDING",
+				"gate": "isEnabled ()=>Vjn()&&!i.CLAUDE_CODE_DISABLE_PLUGIN_FORWARDING",
 				"detail": "local-jsx | Choose whether cloud sessions use the plugins enabled on this machine"
 			},
 			{ "name": "/code-review", "detail": "prompt (aliases review)" },
@@ -22267,7 +22738,7 @@
 			},
 			{
 				"name": "/commit",
-				"gate": "isEnabled ()=>xko()",
+				"gate": "isEnabled ()=>ixo()",
 				"detail": "prompt | Create a git commit. Use whenever you are about to create a commit, whether the user asked for one or it is a step in your current task — it gathers git context and applies the required commi…"
 			},
 			{
@@ -22295,7 +22766,7 @@
 			},
 			{
 				"name": "/cowork-plugin",
-				"gate": "isEnabled ()=>Np()||Zb()||i.CLAUDE_CODE_COWORK_PLUGIN_SKILL&&!_oe()",
+				"gate": "isEnabled ()=>Qp()||J_()||i.CLAUDE_CODE_COWORK_PLUGIN_SKILL&&!wse()",
 				"detail": "prompt | Create a new Cowork plugin from scratch, or customize an installed plugin for a specific organization. Use when: customize plugin, set up plugin, configure plugin, tailor plugin, adjust plugi…"
 			},
 			{
@@ -22317,32 +22788,32 @@
 			},
 			{
 				"name": "/design-consent",
-				"gate": "hidden; isEnabled ()=>xz()",
+				"gate": "hidden; isEnabled ()=>CV()",
 				"detail": "local | Grant Claude agent access to your Design projects"
 			},
 			{
 				"name": "/design-login",
-				"gate": "isEnabled ()=>xz()",
+				"gate": "isEnabled ()=>CV()",
 				"detail": "local-jsx | Authorize design-system access for /design-sync with your claude.ai account"
 			},
 			{
 				"name": "/design-revoke",
-				"gate": "hidden; isEnabled ()=>xz()",
+				"gate": "hidden; isEnabled ()=>CV()",
 				"detail": "local | Revoke Claude agent access to your Design projects"
 			},
 			{
 				"name": "/design-sync",
-				"gate": "isEnabled xz",
+				"gate": "isEnabled CV",
 				"detail": "prompt | Push a React design system to claude.ai/design. This runs a converter that bundles the real component code (from Storybook or a bare package) and uploads it. Use when the user runs /design-sy…"
 			},
 			{
 				"name": "/desktop",
-				"gate": "availability claude-ai; isEnabled JMe",
+				"gate": "availability claude-ai; isEnabled CDe",
 				"detail": "local-jsx (aliases app) | Continue the current session in Claude Desktop"
 			},
 			{
 				"name": "/diff",
-				"gate": "isEnabled ()=>!yhr()",
+				"gate": "isEnabled ()=>!_ao()",
 				"detail": "local-jsx"
 			},
 			{
@@ -22358,7 +22829,7 @@
 			{ "name": "/exit", "detail": "local" },
 			{
 				"name": "/explain-usage",
-				"gate": "isEnabled ()=>Np()||Zb()",
+				"gate": "isEnabled ()=>Qp()||J_()",
 				"detail": "prompt | Explain where this session's tokens went, with one simple chart in plain language. Use when: explain usage, explain my usage, where did my tokens go, token usage breakdown, what used the most…"
 			},
 			{
@@ -22367,7 +22838,7 @@
 			},
 			{
 				"name": "/extra-usage",
-				"gate": "hidden; isEnabled ()=>vO()&&ye()",
+				"gate": "hidden; isEnabled ()=>KO()&&ye()",
 				"detail": "local | Renamed to /usage-credits"
 			},
 			{ "name": "/fast", "gate": "isEnabled ()=>ye()", "detail": "local" },
@@ -22386,12 +22857,12 @@
 			},
 			{
 				"name": "/fork",
-				"gate": "isEnabled ()=>!Da()",
+				"gate": "isEnabled ()=>!Fa()",
 				"detail": "local-jsx | Copy this conversation into a new background session and keep working here"
 			},
 			{
 				"name": "/goal",
-				"gate": "isEnabled ()=>ye()||xn()",
+				"gate": "isEnabled ()=>ye()||Rn()",
 				"detail": "local | Set a goal — keep working until the condition is met"
 			},
 			{
@@ -22413,7 +22884,7 @@
 			},
 			{
 				"name": "/import",
-				"gate": "isEnabled ()=>Lje()&&ye()&&!q()",
+				"gate": "isEnabled ()=>m2e()&&ye()&&!q()",
 				"detail": "local | Import config from another AI coding agent"
 			},
 			{ "name": "/init", "detail": "prompt" },
@@ -22437,27 +22908,27 @@
 			},
 			{
 				"name": "/keybindings",
-				"gate": "isEnabled ()=>Ooe()",
+				"gate": "isEnabled ()=>Lse()",
 				"detail": "local | Open your keyboard shortcuts file"
 			},
 			{
 				"name": "/keybindings-help",
-				"gate": "isEnabled Ooe",
+				"gate": "isEnabled Lse",
 				"detail": "prompt | Use when the user wants to customize keyboard shortcuts, rebind keys, add chord bindings, or modify ~/.claude/keybindings.json. Examples: \"rebind ctrl+s\", \"add a chord shortcut\", \"change the …"
 			},
 			{
 				"name": "/limit-reset",
-				"gate": "hidden; isEnabled ()=>At()&&(Eve()||$de())",
+				"gate": "hidden; isEnabled ()=>Tt()&&(KCe()||Zce())",
 				"detail": "local-jsx"
 			},
 			{
 				"name": "/list-agents",
-				"gate": "isEnabled ()=>Wl()",
+				"gate": "isEnabled ()=>zl()",
 				"detail": "local (aliases peers) | List subagents, teammates, and other Claude sessions you can message"
 			},
 			{
 				"name": "/login",
-				"gate": "isEnabled ()=>{let e=rr();return!i.DISABLE_LOGIN_COMMAND&&(e===null||e.sessionId!==void 0)}",
+				"gate": "isEnabled ()=>{let e=sr();return!i.DISABLE_LOGIN_COMMAND&&(e===null||e.sessionId!==void 0)}",
 				"detail": "local-jsx"
 			},
 			{
@@ -22467,7 +22938,7 @@
 			},
 			{
 				"name": "/loop",
-				"gate": "isEnabled c0",
+				"gate": "isEnabled U0",
 				"detail": "prompt (aliases proactive) | Run a prompt or slash command on a recurring interval (e.g. /loop 5m /foo). Omit the interval to let the model self-pace."
 			},
 			{
@@ -22477,7 +22948,7 @@
 			},
 			{
 				"name": "/low-priority",
-				"gate": "hidden; isEnabled ()=>At()&&(OL()||iLt())",
+				"gate": "hidden; isEnabled ()=>Tt()&&(mH()||INt())",
 				"detail": "local | Continue now at lower priority after reaching your 5-hour limit; run again to stop"
 			},
 			{
@@ -22496,7 +22967,7 @@
 			{ "name": "/model", "gate": "isEnabled ()=>ye()", "detail": "local-jsx" },
 			{
 				"name": "/output-style",
-				"gate": "isEnabled ()=>ye()||!QMe()||Ccn()",
+				"gate": "isEnabled ()=>ye()||!TDe()||hhn()",
 				"detail": "local | List output styles or switch to one"
 			},
 			{ "name": "/passes", "detail": "local-jsx" },
@@ -22523,12 +22994,12 @@
 			},
 			{
 				"name": "/pr",
-				"gate": "isEnabled ()=>xko()",
+				"gate": "isEnabled ()=>ixo()",
 				"detail": "prompt | Create a GitHub pull request. Use whenever you are about to open a PR, whether the user asked for one or it is a step in your current task — it gathers branch context and applies the required…"
 			},
 			{
 				"name": "/privacy-settings",
-				"gate": "isEnabled ()=>SV()",
+				"gate": "isEnabled ()=>c1()",
 				"detail": "local-jsx | View and update your privacy settings"
 			},
 			{
@@ -22538,13 +23009,13 @@
 			},
 			{
 				"name": "/project",
-				"gate": "isEnabled ()=>Hys()&&k(qrr,!1)",
+				"gate": "isEnabled ()=>mvs()&&k(ywr,!1)",
 				"detail": "local | Set the claude.ai Project for this session's usage reports"
 			},
 			{ "name": "/radio", "detail": "local | Listen to Claude FM lo-fi radio" },
 			{
 				"name": "/rate-limit-options",
-				"gate": "isEnabled ()=>At()||!1",
+				"gate": "isEnabled ()=>Tt()||!1",
 				"detail": "local-jsx | Manage usage limits and upgrade options"
 			},
 			{
@@ -22567,7 +23038,7 @@
 			},
 			{
 				"name": "/remote-env",
-				"gate": "availability claude-ai, console-profile; isEnabled ()=>At()||zsn()",
+				"gate": "availability claude-ai, console-profile; isEnabled ()=>Tt()||ydn()",
 				"detail": "local-jsx | Choose the default environment for cloud agents"
 			},
 			{
@@ -22577,12 +23048,12 @@
 			},
 			{
 				"name": "/restart",
-				"gate": "isEnabled qgn",
+				"gate": "isEnabled vSn",
 				"detail": "local (aliases update)"
 			},
 			{
 				"name": "/resume",
-				"gate": "isEnabled Lsr",
+				"gate": "isEnabled gbr",
 				"detail": "local-jsx (aliases continue)"
 			},
 			{
@@ -22600,12 +23071,12 @@
 			{ "name": "/sandbox", "detail": "local-jsx" },
 			{
 				"name": "/schedule",
-				"gate": "isEnabled ()=>Nn()&&At()&&!i.CLAUDE_CODE_REMOTE&&gn(xle)",
+				"gate": "isEnabled ()=>Fn()&&Tt()&&!i.CLAUDE_CODE_REMOTE&&gn(Ude)",
 				"detail": "local (aliases routines) | Create and manage scheduled remote Claude Code agents"
 			},
 			{
 				"name": "/scroll-speed",
-				"gate": "isEnabled ()=>{if(!Kd())return!1;let e=lf();return!(e?Iwe.includes(e.terminal??\"\"):hR.isJetBrainsIdeTerminal())}",
+				"gate": "isEnabled ()=>{if(!Xd())return!1;let e=vf();return!(e?JEe.includes(e.terminal??\"\"):FR.isJetBrainsIdeTerminal())}",
 				"detail": "local-jsx | Adjust mouse wheel scroll speed"
 			},
 			{
@@ -22614,27 +23085,27 @@
 			},
 			{
 				"name": "/send-to-project",
-				"gate": "isEnabled HCt",
+				"gate": "isEnabled GAt",
 				"detail": "prompt | Send this session's work to a Claude Project"
 			},
 			{
 				"name": "/session",
-				"gate": "isEnabled ()=>xn()",
+				"gate": "isEnabled ()=>Rn()",
 				"detail": "local-jsx (aliases remote) | Show cloud session URL and QR code"
 			},
 			{
 				"name": "/setup-bedrock",
-				"gate": "isEnabled ()=>Mfe(\"bedrock\")===void 0",
+				"gate": "isEnabled ()=>Wpe(\"bedrock\")===void 0",
 				"detail": "local-jsx | Reconfigure Amazon Bedrock authentication, region, or model pins"
 			},
 			{
 				"name": "/setup-claude",
-				"gate": "isEnabled ()=>Np()||Zb()",
+				"gate": "isEnabled ()=>Qp()||J_()",
 				"detail": "prompt (aliases setup-cowork) | Guided setup — pick a role, install a matching plugin, try a skill, connect tools. Use when: set up claude, setup claude, set up cowork, setup cowork, get started with …"
 			},
 			{
 				"name": "/setup-vertex",
-				"gate": "isEnabled ()=>Mfe(\"vertex\")===void 0",
+				"gate": "isEnabled ()=>Wpe(\"vertex\")===void 0",
 				"detail": "local-jsx | Reconfigure Google Vertex AI authentication, project, region, or model pins"
 			},
 			{
@@ -22658,12 +23129,12 @@
 			{ "name": "/stickers", "detail": "local | Order Claude Code stickers" },
 			{
 				"name": "/stop",
-				"gate": "isEnabled zt",
+				"gate": "isEnabled Vt",
 				"detail": "local | Stop this background session; transcript and worktree are kept"
 			},
 			{
 				"name": "/subtask",
-				"gate": "isEnabled ()=>!Da()",
+				"gate": "isEnabled ()=>!Fa()",
 				"detail": "local-jsx | Send a subagent off with your full context; its result comes back here"
 			},
 			{
@@ -22676,7 +23147,7 @@
 			},
 			{
 				"name": "/teleport",
-				"gate": "availability claude-ai, console-profile; isEnabled ()=>At()||zsn()",
+				"gate": "availability claude-ai, console-profile; isEnabled ()=>Tt()||ydn()",
 				"detail": "local (aliases tp) | Send this session to the cloud, or resume one from claude.ai"
 			},
 			{ "name": "/terminal-setup", "detail": "local-jsx" },
@@ -22687,12 +23158,12 @@
 			},
 			{
 				"name": "/ultraplan",
-				"gate": "availability claude-ai; isEnabled ()=>kY()",
+				"gate": "availability claude-ai; isEnabled ()=>dX()",
 				"detail": "local | A cloud session drafts a plan you can edit and approve"
 			},
 			{
 				"name": "/ultrareview",
-				"gate": "isEnabled ()=>ye()&&L$()",
+				"gate": "isEnabled ()=>ye()&&yU()",
 				"detail": "local | Find and verify bugs in your branch using a cloud session"
 			},
 			{
@@ -22701,7 +23172,7 @@
 			},
 			{
 				"name": "/upgrade",
-				"gate": "availability claude-ai; isEnabled v_e",
+				"gate": "availability claude-ai; isEnabled ISe",
 				"detail": "local-jsx | Upgrade your plan for higher rate limits and more Opus"
 			},
 			{
@@ -22711,12 +23182,12 @@
 			},
 			{
 				"name": "/usage-credits",
-				"gate": "isEnabled ()=>vO()&&ye()",
+				"gate": "isEnabled ()=>KO()&&ye()",
 				"detail": "local | Configure usage credits or request them from your admin when you hit a limit"
 			},
 			{
 				"name": "/use-case",
-				"gate": "availability claude-ai; isEnabled ()=>Y0()&&!Tt()",
+				"gate": "availability claude-ai; isEnabled ()=>xD()&&!vt()",
 				"detail": "local-jsx | Choose the Life Sciences use case that applies to your requests"
 			},
 			{
@@ -22735,7 +23206,7 @@
 			},
 			{
 				"name": "/web-setup",
-				"gate": "availability claude-ai; isEnabled i2e",
+				"gate": "availability claude-ai; isEnabled WGe",
 				"detail": "local-jsx | Set up cloud sessions with your GitHub account"
 			},
 			{
@@ -22745,7 +23216,7 @@
 			},
 			{
 				"name": "/workflow-authoring",
-				"gate": "isEnabled ()=>sm()",
+				"gate": "isEnabled ()=>Sm()",
 				"detail": "prompt"
 			},
 			{
@@ -22755,12 +23226,11 @@
 			},
 			{
 				"name": "/workflows",
-				"gate": "isEnabled ()=>sm()",
+				"gate": "isEnabled ()=>Sm()",
 				"detail": "local-jsx | Browse running and completed workflows"
 			}
 		],
 		"subcommand": [
-			{ "name": "add", "detail": "<name> <commandOrUrl> [args...]" },
 			{ "name": "agents" },
 			{ "name": "apply-project-settings", "gate": "hidden" },
 			{ "name": "auth" },
@@ -22772,6 +23242,7 @@
 			{ "name": "auto-mode critique" },
 			{ "name": "auto-mode defaults" },
 			{ "name": "auto-mode reset" },
+			{ "name": "daemon", "detail": "[subcommand] [options]" },
 			{ "name": "design-login", "gate": "hidden" },
 			{ "name": "doctor" },
 			{ "name": "drop-worktree-registrations", "gate": "hidden" },
@@ -22782,7 +23253,10 @@
 			{ "name": "edit-sandbox-settings", "gate": "hidden" },
 			{ "name": "edit-skill-overrides", "gate": "hidden" },
 			{ "name": "gateway" },
-			{ "name": "import" },
+			{
+				"name": "import",
+				"detail": "[codex|gemini|cursor] [--dry-run] [--yes[=<digest>]]"
+			},
 			{
 				"name": "import-conversations",
 				"gate": "hidden",
@@ -22790,6 +23264,7 @@
 			},
 			{ "name": "install", "detail": "[target]" },
 			{ "name": "mcp" },
+			{ "name": "mcp add", "detail": "<name> <commandOrUrl> [args...]" },
 			{ "name": "mcp add-from-claude-desktop" },
 			{ "name": "mcp add-json", "detail": "<name> <json>" },
 			{ "name": "mcp get", "detail": "<name>" },
@@ -22799,6 +23274,11 @@
 			{ "name": "mcp remove", "detail": "<name>" },
 			{ "name": "mcp reset-project-choices" },
 			{ "name": "mcp serve" },
+			{ "name": "mcp xaa" },
+			{ "name": "mcp xaa clear" },
+			{ "name": "mcp xaa login" },
+			{ "name": "mcp xaa setup" },
+			{ "name": "mcp xaa show" },
 			{ "name": "plugin" },
 			{ "name": "plugin configure", "detail": "<plugin>" },
 			{ "name": "plugin details", "detail": "<name>" },
@@ -22815,6 +23295,7 @@
 			{ "name": "plugin marketplace remove", "detail": "<name>" },
 			{ "name": "plugin marketplace update", "detail": "[name]" },
 			{ "name": "plugin prune" },
+			{ "name": "plugin restore-set-aside", "detail": "<plugin>" },
 			{ "name": "plugin tag", "detail": "[path]" },
 			{ "name": "plugin test", "gate": "hidden", "detail": "[dir]" },
 			{ "name": "plugin uninstall", "detail": "<plugin>" },
@@ -22822,239 +23303,247 @@
 			{ "name": "plugin validate", "detail": "<path>" },
 			{ "name": "project", "gate": "hidden" },
 			{ "name": "purge", "detail": "[path]" },
-			{ "name": "remote-control", "gate": "hidden" },
+			{ "name": "remote-control", "gate": "hidden", "detail": "[options]" },
+			{ "name": "respawn", "detail": "<id>|--all" },
+			{
+				"name": "rm",
+				"detail": "<id> [--discard-unpushed <commit>@<worktree-id>] [--force-remove-worktree <worktree-id>]"
+			},
 			{ "name": "sandbox", "gate": "hidden" },
 			{ "name": "sandbox install" },
 			{ "name": "sandbox status" },
 			{ "name": "sandbox uninstall" },
+			{ "name": "self-hosted-runner", "detail": "[options]" },
+			{
+				"name": "self-hosted-runner decode-token",
+				"detail": "[token] [options]"
+			},
+			{ "name": "self-hosted-runner doctor", "detail": "[args...]" },
+			{ "name": "self-hosted-runner orchestrator", "detail": "[options]" },
+			{ "name": "self-hosted-runner setup", "detail": "[args...]" },
 			{ "name": "setup-token" },
 			{ "name": "ultrareview", "detail": "[target]" },
-			{ "name": "update" },
-			{ "name": "xaa" },
-			{ "name": "xaa clear" },
-			{ "name": "xaa login" },
-			{ "name": "xaa setup" },
-			{ "name": "xaa show" }
+			{ "name": "update" }
 		],
 		"tool": [
 			{ "name": "Agent" },
 			{
 				"name": "AppifactRepl",
-				"gate": "ts (=import.meta.require(\"/$bunfs/root/chunk-wdqz42as.js\").AppifactReplTool)",
-				"detail": "isEnabled(){return kXo()&&CR()&&!Fd()}"
+				"gate": "is (=import.meta.require(\"/$bunfs/root/chunk-hyt1y2g1.js\").AppifactReplTool)",
+				"detail": "isEnabled(){return Uts()&&KR()&&!id()}"
 			},
 			{
 				"name": "Artifact",
-				"gate": "es (=jn(import.meta.require(\"/$bunfs/root/chunk-421t5hae.js\").ARTIFACT_TOOL_HEAD,()=>import.meta.require(\"/$bunfs/root/chunk-wy2vzqqq.js\").ArtifactTool))",
-				"detail": "isEnabled(){LCs();let e=Mnn();return HCs(e),e===null&&!Fd()}"
+				"gate": "ss (=Kn(import.meta.require(\"/$bunfs/root/chunk-ev3pxrde.js\").ARTIFACT_TOOL_HEAD,()=>import.meta.require(\"/$bunfs/root/chunk-ssyv876r.js\").ArtifactTool))",
+				"detail": "isEnabled(){AIs();let e=Xsn();return RIs(e),e===null&&!id()}"
 			},
 			{ "name": "ArtifactCheck" },
 			{ "name": "ArtifactComments" },
 			{ "name": "ArtifactData" },
-			{ "name": "AskUserQuestion", "detail": "isEnabled(){return cee()}" },
-			{ "name": "Bash", "gate": "Ll()" },
+			{ "name": "AskUserQuestion", "detail": "isEnabled(){return gie()}" },
+			{ "name": "Bash", "gate": "Ul()" },
 			{
 				"name": "ClaudeDesign",
-				"gate": "e (=Tl())",
-				"detail": "isEnabled:m3e"
+				"gate": "e (=wl())",
+				"detail": "isEnabled:z5e"
 			},
-			{ "name": "CronCreate", "detail": "isEnabled(){return c0()}" },
-			{ "name": "CronDelete", "detail": "isEnabled(){return SMn()}" },
-			{ "name": "CronList", "detail": "isEnabled(){return SMn()}" },
-			{ "name": "DesignSync", "detail": "isEnabled(){return xz()}" },
+			{ "name": "CronCreate", "detail": "isEnabled(){return U0()}" },
+			{ "name": "CronDelete", "detail": "isEnabled(){return qLn()}" },
+			{ "name": "CronList", "detail": "isEnabled(){return qLn()}" },
+			{ "name": "DesignSync", "detail": "isEnabled(){return CV()}" },
 			{ "name": "Edit" },
 			{
 				"name": "EndConversation",
-				"gate": "Qn (=import.meta.require(\"/$bunfs/root/chunk-24ae7cvv.js\").EndConversationTool)",
-				"detail": "isEnabled(){let e=Won();return e!==void 0&&Q5r(e)}"
+				"gate": "os (=import.meta.require(\"/$bunfs/root/chunk-4azhxn42.js\").EndConversationTool)",
+				"detail": "isEnabled(){let e=hln();return e!==void 0&&f7r(e)}"
 			},
 			{
 				"name": "EnterPlanMode",
-				"detail": "isEnabled(){return R8.isEnabled()}"
+				"detail": "isEnabled(){return yY.isEnabled()}"
 			},
-			{ "name": "EnterWorktree", "gate": "wVt()" },
+			{ "name": "EnterWorktree", "gate": "wqt()" },
 			{
 				"name": "ExitPlanMode",
-				"detail": "isEnabled(){return Fc()?gws():cee()}"
+				"detail": "isEnabled(){return ac()?tRs():gie()}"
 			},
-			{ "name": "ExitWorktree", "gate": "wVt()" },
+			{ "name": "ExitWorktree", "gate": "wqt()" },
 			{
 				"name": "FetchInboxMessage",
-				"gate": "He (=import.meta.require(\"/$bunfs/root/chunk-39d3defs.js\").FetchInboxMessageTool)",
-				"detail": "isEnabled(){return Lu()||gHn()!==void 0}"
+				"gate": "We (=import.meta.require(\"/$bunfs/root/chunk-2tzm5aty.js\").FetchInboxMessageTool)",
+				"detail": "isEnabled(){return Qu()||Q$n()!==void 0}"
 			},
 			{ "name": "GetTask", "detail": "isEnabled(){return!1}" },
-			{ "name": "Glob", "gate": "(n)=>!mde().has(n.name)" },
-			{ "name": "Grep", "gate": "(n)=>!mde().has(n.name)" },
-			{ "name": "LSP", "gate": "FXe()", "detail": "isEnabled(){return Z9e()}" },
+			{ "name": "Glob", "gate": "(n)=>!Tce().has(n.name)" },
+			{ "name": "Grep", "gate": "(n)=>!Tce().has(n.name)" },
+			{ "name": "LSP", "gate": "mJe()", "detail": "isEnabled(){return xYe()}" },
 			{
 				"name": "ListAgents",
-				"gate": "cs (=import.meta.require(\"/$bunfs/root/chunk-n4kspwwr.js\").ListAgentsTool)",
-				"detail": "isEnabled(){return Wl()}"
+				"gate": "gs (=import.meta.require(\"/$bunfs/root/chunk-atm8pg30.js\").ListAgentsTool)",
+				"detail": "isEnabled(){return zl()}"
 			},
 			{
 				"name": "ListConnectors",
-				"gate": "Kn (=import.meta.require(\"/$bunfs/root/chunk-j8beg8ha.js\").ListConnectorsTool)",
-				"detail": "isEnabled:eBe"
+				"gate": "Zn (=import.meta.require(\"/$bunfs/root/chunk-7qsgh8zq.js\").ListConnectorsTool)",
+				"detail": "isEnabled:Dje"
 			},
 			{ "name": "ListMcpResourcesTool" },
 			{ "name": "ListPlugins" },
 			{ "name": "ListSkills" },
 			{
 				"name": "MonitorTool",
-				"gate": "Yn (=import.meta.require(\"/$bunfs/root/chunk-0vp8jv55.js\").MonitorTool)"
+				"gate": "Jn (=import.meta.require(\"/$bunfs/root/chunk-6krm0665.js\").MonitorTool)"
 			},
 			{ "name": "NotebookEdit" },
-			{ "name": "OfferChromeSetup", "detail": "isEnabled:bVr" },
+			{ "name": "OfferChromeSetup", "detail": "isEnabled:A3r" },
 			{
 				"name": "Poll",
-				"gate": "ke (=import.meta.require(\"/$bunfs/root/chunk-xe58ckwt.js\").PollTool)",
-				"detail": "isEnabled(){return VI()}"
+				"gate": "Te (=import.meta.require(\"/$bunfs/root/chunk-6027v6f4.js\").PollTool)",
+				"detail": "isEnabled(){return hM()}"
 			},
 			{
 				"name": "PowerShell",
-				"gate": "no()",
+				"gate": "io()",
 				"detail": "isEnabled(){return!0}"
 			},
 			{
 				"name": "Projects",
-				"detail": "isEnabled(){return gn(\"allow_projects_tool\")&&Be()!==void 0}"
+				"detail": "isEnabled(){return gn(\"allow_projects_tool\")&&Pe()!==void 0}"
 			},
 			{
 				"name": "ProposeGoal",
-				"detail": "isEnabled(){if(ye()||xn())return!1;if(zt())return!1;if(!gtr())return!1;let e=x1t();if(e===\"disabled\")return!1;return E(e),!0}"
+				"detail": "isEnabled(){if(ye()||Rn())return!1;if(Vt())return!1;if(!Vsr())return!1;let e=fWt();if(e===\"disabled\")return!1;return A(e),!0}"
 			},
-			{ "name": "PublishPlugin", "detail": "isEnabled(){return OJn()}" },
+			{ "name": "PublishPlugin", "detail": "isEnabled(){return mnr()}" },
 			{
 				"name": "PushNotification",
-				"gate": "Xn (=import.meta.require(\"/$bunfs/root/chunk-d2a2q5ds.js\").PushNotificationTool)",
-				"detail": "isEnabled(){return t9(\"tengu_kairos_push_notifications\",!1,g)}"
+				"gate": "ts (=import.meta.require(\"/$bunfs/root/chunk-9ctxf8nv.js\").PushNotificationTool)",
+				"detail": "isEnabled(){return V9(\"tengu_kairos_push_notifications\",!1,g)}"
 			},
 			{
 				"name": "REPL",
-				"gate": "r (=ms())",
-				"detail": "isEnabled(){return $i()}"
+				"gate": "r (=ys())",
+				"detail": "isEnabled(){return Wi()}"
 			},
 			{ "name": "Read" },
 			{ "name": "ReadMcpResourceDirTool" },
 			{ "name": "ReadMcpResourceTool" },
-			{ "name": "ReadNotifications", "detail": "isEnabled:SQn" },
-			{ "name": "ReadWidgetContext", "detail": "isEnabled:Gxt" },
+			{ "name": "ReadNotifications", "detail": "isEnabled:Unr" },
+			{ "name": "ReadWidgetContext", "detail": "isEnabled:rIt" },
 			{
 				"name": "RefreshMcpTools",
 				"gate": "i.CLAUDE_CODE_ENABLE_REFRESH_MCP_TOOLS",
-				"detail": "isEnabled(){let e=t_();return e!==void 0&&e.length>0}"
+				"detail": "isEnabled(){let e=h_();return e!==void 0&&e.length>0}"
 			},
 			{
 				"name": "RemoteTrigger",
-				"gate": "Un (=import.meta.require(\"/$bunfs/root/chunk-8n8avr74.js\").RemoteTriggerTool)",
-				"detail": "isEnabled(){return Nn()&&At()&&!i.CLAUDE_CODE_REMOTE&&gn(\"allow_remote_sessions\")&&gn(xle)}"
+				"gate": "Yn (=import.meta.require(\"/$bunfs/root/chunk-14ce0yzf.js\").RemoteTriggerTool)",
+				"detail": "isEnabled(){return Fn()&&Tt()&&!i.CLAUDE_CODE_REMOTE&&gn(\"allow_remote_sessions\")&&gn(Ude)}"
 			},
 			{ "name": "ReportFindings" },
 			{ "name": "ScheduleWakeup" },
 			{
 				"name": "SearchMcpRegistry",
-				"gate": "qn (=import.meta.require(\"/$bunfs/root/chunk-nprj82z6.js\").SearchMcpRegistryTool)",
-				"detail": "isEnabled:eBe"
+				"gate": "Xn (=import.meta.require(\"/$bunfs/root/chunk-j3y31ba1.js\").SearchMcpRegistryTool)",
+				"detail": "isEnabled:Dje"
 			},
 			{ "name": "SearchPlugins" },
 			{ "name": "SearchSkills" },
-			{ "name": "SendFeedback", "detail": "isEnabled(){return I8()}" },
-			{ "name": "SendFile", "detail": "isEnabled(){return J7e()}" },
+			{ "name": "SendFeedback", "detail": "isEnabled(){return wY()}" },
+			{ "name": "SendFile", "detail": "isEnabled(){return AQe()}" },
 			{ "name": "SendMessage" },
 			{
 				"name": "SendToProject",
-				"gate": "Zn (=import.meta.require(\"/$bunfs/root/chunk-c3sr25nt.js\").ContinueInProjectsTool)",
-				"detail": "isEnabled(){return HCt()}"
+				"gate": "rs (=import.meta.require(\"/$bunfs/root/chunk-ezbv4x6a.js\").ContinueInProjectsTool)",
+				"detail": "isEnabled(){return GAt()}"
 			},
 			{
 				"name": "SendToProjectContext",
-				"gate": "Jn (=import.meta.require(\"/$bunfs/root/chunk-c3sr25nt.js\").ContinueInProjectsContextTool)",
-				"detail": "isEnabled(){return HCt()}"
+				"gate": "ns (=import.meta.require(\"/$bunfs/root/chunk-ezbv4x6a.js\").ContinueInProjectsContextTool)",
+				"detail": "isEnabled(){return GAt()}"
 			},
 			{
 				"name": "SendUserFile",
-				"detail": "isEnabled(){let t=!i.CLAUDE_CODE_ATTACHMENTS_BY_PATH;if(t&&(Ce()!==\"firstParty\"||bt()))return!1;if(t&&!gn(\"allow_send_file\"))return!1;if(!k(\"tengu_send_user_file\",!0))return!1;return(Lu()||R())&&!LW()…"
+				"detail": "isEnabled(){let t=!i.CLAUDE_CODE_ATTACHMENTS_BY_PATH;if(t&&(Ce()!==\"firstParty\"||gt()))return!1;if(t&&!gn(\"allow_send_file\"))return!1;if(!k(\"tengu_send_user_file\",!0))return!1;return(Qu()||j())&&!F2()…"
 			},
 			{
 				"name": "SendUserMessage",
-				"detail": "isEnabled(){return LW()||NXe()}"
+				"detail": "isEnabled(){return F2()||pJe()}"
 			},
-			{ "name": "ShareOnboardingGuide", "detail": "isEnabled(){return o8t()}" },
-			{ "name": "ShowOnboardingRolePicker", "detail": "isEnabled:zs" },
-			{ "name": "Skill", "detail": "isEnabled(){return!nw()}" },
+			{ "name": "ShareOnboardingGuide", "detail": "isEnabled(){return c7t()}" },
+			{ "name": "ShowOnboardingRolePicker", "detail": "isEnabled:Bs" },
+			{ "name": "Skill", "detail": "isEnabled(){return!mw()}" },
 			{
 				"name": "SuggestConnectors",
-				"gate": "Gn (=import.meta.require(\"/$bunfs/root/chunk-jn9nwdj9.js\").SuggestConnectorsTool)",
-				"detail": "isEnabled:eBe"
+				"gate": "Qn (=import.meta.require(\"/$bunfs/root/chunk-wrs80v6q.js\").SuggestConnectorsTool)",
+				"detail": "isEnabled:Dje"
 			},
-			{ "name": "SuggestPluginInstall", "detail": "isEnabled:_at" },
-			{ "name": "SuggestSkills", "detail": "isEnabled:_at" },
+			{ "name": "SuggestPluginInstall", "detail": "isEnabled:hdt" },
+			{ "name": "SuggestSkills", "detail": "isEnabled:hdt" },
 			{
 				"name": "TaskCreate",
-				"gate": "kL()",
-				"detail": "isEnabled(){return Nge()}"
+				"gate": "iH()",
+				"detail": "isEnabled(){return Gye()}"
 			},
 			{
 				"name": "TaskGet",
-				"gate": "kL()",
-				"detail": "isEnabled(){return Nge()}"
+				"gate": "iH()",
+				"detail": "isEnabled(){return Gye()}"
 			},
 			{
 				"name": "TaskList",
-				"gate": "kL()",
-				"detail": "isEnabled(){return Nge()}"
+				"gate": "iH()",
+				"detail": "isEnabled(){return Gye()}"
 			},
 			{ "name": "TaskStop" },
 			{
 				"name": "TaskUpdate",
-				"gate": "kL()",
-				"detail": "isEnabled(){return Nge()}"
+				"gate": "iH()",
+				"detail": "isEnabled(){return Gye()}"
 			},
-			{ "name": "TodoWrite", "detail": "isEnabled(){return!kL()&&uY()}" },
+			{ "name": "TodoWrite", "detail": "isEnabled(){return!iH()&&QY()}" },
 			{
 				"name": "ToolSearch",
-				"gate": "lh()",
-				"detail": "isEnabled(){return lh()}"
+				"gate": "Ah()",
+				"detail": "isEnabled(){return Ah()}"
 			},
 			{
 				"name": "WaitForMcpServers",
-				"detail": "isEnabled(){return iPr(at(),t_()??[])}"
+				"detail": "isEnabled(){return tBr(at(),h_()??[])}"
 			},
 			{
 				"name": "WebFetch",
-				"detail": "isEnabled(){return!i.CLAUDE_CODE_DISABLE_WEB_FETCH&&gn(mHt)}"
+				"detail": "isEnabled(){return!i.CLAUDE_CODE_DISABLE_WEB_FETCH&&gn(FFt)}"
 			},
 			{
 				"name": "WebSearch",
-				"detail": "isEnabled(){if(!gn(tWi))return!1;let e=Ce();if(e===\"firstParty\"||fM(e))return!0;if(e===\"gateway\")return!1;if(e===\"vertex\")return YEo(rt(at()));if(e===\"foundry\")return!0;return!1}"
+				"detail": "isEnabled(){if(!gn(l4i))return!1;let e=Ce();if(e===\"firstParty\"||HM(e))return!0;if(e===\"gateway\")return!1;if(e===\"vertex\")return CRo(it(at()));if(e===\"foundry\")return!0;return!1}"
 			},
-			{ "name": "Workflow", "detail": "isEnabled:()=>sm()" },
+			{ "name": "Workflow", "detail": "isEnabled:()=>Sm()" },
 			{
 				"name": "WrapUp",
-				"detail": "isEnabled(){return SVs()&&!Xz()&&rn(Qs,!1)}"
+				"detail": "isEnabled(){return A9s()&&!zV()&&rn(oi,!1)}"
 			},
 			{ "name": "Write" },
 			{ "name": "enable__mcp__claude-in-chrome" },
 			{ "name": "enable__mcp__remote-devices__Claude_Browser" },
 			{ "name": "enable__mcp__remote-devices__computer" },
-			{ "name": "memory_list", "detail": "isEnabled(){return DLe()}" },
-			{ "name": "memory_read", "detail": "isEnabled(){return DLe()}" },
-			{ "name": "memory_write", "detail": "isEnabled(){return DLe()}" },
+			{ "name": "memory_list", "detail": "isEnabled(){return uNe()}" },
+			{ "name": "memory_read", "detail": "isEnabled(){return uNe()}" },
+			{ "name": "memory_write", "detail": "isEnabled(){return uNe()}" },
 			{
 				"name": "propose_skills",
-				"detail": "isEnabled(){if(_oe())return!1;if(Zb())return i.CLAUDE_CODE_SYNC_SKILLS&&!nx();if(!Np()&&!i.CLAUDE_CODE_SKILL_PROPOSALS&&!rg())return!1;if(!i.CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE&&!(er()&&i.CLAUDE_CODE_…"
+				"detail": "isEnabled(){if(wse())return!1;if(J_())return i.CLAUDE_CODE_SYNC_SKILLS&&!eT();if(!Qp()&&!i.CLAUDE_CODE_SKILL_PROPOSALS&&!Ym())return!1;if(!i.CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE&&!(Mn()&&i.CLAUDE_CODE_…"
 			},
 			{ "name": "request_computer" },
-			{ "name": "self_hosted_runner_get_pool", "gate": "Wn()" },
-			{ "name": "self_hosted_runner_list_runners", "gate": "Wn()" },
-			{ "name": "self_hosted_runner_list_secrets", "gate": "Wn()" },
-			{ "name": "self_hosted_runner_list_sessions", "gate": "Wn()" },
-			{ "name": "self_hosted_runner_read_health", "gate": "Wn()" },
-			{ "name": "self_hosted_runner_read_metrics", "gate": "Wn()" },
-			{ "name": "self_hosted_runner_requeue_session", "gate": "Wn()" },
-			{ "name": "self_hosted_runner_spawn_local", "gate": "Wn()" },
-			{ "name": "self_hosted_runner_tail_log", "gate": "Wn()" }
+			{ "name": "self_hosted_runner_get_pool", "gate": "Vn()" },
+			{ "name": "self_hosted_runner_list_runners", "gate": "Vn()" },
+			{ "name": "self_hosted_runner_list_secrets", "gate": "Vn()" },
+			{ "name": "self_hosted_runner_list_sessions", "gate": "Vn()" },
+			{ "name": "self_hosted_runner_read_health", "gate": "Vn()" },
+			{ "name": "self_hosted_runner_read_metrics", "gate": "Vn()" },
+			{ "name": "self_hosted_runner_requeue_session", "gate": "Vn()" },
+			{ "name": "self_hosted_runner_spawn_local", "gate": "Vn()" },
+			{ "name": "self_hosted_runner_tail_log", "gate": "Vn()" }
 		]
 	}
 }

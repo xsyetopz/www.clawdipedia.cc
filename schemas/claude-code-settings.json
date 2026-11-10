@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-settings.json",
-	"title": "Claude Code settings.json (Claude Code 2.1.319)",
-	"$comment": "For settings.json (user, project, local). Generated from Claude Code 2.1.319 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code settings.json (Claude Code 2.1.321)",
+	"$comment": "For settings.json (user, project, local). Generated from Claude Code 2.1.321 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
 	"type": "object",
 	"properties": {
 		"$schema": {
@@ -3160,7 +3160,7 @@
 			}
 		},
 		"forceLoginMethod": {
-			"description": "Force a specific login method: \"claudeai\" for Claude Pro/Max, \"console\" for Console billing, \"gateway\" for the Cloud gateway OIDC device flow",
+			"description": "Force a specific login method: \"claudeai\" for a Claude subscription (individual, Team, or Enterprise plans), \"console\" for Console billing, \"gateway\" for the Cloud gateway OIDC device flow",
 			"type": "string",
 			"enum": ["claudeai", "console", "gateway"]
 		},

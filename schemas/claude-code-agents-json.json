@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-agents-json.json",
-	"title": "Claude Code --agents JSON entry (Claude Code 2.1.319)",
-	"$comment": "For one subagent definition of the --agents JSON (and the SDK agents option). Generated from Claude Code 2.1.319 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, object described as \"Definition for a custom subagent that can be invoked via the Agent tool.\". Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code --agents JSON entry (Claude Code 2.1.321)",
+	"$comment": "For one subagent definition of the --agents JSON (and the SDK agents option). Generated from Claude Code 2.1.321 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, object described as \"Definition for a custom subagent that can be invoked via the Agent tool.\". Do not edit by hand: run \"bun run schemas\".",
 	"type": "object",
 	"properties": {
 		"description": {
@@ -258,6 +258,14 @@
 											"description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. With or without that declaration, deny and ask rules, hook matchers and disallowed-tool lists that spell mcp__<connectorId> also reach this server's tools, and nothing that allows does; the id is read as a tool's name would spell it (a character other than a letter, a digit, '-' and '_' as '_'), and one that is then longer than 128 characters or holds '__' is not used for that. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered.",
 											"type": "string",
 											"minLength": 1
+										},
+										"autoModeVerdictTools": {
+											"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered.",
+											"maxItems": 64,
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
 										},
 										"tools": {
 											"description": "Per-tool permission policy the host declares for this server's tools (not the tool definitions passed to createSdkMcpServer). always_ask: the CLI asks the host (canUseTool or the permission prompt tool) before each call, even where an allow rule or allowedTools covers the tool, and under bypassPermissions outside a hosted remote session (CLAUDE_CODE_REMOTE); under dontAsk the call is denied; in auto mode the classifier decides, except that by default a tool annotated destructiveHint still asks. always_deny: calls are denied. always_allow and org_max_permission are ignored on sdk servers; grant allows with allowedTools or canUseTool. Read from initialize (sdkMcpServerConfigs) and from each mcp_set_servers entry that names the server. On the wire an entry without tools states no policy: on initialize the stored list and the rules stand; on mcp_set_servers the rules are replaced without them. The Agent SDK always re-sends the registered list. An entry whose policy is not one of the three asks; an entry without a string name is dropped and the rest apply; a value that is not a list reads as absent.",

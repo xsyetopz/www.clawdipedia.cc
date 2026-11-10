@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-stream-json.json",
-	"title": "Claude Code stream-json messages (Claude Code 2.1.319)",
-	"$comment": "For each message type the CLI writes (<type>[_<subtype>]Output) and reads (<type>Input) in stream-json mode. Generated from Claude Code 2.1.319 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, unions described as \"Everything the CLI writes to its output stream\" and \"Everything a client may write to the CLI's input stream\". Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code stream-json messages (Claude Code 2.1.321)",
+	"$comment": "For each message type the CLI writes (<type>[_<subtype>]Output) and reads (<type>Input) in stream-json mode. Generated from Claude Code 2.1.321 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, unions described as \"Everything the CLI writes to its output stream\" and \"Everything a client may write to the CLI's input stream\". Do not edit by hand: run \"bun run schemas\".",
 	"$defs": {
 		"active_goalOutput": {
 			"type": "object",
@@ -453,11 +453,15 @@
 							},
 							"tool_name": {
 								"type": "string"
+							},
+							"artifact_publish": {
+								"type": "boolean",
+								"const": true
 							}
 						},
 						"required": ["id", "display_name"]
 					},
-					"description": "@internal Display metadata for this message's tool_use blocks, keyed by block id. display_name is the MCP server's `tool.annotations.title` when provided, otherwise a readable transform of the wire name; server_display_name is the MCP server's display name (claude.ai's name for a connector, else the name its config gives, else the name the server reports, else its key); icon_url is the MCP server's directory icon URL (claude.ai connectors only); server_id is the mcpsrv_ connector id of a server provisioned by claude.ai, set by the CLI from claude.ai's own connector listing, so a client may show the call as that connector's. server_id_stamp is the X-MCP-Server-ID header value, lower-cased, of an http entry in the dynamic scope (passed in at launch or by a later mcp_set_servers push). Claude Code Remote writes the connector's uuid there when the session has one, otherwise an id it generates; the CLI checks only its shape (at most 128 characters of letters, digits, '.', '_', ':' and '-'; anything else yields no stamp), not whose it is, since a --mcp-config or SDK-host entry can write anything. A client may look it up in its own server list, treat a miss as a server it does not know (never as an error), and show a hit as the entry's claim to be that server, not as proof. They are separate fields: a server provisioned by claude.ai carries server_id, a dynamic-scope http entry server_id_stamp. Both absent for a plugin's, a repo's, a settings or an agent entry. Neither is a permission grant. tool_name is the tool's name as its server lists it, without the mcp__<server>__ prefix. Omitted for blocks whose display label equals the wire name (built-in tools). Wrapper-level sibling — never inside `message.content` — so it is not replayed to the model."
+					"description": "@internal Display metadata for this message's tool_use blocks, keyed by block id. display_name is the MCP server's `tool.annotations.title` when provided, otherwise a readable transform of the wire name; server_display_name is the MCP server's display name (claude.ai's name for a connector, else the name its config gives, else the name the server reports, else its key); icon_url is the MCP server's directory icon URL (claude.ai connectors only); server_id is the mcpsrv_ connector id of a server provisioned by claude.ai, set by the CLI from claude.ai's own connector listing, so a client may show the call as that connector's. server_id_stamp is the X-MCP-Server-ID header value, lower-cased, of an http entry in the dynamic scope (passed in at launch or by a later mcp_set_servers push). Claude Code Remote writes the connector's uuid there when the session has one, otherwise an id it generates; the CLI checks only its shape (at most 128 characters of letters, digits, '.', '_', ':' and '-'; anything else yields no stamp), not whose it is, since a --mcp-config or SDK-host entry can write anything. A client may look it up in its own server list, treat a miss as a server it does not know (never as an error), and show a hit as the entry's claim to be that server, not as proof. They are separate fields: a server provisioned by claude.ai carries server_id, a dynamic-scope http entry server_id_stamp. Both absent for a plugin's, a repo's, a settings or an agent entry. Neither is a permission grant. tool_name is the tool's name as its server lists it, without the mcp__<server>__ prefix. artifact_publish is true on a call to a publishing tool of an Artifacts MCP entry that reaches only Anthropic's server, which the CLI tells from the entry itself, never its name. The finished call's tool_use_result usually carries the artifact's url at its top level, from which Claude Code Remote derives the artifact_id it serves, and its title where the server's answer has one. The mark promises neither, and the url can come on an unmarked call. All three are the worker's word, not proof. Sent only on the main loop's own frames: never for a subagent's call or over Remote Control. Omitted for blocks whose display label equals the wire name (built-in tools). Wrapper-level sibling — never inside `message.content` — so it is not replayed to the model."
 				},
 				"narration_block_indexes": {
 					"type": "array",
@@ -477,7 +481,7 @@
 					"type": "integer",
 					"exclusiveMinimum": 0,
 					"maximum": 9007199254740991,
-					"description": "@internal How long the thinking block in this frame took to stream, in whole milliseconds (at least 1): from its content_block_start to its content_block_stop, so the wait for the response's first token is not counted. For display only. Sent only on a frame whose one content block is a thinking block that was streamed. Older CLI versions never send it, and a CLI that rebuilt its history from SDK frames does not send it when it replays that history, so be ready to show the block without a duration. Wrapper-level sibling — never inside `message.content` — so it is not replayed to the model."
+					"description": "@internal How long the thinking block in this frame took to stream, in whole milliseconds (at least 1): from its content_block_start to its content_block_stop, or to the interrupt that cut it, so the wait for the response's first token is not counted. For display only. Sent only on a frame whose one content block is a thinking block that was streamed. Older CLI versions never send it, and a CLI that rebuilt its history from SDK frames does not send it when it replays that history, so be ready to show the block without a duration. Wrapper-level sibling — never inside `message.content` — so it is not replayed to the model."
 				},
 				"thinking_display": {
 					"type": "string",
@@ -1004,9 +1008,13 @@
 						},
 						"rate_limit_info": {
 							"$ref": "#/$defs/out___schema162"
+						},
+						"cut": {
+							"type": "string",
+							"enum": ["output_limit", "context_window"]
 						}
 					},
-					"description": "@internal Parameters of api_error, present only for the kinds that have any. effort: the effort level the API refused (effort_requires_thinking). media (media_removed): the kind of block the API refused; absent for media_budget. media_reason (media_removed): unsupported_by_model — the API said that the model does not accept PDF documents; media_budget — the request's images and documents together exceed the API's limit, and the requests that follow may leave out blocks of either kind; unprocessable — every other refusal, a gateway's report of a model's refusal among them. provider: the API provider whose credentials failed (provider_credentials, gateway_session_expired). remedy (provider_credentials, gateway_session_expired): refresh_command — a configured refresh command (awsAuthRefresh / gcpAuthRefresh) refreshes the credentials; refresh_credentials — refresh the provider's credentials by hand, no command is configured; adc — refresh the Google application default credentials or the GOOGLE_APPLICATION_CREDENTIALS key file; gateway_token — replace the gateway token supplied through ANTHROPIC_AUTH_TOKEN or ANTHROPIC_CUSTOM_HEADERS; host_managed — the host application owns these credentials; model_access — the credentials work but the model is not enabled for this account and region (Amazon Bedrock). rate_limit_info (usage_limit_reached): what the refused request's own response said about the limit, in the shape rate_limit_event carries. It is read from the same values as the message text, so its status, limit and reset are the text's: status is rejected and isUsingOverage false, rateLimitType names the limit, resetsAt is when it resets, and overageStatus, overageResetsAt, overageDisabledReason and limitScope say whose spend cap it is (the person's own cap arrives as org_level_disabled_until, as on rate_limit_event); dailyCapPaused is true when usage is paused for the organization; no other member is sent. It is that refusal's record and is never updated, so compare resetsAt with the clock before calling the limit current. rate_limit_info (model_requires_usage_credits): that refusal's record, read from the same headers as the message text: status is rejected and isUsingOverage false; rateLimitType is the response's claim (seven_day_overage_included when an included allowance was used up) and is absent when it named none; resetsAt, overageStatus, overageResetsAt and limitScope come when the response had them; errorCode is credits_required when the body said so; overageDisabledReason is the disabled-reason header's when that header came with a claim or overage status, else the body's (the message text can also fall back to a reason cached from an earlier response, which the record does not carry); canUserPurchaseCredits and hasChargeableSavedPaymentMethod come from the body; the person's own cap arrives as org_level_disabled_until, as on rate_limit_event; no other member is sent."
+					"description": "@internal Parameters of api_error, present only for the kinds that have any. effort: the effort level the API refused (effort_requires_thinking). media (media_removed): the kind of block the API refused; absent for media_budget. media_reason (media_removed): unsupported_by_model — the API said that the model does not accept PDF documents; media_budget — the request's images and documents together exceed the API's limit, and the requests that follow may leave out blocks of either kind; unprocessable — every other refusal, a gateway's report of a model's refusal among them. provider: the API provider whose credentials failed (provider_credentials, gateway_session_expired). remedy (provider_credentials, gateway_session_expired): refresh_command — a configured refresh command (awsAuthRefresh / gcpAuthRefresh) refreshes the credentials; refresh_credentials — refresh the provider's credentials by hand, no command is configured; adc — refresh the Google application default credentials or the GOOGLE_APPLICATION_CREDENTIALS key file; gateway_token — replace the gateway token supplied through ANTHROPIC_AUTH_TOKEN or ANTHROPIC_CUSTOM_HEADERS; host_managed — the host application owns these credentials; model_access — the credentials work but the model is not enabled for this account and region (Amazon Bedrock). rate_limit_info (usage_limit_reached): what the refused request's own response said about the limit, in the shape rate_limit_event carries. It is read from the same values as the message text, so its status, limit and reset are the text's: status is rejected and isUsingOverage false, rateLimitType names the limit, resetsAt is when it resets, and overageStatus, overageResetsAt, overageDisabledReason and limitScope say whose spend cap it is (the person's own cap arrives as org_level_disabled_until, as on rate_limit_event); dailyCapPaused is true when usage is paused for the organization; no other member is sent. It is that refusal's record and is never updated, so compare resetsAt with the clock before calling the limit current. rate_limit_info (model_requires_usage_credits): that refusal's record, read from the same headers as the message text: status is rejected and isUsingOverage false; rateLimitType is the response's claim (seven_day_overage_included when an included allowance was used up) and is absent when it named none; resetsAt, overageStatus, overageResetsAt and limitScope come when the response had them; errorCode is credits_required when the body said so; overageDisabledReason is the disabled-reason header's when that header came with a claim or overage status, else the body's (the message text can also fall back to a reason cached from an earlier response, which the record does not carry); canUserPurchaseCredits and hasChargeableSavedPaymentMethod come from the body; the person's own cap arrives as org_level_disabled_until, as on rate_limit_event; no other member is sent. cut (max_output_tokens): which stop reason of the API cut the reply short, which max_output_tokens alone does not say: output_limit — max_tokens, the request's output-token maximum; context_window — model_context_window_exceeded, the model's context window. Absent on the one other error that carries max_output_tokens, the API's tool_use_block_cut_off, which api_error_code names."
 				},
 				"api_error_code": {
 					"type": "string",
@@ -1214,7 +1222,7 @@
 				}
 			},
 			"required": ["type", "command_uuid", "state", "uuid", "session_id"],
-			"description": "@internal Fate of a queued command (slash command or queued user prompt). 'queued' when the inbound message enters the command queue; 'started' when it drains into a turn; then exactly one terminal state: 'completed' — the turn that consumed it ended cleanly; 'cancelled' — removed by cancel_async_message (the host's own, or — with Remote Control enabled (remote_control) — a remote client withdrawing a prompt that a remote client queued: such a uuid was never sent by the host, so there is nothing to resend and the frame is informational), swept by an interrupt with cancel_queued:true, caught by a pending cancel just before dispatch, or consumed into a turn that was aborted (interrupt) or died on a hard failure (model_error, prompt_too_long, ...) — cancelled-over-completed is deliberate dup-over-loss for exactly-once resenders, so a fold answered earlier in a failed turn may be re-sent (a per-fold ledger refinement is tracked separately) — but resenders must not blindly resend on 'cancelled': user-requested removals arrive as the same state, so correlate against your own cancel_async_message responses AND against any interrupt receipt's `cancelled` list (interrupt_cancel_queued_v1) and resend only cancels neither source accounts for; 'discarded' — the session ended (end_session) with the command still queued, or with a peer message still held by the receive-side policy (not preceded by 'queued' then); 'refused' — declined by the session's receive-side policy before entering the queue (outright, or after being held): not preceded by 'queued', and it will not run in this session. Known gap: folds consumed by turns ending via max_turns / hook_stopped / tool_deferred / background_requested report 'completed' even though their content may only be answered on continuation/resume. A prompt sent with requeue_if_interrupted_within_ms that an interrupt puts back reports 'queued' again (after its 'started', if that was reported), then goes on as any queued prompt does. 'completed' means the consuming turn ended, not that the result frame was delivered. Ordering relative to the result frame is per-path: a command that starts a fresh turn emits 'completed' AFTER that turn's result frame (later still when the result is held back for background tasks); a command folded into an already-in-flight turn emits 'completed' BEFORE that turn's result frame. Not a strict pairing: a terminal state may arrive for a command_uuid that never emitted 'started' (control-request ACKs, duplicate deliveries); internally-enqueued commands (cron triggers, teammate shutdown prompts, deferred-turn resume) mint a fresh uuid at enqueue and emit started/terminal without 'queued'; a turn that fails by throwing can leave 'started' without a terminal state; and a peer message the queue's own admission guard drops after acceptance (rate limit, duplicate collapse, loop guard, queued-peer cap) currently leaves 'queued' without a terminal state — on process exit a wrapper should synthesize 'discarded' for uuids it has not seen reach a terminal state. The exactly-one-terminal guarantee is per worker process, not per uuid lifetime: after CCR redelivery a 'discarded' uuid legitimately re-emits queued→…→terminal on the next worker. Emitted on the stdout stream in -p/SDK sessions; remote transports (mobile/desktop bridge) receive the equivalent signal via delivery ACKs instead. A host driving a cloud-hosted session through the headless `--cloud` client also receives 'cancelled' (and only that state) after its interrupt with cancel_queued:true, synthesized from the session's receipt: for a uuid the host sent and did not cancel itself it means the cloud session dropped that command — it will not run; do not resend it; the frames follow the interrupt's success response, are not ordered against the interrupted turn's result, and unknown uuids (another client's prompt) may appear. From internal QueryEvent 'command_lifecycle'."
+			"description": "@internal Fate of a queued command (slash command or queued user prompt). 'queued' when the inbound message enters the command queue; 'started' when it drains into a turn; then exactly one terminal state: 'completed' — the turn that consumed it ended cleanly; 'cancelled' — removed by cancel_async_message (the host's own, or — with Remote Control enabled (remote_control) — a remote client withdrawing a prompt that a remote client queued: such a uuid was never sent by the host, so there is nothing to resend and the frame is informational), swept by an interrupt with cancel_queued:true or, in a remote session and behind a flag, by a plain interrupt, which cancels only messages that the server had sent again (see `cancelled` on the interrupt's response), caught by a pending cancel just before dispatch, or consumed into a turn that was aborted (interrupt) or died on a hard failure (model_error, prompt_too_long, ...) — cancelled-over-completed is deliberate dup-over-loss for exactly-once resenders, so a fold answered earlier in a failed turn may be re-sent (a per-fold ledger refinement is tracked separately) — but resenders must not blindly resend on 'cancelled': user-requested removals arrive as the same state, so correlate against your own cancel_async_message responses AND against any interrupt receipt's `cancelled` list (interrupt_cancel_queued_v1) and resend only cancels neither source accounts for; 'discarded' — the session ended (end_session) with the command still queued, or with a peer message still held by the receive-side policy (not preceded by 'queued' then); 'refused' — declined by the session's receive-side policy before entering the queue (outright, or after being held): not preceded by 'queued', and it will not run in this session. Known gap: folds consumed by turns ending via max_turns / hook_stopped / tool_deferred / background_requested report 'completed' even though their content may only be answered on continuation/resume. A prompt sent with requeue_if_interrupted_within_ms that an interrupt puts back reports 'queued' again (after its 'started', if that was reported), then goes on as any queued prompt does. 'completed' means the consuming turn ended, not that the result frame was delivered. Ordering relative to the result frame is per-path: a command that starts a fresh turn emits 'completed' AFTER that turn's result frame (later still when the result is held back for background tasks); a command folded into an already-in-flight turn emits 'completed' BEFORE that turn's result frame. Not a strict pairing: a terminal state may arrive for a command_uuid that never emitted 'started' (control-request ACKs, duplicate deliveries); internally-enqueued commands (cron triggers, teammate shutdown prompts, deferred-turn resume) mint a fresh uuid at enqueue and emit started/terminal without 'queued'; a turn that fails by throwing can leave 'started' without a terminal state; and a peer message the queue's own admission guard drops after acceptance (rate limit, duplicate collapse, loop guard, queued-peer cap) currently leaves 'queued' without a terminal state — on process exit a wrapper should synthesize 'discarded' for uuids it has not seen reach a terminal state. The exactly-one-terminal guarantee is per worker process, not per uuid lifetime: after CCR redelivery a 'discarded' uuid legitimately re-emits queued→…→terminal on the next worker. Emitted on the stdout stream in -p/SDK sessions; remote transports (mobile/desktop bridge) receive the equivalent signal via delivery ACKs instead. A host driving a cloud-hosted session through the headless `--cloud` client also receives 'cancelled' (and only that state) after its interrupt, with cancel_queued:true or without, synthesized from the `cancelled` list of the cloud session's own receipt (not the response that the host gets): for a uuid the host sent and did not cancel itself it means the cloud session dropped that command — it will not run; do not resend it; the frames follow the interrupt's success response, are not ordered against the interrupted turn's result, and unknown uuids (another client's prompt) may appear. From internal QueryEvent 'command_lifecycle'."
 		},
 		"control_cancel_requestInput": {
 			"type": "object",
@@ -1434,9 +1442,10 @@
 										"mcp_client_registration_unavailable",
 										"mcp_redirect_uri_unusable",
 										"mcp_policy_blocked",
-										"read_denied"
+										"read_denied",
+										"side_question_busy"
 									],
-									"description": "@internal Why the request got an error answer, stamped from the state the handler branched on (never parsed from `error`, though some of that state rests on the error message of another component, for example that of the MCP SDK for mcp_client_registration_unavailable). set_model: invalid_request, catalog_unknown (not shaped like a model id), not_found (the API serves no such model), restricted_by_org, unavailable_for_account, not_offered (this build does not offer it; `error` names the Claude Code version it requires only when its catalog row states one above this build), alias_1m_disabled (CLAUDE_CODE_DISABLE_1M_CONTEXT), alias_1m_unsupported, blocked_by_hook (also when the model kept changing while the hooks ran, which a retry may get past), check_failed (the API settled nothing about the model; a retry may pass), check_rejected (the API answered with an error no retry or sign-in clears), credits_required (a 429 whose body carries that error_code, and nothing clears it by itself), rate_limit (any other 429, even a usage-credits refusal that has no such code or that clears by itself), auth_failed (sign in again), model_not_current, verdict_pending (from older builds only; not a refusal: the outcome follows as a system/informational message), internal_error (the switch may or may not have applied). apply_flag_settings: rarely internal_error, and verdict_pending from older builds. set_permission_mode: invalid_mode, bypass_restricted, bypass_disabled, bypass_not_launched, and for auto auto_mode_settings, auto_mode_circuit_breaker, auto_mode_fast_mode, auto_mode_model or auto_mode_unavailable. remote_control (a failed enable whose cause the bridge reported): remote_control_auth (sign in again), remote_control_terminal, remote_control_ended_elsewhere, remote_control_policy_disabled. get_workspace_diff: workspace_diff_pending (the diff was not ready when the reply was due; ask again shortly, since a diff that finishes in the meantime is returned to the next request that comes within a minute). interrupt (a claude-code-server tenant, by worker_epoch): stale_worker_epoch (it is for another worker life; no turn was stopped), invalid_worker_epoch (it is no whole number of 1 or more; likewise). read_file with the anchor as_written: read_denied (the one refusal, the same for every cause; a plain read_file and the other anchors carry no code). mcp_authenticate (a reply from a `claude -p` session, over stdio or its --sdk-url connection, which includes the sessions that `claude remote-control` spawns; a reply relayed by the Remote Control bridge that a session itself runs carries neither of the next two codes, and a claude-code-server tenant does not serve the request): mcp_client_registration_unavailable (the authorization server gives this client no way to register: it offers no registration endpoint, or the endpoint refused; retrying will not help until that changes), mcp_redirect_uri_unusable (the request set redirectUriOnly and named no redirectUri, or the config of the server sets oauth.clientId or oauth.xaa, or the failure is one that gets mcp_client_registration_unavailable without redirectUriOnly). mcp_policy_blocked goes with the refusal that comes before a dial, when its `error` says that managed policy blocks the MCP server: from a `claude -p` session on mcp_toggle (to enable), mcp_reconnect, mcp_authenticate and, for a server that has a row, mcp_read_resource; from a claude-code-server tenant on mcp_reconnect; from the Remote Control bridge that a session itself runs on mcp_reconnect and mcp_authenticate. It is usually a deny in the managed policy of the organization, which only an administrator can lift. A few refusals that Claude Code makes by itself use the same words and code, though no policy set them. A refusal with other words carries no code: an address that Claude Code says that it reserves, a project server that awaits approval, a server that is switched off. A deny that lands during a dial carries no code either, though the `error` from `claude -p` then also names the managed policy. Absent on every other error; new values are additive, so treat an unknown one as absent."
+									"description": "@internal Why the request got an error answer, stamped from the state the handler branched on (never parsed from `error`, though some of that state rests on the error message of another component, for example that of the MCP SDK for mcp_client_registration_unavailable). set_model: invalid_request, catalog_unknown (not shaped like a model id), not_found (the API serves no such model), restricted_by_org, unavailable_for_account, not_offered (this build does not offer it; `error` names the Claude Code version it requires only when its catalog row states one above this build), alias_1m_disabled (CLAUDE_CODE_DISABLE_1M_CONTEXT), alias_1m_unsupported, blocked_by_hook (also when the model kept changing while the hooks ran, which a retry may get past), check_failed (the API settled nothing about the model; a retry may pass), check_rejected (the API answered with an error no retry or sign-in clears), credits_required (a 429 whose body carries that error_code, and nothing clears it by itself), rate_limit (any other 429, even a usage-credits refusal that has no such code or that clears by itself), auth_failed (sign in again), model_not_current, verdict_pending (from older builds only; not a refusal: the outcome follows as a system/informational message), internal_error (the switch may or may not have applied). apply_flag_settings: rarely internal_error, and verdict_pending from older builds. set_permission_mode: invalid_mode, bypass_restricted, bypass_disabled, bypass_not_launched, and for auto auto_mode_settings, auto_mode_circuit_breaker, auto_mode_fast_mode, auto_mode_model or auto_mode_unavailable. remote_control (a failed enable whose cause the bridge reported): remote_control_auth (sign in again), remote_control_terminal, remote_control_ended_elsewhere, remote_control_policy_disabled. get_workspace_diff: workspace_diff_pending (the diff was not ready when the reply was due; ask again shortly, since a diff that finishes in the meantime is returned to the next request that comes within a minute). interrupt (a claude-code-server tenant, by worker_epoch): stale_worker_epoch (it is for another worker life; no turn was stopped), invalid_worker_epoch (it is no whole number of 1 or more; likewise). read_file with the anchor as_written: read_denied (the one refusal, the same for every cause; a plain read_file and the other anchors carry no code). mcp_authenticate (a reply from a `claude -p` session, over stdio or its --sdk-url connection, which includes the sessions that `claude remote-control` spawns; a reply relayed by the Remote Control bridge that a session itself runs carries neither of the next two codes, and a claude-code-server tenant does not serve the request): mcp_client_registration_unavailable (the authorization server gives this client no way to register: it offers no registration endpoint, or the endpoint refused; retrying will not help until that changes), mcp_redirect_uri_unusable (the request set redirectUriOnly and named no redirectUri, or the config of the server sets oauth.clientId or oauth.xaa, or the failure is one that gets mcp_client_registration_unavailable without redirectUriOnly). mcp_policy_blocked goes with the refusal that comes before a dial, when its `error` says that managed policy blocks the MCP server: from a `claude -p` session on mcp_toggle (to enable), mcp_reconnect, mcp_authenticate and, for a server that has a row, mcp_read_resource; from a claude-code-server tenant on mcp_reconnect; from the Remote Control bridge that a session itself runs on mcp_reconnect and mcp_authenticate. It is usually a deny in the managed policy of the organization, which only an administrator can lift. A few refusals that Claude Code makes by itself use the same words and code, though no policy set them. A refusal with other words carries no code: an address that Claude Code says that it reserves, a project server that awaits approval, a server that is switched off. A deny that lands during a dial carries no code either, though the `error` from `claude -p` then also names the managed policy. side_question (a claude-code-server tenant): side_question_busy (the session already runs as many side questions and title calls as it may at once; ask again when one has ended; its other refusals carry no code). Absent on every other error; new values are additive, so treat an unknown one as absent."
 								},
 								"model": {
 									"type": "string",
@@ -1670,9 +1679,10 @@
 										"mcp_client_registration_unavailable",
 										"mcp_redirect_uri_unusable",
 										"mcp_policy_blocked",
-										"read_denied"
+										"read_denied",
+										"side_question_busy"
 									],
-									"description": "@internal Why the request got an error answer, stamped from the state the handler branched on (never parsed from `error`, though some of that state rests on the error message of another component, for example that of the MCP SDK for mcp_client_registration_unavailable). set_model: invalid_request, catalog_unknown (not shaped like a model id), not_found (the API serves no such model), restricted_by_org, unavailable_for_account, not_offered (this build does not offer it; `error` names the Claude Code version it requires only when its catalog row states one above this build), alias_1m_disabled (CLAUDE_CODE_DISABLE_1M_CONTEXT), alias_1m_unsupported, blocked_by_hook (also when the model kept changing while the hooks ran, which a retry may get past), check_failed (the API settled nothing about the model; a retry may pass), check_rejected (the API answered with an error no retry or sign-in clears), credits_required (a 429 whose body carries that error_code, and nothing clears it by itself), rate_limit (any other 429, even a usage-credits refusal that has no such code or that clears by itself), auth_failed (sign in again), model_not_current, verdict_pending (from older builds only; not a refusal: the outcome follows as a system/informational message), internal_error (the switch may or may not have applied). apply_flag_settings: rarely internal_error, and verdict_pending from older builds. set_permission_mode: invalid_mode, bypass_restricted, bypass_disabled, bypass_not_launched, and for auto auto_mode_settings, auto_mode_circuit_breaker, auto_mode_fast_mode, auto_mode_model or auto_mode_unavailable. remote_control (a failed enable whose cause the bridge reported): remote_control_auth (sign in again), remote_control_terminal, remote_control_ended_elsewhere, remote_control_policy_disabled. get_workspace_diff: workspace_diff_pending (the diff was not ready when the reply was due; ask again shortly, since a diff that finishes in the meantime is returned to the next request that comes within a minute). interrupt (a claude-code-server tenant, by worker_epoch): stale_worker_epoch (it is for another worker life; no turn was stopped), invalid_worker_epoch (it is no whole number of 1 or more; likewise). read_file with the anchor as_written: read_denied (the one refusal, the same for every cause; a plain read_file and the other anchors carry no code). mcp_authenticate (a reply from a `claude -p` session, over stdio or its --sdk-url connection, which includes the sessions that `claude remote-control` spawns; a reply relayed by the Remote Control bridge that a session itself runs carries neither of the next two codes, and a claude-code-server tenant does not serve the request): mcp_client_registration_unavailable (the authorization server gives this client no way to register: it offers no registration endpoint, or the endpoint refused; retrying will not help until that changes), mcp_redirect_uri_unusable (the request set redirectUriOnly and named no redirectUri, or the config of the server sets oauth.clientId or oauth.xaa, or the failure is one that gets mcp_client_registration_unavailable without redirectUriOnly). mcp_policy_blocked goes with the refusal that comes before a dial, when its `error` says that managed policy blocks the MCP server: from a `claude -p` session on mcp_toggle (to enable), mcp_reconnect, mcp_authenticate and, for a server that has a row, mcp_read_resource; from a claude-code-server tenant on mcp_reconnect; from the Remote Control bridge that a session itself runs on mcp_reconnect and mcp_authenticate. It is usually a deny in the managed policy of the organization, which only an administrator can lift. A few refusals that Claude Code makes by itself use the same words and code, though no policy set them. A refusal with other words carries no code: an address that Claude Code says that it reserves, a project server that awaits approval, a server that is switched off. A deny that lands during a dial carries no code either, though the `error` from `claude -p` then also names the managed policy. Absent on every other error; new values are additive, so treat an unknown one as absent."
+									"description": "@internal Why the request got an error answer, stamped from the state the handler branched on (never parsed from `error`, though some of that state rests on the error message of another component, for example that of the MCP SDK for mcp_client_registration_unavailable). set_model: invalid_request, catalog_unknown (not shaped like a model id), not_found (the API serves no such model), restricted_by_org, unavailable_for_account, not_offered (this build does not offer it; `error` names the Claude Code version it requires only when its catalog row states one above this build), alias_1m_disabled (CLAUDE_CODE_DISABLE_1M_CONTEXT), alias_1m_unsupported, blocked_by_hook (also when the model kept changing while the hooks ran, which a retry may get past), check_failed (the API settled nothing about the model; a retry may pass), check_rejected (the API answered with an error no retry or sign-in clears), credits_required (a 429 whose body carries that error_code, and nothing clears it by itself), rate_limit (any other 429, even a usage-credits refusal that has no such code or that clears by itself), auth_failed (sign in again), model_not_current, verdict_pending (from older builds only; not a refusal: the outcome follows as a system/informational message), internal_error (the switch may or may not have applied). apply_flag_settings: rarely internal_error, and verdict_pending from older builds. set_permission_mode: invalid_mode, bypass_restricted, bypass_disabled, bypass_not_launched, and for auto auto_mode_settings, auto_mode_circuit_breaker, auto_mode_fast_mode, auto_mode_model or auto_mode_unavailable. remote_control (a failed enable whose cause the bridge reported): remote_control_auth (sign in again), remote_control_terminal, remote_control_ended_elsewhere, remote_control_policy_disabled. get_workspace_diff: workspace_diff_pending (the diff was not ready when the reply was due; ask again shortly, since a diff that finishes in the meantime is returned to the next request that comes within a minute). interrupt (a claude-code-server tenant, by worker_epoch): stale_worker_epoch (it is for another worker life; no turn was stopped), invalid_worker_epoch (it is no whole number of 1 or more; likewise). read_file with the anchor as_written: read_denied (the one refusal, the same for every cause; a plain read_file and the other anchors carry no code). mcp_authenticate (a reply from a `claude -p` session, over stdio or its --sdk-url connection, which includes the sessions that `claude remote-control` spawns; a reply relayed by the Remote Control bridge that a session itself runs carries neither of the next two codes, and a claude-code-server tenant does not serve the request): mcp_client_registration_unavailable (the authorization server gives this client no way to register: it offers no registration endpoint, or the endpoint refused; retrying will not help until that changes), mcp_redirect_uri_unusable (the request set redirectUriOnly and named no redirectUri, or the config of the server sets oauth.clientId or oauth.xaa, or the failure is one that gets mcp_client_registration_unavailable without redirectUriOnly). mcp_policy_blocked goes with the refusal that comes before a dial, when its `error` says that managed policy blocks the MCP server: from a `claude -p` session on mcp_toggle (to enable), mcp_reconnect, mcp_authenticate and, for a server that has a row, mcp_read_resource; from a claude-code-server tenant on mcp_reconnect; from the Remote Control bridge that a session itself runs on mcp_reconnect and mcp_authenticate. It is usually a deny in the managed policy of the organization, which only an administrator can lift. A few refusals that Claude Code makes by itself use the same words and code, though no policy set them. A refusal with other words carries no code: an address that Claude Code says that it reserves, a project server that awaits approval, a server that is switched off. A deny that lands during a dial carries no code either, though the `error` from `claude -p` then also names the managed policy. side_question (a claude-code-server tenant): side_question_busy (the session already runs as many side questions and title calls as it may at once; ask again when one has ended; its other refusals carry no code). Absent on every other error; new values are additive, so treat an unknown one as absent."
 								},
 								"model": {
 									"type": "string",
@@ -1900,6 +1910,7 @@
 				"dlp_request_denied",
 				"claude_code_version_too_old",
 				"safety_monitor_blocked",
+				"hook_denied",
 				"effort_requires_thinking",
 				"advisor_incompatible",
 				"tool_history_mismatch",
@@ -2186,12 +2197,12 @@
 			"maximum": 9007199254740991,
 			"description": "@internal Input only. Asks the CLI to put this prompt back in its queue, instead of losing it, when an interrupt crosses with a running turn taking the prompt in: the interrupt was sent while its sender still believed the prompt was waiting. The value says for how long an interrupt is taken to have been sent so: a whole number of milliseconds from 1, and above 10000 it counts as 10000. The time runs from the moment the turn announces the model request that carries the prompt (system/status 'requesting', which is on the wire only with partial messages); until then it has not begun. The prompt is put back when an interrupt control request without cancel_queued stops that turn within the time and before the model's next reply has begun to arrive. It goes back to the front of the queue under the same uuid and runs in a later turn of its own, after any queued prompt of higher priority; prompts queued behind it are not merged into that turn's prompt, though the turn can take them in as any turn does. The interrupt's response lists it under still_queued and under put_back, and from then on cancel_async_message can withdraw it. The stopped turn reports no 'cancelled' for it, counts it in its result's queued_turn_count (if its origin is stamped user-driven, as for any queued prompt) and leaves it out of that result's user_message_uuids (on an error result an empty list, with no user_message_uuid, if nothing else is listed). On stdout it reports command_lifecycle 'queued' a second time; over a remote transport its delivery is not reported 'processed' until its later turn ends. With cancel_queued:true it stays with the stopped turn and is not listed under the response's cancelled. The row the stopped turn wrote for it (a queued_command attachment) leaves the conversation and is never stored, so the model sees the prompt once; until the prompt can no longer be put back, that row and the rows after it are kept out of the stored transcript. UserPromptSubmit hooks run for it twice, and what they added to the stopped turn stays. If a compaction begins while that row is kept out, the row is stored at once and stays in the conversation, so the prompt, if an interrupt puts it back or has just done so, is seen twice. A prompt is put back at most once, and never after the host's own cancel_async_message for it answered cancelled:false. Of several prompts taken in since the model last spoke, only the last can be put back; the others stay with the stopped turn. The field is ignored when it is not such a number, when the message has no uuid or has shouldQuery:false, and when the message is not a person's own typing: a synthetic, hidden, client-composed, seeded, peer or relayed message, one that declares a non-human origin, or one whose client_platform names no app or keyboard that a person types in. claude-code-server also needs a client_platform, and one that names an app. A CLI that does not advertise interrupt_requeue_taken_v1 on system/init ignores the field too."
 		},
-		"out___schema324": {
+		"out___schema330": {
 			"type": "boolean",
 			"const": true,
 			"description": "@internal No person typed this message's text in this session (a server or an app composed it). The text is delivered as written and is not treated as typing: no slash-command dispatch, no at-mention expansion beyond the message's own uploaded files, no reminder or command from keywords in it, and a skill named in it does not count as typed by the user. Who sent the message, and whether a person is present, stays with its origin. The checks of whether a message's words are the user's own do not read this mark yet: they too go by the origin. Unlike client_composed, the turn-start attachment pass still runs. Any value other than false or null is read as true."
 		},
-		"out___schema340": {
+		"out___schema346": {
 			"type": "array",
 			"items": {
 				"type": "object",
@@ -2470,7 +2481,7 @@
 				"service_tier"
 			]
 		},
-		"out___schema372": {
+		"out___schema378": {
 			"type": "object",
 			"properties": {
 				"name": {
@@ -2483,7 +2494,7 @@
 			"required": ["name", "text"],
 			"description": "@internal Output only, and to be read only on a message the CLI wrote, never on one another client of the session posted: on a session event, only where its `source` is `worker`. On a message a plugin sent, what a host can show under the plugin's name in place of `message`. `name` is that name as the wrapper the model reads prints it, on one line and scrubbed; `origin.name` holds it raw. `text` is the prompt as hooks left it, with prompts merged into one turn joined by newlines, when `message` is exactly the wrapper the model reads around that prompt. Or it is the command the plugin ran as a person would type it, such as `/review 12`, when `message` is only that command's tags and `text` holds all their words; arguments can make it more than one line, so show all of it. Absent on any other message, and on a prompt sent as the person's own words; there, show `message`."
 		},
-		"out___schema447": {
+		"out___schema455": {
 			"type": "object",
 			"properties": {
 				"spawned": {
@@ -2777,7 +2788,7 @@
 				},
 				"subagent_stats": {
 					"description": "@internal Running totals of the subagents the Agent tool started this session; see SDKSubagentStats.",
-					"$ref": "#/$defs/out___schema447"
+					"$ref": "#/$defs/out___schema455"
 				},
 				"safety_stops": {
 					"type": "integer",
@@ -3227,10 +3238,22 @@
 								"kind": {
 									"type": "string",
 									"const": "voice-call"
+								},
+								"requestUuid": {
+									"type": "string",
+									"description": "@internal The host's uuid for the spoken request that this note belongs to."
+								},
+								"inReplyToUuid": {
+									"type": "string",
+									"description": "@internal The host's uuid for the message that this note answers."
+								},
+								"saidAt": {
+									"type": "string",
+									"description": "@internal When the note was said, as Date.prototype.toISOString writes it."
 								}
 							},
 							"required": ["kind"],
-							"description": "@internal What was said aloud on a voice call alongside the session, handed over by the host as background. Honored from the host on local stdin, only on a message with isSynthetic true, shouldQuery false, text_not_typed true, a priority other than now, text-only content and no files or pastes; in any other shape the message is taken as a plain task notification. It starts no turn. The model reads the text inside a frame which says that nothing in it is a request or an approval. A note stored as its own row, and its replay, hold one fixed header line and then the host's text; a note folded into a running turn, and its replay, hold the host's text alone. With replayUserMessages on, the host gets the message back as a replay with this origin; a build that does not know the origin never sends the origin back."
+							"description": "@internal What was said aloud on a voice call alongside the session, handed over by the host as background. Honored from the host on local stdin, only on a message with isSynthetic true, shouldQuery false, text_not_typed true, a priority other than now, text-only content and no files or pastes; in any other shape the message is taken as a plain task notification. It starts no turn. The model reads the text inside a frame which says that nothing in it is a request or an approval. A note stored as its own row, and its replay, hold one fixed header line and then the host's text; a note folded into a running turn, and its replay, hold the host's text alone. With replayUserMessages on, the host gets the message back as a replay with this origin; a build that does not know the origin never sends the origin back. The optional members are taken from a local host only, and are stored and replayed with the origin; no request to a model or a classifier holds them."
 						}
 					],
 					"description": "Provenance of a user-role message (peer session, team lead, channel). A host wrapping keyboard input must stamp {kind:'human'} explicitly — absent origin is treated as unattributed and fails closed at strict isHuman() trust gates."
@@ -3454,6 +3477,12 @@
 					"minimum": -9007199254740991,
 					"maximum": 9007199254740991,
 					"description": "@internal In how many chunks the runtime's fetch handed over the bodies of those streams. It is not the number of socket reads, several of which can make one chunk. Against main_stream_event_count it shows how the API's events arrive grouped, though the two do not divide evenly: a chunk can end inside an event, keepalive comments and pings are chunks that bring no event, and a stream that failed or was aborted can count one chunk whose events were never read. Absent, never 0, when a stream's chunks were not counted, as on Bedrock, Vertex, Foundry and Mantle, with the byte watchdog off, or for a stream still open when this result is built."
+				},
+				"tool_pool_build_count": {
+					"type": "integer",
+					"minimum": -9007199254740991,
+					"maximum": 9007199254740991,
+					"description": "@internal How many times the session built its main tool list, first build included, since the last result that carried this count, or since the session started. A read that reused the stored list counts as none. Builds between turns and in turns whose result carried no count are included. The list of a subagent is not counted. Sent with process_cpu_ms_turn."
 				},
 				"process_turn_states": {
 					"type": "object",
@@ -4081,6 +4110,12 @@
 					"maximum": 9007199254740991,
 					"description": "@internal Input tokens of the model call whose send time is request_sent_wall_ms: input_tokens + cache_read_input_tokens + cache_creation_input_tokens from that call's message_start. Lets a consumer group turn latency by prompt size. Present only with request_sent_wall_ms, and only when the sum is above zero; absent from older producers."
 				},
+				"first_request_cache_read_input_tokens": {
+					"type": "integer",
+					"minimum": -9007199254740991,
+					"maximum": 9007199254740991,
+					"description": "@internal The cache_read_input_tokens part of first_request_input_tokens, 0 included. Lets a consumer tell a cold prompt cache from a large prompt. Present exactly when first_request_input_tokens is; absent from older producers."
+				},
 				"user_message_server_received_wall_ms": {
 					"type": "number",
 					"description": "@internal The server_received_wall_ms of the user message that user_message_uuid names, copied unchanged, so the session server can measure from its own receipt to request_sent_wall_ms (two machines' clocks) without keeping the receipt time. Present only with request_sent_wall_ms, and only when that message carried a positive finite number there; absent from older producers."
@@ -4356,7 +4391,7 @@
 				},
 				"subagent_stats": {
 					"description": "@internal Running totals of the subagents the Agent tool started this session; see SDKSubagentStats.",
-					"$ref": "#/$defs/out___schema447"
+					"$ref": "#/$defs/out___schema455"
 				},
 				"safety_stops": {
 					"type": "integer",
@@ -4679,10 +4714,22 @@
 								"kind": {
 									"type": "string",
 									"const": "voice-call"
+								},
+								"requestUuid": {
+									"type": "string",
+									"description": "@internal The host's uuid for the spoken request that this note belongs to."
+								},
+								"inReplyToUuid": {
+									"type": "string",
+									"description": "@internal The host's uuid for the message that this note answers."
+								},
+								"saidAt": {
+									"type": "string",
+									"description": "@internal When the note was said, as Date.prototype.toISOString writes it."
 								}
 							},
 							"required": ["kind"],
-							"description": "@internal What was said aloud on a voice call alongside the session, handed over by the host as background. Honored from the host on local stdin, only on a message with isSynthetic true, shouldQuery false, text_not_typed true, a priority other than now, text-only content and no files or pastes; in any other shape the message is taken as a plain task notification. It starts no turn. The model reads the text inside a frame which says that nothing in it is a request or an approval. A note stored as its own row, and its replay, hold one fixed header line and then the host's text; a note folded into a running turn, and its replay, hold the host's text alone. With replayUserMessages on, the host gets the message back as a replay with this origin; a build that does not know the origin never sends the origin back."
+							"description": "@internal What was said aloud on a voice call alongside the session, handed over by the host as background. Honored from the host on local stdin, only on a message with isSynthetic true, shouldQuery false, text_not_typed true, a priority other than now, text-only content and no files or pastes; in any other shape the message is taken as a plain task notification. It starts no turn. The model reads the text inside a frame which says that nothing in it is a request or an approval. A note stored as its own row, and its replay, hold one fixed header line and then the host's text; a note folded into a running turn, and its replay, hold the host's text alone. With replayUserMessages on, the host gets the message back as a replay with this origin; a build that does not know the origin never sends the origin back. The optional members are taken from a local host only, and are stored and replayed with the origin; no request to a model or a classifier holds them."
 						}
 					],
 					"description": "Provenance of a user-role message (peer session, team lead, channel). A host wrapping keyboard input must stamp {kind:'human'} explicitly — absent origin is treated as unattributed and fails closed at strict isHuman() trust gates."
@@ -8234,7 +8281,7 @@
 						},
 						"required": ["surface", "component", "instance_id"]
 					},
-					"description": "@internal Present when a plugin wrote state (`$.state.set`) that these instances read while they were drawn, or a `Client` drawn in them failed and its plugin heard it (`ui.fault`), or the backdrop of the session was set or cleared, or a client of a surface that draws it joined where one ever stood (`$.theme.set` and `$.theme.clear`: its one instance on each such surface, a `Backdrop` whose `instance_id` is `backdrop`), and nothing else moved: only they are stale, and the surface may re-ask them alone. Absent, every mounted instance may be stale, as before. A surface that ignores the field re-asks everything and stays correct."
+					"description": "@internal Present when a plugin wrote state (`$.state.set`) that these instances read while they were drawn, or a `Client` drawn in them failed and its plugin heard it (`ui.fault`), or the theme of the session was set or cleared, or a client of a surface that draws it joined where one ever stood (`$.theme.set` and `$.theme.clear`: two instances on each such surface, a `Backdrop` whose `instance_id` is `backdrop` and a `Theme` whose `instance_id` is `theme`), and nothing else moved: only they are stale, and the surface may re-ask them alone. Absent, every mounted instance may be stale, as before. A surface that ignores the field re-asks everything and stays correct."
 				},
 				"uuid": {
 					"type": "string"
@@ -8274,6 +8321,110 @@
 			},
 			"required": ["type", "subtype", "plugin", "text", "uuid", "session_id"],
 			"description": "@internal Fire-and-forget push from a headless session for one `$.ui.log(text)` line: what the REPL appends to its transcript as a dim notice under the plugin's name. Not sent to the model. Lines are not counted across the session: a plugin's lines are the plugin's to write, however long the session runs; ones logged before the stream opened are delivered first, in order."
+		},
+		"system_ui_notifyOutput": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "string",
+					"const": "system"
+				},
+				"subtype": {
+					"type": "string",
+					"const": "ui_notify"
+				},
+				"plugin": {
+					"type": "string",
+					"description": "@internal The calling plugin's registry name, as the hooks engine knows it (never plugin-settable). Written as the registry spells it and not cleaned as `title` is, so a host must scrub it. Show it after the host's own word that a mod sent it, so neither it nor the title can pass for the app's own."
+				},
+				"source": {
+					"type": "string",
+					"description": "@internal The plugin's full id, `name@marketplace`, as the hooks engine loaded it (never plugin-settable). Two plugins sharing a name differ here. A side-loaded plugin reads `name@inline`."
+				},
+				"title": {
+					"type": "string",
+					"description": "@internal What heads the notification: the plugin's words, cleaned of control characters and cut to 120 characters, or the plugin's name. Plain text, and never the only sign of who sent it."
+				},
+				"text": {
+					"type": "string",
+					"description": "@internal The body: the plugin's words, cleaned of control characters and cut to 1000 characters. Plain text: draw it as a text node, never as markup."
+				},
+				"key": {
+					"type": "string",
+					"description": "@internal The plugin's name for this notification: one with the same source and key replaces the last. Scope it by `source`, so one mod cannot touch another's, even one of the same name. Absent: each frame is its own notification."
+				},
+				"delay_ms": {
+					"type": "integer",
+					"minimum": -9007199254740991,
+					"maximum": 9007199254740991,
+					"description": "@internal How long after this frame arrives to raise it: the client holds it, so it fires with the session out of reach. At most 7 days. Absent: raise it now."
+				},
+				"at": {
+					"type": "integer",
+					"minimum": -9007199254740991,
+					"maximum": 9007199254740991,
+					"description": "@internal The time to raise it, epoch ms, for a moment fixed on the clock at most 7 days ahead: the client books it as `delay_ms` books. Never sent beside `delay_ms`."
+				},
+				"until_back": {
+					"type": "boolean",
+					"description": "@internal With `delay_ms` or `at`: throw it away if the person returns to the session before it fires."
+				},
+				"rewritten": {
+					"type": "boolean",
+					"description": "@internal Always sent. True when what this frame carries differs from what the sender sent and another plugin's hook was in the chain: its words, timing or key may not be the sender's, so say so beside the sender. Missing, as from an older engine, reads as false. Never plugin-settable."
+				},
+				"uuid": {
+					"type": "string"
+				},
+				"session_id": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"type",
+				"subtype",
+				"plugin",
+				"source",
+				"title",
+				"text",
+				"rewritten",
+				"uuid",
+				"session_id"
+			],
+			"description": "@internal Fire-and-forget push from a headless session for one `$.ui.notify(text)`: a notification for the client to raise under the plugin's name. Nothing limits how often a plugin sends one."
+		},
+		"system_ui_notify_cancelOutput": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "string",
+					"const": "system"
+				},
+				"subtype": {
+					"type": "string",
+					"const": "ui_notify_cancel"
+				},
+				"plugin": {
+					"type": "string",
+					"description": "@internal The plugin's registry name, as the hooks engine knows it (never plugin-settable)."
+				},
+				"source": {
+					"type": "string",
+					"description": "@internal The plugin's full id, as on ui_notify (never plugin-settable). Only notifications of this source are touched."
+				},
+				"key": {
+					"type": "string",
+					"description": "@internal The `key` of the notification to take back. Absent: the engine removed the plugin from this session, so drop what this source has waiting for this session. Only the engine sends that."
+				},
+				"uuid": {
+					"type": "string"
+				},
+				"session_id": {
+					"type": "string"
+				}
+			},
+			"required": ["type", "subtype", "plugin", "source", "uuid", "session_id"],
+			"description": "@internal Fire-and-forget push from a headless session for one `$.ui.cancelNotify(key)`, or from the engine as it removes a plugin (see `key`): remove the notification with this source and key, shown or still waiting. None held under that key: do nothing."
 		},
 		"system_ui_panesOutput": {
 			"type": "object",
@@ -10395,10 +10546,22 @@
 								"kind": {
 									"type": "string",
 									"const": "voice-call"
+								},
+								"requestUuid": {
+									"type": "string",
+									"description": "@internal The host's uuid for the spoken request that this note belongs to."
+								},
+								"inReplyToUuid": {
+									"type": "string",
+									"description": "@internal The host's uuid for the message that this note answers."
+								},
+								"saidAt": {
+									"type": "string",
+									"description": "@internal When the note was said, as Date.prototype.toISOString writes it."
 								}
 							},
 							"required": ["kind"],
-							"description": "@internal What was said aloud on a voice call alongside the session, handed over by the host as background. Honored from the host on local stdin, only on a message with isSynthetic true, shouldQuery false, text_not_typed true, a priority other than now, text-only content and no files or pastes; in any other shape the message is taken as a plain task notification. It starts no turn. The model reads the text inside a frame which says that nothing in it is a request or an approval. A note stored as its own row, and its replay, hold one fixed header line and then the host's text; a note folded into a running turn, and its replay, hold the host's text alone. With replayUserMessages on, the host gets the message back as a replay with this origin; a build that does not know the origin never sends the origin back."
+							"description": "@internal What was said aloud on a voice call alongside the session, handed over by the host as background. Honored from the host on local stdin, only on a message with isSynthetic true, shouldQuery false, text_not_typed true, a priority other than now, text-only content and no files or pastes; in any other shape the message is taken as a plain task notification. It starts no turn. The model reads the text inside a frame which says that nothing in it is a request or an approval. A note stored as its own row, and its replay, hold one fixed header line and then the host's text; a note folded into a running turn, and its replay, hold the host's text alone. With replayUserMessages on, the host gets the message back as a replay with this origin; a build that does not know the origin never sends the origin back. The optional members are taken from a local host only, and are stored and replayed with the origin; no request to a model or a classifier holds them."
 						}
 					],
 					"description": "Provenance of a user-role message (peer session, team lead, channel). A host wrapping keyboard input must stamp {kind:'human'} explicitly — absent origin is treated as unattributed and fails closed at strict isHuman() trust gates."
@@ -13725,10 +13888,22 @@
 								"kind": {
 									"type": "string",
 									"const": "voice-call"
+								},
+								"requestUuid": {
+									"type": "string",
+									"description": "@internal The host's uuid for the spoken request that this note belongs to."
+								},
+								"inReplyToUuid": {
+									"type": "string",
+									"description": "@internal The host's uuid for the message that this note answers."
+								},
+								"saidAt": {
+									"type": "string",
+									"description": "@internal When the note was said, as Date.prototype.toISOString writes it."
 								}
 							},
 							"required": ["kind"],
-							"description": "@internal What was said aloud on a voice call alongside the session, handed over by the host as background. Honored from the host on local stdin, only on a message with isSynthetic true, shouldQuery false, text_not_typed true, a priority other than now, text-only content and no files or pastes; in any other shape the message is taken as a plain task notification. It starts no turn. The model reads the text inside a frame which says that nothing in it is a request or an approval. A note stored as its own row, and its replay, hold one fixed header line and then the host's text; a note folded into a running turn, and its replay, hold the host's text alone. With replayUserMessages on, the host gets the message back as a replay with this origin; a build that does not know the origin never sends the origin back."
+							"description": "@internal What was said aloud on a voice call alongside the session, handed over by the host as background. Honored from the host on local stdin, only on a message with isSynthetic true, shouldQuery false, text_not_typed true, a priority other than now, text-only content and no files or pastes; in any other shape the message is taken as a plain task notification. It starts no turn. The model reads the text inside a frame which says that nothing in it is a request or an approval. A note stored as its own row, and its replay, hold one fixed header line and then the host's text; a note folded into a running turn, and its replay, hold the host's text alone. With replayUserMessages on, the host gets the message back as a replay with this origin; a build that does not know the origin never sends the origin back. The optional members are taken from a local host only, and are stored and replayed with the origin; no request to a model or a classifier holds them."
 						}
 					],
 					"description": "Provenance of a user-role message (peer session, team lead, channel). A host wrapping keyboard input must stamp {kind:'human'} explicitly — absent origin is treated as unattributed and fails closed at strict isHuman() trust gates."
@@ -13773,7 +13948,7 @@
 					"description": "The client composed this turn from content the user did not type; the CLI delivers its text as written, with no `@path` file-mention expansion and no slash-command dispatch. On current CLIs the turn-start attachment pass is skipped as a whole: `@server:resource` MCP mentions are not expanded either, and the prompt is sent without the context the CLI normally attaches alongside it (nested `CLAUDE.md` and rules files, skill and tool listings, reminders); the pass the CLI runs between tool calls is unaffected."
 				},
 				"text_not_typed": {
-					"$ref": "#/$defs/out___schema324"
+					"$ref": "#/$defs/out___schema330"
 				},
 				"initiator": {
 					"type": "string",
@@ -13869,7 +14044,7 @@
 					"description": "@internal MCP protocol metadata passed through to SDK consumers, never sent to the model (from internal UserMessage.mcpMeta)."
 				},
 				"tool_result_meta": {
-					"$ref": "#/$defs/out___schema340"
+					"$ref": "#/$defs/out___schema346"
 				},
 				"source_tool_use_id": {
 					"type": "string",
@@ -13913,7 +14088,7 @@
 					"description": "@internal Only on the synthetic message that re-asks the same model after a refusal: the API msg_* id of the refused response. Absent when the CLI has no well-formed id for it."
 				},
 				"plugin_prompt": {
-					"$ref": "#/$defs/out___schema372"
+					"$ref": "#/$defs/out___schema378"
 				},
 				"uuid": {
 					"type": "string"
@@ -16906,10 +17081,22 @@
 								"kind": {
 									"type": "string",
 									"const": "voice-call"
+								},
+								"requestUuid": {
+									"type": "string",
+									"description": "@internal The host's uuid for the spoken request that this note belongs to."
+								},
+								"inReplyToUuid": {
+									"type": "string",
+									"description": "@internal The host's uuid for the message that this note answers."
+								},
+								"saidAt": {
+									"type": "string",
+									"description": "@internal When the note was said, as Date.prototype.toISOString writes it."
 								}
 							},
 							"required": ["kind"],
-							"description": "@internal What was said aloud on a voice call alongside the session, handed over by the host as background. Honored from the host on local stdin, only on a message with isSynthetic true, shouldQuery false, text_not_typed true, a priority other than now, text-only content and no files or pastes; in any other shape the message is taken as a plain task notification. It starts no turn. The model reads the text inside a frame which says that nothing in it is a request or an approval. A note stored as its own row, and its replay, hold one fixed header line and then the host's text; a note folded into a running turn, and its replay, hold the host's text alone. With replayUserMessages on, the host gets the message back as a replay with this origin; a build that does not know the origin never sends the origin back."
+							"description": "@internal What was said aloud on a voice call alongside the session, handed over by the host as background. Honored from the host on local stdin, only on a message with isSynthetic true, shouldQuery false, text_not_typed true, a priority other than now, text-only content and no files or pastes; in any other shape the message is taken as a plain task notification. It starts no turn. The model reads the text inside a frame which says that nothing in it is a request or an approval. A note stored as its own row, and its replay, hold one fixed header line and then the host's text; a note folded into a running turn, and its replay, hold the host's text alone. With replayUserMessages on, the host gets the message back as a replay with this origin; a build that does not know the origin never sends the origin back. The optional members are taken from a local host only, and are stored and replayed with the origin; no request to a model or a classifier holds them."
 						}
 					],
 					"description": "Provenance of a user-role message (peer session, team lead, channel). A host wrapping keyboard input must stamp {kind:'human'} explicitly — absent origin is treated as unattributed and fails closed at strict isHuman() trust gates."
@@ -16954,7 +17141,7 @@
 					"description": "The client composed this turn from content the user did not type; the CLI delivers its text as written, with no `@path` file-mention expansion and no slash-command dispatch. On current CLIs the turn-start attachment pass is skipped as a whole: `@server:resource` MCP mentions are not expanded either, and the prompt is sent without the context the CLI normally attaches alongside it (nested `CLAUDE.md` and rules files, skill and tool listings, reminders); the pass the CLI runs between tool calls is unaffected."
 				},
 				"text_not_typed": {
-					"$ref": "#/$defs/out___schema324"
+					"$ref": "#/$defs/out___schema330"
 				},
 				"initiator": {
 					"type": "string",
@@ -17050,7 +17237,7 @@
 					"description": "@internal MCP protocol metadata passed through to SDK consumers, never sent to the model (from internal UserMessage.mcpMeta)."
 				},
 				"tool_result_meta": {
-					"$ref": "#/$defs/out___schema340"
+					"$ref": "#/$defs/out___schema346"
 				},
 				"source_tool_use_id": {
 					"type": "string",
@@ -17094,7 +17281,7 @@
 					"description": "@internal Only on the synthetic message that re-asks the same model after a refusal: the API msg_* id of the refused response. Absent when the CLI has no well-formed id for it."
 				},
 				"plugin_prompt": {
-					"$ref": "#/$defs/out___schema372"
+					"$ref": "#/$defs/out___schema378"
 				},
 				"uuid": {
 					"type": "string"

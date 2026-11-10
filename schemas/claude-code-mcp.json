@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-mcp.json",
-	"title": "Claude Code .mcp.json (Claude Code 2.1.319)",
-	"$comment": "For .mcp.json (project MCP servers). Generated from Claude Code 2.1.319 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the schema module with the text \"Command cannot be empty\" and \"authServerMetadataUrl must use https://\" (the {mcpServers: record(string, server)} wrapper). Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code .mcp.json (Claude Code 2.1.321)",
+	"$comment": "For .mcp.json (project MCP servers). Generated from Claude Code 2.1.321 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the schema module with the text \"Command cannot be empty\" and \"authServerMetadataUrl must use https://\" (the {mcpServers: record(string, server)} wrapper). Do not edit by hand: run \"bun run schemas\".",
 	"type": "object",
 	"properties": {
 		"mcpServers": {
@@ -408,6 +408,12 @@
 							"connectorId": {
 								"type": "string",
 								"minLength": 1
+							},
+							"autoModeVerdictTools": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
 							}
 						},
 						"required": ["type", "name"]
