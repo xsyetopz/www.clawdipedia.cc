@@ -57,6 +57,12 @@ export const CODE_SHAPE = {
 	baseUrl: ARGS.baseUrl.describe(
 		"With cli: false leaves ANTHROPIC_BASE_URL unset, so that with apiHost the Messages API requests also go to https://api.anthropic.com, as on a direct connection.",
 	),
+	provider: ARGS.provider.describe(
+		'With cli: "vertex" runs the program as a Vertex AI client whose base URL is the stub, with a fake project and no Google sign-in. The model is then in the request path (…/models/<model>:streamRawPredict), not in the body.',
+	),
+	fastRefusal: ARGS.fastRefusal.describe(
+		'With cli: the stub answers each Messages API call that asks for speed "fast" with this HTTP status and the error "Fast mode is not enabled for this model", as a provider that refuses fast mode.',
+	),
 	calls: ARGS.calls.describe(
 		'With cli: the model calls these tools in order, one per turn, such as [{"name": "Bash", "input": {"command": "echo hi"}}], then answers OK after the last result. safeguard ("flagged" or "not_flagged") adds the server-side auto mode verdict for that call.',
 	),

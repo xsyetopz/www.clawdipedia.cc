@@ -116,7 +116,23 @@ const parseBody = (raw: string): unknown => {
 	}
 };
 
-const messagesReply = (body: unknown, calls: Tool[] | undefined): Response => {
+const messagesReply = (
+	body: unknown,
+	calls: Tool[] | undefined,
+	fastRefusal: number | undefined,
+): Response => {
+	if (fastRefusal !== undefined && isRecord(body) && body["speed"] === "fast") {
+		return Response.json(
+			{
+				type: "error",
+				error: {
+					type: "invalid_request_error",
+					message: "Fast mode is not enabled for this model",
+				},
+			},
+			{ status: fastRefusal },
+		);
+	}
 	const call = calls && callOf(body, calls);
 	return isRecord(body) && body["stream"] === true
 		? new Response(streamOf(call), {
@@ -125,12 +141,29 @@ const messagesReply = (body: unknown, calls: Tool[] | undefined): Response => {
 		: Response.json(jsonReply(call));
 };
 
-/** A `fetch` handler that pushes each request onto `requests` and answers: Messages API calls, token counts, then `replies` by `METHOD /path`, else 404. */
+const VERTEX_COUNT = "count-tokens";
+/** The model in a Vertex path, `…/models/<model>:rawPredict` or `:streamRawPredict`, where the SDK moves it from the body; `count-tokens` for a token count. */
+export const vertexModel = (path: string): string | undefined =>
+	/\/models\/([^/:]+):(?:streamR|r)awPredict/u.exec(path)?.[1];
+
+/** True for a Messages API call on the first-party path or the Vertex one, and false for a token count. */
+export const isTurn = (path: string): boolean => {
+	const model = vertexModel(path);
+	return model === undefined
+		? path.startsWith("/v1/messages") && !path.includes("count_tokens")
+		: model !== VERTEX_COUNT;
+};
+
+/**
+ * A `fetch` handler that pushes each request onto `requests` and answers: Messages API calls, token counts, then `replies` by `METHOD /path`, else 404.
+ * With `fastRefusal`, a Messages API call that asks for `speed: "fast"` gets that HTTP status and the error "Fast mode is not enabled for this model".
+ */
 export const makeAnswer =
 	(
 		requests: Sent[],
 		calls: Tool[] | undefined,
 		replies: Record<string, unknown>,
+		fastRefusal?: number,
 	) =>
 	async (req: Request): Promise<Response> => {
 		const key =
@@ -145,10 +178,18 @@ export const makeAnswer =
 			fakeKey: key === undefined ? null : key === FAKE_KEY,
 			body,
 		});
-		if (url.pathname === "/v1/messages" && req.method === "POST") {
-			return messagesReply(body, calls);
+		const model = vertexModel(url.pathname);
+		if (
+			req.method === "POST" &&
+			(url.pathname === "/v1/messages" ||
+				(model !== undefined && model !== VERTEX_COUNT))
+		) {
+			return messagesReply(body, calls, fastRefusal);
 		}
-		if (url.pathname === "/v1/messages/count_tokens") {
+		if (
+			url.pathname === "/v1/messages/count_tokens" ||
+			model === VERTEX_COUNT
+		) {
 			return Response.json({ input_tokens: 10 });
 		}
 		const reply = replies[`${req.method} ${url.pathname}`];

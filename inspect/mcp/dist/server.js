@@ -24744,7 +24744,7 @@ var package_default;
 var init_package = __esm(() => {
   package_default = {
     name: "cc-inspect-mcp",
-    version: "0.15.1",
+    version: "0.16.0",
     private: true,
     description: "MCP server that reads Claude Code session transcripts and the modules inside the Claude Code binary. Source for dist/server.js, which is committed.",
     license: "MIT",
@@ -24838,6 +24838,8 @@ var init_app = __esm(() => {
     show: string2().optional(),
     apiHost: boolean2().optional(),
     baseUrl: boolean2().optional(),
+    provider: _enum(["vertex"]).optional(),
+    fastRefusal: number2().int().min(400).max(599).optional(),
     calls: array(object({
       name: string2(),
       input: record(string2(), unknown()),
@@ -24872,8 +24874,8 @@ var init_claude_code_transcript = __esm(() => {
   claude_code_transcript_default = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
     $id: "https://clawdipedia.cc/schemas/claude-code-transcript.json",
-    title: "Claude Code transcript JSONL entry (Claude Code 2.1.321)",
-    $comment: `For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.321 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to "transcript"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:"<entry type>" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.`,
+    title: "Claude Code transcript JSONL entry (Claude Code 2.1.322)",
+    $comment: `For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.322 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to "transcript"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:"<entry type>" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.`,
     type: "object",
     oneOf: [
       {
@@ -71923,6 +71925,116 @@ var init_code_citations = __esm(() => {
   init_app();
 });
 
+// inspect/mcp/src/stub.ts
+var FAKE_KEY = "sk-ant-fake-probe", sse = (ev, d) => `event: ${ev}
+data: ${JSON.stringify(d)}
+
+`, MESSAGE, safeguardOf = (call) => call?.safeguard !== undefined && {
+  safeguard_results: [
+    {
+      type: "dangerous_tool_use",
+      status: {
+        type: "available",
+        tool_uses: {
+          [call.id]: { type: "evaluated", outcome: call.safeguard }
+        }
+      }
+    }
+  ]
+}, streamOf = (tool) => sse("message_start", {
+  type: "message_start",
+  message: { ...MESSAGE, content: [], stop_reason: null }
+}) + sse("content_block_start", {
+  type: "content_block_start",
+  index: 0,
+  content_block: tool ? { type: "tool_use", id: tool.id, name: tool.name, input: {} } : { type: "text", text: "" }
+}) + sse("content_block_delta", {
+  type: "content_block_delta",
+  index: 0,
+  delta: tool ? { type: "input_json_delta", partial_json: JSON.stringify(tool.input) } : { type: "text_delta", text: "OK" }
+}) + sse("content_block_stop", { type: "content_block_stop", index: 0 }) + sse("message_delta", {
+  type: "message_delta",
+  delta: {
+    stop_reason: tool ? "tool_use" : "end_turn",
+    stop_sequence: null,
+    ...safeguardOf(tool)
+  },
+  usage: { output_tokens: 5 }
+}) + sse("message_stop", { type: "message_stop" }), countToolResults = (messages) => messages.flatMap((m) => {
+  const content = m["content"];
+  const blocks = Array.isArray(content) ? content : [];
+  return blocks.filter((c) => isRecord(c) && c["type"] === "tool_result");
+}).length, callOf = (body, calls) => {
+  const b = isRecord(body) ? body : {};
+  const done = countToolResults(recordsOf(b["messages"]));
+  const call = calls[done];
+  return call !== undefined && recordsOf(b["tools"]).some((t) => t["name"] === call.name) ? { id: `toolu_probe_${done}`, ...call } : undefined;
+}, jsonReply = (call) => call === undefined ? MESSAGE : {
+  ...MESSAGE,
+  content: [
+    { type: "tool_use", id: call.id, name: call.name, input: call.input }
+  ],
+  stop_reason: "tool_use",
+  ...safeguardOf(call)
+}, parseBody = (raw) => {
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return raw;
+  }
+}, messagesReply = (body, calls, fastRefusal) => {
+  if (fastRefusal !== undefined && isRecord(body) && body["speed"] === "fast") {
+    return Response.json({
+      type: "error",
+      error: {
+        type: "invalid_request_error",
+        message: "Fast mode is not enabled for this model"
+      }
+    }, { status: fastRefusal });
+  }
+  const call = calls && callOf(body, calls);
+  return isRecord(body) && body["stream"] === true ? new Response(streamOf(call), {
+    headers: { "content-type": "text/event-stream" }
+  }) : Response.json(jsonReply(call));
+}, VERTEX_COUNT = "count-tokens", vertexModel = (path) => /\/models\/([^/:]+):(?:streamR|r)awPredict/u.exec(path)?.[1], isTurn = (path) => {
+  const model = vertexModel(path);
+  return model === undefined ? path.startsWith("/v1/messages") && !path.includes("count_tokens") : model !== VERTEX_COUNT;
+}, makeAnswer = (requests, calls, replies, fastRefusal) => async (req) => {
+  const key = req.headers.get("x-api-key") ?? req.headers.get("authorization")?.replace(/^Bearer /u, "");
+  const body = parseBody(await req.text());
+  const url = new URL(req.url);
+  requests.push({
+    method: req.method,
+    path: url.pathname + url.search,
+    host: req.headers.get("host") ?? "",
+    fakeKey: key === undefined ? null : key === FAKE_KEY,
+    body
+  });
+  const model = vertexModel(url.pathname);
+  if (req.method === "POST" && (url.pathname === "/v1/messages" || model !== undefined && model !== VERTEX_COUNT)) {
+    return messagesReply(body, calls, fastRefusal);
+  }
+  if (url.pathname === "/v1/messages/count_tokens" || model === VERTEX_COUNT) {
+    return Response.json({ input_tokens: 10 });
+  }
+  const reply = replies[`${req.method} ${url.pathname}`];
+  if (reply !== undefined) {
+    return Response.json(reply, { headers: { "request-id": "req_probe" } });
+  }
+  return Response.json({}, { status: 404 });
+};
+var init_stub = __esm(() => {
+  MESSAGE = {
+    id: "msg_probe",
+    type: "message",
+    role: "assistant",
+    content: [{ type: "text", text: "OK" }],
+    stop_reason: "end_turn",
+    stop_sequence: null,
+    usage: { input_tokens: 10, output_tokens: 5 }
+  };
+});
+
 // inspect/mcp/src/requests.ts
 import { join as join8 } from "path";
 var filesOf = async (dir) => {
@@ -71962,12 +72074,14 @@ var filesOf = async (dir) => {
     messages: bytes(b["messages"]),
     cacheControl
   };
-}, isTurn = (path) => path.startsWith("/v1/messages") && !path.includes("count_tokens"), toolEntry = (r, name) => r.requests.filter((q) => isTurn(q.path)).flatMap((q) => isRecord(q.body) ? recordsOf(q.body["tools"]) : []).toReversed().find((t) => t["name"] === name), toolNames = (r) => r.requests.filter((q) => isTurn(q.path)).map((q) => (isRecord(q.body) ? recordsOf(q.body["tools"]) : []).map((t) => t["name"]).filter((n) => typeof n === "string")), resultText = (r) => {
+}, toolEntry = (r, name) => r.requests.filter((q) => isTurn(q.path)).flatMap((q) => isRecord(q.body) ? recordsOf(q.body["tools"]) : []).toReversed().find((t) => t["name"] === name), toolNames = (r) => r.requests.filter((q) => isTurn(q.path)).map((q) => (isRecord(q.body) ? recordsOf(q.body["tools"]) : []).map((t) => t["name"]).filter((n) => typeof n === "string")), resultText = (r) => {
   const last = r.events.toReversed().find((e) => e["type"] === "result");
   const text = last?.["result"];
   return typeof text === "string" ? text : null;
 };
-var init_requests = () => {};
+var init_requests = __esm(() => {
+  init_stub();
+});
 
 // inspect/mcp/src/pki.ts
 import { rm as rm4 } from "fs/promises";
@@ -72184,103 +72298,6 @@ var quiet = async () => {
 };
 var init_child = () => {};
 
-// inspect/mcp/src/stub.ts
-var FAKE_KEY = "sk-ant-fake-probe", sse = (ev, d) => `event: ${ev}
-data: ${JSON.stringify(d)}
-
-`, MESSAGE, safeguardOf = (call) => call?.safeguard !== undefined && {
-  safeguard_results: [
-    {
-      type: "dangerous_tool_use",
-      status: {
-        type: "available",
-        tool_uses: {
-          [call.id]: { type: "evaluated", outcome: call.safeguard }
-        }
-      }
-    }
-  ]
-}, streamOf = (tool) => sse("message_start", {
-  type: "message_start",
-  message: { ...MESSAGE, content: [], stop_reason: null }
-}) + sse("content_block_start", {
-  type: "content_block_start",
-  index: 0,
-  content_block: tool ? { type: "tool_use", id: tool.id, name: tool.name, input: {} } : { type: "text", text: "" }
-}) + sse("content_block_delta", {
-  type: "content_block_delta",
-  index: 0,
-  delta: tool ? { type: "input_json_delta", partial_json: JSON.stringify(tool.input) } : { type: "text_delta", text: "OK" }
-}) + sse("content_block_stop", { type: "content_block_stop", index: 0 }) + sse("message_delta", {
-  type: "message_delta",
-  delta: {
-    stop_reason: tool ? "tool_use" : "end_turn",
-    stop_sequence: null,
-    ...safeguardOf(tool)
-  },
-  usage: { output_tokens: 5 }
-}) + sse("message_stop", { type: "message_stop" }), countToolResults = (messages) => messages.flatMap((m) => {
-  const content = m["content"];
-  const blocks = Array.isArray(content) ? content : [];
-  return blocks.filter((c) => isRecord(c) && c["type"] === "tool_result");
-}).length, callOf = (body, calls) => {
-  const b = isRecord(body) ? body : {};
-  const done = countToolResults(recordsOf(b["messages"]));
-  const call = calls[done];
-  return call !== undefined && recordsOf(b["tools"]).some((t) => t["name"] === call.name) ? { id: `toolu_probe_${done}`, ...call } : undefined;
-}, jsonReply = (call) => call === undefined ? MESSAGE : {
-  ...MESSAGE,
-  content: [
-    { type: "tool_use", id: call.id, name: call.name, input: call.input }
-  ],
-  stop_reason: "tool_use",
-  ...safeguardOf(call)
-}, parseBody = (raw) => {
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return raw;
-  }
-}, messagesReply = (body, calls) => {
-  const call = calls && callOf(body, calls);
-  return isRecord(body) && body["stream"] === true ? new Response(streamOf(call), {
-    headers: { "content-type": "text/event-stream" }
-  }) : Response.json(jsonReply(call));
-}, makeAnswer = (requests, calls, replies) => async (req) => {
-  const key = req.headers.get("x-api-key") ?? req.headers.get("authorization")?.replace(/^Bearer /u, "");
-  const body = parseBody(await req.text());
-  const url = new URL(req.url);
-  requests.push({
-    method: req.method,
-    path: url.pathname + url.search,
-    host: req.headers.get("host") ?? "",
-    fakeKey: key === undefined ? null : key === FAKE_KEY,
-    body
-  });
-  if (url.pathname === "/v1/messages" && req.method === "POST") {
-    return messagesReply(body, calls);
-  }
-  if (url.pathname === "/v1/messages/count_tokens") {
-    return Response.json({ input_tokens: 10 });
-  }
-  const reply = replies[`${req.method} ${url.pathname}`];
-  if (reply !== undefined) {
-    return Response.json(reply, { headers: { "request-id": "req_probe" } });
-  }
-  return Response.json({}, { status: 404 });
-};
-var init_stub = __esm(() => {
-  MESSAGE = {
-    id: "msg_probe",
-    type: "message",
-    role: "assistant",
-    content: [{ type: "text", text: "OK" }],
-    stop_reason: "end_turn",
-    stop_sequence: null,
-    usage: { input_tokens: 10, output_tokens: 5 }
-  };
-});
-
 // inspect/mcp/src/sandbox.ts
 import { chmod, mkdir as mkdir4, mkdtemp as mkdtemp4, realpath as realpath2 } from "fs/promises";
 import { tmpdir as tmpdir3 } from "os";
@@ -72316,13 +72333,24 @@ exit 44
     await mkdir4(dirname2(join10(dirs.project, name)), { recursive: true });
     await Bun.write(join10(dirs.project, name), body);
   }));
-}, fixedEnv = (dirs, shim, net, { login, baseUrl, self }) => ({
+}, fixedEnv = (dirs, shim, net, {
+  login,
+  baseUrl,
+  self,
+  provider
+}) => ({
   PATH: `${shim}:${process.env["PATH"] ?? ""}`,
   HOME: dirs.home,
   TMPDIR: tmpdir3(),
   CLAUDE_CONFIG_DIR: dirs.config,
   ...login === "key" && { ANTHROPIC_API_KEY: FAKE_KEY },
   ...baseUrl && { ANTHROPIC_BASE_URL: `http://${self}` },
+  ...provider === "vertex" && {
+    CLAUDE_CODE_USE_VERTEX: "1",
+    ANTHROPIC_VERTEX_BASE_URL: `http://${self}`,
+    ANTHROPIC_VERTEX_PROJECT_ID: "probe-project",
+    CLAUDE_CODE_SKIP_VERTEX_AUTH: "1"
+  },
   CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1",
   DISABLE_TELEMETRY: "1",
   HTTPS_PROXY: net.proxyUrl,
@@ -72422,17 +72450,20 @@ var runPrompt = (bin, prompt, model = "claude-opus-5-5", timeoutMs = 60000, env 
     apiHost = false,
     baseUrl = true,
     calls,
-    input
+    input,
+    provider,
+    fastRefusal
   } = options;
   const dirs = await makeDirs(state);
   const requests = [];
-  const answer = makeAnswer(requests, calls, replies);
+  const answer = makeAnswer(requests, calls, replies, fastRefusal);
   const self = startStub(state, answer);
   const net = await startNet(state, answer, apiHost);
   const fixed = fixedEnv(dirs, await makeShim(dirs.home), net, {
     login,
     baseUrl,
-    self
+    self,
+    provider
   });
   checkEnv(env, fixed);
   await writeInputs(dirs, login, files);
@@ -72500,6 +72531,12 @@ var STREAM_FLAGS, STDOUT_CHARS = 4000, STDERR_CHARS = 2000, SHOW_CHARS = 8000, P
   };
   if (a.calls) {
     options.calls = callsOf3(a.calls);
+  }
+  if (a.provider) {
+    options.provider = a.provider;
+  }
+  if (a.fastRefusal !== undefined) {
+    options.fastRefusal = a.fastRefusal;
   }
   if (a.prompts) {
     options.input = a.prompts.map((content) => `${JSON.stringify({ type: "user", message: { role: "user", content } })}
@@ -72669,6 +72706,8 @@ var init_code_schema = __esm(() => {
     show: ARGS.show.describe('With cli: a .json, .jsonl, or .log file of the config folder, else of the project folder, to print at exit, such as ".claude.json", or "d.log" after `--debug-file d.log`.'),
     apiHost: ARGS.apiHost.describe("With cli: the stub also answers https://api.anthropic.com (through a local proxy and a throw-away CA), for requests that ignore ANTHROPIC_BASE_URL, such as GET /api/oauth/profile."),
     baseUrl: ARGS.baseUrl.describe("With cli: false leaves ANTHROPIC_BASE_URL unset, so that with apiHost the Messages API requests also go to https://api.anthropic.com, as on a direct connection."),
+    provider: ARGS.provider.describe('With cli: "vertex" runs the program as a Vertex AI client whose base URL is the stub, with a fake project and no Google sign-in. The model is then in the request path (\u2026/models/<model>:streamRawPredict), not in the body.'),
+    fastRefusal: ARGS.fastRefusal.describe('With cli: the stub answers each Messages API call that asks for speed "fast" with this HTTP status and the error "Fast mode is not enabled for this model", as a provider that refuses fast mode.'),
     calls: ARGS.calls.describe('With cli: the model calls these tools in order, one per turn, such as [{"name": "Bash", "input": {"command": "echo hi"}}], then answers OK after the last result. safeguard ("flagged" or "not_flagged") adds the server-side auto mode verdict for that call.'),
     prompts: ARGS.prompts.describe('With cli: prompts sent in one session, as stream-json user messages on stdin; cli adds "-p --input-format stream-json --output-format stream-json --verbose" before `args`, so a hook that acts from the second prompt on runs.'),
     request: ARGS.request.describe("With cli: the number of a request in `requests`; gives the UTF-8 bytes of its body as compact JSON and of its tools, system, and messages, the path of each block with a cache_control, and the body JSON from `offset` for `length` characters."),

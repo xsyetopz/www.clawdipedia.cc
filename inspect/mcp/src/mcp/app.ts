@@ -84,6 +84,8 @@ export const ARGS = {
 	show: z.string().optional(),
 	apiHost: z.boolean().optional(),
 	baseUrl: z.boolean().optional(),
+	provider: z.enum(["vertex"]).optional(),
+	fastRefusal: z.number().int().min(400).max(599).optional(),
 	calls: z
 		.array(
 			z.object({

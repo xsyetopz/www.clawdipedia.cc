@@ -62,6 +62,10 @@ interface RunOptions {
 	baseUrl?: boolean;
 	/** The model calls these tools in order, one per turn, such as `[{ name: "Bash", input: { command: "echo hi" } }]`. `safeguard` adds the server-side auto mode verdict for the call. */
 	calls?: Tool[];
+	/** `vertex`: the program runs as a Vertex AI client whose base URL is the stub, with a fake project and no Google sign-in. */
+	provider?: "vertex";
+	/** The stub answers each Messages API call that asks for `speed: "fast"` with this HTTP status, as a provider that refuses fast mode. */
+	fastRefusal?: number;
 }
 
 /**
@@ -157,16 +161,19 @@ const execute = async (
 		baseUrl = true,
 		calls,
 		input,
+		provider,
+		fastRefusal,
 	} = options;
 	const dirs = await makeDirs(state);
 	const requests: Sent[] = [];
-	const answer = makeAnswer(requests, calls, replies);
+	const answer = makeAnswer(requests, calls, replies, fastRefusal);
 	const self = startStub(state, answer);
 	const net = await startNet(state, answer, apiHost);
 	const fixed = fixedEnv(dirs, await makeShim(dirs.home), net, {
 		login,
 		baseUrl,
 		self,
+		provider,
 	});
 	checkEnv(env, fixed);
 	await writeInputs(dirs, login, files);

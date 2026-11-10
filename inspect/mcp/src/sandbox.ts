@@ -76,7 +76,17 @@ export const fixedEnv = (
 	dirs: Dirs,
 	shim: string,
 	net: { proxyUrl: string; ca: string | undefined },
-	{ login, baseUrl, self }: { login: string; baseUrl: boolean; self: string },
+	{
+		login,
+		baseUrl,
+		self,
+		provider,
+	}: {
+		login: string;
+		baseUrl: boolean;
+		self: string;
+		provider: "vertex" | undefined;
+	},
 ): Record<string, string> => ({
 	PATH: `${shim}:${process.env["PATH"] ?? ""}`,
 	HOME: dirs.home,
@@ -84,6 +94,13 @@ export const fixedEnv = (
 	CLAUDE_CONFIG_DIR: dirs.config,
 	...(login === "key" && { ANTHROPIC_API_KEY: FAKE_KEY }),
 	...(baseUrl && { ANTHROPIC_BASE_URL: `http://${self}` }),
+	// Without the skip, the program asks Google for a token before the first request.
+	...(provider === "vertex" && {
+		CLAUDE_CODE_USE_VERTEX: "1",
+		ANTHROPIC_VERTEX_BASE_URL: `http://${self}`,
+		ANTHROPIC_VERTEX_PROJECT_ID: "probe-project",
+		CLAUDE_CODE_SKIP_VERTEX_AUTH: "1",
+	}),
 	CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1",
 	DISABLE_TELEMETRY: "1",
 	HTTPS_PROXY: net.proxyUrl,

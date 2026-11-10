@@ -69,6 +69,12 @@ const optionsOf = (a: Args): RunOpts => {
 	if (a.calls) {
 		options.calls = callsOf(a.calls);
 	}
+	if (a.provider) {
+		options.provider = a.provider;
+	}
+	if (a.fastRefusal !== undefined) {
+		options.fastRefusal = a.fastRefusal;
+	}
 	if (a.prompts) {
 		options.input = a.prompts
 			.map(

@@ -2,6 +2,7 @@
 // Fake "Claude Code" scripts that `runArgs` starts with args, files, stdin, a login, and stub replies.
 import { afterAll, expect, test } from "bun:test";
 
+import { toolNames } from "../src/requests.ts";
 import { API_HOST, runArgs } from "../src/run.ts";
 import {
 	createTmp,
@@ -196,6 +197,61 @@ test("runArgs with a call safeguard adds the auto mode verdict for that call id"
 			"safeguard_results",
 		),
 	).toEqual(verdict);
+});
+
+// A Vertex client: a fast turn, the same turn at standard speed, a streamed turn, and a token count, each on its Vertex path.
+const vertexProgram = () =>
+	tmp.script(
+		"claude-vertex",
+		`#!/usr/bin/env bun
+const e = process.env;
+const models = e.ANTHROPIC_VERTEX_BASE_URL + "/v1/projects/" + e.ANTHROPIC_VERTEX_PROJECT_ID + "/locations/global/publishers/anthropic/models/";
+const ask = async (name, body) => {
+  const r = await fetch(models + name, { method: "POST", body: JSON.stringify(body) });
+  return r.status + " " + (await r.text()).replaceAll("\\n", " ");
+};
+const tools = [{ name: "Read" }];
+const lines = [
+  e.CLAUDE_CODE_USE_VERTEX + " " + e.CLAUDE_CODE_SKIP_VERTEX_AUTH,
+  await ask("claude-fable-5-2:rawPredict", { speed: "fast", tools, messages: [] }),
+  await ask("claude-fable-5-2:rawPredict", { tools, messages: [] }),
+  await ask("claude-fable-5-2:streamRawPredict", { stream: true, tools, messages: [] }),
+  await ask("count-tokens:rawPredict", { messages: [] }),
+];
+await Bun.write(e.CLAUDE_CONFIG_DIR + "/out.log", lines.join("\\n"));
+`,
+	);
+
+test("runArgs with provider vertex answers the Vertex paths, and fastRefusal refuses a fast turn", async () => {
+	const r = await runArgs(await vertexProgram(), [], {
+		provider: "vertex",
+		fastRefusal: 400,
+	});
+	const lines = outLog(r);
+	expect(lines[0]).toBe("1 1");
+	expect(lines[1]).toStartWith("400 ");
+	expect(lines[1]).toContain("Fast mode is not enabled");
+	expect(lines[2]).toStartWith('200 {"id":"msg_probe"');
+	expect(lines[3]).toStartWith("200 event: message_start");
+	expect(lines[4]).toBe('200 {"input_tokens":10}');
+	expect(r.requests.map((q) => q.fakeKey)).toEqual([null, null, null, null]);
+	expect(toolNames(r)).toEqual([["Read"], ["Read"], ["Read"]]);
+});
+
+test("runArgs without fastRefusal answers a fast turn", async () => {
+	const r = await runArgs(await vertexProgram(), [], { provider: "vertex" });
+	expect(outLog(r)[1]).toStartWith('200 {"id":"msg_probe"');
+});
+
+test("runArgs with provider vertex refuses an env name that it fixes", async () => {
+	expect(
+		await rejection(
+			runArgs(await argsProgram(), ["x"], {
+				provider: "vertex",
+				env: { ANTHROPIC_VERTEX_PROJECT_ID: "mine" },
+			}),
+		),
+	).toContain("is not allowed");
 });
 
 test("runArgs with baseUrl false leaves ANTHROPIC_BASE_URL unset", async () => {

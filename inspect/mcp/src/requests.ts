@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { isRecord, recordsOf } from "./json.ts";
 import type { RunResult } from "./run.ts";
+import { isTurn } from "./stub.ts";
 
 /** The text of each `.json`, `.jsonl`, and `.log` file under `dir`, such as `.claude.json` or a session transcript, by path relative to `dir`. */
 export const filesOf = async (dir: string): Promise<Record<string, string>> => {
@@ -72,9 +73,6 @@ export const bodyOf = (body: unknown) => {
 		cacheControl,
 	};
 };
-
-const isTurn = (path: string): boolean =>
-	path.startsWith("/v1/messages") && !path.includes("count_tokens");
 
 /** The entry of tool `name` (name, description, input_schema, ...) in the last Messages API request that sends it. */
 export const toolEntry = (
