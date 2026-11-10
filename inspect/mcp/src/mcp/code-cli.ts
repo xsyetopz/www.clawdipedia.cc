@@ -120,9 +120,9 @@ const shownFile = (r: RunResult, { show, query, regex: isRegex }: Args) => {
 	if (file === undefined) {
 		return `\n${show}: not written`;
 	}
-	return query === undefined
-		? `\n${show}: ${clip(file, SHOW_CHARS)}`
-		: `\n${show}, lines with the query: ${clip(linesWith(file, regex(query, isRegex ?? false)), SHOW_CHARS)}`;
+	const lines =
+		query === undefined ? "" : linesWith(file, regex(query, isRegex ?? false));
+	return `\n${show}: ${clip(file, SHOW_CHARS)}${lines === "" ? "" : `\n${show}, lines with the query: ${clip(lines, SHOW_CHARS)}`}`;
 };
 
 const toolText = (tool: string | undefined, entry: object | undefined) => {

@@ -72659,9 +72659,10 @@ var STREAM_FLAGS, STDOUT_CHARS = 4000, STDERR_CHARS = 2000, SHOW_CHARS = 8000, P
     return `
 ${show}: not written`;
   }
-  return query === undefined ? `
-${show}: ${clip(file, SHOW_CHARS)}` : `
-${show}, lines with the query: ${clip(linesWith(file, regex(query, isRegex ?? false)), SHOW_CHARS)}`;
+  const lines = query === undefined ? "" : linesWith(file, regex(query, isRegex ?? false));
+  return `
+${show}: ${clip(file, SHOW_CHARS)}${lines === "" ? "" : `
+${show}, lines with the query: ${clip(lines, SHOW_CHARS)}`}`;
 }, toolText = (tool, entry) => {
   if (tool === undefined) {
     return "";
@@ -72802,7 +72803,7 @@ var init_code_schema = __esm(() => {
     dir: ARGS.dir.describe("With citations: the folder whose `**/*.md` files are checked for `chunk-xxxxxxxx.js` citations (`:N`, `@N`, or `lines A to B` after the name) that name no module of the build."),
     packageVersion: ARGS.packageVersion.describe("With npm: the version of the package in `name`; default: the latest, looked up once and kept."),
     login: ARGS.login.describe('With cli: "key" (default) sets the fake API key; "oauth" writes a fake claude.ai login to .credentials.json instead.'),
-    show: ARGS.show.describe('With cli: a .json, .jsonl, or .log file of the config folder, else of the project folder, to print at exit, such as ".claude.json", or "d.log" after `--debug-file d.log`. With `query`, only its lines that hold that text.'),
+    show: ARGS.show.describe('With cli: a .json, .jsonl, or .log file of the config folder, else of the project folder, to print at exit, such as ".claude.json", or "d.log" after `--debug-file d.log`. With `query`, its lines that hold that text follow.'),
     apiHost: ARGS.apiHost.describe("With cli: the stub also answers https://api.anthropic.com (through a local proxy and a throw-away CA), for requests that ignore ANTHROPIC_BASE_URL, such as GET /api/oauth/profile."),
     baseUrl: ARGS.baseUrl.describe("With cli: false leaves ANTHROPIC_BASE_URL unset, so that with apiHost the Messages API requests also go to https://api.anthropic.com, as on a direct connection."),
     provider: ARGS.provider.describe('With cli: "vertex" runs the program as a Vertex AI client whose base URL is the stub, with a fake project and no Google sign-in. The model is then in the request path (\u2026/models/<model>:streamRawPredict), not in the body.'),
