@@ -65,7 +65,7 @@ const modelCheck = (c: Ctx, i: SurfaceItem): Verdict => {
 				/retired/iu.test(m.src(node)) ||
 				(row !== undefined && /\bstatus:"retired"/u.test(m.src(row)));
 			if (
-				!["StringLiteral", "TemplateElement"].includes(node.type) ||
+				(node.type !== "Literal" && node.type !== "TemplateElement") ||
 				!retired
 			) {
 				bad.push(`${m.name}@${at}`);

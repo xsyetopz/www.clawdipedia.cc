@@ -69,15 +69,15 @@ const HTTP = new Set([
 	"fetch",
 	"head",
 ]);
-const PASSES = new Set([
+const PASSES = new Set<Node["type"]>([
 	"TemplateLiteral",
 	"BinaryExpression",
 	"ConditionalExpression",
 	"LogicalExpression",
-	"ObjectProperty",
+	"Property",
 	"ObjectExpression",
 	"TemplateElement",
-	"StringLiteral",
+	"Literal",
 ]);
 
 const calleeName = (
