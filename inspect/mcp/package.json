@@ -9,10 +9,12 @@
 		"build": "bun build src/server.ts --target=bun --outfile=dist/server.js"
 	},
 	"dependencies": {
-		"@babel/parser": "8.1.0",
-		"@babel/traverse": "8.1.0",
-		"@babel/types": "8.1.0",
 		"@modelcontextprotocol/sdk": "^1.32.2",
+		"eslint-scope": "9.1.2",
+		"oxc-parser": "0.158.0",
 		"zod": "^4.6.7"
+	},
+	"devDependencies": {
+		"@oxc-project/types": "0.158.0"
 	}
 }
