@@ -11,7 +11,7 @@ import {
 	type NodeOf,
 	returnsOf,
 } from "./ast.ts";
-import { asNode, isNull as isNullLiteral } from "./ast/node.ts";
+import { asNode, isNull } from "./ast/node.ts";
 import type { Resolver } from "./resolve.ts";
 import { keyOf, type Prop } from "./surface/common.ts";
 
@@ -98,21 +98,21 @@ export const calleeFn = (
 };
 
 /** Always null: `null`, a name bound to it, or a call of null or of a function that only returns it. */
-export const isNull = (m: Module, n: Node, depth = 0): boolean => {
+export const alwaysNull = (m: Module, n: Node, depth = 0): boolean => {
 	if (depth > 6) {
 		return false;
 	}
-	if (isNullLiteral(n)) {
+	if (isNull(n)) {
 		return true;
 	}
 	if (n.type === "Identifier") {
 		const i = initOf(m, n);
-		return i !== undefined && isNull(i.m, i.n, depth + 1);
+		return i !== undefined && alwaysNull(i.m, i.n, depth + 1);
 	}
 	if (n.type !== "CallExpression") {
 		return false;
 	}
-	if (isNull(m, n.callee, depth + 1)) {
+	if (alwaysNull(m, n.callee, depth + 1)) {
 		return true;
 	}
 	const f = calleeFn(m, n);
@@ -122,7 +122,7 @@ export const isNull = (m: Module, n: Node, depth = 0): boolean => {
 	const rets = returnsOf(f.fn);
 	return (
 		rets.length > 0 &&
-		rets.every((r) => r !== null && isNull(f.module, r, depth + 1))
+		rets.every((r) => r !== null && alwaysNull(f.module, r, depth + 1))
 	);
 };
 
@@ -169,7 +169,7 @@ const viaCall = (
 	const f = n.arguments.length === 0 ? calleeFn(m, n) : undefined;
 	if (f) {
 		for (const ret of returnsOf(f.fn)) {
-			if (ret !== null && !isNull(f.module, ret)) {
+			if (ret !== null && !alwaysNull(f.module, ret)) {
 				return { tool: toolName(R, f.module, ret, depth + 1) };
 			}
 		}

@@ -13,7 +13,13 @@ import {
 } from "./ast.ts";
 import { asNode } from "./ast/node.ts";
 import type { Resolver } from "./resolve.ts";
-import { calleeFn, initOf, isNull, required, toolName } from "./toolvalue.ts";
+import {
+	alwaysNull,
+	calleeFn,
+	initOf,
+	required,
+	toolName,
+} from "./toolvalue.ts";
 
 export interface Tool {
 	name: string;
@@ -80,7 +86,7 @@ const listItems = (
 		}
 		if (e.type === "SpreadElement") {
 			items(R, m, e.argument, when, out, depth + 1);
-		} else if (!isNull(m, e)) {
+		} else if (!alwaysNull(m, e)) {
 			toolItem(R, m, e, when, out);
 		}
 	}
@@ -95,7 +101,7 @@ const branches = (
 	depth: number,
 ): void => {
 	const { test } = n;
-	if (isNull(m, test)) {
+	if (alwaysNull(m, test)) {
 		items(R, m, n.alternate, when, out, depth + 1);
 		return;
 	}
@@ -135,7 +141,7 @@ const callItems = (
 		return true;
 	}
 	// `x?.()` with `x=null` gives no tool.
-	if (n.optional && isNull(m, c)) {
+	if (n.optional && alwaysNull(m, c)) {
 		return true;
 	}
 	const f = calleeFn(m, n);
@@ -143,7 +149,7 @@ const callItems = (
 		return false;
 	}
 	for (const ret of returnsOf(f.fn)) {
-		if (ret !== null && !isNull(f.module, ret)) {
+		if (ret !== null && !alwaysNull(f.module, ret)) {
 			items(R, f.module, ret, when, out, depth + 1);
 		}
 	}
@@ -193,7 +199,7 @@ const items = (
 	if (n.type === "CallExpression" && callItems(R, m, n, when, out, depth)) {
 		return;
 	}
-	if (n.type === "Identifier" && isNull(m, n)) {
+	if (n.type === "Identifier" && alwaysNull(m, n)) {
 		return;
 	}
 	// `a ?? b`, `a || b`: the tools of each part. A name or an import: its value.
