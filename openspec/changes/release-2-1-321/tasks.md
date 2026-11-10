@@ -39,10 +39,7 @@ Each item line of `captures/2.1.321/notes.md` (lines 3 to 120) is in 3.6 or in 3
   - 3: `configure/models-and-providers/model-catalog.md` (the price is left out).
   - 4: `configure/cli/remote-control.md`.
   - 14, 78, 99: `extend/skills-and-commands/slash-commands.md`.
-  - 15: `extend/hooks/session-events.md`.
-  - 16: `configure/cli/flags.md`.
   - 32: `reference/tools/shell-and-web.md` (the new error text).
-  - 63: `extend/hooks/input-and-output.md`.
   - 68, 97, 98, 100, 101, 103, 105, 106, 114: `start/what-changed.md`.
   - 69: `extend/skills-and-commands/frontmatter.md`.
   - 93: `configure/settings/auth.md` (the `forceLoginMethod` part only).
@@ -58,6 +55,11 @@ Each item line of `captures/2.1.321/notes.md` (lines 3 to 120) is in 3.6 or in 3
     22, 24, 25, 26, 27, 28, 29, 30, 31, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 47, 48, 49, 51, 52,
     53, 54, 55, 56, 57, 58, 60, 61, 62, 64, 65, 66, 67, 70, 72, 73, 74, 77, 79, 81, 82, 83, 84, 85, 86, 87, 88,
     89, 92, 94, 95, 102, 104, 107, 111, 115.
+  - Searched in the `2.1.321` program, and not found, so the sentence came off its page:
+    - 15 (`extend/hooks/session-events.md`): the `CwdChanged` handler compares the folders with `===`, and no drive-letter
+      case fold shows (`chunk-ne1755n5.js:2260441`).
+    - 16 (`configure/cli/flags.md`): no check that keeps the type files of the built-in plugins out of a `builtin` folder.
+    - 63 (`extend/hooks/input-and-output.md`): no `UserPromptSubmit` skip on a replayed permission answer.
   - Searched in the `2.1.321` program, and not found, so the row came off `configure/cli/subcommands.md`:
     - 59: no `omitResource` text.
     - 80: no sign-in limit message.

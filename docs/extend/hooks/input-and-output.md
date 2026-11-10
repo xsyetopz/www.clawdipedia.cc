@@ -76,7 +76,7 @@ A probe ran a command hook on each event in `-p` mode. "Stops" means the model m
 | Event | `continue: false` | `systemMessage` |
 | --- | --- | --- |
 | `SessionStart` | Not honored. The session went on. | Not shown. |
-| `UserPromptSubmit` | Honored. No model request. The result is `Operation stopped by hook: <stopReason>`. | Shown as `UserPromptSubmit says: ...`, but not together with a stop. In a remote session, these hooks no longer run when the host replays a permission answer (changed in `2.1.321`, per the [2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321)). |
+| `UserPromptSubmit` | Honored. No model request. The result is `Operation stopped by hook: <stopReason>`. | Shown as `UserPromptSubmit says: ...`, but not together with a stop. |
 | `UserPromptExpansion` | Honored, with the same result text. | Shown as `UserPromptExpansion says: ...`. |
 | `PreToolUse` | Honored. The loop stops after the hook. The `stopReason` is not shown. | Shown as `PreToolUse:Bash says: ...`. |
 | `PostToolUse` | Honored. The loop stops. | Shown only without a stop. |

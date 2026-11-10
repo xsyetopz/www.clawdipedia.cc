@@ -25,7 +25,7 @@ Handlers: `command` and `mcp_tool` (skipped when Claude Code starts).
 | `additionalContext` | <Documented /> | Output, in `hookSpecificOutput` | Text before the first prompt. Plain `stdout` works too. |
 | `initialUserMessage` | <Documented /> | Output | The first user message. Only in `-p`. From a plugin it works only if the plugin was installed before the start. |
 | `sessionTitle` | <Documented /> | Output | Sets the title. Works for `startup`, `resume`, `fork`. Same as `/rename`. |
-| `watchPaths` | <Documented /> | Output | Absolute paths for `FileChanged` to watch. On Windows, a working directory with a lowercase drive letter no longer stops the watch after the first shell command (fixed in `2.1.321`, per the [2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321)). |
+| `watchPaths` | <Documented /> | Output | Absolute paths for `FileChanged` to watch. |
 | `reloadSkills` | <Documented /> | Output | Scans the skill and command folders again. Use it after a hook installs skills. |
 
 ### `Setup`
