@@ -24744,7 +24744,7 @@ var package_default;
 var init_package = __esm(() => {
   package_default = {
     name: "cc-inspect-mcp",
-    version: "0.16.3",
+    version: "0.16.4",
     private: true,
     description: "MCP server that reads Claude Code session transcripts and the modules inside the Claude Code binary. Source for dist/server.js, which is committed.",
     license: "MIT",
@@ -71826,11 +71826,19 @@ var init_readable = __esm(() => {
 
 // inspect/mcp/src/relocate.ts
 import { basename as basename5 } from "path";
-var WINDOW = 200, MAX_HITS = 300, MAX_ANCHORS = 6, WORD, SAME = 50, shape = (s) => s.replaceAll(/[A-Za-z_$][\w$]{0,2}(?![\w$])/gu, "_"), frame = (text, at) => `${shape(text.slice(Math.max(0, at - 2 * SAME), at)).slice(-SAME)}|${shape(text.slice(at, at + 2 * SAME)).slice(0, SAME)}`, words = (s) => new Set([...s.matchAll(WORD)].map((m) => m[0])), claimTerms = (claim) => {
+var WINDOW = 200, MAX_HITS = 300, MAX_ANCHORS = 6, WORD, SAME = 50, NAME2 = 20, shape = (s) => s.replaceAll(/[A-Za-z_$][\w$]{0,2}(?![\w$])/gu, "_"), blank = (s) => s.replaceAll(/chunk-[\da-z]+\.js/gu, (name) => "_".repeat(name.length)), frame = (text, at) => {
+  const lo = Math.max(0, at - 2 * SAME - NAME2);
+  const cut = at - lo;
+  const near = blank(text.slice(lo, at + 2 * SAME + NAME2));
+  return `${shape(near.slice(Math.max(0, cut - 2 * SAME), cut)).slice(-SAME)}|${shape(near.slice(cut, cut + 2 * SAME)).slice(0, SAME)}`;
+}, sameFrame = (a, at, b, to) => frame(a, at) === frame(b, to), windowAt = (text, offset) => text.slice(Math.max(0, offset - WINDOW), offset + WINDOW), termNear = (text, offset, terms) => {
+  const near = windowAt(text, offset);
+  return terms.some((t) => near.includes(t));
+}, words = (s) => new Set([...s.matchAll(WORD)].map((m) => m[0])), claimTerms = (claim) => {
   const plain = claim.replaceAll(/chunk-[\da-z]+\.js(?:[:@]\d+|`? lines \d+ to \d+)?/gu, " ");
   const found = plain.match(/[\w$][\w$.-]{4,}/gu) ?? [];
   return [...new Set(found.map((t) => t.replaceAll(/[.-]+$/gu, "")))].filter((t) => t.length >= 5);
-}, literalsAround = (text, offset) => (text.slice(Math.max(0, offset - WINDOW), offset + WINDOW).match(/"[^"\\\n]{8,}"/gu) ?? []).map((l) => l.slice(1, -1)), rank = (r) => r.score + (r.same ? 1 : 0), occurrences = (text, needle) => {
+}, literalsAround = (text, offset) => (windowAt(text, offset).match(/"[^"\\\n]{8,}"/gu) ?? []).map((l) => l.slice(1, -1)), rank = (r) => r.score + (r.same ? 1 : 0), better = (a, b, offset) => a.same && b.same ? Math.abs(a.offset - offset) < Math.abs(b.offset - offset) : rank(a) > rank(b), occurrences = (text, needle) => {
   const out = [];
   for (let i = text.indexOf(needle);i !== -1 && out.length < MAX_HITS; i = text.indexOf(needle, i + 1)) {
     out.push(i);
@@ -71854,10 +71862,10 @@ var WINDOW = 200, MAX_HITS = 300, MAX_ANCHORS = 6, WORD, SAME = 50, shape = (s) 
           offset: to,
           anchor: term,
           score,
-          same: frame(m.text, to) === frame(oldText, offset)
+          same: sameFrame(oldText, offset, m.text, to)
         };
         const prior = best.get(found.module);
-        if (prior === undefined || rank(found) > rank(prior)) {
+        if (prior === undefined || better(found, prior, offset)) {
           best.set(found.module, found);
         }
       }
@@ -71897,38 +71905,81 @@ var CITATION, findCitations = (file, text) => text.split(`
     }
     return mapped.get(chunk);
   };
-}, sameCode = ({ old, target }, n, terms) => {
+}, NEAR_LINES = 10, MIN_WINDOW = 40, HASH_NAME, cleanLines, linesOf = (s) => {
+  if (s.clean === undefined) {
+    return;
+  }
+  const lines = cleanLines.get(s) ?? s.clean.split(`
+`).map((l) => l.trim().replaceAll(HASH_NAME, "$"));
+  cleanLines.set(s, lines);
+  return lines;
+}, sameLine = (a, b, n) => {
+  for (const radius of [4, 2, 1]) {
+    const before = Math.min(radius, n - 1);
+    const want = a.slice(n - 1 - before, n + radius);
+    if (want.join("").length >= MIN_WINDOW) {
+      for (let k = 0;k < Math.max(a.length, b.length); k += 1) {
+        const to = [n - k, n + k].find((line) => {
+          const at = line - 1 - before;
+          return at >= 0 && want.every((l, i) => b[at + i] === l);
+        });
+        if (to !== undefined) {
+          return to;
+        }
+      }
+    }
+  }
+  return;
+}, isLine = (old, lines, n, terms) => lines !== undefined && n <= lines.length && (!termNear(old.text, n, terms) || terms.some((t) => lines.slice(Math.max(0, n - 1 - NEAR_LINES), n + NEAR_LINES).join(`
+`).includes(t))), sameCode = ({ old, target }, form, n, terms) => {
+  const a = linesOf(old);
+  const b = linesOf(target);
+  if (form === "lines" || form === ":" && isLine(old, a, n, terms)) {
+    return a && b ? sameLine(a, b, n) : undefined;
+  }
   const [r] = relocate(old.text, n, terms, [target], 1);
-  return r?.same === true ? r.offset : undefined;
-}, moveLine = ({ oldByName, newNames, mapModule, moves }, file, line, lineText) => {
+  if (r?.same === true) {
+    return r.offset;
+  }
+  return n < old.text.length && sameFrame(old.text, n, target.text, n) ? n : undefined;
+}, moveChunk = ({ oldByName, newNames, mapModule, moves }, { file, line, terms }, found, chunk, [sep, offset, lead, first, end]) => {
+  const old = newNames.has(chunk) ? undefined : oldByName.get(chunk);
+  if (!old) {
+    return { text: found };
+  }
+  const target = mapModule(chunk);
+  if (!target) {
+    moves.push({ file, line, from: found, how: "unmapped" });
+    return { text: found };
+  }
+  const pair = { old, target };
+  const sameAt = (n, form = ":") => n === undefined ? undefined : sameCode(pair, form, Number(n), terms);
+  const name = basename6(target.name);
+  const moved = sameAt(offset, sep);
+  const range = [sameAt(first, "lines"), sameAt(end, "lines")];
+  const numbers = moved === undefined ? range.every((n) => n !== undefined) && `${lead}${range[0]} to ${range[1]}` : `${sep}${moved}`;
+  const text = numbers === false ? found.replace(chunk, name) : `${name}${numbers}`;
+  moves.push({
+    file,
+    line,
+    from: found,
+    to: text,
+    how: numbers === false ? "module" : "same"
+  });
+  return { text, pair };
+}, moveLine = (ctx, file, line, lineText) => {
   const terms = claimTerms(lineText);
   let last;
-  const sameAt = (n) => last && sameCode(last, n, terms);
-  return lineText.replaceAll(FOLLOW_ON, (found, chunk, sep, offset, from, to) => {
+  const sameAt = (n) => last && n !== undefined ? sameCode(last, ":", Number(n), terms) : undefined;
+  return lineText.replaceAll(FOLLOW_ON, (found, ...groups) => {
+    const [chunk, sep, offset, lead, first, end, from, to] = groups;
     if (chunk === undefined) {
-      return `:${sameAt(Number(from)) ?? from}${to === undefined ? "" : `-${sameAt(Number(to)) ?? to}`}`;
+      return `:${sameAt(from) ?? from}${to === undefined ? "" : `-${sameAt(to) ?? to}`}`;
     }
-    const old = newNames.has(chunk) ? undefined : oldByName.get(chunk);
-    const target = old && mapModule(chunk);
-    last = old && target ? { old, target } : undefined;
-    if (!old) {
-      return found;
-    }
-    if (!last) {
-      moves.push({ file, line, from: found, how: "unmapped" });
-      return found;
-    }
-    const name = basename6(last.target.name);
-    const moved = offset === undefined ? undefined : sameAt(Number(offset));
-    const next = moved === undefined ? found.replace(chunk, name) : `${name}${sep}${moved}`;
-    moves.push({
-      file,
-      line,
-      from: found,
-      to: next,
-      how: moved === undefined ? "module" : "same"
-    });
-    return next;
+    const numbers = [sep, offset, lead, first, end];
+    const moved = moveChunk(ctx, { file, line, terms }, found, chunk, numbers);
+    last = moved.pair;
+    return moved.text;
   });
 }, moveCitations = (files, oldSources, newSources) => {
   const oldByName = new Map(oldSources.map((s) => [basename6(s.name), s]));
@@ -71949,22 +72000,41 @@ var CITATION, findCitations = (file, text) => text.split(`
 var init_citations = __esm(() => {
   init_relocate();
   CITATION = /(chunk-[\da-z]+\.js)(?:[:@]\d+|`? lines \d+ to \d+)?/gu;
-  FOLLOW_ON = /(chunk-[\da-z]+\.js)(?:([:@])(\d+)|`? lines \d+ to \d+)?|(?<=`):(\d+)(?:-(\d+))?(?=`)/gu;
+  FOLLOW_ON = /(chunk-[\da-z]+\.js)(?:([:@])(\d+)|(`? lines )(\d+) to (\d+))?|(?<=`):(\d+)(?:-(\d+))?(?=`)/gu;
   LITERAL = /"[^"\\\n]{20,}"/gu;
+  HASH_NAME = /\$[\da-f]{6}\b|chunk@[\da-f]{8}\.js/gu;
+  cleanLines = new WeakMap;
+});
+
+// inspect/mcp/src/sources.ts
+import { basename as basename7, join as join7 } from "path";
+var sources2 = async (binary) => {
+  const [p, { dir }] = await Promise.all([program3(binary), prepared(binary)]);
+  return Promise.all(p.modules.map(async (m) => {
+    const source = { name: m.name, text: m.source };
+    const clean = Bun.file(join7(dir, "modules", basename7(m.name)));
+    if (await clean.exists()) {
+      source.clean = await clean.text();
+    }
+    return source;
+  }));
+};
+var init_sources = __esm(() => {
+  init_binary();
+  init_prepare();
 });
 
 // inspect/mcp/src/mcp/code-citations.ts
-import { basename as basename7, join as join7 } from "path";
+import { basename as basename8, join as join8 } from "path";
 var citations = async ({ dir, from, version }) => {
   const root = need(dir, "dir");
   const p = await program3(version);
   const files = {};
   for await (const f of new Bun.Glob("**/*.md").scan(root)) {
-    files[f] = await Bun.file(join7(root, f)).text();
+    files[f] = await Bun.file(join8(root, f)).text();
   }
   if (from !== undefined) {
-    const sources = (b) => b.modules.map((m) => ({ name: m.name, text: m.source }));
-    const { moves } = moveCitations(files, sources(await program3(from)), sources(p));
+    const { moves } = moveCitations(files, await sources2(from), await sources2(version));
     const count = (how) => moves.filter((m) => m.how === how).length;
     return text(`${moves.length} citation(s) of ${from} move to ${p.path}: ${count("same")} same, ${count("module")} module, ${count("unmapped")} unmapped
 ${moves.map((m) => `${m.file}:${m.line}: ${m.from} -> ${m.to ?? "unmapped"} (${m.how})`).join(`
@@ -71984,7 +72054,7 @@ ${stale.map((c) => `- ${c.file}:${c.line}: ${c.citation}`).join(`
 }) => {
   const name = need(module, "module");
   const old = await program3(need(from, "from"));
-  const m = old.modules.find((x) => basename7(x.name) === name);
+  const m = old.modules.find((x) => basename8(x.name) === name);
   if (!m) {
     throw new Error(`no module "${name}" in ${old.path}`);
   }
@@ -71998,6 +72068,7 @@ var init_code_citations = __esm(() => {
   init_binary();
   init_citations();
   init_relocate();
+  init_sources();
   init_app();
 });
 
@@ -72112,10 +72183,10 @@ var init_stub = __esm(() => {
 });
 
 // inspect/mcp/src/requests.ts
-import { join as join8 } from "path";
+import { join as join9 } from "path";
 var filesOf = async (dir) => {
   const paths = await Array.fromAsync(new Bun.Glob("**/*.{json,jsonl,log}").scan({ cwd: dir, dot: true }));
-  return Object.fromEntries(await Promise.all(paths.toSorted().map(async (p) => [p, await Bun.file(join8(dir, p)).text()])));
+  return Object.fromEntries(await Promise.all(paths.toSorted().map(async (p) => [p, await Bun.file(join9(dir, p)).text()])));
 }, placesOf = (r, q) => [
   ...r.requests.flatMap((x, i) => q.test(JSON.stringify(x.body ?? "")) ? [`request ${i + 1} ${x.method} ${x.path}`] : []),
   ...q.test(r.stdout) ? ["stdout"] : [],
@@ -72176,7 +72247,7 @@ var init_requests = __esm(() => {
 
 // inspect/mcp/src/pki.ts
 import { rm as rm4 } from "fs/promises";
-import { join as join9 } from "path";
+import { join as join10 } from "path";
 var SSL_CANDIDATES, CA_CNF = `[req]
 distinguished_name=dn
 x509_extensions=v3
@@ -72259,7 +72330,7 @@ subjectAltName=${hosts.map((h) => `DNS:${h}`).join(",")}
 }, makePki = async (dir, extraHosts = []) => {
   const ssl = await findOpenssl();
   const sh = (args) => openssl(ssl, dir, args);
-  const f = (n) => join9(dir, n);
+  const f = (n) => join10(dir, n);
   const hosts = ["api.anthropic.com", ...extraHosts];
   await Promise.all([
     Bun.write(f("ca.cnf"), CA_CNF),
@@ -72392,15 +72463,15 @@ var init_child = () => {};
 // inspect/mcp/src/sandbox.ts
 import { chmod, mkdir as mkdir4, mkdtemp as mkdtemp4, realpath as realpath2 } from "fs/promises";
 import { tmpdir as tmpdir3 } from "os";
-import { dirname as dirname2, join as join10 } from "path";
-var UNSAFE, tempDir = async (p) => realpath2(await mkdtemp4(join10(tmpdir3(), p))), makeShim = async (home) => {
-  const shim = join10(home, ".probe-bin");
+import { dirname as dirname2, join as join11 } from "path";
+var UNSAFE, tempDir = async (p) => realpath2(await mkdtemp4(join11(tmpdir3(), p))), makeShim = async (home) => {
+  const shim = join11(home, ".probe-bin");
   await mkdir4(shim);
-  await Bun.write(join10(shim, "security"), `#!/bin/sh
+  await Bun.write(join11(shim, "security"), `#!/bin/sh
 [ "$1" = "-i" ] && cat >/dev/null
 exit 44
 `);
-  await chmod(join10(shim, "security"), 493);
+  await chmod(join11(shim, "security"), 493);
   return shim;
 }, checkEnv = (env, fixed) => {
   for (const [k, v] of Object.entries(env)) {
@@ -72410,7 +72481,7 @@ exit 44
   }
 }, writeInputs = async (dirs, login, files) => {
   if (login === "oauth") {
-    await Bun.write(join10(dirs.config, ".credentials.json"), JSON.stringify({
+    await Bun.write(join11(dirs.config, ".credentials.json"), JSON.stringify({
       claudeAiOauth: {
         accessToken: FAKE_KEY,
         refreshToken: FAKE_KEY,
@@ -72421,8 +72492,8 @@ exit 44
     }));
   }
   await Promise.all(Object.entries(files).map(async ([name, body]) => {
-    await mkdir4(dirname2(join10(dirs.project, name)), { recursive: true });
-    await Bun.write(join10(dirs.project, name), body);
+    await mkdir4(dirname2(join11(dirs.project, name)), { recursive: true });
+    await Bun.write(join11(dirs.project, name), body);
   }));
 }, fixedEnv = (dirs, shim, net, {
   login,
@@ -72799,7 +72870,7 @@ var init_code_schema = __esm(() => {
     args: ARGS.args.describe('With cli: the program args, such as ["--settings", "<project-dir>/s.json", "auto-mode", "config"]. `<project-dir>` and `<config-dir>` become the temp project and config folders.'),
     files: ARGS.files.describe('With cli: files to write in the temp project folder first, by relative path, such as {"s.json": "{}"}.'),
     replies: ARGS.replies.describe('With cli: JSON replies of the stub by "METHOD /path", such as {"GET /api/oauth/profile": {...}}. "<stub>" in an env value becomes the stub URL.'),
-    from: ARGS.from.describe("With relocate: the version or path of the build that holds `module`, the older one; with citations: the older build, so that the report lists where each stale citation moves to in `version`."),
+    from: ARGS.from.describe("With relocate: the version or path of the build that holds `module`, the older one; with citations: the older build, so that the report lists where each stale citation moves to in `version`. A `:N` is a line of the cleaned module when the words of its sentence are on that line, else a raw offset; of two places with the same code, the one nearer to the old number wins."),
     dir: ARGS.dir.describe("With citations: the folder whose `**/*.md` files are checked for `chunk-xxxxxxxx.js` citations (`:N`, `@N`, or `lines A to B` after the name) that name no module of the build."),
     packageVersion: ARGS.packageVersion.describe("With npm: the version of the package in `name`; default: the latest, looked up once and kept."),
     login: ARGS.login.describe('With cli: "key" (default) sets the fake API key; "oauth" writes a fake claude.ai login to .credentials.json instead.'),
@@ -73122,335 +73193,8 @@ var init_common = __esm(() => {
   FALSY = new Set([false, 0, "", null, undefined, 0n]);
 });
 
-// inspect/mcp/src/surface/help.ts
-var USAGE, ARG, OPTION_LINE, USAGE_FLAG, PARSED, textOf = (n) => {
-  if (n?.type === "StringLiteral") {
-    return n.value;
-  }
-  return n?.type === "TemplateLiteral" ? n.quasis.map((q) => q.value.cooked ?? q.value.raw).join(`\${\u2026}`) : undefined;
-}, partText = (m, n) => {
-  const def = n.type === "Identifier" ? m.variable(n)?.defs[0] : undefined;
-  const init = def?.type === "Variable" ? asNode2(def.node.init) : undefined;
-  return textOf(init ?? n) ?? "";
-}, parts = (n) => {
-  if (n.type !== "BinaryExpression" || n.operator !== "+") {
-    return [n];
-  }
-  const l = asNode2(n.left);
-  const r = asNode2(n.right);
-  return [...l ? parts(l) : [], ...r ? parts(r) : []];
-}, joinedText = (m, n, own) => {
-  const decl = m.parent(n);
-  const id = decl?.type === "VariableDeclarator" ? asNode2(decl.id) : undefined;
-  let best = own;
-  for (const r of (id && m.variable(id)?.references) ?? []) {
-    let top = r.identifier;
-    for (let p = m.parent(top);p?.type === "BinaryExpression"; p = m.parent(top)) {
-      top = p;
-    }
-    const text = parts(top).map((x) => partText(m, x)).join("");
-    best = text.length > best.length ? text : best;
-  }
-  return best;
-}, flagName = (spec) => `--${/^--(?:\[no-\])?([a-z][\w-]*)/u.exec(spec)?.[1] ?? ""}`, optionLines = (text) => {
-  const lines = text.split(`
-`);
-  const out = new Map;
-  for (const [i, line] of lines.entries()) {
-    const hit = OPTION_LINE.exec(line);
-    const spec = hit?.[1];
-    if (spec !== undefined) {
-      const desc = hit?.[2] ?? lines[i + 1]?.trim() ?? "";
-      out.set(flagName(spec), short(`${spec} | ${desc}`));
-    }
-  }
-  return out;
-}, helpOf = (m, n, own) => {
-  const u = USAGE.exec(own);
-  const path = u?.[1]?.trim();
-  if (path === undefined || path === "") {
-    return;
-  }
-  const rest = u?.[2]?.trim() ?? "";
-  const flags = new Map([...rest.matchAll(USAGE_FLAG)].map((f) => [f[0], f[0]]));
-  for (const [k, v] of optionLines(joinedText(m, n, own))) {
-    flags.set(k, v);
-  }
-  return { path, rest, at: { module: m.name, offset: n.start }, flags };
-}, fnOf = (m, n) => {
-  let p = m.parent(n);
-  while (p && !isFn(p)) {
-    p = m.parent(p);
-  }
-  return p;
-}, comparedFlag = (m, n) => {
-  const name = n.type === "StringLiteral" ? PARSED.exec(n.value)?.[1] : undefined;
-  const p = m.parent(n);
-  const callee = p?.type === "CallExpression" ? asNode2(p.callee) : undefined;
-  const compared = p?.type === "BinaryExpression" && ["===", "!=="].includes(p.operator) || p?.type === "SwitchCase" && p.test === n || callee?.type === "MemberExpression" && callee.property.type === "Identifier" && callee.property.name === "startsWith";
-  return compared ? name : undefined;
-}, names2 = (h, f) => h.flags.has(f) || f.startsWith("--no-") && h.flags.get(`--${f.slice(5)}`)?.startsWith("--[no-]") === true, hiddenFlags = (helps, parsers) => {
-  const out = [];
-  for (const p of parsers) {
-    const scored = helps.map((h) => ({
-      h,
-      n: [...p.flags].filter((f) => names2(h, f)).length
-    }));
-    const best = scored.toSorted((a, b) => b.n - a.n)[0];
-    const least = best?.h.at.module === p.at.module ? 2 : 3;
-    if (!best || best.n < least || best.n * 2 < p.flags.size) {
-      continue;
-    }
-    for (const f of p.flags) {
-      if (!names2(best.h, f)) {
-        out.push({
-          kind: "flag",
-          name: `${best.h.path} ${f}`,
-          ...p.at,
-          gate: "hidden"
-        });
-      }
-    }
-  }
-  return out;
-}, helpItems = (bundle) => {
-  const helps = [];
-  scan(bundle, ["Usage: claude ", "USAGE"], (m, n) => {
-    const own = textOf(n);
-    const h = own === undefined ? undefined : helpOf(m, n, own);
-    if (h) {
-      helps.push(h);
-    }
-  });
-  const parsers = new Map;
-  scan(bundle, ['"--'], (m, n) => {
-    const flag = comparedFlag(m, n);
-    const fn = flag === undefined ? undefined : fnOf(m, n);
-    if (flag === undefined || !fn) {
-      return;
-    }
-    const p = parsers.get(fn) ?? {
-      at: { module: m.name, offset: fn.start },
-      flags: new Set
-    };
-    p.flags.add(flag);
-    parsers.set(fn, p);
-  });
-  return [
-    ...helps.flatMap((h) => [
-      {
-        kind: "subcommand",
-        name: h.path,
-        ...h.at,
-        ...h.rest !== "" && { detail: short(h.rest) }
-      },
-      ...[...h.flags].map(([name, detail]) => ({
-        kind: "flag",
-        name: `${h.path} ${name}`,
-        module: h.at.module,
-        offset: h.at.offset,
-        detail
-      }))
-    ]),
-    ...hiddenFlags(helps, [...parsers.values()])
-  ];
-}, helpKind = (bundle, kind) => helpItems(bundle).filter((i) => i.kind === kind);
-var init_help = __esm(() => {
-  init_ast();
-  init_common();
-  USAGE = /(?:Usage:|USAGE\n)\s*claude ((?:[a-z][\w-]*(?: |$))+)(.*)/u;
-  ARG = String.raw`(?:\[?=?<[^>]+>\]?| <[^>]+>| \[[^\]]+\])`;
-  OPTION_LINE = new RegExp(String.raw`^ {2,}(?:-\w, )?(--(?:\[no-\])?[a-z][\w-]*${ARG}*)(?:, -\w)?(?: +(.*))?$`, "u");
-  USAGE_FLAG = /--[a-z][\w-]*/gu;
-  PARSED = /^(--[a-z][\w-]*)=?$/u;
-});
-
-// inspect/mcp/src/surface/commander.ts
-var SPEC, method = (n) => n?.type === "CallExpression" && n.callee.type === "MemberExpression" && n.callee.property.type === "Identifier" ? n.callee.property.name : undefined, initOf2 = (m, n) => {
-  const def = m.variable(n)?.defs[0];
-  return def?.type === "Variable" ? asNode2(def.node.init) : undefined;
-}, argumentOf = (m, p) => {
-  const def = m.variable(p)?.defs[0];
-  if (def?.type !== "Parameter" || !isFn(def.node)) {
-    return;
-  }
-  const at = def.node.params.map((x) => asNode2(x)).indexOf(def.name);
-  const calls = callsOf(m, def.node);
-  const call = calls.length === 1 ? calls[0] : undefined;
-  const arg = asNode2(call?.call.arguments[at]);
-  return call && arg ? { m: call.module, n: arg } : undefined;
-}, chainCommands = (m, n, seen = new Set) => {
-  const out = [];
-  let cur = n;
-  while (cur) {
-    if (cur.type === "CallExpression" && cur.callee.type === "MemberExpression") {
-      if (method(cur) === "command") {
-        const s = constString(m, asNode2(cur.arguments[0]));
-        if (s !== undefined && s !== "") {
-          out.unshift(s.split(/\s/u)[0] ?? "");
-        }
-      }
-      cur = asNode2(cur.callee.object);
-    } else if (cur.type === "Identifier" && !seen.has(m.variable(cur))) {
-      seen.add(m.variable(cur));
-      const init = initOf2(m, cur);
-      const from = init ? { m, n: init } : argumentOf(m, cur);
-      return from ? [...chainCommands(from.m, from.n, seen), ...out] : out;
-    } else {
-      return out;
-    }
-  }
-  return out;
-}, chainedAfter = (m, call) => {
-  const out = [];
-  let cur = call;
-  for (;; ) {
-    const mem = m.parent(cur);
-    const next = mem?.type === "MemberExpression" ? m.parent(mem) : undefined;
-    const name = method(next);
-    if (!next || name === undefined) {
-      return out;
-    }
-    out.push(name);
-    cur = next;
-  }
-}, hides = (m, n, skip) => {
-  if (n.type === "Identifier") {
-    const refs = m.variable(n)?.references ?? [];
-    return refs.some((r) => {
-      const id = r.identifier;
-      if (skip && id.start >= skip.start && id.end <= skip.end) {
-        return false;
-      }
-      const p = m.parent(id);
-      return p?.type === "MemberExpression" && method(m.parent(p)) === "hideHelp";
-    });
-  }
-  let cur = n;
-  while (cur?.type === "CallExpression" && cur.callee.type === "MemberExpression") {
-    if (method(cur) === "hideHelp") {
-      return true;
-    }
-    cur = asNode2(cur.callee.object);
-  }
-  return false;
-}, optionOf = (m, n, seen = new Set) => {
-  if (seen.has(n)) {
-    return;
-  }
-  seen.add(n);
-  const via = (next) => {
-    const x = asNode2(next);
-    return x ? optionOf(m, x, seen) : undefined;
-  };
-  if (n.type === "NewExpression") {
-    return { m, n };
-  }
-  if (n.type === "ConditionalExpression") {
-    return via(n.consequent);
-  }
-  if (n.type === "CallExpression" && n.callee.type === "MemberExpression") {
-    return via(n.callee.object);
-  }
-  if (n.type === "CallExpression") {
-    const callee = asNode2(n.callee);
-    const f = callee && functionOf(m, callee);
-    const r = f && returnsOf(f.fn)[0];
-    return r ? optionOf(f.module, r, seen) : undefined;
-  }
-  if (n.type === "Identifier") {
-    const init = initOf2(m, n);
-    return init ? optionOf(m, init, seen) : undefined;
-  }
-  return;
-}, extractSubcommands = (bundle) => {
-  const out = [];
-  scan(bundle, [".command("], (m, n) => {
-    if (n.type !== "CallExpression" || method(n) !== "command") {
-      return;
-    }
-    const spec = constString(m, asNode2(n.arguments[0]));
-    if (spec === undefined || !/^[a-z][\w-]*/u.test(spec)) {
-      return;
-    }
-    const path = chainCommands(m, n).join(" ");
-    const args = spec.slice(spec.split(/\s/u)[0]?.length).trim();
-    const opts = asNode2(n.arguments[1]);
-    const hidden = opts?.type === "ObjectExpression" && /\bhidden:(!0|true)/u.test(m.src(opts));
-    out.push({
-      kind: "subcommand",
-      name: path,
-      module: m.name,
-      offset: n.start,
-      ...args !== "" && { detail: args },
-      ...hidden && { gate: "hidden" }
-    });
-  });
-  return unique([...out, ...helpKind(bundle, "subcommand")]);
-}, optionGate = (m, arg, o) => {
-  if (arg.type === "ConditionalExpression") {
-    const alternate = asNode2(arg.alternate);
-    const consequent = asNode2(arg.consequent);
-    const test = asNode2(arg.test);
-    if (alternate && consequent && test && hides(m, alternate) && !hides(m, consequent, arg)) {
-      return `hidden unless ${m.src(test)}`;
-    }
-  }
-  return hides(m, arg) || chainedAfter(o.m, o.n).includes("hideHelp") ? "hidden" : undefined;
-}, addFlag = (out, m, at, owner, args, gate, om = m) => {
-  const spec = constString(m, asNode2(args[0]));
-  if (spec === undefined || !SPEC.test(spec)) {
-    return;
-  }
-  const name = /--[a-zA-Z][\w-]*/u.exec(spec)?.[0] ?? /-[\w-]+/u.exec(spec)?.[0];
-  if (name === undefined) {
-    return;
-  }
-  const desc = constString(m, asNode2(args[1]));
-  const cmd = chainCommands(om, owner).join(" ");
-  out.push({
-    kind: "flag",
-    name: cmd === "" ? name : `${cmd} ${name}`,
-    module: m.name,
-    offset: at.start,
-    detail: short(`${spec}${desc !== undefined && desc !== "" ? ` | ${desc}` : ""}`),
-    ...gate !== undefined && { gate }
-  });
-}, extractFlags = (bundle) => {
-  const out = [];
-  scan(bundle, [".option(", ".requiredOption(", ".addOption("], (m, n) => {
-    const name = method(n);
-    if (n.type !== "CallExpression" || n.callee.type !== "MemberExpression" || name === undefined) {
-      return;
-    }
-    const owner = asNode2(n.callee.object);
-    if (!owner) {
-      return;
-    }
-    if (name === "option" || name === "requiredOption") {
-      addFlag(out, m, n, owner, n.arguments);
-      return;
-    }
-    const arg = asNode2(n.arguments[0]);
-    if (name !== "addOption" || !arg) {
-      return;
-    }
-    const o = optionOf(m, arg);
-    if (o) {
-      addFlag(out, o.m, o.n, owner, o.n.arguments, optionGate(m, arg, o), m);
-    }
-  });
-  return unique([...out, ...helpKind(bundle, "flag")]);
-};
-var init_commander = __esm(() => {
-  init_ast();
-  init_common();
-  init_help();
-  SPEC = /^(?:-[\w-]+, ?)?--?[a-zA-Z][\w-]*/u;
-});
-
 // inspect/mcp/src/surface/env/shared.ts
-var NAME2, UPPER, LISTED, EACH, eachName = (m, n) => {
+var NAME3, UPPER, LISTED, EACH, eachName = (m, n) => {
   const c = m.parent(n);
   if (c?.type !== "CallExpression" || c.arguments[0] !== n || c.callee.type !== "MemberExpression" || c.callee.property.type !== "Identifier" || !EACH.has(c.callee.property.name)) {
     return [];
@@ -73474,7 +73218,7 @@ var NAME2, UPPER, LISTED, EACH, eachName = (m, n) => {
 var init_shared = __esm(() => {
   init_ast();
   init_common();
-  NAME2 = /^[A-Za-z_][A-Za-z0-9_]*$/u;
+  NAME3 = /^[A-Za-z_][A-Za-z0-9_]*$/u;
   UPPER = /^[A-Z_][A-Z0-9_]*$/u;
   LISTED = /^[A-Z][A-Z0-9]*_[A-Z0-9_]+$/u;
   EACH = new Set(["map", "flatMap", "forEach", "filter", "some", "every"]);
@@ -73635,7 +73379,7 @@ class EnvObjects {
       return o !== undefined && id !== undefined && o.variable !== v && this.is(o.module, id, seen);
     }
     if (def?.type === "Variable") {
-      const init = initOf3(v);
+      const init = initOf2(v);
       return init !== undefined && this.is(m, init, seen);
     }
     if (def?.type !== "Parameter" || !isFn(def.node)) {
@@ -73659,7 +73403,7 @@ class EnvObjects {
     });
   }
 }
-var isName = (n, name) => n.type === "Identifier" && n.name === name || n.type === "MemberExpression" && !n.computed && n.property.type === "Identifier" && n.property.name === name && n.object.type === "Identifier" && n.object.name === "globalThis", isProcessEnv = (n) => n.type === "MemberExpression" && !n.computed && isName(n.object, "process") && n.property.type === "Identifier" && n.property.name === "env", initOf3 = (v) => {
+var isName = (n, name) => n.type === "Identifier" && n.name === name || n.type === "MemberExpression" && !n.computed && n.property.type === "Identifier" && n.property.name === name && n.object.type === "Identifier" && n.object.name === "globalThis", isProcessEnv = (n) => n.type === "MemberExpression" && !n.computed && isName(n.object, "process") && n.property.type === "Identifier" && n.property.name === "env", initOf2 = (v) => {
   const def = v.defs[0];
   const init = def?.type === "Variable" ? asNode2(def.node.init) : undefined;
   return init && v.references.every((r) => !r.write || r.init) ? init : undefined;
@@ -73879,7 +73623,7 @@ var TYPES3, registryType = (m, getter) => {
 }, namedProps = (o) => {
   const named = o.properties.flatMap((p) => {
     const k = keyOf2(p);
-    return p.type !== "SpreadElement" && k !== undefined && NAME2.test(k) ? [{ p, k }] : [];
+    return p.type !== "SpreadElement" && k !== undefined && NAME3.test(k) ? [{ p, k }] : [];
   });
   return named.length === o.properties.length ? named : [];
 }, addRegistry = (m, o, add) => {
@@ -73940,10 +73684,10 @@ var init_registry = __esm(() => {
 });
 
 // inspect/mcp/src/surface/env.ts
-var extractEnv = (bundle) => {
+var envPlaces = (bundle) => {
   const out = [];
   const add = (m, n, name, extra = {}) => {
-    if (NAME2.test(name)) {
+    if (NAME3.test(name)) {
       out.push({
         kind: "env",
         name,
@@ -73961,8 +73705,8 @@ var extractEnv = (bundle) => {
   });
   resolveHelpers(c);
   growLists(c, out);
-  return unique(out);
-};
+  return out;
+}, extractEnv = (bundle) => unique(envPlaces(bundle));
 var init_env = __esm(() => {
   init_common();
   init_helpers();
@@ -73970,6 +73714,333 @@ var init_env = __esm(() => {
   init_reads();
   init_registry();
   init_shared();
+});
+
+// inspect/mcp/src/surface/help.ts
+var USAGE, ARG, OPTION_LINE, USAGE_FLAG, PARSED, textOf = (n) => {
+  if (n?.type === "StringLiteral") {
+    return n.value;
+  }
+  return n?.type === "TemplateLiteral" ? n.quasis.map((q) => q.value.cooked ?? q.value.raw).join(`\${\u2026}`) : undefined;
+}, partText = (m, n) => {
+  const def = n.type === "Identifier" ? m.variable(n)?.defs[0] : undefined;
+  const init = def?.type === "Variable" ? asNode2(def.node.init) : undefined;
+  return textOf(init ?? n) ?? "";
+}, parts = (n) => {
+  if (n.type !== "BinaryExpression" || n.operator !== "+") {
+    return [n];
+  }
+  const l = asNode2(n.left);
+  const r = asNode2(n.right);
+  return [...l ? parts(l) : [], ...r ? parts(r) : []];
+}, joinedText = (m, n, own) => {
+  const decl = m.parent(n);
+  const id = decl?.type === "VariableDeclarator" ? asNode2(decl.id) : undefined;
+  let best = own;
+  for (const r of (id && m.variable(id)?.references) ?? []) {
+    let top = r.identifier;
+    for (let p = m.parent(top);p?.type === "BinaryExpression"; p = m.parent(top)) {
+      top = p;
+    }
+    const text = parts(top).map((x) => partText(m, x)).join("");
+    best = text.length > best.length ? text : best;
+  }
+  return best;
+}, flagName = (spec) => `--${/^--(?:\[no-\])?([a-z][\w-]*)/u.exec(spec)?.[1] ?? ""}`, optionLines = (text) => {
+  const lines = text.split(`
+`);
+  const out = new Map;
+  for (const [i, line] of lines.entries()) {
+    const hit = OPTION_LINE.exec(line);
+    const spec = hit?.[1];
+    if (spec !== undefined) {
+      const desc = hit?.[2] ?? lines[i + 1]?.trim() ?? "";
+      out.set(flagName(spec), short(`${spec} | ${desc}`));
+    }
+  }
+  return out;
+}, helpOf = (m, n, own) => {
+  const u = USAGE.exec(own);
+  const path = u?.[1]?.trim();
+  if (path === undefined || path === "") {
+    return;
+  }
+  const rest = u?.[2]?.trim() ?? "";
+  const flags = new Map([...rest.matchAll(USAGE_FLAG)].map((f) => [f[0], f[0]]));
+  for (const [k, v] of optionLines(joinedText(m, n, own))) {
+    flags.set(k, v);
+  }
+  return { path, rest, at: { module: m.name, offset: n.start }, flags };
+}, fnOf = (m, n) => {
+  let p = m.parent(n);
+  while (p && !isFn(p)) {
+    p = m.parent(p);
+  }
+  return p;
+}, comparedFlag = (m, n) => {
+  const name = n.type === "StringLiteral" ? PARSED.exec(n.value)?.[1] : undefined;
+  const p = m.parent(n);
+  const callee = p?.type === "CallExpression" ? asNode2(p.callee) : undefined;
+  const compared = p?.type === "BinaryExpression" && ["===", "!=="].includes(p.operator) || p?.type === "SwitchCase" && p.test === n || callee?.type === "MemberExpression" && callee.property.type === "Identifier" && callee.property.name === "startsWith";
+  return compared ? name : undefined;
+}, names2 = (h, f) => h.flags.has(f) || f.startsWith("--no-") && h.flags.get(`--${f.slice(5)}`)?.startsWith("--[no-]") === true, hiddenFlags = (helps, parsers) => {
+  const out = [];
+  for (const p of parsers) {
+    const scored = helps.map((h) => ({
+      h,
+      n: [...p.flags].filter((f) => names2(h, f)).length
+    }));
+    const best = scored.toSorted((a, b) => b.n - a.n)[0];
+    const least = best?.h.at.module === p.at.module ? 2 : 3;
+    if (!best || best.n < least || best.n * 2 < p.flags.size) {
+      continue;
+    }
+    for (const f of p.flags) {
+      if (!names2(best.h, f)) {
+        out.push({
+          kind: "flag",
+          name: `${best.h.path} ${f}`,
+          ...p.at,
+          gate: "hidden"
+        });
+      }
+    }
+  }
+  return out;
+}, helpItems = (bundle) => {
+  const helps = [];
+  scan(bundle, ["Usage: claude ", "USAGE"], (m, n) => {
+    const own = textOf(n);
+    const h = own === undefined ? undefined : helpOf(m, n, own);
+    if (h) {
+      helps.push(h);
+    }
+  });
+  const parsers = new Map;
+  scan(bundle, ['"--'], (m, n) => {
+    const flag = comparedFlag(m, n);
+    const fn = flag === undefined ? undefined : fnOf(m, n);
+    if (flag === undefined || !fn) {
+      return;
+    }
+    const p = parsers.get(fn) ?? {
+      at: { module: m.name, offset: fn.start },
+      flags: new Set
+    };
+    p.flags.add(flag);
+    parsers.set(fn, p);
+  });
+  return [
+    ...helps.flatMap((h) => [
+      {
+        kind: "subcommand",
+        name: h.path,
+        ...h.at,
+        ...h.rest !== "" && { detail: short(h.rest) }
+      },
+      ...[...h.flags].map(([name, detail]) => ({
+        kind: "flag",
+        name: `${h.path} ${name}`,
+        module: h.at.module,
+        offset: h.at.offset,
+        detail
+      }))
+    ]),
+    ...hiddenFlags(helps, [...parsers.values()])
+  ];
+}, helpKind = (bundle, kind) => helpItems(bundle).filter((i) => i.kind === kind);
+var init_help = __esm(() => {
+  init_ast();
+  init_common();
+  USAGE = /(?:Usage:|USAGE\n)\s*claude ((?:[a-z][\w-]*(?: |$))+)(.*)/u;
+  ARG = String.raw`(?:\[?=?<[^>]+>\]?| <[^>]+>| \[[^\]]+\])`;
+  OPTION_LINE = new RegExp(String.raw`^ {2,}(?:-\w, )?(--(?:\[no-\])?[a-z][\w-]*${ARG}*)(?:, -\w)?(?: +(.*))?$`, "u");
+  USAGE_FLAG = /--[a-z][\w-]*/gu;
+  PARSED = /^(--[a-z][\w-]*)=?$/u;
+});
+
+// inspect/mcp/src/surface/commander.ts
+var SPEC, method = (n) => n?.type === "CallExpression" && n.callee.type === "MemberExpression" && n.callee.property.type === "Identifier" ? n.callee.property.name : undefined, initOf3 = (m, n) => {
+  const def = m.variable(n)?.defs[0];
+  return def?.type === "Variable" ? asNode2(def.node.init) : undefined;
+}, argumentOf = (m, p) => {
+  const def = m.variable(p)?.defs[0];
+  if (def?.type !== "Parameter" || !isFn(def.node)) {
+    return;
+  }
+  const at = def.node.params.map((x) => asNode2(x)).indexOf(def.name);
+  const calls = callsOf(m, def.node);
+  const call = calls.length === 1 ? calls[0] : undefined;
+  const arg = asNode2(call?.call.arguments[at]);
+  return call && arg ? { m: call.module, n: arg } : undefined;
+}, chainCommands = (m, n, seen = new Set) => {
+  const out = [];
+  let cur = n;
+  while (cur) {
+    if (cur.type === "CallExpression" && cur.callee.type === "MemberExpression") {
+      if (method(cur) === "command") {
+        const s = constString(m, asNode2(cur.arguments[0]));
+        if (s !== undefined && s !== "") {
+          out.unshift(s.split(/\s/u)[0] ?? "");
+        }
+      }
+      cur = asNode2(cur.callee.object);
+    } else if (cur.type === "Identifier" && !seen.has(m.variable(cur))) {
+      seen.add(m.variable(cur));
+      const init = initOf3(m, cur);
+      const from = init ? { m, n: init } : argumentOf(m, cur);
+      return from ? [...chainCommands(from.m, from.n, seen), ...out] : out;
+    } else {
+      return out;
+    }
+  }
+  return out;
+}, chainedAfter = (m, call) => {
+  const out = [];
+  let cur = call;
+  for (;; ) {
+    const mem = m.parent(cur);
+    const next = mem?.type === "MemberExpression" ? m.parent(mem) : undefined;
+    const name = method(next);
+    if (!next || name === undefined) {
+      return out;
+    }
+    out.push(name);
+    cur = next;
+  }
+}, hides = (m, n, skip) => {
+  if (n.type === "Identifier") {
+    const refs = m.variable(n)?.references ?? [];
+    return refs.some((r) => {
+      const id = r.identifier;
+      if (skip && id.start >= skip.start && id.end <= skip.end) {
+        return false;
+      }
+      const p = m.parent(id);
+      return p?.type === "MemberExpression" && method(m.parent(p)) === "hideHelp";
+    });
+  }
+  let cur = n;
+  while (cur?.type === "CallExpression" && cur.callee.type === "MemberExpression") {
+    if (method(cur) === "hideHelp") {
+      return true;
+    }
+    cur = asNode2(cur.callee.object);
+  }
+  return false;
+}, optionOf = (m, n, seen = new Set) => {
+  if (seen.has(n)) {
+    return;
+  }
+  seen.add(n);
+  const via = (next) => {
+    const x = asNode2(next);
+    return x ? optionOf(m, x, seen) : undefined;
+  };
+  if (n.type === "NewExpression") {
+    return { m, n };
+  }
+  if (n.type === "ConditionalExpression") {
+    return via(n.consequent);
+  }
+  if (n.type === "CallExpression" && n.callee.type === "MemberExpression") {
+    return via(n.callee.object);
+  }
+  if (n.type === "CallExpression") {
+    const callee = asNode2(n.callee);
+    const f = callee && functionOf(m, callee);
+    const r = f && returnsOf(f.fn)[0];
+    return r ? optionOf(f.module, r, seen) : undefined;
+  }
+  if (n.type === "Identifier") {
+    const init = initOf3(m, n);
+    return init ? optionOf(m, init, seen) : undefined;
+  }
+  return;
+}, extractSubcommands = (bundle) => {
+  const out = [];
+  scan(bundle, [".command("], (m, n) => {
+    if (n.type !== "CallExpression" || method(n) !== "command") {
+      return;
+    }
+    const spec = constString(m, asNode2(n.arguments[0]));
+    if (spec === undefined || !/^[a-z][\w-]*/u.test(spec)) {
+      return;
+    }
+    const path = chainCommands(m, n).join(" ");
+    const args = spec.slice(spec.split(/\s/u)[0]?.length).trim();
+    const opts = asNode2(n.arguments[1]);
+    const hidden = opts?.type === "ObjectExpression" && /\bhidden:(!0|true)/u.test(m.src(opts));
+    out.push({
+      kind: "subcommand",
+      name: path,
+      module: m.name,
+      offset: n.start,
+      ...args !== "" && { detail: args },
+      ...hidden && { gate: "hidden" }
+    });
+  });
+  return unique([...out, ...helpKind(bundle, "subcommand")]);
+}, optionGate = (m, arg, o) => {
+  if (arg.type === "ConditionalExpression") {
+    const alternate = asNode2(arg.alternate);
+    const consequent = asNode2(arg.consequent);
+    const test = asNode2(arg.test);
+    if (alternate && consequent && test && hides(m, alternate) && !hides(m, consequent, arg)) {
+      return `hidden unless ${m.src(test)}`;
+    }
+  }
+  return hides(m, arg) || chainedAfter(o.m, o.n).includes("hideHelp") ? "hidden" : undefined;
+}, addFlag = (out, m, at, owner, args, gate, om = m) => {
+  const spec = constString(m, asNode2(args[0]));
+  if (spec === undefined || !SPEC.test(spec)) {
+    return;
+  }
+  const name = /--[a-zA-Z][\w-]*/u.exec(spec)?.[0] ?? /-[\w-]+/u.exec(spec)?.[0];
+  if (name === undefined) {
+    return;
+  }
+  const desc = constString(m, asNode2(args[1]));
+  const cmd = chainCommands(om, owner).join(" ");
+  out.push({
+    kind: "flag",
+    name: cmd === "" ? name : `${cmd} ${name}`,
+    module: m.name,
+    offset: at.start,
+    detail: short(`${spec}${desc !== undefined && desc !== "" ? ` | ${desc}` : ""}`),
+    ...gate !== undefined && { gate }
+  });
+}, extractFlags = (bundle) => {
+  const out = [];
+  scan(bundle, [".option(", ".requiredOption(", ".addOption("], (m, n) => {
+    const name = method(n);
+    if (n.type !== "CallExpression" || n.callee.type !== "MemberExpression" || name === undefined) {
+      return;
+    }
+    const owner = asNode2(n.callee.object);
+    if (!owner) {
+      return;
+    }
+    if (name === "option" || name === "requiredOption") {
+      addFlag(out, m, n, owner, n.arguments);
+      return;
+    }
+    const arg = asNode2(n.arguments[0]);
+    if (name !== "addOption" || !arg) {
+      return;
+    }
+    const o = optionOf(m, arg);
+    if (o) {
+      addFlag(out, o.m, o.n, owner, o.n.arguments, optionGate(m, arg, o), m);
+    }
+  });
+  return unique([...out, ...helpKind(bundle, "flag")]);
+};
+var init_commander = __esm(() => {
+  init_ast();
+  init_common();
+  init_help();
+  SPEC = /^(?:-[\w-]+, ?)?--?[a-zA-Z][\w-]*/u;
 });
 
 // inspect/mcp/src/surface/gate.ts
@@ -74410,7 +74481,7 @@ var init_setting = __esm(() => {
 });
 
 // inspect/mcp/src/surface/slash-command.ts
-var TYPES4, NAME3, builders, nameSource = (p) => {
+var TYPES4, NAME4, builders, nameSource = (p) => {
   if (p.type === "Identifier") {
     return `${p.name}.name`;
   }
@@ -74499,7 +74570,7 @@ var TYPES4, NAME3, builders, nameSource = (p) => {
       return;
     }
     const name = constString(m, prop(n, "name"));
-    if (name === undefined || !NAME3.test(name)) {
+    if (name === undefined || !NAME4.test(name)) {
       return;
     }
     const type = typeOf(m, n);
@@ -74525,7 +74596,7 @@ var init_slash_command = __esm(() => {
   init_ast();
   init_common();
   TYPES4 = new Set(["local", "local-jsx", "prompt"]);
-  NAME3 = /^[a-z][\w:-]*$/u;
+  NAME4 = /^[a-z][\w:-]*$/u;
   builders = new WeakMap;
 });
 
@@ -75512,7 +75583,7 @@ var valJson = (v) => {
     return { type: "array" };
   }
   return { unknown: clip(v.text, 120) };
-}, entriesJson = (entries) => Object.fromEntries(entries.map((e) => ("key" in e) ? [`${e.key}${e.opt ? "?" : ""}`, valJson(e.val)] : [`...${clip(e.spread, 80)}`, "unresolved spread"])), SURFACE_LIMIT = 200, SURFACE_NAME_CHARS = 120, SURFACE_HEADER_CHARS = 300, surfaceLine = (i) => `- ${clip(i.name, SURFACE_NAME_CHARS)}${i.default === undefined ? "" : `  default ${i.default}`}${i.values ? `  values ${i.values.join("|")}` : ""}${has(i.gate) ? `  gate ${clip(i.gate, 120)}` : ""}${has(i.detail) ? `  (${clip(i.detail, 120)})` : ""}  ${i.module ?? "-"}:${i.offset ?? "-"}`, kindCount = async (bundle, modules, k) => {
+}, entriesJson = (entries) => Object.fromEntries(entries.map((e) => ("key" in e) ? [`${e.key}${e.opt ? "?" : ""}`, valJson(e.val)] : [`...${clip(e.spread, 80)}`, "unresolved spread"])), SURFACE_LIMIT = 200, SURFACE_NAME_CHARS = 120, SURFACE_HEADER_CHARS = 300, PLACE_BEFORE = 60, PLACE_AFTER = 200, surfaceLine = (i) => `- ${clip(i.name, SURFACE_NAME_CHARS)}${i.default === undefined ? "" : `  default ${i.default}`}${i.values ? `  values ${i.values.join("|")}` : ""}${has(i.gate) ? `  gate ${clip(i.gate, 120)}` : ""}${has(i.detail) ? `  (${clip(i.detail, 120)})` : ""}  ${i.module ?? "-"}:${i.offset ?? "-"}`, kindCount = async (bundle, modules, k) => {
   try {
     const items = await surface(bundle, k, modules);
     return `- ${k}: ${items.length}`;
@@ -75552,10 +75623,11 @@ var init_surface2 = __esm(async () => {
   init_binary();
   init_events();
   init_resolve();
+  init_env();
   init_tools();
   init_app();
   await init_surface();
-  group("surface", `List what a Claude Code binary exposes by kind (${Object.keys(KINDS).join(", ")}), or resolve object-keys, event-keys, or tool-gates from its code.`, "kind", {
+  group("surface", `List what a Claude Code binary exposes by kind (${Object.keys(KINDS).join(", ")}), or resolve object-keys, event-keys, tool-gates, or env-places (every place that names the environment variable \`name\`: a typed registry entry, a read, a name set for a child process, or a list entry) from its code.`, "kind", {
     ...Object.fromEntries(["", ...Object.keys(KINDS)].map((k) => [k, (a) => listKind(k, a)])),
     "object-keys": async ({ module, offset, anchor, version }) => {
       const { bundle, resolver: R } = await program3(version);
@@ -75603,6 +75675,20 @@ ${JSON.stringify(keys, null, 2)}`, {
         sites: lists.length,
         keys
       });
+    },
+    "env-places": async ({ name, version }) => {
+      const { bundle } = await program3(version);
+      const wanted = need(name, "name");
+      const places = envPlaces(bundle).filter((i) => i.name === wanted);
+      return text(`${wanted}: places ${places.length}
+${places.map((i) => {
+        const at = i.offset ?? 0;
+        const src = bundle.get(i.module ?? "")?.text.slice(Math.max(0, at - PLACE_BEFORE), at + PLACE_AFTER);
+        return `- ${i.detail ?? "read"}  ${i.module}:${at}
+  ${src?.replaceAll(`
+`, " ")}`;
+      }).join(`
+`)}`);
     },
     "tool-gates": async ({ version }) => {
       const { bundle, resolver } = await program3(version);
@@ -75856,7 +75942,7 @@ var init_notes = __esm(() => {
 });
 
 // inspect/mcp/src/mcp/release.ts
-import { dirname as dirname3, join as join11 } from "path";
+import { dirname as dirname3, join as join12 } from "path";
 var DIFF_LINES = 40, MAX_PAGE = 30, ORDER, unitOf = (c) => c.to ?? c.from, changeHead = (c) => {
   const u = unitOf(c);
   const at = [
@@ -75944,8 +76030,8 @@ ${unitDiff(c, DIFF_LINES).join(`
       }
       const a = await prepared(older);
       const root = dirname3(b.dir);
-      const items = await reportItems(join11(root, "diff", "report.md"));
-      const lines = checkNotes(await readNotes(b.index.version, join11(root, "notes.md")), diffIndexes(a.index, b.index), items);
+      const items = await reportItems(join12(root, "diff", "report.md"));
+      const lines = checkNotes(await readNotes(b.index.version, join12(root, "notes.md")), diffIndexes(a.index, b.index), items);
       const count = (k) => lines.filter((l) => l.status === k).length;
       return text(`${b.index.version} notes against ${a.index.version}: ${lines.length} lines, ${count("matched")} matched, ${count("gated")} gated, ${count("unmatched")} unmatched. Read the code of each match before you state it.
 ${lines.map((l) => `- [${l.status}] ${clip(l.line, 160)}${noteWhy(l)}`).join(`
