@@ -1,7 +1,5 @@
 // What a tool expression of the program holds: its value, its name, and whether it is null (`tools.ts` lists the tools).
 
-import type * as t from "@babel/types";
-
 import {
 	type CallNode,
 	constString,
@@ -10,26 +8,18 @@ import {
 	isFn,
 	type Module,
 	type Node,
+	type NodeOf,
 	returnsOf,
 } from "./ast.ts";
-import { asNode } from "./ast/node.ts";
+import { asNode, isNull as isNullLiteral } from "./ast/node.ts";
 import type { Resolver } from "./resolve.ts";
-import { keyOf, type Prop, propValue } from "./surface/common.ts";
+import { keyOf, type Prop } from "./surface/common.ts";
 
 /** A tool's name, and its own `isEnabled` when its definition literal has one. */
 export interface Found {
 	name: string;
 	enabled?: { m: Module; n: Node };
 }
-
-/** A child node. Every node of a parsed module has a position. */
-export const at = (x: t.Node): Node => {
-	const n = asNode(x);
-	if (n === undefined) {
-		throw new Error(`${x.type} has no position`);
-	}
-	return n;
-};
 
 /** The value a name is bound to once (followed across imports), or undefined. */
 export const initOf = (
@@ -59,7 +49,7 @@ const chunkCall = (
 	const c = i?.n ?? obj;
 	if (
 		c.type === "CallExpression" &&
-		cm.src(at(c.callee)).startsWith("import.meta.require")
+		cm.src(c.callee).startsWith("import.meta.require")
 	) {
 		return { cm, call: c };
 	}
@@ -88,7 +78,7 @@ export const required = (
 	if (n.type !== "MemberExpression" || n.property.type !== "Identifier") {
 		return undefined;
 	}
-	const found = chunkCall(m, at(n.object));
+	const found = chunkCall(m, n.object);
 	if (!found) {
 		return undefined;
 	}
@@ -103,7 +93,7 @@ export const calleeFn = (
 	m: Module,
 	call: CallNode,
 ): { module: Module; fn: Fn } | undefined => {
-	const callee = at(call.callee);
+	const { callee } = call;
 	return isFn(callee) ? { module: m, fn: callee } : functionOf(m, callee);
 };
 
@@ -112,7 +102,7 @@ export const isNull = (m: Module, n: Node, depth = 0): boolean => {
 	if (depth > 6) {
 		return false;
 	}
-	if (n.type === "NullLiteral") {
+	if (isNullLiteral(n)) {
 		return true;
 	}
 	if (n.type === "Identifier") {
@@ -122,7 +112,7 @@ export const isNull = (m: Module, n: Node, depth = 0): boolean => {
 	if (n.type !== "CallExpression") {
 		return false;
 	}
-	if (isNull(m, at(n.callee), depth + 1)) {
+	if (isNull(m, n.callee, depth + 1)) {
 		return true;
 	}
 	const f = calleeFn(m, n);
@@ -140,7 +130,7 @@ const named = (name: string | undefined): Found | undefined =>
 	name === undefined || name === "" ? undefined : { name };
 
 /** The object literal of `{name:...}`, or of a tool builder called with one: `tn({name:io,...})`. */
-const literalOf = (n: Node): t.ObjectExpression | undefined => {
+const literalOf = (n: Node): NodeOf<"ObjectExpression"> | undefined => {
 	if (n.type === "ObjectExpression") {
 		return n;
 	}
@@ -162,8 +152,8 @@ const ofLiteral = (
 	if (!p) {
 		return undefined;
 	}
-	const base = named(constString(m, propValue(p)));
-	const e = asNode(prop("isEnabled"));
+	const base = named(constString(m, p.value));
+	const e = prop("isEnabled");
 	return {
 		tool: base && e !== undefined ? { ...base, enabled: { m, n: e } } : base,
 	};

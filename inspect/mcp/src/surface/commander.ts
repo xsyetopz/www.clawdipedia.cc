@@ -17,8 +17,6 @@
 //   `--jq`, a key of the `gh api` flag map (`"-q":"--jq"`), not a flag of this program.
 // - subcommand: 71 paths, 56 old names. Only here: `apply-project-settings`, named by a constant
 //   (`.command(Hmn,{hidden:!0})`). None only there.
-import type * as t from "@babel/types";
-
 import {
 	callsOf,
 	constString,
@@ -26,6 +24,7 @@ import {
 	isFn,
 	type Module,
 	type Node,
+	type NodeOf,
 	returnsOf,
 } from "../ast.ts";
 import {
@@ -148,15 +147,12 @@ const optionOf = (
 	m: Module,
 	n: Node,
 	seen = new Set<unknown>(),
-): { m: Module; n: Node & t.NewExpression } | undefined => {
+): { m: Module; n: NodeOf<"NewExpression"> } | undefined => {
 	if (seen.has(n)) {
 		return undefined;
 	}
 	seen.add(n);
-	const via = (next: t.Node | null | undefined) => {
-		const x = asNode(next);
-		return x ? optionOf(m, x, seen) : undefined;
-	};
+	const via = (next: Node) => optionOf(m, next, seen);
 	if (n.type === "NewExpression") {
 		return { m, n };
 	}
@@ -238,7 +234,7 @@ const addFlag = (
 	m: Module,
 	at: Node,
 	owner: Node,
-	args: readonly (t.Node | null | undefined)[],
+	args: readonly Node[],
 	gate?: string,
 	om = m,
 ): void => {

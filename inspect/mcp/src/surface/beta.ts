@@ -9,7 +9,7 @@
 // Left out: `bedrock-2023-05-31` and `vertex-2023-10-16`, which have the same form but are values of
 // `anthropic_version`, not betas.
 // The old `strings` heuristic has no beta list, so there is nothing to compare.
-import { constString } from "../ast.ts";
+import { constString, strLit } from "../ast.ts";
 import {
 	asNode,
 	type Extractor,
@@ -25,11 +25,12 @@ const VERSION = /^(?:bedrock|vertex)-/u;
 export const extractBetas: Extractor = (bundle) => {
 	const out: SurfaceItem[] = [];
 	scan(bundle, ["-20"], (m, n) => {
-		if (n.type !== "StringLiteral") {
+		const name = strLit(n);
+		if (name === undefined) {
 			return;
 		}
-		const dated = BETA.test(n.value) && !VERSION.test(n.value);
-		const compact = COMPACT.test(n.value);
+		const dated = BETA.test(name) && !VERSION.test(name);
+		const compact = COMPACT.test(name);
 		if (!dated && !compact) {
 			return;
 		}
@@ -44,7 +45,7 @@ export const extractBetas: Extractor = (bundle) => {
 		}
 		out.push({
 			kind: "beta",
-			name: n.value,
+			name,
 			module: m.name,
 			offset: n.start,
 			...(hasGroup && { detail: group }),

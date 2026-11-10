@@ -1,17 +1,15 @@
 // Whether an expression gives undefined, which JSON drops, while the entries of a returned object are read.
-import type * as t from "@babel/types";
-
-import type { Module, Node } from "../ast.ts";
-import { asNode } from "../ast/node.ts";
+import type { Module, Node, NodeOf } from "../ast.ts";
+import { isNull } from "../ast/node.ts";
 import { isVoid } from "./tables.ts";
 import type { Entry, Env } from "./types.ts";
 
-type Undef = (n: t.Node | null | undefined) => boolean;
+type Undef = (n: Node | null | undefined) => boolean;
 
 const isUndefIdentifier = (
 	dm: Module,
 	inner: Env,
-	n: Node & t.Identifier,
+	n: NodeOf<"Identifier">,
 	undef: Undef,
 ): boolean => {
 	const v = dm.variable(n);
@@ -32,10 +30,10 @@ const isUndefIdentifier = (
 };
 
 const isUndefConditional = (
-	n: Node & t.ConditionalExpression,
+	n: NodeOf<"ConditionalExpression">,
 	undef: Undef,
 ): boolean => {
-	let test: t.Node = n.test;
+	let test: Node = n.test;
 	while (test.type === "LogicalExpression" && test.operator === "&&") {
 		test = test.left;
 	}
@@ -43,7 +41,7 @@ const isUndefConditional = (
 };
 
 const isUndefLogical = (
-	n: Node & t.LogicalExpression,
+	n: NodeOf<"LogicalExpression">,
 	undef: Undef,
 ): boolean =>
 	n.operator === "??"
@@ -56,13 +54,13 @@ const isUndef = (
 	inner: Env,
 	n: Node | null | undefined,
 ): boolean => {
-	if (n?.type === "NullLiteral") {
+	if (isNull(n)) {
 		return false;
 	}
 	if (!n || isVoid(n)) {
 		return true;
 	}
-	const undef: Undef = (x) => isUndef(dm, inner, asNode(x));
+	const undef: Undef = (x) => isUndef(dm, inner, x);
 	if (n.type === "Identifier") {
 		return isUndefIdentifier(dm, inner, n, undef);
 	}
@@ -72,12 +70,7 @@ const isUndef = (
 	if (n.type === "ConditionalExpression") {
 		return isUndefConditional(n, undef);
 	}
-	return (
-		n.type === "MemberExpression" &&
-		"optional" in n &&
-		n.optional === true &&
-		undef(n.object)
-	);
+	return n.type === "MemberExpression" && n.optional && undef(n.object);
 };
 
 export const isUnset = (dm: Module, inner: Env, e: Entry): boolean =>

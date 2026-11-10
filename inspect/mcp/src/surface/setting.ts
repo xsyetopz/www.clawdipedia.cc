@@ -13,15 +13,11 @@
 // Kind `setting-key`: the nested leaf keys under those settings, as dotted paths (`permissions.allow`), with
 // `*` for a record key (`extraKnownMarketplaces.*.source.repo`). Checked on 2.1.319: the 196 leaf paths equal the
 // nested leaf property paths of schemas/claude-code-managed-settings.json (test/surface/binary.test.ts).
-import type * as t from "@babel/types";
-
-import type { Bundle, Module, Node } from "../ast.ts";
+import type { Bundle, Module, Node, NodeOf } from "../ast.ts";
 import {
-	asNode,
 	type Extractor,
 	keyOf,
 	prop,
-	propValue,
 	scan,
 	short,
 	type SurfaceItem,
@@ -43,42 +39,39 @@ interface Top {
 /** The condition and object of a spread `...cond&&{key:…}` or `...cond?{key:…}:{}`: keys behind a condition. */
 const conditional = (
 	a: Node | undefined,
-): { test: Node; obj: t.ObjectExpression } | undefined => {
+): { test: Node; obj: NodeOf<"ObjectExpression"> } | undefined => {
 	if (a?.type === "LogicalExpression" && a.operator === "&&") {
-		const test = asNode(a.left);
-		return test && a.right.type === "ObjectExpression"
-			? { test, obj: a.right }
+		return a.right.type === "ObjectExpression"
+			? { test: a.left, obj: a.right }
 			: undefined;
 	}
-	const test = a?.type === "ConditionalExpression" ? asNode(a.test) : undefined;
-	return test &&
-		a?.type === "ConditionalExpression" &&
+	return a?.type === "ConditionalExpression" &&
 		a.consequent.type === "ObjectExpression"
-		? { test, obj: a.consequent }
+		? { test: a.test, obj: a.consequent }
 		: undefined;
 };
 
 const keysOf = (
 	m: Module,
-	o: t.ObjectExpression,
+	o: NodeOf<"ObjectExpression">,
 	out: Top[],
 	gate?: string,
 ): void => {
 	for (const p of o.properties) {
-		const cond =
-			p.type === "SpreadElement" ? conditional(asNode(p.argument)) : undefined;
-		if (cond) {
-			keysOf(m, cond.obj, out, short(m.src(cond.test), 120));
+		if (p.type === "SpreadElement") {
+			const cond = conditional(p.argument);
+			if (cond) {
+				keysOf(m, cond.obj, out, short(m.src(cond.test), 120));
+			}
+			continue;
 		}
 		const k = keyOf(p);
-		const value = p.type === "SpreadElement" ? undefined : propValue(p);
-		const at = asNode(p);
-		if (k !== undefined && k !== "" && value && at) {
+		if (k !== undefined && k !== "") {
 			out.push({
 				m,
 				name: k,
-				value,
-				offset: at.start,
+				value: p.value,
+				offset: p.start,
 				...(gate !== undefined && { gate }),
 			});
 		}
@@ -100,9 +93,7 @@ const topLevel = (bundle: Bundle): Top[] => {
 		const shape = prop(n, "shape");
 		// `shape:()=>({…})`
 		const body =
-			shape?.type === "ArrowFunctionExpression"
-				? asNode(shape.body)
-				: undefined;
+			shape?.type === "ArrowFunctionExpression" ? shape.body : undefined;
 		if (gate && body?.type === "ObjectExpression") {
 			keysOf(m, body, out, `buildGate ${short(m.src(gate), 120)}`);
 		}

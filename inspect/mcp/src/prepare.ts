@@ -14,7 +14,7 @@ import { type Unit, unitsOf } from "./units.ts";
 export { type Unit, unitsOf } from "./units.ts";
 
 /** Raise when the cleaning or the units change, so an older cache is cleaned again. */
-export const FORMAT = 1;
+export const FORMAT = 2;
 
 export interface Index {
 	/** `FORMAT` of the code that wrote it */

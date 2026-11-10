@@ -47,7 +47,7 @@ const laterInCopy = (key: string, k: string): Json | undefined => {
 			// A key of an object literal; `let{key:a,...rest}=line` is a pattern, which reads the key.
 			const prop = m.parent(m.nodeAt(h.index + 1));
 			const obj = prop && m.parent(prop);
-			if (prop?.type !== "ObjectProperty" || obj?.type !== "ObjectExpression") {
+			if (prop?.type !== "Property" || obj?.type !== "ObjectExpression") {
 				continue;
 			}
 			if (

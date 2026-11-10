@@ -14,8 +14,6 @@
 //   `/srun`, `/sleep`, `/count`), MCP tools (`/scan_secrets`), mod capability docs (`/cc-plugin-*`),
 //   and a template name (`/bg`). Known names absent from both: `/cost` and `/review` are aliases of
 //   `/usage` and `/code-review`; `/vim` is not in 2.1.309.
-import type * as t from "@babel/types";
-
 import {
 	callsOf,
 	children,
@@ -25,9 +23,9 @@ import {
 	isFn,
 	type Module,
 	type Node,
+	type NodeOf,
 } from "../ast.ts";
 import {
-	asNode,
 	type Extractor,
 	keyOf,
 	prop,
@@ -36,7 +34,6 @@ import {
 	strings,
 	type SurfaceItem,
 	unique,
-	valueSrc,
 } from "./common.ts";
 
 const TYPES = new Set(["local", "local-jsx", "prompt"]);
@@ -44,23 +41,24 @@ const NAME = /^[a-z][\w:-]*$/u;
 const builders = new WeakMap<object, string>();
 
 /** How a builder's first parameter `p` names the command: `p.name` for `function(p)`, `e` for `function({name:e})`. */
-const nameSource = (p: t.Node): string | undefined => {
+const nameSource = (p: Node): string | undefined => {
 	if (p.type === "Identifier") {
 		return `${p.name}.name`;
 	}
 	if (p.type !== "ObjectPattern") {
 		return undefined;
 	}
-	const v = p.properties.find(
-		(x): x is t.ObjectProperty =>
-			x.type === "ObjectProperty" && keyOf(x) === "name",
-	)?.value;
-	return v?.type === "Identifier" ? v.name : undefined;
+	for (const x of p.properties) {
+		if (x.type === "Property" && keyOf(x) === "name") {
+			return x.value.type === "Identifier" ? x.value.name : undefined;
+		}
+	}
+	return undefined;
 };
 
 /** The type of the first object in `fn` that is `{type:"prompt",name:<nameSrc>,...}`. */
 const returnedType = (m: Module, fn: Fn, nameSrc: string): string => {
-	const stack = [asNode(fn.body)].flatMap((x) => x ?? []);
+	const stack: Node[] = fn.body ? [fn.body] : [];
 	for (let n = stack.pop(); n; n = stack.pop()) {
 		if (n.type === "ObjectExpression") {
 			const type = constString(m, prop(n, "type"));
@@ -79,7 +77,7 @@ const builderType = (m: Module, call: Node): string | undefined => {
 	if (call.type !== "CallExpression") {
 		return undefined;
 	}
-	const f = functionOf(m, asNode(call.callee) ?? call);
+	const f = functionOf(m, call.callee);
 	const p = f?.fn.params[0];
 	if (!f || !p) {
 		return undefined;
@@ -130,7 +128,7 @@ const factoryType = (m: Module, n: Node): string | undefined => {
 	return undefined;
 };
 
-const gateOf = (m: Module, o: Node & t.ObjectExpression): string => {
+const gateOf = (m: Module, o: NodeOf<"ObjectExpression">): string => {
 	const gates: string[] = [];
 	if (/^(!0|true)$/u.test(m.src(prop(o, "isHidden") ?? o).trim())) {
 		gates.push("hidden");
@@ -141,14 +139,14 @@ const gateOf = (m: Module, o: Node & t.ObjectExpression): string => {
 	}
 	const enabled = prop(o, "isEnabled");
 	if (enabled) {
-		gates.push(`isEnabled ${short(valueSrc(m, enabled), 120)}`);
+		gates.push(`isEnabled ${short(m.src(enabled), 120)}`);
 	}
 	return gates.join("; ");
 };
 
 const typeOf = (
 	m: Module,
-	o: Node & t.ObjectExpression,
+	o: NodeOf<"ObjectExpression">,
 ): string | undefined => {
 	const parent = m.parent(o);
 	return (

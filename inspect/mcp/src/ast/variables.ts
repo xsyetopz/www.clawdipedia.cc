@@ -1,25 +1,33 @@
-// Scope analysis of one module: where each name is declared and where it is read or written (Babel bindings).
-import type { Binding, NodePath } from "@babel/traverse";
-import type * as t from "@babel/types";
+// Scope analysis of one module: where each name is declared and where it is read or written (eslint-scope).
+import {
+	analyze,
+	type Definition,
+	type Reference,
+	type Scope,
+	type Variable as Declared,
+} from "eslint-scope";
 
-import { asNode, isNode, type Node } from "./node.ts";
+import { asNode, type Node, type NodeOf } from "./node.ts";
 
 /** Where a name is declared: the declarator, function, class, specifier, or catch clause. */
 export type Def = {
 	/** The identifier that declares the name. */
 	name: Node;
-	/** The declaration, import, or function around `node`. */
-	parent: Node;
 } & (
-	| { type: "Variable"; node: t.VariableDeclarator & Node }
 	| {
-			type:
-				| "Parameter"
-				| "FunctionName"
-				| "ClassName"
-				| "ImportBinding"
-				| "CatchClause";
+			type: "Variable";
+			node: NodeOf<"VariableDeclarator">;
+			parent: NodeOf<"VariableDeclaration">;
+	  }
+	| {
+			type: "ImportBinding";
 			node: Node;
+			parent: NodeOf<"ImportDeclaration">;
+	  }
+	| {
+			type: "Parameter" | "FunctionName" | "ClassName" | "CatchClause";
+			node: Node;
+			parent: null;
 	  }
 );
 /** A read or a write of a name; `init` marks the write that comes with the declaration. */
@@ -31,144 +39,128 @@ export interface Ref {
 }
 export interface Variable {
 	name: string;
-	binding: Binding;
+	/** The scope that declares the name. */
+	scope: Scope;
 	defs: Def[];
 	identifiers: Node[];
 	references: Ref[];
 }
+/** The variables of one module. */
+export interface Variables {
+	/** Each declared variable, by every identifier that declares or uses it. */
+	byId: Map<Node, Variable>;
+	/** The module-scope variables, by name. */
+	top: Map<string, Variable>;
+	/** The identifiers that read a name the module does not declare. */
+	globals: Set<Node>;
+}
 
-const PATTERN = new Set([
-	"ObjectPattern",
-	"ArrayPattern",
-	"ObjectProperty",
-	"RestElement",
-	"AssignmentPattern",
-]);
+// eslint-scope types its input as `estree`; the oxc tree has that shape.
+const isEstree = (n: unknown): n is Parameters<typeof analyze>[0] =>
+	asNode(n)?.type === "Program";
 
-const DEF = new Map<string, "FunctionName" | "ClassName" | "CatchClause">([
-	["FunctionDeclaration", "FunctionName"],
-	["FunctionExpression", "FunctionName"],
-	["ClassDeclaration", "ClassName"],
-	["ClassExpression", "ClassName"],
-	["CatchClause", "CatchClause"],
-]);
-
-/** The value a declarator starts with; a `for (x of y)` declarator starts with `y`. */
-const initOf = (p: NodePath): Node | null => {
-	const init = p.isVariableDeclarator() ? p.node.init : undefined;
-	if (init) {
-		return asNode(init) ?? null;
-	}
-	const loop = p.parentPath?.parent;
-	if (
-		(loop?.type === "ForOfStatement" || loop?.type === "ForInStatement") &&
-		loop.left === p.parent
-	) {
-		return asNode(loop.right) ?? null;
-	}
-	return null;
-};
-
-const defOf = (b: Binding, name: Node): Def | undefined => {
-	const n = asNode(b.path.node);
-	const parent = asNode(b.path.parent);
-	if (!n || !parent) {
+const defOf = (d: Definition): Def | undefined => {
+	const name = asNode(d.name);
+	const node = asNode(d.node);
+	const parent = asNode(d.parent);
+	if (!name || !node || d.type === "ImplicitGlobalVariable") {
 		return undefined;
 	}
-	if (b.kind === "param") {
-		const node = asNode(b.scope.path.node);
-		return node ? { type: "Parameter", node, name, parent } : undefined;
+	if (d.type === "Variable") {
+		return node.type === "VariableDeclarator" &&
+			parent?.type === "VariableDeclaration"
+			? { type: d.type, name, node, parent }
+			: undefined;
 	}
-	if (b.kind === "module") {
-		return { type: "ImportBinding", node: n, name, parent };
+	if (d.type === "ImportBinding") {
+		return parent?.type === "ImportDeclaration"
+			? { type: d.type, name, node, parent }
+			: undefined;
 	}
-	if (n.type === "VariableDeclarator") {
-		return { type: "Variable", node: n, name, parent };
-	}
-	const type = DEF.get(n.type);
-	return type ? { type, node: n, name, parent } : undefined;
+	return { type: d.type, name, node, parent: null };
 };
 
-const writeOf = (
-	v: Variable,
-	identifier: Node,
-	writeExpr: Node | null,
-	init: boolean,
-): void => {
-	v.references.push({ identifier, write: true, init, writeExpr });
-};
-
-/** Writes from a default anywhere above the name in its pattern: `{now:s=f}`. */
-const addDefaults = (v: Variable, name: Node, parents: WeakMap<Node, Node>) => {
-	for (let c = name, p = parents.get(c); p; c = p, p = parents.get(c)) {
-		if (p.type === "AssignmentPattern" && p.left === c) {
-			const right = asNode(p.right);
-			if (right) {
-				writeOf(v, name, right, true);
-			}
-		} else if (!PATTERN.has(p.type)) {
-			break;
+const refOf = (r: Reference): Ref | undefined => {
+	const identifier = asNode(r.identifier);
+	return (
+		identifier && {
+			identifier,
+			write: r.isWrite(),
+			init: r.init === true,
+			writeExpr: asNode(r.writeExpr) ?? null,
 		}
-	}
+	);
 };
 
-const addViolations = (v: Variable, def: Def, b: Binding) => {
-	for (const c of b.constantViolations) {
-		const id = asNode(c.getBindingIdentifiers()[v.name]);
-		if (!id) {
-			continue;
-		}
-		if (c.isVariableDeclarator()) {
-			const node = c.node;
-			if (!isNode(node)) {
-				continue;
-			}
-			v.defs.push({ ...def, node, name: id });
-			v.identifiers.push(id);
-			const i = initOf(c);
-			if (i) {
-				writeOf(v, id, i, true);
-			}
-		} else {
-			const right = "right" in c.node ? asNode(c.node.right) : undefined;
-			writeOf(v, id, right ?? null, false);
-		}
-	}
+// `class A {}` declares `A` in the scope around it and again in the class scope, on one node.
+const outerOf = (d: Declared, s: Scope): Declared | undefined => {
+	const id = d.identifiers[0];
+	const o = s.type === "class" ? s.upper?.set.get(d.name) : undefined;
+	return id !== undefined && o?.identifiers.includes(id) === true
+		? o
+		: undefined;
 };
 
-/** The variable a Babel binding stands for, or undefined for a kind of binding that has no declaration here. */
-export const variableOf = (
-	b: Binding,
-	parents: WeakMap<Node, Node>,
-): Variable | undefined => {
-	const name = asNode(b.identifier);
-	const def = name ? defOf(b, name) : undefined;
-	if (!name || !def) {
-		return undefined;
-	}
-	const v: Variable = {
-		name: b.identifier.name,
-		binding: b,
-		defs: [def],
-		identifiers: [name],
+const variableOf = (
+	d: Declared,
+	s: Scope,
+	made: Map<Declared, Variable>,
+): Variable => {
+	const outer = outerOf(d, s);
+	const v = (outer && made.get(outer)) ?? {
+		name: d.name,
+		scope: s,
+		defs: d.defs.flatMap((x) => defOf(x) ?? []),
+		identifiers: d.identifiers.flatMap((x) => asNode(x) ?? []),
 		references: [],
 	};
-	const init = def.type === "Variable" ? initOf(b.path) : null;
-	if (init) {
-		writeOf(v, name, init, true);
+	made.set(d, v);
+	// A name with a default and a value gets two writes on one identifier; the value comes first.
+	v.references.push(
+		...d.references.toReversed().flatMap((r) => refOf(r) ?? []),
+	);
+	return v;
+};
+
+/** Analyzes the scopes of a module's tree. A class declaration's name is one variable, inside the class and outside. */
+export const variablesOf = (ast: unknown): Variables => {
+	const out: Variables = {
+		byId: new Map(),
+		top: new Map(),
+		globals: new Set(),
+	};
+	if (!isEstree(ast)) {
+		return out;
 	}
-	addDefaults(v, name, parents);
-	for (const p of b.referencePaths) {
-		if (p.isIdentifier() && isNode(p.node)) {
-			v.references.push({
-				identifier: p.node,
-				write: false,
-				init: false,
-				writeExpr: null,
-			});
+	const made = new Map<Declared, Variable>();
+	// `optimistic` keeps each name on its declaration in a scope that calls `eval`.
+	const options = {
+		ecmaVersion: 2026,
+		sourceType: "module",
+		optimistic: true,
+	} as const;
+	for (const s of analyze(ast, options).scopes) {
+		for (const d of s.variables.filter((x) => x.defs.length > 0)) {
+			const v = variableOf(d, s, made);
+			if (s.type === "module") {
+				out.top.set(v.name, v);
+			}
+		}
+		for (const r of s.references) {
+			const id = asNode(r.identifier);
+			if (id && r.isRead() && (r.resolved?.defs.length ?? 0) === 0) {
+				out.globals.add(id);
+			}
 		}
 	}
-	addViolations(v, def, b);
-	v.references.sort((a, c) => a.identifier.start - c.identifier.start);
-	return v;
+	for (const v of new Set(made.values())) {
+		v.references.sort((a, b) => a.identifier.start - b.identifier.start);
+		for (const id of v.identifiers) {
+			out.byId.set(id, v);
+		}
+		for (const r of v.references) {
+			out.byId.set(r.identifier, v);
+		}
+	}
+	return out;
 };

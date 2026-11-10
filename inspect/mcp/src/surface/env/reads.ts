@@ -1,6 +1,4 @@
 // Anchors 2 to 5 of kind `env` that one node shows: reads, helpers, names set for a child, and lists.
-import type * as t from "@babel/types";
-
 import {
 	children,
 	constString,
@@ -8,14 +6,15 @@ import {
 	isFn,
 	type Module,
 	type Node,
+	type NodeOf,
 } from "../../ast.ts";
-import { asNode, keyOf } from "../common.ts";
+import { asNode, keyOf, type Prop } from "../common.ts";
 import { isProcessEnv } from "./objects.ts";
 import { type Ctx, paramOf, UPPER } from "./shared.ts";
 
 const CHILD = { detail: "set for a child process" };
 
-const nodes = (...xs: (t.Node | null | undefined)[]): Node[] =>
+const nodes = (...xs: (Node | null | undefined)[]): Node[] =>
 	xs.flatMap((x) => asNode(x) ?? []);
 
 /** `x.NAME`, `x["NAME"]`, `x[param]` of an env object. */
@@ -73,42 +72,41 @@ const destructure = (c: Ctx, m: Module, n: Node): void => {
 		return;
 	}
 	for (const p of n.id.properties) {
-		const k = p.type === "ObjectProperty" ? keyOf(p) : undefined;
-		const at = asNode(p);
-		if (k !== undefined && k !== "" && at) {
-			c.add(m, at, k);
+		const k = p.type === "Property" ? keyOf(p) : undefined;
+		if (k !== undefined && k !== "") {
+			c.add(m, p, k);
 		}
 	}
 };
 
-const keyName = (
-	m: Module,
-	p: t.ObjectProperty | t.ObjectMethod,
-): string | undefined =>
-	p.computed ? constString(m, asNode(p.key)) : keyOf(p);
+const keyName = (m: Module, p: Prop): string | undefined =>
+	p.computed ? constString(m, p.key) : keyOf(p);
 
 /** Add the child-env names of an object; return the nodes it spreads. */
-const objectNames = (c: Ctx, m: Module, o: t.ObjectExpression): Node[] => {
+const objectNames = (
+	c: Ctx,
+	m: Module,
+	o: NodeOf<"ObjectExpression">,
+): Node[] => {
 	const spread: Node[] = [];
 	for (const p of o.properties) {
 		if (p.type === "SpreadElement") {
-			spread.push(...nodes(p.argument));
+			spread.push(p.argument);
 			continue;
 		}
 		const k = keyName(m, p);
-		const at = asNode(p);
-		if (k !== undefined && UPPER.test(k) && at) {
-			c.add(m, at, k, CHILD);
+		if (k !== undefined && UPPER.test(k)) {
+			c.add(m, p, k, CHILD);
 		}
 	}
 	return spread;
 };
 
 /** The keys of `{...env, NAME:v}`, of an `env:{...}` option, and of objects spread into those. */
-const childEnv = (c: Ctx, m: Module, n: Node & t.ObjectExpression): void => {
+const childEnv = (c: Ctx, m: Module, n: NodeOf<"ObjectExpression">): void => {
 	const parent = m.parent(n);
 	const option =
-		parent?.type === "ObjectProperty" &&
+		parent?.type === "Property" &&
 		keyOf(parent) === "env" &&
 		parent.value === n;
 	if (!option && !c.env.is(m, n)) {
@@ -127,7 +125,7 @@ const childEnv = (c: Ctx, m: Module, n: Node & t.ObjectExpression): void => {
 };
 
 /** An object of two or more uppercase keys is a list (anchor 5). */
-const objectList = (c: Ctx, m: Module, n: Node & t.ObjectExpression): void => {
+const objectList = (c: Ctx, m: Module, n: NodeOf<"ObjectExpression">): void => {
 	if (n.properties.length < 2) {
 		return;
 	}
@@ -211,7 +209,7 @@ const entriesHelper = (c: Ctx, m: Module, n: Node): void => {
 	}
 };
 
-const argsOf = (n: Node): (t.Node | null)[] => {
+const argsOf = (n: Node): (Node | null)[] => {
 	if (n.type === "CallExpression") {
 		return n.arguments;
 	}

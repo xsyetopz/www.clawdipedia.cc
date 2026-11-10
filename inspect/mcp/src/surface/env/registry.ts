@@ -1,15 +1,6 @@
 // Anchor 1 of kind `env`: the typed registry `reg(ns,{NAME:()=>v,...})`.
-import type * as t from "@babel/types";
-
-import type { Bundle, Module, Node } from "../../ast.ts";
-import {
-	asNode,
-	keyOf,
-	type Prop,
-	propValue,
-	scan,
-	strings,
-} from "../common.ts";
+import type { Bundle, Module, Node, NodeOf } from "../../ast.ts";
+import { asNode, keyOf, type Prop, scan, strings } from "../common.ts";
 import type { Variable } from "./objects.ts";
 import { type Add, NAME } from "./shared.ts";
 
@@ -60,7 +51,9 @@ const registryType = (m: Module, getter: Node): RegistryType | undefined => {
 	};
 };
 
-const namedProps = (o: t.ObjectExpression): { p: Prop; k: string }[] => {
+const namedProps = (
+	o: NodeOf<"ObjectExpression">,
+): { p: Prop; k: string }[] => {
 	const named = o.properties.flatMap((p) => {
 		const k = keyOf(p);
 		return p.type !== "SpreadElement" && k !== undefined && NAME.test(k)
@@ -71,30 +64,28 @@ const namedProps = (o: t.ObjectExpression): { p: Prop; k: string }[] => {
 };
 
 /** The names of an object whose getters are mostly typed (`H.bool()`, ...); a constants namespace is not. */
-const addRegistry = (m: Module, o: t.ObjectExpression, add: Add): boolean => {
+const addRegistry = (
+	m: Module,
+	o: NodeOf<"ObjectExpression">,
+	add: Add,
+): boolean => {
 	const named = namedProps(o);
 	if (named.length < 3) {
 		return false;
 	}
-	const types = named.map(({ p }) => {
-		const v = propValue(p);
-		return v && registryType(m, v);
-	});
+	const types = named.map(({ p }) => registryType(m, p.value));
 	const typed = types.filter((t) => t !== undefined && TYPES.has(t.method));
 	if (typed.length * 2 < types.length) {
 		return false;
 	}
 	for (const [i, { p, k }] of named.entries()) {
 		const t = types[i];
-		const at = asNode(p);
-		if (at) {
-			add(
-				m,
-				at,
-				k,
-				t ? { detail: t.detail, ...(t.values && { values: t.values }) } : {},
-			);
-		}
+		add(
+			m,
+			p,
+			k,
+			t ? { detail: t.detail, ...(t.values && { values: t.values }) } : {},
+		);
 	}
 	return true;
 };

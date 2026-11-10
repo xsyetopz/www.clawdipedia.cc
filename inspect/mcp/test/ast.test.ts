@@ -10,3 +10,10 @@ test.each([
 	const m = new Bundle([{ name: "/$bunfs/root/a.js", text: src }]).get("a.js");
 	expect(m?.ast.type).toBe("Program");
 });
+
+// A protobuf chunk of Claude Code 2.1.322 calls `eval` directly; its names still belong to their declarations.
+test("resolves a name in a scope that calls eval", () => {
+	const src = 'var a=1;function f(){eval("0");return a}';
+	const m = new Bundle([{ name: "/$bunfs/root/a.js", text: src }]).get("a.js");
+	expect(m?.topLevel("a")?.references).toHaveLength(2);
+});

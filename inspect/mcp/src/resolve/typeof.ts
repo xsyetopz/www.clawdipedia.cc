@@ -1,15 +1,14 @@
 // The types an expression can give in a bundled program. `expr` (the keys of an object) comes from the
 // class that extends this one.
-import type * as t from "@babel/types";
-
 import {
 	type CallNode,
 	functionOf,
 	type Module,
 	type Node,
+	type NodeOf,
 	returnsOf,
 } from "../ast.ts";
-import { asNode } from "../ast/node.ts";
+import { asNode, isNull } from "../ast/node.ts";
 import { globalNameType, isString, logicalType } from "./rules.ts";
 import {
 	bind,
@@ -88,7 +87,7 @@ export abstract class TypeResolver extends VarTypes {
 		depth = 0,
 		chained = false,
 	): Ty[] | undefined {
-		if (n?.type === "NullLiteral") {
+		if (isNull(n)) {
 			return ["null"];
 		}
 		if (!n || isVoid(n)) {
@@ -105,13 +104,19 @@ export abstract class TypeResolver extends VarTypes {
 		if (simple) {
 			return [simple];
 		}
+		if (n.type === "Literal") {
+			const ty = typeof n.value;
+			return ty === "string" || ty === "number" || ty === "boolean"
+				? [ty]
+				: undefined;
+		}
 		return this.#exprType(m, n, env, depth);
 	}
 
 	/** The types of the node `x` inside an expression, one level deeper. */
 	#sub(
 		m: Module,
-		x: t.Node | null | undefined,
+		x: Node | null | undefined,
 		env: Env | undefined,
 		depth: number,
 	) {
@@ -124,7 +129,7 @@ export abstract class TypeResolver extends VarTypes {
 		env: Env | undefined,
 		depth: number,
 	): Ty[] | undefined {
-		const sub = (x: t.Node | null | undefined) => this.#sub(m, x, env, depth);
+		const sub = (x: Node | null | undefined) => this.#sub(m, x, env, depth);
 		if (n.type === "UnaryExpression") {
 			return [unaryType(n.operator)];
 		}
@@ -160,7 +165,7 @@ export abstract class TypeResolver extends VarTypes {
 
 	#awaitType(
 		m: Module,
-		n: t.AwaitExpression,
+		n: NodeOf<"AwaitExpression">,
 		env: Env | undefined,
 		depth: number,
 	): Ty[] | undefined {
@@ -171,8 +176,8 @@ export abstract class TypeResolver extends VarTypes {
 	}
 
 	#binaryType(
-		n: t.BinaryExpression,
-		sub: (x: t.Node | null | undefined) => Ty[] | undefined,
+		n: NodeOf<"BinaryExpression">,
+		sub: (x: Node | null | undefined) => Ty[] | undefined,
 	): Ty[] | undefined {
 		if (COMPARE.has(n.operator)) {
 			return ["boolean"];
@@ -191,7 +196,7 @@ export abstract class TypeResolver extends VarTypes {
 
 	#memberType(
 		m: Module,
-		n: Node & t.MemberExpression,
+		n: NodeOf<"MemberExpression">,
 		env: Env | undefined,
 		depth: number,
 	): Ty[] | undefined {
@@ -238,7 +243,7 @@ export abstract class TypeResolver extends VarTypes {
 			return got ? [got] : undefined;
 		}
 		const f = functionOf(m, c);
-		if (!f || f.fn.generator === true || (f.fn.async && !awaited)) {
+		if (!f || f.fn.generator || (f.fn.async && !awaited)) {
 			return undefined;
 		}
 		const inner = bind(m, call, env, f.module, f.fn);

@@ -12,17 +12,15 @@
 // drops 507 of 4529 texts, leaving 4022 (OpenTelemetry protobuf, crypto, XML, CSS selector, JWT). Bundled ES modules have no such wrapper, and no
 // module or function marker tells them from app code without losing app texts, so the rest stay.
 // The old `strings` heuristic has no error list, so there is nothing to compare.
-import type * as t from "@babel/types";
-
 import {
 	constString,
 	isFn,
 	type Module,
 	type Node,
+	type NodeOf,
 	type Variable,
 } from "../ast.ts";
 import {
-	asNode,
 	type Extractor,
 	scan,
 	short,
@@ -42,7 +40,7 @@ const valueOf = (v: Variable): Node | null | undefined => {
 		return def.node;
 	}
 	if (def?.type === "Variable" && def.node.init) {
-		return asNode(def.node.init);
+		return def.node.init;
 	}
 	return v.references.find((r) => r.write && !r.init)?.writeExpr;
 };
@@ -67,8 +65,7 @@ const errorClass = (m: Module, id: Node, depth = 0): string | undefined => {
 	) {
 		return undefined;
 	}
-	const sup = asNode(cls.superClass);
-	return sup && errorClass(o.module, sup, depth + 1);
+	return errorClass(o.module, cls.superClass, depth + 1);
 };
 
 /** The text of a message expression, with unknown parts blanked, or undefined when it holds no literal. */
@@ -90,8 +87,8 @@ const text = (m: Module, n: Node | undefined): string | undefined => {
 			.join("");
 	}
 	if (n.type === "BinaryExpression" && n.operator === "+") {
-		const l = text(m, asNode(n.left));
-		const r = text(m, asNode(n.right));
+		const l = text(m, n.left);
+		const r = text(m, n.right);
 		if (l === undefined && r === undefined) {
 			return undefined;
 		}
@@ -133,10 +130,10 @@ const inLibrary = (m: Module, at: Node): boolean => {
 	return false;
 };
 
-type Call = t.NewExpression | t.CallExpression;
+type Call = NodeOf<"NewExpression" | "CallExpression">;
 
 /** The constructions a throw can raise: both branches of `c ? new A(…) : new B(…)` raise one each. */
-const thrown = (a: t.Expression): Call[] => {
+const thrown = (a: Node): Call[] => {
 	if (a.type === "ConditionalExpression") {
 		return [...thrown(a.consequent), ...thrown(a.alternate)];
 	}
@@ -154,25 +151,23 @@ const writesStderr = (m: Module, n: Node): boolean => {
 	) {
 		return false;
 	}
-	const obj = asNode(n.callee.object);
-	return obj !== undefined && m.src(obj) === "process.stderr";
+	return m.src(n.callee.object) === "process.stderr";
 };
 
 export const extractErrors: Extractor = (bundle) => {
 	const out: SurfaceItem[] = [];
 	const add = (m: Module, call: Call, detail: string) => {
-		const node = asNode(call);
-		const t = text(m, asNode(call.arguments[0]));
-		if (!node || t === undefined) {
+		const t = text(m, call.arguments[0]);
+		if (t === undefined) {
 			return;
 		}
 		const name = short(t);
-		if (keep(name) && !inLibrary(m, node)) {
+		if (keep(name) && !inLibrary(m, call)) {
 			out.push({
 				kind: "error",
 				name,
 				module: m.name,
-				offset: node.start,
+				offset: call.start,
 				detail,
 			});
 		}
@@ -180,8 +175,7 @@ export const extractErrors: Extractor = (bundle) => {
 	scan(bundle, ["throw", "stderr"], (m, n) => {
 		if (n.type === "ThrowStatement") {
 			for (const call of thrown(n.argument)) {
-				const callee = asNode(call.callee);
-				const base = callee && errorClass(m, callee);
+				const base = errorClass(m, call.callee);
 				if (base !== undefined && base !== "") {
 					add(m, call, `throw ${base}`);
 				}

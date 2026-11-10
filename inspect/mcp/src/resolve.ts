@@ -1,8 +1,6 @@
 // Finds the keys of the object an expression gives in a bundled program: object literals, their spreads,
 // the values a name is bound to, the arguments a parameter gets at each call, and what a called function
 // returns, across chunks. A value it cannot follow stays unknown.
-import type * as t from "@babel/types";
-
 import {
 	type CallNode,
 	callsOf,
@@ -28,7 +26,7 @@ export type { Entry, Env, JType, Ref, Val } from "./resolve/types.ts";
 export { mergeEntries } from "./resolve/types.ts";
 
 /** The `f(...)` of `f(...).then((x)=>...)` when `fn` is that callback and `index` is its first parameter. */
-const thenSource = (m: Module, fn: Fn, index: number): t.Node | undefined => {
+const thenSource = (m: Module, fn: Fn, index: number): Node | undefined => {
 	const p = m.parent(fn);
 	return index === 0 &&
 		p?.type === "CallExpression" &&
@@ -137,7 +135,7 @@ export class Resolver extends ValueResolver {
 		n: Node,
 		depth: number,
 	): Entry[][] | undefined {
-		const next = (x: t.Node | null | undefined) => {
+		const next = (x: Node | null | undefined) => {
 			const node = asNode(x);
 			return node && this.#returned(dm, inner, node, depth);
 		};

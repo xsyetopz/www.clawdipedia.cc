@@ -1,8 +1,6 @@
 // Lists the built-in tools of the program: the array that `getAllBaseTools` returns, with the code that
 // gates each entry (`c?[T]:[]`, `[A,B].filter(f)`) and the source of the functions that code calls.
 
-import type * as t from "@babel/types";
-
 import {
 	type Bundle,
 	type CallNode,
@@ -10,18 +8,12 @@ import {
 	functionOf,
 	type Module,
 	type Node,
+	type NodeOf,
 	returnsOf,
 } from "./ast.ts";
 import { asNode } from "./ast/node.ts";
 import type { Resolver } from "./resolve.ts";
-import {
-	at,
-	calleeFn,
-	initOf,
-	isNull,
-	required,
-	toolName,
-} from "./toolvalue.ts";
+import { calleeFn, initOf, isNull, required, toolName } from "./toolvalue.ts";
 
 export interface Tool {
 	name: string;
@@ -77,19 +69,17 @@ const toolItem = (
 const listItems = (
 	R: Resolver,
 	m: Module,
-	n: Node & t.ArrayExpression,
+	n: NodeOf<"ArrayExpression">,
 	when: Cond[],
 	out: Out,
 	depth: number,
 ): void => {
-	for (const el of n.elements) {
-		const e = asNode(el);
-		if (e === undefined) {
+	for (const e of n.elements) {
+		if (e === null) {
 			continue;
 		}
-		const spread = e.type === "SpreadElement" ? at(e.argument) : undefined;
-		if (spread) {
-			items(R, m, spread, when, out, depth + 1);
+		if (e.type === "SpreadElement") {
+			items(R, m, e.argument, when, out, depth + 1);
 		} else if (!isNull(m, e)) {
 			toolItem(R, m, e, when, out);
 		}
@@ -99,24 +89,24 @@ const listItems = (
 const branches = (
 	R: Resolver,
 	m: Module,
-	n: Node & t.ConditionalExpression,
+	n: NodeOf<"ConditionalExpression">,
 	when: Cond[],
 	out: Out,
 	depth: number,
 ): void => {
-	const test = at(n.test);
+	const { test } = n;
 	if (isNull(m, test)) {
-		items(R, m, at(n.alternate), when, out, depth + 1);
+		items(R, m, n.alternate, when, out, depth + 1);
 		return;
 	}
 	const i = test.type === "Identifier" ? initOf(m, test) : undefined;
 	const text = i ? `${m.src(test)} (=${i.m.src(i.n)})` : m.src(test);
 	const site = i ?? { m, n: test };
-	items(R, m, at(n.consequent), [...when, { ...site, text }], out, depth + 1);
+	items(R, m, n.consequent, [...when, { ...site, text }], out, depth + 1);
 	items(
 		R,
 		m,
-		at(n.alternate),
+		n.alternate,
 		[...when, { ...site, text: `!(${text})` }],
 		out,
 		depth + 1,
@@ -132,8 +122,8 @@ const callItems = (
 	out: Out,
 	depth: number,
 ): boolean => {
-	const c = at(n.callee);
-	const arg = asNode(n.arguments[0]);
+	const c = n.callee;
+	const arg = n.arguments[0];
 	if (
 		c.type === "MemberExpression" &&
 		c.property.type === "Identifier" &&
@@ -141,11 +131,11 @@ const callItems = (
 		arg
 	) {
 		const cond = { m, n: arg, text: m.src(arg) };
-		items(R, m, at(c.object), [...when, cond], out, depth + 1);
+		items(R, m, c.object, [...when, cond], out, depth + 1);
 		return true;
 	}
 	// `x?.()` with `x=null` gives no tool.
-	if ("optional" in n && n.optional === true && isNull(m, c)) {
+	if (n.optional && isNull(m, c)) {
 		return true;
 	}
 	const f = calleeFn(m, n);
@@ -168,8 +158,8 @@ const partsOf = (
 ): { m: Module; n: Node }[] => {
 	if (n.type === "LogicalExpression") {
 		return [
-			{ m, n: at(n.left) },
-			{ m, n: at(n.right) },
+			{ m, n: n.left },
+			{ m, n: n.right },
 		];
 	}
 	const i = n.type === "Identifier" ? initOf(m, n) : undefined;
@@ -226,7 +216,7 @@ const calleeOf = (x: Node, root: Node) => {
 	if (x.type === "CallExpression") {
 		return x.callee;
 	}
-	return x.type === "ObjectProperty" && x === root ? x.value : undefined;
+	return x.type === "Property" && x === root ? x.value : undefined;
 };
 
 /** The functions that code calls, and the functions those call, `depth` levels down: name to source. */
@@ -248,8 +238,8 @@ const calledFns = (
 			continue;
 		}
 		out.set(id.name, clip(f.module.src(f.fn)));
-		if (depth > 1) {
-			calledFns(f.module, at(f.fn.body), out, depth - 1);
+		if (depth > 1 && f.fn.body) {
+			calledFns(f.module, f.fn.body, out, depth - 1);
 		}
 	}
 };

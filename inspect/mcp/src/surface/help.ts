@@ -14,7 +14,14 @@
 //   modules, argv filters such as the resume-flag filter match `remote-control`. Each flag of the
 //   parser that the help text leaves out is `hidden`. A `--no-x` counts as named when the help text
 //   gives `--[no-]x`.
-import { type Bundle, type Fn, isFn, type Module, type Node } from "../ast.ts";
+import {
+	type Bundle,
+	type Fn,
+	isFn,
+	type Module,
+	type Node,
+	strLit,
+} from "../ast.ts";
 import { asNode, scan, short, type SurfaceItem } from "./common.ts";
 
 const USAGE = /(?:Usage:|USAGE\n)\s*claude ((?:[a-z][\w-]*(?: |$))+)(.*)/u;
@@ -27,14 +34,10 @@ const USAGE_FLAG = /--[a-z][\w-]*/gu;
 const PARSED = /^(--[a-z][\w-]*)=?$/u;
 
 /** The text of a string literal, or of a template literal with `${…}` for each expression. */
-const textOf = (n: Node | undefined): string | undefined => {
-	if (n?.type === "StringLiteral") {
-		return n.value;
-	}
-	return n?.type === "TemplateLiteral"
+const textOf = (n: Node | undefined): string | undefined =>
+	n?.type === "TemplateLiteral"
 		? n.quasis.map((q) => q.value.cooked ?? q.value.raw).join(`\${…}`)
-		: undefined;
-};
+		: strLit(n);
 
 /** The text of a literal, or of the literal a name is declared with. */
 const partText = (m: Module, n: Node): string => {
@@ -129,8 +132,7 @@ const fnOf = (m: Module, n: Node): Fn | undefined => {
 
 /** `--x` when the literal `n` is compared with an argument: `a==="--x"`, `a.startsWith("--x=")`, `case"--x":`. */
 const comparedFlag = (m: Module, n: Node): string | undefined => {
-	const name =
-		n.type === "StringLiteral" ? PARSED.exec(n.value)?.[1] : undefined;
+	const name = PARSED.exec(strLit(n) ?? "")?.[1];
 	const p = m.parent(n);
 	const callee = p?.type === "CallExpression" ? asNode(p.callee) : undefined;
 	const compared =

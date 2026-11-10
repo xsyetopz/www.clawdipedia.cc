@@ -1,7 +1,5 @@
 // The keys of the object an expression gives; the calls, parameters, and pins come from the class that
 // extends this one.
-import type * as t from "@babel/types";
-
 import {
 	type CallNode,
 	type Fn,
@@ -9,7 +7,7 @@ import {
 	isLit,
 	type Module,
 	type Node,
-	valueStart,
+	type NodeOf,
 	type Variable,
 } from "../ast.ts";
 import { asNode } from "../ast/node.ts";
@@ -52,21 +50,11 @@ export abstract class ValueResolver extends HeldEntries {
 	}
 
 	/** Entries of an object literal: keys (computed ones when they are constant strings) and spreads. */
-	entries(m: Module, obj: Node & t.ObjectExpression, env?: Env): Entry[] {
+	entries(m: Module, obj: NodeOf<"ObjectExpression">, env?: Env): Entry[] {
 		const out: Entry[] = [];
-		for (const raw of obj.properties) {
-			const p = asNode(raw);
-			if (!p) {
-				continue;
-			}
+		for (const p of obj.properties) {
 			if (p.type === "SpreadElement") {
-				const arg = asNode(p.argument);
-				if (arg) {
-					this.#spread(m, arg, false, env, out);
-				}
-				continue;
-			}
-			if (p.type !== "ObjectProperty" && p.type !== "ObjectMethod") {
+				this.#spread(m, p.argument, false, env, out);
 				continue;
 			}
 			const key = propKey(m, p);
@@ -77,9 +65,9 @@ export abstract class ValueResolver extends HeldEntries {
 				key,
 				opt: false,
 				val:
-					p.type === "ObjectProperty"
-						? this.#valueOf(m, p.value, env)
-						: { k: "unk", text: m.text.slice(valueStart(m.text, p), p.end) },
+					p.method || p.kind !== "init"
+						? { k: "unk", text: m.src(p.value) }
+						: this.value(m, p.value, env),
 			});
 		}
 		return out;
@@ -114,21 +102,15 @@ export abstract class ValueResolver extends HeldEntries {
 		}
 	}
 
-	/** The value of a node the parser may have left without a position; unknown when it has none. */
-	#valueOf(m: Module, x: t.Node | null | undefined, env?: Env): Val {
-		const n = asNode(x);
-		return n ? this.value(m, n, env) : { k: "unk", text: "" };
-	}
-
 	/** `c ? "a" : "b"`: the strings of both branches; undefined when a branch is not a string. */
 	#branches(
 		m: Module,
-		n: Node & t.ConditionalExpression,
+		n: NodeOf<"ConditionalExpression">,
 		env?: Env,
 	): Val | undefined {
 		const all: string[] = [];
 		for (const b of [n.consequent, n.alternate]) {
-			const strs = strings(this.#valueOf(m, b, env));
+			const strs = strings(this.value(m, b, env));
 			if (!strs) {
 				return undefined;
 			}
@@ -195,7 +177,7 @@ export abstract class ValueResolver extends HeldEntries {
 	/** Entries of the object `a.b.c` reads: each key of the path is followed through the object values. */
 	#member(
 		m: Module,
-		n: Node & t.MemberExpression,
+		n: NodeOf<"MemberExpression">,
 		env: Env | undefined,
 		depth: number,
 	): Entry[] | undefined {

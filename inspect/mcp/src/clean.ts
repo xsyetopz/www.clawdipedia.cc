@@ -3,8 +3,9 @@
 import { createHash } from "node:crypto";
 import { tmpdir } from "node:os";
 
-import { type Fn, isFn, type Module, type Node, type Variable } from "./ast.ts";
-import { asNode } from "./ast/node.ts";
+import type { Scope } from "eslint-scope";
+
+import type { Module, Node, Variable } from "./ast.ts";
 
 const hash = (s: string, n = 6): string =>
 	createHash("sha1").update(s).digest("hex").slice(0, n);
@@ -13,93 +14,16 @@ const hash = (s: string, n = 6): string =>
 const localName = (depth: number, i: number): string =>
 	`${depth <= 26 ? String.fromCodePoint(96 + depth) : `z${depth}_`}${i}`;
 
-const ONE_SCOPE = new Set([
-	"ClassDeclaration",
-	"ClassExpression",
-	"CatchClause",
-	"StaticBlock",
-]);
-
-const fnSpan = (p: Fn, x: Node): number => {
-	if ("key" in p && x === p.key) {
-		return 0;
-	}
-	return p.type === "FunctionExpression" && p.id ? 2 : 1;
-};
-
-const headSpan = (p: Node, x: Node): number => {
-	if (
-		p.type === "ForStatement" ||
-		p.type === "ForInStatement" ||
-		p.type === "ForOfStatement"
+const depthOf = (s: Scope): number => {
+	let d = 1;
+	for (
+		let x = s.upper;
+		x && x.type !== "module" && x.type !== "global";
+		x = x.upper
 	) {
-		const head = p.type === "ForStatement" ? p.init : p.left;
-		return head?.type === "VariableDeclaration" && head.kind !== "var" ? 1 : 0;
+		d++;
 	}
-	if (
-		p.type === "ClassProperty" ||
-		p.type === "ClassPrivateProperty" ||
-		p.type === "ClassAccessorProperty"
-	) {
-		return x === p.value ? 1 : 0;
-	}
-	return 0;
-};
-
-/**
- * How many scopes a child `x` of `p` is inside because of `p`. The count follows the scopes that
- * ESLint's analysis drew, which Babel draws differently, so names stay the same as in older runs.
- */
-const span = (m: Module, p: Node, x: Node): number => {
-	if (isFn(p)) {
-		return fnSpan(p, x);
-	}
-	if (ONE_SCOPE.has(p.type)) {
-		return 1;
-	}
-	if (p.type === "BlockStatement") {
-		const g = m.parent(p);
-		return isFn(g) && g.body === p ? 0 : 1;
-	}
-	if (p.type === "SwitchStatement") {
-		return x === p.discriminant ? 0 : 1;
-	}
-	return headSpan(p, x);
-};
-
-const slotKey = (v: Variable, s: Node): Node => {
-	if (v.binding.kind === "local" && s.type === "FunctionExpression") {
-		return v.identifiers[0] ?? s;
-	}
-	if (s.type === "CatchClause" && v.defs[0]?.node !== s) {
-		return asNode(s.body) ?? s;
-	}
-	return s;
-};
-
-/** The scope that holds a non-module variable: its node and its depth. A named function expression's own name has a scope of its own. */
-const slotOf = (
-	m: Module,
-	v: Variable,
-): { key: Node; depth: number } | undefined => {
-	const s = asNode(v.binding.scope.path.node);
-	if (s === undefined || s.type === "Program") {
-		return undefined;
-	}
-	const key = slotKey(v, s);
-	// Counts the scopes around the function for its name, and the name's own for the function.
-	let depth =
-		1 +
-		(key === s && s.type === "FunctionExpression" && s.id ? 1 : 0) +
-		(s.type === "CatchClause" && key !== s ? 1 : 0);
-	let x: Node = s;
-	let p = m.parent(x);
-	while (p !== undefined) {
-		depth += span(m, p, x);
-		x = p;
-		p = m.parent(x);
-	}
-	return { key, depth };
+	return d;
 };
 
 /** Each variable that a module declares, with the identifier nodes that name it, in the order that the code declares them. */
@@ -129,7 +53,7 @@ const spell = (m: Module, id: Node, old: string, name: string): string => {
 	}
 	const prop =
 		p?.type === "AssignmentPattern" && p.left === id ? m.parent(p) : p;
-	if (prop?.type === "ObjectProperty" && prop.shorthand) {
+	if (prop?.type === "Property" && prop.shorthand) {
 		return `${old}:${name}`;
 	}
 	return name;
@@ -218,7 +142,7 @@ export const renamer = (
 ): ((start: number, end: number) => string) => {
 	const all = declared(m);
 	const names = new Map<Variable, string>();
-	const count = new Map<Node, number>();
+	const count = new Map<Scope, number>();
 	const edits: Edit[] = all
 		.flatMap(({ v, ids }) => ids.map((id) => ({ id, v })))
 		.toSorted((a, b) => a.id.start - b.id.start);
@@ -226,14 +150,14 @@ export const renamer = (
 		renderRange(m, edits, start, end, nameOf);
 	const top: Variable[] = [];
 	for (const { v } of all) {
-		const s = slotOf(m, v);
-		if (!s) {
+		const s = v.scope;
+		if (s.type === "module") {
 			top.push(v);
 			continue;
 		}
-		const i = (count.get(s.key) ?? 0) + 1;
-		count.set(s.key, i);
-		names.set(v, localName(s.depth, i));
+		const i = (count.get(s) ?? 0) + 1;
+		count.set(s, i);
+		names.set(v, localName(depthOf(s), i));
 	}
 	nameTop(names, top, render);
 	return (start, end) => render(start, end, (v) => names.get(v) ?? v.name);

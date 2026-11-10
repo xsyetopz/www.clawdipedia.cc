@@ -10,8 +10,7 @@
 // `example.com` and `.invalid`) are left out: they are bundled library code or links, not endpoints of
 // the program's own service.
 // The old `strings` heuristic has no endpoint list, so there is nothing to compare.
-import type * as t from "@babel/types";
-
+import { type NodeOf, strLit } from "../ast.ts";
 import {
 	type Extractor,
 	scan,
@@ -49,7 +48,11 @@ const addString = (s: string, offset: number, add: Add): void => {
 	}
 };
 
-const addTemplate = (n: t.TemplateLiteral, offset: number, add: Add): void => {
+const addTemplate = (
+	n: NodeOf<"TemplateLiteral">,
+	offset: number,
+	add: Add,
+): void => {
 	const parts = n.quasis.map((q) => q.value.cooked ?? q.value.raw);
 	const e = n.expressions[0];
 	const base =
@@ -74,8 +77,9 @@ export const extractEndpoints: Extractor = (bundle) => {
 			const add: Add = (name, offset, detail) => {
 				out.push({ kind: "endpoint", name, module: m.name, offset, detail });
 			};
-			if (n.type === "StringLiteral") {
-				addString(n.value, n.start, add);
+			const s = strLit(n);
+			if (s !== undefined) {
+				addString(s, n.start, add);
 			} else if (n.type === "TemplateLiteral") {
 				addTemplate(n, n.start, add);
 			}

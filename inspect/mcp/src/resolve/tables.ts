@@ -1,19 +1,24 @@
-import type * as t from "@babel/types";
-
-import { constString, type Fn, type Module, type Node } from "../ast.ts";
-import { asNode } from "../ast/node.ts";
+import {
+	constString,
+	type Fn,
+	litValue,
+	type Module,
+	type Node,
+	type NodeOf,
+} from "../ast.ts";
+import { asNode, isNull } from "../ast/node.ts";
 import type { Env, Ty, Val } from "./types.ts";
 
 export const isVoid = (n: Node | null | undefined): boolean =>
 	!n ||
 	(n.type === "UnaryExpression" && n.operator === "void") ||
-	n.type === "NullLiteral" ||
+	isNull(n) ||
 	(n.type === "Identifier" && n.name === "undefined");
 
 /** The name a member expression reads: the string a computed key holds, or a plain property name. */
 export const keyOf = (
 	m: Module,
-	x: Node & t.MemberExpression,
+	x: NodeOf<"MemberExpression">,
 ): string | undefined => {
 	if (x.computed) {
 		return constString(m, asNode(x.property));
@@ -43,7 +48,7 @@ export const memberPath = (
 /** The parameters of `fn` (in module `dm`) bound to the arguments of `call` (in `m`). */
 export const bind = (
 	m: Module,
-	call: Node & (t.CallExpression | t.NewExpression),
+	call: NodeOf<"CallExpression" | "NewExpression">,
 	env: Env | undefined,
 	dm: Module,
 	fn: Fn,
@@ -140,7 +145,7 @@ export const COMPARE = new Set([
 
 /** The branches of an expression whose keys are those of either side; undefined for any other. */
 export const spreadParts = (n: Node): Node[] | undefined => {
-	let parts: t.Node[];
+	let parts: Node[];
 	if (n.type === "LogicalExpression") {
 		parts = n.operator === "&&" ? [n.right] : [n.left, n.right];
 	} else if (n.type === "ConditionalExpression") {
@@ -148,30 +153,22 @@ export const spreadParts = (n: Node): Node[] | undefined => {
 	} else {
 		return undefined;
 	}
-	return parts.flatMap((x) => asNode(x) ?? []);
+	return parts;
 };
 
 /** The name of a property: a plain or literal key, or a computed key that is a constant string. */
 export const propKey = (
 	m: Module,
-	p: Node & (t.ObjectProperty | t.ObjectMethod),
+	p: NodeOf<"Property">,
 ): string | undefined => {
-	const k = asNode(p.key);
-	if (!k) {
-		return undefined;
-	}
+	const k = p.key;
 	if (p.computed) {
 		return constString(m, k);
 	}
 	if (k.type === "Identifier") {
 		return k.name;
 	}
-	if (k.type === "StringLiteral") {
-		return k.value;
-	}
-	return k.type === "NumericLiteral" || k.type === "BigIntLiteral"
-		? String(k.value)
-		: undefined;
+	return k.type === "Literal" ? String(litValue(k)) : undefined;
 };
 
 /** The expression a wrapper passes its value through (`await x`, `a,b`); undefined for any other node. */
@@ -204,24 +201,29 @@ export const strings = (x: Val): string[] | undefined => {
 
 /** The value of a literal: a string, number, or boolean, a template with no parts, or a negated or signed number. */
 export const literalVal = (n: Node): Val | undefined => {
-	if (n.type === "StringLiteral") {
-		return { k: "str", v: n.value };
+	const v = n.type === "Literal" ? n.value : undefined;
+	if (typeof v === "string") {
+		return { k: "str", v };
 	}
-	if (n.type === "NumericLiteral") {
-		return { k: "num", v: n.value };
+	if (typeof v === "number") {
+		return { k: "num", v };
 	}
-	if (n.type === "BooleanLiteral") {
-		return { k: "bool", v: n.value };
+	if (typeof v === "boolean") {
+		return { k: "bool", v };
 	}
 	if (n.type === "TemplateLiteral" && n.expressions.length === 0) {
 		return { k: "str", v: n.quasis[0]?.value.cooked ?? "" };
 	}
-	if (n.type === "UnaryExpression" && n.argument.type === "NumericLiteral") {
+	const arg =
+		n.type === "UnaryExpression" && n.argument.type === "Literal"
+			? n.argument.value
+			: undefined;
+	if (n.type === "UnaryExpression" && typeof arg === "number") {
 		if (n.operator === "!") {
-			return { k: "bool", v: !n.argument.value };
+			return { k: "bool", v: !arg };
 		}
 		if (n.operator === "-") {
-			return { k: "num", v: -n.argument.value };
+			return { k: "num", v: -arg };
 		}
 	}
 	return undefined;
@@ -229,9 +231,6 @@ export const literalVal = (n: Node): Val | undefined => {
 
 /** The types of nodes that always give the same one. */
 export const SIMPLE_TYPES = new Map<string, Ty>([
-	["StringLiteral", "string"],
-	["NumericLiteral", "number"],
-	["BooleanLiteral", "boolean"],
 	["TemplateLiteral", "string"],
 	["ArrayExpression", "array"],
 	["ObjectExpression", "object"],
@@ -253,11 +252,7 @@ export const globalCallType = (name: string): Ty | undefined =>
 /** The type of a call of a name imported from a Node built-in module, such as `randomUUID` from `"crypto"`. */
 export const importedCallType = (m: Module, id: Node): Ty | undefined => {
 	const def = m.variable(id)?.defs[0];
-	if (
-		def?.type !== "ImportBinding" ||
-		def.node.type !== "ImportSpecifier" ||
-		def.parent.type !== "ImportDeclaration"
-	) {
+	if (def?.type !== "ImportBinding" || def.node.type !== "ImportSpecifier") {
 		return undefined;
 	}
 	const calls = NODE_CALLS[def.parent.source.value.replace(/^node:/u, "")];

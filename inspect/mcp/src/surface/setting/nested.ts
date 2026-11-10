@@ -1,8 +1,13 @@
 // The nested keys of kind `setting-key`: a walk over the zod value of each setting.
-import type * as t from "@babel/types";
-
-import { functionOf, isFn, type Node, returnsOf } from "../../ast.ts";
-import { asNode, keyOf, propValue, type SurfaceItem } from "../common.ts";
+import {
+	type CallNode,
+	functionOf,
+	isFn,
+	type Node,
+	type NodeOf,
+	returnsOf,
+} from "../../ast.ts";
+import { keyOf, type SurfaceItem } from "../common.ts";
 import { item } from "./item.ts";
 import {
 	constOf,
@@ -55,8 +60,8 @@ export class KeyWalk {
 		}
 	}
 
-	go(cx: Cx, x: t.Node | null | undefined, over: Partial<Cx> = {}): void {
-		this.walk({ ...cx, ...over, depth: cx.depth + 1 }, asNode(x));
+	go(cx: Cx, x: Node | null | undefined, over: Partial<Cx> = {}): void {
+		this.walk({ ...cx, ...over, depth: cx.depth + 1 }, x);
 	}
 
 	#key(cx: Cx, k: string, v: Node, at: number, env = cx.env): void {
@@ -72,14 +77,12 @@ export class KeyWalk {
 		}
 		for (const p of o.properties) {
 			if (p.type === "SpreadElement") {
-				this.#shape(cx, spreadTarget(asNode(p.argument)));
+				this.#shape(cx, spreadTarget(p.argument));
 				continue;
 			}
 			const k = keyOf(p);
-			const v = propValue(p);
-			const at = asNode(p);
-			if (k !== undefined && k !== "" && v && at) {
-				this.#key(cx, k, v, at.start);
+			if (k !== undefined && k !== "") {
+				this.#key(cx, k, p.value, p.start);
 			}
 		}
 	}
@@ -96,11 +99,11 @@ export class KeyWalk {
 	}
 
 	/** `k === "default" ? a : b` with `k` bound to a constant picks one branch. */
-	#conditional(cx: Cx, n: t.ConditionalExpression): void {
-		const test = asNode(n.test);
-		if (test?.type === "BinaryExpression" && /^[!=]==?$/u.test(test.operator)) {
-			const l = constOf(cx.m, asNode(test.left), cx.env);
-			const r = constOf(cx.m, asNode(test.right), cx.env);
+	#conditional(cx: Cx, n: NodeOf<"ConditionalExpression">): void {
+		const { test } = n;
+		if (test.type === "BinaryExpression" && /^[!=]==?$/u.test(test.operator)) {
+			const l = constOf(cx.m, test.left, cx.env);
+			const r = constOf(cx.m, test.right, cx.env);
 			if (l !== undefined && r !== undefined) {
 				const same = (l === r) === test.operator.startsWith("=");
 				this.go(cx, same ? n.consequent : n.alternate);
@@ -111,7 +114,7 @@ export class KeyWalk {
 		this.go(cx, n.alternate);
 	}
 
-	#identifier(cx: Cx, n: Node & t.Identifier): void {
+	#identifier(cx: Cx, n: NodeOf<"Identifier">): void {
 		const v = cx.m.variable(n);
 		const b = v && cx.env.get(v);
 		if (b) {
@@ -132,14 +135,13 @@ export class KeyWalk {
 		}
 	}
 
-	#call(cx: Cx, n: t.CallExpression): void {
-		const args = n.arguments.flatMap((a) => asNode(a) ?? []);
-		const callee = asNode(n.callee);
-		if (callee?.type === "MemberExpression") {
+	#call(cx: Cx, n: CallNode): void {
+		const { arguments: args, callee } = n;
+		if (callee.type === "MemberExpression") {
 			this.#method(cx, callee, args);
 			return;
 		}
-		const f = callee && functionOf(cx.m, callee);
+		const f = functionOf(cx.m, callee);
 		if (f) {
 			this.#constructed(cx, f, args);
 		} else {
@@ -148,7 +150,7 @@ export class KeyWalk {
 		}
 	}
 
-	#method(cx: Cx, callee: t.MemberExpression, args: Node[]): void {
+	#method(cx: Cx, callee: NodeOf<"MemberExpression">, args: Node[]): void {
 		const p = callee.property;
 		this.go(cx, callee.object);
 		if (p.type !== "Identifier" || !SAME_PATH_METHODS.has(p.name)) {
@@ -185,8 +187,7 @@ export class KeyWalk {
 	#helper(cx: Cx, f: Found, args: Node[]): void {
 		const bound = new Map(cx.env);
 		for (const [i, p] of f.fn.params.entries()) {
-			const id = asNode(p);
-			const v = id?.type === "Identifier" ? f.module.variable(id) : undefined;
+			const v = p.type === "Identifier" ? f.module.variable(p) : undefined;
 			const a = args[i];
 			if (v && a) {
 				bound.set(v, { m: cx.m, n: a });

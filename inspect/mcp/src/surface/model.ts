@@ -6,6 +6,7 @@
 // Aliases: the all-string array that holds "opusplan" and "sonnet"
 // (`["sonnet","opus","haiku","fable","best",…,"opusplan"]`); `detail` is "alias".
 // The old `strings` heuristic has no model list, so there is nothing to compare.
+import { strLit } from "../ast.ts";
 import {
 	type Extractor,
 	scan,
@@ -21,10 +22,11 @@ export const extractModels: Extractor = (bundle) => {
 	const out: SurfaceItem[] = [];
 	let aliases: { m: string; start: number; names: string[] } | undefined;
 	scan(bundle, ['"claude-', '"opusplan"'], (m, n) => {
-		if (n.type === "StringLiteral" && ID.test(n.value)) {
+		const id = strLit(n);
+		if (id !== undefined && ID.test(id)) {
 			out.push({
 				kind: "model",
-				name: n.value,
+				name: id,
 				module: m.name,
 				offset: n.start,
 				detail: "id",

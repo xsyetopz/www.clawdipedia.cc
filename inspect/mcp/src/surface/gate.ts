@@ -11,9 +11,8 @@
 // 2.1.309: 1101 names, 432 only here, 0 only there. Of the 432, 301 are two-word code names
 // (`tengu_calm_eagle`) and 224 have a literal default; the rest are reads with no default or with an
 // object option (`*_config`, `*_killswitch`, `*_ms`).
-import type * as t from "@babel/types";
-
 import {
+	type CallNode,
 	children,
 	constString,
 	type Fn,
@@ -33,7 +32,7 @@ import {
 
 interface Site {
 	m: Module;
-	n: Node & t.CallExpression;
+	n: CallNode;
 	name: string;
 }
 
@@ -51,8 +50,8 @@ const groupOf = (m: Module, c: Node): Group => {
 		return fn;
 	}
 	const prop =
-		c.type === "MemberExpression" && c.property.type !== "PrivateName"
-			? asNode(c.property)
+		c.type === "MemberExpression" && c.property.type !== "PrivateIdentifier"
+			? c.property
 			: undefined;
 	return prop ? `.${m.src(prop)}` : m.src(c);
 };

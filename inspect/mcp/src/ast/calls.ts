@@ -1,9 +1,14 @@
 // The call and function queries of a module: who a callee is, who calls a function, what a name holds.
 
-import type * as t from "@babel/types";
-
 import type { Module, Variable } from "../ast.ts";
-import { asNode, children, type Fn, isFn, type Node } from "./node.ts";
+import {
+	asNode,
+	children,
+	type Fn,
+	isFn,
+	type Node,
+	type NodeOf,
+} from "./node.ts";
 
 /**
  * The function a callee names: a declaration, a variable whose only value is a function, or one whose
@@ -93,7 +98,7 @@ export const nameOf = (m: Module, fn: Fn): Variable | undefined => {
 	return undefined;
 };
 
-export type CallNode = Node & t.CallExpression;
+export type CallNode = NodeOf<"CallExpression">;
 export interface Call {
 	module: Module;
 	call: CallNode;
@@ -148,8 +153,8 @@ export const constString = (
 	if (!n || depth > 8) {
 		return undefined;
 	}
-	if (n.type === "StringLiteral") {
-		return n.value;
+	if (n.type === "Literal") {
+		return typeof n.value === "string" ? n.value : undefined;
 	}
 	if (n.type === "TemplateLiteral" && n.expressions.length === 0) {
 		return n.quasis[0]?.value.cooked ?? undefined;

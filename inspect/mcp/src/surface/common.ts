@@ -1,20 +1,19 @@
 // Shared parts of the surface extractors: the item type, the module scan, and literal readers.
 // Each extractor anchors on string literals and object shapes, never on minified names.
-import type * as t from "@babel/types";
-
 import {
 	type Bundle,
 	children,
 	constString,
 	isLit,
-	isMethod,
 	litValue,
 	type Module,
 	type Node,
-	valueStart,
+	type NodeOf,
 } from "../ast.ts";
-import { isNode } from "../ast/node.ts";
+import { asNode } from "../ast/node.ts";
 import type { BunModule } from "../bunfs.ts";
+
+export { asNode } from "../ast/node.ts";
 
 /**
  * One functional surface of the program. `module` and `offset` are null for a text fallback (design D2);
@@ -44,10 +43,6 @@ export type Extractor = (
 	files?: Pick<BunModule, "name" | "bytes">[],
 ) => SurfaceItem[] | Promise<SurfaceItem[]>;
 
-/** A Babel node as a node with a position, or undefined for a missing one. */
-export const asNode = (n: t.Node | null | undefined): Node | undefined =>
-	isNode(n) ? n : undefined;
-
 /** Visit every node of each module whose text holds one of `needles`. */
 export const scan = (
 	bundle: Bundle,
@@ -75,7 +70,7 @@ export const scan = (
 
 /** The key of a non-computed property (identifier or string), or undefined. */
 export const keyOf = (
-	p: t.ObjectExpression["properties"][number],
+	p: NodeOf<"Property" | "SpreadElement">,
 ): string | undefined => {
 	if (p.type === "SpreadElement" || p.computed) {
 		return undefined;
@@ -83,28 +78,23 @@ export const keyOf = (
 	if (p.key.type === "Identifier") {
 		return p.key.name;
 	}
-	if (p.key.type === "StringLiteral") {
-		return p.key.value;
-	}
-	return undefined;
+	return p.key.type === "Literal" && typeof p.key.value === "string"
+		? p.key.value
+		: undefined;
 };
 
 /** A property of an object literal: a `key: value` pair, or a method. */
-export type Prop = t.ObjectProperty | t.ObjectMethod;
+export type Prop = Exclude<
+	NodeOf<"ObjectExpression">["properties"][number],
+	{ type: "SpreadElement" }
+>;
 
-/** What the property holds: the value of a pair, or the function of a method. */
-export const propValue = (p: Prop): Node | undefined =>
-	asNode(p.type === "ObjectProperty" ? p.value : p);
-
-/** The source of a property value; a method gives its function from the parameters on, without the key. */
-export const valueSrc = (m: Module, n: Node): string =>
-	isMethod(n) ? m.text.slice(valueStart(m.text, n), n.end) : m.src(n);
-
-/** The value of the property `key` of an object literal. */
-export const prop = (o: t.ObjectExpression, key: string): Node | undefined => {
-	const found = o.properties.find((p): p is Prop => keyOf(p) === key);
-	return found === undefined ? undefined : propValue(found);
-};
+/** The value of the property `key` of an object literal; a method gives its function, from the parameters on. */
+export const prop = (
+	o: NodeOf<"ObjectExpression">,
+	key: string,
+): Node | undefined =>
+	o.properties.find((p): p is Prop => keyOf(p) === key)?.value;
 
 /** The string items of an array literal, or undefined when one item is not a constant string. */
 export const strings = (

@@ -1,15 +1,10 @@
-import type * as t from "@babel/types";
+import type * as O from "@oxc-project/types";
 
-export type Node = t.Node & { start: number; end: number };
-export type Fn = Node &
-	(
-		| t.FunctionDeclaration
-		| t.FunctionExpression
-		| t.ArrowFunctionExpression
-		| t.ObjectMethod
-		| t.ClassMethod
-		| t.ClassPrivateMethod
-	);
+/** A node of the ESTree that oxc-parser gives; each one has `start` and `end`. */
+export type Node = O.Node;
+/** The node of `Node` whose `type` is `T`. */
+export type NodeOf<T extends Node["type"]> = Extract<Node, { type: T }>;
+export type Fn = O.Function | O.ArrowFunctionExpression;
 
 export const isNode = (x: unknown): x is Node =>
 	typeof x === "object" &&
@@ -19,49 +14,40 @@ export const isNode = (x: unknown): x is Node =>
 	"start" in x &&
 	typeof x.start === "number";
 
-/** The node as a located `Node`, or undefined when it has no position (a node the parser made up). */
-export const asNode = (x: t.Node | null | undefined): Node | undefined =>
+/** The value as a `Node`, or undefined when it is not one. */
+export const asNode = (x: unknown): Node | undefined =>
 	isNode(x) ? x : undefined;
 
 export const isFn = (n: Node | null | undefined): n is Fn =>
 	n?.type === "FunctionDeclaration" ||
 	n?.type === "FunctionExpression" ||
-	n?.type === "ArrowFunctionExpression" ||
-	n?.type === "ObjectMethod" ||
-	n?.type === "ClassMethod" ||
-	n?.type === "ClassPrivateMethod";
+	n?.type === "ArrowFunctionExpression";
 
 /** A value written in the code: string, number, boolean, null, regex, or bigint. A template is not one. */
-export const isLit = (n: Node | null | undefined): boolean =>
-	n !== null &&
-	n !== undefined &&
-	n.type !== "TemplateLiteral" &&
-	n.type.endsWith("Literal");
+export const isLit = (n: Node | null | undefined): n is NodeOf<"Literal"> =>
+	n?.type === "Literal";
 
-/** The value of a literal: `null` for `null`, and undefined for a regex. */
-export const litValue = (n: Node): unknown => {
-	if (n.type === "NullLiteral") {
-		return null;
+/** The text of a string literal, or undefined for any other node. */
+export const strLit = (n: Node | null | undefined): string | undefined =>
+	n?.type === "Literal" && typeof n.value === "string" ? n.value : undefined;
+
+/** Whether `n` is `null` in the code. A regex that the runtime cannot build has a null value too. */
+export const isNull = (n: Node | null | undefined): boolean =>
+	n?.type === "Literal" && n.value === null && !("regex" in n);
+
+/** The value of a literal: `null` for `null`, the digits for a bigint, and undefined for a regex. */
+export const litValue = (n: NodeOf<"Literal">): unknown => {
+	if ("regex" in n) {
+		return undefined;
 	}
-	return "value" in n ? n.value : undefined;
+	return "bigint" in n ? n.bigint : n.value;
 };
-
-export type Method = Node &
-	(t.ObjectMethod | t.ClassMethod | t.ClassPrivateMethod);
-export const isMethod = (n: Node | null | undefined): n is Method =>
-	n?.type === "ObjectMethod" ||
-	n?.type === "ClassMethod" ||
-	n?.type === "ClassPrivateMethod";
-
-/** Where the function of a method starts: at its parameters, as ESTree's `value` did. A Babel method starts at its key. */
-export const valueStart = (text: string, n: Method): number =>
-	text.indexOf("(", n.key.end ?? 0);
 
 /** The child nodes of `n`, in source order. */
 export const children = (n: Node): Node[] => {
 	const out: Node[] = [];
 	for (const [k, v] of Object.entries(n)) {
-		if (k === "loc" || k === "range" || k === "interpreter") {
+		if (k === "range" || k === "hashbang") {
 			continue;
 		}
 		if (Array.isArray(v)) {

@@ -1,20 +1,20 @@
 // The env objects of kind `env`: `process.env`, proxies made from a registry, and what holds or returns them.
-import type * as t from "@babel/types";
-
 import {
+	type CallNode,
 	callsOf,
 	type Fn,
 	functionOf,
 	isFn,
 	type Module,
 	type Node,
+	type NodeOf,
 	returnsOf,
 } from "../../ast.ts";
 import { asNode } from "../common.ts";
 
 export type Variable = NonNullable<ReturnType<Module["variable"]>>;
 
-const isName = (n: t.Node, name: string): boolean =>
+const isName = (n: Node, name: string): boolean =>
 	(n.type === "Identifier" && n.name === name) ||
 	(n.type === "MemberExpression" &&
 		!n.computed &&
@@ -24,7 +24,7 @@ const isName = (n: t.Node, name: string): boolean =>
 		n.object.name === "globalThis");
 
 /** `process.env` or `globalThis.process.env` (the SDK reads it that way). */
-export const isProcessEnv = (n: t.Node): boolean =>
+export const isProcessEnv = (n: Node): boolean =>
 	n.type === "MemberExpression" &&
 	!n.computed &&
 	isName(n.object, "process") &&
@@ -114,15 +114,12 @@ export class EnvObjects {
 		return n.type === "Identifier" && this.#identifier(m, n, seen);
 	}
 
-	#any(m: Module, nodes: t.Node[], seen: Set<unknown>): boolean {
-		return nodes.some((x) => {
-			const a = asNode(x);
-			return a !== undefined && this.is(m, a, seen);
-		});
+	#any(m: Module, nodes: Node[], seen: Set<unknown>): boolean {
+		return nodes.some((x) => this.is(m, x, seen));
 	}
 
 	/** A call of a proxy factory, or of a function that returns only env objects. */
-	#call(m: Module, n: t.CallExpression, seen: Set<unknown>): boolean {
+	#call(m: Module, n: CallNode, seen: Set<unknown>): boolean {
 		const callee = asNode(n.callee);
 		const f = callee && functionOf(m, callee);
 		if (!f || seen.has(f.fn)) {
@@ -139,7 +136,7 @@ export class EnvObjects {
 		);
 	}
 
-	#identifier(m: Module, n: Node & t.Identifier, seen: Set<unknown>): boolean {
+	#identifier(m: Module, n: NodeOf<"Identifier">, seen: Set<unknown>): boolean {
 		const v = m.variable(n);
 		const def = v?.defs[0];
 		if (!v || !def || seen.has(v)) {
@@ -157,7 +154,7 @@ export class EnvObjects {
 
 	#binding(
 		m: Module,
-		n: Node & t.Identifier,
+		n: NodeOf<"Identifier">,
 		v: Variable,
 		seen: Set<unknown>,
 	): boolean {

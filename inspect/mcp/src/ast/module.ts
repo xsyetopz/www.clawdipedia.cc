@@ -1,23 +1,24 @@
-import { parse } from "@babel/parser";
-import traverse from "@babel/traverse";
-import * as t from "@babel/types";
+// Each reader of the tree is synchronous, and the parser's async form only moves the same work to a thread; the sync form does no I/O.
+import { parseSync as parse } from "oxc-parser";
 
 import type { Bundle } from "./bundle.ts";
-import { asNode, children, type Node } from "./node.ts";
-import { type Variable, variableOf } from "./variables.ts";
+import { children, isNode, type Node, type NodeOf } from "./node.ts";
+import { type Variable, type Variables, variablesOf } from "./variables.ts";
+
+// The parser's `Severity` is an ambient const enum, which `verbatimModuleSyntax` cannot import.
+const isError = (severity: string): boolean => severity === "Error";
 
 /** One module of a bundle: parsed on first use, with its parents, optional chains, scopes, exports, and imports. */
 export class Module {
 	readonly name: string;
 	readonly text: string;
 	readonly bundle: Bundle | undefined;
-	#parsed?: { file: t.File; ast: Node };
+	#ast?: NodeOf<"Program">;
 	readonly #parents = new WeakMap<Node, Node>();
-	#vars?: Map<Node, Variable>;
-	readonly #top = new Map<string, Variable>();
+	#vars?: Variables;
 	readonly #chains = new WeakSet<Node>();
 	#exports?: Map<string, string>;
-	#imports?: Map<string, t.ImportDeclaration[]>;
+	#imports?: Map<string, NodeOf<"ImportDeclaration">[]>;
 
 	constructor(name: string, text: string, bundle?: Bundle) {
 		this.name = name;
@@ -25,95 +26,75 @@ export class Module {
 		this.bundle = bundle;
 	}
 
-	/** Parses once, links each node to its parent, and rewrites optional chains the way ESTree has them. */
-	#load(): { file: t.File; ast: Node } {
-		if (this.#parsed) {
-			return this.#parsed;
+	/** Parses once, links each node to its parent, and takes each `ChainExpression` out of the tree. */
+	#load(): NodeOf<"Program"> {
+		if (this.#ast) {
+			return this.#ast;
 		}
-		const file = parse(this.text, {
+		const { program, errors } = parse(this.name, this.text, {
+			lang: "js",
 			sourceType: "module",
-			attachComment: false,
+			range: true,
+			preserveParens: false,
 		});
-		const ast = asNode(file.program);
-		if (!ast) {
-			throw new Error(`module ${this.name} has no program position`);
+		const error = errors.find((e) => isError(e.severity));
+		if (error) {
+			throw new SyntaxError(error.message);
 		}
-		this.#parsed = { file, ast };
-		const optional = new WeakSet<Node>();
+		this.#ast = program;
 		const stack: Node[] = [];
-		for (let n: Node | undefined = ast; n; n = stack.pop()) {
-			this.#flattenOptional(n, optional);
+		for (let n: Node | undefined = program; n; n = stack.pop()) {
+			this.#unwrapChains(n);
 			for (const c of children(n)) {
 				this.#parents.set(c, n);
 				stack.push(c);
 			}
 		}
-		return this.#parsed;
+		return program;
 	}
 
 	/**
-	 * `a?.b` stays a member expression with `optional` set, as in ESTree, so one type check finds both.
-	 * The outermost link of a chain is what ESTree wraps in a `ChainExpression`.
+	 * Puts the outermost link of each optional chain in the place of its `ChainExpression`, so `a?.b`
+	 * is a member expression with `optional` set wherever it stands, and one type check finds it.
 	 */
-	#flattenOptional(n: Node, optional: WeakSet<Node>): void {
-		if (n.type === "OptionalMemberExpression") {
-			this.#markChain(n, optional);
-			Object.assign(n, { type: "MemberExpression" });
-		} else if (n.type === "OptionalCallExpression") {
-			this.#markChain(n, optional);
-			Object.assign(n, { type: "CallExpression" });
+	#unwrapChains(n: Node): void {
+		const link = (x: unknown): Node | undefined => {
+			if (!isNode(x) || x.type !== "ChainExpression") {
+				return undefined;
+			}
+			this.#chains.add(x.expression);
+			return x.expression;
+		};
+		for (const [k, v] of Object.entries(n)) {
+			if (Array.isArray(v)) {
+				for (const [i, x] of v.entries()) {
+					const to = link(x);
+					if (to) {
+						v[i] = to;
+					}
+				}
+				continue;
+			}
+			const to = link(v);
+			if (to) {
+				Reflect.set(n, k, to);
+			}
 		}
-	}
-
-	#markChain(n: Node, optional: WeakSet<Node>): void {
-		const p = this.#parents.get(n);
-		const link =
-			p !== undefined &&
-			optional.has(p) &&
-			((p.type === "MemberExpression" && p.object === n) ||
-				(p.type === "CallExpression" && p.callee === n));
-		if (!link) {
-			this.#chains.add(n);
-		}
-		optional.add(n);
 	}
 
 	/** The module's syntax tree; it throws when the text is not JavaScript. */
 	get ast(): Node {
-		return this.#load().ast;
+		return this.#load();
 	}
 
-	#analyze(): Map<Node, Variable> {
-		if (this.#vars) {
-			return this.#vars;
-		}
-		const vars = new Map<Node, Variable>();
-		traverse(this.#load().file, {
-			Scope: (p) => {
-				for (const b of Object.values(p.scope.bindings)) {
-					const v = variableOf(b, this.#parents);
-					if (!v) {
-						continue;
-					}
-					for (const id of v.identifiers) {
-						vars.set(id, v);
-					}
-					for (const r of v.references) {
-						vars.set(r.identifier, v);
-					}
-					if (p.isProgram()) {
-						this.#top.set(v.name, v);
-					}
-				}
-			},
-		});
-		this.#vars = vars;
-		return vars;
+	#analyze(): Variables {
+		this.#vars ??= variablesOf(this.#load());
+		return this.#vars;
 	}
 
 	/** Each declared variable, by every identifier that declares or uses it. */
 	get variables(): Map<Node, Variable> {
-		return this.#analyze();
+		return this.#analyze().byId;
 	}
 
 	parent(n: Node): Node | undefined {
@@ -145,13 +126,9 @@ export class Module {
 	}
 
 	/** The outermost node of `type` that starts at index `pos`, or undefined. */
-	at<T extends Node["type"]>(
-		pos: number,
-		type: T,
-	): Extract<Node, { type: T }> | undefined {
-		const isType = (n: Node): n is Extract<Node, { type: T }> =>
-			n.type === type;
-		let found: Extract<Node, { type: T }> | undefined;
+	at<T extends Node["type"]>(pos: number, type: T): NodeOf<T> | undefined {
+		const isType = (n: Node): n is NodeOf<T> => n.type === type;
+		let found: NodeOf<T> | undefined;
 		for (let n: Node | undefined = this.nodeAt(pos); n; n = this.parent(n)) {
 			if (n.start === pos && isType(n)) {
 				found = n;
@@ -169,24 +146,12 @@ export class Module {
 
 	/** Whether `id` reads a name that the module does not declare. */
 	isGlobal(id: Node): boolean {
-		const p = this.parent(id);
-		return (
-			p !== undefined &&
-			!this.variable(id) &&
-			t.isReferenced(id, p, this.parent(p))
-		);
+		return this.#analyze().globals.has(id);
 	}
 
 	/** Module-scope variable named `name`. */
 	topLevel(name: string): Variable | undefined {
-		this.#analyze();
-		return this.#top.get(name);
-	}
-
-	/** The top-level statements of the module. */
-	#body(): t.Statement[] {
-		const root = this.ast;
-		return root.type === "Program" ? root.body : [];
+		return this.#analyze().top.get(name);
 	}
 
 	/** Exported name to local name, from `export{a as b}` and `export function`/`export const`. */
@@ -196,13 +161,12 @@ export class Module {
 		}
 		const out = new Map<string, string>();
 		this.#exports = out;
-		for (const s of this.#body()) {
+		for (const s of this.#load().body) {
 			if (s.type !== "ExportNamedDeclaration") {
 				continue;
 			}
 			for (const sp of s.specifiers) {
 				if (
-					sp.type === "ExportSpecifier" &&
 					sp.local.type === "Identifier" &&
 					sp.exported.type === "Identifier"
 				) {
@@ -225,10 +189,10 @@ export class Module {
 	}
 
 	/** The import declarations of this module from the module path `source`. */
-	importsFrom(source: string): t.ImportDeclaration[] {
+	importsFrom(source: string): NodeOf<"ImportDeclaration">[] {
 		if (!this.#imports) {
-			const imports = new Map<string, t.ImportDeclaration[]>();
-			for (const s of this.#body()) {
+			const imports = new Map<string, NodeOf<"ImportDeclaration">[]>();
+			for (const s of this.#load().body) {
 				if (s.type === "ImportDeclaration") {
 					const k = s.source.value;
 					imports.set(k, [...(imports.get(k) ?? []), s]);

@@ -1,14 +1,5 @@
 // The code units of one module: a top-level statement or a function, with the functions inside it cut out, so a change shows in one unit.
-import type * as t from "@babel/types";
-
-import {
-	children,
-	isFn,
-	isMethod,
-	type Module,
-	type Node,
-	valueStart,
-} from "./ast.ts";
+import { children, isFn, type Module, type Node } from "./ast.ts";
 import { renamer } from "./clean.ts";
 
 export interface Unit {
@@ -27,20 +18,18 @@ export interface Unit {
 	f: string[];
 }
 
-const keyName = (k: t.Node | null | undefined): string => {
-	if (k?.type === "Identifier") {
+const keyName = (k: Node): string => {
+	if (k.type === "Identifier") {
 		return k.name;
 	}
-	return k?.type === "StringLiteral" || k?.type === "NumericLiteral"
+	return k.type === "Literal" &&
+		(typeof k.value === "string" || typeof k.value === "number")
 		? String(k.value)
 		: "";
 };
 
 const fnLabel = (n: Node, p: Node | undefined): string => {
-	if (isMethod(n)) {
-		return keyName(n.key) || "fn";
-	}
-	if (p?.type === "ObjectProperty") {
+	if (p?.type === "Property" || p?.type === "MethodDefinition") {
 		return keyName(p.key) || "fn";
 	}
 	if (p?.type === "VariableDeclarator" || p?.type === "AssignmentExpression") {
@@ -49,12 +38,8 @@ const fnLabel = (n: Node, p: Node | undefined): string => {
 	return n.type === "FunctionDeclaration" ? "function" : "fn";
 };
 
-const labelOf = (m: Module, n: Node): string => {
-	if (isFn(n)) {
-		return fnLabel(n, m.parent(n));
-	}
-	return n.type === "Directive" ? "ExpressionStatement" : n.type;
-};
+const labelOf = (m: Module, n: Node): string =>
+	isFn(n) ? fnLabel(n, m.parent(n)) : n.type;
 
 interface Span {
 	start: number;
@@ -62,37 +47,37 @@ interface Span {
 }
 interface Open {
 	n: Node;
-	start: number;
 	holes: Span[];
 	f: Set<string>;
 }
 
-const fingerprint = (n: Node, here: Open, cur: Open | undefined): void => {
-	if (n.type === "StringLiteral" || n.type === "DirectiveLiteral") {
-		here.f.add(JSON.stringify(n.value.slice(0, 80)));
+const fingerprint = (n: Node, here: Open): void => {
+	if (n.type === "Literal") {
+		if (typeof n.value === "string") {
+			here.f.add(JSON.stringify(n.value.slice(0, 80)));
+		}
 	} else if (n.type === "TemplateElement" && (n.value.cooked ?? "") !== "") {
 		here.f.add(JSON.stringify(n.value.cooked?.slice(0, 80)));
 	} else if (
 		(n.type === "MemberExpression" ||
-			n.type === "ObjectProperty" ||
-			isMethod(n)) &&
+			n.type === "Property" ||
+			n.type === "MethodDefinition") &&
 		!n.computed
 	) {
 		const k = n.type === "MemberExpression" ? n.property : n.key;
 		if (k.type === "Identifier") {
-			(isMethod(n) ? cur : here)?.f.add(`.${k.name}`);
+			here.f.add(`.${k.name}`);
 		}
 	}
 };
 
 const slice = (
-	{ n, start, holes }: Open,
+	{ n, holes }: Open,
 	render: (from: number, to: number) => string,
 ): string => {
 	let text = "";
-	let at = start;
-	// A function in a method key is found after the method, though it comes first in the text.
-	for (const h of holes.toSorted((a, b) => a.start - b.start)) {
+	let at = n.start;
+	for (const h of holes) {
 		text += `${render(at, h.start)}ƒ`;
 		at = h.end;
 	}
@@ -109,15 +94,13 @@ export const unitsOf = (
 	const walk = (n: Node, cur?: Open): void => {
 		let here = cur;
 		if (here === undefined || isFn(n)) {
-			// A method's unit starts at its parameters, so the key stays in the unit around it.
-			const start = isMethod(n) ? valueStart(m.text, n) : n.start;
-			here = { n, start, holes: [], f: new Set() };
-			cur?.holes.push({ start, end: n.end });
+			here = { n, holes: [], f: new Set() };
+			cur?.holes.push(n);
 			done.push(here);
 		}
-		fingerprint(n, here, cur);
+		fingerprint(n, here);
 		for (const c of children(n)) {
-			walk(c, isMethod(n) && c === n.key ? cur : here);
+			walk(c, here);
 		}
 	};
 	for (const s of children(m.ast)) {
@@ -125,7 +108,7 @@ export const unitsOf = (
 	}
 	return done.map((o) => ({
 		m: name,
-		s: o.start,
+		s: o.n.start,
 		e: o.n.end,
 		k: labelOf(m, o.n),
 		t: slice(o, render),

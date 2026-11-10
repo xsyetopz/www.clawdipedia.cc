@@ -1,12 +1,11 @@
-import type * as t from "@babel/types";
-
 import { Module } from "./module.ts";
+import type { NodeOf } from "./node.ts";
 import type { Variable } from "./variables.ts";
 
 const ROOT = "/$bunfs/root/";
 
 /** The name an import specifier takes from its module. */
-const importedName = (sp: t.ImportSpecifier): string =>
+const importedName = (sp: NodeOf<"ImportSpecifier">): string =>
 	sp.imported.type === "Identifier" ? sp.imported.name : sp.imported.value;
 
 /** The modules of one program, by file name (`chunk-abc.js`). */
@@ -44,11 +43,7 @@ export class Bundle {
 		if (def?.type !== "ImportBinding") {
 			return { module: m, variable: v };
 		}
-		if (
-			seen > 8 ||
-			def.node.type !== "ImportSpecifier" ||
-			def.parent.type !== "ImportDeclaration"
-		) {
+		if (seen > 8 || def.node.type !== "ImportSpecifier") {
 			return undefined;
 		}
 		const from = this.get(def.parent.source.value);

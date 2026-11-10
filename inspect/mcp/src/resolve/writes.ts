@@ -31,7 +31,7 @@ const literalValue = (
 ): Node | undefined => {
 	const key = mod.nodeAt(at);
 	const prop = mod.parent(key);
-	return prop?.type === "ObjectProperty" &&
+	return prop?.type === "Property" &&
 		prop.key === key &&
 		key.type === "Identifier" &&
 		key.name === name &&

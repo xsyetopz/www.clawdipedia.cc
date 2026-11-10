@@ -1,5 +1,3 @@
-import type * as t from "@babel/types";
-
 import type { Module, Node, Variable } from "../ast.ts";
 import { asNode } from "../ast/node.ts";
 import { memberPath } from "./tables.ts";
@@ -14,7 +12,7 @@ export abstract class HeldEntries extends TypeResolver {
 	protected held(
 		module: Module,
 		variable: Variable,
-		init: t.Node | null | undefined,
+		init: Node | null | undefined,
 		before: number,
 		env: Env | undefined,
 		depth: number,

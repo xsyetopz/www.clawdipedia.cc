@@ -85,7 +85,7 @@ const midSites = (m: Src, types: string[], sites: Sites): void => {
 		}
 		const prop = m.parent(m.nodeAt(h.index + 1));
 		const obj = prop && m.parent(prop);
-		if (prop?.type !== "ObjectProperty" || obj?.type !== "ObjectExpression") {
+		if (prop?.type !== "Property" || obj?.type !== "ObjectExpression") {
 			continue;
 		}
 		const list = sites.get(t) ?? [];
