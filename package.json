@@ -93,7 +93,7 @@
 		"oxlint": "catalog:",
 		"oxlint-tsgolint": "catalog:",
 		"typescript": "catalog:",
-		"typescript-bedrock": "file:/Users/krystian/.claude/plugins/cache/xsyetopz/bedrock/0.1.3/.bedrock/packages/typescript-bedrock",
+		"typescript-bedrock": "file:/Users/krystian/.claude/plugins/cache/xsyetopz/bedrock/0.1.4/.bedrock/packages/typescript-bedrock",
 		"wrangler": "^4.159.0"
 	},
 	"overrides": {
