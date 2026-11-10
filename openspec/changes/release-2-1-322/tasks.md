@@ -9,9 +9,12 @@ Do not let a page state a `(proposed)` item.
 - [x] 1.2 Print probes: group `cli322` (`tools/release/probes/print/`), 26 cases.
 - [x] 1.3 cc-inspect: the `code` `cli` options `provider: "vertex"` and `fastRefusal`, the outcome lines, and the query lines of a shown file, each with a test.
 - [x] 1.4 `bun run release:all`, which ends with `captures/2.1.322/compare/compare.md`.
-- [ ] 1.5 `bun run release:probe:managed -- --to 2.1.322`. It needs the user to run the `sudo` install command.
+- [x] 1.5 `bun run release:probe:managed -- --to 2.1.322`. It needs the user to run the `sudo` install command.
 - [x] 1.6 `bun run release:probe:live -- --yes`.
 - [x] 1.7 `bun run release:facts -- --check`.
+- [x] 1.8 The `classify-all-shell` print cases set `CLAUDE_CODE_AUTO_MODE_SERVER=0`, and give the counts of `docs/reference/probes.md` on `2.1.322`.
+- [ ] 1.9 The 21 managed `classify-*` cases with `CLAUDE_CODE_AUTO_MODE_SERVER=0`: `bun run release:probe:managed -- --to 2.1.322 --only` with the 7 case names.
+      It needs the user to run the `sudo` install command. Then `docs/reference/probes.md` names `2.1.322` for the three managed rows.
 
 ## 2. Pages From the Diff
 
