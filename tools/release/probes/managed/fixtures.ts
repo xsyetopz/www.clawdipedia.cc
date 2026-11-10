@@ -3,15 +3,24 @@
 import { cp } from "node:fs/promises";
 import { join } from "node:path";
 
+import { marketplaceFiles, MKT } from "./marketplace.ts";
+
 export const MANAGED_DIR = "/Library/Application Support/ClaudeCode";
 /** Marker file inside the managed folder. A folder without it is not ours and is never touched or probed. */
 export const MARKER = ".release-toolkit-probe";
-export const PHASES = ["baseline", "main", "true", "false", "owned"] as const;
+export const PHASES = [
+	"baseline",
+	"main",
+	"true",
+	"false",
+	"owned",
+	"vouch",
+] as const;
 export type Phase = (typeof PHASES)[number];
 /** Root-owned file in the managed folder naming the installed variant; the tool polls it. */
 export const VARIANT_FILE = ".variant";
-/** Variants the script installs, in order. `main` has no classifyAllShell; `true`/`false` set it. `owned` is `main` in a folder that the sudo user owns. */
-export const VARIANTS = ["main", "true", "false", "owned"] as const;
+/** Variants the script installs, in order. `main` has no classifyAllShell; `true`/`false` set it. `owned` is `main` in a folder that the sudo user owns. `vouch` enables the plugin of the marketplace in the folder. */
+export const VARIANTS = ["main", "true", "false", "owned", "vouch"] as const;
 
 export const HERE = import.meta.dir;
 export const MCP_SERVER = join(HERE, "mcp", "server.js");
@@ -25,6 +34,18 @@ export const srvDef = (name: string, startedLog: string) => ({
 
 const w = async (root: string, rel: string, content: string): Promise<void> => {
 	await Bun.write(join(root, rel), content);
+};
+
+const copyVariants = async (stage: string): Promise<void> => {
+	await cp(join(HERE, "variants"), join(stage, "variants"), {
+		recursive: true,
+	});
+	// fail early if a variant file is missing or not JSON
+	await Promise.all(
+		VARIANTS.map((v) =>
+			Bun.file(join(stage, "variants", v, "managed-settings.json")).json(),
+		),
+	);
 };
 
 /** Writes the base `ClaudeCode/` tree (no managed-settings.json) and `variants/<v>/managed-settings.json` under stage. */
@@ -65,13 +86,10 @@ export const buildStage = async (
 		".claude/skills/managed-skill/SKILL.md",
 		"---\nname: managed-skill\ndescription: PROBE-MANAGED-SKILL-DESC managed policy skill\n---\nPROBE-MANAGED-SKILL-BODY\n",
 	);
-	await cp(join(HERE, "variants"), join(stage, "variants"), {
-		recursive: true,
-	});
-	// fail early if a variant file is missing or not JSON
 	await Promise.all(
-		VARIANTS.map((v) =>
-			Bun.file(join(stage, "variants", v, "managed-settings.json")).json(),
+		Object.entries(marketplaceFiles()).map(([rel, body]) =>
+			w(base, join(MKT, rel), body),
 		),
 	);
+	await copyVariants(stage);
 };

@@ -1,6 +1,7 @@
 // Managed probe phases, split from p305-managed/probe.ts. Each phase returns CaseResults (group "managed").
 // baseline: no managed folder. main: folder without classifyAllShell. true/false: classifyAllShell cases only.
 // owned: the main folder owned by the sudo user, the CLAUDE.md cases only.
+// vouch: managed settings enable a mod from the marketplace in the managed folder; baseline runs the same mod from user settings.
 // The program always runs as the calling user through childEnv (via print/run.ts runCase); nothing here uses sudo.
 import { PROMPT } from "../../lib/env.ts";
 import { type CaseResult, normalise } from "../../lib/results.ts";
@@ -16,6 +17,7 @@ import {
 	type Out,
 	type PhaseCtx,
 } from "./phases/util.ts";
+import { vouchManagedDef, vouchUserDef } from "./phases/vouch.ts";
 export { type PhaseCtx } from "./phases/util.ts";
 
 // classifyAllShell: user/flag are true | false | undefined
@@ -75,10 +77,13 @@ const classifyDefs = (phase: Phase): Def[] => {
 
 export const defsFor = (phase: Phase, ctx: PhaseCtx): Def[] => {
 	if (phase === "baseline") {
-		return mainDefs(ctx);
+		return [...mainDefs(ctx), vouchUserDef];
 	}
 	if (phase === "main") {
 		return [...mainDefs(ctx), ...classifyDefs(phase)];
+	}
+	if (phase === "vouch") {
+		return [vouchManagedDef];
 	}
 	if (phase === "owned") {
 		return mainDefs(ctx).filter((d) => d.name.startsWith("claudemd-"));

@@ -1,0 +1,13 @@
+{
+	"extraKnownMarketplaces": {
+		"probe-mkt": {
+			"source": {
+				"source": "directory",
+				"path": "/Library/Application Support/ClaudeCode/probe-mkt"
+			}
+		}
+	},
+	"enabledPlugins": {
+		"ctxprobe@probe-mkt": true
+	}
+}
