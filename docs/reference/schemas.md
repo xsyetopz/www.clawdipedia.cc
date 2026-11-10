@@ -1,6 +1,6 @@
 ---
 title: JSON Schemas
-description: JSON Schemas and the Mod API type file for every Claude Code 2.1.314 payload and config file, made from the program, and how they differ from the SchemaStore copies.
+description: JSON Schemas and the Mod API type file for every Claude Code 2.1.321 payload and config file, made from the program, and how they differ from the SchemaStore copies.
 sidebar_position: 6
 ---
 

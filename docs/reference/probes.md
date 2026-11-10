@@ -1,6 +1,6 @@
 ---
 title: Probes
-description: Facts checked by running Claude Code 2.1.305 and 2.1.319 against a local stub, and the env vars and settings that changed what the program sent.
+description: Facts checked by running Claude Code 2.1.305, 2.1.319, and 2.1.321 against a local stub, and the env vars and settings that changed what the program sent.
 sidebar_position: 5
 ---
 

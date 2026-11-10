@@ -1,6 +1,6 @@
 ---
 title: CLI Overview
-description: How to start claude, what print mode does, and a map of the flags and subcommands of Claude Code 2.1.314.
+description: How to start claude, what print mode does, and a map of the flags and subcommands of Claude Code 2.1.321.
 sidebar_position: 1
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Subcommands
-description: Every claude subcommand in 2.1.314, including background sessions, auth, plugins, and the hidden commands.
+description: Every claude subcommand in 2.1.321, including background sessions, auth, plugins, and the hidden commands.
 sidebar_position: 3
 ---
 
