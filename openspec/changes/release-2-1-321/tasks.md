@@ -42,7 +42,6 @@ Each item line of `captures/2.1.321/notes.md` (lines 3 to 120) is in 3.6 or in 3
   - 15: `extend/hooks/session-events.md`.
   - 16: `configure/cli/flags.md`.
   - 32: `reference/tools/shell-and-web.md` (the new error text).
-  - 59, 80, 90, 91: `configure/cli/subcommands.md`, the gateway row marked `<Undocumented />` that rests on the notes alone.
   - 63: `extend/hooks/input-and-output.md`.
   - 68, 97, 98, 100, 101, 103, 105, 106, 114: `start/what-changed.md`.
   - 69: `extend/skills-and-commands/frontmatter.md`.
@@ -59,6 +58,11 @@ Each item line of `captures/2.1.321/notes.md` (lines 3 to 120) is in 3.6 or in 3
     22, 24, 25, 26, 27, 28, 29, 30, 31, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 47, 48, 49, 51, 52,
     53, 54, 55, 56, 57, 58, 60, 61, 62, 64, 65, 66, 67, 70, 72, 73, 74, 77, 79, 81, 82, 83, 84, 85, 86, 87, 88,
     89, 92, 94, 95, 102, 104, 107, 111, 115.
+  - Searched in the `2.1.321` program, and not found, so the row came off `configure/cli/subcommands.md`:
+    - 59: no `omitResource` text.
+    - 80: no sign-in limit message.
+    - 90: no gateway error message that drops the user name and password.
+    - 91: the gateway gives `resets <Mon> <day>` from the UTC date, not a local time (`chunk-dbyxjq34.js:1479945`).
   - 93: the Ultra words in the session-feedback message and the `allowedProviders` description have no check.
 
 ## 4. What Changed
