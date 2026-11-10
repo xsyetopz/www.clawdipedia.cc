@@ -119,8 +119,15 @@ Source: the program (`2.1.322`, `chunk-5a8mhnqs.js@86180` and `chunk-5a8mhnqs.js
 
 The program text of `2.1.322` gives the "not verified" label in two conditions:
 
-- A mod returns a `managed` file from `prompt.context` that the program did not send to it with the same path and the same content (`chunk-5a8mhnqs.js@85756`). The print case shows this for a file that the mod adds. The program text has an exception for a mod that the program vouches for. We did not find which mods that covers.
+- A mod returns a `managed` file from `prompt.context` that the program did not send to it with the same path and the same content (`chunk-5a8mhnqs.js@85756`). The print case shows this for a file that the mod adds. The program does not apply this condition to a mod that it vouches for (`chunk-5a8mhnqs.js@85928`, `chunk-k82ezfgy.js@6685`). The program vouches for the mod of a plugin in these conditions:
+  - The plugin id ends with `@builtin` (`chunk-d5bhd0e0.js@254`).
+  - Managed settings that the session vouches for enable the plugin in `enabledPlugins`, and they declare the source of its marketplace under `extraKnownMarketplaces` (`chunk-bs3kcdf7.js@14446`, `chunk-bs3kcdf7.js@17287`). When managed settings enable a plugin that does not meet this condition, the program logs a warning that names the cause (`chunk-bs3kcdf7.js@16178`).
+  - In `claude plugin test`, the plugin loads in the `prepend` or `append` tier (`chunk-hhh3j18b.js@41063`).
 - The program loads a file from the managed folder in a session whose entry point is `remote_cowork` or `remote_cowork_trigger`, and the account of the session could write that file (`chunk-5a8mhnqs.js@84675`, `chunk-9r1hbf9p.js@1453085`). On `2.1.322`, `CLAUDE_CODE_ENTRYPOINT=remote_cowork` with a managed folder that the user owns gave the label (case `managed.owned.claudemd-remote-cowork`). The same entry point with a root-owned folder did not (case `managed.main.claudemd-remote-cowork`). In a normal session, a managed folder that the user owns did not get the label (case `managed.owned.claudemd-order`).
+
+When mods in a row run on the same hooks host, the program sends `prompt.context` to them in one step. For that step, the program keeps the label that each file already has, and does not do the check of the first condition again (`chunk-5a8mhnqs.js@65306`, `chunk-5a8mhnqs.js@85928`). [`CLAUDE_CODE_HOOKS_SAME_THREAD`](env-vars/plugins-and-mcp.md) selects the host.
+
+The label text is in each installed version from `2.1.309` to `2.1.322`. Versions `2.1.309`, `2.1.316`, and `2.1.322` have both conditions and the exception for a vouched mod. We did not examine versions before `2.1.309`.
 
 ## How It Works
 
