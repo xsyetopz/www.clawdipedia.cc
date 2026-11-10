@@ -24744,7 +24744,7 @@ var package_default;
 var init_package = __esm(() => {
   package_default = {
     name: "cc-inspect-mcp",
-    version: "0.17.0",
+    version: "0.17.1",
     private: true,
     description: "MCP server that reads Claude Code session transcripts and the modules inside the Claude Code binary. Source for dist/server.js, which is committed.",
     license: "MIT",
@@ -31117,28 +31117,34 @@ var init_variables = __esm(() => {
 });
 
 // inspect/mcp/src/ast/module.ts
-import { parseSync as parse6 } from "oxc-parser";
+import { parse as parse6 } from "oxc-parser";
 
 class Module {
   name;
   text;
   bundle;
-  #ast;
+  ast;
   #parents = new WeakMap;
   #vars;
   #chains = new WeakSet;
   #exports;
   #imports;
-  constructor(name, text, bundle) {
+  constructor(name, text, ast, bundle) {
     this.name = name;
     this.text = text;
+    this.ast = ast;
     this.bundle = bundle;
-  }
-  #load() {
-    if (this.#ast) {
-      return this.#ast;
+    const stack = [];
+    for (let n = ast;n; n = stack.pop()) {
+      this.#unwrapChains(n);
+      for (const c of children(n)) {
+        this.#parents.set(c, n);
+        stack.push(c);
+      }
     }
-    const { program, errors } = parse6(this.name, this.text, {
+  }
+  static async parse(name, text, bundle) {
+    const { program, errors } = await parse6(name, text, {
       lang: "js",
       sourceType: "module",
       range: true,
@@ -31148,16 +31154,7 @@ class Module {
     if (error) {
       throw new SyntaxError(error.message);
     }
-    this.#ast = program;
-    const stack = [];
-    for (let n = program;n; n = stack.pop()) {
-      this.#unwrapChains(n);
-      for (const c of children(n)) {
-        this.#parents.set(c, n);
-        stack.push(c);
-      }
-    }
-    return program;
+    return new Module(name, text, program, bundle);
   }
   #unwrapChains(n) {
     const link = (x) => {
@@ -31183,22 +31180,17 @@ class Module {
       }
     }
   }
-  get ast() {
-    return this.#load();
-  }
   #analyze() {
-    this.#vars ??= variablesOf(this.#load());
+    this.#vars ??= variablesOf(this.ast);
     return this.#vars;
   }
   get variables() {
     return this.#analyze().byId;
   }
   parent(n) {
-    this.#load();
     return this.#parents.get(n);
   }
   isChain(n) {
-    this.#load();
     return this.#chains.has(n);
   }
   src(n) {
@@ -31241,7 +31233,7 @@ class Module {
     }
     const out = new Map;
     this.#exports = out;
-    for (const s of this.#load().body) {
+    for (const s of this.ast.body) {
       if (s.type !== "ExportNamedDeclaration") {
         continue;
       }
@@ -31267,7 +31259,7 @@ class Module {
   importsFrom(source) {
     if (!this.#imports) {
       const imports = new Map;
-      for (const s of this.#load().body) {
+      for (const s of this.ast.body) {
         if (s.type === "ImportDeclaration") {
           const k = s.source.value;
           imports.set(k, [...imports.get(k) ?? [], s]);
@@ -31286,11 +31278,24 @@ var init_module = __esm(() => {
 // inspect/mcp/src/ast/bundle.ts
 class Bundle {
   modules = new Map;
-  constructor(files) {
-    for (const f of files) {
-      const name = f.name.split("/").pop() ?? f.name;
-      this.modules.set(name, new Module(name, f.text, this));
+  static async parse(files) {
+    const bundle = new Bundle;
+    const parsed = await Promise.all(files.map(async (f) => {
+      try {
+        return await Module.parse(f.name.split("/").pop() ?? f.name, f.text, bundle);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          return null;
+        }
+        throw error;
+      }
+    }));
+    for (const m of parsed) {
+      if (m) {
+        bundle.modules.set(m.name, m);
+      }
     }
+    return bundle;
   }
   get(name) {
     return this.modules.get(name.startsWith(ROOT) ? name.slice(ROOT.length) : name);
@@ -32643,10 +32648,14 @@ var envOr = (name, fallback) => {
   let p = programs.get(path);
   if (!p) {
     const { modules } = await extractModules(path);
+    let bundle;
     p = {
       path,
       modules,
-      bundle: new Bundle(modules.filter((m) => /\.m?js$/u.test(m.name)).map((m) => ({ name: m.name, text: m.source }))),
+      bundle: () => {
+        bundle ??= Bundle.parse(modules.filter((m) => /\.m?js$/u.test(m.name)).map((m) => ({ name: m.name, text: m.source })));
+        return bundle;
+      },
       resolver: new Resolver
     };
     programs.set(path, p);
@@ -33253,33 +33262,37 @@ var FORMAT = 2, sha = (s, n) => createHash2("sha1").update(s).digest("hex").slic
   } finally {
     await rm(tmp, { recursive: true, force: true });
   }
-}, parseError = (m) => {
+}, parsed = async (x) => {
   try {
-    Reflect.get(m, "ast");
-    return;
+    return await Module.parse(x.name, x.text);
   } catch (error) {
     return (error instanceof Error ? error.message : String(error)).slice(0, 120);
   }
-}, cleanModules = (js) => {
+}, cleanModules = async (js) => {
   const out = {
     units: [],
     texts: new Map,
     literals: new Map,
     skipped: {}
   };
-  for (const x of js) {
+  const cleaned = await Promise.all(js.map(async (x) => {
     const name = x.name.split("/").pop() ?? x.name;
-    const m = new Module(x.name, x.text);
-    const error = parseError(m);
-    if (error !== undefined) {
-      out.skipped[name] = error;
-      continue;
+    const m = await parsed(x);
+    if (typeof m === "string") {
+      return { name, error: m };
     }
     const render = renamer(m);
-    const us = unitsOf(name, m, render);
-    out.units.push(...us);
-    out.texts.set(name, render(0, m.text.length));
-    out.literals.set(name, [...new Set(us.flatMap((u) => u.f))].toSorted());
+    const units = unitsOf(name, m, render);
+    return { name, units, text: render(0, m.text.length) };
+  }));
+  for (const c of cleaned) {
+    if ("error" in c) {
+      out.skipped[c.name] = c.error;
+      continue;
+    }
+    out.units.push(...c.units);
+    out.texts.set(c.name, c.text);
+    out.literals.set(c.name, [...new Set(c.units.flatMap((u) => u.f))].toSorted());
   }
   return out;
 }, chunkNames = (literals) => {
@@ -33313,7 +33326,7 @@ var FORMAT = 2, sha = (s, n) => createHash2("sha1").update(s).digest("hex").slic
     };
   }
   const js = modules.filter((x) => /\.m?js$/u.test(x.name));
-  const { units, texts, literals, skipped } = cleanModules(js);
+  const { units, texts, literals, skipped } = await cleanModules(js);
   const chunks = chunkNames(literals);
   for (const u of units) {
     u.t = renameChunks(u.t, chunks);
@@ -34692,16 +34705,17 @@ ${modules.map((m) => `- ${m.name}  ${m.bytes} bytes`).join(`
     }) => {
       const re = new RegExp(regex(need(query, "query"), isRegex).source, "gu");
       const hits = [];
-      const { bundle } = await program(version);
-      for (const m of bundle.modules.values()) {
-        if (has(module) && !m.name.includes(module)) {
+      const p = await program(version);
+      for (const m of p.modules) {
+        const name = m.name.split("/").pop() ?? m.name;
+        if (!/\.m?js$/u.test(name) || has(module) && !name.includes(module)) {
           continue;
         }
-        for (const h of m.text.matchAll(re)) {
+        for (const h of m.source.matchAll(re)) {
           hits.push({
-            module: m.name,
+            module: name,
             offset: h.index,
-            snippet: m.text.slice(Math.max(0, h.index - context), h.index + h[0].length + context)
+            snippet: m.source.slice(Math.max(0, h.index - context), h.index + h[0].length + context)
           });
           if (hits.length >= limit) {
             break;
@@ -34854,13 +34868,7 @@ var scan = (bundle, needles, visit) => {
     if (!needles.some((s) => m.text.includes(s))) {
       continue;
     }
-    let ast;
-    try {
-      ast = m.ast;
-    } catch {
-      continue;
-    }
-    const stack = [ast];
+    const stack = [m.ast];
     for (let n = stack.pop();n !== undefined; n = stack.pop()) {
       visit(m, n);
       stack.push(...children(n));
@@ -36381,7 +36389,7 @@ var initOf3 = (m, id) => {
 }, calleeFn = (m, call) => {
   const { callee } = call;
   return isFn(callee) ? { module: m, fn: callee } : functionOf(m, callee);
-}, isNull2 = (m, n, depth = 0) => {
+}, alwaysNull = (m, n, depth = 0) => {
   if (depth > 6) {
     return false;
   }
@@ -36390,12 +36398,12 @@ var initOf3 = (m, id) => {
   }
   if (n.type === "Identifier") {
     const i = initOf3(m, n);
-    return i !== undefined && isNull2(i.m, i.n, depth + 1);
+    return i !== undefined && alwaysNull(i.m, i.n, depth + 1);
   }
   if (n.type !== "CallExpression") {
     return false;
   }
-  if (isNull2(m, n.callee, depth + 1)) {
+  if (alwaysNull(m, n.callee, depth + 1)) {
     return true;
   }
   const f = calleeFn(m, n);
@@ -36403,7 +36411,7 @@ var initOf3 = (m, id) => {
     return false;
   }
   const rets = returnsOf(f.fn);
-  return rets.length > 0 && rets.every((r) => r !== null && isNull2(f.module, r, depth + 1));
+  return rets.length > 0 && rets.every((r) => r !== null && alwaysNull(f.module, r, depth + 1));
 }, named = (name) => name === undefined || name === "" ? undefined : { name }, literalOf = (n) => {
   if (n.type === "ObjectExpression") {
     return n;
@@ -36426,7 +36434,7 @@ var initOf3 = (m, id) => {
   const f = n.arguments.length === 0 ? calleeFn(m, n) : undefined;
   if (f) {
     for (const ret of returnsOf(f.fn)) {
-      if (ret !== null && !isNull2(f.module, ret)) {
+      if (ret !== null && !alwaysNull(f.module, ret)) {
         return { tool: toolName(R, f.module, ret, depth + 1) };
       }
     }
@@ -36506,13 +36514,13 @@ var MAX_FN = 300, clip2 = (s) => s.length > MAX_FN ? `${s.slice(0, MAX_FN)}\u202
     }
     if (e.type === "SpreadElement") {
       items(R, m, e.argument, when, out, depth + 1);
-    } else if (!isNull2(m, e)) {
+    } else if (!alwaysNull(m, e)) {
       toolItem(R, m, e, when, out);
     }
   }
 }, branches = (R, m, n, when, out, depth) => {
   const { test } = n;
-  if (isNull2(m, test)) {
+  if (alwaysNull(m, test)) {
     items(R, m, n.alternate, when, out, depth + 1);
     return;
   }
@@ -36529,7 +36537,7 @@ var MAX_FN = 300, clip2 = (s) => s.length > MAX_FN ? `${s.slice(0, MAX_FN)}\u202
     items(R, m, c.object, [...when, cond], out, depth + 1);
     return true;
   }
-  if (n.optional && isNull2(m, c)) {
+  if (n.optional && alwaysNull(m, c)) {
     return true;
   }
   const f = calleeFn(m, n);
@@ -36537,7 +36545,7 @@ var MAX_FN = 300, clip2 = (s) => s.length > MAX_FN ? `${s.slice(0, MAX_FN)}\u202
     return false;
   }
   for (const ret of returnsOf(f.fn)) {
-    if (ret !== null && !isNull2(f.module, ret)) {
+    if (ret !== null && !alwaysNull(f.module, ret)) {
       items(R, f.module, ret, when, out, depth + 1);
     }
   }
@@ -36570,7 +36578,7 @@ var MAX_FN = 300, clip2 = (s) => s.length > MAX_FN ? `${s.slice(0, MAX_FN)}\u202
   if (n.type === "CallExpression" && callItems(R, m, n, when, out, depth)) {
     return;
   }
-  if (n.type === "Identifier" && isNull2(m, n)) {
+  if (n.type === "Identifier" && alwaysNull(m, n)) {
     return;
   }
   const r = required2(m, n);
@@ -37324,14 +37332,15 @@ var valJson = (v) => {
     return `- ${k}: error: ${messageOf(error)}`;
   }
 }, listKind = async (kind, { name, offset = 0, limit = SURFACE_LIMIT, version }) => {
-  const { bundle, modules } = await program(version);
+  const p = await program(version);
+  const bundle = await p.bundle();
   if (kind === "") {
-    const rows = await Promise.all(Object.keys(KINDS).map((k) => kindCount(bundle, modules, k)));
+    const rows = await Promise.all(Object.keys(KINDS).map((k) => kindCount(bundle, p.modules, k)));
     return text(rows.join(`
 `));
   }
   const q = name?.toLowerCase();
-  const found = await surface(bundle, kind, modules);
+  const found = await surface(bundle, kind, p.modules);
   const all = found.filter((i) => !has(q) || i.name.toLowerCase().includes(q));
   const budget = MAX_CHARS - SURFACE_HEADER_CHARS;
   let used = 0;
@@ -37363,7 +37372,9 @@ var init_surface2 = __esm(async () => {
   group("surface", `List what a Claude Code binary exposes by kind (${Object.keys(KINDS).join(", ")}), or resolve object-keys, event-keys, tool-gates, or env-places (every place that names the environment variable \`name\`: a typed registry entry, a read, a name set for a child process, or a list entry) from its code.`, "kind", {
     ...Object.fromEntries(["", ...Object.keys(KINDS)].map((k) => [k, (a) => listKind(k, a)])),
     "object-keys": async ({ module, offset, anchor, version }) => {
-      const { bundle, resolver: R } = await program(version);
+      const p = await program(version);
+      const R = p.resolver;
+      const bundle = await p.bundle();
       const modName = need(module, "module");
       const m = bundle.get(modName);
       if (!m) {
@@ -37390,8 +37401,8 @@ ${unresolved.map((u) => `- ${u}`).join(`
 `)}` : ""}`, { keys, unresolved });
     },
     "event-keys": async ({ name, version }) => {
-      const { bundle, resolver } = await program(version);
-      const events = eventSites(bundle, resolver);
+      const p = await program(version);
+      const events = eventSites(await p.bundle(), p.resolver);
       if (!has(name)) {
         return text([...events].toSorted(([a], [b]) => a.localeCompare(b)).map(([n, l]) => `- ${n}: ${l.length} call sites`).join(`
 `), {
@@ -37410,7 +37421,8 @@ ${JSON.stringify(keys, null, 2)}`, {
       });
     },
     "env-places": async ({ name, version }) => {
-      const { bundle } = await program(version);
+      const p = await program(version);
+      const bundle = await p.bundle();
       const wanted = need(name, "name");
       const places = envPlaces(bundle).filter((i) => i.name === wanted);
       return text(`${wanted}: places ${places.length}
@@ -37424,8 +37436,8 @@ ${places.map((i) => {
 `)}`);
     },
     "tool-gates": async ({ version }) => {
-      const { bundle, resolver } = await program(version);
-      const r = baseTools(bundle, resolver);
+      const p = await program(version);
+      const r = baseTools(await p.bundle(), p.resolver);
       return text(`${r.module}: ${r.tools.length} tools
 ${r.tools.map((t) => `- ${t.name}${t.unresolved ? " (unresolved)" : ""}${t.when.length > 0 ? `  when: ${t.when.join(" && ")}` : ""}${has(t.enabled) ? `  own: ${t.enabled}` : ""}`).join(`
 `)}
