@@ -52,6 +52,8 @@ const classifyDefs = (phase: Phase): Def[] => {
 			c: {
 				cfgFiles: { "settings.json": JSON.stringify(user) },
 				args,
+				// From 2.1.319 the server-side check refuses a call that the stub gives no verdict for, and no classifier request follows.
+				env: { CLAUDE_CODE_AUTO_MODE_SERVER: "0" },
 				tool: "Bash",
 				toolInput: { command: "curl -s http://127.0.0.1:9/x" },
 			},

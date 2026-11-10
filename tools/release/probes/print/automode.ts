@@ -72,6 +72,8 @@ const classifyCase = (c: Row): CaseDef => ({
 						? {}
 						: { ".claude/settings.local.json": json(as(c.local)) }),
 				},
+				// From 2.1.319 the server-side check refuses a call that the stub gives no verdict for, and no classifier request follows.
+				env: { CLAUDE_CODE_AUTO_MODE_SERVER: "0" },
 				stub: BASH,
 				timeoutMs: 45_000,
 			},
