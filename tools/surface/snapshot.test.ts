@@ -50,6 +50,9 @@ const run = async (args: string[], empty = true) => {
 	return { code, out, err, dir };
 };
 
+const build = (out: string) =>
+	run(["--binary", CLAUDE_CODE_VERSION, "--commit", "--out", out], false);
+
 interface CaptureItem {
 	kind: string;
 	version: string;
@@ -196,12 +199,10 @@ test.skipIf(!installed)(
 	"two runs on the installed binary give the same bytes as the committed file",
 	async () => {
 		const [a, b] = await Promise.all([tmp(), tmp()]);
-		const runs = await Promise.all(
-			[a, b].map((out) =>
-				run(["--binary", CLAUDE_CODE_VERSION, "--commit", "--out", out], false),
-			),
-		);
-		for (const r of runs) {
+		// One at a time: each build peaks near 18 GB, and two at once swap on a 32 GB machine.
+		const first = await build(a);
+		const second = await build(b);
+		for (const r of [first, second]) {
 			expect(r.err).toBe("");
 			expect(r.code).toBe(0);
 		}
@@ -231,5 +232,5 @@ test.skipIf(!installed)(
 			}
 		}
 	},
-	400_000,
+	900_000,
 );
