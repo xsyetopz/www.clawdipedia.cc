@@ -1,7 +1,7 @@
 import { ARGS, P } from "./app.ts";
 
 /** The description of the `code` tool. */
-export const CODE_DESCRIPTION = `Read the code inside a Claude Code binary: list installs or modules, search literal text, find code by plain words, read a module slice, prepare a cleaned index for release diffs, run a prompt in an installed version against a local fake API to see the text it sends, or run it with other args (cli), list the chunk citations in the Markdown files of a folder that name no module of the build (citations), such as a subcommand; check with \`npm\` whether a text (\`query\`, with \${…} holes) is in the published source of the npm package in \`name\`; with \`query\`, cli names each request, stream, and transcript file that holds that text.`;
+export const CODE_DESCRIPTION = `Read the code inside a Claude Code binary: list installs or modules, search literal text, find code by plain words, read a module slice, prepare a cleaned index for release diffs, run a prompt in an installed version against a local fake API to see the text it sends, or run it with other args (cli), list the chunk citations in the Markdown files of a folder that name no module of the build (citations), find in the build \`version\` the code that sits at \`offset\` of \`module\` in the build \`from\` (relocate; \`query\` is the sentence that names the code), such as a subcommand; check with \`npm\` whether a text (\`query\`, with \${…} holes) is in the published source of the npm package in \`name\`; with \`query\`, cli names each request, stream, and transcript file that holds that text.`;
 
 /** The arguments the `code` tool lists, with the description of each. */
 export const CODE_SHAPE = {
@@ -35,6 +35,9 @@ export const CODE_SHAPE = {
 	),
 	replies: ARGS.replies.describe(
 		'With cli: JSON replies of the stub by "METHOD /path", such as {"GET /api/oauth/profile": {...}}. "<stub>" in an env value becomes the stub URL.',
+	),
+	from: ARGS.from.describe(
+		"With relocate: the version or path of the build that holds `module`, the older one.",
 	),
 	dir: ARGS.dir.describe(
 		"With citations: the folder whose `**/*.md` files are checked for `chunk-xxxxxxxx.js` citations (`:N`, `@N`, or `lines A to B` after the name) that name no module of the build.",

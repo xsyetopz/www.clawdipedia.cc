@@ -71838,8 +71838,53 @@ var init_citations = __esm(() => {
   CITATION = /(chunk-[\da-z]+\.js)(?:[:@]\d+|`? lines \d+ to \d+)?/gu;
 });
 
+// inspect/mcp/src/relocate.ts
+import { basename as basename6 } from "path";
+var WINDOW = 200, MAX_HITS = 300, MAX_ANCHORS = 6, WORD, SAME = 50, shape = (s) => s.replaceAll(/[A-Za-z_$][\w$]{0,2}(?![\w$])/gu, "_"), frame = (text, at) => `${shape(text.slice(Math.max(0, at - 2 * SAME), at)).slice(-SAME)}|${shape(text.slice(at, at + 2 * SAME)).slice(0, SAME)}`, words = (s) => new Set([...s.matchAll(WORD)].map((m) => m[0])), claimTerms = (claim) => {
+  const plain = claim.replaceAll(/chunk-[\da-z]+\.js(?:[:@]\d+|`? lines \d+ to \d+)?/gu, " ");
+  const found = plain.match(/[\w$][\w$.-]{4,}/gu) ?? [];
+  return [...new Set(found.map((t) => t.replaceAll(/[.-]+$/gu, "")))].filter((t) => t.length >= 5);
+}, literalsAround = (text, offset) => (text.slice(Math.max(0, offset - WINDOW), offset + WINDOW).match(/"[^"\\\n]{8,}"/gu) ?? []).map((l) => l.slice(1, -1)), rank = (r) => r.score + (r.same ? 1 : 0), occurrences = (text, needle) => {
+  const out = [];
+  for (let i = text.indexOf(needle);i !== -1 && out.length < MAX_HITS; i = text.indexOf(needle, i + 1)) {
+    out.push(i);
+  }
+  return out;
+}, relocate = (oldText, offset, terms, sources, limit = 3) => {
+  const lo = Math.max(0, offset - WINDOW);
+  const around = oldText.slice(lo, offset + WINDOW);
+  const known = words(around);
+  const near = [...terms, ...literalsAround(oldText, offset)].map((term) => ({ term, at: oldText.indexOf(term, lo) })).filter((a) => a.at !== -1 && a.at < offset + WINDOW).toSorted((a, b) => Math.abs(a.at - offset) - Math.abs(b.at - offset)).slice(0, MAX_ANCHORS);
+  const mods = [...sources];
+  const best = new Map;
+  for (const { term, at } of near) {
+    for (const m of mods) {
+      for (const i of occurrences(m.text, term)) {
+        const here = words(m.text.slice(Math.max(0, i - (at - lo)), i - (at - lo) + around.length));
+        const score = known.size === 0 ? 0 : [...known].filter((w) => here.has(w)).length / known.size;
+        const to = Math.max(0, i + offset - at);
+        const found = {
+          module: basename6(m.name),
+          offset: to,
+          anchor: term,
+          score,
+          same: frame(m.text, to) === frame(oldText, offset)
+        };
+        const prior = best.get(found.module);
+        if (prior === undefined || rank(found) > rank(prior)) {
+          best.set(found.module, found);
+        }
+      }
+    }
+  }
+  return [...best.values()].toSorted((a, b) => rank(b) - rank(a)).slice(0, limit);
+};
+var init_relocate = __esm(() => {
+  WORD = /[A-Za-z_$][\w$]{3,}/gu;
+});
+
 // inspect/mcp/src/mcp/code-citations.ts
-import { join as join7 } from "path";
+import { basename as basename7, join as join7 } from "path";
 var citations = async ({ dir, version }) => {
   const root = need(dir, "dir");
   const p = await program3(version);
@@ -71851,10 +71896,30 @@ var citations = async ({ dir, version }) => {
   return text(stale.length > 0 ? `${stale.length} citation(s) name a chunk that ${p.path} lacks
 ${stale.map((c) => `- ${c.file}:${c.line}: ${c.citation}`).join(`
 `)}` : `${p.path}: every chunk citation in ${Object.keys(files).length} files names a module`, { stale });
+}, relocateAction = async ({
+  from,
+  module,
+  offset = 0,
+  query,
+  version,
+  limit = 3
+}) => {
+  const name = need(module, "module");
+  const old = await program3(need(from, "from"));
+  const m = old.modules.find((x) => basename7(x.name) === name);
+  if (!m) {
+    throw new Error(`no module "${name}" in ${old.path}`);
+  }
+  const target = await program3(version);
+  const found = relocate(m.source, offset, claimTerms(query ?? ""), target.modules.map((x) => ({ name: x.name, text: x.source })), limit);
+  return text(found.length > 0 ? `${name}@${offset} of ${old.path} in ${target.path}
+${found.map((r) => `- ${r.module}@${r.offset}  score ${r.score.toFixed(2)}${r.same ? ", same code" : ""}  anchor ${r.anchor}`).join(`
+`)}` : `${name}@${offset}: no anchor from the query stands near the offset, or ${target.path} lacks it`, { found });
 };
 var init_code_citations = __esm(() => {
   init_binary();
   init_citations();
+  init_relocate();
   init_app();
 });
 
@@ -72578,7 +72643,7 @@ var init_code_cli = __esm(async () => {
 });
 
 // inspect/mcp/src/mcp/code-schema.ts
-var CODE_DESCRIPTION = `Read the code inside a Claude Code binary: list installs or modules, search literal text, find code by plain words, read a module slice, prepare a cleaned index for release diffs, run a prompt in an installed version against a local fake API to see the text it sends, or run it with other args (cli), list the chunk citations in the Markdown files of a folder that name no module of the build (citations), such as a subcommand; check with \`npm\` whether a text (\`query\`, with \${\u2026} holes) is in the published source of the npm package in \`name\`; with \`query\`, cli names each request, stream, and transcript file that holds that text.`, CODE_SHAPE;
+var CODE_DESCRIPTION = `Read the code inside a Claude Code binary: list installs or modules, search literal text, find code by plain words, read a module slice, prepare a cleaned index for release diffs, run a prompt in an installed version against a local fake API to see the text it sends, or run it with other args (cli), list the chunk citations in the Markdown files of a folder that name no module of the build (citations), find in the build \`version\` the code that sits at \`offset\` of \`module\` in the build \`from\` (relocate; \`query\` is the sentence that names the code), such as a subcommand; check with \`npm\` whether a text (\`query\`, with \${\u2026} holes) is in the published source of the npm package in \`name\`; with \`query\`, cli names each request, stream, and transcript file that holds that text.`, CODE_SHAPE;
 var init_code_schema = __esm(() => {
   init_app();
   CODE_SHAPE = {
@@ -72597,6 +72662,7 @@ var init_code_schema = __esm(() => {
     args: ARGS.args.describe('With cli: the program args, such as ["--settings", "<project-dir>/s.json", "auto-mode", "config"]. `<project-dir>` and `<config-dir>` become the temp project and config folders.'),
     files: ARGS.files.describe('With cli: files to write in the temp project folder first, by relative path, such as {"s.json": "{}"}.'),
     replies: ARGS.replies.describe('With cli: JSON replies of the stub by "METHOD /path", such as {"GET /api/oauth/profile": {...}}. "<stub>" in an env value becomes the stub URL.'),
+    from: ARGS.from.describe("With relocate: the version or path of the build that holds `module`, the older one."),
     dir: ARGS.dir.describe("With citations: the folder whose `**/*.md` files are checked for `chunk-xxxxxxxx.js` citations (`:N`, `@N`, or `lines A to B` after the name) that name no module of the build."),
     packageVersion: ARGS.packageVersion.describe("With npm: the version of the package in `name`; default: the latest, looked up once and kept."),
     login: ARGS.login.describe('With cli: "key" (default) sets the fake API key; "oauth" writes a fake claude.ai login to .credentials.json instead.'),
@@ -72720,6 +72786,7 @@ ${excerpt.join(`
       });
     },
     citations,
+    relocate: relocateAction,
     run: runCode,
     cli,
     npm: async ({ name, packageVersion, query }) => {

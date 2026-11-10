@@ -5,7 +5,7 @@ import { fetchPackage, findText } from "../npm.ts";
 import { prepared } from "../prepare.ts";
 import { readable } from "../readable.ts";
 import { clip, group, has, need, regex, text, WRITES_CACHE } from "./app.ts";
-import { citations } from "./code-citations.ts";
+import { citations, relocateAction } from "./code-citations.ts";
 import { cli, runCode } from "./code-cli.ts";
 import { CODE_DESCRIPTION, CODE_SHAPE } from "./code-schema.ts";
 
@@ -145,6 +145,7 @@ group(
 			);
 		},
 		citations,
+		relocate: relocateAction,
 		run: runCode,
 		cli,
 		npm: async ({ name, packageVersion, query }) => {

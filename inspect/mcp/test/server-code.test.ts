@@ -139,6 +139,34 @@ describe("binary", () => {
 		expect(none.isError).toBe(true);
 	});
 
+	test("code relocate finds the code of an offset in another build by the terms of the claim", async () => {
+		const hit = listOf(
+			await call("code", {
+				action: "search",
+				query: "api_error",
+				version: "9.9.9",
+			}),
+			"hits",
+			z.object({ offset: z.number() }),
+		)[0];
+		const r = await call("code", {
+			action: "relocate",
+			from: "9.9.9",
+			version: "9.9.9",
+			module: "app.js",
+			offset: hit?.offset,
+			query: "The program names the event api_error.",
+		});
+		expect(structured(r)["found"]).toMatchObject([
+			{
+				module: "app.js",
+				offset: hit?.offset,
+				anchor: "api_error",
+				same: true,
+			},
+		]);
+	});
+
 	test("surface object-keys follows a spread into a function", async () => {
 		const r = await call("surface", {
 			kind: "object-keys",
