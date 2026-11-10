@@ -126,6 +126,13 @@ const claudemdOrder: Def = {
 	}),
 };
 
+// The program marks a managed file "not verified" only in a remote_cowork session whose account can write the file (chunk-5a8mhnqs.js Vte, chunk-9r1hbf9p.js@1453085).
+const claudemdRemoteCowork: Def = {
+	...claudemdOrder,
+	name: "claudemd-remote-cowork",
+	c: { env: { CLAUDE_CODE_ENTRYPOINT: "remote_cowork" } },
+};
+
 const EXCLUDES = [
 	["any-claude-md", "**/CLAUDE.md"],
 	["managed-abs", `${MANAGED_DIR}/CLAUDE.md`],
@@ -221,6 +228,7 @@ export const mainDefs = (ctx: PhaseCtx): Def[] => [
 	skillDef(false),
 	skillDef(true),
 	claudemdOrder,
+	claudemdRemoteCowork,
 	...excludeDefs(),
 	agentDef(ctx),
 	autoModeDef,

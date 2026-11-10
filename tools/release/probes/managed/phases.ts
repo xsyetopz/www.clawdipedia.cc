@@ -1,6 +1,6 @@
 // Managed probe phases, split from p305-managed/probe.ts. Each phase returns CaseResults (group "managed").
 // baseline: no managed folder. main: folder without classifyAllShell. true/false: classifyAllShell cases only.
-// owned: the main folder owned by the sudo user, the CLAUDE.md case only.
+// owned: the main folder owned by the sudo user, the CLAUDE.md cases only.
 // The program always runs as the calling user through childEnv (via print/run.ts runCase); nothing here uses sudo.
 import { PROMPT } from "../../lib/env.ts";
 import { type CaseResult, normalise } from "../../lib/results.ts";
@@ -81,7 +81,7 @@ export const defsFor = (phase: Phase, ctx: PhaseCtx): Def[] => {
 		return [...mainDefs(ctx), ...classifyDefs(phase)];
 	}
 	if (phase === "owned") {
-		return mainDefs(ctx).filter((d) => d.name === "claudemd-order");
+		return mainDefs(ctx).filter((d) => d.name.startsWith("claudemd-"));
 	}
 	return classifyDefs(phase);
 };
