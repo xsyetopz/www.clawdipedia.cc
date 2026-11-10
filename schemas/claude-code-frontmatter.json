@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-frontmatter.json",
-	"title": "Claude Code frontmatter of skills, subagents, and output styles (Claude Code 2.1.321)",
-	"$comment": "For the YAML header of skill/command, subagent, and output style .md files. Generated from Claude Code 2.1.321 by tools/schemas/code.ts. Anchors: \"tengu_frontmatter_shadow_unknown_key\" and the table {skill, agent, \"output-style\"} of strict zod objects next to it; descriptions are the program's .describe() text; the loose value type of most keys (string, number, boolean, or null) is why they are x-unverified. Keys with a description that starts with \"@internal\" are internal. No probe in captures/ records frontmatter keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
+	"title": "Claude Code frontmatter of skills, subagents, and output styles (Claude Code 2.1.322)",
+	"$comment": "For the YAML header of skill/command, subagent, and output style .md files. Generated from Claude Code 2.1.322 by tools/schemas/code.ts. Anchors: \"tengu_frontmatter_shadow_unknown_key\" and the table {skill, agent, \"output-style\"} of strict zod objects next to it; descriptions are the program's .describe() text; the loose value type of most keys (string, number, boolean, or null) is why they are x-unverified. Keys with a description that starts with \"@internal\" are internal. No probe in captures/ records frontmatter keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
 	"$defs": {
 		"skill": {
 			"type": "object",

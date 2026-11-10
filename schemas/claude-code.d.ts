@@ -1,4 +1,4 @@
-// The Claude Code 2.1.321 Mod API type file, as the program embeds it.
+// The Claude Code 2.1.322 Mod API type file, as the program embeds it.
 // Extracted by tools/schemas/types.ts. Do not edit: run "bun run schemas".
 // Claude Code function hooks: the plugin API's TypeScript declarations.
 //

@@ -1,5 +1,5 @@
 {
-	"version": "2.1.321",
+	"version": "2.1.322",
 	"kinds": {
 		"beta": [
 			{ "name": "advanced-tool-use-2025-11-20", "detail": "tool_search" },
@@ -18026,7 +18026,7 @@
 			},
 			{
 				"name": "--proactivity",
-				"gate": "hidden unless JSe()",
+				"gate": "hidden unless ZSe()",
 				"detail": "--proactivity <level>"
 			},
 			{
@@ -21692,7 +21692,7 @@
 			},
 			{
 				"name": "fastMode",
-				"detail": "When true, fast mode is enabled. When absent or false, fast mode is off."
+				"detail": "When true, fast mode is enabled. When absent or false, fast mode is off. On Vertex a saved value is ignored: use /fast each session."
 			},
 			{
 				"name": "fastModePerSessionOptIn",
@@ -22627,7 +22627,7 @@
 		"slash-command": [
 			{
 				"name": "/add-dir",
-				"gate": "isEnabled ()=>ye()&&Ijr()",
+				"gate": "isEnabled ()=>ye()&&Ljr()",
 				"detail": "local-jsx | Add a new working directory"
 			},
 			{
@@ -22672,7 +22672,7 @@
 			},
 			{
 				"name": "/autofix-pr",
-				"gate": "availability claude-ai, console-profile; isEnabled ()=>Jgn()&&!ye()",
+				"gate": "availability claude-ai, console-profile; isEnabled ()=>Zgn()&&!ye()",
 				"detail": "local | Monitor and autofix any issues with the current PR"
 			},
 			{
@@ -22718,7 +22718,7 @@
 			},
 			{
 				"name": "/claude-in-chrome",
-				"gate": "isEnabled ()=>!e&&(TLe()||Dt())",
+				"gate": "isEnabled ()=>!e&&(ALe()||Dt())",
 				"detail": "prompt | Automates your Chrome browser to interact with web pages - clicking elements, filling forms, capturing screenshots, reading console logs, and navigating sites. Opens pages in new tabs within …"
 			},
 			{
@@ -22727,7 +22727,7 @@
 			},
 			{
 				"name": "/cloud-plugins",
-				"gate": "isEnabled ()=>Vjn()&&!i.CLAUDE_CODE_DISABLE_PLUGIN_FORWARDING",
+				"gate": "isEnabled ()=>Kjn()&&!i.CLAUDE_CODE_DISABLE_PLUGIN_FORWARDING",
 				"detail": "local-jsx | Choose whether cloud sessions use the plugins enabled on this machine"
 			},
 			{ "name": "/code-review", "detail": "prompt (aliases review)" },
@@ -22738,7 +22738,7 @@
 			},
 			{
 				"name": "/commit",
-				"gate": "isEnabled ()=>ixo()",
+				"gate": "isEnabled ()=>lxo()",
 				"detail": "prompt | Create a git commit. Use whenever you are about to create a commit, whether the user asked for one or it is a step in your current task — it gathers git context and applies the required commi…"
 			},
 			{
@@ -22766,7 +22766,7 @@
 			},
 			{
 				"name": "/cowork-plugin",
-				"gate": "isEnabled ()=>Qp()||J_()||i.CLAUDE_CODE_COWORK_PLUGIN_SKILL&&!wse()",
+				"gate": "isEnabled ()=>Qp()||J_()||i.CLAUDE_CODE_COWORK_PLUGIN_SKILL&&!Ese()",
 				"detail": "prompt | Create a new Cowork plugin from scratch, or customize an installed plugin for a specific organization. Use when: customize plugin, set up plugin, configure plugin, tailor plugin, adjust plugi…"
 			},
 			{
@@ -22808,12 +22808,12 @@
 			},
 			{
 				"name": "/desktop",
-				"gate": "availability claude-ai; isEnabled CDe",
+				"gate": "availability claude-ai; isEnabled TDe",
 				"detail": "local-jsx (aliases app) | Continue the current session in Claude Desktop"
 			},
 			{
 				"name": "/diff",
-				"gate": "isEnabled ()=>!_ao()",
+				"gate": "isEnabled ()=>!Eao()",
 				"detail": "local-jsx"
 			},
 			{
@@ -22884,7 +22884,7 @@
 			},
 			{
 				"name": "/import",
-				"gate": "isEnabled ()=>m2e()&&ye()&&!q()",
+				"gate": "isEnabled ()=>y2e()&&ye()&&!q()",
 				"detail": "local | Import config from another AI coding agent"
 			},
 			{ "name": "/init", "detail": "prompt" },
@@ -22908,17 +22908,17 @@
 			},
 			{
 				"name": "/keybindings",
-				"gate": "isEnabled ()=>Lse()",
+				"gate": "isEnabled ()=>Hse()",
 				"detail": "local | Open your keyboard shortcuts file"
 			},
 			{
 				"name": "/keybindings-help",
-				"gate": "isEnabled Lse",
+				"gate": "isEnabled Hse",
 				"detail": "prompt | Use when the user wants to customize keyboard shortcuts, rebind keys, add chord bindings, or modify ~/.claude/keybindings.json. Examples: \"rebind ctrl+s\", \"add a chord shortcut\", \"change the …"
 			},
 			{
 				"name": "/limit-reset",
-				"gate": "hidden; isEnabled ()=>Tt()&&(KCe()||Zce())",
+				"gate": "hidden; isEnabled ()=>Tt()&&(JCe()||tue())",
 				"detail": "local-jsx"
 			},
 			{
@@ -22948,7 +22948,7 @@
 			},
 			{
 				"name": "/low-priority",
-				"gate": "hidden; isEnabled ()=>Tt()&&(mH()||INt())",
+				"gate": "hidden; isEnabled ()=>Tt()&&(mH()||MNt())",
 				"detail": "local | Continue now at lower priority after reaching your 5-hour limit; run again to stop"
 			},
 			{
@@ -22967,7 +22967,7 @@
 			{ "name": "/model", "gate": "isEnabled ()=>ye()", "detail": "local-jsx" },
 			{
 				"name": "/output-style",
-				"gate": "isEnabled ()=>ye()||!TDe()||hhn()",
+				"gate": "isEnabled ()=>ye()||!ADe()||yhn()",
 				"detail": "local | List output styles or switch to one"
 			},
 			{ "name": "/passes", "detail": "local-jsx" },
@@ -22994,7 +22994,7 @@
 			},
 			{
 				"name": "/pr",
-				"gate": "isEnabled ()=>ixo()",
+				"gate": "isEnabled ()=>lxo()",
 				"detail": "prompt | Create a GitHub pull request. Use whenever you are about to open a PR, whether the user asked for one or it is a step in your current task — it gathers branch context and applies the required…"
 			},
 			{
@@ -23009,7 +23009,7 @@
 			},
 			{
 				"name": "/project",
-				"gate": "isEnabled ()=>mvs()&&k(ywr,!1)",
+				"gate": "isEnabled ()=>gvs()&&k(uwr,!1)",
 				"detail": "local | Set the claude.ai Project for this session's usage reports"
 			},
 			{ "name": "/radio", "detail": "local | Listen to Claude FM lo-fi radio" },
@@ -23038,7 +23038,7 @@
 			},
 			{
 				"name": "/remote-env",
-				"gate": "availability claude-ai, console-profile; isEnabled ()=>Tt()||ydn()",
+				"gate": "availability claude-ai, console-profile; isEnabled ()=>Tt()||_dn()",
 				"detail": "local-jsx | Choose the default environment for cloud agents"
 			},
 			{
@@ -23048,12 +23048,12 @@
 			},
 			{
 				"name": "/restart",
-				"gate": "isEnabled vSn",
+				"gate": "isEnabled CSn",
 				"detail": "local (aliases update)"
 			},
 			{
 				"name": "/resume",
-				"gate": "isEnabled gbr",
+				"gate": "isEnabled fbr",
 				"detail": "local-jsx (aliases continue)"
 			},
 			{
@@ -23071,12 +23071,12 @@
 			{ "name": "/sandbox", "detail": "local-jsx" },
 			{
 				"name": "/schedule",
-				"gate": "isEnabled ()=>Fn()&&Tt()&&!i.CLAUDE_CODE_REMOTE&&gn(Ude)",
+				"gate": "isEnabled ()=>Fn()&&Tt()&&!i.CLAUDE_CODE_REMOTE&&gn(jde)",
 				"detail": "local (aliases routines) | Create and manage scheduled remote Claude Code agents"
 			},
 			{
 				"name": "/scroll-speed",
-				"gate": "isEnabled ()=>{if(!Xd())return!1;let e=vf();return!(e?JEe.includes(e.terminal??\"\"):FR.isJetBrainsIdeTerminal())}",
+				"gate": "isEnabled ()=>{if(!Xd())return!1;let e=vf();return!(e?eke.includes(e.terminal??\"\"):FR.isJetBrainsIdeTerminal())}",
 				"detail": "local-jsx | Adjust mouse wheel scroll speed"
 			},
 			{
@@ -23085,7 +23085,7 @@
 			},
 			{
 				"name": "/send-to-project",
-				"gate": "isEnabled GAt",
+				"gate": "isEnabled zAt",
 				"detail": "prompt | Send this session's work to a Claude Project"
 			},
 			{
@@ -23095,7 +23095,7 @@
 			},
 			{
 				"name": "/setup-bedrock",
-				"gate": "isEnabled ()=>Wpe(\"bedrock\")===void 0",
+				"gate": "isEnabled ()=>zpe(\"bedrock\")===void 0",
 				"detail": "local-jsx | Reconfigure Amazon Bedrock authentication, region, or model pins"
 			},
 			{
@@ -23105,7 +23105,7 @@
 			},
 			{
 				"name": "/setup-vertex",
-				"gate": "isEnabled ()=>Wpe(\"vertex\")===void 0",
+				"gate": "isEnabled ()=>zpe(\"vertex\")===void 0",
 				"detail": "local-jsx | Reconfigure Google Vertex AI authentication, project, region, or model pins"
 			},
 			{
@@ -23147,7 +23147,7 @@
 			},
 			{
 				"name": "/teleport",
-				"gate": "availability claude-ai, console-profile; isEnabled ()=>Tt()||ydn()",
+				"gate": "availability claude-ai, console-profile; isEnabled ()=>Tt()||_dn()",
 				"detail": "local (aliases tp) | Send this session to the cloud, or resume one from claude.ai"
 			},
 			{ "name": "/terminal-setup", "detail": "local-jsx" },
@@ -23172,7 +23172,7 @@
 			},
 			{
 				"name": "/upgrade",
-				"gate": "availability claude-ai; isEnabled ISe",
+				"gate": "availability claude-ai; isEnabled DSe",
 				"detail": "local-jsx | Upgrade your plan for higher rate limits and more Opus"
 			},
 			{
@@ -23206,7 +23206,7 @@
 			},
 			{
 				"name": "/web-setup",
-				"gate": "availability claude-ai; isEnabled WGe",
+				"gate": "availability claude-ai; isEnabled VGe",
 				"detail": "local-jsx | Set up cloud sessions with your GitHub account"
 			},
 			{
@@ -23329,33 +23329,33 @@
 			{ "name": "Agent" },
 			{
 				"name": "AppifactRepl",
-				"gate": "is (=import.meta.require(\"/$bunfs/root/chunk-hyt1y2g1.js\").AppifactReplTool)",
-				"detail": "isEnabled(){return Uts()&&KR()&&!id()}"
+				"gate": "is (=import.meta.require(\"/$bunfs/root/chunk-wx3tyafy.js\").AppifactReplTool)",
+				"detail": "isEnabled(){return jts()&&KR()&&!id()}"
 			},
 			{
 				"name": "Artifact",
-				"gate": "ss (=Kn(import.meta.require(\"/$bunfs/root/chunk-ev3pxrde.js\").ARTIFACT_TOOL_HEAD,()=>import.meta.require(\"/$bunfs/root/chunk-ssyv876r.js\").ArtifactTool))",
-				"detail": "isEnabled(){AIs();let e=Xsn();return RIs(e),e===null&&!id()}"
+				"gate": "ss (=Kn(import.meta.require(\"/$bunfs/root/chunk-h7a64myh.js\").ARTIFACT_TOOL_HEAD,()=>import.meta.require(\"/$bunfs/root/chunk-rt9r79t5.js\").ArtifactTool))",
+				"detail": "isEnabled(){xIs();let e=Xsn();return PIs(e),e===null&&!id()}"
 			},
 			{ "name": "ArtifactCheck" },
 			{ "name": "ArtifactComments" },
 			{ "name": "ArtifactData" },
-			{ "name": "AskUserQuestion", "detail": "isEnabled(){return gie()}" },
+			{ "name": "AskUserQuestion", "detail": "isEnabled(){return yie()}" },
 			{ "name": "Bash", "gate": "Ul()" },
 			{
 				"name": "ClaudeDesign",
 				"gate": "e (=wl())",
-				"detail": "isEnabled:z5e"
+				"detail": "isEnabled:V5e"
 			},
 			{ "name": "CronCreate", "detail": "isEnabled(){return U0()}" },
-			{ "name": "CronDelete", "detail": "isEnabled(){return qLn()}" },
-			{ "name": "CronList", "detail": "isEnabled(){return qLn()}" },
+			{ "name": "CronDelete", "detail": "isEnabled(){return YLn()}" },
+			{ "name": "CronList", "detail": "isEnabled(){return YLn()}" },
 			{ "name": "DesignSync", "detail": "isEnabled(){return CV()}" },
 			{ "name": "Edit" },
 			{
 				"name": "EndConversation",
-				"gate": "os (=import.meta.require(\"/$bunfs/root/chunk-4azhxn42.js\").EndConversationTool)",
-				"detail": "isEnabled(){let e=hln();return e!==void 0&&f7r(e)}"
+				"gate": "os (=import.meta.require(\"/$bunfs/root/chunk-qfs6e9bp.js\").EndConversationTool)",
+				"detail": "isEnabled(){let e=hln();return e!==void 0&&h7r(e)}"
 			},
 			{
 				"name": "EnterPlanMode",
@@ -23364,40 +23364,40 @@
 			{ "name": "EnterWorktree", "gate": "wqt()" },
 			{
 				"name": "ExitPlanMode",
-				"detail": "isEnabled(){return ac()?tRs():gie()}"
+				"detail": "isEnabled(){return lc()?rRs():yie()}"
 			},
 			{ "name": "ExitWorktree", "gate": "wqt()" },
 			{
 				"name": "FetchInboxMessage",
-				"gate": "We (=import.meta.require(\"/$bunfs/root/chunk-2tzm5aty.js\").FetchInboxMessageTool)",
-				"detail": "isEnabled(){return Qu()||Q$n()!==void 0}"
+				"gate": "We (=import.meta.require(\"/$bunfs/root/chunk-pge5km6j.js\").FetchInboxMessageTool)",
+				"detail": "isEnabled(){return Qu()||Z$n()!==void 0}"
 			},
 			{ "name": "GetTask", "detail": "isEnabled(){return!1}" },
-			{ "name": "Glob", "gate": "(n)=>!Tce().has(n.name)" },
-			{ "name": "Grep", "gate": "(n)=>!Tce().has(n.name)" },
-			{ "name": "LSP", "gate": "mJe()", "detail": "isEnabled(){return xYe()}" },
+			{ "name": "Glob", "gate": "(n)=>!Rce().has(n.name)" },
+			{ "name": "Grep", "gate": "(n)=>!Rce().has(n.name)" },
+			{ "name": "LSP", "gate": "hJe()", "detail": "isEnabled(){return PYe()}" },
 			{
 				"name": "ListAgents",
-				"gate": "gs (=import.meta.require(\"/$bunfs/root/chunk-atm8pg30.js\").ListAgentsTool)",
+				"gate": "gs (=import.meta.require(\"/$bunfs/root/chunk-rwd8svf7.js\").ListAgentsTool)",
 				"detail": "isEnabled(){return zl()}"
 			},
 			{
 				"name": "ListConnectors",
-				"gate": "Zn (=import.meta.require(\"/$bunfs/root/chunk-7qsgh8zq.js\").ListConnectorsTool)",
-				"detail": "isEnabled:Dje"
+				"gate": "Zn (=import.meta.require(\"/$bunfs/root/chunk-mhgzhwyz.js\").ListConnectorsTool)",
+				"detail": "isEnabled:Nje"
 			},
 			{ "name": "ListMcpResourcesTool" },
 			{ "name": "ListPlugins" },
 			{ "name": "ListSkills" },
 			{
 				"name": "MonitorTool",
-				"gate": "Jn (=import.meta.require(\"/$bunfs/root/chunk-6krm0665.js\").MonitorTool)"
+				"gate": "Jn (=import.meta.require(\"/$bunfs/root/chunk-etsyb3fk.js\").MonitorTool)"
 			},
 			{ "name": "NotebookEdit" },
-			{ "name": "OfferChromeSetup", "detail": "isEnabled:A3r" },
+			{ "name": "OfferChromeSetup", "detail": "isEnabled:P3r" },
 			{
 				"name": "Poll",
-				"gate": "Te (=import.meta.require(\"/$bunfs/root/chunk-6027v6f4.js\").PollTool)",
+				"gate": "Te (=import.meta.require(\"/$bunfs/root/chunk-v1h96r9m.js\").PollTool)",
 				"detail": "isEnabled(){return hM()}"
 			},
 			{
@@ -23411,12 +23411,12 @@
 			},
 			{
 				"name": "ProposeGoal",
-				"detail": "isEnabled(){if(ye()||Rn())return!1;if(Vt())return!1;if(!Vsr())return!1;let e=fWt();if(e===\"disabled\")return!1;return A(e),!0}"
+				"detail": "isEnabled(){if(ye()||Rn())return!1;if(Vt())return!1;if(!Ksr())return!1;let e=fWt();if(e===\"disabled\")return!1;return A(e),!0}"
 			},
-			{ "name": "PublishPlugin", "detail": "isEnabled(){return mnr()}" },
+			{ "name": "PublishPlugin", "detail": "isEnabled(){return hnr()}" },
 			{
 				"name": "PushNotification",
-				"gate": "ts (=import.meta.require(\"/$bunfs/root/chunk-9ctxf8nv.js\").PushNotificationTool)",
+				"gate": "ts (=import.meta.require(\"/$bunfs/root/chunk-6d8kf1qt.js\").PushNotificationTool)",
 				"detail": "isEnabled(){return V9(\"tengu_kairos_push_notifications\",!1,g)}"
 			},
 			{
@@ -23427,8 +23427,8 @@
 			{ "name": "Read" },
 			{ "name": "ReadMcpResourceDirTool" },
 			{ "name": "ReadMcpResourceTool" },
-			{ "name": "ReadNotifications", "detail": "isEnabled:Unr" },
-			{ "name": "ReadWidgetContext", "detail": "isEnabled:rIt" },
+			{ "name": "ReadNotifications", "detail": "isEnabled:Bnr" },
+			{ "name": "ReadWidgetContext", "detail": "isEnabled:oIt" },
 			{
 				"name": "RefreshMcpTools",
 				"gate": "i.CLAUDE_CODE_ENABLE_REFRESH_MCP_TOOLS",
@@ -23436,69 +23436,69 @@
 			},
 			{
 				"name": "RemoteTrigger",
-				"gate": "Yn (=import.meta.require(\"/$bunfs/root/chunk-14ce0yzf.js\").RemoteTriggerTool)",
-				"detail": "isEnabled(){return Fn()&&Tt()&&!i.CLAUDE_CODE_REMOTE&&gn(\"allow_remote_sessions\")&&gn(Ude)}"
+				"gate": "Yn (=import.meta.require(\"/$bunfs/root/chunk-3tf18zw7.js\").RemoteTriggerTool)",
+				"detail": "isEnabled(){return Fn()&&Tt()&&!i.CLAUDE_CODE_REMOTE&&gn(\"allow_remote_sessions\")&&gn(jde)}"
 			},
 			{ "name": "ReportFindings" },
 			{ "name": "ScheduleWakeup" },
 			{
 				"name": "SearchMcpRegistry",
-				"gate": "Xn (=import.meta.require(\"/$bunfs/root/chunk-j3y31ba1.js\").SearchMcpRegistryTool)",
-				"detail": "isEnabled:Dje"
+				"gate": "Xn (=import.meta.require(\"/$bunfs/root/chunk-tkntaqsg.js\").SearchMcpRegistryTool)",
+				"detail": "isEnabled:Nje"
 			},
 			{ "name": "SearchPlugins" },
 			{ "name": "SearchSkills" },
 			{ "name": "SendFeedback", "detail": "isEnabled(){return wY()}" },
-			{ "name": "SendFile", "detail": "isEnabled(){return AQe()}" },
+			{ "name": "SendFile", "detail": "isEnabled(){return RQe()}" },
 			{ "name": "SendMessage" },
 			{
 				"name": "SendToProject",
-				"gate": "rs (=import.meta.require(\"/$bunfs/root/chunk-ezbv4x6a.js\").ContinueInProjectsTool)",
-				"detail": "isEnabled(){return GAt()}"
+				"gate": "rs (=import.meta.require(\"/$bunfs/root/chunk-tvzf91w2.js\").ContinueInProjectsTool)",
+				"detail": "isEnabled(){return zAt()}"
 			},
 			{
 				"name": "SendToProjectContext",
-				"gate": "ns (=import.meta.require(\"/$bunfs/root/chunk-ezbv4x6a.js\").ContinueInProjectsContextTool)",
-				"detail": "isEnabled(){return GAt()}"
+				"gate": "ns (=import.meta.require(\"/$bunfs/root/chunk-tvzf91w2.js\").ContinueInProjectsContextTool)",
+				"detail": "isEnabled(){return zAt()}"
 			},
 			{
 				"name": "SendUserFile",
-				"detail": "isEnabled(){let t=!i.CLAUDE_CODE_ATTACHMENTS_BY_PATH;if(t&&(Ce()!==\"firstParty\"||gt()))return!1;if(t&&!gn(\"allow_send_file\"))return!1;if(!k(\"tengu_send_user_file\",!0))return!1;return(Qu()||j())&&!F2()…"
+				"detail": "isEnabled(){let t=!i.CLAUDE_CODE_ATTACHMENTS_BY_PATH;if(t&&(ve()!==\"firstParty\"||gt()))return!1;if(t&&!gn(\"allow_send_file\"))return!1;if(!k(\"tengu_send_user_file\",!0))return!1;return(Qu()||j())&&!F2()…"
 			},
 			{
 				"name": "SendUserMessage",
-				"detail": "isEnabled(){return F2()||pJe()}"
+				"detail": "isEnabled(){return F2()||mJe()}"
 			},
 			{ "name": "ShareOnboardingGuide", "detail": "isEnabled(){return c7t()}" },
 			{ "name": "ShowOnboardingRolePicker", "detail": "isEnabled:Bs" },
-			{ "name": "Skill", "detail": "isEnabled(){return!mw()}" },
+			{ "name": "Skill", "detail": "isEnabled(){return!hw()}" },
 			{
 				"name": "SuggestConnectors",
-				"gate": "Qn (=import.meta.require(\"/$bunfs/root/chunk-wrs80v6q.js\").SuggestConnectorsTool)",
-				"detail": "isEnabled:Dje"
+				"gate": "Qn (=import.meta.require(\"/$bunfs/root/chunk-s2hmn3as.js\").SuggestConnectorsTool)",
+				"detail": "isEnabled:Nje"
 			},
-			{ "name": "SuggestPluginInstall", "detail": "isEnabled:hdt" },
-			{ "name": "SuggestSkills", "detail": "isEnabled:hdt" },
+			{ "name": "SuggestPluginInstall", "detail": "isEnabled:gdt" },
+			{ "name": "SuggestSkills", "detail": "isEnabled:gdt" },
 			{
 				"name": "TaskCreate",
 				"gate": "iH()",
-				"detail": "isEnabled(){return Gye()}"
+				"detail": "isEnabled(){return Vye()}"
 			},
 			{
 				"name": "TaskGet",
 				"gate": "iH()",
-				"detail": "isEnabled(){return Gye()}"
+				"detail": "isEnabled(){return Vye()}"
 			},
 			{
 				"name": "TaskList",
 				"gate": "iH()",
-				"detail": "isEnabled(){return Gye()}"
+				"detail": "isEnabled(){return Vye()}"
 			},
 			{ "name": "TaskStop" },
 			{
 				"name": "TaskUpdate",
 				"gate": "iH()",
-				"detail": "isEnabled(){return Gye()}"
+				"detail": "isEnabled(){return Vye()}"
 			},
 			{ "name": "TodoWrite", "detail": "isEnabled(){return!iH()&&QY()}" },
 			{
@@ -23508,31 +23508,31 @@
 			},
 			{
 				"name": "WaitForMcpServers",
-				"detail": "isEnabled(){return tBr(at(),h_()??[])}"
+				"detail": "isEnabled(){return oBr(at(),h_()??[])}"
 			},
 			{
 				"name": "WebFetch",
-				"detail": "isEnabled(){return!i.CLAUDE_CODE_DISABLE_WEB_FETCH&&gn(FFt)}"
+				"detail": "isEnabled(){return!i.CLAUDE_CODE_DISABLE_WEB_FETCH&&gn($Ft)}"
 			},
 			{
 				"name": "WebSearch",
-				"detail": "isEnabled(){if(!gn(l4i))return!1;let e=Ce();if(e===\"firstParty\"||HM(e))return!0;if(e===\"gateway\")return!1;if(e===\"vertex\")return CRo(it(at()));if(e===\"foundry\")return!0;return!1}"
+				"detail": "isEnabled(){if(!gn(c4i))return!1;let e=ve();if(e===\"firstParty\"||HM(e))return!0;if(e===\"gateway\")return!1;if(e===\"vertex\")return ARo(it(at()));if(e===\"foundry\")return!0;return!1}"
 			},
 			{ "name": "Workflow", "detail": "isEnabled:()=>Sm()" },
 			{
 				"name": "WrapUp",
-				"detail": "isEnabled(){return A9s()&&!zV()&&rn(oi,!1)}"
+				"detail": "isEnabled(){return x9s()&&!zV()&&rn(oi,!1)}"
 			},
 			{ "name": "Write" },
 			{ "name": "enable__mcp__claude-in-chrome" },
 			{ "name": "enable__mcp__remote-devices__Claude_Browser" },
 			{ "name": "enable__mcp__remote-devices__computer" },
-			{ "name": "memory_list", "detail": "isEnabled(){return uNe()}" },
-			{ "name": "memory_read", "detail": "isEnabled(){return uNe()}" },
-			{ "name": "memory_write", "detail": "isEnabled(){return uNe()}" },
+			{ "name": "memory_list", "detail": "isEnabled(){return fNe()}" },
+			{ "name": "memory_read", "detail": "isEnabled(){return fNe()}" },
+			{ "name": "memory_write", "detail": "isEnabled(){return fNe()}" },
 			{
 				"name": "propose_skills",
-				"detail": "isEnabled(){if(wse())return!1;if(J_())return i.CLAUDE_CODE_SYNC_SKILLS&&!eT();if(!Qp()&&!i.CLAUDE_CODE_SKILL_PROPOSALS&&!Ym())return!1;if(!i.CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE&&!(Mn()&&i.CLAUDE_CODE_…"
+				"detail": "isEnabled(){if(Ese())return!1;if(J_())return i.CLAUDE_CODE_SYNC_SKILLS&&!tT();if(!Qp()&&!i.CLAUDE_CODE_SKILL_PROPOSALS&&!Ym())return!1;if(!i.CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE&&!(Mn()&&i.CLAUDE_CODE_…"
 			},
 			{ "name": "request_computer" },
 			{ "name": "self_hosted_runner_get_pool", "gate": "Vn()" },

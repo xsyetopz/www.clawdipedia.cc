@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-managed-settings.json",
-	"title": "Claude Code managed-settings.json (Claude Code 2.1.321)",
-	"$comment": "For managed settings (settings.json keys plus managed-only keys). Generated from Claude Code 2.1.321 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code managed-settings.json (Claude Code 2.1.322)",
+	"$comment": "For managed settings (settings.json keys plus managed-only keys). Generated from Claude Code 2.1.322 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
 	"type": "object",
 	"properties": {
 		"$schema": {
@@ -4402,7 +4402,7 @@
 			"type": "string"
 		},
 		"fastMode": {
-			"description": "When true, fast mode is enabled. When absent or false, fast mode is off.",
+			"description": "When true, fast mode is enabled. When absent or false, fast mode is off. On Vertex a saved value is ignored: use /fast each session.",
 			"type": "boolean"
 		},
 		"fastModePerSessionOptIn": {

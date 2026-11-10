@@ -25,7 +25,7 @@ Sizes count the text after the placeholders are in place. Each placeholder count
 ## What to Notice
 
 - Sonnet 5.5 gets the same lean prompt as Opus 5.5. Only the model name, the model ID, and the commit trailer change.
-- The old wiki says Sonnet gets the full prompt. The capture shows it does not in 2.1.321, and the official docs agree with the capture.
+- The old wiki says Sonnet gets the full prompt. The capture shows it does not in 2.1.322, and the official docs agree with the capture.
 
 ## Full Text
 
@@ -33,7 +33,7 @@ The text below is every part of the request that Claude Code builds before your 
 
 ````text
 === system[0] (no cache marker) ===
-x-anthropic-billing-header: cc_version=2.1.321.<build>; cc_entrypoint=sdk-cli;
+x-anthropic-billing-header: cc_version=2.1.322.<build>; cc_entrypoint=sdk-cli;
 
 === system[1] (cache marker: {"type":"ephemeral"}) ===
 You are a Claude agent, built on Anthropic's Claude Agent SDK.

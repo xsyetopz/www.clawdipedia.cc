@@ -25,7 +25,7 @@ Sizes count the text after the placeholders are in place. Each placeholder count
 
 ## What to Notice
 
-- By default, the server checks each tool call: the main request carries a `safeguards` field with a `classifier_context` object that holds the rules and the `auto_mode` lists. See [The Server-Side Check](../../../configure/permissions/auto-mode.md#the-server-side-check).
+- By default, the server checks each tool call: the main request carries a `safeguards` field with a `classifier_context` object that holds the rules and the `auto_mode` lists. See [The Server-Side Check](../../configure/permissions/auto-mode.md#the-server-side-check).
 - With `CLAUDE_CODE_AUTO_MODE_SERVER=0`, as in this capture, the program sends no `safeguards` field and asks its own classifier. The first stage is a separate request with the system text `You are a security monitor for autonomous AI coding agents.` and no tools.
 - The stub gave no classifier result that the program could parse, so it sent the same request more than once.
 
@@ -35,7 +35,7 @@ The text below is every part of the request that Claude Code builds before your 
 
 ```text
 === system[0] (no cache marker) ===
-x-anthropic-billing-header: cc_version=2.1.321.<build>; cc_entrypoint=sdk-cli;
+x-anthropic-billing-header: cc_version=2.1.322.<build>; cc_entrypoint=sdk-cli;
 
 === system[1] (cache marker: {"type":"ephemeral"}) ===
 You are a security monitor for autonomous AI coding agents.
@@ -364,7 +364,7 @@ Lines added: 285. Lines removed: 91. Size change: +125,701 characters.
 --- default-lean
 +++ auto-classifier
 @@ -2,125 +2,317 @@
- x-anthropic-billing-header: cc_version=2.1.321.<build>; cc_entrypoint=sdk-cli;
+ x-anthropic-billing-header: cc_version=2.1.322.<build>; cc_entrypoint=sdk-cli;
 
  === system[1] (cache marker: {"type":"ephemeral"}) ===
 -You are a Claude agent, built on Anthropic's Claude Agent SDK.
