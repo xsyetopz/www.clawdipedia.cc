@@ -1921,10 +1921,10 @@
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/configure/cli/remote-control.md#options:12535aed": {
+	"docs/configure/cli/remote-control.md#options:5b20d6db": {
 		"kind": "manual",
 		"probes": [],
-		"note": "2.1.321 text checked against the 2.1.321 release notes only; no program text found"
+		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
 	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:e2b1496a": {
 		"kind": "manual",
