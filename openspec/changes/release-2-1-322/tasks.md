@@ -15,6 +15,8 @@ Do not let a page state a `(proposed)` item.
 - [x] 1.8 The `classify-all-shell` print cases set `CLAUDE_CODE_AUTO_MODE_SERVER=0`, and give the counts of `docs/reference/probes.md` on `2.1.322`.
 - [x] 1.9 The 21 managed `classify-*` cases with `CLAUDE_CODE_AUTO_MODE_SERVER=0`: `bun run release:probe:managed -- --to 2.1.322 --only` with the 7 case names.
       It needs the user to run the `sudo` install command. Then `docs/reference/probes.md` names `2.1.322` for the three managed rows.
+- [x] 1.10 Print probes: group `modcontext` (`tools/release/probes/print/modcontext.ts`), 1 case, for the label that the program writes above each kind of instruction file.
+      `docs/configure/memory-and-rules.md` has the labels and the two conditions of the "not verified" label.
 
 ## 2. Pages From the Diff
 
