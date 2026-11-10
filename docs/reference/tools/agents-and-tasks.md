@@ -36,7 +36,7 @@ Source: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Con
 | `ExitWorktree` | <Documented /> | Leaves the worktree. | `action` (`keep` or `remove`, required), `discard_changes` (boolean, needed for `remove` when there are changes). Refused from a subagent with a cwd override. | Main session and subagents. Kept in background subagents. | ❌ | ❌ | ✅ |
 | `EnterPlanMode` | <Documented /> <Gated note="non-interactive runs need a permission prompt tool" /> | Switches to plan mode. | No parameters. Gives a validation error from an agent. Removed from subagents. | Main session only. | ✅ | ❌ | ✅ |
 | `ExitPlanMode` | <Documented /> <Gated note="non-interactive runs need a permission prompt tool" /> | Presents the plan and leaves plan mode. | `allowedPrompts` (deprecated, unused). A subagent keeps it only when its `permissionMode` is `plan`. | Main session. | ❌ | ❌ | ✅ |
-| `AskUserQuestion` | <Documented /> <Gated note="non-interactive runs need a permission prompt tool" /> | Asks the user 1 to 4 multiple-choice questions. A permission hook or prompt tool can return `afkTimeoutMs` (an integer) only in a bare allow report with empty answers and no other fields. The program refuses it in any other form ([2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321); the program, `chunk-emmfvedy.js:4861`). | Removed from every subagent. The answer to a question can set `annotations[question].unanswered` to `skipped`, `replied_in_chat`, or `dismissed`. The tool result echoes it. The model does not see it. Send it only to a session whose `init` line lists `ask_user_question_unanswered_v1`. See [Capabilities of the `init` Line](../../extend/headless/stream-json.md#capabilities-of-the-init-line). | Main session. | ✅ | ❌ | ❌ |
+| `AskUserQuestion` | <Documented /> <Gated note="non-interactive runs need a permission prompt tool" /> | Asks the user 1 to 4 multiple-choice questions. A permission hook or prompt tool can return `afkTimeoutMs` (an integer) only in a bare allow report with empty answers and no other fields. The program refuses it in any other form ([2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321); the program, `chunk-rm7x2q7g.js:4861`). | Removed from every subagent. The answer to a question can set `annotations[question].unanswered` to `skipped`, `replied_in_chat`, or `dismissed`. The tool result echoes it. The model does not see it. Send it only to a session whose `init` line lists `ask_user_question_unanswered_v1`. See [Capabilities of the `init` Line](../../extend/headless/stream-json.md#capabilities-of-the-init-line). | Main session. | ✅ | ❌ | ❌ |
 | `ProposeGoal` | <Undocumented /> <Gated note="hidden server-side flag" /> | Proposes a goal condition for user approval. | `condition` (string, required), `ask_user` (boolean, default true). | Main session. | ✅ | ❌ | ✅ |
 | `ReportFindings` | <Documented /> | Reports code-review findings as a list. | `level` (`low`, `medium`, `high`, `xhigh`, `max`, optional), `findings` (array of at most 32, required). Used only when review instructions ask for it. | Main session. | ✅ | ✅ | ❌ |
 
@@ -66,10 +66,10 @@ Two result fields are new in `2.1.311`. Source: `AgentResult` and `SkillResult` 
 
 | Field | Status | Tool and Result | Type | What It Means |
 | --- | --- | --- | --- | --- |
-| `toolsUsed` | <Undocumented /> | `Agent`, the completed result | Array of strings | A list of tool names that the program builds from the messages of the subagent. The program leaves the field out when the list is empty (`chunk-6av2ww92.js:9135`, `chunk-6av2ww92.js:9412`). `Skill` turns the same list into `toolsUsedLine`. |
-| `toolsUsedLine` | <Undocumented /> | `Skill`, the forked result | String | The line that the `tool_result` text opens with. It names the tools that the subagent called and that the requests of this conversation did not yet name. The program leaves the field out when there is no such tool (`chunk-5qk4ktjf.js:600`, `chunk-5qk4ktjf.js:1328`). |
+| `toolsUsed` | <Undocumented /> | `Agent`, the completed result | Array of strings | A list of tool names that the program builds from the messages of the subagent. The program leaves the field out when the list is empty (`chunk-6yy7c9r1.js:9135`, `chunk-6yy7c9r1.js:9412`). `Skill` turns the same list into `toolsUsedLine`. |
+| `toolsUsedLine` | <Undocumented /> | `Skill`, the forked result | String | The line that the `tool_result` text opens with. It names the tools that the subagent called and that the requests of this conversation did not yet name. The program leaves the field out when there is no such tool (`chunk-kbkxx3rh.js:600`, `chunk-kbkxx3rh.js:1328`). |
 
-In `2.1.321` the program has no server flag for this list. It builds the list from the tools that each agent recorded, and it leaves the field out when the list is empty (`chunk-0fykeszx.js:1854`, `chunk-0fykeszx.js:4271`, `chunk-0fykeszx.js:4634`).
+In `2.1.321` the program has no server flag for this list. It builds the list from the tools that each agent recorded, and it leaves the field out when the list is empty (`chunk-913dnra7.js:1854`, `chunk-913dnra7.js:4271`, `chunk-913dnra7.js:4634`).
 
 ## Result Fields New in `2.1.321`
 
@@ -77,26 +77,26 @@ Source: `CronDeleteResult` in [`claude-code-tools.json`](../schemas.md), and the
 
 | Field | Status | Tool and Result | Type | What It Means |
 | --- | --- | --- | --- | --- |
-| `endedLoopWakeup` | <Undocumented /> | `CronDelete` | `true` or left out | `true` when the job that `CronDelete` removed was a loop job (its `kind` is `loop`). The program then also emits a signal that a loop wakeup ended. When the program reads the lines of a session, it uses the time of a result with this field as the time the loop wakeup ended. The program leaves the field out for any other job (`chunk-kwsyv2g0.js:7463`, `chunk-de24qy0c.js:20423`). |
+| `endedLoopWakeup` | <Undocumented /> | `CronDelete` | `true` or left out | `true` when the job that `CronDelete` removed was a loop job (its `kind` is `loop`). The program then also emits a signal that a loop wakeup ended. When the program reads the lines of a session, it uses the time of a result with this field as the time the loop wakeup ended. The program leaves the field out for any other job (`chunk-k6x9fbag.js:7463`, `chunk-mmc3rcjz.js:20423`). |
 
 ## Enable Tests
 
-Source: the program (`chunk-ne1755n5.js` and `chunk-q96agkc9.js` of `2.1.316`; the `ExitPlanMode` and `AskUserQuestion` rows are from `2.1.319`). Each tool object has an `isEnabled` function. Claude Code leaves the tool out of the request when it answers no.
+Source: the program (`chunk-9r1hbf9p.js`, `chunk-vm9sabjc.js`, `chunk-dvag14f8.js`, and `chunk-raphtnn0.js` of `2.1.322`). Each tool object has an `isEnabled` function. Claude Code leaves the tool out of the request when it answers no.
 
 | Tools | Test | Result |
 | --- | --- | --- |
-| `ExitPlanMode` | The session is a teammate: an in-process teammate, or a dynamic team context with an agent ID and a team name. Then it uses the shared test below (`Fc()` picks the branch). | Shared test |
-| | Any other session. The `denyInsteadOfPrompting` setting is on in a settings source, or in a plugin's settings (`dee()`; always off when the host has no disk). | Off |
-| | Any other session without that setting. The shared test below (`cee()` is `!dee()` and the shared test). | Shared test |
-| `AskUserQuestion` | `cee()`: the second and third rows above, with no teammate branch. | Same as `ExitPlanMode` for a session that is not a teammate |
-| Shared test (`gws()`) | The run is not interactive and channels are allowed. | Off |
+| `ExitPlanMode` | The session is a teammate: an in-process teammate, or a dynamic team context with an agent ID and a team name. Then it uses the shared test below (`lc()` picks the branch). | Shared test |
+| | Any other session. The `denyInsteadOfPrompting` setting is on in a settings source, or in a plugin's settings (`lte()`; always off when the host has no disk). | Off |
+| | Any other session without that setting. The shared test below (`yie()` is `!lte()` and the shared test). | Shared test |
+| `AskUserQuestion` | `yie()`: the second and third rows above, with no teammate branch. | Same as `ExitPlanMode` for a session that is not a teammate |
+| Shared test (`rRs()`) | The run is not interactive and channels are allowed. | Off |
 | | The run is not interactive and no permission prompt tool is named (the name is empty or `none`). | Off |
 | | Anything else. An interactive session is always on. | On |
 | `EnterPlanMode` | It calls the `ExitPlanMode` test. | Same as `ExitPlanMode` |
 | `TodoWrite` | `CLAUDE_CODE_ENABLE_TASKS` is `false`, and the model test below passes. | On |
 | `TaskCreate`, `TaskGet`, `TaskUpdate`, `TaskList` | `CLAUDE_CODE_ENABLE_TASKS` is not `false`, and the model test below passes. | On |
 
-- `2.1.319` changed the `ExitPlanMode` test (`chunk-9sy4gs4j.js:325`; the shared test is `chunk-zyxy63dk.js:63`; the teammate test is `chunk-hrevs08j.js:81`). Before, `ExitPlanMode` used the shared test alone. Now a session that is not a teammate also turns it off when `permissions.denyInsteadOfPrompting` is `true`.
+- `2.1.319` changed the `ExitPlanMode` test (`chunk-vhrrva0r.js:325`; the shared test is `chunk-vm9sabjc.js:63`; the teammate test is `chunk-dvag14f8.js:81`). Before, `ExitPlanMode` used the shared test alone. Now a session that is not a teammate also turns it off when `permissions.denyInsteadOfPrompting` is `true`.
 - `ExitPlanMode` is a deferred tool. A `claude -p` request lists deferred tools only when `ENABLE_TOOL_SEARCH=false`. All runs below use `-p`, a stub API, and `--permission-prompt-tool` naming an MCP tool, unless the row says otherwise.
 
 | Case (`print.api319.tool.exit-plan.`) | Setup | `ExitPlanMode` in `tools` | `AskUserQuestion` in `tools` |
@@ -109,11 +109,11 @@ Source: the program (`chunk-ne1755n5.js` and `chunk-q96agkc9.js` of `2.1.316`; t
 | `teammate-deny` | As `teammate`, plus `denyInsteadOfPrompting: true`. | Yes | No |
 | `teammate-no-prompt-tool` | As `teammate`, with no prompt tool. | No | No |
 
-- The `teammate-deny` row is the `Fc()` branch: a teammate asks the shared test, so the deny setting does not remove `ExitPlanMode`. `AskUserQuestion` has no teammate branch, so it goes off. The program reads the three hidden flags only when agent teams are on (`chunk-5dx6x1b3.js@113923`), and it refuses a run that gives only some of them.
+- The `teammate-deny` row is the `lc()` branch: a teammate asks the shared test, so the deny setting does not remove `ExitPlanMode`. `AskUserQuestion` has no teammate branch, so it goes off. The program reads the three hidden flags only when agent teams are on (`chunk-rn5sxc5v.js@113923`), and it refuses a run that gives only some of them.
 - Without tool search off, the cases `.prompt-tool`, `.prompt-tool-deny`, `.plan-mode` and `.plan-mode-deny` show the same split through `AskUserQuestion` alone (listed 13 tools, then 12), and `.print` (no prompt tool) lists neither.
 - A non-interactive run is `claude -p` or an SDK run. So a plain `claude -p` run has none of the three tools. Adding `--permission-prompt-tool <name>` turns them on, unless channels are allowed.
 - The model test passes when any of these holds: a launch test passes (one is a host option that opts in to the todo tools); the main-loop model is not known yet; the model name holds `application-inference-profile`; the model is one of `claude-3-opus`, `claude-3-sonnet`, `claude-3-haiku`, `claude-3-5-sonnet`, `claude-3-5-haiku`, `claude-3-7-sonnet`, `claude-opus-4-0`, `claude-opus-4-1`, `claude-opus-4-5`, `claude-opus-4-6`, `claude-opus-4-7`, `claude-sonnet-4-0`, `claude-sonnet-4-5`, `claude-sonnet-4-6`, or `claude-haiku-4-5`; or `CLAUDE_CODE_ENABLE_TODO_TOOLS` is `true`.
-- The probe `print.request.baseline-a` on `2.1.316` (Opus 5.5, `-p`) sends 12 tools. None of `TodoWrite`, `TaskCreate`, `AskUserQuestion`, or `EnterPlanMode` is among them. `Glob` and `Grep` are not among them either, because `Bash` is.
+- The probe `print.request.baseline-a` on `2.1.322` (Opus 5.5, `-p`) sends 12 tools. None of `TodoWrite`, `TaskCreate`, `AskUserQuestion`, or `EnterPlanMode` is among them. `Glob` and `Grep` are not among them either, because `Bash` is.
 - `CLAUDE_CODE_ENABLE_TASKS=0` switches the Task tools off and `TodoWrite` on. Any other value does the reverse. The two families never run together.
 
 ## Example

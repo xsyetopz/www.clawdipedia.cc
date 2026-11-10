@@ -73,7 +73,7 @@ The key lists come from transcripts that 2.1.305 wrote on a real machine and in 
 
 | `type` | Main keys | Meaning |
 | --- | --- | --- |
-| `user` | `message`, `promptId`, `permissionMode`, `permissionDecision`, `toolUseResult`, `sourceToolAssistantUUID`, `origin`, `promptSource`, `turnOrigin`, `turnPosition`, `sandboxed` | A user turn or a tool result. Since `2.1.307` a shell tool result can carry `sandboxed`, whether the command ran in the sandbox (the program, and probe `print.transcripts.lines`). Since `2.1.321` a tool result can carry `connectorFileLines` (`chunk-ne1755n5.js:4299663`, `chunk-tbbj487k.js:27581`): an array of rows, one per file that a connector tool fetched to or sent from the machine, which the screen shows under the result. A row has `direction` (`fetching` or `sending`), `state`, `fileName`, `bytesDone`, `bytesTotal`, `connectorName`, `fileIndex`, and `fileCount` (integer, 1 or more). `state` is `done`, `stopped`, `stopped-maybe-saved`, or an object `{refused: string, leftBehind?: true}`. The optional keys are `place` (a folder), `savedAs` (the saved path), and `groupedFiles` (integer, 2 or more, how many files the row stands for). The screen drops a row that does not match this shape. |
+| `user` | `message`, `promptId`, `permissionMode`, `permissionDecision`, `toolUseResult`, `sourceToolAssistantUUID`, `origin`, `promptSource`, `turnOrigin`, `turnPosition`, `sandboxed` | A user turn or a tool result. Since `2.1.307` a shell tool result can carry `sandboxed`, whether the command ran in the sandbox (the program, and probe `print.transcripts.lines`). Since `2.1.321` a tool result can carry `connectorFileLines` (`chunk-9r1hbf9p.js:4300098`, `chunk-fm0g04m5.js:27581`): an array of rows, one per file that a connector tool fetched to or sent from the machine, which the screen shows under the result. A row has `direction` (`fetching` or `sending`), `state`, `fileName`, `bytesDone`, `bytesTotal`, `connectorName`, `fileIndex`, and `fileCount` (integer, 1 or more). `state` is `done`, `stopped`, `stopped-maybe-saved`, or an object `{refused: string, leftBehind?: true}`. The optional keys are `place` (a folder), `savedAs` (the saved path), and `groupedFiles` (integer, 2 or more, how many files the row stands for). The screen drops a row that does not match this shape. |
 | `assistant` | `message`, `requestId`, `requestRef`, `requestedModel`, `effort`, `perTurnEffort`, `advisorModel`, `apiBlockIndex` | A reply of the model. |
 | `system` | `subtype`, `content`, `level`, `durationMs`, `messageCount` | A note that the model never reads. |
 | `attachment` | `attachment`, `rendered`, `renderedRole`, `renderedInHumanTurn`, `renderedBesideToolResult` | Context that Claude Code adds beside the conversation. `rendered` is the text the model sees and `renderedRole` is `user` or `system`. `renderedBesideToolResult` is `true` on a `remote_session_change` attachment, and `renderedInHumanTurn` is on a `queued_command` attachment whose text differs inside a human turn (the program). |
@@ -102,8 +102,8 @@ These names are in the program next to the writer. The meanings come from the wr
 | `agent-name`, `agent-color` | | The name and color of the session's agent. `/rename`, `/color`, or an agent sets them. |
 | `agent-setting` | | The agent definition that the session runs as, for example from `--agent`. |
 | `tag` | `tag` | A tag on the session. |
-| `worktree-state` | `worktreeSession` | The worktree that the session works in. `null` after it ends. Since `2.1.321` `worktreeSession` can have `extensionRoot`: the project root of the session before `EnterWorktree` made the worktree. The program sets it only when the session was in that root and the worktree is in the same repo. While the session is in the worktree and has not moved out, the program loads skills, plugins, and commands from this root, not from the worktree (`chunk-q96agkc9.js:143891`, `chunk-qfakytpa.js:893438`). |
-| `tools-used` | `tools`, `sessionId`, `uuid` | The names of the tools that the session used, written again when the set grows. Last line wins. Since `2.1.321` the first such line of a session file can have `uuid`, a new ID. The program adds it only when it also sends the line to its internal event writer (`chunk-ne1755n5.js:466708`). |
+| `worktree-state` | `worktreeSession` | The worktree that the session works in. `null` after it ends. Since `2.1.321` `worktreeSession` can have `extensionRoot`: the project root of the session before `EnterWorktree` made the worktree. The program sets it only when the session was in that root and the worktree is in the same repo. While the session is in the worktree and has not moved out, the program loads skills, plugins, and commands from this root, not from the worktree (`chunk-raphtnn0.js:143891`, `chunk-yqezv9gr.js:894051`). |
+| `tools-used` | `tools`, `sessionId`, `uuid` | The names of the tools that the session used, written again when the set grows. Last line wins. Since `2.1.321` the first such line of a session file can have `uuid`, a new ID. The program adds it only when it also sends the line to its internal event writer (`chunk-9r1hbf9p.js:466708`). |
 | `pr-link` | `prNumber`, `prUrl`, `prRepository`, `timestamp` | Ties the session to a pull request. |
 | `bridge-session` | `bridgeSessionId`, `lastSequenceNum`, `sessionGroupingId`, owner ids | The Remote Control link. |
 | `content-replacement` | `replacements`, `agentId` | Records which large tool results a short stand-in replaced. A resume then uses the same stand-ins. |
@@ -179,7 +179,7 @@ Content block types seen: `text`, `thinking`, `tool_use` (in `assistant` lines),
 | `requestId` | The request ID from the API. |
 | `requestRef` | A reference to the matching `api-request` line. |
 | `requestedModel` | The model Claude Code asked for. The `message.model` field shows the model that answered. |
-| `effort`, `perTurnEffort` | The effort level of the call. Since `2.1.312`, `effort` is the level in force: if the conversation already holds an effort change that the model applied, the request uses that level, not a newly picked one. The program reads `effort` from `output_config.effort` of the request it built (`chunk-ne1755n5.js` lines 148959 and 150468). In `2.1.311` it was built from the new pick. The `2.1.311` build is not in the `2.1.321` capture, so this page cites no line for it. |
+| `effort`, `perTurnEffort` | The effort level of the call. Since `2.1.312`, `effort` is the level in force: if the conversation already holds an effort change that the model applied, the request uses that level, not a newly picked one. The program reads `effort` from `output_config.effort` of the request it built (`chunk-9r1hbf9p.js` lines 148959 and 150468). In `2.1.311` it was built from the new pick. The `2.1.311` build is not in the `2.1.321` capture, so this page cites no line for it. |
 | `advisorModel` | The advisor model, if the advisor tool was on. |
 | `apiBlockIndex` | The index of this block in the API reply. One reply can produce several lines. |
 | `thinkingDisplay`, `thinkingDurationMs` | How Claude Code showed the thinking text, and how long it took. |
@@ -196,7 +196,7 @@ Content block types seen: `text`, `thinking`, `tool_use` (in `assistant` lines),
 
 ## Compaction Rows
 
-Source: the program (`chunk-ne1755n5.js@5452531` and `@2631638`).
+Source: the program (`chunk-9r1hbf9p.js@5452966` and `@2631638`).
 
 A compaction writes a `system` line with `subtype: compact_boundary` and the content `Conversation compacted`. Its `compactMetadata` object holds these keys.
 
@@ -208,7 +208,7 @@ A compaction writes a `system` line with `subtype: compact_boundary` and the con
 | `messagesSummarized` | At creation | How many messages the summary covers. |
 | `postTokens` | After the summary exists | The token count of the new context. |
 | `durationMs` | After the summary exists | The time the compaction took. |
-| `cumulativeDroppedTokens` | After the summary exists | The tokens dropped by all compactions so far. It adds `preTokens - postTokens` to the largest earlier value (`chunk-ne1755n5.js`). |
+| `cumulativeDroppedTokens` | After the summary exists | The tokens dropped by all compactions so far. It adds `preTokens - postTokens` to the largest earlier value (`chunk-9r1hbf9p.js`). |
 | `preservedSegment` | Partial compaction | The `headUuid` and `tailUuid` of the kept messages. |
 | `preservedMessages` | Hook-built compaction | The `uuids` of the kept messages. |
 
@@ -219,7 +219,7 @@ If a listed `uuid` is missing, or the walk does not reach `headUuid`, the load a
 
 ## Subagent Lines
 
-A subagent writes its lines to its own file, `<session>/subagents/agent-<agentId>.jsonl`, and not to the session transcript. A search of the session file alone finds no subagent line. A line in that file can carry `attributionAgent`. It holds the agent name, for the sources `agent:builtin:<name>` and `agent:custom:<name>`. Lines caused by a skill carry `attributionSkill`, and `attributionPlugin` when the skill belongs to a plugin (the program, `chunk-qfakytpa.js@878685`).
+A subagent writes its lines to its own file, `<session>/subagents/agent-<agentId>.jsonl`, and not to the session transcript. A search of the session file alone finds no subagent line. A line in that file can carry `attributionAgent`. It holds the agent name, for the sources `agent:builtin:<name>` and `agent:custom:<name>`. Lines caused by a skill carry `attributionSkill`, and `attributionPlugin` when the skill belongs to a plugin (the program, `chunk-yqezv9gr.js@879298`).
 
 ## `attachment` Types
 

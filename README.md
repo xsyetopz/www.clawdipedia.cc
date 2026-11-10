@@ -5,7 +5,7 @@ It is not made by or tied to Anthropic. "Claude" and "Claude Code" name the prod
 
 The site covers every surface of Claude Code that you can use, change, or turn on and off.
 That includes items the official docs never name. They carry an Undocumented badge.
-It tracks one release only: `2.1.314` (see `src/version.ts`). There are no versioned docs.
+It tracks one release only: `2.1.322` (see `src/version.ts`). There are no versioned docs.
 
 Live site: <https://clawdipedia.cc/>
 

@@ -18,7 +18,7 @@ Items that the docs name but describe wrongly are in [Behaves Differently From t
 | Group | Count |
 | --- | --- |
 | [Settings Keys](#settings-keys) | 25 |
-| [Environment Variables](#environment-variables) | 1091 |
+| [Environment Variables](#environment-variables) | 1092 |
 | [CLI Flags and Subcommands](#cli-flags-and-subcommands) | 52 |
 | [Permissions](#permissions) | 121 |
 | [Hooks](#hooks) | 15 |
@@ -34,7 +34,7 @@ Items that the docs name but describe wrongly are in [Behaves Differently From t
 | [Headless Protocol](#headless-protocol) | 195 |
 | [Mod API](#mod-api) | 0 |
 | [Other](#other) | 108 |
-| Total | 1839 |
+| Total | 1840 |
 
 ## Settings Keys
 
@@ -74,7 +74,7 @@ Count: 25.
 
 There are too many to list one by one. Each page below holds a table, and every undocumented variable in it has the Undocumented badge. The pages sort variables by what they do.
 
-Count: 1091.
+Count: 1092.
 
 | Page | Undocumented Rows |
 | --- | --- |
@@ -87,7 +87,7 @@ Count: 1091.
 | [Models and Effort](../configure/env-vars/models-and-effort.md) | 33 |
 | [Network and Proxy](../configure/env-vars/network-and-proxy.md) | 31 |
 | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) | 64 |
-| [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) | 151 |
+| [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) | 152 |
 | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) | 28 |
 | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) | 53 |
 | [System and Third-Party](../configure/env-vars/system-and-third-party.md) | 195 |
@@ -725,7 +725,7 @@ These items exist in the official docs, but the program works in another way. Co
 
 ## In the Program
 
-The program of `2.1.321` holds 9849 items in 18 kinds, counted from `schemas/surface.json`.
+The program of `2.1.322` holds 9849 items in 18 kinds, counted from `schemas/surface.json`.
 [Surface Coverage](surface-coverage.md) lists each item with its page.
 
 | Kind | Items | Not on a Page Yet |

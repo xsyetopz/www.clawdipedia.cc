@@ -7,7 +7,7 @@ sidebar_position: 12
 Claude Code masks text that looks like a secret before it shows or records the text.
 It replaces the secret with `[REDACTED]`. This page describes the algorithm and the rule table.
 It does not list each pattern.
-Source: the program, 2.1.319, and 2.1.321, which has the same rule IDs and levels (`chunk-6nmgrknh.js`, rule table `@21724` to `@29399`). Every row is <Undocumented />.
+Source: the program, 2.1.319, and 2.1.322, which has the same rule IDs and levels (`chunk-d68rqgan.js`, rule table `@21724` to `@29399`). Every row is <Undocumented />.
 
 ## The Rule Table
 
@@ -41,7 +41,7 @@ It reads each block to its end and replaces the whole block with `[REDACTED]`. I
 
 ## High Tier Rule Names
 
-The `high` rules cover these vendors (`chunk-6nmgrknh.js`). The `gitlab-*` family has 11 rules, such as `gitlab-pat`, `gitlab-deploy-token`, and `gitlab-ci-build-token`.
+The `high` rules cover these vendors (`chunk-d68rqgan.js`). The `gitlab-*` family has 11 rules, such as `gitlab-pat`, `gitlab-deploy-token`, and `gitlab-ci-build-token`.
 
 | Vendor | Rule names |
 | --- | --- |
@@ -75,26 +75,26 @@ The table shows the output that each caller masks in 2.1.319. All callers are in
 
 | Output | Function | Source |
 | --- | --- | --- |
-| Each line of the debug log, and each line of the second log file (`[time] [level] message`, which turns over at 10 MiB) | `redact` | `chunk-kd0vv9vh.js@34927`, `chunk-k0rez7a5.js@21777` |
-| The `error` and `debug` lines in the log files of an MCP server | `redact` | `chunk-p8vmn6m1.js@2790`, `@3031` |
-| The `error_message` (cut to 2,000 characters) and `error_stack` (cut to 4,000 characters) of an error report | `redact` | `chunk-ne1755n5.js@321999` to `@322577` |
-| The hook name and the stderr text of a hook that fails | `redact` | `chunk-ne1755n5.js@1024727` to `@1024994` |
-| A `/feedback` report: the error list, the debug log text, the error messages and stacks, the upload error, the description, and the transcript in the bundle | `redact` | `chunk-fzgxnvda.js@16168` to `@29084` |
-| The title and body of a bug report GitHub issue | `redact` | `chunk-pcdt7e62.js@12992`, `@13004` |
-| The validation error of a plugin manifest | `redact` | `chunk-nhpnq9a8.js@10088` |
-| The roster name in a fork message | `redact` | `chunk-3y8jk8we.js@25853`, `@26289` |
-| The debug line for data written to the stdin of a child process | `redact` | `chunk-1csb1paq.js@11002` |
-| A suggested reply. The program drops it when masking changes it. | `redact` | `chunk-xvn44q1p.js@5057` |
-| A web URL in `claude mcp add`. The program refuses it (`secret_in_url`) when masking changes it. | `redact` | `chunk-55kjycmk.js@21963` |
-| The auto mode check input. The program compares the masked text with the input to find the secret spans. | `redact` | `chunk-ne1755n5.js@5276540` |
-| An MCP server config that the program shows | `redact`, on each key and value | `chunk-hwj4b0aa.js@31845` to `@32495` |
-| The preview of tool input, including the field names | `redactForDisplay` | `chunk-wzaa40hd.js@2776` to `@5480` |
-| The path, the description, and the skill summary in a permission request that the program sends to a connected client | `redactForDisplay`, and `redactContext` then `redactTokens` | `chunk-z7xkc6v3.js@39955`, `@42228`, `@43970` |
-| The command, the description, and the plan reason in a remote or push permission notice | `redactContext` then `redactTokens` | `chunk-sjzh0vbz.js@92016`, `@92266`, `chunk-1z1vfkec.js@9034` to `@17499` |
-| The teammate description when a teammate starts (50 characters) | `redactContext` with tracked tokens | `chunk-gcccnvpy.js@5579` |
-| The detail, intent, and latest question of a background job (1,000 and 600 characters), and the tail of its output | `redactContext` with tracked tokens, and `redactTokens` | `chunk-4dgmvrqy.js@21737` to `@33062` |
+| Each line of the debug log, and each line of the second log file (`[time] [level] message`, which turns over at 10 MiB) | `redact` | `chunk-wwzax483.js@34927`, `chunk-j71tw2ed.js@21777` |
+| The `error` and `debug` lines in the log files of an MCP server | `redact` | `chunk-v3acjcn9.js@2790`, `@3031` |
+| The `error_message` (cut to 2,000 characters) and `error_stack` (cut to 4,000 characters) of an error report | `redact` | `chunk-9r1hbf9p.js@321999` to `@322577` |
+| The hook name and the stderr text of a hook that fails | `redact` | `chunk-9r1hbf9p.js@1024733` to `@1024994` |
+| A `/feedback` report: the error list, the debug log text, the error messages and stacks, the upload error, the description, and the transcript in the bundle | `redact` | `chunk-7nmpvy5x.js@16168` to `@29084` |
+| The title and body of a bug report GitHub issue | `redact` | `chunk-yrv8ebdc.js@12992`, `@13004` |
+| The validation error of a plugin manifest | `redact` | `chunk-2qwrjsjt.js@10088` |
+| The roster name in a fork message | `redact` | `chunk-s31xkyam.js@25853`, `@26289` |
+| The debug line for data written to the stdin of a child process | `redact` | `chunk-rbc8qmbc.js@11002` |
+| A suggested reply. The program drops it when masking changes it. | `redact` | `chunk-3x3wefn4.js@5057` |
+| A web URL in `claude mcp add`. The program refuses it (`secret_in_url`) when masking changes it. | `redact` | `chunk-7gvax6qc.js@21963` |
+| The auto mode check input. The program compares the masked text with the input to find the secret spans. | `redact` | `chunk-9r1hbf9p.js@5276975` |
+| An MCP server config that the program shows | `redact`, on each key and value | `chunk-bs1htm0f.js@31845` to `@32495` |
+| The preview of tool input, including the field names | `redactForDisplay` | `chunk-6njb40e9.js@2776` to `@5480` |
+| The path, the description, and the skill summary in a permission request that the program sends to a connected client | `redactForDisplay`, and `redactContext` then `redactTokens` | `chunk-fasnxwnt.js@39955`, `@42228`, `@43970` |
+| The command, the description, and the plan reason in a remote or push permission notice | `redactContext` then `redactTokens` | `chunk-1zv4ybmf.js@92016`, `@92266`, `chunk-q00k3pg4.js@9034` to `@17499` |
+| The teammate description when a teammate starts (50 characters) | `redactContext` with tracked tokens | `chunk-y5mxzmgf.js@5579` |
+| The detail, intent, and latest question of a background job (1,000 and 600 characters), and the tail of its output | `redactContext` with tracked tokens, and `redactTokens` | `chunk-we96br1g.js@21737` to `@33062` |
 
-More calls to `redact` are in `chunk-j3jg1se6.js:1842`, `chunk-ev1xth67.js:2584`, `chunk-6zaq4jhh.js:186`, `chunk-m5e5t0fv.js:16`, `chunk-kd54ptvn.js:563`, `chunk-xd913ea5.js:4241`, `chunk-3y8jk8we.js:731`, `chunk-h5pmez41.js:155`, `chunk-h9msc7hp.js:2327`, and `chunk-e5k8z25c.js:218`. These calls mask a job detail, a task summary line, or a session or job name. The masker class is the only copy in the program: its method names are in no other module.
+More calls to `redact` are in `chunk-f4ys6x97.js:1842`, `chunk-hxvb3rx5.js:2584`, `chunk-e3zrce3w.js:186`, `chunk-nvc2hybs.js:16`, `chunk-pmw57ae5.js:563`, `chunk-dmh2x5gs.js:4241`, `chunk-s31xkyam.js:731`, `chunk-53h10y87.js:155`, `chunk-2wgby2sh.js:2327`, and `chunk-t8f891qv.js:218`. These calls mask a job detail, a task summary line, or a session or job name. The masker class is the only copy in the program: its method names are in no other module.
 
 A probe (2.1.319, `-p --debug-file`) used a `UserPromptSubmit` hook that wrote `leak ghp_<token>` to stderr and exited `1`. The debug log had `leak [REDACTED]`, and the token was in no request. The transcript kept the full token.
 
@@ -124,10 +124,10 @@ The program uses the scan in four places.
 
 | Place | Result |
 | --- | --- |
-| A write to a memory file (`chunk-vr3j7h4t.js`) | The write fails with `Content contains potential secrets (<labels>) and cannot be written to memory.` The text then names the reason. A team memory file says that team memory is shared with all repository collaborators. A memory file says that memory is synced to your account. |
-| A command in an auto mode denial notice (`chunk-d3btef94.js@1717254`) | When the scan finds a secret in the command, the tool input, or the reason, the notice shows no command and no reason. The notice also shows none when the check itself fails. |
-| Synced settings and config content (`chunk-6aah5g27.js@9141`) | The program checks the content for credentials. |
-| The files of a skill package folder (`chunk-nynkk9mk.js@34617`) | The program gets the labels for each file. All `anthropic-*` rules give one label. |
+| A write to a memory file (`chunk-kpdt3phd.js`) | The write fails with `Content contains potential secrets (<labels>) and cannot be written to memory.` The text then names the reason. A team memory file says that team memory is shared with all repository collaborators. A memory file says that memory is synced to your account. |
+| A command in an auto mode denial notice (`chunk-vr3fdvn1.js@1717370`) | When the scan finds a secret in the command, the tool input, or the reason, the notice shows no command and no reason. The notice also shows none when the check itself fails. |
+| Synced settings and config content (`chunk-68rpzzjw.js@9141`) | The program checks the content for credentials. |
+| The files of a skill package folder (`chunk-sjafc330.js@34617`) | The program gets the labels for each file. All `anthropic-*` rules give one label. |
 
 ## Related Pages
 

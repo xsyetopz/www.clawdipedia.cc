@@ -95,6 +95,7 @@ What a `turn.complete` hook returns and what `next(e)` resolves to: `{ text }`. 
 | --- | --- | --- | --- |
 | `text` | <Documented /> | The text of the answer of the turn. | Type: `string`. |
 | `usage` | <Documented /> | What the turn cost. Core fills it from `e.usage` when the turn had one. | Type: `TurnUsage`. Optional. |
+| `by` | <Undocumented /> | The engine sets it: the plugins that wrote the text, or that rewrote the answer they passed down. Their names head the note of the text. | Type: `readonly string[]`. Optional. The engine replaces what a hook puts there. New in `2.1.319`. |
 
 ### `TurnCompleteUnrefused`
 

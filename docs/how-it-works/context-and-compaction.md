@@ -50,7 +50,7 @@ flowchart TD
 
 When auto-compaction is off, the warning level is `effective - 20000` and the compact level never applies.
 The blocked level is checked first, then compact, then warning (the program).
-Source: the program (`chunk-ne1755n5.js@1735397`).
+Source: the program (`chunk-9r1hbf9p.js@1735403`).
 
 At the blocked level, Claude Code stops the turn with a "prompt is too long" error, unless it can recover by compacting.
 `CLAUDE_CODE_BLOCKING_LIMIT_OVERRIDE` (<Undocumented />) replaces the blocked level.
@@ -67,7 +67,7 @@ The accepted window is from 100K to 1M tokens.
 
 Since `2.1.312`, the `autoCompactWindow` of a subagent also lowers a window that `CLAUDE_CODE_AUTO_COMPACT_WINDOW` sets. Before, the variable ended the search and the subagent value had no effect.
 The subagent value is a ceiling. If the window found is larger than the ceiling, Claude Code uses the ceiling (limited by the model window). It never raises the window.
-Source: the program (`chunk-ne1755n5.js` line 94212 and `chunk-6av2ww92.js` line 7020).
+Source: the program (`chunk-9r1hbf9p.js` line 94212 and `chunk-6yy7c9r1.js` line 7020).
 Sources: [Model Configuration: Context Window and Auto-Compaction](https://code.claude.com/docs/en/model-config#context-window-and-auto-compaction) and the program.
 
 ## Controls
@@ -110,32 +110,32 @@ stateDiagram-v2
 | --- | --- | --- |
 | Automatic | <Documented /> | It starts at the compact threshold. The hooks `PreCompact` and `PostCompact` get `trigger: auto`. |
 | Manual | <Documented /> | It starts with `/compact`. The trigger is `manual`. |
-| Reactive | <Undocumented /> | The API refuses a request as too long, and Claude Code compacts and tries again. Since `2.1.311`, this also covers a standard-window session that goes over 200K tokens and gets "Usage credits required for 1M context" (`chunk-mf088szq.js:6999`). It compacts and continues. |
+| Reactive | <Undocumented /> | The API refuses a request as too long, and Claude Code compacts and tries again. Since `2.1.311`, this also covers a standard-window session that goes over 200K tokens and gets "Usage credits required for 1M context" (`chunk-mfrsszee.js:6999`). It compacts and continues. |
 | Precomputed | <Undocumented /> | A summary made ahead of time replaces the conversation. |
 | Larger-model retry | <Undocumented /> | Claude Code can try the compaction first on a model with a larger window. If that fails, the normal compaction runs. |
 | Server side | <Undocumented /> | The beta `context-management-2025-06-27` lets the API edit the context. |
 
-Since `2.1.311`, when the model's reply to a compaction request has no `<summary>` block, Claude Code usually asks once more for the summary before it replaces the conversation (`chunk-ne1755n5.js:119989`).
-The second request adds a short note that says the reply must hold the summary in `<summary>` tags (`chunk-ne1755n5.js:119399`).
-If the second reply has none either, the compaction fails with `Failed to generate conversation summary - the model's reply has no <summary> block` (`chunk-ne1755n5.js:132675`). The `2.1.311` text, `no <summary> block in the second reply either`, is not in `2.1.321`.
-A gate in the program decides whether the second ask runs, so "usually" is the right word (`chunk-ne1755n5.js:119987`).
+Since `2.1.311`, when the model's reply to a compaction request has no `<summary>` block, Claude Code usually asks once more for the summary before it replaces the conversation (`chunk-9r1hbf9p.js:119989`).
+The second request adds a short note that says the reply must hold the summary in `<summary>` tags (`chunk-9r1hbf9p.js:119399`).
+If the second reply has none either, the compaction fails with `Failed to generate conversation summary - the model's reply has no <summary> block` (`chunk-9r1hbf9p.js:132675`). The `2.1.311` text, `no <summary> block in the second reply either`, is not in `2.1.321`.
+A gate in the program decides whether the second ask runs, so "usually" is the right word (`chunk-9r1hbf9p.js:119987`).
 Source: the [Claude Code changelog](https://code.claude.com/docs/en/changelog) and the program.
 
 ## Gates and Retries
 
-Source: the program (`chunk-ne1755n5.js@1741644` to `@2455980`). All rows are <Undocumented /> unless a note says otherwise.
+Source: the program (`chunk-9r1hbf9p.js@1741650` to `@2455980`). All rows are <Undocumented /> unless a note says otherwise.
 
 | Item | What it does |
 | --- | --- |
-| When it checks | The query loop calls the auto-compaction check once per pass, before it builds the next model request (`chunk-mf088szq.js`). It does not check after each tool result of one batch. A batch of large results can push the context over the limit before the next check. |
+| When it checks | The query loop calls the auto-compaction check once per pass, before it builds the next model request (`chunk-mfrsszee.js`). It does not check after each tool result of one batch. A batch of large results can push the context over the limit before the next check. |
 | Skip checks | Auto-compaction does nothing when `DISABLE_COMPACT` is set, when `autoCompactEnabled` is `false`, or when the level is below `compact`. |
 | Failure breaker | After 3 failed auto-compactions in a row, the check returns without a new try. |
 | Rapid-refill breaker | A refill within 3 turns of the last compaction adds 1 to a counter. Any later refill resets it. At 3, auto-compaction stops with the `Autocompact is thrashing` error. |
 | Fixed prefix check | When the system prompt and tools alone are over the threshold, Claude Code logs `compaction cannot help` and goes on. |
-| Reactive route | A window that is not the model default, an overflow in the auto mode classifier, or a compaction that already names a model (the larger-model retry) routes the compaction through the reactive path, not the plain one. The path needs a query source, so a call with none takes the plain path. The reactive path may ask for a last-resort compaction only when the context is at the blocked level or the classifier overflowed (`chunk-ne1755n5.js`). |
+| Reactive route | A window that is not the model default, an overflow in the auto mode classifier, or a compaction that already names a model (the larger-model retry) routes the compaction through the reactive path, not the plain one. The path needs a query source, so a call with none takes the plain path. The reactive path may ask for a last-resort compaction only when the context is at the blocked level or the classifier overflowed (`chunk-9r1hbf9p.js`). |
 | Precompute | `precomputeCompactionEnabled` (default `true`, needs auto-compact on) lets Claude Code write the summary ahead of time. The path also needs a server gate. It starts earlier than the compact threshold, at `effective - round(effective * fraction)` or the compact threshold, whichever is smaller. |
 | Cold compaction | `CLAUDE_CODE_COLD_COMPACT` makes auto-compaction send the full history in a plain request. It sets `stripNonEssential`, which turns off the request that shares the prompt cache prefix. |
-| Larger-model retry | This runs before the normal compaction, not after it. The gate needs at least these: the compaction names no model yet, no earlier auto-compaction failed in a row, the model of the latest assistant reply has a larger window than the current model, and the context is at the blocked level. The attempt gets 1 API try. If it fails, the normal compaction runs next (`chunk-ne1755n5.js`). |
+| Larger-model retry | This runs before the normal compaction, not after it. The gate needs at least these: the compaction names no model yet, no earlier auto-compaction failed in a row, the model of the latest assistant reply has a larger window than the current model, and the context is at the blocked level. The attempt gets 1 API try. If it fails, the normal compaction runs next (`chunk-9r1hbf9p.js`). |
 | Prompt-too-long retry | When the compaction request itself is too long, Claude Code drops the oldest message groups and sends it again. `compactionApiAttemptsLeft` caps the API attempts. At 0 the retry stops. |
 | Second ask | A reply with no `<summary>` block gets one more request. |
 
@@ -187,7 +187,7 @@ Source: [Explore the Context Window: What Survives Compaction](https://code.clau
 | `SessionStart` hooks with the `compact` matcher | <Documented /> | They run again. |
 
 :::note[Spinner after Compaction]
-In `2.1.316`, when automatic compaction runs in the middle of a turn, the spinner can show `Running SessionStart hooks…` until the turn ends. The turn keeps working. The spinner store sets that text on `hooks_start`, and only `compact_end` and the end-of-turn reset clear it. It has no case for the end of the hooks, so the `SessionStart` run after `compact_end` leaves the text up (the program, `chunk-w5fd1yxn.js`). A claudetto session saw it.
+In `2.1.316`, when automatic compaction runs in the middle of a turn, the spinner can show `Running SessionStart hooks…` until the turn ends. The turn keeps working. The spinner store sets that text on `hooks_start`, and only `compact_end` and the end-of-turn reset clear it. It has no case for the end of the hooks, so the `SessionStart` run after `compact_end` leaves the text up (the program, `chunk-2bwa8jfn.js`). A claudetto session saw it.
 :::
 
 ## Example

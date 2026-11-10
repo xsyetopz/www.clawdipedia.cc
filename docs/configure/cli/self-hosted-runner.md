@@ -1,13 +1,13 @@
 ---
 title: Self-Hosted Runner
-description: Every option of claude self-hosted-runner and its orchestrator, setup, doctor, and decode-token subcommands in 2.1.321, with the parser rules and each error.
+description: Every option of claude self-hosted-runner and its orchestrator, setup, doctor, and decode-token subcommands in 2.1.322, with the parser rules and each error.
 sidebar_position: 5
 ---
 
 `claude self-hosted-runner` runs Claude Code cloud sessions on a machine that you control. The root help text does not list the command.
-The [official overview](https://code.claude.com/docs/en/self-hosted-environments) explains environments and runners. The [deploy guide](https://code.claude.com/docs/en/self-hosted-environments-deploy) and the [configuration guide](https://code.claude.com/docs/en/self-hosted-environments-configuration) explain most options. This page lists every option in `2.1.321`, with the options that the official pages do not name, and the exact parser rules.
+The [official overview](https://code.claude.com/docs/en/self-hosted-environments) explains environments and runners. The [deploy guide](https://code.claude.com/docs/en/self-hosted-environments-deploy) and the [configuration guide](https://code.claude.com/docs/en/self-hosted-environments-configuration) explain most options. This page lists every option in `2.1.322`, with the options that the official pages do not name, and the exact parser rules.
 
-Source: the text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.321`, and the option parser of the program (`chunk-1zgjgb31.js`, from offset 243900). The variables are on [Remote and Cloud Session Variables](../env-vars/remote-and-cloud-sessions.md).
+Source: the text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.322`, and the option parser of the program (`chunk-0p6farb3.js`, from offset 243900). The variables are on [Remote and Cloud Session Variables](../env-vars/remote-and-cloud-sessions.md).
 
 ## Example
 
@@ -29,7 +29,7 @@ The command has its own parser. It does not use the parser of the root `claude` 
 - An unknown flag stops the runner with `unknown flag <flag>`. An empty argument stops it with `empty argument — a flag value may be unset (failed env/K8s substitution?)`. Any other word stops it with `unexpected argument '<word>' — this command takes no positional arguments`.
 - A flag wins over its variable. Times in variables are in milliseconds; the flags take seconds or minutes, as their names say.
 - Each parser error prints `error: <message>`, then `Run 'claude self-hosted-runner --help' for usage.`, and the runner exits with code 2. The `cli321` probe runs confirmed this.
-- An on-demand runner that the server refuses because it is not needed (the session ended or paused, or a work order was superseded) exits with code 0, not 1 ([2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321)). The program maps the refusal reasons `superseded`, `session_paused`, `queue_entry_gone`, `pool_moved`, and `standby_gone` to exit code 0. A work order that was already used (`already_registered`, `standby_already_redeemed`) and any other reason still exit with code 1 (`chunk-1zgjgb31.js:235932` to `236468`).
+- An on-demand runner that the server refuses because it is not needed (the session ended or paused, or a work order was superseded) exits with code 0, not 1 ([2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321)). The program maps the refusal reasons `superseded`, `session_paused`, `queue_entry_gone`, `pool_moved`, and `standby_gone` to exit code 0. A work order that was already used (`already_registered`, `standby_already_redeemed`) and any other reason still exit with code 1 (`chunk-0p6farb3.js:235932` to `236468`).
 
 ## Connection Options
 
@@ -99,7 +99,7 @@ The host config folder has no flag. Set `SELF_HOSTED_RUNNER_HOST_CONFIG_DIR`; `-
 
 ## Runner Errors
 
-Source: the program, in its parser (`chunk-1zgjgb31.js`, offsets 245200–255000). The `cli321` probe ran the cases with a probe name.
+Source: the program, in its parser (`chunk-0p6farb3.js`, offsets 245200–255000). The `cli321` probe ran the cases with a probe name.
 
 | Message | When | Probe |
 | --- | --- | --- |
@@ -121,7 +121,7 @@ Source: the program, in its parser (`chunk-1zgjgb31.js`, offsets 245200–255000
 | `--sigkill-timeout-sec was renamed to --session-stop-grace-sec. ...` | The old flag. | `runner-sigkill` |
 | `--drain-marker-file requires a file path (the marker your host writes to announce a graceful drain), got: <value>` | No value, an empty value, or a value that starts with `--`. | |
 | `--hold-idle-file requires a file path (a file your host keeps fresh while the session has processes left running), got: <value>` | No value, an empty value, or a value that starts with `--`. | |
-| `the path, or a link on the way to it, leads to a network location; point --hold-idle-file at a local file` | The hold file is on a network location (`chunk-1zgjgb31.js:241153`). | |
+| `the path, or a link on the way to it, leads to a network location; point --hold-idle-file at a local file` | The hold file is on a network location (`chunk-0p6farb3.js:241153`). | |
 | `the path could not be checked for links to a network location: a folder or link on the way could not be read` | A folder or link on the way to the hold file cannot be read. | |
 | `--agent-proxy-url requires your proxy's https:// URL` | No value, an empty value, or a value that starts with `--`. | |
 | `--proxy-authorization-command / --proxy-authorization-file requires a value` | No value, or a value that starts with `--`. | |
@@ -135,7 +135,7 @@ Source: the program, in its parser (`chunk-1zgjgb31.js`, offsets 245200–255000
 
 `claude self-hosted-runner orchestrator` polls the spawn-hints queue and runs the `spawn-runner` hook in `--hooks-dir` once for each hint. The hook must start the work and exit within `--hook-timeout`. Exit code `0` is success, `1` is a failure to retry, and `2` or more stops further tries. See [On-Demand Runners](https://code.claude.com/docs/en/self-hosted-environments-configuration#on-demand-runners) and [The Spawn-Runner Hook](https://code.claude.com/docs/en/self-hosted-environments-configuration#the-spawn-runner-hook).
 
-Source: the program, in its help text and its orchestrator parser (`chunk-pcy41rk0.js`, near offset 24075).
+Source: the program, in its help text and its orchestrator parser (`chunk-d8kkjn8f.js`, near offset 24075).
 
 | Option | Status | What it does | Default |
 | --- | --- | --- | --- |

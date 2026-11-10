@@ -200,11 +200,11 @@ Where a `prompt.submit` submission came from, as the engine knows it at the site
 
 ### `PromptSectionInput`
 
-The input of `prompt.section`: one named section of the system prompt, at the moment the engine assembles it. From 2.1.302 to 2.1.321, the engine builds shared sections such as `lean_body` without a `prompt.section` call, so a hook does not see them (the program, `chunk-ne1755n5.js:2492230`, `TTn`). A `prompt.compose` hook does. Used by `prompt.section`, `$.prompt.section`.
+The input of `prompt.section`: one named section of the system prompt, at the moment the engine assembles it. From 2.1.302 to 2.1.322, the engine builds shared sections such as `lean_body` without a `prompt.section` call, so a hook does not see them (the program, `chunk-9r1hbf9p.js:2492236`, `TTn`). A `prompt.compose` hook does. Used by `prompt.section`, `$.prompt.section`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `name` | <Differs note="Docs say every named section; the program skips shared sections such as lean_body." /> | The section's id (`env_info_simple`, `memory`, ...), the same on every model and the one `prompt.compose` lists, the key a matcher narrows on. A `prompt.section` hook sees only sections the engine asks about by name. Shared sections such as `lean_body` are not among them from 2.1.302 to 2.1.321, but `prompt.compose` lists them. | Type: `string`. |
+| `name` | <Differs note="Docs say every named section; the program skips shared sections such as lean_body." /> | The section's id (`env_info_simple`, `memory`, ...), the same on every model and the one `prompt.compose` lists, the key a matcher narrows on. A `prompt.section` hook sees only sections the engine asks about by name. Shared sections such as `lean_body` are not among them from 2.1.302 to 2.1.322, but `prompt.compose` lists them. | Type: `string`. |
 | `text` | <Documented /> | The text of the section as core computed it, or null when core omits it. | Type: `string \| null`. |
 
 ### `PromptSectionResult`

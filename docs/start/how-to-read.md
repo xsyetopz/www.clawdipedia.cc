@@ -86,7 +86,7 @@ A fact that no check settles is left out.
 ## One Release Only
 
 This site tracks only the newest release.
-The current release is shown in the top bar, for example "Tracks 2.1.314".
+The current release is shown in the top bar, for example "Tracks 2.1.322".
 There are no old versions of the docs.
 The [What Changed](what-changed.md) page lists breaking changes in the current release, against the release before it.
 For an earlier release, read the official [Changelog](https://code.claude.com/docs/en/changelog).

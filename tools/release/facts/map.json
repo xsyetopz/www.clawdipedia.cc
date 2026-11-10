@@ -1,5 +1,5 @@
 {
-	"docs/reference/tools/files.md#when-glob-and-grep-are-offered:3ddf733a": {
+	"docs/reference/tools/files.md#when-glob-and-grep-are-offered:c3768ac0": {
 		"kind": "manual",
 		"probes": [],
 		"note": "embedded bfs and ugrep gate read in the cleaned 2.1.316 code (chunk-qd604jgh.js); tool lists checked with cc-inspect code cli against the local stub for 2.1.314 and 2.1.316"
@@ -532,17 +532,17 @@
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/configure/permissions/rules.md#rule-syntax:3abd65f8": {
+	"docs/configure/permissions/rules.md#rule-syntax:d954aa56": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/headless/index.md#errors:0ee1be46": {
+	"docs/extend/headless/index.md#errors:9c204f16": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#events-raised-by-these-calls:812defcc": {
+	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#events-raised-by-these-calls:c277efdc": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
@@ -552,22 +552,22 @@
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/calls/tool-command-config.md#members:c06bc242": {
+	"docs/extend/mod-api/calls/tool-command-config.md#members:0e456786": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/calls/tool-command-config.md#engine-events:3a98b3db": {
+	"docs/extend/mod-api/calls/tool-command-config.md#engine-events:b29e13d4": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/calls/tool-command-config.md#engine-events:5623db5d": {
+	"docs/extend/mod-api/calls/tool-command-config.md#engine-events:9eb95aa9": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/calls/turn-prompt.md#engine-events:4a26583a": {
+	"docs/extend/mod-api/calls/turn-prompt.md#engine-events:287963c8": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
@@ -602,7 +602,7 @@
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/types/testing/mocks-mounts.md#mountedmembers:37b6ec66": {
+	"docs/extend/mod-api/types/testing/mocks-mounts.md#mountedmembers:4bb7baf8": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
@@ -612,12 +612,12 @@
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectioninput:beccb490": {
+	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectioninput:b86cbbcf": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectioninput:78882f0f": {
+	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectioninput:e771342b": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
@@ -627,7 +627,7 @@
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/types/turn-prompt/index.md#example:737507f7": {
+	"docs/extend/mod-api/types/turn-prompt/index.md#example:5d938b39": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
@@ -657,26 +657,26 @@
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/ui/ui-elements.md#aboveprompt:2bb8d672": {
+	"docs/extend/mod-api/ui/ui-elements.md#aboveprompt:f865409b": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/ui/ui.md#members:c909d5e8": {
+	"docs/extend/mod-api/ui/ui.md#members:bc337d5e": {
 		"kind": "behaviour",
 		"probes": ["print.cli319.theme.engine"]
 	},
-	"docs/how-it-works/system-prompt.md#shared-sections:04141d55": {
+	"docs/how-it-works/system-prompt.md#shared-sections:a4fe9590": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/reference/opentelemetry.md#events:ca85f00c": {
+	"docs/reference/opentelemetry.md#events:1b2c88c7": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/reference/tools/shell-and-web.md#how-it-works:dd208381": {
+	"docs/reference/tools/shell-and-web.md#how-it-works:7883ae4d": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
@@ -698,7 +698,7 @@
 			"pty.notifications.agent-needs-input-refused"
 		]
 	},
-	"docs/configure/permissions/auto-mode.md#classifier-billing-notice:1f537abf": {
+	"docs/configure/permissions/auto-mode.md#classifier-billing-notice:095d27be": {
 		"kind": "behaviour",
 		"probes": [
 			"pty.notifications.agent-needs-input",
@@ -1098,31 +1098,31 @@
 		"probes": [],
 		"note": "cost-state.modelUsage keys in schemas/claude-code-transcript.json"
 	},
-	"docs/reference/transcript-format.md#line-types:fe1c749c": {
+	"docs/reference/transcript-format.md#line-types:4601cecc": {
 		"kind": "behaviour",
 		"probes": ["print.transcripts.lines"]
 	},
-	"docs/reference/transcript-format.md#other-types-in-the-writer:75b8f778": {
+	"docs/reference/transcript-format.md#other-types-in-the-writer:dd745d66": {
 		"kind": "schema",
 		"probes": [],
 		"note": "worktree-state worktreeSession.extensionRoot in schemas/claude-code-transcript.json"
 	},
-	"docs/reference/transcript-format.md#other-types-in-the-writer:342c4578": {
+	"docs/reference/transcript-format.md#other-types-in-the-writer:4459a570": {
 		"kind": "schema",
 		"probes": [],
 		"note": "tools-used uuid in schemas/claude-code-transcript.json"
 	},
-	"docs/extend/headless/control-protocol.md#subtypes:0bb07f34": {
+	"docs/extend/headless/control-protocol.md#subtypes:8ab64a03": {
 		"kind": "schema",
 		"probes": [],
 		"note": "initialize auth_conflict and other_hook_ask_outranks_host in schemas/claude-code-control-protocol.json"
 	},
-	"docs/extend/headless/control-protocol.md#subtypes:7d641d5d": {
+	"docs/extend/headless/control-protocol.md#subtypes:f74542b6": {
 		"kind": "schema",
 		"probes": [],
 		"note": "interrupt spare_background_tasks in schemas/claude-code-control-protocol.json"
 	},
-	"docs/extend/headless/control-protocol.md#subtypes:60747ce1": {
+	"docs/extend/headless/control-protocol.md#subtypes:2a081748": {
 		"kind": "schema",
 		"probes": [],
 		"note": "mcp_set_servers denied_tools in schemas/claude-code-control-protocol.json"
@@ -1376,12 +1376,12 @@
 		"probes": [],
 		"note": "program behaviour (also in the release notes); the signed catalog needs a cloud provider login"
 	},
-	"docs/how-it-works/context-and-compaction.md#kinds-of-compaction:f38b902f": {
+	"docs/how-it-works/context-and-compaction.md#kinds-of-compaction:657e861c": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour (also in the release notes); needs a server that refuses with the 1M context error"
 	},
-	"docs/how-it-works/context-and-compaction.md#kinds-of-compaction:d21c8c19": {
+	"docs/how-it-works/context-and-compaction.md#kinds-of-compaction:c32d11ba": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour (also in the release notes); needs a compaction reply with no summary"
@@ -1431,7 +1431,7 @@
 		"probes": [],
 		"note": "turn_handoff_available requires_rewind_request_id in schemas/claude-code-stream-json.json"
 	},
-	"docs/extend/headless/stream-json.md#undocumented-types:2d8e44b2": {
+	"docs/extend/headless/stream-json.md#undocumented-types:24583610": {
 		"kind": "schema",
 		"probes": [],
 		"note": "inherited_asks_settled in schemas/claude-code-stream-json.json"
@@ -1531,22 +1531,22 @@
 		"probes": [],
 		"note": "cc-inspect code run of /claude-api PROBE-ARG on 2.1.308 to 2.1.311"
 	},
-	"docs/configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message:b670897f": {
+	"docs/configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message:6c06918c": {
 		"kind": "manual",
 		"probes": [],
 		"note": "chat:sendNowHintPress and the mouse-mode test read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:8976, :9363-9396)"
 	},
-	"docs/configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message:117ca5d3": {
+	"docs/configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message:253da97a": {
 		"kind": "manual",
 		"probes": [],
 		"note": "hint text and its no-key branch read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:9370-9394)"
 	},
-	"docs/configure/keybindings/unbound-and-reserved.md#vim-mode-operators-with-gj-and-gk:ca3d0d3e": {
+	"docs/configure/keybindings/unbound-and-reserved.md#vim-mode-operators-with-gj-and-gk:8398e065": {
 		"kind": "manual",
 		"probes": [],
 		"note": "the gj/gk count clamp read in the cleaned 2.1.312 code (chunk-hz2c9q6k.js:316-321, :784)"
 	},
-	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:6665ab9c": {
+	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:e3310efd": {
 		"kind": "manual",
 		"probes": [],
 		"note": "the cache warning text read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:58010, :58046-58051)"
@@ -1561,12 +1561,12 @@
 		"probes": [],
 		"note": "the spinner reads the sent level first in the cleaned 2.1.312 code (chunk-zgj89n5s.js:1465, chunk-8h49xv0g.js:1512-1516)"
 	},
-	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:d691c53f": {
+	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:04743ec1": {
 		"kind": "manual",
 		"probes": [],
 		"note": "the four conditions of the prompt-note flag read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:60684), against 2.1.311 (chunk-xnjmsx7r.js:57759, :57763, :59815, :60285)"
 	},
-	"docs/configure/settings/auth.md#claude-apps-gateway-server-key:1d48213a": {
+	"docs/configure/settings/auth.md#claude-apps-gateway-server-key:1a5c2df7": {
 		"kind": "manual",
 		"probes": [],
 		"note": "oidc.user_id_claim as an optional non-empty string, its sub fallback, and its missing-claim error, read in 2.1.319 (chunk-85d4q736.js@1404154, @1522930, @1523795)"
@@ -1671,7 +1671,7 @@
 		"probes": [],
 		"note": "the partial-read refusal of Write read in the cleaned 2.1.312 code (chunk-r5cyd28m.js:164229-164274, :73050-73054, :9596-9609, :77622; chunk-s2tghjwy.js:4530; chunk-b09ckz08.js:8515)"
 	},
-	"docs/reference/transcript-format.md#assistant-line-fields:f8041464": {
+	"docs/reference/transcript-format.md#assistant-line-fields:8d5be712": {
 		"kind": "manual",
 		"probes": [],
 		"note": "effort read from output_config.effort of the built request in the cleaned 2.1.312 code (chunk-r5cyd28m.js:135670, :136924), against 2.1.311 (chunk-2ht8z368.js:134537)"
@@ -1701,7 +1701,7 @@
 		"probes": [],
 		"note": "pending_elicitation_requests in the 2.1.316 control schema (chunk-fbth6v0w.js)"
 	},
-	"docs/extend/hooks/handlers.md#command-fields:1190160e": {
+	"docs/extend/hooks/handlers.md#command-fields:f8e9b8dd": {
 		"kind": "manual",
 		"probes": [],
 		"note": "PowerShell exit code 2 prefixes: 2.1.314 chunk-sq7yspzm.js against 2.1.316 chunk-qd604jgh.js"
@@ -1885,7 +1885,7 @@
 		"kind": "behaviour",
 		"probes": ["print.cli319.theme.engine"]
 	},
-	"docs/reference/tools/agents-and-tasks.md#enable-tests:913d2596": {
+	"docs/reference/tools/agents-and-tasks.md#enable-tests:31570c49": {
 		"kind": "behaviour",
 		"probes": [
 			"print.api319.tool.exit-plan.direct",
@@ -1897,7 +1897,7 @@
 			"print.api319.tool.exit-plan.teammate-no-prompt-tool"
 		]
 	},
-	"docs/reference/tools/gated-and-other.md#gated-tools:5395136f": {
+	"docs/reference/tools/gated-and-other.md#gated-tools:69c29bf0": {
 		"kind": "behaviour",
 		"probes": [
 			"print.api319.tool.propose-skills.cowork",
@@ -1916,12 +1916,12 @@
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/configure/cli/subcommands.md#commands:6d606fe0": {
+	"docs/configure/cli/subcommands.md#commands:ae68c773": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/configure/cli/remote-control.md#options:5b20d6db": {
+	"docs/configure/cli/remote-control.md#options:3729c7ae": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
@@ -1936,7 +1936,7 @@
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/configure/models-and-providers/model-catalog.md#aliases:9989868f": {
+	"docs/configure/models-and-providers/model-catalog.md#aliases:63335126": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
@@ -1946,32 +1946,32 @@
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/configure/settings/auth.md#errors:100a9b9e": {
+	"docs/configure/settings/auth.md#errors:9f9f3f78": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/headless/stream-json.md#undocumented-types:b2a405ac": {
+	"docs/extend/headless/stream-json.md#undocumented-types:1c950b26": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/headless/stream-json.md#undocumented-types:26943fe0": {
+	"docs/extend/headless/stream-json.md#undocumented-types:71e8a395": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#errors:a2855c24": {
+	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#errors:5aca9f65": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#errors:c90eaf7b": {
+	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#errors:8f658168": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/mod-api/calls/testing.md#errors:064d22c3": {
+	"docs/extend/mod-api/calls/testing.md#errors:9939dfcb": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
@@ -2001,52 +2001,52 @@
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/mod-api/ui/ui-events.md#events-raised-by-ui-calls:66509ba0": {
+	"docs/extend/mod-api/ui/ui-events.md#events-raised-by-ui-calls:dbe56b56": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/mod-api/ui/ui.md#members:4818e0d9": {
+	"docs/extend/mod-api/ui/ui.md#members:7f48b86f": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/plugins/cli.md#subcommands:d564ecff": {
+	"docs/extend/plugins/cli.md#subcommands:6387dfb1": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/plugins/marketplace.md#errors:cecc700d": {
+	"docs/extend/plugins/marketplace.md#errors:57b29a62": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/plugins/marketplace.md#errors:20920b25": {
+	"docs/extend/plugins/marketplace.md#errors:b7193684": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/skills-and-commands/index.md#skill-locations:c1c0a341": {
+	"docs/extend/skills-and-commands/index.md#skill-locations:a9f8adc4": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/reference/tools/gated-and-other.md#errors:097935a0": {
+	"docs/reference/tools/gated-and-other.md#errors:c651866c": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/reference/tools/gated-and-other.md#errors:1fa9ecf7": {
+	"docs/reference/tools/gated-and-other.md#errors:f87858d1": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/reference/tools/shell-and-web.md#errors:c7959e9a": {
+	"docs/reference/tools/shell-and-web.md#errors:0ccf44c4": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/reference/tools/shell-and-web.md#errors:94acea57": {
+	"docs/reference/tools/shell-and-web.md#errors:faad403a": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
@@ -2103,5 +2103,20 @@
 		"kind": "manual",
 		"probes": [],
 		"note": "system prompt sentence read in the cleaned 2.1.322 code (chunk-9r1hbf9p.js:2502794); the 2.1.321 function has one text for all providers (cc-inspect release diff)"
+	},
+	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:757c1eec": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the six per_turn_effort entries read in the cleaned 2.1.322 model catalog (chunk-9s0rpt1f.js:4264, :9687, :16328, :18418, :19530, :21653)"
+	},
+	"docs/extend/mod-api/types/tool-command-config/command-config.md#commandrunresult:dc2ff4e8": {
+		"kind": "manual",
+		"probes": [],
+		"note": "isTextDisplayOnly read in the 2.1.322 type file (schemas/claude-code.d.ts), first in captures/2.1.319/types.diff; the readers are chunk-5a8mhnqs.js@100130 and chunk-9r1hbf9p.js@5479390 of 2.1.322; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/turn-prompt/suggest-skill-turn.md#turncompleteresult:faa7b35e": {
+		"kind": "manual",
+		"probes": [],
+		"note": "by read in the 2.1.322 type file (schemas/claude-code.d.ts), first in captures/2.1.319/types.diff; no probe checks it yet"
 	}
 }

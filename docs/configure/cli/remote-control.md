@@ -1,6 +1,6 @@
 ---
 title: Remote Control Server
-description: Every option of claude remote-control in 2.1.321, with the hidden and removed flags and each error the option parser prints.
+description: Every option of claude remote-control in 2.1.322, with the hidden and removed flags and each error the option parser prints.
 sidebar_position: 4
 ---
 
@@ -18,7 +18,7 @@ claude rc --continue    # bring back the session the last server here started wi
 
 ## Options
 
-Source: the text of `claude remote-control --help` in `2.1.321`, and the option parser of the program (`chunk-04vb3pmq.js:103038`, function `Ai`).
+Source: the text of `claude remote-control --help` in `2.1.322`, and the option parser of the program (`chunk-78cr37t4.js:103038`, function `Ai`).
 The command has its own parser. It does not use the parser of the root `claude` command, so a root flag such as `--model` is not an option here.
 
 | Option | Status | What it does | Default |
@@ -36,26 +36,26 @@ The command has its own parser. It does not use the parser of the root `claude` 
 | `-h`, `--help` | <Documented /> | Prints the help text. | |
 | `--spawn <mode>` | <Documented /> | Sets how the server makes sessions: `same-dir`, `worktree`, or `session` (one session; the server exits when it ends). Give it only once. Press `w` while the server runs to switch between `same-dir` and `worktree`. | `same-dir`, or the mode saved for this project |
 | `--capacity <N>` | <Documented /> | Sets the maximum number of sessions at the same time in `same-dir` or `worktree` mode. Give it only once. | `32` |
-| `--create-session-in-dir`, `--no-create-session-in-dir` | <Documented /> | Makes one session in the current folder when the server starts. In `worktree` mode, this session stays in the current folder and the other sessions get worktrees. A session keeps the folder it started in: a connected client cannot move it to another folder. The program refuses with "This Remote Control session stays in the folder it was started in. To work in another folder, start a new session there." (changed in `2.1.321`, per the [2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321); the program, `chunk-23653zx5.js:9083`, behind the `tengu_idempotent_blossom` gate). | On |
+| `--create-session-in-dir`, `--no-create-session-in-dir` | <Documented /> | Makes one session in the current folder when the server starts. In `worktree` mode, this session stays in the current folder and the other sessions get worktrees. A session keeps the folder it started in: a connected client cannot move it to another folder. The program refuses with "This Remote Control session stays in the folder it was started in. To work in another folder, start a new session there." (changed in `2.1.321`, per the [2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321); the program, `chunk-mqjkssvg.js:9083`, behind the `tengu_idempotent_blossom` gate). | On |
 | `--allow-unattended-tool-calls` | <Undocumented /> | A hidden option. The help text does not show it. See [Unattended Tool Calls](#unattended-tool-calls). | Off |
-| `--enable-live-preview`, `--preview-port <port>` | <Undocumented /> | Hidden options for a preview tunnel. In `2.1.321` the parser always refuses them with `--enable-live-preview and --preview-port are not available in this build.` | Not available |
+| `--enable-live-preview`, `--preview-port <port>` | <Undocumented /> | Hidden options for a preview tunnel. In `2.1.322` the parser always refuses them with `--enable-live-preview and --preview-port are not available in this build.` | Not available |
 | `--sandbox`, `--no-sandbox` | <Documented /> <Deprecated note="Removed in 2.1.300" /> | Removed. The server does not start. See [Errors](#errors). To sandbox the sessions, set `sandbox.enabled` to `true` in settings. | |
 
 ### Unattended Tool Calls
 
-`--allow-unattended-tool-calls` is in the parser of `2.1.321`, but the help text and the official docs do not show it (the program, `chunk-04vb3pmq.js:103038`).
+`--allow-unattended-tool-calls` is in the parser of `2.1.322`, but the help text and the official docs do not show it (the program, `chunk-78cr37t4.js:103038`).
 Use it only from your own terminal. The program does these checks:
 
 1. The parser refuses it with `--spawn=session`, `--session-id`, or `--continue`.
 2. When the server starts, stdin and stdout must be a terminal, and the process must not be a child of a Claude Code session. Else it stops with `Error: --allow-unattended-tool-calls needs you at a terminal: it cannot start from a script, a pipe, or a Claude Code session.`
-3. The program writes an unattended run grant under `~/.claude/state` (export `writeUnattendedRunGrant`, `chunk-2z7me71s.js`). If the write fails, it stops with a message that says it `could not write to ~/.claude/state. Start it from your own terminal; a sandbox cannot write there.`
+3. The program writes an unattended run grant under `~/.claude/state` (export `writeUnattendedRunGrant`, `chunk-r2hcfdng.js`). If the write fails, it stops with a message that says it `could not write to ~/.claude/state. Start it from your own terminal; a sandbox cannot write there.`
 4. The program gives the grant to the tool host for cloud sessions that use this folder. If that host does not start, the server prints `Cloud sessions cannot use this folder: --allow-unattended-tool-calls could not start. Remote Control runs without it.` and goes on without it.
 
 This page does not say what tool calls the grant allows, because no run on this site has used it.
 
 ## How the Server Starts
 
-The program does these steps before the server takes sessions (the program, `chunk-04vb3pmq.js`, the run-time code after `Ai`):
+The program does these steps before the server takes sessions (the program, `chunk-78cr37t4.js`, the run-time code after `Ai`):
 
 - The first time, the server explains Remote Control and asks `Enable Remote Control? (y/n)`. The answer goes to the config key `remoteDialogSeen`.
 - In a folder that you did not trust yet, the server asks whether to trust it. With no terminal to ask on, run `claude` in the folder once first.
@@ -68,7 +68,7 @@ The program does these steps before the server takes sessions (the program, `chu
 
 ### Order of the Checks
 
-The program checks your account and setup before it reads the options (the program, `chunk-m26e19km.js`, the `remote-control` entry, and `chunk-9jjgmknc.js`, function `Knn`, exported as `getBridgeDisabledDiagnosis`). So a bad option shows its error only when these checks pass. Each failed check prints `Error: <message>` and stops the command with exit code 1. The checks run in this order:
+The program checks your account and setup before it reads the options (the program, `chunk-t7eewwh2.js`, the `remote-control` entry, and `chunk-j6jad9hj.js`, function `Knn`, exported as `getBridgeDisabledDiagnosis`). So a bad option shows its error only when these checks pass. Each failed check prints `Error: <message>` and stops the command with exit code 1. The checks run in this order:
 
 1. The managed setting `disableRemoteControl` is `true`: ``Remote Control is disabled by your organization's policy (managed setting `disableRemoteControl`).``
 2. No stored login: ``You must be logged in to use Remote Control.`` and ``Remote Control is only available with claude.ai subscriptions. Run `claude auth login` to sign in with your claude.ai account.``
@@ -89,7 +89,7 @@ The probe group `cli321` (`rc-*` cases) ran each option error below with a fake 
 
 ### Option Errors
 
-Source: the program, in its option parser (`chunk-04vb3pmq.js:103038`, function `Ai`), and the `cli321` probe runs.
+Source: the program, in its option parser (`chunk-78cr37t4.js:103038`, function `Ai`), and the `cli321` probe runs.
 
 | Message | Status | When |
 | --- | --- | --- |
@@ -106,7 +106,7 @@ Source: the program, in its option parser (`chunk-04vb3pmq.js:103038`, function 
 | `--session-id and --continue cannot be used with --spawn, --capacity, or --create-session-in-dir.` | <Documented /> | You give a resume option with a spawn option. |
 | `--session-id and --continue cannot be used together.` | <Documented /> | You give both. |
 | `--allow-unattended-tool-calls cannot be used with --spawn=session, --session-id, or --continue.` | <Undocumented /> | You give a single-session or resume option with it. |
-| `--enable-live-preview and --preview-port are not available in this build.` | <Undocumented /> | You give either option. The checks that follow it in the parser (`--preview-port requires an integer in [1024, 65535]`, and the pairing of the two options) do not run in `2.1.321`, except the port range check, which runs first while the parser reads `--preview-port`. |
+| `--enable-live-preview and --preview-port are not available in this build.` | <Undocumented /> | You give either option. The checks that follow it in the parser (`--preview-port requires an integer in [1024, 65535]`, and the pairing of the two options) do not run in `2.1.322`, except the port range check, which runs first while the parser reads `--preview-port`. |
 | `Unknown argument: <arg>` and `Run 'claude remote-control --help' for usage.` | <Undocumented /> | Any other argument. |
 | `Error: No recent session found in this directory or its worktrees...` | <Documented /> | `--continue` finds no record. |
 

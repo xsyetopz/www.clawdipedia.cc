@@ -65,7 +65,7 @@ The last column says where the key may appear: the manifest, a marketplace entry
 
 A path in `icon` that holds `..` raises `PATH_TRAVERSAL`. A path with quotes, angle brackets, a backslash, a backtick, whitespace, or control characters raises `LISTING_URL_SCHEME`. So does an `icon` URL that is not `https://`.
 The listing takes the icon file only once: the first time the plugin is saved or submitted in the developer portal. A later change does not change the icon.
-Source: the program, `chunk-gkz786j5.js@2869` and `chunk-gkz786j5.js@31882`.
+Source: the program, `chunk-yqykc8yz.js@2869` and `chunk-yqykc8yz.js@31882`.
 
 ## `userConfig` Option Keys
 

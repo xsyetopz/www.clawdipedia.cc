@@ -9,7 +9,7 @@ The second table lists the events that the `$.ui` methods raise.
 
 A `deny` from a hook refuses a scroll, focus, or close. An invalid tree draws the engine's own drawing.
 
-Official pages: [Draw in the Interface](https://code.claude.com/docs/en/plugins/mods/interface), [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.314 program (`schemas/claude-code.d.ts`).
+Official pages: [Draw in the Interface](https://code.claude.com/docs/en/plugins/mods/interface), [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.322 program (`schemas/claude-code.d.ts`).
 
 ## Example
 
@@ -64,7 +64,7 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 | `ui.copy` | <Documented /> | `$.ui.copy({ text, surface })`. `surface` takes the session's first surface when left out. | Input `UiCopyArgs`. Value `UiCopyResult`. |
 | `ui.view` | <Undocumented /> | `$.ui.view({ agentId })`: whose transcript the main view shows. None means the main conversation. | Input `SiteView`. Value `UiViewResult`. |
 | `ui.notify` | <Documented /> | `$.ui.notify(text, { title })`. `title` is the plugin's name when left out. Two mods that notify again on hearing a notification can echo each other without end. | Input `{ text: string, title?: string, key?: string, delayMs?: number, at?: number, untilBack?: boolean }`. Value `UiNotifyResult`. `key`, `delayMs`, `at`, and `untilBack` are new in `2.1.321`; see [`NotifyOptions`](../types/ui/input-pane-render.md#notifyoptions). |
-| `ui.cancelNotify` | <Undocumented /> | `$.ui.cancelNotify(key)` | Input `{ key: string }`. Value `{ isSent: boolean }`. New in `2.1.321`. Read site: `chunk-ne1755n5.js:4379223`. |
+| `ui.cancelNotify` | <Undocumented /> | `$.ui.cancelNotify(key)` | Input `{ key: string }`. Value `{ isSent: boolean }`. New in `2.1.321`. Read site: `chunk-9r1hbf9p.js:4379658`. |
 | `ui.blit` | <Documented /> | `$.ui.blit(...)`: the `cells` of a `Raster` or the `source` of a keyed `Image`. A hook above may rewrite either, or `{ deny }`. | Input `UiBlitArgs`. Value `UiBlitResult`. |
 
 ## Related Pages

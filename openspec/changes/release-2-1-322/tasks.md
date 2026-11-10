@@ -10,7 +10,7 @@ Do not let a page state a `(proposed)` item.
 - [x] 1.3 cc-inspect: the `code` `cli` options `provider: "vertex"` and `fastRefusal`, the outcome lines, and the query lines of a shown file, each with a test.
 - [x] 1.4 `bun run release:all`, which ends with `captures/2.1.322/compare/compare.md`.
 - [ ] 1.5 `bun run release:probe:managed -- --to 2.1.322`. It needs the user to run the `sudo` install command.
-- [ ] 1.6 `bun run release:probe:live -- --yes`.
+- [x] 1.6 `bun run release:probe:live -- --yes`.
 - [x] 1.7 `bun run release:facts -- --check`.
 
 ## 2. Pages From the Diff
@@ -39,10 +39,10 @@ Source: the notes of [`2.1.322`](https://github.com/anthropics/claude-code/relea
 
 ## 5. Release
 
-- [ ] 5.1 `src/version.ts` reads `2.1.322`.
-- [ ] 5.2 `bun run schemas` and `bun run surface`.
-- [ ] 5.3 Render the prompt pages for `2.1.322`.
-- [ ] 5.4 `bun tools/check/citations.ts --move-from` the `2.1.321` build, then check the `module` moves and the 6 unmapped citations by hand.
-- [ ] 5.5 `bun run version:bump` for the affected plugins.
-- [ ] 5.6 One `CHANGELOG.md` entry for `2.1.322`.
-- [ ] 5.7 `bun run check:citations`, `bun run schemas:check`, `bun run verify:locked`, `just verify`, `just verify-project`, then commit.
+- [x] 5.1 `src/version.ts` reads `2.1.322`.
+- [x] 5.2 `bun run schemas` and `bun run surface`.
+- [x] 5.3 Render the prompt pages for `2.1.322`.
+- [x] 5.4 `bun tools/check/citations.ts --move-from` the `2.1.321` build, then check the `module` moves and the 6 unmapped citations by hand.
+- [x] 5.5 `bun run version:bump` for the affected plugins.
+- [x] 5.6 One `CHANGELOG.md` entry for `2.1.322`.
+- [x] 5.7 `bun run check:citations`, `bun run schemas:check`, `bun run verify:locked`, `just verify`, `just verify-project`, then commit.

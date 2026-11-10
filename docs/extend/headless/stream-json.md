@@ -81,8 +81,8 @@ Only the program shows these. They can change without notice.
 | `system` / `turn_handoff_available` | <Undocumented /> | Sent once by a cloud worker that accepts the `turn_handoff` control request. It carries what the worker wrote to `external_metadata.turn_handoff`. Since `2.1.311` it can have `requires_rewind_request_id` (see [Fields New in `2.1.311`](#fields-new-in-21311)). |
 | `system` / `ui_invalidate` | <Undocumented /> | No description in the program schema. |
 | `system` / `ui_log` | <Undocumented /> | A plugin called `$.ui.log(text)`, and the screen adds a dim notice under the name of the plugin. |
-| `system` / `ui_notify` | <Undocumented /> | New in `2.1.321`. A plugin called `$.ui.notify(text)`, and the client raises a notification under the name of the plugin. The line has `plugin`, `source` (`name@marketplace`), `title`, `text`, and `rewritten`. It can have `key`, `delay_ms`, `at`, and `until_back`. Source: the program (`chunk-sspw8v4n.js:513591`, `2.1.321`). |
-| `system` / `ui_notify_cancel` | <Undocumented /> | New in `2.1.321`. A plugin called `$.ui.cancelNotify(key)`, or the engine removed the plugin. The client removes the notification with this `source` and `key`. Source: the program (`chunk-sspw8v4n.js:514400`, `2.1.321`). |
+| `system` / `ui_notify` | <Undocumented /> | New in `2.1.321`. A plugin called `$.ui.notify(text)`, and the client raises a notification under the name of the plugin. The line has `plugin`, `source` (`name@marketplace`), `title`, `text`, and `rewritten`. It can have `key`, `delay_ms`, `at`, and `until_back`. Source: the program (`chunk-smzekmsg.js:513591`, `2.1.322`). |
+| `system` / `ui_notify_cancel` | <Undocumented /> | New in `2.1.321`. A plugin called `$.ui.cancelNotify(key)`, or the engine removed the plugin. The client removes the notification with this `source` and `key`. Source: the program (`chunk-smzekmsg.js:515917`, `2.1.322`). |
 | `system` / `ui_toast` | <Undocumented /> | A plugin called `$.ui.toast(text)`, and the screen shows a short note under the prompt. |
 | `system` / `ui_status` | <Undocumented /> | A plugin called `$.ui.status(text)`, and the screen pins a line under the prompt. |
 | `system` / `ui_scroll` | <Undocumented /> | A plugin scrolled a site that a remote screen draws. |
@@ -101,7 +101,7 @@ Only the program shows these. They can change without notice.
 | `system` / `turn_preempted` | <Undocumented /> | No description in the program schema. |
 | `system` / `per_turn_effort_changed` | <Undocumented /> | The conversation stopped sending the effort with each turn, because the server refused it. |
 | `system` / `file_attachments_missing` | <Undocumented /> | No description in the program schema. |
-| `system` / `inherited_asks_settled` | <Undocumented /> | New in `2.1.311`. A cloud worker reports, before its first turn, which asks it inherited and keeps. Any ask stored before this event that it does not name is over. The line has `kept_request_ids`, an array of the request IDs (strings) of the earlier worker's asks that stay answerable. Source: the program (`chunk-sspw8v4n.js:15171`, `chunk-3da4gdx5.js:21088`). |
+| `system` / `inherited_asks_settled` | <Undocumented /> | New in `2.1.311`. A cloud worker reports, before its first turn, which asks it inherited and keeps. Any ask stored before this event that it does not name is over. The line has `kept_request_ids`, an array of the request IDs (strings) of the earlier worker's asks that stay answerable. Source: the program (`chunk-smzekmsg.js:15171`, `chunk-d47h4m8y.js:21088`). |
 | `system` / `cloud_session_delta` | <Undocumented /> | No description in the program schema. |
 | `control_request` | <Undocumented /> | A request of the control protocol, which either side can send on the same stream. |
 | `control_response` | <Undocumented /> | The single reply to a `control_request`. |
@@ -154,12 +154,12 @@ A real run of this release, in print mode, wrote the first 14 rows in the order 
 The capture shows the fifth entry hidden, and the program source shows it is `msg_lifecycle_v1`.
 
 Source: the program. These lines are in `captures/2.1.314/clean/modules/`.
-The program builds the array at `chunk-3da4gdx5.js:26626`. The names and the always-on list are at `chunk-apvb0edm.js:93-126`.
-The MCP names are at `chunk-pvpxzxgj.js:54`. The UI names are at `chunk-pvpxzxgj.js:208` and `:228`.
-The notification names are at `chunk-7gg03ce9.js:311`. `session_notices` is at `chunk-3da4gdx5.js:4261`.
-The gate of `read_file_as_written_v1` is at `chunk-3da4gdx5.js:4162`. The lifecycle forwarder is at `chunk-3da4gdx5.js:26629`.
-The task list field is at `chunk-3da4gdx5.js:15025`. The cloud list is at `chunk-5dx6x1b3.js:1520` and `chunk-1nay3s0g.js:2877`.
-The meanings come from `chunk-sspw8v4n.js:16788`, `:16427`, `:10769`, `:18162`, `:18012`, `:19273`, `:19414`, and `:15881`.
+The program builds the array at `chunk-d47h4m8y.js:26626`. The names and the always-on list are at `chunk-1em5h852.js:93-126`.
+The MCP names are at `chunk-70hssrqn.js:54`. The UI names are at `chunk-70hssrqn.js:208` and `:228`.
+The notification names are at `chunk-j6477wxw.js:311`. `session_notices` is at `chunk-d47h4m8y.js:4261`.
+The gate of `read_file_as_written_v1` is at `chunk-d47h4m8y.js:4162`. The lifecycle forwarder is at `chunk-d47h4m8y.js:26629`.
+The task list field is at `chunk-d47h4m8y.js:15025`. The cloud list is at `chunk-rn5sxc5v.js:1520` and `chunk-rhve9zej.js:2877`.
+The meanings come from `chunk-smzekmsg.js:16788`, `:16427`, `:10769`, `:18162`, `:18012`, `:19273`, `:19414`, and `:15881`.
 The first 14 rows come from `captures/2.1.314/print/request.baseline-a.json`.
 The schema describes the array at `schemas/claude-code-stream-json.json:5708`.
 
@@ -179,7 +179,7 @@ The schema marks the `system` and `result` fields as `@internal`, so they can ch
 | `process_start_tuning`, `process_start_purge_delay_ms` | <Undocumented /> | `result` line, success and error | Integer | Start-up tuning data of the process. This page gives only the names and types. |
 | `process_garbage_collections` | <Undocumented /> | `result` line, success and error | Object | Has `to_first_message` and `to_first_result`. Each holds the integers `eden`, `full`, `wall_ms`, and `heap_after_mib`. This page gives only the names and types. |
 
-Source: the program (`chunk-sspw8v4n.js:10465` for the cache fields, `chunk-ne1755n5.js:59784` where the two counts add up, `chunk-sspw8v4n.js:13050` and `chunk-ne1755n5.js:108528` for the `api_error` values, `chunk-sspw8v4n.js:15230` and `chunk-g2v3t6pj.js:1006` for `requires_rewind_request_id`, `chunk-sspw8v4n.js:15424` for `background_color`).
+Source: the program (`chunk-smzekmsg.js:10465` for the cache fields, `chunk-9r1hbf9p.js:59784` where the two counts add up, `chunk-smzekmsg.js:13050` and `chunk-9r1hbf9p.js:108528` for the `api_error` values, `chunk-smzekmsg.js:15230` and `chunk-qr9meaww.js:1006` for `requires_rewind_request_id`, `chunk-smzekmsg.js:15424` for `background_color`).
 
 ## Field New in `2.1.318`
 
@@ -187,7 +187,7 @@ Source: the program (`chunk-sspw8v4n.js:10465` for the cache fields, `chunk-ne17
 | --- | --- | --- | --- | --- |
 | `credential_expires_at` | <Undocumented /> | `result` line, and the `result` object of `--output-format json` | String, an ISO 8601 date | The end of the stored claude.ai sign-in: the end of its refresh token. The real end can fall up to 3 days earlier, so treat it as the latest day. The key is absent when the program has no such date. |
 
-Source: the program. The field is built in `chunk-cs3pvamd.js` (function `$767814`) from the stored `refreshTokenExpiresAt` and set on the result in `chunk-3da4gdx5.js:24829`. The `2.1.318` release notes name it: "Added the date a stored claude.ai sign-in ends to `claude auth status` (`loginExpiresAt`) and to `claude -p` JSON results (`credential_expires_at`)".
+Source: the program. The field is built in `chunk-yqezv9gr.js` (function `$767814`) from the stored `refreshTokenExpiresAt` and set on the result in `chunk-d47h4m8y.js:24829`. The `2.1.318` release notes name it: "Added the date a stored claude.ai sign-in ends to `claude auth status` (`loginExpiresAt`) and to `claude -p` JSON results (`credential_expires_at`)".
 
 **Runs:** `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only notes319.login-expiry` (cases `result-stream-json`, `result-json`, `result-json-no-date`).
 

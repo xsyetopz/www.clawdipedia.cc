@@ -3932,7 +3932,7 @@
 				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"fileName:«»(),bytesDone:«»(),bytesTotal:«»(),connectorName:«»(),place:«»().optional(),savedAs:«»().optional(),fileIndex:«»().int().positive(),fileCount:«»().int().positive(),groupedFiles:«»().int().min(2).optional()"
 			],
-			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module, and by the stream-json rebuild sites. connectorFileLines lists the files a connector (an MCP server that delivers files) fetched or sent in the tool call. The reader checks each item with a zod object (chunk-tbbj487k.js, about offset 27500) and drops items that fail: direction is fetching or sending; state is done, stopped, stopped-maybe-saved, or {refused, leftBehind?}. New in 2.1.321."
+			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module, and by the stream-json rebuild sites. connectorFileLines lists the files a connector (an MCP server that delivers files) fetched or sent in the tool call. The reader checks each item with a zod object (chunk-fm0g04m5.js, about offset 27900, in 2.1.322) and drops items that fail: direction is fetching or sending; state is done, stopped, stopped-maybe-saved, or {refused, leftBehind?}. New in 2.1.321."
 		},
 		"user.toolEndsTurn": {
 			"schema": {
@@ -3973,7 +3973,7 @@
 				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"imagePasteIds:«».length>0?«»:void 0,permissionMode:«»"
 			],
-			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. imagePasteIds is an array of paste ids (numbers) of images pasted in the prompt. The prompt write site drops the key when the list is empty (chunk-m9qw0baf.js:2276)."
+			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. imagePasteIds is an array of paste ids (numbers) of images pasted in the prompt. The prompt write site drops the key when the list is empty (chunk-7nmpvy5x.js:2338 in 2.1.322)."
 		},
 		"user.sourceToolAssistantUUID": {
 			"schema": {
@@ -5082,7 +5082,7 @@
 				"{return{serverClassifierRequest:«».key,serverClassifierResults:«»}}",
 				"isVoidedByAnotherCall(«»){for(let[«»,«»]of this.#«»)if(«»===void 0||«»!==«»&&!«».has(«»))return!0;return!1}toJSON(){return}}"
 			],
-			"note": "Written in memory only: the factory returns {serverClassifierRequest:a1.key,serverClassifierResults:a1}, where a1 is the server-classifier handle (chunk-r5cyd28m.js:57145). The handle is an instance of class XWe (:57041), which ends in toJSON(){return}, so JSON.stringify drops the key. The input-rewrite path also destructures both keys out before it rebuilds the line (`let{serverClassifierRequest:we,serverClassifierResults:Te,...Ee}=e`). So the transcript never holds it, and no value is valid."
+			"note": "Written in memory only: the factory returns {serverClassifierRequest:a1.key,serverClassifierResults:a1}, where a1 is the server-classifier handle (chunk-6cetpjxd.js:1651 in 2.1.322). The handle is an instance of class ge (:1484), which ends in toJSON(){return}, so JSON.stringify drops the key. The input-rewrite path also destructures both keys out before it rebuilds the line (`let{serverClassifierRequest:L,serverClassifierResults:U,...w}=e`). So the transcript never holds it, and no value is valid."
 		},
 		"attachment.attachment.forwardedIntent.lineage": {
 			"schema": {

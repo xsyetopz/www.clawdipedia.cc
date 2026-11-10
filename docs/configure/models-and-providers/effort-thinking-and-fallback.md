@@ -20,24 +20,24 @@ It comes from the catalog (<Undocumented />). `claude-opus-4-7` has the default 
 | `per-turn-control-2026-07-01` | <Undocumented /> | A beta that lets some models take the effort with each message. |
 | `ultrathink` | <Documented /> | A word in a prompt that asks for deeper thinking on that turn only. Since `2.1.311`, in the interactive terminal on the Anthropic API, it runs the turn at `xhigh` effort on Opus 5.5, Sonnet 5.5, Haiku 5.5, and Fable 5.1. Since `2.1.321`, it does so on Fable 5.2 and Mythos 5.2 too. Typed while Claude is working, it raises the rest of that turn. The rainbow on the word shows only where it can raise effort (see the note below). |
 | Default effort | <Documented /> | The default is `high`, except `medium` for Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.2, and Mythos 5.2, and `xhigh` for Opus 4.7. |
-| Cache warning | <Undocumented /> | Since `2.1.312`, the dialog `Switch model?` or `Change effort level?` says `This conversation is cached for the current model. Switching to` the new value in bold `means the full history gets re-read.` (the program, `chunk-d3btef94.js:60970`, `:61006-61011`). The old text ended with `on your next message`. |
+| Cache warning | <Undocumented /> | Since `2.1.312`, the dialog `Switch model?` or `Change effort level?` says `This conversation is cached for the current model. Switching to` the new value in bold `means the full history gets re-read.` (the program, `chunk-vr3fdvn1.js:60973`, `:61009-61014`). The old text ended with `on your next message`. |
 | Effort note in the prompt | <Undocumented /> | The prompt shows the level and `/effort`. Since `2.1.312`, it shows `may wait for your next message` in place of `/effort` only while the request has not yet carried the shown level (see the note below). |
 | Spinner effort | <Undocumented /> | The spinner adds the text `with <level> effort`. Since `2.1.312`, the level is the one the request carried (see the note below). |
 
 Source for `ultrathink`: the [Claude Code changelog](https://code.claude.com/docs/en/changelog) and the program.
-These models are the ones whose catalog entry has the capability `per_turn_effort`. In `2.1.319` they were four. In `2.1.321` they are six, with Fable 5.2 and Mythos 5.2 added (`chunk-vcsr0mgr.js:4264`, `:9687`, `:16328`, `:18418`, `:19530`, `:21634` of `2.1.321`).
-At submit, `chunk-mf088szq.js:4737` sets the turn effort to `xhigh`. A prompt typed during a turn gets the same level (`chunk-fzgxnvda.js:3734`).
-The gate that decides whether a model can take the boost is `chunk-qfakytpa.js:20571`. The prompt colors the word only when it passes (`chunk-d3btef94.js:58212`).
+These models are the ones whose catalog entry has the capability `per_turn_effort`. In `2.1.319` they were four. Since `2.1.321` they are six, with Fable 5.2 and Mythos 5.2 added (`chunk-9s0rpt1f.js:4264`, `:9687`, `:16328`, `:18418`, `:19530`, `:21653` of `2.1.322`).
+At submit, `chunk-mfrsszee.js:4737` sets the turn effort to `xhigh`. A prompt typed during a turn gets the same level (`chunk-7nmpvy5x.js:3734`).
+The gate that decides whether a model can take the boost is `chunk-yqezv9gr.js:20574`. The prompt colors the word only when it passes (`chunk-vr3fdvn1.js:58215`).
 
 Source for the cache warning, the prompt note, and the spinner: the program and the [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312).
 The text of the prompt note did not change in `2.1.312`. Only the flag changed.
 In `2.1.311`, the flag was true after a step key press while Claude was working, on a model that passes the per-turn check, and it cleared when Claude stopped.
-Since `2.1.312`, the flag is true when the request sent a level, no turn effort is set, the sent level differs from the shown level, and the model passes the per-turn check (`chunk-d3btef94.js:63800`).
-The note clears when one of these stops being true. The program then removes the `effort-level` notification (`chunk-d3btef94.js:63813`).
-The program builds the prompt text at `chunk-d3btef94.js:11479`.
-The request puts its level in `output_config.effort` (`chunk-ne1755n5.js:150469`). The request sends it with the stream start (`chunk-ne1755n5.js:154031`).
-The program stores it as the sent level (`chunk-d3btef94.js:101548`, `:101555`).
-The spinner reads the sent level first (`chunk-k0gzdc82.js:1475`). It uses the resolved level only when the program stores no sent level (`chunk-b0rhabcy.js:1596-1600`).
+Since `2.1.312`, the flag is true when the request sent a level, no turn effort is set, the sent level differs from the shown level, and the model passes the per-turn check (`chunk-vr3fdvn1.js:63804`).
+The note clears when one of these stops being true. The program then removes the `effort-level` notification (`chunk-vr3fdvn1.js:63816`).
+The program builds the prompt text at `chunk-vr3fdvn1.js:11480`.
+The request puts its level in `output_config.effort` (`chunk-9r1hbf9p.js:150469`). The request sends it with the stream start (`chunk-9r1hbf9p.js:154048`).
+The program stores it as the sent level (`chunk-vr3fdvn1.js:101551`, `:101558`).
+The spinner reads the sent level first (`chunk-ta8ht7qk.js:1475`). It uses the resolved level only when the program stores no sent level (`chunk-8b0mfdp6.js:1596-1600`).
 In `2.1.311`, the spinner function took no sent level.
 
 | `id` | Default effort | Index (`low`, `medium`, `high`, `xhigh`, `max`) |
@@ -65,7 +65,7 @@ Among saved levels, Claude Code takes the first source that applies:
 3. A top-level `effortLevel` in your user settings file. This is the older form. It applies only to a fixed list of older models that the program pins, and only while no other file sets a top-level `effortLevel`. A new install pins none, so the key does nothing there.
 4. The model default.
 
-To set a floor for a newer model in your user file, write it inside `modelSettings` (the program, `chunk-b0rhabcy.js`).
+To set a floor for a newer model in your user file, write it inside `modelSettings` (the program, `chunk-8b0mfdp6.js`).
 For a subagent, the order is the agent file `effort`, the inherited effort, `CLAUDE_CODE_SUBAGENT_EFFORT`, then the order above (see [Models and Effort](../env-vars/models-and-effort.md)).
 
 Source: [Model Configuration](https://code.claude.com/docs/en/model-config), section "Adjust effort level", and the program.
@@ -94,7 +94,7 @@ Sources: [Model Configuration](https://code.claude.com/docs/en/model-config) and
 | `--fallback-model <model...>`, `fallbackModel` | <Documented /> | A chain of up to three models for overload and server errors. |
 | `CLAUDE_CODE_NO_MODEL_FALLBACK` | <Undocumented /> | Forbids the substitution of a model. |
 | `CLAUDE_CODE_MAX_RETRIES` | <Documented /> | The number of retries. The default is 10. The maximum is 15. |
-| `CLAUDE_CODE_RETRY_WATCHDOG` | <Documented /> | Retries `429` and `529` errors without end and removes the cap. Off by default. Since `2.1.310`, `CLAUDE_CODE_RETRY_WATCHDOG_SCOPE=capacity` keeps only that part. Since `2.1.311`, it no longer retries a `429` or `529` that the API marked not to retry with the header `x-should-retry: false` (`chunk-ne1755n5.js:145756`). This holds in watchdog mode too. A rate-limit header with the value `fetch_error` still allows a retry. |
+| `CLAUDE_CODE_RETRY_WATCHDOG` | <Documented /> | Retries `429` and `529` errors without end and removes the cap. Off by default. Since `2.1.310`, `CLAUDE_CODE_RETRY_WATCHDOG_SCOPE=capacity` keeps only that part. Since `2.1.311`, it no longer retries a `429` or `529` that the API marked not to retry with the header `x-should-retry: false` (`chunk-9r1hbf9p.js:145771`). This holds in watchdog mode too. A rate-limit header with the value `fetch_error` still allows a retry. |
 | `CLAUDE_CODE_OVERLOADED_RETRY_BASE_DELAY_MS`, `CLAUDE_CODE_OVERLOADED_RETRY_MAX_DELAY_MS` | <Documented /> | The start wait and the longest wait after a `529`. The defaults are 500 and 32000. |
 | `API_TIMEOUT_MS` | <Documented /> | The request timeout. The default is 600000. |
 | `CLAUDE_STREAM_IDLE_TIMEOUT_MS`, `CLAUDE_STREAM_FIRST_BYTE_TIMEOUT_MS` | <Documented /> | Stream silence and first-byte deadlines. The program sets the defaults. A value below 5 minutes for `CLAUDE_STREAM_IDLE_TIMEOUT_MS` counts as 5 minutes. |
@@ -108,7 +108,7 @@ Both rows are about a model name that Claude Code does not recognize, such as a 
 
 | Item | Status | Effect | Notes |
 | --- | --- | --- | --- |
-| `CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK` | <Undocumented /> | Turns off the automatic switch to another model after a flagged message. | Since `2.1.312`, the switch also covers names that Claude Code does not recognize. Before, a name with no catalog flag and no known flagged family got no switch. The setting `switchModelsOnFlag` is a second control. Source: `chunk-ygytvt8n.js` lines 15723, 15725 to 15732, and 15813 to 15829. |
+| `CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK` | <Undocumented /> | Turns off the automatic switch to another model after a flagged message. | Since `2.1.312`, the switch also covers names that Claude Code does not recognize. Before, a name with no catalog flag and no known flagged family got no switch. The setting `switchModelsOnFlag` is a second control. Source: `chunk-jshe6j36.js` lines 15723, 15725 to 15732, and 15813 to 15829. |
 | `CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT` | <Documented /> | `0` keeps the full system prompt. | Since `2.1.312`, an unrecognized name gets the short prompt. See [Names That Claude Code Does Not Recognize](../../how-it-works/system-prompt.md#names-that-claude-code-does-not-recognize). |
 
 ## Related Pages

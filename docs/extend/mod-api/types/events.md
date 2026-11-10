@@ -10,7 +10,7 @@ For example, `$.fs.read(...)` is both a call and the event `fs.read`, so a hook 
 
 A plugin adds its own nouns by declaration merging into `EngineInterface`.
 
-Source: the Mod API type file of the 2.1.314 program (`schemas/claude-code.d.ts`). Official page: [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference).
+Source: the Mod API type file of the 2.1.322 program (`schemas/claude-code.d.ts`). Official page: [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference).
 
 ## Example
 

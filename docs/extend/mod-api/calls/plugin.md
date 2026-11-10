@@ -11,7 +11,7 @@ A plugin ships the types of its noun in the `.d.ts` file that `types` names in `
 
 Return `{ refuse }` from `plugin.register` to keep a module out. `plugin.json` names the `types` file.
 
-Official page: [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.314 program (`schemas/claude-code.d.ts`).
+Official page: [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.322 program (`schemas/claude-code.d.ts`).
 
 ## Example
 
