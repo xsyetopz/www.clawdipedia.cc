@@ -6,6 +6,7 @@ setup-project:
 # Run the site checks `just verify` does not: docs, examples, schemas, surface, build, llms.txt, plugins, and deploy config.
 verify-project:
     bun run check:docs
+    bun run check:citations
     bun run check:examples
     bun run check:hosts
     bun run schemas:check

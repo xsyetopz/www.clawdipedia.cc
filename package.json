@@ -18,6 +18,7 @@
 	},
 	"scripts": {
 		"build": "docusaurus build",
+		"check:citations": "bun tools/check/citations.ts",
 		"check:docs": "bun tools/check/docs.ts",
 		"check:examples": "bun tools/check/examples.ts",
 		"check:hosts": "bun tools/check/hosts.ts",

@@ -1,6 +1,6 @@
 // Run: bun test inspect/mcp/test   (needs inspect/mcp/dist/server.js; part of plugin:check)
 import { describe, expect, test } from "bun:test";
-import { realpath, rm, writeFile } from "node:fs/promises";
+import { mkdir, realpath, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import { z } from "zod";
@@ -111,6 +111,32 @@ describe("binary", () => {
 		expect(await Bun.file(join(tmp, "wakaru-runs")).text()).toBe(
 			"run\nrun\nrun\n",
 		);
+	});
+
+	test("code citations lists the chunk citations of a folder that the build lacks", async () => {
+		const dir = join(tmp, "docs");
+		await mkdir(join(dir, "sub"), { recursive: true });
+		await writeFile(
+			join(dir, "sub", "a.md"),
+			"x\nSee `chunk-aaaaaaaa.js:5`.\n",
+		);
+		await writeFile(join(dir, "b.md"), "No citation.\n");
+		const r = await call("code", {
+			action: "citations",
+			dir,
+			version: "9.9.9",
+		});
+		expect(structured(r)["stale"]).toEqual([
+			{
+				file: join("sub", "a.md"),
+				line: 2,
+				citation: "chunk-aaaaaaaa.js:5",
+				chunk: "chunk-aaaaaaaa.js",
+			},
+		]);
+		expect(text(r)).toContain("sub/a.md:2: chunk-aaaaaaaa.js:5");
+		const none = await call("code", { action: "citations", version: "9.9.9" });
+		expect(none.isError).toBe(true);
 	});
 
 	test("surface object-keys follows a spread into a function", async () => {

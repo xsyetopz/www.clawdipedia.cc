@@ -104,7 +104,7 @@ Steps 1 to 8 are unattended and safe in a fresh session. Steps 9 and 10 need the
     - Writes `captures/<to>/live/<case>.json`, with `cacheWarm` where it applies. One attempt per case, no retry.
     - User: yes. Explicit consent every run.
 
-11. **Docs.** Update the docs pages from the worklist in `captures/<to>/compare/compare.md`. Each edit cites the case id it came from. Run `bun run lint` and `bun run check:docs` on the changed pages.
+11. **Docs.** Update the docs pages from the worklist in `captures/<to>/compare/compare.md`. Each edit cites the case id it came from. Run `bun run lint` and `bun run check:docs` on the changed pages, and `bun run check:citations`, which fails on each program citation in `docs/` that names a chunk file the build of `src/version.ts` does not have.
     `docs/start/what-changed.md` holds only the `<to>` section, and that section compares `<to>` with `<from>`. Delete the `<from>` section and drop its fact ids from `tools/release/facts/map.json`. The site keeps no section and no page for an older release: What Changed links the official changelog for those.
     - User: no.
 

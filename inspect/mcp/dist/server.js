@@ -24831,6 +24831,7 @@ var init_app = __esm(() => {
     env: record(string2(), string2()).optional(),
     args: array(string2()).optional(),
     files: record(string2(), string2()).optional(),
+    dir: string2().optional(),
     replies: record(string2(), unknown()).optional(),
     packageVersion: string2().optional(),
     login: _enum(["key", "oauth"]).optional(),
@@ -71821,11 +71822,47 @@ var init_readable = __esm(() => {
   init_prepare();
 });
 
-// inspect/mcp/src/requests.ts
+// inspect/mcp/src/citations.ts
+import { basename as basename5 } from "path";
+var CITATION, findCitations = (file, text) => text.split(`
+`).flatMap((lineText, i) => [...lineText.matchAll(CITATION)].map((m) => ({
+  file,
+  line: i + 1,
+  citation: m[0],
+  chunk: m[1] ?? m[0]
+}))), staleCitations = (files, moduleNames) => {
+  const known = new Set([...moduleNames].map((n) => basename5(n)));
+  return Object.entries(files).flatMap(([file, text]) => findCitations(file, text)).filter((c) => !known.has(c.chunk));
+};
+var init_citations = __esm(() => {
+  CITATION = /(chunk-[\da-z]+\.js)(?:[:@]\d+|`? lines \d+ to \d+)?/gu;
+});
+
+// inspect/mcp/src/mcp/code-citations.ts
 import { join as join7 } from "path";
+var citations = async ({ dir, version }) => {
+  const root = need(dir, "dir");
+  const p = await program3(version);
+  const files = {};
+  for await (const f of new Bun.Glob("**/*.md").scan(root)) {
+    files[f] = await Bun.file(join7(root, f)).text();
+  }
+  const stale = staleCitations(files, p.modules.map((m) => m.name));
+  return text(stale.length > 0 ? `${stale.length} citation(s) name a chunk that ${p.path} lacks
+${stale.map((c) => `- ${c.file}:${c.line}: ${c.citation}`).join(`
+`)}` : `${p.path}: every chunk citation in ${Object.keys(files).length} files names a module`, { stale });
+};
+var init_code_citations = __esm(() => {
+  init_binary();
+  init_citations();
+  init_app();
+});
+
+// inspect/mcp/src/requests.ts
+import { join as join8 } from "path";
 var filesOf = async (dir) => {
   const paths = await Array.fromAsync(new Bun.Glob("**/*.{json,jsonl,log}").scan({ cwd: dir, dot: true }));
-  return Object.fromEntries(await Promise.all(paths.toSorted().map(async (p) => [p, await Bun.file(join7(dir, p)).text()])));
+  return Object.fromEntries(await Promise.all(paths.toSorted().map(async (p) => [p, await Bun.file(join8(dir, p)).text()])));
 }, placesOf = (r, q) => [
   ...r.requests.flatMap((x, i) => q.test(JSON.stringify(x.body ?? "")) ? [`request ${i + 1} ${x.method} ${x.path}`] : []),
   ...q.test(r.stdout) ? ["stdout"] : [],
@@ -71869,7 +71906,7 @@ var init_requests = () => {};
 
 // inspect/mcp/src/pki.ts
 import { rm as rm4 } from "fs/promises";
-import { join as join8 } from "path";
+import { join as join9 } from "path";
 var SSL_CANDIDATES, CA_CNF = `[req]
 distinguished_name=dn
 x509_extensions=v3
@@ -71952,7 +71989,7 @@ subjectAltName=${hosts.map((h) => `DNS:${h}`).join(",")}
 }, makePki = async (dir, extraHosts = []) => {
   const ssl = await findOpenssl();
   const sh = (args) => openssl(ssl, dir, args);
-  const f = (n) => join8(dir, n);
+  const f = (n) => join9(dir, n);
   const hosts = ["api.anthropic.com", ...extraHosts];
   await Promise.all([
     Bun.write(f("ca.cnf"), CA_CNF),
@@ -72182,15 +72219,15 @@ var init_stub = __esm(() => {
 // inspect/mcp/src/sandbox.ts
 import { chmod, mkdir as mkdir4, mkdtemp as mkdtemp4, realpath as realpath2 } from "fs/promises";
 import { tmpdir as tmpdir3 } from "os";
-import { dirname as dirname2, join as join9 } from "path";
-var UNSAFE, tempDir = async (p) => realpath2(await mkdtemp4(join9(tmpdir3(), p))), makeShim = async (home) => {
-  const shim = join9(home, ".probe-bin");
+import { dirname as dirname2, join as join10 } from "path";
+var UNSAFE, tempDir = async (p) => realpath2(await mkdtemp4(join10(tmpdir3(), p))), makeShim = async (home) => {
+  const shim = join10(home, ".probe-bin");
   await mkdir4(shim);
-  await Bun.write(join9(shim, "security"), `#!/bin/sh
+  await Bun.write(join10(shim, "security"), `#!/bin/sh
 [ "$1" = "-i" ] && cat >/dev/null
 exit 44
 `);
-  await chmod(join9(shim, "security"), 493);
+  await chmod(join10(shim, "security"), 493);
   return shim;
 }, checkEnv = (env, fixed) => {
   for (const [k, v] of Object.entries(env)) {
@@ -72200,7 +72237,7 @@ exit 44
   }
 }, writeInputs = async (dirs, login, files) => {
   if (login === "oauth") {
-    await Bun.write(join9(dirs.config, ".credentials.json"), JSON.stringify({
+    await Bun.write(join10(dirs.config, ".credentials.json"), JSON.stringify({
       claudeAiOauth: {
         accessToken: FAKE_KEY,
         refreshToken: FAKE_KEY,
@@ -72211,8 +72248,8 @@ exit 44
     }));
   }
   await Promise.all(Object.entries(files).map(async ([name, body]) => {
-    await mkdir4(dirname2(join9(dirs.project, name)), { recursive: true });
-    await Bun.write(join9(dirs.project, name), body);
+    await mkdir4(dirname2(join10(dirs.project, name)), { recursive: true });
+    await Bun.write(join10(dirs.project, name), body);
   }));
 }, fixedEnv = (dirs, shim, net, { login, baseUrl, self }) => ({
   PATH: `${shim}:${process.env["PATH"] ?? ""}`,
@@ -72541,7 +72578,7 @@ var init_code_cli = __esm(async () => {
 });
 
 // inspect/mcp/src/mcp/code-schema.ts
-var CODE_DESCRIPTION = `Read the code inside a Claude Code binary: list installs or modules, search literal text, find code by plain words, read a module slice, prepare a cleaned index for release diffs, run a prompt in an installed version against a local fake API to see the text it sends, or run it with other args (cli), such as a subcommand; check with \`npm\` whether a text (\`query\`, with \${\u2026} holes) is in the published source of the npm package in \`name\`; with \`query\`, cli names each request, stream, and transcript file that holds that text.`, CODE_SHAPE;
+var CODE_DESCRIPTION = `Read the code inside a Claude Code binary: list installs or modules, search literal text, find code by plain words, read a module slice, prepare a cleaned index for release diffs, run a prompt in an installed version against a local fake API to see the text it sends, or run it with other args (cli), list the chunk citations in the Markdown files of a folder that name no module of the build (citations), such as a subcommand; check with \`npm\` whether a text (\`query\`, with \${\u2026} holes) is in the published source of the npm package in \`name\`; with \`query\`, cli names each request, stream, and transcript file that holds that text.`, CODE_SHAPE;
 var init_code_schema = __esm(() => {
   init_app();
   CODE_SHAPE = {
@@ -72560,6 +72597,7 @@ var init_code_schema = __esm(() => {
     args: ARGS.args.describe('With cli: the program args, such as ["--settings", "<project-dir>/s.json", "auto-mode", "config"]. `<project-dir>` and `<config-dir>` become the temp project and config folders.'),
     files: ARGS.files.describe('With cli: files to write in the temp project folder first, by relative path, such as {"s.json": "{}"}.'),
     replies: ARGS.replies.describe('With cli: JSON replies of the stub by "METHOD /path", such as {"GET /api/oauth/profile": {...}}. "<stub>" in an env value becomes the stub URL.'),
+    dir: ARGS.dir.describe("With citations: the folder whose `**/*.md` files are checked for `chunk-xxxxxxxx.js` citations (`:N`, `@N`, or `lines A to B` after the name) that name no module of the build."),
     packageVersion: ARGS.packageVersion.describe("With npm: the version of the package in `name`; default: the latest, looked up once and kept."),
     login: ARGS.login.describe('With cli: "key" (default) sets the fake API key; "oauth" writes a fake claude.ai login to .credentials.json instead.'),
     show: ARGS.show.describe('With cli: a .json, .jsonl, or .log file of the config folder, else of the project folder, to print at exit, such as ".claude.json", or "d.log" after `--debug-file d.log`.'),
@@ -72586,6 +72624,7 @@ var init_code = __esm(async () => {
   init_prepare();
   init_readable();
   init_app();
+  init_code_citations();
   init_code_schema();
   await init_code_cli();
   group("code", CODE_DESCRIPTION, "action", {
@@ -72680,6 +72719,7 @@ ${excerpt.join(`
         }))
       });
     },
+    citations,
     run: runCode,
     cli,
     npm: async ({ name, packageVersion, query }) => {
@@ -75610,7 +75650,7 @@ var init_notes = __esm(() => {
 });
 
 // inspect/mcp/src/mcp/release.ts
-import { dirname as dirname3, join as join10 } from "path";
+import { dirname as dirname3, join as join11 } from "path";
 var DIFF_LINES = 40, MAX_PAGE = 30, ORDER, unitOf = (c) => c.to ?? c.from, changeHead = (c) => {
   const u = unitOf(c);
   const at = [
@@ -75698,8 +75738,8 @@ ${unitDiff(c, DIFF_LINES).join(`
       }
       const a = await prepared(older);
       const root = dirname3(b.dir);
-      const items = await reportItems(join10(root, "diff", "report.md"));
-      const lines = checkNotes(await readNotes(b.index.version, join10(root, "notes.md")), diffIndexes(a.index, b.index), items);
+      const items = await reportItems(join11(root, "diff", "report.md"));
+      const lines = checkNotes(await readNotes(b.index.version, join11(root, "notes.md")), diffIndexes(a.index, b.index), items);
       const count = (k) => lines.filter((l) => l.status === k).length;
       return text(`${b.index.version} notes against ${a.index.version}: ${lines.length} lines, ${count("matched")} matched, ${count("gated")} gated, ${count("unmatched")} unmatched. Read the code of each match before you state it.
 ${lines.map((l) => `- [${l.status}] ${clip(l.line, 160)}${noteWhy(l)}`).join(`

@@ -77,6 +77,7 @@ export const ARGS = {
 	env: z.record(z.string(), z.string()).optional(),
 	args: z.array(z.string()).optional(),
 	files: z.record(z.string(), z.string()).optional(),
+	dir: z.string().optional(),
 	replies: z.record(z.string(), z.unknown()).optional(),
 	packageVersion: z.string().optional(),
 	login: z.enum(["key", "oauth"]).optional(),
