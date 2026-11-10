@@ -24744,7 +24744,7 @@ var package_default;
 var init_package = __esm(() => {
   package_default = {
     name: "cc-inspect-mcp",
-    version: "0.16.2",
+    version: "0.16.3",
     private: true,
     description: "MCP server that reads Claude Code session transcripts and the modules inside the Claude Code binary. Source for dist/server.js, which is committed.",
     license: "MIT",
@@ -70833,7 +70833,7 @@ var init_binary = __esm(() => {
 });
 
 // inspect/mcp/src/diff/render.ts
-var norm = (t) => t.replaceAll(/\$[0-9a-f]{6}(?:_\d+)?/gu, "$").replaceAll(/chunk@[0-9a-f]{8}\.js/gu, "chunk@").replaceAll("...", "\u2026").replaceAll(/(?<![.\w$])([a-z])\d+\b/gu, "$1"), lines = (t) => t.replaceAll(/([;{}])/gu, `$1
+var norm = (t) => t.replaceAll(/\$[0-9a-f]{6}(?:_\d+)?/gu, "$").replaceAll(/chunk[-@][0-9a-z]{8}\.js/gu, "chunk@").replaceAll(/\b(VERSION|BUILD_TIME|GIT_SHA):"[^"]*"/gu, '$1:""').replaceAll("...", "\u2026").replaceAll(/(?<![.\w$])([a-z])\d+\b/gu, "$1"), lines = (t) => t.replaceAll(/([;{}])/gu, `$1
 `).split(`
 `).map((l) => l.trim()).filter((l) => l !== ""), LINE_CHARS = 200, cut = (l) => l.length > LINE_CHARS ? `${l.slice(0, LINE_CHARS)}\u2026` : l, MAX_CELLS = 4000000, at = (a, k) => a[k] ?? 0, str = (a, k) => a[k] ?? "", lcsTable = (nx, ny) => {
   const w = ny.length + 1;
@@ -75915,7 +75915,7 @@ var init_release = __esm(() => {
       const page = sorted.slice(offset, offset + Math.min(limit, MAX_PAGE));
       const more = offset + page.length < sorted.length;
       const match = has(name) ? ` Matching "${name}": ${countKind(all, "changed")} changed, ${countKind(all, "added")} added, ${countKind(all, "gone")} gone.` : "";
-      return text(`${a.index.version} -> ${b.index.version}: ${d.counts.changed} changed, ${d.counts.added} added, ${d.counts.gone} gone (imports and exports left out).${match} Showing ${offset + 1}-${offset + page.length}${more ? `, next_offset ${offset + page.length}` : ""}.
+      return text(`${a.index.version} -> ${b.index.version}: ${d.counts.changed} changed, ${d.counts.added} added, ${d.counts.gone} gone (imports, exports, and the build stamp left out).${match} Showing ${offset + 1}-${offset + page.length}${more ? `, next_offset ${offset + page.length}` : ""}.
 
 ${page.map((c) => `${changeHead(c)}
 ${unitDiff(c, DIFF_LINES).join(`

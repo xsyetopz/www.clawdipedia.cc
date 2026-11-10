@@ -40,3 +40,20 @@ test("two builds of the same code have no change, and an edited method has one",
 	expect(filterChanges(d, "tengu_other")).toHaveLength(1);
 	expect(filterChanges(d, "nothing like this")).toHaveLength(0);
 });
+
+const app = (version: string, time: string, sha: string, chunk: string) =>
+	`export const about=()=>({VERSION:"${version}",BUILD_TIME:"${time}",GIT_SHA:"${sha}"}).VERSION;export const load=()=>import("/$bunfs/root/chunk-${chunk}.js");`;
+
+test("a build stamp and a chunk name are not a change", () => {
+	const from = indexOf(
+		app("2.1.321", "2026-11-09T00:00:00Z", "aaaa", "39pr5kn3"),
+	);
+	const to = indexOf(
+		app("2.1.322", "2026-11-10T00:15:08Z", "bbbb", "bq6gz2p6"),
+	);
+	expect(diffIndexes(from, to).counts).toEqual({
+		changed: 0,
+		added: 0,
+		gone: 0,
+	});
+});

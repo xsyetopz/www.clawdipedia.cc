@@ -88,7 +88,7 @@ group(
 				? ` Matching "${name}": ${countKind(all, "changed")} changed, ${countKind(all, "added")} added, ${countKind(all, "gone")} gone.`
 				: "";
 			return text(
-				`${a.index.version} -> ${b.index.version}: ${d.counts.changed} changed, ${d.counts.added} added, ${d.counts.gone} gone (imports and exports left out).${match} Showing ${offset + 1}-${offset + page.length}${more ? `, next_offset ${offset + page.length}` : ""}.\n\n${page
+				`${a.index.version} -> ${b.index.version}: ${d.counts.changed} changed, ${d.counts.added} added, ${d.counts.gone} gone (imports, exports, and the build stamp left out).${match} Showing ${offset + 1}-${offset + page.length}${more ? `, next_offset ${offset + page.length}` : ""}.\n\n${page
 					.map((c) => `${changeHead(c)}\n${unitDiff(c, DIFF_LINES).join("\n")}`)
 					.join("\n\n")}`,
 				{

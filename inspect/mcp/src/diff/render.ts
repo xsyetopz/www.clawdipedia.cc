@@ -3,10 +3,12 @@ import type { Change, Diff } from "../diff.ts";
 
 // For matching, names carry no meaning: a local's number moves when an outer scope gains a name, and a module-level or
 // chunk name moves when its declaration changes. Literals, property names, and the code's shape stay.
+// The build stamp (version, time, and commit) differs in every release and tells nothing about a unit.
 export const norm = (t: string) =>
 	t
 		.replaceAll(/\$[0-9a-f]{6}(?:_\d+)?/gu, "$")
-		.replaceAll(/chunk@[0-9a-f]{8}\.js/gu, "chunk@")
+		.replaceAll(/chunk[-@][0-9a-z]{8}\.js/gu, "chunk@")
+		.replaceAll(/\b(VERSION|BUILD_TIME|GIT_SHA):"[^"]*"/gu, '$1:""')
 		.replaceAll("...", "…")
 		.replaceAll(/(?<![.\w$])([a-z])\d+\b/gu, "$1");
 
