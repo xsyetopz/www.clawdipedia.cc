@@ -236,7 +236,7 @@ What a `prompt.context` hook returns: the blocks that the conversation carries, 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `blocks` | <Documented /> | What the conversation carries, in order. | Type: `readonly PromptContextBlock[]`. A block whose name the engine does not route reaches the model once, when the conversation holds none. |
-| `instructionFiles` | <Documented /> | The files now behind `claudeMd`. If left out, the ones from below stand. | Type: `readonly InstructionFile[]`. Optional. Kept in step with the `claudeMd` text. A hook may add, drop, or rewrite any kind. |
+| `instructionFiles` | <Documented /> | The files now behind `claudeMd`. If left out, the ones from below stand. | Type: `readonly InstructionFile[]`. Optional. Kept in step with the `claudeMd` text. A hook may add, drop, or rewrite any kind. On `2.1.322`, the program gave the "not verified" label to a `managed` file that a mod added, and quoted its text. See [Labels in the Prompt](../../../../configure/memory-and-rules.md#labels-in-the-prompt). |
 
 ### `PromptDecoration`
 
