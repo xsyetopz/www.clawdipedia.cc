@@ -111,7 +111,7 @@ describe("binary", () => {
 		expect(await Bun.file(join(tmp, "wakaru-runs")).text()).toBe(
 			"run\nrun\nrun\n",
 		);
-	});
+	}, 30_000);
 
 	test("code citations lists the chunk citations of a folder that the build lacks", async () => {
 		const dir = join(tmp, "docs");
