@@ -1,6 +1,7 @@
 import { listInstalls } from "../binary.ts";
 import {
 	bodyOf,
+	outcomeLines,
 	placesOf,
 	resultText,
 	toolEntry,
@@ -30,6 +31,7 @@ const STDOUT_CHARS = 4000;
 const STDERR_CHARS = 2000;
 const SHOW_CHARS = 8000;
 const PAGE_CHARS = 4000;
+const OUTCOME_CHARS = 600;
 
 /** Only an install: `run` and `cli` execute the file, where the other actions only read it. */
 export const installed = async (version: string | undefined) => {
@@ -188,13 +190,15 @@ export const cli = async (a: Args): Promise<Out> => {
 	const { sent, tools, line } = summary(r, found);
 	const stdout = clip(r.stdout, STDOUT_CHARS);
 	const stderr = clip(r.stderr, STDERR_CHARS);
+	const outcomes = outcomeLines(r).map((l) => clip(l, OUTCOME_CHARS));
 	return text(
-		`${bin.version}: ${line}\nstdout: ${stdout}\nstderr: ${stderr}${shownFile(r, show)}${bodyText(body)}${toolText(tool, entry)}`,
+		`${bin.version}: ${line}${outcomes.map((l) => `\n${l}`).join("")}\nstdout: ${stdout}\nstderr: ${stderr}${shownFile(r, show)}${bodyText(body)}${toolText(tool, entry)}`,
 		{
 			exit: r.exit,
 			requests: sent,
 			tools,
 			found,
+			outcomes,
 			stdout,
 			stderr,
 			...(body && { body }),

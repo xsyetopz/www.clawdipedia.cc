@@ -24744,7 +24744,7 @@ var package_default;
 var init_package = __esm(() => {
   package_default = {
     name: "cc-inspect-mcp",
-    version: "0.16.0",
+    version: "0.16.1",
     private: true,
     description: "MCP server that reads Claude Code session transcripts and the modules inside the Claude Code binary. Source for dist/server.js, which is committed.",
     license: "MIT",
@@ -72078,7 +72078,20 @@ var filesOf = async (dir) => {
   const last = r.events.toReversed().find((e) => e["type"] === "result");
   const text = last?.["result"];
   return typeof text === "string" ? text : null;
-};
+}, outcomeLines = (r) => r.events.flatMap((e) => {
+  if (e["type"] === "system" && e["subtype"] === "notification") {
+    return [
+      `notification ${JSON.stringify(e["key"])}: ${JSON.stringify(e["text"])}`
+    ];
+  }
+  if (e["type"] !== "result") {
+    return [];
+  }
+  const reason = e["fast_mode_disabled_reason"];
+  return [
+    `result: ${JSON.stringify(e["result"])}, fast_mode_state ${JSON.stringify(e["fast_mode_state"])}${reason === undefined ? "" : `, fast_mode_disabled_reason ${JSON.stringify(reason)}`}`
+  ];
+});
 var init_requests = __esm(() => {
   init_stub();
 });
@@ -72503,7 +72516,7 @@ var init_run = __esm(async () => {
 });
 
 // inspect/mcp/src/mcp/code-cli.ts
-var STREAM_FLAGS, STDOUT_CHARS = 4000, STDERR_CHARS = 2000, SHOW_CHARS = 8000, PAGE_CHARS = 4000, installed = async (version) => {
+var STREAM_FLAGS, STDOUT_CHARS = 4000, STDERR_CHARS = 2000, SHOW_CHARS = 8000, PAGE_CHARS = 4000, OUTCOME_CHARS = 600, installed = async (version) => {
   const all = await listInstalls();
   const bin = has(version) ? all.find((i) => i.version === version) : all.find((i) => i.current) ?? all[0];
   if (!bin) {
@@ -72611,13 +72624,16 @@ query found in: ${found.join("; ") || "nothing"}` : "";
   const { sent, tools, line } = summary(r, found);
   const stdout = clip(r.stdout, STDOUT_CHARS);
   const stderr = clip(r.stderr, STDERR_CHARS);
-  return text(`${bin.version}: ${line}
+  const outcomes = outcomeLines(r).map((l) => clip(l, OUTCOME_CHARS));
+  return text(`${bin.version}: ${line}${outcomes.map((l) => `
+${l}`).join("")}
 stdout: ${stdout}
 stderr: ${stderr}${shownFile(r, show)}${bodyText(body)}${toolText(tool, entry)}`, {
     exit: r.exit,
     requests: sent,
     tools,
     found,
+    outcomes,
     stdout,
     stderr,
     ...body && { body },
@@ -72709,7 +72725,7 @@ var init_code_schema = __esm(() => {
     provider: ARGS.provider.describe('With cli: "vertex" runs the program as a Vertex AI client whose base URL is the stub, with a fake project and no Google sign-in. The model is then in the request path (\u2026/models/<model>:streamRawPredict), not in the body.'),
     fastRefusal: ARGS.fastRefusal.describe('With cli: the stub answers each Messages API call that asks for speed "fast" with this HTTP status and the error "Fast mode is not enabled for this model", as a provider that refuses fast mode.'),
     calls: ARGS.calls.describe('With cli: the model calls these tools in order, one per turn, such as [{"name": "Bash", "input": {"command": "echo hi"}}], then answers OK after the last result. safeguard ("flagged" or "not_flagged") adds the server-side auto mode verdict for that call.'),
-    prompts: ARGS.prompts.describe('With cli: prompts sent in one session, as stream-json user messages on stdin; cli adds "-p --input-format stream-json --output-format stream-json --verbose" before `args`, so a hook that acts from the second prompt on runs.'),
+    prompts: ARGS.prompts.describe('With cli: prompts sent in one session, as stream-json user messages on stdin; cli adds "-p --input-format stream-json --output-format stream-json --verbose" before `args`, so a hook that acts from the second prompt on runs. The report has one line for each result event (text, fast_mode_state) and each notification event.'),
     request: ARGS.request.describe("With cli: the number of a request in `requests`; gives the UTF-8 bytes of its body as compact JSON and of its tools, system, and messages, the path of each block with a cache_control, and the body JSON from `offset` for `length` characters."),
     tool: ARGS.tool.describe('With cli: a tool name; gives its entry (name, description, input_schema, ...) from the last Messages API request that sends it, and its size in bytes. A deferred tool is sent only after a ToolSearch call, such as calls [{"name": "ToolSearch", "input": {"query": "select:WebFetch"}}]. In print mode the program sends AskUserQuestion only with "--permission-prompt-tool" (such as "stdio") in `args`.')
   };

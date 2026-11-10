@@ -6,6 +6,7 @@ import { join } from "node:path";
 import {
 	bodyOf,
 	filesOf,
+	outcomeLines,
 	placesOf,
 	resultText,
 	toolEntry,
@@ -147,4 +148,26 @@ test("resultText reads the last result event", () => {
 		}),
 	).toBe("b");
 	expect(resultText({ events: [] })).toBeNull();
+});
+
+test("outcomeLines gives each result and notification event in order", () => {
+	expect(
+		outcomeLines({
+			events: [
+				{ type: "system", subtype: "init", fast_mode_state: "on" },
+				{ type: "result", result: "OK", fast_mode_state: "cooldown" },
+				{ type: "system", subtype: "notification", key: "k", text: "t" },
+				{
+					type: "result",
+					result: "Fast mode OFF",
+					fast_mode_state: "off",
+					fast_mode_disabled_reason: "model_not_allowed",
+				},
+			],
+		}),
+	).toEqual([
+		'result: "OK", fast_mode_state "cooldown"',
+		'notification "k": "t"',
+		'result: "Fast mode OFF", fast_mode_state "off", fast_mode_disabled_reason "model_not_allowed"',
+	]);
 });

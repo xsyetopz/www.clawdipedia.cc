@@ -101,3 +101,23 @@ export const resultText = (r: Pick<RunResult, "events">): string | null => {
 	const text = last?.["result"];
 	return typeof text === "string" ? text : null;
 };
+
+/**
+ * One line for each stream-json `result` event and each `system` event of subtype `notification`, in order.
+ * A result line holds the text, the fast mode state, and the reason when the program gives one.
+ */
+export const outcomeLines = (r: Pick<RunResult, "events">): string[] =>
+	r.events.flatMap((e) => {
+		if (e["type"] === "system" && e["subtype"] === "notification") {
+			return [
+				`notification ${JSON.stringify(e["key"])}: ${JSON.stringify(e["text"])}`,
+			];
+		}
+		if (e["type"] !== "result") {
+			return [];
+		}
+		const reason = e["fast_mode_disabled_reason"];
+		return [
+			`result: ${JSON.stringify(e["result"])}, fast_mode_state ${JSON.stringify(e["fast_mode_state"])}${reason === undefined ? "" : `, fast_mode_disabled_reason ${JSON.stringify(reason)}`}`,
+		];
+	});

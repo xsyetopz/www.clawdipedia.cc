@@ -67,7 +67,7 @@ export const CODE_SHAPE = {
 		'With cli: the model calls these tools in order, one per turn, such as [{"name": "Bash", "input": {"command": "echo hi"}}], then answers OK after the last result. safeguard ("flagged" or "not_flagged") adds the server-side auto mode verdict for that call.',
 	),
 	prompts: ARGS.prompts.describe(
-		'With cli: prompts sent in one session, as stream-json user messages on stdin; cli adds "-p --input-format stream-json --output-format stream-json --verbose" before `args`, so a hook that acts from the second prompt on runs.',
+		'With cli: prompts sent in one session, as stream-json user messages on stdin; cli adds "-p --input-format stream-json --output-format stream-json --verbose" before `args`, so a hook that acts from the second prompt on runs. The report has one line for each result event (text, fast_mode_state) and each notification event.',
 	),
 	request: ARGS.request.describe(
 		"With cli: the number of a request in `requests`; gives the UTF-8 bytes of its body as compact JSON and of its tools, system, and messages, the path of each block with a cache_control, and the body JSON from `offset` for `length` characters.",
