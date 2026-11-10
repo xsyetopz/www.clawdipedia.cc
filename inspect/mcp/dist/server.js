@@ -24744,7 +24744,7 @@ var package_default;
 var init_package = __esm(() => {
   package_default = {
     name: "cc-inspect-mcp",
-    version: "0.16.1",
+    version: "0.16.2",
     private: true,
     description: "MCP server that reads Claude Code session transcripts and the modules inside the Claude Code binary. Source for dist/server.js, which is committed.",
     license: "MIT",
@@ -71824,24 +71824,8 @@ var init_readable = __esm(() => {
   init_prepare();
 });
 
-// inspect/mcp/src/citations.ts
-import { basename as basename5 } from "path";
-var CITATION, findCitations = (file, text) => text.split(`
-`).flatMap((lineText, i) => [...lineText.matchAll(CITATION)].map((m) => ({
-  file,
-  line: i + 1,
-  citation: m[0],
-  chunk: m[1] ?? m[0]
-}))), staleCitations = (files, moduleNames) => {
-  const known = new Set([...moduleNames].map((n) => basename5(n)));
-  return Object.entries(files).flatMap(([file, text]) => findCitations(file, text)).filter((c) => !known.has(c.chunk));
-};
-var init_citations = __esm(() => {
-  CITATION = /(chunk-[\da-z]+\.js)(?:[:@]\d+|`? lines \d+ to \d+)?/gu;
-});
-
 // inspect/mcp/src/relocate.ts
-import { basename as basename6 } from "path";
+import { basename as basename5 } from "path";
 var WINDOW = 200, MAX_HITS = 300, MAX_ANCHORS = 6, WORD, SAME = 50, shape = (s) => s.replaceAll(/[A-Za-z_$][\w$]{0,2}(?![\w$])/gu, "_"), frame = (text, at) => `${shape(text.slice(Math.max(0, at - 2 * SAME), at)).slice(-SAME)}|${shape(text.slice(at, at + 2 * SAME)).slice(0, SAME)}`, words = (s) => new Set([...s.matchAll(WORD)].map((m) => m[0])), claimTerms = (claim) => {
   const plain = claim.replaceAll(/chunk-[\da-z]+\.js(?:[:@]\d+|`? lines \d+ to \d+)?/gu, " ");
   const found = plain.match(/[\w$][\w$.-]{4,}/gu) ?? [];
@@ -71866,7 +71850,7 @@ var WINDOW = 200, MAX_HITS = 300, MAX_ANCHORS = 6, WORD, SAME = 50, shape = (s) 
         const score = known.size === 0 ? 0 : [...known].filter((w) => here.has(w)).length / known.size;
         const to = Math.max(0, i + offset - at);
         const found = {
-          module: basename6(m.name),
+          module: basename5(m.name),
           offset: to,
           anchor: term,
           score,
@@ -71885,14 +71869,106 @@ var init_relocate = __esm(() => {
   WORD = /[A-Za-z_$][\w$]{3,}/gu;
 });
 
+// inspect/mcp/src/citations.ts
+import { basename as basename6 } from "path";
+var CITATION, findCitations = (file, text) => text.split(`
+`).flatMap((lineText, i) => [...lineText.matchAll(CITATION)].map((m) => ({
+  file,
+  line: i + 1,
+  citation: m[0],
+  chunk: m[1] ?? m[0]
+}))), staleCitations = (files, moduleNames) => {
+  const known = new Set([...moduleNames].map((n) => basename6(n)));
+  return Object.entries(files).flatMap(([file, text]) => findCitations(file, text)).filter((c) => !known.has(c.chunk));
+}, FOLLOW_ON, LITERAL, moduleMapper = (oldByName, newSources) => {
+  const literals = newSources.map((source) => ({
+    source,
+    literals: new Set(source.text.match(LITERAL))
+  }));
+  const mapped = new Map;
+  return (chunk) => {
+    if (!mapped.has(chunk)) {
+      const old = new Set(oldByName.get(chunk)?.text.match(LITERAL));
+      const [best] = literals.map((n) => ({
+        source: n.source,
+        shared: [...old].filter((l) => n.literals.has(l)).length
+      })).toSorted((a, b) => b.shared - a.shared);
+      mapped.set(chunk, best && best.shared > 0 ? best.source : undefined);
+    }
+    return mapped.get(chunk);
+  };
+}, sameCode = ({ old, target }, n, terms) => {
+  const [r] = relocate(old.text, n, terms, [target], 1);
+  return r?.same === true ? r.offset : undefined;
+}, moveLine = ({ oldByName, newNames, mapModule, moves }, file, line, lineText) => {
+  const terms = claimTerms(lineText);
+  let last;
+  const sameAt = (n) => last && sameCode(last, n, terms);
+  return lineText.replaceAll(FOLLOW_ON, (found, chunk, sep, offset, from, to) => {
+    if (chunk === undefined) {
+      return `:${sameAt(Number(from)) ?? from}${to === undefined ? "" : `-${sameAt(Number(to)) ?? to}`}`;
+    }
+    const old = newNames.has(chunk) ? undefined : oldByName.get(chunk);
+    const target = old && mapModule(chunk);
+    last = old && target ? { old, target } : undefined;
+    if (!old) {
+      return found;
+    }
+    if (!last) {
+      moves.push({ file, line, from: found, how: "unmapped" });
+      return found;
+    }
+    const name = basename6(last.target.name);
+    const moved = offset === undefined ? undefined : sameAt(Number(offset));
+    const next = moved === undefined ? found.replace(chunk, name) : `${name}${sep}${moved}`;
+    moves.push({
+      file,
+      line,
+      from: found,
+      to: next,
+      how: moved === undefined ? "module" : "same"
+    });
+    return next;
+  });
+}, moveCitations = (files, oldSources, newSources) => {
+  const oldByName = new Map(oldSources.map((s) => [basename6(s.name), s]));
+  const ctx = {
+    oldByName,
+    newNames: new Set(newSources.map((s) => basename6(s.name))),
+    mapModule: moduleMapper(oldByName, newSources),
+    moves: []
+  };
+  const out = Object.fromEntries(Object.entries(files).map(([file, text]) => [
+    file,
+    text.split(`
+`).map((lineText, i) => moveLine(ctx, file, i + 1, lineText)).join(`
+`)
+  ]));
+  return { moves: ctx.moves, files: out };
+};
+var init_citations = __esm(() => {
+  init_relocate();
+  CITATION = /(chunk-[\da-z]+\.js)(?:[:@]\d+|`? lines \d+ to \d+)?/gu;
+  FOLLOW_ON = /(chunk-[\da-z]+\.js)(?:([:@])(\d+)|`? lines \d+ to \d+)?|(?<=`):(\d+)(?:-(\d+))?(?=`)/gu;
+  LITERAL = /"[^"\\\n]{20,}"/gu;
+});
+
 // inspect/mcp/src/mcp/code-citations.ts
 import { basename as basename7, join as join7 } from "path";
-var citations = async ({ dir, version }) => {
+var citations = async ({ dir, from, version }) => {
   const root = need(dir, "dir");
   const p = await program3(version);
   const files = {};
   for await (const f of new Bun.Glob("**/*.md").scan(root)) {
     files[f] = await Bun.file(join7(root, f)).text();
+  }
+  if (from !== undefined) {
+    const sources = (b) => b.modules.map((m) => ({ name: m.name, text: m.source }));
+    const { moves } = moveCitations(files, sources(await program3(from)), sources(p));
+    const count = (how) => moves.filter((m) => m.how === how).length;
+    return text(`${moves.length} citation(s) of ${from} move to ${p.path}: ${count("same")} same, ${count("module")} module, ${count("unmapped")} unmapped
+${moves.map((m) => `${m.file}:${m.line}: ${m.from} -> ${m.to ?? "unmapped"} (${m.how})`).join(`
+`)}`, { moves });
   }
   const stale = staleCitations(files, p.modules.map((m) => m.name));
   return text(stale.length > 0 ? `${stale.length} citation(s) name a chunk that ${p.path} lacks
@@ -72715,7 +72791,7 @@ var init_code_schema = __esm(() => {
     args: ARGS.args.describe('With cli: the program args, such as ["--settings", "<project-dir>/s.json", "auto-mode", "config"]. `<project-dir>` and `<config-dir>` become the temp project and config folders.'),
     files: ARGS.files.describe('With cli: files to write in the temp project folder first, by relative path, such as {"s.json": "{}"}.'),
     replies: ARGS.replies.describe('With cli: JSON replies of the stub by "METHOD /path", such as {"GET /api/oauth/profile": {...}}. "<stub>" in an env value becomes the stub URL.'),
-    from: ARGS.from.describe("With relocate: the version or path of the build that holds `module`, the older one."),
+    from: ARGS.from.describe("With relocate: the version or path of the build that holds `module`, the older one; with citations: the older build, so that the report lists where each stale citation moves to in `version`."),
     dir: ARGS.dir.describe("With citations: the folder whose `**/*.md` files are checked for `chunk-xxxxxxxx.js` citations (`:N`, `@N`, or `lines A to B` after the name) that name no module of the build."),
     packageVersion: ARGS.packageVersion.describe("With npm: the version of the package in `name`; default: the latest, looked up once and kept."),
     login: ARGS.login.describe('With cli: "key" (default) sets the fake API key; "oauth" writes a fake claude.ai login to .credentials.json instead.'),

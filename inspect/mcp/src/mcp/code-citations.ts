@@ -1,17 +1,31 @@
 import { basename, join } from "node:path";
 
 import { program } from "../binary.ts";
-import { staleCitations } from "../citations.ts";
+import { moveCitations, staleCitations } from "../citations.ts";
 import { claimTerms, relocate } from "../relocate.ts";
 import { type Args, need, type Out, text } from "./app.ts";
 
-/** The `citations` action: the chunk citations in the Markdown files of `dir` that name no module of the build. */
-export const citations = async ({ dir, version }: Args): Promise<Out> => {
+/** The `citations` action: the chunk citations in the Markdown files of `dir` that name no module of the build; with `from`, where each moves to in the build. */
+export const citations = async ({ dir, from, version }: Args): Promise<Out> => {
 	const root = need(dir, "dir");
 	const p = await program(version);
 	const files: Record<string, string> = {};
 	for await (const f of new Bun.Glob("**/*.md").scan(root)) {
 		files[f] = await Bun.file(join(root, f)).text();
+	}
+	if (from !== undefined) {
+		const sources = (b: typeof p) =>
+			b.modules.map((m) => ({ name: m.name, text: m.source }));
+		const { moves } = moveCitations(
+			files,
+			sources(await program(from)),
+			sources(p),
+		);
+		const count = (how: string) => moves.filter((m) => m.how === how).length;
+		return text(
+			`${moves.length} citation(s) of ${from} move to ${p.path}: ${count("same")} same, ${count("module")} module, ${count("unmapped")} unmapped\n${moves.map((m) => `${m.file}:${m.line}: ${m.from} -> ${m.to ?? "unmapped"} (${m.how})`).join("\n")}`,
+			{ moves },
+		);
 	}
 	const stale = staleCitations(
 		files,
