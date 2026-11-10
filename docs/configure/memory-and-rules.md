@@ -120,7 +120,7 @@ Source: the program (`2.1.322`, `chunk-5a8mhnqs.js@86180` and `chunk-5a8mhnqs.js
 The program text of `2.1.322` gives the "not verified" label in two conditions:
 
 - A mod returns a `managed` file from `prompt.context` that the program did not send to it with the same path and the same content (`chunk-5a8mhnqs.js@85756`). The print case shows this for a file that the mod adds. The program text has an exception for a mod that the program vouches for. We did not find which mods that covers.
-- The program loads a file from the managed folder in a session whose entry point is `remote_cowork` or `remote_cowork_trigger`, and the account of the session could write that file (`chunk-5a8mhnqs.js@84675`, `chunk-9r1hbf9p.js@1453085`). No probe ran this condition. In a normal session, a managed folder that the user owns did not get the label (case `managed.owned.claudemd-order`).
+- The program loads a file from the managed folder in a session whose entry point is `remote_cowork` or `remote_cowork_trigger`, and the account of the session could write that file (`chunk-5a8mhnqs.js@84675`, `chunk-9r1hbf9p.js@1453085`). On `2.1.322`, `CLAUDE_CODE_ENTRYPOINT=remote_cowork` with a managed folder that the user owns gave the label (case `managed.owned.claudemd-remote-cowork`). The same entry point with a root-owned folder did not (case `managed.main.claudemd-remote-cowork`). In a normal session, a managed folder that the user owns did not get the label (case `managed.owned.claudemd-order`).
 
 ## How It Works
 

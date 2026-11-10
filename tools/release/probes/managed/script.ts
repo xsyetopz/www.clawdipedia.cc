@@ -36,7 +36,7 @@ for V in ${VARIANTS.join(" ")}; do
   cp -P "$STAGE/variants/$V/managed-settings.json" "$DST/managed-settings.json"
   chown -R root:wheel "$DST"
   chmod -R go-w "$DST"
-  # The program adds a note to managed files that the session's own account could have written.
+  # In a remote_cowork session, the program adds a note to managed files that the session's own account could have written.
   if [ "$V" = owned ]; then chown -R "\${SUDO_USER:?run with sudo from your own account}" "$DST"; fi
   echo "installed variant $V"
   # readiness signal for the tool: root-owned file inside the managed folder
