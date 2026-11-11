@@ -11,7 +11,7 @@ import { constString, type Module, type Node, type Variable } from "../ast.ts";
 import {
 	asNode,
 	type Extractor,
-	scan,
+	scanOf,
 	type SurfaceItem,
 	unique,
 } from "./common.ts";
@@ -44,7 +44,7 @@ const joinParts = async (
 export const extractFiles: Extractor = async (bundle) => {
 	const byBase = new Map<Variable, SurfaceItem[]>();
 	const anchored = new Map<Variable, Set<string>>();
-	await scan(bundle, ['"'], async (m, n) => {
+	await scanOf(bundle, ['"'], ["CallExpression"], async (m, n) => {
 		const parts = await joinParts(m, n);
 		if (!parts) {
 			return;

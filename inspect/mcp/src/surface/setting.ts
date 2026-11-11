@@ -19,7 +19,7 @@ import {
 	type Extractor,
 	keyOf,
 	prop,
-	scan,
+	scanOf,
 	short,
 	type SurfaceItem,
 	unique,
@@ -82,10 +82,8 @@ const keysOf = (
 /** Each top-level setting: its key, its zod value, and the gate of its table or spread. */
 const topLevel = async (bundle: Bundle): Promise<Top[]> => {
 	const out: Top[] = [];
-	await scan(bundle, [ANCHOR, "buildGate:"], async (m, n) => {
-		if (n.type !== "ObjectExpression") {
-			return;
-		}
+	const needles = [ANCHOR, "buildGate:"];
+	await scanOf(bundle, needles, ["ObjectExpression"], async (m, n) => {
 		if ((await describe(m, prop(n, "$schema"))) === ANCHOR) {
 			keysOf(m, n, out);
 			return;

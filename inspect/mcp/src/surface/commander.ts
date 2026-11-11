@@ -29,7 +29,7 @@ import { commandPath, initOf, method } from "./commander/chain.ts";
 import {
 	asNode,
 	type Extractor,
-	scan,
+	scanOf,
 	short,
 	type SurfaceItem,
 	unique,
@@ -117,8 +117,8 @@ const optionOf = async (
 
 export const extractSubcommands: Extractor = async (bundle) => {
 	const out: SurfaceItem[] = [];
-	await scan(bundle, [".command("], async (m, n) => {
-		if (n.type !== "CallExpression" || method(n) !== "command") {
+	await scanOf(bundle, [".command("], ["CallExpression"], async (m, n) => {
+		if (method(n) !== "command") {
 			return;
 		}
 		const spec = await constString(m, asNode(n.arguments[0]));
@@ -203,16 +203,13 @@ const addFlag = async (
 
 export const extractFlags: Extractor = async (bundle) => {
 	const out: SurfaceItem[] = [];
-	await scan(
+	await scanOf(
 		bundle,
 		[".option(", ".requiredOption(", ".addOption("],
+		["CallExpression"],
 		async (m, n) => {
 			const name = method(n);
-			if (
-				n.type !== "CallExpression" ||
-				n.callee.type !== "MemberExpression" ||
-				name === undefined
-			) {
+			if (n.callee.type !== "MemberExpression" || name === undefined) {
 				return;
 			}
 			const owner = asNode(n.callee.object);

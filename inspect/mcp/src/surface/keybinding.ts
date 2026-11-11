@@ -7,7 +7,7 @@
 import type { Node } from "../ast.ts";
 import {
 	type Extractor,
-	scan,
+	scanOf,
 	strings,
 	type SurfaceItem,
 	unique,
@@ -22,10 +22,8 @@ interface Best {
 export const extractKeybindings: Extractor = async (bundle) => {
 	let actions: Best | undefined;
 	let contexts: Best | undefined;
-	await scan(bundle, ['"chat:cancel"', '"Global"'], async (m, n) => {
-		if (n.type !== "ArrayExpression") {
-			return;
-		}
+	const needles = ['"chat:cancel"', '"Global"'];
+	await scanOf(bundle, needles, ["ArrayExpression"], async (m, n) => {
 		const s = await strings(m, n);
 		if (!s) {
 			return;

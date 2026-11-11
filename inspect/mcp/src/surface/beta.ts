@@ -13,7 +13,7 @@ import { constString, strLit } from "../ast.ts";
 import {
 	asNode,
 	type Extractor,
-	scan,
+	scanOf,
 	type SurfaceItem,
 	unique,
 } from "./common.ts";
@@ -24,7 +24,7 @@ const VERSION = /^(?:bedrock|vertex)-/u;
 
 export const extractBetas: Extractor = async (bundle) => {
 	const out: SurfaceItem[] = [];
-	await scan(bundle, ["-20"], async (m, n) => {
+	await scanOf(bundle, ["-20"], ["Literal"], async (m, n) => {
 		const name = strLit(n);
 		if (name === undefined) {
 			return;

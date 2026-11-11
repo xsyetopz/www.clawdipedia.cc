@@ -12,7 +12,7 @@ import {
 } from "../ast.ts";
 import { asNode } from "../ast/node.ts";
 import type { BunModule } from "../bunfs.ts";
-import { allSeq, mapSeq } from "../seq.ts";
+import { allSeq, eachSeq, mapSeq } from "../seq.ts";
 
 export { asNode } from "../ast/node.ts";
 
@@ -59,9 +59,21 @@ export const scan = async (
 			stack.push(...children(n));
 		}
 		if (m) {
-			await mapSeq(nodes, (n) => Promise.resolve(visit(m, n)));
+			await eachSeq(nodes, (n) => visit(m, n));
 		}
 	});
+};
+
+/** `scan` for the nodes of the types `types` only. A node of another type takes no turn of the event loop. */
+export const scanOf = async <T extends Node["type"]>(
+	bundle: Bundle,
+	needles: string[],
+	types: T[],
+	visit: (m: Module, n: NodeOf<T>) => void | Promise<void>,
+): Promise<void> => {
+	const wanted = new Set<string>(types);
+	const is = (n: Node): n is NodeOf<T> => wanted.has(n.type);
+	await scan(bundle, needles, (m, n) => (is(n) ? visit(m, n) : undefined));
 };
 
 /** The key of a non-computed property (identifier or string), or undefined. */

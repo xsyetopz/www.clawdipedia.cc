@@ -1,7 +1,7 @@
 // Anchor 1 of kind `env`: the typed registry `reg(ns,{NAME:()=>v,...})`.
 import type { Bundle, Module, Node, NodeOf } from "../../ast.ts";
 import { mapSeq } from "../../seq.ts";
-import { asNode, keyOf, type Prop, scan, strings } from "../common.ts";
+import { asNode, keyOf, type Prop, scanOf, strings } from "../common.ts";
 import type { Variable } from "./objects.ts";
 import { type Add, NAME } from "./shared.ts";
 
@@ -100,8 +100,8 @@ export const scanRegistries = async (
 	add: Add,
 ): Promise<{ m: Module; v: Variable }[]> => {
 	const regs: { m: Module; v: Variable }[] = [];
-	await scan(bundle, [":()=>"], async (m, n) => {
-		if (n.type !== "CallExpression" || n.arguments.length !== 2) {
+	await scanOf(bundle, [":()=>"], ["CallExpression"], async (m, n) => {
+		if (n.arguments.length !== 2) {
 			return;
 		}
 		const o = n.arguments[1];

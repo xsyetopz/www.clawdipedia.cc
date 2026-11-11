@@ -26,7 +26,7 @@ import {
 	type Extractor,
 	keyOf,
 	literal,
-	scan,
+	scanOf,
 	type SurfaceItem,
 	unique,
 } from "./common.ts";
@@ -131,10 +131,7 @@ const loggersOf = (groups: Map<Group, Site[]>): Set<Group> =>
 
 export const extractGates: Extractor = async (bundle) => {
 	const groups = new Map<Group, Site[]>();
-	await scan(bundle, ['"tengu_'], async (m, n) => {
-		if (n.type !== "CallExpression") {
-			return;
-		}
+	await scanOf(bundle, ['"tengu_'], ["CallExpression"], async (m, n) => {
 		const name = await constString(m, asNode(n.arguments[0]));
 		const c = asNode(n.callee);
 		if (name === undefined || !c || !/^tengu_[a-z0-9_]*[a-z0-9]$/u.test(name)) {

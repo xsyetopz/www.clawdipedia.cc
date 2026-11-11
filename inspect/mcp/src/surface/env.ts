@@ -34,10 +34,10 @@
 //   and `CLAUDE_CODE_ARTIFACT_FD` (held in a constant; no read found).
 
 import type { Bundle } from "../ast.ts";
-import { type Extractor, scan, type SurfaceItem, unique } from "./common.ts";
+import { type Extractor, scanOf, type SurfaceItem, unique } from "./common.ts";
 import { growLists, resolveHelpers } from "./env/helpers.ts";
 import { EnvObjects } from "./env/objects.ts";
-import { readNode } from "./env/reads.ts";
+import { readNode, SHOWN } from "./env/reads.ts";
 import { scanRegistries } from "./env/registry.ts";
 import { type Ctx, NAME } from "./env/shared.ts";
 
@@ -58,7 +58,7 @@ export const envPlaces = async (bundle: Bundle): Promise<SurfaceItem[]> => {
 	const env = new EnvObjects();
 	await env.findFactories(await scanRegistries(bundle, add));
 	const c: Ctx = { add, env, helpers: [], lists: [] };
-	await scan(bundle, [""], (m, n) => readNode(c, m, n));
+	await scanOf(bundle, [""], SHOWN, (m, n) => readNode(c, m, n));
 	await resolveHelpers(c);
 	growLists(c, out);
 	return out;

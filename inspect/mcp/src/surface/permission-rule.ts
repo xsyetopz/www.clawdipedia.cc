@@ -11,7 +11,7 @@ import { children, constString, type Node } from "../ast.ts";
 import {
 	asNode,
 	type Extractor,
-	scan,
+	scanOf,
 	strings,
 	type SurfaceItem,
 	unique,
@@ -22,9 +22,8 @@ const DESCRIPTION =
 
 export const extractPermissionRules: Extractor = async (bundle) => {
 	const out: SurfaceItem[] = [];
-	await scan(bundle, [DESCRIPTION], async (m, n) => {
+	await scanOf(bundle, [DESCRIPTION], ["CallExpression"], async (m, n) => {
 		if (
-			n.type !== "CallExpression" ||
 			n.callee.type !== "MemberExpression" ||
 			n.callee.property.type !== "Identifier" ||
 			n.callee.property.name !== "describe"

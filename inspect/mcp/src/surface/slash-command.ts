@@ -30,7 +30,7 @@ import {
 	type Extractor,
 	keyOf,
 	prop,
-	scan,
+	scanOf,
 	short,
 	strings,
 	type SurfaceItem,
@@ -171,10 +171,7 @@ const typeOf = async (
 
 export const extractSlashCommands: Extractor = async (bundle) => {
 	const out: SurfaceItem[] = [];
-	await scan(bundle, ["name:"], async (m, n) => {
-		if (n.type !== "ObjectExpression") {
-			return;
-		}
+	await scanOf(bundle, ["name:"], ["ObjectExpression"], async (m, n) => {
 		const name = await constString(m, prop(n, "name"));
 		if (name === undefined || !NAME.test(name)) {
 			return;

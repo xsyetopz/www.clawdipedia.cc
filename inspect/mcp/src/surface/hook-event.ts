@@ -6,7 +6,7 @@
 import type { Node } from "../ast.ts";
 import {
 	type Extractor,
-	scan,
+	scanOf,
 	strings,
 	type SurfaceItem,
 	unique,
@@ -16,10 +16,7 @@ const PASCAL = /^[A-Z][A-Za-z]+$/u;
 
 export const extractHookEvents: Extractor = async (bundle) => {
 	let best: { m: string; n: Node; names: string[] } | undefined;
-	await scan(bundle, ['"PreToolUse"'], async (m, n) => {
-		if (n.type !== "ArrayExpression") {
-			return;
-		}
+	await scanOf(bundle, ['"PreToolUse"'], ["ArrayExpression"], async (m, n) => {
 		const s = await strings(m, n);
 		if (
 			!s ||

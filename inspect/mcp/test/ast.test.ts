@@ -3,7 +3,8 @@ import { expect, spyOn, test } from "bun:test";
 import { Bundle, Module } from "../src/ast.ts";
 import { callsOf } from "../src/ast/calls.ts";
 import { isFn } from "../src/ast/node.ts";
-import { allSeq, firstSeq, mapSeq } from "../src/seq.ts";
+import { allSeq, eachSeq, firstSeq, mapSeq } from "../src/seq.ts";
+import { rejection } from "./run-helpers.ts";
 
 // Claude Code 2.1.309 minifies a `using` binding to the name `as`.
 test.each([
@@ -93,6 +94,21 @@ const stepLogger = (log: string[]) => async (i: number) => {
 	return i === 1 ? undefined : i;
 };
 
+// Items 2 and 4 give a promise; item 4 fails.
+const stepOrNone = (log: string[]) => {
+	const slow = async (i: number) => {
+		await Bun.sleep(1);
+		log.push(`end ${i}`);
+		if (i === 4) {
+			throw new Error("stop");
+		}
+	};
+	return (i: number) => {
+		log.push(`start ${i}`);
+		return i % 2 === 0 && i > 0 ? slow(i) : undefined;
+	};
+};
+
 // Parsing every module of Claude Code 2.1.322 at once held several GB per test file.
 test("a bundle parses only the modules a reader asks for, each one once", async () => {
 	const parse = spyOn(Module, "parse");
@@ -143,6 +159,17 @@ test("a nested function with the name of an export has no calls in other modules
 	]);
 	const calls = await callsAt(bundle, "b.js", text.indexOf("function v(){}"));
 	expect(calls.map((c) => c?.module.name)).toEqual(["b.js"]);
+});
+
+test("eachSeq waits only for an item that gives a promise, and stops at a failure", async () => {
+	const log: string[] = [];
+	const done = eachSeq([0, 1, 2, 3], stepOrNone(log));
+	expect(log).toEqual(["start 0", "start 1", "start 2"]);
+	await done;
+	expect(log).toEqual(["start 0", "start 1", "start 2", "end 2", "start 3"]);
+	log.length = 0;
+	expect(await rejection(eachSeq([4, 5], stepOrNone(log)))).toMatch(/stop/u);
+	expect(log).toEqual(["start 4", "end 4"]);
 });
 
 test("the sequential helpers run one item at a time, in order, and stop early", async () => {

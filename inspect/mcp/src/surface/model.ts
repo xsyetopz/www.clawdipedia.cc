@@ -9,7 +9,7 @@
 import { strLit } from "../ast.ts";
 import {
 	type Extractor,
-	scan,
+	scanOf,
 	strings,
 	type SurfaceItem,
 	unique,
@@ -21,29 +21,34 @@ const ID =
 export const extractModels: Extractor = async (bundle) => {
 	const out: SurfaceItem[] = [];
 	let aliases: { m: string; start: number; names: string[] } | undefined;
-	await scan(bundle, ['"claude-', '"opusplan"'], async (m, n) => {
-		const id = strLit(n);
-		if (id !== undefined && ID.test(id)) {
-			out.push({
-				kind: "model",
-				name: id,
-				module: m.name,
-				offset: n.start,
-				detail: "id",
-			});
-		}
-		if (n.type !== "ArrayExpression") {
-			return;
-		}
-		const s = await strings(m, n);
-		if (
-			s?.includes("opusplan") === true &&
-			s.includes("sonnet") &&
-			(!aliases || s.length > aliases.names.length)
-		) {
-			aliases = { m: m.name, start: n.start, names: s };
-		}
-	});
+	await scanOf(
+		bundle,
+		['"claude-', '"opusplan"'],
+		["Literal", "ArrayExpression"],
+		async (m, n) => {
+			const id = strLit(n);
+			if (id !== undefined && ID.test(id)) {
+				out.push({
+					kind: "model",
+					name: id,
+					module: m.name,
+					offset: n.start,
+					detail: "id",
+				});
+			}
+			if (n.type !== "ArrayExpression") {
+				return;
+			}
+			const s = await strings(m, n);
+			if (
+				s?.includes("opusplan") === true &&
+				s.includes("sonnet") &&
+				(!aliases || s.length > aliases.names.length)
+			) {
+				aliases = { m: m.name, start: n.start, names: s };
+			}
+		},
+	);
 	for (const name of aliases?.names ?? []) {
 		out.push({
 			kind: "model",

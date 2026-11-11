@@ -253,6 +253,16 @@ const arrayList = async (c: Ctx, m: Module, n: Node): Promise<void> => {
 	}
 };
 
+/** The node types that can show one of anchors 2 to 5. */
+export const SHOWN: Node["type"][] = [
+	"MemberExpression",
+	"BinaryExpression",
+	"VariableDeclarator",
+	"ObjectExpression",
+	"CallExpression",
+	"ArrayExpression",
+];
+
 /** Visit one node for anchors 2 to 5. */
 export const readNode = async (c: Ctx, m: Module, n: Node): Promise<void> => {
 	if ((await member(c, m, n)) || (await inCheck(c, m, n))) {

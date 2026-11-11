@@ -23,7 +23,7 @@ import {
 import { mapSeq } from "../seq.ts";
 import {
 	type Extractor,
-	scan,
+	scanOf,
 	short,
 	type SurfaceItem,
 	unique,
@@ -182,17 +182,22 @@ export const extractErrors: Extractor = async (bundle) => {
 			});
 		}
 	};
-	await scan(bundle, ["throw", "stderr"], async (m, n) => {
-		if (n.type === "ThrowStatement") {
-			await mapSeq(thrown(n.argument), async (call) => {
-				const base = await errorClass(m, call.callee);
-				if (base !== undefined && base !== "") {
-					await add(m, call, `throw ${base}`);
-				}
-			});
-		} else if (n.type === "CallExpression" && writesStderr(m, n)) {
-			await add(m, n, "stderr");
-		}
-	});
+	await scanOf(
+		bundle,
+		["throw", "stderr"],
+		["ThrowStatement", "CallExpression"],
+		async (m, n) => {
+			if (n.type === "ThrowStatement") {
+				await mapSeq(thrown(n.argument), async (call) => {
+					const base = await errorClass(m, call.callee);
+					if (base !== undefined && base !== "") {
+						await add(m, call, `throw ${base}`);
+					}
+				});
+			} else if (writesStderr(m, n)) {
+				await add(m, n, "stderr");
+			}
+		},
+	);
 	return unique(out);
 };
