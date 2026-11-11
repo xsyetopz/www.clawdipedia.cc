@@ -1,0 +1,42 @@
+diff --git a/dist/eslint-scope.cjs b/dist/eslint-scope.cjs
+index ffb66855772a507dc8eda6c424fffc7dd3d53de0..6ecb6be7ba0a4bb6a8b6f81fda8635b986b4979b 100644
+--- a/dist/eslint-scope.cjs
++++ b/dist/eslint-scope.cjs
+@@ -1143,13 +1143,13 @@ class FunctionScope extends Scope {
+ 			return true;
+ 		}
+ 
+-		const bodyStart = this.block.body.range[0];
++		const bodyStart = this.block.body.start;
+ 
+ 		// It's invalid resolution in the following case:
+ 		return !(
+ 			variable.scope === this &&
+-			ref.identifier.range[0] < bodyStart && // the reference is in the parameter part.
+-			variable.defs.every(d => d.name.range[0] >= bodyStart) // the variable is in the body.
++			ref.identifier.start < bodyStart && // the reference is in the parameter part.
++			variable.defs.every(d => d.name.start >= bodyStart) // the variable is in the body.
+ 		);
+ 	}
+ }
+diff --git a/lib/scope.js b/lib/scope.js
+index ea7f116d9cb3fdfd3d1c3ad2ce05b8af4601fd56..596345a50fcaa683c71db655c3c35f07de738c45 100644
+--- a/lib/scope.js
++++ b/lib/scope.js
+@@ -782,13 +782,13 @@ class FunctionScope extends Scope {
+ 			return true;
+ 		}
+ 
+-		const bodyStart = this.block.body.range[0];
++		const bodyStart = this.block.body.start;
+ 
+ 		// It's invalid resolution in the following case:
+ 		return !(
+ 			variable.scope === this &&
+-			ref.identifier.range[0] < bodyStart && // the reference is in the parameter part.
+-			variable.defs.every(d => d.name.range[0] >= bodyStart) // the variable is in the body.
++			ref.identifier.start < bodyStart && // the reference is in the parameter part.
++			variable.defs.every(d => d.name.start >= bodyStart) // the variable is in the body.
+ 		);
+ 	}
+ }

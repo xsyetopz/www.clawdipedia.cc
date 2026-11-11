@@ -23,6 +23,17 @@ test("resolves a name in a scope that calls eval", async () => {
 	expect(m?.topLevel("a")?.references).toHaveLength(2);
 });
 
+// eslint-scope decides this by the place of each node in the text; a patch makes it read `start`, not `range`.
+test("a name in a parameter default is not the variable of the function body", async () => {
+	const src = "var b=1;function f(a=b){var b=2;return a}";
+	const bundle = new Bundle([{ name: "/$bunfs/root/a.js", text: src }]);
+	const m = await bundle.get("a.js");
+	expect(m?.topLevel("b")?.references.map((r) => r.identifier.start)).toEqual([
+		src.indexOf("b=1"),
+		src.indexOf("b)"),
+	]);
+});
+
 // Claude Code 2.1.322 embeds `mermaid.min.js` and two more `.js` files as zstd data.
 test("a bundle leaves out a file that is not JavaScript, and keeps the order of the rest", async () => {
 	const bundle = new Bundle([

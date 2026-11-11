@@ -54,10 +54,10 @@ export class Module {
 		text: string,
 		bundle?: Bundle,
 	): Promise<Module> {
+		// No `range`: it adds an array to each node, a third of the tree. The patch of eslint-scope reads `start`.
 		const { program, errors } = await parse(name, text, {
 			lang: "js",
 			sourceType: "module",
-			range: true,
 			preserveParens: false,
 		});
 		const error = errors.find((e) => isError(e.severity));

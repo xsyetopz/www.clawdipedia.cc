@@ -16,5 +16,8 @@
 	},
 	"devDependencies": {
 		"@oxc-project/types": "0.158.0"
+	},
+	"patchedDependencies": {
+		"eslint-scope@9.1.2": "patches/eslint-scope@9.1.2.patch"
 	}
 }
