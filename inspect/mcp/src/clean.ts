@@ -3,8 +3,6 @@
 import { createHash } from "node:crypto";
 import { tmpdir } from "node:os";
 
-import type { Scope } from "eslint-scope";
-
 import type { Module, Node, Variable } from "./ast.ts";
 
 const hash = (s: string, n = 6): string =>
@@ -13,18 +11,6 @@ const hash = (s: string, n = 6): string =>
 /** The name of a non-module scope's variable: a letter for its depth, then its order (`a1`, `b2`). */
 const localName = (depth: number, i: number): string =>
 	`${depth <= 26 ? String.fromCodePoint(96 + depth) : `z${depth}_`}${i}`;
-
-const depthOf = (s: Scope): number => {
-	let d = 1;
-	for (
-		let x = s.upper;
-		x && x.type !== "module" && x.type !== "global";
-		x = x.upper
-	) {
-		d++;
-	}
-	return d;
-};
 
 /** Each variable that a module declares, with the identifier nodes that name it, in the order that the code declares them. */
 const declared = (m: Module): { v: Variable; ids: Node[] }[] =>
@@ -142,7 +128,7 @@ export const renamer = (
 ): ((start: number, end: number) => string) => {
 	const all = declared(m);
 	const names = new Map<Variable, string>();
-	const count = new Map<Scope, number>();
+	const count = new Map<Variable["scope"], number>();
 	const edits: Edit[] = all
 		.flatMap(({ v, ids }) => ids.map((id) => ({ id, v })))
 		.toSorted((a, b) => a.id.start - b.id.start);
@@ -151,13 +137,13 @@ export const renamer = (
 	const top: Variable[] = [];
 	for (const { v } of all) {
 		const s = v.scope;
-		if (s.type === "module") {
+		if (s.depth === 0) {
 			top.push(v);
 			continue;
 		}
 		const i = (count.get(s) ?? 0) + 1;
 		count.set(s, i);
-		names.set(v, localName(depthOf(s), i));
+		names.set(v, localName(s.depth, i));
 	}
 	nameTop(names, top, render);
 	return (start, end) => render(start, end, (v) => names.get(v) ?? v.name);

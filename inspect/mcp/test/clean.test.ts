@@ -46,6 +46,18 @@ test("keeps shorthand keys, export names, and class names", async () => {
 	expect(out).toMatch(/export\{\$[0-9a-f]{6} as f,\$[0-9a-f]{6} as Z\}/u);
 });
 
+test("a local name has the letter of its scope depth and its order in that scope", async () => {
+	const out = renameModule(
+		await mod(
+			"function f(p,q){{let s}return function(r){{let t;let u}return p+q+r}}function g(w){return w}",
+		),
+	);
+	expect(out).toMatch(
+		/\(a1,a2\)\{\{let b1\}return function\(b1\)\{\{let c1;let c2\}return a1\+a2\+b1\}\}/u,
+	);
+	expect(out).toMatch(/\(a1\)\{return a1\}/u);
+});
+
 const moduleLevelName = async (src: string) =>
 	/function (\$[0-9a-f]{6})\(\)\{return"x"\}/u.exec(
 		renameModule(await mod(src)),

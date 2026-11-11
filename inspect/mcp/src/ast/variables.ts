@@ -37,10 +37,18 @@ export interface Ref {
 	init: boolean;
 	writeExpr: Node | null;
 }
+/**
+ * The scope that declares a name; two variables of one scope share one object. `depth` is 0 for the
+ * module scope, and for another scope it counts that scope and each scope around it inside the module scope.
+ * It stands for the scope of eslint-scope, which holds the whole scope tree of the module in memory.
+ */
+export interface VarScope {
+	depth: number;
+}
 export interface Variable {
 	name: string;
 	/** The scope that declares the name. */
-	scope: Scope;
+	scope: VarScope;
 	defs: Def[];
 	identifiers: Node[];
 	references: Ref[];
@@ -101,15 +109,28 @@ const outerOf = (d: Declared, s: Scope): Declared | undefined => {
 		: undefined;
 };
 
+const depthOf = (s: Scope): number => {
+	let d = 0;
+	for (
+		let x: Scope | null = s;
+		x && x.type !== "module" && x.type !== "global";
+		x = x.upper
+	) {
+		d++;
+	}
+	return d;
+};
+
 const variableOf = (
 	d: Declared,
 	s: Scope,
+	scope: VarScope,
 	made: Map<Declared, Variable>,
 ): Variable => {
 	const outer = outerOf(d, s);
 	const v = (outer && made.get(outer)) ?? {
 		name: d.name,
-		scope: s,
+		scope,
 		defs: d.defs.flatMap((x) => defOf(x) ?? []),
 		identifiers: d.identifiers.flatMap((x) => asNode(x) ?? []),
 		references: [],
@@ -140,8 +161,9 @@ export const variablesOf = (ast: unknown): Variables => {
 		optimistic: true,
 	} as const;
 	for (const s of analyze(ast, options).scopes) {
+		const scope = { depth: depthOf(s) };
 		for (const d of s.variables.filter((x) => x.defs.length > 0)) {
-			const v = variableOf(d, s, made);
+			const v = variableOf(d, s, scope, made);
 			if (s.type === "module") {
 				out.top.set(v.name, v);
 			}
