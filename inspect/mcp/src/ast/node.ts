@@ -2,8 +2,14 @@ import type * as O from "@oxc-project/types";
 
 /** A node of the ESTree that oxc-parser gives; each one has `start` and `end`. */
 export type Node = O.Node;
-/** The node of `Node` whose `type` is `T`. */
-export type NodeOf<T extends Node["type"]> = Extract<Node, { type: T }>;
+/** The node of `Node` whose `type` can be `T`. A function or a class has one node for several types. */
+export type NodeOf<T extends Node["type"]> = Node extends infer N
+	? N extends { type: infer U }
+		? T extends U
+			? N
+			: never
+		: never
+	: never;
 export type Fn = O.Function | O.ArrowFunctionExpression;
 
 export const isNode = (x: unknown): x is Node =>
