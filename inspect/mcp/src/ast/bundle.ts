@@ -11,6 +11,13 @@ const ROOT = "/$bunfs/root/";
 const importedName = (sp: NodeOf<"ImportSpecifier">): string =>
 	sp.imported.type === "Identifier" ? sp.imported.name : sp.imported.value;
 
+// One import specifier of a module: its place among the imports of the same source module, in bundle order.
+interface Import {
+	at: number;
+	module: Module;
+	local: string;
+}
+
 /** The modules of one program, by file name (`chunk-abc.js`). Each module parses on first use. */
 export class Bundle {
 	/** The text of each file, by file name, in bundle order. */
@@ -99,7 +106,9 @@ export class Bundle {
 					}
 				}
 				for (const n of chunks) {
-					index.set(n, [...(index.get(n) ?? []), file]);
+					const files = index.get(n) ?? [];
+					files.push(file);
+					index.set(n, files);
 				}
 			}
 			this.#importers = index;
@@ -107,38 +116,50 @@ export class Bundle {
 		return this.#importers.get(name) ?? [];
 	}
 
-	/** The local variables in other modules that import the top-level `v` of `m`. */
-	async importers(
-		m: Module,
-		v: Variable,
-	): Promise<{ module: Module; variable: Variable }[]> {
-		const names = [...m.exports]
-			.filter(([, l]) => l === v.name)
-			.map(([e]) => e);
-		if (names.length === 0) {
-			return [];
-		}
+	readonly #imports = new Map<Module, Promise<Map<string, Import[]>>>();
+
+	// Each import of a name from `m` in the other modules, by that name. A resolver asks for the importers
+	// of many variables of one module, and a shared chunk has thousands of importers.
+	async #importsOf(m: Module): Promise<Map<string, Import[]>> {
 		const others = await mapSeq(
 			this.importersOf(m.name).filter((n) => n !== m.name),
 			(n) => this.get(n),
 		);
-		const out: { module: Module; variable: Variable }[] = [];
-		for (const other of others.filter((x) => x !== undefined)) {
-			for (const s of other.importsFrom(ROOT + m.name)) {
+		const out = new Map<string, Import[]>();
+		let at = 0;
+		for (const module of others.filter((x) => x !== undefined)) {
+			for (const s of module.importsFrom(ROOT + m.name)) {
 				for (const sp of s.specifiers) {
-					if (sp.type !== "ImportSpecifier") {
-						continue;
-					}
-					if (!names.includes(importedName(sp))) {
-						continue;
-					}
-					const local = other.topLevel(sp.local.name);
-					if (local) {
-						out.push({ module: other, variable: local });
+					if (sp.type === "ImportSpecifier") {
+						const found = out.get(importedName(sp)) ?? [];
+						found.push({ at, module, local: sp.local.name });
+						out.set(importedName(sp), found);
+						at += 1;
 					}
 				}
 			}
 		}
 		return out;
+	}
+
+	/** The local variables in other modules that import the top-level `v` of `m`. */
+	async importers(
+		m: Module,
+		v: Variable,
+	): Promise<{ module: Module; variable: Variable }[]> {
+		const names = m.exportedAs(v.name);
+		if (names.length === 0) {
+			return [];
+		}
+		const imports = this.#imports.get(m) ?? this.#importsOf(m);
+		this.#imports.set(m, imports);
+		const byName = await imports;
+		return names
+			.flatMap((n) => byName.get(n) ?? [])
+			.toSorted((a, b) => a.at - b.at)
+			.flatMap(({ module, local }) => {
+				const variable = module.topLevel(local);
+				return variable ? [{ module, variable }] : [];
+			});
 	}
 }

@@ -42,6 +42,12 @@ const originOf = async (bundle: Bundle, file: string, name: string) => {
 	return m && v && bundle.origin(m, v);
 };
 
+const importersOf = async (bundle: Bundle, file: string, name: string) => {
+	const m = await bundle.get(file);
+	const v = m?.topLevel(name);
+	return m && v ? bundle.importers(m, v) : [];
+};
+
 // Item 1 gives undefined; a later item ends first when the steps run at once.
 const stepLogger = (log: string[]) => async (i: number) => {
 	log.push(`start ${i}`);
@@ -71,6 +77,24 @@ test("a bundle parses only the modules a reader asks for, each one once", async 
 	} finally {
 		parse.mockRestore();
 	}
+});
+
+test("the importers of a variable come in bundle order, for each name it is exported as", async () => {
+	const from = 'from"/$bunfs/root/c.js"';
+	const bundle = new Bundle([
+		{ name: "/$bunfs/root/a.js", text: `import{y as p,x as q,z as s}${from}` },
+		{ name: "/$bunfs/root/b.js", text: `import{x as r}${from}` },
+		{
+			name: "/$bunfs/root/c.js",
+			text: "var v=1,w=2;export{v as x,v as y,w as z}",
+		},
+	]);
+	const found = await importersOf(bundle, "c.js", "v");
+	expect(found.map((i) => [i.module.name, i.variable.name])).toEqual([
+		["a.js", "p"],
+		["a.js", "q"],
+		["b.js", "r"],
+	]);
 });
 
 test("the sequential helpers run one item at a time, in order, and stop early", async () => {

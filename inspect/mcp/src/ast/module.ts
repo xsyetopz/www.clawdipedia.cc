@@ -21,6 +21,7 @@ export class Module {
 	#vars?: Variables;
 	readonly #chains = new WeakSet<Node>();
 	#exports?: Map<string, string>;
+	#exportedAs?: Map<string, string[]>;
 	#imports?: Map<string, NodeOf<"ImportDeclaration">[]>;
 
 	private constructor(
@@ -197,14 +198,29 @@ export class Module {
 		return out;
 	}
 
+	/** The names this module exports the local name `local` as. */
+	exportedAs(local: string): string[] {
+		if (!this.#exportedAs) {
+			const names = new Map<string, string[]>();
+			for (const [exported, l] of this.exports) {
+				const found = names.get(l) ?? [];
+				found.push(exported);
+				names.set(l, found);
+			}
+			this.#exportedAs = names;
+		}
+		return this.#exportedAs.get(local) ?? [];
+	}
+
 	/** The import declarations of this module from the module path `source`. */
 	importsFrom(source: string): NodeOf<"ImportDeclaration">[] {
 		if (!this.#imports) {
 			const imports = new Map<string, NodeOf<"ImportDeclaration">[]>();
 			for (const s of this.ast.body) {
 				if (s.type === "ImportDeclaration") {
-					const k = s.source.value;
-					imports.set(k, [...(imports.get(k) ?? []), s]);
+					const found = imports.get(s.source.value) ?? [];
+					found.push(s);
+					imports.set(s.source.value, found);
 				}
 			}
 			this.#imports = imports;
