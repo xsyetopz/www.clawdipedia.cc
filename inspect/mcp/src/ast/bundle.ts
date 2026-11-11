@@ -142,12 +142,12 @@ export class Bundle {
 		return out;
 	}
 
-	/** The local variables in other modules that import the top-level `v` of `m`. */
+	/** The local variables in other modules that import the top-level `v` of `m`. Empty when `v` is not top-level. */
 	async importers(
 		m: Module,
 		v: Variable,
 	): Promise<{ module: Module; variable: Variable }[]> {
-		const names = m.exportedAs(v.name);
+		const names = m.topLevel(v.name) === v ? m.exportedAs(v.name) : [];
 		if (names.length === 0) {
 			return [];
 		}

@@ -1,6 +1,8 @@
 import { expect, spyOn, test } from "bun:test";
 
 import { Bundle, Module } from "../src/ast.ts";
+import { callsOf } from "../src/ast/calls.ts";
+import { isFn } from "../src/ast/node.ts";
 import { allSeq, firstSeq, mapSeq } from "../src/seq.ts";
 
 // Claude Code 2.1.309 minifies a `using` binding to the name `as`.
@@ -46,6 +48,13 @@ const importersOf = async (bundle: Bundle, file: string, name: string) => {
 	const m = await bundle.get(file);
 	const v = m?.topLevel(name);
 	return m && v ? bundle.importers(m, v) : [];
+};
+
+// The calls of the function whose `function` keyword is at `pos`.
+const callsAt = async (bundle: Bundle, file: string, pos: number) => {
+	const m = await bundle.get(file);
+	const fn = m?.nodeAt(pos);
+	return m && isFn(fn) ? callsOf(m, fn) : [];
 };
 
 // Item 1 gives undefined; a later item ends first when the steps run at once.
@@ -95,6 +104,17 @@ test("the importers of a variable come in bundle order, for each name it is expo
 		["a.js", "q"],
 		["b.js", "r"],
 	]);
+});
+
+// A minifier gives a nested function the name of a top-level one that its scope does not use.
+test("a nested function with the name of an export has no calls in other modules", async () => {
+	const text = "function v(){function v(){}v()}export{v as x}";
+	const bundle = new Bundle([
+		{ name: "/$bunfs/root/a.js", text: 'import{x}from"/$bunfs/root/b.js";x()' },
+		{ name: "/$bunfs/root/b.js", text },
+	]);
+	const calls = await callsAt(bundle, "b.js", text.indexOf("function v(){}"));
+	expect(calls.map((c) => c?.module.name)).toEqual(["b.js"]);
 });
 
 test("the sequential helpers run one item at a time, in order, and stop early", async () => {
