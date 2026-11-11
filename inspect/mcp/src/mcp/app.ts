@@ -2,6 +2,9 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
 import pkg from "../../package.json" with { type: "json" };
+import { releaseTrees } from "../binary.ts";
+import { idleRelease } from "../idle.ts";
+import { releasePrepared } from "../prepare.ts";
 
 export const READ_ONLY = {
 	readOnlyHint: true,
@@ -122,6 +125,16 @@ export const P = {
 	limit: ARGS.limit,
 };
 
+// The engine does not collect an idle heap, so the release runs the collector.
+const whenIdle = idleRelease(
+	Number(process.env["CC_INSPECT_IDLE_MS"] ?? 300_000),
+	() => {
+		releaseTrees();
+		releasePrepared();
+		Bun.gc(true);
+	},
+);
+
 /** One tool whose operations are the values of `action`; each handler gets the parsed arguments. */
 export const group = (
 	tool: string,
@@ -145,17 +158,19 @@ export const group = (
 			annotations,
 		},
 		(a: Record<string, unknown>) =>
-			run(() => {
-				const args = ARGS_SCHEMA.parse(a);
-				const k = args[key] ?? "";
-				const h = Object.hasOwn(handlers, k) ? handlers[k] : undefined;
-				if (!h) {
-					throw new Error(
-						`unknown ${key} "${k}"; ${key}s: ${Object.keys(handlers).filter(Boolean).join(", ")}`,
-					);
-				}
-				return h(args);
-			}),
+			whenIdle(() =>
+				run(() => {
+					const args = ARGS_SCHEMA.parse(a);
+					const k = args[key] ?? "";
+					const h = Object.hasOwn(handlers, k) ? handlers[k] : undefined;
+					if (!h) {
+						throw new Error(
+							`unknown ${key} "${k}"; ${key}s: ${Object.keys(handlers).filter(Boolean).join(", ")}`,
+						);
+					}
+					return h(args);
+				}),
+			),
 	);
 
 export const need = (v: string | undefined, what: string): string => {

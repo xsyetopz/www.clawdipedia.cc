@@ -163,8 +163,8 @@ const serverEnv = (tmp: string, config: string, versions: string) => {
 	};
 };
 
-/** Registers the setup and teardown hooks of the calling file and gives it the server's client. */
-export const startServer = () => {
+/** Registers the setup and teardown hooks of the calling file and gives it the server's client. `extra` adds to the server's environment. */
+export const startServer = (extra: Record<string, string> = {}) => {
 	const tmp = join(tmpdir(), `cc-inspect-test-${crypto.randomUUID()}`);
 	const config = join(tmp, "config");
 	const versions = join(tmp, "versions");
@@ -179,7 +179,7 @@ export const startServer = () => {
 			new StdioClientTransport({
 				command: "bun",
 				args: [SERVER],
-				env: serverEnv(tmp, config, versions),
+				env: { ...serverEnv(tmp, config, versions), ...extra },
 			}),
 		);
 	}, 60_000);

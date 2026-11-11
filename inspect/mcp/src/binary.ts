@@ -132,3 +132,14 @@ export const program = async (binary?: string): Promise<Program> => {
 	}
 	return p;
 };
+
+/**
+ * Lets go of the syntax trees of each program and of what its resolver found in them. The module texts
+ * and the surface lists stay. Call it between tool calls only (see `Bundle.release`).
+ */
+export const releaseTrees = (): void => {
+	for (const p of programs.values()) {
+		p.bundle().release();
+		p.resolver = new Resolver();
+	}
+};

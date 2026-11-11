@@ -166,6 +166,7 @@ It reads your session transcripts and the installed Claude Code binary.
 It makes three kinds of network request. On the first start, Bun downloads the parser package `oxc-parser@0.158.0` and its binary for your platform from the npm registry into the Bun cache (about 5 MB). `release` `notes` runs `gh release view` to get the release notes, once for each version. `code` `read` with `view: "readable"` runs `bunx @wakaru/cli@1.14.0`, once for each module.
 It writes only its cache of cleaned code. The cache is under `CC_INSPECT_CACHE`. If that is unset, it is under `./captures` when that folder exists. Otherwise it is under `~/.cache/cc-inspect`.
 `code` `run` also starts the program once, offline, with temp folders that it removes after the run.
+A `surface` call that parses every module of the program uses about 2.5 GB of memory. After 5 minutes with no call, the server frees the parsed code. `CC_INSPECT_IDLE_MS` sets that time in milliseconds.
 
 ```text
 /plugin install cc-inspect@xsyetopz

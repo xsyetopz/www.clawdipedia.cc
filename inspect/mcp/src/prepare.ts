@@ -245,7 +245,15 @@ export const prepare = async (
 
 const preparedCache = new Map<string, ReturnType<typeof prepare>>();
 
-/** `prepare` for a version or path, kept in memory for the server's life. */
+/**
+ * Lets go of each index that `prepared` keeps; the next call reads it from its cache on disk. Call it
+ * between tool calls only: a call that runs `prepare` writes that cache.
+ */
+export const releasePrepared = (): void => {
+	preparedCache.clear();
+};
+
+/** `prepare` for a version or path, kept in memory until `releasePrepared`. */
 export const prepared = async (
 	binary?: string,
 ): Promise<Awaited<ReturnType<typeof prepare>>> => {

@@ -150,6 +150,23 @@ test("the importers of a variable come in bundle order, for each name it is expo
 	]);
 });
 
+// A bundle keeps the importers of a module by its object, so a release lets go of them with the modules.
+test("a released bundle parses a module again, and gives its importers from the new modules", async () => {
+	const bundle = new Bundle([
+		{
+			name: "/$bunfs/root/a.js",
+			text: 'import{x}from"/$bunfs/root/b.js";var y=x',
+		},
+		{ name: "/$bunfs/root/b.js", text: "var v=1;export{v as x}" },
+	]);
+	const [old] = await importersOf(bundle, "b.js", "v");
+	bundle.release();
+	const [found] = await importersOf(bundle, "b.js", "v");
+	expect(found?.module.name).toBe("a.js");
+	expect(found?.module).not.toBe(old?.module);
+	expect(found?.module).toBe(await bundle.get("a.js"));
+});
+
 // A minifier gives a nested function the name of a top-level one that its scope does not use.
 test("a nested function with the name of an export has no calls in other modules", async () => {
 	const text = "function v(){function v(){}v()}export{v as x}";

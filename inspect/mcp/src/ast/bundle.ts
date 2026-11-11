@@ -41,6 +41,15 @@ export class Bundle {
 		return parsed;
 	}
 
+	/**
+	 * Lets go of each parsed module; a module parses again on its next use. Call it only when no reader
+	 * holds a module, node, or variable of this bundle: one from before the call does not match one from after it.
+	 */
+	release(): void {
+		this.#parsed.clear();
+		this.#imports.clear();
+	}
+
 	async #parse(name: string): Promise<Module | undefined> {
 		const text = this.texts.get(name);
 		if (text === undefined) {
