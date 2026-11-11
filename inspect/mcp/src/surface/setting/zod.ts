@@ -8,6 +8,7 @@ import {
 	returnsOf,
 	type Variable,
 } from "../../ast.ts";
+import { mapSeq } from "../../seq.ts";
 import { asNode } from "../common.ts";
 
 /** The zod types whose inner schemas hold the same value, so their keys sit at the same path. */
@@ -50,24 +51,28 @@ export interface Cx {
 }
 
 /** The constant string of `n`, through the bound parameters. */
-export const constOf = (
+export const constOf = async (
 	m: Module,
 	n: Node | undefined,
 	env: Env,
-): string | undefined => {
+): Promise<string | undefined> => {
 	const v = n?.type === "Identifier" ? m.variable(n) : undefined;
 	const b = v && env.get(v);
 	if (!b) {
 		return constString(m, n);
 	}
-	return "value" in b ? b.value : constOf(b.m, b.n, env);
+	const found = "value" in b ? b.value : await constOf(b.m, b.n, env);
+	return found;
 };
 
 /** The strings of an array literal, with its `...list` spreads read in. */
-const stringList = (m: Module, n: Node | null | undefined): string[] => {
+const stringList = async (
+	m: Module,
+	n: Node | null | undefined,
+): Promise<string[]> => {
 	if (n?.type === "Identifier") {
 		const v = m.variable(n);
-		const o = v && m.bundle?.origin(m, v);
+		const o = v && (await m.bundle?.origin(m, v));
 		const d = o?.variable.defs[0];
 		return d?.type === "Variable" && o
 			? stringList(o.module, asNode(d.node.init))
@@ -76,11 +81,12 @@ const stringList = (m: Module, n: Node | null | undefined): string[] => {
 	if (n?.type !== "ArrayExpression") {
 		return [];
 	}
-	return n.elements.flatMap((e) =>
+	const lists = await mapSeq(n.elements, async (e) =>
 		e?.type === "SpreadElement"
 			? stringList(m, asNode(e.argument))
-			: (constString(m, asNode(e)) ?? []),
+			: ((await constString(m, asNode(e))) ?? []),
 	);
+	return lists.flat();
 };
 
 /** The part of a spread in a shape that holds keys: `...cond&&{…}` and `...cond?{…}:{}` give the object. */
@@ -118,10 +124,10 @@ const entriesMap = (
 };
 
 /** `Object.fromEntries(list.map((k)=>[k,schema]))`: the keys, the variable of `k`, and the schema. */
-export const entriesShape = (
+export const entriesShape = async (
 	m: Module,
 	o: Node | undefined,
-): { keys: string[]; param: Variable; value: Node } | undefined => {
+): Promise<{ keys: string[]; param: Variable; value: Node } | undefined> => {
 	const parts = entriesMap(m, o);
 	if (!parts) {
 		return undefined;
@@ -133,6 +139,6 @@ export const entriesShape = (
 	const value =
 		pair?.type === "ArrayExpression" ? asNode(pair.elements[1]) : undefined;
 	return param && value
-		? { keys: stringList(m, list), param, value }
+		? { keys: await stringList(m, list), param, value }
 		: undefined;
 };

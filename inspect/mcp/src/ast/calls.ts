@@ -14,17 +14,18 @@ import {
  * The function a callee names: a declaration, a variable whose only value is a function, or one whose
  * only value is the parameter of a setter (`var f;function set(e){f=e}set(g)`) that has one known call.
  */
-export const functionOf = (
+export const functionOf = async (
 	m: Module,
 	callee: Node,
 	depth = 0,
-): { module: Module; fn: Fn } | undefined => {
+): Promise<{ module: Module; fn: Fn } | undefined> => {
 	if (callee.type !== "Identifier") {
 		return undefined;
 	}
 	const v0 = m.variable(callee);
 	const o =
-		v0 && (m.bundle ? m.bundle.origin(m, v0) : { module: m, variable: v0 });
+		v0 &&
+		(m.bundle ? await m.bundle.origin(m, v0) : { module: m, variable: v0 });
 	if (!o) {
 		return undefined;
 	}
@@ -49,27 +50,25 @@ const writtenFunction = (
 	module: Module,
 	w: Node | null,
 	depth: number,
-): { module: Module; fn: Fn } | undefined => {
-	if (isFn(w)) {
-		return { module, fn: w };
+): Promise<{ module: Module; fn: Fn } | undefined> => {
+	if (w?.type === "Identifier") {
+		return setterArgument(module, w, depth);
 	}
-	return w?.type === "Identifier"
-		? setterArgument(module, w, depth)
-		: undefined;
+	return Promise.resolve(isFn(w) ? { module, fn: w } : undefined);
 };
 
 /** The function passed for parameter `p` at the one known call of the function that declares it. */
-const setterArgument = (
+const setterArgument = async (
 	m: Module,
 	p: Node,
 	depth: number,
-): { module: Module; fn: Fn } | undefined => {
+): Promise<{ module: Module; fn: Fn } | undefined> => {
 	const def = m.variable(p)?.defs[0];
 	if (depth > 4 || def?.type !== "Parameter" || !isFn(def.node)) {
 		return undefined;
 	}
 	const at = def.node.params.map((x) => asNode(x)).indexOf(def.name);
-	const calls = callsOf(m, def.node);
+	const calls = await callsOf(m, def.node);
 	const call = calls.length === 1 ? calls[0] : undefined;
 	const arg = asNode(call?.call.arguments[at]);
 	if (!call || !arg) {
@@ -108,7 +107,10 @@ export interface Call {
  * The calls of `fn`, in its module and in every module that imports it. An `undefined` in the list
  * means the function is used as a value somewhere, so not every call is known.
  */
-export const callsOf = (m: Module, fn: Fn): (Call | undefined)[] => {
+export const callsOf = async (
+	m: Module,
+	fn: Fn,
+): Promise<(Call | undefined)[]> => {
 	const v = nameOf(m, fn);
 	if (!v) {
 		return [undefined];
@@ -116,7 +118,7 @@ export const callsOf = (m: Module, fn: Fn): (Call | undefined)[] => {
 	const out: (Call | undefined)[] = [];
 	scanRefs(out, fn, m, v);
 	if (m.bundle) {
-		for (const i of m.bundle.importers(m, v)) {
+		for (const i of await m.bundle.importers(m, v)) {
 			scanRefs(out, fn, i.module, i.variable);
 		}
 	}
@@ -145,11 +147,11 @@ const scanRefs = (
 };
 
 /** A string the expression always gives: a literal, or a name bound once to one (followed across imports). */
-export const constString = (
+export const constString = async (
 	m: Module,
 	n: Node | null | undefined,
 	depth = 0,
-): string | undefined => {
+): Promise<string | undefined> => {
 	if (!n || depth > 8) {
 		return undefined;
 	}
@@ -164,7 +166,8 @@ export const constString = (
 	}
 	const v0 = m.variable(n);
 	const o =
-		v0 && (m.bundle ? m.bundle.origin(m, v0) : { module: m, variable: v0 });
+		v0 &&
+		(m.bundle ? await m.bundle.origin(m, v0) : { module: m, variable: v0 });
 	if (!o) {
 		return undefined;
 	}

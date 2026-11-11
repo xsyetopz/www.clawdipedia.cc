@@ -12,6 +12,7 @@ import {
 } from "../ast.ts";
 import { asNode } from "../ast/node.ts";
 import type { BunModule } from "../bunfs.ts";
+import { allSeq, mapSeq } from "../seq.ts";
 
 export { asNode } from "../ast/node.ts";
 
@@ -43,22 +44,24 @@ export type Extractor = (
 	files?: Pick<BunModule, "name" | "bytes">[],
 ) => SurfaceItem[] | Promise<SurfaceItem[]>;
 
-/** Visit every node of each module whose text holds one of `needles`. */
-export const scan = (
+/** Visit every node of each module whose text holds one of `needles`, one module after the other. */
+export const scan = async (
 	bundle: Bundle,
 	needles: string[],
-	visit: (m: Module, n: Node) => void,
-): void => {
-	for (const m of bundle.modules.values()) {
-		if (!needles.some((s) => m.text.includes(s))) {
-			continue;
-		}
-		const stack: Node[] = [m.ast];
+	visit: (m: Module, n: Node) => void | Promise<void>,
+): Promise<void> => {
+	await mapSeq(bundle.namesWith(needles), async (name) => {
+		const m = await bundle.get(name);
+		const stack: Node[] = m ? [m.ast] : [];
+		const nodes: Node[] = [];
 		for (let n = stack.pop(); n !== undefined; n = stack.pop()) {
-			visit(m, n);
+			nodes.push(n);
 			stack.push(...children(n));
 		}
-	}
+		if (m) {
+			await mapSeq(nodes, (n) => Promise.resolve(visit(m, n)));
+		}
+	});
 };
 
 /** The key of a non-computed property (identifier or string), or undefined. */
@@ -90,22 +93,15 @@ export const prop = (
 	o.properties.find((p): p is Prop => keyOf(p) === key)?.value;
 
 /** The string items of an array literal, or undefined when one item is not a constant string. */
-export const strings = (
+export const strings = async (
 	m: Module,
 	n: Node | null | undefined,
-): string[] | undefined => {
+): Promise<string[] | undefined> => {
 	if (n?.type !== "ArrayExpression") {
 		return undefined;
 	}
-	const out: string[] = [];
-	for (const el of n.elements) {
-		const s = constString(m, asNode(el));
-		if (s === undefined) {
-			return undefined;
-		}
-		out.push(s);
-	}
-	return out;
+	const found = await allSeq(n.elements, (el) => constString(m, asNode(el)));
+	return found;
 };
 
 const FALSY = new Set<unknown>([false, 0, "", null, undefined, 0n]);
@@ -128,7 +124,10 @@ const unaryLiteral = (n: Node): string | undefined => {
 };
 
 /** A literal as short text (`!0` is `true`), or "unknown" for computed code. */
-export const literal = (m: Module, n: Node | null | undefined): string => {
+export const literal = async (
+	m: Module,
+	n: Node | null | undefined,
+): Promise<string> => {
 	if (!n) {
 		return "unknown";
 	}
@@ -142,7 +141,7 @@ export const literal = (m: Module, n: Node | null | undefined): string => {
 	if (n.type === "Identifier" && n.name === "undefined") {
 		return "undefined";
 	}
-	const s = constString(m, n);
+	const s = await constString(m, n);
 	if (s !== undefined) {
 		return JSON.stringify(s);
 	}

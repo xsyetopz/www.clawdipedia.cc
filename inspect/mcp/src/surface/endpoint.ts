@@ -68,9 +68,9 @@ const addTemplate = (
 	}
 };
 
-export const extractEndpoints: Extractor = (bundle) => {
+export const extractEndpoints: Extractor = async (bundle) => {
 	const out: SurfaceItem[] = [];
-	scan(
+	await scan(
 		bundle,
 		["https://", "BASE_API_URL", '"/api/', '"/v1/', "`/"],
 		(m, n) => {

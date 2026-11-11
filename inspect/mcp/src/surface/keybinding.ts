@@ -19,14 +19,14 @@ interface Best {
 	names: string[];
 }
 
-export const extractKeybindings: Extractor = (bundle) => {
+export const extractKeybindings: Extractor = async (bundle) => {
 	let actions: Best | undefined;
 	let contexts: Best | undefined;
-	scan(bundle, ['"chat:cancel"', '"Global"'], (m, n) => {
+	await scan(bundle, ['"chat:cancel"', '"Global"'], async (m, n) => {
 		if (n.type !== "ArrayExpression") {
 			return;
 		}
-		const s = strings(m, n);
+		const s = await strings(m, n);
 		if (!s) {
 			return;
 		}

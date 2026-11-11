@@ -1,3 +1,6 @@
+import { mapSeq } from "../seq.ts";
+// A module parses when a reader first asks for it, and the bundle keeps it. Parsing a whole program at
+// once holds several GB of syntax trees.
 import { Module } from "./module.ts";
 import type { NodeOf } from "./node.ts";
 import type { Variable } from "./variables.ts";
@@ -8,57 +11,66 @@ const ROOT = "/$bunfs/root/";
 const importedName = (sp: NodeOf<"ImportSpecifier">): string =>
 	sp.imported.type === "Identifier" ? sp.imported.name : sp.imported.value;
 
-/** The parsed modules of one program, by file name (`chunk-abc.js`). */
+/** The modules of one program, by file name (`chunk-abc.js`). Each module parses on first use. */
 export class Bundle {
-	readonly modules = new Map<string, Module>();
+	/** The text of each file, by file name, in bundle order. */
+	readonly texts = new Map<string, string>();
+	readonly #parsed = new Map<string, Promise<Module | undefined>>();
 
-	/** Parses every file at once. It leaves out a file whose text is not JavaScript. */
-	static async parse(files: { name: string; text: string }[]): Promise<Bundle> {
-		const bundle = new Bundle();
-		const parsed = await Promise.all(
-			files.map(async (f) => {
-				try {
-					return await Module.parse(
-						f.name.split("/").pop() ?? f.name,
-						f.text,
-						bundle,
-					);
-				} catch (error) {
-					if (error instanceof SyntaxError) {
-						return null;
-					}
-					throw error;
-				}
-			}),
-		);
-		for (const m of parsed) {
-			if (m) {
-				bundle.modules.set(m.name, m);
-			}
+	constructor(files: { name: string; text: string }[]) {
+		for (const f of files) {
+			this.texts.set(f.name.split("/").pop() ?? f.name, f.text);
 		}
-		return bundle;
 	}
 
-	get(name: string): Module | undefined {
-		return this.modules.get(
-			name.startsWith(ROOT) ? name.slice(ROOT.length) : name,
-		);
+	/** The parsed module of a file name or `/$bunfs/root/` path. Undefined when there is none, or when its text is not JavaScript. */
+	get(name: string): Promise<Module | undefined> {
+		const key = name.startsWith(ROOT) ? name.slice(ROOT.length) : name;
+		let parsed = this.#parsed.get(key);
+		if (!parsed) {
+			parsed = this.#parse(key);
+			this.#parsed.set(key, parsed);
+		}
+		return parsed;
 	}
 
-	/** Modules whose text names `needle`. */
-	withText(needle: string): Module[] {
-		return [...this.modules.values()].filter((m) => m.text.includes(needle));
+	async #parse(name: string): Promise<Module | undefined> {
+		const text = this.texts.get(name);
+		if (text === undefined) {
+			return undefined;
+		}
+		try {
+			return await Module.parse(name, text, this);
+		} catch (error) {
+			if (error instanceof SyntaxError) {
+				return undefined;
+			}
+			throw error;
+		}
+	}
+
+	/** The file names whose text names `needle`, in bundle order. */
+	namesWith(needles: string[]): string[] {
+		return [...this.texts]
+			.filter(([, t]) => needles.some((s) => t.includes(s)))
+			.map(([n]) => n);
+	}
+
+	/** The parsed modules whose text names `needle`, in bundle order. */
+	async withText(needle: string): Promise<Module[]> {
+		const found = await mapSeq(this.namesWith([needle]), (n) => this.get(n));
+		return found.filter((m) => m !== undefined);
 	}
 
 	/**
 	 * Where an imported binding comes from: the module that exports it and that module's variable.
 	 * It follows re-exports. Undefined for anything else.
 	 */
-	origin(
+	async origin(
 		m: Module,
 		v: Variable,
 		seen = 0,
-	): { module: Module; variable: Variable } | undefined {
+	): Promise<{ module: Module; variable: Variable } | undefined> {
 		const def = v.defs[0];
 		if (def?.type !== "ImportBinding") {
 			return { module: m, variable: v };
@@ -66,28 +78,28 @@ export class Bundle {
 		if (seen > 8 || def.node.type !== "ImportSpecifier") {
 			return undefined;
 		}
-		const from = this.get(def.parent.source.value);
+		const from = await this.get(def.parent.source.value);
 		const local = from?.exports.get(importedName(def.node));
 		const target = local === undefined ? undefined : from?.topLevel(local);
 		return from && target ? this.origin(from, target, seen + 1) : undefined;
 	}
 
-	#importers?: Map<string, Module[]>;
+	#importers?: Map<string, string[]>;
 
-	/** The modules whose text names the chunk `name` as `"/$bunfs/root/<name>"`, indexed on first use. */
-	importersOf(name: string): Module[] {
+	/** The file names whose text names the chunk `name` as `"/$bunfs/root/<name>"`, indexed on first use. */
+	importersOf(name: string): string[] {
 		if (!this.#importers) {
-			const index = new Map<string, Module[]>();
+			const index = new Map<string, string[]>();
 			const re = /"\/\$bunfs\/root\/([^"]+)"/gu;
-			for (const m of this.modules.values()) {
+			for (const [file, text] of this.texts) {
 				const chunks = new Set<string>();
-				for (const x of m.text.matchAll(re)) {
+				for (const x of text.matchAll(re)) {
 					if (x[1] !== undefined) {
 						chunks.add(x[1]);
 					}
 				}
 				for (const n of chunks) {
-					index.set(n, [...(index.get(n) ?? []), m]);
+					index.set(n, [...(index.get(n) ?? []), file]);
 				}
 			}
 			this.#importers = index;
@@ -96,18 +108,22 @@ export class Bundle {
 	}
 
 	/** The local variables in other modules that import the top-level `v` of `m`. */
-	importers(m: Module, v: Variable): { module: Module; variable: Variable }[] {
+	async importers(
+		m: Module,
+		v: Variable,
+	): Promise<{ module: Module; variable: Variable }[]> {
 		const names = [...m.exports]
 			.filter(([, l]) => l === v.name)
 			.map(([e]) => e);
 		if (names.length === 0) {
 			return [];
 		}
+		const others = await mapSeq(
+			this.importersOf(m.name).filter((n) => n !== m.name),
+			(n) => this.get(n),
+		);
 		const out: { module: Module; variable: Variable }[] = [];
-		for (const other of this.importersOf(m.name)) {
-			if (other === m) {
-				continue;
-			}
+		for (const other of others.filter((x) => x !== undefined)) {
 			for (const s of other.importsFrom(ROOT + m.name)) {
 				for (const sp of s.specifiers) {
 					if (sp.type !== "ImportSpecifier") {

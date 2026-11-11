@@ -10,9 +10,9 @@ import { prepare, unitsOf } from "../src/prepare.ts";
 
 const mod = async (
 	text: string,
-): Promise<NonNullable<ReturnType<Bundle["get"]>>> => {
-	const bundle = await Bundle.parse([{ name: "/$bunfs/root/a.js", text }]);
-	const found = bundle.get("a.js");
+): Promise<NonNullable<Awaited<ReturnType<Bundle["get"]>>>> => {
+	const bundle = new Bundle([{ name: "/$bunfs/root/a.js", text }]);
+	const found = await bundle.get("a.js");
 	if (found === undefined) {
 		throw new Error("the bundle holds no a.js");
 	}

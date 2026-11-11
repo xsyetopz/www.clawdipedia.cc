@@ -1,31 +1,101 @@
-import { expect, test } from "bun:test";
+import { expect, spyOn, test } from "bun:test";
 
-import { Bundle } from "../src/ast.ts";
+import { Bundle, Module } from "../src/ast.ts";
+import { allSeq, firstSeq, mapSeq } from "../src/seq.ts";
 
 // Claude Code 2.1.309 minifies a `using` binding to the name `as`.
 test.each([
 	"async function f(g){using as=await g();return as}",
 	"async function f(g){await using as=g();return as}",
 ])("parses a using declaration bound to `as`: %s", async (src) => {
-	const bundle = await Bundle.parse([{ name: "/$bunfs/root/a.js", text: src }]);
-	const m = bundle.get("a.js");
+	const bundle = new Bundle([{ name: "/$bunfs/root/a.js", text: src }]);
+	const m = await bundle.get("a.js");
 	expect(m?.ast.type).toBe("Program");
 });
 
 // A protobuf chunk of Claude Code 2.1.322 calls `eval` directly; its names still belong to their declarations.
 test("resolves a name in a scope that calls eval", async () => {
 	const src = 'var a=1;function f(){eval("0");return a}';
-	const bundle = await Bundle.parse([{ name: "/$bunfs/root/a.js", text: src }]);
-	const m = bundle.get("a.js");
+	const bundle = new Bundle([{ name: "/$bunfs/root/a.js", text: src }]);
+	const m = await bundle.get("a.js");
 	expect(m?.topLevel("a")?.references).toHaveLength(2);
 });
 
 // Claude Code 2.1.322 embeds `mermaid.min.js` and two more `.js` files as zstd data.
 test("a bundle leaves out a file that is not JavaScript, and keeps the order of the rest", async () => {
-	const bundle = await Bundle.parse([
+	const bundle = new Bundle([
 		{ name: "/$bunfs/root/zstd.js", text: "(�/�\u0000" },
 		{ name: "/$bunfs/root/b.js", text: "var b=1" },
 		{ name: "/$bunfs/root/a.js", text: "var a=1" },
 	]);
-	expect([...bundle.modules.keys()]).toEqual(["b.js", "a.js"]);
+	const names = [...bundle.texts.keys()];
+	const mods = await mapSeq(names, (n) => bundle.get(n));
+	expect(names.filter((_, i) => mods[i] !== undefined)).toEqual([
+		"b.js",
+		"a.js",
+	]);
+});
+
+const originOf = async (bundle: Bundle, file: string, name: string) => {
+	const m = await bundle.get(file);
+	const v = m?.topLevel(name);
+	return m && v && bundle.origin(m, v);
+};
+
+// Item 1 gives undefined; a later item ends first when the steps run at once.
+const stepLogger = (log: string[]) => async (i: number) => {
+	log.push(`start ${i}`);
+	await Bun.sleep(3 - i);
+	log.push(`end ${i}`);
+	return i === 1 ? undefined : i;
+};
+
+// Parsing every module of Claude Code 2.1.322 at once held several GB per test file.
+test("a bundle parses only the modules a reader asks for, each one once", async () => {
+	const parse = spyOn(Module, "parse");
+	try {
+		const bundle = new Bundle([
+			{
+				name: "/$bunfs/root/a.js",
+				text: 'import{x}from"/$bunfs/root/b.js";var y=x',
+			},
+			{ name: "/$bunfs/root/b.js", text: "var v=1;export{v as x}" },
+			{ name: "/$bunfs/root/c.js", text: "var c=1" },
+		]);
+		expect(parse).not.toHaveBeenCalled();
+		const o = await originOf(bundle, "a.js", "x");
+		await bundle.get("/$bunfs/root/a.js");
+		expect(o?.module.name).toBe("b.js");
+		expect(o?.variable.name).toBe("v");
+		expect(parse.mock.calls.map(([name]) => name)).toEqual(["a.js", "b.js"]);
+	} finally {
+		parse.mockRestore();
+	}
+});
+
+test("the sequential helpers run one item at a time, in order, and stop early", async () => {
+	const log: string[] = [];
+	const step = stepLogger(log);
+	expect(await mapSeq([0, 1, 2], step)).toEqual([0, undefined, 2]);
+	expect(log).toEqual([
+		"start 0",
+		"end 0",
+		"start 1",
+		"end 1",
+		"start 2",
+		"end 2",
+	]);
+	log.length = 0;
+	expect(await allSeq([0, 1, 2], step)).toBeUndefined();
+	expect(await firstSeq([1, 2, 0], step)).toBe(2);
+	expect(log).toEqual([
+		"start 0",
+		"end 0",
+		"start 1",
+		"end 1",
+		"start 1",
+		"end 1",
+		"start 2",
+		"end 2",
+	]);
 });

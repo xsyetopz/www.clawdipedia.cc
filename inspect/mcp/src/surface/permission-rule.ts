@@ -20,22 +20,29 @@ import {
 const DESCRIPTION =
 	"Permission mode for controlling how tool executions are handled";
 
-export const extractPermissionRules: Extractor = (bundle) => {
+export const extractPermissionRules: Extractor = async (bundle) => {
 	const out: SurfaceItem[] = [];
-	scan(bundle, [DESCRIPTION], (m, n) => {
+	await scan(bundle, [DESCRIPTION], async (m, n) => {
 		if (
 			n.type !== "CallExpression" ||
 			n.callee.type !== "MemberExpression" ||
 			n.callee.property.type !== "Identifier" ||
-			n.callee.property.name !== "describe" ||
-			constString(m, asNode(n.arguments[0]))?.startsWith(DESCRIPTION) !== true
+			n.callee.property.name !== "describe"
 		) {
+			return;
+		}
+		const described = await constString(m, asNode(n.arguments[0]));
+		if (described?.startsWith(DESCRIPTION) !== true) {
 			return;
 		}
 		const root = asNode(n.callee.object);
 		const stack: Node[] = root ? [root] : [];
-		for (let x = stack.pop(); x !== undefined; x = stack.pop()) {
-			for (const name of strings(m, x) ?? []) {
+		const next = async (): Promise<void> => {
+			const x = stack.pop();
+			if (x === undefined) {
+				return;
+			}
+			for (const name of (await strings(m, x)) ?? []) {
 				out.push({
 					kind: "permission-rule",
 					name,
@@ -45,7 +52,9 @@ export const extractPermissionRules: Extractor = (bundle) => {
 				});
 			}
 			stack.push(...children(x));
-		}
+			return next();
+		};
+		await next();
 	});
 	return unique(out);
 };

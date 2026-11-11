@@ -86,7 +86,7 @@ describe("tool", () => {
 		const b =
 			'const B=(d)=>({isEnabled:()=>!0,...d});const K="REPL";const E=B({name:K,aliases:["Eval"]});export{E as EvalTool};';
 		const t = await surface(
-			await Bundle.parse([
+			new Bundle([
 				{ name: "/$bunfs/root/a.js", text: a },
 				{ name: "/$bunfs/root/b.js", text: b },
 			]),
@@ -141,11 +141,7 @@ describe("mod-api", () => {
 		},
 	];
 	test("$ calls through nested types, event map keys, and classic events", async () => {
-		const m = await surface(
-			await bundle("var a=1"),
-			"mod-api",
-			await embedded(),
-		);
+		const m = await surface(bundle("var a=1"), "mod-api", await embedded());
 		expect(m.map((i) => [i.name, i.detail])).toEqual([
 			["$.plugin.name", "property"],
 			["$.ui.log", "call"],
@@ -161,7 +157,7 @@ describe("mod-api", () => {
 		expect(DTS.slice(Number(log?.offset)).trimStart()).toStartWith("log(");
 	});
 	test("throws without the embedded files", async () => {
-		const error = await surface(await bundle("var a=1"), "mod-api").catch(
+		const error = await surface(bundle("var a=1"), "mod-api").catch(
 			(error_: unknown) => error_,
 		);
 		expect(error).toHaveProperty("message", expect.stringMatching(/embedded/u));

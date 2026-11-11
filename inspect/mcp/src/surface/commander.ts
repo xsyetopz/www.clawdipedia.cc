@@ -18,15 +18,14 @@
 // - subcommand: 71 paths, 56 old names. Only here: `apply-project-settings`, named by a constant
 //   (`.command(Hmn,{hidden:!0})`). None only there.
 import {
-	callsOf,
 	constString,
 	functionOf,
-	isFn,
 	type Module,
 	type Node,
 	type NodeOf,
 	returnsOf,
 } from "../ast.ts";
+import { commandPath, initOf, method } from "./commander/chain.ts";
 import {
 	asNode,
 	type Extractor,
@@ -38,65 +37,6 @@ import {
 import { helpKind } from "./help.ts";
 
 const SPEC = /^(?:-[\w-]+, ?)?--?[a-zA-Z][\w-]*/u;
-
-const method = (n: Node | undefined): string | undefined =>
-	n?.type === "CallExpression" &&
-	n.callee.type === "MemberExpression" &&
-	n.callee.property.type === "Identifier"
-		? n.callee.property.name
-		: undefined;
-
-/** The initializer of the variable `n` names, when its first declaration is a `let`/`const`/`var`. */
-const initOf = (m: Module, n: Node): Node | undefined => {
-	const def = m.variable(n)?.defs[0];
-	return def?.type === "Variable" ? asNode(def.node.init) : undefined;
-};
-
-/** The argument that parameter `p` gets at the one known call of its function (`function E(C){C.command("add")}E(mcp)`). */
-const argumentOf = (m: Module, p: Node): { m: Module; n: Node } | undefined => {
-	const def = m.variable(p)?.defs[0];
-	if (def?.type !== "Parameter" || !isFn(def.node)) {
-		return undefined;
-	}
-	const at = def.node.params.map((x) => asNode(x)).indexOf(def.name);
-	const calls = callsOf(m, def.node);
-	const call = calls.length === 1 ? calls[0] : undefined;
-	const arg = asNode(call?.call.arguments[at]);
-	return call && arg ? { m: call.module, n: arg } : undefined;
-};
-
-/** The command words of `.command("x")` calls below `n` in its chain, outermost last. */
-const chainCommands = (
-	m: Module,
-	n: Node,
-	seen = new Set<unknown>(),
-): string[] => {
-	const out: string[] = [];
-	let cur: Node | undefined = n;
-	while (cur) {
-		if (
-			cur.type === "CallExpression" &&
-			cur.callee.type === "MemberExpression"
-		) {
-			if (method(cur) === "command") {
-				const s = constString(m, asNode(cur.arguments[0]));
-				if (s !== undefined && s !== "") {
-					out.unshift(s.split(/\s/u)[0] ?? "");
-				}
-			}
-			cur = asNode(cur.callee.object);
-		} else if (cur.type === "Identifier" && !seen.has(m.variable(cur))) {
-			// `let x=program.command("mcp")…; x.command("add")`
-			seen.add(m.variable(cur));
-			const init = initOf(m, cur);
-			const from = init ? { m, n: init } : argumentOf(m, cur);
-			return from ? [...chainCommands(from.m, from.n, seen), ...out] : out;
-		} else {
-			return out;
-		}
-	}
-	return out;
-};
 
 /** The calls chained on `call`: `call.a().b()`. */
 const chainedAfter = (m: Module, call: Node): string[] => {
@@ -143,11 +83,11 @@ const hides = (m: Module, n: Node, skip?: Node): boolean => {
 };
 
 /** The `new Option(...)` behind an `addOption` argument: through call chains, `a?b:c`, variables, and factories. */
-const optionOf = (
+const optionOf = async (
 	m: Module,
 	n: Node,
 	seen = new Set<unknown>(),
-): { m: Module; n: NodeOf<"NewExpression"> } | undefined => {
+): Promise<{ m: Module; n: NodeOf<"NewExpression"> } | undefined> => {
 	if (seen.has(n)) {
 		return undefined;
 	}
@@ -164,7 +104,7 @@ const optionOf = (
 	}
 	if (n.type === "CallExpression") {
 		const callee = asNode(n.callee);
-		const f = callee && functionOf(m, callee);
+		const f = callee && (await functionOf(m, callee));
 		const r = f && returnsOf(f.fn)[0];
 		return r ? optionOf(f.module, r, seen) : undefined;
 	}
@@ -175,17 +115,17 @@ const optionOf = (
 	return undefined;
 };
 
-export const extractSubcommands: Extractor = (bundle) => {
+export const extractSubcommands: Extractor = async (bundle) => {
 	const out: SurfaceItem[] = [];
-	scan(bundle, [".command("], (m, n) => {
+	await scan(bundle, [".command("], async (m, n) => {
 		if (n.type !== "CallExpression" || method(n) !== "command") {
 			return;
 		}
-		const spec = constString(m, asNode(n.arguments[0]));
+		const spec = await constString(m, asNode(n.arguments[0]));
 		if (spec === undefined || !/^[a-z][\w-]*/u.test(spec)) {
 			return;
 		}
-		const path = chainCommands(m, n).join(" ");
+		const path = await commandPath(m, n);
 		const args = spec.slice(spec.split(/\s/u)[0]?.length).trim();
 		const opts = asNode(n.arguments[1]);
 		const hidden =
@@ -200,7 +140,7 @@ export const extractSubcommands: Extractor = (bundle) => {
 			...(hidden && { gate: "hidden" }),
 		});
 	});
-	return unique([...out, ...helpKind(bundle, "subcommand")]);
+	return unique([...out, ...(await helpKind(bundle, "subcommand"))]);
 };
 
 /** The gate of an `addOption` argument: `hidden`, `hidden unless <condition>`, or none. */
@@ -229,7 +169,7 @@ const optionGate = (
 };
 
 /** `at` and `args` are in `m`; `owner` (the command chain) is in `om`. */
-const addFlag = (
+const addFlag = async (
 	out: SurfaceItem[],
 	m: Module,
 	at: Node,
@@ -237,8 +177,8 @@ const addFlag = (
 	args: readonly Node[],
 	gate?: string,
 	om = m,
-): void => {
-	const spec = constString(m, asNode(args[0]));
+): Promise<void> => {
+	const spec = await constString(m, asNode(args[0]));
 	if (spec === undefined || !SPEC.test(spec)) {
 		return;
 	}
@@ -247,8 +187,8 @@ const addFlag = (
 	if (name === undefined) {
 		return;
 	}
-	const desc = constString(m, asNode(args[1]));
-	const cmd = chainCommands(om, owner).join(" ");
+	const desc = await constString(m, asNode(args[1]));
+	const cmd = await commandPath(om, owner);
 	out.push({
 		kind: "flag",
 		name: cmd === "" ? name : `${cmd} ${name}`,
@@ -261,33 +201,45 @@ const addFlag = (
 	});
 };
 
-export const extractFlags: Extractor = (bundle) => {
+export const extractFlags: Extractor = async (bundle) => {
 	const out: SurfaceItem[] = [];
-	scan(bundle, [".option(", ".requiredOption(", ".addOption("], (m, n) => {
-		const name = method(n);
-		if (
-			n.type !== "CallExpression" ||
-			n.callee.type !== "MemberExpression" ||
-			name === undefined
-		) {
-			return;
-		}
-		const owner = asNode(n.callee.object);
-		if (!owner) {
-			return;
-		}
-		if (name === "option" || name === "requiredOption") {
-			addFlag(out, m, n, owner, n.arguments);
-			return;
-		}
-		const arg = asNode(n.arguments[0]);
-		if (name !== "addOption" || !arg) {
-			return;
-		}
-		const o = optionOf(m, arg);
-		if (o) {
-			addFlag(out, o.m, o.n, owner, o.n.arguments, optionGate(m, arg, o), m);
-		}
-	});
-	return unique([...out, ...helpKind(bundle, "flag")]);
+	await scan(
+		bundle,
+		[".option(", ".requiredOption(", ".addOption("],
+		async (m, n) => {
+			const name = method(n);
+			if (
+				n.type !== "CallExpression" ||
+				n.callee.type !== "MemberExpression" ||
+				name === undefined
+			) {
+				return;
+			}
+			const owner = asNode(n.callee.object);
+			if (!owner) {
+				return;
+			}
+			if (name === "option" || name === "requiredOption") {
+				await addFlag(out, m, n, owner, n.arguments);
+				return;
+			}
+			const arg = asNode(n.arguments[0]);
+			if (name !== "addOption" || !arg) {
+				return;
+			}
+			const o = await optionOf(m, arg);
+			if (o) {
+				await addFlag(
+					out,
+					o.m,
+					o.n,
+					owner,
+					o.n.arguments,
+					optionGate(m, arg, o),
+					m,
+				);
+			}
+		},
+	);
+	return unique([...out, ...(await helpKind(bundle, "flag"))]);
 };

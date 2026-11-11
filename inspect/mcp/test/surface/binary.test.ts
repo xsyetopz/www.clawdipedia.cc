@@ -19,7 +19,7 @@ const prog = (): Promise<Program> => {
 };
 const get = async (kind: string) => {
 	const p = await prog();
-	const found = await surface(await p.bundle(), kind, p.modules);
+	const found = await surface(p.bundle(), kind, p.modules);
 	return found.map((i) => i.name);
 };
 
@@ -27,11 +27,10 @@ describe.skipIf(!has)("installed binary 2.1.309", () => {
 	test("tool: the names of tool-gates", async () => {
 		const n = await get("tool");
 		const p = await prog();
-		const bundle = await p.bundle();
+		const bundle = p.bundle();
+		const base = await baseTools(bundle, new Resolver());
 		expect(n).toEqual(
-			[
-				...new Set(baseTools(bundle, new Resolver()).tools.map((t) => t.name)),
-			].toSorted(byCode),
+			[...new Set(base.tools.map((t) => t.name))].toSorted(byCode),
 		);
 		expect(n).toContain("Bash");
 		expect(n).toContain("Agent");
@@ -121,7 +120,7 @@ describe.skipIf(!has)("installed binary 2.1.309", () => {
 		}
 		expect(n).not.toContain("bedrock-2023-05-31");
 		const p = await prog();
-		const found = await surface(await p.bundle(), "beta", p.modules);
+		const found = await surface(p.bundle(), "beta", p.modules);
 		expect(found.find((i) => i.name === "context-1m-2025-08-07")?.detail).toBe(
 			"long_context",
 		);
@@ -247,7 +246,7 @@ describe.skipIf(!hasSchema)("setting-key against the generated schema", () => {
 
 	test("names every nested leaf property path of the schema, and no other", async () => {
 		const p = await program(schemaVersion);
-		const found = await surface(await p.bundle(), "setting-key", p.modules);
+		const found = await surface(p.bundle(), "setting-key", p.modules);
 		const got = found.map((i) => i.name);
 		expect(got).toEqual(leaves);
 	}, 300_000);

@@ -1,5 +1,6 @@
 // Anchor 1 of kind `env`: the typed registry `reg(ns,{NAME:()=>v,...})`.
 import type { Bundle, Module, Node, NodeOf } from "../../ast.ts";
+import { mapSeq } from "../../seq.ts";
 import { asNode, keyOf, type Prop, scan, strings } from "../common.ts";
 import type { Variable } from "./objects.ts";
 import { type Add, NAME } from "./shared.ts";
@@ -24,7 +25,10 @@ interface RegistryType {
 	values?: string[];
 }
 
-const registryType = (m: Module, getter: Node): RegistryType | undefined => {
+const registryType = async (
+	m: Module,
+	getter: Node,
+): Promise<RegistryType | undefined> => {
 	if (
 		getter.type !== "ArrowFunctionExpression" ||
 		getter.body.type !== "Identifier"
@@ -42,7 +46,7 @@ const registryType = (m: Module, getter: Node): RegistryType | undefined => {
 		return undefined;
 	}
 	const a0 = asNode(init.arguments[0]);
-	const values = strings(m, a0);
+	const values = await strings(m, a0);
 	const opts = a0?.type === "ObjectExpression" ? m.src(a0) : "";
 	return {
 		method: c.property.name,
@@ -64,16 +68,16 @@ const namedProps = (
 };
 
 /** The names of an object whose getters are mostly typed (`H.bool()`, ...); a constants namespace is not. */
-const addRegistry = (
+const addRegistry = async (
 	m: Module,
 	o: NodeOf<"ObjectExpression">,
 	add: Add,
-): boolean => {
+): Promise<boolean> => {
 	const named = namedProps(o);
 	if (named.length < 3) {
 		return false;
 	}
-	const types = named.map(({ p }) => registryType(m, p.value));
+	const types = await mapSeq(named, ({ p }) => registryType(m, p.value));
 	const typed = types.filter((t) => t !== undefined && TYPES.has(t.method));
 	if (typed.length * 2 < types.length) {
 		return false;
@@ -91,17 +95,17 @@ const addRegistry = (
 };
 
 /** Add the names of every env registry in the bundle; return their namespaces. */
-export const scanRegistries = (
+export const scanRegistries = async (
 	bundle: Bundle,
 	add: Add,
-): { m: Module; v: Variable }[] => {
+): Promise<{ m: Module; v: Variable }[]> => {
 	const regs: { m: Module; v: Variable }[] = [];
-	scan(bundle, [":()=>"], (m, n) => {
+	await scan(bundle, [":()=>"], async (m, n) => {
 		if (n.type !== "CallExpression" || n.arguments.length !== 2) {
 			return;
 		}
 		const o = n.arguments[1];
-		if (o?.type !== "ObjectExpression" || !addRegistry(m, o, add)) {
+		if (o?.type !== "ObjectExpression" || !(await addRegistry(m, o, add))) {
 			return;
 		}
 		const ns = asNode(n.arguments[0]);

@@ -22,9 +22,9 @@ const BETA = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*-\d{4}-\d\d-\d\d$/u;
 const COMPACT = /^[a-z]+(?:-[a-z]+)*-\d{8}$/u;
 const VERSION = /^(?:bedrock|vertex)-/u;
 
-export const extractBetas: Extractor = (bundle) => {
+export const extractBetas: Extractor = async (bundle) => {
 	const out: SurfaceItem[] = [];
-	scan(bundle, ["-20"], (m, n) => {
+	await scan(bundle, ["-20"], async (m, n) => {
 		const name = strLit(n);
 		if (name === undefined) {
 			return;
@@ -37,7 +37,7 @@ export const extractBetas: Extractor = (bundle) => {
 		const p = m.parent(n);
 		const group =
 			p?.type === "CallExpression" && p.arguments[1] === n
-				? constString(m, asNode(p.arguments[0]))
+				? await constString(m, asNode(p.arguments[0]))
 				: undefined;
 		const hasGroup = group !== undefined && group !== "";
 		if (!dated && !hasGroup) {

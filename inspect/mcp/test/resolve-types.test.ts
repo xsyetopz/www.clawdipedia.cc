@@ -103,9 +103,9 @@ describe("types", () => {
 			e: ["string"],
 		});
 	});
-	test("merging sites of different kinds keeps both types", () => {
+	test("merging sites of different kinds keeps both types", async () => {
 		expect(
-			mergedTypes([
+			await mergedTypes([
 				[str("level", "info")],
 				[{ key: "level", opt: false, val: { k: "num", v: 1 } }],
 			]),

@@ -4,8 +4,8 @@ import { type Index, unitsOf } from "../src/prepare.ts";
 
 /** Parse `text` as the module `a.js` and return an Index with its units. */
 export const indexOf = async (text: string): Promise<Index> => {
-	const bundle = await Bundle.parse([{ name: "/$bunfs/root/a.js", text }]);
-	const m = bundle.get("a.js");
+	const bundle = new Bundle([{ name: "/$bunfs/root/a.js", text }]);
+	const m = await bundle.get("a.js");
 	if (m === undefined) {
 		throw new Error("module a.js is missing");
 	}

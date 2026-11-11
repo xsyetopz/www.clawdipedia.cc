@@ -7,6 +7,7 @@ import {
 	type NodeOf,
 	returnsOf,
 } from "../../ast.ts";
+import { mapSeq } from "../../seq.ts";
 import { keyOf, type SurfaceItem } from "../common.ts";
 import { item } from "./item.ts";
 import {
@@ -21,7 +22,7 @@ import {
 
 const MAX_DEPTH = 40;
 
-type Found = NonNullable<ReturnType<typeof functionOf>>;
+type Found = NonNullable<Awaited<ReturnType<typeof functionOf>>>;
 
 /**
  * The nested keys of the zod value `n` at `path`. It follows helper functions through their returns (with their
@@ -38,7 +39,7 @@ export class KeyWalk {
 		this.gate = gate;
 	}
 
-	walk(cx: Cx, n: Node | null | undefined): void {
+	async walk(cx: Cx, n: Node | null | undefined): Promise<void> {
 		if (!n || cx.depth > MAX_DEPTH) {
 			return;
 		}
@@ -46,80 +47,92 @@ export class KeyWalk {
 			n.type === "ArrowFunctionExpression" ||
 			n.type === "FunctionExpression"
 		) {
-			for (const r of returnsOf(n)) {
-				this.go(cx, r);
-			}
+			await mapSeq(returnsOf(n), (r) => this.go(cx, r));
 		} else if (n.type === "ConditionalExpression") {
-			this.#conditional(cx, n);
+			await this.#conditional(cx, n);
 		} else if (n.type === "LogicalExpression") {
-			this.go(cx, n.right);
+			await this.go(cx, n.right);
 		} else if (n.type === "Identifier") {
-			this.#identifier(cx, n);
+			await this.#identifier(cx, n);
 		} else if (n.type === "CallExpression") {
-			this.#call(cx, n);
+			await this.#call(cx, n);
 		}
 	}
 
-	go(cx: Cx, x: Node | null | undefined, over: Partial<Cx> = {}): void {
-		this.walk({ ...cx, ...over, depth: cx.depth + 1 }, x);
+	async go(
+		cx: Cx,
+		x: Node | null | undefined,
+		over: Partial<Cx> = {},
+	): Promise<void> {
+		await this.walk({ ...cx, ...over, depth: cx.depth + 1 }, x);
 	}
 
-	#key(cx: Cx, k: string, v: Node, at: number, env = cx.env): void {
+	async #key(
+		cx: Cx,
+		k: string,
+		v: Node,
+		at: number,
+		env = cx.env,
+	): Promise<void> {
 		const path = `${cx.path}.${k}`;
-		this.out.push(item("setting-key", cx.m, path, v, at, this.gate));
-		this.go(cx, v, { path, env });
+		const it = await item("setting-key", cx.m, path, v, at, this.gate);
+		this.out.push(it);
+		await this.go(cx, v, { path, env });
 	}
 
-	#shape(cx: Cx, o: Node | undefined): void {
+	async #shape(cx: Cx, o: Node | undefined): Promise<void> {
 		if (o?.type !== "ObjectExpression") {
-			this.#fromEntries(cx, o);
+			await this.#fromEntries(cx, o);
 			return;
 		}
-		for (const p of o.properties) {
+		await mapSeq(o.properties, async (p) => {
 			if (p.type === "SpreadElement") {
-				this.#shape(cx, spreadTarget(p.argument));
-				continue;
+				await this.#shape(cx, spreadTarget(p.argument));
+				return;
 			}
 			const k = keyOf(p);
 			if (k !== undefined && k !== "") {
-				this.#key(cx, k, p.value, p.start);
+				await this.#key(cx, k, p.value, p.start);
 			}
-		}
+		});
 	}
 
-	#fromEntries(cx: Cx, o: Node | undefined): void {
-		const shape = entriesShape(cx.m, o);
+	async #fromEntries(cx: Cx, o: Node | undefined): Promise<void> {
+		const shape = await entriesShape(cx.m, o);
 		if (!shape) {
 			return;
 		}
-		for (const k of shape.keys) {
+		await mapSeq(shape.keys, async (k) => {
 			const env = new Map(cx.env).set(shape.param, { value: k });
-			this.#key(cx, k, shape.value, shape.value.start, env);
-		}
+			await this.#key(cx, k, shape.value, shape.value.start, env);
+		});
 	}
 
 	/** `k === "default" ? a : b` with `k` bound to a constant picks one branch. */
-	#conditional(cx: Cx, n: NodeOf<"ConditionalExpression">): void {
+	async #conditional(
+		cx: Cx,
+		n: NodeOf<"ConditionalExpression">,
+	): Promise<void> {
 		const { test } = n;
 		if (test.type === "BinaryExpression" && /^[!=]==?$/u.test(test.operator)) {
-			const l = constOf(cx.m, test.left, cx.env);
-			const r = constOf(cx.m, test.right, cx.env);
+			const l = await constOf(cx.m, test.left, cx.env);
+			const r = await constOf(cx.m, test.right, cx.env);
 			if (l !== undefined && r !== undefined) {
 				const same = (l === r) === test.operator.startsWith("=");
-				this.go(cx, same ? n.consequent : n.alternate);
+				await this.go(cx, same ? n.consequent : n.alternate);
 				return;
 			}
 		}
-		this.go(cx, n.consequent);
-		this.go(cx, n.alternate);
+		await this.go(cx, n.consequent);
+		await this.go(cx, n.alternate);
 	}
 
-	#identifier(cx: Cx, n: NodeOf<"Identifier">): void {
+	async #identifier(cx: Cx, n: NodeOf<"Identifier">): Promise<void> {
 		const v = cx.m.variable(n);
 		const b = v && cx.env.get(v);
 		if (b) {
 			if ("n" in b) {
-				this.go(cx, b.n, { m: b.m });
+				await this.go(cx, b.n, { m: b.m });
 			}
 			return;
 		}
@@ -127,64 +140,64 @@ export class KeyWalk {
 		const o =
 			v &&
 			(cx.m.bundle
-				? cx.m.bundle.origin(cx.m, v)
+				? await cx.m.bundle.origin(cx.m, v)
 				: { module: cx.m, variable: v });
 		const d = o?.variable.defs[0];
 		if (o && d?.type === "Variable") {
-			this.go(cx, d.node.init, { m: o.module });
+			await this.go(cx, d.node.init, { m: o.module });
 		}
 	}
 
-	#call(cx: Cx, n: CallNode): void {
+	async #call(cx: Cx, n: CallNode): Promise<void> {
 		const { arguments: args, callee } = n;
 		if (callee.type === "MemberExpression") {
-			this.#method(cx, callee, args);
+			await this.#method(cx, callee, args);
 			return;
 		}
-		const f = functionOf(cx.m, callee);
+		const f = await functionOf(cx.m, callee);
 		if (f) {
-			this.#constructed(cx, f, args);
+			await this.#constructed(cx, f, args);
 		} else {
 			// `s()` where `var s=p(()=>z.object({…}))`: the memoized schema of a variable
-			this.go(cx, callee);
+			await this.go(cx, callee);
 		}
 	}
 
-	#method(cx: Cx, callee: NodeOf<"MemberExpression">, args: Node[]): void {
+	async #method(
+		cx: Cx,
+		callee: NodeOf<"MemberExpression">,
+		args: Node[],
+	): Promise<void> {
 		const p = callee.property;
-		this.go(cx, callee.object);
+		await this.go(cx, callee.object);
 		if (p.type !== "Identifier" || !SAME_PATH_METHODS.has(p.name)) {
 			return;
 		}
-		for (const a of args) {
-			if (a.type === "ObjectExpression") {
-				this.#shape(cx, a);
-			} else {
-				this.go(cx, a);
-			}
-		}
+		await mapSeq(args, (a) =>
+			a.type === "ObjectExpression" ? this.#shape(cx, a) : this.go(cx, a),
+		);
 	}
 
-	#constructed(cx: Cx, f: Found, args: Node[]): void {
+	async #constructed(cx: Cx, f: Found, args: Node[]): Promise<void> {
 		const type = zodType(f.module, f.fn);
 		if (type === undefined) {
-			this.#helper(cx, f, args);
+			await this.#helper(cx, f, args);
 		} else if (type === "object") {
-			this.#shape(cx, args[0]);
+			await this.#shape(cx, args[0]);
 		} else if (type === "record") {
 			const value = args.length > 1 ? args[1] : args[0];
-			this.go(cx, value, { path: `${cx.path}.*` });
+			await this.go(cx, value, { path: `${cx.path}.*` });
 		} else if (SAME_PATH.has(type)) {
-			for (const a of args) {
-				for (const e of a.type === "ArrayExpression" ? a.elements : [a]) {
-					this.go(cx, e);
-				}
-			}
+			await mapSeq(args, (a) => {
+				const list: (Node | null)[] =
+					a.type === "ArrayExpression" ? a.elements : [a];
+				return mapSeq(list, (e) => this.go(cx, e));
+			});
 		}
 	}
 
 	/** A helper that builds a schema: its returns, with each parameter bound to its argument. */
-	#helper(cx: Cx, f: Found, args: Node[]): void {
+	async #helper(cx: Cx, f: Found, args: Node[]): Promise<void> {
 		const bound = new Map(cx.env);
 		for (const [i, p] of f.fn.params.entries()) {
 			const v = p.type === "Identifier" ? f.module.variable(p) : undefined;
@@ -193,14 +206,13 @@ export class KeyWalk {
 				bound.set(v, { m: cx.m, n: a });
 			}
 		}
-		for (const r of returnsOf(f.fn)) {
-			this.go(cx, r, { m: f.module, env: bound });
-		}
+		await mapSeq(returnsOf(f.fn), (r) =>
+			this.go(cx, r, { m: f.module, env: bound }),
+		);
 		// a callback that a wrapper outside the program calls: `p(()=>z.object({…}))` returns `lib.lazy(e)`
-		for (const a of args) {
-			if (isFn(a)) {
-				this.go(cx, a);
-			}
-		}
+		await mapSeq(
+			args.filter((a) => isFn(a)),
+			(a) => this.go(cx, a),
+		);
 	}
 }

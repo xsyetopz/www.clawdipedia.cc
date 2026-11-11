@@ -1,4 +1,5 @@
 import type { Module, Node, Variable } from "../ast.ts";
+import { mapSeq } from "../seq.ts";
 
 /** What a parameter is bound to in one call: the argument, or null when the call leaves it out. */
 export type Env = Map<Variable, Ref | null>;
@@ -63,7 +64,9 @@ export const loosen = (v: Val): Val =>
 		: { k: "unk", text: "" };
 
 type Keyed = Extract<Entry, { key: string }>;
-export type TyOf = (v: Val) => JType[] | undefined;
+export type TyOf = (
+	v: Val,
+) => JType[] | undefined | Promise<JType[] | undefined>;
 
 /** The JSON types of a value the code shows: its own, or the types it holds when unknown. */
 export const defaultTy: TyOf = (v) => {
@@ -75,7 +78,7 @@ export const defaultTy: TyOf = (v) => {
 };
 
 /** The value of a key that one site gives as a literal and another as an unknown value: the literal is one case only. */
-const mergeUnknown = (pv: Val, ev: Val, ty: TyOf): Val => {
+const mergeUnknown = async (pv: Val, ev: Val, ty: TyOf): Promise<Val> => {
 	const known = pv.k === "unk" ? ev : pv;
 	const unknown = pv.k === "unk" ? pv : ev;
 	// An object keeps its keys, and its leaf values become unknown.
@@ -83,13 +86,18 @@ const mergeUnknown = (pv: Val, ev: Val, ty: TyOf): Val => {
 		return loosen(known);
 	}
 	if (unknown.k === "unk") {
-		return { ...unknown, t: jsonTypes(union(ty(known), ty(unknown))) ?? null };
+		const t = union(await ty(known), await ty(unknown));
+		return { ...unknown, t: jsonTypes(t) ?? null };
 	}
 	return unknown;
 };
 
 /** The value of a key that two sites give as known values; undefined when the first stands. */
-const mergeKnown = (pv: Val, ev: Val, ty: TyOf): Val | undefined => {
+const mergeKnown = async (
+	pv: Val,
+	ev: Val,
+	ty: TyOf,
+): Promise<Val | undefined> => {
 	if (
 		(pv.k === "str" || pv.k === "enum") &&
 		(ev.k === "str" || ev.k === "enum")
@@ -100,7 +108,7 @@ const mergeKnown = (pv: Val, ev: Val, ty: TyOf): Val | undefined => {
 	if (pv.k === "obj" && ev.k === "obj") {
 		return {
 			k: "obj",
-			e: mergeEntries([pv.e, ev.e], ty),
+			e: await mergeEntries([pv.e, ev.e], ty),
 			...(pv.open === true || ev.open === true ? { open: true } : {}),
 		};
 	}
@@ -110,21 +118,26 @@ const mergeKnown = (pv: Val, ev: Val, ty: TyOf): Val | undefined => {
 	}
 	// Two kinds, such as a string and a number: both types.
 	if (pv.k !== ev.k) {
-		return { k: "unk", text: "", t: jsonTypes(union(ty(pv), ty(ev))) ?? null };
+		const t = union(await ty(pv), await ty(ev));
+		return { k: "unk", text: "", t: jsonTypes(t) ?? null };
 	}
 	return undefined;
 };
 
 /** The entry that replaces `prev` when a second site gives the same key as `e`; undefined when `prev` stands. */
-const mergeKeyed = (prev: Keyed, e: Keyed, ty: TyOf): Keyed | undefined => {
+const mergeKeyed = async (
+	prev: Keyed,
+	e: Keyed,
+	ty: TyOf,
+): Promise<Keyed | undefined> => {
 	if (prev.val.k === "unk" || e.val.k === "unk") {
 		return {
 			...prev,
 			opt: prev.opt || e.opt,
-			val: mergeUnknown(prev.val, e.val, ty),
+			val: await mergeUnknown(prev.val, e.val, ty),
 		};
 	}
-	const val = mergeKnown(prev.val, e.val, ty);
+	const val = await mergeKnown(prev.val, e.val, ty);
 	return val && { ...prev, val };
 };
 
@@ -132,29 +145,29 @@ const mergeKeyed = (prev: Keyed, e: Keyed, ty: TyOf): Keyed | undefined => {
  * Merge several literals of one thing: a key missing from any of them becomes optional. `ty` gives the
  * types of an unknown value; without it, a value whose sites differ in type keeps only the types it holds.
  */
-export const mergeEntries = (
+export const mergeEntries = async (
 	lists: Entry[][],
 	ty: TyOf = defaultTy,
-): Entry[] => {
+): Promise<Entry[]> => {
 	const seen = new Map<string, Entry>();
 	const count = new Map<string, number>();
-	for (const l of lists) {
-		for (const e of l) {
+	await mapSeq(lists, (l) =>
+		mapSeq(l, async (e) => {
 			if (!("key" in e)) {
-				continue;
+				return;
 			}
 			count.set(e.key, (count.get(e.key) ?? 0) + 1);
 			const prev = seen.get(e.key);
 			if (!prev || !("key" in prev)) {
 				seen.set(e.key, e);
-				continue;
+				return;
 			}
-			const merged = mergeKeyed(prev, e, ty);
+			const merged = await mergeKeyed(prev, e, ty);
 			if (merged) {
 				seen.set(e.key, merged);
 			}
-		}
-	}
+		}),
+	);
 	const out: Entry[] = [];
 	for (const e of seen.values()) {
 		out.push(

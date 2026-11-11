@@ -4,7 +4,7 @@ import { mkdir, mkdtemp, readdir, rename, rm } from "node:fs/promises";
 import { homedir, tmpdir } from "node:os";
 import { basename, join } from "node:path";
 
-import { Module } from "./ast.ts";
+import { mapSeq, Module } from "./ast.ts";
 import { listInstalls, program } from "./binary.ts";
 import { renameChunks, renamer } from "./clean.ts";
 import { exists } from "./fs.ts";
@@ -106,19 +106,17 @@ const cleanModules = async (
 		literals: new Map(),
 		skipped: {},
 	};
-	const cleaned = await Promise.all(
-		js.map(async (x) => {
-			const name = x.name.split("/").pop() ?? x.name;
-			// The module stays inside this call, so its syntax tree is freed after use.
-			const m = await parsed(x);
-			if (typeof m === "string") {
-				return { name, error: m };
-			}
-			const render = renamer(m);
-			const units = unitsOf(name, m, render);
-			return { name, units, text: render(0, m.text.length) };
-		}),
-	);
+	// One module at a time: its syntax tree stays inside this call, so it is freed before the next parse.
+	const cleaned = await mapSeq(js, async (x) => {
+		const name = x.name.split("/").pop() ?? x.name;
+		const m = await parsed(x);
+		if (typeof m === "string") {
+			return { name, error: m };
+		}
+		const render = renamer(m);
+		const units = unitsOf(name, m, render);
+		return { name, units, text: render(0, m.text.length) };
+	});
 	for (const c of cleaned) {
 		if ("error" in c) {
 			out.skipped[c.name] = c.error;

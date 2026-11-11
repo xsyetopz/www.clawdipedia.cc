@@ -18,10 +18,10 @@ import {
 const ID =
 	/^claude-(?:\d[\d-]*-)?(?:opus|sonnet|haiku|fable|mythos)(?:-[a-z0-9]+)*(?:@\d+)?(?:\[1m\])?$/u;
 
-export const extractModels: Extractor = (bundle) => {
+export const extractModels: Extractor = async (bundle) => {
 	const out: SurfaceItem[] = [];
 	let aliases: { m: string; start: number; names: string[] } | undefined;
-	scan(bundle, ['"claude-', '"opusplan"'], (m, n) => {
+	await scan(bundle, ['"claude-', '"opusplan"'], async (m, n) => {
 		const id = strLit(n);
 		if (id !== undefined && ID.test(id)) {
 			out.push({
@@ -35,7 +35,7 @@ export const extractModels: Extractor = (bundle) => {
 		if (n.type !== "ArrayExpression") {
 			return;
 		}
-		const s = strings(m, n);
+		const s = await strings(m, n);
 		if (
 			s?.includes("opusplan") === true &&
 			s.includes("sonnet") &&

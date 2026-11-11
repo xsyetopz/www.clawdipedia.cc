@@ -39,17 +39,16 @@ const findTaskItem = (n: Node | undefined): Node | undefined => {
 
 /** The common base is spread from the same builder as the main payload, with two arguments as
  * there: copy the keys that builder sends. */
-const copyBase = (
+const copyBase = async (
 	src: Src,
 	retAt: number,
 	schema: Json,
 	subSchema: Json,
-): void => {
+): Promise<void> => {
 	const baseCall = src.at(retAt + "{...".length, "CallExpression");
+	const called = baseCall && (await R.call(src, baseCall));
 	const baseKeys = new Set(
-		(baseCall ? (R.call(src, baseCall) ?? []) : []).flatMap((e) =>
-			"key" in e ? [e.key] : [],
-		),
+		(called ?? []).flatMap((e) => ("key" in e ? [e.key] : [])),
 	);
 	for (const [k, v] of Object.entries(props(schema))) {
 		if (baseKeys.has(k)) {
@@ -59,20 +58,20 @@ const copyBase = (
 };
 
 /** The subagent panel gets its own payload: the common base plus `columns` and `tasks`. */
-const buildSubagent = (
+const buildSubagent = async (
 	src: Src,
 	retAt: number,
 	schema: Json,
-): Json | undefined => {
-	const sub = only("subagentStatusLine execution");
+): Promise<Json | undefined> => {
+	const sub = await only("subagentStatusLine execution");
 	const sm = /\{\.\.\.[\w$]+\([\w$]+,[\w$]+\),columns:[\w$]+,tasks:/u.exec(
 		sub.text,
 	);
 	if (!sm) {
 		return undefined;
 	}
-	const subEntries = R.objectAt(sub, sm.index);
-	const subSchema = objSchema(subEntries, "plain");
+	const subEntries = await R.objectAt(sub, sm.index);
+	const subSchema = await objSchema(subEntries, "plain");
 	const tasks = subEntries.find((e) => "key" in e && e.key === "tasks");
 	const each =
 		tasks && "val" in tasks && tasks.val.k === "unk"
@@ -81,10 +80,10 @@ const buildSubagent = (
 	if (each?.type === "ObjectExpression") {
 		props(subSchema)["tasks"] = {
 			type: "array",
-			items: objSchema(R.entries(sub, each), "plain"),
+			items: await objSchema(await R.entries(sub, each), "plain"),
 		};
 	}
-	copyBase(src, retAt, schema, subSchema);
+	await copyBase(src, retAt, schema, subSchema);
 	markObserved(
 		subSchema,
 		stdinKeys(readJson(join(CAPTURES, "pty/statusline.subagent-tick.json"))),
@@ -95,15 +94,18 @@ const buildSubagent = (
 	};
 };
 
-export const buildStatusLine = (): { file: string; schema: Json } => {
-	const src = only("tengu_status_line_result");
-	const main = literalAfter(
+export const buildStatusLine = async (): Promise<{
+	file: string;
+	schema: Json;
+}> => {
+	const src = await only("tengu_status_line_result");
+	const main = await literalAfter(
 		src,
 		/return\{\.\.\.[\w$]+\([\w$]+,[\w$]+\),\.\.\.[\w$]+&&\{session_name:/u,
 	);
 	// literalAfter points at the `{` before session_name; the full literal starts at the `return{` before it.
 	const retAt = src.text.lastIndexOf("return{", main.at) + "return".length;
-	const schema = objSchema(R.objectAt(src, retAt), "plain");
+	const schema = await objSchema(await R.objectAt(src, retAt), "plain");
 	const tmpl = parseTemplate(src);
 	const codeOnly: string[] = [];
 	const tmplOnly: string[] = [];
@@ -119,7 +121,7 @@ export const buildStatusLine = (): { file: string; schema: Json } => {
 		}
 	}
 
-	const subDef = buildSubagent(src, retAt, schema);
+	const subDef = await buildSubagent(src, retAt, schema);
 	if (tmplOnly.length > 0) {
 		note(
 			`status-line: in the prompt template, and the code builds that object from a literal without it: ${tmplOnly.join(", ")}`,

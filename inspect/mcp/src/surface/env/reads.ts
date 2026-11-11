@@ -8,6 +8,7 @@ import {
 	type Node,
 	type NodeOf,
 } from "../../ast.ts";
+import { mapSeq } from "../../seq.ts";
 import { asNode, keyOf, type Prop } from "../common.ts";
 import { isProcessEnv } from "./objects.ts";
 import { type Ctx, paramOf, UPPER } from "./shared.ts";
@@ -18,12 +19,12 @@ const nodes = (...xs: (Node | null | undefined)[]): Node[] =>
 	xs.flatMap((x) => asNode(x) ?? []);
 
 /** `x.NAME`, `x["NAME"]`, `x[param]` of an env object. */
-const member = (c: Ctx, m: Module, n: Node): boolean => {
+const member = async (c: Ctx, m: Module, n: Node): Promise<boolean> => {
 	if (n.type !== "MemberExpression" || isProcessEnv(n)) {
 		return false;
 	}
 	const obj = asNode(n.object);
-	if (!obj || !c.env.is(m, obj)) {
+	if (!obj || !(await c.env.is(m, obj))) {
 		return false;
 	}
 	if (!n.computed) {
@@ -36,7 +37,7 @@ const member = (c: Ctx, m: Module, n: Node): boolean => {
 		return true;
 	}
 	const prop = asNode(n.property);
-	const s = constString(m, prop);
+	const s = await constString(m, prop);
 	const p = s === undefined && prop ? paramOf(m, prop) : undefined;
 	if (s !== undefined) {
 		c.add(m, n, s);
@@ -47,15 +48,15 @@ const member = (c: Ctx, m: Module, n: Node): boolean => {
 };
 
 /** `"NAME" in x` of an env object. */
-const inCheck = (c: Ctx, m: Module, n: Node): boolean => {
+const inCheck = async (c: Ctx, m: Module, n: Node): Promise<boolean> => {
 	if (n.type !== "BinaryExpression" || n.operator !== "in") {
 		return false;
 	}
 	const right = asNode(n.right);
-	if (!right || !c.env.is(m, right)) {
+	if (!right || !(await c.env.is(m, right))) {
 		return false;
 	}
-	const s = constString(m, asNode(n.left));
+	const s = await constString(m, asNode(n.left));
 	if (s !== undefined) {
 		c.add(m, n, s);
 	}
@@ -63,12 +64,12 @@ const inCheck = (c: Ctx, m: Module, n: Node): boolean => {
 };
 
 /** `const {NAME}=x` of an env object. */
-const destructure = (c: Ctx, m: Module, n: Node): void => {
+const destructure = async (c: Ctx, m: Module, n: Node): Promise<void> => {
 	const init = n.type === "VariableDeclarator" ? asNode(n.init) : undefined;
 	if (n.type !== "VariableDeclarator" || n.id.type !== "ObjectPattern") {
 		return;
 	}
-	if (!init || !c.env.is(m, init)) {
+	if (!init || !(await c.env.is(m, init))) {
 		return;
 	}
 	for (const p of n.id.properties) {
@@ -79,49 +80,59 @@ const destructure = (c: Ctx, m: Module, n: Node): void => {
 	}
 };
 
-const keyName = (m: Module, p: Prop): string | undefined =>
-	p.computed ? constString(m, p.key) : keyOf(p);
+const keyName = (m: Module, p: Prop): Promise<string | undefined> =>
+	p.computed ? constString(m, p.key) : Promise.resolve(keyOf(p));
 
 /** Add the child-env names of an object; return the nodes it spreads. */
-const objectNames = (
+const objectNames = async (
 	c: Ctx,
 	m: Module,
 	o: NodeOf<"ObjectExpression">,
-): Node[] => {
+): Promise<Node[]> => {
 	const spread: Node[] = [];
-	for (const p of o.properties) {
+	await mapSeq(o.properties, async (p) => {
 		if (p.type === "SpreadElement") {
 			spread.push(p.argument);
-			continue;
+			return;
 		}
-		const k = keyName(m, p);
+		const k = await keyName(m, p);
 		if (k !== undefined && UPPER.test(k)) {
 			c.add(m, p, k, CHILD);
 		}
-	}
+	});
 	return spread;
 };
 
 /** The keys of `{...env, NAME:v}`, of an `env:{...}` option, and of objects spread into those. */
-const childEnv = (c: Ctx, m: Module, n: NodeOf<"ObjectExpression">): void => {
+const childEnv = async (
+	c: Ctx,
+	m: Module,
+	n: NodeOf<"ObjectExpression">,
+): Promise<void> => {
 	const parent = m.parent(n);
 	const option =
 		parent?.type === "Property" &&
 		keyOf(parent) === "env" &&
 		parent.value === n;
-	if (!option && !c.env.is(m, n)) {
+	if (!option && !(await c.env.is(m, n))) {
 		return;
 	}
 	const stack: Node[] = [n];
-	for (let o = stack.pop(); o; o = stack.pop()) {
+	const next = async (): Promise<void> => {
+		const o = stack.pop();
+		if (!o) {
+			return;
+		}
 		if (o.type === "LogicalExpression") {
 			stack.push(...nodes(o.right));
 		} else if (o.type === "ConditionalExpression") {
 			stack.push(...nodes(o.consequent, o.alternate));
 		} else if (o.type === "ObjectExpression") {
-			stack.push(...objectNames(c, m, o));
+			stack.push(...(await objectNames(c, m, o)));
 		}
-	}
+		return next();
+	};
+	await next();
 };
 
 /** An object of two or more uppercase keys is a list (anchor 5). */
@@ -139,7 +150,7 @@ const objectList = (c: Ctx, m: Module, n: NodeOf<"ObjectExpression">): void => {
 };
 
 /** OpenTelemetry SDK readers (`x.getNumberFromEnv("OTEL_…")`); property names survive minifying. */
-const otelReader = (c: Ctx, m: Module, n: Node): void => {
+const otelReader = async (c: Ctx, m: Module, n: Node): Promise<void> => {
 	if (
 		n.type !== "CallExpression" ||
 		n.callee.type !== "MemberExpression" ||
@@ -149,7 +160,7 @@ const otelReader = (c: Ctx, m: Module, n: Node): void => {
 		return;
 	}
 	const arg = asNode(n.arguments[0]);
-	const s = constString(m, arg);
+	const s = await constString(m, arg);
 	const p = s === undefined && arg ? paramOf(m, arg) : undefined;
 	if (s !== undefined) {
 		c.add(m, n, s);
@@ -188,7 +199,7 @@ const comparedParams = (
 };
 
 /** `(j)=>Object.entries(process.env).filter(([k])=>k.toUpperCase()===j)`: a helper that matches its parameter against each name. */
-const entriesHelper = (c: Ctx, m: Module, n: Node): void => {
+const entriesHelper = async (c: Ctx, m: Module, n: Node): Promise<void> => {
 	if (
 		n.type !== "CallExpression" ||
 		n.callee.type !== "MemberExpression" ||
@@ -200,7 +211,7 @@ const entriesHelper = (c: Ctx, m: Module, n: Node): void => {
 		return;
 	}
 	const arg = asNode(n.arguments[0]);
-	if (!arg || !c.env.is(m, arg)) {
+	if (!arg || !(await c.env.is(m, arg))) {
 		return;
 	}
 	const fn = enclosingFn(m, n);
@@ -217,42 +228,43 @@ const argsOf = (n: Node): (Node | null)[] => {
 };
 
 /** `"--setenv","NAME",v`: a name set for the sandboxed child (bubblewrap arguments). */
-const setenv = (c: Ctx, m: Module, n: Node): void => {
+const setenv = async (c: Ctx, m: Module, n: Node): Promise<void> => {
 	const args = argsOf(n);
-	for (const [i, a] of args.entries()) {
+	await mapSeq(args.entries(), async ([i, a]) => {
 		const at = asNode(a);
-		if (at && constString(m, at) === "--setenv") {
-			const k = constString(m, asNode(args[i + 1]));
+		if (at && (await constString(m, at)) === "--setenv") {
+			const k = await constString(m, asNode(args[i + 1]));
 			if (k !== undefined && UPPER.test(k)) {
 				c.add(m, at, k, CHILD);
 			}
 		}
-	}
+	});
 };
 
 /** Spreads and names of other lists may sit among the strings (`["A_B",...x,y,"C_D"]`). */
-const arrayList = (c: Ctx, m: Module, n: Node): void => {
+const arrayList = async (c: Ctx, m: Module, n: Node): Promise<void> => {
 	if (n.type !== "ArrayExpression") {
 		return;
 	}
-	const names = n.elements.flatMap((e) => constString(m, asNode(e)) ?? []);
+	const found = await mapSeq(n.elements, (e) => constString(m, asNode(e)));
+	const names = found.filter((x) => x !== undefined);
 	if (names.length >= 2 && names.every((x) => UPPER.test(x))) {
 		c.lists.push({ m, n, names });
 	}
 };
 
 /** Visit one node for anchors 2 to 5. */
-export const readNode = (c: Ctx, m: Module, n: Node): void => {
-	if (member(c, m, n) || inCheck(c, m, n)) {
+export const readNode = async (c: Ctx, m: Module, n: Node): Promise<void> => {
+	if ((await member(c, m, n)) || (await inCheck(c, m, n))) {
 		return;
 	}
-	destructure(c, m, n);
+	await destructure(c, m, n);
 	if (n.type === "ObjectExpression") {
-		childEnv(c, m, n);
+		await childEnv(c, m, n);
 		objectList(c, m, n);
 	}
-	otelReader(c, m, n);
-	entriesHelper(c, m, n);
-	setenv(c, m, n);
-	arrayList(c, m, n);
+	await otelReader(c, m, n);
+	await entriesHelper(c, m, n);
+	await setenv(c, m, n);
+	await arrayList(c, m, n);
 };

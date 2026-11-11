@@ -42,7 +42,7 @@ if (import.meta.main) {
 		},
 	});
 	const p = await program(a.binary);
-	const bundle = await p.bundle();
+	const bundle = p.bundle();
 	const kinds =
 		a.kind === undefined || a.kind === "" ? Object.keys(KINDS) : [a.kind];
 	const runs = await Promise.all(

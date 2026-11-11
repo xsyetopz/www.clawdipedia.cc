@@ -129,7 +129,7 @@ export const audit = async (version: string, root: string) => {
 	const c: Ctx = {
 		version,
 		root,
-		bundle: await p.bundle(),
+		bundle: p.bundle(),
 		items,
 		sweep: sweepOf(
 			await readJson(join(root, "captures", version, "print", "sweep.json")),

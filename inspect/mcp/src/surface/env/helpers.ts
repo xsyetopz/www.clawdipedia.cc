@@ -1,14 +1,15 @@
 // The parts of kind `env` that run after the scan: helpers that pass a name on, and lists that fill each other.
 import { callsOf, constString, type Fn, nameOf, type Node } from "../../ast.ts";
+import { mapSeq } from "../../seq.ts";
 import { asNode, type SurfaceItem } from "../common.ts";
 import { type Ctx, eachName, LISTED, paramOf } from "./shared.ts";
 
 /** A helper may pass its parameter on to another helper (`wt(e)` -> `Su(e)` -> `process.env[e]`). */
-export const resolveHelpers = (c: Ctx): void => {
+export const resolveHelpers = async (c: Ctx): Promise<void> => {
 	const done = new Set<Fn>();
-	for (const h of c.helpers) {
+	await mapSeq(c.helpers, async (h) => {
 		if (done.has(h.fn)) {
-			continue;
+			return;
 		}
 		done.add(h.fn);
 		if (h.index === 0) {
@@ -16,26 +17,26 @@ export const resolveHelpers = (c: Ctx): void => {
 				h.fn,
 				...(nameOf(h.m, h.fn)?.references.map((r) => r.identifier) ?? []),
 			];
-			for (const u of uses) {
-				for (const s of eachName(h.m, u)) {
+			await mapSeq(uses, async (u) => {
+				for (const s of await eachName(h.m, u)) {
 					c.add(h.m, u, s);
 				}
-			}
+			});
 		}
-		for (const call of callsOf(h.m, h.fn)) {
+		await mapSeq(await callsOf(h.m, h.fn), async (call) => {
 			if (!call) {
-				continue;
+				return;
 			}
 			const a = asNode(call.call.arguments[h.index]);
-			const s = constString(call.module, a);
+			const s = await constString(call.module, a);
 			const p = s === undefined && a ? paramOf(call.module, a) : undefined;
 			if (s !== undefined) {
 				c.add(call.module, call.call, s);
 			} else if (p) {
 				c.helpers.push({ m: call.module, ...p });
 			}
-		}
-	}
+		});
+	});
 };
 
 /** Names added from one list count for the next ones, until no list adds a name. */

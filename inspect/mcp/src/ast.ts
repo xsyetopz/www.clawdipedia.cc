@@ -23,3 +23,4 @@ export {
 	strLit,
 } from "./ast/node.ts";
 export type { Def, Ref, Variable } from "./ast/variables.ts";
+export { mapSeq } from "./seq.ts";

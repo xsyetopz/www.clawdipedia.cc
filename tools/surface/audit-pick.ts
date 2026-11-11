@@ -1,4 +1,5 @@
 // The choice of the check for one item: the kind of the item and the reason of the exclusion decide.
+import { mapSeq } from "../../inspect/mcp/src/seq.ts";
 import type { SurfaceItem } from "../../inspect/mcp/src/surface/common.ts";
 import {
 	commandCheck,
@@ -38,7 +39,7 @@ const fileCheck = (c: Ctx, i: SurfaceItem, named: boolean): Verdict => {
 	};
 };
 
-type Mod = NonNullable<ReturnType<Ctx["bundle"]["modules"]["get"]>>;
+type Mod = NonNullable<Awaited<ReturnType<Ctx["bundle"]["get"]>>>;
 
 const objectAround = (m: Mod, start: ReturnType<Mod["nodeAt"]>) => {
 	let row: ReturnType<Mod["parent"]> = start;
@@ -48,10 +49,17 @@ const objectAround = (m: Mod, start: ReturnType<Mod["nodeAt"]>) => {
 	return row;
 };
 
-const modelCheck = (c: Ctx, i: SurfaceItem): Verdict => {
+const modelCheck = async (c: Ctx, i: SurfaceItem): Promise<Verdict> => {
 	const bad: string[] = [];
 	let n = 0;
-	for (const m of allText(c)) {
+	await mapSeq(allText(c), async (t) => {
+		if (!t.text.includes(i.name)) {
+			return;
+		}
+		const m = await c.bundle.get(t.name);
+		if (m === undefined) {
+			return;
+		}
 		for (
 			let at = m.text.indexOf(i.name);
 			at >= 0;
@@ -71,7 +79,7 @@ const modelCheck = (c: Ctx, i: SurfaceItem): Verdict => {
 				bad.push(`${m.name}@${at}`);
 			}
 		}
-	}
+	});
 	return {
 		ok: n > 0 && bad.length === 0,
 		evidence: { occurrences: n, outsideRetiredText: bad.slice(0, 3) },

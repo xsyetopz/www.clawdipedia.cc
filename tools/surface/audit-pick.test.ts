@@ -7,10 +7,10 @@ import type { Ctx } from "./audit-types.ts";
 const SRC =
 	'var T=[{id:"old-model-1",status:"retired"}];var live="new-model-2";fetch({url:"/api/called"});var u="/api/named";';
 
-const ctx = async (): Promise<Ctx> => ({
+const ctx = (): Ctx => ({
 	version: "0.0.0",
 	root: "",
-	bundle: await Bundle.parse([{ name: "/$bunfs/root/a.js", text: SRC }]),
+	bundle: new Bundle([{ name: "/$bunfs/root/a.js", text: SRC }]),
 	items: new Map(),
 	sweep: {},
 	endpointRows: new Map(),
@@ -18,7 +18,7 @@ const ctx = async (): Promise<Ctx> => ({
 });
 
 const verdict = async (kind: string, name: string) => {
-	const [check, run] = pick(await ctx(), "Not a thing to set.", {
+	const [check, run] = pick(ctx(), "Not a thing to set.", {
 		kind,
 		name,
 		module: "a.js",

@@ -3,12 +3,13 @@
 import type { Bundle, CallNode, Module, Node } from "./ast.ts";
 import { asNode } from "./ast/node.ts";
 import type { Entry, Resolver } from "./resolve.ts";
+import { mapSeq } from "./seq.ts";
 
 const esc = (id: string) => id.replaceAll("$", String.raw`\$`);
 
 /** Local names under which a module imports `exportName` from the chunk `chunk`. */
 export const aliasesOf = (
-	src: Module,
+	src: Pick<Module, "text">,
 	chunk: string,
 	exportName: string,
 ): string[] => {
@@ -40,29 +41,27 @@ export const callAt = (src: Module, open: number): CallNode | undefined => {
 };
 
 /** Entries of an argument: an object literal, or the object a name holds. */
-export const argEntries = (
+export const argEntries = async (
 	R: Resolver,
 	src: Module,
 	a: Node | undefined,
-): Entry[] | undefined => {
+): Promise<Entry[] | undefined> => {
 	if (a?.type === "ObjectExpression") {
 		return R.entries(src, a);
 	}
-	if (a?.type === "Identifier") {
-		return R.ident(src, a);
-	}
-	return undefined;
+	const found = a?.type === "Identifier" ? await R.ident(src, a) : undefined;
+	return found;
 };
 
 /**
  * Every call of the event emitter (`async function f(name, attrs){...{...base(),"event.name":...`), by
  * event name: one list of attribute entries per call site, with spreads pinned.
  */
-export const eventSites = (
+export const eventSites = async (
 	bundle: Bundle,
 	R: Resolver,
-): Map<string, Entry[][]> => {
-	const [eSrc, ...more] = bundle.withText('"event.sequence"');
+): Promise<Map<string, Entry[][]>> => {
+	const [eSrc, ...more] = await bundle.withText('"event.sequence"');
 	if (!eSrc || more.length > 0) {
 		throw new Error("event emitter module not found");
 	}
@@ -74,20 +73,23 @@ export const eventSites = (
 		throw new Error("event emitter not found");
 	}
 	const events = new Map<string, Entry[][]>();
-	for (const m of bundle.modules.values()) {
-		const names = m === eSrc ? [fn] : aliasesOf(m, eSrc.name, fn);
-		for (const nm of names) {
+	await mapSeq(bundle.texts, async ([file, text]) => {
+		const names =
+			file === eSrc.name ? [fn] : aliasesOf({ text }, eSrc.name, fn);
+		await mapSeq(names, async (nm) => {
 			const re = new RegExp(`(?<![\\w$.])${esc(nm)}\\("([a-z_]+)"`, "gu");
-			for (const hit of m.text.matchAll(re)) {
+			await mapSeq(text.matchAll(re), async (hit) => {
 				const name = hit[1];
-				if (name === undefined) {
-					continue;
+				const m = await bundle.get(file);
+				if (name === undefined || !m) {
+					return;
 				}
 				const call = callAt(m, hit.index + nm.length);
-				const entries = argEntries(R, m, asNode(call?.arguments[1])) ?? [];
-				events.set(name, [...(events.get(name) ?? []), R.pin(entries)]);
-			}
-		}
-	}
+				const entries =
+					(await argEntries(R, m, asNode(call?.arguments[1]))) ?? [];
+				events.set(name, [...(events.get(name) ?? []), await R.pin(entries)]);
+			});
+		});
+	});
 	return events;
 };

@@ -19,30 +19,35 @@ export const isVoid = (n: Node | null | undefined): boolean =>
 export const keyOf = (
 	m: Module,
 	x: NodeOf<"MemberExpression">,
-): string | undefined => {
+): Promise<string | undefined> => {
 	if (x.computed) {
 		return constString(m, asNode(x.property));
 	}
-	return x.property.type === "Identifier" ? x.property.name : undefined;
+	return Promise.resolve(
+		x.property.type === "Identifier" ? x.property.name : undefined,
+	);
 };
 
 /** The object, property names, and root name of `a.b.c`; undefined for anything else. */
-export const memberPath = (
+export const memberPath = async (
 	m: Module,
 	n: Node,
-): { root: Node; path: string[] } | undefined => {
+): Promise<{ root: Node; path: string[] } | undefined> => {
 	const path: string[] = [];
-	let x = n;
-	while (x.type === "MemberExpression") {
-		const key = keyOf(m, x);
+	const walk = async (x: Node): Promise<Node | undefined> => {
+		if (x.type !== "MemberExpression") {
+			return x;
+		}
+		const key = await keyOf(m, x);
 		const next = asNode(x.object);
 		if (key === undefined || !next) {
 			return undefined;
 		}
 		path.unshift(key);
-		x = next;
-	}
-	return x.type === "Identifier" ? { root: x, path } : undefined;
+		return walk(next);
+	};
+	const root = await walk(n);
+	return root?.type === "Identifier" ? { root, path } : undefined;
 };
 
 /** The parameters of `fn` (in module `dm`) bound to the arguments of `call` (in `m`). */
@@ -160,15 +165,17 @@ export const spreadParts = (n: Node): Node[] | undefined => {
 export const propKey = (
 	m: Module,
 	p: NodeOf<"Property">,
-): string | undefined => {
+): Promise<string | undefined> => {
 	const k = p.key;
 	if (p.computed) {
 		return constString(m, k);
 	}
 	if (k.type === "Identifier") {
-		return k.name;
+		return Promise.resolve(k.name);
 	}
-	return k.type === "Literal" ? String(litValue(k)) : undefined;
+	return Promise.resolve(
+		k.type === "Literal" ? String(litValue(k)) : undefined,
+	);
 };
 
 /** The expression a wrapper passes its value through (`await x`, `a,b`); undefined for any other node. */

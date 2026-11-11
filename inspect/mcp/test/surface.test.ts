@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 
 import { Bundle, children, type Node } from "../src/ast.ts";
 import { isNode } from "../src/ast/node.ts";
+import { mapSeq } from "../src/seq.ts";
 import { literal, short, unique } from "../src/surface/common.ts";
 import { envPlaces } from "../src/surface/env.ts";
 import { KINDS, surface } from "../src/surface/index.ts";
@@ -21,8 +22,8 @@ const firstArray = (n: Node): Node | undefined => {
 };
 
 const arrayLiterals = async (src: string): Promise<string[]> => {
-	const parsed = await bundle(src);
-	const m = parsed.get("a.js");
+	const parsed = bundle(src);
+	const m = await parsed.get("a.js");
 	if (m === undefined) {
 		throw new Error("module a.js missing");
 	}
@@ -30,9 +31,10 @@ const arrayLiterals = async (src: string): Promise<string[]> => {
 	if (array?.type !== "ArrayExpression") {
 		throw new Error("no array in source");
 	}
-	return array.elements
-		.flatMap((e) => (isNode(e) ? [e] : []))
-		.map((e) => literal(m, e));
+	return mapSeq(
+		array.elements.flatMap((e) => (isNode(e) ? [e] : [])),
+		(e) => literal(m, e),
+	);
 };
 
 describe("registry", () => {
@@ -60,7 +62,7 @@ describe("registry", () => {
 	});
 
 	test("throws on an unknown kind", async () => {
-		const error = await surface(await bundle("var a=1"), "nope").catch(
+		const error = await surface(bundle("var a=1"), "nope").catch(
 			(error_: unknown) => error_,
 		);
 		expect(error).toHaveProperty(
@@ -70,7 +72,7 @@ describe("registry", () => {
 	});
 
 	test("computes a kind once per bundle", async () => {
-		const b = await bundle('var a=["PreToolUse","PostToolUse"]');
+		const b = bundle('var a=["PreToolUse","PostToolUse"]');
 		expect(await surface(b, "hook-event")).toBe(await surface(b, "hook-event"));
 	});
 });
@@ -89,7 +91,7 @@ describe("common helpers", () => {
 
 	test("a repeated name keeps its first module and its last offset in it", async () => {
 		const a = "var x=process.env.AAA_ONE;var y=process.env.AAA_ONE;";
-		const b = await Bundle.parse([
+		const b = new Bundle([
 			{ name: "/$bunfs/root/a.js", text: a },
 			{ name: "/$bunfs/root/b.js", text: a },
 		]);
@@ -206,7 +208,7 @@ var D=["VIA_COMPARE_A","VIA_COMPARE_B"];
 function L(e){return D.some((n)=>process.env[n]!==e[n])}
 var K=["ONLY_LISTED_A","VIA_COMPARE_A","VIA_COMPARE_B"];
 `;
-		const places = envPlaces(await bundle(src));
+		const places = await envPlaces(bundle(src));
 		const of = (name: string) =>
 			places.filter((p) => p.name === name).map((p) => p.detail);
 		expect(of("VIA_COMPARE_A")).toEqual(["str", undefined]);

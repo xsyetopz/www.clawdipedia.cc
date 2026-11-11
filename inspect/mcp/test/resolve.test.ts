@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 
-import type { Entry } from "../src/resolve.ts";
+import type { Entry, Val } from "../src/resolve.ts";
+import { mapSeq } from "../src/seq.ts";
 import {
 	coalesceKeys,
 	computedKeys,
@@ -13,43 +14,51 @@ import {
 } from "./resolve-helpers.ts";
 
 describe("mergeEntries", () => {
-	test("different string literals at two sites give an enum", () => {
-		expect(mergedVal([[str("subtype", "a")], [str("subtype", "b")]])).toEqual({
+	test("different string literals at two sites give an enum", async () => {
+		expect(
+			await mergedVal([[str("subtype", "a")], [str("subtype", "b")]]),
+		).toEqual({
 			k: "enum",
 			v: ["a", "b"],
 		});
 	});
-	test("a literal at one site and a computed value at another is not a const", () => {
-		for (const lists of [
-			[[str("level", "info")], [unk("level", "n")]],
-			[[unk("level", "n")], [str("level", "info")]],
-		]) {
-			expect(mergedVal(lists)?.k).toBe("unk");
-		}
+	test("a literal at one site and a computed value at another is not a const", async () => {
+		const vals = await mapSeq(
+			[
+				[[str("level", "info")], [unk("level", "n")]],
+				[[unk("level", "n")], [str("level", "info")]],
+			],
+			mergedVal,
+		);
+		expect(vals.map((v) => v?.k)).toEqual(["unk", "unk"]);
 	});
 });
 
 describe("mergeEntries with an unknown value", () => {
-	test("an object keeps its keys, its leaves become unknown, and it may be no object", () => {
+	test("an object keeps its keys, its leaves become unknown, and it may be no object", async () => {
 		const lit: Entry = {
 			key: "message",
 			opt: false,
 			val: { k: "obj", e: [str("stop_reason", "stop_sequence")] },
 		};
-		for (const lists of [
-			[[lit], [unk("message", "n")]],
-			[[unk("message", "n")], [lit]],
-		]) {
-			expect(mergedVal(lists)).toEqual({
-				k: "obj",
-				e: [{ key: "stop_reason", opt: false, val: { k: "unk", text: "" } }],
-				open: true,
-			});
-		}
+		const vals = await mapSeq(
+			[
+				[[lit], [unk("message", "n")]],
+				[[unk("message", "n")], [lit]],
+			],
+			mergedVal,
+		);
+		const want: Val = {
+			k: "obj",
+			e: [{ key: "stop_reason", opt: false, val: { k: "unk", text: "" } }],
+			open: true,
+		};
+		expect(vals).toEqual([want, want]);
 	});
-	test("a number at one site and an unknown value at another is unknown", () => {
+	test("a number at one site and an unknown value at another is unknown", async () => {
 		const num: Entry = { key: "n", opt: false, val: { k: "num", v: 0 } };
-		expect(mergedVal([[num], [unk("n", "x")]])?.k).toBe("unk");
+		const val = await mergedVal([[num], [unk("n", "x")]]);
+		expect(val?.k).toBe("unk");
 	});
 });
 

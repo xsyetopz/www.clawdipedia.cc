@@ -13,6 +13,7 @@ import {
 } from "./ast.ts";
 import { asNode } from "./ast/node.ts";
 import type { Resolver } from "./resolve.ts";
+import { firstSeq, mapSeq } from "./seq.ts";
 import {
 	alwaysNull,
 	calleeFn,
@@ -45,14 +46,14 @@ const add = (out: Out, when: Cond[], tool: Tool): void => {
 	});
 };
 
-const toolItem = (
+const toolItem = async (
 	R: Resolver,
 	m: Module,
 	e: Node,
 	when: Cond[],
 	out: Out,
-): void => {
-	const found = toolName(R, m, e);
+): Promise<void> => {
+	const found = await toolName(R, m, e);
 	if (!found) {
 		add(out, when, { name: m.src(e), when: [], unresolved: true });
 		return;
@@ -72,44 +73,44 @@ const toolItem = (
 	});
 };
 
-const listItems = (
+const listItems = async (
 	R: Resolver,
 	m: Module,
 	n: NodeOf<"ArrayExpression">,
 	when: Cond[],
 	out: Out,
 	depth: number,
-): void => {
-	for (const e of n.elements) {
+): Promise<void> => {
+	await mapSeq(n.elements, async (e) => {
 		if (e === null) {
-			continue;
+			return;
 		}
 		if (e.type === "SpreadElement") {
-			items(R, m, e.argument, when, out, depth + 1);
-		} else if (!alwaysNull(m, e)) {
-			toolItem(R, m, e, when, out);
+			await items(R, m, e.argument, when, out, depth + 1);
+		} else if (!(await alwaysNull(m, e))) {
+			await toolItem(R, m, e, when, out);
 		}
-	}
+	});
 };
 
-const branches = (
+const branches = async (
 	R: Resolver,
 	m: Module,
 	n: NodeOf<"ConditionalExpression">,
 	when: Cond[],
 	out: Out,
 	depth: number,
-): void => {
+): Promise<void> => {
 	const { test } = n;
-	if (alwaysNull(m, test)) {
-		items(R, m, n.alternate, when, out, depth + 1);
+	if (await alwaysNull(m, test)) {
+		await items(R, m, n.alternate, when, out, depth + 1);
 		return;
 	}
-	const i = test.type === "Identifier" ? initOf(m, test) : undefined;
+	const i = test.type === "Identifier" ? await initOf(m, test) : undefined;
 	const text = i ? `${m.src(test)} (=${i.m.src(i.n)})` : m.src(test);
 	const site = i ?? { m, n: test };
-	items(R, m, n.consequent, [...when, { ...site, text }], out, depth + 1);
-	items(
+	await items(R, m, n.consequent, [...when, { ...site, text }], out, depth + 1);
+	await items(
 		R,
 		m,
 		n.alternate,
@@ -120,14 +121,14 @@ const branches = (
 };
 
 /** Handles a call that gives tools: `list.filter(f)`, a null `x?.()`, or a function that returns them. False when it is none of these. */
-const callItems = (
+const callItems = async (
 	R: Resolver,
 	m: Module,
 	n: CallNode,
 	when: Cond[],
 	out: Out,
 	depth: number,
-): boolean => {
+): Promise<boolean> => {
 	const c = n.callee;
 	const arg = n.arguments[0];
 	if (
@@ -137,38 +138,38 @@ const callItems = (
 		arg
 	) {
 		const cond = { m, n: arg, text: m.src(arg) };
-		items(R, m, c.object, [...when, cond], out, depth + 1);
+		await items(R, m, c.object, [...when, cond], out, depth + 1);
 		return true;
 	}
 	// `x?.()` with `x=null` gives no tool.
-	if (n.optional && alwaysNull(m, c)) {
+	if (n.optional && (await alwaysNull(m, c))) {
 		return true;
 	}
-	const f = calleeFn(m, n);
+	const f = await calleeFn(m, n);
 	if (!f) {
 		return false;
 	}
-	for (const ret of returnsOf(f.fn)) {
-		if (ret !== null && !alwaysNull(f.module, ret)) {
-			items(R, f.module, ret, when, out, depth + 1);
+	await mapSeq(returnsOf(f.fn), async (ret) => {
+		if (ret !== null && !(await alwaysNull(f.module, ret))) {
+			await items(R, f.module, ret, when, out, depth + 1);
 		}
-	}
+	});
 	return true;
 };
 
 /** The expressions that hold the tools of `n`: each side of `a ?? b`, the value of a name, or the export of a chunk. */
-const partsOf = (
+const partsOf = async (
 	m: Module,
 	n: Node,
-	r: ReturnType<typeof required>,
-): { m: Module; n: Node }[] => {
+	r: Awaited<ReturnType<typeof required>>,
+): Promise<{ m: Module; n: Node }[]> => {
 	if (n.type === "LogicalExpression") {
 		return [
 			{ m, n: n.left },
 			{ m, n: n.right },
 		];
 	}
-	const i = n.type === "Identifier" ? initOf(m, n) : undefined;
+	const i = n.type === "Identifier" ? await initOf(m, n) : undefined;
 	if (i) {
 		return [i];
 	}
@@ -176,38 +177,39 @@ const partsOf = (
 };
 
 /** Each tool of an expression that gives a list of tools, with the conditions it is under. */
-const items = (
+const items = async (
 	R: Resolver,
 	m: Module,
 	n: Node,
 	when: Cond[],
 	out: Out,
 	depth = 0,
-): void => {
+): Promise<void> => {
 	if (depth > 8) {
 		add(out, when, { name: `...${m.src(n)}`, when: [], unresolved: true });
 		return;
 	}
 	if (n.type === "ArrayExpression") {
-		listItems(R, m, n, when, out, depth);
+		await listItems(R, m, n, when, out, depth);
 		return;
 	}
 	if (n.type === "ConditionalExpression") {
-		branches(R, m, n, when, out, depth);
+		await branches(R, m, n, when, out, depth);
 		return;
 	}
-	if (n.type === "CallExpression" && callItems(R, m, n, when, out, depth)) {
+	if (
+		n.type === "CallExpression" &&
+		(await callItems(R, m, n, when, out, depth))
+	) {
 		return;
 	}
-	if (n.type === "Identifier" && alwaysNull(m, n)) {
+	if (n.type === "Identifier" && (await alwaysNull(m, n))) {
 		return;
 	}
 	// `a ?? b`, `a || b`: the tools of each part. A name or an import: its value.
-	const r = required(m, n);
-	const next = partsOf(m, n, r);
-	for (const x of next) {
-		items(R, x.m, x.n, when, out, depth + 1);
-	}
+	const r = await required(m, n);
+	const next = await partsOf(m, n, r);
+	await mapSeq(next, (x) => items(R, x.m, x.n, when, out, depth + 1));
 	if (next.length === 0) {
 		add(out, when, {
 			name: `...${typeof r === "string" ? r : m.src(n)}`,
@@ -226,63 +228,66 @@ const calleeOf = (x: Node, root: Node) => {
 };
 
 /** The functions that code calls, and the functions those call, `depth` levels down: name to source. */
-const calledFns = (
+const calledFns = async (
 	m: Module,
 	n: Node,
 	out: Map<string, string>,
 	depth = 2,
-): void => {
+): Promise<void> => {
 	const stack = [n];
+	const nodes: Node[] = [];
 	for (let x = stack.pop(); x !== undefined; x = stack.pop()) {
 		stack.push(...children(x));
+		nodes.push(x);
+	}
+	await mapSeq(nodes, async (x) => {
 		const id = asNode(calleeOf(x, n));
 		if (id?.type !== "Identifier" || out.has(id.name)) {
-			continue;
+			return;
 		}
-		const f = functionOf(m, id);
+		const f = await functionOf(m, id);
 		if (!f) {
-			continue;
+			return;
 		}
 		out.set(id.name, clip(f.module.src(f.fn)));
 		if (depth > 1 && f.fn.body) {
-			calledFns(f.module, f.fn.body, out, depth - 1);
+			await calledFns(f.module, f.fn.body, out, depth - 1);
 		}
-	}
+	});
 };
 
 const KEY = "getAllBaseTools:";
 const baseFn = (bundle: Bundle) =>
-	bundle
-		.withText(KEY)
-		.map((m) => {
-			const hit = /getAllBaseTools:[\w$]/u.exec(m.text);
-			return hit === null
-				? undefined
-				: functionOf(m, m.nodeAt(hit.index + KEY.length));
-		})
-		.find((f) => f !== undefined);
+	firstSeq(bundle.namesWith([KEY]), async (name) => {
+		const m = await bundle.get(name);
+		const hit = m && /getAllBaseTools:[\w$]/u.exec(m.text);
+		return hit ? functionOf(m, m.nodeAt(hit.index + KEY.length)) : undefined;
+	});
 
 /** The built-in tools `getAllBaseTools` returns, and the source of the functions their conditions call. */
-export const baseTools = (
+export const baseTools = async (
 	bundle: Bundle,
 	R: Resolver,
-): { module: string; tools: Tool[]; functions: Record<string, string> } => {
-	const f = baseFn(bundle);
+): Promise<{
+	module: string;
+	tools: Tool[];
+	functions: Record<string, string>;
+}> => {
+	const f = await baseFn(bundle);
 	if (!f) {
 		throw new Error("no getAllBaseTools function found");
 	}
 	const out: Out = [];
-	for (const ret of returnsOf(f.fn)) {
+	await mapSeq(returnsOf(f.fn), async (ret) => {
 		if (ret !== null) {
-			items(R, f.module, ret, [], out);
+			await items(R, f.module, ret, [], out);
 		}
-	}
+	});
 	const fns = new Map<string, string>();
-	for (const { conds } of out) {
-		for (const c of conds) {
-			calledFns(c.m, c.n, fns);
-		}
-	}
+	await mapSeq(
+		out.flatMap(({ conds }) => conds),
+		(c) => calledFns(c.m, c.n, fns),
+	);
 	return {
 		module: f.module.name,
 		tools: out.map((o) => o.tool),

@@ -2,6 +2,7 @@
 import { join } from "node:path";
 
 import { type Entry, mergeEntries } from "../../../inspect/mcp/src/resolve.ts";
+import { mapSeq } from "../../../inspect/mcp/src/seq.ts";
 import { isTranscriptSite } from "../transcript-sites.ts";
 import {
 	CAPTURES,
@@ -16,6 +17,7 @@ import {
 	note,
 	only,
 	OUT,
+	parsed,
 	props,
 	R,
 	readJson,
@@ -44,10 +46,10 @@ type Sites = Map<string, Site[]>;
 const REGISTRY = '{user:"transcript",assistant:"transcript"';
 
 /** Entry types of the registry, and the policy string of each that has one. */
-const readRegistry = (
+const readRegistry = async (
 	reg: Src,
-): { types: string[]; policy: Map<string, string> } => {
-	const registry = R.objectAt(reg, idx(reg, REGISTRY));
+): Promise<{ types: string[]; policy: Map<string, string> }> => {
+	const registry = await R.objectAt(reg, idx(reg, REGISTRY));
 	const types = registry.flatMap((e) => ("key" in e ? [e.key] : []));
 	const policy = new Map<string, string>();
 	for (const e of registry) {
@@ -59,14 +61,15 @@ const readRegistry = (
 };
 
 /** Fields the writer adds to every message line: the literal in insertMessageChain plus its spreads. */
-const commonFields = (): Json => {
+const commonFields = async (): Promise<Json> => {
 	const wRe = /parentUuid:[\w$]+\?null:[\w$]+,logicalParentUuid:/u;
-	const w = mods.find((m) => wRe.test(m.text));
-	if (!w) {
+	const found = mods.find((m) => wRe.test(m.text));
+	if (!found) {
 		throw new Error("insertMessageChain literal not found");
 	}
+	const w = await parsed(found);
 	const wAt = w.text.lastIndexOf("{", idx(w, wRe));
-	return objSchema(R.objectAt(w, wAt), "const");
+	return objSchema(await R.objectAt(w, wAt), "const");
 };
 
 const addSite = (sites: Sites, t: string, site: Site): void => {
@@ -76,45 +79,49 @@ const addSite = (sites: Sites, t: string, site: Site): void => {
 };
 
 /** Literals where `type:"<t>"` comes later, such as an assistant message built as {message, ..., type:"assistant"}: the literal that holds the key. */
-const midSites = (m: Src, types: string[], sites: Sites): void => {
-	const mid = /,type:"([\w-]+)"[,}]/gu;
-	for (let h = mid.exec(m.text); h; h = mid.exec(m.text)) {
+const midSites = async (
+	m: Src,
+	hits: RegExpExecArray[],
+	sites: Sites,
+): Promise<void> => {
+	await mapSeq(hits, async (h) => {
 		const t = group(h, 1);
-		if (!types.includes(t)) {
-			continue;
-		}
 		const prop = m.parent(m.nodeAt(h.index + 1));
 		const obj = prop && m.parent(prop);
 		if (prop?.type !== "Property" || obj?.type !== "ObjectExpression") {
-			continue;
+			return;
 		}
 		const list = sites.get(t) ?? [];
 		if (!list.some((x) => x.src === m && x.at === obj.start)) {
-			list.push({ src: m, at: obj.start, entries: R.entries(m, obj) });
+			list.push({ src: m, at: obj.start, entries: await R.entries(m, obj) });
 		}
 		sites.set(t, list);
-	}
+	});
 };
 
 /** Every `{type:"<t>",...}` literal in the program. */
-const collectSites = (types: string[]): Sites => {
+const collectSites = async (types: string[]): Promise<Sites> => {
 	const sites: Sites = new Map();
 	const re = /\{(?:\.\.\.[\w$.()]+,)?type:"([\w-]+)"[,}]/gu;
-	for (const m of mods) {
-		let hit: RegExpExecArray | null = re.exec(m.text);
-		while (hit) {
-			const t = group(hit, 1);
-			if (types.includes(t)) {
-				addSite(sites, t, {
-					src: m,
-					at: hit.index,
-					entries: R.objectAt(m, hit.index),
-				});
-			}
-			hit = re.exec(m.text);
+	const mid = /,type:"([\w-]+)"[,}]/gu;
+	const typed = (text: string, find: RegExp) =>
+		[...text.matchAll(find)].filter((h) => types.includes(group(h, 1)));
+	await mapSeq(mods, async (t) => {
+		const here = typed(t.text, re);
+		const later = typed(t.text, mid);
+		if (here.length === 0 && later.length === 0) {
+			return;
 		}
-		midSites(m, types, sites);
-	}
+		const m = await parsed(t);
+		await mapSeq(here, async (hit) => {
+			addSite(sites, group(hit, 1), {
+				src: m,
+				at: hit.index,
+				entries: await R.objectAt(m, hit.index),
+			});
+		});
+		await midSites(m, later, sites);
+	});
 	return sites;
 };
 
@@ -170,24 +177,27 @@ const useSites = (t: string, x: Shared): Site[] => {
 };
 
 /** Add the keys a probe saw that no constructor has: find the later write of each. */
-const addProbeKeys = (
+const addProbeKeys = async (
 	t: string,
 	schema: Json,
 	withType: Record<string, Json>,
 	seen: unknown,
-): void => {
+): Promise<void> => {
 	if (!isStringArray(seen)) {
 		return;
 	}
 	const lost: string[] = [];
-	for (const k of seen.filter((s) => !(s in withType))) {
-		const site = laterWrite(k);
-		if (site) {
-			withType[k] = site;
-		} else {
-			lost.push(k);
-		}
-	}
+	await mapSeq(
+		seen.filter((s) => !(s in withType)),
+		async (k) => {
+			const site = await laterWrite(k);
+			if (site) {
+				withType[k] = site;
+			} else {
+				lost.push(k);
+			}
+		},
+	);
 	markObserved(schema, seen);
 	if (lost.length > 0) {
 		note(`transcript ${t}: probe keys with no write site: ${lost.join(", ")}`);
@@ -195,12 +205,14 @@ const addProbeKeys = (
 };
 
 /** The schema of one entry type; `noCode` collects types no code writes. */
-const typeDef = (t: string, x: Shared, noCode: string[]): Json => {
+const typeDef = async (
+	t: string,
+	x: Shared,
+	noCode: string[],
+): Promise<Json> => {
 	const use = useSites(t, x);
-	const schema = objSchema(
-		mergeEntries(use.map((s) => R.pin(s.entries))),
-		"const",
-	);
+	const pinned = await mapSeq(use, (s) => R.pin(s.entries));
+	const schema = await objSchema(await mergeEntries(pinned), "const");
 	// `type` is the discriminator, whatever the sites say.
 	const withType: Record<string, Json> = { type: { const: t } };
 	for (const [k, v] of Object.entries(props(schema))) {
@@ -224,21 +236,24 @@ const typeDef = (t: string, x: Shared, noCode: string[]): Json => {
 	if (t === "user" && tur !== undefined && tur["type"] === undefined) {
 		tur["type"] = ["object", "string", "array"];
 	}
-	addProbeKeys(t, schema, withType, x.data[`line.${t}`]);
+	await addProbeKeys(t, schema, withType, x.data[`line.${t}`]);
 	schema["$comment"] =
 		`Registry policy: ${x.policy.get(t) ?? "none"}. Code sites used: ${use.length}.${use.length > 0 ? "" : " The program reads this type, and no code in this build writes it, so only `type` is known."}`;
 	return schema;
 };
 
-export const buildTranscript = (): { file: string; schema: Json } => {
-	const reg = only(REGISTRY);
-	const { types, policy } = readRegistry(reg);
+export const buildTranscript = async (): Promise<{
+	file: string;
+	schema: Json;
+}> => {
+	const reg = await only(REGISTRY);
+	const { types, policy } = await readRegistry(reg);
 	const probe = readJson(join(CAPTURES, "print/transcripts.lines.json"));
 	const rawData = probe?.["data"];
 	const x: Shared = {
 		reg,
-		sites: collectSites(types),
-		common: commonFields(),
+		sites: await collectSites(types),
+		common: await commonFields(),
 		streamKeys: streamKeysOf(),
 		data: isJson(rawData) ? rawData : {},
 		policy,
@@ -246,9 +261,9 @@ export const buildTranscript = (): { file: string; schema: Json } => {
 
 	const $defs: Record<string, Json> = {};
 	const noCode: string[] = [];
-	for (const t of types) {
-		$defs[t] = typeDef(t, x, noCode);
-	}
+	await mapSeq(types, async (t) => {
+		$defs[t] = await typeDef(t, x, noCode);
+	});
 	if (noCode.length > 0) {
 		note(
 			`transcript: read-only types (the program reads them, and no code in this build writes them): ${noCode.join(", ")}`,

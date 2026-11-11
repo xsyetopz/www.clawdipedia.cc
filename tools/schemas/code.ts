@@ -17,7 +17,16 @@
 import { join } from "node:path";
 
 import { buildClaudeJson } from "./code/claudejson.ts";
-import { argv, countProps, mods, OUT, R, report, ROOT } from "./code/ctx.ts";
+import {
+	argv,
+	countProps,
+	mapSeq,
+	mods,
+	OUT,
+	R,
+	report,
+	ROOT,
+} from "./code/ctx.ts";
 import { buildFrontmatter } from "./code/frontmatter.ts";
 import { buildOtel } from "./code/otel.ts";
 import { buildStatusLine } from "./code/statusline.ts";
@@ -44,9 +53,9 @@ interface Built {
 	stale: number;
 }
 
-// The builders run in order up to their first await, so their shared state (R, report) fills as before.
+// The builders run one after the other, so their shared state (R, report) fills in order.
 const buildOne = async (build: (typeof builders)[number]): Promise<Built> => {
-	const { file, schema: built } = build();
+	const { file, schema: built } = await build();
 	// Types read by hand from the program, from tools/schemas/manual/; these drop "x-unverified".
 	const hand = await applyManual(file, built, inProgram);
 	const lines: string[] = [];
@@ -75,7 +84,7 @@ const buildOne = async (build: (typeof builders)[number]): Promise<Built> => {
 	return { file, text, lines, stale };
 };
 
-const built = await Promise.all(builders.map((b) => buildOne(b)));
+const built = await mapSeq(builders, buildOne);
 for (const b of built) {
 	for (const l of b.lines) {
 		console.info(l);

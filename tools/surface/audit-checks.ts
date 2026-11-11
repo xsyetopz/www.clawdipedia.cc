@@ -24,8 +24,13 @@ const namesOfKind = (c: Ctx, kind: string) =>
 	);
 
 /** The module of the read site of an item, when it has one. */
-const moduleOf = (c: Ctx, i: SurfaceItem) =>
-	i.module !== null && i.offset !== null ? c.bundle.get(i.module) : undefined;
+const moduleOf = async (c: Ctx, i: SurfaceItem) => {
+	const m =
+		i.module !== null && i.offset !== null
+			? await c.bundle.get(i.module)
+			: undefined;
+	return m;
+};
 
 /** The check of an error text that has no library to name: neither a library, nor a function that reads the environment, nor a name of a variable or a flag may hold it. */
 export const internalError = async (
@@ -35,7 +40,7 @@ export const internalError = async (
 ): Promise<Verdict> => {
 	// Only the versions the program holds, and whole matches: a short phrase of the program's own often turns up in some old major or inside a longer library message, and a loose match can pair a number of the program with a library constant of another value.
 	const lib = await libCheck(c, pool, i.name, false, true);
-	const m = moduleOf(c, i);
+	const m = await moduleOf(c, i);
 	const fn = m && i.offset !== null ? fnAround(m, i.offset) : undefined;
 	const reads =
 		fn && m ? /process\.(env|argv)\b/u.exec(m.src(fn))?.[0] : undefined;
@@ -92,8 +97,11 @@ const calleeName = (
 };
 
 /** Whether the literal at the site is, through `+`, template, `?:` or an options object, an argument of an HTTP verb call. */
-export const endpointCalled = (c: Ctx, i: SurfaceItem): Verdict => {
-	const m = moduleOf(c, i);
+export const endpointCalled = async (
+	c: Ctx,
+	i: SurfaceItem,
+): Promise<Verdict> => {
+	const m = await moduleOf(c, i);
 	if (m === undefined || i.offset === null) {
 		return { ok: false, evidence: { site: "none" } };
 	}

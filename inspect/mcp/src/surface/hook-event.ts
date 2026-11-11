@@ -14,13 +14,13 @@ import {
 
 const PASCAL = /^[A-Z][A-Za-z]+$/u;
 
-export const extractHookEvents: Extractor = (bundle) => {
+export const extractHookEvents: Extractor = async (bundle) => {
 	let best: { m: string; n: Node; names: string[] } | undefined;
-	scan(bundle, ['"PreToolUse"'], (m, n) => {
+	await scan(bundle, ['"PreToolUse"'], async (m, n) => {
 		if (n.type !== "ArrayExpression") {
 			return;
 		}
-		const s = strings(m, n);
+		const s = await strings(m, n);
 		if (
 			!s ||
 			!s.includes("PreToolUse") ||

@@ -20,6 +20,7 @@ import {
 	type NodeOf,
 	type Variable,
 } from "../ast.ts";
+import { mapSeq } from "../seq.ts";
 import {
 	type Extractor,
 	scan,
@@ -46,7 +47,11 @@ const valueOf = (v: Variable): Node | null | undefined => {
 };
 
 /** The builtin error that the class `id` names is or extends (`TypeError`), or undefined. */
-const errorClass = (m: Module, id: Node, depth = 0): string | undefined => {
+const errorClass = async (
+	m: Module,
+	id: Node,
+	depth = 0,
+): Promise<string | undefined> => {
 	if (id.type !== "Identifier" || depth > 8) {
 		return undefined;
 	}
@@ -54,7 +59,9 @@ const errorClass = (m: Module, id: Node, depth = 0): string | undefined => {
 	if (!v0 || v0.defs.length === 0) {
 		return BASE.has(id.name) ? id.name : undefined;
 	}
-	const o = m.bundle ? m.bundle.origin(m, v0) : { module: m, variable: v0 };
+	const o = m.bundle
+		? await m.bundle.origin(m, v0)
+		: { module: m, variable: v0 };
 	if (!o) {
 		return undefined;
 	}
@@ -69,11 +76,14 @@ const errorClass = (m: Module, id: Node, depth = 0): string | undefined => {
 };
 
 /** The text of a message expression, with unknown parts blanked, or undefined when it holds no literal. */
-const text = (m: Module, n: Node | undefined): string | undefined => {
+const text = async (
+	m: Module,
+	n: Node | undefined,
+): Promise<string | undefined> => {
 	if (!n) {
 		return undefined;
 	}
-	const s = constString(m, n);
+	const s = await constString(m, n);
 	if (s !== undefined) {
 		return s;
 	}
@@ -87,8 +97,8 @@ const text = (m: Module, n: Node | undefined): string | undefined => {
 			.join("");
 	}
 	if (n.type === "BinaryExpression" && n.operator === "+") {
-		const l = text(m, n.left);
-		const r = text(m, n.right);
+		const l = await text(m, n.left);
+		const r = await text(m, n.right);
 		if (l === undefined && r === undefined) {
 			return undefined;
 		}
@@ -154,10 +164,10 @@ const writesStderr = (m: Module, n: Node): boolean => {
 	return m.src(n.callee.object) === "process.stderr";
 };
 
-export const extractErrors: Extractor = (bundle) => {
+export const extractErrors: Extractor = async (bundle) => {
 	const out: SurfaceItem[] = [];
-	const add = (m: Module, call: Call, detail: string) => {
-		const t = text(m, call.arguments[0]);
+	const add = async (m: Module, call: Call, detail: string) => {
+		const t = await text(m, call.arguments[0]);
 		if (t === undefined) {
 			return;
 		}
@@ -172,16 +182,16 @@ export const extractErrors: Extractor = (bundle) => {
 			});
 		}
 	};
-	scan(bundle, ["throw", "stderr"], (m, n) => {
+	await scan(bundle, ["throw", "stderr"], async (m, n) => {
 		if (n.type === "ThrowStatement") {
-			for (const call of thrown(n.argument)) {
-				const base = errorClass(m, call.callee);
+			await mapSeq(thrown(n.argument), async (call) => {
+				const base = await errorClass(m, call.callee);
 				if (base !== undefined && base !== "") {
-					add(m, call, `throw ${base}`);
+					await add(m, call, `throw ${base}`);
 				}
-			}
+			});
 		} else if (n.type === "CallExpression" && writesStderr(m, n)) {
-			add(m, n, "stderr");
+			await add(m, n, "stderr");
 		}
 	});
 	return unique(out);

@@ -30,7 +30,9 @@ export interface Ctx {
 
 export const reEscape = (s: string) =>
 	s.replaceAll(/[.*+?^${}()|[\]\\/]/gu, String.raw`\$&`);
-export const allText = (c: Ctx) => [...c.bundle.modules.values()];
+/** The name and text of each file of the program, in bundle order. */
+export const allText = (c: Ctx) =>
+	[...c.bundle.texts].map(([name, text]) => ({ name, text }));
 
 /** Whether a value is a list of strings. */
 export const isStrings = (v: unknown): v is string[] =>

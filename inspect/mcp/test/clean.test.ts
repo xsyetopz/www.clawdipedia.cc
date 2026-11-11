@@ -5,8 +5,8 @@ import { Bundle } from "../src/ast.ts";
 import { cleanModule, renameModule } from "../src/clean.ts";
 
 const mod = async (text: string) => {
-	const bundle = await Bundle.parse([{ name: "/$bunfs/root/a.js", text }]);
-	const found = bundle.get("a.js");
+	const bundle = new Bundle([{ name: "/$bunfs/root/a.js", text }]);
+	const found = await bundle.get("a.js");
 	if (found === undefined) {
 		throw new Error("module a.js missing");
 	}

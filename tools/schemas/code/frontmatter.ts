@@ -18,10 +18,10 @@ import {
 } from "./ctx.ts";
 
 /** Parse `NAME=f(()=>u({...}))` / `NAME=f(()=>OTHER().extend({...}))` zod object definitions. */
-const zodFields = (
+const zodFields = async (
 	src: Src,
 	name: string,
-): { parent?: string | undefined; fields: Entry[]; at: number } => {
+): Promise<{ parent?: string | undefined; fields: Entry[]; at: number }> => {
 	const re = new RegExp(
 		`[,; ]${esc(name)}=[\\w$]+\\(\\(\\)=>(?:([\\w$]+)\\(\\)\\.extend\\(|[\\w$]+\\()\\{`,
 		"u",
@@ -31,7 +31,7 @@ const zodFields = (
 		throw new Error(`zod definition ${name} not found`);
 	}
 	const at = m.index + m[0].length - 1;
-	return { parent: m[1], fields: R.objectAt(src, at), at };
+	return { parent: m[1], fields: await R.objectAt(src, at), at };
 };
 
 const frontmatterField = (e: Entry): [string, Json] | undefined => {
@@ -72,7 +72,7 @@ const readKeys = (text: string, v: string): Set<string> =>
 		].map((m) => group(m, 1)),
 	]);
 
-const buildDefs = (src: Src): Record<string, Json> => {
+const buildDefs = async (src: Src): Promise<Record<string, Json>> => {
 	const reg =
 		/\{skill:[\w$]+\(\(\)=>([\w$]+)\(\)\.strict\(\)\),agent:[\w$]+\(\(\)=>([\w$]+)\(\)\.strict\(\)\),"output-style":[\w$]+\(\(\)=>([\w$]+)\(\)\.strict\(\)\)\}/u.exec(
 			src.text,
@@ -81,11 +81,12 @@ const buildDefs = (src: Src): Record<string, Json> => {
 		throw new Error("frontmatter schema table not found");
 	}
 	const [skill, agent, style] = [group(reg, 1), group(reg, 2), group(reg, 3)];
-	const build = (name: string): Json => {
-		const z = zodFields(src, name);
+	const build = async (name: string): Promise<Json> => {
+		const z = await zodFields(src, name);
 		const p: Record<string, Json> = {};
 		if (z.parent !== undefined) {
-			for (const [k, v] of Object.entries(props(build(z.parent)))) {
+			const parent = await build(z.parent);
+			for (const [k, v] of Object.entries(props(parent))) {
 				p[k] = v;
 			}
 		}
@@ -99,15 +100,15 @@ const buildDefs = (src: Src): Record<string, Json> => {
 	};
 	return {
 		skill: {
-			...build(skill),
+			...(await build(skill)),
 			$comment: "Skills and commands (.md files with a YAML header).",
 		},
 		agent: {
-			...build(agent),
+			...(await build(agent)),
 			$comment: "Subagent files (.md with a YAML header).",
 		},
 		"output-style": {
-			...build(style),
+			...(await build(style)),
 			$comment: "Output style files (.md with a YAML header).",
 		},
 	};
@@ -159,9 +160,12 @@ const noteAllowlist = ($defs: Record<string, Json>): void => {
 	}
 };
 
-export const buildFrontmatter = (): { file: string; schema: Json } => {
-	const src = only("tengu_frontmatter_shadow_unknown_key");
-	const $defs = buildDefs(src);
+export const buildFrontmatter = async (): Promise<{
+	file: string;
+	schema: Json;
+}> => {
+	const src = await only("tengu_frontmatter_shadow_unknown_key");
+	const $defs = await buildDefs(src);
 	noteLoaderReads(src, $defs["skill"] ?? {});
 	noteAllowlist($defs);
 	return {

@@ -167,7 +167,7 @@ export const snapshot = async (
 		}
 	}
 	const p = await program(binary);
-	const bundle = await p.bundle();
+	const bundle = p.bundle();
 	const byKind: Record<string, SurfaceItem[]> = {};
 	const runs = await Promise.all(
 		kinds.map(async (k) => [k, await surface(bundle, k, p.modules)] as const),

@@ -1,3 +1,4 @@
+import type { Bundle, Module, Node, NodeOf } from "../ast.ts";
 // Kind `setting`: the top-level keys of settings.json.
 // Anchors (checked on 2.1.309, task 1.1), the same objects that tools/schemas/generate.ts runs:
 // 1. The object of zod getters whose `$schema` getter ends in
@@ -13,7 +14,7 @@
 // Kind `setting-key`: the nested leaf keys under those settings, as dotted paths (`permissions.allow`), with
 // `*` for a record key (`extraKnownMarketplaces.*.source.repo`). Checked on 2.1.319: the 196 leaf paths equal the
 // nested leaf property paths of schemas/claude-code-managed-settings.json (test/surface/binary.test.ts).
-import type { Bundle, Module, Node, NodeOf } from "../ast.ts";
+import { mapSeq } from "../seq.ts";
 import {
 	type Extractor,
 	keyOf,
@@ -79,13 +80,13 @@ const keysOf = (
 };
 
 /** Each top-level setting: its key, its zod value, and the gate of its table or spread. */
-const topLevel = (bundle: Bundle): Top[] => {
+const topLevel = async (bundle: Bundle): Promise<Top[]> => {
 	const out: Top[] = [];
-	scan(bundle, [ANCHOR, "buildGate:"], (m, n) => {
+	await scan(bundle, [ANCHOR, "buildGate:"], async (m, n) => {
 		if (n.type !== "ObjectExpression") {
 			return;
 		}
-		if (describe(m, prop(n, "$schema")) === ANCHOR) {
+		if ((await describe(m, prop(n, "$schema"))) === ANCHOR) {
 			keysOf(m, n, out);
 			return;
 		}
@@ -101,21 +102,21 @@ const topLevel = (bundle: Bundle): Top[] => {
 	return out;
 };
 
-export const extractSettings: Extractor = (bundle) =>
+export const extractSettings: Extractor = async (bundle) =>
 	unique(
-		topLevel(bundle).map((s) =>
+		await mapSeq(await topLevel(bundle), (s) =>
 			item("setting", s.m, s.name, s.value, s.offset, s.gate),
 		),
 	);
 
-export const extractSettingKeys: Extractor = (bundle) => {
+export const extractSettingKeys: Extractor = async (bundle) => {
 	const out: SurfaceItem[] = [];
-	for (const s of topLevel(bundle)) {
+	await mapSeq(await topLevel(bundle), (s) =>
 		new KeyWalk(out, s.gate).walk(
 			{ m: s.m, path: s.name, env: new Map(), depth: 0 },
 			s.value,
-		);
-	}
+		),
+	);
 	// An object key is set through its own keys, so only the leaves are items.
 	const all = unique(out);
 	const parents = new Set(

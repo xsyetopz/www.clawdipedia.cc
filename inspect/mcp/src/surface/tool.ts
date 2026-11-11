@@ -6,8 +6,8 @@ import { Resolver } from "../resolve.ts";
 import { baseTools } from "../tools.ts";
 import { type Extractor, short, type SurfaceItem, unique } from "./common.ts";
 
-export const extractTools: Extractor = (bundle) => {
-	const r = baseTools(bundle, new Resolver());
+export const extractTools: Extractor = async (bundle) => {
+	const r = await baseTools(bundle, new Resolver());
 	const items: SurfaceItem[] = [];
 	for (const t of r.tools) {
 		const item: SurfaceItem = {

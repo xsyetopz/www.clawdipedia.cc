@@ -7,6 +7,7 @@ import {
 	eventSites,
 } from "../../../inspect/mcp/src/events.ts";
 import { mergeEntries } from "../../../inspect/mcp/src/resolve.ts";
+import { mapSeq } from "../../../inspect/mcp/src/seq.ts";
 import {
 	bundle,
 	esc,
@@ -18,9 +19,11 @@ import {
 	mods,
 	note,
 	only,
+	parsed,
 	R,
 	sortedKeys,
 	type Src,
+	type Text,
 	UNVERIFIED,
 	VERSION,
 } from "./ctx.ts";
@@ -33,8 +36,8 @@ interface Slot {
 }
 
 /** Base attributes: the keys the metrics/events attribute builder assigns. */
-const buildBase = (): { base: Defs; baseNote: string } => {
-	const bSrc = only('["user.id"]=');
+const buildBase = async (): Promise<{ base: Defs; baseNote: string }> => {
+	const bSrc = await only('["user.id"]=');
 	const bAt = idx(bSrc, '["user.id"]=');
 	const bFn = fnAround(bSrc, bAt, () => true);
 	const bText = bFn ? bSrc.src(bFn) : "";
@@ -59,15 +62,16 @@ const buildBase = (): { base: Defs; baseNote: string } => {
 };
 
 /** Attribution keys (agent, skill, plugin, mcp) that cost/token metrics spread in. */
-const buildAttrib = (): Defs => {
+const buildAttrib = async (): Promise<Defs> => {
 	const attrRe = /\{\.\.\.[\w$]+&&\{"agent\.name":/u;
-	const attrSrc = mods.find((m) => attrRe.test(m.text));
-	if (!attrSrc) {
+	const found = mods.find((m) => attrRe.test(m.text));
+	if (!found) {
 		throw new Error("attribution anchor not found");
 	}
+	const attrSrc = await parsed(found);
 	const attrAt = idx(attrSrc, attrRe);
 	const attrib: Defs = {};
-	attrsToProps(R.objectAt(attrSrc, attrAt), attrib);
+	await attrsToProps(await R.objectAt(attrSrc, attrAt), attrib);
 	for (const v of Object.values(attrib)) {
 		v["x-unverified"] = true;
 	}
@@ -113,34 +117,42 @@ const findMethods = (
 };
 
 /** Add the attributes of each `acc()?.add(value, attrs)` call in one module. */
-const collectAdds = (m: Src, nm: string, p: Defs, attrib: Defs): void => {
+const collectAdds = async (
+	t: Text,
+	nm: string,
+	p: Defs,
+	attrib: Defs,
+): Promise<void> => {
 	const call = new RegExp(`(?<![\\w$.])${esc(nm)}\\(\\)\\?\\.add\\(`, "gu");
-	let hit: RegExpExecArray | null = call.exec(m.text);
-	while (hit) {
+	const hits = [...t.text.matchAll(call)];
+	if (hits.length === 0) {
+		return;
+	}
+	const m = await parsed(t);
+	await mapSeq(hits, async (hit) => {
 		const open = hit.index + hit[0].length - 1;
 		const arg = callAt(m, open)?.arguments[1];
-		const entries = argEntries(R, m, isNode(arg) ? arg : undefined);
+		const entries = await argEntries(R, m, isNode(arg) ? arg : undefined);
 		if (entries) {
 			const before = R.unresolved.length;
-			attrsToProps(R.spreads(entries), p);
+			await attrsToProps(await R.spreads(entries), p);
 			if (R.unresolved.length > before && Object.keys(attrib).length > 0) {
 				for (const [k, v] of Object.entries(attrib)) {
 					p[k] ??= v;
 				}
 			}
 		}
-		hit = call.exec(m.text);
-	}
+	});
 };
 
 /** Metrics: installMeter registers each counter; accessors expose them; call sites add values. */
-const buildMetrics = (
+const buildMetrics = async (
 	$defs: Defs,
 	base: Defs,
 	baseNote: string,
 	attrib: Defs,
-): void => {
-	const mSrc = only("Count of CLI sessions started");
+): Promise<void> => {
+	const mSrc = await only("Count of CLI sessions started");
 	const slot = findSlots(mSrc);
 	const method = findMethods(mSrc, slot);
 	const accessorSrc = mods.find((m) =>
@@ -150,7 +162,7 @@ const buildMetrics = (
 		throw new Error("metric accessors not found");
 	}
 	const metricProps = new Map<string, Defs>();
-	for (const [meth, name] of method) {
+	await mapSeq(method, async ([meth, name]) => {
 		const acc = new RegExp(
 			`function ([\\w$]+)\\(\\)\\{return [\\w$]+\\(\\)\\.host\\.telemetryHandles\\.${meth}\\(\\)\\}`,
 			"u",
@@ -158,17 +170,15 @@ const buildMetrics = (
 		const p: Defs = {};
 		metricProps.set(name, p);
 		if (!acc) {
-			continue;
+			return;
 		}
 		const accName = group(acc, 1);
-		for (const m of mods) {
+		await mapSeq(mods, async (m) => {
 			const names =
 				m === accessorSrc ? [accName] : aliasesOf(m, accessorSrc.name, accName);
-			for (const nm of names) {
-				collectAdds(m, nm, p, attrib);
-			}
-		}
-	}
+			await mapSeq(names, (nm) => collectAdds(m, nm, p, attrib));
+		});
+	});
 	for (const s of slot.values()) {
 		const own = metricProps.get(s.name) ?? {};
 		$defs[`metric:claude_code.${s.name}`] = {
@@ -184,7 +194,11 @@ const buildMetrics = (
 };
 
 /** Events: bi(name, attrs) emits a log record with the base attributes and event.* fields. */
-const buildEvents = ($defs: Defs, base: Defs, baseNote: string): void => {
+const buildEvents = async (
+	$defs: Defs,
+	base: Defs,
+	baseNote: string,
+): Promise<void> => {
 	const evProps: Defs = {
 		"event.name": { type: "string" },
 		"event.timestamp": { type: "string" },
@@ -192,26 +206,26 @@ const buildEvents = ($defs: Defs, base: Defs, baseNote: string): void => {
 		"prompt.id": { ...UNVERIFIED },
 		"workspace.host_paths": { type: "array" },
 	};
-	const events = eventSites(bundle, R);
-	for (const [name, lists] of events) {
+	const events = await eventSites(bundle, R);
+	await mapSeq(events, async ([name, lists]) => {
 		const p: Defs = {};
-		attrsToProps(mergeEntries(lists), p);
+		await attrsToProps(await mergeEntries(lists), p);
 		$defs[`event:${name}`] = {
 			"x-otel-kind": "event",
 			type: "object",
 			$comment: `${baseNote} Call sites read: ${lists.length}. A key missing from some sites is optional.`,
 			properties: { ...base, ...evProps, ...p, "event.name": { const: name } },
 		};
-	}
+	});
 };
 
-export const buildOtel = (): { file: string; schema: Json } => {
+export const buildOtel = async (): Promise<{ file: string; schema: Json }> => {
 	const $defs: Defs = {};
-	const { base, baseNote } = buildBase();
-	const attrib = buildAttrib();
-	buildMetrics($defs, base, baseNote, attrib);
-	buildSpans($defs, base, baseNote);
-	buildEvents($defs, base, baseNote);
+	const { base, baseNote } = await buildBase();
+	const attrib = await buildAttrib();
+	await buildMetrics($defs, base, baseNote, attrib);
+	await buildSpans($defs, base, baseNote);
+	await buildEvents($defs, base, baseNote);
 
 	const ordered = Object.fromEntries(
 		sortedKeys($defs).map((k): [string, Json] => [k, $defs[k] ?? {}]),

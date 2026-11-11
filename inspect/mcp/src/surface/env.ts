@@ -42,7 +42,7 @@ import { scanRegistries } from "./env/registry.ts";
 import { type Ctx, NAME } from "./env/shared.ts";
 
 /** Every place that names an env variable, in the order found; `extractEnv` keeps the first of each name. */
-export const envPlaces = (bundle: Bundle): SurfaceItem[] => {
+export const envPlaces = async (bundle: Bundle): Promise<SurfaceItem[]> => {
 	const out: SurfaceItem[] = [];
 	const add: Ctx["add"] = (m, n, name, extra = {}) => {
 		if (NAME.test(name)) {
@@ -56,14 +56,13 @@ export const envPlaces = (bundle: Bundle): SurfaceItem[] => {
 		}
 	};
 	const env = new EnvObjects();
-	env.findFactories(scanRegistries(bundle, add));
+	await env.findFactories(await scanRegistries(bundle, add));
 	const c: Ctx = { add, env, helpers: [], lists: [] };
-	scan(bundle, [""], (m, n) => {
-		readNode(c, m, n);
-	});
-	resolveHelpers(c);
+	await scan(bundle, [""], (m, n) => readNode(c, m, n));
+	await resolveHelpers(c);
 	growLists(c, out);
 	return out;
 };
 
-export const extractEnv: Extractor = (bundle) => unique(envPlaces(bundle));
+export const extractEnv: Extractor = async (bundle) =>
+	unique(await envPlaces(bundle));

@@ -183,9 +183,9 @@ const hiddenFlags = (helps: Help[], parsers: Parser[]): SurfaceItem[] => {
 };
 
 /** The subcommands and flags of every help text in the program, and the hidden flags of their parsers. */
-const helpItems = (bundle: Bundle): SurfaceItem[] => {
+const helpItems = async (bundle: Bundle): Promise<SurfaceItem[]> => {
 	const helps: Help[] = [];
-	scan(bundle, ["Usage: claude ", "USAGE"], (m, n) => {
+	await scan(bundle, ["Usage: claude ", "USAGE"], (m, n) => {
 		const own = textOf(n);
 		const h = own === undefined ? undefined : helpOf(m, n, own);
 		if (h) {
@@ -193,7 +193,7 @@ const helpItems = (bundle: Bundle): SurfaceItem[] => {
 		}
 	});
 	const parsers = new Map<Fn, Parser>();
-	scan(bundle, ['"--'], (m, n) => {
+	await scan(bundle, ['"--'], (m, n) => {
 		const flag = comparedFlag(m, n);
 		const fn = flag === undefined ? undefined : fnOf(m, n);
 		if (flag === undefined || !fn) {
@@ -227,7 +227,10 @@ const helpItems = (bundle: Bundle): SurfaceItem[] => {
 };
 
 /** The items of one kind from the help texts. */
-export const helpKind = (
+export const helpKind = async (
 	bundle: Bundle,
 	kind: "flag" | "subcommand",
-): SurfaceItem[] => helpItems(bundle).filter((i) => i.kind === kind);
+): Promise<SurfaceItem[]> => {
+	const items = await helpItems(bundle);
+	return items.filter((i) => i.kind === kind);
+};

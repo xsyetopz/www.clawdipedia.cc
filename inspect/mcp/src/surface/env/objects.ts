@@ -10,6 +10,7 @@ import {
 	type NodeOf,
 	returnsOf,
 } from "../../ast.ts";
+import { everySeq, mapSeq, someSeq } from "../../seq.ts";
 import { asNode } from "../common.ts";
 
 export type Variable = NonNullable<ReturnType<Module["variable"]>>;
@@ -50,25 +51,30 @@ export class EnvObjects {
 	readonly #known = new WeakMap<object, boolean>();
 
 	/** Find the proxy factories: the functions called with a registry namespace as an argument. */
-	findFactories(regs: { m: Module; v: Variable }[]): void {
+	async findFactories(regs: { m: Module; v: Variable }[]): Promise<void> {
 		const queue = [...regs];
-		for (let item = queue.pop(); item; item = queue.pop()) {
+		const next = async (): Promise<void> => {
+			const item = queue.pop();
+			if (!item) {
+				return;
+			}
 			const { m, v } = item;
-			if (this.registries.has(v)) {
-				continue;
+			if (!this.registries.has(v)) {
+				this.registries.add(v);
+				await mapSeq(v.references, async (r) => {
+					const w = await this.#use(m, r.identifier);
+					if (w) {
+						queue.push({ m, v: w });
+					}
+				});
 			}
-			this.registries.add(v);
-			for (const r of v.references) {
-				const w = this.#use(m, r.identifier);
-				if (w) {
-					queue.push({ m, v: w });
-				}
-			}
-		}
+			return next();
+		};
+		await next();
 	}
 
 	/** One use of a registry variable: the registry it is spread into (returned), or the factory it is passed to (recorded). */
-	#use(m: Module, id: Node): Variable | undefined {
+	async #use(m: Module, id: Node): Promise<Variable | undefined> {
 		const p = m.parent(id);
 		if (p?.type === "SpreadElement") {
 			// `QN={...ns1,...ns2}` is a registry too
@@ -80,7 +86,7 @@ export class EnvObjects {
 		}
 		if (p?.type === "CallExpression" && p.arguments.some((a) => a === id)) {
 			const callee = asNode(p.callee);
-			const f = callee && functionOf(m, callee);
+			const f = callee && (await functionOf(m, callee));
 			if (f) {
 				this.factories.add(f.fn);
 			}
@@ -89,9 +95,9 @@ export class EnvObjects {
 	}
 
 	/** Is `n` an env object (anchor 2)? */
-	is(m: Module, n: Node, seen = new Set<unknown>()): boolean {
+	is(m: Module, n: Node, seen = new Set<unknown>()): Promise<boolean> {
 		if (isProcessEnv(n)) {
-			return true;
+			return Promise.resolve(true);
 		}
 		if (n.type === "ObjectExpression") {
 			return this.#any(
@@ -111,17 +117,19 @@ export class EnvObjects {
 		if (n.type === "CallExpression") {
 			return this.#call(m, n, seen);
 		}
-		return n.type === "Identifier" && this.#identifier(m, n, seen);
+		return n.type === "Identifier"
+			? this.#identifier(m, n, seen)
+			: Promise.resolve(false);
 	}
 
-	#any(m: Module, nodes: Node[], seen: Set<unknown>): boolean {
-		return nodes.some((x) => this.is(m, x, seen));
+	#any(m: Module, nodes: Node[], seen: Set<unknown>): Promise<boolean> {
+		return someSeq(nodes, (x) => this.is(m, x, seen));
 	}
 
 	/** A call of a proxy factory, or of a function that returns only env objects. */
-	#call(m: Module, n: CallNode, seen: Set<unknown>): boolean {
+	async #call(m: Module, n: CallNode, seen: Set<unknown>): Promise<boolean> {
 		const callee = asNode(n.callee);
-		const f = callee && functionOf(m, callee);
+		const f = callee && (await functionOf(m, callee));
 		if (!f || seen.has(f.fn)) {
 			return false;
 		}
@@ -132,11 +140,17 @@ export class EnvObjects {
 		const rets = returnsOf(f.fn);
 		return (
 			rets.length > 0 &&
-			rets.every((r) => r !== null && this.is(f.module, r, seen))
+			(await everySeq(rets, (r) =>
+				r === null ? Promise.resolve(false) : this.is(f.module, r, seen),
+			))
 		);
 	}
 
-	#identifier(m: Module, n: NodeOf<"Identifier">, seen: Set<unknown>): boolean {
+	async #identifier(
+		m: Module,
+		n: NodeOf<"Identifier">,
+		seen: Set<unknown>,
+	): Promise<boolean> {
 		const v = m.variable(n);
 		const def = v?.defs[0];
 		if (!v || !def || seen.has(v)) {
@@ -147,20 +161,20 @@ export class EnvObjects {
 			return known;
 		}
 		seen.add(v);
-		const r = this.#binding(m, n, v, seen);
+		const r = await this.#binding(m, n, v, seen);
 		this.#known.set(v, r);
 		return r;
 	}
 
-	#binding(
+	async #binding(
 		m: Module,
 		n: NodeOf<"Identifier">,
 		v: Variable,
 		seen: Set<unknown>,
-	): boolean {
+	): Promise<boolean> {
 		const def = v.defs[0];
 		if (def?.type === "ImportBinding") {
-			const o = m.bundle?.origin(m, v);
+			const o = await m.bundle?.origin(m, v);
 			const id = o?.variable.identifiers[0];
 			return (
 				o !== undefined &&
@@ -180,7 +194,12 @@ export class EnvObjects {
 	}
 
 	/** A parameter is an env object by its default, or when every call passes one. */
-	#parameter(m: Module, fn: Fn, name: string, seen: Set<unknown>): boolean {
+	async #parameter(
+		m: Module,
+		fn: Fn,
+		name: string,
+		seen: Set<unknown>,
+	): Promise<boolean> {
 		const index = fn.params.findIndex((p) => {
 			const id = p.type === "AssignmentPattern" ? p.left : p;
 			return id.type === "Identifier" && id.name === name;
@@ -189,14 +208,16 @@ export class EnvObjects {
 		if (p?.type === "AssignmentPattern") {
 			return isProcessEnv(p.right);
 		}
-		const calls = callsOf(m, fn);
+		const calls = await callsOf(m, fn);
 		return (
 			index !== -1 &&
 			calls.length > 0 &&
-			calls.every((c) => {
+			(await everySeq(calls, (c) => {
 				const a = asNode(c?.call.arguments[index]);
-				return c !== undefined && a !== undefined && this.is(c.module, a, seen);
-			})
+				return c !== undefined && a !== undefined
+					? this.is(c.module, a, seen)
+					: Promise.resolve(false);
+			}))
 		);
 	}
 }

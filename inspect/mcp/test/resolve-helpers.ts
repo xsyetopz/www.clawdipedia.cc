@@ -2,6 +2,7 @@
 import { Bundle, constString, type Fn, returnsOf } from "../src/ast.ts";
 import { asNode } from "../src/ast/node.ts";
 import { type Entry, mergeEntries, Resolver } from "../src/resolve.ts";
+import { mapSeq } from "../src/seq.ts";
 
 export const str = (key: string, v: string): Entry => ({
 	key,
@@ -15,8 +16,8 @@ export const unk = (key: string, text: string): Entry => ({
 });
 
 /** The bundle of one or more chunks, and a resolver for it. */
-export const load = async (files: Record<string, string>) => {
-	const b = await Bundle.parse(
+export const load = (files: Record<string, string>) => {
+	const b = new Bundle(
 		Object.entries(files).map(([name, text]) => ({
 			name: `/$bunfs/root/${name}`,
 			text,
@@ -27,8 +28,8 @@ export const load = async (files: Record<string, string>) => {
 
 /** The module `a.js` of the bundle, which the files must hold. */
 export const moduleA = async (files: Record<string, string>) => {
-	const { b, r } = await load(files);
-	const m = b.get("a.js");
+	const { b, r } = load(files);
+	const m = await b.get("a.js");
 	if (m === undefined) {
 		throw new Error("no module");
 	}
@@ -44,19 +45,19 @@ export const spreadKeys = async (
 	const { m, r } = await moduleA({ "a.js": src, ...extra });
 	const spread = m.at(src.lastIndexOf(`...${id}`), "SpreadElement");
 	const arg = asNode(spread?.argument);
-	const got = arg && r.expr(m, arg);
+	const got = arg && (await r.expr(m, arg));
 	return got?.flatMap((e) => ("key" in e ? [e.key + (e.opt ? "?" : "")] : []));
 };
 
 /** The value of the first entry that `mergeEntries` gives for these sites, when it has a key. */
-export const mergedVal = (lists: Entry[][]) => {
-	const [e] = mergeEntries(lists);
+export const mergedVal = async (lists: Entry[][]) => {
+	const [e] = await mergeEntries(lists);
 	return e !== undefined && "key" in e ? e.val : undefined;
 };
 
 /** The JSON types of the first merged entry. */
-export const mergedTypes = (lists: Entry[][]) => {
-	const val = mergedVal(lists);
+export const mergedTypes = async (lists: Entry[][]) => {
+	const val = await mergedVal(lists);
 	return val && new Resolver().typeOfVal(val);
 };
 
@@ -64,20 +65,15 @@ export const mergedTypes = (lists: Entry[][]) => {
 export const coalesceKeys = async (src: string) => {
 	const { m, r } = await moduleA({ "a.js": src });
 	const o = m.at(m.text.indexOf("{..."), "ObjectExpression");
-	return (
-		o &&
-		r
-			.spreads(r.entries(m, o))
-			.map((e) => ("key" in e ? `${e.key}${e.opt ? "?" : ""}` : ""))
-	);
+	const spread = o && (await r.spreads(await r.entries(m, o)));
+	return spread?.map((e) => ("key" in e ? `${e.key}${e.opt ? "?" : ""}` : ""));
 };
 
 /** The keys of the object literal at `{[` in `files["a.js"]`. */
 export const computedKeys = async (files: Record<string, string>) => {
 	const { m, r } = await moduleA(files);
-	return r
-		.objectAt(m, m.text.indexOf("{["))
-		.map((e) => ("key" in e ? e.key : ""));
+	const entries = await r.objectAt(m, m.text.indexOf("{["));
+	return entries.map((e) => ("key" in e ? e.key : ""));
 };
 
 /** The constant string of the last name in `src`, or undefined. */
@@ -89,9 +85,10 @@ export const lastConst = async (src: string) => {
 /** The key, kind, and string values of each key of the first object literal in `src`. */
 export const valsOf = async (src: string) => {
 	const { m, r } = await moduleA({ "a.js": src });
-	return r
-		.objectAt(m, m.text.indexOf("{"))
-		.map((e) => ("key" in e ? [e.key, e.val.k, "v" in e.val && e.val.v] : []));
+	const entries = await r.objectAt(m, m.text.indexOf("{"));
+	return entries.map((e) =>
+		"key" in e ? [e.key, e.val.k, "v" in e.val && e.val.v] : [],
+	);
 };
 
 /** The JSON type of each key of the object literal `o={...}`. */
@@ -100,11 +97,15 @@ export const types = async (
 	extra: Record<string, string> = {},
 ) => {
 	const { m, r } = await moduleA({ "a.js": src, ...extra });
-	return Object.fromEntries(
-		r
-			.objectAt(m, src.lastIndexOf("o={") + 2)
-			.flatMap((e) => ("key" in e ? [[e.key, r.typeOfVal(e.val)]] : [])),
+	const entries = await r.objectAt(m, src.lastIndexOf("o={") + 2);
+	const typed = await mapSeq(
+		entries,
+		async (
+			e,
+		): Promise<[string, Awaited<ReturnType<Resolver["typeOfVal"]>>][]> =>
+			"key" in e ? [[e.key, await r.typeOfVal(e.val)]] : [],
 	);
+	return Object.fromEntries(typed.flat());
 };
 
 /** The source of each return of the function of `type` that starts at `find`; null for a bare return. */

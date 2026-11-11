@@ -6,10 +6,11 @@ import { eventSites } from "../events.ts";
 import { Resolver } from "../resolve.ts";
 import { type Extractor, unique } from "./common.ts";
 
-export const extractOtelEvents: Extractor = (bundle) => {
-	const module = bundle.withText('"event.sequence"')[0]?.name ?? null;
+export const extractOtelEvents: Extractor = async (bundle) => {
+	const [first] = await bundle.withText('"event.sequence"');
+	const module = first?.name ?? null;
 	return unique(
-		[...eventSites(bundle, new Resolver())].map(([name, sites]) => ({
+		[...(await eventSites(bundle, new Resolver()))].map(([name, sites]) => ({
 			kind: "otel-event",
 			name,
 			module,

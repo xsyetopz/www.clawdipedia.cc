@@ -11,6 +11,7 @@ import {
 	type Variable,
 } from "../ast.ts";
 import { asNode } from "../ast/node.ts";
+import { allSeq, mapSeq } from "../seq.ts";
 import { HeldEntries } from "./held.ts";
 import {
 	inLoopHead,
@@ -34,32 +35,36 @@ export abstract class ValueResolver extends HeldEntries {
 		v: Variable,
 		fn: Fn,
 		depth: number,
-	): Entry[] | undefined;
+	): Promise<Entry[] | undefined>;
 	abstract call(
 		m: Module,
 		call: CallNode,
 		env?: Env,
 		depth?: number,
-	): Entry[] | undefined;
-	abstract pin(entries: Entry[], depth?: number): Entry[];
+	): Promise<Entry[] | undefined>;
+	abstract pin(entries: Entry[], depth?: number): Promise<Entry[]>;
 
 	/** Entries of the object literal whose `{` is at `pos`; empty when there is none. */
-	objectAt(m: Module, pos: number): Entry[] {
+	objectAt(m: Module, pos: number): Promise<Entry[]> {
 		const o = m.at(pos, "ObjectExpression");
-		return o ? this.entries(m, o) : [];
+		return o ? this.entries(m, o) : Promise.resolve([]);
 	}
 
 	/** Entries of an object literal: keys (computed ones when they are constant strings) and spreads. */
-	entries(m: Module, obj: NodeOf<"ObjectExpression">, env?: Env): Entry[] {
+	async entries(
+		m: Module,
+		obj: NodeOf<"ObjectExpression">,
+		env?: Env,
+	): Promise<Entry[]> {
 		const out: Entry[] = [];
-		for (const p of obj.properties) {
+		await mapSeq(obj.properties, async (p) => {
 			if (p.type === "SpreadElement") {
-				this.#spread(m, p.argument, false, env, out);
-				continue;
+				await this.#spread(m, p.argument, false, env, out);
+				return;
 			}
-			const key = propKey(m, p);
+			const key = await propKey(m, p);
 			if (key === undefined) {
-				continue;
+				return;
 			}
 			out.push({
 				key,
@@ -67,22 +72,22 @@ export abstract class ValueResolver extends HeldEntries {
 				val:
 					p.method || p.kind !== "init"
 						? { k: "unk", text: m.src(p.value) }
-						: this.value(m, p.value, env),
+						: await this.value(m, p.value, env),
 			});
-		}
+		});
 		return out;
 	}
 
 	/** Adds the entries a spread of `n` gives to `out`; `opt` marks them as present at some sites only. */
-	#spread(
+	async #spread(
 		m: Module,
 		n: Node,
 		opt: boolean,
 		env: Env | undefined,
 		out: Entry[],
-	) {
+	): Promise<void> {
 		if (n.type === "ObjectExpression") {
-			for (const e of this.entries(m, n, env)) {
+			for (const e of await this.entries(m, n, env)) {
 				out.push({ ...e, opt: e.opt || opt });
 			}
 			return;
@@ -90,9 +95,7 @@ export abstract class ValueResolver extends HeldEntries {
 		// `a && {...}`, `a ?? {...}`, `a || {...}`, and `c ? {...} : {...}`: the keys of either side.
 		const parts = spreadParts(n);
 		if (parts) {
-			for (const part of parts) {
-				this.#spread(m, part, true, env, out);
-			}
+			await mapSeq(parts, (part) => this.#spread(m, part, true, env, out));
 		} else if (
 			!isVoid(n) &&
 			!isLit(n) &&
@@ -103,30 +106,28 @@ export abstract class ValueResolver extends HeldEntries {
 	}
 
 	/** `c ? "a" : "b"`: the strings of both branches; undefined when a branch is not a string. */
-	#branches(
+	async #branches(
 		m: Module,
 		n: NodeOf<"ConditionalExpression">,
 		env?: Env,
-	): Val | undefined {
-		const all: string[] = [];
-		for (const b of [n.consequent, n.alternate]) {
-			const strs = strings(this.value(m, b, env));
-			if (!strs) {
-				return undefined;
-			}
-			all.push(...strs);
+	): Promise<Val | undefined> {
+		const found = await allSeq([n.consequent, n.alternate], async (b) =>
+			strings(await this.value(m, b, env)),
+		);
+		if (!found) {
+			return undefined;
 		}
-		const v = [...new Set(all)];
+		const v = [...new Set(found.flat())];
 		return v.length === 1 ? { k: "str", v: v[0] ?? "" } : { k: "enum", v };
 	}
 
-	value(m: Module, n: Node, env?: Env): Val {
+	async value(m: Module, n: Node, env?: Env): Promise<Val> {
 		const lit = literalVal(n);
 		if (lit) {
 			return lit;
 		}
 		if (n.type === "ConditionalExpression") {
-			const v = this.#branches(m, n, env);
+			const v = await this.#branches(m, n, env);
 			if (v) {
 				return v;
 			}
@@ -135,7 +136,7 @@ export abstract class ValueResolver extends HeldEntries {
 			return { k: "arr" };
 		}
 		if (n.type === "ObjectExpression") {
-			return { k: "obj", e: this.entries(m, n, env) };
+			return { k: "obj", e: await this.entries(m, n, env) };
 		}
 		return { k: "unk", text: m.src(n), ref: { m, n, env } };
 	}
@@ -144,7 +145,12 @@ export abstract class ValueResolver extends HeldEntries {
 	 * Entries of the object an expression gives: a literal, a call, a name, `a.b`, `await x`, `a,b`, or a
 	 * ternary of those. Null and undefined give no entries, as a spread of them adds nothing.
 	 */
-	expr(m: Module, n: Node | null, env?: Env, depth = 0): Entry[] | undefined {
+	async expr(
+		m: Module,
+		n: Node | null,
+		env?: Env,
+		depth = 0,
+	): Promise<Entry[] | undefined> {
 		if (!n || isVoid(n)) {
 			return [];
 		}
@@ -156,12 +162,12 @@ export abstract class ValueResolver extends HeldEntries {
 			return this.expr(m, inner, env, depth);
 		}
 		if (n.type === "ConditionalExpression") {
-			const a = this.expr(m, asNode(n.consequent) ?? null, env, depth);
-			const c = this.expr(m, asNode(n.alternate) ?? null, env, depth);
+			const a = await this.expr(m, asNode(n.consequent) ?? null, env, depth);
+			const c = await this.expr(m, asNode(n.alternate) ?? null, env, depth);
 			return a && c ? mergeEntries([a, c], this.ty) : undefined;
 		}
 		if (n.type === "ObjectExpression") {
-			return this.pin(this.entries(m, n, env), depth + 1);
+			return this.pin(await this.entries(m, n, env), depth + 1);
 		}
 		if (n.type === "CallExpression") {
 			return this.call(m, n, env, depth);
@@ -175,29 +181,34 @@ export abstract class ValueResolver extends HeldEntries {
 	}
 
 	/** Entries of the object `a.b.c` reads: each key of the path is followed through the object values. */
-	#member(
+	async #member(
 		m: Module,
 		n: NodeOf<"MemberExpression">,
 		env: Env | undefined,
 		depth: number,
-	): Entry[] | undefined {
-		const p = memberPath(m, n);
+	): Promise<Entry[] | undefined> {
+		const p = await memberPath(m, n);
 		if (!p) {
 			return undefined;
 		}
-		let got = this.ident(m, p.root, env, depth);
+		let got = await this.ident(m, p.root, env, depth);
 		for (const k of p.path) {
 			const e = got?.find((x) => "key" in x && x.key === k);
 			got = e && "key" in e && e.val.k === "obj" ? e.val.e : undefined;
 		}
 		const last = p.path.at(-1);
 		return (
-			got ?? (last === undefined ? undefined : this.#assigned(m, last, depth))
+			got ??
+			(last === undefined ? undefined : await this.#assigned(m, last, depth))
 		);
 	}
 
 	/** `o.key` whose object cannot be followed (a parameter of a function called with state, say): every write of `.key`, as minified code keeps property names. */
-	#assigned(m: Module, key: string, depth: number): Entry[] | undefined {
+	#assigned(
+		m: Module,
+		key: string,
+		depth: number,
+	): Promise<Entry[] | undefined> {
 		return this.#writes.entries(
 			m,
 			key,
@@ -215,7 +226,12 @@ export abstract class ValueResolver extends HeldEntries {
 	 * the keys that `name.key=` adds), the argument of the call it is evaluated in, or for a parameter the
 	 * argument at every call site.
 	 */
-	ident(m: Module, id: Node, env?: Env, depth = 0): Entry[] | undefined {
+	async ident(
+		m: Module,
+		id: Node,
+		env?: Env,
+		depth = 0,
+	): Promise<Entry[] | undefined> {
 		const v = m.variable(id);
 		if (!v) {
 			return undefined;
@@ -224,7 +240,7 @@ export abstract class ValueResolver extends HeldEntries {
 			const arg = env.get(v);
 			return arg ? this.expr(arg.m, arg.n, arg.env, depth + 1) : [];
 		}
-		const o = m.bundle?.origin(m, v) ?? { module: m, variable: v };
+		const o = (await m.bundle?.origin(m, v)) ?? { module: m, variable: v };
 		const def = o.variable.defs[0];
 		if (def?.type === "Parameter") {
 			return isFn(def.node)
@@ -235,14 +251,14 @@ export abstract class ValueResolver extends HeldEntries {
 	}
 
 	/** The entries of a name declared by a variable declarator, kept per name when it is read from another module. */
-	#declared(
+	async #declared(
 		m: Module,
 		id: Node,
 		o: { module: Module; variable: Variable },
 		def: Variable["defs"][number] | undefined,
 		env: Env | undefined,
 		depth: number,
-	): Entry[] | undefined {
+	): Promise<Entry[] | undefined> {
 		if (def?.type !== "Variable" || def.node.id !== def.name) {
 			return undefined;
 		}
@@ -260,7 +276,7 @@ export abstract class ValueResolver extends HeldEntries {
 			return this.#names.get(def.name);
 		}
 		this.#names.set(def.name, undefined);
-		const out = held();
+		const out = await held();
 		this.#names.set(def.name, out);
 		return out;
 	}

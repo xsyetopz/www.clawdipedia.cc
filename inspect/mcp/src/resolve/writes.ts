@@ -1,5 +1,6 @@
 import type { Module, Node } from "../ast.ts";
 import { asNode } from "../ast/node.ts";
+import { allSeq } from "../seq.ts";
 import type { Entry } from "./types.ts";
 
 // Steps a program-wide write lookup may take: a write such as `x.usage=u` where `u=f(u,...)` repeats
@@ -46,16 +47,18 @@ const literalValue = (
  * each `{key:value}` literal too: a name an object literal builds with a scalar value must not take the
  * object type of an unrelated `.key=` write.
  */
-export const propertyWrites = (
+export const propertyWrites = async (
 	m: Module,
 	key: string,
-): { mod: Module; value: Node }[] => {
+): Promise<{ mod: Module; value: Node }[]> => {
 	const out: { mod: Module; value: Node }[] = [];
-	for (const [needle, skip, find] of [
-		[`.${key}=`, 1, writtenValue],
-		[`${key}:`, 0, literalValue],
-	] as const) {
-		for (const mod of m.bundle?.withText(needle) ?? [m]) {
+	const collect = async (
+		needle: string,
+		skip: number,
+		find: (mod: Module, at: number, key: string) => Node | undefined,
+	) => {
+		const mods = m.bundle ? await m.bundle.withText(needle) : [m];
+		for (const mod of mods) {
 			for (
 				let at = mod.text.indexOf(needle);
 				at !== -1;
@@ -67,9 +70,10 @@ export const propertyWrites = (
 				}
 			}
 		}
-		if (out.length === 0) {
-			return out;
-		}
+	};
+	await collect(`.${key}=`, 1, writtenValue);
+	if (out.length > 0) {
+		await collect(`${key}:`, 0, literalValue);
 	}
 	return out;
 };
@@ -88,12 +92,12 @@ export class Writes {
 	 * The merged entries of each write of `.key`. One write that does not resolve makes the whole read
 	 * unknown, so a common name with unrelated writes stays unknown.
 	 */
-	entries(
+	async entries(
 		m: Module,
 		key: string,
-		read: (mod: Module, value: Node) => Entry[] | undefined,
-		merge: (lists: Entry[][]) => Entry[],
-	): Entry[] | undefined {
+		read: (mod: Module, value: Node) => Promise<Entry[] | undefined>,
+		merge: (lists: Entry[][]) => Promise<Entry[]>,
+	): Promise<Entry[] | undefined> {
 		if (this.#byKey.has(key)) {
 			return this.#byKey.get(key);
 		}
@@ -101,18 +105,13 @@ export class Writes {
 		const outer = this.#steps;
 		this.#steps ??= WRITE_STEPS;
 		try {
-			const lists: Entry[][] = [];
-			for (const w of propertyWrites(m, key)) {
-				const got = read(w.mod, w.value);
-				if (!got) {
-					return undefined;
-				}
-				lists.push(got);
-			}
-			if (this.#steps < 0) {
+			const lists = await allSeq(await propertyWrites(m, key), (w) =>
+				read(w.mod, w.value),
+			);
+			if (!lists || this.#steps < 0) {
 				return undefined;
 			}
-			const out = lists.length > 0 ? merge(lists) : undefined;
+			const out = lists.length > 0 ? await merge(lists) : undefined;
 			this.#byKey.set(key, out);
 			return out;
 		} finally {

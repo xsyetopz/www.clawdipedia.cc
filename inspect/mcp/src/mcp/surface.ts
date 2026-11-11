@@ -2,6 +2,7 @@ import type { Node } from "../ast.ts";
 import { program } from "../binary.ts";
 import { eventSites } from "../events.ts";
 import { type Entry, mergeEntries, type Val } from "../resolve.ts";
+import { mapSeq } from "../seq.ts";
 import { envPlaces } from "../surface/env.ts";
 import { KINDS, surface, type SurfaceItem } from "../surface/index.ts";
 import { baseTools } from "../tools.ts";
@@ -71,10 +72,10 @@ const listKind = async (
 	{ name, offset = 0, limit = SURFACE_LIMIT, version }: Args,
 ) => {
 	const p = await program(version);
-	const bundle = await p.bundle();
+	const bundle = p.bundle();
 	if (kind === "") {
-		const rows = await Promise.all(
-			Object.keys(KINDS).map((k) => kindCount(bundle, p.modules, k)),
+		const rows = await mapSeq(Object.keys(KINDS), (k) =>
+			kindCount(bundle, p.modules, k),
 		);
 		return text(rows.join("\n"));
 	}
@@ -112,9 +113,9 @@ group(
 		"object-keys": async ({ module, offset, anchor, version }) => {
 			const p = await program(version);
 			const R = p.resolver;
-			const bundle = await p.bundle();
+			const bundle = p.bundle();
 			const modName = need(module, "module");
-			const m = bundle.get(modName);
+			const m = await bundle.get(modName);
 			if (!m) {
 				throw new Error(`no JavaScript module "${modName}"`);
 			}
@@ -132,7 +133,7 @@ group(
 				throw new Error(`no object literal around ${module}@${pos}`);
 			}
 			const before = R.unresolved.length;
-			const keys = entriesJson(R.pin(R.entries(m, obj)));
+			const keys = entriesJson(await R.pin(await R.entries(m, obj)));
 			const unresolved = [...new Set(R.unresolved.slice(before))];
 			return text(
 				`${JSON.stringify(keys, null, 2)}${unresolved.length > 0 ? `\n\nSpreads not followed:\n${unresolved.map((u) => `- ${u}`).join("\n")}` : ""}`,
@@ -141,7 +142,7 @@ group(
 		},
 		"event-keys": async ({ name, version }) => {
 			const p = await program(version);
-			const events = eventSites(await p.bundle(), p.resolver);
+			const events = await eventSites(p.bundle(), p.resolver);
 			if (!has(name)) {
 				return text(
 					[...events]
@@ -161,7 +162,7 @@ group(
 					`no event "${name}"; events: ${[...events.keys()].join(", ")}`,
 				);
 			}
-			const keys = entriesJson(mergeEntries(lists));
+			const keys = entriesJson(await mergeEntries(lists));
 			return text(
 				`${lists.length} call sites\n${JSON.stringify(keys, null, 2)}`,
 				{
@@ -172,24 +173,24 @@ group(
 		},
 		"env-places": async ({ name, version }) => {
 			const p = await program(version);
-			const bundle = await p.bundle();
+			const bundle = p.bundle();
 			const wanted = need(name, "name");
-			const places = envPlaces(bundle).filter((i) => i.name === wanted);
-			return text(
-				`${wanted}: places ${places.length}\n${places
-					.map((i) => {
-						const at = i.offset ?? 0;
-						const src = bundle
-							.get(i.module ?? "")
-							?.text.slice(Math.max(0, at - PLACE_BEFORE), at + PLACE_AFTER);
-						return `- ${i.detail ?? "read"}  ${i.module}:${at}\n  ${src?.replaceAll("\n", " ")}`;
-					})
-					.join("\n")}`,
-			);
+			const found = await envPlaces(bundle);
+			const places = found.filter((i) => i.name === wanted);
+			const lines = await mapSeq(places, async (i) => {
+				const at = i.offset ?? 0;
+				const mod = await bundle.get(i.module ?? "");
+				const src = mod?.text.slice(
+					Math.max(0, at - PLACE_BEFORE),
+					at + PLACE_AFTER,
+				);
+				return `- ${i.detail ?? "read"}  ${i.module}:${at}\n  ${src?.replaceAll("\n", " ")}`;
+			});
+			return text(`${wanted}: places ${places.length}\n${lines.join("\n")}`);
 		},
 		"tool-gates": async ({ version }) => {
 			const p = await program(version);
-			const r = baseTools(await p.bundle(), p.resolver);
+			const r = await baseTools(p.bundle(), p.resolver);
 			return text(
 				`${r.module}: ${r.tools.length} tools\n${r.tools
 					.map(

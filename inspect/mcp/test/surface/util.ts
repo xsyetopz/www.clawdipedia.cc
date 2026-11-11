@@ -2,9 +2,9 @@ import { Bundle } from "../../src/ast.ts";
 import { surface } from "../../src/surface/index.ts";
 
 export const bundle = (text: string) =>
-	Bundle.parse([{ name: "/$bunfs/root/a.js", text }]);
-export const items = async (kind: string, text: string) =>
-	surface(await bundle(text), kind);
+	new Bundle([{ name: "/$bunfs/root/a.js", text }]);
+export const items = (kind: string, text: string) =>
+	surface(bundle(text), kind);
 export const names = async (kind: string, text: string) => {
 	const found = await items(kind, text);
 	return found.map((i) => i.name);

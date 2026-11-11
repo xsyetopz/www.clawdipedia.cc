@@ -12,12 +12,15 @@ import {
 	VERSION,
 } from "./ctx.ts";
 import { objSchema } from "./schema.ts";
-export const buildClaudeJson = (): { file: string; schema: Json } => {
-	const src = only("numStartups:0");
+export const buildClaudeJson = async (): Promise<{
+	file: string;
+	schema: Json;
+}> => {
+	const src = await only("numStartups:0");
 	const dStart = idx(src, "{numStartups:0,");
 	const pStart = idx(src, "{allowedTools:[],mcpContextUris:[],mcpServers:{}");
-	const global = objSchema(R.objectAt(src, dStart), "default");
-	const project = objSchema(R.objectAt(src, pStart), "default");
+	const global = await objSchema(await R.objectAt(src, dStart), "default");
+	const project = await objSchema(await R.objectAt(src, pStart), "default");
 	const al = /\["apiKeyHelper","installMethod","autoUpdates"[^\]]*\]/u.exec(
 		src.text,
 	);

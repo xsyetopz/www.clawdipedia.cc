@@ -9,6 +9,7 @@ import {
 	returnsOf,
 } from "../ast.ts";
 import { asNode, isNull } from "../ast/node.ts";
+import { mapSeq } from "../seq.ts";
 import { globalNameType, isString, logicalType } from "./rules.ts";
 import {
 	bind,
@@ -34,17 +35,18 @@ import {
 import { VarTypes } from "./vartypes.ts";
 
 export abstract class TypeResolver extends VarTypes {
-	protected readonly ty = (v: Val): JType[] | undefined => this.typeOfVal(v);
+	protected readonly ty = (v: Val): Promise<JType[] | undefined> =>
+		this.typeOfVal(v);
 
 	abstract expr(
 		m: Module,
 		n: Node | null,
 		env?: Env,
 		depth?: number,
-	): Entry[] | undefined;
+	): Promise<Entry[] | undefined>;
 
 	/** The JSON types a value can have, or undefined when the code does not show them. */
-	typeOfVal(v: Val): JType[] | undefined {
+	async typeOfVal(v: Val): Promise<JType[] | undefined> {
 		if (v.k !== "unk") {
 			return defaultTy(v);
 		}
@@ -57,7 +59,7 @@ export abstract class TypeResolver extends VarTypes {
 		}
 		this.#nested++;
 		try {
-			return jsonTypes(this.typeOf(v.ref.m, v.ref.n, v.ref.env));
+			return jsonTypes(await this.typeOf(v.ref.m, v.ref.n, v.ref.env));
 		} finally {
 			this.#nested--;
 		}
@@ -65,7 +67,12 @@ export abstract class TypeResolver extends VarTypes {
 	#nested = 0;
 
 	/** The types an expression gives, "absent" for undefined; undefined when one of them is not known. */
-	typeOf(m: Module, n: Node | null, env?: Env, depth = 0): Ty[] | undefined {
+	async typeOf(
+		m: Module,
+		n: Node | null,
+		env?: Env,
+		depth = 0,
+	): Promise<Ty[] | undefined> {
 		// Without the arguments of a call, a node has one type: it is worked out once.
 		if (!n || env) {
 			return this.#typeOf(m, n, env, depth);
@@ -74,19 +81,19 @@ export abstract class TypeResolver extends VarTypes {
 			return this.#types.get(n);
 		}
 		this.#types.set(n, undefined);
-		const got = this.#typeOf(m, n, env, depth);
+		const got = await this.#typeOf(m, n, env, depth);
 		this.#types.set(n, got);
 		return got;
 	}
 	readonly #types = new Map<Node, Ty[] | undefined>();
 
-	#typeOf(
+	async #typeOf(
 		m: Module,
 		n: Node | null,
 		env?: Env,
 		depth = 0,
 		chained = false,
-	): Ty[] | undefined {
+	): Promise<Ty[] | undefined> {
 		if (isNull(n)) {
 			return ["null"];
 		}
@@ -98,7 +105,7 @@ export abstract class TypeResolver extends VarTypes {
 		}
 		// A chain gives "absent" when a link is nullish.
 		if (m.isChain(n) && !chained) {
-			return union(this.#typeOf(m, n, env, depth + 1, true), ["absent"]);
+			return union(await this.#typeOf(m, n, env, depth + 1, true), ["absent"]);
 		}
 		const simple = SIMPLE_TYPES.get(n.type);
 		if (simple) {
@@ -123,12 +130,12 @@ export abstract class TypeResolver extends VarTypes {
 		return this.typeOf(m, asNode(x) ?? null, env, depth + 1);
 	}
 
-	#exprType(
+	async #exprType(
 		m: Module,
 		n: Node,
 		env: Env | undefined,
 		depth: number,
-	): Ty[] | undefined {
+	): Promise<Ty[] | undefined> {
 		const sub = (x: Node | null | undefined) => this.#sub(m, x, env, depth);
 		if (n.type === "UnaryExpression") {
 			return [unaryType(n.operator)];
@@ -137,10 +144,12 @@ export abstract class TypeResolver extends VarTypes {
 			return this.#binaryType(n, sub);
 		}
 		if (n.type === "LogicalExpression") {
-			return logicalType(n.operator, sub(n.left), sub(n.right));
+			const left = await sub(n.left);
+			return logicalType(n.operator, left, await sub(n.right));
 		}
 		if (n.type === "ConditionalExpression") {
-			return union(sub(n.consequent), sub(n.alternate));
+			const a = await sub(n.consequent);
+			return union(a, await sub(n.alternate));
 		}
 		if (n.type === "SequenceExpression") {
 			return sub(n.expressions.at(-1));
@@ -168,24 +177,25 @@ export abstract class TypeResolver extends VarTypes {
 		n: NodeOf<"AwaitExpression">,
 		env: Env | undefined,
 		depth: number,
-	): Ty[] | undefined {
+	): Promise<Ty[] | undefined> {
 		const arg = asNode(n.argument);
 		return arg?.type === "CallExpression" && !m.isChain(arg)
 			? this.#callType(m, arg, env, depth, true)
 			: this.#sub(m, n.argument, env, depth);
 	}
 
-	#binaryType(
+	async #binaryType(
 		n: NodeOf<"BinaryExpression">,
-		sub: (x: Node | null | undefined) => Ty[] | undefined,
-	): Ty[] | undefined {
+		sub: (x: Node | null | undefined) => Promise<Ty[] | undefined>,
+	): Promise<Ty[] | undefined> {
 		if (COMPARE.has(n.operator)) {
 			return ["boolean"];
 		}
 		if (n.operator !== "+") {
 			return ["number"];
 		}
-		const [a, b] = [sub(n.left), sub(n.right)];
+		const a = await sub(n.left);
+		const b = await sub(n.right);
 		if (isString(a) || isString(b)) {
 			return ["string"];
 		}
@@ -194,12 +204,12 @@ export abstract class TypeResolver extends VarTypes {
 			: undefined;
 	}
 
-	#memberType(
+	async #memberType(
 		m: Module,
 		n: NodeOf<"MemberExpression">,
 		env: Env | undefined,
 		depth: number,
-	): Ty[] | undefined {
+	): Promise<Ty[] | undefined> {
 		if (
 			!n.computed &&
 			n.property.type === "Identifier" &&
@@ -207,23 +217,23 @@ export abstract class TypeResolver extends VarTypes {
 		) {
 			return ["number"];
 		}
-		const key = keyOf(m, n);
-		const obj = this.expr(m, asNode(n.object) ?? null, env, depth + 1);
+		const key = await keyOf(m, n);
+		const obj = await this.expr(m, asNode(n.object) ?? null, env, depth + 1);
 		const e = obj?.find((x) => "key" in x && x.key === key);
 		if (!e || !("key" in e)) {
 			return undefined;
 		}
-		const got = this.typeOfVal(e.val);
+		const got = await this.typeOfVal(e.val);
 		return got && (e.opt ? [...got, "absent"] : got);
 	}
 
-	#callType(
+	async #callType(
 		m: Module,
 		call: CallNode,
 		env: Env | undefined,
 		depth: number,
 		awaited: boolean,
-	): Ty[] | undefined {
+	): Promise<Ty[] | undefined> {
 		const c = asNode(call.callee);
 		if (!c) {
 			return undefined;
@@ -242,7 +252,7 @@ export abstract class TypeResolver extends VarTypes {
 			const got = memberCallType(m, asNode(c.object), c.property.name);
 			return got ? [got] : undefined;
 		}
-		const f = functionOf(m, c);
+		const f = await functionOf(m, c);
 		if (!f || f.fn.generator || (f.fn.async && !awaited)) {
 			return undefined;
 		}
@@ -251,20 +261,23 @@ export abstract class TypeResolver extends VarTypes {
 		if (rets.length === 0) {
 			return ["absent"];
 		}
+		const types = await mapSeq(rets, (r) =>
+			this.typeOf(f.module, r, inner, depth + 1),
+		);
 		let out: Ty[] | undefined = [];
-		for (const r of rets) {
-			out = union(out, this.typeOf(f.module, r, inner, depth + 1));
+		for (const t of types) {
+			out = union(out, t);
 		}
 		return out;
 	}
 
 	/** The types of a name: its argument in this call, the arguments at every call, or each write. */
-	#identType(
+	async #identType(
 		m: Module,
 		id: Node,
 		env: Env | undefined,
 		depth: number,
-	): Ty[] | undefined {
+	): Promise<Ty[] | undefined> {
 		if (id.type !== "Identifier") {
 			return undefined;
 		}
@@ -276,7 +289,7 @@ export abstract class TypeResolver extends VarTypes {
 			const arg = env.get(v);
 			return arg ? this.typeOf(arg.m, arg.n, arg.env, depth + 1) : ["absent"];
 		}
-		const o = m.bundle?.origin(m, v) ?? { module: m, variable: v };
+		const o = (await m.bundle?.origin(m, v)) ?? { module: m, variable: v };
 		return this.varTypeOf(o.module, o.variable, depth);
 	}
 }

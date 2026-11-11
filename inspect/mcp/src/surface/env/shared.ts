@@ -39,7 +39,7 @@ export interface Ctx {
 const EACH = new Set(["map", "flatMap", "forEach", "filter", "some", "every"]);
 
 /** The names of a constant string list that `list.flatMap(f)` passes to `f`, when `f` is `n`. */
-export const eachName = (m: Module, n: Node): string[] => {
+export const eachName = async (m: Module, n: Node): Promise<string[]> => {
 	const c = m.parent(n);
 	if (
 		c?.type !== "CallExpression" ||
@@ -53,7 +53,7 @@ export const eachName = (m: Module, n: Node): string[] => {
 	const list = asNode(c.callee.object);
 	const def = list?.type === "Identifier" ? m.variable(list)?.defs[0] : null;
 	const init = def?.type === "Variable" ? asNode(def.node.init) : list;
-	return strings(m, init) ?? [];
+	return (await strings(m, init)) ?? [];
 };
 
 /** The index of `id` among the parameters of the function that declares it, with that function. */

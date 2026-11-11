@@ -14,8 +14,15 @@ import { extractModules } from "../../../inspect/mcp/src/bunfs.ts";
 import { type Entry, Resolver } from "../../../inspect/mcp/src/resolve.ts";
 import { CLAUDE_CODE_VERSION } from "../../../src/version.ts";
 
+export { mapSeq } from "../../../inspect/mcp/src/ast.ts";
+
 export type Json = Record<string, unknown>;
 export type Src = Module;
+/** The name and text of a module, as read without parsing it. */
+export interface Text {
+	name: string;
+	text: string;
+}
 
 export const ROOT = resolve(import.meta.dir, "../../..");
 const BASE_URL = "https://clawdipedia.cc/schemas";
@@ -38,17 +45,28 @@ export const note = (s: string) => report.push(s);
 // ---------------------------------------------------------------- program access
 
 const { modules: binModules } = await extractModules(BIN);
-export const bundle = await Bundle.parse(
+export const bundle = new Bundle(
 	binModules
 		.filter((m) => /\.m?js$/u.test(m.name))
 		.map((m) => ({ name: m.name, text: m.source })),
 );
-export const mods: Src[] = [...bundle.modules.values()];
+export const mods: Text[] = [...bundle.texts].map(([name, text]) => ({
+	name,
+	text,
+}));
 export const R = new Resolver();
+/** The parsed module of a file that `mods` lists. */
+export const parsed = async (t: Text): Promise<Src> => {
+	const m = await bundle.get(t.name);
+	if (m === undefined) {
+		throw new Error(`no module ${t.name}`);
+	}
+	return m;
+};
 /** Modules whose text contains `needle`. */
-const withText = (needle: string): Src[] => bundle.withText(needle);
-export const only = (needle: string): Src => {
-	const hit = withText(needle);
+const withText = (needle: string): Promise<Src[]> => bundle.withText(needle);
+export const only = async (needle: string): Promise<Src> => {
+	const hit = await withText(needle);
 	if (hit.length === 0) {
 		throw new Error(`anchor not found: ${needle}`);
 	}
@@ -72,16 +90,16 @@ export const idx = (src: Src, needle: string | RegExp): number => {
 	return i;
 };
 /** Entries of the object literal that starts at the `{` that ends the regex match. */
-export const literalAfter = (
+export const literalAfter = async (
 	src: Src,
 	re: RegExp,
-): { entries: Entry[]; at: number } => {
+): Promise<{ entries: Entry[]; at: number }> => {
 	const m = re.exec(src.text);
 	if (!m) {
 		throw new Error(`anchor not found in ${src.name}: ${re}`);
 	}
 	const at = m.index + m[0].length - 1;
-	return { entries: R.objectAt(src, at), at };
+	return { entries: await R.objectAt(src, at), at };
 };
 /** The innermost function around index `pos` that passes `test`. */
 export const fnAround = (
@@ -104,8 +122,8 @@ const readOptional = async (path: string): Promise<Json | undefined> => {
 	if (!(await file.exists())) {
 		return undefined;
 	}
-	const parsed: unknown = await file.json();
-	return isJson(parsed) ? parsed : undefined;
+	const json: unknown = await file.json();
+	return isJson(json) ? json : undefined;
 };
 /** The JSON files the builders read, loaded once at start-up (the builders are synchronous). */
 const PRELOAD = [

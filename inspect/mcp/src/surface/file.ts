@@ -19,10 +19,10 @@ import {
 const ANCHORS = ["history.jsonl", "keybindings.json"];
 
 /** The callee `base` and the last constant string of `join(base(), …, "name")`, or undefined for another call. */
-const joinParts = (
+const joinParts = async (
 	m: Module,
 	n: Node,
-): { callee: Node; name: string } | undefined => {
+): Promise<{ callee: Node; name: string } | undefined> => {
 	if (n.type !== "CallExpression" || n.arguments.length < 2) {
 		return undefined;
 	}
@@ -34,24 +34,25 @@ const joinParts = (
 	) {
 		return undefined;
 	}
-	const name = constString(m, asNode(n.arguments.at(-1)));
+	const name = await constString(m, asNode(n.arguments.at(-1)));
 	const callee = asNode(a0.callee);
 	return name === undefined || name === "" || !callee
 		? undefined
 		: { callee, name };
 };
 
-export const extractFiles: Extractor = (bundle) => {
+export const extractFiles: Extractor = async (bundle) => {
 	const byBase = new Map<Variable, SurfaceItem[]>();
 	const anchored = new Map<Variable, Set<string>>();
-	scan(bundle, ['"'], (m, n) => {
-		const parts = joinParts(m, n);
+	await scan(bundle, ['"'], async (m, n) => {
+		const parts = await joinParts(m, n);
 		if (!parts) {
 			return;
 		}
 		const { callee, name } = parts;
 		const v = m.variable(callee);
-		const base = v && (bundle.origin(m, v)?.variable ?? v);
+		const o = v && (await bundle.origin(m, v));
+		const base = v && (o?.variable ?? v);
 		if (!base) {
 			return;
 		}

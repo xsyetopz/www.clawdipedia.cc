@@ -225,7 +225,7 @@ function rc(a){if(a==="--resume"||a==="--continue"||a==="--name"||a==="--sandbox
 function filter(a){if(a==="--resume"||a==="--continue"||a==="--fork-session")return 1}
 `;
 		const found = await surface(
-			await Bundle.parse([
+			new Bundle([
 				{ name: "/$bunfs/root/a.js", text: help },
 				{ name: "/$bunfs/root/b.js", text: parsers },
 			]),

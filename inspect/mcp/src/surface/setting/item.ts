@@ -6,30 +6,34 @@ import { asNode, short, type SurfaceItem } from "../common.ts";
 export const describe = (
 	m: Module,
 	n: Node | undefined,
-): string | undefined => {
-	let cur = n?.type === "ArrowFunctionExpression" ? asNode(n.body) : n;
-	while (
-		cur?.type === "CallExpression" &&
-		cur.callee.type === "MemberExpression"
-	) {
+): Promise<string | undefined> => {
+	const walk = async (cur: Node | undefined): Promise<string | undefined> => {
+		if (
+			cur?.type !== "CallExpression" ||
+			cur.callee.type !== "MemberExpression"
+		) {
+			return undefined;
+		}
 		const p = cur.callee.property;
 		if (p.type === "Identifier" && p.name === "describe") {
-			return constString(m, asNode(cur.arguments[0]));
+			const text = await constString(m, asNode(cur.arguments[0]));
+			return text;
 		}
-		cur = asNode(cur.callee.object);
-	}
-	return undefined;
+		const found = await walk(asNode(cur.callee.object));
+		return found;
+	};
+	return walk(n?.type === "ArrowFunctionExpression" ? asNode(n.body) : n);
 };
 
-export const item = (
+export const item = async (
 	kind: string,
 	m: Module,
 	name: string,
 	value: Node,
 	offset: number,
 	gate?: string,
-): SurfaceItem => {
-	const d = describe(m, value);
+): Promise<SurfaceItem> => {
+	const d = await describe(m, value);
 	return {
 		kind,
 		name,

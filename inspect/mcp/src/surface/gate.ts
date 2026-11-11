@@ -20,6 +20,7 @@ import {
 	type Module,
 	type Node,
 } from "../ast.ts";
+import { mapSeq } from "../seq.ts";
 import {
 	asNode,
 	type Extractor,
@@ -44,10 +45,10 @@ const payload = (n: Node | undefined): boolean =>
 	n?.type === "ObjectExpression" &&
 	n.properties.some((p) => keyOf(p) !== "safe");
 
-const groupOf = (m: Module, c: Node): Group => {
-	const fn = functionOf(m, c)?.fn;
-	if (fn) {
-		return fn;
+const groupOf = async (m: Module, c: Node): Promise<Group> => {
+	const found = await functionOf(m, c);
+	if (found) {
+		return found.fn;
 	}
 	const prop =
 		c.type === "MemberExpression" && c.property.type !== "PrivateIdentifier"
@@ -62,14 +63,19 @@ const forwards = (
 	fn: Fn,
 	name: string,
 	loggers: Set<Group>,
-): boolean => {
+): Promise<boolean> => {
 	const root = asNode(fn.body);
 	const stack: Node[] = root ? [root] : [];
-	for (let n = stack.pop(); n !== undefined; n = stack.pop()) {
+	const next = async (): Promise<boolean> => {
+		const n = stack.pop();
+		if (n === undefined) {
+			return false;
+		}
 		if (n.type === "CallExpression") {
 			const a0 = n.arguments[0];
 			const callee = asNode(n.callee);
-			const target = callee && functionOf(fm, callee)?.fn;
+			const found = callee && (await functionOf(fm, callee));
+			const target = found?.fn;
 			if (
 				a0?.type === "Identifier" &&
 				a0.name === name &&
@@ -80,49 +86,40 @@ const forwards = (
 			}
 		}
 		stack.push(...children(n));
-	}
-	return false;
+		return next();
+	};
+	return next();
 };
 
 /** A wrapper `fo(e){…a(e,{…})…}` that passes its first parameter on to a logger is a logger too. Did one join? */
-const growLoggers = (
+const growLoggers = async (
 	groups: Map<Group, Site[]>,
 	loggers: Set<Group>,
-): boolean => {
+): Promise<boolean> => {
 	let grew = false;
-	for (const [k, sites] of groups) {
+	await mapSeq(groups, async ([k, sites]) => {
 		if (loggers.has(k) || typeof k === "string") {
-			continue;
+			return;
 		}
 		const p = k.params[0];
 		const first = sites[0];
 		const callee = first && asNode(first.n.callee);
-		const fm = first && callee && functionOf(first.m, callee)?.module;
-		if (p?.type === "Identifier" && fm && forwards(fm, k, p.name, loggers)) {
+		const found = first && callee && (await functionOf(first.m, callee));
+		const fm = found?.module;
+		if (
+			p?.type === "Identifier" &&
+			fm &&
+			(await forwards(fm, k, p.name, loggers))
+		) {
 			loggers.add(k);
 			grew = true;
 		}
-	}
+	});
 	return grew;
 };
 
-export const extractGates: Extractor = (bundle) => {
-	const groups = new Map<Group, Site[]>();
-	scan(bundle, ['"tengu_'], (m, n) => {
-		if (n.type !== "CallExpression") {
-			return;
-		}
-		const name = constString(m, asNode(n.arguments[0]));
-		const c = asNode(n.callee);
-		if (name === undefined || !c || !/^tengu_[a-z0-9_]*[a-z0-9]$/u.test(name)) {
-			return;
-		}
-		const key = groupOf(m, c);
-		const g = groups.get(key) ?? [];
-		g.push({ m, n, name });
-		groups.set(key, g);
-	});
-	const loggers = new Set<Group>(
+const loggersOf = (groups: Map<Group, Site[]>): Set<Group> =>
+	new Set(
 		[...groups]
 			.filter(
 				([, s]) =>
@@ -131,18 +128,39 @@ export const extractGates: Extractor = (bundle) => {
 			)
 			.map(([k]) => k),
 	);
-	for (let grew = true; grew;) {
-		grew = growLoggers(groups, loggers);
-	}
-	const out: SurfaceItem[] = [];
-	for (const [k, sites] of groups) {
-		if (loggers.has(k)) {
-			continue;
+
+export const extractGates: Extractor = async (bundle) => {
+	const groups = new Map<Group, Site[]>();
+	await scan(bundle, ['"tengu_'], async (m, n) => {
+		if (n.type !== "CallExpression") {
+			return;
 		}
-		for (const { m, n, name } of sites) {
+		const name = await constString(m, asNode(n.arguments[0]));
+		const c = asNode(n.callee);
+		if (name === undefined || !c || !/^tengu_[a-z0-9_]*[a-z0-9]$/u.test(name)) {
+			return;
+		}
+		const key = await groupOf(m, c);
+		const g = groups.get(key) ?? [];
+		g.push({ m, n, name });
+		groups.set(key, g);
+	});
+	const loggers = loggersOf(groups);
+	const grow = async (): Promise<void> => {
+		if (await growLoggers(groups, loggers)) {
+			return grow();
+		}
+	};
+	await grow();
+	const out: SurfaceItem[] = [];
+	await mapSeq(groups, async ([k, sites]) => {
+		if (loggers.has(k)) {
+			return;
+		}
+		await mapSeq(sites, async ({ m, n, name }) => {
 			const d = asNode(n.arguments[1]);
 			const def =
-				d && d.type !== "ObjectExpression" ? literal(m, d) : undefined;
+				d && d.type !== "ObjectExpression" ? await literal(m, d) : undefined;
 			out.push({
 				kind: "gate",
 				name,
@@ -150,7 +168,7 @@ export const extractGates: Extractor = (bundle) => {
 				offset: n.start,
 				...(def !== undefined && { default: def }),
 			});
-		}
-	}
+		});
+	});
 	return unique(out);
 };

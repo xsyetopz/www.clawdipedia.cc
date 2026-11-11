@@ -25,6 +25,7 @@ import {
 	type Node,
 	type NodeOf,
 } from "../ast.ts";
+import { firstSeq } from "../seq.ts";
 import {
 	type Extractor,
 	keyOf,
@@ -57,27 +58,35 @@ const nameSource = (p: Node): string | undefined => {
 };
 
 /** The type of the first object in `fn` that is `{type:"prompt",name:<nameSrc>,...}`. */
-const returnedType = (m: Module, fn: Fn, nameSrc: string): string => {
+const returnedType = (m: Module, fn: Fn, nameSrc: string): Promise<string> => {
 	const stack: Node[] = fn.body ? [fn.body] : [];
-	for (let n = stack.pop(); n; n = stack.pop()) {
+	const next = async (): Promise<string> => {
+		const n = stack.pop();
+		if (!n) {
+			return "";
+		}
 		if (n.type === "ObjectExpression") {
-			const type = constString(m, prop(n, "type"));
+			const type = await constString(m, prop(n, "type"));
 			const v = prop(n, "name");
 			if (type !== undefined && TYPES.has(type) && v && m.src(v) === nameSrc) {
 				return type;
 			}
 		}
 		stack.push(...children(n));
-	}
-	return "";
+		return next();
+	};
+	return next();
 };
 
 /** The command type a builder gives its argument: its body holds `{type:"prompt",name:p.name,...}` for its first parameter `p`. */
-const builderType = (m: Module, call: Node): string | undefined => {
+const builderType = async (
+	m: Module,
+	call: Node,
+): Promise<string | undefined> => {
 	if (call.type !== "CallExpression") {
 		return undefined;
 	}
-	const f = functionOf(m, call.callee);
+	const f = await functionOf(m, call.callee);
 	const p = f?.fn.params[0];
 	if (!f || !p) {
 		return undefined;
@@ -85,7 +94,8 @@ const builderType = (m: Module, call: Node): string | undefined => {
 	let found = builders.get(f.fn);
 	if (found === undefined) {
 		const nameSrc = nameSource(p);
-		found = nameSrc === undefined ? "" : returnedType(f.module, f.fn, nameSrc);
+		found =
+			nameSrc === undefined ? "" : await returnedType(f.module, f.fn, nameSrc);
 		builders.set(f.fn, found);
 	}
 	return found === "" ? undefined : found;
@@ -110,30 +120,32 @@ const returningFn = (m: Module, n: Node): Fn | undefined => {
 };
 
 /** The builder type of an object a factory returns, for `reg(make())` where `make` ends in `return (…, {name:"x"})`. */
-const factoryType = (m: Module, n: Node): string | undefined => {
+const factoryType = async (m: Module, n: Node): Promise<string | undefined> => {
 	const f = returningFn(m, n);
-	for (const k of f ? callsOf(m, f) : []) {
+	const calls = f ? await callsOf(m, f) : [];
+	return firstSeq(calls, async (k): Promise<string | undefined> => {
 		const outer = k?.module.parent(k.call);
 		if (
 			k &&
 			outer?.type === "CallExpression" &&
 			outer.arguments[0] === k.call
 		) {
-			const type = builderType(k.module, outer);
-			if (type !== undefined) {
-				return type;
-			}
+			const built = await builderType(k.module, outer);
+			return built;
 		}
-	}
-	return undefined;
+		return undefined;
+	});
 };
 
-const gateOf = (m: Module, o: NodeOf<"ObjectExpression">): string => {
+const gateOf = async (
+	m: Module,
+	o: NodeOf<"ObjectExpression">,
+): Promise<string> => {
 	const gates: string[] = [];
 	if (/^(!0|true)$/u.test(m.src(prop(o, "isHidden") ?? o).trim())) {
 		gates.push("hidden");
 	}
-	const avail = strings(m, prop(o, "availability"));
+	const avail = await strings(m, prop(o, "availability"));
 	if (avail) {
 		gates.push(`availability ${avail.join(", ")}`);
 	}
@@ -144,36 +156,36 @@ const gateOf = (m: Module, o: NodeOf<"ObjectExpression">): string => {
 	return gates.join("; ");
 };
 
-const typeOf = (
+const typeOf = async (
 	m: Module,
 	o: NodeOf<"ObjectExpression">,
-): string | undefined => {
+): Promise<string | undefined> => {
 	const parent = m.parent(o);
 	return (
-		constString(m, prop(o, "type")) ??
+		(await constString(m, prop(o, "type"))) ??
 		(parent?.type === "CallExpression" && parent.arguments[0] === o
 			? builderType(m, parent)
 			: factoryType(m, o))
 	);
 };
 
-export const extractSlashCommands: Extractor = (bundle) => {
+export const extractSlashCommands: Extractor = async (bundle) => {
 	const out: SurfaceItem[] = [];
-	scan(bundle, ["name:"], (m, n) => {
+	await scan(bundle, ["name:"], async (m, n) => {
 		if (n.type !== "ObjectExpression") {
 			return;
 		}
-		const name = constString(m, prop(n, "name"));
+		const name = await constString(m, prop(n, "name"));
 		if (name === undefined || !NAME.test(name)) {
 			return;
 		}
-		const type = typeOf(m, n);
+		const type = await typeOf(m, n);
 		if (type === undefined || !TYPES.has(type)) {
 			return;
 		}
-		const desc = constString(m, prop(n, "description")) ?? "";
-		const aliases = strings(m, prop(n, "aliases")) ?? [];
-		const gate = gateOf(m, n);
+		const desc = (await constString(m, prop(n, "description"))) ?? "";
+		const aliases = (await strings(m, prop(n, "aliases"))) ?? [];
+		const gate = await gateOf(m, n);
 		const alias = aliases.length > 0 ? ` (aliases ${aliases.join(", ")})` : "";
 		out.push({
 			kind: "slash-command",
