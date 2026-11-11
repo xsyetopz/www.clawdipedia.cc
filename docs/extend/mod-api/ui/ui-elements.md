@@ -1,18 +1,46 @@
 ---
 title: Surfaces, Elements, and Render Sites
-description: What a mod may draw and where - the surfaces, the 16 render sites with their props, and the JSX globals.
+description: What a mod may draw and where - the surfaces, the 17 render sites with their props, and the JSX globals.
 sidebar_position: 8
 ---
 
-An element is a building block of a drawing, such as `Box`, `Text`, or `Button`.
-A render site is a part of Claude Code that a mod may redraw, such as the spinner or the prompt hint.
-A `ui.render` hook gets the site in `e.component` and returns a tree of elements.
-The 16 render sites are `AskUserQuestion`, `UserMessage`, `AssistantMessage`, `ToolUse`, `ToolResult`, `ToolGroup`, `ToolProgress`, `CommandOutput`, `Spinner`, `TurnDuration`, `InfoNotice`, `SessionMode`, `PromptHint`, `AbovePrompt`, `Pane`, and `Placed`.
-The engine alone draws the permission dialog. A mod adds context to it with `$.ui.notice`.
+A mod draws with elements, at render sites, on a surface.
 
-Return the engine's tree (call `next(e)`) to leave a site as it is. JSX needs a `.tsx` or `.jsx` file.
+- A surface is the app that draws: the terminal, the desktop app, the mobile app, or the VS Code extension.
+- A render site is one part of the interface, such as the spinner, a tool row, or a pane.
+- An element is a building block of a drawing, such as `Box`, `Text`, or `Button`.
+
+The engine (Claude Code) raises `ui.render` when it is about to draw a render site.
+A hook gets the name of the site in `e.component` and returns a tree of elements. JSX needs a `.tsx` or `.jsx` file.
 
 Official pages: [Draw in the Interface](https://code.claude.com/docs/en/plugins/mods/interface), [Mods Overview](https://code.claude.com/docs/en/plugins/mods/overview), [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.322 program (`schemas/claude-code.d.ts`).
+
+## What a Mod Can Do at a Render Site
+
+A render site is a place, not a tag.
+The element table from `$.ui.resolve(e)` holds elements only. It has no `Spinner`, `ToolUse`, or other site name.
+Thus a mod cannot put a render site into a tree of its own. The engine decides where each site is.
+
+The engine draws most sites itself: the messages, the tool rows, the spinner, and the status lines.
+At such a site, a `ui.render` hook makes one of four choices.
+
+| Choice | What the hook returns | What the surface draws |
+| --- | --- | --- |
+| Leave it | `next(e)` | The engine's drawing, as it is. |
+| Change a detail | `next({ ...e, props })`, with changed props | The engine's drawing with the new props. An invalid rewrite draws the original. |
+| Wrap it | A tree that holds the result of `await next(e)` | The engine's drawing, with the elements of the mod beside it. |
+| Replace it | A tree of its own, with no call to `next` | The tree of the mod alone. An invalid tree draws the engine's drawing. |
+
+Four sites are empty until a hook draws them. A mod draws something new there.
+
+- [Pane](#pane): a framed region that a mod opens with `$.ui.open`.
+- [`Placed`](#placed): a row that a mod places in the transcript with `$.ui.place`.
+- [`AbovePrompt`](#aboveprompt): the band above the prompt. It is always there, and every mod shares it.
+- [`Backdrop`](#backdrop): the drawing behind the conversation, which a mod sets with `$.theme.set`.
+
+The engine alone draws the permission dialog. A mod adds context to it with `$.ui.notice`.
+
+Official sections, with an example of each choice: [Change What Claude Code Already Draws](https://code.claude.com/docs/en/plugins/mods/interface#change-what-claude-code-already-draws) and [Pick Where to Draw](https://code.claude.com/docs/en/plugins/mods/interface#pick-where-to-draw).
 
 ## Example
 
@@ -48,6 +76,28 @@ on("ui.render", { component: "Pane" }, async ($, e) => {
 | `vscode` | <Differs note="The type file says no surface is attached yet. The docs say the extension draws from 2.1.299 in a session that fetches feature flags." /> | The editor webview. The same table as `desktop` without `Client`. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`. | `e.surface === 'vscode'` |
 
 ## Render Sites and Props
+
+Each name in this table is a value of `e.component`. The sections below give the props of each site.
+
+| Site | Status | What it is | What draws it |
+| --- | --- | --- | --- |
+| [`AskUserQuestion`](#askuserquestion) | <Documented /> | The dialog the AskUserQuestion tool opens. | The engine. |
+| [`UserMessage`](#usermessage) | <Documented /> | A user-role row of the transcript. | The engine. |
+| [`AssistantMessage`](#assistantmessage) | <Documented /> | One block of an assistant reply. | The engine. |
+| [`ToolUse`](#tooluse) | <Documented /> | The row of a tool call in the transcript. | The engine. |
+| [`ToolResult`](#toolresult) | <Documented /> | The result block under a tool row. | The engine. |
+| [`ToolGroup`](#toolgroup) | <Documented /> | A run of tool calls that the transcript folds into one count line. | The engine. |
+| [`CommandOutput`](#commandoutput) | <Documented /> | The output row of a slash command. | The engine. |
+| [`ToolProgress`](#toolprogress) | <Documented /> | One row of live progress under a running tool call. | The engine. |
+| [Spinner](#spinner) | <Documented /> | The line that animates while a turn runs. | The engine. |
+| [`TurnDuration`](#turnduration) | <Documented /> | The line that closes a turn. | The engine. |
+| [`InfoNotice`](#infonotice) | <Documented /> | One dim status line under the logo. | The engine. |
+| [`SessionMode`](#sessionmode) | <Documented /> | The mode labels at the right of the prompt footer. | The engine. |
+| [`PromptHint`](#prompthint) | <Documented /> | The hint line under the prompt. | The engine. |
+| [`AbovePrompt`](#aboveprompt) | <Documented /> | The band directly above the prompt input. | A hook of a mod. A survey also draws there. |
+| [Pane](#pane) | <Documented /> | A framed region. | A hook of a mod, after `$.ui.open`. |
+| [`Placed`](#placed) | <Documented /> | A row in the transcript. | A hook of a mod, after `$.ui.place`. |
+| [`Backdrop`](#backdrop) | <Documented /> | The drawing behind the conversation. | A hook of a mod, after `$.theme.set`. |
 
 "Read-only" means a rewrite must keep the prop as received. The engine refuses a change.
 Many sites have `onScreen` (type `OnScreen \| null`, optional, read-only): which of its rows the viewport shows now. It is `null` while drawn outside the viewport, and absent where the surface does not say.
@@ -232,6 +282,17 @@ A row that a plugin placed in the transcript with `$.ui.place`. It is empty unti
 | `id` | <Undocumented /> | What `$.ui.place` was given. It is unique among that plugin's rows. | `string`. Read-only. New in `2.1.314`. |
 | `plugin` | <Undocumented /> | Who placed the row, so a hook can leave the row of another plugin alone. | `string`. Read-only. New in `2.1.314`. |
 | `onScreen` | <Undocumented /> | Which of its rows the viewport of the transcript shows now. It is reported once the row is drawn, and again when it changes. On a scroll, it is reported for the messages at the edges of the viewport only. | `OnScreen \| null`, optional. Read-only. `null` while drawn outside the viewport. Absent where the surface does not say. A rewrite carries it on as received. The engine refuses a rewrite that changes or drops it. New in `2.1.314`. |
+
+### `Backdrop`
+
+The backdrop of the session, which a plugin set with `$.theme.set`. Only the desktop and mobile surfaces raise it, and they draw it behind the conversation. It is empty until a hook draws it. Every plugin's hook hears it, so read `plugin` beside `id`. The surface sizes the drawing to its window or screen, and presses go through to what is over it. Each surface asks separately, so a hook can read `e.surface` and draw a different scene on each. A `Client` draws nothing on mobile.
+
+| Item | Status | What it is for | Shape and limits |
+| --- | --- | --- | --- |
+| `id` | <Documented /> | What `$.theme.set` was given as `backdrop`. | `string`. Read-only. |
+| `plugin` | <Documented /> | Who set the backdrop, so a hook can leave the backdrop of another plugin alone. | `string`. Read-only. |
+| `glass` | <Documented /> | How the surface frosts its panels over the drawing, with the defaults filled in. | `{ blur: number; tint?: string; opacity: number } \| false`. Read-only. `false` where the panels stay as they are. |
+| `colorScheme` | <Documented /> | Whether the scene is light or dark. | `'light' \| 'dark'`, optional. Read-only. Absent where the plugin did not say. |
 
 ## JSX and Globals
 
