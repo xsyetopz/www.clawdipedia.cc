@@ -34,6 +34,9 @@ describe("binary", () => {
 			dir: join(tmp, "cache", "9.9.9", "clean"),
 		});
 		expect(structured(r)["units"]).toBeGreaterThan(10);
+		const again = await call("code", { action: "prepare", version: "9.9.9" });
+		expect(structured(again)["parsed"]).toBe(0);
+		expect(text(again)).toContain("read from the cache");
 	});
 
 	test("code search and read find code by a literal anchor", async () => {

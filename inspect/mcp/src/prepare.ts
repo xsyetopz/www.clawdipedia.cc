@@ -253,17 +253,22 @@ export const releasePrepared = (): void => {
 	preparedCache.clear();
 };
 
-/** `prepare` for a version or path, kept in memory until `releasePrepared`. */
+/**
+ * `prepare` for a version or path, kept in memory until `releasePrepared`. A call that gets the kept
+ * result did no work, so it gives `parsed: 0` and its own `ms`.
+ */
 export const prepared = async (
 	binary?: string,
 ): Promise<Awaited<ReturnType<typeof prepare>>> => {
+	const t0 = performance.now();
 	const p = await program(binary);
 	const installs = await listInstalls();
 	const version =
 		installs.find((i) => i.path === p.path)?.version ?? basename(p.path);
 	const hit = preparedCache.get(p.path);
 	if (hit) {
-		return hit;
+		const kept = await hit;
+		return { ...kept, parsed: 0, ms: Math.round(performance.now() - t0) };
 	}
 	const pending = prepare(
 		version,
