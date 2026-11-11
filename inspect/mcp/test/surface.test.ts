@@ -75,6 +75,15 @@ describe("registry", () => {
 		const b = bundle('var a=["PreToolUse","PostToolUse"]');
 		expect(await surface(b, "hook-event")).toBe(await surface(b, "hook-event"));
 	});
+
+	test("computes a kind once for two calls at the same time", async () => {
+		const b = bundle('var a=["PreToolUse","PostToolUse"]');
+		const [first, second] = await Promise.all([
+			surface(b, "hook-event"),
+			surface(b, "hook-event"),
+		]);
+		expect(first).toBe(second);
+	});
 });
 
 describe("common helpers", () => {

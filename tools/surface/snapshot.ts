@@ -11,6 +11,7 @@ import { basename, dirname, join } from "node:path";
 import { parseArgs } from "node:util";
 
 import { binaryPath, program } from "../../inspect/mcp/src/binary.ts";
+import { mapSeq } from "../../inspect/mcp/src/seq.ts";
 import {
 	KINDS,
 	surface,
@@ -169,11 +170,10 @@ export const snapshot = async (
 	const p = await program(binary);
 	const bundle = p.bundle();
 	const byKind: Record<string, SurfaceItem[]> = {};
-	const runs = await Promise.all(
-		kinds.map(async (k) => [k, await surface(bundle, k, p.modules)] as const),
-	);
-	for (const [k, items] of runs) {
-		byKind[k] = items;
+	// One kind after the other: kinds that run at once hold the garbage of each at once.
+	const runs = await mapSeq(kinds, (k) => surface(bundle, k, p.modules));
+	for (const [i, k] of kinds.entries()) {
+		byKind[k] = runs[i] ?? [];
 	}
 	const version = VERSION_RE.test(binary) ? binary : basename(binary);
 	return { version, byKind };

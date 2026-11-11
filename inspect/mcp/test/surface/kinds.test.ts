@@ -162,6 +162,14 @@ describe("mod-api", () => {
 		);
 		expect(error).toHaveProperty("message", expect.stringMatching(/embedded/u));
 	});
+	test("a run that throws is not kept for the bundle", async () => {
+		const b = bundle("var a=1");
+		const error = await surface(b, "mod-api").catch(
+			(error_: unknown) => error_,
+		);
+		expect(error).toBeInstanceOf(Error);
+		expect(await surface(b, "mod-api", await embedded())).toHaveLength(8);
+	});
 });
 
 describe("keybinding", () => {
