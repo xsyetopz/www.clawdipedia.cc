@@ -143,6 +143,25 @@ const chunkNames = (literals: Map<string, string[]>): Map<string, string> => {
 	return chunks;
 };
 
+// Gives each unit the one string of each text. Three of five units have the text of another unit, and a
+// property name such as `.length` is in the fingerprint of thousands of units.
+const shareStrings = (units: Unit[]): void => {
+	const pool = new Map<string, string>();
+	const one = (s: string): string => {
+		const first = pool.get(s);
+		if (first !== undefined) {
+			return first;
+		}
+		pool.set(s, s);
+		return s;
+	};
+	for (const u of units) {
+		u.t = one(u.t);
+		u.h = one(u.h);
+		u.f = u.f.map((x) => one(x));
+	}
+};
+
 const isIndex = (x: unknown): x is Index =>
 	isRecord(x) &&
 	typeof x["version"] === "string" &&
@@ -158,12 +177,16 @@ const readCache = async (
 		return undefined;
 	}
 	const index: unknown = JSON.parse(await cached.text());
-	return isIndex(index) &&
-		index.format === FORMAT &&
-		index.binary.size === binary.size &&
-		index.binary.mtime === binary.mtime
-		? index
-		: undefined;
+	if (
+		!isIndex(index) ||
+		index.format !== FORMAT ||
+		index.binary.size !== binary.size ||
+		index.binary.mtime !== binary.mtime
+	) {
+		return undefined;
+	}
+	shareStrings(index.units);
+	return index;
 };
 
 /**
@@ -196,6 +219,7 @@ export const prepare = async (
 		u.t = renameChunks(u.t, chunks);
 		u.h = sha(u.t, 12);
 	}
+	shareStrings(units);
 	const index: Index = {
 		format: FORMAT,
 		version,
