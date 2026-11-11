@@ -199,7 +199,7 @@ test.skipIf(!installed)(
 	"two runs on the installed binary give the same bytes as the committed file",
 	async () => {
 		const [a, b] = await Promise.all([tmp(), tmp()]);
-		// One at a time: each build peaks near 18 GB, and two at once swap on a 32 GB machine.
+		// One at a time: each build peaks near 2.5 GB, so two at once can swap on an 8 GB machine.
 		const first = await build(a);
 		const second = await build(b);
 		for (const r of [first, second]) {
