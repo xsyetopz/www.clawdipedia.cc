@@ -46,19 +46,23 @@ export const litValue = (n: NodeOf<"Literal">): unknown => {
 /** The child nodes of `n`, in source order. */
 export const children = (n: Node): Node[] => {
 	const out: Node[] = [];
-	for (const [k, v] of Object.entries(n)) {
-		if (k === "range" || k === "hashbang") {
-			continue;
+	const hashbang = n.type === "Program" ? n.hashbang : undefined;
+	let sorted = true;
+	const add = (x: unknown): void => {
+		if (isNode(x) && x !== hashbang) {
+			sorted &&= (out.at(-1)?.start ?? 0) <= x.start;
+			out.push(x);
 		}
+	};
+	for (const v of Object.values(n)) {
 		if (Array.isArray(v)) {
 			for (const x of v) {
-				if (isNode(x)) {
-					out.push(x);
-				}
+				add(x);
 			}
-		} else if (isNode(v)) {
-			out.push(v);
+		} else {
+			add(v);
 		}
 	}
-	return out.toSorted((a, b) => a.start - b.start);
+	// The parser gives most nodes with the fields in source order, and the walk of a module asks for each node.
+	return sorted ? out : out.toSorted((a, b) => a.start - b.start);
 };
