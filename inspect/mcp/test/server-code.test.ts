@@ -27,10 +27,10 @@ describe("binary", () => {
 	});
 
 	test("code prepare cleans an install once and then reads the cache", async () => {
+		// The tests run in a random order, and `find` also prepares: `server-idle.test.ts` has the count of a first call.
 		const r = await call("code", { action: "prepare", version: "9.9.9" });
 		expect(r.structuredContent).toMatchObject({
 			version: "9.9.9",
-			parsed: 1,
 			dir: join(tmp, "cache", "9.9.9", "clean"),
 		});
 		expect(structured(r)["units"]).toBeGreaterThan(10);
