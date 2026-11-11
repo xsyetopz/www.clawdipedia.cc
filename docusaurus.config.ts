@@ -25,6 +25,55 @@ const schemasPlugin = ({ siteDir }: LoadContext): Plugin => ({
 	},
 });
 
+// Each Mantine file is its own stylesheet entry. A CSS file that pulls them in with
+// `@import` makes postcss-cascade-layers warn once for each rule, because the plugin
+// matches the word "layer" in the path.
+const MANTINE_STYLES = [
+	"baseline",
+	"default-css-variables",
+	"global",
+	"Badge",
+	"Tooltip",
+	"Popover",
+	"Paper",
+	"List",
+	"Title",
+	"Text",
+	"Anchor",
+	"Group",
+	"Stack",
+	"VisuallyHidden",
+].map((name) => `./node_modules/@mantine/core/styles/${name}.layer.css`);
+
+// On Bun, `require.cache` lists the built-in `ws` as a child of webpack-bundle-analyzer
+// under the bare name "ws". webpack follows client.js to that name, cannot stat it, and
+// then saves no client cache. bun.lock replaces client.js: it changes when a dependency
+// of client.js does, and the cache version already holds the Docusaurus version.
+const clientCachePlugin = ({ siteDir }: LoadContext): Plugin => ({
+	name: "client-cache",
+	configureWebpack({ cache }, isServer) {
+		if (isServer || typeof cache !== "object" || cache.type !== "filesystem") {
+			return {};
+		}
+		const tracked = cache.buildDependencies?.["config"] ?? [];
+		return {
+			mergeStrategy: { "cache.buildDependencies.config": "replace" },
+			cache: {
+				type: "filesystem",
+				buildDependencies: {
+					config: [
+						...tracked.filter(
+							(item) =>
+								typeof item !== "string" || basename(item) !== "client.js",
+						),
+						join(siteDir, "bun.lock"),
+					],
+				},
+			},
+		};
+	},
+});
+
 const config: Config = {
 	title: "Clawdipedia",
 	tagline: DISCLAIMER,
@@ -63,7 +112,7 @@ const config: Config = {
 		],
 	],
 
-	plugins: [schemasPlugin, llmsTxtPlugin],
+	plugins: [schemasPlugin, llmsTxtPlugin, clientCachePlugin],
 
 	presets: [
 		[
@@ -76,7 +125,7 @@ const config: Config = {
 					rehypePlugins: [rehypeCodeWbr, rehypeTableMarks],
 				},
 				blog: false,
-				theme: { customCss: ["./src/css/custom.css", "./src/css/mantine.css"] },
+				theme: { customCss: ["./src/css/custom.css", ...MANTINE_STYLES] },
 			} satisfies Preset.Options,
 		],
 	],
