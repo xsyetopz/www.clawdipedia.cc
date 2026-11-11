@@ -1,7 +1,14 @@
 import { parse } from "oxc-parser";
 
 import type { Bundle } from "./bundle.ts";
-import { asNode, children, isNode, type Node, type NodeOf } from "./node.ts";
+import {
+	asNode,
+	childAt,
+	children,
+	isNode,
+	type Node,
+	type NodeOf,
+} from "./node.ts";
 import {
 	type Variable,
 	variableAt,
@@ -130,9 +137,7 @@ export class Module {
 	nodeAt(pos: number): Node {
 		let n: Node = this.ast;
 		for (;;) {
-			const next: Node | undefined = children(n).find(
-				(c) => c.start <= pos && pos < c.end,
-			);
+			const next = childAt(n, pos);
 			if (!next) {
 				return n;
 			}

@@ -34,6 +34,23 @@ test("a name in a parameter default is not the variable of the function body", a
 	]);
 });
 
+// A template has its texts in one list and its expressions in another.
+const TEMPLATE = `\`a\${b}c\${d}\``;
+
+test.each([
+	["[,a,,b]", "b", "Identifier"],
+	["[,a,,b]", ",,", "ArrayExpression"],
+	["var a=1; var b=2; var c=3; var d=4; var e=5", "d=4", "Identifier"],
+	["var a=1; var b=2; var c=3; var d=4; var e=5", " var d", "Program"],
+	["({a})", "a", "Identifier"],
+	[TEMPLATE, "d", "Identifier"],
+	[TEMPLATE, "c", "TemplateElement"],
+])("the innermost node of `%s` at `%s` is a %s", async (src, at, type) => {
+	const bundle = new Bundle([{ name: "/$bunfs/root/a.js", text: src }]);
+	const m = await bundle.get("a.js");
+	expect<string | undefined>(m?.nodeAt(src.indexOf(at)).type).toBe(type);
+});
+
 // Claude Code 2.1.322 embeds `mermaid.min.js` and two more `.js` files as zstd data.
 test("a bundle leaves out a file that is not JavaScript, and keeps the order of the rest", async () => {
 	const bundle = new Bundle([

@@ -72,3 +72,41 @@ export const children = (n: Node): Node[] => {
 	// The parser gives most nodes with the fields in source order, and the walk of a module asks for each node.
 	return sorted ? out : out.toSorted((a, b) => a.start - b.start);
 };
+
+const holds = (x: unknown, pos: number): x is Node =>
+	isNode(x) && x.start <= pos && pos < x.end;
+
+// The item of one list field that holds `pos`. The items of a list are in source order, so a binary search
+// finds it: the body of a module can have thousands of statements.
+const itemAt = (list: unknown[], pos: number): Node | undefined => {
+	let lo = 0;
+	let hi = list.length;
+	while (lo < hi) {
+		const mid = Math.floor((lo + hi) / 2);
+		const x: unknown = list[mid];
+		if (!isNode(x)) {
+			// An array with a hole (`[,a]`) has a null item.
+			return list.find((y) => holds(y, pos));
+		}
+		if (x.end <= pos) {
+			lo = mid + 1;
+		} else {
+			hi = mid;
+		}
+	}
+	const x: unknown = list[lo];
+	return holds(x, pos) ? x : undefined;
+};
+
+/** The first of `children(n)` that holds index `pos`, found without the list of the children. */
+export const childAt = (n: Node, pos: number): Node | undefined => {
+	const hashbang = n.type === "Program" ? n.hashbang : undefined;
+	let found: Node | undefined;
+	for (const v of Object.values(n)) {
+		const x: unknown = Array.isArray(v) ? itemAt(v, pos) : v;
+		if (holds(x, pos) && x !== hashbang && (!found || x.start < found.start)) {
+			found = x;
+		}
+	}
+	return found;
+};
