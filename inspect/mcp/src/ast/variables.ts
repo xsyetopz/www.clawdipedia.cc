@@ -53,10 +53,23 @@ export interface Variable {
 	identifiers: Node[];
 	references: Ref[];
 }
+// Each identifier keeps its variable under this key, which takes less memory than one map entry per identifier.
+const VARIABLE = Symbol("variable");
+interface Named {
+	type: string;
+	[VARIABLE]?: Variable;
+}
+
+/** The variable an identifier names: the one it refers to, or the one it declares. Undefined before `variablesOf`. */
+export const variableAt = (id: Node): Variable | undefined => {
+	const named: Named = id;
+	return named[VARIABLE];
+};
+
 /** The variables of one module. */
 export interface Variables {
-	/** Each declared variable, by every identifier that declares or uses it. */
-	byId: Map<Node, Variable>;
+	/** Each declared variable. */
+	all: Variable[];
 	/** The module-scope variables, by name. */
 	top: Map<string, Variable>;
 	/** The identifiers that read a name the module does not declare. */
@@ -145,11 +158,7 @@ const variableOf = (
 
 /** Analyzes the scopes of a module's tree. A class declaration's name is one variable, inside the class and outside. */
 export const variablesOf = (ast: unknown): Variables => {
-	const out: Variables = {
-		byId: new Map(),
-		top: new Map(),
-		globals: new Set(),
-	};
+	const out: Variables = { all: [], top: new Map(), globals: new Set() };
 	if (!isEstree(ast)) {
 		return out;
 	}
@@ -175,7 +184,8 @@ export const variablesOf = (ast: unknown): Variables => {
 			}
 		}
 	}
-	for (const v of new Set(made.values())) {
+	out.all = [...new Set(made.values())];
+	for (const v of out.all) {
 		// A list from `flatMap` or `push` has room for the longest list that the program made that way, near
 		// 200 bytes on each variable. A copy of the list, or one from `toSorted`, has room for its items only.
 		v.defs = [...v.defs];
@@ -183,11 +193,12 @@ export const variablesOf = (ast: unknown): Variables => {
 		v.references = v.references.toSorted(
 			(a, b) => a.identifier.start - b.identifier.start,
 		);
-		for (const id of v.identifiers) {
-			out.byId.set(id, v);
-		}
-		for (const r of v.references) {
-			out.byId.set(r.identifier, v);
+		const named: Named[] = [
+			...v.identifiers,
+			...v.references.map((r) => r.identifier),
+		];
+		for (const id of named) {
+			id[VARIABLE] = v;
 		}
 	}
 	return out;

@@ -14,7 +14,7 @@ const localName = (depth: number, i: number): string =>
 
 /** Each variable that a module declares, with the identifier nodes that name it, in the order that the code declares them. */
 const declared = (m: Module): { v: Variable; ids: Node[] }[] =>
-	[...new Set(m.variables.values())]
+	m.variables
 		.toSorted(
 			(a, b) => (a.identifiers[0]?.start ?? 0) - (b.identifiers[0]?.start ?? 0),
 		)

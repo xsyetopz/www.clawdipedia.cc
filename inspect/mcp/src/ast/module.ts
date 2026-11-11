@@ -2,7 +2,12 @@ import { parse } from "oxc-parser";
 
 import type { Bundle } from "./bundle.ts";
 import { asNode, children, isNode, type Node, type NodeOf } from "./node.ts";
-import { type Variable, type Variables, variablesOf } from "./variables.ts";
+import {
+	type Variable,
+	variableAt,
+	type Variables,
+	variablesOf,
+} from "./variables.ts";
 
 // The parser's `Severity` is an ambient const enum, which `verbatimModuleSyntax` cannot import.
 const isError = (severity: string): boolean => severity === "Error";
@@ -101,9 +106,9 @@ export class Module {
 		return this.#vars;
 	}
 
-	/** Each declared variable, by every identifier that declares or uses it. */
-	get variables(): Map<Node, Variable> {
-		return this.#analyze().byId;
+	/** Each declared variable. */
+	get variables(): Variable[] {
+		return this.#analyze().all;
 	}
 
 	parent(n: Node): Node | undefined {
@@ -151,7 +156,8 @@ export class Module {
 
 	/** The variable an identifier names: the one it refers to, or the one it declares. */
 	variable(id: Node): Variable | undefined {
-		return this.variables.get(id);
+		this.#analyze();
+		return variableAt(id);
 	}
 
 	/** Whether `id` reads a name that the module does not declare. */
