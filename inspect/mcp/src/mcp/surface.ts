@@ -177,13 +177,11 @@ group(
 			const wanted = need(name, "name");
 			const found = await envPlaces(bundle);
 			const places = found.filter((i) => i.name === wanted);
-			const lines = await mapSeq(places, async (i) => {
+			const lines = places.map((i) => {
 				const at = i.offset ?? 0;
-				const mod = await bundle.get(i.module ?? "");
-				const src = mod?.text.slice(
-					Math.max(0, at - PLACE_BEFORE),
-					at + PLACE_AFTER,
-				);
+				const src = bundle.texts
+					.get(i.module ?? "")
+					?.slice(Math.max(0, at - PLACE_BEFORE), at + PLACE_AFTER);
 				return `- ${i.detail ?? "read"}  ${i.module}:${at}\n  ${src?.replaceAll("\n", " ")}`;
 			});
 			return text(`${wanted}: places ${places.length}\n${lines.join("\n")}`);

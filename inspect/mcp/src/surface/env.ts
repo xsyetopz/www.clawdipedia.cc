@@ -41,8 +41,7 @@ import { readNode, SHOWN } from "./env/reads.ts";
 import { scanRegistries } from "./env/registry.ts";
 import { type Ctx, NAME } from "./env/shared.ts";
 
-/** Every place that names an env variable, in the order found; `extractEnv` keeps the first of each name. */
-export const envPlaces = async (bundle: Bundle): Promise<SurfaceItem[]> => {
+const findPlaces = async (bundle: Bundle): Promise<SurfaceItem[]> => {
 	const out: SurfaceItem[] = [];
 	const add: Ctx["add"] = (m, n, name, extra = {}) => {
 		if (NAME.test(name)) {
@@ -64,5 +63,26 @@ export const envPlaces = async (bundle: Bundle): Promise<SurfaceItem[]> => {
 	return out;
 };
 
+const found = new WeakMap<Bundle, Promise<SurfaceItem[]>>();
+
+/**
+ * Every place that names an env variable, in the order found; `extractEnv` keeps the first of each name.
+ * Found once per bundle, because a search visits every node of the program: do not change the list. A
+ * search that throws is not kept.
+ */
+export const envPlaces = async (bundle: Bundle): Promise<SurfaceItem[]> => {
+	const places = found.get(bundle) ?? findPlaces(bundle);
+	found.set(bundle, places);
+	try {
+		return await places;
+	} catch (error) {
+		if (found.get(bundle) === places) {
+			found.delete(bundle);
+		}
+		throw error;
+	}
+};
+
+// A copy, because `unique` writes to the first item of each name.
 export const extractEnv: Extractor = async (bundle) =>
-	unique(await envPlaces(bundle));
+	unique(structuredClone(await envPlaces(bundle)));

@@ -225,6 +225,20 @@ var K=["ONLY_LISTED_A","VIA_COMPARE_A","VIA_COMPARE_B"];
 		expect(of("ONLY_LISTED_A")).toEqual(["listed"]);
 	});
 
+	// The `env` list gives the first place of a name the detail of a later one.
+	test("the places of a bundle are found once, and the env list leaves them as they are", async () => {
+		const b = bundle(
+			'spawn("a",{env:{...process.env,FOO_BAR:"1"}});var x=process.env.FOO_BAR',
+		);
+		const places = await envPlaces(b);
+		const details = places.map((p) => p.detail);
+		expect(details).toEqual([undefined, "set for a child process"]);
+		const [listed] = await surface(b, "env");
+		expect(listed?.detail).toBe("set for a child process");
+		expect(await envPlaces(b)).toBe(places);
+		expect(places.map((p) => p.detail)).toEqual(details);
+	});
+
 	test("a lowercase read of another object is not an env name", async () => {
 		const n = await names("env", "var o={a:1};var x=o.FOO_BAR,y=o.low;");
 		expect(n).not.toContain("FOO_BAR");
