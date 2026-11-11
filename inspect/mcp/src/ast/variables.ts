@@ -176,7 +176,13 @@ export const variablesOf = (ast: unknown): Variables => {
 		}
 	}
 	for (const v of new Set(made.values())) {
-		v.references.sort((a, b) => a.identifier.start - b.identifier.start);
+		// A list from `flatMap` or `push` has room for the longest list that the program made that way, near
+		// 200 bytes on each variable. A copy of the list, or one from `toSorted`, has room for its items only.
+		v.defs = [...v.defs];
+		v.identifiers = [...v.identifiers];
+		v.references = v.references.toSorted(
+			(a, b) => a.identifier.start - b.identifier.start,
+		);
 		for (const id of v.identifiers) {
 			out.byId.set(id, v);
 		}
