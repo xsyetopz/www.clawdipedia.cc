@@ -6,7 +6,7 @@ sidebar_position: 1
 
 An environment variable is a named setting that a program reads when it starts.
 Claude Code `2.1.322` reads well over a thousand of them.
-This section lists 1571 variables that you can use. It splits them into groups, so you can find them.
+This section lists 1572 variables that you can use. It splits them into groups, so you can find them.
 The [official docs](https://code.claude.com/docs/en/env-vars) list a few of them. Only the program shows most of them.
 
 Set a variable in your shell, or under the `env` key of `~/.claude/settings.json`, `.claude/settings.json`, `.claude/settings.local.json`, or managed settings.
@@ -107,13 +107,13 @@ Numeric variables, such as timeouts and token budgets, accept forms like `2e3` (
 | [Models and Effort](models-and-effort.md) | Environment variables that pick the model, pin model aliases, set thinking effort, and limit output size | 84 |
 | [Auth and Accounts](auth-and-accounts.md) | Environment variables for API keys, login tokens, credential helpers, and account details | 79 |
 | [Cloud Providers](cloud-providers.md) | Environment variables for Amazon Bedrock, Google Vertex AI, Microsoft Foundry, and gateway setups | 78 |
-| [Network and Proxy](network-and-proxy.md) | Environment variables for API addresses, proxies, TLS certificates, time limits, and retries | 70 |
+| [Network and Proxy](network-and-proxy.md) | Environment variables for API addresses, proxies, TLS certificates, time limits, and retries | 71 |
 | [Context and Compaction](context-and-compaction.md) | Environment variables for the context window, compaction, memory, and the prompt cache | 49 |
 | [Tools and Bash](tools-and-bash.md) | Environment variables for the Bash tool, file tools, search, permissions, and the sandbox | 102 |
 | [UI and Terminal](ui-and-terminal.md) | Environment variables for the terminal screen, colors, voice, keys, and notifications | 88 |
-| [Sessions and Storage](sessions-and-storage.md) | Environment variables for config folders, session files, resume, install, and updates | 78 |
+| [Sessions and Storage](sessions-and-storage.md) | Environment variables for config folders, session files, resume, install, and updates | 80 |
 | [Telemetry and Debug](telemetry-and-debug.md) | Environment variables for usage data, OpenTelemetry, debug logs, and error reports | 141 |
-| [Plugins and MCP](plugins-and-mcp.md) | Environment variables for plugins, MCP servers, skills, hooks, and marketplaces | 102 |
+| [Plugins and MCP](plugins-and-mcp.md) | Environment variables for plugins, MCP servers, skills, hooks, and marketplaces | 103 |
 | [Agents and Teams](agents-and-teams.md) | Environment variables for subagents, agent teams, background tasks, and workers | 80 |
 | [Features and Toggles](features-and-toggles.md) | Environment variables that turn single features on or off, including server-gated features | 67 |
 | [Remote and Cloud Sessions](remote-and-cloud-sessions.md) | Environment variables for cloud sessions, the bridge, the desktop app, Chrome, Cowork, and Slack | 188 |

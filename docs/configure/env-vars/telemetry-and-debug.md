@@ -73,7 +73,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `DEBUG` | <Documented /> | Turns on debug mode when truthy. | - | - |
 | `DEBUG_CLAUDE_AGENT_SDK` | <Undocumented /> | In the SDK, forwards the CLI stderr to the caller and sets `DEBUG` to `1` for the child. | - | - |
 | `DEBUG_SDK` | <Undocumented /> | Turns on debug mode at start. | - | - |
-| `DISABLE_ERROR_REPORTING` | <Documented /> | Opts out of error reporting. | On or off | - |
+| `DISABLE_ERROR_REPORTING` | <Documented /> | Opts out of error reporting. A background session that you start keeps the value: the program passes it to the background process (`chunk-ph0kyf9w.js:37656`, `:39586`). | On or off | - |
 | `DISABLE_TELEMETRY` | <Documented /> | Opts out of telemetry. The bundle also treats it as "no-telemetry" mode for other non-essential traffic checks. | Text. Any non-empty string counts, so `0` and `false` still opt out. Claude Code passes it to remote child sessions | All sessions. Not set from project `env` before trust |
 | `DO_NOT_TRACK` | <Documented /> | Opts out of telemetry like `DISABLE_TELEMETRY` does. | On or off. Claude Code parses it as a standard boolean, so `0` or `false` leaves telemetry on | All sessions. Not set from project `env` before trust |
 | `ENABLE_BETA_TRACING_DETAILED` | <Documented /> <Gated note="Works only behind a feature flag or server gate" /> <Experimental /> | Turns on detailed beta tracing. It needs `BETA_TRACING_ENDPOINT` as well. | On or off. Also needs a non-empty `BETA_TRACING_ENDPOINT`. Gated by an org check or a feature flag | Tracing. Not set from project `env` before trust |

@@ -136,6 +136,24 @@ Each case ran on `2.1.316` and on `2.1.319` with `--debug-file` set.
 - Empty and not-PEM files did not stop the run on `2.1.316` against the plain HTTP stub (exit 0, 1 request). The stderr warning is the only change the cases show for them. A TLS stub cannot test them, because the file then holds no CA for the stub. The `2.1.318` and `2.1.319` runs gave the same results.
 - The first stderr line (`Warning: Ignoring extra certs from ..., load failed: ...`) comes from the runtime. On `2.1.316` it showed only in the TLS case. The `Claude Code ...` lines show only on `2.1.318` and later.
 
+## Certificate Name-Constraint Errors
+
+The `2.1.323` release notes say: "Fixed certificate name-constraint errors being retried for minutes; they now fail at once with a message that says what to fix".
+Status: <Documented /> in the release notes the program shows. The message text below is read from the program. The retry change is not checked.
+
+A certificate authority in the server's chain can limit the names it may certify (a name constraint).
+When a server certificate breaks that limit, the program shows a message that says what to fix.
+Whoever runs the server, proxy, or gateway makes the fix.
+The program starts the message with `Unable to connect to API: SSL certificate verification failed (<code>).`
+
+| Code | What the message says to do |
+| --- | --- |
+| `PERMITTED_VIOLATION`, `EXCLUDED_VIOLATION` | Issue a new certificate whose names all fit the limit, or one whose chain has no such limit. The message adds that a certificate with no DNS subject alternative name can have its common name checked as a DNS name, even an address. |
+| `NAME_CONSTRAINTS_WITHOUT_SANS` | Issue a new certificate that lists its names as subject alternative names. |
+| `UNSUPPORTED_CONSTRAINT_TYPE` | The limit covers a kind of name that Claude Code cannot check, usually IP addresses. Claude Code refuses any certificate under such an authority that lists a name of that kind. Issue a certificate whose chain has no such limit, or one that lists only DNS names that every authority in the chain allows. Clients must then use those names to reach the server. |
+
+**Source:** the program. The code set and the message function are in `chunk-x4fdscgs.js` (`324812`, about `325089`), and the error text that carries them is at `329887`.
+
 ## How It Works
 
 Claude Code reads shell variables once at startup, so restart after a change.
