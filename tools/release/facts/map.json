@@ -42,14 +42,6 @@
 		"kind": "env",
 		"probes": ["print.sweep"]
 	},
-	"docs/configure/env-vars/plugins-and-mcp.md#variables:dfd0d592": {
-		"kind": "env",
-		"probes": ["print.sweep"]
-	},
-	"docs/configure/env-vars/plugins-and-mcp.md#variables:16f1ccc0": {
-		"kind": "env",
-		"probes": ["print.sweep"]
-	},
 	"docs/configure/env-vars/telemetry-and-debug.md#variables:42614a05": {
 		"kind": "env",
 		"probes": [
@@ -342,7 +334,7 @@
 		"probes": [],
 		"note": "RenderInput Placed.onScreen in schemas/claude-code.d.ts"
 	},
-	"docs/extend/plugins/cli.md#subcommands:ae6630e1": {
+	"docs/extend/plugins/cli.md#subcommands:7b5768c8": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
@@ -1705,7 +1697,7 @@
 		"probes": [],
 		"note": "an absence: the builder of the attachment is gone in the 2.1.314 program and only the reader, the renderer and the kind lists are left, so no probe can show the kind"
 	},
-	"docs/configure/models-and-providers/model-catalog.md#catalog:f4ea2594": {
+	"docs/configure/models-and-providers/model-catalog.md#catalog:3ff71bfb": {
 		"kind": "manual",
 		"probes": [],
 		"note": "/model unknown-id warning, 2.1.316 release notes and a -p probe of /model claude-zeta-9"
@@ -1885,7 +1877,7 @@
 		"probes": [],
 		"note": "cites the official release notes"
 	},
-	"docs/configure/cli/subcommands.md#ultrareview-eval-flags:f63ce40e": {
+	"docs/configure/cli/subcommands.md#ultrareview-eval-flags:f7b6a1c1": {
 		"kind": "flag",
 		"probes": [
 			"print.cli319.ultrareview-max-cost",
@@ -1921,7 +1913,7 @@
 			"print.api319.tool.exit-plan.teammate-no-prompt-tool"
 		]
 	},
-	"docs/reference/tools/gated-and-other.md#gated-tools:69c29bf0": {
+	"docs/reference/tools/gated-and-other.md#gated-tools:a1e94573": {
 		"kind": "behaviour",
 		"probes": [
 			"print.api319.tool.propose-skills.cowork",
@@ -2142,5 +2134,140 @@
 		"kind": "manual",
 		"probes": [],
 		"note": "by read in the 2.1.322 type file (schemas/claude-code.d.ts), first in captures/2.1.319/types.diff; no probe checks it yet"
+	},
+	"docs/configure/cli/remote-control.md#options:12d0a333": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the 2.1.323 release notes and the program"
+	},
+	"docs/configure/keybindings/index.md#example:4c2687a2": {
+		"kind": "manual",
+		"probes": [],
+		"note": "misspelled-modifier warning read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/configure/memory-and-rules.md#labels-in-the-prompt:9c5814a3": {
+		"kind": "manual",
+		"probes": [],
+		"note": "label text read in each installed program from 2.1.309"
+	},
+	"docs/configure/memory-and-rules.md#labels-in-the-prompt:dd250443": {
+		"kind": "manual",
+		"probes": [],
+		"note": "label text read in each installed program from 2.1.309"
+	},
+	"docs/configure/models-and-providers/model-catalog.md#catalog:732965dc": {
+		"kind": "manual",
+		"probes": [],
+		"note": "1M default window for an unknown ID read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/configure/permissions/modes.md#choosing-and-cycling-a-mode:90a6cc7f": {
+		"kind": "manual",
+		"probes": [],
+		"note": "auto mode killswitch fallback read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/configure/permissions/rules.md#the-permissions-keys:085d6733": {
+		"kind": "manual",
+		"probes": [],
+		"note": "shell reads under blockReadsOutsideWorkingDirectories read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/configure/permissions/rules.md#session-only-allow-rules:9d73eb0a": {
+		"kind": "manual",
+		"probes": [],
+		"note": "allow-rule split to session read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/configure/permissions/sandbox.md#other-behavior:c30639ec": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the 2.1.323 release notes and the program"
+	},
+	"docs/configure/permissions/sandbox.md#other-behavior:1505f940": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the 2.1.323 release notes and the program"
+	},
+	"docs/configure/settings/index.md#where-settings-live:f6685bcd": {
+		"kind": "manual",
+		"probes": [],
+		"note": "settings write outside a git repository read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/configure/settings/index.md#where-settings-live:d2f43e35": {
+		"kind": "manual",
+		"probes": [],
+		"note": "settings write seed rule read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/configure/settings/index.md#managed-settings:260bc031": {
+		"kind": "manual",
+		"probes": [],
+		"note": "managed file re-read at start-up read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/extend/headless/stream-json.md#undocumented-types:e5964b7c": {
+		"kind": "manual",
+		"probes": [],
+		"note": "hook heartbeat tool_progress read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/extend/hooks/input-and-output.md#common-input-fields:b163e2fb": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the 2.1.323 release notes (agent_id on subagent compaction hooks)"
+	},
+	"docs/extend/hooks/input-and-output.md#common-input-fields:dc3f3f2c": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the 2.1.323 release notes (agent_type on subagent compaction hooks)"
+	},
+	"docs/extend/mod-api/calls/tool-command-config.md#events-raised-by-these-calls:7a74abc5": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the 2.1.323 release notes and the program"
+	},
+	"docs/extend/skills-and-commands/slash-commands.md#how-usage-and-artifacts-work:8d139f43": {
+		"kind": "manual",
+		"probes": [],
+		"note": "/usage fix lines read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/extend/skills-and-commands/slash-commands.md#how-usage-and-artifacts-work:3fe8b600": {
+		"kind": "manual",
+		"probes": [],
+		"note": "/usage fix lines read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/how-it-works/account-and-access.md#the-usage-limit-menu:13b1a17e": {
+		"kind": "manual",
+		"probes": [],
+		"note": "spend limit menu read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/how-it-works/permission-flow.md#step-by-step:65c84eff": {
+		"kind": "manual",
+		"probes": [],
+		"note": "Bash allow-rule wildcard warning read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/how-it-works/permission-flow.md#step-by-step:2e5b0f40": {
+		"kind": "manual",
+		"probes": [],
+		"note": "shell reads under blockReadsOutsideWorkingDirectories read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/reference/opentelemetry.md#export-behavior:218d8c48": {
+		"kind": "external",
+		"probes": [],
+		"note": "cites the 2.1.323 release notes"
+	},
+	"docs/reference/tools/agents-and-tasks.md#errors:95a2f89a": {
+		"kind": "manual",
+		"probes": [],
+		"note": "worktree link-escape error read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/reference/tools/gated-and-other.md#gated-tools:40fb3688": {
+		"kind": "manual",
+		"probes": [],
+		"note": "WrapUp gate read in the 2.1.323 program"
+	},
+	"docs/reference/tools/gated-and-other.md#gated-tools:4f2c2b39": {
+		"kind": "manual",
+		"probes": [],
+		"note": "Yield tool read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/reference/tools/shell-and-web.md#errors:c9d66874": {
+		"kind": "manual",
+		"probes": [],
+		"note": "WebFetch call-time refusal read in the 2.1.323 program; the 2.1.322 program lacks it"
 	}
 }

@@ -38,7 +38,7 @@ Line numbers are lines of `captures/2.1.323/notes.md`, which holds the release n
 ## 5. What Changed
 
 - [x] 5.1 `docs/start/what-changed.md` holds only "Version 2.1.323" (`b73b06da`).
-- [ ] 5.2 `tools/release/facts/map.json` maps every fact, and `release:facts -- --check` passes.
+- [x] 5.2 `tools/release/facts/map.json` maps every fact, and `release:facts -- --check` passes.
 
 ## 6. Release
 
