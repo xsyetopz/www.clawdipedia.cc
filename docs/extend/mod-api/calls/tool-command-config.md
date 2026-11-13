@@ -85,7 +85,7 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 
 | Item | Status | The argument | Input and value |
 | --- | --- | --- | --- |
-| `tool.list` | <Documented /> | `$.tool.list()` | Input `NoArgs`. Value `ToolInfo[]`. |
+| `tool.list` | <Documented /> | `$.tool.list()` | Input `NoArgs`. Value `ToolInfo[]`. Since `2.1.323`, the tools a `tool.list` hook adds or removes apply to the model and every agent ([2.1.323 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323); the program, `chunk-bgb5bg9p.js:22177`). |
 | `tool.register` | <Documented /> | `$.tool.register(spec)` | Input `RegisteredToolSpec`. Value `{ tool: string }`. |
 | `command.list` | <Documented /> | `$.command.list()` | Input `NoArgs`. Value `CommandInfo[]`. |
 | `command.register` | <Documented /> | `$.command.register(spec)` | Input `CommandSpec`. Value `{ command: string }`. |

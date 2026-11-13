@@ -51,7 +51,7 @@ Source: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/m
 
 | Command | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
-| `/mcp` | <Documented /> | Opens the MCP panel. | Shows status, tool count, `cached` state, and `Issue:`. You can enable, disable, reconnect, authenticate, and clear authentication. |
+| `/mcp` | <Documented /> | Opens the MCP panel. | Shows status, tool count, `cached` state, and `Issue:`. You can enable, disable, reconnect, authenticate, and clear authentication. Since `2.1.323`, a server that needs authentication but still holds its sign-in also shows "Reconnect", and the page opens on it ([2.1.323 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323); the program, `chunk-8fw1gbv7.js:26827`). |
 | `/mcp reconnect all` | <Documented /> | Retries every failed server. | The interactive terminal needs `2.1.284` or later. |
 | `/mcp enable\|disable\|reconnect <server>` | <Documented /> | Controls a server without the panel. | Claude Code suggests it when a background session has no terminal attached. |
 | `/mcp__<server>__<prompt>` | <Documented /> | Runs an MCP prompt. | See [MCP Runtime](runtime.md#resources-and-prompts). |
