@@ -38,7 +38,7 @@ Source: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/m
 | `-s, --scope <scope>` | <Documented /> | Picks the scope. | `local` (default), `user`, or `project`. On `remove`, the default is the scope where the server exists. | `add`, `add-json`, `add-from-claude-desktop`, `remove` |
 | `-t, --transport <transport>` | <Documented /> | Picks the transport. | `stdio` (default), `sse`, or `http`. `ws` is not accepted. | `add` |
 | `-e, --env <env...>` | <Documented /> | Sets env vars of a stdio server. | `KEY=value`. Put another option between `--env` and the name. | `add` |
-| `-H, --header <header...>` | <Documented /> | Sets headers of a remote server. | `"Name: value"` | `add` |
+| `-H, --header <header...>` | <Documented /> | Sets headers of a remote server. | `"Name: value"`. `--help` says "Set headers for HTTP/SSE servers, repeat for more (e.g. -H "X-Api-Key: abc123")" (the program, `chunk-7j145bsn.js:21068`). | `add` |
 | `--client-id <clientId>` | <Documented /> | Sets the OAuth client ID. | Only for `http` and `sse`. | `add` |
 | `--client-secret` | <Documented /> | Prompts for the OAuth client secret. | Masked input. `MCP_CLIENT_SECRET` skips the prompt. Claude Code stores it in the keychain (macOS) or a credentials file. You set it only when you add the server. | `add`, `add-json` |
 | `--callback-port <port>` | <Documented /> | Fixes the OAuth callback port. | For servers with a pre-registered `http://localhost:PORT/callback`. For `xaa setup`, an integer from 1 to 65535. | `add` |

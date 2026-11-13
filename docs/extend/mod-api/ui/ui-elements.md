@@ -268,6 +268,7 @@ The framed region a plugin opened with `$.ui.open({ id })`. There is one instanc
 | --- | --- | --- | --- |
 | `title` | <Documented /> | The label of its tab while more than one pane is open. | `string`. Read-only here. Another `$.ui.open`, or a hook on `ui.open`, retitles it. |
 | `isFocused` | <Documented /> | True while the pane holds the keyboard, which the person gave it. Tab walks its elements, a Button's `hotkey` presses it, and the arrows scroll. | `boolean`. Read-only. |
+| `isPromptCovered` | <Documented /> | True while a dialog or a field above the prompt covers the prompt. | `boolean`. Read-only. The prop is left out while it is false (the program, `chunk-1xmjf4e6.js:558301`). |
 | `bodyColumns` | <Documented /> | Cells across the body, inside the frame. | `number`. Read-only. |
 | `placement` | <Documented /> | Where the surface seated the pane: `dock` beside the transcript (the terminal in fullscreen from 110 columns), or `inline` above the prompt. | `'dock' \| 'inline'`. Read-only. The engine refuses a change. |
 | `scroll` | <Documented /> | The window of the body over the tree. Engine-owned. | `SiteScroll`. `bodyRows` is the room the frame may use. Inline, the frame fits the tree. |

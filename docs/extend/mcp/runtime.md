@@ -71,7 +71,7 @@ Source: [Channels Reference](https://code.claude.com/docs/en/channels-reference)
 | Error text | <Documented /> | Shortens long errors. | Over about 11000 characters, the first 5000 and last 5000 stay. For `isError: true` results. |
 | 16 MiB response | <Documented /> | Caps one response or message. | HTTP and SSE stop reading. A WebSocket closes the connection. |
 | Description limits | <Documented /> | Cuts long text. | 4096 characters for server instructions and an upfront tool. 16384 for a tool found by tool search. `CLAUDE_CODE_MAX_MCP_DESCRIPTION_LENGTH` replaces both. |
-| Schema checks | <Documented /> | Drops bad tools. | Excludes a tool with a bad top-level property name or an invalid 2020-12 schema. Skips a tool whose input schema the Anthropic API would reject; `/mcp` lists each skipped tool as `name: reason` (the program, `chunk-qnbq0cf3.js:180221`, `chunk-8fw1gbv7.js:8749`). Flattens a root `anyOf`, `oneOf`, or `allOf`. |
+| Schema checks | <Documented /> | Drops bad tools. | Excludes a tool with a bad top-level property name or an invalid 2020-12 schema. Skips a tool whose input schema the Anthropic API would reject; `/mcp` says "Claude wasn't given N tools because the Anthropic API would reject their input schemas. Once the server is fixed, choose Reconnect." and lists each skipped tool as `name: reason`, up to 3 rows (the program, `chunk-qnbq0cf3.js:180221`, `chunk-8fw1gbv7.js:9594`). Flattens a root `anyOf`, `oneOf`, or `allOf`. |
 
 ## Timing and Recovery
 

@@ -42,7 +42,7 @@ on("engine.create", async ($, e, next) => {
 | Item | Status | What it does | How it works | Where it can be used |
 | --- | --- | --- | --- | --- |
 | `plugin.register` | <Documented /> | Fires once for each hooks module about to join the chain, at load and at reload. Core allows by default. | Input `PluginRegisterInput`. Result `PluginRegisterResult`: `{ allow: true }` or `{ refuse }`. A refused module never joins. The engine skips a judge that fails, and the module joins. | Hook via `on('plugin.register', ...)`. |
-| `engine.create` | <Documented /> | Runs while the engine builds `$`, once per load or reload of this plugin, before any other hook of it. `next(e)` resolves to `$` built so far. | Input `EngineCreateInput`. Result `EngineCreateResult`. A step may add nouns to `$`. Outside `user` it may also withhold nouns. If it replaces another plugin's noun, it fails and the plugin unloads. | Hook via `on('engine.create', ...)`. |
+| `engine.create` | <Documented /> | Runs while the engine builds `$`, once per load or reload of this plugin, before any other hook of it. `next(e)` resolves to `$` built so far. | Input `EngineCreateInput`. Result `EngineCreateResult`. A step may add nouns to `$` only when the hook names `engine.create`: a `*`, namespace, or negated hook only observes ([v2.1.323 release](https://github.com/anthropics/claude-code/releases/tag/v2.1.323)). If no hook names `engine.create`, `claude plugin validate` reports that the plugin never adds nouns (the program, `chunk-xq1041h8.js:43699`). Outside `user` it may also withhold nouns. If it replaces another plugin's noun, it fails and the plugin unloads. | Hook via `on('engine.create', ...)`. |
 
 ## Types
 
