@@ -36,11 +36,22 @@ interface Slot {
 }
 
 /** Base attributes: the keys the metrics/events attribute builder assigns. */
+const fnTextAt = async (re: RegExp): Promise<string> => {
+	const found = mods.find((m) => re.test(m.text));
+	if (!found) {
+		throw new Error(`base attribute anchor not found: ${re.source}`);
+	}
+	const src = await parsed(found);
+	const fn = fnAround(src, idx(src, re), () => true);
+	return fn ? src.src(fn) : "";
+};
+
 const buildBase = async (): Promise<{ base: Defs; baseNote: string }> => {
-	const bSrc = await only('["user.id"]=');
-	const bAt = idx(bSrc, '["user.id"]=');
-	const bFn = fnAround(bSrc, bAt, () => true);
-	const bText = bFn ? bSrc.src(bFn) : "";
+	// The builder assigns user.id from a variable and merges the gateway OIDC claims (`["user.id"]=r.sub`, `user.groups`), which since 2.1.323 live in a function of another module.
+	const bText = [
+		await fnTextAt(/\["user\.id"\]=[\w$]+,/u),
+		await fnTextAt(/\["user\.id"\]=[\w$]+\.sub\b/u),
+	].join("\n");
 	const baseKeys = [
 		...new Set(
 			[...bText.matchAll(/\b[\w$]\["([\w.]+)"\]=/gu)].map((m) => group(m, 1)),

@@ -679,7 +679,7 @@
 			},
 			"anchors": [
 				"«»={skill:«»(()=>«»().strict()),agent:«»(()=>«»().strict()),\"output-style\":«»(()=>«»().strict())}",
-				"observer:«»().optional().describe(\"Agent type auto-spawned as a background observer whenever this agent runs.\"),observerMessage:"
+				"observer:«»().optional().describe(\"Agent type auto-spawned as a background observer whenever this agent runs, or a comma-separated list of up to four, none of whose names has a comma.\"),observerMessage:"
 			],
 			"note": "The program's own frontmatter validator AI(kind, parsed) checks the parsed YAML with lPo.agent (a strict zod object). That declares observer as string, number, boolean or null (zod Ue([o(),E(),M(),Uf()])). Frontmatter is parsed with Bun.YAML.parse, so YAML scalars and lists reach it as these JSON types."
 		},

@@ -223,7 +223,7 @@
 			},
 			"anchors": [
 				"{type:\"last-prompt\",leafUuid:null,explicit:!0,sessionId:«»()}",
-				"{type:\"last-prompt\",...s.currentSessionLastPrompt&&{lastPrompt:«».currentSessionLastPrompt},leafUuid:«»,explicit:!0"
+				"{type:\"last-prompt\",...«».currentSessionLastPrompt&&{lastPrompt:«».currentSessionLastPrompt},leafUuid:«»,explicit:!0"
 			],
 			"note": "Three kinds of write: the exit reappend (lastPrompt and leafUuid are strings, each present only when truthy), the explicit leaf checkpoint (leafUuid is the message uuid string), and the withdrawal (leafUuid:null with explicit:true, the reader tests leafUuid===null). sessionId is a string."
 		},
@@ -240,7 +240,7 @@
 			},
 			"anchors": [
 				"{type:\"last-prompt\",leafUuid:null,explicit:!0,sessionId:«»()}",
-				"{type:\"last-prompt\",...s.currentSessionLastPrompt&&{lastPrompt:«».currentSessionLastPrompt},leafUuid:«»,explicit:!0"
+				"{type:\"last-prompt\",...«».currentSessionLastPrompt&&{lastPrompt:«».currentSessionLastPrompt},leafUuid:«»,explicit:!0"
 			],
 			"note": "Three kinds of write: the exit reappend (lastPrompt and leafUuid are strings, each present only when truthy), the explicit leaf checkpoint (leafUuid is the message uuid string), and the withdrawal (leafUuid:null with explicit:true, the reader tests leafUuid===null). sessionId is a string."
 		},
@@ -250,7 +250,7 @@
 			},
 			"anchors": [
 				"{type:\"last-prompt\",leafUuid:null,explicit:!0,sessionId:«»()}",
-				"{type:\"last-prompt\",...s.currentSessionLastPrompt&&{lastPrompt:«».currentSessionLastPrompt},leafUuid:«»,explicit:!0"
+				"{type:\"last-prompt\",...«».currentSessionLastPrompt&&{lastPrompt:«».currentSessionLastPrompt},leafUuid:«»,explicit:!0"
 			],
 			"note": "Three kinds of write: the exit reappend (lastPrompt and leafUuid are strings, each present only when truthy), the explicit leaf checkpoint (leafUuid is the message uuid string), and the withdrawal (leafUuid:null with explicit:true, the reader tests leafUuid===null). sessionId is a string."
 		},
@@ -659,7 +659,7 @@
 			},
 			"anchors": [
 				"{type:\"content-replacement\",sessionId:this.store.getSessionId(),agentId:«»,replacements:«»}",
-				"p.push({kind:\"tool-result\",toolUseId:«».toolUseId,replacement:«».content})"
+				"«».push({kind:\"tool-result\",toolUseId:«».toolUseId,replacement:«».content})"
 			],
 			"note": "insertContentReplacement(records, agentId) appends the line. Each record is the object the tool result budget pushes: {kind:'tool-result', toolUseId, replacement}, where replacement is the string that replaced the persisted tool result. agentId is added by the caller for a subagent (string; absent for the main thread)."
 		},
@@ -669,7 +669,7 @@
 			},
 			"anchors": [
 				"{type:\"content-replacement\",sessionId:this.store.getSessionId(),agentId:«»,replacements:«»}",
-				"p.push({kind:\"tool-result\",toolUseId:«».toolUseId,replacement:«».content})"
+				"«».push({kind:\"tool-result\",toolUseId:«».toolUseId,replacement:«».content})"
 			],
 			"note": "insertContentReplacement(records, agentId) appends the line. Each record is the object the tool result budget pushes: {kind:'tool-result', toolUseId, replacement}, where replacement is the string that replaced the persisted tool result. agentId is added by the caller for a subagent (string; absent for the main thread)."
 		},
@@ -693,7 +693,7 @@
 			},
 			"anchors": [
 				"{type:\"content-replacement\",sessionId:this.store.getSessionId(),agentId:«»,replacements:«»}",
-				"p.push({kind:\"tool-result\",toolUseId:«».toolUseId,replacement:«».content})"
+				"«».push({kind:\"tool-result\",toolUseId:«».toolUseId,replacement:«».content})"
 			],
 			"note": "insertContentReplacement(records, agentId) appends the line. Each record is the object the tool result budget pushes: {kind:'tool-result', toolUseId, replacement}, where replacement is the string that replaced the persisted tool result. agentId is added by the caller for a subagent (string; absent for the main thread)."
 		},
@@ -3271,9 +3271,9 @@
 				"type": "string"
 			},
 			"anchors": [
-				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestedModel:«».model",
-				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestedModel:«».model",
-				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestedModel:«».model"
+				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model",
+				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model",
+				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; requestedModel is the model id string of the request (Q.model)."
 		},
@@ -3285,9 +3285,9 @@
 				"attributionAgent:«».slice(14),...«»(«»)",
 				"attributionSkill:«»,...«»&&{attributionPlugin:«»}",
 				"attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
-				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionAgent is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
 		},
@@ -3299,9 +3299,9 @@
 				"attributionAgent:«».slice(14),...«»(«»)",
 				"attributionSkill:«»,...«»&&{attributionPlugin:«»}",
 				"attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
-				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionSkill is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
 		},
@@ -3313,9 +3313,9 @@
 				"attributionAgent:«».slice(14),...«»(«»)",
 				"attributionSkill:«»,...«»&&{attributionPlugin:«»}",
 				"attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
-				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionPlugin is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
 		},
@@ -3327,9 +3327,9 @@
 				"attributionAgent:«».slice(14),...«»(«»)",
 				"attributionSkill:«»,...«»&&{attributionPlugin:«»}",
 				"attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
-				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionMcpServer is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
 		},
@@ -3341,9 +3341,9 @@
 				"attributionAgent:«».slice(14),...«»(«»)",
 				"attributionSkill:«»,...«»&&{attributionPlugin:«»}",
 				"attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
-				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionMcpTool is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
 		},
@@ -3809,7 +3809,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"\"user-rejected\"",
 				"\"permission-rule\"",
 				"\"interrupted\"",
@@ -3822,7 +3822,7 @@
 				"type": "boolean"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"«».behavior===\"deny\"&&«».endsTurn?!0:void 0"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. toolDenialEndsTurn is true when written, else undefined."
@@ -3832,7 +3832,7 @@
 				"type": "boolean"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"«».decisionReason.monitorBlocked===!0?!0:void 0"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. toolDenialMonitorBlocked is true when written (the spread is guarded by the value)."
@@ -3842,7 +3842,7 @@
 				"type": "array"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"«» instanceof «»?«».sandboxViolations:void 0"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. sandboxViolations is an array of sandbox violation records from the sandbox runtime; the items are not typed here."
@@ -3852,7 +3852,7 @@
 				"type": "boolean"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"«» instanceof «»?«».sandboxed:void 0"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. sandboxed is a boolean flag."
@@ -3929,7 +3929,7 @@
 				}
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"fileName:«»(),bytesDone:«»(),bytesTotal:«»(),connectorName:«»(),place:«»().optional(),savedAs:«»().optional(),fileIndex:«»().int().positive(),fileCount:«»().int().positive(),groupedFiles:«»().int().min(2).optional()"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module, and by the stream-json rebuild sites. connectorFileLines lists the files a connector (an MCP server that delivers files) fetched or sent in the tool call. The reader checks each item with a zod object (chunk-fm0g04m5.js, about offset 27900, in 2.1.322) and drops items that fail: direction is fetching or sending; state is done, stopped, stopped-maybe-saved, or {refused, leftBehind?}. New in 2.1.321."
@@ -3939,7 +3939,7 @@
 				"type": "boolean"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"toolEndsTurn:«»"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. toolEndsTurn is a boolean flag set when the tool ends the turn."
@@ -3957,7 +3957,7 @@
 				}
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"mcpMeta:«».mcpMeta"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. mcpMeta holds the MCP CallToolResult fields _meta and structuredContent (@modelcontextprotocol/sdk CallToolResult: _meta?: object, structuredContent?: object); only the keys present in the tool result are written."
@@ -3970,7 +3970,7 @@
 				}
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"imagePasteIds:«».length>0?«»:void 0,permissionMode:«»"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. imagePasteIds is an array of paste ids (numbers) of images pasted in the prompt. The prompt write site drops the key when the list is empty (chunk-7nmpvy5x.js:2338 in 2.1.322)."
@@ -3980,7 +3980,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"sourceToolAssistantUUID:«».uuid"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. sourceToolAssistantUUID is the uuid string of the assistant line holding the tool_use."
@@ -3997,7 +3997,7 @@
 				]
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"«»=[\"acceptEdits\",\"auto\",\"bypassPermissions\",\"default\",\"dontAsk\",\"plan\"]"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. permissionMode is a permission mode string; the program's list of modes is acceptEdits, auto, bypassPermissions, default, dontAsk, plan, and the reader drops other values."
@@ -4027,7 +4027,7 @@
 				}
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»"
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. origin is an object with a kind string ('human', 'plugin', 'channel', 'task-notification', 'peer', 'coordinator', 'unclassified', 'observer', 'auto-continuation', 'observer-activity', 'slack-ping' are handled by the origin helper dle), plus kind-specific keys: name and asUser (plugin), server (channel), subkind (task-notification), plugin (peer, coordinator)."
 		},
@@ -4036,7 +4036,7 @@
 				"enum": ["typed", "queued", "suggestion_accepted", "sdk", "system"]
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"case\"typed\":case\"queued\":case\"suggestion_accepted\":return{kind:\"unclassified\"};case\"sdk\""
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. promptSource is one of the five values the origin helper switches on."
@@ -4046,7 +4046,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"interruptedMessageId:«»"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. interruptedMessageId is a message uuid string."
@@ -4056,7 +4056,7 @@
 				"type": "boolean"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"function «»(«»){return «»(«».reason)===\"shutdown\"?!0:void 0}"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. interruptedByShutdown is true when the abort reason is 'shutdown' and is not written otherwise."
@@ -4871,21 +4871,27 @@
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["type:\"api-request-blob\",sessionId:«».sessionId", "hash:w"],
+			"anchors": [
+				"type:\"api-request-blob\",sessionId:«».sessionId,...«».agentId!==void 0&&{agentId:«».agentId},hash:«»,message:«»}"
+			],
 			"note": "A journal line the request journal writes (a hash-chained record of API request bodies): sessionId is a string (session id, agent id, or the content hash of the message)."
 		},
 		"api-request-blob.agentId": {
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["type:\"api-request-blob\",sessionId:«».sessionId", "hash:w"],
+			"anchors": [
+				"type:\"api-request-blob\",sessionId:«».sessionId,...«».agentId!==void 0&&{agentId:«».agentId},hash:«»,message:«»}"
+			],
 			"note": "A journal line the request journal writes (a hash-chained record of API request bodies): agentId is a string (session id, agent id, or the content hash of the message)."
 		},
 		"api-request-blob.hash": {
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["type:\"api-request-blob\",sessionId:«».sessionId", "hash:w"],
+			"anchors": [
+				"type:\"api-request-blob\",sessionId:«».sessionId,...«».agentId!==void 0&&{agentId:«».agentId},hash:«»,message:«»}"
+			],
 			"note": "A journal line the request journal writes (a hash-chained record of API request bodies): hash is a string (session id, agent id, or the content hash of the message)."
 		},
 		"api-request-blob.message": {
@@ -5447,9 +5453,11 @@
 					},
 					"classifierCategory": {
 						"enum": [
+							"access_added_as_a_means",
 							"account_standing_rule_changes",
 							"auto_mode_bypass",
 							"blind_apply",
+							"bot_check_circumvention",
 							"browser_file_upload_exfil",
 							"browser_input_exfil",
 							"browser_js_exfil",
@@ -5462,7 +5470,14 @@
 							"code_from_external",
 							"code_that_leaks_when_run",
 							"command_network_lists",
+							"consent_given_for_the_user",
 							"containment_escape",
+							"cowork_delete_grant",
+							"cowork_folder_access",
+							"cowork_run_routine_now",
+							"cowork_scheduled_task_delete",
+							"cowork_scheduled_task_write",
+							"cowork_skill_persistence",
 							"create_public_surface",
 							"create_rce_surface",
 							"create_unsafe_agents",
@@ -5470,6 +5485,7 @@
 							"credential_leakage",
 							"credential_materialization",
 							"data_exfiltration",
+							"destructive_or_unwanted_actions",
 							"dns_domain_cert_changes",
 							"excess_sensitive_detail",
 							"exfil_scouting",
@@ -5478,6 +5494,7 @@
 							"external_system_writes",
 							"feature_flag_writes",
 							"git_destructive",
+							"identity_not_given",
 							"instruction_poisoning",
 							"interfere_with_workloads",
 							"irreversible_deletion_general",
@@ -5487,6 +5504,7 @@
 							"merge_without_review",
 							"modify_shared_resources",
 							"node_lifecycle_operations",
+							"notes_for_later_sessions",
 							"out_of_place_publication",
 							"package_registry_bypass",
 							"permission_grant",
@@ -5500,6 +5518,7 @@
 							"remote_shell_writes",
 							"safety_bypass_flag",
 							"sandbox_network_callback",
+							"save_over_an_occupied_name",
 							"secret_store_writes",
 							"security_test_removal",
 							"security_weaken",
@@ -5510,22 +5529,22 @@
 							"session_transcript_tampering",
 							"shared_cluster_mutation",
 							"shared_scratch_sweep",
+							"stated_interface_sidestepped",
 							"third_party_attack",
 							"tls_auth_weaken",
 							"tmux_self_drive",
 							"traffic_redirection",
+							"unauthorized_access",
 							"unauthorized_persistence",
+							"undermining_oversight",
 							"unrequested_artifact_publish",
 							"unrequested_commit_in_a_connected_app",
+							"unsanctioned_communication",
 							"untrusted_code_integration",
 							"unverifiable_deletion_scope",
 							"unverifiable_deletion_target",
-							"cowork_delete_grant",
-							"cowork_folder_access",
-							"cowork_run_routine_now",
-							"cowork_scheduled_task_delete",
-							"cowork_scheduled_task_write",
-							"cowork_skill_persistence"
+							"walled_content_from_a_copy",
+							"website_access_circumvention"
 						]
 					}
 				},
@@ -5536,17 +5555,17 @@
 				"for(let «» of «»(«»,«»))«».permissionDecision=«»;return «»",
 				"return{decision:«»,source:«»,...«»!==void 0&&!«»&&{reasonType:«».type}",
 				"return\"classifier\";switch(«».type){case\"hook\":return\"hook\";case\"user\":return «».permanent?\"user_permanent\":\"user_temporary\"",
-				"«»=new Set([...«»,...«»]);function «»(«»){return «»!==void 0&&«».has(«»)?",
+				"«»=new Set([...«»,...«»,...«»,...«»]);function «»(«»){return «»!==void 0&&«».has(«»)?",
 				":«»?.recorded?.grantScope??(«»?.outcome.behavior===\"allow\"?«».outcome.grantScope:void 0)"
 			],
-			"note": "s9r(messages,toolUseId,record) assigns the record built by PU(decision,source,ctx), stored by EY. Callers: PU('cancelled','server_fallback_tombstone'|'user_abort'), PU('reject','invalid_input'|'permission_updated_input_invalid'), LOn (reject, source from Rst), Cst (decision/source from the recorded tool decision or IOn). source: Rst/IOn give user_temporary, user_permanent, user_reject, hook, config, user_abort; the recorded tool decision source (aYr) gives classifier, hook, user_permanent, user_temporary, user_abort, user_reject, unknown, or config. reasonType: decisionReason.type; the program's exhaustive switch (bIe) lists these 11 types. grantScope: 'once' or 'session' (the helper Mut returns always/session/once, and 'always' is filtered out both for the recorded scope and the outcome scope). circuitBreaker: a key of the safety-check table (checked with Object.hasOwn), 9 keys. classifierCategory: only for classifier reasons, and only if the category is in the closed set ZFo+e$o (79 names). reasonCode: string built by zne (e.g. 'rule:<source>', 'mode:<mode>', 'hook:<name>', 'classifier:auto-mode', 'subcommands:a+b', 'unknown', 'subcommandResults'), open set. ruleSource: a permission rule source string (e.g. userSettings, projectSettings, localSettings, flagSettings, policySettings, cliArg, session, command, toolsNarrowing); the full set is not closed in the code I read, so it is typed string. Keys other than decision and source are omitted when undefined. Matches the observed object."
+			"note": "s9r(messages,toolUseId,record) assigns the record built by PU(decision,source,ctx), stored by EY. Callers: PU('cancelled','server_fallback_tombstone'|'user_abort'), PU('reject','invalid_input'|'permission_updated_input_invalid'), LOn (reject, source from Rst), Cst (decision/source from the recorded tool decision or IOn). source: Rst/IOn give user_temporary, user_permanent, user_reject, hook, config, user_abort; the recorded tool decision source (aYr) gives classifier, hook, user_permanent, user_temporary, user_abort, user_reject, unknown, or config. reasonType: decisionReason.type; the program's exhaustive switch (bIe) lists these 11 types. grantScope: 'once' or 'session' (the helper Mut returns always/session/once, and 'always' is filtered out both for the recorded scope and the outcome scope). circuitBreaker: a key of the safety-check table (checked with Object.hasOwn), 9 keys. classifierCategory: only for classifier reasons, and only if the category is in the closed set the filter XL tests, the union of four name lists (KJs+T4r+JBo+_7n in 2.1.323, 92 names). reasonCode: string built by zne (e.g. 'rule:<source>', 'mode:<mode>', 'hook:<name>', 'classifier:auto-mode', 'subcommands:a+b', 'unknown', 'subcommandResults'), open set. ruleSource: a permission rule source string (e.g. userSettings, projectSettings, localSettings, flagSettings, policySettings, cliArg, session, command, toolsNarrowing); the full set is not closed in the code I read, so it is typed string. Keys other than decision and source are omitted when undefined. Matches the observed object."
 		},
 		"user.refusedMessageId": {
 			"schema": {
 				"type": "string"
 			},
 			"anchors": [
-				"«».refusedMessageId=«»,«».message.stop_reason=\"refusal\"",
+				"«».refusedMessageId=«»,«».refusingModel=«»??void 0,«».message.stop_reason=\"refusal\"",
 				"refusedMessageId:«».refusedMessageId,now:«».now",
 				"...«»!==void 0&&{refusedMessageId:«»}"
 			],
@@ -5650,7 +5669,7 @@
 				"settleRequest(«»,«»){let «»=this.inFlight.get(«»);if(«»===void 0)return;this.inFlight.delete(«»);let «»={request:«»,context:«»};for(let «» of «»)this.judged.set(«»,«»)}",
 				"historyFor(«»){return this.judged.get(«»)}",
 				"function «»(«»){return{git_state:«».git_state,...«».chrome_navigation!==void 0&&{chrome_navigation:«».chrome_navigation},...«».live_cwd!==void 0&&{live_cwd:«».live_cwd},platform:«».platform}}",
-				"?«»(«»(),{artifacts:«»?.artifacts,thread:«»!==null,threadStoresNothing:«»!==null&&«»===null,exactMcpAllowRules:",
+				"?«»(«»(),{artifacts:«»?.artifacts,thread:«»!==null,exactMcpAllowRules:",
 				"!==void 0)«»(«».key,«»(«»))}"
 			],
 			"note": "The constructor sets serverClassifierContext:Cvt(tool_use_id) (only for a single tool_result in an array content). Cvt reads the judged Map filled by settleRequest(requestKey, toolUseIds), which stores {request:requestKey, context:inFlightContext}. The in-flight context is kpn(ac), recorded by wvt(Hg.key, kpn(ac)) where Hg.key is crypto.randomUUID() (string, passed through mKt(pee(),...) to Zqe.key). kpn picks git_state, chrome_navigation (if defined), live_cwd (if defined), platform from the auto-mode server context built by Lpr: git_state is the host git object (non-null, since Lpr reads its .visibility), chrome_navigation {enabled, baselines, tabs?}, live_cwd and platform strings (platform:O()). The reader (nio, MFe zod) takes request as a non-empty string and context as an object with those four optional keys. Inner property types of git_state come from the zod schema qso (reader side), not from a writer literal, so they are listed as that schema states. If never settled or no context is held, the key is undefined and dropped; never null."

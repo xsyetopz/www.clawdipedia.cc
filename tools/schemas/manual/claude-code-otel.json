@@ -3054,20 +3054,22 @@
 				"type": "string"
 			},
 			"anchors": [
-				"function «»(«»){if(«»===void 0)return{prompt:\"<REDACTED>\",prompt_text:\"<REDACTED>\"};let «»=«»()?«»(()=>«»(«»().host),void 0,«»):«»(«»);return{prompt:«»,prompt_text:«»}}",
-				"«»(\"user_prompt\",{prompt_length:String(«»?.length??0),...«»(«»),...«».attributes})"
+				"function «»(«»,«»){if(«»===void 0)return{prompt:\"<REDACTED>\",prompt_text:\"<REDACTED>\"};let «»=«»()?«»(«»,«»):«»(«»);return{prompt:«»,prompt_text:«»}}",
+				"function «»(«»,«»){if(«»(«»)&&!«»())return\"<REDACTED>\";return «»(()=>«»(«»().host),void 0,«»)}",
+				"«»(\"user_prompt\",{prompt_length:String(«»?.length??0),...«»(«»,«».origin),...«».attributes})"
 			],
-			"note": "t9s(e) returns {prompt:n,prompt_text:n} with n=\"<REDACTED>\" or the redacted prompt text XCe(...) (a string)."
+			"note": "Ufa(prompt, origin) returns {prompt:o,prompt_text:o} with o=\"<REDACTED>\" or aWs(prompt, origin), which gives \"<REDACTED>\" for some origins and else the redacted prompt text z$e(...) (a string)."
 		},
 		"event:user_prompt.prompt_text": {
 			"schema": {
 				"type": "string"
 			},
 			"anchors": [
-				"function «»(«»){if(«»===void 0)return{prompt:\"<REDACTED>\",prompt_text:\"<REDACTED>\"};let «»=«»()?«»(()=>«»(«»().host),void 0,«»):«»(«»);return{prompt:«»,prompt_text:«»}}",
-				"«»(\"user_prompt\",{prompt_length:String(«»?.length??0),...«»(«»),...«».attributes})"
+				"function «»(«»,«»){if(«»===void 0)return{prompt:\"<REDACTED>\",prompt_text:\"<REDACTED>\"};let «»=«»()?«»(«»,«»):«»(«»);return{prompt:«»,prompt_text:«»}}",
+				"function «»(«»,«»){if(«»(«»)&&!«»())return\"<REDACTED>\";return «»(()=>«»(«»().host),void 0,«»)}",
+				"«»(\"user_prompt\",{prompt_length:String(«»?.length??0),...«»(«»,«».origin),...«».attributes})"
 			],
-			"note": "t9s(e) returns {prompt:n,prompt_text:n}: the same string as prompt."
+			"note": "Ufa(prompt, origin) returns {prompt:o,prompt_text:o}: the same string as prompt."
 		},
 		"metric:claude_code.cost.usage.model": {
 			"schema": {
@@ -3308,10 +3310,11 @@
 				"type": "string"
 			},
 			"anchors": [
-				"«»=«»(),«»=«»?\"<REDACTED>\":«»(«»)",
+				"«»=«»(),«»=«»?\"<REDACTED>\":«»(«»,«»)",
+				"return «».OTEL_LOG_USER_PROMPTS&&!«»()?«»(«»,«»):\"<REDACTED>\"}",
 				"...«»(),user_prompt:«»,user_prompt_length:«»?0:«».length,\"interaction.sequence\":«»}"
 			],
-			"note": "u=i?\"<REDACTED>\":kt(n) with kt(n)=OTEL_LOG_USER_PROMPTS&&!kA()?XCe(...):\"<REDACTED>\": a string."
+			"note": "h=m?\"<REDACTED>\":Mt(prompt, origin) with Mt=OTEL_LOG_USER_PROMPTS&&!aM()?aWs(prompt, origin):\"<REDACTED>\", and aWs gives \"<REDACTED>\" or the redacted prompt text: a string."
 		},
 		"span:claude_code.interaction.parent.source": {
 			"schema": {
