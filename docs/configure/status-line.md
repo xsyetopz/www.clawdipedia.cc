@@ -45,7 +45,7 @@ Official page: [Customize Your Status Line](https://code.claude.com/docs/en/stat
 | `statusLine.padding` | <Documented /> | Extra horizontal space in characters | The default is `0`. It adds to the built-in spacing | Same |
 | `statusLine.refreshInterval` | <Documented /> | Re-runs the command every N seconds | The minimum is `1`. The bundle uses `Math.max(1, n) * 1000` ms. It suits clocks and idle sessions | Same |
 | `statusLine.hideVimModeIndicator` | <Documented /> | Hides the built-in `-- INSERT --` text | Use it when the script prints `vim.mode` itself | Same |
-| `subagentStatusLine` | <Documented /> | Custom row for each subagent in the agent panel | It has the fields `type` (`"command"`) and `command`. See the next section | Same |
+| `subagentStatusLine` | <Documented /> <Deprecated note="No effect since 2.1.323" /> | Custom row for each subagent in the agent panel | In 2.1.323 the program removed its runner. Subagent rows always use the default look. A settings file that still holds the key loads as before. See [Subagent Status Line](#subagent-status-line) | Same |
 | `/statusline` | <Documented /> | Writes a script in `~/.claude/` and the setting | It takes natural language. `/statusline delete` removes it | Interactive |
 | Workspace trust | <Documented /> | The command waits for trust | `--debug` logs `Status line command skipped: workspace trust not accepted` | Project files |
 | `CLAUDE_CODE_SAFE_MODE` | <Documented /> | Status line commands do not load | Managed policy still applies | Env |
@@ -65,7 +65,7 @@ Two hook settings also act on the status line. `disableAllHooks` set outside man
 
 - Each printed line is a row. ANSI colors and OSC 8 links work.
 - The output shows only after exit code `0`. A non-zero exit or empty output blanks the line.
-- Claude Code sets `COLUMNS` and `LINES` before it runs the `statusLine` script. `tput cols` does not work. The `subagentStatusLine` command does not get them (checked in the interactive screen). It gets `columns` in its JSON.
+- Claude Code sets `COLUMNS` and `LINES` before it runs the `statusLine` script. `tput cols` does not work.
 - Claude Code sets the variables `CLAUDECODE` and `CLAUDE_CODE_CHILD_SESSION` in the script process. See [Environment Variables](env-vars/index.md).
 - `claude --debug` logs `stderr` of each run and the exit code of the first run.
 - The line hides during the help menu and permission prompts. The command does not run while a permission or MCP input dialog is open (checked). Outside fullscreen, notifications share the row.
@@ -75,13 +75,7 @@ Source for this list: the official [Customize Your Status Line](https://code.cla
 
 ## Subagent Status Line
 
-`subagentStatusLine` customizes each subagent row in the agent panel.
-Its command runs once per refresh tick (a fixed 5 seconds, checked in the interactive screen). It gets all visible rows as one JSON object.
-It prints one JSON line for each row it wants to override: `{"id": "<task id>", "content": "<row body>"}`.
-A row without `id` keeps the default. An empty `content` hides the row.
-The same trust, `disableAllHooks`, and `allowManagedHooksOnly` gates apply.
-A plugin can ship a default `subagentStatusLine` in its `settings.json`.
-The input fields are in the `Subagent Task Fields` table below.
+`subagentStatusLine` has no effect in 2.1.323. The program no longer runs its command, and it builds no input for it. Subagent rows in the agent panel always use the default look. The settings schema still lists the key, so a settings file that holds it loads without an error. See [Agents and Remote Settings](settings/agents-and-remote.md).
 
 ## JSON Fields
 
@@ -97,7 +91,7 @@ Always read optional fields with a default, for example `jq -r '.vim.mode // emp
 | `prompt_id` | <Documented /> | UUID of the prompt in work | May be absent before the first input | Status line |
 | `transcript_path` | <Documented /> | Transcript file path | String | Status line |
 | `cwd` | <Documented /> | Working directory | Same value as `workspace.current_dir` | Status line |
-| `version` | <Documented /> | Claude Code version | `2.1.322` here | Status line |
+| `version` | <Documented /> | Claude Code version | `2.1.323` here | Status line |
 | `model.id`, `model.display_name` | <Documented /> | Model id and name | Strings | Status line |
 | `output_style.name` | <Documented /> | Active style name | `default` when none. See [Output Styles](output-styles.md) | Status line |
 | `fast_mode` | <Documented /> | Fast mode on | Boolean | Status line |
@@ -105,8 +99,8 @@ Always read optional fields with a default, for example `jq -r '.vim.mode // emp
 | `thinking.enabled` | <Documented /> | Extended thinking on | Boolean | Status line |
 | `vim.mode` | <Documented /> | `NORMAL`, `INSERT`, `VISUAL`, `VISUAL LINE` | May be absent. Present when vim mode is on | Status line |
 | `agent.name` | <Documented /> | Agent name | Present with `--agent` or agent settings | Status line |
-| `agent_type` | <Undocumented /> | Agent type of the main thread | Present with `--agent` or agent settings. The same value hooks get as `agent_type`. The built-in `statusline-setup` agent's prompt calls it `agent.type`. Read it at the top level as `agent_type` | Status line, `subagentStatusLine` |
-| `scratchpad_dir` | <Gated note="tengu_scratch, or the artifact tools" /> | The session scratchpad folder | Present when the server flag `tengu_scratch` is on, or when the session may use the artifact tools | Status line, `subagentStatusLine` |
+| `agent_type` | <Undocumented /> | Agent type of the main thread | Present with `--agent` or agent settings. The same value hooks get as `agent_type`. The built-in `statusline-setup` agent's prompt calls it `agent.type`. Read it at the top level as `agent_type` | Status line |
+| `scratchpad_dir` | <Gated note="tengu_scratch, or the artifact tools" /> | The session scratchpad folder | Present when the server flag `tengu_scratch` is on, or when the session may use the artifact tools | Status line |
 | `remote.session_id` | <Undocumented /> | Id of a remote session | Present when the session is remote. The docs do not list `remote` | Status line |
 
 ### Workspace Fields
@@ -157,25 +151,6 @@ The object `prompt_cache` appears after the first main-conversation response (ne
 | `prompt_cache.miss_causes` | <Documented /> | Count per cause | Map | Status line |
 | `prompt_cache.recache_tokens_if_cold` | <Documented /> | Tokens a cold cache re-caches | `null` after a compaction until the next request | Status line |
 
-### Subagent Task Fields
-
-The `subagentStatusLine` command gets `session_id`, `transcript_path`, `cwd`, `prompt_id`, `agent_type` and `scratchpad_dir` when they are set, `columns`, and a `tasks` array.
-
-| Field | Status | What it holds | Notes | Where |
-| --- | --- | --- | --- | --- |
-| `columns` | <Documented /> | Usable row width | Number | `subagentStatusLine` |
-| `tasks[].id` | <Documented /> | Task id | Echo it back as `id` | `subagentStatusLine` |
-| `tasks[].name` | <Documented /> | Address name | Optional | `subagentStatusLine` |
-| `tasks[].type` | <Documented /> | Kind of task | `local_agent` | `subagentStatusLine` |
-| `tasks[].agentType` | <Documented /> | Subagent type | Same value as hook `agent_type`. Needs `2.1.293` | `subagentStatusLine` |
-| `tasks[].status` | <Documented /> | State | `running`, `completed`, `failed`, `killed` | `subagentStatusLine` |
-| `tasks[].description`, `tasks[].label` | <Documented /> | Short text | `label` is a progress summary. Otherwise it is `description` | `subagentStatusLine` |
-| `tasks[].startTime` | <Documented /> | Start time | Epoch milliseconds | `subagentStatusLine` |
-| `tasks[].model`, `tasks[].contextWindowSize` | <Documented /> | Resolved model and its window | Optional | `subagentStatusLine` |
-| `tasks[].effort` | <Documented /> | Configured effort | String or number. Needs `2.1.213` | `subagentStatusLine` |
-| `tasks[].tokenCount`, `tasks[].tokenSamples` | <Documented /> | Running tokens and up to 16 samples | Oldest first | `subagentStatusLine` |
-| `tasks[].cwd` | <Documented /> | Subagent working directory | This is the worktree of the subagent, if it has one | `subagentStatusLine` |
-
 ## How It Works
 
 ```mermaid
@@ -192,15 +167,10 @@ flowchart TD
 :::note[Interactive Probe Findings]
 Checked in the interactive screen (2.1.305, local stub, fake key, clean environment). See [Interactive Probes](../reference/probes.md#interactive-probes).
 
-- `subagentStatusLine` runs on a fixed 5-second tick while the agent panel has tasks. The tick is 4.99 to 5.02 seconds over 5 intervals, after a first interval of 4.69 seconds. It also runs for tasks that are `completed`. It is not debounced like `statusLine`. No setting changes the 5 seconds. The first run came when the agent started.
-- Its command does not get `COLUMNS` and `LINES`. Use the `columns` field (194 on a 200-column screen). Claude Code sets `CLAUDECODE` and `CLAUDE_CODE_CHILD_SESSION`.
-- Its input holds only `session_id`, `transcript_path`, `cwd`, `prompt_id`, `columns`, and `tasks`, not the full `statusLine` object. The agent panel drew a row override `{"id": ..., "content": "..."}`.
 - For `statusLine`, `transcript_path` is present from the first run, before any message. `prompt_id` is absent until the first prompt. Then it is the same UUID as `prompt_id` in hook input. After the first reply, the input also gains `prompt_cache`. `current_usage` is no longer `null`.
 - `statusLine` runs once at start and once after the first reply (not at prompt submit). Three mode changes gave one run, 0.33 seconds after the last one. This held both when sent 100 ms apart and when sent in one write. This fits the 300 ms debounce. `refreshInterval: 3` ran every 3.0 seconds (3.0 to 3.1 seconds over 14 intervals in a run with no other trigger).
 - Runs paused while a permission or MCP input dialog was on screen. A Bash permission dialog was on screen for 17.4 seconds. The gap between runs was 19.3 seconds.
 - `padding: 1` gave a one-space indent, and two printed lines showed as two rows under the prompt.
-- With no subagents, `subagentStatusLine` did not run. In a session left idle for 29.6 seconds its command had not run once. The first run came when a background agent started.
-- A test agent finished at once. The command kept its 5-second tick for 29.7 seconds after the agent started (7 runs, all with the tasks `completed`). Then it did not run again for the next 29 seconds. The input listed three tasks, because the stub answers every request that has no tool result yet with the same `Agent` call.
 
 :::
 

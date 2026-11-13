@@ -23,6 +23,7 @@ Where to Set It tells you which files may set the key. See [Settings Files and S
 | `breakReminder.enabled` | <Undocumented /> | boolean | `false` | Turn on the break reminder. The reminder fires only when this is `true`. | Settings files |
 | `breakReminder.intervalMinutes` | <Undocumented /> | integer | `30` | Set the minutes of continuous use before the reminder fires. It fires again every interval until you take a break. | Settings files |
 | `breakReminder.message` | <Undocumented /> | string | - | Set your own reminder text. Leave it unset for a rotating set of friendly nudges. | Settings files |
+| `clawdFileProgressEnabled` | <Undocumented /> | boolean | `false` | Show Clawd, Claude Code's mascot, on the progress line when a file goes to or from a connector. Clawd does not show in screen reader mode or while Reduce motion is on. In a terminal without image support it shows as text, only above progress bars. The `/config` list shows it as "Show Clawd carrying files" and not in Apple Terminal. Source: the settings schema and the `/config` code | Any settings file |
 | `companyAnnouncements` | <Documented /> | array of string | - | Show your organization's announcements at startup. | Any settings file |
 | `editorMode` | <Documented /> | string | - | Use vim key bindings in the input prompt. | Any settings file |
 | `emojiCompletionEnabled` | <Documented /> | boolean | - | Turn off `:shortcode:` emoji suggestions and replacement in the prompt input. | Any settings file |
