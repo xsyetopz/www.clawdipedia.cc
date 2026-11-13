@@ -17,7 +17,7 @@ Source: [Marketplace Reference](https://code.claude.com/docs/en/plugins/marketpl
 
 | Key | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
-| `name` | <Documented /> | Sets the marketplace id. | Letters, digits, `.`, `_`, `-`. Many names are reserved: official names, `inline`, `builtin`, `skills-dir`, `synced`, `npm`, `github`, the `claudeai-` prefix, and JavaScript member names. |
+| `name` | <Documented /> | Sets the marketplace id. | Letters, digits, `.`, `_`, `-`. Many names are reserved: official names, `inline`, `builtin`, `skills-dir`, `synced`, `claude-plugin-test`, and the `claudeai-` prefix. Names such as `npm` and `github` are no longer reserved (the program, `chunk-3dhh2g49.js:54098`). |
 | `owner` | <Documented /> | Names the maintainer. | `name` is required. `email` and `url` are optional. |
 | `plugins` | <Documented /> | Lists the plugin entries. | An invalid entry becomes a stub with source `unsupported`. The other entries still load. |
 | `$schema`, `description`, `version` | <Documented /> | Info about the marketplace. | `metadata.description` and `metadata.version` work as alternates. |

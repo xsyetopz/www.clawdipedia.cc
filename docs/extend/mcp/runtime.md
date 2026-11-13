@@ -71,7 +71,7 @@ Source: [Channels Reference](https://code.claude.com/docs/en/channels-reference)
 | Error text | <Documented /> | Shortens long errors. | Over about 11000 characters, the first 5000 and last 5000 stay. For `isError: true` results. |
 | 16 MiB response | <Documented /> | Caps one response or message. | HTTP and SSE stop reading. A WebSocket closes the connection. |
 | Description limits | <Documented /> | Cuts long text. | 4096 characters for server instructions and an upfront tool. 16384 for a tool found by tool search. `CLAUDE_CODE_MAX_MCP_DESCRIPTION_LENGTH` replaces both. |
-| Schema checks | <Documented /> | Drops bad tools. | Excludes a tool with a bad top-level property name or an invalid 2020-12 schema. Flattens a root `anyOf`, `oneOf`, or `allOf`. |
+| Schema checks | <Documented /> | Drops bad tools. | Excludes a tool with a bad top-level property name or an invalid 2020-12 schema. Skips a tool whose input schema the Anthropic API would reject; `/mcp` lists each skipped tool as `name: reason` (the program, `chunk-qnbq0cf3.js:180221`, `chunk-8fw1gbv7.js:8749`). Flattens a root `anyOf`, `oneOf`, or `allOf`. |
 
 ## Timing and Recovery
 
@@ -136,7 +136,7 @@ Rows with a start of a message are families. The backticked text is the start th
 | `Server "` | <Undocumented /> | A server operation failed. | The server does not support resources, is not connected, or was not found. The last case lists the available servers. |
 | `No MCP server named` | <Undocumented /> | A server name is not in the scope that the command searched. | The scope is `.mcp.json`, local, or user. |
 | `StdioClientTransport already started`, `MCP tool call to server`, `Missing required ${…}: ${…}. Usage: /mcp__`, `The tool call was interrupted`, `Unsupported server type`, `claude.ai MCP proxy is not available`, `No claude.ai OAuth token`, `The "${…}" connector`, `"${…}" was disabled while reconnecting`, `Connection failed`, `Server status:`, `The result of MCP tool` | <Undocumented /> | An MCP server or tool call failed. | One of these causes applies. The server or client does not support a capability that the call needs (roots, sampling, elicitation, tasks, resources). The tool call was interrupted or aborted because the account changed. A required argument is missing. The server type is not supported. |
-| `the registry answered ${…} with no readable list` | <Undocumented /> | The fetch of the official MCP connector registry got an answer that Claude Code cannot use as a list. | The check fails when the status is not 2xx or the body is not an object. The caller stops at once on a not-OK answer, so in practice the body is the cause. The text starts with the status, for example `the registry answered 200 with no readable list`. The program stops the fetch and writes `Failed to fetch MCP registry:` and the reason to its debug log. Both the `/mcp-registry/v0/servers` and the `/api/directory/servers` endpoints use this check. Source: the program (`chunk-yqezv9gr.js:875332` and `chunk-yqezv9gr.js:873204`). |
+| `GET /api/directory/server-urls answered status ${…}, not 200 with a list of URLs` | <Undocumented /> | The unauthenticated fetch of the official MCP server URLs got an answer that is not a 200 with a list of URLs. | The program does not follow redirects. It writes `Failed to fetch MCP registry:` and the reason to its debug log and sets no official URLs. On success it logs `[mcp-registry] Loaded N official MCP URLs`. Source: the program (`chunk-x4fdscgs.js:920495`). |
 
 ## Related Pages
 
