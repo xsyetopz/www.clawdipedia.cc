@@ -32,8 +32,16 @@ jobs:
       - name: Verify
         run: just verify
       # check:citations reads the build of src/version.ts from ~/.local/share/claude/versions.
-      - name: Install the tracked Claude Code build
-        run: curl -fsSL https://claude.ai/install.sh | bash -s "$(bun -e 'console.log((await import("./src/version.ts")).CLAUDE_CODE_VERSION)')"
+      # The docs cite the darwin-arm64 build; other platforms have other chunk names. The step only reads it.
+      - name: Download the tracked Claude Code build
+        run: |
+          v=$(bun -e 'console.log((await import("./src/version.ts")).CLAUDE_CODE_VERSION)')
+          base="https://downloads.claude.ai/claude-code-releases/$v"
+          dir="$HOME/.local/share/claude/versions"
+          mkdir -p "$dir"
+          curl -fsSL -o "$dir/$v" "$base/darwin-arm64/claude"
+          sum=$(curl -fsSL "$base/manifest.json" | jq -r '.platforms["darwin-arm64"].checksum')
+          echo "$sum  $dir/$v" | sha256sum -c -
       - name: Site checks
         run: just verify-project
       # Every step above must pass before this one runs, so a failed check stops the deploy.
