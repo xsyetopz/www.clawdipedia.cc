@@ -42,7 +42,7 @@ Line numbers are lines of `captures/2.1.323/notes.md`, which holds the release n
 
 ## 6. Release
 
-- [ ] 6.1 Bump `src/version.ts`, run `bun run schemas`, `bun run surface`, and `bun run surface:check`.
-- [ ] 6.2 Render the prompt pages, move program citations to `2.1.323`, and run `bun run check:citations`.
-- [ ] 6.3 Bump clawdipedia-docs, clawdipedia-docs-cli, and cc-inspect, and add a `CHANGELOG.md` entry.
-- [ ] 6.4 Run `just verify` and `just verify-project`.
+- [x] 6.1 Bump `src/version.ts`, run `bun run schemas`, `bun run surface`, and `bun run surface:check` (`3b4d8783`).
+- [x] 6.2 Render the prompt pages, move program citations to `2.1.323`, and run `bun run check:citations` (`d50fa049`, `50379ae1`).
+- [x] 6.3 Bump clawdipedia-docs and clawdipedia-docs-cli to 3.0.5 and cc-inspect to 0.18.1, and add a `CHANGELOG.md` entry (`50379ae1`).
+- [ ] 6.4 Run `just verify` and `just verify-project`. `just verify` passes. In `just verify-project`, every check up to `surface:check` passes, and so does `plugin:check`. The site build stops locally at the 8 GB memory limit for one process. CI does not reach the build, because its `typecheck` step fails on `@site/src/components/badge`: git tracks `Badge.tsx`, and that failure dates from before this change.
