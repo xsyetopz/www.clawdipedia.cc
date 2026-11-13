@@ -271,6 +271,18 @@
 		"route": "/extend/mod-api/calls/testing",
 		"anchor": "errors"
 	},
+	"error:${…} ${…} was refused and nothing was pressed: Space with Control or Option held can open an app launcher, which is outside the apps you have access to. If this shortcut is needed, ask the user to pre…": {
+		"route": "/reference/tools/gated-and-other",
+		"anchor": "errors"
+	},
+	"error:${…} ${…} was refused and nothing was pressed: another action is holding Control, Option or Space, and together they can open an app launcher. Try again once that action has finished.": {
+		"route": "/reference/tools/gated-and-other",
+		"anchor": "errors"
+	},
+	"error:${…} ${…} was refused: together with keys another action is pressing, it would make a system shortcut. Try again once that action has finished, or request the `systemKeyCombos` grant via request_acces…": {
+		"route": "/reference/tools/gated-and-other",
+		"anchor": "errors"
+	},
 	"error:${…} ${…}; not sent": {
 		"route": "/configure/cli/flags",
 		"anchor": "errors"
@@ -599,6 +611,10 @@
 		"route": "/extend/plugins/cli",
 		"anchor": "errors"
 	},
+	"error:${…} was added by a tool.list hook, and no tool.call hook answered this call": {
+		"route": "/extend/mod-api/calls/tool-command-config",
+		"anchor": "events-raised-by-these-calls"
+	},
 	"error:${…} was not written by this run (it served no mocks) — nothing there is to be adopted": {
 		"route": "/extend/plugins/cli",
 		"anchor": "errors"
@@ -633,6 +649,10 @@
 	},
 	"error:${…}'s marketplace entry now installs it by running a command on this machine (`${…}`) that has not been reviewed yet, so it was not run. Review and accept it: ${…}.": {
 		"route": "/extend/plugins/loading",
+		"anchor": "errors"
+	},
+	"error:${…}, so the session now stands in ${…}, a temporary folder of Claude Code's own. Tell the person to put them right and then start the session again.": {
+		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
 	},
 	"error:${…}. Available agents: ${…}": {
@@ -1307,10 +1327,6 @@
 		"route": "/extend/mod-api",
 		"anchor": "errors"
 	},
-	"error:${…}: send_task_message": {
-		"route": "/extend/headless",
-		"anchor": "errors"
-	},
 	"error:${…}: session_id is not a cloud session id": {
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
@@ -1531,6 +1547,10 @@
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
 	},
+	"error:A character in the typed text was refused: together with keys another action is pressing, it would make a system shortcut. Earlier characters may already have been typed, so check before you try again…": {
+		"route": "/reference/tools/gated-and-other",
+		"anchor": "errors"
+	},
 	"error:A diskless session can only load its config through a storage backend (none was handed in, or CLAUDE_CODE_HOVER_REST is off)": {
 		"route": "/configure/env-vars/sessions-and-storage",
 		"anchor": "variables"
@@ -1553,6 +1573,10 @@
 	},
 	"error:A shell tool was granted, but ${…}, so the Windows side could not be put out of the sandboxed shell's reach — the run was refused.": {
 		"route": "/extend/plugins/cli",
+		"anchor": "errors"
+	},
+	"error:A space or invisible character in the typed text was refused: another action is holding Control or Option, and together they can open an app launcher. Earlier characters may already have been typed, s…": {
+		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
 	},
 	"error:A tool server doesn't run a plugin's command on its own. The plugin was not installed or updated and its command was not run.": {
@@ -2249,6 +2273,10 @@
 	},
 	"error:ExitPlanMode approved but tool_result has no \"## Approved Plan:\" marker — remote may have hit the empty-plan or isAgent branch. Content preview: ${…}": {
 		"route": "/how-it-works/sessions-and-storage",
+		"anchor": "errors"
+	},
+	"error:ExitWorktree stopped before it left or removed any worktree: this session entered or left one while the call ran. Check where the session is now before calling ExitWorktree again.": {
+		"route": "/reference/tools/files",
 		"anchor": "errors"
 	},
 	"error:Expected a `*": {
@@ -3407,10 +3435,6 @@
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
-	"error:Session e*": {
-		"route": "/configure/settings/auth",
-		"anchor": "errors"
-	},
 	"error:Session m*": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
@@ -3643,6 +3667,10 @@
 		"route": "/extend/hooks/configuration",
 		"anchor": "errors"
 	},
+	"error:The lock on ${…} was lost before the change could be saved. Nothing was saved. Try again.": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "errors"
+	},
 	"error:The name that this hook's matcher is tested against (for a tool call, the tool's name) has over ${…} characters, more than a cloud session tests.": {
 		"route": "/extend/hooks/configuration",
 		"anchor": "errors"
@@ -3657,6 +3685,10 @@
 	},
 	"error:The repo's MCP servers have been closed": {
 		"route": "/extend/hooks/configuration",
+		"anchor": "errors"
+	},
+	"error:The sandbox could not create a folder that it has to hide from the command (${…}), so the command was not started.": {
+		"route": "/configure/permissions/sandbox",
 		"anchor": "errors"
 	},
 	"error:The skill \"${…}\" was not loaded because of a fault in Claude Code: it has no record of the files that the skill was verified against. Do not try again.": {
@@ -3883,22 +3915,6 @@
 		"route": "/extend/hooks/configuration",
 		"anchor": "errors"
 	},
-	"error:Unknown pr*": {
-		"route": "/extend/headless",
-		"anchor": "errors"
-	},
-	"error:Unknown protocol set in OTEL_EXPORTER_OTLP_LOGS_PROTOCOL or OTEL_EXPORTER_OTLP_PROTOCOL env var: ${…}": {
-		"route": "/configure/env-vars/telemetry-and-debug",
-		"anchor": "errors"
-	},
-	"error:Unknown protocol set in OTEL_EXPORTER_OTLP_METRICS_PROTOCOL or OTEL_EXPORTER_OTLP_PROTOCOL env var: ${…}": {
-		"route": "/configure/env-vars/telemetry-and-debug",
-		"anchor": "errors"
-	},
-	"error:Unknown protocol set in OTEL_EXPORTER_OTLP_TRACES_PROTOCOL or OTEL_EXPORTER_OTLP_PROTOCOL env var: ${…}": {
-		"route": "/configure/env-vars/telemetry-and-debug",
-		"anchor": "errors"
-	},
 	"error:Unknown sk*": {
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
@@ -3910,10 +3926,6 @@
 	"error:Unsupported cont*": {
 		"route": "/extend/headless",
 		"anchor": "errors"
-	},
-	"error:Unsupported control request subtype": {
-		"route": "/extend/headless/control-protocol",
-		"anchor": "example"
 	},
 	"error:Unsupported control request subtype: ${…}": {
 		"route": "/extend/headless/control-protocol",
@@ -4182,6 +4194,10 @@
 	"error:[DaemonLock] Failed to *": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
+	},
+	"error:[Error] ${…}": {
+		"route": "/extend/skills-and-commands/substitutions",
+		"anchor": "shell-injection"
 	},
 	"error:[RemoteSessionManager] Cannot send: not connected": {
 		"route": "/how-it-works/sessions-and-storage",
@@ -4601,10 +4617,6 @@
 	},
 	"error:client ev*": {
 		"route": "/how-it-works/sessions-and-storage",
-		"anchor": "errors"
-	},
-	"error:clientMetadataUrl must be a valid HTTPS URL with a non-root pathname, got: ${…}": {
-		"route": "/extend/mcp/auth",
 		"anchor": "errors"
 	},
 	"error:cloud session ended (${…}) before plan approval": {
@@ -6619,10 +6631,6 @@
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
 	},
-	"flag:drop-worktree-registrations --json": {
-		"route": "/configure/cli/subcommands",
-		"anchor": "commands"
-	},
 	"flag:edit-chrome-settings --json": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
@@ -6968,10 +6976,6 @@
 		"anchor": "subcommands"
 	},
 	"flag:plugin install --marketplace": {
-		"route": "/extend/plugins/cli",
-		"anchor": "subcommands"
-	},
-	"flag:plugin install --registry": {
 		"route": "/extend/plugins/cli",
 		"anchor": "subcommands"
 	},
@@ -7575,11 +7579,19 @@
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
 	},
+	"flag:ultrareview --review-md": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "ultrareview-eval-flags"
+	},
 	"flag:ultrareview --timeout": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
 	},
 	"flag:ultrareview --trust-workspace": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "commands"
+	},
+	"flag:workspace-trust --json": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
 	},
@@ -8804,6 +8816,10 @@
 		"anchor": "commands"
 	},
 	"subcommand:update": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "commands"
+	},
+	"subcommand:workspace-trust": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
 	},

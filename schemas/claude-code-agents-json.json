@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-agents-json.json",
-	"title": "Claude Code --agents JSON entry (Claude Code 2.1.322)",
-	"$comment": "For one subagent definition of the --agents JSON (and the SDK agents option). Generated from Claude Code 2.1.322 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, object described as \"Definition for a custom subagent that can be invoked via the Agent tool.\". Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code --agents JSON entry (Claude Code 2.1.323)",
+	"$comment": "For one subagent definition of the --agents JSON (and the SDK agents option). Generated from Claude Code 2.1.323 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, object described as \"Definition for a custom subagent that can be invoked via the Agent tool.\". Do not edit by hand: run \"bun run schemas\".",
 	"type": "object",
 	"properties": {
 		"description": {
@@ -267,6 +267,68 @@
 												"type": "string"
 											}
 										},
+										"dataFlowServer": {
+											"description": "@internal Where the host got this server, for the data flow records of calls to it: one of Anthropic's, by its registry id; a claude.ai connector, by its id (tagged or a bare UUID) and its directory id or null; or one the user configured, by the transport the host reaches it over. The first two are taken only in a session a desktop host started. Without it, or with a value of another shape, the records say unknown (docs/desktop-host-contract.md, D139). Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered.",
+											"anyOf": [
+												{
+													"type": "object",
+													"properties": {
+														"type": {
+															"type": "string",
+															"const": "anthropic"
+														},
+														"id": {
+															"type": "string",
+															"minLength": 1
+														}
+													},
+													"required": ["type", "id"]
+												},
+												{
+													"type": "object",
+													"properties": {
+														"type": {
+															"type": "string",
+															"const": "claude_ai_connector"
+														},
+														"id": {
+															"type": "string",
+															"minLength": 1
+														},
+														"directory_id": {
+															"anyOf": [
+																{
+																	"type": "string",
+																	"minLength": 1
+																},
+																{
+																	"type": "null"
+																}
+															]
+														}
+													},
+													"required": ["type", "id", "directory_id"]
+												},
+												{
+													"type": "object",
+													"properties": {
+														"type": {
+															"type": "string",
+															"const": "client_configured"
+														},
+														"transport": {
+															"type": "string",
+															"enum": ["stdio", "http", "in_process"]
+														},
+														"plugin_id_hash": {
+															"type": "string",
+															"minLength": 1
+														}
+													},
+													"required": ["type", "transport"]
+												}
+											]
+										},
 										"tools": {
 											"description": "Per-tool permission policy the host declares for this server's tools (not the tool definitions passed to createSdkMcpServer). always_ask: the CLI asks the host (canUseTool or the permission prompt tool) before each call, even where an allow rule or allowedTools covers the tool, and under bypassPermissions outside a hosted remote session (CLAUDE_CODE_REMOTE); under dontAsk the call is denied; in auto mode the classifier decides, except that by default a tool annotated destructiveHint still asks. always_deny: calls are denied. always_allow and org_max_permission are ignored on sdk servers; grant allows with allowedTools or canUseTool. Read from initialize (sdkMcpServerConfigs) and from each mcp_set_servers entry that names the server. On the wire an entry without tools states no policy: on initialize the stored list and the rules stand; on mcp_set_servers the rules are replaced without them. The Agent SDK always re-sends the registered list. An entry whose policy is not one of the three asks; an entry without a string name is dropped and the rest apply; a value that is not a list reads as absent.",
 											"type": "array",
@@ -370,7 +432,7 @@
 			]
 		},
 		"observer": {
-			"description": "Agent type auto-spawned as a background observer whenever this agent runs. The observer receives read-only activity digests and reports via the ObserverReport tool; it never participates in the task.",
+			"description": "Agent type auto-spawned as a background observer whenever this agent runs, or a comma-separated list of up to four, none of whose names has a comma. An observer receives read-only activity digests and reports via the ObserverReport tool; it never participates in the task.",
 			"type": "string"
 		},
 		"observerMessage": {

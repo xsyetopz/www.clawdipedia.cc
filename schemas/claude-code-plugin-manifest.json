@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-plugin-manifest.json",
-	"title": "Claude Code plugin.json (Claude Code 2.1.322)",
-	"$comment": "For .claude-plugin/plugin.json. Generated from Claude Code 2.1.322 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code plugin.json (Claude Code 2.1.323)",
+	"$comment": "For .claude-plugin/plugin.json. Generated from Claude Code 2.1.323 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
 	"type": "object",
 	"properties": {
 		"$schema": {
@@ -67,7 +67,7 @@
 			}
 		},
 		"defaultEnabled": {
-			"description": "Whether the plugin starts enabled when the user has no explicit enabled/disabled setting for it (default: true). Explicit enabledPlugins values always win, and a plugin required by an enabled dependent is enabled regardless of this value.",
+			"description": "Whether the plugin starts enabled when the user has no explicit enabled/disabled setting for it (default: true). Explicit enabledPlugins values always win, and a plugin required by an enabled dependent is enabled regardless of this value. In a cloud session that began as a claude.ai chat, so is a plugin synced from the user's claude.ai account.",
 			"type": "boolean"
 		},
 		"dependencies": {
@@ -101,6 +101,14 @@
 		},
 		"metadata": {
 			"description": "Free-form metadata for the plugin author's own use (e.g. entitlement or catalog fields). Preserved on the parsed manifest but not read by Claude Code.",
+			"type": "object",
+			"propertyNames": {
+				"type": "string"
+			},
+			"additionalProperties": {}
+		},
+		"engines": {
+			"description": "Versions of its hosts this plugin runs on. \"claude-code\" is a semver range (e.g. \">=2.1.320\"): outside it, the plugin is not installed, updated or loaded. Other keys are ignored.",
 			"type": "object",
 			"propertyNames": {
 				"type": "string"
@@ -1551,6 +1559,67 @@
 										"items": {
 											"type": "string"
 										}
+									},
+									"dataFlowServer": {
+										"anyOf": [
+											{
+												"type": "object",
+												"properties": {
+													"type": {
+														"type": "string",
+														"const": "anthropic"
+													},
+													"id": {
+														"type": "string",
+														"minLength": 1
+													}
+												},
+												"required": ["type", "id"]
+											},
+											{
+												"type": "object",
+												"properties": {
+													"type": {
+														"type": "string",
+														"const": "claude_ai_connector"
+													},
+													"id": {
+														"type": "string",
+														"minLength": 1
+													},
+													"directory_id": {
+														"anyOf": [
+															{
+																"type": "string",
+																"minLength": 1
+															},
+															{
+																"type": "null"
+															}
+														]
+													}
+												},
+												"required": ["type", "id", "directory_id"]
+											},
+											{
+												"type": "object",
+												"properties": {
+													"type": {
+														"type": "string",
+														"const": "client_configured"
+													},
+													"transport": {
+														"type": "string",
+														"enum": ["stdio", "http", "in_process"]
+													},
+													"plugin_id_hash": {
+														"type": "string",
+														"minLength": 1
+													}
+												},
+												"required": ["type", "transport"]
+											}
+										]
 									}
 								},
 								"required": ["type", "name"]
@@ -2104,6 +2173,67 @@
 													"items": {
 														"type": "string"
 													}
+												},
+												"dataFlowServer": {
+													"anyOf": [
+														{
+															"type": "object",
+															"properties": {
+																"type": {
+																	"type": "string",
+																	"const": "anthropic"
+																},
+																"id": {
+																	"type": "string",
+																	"minLength": 1
+																}
+															},
+															"required": ["type", "id"]
+														},
+														{
+															"type": "object",
+															"properties": {
+																"type": {
+																	"type": "string",
+																	"const": "claude_ai_connector"
+																},
+																"id": {
+																	"type": "string",
+																	"minLength": 1
+																},
+																"directory_id": {
+																	"anyOf": [
+																		{
+																			"type": "string",
+																			"minLength": 1
+																		},
+																		{
+																			"type": "null"
+																		}
+																	]
+																}
+															},
+															"required": ["type", "id", "directory_id"]
+														},
+														{
+															"type": "object",
+															"properties": {
+																"type": {
+																	"type": "string",
+																	"const": "client_configured"
+																},
+																"transport": {
+																	"type": "string",
+																	"enum": ["stdio", "http", "in_process"]
+																},
+																"plugin_id_hash": {
+																	"type": "string",
+																	"minLength": 1
+																}
+															},
+															"required": ["type", "transport"]
+														}
+													]
 												}
 											},
 											"required": ["type", "name"]

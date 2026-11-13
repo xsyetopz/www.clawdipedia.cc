@@ -1,5 +1,5 @@
 {
-	"version": "2.1.322",
+	"version": "2.1.323",
 	"kinds": {
 		"beta": [
 			{ "name": "advanced-tool-use-2025-11-20", "detail": "tool_search" },
@@ -143,6 +143,7 @@
 				"detail": "path"
 			},
 			{ "name": "/api/directory/plugins", "detail": "path" },
+			{ "name": "/api/directory/server-urls", "detail": "path" },
 			{ "name": "/api/directory/servers?${…}", "detail": "path" },
 			{ "name": "/api/eval-authed/${…}", "detail": "path" },
 			{ "name": "/api/eval/${…}", "detail": "path" },
@@ -599,7 +600,6 @@
 			{ "name": "/v1/organizations/workspaces?beta=true", "detail": "path" },
 			{ "name": "/v1/pages/mcp", "detail": "path" },
 			{ "name": "/v1/privacy-consents/checkup", "detail": "path" },
-			{ "name": "/v1/session_ingress/session/${…}", "detail": "path" },
 			{
 				"name": "/v1/session_ingress/session/${…}/git_proxy/${…}/${…}.git",
 				"detail": "path"
@@ -880,6 +880,10 @@
 				"name": "https://platform.claude.com/oauth/code/success?app=claude-code",
 				"detail": "url"
 			},
+			{
+				"name": "https://platform.claude.com/settings/billing",
+				"detail": "url"
+			},
 			{ "name": "https://platform.claude.com/v1/oauth/token", "detail": "url" },
 			{ "name": "https://preview.claude.ai", "detail": "url" },
 			{ "name": "https://status.claude.com", "detail": "url" },
@@ -1044,6 +1048,7 @@
 			{ "name": "API_FORCE_IDLE_TIMEOUT", "detail": "int" },
 			{ "name": "API_TIMEOUT_MS", "detail": "int" },
 			{ "name": "APPDATA", "detail": "str" },
+			{ "name": "APPDOMAIN_MANAGER_", "detail": "listed" },
 			{ "name": "APP_URL", "detail": "str" },
 			{ "name": "ARGV0", "detail": "set for a child process" },
 			{
@@ -1113,11 +1118,13 @@
 			{ "name": "AZURE_USERNAME" },
 			{ "name": "BASH_ALIASES", "detail": "listed" },
 			{ "name": "BASH_CMDS", "detail": "listed" },
+			{ "name": "BASH_COMPAT", "detail": "listed" },
 			{ "name": "BASH_DEFAULT_TIMEOUT_MS" },
 			{ "name": "BASH_ENV" },
+			{ "name": "BASH_LOADABLES_PATH", "detail": "listed" },
 			{ "name": "BASH_MAX_OUTPUT_LENGTH", "detail": "int" },
 			{ "name": "BASH_MAX_TIMEOUT_MS" },
-			{ "name": "BASH_VERSION", "detail": "listed" },
+			{ "name": "BASH_SOURCE_PATH", "detail": "listed" },
 			{ "name": "BAT_THEME", "detail": "str" },
 			{ "name": "BETA_TRACING_ENDPOINT", "detail": "str" },
 			{ "name": "BINSTAR_API_TOKEN", "detail": "listed" },
@@ -1135,6 +1142,7 @@
 			{ "name": "BUNDLE_USER_HOME" },
 			{ "name": "BUN_CHROME_PATH", "detail": "str" },
 			{ "name": "BUN_CONFIG_FILE" },
+			{ "name": "BUN_CONFIG_REGISTRY", "detail": "listed" },
 			{ "name": "BUN_GC_TIMER_DISABLE" },
 			{ "name": "BUN_INSTALL", "detail": "str" },
 			{ "name": "BUN_INSTALL_CACHE_DIR", "detail": "set for a child process" },
@@ -1235,6 +1243,7 @@
 			{ "name": "CLAUDE_BG_PTY_AUTH", "detail": "str" },
 			{ "name": "CLAUDE_BG_RENDEZVOUS_SOCK", "detail": "str" },
 			{ "name": "CLAUDE_BG_RV_AUTH", "detail": "str" },
+			{ "name": "CLAUDE_BG_SESSION_CREDENTIAL", "detail": "str" },
 			{ "name": "CLAUDE_BG_SESSION_PERMISSION_RULES", "detail": "str" },
 			{
 				"name": "CLAUDE_BG_SILENT_PEER_TIMEOUT_MS",
@@ -1362,6 +1371,7 @@
 				"detail": "int{min:0}"
 			},
 			{ "name": "CLAUDE_CODE_AUTH_FAIL_EXIT_MS", "detail": "int{min:0}" },
+			{ "name": "CLAUDE_CODE_AUTOMOUNT_ROOTS", "detail": "str" },
 			{ "name": "CLAUDE_CODE_AUTOUPDATER_DISABLED_BY_HOST", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_AUTO_BACKGROUND_TIMEOUT_MS", "detail": "listed" },
 			{ "name": "CLAUDE_CODE_AUTO_COMPACT_WINDOW", "detail": "str" },
@@ -1453,10 +1463,14 @@
 				"detail": "bool"
 			},
 			{ "name": "CLAUDE_CODE_CCR_OWN_CONNECTION_POOL", "detail": "bool" },
-			{ "name": "CLAUDE_CODE_CCR_REQUESTS_BY_FETCH", "detail": "bool" },
+			{ "name": "CLAUDE_CODE_CCR_REQUESTS_BY_FETCH", "detail": "listed" },
 			{ "name": "CLAUDE_CODE_CCR_SKIP_FRESH_MIGRATIONS", "detail": "bool" },
 			{
 				"name": "CLAUDE_CODE_CCR_SKIP_HYDRATE_ON_CURRENT_TIP",
+				"detail": "bool"
+			},
+			{
+				"name": "CLAUDE_CODE_CCR_SKIP_NEEDLESS_STARTUP_READS",
 				"detail": "bool"
 			},
 			{ "name": "CLAUDE_CODE_CCR_SLOW_SKILLS_WATCH", "detail": "bool" },
@@ -1518,8 +1532,11 @@
 			{ "name": "CLAUDE_CODE_DECSTBM", "detail": "str" },
 			{ "name": "CLAUDE_CODE_DEEP_TWILIGHT", "detail": "triBool" },
 			{ "name": "CLAUDE_CODE_DESIGN_OAUTH_CLIENT_ID", "detail": "str" },
-			{ "name": "CLAUDE_CODE_DESKTOP_APP_VERSION", "detail": "str" },
+			{ "name": "CLAUDE_CODE_DESKTOP_APP_VERSION", "detail": "rawStr" },
 			{ "name": "CLAUDE_CODE_DESKTOP_CONNECTOR_NAMES", "detail": "bool" },
+			{ "name": "CLAUDE_CODE_DESKTOP_MESSAGE_CARD", "detail": "bool" },
+			{ "name": "CLAUDE_CODE_DESKTOP_MODE_FROM_RECORD", "detail": "bool" },
+			{ "name": "CLAUDE_CODE_DESKTOP_PLUGIN_INSTALL_FRAMES", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_DESKTOP_SKILLS_PLUGIN_DIR", "detail": "str" },
 			{ "name": "CLAUDE_CODE_DESKTOP_SKILL_SWITCHES", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_DESKTOP_WORKFLOW_LIMIT_WAIT", "detail": "bool" },
@@ -1811,6 +1828,15 @@
 			{ "name": "CLAUDE_CODE_EXPERIMENTAL_OBSERVER_AGENTS", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_EXTRA_BODY", "detail": "str" },
 			{ "name": "CLAUDE_CODE_EXTRA_METADATA", "detail": "str" },
+			{ "name": "CLAUDE_CODE_FEATURE_FLAGS_KICK_FROM_INIT", "detail": "bool" },
+			{
+				"name": "CLAUDE_CODE_FEATURE_FLAGS_KICK_ON_WARM_CACHE",
+				"detail": "bool"
+			},
+			{
+				"name": "CLAUDE_CODE_FEATURE_FLAGS_REFRESH_INTERVAL_MS",
+				"detail": "int"
+			},
 			{ "name": "CLAUDE_CODE_FEDERATION_CACHE_DIR", "detail": "str" },
 			{ "name": "CLAUDE_CODE_FILE_READ_MAX_OUTPUT_TOKENS", "detail": "int" },
 			{
@@ -1860,7 +1886,6 @@
 				"name": "CLAUDE_CODE_GB_DISK_CACHE_WHEN_TELEMETRY_OFF",
 				"detail": "bool"
 			},
-			{ "name": "CLAUDE_CODE_GB_REFRESH_INTERVAL_MS", "detail": "int" },
 			{ "name": "CLAUDE_CODE_GENTLE_PARASOL", "detail": "str" },
 			{ "name": "CLAUDE_CODE_GIT_BASH_PATH", "detail": "str" },
 			{ "name": "CLAUDE_CODE_GIT_CHECK_ONLY_IN_REPOSITORY", "detail": "bool" },
@@ -1904,7 +1929,12 @@
 				"detail": "int{min:0}"
 			},
 			{ "name": "CLAUDE_CODE_HOOKS_SAME_THREAD", "detail": "bool" },
+			{
+				"name": "CLAUDE_CODE_HOOK_HEARTBEAT_INTERVAL_MS",
+				"detail": "int{min:100,max:30000}"
+			},
 			{ "name": "CLAUDE_CODE_HOSTED_DESKTOP", "detail": "bool" },
+			{ "name": "CLAUDE_CODE_HOST_ARTIFACT_TYPE_COMMANDS", "detail": "names" },
 			{ "name": "CLAUDE_CODE_HOST_AUTH_ENV_VAR", "detail": "str" },
 			{
 				"name": "CLAUDE_CODE_HOST_AUTH_REFRESH_TIMEOUT_MS",
@@ -2044,6 +2074,10 @@
 				"name": "CLAUDE_CODE_MCP_SERVE_INTERFACE_MIN_VERSION",
 				"detail": "int{min:1,digitsOnly:!0}"
 			},
+			{
+				"name": "CLAUDE_CODE_MCP_SERVE_MEMORY_WALKS_DEADLINE_MS",
+				"detail": "int{min:1}"
+			},
 			{ "name": "CLAUDE_CODE_MCP_SERVE_SETTINGS", "detail": "rawStr" },
 			{ "name": "CLAUDE_CODE_MCP_SERVE_TOOL_OUTPUT", "detail": "bool" },
 			{
@@ -2114,7 +2148,11 @@
 			},
 			{
 				"name": "CLAUDE_CODE_OVERLOADED_RETRY_MAX_DELAY_MS",
-				"detail": "int{min:32000,max:64000,digitsOnly:!0}"
+				"detail": "int{min:32000,max:300000,digitsOnly:!0}"
+			},
+			{
+				"name": "CLAUDE_CODE_OVERLOADED_RETRY_MAX_WAIT_MS",
+				"detail": "int{min:300000,max:3600000,digitsOnly:!0}"
 			},
 			{ "name": "CLAUDE_CODE_OVERRIDE_DATE", "detail": "str" },
 			{ "name": "CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE", "detail": "bool" },
@@ -2134,7 +2172,7 @@
 			{ "name": "CLAUDE_CODE_PEWTER_OWL", "detail": "triBool" },
 			{ "name": "CLAUDE_CODE_PEWTER_OWL_TOOL", "detail": "triBool" },
 			{ "name": "CLAUDE_CODE_PLAIN_DELTA_DIRECT_WRITE", "detail": "bool" },
-			{ "name": "CLAUDE_CODE_PLAIN_DELTA_FAST_PATH", "detail": "bool" },
+			{ "name": "CLAUDE_CODE_PLAIN_DELTA_FAST_PATH", "detail": "rawStr" },
 			{ "name": "CLAUDE_CODE_PLAIN_DELTA_TAKE_AT_SOURCE", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_PLAN_MODE_REQUIRED", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_PLAN_V2_AGENT_COUNT", "detail": "int" },
@@ -2158,6 +2196,10 @@
 				"detail": "set for a child process"
 			},
 			{ "name": "CLAUDE_CODE_PLUGIN_PREFER_HTTPS", "detail": "bool" },
+			{
+				"name": "CLAUDE_CODE_PLUGIN_REMOTE_MCP_REACHABLE_HOSTS_HINT",
+				"detail": "str"
+			},
 			{ "name": "CLAUDE_CODE_PLUGIN_SEED_DIR", "detail": "str" },
 			{ "name": "CLAUDE_CODE_PLUGIN_USE_ZIP_CACHE", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_POLICY_HELPER_PS1_PATH" },
@@ -2189,6 +2231,7 @@
 			{ "name": "CLAUDE_CODE_PROGRAM_USE_CASE_STAMPED", "detail": "str" },
 			{ "name": "CLAUDE_CODE_PROJECTS_SESSION", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_PROJECT_DIR_NAME", "detail": "str" },
+			{ "name": "CLAUDE_CODE_PROJECT_DOC_LOOK_TIMEOUT_MS" },
 			{ "name": "CLAUDE_CODE_PROMPT_CACHE_TTL", "detail": "enum" },
 			{ "name": "CLAUDE_CODE_PROPAGATE_TRACEPARENT", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST", "detail": "bool" },
@@ -2262,6 +2305,7 @@
 			{ "name": "CLAUDE_CODE_RESULT_NONCE", "detail": "str" },
 			{ "name": "CLAUDE_CODE_RESUME_CACHE_WARM", "detail": "triBool" },
 			{ "name": "CLAUDE_CODE_RESUME_FROM_SESSION", "detail": "str" },
+			{ "name": "CLAUDE_CODE_RESUME_HINT_COMMAND", "detail": "str" },
 			{ "name": "CLAUDE_CODE_RESUME_INTERRUPTED_TURN", "detail": "bool" },
 			{
 				"name": "CLAUDE_CODE_RESUME_INTERRUPTED_TURN_MAX_AGE_MS",
@@ -2323,6 +2367,10 @@
 				"name": "CLAUDE_CODE_SDK_HAS_SESSIONS_OAUTH_REFRESH",
 				"detail": "bool"
 			},
+			{
+				"name": "CLAUDE_CODE_SDK_MCP_TOOL_IDLE_TIMEOUT",
+				"detail": "int{min:1,wholeValue:!0}"
+			},
 			{ "name": "CLAUDE_CODE_SDK_READS_SESSION_STATE", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_SDK_READS_STARTUP_MARKS", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_SENDMESSAGE_HANDBACK" },
@@ -2338,6 +2386,10 @@
 				"name": "CLAUDE_CODE_SESSION_BEGAN_AS_COPY",
 				"values": ["1"],
 				"detail": "enum"
+			},
+			{
+				"name": "CLAUDE_CODE_SESSION_CREATED_AT_MS",
+				"detail": "int{min:1,max:9999999999999,digitsOnly:!0}"
 			},
 			{ "name": "CLAUDE_CODE_SESSION_ID", "detail": "str" },
 			{ "name": "CLAUDE_CODE_SESSION_KIND", "detail": "str" },
@@ -2358,6 +2410,7 @@
 				"detail": "set for a child process"
 			},
 			{ "name": "CLAUDE_CODE_SHELL_PREFIX", "detail": "str" },
+			{ "name": "CLAUDE_CODE_SHOWN_PLUGINS_DIR", "detail": "str" },
 			{ "name": "CLAUDE_CODE_SILENT_TURN_REMINDER", "detail": "triBool" },
 			{
 				"name": "CLAUDE_CODE_SILENT_TURN_REMINDER_SECONDS",
@@ -2476,6 +2529,7 @@
 			{ "name": "CLAUDE_CODE_SYNC_SKILLS_INSTALL_TIMEOUT_MS", "detail": "int" },
 			{ "name": "CLAUDE_CODE_SYNC_SKILLS_WAIT_TIMEOUT_MS", "detail": "int" },
 			{ "name": "CLAUDE_CODE_SYNTAX_HIGHLIGHT", "detail": "str" },
+			{ "name": "CLAUDE_CODE_SYSTEM_PROMPT_FEATURE_FLAG", "detail": "str" },
 			{ "name": "CLAUDE_CODE_SYSTEM_PROMPT_GB_FEATURE", "detail": "str" },
 			{ "name": "CLAUDE_CODE_TAGS", "detail": "str" },
 			{ "name": "CLAUDE_CODE_TAG_ISMETA_MESSAGES", "detail": "bool" },
@@ -2538,14 +2592,20 @@
 			{ "name": "CLAUDE_CODE_ULTRAREVIEW_PREFLIGHT_FIXTURE", "detail": "str" },
 			{ "name": "CLAUDE_CODE_ULTRAREVIEW_PR_AS_MERGED", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_ULTRAREVIEW_QUOTA_FIXTURE", "detail": "str" },
+			{ "name": "CLAUDE_CODE_ULTRAREVIEW_REVIEW_MD_FILE", "detail": "str" },
 			{
 				"name": "CLAUDE_CODE_UNWATCHED_REPLY_HOLD_MS",
 				"detail": "int{min:1,max:2000,digitsOnly:!0}"
 			},
 			{ "name": "CLAUDE_CODE_UPFRONT_TOOLS", "detail": "names" },
+			{ "name": "CLAUDE_CODE_USER_DELEGATED_SESSION", "detail": "bool" },
 			{
 				"name": "CLAUDE_CODE_USER_DELEGATED_SESSION_ALLOWED_CHECK_MODELS",
 				"detail": "names"
+			},
+			{
+				"name": "CLAUDE_CODE_USER_DELEGATED_SESSION_ANY_CHECK_MODEL",
+				"detail": "bool"
 			},
 			{
 				"name": "CLAUDE_CODE_USER_DELEGATED_SESSION_DIRECT_API",
@@ -2824,14 +2884,13 @@
 			{ "name": "CONSUL_HTTP_TOKEN", "detail": "listed" },
 			{ "name": "CONSUL_HTTP_TOKEN_FILE" },
 			{ "name": "CONTAINER_SANDBOX_MOUNT_POINT", "detail": "str" },
+			{ "name": "COREPACK_NPM_REGISTRY", "detail": "listed" },
 			{ "name": "COURSIER_CONFIG_DIR" },
 			{ "name": "COURSIER_CREDENTIALS" },
-			{ "name": "CPLUS_INCLUDE_PATH", "detail": "listed" },
 			{ "name": "CREDENTIALS_DIRECTORY" },
 			{ "name": "CURL_CA_BUNDLE", "detail": "str" },
 			{ "name": "CURL_HOME" },
 			{ "name": "CURSOR_TRACE_ID", "detail": "rawStr" },
-			{ "name": "C_INCLUDE_PATH", "detail": "listed" },
 			{ "name": "ComSpec", "detail": "str" },
 			{ "name": "ConEmuANSI", "detail": "str" },
 			{ "name": "ConEmuPID", "detail": "str" },
@@ -2843,11 +2902,11 @@
 			{ "name": "DEBUG_AUTH" },
 			{ "name": "DEBUG_CLAUDE_AGENT_SDK", "detail": "bool" },
 			{ "name": "DEBUG_SDK", "detail": "bool" },
-			{ "name": "DEFAULT_IDENTITY_CLIENT_ID", "detail": "listed" },
 			{ "name": "DEFAULT_WORKFLOW_TOKEN", "detail": "listed" },
 			{ "name": "DEMO_VERSION", "detail": "str" },
 			{ "name": "DENO_CERT", "detail": "str" },
 			{ "name": "DENO_DEPLOYMENT_ID", "detail": "str" },
+			{ "name": "DENO_TLS_CA_STORE", "detail": "listed" },
 			{ "name": "DETECT_GCP_RETRIES" },
 			{ "name": "DEVELOPER_DIR", "detail": "listed" },
 			{ "name": "DEVPOD" },
@@ -2912,6 +2971,7 @@
 			{ "name": "ES_JAVA_OPTS", "detail": "listed" },
 			{ "name": "FALLBACK_FOR_ALL_PRIMARY_MODELS", "detail": "str" },
 			{ "name": "FASTLANE_SESSION", "detail": "listed" },
+			{ "name": "FLIT_INDEX_URL", "detail": "listed" },
 			{ "name": "FLIT_PASSWORD", "detail": "listed" },
 			{ "name": "FLIT_USERNAME", "detail": "listed" },
 			{ "name": "FLY_APP_NAME" },
@@ -2962,11 +3022,15 @@
 			{ "name": "GITLAB_CI", "detail": "str" },
 			{ "name": "GITLAB_TOKEN", "detail": "set for a child process" },
 			{ "name": "GITPOD_WORKSPACE_ID", "detail": "str" },
+			{ "name": "GIT_ADVICE", "detail": "listed" },
+			{ "name": "GIT_ALLOC_LIMIT", "detail": "listed" },
 			{ "name": "GIT_ALLOW_PROTOCOL", "detail": "set for a child process" },
 			{ "name": "GIT_ALTERNATE_OBJECT_DIRECTORIES", "detail": "listed" },
 			{ "name": "GIT_ASKPASS", "detail": "str" },
+			{ "name": "GIT_ATTR_GLOBAL", "detail": "listed" },
 			{ "name": "GIT_ATTR_NOSYSTEM", "detail": "listed" },
 			{ "name": "GIT_ATTR_SOURCE", "detail": "listed" },
+			{ "name": "GIT_ATTR_SYSTEM", "detail": "listed" },
 			{ "name": "GIT_AUTHOR_DATE", "detail": "set for a child process" },
 			{ "name": "GIT_AUTHOR_EMAIL", "detail": "set for a child process" },
 			{ "name": "GIT_AUTHOR_NAME", "detail": "set for a child process" },
@@ -2977,6 +3041,7 @@
 			{ "name": "GIT_COMMITTER_DATE", "detail": "set for a child process" },
 			{ "name": "GIT_COMMITTER_EMAIL", "detail": "set for a child process" },
 			{ "name": "GIT_COMMITTER_NAME", "detail": "set for a child process" },
+			{ "name": "GIT_COMMIT_GRAPH_PARANOIA", "detail": "listed" },
 			{ "name": "GIT_COMMON_DIR", "detail": "set for a child process" },
 			{ "name": "GIT_CONFIG", "detail": "set for a child process" },
 			{ "name": "GIT_CONFIG_COUNT", "detail": "str" },
@@ -2984,30 +3049,68 @@
 			{ "name": "GIT_CONFIG_NOSYSTEM", "detail": "str" },
 			{ "name": "GIT_CONFIG_PARAMETERS" },
 			{ "name": "GIT_CONFIG_SYSTEM", "detail": "set for a child process" },
+			{ "name": "GIT_DEFAULT_HASH", "detail": "listed" },
+			{ "name": "GIT_DEFAULT_REF_FORMAT", "detail": "listed" },
 			{ "name": "GIT_DIFF_OPTS", "detail": "listed" },
 			{ "name": "GIT_DIR", "detail": "str" },
 			{ "name": "GIT_DISCOVERY_ACROSS_FILESYSTEM", "detail": "listed" },
 			{ "name": "GIT_EDITOR", "detail": "set for a child process" },
 			{ "name": "GIT_EXEC_PATH", "detail": "set for a child process" },
 			{ "name": "GIT_EXTERNAL_DIFF", "detail": "listed" },
+			{ "name": "GIT_EXTERNAL_DIFF_TRUST_EXIT_CODE", "detail": "listed" },
+			{ "name": "GIT_FLUSH", "detail": "listed" },
 			{ "name": "GIT_GLOB_PATHSPECS", "detail": "set for a child process" },
 			{ "name": "GIT_GRAFT_FILE", "detail": "listed" },
+			{ "name": "GIT_HTTP_EXPORT_ALL", "detail": "listed" },
+			{ "name": "GIT_HTTP_KEEPALIVE_COUNT", "detail": "listed" },
+			{ "name": "GIT_HTTP_KEEPALIVE_IDLE", "detail": "listed" },
+			{ "name": "GIT_HTTP_KEEPALIVE_INTERVAL", "detail": "listed" },
+			{ "name": "GIT_HTTP_LOW_SPEED_LIMIT", "detail": "listed" },
+			{ "name": "GIT_HTTP_LOW_SPEED_TIME", "detail": "listed" },
+			{ "name": "GIT_HTTP_MAX_REQUESTS", "detail": "listed" },
+			{ "name": "GIT_HTTP_MAX_REQUEST_BUFFER", "detail": "listed" },
+			{ "name": "GIT_HTTP_MAX_RETRIES", "detail": "listed" },
+			{ "name": "GIT_HTTP_MAX_RETRY_TIME", "detail": "listed" },
 			{ "name": "GIT_HTTP_PROXY_AUTHMETHOD", "detail": "listed" },
+			{ "name": "GIT_HTTP_RETRY_AFTER", "detail": "listed" },
+			{ "name": "GIT_HTTP_USER_AGENT", "detail": "listed" },
 			{ "name": "GIT_ICASE_PATHSPECS", "detail": "set for a child process" },
 			{ "name": "GIT_IMPLICIT_WORK_TREE", "detail": "set for a child process" },
 			{ "name": "GIT_INDEX_FILE", "detail": "set for a child process" },
+			{ "name": "GIT_INDEX_VERSION", "detail": "listed" },
 			{ "name": "GIT_LFS_SKIP_SMUDGE", "detail": "listed" },
 			{ "name": "GIT_LITERAL_PATHSPECS", "detail": "set for a child process" },
+			{ "name": "GIT_MERGE_AUTOEDIT", "detail": "listed" },
+			{ "name": "GIT_MERGE_VERBOSITY", "detail": "listed" },
+			{ "name": "GIT_MMAP_LIMIT", "detail": "listed" },
 			{ "name": "GIT_NAMESPACE", "detail": "listed" },
 			{ "name": "GIT_NOGLOB_PATHSPECS", "detail": "set for a child process" },
+			{ "name": "GIT_NOTES_DISPLAY_REF", "detail": "listed" },
+			{ "name": "GIT_NOTES_REF", "detail": "listed" },
+			{ "name": "GIT_NOTES_REWRITE_MODE", "detail": "listed" },
+			{ "name": "GIT_NOTES_REWRITE_REF", "detail": "listed" },
 			{ "name": "GIT_NO_LAZY_FETCH", "detail": "set for a child process" },
 			{ "name": "GIT_NO_REPLACE_OBJECTS", "detail": "listed" },
 			{ "name": "GIT_OBJECT_DIRECTORY", "detail": "set for a child process" },
 			{ "name": "GIT_OPTIONAL_LOCKS", "detail": "set for a child process" },
 			{ "name": "GIT_PAGER", "detail": "listed" },
+			{ "name": "GIT_PAGER_IN_USE", "detail": "listed" },
+			{ "name": "GIT_PRINT_SHA1_ELLIPSIS", "detail": "listed" },
 			{ "name": "GIT_PROGRESS_DELAY", "detail": "set for a child process" },
+			{ "name": "GIT_PROTOCOL", "detail": "listed" },
+			{ "name": "GIT_PROTOCOL_FROM_USER", "detail": "listed" },
 			{ "name": "GIT_PROXY_COMMAND", "detail": "set for a child process" },
+			{ "name": "GIT_PROXY_SSL_CAINFO", "detail": "listed" },
+			{ "name": "GIT_PROXY_SSL_CERT", "detail": "listed" },
+			{ "name": "GIT_PROXY_SSL_CERT_PASSWORD_PROTECTED", "detail": "listed" },
+			{ "name": "GIT_PROXY_SSL_KEY", "detail": "listed" },
+			{ "name": "GIT_QUARANTINE_PATH", "detail": "listed" },
+			{ "name": "GIT_REDIRECT_STDERR", "detail": "listed" },
+			{ "name": "GIT_REDIRECT_STDIN", "detail": "listed" },
+			{ "name": "GIT_REDIRECT_STDOUT", "detail": "listed" },
 			{ "name": "GIT_REFERENCE_BACKEND", "detail": "listed" },
+			{ "name": "GIT_REFLOG_ACTION", "detail": "listed" },
+			{ "name": "GIT_REF_PARANOIA", "detail": "listed" },
 			{ "name": "GIT_REPLACE_REF_BASE", "detail": "listed" },
 			{ "name": "GIT_SEQUENCE_EDITOR", "detail": "listed" },
 			{ "name": "GIT_SHALLOW_FILE", "detail": "listed" },
@@ -3017,12 +3120,24 @@
 			{ "name": "GIT_SSL_CAINFO", "detail": "str" },
 			{ "name": "GIT_SSL_CAPATH", "detail": "str" },
 			{ "name": "GIT_SSL_CERT" },
+			{ "name": "GIT_SSL_CERT_PASSWORD_PROTECTED", "detail": "listed" },
+			{ "name": "GIT_SSL_CERT_TYPE", "detail": "listed" },
+			{ "name": "GIT_SSL_CIPHER_LIST", "detail": "listed" },
 			{ "name": "GIT_SSL_KEY" },
+			{ "name": "GIT_SSL_KEY_TYPE", "detail": "listed" },
 			{ "name": "GIT_SSL_NO_VERIFY", "detail": "listed" },
+			{ "name": "GIT_SSL_VERSION", "detail": "listed" },
 			{ "name": "GIT_TEMPLATE_DIR", "detail": "listed" },
 			{ "name": "GIT_TERMINAL_PROMPT", "detail": "str" },
+			{ "name": "GIT_TEST_COMMIT_GRAPH", "detail": "listed" },
+			{ "name": "GIT_TEST_MULTI_PACK_INDEX", "detail": "listed" },
 			{ "name": "GIT_TEST_PACK_PATH_WALK", "detail": "listed" },
+			{ "name": "GIT_TEST_SPARSE_INDEX", "detail": "listed" },
+			{ "name": "GIT_TEST_SPLIT_INDEX", "detail": "listed" },
 			{ "name": "GIT_TEXTDOMAINDIR", "detail": "listed" },
+			{ "name": "GIT_TRACE2_REDACT", "detail": "listed" },
+			{ "name": "GIT_TRACE_REFS", "detail": "listed" },
+			{ "name": "GIT_USER_AGENT", "detail": "listed" },
 			{ "name": "GIT_WORK_TREE", "detail": "set for a child process" },
 			{ "name": "GNOME_TERMINAL_SERVICE", "detail": "str" },
 			{ "name": "GNUPGHOME" },
@@ -3050,6 +3165,7 @@
 			{ "name": "GRPC_VERBOSITY" },
 			{ "name": "GTK_PATH", "detail": "listed" },
 			{ "name": "HATCH_INDEX_AUTH", "detail": "listed" },
+			{ "name": "HATCH_INDEX_REPO", "detail": "listed" },
 			{ "name": "HATCH_INDEX_USER", "detail": "listed" },
 			{ "name": "HELM_CONFIG_HOME" },
 			{ "name": "HELM_REGISTRY_CONFIG" },
@@ -3077,11 +3193,9 @@
 			{ "name": "HUGGINGFACEHUB_API_TOKEN", "detail": "listed" },
 			{ "name": "HUGGING_FACE_HUB_TOKEN", "detail": "listed" },
 			{ "name": "IBM_JAVA_OPTIONS", "detail": "listed" },
-			{ "name": "IDENTITY_ENDPOINT", "detail": "listed" },
 			{ "name": "IDENTITY_HEADER", "detail": "listed" },
-			{ "name": "IDENTITY_SERVER_THUMBPRINT", "detail": "listed" },
-			{ "name": "IMDS_ENDPOINT", "detail": "listed" },
 			{ "name": "INK_SCREEN_READER", "detail": "bool" },
+			{ "name": "INPUT_AWS_BEARER_TOKEN_BEDROCK", "detail": "listed" },
 			{ "name": "INTELLIJ_TERMINAL_COMMAND_BLOCKS", "detail": "str" },
 			{ "name": "INTELLIJ_TERMINAL_COMMAND_BLOCKS_REWORKED", "detail": "str" },
 			{ "name": "IS_DEMO", "detail": "str" },
@@ -3113,7 +3227,6 @@
 			{ "name": "LD_PRELOAD", "detail": "listed" },
 			{ "name": "LEIN_HOME" },
 			{ "name": "LEIN_JVM_OPTS", "detail": "listed" },
-			{ "name": "LIBRARY_PATH", "detail": "listed" },
 			{ "name": "LOCALAPPDATA", "detail": "str" },
 			{ "name": "LOCAL_BRIDGE", "detail": "bool" },
 			{ "name": "LS_COLORS", "detail": "listed" },
@@ -3151,11 +3264,9 @@
 			{ "name": "MCP_XAA_IDP_CLIENT_SECRET", "detail": "str" },
 			{ "name": "METADATA_SERVER_DETECTION" },
 			{ "name": "MIMALLOC_PURGE_DELAY" },
-			{ "name": "MIMALLOC_PURGE_HOLES", "detail": "listed" },
-			{ "name": "MIMALLOC_PURGE_HOLES_MIN_INTERVAL", "detail": "listed" },
+			{ "name": "MODULE_PATH", "detail": "listed" },
 			{ "name": "MONO_PATH", "detail": "listed" },
 			{ "name": "MSAL_FORCE_REGION" },
-			{ "name": "MSI_ENDPOINT", "detail": "listed" },
 			{ "name": "MSI_SECRET", "detail": "listed" },
 			{ "name": "MSYSTEM", "detail": "str" },
 			{ "name": "MS_TEAMS_WEBHOOK_URI", "detail": "listed" },
@@ -3167,6 +3278,7 @@
 			{ "name": "NODE_DEBUG" },
 			{ "name": "NODE_ENV", "detail": "set for a child process" },
 			{ "name": "NODE_EXTRA_CA_CERTS", "detail": "str" },
+			{ "name": "NODE_INSPECTOR_IPC" },
 			{ "name": "NODE_OPTIONS", "detail": "str" },
 			{ "name": "NODE_PATH", "detail": "str" },
 			{ "name": "NODE_REDIRECT_WARNINGS", "detail": "listed" },
@@ -3184,6 +3296,7 @@
 			{ "name": "NPM_CONFIG_HTTP_PROXY", "detail": "listed" },
 			{ "name": "NPM_CONFIG_PREFIX" },
 			{ "name": "NPM_CONFIG_PROXY", "detail": "listed" },
+			{ "name": "NPM_CONFIG_REGISTRY", "detail": "listed" },
 			{ "name": "NPM_CONFIG_USERCONFIG" },
 			{ "name": "NUGET_AUTH_TOKEN", "detail": "listed" },
 			{ "name": "NoDefaultCurrentDirectoryInExePath", "detail": "str" },
@@ -3308,6 +3421,7 @@
 			{ "name": "P4PORT", "detail": "str" },
 			{ "name": "PATH", "detail": "str" },
 			{ "name": "PATHEXT", "detail": "str" },
+			{ "name": "PATH_LOCALE", "detail": "listed" },
 			{ "name": "PGPASSFILE" },
 			{ "name": "PGSERVICEFILE" },
 			{ "name": "PGSSLKEY" },
@@ -3316,8 +3430,12 @@
 			{ "name": "PIP_CERT", "detail": "str" },
 			{ "name": "PIP_CLIENT_CERT" },
 			{ "name": "PIP_CONFIG_FILE" },
+			{ "name": "PIP_EXTRA_INDEX_URL", "detail": "listed" },
+			{ "name": "PIP_FIND_LINKS", "detail": "listed" },
+			{ "name": "PIP_INDEX_URL", "detail": "listed" },
 			{ "name": "PLAYWRIGHT_BROWSERS_PATH", "detail": "str" },
 			{ "name": "POETRY_CONFIG_DIR" },
+			{ "name": "POSIXLY_CORRECT", "detail": "listed" },
 			{ "name": "PREFIX", "detail": "str" },
 			{ "name": "PROCESSOR_ARCHITECTURE", "detail": "listed" },
 			{ "name": "PROGRAMDATA", "detail": "str" },
@@ -3347,9 +3465,6 @@
 			{ "name": "RUSTUP_HOME", "detail": "listed" },
 			{ "name": "RUST_BACKTRACE", "detail": "listed" },
 			{ "name": "RUST_LOG", "detail": "listed" },
-			{ "name": "R_LIBS", "detail": "listed" },
-			{ "name": "R_LIBS_SITE", "detail": "listed" },
-			{ "name": "R_LIBS_USER", "detail": "listed" },
 			{ "name": "R_PROFILE_USER", "detail": "listed" },
 			{ "name": "S3CMD_CONFIG" },
 			{ "name": "SAFEUSER", "detail": "str" },
@@ -3476,7 +3591,11 @@
 			{ "name": "TMUX_PANE", "detail": "str" },
 			{ "name": "TRACEPARENT", "detail": "str" },
 			{ "name": "TRACESTATE", "detail": "str" },
+			{ "name": "TSC_NONPOLLING_WATCHER" },
+			{ "name": "TSC_WATCHDIRECTORY" },
+			{ "name": "TSC_WATCHFILE" },
 			{ "name": "TWINE_PASSWORD", "detail": "listed" },
+			{ "name": "TWINE_REPOSITORY_URL", "detail": "listed" },
 			{ "name": "TWINE_USERNAME", "detail": "listed" },
 			{ "name": "TZ", "detail": "set for a child process" },
 			{ "name": "ULTRAPLAN_PROMPT_FILE", "detail": "str" },
@@ -3489,8 +3608,15 @@
 			{ "name": "USE_LOCAL_OAUTH", "detail": "bool" },
 			{ "name": "USE_STAGING_OAUTH", "detail": "bool" },
 			{ "name": "UV_CONFIG_FILE" },
+			{ "name": "UV_DEFAULT_INDEX", "detail": "listed" },
+			{ "name": "UV_EXTRA_INDEX_URL", "detail": "listed" },
+			{ "name": "UV_FIND_LINKS", "detail": "listed" },
+			{ "name": "UV_INDEX", "detail": "listed" },
+			{ "name": "UV_INDEX_URL", "detail": "listed" },
+			{ "name": "UV_NATIVE_TLS", "detail": "listed" },
 			{ "name": "UV_PUBLISH_PASSWORD", "detail": "listed" },
 			{ "name": "UV_PUBLISH_TOKEN", "detail": "listed" },
+			{ "name": "UV_PUBLISH_URL", "detail": "listed" },
 			{ "name": "UV_PUBLISH_USERNAME", "detail": "listed" },
 			{ "name": "UV_THREADPOOL_SIZE", "detail": "str" },
 			{ "name": "VAULT_AUTH_TOKEN", "detail": "listed" },
@@ -3527,6 +3653,7 @@
 			{ "name": "VITALS_EMITTER_BIN", "detail": "str" },
 			{ "name": "VOICE_STREAM_BASE_URL", "detail": "str" },
 			{ "name": "VSCODE_GIT_ASKPASS_MAIN", "detail": "str" },
+			{ "name": "VSCODE_INSPECTOR_OPTIONS" },
 			{ "name": "VSS_NUGET_ACCESSTOKEN", "detail": "listed" },
 			{ "name": "VSS_NUGET_EXTERNAL_FEED_ENDPOINTS", "detail": "listed" },
 			{ "name": "VTE_VERSION", "detail": "str" },
@@ -3551,6 +3678,9 @@
 			{ "name": "XDG_RUNTIME_DIR", "detail": "str" },
 			{ "name": "XDG_STATE_HOME", "detail": "str" },
 			{ "name": "XTERM_VERSION", "detail": "str" },
+			{ "name": "YARN_NPM_PUBLISH_REGISTRY", "detail": "listed" },
+			{ "name": "YARN_NPM_REGISTRY_SERVER", "detail": "listed" },
+			{ "name": "YARN_REGISTRY", "detail": "listed" },
 			{ "name": "ZDOTDIR", "detail": "str" },
 			{ "name": "ZED_TERM", "detail": "str" },
 			{ "name": "ZELLIJ", "detail": "str" },
@@ -3822,6 +3952,18 @@
 			},
 			{
 				"name": "${…} ${…} resolves to ${…}, outside ${…} — refusing to write there (is it a symlink?)",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…} ${…} was refused and nothing was pressed: Space with Control or Option held can open an app launcher, which is outside the apps you have access to. If this shortcut is needed, ask the user to pre…",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…} ${…} was refused and nothing was pressed: another action is holding Control, Option or Space, and together they can open an app launcher. Try again once that action has finished.",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…} ${…} was refused: together with keys another action is pressing, it would make a system shortcut. Try again once that action has finished, or request the `systemKeyCombos` grant via request_acces…",
 				"detail": "throw Error"
 			},
 			{ "name": "${…} ${…}; not sent", "detail": "throw Error" },
@@ -4230,6 +4372,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "${…} was added by a tool.list hook, and no tool.call hook answered this call",
+				"detail": "throw Error"
+			},
+			{
 				"name": "${…} was not written by this run (it served no mocks) — nothing there is to be adopted",
 				"detail": "throw Error"
 			},
@@ -4269,6 +4415,10 @@
 			{
 				"name": "${…}, if provided, must be a Buffer.",
 				"detail": "throw TypeError"
+			},
+			{
+				"name": "${…}, so the session now stands in ${…}, a temporary folder of Claude Code's own. Tell the person to put them right and then start the session again.",
+				"detail": "throw Error"
 			},
 			{ "name": "${…}. Available agents: ${…}", "detail": "throw Error" },
 			{ "name": "${…}. Nothing was sent.", "detail": "throw Error" },
@@ -4841,6 +4991,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "${…}: its TypeScript files come to more than ${…} bytes",
+				"detail": "throw Error"
+			},
+			{
 				"name": "${…}: matcher${…} has the key ${…}, which a matcher does not keep",
 				"detail": "throw Error"
 			},
@@ -4862,6 +5016,14 @@
 			},
 			{
 				"name": "${…}: matcher${…} uses the reserved key ${…} (how a RegExp crosses the worker boundary); a RegExp goes in as a RegExp",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…}: more than ${…} TypeScript files under its hooks, types and tests folders",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…}: more than ${…} files and folders under its hooks, types and tests folders",
 				"detail": "throw Error"
 			},
 			{
@@ -4985,7 +5147,6 @@
 				"name": "${…}: returned a drawing with a function where plain data goes; a closure rides only in an element's onPress or onEvent",
 				"detail": "throw Error"
 			},
-			{ "name": "${…}: send_task_message", "detail": "throw Error" },
 			{
 				"name": "${…}: session_id is not a cloud session id",
 				"detail": "throw Error"
@@ -5478,6 +5639,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": ".git/index is not a plain file with one name",
+				"detail": "throw Error"
+			},
+			{
 				"name": ".mcp.json is malformed (not valid JSON, or mcpServers is not an object)",
 				"detail": "throw Error"
 			},
@@ -5690,6 +5855,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "A character in the typed text was refused: together with keys another action is pressing, it would make a system shortcut. Earlier characters may already have been typed, so check before you try again…",
+				"detail": "throw Error"
+			},
+			{
 				"name": "A credential source or AWS security credentials supplier must be specified.",
 				"detail": "throw Error"
 			},
@@ -5758,6 +5927,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "A space or invisible character in the typed text was refused: another action is holding Control or Option, and together they can open an app launcher. Earlier characters may already have been typed, s…",
+				"detail": "throw Error"
+			},
+			{
 				"name": "A stoppedByPerson question is already installed",
 				"detail": "throw Error"
 			},
@@ -5785,6 +5958,7 @@
 				"name": "A workflow v2 run cannot withhold its script",
 				"detail": "throw Error"
 			},
+			{ "name": "ALL_PROXY is not a URL", "detail": "throw Error" },
 			{
 				"name": "ANTHROPIC_API_KEY is set in this environment and takes precedence over a profile, so a profile sign-in would not be used. Unset it to sign in this way.",
 				"detail": "throw Error"
@@ -6044,6 +6218,14 @@
 			},
 			{
 				"name": "CCRClient: a page is no list of events",
+				"detail": "throw Error"
+			},
+			{
+				"name": "CCRClient: closed, so the marker is not queued",
+				"detail": "throw Error"
+			},
+			{
+				"name": "CCRClient: the marker lists more rows than CCR keeps",
 				"detail": "throw Error"
 			},
 			{
@@ -6525,11 +6707,19 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "Claude Code couldn't create the signing key that a teammate in its own terminal pane needs, so the teammate was not started. To run teammates without panes, restart Claude Code with --teammate-mode in…",
+				"detail": "throw Error"
+			},
+			{
 				"name": "Claude Code did not reconnect to ${…}: sign-in data for the config in your settings is still stored, or the credential store could not be read. Restart Claude Code and use Clear authentication again.",
 				"detail": "throw Error"
 			},
 			{
 				"name": "Claude Code is shutting down; not starting this MCP server process",
+				"detail": "throw Error"
+			},
+			{
+				"name": "Claude Code was exiting and had already released its lock on the index",
 				"detail": "throw Error"
 			},
 			{
@@ -6583,10 +6773,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "Client does not support elicitation capability (required for ${…})",
-				"detail": "throw Error"
-			},
-			{
 				"name": "Client does not support form elicitation.",
 				"detail": "throw Error"
 			},
@@ -6595,27 +6781,11 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "Client does not support roots capability (required for ${…})",
-				"detail": "throw Error"
-			},
-			{
-				"name": "Client does not support roots list changed notifications (required for ${…})",
-				"detail": "throw Error"
-			},
-			{
 				"name": "Client does not support sampling (required for ${…})",
 				"detail": "throw Error"
 			},
 			{
-				"name": "Client does not support sampling capability (required for ${…})",
-				"detail": "throw Error"
-			},
-			{
 				"name": "Client does not support sampling tools capability.",
-				"detail": "throw Error"
-			},
-			{
-				"name": "Client does not support tasks capability (required for ${…})",
 				"detail": "throw Error"
 			},
 			{
@@ -7022,6 +7192,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "Couldn't run `${…}` for ${…}. A file named HEAD or .git in this folder or one above it may not be yours, and git can run commands named in a repository's files. If you trust this folder, allow the git…",
+				"detail": "throw Error"
+			},
+			{
 				"name": "Couldn't save that choice to your Claude Code config, so you'll be asked again next time.",
 				"detail": "stderr"
 			},
@@ -7349,7 +7523,7 @@
 				"detail": "stderr"
 			},
 			{
-				"name": "Error: sandbox required but unavailable: ${…} sandbox.failIfUnavailable is set — refusing to start without a working sandbox.",
+				"name": "Error: sandbox required but unavailable: ${…} Refusing to start without a working sandbox (see sandbox.failIfUnavailable).",
 				"detail": "stderr"
 			},
 			{
@@ -7399,6 +7573,10 @@
 			},
 			{
 				"name": "ExitPlanMode approved but tool_result has no \"## Approved Plan:\" marker — remote may have hit the empty-plan or isAgent branch. Content preview: ${…}",
+				"detail": "throw Error"
+			},
+			{
+				"name": "ExitWorktree stopped before it left or removed any worktree: this session entered or left one while the call ran. Check where the session is now before calling ExitWorktree again.",
 				"detail": "throw Error"
 			},
 			{
@@ -7646,7 +7824,6 @@
 				"name": "Failed to fetch session events: HTTP ${…}",
 				"detail": "throw Error"
 			},
-			{ "name": "Failed to fetch session logs", "detail": "throw Error" },
 			{
 				"name": "Failed to finalize marketplace cache. Please manually delete the directory at ${…} if it exists and try again. Technical details: ${…}",
 				"detail": "throw Error"
@@ -7891,6 +8068,10 @@
 			},
 			{ "name": "Function expected", "detail": "throw TypeError" },
 			{ "name": "GCP credentials check timed out", "detail": "throw Error" },
+			{
+				"name": "GET /api/directory/server-urls answered status ${…}, not 200 with a list of URLs",
+				"detail": "throw Error"
+			},
 			{
 				"name": "GIT_ALLOW_PROTOCOL may list only transport names made of letters, digits and \"-\"",
 				"detail": "throw Error"
@@ -8225,6 +8406,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "Invalid character in header content [\"${…}\"]",
+				"detail": "throw Error"
+			},
+			{
 				"name": "Invalid client, expected instance of ${…}",
 				"detail": "throw Error"
 			},
@@ -8376,6 +8561,10 @@
 			},
 			{
 				"name": "Invalid loadBalancingConfig: unexpected type ${…}",
+				"detail": "throw Error"
+			},
+			{
+				"name": "Invalid managedSettingsDelivery. Expected 'argv' or 'initialize'.",
 				"detail": "throw Error"
 			},
 			{ "name": "Invalid manifest: ${…}", "detail": "throw Error" },
@@ -9336,7 +9525,6 @@
 			{ "name": "No assistant message found", "detail": "throw Error" },
 			{ "name": "No assistant messages found", "detail": "throw Error" },
 			{ "name": "No auth available", "detail": "throw Error" },
-			{ "name": "No auth provider", "detail": "throw Error" },
 			{
 				"name": "No available ports for OAuth redirect",
 				"detail": "throw Error"
@@ -10215,6 +10403,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "Refusing to write ${…}: a directory on its path was replaced by a symbolic link during the write. Nothing was written there; check where the path leads now and retry.",
+				"detail": "throw Error"
+			},
+			{
 				"name": "Refusing to write ${…}: it is a symbolic link. Write to the link's target path instead.",
 				"detail": "throw Error"
 			},
@@ -10288,6 +10480,10 @@
 			{
 				"name": "Request body gzip: compression stopped",
 				"detail": "throw Error"
+			},
+			{
+				"name": "Request path contains unescaped characters",
+				"detail": "throw TypeError"
 			},
 			{
 				"name": "Request timed out while downloading marketplace from ${…}. The server may be slow or unreachable. Technical details: ${…}",
@@ -10455,10 +10651,6 @@
 				"detail": "stderr"
 			},
 			{
-				"name": "Server does not support ${…} (required for ${…})",
-				"detail": "throw Error"
-			},
-			{
 				"name": "Server does not support completions (required for ${…})",
 				"detail": "throw Error"
 			},
@@ -10480,10 +10672,6 @@
 			},
 			{
 				"name": "Server does not support prompts (required for ${…})",
-				"detail": "throw Error"
-			},
-			{
-				"name": "Server does not support resource subscriptions (required for ${…})",
 				"detail": "throw Error"
 			},
 			{
@@ -10544,10 +10732,6 @@
 			},
 			{
 				"name": "Session append: transcript not writable via storage",
-				"detail": "throw Error"
-			},
-			{
-				"name": "Session expired. Please run /login to sign in again.",
 				"detail": "throw Error"
 			},
 			{ "name": "Session moved to ${…}", "detail": "stderr" },
@@ -10883,6 +11067,10 @@
 				"detail": "stderr"
 			},
 			{
+				"name": "The doc hashes came without organization_uuid",
+				"detail": "throw Error"
+			},
+			{
 				"name": "The file at the specified path does not contain a PEM-encoded certificate.",
 				"detail": "throw Error"
 			},
@@ -11004,6 +11192,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "The lock on ${…} was lost before the change could be saved. Nothing was saved. Try again.",
+				"detail": "throw Error"
+			},
+			{
 				"name": "The message checksum (${…}) did not match the expected value of ${…}",
 				"detail": "throw Error"
 			},
@@ -11072,6 +11264,14 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "The sandbox could not create a folder that it has to hide from the command (${…}), so the command was not started.",
+				"detail": "throw Error"
+			},
+			{
+				"name": "The scheduled tasks file (.claude/scheduled_tasks.json) could not be read as a list of tasks, so nothing was removed from it. Check or repair that file, then try again.",
+				"detail": "throw Error"
+			},
+			{
 				"name": "The search did not run: ripgrep was found by name rather than at a full path, and starting it that way inside the search folder could run a program planted there. This is an internal error; report it …",
 				"detail": "throw Error"
 			},
@@ -11120,6 +11320,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "The window at one end of the drag changed after it was checked, so the drag was refused. Take a new screenshot and try again.",
+				"detail": "throw Error"
+			},
+			{
 				"name": "The working directory no longer leads where it did when this call was permission-checked (it was deleted, a part of its path was replaced, or it can't be examined), so the call was not run. Make the c…",
 				"detail": "throw Error"
 			},
@@ -11141,6 +11345,10 @@
 			},
 			{
 				"name": "This call was interrupted before the monitor started; nothing is running.",
+				"detail": "throw Error"
+			},
+			{
+				"name": "This cloud browser call was stopped before it was sent.",
 				"detail": "throw Error"
 			},
 			{
@@ -11304,6 +11512,10 @@
 			{ "name": "Tool ${…} not found", "detail": "throw Error" },
 			{
 				"name": "Tool use input must be a string or object",
+				"detail": "throw Error"
+			},
+			{
+				"name": "Trailers are invalid with this transfer encoding",
 				"detail": "throw Error"
 			},
 			{
@@ -11558,18 +11770,6 @@
 			},
 			{ "name": "Unknown mode: ${…}", "detail": "throw Error" },
 			{ "name": "Unknown parameter structure ${…}", "detail": "throw Error" },
-			{
-				"name": "Unknown protocol set in OTEL_EXPORTER_OTLP_LOGS_PROTOCOL or OTEL_EXPORTER_OTLP_PROTOCOL env var: ${…}",
-				"detail": "throw Error"
-			},
-			{
-				"name": "Unknown protocol set in OTEL_EXPORTER_OTLP_METRICS_PROTOCOL or OTEL_EXPORTER_OTLP_PROTOCOL env var: ${…}",
-				"detail": "throw Error"
-			},
-			{
-				"name": "Unknown protocol set in OTEL_EXPORTER_OTLP_TRACES_PROTOCOL or OTEL_EXPORTER_OTLP_PROTOCOL env var: ${…}",
-				"detail": "throw Error"
-			},
 			{ "name": "Unknown skill: ${…}", "detail": "throw Error" },
 			{ "name": "Unknown state", "detail": "throw Error" },
 			{
@@ -11617,10 +11817,6 @@
 			},
 			{
 				"name": "Unsupported client authentication method: ${…}",
-				"detail": "throw Error"
-			},
-			{
-				"name": "Unsupported control request subtype",
 				"detail": "throw Error"
 			},
 			{
@@ -12084,8 +12280,13 @@
 				"name": "[DaemonLock] Failed to replace daemon lock: ${…}${…}",
 				"detail": "throw Error"
 			},
+			{ "name": "[Error] ${…}", "detail": "throw Error" },
 			{
 				"name": "[RemoteSessionManager] Cannot send: not connected",
+				"detail": "throw Error"
+			},
+			{
+				"name": "[Request interrupted by user for tool use]",
 				"detail": "throw Error"
 			},
 			{
@@ -12161,19 +12362,11 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "`action` no longer names what was approved — this input was approved as another Artifact action, not this live-edit; nothing was sent; retry so it is checked again",
-				"detail": "throw Error"
-			},
-			{
 				"name": "`action` no longer names what was approved — this input was approved as another Artifact action, not this reply; nothing was posted; retry so it is checked again",
 				"detail": "throw Error"
 			},
 			{
 				"name": "`action` no longer names what was approved — this input was approved as another Artifact action, not this resolve; nothing was changed; retry so it is checked again",
-				"detail": "throw Error"
-			},
-			{
-				"name": "`action` no longer names what was approved — this input was approved as another Artifact action, not this sync; nothing was sent; retry so it is checked again",
 				"detail": "throw Error"
 			},
 			{
@@ -12210,10 +12403,6 @@
 			},
 			{
 				"name": "`action` or `url` no longer names the room_send that was approved — nothing was sent; retry so it is checked again",
-				"detail": "throw Error"
-			},
-			{
-				"name": "`action` or `url` no longer names the version that was approved — this input was approved as another Artifact action or for another artifact; nothing was sent; retry so it is checked again",
 				"detail": "throw Error"
 			},
 			{
@@ -12323,6 +12512,19 @@
 			},
 			{
 				"name": "`writes[${…}].op` changed after this batch was approved — nothing was written; retry so it is checked again",
+				"detail": "throw Error"
+			},
+			{
+				"name": "a .git file that points somewhere unsafe to follow",
+				"detail": "throw Error"
+			},
+			{
+				"name": "a .git link that is unsafe to follow",
+				"detail": "throw Error"
+			},
+			{ "name": "a .git link to another link", "detail": "throw Error" },
+			{
+				"name": "a .git that is neither file nor directory",
 				"detail": "throw Error"
 			},
 			{
@@ -12447,6 +12649,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "a script starts after it is compiled",
+				"detail": "throw Error"
+			},
+			{
 				"name": "a served tool must have an object input schema",
 				"detail": "throw Error"
 			},
@@ -12475,10 +12681,12 @@
 				"name": "a write made no progress; copy stopped",
 				"detail": "throw Error"
 			},
+			{ "name": "a write of the index fell short", "detail": "throw Error" },
 			{
 				"name": "accepted settings text exceeds the settings size limit",
 				"detail": "throw Error"
 			},
+			{ "name": "account flags not served yet", "detail": "throw Error" },
 			{
 				"name": "account-memory text still matched a search key after 16 replacement rounds",
 				"detail": "throw Error"
@@ -12647,6 +12855,7 @@
 				"name": "alias namespace path not allowed: ${…}",
 				"detail": "throw Error"
 			},
+			{ "name": "allows() admits no other type", "detail": "throw Error" },
 			{
 				"name": "ambiguous mock server \"${…}\": declared by plugins ${…} — rename mocks/${…}/ to ${…}",
 				"detail": "throw Error"
@@ -13160,6 +13369,7 @@
 				"name": "checkout hook succeeded but ${…}/.git is missing (for non-git SCMs, set CLAUDE_RUNNER_SKIP_GIT_VERIFY=1 in the runner's environment)",
 				"detail": "throw Error"
 			},
+			{ "name": "checksum mismatch", "detail": "throw Error" },
 			{
 				"name": "claude gateway requires the native binary",
 				"detail": "throw Error"
@@ -13225,10 +13435,6 @@
 			},
 			{ "name": "client egress policy", "detail": "throw Error" },
 			{ "name": "client event POST failed", "detail": "throw Error" },
-			{
-				"name": "clientMetadataUrl must be a valid HTTPS URL with a non-root pathname, got: ${…}",
-				"detail": "throw Error"
-			},
 			{
 				"name": "client_secret_basic authentication requires a client_secret",
 				"detail": "throw Error"
@@ -13466,7 +13672,10 @@
 				"detail": "throw Error"
 			},
 			{ "name": "daemon.json is malformed: ${…}", "detail": "throw Error" },
-			{ "name": "damaged transcript line", "detail": "throw Error" },
+			{
+				"name": "daemon.json was changed from inside another change to it",
+				"detail": "throw Error"
+			},
 			{
 				"name": "data and file_path are not accepted with read_db",
 				"detail": "throw Error"
@@ -14068,6 +14277,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "framedPreimage: NUL in a signed field",
+				"detail": "throw Error"
+			},
+			{
 				"name": "fromJSONSchema input is not valid JSON (possibly cyclic); use $defs/$ref for recursive schemas",
 				"detail": "throw Error"
 			},
@@ -14150,7 +14363,15 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "git could not read the objects asked for",
+				"detail": "throw Error"
+			},
+			{
 				"name": "git could not say whether a cherry-pick or revert is in progress",
+				"detail": "throw Error"
+			},
+			{
+				"name": "git did not give the object asked for",
 				"detail": "throw Error"
 			},
 			{
@@ -14597,10 +14818,6 @@
 				"name": "its package.json sets overrides, which this install does not apply",
 				"detail": "throw Error"
 			},
-			{
-				"name": "its saved transcript couldn't be read",
-				"detail": "throw Error"
-			},
 			{ "name": "judge call failed: ${…}${…}", "detail": "throw Error" },
 			{
 				"name": "keepsBeneath: this test has its own ui.render hook at this site, so look for what it drew with find",
@@ -14766,6 +14983,10 @@
 			},
 			{
 				"name": "mcp task outcome: the project folder is a storage scope and no storage backend can take it",
+				"detail": "throw Error"
+			},
+			{
+				"name": "mcpTaskTicket: the tool's name does not fit a ticket",
 				"detail": "throw Error"
 			},
 			{
@@ -14941,7 +15162,7 @@
 			{ "name": "mount_path contains null bytes", "detail": "throw Error" },
 			{ "name": "mount_path must be absolute", "detail": "throw Error" },
 			{
-				"name": "mount_path must be under /uploads/ or /outputs/",
+				"name": "mount_path must be under /uploads/, /outputs/ or, on a managed remote session, /connector-downloads/",
 				"detail": "throw Error"
 			},
 			{
@@ -15148,6 +15369,10 @@
 			},
 			{
 				"name": "oidc: the IdP discovery document has no token_endpoint, which private_key_jwt needs as the assertion audience",
+				"detail": "throw Error"
+			},
+			{
+				"name": "only POST, GET and DELETE are relayed",
 				"detail": "throw Error"
 			},
 			{
@@ -15375,7 +15600,6 @@
 			{ "name": "payment_method unavailable: ${…}", "detail": "throw Error" },
 			{ "name": "pbcopy exited with code ${…}", "detail": "throw Error" },
 			{ "name": "pbpaste exited with code ${…}", "detail": "throw Error" },
-			{ "name": "performRemoveByUuid: short write", "detail": "throw Error" },
 			{
 				"name": "permission mode not applied after relocation: ${…}",
 				"detail": "throw Error"
@@ -15496,6 +15720,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "project context: a request sent ahead of the prompt build was refused, and the build sent none of its own",
+				"detail": "throw Error"
+			},
+			{
 				"name": "project_memory_read: spill to tool-results failed",
 				"detail": "throw Error"
 			},
@@ -15583,12 +15811,9 @@
 			},
 			{ "name": "read denied: ${…}", "detail": "throw Error" },
 			{ "name": "read not allowed (${…}): ${…}", "detail": "throw Error" },
+			{ "name": "read not allowed under ${…}: ${…}", "detail": "throw Error" },
 			{
 				"name": "read not allowed under --restricted: ${…}",
-				"detail": "throw Error"
-			},
-			{
-				"name": "read not allowed under permissions.blockReadsOutsideWorkingDirectories: ${…}",
 				"detail": "throw Error"
 			},
 			{ "name": "read not allowed: ${…}", "detail": "throw Error" },
@@ -15644,6 +15869,10 @@
 			},
 			{
 				"name": "reading this file is blocked by a Read permission rule — the upload was not attempted",
+				"detail": "throw Error"
+			},
+			{
+				"name": "readingCredentialsAsStored takes a synchronous read",
 				"detail": "throw Error"
 			},
 			{
@@ -16144,6 +16373,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "setSettingsRootForTesting needs NODE_ENV=test",
+				"detail": "throw Error"
+			},
+			{
 				"name": "setSharedUnprotectedHeader can only be called once",
 				"detail": "throw TypeError"
 			},
@@ -16183,6 +16416,7 @@
 				"name": "settings storageV5 write failed: ${…}${…}",
 				"detail": "throw Error"
 			},
+			{ "name": "setup script aborted", "detail": "throw Error" },
 			{
 				"name": "setup_overage_billing unavailable: ${…}",
 				"detail": "throw Error"
@@ -16379,10 +16613,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "syncedFileRequestSigner: NUL in a signed field",
-				"detail": "throw Error"
-			},
-			{
 				"name": "syncedFileRequestSigner: the content hash is not 32 bytes",
 				"detail": "throw Error"
 			},
@@ -16445,6 +16675,14 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "the MCP server has not connected yet",
+				"detail": "throw Error"
+			},
+			{
+				"name": "the MCP server's tools have not been checked against the owner's approved list since it connected",
+				"detail": "throw Error"
+			},
+			{
 				"name": "the MDM settings have not been read yet",
 				"detail": "throw Error"
 			},
@@ -16497,6 +16735,7 @@
 				"name": "the case's scaffold created ${…}/ in the run's working directory — that name is reserved for the run's artifact publishes; have the scaffold use another name",
 				"detail": "throw Error"
 			},
+			{ "name": "the commit names no tree", "detail": "throw Error" },
 			{
 				"name": "the connect deadline fired as the response arrived",
 				"detail": "throw Error"
@@ -16630,6 +16869,7 @@
 				"name": "the measurement returned too much data",
 				"detail": "throw Error"
 			},
+			{ "name": "the name is taken", "detail": "throw Error" },
 			{
 				"name": "the new worktree's directory was replaced, or its .git file no longer names the git directory created for it; if this repeats, a command running in the sandbox may be changing .claude/worktrees",
 				"detail": "throw Error"
@@ -16696,6 +16936,11 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "the plugin folder is not in the commit",
+				"detail": "throw Error"
+			},
+			{ "name": "the plugin holds too many folders", "detail": "throw Error" },
+			{
 				"name": "the plugin's folder was moved or replaced by a link during the install, so the packages were not added",
 				"detail": "throw Error"
 			},
@@ -16714,10 +16959,6 @@
 			{
 				"name": "the record of attached computers gave no list",
 				"detail": "throw TypeError"
-			},
-			{
-				"name": "the registry answered ${…} with no readable list",
-				"detail": "throw Error"
 			},
 			{
 				"name": "the remote sent a context breakdown this version can't read",
@@ -16814,6 +17055,10 @@
 				"name": "the staging folder is not a real directory",
 				"detail": "throw Error"
 			},
+			{
+				"name": "the stash's copy of the index was shorter than expected",
+				"detail": "throw Error"
+			},
 			{ "name": "the stop action is missing", "detail": "throw Error" },
 			{
 				"name": "the stored copy is not a regular file",
@@ -16825,6 +17070,14 @@
 			},
 			{
 				"name": "the sub-command was killed or did not exit with 0",
+				"detail": "throw Error"
+			},
+			{
+				"name": "the tool.list hooks answered no entry that could be read",
+				"detail": "throw Error"
+			},
+			{
+				"name": "the tool.list hooks answered no list",
 				"detail": "throw Error"
 			},
 			{
@@ -16862,6 +17115,18 @@
 			},
 			{
 				"name": "this browser ignored the preview network lock-down; preview stopped before loading the page",
+				"detail": "throw Error"
+			},
+			{
+				"name": "this computer serves this session nothing now",
+				"detail": "throw Error"
+			},
+			{
+				"name": "this computer's MCP connections are being set up or rebuilt",
+				"detail": "throw Error"
+			},
+			{
+				"name": "this computer's announced MCP tools changed while this request was being checked",
 				"detail": "throw Error"
 			},
 			{ "name": "this drawing was unmounted", "detail": "throw Error" },
@@ -16934,10 +17199,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "this read's approval cannot be matched to a working-copy read of this file now (the approval named another kind of read, the file stopped being one this session can hold a working copy of, or the chec…",
-				"detail": "throw Error"
-			},
-			{
 				"name": "this runtime has no Bun.FetchSession",
 				"detail": "throw Error"
 			},
@@ -16954,7 +17215,15 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "this session connects no MCP servers yet",
+				"detail": "throw Error"
+			},
+			{
 				"name": "this session has no first-party credential to authorize",
+				"detail": "throw Error"
+			},
+			{
+				"name": "this session is parked until a host claims it, and its stdio servers start at the claim",
 				"detail": "throw Error"
 			},
 			{ "name": "this test has ended", "detail": "throw Error" },
@@ -17139,7 +17408,6 @@
 				"name": "unreachable: fetchFilestoreToFile retry loop fell through",
 				"detail": "throw Error"
 			},
-			{ "name": "unreadable transcript mark", "detail": "throw Error" },
 			{ "name": "unrecognised depth", "detail": "throw Error" },
 			{ "name": "unrecognized resolve refusal", "detail": "throw Error" },
 			{
@@ -17412,6 +17680,10 @@
 			{ "name": "write made no progress", "detail": "throw Error" },
 			{
 				"name": "write returned 0 bytes with data remaining",
+				"detail": "throw Error"
+			},
+			{
+				"name": "writeFileAndFlush: heldDirectory cannot be combined with allowSymlink, stagingDir or createOnly",
 				"detail": "throw Error"
 			},
 			{
@@ -17871,6 +18143,11 @@
 				"detail": "--ide | Automatically connect to IDE on startup if exactly one valid IDE is available"
 			},
 			{
+				"name": "--ignore-persisted-trust",
+				"gate": "hidden",
+				"detail": "--ignore-persisted-trust | Honor no persisted workspace trust record in this process (set by an IDE host for a folder nobody trusted)"
+			},
+			{
 				"name": "--include-hook-events",
 				"detail": "--include-hook-events | Include all hook lifecycle events in the output stream (only works with --output-format=stream-json)"
 			},
@@ -17907,6 +18184,11 @@
 				"detail": "--json-schema <schema> | JSON Schema for structured output validation (only works with --print). Example: {\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\"}},\"required\":[\"name\"]}"
 			},
 			{
+				"name": "--lead-verify-key",
+				"gate": "hidden",
+				"detail": "--lead-verify-key <time.key> | When the teammate was launched, then the public key that checks the team lead's messages"
+			},
+			{
 				"name": "--maintenance",
 				"gate": "hidden",
 				"detail": "--maintenance | Run Setup hooks with maintenance trigger, then continue"
@@ -17915,6 +18197,11 @@
 				"name": "--managed-settings",
 				"gate": "hidden",
 				"detail": "--managed-settings <json> | Policy-tier settings JSON from a spawning parent process (SDK use only)"
+			},
+			{
+				"name": "--managed-settings-in-initialize",
+				"gate": "hidden",
+				"detail": "--managed-settings-in-initialize | Read the managed settings from the managedSettings field of the initialize control request instead of --managed-settings, and exit if they cannot be used (SDK use on…"
 			},
 			{
 				"name": "--max-budget-usd",
@@ -18026,7 +18313,7 @@
 			},
 			{
 				"name": "--proactivity",
-				"gate": "hidden unless ZSe()",
+				"gate": "hidden unless fhe()",
 				"detail": "--proactivity <level>"
 			},
 			{
@@ -18348,10 +18635,6 @@
 				"detail": "--status | Report whether design-system access is authorized, and exit"
 			},
 			{
-				"name": "drop-worktree-registrations --json",
-				"detail": "--json | Read the request as JSON from stdin"
-			},
-			{
 				"name": "edit-chrome-settings --json",
 				"detail": "--json | Read the edit as JSON from stdin"
 			},
@@ -18417,7 +18700,7 @@
 			},
 			{
 				"name": "mcp add --header",
-				"detail": "-H, --header <header...> | Set headers for HTTP/SSE servers (e.g. -H \"X-Api-Key: abc123\" -H \"X-Custom: value\")"
+				"detail": "-H, --header <header...> | Set headers for HTTP/SSE servers, repeat for more (e.g. -H \"X-Api-Key: abc123\")"
 			},
 			{
 				"name": "mcp add --scope",
@@ -18697,10 +18980,6 @@
 			{
 				"name": "plugin install --marketplace",
 				"detail": "--marketplace <source> | Install <plugin> (its bare name) from the marketplace at this source: owner/repo, a git or https URL, or a path. A marketplace not added yet is added first, in user settings, …"
-			},
-			{
-				"name": "plugin install --registry",
-				"detail": "--registry <url> | For a <package>@npm install: resolve and download from this npm registry instead of the one your npm configuration selects"
 			},
 			{
 				"name": "plugin install --replace",
@@ -19283,29 +19562,43 @@
 				"detail": "--post | Post the finished review's findings to the PR as you (PR targets only; one plain comment, not a review)"
 			},
 			{
+				"name": "ultrareview --review-md",
+				"gate": "hidden",
+				"detail": "--review-md <file>"
+			},
+			{
 				"name": "ultrareview --timeout",
 				"detail": "--timeout <minutes> | Maximum minutes to wait for the review to finish (default: 45)"
 			},
 			{
 				"name": "ultrareview --trust-workspace",
 				"detail": "--trust-workspace | Trust the current folder for this run only, without asking (for scripts and CI). Takes no value: put a PR number or base branch before it. Use it only on folders you trust: the fol…"
+			},
+			{
+				"name": "workspace-trust --json",
+				"detail": "--json | Write one JSON object to stdout"
 			}
 		],
 		"gate": [
 			{ "name": "tengu_1p_event_batch_config" },
+			{ "name": "tengu_abundant_shore", "default": "false" },
 			{ "name": "tengu_abundant_squid", "default": "false" },
 			{ "name": "tengu_abundant_trinket", "default": "true" },
+			{ "name": "tengu_adaptive_pinwheel", "default": "true" },
 			{ "name": "tengu_agents_md_mod", "default": "unknown" },
 			{ "name": "tengu_agentview_inherit_mode_demote", "default": "true" },
 			{ "name": "tengu_agile_glade", "default": "null" },
+			{ "name": "tengu_agile_ladybug" },
 			{ "name": "tengu_agile_sunbeam" },
 			{ "name": "tengu_alder_compass", "default": "false" },
 			{ "name": "tengu_amber_anchor", "default": "false" },
 			{ "name": "tengu_amber_creek", "default": "false" },
 			{ "name": "tengu_amber_curlew" },
+			{ "name": "tengu_amber_doorbell", "default": "false" },
 			{ "name": "tengu_amber_ferry", "default": "false" },
 			{ "name": "tengu_amber_flint", "default": "true" },
 			{ "name": "tengu_amber_kestrel", "default": "false" },
+			{ "name": "tengu_amber_lantern", "default": "false" },
 			{ "name": "tengu_amber_larch", "default": "true" },
 			{ "name": "tengu_amber_lark", "default": "false" },
 			{ "name": "tengu_amber_lattice" },
@@ -19328,12 +19621,15 @@
 			{ "name": "tengu_amber_trellis", "default": "false" },
 			{ "name": "tengu_amber_tributary_dotterel", "default": "false" },
 			{ "name": "tengu_amber_tributary_sandpiper", "default": "false" },
+			{ "name": "tengu_ambling_tortoise", "default": "0" },
 			{ "name": "tengu_anchored_lantern" },
 			{ "name": "tengu_ancient_axolotl", "default": "false" },
+			{ "name": "tengu_ancient_pond" },
 			{ "name": "tengu_ancient_thompson" },
 			{ "name": "tengu_ant_yolo_equiv_strip_config" },
 			{ "name": "tengu_async_goblet", "default": "true" },
 			{ "name": "tengu_async_snowglobe" },
+			{ "name": "tengu_atomic_garden", "default": "true" },
 			{ "name": "tengu_attempt_decision_shadow", "default": "false" },
 			{ "name": "tengu_auto_mode_config", "default": "unknown" },
 			{ "name": "tengu_auto_mode_worktree_fast_path", "default": "false" },
@@ -19389,6 +19685,7 @@
 			{ "name": "tengu_bridge_host_profile", "default": "\"off\"" },
 			{ "name": "tengu_bridge_inbox_pointer_boundary", "default": "true" },
 			{ "name": "tengu_bridge_initialize_commands", "default": "false" },
+			{ "name": "tengu_bridge_leave_silent_pool_off", "default": "false" },
 			{ "name": "tengu_bridge_min_version" },
 			{ "name": "tengu_bridge_owner_check_attribution", "default": "true" },
 			{ "name": "tengu_bridge_owner_pinned_end", "default": "true" },
@@ -19403,17 +19700,17 @@
 			{ "name": "tengu_bridge_recovery_patience", "default": "true" },
 			{ "name": "tengu_bridge_repl_v2_config", "default": "unknown" },
 			{ "name": "tengu_bridge_repl_v2_cse_shim_enabled", "default": "true" },
-			{ "name": "tengu_bridge_requires_action_details", "default": "false" },
+			{ "name": "tengu_bridge_requires_action_details", "default": "true" },
 			{ "name": "tengu_bridge_resume_respects_local_owner", "default": "true" },
 			{ "name": "tengu_bridge_selfheal_heartbeats", "default": "true" },
 			{ "name": "tengu_bridge_signed_out_neutral", "default": "true" },
 			{ "name": "tengu_bridge_subagent_frames", "default": "true" },
 			{ "name": "tengu_bridge_subagent_text", "default": "false" },
+			{ "name": "tengu_bridge_unarchive_on_resume", "default": "true" },
 			{ "name": "tengu_bright_fog", "default": "true" },
 			{ "name": "tengu_bright_kettle", "default": "unknown" },
 			{ "name": "tengu_bright_lake", "default": "true" },
 			{ "name": "tengu_bright_wall", "default": "true" },
-			{ "name": "tengu_brindle_causeway", "default": "true" },
 			{ "name": "tengu_brindle_otter", "default": "false" },
 			{ "name": "tengu_brisk_kiwi" },
 			{ "name": "tengu_brisk_meadow" },
@@ -19471,7 +19768,6 @@
 			},
 			{ "name": "tengu_ccr_reactivation_beat", "default": "false" },
 			{ "name": "tengu_ccr_reconnect_beat", "default": "false" },
-			{ "name": "tengu_ccr_sdk_mcp_remote_manifests", "default": "false" },
 			{ "name": "tengu_ccr_skip_redundant_heartbeat", "default": "false" },
 			{ "name": "tengu_ccr_sse_keepalive_max_interval_s", "default": "0" },
 			{ "name": "tengu_ccr_sse_long_poll_fallback", "default": "true" },
@@ -19491,6 +19787,7 @@
 			{ "name": "tengu_chair_sermon", "default": "false" },
 			{ "name": "tengu_cheeky_toucan" },
 			{ "name": "tengu_cheerful_horizon", "default": "false" },
+			{ "name": "tengu_cheerful_lighthouse", "default": "null" },
 			{ "name": "tengu_chomp_inflection", "default": "false" },
 			{ "name": "tengu_chomp_sable", "default": "false" },
 			{ "name": "tengu_chomp_thaw", "default": "false" },
@@ -19512,9 +19809,12 @@
 				"name": "tengu_claudeai_skills_sync_interval_minutes",
 				"default": "unknown"
 			},
+			{ "name": "tengu_clever_fern", "default": "false" },
 			{ "name": "tengu_clever_orbit", "default": "false" },
 			{ "name": "tengu_clever_yeti" },
+			{ "name": "tengu_cloud_delete_unused", "default": "false" },
 			{ "name": "tengu_cloud_session_shell", "default": "false" },
+			{ "name": "tengu_cobalt_ferrule" },
 			{ "name": "tengu_cobalt_harbor", "default": "false" },
 			{ "name": "tengu_cobalt_harbor_notice", "default": "true" },
 			{ "name": "tengu_cobalt_plinth", "default": "unknown" },
@@ -19552,10 +19852,11 @@
 			{ "name": "tengu_compact_cache_prefix", "default": "true" },
 			{ "name": "tengu_compiled_acorn", "default": "false" },
 			{ "name": "tengu_composed_beacon", "default": "false" },
+			{ "name": "tengu_composed_hare", "default": "false" },
 			{ "name": "tengu_composed_kite" },
 			{ "name": "tengu_composed_quail", "default": "true" },
 			{ "name": "tengu_composed_quilt" },
-			{ "name": "tengu_composed_treehouse", "default": "false" },
+			{ "name": "tengu_compressed_marshmallow", "default": "false" },
 			{ "name": "tengu_compressed_river", "default": "true" },
 			{ "name": "tengu_concurrent_candle", "default": "unknown" },
 			{ "name": "tengu_concurrent_lake", "default": "false" },
@@ -19568,15 +19869,14 @@
 			{ "name": "tengu_copper_kestrel", "default": "true" },
 			{ "name": "tengu_copper_kite" },
 			{ "name": "tengu_copper_lantern", "default": "false" },
-			{ "name": "tengu_copper_ledger", "default": "false" },
 			{ "name": "tengu_copper_sluice" },
-			{ "name": "tengu_copper_thimble", "default": "false" },
 			{ "name": "tengu_copper_thistle", "default": "false" },
 			{ "name": "tengu_copper_trellis", "default": "false" },
 			{ "name": "tengu_coral_anchor", "default": "true" },
 			{ "name": "tengu_cosmic_cookie", "default": "false" },
 			{ "name": "tengu_cosmic_crayon" },
 			{ "name": "tengu_cosmic_lake", "default": "false" },
+			{ "name": "tengu_cosmic_puddle", "default": "false" },
 			{ "name": "tengu_cosmic_shore", "default": "true" },
 			{ "name": "tengu_cosmic_sketch", "default": "false" },
 			{
@@ -19584,6 +19884,7 @@
 				"default": "false"
 			},
 			{ "name": "tengu_cowork_chrome_automode_default", "default": "false" },
+			{ "name": "tengu_cozy_axolotl" },
 			{ "name": "tengu_cozy_dusk", "default": "unknown" },
 			{ "name": "tengu_cozy_eagle", "default": "true" },
 			{ "name": "tengu_cozy_fern", "default": "false" },
@@ -19603,6 +19904,7 @@
 			{ "name": "tengu_curious_rivest", "default": "unknown" },
 			{ "name": "tengu_curious_tower", "default": "false" },
 			{ "name": "tengu_curious_tower_stateless_models", "default": "\"\"" },
+			{ "name": "tengu_curried_shore", "default": "0" },
 			{ "name": "tengu_curried_sparrow", "default": "false" },
 			{ "name": "tengu_curried_squirrel" },
 			{ "name": "tengu_curried_trinket", "default": "\"control\"" },
@@ -19614,14 +19916,18 @@
 			{ "name": "tengu_dapper_brooks", "default": "false" },
 			{ "name": "tengu_dapper_cupcake", "default": "true" },
 			{ "name": "tengu_dapper_dawn", "default": "false" },
-			{ "name": "tengu_dapper_dusk", "default": "false" },
+			{ "name": "tengu_dapper_deer" },
+			{ "name": "tengu_dapper_dusk" },
 			{ "name": "tengu_dapper_fountain", "default": "true" },
 			{ "name": "tengu_dapper_pancake", "default": "false" },
 			{ "name": "tengu_dapper_platypus", "default": "false" },
 			{ "name": "tengu_dapper_truffle", "default": "unknown" },
 			{ "name": "tengu_dappled_gourd", "default": "false" },
 			{ "name": "tengu_dash_flame", "default": "false" },
+			{ "name": "tengu_dazzling_acorn", "default": "null" },
 			{ "name": "tengu_dazzling_garden", "default": "true" },
+			{ "name": "tengu_dazzling_platypus", "default": "false" },
+			{ "name": "tengu_declarative_glacier", "default": "true" },
 			{ "name": "tengu_deep_acorn", "default": "false" },
 			{ "name": "tengu_deep_feather", "default": "true" },
 			{ "name": "tengu_deep_locket" },
@@ -19634,6 +19940,7 @@
 			{ "name": "tengu_delegated_quail", "default": "unknown" },
 			{ "name": "tengu_delightful_goblet" },
 			{ "name": "tengu_delightful_hamster", "default": "false" },
+			{ "name": "tengu_desktop_card_message_approval", "default": "true" },
 			{ "name": "tengu_desktop_upsell", "default": "unknown" },
 			{ "name": "tengu_destructive_command_warning", "default": "false" },
 			{ "name": "tengu_disable_live_host_context", "default": "false" },
@@ -19643,6 +19950,7 @@
 			},
 			{ "name": "tengu_distributed_adleman", "default": "true" },
 			{ "name": "tengu_doorbell_agave", "default": "true" },
+			{ "name": "tengu_downy_plover", "default": "unknown" },
 			{ "name": "tengu_dreamy_flute", "default": "false" },
 			{ "name": "tengu_dreamy_frost", "default": "false" },
 			{ "name": "tengu_dreamy_lobster" },
@@ -19657,6 +19965,7 @@
 			{ "name": "tengu_drifting_twilight", "default": "true" },
 			{ "name": "tengu_drifting_valley", "default": "false" },
 			{ "name": "tengu_dunwich_bell", "default": "false" },
+			{ "name": "tengu_dusky_finch", "default": "false" },
 			{ "name": "tengu_dusky_sorrel" },
 			{ "name": "tengu_eager_balloon" },
 			{ "name": "tengu_eager_brooks", "default": "false" },
@@ -19687,13 +19996,11 @@
 			{ "name": "tengu_eventual_dragonfly" },
 			{ "name": "tengu_eventual_haven", "default": "true" },
 			{ "name": "tengu_eventual_noodle", "default": "false" },
-			{ "name": "tengu_expressive_church", "default": "false" },
-			{ "name": "tengu_expressive_pine", "default": "false" },
+			{ "name": "tengu_expressive_island", "default": "false" },
 			{ "name": "tengu_expressive_whistle", "default": "false" },
 			{ "name": "tengu_expressive_whistle_config" },
 			{ "name": "tengu_fallow_lantern" },
-			{ "name": "tengu_fallow_plover", "default": "false" },
-			{ "name": "tengu_fancy_canyon", "default": "false" },
+			{ "name": "tengu_fallow_trellis" },
 			{ "name": "tengu_fancy_crab", "default": "0" },
 			{ "name": "tengu_fancy_milner", "default": "true" },
 			{ "name": "tengu_fancy_wand", "default": "false" },
@@ -19712,10 +20019,12 @@
 				"default": "unknown"
 			},
 			{ "name": "tengu_fizzy_bonbon", "default": "false" },
+			{ "name": "tengu_fizzy_galaxy" },
 			{ "name": "tengu_fizzy_grove", "default": "false" },
 			{ "name": "tengu_fizzy_petal", "default": "false" },
 			{ "name": "tengu_fizzy_treasure", "default": "true" },
 			{ "name": "tengu_fizzy_widget" },
+			{ "name": "tengu_fizzy_wren", "default": "false" },
 			{ "name": "tengu_fleet_past_sessions", "default": "false" },
 			{ "name": "tengu_fleetview_pr_batch", "default": "true" },
 			{ "name": "tengu_fleetview_simple", "default": "false" },
@@ -19723,25 +20032,31 @@
 			{ "name": "tengu_flickering_rain", "default": "true" },
 			{ "name": "tengu_flint_harbor_prompt" },
 			{ "name": "tengu_flint_harbor_share", "default": "false" },
-			{ "name": "tengu_floating_lagoon", "default": "false" },
 			{ "name": "tengu_floating_steele", "default": "0" },
-			{ "name": "tengu_floofy_haven", "default": "unknown" },
+			{ "name": "tengu_floating_wadler", "default": "true" },
+			{ "name": "tengu_fluffy_melody", "default": "false" },
 			{ "name": "tengu_fluttering_rose", "default": "false" },
 			{ "name": "tengu_fluttering_scone" },
 			{ "name": "tengu_fluttering_sutherland", "default": "false" },
 			{ "name": "tengu_foamy_heron" },
 			{ "name": "tengu_foamy_pelican", "default": "\"off\"" },
-			{ "name": "tengu_foamy_sedgewick", "default": "false" },
+			{ "name": "tengu_foamy_rabbit", "default": "true" },
 			{ "name": "tengu_foamy_spring" },
+			{ "name": "tengu_foamy_whistle" },
 			{ "name": "tengu_framed_osprey", "default": "false" },
 			{ "name": "tengu_fresh_heron", "default": "unknown" },
+			{ "name": "tengu_frolicking_frost", "default": "false" },
 			{ "name": "tengu_frolicking_nest", "default": "true" },
+			{ "name": "tengu_frolicking_quasar", "default": "false" },
+			{ "name": "tengu_frolicking_riddle" },
 			{ "name": "tengu_frond_boric" },
+			{ "name": "tengu_functional_flute", "default": "false" },
 			{ "name": "tengu_functional_llama", "default": "null" },
 			{ "name": "tengu_fuzzy_hearth", "default": "false" },
 			{ "name": "tengu_fuzzy_spindle", "default": "0" },
 			{ "name": "tengu_gb_eval_authed_enable", "default": "false" },
 			{ "name": "tengu_gb_refresh_interval_minutes", "default": "null" },
+			{ "name": "tengu_generic_ember", "default": "false" },
 			{ "name": "tengu_generic_papert", "default": "false" },
 			{ "name": "tengu_gentle_anchor", "default": "true" },
 			{ "name": "tengu_gentle_brooks", "default": "true" },
@@ -19753,6 +20068,7 @@
 			{ "name": "tengu_gentle_hummingbird", "default": "true" },
 			{ "name": "tengu_gentle_ocean", "default": "false" },
 			{ "name": "tengu_gentle_orchard", "default": "true" },
+			{ "name": "tengu_gentle_sphinx", "default": "true" },
 			{ "name": "tengu_gentle_wagtail" },
 			{ "name": "tengu_giggly_dragonfly", "default": "true" },
 			{ "name": "tengu_giggly_oasis" },
@@ -19764,11 +20080,14 @@
 			{ "name": "tengu_glimmering_glacier", "default": "true" },
 			{ "name": "tengu_glimmering_glade", "default": "true" },
 			{ "name": "tengu_glimmering_newt" },
+			{ "name": "tengu_glistening_wreath", "default": "false" },
 			{ "name": "tengu_glittery_mitten", "default": "true" },
 			{ "name": "tengu_glittery_tower_killswitch", "default": "false" },
 			{ "name": "tengu_glowing_lark", "default": "unknown" },
+			{ "name": "tengu_glowing_nygaard" },
 			{ "name": "tengu_glowing_orbit", "default": "true" },
 			{ "name": "tengu_glowing_pancake", "default": "false" },
+			{ "name": "tengu_glowing_wave" },
 			{ "name": "tengu_golden_dove" },
 			{ "name": "tengu_golden_panda" },
 			{ "name": "tengu_golden_pebble" },
@@ -19786,6 +20105,7 @@
 			{ "name": "tengu_gorse_pylon", "default": "false" },
 			{ "name": "tengu_gorse_sill", "default": "false" },
 			{ "name": "tengu_graceful_cake", "default": "true" },
+			{ "name": "tengu_graceful_fiddle" },
 			{ "name": "tengu_graceful_hoare", "default": "false" },
 			{ "name": "tengu_gravel_chorus", "default": "true" },
 			{ "name": "tengu_greedy_crane", "default": "true" },
@@ -19793,6 +20113,7 @@
 			{ "name": "tengu_greedy_shore", "default": "false" },
 			{ "name": "tengu_groovy_eclipse", "default": "false" },
 			{ "name": "tengu_groovy_ember", "default": "null" },
+			{ "name": "tengu_groovy_rain", "default": "false" },
 			{ "name": "tengu_gypsum_kite", "default": "false" },
 			{ "name": "tengu_happy_ocean", "default": "false" },
 			{ "name": "tengu_harbor", "default": "false" },
@@ -19813,8 +20134,8 @@
 			{ "name": "tengu_harp_voatavo", "default": "true" },
 			{ "name": "tengu_hashed_lagoon", "default": "0" },
 			{ "name": "tengu_hashed_lark" },
-			{ "name": "tengu_hashed_mitten" },
 			{ "name": "tengu_hashed_pascal", "default": "false" },
+			{ "name": "tengu_hashed_yeti" },
 			{ "name": "tengu_hawthorn_steeple", "default": "false" },
 			{ "name": "tengu_haze_glass", "default": "false" },
 			{ "name": "tengu_hazel_lantern", "default": "0" },
@@ -19827,8 +20148,10 @@
 			{ "name": "tengu_hazy_cosmos", "default": "true" },
 			{ "name": "tengu_hazy_hamster" },
 			{ "name": "tengu_hazy_nova", "default": "false" },
+			{ "name": "tengu_hazy_origami", "default": "true" },
 			{ "name": "tengu_hazy_peach" },
 			{ "name": "tengu_hazy_prism", "default": "false" },
+			{ "name": "tengu_hazy_tome", "default": "false" },
 			{ "name": "tengu_hearth_member_relay_rows_enabled", "default": "false" },
 			{ "name": "tengu_hearth_resolved_rows", "default": "\"off\"" },
 			{ "name": "tengu_heedful_sparrow", "default": "false" },
@@ -19847,13 +20170,17 @@
 			{ "name": "tengu_humble_hammock", "default": "false" },
 			{ "name": "tengu_humble_hartmanis" },
 			{ "name": "tengu_humble_petal", "default": "true" },
+			{ "name": "tengu_humble_tide", "default": "false" },
 			{ "name": "tengu_humble_wand", "default": "true" },
 			{ "name": "tengu_humble_zephyr", "default": "false" },
+			{ "name": "tengu_humming_duckling", "default": "false" },
 			{ "name": "tengu_humming_locket", "default": "true" },
+			{ "name": "tengu_humming_squirrel" },
 			{ "name": "tengu_humming_star", "default": "true" },
 			{ "name": "tengu_humming_sundae", "default": "0" },
 			{ "name": "tengu_humming_waterfall", "default": "false" },
 			{ "name": "tengu_hushed_caraway" },
+			{ "name": "tengu_hushed_heron", "default": "false" },
 			{ "name": "tengu_hushed_kestrel", "default": "true" },
 			{ "name": "tengu_hushed_lantern", "default": "true" },
 			{ "name": "tengu_hushed_lark", "default": "unknown" },
@@ -19867,13 +20194,13 @@
 			{ "name": "tengu_idempotent_pine", "default": "0" },
 			{ "name": "tengu_idempotent_wolf", "default": "true" },
 			{ "name": "tengu_idle_amber_finch", "default": "false" },
-			{ "name": "tengu_immutable_falcon", "default": "false" },
 			{ "name": "tengu_immutable_ladybug" },
 			{ "name": "tengu_immutable_tide", "default": "0" },
 			{ "name": "tengu_imperative_spindle", "default": "false" },
 			{ "name": "tengu_imperative_whistle", "default": "false" },
 			{ "name": "tengu_import", "default": "false" },
 			{ "name": "tengu_indexed_corbato", "default": "false" },
+			{ "name": "tengu_indexed_nautilus", "default": "false" },
 			{ "name": "tengu_indexed_pearl", "default": "unknown" },
 			{ "name": "tengu_inherited_gosling", "default": "true" },
 			{ "name": "tengu_inherited_raven", "default": "false" },
@@ -19882,6 +20209,7 @@
 			{ "name": "tengu_iridescent_crystal", "default": "false" },
 			{ "name": "tengu_iridescent_feather" },
 			{ "name": "tengu_iridescent_gem", "default": "0" },
+			{ "name": "tengu_iridescent_nest" },
 			{ "name": "tengu_iterative_aurora", "default": "false" },
 			{ "name": "tengu_iterative_cosmos", "default": "true" },
 			{ "name": "tengu_iterative_falcon", "default": "true" },
@@ -19894,8 +20222,10 @@
 			{ "name": "tengu_jaunty_charm" },
 			{ "name": "tengu_jaunty_ember", "default": "false" },
 			{ "name": "tengu_jaunty_honey" },
+			{ "name": "tengu_jaunty_salamander", "default": "0" },
 			{ "name": "tengu_jaunty_snowglobe", "default": "false" },
 			{ "name": "tengu_jaunty_umbrella" },
+			{ "name": "tengu_jazzy_corbato", "default": "true" },
 			{ "name": "tengu_jazzy_goblet", "default": "false" },
 			{ "name": "tengu_jazzy_puddle", "default": "true" },
 			{ "name": "tengu_jazzy_ripple", "default": "false" },
@@ -19908,7 +20238,6 @@
 			{ "name": "tengu_jolly_candy", "default": "0" },
 			{ "name": "tengu_jolly_pudding" },
 			{ "name": "tengu_jolly_wreath", "default": "false" },
-			{ "name": "tengu_jolly_wren", "default": "true" },
 			{ "name": "tengu_joyful_anchor", "default": "null" },
 			{ "name": "tengu_joyful_globe", "default": "true" },
 			{ "name": "tengu_joyful_parasol", "default": "true" },
@@ -19929,9 +20258,11 @@
 			{ "name": "tengu_kairos_push_notifications", "default": "false" },
 			{ "name": "tengu_kairos_ready_nudge", "default": "null" },
 			{ "name": "tengu_keen_anchor", "default": "true" },
+			{ "name": "tengu_keen_dunlin", "default": "false" },
 			{ "name": "tengu_keen_lantern", "default": "true" },
 			{ "name": "tengu_keen_pudding" },
 			{ "name": "tengu_keen_sloth", "default": "true" },
+			{ "name": "tengu_keen_sparrow" },
 			{ "name": "tengu_kestrel_lantern", "default": "true" },
 			{ "name": "tengu_kestrel_moor", "default": "true" },
 			{ "name": "tengu_keybinding_customization_release", "default": "true" },
@@ -19959,15 +20290,18 @@
 			{ "name": "tengu_lapis_anchor_budget", "default": "unknown" },
 			{ "name": "tengu_lapis_anchor_user_turn", "default": "true" },
 			{ "name": "tengu_lazy_dove", "default": "false" },
-			{ "name": "tengu_lazy_pumpkin", "default": "false" },
 			{ "name": "tengu_lazy_spindle", "default": "false" },
+			{ "name": "tengu_lean_osprey" },
 			{ "name": "tengu_left_arrow_carries_queued", "default": "true" },
 			{ "name": "tengu_left_arrow_editing_guard", "default": "true" },
 			{ "name": "tengu_level_dunlin", "default": "true" },
+			{ "name": "tengu_level_harbor", "default": "false" },
 			{ "name": "tengu_level_wren", "default": "true" },
 			{ "name": "tengu_lexical_crystal", "default": "true" },
+			{ "name": "tengu_lexical_cupcake", "default": "unknown" },
 			{ "name": "tengu_lexical_dragonfly", "default": "false" },
 			{ "name": "tengu_lexical_glade", "default": "false" },
+			{ "name": "tengu_lexical_parnas" },
 			{ "name": "tengu_lilac_loom", "default": "null" },
 			{ "name": "tengu_limber_finch" },
 			{ "name": "tengu_linear_brook", "default": "true" },
@@ -19982,12 +20316,13 @@
 			{ "name": "tengu_lively_beaver", "default": "false" },
 			{ "name": "tengu_lively_cook", "default": "true" },
 			{ "name": "tengu_lively_crown", "default": "\"off\"" },
-			{ "name": "tengu_lively_plover", "default": "true" },
 			{ "name": "tengu_lively_waffle", "default": "true" },
+			{ "name": "tengu_lively_waterfall" },
 			{ "name": "tengu_log_datadog_events", "default": "false" },
 			{ "name": "tengu_loggia_denkbild", "default": "false" },
 			{ "name": "tengu_loggia_passage", "default": "false" },
 			{ "name": "tengu_loggia_roster", "default": "unknown" },
+			{ "name": "tengu_logical_nebula", "default": "true" },
 			{ "name": "tengu_long_context_survey_probability", "default": "\"\"" },
 			{
 				"name": "tengu_long_context_survey_question_variant",
@@ -19996,6 +20331,7 @@
 			{ "name": "tengu_long_context_survey_threshold", "default": "\"\"" },
 			{ "name": "tengu_long_context_survey_trigger_mode", "default": "\"\"" },
 			{ "name": "tengu_lovely_locket", "default": "false" },
+			{ "name": "tengu_lovely_quail", "default": "false" },
 			{ "name": "tengu_lovely_rain", "default": "false" },
 			{ "name": "tengu_lovely_umbrella" },
 			{ "name": "tengu_lovely_whisper" },
@@ -20005,10 +20341,10 @@
 			{ "name": "tengu_lucky_finch" },
 			{ "name": "tengu_lucky_nebula", "default": "false" },
 			{ "name": "tengu_lucky_quill", "default": "true" },
-			{ "name": "tengu_lucky_whisper", "default": "false" },
 			{ "name": "tengu_lucky_widget", "default": "false" },
 			{ "name": "tengu_luminous_locket", "default": "unknown" },
 			{ "name": "tengu_luminous_seal", "default": "true" },
+			{ "name": "tengu_luminous_trinket", "default": "false" },
 			{ "name": "tengu_madrone_spindle", "default": "true" },
 			{ "name": "tengu_madrone_spindle_corbel", "default": "false" },
 			{ "name": "tengu_madrone_spindle_newel", "default": "false" },
@@ -20028,7 +20364,6 @@
 			{ "name": "tengu_mcp_claudeai_eligibility_gate", "default": "false" },
 			{ "name": "tengu_mcp_connect_suspend_redial", "default": "true" },
 			{ "name": "tengu_mcp_connect_timeout_retry", "default": "true" },
-			{ "name": "tengu_mcp_directory_bff", "default": "false" },
 			{ "name": "tengu_mcp_directory_visibility", "default": "unknown" },
 			{ "name": "tengu_mcp_discover_projection_prior", "default": "\"off\"" },
 			{ "name": "tengu_mcp_discovery_cache_enable", "default": "null" },
@@ -20065,15 +20400,20 @@
 			{ "name": "tengu_measured_shelf", "default": "0" },
 			{ "name": "tengu_media_byte_cap" },
 			{ "name": "tengu_mellow_beacon", "default": "false" },
+			{ "name": "tengu_mellow_drawer", "default": "false" },
 			{ "name": "tengu_mellow_ember", "default": "false" },
 			{ "name": "tengu_mellow_heron", "default": "false" },
+			{ "name": "tengu_mellow_inkwell", "default": "false" },
 			{ "name": "tengu_mellow_kestrel", "default": "false" },
 			{ "name": "tengu_mellow_minsky", "default": "true" },
+			{ "name": "tengu_mellow_pulse", "default": "true" },
 			{ "name": "tengu_mellow_rainbow" },
+			{ "name": "tengu_mellow_sphinx" },
 			{ "name": "tengu_mellow_sunset", "default": "true" },
 			{ "name": "tengu_mellow_thistle", "default": "false" },
 			{ "name": "tengu_melodic_ember", "default": "true" },
 			{ "name": "tengu_melodic_octopus", "default": "true" },
+			{ "name": "tengu_melodic_pelican" },
 			{ "name": "tengu_melodic_wolf", "default": "true" },
 			{ "name": "tengu_mem_push_delete_mode", "default": "\"corroborate\"" },
 			{ "name": "tengu_memdir_write_lint", "default": "false" },
@@ -20090,24 +20430,28 @@
 			{ "name": "tengu_mermaid_mod", "default": "unknown" },
 			{ "name": "tengu_merry_boot" },
 			{ "name": "tengu_merry_kite", "default": "1" },
+			{ "name": "tengu_merry_lake", "default": "false" },
 			{ "name": "tengu_merry_popcorn", "default": "true" },
 			{ "name": "tengu_merry_thunder", "default": "false" },
 			{ "name": "tengu_merry_tide", "default": "false" },
 			{ "name": "tengu_mighty_brook", "default": "true" },
 			{ "name": "tengu_mighty_flask", "default": "false" },
+			{ "name": "tengu_mighty_kazoo", "default": "0" },
 			{ "name": "tengu_mighty_sprout" },
 			{ "name": "tengu_mighty_thimble", "default": "true" },
 			{ "name": "tengu_mint_lanes", "default": "false" },
 			{ "name": "tengu_misty_anchor", "default": "false" },
 			{ "name": "tengu_misty_aurora", "default": "0" },
 			{ "name": "tengu_misty_crown" },
+			{ "name": "tengu_misty_fiddle", "default": "false" },
+			{ "name": "tengu_misty_oasis", "default": "true" },
 			{ "name": "tengu_misty_sunbeam", "default": "false" },
 			{ "name": "tengu_misty_twilight", "default": "true" },
+			{ "name": "tengu_modular_marble", "default": "false" },
 			{ "name": "tengu_modular_mochi", "default": "false" },
-			{ "name": "tengu_modular_seal", "default": "false" },
+			{ "name": "tengu_modular_seal", "default": "unknown" },
 			{ "name": "tengu_modular_sparkle" },
 			{ "name": "tengu_moonlit_crayon", "default": "false" },
-			{ "name": "tengu_moonlit_goblet", "default": "null" },
 			{ "name": "tengu_moonlit_island", "default": "true" },
 			{ "name": "tengu_moonlit_kettle" },
 			{ "name": "tengu_moonlit_lagoon", "default": "true" },
@@ -20120,14 +20464,17 @@
 			{ "name": "tengu_mossy_crayon" },
 			{ "name": "tengu_mossy_crown", "default": "true" },
 			{ "name": "tengu_mossy_dijkstra", "default": "true" },
+			{ "name": "tengu_mossy_ferry", "default": "false" },
 			{ "name": "tengu_mossy_gray", "default": "false" },
+			{ "name": "tengu_mossy_karp", "default": "true" },
 			{ "name": "tengu_mossy_kepler", "default": "false" },
 			{ "name": "tengu_mossy_knuth" },
 			{ "name": "tengu_mossy_lathe", "default": "true" },
 			{ "name": "tengu_mossy_melody", "default": "false" },
+			{ "name": "tengu_mossy_satchel", "default": "0" },
 			{ "name": "tengu_mossy_sky", "default": "false" },
 			{ "name": "tengu_mossy_squid", "default": "false" },
-			{ "name": "tengu_mossy_thrush", "default": "false" },
+			{ "name": "tengu_mossy_turnstile" },
 			{ "name": "tengu_mossy_wirth", "default": "false" },
 			{ "name": "tengu_moth_copse", "default": "false" },
 			{ "name": "tengu_mutable_knuth", "default": "0" },
@@ -20135,8 +20482,8 @@
 			{ "name": "tengu_nankeen_kestrel", "default": "false" },
 			{ "name": "tengu_native_cursor", "default": "false" },
 			{ "name": "tengu_neapolitan", "default": "false" },
+			{ "name": "tengu_nested_acorn", "default": "0" },
 			{ "name": "tengu_nested_ripple", "default": "true" },
-			{ "name": "tengu_nifty_finch", "default": "true" },
 			{ "name": "tengu_nifty_harbor", "default": "true" },
 			{ "name": "tengu_nifty_lemur" },
 			{ "name": "tengu_nifty_pine" },
@@ -20153,6 +20500,7 @@
 			{ "name": "tengu_observer_subagent_fanout", "default": "true" },
 			{ "name": "tengu_ochre_bittern", "default": "false" },
 			{ "name": "tengu_ochre_dunlin", "default": "false" },
+			{ "name": "tengu_ochre_gannet", "default": "true" },
 			{ "name": "tengu_ochre_gantry" },
 			{ "name": "tengu_ochre_plover", "default": "false" },
 			{ "name": "tengu_official_plugin_prompt_overrides" },
@@ -20176,7 +20524,9 @@
 			{ "name": "tengu_parallel_trinket", "default": "true" },
 			{ "name": "tengu_parsed_creek" },
 			{ "name": "tengu_parsed_eagle", "default": "\"off\"" },
+			{ "name": "tengu_parsed_spindle", "default": "false" },
 			{ "name": "tengu_parsed_willow", "default": "true" },
+			{ "name": "tengu_partitioned_eclipse", "default": "unknown" },
 			{ "name": "tengu_partitioned_finch", "default": "true" },
 			{ "name": "tengu_passport_quail", "default": "false" },
 			{ "name": "tengu_patient_beacon" },
@@ -20188,17 +20538,21 @@
 			{ "name": "tengu_patient_tide", "default": "0" },
 			{ "name": "tengu_patient_walnut", "default": "false" },
 			{ "name": "tengu_peaceful_leaf", "default": "false" },
+			{ "name": "tengu_peaceful_lemur", "default": "false" },
 			{ "name": "tengu_peaceful_origami", "default": "false" },
-			{ "name": "tengu_peaceful_shamir", "default": "false" },
+			{ "name": "tengu_pebble_harbor", "default": "0" },
 			{ "name": "tengu_pencil_farmer", "default": "false" },
 			{ "name": "tengu_penguins_off", "default": "null" },
 			{ "name": "tengu_peppy_gosling", "default": "0" },
 			{ "name": "tengu_peppy_nautilus" },
 			{ "name": "tengu_peppy_nest", "default": "false" },
+			{ "name": "tengu_peppy_pixel", "default": "false" },
+			{ "name": "tengu_peppy_sphinx", "default": "false" },
 			{ "name": "tengu_peppy_spindle", "default": "false" },
 			{ "name": "tengu_pewter_avocet", "default": "true" },
 			{ "name": "tengu_pewter_brook", "default": "false" },
 			{ "name": "tengu_pewter_canteen", "default": "false" },
+			{ "name": "tengu_pewter_grebe", "default": "false" },
 			{ "name": "tengu_pewter_owl_model", "default": "\"\"" },
 			{ "name": "tengu_pewter_summit", "default": "false" },
 			{ "name": "tengu_piped_planet", "default": "false" },
@@ -20207,14 +20561,17 @@
 			{ "name": "tengu_placid_noether", "default": "true" },
 			{ "name": "tengu_plaid_harbor", "default": "true" },
 			{ "name": "tengu_plaid_kettle", "default": "1" },
-			{ "name": "tengu_plain_heron", "default": "true" },
 			{ "name": "tengu_plain_kestrel", "default": "unknown" },
+			{ "name": "tengu_plain_kettle", "default": "true" },
+			{ "name": "tengu_plain_ledger" },
+			{ "name": "tengu_plain_locket", "default": "true" },
 			{ "name": "tengu_plain_sorrel", "default": "true" },
 			{ "name": "tengu_playful_hare", "default": "true" },
 			{ "name": "tengu_playful_lobster", "default": "true" },
 			{ "name": "tengu_playful_panda", "default": "true" },
 			{ "name": "tengu_playful_puzzle", "default": "false" },
 			{ "name": "tengu_playful_snail" },
+			{ "name": "tengu_playful_valley", "default": "true" },
 			{ "name": "tengu_plugin_binary_assets", "default": "false" },
 			{ "name": "tengu_plugin_command_source_refresh", "default": "true" },
 			{ "name": "tengu_plugin_feedback_survey_config", "default": "unknown" },
@@ -20222,12 +20579,10 @@
 			{ "name": "tengu_plugin_menu_close_reload", "default": "unknown" },
 			{ "name": "tengu_plugin_official_mkt_git_fallback", "default": "true" },
 			{ "name": "tengu_plugin_ratings_store_config", "default": "unknown" },
-			{ "name": "tengu_plugins_npm_marketplace", "default": "unknown" },
 			{ "name": "tengu_plum_vx3", "default": "false" },
 			{ "name": "tengu_plumb_kestrel" },
 			{ "name": "tengu_plumb_marten", "default": "false" },
 			{ "name": "tengu_polished_dewdrop", "default": "\"\"" },
-			{ "name": "tengu_polished_fountain" },
 			{ "name": "tengu_polished_hammock" },
 			{ "name": "tengu_polished_lagoon", "default": "unknown" },
 			{ "name": "tengu_polished_quill_killswitch", "default": "false" },
@@ -20237,6 +20592,7 @@
 			{ "name": "tengu_prancy_charm", "default": "false" },
 			{ "name": "tengu_prancy_lantern" },
 			{ "name": "tengu_prancy_pebble", "default": "false" },
+			{ "name": "tengu_precious_crab", "default": "false" },
 			{ "name": "tengu_precious_ember", "default": "true" },
 			{ "name": "tengu_precious_koala", "default": "\"off\"" },
 			{ "name": "tengu_precious_sprout", "default": "unknown" },
@@ -20260,14 +20616,15 @@
 			{ "name": "tengu_propose_goal", "default": "false" },
 			{ "name": "tengu_proud_book" },
 			{ "name": "tengu_proud_clover", "default": "false" },
-			{ "name": "tengu_proud_flurry_enabled", "default": "false" },
+			{ "name": "tengu_proud_glade", "default": "unknown" },
 			{ "name": "tengu_proud_honey" },
 			{ "name": "tengu_proud_pearl", "default": "false" },
 			{ "name": "tengu_ptc_enabled", "default": "true" },
+			{ "name": "tengu_pure_squid", "default": "false" },
+			{ "name": "tengu_pure_tide" },
 			{ "name": "tengu_purring_aurora", "default": "false" },
 			{ "name": "tengu_purring_micali", "default": "true" },
 			{ "name": "tengu_purring_pine", "default": "true" },
-			{ "name": "tengu_purring_reef", "default": "false" },
 			{ "name": "tengu_quartz_pipit", "default": "true" },
 			{ "name": "tengu_quartz_thimble", "default": "true" },
 			{ "name": "tengu_quiet_almanac", "default": "unknown" },
@@ -20277,11 +20634,10 @@
 			{ "name": "tengu_quiet_heron", "default": "false" },
 			{ "name": "tengu_quiet_hopcroft", "default": "false" },
 			{ "name": "tengu_quiet_lantern", "default": "true" },
+			{ "name": "tengu_quiet_larch", "default": "false" },
 			{ "name": "tengu_quiet_larkspur", "default": "true" },
-			{ "name": "tengu_quiet_ledger", "default": "\"off\"" },
 			{ "name": "tengu_quiet_locket", "default": "true" },
 			{ "name": "tengu_quiet_marten" },
-			{ "name": "tengu_quiet_medlar" },
 			{ "name": "tengu_quiet_pike", "default": "false" },
 			{ "name": "tengu_quiet_sextant" },
 			{ "name": "tengu_quiet_turnstile", "default": "true" },
@@ -20293,17 +20649,20 @@
 			{ "name": "tengu_quirky_volcano", "default": "0" },
 			{ "name": "tengu_quizzical_giraffe", "default": "false" },
 			{ "name": "tengu_quizzical_knuth" },
+			{ "name": "tengu_quizzical_locket", "default": "false" },
 			{ "name": "tengu_quizzical_mango", "default": "true" },
 			{ "name": "tengu_quizzical_thimble", "default": "true" },
 			{ "name": "tengu_quizzical_toucan", "default": "true" },
 			{ "name": "tengu_quizzical_wirth", "default": "true" },
 			{ "name": "tengu_quizzical_zebra" },
+			{ "name": "tengu_radiant_badger", "default": "false" },
 			{ "name": "tengu_radiant_fern", "default": "[]" },
 			{ "name": "tengu_radiant_finch", "default": "false" },
 			{ "name": "tengu_radiant_fox", "default": "false" },
 			{ "name": "tengu_radiant_hare", "default": "false" },
 			{ "name": "tengu_radiant_heron", "default": "false" },
 			{ "name": "tengu_radiant_lemur", "default": "false" },
+			{ "name": "tengu_radiant_swing", "default": "unknown" },
 			{ "name": "tengu_radiant_teapot", "default": "true" },
 			{ "name": "tengu_rate_limit_promo_notices", "default": "[]" },
 			{ "name": "tengu_rc_long_turn_nudge", "default": "null" },
@@ -20315,6 +20674,7 @@
 			{ "name": "tengu_record_created_pr_to_ccr", "default": "false" },
 			{ "name": "tengu_recursive_glade" },
 			{ "name": "tengu_recursive_puddle", "default": "false" },
+			{ "name": "tengu_refactored_crystal", "default": "false" },
 			{ "name": "tengu_refactored_gadget" },
 			{ "name": "tengu_reflective_bee", "default": "\"off\"" },
 			{ "name": "tengu_reflective_wolf", "default": "true" },
@@ -20327,6 +20687,7 @@
 			{ "name": "tengu_repl_mcp_error_throw", "default": "true" },
 			{ "name": "tengu_repl_mcp_undeclared_args_refuse", "default": "true" },
 			{ "name": "tengu_repl_unwritable_args_refuse", "default": "true" },
+			{ "name": "tengu_replicated_falcon" },
 			{ "name": "tengu_resilient_adleman" },
 			{ "name": "tengu_resume_cache_warm_config" },
 			{ "name": "tengu_resume_open_live_bg", "default": "true" },
@@ -20334,7 +20695,6 @@
 			{ "name": "tengu_rippling_map", "default": "true" },
 			{ "name": "tengu_rippling_orbit", "default": "false" },
 			{ "name": "tengu_rippling_sketch", "default": "true" },
-			{ "name": "tengu_rippling_stream" },
 			{ "name": "tengu_rippling_tulip", "default": "unknown" },
 			{ "name": "tengu_riveted_lantern" },
 			{ "name": "tengu_rosy_crab", "default": "true" },
@@ -20343,8 +20703,8 @@
 			{ "name": "tengu_rosy_finch", "default": "false" },
 			{ "name": "tengu_rosy_flute", "default": "true" },
 			{ "name": "tengu_rosy_llama", "default": "false" },
-			{ "name": "tengu_rosy_pebble", "default": "false" },
 			{ "name": "tengu_russet_abacus", "default": "false" },
+			{ "name": "tengu_russet_hawthorn" },
 			{ "name": "tengu_russet_whimbrel", "default": "0" },
 			{ "name": "tengu_rustling_blossom", "default": "false" },
 			{ "name": "tengu_rustling_crescent", "default": "true" },
@@ -20354,7 +20714,6 @@
 			{ "name": "tengu_rustling_sunset", "default": "true" },
 			{ "name": "tengu_sable_orrery", "default": "true" },
 			{ "name": "tengu_saddle_lantern", "default": "false" },
-			{ "name": "tengu_saffron_credits_only_tiers", "default": "unknown" },
 			{ "name": "tengu_saffron_ferry", "default": "true" },
 			{ "name": "tengu_saffron_kite", "default": "true" },
 			{ "name": "tengu_saffron_ladder", "default": "false" },
@@ -20363,9 +20722,11 @@
 			{ "name": "tengu_saffron_wren", "default": "true" },
 			{ "name": "tengu_sage_compass2" },
 			{ "name": "tengu_salt_marsh", "default": "false" },
+			{ "name": "tengu_salt_vetch" },
 			{ "name": "tengu_satchel_banjo", "default": "false" },
+			{ "name": "tengu_scalable_whistle", "default": "false" },
 			{ "name": "tengu_scratch", "default": "false" },
-			{ "name": "tengu_sdk_mcp_manifests", "default": "true" },
+			{ "name": "tengu_sdk_mcp_manifests", "default": "false" },
 			{ "name": "tengu_sedge_lantern_config" },
 			{ "name": "tengu_send_file", "default": "false" },
 			{ "name": "tengu_send_user_file", "default": "true" },
@@ -20397,9 +20758,10 @@
 			{ "name": "tengu_sharded_globe", "default": "false" },
 			{ "name": "tengu_sharded_moonbeam", "default": "true" },
 			{ "name": "tengu_sharded_snowflake", "default": "false" },
-			{ "name": "tengu_shell_task_rows_live_only_enabled", "default": "false" },
 			{ "name": "tengu_shimmering_cherny", "default": "null" },
 			{ "name": "tengu_shimmering_firefly", "default": "false" },
+			{ "name": "tengu_shimmering_glade" },
+			{ "name": "tengu_shimmying_sparkle", "default": "false" },
 			{ "name": "tengu_shimmying_stardust", "default": "false" },
 			{ "name": "tengu_shimmying_willow", "default": "30" },
 			{ "name": "tengu_shining_fractals", "default": "false" },
@@ -20408,6 +20770,7 @@
 			{ "name": "tengu_silent_harbor", "default": "false" },
 			{ "name": "tengu_silent_heron", "default": "0" },
 			{ "name": "tengu_silk_hinge", "default": "false" },
+			{ "name": "tengu_silly_glacier", "default": "false" },
 			{ "name": "tengu_silly_waterfall", "default": "false" },
 			{ "name": "tengu_skills_dashboard_enabled", "default": "false" },
 			{ "name": "tengu_slate_bittern", "default": "true" },
@@ -20417,33 +20780,44 @@
 			{ "name": "tengu_slate_lantern_ember", "default": "false" },
 			{ "name": "tengu_slate_lantern_hush", "default": "null" },
 			{ "name": "tengu_slate_marten", "default": "false" },
+			{ "name": "tengu_slate_sextant" },
 			{ "name": "tengu_slate_thimble", "default": "false" },
 			{ "name": "tengu_slate_wicket", "default": "true" },
+			{ "name": "tengu_sleepy_flute" },
 			{ "name": "tengu_sleepy_rabbit", "default": "false" },
 			{ "name": "tengu_sleepy_ripple", "default": "true" },
 			{ "name": "tengu_sleepy_shore", "default": "null" },
 			{ "name": "tengu_sleepy_snowflake", "default": "\"all\"" },
 			{ "name": "tengu_smooth_chipmunk", "default": "true" },
 			{ "name": "tengu_smooth_harbor", "default": "false" },
-			{ "name": "tengu_smooth_quiche" },
+			{ "name": "tengu_smooth_pelican", "default": "false" },
+			{ "name": "tengu_smooth_wolf" },
 			{ "name": "tengu_snappy_noodle", "default": "unknown" },
 			{ "name": "tengu_snappy_pelican", "default": "false" },
+			{ "name": "tengu_snappy_pinwheel", "default": "false" },
 			{ "name": "tengu_snappy_plum", "default": "false" },
+			{ "name": "tengu_snappy_seal", "default": "false" },
 			{ "name": "tengu_snappy_sunrise_killswitch" },
 			{ "name": "tengu_snappy_tower" },
 			{ "name": "tengu_snazzy_starlight", "default": "unknown" },
 			{ "name": "tengu_snoopy_creek", "default": "false" },
 			{ "name": "tengu_snoopy_thimble", "default": "false" },
+			{ "name": "tengu_snug_crystal", "default": "false" },
+			{ "name": "tengu_snug_glacier", "default": "false" },
+			{ "name": "tengu_snug_nautilus", "default": "null" },
 			{ "name": "tengu_snug_orbit", "default": "[]" },
 			{ "name": "tengu_snug_platypus" },
 			{ "name": "tengu_snug_puddle" },
 			{ "name": "tengu_snug_quill" },
 			{ "name": "tengu_snug_reef", "default": "0" },
+			{ "name": "tengu_snug_starfish", "default": "false" },
 			{ "name": "tengu_snug_storm", "default": "null" },
 			{ "name": "tengu_snug_wall", "default": "false" },
 			{ "name": "tengu_snuggly_goblet", "default": "false" },
+			{ "name": "tengu_snuggly_mochi", "default": "false" },
 			{ "name": "tengu_sober_inkwell" },
 			{ "name": "tengu_soft_kurzweil", "default": "true" },
+			{ "name": "tengu_soft_pascal", "default": "false" },
 			{ "name": "tengu_soft_spark", "default": "false" },
 			{ "name": "tengu_soft_spindle", "default": "true" },
 			{ "name": "tengu_sorrel_avocet", "default": "false" },
@@ -20456,6 +20830,7 @@
 			{ "name": "tengu_sorrel_trellis_weir" },
 			{ "name": "tengu_sorted_metcalfe" },
 			{ "name": "tengu_sorted_otter", "default": "false" },
+			{ "name": "tengu_sorted_plum", "default": "false" },
 			{ "name": "tengu_sorted_thimble", "default": "false" },
 			{ "name": "tengu_sorted_truffle", "default": "true" },
 			{ "name": "tengu_sorted_willow", "default": "false" },
@@ -20465,15 +20840,21 @@
 			{ "name": "tengu_spicy_blossom", "default": "false" },
 			{ "name": "tengu_splendid_horizon" },
 			{ "name": "tengu_splendid_lynx" },
+			{ "name": "tengu_splendid_puddle", "default": "0" },
 			{ "name": "tengu_splendid_sutton", "default": "false" },
 			{ "name": "tengu_sprightly_orbit", "default": "true" },
 			{ "name": "tengu_sprightly_pebble", "default": "false" },
+			{ "name": "tengu_squishy_prism" },
+			{ "name": "tengu_squishy_snail" },
 			{ "name": "tengu_squishy_spring", "default": "true" },
 			{ "name": "tengu_squishy_ullman", "default": "false" },
 			{ "name": "tengu_staged_ladybug", "default": "true" },
 			{ "name": "tengu_staged_pumpkin", "default": "true" },
+			{ "name": "tengu_staged_storm", "default": "false" },
+			{ "name": "tengu_stalwart_quince" },
 			{ "name": "tengu_starry_balloon", "default": "null" },
 			{ "name": "tengu_starry_crescent", "default": "false" },
+			{ "name": "tengu_starry_pebble_enabled", "default": "false" },
 			{ "name": "tengu_starry_squid", "default": "true" },
 			{ "name": "tengu_starry_waterfall" },
 			{ "name": "tengu_startup_announcements", "default": "unknown" },
@@ -20481,7 +20862,10 @@
 			{ "name": "tengu_stateful_mitten", "default": "false" },
 			{ "name": "tengu_static_title_under_mux", "default": "true" },
 			{ "name": "tengu_steadfast_wren" },
+			{ "name": "tengu_steady_anchor", "default": "true" },
 			{ "name": "tengu_steady_finch", "default": "false" },
+			{ "name": "tengu_steady_heron", "default": "true" },
+			{ "name": "tengu_steady_juniper" },
 			{ "name": "tengu_steady_marshmallow" },
 			{ "name": "tengu_steady_metcalfe" },
 			{ "name": "tengu_steady_mitten", "default": "false" },
@@ -20503,9 +20887,13 @@
 			{ "name": "tengu_structured_blossom" },
 			{ "name": "tengu_structured_output_strict", "default": "false" },
 			{ "name": "tengu_sturdy_lantern", "default": "true" },
+			{ "name": "tengu_sturdy_plover", "default": "false" },
 			{ "name": "tengu_subagent_cache_evict", "default": "false" },
 			{ "name": "tengu_sunny_anchor" },
+			{ "name": "tengu_sunny_lollipop" },
 			{ "name": "tengu_sunny_moon" },
+			{ "name": "tengu_sunny_mountain", "default": "false" },
+			{ "name": "tengu_sunny_pancake", "default": "false" },
 			{ "name": "tengu_sunset_penguin_opus48", "default": "\"2026-11-30\"" },
 			{ "name": "tengu_surface_failed_mcp_servers", "default": "true" },
 			{ "name": "tengu_swift_bear", "default": "true" },
@@ -20521,6 +20909,7 @@
 			{ "name": "tengu_tab_read_sep", "default": "false" },
 			{ "name": "tengu_tallow_quoit", "default": "null" },
 			{ "name": "tengu_tallow_quoit_gate", "default": "false" },
+			{ "name": "tengu_tawny_thimble" },
 			{ "name": "tengu_tawny_thrush" },
 			{ "name": "tengu_teal_corbel", "default": "false" },
 			{ "name": "tengu_teal_corbel_finial", "default": "true" },
@@ -20530,18 +20919,23 @@
 			{ "name": "tengu_temporal_hare", "default": "false" },
 			{ "name": "tengu_temporal_haven", "default": "false" },
 			{ "name": "tengu_temporal_kazoo", "default": "null" },
+			{ "name": "tengu_temporal_nautilus" },
+			{ "name": "tengu_temporal_raven" },
 			{ "name": "tengu_tender_mitten" },
 			{ "name": "tengu_tender_quill" },
 			{ "name": "tengu_tender_thunder" },
 			{ "name": "tengu_terminal_sidebar", "default": "false" },
+			{ "name": "tengu_tethered_buoy", "default": "true" },
 			{ "name": "tengu_thinking_block_resumption", "default": "false" },
 			{ "name": "tengu_thistle_grebe", "default": "null" },
 			{ "name": "tengu_thrifty_sonic", "default": "false" },
+			{ "name": "tengu_ticklish_fern", "default": "false" },
 			{ "name": "tengu_ticklish_pnueli", "default": "false" },
 			{ "name": "tengu_ticklish_whisper", "default": "false" },
+			{ "name": "tengu_tidal_kestrel" },
 			{ "name": "tengu_tidal_sparrow", "default": "true" },
 			{ "name": "tengu_tidy_abacus", "default": "true" },
-			{ "name": "tengu_tidy_blanket", "default": "false" },
+			{ "name": "tengu_tidy_burrow" },
 			{ "name": "tengu_tidy_cloud", "default": "true" },
 			{ "name": "tengu_tidy_eclipse", "default": "true" },
 			{ "name": "tengu_tidy_fern", "default": "true" },
@@ -20558,6 +20952,8 @@
 			{ "name": "tengu_toasty_fiddle", "default": "[]" },
 			{ "name": "tengu_toasty_giraffe", "default": "false" },
 			{ "name": "tengu_toasty_hammock" },
+			{ "name": "tengu_toasty_jellyfish" },
+			{ "name": "tengu_toasty_lightning", "default": "false" },
 			{ "name": "tengu_toasty_owl", "default": "false" },
 			{ "name": "tengu_toasty_planet", "default": "false" },
 			{ "name": "tengu_tool_cgroup_exclude_classes", "default": "null" },
@@ -20567,12 +20963,14 @@
 			{ "name": "tengu_tool_search_unsupported_models", "default": "null" },
 			{ "name": "tengu_tools_exclusion_killswitch", "default": "false" },
 			{ "name": "tengu_trace_lantern", "default": "false" },
+			{ "name": "tengu_tranquil_cake", "default": "false" },
 			{ "name": "tengu_tranquil_cloud", "default": "true" },
 			{ "name": "tengu_tranquil_cocoa", "default": "false" },
 			{ "name": "tengu_tranquil_crescent" },
 			{ "name": "tengu_tranquil_crown" },
 			{ "name": "tengu_tranquil_duckling" },
 			{ "name": "tengu_tranquil_fern", "default": "true" },
+			{ "name": "tengu_tranquil_peach" },
 			{ "name": "tengu_tranquil_starlight", "default": "false" },
 			{ "name": "tengu_transcript_local_gc", "default": "false" },
 			{ "name": "tengu_transient_cocoa", "default": "false" },
@@ -20586,11 +20984,13 @@
 			{ "name": "tengu_twinkling_cosmos", "default": "false" },
 			{ "name": "tengu_twinkling_globe" },
 			{ "name": "tengu_twinkling_hoare", "default": "false" },
-			{ "name": "tengu_twinkly_babbage", "default": "false" },
+			{ "name": "tengu_twinkling_melody" },
 			{ "name": "tengu_twinkly_breeze" },
 			{ "name": "tengu_twinkly_clover" },
+			{ "name": "tengu_twinkly_moler", "default": "false" },
 			{ "name": "tengu_twinkly_prism", "default": "false" },
 			{ "name": "tengu_twinkly_sunrise", "default": "true" },
+			{ "name": "tengu_twinkly_whale", "default": "false" },
 			{ "name": "tengu_typed_koala", "default": "true" },
 			{ "name": "tengu_typed_pebble", "default": "0" },
 			{ "name": "tengu_typed_treasure" },
@@ -20600,13 +21000,14 @@
 				"name": "tengu_ultraplan_prompt_identifier",
 				"default": "\"simple_plan\""
 			},
-			{ "name": "tengu_ultraplan_timeout_seconds", "default": "5400" },
+			{ "name": "tengu_ultraplan_timeout_seconds", "default": "unknown" },
 			{ "name": "tengu_ultrareview_awareness", "default": "null" },
 			{ "name": "tengu_ultrareview_post_enabled", "default": "true" },
 			{ "name": "tengu_umber_petrel", "default": "false" },
 			{ "name": "tengu_umber_plover", "default": "true" },
 			{ "name": "tengu_umber_sluice", "default": "false" },
 			{ "name": "tengu_umber_stile", "default": "false" },
+			{ "name": "tengu_unhurried_wren", "default": "false" },
 			{ "name": "tengu_unified_waterfall", "default": "true" },
 			{ "name": "tengu_usage_overage_included_models", "default": "null" },
 			{ "name": "tengu_valiant_crayon", "default": "false" },
@@ -20617,10 +21018,12 @@
 			{ "name": "tengu_valiant_teapot", "default": "false" },
 			{ "name": "tengu_validated_clover" },
 			{ "name": "tengu_vast_frost", "default": "0" },
+			{ "name": "tengu_vast_meteor" },
 			{ "name": "tengu_vast_muffin" },
 			{ "name": "tengu_vast_platypus" },
 			{ "name": "tengu_vast_puddle" },
 			{ "name": "tengu_vast_sunset", "default": "true" },
+			{ "name": "tengu_vast_treehouse" },
 			{ "name": "tengu_vast_tulip", "default": "false" },
 			{ "name": "tengu_vast_wave" },
 			{ "name": "tengu_vectorized_mitten", "default": "false" },
@@ -20630,6 +21033,7 @@
 			{ "name": "tengu_velvet_crab", "default": "false" },
 			{ "name": "tengu_velvet_gannet", "default": "false" },
 			{ "name": "tengu_velvet_harbor_owl", "default": "\"off\"" },
+			{ "name": "tengu_velvet_haven", "default": "null" },
 			{ "name": "tengu_velvet_heron", "default": "true" },
 			{ "name": "tengu_velvet_ibis" },
 			{ "name": "tengu_velvet_marble", "default": "unknown" },
@@ -20705,6 +21109,7 @@
 			{ "name": "tengu_vivid_crayon", "default": "true" },
 			{ "name": "tengu_vivid_crown", "default": "false" },
 			{ "name": "tengu_vivid_peach", "default": "undefined" },
+			{ "name": "tengu_vivid_wreath", "default": "true" },
 			{ "name": "tengu_vscode_card_message_approval", "default": "true" },
 			{ "name": "tengu_vscode_code_colors", "default": "true" },
 			{ "name": "tengu_vscode_feedback_survey", "default": "false" },
@@ -20735,13 +21140,16 @@
 			{ "name": "tengu_wiggly_locket", "default": "false" },
 			{ "name": "tengu_wild_gosling", "default": "false" },
 			{ "name": "tengu_wild_octopus" },
+			{ "name": "tengu_wild_orbit", "default": "false" },
 			{ "name": "tengu_wild_tome", "default": "false" },
 			{ "name": "tengu_willow_tern", "default": "false" },
 			{ "name": "tengu_wise_bear_copy", "default": "null" },
+			{ "name": "tengu_wise_brook", "default": "false" },
 			{ "name": "tengu_wise_comet", "default": "false" },
 			{ "name": "tengu_wise_kite", "default": "false" },
 			{ "name": "tengu_wise_newt", "default": "unknown" },
 			{ "name": "tengu_wise_origami", "default": "false" },
+			{ "name": "tengu_wise_pearl", "default": "null" },
 			{ "name": "tengu_wise_salamander", "default": "0" },
 			{ "name": "tengu_wise_starlight", "default": "false" },
 			{ "name": "tengu_witty_hearth", "default": "true" },
@@ -20750,7 +21158,6 @@
 			{ "name": "tengu_witty_wand" },
 			{ "name": "tengu_wobbly_dahl", "default": "false" },
 			{ "name": "tengu_wobbly_fern", "default": "unknown" },
-			{ "name": "tengu_wobbly_fog" },
 			{ "name": "tengu_wobbly_pinwheel", "default": "true" },
 			{ "name": "tengu_wondrous_acorn", "default": "null" },
 			{ "name": "tengu_wondrous_haven", "default": "false" },
@@ -20760,8 +21167,8 @@
 			{ "name": "tengu_woolly_blanket", "default": "false" },
 			{ "name": "tengu_woolly_emerson", "default": "true" },
 			{ "name": "tengu_woolly_kettle", "default": "false" },
-			{ "name": "tengu_woolly_leaf", "default": "false" },
 			{ "name": "tengu_woolly_owl", "default": "false" },
+			{ "name": "tengu_woolly_thimble" },
 			{ "name": "tengu_woolly_toast", "default": "false" },
 			{ "name": "tengu_worker_owner_rows_killswitch", "default": "false" },
 			{ "name": "tengu_workflow_schema_lint_enforce", "default": "true" },
@@ -20773,13 +21180,18 @@
 			{ "name": "tengu_xterm_atlas_reset", "default": "true" },
 			{ "name": "tengu_zany_book" },
 			{ "name": "tengu_zany_flask", "default": "2" },
+			{ "name": "tengu_zany_oasis" },
 			{ "name": "tengu_zesty_feather" },
+			{ "name": "tengu_zesty_horizon_wait", "default": "true" },
 			{ "name": "tengu_zesty_muffin" },
+			{ "name": "tengu_zesty_noodle" },
 			{ "name": "tengu_zesty_pearl", "default": "false" },
 			{ "name": "tengu_zinc_harbor", "default": "false" },
 			{ "name": "tengu_zippy_avalanche" },
 			{ "name": "tengu_zippy_cocoa" },
 			{ "name": "tengu_zippy_gosling", "default": "0" },
+			{ "name": "tengu_zippy_piglet", "default": "false" },
+			{ "name": "tengu_zippy_quilt", "default": "false" },
 			{ "name": "tengu_zippy_spindle", "default": "false" }
 		],
 		"hook-event": [
@@ -21361,7 +21773,7 @@
 			{ "name": "hook_registered", "detail": "2 call sites" },
 			{ "name": "internal_error", "detail": "1 call sites" },
 			{ "name": "managed_settings_resolved", "detail": "2 call sites" },
-			{ "name": "mcp_server_connection", "detail": "2 call sites" },
+			{ "name": "mcp_server_connection", "detail": "1 call sites" },
 			{ "name": "permission_mode_changed", "detail": "1 call sites" },
 			{ "name": "plugin_installed", "detail": "1 call sites" },
 			{ "name": "plugin_loaded", "detail": "1 call sites" },
@@ -21441,7 +21853,10 @@
 				"name": "appendPlugins",
 				"detail": "Managed plugins (plugin@marketplace ids that managed enabledPlugins sets true) whose hooks run last among plugins, innermost, in the listed order: the last id listed sits just above the built-in plugi…"
 			},
-			{ "name": "askUserQuestionTimeout" },
+			{
+				"name": "askUserQuestionTimeout",
+				"detail": "Idle time before Claude's questions in the terminal auto-continue with any answers selected so far. When unset, the terminal does not auto-continue. The Claude desktop and web apps show Claude's quest…"
+			},
 			{ "name": "attribution" },
 			{
 				"name": "attributionProject",
@@ -21541,6 +21956,10 @@
 			{
 				"name": "claudeMdExcludes",
 				"detail": "Glob patterns or absolute paths of CLAUDE.md files to exclude from loading. Patterns are matched against absolute file paths using picomatch. Only applies to User, Project, and Local memory types (Man…"
+			},
+			{
+				"name": "clawdFileProgressEnabled",
+				"detail": "@internal Whether to show Clawd, Claude Code's mascot, carrying the file on the progress line when a file goes to or from a connector"
 			},
 			{
 				"name": "cleanupPeriodDays",
@@ -21672,7 +22091,7 @@
 			},
 			{
 				"name": "enabledPlugins",
-				"detail": "Enabled plugins using plugin-id@marketplace-id format. Example: { \"formatter@anthropic-tools\": true }. Also supports extended format with version constraints. Settings precedence is user < project < l…"
+				"detail": "Enabled plugins using plugin-id@marketplace-id format. Example: { \"formatter@anthropic-tools\": true }. Only true turns on a marketplace plugin: a list of versions is accepted but leaves it off. Settin…"
 			},
 			{
 				"name": "enforceAvailableModels",
@@ -21855,6 +22274,10 @@
 				"detail": "URL template for PR links in the footer link badges and inline messages. The detected git PR is rendered as the first footer-link badge. Placeholders: {host} {owner} {repo} {number} {url}. Example: \"h…"
 			},
 			{
+				"name": "precomputeArmTokens",
+				"detail": "@internal Read from the flag settings only, for a host that sends /compact below the automatic threshold: the main conversation starts its background compaction summary at this many tokens, when that …"
+			},
+			{
 				"name": "precomputeCompactionEnabled",
 				"detail": "Precompute the compaction summary in the background before it is needed. Only applies when auto-compact is on."
 			},
@@ -21999,7 +22422,7 @@
 			{ "name": "subagentPromptCacheTtl" },
 			{
 				"name": "subagentStatusLine",
-				"detail": "Custom per-subagent status line shown in the agent panel; receives row context as JSON on stdin"
+				"detail": "Deprecated: no longer has any effect. Subagent rows always use the default look."
 			},
 			{
 				"name": "switchModelsOnFlag",
@@ -22152,7 +22575,7 @@
 			},
 			{
 				"name": "additionalMarketplaces.*.source.package",
-				"detail": "npm package containing marketplace.json (e.g. \"@acme/claude-marketplace\"). In strictKnownMarketplaces / blockedMarketplaces an entry also governs plugins installed straight from the npm marketplace (`…"
+				"detail": "npm package containing marketplace.json (e.g. \"@acme/claude-marketplace\"). A scope wildcard such as \"@acme/*\" still parses in a managed list, so a list that holds one stays valid, but it matches no ma…"
 			},
 			{
 				"name": "additionalMarketplaces.*.source.path",
@@ -22172,7 +22595,7 @@
 			},
 			{
 				"name": "additionalMarketplaces.*.source.registry",
-				"detail": "Registry URL. When adding a marketplace: a one-off registry override (otherwise your npm configuration decides). In a policy entry: the origin and path prefix the package's RESOLVED tarball URL must f…"
+				"detail": "Registry URL. When adding a marketplace: a one-off registry override (otherwise your npm configuration decides). Under allowManagedPermissionRulesOnly, an npm marketplace keeps plugin allowed-tools on…"
 			},
 			{ "name": "additionalMarketplaces.*.source.repo" },
 			{
@@ -22288,7 +22711,7 @@
 			},
 			{
 				"name": "extraKnownMarketplaces.*.source.package",
-				"detail": "npm package containing marketplace.json (e.g. \"@acme/claude-marketplace\"). In strictKnownMarketplaces / blockedMarketplaces an entry also governs plugins installed straight from the npm marketplace (`…"
+				"detail": "npm package containing marketplace.json (e.g. \"@acme/claude-marketplace\"). A scope wildcard such as \"@acme/*\" still parses in a managed list, so a list that holds one stays valid, but it matches no ma…"
 			},
 			{
 				"name": "extraKnownMarketplaces.*.source.path",
@@ -22308,7 +22731,7 @@
 			},
 			{
 				"name": "extraKnownMarketplaces.*.source.registry",
-				"detail": "Registry URL. When adding a marketplace: a one-off registry override (otherwise your npm configuration decides). In a policy entry: the origin and path prefix the package's RESOLVED tarball URL must f…"
+				"detail": "Registry URL. When adding a marketplace: a one-off registry override (otherwise your npm configuration decides). Under allowManagedPermissionRulesOnly, an npm marketplace keeps plugin allowed-tools on…"
 			},
 			{ "name": "extraKnownMarketplaces.*.source.repo" },
 			{
@@ -22365,12 +22788,16 @@
 				"detail": "List of permission rules that should always prompt for confirmation"
 			},
 			{
+				"name": "permissions.blockFileToolReadsOutsideWorkingDirectories",
+				"detail": "@internal For the program that starts Claude Code: read only from --settings at the launch; ignored in settings sent to a running session and in user, project, local and managed settings. Refuse reads…"
+			},
+			{
 				"name": "permissions.blockReadsExemptPaths",
 				"detail": "For the program that starts Claude Code: read only from --settings and from settings that program sends while the session runs; ignored in user, project, local and managed settings. Absolute paths, ea…"
 			},
 			{
 				"name": "permissions.blockReadsOutsideWorkingDirectories",
-				"detail": "Refuse file-tool reads (Read, Grep, Glob, LSP) outside the working directories in every permission mode; true in any settings source wins. No allow rule lifts it. Also set when the user picks \"block\" …"
+				"detail": "Refuse file-tool reads (Read, Grep, Glob, LSP) outside the working directories in every permission mode; true in any settings source wins. No allow rule lifts it. Also binds shell commands: one that n…"
 			},
 			{
 				"name": "permissions.blockWritesOutsideWorkingDirectories",
@@ -22627,12 +23054,12 @@
 		"slash-command": [
 			{
 				"name": "/add-dir",
-				"gate": "isEnabled ()=>ye()&&Ljr()",
+				"gate": "isEnabled ()=>he()&&A3r()",
 				"detail": "local-jsx | Add a new working directory"
 			},
 			{
 				"name": "/advisor",
-				"gate": "isEnabled ()=>ye()&&HR()",
+				"gate": "isEnabled ()=>he()&&ux()",
 				"detail": "local | Let Claude consult a stronger model at key moments"
 			},
 			{
@@ -22642,37 +23069,37 @@
 			},
 			{
 				"name": "/artifact-capabilities",
-				"gate": "isEnabled $n",
+				"gate": "isEnabled Mn",
 				"detail": "prompt"
 			},
 			{
 				"name": "/artifact-design",
-				"gate": "isEnabled Fn",
+				"gate": "isEnabled Bn",
 				"detail": "prompt | Design guidance and fundamentals for Artifacts."
 			},
 			{
 				"name": "/artifact-diagramming",
-				"gate": "isEnabled Hn",
+				"gate": "isEnabled Gn",
 				"detail": "prompt | Diagramming know-how for Artifacts - when a picture earns its place, how to draw one that shows the real mechanism, and the inline-SVG mechanics that keep it legible in both themes."
 			},
 			{
 				"name": "/artifacts",
-				"gate": "isEnabled ()=>KR()&&gu()===null",
+				"gate": "isEnabled ()=>Gv()&&zc()===null",
 				"detail": "local-jsx | Browse your published and shared artifacts"
 			},
 			{
 				"name": "/auto-mode-setup",
-				"gate": "isEnabled ()=>vnt()&&!ye()",
+				"gate": "isEnabled ()=>ylt()&&!he()",
 				"detail": "local-jsx | Teach auto mode about your environment, plus optional rule tweaks"
 			},
 			{
 				"name": "/autocompact",
-				"gate": "isEnabled (){return ye()||Rn()}",
+				"gate": "isEnabled (){return he()||An()}",
 				"detail": "local | Configure the auto-compact window size"
 			},
 			{
 				"name": "/autofix-pr",
-				"gate": "availability claude-ai, console-profile; isEnabled ()=>Zgn()&&!ye()",
+				"gate": "availability claude-ai, console-profile; isEnabled ()=>nEn()&&!he()",
 				"detail": "local | Monitor and autofix any issues with the current PR"
 			},
 			{
@@ -22707,18 +23134,18 @@
 			},
 			{
 				"name": "/chrome",
-				"gate": "availability claude-ai; isEnabled ()=>!ye()&&hO()",
+				"gate": "availability claude-ai; isEnabled ()=>!he()&&bI()",
 				"detail": "local-jsx | Open Claude in Chrome settings"
 			},
 			{ "name": "/claude-api", "gate": "isEnabled ()=>!n", "detail": "prompt" },
 			{
 				"name": "/claude-code-docs",
-				"gate": "isEnabled (){return!i&&k(\"tengu_birch_kettle\",!1)}",
+				"gate": "isEnabled (){return!i&&b(\"tengu_birch_kettle\",!1)}",
 				"detail": "prompt"
 			},
 			{
 				"name": "/claude-in-chrome",
-				"gate": "isEnabled ()=>!e&&(ALe()||Dt())",
+				"gate": "isEnabled ()=>!e&&(WNe()||Nt())",
 				"detail": "prompt | Automates your Chrome browser to interact with web pages - clicking elements, filling forms, capturing screenshots, reading console logs, and navigating sites. Opens pages in new tabs within …"
 			},
 			{
@@ -22727,18 +23154,18 @@
 			},
 			{
 				"name": "/cloud-plugins",
-				"gate": "isEnabled ()=>Kjn()&&!i.CLAUDE_CODE_DISABLE_PLUGIN_FORWARDING",
+				"gate": "isEnabled ()=>pVn()&&!i.CLAUDE_CODE_DISABLE_PLUGIN_FORWARDING",
 				"detail": "local-jsx | Choose whether cloud sessions use the plugins enabled on this machine"
 			},
 			{ "name": "/code-review", "detail": "prompt (aliases review)" },
 			{
 				"name": "/color",
-				"gate": "isEnabled ()=>ye()",
+				"gate": "isEnabled ()=>he()",
 				"detail": "local | Set the prompt bar color for this session"
 			},
 			{
 				"name": "/commit",
-				"gate": "isEnabled ()=>lxo()",
+				"gate": "isEnabled ()=>bNo()",
 				"detail": "prompt | Create a git commit. Use whenever you are about to create a commit, whether the user asked for one or it is a step in your current task — it gathers git context and applies the required commi…"
 			},
 			{
@@ -22752,12 +23179,12 @@
 			},
 			{
 				"name": "/config",
-				"gate": "isEnabled ()=>ye()",
+				"gate": "isEnabled ()=>he()",
 				"detail": "local (aliases settings) | Set a setting by key"
 			},
 			{
 				"name": "/context",
-				"gate": "isEnabled (){return ye()}",
+				"gate": "isEnabled (){return he()}",
 				"detail": "local | Show current context usage"
 			},
 			{
@@ -22766,7 +23193,7 @@
 			},
 			{
 				"name": "/cowork-plugin",
-				"gate": "isEnabled ()=>Qp()||J_()||i.CLAUDE_CODE_COWORK_PLUGIN_SKILL&&!Ese()",
+				"gate": "isEnabled ()=>Ip()||wS()||i.CLAUDE_CODE_COWORK_PLUGIN_SKILL&&!t8()",
 				"detail": "prompt | Create a new Cowork plugin from scratch, or customize an installed plugin for a specific organization. Use when: customize plugin, set up plugin, configure plugin, tailor plugin, adjust plugi…"
 			},
 			{
@@ -22788,32 +23215,32 @@
 			},
 			{
 				"name": "/design-consent",
-				"gate": "hidden; isEnabled ()=>CV()",
+				"gate": "hidden; isEnabled ()=>R4()",
 				"detail": "local | Grant Claude agent access to your Design projects"
 			},
 			{
 				"name": "/design-login",
-				"gate": "isEnabled ()=>CV()",
+				"gate": "isEnabled ()=>R4()",
 				"detail": "local-jsx | Authorize design-system access for /design-sync with your claude.ai account"
 			},
 			{
 				"name": "/design-revoke",
-				"gate": "hidden; isEnabled ()=>CV()",
+				"gate": "hidden; isEnabled ()=>R4()",
 				"detail": "local | Revoke Claude agent access to your Design projects"
 			},
 			{
 				"name": "/design-sync",
-				"gate": "isEnabled CV",
+				"gate": "isEnabled R4",
 				"detail": "prompt | Push a React design system to claude.ai/design. This runs a converter that bundles the real component code (from Storybook or a bare package) and uploads it. Use when the user runs /design-sy…"
 			},
 			{
 				"name": "/desktop",
-				"gate": "availability claude-ai; isEnabled TDe",
+				"gate": "availability claude-ai; isEnabled ()=>FHe()||L4n()!==null",
 				"detail": "local-jsx (aliases app) | Continue the current session in Claude Desktop"
 			},
 			{
 				"name": "/diff",
-				"gate": "isEnabled ()=>!Eao()",
+				"gate": "isEnabled ()=>!Apo()",
 				"detail": "local-jsx"
 			},
 			{
@@ -22823,13 +23250,13 @@
 			},
 			{
 				"name": "/effort",
-				"gate": "isEnabled ()=>ye()",
+				"gate": "isEnabled ()=>he()",
 				"detail": "local | Set effort level for model usage"
 			},
 			{ "name": "/exit", "detail": "local" },
 			{
 				"name": "/explain-usage",
-				"gate": "isEnabled ()=>Qp()||J_()",
+				"gate": "isEnabled ()=>Ip()||wS()",
 				"detail": "prompt | Explain where this session's tokens went, with one simple chart in plain language. Use when: explain usage, explain my usage, where did my tokens go, token usage breakdown, what used the most…"
 			},
 			{
@@ -22838,10 +23265,10 @@
 			},
 			{
 				"name": "/extra-usage",
-				"gate": "hidden; isEnabled ()=>KO()&&ye()",
+				"gate": "hidden; isEnabled ()=>SO()&&he()",
 				"detail": "local | Renamed to /usage-credits"
 			},
-			{ "name": "/fast", "gate": "isEnabled ()=>ye()", "detail": "local" },
+			{ "name": "/fast", "gate": "isEnabled ()=>he()", "detail": "local" },
 			{
 				"name": "/feedback",
 				"detail": "local-jsx | Send feedback to Anthropic or report a bug"
@@ -22852,17 +23279,17 @@
 			},
 			{
 				"name": "/focus",
-				"gate": "isEnabled ()=>ye()",
+				"gate": "isEnabled ()=>he()",
 				"detail": "local | Toggle focus view: just your prompt, summary, and response"
 			},
 			{
 				"name": "/fork",
-				"gate": "isEnabled ()=>!Fa()",
+				"gate": "isEnabled ()=>!$a()",
 				"detail": "local-jsx | Copy this conversation into a new background session and keep working here"
 			},
 			{
 				"name": "/goal",
-				"gate": "isEnabled ()=>ye()||Rn()",
+				"gate": "isEnabled ()=>he()||An()",
 				"detail": "local | Set a goal — keep working until the condition is met"
 			},
 			{
@@ -22884,7 +23311,7 @@
 			},
 			{
 				"name": "/import",
-				"gate": "isEnabled ()=>y2e()&&ye()&&!q()",
+				"gate": "isEnabled ()=>$Ge()&&he()&&!K()",
 				"detail": "local | Import config from another AI coding agent"
 			},
 			{ "name": "/init", "detail": "prompt" },
@@ -22908,27 +23335,27 @@
 			},
 			{
 				"name": "/keybindings",
-				"gate": "isEnabled ()=>Hse()",
+				"gate": "isEnabled ()=>Hae()",
 				"detail": "local | Open your keyboard shortcuts file"
 			},
 			{
 				"name": "/keybindings-help",
-				"gate": "isEnabled Hse",
+				"gate": "isEnabled Hae",
 				"detail": "prompt | Use when the user wants to customize keyboard shortcuts, rebind keys, add chord bindings, or modify ~/.claude/keybindings.json. Examples: \"rebind ctrl+s\", \"add a chord shortcut\", \"change the …"
 			},
 			{
 				"name": "/limit-reset",
-				"gate": "hidden; isEnabled ()=>Tt()&&(JCe()||tue())",
+				"gate": "hidden; isEnabled ()=>At()&&(nRe()||rpe())",
 				"detail": "local-jsx"
 			},
 			{
 				"name": "/list-agents",
-				"gate": "isEnabled ()=>zl()",
+				"gate": "isEnabled ()=>ed()",
 				"detail": "local (aliases peers) | List subagents, teammates, and other Claude sessions you can message"
 			},
 			{
 				"name": "/login",
-				"gate": "isEnabled ()=>{let e=sr();return!i.DISABLE_LOGIN_COMMAND&&(e===null||e.sessionId!==void 0)}",
+				"gate": "isEnabled ()=>{let e=lr();return!i.DISABLE_LOGIN_COMMAND&&(e===null||e.sessionId!==void 0)}",
 				"detail": "local-jsx"
 			},
 			{
@@ -22938,7 +23365,7 @@
 			},
 			{
 				"name": "/loop",
-				"gate": "isEnabled U0",
+				"gate": "isEnabled BD",
 				"detail": "prompt (aliases proactive) | Run a prompt or slash command on a recurring interval (e.g. /loop 5m /foo). Omit the interval to let the model self-pace."
 			},
 			{
@@ -22948,12 +23375,12 @@
 			},
 			{
 				"name": "/low-priority",
-				"gate": "hidden; isEnabled ()=>Tt()&&(mH()||MNt())",
+				"gate": "hidden; isEnabled ()=>At()&&(hN()||yUt())",
 				"detail": "local | Continue now at lower priority after reaching your 5-hour limit; run again to stop"
 			},
 			{
 				"name": "/mcp",
-				"gate": "isEnabled ()=>ye()",
+				"gate": "isEnabled ()=>he()",
 				"detail": "local-jsx | Manage MCP servers"
 			},
 			{
@@ -22964,10 +23391,10 @@
 				"name": "/mobile",
 				"detail": "local-jsx (aliases ios, android) | Show QR code to download the Claude mobile app"
 			},
-			{ "name": "/model", "gate": "isEnabled ()=>ye()", "detail": "local-jsx" },
+			{ "name": "/model", "gate": "isEnabled ()=>he()", "detail": "local-jsx" },
 			{
 				"name": "/output-style",
-				"gate": "isEnabled ()=>ye()||!ADe()||yhn()",
+				"gate": "isEnabled ()=>he()||!$He()||SEn()",
 				"detail": "local | List output styles or switch to one"
 			},
 			{ "name": "/passes", "detail": "local-jsx" },
@@ -22994,12 +23421,12 @@
 			},
 			{
 				"name": "/pr",
-				"gate": "isEnabled ()=>lxo()",
+				"gate": "isEnabled ()=>bNo()",
 				"detail": "prompt | Create a GitHub pull request. Use whenever you are about to open a PR, whether the user asked for one or it is a step in your current task — it gathers branch context and applies the required…"
 			},
 			{
 				"name": "/privacy-settings",
-				"gate": "isEnabled ()=>c1()",
+				"gate": "isEnabled ()=>CB()",
 				"detail": "local-jsx | View and update your privacy settings"
 			},
 			{
@@ -23009,13 +23436,13 @@
 			},
 			{
 				"name": "/project",
-				"gate": "isEnabled ()=>gvs()&&k(uwr,!1)",
+				"gate": "isEnabled ()=>d0s()&&b(T0r,!1)",
 				"detail": "local | Set the claude.ai Project for this session's usage reports"
 			},
 			{ "name": "/radio", "detail": "local | Listen to Claude FM lo-fi radio" },
 			{
 				"name": "/rate-limit-options",
-				"gate": "isEnabled ()=>Tt()||!1",
+				"gate": "isEnabled ()=>At()||!1",
 				"detail": "local-jsx | Manage usage limits and upgrade options"
 			},
 			{
@@ -23038,22 +23465,22 @@
 			},
 			{
 				"name": "/remote-env",
-				"gate": "availability claude-ai, console-profile; isEnabled ()=>Tt()||_dn()",
+				"gate": "availability claude-ai, console-profile; isEnabled ()=>At()||Dmn()",
 				"detail": "local-jsx | Choose the default environment for cloud agents"
 			},
 			{
 				"name": "/rename",
-				"gate": "isEnabled ()=>ye()",
+				"gate": "isEnabled ()=>he()",
 				"detail": "local (aliases name) | Rename the current conversation"
 			},
 			{
 				"name": "/restart",
-				"gate": "isEnabled CSn",
+				"gate": "isEnabled GAn",
 				"detail": "local (aliases update)"
 			},
 			{
 				"name": "/resume",
-				"gate": "isEnabled fbr",
+				"gate": "isEnabled WBr",
 				"detail": "local-jsx (aliases continue)"
 			},
 			{
@@ -23071,12 +23498,12 @@
 			{ "name": "/sandbox", "detail": "local-jsx" },
 			{
 				"name": "/schedule",
-				"gate": "isEnabled ()=>Fn()&&Tt()&&!i.CLAUDE_CODE_REMOTE&&gn(jde)",
+				"gate": "isEnabled ()=>Wn()&&At()&&!i.CLAUDE_CODE_REMOTE&&gn(WY)",
 				"detail": "local (aliases routines) | Create and manage scheduled remote Claude Code agents"
 			},
 			{
 				"name": "/scroll-speed",
-				"gate": "isEnabled ()=>{if(!Xd())return!1;let e=vf();return!(e?eke.includes(e.terminal??\"\"):FR.isJetBrainsIdeTerminal())}",
+				"gate": "isEnabled ()=>{if(!ec())return!1;let e=Wf();return!(e?uTe.includes(e.terminal??\"\"):fx.isJetBrainsIdeTerminal())}",
 				"detail": "local-jsx | Adjust mouse wheel scroll speed"
 			},
 			{
@@ -23085,27 +23512,27 @@
 			},
 			{
 				"name": "/send-to-project",
-				"gate": "isEnabled zAt",
+				"gate": "isEnabled QOt",
 				"detail": "prompt | Send this session's work to a Claude Project"
 			},
 			{
 				"name": "/session",
-				"gate": "isEnabled ()=>Rn()",
+				"gate": "isEnabled ()=>An()",
 				"detail": "local-jsx (aliases remote) | Show cloud session URL and QR code"
 			},
 			{
 				"name": "/setup-bedrock",
-				"gate": "isEnabled ()=>zpe(\"bedrock\")===void 0",
+				"gate": "isEnabled ()=>oge(\"bedrock\")===void 0&&!0",
 				"detail": "local-jsx | Reconfigure Amazon Bedrock authentication, region, or model pins"
 			},
 			{
 				"name": "/setup-claude",
-				"gate": "isEnabled ()=>Qp()||J_()",
+				"gate": "isEnabled ()=>Ip()||wS()",
 				"detail": "prompt (aliases setup-cowork) | Guided setup — pick a role, install a matching plugin, try a skill, connect tools. Use when: set up claude, setup claude, set up cowork, setup cowork, get started with …"
 			},
 			{
 				"name": "/setup-vertex",
-				"gate": "isEnabled ()=>zpe(\"vertex\")===void 0",
+				"gate": "isEnabled ()=>oge(\"vertex\")===void 0&&!0",
 				"detail": "local-jsx | Reconfigure Google Vertex AI authentication, project, region, or model pins"
 			},
 			{
@@ -23114,7 +23541,7 @@
 			},
 			{
 				"name": "/skill-doctor",
-				"gate": "isEnabled ()=>ye()",
+				"gate": "isEnabled ()=>he()",
 				"detail": "local | Show which loaded skills are unused and costing context"
 			},
 			{ "name": "/skills", "detail": "local-jsx | List available skills" },
@@ -23126,15 +23553,18 @@
 				"name": "/statusline",
 				"detail": "prompt | Set up Claude Code's status line UI"
 			},
-			{ "name": "/stickers", "detail": "local | Order Claude Code stickers" },
+			{
+				"name": "/stickers",
+				"detail": "local | Check Claude Code sticker availability"
+			},
 			{
 				"name": "/stop",
-				"gate": "isEnabled Vt",
+				"gate": "isEnabled Kt",
 				"detail": "local | Stop this background session; transcript and worktree are kept"
 			},
 			{
 				"name": "/subtask",
-				"gate": "isEnabled ()=>!Fa()",
+				"gate": "isEnabled ()=>!$a()",
 				"detail": "local-jsx | Send a subagent off with your full context; its result comes back here"
 			},
 			{
@@ -23143,11 +23573,12 @@
 			},
 			{
 				"name": "/team-onboarding",
+				"gate": "isEnabled $wr",
 				"detail": "prompt | Help teammates ramp on Claude Code with a guide from your usage"
 			},
 			{
 				"name": "/teleport",
-				"gate": "availability claude-ai, console-profile; isEnabled ()=>Tt()||_dn()",
+				"gate": "availability claude-ai, console-profile; isEnabled ()=>At()||Dmn()",
 				"detail": "local (aliases tp) | Send this session to the cloud, or resume one from claude.ai"
 			},
 			{ "name": "/terminal-setup", "detail": "local-jsx" },
@@ -23158,12 +23589,12 @@
 			},
 			{
 				"name": "/ultraplan",
-				"gate": "availability claude-ai; isEnabled ()=>dX()",
+				"gate": "availability claude-ai; isEnabled ()=>NX()",
 				"detail": "local | A cloud session drafts a plan you can edit and approve"
 			},
 			{
 				"name": "/ultrareview",
-				"gate": "isEnabled ()=>ye()&&yU()",
+				"gate": "isEnabled ()=>he()&&RU()",
 				"detail": "local | Find and verify bugs in your branch using a cloud session"
 			},
 			{
@@ -23172,22 +23603,22 @@
 			},
 			{
 				"name": "/upgrade",
-				"gate": "availability claude-ai; isEnabled DSe",
+				"gate": "availability claude-ai; isEnabled Nwe",
 				"detail": "local-jsx | Upgrade your plan for higher rate limits and more Opus"
 			},
 			{
 				"name": "/usage",
-				"gate": "isEnabled ()=>ye()",
+				"gate": "isEnabled ()=>he()",
 				"detail": "local (aliases cost, stats) | Show session cost, plan usage, and what's contributing to your limits"
 			},
 			{
 				"name": "/usage-credits",
-				"gate": "isEnabled ()=>KO()&&ye()",
+				"gate": "isEnabled ()=>SO()&&he()",
 				"detail": "local | Configure usage credits or request them from your admin when you hit a limit"
 			},
 			{
 				"name": "/use-case",
-				"gate": "availability claude-ai; isEnabled ()=>xD()&&!vt()",
+				"gate": "availability claude-ai; isEnabled ()=>DL()&&!Et()",
 				"detail": "local-jsx | Choose the Life Sciences use case that applies to your requests"
 			},
 			{
@@ -23206,7 +23637,7 @@
 			},
 			{
 				"name": "/web-setup",
-				"gate": "availability claude-ai; isEnabled VGe",
+				"gate": "availability claude-ai; isEnabled _4e",
 				"detail": "local-jsx | Set up cloud sessions with your GitHub account"
 			},
 			{
@@ -23216,7 +23647,7 @@
 			},
 			{
 				"name": "/workflow-authoring",
-				"gate": "isEnabled ()=>Sm()",
+				"gate": "isEnabled ()=>Bm()",
 				"detail": "prompt"
 			},
 			{
@@ -23226,7 +23657,7 @@
 			},
 			{
 				"name": "/workflows",
-				"gate": "isEnabled ()=>Sm()",
+				"gate": "isEnabled ()=>Bm()",
 				"detail": "local-jsx | Browse running and completed workflows"
 			}
 		],
@@ -23245,7 +23676,6 @@
 			{ "name": "daemon", "detail": "[subcommand] [options]" },
 			{ "name": "design-login", "gate": "hidden" },
 			{ "name": "doctor" },
-			{ "name": "drop-worktree-registrations", "gate": "hidden" },
 			{ "name": "edit-chrome-settings", "gate": "hidden" },
 			{ "name": "edit-hook", "gate": "hidden" },
 			{ "name": "edit-memory-settings", "gate": "hidden" },
@@ -23323,227 +23753,233 @@
 			{ "name": "self-hosted-runner setup", "detail": "[args...]" },
 			{ "name": "setup-token" },
 			{ "name": "ultrareview", "detail": "[target]" },
-			{ "name": "update" }
+			{ "name": "update" },
+			{ "name": "workspace-trust", "gate": "hidden" }
 		],
 		"tool": [
 			{ "name": "Agent" },
 			{
 				"name": "AppifactRepl",
-				"gate": "is (=import.meta.require(\"/$bunfs/root/chunk-wx3tyafy.js\").AppifactReplTool)",
-				"detail": "isEnabled(){return jts()&&KR()&&!id()}"
+				"gate": "ei (=import.meta.require(\"/$bunfs/root/chunk-y00rsa8r.js\").AppifactReplTool)",
+				"detail": "isEnabled(){return s$s()&&Gv()&&!fd()}"
 			},
 			{
 				"name": "Artifact",
-				"gate": "ss (=Kn(import.meta.require(\"/$bunfs/root/chunk-h7a64myh.js\").ARTIFACT_TOOL_HEAD,()=>import.meta.require(\"/$bunfs/root/chunk-rt9r79t5.js\").ArtifactTool))",
-				"detail": "isEnabled(){xIs();let e=Xsn();return PIs(e),e===null&&!id()}"
+				"gate": "Js (=$s(import.meta.require(\"/$bunfs/root/chunk-xw15ef0y.js\").ARTIFACT_TOOL_HEAD,()=>import.meta.require(\"/$bunfs/root/chunk-h0rf5sg2.js\").ArtifactTool))",
+				"detail": "isEnabled(){ujs();let e=Zcn();return fjs(e),e===null&&!fd()}"
 			},
 			{ "name": "ArtifactCheck" },
 			{ "name": "ArtifactComments" },
 			{ "name": "ArtifactData" },
-			{ "name": "AskUserQuestion", "detail": "isEnabled(){return yie()}" },
-			{ "name": "Bash", "gate": "Ul()" },
+			{ "name": "AskUserQuestion", "detail": "isEnabled(){return Sle()}" },
+			{ "name": "Bash", "gate": "zl()" },
 			{
 				"name": "ClaudeDesign",
-				"gate": "e (=wl())",
-				"detail": "isEnabled:V5e"
+				"gate": "e (=Ic())",
+				"detail": "isEnabled:sYe"
 			},
-			{ "name": "CronCreate", "detail": "isEnabled(){return U0()}" },
-			{ "name": "CronDelete", "detail": "isEnabled(){return YLn()}" },
-			{ "name": "CronList", "detail": "isEnabled(){return YLn()}" },
-			{ "name": "DesignSync", "detail": "isEnabled(){return CV()}" },
+			{ "name": "CronCreate", "detail": "isEnabled(){return BD()}" },
+			{ "name": "CronDelete", "detail": "isEnabled(){return H$n()}" },
+			{ "name": "CronList", "detail": "isEnabled(){return H$n()}" },
+			{ "name": "DesignSync", "detail": "isEnabled(){return R4()}" },
 			{ "name": "Edit" },
 			{
 				"name": "EndConversation",
-				"gate": "os (=import.meta.require(\"/$bunfs/root/chunk-qfs6e9bp.js\").EndConversationTool)",
-				"detail": "isEnabled(){let e=hln();return e!==void 0&&h7r(e)}"
+				"gate": "Xs (=import.meta.require(\"/$bunfs/root/chunk-n73mn8nz.js\").EndConversationTool)",
+				"detail": "isEnabled(){let e=ivt();return e!==void 0&&aso(e)}"
 			},
 			{
 				"name": "EnterPlanMode",
-				"detail": "isEnabled(){return yY.isEnabled()}"
+				"detail": "isEnabled(){return JY.isEnabled()}"
 			},
-			{ "name": "EnterWorktree", "gate": "wqt()" },
+			{ "name": "EnterWorktree", "gate": "_8t()" },
 			{
 				"name": "ExitPlanMode",
-				"detail": "isEnabled(){return lc()?rRs():yie()}"
+				"detail": "isEnabled(){return Ec()?IHs():Sle()}"
 			},
-			{ "name": "ExitWorktree", "gate": "wqt()" },
+			{ "name": "ExitWorktree", "gate": "_8t()" },
 			{
 				"name": "FetchInboxMessage",
-				"gate": "We (=import.meta.require(\"/$bunfs/root/chunk-pge5km6j.js\").FetchInboxMessageTool)",
-				"detail": "isEnabled(){return Qu()||Z$n()!==void 0}"
+				"gate": "nt (=import.meta.require(\"/$bunfs/root/chunk-4105n21a.js\").FetchInboxMessageTool)",
+				"detail": "isEnabled(){return mc()||UGn()!==void 0}"
 			},
 			{ "name": "GetTask", "detail": "isEnabled(){return!1}" },
-			{ "name": "Glob", "gate": "(n)=>!Rce().has(n.name)" },
-			{ "name": "Grep", "gate": "(n)=>!Rce().has(n.name)" },
-			{ "name": "LSP", "gate": "hJe()", "detail": "isEnabled(){return PYe()}" },
+			{ "name": "Glob", "gate": "(n)=>!_X().has(n.name)" },
+			{ "name": "Grep", "gate": "(n)=>!_X().has(n.name)" },
+			{ "name": "LSP", "gate": "QZe()", "detail": "isEnabled(){return fJe()}" },
 			{
 				"name": "ListAgents",
-				"gate": "gs (=import.meta.require(\"/$bunfs/root/chunk-rwd8svf7.js\").ListAgentsTool)",
-				"detail": "isEnabled(){return zl()}"
+				"gate": "ai (=import.meta.require(\"/$bunfs/root/chunk-kt4ww5px.js\").ListAgentsTool)",
+				"detail": "isEnabled(){return ed()}"
 			},
 			{
 				"name": "ListConnectors",
-				"gate": "Zn (=import.meta.require(\"/$bunfs/root/chunk-mhgzhwyz.js\").ListConnectorsTool)",
-				"detail": "isEnabled:Nje"
+				"gate": "Ks (=import.meta.require(\"/$bunfs/root/chunk-sq0k5327.js\").ListConnectorsTool)",
+				"detail": "isEnabled:v6e"
 			},
 			{ "name": "ListMcpResourcesTool" },
 			{ "name": "ListPlugins" },
 			{ "name": "ListSkills" },
 			{
 				"name": "MonitorTool",
-				"gate": "Jn (=import.meta.require(\"/$bunfs/root/chunk-etsyb3fk.js\").MonitorTool)"
+				"gate": "Vs (=import.meta.require(\"/$bunfs/root/chunk-vavp8ckg.js\").MonitorTool)"
 			},
 			{ "name": "NotebookEdit" },
-			{ "name": "OfferChromeSetup", "detail": "isEnabled:P3r" },
+			{ "name": "OfferChromeSetup", "detail": "isEnabled:TQr" },
 			{
 				"name": "Poll",
-				"gate": "Te (=import.meta.require(\"/$bunfs/root/chunk-v1h96r9m.js\").PollTool)",
-				"detail": "isEnabled(){return hM()}"
+				"gate": "Ae (=import.meta.require(\"/$bunfs/root/chunk-mamg8265.js\").PollTool)",
+				"detail": "isEnabled(){return SR()}"
 			},
 			{
 				"name": "PowerShell",
-				"gate": "io()",
+				"gate": "Oo()",
 				"detail": "isEnabled(){return!0}"
 			},
 			{
 				"name": "Projects",
-				"detail": "isEnabled(){return gn(\"allow_projects_tool\")&&Pe()!==void 0}"
+				"detail": "isEnabled(){return gn(\"allow_projects_tool\")&&De()!==void 0}"
 			},
 			{
 				"name": "ProposeGoal",
-				"detail": "isEnabled(){if(ye()||Rn())return!1;if(Vt())return!1;if(!Ksr())return!1;let e=fWt();if(e===\"disabled\")return!1;return A(e),!0}"
+				"detail": "isEnabled(){if(he()||An())return!1;if(Kt())return!1;if(!fpr())return!1;let e=i4t();if(e===\"disabled\")return!1;return E(e),!0}"
 			},
-			{ "name": "PublishPlugin", "detail": "isEnabled(){return hnr()}" },
+			{ "name": "PublishPlugin", "detail": "isEnabled(){return wdr()}" },
 			{
 				"name": "PushNotification",
-				"gate": "ts (=import.meta.require(\"/$bunfs/root/chunk-6d8kf1qt.js\").PushNotificationTool)",
-				"detail": "isEnabled(){return V9(\"tengu_kairos_push_notifications\",!1,g)}"
+				"gate": "Ys (=import.meta.require(\"/$bunfs/root/chunk-tq9gd7wr.js\").PushNotificationTool)",
+				"detail": "isEnabled(){return b7(\"tengu_kairos_push_notifications\",!1,R)}"
 			},
 			{
 				"name": "REPL",
-				"gate": "r (=ys())",
-				"detail": "isEnabled(){return Wi()}"
+				"gate": "r (=ci())",
+				"detail": "isEnabled(){return Yi()}"
 			},
 			{ "name": "Read" },
 			{ "name": "ReadMcpResourceDirTool" },
 			{ "name": "ReadMcpResourceTool" },
-			{ "name": "ReadNotifications", "detail": "isEnabled:Bnr" },
-			{ "name": "ReadWidgetContext", "detail": "isEnabled:oIt" },
+			{ "name": "ReadNotifications", "detail": "isEnabled:rcr" },
+			{ "name": "ReadWidgetContext", "detail": "isEnabled:IDt" },
 			{
 				"name": "RefreshMcpTools",
 				"gate": "i.CLAUDE_CODE_ENABLE_REFRESH_MCP_TOOLS",
-				"detail": "isEnabled(){let e=h_();return e!==void 0&&e.length>0}"
+				"detail": "isEnabled(){let e=Sy();return e!==void 0&&e.length>0}"
 			},
 			{
 				"name": "RemoteTrigger",
-				"gate": "Yn (=import.meta.require(\"/$bunfs/root/chunk-3tf18zw7.js\").RemoteTriggerTool)",
-				"detail": "isEnabled(){return Fn()&&Tt()&&!i.CLAUDE_CODE_REMOTE&&gn(\"allow_remote_sessions\")&&gn(jde)}"
+				"gate": "Us (=import.meta.require(\"/$bunfs/root/chunk-wzfnt6br.js\").RemoteTriggerTool)",
+				"detail": "isEnabled(){return Wn()&&At()&&!i.CLAUDE_CODE_REMOTE&&!0&&gn(\"allow_remote_sessions\")&&gn(WY)}"
 			},
 			{ "name": "ReportFindings" },
-			{ "name": "ScheduleWakeup" },
+			{ "name": "ScheduleWakeup", "detail": "isEnabled(){return!0}" },
 			{
 				"name": "SearchMcpRegistry",
-				"gate": "Xn (=import.meta.require(\"/$bunfs/root/chunk-tkntaqsg.js\").SearchMcpRegistryTool)",
-				"detail": "isEnabled:Nje"
+				"gate": "qs (=import.meta.require(\"/$bunfs/root/chunk-9xayswg1.js\").SearchMcpRegistryTool)",
+				"detail": "isEnabled:v6e"
 			},
 			{ "name": "SearchPlugins" },
 			{ "name": "SearchSkills" },
-			{ "name": "SendFeedback", "detail": "isEnabled(){return wY()}" },
-			{ "name": "SendFile", "detail": "isEnabled(){return RQe()}" },
+			{ "name": "SendFeedback", "detail": "isEnabled(){return tX()}" },
+			{ "name": "SendFile", "detail": "isEnabled(){return ket()}" },
 			{ "name": "SendMessage" },
 			{
 				"name": "SendToProject",
-				"gate": "rs (=import.meta.require(\"/$bunfs/root/chunk-tvzf91w2.js\").ContinueInProjectsTool)",
-				"detail": "isEnabled(){return zAt()}"
+				"gate": "Qs (=import.meta.require(\"/$bunfs/root/chunk-jx9c5bzc.js\").ContinueInProjectsTool)",
+				"detail": "isEnabled(){return QOt()}"
 			},
 			{
 				"name": "SendToProjectContext",
-				"gate": "ns (=import.meta.require(\"/$bunfs/root/chunk-tvzf91w2.js\").ContinueInProjectsContextTool)",
-				"detail": "isEnabled(){return zAt()}"
+				"gate": "Zs (=import.meta.require(\"/$bunfs/root/chunk-jx9c5bzc.js\").ContinueInProjectsContextTool)",
+				"detail": "isEnabled(){return QOt()}"
 			},
 			{
 				"name": "SendUserFile",
-				"detail": "isEnabled(){let t=!i.CLAUDE_CODE_ATTACHMENTS_BY_PATH;if(t&&(ve()!==\"firstParty\"||gt()))return!1;if(t&&!gn(\"allow_send_file\"))return!1;if(!k(\"tengu_send_user_file\",!0))return!1;return(Qu()||j())&&!F2()…"
+				"detail": "isEnabled(){let t=!i.CLAUDE_CODE_ATTACHMENTS_BY_PATH;if(t&&(ve()!==\"firstParty\"||yt()))return!1;if(t&&!gn(\"allow_send_file\"))return!1;if(!b(\"tengu_send_user_file\",!0))return!1;return(mc()||P())&&!K6()…"
 			},
 			{
 				"name": "SendUserMessage",
-				"detail": "isEnabled(){return F2()||mJe()}"
+				"detail": "isEnabled(){return K6()||iet()}"
 			},
-			{ "name": "ShareOnboardingGuide", "detail": "isEnabled(){return c7t()}" },
-			{ "name": "ShowOnboardingRolePicker", "detail": "isEnabled:Bs" },
-			{ "name": "Skill", "detail": "isEnabled(){return!hw()}" },
+			{ "name": "ShareOnboardingGuide", "detail": "isEnabled(){return ien()}" },
+			{ "name": "ShowOnboardingRolePicker", "detail": "isEnabled:Pi" },
+			{ "name": "Skill", "detail": "isEnabled(){return!Kw()}" },
 			{
 				"name": "SuggestConnectors",
-				"gate": "Qn (=import.meta.require(\"/$bunfs/root/chunk-s2hmn3as.js\").SuggestConnectorsTool)",
-				"detail": "isEnabled:Nje"
+				"gate": "Gs (=import.meta.require(\"/$bunfs/root/chunk-2akdabwe.js\").SuggestConnectorsTool)",
+				"detail": "isEnabled:v6e"
 			},
-			{ "name": "SuggestPluginInstall", "detail": "isEnabled:gdt" },
-			{ "name": "SuggestSkills", "detail": "isEnabled:gdt" },
+			{ "name": "SuggestPluginInstall", "detail": "isEnabled:Vft" },
+			{ "name": "SuggestSkills", "detail": "isEnabled:Vft" },
 			{
 				"name": "TaskCreate",
-				"gate": "iH()",
-				"detail": "isEnabled(){return Vye()}"
+				"gate": "iN()",
+				"detail": "isEnabled(){return QSe()}"
 			},
 			{
 				"name": "TaskGet",
-				"gate": "iH()",
-				"detail": "isEnabled(){return Vye()}"
+				"gate": "iN()",
+				"detail": "isEnabled(){return QSe()}"
 			},
 			{
 				"name": "TaskList",
-				"gate": "iH()",
-				"detail": "isEnabled(){return Vye()}"
+				"gate": "iN()",
+				"detail": "isEnabled(){return QSe()}"
 			},
 			{ "name": "TaskStop" },
 			{
 				"name": "TaskUpdate",
-				"gate": "iH()",
-				"detail": "isEnabled(){return Vye()}"
+				"gate": "iN()",
+				"detail": "isEnabled(){return QSe()}"
 			},
-			{ "name": "TodoWrite", "detail": "isEnabled(){return!iH()&&QY()}" },
+			{ "name": "TodoWrite", "detail": "isEnabled(){return!iN()&&EX()}" },
 			{
 				"name": "ToolSearch",
-				"gate": "Ah()",
-				"detail": "isEnabled(){return Ah()}"
+				"gate": "bh()",
+				"detail": "isEnabled(){return bh()}"
 			},
 			{
 				"name": "WaitForMcpServers",
-				"detail": "isEnabled(){return oBr(at(),h_()??[])}"
+				"detail": "isEnabled(){return yXr(st(),Sy()??[])}"
 			},
 			{
 				"name": "WebFetch",
-				"detail": "isEnabled(){return!i.CLAUDE_CODE_DISABLE_WEB_FETCH&&gn($Ft)}"
+				"detail": "isEnabled(){return!i.CLAUDE_CODE_DISABLE_WEB_FETCH&&gn(owt)}"
 			},
 			{
 				"name": "WebSearch",
-				"detail": "isEnabled(){if(!gn(c4i))return!1;let e=ve();if(e===\"firstParty\"||HM(e))return!0;if(e===\"gateway\")return!1;if(e===\"vertex\")return ARo(it(at()));if(e===\"foundry\")return!0;return!1}"
+				"detail": "isEnabled(){if(!gn(paa))return!1;let e=ve();if(e===\"firstParty\"||jM(e))return!0;if(e===\"gateway\")return!1;if(e===\"vertex\")return BHo(at(st()));if(e===\"foundry\")return!0;return!1}"
 			},
-			{ "name": "Workflow", "detail": "isEnabled:()=>Sm()" },
+			{ "name": "Workflow", "detail": "isEnabled:()=>Bm()" },
 			{
 				"name": "WrapUp",
-				"detail": "isEnabled(){return x9s()&&!zV()&&rn(oi,!1)}"
+				"detail": "isEnabled(){return Wsi()&&!Vq()&&tn(Xi,!1)&&(!zsi()||tn(Qi,!1))}"
 			},
 			{ "name": "Write" },
+			{
+				"name": "Yield",
+				"gate": "Ro (=import.meta.require(\"/$bunfs/root/chunk-wsbdy0t0.js\").YieldTool)",
+				"detail": "isEnabled:Ion"
+			},
 			{ "name": "enable__mcp__claude-in-chrome" },
 			{ "name": "enable__mcp__remote-devices__Claude_Browser" },
 			{ "name": "enable__mcp__remote-devices__computer" },
-			{ "name": "memory_list", "detail": "isEnabled(){return fNe()}" },
-			{ "name": "memory_read", "detail": "isEnabled(){return fNe()}" },
-			{ "name": "memory_write", "detail": "isEnabled(){return fNe()}" },
+			{ "name": "memory_list", "detail": "isEnabled(){return z1e()}" },
+			{ "name": "memory_read", "detail": "isEnabled(){return z1e()}" },
+			{ "name": "memory_write", "detail": "isEnabled(){return z1e()}" },
 			{
 				"name": "propose_skills",
-				"detail": "isEnabled(){if(Ese())return!1;if(J_())return i.CLAUDE_CODE_SYNC_SKILLS&&!tT();if(!Qp()&&!i.CLAUDE_CODE_SKILL_PROPOSALS&&!Ym())return!1;if(!i.CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE&&!(Mn()&&i.CLAUDE_CODE_…"
+				"detail": "isEnabled(){if(t8())return!1;if(wS())return i.CLAUDE_CODE_SYNC_SKILLS&&!UC();if(!Ip()&&!i.CLAUDE_CODE_SKILL_PROPOSALS&&!Om())return!1;if(!i.CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE&&!(on()&&i.CLAUDE_CODE_S…"
 			},
 			{ "name": "request_computer" },
-			{ "name": "self_hosted_runner_get_pool", "gate": "Vn()" },
-			{ "name": "self_hosted_runner_list_runners", "gate": "Vn()" },
-			{ "name": "self_hosted_runner_list_secrets", "gate": "Vn()" },
-			{ "name": "self_hosted_runner_list_sessions", "gate": "Vn()" },
-			{ "name": "self_hosted_runner_read_health", "gate": "Vn()" },
-			{ "name": "self_hosted_runner_read_metrics", "gate": "Vn()" },
-			{ "name": "self_hosted_runner_requeue_session", "gate": "Vn()" },
-			{ "name": "self_hosted_runner_spawn_local", "gate": "Vn()" },
-			{ "name": "self_hosted_runner_tail_log", "gate": "Vn()" }
+			{ "name": "self_hosted_runner_get_pool", "gate": "Bs()" },
+			{ "name": "self_hosted_runner_list_runners", "gate": "Bs()" },
+			{ "name": "self_hosted_runner_list_secrets", "gate": "Bs()" },
+			{ "name": "self_hosted_runner_list_sessions", "gate": "Bs()" },
+			{ "name": "self_hosted_runner_read_health", "gate": "Bs()" },
+			{ "name": "self_hosted_runner_read_metrics", "gate": "Bs()" },
+			{ "name": "self_hosted_runner_requeue_session", "gate": "Bs()" },
+			{ "name": "self_hosted_runner_spawn_local", "gate": "Bs()" },
+			{ "name": "self_hosted_runner_tail_log", "gate": "Bs()" }
 		]
 	}
 }

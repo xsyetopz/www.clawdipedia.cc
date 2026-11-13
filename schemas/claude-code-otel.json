@@ -1,19 +1,43 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-otel.json",
-	"title": "Claude Code OpenTelemetry metrics, spans, and events (Claude Code 2.1.322)",
-	"$comment": "For the OpenTelemetry data Claude Code emits. Each $defs entry is one metric, span, or event; the kind is in x-otel-kind and the properties are its attributes. Generated from Claude Code 2.1.322 by tools/schemas/code.ts. Anchors: \"Count of CLI sessions started\" (the meter setup that registers each metric with its description and unit) with the counter accessor functions and their .add(value, attributes) call sites; the span helpers (startSpan(\"claude_code.<name>\") with the attribute literal built just before it, and the wrapper that takes {spanType, attrs, contentAttrs}); the event emitter that sets \"event.name\", \"event.timestamp\", \"event.sequence\" and its call sites with the attribute literal; the base attribute builder behind \"OTEL_METRICS_INCLUDE_SESSION_ID\". No probe in captures/ records telemetry, so nothing is marked x-observed. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
+	"title": "Claude Code OpenTelemetry metrics, spans, and events (Claude Code 2.1.323)",
+	"$comment": "For the OpenTelemetry data Claude Code emits. Each $defs entry is one metric, span, or event; the kind is in x-otel-kind and the properties are its attributes. Generated from Claude Code 2.1.323 by tools/schemas/code.ts. Anchors: \"Count of CLI sessions started\" (the meter setup that registers each metric with its description and unit) with the counter accessor functions and their .add(value, attributes) call sites; the span helpers (startSpan(\"claude_code.<name>\") with the attribute literal built just before it, and the wrapper that takes {spanType, attrs, contentAttrs}); the event emitter that sets \"event.name\", \"event.timestamp\", \"event.sequence\" and its call sites with the attribute literal; the base attribute builder behind \"OTEL_METRICS_INCLUDE_SESSION_ID\". No probe in captures/ records telemetry, so nothing is marked x-observed. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
 	"$defs": {
 		"event:api_error": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -86,13 +110,37 @@
 		"event:api_refusal": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -165,13 +213,37 @@
 		"event:api_request": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -263,13 +335,37 @@
 		"event:api_retries_exhausted": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -318,13 +414,37 @@
 		"event:assistant_response": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -367,13 +487,37 @@
 		"event:at_mention": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -404,13 +548,37 @@
 		"event:auth": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -450,13 +618,37 @@
 		"event:compaction": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -502,13 +694,37 @@
 		"event:feedback_survey": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 17. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 17. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -563,13 +779,37 @@
 		"event:hook_execution_complete": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -645,13 +885,37 @@
 		"event:hook_execution_start": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -697,13 +961,37 @@
 		"event:hook_plugin_metrics": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -734,13 +1022,37 @@
 		"event:hook_registered": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 2. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 2. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -786,13 +1098,37 @@
 		"event:internal_error": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -823,13 +1159,37 @@
 		"event:managed_settings_resolved": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 2. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 2. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -893,13 +1253,37 @@
 		"event:mcp_server_connection": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 2. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -954,13 +1338,37 @@
 		"event:permission_mode_changed": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -994,13 +1402,37 @@
 		"event:plugin_installed": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1043,13 +1475,37 @@
 		"event:plugin_loaded": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1113,13 +1569,37 @@
 		"event:retention_sweep": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1180,13 +1660,37 @@
 		"event:safety_event": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1262,13 +1766,37 @@
 		"event:skill_activated": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1311,13 +1839,37 @@
 		"event:subagent_completed": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1378,13 +1930,37 @@
 		"event:system_prompt": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1421,13 +1997,37 @@
 		"event:tool": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1464,13 +2064,37 @@
 		"event:tool_decision": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 2. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 2. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1525,13 +2149,37 @@
 		"event:tool_result": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 2. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 2. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1607,13 +2255,37 @@
 		"event:user_prompt": {
 			"x-otel-kind": "event",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Call sites read: 1. A key missing from some sites is optional.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Call sites read: 1. A key missing from some sites is optional.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1648,13 +2320,37 @@
 			"x-otel-kind": "metric",
 			"type": "object",
 			"description": "Total active time in seconds",
-			"$comment": "Unit: s. Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
+			"$comment": "Unit: s. Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1665,13 +2361,37 @@
 			"x-otel-kind": "metric",
 			"type": "object",
 			"description": "Count of code editing tool permission decisions (accept/reject) for Edit, Write, and NotebookEdit tools",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1694,13 +2414,37 @@
 			"x-otel-kind": "metric",
 			"type": "object",
 			"description": "Number of git commits created",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1711,13 +2455,37 @@
 			"x-otel-kind": "metric",
 			"type": "object",
 			"description": "Cost of the Claude Code session",
-			"$comment": "Unit: USD. Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
+			"$comment": "Unit: USD. Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1758,13 +2526,37 @@
 			"x-otel-kind": "metric",
 			"type": "object",
 			"description": "Count of lines of code modified, with the 'type' attribute indicating whether lines were added or removed and the 'model' attribute indicating which model made the change",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1781,13 +2573,37 @@
 			"x-otel-kind": "metric",
 			"type": "object",
 			"description": "Number of pull requests created",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1798,13 +2614,37 @@
 			"x-otel-kind": "metric",
 			"type": "object",
 			"description": "Count of CLI sessions started",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1815,13 +2655,37 @@
 			"x-otel-kind": "metric",
 			"type": "object",
 			"description": "Number of tokens used",
-			"$comment": "Unit: tokens. Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set. ",
+			"$comment": "Unit: tokens. Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1864,13 +2728,37 @@
 		"span:claude_code.bash.subprocess": {
 			"x-otel-kind": "span",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (contentAttrs: command).",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (contentAttrs: command).",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1898,13 +2786,37 @@
 		"span:claude_code.compaction": {
 			"x-otel-kind": "span",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1.",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1.",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1926,13 +2838,37 @@
 		"span:claude_code.hook": {
 			"x-otel-kind": "span",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -1963,13 +2899,37 @@
 		"span:claude_code.interaction": {
 			"x-otel-kind": "span",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -2006,13 +2966,37 @@
 		"span:claude_code.llm_request": {
 			"x-otel-kind": "span",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -2046,13 +3030,37 @@
 		"span:claude_code.mcp.rpc": {
 			"x-otel-kind": "span",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 2. Added only when content logging is on (contentAttrs: mcp_args; contentAttrs: mcp_args).",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (contentAttrs: mcp_args).",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -2086,13 +3094,37 @@
 		"span:claude_code.subagent.spawn": {
 			"x-otel-kind": "span",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -2117,13 +3149,37 @@
 		"span:claude_code.tool": {
 			"x-otel-kind": "span",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -2175,13 +3231,37 @@
 		"span:claude_code.tool.blocked_on_user": {
 			"x-otel-kind": "span",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"
@@ -2200,13 +3280,37 @@
 		"span:claude_code.tool.execution": {
 			"x-otel-kind": "span",
 			"type": "object",
-			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
+			"$comment": "Base attributes (keys assigned by the attribute builder, in code order); the builder also copies keys of OTEL_RESOURCE_ATTRIBUTES when OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES is set.  Gates found in the builder: OTEL_METRICS_INCLUDE_SESSION_ID, OTEL_METRICS_INCLUDE_VERSION, OTEL_METRICS_INCLUDE_ENTRYPOINT, OTEL_METRICS_INCLUDE_REPOSITORY, OTEL_METRICS_INCLUDE_ACCOUNT_UUID. Also set on every span: gen_ai.provider.name. Attributes set after the span starts (at its end) are not listed. Creation sites read: 1. Added only when content logging is on (attributes literal at creation).",
 			"properties": {
 				"user.id": {
 					"type": "string"
 				},
+				"session.id": {
+					"x-unverified": true
+				},
+				"ccr.session.id": {
+					"x-unverified": true
+				},
+				"app.version": {
+					"x-unverified": true
+				},
+				"app.entrypoint": {
+					"x-unverified": true
+				},
+				"organization.id": {
+					"x-unverified": true
+				},
 				"user.email": {
 					"type": "string"
+				},
+				"user.account_uuid": {
+					"x-unverified": true
+				},
+				"user.account_id": {
+					"x-unverified": true
+				},
+				"terminal.type": {
+					"x-unverified": true
 				},
 				"user.groups": {
 					"type": "string"

@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-status-line.json",
-	"title": "Claude Code status line stdin JSON (Claude Code 2.1.322)",
-	"$comment": "For the JSON on stdin of a statusLine command. Generated from Claude Code 2.1.322 by tools/schemas/code.ts. Anchors: the telemetry key \"tengu_status_line_result\" (module with the builder whose return literal starts at \"session_name\"), the common base builder it spreads (keys session_id, transcript_path, cwd, scratchpad_dir, prompt_id, permission_mode, agent_id, agent_type, effort), the prompt_cache builder (key \"prompt_cache\" with \"warm\"), and \"The statusLine command will receive the following JSON input via stdin:\" for the types and descriptions the code does not show. Field order is the order in the code. The prompt also lists agent.type, which the code never sets, so it is left out. The code sets scratchpad_dir, agent_type, cost, exceeds_200k_tokens, fast_mode, remote, which the prompt does not list. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
+	"title": "Claude Code status line stdin JSON (Claude Code 2.1.323)",
+	"$comment": "For the JSON on stdin of a statusLine command. Generated from Claude Code 2.1.323 by tools/schemas/code.ts. Anchors: the telemetry key \"tengu_status_line_result\" (module with the builder whose return literal starts at \"session_name\"), the common base builder it spreads (keys session_id, transcript_path, cwd, scratchpad_dir, prompt_id, permission_mode, agent_id, agent_type, effort), the prompt_cache builder (key \"prompt_cache\" with \"warm\"), and \"The statusLine command will receive the following JSON input via stdin:\" for the types and descriptions the code does not show. Field order is the order in the code. The prompt also lists agent.type, which the code never sets, so it is left out. The code sets scratchpad_dir, agent_type, cost, exceeds_200k_tokens, fast_mode, remote, which the prompt does not list. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
 	"type": "object",
 	"properties": {
 		"session_id": {
@@ -451,112 +451,6 @@
 				}
 			},
 			"description": "Optional, only present when in a --worktree session"
-		}
-	},
-	"$defs": {
-		"subagentStatusLineInput": {
-			"type": "object",
-			"properties": {
-				"session_id": {
-					"type": "string",
-					"description": "Unique session ID",
-					"x-observed": true
-				},
-				"transcript_path": {
-					"type": "string",
-					"description": "Path to the conversation transcript",
-					"x-observed": true
-				},
-				"cwd": {
-					"type": "string",
-					"description": "Current working directory",
-					"x-observed": true
-				},
-				"scratchpad_dir": {
-					"type": "string"
-				},
-				"prompt_id": {
-					"type": "string",
-					"description": "Optional: UUID of the prompt being processed (same as OTel prompt.id)",
-					"x-observed": true
-				},
-				"agent_type": {
-					"type": "string"
-				},
-				"columns": {
-					"type": "number",
-					"x-observed": true
-				},
-				"tasks": {
-					"type": "array",
-					"items": {
-						"type": "object",
-						"properties": {
-							"id": {
-								"type": "string"
-							},
-							"name": {
-								"type": "string"
-							},
-							"type": {
-								"const": "local_agent"
-							},
-							"agentType": {
-								"type": "string"
-							},
-							"status": {
-								"enum": [
-									"pending",
-									"running",
-									"completed",
-									"failed",
-									"killed",
-									"paused"
-								]
-							},
-							"description": {
-								"type": "string"
-							},
-							"label": {
-								"type": "string"
-							},
-							"startTime": {
-								"type": "number"
-							},
-							"model": {
-								"type": "string"
-							},
-							"effort": {
-								"anyOf": [
-									{
-										"enum": ["low", "medium", "high", "xhigh", "max"]
-									},
-									{
-										"type": "integer"
-									}
-								]
-							},
-							"contextWindowSize": {
-								"type": "number"
-							},
-							"tokenCount": {
-								"type": "number"
-							},
-							"tokenSamples": {
-								"type": "array",
-								"items": {
-									"type": "number"
-								}
-							},
-							"cwd": {
-								"type": "string"
-							}
-						}
-					},
-					"x-observed": true
-				}
-			},
-			"$comment": "Payload of the subagentStatusLine command."
 		}
 	}
 }

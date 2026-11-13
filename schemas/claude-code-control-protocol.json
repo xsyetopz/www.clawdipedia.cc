@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-control-protocol.json",
-	"title": "Claude Code control protocol (Claude Code 2.1.322)",
-	"$comment": "For the request and response of each control_request subtype in stream-json mode (definitions <subtype>Request and <subtype>Response, direction in x-direction). Generated from Claude Code 2.1.322 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, table of rows {request, originator, response}; the request union is described as \"Control requests a client sends to drive the loop\". Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code control protocol (Claude Code 2.1.323)",
+	"$comment": "For the request and response of each control_request subtype in stream-json mode (definitions <subtype>Request and <subtype>Response, direction in x-direction). Generated from Claude Code 2.1.323 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, table of rows {request, originator, response}; the request union is described as \"Control requests a client sends to drive the loop\". Do not edit by hand: run \"bun run schemas\".",
 	"$defs": {
 		"apply_flag_settingsRequest": {
 			"type": "object",
@@ -325,7 +325,7 @@
 						"auto_mode_stop_no_verdict",
 						"org_ask_ceiling"
 					],
-					"description": "@internal A closed-set code for a reason a host can act on, beside decision_reason_type (whose values are unchanged, so type-keyed host policy decides as before): 'outside_reads_blocked', 'memory_paused', 'classifier_transcript_too_long', 'org_ask_ceiling' (the MCP tool's ceiling, toolPermissions, is 'ask', and an ask rule or the ceiling itself raised the ask: type 'rule' or 'other'). The type also lists auto_mode_ values, which are sent on system/permission_denied only, never on this request. Absent for every other reason; new values are additive."
+					"description": "@internal A closed-set code for a reason a host can act on, beside decision_reason_type (whose values are unchanged, so type-keyed host policy decides as before): 'outside_reads_blocked', 'memory_paused', 'classifier_transcript_too_long', 'org_ask_ceiling' (the MCP tool's ceiling, toolPermissions, is 'ask', and an ask rule or the ceiling itself raised the ask: type 'rule' or 'other'; or the limit on the connector behind the ask is 'ask' or could not be read, with any type). The type also lists auto_mode_ values, which are sent on system/permission_denied only, never on this request. Absent for every other reason; new values are additive."
 				},
 				"decision_reason_rule_source": {
 					"type": "string",
@@ -338,7 +338,7 @@
 				},
 				"decision_reason_hook_source": {
 					"type": "string",
-					"description": "@internal With decision_reason_type 'hook': where the hook that asked comes from: 'plugin:<name>', 'plugin', 'skill:<name>', 'skill', or 'settings' for any other hook, such as one the SDK host registered. This CLI sends and passes on no other shape. It is absent when the CLI does not know it, when several plugins' check hooks asked together, or when the name is not 1 to 64 ASCII letters, digits, '.', '_' and '-' that start with a letter or digit. When several hooks ask on one call it is absent, or names the one whose reason decision_reason carries. The name is chosen by the plugin's or skill's author: joined words can spell a message, and it can look like a domain. Set it apart as a name, in quotation marks or in brackets as the terminal's label does. Show it in plain text, not through Markdown or an autolinker, and never as your own words. Untrusted, for display only: check and escape it, never put it in a URL, and never answer or hide a prompt because of it."
+					"description": "@internal With decision_reason_type 'hook': where the hook that asked comes from: 'plugin:<name>', 'plugin', 'skill:<name>', 'skill', or 'settings' for any other hook, such as one the SDK host registered. This CLI sends and passes on no other shape. It is absent when the CLI does not know it, or when the name is not 1 to 64 ASCII letters, digits, '.', '_' and '-' that start with a letter or digit. When several hooks ask on one call it is absent, or names the one whose reason decision_reason carries. The name is chosen by the plugin's or skill's author: joined words can spell a message, and it can look like a domain. Set it apart as a name, in quotation marks or in brackets as the terminal's label does. Show it in plain text, not through Markdown or an autolinker, and never as your own words. Untrusted, for display only: check and escape it, never put it in a URL, and never answer or hide a prompt because of it."
 				},
 				"decision_reason_hook_plugin_id": {
 					"type": "string",
@@ -346,7 +346,7 @@
 				},
 				"server_policy_ask_only": {
 					"type": "boolean",
-					"description": "@internal Sent with decision_reason_type 'rule', and for an MCP tool's ask that has none. true = when the frame was built, nothing asked for a person on this call but the default prompt for a tool that no rule allows and, at most, a tool policy that the host itself pushed (permission_policy 'always_ask'): no other ask rule that the permission check applies to the call, no hook's or plugin's ask, no PermissionRequest hook, no organization ceiling, no plan-mode floor, no safety check, no ask or veto on a standing grant of the tool's own, no auto-mode classifier active for the call. false = something else did, or may have. It says nothing of WHY the host pushed that policy, which only the host knows; nothing of whose server the tool is (see mcp_server), so a host answers only for a tool that it holds a person's grant for; and nothing of what changes after the frame is sent. Absent on other reason types, on another tool's ask without a reason type, wherever a request is listed, mirrored or passed on again (pending_permission_requests), and from older versions."
+					"description": "@internal Sent with decision_reason_type 'rule', for an MCP tool's ask that has none, for the default prompt of Write or Edit with no reason type, and for that of Read, Write or Edit with 'workingDir' and the plain outside-the-working-directories decision_reason. true = when the frame was built, nothing asked for a person on this call but the default prompt for a tool that no rule allows and, at most, a tool policy that the host itself pushed (permission_policy 'always_ask'): no other ask rule that the permission check applies to the call, no hook's or plugin's ask, no PermissionRequest hook, no organization ceiling, no plan-mode floor, no safety check, no ask or veto on a standing grant of the tool's own, no auto-mode classifier active for the call. false = something else did, or may have. It says nothing of WHY the host pushed that policy, which only the host knows; nothing of whose server the tool is (see mcp_server), so a host answers only for a tool that it holds a person's grant for (a file tool apart, below); and nothing of what changes after the frame is sent. For a file tool it says nothing of where the path lies, so a host answers only for a path that it has judged itself. Absent on other reason types, on any other tool's ask without a reason type (Read's included), wherever a request is listed, mirrored or passed on again (pending_permission_requests), and from older versions."
 				},
 				"classifier_approvable": {
 					"type": "boolean",
@@ -1020,7 +1020,7 @@
 				}
 			},
 			"required": ["subtype"],
-			"description": "@internal Requests the browsers connected to the session's Claude in Chrome server, as the terminal's /chrome browser picker lists them. Fails when the server is not connected.",
+			"description": "@internal Requests the browsers connected to the session's Claude in Chrome server, as the terminal's /chrome browser picker lists them. Fails when the server is not connected, and in a cloud session.",
 			"x-direction": "client"
 		},
 		"get_chrome_browsersResponse": {
@@ -2554,6 +2554,22 @@
 						"ultrathinkAvailable": {
 							"type": "boolean",
 							"description": "True when typing `ultrathink` runs the turn at xhigh effort, and when the session is already at xhigh or max, where the turn stays as it is. The terminal colors the word by this rule, and hosts should color it only while this is true. Absent means a Claude Code too old to report it, which does not raise the turn in a host's chat box."
+						},
+						"outsideFileToolReadsBlocked": {
+							"type": "boolean",
+							"description": "@internal Whether permissions.blockFileToolReadsOutsideWorkingDirectories or permissions.blockReadsOutsideWorkingDirectories is in force in the session now. It says that the setting applies, not that nothing outside the working directories can be read: docs/desktop-host-contract.md D112 lists what stays open. `sources` shows only that a key was delivered, also to a Claude Code that does not know it. Absent means a Claude Code too old to report it, which may still apply the second key but not the first."
+						},
+						"outsideFileToolWritesBlocked": {
+							"type": "boolean",
+							"description": "@internal Whether permissions.blockWritesOutsideWorkingDirectories is in force in the session now, so that the file tools refuse writes outside its working directories. Absent means a Claude Code too old to report it, which may still apply that key."
+						},
+						"outsideBlocksCountLaunchFoldersOnly": {
+							"type": "boolean",
+							"description": "@internal True only where permissions.blockFileToolReadsOutsideWorkingDirectories is in force: the read and write blocks then count only the starting directory, --add-dir, and permissions.additionalDirectories (fully qualified, or ~ or ~/…; a relative entry does not count) in --settings or in a push, and none that a policy tier adds. Never true in a background session, whose launch is replayed from files that the account can write, nor while the starting directory has moved outside both the one that headless start-up began with (after any --worktree) and the added folders named above. False or absent: do not rely on this. docs/desktop-host-contract.md D112 lists what can still move those blocks."
+						},
+						"launchEnvLeftOwnFilesInPlace": {
+							"type": "boolean",
+							"description": "@internal False where the environment that launched Claude Code sets a variable that can move a folder of its own files which the blocks outside the working directories let through: CLAUDE_COWORK_MEMORY_PATH_OVERRIDE, CLAUDE_CODE_REMOTE_MEMORY_DIR or CLAUDE_CODE_PROJECT_DIR_NAME, not empty, or CLAUDE_CONFIG_DIR, set at all. A login profile can set these, so a host that did not set them reads this. Also false once, under permissions.blockFileToolReadsOutsideWorkingDirectories, one of the two memory variables, CLAUDE_CONFIG_DIR, HOME or one of its Windows kin has been changed by neither the launch nor --settings (managed settings, a plugin): the file tools are then refused those files and every added folder for the rest of the process. Else reported whether or not those blocks are on. True says nothing of the HOME, and its Windows kin, that the launch itself set, of CLAUDE_CODE_TMPDIR or of values from --settings. docs/desktop-host-contract.md D112."
 						}
 					},
 					"required": ["model", "effort"],
@@ -3619,6 +3635,21 @@
 											"isUntracked"
 										]
 									}
+								},
+								"omitted": {
+									"type": "object",
+									"properties": {
+										"files": {
+											"type": "integer",
+											"minimum": 0,
+											"maximum": 9007199254740991
+										},
+										"exact": {
+											"type": "boolean"
+										}
+									},
+									"required": ["files", "exact"],
+									"description": "Changed files with no perFileStats row. Use it in place of stats.filesCount minus the number of rows, which misses new files that got no row and can be wrong when source.kind is 'branch'. exact true: files is the whole count (0: every changed file has a row). exact false: files is a floor; show 'at least', or 'there may be more' for 0. Causes include a failed listing, more than 500 changed files or untracked paths, and 50 uncommitted changes to tracked files filling the rows (untracked files are then not looked for). Never counted: files git ignores, untracked files older than the session or outside the session's folder, changes inside submodules. files is 0 whenever stats.filesCount is 0. Absent from Claude Code versions that predate it: subtract instead."
 								},
 								"hunks": {
 									"type": "array",
@@ -6032,10 +6063,22 @@
 				"subtype": {
 					"type": "string",
 					"const": "host_auth_token_refresh"
+				},
+				"status": {
+					"anyOf": [
+						{
+							"type": "number",
+							"const": 401
+						},
+						{
+							"type": "number",
+							"const": 403
+						}
+					]
 				}
 			},
 			"required": ["subtype"],
-			"description": "@internal Request from the CLI subprocess to the SDK host for a fresh provider credential after a 401 or an AWS / Google Cloud credential failure when the host owns the credential (Cowork 3P).",
+			"description": "@internal Request from the CLI subprocess to the SDK host for a fresh provider credential when the host owns it (Cowork 3P). status is the HTTP status that caused the request: 401, or 403 from a customer gateway. Any other cause, such as a revoked-token 403, omits it.",
 			"x-direction": "agent"
 		},
 		"host_auth_token_refreshResponse": {
@@ -6198,12 +6241,74 @@
 								},
 								"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 							},
+							"dataFlowServer": {
+								"anyOf": [
+									{
+										"type": "object",
+										"properties": {
+											"type": {
+												"type": "string",
+												"const": "anthropic"
+											},
+											"id": {
+												"type": "string",
+												"minLength": 1
+											}
+										},
+										"required": ["type", "id"]
+									},
+									{
+										"type": "object",
+										"properties": {
+											"type": {
+												"type": "string",
+												"const": "claude_ai_connector"
+											},
+											"id": {
+												"type": "string",
+												"minLength": 1
+											},
+											"directory_id": {
+												"anyOf": [
+													{
+														"type": "string",
+														"minLength": 1
+													},
+													{
+														"type": "null"
+													}
+												]
+											}
+										},
+										"required": ["type", "id", "directory_id"]
+									},
+									{
+										"type": "object",
+										"properties": {
+											"type": {
+												"type": "string",
+												"const": "client_configured"
+											},
+											"transport": {
+												"type": "string",
+												"enum": ["stdio", "http", "in_process"]
+											},
+											"plugin_id_hash": {
+												"type": "string",
+												"minLength": 1
+											}
+										},
+										"required": ["type", "transport"]
+									}
+								],
+								"description": "@internal Where the host got this server, for the data flow records of calls to it: one of Anthropic's, by its registry id; a claude.ai connector, by its id (tagged or a bare UUID) and its directory id or null; or one the user configured, by the transport the host reaches it over. The first two are taken only in a session a desktop host started. Without it, or with a value of another shape, the records say unknown (docs/desktop-host-contract.md, D139). Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+							},
 							"tools": {
-								"$ref": "#/$defs/initializeRequest____schema21"
+								"$ref": "#/$defs/initializeRequest____schema23"
 							}
 						}
 					},
-					"description": "Settings for the SDK-hosted MCP servers named in sdkMcpServers, keyed by server name. Sent as a separate field so a CLI that predates it ignores it; entries whose name is not in sdkMcpServers, and values that do not match this shape, are ignored rather than rejected. timeout, disableAutoBackground, connectorId and autoModeVerdictTools apply when the server is first registered; tools (the per-tool permission policy) adds its ask and deny rules on every initialize that names the server. An initialize never removes a rule; mcp_set_servers replaces them."
+					"description": "Settings for the SDK-hosted MCP servers named in sdkMcpServers, keyed by server name. Sent as a separate field so a CLI that predates it ignores it; entries whose name is not in sdkMcpServers, and values that do not match this shape, are ignored rather than rejected. timeout, disableAutoBackground, connectorId, autoModeVerdictTools and dataFlowServer apply when the server is first registered; tools (the per-tool permission policy) adds its ask and deny rules on every initialize that names the server. An initialize never removes a rule; mcp_set_servers replaces them."
 				},
 				"sdkMcpServerManifests": {
 					"type": "object",
@@ -6237,7 +6342,7 @@
 				"sdkMcpServerManifestsOrigin": {
 					"type": "string",
 					"enum": ["host_per_send"],
-					"description": "The host's statement that it composed this request's sdkMcpServerManifests for this very send, from its servers' current state. Needed only by a host that reaches the CLI over a remote session transport, where an unmarked sdkMcpServerManifests is not used (a recorded registration could be handed to a later worker). The CLI also refuses a marked manifest whose session-stream frame is more than five minutes old, so capture the manifests when writing the request, not earlier; and it may still decline them when remote manifests are switched off in that CLI, or on any session where the session service has not told the CLI in the last five minutes that only the account owning the session can send events to it. sdk_mcp_manifests_parked in the response says what became of each entry. A value this CLI does not know counts as no marker. A host on the CLI's own stream-json stdio transport may omit this field; a host writing to the stdin of a remote-session worker cannot use manifests at all."
+					"description": "The host's statement that it composed this request's sdkMcpServerManifests for this very send, from its servers' current state. Needed only by a host that reaches the CLI over a remote session transport, where an unmarked sdkMcpServerManifests is not used (a recorded registration could be handed to a later worker). The CLI also refuses a marked manifest whose session-stream frame is more than five minutes old, so capture the manifests when writing the request, not earlier. It declines them too when manifests are switched off in that CLI. Over a remote session it also declines them in three more cases: in any session other than an interactive Cowork chat started from claude.ai; until Anthropic has served that CLI its manifests switch on (so not before its feature flags load); and where the session service has not recently told the CLI that only the account owning the session can send events to it. sdk_mcp_manifests_parked in the response says what became of each entry. A value this CLI does not know counts as no marker. A host on the CLI's own stream-json stdio transport may omit this field; a host writing to the stdin of a remote-session worker cannot use manifests at all."
 				},
 				"jsonSchema": {
 					"type": "object",
@@ -6562,8 +6667,70 @@
 																},
 																"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 															},
+															"dataFlowServer": {
+																"anyOf": [
+																	{
+																		"type": "object",
+																		"properties": {
+																			"type": {
+																				"type": "string",
+																				"const": "anthropic"
+																			},
+																			"id": {
+																				"type": "string",
+																				"minLength": 1
+																			}
+																		},
+																		"required": ["type", "id"]
+																	},
+																	{
+																		"type": "object",
+																		"properties": {
+																			"type": {
+																				"type": "string",
+																				"const": "claude_ai_connector"
+																			},
+																			"id": {
+																				"type": "string",
+																				"minLength": 1
+																			},
+																			"directory_id": {
+																				"anyOf": [
+																					{
+																						"type": "string",
+																						"minLength": 1
+																					},
+																					{
+																						"type": "null"
+																					}
+																				]
+																			}
+																		},
+																		"required": ["type", "id", "directory_id"]
+																	},
+																	{
+																		"type": "object",
+																		"properties": {
+																			"type": {
+																				"type": "string",
+																				"const": "client_configured"
+																			},
+																			"transport": {
+																				"type": "string",
+																				"enum": ["stdio", "http", "in_process"]
+																			},
+																			"plugin_id_hash": {
+																				"type": "string",
+																				"minLength": 1
+																			}
+																		},
+																		"required": ["type", "transport"]
+																	}
+																],
+																"description": "@internal Where the host got this server, for the data flow records of calls to it: one of Anthropic's, by its registry id; a claude.ai connector, by its id (tagged or a bare UUID) and its directory id or null; or one the user configured, by the transport the host reaches it over. The first two are taken only in a session a desktop host started. Without it, or with a value of another shape, the records say unknown (docs/desktop-host-contract.md, D139). Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+															},
 															"tools": {
-																"$ref": "#/$defs/initializeRequest____schema21"
+																"$ref": "#/$defs/initializeRequest____schema23"
 															}
 														},
 														"required": ["type", "name"]
@@ -6642,7 +6809,7 @@
 							},
 							"observer": {
 								"type": "string",
-								"description": "Agent type auto-spawned as a background observer whenever this agent runs. The observer receives read-only activity digests and reports via the ObserverReport tool; it never participates in the task."
+								"description": "Agent type auto-spawned as a background observer whenever this agent runs, or a comma-separated list of up to four, none of whose names has a comma. An observer receives read-only activity digests and reports via the ObserverReport tool; it never participates in the task."
 							},
 							"observerMessage": {
 								"type": "string",
@@ -6727,6 +6894,14 @@
 					},
 					"description": "Plugins to load for the session, in the same shape as the SDK `plugins` option: the stdin form of one --plugin-dir flag per entry (--plugin-dir-no-mcp when skipMcpDiscovery is set), so the launch command line does not grow with the plugin count. Loaded only by a CLI launched with --await-initialize, which reads this request during startup before any plugin work. Without that flag, on a repeated initialize, or over a remote session transport the field loads nothing; plugins_applied in the response reports whether the listed plugins are in fact loaded."
 				},
+				"managedSettings": {
+					"type": "object",
+					"propertyNames": {
+						"type": "string"
+					},
+					"additionalProperties": {},
+					"description": "@internal The managed settings of the host that starts Claude Code, in the same shape as the SDK `managedSettings` option, so that the launch command line does not grow with them. Read only by a CLI launched with --await-initialize and --managed-settings-in-initialize. It applies them as it applies --managed-settings, before it reads any settings, and exits with code 1 when it cannot; startup_failure_reason then says why, where the host set CLAUDE_CODE_STARTUP_FAILURE_RESULTS. Without those flags, on a repeated initialize, or over a remote session transport the field sets nothing; managed_settings_applied in the response reports whether these settings are the ones stored at launch."
+				},
 				"workspaceTrust": {
 					"type": "object",
 					"properties": {
@@ -6750,6 +6925,10 @@
 						},
 						"environmentId": {
 							"type": "string"
+						},
+						"resumeOnly": {
+							"type": "boolean",
+							"description": "@internal The host quit or updated while it served this request and wants the same connection back: the helper takes it up again or does not start, and never links. Absent or false is a start that links."
 						}
 					},
 					"required": ["workId", "environmentId"],
@@ -6765,7 +6944,7 @@
 			"minLength": 1,
 			"description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. With or without that declaration, deny and ask rules, hook matchers and disallowed-tool lists that spell mcp__<connectorId> also reach this server's tools, and nothing that allows does; the id is read as a tool's name would spell it (a character other than a letter, a digit, '-' and '_' as '_'), and one that is then longer than 128 characters or holds '__' is not used for that. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered."
 		},
-		"initializeRequest____schema21": {
+		"initializeRequest____schema23": {
 			"type": "array",
 			"items": {
 				"type": "object",
@@ -6978,6 +7157,10 @@
 					"type": "boolean",
 					"description": "Whether every plugin this initialize listed is loaded: true when each one is among the plugins the process loaded at launch (from `plugins` under --await-initialize, or from --plugin-dir), so a re-sent initialize naming the launch set also reads true; false otherwise. The `plugins` field never loads anything after launch. Absent when the request listed no plugins, and on CLIs that predate the field (those never read `plugins`)."
 				},
+				"managed_settings_applied": {
+					"type": "boolean",
+					"description": "@internal Whether the `managedSettings` in this initialize are the ones the process stored at launch under --managed-settings-in-initialize, so a re-sent initialize with the same settings also reads true. True does not say that they are in force: state.parentSettingsIncluded of list_permission_rules says whether they count beside the machine's own managed settings. The request's `managedSettings` field sets nothing after launch. Absent when the request carried none, on CLIs that predate this field (those never read `managedSettings`), and from responders that do not store them. A host that sent them must send no prompt until this is true; the TypeScript SDK holds the prompt, and ends the session on any other answer."
+				},
 				"host_worded_asks": {
 					"type": "boolean",
 					"description": "@internal Desktop host only: true when this session reads permissionDisplay on a PreToolUse hook's ask (coreSchemas.ts HookPermissionDisplaySchema) and sends its asks to the host as can_use_tool requests. Absent otherwise. Send permissionDisplay only when this is true, and check each can_use_tool request for the words: the CLI may send an ask without them."
@@ -7001,7 +7184,7 @@
 							"not_honoured"
 						]
 					},
-					"description": "What became of each entry of this initialize's sdkMcpServerManifests, keyed by sdk server name, for the entries whose name is in sdkMcpServers. 'parked': kept for the connect that follows this reply, which answers the server's MCP initialize and first tools/list from it (a later failure to replay shows up as live mcp_message frames, as when no entry was sent). 'already_connected': this CLI already had a live client for the server. 'protocol_version_mismatch': initializeResult.protocolVersion is not the version this CLI's client requests. 'malformed': the entry is not of the documented shape, reported whether or not manifests were honoured (every name in sdkMcpServers gets this when the field itself is not an object); or an honoured entry is past the limits this CLI sets on a live answer. 'not_honoured': the CLI did not use the entry: manifests or remote manifests are switched off in this CLI, the session service has not told this remote-session worker in the last five minutes that only the account owning the session can send events to it, or the request reached such a worker other than over its session stream (nothing for the host to change in any of these cases); or this CLI had read as many tool lists as it allows in a minute (send it again later); or it came over the session stream without sdkMcpServerManifestsOrigin or on a frame too old to trust (the host's to fix). Absent when the request carried no sdkMcpServerManifests or named no sdkMcpServers, and on CLIs that predate the field."
+					"description": "What became of each entry of this initialize's sdkMcpServerManifests, keyed by sdk server name, for the entries whose name is in sdkMcpServers. 'parked': kept for the connect that follows this reply, which answers the server's MCP initialize and first tools/list from it (a later failure to replay shows up as live mcp_message frames, as when no entry was sent). 'already_connected': this CLI already had a live client for the server. 'protocol_version_mismatch': initializeResult.protocolVersion is not the version this CLI's client requests. 'malformed': the entry is not of the documented shape, reported whether or not manifests were honoured (every name in sdkMcpServers gets this when the field itself is not an object); or an honoured entry is past the limits this CLI sets on a live answer. 'not_honoured': the CLI did not use the entry: manifests are switched off in this CLI, this remote session is not an interactive Cowork chat started from claude.ai, the session service has not recently told this remote-session worker that only the account owning the session can send events to it, or the request reached such a worker other than over its session stream (nothing for the host to change in any of these cases); or this CLI had read as many tool lists as it allows in a minute (send it again later); or it came over the session stream without sdkMcpServerManifestsOrigin or on a frame too old to trust (the host's to fix). Absent when the request carried no sdkMcpServerManifests or named no sdkMcpServers, and on CLIs that predate the field."
 				},
 				"permission_mode_from_default_fallback": {
 					"type": "boolean",
@@ -7301,7 +7484,7 @@
 					"items": {
 						"type": "string"
 					},
-					"description": "Uuids of async user messages that survive this interrupt: commands still in the queue, plus any batch already dequeued for the imminent turn but not yet reachable by the abort, plus any user message this process has read but not yet queued, from its own input stream (held, for instance, while a model change is still being checked or behind start-up work; a message a Remote Control client sent that is still being ingested is not listed). An interrupt — plain or cancel_queued:true — that lands during the FIRST-command prewait window (before the first turn of the session has armed a controller) is additionally LATCHED, scoped to the user-intent work pending at that instant — the batch already dequeued and parked for the imminent turn, plus the user-intent main-thread commands then in the queue or held ahead of it (the work this list enumerates): the first turn to arm that carries any of that doomed work starts already aborted, exactly once, so the listed prewait batch is delivered into an immediately-aborted turn, its frames and result flowing through the normal abort path, instead of running to completion. A turn carrying none of it arms live and leaves the latch waiting: a system delivery turn (for example a replayed host event), or a prompt enqueued after the interrupt — post-interrupt work is never coalesced with the doomed work and never dies to the latch, so the Stop kills exactly what this receipt listed. The latch is released when the doomed work is retired without arming: if a parked prewait batch is entirely cancelled, the latch is released even when other queued commands remain (those arm and run normally); with nothing parked, it is released once none of the doomed commands remains queued or held — work enqueued after the interrupt neither holds it up nor is aborted by it. Survivors that ride any later turn run normally. These WILL run (subject to that latch) unless cancelled first (or unless the request set cancel_queued:true, in which case every uuid-stamped survivor this process holds is removed, emitted a terminal `cancelled` synchronously, and listed under `cancelled` instead — leaving here only what a client driving a hosted session can no longer recall: a send already in flight to that session, or the first prompt the session was created with; a send that client still holds on its own machine behind a send gate (it waits there until that session is ready to take it) has not gone out, so it is withdrawn and listed under `cancelled` like a queued one, and cancel_async_message can withdraw it too, while a plain interrupt leaves it held and lists it here). Cancellation granularity: uuids still in the queue are individually cancellable via cancel_async_message (the re-run of an interrupted turn that also answers for other client messages only if this interrupt was for it; see the response to that request); a listed uuid whose message the process running the session (never a client driving a hosted session) still keeps out of its queue, behind a model change or start-up work, is not yet cancellable that way: cancel_async_message answers cancelled:false for it and plants a cancel-pending mark, which the drain honours once the message is queued and the mid-turn fold of a running turn does not; once a batch is dequeued and coalesced into one turn, cancelling a NON-representative member uuid is a no-op (its content still runs), while cancelling the batch-representative uuid drops the WHOLE coalesced batch — in both cases the cancel response reports cancelled:false because the message was no longer in the queue. Coverage caveats: only uuid-STAMPED messages appear (a message enqueued without a uuid still runs but is never listed, so [] does not mean \"nothing will run\"); only main-thread messages are listed (subagent-addressed messages are out of scope); and the list may include internally-enqueued uuids the client never sent (cron triggers, auto-resume continuations) — ignore unknown uuids rather than treating them as an error. Ordering: on a clean interrupt this receipt is written before the interrupted turn result; a turn that crashes during interrupt handling emits its error result on a direct-write path that may precede the receipt. Snapshot is taken synchronously with abort processing — probing the queue after the interrupted result instead always loses the race against the drain loop, which starts the next queued turn immediately."
+					"description": "Uuids of async user messages that survive this interrupt: commands still in the queue, plus any batch already dequeued for the imminent turn but not yet reachable by the abort, plus any user message this process has read but not yet queued, from its own input stream (held, for instance, while a model change is still being checked or behind start-up work; a message a Remote Control client sent that is still being ingested is not listed). An interrupt — plain or cancel_queued:true — that lands during the FIRST-command prewait window (before the first turn of the session has armed a controller) is additionally LATCHED, scoped to the user-intent work pending at that instant — the batch already dequeued and parked for the imminent turn, plus the user-intent main-thread commands then in the queue or held ahead of it (the work this list enumerates): the first turn to arm that carries any of that doomed work starts already aborted, exactly once, so the listed prewait batch is delivered into an immediately-aborted turn, its frames and result flowing through the normal abort path, instead of running to completion. A turn carrying none of it arms live and leaves the latch waiting: a system delivery turn (for example a replayed host event), or a prompt enqueued after the interrupt — post-interrupt work is never coalesced with the doomed work and never dies to the latch, so the Stop kills exactly what this receipt listed. A worker of a cloud session may treat a plain interrupt from a person differently. If it reads the interrupt before its first turn, while it holds a prompt from the worker before it, the interrupt stops the turn of that prompt, and listed messages that no turn has started then run. The latch is released when the doomed work is retired without arming: if a parked prewait batch is entirely cancelled, the latch is released even when other queued commands remain (those arm and run normally); with nothing parked, it is released once none of the doomed commands remains queued or held — work enqueued after the interrupt neither holds it up nor is aborted by it. Survivors that ride any later turn run normally. These WILL run (subject to that latch) unless cancelled first (or unless the request set cancel_queued:true, in which case every uuid-stamped survivor this process holds is removed, emitted a terminal `cancelled` synchronously, and listed under `cancelled` instead — leaving here only what a client driving a hosted session can no longer recall: a send already in flight to that session, or the first prompt the session was created with; a send that client still holds on its own machine behind a send gate (it waits there until that session is ready to take it) has not gone out, so it is withdrawn and listed under `cancelled` like a queued one, and cancel_async_message can withdraw it too, while a plain interrupt leaves it held and lists it here). Cancellation granularity: uuids still in the queue are individually cancellable via cancel_async_message (the re-run of an interrupted turn that also answers for other client messages only if this interrupt was for it; see the response to that request); a listed uuid whose message the process running the session (never a client driving a hosted session) still keeps out of its queue, behind a model change or start-up work, is not yet cancellable that way: cancel_async_message answers cancelled:false for it and plants a cancel-pending mark, which the drain honours once the message is queued and the mid-turn fold of a running turn does not; once a batch is dequeued and coalesced into one turn, cancelling a NON-representative member uuid is a no-op (its content still runs), while cancelling the batch-representative uuid drops the WHOLE coalesced batch — in both cases the cancel response reports cancelled:false because the message was no longer in the queue. Coverage caveats: only uuid-STAMPED messages appear (a message enqueued without a uuid still runs but is never listed, so [] does not mean \"nothing will run\"); only main-thread messages are listed (subagent-addressed messages are out of scope); and the list may include internally-enqueued uuids the client never sent (cron triggers, auto-resume continuations) — ignore unknown uuids rather than treating them as an error. Ordering: on a clean interrupt this receipt is written before the interrupted turn result; a turn that crashes during interrupt handling emits its error result on a direct-write path that may precede the receipt. Snapshot is taken synchronously with abort processing — probing the queue after the interrupted result instead always loses the race against the drain loop, which starts the next queued turn immediately."
 				},
 				"put_back": {
 					"type": "array",
@@ -7816,7 +7999,7 @@
 				}
 			},
 			"required": ["subtype", "tool"],
-			"description": "Invokes an MCP tool via the subprocess MCP client without a model turn. No permission check (control channel is trusted, same as other subtypes) unless check_permissions is set. SDK-type MCP servers (config.type === \"sdk\") are rejected — they are caller-provided, so the caller can invoke them directly without the subprocess round-trip. Result content passes through the same processing as model-turn MCP calls, unless result_not_for_model is set. Session expiry is not retried automatically; callers can mcp_reconnect and retry. UrlElicitationRequired (-32042) tries Elicitation hooks; if no hook resolves, the call errors with the URL in the message — open it out-of-band, then retry mcp_call. STAGED calls (input_files/output_files declared) additionally stage lane rows in/out around the call — see the input_files describe. Staged failures come back as a success-subtype response whose staging field carries a typed error_code; subtype:error is emitted only when the call could not be attempted at all (server not connected, kill switch, dispatch failure) and means nothing ran. A target server that is not yet connected is brought up on demand: dispatch runs the deferred plugin/MCP startup resolution (the work a first model turn would have done) and waits up to 30s — shortened by expires_at when that is sooner — for the server to connect before answering \"MCP server not connected\", so a dispatch that races plugin startup (e.g. after an idle-wake reattach) succeeds instead of failing until a turn runs. Standard RPC semantics: a redelivered request_id supersedes the in-flight run (it is aborted and its response suppressed — exactly one response per request_id); conversion is idempotent, so re-running is safe. Cancellable via control_cancel_request.",
+			"description": "Invokes an MCP tool via the subprocess MCP client without a model turn. No permission check (control channel is trusted, same as other subtypes) unless check_permissions is set. In a cloud session, tools on the user's own computer or browser are rejected. SDK-type MCP servers (config.type === \"sdk\") are rejected — they are caller-provided, so the caller can invoke them directly without the subprocess round-trip. Result content passes through the same processing as model-turn MCP calls, unless result_not_for_model is set. Session expiry is not retried automatically; callers can mcp_reconnect and retry. UrlElicitationRequired (-32042) tries Elicitation hooks; if no hook resolves, the call errors with the URL in the message — open it out-of-band, then retry mcp_call. STAGED calls (input_files/output_files declared) additionally stage lane rows in/out around the call — see the input_files describe. Staged failures come back as a success-subtype response whose staging field carries a typed error_code; subtype:error is emitted only when the call could not be attempted at all (server not connected, kill switch, dispatch failure) and means nothing ran. A target server that is not yet connected is brought up on demand: dispatch runs the deferred plugin/MCP startup resolution (the work a first model turn would have done) and waits up to 30s — shortened by expires_at when that is sooner — for the server to connect before answering \"MCP server not connected\", so a dispatch that races plugin startup (e.g. after an idle-wake reattach) succeeds instead of failing until a turn runs. Standard RPC semantics: a redelivered request_id supersedes the in-flight run (it is aborted and its response suppressed — exactly one response per request_id); conversion is idempotent, so re-running is safe. Cancellable via control_cancel_request.",
 			"x-direction": "client"
 		},
 		"mcp_callResponse": {
@@ -7912,6 +8095,11 @@
 								"retryable": {
 									"type": "boolean",
 									"description": "Present when the failure class is known (lane transport verdict, CAS rejection): true = safe to re-drive with the same request_id, false = deterministic. Absent = unknown; treat as non-retryable and switch on error_code."
+								},
+								"refusal_limit": {
+									"type": "boolean",
+									"const": true,
+									"description": "With check_permissions: the call was refused unjudged, because the named server's checked calls stood at a refusal limit. It speaks for this call alone, so read it on each reply. error_code stays tool_error, so a host that does not know this member still reads a refusal. An unstaged call says the same with the error response's error_code mcp_call_refusal_limit."
 								}
 							},
 							"required": ["ok", "error_code", "detail"]
@@ -7969,7 +8157,7 @@
 				}
 			},
 			"required": ["subtype", "serverName", "uri"],
-			"description": "Reads one MCP Apps (SEP-1865) UI resource — a `ui://` URI, typically the `_meta.ui.resourceUri` a tool declares — from a connected MCP server the CLI itself dialed, with `resources/read`, for a host that renders it. Read-only and no model turn. The reply is untrusted third-party content (HTML): render it sandboxed. SDK-type MCP servers (config.type === \"sdk\") are rejected — they are caller-provided, so the caller can read them directly. Errors name the cause: a non-ui:// URI, an unknown server, a server that managed policy blocks, that is disabled or that the project has not approved (the refusals mcp_reconnect gives), a server that is not connected (failed, pending or needs-auth: send mcp_reconnect; a connected server, or one still listed from the discovery cache, is read through the same connect path a tool call takes), a response over the size limit, or the server's own resources/read error (over a transport that stores frames, one fixed sentence in its place). Refused on a lane that redacts what it persists (a Remote Control bridge worker, a tenant worker) and by the client of a cloud-hosted session. Advertised as `mcp_read_resource_v1` in system/init.capabilities.",
+			"description": "Reads one MCP Apps (SEP-1865) UI resource — a `ui://` URI, typically the `_meta.ui.resourceUri` a tool declares — from a connected MCP server the CLI itself dialed, with `resources/read`, for a host that renders it. Read-only and no model turn. The reply is untrusted third-party content (HTML): render it sandboxed. SDK-type MCP servers (config.type === \"sdk\") are rejected — they are caller-provided, so the caller can read them directly. Errors name the cause: a non-ui:// URI, an unknown server, in a cloud session a server on the user's own computer or browser, a server that managed policy blocks, that is disabled or that the project has not approved (the refusals mcp_reconnect gives), a server that is not connected (failed, pending or needs-auth: send mcp_reconnect; a connected server, or one still listed from the discovery cache, is read through the same connect path a tool call takes), a response over the size limit, or the server's own resources/read error (over a transport that stores frames, one fixed sentence in its place). Refused on a lane that redacts what it persists (a Remote Control bridge worker, a tenant worker) and by the client of a cloud-hosted session. Advertised as `mcp_read_resource_v1` in system/init.capabilities.",
 			"x-direction": "client"
 		},
 		"mcp_read_resourceResponse": {
@@ -8253,6 +8441,68 @@
 										},
 										"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 									},
+									"dataFlowServer": {
+										"anyOf": [
+											{
+												"type": "object",
+												"properties": {
+													"type": {
+														"type": "string",
+														"const": "anthropic"
+													},
+													"id": {
+														"type": "string",
+														"minLength": 1
+													}
+												},
+												"required": ["type", "id"]
+											},
+											{
+												"type": "object",
+												"properties": {
+													"type": {
+														"type": "string",
+														"const": "claude_ai_connector"
+													},
+													"id": {
+														"type": "string",
+														"minLength": 1
+													},
+													"directory_id": {
+														"anyOf": [
+															{
+																"type": "string",
+																"minLength": 1
+															},
+															{
+																"type": "null"
+															}
+														]
+													}
+												},
+												"required": ["type", "id", "directory_id"]
+											},
+											{
+												"type": "object",
+												"properties": {
+													"type": {
+														"type": "string",
+														"const": "client_configured"
+													},
+													"transport": {
+														"type": "string",
+														"enum": ["stdio", "http", "in_process"]
+													},
+													"plugin_id_hash": {
+														"type": "string",
+														"minLength": 1
+													}
+												},
+												"required": ["type", "transport"]
+											}
+										],
+										"description": "@internal Where the host got this server, for the data flow records of calls to it: one of Anthropic's, by its registry id; a claude.ai connector, by its id (tagged or a bare UUID) and its directory id or null; or one the user configured, by the transport the host reaches it over. The first two are taken only in a session a desktop host started. Without it, or with a value of another shape, the records say unknown (docs/desktop-host-contract.md, D139). Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+									},
 									"tools": {
 										"type": "array",
 										"items": {
@@ -8281,6 +8531,10 @@
 							}
 						]
 					}
+				},
+				"hint": {
+					"type": "string",
+					"description": "@internal CCR: why the broker sent this set (e.g. connector_signed_in) — a hint, not a grant; the CLI re-derives its own MCP set."
 				},
 				"denied_tools": {
 					"type": "array",
@@ -8615,6 +8869,68 @@
 														},
 														"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 													},
+													"dataFlowServer": {
+														"anyOf": [
+															{
+																"type": "object",
+																"properties": {
+																	"type": {
+																		"type": "string",
+																		"const": "anthropic"
+																	},
+																	"id": {
+																		"type": "string",
+																		"minLength": 1
+																	}
+																},
+																"required": ["type", "id"]
+															},
+															{
+																"type": "object",
+																"properties": {
+																	"type": {
+																		"type": "string",
+																		"const": "claude_ai_connector"
+																	},
+																	"id": {
+																		"type": "string",
+																		"minLength": 1
+																	},
+																	"directory_id": {
+																		"anyOf": [
+																			{
+																				"type": "string",
+																				"minLength": 1
+																			},
+																			{
+																				"type": "null"
+																			}
+																		]
+																	}
+																},
+																"required": ["type", "id", "directory_id"]
+															},
+															{
+																"type": "object",
+																"properties": {
+																	"type": {
+																		"type": "string",
+																		"const": "client_configured"
+																	},
+																	"transport": {
+																		"type": "string",
+																		"enum": ["stdio", "http", "in_process"]
+																	},
+																	"plugin_id_hash": {
+																		"type": "string",
+																		"minLength": 1
+																	}
+																},
+																"required": ["type", "transport"]
+															}
+														],
+														"description": "@internal Where the host got this server, for the data flow records of calls to it: one of Anthropic's, by its registry id; a claude.ai connector, by its id (tagged or a bare UUID) and its directory id or null; or one the user configured, by the transport the host reaches it over. The first two are taken only in a session a desktop host started. Without it, or with a value of another shape, the records say unknown (docs/desktop-host-contract.md, D139). Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+													},
 													"tools": {
 														"type": "array",
 														"items": {
@@ -8826,10 +9142,15 @@
 					"type": "string",
 					"const": "sessions",
 					"description": "Which host-handed bearer the CLI asks for. Absent: the claude.ai sign-in token (the only meaning hosts that predate the field know). 'sessions': the second token that authorizes the cloud-sessions API, which a host that set CLAUDE_CODE_SDK_HAS_SESSIONS_OAUTH_REFRESH answers; it must belong to the same account and organization as the sign-in token."
+				},
+				"token_state": {
+					"type": "string",
+					"enum": ["refused", "not_refused"],
+					"description": "What brought this ask. 'refused': it follows a 401, or a 403 for a revoked token, on a request that carried the sign-in token. 'not_refused': it does not (a Remote Control close code asked for a fresh credential, a request went with no credential, or the CLI holds no token yet), so the token may still be good and the host may answer with it again. Present on every ask without kind, from a CLI that knows the field. A host takes any other value as absent."
 				}
 			},
 			"required": ["subtype"],
-			"description": "@internal Request from the CLI subprocess to the SDK host for a fresh OAuth access token: after a 401 with no local refresh token, or, with kind, when the CLI first needs that bearer.",
+			"description": "@internal Request from the CLI subprocess to the SDK host for a fresh OAuth access token: with no kind, when it has no local refresh token, most often after a 401; with kind, when it first needs that bearer.",
 			"x-direction": "agent"
 		},
 		"oauth_token_refreshResponse": {
@@ -8927,6 +9248,18 @@
 						}
 					],
 					"description": "@internal How to find the file `path` names, instead of resolving it against the live cwd, which a `cd` in the shell moves. workspace_root, diff_root and repo each name a directory the session looks up on each request; as_written names none, and has its contract in its own description. workspace_root is the root list_directory lists from. diff_root is the repository get_workspace_diff diffs, so a path taken from that diff opens the file the diff shows. It is refused in a session whose diff follows the shell's cwd between several repositories; a client that knows the repository should send `repo`. repo is the checkout the session declares for that repository or, failing that, diff_root when its origin remote ends in that owner/name. With those three, `path` must stay inside that directory as spelled (the check follows no symlink). Whatever the anchor, the read is gated as any other read_file is. A path that is `~`, starts with `~/` or leaves that directory, or an anchor the session cannot resolve or does not serve, is refused with the error `read denied: <path>`. Leave the field out when there is no anchor: null is refused. A CLI that predates this field ignores it and reads against the live cwd; the response's `anchor` tells the two apart."
+				},
+				"offset": {
+					"type": "number",
+					"description": "@internal The byte the read starts at, counted from the file's start or, when negative, back from its end, which is the response's `total_bytes`. It is held within the file: further back than the start counts as the start, and past the end as the end. The response's `offset` says where the read started. Up to `max_bytes` bytes (1,000,000 by default, 10,000,000 at most) are read from there, through the same gates as any other read_file, and `truncated` says that more lie past them. To read on, send the response's `offset` plus its `read_bytes`; an answer whose `offset` is less than the one sent did not start there, because the file ends sooner or is one that is only read from its start. Anything but a whole number from -(2^53 - 1) to 2^53 - 1, null included, is refused with the error `read denied: <path>`. A CLI that predates this field, and a session that reads through a tool container, ignore it, refusing no value of it, and read from the file's start: only an answer that has `offset` used it."
+				},
+				"for_upload": {
+					"type": "boolean",
+					"description": "@internal When true, the caller means to hand the file on, for example into an artifact that other people can open, so a file that every other gate has passed also goes through Claude Code's test for credential files (takenByPathRefusal). One whose path has a credential's name or place, as sent or as it resolves, or is too dressed or too deep for the test to judge, is refused with the error_code credential_name (read_denied with the anchor as_written); one of Claude Code's own files, or a kernel or device path, is refused with no error_code. A file with more than one hard link is served: a caller that minds looks for itself. Only an answer that has `upload_screened` used the member. A CLI that predates it, the Remote Control bridge that a session itself runs, the engine's readFile and a session that reads through a tool container ignore it and answer as for a plain read_file, so a caller must take a success without `upload_screened` as a file whose name was not tested."
+				},
+				"liveReply": {
+					"type": "boolean",
+					"description": "@internal When true, a process whose newest system/init lists the capability `read_file_live_reply_v1` publishes the success reply only to the clients attached at that moment, as a control_response marked live_only: true on the session's unsequenced event stream, and the reply is not stored with the session's events. Send it only to such a session, and only if your client reads control_response frames from that stream; a reply sent while its stream is down is lost and the request must be sent again. A reply of over 56 KiB as JSON comes back instead as the live-only error `The reply is too large to be sent without storing it`, which is not stored either: ask for less with `max_bytes` and read on with `offset` (40,000 bytes as base64 fit beside up to 3,000 bytes of paths as JSON, `absPath` and any `requested_path` together). Every other error reply, and every reply from a process that does not list the capability, is an ordinary stored reply, so a client that sets it must accept either."
 				}
 			},
 			"required": ["subtype", "path"],
@@ -8952,12 +9285,37 @@
 				},
 				"lossy": {
 					"type": "boolean",
-					"description": "Present on every utf-8 answer. True when the bytes read were not all valid UTF-8, so `contents` has U+FFFD where bytes were replaced and is not the file's own text: a binary file, text in another encoding, or a read cut inside a character when `truncated` is set. False when `contents` is exactly the bytes read, decoded, even if the file itself contains U+FFFD. Absent on a base64 answer, which is exact, and from an older CLI or tool container: a client that sees neither this nor `encoding: 'base64'` cannot tell whether `contents` is exact."
+					"description": "Present on every utf-8 answer. True when the bytes read were not all valid UTF-8, so `contents` has U+FFFD where bytes were replaced and is not the file's own text: a binary file, text in another encoding, or a read cut inside a character, at its end when `truncated` is set, or at its start when `offset` is set. False when `contents` is exactly the bytes read, decoded, even if the file itself contains U+FFFD. Absent on a base64 answer, which is exact, and from an older CLI or tool container: a client that sees neither this nor `encoding: 'base64'` cannot tell whether `contents` is exact."
 				},
 				"anchor": {
 					"type": "string",
 					"enum": ["workspace_root", "diff_root", "repo", "as_written"],
 					"description": "@internal The kind of the request's `anchor`, set when the file was found by it. Absent when the request sent no anchor, or when an older CLI ignored it and read against the live cwd."
+				},
+				"offset": {
+					"type": "number",
+					"description": "@internal The byte `contents` starts at, counted from the file's start, set when the request's `offset` was used. Absent when the request sent none, or when an older CLI or a tool container ignored it and read from the file's start."
+				},
+				"read_bytes": {
+					"type": "number",
+					"description": "@internal How many of the file's bytes `contents` holds, set when `offset` is. A utf-8 `contents` does not show it where `lossy` is true."
+				},
+				"total_bytes": {
+					"type": "number",
+					"description": "@internal The file's size in bytes as stat gave it when the file was opened for this read, set when `offset` is. A file that changes while it is read can hold more or less, so `contents` can reach past it or end before it. For a file of procfs, sysfs or debugfs (most of /proc and /sys) stat does not know the size, so such a file is read from its start whatever the `offset`."
+				},
+				"etag": {
+					"type": "string",
+					"description": "@internal An opaque string that names the file as it was opened for this read, set when `offset` is; compare it for equality alone. It changes when the file is replaced, or when its size, its modified time or the time of its last status change does. Parts read under one etag can still differ: an edit made while a part is read shows only in the next read's etag, one within a tick of a coarse filesystem clock may not show, and a file of procfs or sysfs keeps its etag while its text changes. A file that is being appended to has a new etag at each read."
+				},
+				"upload_screened": {
+					"type": "boolean",
+					"const": true,
+					"description": "@internal Set when the request's `for_upload` was used and the file passed. Absent when the request did not set it, or when whatever answered ignored it."
+				},
+				"requested_path": {
+					"type": "string",
+					"description": "@internal The request's `path`, exactly as sent, on every success reply whose `absPath` is what that path resolved to. If it differs from the path you sent, the reply answers another request under the same request_id: drop it and keep waiting. Compare the reply's `anchor` with your anchor's kind as well. Both can still match for another file where what the path is resolved against changes between requests (the live cwd, an as_written look-up) or isn't in the reply (which repository, for the anchor kind repo). Absent where `absPath` is itself the path as sent (Remote Control, and a session that reads through a tool container), from the engine's readFile, and in replies of an older CLI. It does not prove who wrote the reply."
 				}
 			},
 			"required": ["contents", "absPath"],
@@ -9771,6 +10129,68 @@
 														},
 														"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 													},
+													"dataFlowServer": {
+														"anyOf": [
+															{
+																"type": "object",
+																"properties": {
+																	"type": {
+																		"type": "string",
+																		"const": "anthropic"
+																	},
+																	"id": {
+																		"type": "string",
+																		"minLength": 1
+																	}
+																},
+																"required": ["type", "id"]
+															},
+															{
+																"type": "object",
+																"properties": {
+																	"type": {
+																		"type": "string",
+																		"const": "claude_ai_connector"
+																	},
+																	"id": {
+																		"type": "string",
+																		"minLength": 1
+																	},
+																	"directory_id": {
+																		"anyOf": [
+																			{
+																				"type": "string",
+																				"minLength": 1
+																			},
+																			{
+																				"type": "null"
+																			}
+																		]
+																	}
+																},
+																"required": ["type", "id", "directory_id"]
+															},
+															{
+																"type": "object",
+																"properties": {
+																	"type": {
+																		"type": "string",
+																		"const": "client_configured"
+																	},
+																	"transport": {
+																		"type": "string",
+																		"enum": ["stdio", "http", "in_process"]
+																	},
+																	"plugin_id_hash": {
+																		"type": "string",
+																		"minLength": 1
+																	}
+																},
+																"required": ["type", "transport"]
+															}
+														],
+														"description": "@internal Where the host got this server, for the data flow records of calls to it: one of Anthropic's, by its registry id; a claude.ai connector, by its id (tagged or a bare UUID) and its directory id or null; or one the user configured, by the transport the host reaches it over. The first two are taken only in a session a desktop host started. Without it, or with a value of another shape, the records say unknown (docs/desktop-host-contract.md, D139). Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+													},
 													"tools": {
 														"type": "array",
 														"items": {
@@ -10385,7 +10805,7 @@
 					"items": {
 						"type": "string"
 					},
-					"description": "@internal Optional protocol features this worker reads, named only to a machine whose announce lists the matching host capability: 'still_here' — an announce marked 'still_here' is noted and nothing is taken from it. Absent from a worker that reads none of what the machine listed; the machine then sends none."
+					"description": "@internal Optional protocol features this worker reads, each named only to a machine whose announce says that it sends such a thing: 'still_here' (to one that lists the matching host capability) — an announce marked 'still_here' is noted and nothing is taken from it; 'upload_reports' (to one that announces an MCP tool with the hint reports_uploads) — the report of uploads on that tool's answers is kept. Absent from a worker that reads none of what the machine said; the machine then sends none."
 				}
 			},
 			"required": ["status", "protocol_version"],
@@ -10614,7 +11034,7 @@
 				}
 			},
 			"required": ["subtype", "device_id"],
-			"description": "@internal Switches the session's Claude in Chrome server to the given browser, as the terminal's picker does. Fails when the server is not connected.",
+			"description": "@internal Switches the session's Claude in Chrome server to the given browser, as the terminal's picker does. Fails when the server is not connected, and in a cloud session.",
 			"x-direction": "client"
 		},
 		"select_chrome_browserResponse": {
@@ -10735,11 +11155,11 @@
 						},
 						"trust_root": {
 							"type": "string",
-							"description": "Present when `directory` sits inside a git repository whose canonical root differs from it (a subdirectory or a linked worktree). Accepting trust grants that whole repository — every subdirectory and linked worktree of the root — so the trust dialog should name this root alongside `directory`. Informational only: the attestation echo still pins `trusted_directory` to `directory`. Vetted by the same visible-glyph rule as `directory`; a canonical root that fails it is omitted rather than carried."
+							"description": "Present when `directory` sits inside a git repository whose canonical root differs from it (a subdirectory or a linked worktree). Accepting trust grants that whole repository — every subdirectory and linked worktree of the root — so the trust dialog should name this root alongside `directory`. Informational only: the attestation echo still pins `trusted_directory` to `directory`. Vetted by the same visible-glyph rule as `directory`: a canonical root that fails it rejects the request (reason: unsafe_path), since accepting would record trust under that root."
 						},
 						"directory": {
 							"type": "string",
-							"description": "Canonical target directory. Nothing changed; show a trust dialog for exactly this string and, on accept, re-send with trust_accepted: true and trusted_directory echoing it verbatim. Safe to render verbatim in the dialog, by construction: every character is a visible, space-distinguishable glyph. Targets whose canonical path contains control (Cc), format (Cf), default-ignorable, line/paragraph-separator (Zl/Zp), non-ASCII-space Zs, or braille-blank code points are rejected (reason: unsafe_path) before this arm can carry them."
+							"description": "Canonical target directory. Nothing changed; show a trust dialog for exactly this string and, on accept, re-send with trust_accepted: true and trusted_directory echoing it verbatim. Safe to render verbatim in the dialog, by construction: every character is a visible, space-distinguishable glyph. Targets whose canonical path, or the canonical root of the repository they belong to, contains control (Cc), format (Cf), default-ignorable, line/paragraph-separator (Zl/Zp), non-ASCII-space Zs, braille-blank or lone-surrogate code points are rejected (reason: unsafe_path) before this arm can carry them."
 						}
 					},
 					"required": ["status", "directory"]
@@ -10761,7 +11181,7 @@
 								"unsafe_path",
 								"remote_origin"
 							],
-							"description": "unsafe_path: the target's canonical path contains characters that do not render as visible, space-distinguishable glyphs — control (Cc), format (Cf), default-ignorable, line/paragraph-separator (Zl/Zp), non-ASCII-space Zs, or braille-blank code points; rejected fail-closed before the trust round-trip, and the offending path is never echoed back. remote_origin: the request reached a Remote Control session (claude remote-control) from a remote client rather than from the process that owns the CLI's stdin; such a session keeps the working directory it was started in, and nothing was resolved or recorded."
+							"description": "unsafe_path: the target's canonical path, or the canonical root of the repository it belongs to (the key a trust grant would be written under), contains characters that do not render as visible, space-distinguishable glyphs — control (Cc), format (Cf), default-ignorable, line/paragraph-separator (Zl/Zp), non-ASCII-space Zs, braille-blank or lone-surrogate code points; rejected fail-closed before the trust round-trip, and the offending path is never echoed back. A root already trusted from a terminal session is not re-judged. remote_origin: the request reached a Remote Control session (claude remote-control) from a remote client rather than from the process that owns the CLI's stdin; such a session keeps the working directory it was started in, and nothing was resolved or recorded."
 						},
 						"message": {
 							"type": "string",
@@ -10902,7 +11322,7 @@
 				"system_prompt": {
 					"type": "string",
 					"minLength": 1,
-					"description": "@internal Replaces the custom system prompt (the --system-prompt / initialize systemPrompt slot). The session keeps sending the system prompt it has recorded, so the new text is first sent after the next compaction; under systemPromptSnapshot: false it is sent from the next turn on. The tool definitions already sent do not change. Applied only when the model request is accepted; must be non-empty (there is no revert-to-built-in form); re-send the current model for a prompt-only update; sending the text already in effect changes nothing. The CLAUDE_CODE_SYSTEM_PROMPT_GB_FEATURE per-turn read, where configured, still wins. Transports that do not implement it, and older builds, ack success without applying it."
+					"description": "@internal Replaces the custom system prompt (the --system-prompt / initialize systemPrompt slot). The session keeps sending the system prompt it has recorded, so the new text is first sent after the next compaction; under systemPromptSnapshot: false it is sent from the next turn on. The tool definitions already sent do not change. Applied only when the model request is accepted; must be non-empty (there is no revert-to-built-in form); re-send the current model for a prompt-only update; sending the text already in effect changes nothing. The CLAUDE_CODE_SYSTEM_PROMPT_FEATURE_FLAG per-turn read, where configured, still wins. Transports that do not implement it, and older builds, ack success without applying it."
 				},
 				"only_if_model_is_current": {
 					"type": "boolean",
@@ -11272,7 +11692,7 @@
 				},
 				"requires_rewind_request_id": {
 					"type": "string",
-					"description": "@internal The request_id of a rewind_conversation control request that the client sent ahead of this one, when the turn is meant only for the conversation as that rewind leaves it. A worker that advertises requires_rewind_request_id: true in turn_handoff_available reads it; a worker without that key ignores it and appends the turn whether or not the rewind was made, and the request may start a new worker whose build the client cannot know, so a client sends the member only once every worker that could read it has the key. A worker that reads it appends the turn only if that rewind is the last one it carried out (answered rewound: true), the last user or assistant message is still the one that rewind left at the end, and nothing it holds waits to be appended ahead of the turn (a turn in progress, or a message it received since). Otherwise it appends nothing and runs no call, and answers an error that starts \"invalid_handoff: required_rewind_\" and then one word: unknown, this worker has carried out no rewind (it replaced the worker that answered that request, or the request was refused or not read yet); other, its last rewind is a different request (the named one was refused here, not read yet, or followed by another); moved_on, it made that cut and the conversation has changed since; lines_waiting, it made that cut and something waits to be appended first. After unknown or other, go by the rewind's own answer where one was given, bearing in mind that a rewound: false of persist_failed or state_changed can still leave the cut for the next worker, and that the same rewind delivered again after its cut was stored answers target_not_found. A client that saw rewound: true and is then answered unknown may send the turn again without the member: the cut stands, though the new worker may have appended lines since, so the turn lands at the conversation's end, not necessarily right after the cut. After other, moved_on or lines_waiting do not send the turn again without the member: the conversation is not, or may no longer be, as that rewind left it. The check is skipped once any of the turn's messages is in the conversation or queued from an earlier delivery: a request sent again after that is answered as without the member. A value that is not a string is refused (invalid_handoff)."
+					"description": "@internal The request_id of a rewind_conversation control request that the client sent ahead of this one, when the turn is meant only for the conversation as that rewind leaves it. A worker that advertises requires_rewind_request_id: true in turn_handoff_available reads it; a worker without that key ignores it and appends the turn whether or not the rewind was made, and the request may start a new worker whose build the client cannot know, so a client sends the member only once every worker that could read it has the key. A worker that reads it appends the turn only if that rewind is the last one it carried out (answered rewound: true), the last user or assistant message is still the one that rewind left at the end, and nothing it holds waits to be appended ahead of the turn (a turn in progress, or a message it received since). Otherwise it appends nothing and runs no call, and answers an error that starts \"invalid_handoff: required_rewind_\" and then one word: unknown, this worker has carried out no rewind (it replaced the worker that answered that request, or the request was refused or not read yet); other, its last rewind is a different request (the named one was refused here, not read yet, or followed by another); moved_on, it made that cut and the conversation has changed since; lines_waiting, it made that cut and something waits to be appended first. After unknown or other, go by the rewind's own answer where one was given, bearing in mind that a rewound: false of persist_failed or state_changed can still leave the cut for the next worker, and that the same rewind delivered again after its cut was stored answers target_not_found, except on a later worker that loaded the stored record of that cut, where the record names the row it cut at: that worker answers it rewound: true again, with the same fields, and then takes the turn. A client that saw rewound: true and is then answered unknown may send the turn again without the member: the cut stands, though the new worker may have appended lines since, so the turn lands at the conversation's end, not necessarily right after the cut. After other, moved_on or lines_waiting do not send the turn again without the member: the conversation is not, or may no longer be, as that rewind left it. The check is skipped once any of the turn's messages is in the conversation or queued from an earlier delivery: a request sent again after that is answered as without the member. A value that is not a string is refused (invalid_handoff)."
 				},
 				"relay_marker": {
 					"type": "object",
@@ -11418,7 +11838,7 @@
 						"type": "string",
 						"maxLength": 64
 					},
-					"description": "@internal What this client draws beyond what every client of its surface draws: `Backdrop` (the session's backdrop, drawn behind the whole conversation; only a `desktop` or `mobile` client's word counts), `Input` and `Select` (on `mobile`: a client that does not name one is sent an empty Box in its place, as is an ask with no `client_id`, since no attach can name its default id). Held per client like `answers`: a later `ui_attach` under the same id that names it replaces it, and it leaves with the client. A name this version does not know, or one said twice, is ignored, so a newer client keeps its attach; a list of more than 16 names, or a name of more than 64 characters, is refused with the attach. Absent: a client still attached, or one put back, keeps what it said, and a first attach draws none. Empty, or nothing known in it: none, and `$.theme.set` answers that nothing draws it."
+					"description": "@internal What this client draws beyond what every client of its surface draws: `Theme` (what `$.theme.set` sets, the scene behind the conversation and the look alike; only a `desktop` or `mobile` client's word counts), `Input` and `Select` (on `mobile`: a client that does not name one is sent an empty Box in its place, as is an ask with no `client_id`, since no attach can name its default id), `Progress` (on `mobile`: a client that does not name it, or an ask with no `client_id`, is sent the Box and Text that draw it). Held per client like `answers`: a later `ui_attach` under the same id that names it replaces it, and it leaves with the client. A name this version does not know, or one said twice, is ignored, so a newer client keeps its attach; a list of more than 16 names, or a name of more than 64 characters, is refused with the attach. Absent: a client still attached, or one put back, keeps what it said, and a first attach draws none. Empty, or nothing known in it: none, and `$.theme.set` answers that nothing draws it."
 				}
 			},
 			"required": ["subtype", "surface", "client_id"],
@@ -11469,9 +11889,9 @@
 						"AbovePrompt",
 						"Pane",
 						"Placed",
-						"Backdrop"
+						"Theme"
 					],
-					"description": "@internal A component a plugin may draw through `ui.render`: one name per render site of the hooks engine (src/plugins/functionHooks/types/render/render-component.ts)."
+					"description": "@internal What a surface names a site by: a component, or `Theme`, the session's theme."
 				},
 				"instance_id": {
 					"type": "string",
@@ -11660,9 +12080,9 @@
 						"AbovePrompt",
 						"Pane",
 						"Placed",
-						"Backdrop"
+						"Theme"
 					],
-					"description": "@internal A component a plugin may draw through `ui.render`: one name per render site of the hooks engine (src/plugins/functionHooks/types/render/render-component.ts)."
+					"description": "@internal What a surface names a site by: a component, or `Theme`, the session's theme."
 				},
 				"instance_id": {
 					"type": "string",
@@ -11828,6 +12248,10 @@
 					"type": "string",
 					"maxLength": 1000000,
 					"description": "@internal What the person pastes afterwards, verbatim, as the `ui.copy` hooks left it."
+				},
+				"answers_press": {
+					"type": "string",
+					"description": "@internal The `press_id` of the press whose own handler's call made this `$.ui.copy`, awaited by that handler or not. Only the engine sets it: no plugin's argument and no `ui.copy` hook can set or change it, and a hook that changes the text or surface removes it. Set only on a request addressed to the client whose `client_id` the press carried. Absent from any other copy: one from a hook, a field, a pick, a timer no press's handler set, or code reached through a plugin's method, its own included; one whose press argument a hook changed before its handler ran; one whose press carried no `press_id` or no `client_id`; and one made once its press and a newer press of the same plugin that carried an id are both answered. The engine checks neither the age of the id nor how often it is named, on copies and fills alike: that is the host's."
 				}
 			},
 			"required": ["subtype", "surface", "client_id", "plugin", "text"],
@@ -12039,7 +12463,7 @@
 						"AbovePrompt",
 						"Pane",
 						"Placed",
-						"Backdrop"
+						"Theme"
 					],
 					"description": "@internal The render site the Input was drawn in, as the ui_render that drew it named it; pairs with `key` for the re-resolve."
 				},
@@ -12111,9 +12535,9 @@
 						"AbovePrompt",
 						"Pane",
 						"Placed",
-						"Backdrop"
+						"Theme"
 					],
-					"description": "@internal A component a plugin may draw through `ui.render`: one name per render site of the hooks engine (src/plugins/functionHooks/types/render/render-component.ts)."
+					"description": "@internal What a surface names a site by: a component, or `Theme`, the session's theme."
 				},
 				"instance_id": {
 					"type": "string",
@@ -12332,6 +12756,11 @@
 								"minimum": -9007199254740991,
 								"maximum": 9007199254740991,
 								"description": "@internal The body columns its content asked for while docked; a request the person's own sizing overrides."
+							},
+							"placement": {
+								"type": "string",
+								"const": "widget",
+								"description": "@internal Its latest open asked to start as a widget, the small form of a minimized pane. A request, repeated on every roster while it stands: honour it on first seeing the pane; after that the person's expand or minimize stands. Read any other value as absent."
 							}
 						},
 						"required": ["id", "title", "plugin"],
@@ -12423,7 +12852,7 @@
 				"press_id": {
 					"type": "string",
 					"pattern": "^[A-Za-z0-9._-]{1,64}$",
-					"description": "@internal The host's own id for this one press: 1 to 64 ASCII letters, digits, '.', '_' and '-'. A `$.prompt.fill` that the pressed element's own handler makes names it back as `answers_press` on the ui_prompt_fill. A value of any other shape is dropped as if absent and the press runs the same. Send `client_id` with it: the id is named back to that client alone, and the id of a press that carries no `client_id` is named back to no client. No hook and no handler is shown it. A CLI that predates the field ignores it."
+					"description": "@internal The host's own id for this one press: 1 to 64 ASCII letters, digits, '.', '_' and '-'. A `$.prompt.fill` or `$.ui.copy` that the pressed element's own handler makes names it back as `answers_press` on the ui_prompt_fill or ui_copy. A value of any other shape is dropped as if absent and the press runs the same. Send `client_id` with it: the id is named back to that client alone, and the id of a press that carries no `client_id` is named back to no client. No hook and no handler is shown it. A CLI that predates the field ignores it."
 				},
 				"render": {
 					"type": "object",
@@ -12439,36 +12868,27 @@
 							"description": "@internal The asking client, as its ui_attach named it. The ask puts it on the roster when it is not there: the id given, else `<surface>:default`."
 						},
 						"component": {
-							"anyOf": [
-								{
-									"type": "string",
-									"enum": [
-										"AskUserQuestion",
-										"UserMessage",
-										"AssistantMessage",
-										"ToolUse",
-										"ToolResult",
-										"ToolGroup",
-										"ToolProgress",
-										"CommandOutput",
-										"Spinner",
-										"TurnDuration",
-										"InfoNotice",
-										"SessionMode",
-										"PromptHint",
-										"AbovePrompt",
-										"Pane",
-										"Placed",
-										"Backdrop"
-									],
-									"description": "@internal A component a plugin may draw through `ui.render`: one name per render site of the hooks engine (src/plugins/functionHooks/types/render/render-component.ts)."
-								},
-								{
-									"type": "string",
-									"const": "Theme"
-								}
+							"type": "string",
+							"enum": [
+								"AskUserQuestion",
+								"UserMessage",
+								"AssistantMessage",
+								"ToolUse",
+								"ToolResult",
+								"ToolGroup",
+								"ToolProgress",
+								"CommandOutput",
+								"Spinner",
+								"TurnDuration",
+								"InfoNotice",
+								"SessionMode",
+								"PromptHint",
+								"AbovePrompt",
+								"Pane",
+								"Placed",
+								"Theme"
 							],
-							"description": "@internal What to draw, or `Theme`: the session's colors, under the `instance_id` `theme`. No hook draws them: the engine answers itself, `props` of `plugin` and `colors` to `desktop` and `mobile`, and `{}` with none standing, under another id or to any other surface."
+							"description": "@internal What to draw, or `Theme`, the session's theme, by `instance_id`. Under `theme` no hook draws: the engine answers itself, `props` of `plugin` with whichever of `colors`, `overrideColorScheme` and a still `backdrop` stands to `desktop` and `mobile`, and `{}` with none standing, with a scene and no `colors`, under another id or to any other surface. Under `backdrop` a mod's `ui.render` hook for `Backdrop` draws the scene that stands, with `props` of `scene`, `plugin`, `glass` and `overrideColorScheme` where a plugin said it."
 						},
 						"instance_id": {
 							"type": "string",
@@ -13080,6 +13500,35 @@
 					"properties": {
 						"type": {
 							"type": "string",
+							"const": "Progress"
+						},
+						"props": {
+							"type": "object",
+							"properties": {
+								"label": {
+									"type": "string"
+								},
+								"value": {
+									"type": "number"
+								},
+								"valueText": {
+									"type": "string"
+								},
+								"color": {
+									"type": "string"
+								}
+							},
+							"required": ["label"],
+							"description": "@internal How far along a task is, sent only to a mobile client that names `Progress` in `ui_attach`'s `draws`; for any other client the engine draws it as Box and Text. `label` names it, `value` is the fraction from 0 to 1 and absent while the task is running, `valueText` is the figure as a person reads it, `color` a theme key or a raw color. No children."
+						}
+					},
+					"required": ["type", "props"]
+				},
+				{
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
 							"const": "engine"
 						},
 						"ref": {
@@ -13092,7 +13541,7 @@
 					"required": ["type", "ref"]
 				}
 			],
-			"description": "@internal A plain-data tree a `ui.render` hook returned, as the hooks engine validated it: Box, Text, div, span or b with children, a Button, Input or Select leaf carrying the `press` that names its handler, a Link with its text, a Code leaf, a Markdown leaf, a Client leaf (a surface-module region, carried as data; never on mobile), an Svg leaf (desktop and mobile; never the terminal), or an engine node the surface draws itself (src/plugins/functionHooks/types/element/render-element.ts)."
+			"description": "@internal A plain-data tree a `ui.render` hook returned, as the hooks engine validated it: Box, Text, div, span or b with children, a Button, Input or Select leaf carrying the `press` that names its handler, a Link with its text, a Code leaf, a Markdown leaf, a Client leaf (a surface-module region, carried as data; never on mobile), an Svg leaf (desktop and mobile; never the terminal), a Progress leaf (mobile alone), or an engine node the surface draws itself (src/plugins/functionHooks/types/element/render-element.ts)."
 		},
 		"ui_pressResponse____schema6": {
 			"type": "object",
@@ -13699,36 +14148,27 @@
 					"description": "@internal The asking client, as its ui_attach named it. The ask puts it on the roster when it is not there: the id given, else `<surface>:default`."
 				},
 				"component": {
-					"anyOf": [
-						{
-							"type": "string",
-							"enum": [
-								"AskUserQuestion",
-								"UserMessage",
-								"AssistantMessage",
-								"ToolUse",
-								"ToolResult",
-								"ToolGroup",
-								"ToolProgress",
-								"CommandOutput",
-								"Spinner",
-								"TurnDuration",
-								"InfoNotice",
-								"SessionMode",
-								"PromptHint",
-								"AbovePrompt",
-								"Pane",
-								"Placed",
-								"Backdrop"
-							],
-							"description": "@internal A component a plugin may draw through `ui.render`: one name per render site of the hooks engine (src/plugins/functionHooks/types/render/render-component.ts)."
-						},
-						{
-							"type": "string",
-							"const": "Theme"
-						}
+					"type": "string",
+					"enum": [
+						"AskUserQuestion",
+						"UserMessage",
+						"AssistantMessage",
+						"ToolUse",
+						"ToolResult",
+						"ToolGroup",
+						"ToolProgress",
+						"CommandOutput",
+						"Spinner",
+						"TurnDuration",
+						"InfoNotice",
+						"SessionMode",
+						"PromptHint",
+						"AbovePrompt",
+						"Pane",
+						"Placed",
+						"Theme"
 					],
-					"description": "@internal What to draw, or `Theme`: the session's colors, under the `instance_id` `theme`. No hook draws them: the engine answers itself, `props` of `plugin` and `colors` to `desktop` and `mobile`, and `{}` with none standing, under another id or to any other surface."
+					"description": "@internal What to draw, or `Theme`, the session's theme, by `instance_id`. Under `theme` no hook draws: the engine answers itself, `props` of `plugin` with whichever of `colors`, `overrideColorScheme` and a still `backdrop` stands to `desktop` and `mobile`, and `{}` with none standing, with a scene and no `colors`, under another id or to any other surface. Under `backdrop` a mod's `ui.render` hook for `Backdrop` draws the scene that stands, with `props` of `scene`, `plugin`, `glass` and `overrideColorScheme` where a plugin said it."
 				},
 				"instance_id": {
 					"type": "string",
@@ -14199,6 +14639,35 @@
 					"properties": {
 						"type": {
 							"type": "string",
+							"const": "Progress"
+						},
+						"props": {
+							"type": "object",
+							"properties": {
+								"label": {
+									"type": "string"
+								},
+								"value": {
+									"type": "number"
+								},
+								"valueText": {
+									"type": "string"
+								},
+								"color": {
+									"type": "string"
+								}
+							},
+							"required": ["label"],
+							"description": "@internal How far along a task is, sent only to a mobile client that names `Progress` in `ui_attach`'s `draws`; for any other client the engine draws it as Box and Text. `label` names it, `value` is the fraction from 0 to 1 and absent while the task is running, `valueText` is the figure as a person reads it, `color` a theme key or a raw color. No children."
+						}
+					},
+					"required": ["type", "props"]
+				},
+				{
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
 							"const": "engine"
 						},
 						"ref": {
@@ -14211,7 +14680,7 @@
 					"required": ["type", "ref"]
 				}
 			],
-			"description": "@internal A plain-data tree a `ui.render` hook returned, as the hooks engine validated it: Box, Text, div, span or b with children, a Button, Input or Select leaf carrying the `press` that names its handler, a Link with its text, a Code leaf, a Markdown leaf, a Client leaf (a surface-module region, carried as data; never on mobile), an Svg leaf (desktop and mobile; never the terminal), or an engine node the surface draws itself (src/plugins/functionHooks/types/element/render-element.ts)."
+			"description": "@internal A plain-data tree a `ui.render` hook returned, as the hooks engine validated it: Box, Text, div, span or b with children, a Button, Input or Select leaf carrying the `press` that names its handler, a Link with its text, a Code leaf, a Markdown leaf, a Client leaf (a surface-module region, carried as data; never on mobile), an Svg leaf (desktop and mobile; never the terminal), a Progress leaf (mobile alone), or an engine node the surface draws itself (src/plugins/functionHooks/types/element/render-element.ts)."
 		},
 		"ui_renderResponse____schema1": {
 			"type": "object",
@@ -14573,7 +15042,7 @@
 						"AbovePrompt",
 						"Pane",
 						"Placed",
-						"Backdrop"
+						"Theme"
 					],
 					"description": "@internal The render site the Select was drawn in, as the ui_render that drew it named it; pairs with `key` for the re-resolve."
 				},
