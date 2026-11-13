@@ -17,18 +17,14 @@ printf '%s %s\\n' "$T" "$IN" >> "$D/$E.log"
 [ -f "$D/ctl/$E.exit" ] && exit "$(cat "$D/ctl/$E.exit")"
 exit 0
 `;
-/** Status line helper: logs one row per call (time, env, stdin) and prints rows. Kind "sub" prints one row per task. */
+/** Status line helper: logs one row per call (time, env, stdin) and prints rows. */
 export const SL_SH = `#!/bin/bash
 # sl.sh <kind>: log invocation (time, env, stdin) and print a row
 K=$1; D="$HOME/sllog"; mkdir -p "$D"
 IN=$(cat)
 T=$(/usr/bin/perl -MTime::HiRes=time -e 'printf "%.3f", time')
 printf '%s ENV COLUMNS=%s LINES=%s CLAUDECODE=%s CHILD=%s\\n%s\\n' "$T" "$COLUMNS" "$LINES" "$CLAUDECODE" "$CLAUDE_CODE_CHILD_SESSION" "$IN" >> "$D/$K.log"
-if [ "$K" = sub ]; then
-  echo "$IN" | /usr/bin/python3 -c 'import sys,json;d=json.load(sys.stdin);[print(json.dumps({"id":t["id"],"content":"SUBROW "+t["status"]})) for t in d.get("tasks",[])]'
-else
-  echo "SL-ROW1"; echo "SL-ROW2"
-fi
+echo "SL-ROW1"; echo "SL-ROW2"
 `;
 
 /** A hook entry that runs the helper for one event. */

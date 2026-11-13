@@ -687,8 +687,7 @@
 			"pty.statusline.debounce",
 			"pty.statusline.dialog-pause",
 			"pty.statusline.idle-no-tick",
-			"pty.statusline.refresh-interval",
-			"pty.statusline.subagent-tick"
+			"pty.statusline.refresh-interval"
 		]
 	},
 	"docs/extend/hooks/session-events.md#notification:8b61c366": {
@@ -1056,7 +1055,6 @@
 			"pty.statusline.dialog-pause",
 			"pty.statusline.idle-no-tick",
 			"pty.statusline.refresh-interval",
-			"pty.statusline.subagent-tick",
 			"pty.captures.guide"
 		]
 	},

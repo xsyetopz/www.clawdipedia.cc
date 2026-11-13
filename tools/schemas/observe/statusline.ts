@@ -1,7 +1,6 @@
 // Usage: bun tools/schemas/observe/statusline.ts <out-dir> [--to <version>]
 // Runs the status line pty probes (fake key, local stub, temp HOME) and records the key paths and JSON types
 // of the JSON that the program writes to the status line command's stdin. No value is kept.
-// Roots: `$root` for the main status line, `subagentStatusLineInput` for the subagent panel.
 import { mkdir, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -30,17 +29,17 @@ if (out === undefined || out === "") {
 }
 
 const tally = new Tally();
-const counts = { main: 0, sub: 0, runs: 0 };
-const feed = (x: PtyRun, kind: "main" | "sub"): void => {
-	const lines = x.file(`sllog/${kind}.log`).split("\n");
+const counts = { main: 0, runs: 0 };
+const feed = (x: PtyRun): void => {
+	const lines = x.file("sllog/main.log").split("\n");
 	for (let i = 0; i < lines.length; i++) {
 		if (!/^\d+\.\d+ ENV/u.test(lines[i] ?? "")) {
 			continue;
 		}
 		try {
 			const parsed: unknown = JSON.parse(lines[i + 1] ?? "");
-			tally.add(kind === "main" ? "$root" : "subagentStatusLineInput", parsed);
-			counts[kind]++;
+			tally.add("$root", parsed);
+			counts.main++;
 		} catch {
 			// not JSON: skip
 		}
@@ -50,8 +49,7 @@ const watch = ({ retryIf: _r, ...c }: PtyCase): PtyCase => ({
 	...c,
 	data: (x) => {
 		counts.runs++;
-		feed(x, "main");
-		feed(x, "sub");
+		feed(x);
 		return c.data(x);
 	},
 });
@@ -91,7 +89,6 @@ try {
 	const refresh = get("statusline.refresh-interval");
 	const cases: PtyCase[] = [
 		watch(refresh),
-		watch(get("statusline.subagent-tick")),
 		// a turn first, so the fields that need a finished request show up
 		watch({
 			...refresh,

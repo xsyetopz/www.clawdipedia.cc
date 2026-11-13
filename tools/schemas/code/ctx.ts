@@ -130,7 +130,6 @@ const PRELOAD = [
 	join(OUT, "claude-code-stream-json.json"),
 	join(CAPTURES, "print/transcripts.lines.json"),
 	join(CAPTURES, "pty/statusline.refresh-interval.json"),
-	join(CAPTURES, "pty/statusline.subagent-tick.json"),
 ];
 const preloaded = new Map<string, Json | undefined>(
 	await Promise.all(

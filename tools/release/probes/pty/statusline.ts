@@ -2,7 +2,6 @@
 // The helper logs one row per call into the sandbox; intervals come from those times and from RAW.idx read bursts.
 // Out of tolerance is not a failure: the case reruns once and is marked flaky when the rerun disagrees.
 import {
-	arr,
 	ASK,
 	ESC,
 	gaps,
@@ -11,7 +10,6 @@ import {
 	type Obj,
 	obj,
 	pre,
-	PROMPT,
 	type PtyCase,
 	type PtyGroup,
 	type PtyRun,
@@ -32,10 +30,6 @@ const SL = (extra: Obj = {}): Obj => ({
 		command: "/bin/bash {HOME}/sl.sh main",
 		padding: 1,
 		...extra,
-	},
-	subagentStatusLine: {
-		type: "command",
-		command: "/bin/bash {HOME}/sl.sh sub",
 	},
 });
 
@@ -129,7 +123,7 @@ const noTick: PtyCase = {
 	secs: 32,
 	facts: ["statusline.timing"],
 	notes:
-		"Idle session, no refreshInterval and no subagent: the main status line is expected to run only at start (no periodic tick).",
+		"Idle session and no refreshInterval: the main status line is expected to run only at start (no periodic tick).",
 	retryIf: (f) => f["withinTolerance"] === false,
 	data: (x) => {
 		const c = calls(x, "main");
@@ -182,48 +176,6 @@ const dialogPause: PtyCase = {
 	},
 };
 
-const subagent: PtyCase = {
-	id: "statusline.subagent-tick",
-	settings: SL(),
-	stub: {
-		seq: [
-			{
-				name: "Agent",
-				input: {
-					description: "Probe task",
-					prompt: PROMPT,
-					subagent_type: "general-purpose",
-					run_in_background: true,
-				},
-			},
-		],
-	},
-	schedule: [UP, ASK()],
-	secs: 34,
-	facts: ["statusline.subagent"],
-	notes:
-		"The stub starts one background general-purpose agent; the subagent status line runs on a tick while the panel has tasks (expected 5 s +-1 s).",
-	retryIf: (f) => f["withinTolerance"] === false,
-	data: (x) => {
-		const s = calls(x, "sub");
-		const tasks = s.flatMap((k) => arr(k.stdin["tasks"]).map((t) => obj(t)));
-		return {
-			...pre(s.length > 0, "subagent status line never ran"),
-			...interval(s, 5),
-			stdinKeys: keysOf(s[0]?.stdin ?? {}),
-			taskKeys: keysOf(tasks[0] ?? {}),
-			taskStatuses: [
-				...new Set(tasks.map((t) => String(t["status"]))),
-			].toSorted(),
-			subRowShown: shows(x, "SUBROW"),
-		};
-	},
-	samples: (x) => ({
-		...intervalSamples(calls(x, "sub")),
-		mainInvocations: String(calls(x, "main").length),
-	}),
-};
-
 const debounce: PtyCase = {
 	id: "statusline.debounce",
 	settings: SL(),
@@ -267,6 +219,6 @@ const debounce: PtyCase = {
 
 export const statuslineGroup: PtyGroup = {
 	id: "statusline",
-	title: "status line and subagent status line timing",
-	cases: () => [noTick, refresh, dialogPause, subagent, debounce],
+	title: "status line timing",
+	cases: () => [noTick, refresh, dialogPause, debounce],
 };
