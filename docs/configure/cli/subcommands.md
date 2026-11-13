@@ -21,7 +21,7 @@ claude stop <id>                        # stop it, keep the conversation
 
 ## Commands
 
-Source: the text of `claude <command> --help` in `2.1.322`.
+Source: the text of `claude <command> --help` in `2.1.323`.
 
 | Command | Status | What it does |
 | --- | --- | --- |
@@ -80,7 +80,7 @@ In eval mode, `--json`, `--timeout`, `--post`, `--no-post`, and `--trust-workspa
 ### `daemon` Subcommands
 
 `claude daemon --help` lists `run [json-path]`, `status`, `logs`, `uninstall`, and `stop` (with `--any` and `--keep-workers`), and the options `--json-path <p>` (default `~/.claude/daemon.json`) and `--log-file <p>` (default `~/.claude/daemon.log`). The help text says: "Service install is disabled in this version — the daemon runs on demand and exits when the last client disconnects."
-Source: the program, in its help text in `2.1.322` and its argument parser (`chunk-j71tw2ed.js`, near offset 75628).
+Source: the program, in its help text in `2.1.323` and its argument parser (`chunk-j71tw2ed.js`, near offset 75628).
 
 - With no subcommand, the daemon opens the hub on a terminal, and runs in the foreground (`run`) when stdin is not a terminal.
 - `log` is an alias of `logs`. Both options also take the `--option=value` form.

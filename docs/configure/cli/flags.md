@@ -207,7 +207,7 @@ Flags that connect to an IDE, the desktop app, or a deep link.
 | --- | --- | --- | --- |
 | `--ide` | <Documented /> | ✅ | Connects to the IDE at startup when exactly one valid IDE is open. |
 | `--desktop` | <Documented /> | ✅ | Opens the session in the Claude Desktop app instead of the terminal. |
-| `--chrome` | <Documented /> | ✅ | Turns on the Claude in Chrome integration. |
+| `--chrome` | <Documented /> | ✅ | Turns on the Claude in Chrome integration. If the first-run setup cannot connect, the program tells you to restart with `claude --chrome --resume`, not to run `/chrome` (`chunk-1xmjf4e6.js:1397247`, `chunk-3k6k02vw.js:41832`). |
 | `--no-chrome` | <Documented /> | ✅ | Turns off the Claude in Chrome integration. |
 | `--prefill` `<text>` | <Undocumented /> | ❌ | Fills the prompt box with text and does not send it. |
 | `--prefill-b64` `<b64>` | <Undocumented /> | ❌ | Fills the prompt box with base64url text, for deep links. |

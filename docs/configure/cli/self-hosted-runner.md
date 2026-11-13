@@ -1,13 +1,13 @@
 ---
 title: Self-Hosted Runner
-description: Every option of claude self-hosted-runner and its orchestrator, setup, doctor, and decode-token subcommands in 2.1.322, with the parser rules and each error.
+description: Every option of claude self-hosted-runner and its orchestrator, setup, doctor, and decode-token subcommands in 2.1.323, with the parser rules and each error.
 sidebar_position: 5
 ---
 
 `claude self-hosted-runner` runs Claude Code cloud sessions on a machine that you control. The root help text does not list the command.
-The [official overview](https://code.claude.com/docs/en/self-hosted-environments) explains environments and runners. The [deploy guide](https://code.claude.com/docs/en/self-hosted-environments-deploy) and the [configuration guide](https://code.claude.com/docs/en/self-hosted-environments-configuration) explain most options. This page lists every option in `2.1.322`, with the options that the official pages do not name, and the exact parser rules.
+The [official overview](https://code.claude.com/docs/en/self-hosted-environments) explains environments and runners. The [deploy guide](https://code.claude.com/docs/en/self-hosted-environments-deploy) and the [configuration guide](https://code.claude.com/docs/en/self-hosted-environments-configuration) explain most options. This page lists every option in `2.1.323`, with the options that the official pages do not name, and the exact parser rules.
 
-Source: the text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.322`, and the option parser of the program (`chunk-0p6farb3.js`, from offset 243900). The variables are on [Remote and Cloud Session Variables](../env-vars/remote-and-cloud-sessions.md).
+Source: the text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.323`, and the option parser of the program (`chunk-jmkrmahq.js`, near offset 253048). The variables are on [Remote and Cloud Session Variables](../env-vars/remote-and-cloud-sessions.md).
 
 ## Example
 
