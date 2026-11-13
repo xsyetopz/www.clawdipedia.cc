@@ -127,6 +127,19 @@ The program names each rate limit window in its usage limit messages (`chunk-7w2
 
 Since `2.1.312`, the program calls the five-hour window the "5-hour limit". Earlier it said "session limit" (`2.1.311`). The same change reaches the reset messages, such as "Resetting your 5-hour limit… this usually takes a few seconds" (`chunk-s4kb1551.js:645`) and "Couldn't reset your 5-hour limit with this login · run /login, then try again" (`chunk-1pk1x242.js:2546`). Source: the [release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312) and the program.
 
+## The Usage Limit Menu
+
+`/rate-limit-options` opens a menu at a usage limit (`chunk-2x9ma4k7.js:2368416`; the rows are built at `chunk-d338x18r.js:39591`). These rows can appear:
+
+| Row | When |
+| --- | --- |
+| "Switch to usage credits", or "Add funds to continue with usage credits" | The limit can be passed with usage credits. |
+| "Ask your admin for more usage" | The account cannot turn on credits itself. |
+| "Upgrade your plan" | The limit lists an upgrade path. |
+| "Stop and wait for limit to reset", or "Stop" | Always. |
+
+The program shows "Couldn't load your current spend limit, so it can't be changed right now. Try /rate-limit-options again later." when it cannot read the current spend limit. Since `2.1.323`, the menu does not offer a lower limit then (`chunk-d338x18r.js:31796`). The string is not in the `2.1.322` program.
+
 ## What Others Can See
 
 - An SDK host gets the account from the control protocol: `email`, `organization`, `subscriptionType`, `tokenSource`, `apiKeySource`, and `apiProvider` (`schemas/claude-code-control-protocol.json`).
