@@ -1,0 +1,7 @@
+name: Project setup
+description: Install the dependencies of the plugin servers, which keep their own lockfiles.
+runs:
+  using: composite
+  steps:
+    - run: just setup-project
+      shell: bash
