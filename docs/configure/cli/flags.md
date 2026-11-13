@@ -1,11 +1,11 @@
 ---
 title: All Flags
-description: Every claude flag in 2.1.322, with the ones that claude --help hides, grouped by job.
+description: Every claude flag in 2.1.323, with the ones that claude --help hides, grouped by job.
 sidebar_position: 2
 ---
 
 A flag changes how one `claude` run behaves.
-`claude --help` shows 66 flags. Another 65 work but stay hidden from the help text.
+`claude --help` shows 66 flags. Another 68 work but stay hidden from the help text.
 This page lists both kinds in one place, grouped by what they do.
 Two hidden flags have no row, because no code reads them: `--runner-declares` and `--agents-view-if-allowed` (the program).
 
@@ -62,6 +62,7 @@ Flags that choose how a run starts and how print mode reads input and writes out
 | `--client-data-url <url>` | <Undocumented /> | ❌ | Loads a signed configuration document from a URL and exits if it fails. |
 | `--allow-other-models` | <Undocumented /> | ❌ | With `--client-data-url`, starts on a model that the document does not list. |
 | `--managed-settings` `<json>` | <Undocumented /> | ❌ | Gives policy settings as JSON from a parent process, for the SDK. |
+| `--managed-settings-in-initialize` | <Undocumented /> | ❌ | Reads the policy settings from the `managedSettings` field of the `initialize` request, not from `--managed-settings`. It exits if the settings cannot be used. For SDK use only; it needs `--await-initialize` (the program, `chunk-9tj6jrqc.js:64543`). |
 | `--host-auth-is-org-sign-in` | <Undocumented /> | ❌ | Says that the token of the host is an organization sign-in, for desktop hosts. |
 
 ### Safe Modes, Settings, and Debug
@@ -79,6 +80,7 @@ Flags that strip your setup down, load extra settings, or turn on logs.
 | `--bare` | <Documented /> | ✅ | Starts with a minimal setup that has no hooks, no plugin sync, no auto memory, and no background work. It skips hooks, LSP, plugin sync, attribution, auto memory, background prefetches, keychain reads, and `CLAUDE.md` discovery. |
 | `--safe-mode` | <Documented /> | ✅ | Starts with all customizations off, such as `CLAUDE.md`, skills, plugins, hooks, and MCP servers. |
 | `--restricted` | <Documented /> | ✅ | Removes the tools that run code and `WebFetch`. Also ignores user, project, and local settings. It suits untrusted input. |
+| `--ignore-persisted-trust` | <Undocumented /> | ❌ | No saved workspace trust record counts in this process. `CLAUDE_CODE_IGNORE_PERSISTED_TRUST` does the same. The program reads the flag from the arguments; it has no help text (`chunk-rqvvpwt0.js:8192`, `chunk-x4fdscgs.js:85193`). |
 | `--ax-screen-reader` | <Documented /> | ✅ | Draws flat text with no borders or animations, for screen readers. |
 | `--settings` `<file-or-json>` | <Documented /> | ✅ | Loads more settings from a JSON file or a JSON string. |
 | `--setting-sources` `<sources>` | <Documented /> | ✅ | Chooses which setting sources load: `user`, `project`, and `local`. A source that you leave out supplies no auto-mode rules and no saved permission consents. Managed settings and `--settings` stay (the program). |
@@ -193,6 +195,7 @@ Flags that a lead agent passes to a teammate process it starts. You rarely set t
 | `--agent-color` `<color>` | <Undocumented /> | ❌ | Sets the UI color of a teammate. |
 | `--plan-mode-required` | <Undocumented /> | ❌ | Requires plan mode before the teammate implements anything. |
 | `--teammate-mode` `<mode>` | <Documented /> | ❌ | Sets the mode of a teammate. The bundle gives no help text. |
+| `--lead-verify-key` `<time.key>` | <Undocumented /> | ❌ | Gives a teammate the public key that checks the messages of its team lead. The lead passes it when it starts the teammate (the program, `chunk-9tj6jrqc.js:71266`, `chunk-b5mt6th9.js:29769`). |
 | `--agent-type` `<type>` | <Undocumented /> | ❌ | Sets a custom agent type for a teammate. |
 | `--parent-session-id` `<id>` | <Undocumented /> | ❌ | Gives the parent session ID for analytics. |
 

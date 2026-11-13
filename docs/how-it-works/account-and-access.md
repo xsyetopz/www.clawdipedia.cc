@@ -95,7 +95,7 @@ These rules change the Fable entry:
   - Your plan is not `max` or `pro`, and your organization role is not `admin`, `billing`, `owner`, or `primary_owner` (`chunk-jshe6j36.js:11262`, `chunk-yqezv9gr.js:32550`). Without a claude.ai login with the inference scope, neither the plan nor the role keeps the entry on (`chunk-yqezv9gr.js:32391`).
   - Usage credits are off for the organization, or not set up (`org_level_disabled` or `overage_not_provisioned`).
   - The model's billing mode is not `pay_per_request` or `included_in_plan`.
-- **Credits-only plans.** The server config `tengu_saffron_credits_only_tiers` names the plans that use models only with credits. Its default is `["enterprise"]` (`chunk-jshe6j36.js:11398`).
+- **Credits-only plans.** The server config `tengu_saffron_credits_only_tiers` names the plans that use models only with credits. Its default is `["enterprise"]` (`chunk-32xrm2zt.js:183363`).
 - To limit the models people can pick, use `availableModels` and `deniedModels`. See [Model Settings](../configure/settings/model.md).
 
 ## What a Refusal Says

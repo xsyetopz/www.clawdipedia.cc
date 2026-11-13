@@ -1,6 +1,6 @@
 ---
 title: Subcommands
-description: Every claude subcommand in 2.1.322, including background sessions, auth, plugins, and the hidden commands.
+description: Every claude subcommand in 2.1.323, including background sessions, auth, plugins, and the hidden commands.
 sidebar_position: 3
 ---
 
@@ -30,7 +30,7 @@ Source: the text of `claude <command> --help` in `2.1.322`.
 | `claude logs <id\|name>` | <Documented /> | Prints the recent output of a background session. |
 | `claude stop <id>` (alias `kill`) | <Documented /> | Stops a background session and keeps the conversation. |
 | `claude respawn <id>` or `--all` | <Documented /> | Restarts a background session, or all of them, so it uses the current Claude Code binary. |
-| `claude rm <id>` | <Documented /> | Deletes a background session and its worktree when that is safe. Unlike `stop`, it works on a session that already exited. In `2.1.321` it takes `--discard-unpushed <commit>@<worktree-id>` (also discards the unpushed commits and uncommitted changes of the worktree while it is still at that commit) and `--force-remove-worktree <worktree-id>` (deletes the worktree folder when the `WorktreeRemove` hook or git could not; the repository must list it as a worktree, with no uncommitted changes to tracked files; the branch stays). For both, pass the value that an earlier `claude rm <id>` printed. |
+| `claude rm <id>` | <Documented /> | Removes a background session from the list, and deletes its worktree when that is safe. The conversation is kept, and `claude --resume` lists it (`chunk-ph0kyf9w.js:69249`). Unlike `stop`, it works on a session that already exited. It takes `--discard-unpushed <commit>@<worktree-id>` (also discards the unpushed commits and uncommitted changes of the worktree while it is still at that commit) and `--force-remove-worktree <worktree-id>` (deletes the worktree folder when the `WorktreeRemove` hook or git could not; the repository must list it as a worktree, with no uncommitted changes to tracked files; the branch stays). For both, pass the value that an earlier `claude rm <id>` printed. |
 | `claude daemon [run\|status\|logs\|stop\|uninstall]` | <Documented /> | Controls the supervisor of background sessions, which the root help does not list. See [`daemon` Subcommands](#daemon-subcommands). |
 | `claude auth login\|logout\|status` | <Documented /> | Signs you in and out. `status` exits with 1 when you are not signed in. `login` takes `--claudeai` (the default), `--console` (API usage billing), `--email <email>` (fills in the login page), and `--sso`. `status` prints JSON by default (`--json`). With `--text`, it prints text. `login` also has a hidden option, `--gateway-json`, for a program that shows the Cloud gateway sign-in to a person. It writes its questions as JSON lines and reads the answers from stdin. It cannot be combined with `--console`, `--claudeai`, `--sso`, or `--email`. It reads the gateway from the settings of the machine. It checks in this order: a clash with the other login flags, a gateway in the settings, a terminal on stdin, and a Claude Code session. Each failure prints one line to standard error and exits with code 1. See the errors on [Auth Settings](../settings/auth.md#errors) (the program). |
 | `claude setup-token` | <Documented /> | Makes a long-lived token. It needs a subscription. |
@@ -48,19 +48,20 @@ Source: the text of `claude <command> --help` in `2.1.322`.
 | `claude ultrareview [target]` | <Documented /> | Starts a cloud review with many agents, with `--json`, `--post`, `--no-post` (the default), `--timeout`, and `--trust-workspace`. Since `2.1.309` it needs a trusted folder. It asks on a terminal. Without a terminal it may refuse, so scripts pass `--trust-workspace` after the target, or set `CLAUDE_CODE_DISABLE_ULTRAREVIEW_TRUST_CHECK=1`. |
 | `claude self-hosted-runner` | <Documented /> | Runs cloud sessions on your machine, and the root help does not list it. Subcommands: `orchestrator`, `setup`, `doctor`, and `decode-token`. See [Self-Hosted Runner](self-hosted-runner.md) for every option and error. |
 | `claude sandbox` | <Undocumented /> | A hidden command with three subcommands for the Windows sandbox: `install` adds the sandbox user and network filters. It asks for elevation once. `status` prints the sandbox state and the Windows install state as one JSON line. `uninstall` removes them and lists what stays behind, with `--json`. |
-| `claude edit-hook`, `edit-permission-rules`, `edit-memory-settings`, `edit-skill-overrides`, `edit-sandbox-settings`, `edit-chrome-settings`, `drop-worktree-registrations`, `design-login` | <Undocumented /> | Hidden commands that read one JSON edit from stdin with `--json`. Their text says they serve the VS Code extension. `design-login --status` reports whether design-system access is authorized and exits. |
+| `claude edit-hook`, `edit-permission-rules`, `edit-memory-settings`, `edit-skill-overrides`, `edit-sandbox-settings`, `edit-chrome-settings`, `design-login` | <Undocumented /> | Hidden commands that read one JSON edit from stdin with `--json`. Their text says they serve the VS Code extension. `design-login --status` reports whether design-system access is authorized and exits. |
+| `claude workspace-trust --json` | <Undocumented /> | A hidden command that reports, as JSON, whether the current folder holds a saved workspace trust record. `--json` is required, and no other argument is allowed. The text says the VS Code extension uses it. The JSON has `trusted`, `directory`, `root` and `unsafe_path` when they apply, and `sandbox_limits_files`. If the record cannot be read, it prints `claude workspace-trust: the trust record could not be read: <message>` (the program, `chunk-2jz0wx1x.js:37057`). |
 | `claude apply-project-settings` | <Undocumented /> | A hidden command that shows how your user and project settings differ from what you accepted for cloud sessions on this computer. It lets you accept them. It needs a terminal. |
 | `claude project` | <Undocumented /> <Deprecated note="Use claude purge" /> | A hidden command with one subcommand, `purge`. The program says that `claude project purge` is now `claude purge` and that the old name still works for now. |
 | `claude import-conversations <exportPath>` | <Undocumented /> | A hidden command that archives an export, with `--cwd` and `--dry-run`. |
 
 :::note[Hidden Commands]
-The `edit-*` commands, `drop-worktree-registrations`, and `design-login` read one JSON edit from stdin.
+The `edit-*` commands and `design-login` read one JSON edit from stdin.
 Their own text says they serve the VS Code extension. Do not build scripts on them.
 :::
 
 ### `ultrareview` Eval Flags
 
-Since `2.1.319`, the program defines three hidden options on `claude ultrareview`. They belong to an eval mode that the gate `tengu_review_bughunter_config.eval_enabled` controls.
+Since `2.1.319`, the program defines three hidden options on `claude ultrareview`, and `2.1.323` adds a fourth, `--review-md`. They belong to an eval mode that the gate `tengu_review_bughunter_config.eval_enabled` controls.
 Source: the program (the option definitions with `hideHelp()`, and the eval handler `ultrareviewEvalHandler`).
 The official docs do not list these flags ([Run Ultrareview Non-Interactively](https://code.claude.com/docs/en/ultrareview#run-ultrareview-non-interactively)).
 Run: case `print.cli319.ultrareview-max-cost`, `-list`, and `-output`. Hypothesis: a build without the gate refuses the option. Prediction: exit 1 and `error: unknown option`. Result: exit 1 with `error: unknown option '--max-cost'`, `'--list'`, and `'--output'`.
@@ -70,6 +71,9 @@ Run: case `print.cli319.ultrareview-max-cost`, `-list`, and `-output`. Hypothesi
 | `--list <file>` | <Gated note="tengu_review_bughunter_config.eval_enabled" /> | Reads the pull requests to review from a file. Do not give pull requests as arguments with it. `-` is refused, so the list must be in a file. | Off |
 | `--output <file>` | <Gated note="tengu_review_bughunter_config.eval_enabled" /> | Sets where the report goes. The program refuses a place inside its own folder, where old files may be removed. | A file in the program's own folder |
 | `--max-cost <dollars>` | <Gated note="tengu_review_bughunter_config.eval_enabled" /> | Sets a limit on cost, in US dollars. The value must be a number above 0. | Off |
+| `--review-md <file>` | <Gated note="tengu_review_bughunter_config.eval_enabled" /> | Sends the file as a draft `REVIEW.md` in place of the `REVIEW.md` of each repository. The program refuses a file that is not UTF-8 text or is blank, with `Nothing was started.` Without the gate, it prints `error: unknown option '--review-md'` (`chunk-2jz0wx1x.js:58523`, `chunk-kamh1y2p.js:36492`). | Off |
+
+The program also refuses the launch inside a Claude Code session, when `CLAUDE_CODE_ULTRAREVIEW_REVIEW_MD_FILE` asks for a draft. Only a person may send a draft `REVIEW.md` (`chunk-dcft79a2.js:30478`).
 
 In eval mode, `--json`, `--timeout`, `--post`, `--no-post`, and `--trust-workspace` are refused with `--json, --timeout, --post, --no-post and --trust-workspace don't work with eval. Leave them out.` Every refusal ends with `Nothing was started.`
 
