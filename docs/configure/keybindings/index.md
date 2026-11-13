@@ -37,6 +37,7 @@ This file binds `ctrl+k` in the chat input to the stash action. It frees `ctrl+s
 
 A binding value is an action name, `command:<name>`, or `null`. `command:<name>` runs the slash command as if you typed it. `null` removes a default key.
 The `command:` name may use letters, digits, `:`, `-`, and `_`.
+Each part of a key before the last must be a modifier: `ctrl`, `control`, `alt`, `opt`, `option`, `shift`, `meta`, `cmd`, `command`, `super`, or `win`. Since `2.1.323`, Claude Code ignores a binding such as `ctl+k` that has a misspelled modifier, where before it bound the bare key. The program reports `"ctl" is not a modifier, so the binding "ctl+k" is ignored` and suggests a fix (`chunk-qmcxj60c.js:4615`). For keys pressed one after another, put a space between them, as in `ctrl+x ctrl+s`.
 The schema is [claude-code-keybindings.json](https://xsyetopz.github.io/clawdipedia/schemas/claude-code-keybindings.json).
 
 ## Contexts
