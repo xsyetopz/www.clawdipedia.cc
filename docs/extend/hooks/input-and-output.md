@@ -48,8 +48,8 @@ A command hook reads this JSON on `stdin`. An HTTP hook gets it as the POST body
 | `permission_mode` | <Documented /> | `default`, `plan`, `acceptEdits`, `auto`, `dontAsk`, or `bypassPermissions`. | Claude Code sends manual mode as `default`. Not on every event. |
 | `effort` | <Documented /> | An object `{level}` with `low`, `medium`, `high`, `xhigh`, or `max`. | Only in tool-use context, and only when the model supports effort. Claude Code sends it on tool events, `Stop`, and `SubagentStop`. |
 | `hook_event_name` | <Documented /> | The name of the event. | In the type file it is a literal on each event type, not on `BaseHookInput`. |
-| `agent_id` | <Documented /> | The subagent or in-process teammate that the hook fires in. | Absent on the main thread. On task and teammate events it names the actor (2.1.290). |
-| `agent_type` | <Documented /> | The agent name. | Set in a subagent, or on the main thread with `--agent`. |
+| `agent_id` | <Documented /> | The subagent or in-process teammate that the hook fires in. | Absent on the main thread. On task and teammate events it names the actor (2.1.290). Since 2.1.323, `PreCompact`, `PostCompact`, and the `SessionStart` that follows a compaction also carry it when a subagent compacts. |
+| `agent_type` | <Documented /> | The agent name. | Set in a subagent, or on the main thread with `--agent`. Since 2.1.323, it is also set on those compaction events when a subagent compacts. |
 | `mcp_server` | <Documented /> | An object `{name, source}` for an MCP tool. | Needs 2.1.274. `source` is an open set: `sdk`, `plugin`, `user`, `project`, `local`, `dynamic`, `managed`, `enterprise`, `claudeai`, `agent`. |
 
 ## Universal Output Fields

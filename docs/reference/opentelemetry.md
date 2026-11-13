@@ -1,6 +1,6 @@
 ---
 title: OpenTelemetry Events
-description: The log events that Claude Code 2.1.322 emits through OpenTelemetry, with the attributes of each, read from the program.
+description: The log events that Claude Code 2.1.323 emits through OpenTelemetry, with the attributes of each, read from the program.
 sidebar_position: 7
 ---
 
@@ -82,6 +82,19 @@ Since `2.1.318`, the program adds `anthropic.provider`, `anthropic.custom_base_u
 
 Every event carries these base attributes: `user.id`, `user.email`, `user.groups`, `event.name`, `event.timestamp`, `event.sequence`, `prompt.id`, and `workspace.host_paths`.
 When `OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES` is set, the program also copies the keys of `OTEL_RESOURCE_ATTRIBUTES`.
+
+## Export Behavior
+
+Since `2.1.323`, the program changes how it sends OpenTelemetry data ([v2.1.323 release](https://github.com/anthropics/claude-code/releases/tag/v2.1.323)).
+
+| Case | Status | Behavior |
+| --- | --- | --- |
+| An `otlp` exporter has an endpoint but `OTEL_EXPORTER_OTLP_PROTOCOL` is not set | <Undocumented /> | The protocol is `http/protobuf`. Before, export failed with no message. |
+| The endpoint is the default `localhost:4318` | <Undocumented /> | The export does not go through a configured proxy. |
+| One entry of `OTEL_RESOURCE_ATTRIBUTES` is malformed | <Undocumented /> | The program keeps the other entries. Before, one bad entry dropped all of them. |
+| Export through a proxy that is slow to reach the collector | <Undocumented /> | The timeout is 25 seconds, and `OTEL_EXPORTER_OTLP_TIMEOUT` cannot raise it above 25 seconds. Before, the limit was 30 seconds. |
+
+**Source:** the program. The default protocol is at `chunk-gma0wa2s.js@36711` and `@41500`. The loopback check and the 25 second cap are at `chunk-gma0wa2s.js@54350`. The resource attribute parser is at `chunk-br8g301d.js@400`.
 
 ## Related Pages
 

@@ -1,6 +1,6 @@
 ---
 title: Betas
-description: Every anthropic-beta value in Claude Code 2.1.322, when it is sent, and how the list is built and turned off.
+description: Every anthropic-beta value in Claude Code 2.1.323, when it is sent, and how the list is built and turned off.
 sidebar_position: 3
 ---
 

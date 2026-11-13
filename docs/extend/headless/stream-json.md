@@ -67,7 +67,7 @@ Only the program shows these. They can change without notice.
 | `system` / `turn_duration` | <Undocumented /> | The wall-clock time of a turn, with the budget and the number of background jobs. |
 | `system` / `api_error` | <Undocumented /> | An API error that can be retried, with the error data and the retry counts. |
 | `system` / `local_command_output` | <Undocumented /> | The output of a local slash command, such as `/usage`. |
-| `tool_progress` | <Undocumented /> | No description in the program schema. |
+| `tool_progress` | <Undocumented /> | No description in the program schema. Since `2.1.323`, a hook that runs long in a `UserPromptSubmit`, `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `Stop`, `PreCompact`, or `PostCompact` event sends this message every 30 s with `heartbeat: true`, so a client sees that the hook still runs. Source: `chunk-2x9ma4k7.js` lines 1141240 and 1141898. |
 | `auth_status` | <Undocumented /> | No description in the program schema. |
 | `system` / `files_persisted` | <Undocumented /> | No description in the program schema. |
 | `system` / `task_notification` | <Undocumented /> | No description in the program schema. |
