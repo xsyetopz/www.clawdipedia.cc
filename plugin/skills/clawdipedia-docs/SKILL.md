@@ -5,7 +5,7 @@ description: Look up Claude Code behavior, settings, env vars, flags, hooks, plu
 
 # Anthropic Docs
 
-The `clawdipedia` source describes what Claude Code 2.1.322 does, checked against the program as well as the official docs. Take each detail that the user may act on from these pages: a key name, a default, an environment variable, a hook field. Memory of these details is often stale or wrong. The other three sources cover official docs and Claude resources pages.
+The `clawdipedia` source describes what Claude Code 2.1.323 does, checked against the program as well as the official docs. Take each detail that the user may act on from these pages: a key name, a default, an environment variable, a hook field. Memory of these details is often stale or wrong. The other three sources cover official docs and Claude resources pages.
 
 ## Pick the Source
 

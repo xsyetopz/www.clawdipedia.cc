@@ -24744,7 +24744,7 @@ var package_default;
 var init_package = __esm(() => {
   package_default = {
     name: "cc-inspect-mcp",
-    version: "0.18.0",
+    version: "0.18.1",
     private: true,
     description: "MCP server that reads Claude Code session transcripts and the modules inside the Claude Code binary. Source for dist/server.js, which is committed.",
     license: "MIT",
@@ -28979,8 +28979,8 @@ var init_claude_code_transcript = __esm(() => {
   claude_code_transcript_default = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
     $id: "https://clawdipedia.cc/schemas/claude-code-transcript.json",
-    title: "Claude Code transcript JSONL entry (Claude Code 2.1.322)",
-    $comment: `For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.322 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to "transcript"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:"<entry type>" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.`,
+    title: "Claude Code transcript JSONL entry (Claude Code 2.1.323)",
+    $comment: `For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.323 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to "transcript"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:"<entry type>" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.`,
     type: "object",
     oneOf: [
       {
@@ -29036,6 +29036,15 @@ var init_claude_code_transcript = __esm(() => {
       },
       {
         $ref: "#/$defs/custom-title"
+      },
+      {
+        $ref: "#/$defs/data-flow-incomplete"
+      },
+      {
+        $ref: "#/$defs/data-flow-records"
+      },
+      {
+        $ref: "#/$defs/derived-from"
       },
       {
         $ref: "#/$defs/dev-mods"
@@ -30020,6 +30029,9 @@ var init_claude_code_transcript = __esm(() => {
           cutInUnfinishedBlock: {
             "x-unverified": true
           },
+          toolCallCutAtOutputLimit: {
+            "x-unverified": true
+          },
           healsDistinctCarrier: {
             type: "boolean",
             enum: [true]
@@ -30062,8 +30074,11 @@ var init_claude_code_transcript = __esm(() => {
             type: "integer"
           },
           requestRef: {
-            type: "string",
+            type: ["object", "string"],
             "x-observed": true
+          },
+          requestNotRecorded: {
+            "x-unverified": true
           },
           requestedModel: {
             "x-observed": true,
@@ -30563,6 +30578,66 @@ var init_claude_code_transcript = __esm(() => {
         },
         $comment: "Registry policy: last-wins. Code sites used: 4."
       },
+      "data-flow-incomplete": {
+        type: "object",
+        properties: {
+          type: {
+            const: "data-flow-incomplete"
+          },
+          v: {
+            type: "number"
+          },
+          sessionId: {
+            "x-unverified": true
+          },
+          agentId: {
+            "x-unverified": true
+          }
+        },
+        $comment: "Registry policy: accumulate. Code sites used: 4."
+      },
+      "data-flow-records": {
+        type: "object",
+        properties: {
+          type: {
+            const: "data-flow-records"
+          },
+          v: {
+            type: "number"
+          },
+          sessionId: {
+            "x-unverified": true
+          },
+          agentId: {
+            "x-unverified": true
+          },
+          records: {
+            "x-unverified": true
+          },
+          snapshot: {
+            type: "boolean"
+          }
+        },
+        $comment: "Registry policy: accumulate. Code sites used: 4."
+      },
+      "derived-from": {
+        type: "object",
+        properties: {
+          type: {
+            const: "derived-from"
+          },
+          v: {
+            type: "number"
+          },
+          sessionId: {
+            "x-unverified": true
+          },
+          sessions: {
+            "x-unverified": true
+          }
+        },
+        $comment: "Registry policy: last-wins. Code sites used: 4."
+      },
       "dev-mods": {
         type: "object",
         properties: {
@@ -30802,7 +30877,7 @@ var init_claude_code_transcript = __esm(() => {
             type: "string"
           },
           explicit: {
-            type: "boolean"
+            "x-unverified": true
           }
         },
         $comment: "Registry policy: boundary-cleared. Code sites used: 6."
@@ -30871,13 +30946,16 @@ var init_claude_code_transcript = __esm(() => {
           type: {
             const: "observer-ref"
           },
-          agentId: {
-            type: "string"
-          },
           observerTaskId: {
             type: "string"
           },
           observerAgentType: {
+            type: "string"
+          },
+          observerTaskIds: {
+            "x-unverified": true
+          },
+          agentId: {
             type: "string"
           },
           timestamp: {
@@ -30957,6 +31035,12 @@ var init_claude_code_transcript = __esm(() => {
                   "artifact_publish_retry"
                 ]
               },
+              toolName: {
+                type: "string"
+              },
+              elapsedTimeSeconds: {
+                type: "number"
+              },
               hookEvent: {
                 type: "string"
               },
@@ -30971,12 +31055,6 @@ var init_claude_code_transcript = __esm(() => {
               },
               statusMessage: {
                 type: "string"
-              },
-              toolName: {
-                type: "string"
-              },
-              elapsedTimeSeconds: {
-                type: "number"
               },
               output: {
                 type: "string"
@@ -31177,6 +31255,9 @@ var init_claude_code_transcript = __esm(() => {
               toolDenialKind: {
                 "x-unverified": true
               },
+              userFeedback: {
+                "x-unverified": true
+              },
               nativeTimeoutMs: {
                 "x-unverified": true
               },
@@ -31190,6 +31271,9 @@ var init_claude_code_transcript = __esm(() => {
                 "x-unverified": true
               },
               delegatedToolNames: {
+                "x-unverified": true
+              },
+              carriedMarkers: {
                 "x-unverified": true
               },
               notes: {
@@ -31286,7 +31370,7 @@ var init_claude_code_transcript = __esm(() => {
             type: "string"
           }
         },
-        $comment: "Registry policy: boundary-cleared. Code sites used: 53."
+        $comment: "Registry policy: boundary-cleared. Code sites used: 51."
       },
       "queue-operation": {
         type: "object",
@@ -32522,9 +32606,11 @@ var init_claude_code_transcript = __esm(() => {
               },
               classifierCategory: {
                 enum: [
+                  "access_added_as_a_means",
                   "account_standing_rule_changes",
                   "auto_mode_bypass",
                   "blind_apply",
+                  "bot_check_circumvention",
                   "browser_file_upload_exfil",
                   "browser_input_exfil",
                   "browser_js_exfil",
@@ -32537,7 +32623,14 @@ var init_claude_code_transcript = __esm(() => {
                   "code_from_external",
                   "code_that_leaks_when_run",
                   "command_network_lists",
+                  "consent_given_for_the_user",
                   "containment_escape",
+                  "cowork_delete_grant",
+                  "cowork_folder_access",
+                  "cowork_run_routine_now",
+                  "cowork_scheduled_task_delete",
+                  "cowork_scheduled_task_write",
+                  "cowork_skill_persistence",
                   "create_public_surface",
                   "create_rce_surface",
                   "create_unsafe_agents",
@@ -32545,6 +32638,7 @@ var init_claude_code_transcript = __esm(() => {
                   "credential_leakage",
                   "credential_materialization",
                   "data_exfiltration",
+                  "destructive_or_unwanted_actions",
                   "dns_domain_cert_changes",
                   "excess_sensitive_detail",
                   "exfil_scouting",
@@ -32553,6 +32647,7 @@ var init_claude_code_transcript = __esm(() => {
                   "external_system_writes",
                   "feature_flag_writes",
                   "git_destructive",
+                  "identity_not_given",
                   "instruction_poisoning",
                   "interfere_with_workloads",
                   "irreversible_deletion_general",
@@ -32562,6 +32657,7 @@ var init_claude_code_transcript = __esm(() => {
                   "merge_without_review",
                   "modify_shared_resources",
                   "node_lifecycle_operations",
+                  "notes_for_later_sessions",
                   "out_of_place_publication",
                   "package_registry_bypass",
                   "permission_grant",
@@ -32575,6 +32671,7 @@ var init_claude_code_transcript = __esm(() => {
                   "remote_shell_writes",
                   "safety_bypass_flag",
                   "sandbox_network_callback",
+                  "save_over_an_occupied_name",
                   "secret_store_writes",
                   "security_test_removal",
                   "security_weaken",
@@ -32585,22 +32682,22 @@ var init_claude_code_transcript = __esm(() => {
                   "session_transcript_tampering",
                   "shared_cluster_mutation",
                   "shared_scratch_sweep",
+                  "stated_interface_sidestepped",
                   "third_party_attack",
                   "tls_auth_weaken",
                   "tmux_self_drive",
                   "traffic_redirection",
+                  "unauthorized_access",
                   "unauthorized_persistence",
+                  "undermining_oversight",
                   "unrequested_artifact_publish",
                   "unrequested_commit_in_a_connected_app",
+                  "unsanctioned_communication",
                   "untrusted_code_integration",
                   "unverifiable_deletion_scope",
                   "unverifiable_deletion_target",
-                  "cowork_delete_grant",
-                  "cowork_folder_access",
-                  "cowork_run_routine_now",
-                  "cowork_scheduled_task_delete",
-                  "cowork_scheduled_task_write",
-                  "cowork_skill_persistence"
+                  "walled_content_from_a_copy",
+                  "website_access_circumvention"
                 ]
               }
             },
@@ -32696,6 +32793,9 @@ var init_claude_code_transcript = __esm(() => {
           },
           toolEndsTurn: {
             type: "boolean"
+          },
+          mcpCallNotReadOnly: {
+            "x-unverified": true
           },
           imagePasteIds: {
             type: "array",
@@ -35228,15 +35328,23 @@ var resolveHelpers = async (c) => {
       }
     });
   });
+}, declOf = (l) => {
+  let n = l.m.parent(l.n);
+  while (n && n.type !== "VariableDeclaration" && n.type !== "ObjectExpression" && n.type !== "ArrayExpression" && !isFn(n)) {
+    n = l.m.parent(n);
+  }
+  return n?.type === "VariableDeclaration" ? n : l.n;
 }, growLists = (c, out) => {
   const found = new Set(out.map((i) => i.name));
+  const groups = Map.groupBy(c.lists, declOf).values().toArray();
   for (let grew = true;grew; ) {
     grew = false;
-    for (const l of c.lists) {
-      if (l.names.filter((x) => found.has(x)).length * 3 < l.names.length) {
+    for (const g of groups) {
+      const all = g.flatMap((l) => l.names);
+      if (all.filter((x) => found.has(x)).length * 3 < all.length) {
         continue;
       }
-      for (const x of l.names) {
+      for (const [l, x] of g.flatMap((list) => list.names.map((name) => [list, name]))) {
         if (!found.has(x) && LISTED.test(x)) {
           c.add(l.m, l.n, x, { detail: "listed" });
           found.add(x);

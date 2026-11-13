@@ -48,7 +48,8 @@ const LONG_ENV = Array.from(
 
 const LINES = [
 	{ type: "custom-title", customTitle: "Fixture", sessionId: SESSION },
-	{ type: "last-prompt", explicit: "yes", sessionId: SESSION },
+	// 2.1.323 writes `explicit` from a parameter, so the schema leaves it untyped.
+	{ type: "last-prompt", lastPrompt: 5, sessionId: SESSION },
 	{ type: "no-such-type" },
 ];
 

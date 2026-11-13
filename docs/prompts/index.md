@@ -1,6 +1,6 @@
 ---
 title: "Captured System Prompts"
-description: "Every system prompt variant you can pick in Claude Code 2.1.322, captured offline and compared."
+description: "Every system prompt variant you can pick in Claude Code 2.1.323, captured offline and compared."
 sidebar_position: 1
 ---
 
@@ -89,7 +89,7 @@ A condition in parentheses after a prompt name is the condition that makes the p
 
 Every prompt on these pages was captured offline, with no model call and no cost.
 
-1. A script starts the installed program (version 2.1.322) in print mode (`-p`) once per variant.
+1. A script starts the installed program (version 2.1.323) in print mode (`-p`) once per variant.
 2. The program talks to a small fake Messages API on `127.0.0.1`. The fake server writes each request body to a file and sends back a canned reply.
 3. The run uses a fake API key, a dead proxy (`HTTPS_PROXY` and `HTTP_PROXY` point to a closed port), `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1`, `DISABLE_TELEMETRY=1`, and a temporary home, config folder, and project folder. No login token is used. The script checks that every request went to the local server.
 4. A second script reads the saved request bodies, replaces machine-specific values with placeholders, and writes these pages. It makes the diffs with `diff -u`, not by hand.
@@ -160,7 +160,7 @@ flowchart TD
 
 Subagents skip this chart. They get their own body and notes (see [Subagent, general-purpose](./agents/subagent-general-purpose.md)).
 
-Captures disagree with the old wiki in one place: the wiki says models with `sonnet` or `haiku` in the name get the full prompt. In 2.1.322 they get the lean prompt, and only `CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=0` gives the full one.
+Captures disagree with the old wiki in one place: the wiki says models with `sonnet` or `haiku` in the name get the full prompt. In 2.1.323 they get the lean prompt, and only `CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=0` gives the full one.
 
 ## All Variants
 

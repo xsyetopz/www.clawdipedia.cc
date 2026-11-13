@@ -21,12 +21,12 @@ Gated tools, and tools that only the interactive screen or other modes add (such
 
 ### `Agent`
 
-Sent in full by default: ✅ Yes. Description: 3,227 characters. Schema: 1,942 characters.
+Sent in full by default: ✅ Yes. Description: 3,225 characters. Schema: 1,942 characters.
 
 ```text
 Launch a new agent to handle complex, multi-step tasks. Each agent type has specific capabilities and tools available to it.
 
-Available agent types are listed in <system-reminder> messages in the conversation.
+Available agent types are listed in messages from the system in the conversation.
 
 When using the Agent tool, specify a subagent_type to select an agent: `"fork"` forks yourself (the fork inherits your full conversation context and always runs on your model — a `model` override is ignored); any other type — or omitting it — starts a fresh agent (general-purpose by default).
 
@@ -954,7 +954,7 @@ Sent in full by default: ✅ Yes. Description: 1,417 characters. Schema: 327 cha
 ```text
 Invoke a skill.
 
-A skill is a packaged set of instructions the user or project has set up for a particular kind of task (deploy steps, a review checklist, a repo-specific workflow). Available skills appear in a system-reminder listing with one-line descriptions. When the task at hand is one a listed skill covers, call this tool first — the skill's instructions load into the turn for you to follow in place of your default approach; some skills instead run in a subagent and return the finished result. A skill that runs in the background returns only the agent's name — its result arrives later as a task notification, so don't wait on it or invoke it again in the meantime. Users may also ask for one by name (`/<name>`, or "slash command"); that's a request to invoke it.
+A skill is a packaged set of instructions the user or project has set up for a particular kind of task (deploy steps, a review checklist, a repo-specific workflow). Available skills appear in a listing from the system with one-line descriptions. When the task at hand is one a listed skill covers, call this tool first — the skill's instructions load into the turn for you to follow in place of your default approach; some skills instead run in a subagent and return the finished result. A skill that runs in the background returns only the agent's name — its result arrives later as a task notification, so don't wait on it or invoke it again in the meantime. Users may also ask for one by name (`/<name>`, or "slash command"); that's a request to invoke it.
 
 - `skill`: exact name from the listing, no leading slash. Plugin skills use `plugin:skill`. Directory-scoped skills are listed with a path prefix (`apps/web:deploy`); when both scoped and unscoped variants of a name exist, pick the one whose directory contains the files you're working on (most specific wins; unscoped otherwise).
 - `args`: optional arguments to pass through.
@@ -1103,14 +1103,14 @@ Search the web. Returns result blocks with titles and URLs. US-only.
 
 ### `Workflow`
 
-Sent in full by default: ✅ Yes. Description: 3,480 characters. Schema: 1,775 characters.
+Sent in full by default: ✅ Yes. Description: 3,496 characters. Schema: 1,775 characters.
 
 ```text
 Execute a workflow script that orchestrates multiple subagents deterministically. Workflows run in the background — this tool returns immediately with a task ID, and a <task-notification> arrives when the workflow completes. Use /workflows to watch live progress.
 
 ONLY call this tool when the user has explicitly opted into multi-agent orchestration. Workflows can spawn dozens of agents and consume a large amount of tokens; the user must request that scale, not have it inferred. Explicit opt-in means one of:
-- The user included the keyword "ultracode" in their prompt (you'll see a system-reminder confirming it).
-- Ultracode is on for the session (a system-reminder confirms it) — see **Ultracode** in the workflow authoring reference.
+- The user included the keyword "ultracode" in their prompt (you'll see a message from the system confirming it).
+- Ultracode is on for the session (a message from the system confirms it) — see **Ultracode** in the workflow authoring reference.
 - The user directly asked you to run a workflow or use multi-agent orchestration in their own words ("use a workflow", "run a workflow", "fan out agents", "orchestrate this with subagents"). The ask must be in the user's words — a task that would merely benefit from a workflow does not count.
 - The user invoked a skill or slash command whose instructions tell you to call Workflow.
 - The user asked you to run a specific named or saved workflow.
@@ -1216,12 +1216,12 @@ When to use: creating a new file, or fully replacing one you've already Read. Ov
 
 ### `ToolSearch`
 
-Sent in full by default: ✅ Yes. Description: 953 characters. Schema: 406 characters.
+Sent in full by default: ✅ Yes. Description: 952 characters. Schema: 406 characters.
 
 ```text
 Fetches full schema definitions for deferred tools so they can be called.
 
-Deferred tools appear by name in <system-reminder> messages. Until fetched, only the name is known — there is no parameter schema, so the tool cannot be invoked. This tool takes a query, matches it against the deferred tool list, and returns the matched tools' complete JSONSchema definitions inside a <functions> block. Once a tool's schema appears in that result, it is callable exactly like any tool defined at the top of the prompt.
+Deferred tools appear by name in a message from the system. Until fetched, only the name is known — there is no parameter schema, so the tool cannot be invoked. This tool takes a query, matches it against the deferred tool list, and returns the matched tools' complete JSONSchema definitions inside a <functions> block. Once a tool's schema appears in that result, it is callable exactly like any tool defined at the top of the prompt.
 
 Result format: each matched tool appears as one <function>{"description": "...", "name": "...", "parameters": {...}}</function> line inside the <functions> block — the same encoding as the tool list at the top of this prompt.
 

@@ -40,7 +40,7 @@ Sources: the release notes of [`2.1.323`](https://github.com/anthropics/claude-c
 
 ### Mod API Type File
 
-Source: the Mod API type file of the `2.1.323` program (`schemas/claude-code.d.ts`), compared with the `2.1.322` one.
+Source: the program: the Mod API type file (`schemas/claude-code.d.ts`) of `2.1.323`, compared with the one of `2.1.322`.
 
 | Change | Status | What it means for you | Where to read more |
 | --- | --- | --- | --- |

@@ -12,7 +12,7 @@ The default list has 12 tools on Opus 5.5. The columns show the length of the de
 
 | Tool | Description | Schema |
 | --- | --- | --- |
-| [`Agent`](./tools.md#agent) | 3,227 | 1,942 |
+| [`Agent`](./tools.md#agent) | 3,225 | 1,942 |
 | [`Bash`](./tools.md#bash) | 1,934 | 1,720 |
 | [`Edit`](./tools.md#edit) | 360 | 552 |
 | [`ListAgents`](./tools.md#listagents) | 777 | 316 |
@@ -20,8 +20,8 @@ The default list has 12 tools on Opus 5.5. The columns show the length of the de
 | [`ReportFindings`](./tools.md#reportfindings) | 574 | 1,545 |
 | [`ScheduleWakeup`](./tools.md#schedulewakeup) | 3,396 | 1,392 |
 | [`Skill`](./tools.md#skill) | 1,417 | 327 |
-| [`ToolSearch`](./tools.md#toolsearch) | 953 | 406 |
-| [`Workflow`](./tools.md#workflow) | 3,480 | 1,775 |
+| [`ToolSearch`](./tools.md#toolsearch) | 952 | 406 |
+| [`Workflow`](./tools.md#workflow) | 3,496 | 1,775 |
 | [`DeferredToolPlaceholder`](./tools.md#deferredtoolplaceholder) | 83 | 33 |
 | [`Write`](./tools.md#write) | 240 | 348 |
 
