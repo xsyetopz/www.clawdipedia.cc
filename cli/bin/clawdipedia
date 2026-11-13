@@ -6930,9 +6930,9 @@ var package_default = {
   },
   dependencies: {
     "@modelcontextprotocol/sdk": "^1.32.2",
-    "@rgrove/parse-xml": "^5.1.0",
+    "@rgrove/parse-xml": "^5.2.0",
     "node-html-markdown": "^2.0.0",
-    "node-html-parser": "^9.0.5",
+    "node-html-parser": "^9.0.7",
     zod: "^4.6.7"
   }
 };
@@ -7468,6 +7468,7 @@ var attValueCharDoubleQuote = /["&<]/;
 var attValueCharSingleQuote = /['&<]/;
 var attValueNormalizedWhitespace = /\r\n|[\n\r\t]/g;
 var endCharData = /<|&|]]>/;
+var lineBreakToNormalize = /\r\n?/g;
 var markupDeclarationDelimiter = /["'<>\]]|$/;
 var predefinedEntities = Object.freeze(Object.assign(Object.create(null), {
   amp: "&",
@@ -7502,10 +7503,17 @@ class XmlNode {
     this.end = -1;
   }
   get document() {
-    return this.parent?.document ?? null;
+    let node = this.parent;
+    while (node !== null) {
+      if (node.type === XmlNode.TYPE_DOCUMENT) {
+        return node;
+      }
+      node = node.parent;
+    }
+    return null;
   }
   get isRootNode() {
-    return this.parent !== null && this.parent === this.document && this.type === XmlNode.TYPE_ELEMENT;
+    return this.parent?.type === XmlNode.TYPE_DOCUMENT && this.type === XmlNode.TYPE_ELEMENT;
   }
   get preserveWhitespace() {
     return !!this.parent?.preserveWhitespace;
@@ -7752,12 +7760,15 @@ class XmlProcessingInstruction extends XmlNode {
 }
 
 // plugin/mcp/node_modules/@rgrove/parse-xml/dist/lib/Parser.js
+var defaultMaxElementDepth = 256;
 var emptyString2 = "";
 
 class Parser {
   constructor(xml, options = {}) {
+    this.depth = 0;
     let doc = this.document = new XmlDocument;
     this.currentNode = doc;
+    this.maxElementDepth = options.maxElementDepth ?? defaultMaxElementDepth;
     this.options = options;
     this.scanner = new StringScanner(xml);
     if (this.options.includeOffsets) {
@@ -7926,11 +7937,9 @@ class Parser {
         if (publicId === false) {
           throw this.error("Expected a public identifier");
         }
-        this.consumeWhitespace();
       }
       if (publicId !== undefined || scanner.consumeString("SYSTEM")) {
-        this.consumeWhitespace();
-        systemId = this.consumeSystemLiteral();
+        systemId = this.consumeWhitespace() && this.consumeSystemLiteral();
         if (systemId === false) {
           throw this.error("Expected a system identifier");
         }
@@ -7961,6 +7970,10 @@ class Parser {
       scanner.reset(startIndex);
       return false;
     }
+    if (!(this.depth < this.maxElementDepth)) {
+      scanner.reset(startIndex);
+      throw this.error(`Maximum element depth of ${this.maxElementDepth} exceeded (see the \`maxElementDepth\` option)`);
+    }
     let attributes = this.consumeAttributes();
     let isEmpty = !!scanner.consumeString("/>");
     let element = new XmlElement(name, attributes);
@@ -7970,6 +7983,7 @@ class Parser {
         throw this.error(`Unclosed start tag for element \`${name}\``);
       }
       this.currentNode = element;
+      this.depth += 1;
       do {
         this.consumeCharData();
       } while (this.consumeElement() || this.consumeContentReference() || this.consumeCdataSection() || this.consumeProcessingInstruction() || this.consumeComment());
@@ -7984,6 +7998,7 @@ class Parser {
         throw this.error(`Unclosed end tag for element ${name}`);
       }
       this.currentNode = element.parent;
+      this.depth -= 1;
     }
     return this.addNode(element, startIndex);
   }
@@ -8173,26 +8188,31 @@ class Parser {
     }
     let encoding;
     let standalone;
-    if (this.consumeWhitespace()) {
-      encoding = !!scanner.consumeString("encoding") && this.consumeEqual() && this.consumeSystemLiteral();
-      if (encoding) {
-        if (!/^[A-Za-z][\w.-]*$/.test(encoding)) {
-          throw this.error("Invalid character in encoding name");
-        }
-        this.consumeWhitespace();
+    let hasWhitespace = this.consumeWhitespace();
+    if (hasWhitespace && scanner.consumeString("encoding")) {
+      let value = this.consumeEqual() && this.consumeSystemLiteral();
+      if (value === false) {
+        throw this.error("Invalid or unclosed XML declaration");
+      } else if (!/^[A-Za-z][\w.-]*$/.test(value)) {
+        throw this.error("Invalid character in encoding name");
       }
-      standalone = !!scanner.consumeString("standalone") && this.consumeEqual() && this.consumeSystemLiteral();
-      if (standalone) {
-        if (standalone !== "yes" && standalone !== "no") {
-          throw this.error('Only "yes" and "no" are permitted as values of `standalone`');
-        }
-        this.consumeWhitespace();
+      encoding = value;
+      hasWhitespace = this.consumeWhitespace();
+    }
+    if (hasWhitespace && scanner.consumeString("standalone")) {
+      let value = this.consumeEqual() && this.consumeSystemLiteral();
+      if (value === false) {
+        throw this.error("Invalid or unclosed XML declaration");
+      } else if (value !== "yes" && value !== "no") {
+        throw this.error('Only "yes" and "no" are permitted as values of `standalone`');
       }
+      standalone = value;
+      this.consumeWhitespace();
     }
     if (!scanner.consumeString("?>")) {
       throw this.error("Invalid or unclosed XML declaration");
     }
-    return this.options.preserveXmlDeclaration ? this.addNode(new XmlDeclaration(version, encoding || undefined, standalone || undefined), startIndex) : true;
+    return this.options.preserveXmlDeclaration ? this.addNode(new XmlDeclaration(version, encoding, standalone), startIndex) : true;
   }
   error(message) {
     let { scanner } = this;
@@ -8224,13 +8244,8 @@ class Parser {
   }
 }
 function normalizeLineBreaks(text) {
-  let i = 0;
-  while ((i = text.indexOf("\r", i)) !== -1) {
-    text = text[i + 1] === `
-` ? text.slice(0, i) + text.slice(i + 1) : text.slice(0, i) + `
-` + text.slice(i + 1);
-  }
-  return text;
+  return text.includes("\r") ? text.replace(lineBreakToNormalize, `
+`) : text;
 }
 // plugin/mcp/node_modules/@rgrove/parse-xml/dist/index.js
 function parseXml(xml, options) {
@@ -9520,6 +9535,9 @@ function determineBranch(decodeTree, current, nodeIndex, char) {
 var htmlDecoder = /* @__PURE__ */ getDecoder(htmlDecodeTree);
 function decodeHTML(htmlString, mode = DecodingMode.Legacy) {
   return htmlDecoder(htmlString, mode);
+}
+function decodeHTMLAttribute(htmlAttribute) {
+  return htmlDecoder(htmlAttribute, DecodingMode.Attribute);
 }
 var xmlCodeMap$1 = /* @__PURE__ */ new Map([
   [34, "&quot;"],
@@ -12069,16 +12087,20 @@ function findOne(test, elems) {
   return elem;
 }
 function findAll(test, nodes) {
-  let result = [];
-  for (let i = 0, j = nodes.length;i < j; i++) {
-    const node = nodes[i];
+  const result = [];
+  const stack = [];
+  for (let i = nodes.length - 1;i >= 0; i--)
+    stack.push(nodes[i]);
+  while (stack.length > 0) {
+    const node = stack.pop();
     if (!isTag(node))
       continue;
     if (test(node))
       result.push(node);
     const childs = getChildren(node);
     if (childs)
-      result = result.concat(findAll(test, childs));
+      for (let i = childs.length - 1;i >= 0; i--)
+        stack.push(childs[i]);
   }
   return result;
 }
@@ -12202,6 +12224,9 @@ function trimText(text) {
 }
 function decode(val) {
   return decodeHTML(val);
+}
+function decodeAttribute(val) {
+  return decodeHTMLAttribute(val);
 }
 var Htags = [
   "h1",
@@ -12404,9 +12429,10 @@ var HTMLElement = class HTMLElement extends Node {
         } else
           node.childNodes.forEach(dfs);
       } else if (node.nodeType === 3) {
-        if (node.isWhitespace)
-          currentBlock.prependWhitespace = true;
-        else {
+        if (node.isWhitespace) {
+          if (currentBlock.length > 0)
+            currentBlock.prependWhitespace = true;
+        } else {
           let text = node.trimmedText;
           if (currentBlock.prependWhitespace) {
             text = ` ${text}`;
@@ -12418,22 +12444,40 @@ var HTMLElement = class HTMLElement extends Node {
     }
     dfs(this);
     return blocks.map((block) => {
-      return block.join("").replace(/\s{2,}/g, " ");
+      return block.join("").replace(/\s{2,}/g, " ").trim();
     }).join(`
 `).replace(/\s+$/, "");
   }
   toString() {
-    const tag = this.rawTagName;
-    if (tag) {
-      const attrs = this.rawAttrs ? ` ${this.rawAttrs}` : "";
-      return this.voidTag.formatNode(tag, attrs, this.innerHTML);
-    }
-    return this.innerHTML;
+    return this.serialize([this]);
   }
   get innerHTML() {
-    return this.childNodes.map((child) => {
-      return child.toString();
-    }).join("");
+    return this.serialize(this.childNodes);
+  }
+  serialize(nodes) {
+    const out = [];
+    const stack = [...nodes].reverse();
+    while (stack.length > 0) {
+      const item = stack.pop();
+      if (typeof item === "string")
+        out.push(item);
+      else if (item instanceof HTMLElement) {
+        const tag = item.rawTagName;
+        if (tag) {
+          const attrs = item.rawAttrs ? ` ${item.rawAttrs}` : "";
+          if (item.voidTag.isVoidElement(tag.toLowerCase())) {
+            out.push(item.voidTag.formatNode(tag, attrs, ""));
+            continue;
+          }
+          out.push(`<${tag}${attrs}>`);
+          stack.push(`</${tag}>`);
+        }
+        for (let i = item.childNodes.length - 1;i >= 0; i--)
+          stack.push(item.childNodes[i]);
+      } else
+        out.push(item.toString());
+    }
+    return out.join("");
   }
   set innerHTML(content) {
     const r = parse$1(content, this._parseOptions);
@@ -12672,7 +12716,7 @@ var HTMLElement = class HTMLElement extends Node {
     const attrs = this.rawAttributes;
     for (const key in attrs) {
       const val = attrs[key] || "";
-      this._attrs[key.toLowerCase()] = decode(val);
+      this._attrs[key.toLowerCase()] = decodeAttribute(val);
     }
     return this._attrs;
   }
@@ -12680,7 +12724,7 @@ var HTMLElement = class HTMLElement extends Node {
     const ret_attrs = {};
     const attrs = this.rawAttributes;
     for (const key in attrs)
-      ret_attrs[key] = decode(attrs[key] || "");
+      ret_attrs[key] = decodeAttribute(attrs[key] || "");
     return ret_attrs;
   }
   get rawAttributes() {
@@ -12736,7 +12780,7 @@ var HTMLElement = class HTMLElement extends Node {
       }
     attrs[key] = String(value);
     if (this._attrs)
-      this._attrs[k2] = decode(attrs[key]);
+      this._attrs[k2] = decodeAttribute(attrs[key]);
     this.rawAttrs = Object.keys(attrs).map((name) => {
       const val = this.quoteAttribute(attrs[name]);
       if (val === "null" || val === '""')
@@ -12887,6 +12931,7 @@ var HTMLElement = class HTMLElement extends Node {
 };
 var kMarkupPattern = /<!--[\s\S]*?-->|<(\/?)([a-zA-Z][-.:0-9_a-zA-Z@\xB7\xC0-\xD6\xD8-\xF6\u00F8-\u03A1\u03A3-\u03D9\u03DB-\u03EF\u03F7-\u03FF\u0400-\u04FF\u0500-\u052F\u1D00-\u1D2B\u1D6B-\u1D77\u1D79-\u1D9A\u1E00-\u1E9B\u1F00-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FBE\u1FC2-\u1FC4\u1FC6-\u1FCC\u1FD0-\u1FD3\u1FD6-\u1FDB\u1FE0-\u1FEC\u1FF2-\u1FF4\u1FF6-\u1FFC\u2126\u212A-\u212B\u2132\u214E\u2160-\u2188\u2C60-\u2C7F\uA722-\uA787\uA78B-\uA78E\uA790-\uA7AD\uA7B0-\uA7B7\uA7F7-\uA7FF\uAB30-\uAB5A\uAB5C-\uAB5F\uAB64-\uAB65\uFB00-\uFB06\uFB13-\uFB17\uFF21-\uFF3A\uFF41-\uFF5A\x37F-\u1FFF\u200C-\u200D\u203F-\u2040\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD]*)((?:\s+[^>]*?(?:(?:'[^']*')|(?:"[^"]*"))?)*)\s*(\/?)>/gu;
 var kMarkupPatternWithCDATA = /<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|<(\/?)([a-zA-Z][-.:0-9_a-zA-Z@\xB7\xC0-\xD6\xD8-\xF6\u00F8-\u03A1\u03A3-\u03D9\u03DB-\u03EF\u03F7-\u03FF\u0400-\u04FF\u0500-\u052F\u1D00-\u1D2B\u1D6B-\u1D77\u1D79-\u1D9A\u1E00-\u1E9B\u1F00-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FBE\u1FC2-\u1FC4\u1FC6-\u1FCC\u1FD0-\u1FD3\u1FD6-\u1FDB\u1FE0-\u1FEC\u1FF2-\u1FF4\u1FF6-\u1FFC\u2126\u212A-\u212B\u2132\u214E\u2160-\u2188\u2C60-\u2C7F\uA722-\uA787\uA78B-\uA78E\uA790-\uA7AD\uA7B0-\uA7B7\uA7F7-\uA7FF\uAB30-\uAB5A\uAB5C-\uAB5F\uAB64-\uAB65\uFB00-\uFB06\uFB13-\uFB17\uFF21-\uFF3A\uFF41-\uFF5A\x37F-\u1FFF\u200C-\u200D\u203F-\u2040\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD]*)((?:\s+[^>]*?(?:(?:'[^']*')|(?:"[^"]*"))?)*)\s*(\/?)>/gu;
+var kUnquotedAttributeValueAtEnd = /(?:^|\s)[^\s"'<>=\/]+\s*=\s*[^\s"'<>`]+$/;
 var kAttributePattern = /(?:^|\s)(id|class)\s*=\s*((?:'[^']*')|(?:"[^"]*")|\S+)/gi;
 var kElementsClosedByOpening = {
   li: {
@@ -13287,6 +13332,10 @@ function base_parse(data, options = {}) {
     const matchLength = matchText.length;
     const tagStartPos = markupPattern.lastIndex - matchLength;
     const tagEndPos = markupPattern.lastIndex;
+    if (closingSlash && !leadingSlash && kUnquotedAttributeValueAtEnd.test(attributes) && !voidTag.isVoidElement(tagName)) {
+      attributes += closingSlash;
+      closingSlash = "";
+    }
     if (lastTextPos > -1) {
       if (lastTextPos + matchLength < tagEndPos) {
         const text = data.substring(lastTextPos, tagStartPos);

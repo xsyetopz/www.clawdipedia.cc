@@ -10,9 +10,9 @@
 	},
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "^1.32.2",
-		"@rgrove/parse-xml": "^5.1.0",
+		"@rgrove/parse-xml": "^5.2.0",
 		"node-html-markdown": "^2.0.0",
-		"node-html-parser": "^9.0.5",
+		"node-html-parser": "^9.0.7",
 		"zod": "^4.6.7"
 	}
 }
