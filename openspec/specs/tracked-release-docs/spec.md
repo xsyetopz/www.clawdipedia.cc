@@ -72,8 +72,9 @@ the page SHALL link the official changelog at `https://code.claude.com/docs/en/c
 
 ### Requirement: Tracked Version Stamp
 
-`src/version.ts`, `schemas/`, `schemas/surface.json`, the plugin and marketplace texts, and the prompt pages in `docs/prompts/` SHALL name the same tracked version, and `bun run verify:locked` SHALL pass.
+`src/version.ts`, `schemas/`, `schemas/surface.json`, the plugin texts, and the prompt pages in `docs/prompts/` SHALL name the same tracked version, and `bun run verify:locked` SHALL pass.
 The prompt pages SHALL be rendered from `captures/<version>/prompts` of the tracked version with `bun tools/capture-prompts/render.ts`, because `release:all` does not render them.
+Each program citation in `docs/` SHALL name a module of the tracked build, and `bun run check:citations` SHALL pass.
 
 #### Scenario: Release Check
 
@@ -87,5 +88,10 @@ The prompt pages SHALL be rendered from `captures/<version>/prompts` of the trac
 
 #### Scenario: Prompt Pages
 
-- **WHEN** the release to `2.1.321` is done and someone runs `grep -rln 'cc_version=2\.1\.319' docs/prompts`
+- **WHEN** the release to `2.1.322` is done and someone runs `grep -rln 'cc_version=2\.1\.321' docs/prompts`
 - **THEN** it prints nothing
+
+#### Scenario: Program Citations
+
+- **WHEN** the release to `2.1.322` is done and `bun run check:citations` runs
+- **THEN** it exits 0, because no page cites a chunk file that only the `2.1.321` build has
