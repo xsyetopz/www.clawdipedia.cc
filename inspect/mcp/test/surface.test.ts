@@ -225,6 +225,20 @@ var K=["ONLY_LISTED_A","VIA_COMPARE_A","VIA_COMPARE_B"];
 		expect(of("ONLY_LISTED_A")).toEqual(["listed"]);
 	});
 
+	// Claude Code 2.1.323 splits one list in two Sets of one declaration; the first alone is under a third found.
+	test("lists of one declaration are judged together", async () => {
+		const src = `
+var mo=new Set(["SPLIT_A","SPLIT_B","SPLIT_C","SPLIT_D","SPLIT_E","SPLIT_F","SPLIT_G","SPLIT_H","SPLIT_I","SPLIT_J","SPLIT_K","SPLIT_L"]),So=new Set(["PATH","ZDOTDIR","SYSTEMROOT","WINDIR"]);
+var a=process.env.SPLIT_A,b=process.env.SPLIT_B,c=process.env.SPLIT_C;
+var d=process.env.PATH,e=process.env.ZDOTDIR,f=process.env.SYSTEMROOT,g=process.env.WINDIR;
+var lone=["LONE_A","LONE_B","LONE_C","LONE_D"],other=["LONE_E"];
+var h=process.env.LONE_A;
+`;
+		const n = await names("env", src);
+		expect(n).toContain("SPLIT_L");
+		expect(n).not.toContain("LONE_B");
+	});
+
 	// The `env` list gives the first place of a name the detail of a later one.
 	test("the places of a bundle are found once, and the env list leaves them as they are", async () => {
 		const b = bundle(

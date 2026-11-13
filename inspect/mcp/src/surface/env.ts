@@ -15,7 +15,8 @@
 // 5. Name lists and name-keyed objects of uppercase strings (`["A_B",...x,"C"]`, `{A_B:1}`) where at
 //    least a third of the names are found: the rest of their `A_B` names, with detail "listed". Repeated
 //    until no list adds a name, so lists that share names (the telemetry set `bi`, the child-env scrub
-//    lists) fill each other. (env/helpers.ts)
+//    lists) fill each other. Lists of one `var` statement (`var a=new Set([...]),b=new Set([...])`) count
+//    as one list. (env/helpers.ts)
 // Compared with the old `strings` heuristic (tools/release/diff/extract.ts, 1257 names) on 2.1.309:
 // 1846 names, 704 only here, 115 only there.
 // - Only here: 703 start with a prefix outside its 12 `ENV_PREFIXES` (GIT, AWS, CCR, VERTEX, AZURE, ...;
