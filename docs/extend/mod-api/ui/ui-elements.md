@@ -1,6 +1,6 @@
 ---
 title: Surfaces, Elements, and Render Sites
-description: What a mod may draw and where - the surfaces, the 17 render sites with their props, and the JSX globals.
+description: What a mod may draw and where - the surfaces, the 18 render sites with their props, and the JSX globals.
 sidebar_position: 8
 ---
 
@@ -72,7 +72,7 @@ on("ui.render", { component: "Pane" }, async ($, e) => {
 | --- | --- | --- | --- | --- |
 | `terminal` | <Documented /> | Ink. Draws the whole tree of the hook. | `Box`, `Text`, `Button`, `Input`, `Select`, `Link`, `Code`, `Markdown`, `Client`, `Raster`, `Image`. No `Svg`. | `e.surface === 'terminal'` |
 | `desktop` | <Documented /> | Claude Code Desktop. Asks over the wire. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Client`. | `e.surface === 'desktop'` |
-| `mobile` | <Documented /> | The mobile app. Asks over the wire. | `Box`, `Text`, `Button`, `Svg`, `Link`, `Code`, `Markdown`. No `Input`, `Select`, or `Client` yet. The docs name no mobile surface. | `e.surface === 'mobile'` |
+| `mobile` | <Documented /> | The mobile app. Asks over the wire. | `Box`, `Text`, `Button`, `Svg`, `Link`, `Code`, `Markdown`. Since `2.1.323`, `Progress` too, when the client names it in `draws`; any other client gets its Box and Text. No `Input`, `Select`, or `Client` yet. The docs name no mobile surface. | `e.surface === 'mobile'` |
 | `vscode` | <Differs note="The type file says no surface is attached yet. The docs say the extension draws from 2.1.299 in a session that fetches feature flags." /> | The editor webview. The same table as `desktop` without `Client`. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`. | `e.surface === 'vscode'` |
 
 ## Render Sites and Props
@@ -95,6 +95,7 @@ Each name in this table is a value of `e.component`. The sections below give the
 | [`SessionMode`](#sessionmode) | <Documented /> | The mode labels at the right of the prompt footer. | The engine. |
 | [`PromptHint`](#prompthint) | <Documented /> | The hint line under the prompt. | The engine. |
 | [`AbovePrompt`](#aboveprompt) | <Documented /> | The band directly above the prompt input. | A hook of a mod. A survey also draws there. |
+| [`AbovePromptList`](#abovepromptlist) | <Documented /> | The arrangement of the `AbovePrompt` rows of the band. New in `2.1.323`. | The engine stacks the rows that hooks settled. |
 | [Pane](#pane) | <Documented /> | A framed region. | A hook of a mod, after `$.ui.open`. |
 | [`Placed`](#placed) | <Documented /> | A row in the transcript. | A hook of a mod, after `$.ui.place`. |
 | [`Backdrop`](#backdrop) | <Documented /> | The drawing behind the conversation. | A hook of a mod, after `$.theme.set`. |
@@ -109,7 +110,7 @@ The dialog the AskUserQuestion tool opens. A tree for it holds the engine's node
 | Item | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
 | `tool` | <Documented /> | The name of the tool whose call opened the dialog. | `string`. |
-| `questions` | <Documented /> | The tool's `questions` input, as the dialog draws them. A rewrite must still fit the tool's schema, or the engine draws the original. | `unknown[]`. |
+| `questions` | <Documented /> | The tool's `questions` input, as the dialog draws them. A rewrite must still fit the tool's schema, or the engine draws the original. | `unknown[]`. Since `2.1.323`, the engine's own confirmations are drawn as asked, whatever a rewrite says (`schemas/claude-code.d.ts`). |
 | `metadataSource` | <Documented /> | The call's `metadata.source` (who asked), when the model gave one. Analytics only, never drawn. | `string`, optional. |
 
 ### `UserMessage`
@@ -215,6 +216,7 @@ The line that closes a turn in the transcript, such as `Baked for 3s`. Only the 
 | --- | --- | --- | --- |
 | `word` | <Documented /> | The past-tense word the line drew (`Baked`). | `string`. |
 | `durationMs` | <Documented /> | The duration of the turn in milliseconds. | `number`. |
+| `waitingFor` | <Documented /> | What the line waits on while it draws only its waiting text (`Waiting for 2 background agents to finish`). It is read when the row mounts: the pending agents that started at or before the time of the line. Absent while the line draws anything else, or when their count differs from the count it draws. A hook that redraws the line for its own agents checks that each agent is its own and that `workflows` is 0. | `WaitingFor`, optional, read-only: `{ agents: ReadonlyArray<{ id: string, agentType: string, tool_use_id?: string }>, workflows: number }`. `id` is the `task.id` of the `UserMessage` notification row that reports the end of the agent. `agentType` is `general-purpose` or `<plugin>:<agent>`. `tool_use_id` is the call that started it, as `tool.call` carried it, when its task records one. `workflows` is how many workflows the line waits on. New in `2.1.323` (`schemas/claude-code.d.ts`, `WaitingFor`, `WaitingAgent`; the program, `chunk-jjj74jck.js:217077`). |
 | `onScreen` | <Documented /> | Which rows are in the viewport. | See above. |
 
 ### `InfoNotice`
@@ -237,7 +239,7 @@ The dim mode labels at the right of the prompt footer (`focus`, `memory paused`)
 
 ### `PromptHint`
 
-The dim hint line under the prompt (`? for shortcuts`, `esc to interrupt`, and the pills beside them). One instance.
+The dim hint line under the prompt (`? for shortcuts`, `esc to interrupt`, and the pills beside them). One instance. Since `2.1.323`, the terminal, desktop, and mobile surfaces raise it (`schemas/claude-code.d.ts`; the program, `chunk-s82q53mp.js:120485`).
 
 | Item | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
@@ -248,17 +250,32 @@ The dim hint line under the prompt (`? for shortcuts`, `esc to interrupt`, and t
 
 ### `AbovePrompt`
 
-The band directly above the prompt input, where surveys draw. The engine draws a `[-]` beside the tree and an `n more` row under it. A hook draws one tree or passes. The person collapses it (ctrl+x ctrl+a) or focuses it (a click, ctrl+x tab).
+The band directly above the prompt input, where surveys draw. The engine draws a `[-]` beside the tree and an `n more` row under it. Since `2.1.323`, the engine asks once for each plugin that hooks it, `e.plugin` naming the plugin. A hook draws that plugin's row or passes, and [`AbovePromptList`](#abovepromptlist) stacks the rows. The person collapses the band (ctrl+x ctrl+a) or focuses it (a click, ctrl+x tab). Since `2.1.323`, the mobile surface raises it too (`schemas/claude-code.d.ts`; the program, `chunk-s82q53mp.js:120485`).
 
 | Item | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
 | `hasSurvey` | <Documented /> | True while a survey holds the band. A hook yields to it. | `boolean`. Read-only. |
-| `isCollapsed` | <Documented /> | True while the person has collapsed the band: a tree still returns, and nothing of it is on screen. False where the band cannot collapse. | `boolean`. Read-only. Since `2.1.321`. The program passes it in the props of `AbovePrompt` (`chunk-vr3fdvn1.js:533507`). |
+| `isCollapsed` | <Documented /> | True while the person has collapsed the band: a tree still returns, and nothing of it is on screen. False where the band cannot collapse. | `boolean`. Read-only. Since `2.1.321`. The program passes it in the props of `AbovePrompt` (`chunk-1xmjf4e6.js:545725`). |
 | `isWorking` | <Documented /> | True while a model turn is running. | `boolean`. Read-only. |
 | `maxRows` | <Documented /> | Rows the band may take. In fullscreen, what remains of the bottom slot above the prompt. Otherwise the terminal's height. | `number`. Read-only. The slot has a cap of half the terminal's rows. A taller tree scrolls in a window of `scroll.bodyRows`. |
 | `bodyColumns` | <Documented /> | Cells the tree is laid out in. | `number`. Read-only. Size a table to this value, not to `viewport.columns`. |
 | `scroll` | <Documented /> | The window over a tree taller than `maxRows`. Engine-owned. The wheel and the person's keys move it while the band has focus. | `SiteScroll`. `bodyRows` is `maxRows` less the `n more` row. |
 | `view` | <Documented /> | Which transcript is on screen above the band: the main conversation or one agent's. | `SiteView`. Read-only. A switch of view re-runs the hook. |
+
+### `AbovePromptList`
+
+New in `2.1.323`. The arrangement of the band once its rows settled. A hook that names it, or a bare `on("*")`, hears it. What settles is the whole band. The engine asks it itself while it draws `AbovePrompt`. Core stacks `rows`. Filter what `next(e)` gets and wrap its answer, never rows copied by value. An organization's mod wins by the order of the chain. The engine passes over a bad answer. To fail closed, answer no rows in its `.catch`. A `rows` rewrite that drops, adds, or reorders a row is refused. Terminal, desktop, and mobile only (`schemas/claude-code.d.ts`; the program, `chunk-s82q53mp.js:125489`, `chunk-s82q53mp.js:120485`).
+
+| Item | Status | What it is for | Shape and limits |
+| --- | --- | --- | --- |
+| `rows` | <Documented /> | The settled rows, in chain order, one for each plugin that drew one. A rewrite holds the rows it was handed, and what it leaves is what core stacks. | `readonly AbovePromptRow[]`. |
+| `hasSurvey` | <Documented /> | As on `AbovePrompt`. | `boolean`. Read-only. |
+| `isCollapsed` | <Documented /> | As on `AbovePrompt`. | `boolean`. Read-only. |
+| `isWorking` | <Documented /> | As on `AbovePrompt`. | `boolean`. Read-only. |
+| `maxRows` | <Documented /> | As on `AbovePrompt`: the rows the band may take, all its rows together. | `number`. Read-only. |
+| `bodyColumns` | <Documented /> | As on `AbovePrompt`. | `number`. Read-only. |
+| `scroll` | <Documented /> | As on `AbovePrompt`: the window over the whole stacked tree. | `SiteScroll`. Read-only. |
+| `view` | <Documented /> | As on `AbovePrompt`. | `SiteView`. Read-only. A rewrite carries it on as received. |
 
 ### Pane
 
@@ -268,9 +285,10 @@ The framed region a plugin opened with `$.ui.open({ id })`. There is one instanc
 | --- | --- | --- | --- |
 | `title` | <Documented /> | The label of its tab while more than one pane is open. | `string`. Read-only here. Another `$.ui.open`, or a hook on `ui.open`, retitles it. |
 | `isFocused` | <Documented /> | True while the pane holds the keyboard, which the person gave it. Tab walks its elements, a Button's `hotkey` presses it, and the arrows scroll. | `boolean`. Read-only. |
-| `isPromptCovered` | <Documented /> | True while a dialog or a field above the prompt covers the prompt. | `boolean`. Read-only. The prop is left out while it is false (the program, `chunk-1xmjf4e6.js:558301`). |
+| `isPromptCovered` | <Documented /> | True while keys typed in the terminal may go to something other than the prompt or this pane: a dialog (a permission prompt, `/model`), a search, or a field in the band. | `true`, optional. Read-only. The prop is left out while it is false (the program, `chunk-1xmjf4e6.js:558301`). Since `2.1.323`, the type is `true`, not `boolean` (`schemas/claude-code.d.ts`). |
 | `bodyColumns` | <Documented /> | Cells across the body, inside the frame. | `number`. Read-only. |
-| `placement` | <Documented /> | Where the surface seated the pane: `dock` beside the transcript (the terminal in fullscreen from 110 columns), or `inline` above the prompt. | `'dock' \| 'inline'`. Read-only. The engine refuses a change. |
+| `placement` | <Documented /> | Where the surface seated the pane: `dock` beside the transcript (the terminal in fullscreen from 110 columns), or `inline` above the prompt. Since `2.1.323`, on the desktop app also `widget`, the small form of a minimized pane. Draw what reads at a glance there, because clicks may not reach it. The hook runs again when the seat changes. | `'dock' \| 'inline' \| 'widget'`. Read-only. The engine refuses a change. Treat any other value as `dock`. Since `2.1.323` (`schemas/claude-code.d.ts`). |
+| `anchoredEdges` | <Documented /> | The edges of the chat area that a `widget` is anchored on, to align the drawing by: `["bottom", "right"]` in that corner, `["right"]` stacked on another widget there, `[]` in the session rail (the column beside the chat). | `readonly ('top' \| 'right' \| 'bottom' \| 'left')[]`, optional. Absent in every other seat. The hook runs again when they change. Ignore a value outside these four. No call moves a widget. Since `2.1.323` (`schemas/claude-code.d.ts`; the program, `chunk-s82q53mp.js:119983`). |
 | `scroll` | <Documented /> | The window of the body over the tree. Engine-owned. | `SiteScroll`. `bodyRows` is the room the frame may use. Inline, the frame fits the tree. |
 | `view` | <Documented /> | Which transcript is on screen beside the pane. | `SiteView`. The pane stays open across a switch of view. |
 
@@ -286,14 +304,14 @@ A row that a plugin placed in the transcript with `$.ui.place`. It is empty unti
 
 ### `Backdrop`
 
-The backdrop of the session, which a plugin set with `$.theme.set`. Only the desktop and mobile surfaces raise it, and they draw it behind the conversation. It is empty until a hook draws it. Every plugin's hook hears it, so read `plugin` beside `id`. The surface sizes the drawing to its window or screen, and presses go through to what is over it. Each surface asks separately, so a hook can read `e.surface` and draw a different scene on each. A `Client` draws nothing on mobile.
+The backdrop of the session, which a plugin set with `$.theme.set`. Only the desktop and mobile surfaces raise it, and they draw it behind the conversation. It is empty until a hook draws it. Every plugin's hook hears it, so read `plugin` beside `scene`. The surface sizes the drawing to its window or screen, and presses go through to what is over it. Each surface asks separately, so a hook can read `e.surface` and draw a different scene on each. A `Client` draws nothing on mobile.
 
 | Item | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
-| `id` | <Documented /> | What `$.theme.set` was given as `backdrop`. | `string`. Read-only. |
+| `scene` | <Documented /> | What `$.theme.set` was given as `backdrop.scene`. Since `2.1.323`, this prop is `scene`, not `id`. | `string`. Read-only. |
 | `plugin` | <Documented /> | Who set the backdrop, so a hook can leave the backdrop of another plugin alone. | `string`. Read-only. |
 | `glass` | <Documented /> | How the surface frosts its panels over the drawing, with the defaults filled in. | `{ blur: number; tint?: string; opacity: number } \| false`. Read-only. `false` where the panels stay as they are. |
-| `colorScheme` | <Documented /> | Whether the scene is light or dark. | `'light' \| 'dark'`, optional. Read-only. Absent where the plugin did not say. |
+| `overrideColorScheme` | <Documented /> | The `overrideColorScheme` of `$.theme.set`: whether to force light or dark. Since `2.1.323`, this prop is `overrideColorScheme`, not `colorScheme`. | `'light' \| 'dark'`, optional. Read-only. Absent where the plugin did not say. |
 
 ## JSX and Globals
 

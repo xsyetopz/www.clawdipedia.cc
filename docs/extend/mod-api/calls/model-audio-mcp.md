@@ -11,7 +11,7 @@ A model call bills to the plan or key of the person, so keep requests small.
 
 A `deny` from a hook refuses a call. `maxTokens` is 1024 by default and goes up to 64000 or the output limit of the model.
 
-Official pages: [Use the Mods API](https://code.claude.com/docs/en/plugins/mods/api), [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.322 program (`schemas/claude-code.d.ts`).
+Official pages: [Use the Mods API](https://code.claude.com/docs/en/plugins/mods/api), [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.323 program (`schemas/claude-code.d.ts`).
 "Run time" appears in a "Where it can be used" cell. It means in a hook, in a closure that a hook drew, or in a timer callback. It does not mean inside `register`.
 
 ## Example
@@ -40,7 +40,7 @@ on("command.run", { command: "triage" }, async ($, e) => {
 | `$.audio.play` | <Documented /> | Plays one audio clip, starting now. Clips do not queue, so two calls play together (a bed under speech). | `(clip, options?) => Promise<void>`. `afplay` plays it on macOS. Linux and Windows terminals play nothing. | Run time. |
 | `$.audio.speak` | <Documented /> | Speaks `text` with the platform's own synthesizer (`say` on macOS). Plain text. | `(text, options?) => Promise<SpeakResult>`. Utterances queue. Rejects if there is no synthesizer. | Run time. |
 | `$.mcp.call` | <Documented /> | Calls `tool` on one of the engine's connected MCP servers, with the engine's own connection. | `(server, tool, args?) => Promise<McpToolResult>`. No permission prompt appears, because the plugin's call is the grant. | Run time. |
-| `$.mcp.connect` | <Documented /> | Connects one of the MCP servers that this plugin's own manifest lists, if the session has not already. | `(server) => Promise<McpConnectResult>`. Listing a server defers nothing, so refuse its calls at `tool.check` to hold them back. | The server key must be listed in this plugin's manifest. |
+| `$.mcp.connect` | <Documented /> | Connects an MCP server if the session has not already: one that this plugin's own manifest lists, by its key, or, since `2.1.323`, any server that `/mcp` lists. Connected means its tools ride the next request of the turn. | `(server) => Promise<McpConnectResult>`. A server joins the session at its start unless a hook on `mcp.connect` holds it back. Since `2.1.323`, this call brings a held one in (the hooks are asked with this plugin as `next.origin`), by the enable of the session under its policy. A key of the own manifest is read first. The same server run under another name answers with that name, and is only read. A listed server that is off, waits on sign-in, or failed answers as it stands: the call never dials, switches, or drops one that no hook holds. A key not yet in the session, when another server is listed under that name, answers `failed`. Before `2.1.323`, listing a server deferred nothing, so refuse its calls at `tool.check` to hold them back. | The server is a key of this plugin's manifest or, since `2.1.323`, its name as `/mcp` lists it (`schemas/claude-code.d.ts`). |
 
 ## Events Raised by These Calls
 
@@ -54,7 +54,7 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 | `audio.play` | <Documented /> | The clip and how to play it (`shouldLoop`, `gain`). | Input `{ clip: AudioClip, shouldLoop: boolean, gain?: number }`. Value `void`. |
 | `audio.speak` | <Documented /> | `$.audio.speak(text, { voice })` | Input `SpeakRequest`. Value `SpeakResult`. |
 | `mcp.call` | <Documented /> | `$.mcp.call(server, tool, args)` | Input `{ server: string, tool: string, args: Record<string, unknown> }`. Value `McpToolResult`. |
-| `mcp.connect` | <Documented /> | `$.mcp.connect(server)` | Input `{ server: string }`. Value `McpConnectResult`. |
+| `mcp.connect` | <Documented /> | `$.mcp.connect(server)` | Input `{ server: string }`. Value `McpConnectResult`. Since `2.1.323`, the input is `{ server: string, provider: Origin }` and the engine raises the event too, for each server it is about to join by itself (`next.origin` is the engine's). `server` is the key as `$.mcp.connect(server)` spelled it, or on the engine's raise the name `/mcp` lists, usually `plugin:<plugin>:<server>`. `provider` is who provides the server: the plugin and its tier, or `mcp:<server>` for a server that settings configure. Both are pinned: a rewrite is refused, and a `$.mcp.connect` that then resolves to the server of another provider answers `failed`. A hook on the engine's raise that answers without calling `next` holds the server back: nothing is dialed, and `/mcp` lists it as held by the plugin of that hook until `$.mcp.connect` or a later raise lets it through. Headless plugin install, sync, and reload raise nothing: a server they bring in first dials with no hook asked, and one held before stays held. The event is not raised for the dial that `$.mcp.connect` itself starts (`schemas/claude-code.d.ts`; the program, `chunk-2x9ma4k7.js:4508402`, `chunk-s82q53mp.js:104498`). |
 
 ## Related Pages
 

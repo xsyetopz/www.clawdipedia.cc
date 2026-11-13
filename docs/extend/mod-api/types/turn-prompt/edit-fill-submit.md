@@ -200,7 +200,7 @@ Where a `prompt.submit` submission came from, as the engine knows it at the site
 
 ### `PromptSectionInput`
 
-The input of `prompt.section`: one named section of the system prompt, at the moment the engine assembles it. From 2.1.302 to 2.1.322, the engine builds shared sections such as `lean_body` without a `prompt.section` call, so a hook does not see them (the program, `chunk-9r1hbf9p.js:2492236`, `TTn`). A `prompt.compose` hook does. Used by `prompt.section`, `$.prompt.section`.
+The input of `prompt.section`: one named section of the system prompt, at the moment the engine assembles it. From 2.1.302 to 2.1.322, the engine builds shared sections such as `lean_body` without a `prompt.section` call, so a hook does not see them (the program, `chunk-2x9ma4k7.js:2638354`, `TTn`). A `prompt.compose` hook does. Used by `prompt.section`, `$.prompt.section`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |

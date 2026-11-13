@@ -58,13 +58,13 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 | `ui.close` | <Documented /> | `$.ui.close({ id })` with `origin` `plugin`. The engine raises it too, for the person (`person`) and for an unload (`unload`). | Input `PaneCloseInput`. Value `void`. |
 | `ui.panes` | <Documented /> | `$.ui.panes()` | Input `NoArgs`. Value `readonly UiPane[]`. |
 | `ui.place` | <Undocumented /> | `$.ui.place({ id })` | Input `UiPlaceArgs`. Value `UiPlaceResult`. New in `2.1.314`. |
-| `theme.set` | <Undocumented /> | `$.theme.set({ backdrop })` | Input `ThemeSetArgs`. Value `ThemeResult`. New in `2.1.319`. Case: `print.cli319.theme.engine`. |
+| `theme.set` | <Undocumented /> | `$.theme.set({ backdrop })`. Since `2.1.323`, `backdrop` is a scene (`{ scene }`) or a still ground, and the scheme is the top-level `overrideColorScheme`. | Input `ThemeSetArgs`. Value `ThemeResult`. New in `2.1.319`. Case: `print.cli319.theme.engine`. |
 | `theme.clear` | <Undocumented /> | `$.theme.clear()` | Input `NoArgs`. Value `ThemeResult`. New in `2.1.319`. Case: `print.cli319.theme.engine`. |
 | `ui.selection` | <Documented /> | `$.ui.selection()` | Input `NoArgs`. Value `UiSelection \| undefined`. |
 | `ui.copy` | <Documented /> | `$.ui.copy({ text, surface })`. `surface` takes the session's first surface when left out. | Input `UiCopyArgs`. Value `UiCopyResult`. |
 | `ui.view` | <Undocumented /> | `$.ui.view({ agentId })`: whose transcript the main view shows. None means the main conversation. | Input `SiteView`. Value `UiViewResult`. |
 | `ui.notify` | <Documented /> | `$.ui.notify(text, { title })`. `title` is the plugin's name when left out. Two mods that notify again on hearing a notification can echo each other without end. | Input `{ text: string, title?: string, key?: string, delayMs?: number, at?: number, untilBack?: boolean }`. Value `UiNotifyResult`. `key`, `delayMs`, `at`, and `untilBack` are new in `2.1.321`; see [`NotifyOptions`](../types/ui/input-pane-render.md#notifyoptions). |
-| `ui.cancelNotify` | <Undocumented /> | `$.ui.cancelNotify(key)` | Input `{ key: string }`. Value `{ isSent: boolean }`. New in `2.1.321`. Read site: `chunk-9r1hbf9p.js:4379658`. |
+| `ui.cancelNotify` | <Undocumented /> | `$.ui.cancelNotify(key)` | Input `{ key: string }`. Value `{ isSent: boolean }`. New in `2.1.321`. Read site: `chunk-2x9ma4k7.js:4573061`. |
 | `ui.blit` | <Documented /> | `$.ui.blit(...)`: the `cells` of a `Raster` or the `source` of a keyed `Image`. A hook above may rewrite either, or `{ deny }`. | Input `UiBlitArgs`. Value `UiBlitResult`. |
 
 ## Related Pages

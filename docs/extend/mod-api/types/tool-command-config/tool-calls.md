@@ -58,7 +58,7 @@ The input of `tool.check`. It has the tool and its arguments. It also has the ce
 | `agentId` | <Documented /> | The id of the loop that decides the call. It is on a real call inside the loop of a subagent or a teammate: the one that its `tool.call` carried. | Type: `string`. Optional. Absent on the main loop and on a query. It says which loop, not which plugin caused the call (`next.origin` says that). |
 | `isReadOnly` | <Documented /> | Set when the tool call is read-only (new in 2.1.304). | Type: `true`. Optional. The program passes it on as the read-only flag of the permission decision. |
 | `approver` | <Documented /> | Who answers this evaluation's asks, known before any hook runs (new in 2.1.307). | Type: `ToolCheckApprover`. Optional. Set by the engine and pinned. `host` when a hosted session's permission callback or prompt tool, or the cloud session a served call is for, answers. `person` when a person can be asked, a pane's card included. Absent when nobody can be asked (`dontAsk` mode, avoid-prompts, headless). |
-| `ceiling` | <Documented /> | The most permissive verdict that the organization lets a call of the tool reach (`ask`), as its administrators set it on the tool of a connector. | Type: `ToolCheckDecision`. Optional. Set by the engine, from the tool, never by a query, and pinned. The own `ceiling` of a hook, on its answer, is dropped. Absent where none is set. |
+| `ceiling` | <Documented /> | The most permissive verdict that the organization lets a call of the tool reach (`ask`), as its administrators set it on the tool of a connector. | Type: `ToolCheckDecision`. Optional. Set by the engine, from the tool, never by a query, and pinned. The own `ceiling` of a hook, on its answer, is dropped. Since `2.1.323`, where the question has none, it is the ceiling that the check of core found for this call, on the verdict of core and on each hook's that asked beneath. Absent where none is set (`schemas/claude-code.d.ts`, `ToolCheckInput`). |
 
 ### `ToolCheckResult`
 
@@ -73,7 +73,7 @@ What a `tool.check` hook returns and what `next(e)` resolves to: the verdict, wh
 | `setting` | <Documented /> | The key of the option whose own check asked, whoever configured it (`permissions.blockReadsOutsideWorkingDirectories`). | Type: `string`. Optional. From core, for the read block: its ask on a shell command that reads outside the working directories or, the block on, leaves the sandbox. |
 | `plugin` | <Documented /> | The plugin whose hook made this ask (new in 2.1.307). | Type: `string`. Optional. Set by the engine and pinned. What a hook writes here is dropped. Set on an `ask` that a hook answered, a reworded ask included. An ask a hook passes up unchanged keeps what it carried, so core's own ask names none. Such an ask is a person's: the dialog, the host's callback, or a `PermissionRequest` hook answers it. No classifier's allow settles it, its block still refuses, and a rule for the whole tool is not kept. A narrower rule the person saves settles nothing while the hook asks. Where nobody can be asked (`approver` absent), the program turns the ask into a deny, and its reason is the model's error. A tool that raises no prompt keeps its own rule. |
 | `decider` | <Undocumented /> <Deprecated note="Removed from the type file in 2.1.307." /> | The 2.1.304 to 2.1.306 way for a hook to put its ask to a person. | Type: `'host' \| 'person'`. Optional. The 2.1.309 program still reads `decider: "person"` on a hook's answer and marks the answer with `plugin`. It ignores any other value, and no result carries `decider` (the program). Use `ask` alone since 2.1.307: every ask a hook makes goes to a person. |
-| `ceiling` | <Documented /> | The most permissive verdict that the organization lets a call of the tool reach (`ask`), as its administrators set it on the tool of a connector. | Type: `ToolCheckDecision`. Optional. Set by the engine from the tool. The own `ceiling` of a hook is dropped. |
+| `ceiling` | <Documented /> | The most permissive verdict that the organization lets a call of the tool reach (`ask`), as its administrators set it on the tool of a connector. | Type: `ToolCheckDecision`. Optional. Set by the engine from the tool. The own `ceiling` of a hook is dropped. Since `2.1.323`, where the question has none, it is the ceiling that the check of core found for this call (`schemas/claude-code.d.ts`, `ToolCheckInput`). |
 
 ### `ToolDescribeInput`
 
@@ -107,13 +107,33 @@ What a `tool.describe` hook returns: the description that the model sees for tha
 
 ### `ToolInfo`
 
-One tool as `$.tool.list()` returns it. Used by `$.tool.list`, `tool.list`.
+One tool as `$.tool.list()` returns it and a `tool.list` hook answers it (since `2.1.323`). Used by `$.tool.list`, `tool.list`.
+
+Since `2.1.323` (`schemas/claude-code.d.ts`, `ToolInfo`; the program, `chunk-620k1a78.js:105325`, `chunk-2x9ma4k7.js:4502683`):
+
+- **What the hooks answer.** For the raise of the engine, the answer is the tool pool of the session: for the model, every agent (foreground or background), ToolSearch, and `$.tool.call`. The tools of an MCP server that joins later are asked about before a request carries them. For the `$.tool.list()` of a mod, the answer is only what that call reads.
+- **What `next(e)` holds.** The tools as the engine built them, with what an earlier answer removed and without what it added. Answer the whole list each time. The order of the list is ignored, so that the prompt cache holds.
+- **When the engine raises it.** Before the first request of a thread, once a load of hooks modules is over or 10 seconds have passed. It raises it again when the loaded plugins, the names of the tools, or a setting change, and at the turn after `$.ui.invalidate('tool.list')`. It never raises it per turn, because a pool that moves breaks the prompt cache.
+- **Remove a tool.** Leave an entry out and the tool goes, with what a deny rule on it takes out. What such a rule brings back, such as Glob and Grep without Bash, is asked about too. A tool that no deny rule can leave out stays while any other does. A call of a removed tool is refused, by a script, an agent, the host's `mcp_call`, an `mcp_tool` settings hook, or a Monitor poll, and a running watch of it ends. The last three do not wait for a hooks load, so one made before a module has loaded is not refused by what that module removes. A tool that a thread already declared stays declared until a compaction, and a call of it is refused saying why. `$.ui.ask` and `$.agent.spawn` are the host's: removing their tools does not reach them.
+- **Add a tool.** Add `{ name, description, mcp: false, inputSchema? }` under a new name and the tool joins. It is checked as `$.tool.register` checks a spec, and an entry that fails is left out. A `tool.call` hook on its name answers its calls, with no permission prompt. A call that no hook answers is a tool error that names it. A schema that the API refuses is declared with no parameters. New words reach a thread at its next compaction. These cannot be added: an `mcp__` name, a name that a request declares itself (`advisor`, `DeferredToolPlaceholder`), and the name of a tool or built-in in any case or with its words apart, on or off. An entry with the name or alias of a tool that exists leaves that tool as it is: `tool.describe` changes a description. A deny rule, a `--tools` list, and the `tools:` of an agent hold over an added tool as over any other. A real tool takes its name when it joins.
+- **Failure.** A hook that throws, crashes, or runs past its 10-second budget is skipped, unless its `.catch` answers. The answer is then what the others said, without what the hook removed or added on any run, and the event is raised again at the next turn. A hook whose `$` ops hold it past 30 seconds in all is aborted the same way (`opHoldMs: 30000`, `chunk-s82q53mp.js:201764`). A crash traced to a mod can unload it, and the removals of a mod lapse when it is unloaded. A `{ deny }`, or a list with nothing in it to read, leaves the last answer standing, and the event is raised again at the next turn. A turn waits at most 10 seconds for a raise, then goes on with the answer that stood, or the tools as built before the first. A `$.tool.call` of a `tool.list` hook, or an agent it spawns, reads the answer that stood, or the tools as built on the first raise. `$.prompt.submit` and `$.command.run` are refused there.
+- **Managed policy.** Where sec-default is seated, the hook of a person cannot remove a tool of the managed MCP servers or seated plugins of the organization, or bring back a tool that a hook of the organization removed. Its addition is dropped while managed `allowedMcpServers` is set, or where the name reads as a tool that the organization delivers. A hook of a person that overruns or crashes is skipped and sec-default still answers, though that hook can delay the answer. The engine puts no other limit on the answer.
+
+```javascript
+on("tool.list", async ($, e, next) => {
+  const listed = await next(e);
+  return listed.value === undefined
+    ? listed
+    : { value: listed.value.filter((t) => t.name !== "AskUserQuestion") };
+});
+```
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `name` | <Documented /> | What the model calls it by. | Type: `string`. |
 | `description` | <Documented /> | What it does, in the own words of the tool (its description, at most a first sentence for MCP tools without one). | Type: `string`. |
 | `mcp` | <Documented /> | True for the tool of an MCP server. | Type: `boolean`. |
+| `inputSchema` | <Documented /> | On an entry that a `tool.list` hook adds: a JSON schema object for the input (`{ type: "object", properties, required }`). Default `{ type: "object" }`, as on `$.tool.register`. | Type: `Record<string, unknown>`. Optional. New in `2.1.323`. Never on a tool that the session lists. |
 
 ### `ToolInputOf`
 

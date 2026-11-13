@@ -60,7 +60,7 @@ Source: [Settings Reference](https://code.claude.com/docs/en/settings-reference)
 | `defaultToAgentsView` | <Documented /> | Open agent view instead of a new conversation when you run `claude` with no arguments. |
 | `diffTool` | <Documented /> | Choose whether Claude's proposed file changes open in the VS Code or JetBrains diff viewer or stay in the terminal. |
 | `externalEditorContext` | <Documented /> | Show Claude's last response as comments when you press Ctrl+G to edit. |
-| `fastModeChosenOnFableOrMythos` | <Undocumented /> | On the Anthropic API, `/fast` writes `true` when it turns fast mode on with the model `claude-fable-5-2` or `claude-mythos-5-2`, and `false` in each other case. With `true`, a saved `fastMode: true` also applies on these two models (the program, `chunk-yqezv9gr.js:395873`, `:396173`). On Vertex, the program does not read or write the key. See [Fast Mode](../models-and-providers/fast-mode.md#fable-52-and-mythos-52). |
+| `fastModeChosenOnFableOrMythos` | <Undocumented /> | On the Anthropic API, `/fast` writes `true` when it turns fast mode on with the model `claude-fable-5-2` or `claude-mythos-5-2`, and `false` in each other case. With `true`, a saved `fastMode: true` also applies on these two models (the program, `chunk-x4fdscgs.js:407767`, `:408067`). On Vertex, the program does not read or write the key. See [Fast Mode](../models-and-providers/fast-mode.md#fable-52-and-mythos-52). |
 | `leftArrowOpensAgents` | <Documented /> | Turn off the `←` shortcut that backgrounds the session and opens agent view. |
 | `prStatusFooterEnabled` | <Documented /> | Turn off the prompt footer's PR review status badge and the pull request check behind it. |
 

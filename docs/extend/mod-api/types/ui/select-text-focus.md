@@ -200,7 +200,7 @@ The input of `ui.focus`: the focus ring of a site, about to move. It moves onto 
 | --- | --- | --- | --- |
 | `component` | <Documented /> | Which site: a `Pane` body or the `AbovePrompt` band. | Type: `UiFocusComponent`. |
 | `requestId` | <Documented /> | The instance that the `ui.render` hook that draws the site sees: the id of the pane, or the one id of the band. | Type: `string`. |
-| `plugin` | <Documented /> | Whose `ui.render` hook drew the element that takes the ring. Absent with `element`. Read-only. | Type: `string`. Optional. |
+| `plugin` | <Documented /> | Whose `ui.render` hook drew the element that takes the ring. Absent with `element`. Read-only. | Type: `string`. Optional. Since `2.1.323`, a hook that names no `plugin` hears the elements of its own plugin and the stops of the engine. `{ plugin: "*" }` hears the elements of every plugin (`schemas/claude-code.d.ts`, `UiFocusInput`). |
 | `element` | <Documented /> | The `key` of the element that takes the ring, as `ui.press` names it. Absent for one of the own stops of the engine (the close mark of a pane or the tab of another). | Type: `string`. Optional. `next({ ...e, element })` lands it on another element that `plugin` drew in the site instead. For one not drawn there, core answers `{ deny }`. |
 | `origin` | <Documented /> | Who moves it (UiFocusOrigin). The engine sets it where the move starts. | Type: `UiFocusOrigin`. |
 

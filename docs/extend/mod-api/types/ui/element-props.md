@@ -91,7 +91,7 @@ The props of `Button`, the pressable of every surface. It has an address, a labe
 | --- | --- | --- | --- |
 | `key` | <Documented /> | The address of the element: `e.element` at `ui.press`, what a matcher names. Defaults to the `label`, or the one string child. | Type: `string`. Optional. Needed where the Button holds other children and no `label`. The text of a row holds what changes (a count, an age). Its address must not change. |
 | `label` | <Documented /> | The text drawn on the button, or the one string child. | Type: `string`. Optional. Children of strings and `Text` are drawn in its place. Any other element is refused. |
-| `hotkey` | <Documented /> | One digit (`"1"`) or one lowercase letter (`"w"`) that presses it while the site of the plugin holds the focus. The engine refuses anything else. | Type: `string`. Optional. Its site holds the key after ctrl+x tab, a click, or `open({ focus })`. Two buttons with the same key clash, and the later wins. |
+| `hotkey` | <Documented /> | One digit (`"1"`) or one lowercase letter (`"w"`) that presses it while the site of the plugin holds the focus. The engine refuses anything else. | Type: `string`. Optional. Its site holds the key after ctrl+x tab, a click, or `open({ focus })`. Two buttons of one plugin with the same key clash, and the later wins. Since `2.1.323`, two buttons of two plugins with the same key press neither (`schemas/claude-code.d.ts`). |
 | `action` | <Documented /> | An engine keybinding action (`"app:cycleDiffBase"`) whose chord, as the person bound it, presses this from the prompt. The engine refuses unknown names. | Type: `string`. Optional. Chords that a global or active context binding holds, on the terminal while the button is mounted. |
 | `plain` | <Documented /> | Drawn without chrome: the hotkey in the accent color, a colon, and the label (`1: Yes`), as the row of a survey reads. With no `hotkey`, the label alone. | Type: `true`. Optional. A one-glyph label is then a control by itself. `dimColor` and `hover` still apply. |
 | `dimColor` | <Documented /> | The label drawn dim at rest, as the `dimColor` of `Text`, and at full strength under the pointer or the focus. Use it for a secondary control or a path in a list. | Type: `boolean`. Optional. |
@@ -146,7 +146,7 @@ What the function of a surface module receives as its second argument. It has it
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `elements` | <Documented /> | The element table of the surface (ClientElements), the tags that the module draws with: `const { Box, Text } = surface.elements`. No `Client` in it. | Type: `ClientElements`. Read-only. |
+| `elements` | <Documented /> | The element table of the surface (ClientElements), the tags that the module draws with: `const { Box, Text } = surface.elements`. No `Client` in it, and since `2.1.323` no `Progress`. | Type: `ClientElements`. Read-only. |
 | `state` | <Documented /> | The local state of the instance: `undefined` until the first `setState`. Kept across the redraws of the plugin, and dropped with the instance. | Type: `S \| undefined`. Read-only. |
 | `setState` | <Documented /> | Replaces the local state and schedules one more call of the function on the next frame. Several calls before it coalesce into one redraw. | Type: `(next: S) => void`. A `setState` on each of three renders in a row with no key, pointer, tick, press or props between is a render loop. The instance unmounts. |
 | `columns` | <Documented /> | The width of the region in cells, as last laid out (0 before the first layout). | Type: `number`. Read-only. |
@@ -154,7 +154,7 @@ What the function of a surface module receives as its second argument. It has it
 | `every` | <Documented /> | Calls `fn` every `ms` milliseconds on the frame clock of the surface until the returned function is called or the instance unmounts. | Type: `(ms: number, fn: () => void) => () => void`. Start it once (while `state` is still undefined), not on every call. |
 | `onPointer` | <Documented /> | Sets the pointer listener of the instance (one, and a later call replaces it) and returns what clears it. See ClientPointerEvent for capture. | Type: `(fn: (event: ClientPointerEvent) => void) => () => void`. |
 | `onKey` | <Documented /> | Sets the key listener of the instance (one, and a later call replaces it). It is reached while a click has given it the focus. Escape returns that. | Type: `(fn: (event: ClientKeyEvent) => void) => () => void`. |
-| `post` | <Documented /> | Sends plain data to the hooks module of the plugin: `e.data` of a `ui.message` that only the hooks of that plugin see. It sends one for each frame at most. | Type: `(data: JsonValue) => void`. A later post in the same frame replaces an undelivered one. At most 20,000 values, 32 deep, 100,000 characters. |
+| `post` | <Documented /> | Sends plain data to the hooks module of the plugin: `e.data` of a `ui.message` that only the hooks of that plugin see. It sends one for each frame at most. | Type: `(data: JsonValue) => void`. A later post in the same frame replaces an undelivered one. At most 20,000 values, 32 deep, 100,000 characters. Since `2.1.323`, with no named key on a list and no key named `__proto__`, `constructor` or `prototype`, or the post is not sent. |
 
 ### `CodeProps`
 

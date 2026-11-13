@@ -43,7 +43,7 @@ Review the changes under $ARGUMENTS and list the bugs you find.
 
 | Key | Status | What it does | Notes |
 | --- | --- | --- | --- |
-| `name` | <Documented /> | The command name. | Defaults to the folder name. At most 256 characters. Skills and plugin skills only, not command files. Claude Code refuses a skill or command name with a Bamum letter, which some fonts draw as blank ([2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321)). The program's set of blank-looking characters holds `U+16910`, a Bamum letter (`chunk-d68rqgan.js:5943`). I did not trace the call from the skill name check. |
+| `name` | <Documented /> | The command name. | Defaults to the folder name. At most 256 characters. Skills and plugin skills only, not command files. Claude Code refuses a skill or command name with a Bamum letter, which some fonts draw as blank ([2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321)). The program's set of blank-looking characters holds `U+16910`, a Bamum letter (`chunk-dazyb5h4.js:5959`). I did not trace the call from the skill name check. |
 | `description` | <Documented /> | Tells Claude when to use the skill. | Numbers and booleans become strings. The listing cuts it at 1,536 characters. |
 | `when_to_use` | <Documented /> | More trigger text. | Claude Code adds it after `description`. Counts toward the 1,536 limit. The only documented key with an underscore. |
 | `argument-hint` | <Documented /> | An autocomplete hint. | Text, for example `[issue-number]`. |
@@ -81,7 +81,7 @@ The base is now the directory where the session started, when all of these are t
 
 In any other case, the base is the working directory.
 For a file outside the working directory, the program skips a `.claude/skills` folder that git ignores or that it cannot confirm.
-Source: the program (`chunk-9r1hbf9p.js` lines 172206 to 172220 and 171993 to 172054).
+Source: the program (`chunk-2x9ma4k7.js` lines 179922 to 179936 and 171993 to 172054).
 
 ## Outside Claude Code
 

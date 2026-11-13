@@ -70,7 +70,7 @@ These types are aliases, unions, or plain shapes. Each row gives its use and its
 | `Narrowed` | <Documented /> | `e` in a matched hook. It has the members of the argument union `E` that matcher `P` can match. Each member has the keys that `P` names narrowed to what a match implies. | Helper type. It narrows an event type with a matcher. A scalar narrows to a literal. Other keys stay as declared. |
 | `NarrowedByAny` | <Documented /> | A value of declared type `V` under a one-of, folded over the tuple into `Found`: the union of what each alternative narrows `V` to (NarrowedByOne). | Helper type. It narrows by a one-of list. An alternative that cannot match adds nothing. |
 | `NarrowedByOne` | <Documented /> | A value of declared type `V` under one matcher node `Q` that is not a one-of, member of `V` by member. A member that cannot match is `never`. | Helper type. It narrows by one matcher value. A `RegExp` keeps the member. An object recurses one level down. |
-| `NarrowedMember` | <Documented /> | One object member `E` under object pattern `P`, `D` levels down: `never` when a key of `P` is impossible on it (ImpossibleKeys), else `E` narrowed. | Helper type. It narrows each key that the matcher names. Other keys stay as declared. |
+| `NarrowedMember` | <Documented /> | One object member `E` under object pattern `P`, `D` levels down: `never` when a key of `P` is impossible on it (ImpossibleKeys), else `E` narrowed. | Helper type. It narrows each key that the matcher names. Other keys stay as declared. Since `2.1.323`, `plugin` under `"*"` stays as declared too: the wildcard of a default matcher key says nothing of the value. |
 | `NarrowedValue` | <Documented /> | A value of declared type `V` where the matcher gives `Q`, `D` levels down: NarrowedByAny under a one-of (an array), NarrowedByOne otherwise. | Helper type. It stops narrowing at a set depth, and for a field typed `unknown`, such as the input of a tool. |
 | `NonEmpty` | <Documented /> | Array type `V`, of element `Item`, once some element of it is known to match: a tuple of at least one `Item`, readonly when `V` is. | Helper type. It turns an array into a non-empty tuple, so `e` is still valid where the declared array is taken. |
 | `OpenMatcher` | <Documented /> | The keys that a variant with a string index signature (the input of an MCP tool) takes beyond its own. They are the key of another variant as typed there, and others free. | Object type. A wrong value for a key that an event declares (`command: 5`) fails to compile on every variant. |
@@ -118,7 +118,7 @@ The rest of the chain, as one hook receives it. The engine makes it once for eac
 
 ### `StarNext`
 
-`next` in a `*` hook. The set of events is open at runtime, so `e` is `unknown` until `next.is(pattern, e)` narrows it to events that it knows. Callable type with the fields `to`, `signal`, `is`, `event`, `origin`, `trace`, `budget`. It has one call form for each known event.
+`next` in a `*` hook. The set of events is open at runtime, so `e` is `unknown` until `next.is(pattern, e)` narrows it to events that it knows. Once narrowed, `e` is an ordinary hook argument on those events, except on `engine.create`, where (since `2.1.323`) it only observes the fold. Callable type with the fields `to`, `signal`, `is`, `event`, `origin`, `trace`, `budget`. It has one call form for each known event.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -166,7 +166,7 @@ The time bounds that every hook runs under, in milliseconds. These members type 
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `ms` | <Documented /> | The budget of a hook for each dispatch, from its call to its return. Past it the hook is absent (the engine asks its `.catch`, else runs `next(e)` on its behalf). | Type: `10_000`. A streaming hook counts only the time that its own code runs, not the time at a `yield`. Read-only. |
+| `ms` | <Documented /> | The budget of a hook for each dispatch, from its call to its return. Past it the hook is absent (the engine asks its `.catch`, else runs `next(e)` on its behalf). | Type: `10_000`. A streaming hook counts only the time that its own code runs, not the time at a `yield`. Since `2.1.323`, on `tool.list` the `$` calls of a hook hold it for 30 seconds in all, then fail it. Read-only. |
 | `catchMs` | <Documented /> | The grace of a `.catch` handler: a fresh budget from the moment the engine calls it, on the same clock. Its `next` replay and its `$` calls are free. | Type: `1_000`. Past it the hook is absent as if it had no handler. `next.error.budget` and `next.budget.ms` both read it there. `engine.create` has no budget. Read-only. |
 | `lingerMs` | <Documented /> | How long a hook may keep running after `next.signal` aborted (the person interrupted, a hook above settled first, or the hook exhausted its own budget). | Type: `5_000`. Past it the engine reports the hook as lingering. The dispatch had already gone on without it when the signal aborted. Read-only. |
 
@@ -207,7 +207,7 @@ Who raised a dispatch, as `next.origin` holds it: the name of the calling plugin
 
 ### `Matcher`
 
-What `on(event, matcher, hook)` takes for an argument of type `I`: the shape of the `e` that the hook wants, as a partial of it at any depth. Type of the second argument of `on`. A leaf is `===` or a `RegExp`. An array means any of. An object is a partial match of an object.
+What `on(event, matcher, hook)` takes for an argument of type `I`: the shape of the `e` that the hook wants, as a partial of it at any depth. Type of the second argument of `on`. A leaf is `===` or a `RegExp`. An array means any of. An object is a partial match of an object. Since `2.1.323`, `plugin` is a default matcher key: where the engine sets it on `e` (`ui.press`, a band row), a matcher that leaves it out is read as naming the plugin of the hook itself. `"*"` names every plugin, and hears an `e` without the key (`schemas/claude-code.d.ts`).
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |

@@ -165,7 +165,7 @@ What `$.http.fetch` resolves with. Object with fields `status`, `ok`, `headers`,
 
 ### `JsonValue`
 
-Plain data is what JSON holds. It is also what crosses whole between the hooks module and the surface module of a plugin. Examples are the props of a `Client` and the data of a post. Union. Fields: `[key: string]`. A function, a class instance, `undefined` or a cycle is not plain data. The engine refuses one where it checks, and drops it where it clones.
+Plain data is what JSON holds. It is also what crosses whole between the hooks module and the surface module of a plugin. Examples are the props of a `Client` and the data of a post. Union. Fields: `[key: string]`. A function, a class instance, `undefined` or a cycle is not plain data. Since `2.1.323`, a named key on a list, or a key named `__proto__`, `constructor` or `prototype`, is not plain data either. The engine refuses one where it checks, and drops it where it clones.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |

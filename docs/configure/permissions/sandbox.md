@@ -138,7 +138,7 @@ See [Permission Flow](../../how-it-works/permission-flow.md).
 
 ## Sandbox Section in the `Bash` Prompt
 
-Source: the program (`chunk-9r1hbf9p.js:174694`, settings schema in `chunk-mttfbqwj.js`).
+Source: the program (`chunk-2x9ma4k7.js:183135`, settings schema in `chunk-3dhh2g49.js`).
 
 When the sandbox is on, the `Bash` tool prompt carries a sandbox section. The model reads the limits there. The section lists these paths and hosts:
 

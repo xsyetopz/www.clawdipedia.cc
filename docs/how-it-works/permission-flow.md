@@ -57,9 +57,9 @@ flowchart TD
 
 A safety check covers `rm -r` on a mounted drive, the folder that holds mounted drives (`/Volumes`, `/media`, WSL `/mnt/c`), or a top-level file or folder of a drive. Since 2.1.304 the program says it "requires explicit approval and cannot be auto-allowed by permission rules". `CLAUDE_CODE_DISABLE_MOUNTED_DRIVE_RM_PROMPT` turns this prompt off ([Tools and Bash](../configure/env-vars/tools-and-bash.md)).
 
-Claude Code also checks `deny` and `ask` rules at startup. It warns about a rule that matches no tool (`matches no tool · check for typos`). It also warns about a rule that gives a raw string where the tool needs its own matcher (`never matches`). Source: the program (`chunk-z1rrqs8n.js:1141`).
+Claude Code also checks `deny` and `ask` rules at startup. It warns about a rule that matches no tool (`matches no tool · check for typos`). It also warns about a rule that gives a raw string where the tool needs its own matcher (`never matches`). Source: the program (`chunk-r2xdymmc.js:1165`).
 Since 2.1.323 the program also warns about a Bash `allow` rule that has `*` in a variable's value (`chunk-3dhh2g49.js:191921`).
-Since `2.1.311`, a warning about a rule from a settings file shows once per user until the rule changes. The program saves a key for each shown warning in the `seenSecurityWarnings` entry of the user config file (the last 256 keys), and the key holds the source, the settings file, and the warning text (`chunk-z1rrqs8n.js:1215`, `chunk-dzamkz32.js:10`).
+Since `2.1.311`, a warning about a rule from a settings file shows once per user until the rule changes. The program saves a key for each shown warning in the `seenSecurityWarnings` entry of the user config file (the last 256 keys), and the key holds the source, the settings file, and the warning text (`chunk-r2xdymmc.js:1239`, `chunk-mk1dn8k6.js:10`).
 
 Built-in safety checks, called circuit breakers, can also force a prompt. Some are immune to `bypassPermissions`. See [Permission Modes](../configure/permissions/modes.md#safety-checks). The diagram omits them because the program does not show where they run.
 

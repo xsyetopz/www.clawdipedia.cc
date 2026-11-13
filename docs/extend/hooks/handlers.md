@@ -43,7 +43,7 @@ Claude Code fills only names in `allowedEnvVars` into headers. Other references 
 | --- | --- | --- | --- |
 | `command` | <Documented /> | Runs a shell command or an executable. Input on `stdin`. Result by exit code, `stdout`, and `stderr`. | All 33 events. |
 | `http` | <Documented /> | Sends the input as JSON in a POST to a URL. The result is the response body, and needs a 2xx status. | 31 events. Not `SessionStart` and not `Setup`. |
-| `mcp_tool` | <Documented /> | Calls a tool on a configured MCP server. Claude Code reads the text result like `stdout`. A result with `isError: true` is a non-blocking error. A `PreToolUse` hook on a stdio or HTTP MCP server whose answer is over 16 MiB now makes Claude Code refuse the tool call, not skip the hook ([2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321)). The program has an MCP answer limit of `16777216` bytes (`chunk-am3mg5g7.js:1108`), and the hook error path reports a message from the server that was too large (`chunk-9r1hbf9p.js:3692922`). | 33 events. Claude Code skips it on `Setup`, and on `SessionStart` when Claude Code starts. |
+| `mcp_tool` | <Documented /> | Calls a tool on a configured MCP server. Claude Code reads the text result like `stdout`. A result with `isError: true` is a non-blocking error. A `PreToolUse` hook on a stdio or HTTP MCP server whose answer is over 16 MiB now makes Claude Code refuse the tool call, not skip the hook ([2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321)). The program has an MCP answer limit of `16777216` bytes (`chunk-sstb45zf.js:1310`), and the hook error path reports a message from the server that was too large (`chunk-2x9ma4k7.js:3861419`). | 33 events. Claude Code skips it on `Setup`, and on `SessionStart` when Claude Code starts. |
 | `prompt` | <Documented /> | One model call that returns `ok`. | 12 events, plus `PermissionRequest`. |
 | `agent` | <Documented /> <Experimental /> | A subagent that checks a condition. Up to 50 turns. Experimental, and the docs say it may change. | 12 events. Not `PermissionRequest`. |
 | `callback` | <Undocumented /> | A function that an SDK host or a mod registers. | Events that run device hooks. It is not a config key. |
@@ -73,7 +73,7 @@ Source: a probe of the program (see [Probes](../../reference/probes.md)).
 | --- | --- | --- | --- |
 | `command` | <Documented /> | The command string, or the program to run when you set `args`. | Shell form uses `sh -c`, Git Bash, or PowerShell. |
 | `args` | <Documented /> | An argument list for exec form. | No shell runs. Claude Code replaces placeholders in `command` and in each element. |
-| `shell` | <Documented /> | `bash` or `powershell`. | Claude Code ignores it when you set `args`. With `powershell`, Claude Code adds `; if (-not $?) { if ($LASTEXITCODE -eq 2) { exit 2 } }` after the command, so exit code 2 blocks. It does not add it for `PermissionRequest`. It also does not add it when the command starts with `using`, `param(`, a `[type]` cast or attribute, or a named block, and also has a `begin`, `process`, `end`, `clean`, or `dynamicparam` block. Before `2.1.316`, any of those starts was enough to leave it out, so exit code 2 did not block (the program, `chunk-9r1hbf9p.js`). |
+| `shell` | <Documented /> | `bash` or `powershell`. | Claude Code ignores it when you set `args`. With `powershell`, Claude Code adds `; if (-not $?) { if ($LASTEXITCODE -eq 2) { exit 2 } }` after the command, so exit code 2 blocks. It does not add it for `PermissionRequest`. It also does not add it when the command starts with `using`, `param(`, a `[type]` cast or attribute, or a named block, and also has a `begin`, `process`, `end`, `clean`, or `dynamicparam` block. Before `2.1.316`, any of those starts was enough to leave it out, so exit code 2 did not block (the program, `chunk-2x9ma4k7.js`). |
 | `async` | <Documented /> | Runs in the background. | Claude Code does not enforce `timeout`. The hook cannot block. Output arrives on the next turn. |
 | `asyncRewake` | <Documented /> | A background run that wakes the model on exit 2. | `stderr` (or `stdout` if `stderr` is empty) becomes a system reminder. `timeout` still applies. Implies `async`. |
 | `onFailure` | <Documented /> | `continue` or `block`. | Needs 2.1.295. See [Configuration](configuration.md#failure-handling). Also works on `http`. |
@@ -115,18 +115,18 @@ On observer events, it does not wait.
 
 ## Prompt Hooks on `Stop` And `SubagentStop`
 
-On `Stop` and `SubagentStop`, the program wraps the `prompt` as a stopping condition that the model judges on transcript evidence only (the program, `chunk-9r1hbf9p.js`).
+On `Stop` and `SubagentStop`, the program wraps the `prompt` as a stopping condition that the model judges on transcript evidence only (the program, `chunk-2x9ma4k7.js`).
 The model must answer with a JSON object. `ok` and `reason` are required, and `impossible` is optional.
 On a repeat block, the feedback to Claude holds the hook prompt in square brackets, then the `reason`.
 Claude Code cuts the bracketed prompt to 500 characters on a repeat.
 
-The turn ends after a number of consecutive blocks. The default is 8. `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` sets it, and a value of 0 or less removes the cap. The program prints a warning when the cap ends the turn (the program, `chunk-mfrsszee.js`).
-When the cap ends the turn in a subagent or a teammate, Claude Code does not show the notice to you. Only the main session shows it (the program, `chunk-mfrsszee.js`). So a subagent can end with no sign in the parent.
+The turn ends after a number of consecutive blocks. The default is 8. `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` sets it, and a value of 0 or less removes the cap. The program prints a warning when the cap ends the turn (the program, `chunk-fxkn94rg.js`).
+When the cap ends the turn in a subagent or a teammate, Claude Code does not show the notice to you. Only the main session shows it (the program, `chunk-fxkn94rg.js`). So a subagent can end with no sign in the parent.
 A timeout, an API error, a reply that is not JSON, and a reply that fails the schema all leave the stop alone. The hook fails open. See the next section.
 
 ## Calls of `prompt` And `agent` Hooks
 
-Source: the program (`chunk-9r1hbf9p.js`). All rows are <Undocumented />, except where a note says otherwise.
+Source: the program (`chunk-2x9ma4k7.js`). All rows are <Undocumented />, except where a note says otherwise.
 
 | Item | `prompt` hook | `agent` hook |
 | --- | --- | --- |
@@ -157,7 +157,7 @@ The limits do not cover `command`, `http`, or `mcp_tool` hooks.
 | 12 overdue | <Documented /> | At most 12 more run when they waited longer than the timeout of their event. | These hooks use a second count of 12. It is separate from the first. |
 | 12 per event | <Undocumented /> | When one event starts several of these hooks, at most 12 start together. | The program also uses this number to size the time budget of the event. |
 
-Source: the program (`chunk-9r1hbf9p.js:3658678` in `2.1.322`, the constants 12, 24, and 12 and the `model hooks` and `overdue model hooks` counts).
+Source: the program (`chunk-2x9ma4k7.js:1136462` in `2.1.323`, the constants 12, 24, and 12 and the `model hooks` and `overdue model hooks` counts).
 We did not trace that a subagent shares the session host of its parent.
 
 ## Related Pages

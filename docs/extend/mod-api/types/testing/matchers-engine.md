@@ -48,7 +48,7 @@ The element that each surface-dependent act of a mounted drawing reaches. A hand
 
 ### `ElementQuery`
 
-What `find` and `findAll` of a mounted drawing match an element on, with every field given at once: its tag, its `key`, and the text it shows. Object with the fields `type?`, `key?`, `text?`, `in?`. `text` matches the whole shown text: a string by inclusion, a `RegExp` by test.
+What `find` and `findAll` of a mounted drawing match an element on, with every field given at once: its tag, its `key`, and the text it shows. Object with the fields `type?`, `key?`, `text?`, `in?`. `text` matches the whole shown text: a string by inclusion, a `RegExp` by test. Since `2.1.323`, the shown text of a `Progress` is its label and its figure (`schemas/claude-code.d.ts`, `ElementQuery`).
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -125,7 +125,7 @@ What `expect(received)` answers: the checks, their negation, and the checks on w
 
 ### `FoundElement`
 
-One element of a mounted drawing as `find` returns it. It is the description that the hook of the plugin (or the module of a `Client`) built, read as plain data. Object with fields `type`, `key`, `props`, `text`, `children`. It is what every surface is handed to draw, not what any surface painted: the same on the terminal, the desktop, VS Code and mobile.
+One element of a mounted drawing as `find` returns it. It is the description that the hook of the plugin (or the module of a `Client`) built, read as plain data. Object with fields `type`, `key`, `props`, `text`, `children`. It is what each surface is handed to draw, not what it painted: the same on all of them. Since `2.1.323`, a `Progress` is `Box` and `Text` on every surface but mobile (`schemas/claude-code.d.ts`, `FoundElement`).
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |

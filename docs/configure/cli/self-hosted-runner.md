@@ -99,7 +99,7 @@ The host config folder has no flag. Set `SELF_HOSTED_RUNNER_HOST_CONFIG_DIR`; `-
 
 ## Runner Errors
 
-Source: the program, in its parser (`chunk-0p6farb3.js`, offsets 245200–255000). The `cli321` probe ran the cases with a probe name.
+Source: the program, in its parser (`chunk-jmkrmahq.js`, offsets 245200–255000). The `cli321` probe ran the cases with a probe name.
 
 | Message | When | Probe |
 | --- | --- | --- |
@@ -121,7 +121,7 @@ Source: the program, in its parser (`chunk-0p6farb3.js`, offsets 245200–255000
 | `--sigkill-timeout-sec was renamed to --session-stop-grace-sec. ...` | The old flag. | `runner-sigkill` |
 | `--drain-marker-file requires a file path (the marker your host writes to announce a graceful drain), got: <value>` | No value, an empty value, or a value that starts with `--`. | |
 | `--hold-idle-file requires a file path (a file your host keeps fresh while the session has processes left running), got: <value>` | No value, an empty value, or a value that starts with `--`. | |
-| `the path, or a link on the way to it, leads to a network location; point --hold-idle-file at a local file` | The hold file is on a network location (`chunk-0p6farb3.js:241153`). | |
+| `the path, or a link on the way to it, leads to a network location; point --hold-idle-file at a local file` | The hold file is on a network location (`chunk-jmkrmahq.js:267472`). | |
 | `the path could not be checked for links to a network location: a folder or link on the way could not be read` | A folder or link on the way to the hold file cannot be read. | |
 | `--agent-proxy-url requires your proxy's https:// URL` | No value, an empty value, or a value that starts with `--`. | |
 | `--proxy-authorization-command / --proxy-authorization-file requires a value` | No value, or a value that starts with `--`. | |
@@ -135,7 +135,7 @@ Source: the program, in its parser (`chunk-0p6farb3.js`, offsets 245200–255000
 
 `claude self-hosted-runner orchestrator` polls the spawn-hints queue and runs the `spawn-runner` hook in `--hooks-dir` once for each hint. The hook must start the work and exit within `--hook-timeout`. Exit code `0` is success, `1` is a failure to retry, and `2` or more stops further tries. See [On-Demand Runners](https://code.claude.com/docs/en/self-hosted-environments-configuration#on-demand-runners) and [The Spawn-Runner Hook](https://code.claude.com/docs/en/self-hosted-environments-configuration#the-spawn-runner-hook).
 
-Source: the program, in its help text and its orchestrator parser (`chunk-d8kkjn8f.js`, near offset 24075).
+Source: the program, in its help text and its orchestrator parser (`chunk-pr8txaye.js`, near offset 24075).
 
 | Option | Status | What it does | Default |
 | --- | --- | --- | --- |

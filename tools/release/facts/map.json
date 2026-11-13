@@ -524,17 +524,17 @@
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/configure/permissions/rules.md#rule-syntax:d954aa56": {
+	"docs/configure/permissions/rules.md#rule-syntax:517a068e": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/headless/index.md#errors:9c204f16": {
+	"docs/extend/headless/index.md#errors:4a71275c": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#events-raised-by-these-calls:c277efdc": {
+	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#events-raised-by-these-calls:d7b38e73": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
@@ -544,22 +544,22 @@
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/calls/tool-command-config.md#members:0e456786": {
+	"docs/extend/mod-api/calls/tool-command-config.md#members:5d88f7d6": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/calls/tool-command-config.md#engine-events:b29e13d4": {
+	"docs/extend/mod-api/calls/tool-command-config.md#engine-events:cef36546": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/calls/tool-command-config.md#engine-events:9eb95aa9": {
+	"docs/extend/mod-api/calls/tool-command-config.md#engine-events:7aa43b69": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/calls/turn-prompt.md#engine-events:287963c8": {
+	"docs/extend/mod-api/calls/turn-prompt.md#engine-events:7238649a": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
@@ -594,7 +594,7 @@
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/types/testing/mocks-mounts.md#mountedmembers:4bb7baf8": {
+	"docs/extend/mod-api/types/testing/mocks-mounts.md#mountedmembers:d097c5c9": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
@@ -604,7 +604,7 @@
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectioninput:b86cbbcf": {
+	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectioninput:71fc4d4f": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
@@ -624,12 +624,12 @@
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/types/turn-prompt/suggest-skill-turn.md#skillpromptinput:b8a883e6": {
+	"docs/extend/mod-api/types/turn-prompt/suggest-skill-turn.md#skillpromptinput:fe9825cf": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/types/turn-prompt/suggest-skill-turn.md#turnstepinput:9fce5506": {
+	"docs/extend/mod-api/types/turn-prompt/suggest-skill-turn.md#turnstepinput:047fc51f": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
@@ -649,12 +649,12 @@
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/ui/ui-elements.md#aboveprompt:f865409b": {
+	"docs/extend/mod-api/ui/ui-elements.md#aboveprompt:17b70739": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/ui/ui.md#members:bc337d5e": {
+	"docs/extend/mod-api/ui/ui.md#members:ece56d70": {
 		"kind": "behaviour",
 		"probes": ["print.cli319.theme.engine"]
 	},
@@ -663,12 +663,12 @@
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/reference/opentelemetry.md#events:1b2c88c7": {
+	"docs/reference/opentelemetry.md#events:a62a88cf": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/reference/tools/shell-and-web.md#how-it-works:7883ae4d": {
+	"docs/reference/tools/shell-and-web.md#how-it-works:45b9f3d9": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
@@ -689,7 +689,7 @@
 			"pty.notifications.agent-needs-input-refused"
 		]
 	},
-	"docs/configure/permissions/auto-mode.md#classifier-billing-notice:095d27be": {
+	"docs/configure/permissions/auto-mode.md#classifier-billing-notice:a8f8dc77": {
 		"kind": "behaviour",
 		"probes": [
 			"pty.notifications.agent-needs-input",
@@ -1114,39 +1114,34 @@
 		"probes": [],
 		"note": "cost-state.modelUsage keys in schemas/claude-code-transcript.json"
 	},
-	"docs/reference/transcript-format.md#line-types:4601cecc": {
+	"docs/reference/transcript-format.md#line-types:16c3263f": {
 		"kind": "behaviour",
 		"probes": ["print.transcripts.lines"]
 	},
-	"docs/reference/transcript-format.md#other-types-in-the-writer:dd745d66": {
+	"docs/reference/transcript-format.md#other-types-in-the-writer:87b8d851": {
 		"kind": "schema",
 		"probes": [],
 		"note": "worktree-state worktreeSession.extensionRoot in schemas/claude-code-transcript.json"
 	},
-	"docs/reference/transcript-format.md#other-types-in-the-writer:4459a570": {
+	"docs/reference/transcript-format.md#other-types-in-the-writer:c963d788": {
 		"kind": "schema",
 		"probes": [],
 		"note": "tools-used uuid in schemas/claude-code-transcript.json"
 	},
-	"docs/extend/headless/control-protocol.md#subtypes:8ab64a03": {
+	"docs/extend/headless/control-protocol.md#subtypes:76f7b4c9": {
 		"kind": "schema",
 		"probes": [],
 		"note": "initialize auth_conflict and other_hook_ask_outranks_host in schemas/claude-code-control-protocol.json"
 	},
-	"docs/extend/headless/control-protocol.md#subtypes:f74542b6": {
+	"docs/extend/headless/control-protocol.md#subtypes:682f2858": {
 		"kind": "schema",
 		"probes": [],
 		"note": "interrupt spare_background_tasks in schemas/claude-code-control-protocol.json"
 	},
-	"docs/extend/headless/control-protocol.md#subtypes:2a081748": {
+	"docs/extend/headless/control-protocol.md#subtypes:fb972a2d": {
 		"kind": "schema",
 		"probes": [],
 		"note": "mcp_set_servers denied_tools in schemas/claude-code-control-protocol.json"
-	},
-	"docs/reference/tools/shell-and-web.md#how-it-works:a0227744": {
-		"kind": "schema",
-		"probes": [],
-		"note": "backgroundCalledBackWithinMs in schemas/claude-code-tools.json"
 	},
 	"docs/reference/tools/agents-and-tasks.md#result-fields-new-in-21321:69df7b11": {
 		"kind": "schema",
@@ -1392,12 +1387,12 @@
 		"probes": [],
 		"note": "program behaviour (also in the release notes); the signed catalog needs a cloud provider login"
 	},
-	"docs/how-it-works/context-and-compaction.md#kinds-of-compaction:657e861c": {
+	"docs/how-it-works/context-and-compaction.md#kinds-of-compaction:75cd31d8": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour (also in the release notes); needs a server that refuses with the 1M context error"
 	},
-	"docs/how-it-works/context-and-compaction.md#kinds-of-compaction:c32d11ba": {
+	"docs/how-it-works/context-and-compaction.md#kinds-of-compaction:303db607": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour (also in the release notes); needs a compaction reply with no summary"
@@ -1447,7 +1442,7 @@
 		"probes": [],
 		"note": "turn_handoff_available requires_rewind_request_id in schemas/claude-code-stream-json.json"
 	},
-	"docs/extend/headless/stream-json.md#undocumented-types:24583610": {
+	"docs/extend/headless/stream-json.md#undocumented-types:62a7bd2a": {
 		"kind": "schema",
 		"probes": [],
 		"note": "inherited_asks_settled in schemas/claude-code-stream-json.json"
@@ -1547,22 +1542,22 @@
 		"probes": [],
 		"note": "cc-inspect code run of /claude-api PROBE-ARG on 2.1.308 to 2.1.311"
 	},
-	"docs/configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message:6c06918c": {
+	"docs/configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message:093447ba": {
 		"kind": "manual",
 		"probes": [],
 		"note": "chat:sendNowHintPress and the mouse-mode test read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:8976, :9363-9396)"
 	},
-	"docs/configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message:253da97a": {
+	"docs/configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message:f8465662": {
 		"kind": "manual",
 		"probes": [],
 		"note": "hint text and its no-key branch read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:9370-9394)"
 	},
-	"docs/configure/keybindings/unbound-and-reserved.md#vim-mode-operators-with-gj-and-gk:8398e065": {
+	"docs/configure/keybindings/unbound-and-reserved.md#vim-mode-operators-with-gj-and-gk:33091990": {
 		"kind": "manual",
 		"probes": [],
 		"note": "the gj/gk count clamp read in the cleaned 2.1.312 code (chunk-hz2c9q6k.js:316-321, :784)"
 	},
-	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:e3310efd": {
+	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:43cd4772": {
 		"kind": "manual",
 		"probes": [],
 		"note": "the cache warning text read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:58010, :58046-58051)"
@@ -1577,12 +1572,12 @@
 		"probes": [],
 		"note": "the spinner reads the sent level first in the cleaned 2.1.312 code (chunk-zgj89n5s.js:1465, chunk-8h49xv0g.js:1512-1516)"
 	},
-	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:04743ec1": {
+	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:17c0581d": {
 		"kind": "manual",
 		"probes": [],
 		"note": "the four conditions of the prompt-note flag read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:60684), against 2.1.311 (chunk-xnjmsx7r.js:57759, :57763, :59815, :60285)"
 	},
-	"docs/configure/settings/auth.md#claude-apps-gateway-server-key:1a5c2df7": {
+	"docs/configure/settings/auth.md#claude-apps-gateway-server-key:4e144155": {
 		"kind": "manual",
 		"probes": [],
 		"note": "oidc.user_id_claim as an optional non-empty string, its sub fallback, and its missing-claim error, read in 2.1.319 (chunk-85d4q736.js@1404154, @1522930, @1523795)"
@@ -1687,7 +1682,7 @@
 		"probes": [],
 		"note": "the partial-read refusal of Write read in the cleaned 2.1.312 code (chunk-r5cyd28m.js:164229-164274, :73050-73054, :9596-9609, :77622; chunk-s2tghjwy.js:4530; chunk-b09ckz08.js:8515)"
 	},
-	"docs/reference/transcript-format.md#assistant-line-fields:8d5be712": {
+	"docs/reference/transcript-format.md#assistant-line-fields:cb781edf": {
 		"kind": "manual",
 		"probes": [],
 		"note": "effort read from output_config.effort of the built request in the cleaned 2.1.312 code (chunk-r5cyd28m.js:135670, :136924), against 2.1.311 (chunk-2ht8z368.js:134537)"
@@ -1717,7 +1712,7 @@
 		"probes": [],
 		"note": "pending_elicitation_requests in the 2.1.316 control schema (chunk-fbth6v0w.js)"
 	},
-	"docs/extend/hooks/handlers.md#command-fields:f8e9b8dd": {
+	"docs/extend/hooks/handlers.md#command-fields:32cef0ef": {
 		"kind": "manual",
 		"probes": [],
 		"note": "PowerShell exit code 2 prefixes: 2.1.314 chunk-sq7yspzm.js against 2.1.316 chunk-qd604jgh.js"
@@ -1889,7 +1884,7 @@
 		"kind": "behaviour",
 		"probes": ["pty.cli319.keybinding.session-tabs"]
 	},
-	"docs/extend/mod-api/ui/ui-events.md#events-raised-by-ui-calls:153928ad": {
+	"docs/extend/mod-api/ui/ui-events.md#events-raised-by-ui-calls:91f1c79a": {
 		"kind": "behaviour",
 		"probes": ["print.cli319.theme.engine"]
 	},
@@ -1901,7 +1896,7 @@
 		"kind": "behaviour",
 		"probes": ["print.cli319.theme.engine"]
 	},
-	"docs/reference/tools/agents-and-tasks.md#enable-tests:31570c49": {
+	"docs/reference/tools/agents-and-tasks.md#enable-tests:11bff575": {
 		"kind": "behaviour",
 		"probes": [
 			"print.api319.tool.exit-plan.direct",
@@ -1913,7 +1908,7 @@
 			"print.api319.tool.exit-plan.teammate-no-prompt-tool"
 		]
 	},
-	"docs/reference/tools/gated-and-other.md#gated-tools:a1e94573": {
+	"docs/reference/tools/gated-and-other.md#gated-tools:993523c8": {
 		"kind": "behaviour",
 		"probes": [
 			"print.api319.tool.propose-skills.cowork",
@@ -1932,12 +1927,12 @@
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/configure/cli/subcommands.md#commands:ae68c773": {
+	"docs/configure/cli/subcommands.md#commands:fb171547": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/configure/cli/remote-control.md#options:3729c7ae": {
+	"docs/configure/cli/remote-control.md#options:e41ba026": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
@@ -1952,7 +1947,7 @@
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/configure/models-and-providers/model-catalog.md#aliases:63335126": {
+	"docs/configure/models-and-providers/model-catalog.md#aliases:465f7ec4": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
@@ -1962,32 +1957,32 @@
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/configure/settings/auth.md#errors:9f9f3f78": {
+	"docs/configure/settings/auth.md#errors:9fab022f": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/headless/stream-json.md#undocumented-types:1c950b26": {
+	"docs/extend/headless/stream-json.md#undocumented-types:3e51cea5": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/headless/stream-json.md#undocumented-types:71e8a395": {
+	"docs/extend/headless/stream-json.md#undocumented-types:984b7655": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#errors:5aca9f65": {
+	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#errors:c0ad4929": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#errors:8f658168": {
+	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#errors:8bcea403": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/mod-api/calls/testing.md#errors:9939dfcb": {
+	"docs/extend/mod-api/calls/testing.md#errors:21c4b80c": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
@@ -2017,52 +2012,52 @@
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/mod-api/ui/ui-events.md#events-raised-by-ui-calls:dbe56b56": {
+	"docs/extend/mod-api/ui/ui-events.md#events-raised-by-ui-calls:bbcbe27a": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/mod-api/ui/ui.md#members:7f48b86f": {
+	"docs/extend/mod-api/ui/ui.md#members:93095856": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/plugins/cli.md#subcommands:6387dfb1": {
+	"docs/extend/plugins/cli.md#subcommands:05e28f84": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/plugins/marketplace.md#errors:57b29a62": {
+	"docs/extend/plugins/marketplace.md#errors:7cfe54a0": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/plugins/marketplace.md#errors:b7193684": {
+	"docs/extend/plugins/marketplace.md#errors:dac735fa": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/extend/skills-and-commands/index.md#skill-locations:a9f8adc4": {
+	"docs/extend/skills-and-commands/index.md#skill-locations:d3f99039": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/reference/tools/gated-and-other.md#errors:c651866c": {
+	"docs/reference/tools/gated-and-other.md#errors:6a8a77f5": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/reference/tools/gated-and-other.md#errors:f87858d1": {
+	"docs/reference/tools/gated-and-other.md#errors:ae835643": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/reference/tools/shell-and-web.md#errors:0ccf44c4": {
+	"docs/reference/tools/shell-and-web.md#errors:14a1a284": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
 	},
-	"docs/reference/tools/shell-and-web.md#errors:faad403a": {
+	"docs/reference/tools/shell-and-web.md#errors:5e31f25e": {
 		"kind": "manual",
 		"probes": [],
 		"note": "2.1.321 text checked against the 2.1.321 release notes and the 2.1.321 program"
@@ -2075,7 +2070,7 @@
 			"print.cli322.fast-vertex-eu"
 		]
 	},
-	"docs/configure/models-and-providers/fast-mode.md#where-fast-mode-works:70261b19": {
+	"docs/configure/models-and-providers/fast-mode.md#where-fast-mode-works:fea1350c": {
 		"kind": "behaviour",
 		"probes": ["print.cli322.fast-bedrock", "print.cli322.fast-foundry"]
 	},
@@ -2120,7 +2115,7 @@
 		"probes": [],
 		"note": "system prompt sentence read in the cleaned 2.1.322 code (chunk-9r1hbf9p.js:2502794); the 2.1.321 function has one text for all providers (cc-inspect release diff)"
 	},
-	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:757c1eec": {
+	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:9a9886fd": {
 		"kind": "manual",
 		"probes": [],
 		"note": "the six per_turn_effort entries read in the cleaned 2.1.322 model catalog (chunk-9s0rpt1f.js:4264, :9687, :16328, :18418, :19530, :21653)"
@@ -2215,7 +2210,7 @@
 		"probes": [],
 		"note": "cites the 2.1.323 release notes (agent_type on subagent compaction hooks)"
 	},
-	"docs/extend/mod-api/calls/tool-command-config.md#events-raised-by-these-calls:7a74abc5": {
+	"docs/extend/mod-api/calls/tool-command-config.md#events-raised-by-these-calls:2b9b5a62": {
 		"kind": "external",
 		"probes": [],
 		"note": "cites the 2.1.323 release notes and the program"
@@ -2255,7 +2250,7 @@
 		"probes": [],
 		"note": "worktree link-escape error read in the 2.1.323 program; the 2.1.322 program lacks it"
 	},
-	"docs/reference/tools/gated-and-other.md#gated-tools:40fb3688": {
+	"docs/reference/tools/gated-and-other.md#gated-tools:39f489c6": {
 		"kind": "manual",
 		"probes": [],
 		"note": "WrapUp gate read in the 2.1.323 program"
@@ -2269,5 +2264,255 @@
 		"kind": "manual",
 		"probes": [],
 		"note": "WebFetch call-time refusal read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/extend/mod-api/calls/model-audio-mcp.md#members:bcb0f08f": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/calls/model-audio-mcp.md#events-raised-by-these-calls:7d9f3ff8": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/calls/tool-command-config.md#members:0e98b419": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/hooks.md#types-without-fields:0d3bc730": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/hooks.md#starnext:5d4b48f7": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/hooks.md#hookbudget:8c2507bd": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/hooks.md#matcher:64788cfb": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/infra/atoms-files-http.md#jsonvalue:dd73a777": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/model.md#types-without-fields:70e5ed35": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/session/receive-send-usage.md#sessionreceiveorigin:51814251": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/testing/matchers-engine.md#elementquery:4f3dfacb": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/testing/matchers-engine.md#foundelement:1ad31759": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/testing/mocks-mounts.md#mountedmembers:46f70034": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolcheckinput:9d4886d5": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolcheckresult:4e9dfa80": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolinfo:11a80f20": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolinfo:9226243e": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolinfo:0f0a4262": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/ui/call-arguments.md#uiinputargument:a79abffc": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/ui/call-arguments.md#uipane:b5683556": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/ui/call-arguments.md#uipressargument:88bd6a2a": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/ui/call-arguments.md#uiselectargument:b318471a": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/ui/element-props.md#buttonprops:eeb99c99": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/ui/element-props.md#clientsurface:8d61865e": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/ui/element-props.md#clientsurface:6754e693": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/ui/index.md#types-without-fields:f1826e27": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/ui/index.md#types-without-fields:0da6ca42": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/ui/index.md#types-without-fields:a1f0668a": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/ui/index.md#types-without-fields:09cee75d": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/ui/input-pane-render.md#paneopenargs:6cf714fb": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/ui/input-pane-render.md#progressprops:b8c5ebf3": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/ui/input-pane-render.md#renderelement:83822fe0": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/ui/input-pane-render.md#renderinputof:3c59222c": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/ui/select-text-focus.md#uifocusinput:cfaad103": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#surfaces:53687f5f": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#render-sites-and-props:b58f919a": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#askuserquestion:42bb4531": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#turnduration:2ce0afe8": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#prompthint:34d4c1b4": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#aboveprompt:dee32e62": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#aboveprompt:e118bd84": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#abovepromptlist:83522ffe": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#pane:a26c50a2": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#pane:0d6fa774": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#pane:367aae55": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#backdrop:228f699f": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#backdrop:8d72c8cc": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/ui/ui.md#members:bc764456": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/ui/ui.md#members:f1cafdad": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/ui/ui.md#members:053791b6": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
 	}
 }

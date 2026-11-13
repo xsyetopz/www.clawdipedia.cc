@@ -38,6 +38,28 @@ Sources: the release notes of [`2.1.323`](https://github.com/anthropics/claude-c
 | `MCP_SDK_GENERATION=v1` | <Differs /> | It now runs the v2 MCP client in a compatibility mode. The v1 client is gone. | [Plugins and MCP Variables](../configure/env-vars/plugins-and-mcp.md) |
 | `cli323` probe group | <Undocumented /> | Release probes for `unsetOptionCount`, `claude workspace-trust`, `subagentStatusLine`, and the `claude mcp add --help` examples. | [Release Probes](../reference/probes.md) |
 
+### Mod API Type File
+
+Source: the Mod API type file of the `2.1.323` program (`schemas/claude-code.d.ts`), compared with the `2.1.322` one.
+
+| Change | Status | What it means for you | Where to read more |
+| --- | --- | --- | --- |
+| `$.theme.set` backdrop | <Differs /> | `backdrop.id` is now `backdrop.scene`, and the `Backdrop` render prop `id` is now `scene`. `colorScheme` moved out of `backdrop` to the top-level `overrideColorScheme`. A backdrop can also be a still ground (`ThemeGround`: a `color`, a `gradient`, or a `vector`), which draws with no `ui.render` hook and takes no `glass`. | [UI Methods](../extend/mod-api/ui/ui.md), [Surfaces, Elements, and Render Sites](../extend/mod-api/ui/ui-elements.md) |
+| `$.theme.set` errors | <Undocumented /> | New messages: `theme.set needs at least one of backdrop, overrideColorScheme, colors; $.theme.clear() clears the theme`, `overrideColorScheme is light or dark`, and `glass.blur is a number of points, 0 to 64`. A backdrop must name exactly one of `scene`, `color`, `gradient`, or `vector` (the program). | [UI Methods](../extend/mod-api/ui/ui.md) |
+| `ThemeColors` and `ThemeResult` | <Undocumented /> | `colors` may not hold the keys `__proto__`, `constructor`, or `prototype`. A surface refuses a palette with too little text contrast. `isDrawn: true` means a client that says it draws the theme is attached. | [UI Methods](../extend/mod-api/ui/ui.md) |
+| `Progress` element | <Undocumented /> | A new element with `label`, `value`, `max`, `valueText`, and `color`, on the terminal, desktop, mobile, and VS Code tables. `ClientElements` leaves it out. In tests, `ElementQuery.text` matches its label and figure. | [UI Element Props Types](../extend/mod-api/types/ui/element-props.md), [Testing Matcher and Engine Types](../extend/mod-api/types/testing/matchers-engine.md) |
+| Pane `placement` `widget` | <Undocumented /> | `$.ui.open` takes `placement: 'widget'`, and the `Pane` prop `placement` can be `widget` on the desktop app. `$.ui.open` and `$.ui.close` refuse a pane that another plugin holds. | [UI Methods](../extend/mod-api/ui/ui.md), [UI Input, Pane, and Render Types](../extend/mod-api/types/ui/input-pane-render.md) |
+| `AbovePromptList` and `AbovePrompt` | <Undocumented /> | `AbovePromptList` is a new render site. `AbovePrompt` is asked once per plugin with `e.plugin`. Mobile also raises `AbovePrompt` and `PromptHint`. | [Surfaces, Elements, and Render Sites](../extend/mod-api/ui/ui-elements.md) |
+| `TurnDuration.waitingFor` | <Undocumented /> | A new read-only prop that names the agents and the count of workflows that the turn waits for. | [Surfaces, Elements, and Render Sites](../extend/mod-api/ui/ui-elements.md) |
+| Matcher `plugin` key | <Differs /> | A `ui.render`, `ui.focus`, `ui.input`, `ui.press`, or `ui.select` hook that names no `plugin` hears only the elements of its own plugin. `{ plugin: "*" }` hears every plugin. | [Hook Machinery Types](../extend/mod-api/types/hooks.md), [UI Call Argument and Result Types](../extend/mod-api/types/ui/call-arguments.md) |
+| Button `hotkey` | <Differs /> | When two plugins use one hotkey, a press triggers neither. Within one plugin, the later button wins. | [UI Element Props Types](../extend/mod-api/types/ui/element-props.md) |
+| `$.tool.list`, `ToolInfo.inputSchema` | <Undocumented /> | `$.tool.list` runs through the `tool.list` hooks, but not those of the calling plugin. A hook can add a tool with `inputSchema`. A call of a removed tool is refused. The `$` calls of a `tool.list` hook fail after 30 seconds in all, and `$.ui.invalidate` takes `tool.list`. | [Tool, Command, and Config](../extend/mod-api/calls/tool-command-config.md), [Tool Call, Check, and Describe Types](../extend/mod-api/types/tool-command-config/tool-calls.md) |
+| `ceiling` of `tool.check` | <Undocumented /> | When the question has no ceiling, `ceiling` is the one that the core check found for the call. | [Tool Call, Check, and Describe Types](../extend/mod-api/types/tool-command-config/tool-calls.md) |
+| `mcp.connect` and `$.mcp.connect` | <Undocumented /> | The event is also raised for servers the engine connects itself, with a pinned `provider`. A hook that does not call `next` holds the server, and `/mcp` lists it as held. `$.mcp.connect` can connect any server that `/mcp` lists. | [Model, Audio, and MCP](../extend/mod-api/calls/model-audio-mcp.md) |
+| `origin.isVerified` of `session.receive` | <Undocumented /> | It is also true when a pane teammate accepted the signature of the lead. | [Session Receive, Send, and Usage Types](../extend/mod-api/types/session/receive-send-usage.md) |
+| `TurnStepInput.effort` | <Undocumented /> | The level can come from `CLAUDE_CODE_EFFORT_LEVEL`. A rewrite lasts one step. | [Prompt Suggest, Skill, and Turn Types](../extend/mod-api/types/turn-prompt/suggest-skill-turn.md) |
+| Plain data rule | <Undocumented /> | A named key on a list, or a key `__proto__`, `constructor`, or `prototype`, is not plain data for `JsonValue` and `Surface.post`. | [Atom, Files, and HTTP Types](../extend/mod-api/types/infra/atoms-files-http.md) |
+
 ### Settings, Permissions, and Startup
 
 | Change | Status | What it means for you | Where to read more |

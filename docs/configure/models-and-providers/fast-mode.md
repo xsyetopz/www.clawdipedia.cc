@@ -11,7 +11,7 @@ The offsets on this page are from the program `2.1.322`.
 
 ## Where Fast Mode Works
 
-The program has one capability name for each provider that supports fast mode (`chunk-yqezv9gr.js:387876`).
+The program has one capability name for each provider that supports fast mode (`chunk-x4fdscgs.js:399771`).
 
 | Provider | Status | Capability | Result of `/fast on` |
 | --- | --- | --- | --- |
@@ -20,21 +20,21 @@ The program has one capability name for each provider that supports fast mode (`
 | Each other provider | <Documented /> | None | `Fast mode is not available on this provider`. Cases for Bedrock and Foundry: `print.cli322.fast-bedrock`, `.fast-foundry`. |
 
 The official page [Speed Up Responses with Fast Mode](https://code.claude.com/docs/en/fast-mode#requirements), section "Requirements", says that fast mode is not available on Google Cloud's Agent Platform. The program `2.1.322` supports it there.
-In `2.1.321`, the text for all other providers was `Fast mode is only available when using the Anthropic API directly`. Since `2.1.322`, it is `Fast mode is not available on this provider` (`chunk-yqezv9gr.js:390215`).
+In `2.1.321`, the text for all other providers was `Fast mode is only available when using the Anthropic API directly`. Since `2.1.322`, it is `Fast mode is not available on this provider` (`chunk-x4fdscgs.js:402109`).
 
 ## Controls
 
 | Item | Status | What it does |
 | --- | --- | --- |
-| `/fast` `[on\|off]` | <Documented /> | Without an argument, it opens a panel in the interactive terminal, and it toggles fast mode in print mode (case `print.cli322.fast-vertex-toggle`). Another argument gives `Unknown argument "maybe". Use: /fast [on\|off]` (case `print.cli322.fast-vertex-bad-argument`; `chunk-r6jbvj4z.js:19076`). |
-| `--fast-mode <on\|off>` | <Undocumented /> | Sets `fastMode` in the flag settings of the session (`chunk-23mn5fhk.js:3597`). Another value does nothing. On Vertex with `--fast-mode on`, `/fast on` works in print mode (case `print.cli322.fast-vertex-flag`), and a prompt on `claude-fable-5-2` goes out with `speed: "fast"` (a cc-inspect run). |
-| `fastMode` | <Differs /> | On the Anthropic API, `true` in a settings file starts each session with fast mode on. On Vertex, the program ignores a saved value: only a flag setting (`--settings '{"fastMode": true}'` or `--fast-mode on`) or `/fast` turns fast mode on (`chunk-yqezv9gr.js:391333`). Since `2.1.322`, the description of the key ends with `On Vertex a saved value is ignored: use /fast each session.` (`chunk-mttfbqwj.js:293469`). The official docs do not state the Vertex rule. |
+| `/fast` `[on\|off]` | <Documented /> | Without an argument, it opens a panel in the interactive terminal, and it toggles fast mode in print mode (case `print.cli322.fast-vertex-toggle`). Another argument gives `Unknown argument "maybe". Use: /fast [on\|off]` (case `print.cli322.fast-vertex-bad-argument`; `chunk-s87ywym1.js:20519`). |
+| `--fast-mode <on\|off>` | <Undocumented /> | Sets `fastMode` in the flag settings of the session (`chunk-z2s1c1yg.js:3731`). Another value does nothing. On Vertex with `--fast-mode on`, `/fast on` works in print mode (case `print.cli322.fast-vertex-flag`), and a prompt on `claude-fable-5-2` goes out with `speed: "fast"` (a cc-inspect run). |
+| `fastMode` | <Differs /> | On the Anthropic API, `true` in a settings file starts each session with fast mode on. On Vertex, the program ignores a saved value: only a flag setting (`--settings '{"fastMode": true}'` or `--fast-mode on`) or `/fast` turns fast mode on (`chunk-x4fdscgs.js:403227`). Since `2.1.322`, the description of the key ends with `On Vertex a saved value is ignored: use /fast each session.` (`chunk-3dhh2g49.js:276624`). The official docs do not state the Vertex rule. |
 | `fastModePerSessionOptIn` | <Documented /> | Each session starts with fast mode off. In managed settings, it also refuses `/fast on` outside the interactive terminal. |
 | `CLAUDE_CODE_DISABLE_FAST_MODE` | <Documented /> | Turns fast mode off on each provider. On Vertex, `/fast on` then gives `Fast mode is not available` (case `print.cli322.fast-vertex-disabled`). |
-| `CLAUDE_CODE_SKIP_FAST_MODE_ORG_CHECK`, `CLAUDE_CODE_SKIP_FAST_MODE_NETWORK_ERRORS` | <Documented /> | Change the organization check on the Anthropic API. On Vertex, the program makes no organization check, so they do nothing there (`chunk-yqezv9gr.js:388101`). |
+| `CLAUDE_CODE_SKIP_FAST_MODE_ORG_CHECK`, `CLAUDE_CODE_SKIP_FAST_MODE_NETWORK_ERRORS` | <Documented /> | Change the organization check on the Anthropic API. On Vertex, the program makes no organization check, so they do nothing there (`chunk-x4fdscgs.js:399996`). |
 | `CLAUDE_CODE_MODEL_CAPABILITIES` | <Undocumented /> | The capabilities `fast_mode` and `vertex_fast_mode` turn fast mode on or off for a model. See [Models](#models). |
 | `CLOUD_ML_REGION`, `VERTEX_REGION_CLAUDE_FABLE_5_2` | <Differs /> | Set the Vertex region that fast mode checks. See [Vertex Regions](#vertex-regions). |
-| `chat:fastMode` (`meta+o`) | <Documented /> | The keybinding action for fast mode (`chunk-f3snxxsj.js:1539`). |
+| `chat:fastMode` (`meta+o`) | <Documented /> | The keybinding action for fast mode (`chunk-gsvg1pvs.js:1719`). |
 
 In print mode, `/fast` works only when a flag setting has `fastMode: true`.
 Without it, or with `--settings '{"fastMode": false}'`, the result is `Fast mode unavailable: Fast mode is not available in the Agent SDK` (cases `print.cli322.fast-vertex-no-settings` and `.fast-vertex-settings-off`).
@@ -42,12 +42,12 @@ Source: [Speed Up Responses with Fast Mode](https://code.claude.com/docs/en/fast
 
 ## Models
 
-A model supports fast mode when its catalog entry has the capability of the provider (`chunk-yqezv9gr.js:391959`).
+A model supports fast mode when its catalog entry has the capability of the provider (`chunk-x4fdscgs.js:403853`).
 
 | Provider | Models | Default fast model |
 | --- | --- | --- |
-| Anthropic API | `claude-opus-4-8`, `claude-opus-5`, `claude-opus-5-5`, `claude-fable-5-2`, `claude-mythos-5-2` (`chunk-9s0rpt1f.js:14288`, `:15280`, `:16384`, `:19586`, `:21709`) | `opus`, or `opus[1m]` (`chunk-yqezv9gr.js:391048`) |
-| Vertex | `claude-fable-5-2`, `claude-mythos-5-2` (`chunk-9s0rpt1f.js:19599`, `:21722`) | `claude-fable-5-2` |
+| Anthropic API | `claude-opus-4-8`, `claude-opus-5`, `claude-opus-5-5`, `claude-fable-5-2`, `claude-mythos-5-2` (`chunk-gep2e53q.js:14288`, `:15280`, `:16384`, `:19586`, `:21709`) | `opus`, or `opus[1m]` (`chunk-x4fdscgs.js:402942`) |
+| Vertex | `claude-fable-5-2`, `claude-mythos-5-2` (`chunk-gep2e53q.js:19599`, `:21722`) | `claude-fable-5-2` |
 
 On the Anthropic API, a name that the catalog does not know supports fast mode when it contains `opus-4-8` or `opus-5`. On Vertex, such a name does not.
 The official page names Fable 5.2, Opus 5.5, Opus 5, and Opus 4.8. The entry for `claude-mythos-5-2` is from the program only (<Undocumented />).
@@ -80,17 +80,17 @@ A run of the cc-inspect `code` action `cli` as a Vertex client shows the change 
 
 ### Fable 5.2 and Mythos 5.2
 
-On `claude-fable-5-2` and `claude-mythos-5-2`, fast mode is on only after you chose it on one of these two models (`chunk-yqezv9gr.js:395769`, `:395873`).
-A flag setting with `fastMode: true` counts as that choice for the session (`chunk-yqezv9gr.js:395992`).
-On the Anthropic API, `/fast` in the interactive terminal saves the choice in `.claude.json` as `fastModeChosenOnFableOrMythos` (<Undocumented />, `chunk-yqezv9gr.js:396173`). The value is `true` when the model is one of these two, and `false` for each other model. On Vertex, the choice lasts for the session only.
+On `claude-fable-5-2` and `claude-mythos-5-2`, fast mode is on only after you chose it on one of these two models (`chunk-x4fdscgs.js:407663`, `:407767`).
+A flag setting with `fastMode: true` counts as that choice for the session (`chunk-x4fdscgs.js:407886`).
+On the Anthropic API, `/fast` in the interactive terminal saves the choice in `.claude.json` as `fastModeChosenOnFableOrMythos` (<Undocumented />, `chunk-x4fdscgs.js:408067`). The value is `true` when the model is one of these two, and `false` for each other model. On Vertex, the choice lasts for the session only.
 Source: [Speed Up Responses with Fast Mode](https://code.claude.com/docs/en/fast-mode#switch-models-while-fast-mode-is-on), section "Switch models while fast mode is on", and the program.
 
 ## Vertex Regions
 
-On Vertex, fast mode needs the region `global`, `us`, or `eu` (`chunk-yqezv9gr.js:389931`).
-The program checks the region of the current model when that model supports fast mode. If not, it checks the region of `claude-fable-5-2` (`chunk-yqezv9gr.js:390038`).
-The region of a model is the value of its `VERTEX_REGION_*` variable. When that variable is not set, or the model has none, it is the default Vertex region, which `CLOUD_ML_REGION` sets (`chunk-4qw1tk01.js:5607`).
-The refusal text names the variable of the checked model, and `CLOUD_ML_REGION` for a model without one (`chunk-4qw1tk01.js:5768`).
+On Vertex, fast mode needs the region `global`, `us`, or `eu` (`chunk-x4fdscgs.js:401825`).
+The program checks the region of the current model when that model supports fast mode. If not, it checks the region of `claude-fable-5-2` (`chunk-x4fdscgs.js:401932`).
+The region of a model is the value of its `VERTEX_REGION_*` variable. When that variable is not set, or the model has none, it is the default Vertex region, which `CLOUD_ML_REGION` sets (`chunk-myegr98p.js:5612`).
+The refusal text names the variable of the checked model, and `CLOUD_ML_REGION` for a model without one (`chunk-myegr98p.js:5773`).
 
 | Case | Region variables | Result |
 | --- | --- | --- |
@@ -111,11 +111,11 @@ The refusal text names the variable of the checked model, and `CLOUD_ML_REGION` 
 On the Anthropic API in the interactive terminal, `/fast off` removes `fastMode` from the user settings file.
 In print mode, the off text is `Fast mode OFF (this session only)` (case `print.cli322.fast-vertex-off`). In the interactive terminal, it is `Fast mode OFF`, on Vertex too.
 With a remote workspace, the program sends `fastMode` and the model to the workspace in the control request `apply_flag_settings`.
-Source: the program (`chunk-28z06fjm.js:2543`).
+Source: the program (`chunk-63td8kgj.js:2543`).
 
 ## Availability Reasons and Texts
 
-When fast mode cannot go on, `/fast on` prints `Fast mode unavailable:` and a text (`chunk-28z06fjm.js:1833`). The stream-json `result` event has the reason in `fast_mode_disabled_reason` (`chunk-yqezv9gr.js:389145`, `:390215`).
+When fast mode cannot go on, `/fast on` prints `Fast mode unavailable:` and a text (`chunk-63td8kgj.js:1833`). The stream-json `result` event has the reason in `fast_mode_disabled_reason` (`chunk-x4fdscgs.js:401039`, `:402109`).
 In the print cases, the texts for `not_first_party` and for `CLAUDE_CODE_DISABLE_FAST_MODE` come without that prefix.
 
 | Reason | Status | Text | When |
@@ -127,7 +127,7 @@ In the print cases, the texts for `not_first_party` and for `CLAUDE_CODE_DISABLE
 | `preference` | <Documented /> | `Fast mode has been disabled by your organization` | Managed settings have `fastMode: false`, or `fastModePerSessionOptIn: true` outside the interactive terminal, or the organization turned fast mode off. |
 | `sdk_opt_in_required` | <Documented /> | `Fast mode is not available in the Agent SDK` | Print mode or the SDK without `fastMode: true` in the flag settings. |
 | `pending` | <Undocumented /> | `Checking fast mode availability` | The organization check is not complete. Anthropic API only. |
-| `free` | <Documented /> | `Fast mode requires a paid subscription`, or `Fast mode unavailable during evaluation. Please purchase credits.` with an API key | Anthropic API only (`chunk-yqezv9gr.js:388723`). |
+| `free` | <Documented /> | `Fast mode requires a paid subscription`, or `Fast mode unavailable during evaluation. Please purchase credits.` with an API key | Anthropic API only (`chunk-x4fdscgs.js:400617`). |
 | `extra_usage_disabled` | <Documented /> | `Fast mode requires usage credits` | Anthropic API only. |
 | `network_error` | <Documented /> | `Fast mode unavailable due to network connectivity issues` | Anthropic API only. |
 | `unknown` | <Documented /> | `Fast mode is currently unavailable` | Anthropic API only, or a server gate that turns fast mode off. |
@@ -137,16 +137,16 @@ The official pages do not have the texts for `not_first_party`, `sdk_opt_in_requ
 
 ## Fallback to Standard Speed
 
-When a request with `speed: "fast"` fails, the program sends it again at standard speed (`chunk-9r1hbf9p.js:2853411`).
+When a request with `speed: "fast"` fails, the program sends it again at standard speed (`chunk-2x9ma4k7.js:2996127`).
 
 | Provider | Response | Status | What the program does |
 | --- | --- | --- | --- |
 | Vertex | `400` with `fast mode`, `speed: extra inputs`, or `` `speed` parameter `` in the message | <Undocumented /> | Uses standard speed for that model until the session ends. The reason becomes `model_not_allowed`. `/fast on` clears it. |
 | Vertex | `403` or `404` | <Undocumented /> | Starts a cooldown of 30 minutes with the reason `refused`. `fast_mode_state` is `cooldown`. |
-| Each | `429`, or an overloaded error | <Documented /> | When the response asks for a wait below 20 seconds, the program waits and tries fast mode again. If not, it starts a cooldown with the reason `rate_limit` or `overloaded`. The cooldown is the time from the response, and at least 10 minutes. It is 30 minutes when the response gives no time (`chunk-9r1hbf9p.js:2869771`, `chunk-yqezv9gr.js:392469`). The docs do not give the times. |
-| Each | A `429` with the header `anthropic-ratelimit-unified-overage-disabled-reason` | <Documented /> | Sends the request again at standard speed without a cooldown. For a reason that means no credits are left, it shows the notification `fast-mode-overage-rejected` one time for each turn (`chunk-yqezv9gr.js:398016`). |
+| Each | `429`, or an overloaded error | <Documented /> | When the response asks for a wait below 20 seconds, the program waits and tries fast mode again. If not, it starts a cooldown with the reason `rate_limit` or `overloaded`. The cooldown is the time from the response, and at least 10 minutes. It is 30 minutes when the response gives no time (`chunk-2x9ma4k7.js:3013550`, `chunk-x4fdscgs.js:404363`). The docs do not give the times. |
+| Each | A `429` with the header `anthropic-ratelimit-unified-overage-disabled-reason` | <Documented /> | Sends the request again at standard speed without a cooldown. For a reason that means no credits are left, it shows the notification `fast-mode-overage-rejected` one time for each turn (`chunk-x4fdscgs.js:409910`). |
 
-The test for a Vertex refusal is at `chunk-9r1hbf9p.js:2865231`. It does not run on the Anthropic API.
+The test for a Vertex refusal is at `chunk-2x9ma4k7.js:3009005`. It does not run on the Anthropic API.
 A cc-inspect run with a stub that refuses each fast request (`provider: "vertex"`, `fastRefusal`) gave these results on `claude-fable-5-2`:
 
 | `fastRefusal` | Requests | `fast_mode_state` | `fast_mode_disabled_reason` | Debug log line |
@@ -155,7 +155,7 @@ A cc-inspect run with a stub that refuses each fast request (`provider: "vertex"
 | `403` | 2 | `cooldown` | None | `Fast mode cooldown triggered (refused), duration 1800s` |
 | `404` | 2 | `cooldown` | None | Not read |
 
-The interactive terminal shows these texts during a cooldown (`chunk-vr3fdvn1.js:561175`, `:1832089`, `:1832438`):
+The interactive terminal shows these texts during a cooldown (`chunk-1xmjf4e6.js:573623`, `:1853125`, `:1832438`):
 
 - `Fast mode overloaded and is temporarily unavailable`
 - `Fast mode was refused for this project` (new in `2.1.322`)
@@ -167,7 +167,7 @@ Source: [Speed Up Responses with Fast Mode](https://code.claude.com/docs/en/fast
 
 ## Request
 
-A fast request has `speed: "fast"` in the body (`chunk-9r1hbf9p.js:2952032`).
+A fast request has `speed: "fast"` in the body (`chunk-2x9ma4k7.js:3097390`).
 
 | Case or run | Provider | `speed` | Beta `fast-mode-2026-02-01` |
 | --- | --- | --- | --- |
@@ -176,15 +176,15 @@ A fast request has `speed: "fast"` in the body (`chunk-9r1hbf9p.js:2952032`).
 | `print.cli322.fast-request-first-party-disabled` | Anthropic API, `CLAUDE_CODE_DISABLE_FAST_MODE=1` | Not sent | Not sent |
 | cc-inspect `code` `cli`, `provider: "vertex"` | Vertex, `claude-fable-5-2` | `fast` | Not sent. The body has `"anthropic_version":"vertex-2023-10-16"`. |
 
-The system prompt has one sentence about fast mode. On Vertex since `2.1.322`, it ends with `switches the session to a model that does`. On the Anthropic API, it ends with `switches the session to Claude Opus` (`chunk-9r1hbf9p.js:2503138`).
+The system prompt has one sentence about fast mode. On Vertex since `2.1.322`, it ends with `switches the session to a model that does`. On the Anthropic API, it ends with `switches the session to Claude Opus` (`chunk-2x9ma4k7.js:2649257`).
 
 ## Price Text
 
-The text after `Fast mode ON` depends on the provider (`chunk-28z06fjm.js:1579`).
+The text after `Fast mode ON` depends on the provider (`chunk-63td8kgj.js:1579`).
 On the Anthropic API, it is the fast price of the model, such as `$8/$40 per Mtok`. On Vertex, it is `2x <model> standard price`.
 The panel says `Draws from usage credits at a higher rate` on the Anthropic API and `Billed at a higher rate` on Vertex.
 
-The program holds these fast prices in US dollars for each million tokens (`chunk-yqezv9gr.js:402250`, `:402885`):
+The program holds these fast prices in US dollars for each million tokens (`chunk-x4fdscgs.js:414144`, `:414779`):
 
 | Model | Status | Input | Output | Cache write (5 minutes) | Cache write (1 hour) | Cache read |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -198,7 +198,7 @@ The last row applies when a capability override turns fast mode on for another m
 
 ## The Panel
 
-In the interactive terminal, `/fast` without an argument opens a panel (`chunk-vr3fdvn1.js:557300`).
+In the interactive terminal, `/fast` without an argument opens a panel (`chunk-1xmjf4e6.js:569748`).
 
 | Part | Text |
 | --- | --- |
@@ -213,7 +213,7 @@ No pty probe covers the panel on Vertex. These texts are from the program.
 
 ## Result Fields
 
-Each stream-json `result` event has the fast mode state (`chunk-smzekmsg.js:424692`).
+Each stream-json `result` event has the fast mode state (`chunk-h3xwema8.js:459073`).
 
 | Field | Status | Values |
 | --- | --- | --- |

@@ -96,7 +96,7 @@ The program decides in this order:
 3. For a known name, the gate `tengu_velvet_tide` gives the short prompt when on. Otherwise the server setting `simple_system_prompt` for the model decides.
 
 The program now canonicalizes the name for this test with the option `deterministic`. The option skips the lookup that turns an `application-inference-profile` ARN into the model behind it. So an ARN no longer counts as the Sonnet or Haiku model that it fronts, unless `modelOverrides` maps it.
-Source: the program (`chunk-wyaw0eh8.js` lines 376 to 405 and `chunk-yqezv9gr.js` lines 26471 to 26490; in `2.1.311` the same test used no `deterministic` option, and that build is not in the `2.1.321` capture).
+Source: the program (`chunk-b9bvke64.js` lines 345 to 374 and `chunk-x4fdscgs.js` lines 27171 to 27190; in `2.1.311` the same test used no `deterministic` option, and that build is not in the `2.1.321` capture).
 
 ## Prompt by Model
 
@@ -228,7 +228,7 @@ The first two rows differ because Opus 5.5 gets the short prompt and Sonnet 5 th
 
 ## Responsive Mode
 
-The program has a built-in plugin named `cc-plugin-responsive-mode` (the plugin is defined in `chunk-3agj72pz.js`, registered in `chunk-5tdaqsyr.js`, and loads `chunk-vksxwdrb.js`). Its description reads: "Responsive mode: Claude replies to you in a sentence before thinking or using tools, on every prompt".
+The program has a built-in plugin named `cc-plugin-responsive-mode` (the plugin is defined in `chunk-p1x9gjdg.js`, registered in `chunk-mt5heavc.js`, and loads `chunk-9dgv2k67.js`). Its description reads: "Responsive mode: Claude replies to you in a sentence before thinking or using tools, on every prompt".
 The plugin is off by default (`defaultEnabled: false`). It is only available when the experiment `tengu_quiet_ember` is on, and never in a background or daemon session. You cannot set that experiment. The plugin registers when the entry point is not `local-agent`, or when the session is remote. The plugin acts only on a prompt that a person typed and that is not a slash command.
 This page does not state how the plugin changes the prompt, because that text was not read in this run.
 

@@ -10,7 +10,7 @@ Each type below has its own table of fields.
 
 ### `UiInputArgument`
 
-The argument of `ui.input`: a change of, or a submit from, an `Input` that a render hook drew. Flat and frozen like every event argument. Another plugin addresses one field by matcher: `on("ui.input", { plugin: "roster", element: "reply" }, ...)`. Used by `ui.input`.
+The argument of `ui.input`: a change of, or a submit from, an `Input` that a render hook drew. Flat and frozen like every event argument. A hook that names no `plugin` hears the fields of its own plugin only. Another plugin addresses one field by matcher, and `{ plugin: "*" }` addresses the fields of every plugin: `on("ui.input", { plugin: "roster", element: "reply" }, ...)`. Since `2.1.323` (`schemas/claude-code.d.ts`, `UiInputArgument`). Used by `ui.input`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -73,7 +73,7 @@ What `$.ui.notify` resolves to and what the `{ value }` of a `ui.notify` hook ho
 
 ### `UiOpenResult`
 
-What `$.ui.open` resolves to and what the `{ value }` of a `ui.open` hook holds. `isPlaced` says if a surface draws the pane now. Asked panes place at any width. Unasked panes need 144 columns (110 for an id that the person opened before).
+What `$.ui.open` resolves to and what the `{ value }` of a `ui.open` hook holds. `isPlaced` says if a surface draws the pane now. Asked panes place at any width. Unasked panes need 144 columns (110 for an id that the person opened before). Where a surface seated the pane is on the `Pane` render props (`placement`), per surface (`schemas/claude-code.d.ts`, `UiOpenResult`; the 2.1.323 comment names `placement` where 2.1.322 named `dock` and `inline`).
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -83,7 +83,7 @@ What `$.ui.open` resolves to and what the `{ value }` of a `ui.open` hook holds.
 
 ### `UiPane`
 
-One of the open panes of this plugin as `$.ui.panes()` lists it. It has the id and title of the pane, and where it stands with the person right now. Where the surface seated the pane (`dock` or `inline`) is on the `Pane` render props. Used by `$.ui.panes`, `ui.panes`.
+One of the open panes of this plugin as `$.ui.panes()` lists it. It has the id and title of the pane, and where it stands with the person right now. Where the surface seated the pane (`dock`, `inline`, or `widget`) is on the `Pane` render props (`placement`). Since `2.1.323` the type file names `widget` here (`schemas/claude-code.d.ts`, `UiPane`). Used by `$.ui.panes`, `ui.panes`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -115,7 +115,7 @@ What `$.ui.place` resolves to and what the `{ value }` of a `ui.place` hook hold
 
 ### `UiPressArgument`
 
-The argument of `ui.press`: a press on a `Button` that a render hook drew, or on an answered `Markdown` link. Flat and frozen like every event argument. Another plugin addresses one button by matcher: `on("ui.press", { plugin: "explainer", element: "explain" }, ...)`. Used by `ui.press`.
+The argument of `ui.press`: a press on a `Button` that a render hook drew, or on an answered `Markdown` link. Flat and frozen like every event argument. A hook that names no `plugin` hears the presses of its own plugin only. Another plugin addresses one button by matcher, and `{ plugin: "*" }` addresses the buttons of every plugin: `on("ui.press", { plugin: "explainer", element: "explain" }, ...)`. Since `2.1.323` (`schemas/claude-code.d.ts`, `UiPressArgument`). Used by `ui.press`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -197,7 +197,7 @@ What `$.ui.scroll` brings into view: never a row number, always a thing drawn so
 
 ### `UiSelectArgument`
 
-The argument of `ui.select`: a pick from a `Select` that a render hook drew. Flat and frozen like every event argument. Another plugin addresses one picker by matcher: `on("ui.select", { plugin: "roster", element: "peer" }, ...)`. Used by `ui.select`.
+The argument of `ui.select`: a pick from a `Select` that a render hook drew. Flat and frozen like every event argument. A hook that names no `plugin` hears the pickers of its own plugin only. Another plugin addresses one picker by matcher, and `{ plugin: "*" }` addresses the pickers of every plugin: `on("ui.select", { plugin: "roster", element: "peer" }, ...)`. Since `2.1.323` (`schemas/claude-code.d.ts`, `UiSelectArgument`). Used by `ui.select`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
