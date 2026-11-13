@@ -10,7 +10,11 @@ import { homedir } from "node:os";
 import { basename, dirname, join } from "node:path";
 import { parseArgs } from "node:util";
 
-import { binaryPath, program } from "../../inspect/mcp/src/binary.ts";
+import {
+	binaryPath,
+	program,
+	releaseTrees,
+} from "../../inspect/mcp/src/binary.ts";
 import { mapSeq } from "../../inspect/mcp/src/seq.ts";
 import {
 	KINDS,
@@ -172,6 +176,8 @@ export const snapshot = async (
 	const byKind: Record<string, SurfaceItem[]> = {};
 	// One kind after the other: kinds that run at once hold the garbage of each at once.
 	const runs = await mapSeq(kinds, (k) => surface(bundle, k, p.modules));
+	// A caller that snapshots two versions, such as release:diff, would otherwise hold both sets of trees.
+	releaseTrees();
 	for (const [i, k] of kinds.entries()) {
 		byKind[k] = runs[i] ?? [];
 	}

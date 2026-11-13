@@ -3,11 +3,12 @@ import { access, mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { listInstalls } from "../../inspect/mcp/src/binary.ts";
+import { listInstalls, program } from "../../inspect/mcp/src/binary.ts";
 import { KINDS } from "../../inspect/mcp/src/surface/index.ts";
+import { compile } from "../../inspect/mcp/test/server-harness.ts";
 import { CLAUDE_CODE_VERSION } from "../../src/version.ts";
 import { sorted, sortedStrings } from "../schemas/sorted.ts";
-import { committed, serialize, validate } from "./snapshot.ts";
+import { committed, serialize, snapshot, validate } from "./snapshot.ts";
 
 const SCRIPT = join(import.meta.dir, "snapshot.ts");
 const COPY = join(import.meta.dir, "..", "..", "schemas", "surface.json");
@@ -193,6 +194,17 @@ test("check with no binary still fails on the wrong version", async () => {
 	const r = await run(["--check", "--out", out]);
 	expect(r.code).toBe(1);
 	expect(r.err).toContain("0.0.1");
+});
+
+test("a snapshot lets go of the syntax trees, so a second version does not parse beside the first", async () => {
+	const dir = await tmp();
+	await writeFile(join(dir, "app.mjs"), "globalThis.x = process.env.A;\n");
+	await compile(join(dir, "app.mjs"), join(dir, "app.js"));
+	const p = await program(join(dir, "app.js"));
+	const [name = ""] = p.bundle().texts.keys();
+	const tree = await p.bundle().get(name);
+	await snapshot(join(dir, "app.js"), ["env"]);
+	expect(await p.bundle().get(name)).not.toBe(tree);
 });
 
 test.skipIf(!installed)(
