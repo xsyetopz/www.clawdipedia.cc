@@ -8,7 +8,7 @@ These variables change how Claude Code loads plugins, runs MCP servers, finds sk
 They set time limits, token limits, cache paths, and marketplace behavior.
 Use them to tune slow MCP servers or to lock down plugin loading.
 
-This page lists 110 variables. `MCP_TIMEOUT` and `MCP_TOOL_TIMEOUT` are common. Switch rows take `1`.
+This page lists 111 variables. `MCP_TIMEOUT` and `MCP_TOOL_TIMEOUT` are common. Switch rows take `1`.
 
 ## Example
 
@@ -75,6 +75,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_MCP_SERVE_AUTH_TOKEN` | <Undocumented /> | Gives the MCP serve mode a bearer value for its auth. Without it the mode uses a stdout reader. | Text (a secret). Claude Code reads it from the env once and then removes it. It also clears it from the child process env | MCP serve mode |
 | `CLAUDE_CODE_MCP_SERVE_GARBAGE_COLLECTIONS` | <Undocumented /> | Sets when the tool server of `mcp serve` makes its own garbage collections with `bun:jsc`. A full collection runs `fullGC`. A young collection runs `edenGC`. Added in `2.1.321`. | Parts split by commas: `first=listen`, `first=rest`, `first=skip`, or `first=never`; `later=young` or `later=full`; `rest_delay_ms=N`; `min_growth_mib=N`; `between_growth_mib=N` or `between_growth_mib=off`. `N` has one to six digits. Defaults are `first=listen`, `later=full`, `rest_delay_ms=1500`, `min_growth_mib=16`, `between_growth_mib=8`. `first=never` in any part turns the collections off. A part that fails to parse gives a warning in the debug log, and the server acts as if the variable were unset | `mcp serve` tool server. Parsed at `chunk-6jz99wkn.js:1804`. Used at `chunk-6jz99wkn.js:4903`. The program did not show what an unset variable means, because a second check decides it |
 | `CLAUDE_CODE_MCP_SERVE_INTERFACE_MIN_VERSION` | <Undocumented /> | Asks for a minimum `anthropic/toolHostInterface` version. Claude Code ignores and logs a value that differs from the real one. | Text. The log event is `launch_min_version_ignored` | MCP serve mode |
+| `CLAUDE_CODE_MCP_SERVE_MEMORY_WALKS_DEADLINE_MS` | <Undocumented /> | Sets the time limit for the memory file walks of the `mcp serve` tool server. | A number of milliseconds, `2000` by default. When the limit passes or a walk fails, the walk stops and the server logs `memory_walks_late` or `memory_walks_failed`. Since `2.1.323` (the program, `chunk-j800tms2.js:4379`) | `mcp serve` tool server |
 | `CLAUDE_CODE_MCP_SERVE_SETTINGS` | <Undocumented /> | Gives launch settings as JSON with `permissions.allow` and `permissions.deny` rules. Without readable settings the server runs nothing. | Text. Also on the list of vars that force a copy of the env | MCP serve mode |
 | `CLAUDE_CODE_MCP_SERVE_TOOL_OUTPUT` | <Undocumented /> | Lets the MCP serve mode return tool output objects. Needs launch rules from `CLAUDE_CODE_MCP_SERVE_SETTINGS`. | On or off. Boolean, true only as `true`. Otherwise the server refuses calls that ask for an output object | MCP serve mode |
 | `CLAUDE_CODE_MCP_SERVE_WORKSPACE_ROOT` | <Undocumented /> | Sets the workspace root of the MCP serve mode. It must be an absolute path of at most 4096 characters. | Text. A bad path gives the fault `bad_path` | MCP serve mode |
@@ -136,7 +137,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `MCP_DISCOVERY_CACHE_TTL_S` | <Documented /> | Sets how long a cache entry is used without a background refresh. | Default `900` | - |
 | `MCP_PROTOCOL_NEGOTIATION` | <Documented /> | Chooses whether the v2 MCP client probes servers for the newer protocol revision. | `auto` or `legacy`. Probes for revision `2026-07-28`. v2 runtime only | - |
 | `MCP_REMOTE_SERVER_CONNECTION_BATCH_SIZE` | <Documented /> | Sets how many remote (HTTP or SSE) MCP servers connect in parallel at startup. | A number. Default `20` | - |
-| `MCP_SDK_GENERATION` | <Documented /> | Pins the MCP client runtime to `v1` or `v2`. | `v1` or `v2`. Read once per process. Since `2.1.218` | - |
+| `MCP_SDK_GENERATION` | <Documented /> | Pins the MCP client runtime to `v1` or `v2`. | `v1` or `v2`. Read once per process. Since `2.1.218`. Since `2.1.323` the v1 MCP client is gone, and `v1` runs the v2 client in a compatibility mode with an earlier handshake and relaxed OAuth sign-in checks (the program, `chunk-yze97b10.js:1037`) | - |
 | `MCP_SERVER_CONNECTION_BATCH_SIZE` | <Documented /> | Sets how many local (stdio) MCP servers connect in parallel at startup. | A number. Default `3` | - |
 | `MCP_TIMEOUT` | <Documented /> | Sets the startup connect timeout of one MCP server in milliseconds. | Default `30000` | - |
 | `MCP_TOOL_TIMEOUT` | <Documented /> | Sets the timeout of an MCP tool call in milliseconds. | Default `100000000` (about 28 hours). Values below 1000 become 1 s. The per-server `timeout` wins. Remote servers also have a 60 s per-request timer | - |
