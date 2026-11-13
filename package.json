@@ -14,7 +14,7 @@
 			"oxlint": "1.93.0",
 			"oxlint-tsgolint": "7.0.2006",
 			"typescript": "7.0.2",
-			"typescript-bedrock": "0.1.11"
+			"typescript-bedrock": "0.1.13"
 		}
 	},
 	"scripts": {
@@ -95,7 +95,7 @@
 		"oxlint-tsgolint": "catalog:",
 		"typescript": "catalog:",
 		"typescript-bedrock": "catalog:",
-		"wrangler": "^4.160.0"
+		"wrangler": "^4.161.0"
 	},
 	"overrides": {
 		"@types/node": "26.6.6"
