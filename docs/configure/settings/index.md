@@ -73,6 +73,8 @@ Source: [Settings Files and Precedence](https://code.claude.com/docs/en/settings
   After `/cd`, it reads the new directory (v2.1.246 or later).
 - In a git repository, the local file lives at the repository root. In a worktree, it lives at the main checkout root.
 - Claude Code adds `**/.claude/settings.local.json` to your global git excludes file when it writes the local file.
+  Since `2.1.323`, it does this also when the folder is not a git repository yet (`chunk-rqvvpwt0.js:6395`, called from `chunk-rqvvpwt0.js:85856`).
+- A write to a settings file reads the file from disk first, so a hand edit made moments before is kept. A file that was deleted starts again as a new file that holds only that change. Since `2.1.323`, a write seeds from the last parse only when the file is empty, broken, or locked, or when a `ConfigChange` hook blocked the latest change (`chunk-rqvvpwt0.js:88588`).
 - Claude Code watches the files and reloads them. It runs the `ConfigChange` hook for each change in a settings file.
 - Managed settings from MDM or the console reach a running session on a schedule, not on save.
 - A cloud session reads only the shared project file and server-managed settings.
@@ -135,6 +137,7 @@ Source: [Deploy Managed Settings](https://code.claude.com/docs/en/managed-settin
 
 - Claude Code merges `managed-settings.json` first, then each `*.json` file of `managed-settings.d/` in alphabetical order.
   Number the files to set the order, such as `10-telemetry.json`.
+- Since `2.1.323`, start-up reads a managed file again when the first read found it absent, empty, or not loadable, so a program that rewrites the file at that moment does not hide it. The re-read covers `managed-settings.json` and the files of `managed-settings.d/`. It has a limit of 5 seconds. When the limit passes, Claude Code keeps the managed settings it already read (`chunk-x4fdscgs.js:551395`, `:552600`).
 - `managedSourcesBehavior` decides how sources combine. `first-wins` uses the highest source alone. `merge` deep-merges them.
 - `parentSettingsBehavior` does the same for the SDK parent tier.
 - `policyHelper` and `policyHelpers` compute managed settings at startup.

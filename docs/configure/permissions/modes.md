@@ -46,6 +46,7 @@ Captured system prompts for some modes: [Plan](../../prompts/modes/mode-plan.md)
 
 - `permissions.defaultMode` sets the start mode. `--permission-mode` wins for one session.
 - Project and local settings cannot set `auto` or `bypassPermissions` as the default. Source: the program.
+- Since `2.1.323`, when the auto mode killswitch is active, `--permission-mode auto` and `defaultMode: auto` start the session in `default` (Manual), which asks first. The program logs `auto mode killswitch active (override- or payload-served) — falling back to default` (`chunk-2xn4gen7.js:4930`, `:8151`). The same fallback applies to an agent definition's `permissionMode: auto`.
 - `permissions.disableBypassPermissionsMode` stops `bypassPermissions`. So does a bypass dialog that you did not accept.
   The program texts are `bypassPermissions mode is disabled by settings` and `Cannot set permission mode to bypassPermissions because the session was not launched with --dangerously-skip-permissions`.
 - A cloud session cannot use `bypassPermissions`. Source: the program error text.

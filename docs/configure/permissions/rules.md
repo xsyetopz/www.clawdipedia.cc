@@ -102,6 +102,19 @@ A `PermissionUpdate` changes rules or the mode. Hooks and SDK hosts send and rec
 
 Source: `PermissionUpdate` in the Mod API type file of the 2.1.322 program (`schemas/claude-code.d.ts`).
 
+### Session-Only Allow Rules
+
+Since `2.1.323`, an `addRules` or `replaceRules` update that adds an `allow` rule is split before it is saved. The program moves a rule to the `session` destination and does not save it when one of these holds. The destinations `session` and `cliArg` are not checked.
+
+| Reason | Status | When it applies | Text shown |
+| --- | --- | --- | --- |
+| `holds_secret` | <Undocumented /> | The tool name and rule content match a secret pattern | `Allowed for this session only. The rule looks like it contains a secret, so it isn’t saved to settings.` |
+| `scan_failed` | <Undocumented /> | The secret check threw an error | `Allowed for this session only. The rule couldn’t be checked for secrets, so it isn’t saved to settings.` |
+| `tracked_by_git` | <Undocumented /> | The destination is `localSettings` and git tracks `.claude/settings.local.json` | `Allowed for this session only. Git tracks .claude/settings.local.json, so the rule isn’t saved there.` |
+
+A rule that the `allow` list of the destination file already holds is not moved. A `removeRules` update for an `allow` rule in a saved destination also removes the rule from `session`.
+Source: the program (`chunk-ny35jjxw.js:212300`).
+
 ## How It Works
 
 [Permission Flow](../../how-it-works/permission-flow.md) shows how Claude Code walks the lists, the hooks, and the mode.
