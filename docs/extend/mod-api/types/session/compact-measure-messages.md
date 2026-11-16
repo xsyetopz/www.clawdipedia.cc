@@ -160,6 +160,20 @@ What `$.session.identity()` answers. It says how the session is signed in and, u
 | `email` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
 | `isVerified` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
 
+### `SessionInfo`
+
+What `$.session.info()` answers. Since `2.1.326`, it holds what a settings hook's input says of the session that no other read on `$.session` gives, and where the engine runs. Used by `$.session.info`, `session.info`.[^session-info]
+
+| Field | Status | What it is for | Type and limits |
+| --- | --- | --- | --- |
+| `transcriptPath` | <Documented /> | The transcript file of the main conversation (`transcript_path`). | Type: `string`. It is empty in a session that keeps none on this machine. The transcript of a subagent lies in the `subagents/` folder under the folder of that name. |
+| `scratchpadDir` | <Documented /> | The scratchpad directory of the session (`scratchpad_dir`). | Type: `string`. Optional. Absent where the session has none. |
+| `promptId` | <Documented /> | The ID of the prompt that the session is on (`prompt_id`). | Type: `string`. Optional. Absent before the first prompt. |
+| `agentType` | <Documented /> | The agent that the session itself runs as (`--agent`, `agent_type`). | Type: `string`. Optional. Absent when it runs as none. |
+| `configRoot` | <Documented /> | The folder that the project settings are read from, when it is not where the session stands. A settings hook's command starts in it. | Type: `string`. Optional. Absent otherwise. |
+| `platform` | <Documented /> | The operating system that the engine runs on. | Type: `'macos' \| 'windows' \| 'wsl' \| 'linux' \| 'unknown'`. Optional. `wsl` is Linux under Windows. The engine always gives it. A hook that answers whole may leave it out. |
+| `isHosted` | <Documented /> | Whether the engine runs on the hosted server. That machine is not the session's own, so `platform` is the server's. | Type: `boolean`. Optional. False anywhere else, a cloud session with a machine of its own included. The engine always gives it. A hook that answers whole may leave it out. |
+
 ### `SessionMeasureInput`
 
 The input of `session.measure`. It holds what `$.session.usage()` answers at this moment, and which of its units moved since the last measurement that a hook saw. The figures are the same as in the call, without `context.breakdown`. A hook can only observe. Used by `session.measure`, `$.session.measure`.
@@ -243,3 +257,4 @@ A `$.session.messages({ as: "api" })` call that names no agent. It reads the mai
 ## Sources
 
 [^resume-loader]: The program, `chunk-2x9ma4k7.js`.
+[^session-info]: `schemas/claude-code.d.ts`, `SessionInfo`. The program, `chunk-4h798pp0.js:57382`.

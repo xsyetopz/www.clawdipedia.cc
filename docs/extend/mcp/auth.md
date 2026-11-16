@@ -41,6 +41,7 @@ Use it for short-lived tokens.
 | Working folder | <Documented /> | Resolves relative paths. | The plugin folder, the project folder, the primary working folder, or `~/.claude` (user, managed, connector). It depends on where you configure the server. |
 | Env scrub | <Documented /> | Hides credential variables. | Project `.mcp.json`, plugin, and project agent servers receive no variables with `TOKEN`, `SECRET`, `PASSWORD`, `KEY`, or `AUTH` in the name, plus a fixed list. |
 | Trust rule | <Documented /> | Runs the helper late. | Project and local servers run it only after the trust dialog for the folder that declares them. Until then, Claude Code uses only static `headers`. |
+| Failed helper | <Documented /> | Keeps other sessions connecting. | Since `2.1.326`, a helper that fails, or does not run in an untrusted folder, no longer marks a server as needing sign-in for other sessions when no OAuth refresh token is stored. This holds for most servers.[^helper-failed] |
 | `${user_config.*}` | <Documented /> | Plugin options. | Not allowed. Claude Code reports the server as misconfigured. Before `2.1.207` it substituted them. |
 | Policy refusal | <Documented /> | Refuses a plugin helper. | A marketplace entry with `headersHelper` must inline its full manifest with `strict: false`. Otherwise Claude Code refuses to run it. |
 
@@ -139,3 +140,4 @@ Each row is a family of messages. The backticked text is the start that every me
 [^list-timeout]: The program, `chunk-2x9ma4k7.js:4330619`.
 [^settings-check]: The program, `chunk-2x9ma4k7.js:4330619` and `chunk-mghdt42f.js:6533`. The flag is `require_connector_block_on_plugin_servers`.
 [^many-hosts]: The program, `chunk-2x9ma4k7.js:4314036`. The program does not show here what a caller does with the error.
+[^helper-failed]: The program, `chunk-cyt43yzs.js:354-365` and `chunk-j76re4j2.js:5662-5697`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

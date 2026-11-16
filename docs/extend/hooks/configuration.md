@@ -130,13 +130,15 @@ A hook fails when it cannot start or reaches its timeout. It also fails when it 
 | `DISABLE_BRIEF_MODE_STOP_HOOK` | <Undocumented /> | Skips the brief-mode check at the end of a turn. See [Features and Toggles](../../configure/env-vars/features-and-toggles.md). | |
 | `CLAUDE_CODE_RESUME_SESSIONSTART_HOOKS_WAIT_MS` | <Undocumented /> | Sets how long a resume waits for `SessionStart` hooks. See [Sessions and Storage](../../configure/env-vars/sessions-and-storage.md). | |
 
+Since `2.1.326`, the transcript shows a failed hook, a blocking hook, and a hook that timed out in red, with the reason below. A hook that stops Claude shows in yellow with its reason.[^transcript-colors]
+
 ## Settings Keys and Trust
 
 | Item | Status | What it does | Notes |
 | --- | --- | --- | --- |
 | `hooks` | <Documented /> | The event map. | Merges across levels. |
-| `allowedHttpHookUrls` | <Documented /> | A URL allowlist for `http` hooks. | `*` is a wildcard. An empty array blocks all. Arrays merge across levels. |
-| `httpHookAllowedEnvVars` | <Documented /> | A name allowlist for header values. | Claude Code intersects it with each hook's `allowedEnvVars`. Arrays merge. |
+| `allowedHttpHookUrls` | <Documented /> | A URL allowlist for `http` hooks. | `*` is a wildcard. An empty array blocks all. Arrays merge across levels. Since `2.1.326`, where managed settings do not set it, a list in another settings file does not apply to hooks that managed settings define or that come from a plugin they enable from a local folder.[^managed-lists] |
+| `httpHookAllowedEnvVars` | <Documented /> | A name allowlist for header values. | Claude Code intersects it with each hook's `allowedEnvVars`. Arrays merge. Since `2.1.326`, the same managed-settings rule applies as for `allowedHttpHookUrls`.[^managed-lists] |
 | Workspace trust | <Documented /> | Settings hooks wait for the trust dialog. | `-p` and SDK sessions treat the folder as trusted. Hooks of project subagents need the dialog. |
 | `/hooks` menu | <Documented /> | A read-only browser of your hooks. | Shows where each one comes from. |
 | Debug output | <Documented /> | `claude --debug-file <path>` writes hook activity. | `CLAUDE_CODE_DEBUG_LOG_LEVEL=verbose` adds matcher lines. |
@@ -173,3 +175,5 @@ Each row is a family of messages. The backticked text is the start that every me
 [^powershell]: Probe case `print.err319.hook-powershell` printed this text.
 [^gitbash]: The program checks `x()==="windows"`, a platform check (read site `chunk-2x9ma4k7.js`, search `requires bash but Git Bash was not found`). On this macOS build the platform is a baked-in `"darwin"` literal, and `CLAUDE_CODE_HOST_PLATFORM` only sets the telemetry `platform` field. Not run: hard limit on this host.
 [^absolute]: The program, `chunk-95t7prpp.js:40200` and `chunk-qyghbmn1.js:17617`.
+[^managed-lists]: The program, `chunk-4h798pp0.js:200481-200497` and the field text of both settings. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^transcript-colors]: The program, `chunk-s3j7dx93.js:10448-10630`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

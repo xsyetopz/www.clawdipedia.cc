@@ -115,6 +115,20 @@ What `$.ui.place` resolves to, and what the `{ value }` of a `ui.place` hook hol
 | `requestId` | <Undocumented /> | The ID of the row when it stands for a surface that is not attached yet. | Type: `string`. Optional. New in `2.1.314`. |
 | `reason` | <Undocumented /> | Why nothing draws it, in one line to show or log. | Type: `string`. New in `2.1.314`. |
 
+### `UiPointerInput`
+
+The input of `ui.pointer`. Since `2.1.326`, it tells what the pointer did on the backdrop, and where. Every key is pinned. Used by `ui.pointer`.[^ui-pointer]
+
+| Field | Status | What it is for | Type and limits |
+| --- | --- | --- | --- |
+| `surface` | <Documented /> | Where the pointer event came from. | Type: `RenderSurface`. `desktop` or `mobile`. |
+| `component` | <Documented /> | The element that was hit. | Type: `'Backdrop'`. |
+| `requestId` | <Documented /> | The `requestId` that the `ui.render` hook that drew the backdrop saw. | Type: `string`. |
+| `scene` | <Documented /> | The `scene` that the plugin named in `$.theme.set`. | Type: `string`. |
+| `type` | <Documented /> | The kind of event: a click, or a tap of a finger. | Type: `'click'`. Moves never reach a mod. |
+| `x` | <Documented /> | The place from the left edge of the backdrop (0) to its right edge (1). | Type: `number`. In steps of 1/64. |
+| `y` | <Documented /> | The place from the top edge of the backdrop (0) to its bottom edge (1). | Type: `number`. In steps of 1/64. The y of a shader points up, so give it `1 - e.y`. |
+
 ### `UiPressArgument`
 
 The argument of `ui.press`: a press on a `Button` that a render hook drew, or on an answered `Markdown` link. It is flat and frozen like every event argument. A hook that names no `plugin` hears the presses of its own plugin only. Another plugin addresses one button by matcher, and `{ plugin: "*" }` addresses the buttons of every plugin: `on("ui.press", { plugin: "explainer", element: "explain" }, ...)`. Since `2.1.323`.[^ui-press] Used by `ui.press`.
@@ -270,3 +284,4 @@ The background task that a `UserMessage` notification row reports on: a subagent
 [^ui-press]: `schemas/claude-code.d.ts`, `UiPressArgument`.
 [^scroll]: `captures/2.1.321/types.diff`.
 [^ui-select]: `schemas/claude-code.d.ts`, `UiSelectArgument`.
+[^ui-pointer]: `schemas/claude-code.d.ts`, `UiPointerInput`. The program, `chunk-8c7cqrmr.js:274`.

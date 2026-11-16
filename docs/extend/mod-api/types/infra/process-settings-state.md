@@ -151,7 +151,20 @@ A pending timer from `$.clock.after` / `$.clock.every`. Object with fields `canc
 | --- | --- | --- | --- |
 | `cancel` | <Documented /> | Stops it. A stopped timer never fires again. | Type: `() => void`. |
 
+### `WasmCompileInput`
+
+What a hook on `wasm.compile` receives. Since `2.1.326`, it holds the bytes that are about to compile, and the file that they were read from when the call named one. Used by `$.wasm.compile`, `wasm.compile`.[^wasm-compile]
+
+| Field | Status | What it is for | Type and limits |
+| --- | --- | --- | --- |
+| `path` | <Documented /> | The file under the folder of the calling plugin, as `claude plugin validate` prints it. | Type: `string`. Optional. Uses `/` as the separator. Absent for bytes made at run time. Pinned: `next(e)` passes it on. |
+| `base64` | <Documented /> | The binary: the file as read for this call, or the bytes as they were when the call was made. | Type: `string`. A hook may replace it. |
+
 ## Related Pages
 
 - [Files, State, Clock, HTTP, Process, and Settings Types](index.md)
 - [Mod API Types](../index.md)
+
+## Sources
+
+[^wasm-compile]: `schemas/claude-code.d.ts`, `WasmCompileInput`. The program, `chunk-4h798pp0.js:240496`.

@@ -107,7 +107,7 @@ On `2.1.319`, an auto mode run with a custom base URL that gives no server-side 
 
 | Pattern | Status | What it does | Events |
 | --- | --- | --- | --- |
-| Top-level `decision: "block"` | <Documented /> | Blocks. `reason` is the message. | `UserPromptSubmit`, `UserPromptExpansion`, `PostToolUse`, `PostToolUseFailure`, `PostToolBatch`, `Stop`, `SubagentStop`, `ConfigChange`, `PreCompact`, `TaskCreated` |
+| Top-level `decision: "block"` | <Documented /> | Blocks. `reason` is the message. Since `2.1.326`, it also blocks when `hookSpecificOutput` names a different event than the one that ran. Claude Code ignores `hookSpecificOutput`, logs a warning, and keeps the block.[^block-mismatch] `PermissionRequest` is not covered. | `UserPromptSubmit`, `UserPromptExpansion`, `PostToolUse`, `PostToolUseFailure`, `PostToolBatch`, `Stop`, `SubagentStop`, `ConfigChange`, `PreCompact`, `TaskCreated` |
 | `hookSpecificOutput.permissionDecision` | <Documented /> | `allow`, `deny`, `ask`, or `defer`. `defer` works only in `-p`. | `PreToolUse`. `PreModelSwitch` has no `defer`. |
 | `hookSpecificOutput.decision.behavior` | <Documented /> | `allow` or `deny`. Needs a `decision` object. | `PermissionRequest` |
 | `continue: false` or exit 2 | <Documented /> | Stops the teammate. | `TeammateIdle`, `TaskCompleted` |
@@ -177,3 +177,4 @@ The hook input is in the `*HookInput` types in the Mod API type file `https://cl
 [^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the program (`BaseHookInput`, `McpServerProvenance`, `ClassicResultFields`, and the hook output schema). The exit code 2 table was checked against the Hooks Reference.
 [^probes-print]: Probes in `-p` mode with a local stub.
 [^exit-127]: The program, `chunk-s3j7dx93.js:10508`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^block-mismatch]: The program, `chunk-4h798pp0.js:64591` and `chunk-4h798pp0.js:203690`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

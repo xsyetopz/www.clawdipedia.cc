@@ -147,6 +147,16 @@ on("tool.list", async ($, e, next) => {
 | --- | --- | --- | --- |
 | `[K in keyof ToolEnvelope<Name, Arguments>]` | <Documented /> | Each key of the tool envelope, with its type unchanged. | Type: `ToolEnvelope<Name, Arguments>[K]`. |
 
+### `ToolJudgeInput`
+
+The input of `tool.judge`. Since `2.1.326`, it is the question of `tool.check` about a real call: all fields of `ToolCheckInput`, with a call that always has its ID. All fields are pinned. Used by `tool.judge`, `$.tool.judge`.
+
+| Field | Status | What it is for | Type and limits |
+| --- | --- | --- | --- |
+| `tool_use_id` | <Documented /> | The call that is judged: the ID that its `tool.call` and `tool.check` carried. | Type: `string`. `next.origin` names a plugin only on the own `$.agent.call` of that plugin, where its allow stands in the place of the classifier. On any other call it names the engine. |
+
+The other fields are those of [`ToolCheckInput`](#toolcheckinput).[^tool-judge]
+
 ### `ToolNamed`
 
 An input that names its tool as the literal `T`. `next` and `$.tool.call` read it to type the result of the call for each tool (NextResultFor).
@@ -216,3 +226,4 @@ One tool_use block of an assistant message, with its outcome once the transcript
 [^break-cache]: `captures/2.1.321/types.diff`.
 [^tool-info]: `schemas/claude-code.d.ts`, `ToolInfo`. The program, `chunk-620k1a78.js:105325`, `chunk-2x9ma4k7.js:4502683`.
 [^op-hold]: `opHoldMs: 30000`, `chunk-s82q53mp.js:201764`.
+[^tool-judge]: `schemas/claude-code.d.ts`, `ToolJudgeInput`. The program, `chunk-3epcmdpn.js:19-20`.

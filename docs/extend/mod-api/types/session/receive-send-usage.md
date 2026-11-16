@@ -155,6 +155,16 @@ What a `session.start` hook returns and what `next(e)` resolves to: `{ cwd }`, w
 | --- | --- | --- | --- |
 | `cwd` | <Documented /> | The working directory of the session. | Type: `string`. |
 
+### `SessionStopInput`
+
+The input of `session.stop`. Since `2.1.326`, it tells what the Stop of the person found. It is the record of the engine: a hook observes it, and `next(e)` passes it on. Used by `session.stop`, `$.session.stop`.
+
+| Field | Status | What it is for | Type and limits |
+| --- | --- | --- | --- |
+| `isTurnRunning` | <Documented /> | Whether a turn of the main conversation was under way. | Type: `boolean`. At the terminal, a command that the person waits on also counts. A prompt that has not started reads false. |
+
+The result of a `session.stop` hook is `SessionStopResult`, which is `{ isTurnRunning }`. Core echoes it, and a value that a hook returns changes nothing.[^session-stop]
+
 ### `SessionUsage`
 
 What `$.session.usage()` answers: when the session began, the fill of the context window, the rate-limit windows of the account, and the cost of the session. These are the figures of the status line. The engine leaves out a figure that it lacks. It never sets such a figure to zero. Used by `$.session.usage`, `session.usage`.
@@ -193,3 +203,4 @@ What `$.session.version()` answers: the version of the engine that the session r
 ## Sources
 
 [^verified]: The type file `schemas/claude-code.d.ts`.
+[^session-stop]: `schemas/claude-code.d.ts`, `SessionStopInput`. The program, `chunk-4h798pp0.js:10027`.
