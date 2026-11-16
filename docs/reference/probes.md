@@ -6,7 +6,19 @@ sidebar_position: 5
 
 A probe is a small test that runs Claude Code `2.1.305` and checks what one setting changes.
 The probes ran against a local stub of the Messages API, so they cost nothing and sent no data to Anthropic.
-They show which environment variables and settings have an effect that you can see.
+They show which environment variables and settings have an effect that you can see. Use the results to learn what a variable does before you set it. The [Example](#example) shows one probe that you can run by hand.
+
+## Example
+
+Repeat the `[1m]` probe by hand against any stub or proxy that logs request headers.
+
+```bash title="Check the 1M beta"
+ANTHROPIC_BASE_URL=http://127.0.0.1:8787 \
+ANTHROPIC_API_KEY=sk-ant-fake-probe \
+claude -p "Reply with 'OK'." --model "sonnet[1m]" --output-format stream-json --verbose
+```
+
+Look for `context-1m-2025-08-07` in the `anthropic-beta` header. Run it again without `[1m]` and the value is gone.
 
 ## How We Probed
 
@@ -99,11 +111,11 @@ Ten undocumented names have no row in this table. Five ended the run with the va
 ## Request Details
 
 - `cc_version=2.1.305.b57`: the suffix `b57` stayed the same in all runs with the prompt `Reply with 'OK'.`, on both models tried. Auto mode classifier requests carried a different suffix, `034`.
-- `/v1/messages/cache_touch`: never called. On `2.1.305` with a real `CLAUDE_CODE_OAUTH_TOKEN`, `claude -p "Reply with 'OK'."` got no `anthropic-cache-keepalive` header, the request had no `cache-keepalive` beta, and no `cache_touch` call was made (seen through a local proxy that logged only paths, and a debug file). The program sends it only when the response has `anthropic-cache-keepalive: active` for a request with the `cache-keepalive-2026-09-03` beta.
+- `/v1/messages/cache_touch`: never called. On `2.1.305` with a real `CLAUDE_CODE_OAUTH_TOKEN`, `claude -p "Reply with 'OK'."` got no `anthropic-cache-keepalive` header, the request had no `cache-keepalive` beta, and no `cache_touch` call was made (seen through a local proxy that logged only paths, and a debug file). Claude Code sends it only when the response has `anthropic-cache-keepalive: active` for a request with the `cache-keepalive-2026-09-03` beta.
   That beta needs a 1-hour cache TTL for a subscriber login, `allow_cache_keepalive`, and a server-side flag. It is also off when `ANTHROPIC_UNIX_SOCKET` is set.
   The body is `{"request_id": ...}`, and the response needs a request id. Touches repeat every 30 s by default (10 to 120).
   We ran the stub with that response header and a request id, with and without `CLAUDE_INTERNAL_FC_OVERRIDES` setting the flags. The program never sent the beta and never called the path, because the probe had no subscriber login.
-  The path, the header name, the body field, and the 30 s default with its 10 to 120 range are in the program's code.
+  The path, the header name, the body field, and the 30 s default with its 10 to 120 range come from the program.[^cache-touch]
 - `context-1m-2025-08-07`: added by a `[1m]` suffix, also on models with a native 1M window. Not sent without the suffix.
   The default model in this setup was `claude-opus-5-5` and it did not send the beta.
 - Base betas in the plain run: `claude-code-20250219`, `interleaved-thinking-2025-05-14`, `thinking-token-count-2026-05-13`, `context-management-2025-06-27`, `per-turn-control-2026-07-01`, `mid-conversation-tool-changes-2026-07-01`, `advanced-tool-use-2025-11-20`, `effort-2025-11-24`, `thinking-display-updates-2026-08-18`.
@@ -200,10 +212,10 @@ The stub reply to `GET /api/oauth/profile` set every field: `account` with `uuid
 
 | Hypothesis | Prediction | Command | Status | Result |
 | --- | --- | --- | --- | --- |
-| `USE_LOCAL_OAUTH=1` and `CLAUDE_LOCAL_OAUTH_API_BASE` point the profile request at a local server. | The stub gets `GET /api/oauth/profile`. | `code {"action":"cli","login":"oauth","env":{"USE_LOCAL_OAUTH":"1","CLAUDE_LOCAL_OAUTH_API_BASE":"<stub>"},"args":["--debug-file","<config-dir>/debug.log","-p","Reply with 'OK'."],"show":"debug.log"}` | <Undocumented /> | Wrong. The stub got only `POST /v1/messages`. The debug log said `Failed to fetch oauth profile from OAuth token: ... connect ECONNREFUSED 127.0.0.1:9`, so the request went to the dead proxy. The program always picks the production OAuth config (`function E(){return"prod"}`, `chunk-40c7f7c7.js@415`). `2.1.316` has the same code. |
+| `USE_LOCAL_OAUTH=1` and `CLAUDE_LOCAL_OAUTH_API_BASE` point the profile request at a local server. | The stub gets `GET /api/oauth/profile`. | `code {"action":"cli","login":"oauth","env":{"USE_LOCAL_OAUTH":"1","CLAUDE_LOCAL_OAUTH_API_BASE":"<stub>"},"args":["--debug-file","<config-dir>/debug.log","-p","Reply with 'OK'."],"show":"debug.log"}` | <Undocumented /> | Wrong. The stub got only `POST /v1/messages`. The debug log said `Failed to fetch oauth profile from OAuth token: ... connect ECONNREFUSED 127.0.0.1:9`, so the request went to the dead proxy. The program always picks the production OAuth config.[^oauth-config] `2.1.316` has the same code. |
 | The profile request goes to `api.anthropic.com` whatever `ANTHROPIC_BASE_URL` says. | With `apiHost`, the request shows up with the host `api.anthropic.com`. | The same input with `"apiHost":true` and the profile reply in `replies` | <Undocumented /> | Right. The requests were `GET https://api.anthropic.com/api/oauth/profile` and `POST /v1/messages?beta=true` (the stub). Both carried the fake token. |
 | The reply fields land in `oauthAccount` of `.claude.json` under camelCase names. | `oauthAccount` holds a key for each field. | The same input with `"show":".claude.json"` | <Undocumented /> | `oauthAccount` had `accountUuid`, `emailAddress`, `organizationUuid`, `hasExtraUsageEnabled`, `billingType`, `accountCreatedAt`, `subscriptionCreatedAt`, `ccOnboardingFlags`, `claudeCodeTrialEndsAt`, `claudeCodeTrialDurationDays`, `seatTier`, `planDisplayName`, `displayName`, `fullName`, and `profileFetchedAt`. `organization.name`, `organization_type`, and `rate_limit_tier` were not in it. See [Account and Access](../how-it-works/account-and-access.md#the-profile-request). |
-| The plan and the rate limit tier go to the stored login. | `.credentials.json` gets `subscriptionType` and `rateLimitTier`. | The same input with `"show":".credentials.json"` | <Undocumented /> | With a reply that had no `request-id` header, the login did not change. The debug log said `OAuth: stored login plan not recorded from the profile (unstamped)`. The stub then sent `request-id: req_probe`, and the login got `subscriptionType: "max"`, `subscriptionTypeSource: "profile"`, `subscriptionTypeVerifiedAt`, and `rateLimitTier`. The check is the pattern `^req_[A-Za-z0-9_-]{1,36}$` (`chunk-fknzn91z.js@415`). |
+| The plan and the rate limit tier go to the stored login. | `.credentials.json` gets `subscriptionType` and `rateLimitTier`. | The same input with `"show":".credentials.json"` | <Undocumented /> | With a reply that had no `request-id` header, the login did not change. The debug log said `OAuth: stored login plan not recorded from the profile (unstamped)`. The stub then sent `request-id: req_probe`, and the login got `subscriptionType: "max"`, `subscriptionTypeSource: "profile"`, `subscriptionTypeVerifiedAt`, and `rateLimitTier`. The check is the pattern `^req_[A-Za-z0-9_-]{1,36}$`.[^req-id-pattern] |
 
 ## Static and Print Probes
 
@@ -259,7 +271,7 @@ The `cli321` group runs against `2.1.321` with the local stub and a fake key. It
 
 ## Release Probes for 2.1.322
 
-The `cli322` group runs against `2.1.322` with the local stub and a fake key. It covers fast mode on Vertex, which is the one item of the [`2.1.322` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.322). Each case runs `/fast` in print mode and records the `result` event. The captures are in `captures/2.1.322/print/`. [Fast Mode](../configure/models-and-providers/fast-mode.md) has the results.
+The `cli322` group runs against `2.1.322` with the local stub and a fake key. It covers fast mode on Vertex, which is the one item of the `2.1.322` release notes.[^notes-322] Each case runs `/fast` in print mode and records the `result` event. The captures are in `captures/2.1.322/print/`. [Fast Mode](../configure/models-and-providers/fast-mode.md) has the results.
 
 | Layer | Group or Case | Status | What It Runs |
 | --- | --- | --- | --- |
@@ -270,7 +282,7 @@ The `cli322` group runs against `2.1.322` with the local stub and a fake key. It
 
 ## Release Probes for 2.1.323
 
-The `cli323` group runs against `2.1.323` with the local stub and a fake key. It sends no model request: each case runs a subcommand with `argv` or a print run that needs no answer. It covers four items of the [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The captures are in `captures/2.1.323/print/`. The range of `CLAUDE_CODE_OVERLOADED_RETRY_MAX_DELAY_MS` has no case, because the program reads an out-of-range value as unset with no warning, and only a retry after an overloaded response shows the delay.
+The `cli323` group runs against `2.1.323` with the local stub and a fake key. It sends no model request: each case runs a subcommand with `argv` or a print run that needs no answer. It covers four items of the `2.1.323` release notes.[^notes-323] The captures are in `captures/2.1.323/print/`. The range of `CLAUDE_CODE_OVERLOADED_RETRY_MAX_DELAY_MS` has no case, because the program reads an out-of-range value as unset with no warning, and only a retry after an overloaded response shows the delay.
 
 | Layer | Group or Case | Status | What It Runs |
 | --- | --- | --- | --- |
@@ -292,7 +304,7 @@ These runs used the real `2.1.306`, `2.1.307`, `2.1.308`, `2.1.309`, `2.1.310`, 
 | `claudeMdExcludes` of the managed absolute path, or `<managed>/**`, in user or project settings | <Documented /> | Nothing was removed: user and project `CLAUDE.md` stayed, and the managed `CLAUDE.md` and the managed rule loaded. |
 | Managed `.claude/rules/*.md` | <Undocumented /> | It loaded, and `claudeMdExcludes` with `**/CLAUDE.md`, the managed absolute path, or `<managed>/**` did not remove it. |
 | A `managed-settings.d/` drop-in that denies `NotebookEdit` | <Documented /> | `NotebookEdit` left the `init` event tool list (present there in the baseline). It was not in the request tool list in either run (12 tools). |
-| The prompt note "not verified as your organization's policy" | <Undocumented /> | It did not appear with a root-owned folder. The program text says it is added for managed files that the session's own account could write. The `managed.owned.claudemd-order` case tests that with a folder that the user owns. That case needs sudo, so it runs with the managed probe. On `2.1.322`, the note did not appear in that case either. The program text of `2.1.323` makes that ownership check only in a session whose entry point is `remote_cowork` or `remote_cowork_trigger` (`chunk-s82q53mp.js@86054`, `chunk-2x9ma4k7.js@1557842`). The `managed.*.claudemd-remote-cowork` cases set `CLAUDE_CODE_ENTRYPOINT=remote_cowork`. On `2.1.322`, the note appeared with a folder that the user owns (`managed.owned.claudemd-remote-cowork`) and did not appear with a root-owned folder (`managed.main.claudemd-remote-cowork`). The note did appear in the print case `modcontext.prompt-context.added-files`, above a `managed` file that a mod added. It also appeared when user settings enabled that mod from a `directory` marketplace (`managed.baseline.mod-vouch-user`). It did not appear when managed settings declared the marketplace in the managed folder and enabled the mod (`managed.vouch.mod-vouch-managed`). See [Labels in the Prompt](../configure/memory-and-rules.md#labels-in-the-prompt). |
+| The prompt note "not verified as your organization's policy" | <Undocumented /> | It did not appear with a root-owned folder. The note is added for managed files that the session's own account could write.[^managed-note] The `managed.owned.claudemd-order` case tests that with a folder that the user owns. That case needs sudo, so it runs with the managed probe. On `2.1.322`, the note did not appear in that case either. In `2.1.323` the program makes that ownership check only in a session whose entry point is `remote_cowork` or `remote_cowork_trigger`.[^managed-note-entry] The `managed.*.claudemd-remote-cowork` cases set `CLAUDE_CODE_ENTRYPOINT=remote_cowork`. On `2.1.322`, the note appeared with a folder that the user owns (`managed.owned.claudemd-remote-cowork`) and did not appear with a root-owned folder (`managed.main.claudemd-remote-cowork`). The note did appear in the print case `modcontext.prompt-context.added-files`, above a `managed` file that a mod added. It also appeared when user settings enabled that mod from a `directory` marketplace (`managed.baseline.mod-vouch-user`). It did not appear when managed settings declared the marketplace in the managed folder and enabled the mod (`managed.vouch.mod-vouch-managed`). See [Labels in the Prompt](../configure/memory-and-rules.md#labels-in-the-prompt). |
 | User agent with `mcpServers` frontmatter, no `--mcp-config` | <Undocumented /> | The agent ran, but its server did not start (without the managed folder it did). A notice said `probe-agent agent MCP server blocked by enterprise MCP config: agent_srv`. |
 | `autoMode` in `managed-settings.json` and a `managed-settings.d/` drop-in, with `claude auto-mode config` | <Documented /> | Both files applied. Lists from all sources join, with user or `--settings` rules first and managed rules after. `$defaults` expands where it sits. A list with no `$defaults` in any source has no defaults. See [Auto Mode](../configure/permissions/auto-mode.md). |
 
@@ -319,8 +331,8 @@ Follow-up probes ran the interactive screen with a hook that logs each `Notifica
 
 | What We Ran | Status | What We Saw |
 | --- | --- | --- |
-| `PushNotification` tool call `{message, status: "proactive"}` | <Undocumented /> <Gated note="The tool is behind a server-side flag that is off by default" /> | The hook got `session_id`, `transcript_path`, `cwd`, `prompt_id`, `hook_event_name`, `message` (`probe push`), and `notification_type` `push_notification`. No `title`. The tool result was `Terminal notification sent.` The flag is `tengu_kairos_push_notifications`. The probe forced it through cached feature flags in the temp config, with `CLAUDE_CODE_GB_DISK_CACHE_WHEN_TELEMETRY_OFF=1`, `ENABLE_TOOL_SEARCH=false` (the tool is deferred), and `CLAUDE_CODE_DISABLE_NOTIFICATION_PRESENCE_CHECK=1`. A run without the presence-check variable gave the tool result `Not sent because you're active in this terminal.` and no hook call. |
-| Agent teams (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`), one named background teammate, and a hand-written `permission_request` in `<config>/teams/<team>/inboxes/team-lead.json` | <Undocumented /> <Gated note="Set CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 or use --agent-teams" /> | The hook got `worker_permission_prompt` with the message `A subagent needs permission for Bash` (the name part was `A subagent`, not the teammate name) and no `title`. A normal `permission_prompt` (`Claude needs your permission`) followed when the dialog showed `Bash command · from a subagent`. The lead's poller starts only when a teammate exists, and it sends the notification only when the lead is idle with no dialog shown. The network form, `<name> needs network access to <host>`, was not run (it needs a sandbox and a teammate in another process). On `2.1.305` the same hand-written `permission_request` did not work: the lead showed `Message from @mate (unverified)` as a plain message, and no hook ran. The program reads an inbox message as verified only when the same process wrote it (it has a `msg_id` that the process recorded), so a hand-written file is treated as forged or unverifiable (the program). The `worker_permission_prompt` text was not seen again. A real in-process teammate whose scripted `Bash` call needed permission showed the dialog `Bash command · from the mate agent` and fired only `permission_prompt` (`Claude needs your permission`). The lead's inbox path, and so `worker_permission_prompt` and its network form, needs a teammate in another process (a pane backend), which was not available here. |
+| `PushNotification` tool call `{message, status: "proactive"}` | <Undocumented /> <Gated note="The tool is behind a server-side flag that is off by default" /> | The hook got `session_id`, `transcript_path`, `cwd`, `prompt_id`, `hook_event_name`, `message` (`probe push`), and `notification_type` `push_notification`. No `title`. The tool result was `Terminal notification sent.` The probe forced the flag[^push-flag] through cached feature flags in the temp config, with `CLAUDE_CODE_GB_DISK_CACHE_WHEN_TELEMETRY_OFF=1`, `ENABLE_TOOL_SEARCH=false` (the tool is deferred), and `CLAUDE_CODE_DISABLE_NOTIFICATION_PRESENCE_CHECK=1`. A run without the presence-check variable gave the tool result `Not sent because you're active in this terminal.` and no hook call. |
+| Agent teams (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`), one named background teammate, and a hand-written `permission_request` in `<config>/teams/<team>/inboxes/team-lead.json` | <Undocumented /> <Gated note="Set CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 or use --agent-teams" /> | The hook got `worker_permission_prompt` with the message `A subagent needs permission for Bash` (the name part was `A subagent`, not the teammate name) and no `title`. A normal `permission_prompt` (`Claude needs your permission`) followed when the dialog showed `Bash command · from a subagent`. The lead's poller starts only when a teammate exists, and it sends the notification only when the lead is idle with no dialog shown. The network form, `<name> needs network access to <host>`, was not run (it needs a sandbox and a teammate in another process). On `2.1.305` the same hand-written `permission_request` did not work: the lead showed `Message from @mate (unverified)` as a plain message, and no hook ran. The program reads an inbox message as verified only when the same process wrote it (it has a `msg_id` that the process recorded), so a hand-written file is treated as forged or unverifiable.[^inbox-verified] The `worker_permission_prompt` text was not seen again. A real in-process teammate whose scripted `Bash` call needed permission showed the dialog `Bash command · from the mate agent` and fired only `permission_prompt` (`Claude needs your permission`). The lead's inbox path, and so `worker_permission_prompt` and its network form, needs a teammate in another process (a pane backend), which was not available here. |
 | Built-in computer-use MCP server, enabled in `/mcp` | <Undocumented /> <Gated note="Needs a Pro or Max plan, a server flag, and not HIPAA" /> | It connected with its tools. `list_granted_applications` and `wait` calls did not fire the hook. The program sends `computer_use_enter` when it takes the computer-use lock, so the probe stopped before any action that controls the screen. Not seen. Not rerun on `2.1.305`. |
 | Search of the program for `model_refusal_fallback` | <Undocumented /> | The name is in the `notification_type` list, but no code sends a Notification with it. The only other use is a system message subtype. This is a reading of the `2.1.305` program, not a live run. |
 | `auth_storage_failure` | <Undocumented /> | Not run. The token URL cannot point at localhost (`CLAUDE_CODE_CUSTOM_OAUTH_URL` allows only three Anthropic hosts), and on macOS the save goes to the real keychain. The `2.1.305` program still sends it when the login save fails (reading only). |
@@ -338,18 +350,6 @@ Not run, because they need a login, a cloud or remote session, or another host:
 - Remote, CCR, and cloud variables need a remote session.
 - Subscriber-only paths such as `cache_touch` need a login.
 
-## Example
-
-Repeat the `[1m]` probe by hand against any stub or proxy that logs request headers.
-
-```bash title="Check the 1M beta"
-ANTHROPIC_BASE_URL=http://127.0.0.1:8787 \
-ANTHROPIC_API_KEY=sk-ant-fake-probe \
-claude -p "Reply with 'OK'." --model "sonnet[1m]" --output-format stream-json --verbose
-```
-
-Look for `context-1m-2025-08-07` in the `anthropic-beta` header. Run it again without `[1m]` and the value is gone.
-
 ## How It Works
 
 The harness reads an env var at start or at the point of use. A probe sets one variable, runs the same short session, and compares every output to the baseline.
@@ -362,3 +362,15 @@ A change in a header, the system prompt, the tool list, or an event is an effect
 - [Environment Variables](../configure/env-vars/index.md)
 - [Hooks](../extend/hooks/index.md)
 - [Request and Cache](../how-it-works/request-and-cache.md)
+
+## Sources
+
+[^cache-touch]: The program, the `cache_touch` request code.
+[^oauth-config]: The program, `chunk-40c7f7c7.js@415`, `function E(){return"prod"}`.
+[^req-id-pattern]: The program, `chunk-fknzn91z.js@415`.
+[^managed-note]: The program text.
+[^managed-note-entry]: The program, `chunk-s82q53mp.js@86054`, `chunk-2x9ma4k7.js@1557842`.
+[^push-flag]: The flag is `tengu_kairos_push_notifications`.
+[^inbox-verified]: The program.
+[^notes-322]: [`2.1.322` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.322).
+[^notes-323]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323).

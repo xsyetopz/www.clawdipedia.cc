@@ -5,10 +5,9 @@ sidebar_position: 6
 ---
 
 This site publishes the exact fields of every Claude Code `2.1.322` payload and config file: 17 JSON Schemas and the Mod API type file.
-Most are made by running the program's own validators. So they list every key that this release knows.
-Paste a config file's `$schema` URL into the file. Your editor can then suggest keys and flag mistakes.
-
-They list every field of this release. Look a field up in them before you rely on it. Build on the fields they name.
+Most are made by running the program's own validators, so they list every key that this release knows.
+To use one, add the `$schema` URL of a config file to the file. Your editor then suggests keys and flags mistakes.
+Look a field up in the schemas before you rely on it.
 
 ## The Schemas
 
@@ -45,7 +44,7 @@ The generator makes a file from the program's code. It reads the object literals
 In it, `x-unverified` marks a field whose type the code does not show, and `x-observed` marks a field that a probe saw.
 A field whose type a person read by hand from the program's code has that type and no `x-unverified`. The generator checks on each run that the code it was read from is still in the program.
 A field that is still `x-unverified` may carry `x-observed-type`, the JSON types that real payloads had there. It is a note and does not change what the schema accepts.
-Each file's `$comment` names the strings in the program that it was read from.
+Each file's `$comment` names the strings in the program that it was read from.[^comment-strings]
 
 The managed schema has every key of the settings schema plus the keys that only managed settings honor.
 Those keys carry `"x-managed-only": true`.
@@ -114,10 +113,10 @@ We compared the files with the copies on [SchemaStore](https://json.schemastore.
 | Plugin hooks | none | 5 | SchemaStore has no schema for this file. |
 
 SchemaStore has 25 settings keys that this site's settings schema does not. 12 of them are managed-only keys, such as `policyHelper` and `allowManagedHooksOnly`, which this site's managed schema has.
-The other 13 are not in the `2.1.322` validator at all, for example `autoConnectIde`, `diffTool`, `skippedPlugins`, and `sshHostAllowlist`. Four are keys of the global config file `~/.claude.json`: `autoConnectIde`, `autoInstallIdeExtension`, `diffTool`, and `externalEditorContext`. Five are desktop-app fields that the program carries: `browserExternalPageTools`, `disableBrowserExternalNavigation`, `disableMobileSimulatorTools`, `requireCoworkFullVmSandbox`, and `sshHostAllowlist`. Four have no string in the `2.1.322` program: `permissionExplainerEnabled`, `skippedMarketplaces`, `skippedPlugins`, and `teammateDefaultModel`.
+The other 13 are not in the `2.1.322` validator at all, for example `autoConnectIde`, `diffTool`, `skippedPlugins`, and `sshHostAllowlist`. Four are keys of the global config file `~/.claude.json`: `autoConnectIde`, `autoInstallIdeExtension`, `diffTool`, and `externalEditorContext`. Five are desktop-app fields that the program carries: `browserExternalPageTools`, `disableBrowserExternalNavigation`, `disableMobileSimulatorTools`, `requireCoworkFullVmSandbox`, and `sshHostAllowlist`. Four have no string in the `2.1.322` program:[^no-string] `permissionExplainerEnabled`, `skippedMarketplaces`, `skippedPlugins`, and `teammateDefaultModel`.
 
 SchemaStore also has [`claude-code-launch.json`](https://json.schemastore.org/claude-code-launch.json), the Launch Preview file for preview servers in Claude Code Desktop.
-This site has no copy of it. We found no validator for that file in the `claude` program. It belongs to the Desktop app. So there is nothing to export from the binary.
+This site has no copy of it. It belongs to the Desktop app, and we found no validator for it in the `claude` program.[^launch-validator] So there is nothing to export from the binary.
 
 ## Related Pages
 
@@ -126,3 +125,9 @@ This site has no copy of it. We found no validator for that file in the `claude`
 - [Probes](probes.md)
 - [OpenTelemetry Events](opentelemetry.md)
 - [Undocumented Features](undocumented.md)
+
+## Sources
+
+[^comment-strings]: The generator, `tools/schemas/code.ts`.
+[^no-string]: The program, searched for each key name.
+[^launch-validator]: The program, searched for a validator of `claude-code-launch.json`.

@@ -5,15 +5,26 @@ sidebar_position: 4
 ---
 
 These tools start subagents, send messages, track tasks, schedule work, and control plan mode and worktrees.
-Claude uses them to split a large job into parts.
+Claude uses them to split a large job into parts.[^tools-sources]
 For example, `Agent` starts a subagent with its own context, and `TaskCreate` adds a step to the task list.
 [Tools](index.md#how-to-read-the-tool-tables) explains the Yes and No columns.
 
 You see subagents, tasks, and plans in the interface. You can turn tasks off with `CLAUDE_CODE_ENABLE_TASKS=0`. Claude uses `TodoWrite` instead. You can turn workflows off with `CLAUDE_CODE_DISABLE_WORKFLOWS=1`. You can also add a deny rule. The task, cron, plan, and agent-listing tools need a gate.
 
-## Tools
+## Example
 
-Source: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Configure Permissions](https://code.claude.com/docs/en/permissions), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program.
+Stop Claude from running workflows. Use the old checklist tool.
+
+```json title=".claude/settings.json"
+{
+  "env": {
+    "CLAUDE_CODE_DISABLE_WORKFLOWS": "1",
+    "CLAUDE_CODE_ENABLE_TASKS": "0"
+  }
+}
+```
+
+## Tools
 
 | Tool | Status | What It Does | How It Works | Available In | Read-Only | Parallel | Deferred |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -33,18 +44,18 @@ Source: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Con
 | `ScheduleWakeup` | <Documented /> <Gated note="dynamic /loop" /> | Schedules the next turn of a dynamic `/loop`. | `delaySeconds` (number, clamped to 60 to 3600), `reason`, `prompt`, `stop` (boolean), `noop` (boolean). All are optional, but the first three are required unless `stop` is true. | Main session. | ❌ | ❌ | ❌ |
 | `Workflow` | <Documented /> <Gated note="off with CLAUDE_CODE_DISABLE_WORKFLOWS=1" /> | Runs a JavaScript workflow that orchestrates subagents. | `script`, `name`, `scriptPath`, `args`, `resumeFromRunId`. `description` and `title` are ignored. Alias `RunWorkflow`. Removed from subagents. | Main session. | ❌ | ❌ | ❌ |
 | `EnterWorktree` | <Documented /> | Creates a git worktree and switches into it. | `name` (string, optional) or `path` (string, optional, an existing worktree). Not both. Not deferred when `CLAUDE_CODE_SESSION_KIND` is `bg`. Refused from a subagent with a cwd override. | Main session and subagents. Kept in background subagents. | ❌ | ❌ | ✅ |
-| `ExitWorktree` | <Documented /> | Leaves the worktree. | `action` (`keep` or `remove`, required), `discard_changes` (boolean, needed for `remove` when there are changes). Refused from a subagent with a cwd override. Since `2.1.326`, `remove` is also refused while a background subagent or shell command may still run in the worktree, unless Claude passes `discard_changes` (`chunk-fkkma3m4.js:7971`). The text says to wait for the task, ask you before it stops the task, or use `keep` (`chunk-fkkma3m4.js:7601`). | Main session and subagents. Kept in background subagents. | ❌ | ❌ | ✅ |
+| `ExitWorktree` | <Documented /> | Leaves the worktree. | `action` (`keep` or `remove`, required), `discard_changes` (boolean, needed for `remove` when there are changes). Refused from a subagent with a cwd override. Since `2.1.326`, `remove` is also refused while a background subagent or shell command may still run in the worktree, unless Claude passes `discard_changes`.[^exit-worktree-refusal] The text says to wait for the task, ask you before it stops the task, or use `keep`.[^exit-worktree-text] | Main session and subagents. Kept in background subagents. | ❌ | ❌ | ✅ |
 | `EnterPlanMode` | <Documented /> <Gated note="non-interactive runs need a permission prompt tool" /> | Switches to plan mode. | No parameters. Gives a validation error from an agent. Removed from subagents. | Main session only. | ✅ | ❌ | ✅ |
 | `ExitPlanMode` | <Documented /> <Gated note="non-interactive runs need a permission prompt tool" /> | Presents the plan and leaves plan mode. | `allowedPrompts` (deprecated, unused). A subagent keeps it only when its `permissionMode` is `plan`. | Main session. | ❌ | ❌ | ✅ |
-| `AskUserQuestion` | <Documented /> <Gated note="non-interactive runs need a permission prompt tool" /> | Asks the user 1 to 4 multiple-choice questions. A permission hook or prompt tool can return `afkTimeoutMs` (an integer) only in a bare allow report with empty answers and no other fields. The program refuses it in any other form ([2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321); the program, `chunk-6mq0yjnk.js:2845`). | Removed from every subagent. The answer to a question can set `annotations[question].unanswered` to `skipped`, `replied_in_chat`, or `dismissed`. The tool result echoes it. The model does not see it. Send it only to a session whose `init` line lists `ask_user_question_unanswered_v1`. See [Capabilities of the `init` Line](../../extend/headless/stream-json.md#capabilities-of-the-init-line). | Main session. | ✅ | ❌ | ❌ |
-| `SetGoal` | <Undocumented /> <Gated note="hidden server-side flag" /> | Sets a session goal, a stop check that keeps Claude working until a separate evaluator confirms it is met. Since `2.1.326`, this tool is the former `ProposeGoal`, and the program keeps `ProposeGoal` as an alias (`chunk-85qjfjsd.js:72`, `chunk-qzqcbad8.js:229`). | `condition` (string, required, at most 500 characters), `ask_user` (boolean, default true). With `ask_user` true, or while a goal is active, the user gets an approval dialog first. | Main session. | ✅ | ❌ | ✅ |
-| `GetGoal` | <Undocumented /> <Gated note="hidden server-side flag" /> | Since `2.1.326`, reads the session goal and the last reason the evaluator gave for "not met". It says so when no goal is active (`chunk-a5yh78h1.js:11`). | No parameters. | Same flag as `SetGoal`. | ✅ | ✅ | ✅ |
-| `PauseGoal` | <Undocumented /> <Gated note="hidden server-side flag" /> | Since `2.1.326`, pauses the session goal until the next user message, and shows the user why. Claude uses it only for a blocker that the user must remove (`chunk-js4t58af.js:7`). | `reason` (string, required, at most 500 characters). Refused from an agent. The goal must exist, must not be paused, and must have had a check. | Main session. | ✅ | ❌ | ✅ |
+| `AskUserQuestion` | <Documented /> <Gated note="non-interactive runs need a permission prompt tool" /> | Asks the user 1 to 4 multiple-choice questions. A permission hook or prompt tool can return `afkTimeoutMs` (an integer) only in a bare allow report with empty answers and no other fields. The program refuses it in any other form.[^afk-timeout] | Removed from every subagent. The answer to a question can set `annotations[question].unanswered` to `skipped`, `replied_in_chat`, or `dismissed`. The tool result echoes it. The model does not see it. Send it only to a session whose `init` line lists `ask_user_question_unanswered_v1`. See [Capabilities of the `init` Line](../../extend/headless/stream-json.md#capabilities-of-the-init-line). | Main session. | ✅ | ❌ | ❌ |
+| `SetGoal` | <Undocumented /> <Gated note="hidden server-side flag" /> | Sets a session goal, a stop check that keeps Claude working until a separate evaluator confirms it is met. Since `2.1.326`, this tool is the former `ProposeGoal`, and the program keeps `ProposeGoal` as an alias.[^setgoal-alias] | `condition` (string, required, at most 500 characters), `ask_user` (boolean, default true). With `ask_user` true, or while a goal is active, the user gets an approval dialog first. | Main session. | ✅ | ❌ | ✅ |
+| `GetGoal` | <Undocumented /> <Gated note="hidden server-side flag" /> | Since `2.1.326`, reads the session goal and the last reason the evaluator gave for "not met". It says so when no goal is active.[^getgoal] | No parameters. | Same flag as `SetGoal`. | ✅ | ✅ | ✅ |
+| `PauseGoal` | <Undocumented /> <Gated note="hidden server-side flag" /> | Since `2.1.326`, pauses the session goal until the next user message, and shows the user why. Claude uses it only for a blocker that the user must remove.[^pausegoal] | `reason` (string, required, at most 500 characters). Refused from an agent. The goal must exist, must not be paused, and must have had a check. | Main session. | ✅ | ❌ | ✅ |
 | `ReportFindings` | <Documented /> | Reports code-review findings as a list. | `level` (`low`, `medium`, `high`, `xhigh`, `max`, optional), `findings` (array of at most 32, required). Used only when review instructions ask for it. | Main session. | ✅ | ✅ | ❌ |
 
 ## `Agent` Parameters
 
-Source: the program (the `Agent` input schema).
+Claude passes these parameters when it calls `Agent`.[^agent-schema]
 
 | Parameter | What It Does | Required |
 | --- | --- | --- |
@@ -64,44 +75,44 @@ Source: the program (the `Agent` input schema).
 
 ## Result Fields New in `2.1.311`
 
-Two result fields are new in `2.1.311`. Source: `AgentResult` and `SkillResult` in [`claude-code-tools.json`](../schemas.md), and the program.
+Two result fields are new in `2.1.311`.[^result-311]
 
 | Field | Status | Tool and Result | Type | What It Means |
 | --- | --- | --- | --- | --- |
-| `toolsUsed` | <Undocumented /> | `Agent`, the completed result | Array of strings | A list of tool names that the program builds from the messages of the subagent. The program leaves the field out when the list is empty (`chunk-jaky6hhv.js:9427`, `chunk-jaky6hhv.js:9704`). `Skill` turns the same list into `toolsUsedLine`. |
-| `toolsUsedLine` | <Undocumented /> | `Skill`, the forked result | String | The line that the `tool_result` text opens with. It names the tools that the subagent called and that the requests of this conversation did not yet name. The program leaves the field out when there is no such tool (`chunk-w3bqrzfg.js:662`, `chunk-w3bqrzfg.js:1418`). |
+| `toolsUsed` | <Undocumented /> | `Agent`, the completed result | Array of strings | A list of tool names that the program builds from the messages of the subagent. The program leaves the field out when the list is empty.[^tools-used] `Skill` turns the same list into `toolsUsedLine`. |
+| `toolsUsedLine` | <Undocumented /> | `Skill`, the forked result | String | The line that the `tool_result` text opens with. It names the tools that the subagent called and that the requests of this conversation did not yet name. The program leaves the field out when there is no such tool.[^tools-used-line] |
 
-In `2.1.321` the program has no server flag for this list. It builds the list from the tools that each agent recorded, and it leaves the field out when the list is empty (`chunk-b67kdazn.js:1857`, `chunk-b67kdazn.js:4285`, `chunk-b67kdazn.js:4652`).
+In `2.1.321` the program has no server flag for this list. It builds the list from the tools that each agent recorded, and it leaves the field out when the list is empty.[^tools-used-321]
 
 ## Result Fields New in `2.1.321`
 
-Source: `CronDeleteResult` in [`claude-code-tools.json`](../schemas.md), and the program.
+One result field is new in `2.1.321`.[^result-321]
 
 | Field | Status | Tool and Result | Type | What It Means |
 | --- | --- | --- | --- | --- |
-| `endedLoopWakeup` | <Undocumented /> | `CronDelete` | `true` or left out | `true` when the job that `CronDelete` removed was a loop job (its `kind` is `loop`). The program then also emits a signal that a loop wakeup ended. When the program reads the lines of a session, it uses the time of a result with this field as the time the loop wakeup ended. The program leaves the field out for any other job (`chunk-rw4s0xwq.js:7745`, `chunk-620k1a78.js:20532`). |
+| `endedLoopWakeup` | <Undocumented /> | `CronDelete` | `true` or left out | `true` when the job that `CronDelete` removed was a loop job (its `kind` is `loop`). The program then also emits a signal that a loop wakeup ended. When the program reads the lines of a session, it uses the time of a result with this field as the time the loop wakeup ended. The program leaves the field out for any other job.[^ended-loop] |
 
 ## Enable Tests
 
-Source: the program (`chunk-2x9ma4k7.js`, `chunk-wf3hrn2k.js`, `chunk-ekd5hf8v.js`, and `chunk-4pz2b5hr.js` of `2.1.323`). Each tool object has an `isEnabled` function. Claude Code leaves the tool out of the request when it answers no.
+Each tool object has an `isEnabled` function. Claude Code leaves the tool out of the request when it answers no.[^enable-tests]
 
 | Tools | Test | Result |
 | --- | --- | --- |
-| `ExitPlanMode` | The session is a teammate: an in-process teammate, or a dynamic team context with an agent ID and a team name. Then it uses the shared test below (`lc()` picks the branch). | Shared test |
-| | Any other session. The `denyInsteadOfPrompting` setting is on in a settings source, or in a plugin's settings (`lte()`; always off when the host has no disk). | Off |
-| | Any other session without that setting. The shared test below (`yie()` is `!lte()` and the shared test). | Shared test |
-| `AskUserQuestion` | `yie()`: the second and third rows above, with no teammate branch. | Same as `ExitPlanMode` for a session that is not a teammate |
-| Shared test (`rRs()`) | The run is not interactive and channels are allowed. | Off |
+| `ExitPlanMode` | The session is a teammate: an in-process teammate, or a dynamic team context with an agent ID and a team name. Then it uses the shared test below. | Shared test |
+| | Any other session. The `denyInsteadOfPrompting` setting is on in a settings source, or in a plugin's settings (always off when the host has no disk). | Off |
+| | Any other session without that setting. The shared test below. | Shared test |
+| `AskUserQuestion` | The second and third rows above, with no teammate branch. | Same as `ExitPlanMode` for a session that is not a teammate |
+| Shared test | The run is not interactive and channels are allowed. | Off |
 | | The run is not interactive and no permission prompt tool is named (the name is empty or `none`). | Off |
 | | Anything else. An interactive session is always on. | On |
 | `EnterPlanMode` | It calls the `ExitPlanMode` test. | Same as `ExitPlanMode` |
 | `TodoWrite` | `CLAUDE_CODE_ENABLE_TASKS` is `false`, and the model test below passes. | On |
 | `TaskCreate`, `TaskGet`, `TaskUpdate`, `TaskList` | `CLAUDE_CODE_ENABLE_TASKS` is not `false`, and the model test below passes. | On |
 
-- `2.1.319` changed the `ExitPlanMode` test (`chunk-pcbqgshh.js:333`; the shared test is `chunk-wf3hrn2k.js:63`; the teammate test is `chunk-ekd5hf8v.js:88`). Before, `ExitPlanMode` used the shared test alone. Now a session that is not a teammate also turns it off when `permissions.denyInsteadOfPrompting` is `true`.
-- `ExitPlanMode` is a deferred tool. A `claude -p` request lists deferred tools only when `ENABLE_TOOL_SEARCH=false`. All runs below use `-p`, a stub API, and `--permission-prompt-tool` naming an MCP tool, unless the row says otherwise.
+- `2.1.319` changed the `ExitPlanMode` test.[^exit-plan-test] Before, `ExitPlanMode` used the shared test alone. Now a session that is not a teammate also turns it off when `permissions.denyInsteadOfPrompting` is `true`.
+- `ExitPlanMode` is a deferred tool. A `claude -p` request lists deferred tools only when `ENABLE_TOOL_SEARCH=false`. All runs below use `-p`, a stub API, and `--permission-prompt-tool` naming an MCP tool, unless the row says otherwise.[^exit-plan-cases]
 
-| Case (`print.api319.tool.exit-plan.`) | Setup | `ExitPlanMode` in `tools` | `AskUserQuestion` in `tools` |
+| Case | Setup | `ExitPlanMode` in `tools` | `AskUserQuestion` in `tools` |
 | --- | --- | --- | --- |
 | `direct` | Tool search off. | Yes | Yes |
 | `direct-deny` | Tool search off. `denyInsteadOfPrompting: true`. | No | No |
@@ -111,25 +122,12 @@ Source: the program (`chunk-2x9ma4k7.js`, `chunk-wf3hrn2k.js`, `chunk-ekd5hf8v.j
 | `teammate-deny` | As `teammate`, plus `denyInsteadOfPrompting: true`. | Yes | No |
 | `teammate-no-prompt-tool` | As `teammate`, with no prompt tool. | No | No |
 
-- The `teammate-deny` row is the `lc()` branch: a teammate asks the shared test, so the deny setting does not remove `ExitPlanMode`. `AskUserQuestion` has no teammate branch, so it goes off. The program reads the three hidden flags only when agent teams are on (`chunk-5erhnvzw.js@112405`), and it refuses a run that gives only some of them.
-- Without tool search off, the cases `.prompt-tool`, `.prompt-tool-deny`, `.plan-mode` and `.plan-mode-deny` show the same split through `AskUserQuestion` alone (listed 13 tools, then 12), and `.print` (no prompt tool) lists neither.
+- In the `teammate-deny` row, a teammate asks the shared test, so the deny setting does not remove `ExitPlanMode`. `AskUserQuestion` has no teammate branch, so it goes off. The program reads the three hidden flags only when agent teams are on, and it refuses a run that gives only some of them.[^teams-flags]
+- With tool search on, the same split shows through `AskUserQuestion` alone (13 tools listed, then 12), and a run with no prompt tool lists neither.[^tool-search-cases]
 - A non-interactive run is `claude -p` or an SDK run. So a plain `claude -p` run has none of the three tools. Adding `--permission-prompt-tool <name>` turns them on, unless channels are allowed.
 - The model test passes when any of these holds: a launch test passes (one is a host option that opts in to the todo tools); the main-loop model is not known yet; the model name holds `application-inference-profile`; the model is one of `claude-3-opus`, `claude-3-sonnet`, `claude-3-haiku`, `claude-3-5-sonnet`, `claude-3-5-haiku`, `claude-3-7-sonnet`, `claude-opus-4-0`, `claude-opus-4-1`, `claude-opus-4-5`, `claude-opus-4-6`, `claude-opus-4-7`, `claude-sonnet-4-0`, `claude-sonnet-4-5`, `claude-sonnet-4-6`, or `claude-haiku-4-5`; or `CLAUDE_CODE_ENABLE_TODO_TOOLS` is `true`.
-- The probe `print.request.baseline-a` on `2.1.322` (Opus 5.5, `-p`) sends 12 tools. None of `TodoWrite`, `TaskCreate`, `AskUserQuestion`, or `EnterPlanMode` is among them. `Glob` and `Grep` are not among them either, because `Bash` is.
+- A probe on `2.1.322` (Opus 5.5, `-p`) sends 12 tools.[^baseline-probe] None of `TodoWrite`, `TaskCreate`, `AskUserQuestion`, or `EnterPlanMode` is among them. `Glob` and `Grep` are not among them either, because `Bash` is.
 - `CLAUDE_CODE_ENABLE_TASKS=0` switches the Task tools off and `TodoWrite` on. Any other value does the reverse. The two families never run together.
-
-## Example
-
-Stop Claude from running workflows. Use the old checklist tool.
-
-```json title=".claude/settings.json"
-{
-  "env": {
-    "CLAUDE_CODE_DISABLE_WORKFLOWS": "1",
-    "CLAUDE_CODE_ENABLE_TASKS": "0"
-  }
-}
-```
 
 ## How It Works
 
@@ -155,11 +153,11 @@ Each row is a family of messages. The backticked text is the start that every me
 | `Cannot enter worktree` | <Undocumented /> | `EnterWorktree` with `path` refused the worktree. | The worktree belongs to another running session (locked). The worktree does not exist. It is a network path. Git marks it prunable. It is not a registered or linked worktree. It is the current directory. It is not under the worktrees that Claude Code manages. |
 | `Orphaned worktree dir` | <Undocumented /> | Claude Code left a leftover worktree directory alone. | It will not self-heal when `git remote`, `rev-list`, or `rev-parse` fails. It will also not self-heal when the branch has unpushed commits. |
 | `WorktreeCreate hook failed` | <Undocumented /> | A `WorktreeCreate` hook did not give a worktree. | The hook errored. A configured hook did not run (workspace not trusted or matcher mismatch). The hook returned no worktree path. |
-| Various | <Undocumented /> | **Goal tools.** `SetGoal` or `PauseGoal` refused a call. Before `2.1.326`, `SetGoal` was `ProposeGoal`. | It cannot be used in agent contexts. The goal condition is empty or too wide once shown. `SetGoal` cannot clear a goal (use `/goal clear`). No interactive session can render the prompt. An earlier question about the goal has no answer yet. `PauseGoal` found no active goal, or the goal is already paused, or the goal has not been checked yet. |
-| Various | <Undocumented /> | **Workflow.** A `Workflow` run or workflow script was refused. | A script uses syntax that workflow scripts do not support (`with`, `import()`, `await using`, a reserved identifier, a `meta` statement with spread or computed keys). A `workflow()`, `agent()`, `parallel()`, or `pipeline()` call got wrong arguments. A named workflow does not exist. A permission rule denies `agentType`. A run was killed or was restored from the journal. A run hides its script and cannot be resumed. |
-| Various | <Undocumented /> | **Task tools.** A task, notification, or worktree tool call was refused. | A subagent called `ReadNotifications`. A task is not running, or another agent owns it. A task type or parameter is missing or not supported (`Missing required parameter: task_id`, `Unsupported task type: <type>`). `EnterWorktree` needs `path` or would give no write access. The session is already in a worktree. |
-| Various | <Undocumented /> | **Plan mode.** `ExitPlanMode` or `EnterPlanMode` was refused. | The approval arrived without the plan. No plan file was found. The request to the lead could not be written. An agent context used `EnterPlanMode`. |
-| Various | <Undocumented /> | **Worktree creation.** A worktree could not be created or reused. | A leftover worktree folder points to another location. A branch is already checked out elsewhere or already exists. The worktree already exists and cannot be reused. Workspace trust was not accepted yet (run `claude` once in the directory). A `WorktreeCreate` hook emitted a path that cannot be verified. Since 2.1.323, a checkout where git could write outside the repository through a link, a symbolic ref, or another entry that is not a plain file gives `Cannot create worktree "<name>": git could write outside this repository through ...`. The text names `git-new-workdir` checkouts, older Android `repo` checkouts, and `cp -al` copies, and says to use a plain clone (the program: `chunk-2x9ma4k7.js:4088932`). |
+| Various | <Undocumented /> | Goal tools: `SetGoal` or `PauseGoal` refused a call. Before `2.1.326`, `SetGoal` was `ProposeGoal`. | It cannot be used in agent contexts. The goal condition is empty or too wide once shown. `SetGoal` cannot clear a goal (use `/goal clear`). No interactive session can render the prompt. An earlier question about the goal has no answer yet. `PauseGoal` found no active goal, or the goal is already paused, or the goal has not been checked yet. |
+| Various | <Undocumented /> | Workflow: a `Workflow` run or workflow script was refused. | A script uses syntax that workflow scripts do not support (`with`, `import()`, `await using`, a reserved identifier, a `meta` statement with spread or computed keys). A `workflow()`, `agent()`, `parallel()`, or `pipeline()` call got wrong arguments. A named workflow does not exist. A permission rule denies `agentType`. A run was killed or was restored from the journal. A run hides its script and cannot be resumed. |
+| Various | <Undocumented /> | Task tools: a task, notification, or worktree tool call was refused. | A subagent called `ReadNotifications`. A task is not running, or another agent owns it. A task type or parameter is missing or not supported (`Missing required parameter: task_id`, `Unsupported task type: <type>`). `EnterWorktree` needs `path` or would give no write access. The session is already in a worktree. |
+| Various | <Undocumented /> | Plan mode: `ExitPlanMode` or `EnterPlanMode` was refused. | The approval arrived without the plan. No plan file was found. The request to the lead could not be written. An agent context used `EnterPlanMode`. |
+| Various | <Undocumented /> | Worktree creation: a worktree could not be created or reused. | A leftover worktree folder points to another location. A branch is already checked out elsewhere or already exists. The worktree already exists and cannot be reused. Workspace trust was not accepted yet (run `claude` once in the directory). A `WorktreeCreate` hook emitted a path that cannot be verified. Since `2.1.323`, a checkout where git could write outside the repository through a link, a symbolic ref, or another entry that is not a plain file gives `Cannot create worktree "<name>": git could write outside this repository through ...`. The text names `git-new-workdir` checkouts, older Android `repo` checkouts, and `cp -al` copies, and says to use a plain clone.[^worktree-outside] |
 
 ## Related Pages
 
@@ -167,3 +165,27 @@ Each row is a family of messages. The backticked text is the start that every me
 - [Subagents](../../extend/subagents/index.md)
 - [Subagent Frontmatter](../../extend/subagents/frontmatter.md)
 - [Tools Reference](https://code.claude.com/docs/en/tools-reference)
+
+## Sources
+
+[^tools-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Configure Permissions](https://code.claude.com/docs/en/permissions), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program.
+[^exit-worktree-refusal]: The program, `chunk-fkkma3m4.js:7971`.
+[^exit-worktree-text]: The program, `chunk-fkkma3m4.js:7601`.
+[^afk-timeout]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-6mq0yjnk.js:2845`.
+[^setgoal-alias]: The program, `chunk-85qjfjsd.js:72`, `chunk-qzqcbad8.js:229`.
+[^getgoal]: The program, `chunk-a5yh78h1.js:11`.
+[^pausegoal]: The program, `chunk-js4t58af.js:7`.
+[^agent-schema]: The program, the `Agent` input schema.
+[^result-311]: `AgentResult` and `SkillResult` in [`claude-code-tools.json`](../schemas.md), and the program.
+[^tools-used]: The program, `chunk-jaky6hhv.js:9427`, `chunk-jaky6hhv.js:9704`.
+[^tools-used-line]: The program, `chunk-w3bqrzfg.js:662`, `chunk-w3bqrzfg.js:1418`.
+[^tools-used-321]: The program, `chunk-b67kdazn.js:1857`, `chunk-b67kdazn.js:4285`, `chunk-b67kdazn.js:4652`.
+[^result-321]: `CronDeleteResult` in [`claude-code-tools.json`](../schemas.md), and the program.
+[^ended-loop]: The program, `chunk-rw4s0xwq.js:7745`, `chunk-620k1a78.js:20532`.
+[^enable-tests]: The program, `chunk-2x9ma4k7.js`, `chunk-wf3hrn2k.js`, `chunk-ekd5hf8v.js`, and `chunk-4pz2b5hr.js` of `2.1.323`. The minified names are `lc()` (picks the teammate branch), `lte()` (the `denyInsteadOfPrompting` test), `yie()` (`!lte()` and the shared test), and `rRs()` (the shared test).
+[^exit-plan-test]: The program, `chunk-pcbqgshh.js:333`. The shared test is `chunk-wf3hrn2k.js:63`. The teammate test is `chunk-ekd5hf8v.js:88`.
+[^teams-flags]: The program, `chunk-5erhnvzw.js@112405`.
+[^tool-search-cases]: Probe cases `print.api319.tool.exit-plan.prompt-tool`, `.prompt-tool-deny`, `.plan-mode`, `.plan-mode-deny`, and `.print`.
+[^baseline-probe]: Probe case `print.request.baseline-a`.
+[^worktree-outside]: The program, `chunk-2x9ma4k7.js:4088932`.
+[^exit-plan-cases]: Probe cases `print.api319.tool.exit-plan.*`. Each row names the case suffix.

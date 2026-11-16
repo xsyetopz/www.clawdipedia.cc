@@ -9,6 +9,21 @@ Each tool has input fields and a few flags that tell Claude Code how to treat it
 For example, `Grep` is read-only and safe to run in parallel, so Claude Code can run many searches at once.
 This page covers the shared rules. The other pages list every tool and every parameter.
 
+## Example
+
+Hide web tools from Claude. Keep MCP tools loaded at the start when they are small.
+
+```json title=".claude/settings.json"
+{
+  "permissions": {
+    "deny": ["WebFetch", "WebSearch"]
+  },
+  "env": {
+    "ENABLE_TOOL_SEARCH": "auto:10"
+  }
+}
+```
+
 ## Tool Pages
 
 | Page | What It Covers |
@@ -34,7 +49,7 @@ A tool with no flag in its definition shows No for Read-Only and Parallel.
 
 ## Common Properties
 
-Source: the program (the tool definitions).
+Each tool definition in the program sets these properties.[^definitions]
 
 | Property | Values | What It Means |
 | --- | --- | --- |
@@ -47,8 +62,7 @@ Source: the program (the tool definitions).
 ## `ToolSearch`
 
 `ToolSearch` loads the full schema of a deferred tool, so that Claude can call it.
-For example, the query `select:Read,Edit,Grep` fetches those three tools by name.
-Source: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program.
+For example, the query `select:Read,Edit,Grep` fetches those three tools by name.[^toolsearch-sources]
 
 | Item | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
@@ -92,11 +106,11 @@ flowchart TD
 
 ### Switches for Tool Search
 
-Source: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/mcp) and [Environment Variables](https://code.claude.com/docs/en/env-vars). Set them in the shell or in `env` in settings.
+Set these switches in the shell or in `env` in settings. See [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/mcp) and [Environment Variables](https://code.claude.com/docs/en/env-vars).
 
 | Item | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
-| `ENABLE_TOOL_SEARCH` unset | <Documented /> | MCP tools are deferred. | Since `2.1.304` this also holds behind a custom `ANTHROPIC_BASE_URL`. If the gateway answers 400 or 422, Claude Code retries the request without tool search. Source: the program and the [release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304). |
+| `ENABLE_TOOL_SEARCH` unset | <Documented /> | MCP tools are deferred. | Since `2.1.304` this also holds behind a custom `ANTHROPIC_BASE_URL`. If the gateway answers 400 or 422, Claude Code retries the request without tool search.[^custom-base-url] |
 | `ENABLE_TOOL_SEARCH=true` | <Documented /> | MCP tools stay deferred, also on a proxy host. | - |
 | `ENABLE_TOOL_SEARCH=auto` and `auto:N` | <Documented /> | Tools load at the start while their definitions fit in N percent of the window. | The default is 10. `auto:0` acts like `true`. `auto:100` acts like `false`. N stays between 0 and 100. |
 | `ENABLE_TOOL_SEARCH=false` | <Documented /> | Every MCP tool loads at the start. | - |
@@ -111,23 +125,8 @@ Source: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/m
 - A runtime check decides: `SuggestPluginInstall`, `SuggestSkills`, `SendUserFile`.
 - Not deferred: `Read`, `Write`, `Edit`, `Glob`, `Grep`, `Bash`, `PowerShell`, `Agent`, `Skill`, `AskUserQuestion`, `ListAgents`, `Workflow`, `ReportFindings`, `ToolSearch`, `StructuredOutput`, `SubagentHandback`, `ScheduleWakeup`, `memory_*`, and the rest of the gated tools.
 - The old capture of `2.1.296` lacked `Glob` and `Grep`. In `2.1.305` they are not deferred.
-- From `2.1.306` to `2.1.311`, our `-p` stub runs offered neither `Glob` nor `Grep`, not even behind `ToolSearch`. In this build, the `Bash` tool runs `find` and `grep` as the embedded `bfs` and `ugrep`, and the prompts point Claude to them (the program).
+- From `2.1.306` to `2.1.311`, our `-p` stub runs offered neither `Glob` nor `Grep`, not even behind `ToolSearch`. In this build, the `Bash` tool runs `find` and `grep` as the embedded `bfs` and `ugrep`, and the prompts point Claude to them.[^bfs-ugrep]
 - In the `2.1.305` capture, the main prompt lists 12 tools (the site's captures use a local stub as `ANTHROPIC_BASE_URL`, and tool search is on behind a custom base URL, so it is not 20 as before). `CronCreate`, `CronDelete`, `CronList`, `EnterWorktree`, `ExitWorktree`, `NotebookEdit`, `SendMessage`, `TaskStop`, `WebFetch`, and `WebSearch` sit behind `ToolSearch`. See [Tools per Variant](../../prompts/tools/tools-per-variant.md).
-
-## Example
-
-Hide web tools from Claude. Keep MCP tools loaded at the start when they are small.
-
-```json title=".claude/settings.json"
-{
-  "permissions": {
-    "deny": ["WebFetch", "WebSearch"]
-  },
-  "env": {
-    "ENABLE_TOOL_SEARCH": "auto:10"
-  }
-}
-```
 
 ## How It Works
 
@@ -147,3 +146,10 @@ It lists every field of this release. Build on the fields it names. Look each on
 - [MCP](../../extend/mcp/index.md) covers tools that MCP servers add.
 - [Subagents](../../extend/subagents/index.md) covers the tools that a subagent keeps.
 - [Environment Variables for Tools and Bash](../../configure/env-vars/tools-and-bash.md)
+
+## Sources
+
+[^definitions]: The program, the tool definitions.
+[^toolsearch-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program.
+[^custom-base-url]: The program, and the [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304).
+[^bfs-ugrep]: The program.
