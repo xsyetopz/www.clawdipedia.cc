@@ -218,4 +218,4 @@ Claude Code shows "Couldn't load your current spend limit, so it can't be change
 [^spend]: The program, `chunk-d338x18r.js:31796`. The string is not in the `2.1.322` program.
 [^control]: `schemas/claude-code-control-protocol.json`.
 [^mod-account]: `schemas/claude-code.d.ts`.
-[^finishing]: The program, `chunk-0py32h2p.js:616` and `chunk-0py32h2p.js:2294`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^finishing]: The program, `chunk-0py32h2p.js:616` and `chunk-0py32h2p.js:2294`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

@@ -263,4 +263,4 @@ Claude Code builds this payload in code, with no validator, so the schema comes 
 [^local]: The program.
 [^loop]: The program.
 [^claude-json]: The program.
-[^child-logs]: The program, `chunk-y5hjhy3x.js:6528`, `chunk-zyq9kffp.js:378`, and `chunk-z4j4mjgn.js:44893-44944`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^child-logs]: The program, `chunk-y5hjhy3x.js:6528`, `chunk-zyq9kffp.js:378`, and `chunk-z4j4mjgn.js:44893-44944`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

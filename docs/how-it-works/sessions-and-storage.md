@@ -176,4 +176,4 @@ Since `2.1.326`, a transcript write that fails can leave a partial last line. Cl
 [^mods-downloads]: The program.
 [^unexpected-arg]: The program.
 [^seal]: The program, `chunk-4h798pp0.js:29157`, `:29248`, `:29438`.
-[^child-logs]: The program, `chunk-y5hjhy3x.js:5706-5712`, `chunk-y5hjhy3x.js:6528`, `chunk-zyq9kffp.js:378`, and `chunk-z4j4mjgn.js:44893-44944`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^child-logs]: The program, `chunk-y5hjhy3x.js:5706-5712`, `chunk-y5hjhy3x.js:6528`, `chunk-zyq9kffp.js:378`, and `chunk-z4j4mjgn.js:44893-44944`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

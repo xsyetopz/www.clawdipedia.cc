@@ -97,4 +97,4 @@ The flow matches the `claude --help` output.[^help]
 ## Sources
 
 [^help]: The program, `claude --help`, `2.1.326`.
-[^bg-key]: The program, `chunk-fdjay46b.js:1095-1130` and `chunk-91rhn136.js:22-27`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^bg-key]: The program, `chunk-fdjay46b.js:1095-1130` and `chunk-91rhn136.js:22-27`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

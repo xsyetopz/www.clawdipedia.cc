@@ -157,5 +157,5 @@ Each row is a family of messages. The backticked text is the start that every me
 [^import-read]: The program, `chunk-4gr9jngq.js`.
 [^notebook-checks]: The program, `chunk-2x9ma4k7.js:5201403` and `chunk-2x9ma4k7.js:5202465`.
 [^notebook-size]: The program, `chunk-2x9ma4k7.js:5203624`.
-[^signin-files]: The program, `chunk-2e8vamz8.js:1533-1551` and `chunk-2e8vamz8.js:11631-11693`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^device-files]: The program, `chunk-bprgtdg6.js:8760-8794` and `chunk-z4j4mjgn.js:47220`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^signin-files]: The program, `chunk-2e8vamz8.js:1533-1551` and `chunk-2e8vamz8.js:11631-11693`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^device-files]: The program, `chunk-bprgtdg6.js:8760-8794` and `chunk-z4j4mjgn.js:47220`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

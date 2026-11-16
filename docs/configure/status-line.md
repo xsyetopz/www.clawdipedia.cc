@@ -104,7 +104,7 @@ Always read optional fields with a default, for example `jq -r '.vim.mode // emp
 | `vim.mode` | <Documented /> | `NORMAL`, `INSERT`, `VISUAL`, `VISUAL LINE` | May be absent. Present when vim mode is on | Status line |
 | `agent.name` | <Documented /> | Agent name | Present with `--agent` or agent settings | Status line |
 | `agent_type` | <Undocumented /> | Agent type of the main thread | Present with `--agent` or agent settings. The same value hooks get as `agent_type`. The built-in `statusline-setup` agent's prompt calls it `agent.type`. Read it at the top level as `agent_type` | Status line |
-| `scratchpad_dir` | <Gated note="tengu_scratch, or the artifact tools" /> | The session scratchpad folder | Present when the server flag `tengu_scratch` is on, or when the session may use the artifact tools | Status line |
+| `scratchpad_dir` | <Gated note="tengu_scratch, or the artifact tools" /> | The session scratchpad folder | Present when a server-side flag is on, or when the session may use the artifact tools | Status line |
 | `remote.session_id` | <Undocumented /> | Id of a remote session | Present when the session is remote. The docs do not list `remote` | Status line |
 
 ### Workspace Fields

@@ -135,6 +135,6 @@ Each option error below prints `Error: <message>` on stderr and exits with code 
 [^startup]: The program, `chunk-2dg5mr3x.js`, the run-time code after `Ai`.
 [^order]: The program, `chunk-ngtnhntk.js`, the `remote-control` entry, and `chunk-ajh9vqm0.js`, function `Knn`, exported as `getBridgeDisabledDiagnosis`.
 [^flag]: The program, flag `tengu_ccr_bridge`. Probe group `cli321`.
-[^exit-codes]: The program, `chunk-jh1meyy3.js:5-8` and `chunk-y5hjhy3x.js:6333`, `:6797-6798`. [2.1.325 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
+[^exit-codes]: The program, `chunk-jh1meyy3.js:5-8` and `chunk-y5hjhy3x.js:6333`, `:6797-6798`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
 [^cli321]: The program, `chunk-2dg5mr3x.js:107633`, function `Ai`. Probe group `cli321` (`rc-*` cases), run with a fake `max` login, only `DISABLE_TELEMETRY` set, and no network.
-[^child-logs]: The program, `chunk-y5hjhy3x.js:5706-5712`, `chunk-y5hjhy3x.js:6519-6528`, `chunk-zyq9kffp.js:378`, and `chunk-z4j4mjgn.js:44893-44944`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^child-logs]: The program, `chunk-y5hjhy3x.js:5706-5712`, `chunk-y5hjhy3x.js:6519-6528`, `chunk-zyq9kffp.js:378`, and `chunk-z4j4mjgn.js:44893-44944`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

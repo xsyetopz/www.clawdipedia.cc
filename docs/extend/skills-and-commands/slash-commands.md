@@ -258,12 +258,12 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^kinds]: The program calls a panel command `local-jsx`, a text command `local`, and a prompt command `prompt`.
-[^rewind]: The program, `chunk-y9bdpp8r.js:23472-23488`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^memory]: The program, `chunk-eqmsy9y5.js:2145-2153`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^tui]: The program, `chunk-y9bdpp8r.js:13655-13662` and `:123405-123480`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^terminal-setup]: The program, `chunk-gnqb58r1.js:351-379`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^rewind]: The program, `chunk-y9bdpp8r.js:23472-23488`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^memory]: The program, `chunk-eqmsy9y5.js:2145-2153`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^tui]: The program, `chunk-y9bdpp8r.js:13655-13662` and `:123405-123480`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^terminal-setup]: The program, `chunk-gnqb58r1.js:351-379`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^login-privacy]: The program, `chunk-rrxbrq23.js:33-50` and `chunk-d73xe1mr.js:18994-18996`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^login]: The program, `chunk-1sk1fatq.js:7-31`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^login]: The program, `chunk-1sk1fatq.js:7-31`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^count]: The program, the command objects. `/keybindings`, `/release-notes`, `/rewind`, `/chrome`, `/statusline`, and `/sandbox` are missing from the program inventory file because of the key order in their objects. The program itself has them. Official page: [Commands](https://code.claude.com/docs/en/commands).
 [^diff]: The program, `chunk-rszfmg4b.js:30037`.
 [^more-models]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-1xmjf4e6.js:719561`.
@@ -293,8 +293,8 @@ Each row is a family of messages. The backticked text is the start that every me
 [^unseen]: The program.
 [^usage-sources]: The program.
 [^channel-api]: The program, `chunk-6jd11p1d.js:200`.
-[^cd-taller]: The program, `chunk-q43jj74r.js:390`, `chunk-q43jj74r.js:403`, and `chunk-q43jj74r.js:414`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^rewind-skip]: The program, `chunk-y9bdpp8r.js:22895-22920` and `chunk-3zn9cw12.js:3144`. The release notes say this applies on macOS, Linux, and WSL when the sandbox is on. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^cd-taller]: The program, `chunk-q43jj74r.js:390`, `chunk-q43jj74r.js:403`, and `chunk-q43jj74r.js:414`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^rewind-skip]: The program, `chunk-y9bdpp8r.js:22895-22920` and `chunk-3zn9cw12.js:3144`. The release notes say this applies on macOS, Linux, and WSL when the sandbox is on. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^status-features]: The program, `chunk-gn1ntjav.js:90-124`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^off-commands]: The program, `chunk-gn1ntjav.js:130-175`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^skills-exit]: The program, `chunk-9baz34m5.js:1047-1095` and `chunk-9baz34m5.js:1309-1312`, and `chunk-3h482j38.js:40-48` for the key name. The second press runs the same save as `Esc`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

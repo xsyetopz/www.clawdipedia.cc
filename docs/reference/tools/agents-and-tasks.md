@@ -190,4 +190,4 @@ Each row is a family of messages. The backticked text is the start that every me
 [^baseline-probe]: Probe case `print.request.baseline-a`.
 [^worktree-outside]: The program, `chunk-2x9ma4k7.js:4088932`.
 [^exit-plan-cases]: Probe cases `print.api319.tool.exit-plan.*`. Each row names the case suffix.
-[^send-auth]: The program, `chunk-q0t5bnq3.js:477` and `chunk-q0t5bnq3.js:488`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^send-auth]: The program, `chunk-q0t5bnq3.js:477` and `chunk-q0t5bnq3.js:488`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

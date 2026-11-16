@@ -261,7 +261,7 @@ Every fact needs a source.
 
 - Official docs: link to the page in the sentence or in a footnote.
 - The program: put the evidence in a footnote, not in the sentence. Write "The program," and the module citation, such as `chunk-m33vdkhs.js:5402`.
-- Release notes: link the release page in a footnote, such as `[2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)`.
+- Release notes: link the release page in a footnote, such as ``[`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)``.
 - Probe results: name the probe case in a footnote, or link to the Probes page.
 
 Keep internal parts out of the sentence: module citations, minified names, server-side flag names, and probe case ids go in the footnote. Give each footnote a short name, such as `[^windows-backend]`, and put the definitions under a `## Sources` heading at the end of the page.

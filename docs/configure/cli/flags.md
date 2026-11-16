@@ -271,5 +271,5 @@ Each row is a family of messages. The backticked text is the start that every me
 [^auto-refused]: Probe case `print.err319.auto-mode-print-refused`.
 [^chrome-live]: Live run, case `live.err319`, with `--chrome` and a subscription token.
 [^chrome-fake]: Probe case `print.err319.chrome-no-extension`.
-[^add-dir-trust]: The program, `chunk-fdjay46b.js:2019-2026` and `chunk-fdjay46b.js:2068-2082`. The trust prompt in a local terminal session is from the [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^add-dir-trust]: The program, `chunk-fdjay46b.js:2019-2026` and `chunk-fdjay46b.js:2068-2082`. The trust prompt in a local terminal session is from the [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^rewind-skip]: The program, `chunk-xt4nsgp1.js:36495-36499`. The reasons are in `chunk-3zn9cw12.js:3144`.

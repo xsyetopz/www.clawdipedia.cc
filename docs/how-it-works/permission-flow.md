@@ -121,7 +121,7 @@ The check runs in the tool stage of every turn. See [The Agent Loop](agent-loop.
 [^git-trust]: The program, `chunk-4h798pp0.js:71295`. A server-side flag gates it.
 [^git-text]: The program, `chunk-4h798pp0.js:71313`.
 [^block-reads]: The program, `chunk-kpnan531.js:5207`, `chunk-rqvvpwt0.js:67829`.
-[^relative-cd]: The program, `chunk-4h798pp0.js:74436-74455`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^relative-cd]: The program, `chunk-4h798pp0.js:74436-74455`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^trust-list]: The program, `chunk-hazkmz06.js:970-976` and `chunk-hazkmz06.js:1148-1188`.
 [^cd-list]: The program, `chunk-q43jj74r.js:225-252`.
 [^trust-exit]: The program, `chunk-hazkmz06.js:689-693`.

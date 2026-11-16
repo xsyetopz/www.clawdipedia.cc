@@ -161,4 +161,4 @@ The program uses the scan in four places.
 [^scan-denial]: The program, `chunk-1xmjf4e6.js@1734442`.
 [^scan-sync]: The program, `chunk-ny35jjxw.js@210351`.
 [^scan-skill]: The program, `chunk-egtw0zen.js@36887`.
-[^where-masker]: The program, `chunk-t1sy1zdg.js:1473`, `chunk-hfdwkv62.js:463-466`, and `chunk-q6dkrxcc.js:633`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^where-masker]: The program, `chunk-t1sy1zdg.js:1473`, `chunk-hfdwkv62.js:463-466`, and `chunk-q6dkrxcc.js:633`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
