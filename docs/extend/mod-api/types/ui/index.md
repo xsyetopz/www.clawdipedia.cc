@@ -4,9 +4,7 @@ description: "Types of $.ui, the element props, and the client modules: Box, Tex
 sidebar_position: 11
 ---
 
-These are the types of `$.ui`, the element props, and the client modules.
-They describe `Box`, `Text`, `Button`, and the other elements that a mod can draw.
-They also cover images, inputs, links, panes, scroll targets, selections, and render inputs.
+These are the types of `$.ui`, the element props, and the client modules. Use them to type the elements that a mod draws, such as `Box`, `Text`, and `Button`, and the calls that a mod makes on the interface. They also cover images, inputs, links, panes, scroll targets, selections, and render inputs. Each page below has one table of fields for each type.
 
 ## Pages
 
@@ -29,7 +27,7 @@ This element draws a button that copies a URL to the clipboard when pressed.
 
 ## Types without Fields
 
-These types are aliases, unions, or plain shapes. Each row gives its use and its shape.
+These types are aliases, unions, or plain shapes with no fields of their own. Each row gives the use and the shape of one type.
 
 | Type | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |

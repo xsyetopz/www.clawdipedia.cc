@@ -4,12 +4,11 @@ description: The events that fire when Claude Code draws part of the interface, 
 sidebar_position: 7
 ---
 
-These events fire when Claude Code draws part of the interface, and when a person uses a control that a mod drew.
-The second table lists the events that the `$.ui` methods raise.
+Claude Code raises these events when it draws part of the interface and when a person uses a control that a mod drew. Hook them to change a drawing, to react to a press, an input, or a pick, or to watch a failure. Register a hook with `on(event, ...)`.
 
-A `deny` from a hook refuses a scroll, focus, or close. An invalid tree draws the engine's own drawing.
+The first table lists the events of the engine. The second table lists the events that the `$.ui` methods raise. A `deny` from a hook refuses a scroll, focus, or close. If a hook returns an invalid tree, Claude Code draws its own drawing.
 
-Official pages: [Draw in the Interface](https://code.claude.com/docs/en/plugins/mods/interface), [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.322 program (`schemas/claude-code.d.ts`).
+Official pages: [Draw in the Interface](https://code.claude.com/docs/en/plugins/mods/interface) and [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference).[^types-322]
 
 ## Example
 
@@ -35,12 +34,12 @@ on("ui.render", { component: "Spinner" }, async ($, e, next) =>
 | --- | --- | --- | --- | --- |
 | `ui.render` | <Documented /> | Fires when the engine is about to draw a component: once for each input value (props, viewport width), at plugin load, or on `$.ui.invalidate("ui.render")`. | Input `RenderInput`. Result `RenderElement`: the tree to draw. `next(e)` gives the engine's drawing. An invalid tree draws the engine's drawing. | `on('ui.render', ...)`. In tests: `$.ui.render(...)` on the test engine (not on a hook's `$`). |
 | `ui.resolve` | <Documented /> | Fires when the plugins load (not on each draw), once for each surface, component, and plugin. `e` names the surface and component, never the props. | Input `ResolveInput`. Result `ElementTable`: the element table of the surface. A hook may restyle an element or leave one out. | `on('ui.resolve', ...)`. Also `$.ui.resolve(...)`. |
-| `ui.press` | <Documented /> | Fires when a `Button` that a render hook drew is pressed on a surface. `e` is `{ plugin, element, component, surface }`. `element` is the button's `key`. Set a `key` on buttons that share a label: until 2.1.304 a click was lost when same-label buttons with no `key` were redrawn unchanged. | Input `UiPressArgument`. Result `{ element }`. `next(e)` lets the press through. Returning `{ element }` takes it. | `on('ui.press', ...)`. |
+| `ui.press` | <Documented /> | Fires when a `Button` that a render hook drew is pressed on a surface. `e` is `{ plugin, element, component, surface }`. `element` is the button's `key`. Set a `key` on buttons that share a label. Until `2.1.304`, a click was lost when same-label buttons with no `key` were redrawn unchanged. | Input `UiPressArgument`. Result `{ element }`. `next(e)` lets the press through. Returning `{ element }` takes it. | `on('ui.press', ...)`. |
 | `ui.input` | <Documented /> | Fires when an `Input` that a render hook drew changes or the person submits it. `e` is `{ plugin, element, component, surface, kind, value }`. | Input `UiInputArgument`. Result `{ element, value }`. `next({ ...e, value })` rewrites the typing. | `on('ui.input', ...)`. |
 | `ui.select` | <Documented /> | Fires when the person picks from a `Select` that a render hook drew. `e` is `{ plugin, element, component, surface, value }`. | Input `UiSelectArgument`. Result `{ element, value }`. `next({ ...e, value })` rewrites the pick. | `on('ui.select', ...)`. |
 | `ui.message` | <Documented /> | Fires when a `Client` that this plugin drew posts from its surface module (`surface.post(data)`). Only this plugin's hooks see it. | Input `UiMessageArgument`. Result `{ props? }`. `next({ ...e, data })` rewrites the data. One call for each instance in each frame. | `on('ui.message', ...)`. |
 | `ui.fault` | <Documented /> | Fires when a `Client` that this plugin drew failed on a surface. Its module did not load, its drawing failed, or its code failed after it drew. | Input `UiFaultInput`. Result `{}`. Only this plugin's hooks see it. `e.phase` says when and `e.reason` says why. | `on('ui.fault', ...)`. |
-| `ui.pointer` | <Documented /> | Since `2.1.326`, fires when the person clicks or taps the backdrop where no part of the app covers it. Only the hooks of the plugin that set the theme see it. | Input `UiPointerInput`, with `surface`, `component` (`Backdrop`), `type` (`click`), and `x` and `y` rounded to 1/64 (the program, `chunk-8c7cqrmr.js:274`). Result `{}`. Observe only: it may be a stray click, so it is no request of the person as a `ui.press` is. To answer it, change what the `Backdrop` hook draws and redraw. | `on('ui.pointer', ...)`. |
+| `ui.pointer` | <Documented /> | Since `2.1.326`, fires when the person clicks or taps the backdrop where no part of the app covers it. Only the hooks of the plugin that set the theme see it. | Input `UiPointerInput`, with `surface`, `component` (`Backdrop`), `type` (`click`), and `x` and `y` rounded to 1/64.[^pointer] Result `{}`. Observe only. It may be a stray click, so it is not a request of the person, as a `ui.press` is. To answer it, change what the `Backdrop` hook draws and redraw. | `on('ui.pointer', ...)`. |
 | `ui.scroll` | <Documented /> | Fires before the window of a site moves: the person's wheel or scroll keys on a `Pane` body or the `AbovePrompt` band (at its edges too), or `$.ui.scroll`. | Input `UiScrollInput`. Result `{}` or `{ deny }`. `next({ ...e, offset })` scrolls elsewhere. | `on('ui.scroll', ...)`. Also `$.ui.scroll(...)`. |
 | `ui.focus` | <Documented /> | Fires before the focus ring of a site moves: the person's Tab, arrows, or click in a `Pane` or the band, an `autoFocus` element taking it, or `$.ui.focus`. | Input `UiFocusInput`. Result `{}` or `{ deny }`. `next({ ...e, element })` moves the focus to another element. | `on('ui.focus', ...)`. Also `$.ui.focus(...)`. |
 
@@ -59,13 +58,13 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 | `ui.close` | <Documented /> | `$.ui.close({ id })` with `origin` `plugin`. The engine raises it too, for the person (`person`) and for an unload (`unload`). | Input `PaneCloseInput`. Value `void`. |
 | `ui.panes` | <Documented /> | `$.ui.panes()` | Input `NoArgs`. Value `readonly UiPane[]`. |
 | `ui.place` | <Undocumented /> | `$.ui.place({ id })` | Input `UiPlaceArgs`. Value `UiPlaceResult`. New in `2.1.314`. |
-| `theme.set` | <Undocumented /> | `$.theme.set({ backdrop })`. Since `2.1.323`, `backdrop` is a scene (`{ scene }`) or a still ground, and the scheme is the top-level `overrideColorScheme`. | Input `ThemeSetArgs`. Value `ThemeResult`. New in `2.1.319`. Case: `print.cli319.theme.engine`. |
-| `theme.clear` | <Undocumented /> | `$.theme.clear()` | Input `NoArgs`. Value `ThemeResult`. New in `2.1.319`. Case: `print.cli319.theme.engine`. |
+| `theme.set` | <Undocumented /> | `$.theme.set({ backdrop })`. Since `2.1.323`, `backdrop` is a scene (`{ scene }`) or a still ground, and the scheme is the top-level `overrideColorScheme`. | Input `ThemeSetArgs`. Value `ThemeResult`. New in `2.1.319`.[^theme-case] |
+| `theme.clear` | <Undocumented /> | `$.theme.clear()` | Input `NoArgs`. Value `ThemeResult`. New in `2.1.319`.[^theme-case] |
 | `ui.selection` | <Documented /> | `$.ui.selection()` | Input `NoArgs`. Value `UiSelection \| undefined`. |
 | `ui.copy` | <Documented /> | `$.ui.copy({ text, surface })`. `surface` takes the session's first surface when left out. | Input `UiCopyArgs`. Value `UiCopyResult`. |
 | `ui.view` | <Undocumented /> | `$.ui.view({ agentId })`: whose transcript the main view shows. None means the main conversation. | Input `SiteView`. Value `UiViewResult`. |
 | `ui.notify` | <Documented /> | `$.ui.notify(text, { title })`. `title` is the plugin's name when left out. Two mods that notify again on hearing a notification can echo each other without end. | Input `{ text: string, title?: string, key?: string, delayMs?: number, at?: number, untilBack?: boolean }`. Value `UiNotifyResult`. `key`, `delayMs`, `at`, and `untilBack` are new in `2.1.321`; see [`NotifyOptions`](../types/ui/input-pane-render.md#notifyoptions). |
-| `ui.cancelNotify` | <Undocumented /> | `$.ui.cancelNotify(key)` | Input `{ key: string }`. Value `{ isSent: boolean }`. New in `2.1.321`. Read site: `chunk-2x9ma4k7.js:4573061`. |
+| `ui.cancelNotify` | <Undocumented /> | `$.ui.cancelNotify(key)` | Input `{ key: string }`. Value `{ isSent: boolean }`. New in `2.1.321`. [^cancel-notify] |
 | `ui.blit` | <Documented /> | `$.ui.blit(...)`: the `cells` of a `Raster` or the `source` of a keyed `Image`. A hook above may rewrite either, or `{ deny }`. | Input `UiBlitArgs`. Value `UiBlitResult`. |
 
 ## Related Pages
@@ -74,3 +73,10 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 - [UI Methods](ui.md)
 - [Surfaces, Elements, and Render Sites](ui-elements.md)
 - [UI Types](../types/ui/index.md) (input and result types)
+
+## Sources
+
+[^types-322]: The Mod API type file of the `2.1.322` program, `schemas/claude-code.d.ts`.
+[^pointer]: The program, `chunk-8c7cqrmr.js:274`.
+[^theme-case]: Probe case `print.cli319.theme.engine`.
+[^cancel-notify]: The program, `chunk-2x9ma4k7.js:4573061`.

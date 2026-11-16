@@ -4,9 +4,9 @@ description: "Types of Input, Link, Markdown, notify options, panes, Raster, and
 sidebar_position: 2
 ---
 
-## Types with Fields
+These types describe the `Input`, `Link`, `Markdown`, `Progress`, and `Raster` elements, the options of `$.ui.notify`, the panes, and the inputs and results of `ui.render`. Use them to type the props that a mod draws with and to read what a render hook receives. Each type below has its own table of fields.
 
-Each type below has its own table of fields.
+## Types with Fields
 
 ### `InputProps`
 
@@ -68,13 +68,11 @@ Options of `$.ui.notify`. Used by `$.ui.notify`.
 | `at` | <Undocumented /> | The clock time to show the notification. | Type: `number`. Optional. Epoch milliseconds, a whole number from 0 to 7 days from now. Do not give it with `delayMs`. Since `2.1.321`. |
 | `untilBack` | <Undocumented /> | With `delayMs` or `at`: the client drops the notification if the person comes back to the session before it shows. | Type: `boolean`. Optional. Since `2.1.321`. |
 
-The engine sends `key`, `delayMs`, `at`, and `untilBack` to the client in the `ui_notify` stream message, as `key`, `delay_ms`, `at`, and `until_back`. In the program, only that message reads the timing fields; the terminal notification channels do not. A bad option makes the call fail with one of these texts:
+The engine sends `key`, `delayMs`, `at`, and `untilBack` to the client in the `ui_notify` stream message, as `key`, `delay_ms`, `at`, and `until_back`. Only that message reads the timing fields. The terminal notification channels do not.[^notify-read] A bad option makes the call fail with one of these texts:
 
 - `key is a string of 1 to 64 characters, with no hidden characters or stray spaces, and not a name every object has, such as constructor`
 - `give delayMs or at, not both. Each is a whole number of 0 or more: delayMs in milliseconds, up to 7 days, and at in epoch milliseconds, up to 7 days from now`
 - `untilBack is a boolean, when given`
-
-Read sites: the checks `chunk-2x9ma4k7.js:4543213` (`HEs`), the call `chunk-s82q53mp.js:285501`, and the `ui_notify` message `chunk-h3xwema8.js:551765`.
 
 ### `OnScreen`
 
@@ -116,8 +114,8 @@ The argument of `$.ui.open`. It has which pane, its title, whether it asks for t
 | `holdToasts` | <Documented /> | While the pane is the one displayed, the surface holds every transient toast. That includes the `$.ui.toast` of each other plugin, the own toasts of the engine, and those of this plugin. | Type: `true`. Optional. Toasts wait while the pane is open. Use it for a dialog that the person answers and leaves. Each open sets it anew. |
 | `backgroundColor` | <Documented /> | What the surface paints under the pane's body while it is the one shown, as a Box takes it: a theme key, a raw color, or `"transparent"`. | Type: `Color`. Optional. `"transparent"` paints nothing, so what lies behind the pane shows through. A color stops at the body. Left out, the surface's own look stands. Anything else is refused. Each open sets it anew, and a `ui.open` hook may drop it. A request, not a grant: a surface with no counterpart for a theme key keeps its own look. Since `2.1.311`. |
 | `rows` | <Documented /> | The body rows that the content of the pane wants while seated inline above the prompt. It opens that tall, up to what the layout spares, not a third. | Type: `number`. Optional. A request, not a grant. A size that the person dragged wins. The dock ignores it. A positive whole number. |
-| `columns` | <Documented /> | The body columns the pane's content wants while docked beside a fullscreen transcript: the dock opens that wide, at most 45% of the terminal's columns and at least 24. Each open sets it anew. | Type: `number`. Optional. A request, not a grant. A width the person dragged or keyed wins, under the same ceiling. Since `2.1.305` the dock stays within 45% of the terminal's width, also for a requested or chosen width and a width kept from a wider terminal, with a floor of 24 columns. The cap is also at most the terminal's width minus 60 columns. The dock is hidden below 110 columns, so the floor and the cap never clash (the program; [v2.1.305 release](https://github.com/anthropics/claude-code/releases/tag/v2.1.305)). The inline block ignores it. A positive whole number. |
-| `placement` | <Documented /> | Asks that the pane start as a `"widget"`, the small form of a minimized pane on the desktop app. Drawn so, its `Pane` props say `placement: "widget"`. | Type: `'widget'`. Optional. A request: the surface decides, and the person can expand or minimize the pane afterwards. A surface with no widgets (the terminal, VS Code, a desktop app without them) opens the pane as if this were left out. Any other value is ignored. Each open sets it anew, but a surface is meant to read it only when it first shows the pane. A `ui.open` hook may set or drop it. Since `2.1.323` (`schemas/claude-code.d.ts`; the program, `chunk-h3xwema8.js:556803`). |
+| `columns` | <Documented /> | The body columns the pane's content wants while docked beside a fullscreen transcript: the dock opens that wide, at most 45% of the terminal's columns and at least 24. Each open sets it anew. | Type: `number`. Optional. A request, not a grant. A width the person dragged or keyed wins, under the same ceiling. Since `2.1.305` the dock stays within 45% of the terminal's width, also for a requested or chosen width and a width kept from a wider terminal, with a floor of 24 columns. The cap is also at most the terminal's width minus 60 columns. The dock is hidden below 110 columns, so the floor and the cap never clash.[^dock] The inline block ignores it. A positive whole number. |
+| `placement` | <Documented /> | Asks that the pane start as a `"widget"`, the small form of a minimized pane on the desktop app. Drawn so, its `Pane` props say `placement: "widget"`. | Type: `'widget'`. Optional. A request: the surface decides, and the person can expand or minimize the pane afterwards. A surface with no widgets (the terminal, VS Code, a desktop app without them) opens the pane as if this were left out. Any other value is ignored. Each open sets it anew, but a surface is meant to read it only when it first shows the pane. A `ui.open` hook may set or drop it. Since `2.1.323`.[^placement] |
 
 ### `PressedLink`
 
@@ -129,7 +127,7 @@ The link that a press landed on. It is one that a `Markdown` drew, pressed where
 
 ### `ProgressProps`
 
-The props of `Progress`, how far along a task is. A leaf: no children. Use it for a task moving toward done. For a level that is not heading anywhere, such as usage against a limit, draw a bar of Boxes instead. The `ToolProgress` render site is unrelated. New in `2.1.323` (`schemas/claude-code.d.ts`; the program builds it in `chunk-s82q53mp.js:21347`).
+The props of `Progress`, how far along a task is. A leaf: no children. Use it for a task moving toward done. For a level that is not heading anywhere, such as usage against a limit, draw a bar of Boxes instead. The `ToolProgress` render site is unrelated. New in `2.1.323`.[^progress-props]
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -189,7 +187,7 @@ What a render hook returns, and what `next(e)` resolves to: a plain-data tree of
 | `children` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
 | `type` | <Documented /> | A block of markdown that every surface draws as it draws the text of an assistant reply. It has its own renderer, theme, hyperlinks and highlighting. | Type: `'Markdown'`. Built by `<Markdown>`. A leaf. Without a `press` its links open as the surface opens links. |
 | `props` | <Documented /> | The props of the element, typed `MarkdownLeafProps`. | Type: `MarkdownLeafProps`. |
-| `part` | <Documented /> | Whose `key` it is: the engine sets it on a keyed element as the tree leaves its hook, as on a Box (new in 2.1.307). | Type: `PluginStamp`. Optional. |
+| `part` | <Documented /> | Whose `key` it is: the engine sets it on a keyed element as the tree leaves its hook, as on a Box (new in `2.1.307`). | Type: `PluginStamp`. Optional. |
 | `children` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
 | `type` | <Documented /> | A `Markdown` whose plugin answers the links that it drew (`onLinkPress`). A press on one raises `ui.press` with `e.link`, and the surface opens none. | Type: `'Markdown'`. |
 | `props` | <Documented /> | The props of the element, typed `MarkdownLeafProps`. | Type: `MarkdownLeafProps`. |
@@ -202,7 +200,7 @@ What a render hook returns, and what `next(e)` resolves to: a plain-data tree of
 | `type` | <Documented /> | A vector drawing, for the remote surfaces alone. The SVG markup is the data of the element, drawn in an isolated box, off the page. | Type: `'Svg'`. A leaf. A surface whose table lacks it refuses the tree. Put a press that others should see on an enclosing `Button`. |
 | `props` | <Documented /> | The props of the element, typed `SvgProps`. | Type: `SvgProps`. |
 | `children` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
-| `type` | <Documented /> | How far along a task is, or that it is still running. Hooks above wrap it, replace it, or rewrite its props. | Type: `'Progress'`. A leaf. A mobile client that names it in `draws` is sent this node. Any other client, on any surface, gets its Box and Text. A surface module cannot draw one. Since `2.1.323` (`schemas/claude-code.d.ts`; the program, `chunk-h3xwema8.js:845092`). |
+| `type` | <Documented /> | How far along a task is, or that it is still running. Hooks above wrap it, replace it, or rewrite its props. | Type: `'Progress'`. A leaf. A mobile client that names it in `draws` is sent this node. Any other client, on any surface, gets its Box and Text. A surface module cannot draw one. Since `2.1.323`.[^progress-node] |
 | `props` | <Documented /> | The props of the element, typed `ProgressProps`. | Type: `ProgressProps`. |
 | `children` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
 | `type` | <Documented /> | A grid of terminal cells, for the terminal surface alone. Each cell is a glyph, a foreground and a background, packed in `props.cells`. | Type: `'Raster'`. A leaf, one node however many cells. `$.ui.blit` repaints it in place. A surface whose table lacks it refuses the tree. |
@@ -226,7 +224,7 @@ One `ui.render` input, for a component narrowed to one surface.
 | `component` | <Documented /> | Which component this instance is, the key a matcher narrows on. | Type: `C`. |
 | `requestId` | <Documented /> | The instance: the tool_use_id for a dialog or tool row, the message id for a message, or the agent id for a spinner. | Type: `string`. Two drawings of one component are two instances. |
 | `viewport` | <Documented /> | The size that the surface draws into, in character cells, and whether its layout docks a pane. Absent where no surface has measured. | Type: `RenderViewport`. Optional. Part of the envelope, so a rewrite keeps it. A change of width re-draws every hooked site once the resize settles. |
-| `plugin` | <Documented /> | Whose this drawing is, where it is one plugin's: the plugin an `AbovePrompt` row is asked of, the plugin that opened a `Pane`. It is a default matcher key: a hook that leaves it out hears the drawings of its own plugin only here. A hook that names it is read as written, `{ plugin: "*" }` for all. | Type: `string`. Optional. Pinned: a rewrite carries it on as received. Since `2.1.323` (`schemas/claude-code.d.ts`; the program, `chunk-s82q53mp.js:76755`). |
+| `plugin` | <Documented /> | Whose this drawing is, where it is one plugin's: the plugin an `AbovePrompt` row is asked of, the plugin that opened a `Pane`. It is a default matcher key: a hook that leaves it out hears the drawings of its own plugin only here. A hook that names it is read as written, `{ plugin: "*" }` for all. | Type: `string`. Optional. Pinned: a rewrite carries it on as received. Since `2.1.323`.[^render-plugin] |
 | `props` | <Documented /> | The plain-data props of the component. | Type: `RenderPropsOf[C]`. |
 
 ### `RenderResultOf`
@@ -251,3 +249,12 @@ The size that a surface draws into, in character cells of the monospace metric o
 
 - [UI Types](index.md)
 - [Mod API Types](../index.md)
+
+## Sources
+
+[^notify-read]: The program, checks `chunk-2x9ma4k7.js:4543213` (`HEs`), call `chunk-s82q53mp.js:285501`, and the `ui_notify` message `chunk-h3xwema8.js:551765`.
+[^dock]: The program. [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
+[^placement]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-h3xwema8.js:556803`.
+[^progress-props]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-s82q53mp.js:21347`.
+[^progress-node]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-h3xwema8.js:845092`.
+[^render-plugin]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-s82q53mp.js:76755`.

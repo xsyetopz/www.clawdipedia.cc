@@ -1,10 +1,10 @@
 ---
 title: Surfaces, Elements, and Render Sites
-description: What a mod may draw and where - the surfaces, the 18 render sites with their props, and the JSX globals.
+description: "What a mod may draw and where: the surfaces, the 18 render sites with their props, and the JSX globals."
 sidebar_position: 8
 ---
 
-A mod draws with elements, at render sites, on a surface.
+A mod draws with elements, at render sites, on a surface. Use this page to find which site and element to hook when you want to change what Claude Code shows. Hook `ui.render` with `on("ui.render", { component }, ...)` to draw at a site.
 
 - A surface is the app that draws: the terminal, the desktop app, the mobile app, or the VS Code extension.
 - A render site is one part of the interface, such as the spinner, a tool row, or a pane.
@@ -13,7 +13,7 @@ A mod draws with elements, at render sites, on a surface.
 The engine (Claude Code) raises `ui.render` when it is about to draw a render site.
 A hook gets the name of the site in `e.component` and returns a tree of elements. JSX needs a `.tsx` or `.jsx` file.
 
-Official pages: [Draw in the Interface](https://code.claude.com/docs/en/plugins/mods/interface), [Mods Overview](https://code.claude.com/docs/en/plugins/mods/overview), [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.322 program (`schemas/claude-code.d.ts`).
+Official pages: [Draw in the Interface](https://code.claude.com/docs/en/plugins/mods/interface), [Mods Overview](https://code.claude.com/docs/en/plugins/mods/overview), and [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference).[^types]
 
 ## What a Mod Can Do at a Render Site
 
@@ -110,7 +110,7 @@ The dialog the AskUserQuestion tool opens. A tree for it holds the engine's node
 | Item | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
 | `tool` | <Documented /> | The name of the tool whose call opened the dialog. | `string`. |
-| `questions` | <Documented /> | The tool's `questions` input, as the dialog draws them. A rewrite must still fit the tool's schema, or the engine draws the original. | `unknown[]`. Since `2.1.323`, the engine's own confirmations are drawn as asked, whatever a rewrite says (`schemas/claude-code.d.ts`). |
+| `questions` | <Documented /> | The tool's `questions` input, as the dialog draws them. A rewrite must still fit the tool's schema, or the engine draws the original. | `unknown[]`. Since `2.1.323`, the engine's own confirmations are drawn as asked, whatever a rewrite says.[^types-323] |
 | `metadataSource` | <Documented /> | The call's `metadata.source` (who asked), when the model gave one. Analytics only, never drawn. | `string`, optional. |
 
 ### `UserMessage`
@@ -216,7 +216,7 @@ The line that closes a turn in the transcript, such as `Baked for 3s`. Only the 
 | --- | --- | --- | --- |
 | `word` | <Documented /> | The past-tense word the line drew (`Baked`). | `string`. |
 | `durationMs` | <Documented /> | The duration of the turn in milliseconds. | `number`. |
-| `waitingFor` | <Documented /> | What the line waits on while it draws only its waiting text (`Waiting for 2 background agents to finish`). It is read when the row mounts: the pending agents that started at or before the time of the line. Absent while the line draws anything else, or when their count differs from the count it draws. A hook that redraws the line for its own agents checks that each agent is its own and that `workflows` is 0. | `WaitingFor`, optional, read-only: `{ agents: ReadonlyArray<{ id: string, agentType: string, tool_use_id?: string }>, workflows: number }`. `id` is the `task.id` of the `UserMessage` notification row that reports the end of the agent. `agentType` is `general-purpose` or `<plugin>:<agent>`. `tool_use_id` is the call that started it, as `tool.call` carried it, when its task records one. `workflows` is how many workflows the line waits on. New in `2.1.323` (`schemas/claude-code.d.ts`, `WaitingFor`, `WaitingAgent`; the program, `chunk-jjj74jck.js:217077`). |
+| `waitingFor` | <Documented /> | What the line waits on while it draws only its waiting text (`Waiting for 2 background agents to finish`). It is read when the row mounts: the pending agents that started at or before the time of the line. Absent while the line draws anything else, or when their count differs from the count it draws. A hook that redraws the line for its own agents checks that each agent is its own and that `workflows` is 0. | `WaitingFor`, optional, read-only: `{ agents: ReadonlyArray<{ id: string, agentType: string, tool_use_id?: string }>, workflows: number }`. `id` is the `task.id` of the `UserMessage` notification row that reports the end of the agent. `agentType` is `general-purpose` or `<plugin>:<agent>`. `tool_use_id` is the call that started it, as `tool.call` carried it, when its task records one. `workflows` is how many workflows the line waits on. New in `2.1.323`.[^waiting] |
 | `onScreen` | <Documented /> | Which rows are in the viewport. | See above. |
 
 ### `InfoNotice`
@@ -239,7 +239,7 @@ The dim mode labels at the right of the prompt footer (`focus`, `memory paused`)
 
 ### `PromptHint`
 
-The dim hint line under the prompt (`? for shortcuts`, `esc to interrupt`, and the pills beside them). One instance. Since `2.1.323`, the terminal, desktop, and mobile surfaces raise it (`schemas/claude-code.d.ts`; the program, `chunk-s82q53mp.js:120485`).
+The dim hint line under the prompt (`? for shortcuts`, `esc to interrupt`, and the pills beside them). One instance. Since `2.1.323`, the terminal, desktop, and mobile surfaces raise it.[^above-prompt]
 
 | Item | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
@@ -250,12 +250,12 @@ The dim hint line under the prompt (`? for shortcuts`, `esc to interrupt`, and t
 
 ### `AbovePrompt`
 
-The band directly above the prompt input, where surveys draw. The engine draws a `[-]` beside the tree and an `n more` row under it. Since `2.1.323`, the engine asks once for each plugin that hooks it, `e.plugin` naming the plugin. A hook draws that plugin's row or passes, and [`AbovePromptList`](#abovepromptlist) stacks the rows. The person collapses the band (ctrl+x ctrl+a) or focuses it (a click, ctrl+x tab). Since `2.1.323`, the mobile surface raises it too (`schemas/claude-code.d.ts`; the program, `chunk-s82q53mp.js:120485`).
+The band directly above the prompt input, where surveys draw. The engine draws a `[-]` beside the tree and an `n more` row under it. Since `2.1.323`, the engine asks once for each plugin that hooks it, `e.plugin` naming the plugin. A hook draws that plugin's row or passes, and [`AbovePromptList`](#abovepromptlist) stacks the rows. The person collapses the band (ctrl+x ctrl+a) or focuses it (a click, ctrl+x tab). Since `2.1.323`, the mobile surface raises it too.[^above-prompt]
 
 | Item | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
 | `hasSurvey` | <Documented /> | True while a survey holds the band. A hook yields to it. | `boolean`. Read-only. |
-| `isCollapsed` | <Documented /> | True while the person has collapsed the band: a tree still returns, and nothing of it is on screen. False where the band cannot collapse. | `boolean`. Read-only. Since `2.1.321`. The program passes it in the props of `AbovePrompt` (`chunk-1xmjf4e6.js:545725`). |
+| `isCollapsed` | <Documented /> | True while the person has collapsed the band: a tree still returns, and nothing of it is on screen. False where the band cannot collapse. | `boolean`. Read-only. Since `2.1.321`. Claude Code passes it in the props of `AbovePrompt`.[^collapsed] |
 | `isWorking` | <Documented /> | True while a model turn is running. | `boolean`. Read-only. |
 | `maxRows` | <Documented /> | Rows the band may take. In fullscreen, what remains of the bottom slot above the prompt. Otherwise the terminal's height. | `number`. Read-only. The slot has a cap of half the terminal's rows. A taller tree scrolls in a window of `scroll.bodyRows`. |
 | `bodyColumns` | <Documented /> | Cells the tree is laid out in. | `number`. Read-only. Size a table to this value, not to `viewport.columns`. |
@@ -264,7 +264,7 @@ The band directly above the prompt input, where surveys draw. The engine draws a
 
 ### `AbovePromptList`
 
-New in `2.1.323`. The arrangement of the band once its rows settled. A hook that names it, or a bare `on("*")`, hears it. What settles is the whole band. The engine asks it itself while it draws `AbovePrompt`. Core stacks `rows`. Filter what `next(e)` gets and wrap its answer, never rows copied by value. An organization's mod wins by the order of the chain. The engine passes over a bad answer. To fail closed, answer no rows in its `.catch`. A `rows` rewrite that drops, adds, or reorders a row is refused. Terminal, desktop, and mobile only (`schemas/claude-code.d.ts`; the program, `chunk-s82q53mp.js:125489`, `chunk-s82q53mp.js:120485`).
+New in `2.1.323`. The arrangement of the band once its rows settled. A hook that names it, or a bare `on("*")`, hears it. What settles is the whole band. The engine asks it itself while it draws `AbovePrompt`. Core stacks `rows`. Filter what `next(e)` gets and wrap its answer, never rows copied by value. An organization's mod wins by the order of the chain. The engine passes over a bad answer. To fail closed, answer no rows in its `.catch`. A `rows` rewrite that drops, adds, or reorders a row is refused. Terminal, desktop, and mobile only.[^list]
 
 | Item | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
@@ -285,10 +285,10 @@ The framed region a plugin opened with `$.ui.open({ id })`. There is one instanc
 | --- | --- | --- | --- |
 | `title` | <Documented /> | The label of its tab while more than one pane is open. | `string`. Read-only here. Another `$.ui.open`, or a hook on `ui.open`, retitles it. |
 | `isFocused` | <Documented /> | True while the pane holds the keyboard, which the person gave it. Tab walks its elements, a Button's `hotkey` presses it, and the arrows scroll. | `boolean`. Read-only. |
-| `isPromptCovered` | <Documented /> | True while keys typed in the terminal may go to something other than the prompt or this pane: a dialog (a permission prompt, `/model`), a search, or a field in the band. | `true`, optional. Read-only. The prop is left out while it is false (the program, `chunk-1xmjf4e6.js:558301`). Since `2.1.323`, the type is `true`, not `boolean` (`schemas/claude-code.d.ts`). |
+| `isPromptCovered` | <Documented /> | True while keys typed in the terminal may go to something other than the prompt or this pane: a dialog (a permission prompt, `/model`), a search, or a field in the band. | `true`, optional. Read-only. The prop is left out while it is false.[^covered] Since `2.1.323`, the type is `true`, not `boolean`.[^types-323] |
 | `bodyColumns` | <Documented /> | Cells across the body, inside the frame. | `number`. Read-only. |
-| `placement` | <Documented /> | Where the surface seated the pane: `dock` beside the transcript (the terminal in fullscreen from 110 columns), or `inline` above the prompt. Since `2.1.323`, on the desktop app also `widget`, the small form of a minimized pane. Draw what reads at a glance there, because clicks may not reach it. The hook runs again when the seat changes. | `'dock' \| 'inline' \| 'widget'`. Read-only. The engine refuses a change. Treat any other value as `dock`. Since `2.1.323` (`schemas/claude-code.d.ts`). |
-| `anchoredEdges` | <Documented /> | The edges of the chat area that a `widget` is anchored on, to align the drawing by: `["bottom", "right"]` in that corner, `["right"]` stacked on another widget there, `[]` in the session rail (the column beside the chat). | `readonly ('top' \| 'right' \| 'bottom' \| 'left')[]`, optional. Absent in every other seat. The hook runs again when they change. Ignore a value outside these four. No call moves a widget. Since `2.1.323` (`schemas/claude-code.d.ts`; the program, `chunk-s82q53mp.js:119983`). |
+| `placement` | <Documented /> | Where the surface seated the pane: `dock` beside the transcript (the terminal in fullscreen from 110 columns), or `inline` above the prompt. Since `2.1.323`, on the desktop app also `widget`, the small form of a minimized pane. Draw what reads at a glance there, because clicks may not reach it. The hook runs again when the seat changes. | `'dock' \| 'inline' \| 'widget'`. Read-only. The engine refuses a change. Treat any other value as `dock`. Since `2.1.323`.[^types-323] |
+| `anchoredEdges` | <Documented /> | The edges of the chat area that a `widget` is anchored on, to align the drawing by: `["bottom", "right"]` in that corner, `["right"]` stacked on another widget there, `[]` in the session rail (the column beside the chat). | `readonly ('top' \| 'right' \| 'bottom' \| 'left')[]`, optional. Absent in every other seat. The hook runs again when they change. Ignore a value outside these four. No call moves a widget. Since `2.1.323`.[^anchored] |
 | `scroll` | <Documented /> | The window of the body over the tree. Engine-owned. | `SiteScroll`. `bodyRows` is the room the frame may use. Inline, the frame fits the tree. |
 | `view` | <Documented /> | Which transcript is on screen beside the pane. | `SiteView`. The pane stays open across a switch of view. |
 
@@ -329,3 +329,14 @@ The backdrop of the session, which a plugin set with `$.theme.set`. Only the des
 - [UI Methods](ui.md)
 - [UI Events](ui-events.md)
 - [UI Types](../types/ui/index.md) (element props and results)
+
+## Sources
+
+[^types]: The Mod API type file of the `2.1.322` program, `schemas/claude-code.d.ts`.
+[^types-323]: The Mod API type file, `schemas/claude-code.d.ts`.
+[^waiting]: The Mod API type file, `schemas/claude-code.d.ts`, `WaitingFor` and `WaitingAgent`. The program, `chunk-jjj74jck.js:217077`.
+[^above-prompt]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-s82q53mp.js:120485`.
+[^collapsed]: The program, `chunk-1xmjf4e6.js:545725`.
+[^list]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-s82q53mp.js:125489` and `chunk-s82q53mp.js:120485`.
+[^covered]: The program, `chunk-1xmjf4e6.js:558301`.
+[^anchored]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-s82q53mp.js:119983`.

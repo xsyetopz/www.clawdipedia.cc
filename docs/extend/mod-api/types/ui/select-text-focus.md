@@ -4,9 +4,9 @@ description: "Types of resolve inputs, Select, Svg, Text, toasts, blit and copy 
 sidebar_position: 3
 ---
 
-## Types with Fields
+These types describe the `Select`, `Svg`, and `Text` elements, the toast, blit, and copy calls, the fault input, and the focus calls. Use them to type the props that a mod draws with and the inputs and results of its hooks. Each type below has its own table of fields.
 
-Each type below has its own table of fields.
+## Types with Fields
 
 ### `ResolveInputOf`
 
@@ -147,7 +147,7 @@ What `$.ui.blit` resolves to and what the `{ value }` of a `ui.blit` hook holds.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `deny` | <Documented /> | Absent when the engine took the cells or source, else why not. | Type: `string`. Optional. Says why nothing was drawn: not mounted, wrong size, bad cells or source. With no surface, `no-surface` heads it. |
+| `deny` | <Documented /> | Absent when the engine took the cells or source, else why not. | Type: `string`. Optional. It says why nothing was drawn: not mounted, wrong size, bad cells or source. With no surface, `no-surface` heads it. |
 | `fix` | <Documented /> | With `deny`, a stable code to key on instead of the words of `deny`. | Type: `'tmux-passthrough'`. Optional. New in `2.1.310`. `tmux-passthrough`: tmux 3.3 or later holds back images that the terminal outside it can draw, because `allow-passthrough` or `focus-events` is off. Both must be on. Absent for every other cause. |
 
 ### `UiCopyArgs`
@@ -200,7 +200,7 @@ The input of `ui.focus`: the focus ring of a site, about to move. It moves onto 
 | --- | --- | --- | --- |
 | `component` | <Documented /> | Which site: a `Pane` body or the `AbovePrompt` band. | Type: `UiFocusComponent`. |
 | `requestId` | <Documented /> | The instance that the `ui.render` hook that draws the site sees: the id of the pane, or the one id of the band. | Type: `string`. |
-| `plugin` | <Documented /> | Whose `ui.render` hook drew the element that takes the ring. Absent with `element`. Read-only. | Type: `string`. Optional. Since `2.1.323`, a hook that names no `plugin` hears the elements of its own plugin and the stops of the engine. `{ plugin: "*" }` hears the elements of every plugin (`schemas/claude-code.d.ts`, `UiFocusInput`). |
+| `plugin` | <Documented /> | Whose `ui.render` hook drew the element that takes the ring. Absent with `element`. Read-only. | Type: `string`. Optional. Since `2.1.323`, a hook that names no `plugin` hears the elements of its own plugin and the stops of the engine. `{ plugin: "*" }` hears the elements of every plugin.[^focus-input] |
 | `element` | <Documented /> | The `key` of the element that takes the ring, as `ui.press` names it. Absent for one of the own stops of the engine (the close mark of a pane or the tab of another). | Type: `string`. Optional. `next({ ...e, element })` lands it on another element that `plugin` drew in the site instead. For one not drawn there, core answers `{ deny }`. |
 | `origin` | <Documented /> | Who moves it (UiFocusOrigin). The engine sets it where the move starts. | Type: `UiFocusOrigin`. |
 
@@ -226,3 +226,7 @@ What a `ui.focus` hook returns, what `next(e)` resolves to, and what `$.ui.focus
 
 - [UI Types](index.md)
 - [Mod API Types](../index.md)
+
+## Sources
+
+[^focus-input]: The Mod API type file, `schemas/claude-code.d.ts`, `UiFocusInput`.

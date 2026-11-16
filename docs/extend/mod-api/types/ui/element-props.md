@@ -4,9 +4,9 @@ description: "Types of the element props and the client modules: AskOptions, Box
 sidebar_position: 1
 ---
 
-## Types with Fields
+These types describe the props of the `Box`, `Button`, `Code`, `Image`, and `Client` elements, and the options of `$.ui.ask`. Use them to type the elements that a mod draws and the events that a `Client` module handles. Each type below has its own table of fields.
 
-Each type below has its own table of fields.
+## Types with Fields
 
 ### `AskOptions`
 
@@ -91,7 +91,7 @@ The props of `Button`, the pressable of every surface. It has an address, a labe
 | --- | --- | --- | --- |
 | `key` | <Documented /> | The address of the element: `e.element` at `ui.press`, what a matcher names. Defaults to the `label`, or the one string child. | Type: `string`. Optional. Needed where the Button holds other children and no `label`. The text of a row holds what changes (a count, an age). Its address must not change. |
 | `label` | <Documented /> | The text drawn on the button, or the one string child. | Type: `string`. Optional. Children of strings and `Text` are drawn in its place. Any other element is refused. |
-| `hotkey` | <Documented /> | One digit (`"1"`) or one lowercase letter (`"w"`) that presses it while the site of the plugin holds the focus. The engine refuses anything else. | Type: `string`. Optional. Its site holds the key after ctrl+x tab, a click, or `open({ focus })`. Two buttons of one plugin with the same key clash, and the later wins. Since `2.1.323`, two buttons of two plugins with the same key press neither (`schemas/claude-code.d.ts`). |
+| `hotkey` | <Documented /> | One digit (`"1"`) or one lowercase letter (`"w"`) that presses it while the site of the plugin holds the focus. The engine refuses anything else. | Type: `string`. Optional. Its site holds the key after ctrl+x tab, a click, or `open({ focus })`. Two buttons of one plugin with the same key clash, and the later wins. Since `2.1.323`, two buttons of two plugins with the same key press neither.[^hotkey] |
 | `action` | <Documented /> | An engine keybinding action (`"app:cycleDiffBase"`) whose chord, as the person bound it, presses this from the prompt. The engine refuses unknown names. | Type: `string`. Optional. Chords that a global or active context binding holds, on the terminal while the button is mounted. |
 | `plain` | <Documented /> | Drawn without chrome: the hotkey in the accent color, a colon, and the label (`1: Yes`), as the row of a survey reads. With no `hotkey`, the label alone. | Type: `true`. Optional. A one-glyph label is then a control by itself. `dimColor` and `hover` still apply. |
 | `dimColor` | <Documented /> | The label drawn dim at rest, as the `dimColor` of `Text`, and at full strength under the pointer or the focus. Use it for a secondary control or a path in a list. | Type: `boolean`. Optional. |
@@ -199,13 +199,13 @@ A `$.ui.blit` argument that swaps one of the mounted keyed Images of the caller 
 
 ### `ImageProps`
 
-The props of `Image`, the terminal surface's picture leaf: pixels over a box of cells where the terminal can (kitty, Ghostty), the `alt` elsewhere. Since `2.1.305` it also draws in iTerm2 3.5 and later with fullscreen rendering. The program detects it from an XTVERSION reply that names iTerm2 3.5 or later; otherwise it shows the `alt` text. Since `2.1.310` it also draws inside tmux, for a bytes `source` only, when tmux's `allow-passthrough` and `focus-events` are on. Object with the fields `key?`, `source`, `columns`, `rows`, `alt`. A leaf with no children, `hover`, or `onPress`. A new `source` replaces the picture in place.
+The props of `Image`, the terminal surface's picture leaf: pixels over a box of cells where the terminal can (kitty, Ghostty), the `alt` elsewhere. Since `2.1.305` it also draws in iTerm2 3.5 and later with fullscreen rendering. Claude Code detects iTerm2 from an XTVERSION reply that names version 3.5 or later. Otherwise it shows the `alt` text.[^iterm] Since `2.1.310` it also draws inside tmux, for a bytes `source` only, when tmux's `allow-passthrough` and `focus-events` are on. Object with the fields `key?`, `source`, `columns`, `rows`, `alt`. A leaf with no children, `hover`, or `onPress`. A new `source` replaces the picture in place.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `key` | <Documented /> | The address of the element within the drawing: what `$.ui.blit` names to swap. | Type: `string`. Optional. Unique among the Images of one tree. If absent, only a redraw changes it. |
 | `source` | <Documented /> | The picture (ImageSource): `{ png }` or `{ rgba, width, height }` bytes, or `{ file, format }` / `{ shm, format, width, height }` read here. | Type: `ImageSource`. |
-| `columns` | <Documented /> | /** How many terminal columns wide, 1 to 255. The picture is scaled to fill the box, and the site clips what its body cannot show. */ | Type: `number`. |
+| `columns` | <Documented /> | How many terminal columns wide, 1 to 255. The picture is scaled to fill the box, and the site clips what its body cannot show. | Type: `number`. |
 | `rows` | <Documented /> | How many terminal rows tall, 1 to 255. | Type: `number`. |
 | `alt` | <Documented /> | What the picture says. It is drawn dim in its place where the picture cannot be (and read by a screen reader). Required, and may be a single space. | Type: `string`. |
 
@@ -237,3 +237,8 @@ The picture that an `Image` displays. It is base64 bytes that the plugin holds (
 
 - [UI Types](index.md)
 - [Mod API Types](../index.md)
+
+## Sources
+
+[^hotkey]: The Mod API type file, `schemas/claude-code.d.ts`.
+[^iterm]: The program.
