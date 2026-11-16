@@ -89,6 +89,10 @@ Source: the program: the Mod API type file (`schemas/claude-code.d.ts`) of `2.1.
 | Settings file saved with an error | <Undocumented /> | A settings file that you save with an error during a session gets a pinned warning that names the file. | [Settings](../configure/settings/index.md#errors) |
 | Sandbox after a worktree move | <Documented /> | The sandbox keeps its state when a session enters or leaves a worktree, until you run `/cd` or `/sandbox`. Bash commands may then ask first. | [Sandbox](../configure/permissions/sandbox.md#other-behavior) |
 | Sandbox helper programs | <Documented /> | Programs that the sandbox starts for its own use, ripgrep, and read-only local git commands run without Claude Code's sign-in tokens and API keys. | [Sandbox](../configure/permissions/sandbox.md#other-behavior) |
+| `permissions.allow` in `-p` and SDK runs | <Documented /> | Entries from project and local settings files are dropped until the folder is trusted, and a warning on stderr names the files. | [Permission Rules](../configure/permissions/rules.md#warnings-about-rules) |
+| Approval after a failed permission check | <Documented /> | In `bypassPermissions` mode, a tool call whose permission check fails with an error asks for approval. Allow rules cannot give it. | [Permission Modes](../configure/permissions/modes.md#safety-checks) |
+| Settings files and `.mcp.json` with broken JSON | <Documented /> | The error gives the line and the column of the first syntax error. | [Settings](../configure/settings/index.md#where-settings-live), [MCP Runtime](../extend/mcp/runtime.md#errors) |
+| Git `PATH` for worktrees | <Gated /> | Git runs with only the absolute entries of `PATH` when Claude Code creates a worktree. Give a git filter or helper by its full path. | [Core Settings](../configure/settings/core.md#git-path-for-worktrees) |
 
 ### Tools, Hooks, and MCP
 
@@ -101,6 +105,8 @@ Source: the program: the Mod API type file (`schemas/claude-code.d.ts`) of `2.1.
 | `SendMessage` refusal | <Undocumented /> | It refuses to send to a session on another machine when this session signs in with an API key, an auth token, a profile, or a workload identity. | [Agent and Task Tools](../reference/tools/agents-and-tasks.md#errors) |
 | `Monitor` with only stderr output | <Documented /> | A watch that ends with no events, and whose command wrote to stderr, tells Claude so. | [Shell and Web Tools](../reference/tools/shell-and-web.md#how-it-works) |
 | Code Mode and agent teams | <Undocumented /> | Agent teams no longer block Code Mode. | [Gated and Other Tools](../reference/tools/gated-and-other.md#code-mode) |
+| Code Mode `$` helper | <Undocumented /> | The helper refuses some values with an error, and nothing runs. | [Gated and Other Tools](../reference/tools/gated-and-other.md#code-mode) |
+| Git commands in a worktree subagent | <Gated /> | A subagent isolated in a worktree cannot run git commands that rewrite shared branches or refs. A main session is not affected. | [Subagent Runtime](../extend/subagents/runtime.md#git-commands-in-a-worktree-subagent) |
 | Shell working directory | <Undocumented /> | A Bash command no longer runs in the launch folder when its working directory is gone. It fails with a message. | [Agent Loop](../how-it-works/agent-loop.md#the-tool-stage) |
 | Subagent output limit | <Undocumented /> | A subagent whose reply stops at the token limit is asked up to 3 times to answer again, more briefly. | [Subagent Runtime](../extend/subagents/runtime.md#limits-and-switches), [Agent Loop](../how-it-works/agent-loop.md#recovery-inside-the-loop) |
 | `decision: "block"` hook output | <Documented /> | It also blocks when `hookSpecificOutput` names a different event. Claude Code ignores that field and logs a warning. | [Hook Input and Output](../extend/hooks/input-and-output.md#decision-patterns) |
@@ -118,7 +124,7 @@ Source: the program: the Mod API type file (`schemas/claude-code.d.ts`) of `2.1.
 
 | Change | Status | What it means for you | Where to read more |
 | --- | --- | --- | --- |
-| `/login` and an unused API key | <Documented /> | `/login` says that requests still use the approved key. `/status` names an unused `ANTHROPIC_API_KEY`. | [Account and Access](../how-it-works/account-and-access.md#login-and-an-unused-api-key) |
+| `/login` and an unused API key | <Documented /> | `/login` says that requests still use the approved key. `/status` names an unused `ANTHROPIC_API_KEY`. Turning the key on in `/config` clears "Not logged in". | [Account and Access](../how-it-works/account-and-access.md#login-and-an-unused-api-key) |
 | Login code screen | <Documented /> | After you submit the code, the screen shows "Finishing sign-in…". | [Account and Access](../how-it-works/account-and-access.md#finishing-a-login) |
 | `/login` code prompt | <Documented /> | It refuses a web address, a `localhost` address, or a short number code, and stays open. The sign-in request also asks for the scope `user:privacy_consents:write`. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands) |
 | `claude auth logout` | <Undocumented /> | Claude Code asks again when the revoke request gets a server error or a network failure. | [Subcommands](../configure/cli/subcommands.md#errors) |
