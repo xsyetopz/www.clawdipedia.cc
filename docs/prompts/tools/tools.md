@@ -387,7 +387,7 @@ Switching with `path` also works when the session is already in a worktree (the 
 
 ### `ExitWorktree`
 
-Sent in full by default: ❌ No, deferred. Description: 1,923 characters. Schema: 481 characters.
+Sent in full by default: ❌ No, deferred. Description: 2,149 characters. Schema: 653 characters.
 
 ```text
 Exit a worktree session created by EnterWorktree and return the session to the original working directory.
@@ -410,8 +410,8 @@ If called outside an EnterWorktree session, the tool is a **no-op**: it reports 
 
 - `action` (required): `"keep"` or `"remove"`
   - `"keep"` — leave the worktree directory and branch intact on disk. Use this if the user wants to come back to the work later, or if there are changes to preserve.
-  - `"remove"` — delete the worktree directory and its branch. Use this for a clean exit when the work is done or abandoned.
-- `discard_changes` (optional, default false): only meaningful with `action: "remove"`. If the worktree has uncommitted files or commits not on the original branch, the tool will REFUSE to remove it unless this is set to `true`. If the tool returns an error listing changes, confirm with the user before re-invoking with `discard_changes: true`.
+  - `"remove"` — delete the worktree directory, and its branch too unless a hook made the worktree or git refuses the delete. Use this for a clean exit when the work is done or abandoned.
+- `discard_changes` (optional, default false): only meaningful with `action: "remove"`. If the worktree has uncommitted files or commits not on the original branch, the tool will REFUSE to remove it unless this is set to `true`. If the tool returns an error listing changes, confirm with the user before re-invoking with `discard_changes: true`. The tool also refuses while a task may be running in the worktree: wait for the task, or ask the user before stopping it, then call the tool again, or use `keep`.
 
 ## Behavior
 
@@ -427,7 +427,7 @@ If called outside an EnterWorktree session, the tool is a **no-op**: it reports 
   "type": "object",
   "properties": {
     "action": {
-      "description": "\"keep\" leaves the worktree and branch on disk; \"remove\" deletes both.",
+      "description": "\"keep\" leaves the worktree and branch on disk; \"remove\" deletes the worktree and, unless a hook made it or git refuses, its branch.",
       "type": "string",
       "enum": [
         "keep",
@@ -435,7 +435,7 @@ If called outside an EnterWorktree session, the tool is a **no-op**: it reports 
       ]
     },
     "discard_changes": {
-      "description": "Required true when action is \"remove\" and the worktree has uncommitted files or unmerged commits. The tool will refuse and list them otherwise.",
+      "description": "Required true when action is \"remove\" and the worktree has uncommitted files or unmerged commits. The tool will refuse and list them otherwise. It also removes the worktree under any task still running there, so set it only after the user has confirmed.",
       "type": "boolean"
     }
   },
@@ -476,7 +476,7 @@ Lists agents you can SendMessage to — in-process subagents you spawned, the te
 
 ### `Monitor`
 
-Sent in full by default: ❌ No, deferred. Description: 6,354 characters. Schema: 1,040 characters.
+Sent in full by default: ❌ No, deferred. Description: 6,357 characters. Schema: 1,040 characters.
 
 ```text
 Start a background monitor that streams events from a long-running script. Each stdout line is an event — you keep working and notifications arrive in the chat. Events arrive on their own schedule and are not replies from the user, even if one lands while you're waiting for the user to answer a question.
@@ -492,7 +492,7 @@ Your script's stdout is the event stream. Each line becomes a notification. Exit
   tail -f /var/log/app.log | grep --line-buffered "ERROR"
 
   # Each file change is an event
-  inotifywait -m --format '%e %f' /watched/dir
+  inotifywait -m -q --format '%e %f' /watched/dir
 
   # Poll GitHub for new PR comments and emit one line per new comment
   last=$(date -u +%Y-%m-%dT%H:%M:%SZ)
@@ -1103,7 +1103,7 @@ Search the web. Returns result blocks with titles and URLs. US-only.
 
 ### `Workflow`
 
-Sent in full by default: ✅ Yes. Description: 3,496 characters. Schema: 1,775 characters.
+Sent in full by default: ✅ Yes. Description: 3,496 characters. Schema: 2,092 characters.
 
 ```text
 Execute a workflow script that orchestrates multiple subagents deterministically. Workflows run in the background — this tool returns immediately with a task ID, and a <task-notification> arrives when the workflow completes. Use /workflows to watch live progress.
@@ -1173,7 +1173,7 @@ This session has the default workflow size guideline: medium — keep workflows 
       "type": "string"
     },
     "resumeFromRunId": {
-      "description": "Run ID of a prior Workflow invocation to resume from. Completed agent() calls with unchanged (prompt, opts) return their cached results instantly; only edited or new calls re-run. Same-session only. Stop the prior run first (TaskStop) before resuming.",
+      "description": "Run ID of a prior Workflow invocation to resume from. The cache is positional: agent() calls replay from cache up to the first call that failed, no longer matches the earlier run (edited, added, removed or reordered) or never started in it; that call and every call after it run again, even when their own (prompt, opts) are unchanged. A call a usage limit refused, or one still running when the run stopped, usually runs again without ending reuse: finished calls after it still come from cache. Same-session only. Stop the prior run first (TaskStop) before resuming.",
       "type": "string",
       "pattern": "^wf_[a-z0-9-]{6,}$"
     }

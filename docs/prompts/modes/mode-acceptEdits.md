@@ -15,9 +15,9 @@ Starts in `acceptEdits` permission mode. Run `claude --permission-mode acceptEdi
 | `system[2]` | 5,788 |
 | `messages[0].content[0]` | 592 |
 | `messages[0].content[1]` | 16 |
-| `messages[1].content[0]` | 9,094 |
+| `messages[1].content[0]` | 9,103 |
 | System blocks only | 5,928 |
-| Everything shown here | 15,920 |
+| Everything shown here | 15,929 |
 | Tools sent | 12 |
 
 Sizes count the text after the placeholders are in place. Each placeholder counts at its own length.

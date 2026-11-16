@@ -15,9 +15,9 @@ The prompt that a `Plan` subagent gets. The main agent calls the `Agent` tool wi
 | `system[2]` | 3,519 |
 | `messages[0].content[0]` | 592 |
 | `messages[0].content[1]` | 36 |
-| `messages[1].content[0]` | 7,412 |
+| `messages[1].content[0]` | 7,421 |
 | System blocks only | 3,680 |
-| Everything shown here | 12,010 |
+| Everything shown here | 12,019 |
 | Tools sent | 5 |
 
 Sizes count the text after the placeholders are in place. Each placeholder counts at its own length.
@@ -33,7 +33,7 @@ The text below is every part of the request that Claude Code builds before your 
 
 ```text
 === system[0] (no cache marker) ===
-x-anthropic-billing-header: cc_version=2.1.323.<build>; cc_entrypoint=sdk-cli; cc_is_subagent=true;
+x-anthropic-billing-header: cc_version=2.1.326.<build>; cc_entrypoint=sdk-cli; cc_is_subagent=true;
 
 === system[1] (cache marker: {"type":"ephemeral"}) ===
 You are a Claude agent, built on Anthropic's Claude Agent SDK.
@@ -146,7 +146,7 @@ TRIGGER — read FIRST, before you answer, run a command or open a file (already
 SKIP only when another provider is being worked on (overrides all triggers): OpenAI/GPT/Gemini/Llama/Mistral/Cohere/Ollama named in the query; OR `grep -rE 'openai|langchain_openai|google.generativeai|genai|mistralai|cohere|ollama'` over the project hits (run this grep FIRST if no provider named — don't Read the file; if nothing hits, load this skill).
 - workflow-authoring: Reference for writing a Workflow tool script (script API and gotchas, resume, quality patterns, worked examples). Load before authoring a script for a workflow the user already opted into; it does not itself authorize running one.
 - run: Launch and drive this project's app to see a change working. Use when asked to run, start, or screenshot the app, or to confirm a change works in the real app (not just tests). First looks for a project skill that already covers launching the app; otherwise falls back to built-in patterns per project type (CLI, server, TUI, Electron, browser-driven, library).
-- plugin-authoring: Make a mod: a change to Claude's own interface or behaviour, such as a panel or pane that stays beside the chat and updates, a band, status line, toast, slash command, or hook on tool calls. Use to make, change or debug a mod or its hooks module.
+- plugin-authoring: Make a mod: a change to Claude's own interface or behaviour, such as a theme, a panel or pane that stays beside the chat and updates, a band, status line, toast, slash command, or hook on tool calls. Use to make, change or debug a mod or its hooks module.
 - init: Initialize a new CLAUDE.md file with codebase documentation
 - security-review: Complete a security review of the pending changes on the current branch
 
@@ -164,8 +164,8 @@ Lines added: 56. Lines removed: 61. Size change: -3,910 characters.
 +++ subagent-plan
 @@ -1,64 +1,70 @@
  === system[0] (no cache marker) ===
--x-anthropic-billing-header: cc_version=2.1.323.<build>; cc_entrypoint=sdk-cli;
-+x-anthropic-billing-header: cc_version=2.1.323.<build>; cc_entrypoint=sdk-cli; cc_is_subagent=true;
+-x-anthropic-billing-header: cc_version=2.1.326.<build>; cc_entrypoint=sdk-cli;
++x-anthropic-billing-header: cc_version=2.1.326.<build>; cc_entrypoint=sdk-cli; cc_is_subagent=true;
 
  === system[1] (cache marker: {"type":"ephemeral"}) ===
  You are a Claude agent, built on Anthropic's Claude Agent SDK.

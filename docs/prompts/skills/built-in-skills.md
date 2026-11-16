@@ -101,7 +101,7 @@ Prompt: [Skill, /run](./skill-run.md).
 ### `plugin-authoring`
 
 ```text
-Make a mod: a change to Claude's own interface or behaviour, such as a panel or pane that stays beside the chat and updates, a band, status line, toast, slash command, or hook on tool calls. Use to make, change or debug a mod or its hooks module.
+Make a mod: a change to Claude's own interface or behaviour, such as a theme, a panel or pane that stays beside the chat and updates, a band, status line, toast, slash command, or hook on tool calls. Use to make, change or debug a mod or its hooks module.
 ```
 
 Prompt: [Skill, /plugin-authoring](./skill-plugin-authoring.md).
