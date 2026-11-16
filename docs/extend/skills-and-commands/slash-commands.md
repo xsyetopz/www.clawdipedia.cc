@@ -77,7 +77,7 @@ Each line is a separate command. The text after the name is the argument.
 | `/plugin` (aliases `/plugins`, `/marketplace`) `[subcommand]` | <Documented /> | Manages plugins. | Panel with argument completion. |
 | `/reload-plugins` `[--force]` | <Documented /> | Activates pending plugin changes in the current session. | Runs non-interactive too (since `2.1.260`). |
 | `/reload-skills` | <Documented /> | Loads skills added or changed on disk during this session. | Works in both modes. |
-| `/skills` | <Documented /> | Lists available skills. `Space` cycles the `skillOverrides` state and `Esc` saves it. | Panel. |
+| `/skills` | <Documented /> | Lists available skills. `Space` cycles the `skillOverrides` state and `Esc` saves it. | Panel. Since `2.1.326`, pressing Ctrl+C or Ctrl+D a second time saves the changes and closes the panel. After the first press, the panel title says "press Ctrl-C again to close", with the name of the key you pressed.[^skills-exit] |
 | `/skill-doctor` | <Documented /> | Shows which loaded skills are unused and cost context. | Panel (opens the `/plugin` Stats tab) and a text form. Needs feature-flag fetching. |
 | `/output-style` `[style]` | <Documented /> | Lists output styles or switches to one. | Text command. |
 | `/theme` | <Documented /> | Changes the theme. | Panel. |
@@ -296,3 +296,4 @@ Each row is a family of messages. The backticked text is the start that every me
 [^rewind-skip]: The program, `chunk-y9bdpp8r.js:22895-22920` and `chunk-3zn9cw12.js:3144`. The release notes say this applies on macOS, Linux, and WSL when the sandbox is on. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^status-features]: The program, `chunk-gn1ntjav.js:90-124`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^off-commands]: The program, `chunk-gn1ntjav.js:130-175`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^skills-exit]: The program, `chunk-9baz34m5.js:1047-1095` and `chunk-9baz34m5.js:1309-1312`, and `chunk-3h482j38.js:40-48` for the key name. The second press runs the same save as `Esc`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

@@ -159,6 +159,8 @@ flowchart TD
   F --> G["Ask for <code>userConfig</code> values"]
 ```
 
+Since `2.1.326`, a malformed display field, such as `author` or `homepage`, no longer stops an enabled plugin from loading. Claude Code ignores the field. The plugin loads with its hooks and MCP servers, and `/plugin` and `claude plugin list` show a note.[^display-field] See [Plugin Commands](cli.md#how-it-works) for the note.
+
 ## Related Pages
 
 - [Plugins](index.md) for the overview.
@@ -174,3 +176,4 @@ flowchart TD
 [^status-line]: The program, `chunk-3dhh2g49.js:255136`.
 [^v310]: [`2.1.310` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.310).
 [^icon]: The program, `chunk-xerchq1h.js@2908` and `chunk-xerchq1h.js@31921`.
+[^display-field]: The program, `chunk-4h798pp0.js:265352-265395` and `chunk-kek2xxjw.js:788`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

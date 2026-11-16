@@ -95,6 +95,12 @@ flowchart TD
   E --> F[Register skills, hooks, MCP, LSP, monitors]
 ```
 
+## Unsafe Paths and Links
+
+Since `2.1.326`, a plugin that you load from a folder skips a path or link that leads outside the plugin folder. Claude Code logs a warning that names the path, such as `Skipping ".lsp.json" for directory-loaded plugin ...: it resolves outside the plugin directory`. It does the same for an MCP source that climbs out of the folder, and for an MCPB source, which needs a download that the folder load does not do. `claude plugin validate` reports some unsafe paths and links.[^unsafe-paths]
+
+Since `2.1.326`, a session in a git worktree can skip the `extraKnownMarketplaces` from the worktree's own settings. A notice names the first skipped marketplace and the count of the others. It tells you to add the marketplace yourself, with `/plugin` or `claude plugin marketplace add <source>`.[^worktree-skip]
+
 ## Errors
 
 Each row is a family of messages. The backticked text is the start that every message in the family shares.
@@ -123,3 +129,5 @@ Each row is a family of messages. The backticked text is the start that every me
 [^zip]: The program.
 [^not-installed]: The program, `chunk-xvwfyath.js:21465`.
 [^lsp]: The program, `chunk-xvwfyath.js:19231`.
+[^unsafe-paths]: The program, `chunk-4h798pp0.js:44080-44106`, `chunk-4h798pp0.js:225540-225566`, and `chunk-4h798pp0.js:44324`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325) for the `validate` part, which the code lines do not show.
+[^worktree-skip]: The program, `chunk-hm39agsh.js:282-295`, `chunk-sahanck2.js:141`, and `chunk-y9bdpp8r.js:120238`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
