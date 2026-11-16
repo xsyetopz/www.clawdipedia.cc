@@ -11,7 +11,7 @@ A plugin ships the types of its noun in the `.d.ts` file that `types` names in `
 
 Return `{ refuse }` from `plugin.register` to keep a module out. `plugin.json` names the `types` file.
 
-Official page: [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.323 program (`schemas/claude-code.d.ts`).
+Official page: [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.326 program (`schemas/claude-code.d.ts`).
 
 ## Example
 
@@ -35,13 +35,13 @@ on("engine.create", async ($, e, next) => {
 | Item | Status | What it does | How it works | Where it can be used |
 | --- | --- | --- | --- | --- |
 | `$.plugin.name` | <Documented /> | The name from `plugin.json`. Debug-log and `$.ui.log` lines carry it. | Type `string`. | Anywhere in the module (a plain value). |
-| `$.plugin.root` | <Documented /> | The plugin's directory (the one holding `plugin.json`), absolute. | Type `string`. | Anywhere in the module (a plain value). |
+| `$.plugin.root` | <Documented /> | The plugin's directory (the one holding `.claude-plugin/plugin.json`), absolute. | Type `string`. | Anywhere in the module (a plain value). |
 
 ## Events
 
 | Item | Status | What it does | How it works | Where it can be used |
 | --- | --- | --- | --- | --- |
-| `plugin.register` | <Documented /> | Fires once for each hooks module about to join the chain, at load and at reload. Core allows by default. | Input `PluginRegisterInput`. Result `PluginRegisterResult`: `{ allow: true }` or `{ refuse }`. A refused module never joins. The engine skips a judge that fails, and the module joins. | Hook via `on('plugin.register', ...)`. |
+| `plugin.register` | <Documented /> | Fires once for each plugin about to load, with a hooks module or without one, at load and at reload. Core allows by default. | Input `PluginRegisterInput`. Result `PluginRegisterResult`: `{ allow: true }` or `{ refuse }`. A refused plugin never joins, and none of its other parts take effect: command hooks, MCP and LSP servers, skills, commands, agents, output styles, themes, monitors, settings, and `bin/` (a monitor armed before the refusal runs on). The engine skips a judge that fails, and the plugin joins. Since `2.1.326`, a hook narrows what loads: pass `provides` on with entries removed, and those parts stay out while the rest load (the program, `chunk-4h798pp0.js:238035`). | Hook via `on('plugin.register', ...)`. |
 | `engine.create` | <Documented /> | Runs while the engine builds `$`, once per load or reload of this plugin, before any other hook of it. `next(e)` resolves to `$` built so far. | Input `EngineCreateInput`. Result `EngineCreateResult`. A step may add nouns to `$` only when the hook names `engine.create`: a `*`, namespace, or negated hook only observes ([v2.1.323 release](https://github.com/anthropics/claude-code/releases/tag/v2.1.323)). If no hook names `engine.create`, `claude plugin validate` reports that the plugin never adds nouns (the program, `chunk-xq1041h8.js:43699`). Outside `user` it may also withhold nouns. If it replaces another plugin's noun, it fails and the plugin unloads. | Hook via `on('engine.create', ...)`. |
 
 ## Types
@@ -58,8 +58,10 @@ on("engine.create", async ($, e, next) => {
 | `InstructionFile` | <Documented /> | One instruction file behind the `claudeMd` block. | `path` (absolute), `kind`, `content` (comments and front matter already stripped), and `parent?` (the file whose `@` import brought this one). |
 | `InstructionFileKind` | <Documented /> | The tier of an instruction file. | One of the values of `INSTRUCTION_FILE_KINDS`. |
 | `PluginOptions` | <Documented /> | A plugin's options as `register(on, options)` gets them: the values of its `userConfig` fields, defaults filled in. | A read-only record of string, number, boolean, or string list. Stored in `pluginConfigs[<plugin>].options` of settings. |
-| `PluginRegisterInput` | <Documented /> | The input of `plugin.register`: one hooks module about to load. The type pins every field. | `name`, `tier` (never `core`), `root`, `version?`, `provenance` (`<name>@<marketplace>`, `<name>@inline` for `--plugin-dir`, `<name>@builtin`), and `uses`. |
-| `PluginRegisterResult` | <Documented /> | What a `plugin.register` hook returns. | `{ allow: true }` lets the module load. `{ refuse: reason }` stops it. The debug log names the plugin and the reason. |
+| `PluginRegisterInput` | <Documented /> | The input of `plugin.register`: one hooks module about to load. The type pins every field. | `name`, `tier` (never `core`), `root`, `version?`, `provenance` (`<name>@<marketplace>`, `<name>@inline` for `--plugin-dir`, `<name>@builtin`), and `uses`. Since `2.1.326` it also holds `provides` (`PluginProvides`), `unread` (the kinds whose list may be short because the host could not read something), and `requiredByOrganization?` (`true` where the app that started the session handed over the plugin by path and said its organization requires it; it gives the plugin no tier or permission). Every field is pinned but `provides`, which only narrows. |
+| `PluginProvides` | <Documented /> | Since `2.1.326`, what a plugin provides, kind by kind, as the host read it off the folder of the plugin: the lists that `claude plugin validate` prints. | Lists `modules`, `hooks`, `mcpServers`, `lspServers`, `monitors`, `skills`, `commands`, `agents`, `outputStyles`, `themes`, `workflows`, and `bin`. Text is as written, before `${}` expansion, with no env, headers, or option values. A `url`, and a `target` that is a URL, lose their login, query, and fragment. A list with an entry removed is an allowlist for its kind. A list that is not a subset of the one received is refused, and so is `themes` or `bin` narrowed. Settings are not listed. |
+| `PluginHookEntry` | <Documented /> | Since `2.1.326`, one settings hook that a plugin ships (`hooks.json` or the `hooks` of its manifest). | Fields `event`, `matcher?`, and `type`: `command` (`command`, `args?`), `http` (`url`), `prompt` or `agent` (`prompt`), or `mcp_tool` (`server`, `tool`). |
+| `PluginRegisterResult` | <Documented /> | What a `plugin.register` hook returns. | `{ allow: true }` lets the module load. `{ refuse: reason }` stops the whole plugin. The debug log names the plugin and the reason. |
 | `PluginRegisterUses` | <Documented /> | What a hooks module uses, as the host scanned its source. These are the lists `claude plugin validate` prints. | `events` (the patterns of the `on` calls), `calls` (`noun.method`), `env?` (names in `$.env.get` and `$.env.set`), `state?` (`{ plugin, key }`). A module that spells `on`, `$`, `$.env`, or a `$.state` reference in a non-literal way does not load. |
 | `PluginStamp` | <Documented /> | Whose element: the plugin whose hook drew it. The runtime stamps it. | Field `plugin`. Two plugins under one `hover.scope` string never share a group. |
 | `PluginState` | <Documented /> | The named values plugins keep in the session (`$.state`), by plugin name and key. Empty by default. | A plugin declares its keys by declaration merging. Example: `interface PluginState { swarm: { workers: Worker[] } }`. |

@@ -10,7 +10,7 @@ sidebar_position: 12
 
 Return `{ isOffered: false }` or `{ deny }` from a hook to turn something off. Hook `agent.spawn` to pick a model or refuse. Hook `agent.offer` to hide a type.
 
-Official pages: [Use the Mods API](https://code.claude.com/docs/en/plugins/mods/api), [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.323 program (`schemas/claude-code.d.ts`).
+Official pages: [Use the Mods API](https://code.claude.com/docs/en/plugins/mods/api), [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.326 program (`schemas/claude-code.d.ts`).
 "Run time" appears in a "Where it can be used" cell. It means in a hook, in a closure that a hook drew, or in a timer callback. It does not mean inside `register`.
 
 ## Example
@@ -30,6 +30,8 @@ on("agent.spawn", async ($, e, next) =>
 | `$.agent.spawn` | <Documented /> | Spawns a subagent. It is the event `agent.spawn`, the same call the engine makes when the Agent tool starts one. | `(input: AgentSpawnArgs) => Promise<AgentSpawnResult>`. Starts a subagent in the background and resolves `{ model, agentId }` or `{ deny }`. | Run time. |
 | `$.agent.list` | <Documented /> | Returns the agents of the session so far, subagents and teammates, whoever spawned them. | `() => Promise<AgentInfo[]>`. One entry for each agent until the engine drops its task. The list omits a workflow's agents. | Run time. |
 | `$.agent.register` | <Documented /> | Defines an agent type, named `<plugin>:<name>`, that the Agent tool dispatches from the next turn on. | `(spec: AgentSpec) => Promise<...>`. Takes the same fields as an agent file. A second call with the same name replaces the first. Rejects on an invalid spec. | After the session binds at `session.start` (rejects before). |
+| `$.agent.call` | <Documented /> | Since `2.1.326`, runs a tool as the own call of an agent. It is the event `agent.call`, and `tool.call` runs beneath it in the loop of that agent. `$.tool.call` is unchanged. | `(args: AgentCallArgs, options?: AgentCallOptions) => Promise<...>`. `args` holds `tool`, `input`, and `agentId` (absent: the main conversation). The call has the tools, folder, mode, and rules of the agent. It meets the hooks, the dialog, and the classifier of auto mode as a call of the model does. Nothing joins the conversation of the agent. Resolves the tool's result, or `{ deny }` for a refusal, a tool the agent lacks, an agent the session cannot run from, or a cut by `options.signal`. Rejects on a deny from an `agent.call` hook. `Workflow` is refused (the program, `chunk-4h798pp0.js:240184`, `chunk-c6j0a43h.js:1218`). | Run time. |
+| `$.agent.limits` | <Documented /> | Since `2.1.326`, returns the bounds the agents of the session run under: how many may run at once, how deep they may nest, and whether they may run in the background. | `() => Promise<AgentLimits>`. Resolves `{ concurrent, depth, isBackgroundEnabled }`, read at each call and the same for every plugin (the program, `chunk-4h798pp0.js:220850`). `concurrent` follows `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`, 20 unless set. `depth` follows `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH`. | Run time. |
 
 ## Engine Events
 
@@ -43,6 +45,8 @@ on("agent.spawn", async ($, e, next) =>
 | Item | Status | What it does | How it works | Where it can be used |
 | --- | --- | --- | --- | --- |
 | `agent.list` | <Documented /> | The argument of `$.agent.list()`. | Input `NoArgs`. Value `AgentInfo[]`. A hook above the caller returns `next(e)`, `{ deny: reason }`, or `{ value }`. | `on('agent.list', ...)` |
+| `agent.call` | <Documented /> | `$.agent.call(args, options)`. Since `2.1.326`, a hook above the caller reads the abort signal of the call as `next.signal`. | Input `AgentCallArgs`. Value `ToolCallResult`. | `on('agent.call', ...)` |
+| `agent.limits` | <Documented /> | `$.agent.limits()` | Input `NoArgs`. Value `AgentLimits`. | `on('agent.limits', ...)` |
 | `agent.register` | <Documented /> | The argument of `$.agent.register(spec)`. A hook above can rewrite any of it, but the type stays the caller's. | Input `AgentSpec`. Value `{ agent: string }`. | `on('agent.register', ...)` |
 
 ## Listing Cost of an Agent
@@ -71,6 +75,14 @@ A `agent.offer` hook that returns `{ isOffered: false }` hides the type from the
 | `AgentInfo.type` | <Documented /> | The agent type it was spawned as (`general-purpose`, `Explore`), or `teammate`. | `string`. |
 | `AgentInfo.status` | <Documented /> | Where its loop stands now. | `AgentStatus`. |
 | `AgentInfo.parentId` | <Documented /> | The id of the agent whose loop spawned it. | `string`, optional. Absent when the main loop did. |
+| `AgentInfo.kind` | <Documented /> | Since `2.1.326`, which kind of task the engine keeps it as. | `'local_agent'` for every subagent, whatever its `type`, or `'in_process_teammate'` (the program, `chunk-4h798pp0.js:220962`). |
+| `AgentInfo.taskStatus` | <Documented /> | Since `2.1.326`, the own status of the task, as the engine stores it, before `status` tells `waiting` and `idle` apart. | `'pending' \| 'running' \| 'completed' \| 'failed' \| 'killed' \| 'paused'`. A subagent that ended its turn is `completed` here. A teammate between turns is `running`. |
+| `AgentInfo.label`, `startTime`, `cwd` | <Documented /> | Since `2.1.326`, what the agent is doing, when it started, and the folder it works in. | `label` is the latest progress summary as stored, else `description`. `startTime` is in milliseconds since the epoch. `cwd` is the own folder of the agent (a worktree), else the folder of the session. |
+| `AgentInfo.model`, `effort`, `contextWindowSize` | <Documented /> | Since `2.1.326`, the model the agent runs on, the effort set for it, and the context window of that model in tokens. | All optional. `model` is absent where the engine has none, such as a teammate in a pane of its own. `effort` is a level or a number as written. A request may carry less (`lastRequest`). |
+| `AgentInfo.tokenCount`, `tokenSamples` | <Documented /> | Since `2.1.326`, the tokens the agent has used, and its last 16 readings. | `tokenCount` is the latest request's input and all its output, 0 before the first reading. `tokenSamples` runs oldest first, about five seconds apart, and the last one is `tokenCount`. They start over when the row of the agent goes. |
+| `AgentInfo.lastRequest` | <Documented /> | Since `2.1.326`, the last request of the loop that the API began to answer. | `AgentRequest`, optional. Fields `at` (the start of the request, in `$.clock.now()` milliseconds), `model`, `effort?`, and `cacheTtl?` (`'5m'` or `'1h'`). Absent before the first request and for a teammate in a pane of its own. |
+| `AgentInfo.usage`, `cost` | <Documented /> | Since `2.1.326`, the tokens of the own requests of the agent that `/cost` counts, one entry for each model that answered, and the cost `/cost` credited for them. | `usage` is `TurnUsage[]`, absent until `/cost` counts a request. `cost` is `SessionCost`, a part of the cost of `$.session.usage()`, so an estimate. `cost` is absent for a teammate in a pane of its own. |
+| `AgentInfo.hasRow` | <Documented /> | Since `2.1.326`, whether the agent list at a glance holds a row for the agent. | `boolean`. False where the layout draws no agent rows. A finished subagent keeps an undrawn row until the engine drops its task. |
 | `AgentInfo.spawnedBy` | <Documented /> | The plugin whose `$.agent.spawn` (or Agent `$.tool.call`) started it. | `string`, optional. Absent when the model or the person did. |
 | `AgentInfo.name` | <Documented /> | What SendMessage addresses it by, when it has one. | `string`, optional. Two agents may hold one name. `id` tells them apart. |
 
@@ -86,7 +98,7 @@ A `agent.offer` hook that returns `{ isOffered: false }` hides the type from the
 
 ### Spawn Types
 
-`AgentSpawnArgs` is the input of the call: the `prompt` field of `AgentSpawnInput` plus optional `description`, `subagentType`, `model`, `name`, and `cwd`.
+`AgentSpawnArgs` is the input of the call: the `prompt` field of `AgentSpawnInput` plus optional `description`, `subagentType`, `model`, `name`, `cwd`, and, since `2.1.326`, `parentAgentId`.
 A hook may rewrite the content keys of `AgentSpawnInput`. The type pins every other key.
 
 | Item | Status | What it is for | Shape and limits |
@@ -95,6 +107,7 @@ A hook may rewrite the content keys of `AgentSpawnInput`. The type pins every ot
 | `AgentSpawnInput.prompt` | <Documented /> | The task the subagent gets. A rewrite is the prompt it runs with. | `string`. On a workflow run that hides its script, it is a placeholder. The engine does not apply a rewrite. |
 | `AgentSpawnInput.description` | <Documented /> | The short description of the task. A rewrite is what the task shows as. | `string`. |
 | `AgentSpawnInput.subagentType` | <Documented /> | The resolved agent type (`general-purpose`, `Explore`, a plugin's agent, `fork`). | `string`. A name that matches no agent refuses the spawn. |
+| `AgentSpawnInput.parentAgentId` | <Documented /> | Since `2.1.326`, the agent that the spawn is made under, when a plugin gives it to `$.agent.spawn`. Left out, the spawn is the own spawn of the main loop. | `string`, optional. Names a running or resting agent of this session. The spawn acts as the own spawn of that agent: with `subagentType: "fork"` it copies the conversation, prompt, tools, and model of the agent. A child is one level deeper, shows that agent as `parentId` in `$.agent.list()`, stops with it, and uses its folder and permission mode. The spawn takes no turn of the agent and writes nothing to its conversation. An id the session cannot read or run from answers `{ deny }`, and nothing falls back to the main loop (the program, `chunk-4h798pp0.js:236187`). |
 | `AgentSpawnInput.provider` | <Documented /> | Who provides this agent. Pinned. | `Origin`. |
 | `AgentSpawnInput.model` | <Documented /> | The Agent tool's `model` parameter as given, an alias (`haiku`) or a full id. | `string`, optional. A hook sets it to pick the model. Forks inherit the model, so the engine ignores it for them. |
 | `AgentSpawnInput.parentModel` | <Documented /> | The parent's effective model, what `inherit` resolves to. Pinned. | `string`. |

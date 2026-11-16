@@ -61,8 +61,8 @@ These sources go in `extraKnownMarketplaces`, `strictKnownMarketplaces`, and `bl
 
 | Source | Status | Fields | How It Works |
 | --- | --- | --- | --- |
-| `github` | <Documented /> | `repo`, `ref`, `path`, `sparsePaths` | The form `owner/*` works only in policy lists. |
-| `git` | <Documented /> | `url`, `ref`, `path`, `sparsePaths` | Claude Code accepts `skipLfs` and ignores it. |
+| `github` | <Documented /> | `repo`, `ref`, `path`, `sparsePaths` | The form `owner/*` works only in policy lists. Since `2.1.326`, `ref` takes a branch, a tag, or the full ID of a commit (40 or 64 lowercase hex digits). A full commit ID holds the marketplace at that commit: refreshes and auto-updates do not move it, and a branch or tag of the repository must hold the commit. A client before `2.1.326` cannot clone such a pin, so a marketplace pinned this way stops loading there (`325:123`; the program, `chunk-m33vdkhs.js:3554`). |
+| `git` | <Documented /> | `url`, `ref`, `path`, `sparsePaths` | Claude Code accepts `skipLfs` and ignores it. `ref` takes the same values as for `github`. |
 | `url` | <Documented /> | `url`, `headers`, `headersHelper` | Gets only the JSON file, so plugin entries cannot use relative sources. |
 | `file`, `directory` | <Documented /> | `path` | Read in place. |
 | `settings` | <Documented /> | `name`, `plugins`, `owner` | An inline catalog in `extraKnownMarketplaces`. Entries need remote sources. |
@@ -72,11 +72,13 @@ These sources go in `extraKnownMarketplaces`, `strictKnownMarketplaces`, and `bl
 
 ## Plugin Digests
 
+Since `2.1.326`, the program deprecates `pluginDigests` and ignores it. Settings that hold it still load. A plugin takes the organization tier when managed settings enable it, declare its marketplace with a remote source, and list it in `prependPlugins` or `appendPlugins` (the program, `chunk-m33vdkhs.js:8108`). The folder of the plugin must be the copy that its install record holds. When the record holds no hash, or holds another one, the plugin does not load, and the warning says "its install record holds no hash" or "its folder is not the copy its install record holds" (the program, `chunk-4h798pp0.js:56283`). The rest of this section describes `2.1.323`.
+
 The `pluginDigests` field sits in an entry of `extraKnownMarketplaces` (and its alias `additionalMarketplaces`). The settings schema marks it as managed settings only. Source: the settings schema and the program (`chunk-92tthkz2.js:148`, `chunk-2x9ma4k7.js:51961`).
 
 | Field | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
-| `pluginDigests` | <Documented /> <ManagedOnly /> | Lists, by plugin name, the digests of the releases of a plugin that your organization delivers with its own tier. | Type: object of arrays of strings. A plugin that is enabled and listed in `prependPlugins` or `appendPlugins` loads its hooks module only from a folder that proves one of its digests. The plugin then takes its place in that tier. Any other copy does not load. |
+| `pluginDigests` | <Documented /> <Deprecated note="Ignored since 2.1.326" /> <ManagedOnly /> | Lists, by plugin name, the digests of the releases of a plugin that your organization delivers with its own tier. | Type: object of arrays of strings. A plugin that is enabled and listed in `prependPlugins` or `appendPlugins` loads its hooks module only from a folder that proves one of its digests. The plugin then takes its place in that tier. Any other copy does not load. |
 
 - A digest is `sha256-` and the base64 SHA-256 of the folder. The hash covers every regular file, in UTF-16 code unit order of its path. For each file, the hash takes `f PATH`, a NUL byte, the byte length, a NUL byte, and the bytes. Paths use `/`. At the root, the hash leaves out `.git`, `.in_use`, `.orphaned_at`, `.claude-plugin-link`, and `.links_materialized`.
 - The plugin keeps its manifest at `.claude-plugin/plugin.json` and names one module in `hooks/hooks.json`.

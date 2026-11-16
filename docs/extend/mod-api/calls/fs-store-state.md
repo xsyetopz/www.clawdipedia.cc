@@ -28,7 +28,7 @@ on("turn.complete", async ($, e, next) => {
 
 | Item | Status | What it does | How it works | Where it can be used |
 | --- | --- | --- | --- | --- |
-| `$.fs.read` | <Documented /> | Reads a file and returns its text. With `{ as: "bytes" }` it returns the bytes as `{ base64 }`. | Three call forms. Rejects when the file is missing or over 4 MiB. `options.as` is `"text"` (default) or `"bytes"`. | Run time. |
+| `$.fs.read` | <Documented /> | Reads a file and returns its text. With `{ as: "bytes" }` it returns the bytes as `{ base64 }`. | Three call forms. Rejects when the file is missing or the answer is over 4 MiB. `options.as` is `"text"` (default) or `"bytes"`. Since `2.1.326`, `options.offset` (bytes from the start, 0 by default) and `options.length` (at most 4 MiB) read a range of bytes of a file; a range on a pipe, a socket, a device, or a directory rejects. A text range that cuts a character gives U+FFFD at that edge. | Run time. |
 | `$.fs.write` | <Documented /> | Writes `text` to a file, creating it and its directories as needed. | `(path, text) => Promise<void>`. `path` is relative to the working directory, or absolute. `text` is the whole new content. | Run time. |
 | `$.fs.list` | <Documented /> | Lists a directory: `{ name, kind, size, mtimeMs, isLink }` for each entry. | `(path?) => Promise<FsEntry[]>`. A symbolic link is `other` with `isLink`. | Run time. |
 | `$.fs.exists` | <Documented /> | Returns whether the path exists. | `(path) => Promise<boolean>`. Rejects only for a network location. | Run time. |
@@ -59,7 +59,7 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 
 | Item | Status | The argument | Input and value |
 | --- | --- | --- | --- |
-| `fs.read` | <Documented /> | `$.fs.read(path, { as })`. `as` is `text` unless the caller asked for `bytes`. | Input `{ path: string, as: FsReadAs }`. Value `string \| FsBytes`. |
+| `fs.read` | <Documented /> | `$.fs.read(path, { as })`. `as` is `text` unless the caller asked for `bytes`. | Input `{ path: string, as?: FsReadAs, offset?: number, length?: number }`. Value `string \| FsBytes`. |
 | `fs.write` | <Documented /> | `$.fs.write(path, text)` | Input `{ path: string, text: string }`. Value `void`. |
 | `fs.list` | <Documented /> | `$.fs.list(path)` | Input `{ path: string }`. Value `FsEntry[]`. |
 | `fs.exists` | <Documented /> | `$.fs.exists(path)` | Input `{ path: string }`. Value `boolean`. |

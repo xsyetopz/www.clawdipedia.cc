@@ -88,6 +88,12 @@ flowchart TD
   E --> F["Next session or <code>/reload-plugins</code>"]
 ```
 
+Since `2.1.326`, `claude plugin eval --output-dir ''` stops with "Error: --output-dir was given an empty path; pass a directory, or omit it to use the default results directory" (the program, `chunk-5w1qg79z.js:13383`).
+
+Since `2.1.326`, a failed HTTPS clone says that Claude Code runs the clone with terminal prompts and askpass programs turned off and tells credential helpers not to prompt, so git needs a credential it can get without asking you, such as one a credential helper already holds (the program, `chunk-4h798pp0.js:252421`).
+
+Since `2.1.326`, the folder where `.mcpb` bundles are unpacked is `<config>/plugins/mcpb`, and the environment variable `CLAUDE_CODE_PLUGIN_MCPB_DIR` replaces it (the program, `chunk-nhfp95ss.js:160-168`).
+
 ## Errors
 
 Each row is a family of messages. The backticked text is the start that every message in the family shares.

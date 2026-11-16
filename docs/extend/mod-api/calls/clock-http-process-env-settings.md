@@ -1,16 +1,16 @@
 ---
 title: Clock, HTTP, Process, Env, and Settings
-description: The five $ nouns that reach the machine - time and timers, web requests, commands, environment variables, and merged settings.
+description: The $ nouns that reach the machine - time and timers, web requests, commands, environment variables, and merged settings.
 sidebar_position: 14
 ---
 
-These five nouns reach the machine: `$.clock` for time and timers, `$.http` for web requests, `$.process` for commands, `$.env` for environment variables, and `$.settings` for the merged settings.
+These nouns reach the machine: `$.clock` for time and timers, `$.http` for web requests, `$.process` for commands, `$.env` for environment variables, and `$.settings` for the merged settings. Since `2.1.326`, `$.wasm` compiles WebAssembly in the environment of the module.
 `$.process` works in the CLI only.
 `$.settings` can only read.
 
 A policy can refuse a call. For example, the organization's web-fetch policy can refuse `$.http.fetch`.
 
-Official pages: [Use the Mods API](https://code.claude.com/docs/en/plugins/mods/api), [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.323 program (`schemas/claude-code.d.ts`).
+Official pages: [Use the Mods API](https://code.claude.com/docs/en/plugins/mods/api), [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.326 program (`schemas/claude-code.d.ts`).
 "Run time" appears in a "Where it can be used" cell. It means in a hook, in a closure that a hook drew, or in a timer callback. It does not mean inside `register`.
 
 ## Example
@@ -41,8 +41,10 @@ on("session.start", async ($, e, next) => {
 | `$.http.fetch` | <Documented /> | Fetches `url` through the host, never the plugin's own network. Resolves `{ status, ok, headers, text }` once the host reads the body. | `(url, init?) => Promise<HttpResponse>`. Fetches an http or https URL. The organization's web-fetch policy can refuse it. `init.auth` takes a handle from [`$.session.authorize()`](session.md). The engine uses it only on https to `api.anthropic.com`. | Run time. |
 | `$.process.run` | <Documented /> | Runs a command on the host by its argument list (no shell). Resolves `{ exitCode, stdout, stderr }` once it exits, with any exit code. | `(argv, init?) => Promise<ProcessRunResult>`. Timeout 30 seconds by default, 10 minutes at most. The call cuts output at 4,194,304 bytes. | CLI only. |
 | `$.process.spawn` | <Documented /> | Starts a command on the host by its argument list (no shell) and streams what it writes, then how it ended. | `(request) => HookStream`. Leaving the loop, `next.signal`, or an unload kills the child. | CLI only. |
+| `$.process.hookEnv` | <Documented /> | Since `2.1.326`, returns the variables that name the session and this plugin, as its command hook gets them, to pass as the `env` of a child. `run` and `spawn` set none of them. | `() => Promise<Record<string, string>>`. Holds `CLAUDECODE`, `CLAUDE_CODE_SESSION_ID`, `CLAUDE_CODE_CHILD_SESSION`, `CLAUDE_CODE_SESSION_ATTENDED`, `CLAUDE_PID`, `CLAUDE_PROJECT_DIR`, `CLAUDE_PLUGIN_ROOT`, `CLAUDE_PLUGIN_DATA`, and `TRACEPARENT` while a trace passes on. The call makes the data folder of the plugin, and rejects when it cannot (the program, `chunk-4h798pp0.js:237453`). | CLI only. |
 | `$.env.get` | <Documented /> | Resolves the value of a variable, or `undefined` when unset. | `(name) => Promise<string \| undefined>`. `name` must be a string literal. `claude plugin validate` lists the names your module reads. | The name must be a literal in the module source. |
 | `$.env.set` | <Documented /> | Sets the variable for this process and everything it starts later, or unsets it when `value` is `undefined`. | `(name, value) => Promise<EnvSetResult>`. `name` must be a string literal. Resolves `{}` or `{ deny }`. | The name must be a literal in the module source. |
+| `$.wasm.compile` | <Documented /> | Since `2.1.326`, compiles a WebAssembly binary and resolves with its `WebAssembly.Module`, to instantiate with the standard API. A module that calls `compile` has a `WebAssembly` global, the standard API less every other way to compile. Any other module has none. | `(source: string \| ArrayBuffer \| ArrayBufferView) => Promise<WebAssembly.Module>`. `source` is a string literal that names a `.wasm` file of the plugin, relative to the calling file, or bytes made at run time. Either may hold 64 MiB. A path that is no literal does not load. The engine supplies no imports (no WASI), and nothing caps memory, so set `maximum`. A hook above reads the bytes, replaces them, or refuses (`WasmCompileInput`). Rejects with a `WebAssembly.CompileError` for bytes that are no module, for a module that defines or imports a shared memory, and on the hosted server, which has no WebAssembly. Nothing stops a loop that stays inside WebAssembly, so have long code call an import that throws past a deadline (the program, `chunk-4h798pp0.js:240496`, `chunk-qg227pzf.js:2548`). | The path must be a literal in the module source. `claude plugin validate` lists each file with its size, SHA-256, imports, and exports. |
 | `$.settings.read` | <Documented /> | Resolves the settings merged over every source, one source's settings as loaded (`{ source }`), or the value of one top-level key (`{ key }`, with an optional `source`), `undefined` when the settings hold none. | `(args?: { source? } \| { key, source? }) => Promise<Settings \| unknown>`. Returns a snapshot of plain data. A read of one key is the read of the merged object, projected, and raises no event of its own. With no hook, the merge takes a scalar from the last source that has it, joins lists, and merges objects. A `settings.read` hook gets each settings layer (`layers`) and rewrites the merged settings (new in 2.1.304). | Run time. |
 
 ## Events Raised by These Calls
@@ -58,9 +60,11 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 | `http.fetch` | <Documented /> | `$.http.fetch(url, init)` | Input `{ url: string, init?: HttpInit }`. Value `HttpResponse`. Since `2.1.321`, a request of the engine itself, such as a model request, also raises this event, with `next.origin.plugin` set to `"engine"`. For such a request, `init.body` can be `{ base64 }`, `init.compress` can be set, and the answer can carry `isStreaming` and `sendIndex`. A plugin's own `$.http.fetch` cannot pass these (see Errors below). Source: the program (`chunk-2x9ma4k7.js:4212439`, `chunk-2x9ma4k7.js:4214844`) and the `http.fetch` types of the type file. |
 | `process.run` | <Documented /> | `$.process.run(argv, init)` | Input `{ argv: readonly string[], init?: ProcessRunInit }`. Value `ProcessRunResult`. |
 | `process.spawn` | <Documented /> | `$.process.spawn(request)`. It streams. `{ deny }` kills a running child. | Input `ProcessSpawnRequest`. Value `ProcessSpawnResult`. |
+| `process.hookEnv` | <Documented /> | `$.process.hookEnv()` | Input `NoArgs`. Value `Record<string, string>`. |
 | `settings.read` | <Documented /> | `$.settings.read({ source })`, `$.settings.read()` | Input `SettingsReadArgs`. Value `Settings`. Since 2.1.304 the hook also gets each settings layer (`layers`) and rewrites the merged settings. A managed mod can use this to make an organization's setting a ceiling, including `cleanupPeriodDays`, which the retention sweep uses. Each layer is `{ source, settings }`, lowest precedence first. `source` is a settings source or `plugin`. A source with no settings, or one the engine bars from the read, is left out. |
 | `env.get` | <Documented /> | `$.env.get(name)`. The type pins `name`. | Input `{ name: string }`. Value `string \| undefined`. |
 | `env.set` | <Documented /> | `$.env.set(name, value)`. The type pins `name`. No `value` unsets. | Input `{ name: string, value?: string }`. Value `EnvSetResult`. |
+| `wasm.compile` | <Documented /> | `$.wasm.compile(source)` | Input `WasmCompileInput`. Value `WasmBytes`. |
 
 ## Errors
 
