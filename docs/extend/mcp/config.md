@@ -4,12 +4,9 @@ description: The .mcp.json shape, every server option for each transport, env va
 sidebar_position: 2
 ---
 
-An MCP server is a program that gives Claude new tools.
-You write its config in `.mcp.json` or in `~/.claude.json`.
-Each transport takes its own options, and values can use `${VAR}` expansion.
-For example, `{ "mcpServers": { "files": { "command": "bunx", "args": ["server"] } } }` starts a local server.
+An MCP server is a program that gives Claude new tools. You write its config in `.mcp.json` or in `~/.claude.json`. Each transport takes its own options, and values can use `${VAR}` expansion. For example, `{ "mcpServers": { "files": { "command": "bunx", "args": ["server"] } } }` starts a local server.
 
-Edit the file, or use `claude mcp add` and `add-json`. To turn a server off, remove the entry or use `/mcp`. See [MCP Settings and Policy](settings.md). Servers live in `.mcp.json`, `~/.claude.json`, a plugin `.mcp.json`, or `mcpServers` in `plugin.json`.
+To add a server, edit the file, or use `claude mcp add` and `add-json`. To turn a server off, remove the entry or use `/mcp`. See [MCP Settings and Policy](settings.md). Servers live in `.mcp.json`, `~/.claude.json`, a plugin `.mcp.json`, or `mcpServers` in `plugin.json`.
 
 ## File Shape
 
@@ -27,11 +24,11 @@ A plugin can use the same shape in its `.mcp.json` or inline in `plugin.json`.
 
 ## Server Options
 
-Source: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/mcp) for rows marked <Documented />. For the others, the program (its server schema).
+Official page: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/mcp).[^server-options]
 
 | Option | Status | What It Does | How It Works | Used By |
 | --- | --- | --- | --- | --- |
-| `type` | <Documented /> | Picks the transport. | `stdio`, `sse`, `http`, `ws`. `streamable-http` is an alias of `http`. No `type` means `stdio`, A `url` without `type` is an error, and Claude Code skips the entry. | All |
+| `type` | <Documented /> | Picks the transport. | `stdio`, `sse`, `http`, `ws`. `streamable-http` is an alias of `http`. No `type` means `stdio`. A `url` without `type` is an error, and Claude Code skips the entry. | All |
 | `command` | <Documented /> | The program to run. | Required, at least one character. Claude Code expands `${VAR}`. | `stdio` |
 | `args` | <Documented /> | Arguments for the program. | Array of strings. Default `[]`. Claude Code expands `${VAR}`. | `stdio` |
 | `env` | <Documented /> | Env vars for the process. | Map of strings. Claude Code expands `${VAR}`. | `stdio` |
@@ -50,7 +47,7 @@ Source: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/m
 | `request_timeout_ms` | <Undocumented /> | A wire hint for a per-request timeout. | Claude Code folds it into `timeout` at parse time when `timeout` is missing. It caps the value at 300000. | `sse`, `http` |
 | `toolPermissions` | <Undocumented /> | A per-tool policy map. | Tool name to `allow`, `ask`, or `blocked`. `ask` prompts on each call. `blocked` hides the tool. | `sse`, `http`, `claudeai-proxy` |
 | `disableAutoBackground` | <Undocumented /> | Never moves calls to the background. | `true` keeps the call in the foreground. Read when the server is first registered. | `sdk` |
-| `autoModeVerdictTools` | <Undocumented /> | Names the tools whose calls can carry an auto mode verdict. | Array of at most 64 tool names, each at most 128 characters, as the server lists them. A longer list or a longer name leaves the whole list out. For a call of a listed tool that the server-side auto mode classifier allowed, the program can set `_meta["claudecode/autoModeVerdict"]` to `allowed_by_server` on the call. It sets nothing if the call args differ from the model input, a hook made the call, or an agent other than the main conversation made it. Read when the server is first registered. | `sdk` |
+| `autoModeVerdictTools` | <Undocumented /> | Names the tools whose calls can carry an auto mode verdict. | Array of at most 64 tool names, each at most 128 characters, as the server lists them. A longer list or a longer name leaves the whole list out. For a call of a listed tool that the server-side auto mode classifier allowed, Claude Code can set `_meta["claudecode/autoModeVerdict"]` to `allowed_by_server` on the call. It sets nothing if the call args differ from the model input, a hook made the call, or an agent other than the main conversation made it. Read when the server is first registered. | `sdk` |
 | `ideName`, `ideRunningInWindows`, `authToken` | <Undocumented /> | Data of an IDE server. | `authToken` exists only on `ws-ide`. | `sse-ide`, `ws-ide` |
 | `cachedInitResponse`, `cachedDiscoverResponse`, `discoverSupport`, `eligible`, `ineligibleReason` | <Undocumented /> | Cached connector data. | `discoverSupport` is `supported`, `legacy`, or `unknown`. Claude Code removes these from the shown config. | `claudeai-proxy` |
 
@@ -73,7 +70,7 @@ Values in `command`, `args`, `env`, `url`, and `headers` can read env vars.
 | Rule | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
 | Server name characters | <Documented /> | Limits the name. | Letters, numbers, hyphens, and underscores. |
-| Blocked names | <Undocumented /> | Rejects unsafe keys. | The program also rejects `constructor`, `prototype`, `__proto__`, `__defineGetter__`, `__defineSetter__`, `__lookupGetter__`, `__lookupSetter__`. |
+| Blocked names | <Undocumented /> | Rejects unsafe keys. | Claude Code also rejects `constructor`, `prototype`, `__proto__`, `__defineGetter__`, `__defineSetter__`, `__lookupGetter__`, `__lookupSetter__`. |
 | Reserved names | <Documented /> | Protects built-in servers. | `workspace`, `claude-in-chrome`, `computer-use`, `Claude Preview`, `Claude Browser`. Claude Code skips such a server and warns. |
 | `anthropic-skills` | <Documented /> | A reserved prompt source. | Claude Code does not list prompts of a server with this name. Its tools still work. |
 
@@ -84,7 +81,7 @@ Values in `command`, `args`, `env`, `url`, and `headers` can read env vars.
 - Scopes match by name. Plugins and connectors match by endpoint.
 - Two URLs are the same endpoint when they differ only in scheme or host case, a default port, or a trailing slash.
 - The same name with different endpoints in two scopes gives a warning. Claude Code stores OAuth sign-ins for each endpoint.
-- Since `2.1.305`, a server passed by a cloud session or by the SDK's `setMcpServers` is no longer replaced later in the session by a same-named server from your own settings ([v2.1.305 release](https://github.com/anthropics/claude-code/releases/tag/v2.1.305)).
+- Since `2.1.305`, a server passed by a cloud session or by the SDK's `setMcpServers` is no longer replaced later in the session by a same-named server from your own settings.[^v305]
 
 ## Example
 
@@ -120,8 +117,7 @@ flowchart TD
 
 ## Exact Fields
 
-The exact fields are in `https://clawdipedia.cc/schemas/claude-code-mcp.json`, which comes from the program's own validator for `.mcp.json`.
-It lists every field of this release. Build on the fields it names. Look up each one there before you rely on it.
+The exact fields are in `https://clawdipedia.cc/schemas/claude-code-mcp.json`, which comes from the validator that Claude Code uses for `.mcp.json`. It lists every field of this release. Look up a field there before you rely on it.[^validator]
 
 ## Related Pages
 
@@ -129,3 +125,9 @@ It lists every field of this release. Build on the fields it names. Look up each
 - [MCP Commands](cli.md) for `claude mcp add` and `add-json`
 - [MCP Settings and Policy](settings.md)
 - [Plugin Manifest](../plugins/manifest.md) for `mcpServers` in a plugin
+
+## Sources
+
+[^server-options]: The program server schema, for the rows marked <Undocumented />.
+[^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
+[^validator]: The program.

@@ -4,15 +4,13 @@ description: What MCP is, the transports and scopes Claude Code supports, and a 
 sidebar_position: 1
 ---
 
-MCP is the Model Context Protocol, an open standard that lets Claude Code use tools, files, and prompts from other programs.
-A program that offers them is an MCP server.
-For example, `claude mcp add --transport http notion https://mcp.notion.com/mcp` adds a server over HTTP.
-This page covers the big picture. The other pages list every option.
+MCP is the Model Context Protocol, an open standard that lets Claude Code use tools, files, and prompts from other programs. A program that offers them is an MCP server. Add a server to give Claude new tools. For example, `claude mcp add --transport http notion https://mcp.notion.com/mcp` adds a server over HTTP.
+
+This page gives the big picture. The other pages list every option.
 
 ## Transports
 
-The transport is how Claude Code talks to a server. Set it with `type` in the server entry.
-Source: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/mcp), [Control MCP Server Access for Your Organization](https://code.claude.com/docs/en/managed-mcp), and the program (the server schema).
+The transport is how Claude Code talks to a server. Set it with `type` in the server entry. Official pages: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/mcp) and [Control MCP Server Access for Your Organization](https://code.claude.com/docs/en/managed-mcp).[^schema]
 
 | Transport | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
@@ -36,10 +34,10 @@ A scope says where Claude Code stores a server and who sees it.
 | `user` | <Documented /> | A server for all your projects. | Claude Code stores it in `~/.claude.json` under `mcpServers`. |
 | Plugin | <Documented /> | Servers that a plugin bundles. | Named `plugin:<plugin>:<server>`. Tools are `mcp__plugin_<plugin>_<server>__<tool>`. |
 | claude.ai connectors | <Documented /> | Servers you added in claude.ai. | Claude Code fetches it at start for a claude.ai login. It has the lowest precedence. |
-| `managed` | <Documented /> | Servers your organization provides. | From the `managedMcpServers` key in managed settings (the `managed-mcp.json` file gets the `enterprise` scope; source: the program). Ranks above every other source (`2.1.259` and later). |
+| `managed` | <Documented /> | Servers your organization provides. | From the `managedMcpServers` key in managed settings (the `managed-mcp.json` file gets the `enterprise` scope[^schema]). Ranks above every other source (`2.1.259` and later). |
 | `dynamic` | <Undocumented /> | Servers passed at run time. | Used for `--mcp-config`, for the remote copy from `CLAUDE_CODE_REMOTE_MCP_CONFIG`, and for plugin servers. |
-| `enterprise` | <Undocumented /> | The servers in `managed-mcp.json`. | Read from the managed settings folder. While the file exists, it has exclusive control of MCP servers. Claude Code blocks agent frontmatter servers. Checked: user and project servers did not start. `claude mcp list` showed only the managed server. `claude mcp get` showed `Scope: Enterprise config (managed by your organization)`. `--mcp-config` failed with `You cannot dynamically configure MCP servers when an enterprise MCP config is present`. Checked with a user agent that has `mcpServers` frontmatter: the agent ran, but its server did not start. A notice said `probe-agent agent MCP server blocked by enterprise MCP config: agent_srv`. `init` listed the managed server with `source` `enterprise`. See [Probes](../../reference/probes.md#managed-folder-probe). |
-| `agent` | <Undocumented /> | A server in an agent's `mcpServers` frontmatter. | Starts when that agent runs and stops when it ends. Claude Code skips project agents (`.claude/agents/`) in a folder you have not trusted. `--strict-mcp-config` and `--bare` block it. Checked in `-p` with a user agent. |
+| `enterprise` | <Undocumented /> | The servers in `managed-mcp.json`. | Read from the managed settings folder. While the file exists, it has exclusive control of MCP servers. Claude Code blocks agent frontmatter servers. In a managed folder probe, user and project servers did not start, and `claude mcp list` showed only the managed server. `claude mcp get` showed `Scope: Enterprise config (managed by your organization)`. `--mcp-config` failed with `You cannot dynamically configure MCP servers when an enterprise MCP config is present`. A user agent with `mcpServers` frontmatter ran, but its server did not start. A notice said `probe-agent agent MCP server blocked by enterprise MCP config: agent_srv`. `init` listed the managed server with `source` `enterprise`.[^enterprise] |
+| `agent` | <Undocumented /> | A server in an agent's `mcpServers` frontmatter. | Starts when that agent runs and stops when it ends. Claude Code skips project agents (`.claude/agents/`) in a folder you have not trusted. `--strict-mcp-config` and `--bare` block it.[^agent] |
 
 The full scope list is `local`, `user`, `project`, `dynamic`, `enterprise`, `claudeai`, `managed`, `agent`. Plugin servers also use `dynamic`.
 
@@ -89,3 +87,9 @@ After a server connects, its tools get names like `mcp__github__create_issue`. S
 
 - [Plugins](../plugins/index.md) can bundle MCP servers.
 - [Plugin and MCP Env Vars](../../configure/env-vars/plugins-and-mcp.md)
+
+## Sources
+
+[^schema]: The program, server schema.
+[^enterprise]: See [Probes](../../reference/probes.md#managed-folder-probe).
+[^agent]: Checked in `-p` with a user agent.

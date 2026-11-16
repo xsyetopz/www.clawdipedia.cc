@@ -4,20 +4,18 @@ description: Every claude mcp subcommand and flag, and the /mcp command inside a
 sidebar_position: 4
 ---
 
-The `claude mcp` command adds, lists, and removes MCP servers from the shell.
-Inside a session, the `/mcp` command shows the state of each server.
-For example, `claude mcp list` prints each server and tells you if Claude Code connects to it.
+The `claude mcp` command adds, lists, and removes MCP servers from the shell. Inside a session, the `/mcp` command shows the state of each server. For example, `claude mcp list` prints each server and tells you if Claude Code connects to it.
 
-Flags pick the scope, the transport, env vars, headers, and OAuth fields. The commands write to `~/.claude.json` or `.mcp.json`, depending on the scope.
+Flags pick the scope, the transport, env vars, headers, and OAuth fields. The commands write to `~/.claude.json` or `.mcp.json`, depending on the scope. Run `claude mcp add` once, and the next session connects to the server.
 
 ## Subcommands
 
-Source: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/mcp), [Control MCP Server Access for Your Organization](https://code.claude.com/docs/en/managed-mcp), and `claude mcp --help`.
+Official pages: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/mcp) and [Control MCP Server Access for Your Organization](https://code.claude.com/docs/en/managed-mcp). Run `claude mcp --help` for the same list.
 
 | Command | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
 | `claude mcp add [options] <name> <commandOrUrl> [args...]` | <Documented /> | Adds a server. | Writes to the scope and prints `Added ...`. Put `--` before a stdio command. Then Claude Code does not parse its flags. Claude Code rejects a reserved name. |
-| `claude mcp add-json [options] <name> <json>` | <Documented /> | Adds a server from a JSON string. | Accepts `stdio`, `sse`, `http`, and `ws`. The JSON is the entry object, not the `mcpServers` wrapper. Since `2.1.326`, a bad entry gets a message that says what to change: not a JSON object, a `url` with no `type`, an `mcpServers` wrapper, no `command` or `type`, an unknown `type`, or the failing field paths (the program, `chunk-4h798pp0.js:228852`; [`2.1.326` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)). |
+| `claude mcp add-json [options] <name> <json>` | <Documented /> | Adds a server from a JSON string. | Accepts `stdio`, `sse`, `http`, and `ws`. The JSON is the entry object, not the `mcpServers` wrapper. Since `2.1.326`, a bad entry gets a message that says what to change: not a JSON object, a `url` with no `type`, an `mcpServers` wrapper, no `command` or `type`, an unknown `type`, or the failing field paths.[^add-json] |
 | `claude mcp add-from-claude-desktop [options]` | <Documented /> | Imports servers from Claude Desktop. | macOS and WSL only. You pick interactively. Claude Code rejects a name with other characters. A duplicate gets a suffix such as `server_1`. |
 | `claude mcp get <name>` | <Documented /> | Shows one server. | Health-checks approved servers and shows `Issue:` on a failure. An unapproved `.mcp.json` server shows `Pending approval`. A plugin stdio server shows `Command: stdio` and `NAME=[REDACTED]`. |
 | `claude mcp list` | <Documented /> | Lists servers. | Shows `Connected`, `Needs authentication`, `Failed to connect`, `Pending approval`, or `Disabled for this project`. Warnings show here. |
@@ -38,12 +36,12 @@ Source: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/m
 | `-s, --scope <scope>` | <Documented /> | Picks the scope. | `local` (default), `user`, or `project`. On `remove`, the default is the scope where the server exists. | `add`, `add-json`, `add-from-claude-desktop`, `remove` |
 | `-t, --transport <transport>` | <Documented /> | Picks the transport. | `stdio` (default), `sse`, or `http`. `ws` is not accepted. | `add` |
 | `-e, --env <env...>` | <Documented /> | Sets env vars of a stdio server. | `KEY=value`. Put another option between `--env` and the name. | `add` |
-| `-H, --header <header...>` | <Documented /> | Sets headers of a remote server. | `"Name: value"`. `--help` says "Set headers for HTTP/SSE servers, repeat for more (e.g. -H "X-Api-Key: abc123")" (the program, `chunk-7j145bsn.js:21068`). | `add` |
+| `-H, --header <header...>` | <Documented /> | Sets headers of a remote server. | `"Name: value"`. `--help` says "Set headers for HTTP/SSE servers, repeat for more (e.g. -H "X-Api-Key: abc123")".[^header-help] | `add` |
 | `--client-id <clientId>` | <Documented /> | Sets the OAuth client ID. | Only for `http` and `sse`. | `add` |
 | `--client-secret` | <Documented /> | Prompts for the OAuth client secret. | Masked input. `MCP_CLIENT_SECRET` skips the prompt. Claude Code stores it in the keychain (macOS) or a credentials file. You set it only when you add the server. | `add`, `add-json` |
 | `--callback-port <port>` | <Documented /> | Fixes the OAuth callback port. | For servers with a pre-registered `http://localhost:PORT/callback`. For `xaa setup`, an integer from 1 to 65535. | `add` |
 | `--xaa` | <Gated note="CLAUDE_CODE_ENABLE_XAA" /> | Enables XAA for the server. | Hidden unless you set the gate. Needs `xaa setup`, `--client-id`, and `--client-secret`. Without the gate, Claude Code prints `--xaa requires CLAUDE_CODE_ENABLE_XAA=1`. | `add` |
-| `--web` | <Gated note="tengu_twinkling_aurora" /> | Adds the server as a claude.ai connector, not to the local config. | Takes only a name and an `https://` address. Run `print.cli319.mcp-add-web` (hypothesis: the gate is off; prediction: refusal; result: exit 1): `--web isn't available yet. To add it to your local config, remove --web and use --transport http for an https address.` The program also refuses an address that looks like it has a secret in it. | `add` |
+| `--web` | <Gated note="tengu_twinkling_aurora" /> | Adds the server as a claude.ai connector, not to the local config. | Takes only a name and an `https://` address. With the gate off, the command exits 1 and prints `--web isn't available yet. To add it to your local config, remove --web and use --transport http for an https address.`[^web] The program also refuses an address that looks like it has a secret in it. | `add` |
 | `--no-browser` | <Documented /> | Prints the authorization URL. | For SSH and headless sessions. You paste the redirect URL back. | `login` |
 | `-d, --debug`, `--verbose` | <Documented /> | Debug output, and a verbose override. | None. | `serve` |
 
@@ -51,7 +49,7 @@ Source: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/m
 
 | Command | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
-| `/mcp` | <Documented /> | Opens the MCP panel. | Shows status, tool count, `cached` state, and `Issue:`. You can enable, disable, reconnect, authenticate, and clear authentication. Since `2.1.323`, a server that needs authentication but still holds its sign-in also shows "Reconnect", and the page opens on it ([2.1.323 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323); the program, `chunk-8fw1gbv7.js:26827`). |
+| `/mcp` | <Documented /> | Opens the MCP panel. | Shows status, tool count, `cached` state, and `Issue:`. You can enable, disable, reconnect, authenticate, and clear authentication. Since `2.1.323`, a server that needs authentication but still holds its sign-in also shows "Reconnect", and the page opens on it.[^reconnect] |
 | `/mcp reconnect all` | <Documented /> | Retries every failed server. | The interactive terminal needs `2.1.284` or later. |
 | `/mcp enable\|disable\|reconnect <server>` | <Documented /> | Controls a server without the panel. | Claude Code suggests it when a background session has no terminal attached. |
 | `/mcp__<server>__<prompt>` | <Documented /> | Runs an MCP prompt. | See [MCP Runtime](runtime.md#resources-and-prompts). |
@@ -86,10 +84,10 @@ Each row is a family of messages. The backticked text is the start that every me
 | Start of Message | Status | What It Means | Cases |
 | --- | --- | --- | --- |
 | `Cannot add MCP server`, `Cannot remove MCP server`, `Project-scope MCP server changes`, `Invalid scope:`, `Invalid transport type`, `Invalid header`, `Server added, but the client secret`, `Warning: --client-id`, `Warning: The command`, `If this is an HTTP server`, `If this is an SSE server`, `If this is a remote server`, `To remove from a specific scope`, `Specify a scope with -s`, `Can't read .mcp.json` | <Undocumented /> | Claude Code refused `claude mcp add` or `claude mcp remove`, or the command printed a warning. | One of these causes applies. Enterprise or managed settings control the MCP servers. The host application registers the type. The scope is not allowed. The transport type or header format is wrong. `.mcp.json` is not a regular file or is too large. You gave an OAuth option for a server that is not HTTP or SSE. |
-| Various | <Undocumented /> | **Claude Desktop import.** The Claude Desktop integration is not supported or has no config. | It works on macOS and WSL only, or Claude Code could not find the config file in Windows. |
-| Various | <Undocumented /> | **MCP server controls.** Claude Code refused an MCP server control or config file. | One of these causes applies. A server name is not in the listing. A request needs a name and an id. Claude Code could not read a `.mcp.json` or `managed-mcp.json` file. The terminal is still starting up. MCP error text or a config is too long or too deeply encoded. Claude Code does not start a server process because it is shutting down. A tool runs on another machine and cannot run here. |
-| `Cannot change .mcp.json here` | <Undocumented /> | `claude mcp add` refused to write a `.mcp.json` file. | The folder is a `connector-downloads` folder that has a `.gitignore`. Claude Code saves files from claude.ai connectors there and does not read `.mcp.json` there. Move or rename the folder. Probe case `print.err319.mcp-add-connector-downloads` printed this text. Without the `.gitignore`, the control case printed no error. |
-| `Invalid environment variable format` | <Undocumented /> | `claude mcp add` refused an `-e` value. | A value after `-e` has no `=`. The text is `Invalid environment variable format: <value>, environment variables should be added as: -e KEY1=value1 -e KEY2=value2`. Put the server name before `-e`, because `-e` takes many values. Probe case `print.err319.mcp-add-bad-env` printed this text and exited with code 1. |
+| Various | <Undocumented /> | Claude Desktop import. The Claude Desktop integration is not supported or has no config. | It works on macOS and WSL only, or Claude Code could not find the config file in Windows. |
+| Various | <Undocumented /> | MCP server controls. Claude Code refused an MCP server control or config file. | One of these causes applies. A server name is not in the listing. A request needs a name and an id. Claude Code could not read a `.mcp.json` or `managed-mcp.json` file. The terminal is still starting up. MCP error text or a config is too long or too deeply encoded. Claude Code does not start a server process because it is shutting down. A tool runs on another machine and cannot run here. |
+| `Cannot change .mcp.json here` | <Undocumented /> | `claude mcp add` refused to write a `.mcp.json` file. | The folder is a `connector-downloads` folder that has a `.gitignore`. Claude Code saves files from claude.ai connectors there and does not read `.mcp.json` there. Move or rename the folder.[^connector-dl] |
+| `Invalid environment variable format` | <Undocumented /> | `claude mcp add` refused an `-e` value. | A value after `-e` has no `=`. The text is `Invalid environment variable format: <value>, environment variables should be added as: -e KEY1=value1 -e KEY2=value2`. Put the server name before `-e`, because `-e` takes many values.[^bad-env] |
 
 ## Related Pages
 
@@ -97,3 +95,12 @@ Each row is a family of messages. The backticked text is the start that every me
 - [Server Configuration](config.md)
 - [MCP Authentication](auth.md)
 - [CLI Subcommands](../../configure/cli/subcommands.md)
+
+## Sources
+
+[^add-json]: The program, `chunk-4h798pp0.js:228852`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^header-help]: The program, `chunk-7j145bsn.js:21068`.
+[^web]: Probe case `print.cli319.mcp-add-web`. The gate is the server-side flag `tengu_twinkling_aurora`.
+[^reconnect]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-8fw1gbv7.js:26827`.
+[^connector-dl]: Probe case `print.err319.mcp-add-connector-downloads` printed this text. Without the `.gitignore`, the control case printed no error.
+[^bad-env]: Probe case `print.err319.mcp-add-bad-env` printed this text and exited with code 1.

@@ -4,15 +4,13 @@ description: Settings keys, allow and deny lists, project approval, managed-mcp.
 sidebar_position: 3
 ---
 
-These settings decide which MCP servers may run and which ones a project may use.
-Administrators use them for allow lists and deny lists.
-For example, `{ "enableAllProjectMcpServers": true }` approves every server in a project `.mcp.json` file.
+These settings decide which MCP servers may run and which ones a project may use. Administrators use them for allow lists and deny lists. For example, `{ "enableAllProjectMcpServers": true }` approves every server in a project `.mcp.json` file.
 
-Most keys also work in your own settings. They live in settings files, `~/.claude.json`, `.mcp.json`, and `managed-mcp.json`. The switches are `disabledMcpjsonServers`, `enableAllProjectMcpServers`, `deniedMcpServers`, `--strict-mcp-config`, and `disableClaudeAiConnectors`.
+Most keys also work in your own settings. They live in settings files, `~/.claude.json`, `.mcp.json`, and `managed-mcp.json`. To turn a control on, set one of these switches: `disabledMcpjsonServers`, `enableAllProjectMcpServers`, `deniedMcpServers`, `--strict-mcp-config`, and `disableClaudeAiConnectors`.
 
 ## Settings Keys
 
-Source: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/mcp), [Control MCP Server Access for Your Organization](https://code.claude.com/docs/en/managed-mcp), [Settings Reference](https://code.claude.com/docs/en/settings-reference), and [Channels Reference](https://code.claude.com/docs/en/channels-reference).
+Official pages: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/mcp), [Control MCP Server Access for Your Organization](https://code.claude.com/docs/en/managed-mcp), [Settings Reference](https://code.claude.com/docs/en/settings-reference), and [Channels Reference](https://code.claude.com/docs/en/channels-reference).
 
 These keys sit in the settings files. Each key has one row, with its type, what it does, and where to set it, on [MCP and Channels Settings](../../configure/settings/mcp-and-channels.md#keys).
 
@@ -40,7 +38,7 @@ These keys sit under `projects["<path>"]`.
 | --- | --- | --- | --- |
 | `.mcp.json` | <Documented /> | Holds project servers. | At the project root. Interactive sessions ask for approval. `claude -p`, the SDK, and cloud sessions load it without a prompt. |
 | `~/.claude.json` | <Documented /> | Holds local and user servers. | `claude mcp add` writes it. |
-| `managed-mcp.json` | <Documented /> | A fixed server set from the organization. | Gives the organization exclusive control. Claude Code ignores other sources. In the probe, Claude Code dropped user and project servers with no warning, which matches the [official page](https://code.claude.com/docs/en/managed-mcp#disable-mcp-entirely) (see [Managed Folder Probe](../../reference/probes.md#managed-folder-probe)). Claude in Chrome and connectors stay blocked unless you set the two `allow` keys above. Since `2.1.326`, when the file appears during a session, Claude Code shows a notice that your organization now manages MCP servers and only allowed servers load from now on. If the file cannot be read, the notice says your own servers will not load. If the account that runs Claude Code could have written the file, Claude Code ignores a late file and logs it, and a restart applies it (the program, `chunk-4h798pp0.js:229698`; [`2.1.326` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)). |
+| `managed-mcp.json` | <Documented /> | A fixed server set from the organization. | Gives the organization exclusive control. Claude Code ignores other sources. In a probe, Claude Code dropped user and project servers with no warning, which matches the [official page](https://code.claude.com/docs/en/managed-mcp#disable-mcp-entirely). See [Managed Folder Probe](../../reference/probes.md#managed-folder-probe). Claude in Chrome and connectors stay blocked unless you set the two `allow` keys above. Since `2.1.326`, when the file appears during a session, Claude Code shows a notice that your organization now manages MCP servers and only allowed servers load from now on. If the file cannot be read, the notice says your own servers will not load. If the account that runs Claude Code could have written the file, Claude Code ignores a late file and logs it, and a restart applies it.[^managed-late] |
 | `--mcp-config <configs...>` | <Documented /> | Loads servers from files or strings. | Space-separated. Scope `dynamic`. `headersHelper` runs in the primary working folder. |
 | `--strict-mcp-config` | <Documented /> | Uses only the `--mcp-config` servers. | Skips the approval prompt for project servers it does not load (`2.1.246` and later). |
 | `--plugin-dir-no-mcp <path>` | <Undocumented /> | Loads an inline plugin without its MCP servers. | Hidden flag. The SDK form is `skipMcpDiscovery`. |
@@ -90,3 +88,7 @@ flowchart TD
 - [Server Configuration](config.md)
 - [MCP Commands](cli.md) for `claude mcp reset-project-choices`
 - [MCP and Channels Settings](../../configure/settings/mcp-and-channels.md)
+
+## Sources
+
+[^managed-late]: The program, `chunk-4h798pp0.js:229698`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

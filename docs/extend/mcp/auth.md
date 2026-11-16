@@ -4,16 +4,13 @@ description: OAuth options, headersHelper, enterprise XAA sign-in, and claude.ai
 sidebar_position: 5
 ---
 
-Some MCP servers need you to sign in.
-Claude Code supports OAuth, a script that makes headers, and managed sign-in for enterprises.
-For example, `/mcp` opens a panel where you start the OAuth sign-in for a server.
-This page describes the options only. It does not walk through any account sign-in.
+Some MCP servers need you to sign in. Claude Code supports OAuth, a script that makes headers, and managed sign-in for enterprises. To start the OAuth sign-in for a server, open `/mcp` and pick the server.
 
-OAuth works for `http` and `sse` servers. Headers work for `http`, `sse`, and `ws` servers. Use the server `oauth` fields, `headers`, `headersHelper`, and env vars to change it. Turn it off with `claude mcp logout`, `Clear authentication` in `/mcp`, `disableClaudeAiConnectors`, or `ENABLE_CLAUDEAI_MCP_SERVERS`. Tokens are in secure storage.
+OAuth works for `http` and `sse` servers. Headers work for `http`, `sse`, and `ws` servers. Change the setup with the server `oauth` fields, `headers`, `headersHelper`, and env vars. To sign out or turn it off, use `claude mcp logout`, `Clear authentication` in `/mcp`, `disableClaudeAiConnectors`, or `ENABLE_CLAUDEAI_MCP_SERVERS`. Tokens are in secure storage.
 
 ## OAuth Options
 
-Source: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/mcp), [Environment Variables](https://code.claude.com/docs/en/env-vars), and the program for the rows marked <Undocumented /> or <Gated />.
+Official pages: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/mcp) and [Environment Variables](https://code.claude.com/docs/en/env-vars).[^auth-rows]
 
 | Item | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
@@ -22,10 +19,10 @@ Source: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/m
 | `oauth.callbackPort` | <Documented /> | Fixes the callback port. | The redirect URI is `http://localhost:PORT/callback`. A positive integer. |
 | `oauth.authServerMetadataUrl` | <Documented /> | Skips the discovery chain. | Must start with `https://`. The default order is [RFC 9728](https://www.rfc-editor.org/rfc/rfc9728) `/.well-known/oauth-protected-resource`, then [RFC 8414](https://www.rfc-editor.org/rfc/rfc8414) `/.well-known/oauth-authorization-server`. |
 | `oauth.scopes` | <Documented /> | Pins the requested scopes. | One space-separated string, at least one character. It overrides the scopes in metadata. Claude Code adds `offline_access` if the server advertises it. |
-| `oauth.xaa` | <Gated note="CLAUDE_CODE_ENABLE_XAA=1" /> | Enables XAA for the server. | Boolean. Without the gate Claude Code says `Remove 'oauth.xaa'`. |
+| `oauth.xaa` | <Gated note="CLAUDE_CODE_ENABLE_XAA=1" /> | Enables XAA for the server. | Boolean. Without the gate Claude Code says `Remove 'oauth.xaa'`.[^xaa-gate] |
 | `--client-id`, `--client-secret`, `--callback-port` | <Documented /> | Set the OAuth fields when you add a server. | See [MCP Commands](cli.md#flags). You set the secret only at add time. |
 | `MCP_CLIENT_SECRET`, `MCP_OAUTH_CALLBACK_PORT` | <Documented /> | Env forms of the secret and port. | The secret skips the prompt. Login and `/mcp` never read it again. |
-| `MCP_OAUTH_CLIENT_METADATA_URL` | <Undocumented /> | Overrides the CIMD URL. | The program logs `Using CIMD URL from env`. |
+| `MCP_OAUTH_CLIENT_METADATA_URL` | <Undocumented /> | Overrides the CIMD URL. | Claude Code logs `Using CIMD URL from env`.[^cimd-env] |
 | Token storage | <Documented /> | Keeps tokens. | Claude Code stores tokens securely and refreshes them. The client secret is in the macOS keychain or a credentials file. `Clear authentication` in `/mcp` and `claude mcp logout` remove them. |
 | v2 runtime checks | <Documented /> | Hardens OAuth. | Fails on an unexpected issuer. Sends credentials only to `https` or loopback token endpoints. |
 | Local OAuth refusal | <Documented /> | Handles hosted connectors. | Microsoft 365, Gmail, and Google Calendar hosts need claude.ai. Claude Code shows `is Anthropic-hosted and doesn't support local OAuth`. |
@@ -121,10 +118,10 @@ Each row is a family of messages. The backticked text is the start that every me
 
 | Start of Message | Status | What It Means | Cases |
 | --- | --- | --- | --- |
-| `XAA`, `authServerMetadataUrl must`, `Configured auth server metadata`, `HTTP ${…} fetching configured auth server`, `Unexpected auth result`, `Invalid authorization URL`, `No TTY available to prompt for client secret`, `Enter OAuth client secret`, `Unable to build claude.ai connector auth URL`, `Server type "${…}" does not support OAuth`, `No OAuth flow in progress`, `Invalid callback URL`, `MCP OAuth failed`, `OAuth flow completed without`, `No available ports for OAuth redirect`, `clientMetadataUrl must` | <Undocumented /> | An MCP OAuth or XAA (cross-app access) sign-in step failed. | Discovery of protected resource metadata or authorization server metadata failed or did not match, the token endpoint is not HTTPS, the token exchange or jwt-bearer grant failed or returned an unexpected shape, XAA is not enabled (`CLAUDE_CODE_ENABLE_XAA=1`), no IdP connection is configured, or the callback URL does not belong to this sign-in. In `2.1.311`, the server now names an authorization server other than the one you signed in with (`XAA: authorization server changed`). If the move is expected, run `claude mcp remove` for the server and add it again with its client secret (`chunk-mghdt42f.js:847`). |
-| `Could not check "${…}" against your organization's connector list in time` | <Undocumented /> | A sign-in to an MCP server was stopped, because Claude Code could not get your organization's list of claude.ai connectors in time. | The sign-in waits for that list first. When the wait ends without a list, and the fetch of the list itself did not fail, the text is `Could not check "${…}" against your organization's connector list in time. Try signing in again later.` Sign in again later. Source: the program (`chunk-2x9ma4k7.js:4330619`). |
-| `Could not check "${…}" against your organization's connector settings, so the sign-in was stopped.`, `Could not check this MCP server against your organization's connector settings, so the sign-in was stopped.` | <Undocumented /> | A sign-in to an MCP server was stopped, because the check against your organization's connector settings did not finish. | The first form names the server. It follows a failed wait for the connector list. The second form has no name. It applies to a server that a plugin or a plugin agent declares, when the `require_connector_block_on_plugin_servers` flag is not off. The check also runs on the headers that the server gets. Sign in again later, or ask your administrator. Source: the program (`chunk-2x9ma4k7.js:4330619` and `chunk-mghdt42f.js:6533`). |
-| `Too many named hosts` | <Undocumented /> | The check of a server against the connector block list stopped, because the headers of the server name more than 32 distinct hosts. | The check reads the `host`, `x-forwarded-host`, and `forwarded` headers of the server. A set of more than 32 hosts throws this plain error, with no other text. Name fewer hosts in those headers. Source: the program (`chunk-2x9ma4k7.js:4314036`). The program does not show here what a caller does with the error. |
+| `XAA`, `authServerMetadataUrl must`, `Configured auth server metadata`, `HTTP ${…} fetching configured auth server`, `Unexpected auth result`, `Invalid authorization URL`, `No TTY available to prompt for client secret`, `Enter OAuth client secret`, `Unable to build claude.ai connector auth URL`, `Server type "${…}" does not support OAuth`, `No OAuth flow in progress`, `Invalid callback URL`, `MCP OAuth failed`, `OAuth flow completed without`, `No available ports for OAuth redirect`, `clientMetadataUrl must` | <Undocumented /> | An MCP OAuth or XAA (cross-app access) sign-in step failed. | Discovery of protected resource metadata or authorization server metadata failed or did not match, the token endpoint is not HTTPS, the token exchange or jwt-bearer grant failed or returned an unexpected shape, XAA is not enabled (`CLAUDE_CODE_ENABLE_XAA=1`), no IdP connection is configured, or the callback URL does not belong to this sign-in. In `2.1.311`, the server now names an authorization server other than the one you signed in with (`XAA: authorization server changed`). If the move is expected, run `claude mcp remove` for the server and add it again with its client secret.[^xaa-changed] |
+| `Could not check "${…}" against your organization's connector list in time` | <Undocumented /> | A sign-in to an MCP server was stopped, because Claude Code could not get your organization's list of claude.ai connectors in time. | The sign-in waits for that list first. When the wait ends without a list, and the fetch of the list itself did not fail, the text is `Could not check "${…}" against your organization's connector list in time. Try signing in again later.` Sign in again later.[^list-timeout] |
+| `Could not check "${…}" against your organization's connector settings, so the sign-in was stopped.`, `Could not check this MCP server against your organization's connector settings, so the sign-in was stopped.` | <Undocumented /> | A sign-in to an MCP server was stopped, because the check against your organization's connector settings did not finish. | The first form names the server. It follows a failed wait for the connector list. The second form has no name. It applies to a server that a plugin or a plugin agent declares, unless a server-side flag turns the check off.[^settings-check] The check also runs on the headers that the server gets. Sign in again later, or ask your administrator. |
+| `Too many named hosts` | <Undocumented /> | The check of a server against the connector block list stopped, because the headers of the server name more than 32 distinct hosts. | The check reads the `host`, `x-forwarded-host`, and `forwarded` headers of the server. A set of more than 32 hosts throws this plain error, with no other text. Name fewer hosts in those headers.[^many-hosts] |
 
 ## Related Pages
 
@@ -132,3 +129,13 @@ Each row is a family of messages. The backticked text is the start that every me
 - [MCP Commands](cli.md)
 - [MCP Env Vars](env.md)
 - [Settings: Authentication](../../configure/settings/auth.md) for the sign-in of Claude Code itself
+
+## Sources
+
+[^auth-rows]: The program, for the rows marked <Undocumented /> or <Gated />.
+[^cimd-env]: The program.
+[^xaa-gate]: The program.
+[^xaa-changed]: The program, `chunk-mghdt42f.js:847`.
+[^list-timeout]: The program, `chunk-2x9ma4k7.js:4330619`.
+[^settings-check]: The program, `chunk-2x9ma4k7.js:4330619` and `chunk-mghdt42f.js:6533`. The flag is `require_connector_block_on_plugin_servers`.
+[^many-hosts]: The program, `chunk-2x9ma4k7.js:4314036`. The program does not show here what a caller does with the error.

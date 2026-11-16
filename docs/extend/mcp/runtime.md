@@ -4,16 +4,13 @@ description: Tool names, permission patterns, resources, prompts, elicitation, c
 sidebar_position: 6
 ---
 
-After an MCP server connects, Claude Code adds its tools, resources, and prompts to the session.
-The names, the permission rules, and the limits decide what Claude can use and for how long.
-Claude Code names a tool from a server `mcp__<server>__<tool>`.
-For example, `mcp__github__create_issue` is the `create_issue` tool of the `github` server.
+After an MCP server connects, Claude Code adds its tools, resources, and prompts to the session. The names, the permission rules, and the limits decide what Claude can use and for how long. Claude Code names a tool from a server `mcp__<server>__<tool>`. For example, `mcp__github__create_issue` is the `create_issue` tool of the `github` server.
 
-This runs by itself once a server connects. Use `permissions.deny` for tools, `ENABLE_TOOL_SEARCH` for deferral, and `CLAUDE_CODE_MCP_AUTO_BACKGROUND_MS` for background moves. Claude Code saves large results under `tool-results`.
+This runs by itself once a server connects. To change it, use `permissions.deny` for tools, `ENABLE_TOOL_SEARCH` for deferral, and `CLAUDE_CODE_MCP_AUTO_BACKGROUND_MS` for background moves. Claude Code saves large results under `tool-results`.
 
 ## Tools and Names
 
-Source: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/mcp), [Configure Permissions](https://code.claude.com/docs/en/permissions), and the program for rows marked <Undocumented />.
+Official pages: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/mcp) and [Configure Permissions](https://code.claude.com/docs/en/permissions).[^undoc]
 
 | Item | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
@@ -33,7 +30,7 @@ Source: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/m
 | Item | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
 | `@server:protocol://path` | <Documented /> | Attaches a resource. | Claude Code fetches it as an attachment. The `@` menu has fuzzy search. |
-| `ListMcpResourcesTool` | <Documented /> | Lists resources of all servers. | The docs say Claude Code has tools to list and read resources but give no names. Each entry has a `server` field. `ui://` entries are hidden. |
+| `ListMcpResourcesTool` | <Documented /> | Lists resources of all servers. | The official page says Claude Code has tools to list and read resources but gives no names. Each entry has a `server` field. `ui://` entries are hidden. |
 | `ReadMcpResourceTool` | <Documented /> | Reads one resource. | Parameters `server` and `uri`, both required. |
 | `ReadMcpResourceDirTool` | <Undocumented /> | Lists the children of a directory resource. | Parameters `server` and `uri`. Uses `resources/directory/read`. Not recursive. Only for a server that declares directory support. |
 | Old tool names | <Undocumented /> | Map old names to new. | `ListMcpResources`, `ReadMcpResource`, and `ReadMcpResourceDir` map to the `...Tool` names in rules and hooks. |
@@ -55,7 +52,7 @@ A channel is a way for a server to push messages into your session.
 | `claude/channel/permission` | <Documented /> | Relays permission prompts over a channel. | Notifications `notifications/claude/channel/permission_request` and `.../permission`. |
 | `channels` plugin key | <Documented /> | Binds a channel to a plugin server. | Fields `server`, `displayName`, `userConfig`. In `plugin.json`. |
 
-Source: [Channels Reference](https://code.claude.com/docs/en/channels-reference) and [Push Events into a Running Session with Channels](https://code.claude.com/docs/en/channels).
+Official pages: [Channels Reference](https://code.claude.com/docs/en/channels-reference) and [Push Events into a Running Session with Channels](https://code.claude.com/docs/en/channels).
 
 ## Limits
 
@@ -71,7 +68,7 @@ Source: [Channels Reference](https://code.claude.com/docs/en/channels-reference)
 | Error text | <Documented /> | Shortens long errors. | Over about 11000 characters, the first 5000 and last 5000 stay. For `isError: true` results. |
 | 16 MiB response | <Documented /> | Caps one response or message. | HTTP and SSE stop reading. A WebSocket closes the connection. |
 | Description limits | <Documented /> | Cuts long text. | 4096 characters for server instructions and an upfront tool. 16384 for a tool found by tool search. `CLAUDE_CODE_MAX_MCP_DESCRIPTION_LENGTH` replaces both. |
-| Schema checks | <Documented /> | Drops bad tools. | Excludes a tool with a bad top-level property name or an invalid 2020-12 schema. Skips a tool whose input schema the Anthropic API would reject; `/mcp` says "Claude wasn't given N tools because the Anthropic API would reject their input schemas. Once the server is fixed, choose Reconnect." and lists each skipped tool as `name: reason`, up to 3 rows (the program, `chunk-qnbq0cf3.js:180221`, `chunk-8fw1gbv7.js:9594`). Flattens a root `anyOf`, `oneOf`, or `allOf`. |
+| Schema checks | <Documented /> | Drops bad tools. | Excludes a tool with a bad top-level property name or an invalid 2020-12 schema. Skips a tool whose input schema the Anthropic API would reject; `/mcp` says "Claude wasn't given N tools because the Anthropic API would reject their input schemas. Once the server is fixed, choose Reconnect." and lists each skipped tool as `name: reason`, up to 3 rows.[^schema-checks] Flattens a root `anyOf`, `oneOf`, or `allOf`. |
 
 ## Timing and Recovery
 
@@ -83,7 +80,7 @@ Source: [Channels Reference](https://code.claude.com/docs/en/channels-reference)
 | `list_changed` | <Documented /> | Refreshes tools, prompts, and resources. | Interactive sessions refresh all three. `-p` refreshes tools only. A failed refresh keeps the old lists. |
 | Stdio shutdown | <Documented /> | Stops a stdio server. | On macOS and Linux: `SIGINT`, then `SIGTERM` after 100 ms, then `SIGKILL` after 400 ms more. |
 | `roots/list` | <Documented /> | Tells servers which folders Claude Code allows. | Answers with the launch folder and added folders. |
-| Tool search modes | <Documented /> | Controls deferral. | `ENABLE_TOOL_SEARCH`: not set, `true`, `auto`, `auto:N`, or `false`. Since 2.1.304 tool search is on by default behind a custom `ANTHROPIC_BASE_URL`, and a 400 or 422 from the gateway is retried without it. Since 2.1.305 the retry also covers an endpoint or gateway that rejects tool search, and a `ToolSearch` that is disallowed or left out of `--tools` ([v2.1.305 release](https://github.com/anthropics/claude-code/releases/tag/v2.1.305)). After a refusal the program says `Tool search is off for this conversation: the endpoint refused it earlier in this process.` `ENABLE_TOOL_SEARCH=true` overrides a conversation that ran without `ToolSearch`, which stays that way until it is compacted or cleared (the program). |
+| Tool search modes | <Documented /> | Controls deferral. | `ENABLE_TOOL_SEARCH`: not set, `true`, `auto`, `auto:N`, or `false`. Since 2.1.304 tool search is on by default behind a custom `ANTHROPIC_BASE_URL`, and a 400 or 422 from the gateway is retried without it. Since 2.1.305 the retry also covers an endpoint or gateway that rejects tool search, and a `ToolSearch` that is disallowed or left out of `--tools`.[^v305] After a refusal Claude Code says `Tool search is off for this conversation: the endpoint refused it earlier in this process.` `ENABLE_TOOL_SEARCH=true` overrides a conversation that ran without `ToolSearch`, which stays that way until it is compacted or cleared.[^undoc] |
 
 ## Example
 
@@ -136,7 +133,7 @@ Rows with a start of a message are families. The backticked text is the start th
 | `Server "` | <Undocumented /> | A server operation failed. | The server does not support resources, is not connected, or was not found. The last case lists the available servers. |
 | `No MCP server named` | <Undocumented /> | A server name is not in the scope that the command searched. | The scope is `.mcp.json`, local, or user. |
 | `StdioClientTransport already started`, `MCP tool call to server`, `Missing required ${…}: ${…}. Usage: /mcp__`, `The tool call was interrupted`, `Unsupported server type`, `claude.ai MCP proxy is not available`, `No claude.ai OAuth token`, `The "${…}" connector`, `"${…}" was disabled while reconnecting`, `Connection failed`, `Server status:`, `The result of MCP tool` | <Undocumented /> | An MCP server or tool call failed. | One of these causes applies. The server or client does not support a capability that the call needs (roots, sampling, elicitation, tasks, resources). The tool call was interrupted or aborted because the account changed. A required argument is missing. The server type is not supported. |
-| `GET /api/directory/server-urls answered status ${…}, not 200 with a list of URLs` | <Undocumented /> | The unauthenticated fetch of the official MCP server URLs got an answer that is not a 200 with a list of URLs. | The program does not follow redirects. It writes `Failed to fetch MCP registry:` and the reason to its debug log and sets no official URLs. On success it logs `[mcp-registry] Loaded N official MCP URLs`. Source: the program (`chunk-x4fdscgs.js:920495`). |
+| `GET /api/directory/server-urls answered status ${…}, not 200 with a list of URLs` | <Undocumented /> | The unauthenticated fetch of the official MCP server URLs got an answer that is not a 200 with a list of URLs. | Claude Code does not follow redirects. It writes `Failed to fetch MCP registry:` and the reason to its debug log and sets no official URLs. On success it logs `[mcp-registry] Loaded N official MCP URLs`.[^registry] |
 
 ## Related Pages
 
@@ -144,3 +141,10 @@ Rows with a start of a message are families. The backticked text is the start th
 - [MCP Env Vars](env.md)
 - [Plugin Manifest](../plugins/manifest.md) for the `channels` key
 - [Agent Loop](../../how-it-works/agent-loop.md) for how tool calls run
+
+## Sources
+
+[^undoc]: The program, for rows marked <Undocumented />.
+[^schema-checks]: The program, `chunk-qnbq0cf3.js:180221` and `chunk-8fw1gbv7.js:9594`.
+[^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
+[^registry]: The program, `chunk-x4fdscgs.js:920495`.

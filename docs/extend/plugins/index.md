@@ -4,9 +4,8 @@ description: What a plugin is, how plugin ids and scopes work, and a map of the 
 sidebar_position: 1
 ---
 
-A plugin is a folder that adds skills, agents, hooks, or MCP servers to Claude Code.
-A marketplace is a list of plugins that you can install.
-For example, `claude plugin install my-plugin@my-marketplace` installs a plugin from a marketplace.
+A plugin is a folder that adds skills, agents, hooks, or MCP servers to Claude Code. A marketplace is a list of plugins that you can install. To add a plugin, run `claude plugin install`. For example, `claude plugin install my-plugin@my-marketplace` installs a plugin from a marketplace.
+
 This page gives the big picture. The other pages list every key, command, and path.
 
 ## What a Plugin Holds
@@ -91,4 +90,6 @@ Paths and variables are in [Plugin Loading](loading.md).
 
 - [Create Plugins](https://code.claude.com/docs/en/plugins) is the official guide for authors.
 - [Plugin Manifest Reference](https://code.claude.com/docs/en/plugins/manifest-reference) describes `plugin.json`.
-- Program-only facts come from the program (the bundled manifest schema and the plugin loader).
+- Facts that no official page states come from the bundled manifest schema and the plugin loader.[^program]
+
+[^program]: The program.

@@ -4,17 +4,13 @@ description: Every env var that changes how Claude Code starts, times out, limit
 sidebar_position: 7
 ---
 
-These env vars change how Claude Code starts, times out, and limits MCP servers.
-Set them in the shell or in the `env` key of a settings file.
-For example, `MCP_TIMEOUT=30000` gives a server 30 seconds to start.
+These env vars change how Claude Code starts, times out, limits, and authenticates MCP servers. For example, `MCP_TIMEOUT=30000` gives a server 30 seconds to start. Change a slow server's timeout here, or limit big results with `MAX_MCP_OUTPUT_TOKENS`.
 
-Export the variable, or add it to `env` in a settings file. Some are switches, such as `ENABLE_CLAUDEAI_MCP_SERVERS` and `MCP_CONNECTION_NONBLOCKING`.
+Export the variable in the shell, or add it to `env` in a settings file. Some are switches, such as `ENABLE_CLAUDEAI_MCP_SERVERS` and `MCP_CONNECTION_NONBLOCKING`.
 
 ## Documented Variables
 
-Each name links to its row on the env var pages, which hold the status, the values, the defaults, and the notes.
-Source: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/mcp), [Environment Variables](https://code.claude.com/docs/en/env-vars), and [Settings Reference](https://code.claude.com/docs/en/settings-reference).
-[Plugin and MCP Env Vars](../../configure/env-vars/plugins-and-mcp.md) and the other env var pages list all env vars of Claude Code.
+Each name links to its row on the env var pages, which hold the status, the values, the defaults, and the notes. Official pages: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/mcp), [Environment Variables](https://code.claude.com/docs/en/env-vars), and [Settings Reference](https://code.claude.com/docs/en/settings-reference). [Plugin and MCP Env Vars](../../configure/env-vars/plugins-and-mcp.md) and the other env var pages list all env vars of Claude Code.
 
 - [`MCP_TIMEOUT`](../../configure/env-vars/plugins-and-mcp.md#variables): Startup timeout of one server.
 - [`MCP_TOOL_TIMEOUT`](../../configure/env-vars/plugins-and-mcp.md#variables): Timeout of one tool call.
@@ -55,7 +51,7 @@ Claude Code puts these in the env of a stdio server or a `headersHelper`.
 
 ## Undocumented Variables
 
-Only the program shows these. They can change without notice.
+No official page lists these.[^undoc] They can change without notice.
 
 - [`ENABLE_MCP_LARGE_OUTPUT_FILES`](../../configure/env-vars/plugins-and-mcp.md#variables): Switch for result files.
 - [`CLAUDE_CODE_MCP_APPS_HOST`](../../configure/env-vars/plugins-and-mcp.md#variables): Declares MCP Apps support.
@@ -107,3 +103,7 @@ flowchart TD
 - [MCP Runtime](runtime.md)
 - [MCP Authentication](auth.md)
 - [Plugin Loading](../plugins/loading.md#env-vars) for plugin env vars
+
+## Sources
+
+[^undoc]: The program.

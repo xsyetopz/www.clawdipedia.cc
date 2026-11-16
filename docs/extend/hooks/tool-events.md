@@ -4,6 +4,8 @@ description: The tool and tool result hook events, with their input, output, and
 sidebar_position: 5
 ---
 
+Hook events around tools let a script approve, change, or block a tool call, and read or replace its result. Use them to enforce rules that permission settings cannot express, or to log what tools do. You add a hook under `hooks` in a settings file, and this page lists the input and output of each tool event.
+
 ## Tool Events
 
 These events fire before a tool runs. They also fire when a permission prompt shows or auto mode denies a call.
@@ -55,7 +57,7 @@ The docs name `Workflow` as a tool you can match, but give no input shape for it
 
 Fires when a permission prompt would show, or when Claude Code would deny a call that cannot prompt.
 This event does not honor exit 2. Deny with the `decision` object instead.
-We checked this in the interactive screen. The hook fires before the dialog opens. `allow` skips the dialog. `deny` returns `message` to the model. Claude Code ignores a top-level `decision: "block"`. See [Input and Output](input-and-output.md#what-fires-and-what-is-honored-in-the-interactive-screen).
+In the interactive screen, the hook fires before the dialog opens. `allow` skips the dialog. `deny` returns `message` to the model. Claude Code ignores a top-level `decision: "block"`.[^interactive] See [Input and Output](input-and-output.md#what-fires-and-what-is-honored-in-the-interactive-screen).
 There is no event for a sandbox network request.
 Handlers: `command`, `http`, `mcp_tool`, and `prompt`. Claude Code skips an `agent` hook.
 
@@ -85,7 +87,7 @@ Handlers: `command`, `http`, `mcp_tool`, and `prompt`. Claude Code skips an `age
 Fires only when auto mode denies a call, including a denial with no classifier verdict.
 It does not fire for manual denials, `PreToolUse` blocks, or deny rules.
 Claude Code ignores the exit code and `stderr`.
-We checked this in the interactive screen. An auto mode denial fired it. A manual "No" did not. On 2.1.319, the stub gave the server-side check a `flagged` verdict for a `curl` call (cases `pty.hooks.permissiondenied.auto` and `.retry`). The hook got `reason: "The server-side auto mode classifier judged this action dangerous (it gave no explanation)"`. The tool did not run, and the turn went on. With `retry: true`, the model's next request got the extra text `The PermissionDenied hook indicated you may retry this tool call.` after the denied tool result. Without `retry` that text was absent. `PermissionRequest` did not fire, and `systemMessage` was not shown. The program adds the text only when the denial has a verdict and does not end the turn (the program, `chunk-2x9ma4k7.js@4473158`). With no verdict through a custom base URL, the program showed the dialog `Auto mode can't check actions in this session` and `PermissionDenied` did not fire.
+In the interactive screen, an auto mode denial fires it and a manual "No" does not. The hook gets `reason`, the tool does not run, and the turn goes on. With `retry: true`, the next model request gets the extra text `The PermissionDenied hook indicated you may retry this tool call.` after the denied tool result. Without `retry`, that text is absent. `PermissionRequest` does not fire, and `systemMessage` does not show. Claude Code adds the retry text only when the denial has a verdict and does not end the turn.[^denied-probe] With no verdict through a custom base URL, Claude Code shows the dialog `Auto mode can't check actions in this session` and `PermissionDenied` does not fire.
 This event accepts all five handler types. Claude Code drops output from `prompt` and `agent`.
 
 | Field | Status | Direction | What it does |
@@ -147,7 +149,7 @@ Exit 2, `decision: "block"`, or `continue: false` stops the loop.
 
 ## `PostToolUse` `tool_response` Shapes
 
-We logged the stdin of a `PostToolUse` command hook in `-p` on `2.1.305`, with one scripted call per tool. This is the `tool_response` you can read, and the shape `updatedToolOutput` replaces.
+The `tool_response` field holds what each tool returned. It is also the shape that `updatedToolOutput` replaces.[^shapes-probe]
 
 | Tool | Status | `tool_response` |
 | --- | --- | --- |
@@ -166,9 +168,9 @@ We logged the stdin of a `PostToolUse` command hook in `-p` on `2.1.305`, with o
 | `NotebookEdit` | <Undocumented /> | `new_source`, `old_source`, `cell_type`, `language`, `edit_mode`, `cell_id`, `error` (empty), `notebook_path`, `original_file`, and `updated_file`. Seen on 2.1.319, after a `Read` of the notebook. |
 | `WebSearch` | <Undocumented /> | `query`, `results`, `durationSeconds`, and `searchCount`. Seen on 2.1.319 against the stub, so `results` held the stub text and `searchCount` was `0`. |
 
-A second probe ran the same hook in the interactive screen (2.1.305, `acceptEdits`, one scripted call per tool). It confirmed the shapes of `Bash`, `Read`, `Write`, and `Edit` above, with one difference: the `Edit` result after a `Read` had no `contentNotInModelContext` key. It also confirmed that an MCP tool's `tool_response` is the array of content blocks the server returned (`[{"type":"text","text":"echo:OK"}]`), and that the hook input has `mcp_server`. Every `PostToolUse` input had `hook_event_name`, `tool_name`, `tool_input`, `tool_response`, `tool_use_id`, and `duration_ms`. On `2.1.305` an `Edit` of a file that was never read was not an error, in `acceptEdits` and in the default mode. The file changed, `PostToolUse` fired, and no `PostToolUseFailure` fired. That `tool_response` had `contentNotInModelContext: true`, which the `Edit` after a `Read` did not have. See [Interactive Probes](../../reference/probes.md#interactive-probes).
+The interactive screen gives the same shapes for `Bash`, `Read`, `Write`, and `Edit`, with one difference: the `Edit` result after a `Read` has no `contentNotInModelContext` key. An MCP tool's `tool_response` is the array of content blocks the server returned (`[{"type":"text","text":"echo:OK"}]`), and the hook input has `mcp_server`. Every `PostToolUse` input has `hook_event_name`, `tool_name`, `tool_input`, `tool_response`, `tool_use_id`, and `duration_ms`. On `2.1.305`, an `Edit` of a file that was never read is not an error, in `acceptEdits` and in the default mode. The file changes, `PostToolUse` fires, and `PostToolUseFailure` does not. That `tool_response` has `contentNotInModelContext: true`.[^interactive-shapes] See [Interactive Probes](../../reference/probes.md#interactive-probes).
 
-A third probe (2.1.319, `-p`) ran `Read` of a notebook, `Glob`, `Grep`, `NotebookEdit`, `WebFetch`, and `WebSearch`, with `ENABLE_TOOL_SEARCH=false` so that no tool was deferred. The `Glob`, `Grep`, `NotebookEdit`, and `WebSearch` rows above come from it. These results do not show in the table:
+On `2.1.319` in `-p`, these results do not show in the table:[^third-probe]
 
 - `WebFetch` of `example.com` failed the domain check, so only `PostToolUseFailure` fired, with `is_interrupt: false` and the `error` `Unable to verify if domain example.com is safe to fetch. This may be due to network restrictions or enterprise security policies blocking claude.ai.`
 - `NotebookEdit` with no `Read` of the notebook first got the `tool_result` error `File has not been read yet. Read it first before writing to it.` Neither `PostToolUse` nor `PostToolUseFailure` fired.
@@ -180,3 +182,11 @@ A third probe (2.1.319, `-p`) ran `Read` of a notebook, `Glob`, `Grep`, `Noteboo
 - [Hook Events](events.md): all 33 events and where each one is documented.
 - [Input and Output](input-and-output.md): common fields, decisions, and exit codes.
 - [Configuration](configuration.md): matchers and timeouts.
+
+## Sources
+
+[^interactive]: Interactive probe on the `PermissionRequest` hook.
+[^denied-probe]: On `2.1.319`, the stub gave the server-side check a `flagged` verdict for a `curl` call. Probe cases `pty.hooks.permissiondenied.auto` and `pty.hooks.permissiondenied.retry`. The hook got `reason: "The server-side auto mode classifier judged this action dangerous (it gave no explanation)"`. The program, `chunk-2x9ma4k7.js@4473158`.
+[^shapes-probe]: A `PostToolUse` command hook logged its stdin in `-p` on `2.1.305`, with one scripted call per tool.
+[^interactive-shapes]: A second probe ran the same hook in the interactive screen on `2.1.305` with `acceptEdits` and one scripted call per tool.
+[^third-probe]: A third probe on `2.1.319` in `-p` ran `Read` of a notebook, `Glob`, `Grep`, `NotebookEdit`, `WebFetch`, and `WebSearch`, with `ENABLE_TOOL_SEARCH=false` so that no tool was deferred. The `Glob`, `Grep`, `NotebookEdit`, and `WebSearch` rows above come from it.
