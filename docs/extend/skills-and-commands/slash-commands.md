@@ -55,7 +55,7 @@ Each line is a separate command. The text after the name is the argument.
 | `/copy` `[N]` | <Documented /> | Copies the last reply to the clipboard. `/copy N` copies the Nth latest. | Panel. |
 | `/exit` (alias `/quit`) | <Documented /> | Exits the CLI. In a background session, it detaches. The session keeps running. | Panel and text form. |
 | `/restart` (alias `/update`) | <Gated note="Interactive terminal on macOS or Linux, native install only, and a server-side feature flag." /> | Restarts Claude Code on the newly installed version. Resumes this session. | Interactive only. See [How `/restart` Works](#how-restart-works). |
-| `/rewind` (aliases `/checkpoint`, `/undo`) | <Documented /> | Restores the code, the conversation, or both to an earlier point. | Interactive only. |
+| `/rewind` (aliases `/checkpoint`, `/undo`) | <Documented /> | Restores the code, the conversation, or both to an earlier point. | Interactive only. Each point says what code it can restore. Since `2.1.326`, a turn whose changes were not tracked reads `Code changes unknown` instead of `No code changes`, and a file that a shell command changed reads `Can't restore <file> changed while a command ran`.[^rewind] |
 | `/tasks` (alias `/bashes`) | <Documented /> | Shows and manages everything that runs in the background. | Panel. |
 | `/list-agents` (alias `/peers`) | <Documented /> | Lists subagents, teammates, and other sessions you can message. | Off when the org setting `messagingBeyondOwnAgentsDisabled` is set. |
 | `/focus` `[on\|off]` | <Documented /> | Toggles focus view: only your prompt, a summary, and the reply. | Needs the fullscreen renderer (`/tui fullscreen` or `CLAUDE_CODE_NO_FLICKER=1`). The setting `viewMode: "focus"` does the same. |
@@ -70,7 +70,7 @@ Each line is a separate command. The text after the name is the argument.
 | Command | Status | What it does | Notes |
 | --- | --- | --- | --- |
 | `/config` (alias `/settings`) `key=value` | <Documented /> | Sets a setting by key. | The text form works in non-interactive mode only. In the panel, the default permission mode shows "Auto (default)" when new sessions start in auto mode, not Manual. Pressing Space on that row saves Don't Ask, not Plan: the options are Manual, Plan, Accept edits, Auto, and Don't Ask, in that order.[^config-panel] |
-| `/memory` | <Documented /> | Edits `CLAUDE.md` files and memory settings. | Panel. |
+| `/memory` | <Documented /> | Edits `CLAUDE.md` files and memory settings. | Panel. Since `2.1.326`, a read-only file opens with the warning `This file is read-only, so your changes may not save. Check its permissions.` On a read-only file system the warning says to make that file system writable.[^memory] |
 | `/permissions` (alias `/allowed-tools`) | <Documented /> | Manages allow and deny rules. | Panel. |
 | `/hooks` | <Documented /> | Shows your hook configuration. | Panel. Needs no workspace. See [Hooks](../hooks/index.md). |
 | `/mcp` `[reconnect\|enable\|disable [<server>\|all]]` | <Documented /> | Manages MCP servers. | Panel and text form. |
@@ -81,11 +81,11 @@ Each line is a separate command. The text after the name is the argument.
 | `/skill-doctor` | <Documented /> | Shows which loaded skills are unused and cost context. | Panel (opens the `/plugin` Stats tab) and a text form. Needs feature-flag fetching. |
 | `/output-style` `[style]` | <Documented /> | Lists output styles or switches to one. | Text command. |
 | `/theme` | <Documented /> | Changes the theme. | Panel. |
-| `/tui` `[default\|fullscreen]` | <Documented /> | Sets the terminal UI renderer. | A change restarts and resumes the session. |
+| `/tui` `[default\|fullscreen]` | <Documented /> | Sets the terminal UI renderer. | A change restarts and resumes the session. Since `2.1.326`, when something keeps the renderer, `/tui` shows `Still the <renderer> renderer` and names the cause and the fix: the `tui` setting or a `CLAUDE_CODE_NO_FLICKER` or `CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN` value in a settings file, managed settings, screen reader mode, `tmux -CC`, SSH to Windows, or repeated failed fullscreen starts.[^tui] |
 | `/color` `[color\|default]` | <Documented /> | Sets the prompt bar color for this session. | Panel and text form. |
 | `/brief` | <Gated note="Remote config flag enable_slash_command, and the account needs the Brief tool." /> | Toggles brief-only mode. | Panel. |
 | `/scroll-speed` | <Documented /> | Adjusts mouse wheel scroll speed. | Needs the fullscreen renderer. Off in some terminals, including JetBrains. |
-| `/terminal-setup` | <Documented /> | Installs the Shift+Enter key binding. | The text changes with the terminal. On Terminal.app, since `2.1.323`, the success text adds a dim note after "Enabled "Use Option as Meta key"": the Option key no longer types characters such as é, or on some keyboard layouts the at sign, pipe, brackets, braces, and backslash. To undo it, uncheck "Use Option as Meta key" in Terminal → Settings → Profiles → Keyboard, for your default and startup profiles.[^terminal-note] |
+| `/terminal-setup` | <Documented /> | Installs the Shift+Enter key binding. | The text changes with the terminal. On Terminal.app, since `2.1.323`, the success text adds a dim note after "Enabled "Use Option as Meta key"": the Option key no longer types characters such as é, or on some keyboard layouts the at sign, pipe, brackets, braces, and backslash. To undo it, uncheck "Use Option as Meta key" in Terminal → Settings → Profiles → Keyboard, for your default and startup profiles.[^terminal-note] Since `2.1.326`, inside tmux the text names the two `~/.tmux.conf` lines that Shift+Enter needs: `set -s extended-keys on` and `set -as terminal-features 'xterm*:extkeys'`. In Windows Terminal before `1.25`, where Shift+Enter sends the prompt, it says to press Ctrl+J or type a backslash and press Enter, or to update Windows Terminal.[^terminal-setup] |
 | `/keybindings` | <Documented /> | Opens your keyboard shortcuts file. | Interactive only. Needs keybinding customization on. |
 | `/ide` `[open]` | <Documented /> | Manages IDE integrations and shows status. | Panel. |
 | `/init` | <Documented /> | Creates a `CLAUDE.md` file with codebase notes. | A prompt command. With env var `CLAUDE_CODE_NEW_INIT` it also configures skills and hooks. Claude can call it through the `Skill` tool. |
@@ -100,7 +100,7 @@ Each line is a separate command. The text after the name is the argument.
 | `/chrome` | <Gated note="Availability claude-ai, policy allow_claude_browser_extension, interactive only." /> | Opens Claude in Chrome settings. | Panel. |
 | `/insights` | <Gated note="Policy allow_insights, and needs a workspace." /> | Makes a report that analyzes your sessions. | A prompt command. |
 | `/privacy-settings` | <Gated note="A signed-in subscriber with an eligible plan." /> | Views and updates privacy settings. | Panel. |
-| `/login` | <Documented /> | Signs in, or switches accounts. | Off when env var `DISABLE_LOGIN_COMMAND` is set. |
+| `/login` | <Documented /> | Signs in, or switches accounts. | Off when env var `DISABLE_LOGIN_COMMAND` is set. Since `2.1.326`, the code prompt refuses a web address, a `localhost` address, or a short number code, says what to do instead, and stays open for the right code. The right code has a `#` in the middle.[^login] |
 | `/logout` | <Documented /> | Signs out. | Off when env var `DISABLE_LOGOUT_COMMAND` is set. |
 | `/install` `[options]` | <Documented /> | Installs the native build. | Takes `--force` and a target. Interactive only. |
 
@@ -246,6 +246,11 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^kinds]: The program calls a panel command `local-jsx`, a text command `local`, and a prompt command `prompt`.
+[^rewind]: The program, `chunk-y9bdpp8r.js:23472-23488`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^memory]: The program, `chunk-eqmsy9y5.js:2145-2153`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^tui]: The program, `chunk-y9bdpp8r.js:13655-13662` and `:123405-123480`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^terminal-setup]: The program, `chunk-gnqb58r1.js:351-379`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^login]: The program, `chunk-1sk1fatq.js:7-31`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^count]: The program, the command objects. `/keybindings`, `/release-notes`, `/rewind`, `/chrome`, `/statusline`, and `/sandbox` are missing from the program inventory file because of the key order in their objects. The program itself has them. Official page: [Commands](https://code.claude.com/docs/en/commands).
 [^diff]: The program, `chunk-rszfmg4b.js:30037`.
 [^more-models]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-1xmjf4e6.js:719561`.
