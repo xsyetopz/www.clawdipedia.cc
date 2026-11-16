@@ -5,13 +5,9 @@ sidebar_position: 10
 draft: false
 ---
 
-This page lists everything that official Anthropic docs leave out.
-Each item carries the <Undocumented /> badge on its own page.
-Here you find them all in one place, sorted by surface, with a link to the page that explains each one.
-An undocumented item can change or vanish in any release, so treat it with care.
+This page lists every item that official Anthropic docs leave out. Each item carries the <Undocumented /> badge on its own page, and this page groups them by surface with a link to each one. An undocumented item can change or vanish in any release, so check it before you rely on it.
 
-Counts are table rows. A row can name several items, such as a list of related variables.
-Items that the docs name but describe wrongly are in [Behaves Differently From the Docs](#behaves-differently-from-the-docs).
+Counts are table rows. A row can name several items, such as a list of related variables. Items that the docs name but describe wrongly are in [Behaves Differently From the Docs](#behaves-differently-from-the-docs).
 
 ## Summary
 
@@ -72,7 +68,7 @@ Count: 25.
 
 ## Environment Variables
 
-There are too many to list one by one. Each page below holds a table, and every undocumented variable in it has the Undocumented badge. The pages sort variables by what they do.
+Too many variables exist to list here. Each page below holds a table, and every undocumented variable in it has the Undocumented badge. The pages sort variables by what they do.
 
 Count: 1120.
 
@@ -555,7 +551,7 @@ Count: 195.
 
 ## Mod API
 
-The Mod API is covered by official Mods pages, so no Mod API item is listed here as undocumented. Differences are in the last section. For the Mod API, Documented means that the item is in the official docs or in the published type file (which the docs call "The complete reference"), so the Mod API shows 0 Undocumented rows.
+Official Mods pages cover the Mod API, so this page lists no Mod API item as undocumented. For the Mod API, Documented means that the item is in the official docs or in the published type file, which the docs call "The complete reference". Differences are in the last section.
 
 Count: 0.
 
@@ -678,7 +674,7 @@ Count: 108.
 
 ## Behaves Differently From the Docs
 
-These items exist in the official docs, but the program works in another way. Count: 42. The badge on each page says how.
+These items exist in the official docs, but Claude Code works in another way. The badge on each page says how. Count: 42.
 
 | Item | Where |
 | --- | --- |

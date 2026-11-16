@@ -4,11 +4,7 @@ description: How an AI agent can read this site as plain text, and how to instal
 sidebar_position: 5
 ---
 
-An agent reads plain text better than a web page.
-This site gives agents text files, a small manifest, and a plugin.
-The plugin adds an MCP server (a program that gives an agent tools) and a skill that tells Claude when to use it.
-The server reads the live site and keeps a copy on disk. So it still answers when you are offline (see [Live Fetch and Cache](#live-fetch-and-cache)). It has no telemetry and sends no data about you. It only requests public pages.
-Source: [llms.txt Proposal](https://llmstxt.org/) and [Model Context Protocol Specification](https://modelcontextprotocol.io/specification).
+An agent reads plain text better than a web page, so this site gives agents text files, a small manifest, and a plugin.[^standards] The plugin adds an MCP server (a program that gives an agent tools) and a skill that tells Claude when to use it. To use it, install the plugin (see [Install the Plugin](#install-the-plugin)). The server reads the live site and keeps a copy on disk, so it still answers when you are offline (see [Live Fetch and Cache](#live-fetch-and-cache)). It has no telemetry, sends no data about you, and requests only public pages.
 
 ## Text Files
 
@@ -106,7 +102,7 @@ Every result ends with a `Source:` line. It names the host and says whether the 
 ## Use the Server with Other Clients
 
 The server speaks MCP over stdio. Any MCP client can run it.
-Clone the repo. Then point the client at the built file.
+Clone the repo, then point the client at the built file.
 
 ```json title="MCP client config"
 {
@@ -123,11 +119,9 @@ In Claude Code, you can add it by hand with `claude mcp add clawdipedia-docs -- 
 
 ## Live Fetch and Cache
 
-The server has no bundled copy of the pages.
-It fetches the manifest, pages, and schemas from the site when a tool needs them. It fetches the pages of the other three sources from their hosts.
-The server saves each fetched file on disk. If the network fails, the server serves the saved copy. The `Source:` line says it is offline.
-If the server saved nothing yet, the tool returns an error that says the host could not be reached.
-The server starts without any network request.
+The server has no bundled copy of the pages. It fetches the manifest, pages, and schemas from the site when a tool needs them. It fetches the pages of the other three sources from their hosts. The server starts without any network request.
+
+The server saves each fetched file on disk. If the network fails, the server serves the saved copy, and the `Source:` line says it is offline. If the server saved nothing yet, the tool returns an error that says the host could not be reached.
 
 ### Settings
 
@@ -156,8 +150,7 @@ A base URL must use `https`. Plain `http` works only for `localhost` and `127.0.
 | Over the size cap | The server deletes the least recently fetched files, pages of platform, code, and claude-resources first. Then it deletes site pages and schemas. The server never deletes the index files. |
 | Folder that cannot be written | The cache lives in memory until the server stops. |
 
-The server ignores any manifest entry with an odd route or a URL outside the site.
-It does not send or keep cookies.
+The server ignores any manifest entry with an odd route or a URL outside the site. It does not send or keep cookies.
 
 ## Inspect Sessions and the Program
 
@@ -197,7 +190,7 @@ The server has 4 tools. Each takes an `action` or a `kind` that picks what it do
 | `surface` | `kind: "tool-gates"` | Lists the built-in tools of a binary. Each tool comes with the code in the tool list that turns it on or off. It also comes with its own `isEnabled()` check, when it has one. It also comes with the source of the functions they call. The list does not include the filters of each session. So a listed tool may still be off. |
 | `release` | `action: "diff"` | Lists the functions changed, added, and gone between two versions (`from` and `to`), each with the changed lines of its cleaned code. Pass `name` to keep the changes that hold a text. |
 | `release` | `action: "explain"` | For a `name` (a string, a command such as `/loops`, or a tool name), gives where its code is and who uses it. It also gives the gates and env reads that guard it, and whether each function is a no-op, a stub, or handled. |
-| `release` | `action: "notes"` | Marks each line of the release notes of `version` as matched (a changed function or a `release:diff` item holds its code span or words), gated (the match reads a `tengu_` gate), or unmatched. It compares against `from` (else the newest older install). Read the code of each match before you state it. |
+| `release` | `action: "notes"` | Marks each line of the release notes of `version` as matched (a changed function or a `release:diff` item holds its code span or words), gated (the match reads a server-side gate)[^gated], or unmatched. It compares against `from` (else the newest older install). Read the code of each match before you state it. |
 
 The server also has 2 MCP prompts. They give an agent the steps of a task. `release_review` (with `from` and `to`) runs `prepare`, `diff`, and `notes`. Then it runs `find` and `explain` for each gated or unmatched line. `explain_change` (with `name`) runs `find` and `explain` for one name.
 
@@ -210,3 +203,8 @@ The code tools read the code with the [meriyah](https://github.com/meriyah/meriy
 - [Plugin Manifest](../extend/plugins/manifest.md)
 - [Plugin Loading](../extend/plugins/loading.md)
 - [Marketplaces](../extend/plugins/marketplace.md)
+
+## Source Notes
+
+[^standards]: [llms.txt Proposal](https://llmstxt.org/) and [Model Context Protocol Specification](https://modelcontextprotocol.io/specification).
+[^gated]: The tool output marks gates with the prefix `tengu_`.

@@ -4,9 +4,29 @@ description: A task map that links each thing you may want to change to the sett
 sidebar_position: 2
 ---
 
-Claude Code has many places where you can change how it works.
-This page starts from what you want to do. It points to the right place.
-Each row links to the page that lists every key, flag, or field.
+Claude Code has many places where you can change how it works. This page starts from what you want to do and points to the right place. Each row links to the page that lists every key, flag, or field.
+
+## Example
+
+You want Claude to run your formatter after each edit and to ask before it runs `git push`. Two small settings do both.
+
+```json title=".claude/settings.json"
+{
+  "permissions": {
+    "ask": ["Bash(git push:*)"]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [{ "type": "command", "command": "bunx prettier --write ." }]
+      }
+    ]
+  }
+}
+```
+
+The first part is a permission rule. The second part is a hook. Both live in the shared project settings file.
 
 ## The Surfaces
 
@@ -108,38 +128,11 @@ flowchart LR
 
 ## What You Cannot Change
 
-The program fixes some parts.
-You cannot edit the built-in tools, the permission engine, or the request format from a setting.
-You can still watch or shape them with a hook or a mod.
-The [Architecture](../how-it-works/architecture.md) and [Agent Loop](../how-it-works/agent-loop.md) pages show where each part sits.
+Claude Code fixes some parts. No setting edits the built-in tools, the permission engine, or the request format. You can still watch or shape them with a hook or a mod. The [Architecture](../how-it-works/architecture.md) and [Agent Loop](../how-it-works/agent-loop.md) pages show where each part sits.
 
 :::warning
-Do not use <Undocumented /> items in shared setups without a plan.
-They can change in any release without notice.
+Do not use <Undocumented /> items in shared setups without a plan. They can change in any release without notice.
 :::
-
-## Example
-
-You want Claude to run your formatter after each edit and to ask before it runs `git push`.
-Two small settings do both.
-
-```json title=".claude/settings.json"
-{
-  "permissions": {
-    "ask": ["Bash(git push:*)"]
-  },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [{ "type": "command", "command": "bunx prettier --write ." }]
-      }
-    ]
-  }
-}
-```
-
-The first part is a permission rule. The second part is a hook. Both live in the shared project settings file.
 
 ## Related Pages
 

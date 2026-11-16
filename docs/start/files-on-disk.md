@@ -4,11 +4,19 @@ description: Every file and folder that Claude Code reads or writes, with what i
 sidebar_position: 3
 ---
 
-Claude Code keeps its state in plain files.
-Some you write, such as settings and `CLAUDE.md`. Others Claude Code writes, such as transcripts and caches.
-This page lists them by place, says what each one is, and links to the page with the details.
+Claude Code keeps its state in plain files. You write some of them, such as settings and `CLAUDE.md`. Claude Code writes others, such as transcripts and caches. This page lists them by place, says what each one is, and links to the page with the details. See also [Explore the .claude Directory](https://code.claude.com/docs/en/claude-directory).[^overview]
 
-Source: [Explore the .claude Directory](https://code.claude.com/docs/en/claude-directory) and the program.
+## Example
+
+You want to find where Claude Code kept the last session in `/work/app`. Then you want to remove old ones.
+
+```bash
+ls ~/.claude/projects/-work-app/
+claude purge --dry-run
+```
+
+The first command lists the transcripts of that project.
+The second shows what `claude purge` would delete. It deletes nothing.
 
 :::warning
 The files are not encrypted.
@@ -83,7 +91,7 @@ You usually commit these files, except the ones marked local.
 
 ## Plugins and Marketplaces
 
-Source: [Plugin Loading Reference](https://code.claude.com/docs/en/plugins/loading).
+Official page: [Plugin Loading Reference](https://code.claude.com/docs/en/plugins/loading).
 
 | Path | Status | What it is | Page |
 | --- | --- | --- | --- |
@@ -102,8 +110,7 @@ Source: [Plugin Loading Reference](https://code.claude.com/docs/en/plugins/loadi
 ## Sessions and Transcripts
 
 All paths here are under `~/.claude/`.
-`<project>` is the project folder path. In it, `-` replaces every character other than a letter or digit.
-Source: [Explore the .claude Directory](https://code.claude.com/docs/en/claude-directory).
+`<project>` is the project folder path. In it, `-` replaces every character other than a letter or digit. See [Explore the .claude Directory](https://code.claude.com/docs/en/claude-directory).
 
 | Path | Status | What it is | Cleaned by age? |
 | --- | --- | --- | --- |
@@ -138,13 +145,13 @@ The line format of a transcript is on [Transcript Format](../reference/transcrip
 | `~/.claude/policy-limits.json` | <Documented /> | Cached organization limits. Some account types only. | [Enterprise Settings](../configure/settings/enterprise.md) |
 | `~/.claude/cache/changelog.md` | <Documented /> | A cached copy of the [changelog](https://code.claude.com/docs/en/changelog) for `/release-notes`. | [What Changed](what-changed.md) |
 | `~/.claude/daemon/roster.json`, `~/.claude/jobs/<id>/state.json`, `~/.claude/jobs/<id>/tmp/` | <Documented /> | The list of running background sessions, the state of each session, and its scratch folder. Keep them. The official "Agent View" page describes them. | [Sessions and Storage](../how-it-works/sessions-and-storage.md) |
-| `state/`, `mods/`, `bridge-spawn/`, `seed-admin/`, `downloads/`, `cache/model-catalog/` | <Undocumented /> | Present on a `2.1.305` machine (after `2.1.305` was installed, only `cache/model-catalog/` and a type file under `mods/handoff/` were written; `bridge-spawn/`, `seed-admin/`, and `downloads/` are empty and `state/` was last written before the install) or named in the program. No docs page describes them. The program describes `state/`, `seed-admin/`, `bridge-spawn/`, and `cache/model-catalog/`; see the link. | [Sessions and Storage](../how-it-works/sessions-and-storage.md) |
+| `state/`, `mods/`, `bridge-spawn/`, `seed-admin/`, `downloads/`, `cache/model-catalog/` | <Undocumented /> | Present on a `2.1.305` machine, or named in the program. After `2.1.305` was installed, only `cache/model-catalog/` and a type file under `mods/handoff/` were written. `bridge-spawn/`, `seed-admin/`, and `downloads/` are empty, and `state/` was last written before the install. No docs page describes them. See the link for what the program says about `state/`, `seed-admin/`, `bridge-spawn/`, and `cache/model-catalog/`.[^config-folders] | [Sessions and Storage](../how-it-works/sessions-and-storage.md) |
 
 ## Names in the Config Folder
 
 The tables above show full paths. This table lists each name on its own, so you can look one up.
 The paths are under `~/.claude/` unless the Where column says otherwise.
-The program holds more names than this table lists. They are internal files, or names with a use that this page could not confirm.
+Claude Code uses more names than this table lists. They are internal files, or names with a use that this page could not confirm.[^more-names]
 
 | Name | Status | Where | What it is |
 | --- | --- | --- | --- |
@@ -179,11 +186,11 @@ The program holds more names than this table lists. They are internal files, or 
 | `state` | <Undocumented /> | `~/.claude/` | Staged settings changes and consent records. See [Sessions and Storage](../how-it-works/sessions-and-storage.md). |
 | `seed-admin` | <Undocumented /> | `~/.claude/` | The root for temp folders of cloud-session uploads. See [Sessions and Storage](../how-it-works/sessions-and-storage.md). |
 | `model-catalog` | <Undocumented /> | `~/.claude/cache/` | Cached model catalog files and `masked-ids.json`. See [Sessions and Storage](../how-it-works/sessions-and-storage.md). |
-| `.config.json` | <Undocumented /> | `~/.claude/` | The old place of the global config. The program uses it when it is a non-empty file. Otherwise it uses `~/.claude.json`. |
-| `.last-cleanup` | <Undocumented /> | `~/.claude/` | Holds an ISO time. The program reads the age of the file to skip a new cleanup run. |
-| `.deep-link-register-failed` | <Undocumented /> | `~/.claude/` | A marker that the deep-link registration failed. The program reads the age of the file. It does not try again for a while. |
+| `.config.json` | <Undocumented /> | `~/.claude/` | The old place of the global config. Claude Code uses it when it is a non-empty file. Otherwise it uses `~/.claude.json`.[^config-json] |
+| `.last-cleanup` | <Undocumented /> | `~/.claude/` | Holds an ISO time. Claude Code reads the age of the file to skip a new cleanup run.[^last-cleanup] |
+| `.deep-link-register-failed` | <Undocumented /> | `~/.claude/` | A marker that the deep-link registration failed. Claude Code reads the age of the file. It does not try again for a while.[^deep-link] |
 | `.last-update-result.json` | <Undocumented /> | `~/.claude/` | The result of the last update, with the fields `outcome` (`success` or `failed`), `status`, `version_from`, `version_to`, and `error_code`. |
-| `.update.lock` | <Undocumented /> | `~/.claude/` | The update lock. The program treats a lock younger than 5 minutes as held. |
+| `.update.lock` | <Undocumented /> | `~/.claude/` | The update lock. A lock younger than 5 minutes counts as held.[^update-lock] |
 | `active-time.json` | <Undocumented /> | `~/.claude/` | A ledger of active time, with `version` `1` and a `windows` list. |
 | `asset-cache` | <Undocumented /> | `~/.claude/plugins/` | The cache of plugin binary assets. |
 | `cowork_plugins` | <Undocumented /> | `~/.claude/` | The plugin root in place of `plugins` when `CLAUDE_CODE_USE_COWORK_PLUGINS` is on. |
@@ -195,9 +202,9 @@ The program holds more names than this table lists. They are internal files, or 
 | `mcp-needs-auth-cache.json` | <Undocumented /> | `~/.claude/` | The MCP needs-auth cache. |
 | `my-closed-issues.json` | <Undocumented /> | `~/.claude/cache/` | A cached list of closed issues. Each entry has `number`, `title`, and `closedAt`. |
 | `startup-perf` | <Undocumented /> | `~/.claude/` | A `.json` and a `.txt` file that `CLAUDE_CODE_PROFILE_STARTUP=1` writes. See [Probes](../reference/probes.md). |
-| `daemon.json` | <Undocumented /> | `~/.claude/` | A file in the config folder that the file tools refuse to write. The program refuses the same writes to `daemon`, `jobs`, `shell-snapshots`, and `session-env`. |
-| `local` | <Undocumented /> | `~/.claude/` | The folder of a local npm install. After a failed auto-update, the program tells you to run `cd ~/.claude/local && npm update`. |
-| `loop.md` | <Undocumented /> | `.claude/`, `~/.claude/` | The task list of a `/loop` tick that has no prompt. The program reads the project file first, then the config folder file. It cuts the text to 25000 bytes and adds a warning. |
+| `daemon.json` | <Undocumented /> | `~/.claude/` | A file in the config folder that the file tools refuse to write. The same writes to `daemon`, `jobs`, `shell-snapshots`, and `session-env` are also refused.[^daemon-json] |
+| `local` | <Undocumented /> | `~/.claude/` | The folder of a local npm install. After a failed auto-update, Claude Code tells you to run `cd ~/.claude/local && npm update`.[^local] |
+| `loop.md` | <Undocumented /> | `.claude/`, `~/.claude/` | The task list of a `/loop` tick that has no prompt. Claude Code reads the project file first, then the config folder file. It cuts the text to 25000 bytes and adds a warning.[^loop] |
 | `personal` | <Undocumented /> | `~/.claude/memory/` | The folder of the personal memory store (`memory/personal`). The store takes only Markdown files. The model reads and writes it through a memory store named `personal`, when memory stores are on. |
 | `workflows` | <Undocumented /> | `.claude/` | Predefined workflows, as `.claude/workflows/<name>.js`. A workflow call that gives a `name` resolves it from here or from the built-in list. The save dialog writes a project workflow to this folder. |
 
@@ -229,22 +236,11 @@ When two settings files set the same key, the higher one wins.
 List keys such as `permissions.allow` merge across files.
 The exceptions and the merge rules are on [Settings Files and Scopes](../configure/settings/index.md).
 
-## Example
-
-You want to find where Claude Code kept the last session in `/work/app`. Then you want to remove old ones.
-
-```bash
-ls ~/.claude/projects/-work-app/
-claude purge --dry-run
-```
-
-The first command lists the transcripts of that project.
-The second shows what `claude purge` would delete. It deletes nothing.
-
 ## Exact Fields
 
-The exact fields of `~/.claude.json` are in this schema: `https://clawdipedia.cc/schemas/claude-code-claude-json.json`. The program builds this payload in code, not with a validator. So the schema comes from that code. A field marked `x-unverified` has a type that the code does not show. A field marked `x-observed` is a field that a probe saw.
-It lists every field of this release. Build on the fields it names. Look each one up there before you rely on it.
+The exact fields of `~/.claude.json` are in this schema: `https://clawdipedia.cc/schemas/claude-code-claude-json.json`. It lists every field of this release. Look each field up there before you rely on it.
+
+Claude Code builds this payload in code, with no validator, so the schema comes from that code.[^claude-json] A field marked `x-unverified` has a type that the code does not show. A field marked `x-observed` is a field that a probe saw.
 
 ## Related Pages
 
@@ -252,3 +248,17 @@ It lists every field of this release. Build on the fields it names. Look each on
 - [Sessions and Storage](../how-it-works/sessions-and-storage.md)
 - [Settings Files and Scopes](../configure/settings/index.md)
 - [Environment Variables for Sessions and Storage](../configure/env-vars/sessions-and-storage.md)
+
+## Sources
+
+[^overview]: The program.
+[^config-folders]: The program.
+[^more-names]: The program.
+[^config-json]: The program.
+[^last-cleanup]: The program.
+[^deep-link]: The program.
+[^update-lock]: The program.
+[^daemon-json]: The program.
+[^local]: The program.
+[^loop]: The program.
+[^claude-json]: The program.
