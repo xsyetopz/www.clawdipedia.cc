@@ -107,7 +107,7 @@ Source: [Connect Claude Code to Tools via MCP](https://code.claude.com/docs/en/m
 
 ### Which Built-In Tools Are Deferred
 
-- Deferred: `WebFetch`, `WebSearch`, `NotebookEdit`, `TodoWrite`, `LSP`, `Monitor`, `EnterPlanMode`, `ExitPlanMode`, `EnterWorktree`, `ExitWorktree`, `TaskCreate`, `TaskGet`, `TaskUpdate`, `TaskList`, `TaskStop`, `SendMessage`, `SendFile`, `CronCreate`, `CronDelete`, `CronList`, `PushNotification`, `RemoteTrigger`, `EndConversation`, `ProposeGoal`, `FetchInboxMessage`, `PublishPlugin`, `OfferChromeSetup`, `DesignSync`, `SearchMcpRegistry`, `SuggestConnectors`, `ListConnectors`, the three MCP resource tools, and the nine self-hosted runner tools.
+- Deferred: `WebFetch`, `WebSearch`, `NotebookEdit`, `TodoWrite`, `LSP`, `Monitor`, `EnterPlanMode`, `ExitPlanMode`, `EnterWorktree`, `ExitWorktree`, `TaskCreate`, `TaskGet`, `TaskUpdate`, `TaskList`, `TaskStop`, `SendMessage`, `SendFile`, `CronCreate`, `CronDelete`, `CronList`, `PushNotification`, `RemoteTrigger`, `EndConversation`, `SetGoal`, `GetGoal`, `PauseGoal`, `FetchInboxMessage`, `PublishPlugin`, `OfferChromeSetup`, `DesignSync`, `SearchMcpRegistry`, `SuggestConnectors`, `ListConnectors`, the three MCP resource tools, and the nine self-hosted runner tools.
 - A runtime check decides: `SuggestPluginInstall`, `SuggestSkills`, `SendUserFile`.
 - Not deferred: `Read`, `Write`, `Edit`, `Glob`, `Grep`, `Bash`, `PowerShell`, `Agent`, `Skill`, `AskUserQuestion`, `ListAgents`, `Workflow`, `ReportFindings`, `ToolSearch`, `StructuredOutput`, `SubagentHandback`, `ScheduleWakeup`, `memory_*`, and the rest of the gated tools.
 - The old capture of `2.1.296` lacked `Glob` and `Grep`. In `2.1.305` they are not deferred.

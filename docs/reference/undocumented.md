@@ -24,17 +24,17 @@ Items that the docs name but describe wrongly are in [Behaves Differently From t
 | [Hooks](#hooks) | 15 |
 | [Commands](#commands) | 2 |
 | [Skills](#skills) | 7 |
-| [Subagents](#subagents) | 7 |
+| [Subagents](#subagents) | 8 |
 | [Plugins](#plugins) | 9 |
 | [MCP](#mcp) | 32 |
 | [Tools](#tools) | 30 |
-| [API Endpoints and Betas](#api-endpoints-and-betas) | 98 |
+| [API Endpoints and Betas](#api-endpoints-and-betas) | 99 |
 | [System Prompt](#system-prompt) | 34 |
 | [Transcript and Sessions](#transcript-and-sessions) | 13 |
 | [Headless Protocol](#headless-protocol) | 195 |
 | [Mod API](#mod-api) | 0 |
 | [Other](#other) | 108 |
-| Total | 1845 |
+| Total | 1847 |
 
 ## Settings Keys
 
@@ -258,7 +258,7 @@ Count: 7.
 
 Frontmatter keys and built-in agents that official pages leave out.
 
-Count: 7.
+Count: 8.
 
 | Item | Where |
 | --- | --- |
@@ -269,6 +269,7 @@ Count: 7.
 | `comment-thread-analyst` | [Subagent Runtime](../extend/subagents/runtime.md#built-in-agents) (Built-In Agents) |
 | Web-reading agent | [Subagent Runtime](../extend/subagents/runtime.md#built-in-agents) (Built-In Agents) |
 | `CLAUDE_CODE_ENABLE_APPEND_SUBAGENT_PROMPT`, `CLAUDE_CODE_MEMORY_SUBAGENT_APPEND`, `CLAUDE_CODE_SUBAGENT_PROMPT_SNAPSHOT`, and 2 more | [Subagent Runtime](../extend/subagents/runtime.md#limits-and-switches) (Limits and Switches) |
+| Subagent output limit | [Subagent Runtime](../extend/subagents/runtime.md#limits-and-switches) (Limits and Switches) |
 
 ## Plugins
 
@@ -337,7 +338,7 @@ Count: 30.
 
 | Item | Where |
 | --- | --- |
-| `ProposeGoal` | [Agents, Tasks, and Planning](tools/agents-and-tasks.md#tools) (Tools) |
+| `SetGoal`, `GetGoal`, `PauseGoal` | [Agents, Tasks, and Planning](tools/agents-and-tasks.md#tools) (Tools) |
 | `memory_read` | [Files, Search, and Memory](tools/files.md#tools) (Tools) |
 | `memory_write` | [Files, Search, and Memory](tools/files.md#tools) (Tools) |
 | `memory_list` | [Files, Search, and Memory](tools/files.md#tools) (Tools) |
@@ -372,7 +373,7 @@ Count: 30.
 
 Endpoints that Claude Code calls and the beta headers it sends.
 
-Count: 98.
+Count: 99.
 
 | Item | Where |
 | --- | --- |
@@ -416,6 +417,7 @@ Count: 98.
 | `mid-conversation-system-clear-at-2026-08-21` | [Betas](api/betas.md#registry) (Registry) |
 | `/v1/messages/cache_touch` | [Endpoints and Headers](api/endpoints.md#model-endpoints) (Model Endpoints) |
 | `/v1/oauth/token`, `/api/oauth/profile`, `/api/oauth/usage`, `/api/oauth/account/settings` | [Endpoints and Headers](api/endpoints.md#account-and-service-endpoints) (Account and Service Endpoints) |
+| `/v1/privacy-consents`, `/v1/privacy-consents/check` | [Endpoints and Headers](api/endpoints.md#account-and-service-endpoints) (Account and Service Endpoints) |
 | `/api/oauth/account/settings?opt_in_only_if_unset=grove_enabled` | [Endpoints and Headers](api/endpoints.md#account-and-service-endpoints) (Account and Service Endpoints) |
 | `/api/claude_code/policy_limits` | [Endpoints and Headers](api/endpoints.md#account-and-service-endpoints) (Account and Service Endpoints) |
 | `/api/claude_code/organizations/metrics_enabled`, `/api/claude_code/notification/preferences`, `/api/claude_code/skills` | [Endpoints and Headers](api/endpoints.md#account-and-service-endpoints) (Account and Service Endpoints) |
