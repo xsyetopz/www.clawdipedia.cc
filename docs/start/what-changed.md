@@ -1,10 +1,10 @@
 ---
 title: What Changed
-description: What changed in Claude Code 2.1.323, the release this site covers, against 2.1.322, the release before it.
+description: What changed in Claude Code 2.1.326, the release this site covers, against 2.1.323, the release before it.
 sidebar_position: 4
 ---
 
-This page lists the changes in `2.1.323`, the release this site covers, against `2.1.322`, the release before it.
+This page lists the changes in `2.1.326`, the release this site covers, against `2.1.323`, the last release that this page covered.
 It is short on purpose. The site only repeats what its sources say. It does not guess.
 For every fix and small change, read the official [Changelog](https://code.claude.com/docs/en/changelog).
 
@@ -12,109 +12,145 @@ For every fix and small change, read the official [Changelog](https://code.claud
 
 Run `claude --version`.
 The `/release-notes` command shows a cached copy of the [changelog](https://code.claude.com/docs/en/changelog).
-This site covers `2.1.323`, the version shown in the navbar.
+This site covers `2.1.326`, the version shown in the navbar.
 
-## Version 2.1.323
+## Version 2.1.326
 
-Sources: the release notes of [`2.1.323`](https://github.com/anthropics/claude-code/releases/tag/v2.1.323), and a comparison of the `2.1.322` and `2.1.323` programs. A row lists only what the program or a probe confirmed. Rows marked with the program, or with a case id, come from the program and not from the release notes. The notes items for VS Code, the web, cloud sessions, and Remote Control are not on this site.
+Sources: the release notes of [`2.1.325`](https://github.com/anthropics/claude-code/releases/tag/v2.1.325) and [`2.1.326`](https://github.com/anthropics/claude-code/releases/tag/v2.1.326), and a comparison of the `2.1.323` and `2.1.326` programs. The site skipped `2.1.325`, and `2.1.324` does not exist. Each row states what the linked page states. The notes items for VS Code, the web, cloud sessions, and Remote Control are not all on this site.
 
 ### Plugins and Mods
 
 | Change | Status | What it means for you | Where to read more |
 | --- | --- | --- | --- |
-| `engines["claude-code"]` in `plugin.json` | <Documented /> | A plugin outside its stated version range is not installed, updated, or loaded. Install and update pick the newest version that fits. | [Plugin Manifest](../extend/plugins/manifest.md#top-level-keys) |
-| `claude plugin validate` checks more | <Documented /> | It type-checks a TypeScript hooks module (a warning; `--strict` fails on it), lists the `$` nouns that `engine.create` adds, withholds, or replaces, and fails a mod whose `engine.create` hook is not in the accepted form. | [Plugin CLI](../extend/plugins/cli.md#subcommands) |
-| `engine.create` by name only | <Documented /> | A `*`, namespace, or negated hook on `engine.create` only observes. To add or withhold a noun, hook `engine.create` by name. | [Plugin and Engine](../extend/mod-api/calls/plugin.md#events) |
-| `unsetOptionCount` in `claude plugin install --json` | <Documented /> | The result counts the `userConfig` options that are not set yet (cases `print.cli323.plugin-install-json`, `.plugin-install-config-one`). | [Plugin CLI](../extend/plugins/cli.md#subcommands) |
-| `isPromptCovered` pane prop | <Documented /> | A mod's pane learns when a dialog or a field covers the prompt. | [UI Elements](../extend/mod-api/ui/ui-elements.md) |
-| A plugin's `agent` setting is deprecated | <Documented /> | It still applies. It now warns at startup, in `claude plugin list`, and in `claude plugin validate`. | [Plugin Manifest](../extend/plugins/manifest.md#top-level-keys) |
-| Plugin load and install errors | <Documented /> | A plugin that only a repository's settings enable now says it is not installed. A failed language server names itself. A git submodule off its recorded commit fails the install. A version list in `enabledPlugins` says why the plugin stays off. | [Plugin Loading](../extend/plugins/loading.md#errors), [Marketplace](../extend/plugins/marketplace.md#errors) |
-| Marketplace names `npm`, `pip`, `uv`, `cargo`, `github`, `gh` | <Documented /> | These names are no longer refused as reserved. One bad entry in `renames` no longer hides the other renames. | [Marketplace](../extend/plugins/marketplace.md#top-level-keys) |
-| `/mcp` server page | <Documented /> | A server that needs authentication but still holds its sign-in shows "Reconnect", and the page opens on it. | [MCP CLI](../extend/mcp/cli.md#the-mcp-command) |
-| `tool.list` hooks | <Documented /> | The tools a `tool.list` hook adds or removes apply to the model and every agent. | [Tool, Command, and Config Calls](../extend/mod-api/calls/tool-command-config.md#events-raised-by-these-calls) |
-| MCP startup wait | <Documented /> | When settings change `CLAUDE_CODE_MCP_STARTUP_WAIT_MS` after start-up, the first turn of an SDK session still waits for a server that `--allowedTools` names. | [Plugins and MCP Variables](../configure/env-vars/plugins-and-mcp.md) |
-| `.mcp.json` approvals match the exact name | <Documented /> | An approval written in another spelling asks again. | [MCP and Channels Settings](../configure/settings/mcp-and-channels.md) |
-| `/mcp` shows left-out tools | <Documented /> | It counts the tools of a server that the API would refuse for their input schema, and says why. | [MCP Runtime](../extend/mcp/runtime.md) |
-| `MCP_SDK_GENERATION=v1` | <Differs /> | It now runs the v2 MCP client in a compatibility mode. The v1 client is gone. | [Plugins and MCP Variables](../configure/env-vars/plugins-and-mcp.md) |
-| `cli323` probe group | <Undocumented /> | Release probes for `unsetOptionCount`, `claude workspace-trust`, `subagentStatusLine`, and the `claude mcp add --help` examples. | [Release Probes](../reference/probes.md) |
+| Plugin loaded from a folder | <Documented /> | A path or link that leads outside the plugin folder is skipped, and a warning names the path. `claude plugin validate` reports some unsafe paths and links. | [Plugin Loading](../extend/plugins/loading.md#unsafe-paths-and-links), [Plugin CLI](../extend/plugins/cli.md#subcommands) |
+| `extraKnownMarketplaces` in a worktree | <Documented /> | A session in a git worktree can skip the marketplaces from the worktree's own settings. A notice tells you to add the marketplace yourself. | [Plugin Loading](../extend/plugins/loading.md#unsafe-paths-and-links) |
+| Malformed display field in `plugin.json` | <Documented /> | A bad `author` or `homepage` no longer stops an enabled plugin from loading. Claude Code ignores the field, and `/plugin` and `claude plugin list` show a note. | [Plugin Manifest](../extend/plugins/manifest.md#how-it-works), [Plugin CLI](../extend/plugins/cli.md#how-it-works) |
+| `--plugin-dir` and nested skills | <Documented /> | A `.claude/skills` folder inside such a plugin no longer loads from a session that you started above the plugin. | [Plugin CLI](../extend/plugins/cli.md#session-flags) |
+| `claude plugin eval --output-dir ''` | <Documented /> | An empty path stops with an error. Pass a directory, or leave the option out. | [Plugin CLI](../extend/plugins/cli.md#how-it-works) |
+| Failed HTTPS clone | <Documented /> | The message says that git runs with terminal prompts turned off, so it needs a credential it can get without asking you. | [Plugin CLI](../extend/plugins/cli.md#how-it-works) |
+| `CLAUDE_CODE_PLUGIN_MCPB_DIR` | <Undocumented /> | The folder where `.mcpb` bundles unpack is `<config>/plugins/mcpb`, and this variable replaces it. | [Plugin CLI](../extend/plugins/cli.md#how-it-works), [Plugins and MCP Variables](../configure/env-vars/plugins-and-mcp.md#variables) |
+| `claude plugin uninstall` and bundles | <Documented /> | It also deletes the files unpacked from `.mcpb` and `.dxt` bundles, unless another plugin uses the bundle. | [Plugin CLI](../extend/plugins/cli.md#how-it-works) |
+| `/plugin` questions | <Documented /> | Uninstall, remove-marketplace, and switch-copy questions are lists. Use the arrow keys and Enter. The keys `y`, `n`, and `u` no longer answer. | [Plugin CLI](../extend/plugins/cli.md#how-it-works) |
+| `github` marketplace `ref` | <Documented /> | `ref` takes a branch, a tag, or a full commit ID. A full ID holds the marketplace at that commit. A client before `2.1.326` cannot clone such a pin. | [Marketplace](../extend/plugins/marketplace.md#marketplace-sources) |
+| `pluginDigests` | <Differs /> | It is deprecated and ignored. Settings that hold it still load. A plugin must be the copy that its install record holds, or it does not load. | [Marketplace](../extend/plugins/marketplace.md#plugin-digests) |
+| Marketplace trust text | <Documented /> | The add-marketplace confirmation, the install warning, and the recommendation prompt now say that plugins can run code on your computer. | [Marketplace](../extend/plugins/marketplace.md#how-it-works) |
 
 ### Mod API Type File
 
-Source: the program: the Mod API type file (`schemas/claude-code.d.ts`) of `2.1.323`, compared with the one of `2.1.322`.
+Source: the program: the Mod API type file (`schemas/claude-code.d.ts`) of `2.1.326`, compared with the one of `2.1.323`.
 
 | Change | Status | What it means for you | Where to read more |
 | --- | --- | --- | --- |
-| `$.theme.set` backdrop | <Differs /> | `backdrop.id` is now `backdrop.scene`, and the `Backdrop` render prop `id` is now `scene`. `colorScheme` moved out of `backdrop` to the top-level `overrideColorScheme`. A backdrop can also be a still ground (`ThemeGround`: a `color`, a `gradient`, or a `vector`), which draws with no `ui.render` hook and takes no `glass`. | [UI Methods](../extend/mod-api/ui/ui.md), [Surfaces, Elements, and Render Sites](../extend/mod-api/ui/ui-elements.md) |
-| `$.theme.set` errors | <Undocumented /> | New messages: `theme.set needs at least one of backdrop, overrideColorScheme, colors; $.theme.clear() clears the theme`, `overrideColorScheme is light or dark`, and `glass.blur is a number of points, 0 to 64`. A backdrop must name exactly one of `scene`, `color`, `gradient`, or `vector` (the program). | [UI Methods](../extend/mod-api/ui/ui.md) |
-| `ThemeColors` and `ThemeResult` | <Undocumented /> | `colors` may not hold the keys `__proto__`, `constructor`, or `prototype`. A surface refuses a palette with too little text contrast. `isDrawn: true` means a client that says it draws the theme is attached. | [UI Methods](../extend/mod-api/ui/ui.md) |
-| `Progress` element | <Undocumented /> | A new element with `label`, `value`, `max`, `valueText`, and `color`, on the terminal, desktop, mobile, and VS Code tables. `ClientElements` leaves it out. In tests, `ElementQuery.text` matches its label and figure. | [UI Element Props Types](../extend/mod-api/types/ui/element-props.md), [Testing Matcher and Engine Types](../extend/mod-api/types/testing/matchers-engine.md) |
-| Pane `placement` `widget` | <Undocumented /> | `$.ui.open` takes `placement: 'widget'`, and the `Pane` prop `placement` can be `widget` on the desktop app. `$.ui.open` and `$.ui.close` refuse a pane that another plugin holds. | [UI Methods](../extend/mod-api/ui/ui.md), [UI Input, Pane, and Render Types](../extend/mod-api/types/ui/input-pane-render.md) |
-| `AbovePromptList` and `AbovePrompt` | <Undocumented /> | `AbovePromptList` is a new render site. `AbovePrompt` is asked once per plugin with `e.plugin`. Mobile also raises `AbovePrompt` and `PromptHint`. | [Surfaces, Elements, and Render Sites](../extend/mod-api/ui/ui-elements.md) |
-| `TurnDuration.waitingFor` | <Undocumented /> | A new read-only prop that names the agents and the count of workflows that the turn waits for. | [Surfaces, Elements, and Render Sites](../extend/mod-api/ui/ui-elements.md) |
-| Matcher `plugin` key | <Differs /> | A `ui.render`, `ui.focus`, `ui.input`, `ui.press`, or `ui.select` hook that names no `plugin` hears only the elements of its own plugin. `{ plugin: "*" }` hears every plugin. | [Hook Machinery Types](../extend/mod-api/types/hooks.md), [UI Call Argument and Result Types](../extend/mod-api/types/ui/call-arguments.md) |
-| Button `hotkey` | <Differs /> | When two plugins use one hotkey, a press triggers neither. Within one plugin, the later button wins. | [UI Element Props Types](../extend/mod-api/types/ui/element-props.md) |
-| `$.tool.list`, `ToolInfo.inputSchema` | <Undocumented /> | `$.tool.list` runs through the `tool.list` hooks, but not those of the calling plugin. A hook can add a tool with `inputSchema`. A call of a removed tool is refused. The `$` calls of a `tool.list` hook fail after 30 seconds in all, and `$.ui.invalidate` takes `tool.list`. | [Tool, Command, and Config](../extend/mod-api/calls/tool-command-config.md), [Tool Call, Check, and Describe Types](../extend/mod-api/types/tool-command-config/tool-calls.md) |
-| `ceiling` of `tool.check` | <Undocumented /> | When the question has no ceiling, `ceiling` is the one that the core check found for the call. | [Tool Call, Check, and Describe Types](../extend/mod-api/types/tool-command-config/tool-calls.md) |
-| `mcp.connect` and `$.mcp.connect` | <Undocumented /> | The event is also raised for servers the engine connects itself, with a pinned `provider`. A hook that does not call `next` holds the server, and `/mcp` lists it as held. `$.mcp.connect` can connect any server that `/mcp` lists. | [Model, Audio, and MCP](../extend/mod-api/calls/model-audio-mcp.md) |
-| `origin.isVerified` of `session.receive` | <Undocumented /> | It is also true when a pane teammate accepted the signature of the lead. | [Session Receive, Send, and Usage Types](../extend/mod-api/types/session/receive-send-usage.md) |
-| `TurnStepInput.effort` | <Undocumented /> | The level can come from `CLAUDE_CODE_EFFORT_LEVEL`. A rewrite lasts one step. | [Prompt Suggest, Skill, and Turn Types](../extend/mod-api/types/turn-prompt/suggest-skill-turn.md) |
-| Plain data rule | <Undocumented /> | A named key on a list, or a key `__proto__`, `constructor`, or `prototype`, is not plain data for `JsonValue` and `Surface.post`. | [Atom, Files, and HTTP Types](../extend/mod-api/types/infra/atoms-files-http.md) |
+| `$.session.info` | <Documented /> | It returns the transcript file, scratchpad, prompt id, agent type, config root, platform, and hosting of the session. | [Session Calls](../extend/mod-api/calls/session.md#members), [Session Types](../extend/mod-api/types/session/compact-measure-messages.md#sessioninfo) |
+| `session.stop` | <Documented /> | It fires when the person presses Stop. It only observes. | [Session Calls](../extend/mod-api/calls/session.md#engine-events), [Session Receive, Send, and Usage Types](../extend/mod-api/types/session/receive-send-usage.md#sessionstopinput) |
+| `tool.judge` | <Documented /> | It fires when auto mode is about to ask its classifier about a call. | [Tool, Command, and Config Calls](../extend/mod-api/calls/tool-command-config.md#engine-events), [Tool Call, Check, and Describe Types](../extend/mod-api/types/tool-command-config/tool-calls.md#tooljudgeinput) |
+| `tool.run` | <Documented /> | It fires when an allowed call is about to run. A hook can answer in place of the tool. It never fires for a refusal. | [Tool, Command, and Config Calls](../extend/mod-api/calls/tool-command-config.md#engine-events) |
+| `$.fs.read` range | <Documented /> | `options.offset` and `options.length` read a range of bytes of a file. | [Files, Store, and State](../extend/mod-api/calls/fs-store-state.md#members) |
+| `plugin.register` `provides` | <Documented /> | A hook can narrow what a plugin loads. `PluginRegisterInput` also holds `provides`, `unread`, and `requiredByOrganization?`. | [Plugin and Engine](../extend/mod-api/calls/plugin.md#events), [Plugin and Engine](../extend/mod-api/calls/plugin.md#types) |
+| `PluginProvides` and `PluginHookEntry` | <Documented /> | New types that list what a plugin provides, kind by kind, and each settings hook that it ships. | [Plugin and Engine](../extend/mod-api/calls/plugin.md#types) |
+| `$.wasm.compile` | <Documented /> | A new noun that compiles WebAssembly in the environment of the module. A `wasm.compile` hook can read, replace, or refuse the bytes. | [Clock, HTTP, Process, Environment, and Settings](../extend/mod-api/calls/clock-http-process-env-settings.md#members), [Process, Settings, and State Types](../extend/mod-api/types/infra/process-settings-state.md#wasmcompileinput) |
+| `$.process.hookEnv` | <Documented /> | It returns the variables that name the session and the plugin, as a command hook gets them. | [Clock, HTTP, Process, Environment, and Settings](../extend/mod-api/calls/clock-http-process-env-settings.md#members) |
+| `$.model.complete` and `$.model.classify` cost | <Documented /> | An answered request counts toward the session cost, `/cost`, and the cost and token metrics. | [Model, Audio, and MCP](../extend/mod-api/calls/model-audio-mcp.md#members) |
+| `$.audio.speak` signal | <Documented /> | It rejects at once when `options.signal` aborts. | [Model, Audio, and MCP](../extend/mod-api/calls/model-audio-mcp.md#members) |
+| `$.mcp.call` | <Documented /> | A remote server that is down is dialed again with the sign-in already held. | [Model, Audio, and MCP](../extend/mod-api/calls/model-audio-mcp.md#members) |
+| `$.agent.call` and `agent.call` | <Documented /> | `$.agent.call` runs a tool as an agent's own call. A hook above the caller reads the abort signal as `next.signal`. | [Agent Calls](../extend/mod-api/calls/agent.md#members-of-the-agent-noun), [Agent Calls](../extend/mod-api/calls/agent.md#events-raised-by-agent-calls) |
+| `$.agent.limits` | <Documented /> | It returns how many agents may run at once, how deep they nest, and whether they may run in the background. | [Agent Calls](../extend/mod-api/calls/agent.md#members-of-the-agent-noun), [Agent Calls](../extend/mod-api/calls/agent.md#agent-limits) |
+| `AgentInfo` fields | <Documented /> | `kind`, `taskStatus`, `label`, `startTime`, `cwd`, `model`, `effort`, `contextWindowSize`, `tokenCount`, `tokenSamples`, `lastRequest`, `usage`, `cost`, and `hasRow` are new. | [Agent Calls](../extend/mod-api/calls/agent.md#what-agentlist-returns) |
+| `AgentSpawnInput.parentAgentId` | <Documented /> | A plugin can start a spawn under a running or resting agent of the session. | [Agent Calls](../extend/mod-api/calls/agent.md#spawn-types) |
+| `ui.pointer` | <Documented /> | It fires when the person clicks or taps the backdrop. Only the hooks of the plugin that set the theme see it. | [UI Events](../extend/mod-api/ui/ui-events.md#engine-events), [UI Call Argument and Result Types](../extend/mod-api/types/ui/call-arguments.md#uipointerinput) |
+| `overflowX` box prop | <Documented /> | The value `'scroll'` stops the box from wrapping its children. | [UI Element Props Types](../extend/mod-api/types/ui/element-props.md#boxprops) |
+| `wrap` `'clip'` and `maxLines` | <Documented /> | `'clip'` is a new `wrap` value. `maxLines` limits the lines from 1 to 10000. | [UI Select, Text, and Focus Types](../extend/mod-api/types/ui/select-text-focus.md#textprops) |
 
 ### Settings, Permissions, and Startup
 
 | Change | Status | What it means for you | Where to read more |
 | --- | --- | --- | --- |
-| `subagentStatusLine` removed | <Differs /> | The key has no effect. A settings file that holds it still loads, also with a wrong type (cases `print.cli323.subagent-status-line-*`). | [Status Line](../configure/status-line.md) |
-| `permissions.blockFileToolReadsOutsideWorkingDirectories` | <Undocumented /> | A new nested setting key (the program). A refused file reference names the setting that blocked it. | [Permission Rules](../configure/permissions/rules.md#the-permissions-keys), [File Tools](../reference/tools/files.md#errors) |
-| Start-up warning for `*` in a variable value | <Documented /> | A Bash allow rule such as `Bash(PORT=* npm run dev)` gives a warning at start-up. | [Permission Flow](../how-it-works/permission-flow.md#the-order-of-checks) |
-| Bash permission fixes | <Documented /> | Several Bash rule cases now ask: attached wildcards, `sudo` and `env` wrappers, combined `sudo` flags, and writes to `.git` or `.claude`. | [Permission Rules](../configure/permissions/rules.md#rule-syntax) |
-| Auto mode falls back to Manual | <Documented /> | When auto mode is not available, `--permission-mode auto` and `defaultMode: auto` start in Manual mode. | [Permission Modes](../configure/permissions/modes.md#choosing-and-cycling-a-mode) |
-| `plansDirectory` stays in the project | <Documented /> | A plan write that the program cannot show to stay inside the project is refused. | [Core Settings](../configure/settings/core.md) |
-| "Don't ask again" for secrets | <Documented /> | An allow rule that seems to hold a secret, or that would go to a `settings.local.json` that git tracks, lasts for the session only. | [Permission Rules](../configure/permissions/rules.md) |
-| Settings files and managed settings | <Documented /> | A settings write reads the file from disk first. Start-up reads a managed settings file a second time when the first read fails. `.claude/settings.local.json` is ignored globally also outside a git repository. | [Settings Files and Scopes](../configure/settings/index.md#where-settings-live) |
-| `policyHelper` environment | <Documented /> | The policy helper no longer gets environment variables from user or `--settings` files. Set what it needs in managed `env` or in the shell that starts Claude Code. | [Enterprise Settings](../configure/settings/enterprise.md#keys) |
-| `cleanupPeriodDays` errors | <Documented /> | The cleanup counts a folder it cannot read as an error. | [Core Settings](../configure/settings/core.md) |
-| `clawdFileProgressEnabled`, `precomputeArmTokens` | <Undocumented /> | Two new settings in the program. | [UI Settings](../configure/settings/ui.md), [Core Settings](../configure/settings/core.md) |
-| Misspelled keybinding modifiers | <Documented /> | A binding such as `ctl+k` is ignored. It no longer binds the bare key. | [Keybindings](../configure/keybindings/index.md) |
+| `subagentStatusLine` | <Documented /> | It works again, after it had no effect in `2.1.323`. It is deprecated: it still works and will stop working in a future release. | [Status Line](../configure/status-line.md#subagent-status-line), [Agents and Remote Settings](../configure/settings/agents-and-remote.md#keys) |
+| `sandbox.autoAllowBashIfSandboxed` | <Differs /> | The default is `false`. Sandboxed commands go through the normal permission flow. Set `true` to skip the prompt. | [Sandbox](../configure/permissions/sandbox.md#core-keys), [Sandbox](../configure/permissions/sandbox.md#how-it-works) |
+| `sandbox.windows.backend` | <Documented /> | A new key for Windows. `sandboxuser` is the default, and `mxc` is experimental. | [Sandbox](../configure/permissions/sandbox.md#core-keys) |
+| Sandbox writes in `--add-dir` folders | <Gated /> | When a server-side flag is on, the sandbox refuses writes to protected `.claude` files in each added folder. | [Sandbox](../configure/permissions/sandbox.md#other-behavior) |
+| Sandbox and `~/.ssh` | <Gated /> | `sandbox.filesystem.allowWrite` entries in project and local settings open nothing under `~/.ssh` or `~/.claude/remote`. Name `~/.ssh` in user or managed settings. | [Sandbox](../configure/permissions/sandbox.md#other-behavior) |
+| Sandbox and `.git` links | <Gated /> | After a sandboxed command, Claude Code sets aside each new symlink and each new ref file that points outside `refs/`. | [Sandbox](../configure/permissions/sandbox.md#other-behavior) |
+| Warning for an incomplete rule | <Documented /> | `--allowedTools`, `--disallowedTools`, and `--tools` warn at start-up about an entry that does not look like a complete rule. | [Permission Rules](../configure/permissions/rules.md#warnings-about-rules), [Flags](../configure/cli/flags.md#permissions-and-tools) |
+| Warning for an unsaved rule change | <Documented /> | The terminal warns when a rule change from `/permissions`, a tool prompt, or `/add-dir` cannot be written to a settings file. | [Permission Rules](../configure/permissions/rules.md#warnings-about-rules) |
+| Auto mode and failed policy settings | <Documented /> | If the served policy settings fail to load, a session that started in auto mode by default falls back to another mode. | [Auto Mode](../configure/permissions/auto-mode.md) |
+| Auto mode and wildcard rules | <Documented /> | A `Bash` wildcard rule whose program word is not a plain name, or is a Windows path, is dropped. The safety check decides these calls. | [Auto Mode](../configure/permissions/auto-mode.md#broad-allow-rules-in-auto-mode) |
+| Untrusted git repositories | <Gated /> | A read-only `git` command asks first when git would use a repository that Claude Code cannot match to a trusted folder. | [Permission Flow](../how-it-works/permission-flow.md#untrusted-git-repositories) |
+| `cd` and a relative path | <Documented /> | A `Bash` command can ask first when it reads a relative path after a `cd`. | [Permission Flow](../how-it-works/permission-flow.md#sign-in-files-in-shell-commands) |
+| Folder trust prompt | <Documented /> | It lists each settings file of the folder, with the tags `(runs commands)` and `(sets environment variables)`. | [Permission Flow](../how-it-works/permission-flow.md#folder-trust-prompt) |
+| Settings nested too deep | <Documented /> | Values nested more than 64 levels deep are dropped, with a warning. | [Settings](../configure/settings/index.md#deep-nesting) |
+| `allowedHttpHookUrls` and `httpHookAllowedEnvVars` | <Documented /> | Where managed settings do not set them, a list in another file does not apply to managed hooks. | [Hooks and Plugins Settings](../configure/settings/hooks-and-plugins.md#keys), [Hook Configuration](../extend/hooks/configuration.md#settings-keys-and-trust) |
+| `awaySummaryEnabled` | <Documented /> | The automatic recap is also skipped when the last reply was billed to usage credits. | [Core Settings](../configure/settings/core.md#keys) |
+| `plansDirectory` | <Documented /> | If Claude Code cannot save an approved plan there, it saves the plan in `~/.claude/plans`. | [Core Settings](../configure/settings/core.md#keys) |
+| `autoContinueAtUsageLimit` | <Documented /> | The wait stops when your login changes or ends. | [Agents and Remote Settings](../configure/settings/agents-and-remote.md#keys) |
+| `apply_flag_settings` | <Undocumented /> | A request with an invalid setting applies nothing and keeps the earlier settings. | [Control Protocol](../extend/headless/control-protocol.md#subtypes) |
+| `CLAUDE_CODE_MAX_CONTEXT_TOKENS` | <Differs /> | It applies to every model id that Claude Code does not recognize. | [Context and Compaction Variables](../configure/env-vars/context-and-compaction.md#variables) |
+| `CLAUDE_CODE_CHILD_NOTES_DIR` | <Undocumented /> | Claude Code sets it for child processes when a notes directory exists. Do not set it by hand. | [Sessions and Storage Variables](../configure/env-vars/sessions-and-storage.md#variables) |
+
+### Tools, Hooks, and MCP
+
+| Change | Status | What it means for you | Where to read more |
+| --- | --- | --- | --- |
+| `Write` and `Edit` on sign-in files | <Undocumented /> | Both refuse the sign-in token file, the machine key file, the token lock file, and a hard link to one of them. | [File Tools](../reference/tools/files.md#write-and-edit-limits) |
+| `Read` on a device file | <Undocumented /> | A path that names a device or process file, such as one under `/dev` or `/proc`, is refused. | [File Tools](../reference/tools/files.md#errors) |
+| `ExitWorktree` | <Documented /> | `remove` is also refused while a background subagent or shell command may still run in the worktree. | [Agent and Task Tools](../reference/tools/agents-and-tasks.md#tools) |
+| Goal tools | <Gated /> | `SetGoal` is the former `ProposeGoal`. `GetGoal` and `PauseGoal` are new. | [Agent and Task Tools](../reference/tools/agents-and-tasks.md#tools) |
+| `SendMessage` refusal | <Undocumented /> | It refuses to send to a session on another machine when this session signs in with an API key, an auth token, a profile, or a workload identity. | [Agent and Task Tools](../reference/tools/agents-and-tasks.md#errors) |
+| `Monitor` with only stderr output | <Documented /> | A watch that ends with no events, and whose command wrote to stderr, tells Claude so. | [Shell and Web Tools](../reference/tools/shell-and-web.md#how-it-works) |
+| Code Mode and agent teams | <Undocumented /> | Agent teams no longer block Code Mode. | [Gated and Other Tools](../reference/tools/gated-and-other.md#code-mode) |
+| Shell working directory | <Undocumented /> | A Bash command no longer runs in the launch folder when its working directory is gone. It fails with a message. | [Agent Loop](../how-it-works/agent-loop.md#the-tool-stage) |
+| Subagent output limit | <Undocumented /> | A subagent whose reply stops at the token limit is asked up to 3 times to answer again, more briefly. | [Subagent Runtime](../extend/subagents/runtime.md#limits-and-switches), [Agent Loop](../how-it-works/agent-loop.md#recovery-inside-the-loop) |
+| `decision: "block"` hook output | <Documented /> | It also blocks when `hookSpecificOutput` names a different event. Claude Code ignores that field and logs a warning. | [Hook Input and Output](../extend/hooks/input-and-output.md#decision-patterns) |
+| Exit code 127 on `PreToolUse` | <Documented /> | The notice adds that a program the hook needs may be missing. | [Hook Input and Output](../extend/hooks/input-and-output.md#exit-codes) |
+| HTTP hook `headers` | <Documented /> | Claude Code drops `Content-Length` and `Transfer-Encoding` and logs a warning. | [Hook Handlers](../extend/hooks/handlers.md#http-fields) |
+| Failed hooks in the transcript | <Documented /> | A failed, blocking, or timed-out hook shows in red, and a hook that stops Claude shows in yellow. | [Hook Configuration](../extend/hooks/configuration.md#environment-variables-for-hooks) |
+| `/mcp` questions from background tasks | <Documented /> | Esc and Ctrl+C read `answer later`. A closed question marks its task as `needs your input`. | [MCP Runtime](../extend/mcp/runtime.md#elicitation-and-channels) |
+| MCP helper that fails | <Documented /> | It no longer marks a server as needing sign-in for other sessions when no OAuth refresh token is stored. | [MCP Auth](../extend/mcp/auth.md#headershelper) |
+| `claude mcp add-json` messages | <Documented /> | A bad entry gets a message that says what to change. | [MCP CLI](../extend/mcp/cli.md#subcommands) |
+| `claude mcp serve` and the sandbox | <Documented /> | It ignores `dangerouslyDisableSandbox` and `sandbox.excludedCommands`. | [MCP CLI](../extend/mcp/cli.md#subcommands) |
+| `managed-mcp.json` that appears late | <Documented /> | Claude Code shows a notice, and may ignore a late file that the running account could have written. | [MCP Settings](../extend/mcp/settings.md#files-and-flags) |
 
 ### CLI, Sessions, and Accounts
 
 | Change | Status | What it means for you | Where to read more |
 | --- | --- | --- | --- |
-| `claude workspace-trust --json` | <Undocumented /> | A hidden command that reports whether the folder holds a saved workspace trust record. `--ignore-persisted-trust` counts only before the subcommand (cases `print.cli323.workspace-trust-*`). | [Subcommands](../configure/cli/subcommands.md) |
-| `claude drop-worktree-registrations` and `claude plugin install --registry` | <Differs /> | The program no longer has them. | [Subcommands](../configure/cli/subcommands.md) |
-| `claude rm` wording | <Documented /> | It says the session is removed from the list, not deleted. `claude --resume` still lists it. | [Subcommands](../configure/cli/subcommands.md) |
-| `/security-review` asks before git commands | <Gated note="Server flag tengu_lexical_parnas." /> | With the flag on, the command pre-allows no tools, so its git commands ask first. | [Bundled Skills](../extend/skills-and-commands/bundled-skills.md) |
-| Sandbox notes for `git worktree` and `lsof` | <Documented /> | In the sandbox, `.git/worktrees` is read-only, so `git worktree add`, `move`, and `remove` fail there. On macOS, a sandboxed command sees only the processes it started, so an empty `lsof` result does not show a free port. | [Sandbox](../configure/permissions/sandbox.md#other-behavior) |
-| `/usage` subagent fix line | <Documented /> | The fix reads `Check which models your subagents use`, and its detail says the share covers whole sessions, not only subagents. | [How `/usage` and `/artifacts` Work](../extend/skills-and-commands/slash-commands.md#how-usage-and-artifacts-work) |
-| Ended claude.ai login warning | <Undocumented /> | The print-mode warning now says that `claude auth logout` also removes saved MCP server logins and plugin secrets. The warning itself was already in `2.1.322`. | [Subcommands](../configure/cli/subcommands.md#errors) |
-| `/usage` flags long sessions | <Documented /> | `/usage` names sessions with requests in 8 or more separate hours, and `f` starts a fix for them. | [How `/usage` and `/artifacts` Work](../extend/skills-and-commands/slash-commands.md#how-usage-and-artifacts-work) |
-| `/terminal-setup` and `/diff` texts | <Documented /> | After setup on Terminal.app, a note says which characters the Option key no longer types and how to undo it. The `/diff` panel says `/diff to close`. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands) |
-| `/stickers` checks availability | <Differs /> | The command checks whether stickers are available. It no longer orders them. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#account-cloud-and-other-commands) |
-| `/team-onboarding` gate | <Gated note="Flag tengu_logical_nebula." /> | The command is hidden when the server turns the flag off. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#account-cloud-and-other-commands) |
-| Remote Control identity | <Documented /> | A server restarted in the same folder, on the same computer and account, keeps its saved identity for up to 30 days. Before, the limit was 4 hours. | [Remote Control](../configure/cli/remote-control.md#options) |
-| Self-hosted runner exit code | <Documented /> | A superseded on-demand runner exits with `1` again. | [Self-Hosted Runner](../configure/cli/self-hosted-runner.md) |
-| Claude in Chrome setup | <Documented /> | Setup tells you to restart with `claude --chrome --resume`, not to run `/chrome`. | [Flags](../configure/cli/flags.md) |
-| Usage limit menu | <Documented /> | At a usage limit, a menu offers usage credits, an upgrade, or a stop. When the current spend limit cannot load, the menu does not offer a lower limit. | [Account and Access](../how-it-works/account-and-access.md#the-usage-limit-menu) |
-| New environment variables | <Documented /> | `CLAUDE_CODE_PERFORCE_MODE` gets a one-time notice, `CLAUDE_CODE_RESUME_HINT_COMMAND` names a host's resume command, and `CLAUDE_CODE_AUTOMOUNT_ROOTS` names autofs map roots on Linux. | [Tools and Bash Variables](../configure/env-vars/tools-and-bash.md), [Sessions and Storage Variables](../configure/env-vars/sessions-and-storage.md) |
-| `CLAUDE_CODE_HOOK_HEARTBEAT_INTERVAL_MS` | <Undocumented /> | Sets the hook heartbeat interval, 100 to 30000 ms. The heartbeat itself is in the release notes. | [SDK and Automation Variables](../configure/env-vars/sdk-and-automation.md) |
+| `/login` and an unused API key | <Documented /> | `/login` says that requests still use the approved key. `/status` names an unused `ANTHROPIC_API_KEY`. | [Account and Access](../how-it-works/account-and-access.md#login-and-an-unused-api-key) |
+| Login code screen | <Documented /> | After you submit the code, the screen shows "Finishing sign-in…". | [Account and Access](../how-it-works/account-and-access.md#finishing-a-login) |
+| `/login` code prompt | <Documented /> | It refuses a web address, a `localhost` address, or a short number code, and stays open. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands) |
+| `claude auth logout` | <Undocumented /> | Claude Code asks again when the revoke request gets a server error or a network failure. | [Subcommands](../configure/cli/subcommands.md#errors) |
+| Background session and `ANTHROPIC_API_KEY` | <Documented /> | A background session that is not `--bare` cannot use a key that nobody approved. | [CLI](../configure/cli/index.md#background-sessions-and-api-keys) |
+| `--add-dir` and `/add-dir` | <Documented /> | They show the trust prompt for a folder you have not trusted. `claude --bg` refuses such a folder. | [Flags](../configure/cli/flags.md#agents-plugins-mcp-and-context) |
+| `--rewind-files` | <Undocumented /> | It prints a warning when it leaves files untouched. | [Flags](../configure/cli/flags.md#sessions-and-worktrees) |
+| `claude purge` | <Documented /> | When stdout and stderr both go to a pipe or file, it deletes nothing and tells you to use the terminal. | [Subcommands](../configure/cli/subcommands.md#commands) |
+| `claude worktree-hook` | <Undocumented /> | A hidden command that runs the WorktreeCreate or WorktreeRemove hooks and reports JSON. | [Subcommands](../configure/cli/subcommands.md#commands) |
+| `claude self-hosted-runner` options | <Undocumented /> | `--no-clone-through-agent-proxy` and `--use-anthropic-gh` are new hidden flags. `SELF_HOSTED_RUNNER_USE_ANTHROPIC_GH` sets the second one. | [Self-Hosted Runner](../configure/cli/self-hosted-runner.md#runtime-options), [Remote and Cloud Sessions Variables](../configure/env-vars/remote-and-cloud-sessions.md#variables) |
+| Print mode retry line | <Documented /> | Print mode writes a dim line to `stderr` while it waits to retry an API request. | [Headless Mode](../extend/headless/index.md#how-it-works) |
+| `child-logs/` | <Undocumented /> | Debug logs of Remote Control sessions started with `--verbose` go to `~/.claude/child-logs/`. | [Sessions and Storage](../how-it-works/sessions-and-storage.md#where-files-live), [Remote Control](../configure/cli/remote-control.md#options), [Files on Disk](files-on-disk.md#caches-and-account-files) |
+| Remote Control exit codes | <Documented /> | The exit code tells a service manager whether to start the server again. | [Remote Control](../configure/cli/remote-control.md#exit-codes) |
+| Partial transcript line | <Undocumented /> | Claude Code adds a newline before the next append, so records do not join. | [Sessions and Storage](../how-it-works/sessions-and-storage.md#errors) |
+| `/rewind` | <Documented /> | It says `Code changes unknown` for an untracked turn. A restore can skip some files, and the result says so. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#session-and-conversation-commands) |
+| `/cd` in fullscreen mode | <Documented /> | When the trust prompt does not fit the window, `Yes` is refused until the window is taller. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#session-and-conversation-commands) |
+| `/memory`, `/skills`, `/tui` | <Documented /> | `/memory` warns about a read-only file. `/skills` closes on a second Ctrl+C or Ctrl+D. `/tui` names what keeps the renderer. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands) |
+| `/terminal-setup`, `/help`, `/status` | <Documented /> | `/terminal-setup` names the tmux lines that Shift+Enter needs. `/help` takes `[command]`. `/status` has a `Features` row. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands) |
+| Command that is off | <Documented /> | A built-in command that is off says why, instead of `Unknown command`. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#when-a-command-is-off) |
+| Queued message hint | <Undocumented /> | The hint reads `Queued · <key> send now`, or `Queued · click to send now`. | [Unbound and Reserved Keys](../configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message) |
 
 ### Models, Network, and Telemetry
 
 | Change | Status | What it means for you | Where to read more |
 | --- | --- | --- | --- |
-| Unknown model IDs get 1M context | <Differs /> | The program assumes 1M, not 200K. Set `CLAUDE_CODE_DISABLE_1M_CONTEXT=1` to keep 200K. | [Model Catalog](../configure/models-and-providers/model-catalog.md) |
-| `CLAUDE_CODE_OVERLOADED_RETRY_MAX_DELAY_MS` accepts up to 300000 | <Documented /> | You can set a longer wait after a `529`. | [Fallback and Retries](../configure/models-and-providers/effort-thinking-and-fallback.md#fallback-and-retries) |
-| `CLAUDE_CODE_OVERLOADED_RETRY_MAX_WAIT_MS` | <Undocumented /> | A new variable behind `tengu_steady_heron`, 300000 to 3600000, read by the main thread only (the program). | [Fallback and Retries](../configure/models-and-providers/effort-thinking-and-fallback.md#fallback-and-retries) |
-| `ALL_PROXY` and organization requests | <Differs /> | Organization settings and policy requests no longer use a proxy set only by `ALL_PROXY`. Set `HTTPS_PROXY`. | [System and Third-Party Variables](../configure/env-vars/system-and-third-party.md) |
-| Certificate name-constraint errors | <Documented /> | The message says what to fix. | [Network and Proxy Variables](../configure/env-vars/network-and-proxy.md#certificate-name-constraint-errors) |
-| OpenTelemetry export | <Documented /> | An `otlp` exporter with no protocol uses `http/protobuf`. The default `localhost:4318` endpoint skips the proxy. One bad `OTEL_RESOURCE_ATTRIBUTES` entry no longer drops the others. The export timeout is at most 25 seconds. | [OpenTelemetry](../reference/opentelemetry.md#export-behavior) |
-| Background agent replies in OpenTelemetry | <Documented /> | `OTEL_LOG_ASSISTANT_RESPONSES=0` also keeps the reply of a background agent out of `user_prompt` events and interaction spans. | [Telemetry and Debug Variables](../configure/env-vars/telemetry-and-debug.md#variables) |
-| Hook and stream fields | <Documented /> | Compaction hooks of a subagent get `agent_id` and `agent_type`. Long hooks in print mode send `tool_progress` heartbeats. | [Hook Input and Output](../extend/hooks/input-and-output.md), [Stream JSON](../extend/headless/stream-json.md) |
-| Code Mode | <Documented /> | An experimental opt-in in which Claude writes JavaScript to call its tools. | [Gated and Other Tools](../reference/tools/gated-and-other.md#code-mode) |
-| Tool error texts | <Undocumented /> | `ExitWorktree` can stop before it changes anything. Worktree creation refuses link-based checkouts. A subagent stopped by safeguards gets new text. WebFetch checks its switch and the `allow_web_fetch` policy again at call time. | [File Tools](../reference/tools/files.md#errors), [Agents and Tasks](../reference/tools/agents-and-tasks.md#errors), [Subagent Runtime](../extend/subagents/runtime.md#limits-and-switches), [Shell and Web Tools](../reference/tools/shell-and-web.md#errors) |
-
-The comparison of the two programs also lists 163 added and 39 removed gates, 69 added and 29 removed error texts, and one removed environment variable, `CLAUDE_CODE_GB_REFRESH_INTERVAL_MS`. [Surface Coverage](../reference/surface-coverage.md) maps each name to its page.
+| Refused `max_tokens` | <Undocumented /> | Claude Code resends the request with the limit that the error names. It keeps the lower cap until `/clear`, compaction, resume, or a provider change. | [Model Endpoints](../reference/api/endpoints.md#model-endpoints), [Agent Loop](../how-it-works/agent-loop.md#recovery-inside-the-loop) |
+| Context length errors of gateways | <Undocumented /> | Claude Code knows the errors of many third-party gateways and Foundry, so sessions compact instead of stopping on every turn. | [Models](../how-it-works/models.md#retries-and-timeouts) |
+| `opusplan` | <Documented /> | A subagent that has its own model keeps it in plan mode. | [Model Catalog](../configure/models-and-providers/model-catalog.md#aliases) |
+| `sonnet[1m]` | <Undocumented /> | Claude Code no longer rewrites a saved `sonnet[1m]` to a dated model ID. | [Model Catalog](../configure/models-and-providers/model-catalog.md#other-model-ids-in-the-program) |
+| `/api/oauth/usage` | <Undocumented /> | The usage read adds `skip_spend=1` for each read kind except the plain one. | [Account and Service Endpoints](../reference/api/endpoints.md#account-and-service-endpoints) |
+| `/v1/privacy-consents` | <Undocumented /> | Claude Code reads and saves the training consent with your claude.ai sign-in. | [Sign-In and Account Paths](../reference/api/endpoints.md#sign-in-and-account-paths) |
+| Push notification text | <Undocumented /> | The tool description in a push notification from Remote Control or a cloud session is masked. | [Secret Masking](../reference/secret-masking.md#where-it-applies) |
+| `CLAUDE_BG_GATEWAY_ROUTED` | <Undocumented /> | The background dispatcher sets it. A session with the mark stops when it loses its gateway. | [Network and Proxy Variables](../configure/env-vars/network-and-proxy.md#variables) |
+| `CERT_SIGNATURE_FAILURE` | <Documented /> | The error names a possible cause after a CA renewal and what IT can change. | [Network and Proxy Variables](../configure/env-vars/network-and-proxy.md#certificate-signature-errors) |
+| `ALL_PROXY` as the only proxy | <Documented /> | Plugin and marketplace requests fail after 25 seconds when the proxy never answers. | [Network and Proxy Variables](../configure/env-vars/network-and-proxy.md#proxy-requests-with-only-all_proxy) |
+| `user_prompt` event | <Undocumented /> | A message sent while tool calls run also gives this event, with `delivery.mode` set to `mid_turn`. | [OpenTelemetry](../reference/opentelemetry.md#events) |
+| `OTEL_RESOURCE_INCLUDE_HOST` | <Undocumented /> | It adds `host.name` and `host.id` to the OpenTelemetry resource. | [Telemetry and Debug Variables](../configure/env-vars/telemetry-and-debug.md#variables) |
 
 ## Earlier Releases
 
@@ -122,9 +158,8 @@ This site keeps no page for an older release. The official [Changelog](https://c
 
 ## Example
 
-You update to `2.1.323` and keep `subagentStatusLine` in your settings.
-The file still loads, and subagent rows use the default look.
-Check that your file loads with no error:
+In `2.1.326`, `subagentStatusLine` works again. It is deprecated, but it still works.
+Check the version, then check that a settings file with the key loads:
 
 ```bash
 claude --version
