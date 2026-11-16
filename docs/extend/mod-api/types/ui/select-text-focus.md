@@ -37,7 +37,7 @@ The props of `Select`, the one-of-several picker of every surface. It has an add
 | `options` | <Documented /> | What the person can pick, in the order drawn. At least one, with unique values. | Type: `readonly SelectOption[]`. |
 | `value` | <Documented /> | Which option is selected when drawn. The pick of the person replaces it until the hook draws another. | Type: `string`. Optional. |
 | `autoFocus` | <Documented /> | The focus ring of the site starts here when the site takes the keyboard, instead of on nothing, as the `autofocus` of the DOM. Enter acts on it at once. | Type: `true`. Optional. A pane opened with `focus` takes it. Of several in one site, the first drawn wins. A ring that the person has moved stays where it is. |
-| `onSelect` | <Documented /> | Runs on a pick with the value of the option, in the own environment of the plugin: the bottom of a `ui.select` chain. No model turn unless it asks one. | Type: `(value: string, e: UiSelectArgument) => void`. |
+| `onSelect` | <Documented /> | Runs on a pick with the value of the option, in the plugin's own environment: the bottom of a `ui.select` chain. No model turn unless it asks one. | Type: `(value: string, e: UiSelectArgument) => void`. |
 
 ### `SiteScroll`
 
@@ -77,8 +77,8 @@ The props of `Svg`, the vector leaf of the remote surfaces. The markup is the da
 | --- | --- | --- | --- |
 | `source` | <Documented /> | The SVG document, `<svg ...>...</svg>`, at most 131072 characters. | Type: `string`. |
 | `alt` | <Documented /> | What the drawing says, for a reader that cannot see it. Required, because a surface without the element draws nothing else of it. | Type: `string`. |
-| `width` | <Documented /> | CSS pixels. If absent, the box takes the own width of the markup up to the slot. | Type: `number`. Optional. |
-| `height` | <Documented /> | CSS pixels. If absent, the own height of the markup at the drawn width. | Type: `number`. Optional. |
+| `width` | <Documented /> | CSS pixels. If absent, the box takes the markup's own width up to the slot. | Type: `number`. Optional. |
+| `height` | <Documented /> | CSS pixels. If absent, the markup's own height at the drawn width. | Type: `number`. Optional. |
 | `isInteractive` | <Documented /> | `true` draws the SVG in a script-less sandboxed frame so hover, CSS `:hover`, SMIL animation and `<title>` tooltips work. If absent, an image. | Type: `boolean`. Optional. It never enables script or event-handler attributes. Put presses on an enclosing element. New in `2.1.314`: the editor ignores it and always draws an image. SMIL and CSS animation can run there, but hover, CSS `:hover`, and `<title>` tooltips never work. |
 
 ### `TextHoverProps`
@@ -106,7 +106,7 @@ The props of `Text`: colors, styles, and the size, weight, face and digits that 
 | `hover` | <Documented /> | Style overrides. The surface applies them while the pointer is over the nearest enclosing keyed `Box`, or, given a `scope`, over its group. | Type: `TextHoverProps`. Optional. No hook runs and nothing crosses to the plugin. The engine refuses it outside a keyed Box unless it names a `scope`. |
 | `color` | <Documented /> | The text color. | Type: `Color`. Optional. |
 | `backgroundColor` | <Documented /> | The background color. | Type: `Color`. Optional. |
-| `dimColor` | <Documented /> | The run dimmed. On the terminal, it is drawn in the dim color of the theme. | Type: `boolean`. Optional. Faint too where that color is the own white or black of the palette, as plain text is. It is not faint if the run is bold, inverse or on a background of any other color. |
+| `dimColor` | <Documented /> | The run dimmed. On the terminal, it is drawn in the dim color of the theme. | Type: `boolean`. Optional. Faint too where that color is the palette's own white or black, as plain text is. It is not faint if the run is bold, inverse or on a background of any other color. |
 | `size` | <Documented /> | The text size, a step on a scale that each surface maps to its own type sizes. | Type: `'caption' \| 'footnote' \| 'body' \| 'heading' \| 'title'`. Optional. If absent, the size of the enclosing Text, or `body`. The terminal has one size and ignores it. |
 | `weight` | <Documented /> | How heavy the text is, drawn at the nearest weight that the surface has. | Type: `'regular' \| 'medium' \| 'semibold' \| 'bold'`. Optional. If absent, the weight of the enclosing Text. The terminal draws `semibold` and `bold` as bold and cannot draw a lighter weight inside a bold Text. |
 | `mono` | <Documented /> | The monospaced face of the surface at the same size. The terminal is always monospaced and ignores it. | Type: `boolean`. Optional. |
@@ -202,7 +202,7 @@ The input of `ui.focus`: the focus ring of a site, about to move. It moves onto 
 | `component` | <Documented /> | Which site: a `Pane` body or the `AbovePrompt` band. | Type: `UiFocusComponent`. |
 | `requestId` | <Documented /> | The instance that the `ui.render` hook that draws the site sees: the id of the pane, or the one id of the band. | Type: `string`. |
 | `plugin` | <Documented /> | Whose `ui.render` hook drew the element that takes the ring. Absent with `element`. Read-only. | Type: `string`. Optional. Since `2.1.323`, a hook that names no `plugin` hears the elements of its own plugin and the stops of the engine. `{ plugin: "*" }` hears the elements of every plugin.[^focus-input] |
-| `element` | <Documented /> | The `key` of the element that takes the ring, as `ui.press` names it. Absent for one of the own stops of the engine (the close mark of a pane or the tab of another). | Type: `string`. Optional. `next({ ...e, element })` lands it on another element that `plugin` drew in the site instead. For one not drawn there, core answers `{ deny }`. |
+| `element` | <Documented /> | The `key` of the element that takes the ring, as `ui.press` names it. Absent for one of the engine's own stops (the close mark of a pane or the tab of another). | Type: `string`. Optional. `next({ ...e, element })` lands it on another element that `plugin` drew in the site instead. For one not drawn there, core answers `{ deny }`. |
 | `origin` | <Documented /> | Who moves it (UiFocusOrigin). The engine sets it where the move starts. | Type: `UiFocusOrigin`. |
 
 ### `UiFocusOrigin`

@@ -151,7 +151,7 @@ Each entry compares a type file with the one before it. The type file and the pr
   - Adds the element `Progress` to every surface table except `ClientElements`, the type `AbovePromptRow`, the render component `AbovePromptList`, and `tool.list` to `InvalidatableEventName`.
   - Lets `$.mcp.connect` bring in any server that `/mcp` lists, and refuses `$.ui.open` and `$.ui.close` on a pane that another plugin holds.
   - Adds `placement` to `PaneOpenArgs`, and a plain-data rule (no named key on a list, no key `__proto__`, `constructor`, or `prototype`).
-  - Two plugins on one `hotkey` press neither, and a matcher that leaves out `plugin` names the own plugin of the hook.
+  - Two plugins on one `hotkey` press neither, and a matcher that leaves out `plugin` names the hook's own plugin.
   - `claude plugin validate` also reports the `$` nouns that an `engine.create` hook adds or withholds.
 - `2.1.322`: matches `2.1.321` apart from the version in its header.
 - `2.1.321`, compared with `2.1.319`:

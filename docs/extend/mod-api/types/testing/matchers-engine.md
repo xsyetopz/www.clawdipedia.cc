@@ -57,11 +57,11 @@ What `find` and `findAll` of a mounted drawing match an element on. An element m
 | `type` | <Documented /> | The tag of the element to match. | Type: `string`. Optional. |
 | `key` | <Documented /> | The `key` of the element to match. | Type: `string`. Optional. |
 | `text` | <Documented /> | The text that the element shows. A string matches by inclusion, and a `RegExp` matches by test. | Type: `string \| RegExp`. Optional. |
-| `in` | <Documented /> | Searches what the surface module of this `Client` drew (by the key of the `Client`), instead of the own tree of the plugin. | Type: `string`. Optional. |
+| `in` | <Documented /> | Searches what the surface module of this `Client` drew (by the key of the `Client`), instead of the plugin's own tree. | Type: `string`. Optional. |
 
 ### `Engine`
 
-What a test holds as `$`: the own `$` of the engine. Every call on it works as the calls of the REPL, the query loop, and the render sites, over every plugin. It is an object with one call for each event noun, plus `classic`. `next.origin` is the engine. `$.ui.mount` draws an instance. `press`, `input`, and `select` act on the instance.
+What a test holds as `$`: the engine's own `$`. Every call on it works as the calls of the REPL, the query loop, and the render sites, over every plugin. It is an object with one call for each event noun, plus `classic`. `next.origin` is the engine. `$.ui.mount` draws an instance. `press`, `input`, and `select` act on the instance.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -78,7 +78,7 @@ The classic (settings) hook events as the engine raises them. Each is a call tha
 
 ### `EngineInput`
 
-A surface that types into an `Input` that a test rendered. The `ui.input` chain runs over every plugin that hooks it, with the own handler of the `Input` last. It is an object with the field `input`.
+A surface that types into an `Input` that a test rendered. The `ui.input` chain runs over every plugin that hooks it, with the `Input`'s own handler last. It is an object with the field `input`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -110,7 +110,7 @@ A surface that presses a `Button` that a test rendered, or a link of a `Markdown
 
 ### `EngineSelect`
 
-A surface that picks an option of a `Select` that a test rendered. The `ui.select` chain runs over every plugin that hooks it, with the own `onSelect` of the `Select` last. It is an object with the field `select`.
+A surface that picks an option of a `Select` that a test rendered. The `ui.select` chain runs over every plugin that hooks it, with the `Select`'s own `onSelect` last. It is an object with the field `select`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |

@@ -159,7 +159,7 @@ Options of `$.model.complete`. They are not part of the request, so no hook on `
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `signal` | <Documented /> | Aborting the signal cuts the call while it runs. The call then resolves `aborted`, as when its dispatch aborts. If the signal is already aborted, no request is made. | Type: `AbortSignal`. Optional. It is the own signal of the plugin. |
+| `signal` | <Documented /> | Aborting the signal cuts the call while it runs. The call then resolves `aborted`, as when its dispatch aborts. If the signal is already aborted, no request is made. | Type: `AbortSignal`. Optional. It is the plugin's own signal. |
 
 ### `ModelCompleteRequest`
 

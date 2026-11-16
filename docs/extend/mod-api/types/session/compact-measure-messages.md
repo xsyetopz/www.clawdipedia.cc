@@ -30,7 +30,7 @@ A compaction that stands. It has the conversation as it reads afterwards. When t
 | `usage` | <Documented /> | What the model request of the compaction cost (`ModelUsage`), when core made one. These are the token counts of the summarizer, as the API reported them. | Type: `ModelUsage`. Optional. Absent when a hook answered, when a stored summary was reused, or when the response gave none. The cost ledger already holds it. |
 | `skip` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
 
-A hook that keeps messages changes what `--resume` loads. A kept message with a `handle` comes back as the own row of the engine. A kept tool result row points to its assistant row through `sourceToolAssistantUUID`, and the loader follows that link. The loader also adds back the tool results that share one `message.id`. So a kept tool result with a `handle` can pull rows from before the boundary into the next session. The engine builds a message without a `handle` anew. A boundary row from a hook can carry `preservedMessages` (the kept `uuids`) and has no `preservedSegment`. See [Compaction Rows](../../../../reference/transcript-format.md#compaction-rows).[^resume-loader]
+A hook that keeps messages changes what `--resume` loads. A kept message with a `handle` comes back as the engine's own row. A kept tool result row points to its assistant row through `sourceToolAssistantUUID`, and the loader follows that link. The loader also adds back the tool results that share one `message.id`. So a kept tool result with a `handle` can pull rows from before the boundary into the next session. The engine builds a message without a `handle` anew. A boundary row from a hook can carry `preservedMessages` (the kept `uuids`) and has no `preservedSegment`. See [Compaction Rows](../../../../reference/transcript-format.md#compaction-rows).[^resume-loader]
 
 ### `SessionCompactInput`
 
@@ -39,9 +39,9 @@ The input of `session.compact`: one compaction of the conversation, about to run
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `trigger` | <Documented /> | What starts the compaction (`SessionCompactTrigger`). A matcher narrows on this key. Pinned: `next(e)` passes it on as received. | Type: `SessionCompactTrigger`. |
-| `agentId` | <Documented /> | The id of the loop that compacts, for the own transcript of a subagent or a fork. Absent for the main conversation (the `agentId` of `tool.call`). | Type: `string`. Optional. Pinned: a rewrite that changes it fails the hook. `e.messages` is the transcript of this loop. It is not the main transcript. |
+| `agentId` | <Documented /> | The id of the loop that compacts, for a subagent's own transcript or a fork. Absent for the main conversation (the `agentId` of `tool.call`). | Type: `string`. Optional. Pinned: a rewrite that changes it fails the hook. `e.messages` is the transcript of this loop. It is not the main transcript. |
 | `instructions` | <Documented /> | What the summary should keep or stress. It is the text after `/compact`, the text of a plugin, or absent. | Type: `string`. Optional. `next({ ...e, instructions })` changes what the summarizer receives. |
-| `messages` | <Documented /> | The transcript that the compaction runs over, in the shape of `$.session.messages()`. Each message carries the `handle` of the engine. A subagent has its own transcript under `agentId`. | Type: `readonly SessionMessage[]`. `next({ ...e, messages })` changes what the engine summarizes. A message that keeps its handle is the own message of the engine, whole. The engine reads a message without a handle as you built it. |
+| `messages` | <Documented /> | The transcript that the compaction runs over, in the shape of `$.session.messages()`. Each message carries the `handle` of the engine. A subagent has its own transcript under `agentId`. | Type: `readonly SessionMessage[]`. `next({ ...e, messages })` changes what the engine summarizes. A message that keeps its handle is the engine's own message, whole. The engine reads a message without a handle as you built it. |
 
 ### `SessionCompactSkipped`
 
@@ -203,7 +203,7 @@ One message of the transcript as `$.session.messages()` returns it.
 | `text` | <Documented /> | The text blocks of the message joined. It is `''` when the message has none. | Type: `string`. |
 | `toolUses` | <Documented /> | The `tool_use` blocks of an assistant message. Each has its outcome (`result`, `text`, `isError`) once the transcript holds it. | Type: `ToolUseSummary[]`. |
 | `toolResults` | <Documented /> | The `tool_result` blocks of a user message: `{ tool_use_id, text, isError, result }`. | Type: `ToolResultSummary[]`. Optional. |
-| `handle` | <Documented /> | An opaque token that the engine stamps on each message that it hands to a `session.compact` hook. A list that the hook hands back then maps to the own messages of the engine. | Type: `string`. Optional. Absent on `$.session.messages()` and on a message that a hook built. |
+| `handle` | <Documented /> | An opaque token that the engine stamps on each message that it hands to a `session.compact` hook. A list that the hook hands back then maps to the engine's own messages. | Type: `string`. Optional. Absent on `$.session.messages()` and on a message that a hook built. |
 
 ### `SessionMessagesAgentArgs`
 

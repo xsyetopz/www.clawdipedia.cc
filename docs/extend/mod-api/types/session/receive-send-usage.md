@@ -28,7 +28,7 @@ An external-event wake that the engine parsed from the text of the delivery (a G
 | --- | --- | --- | --- |
 | `source` | <Documented /> | The service that produced the event (`github`, or `artifact-room` for the events of a page). | Type: `string`. |
 | `kind` | <Documented /> | The kind of the event (`pull_request.closed`, `check_suite`). | Type: `string`. |
-| `from` | <Documented /> | The sender-kind attribute of the envelope, as the server stamped it. `system` is the own event of a relay. `rc_owner` is the own relayed message of the user. Absent when the envelope carries none. | Type: `string`. Optional. |
+| `from` | <Documented /> | The sender-kind attribute of the envelope, as the server stamped it. `system` is a relay's own event. `rc_owner` is the user's own relayed message. Absent when the envelope carries none. | Type: `string`. Optional. |
 | `data` | <Documented /> | The JSON body of the envelope (`{ pr: "acme/app#12", outcome: "merged" }`). | Type: `Record<string, unknown>`. The payload of the event. For `artifact-room` it holds `artifact`, `events`, and `overflow`. |
 | `untrustedKeys` | <Documented /> | The `data` keys whose values are free text that a third party wrote (the `author` and `comment` of a commenter). The producer marks these keys. | Type: `readonly string[]`. Empty when there are none. The server asserts the value of every other key, but not the values of these keys. |
 
@@ -49,7 +49,7 @@ Where an inbound delivery came from, as the bridge classified it from the stamps
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `kind` | <Documented /> | `bridge` is the own message of the user from a Remote Control client. `unclassified` is a delivery that nobody could place. The other values are the same as at `prompt.submit`. | Type: `'bridge' \| 'task-notification' \| 'scheduled-trigger' \| 'peer-send-message' \| 'projects-relay' \| 'slack-ping' \| 'unclassified'`. `task-notification` is the event of a relay or a trigger. |
+| `kind` | <Documented /> | `bridge` is the user's own message from a Remote Control client. `unclassified` is a delivery that nobody could place. The other values are the same as at `prompt.submit`. | Type: `'bridge' \| 'task-notification' \| 'scheduled-trigger' \| 'peer-send-message' \| 'projects-relay' \| 'slack-ping' \| 'unclassified'`. `task-notification` is the event of a relay or a trigger. |
 | `kind` | <Documented /> | `peer` is the model of another session or agent. `coordinator` is the main conversation, writing to an agent of its own. | Type: `'peer' \| 'coordinator'`. |
 | `plugin` | <Documented /> | The plugin whose `$.session.send` composed the delivery, as the sender says. Absent for a message that the sending model wrote itself. | Type: `string`. Optional. It is a claim over a same-user channel, and it is exactly as trustworthy as the name of the sender. Name it in a log line. Never key a guard on it. |
 | `kind` | <Documented /> | A delivery through the agent-team mailbox of this session. `coordinator` comes from the harness of the lead. `peer` comes from a teammate, or from a sender that is unverified. | Type: `'peer' \| 'coordinator'`. |
@@ -76,7 +76,7 @@ What `$.session.repo()` answers: the root of the repository and its origin remot
 | --- | --- | --- | --- |
 | `root` | <Documented /> | The absolute root of the repository. For a worktree, it is the root of the main working tree. | Type: `string`. |
 | `remote` | <Documented /> | The URL of the `origin` remote as git has it (push URL preferred), or null when the repository has none. | Type: `string \| null`. |
-| `internal` | <Documented /> | Whether the remote is one of the repositories that this build treats as its own. False in a build that has none, or when the remote is unrecognized. | Type: `boolean`. True for a repository on the own list of the build. A plugin may read it to act differently in a public repository. |
+| `internal` | <Documented /> | Whether the remote is one of the repositories that this build treats as its own. False in a build that has none, or when the remote is unrecognized. | Type: `boolean`. True for a repository on the build's own list. A plugin may read it to act differently in a public repository. |
 | `name` | <Documented /> | The repository that the allowlist matched, as `owner/name`. Null when `internal` is false. | Type: `string \| null`. A working copy without a remote that the engine still recognizes is named by its own checkout configuration. The name of a remote is its path. |
 
 ### `SessionResume`
@@ -93,7 +93,7 @@ The recipient of `$.session.send`. It is a recipient as the `SendMessage` tool n
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `sessionId` | <Documented /> | One of the own sessions of the user. It is what `$.session.id()` answers on this machine, or a Remote Control or cloud id (`session_...`). | Type: `string`. The engine does not deliver to a session that is not running now. The result says so. |
+| `sessionId` | <Documented /> | One of the user's own sessions. It is what `$.session.id()` answers on this machine, or a Remote Control or cloud id (`session_...`). | Type: `string`. The engine does not deliver to a session that is not running now. The result says so. |
 | `agentId` | <Documented /> | A subagent or teammate of this session. It is the id that `$.agent.list()` lists and `agent.spawn` answered. | Type: `string`. The engine resumes a finished subagent from its transcript with the message, as the tool does. The `teammateId` of a live teammate reaches the teammate too. |
 
 ### `SessionSendArgs`

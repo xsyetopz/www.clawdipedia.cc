@@ -100,7 +100,7 @@ The props of `Button`, the pressable of every surface. It has an address, a labe
 | `role` | <Documented /> | Marks the Button that closes its site. It is a drawing hint only. `onPress` still does the dismissing and the press is raised as for any Button. | Type: `'dismiss'`. Optional. The terminal draws it as without the prop. A desktop draws its native close control at the trailing edge of the site, with the label as its accessible name. |
 | `autoFocus` | <Documented /> | The focus ring of the site starts here when the site takes the keyboard, instead of on nothing, as the `autofocus` of the DOM. Enter acts on it at once. | Type: `true`. Optional. A pane opened with `focus` takes it. Of several in one site, the first drawn wins. |
 | `hover` | <Documented /> | Label style overrides (the `Text` set). The surface applies them while the nearest enclosing keyed `Box`, or given a `scope` its group, is hovered. | Type: `TextHoverProps`. Optional. No hook runs and nothing crosses to the plugin. Under the pointer itself the button inverts as it always has. The engine refuses it outside a keyed Box unless it names a `scope`. |
-| `onPress` | <Documented /> | What the press runs, in the own environment of the plugin: the bottom of the `ui.press` chain. The host holds only a handle, for the life of the drawing. | Type: `(e: UiPressArgument) => void`. Runs with the `ui.press` argument. `e.surface` names the surface the press came from. |
+| `onPress` | <Documented /> | What the press runs, in the plugin's own environment: the bottom of the `ui.press` chain. The host holds only a handle, for the life of the drawing. | Type: `(e: UiPressArgument) => void`. Runs with the `ui.press` argument. `e.surface` names the surface the press came from. |
 
 ### `ClientKeyEvent`
 
@@ -159,7 +159,7 @@ What the function of a surface module receives as its second argument. It has it
 
 ### `CodeProps`
 
-The props of `Code`, source text that every surface draws with the own highlighter of the engine. It has coloured tokens, a line gutter on request, or a unified diff. Object with the fields `source`, `language?`, `path?`, `startLine?`, `format?`, `wrap?`. A leaf with no children. The color on screen belongs to the engine.
+The props of `Code`, source text that every surface draws with the engine's own highlighter. It has coloured tokens, a line gutter on request, or a unified diff. Object with the fields `source`, `language?`, `path?`, `startLine?`, `format?`, `wrap?`. A leaf with no children. The color on screen belongs to the engine.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |

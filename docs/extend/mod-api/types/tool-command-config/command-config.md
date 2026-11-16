@@ -88,9 +88,9 @@ What a `command.run` hook returns and what `next(e)` and `$.command.run` resolve
 | --- | --- | --- | --- |
 | `text` | <Documented /> | The output of the command as a transcript line. Undefined when the command showed no text (a panel, or a prompt for the model). | Type: `string`. Optional. |
 | `context` | <Documented /> | What the model reads after the output of the command. The user never sees it. Each entry is one hidden user message that the engine records after the output row. | Type: `readonly string[]`. Optional. The notes that the command left for the model. Absent when there are none. |
-| `isTextDisplayOnly` | <Gated note="The engine reads it only when every plugin that hooks the command is bundled with Claude Code." /> | True: `text` is for the user only, and `context` is all that the model reads. The engine draws and keeps the output row, and sends it in no request. The engine reads this field on the own answer of a hook without `next`, on the queued lanes. A panel that a hook answers in the middle of a turn keeps its text in requests. The text of any other plugin stays in requests. | Type: `true`. Optional. New in `2.1.319`. |
+| `isTextDisplayOnly` | <Gated note="The engine reads it only when every plugin that hooks the command is bundled with Claude Code." /> | True: `text` is for the user only, and `context` is all that the model reads. The engine draws and keeps the output row, and sends it in no request. The engine reads this field on a hook's own answer without `next`, on the queued lanes. A panel that a hook answers in the middle of a turn keeps its text in requests. The text of any other plugin stays in requests. | Type: `true`. Optional. New in `2.1.319`. |
 | `exitCode` | <Documented /> | The exit code of the process when this command was the whole prompt of a headless run (`claude -p "/lint"`). Use a whole number from 0 to 255. | Type: `number`. Optional. If you leave it out, the run exits as it would have. Any other value fails the hook. An interactive session ignores it. |
-| `ref` | <Documented /> | Core sets it on what `next(e)` resolves to. It names the run of the command by the engine. The result of the run stays on the host side. | Type: `number`. Optional. A hook that returns the object that it got makes the engine use that run verbatim. Absent on the own `{ text }` of a hook and on the `{ text }` of `$.command.run`. |
+| `ref` | <Documented /> | Core sets it on what `next(e)` resolves to. It names the run of the command by the engine. The result of the run stays on the host side. | Type: `number`. Optional. A hook that returns the object that it got makes the engine use that run verbatim. Absent on a hook's own `{ text }` and on the `{ text }` of `$.command.run`. |
 
 ### `CommandSpec`
 
@@ -111,7 +111,7 @@ The input of `config.describe`. It holds how one `/config` row appears, at the m
 | --- | --- | --- | --- |
 | `key` | <Documented /> | The name of the row, as the `key` of `config.set` names it. A matcher narrows on this key. Pinned: the engine refuses a rewrite. | Type: `string`. |
 | `label` | <Documented /> | What the menu draws for the row, before its value. | Type: `string`. |
-| `description` | <Documented /> | The help text beneath the label, when the row has one (the `description` of a plugin field). Absent for the own rows of the panel. | Type: `string`. Optional. |
+| `description` | <Documented /> | The help text beneath the label, when the row has one (the `description` of a plugin field). Absent for the panel's own rows. | Type: `string`. Optional. |
 | `isHidden` | <Documented /> | Whether the menu leaves the row out. A hidden row still answers `$.config.set` and `/config key=value`. | Type: `boolean`. |
 | `provider` | <Documented /> | The owner of the row, as the `provider` of `config.set` names it. Pinned. | Type: `Origin`. |
 
@@ -138,7 +138,7 @@ One `/config` row as `$.config.list()` returns it. It is what the menu would dra
 | `kind` | <Documented /> | How the row takes its value (`ConfigKind`). | Type: `ConfigKind`. |
 | `value` | <Documented /> | What the row holds now. | Type: `ConfigValue`. |
 | `options` | <Documented /> | The values that a `choice` row takes, in order (the declared `options` of a plugin string field for its row). Absent for other kinds. | Type: `readonly string[]`. Optional. |
-| `provider` | <Documented /> | The owner of the row: the engine for the own rows of the panel, otherwise the plugin. | Type: `Origin`. |
+| `provider` | <Documented /> | The owner of the row: the engine for the panel's own rows, otherwise the plugin. | Type: `Origin`. |
 | `isLocked` | <Documented /> | Whether a trusted source (managed settings, or the policy of the organization) owns the value. The menu then shows the value and refuses a change. | Type: `boolean`. |
 
 ### `ConfigSetInput`
@@ -150,7 +150,7 @@ The input of `config.set`. It describes one `/config` row that is about to chang
 | `key` | <Documented /> | The name of the row. It is the id of the panel for a built-in (`theme`, `verbose`, `autoCompact`), or `<plugin>.<field>` for the `userConfig` field of a plugin. | Type: `string`. A matcher narrows on this key. It is pinned: the engine refuses a rewrite. |
 | `value` | <Documented /> | What the engine sets the row to. `next({ ...e, value })` clamps or replaces it, within the kind of the row (a toggle takes a boolean). | Type: `ConfigValue`. |
 | `previous` | <Documented /> | What the row holds before the change, as the menu shows it. Pinned. | Type: `ConfigValue`. |
-| `provider` | <Documented /> | The owner of the row: `{ plugin: "engine", tier: "core" }` for the own rows of the panel, or the plugin and its tier for a `userConfig` field. Pinned. | Type: `Origin`. |
+| `provider` | <Documented /> | The owner of the row: `{ plugin: "engine", tier: "core" }` for the panel's own rows, or the plugin and its tier for a `userConfig` field. Pinned. | Type: `Origin`. |
 | `origin` | <Documented /> | Where the change came from (`ConfigOrigin`): the user in the menu (`composer`), or the `$.config.set` of a plugin. Pinned. | Type: `ConfigOrigin`. |
 
 ### `ConfigSetResult`

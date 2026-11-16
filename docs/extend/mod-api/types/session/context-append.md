@@ -144,14 +144,14 @@ Who caused a row, as the engine knows it from the row itself. It can be the send
 
 ### `SessionAppendResult`
 
-What a `session.append` hook returns and what `next(e)` resolves to. It is the row as the session stored it, or `{ deny: reason }` for the own call of a plugin. `next(e)` resolves once the session keeps the row. Only the own `note` append of a plugin may be refused. Used by `$.session.append`, `session.append`.
+What a `session.append` hook returns and what `next(e)` resolves to. It is the row as the session stored it, or `{ deny: reason }` for a plugin's own call. `next(e)` resolves once the session keeps the row. Only a plugin's own `note` append may be refused. Used by `$.session.append`, `session.append`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `message` | <Documented /> | The row as stored. It is what arrived at the bottom, with the pinned parts put back. | Type: `SessionAppendMessage`. |
 | `uuid` | <Documented /> | The id of the stored row. It is the same in the transcript file and on every later read. | Type: `string`. |
 | `deny` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
-| `deny` | <Documented /> | Refuses the own append of a plugin, so the session stores nothing. The call resolves to this value, which is the reason that the refusing hook gave. | Type: `string`. |
+| `deny` | <Documented /> | Refuses a plugin's own append, so the session stores nothing. The call resolves to this value, which is the reason that the refusing hook gave. | Type: `string`. |
 | `message` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
 | `uuid` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
 

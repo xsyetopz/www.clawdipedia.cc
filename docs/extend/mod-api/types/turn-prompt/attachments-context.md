@@ -158,7 +158,7 @@ Who changed the prompt box at `prompt.change`, as the engine stamps it where the
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `kind` | <Documented /> | The engine put a recalled entry of the prompt history in the box. The person used the up and down arrows, the history search, or the history picker. | Type: `'history'`. Stepping back out of a recall is `history` too. It happens when the person passes the newest entry, cancels the search, or gets the own draft put back. |
+| `kind` | <Documented /> | The engine put a recalled entry of the prompt history in the box. The person used the up and down arrows, the history search, or the history picker. | Type: `'history'`. Stepping back out of a recall is `history` too. It happens when the person passes the newest entry, cancels the search, or gets their own draft back. |
 | `kind` | <Documented /> | Something other than an edit or an undo emptied the box: a submit took the draft, a clear, or a stash. | Type: `'clear'`. `text` is the box when the engine raised the event. A key typed since is in it. |
 | `kind` | <Documented /> | The person took an edit back (`chat:undo`). The box holds an earlier text of theirs, which may be empty. | Type: `'undo'`. |
 | `kind` | <Documented /> | The `$.prompt.fill` of a plugin landed, as its `prompt.fill` chain left it and as the engine finished it (an over-long text collapsed). | Type: `'plugin'`. |
