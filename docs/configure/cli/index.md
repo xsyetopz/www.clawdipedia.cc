@@ -64,6 +64,10 @@ Some of them work only together, for example `--include-partial-messages` needs 
 The result of `--output-format json` has a `usage` field.
 Its `cache_creation` part is split into `ephemeral_1h_input_tokens` and `ephemeral_5m_input_tokens`. See [How Claude Code Uses Prompt Caching](https://code.claude.com/docs/en/prompt-caching#choose-the-ttl-yourself).
 
+## Background Sessions and API Keys
+
+Since `2.1.326`, a background session that is not `--bare` cannot use an `ANTHROPIC_API_KEY` that nobody approved. Claude Code refuses it and tells you to run the session in this terminal.[^bg-key] A session that you start with `claude --bare --bg` gets the key only if the background service has it or is not running yet. If the service lacks the key, token, or workload identity, Claude Code refuses and tells you to run the session in this terminal.
+
 ## How It Works
 
 Claude Code reads your flags first. A flag wins over the same choice in an environment variable or a settings file, with a few exceptions. [Environment Variables](../env-vars/index.md#which-value-wins) lists them.
@@ -93,3 +97,4 @@ The flow matches the `claude --help` output.[^help]
 ## Sources
 
 [^help]: The program, `claude --help`, `2.1.326`.
+[^bg-key]: The program, `chunk-fdjay46b.js:1095-1130` and `chunk-91rhn136.js:22-27`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

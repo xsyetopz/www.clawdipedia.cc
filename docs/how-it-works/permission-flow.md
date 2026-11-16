@@ -67,6 +67,14 @@ Since `2.1.311`, a warning about a rule from a settings file shows once per user
 
 <Gated /> Since `2.1.326`, a read-only `git` command asks first if git would use a repository that Claude Code cannot match to the project or to one you trusted. The warning says "Its settings can make git run programs."[^git-trust] To run such commands without a prompt, name that folder with `--add-dir` at the start. This also loads its skills and commands. The `additionalDirectories` setting does not do this. If you trust a folder that holds no trust yet, start Claude Code there once and accept the trust dialog. When Claude Code cannot offer `--add-dir`, the text says "An allow rule for git would apply in every repository."[^git-text]
 
+### Sign-In Files in Shell Commands
+
+Since `2.1.326`, a `Bash` command can ask first when it reads a relative path after a `cd`. The prompt says that Claude Code cannot check the path against this computer's keys and sign-in files first.[^relative-cd]
+
+### Folder Trust Prompt
+
+Since `2.1.326`, the folder trust prompt at launch lists each settings file of the folder. A file that runs commands gets the tag `(runs commands)`. A file that sets environment variables gets the tag `(sets environment variables)`. The prompt shows the list under the header `Accessing workspace:`.[^trust-list] The prompt for a folder you enter with `/cd` lists its settings files in the same way, without the tags.[^cd-list] If you refuse the folder at launch, Claude Code prints `Claude Code didn't start because this folder isn't trusted.` and exits. It tells you to run `claude` again and choose Yes, or to run it in another folder.[^trust-exit]
+
 ### Circuit Breakers
 
 Built-in safety checks, called circuit breakers, can also force a prompt. Some are immune to `bypassPermissions`. See [Permission Modes](../configure/permissions/modes.md#safety-checks). The diagram omits them because the program does not show where they run.
@@ -113,3 +121,7 @@ The check runs in the tool stage of every turn. See [The Agent Loop](agent-loop.
 [^git-trust]: The program, `chunk-4h798pp0.js:71295`. A server-side flag gates it.
 [^git-text]: The program, `chunk-4h798pp0.js:71313`.
 [^block-reads]: The program, `chunk-kpnan531.js:5207`, `chunk-rqvvpwt0.js:67829`.
+[^relative-cd]: The program, `chunk-4h798pp0.js:74436-74455`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^trust-list]: The program, `chunk-hazkmz06.js:970-976` and `chunk-hazkmz06.js:1148-1188`.
+[^cd-list]: The program, `chunk-q43jj74r.js:225-252`.
+[^trust-exit]: The program, `chunk-hazkmz06.js:689-693`.

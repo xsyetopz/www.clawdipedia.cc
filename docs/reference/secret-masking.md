@@ -90,6 +90,7 @@ The table shows the output that each caller masks in `2.1.319`.
 | The preview of tool input, including the field names[^where-14] | `redactForDisplay` |
 | The path, the description, and the skill summary in a permission request that the program sends to a connected client[^where-15] | `redactForDisplay`, and `redactContext` then `redactTokens` |
 | The command, the description, and the plan reason in a remote or push permission notice[^where-16] | `redactContext` then `redactTokens` |
+| Since `2.1.326`, the tool description in a push notification from Remote Control or a cloud session[^where-masker] | `redactContext` then `redactTokens`. The masker keeps a `://[REDACTED]` host marker when a `.` or `-` follows it. |
 | The teammate description when a teammate starts (50 characters)[^where-17] | `redactContext` with tracked tokens |
 | The detail, intent, and latest question of a background job (1,000 and 600 characters), and the tail of its output[^where-18] | `redactContext` with tracked tokens, and `redactTokens` |
 
@@ -160,3 +161,4 @@ The program uses the scan in four places.
 [^scan-denial]: The program, `chunk-1xmjf4e6.js@1734442`.
 [^scan-sync]: The program, `chunk-ny35jjxw.js@210351`.
 [^scan-skill]: The program, `chunk-egtw0zen.js@36887`.
+[^where-masker]: The program, `chunk-t1sy1zdg.js:1473`, `chunk-hfdwkv62.js:463-466`, and `chunk-q6dkrxcc.js:633`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

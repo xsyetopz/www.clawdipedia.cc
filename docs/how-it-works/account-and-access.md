@@ -119,6 +119,10 @@ Status: <Undocumented /> in the official docs.
 - After a login, when an approved `ANTHROPIC_API_KEY` still serves requests, Claude Code says "Signed in, but requests still use ANTHROPIC_API_KEY. To use this login, turn off "Use custom API key" in /config".[^api-key-note]
 - The footer says "Not logged in · /login, or /config to use ANTHROPIC_API_KEY" when an unused key is set. Otherwise it says "Not logged in · Run /login".[^footer]
 
+## Finishing a Login
+
+Since `2.1.326`, after you submit the login code, the screen shows "Finishing sign-in…" while Claude Code waits for the login to finish.[^finishing]
+
 ## What a Refusal Says
 
 When something needs usage credits, such as fast mode or the 1M context window, the message names where to turn them on.[^refusal]
@@ -208,3 +212,4 @@ Claude Code shows "Couldn't load your current spend limit, so it can't be change
 [^spend]: The program, `chunk-d338x18r.js:31796`. The string is not in the `2.1.322` program.
 [^control]: `schemas/claude-code-control-protocol.json`.
 [^mod-account]: `schemas/claude-code.d.ts`.
+[^finishing]: The program, `chunk-0py32h2p.js:616` and `chunk-0py32h2p.js:2294`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

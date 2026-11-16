@@ -28,7 +28,7 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 | `agent` | <Documented /> | string | - | Start every session as a named subagent with its prompt, tools, and model. | Any settings file |
 | `agentPushNotifEnabled` | <Documented /> | boolean | - | Let Claude send a push notification to your phone when it decides to. | Any settings file |
 | `askUserQuestionTimeout` | <Documented /> | enum: `60s`, `5m`, `10m`, `never` | `never` | Let an unanswered question auto-continue after idle time. Auto-continue runs only when you set `60s`, `5m`, or `10m`. | User or managed settings |
-| `autoContinueAtUsageLimit` | <Documented /> | boolean | - | Wait in the open session and continue the task automatically after a claude.ai usage limit resets. | User or managed settings |
+| `autoContinueAtUsageLimit` | <Documented /> | boolean | - | Wait in the open session and continue the task automatically after a claude.ai usage limit resets. Since `2.1.326`, Claude Code stops the wait and shows "Automatic continue stopped · your login changed or ended · send a prompt to continue" when your login changes or ends.[^auto-continue] | User or managed settings |
 | `autoUploadSessions` | <Undocumented /> <Caution /> | boolean | - | Mirror local sessions to claude.ai as view-only, with no remote control. | Settings files |
 | `crossSessionInbound` | <Documented /> | string | - | Choose what happens to messages from your other sessions. `accept` delivers them. `hold` parks them for review. `refuse` opts out. | Any settings file |
 | `daemonColdStart` | <Undocumented /> | enum: `transient`, `ask` | - | Choose what happens when no background service runs: `transient` starts one for this login session. `ask` offers a permanent install. | Settings files |
@@ -72,3 +72,4 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 [^workflow-reasons]: The program.
 [^ssh-host]: The settings schema. Probe cases `print.cli319.ssh.valid`, `print.cli319.ssh.bad`, and `print.cli319.ssh.not-array`. The schema type in the program is `unknown` with the type tag `array`, and its text says "Claude Code itself does not use it". The Desktop and Windows parts cannot run here.
 [^subagent-status]: The program, `chunk-m33vdkhs.js:9208`.
+[^auto-continue]: The program, `chunk-48s6a53p.js:340-342` and `chunk-dpm9m90j.js:825-834`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
