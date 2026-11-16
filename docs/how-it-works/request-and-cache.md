@@ -4,16 +4,22 @@ description: What one request to the model holds, which cache markers it carries
 sidebar_position: 3
 ---
 
-Each time the model must answer, Claude Code builds one request to the Messages API.
-The request holds the tool list, the system prompt, and the whole conversation so far.
-The API can reuse the start of a request it has seen before. That reuse is the prompt cache.
-What you change in the request decides what the cache can reuse. So it decides speed and cost.
+Each time the model must answer, Claude Code builds one request to the Messages API. The request holds the tool list, the system prompt, and the whole conversation so far.
+
+The API can reuse the start of a request it has seen before. That reuse is the prompt cache. What you change in the request decides what the cache can reuse, so it decides speed and cost. To keep the cache, avoid the actions in [What Breaks the Cache](#what-breaks-the-cache). To change how long it lives, set `CLAUDE_CODE_PROMPT_CACHE_TTL` or `ENABLE_PROMPT_CACHING_1H`.
+
+## Example
+
+You switch models in the middle of a task with `/model`. The next request has no cache hits, because each model has its own cache. Pick the model at the start of a session to avoid this.
+
+```bash
+ENABLE_PROMPT_CACHING_1H=1 claude --model sonnet
+```
 
 ## Parts of a Request
 
 The API reads the parts in this order: tools, then system, then messages.
-A change in an early part makes the later parts miss the cache.
-Source: [How Claude Code Uses Prompt Caching](https://code.claude.com/docs/en/prompt-caching).
+A change in an early part makes the later parts miss the cache. See [How Claude Code Uses Prompt Caching](https://code.claude.com/docs/en/prompt-caching).
 
 ```mermaid
 flowchart LR
@@ -33,7 +39,7 @@ Project context changes at session start, at `/clear`, and at `/compact`.
 
 ## Body Fields
 
-The field list comes from the official docs and from `api-request` lines that version 2.1.305 wrote to a local transcript. They and a stub run of 2.1.305 wrote `api-request` lines with the keys `model`, `betas`, `max_tokens`, `thinking`, `context_management`, and `output_config`.
+These are the fields of the request body. The local transcript records the keys `model`, `betas`, `max_tokens`, `thinking`, `context_management`, and `output_config`.[^body-fields]
 
 | Field | Status | Content |
 | --- | --- | --- |
@@ -49,14 +55,11 @@ The field list comes from the official docs and from `api-request` lines that ve
 | `messages` | <Documented /> | The conversation. An entry with `role: "system"` can join in the middle. |
 | `CLAUDE_CODE_EXTRA_BODY` | <Documented /> | An env var that adds fields to the body. |
 
-The transcript line `api-request` records the request.
-The lines `api-request-shape` and `api-request-blob` store parts of it once, by hash.
-All three are <Undocumented />. See [Transcript Format](../reference/transcript-format.md).
+The transcript line `api-request` records the request. The lines `api-request-shape` and `api-request-blob` store parts of it once, by hash. All three are <Undocumented />. See [Transcript Format](../reference/transcript-format.md).
 
 ## System Blocks and Cache Markers
 
-A cache marker (`cache_control`) tells the API: "everything up to here can be reused."
-An observed request had three `system` blocks and three markers.
+A cache marker (`cache_control`) tells the API: "everything up to here can be reused." An observed request had three `system` blocks and three markers.[^markers]
 
 | Position | Status | Marker |
 | --- | --- | --- |
@@ -65,11 +68,9 @@ An observed request had three `system` blocks and three markers.
 | `system[2]` (system prompt) | <Undocumented /> | `ephemeral`, `ttl: 1h`. |
 | Last block of the last message | <Undocumented /> | `ephemeral`, `ttl: 1h`. |
 
-A print-mode run of 2.1.316 against the local stub with a fake key sent the same three blocks, but the markers were plain `{"type":"ephemeral"}` on `system[1]`, `system[2]`, and the last message block. They had no `ttl` and no `scope`. So the fields `ttl: 1h` and `scope: global` do not always appear. `system[0]` had no marker. Source: the probe captures of 2.1.316.
+In a second run, the same three blocks carried plain `{"type":"ephemeral"}` markers on `system[1]`, `system[2]`, and the last message block. They had no `ttl` and no `scope`. So the fields `ttl: 1h` and `scope: global` do not always appear. `system[0]` had no marker.[^plain-markers]
 
-Claude Code also marks the block of system context in the middle of a conversation, such as file-change notices, on every provider.
-`CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS` turns this off.
-If a gateway rejects the marker with a `400` error, Claude Code moves it to the last message. It keeps it there.
+Claude Code also marks the block of system context in the middle of a conversation, such as file-change notices, on every provider. Set `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS` to turn this off. If a gateway rejects the marker with a `400` error, Claude Code moves it to the last message and keeps it there.
 
 ```mermaid
 sequenceDiagram
@@ -84,8 +85,7 @@ sequenceDiagram
 
 ### The Attribution Line
 
-`system[0]` is a text block that starts with `x-anthropic-billing-header:`. Claude Code builds it for each request (the program, `chunk-9r6f1wsj.js@2988`). The text after the colon is a list of `name=value;` pairs.
-The `cc_` names say which client, entry point, and turn made the request.
+`system[0]` is a text block that starts with `x-anthropic-billing-header:`. Claude Code builds it for each request.[^attribution] The text after the colon is a list of `name=value;` pairs. The `cc_` names say which client, entry point, and turn made the request.
 
 | Pair | When it appears |
 | --- | --- |
@@ -106,17 +106,16 @@ The block has no cache marker.
 
 ## Output Limit Retry
 
-The `2.1.326` release notes say: "Fixed an error when `max_tokens` exceeded the model's limit: Claude Code now retries the request with the maximum the Anthropic API reports" ([`2.1.326` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)).
-Status: <Undocumented /> in the official docs. The program text is read from `chunk-4h798pp0.js`.
+When `max_tokens` exceeds the model's limit, Claude Code now retries the request with the maximum the Anthropic API reports.[^retry-notes] Status: <Undocumented /> in the official docs.
 
-- The program matches the error text `max_tokens: <n> > <limit>, which is the maximum allowed number of output tokens for <model>` (`chunk-4h798pp0.js:154748`).
+- Claude Code matches the error text `max_tokens: <n> > <limit>, which is the maximum allowed number of output tokens for <model>`.[^retry-match]
 - It acts on the statuses `400`, `402`, `413`, `422`, and `429`, and it retries once.
 - The retry uses the limit that the API reports, when that limit is at least 4096. Otherwise it uses a cached or default limit.
-- After the provider accepts the resent request, the program caps `max_tokens` for that model and warns: "Until the next /clear, compaction, resume or provider change, max_tokens for this model is capped at N. Set CLAUDE_CODE_MAX_OUTPUT_TOKENS to pick a different limit." (`chunk-4h798pp0.js:154816`).
+- After the provider accepts the resent request, Claude Code caps `max_tokens` for that model and warns: "Until the next /clear, compaction, resume or provider change, max_tokens for this model is capped at N. Set CLAUDE_CODE_MAX_OUTPUT_TOKENS to pick a different limit."[^retry-cap]
 
 ## Cache Lifetime
 
-Sources: [How Claude Code Uses Prompt Caching: Cache Lifetime](https://code.claude.com/docs/en/prompt-caching#cache-lifetime) and [Environment Variables](https://code.claude.com/docs/en/env-vars).
+See [How Claude Code Uses Prompt Caching: Cache Lifetime](https://code.claude.com/docs/en/prompt-caching#cache-lifetime) and [Environment Variables](https://code.claude.com/docs/en/env-vars).
 
 | Item | Status | Effect |
 | --- | --- | --- |
@@ -128,16 +127,16 @@ Sources: [How Claude Code Uses Prompt Caching: Cache Lifetime](https://code.clau
 | `FORCE_PROMPT_CACHING_5M` | <Documented /> | Forces five minutes. It wins over the other items. |
 | `DISABLE_PROMPT_CACHING` | <Documented /> | Turns caching off. The suffixes `_HAIKU`, `_SONNET`, `_OPUS`, and `_FABLE` turn it off for one model family. |
 | `DISABLE_PROMPT_CACHING_MYTHOS` | <Undocumented /> | Turns caching off for the Mythos models. |
-| `experimental.cacheTtl` in an agent definition | <Undocumented /> | Sets `5m` or `1h` for the requests of that agent when no `subagentPromptCacheTtl` setting or variable is set. The program ignores `1h` while a Claude subscription is in overage (the program, `chunk-2x9ma4k7.js@978103`). |
+| `experimental.cacheTtl` in an agent definition | <Undocumented /> | Sets `5m` or `1h` for the requests of that agent when no `subagentPromptCacheTtl` setting or variable is set. Claude Code ignores `1h` while a Claude subscription is in overage.[^overage] |
 | `CLAUDE_CODE_MESSAGES_PROMPT_CACHE_TTL` | <Undocumented /> | Appears in the env schema. No source states what it does. |
 
-Unset, `promptCacheTtl` means one hour on a Claude subscription within its usage limits and five minutes on an API key, Bedrock, Vertex, or Foundry. Unset, `subagentPromptCacheTtl` means five minutes unless `ENABLE_PROMPT_CACHING_1H=1`. Each environment variable wins over its setting (the program, `chunk-3dhh2g49.js@273684`). The cache ledger counts a TTL of `5m` as 300,000 ms and `1h` as 3,600,000 ms (`chunk-3hya3c3s.js@207`).
+Unset, `promptCacheTtl` means one hour on a Claude subscription within its usage limits and five minutes on an API key, Bedrock, Vertex, or Foundry. Unset, `subagentPromptCacheTtl` means five minutes unless `ENABLE_PROMPT_CACHING_1H=1`. Each environment variable wins over its setting.[^env-wins] The cache ledger counts a TTL of `5m` as 300,000 ms and `1h` as 3,600,000 ms.[^ledger]
 
 The cache is per machine and per folder, because the prompt holds memory paths and the working directory.
 
 ## The Cache Line of `/usage`
 
-`/usage` prints one line that starts with `Prompt cache (main):`. It shows only after the session sent a request (the program, `chunk-2x9ma4k7.js@1165674`). Claude Code joins the parts below with ` · `.
+`/usage` prints one line that starts with `Prompt cache (main):`. It shows only after the session sent a request.[^usage-line] Claude Code joins the parts below with ` · `.
 
 | Part | Text | Source of the number |
 | --- | --- | --- |
@@ -164,11 +163,11 @@ The `likely cause:` text is a list with a comma between the items. A cause can a
 | `prompt unchanged — likely server-side` | Nothing differs and the gap is under five minutes. |
 | `unknown` | No cause matched. |
 
-Source: the program, `chunk-byyfpk0c.js@56059` (the cause names and texts).
+The cause names and texts come from the program.[^causes]
 
 ## What Breaks the Cache
 
-Source: [How Claude Code Uses Prompt Caching](https://code.claude.com/docs/en/prompt-caching).
+See [How Claude Code Uses Prompt Caching](https://code.claude.com/docs/en/prompt-caching).
 
 | Action | Status | Effect |
 | --- | --- | --- |
@@ -183,18 +182,14 @@ Source: [How Claude Code Uses Prompt Caching](https://code.claude.com/docs/en/pr
 
 ## Per-Turn Values
 
-Some models can take their effort level and the current time with each message.
-Claude Code then sends them in a system entry of the message, with the betas `per-turn-control-2026-07-01` and `timing-2026-09-09`.
-These values are <Undocumented />. The capability flags `per_turn_effort` and `per_turn_timing` mark the models that accept them. See [Models](models.md#capabilities).
+Some models can take their effort level and the current time with each message. Claude Code then sends them in a system entry of the message, with the betas `per-turn-control-2026-07-01` and `timing-2026-09-09`. These values are <Undocumented />. The capability flags `per_turn_effort` and `per_turn_timing` mark the models that accept them. See [Models](models.md#capabilities).
 
 ## Facts From Probes
 
-A local stub of the Messages API showed these facts.
-No model call left the machine.
+A local stub of the Messages API showed these facts. No model call left the machine.
 
 - A model name with the `[1m]` suffix adds the `context-1m-2025-08-07` beta. Without the suffix, Claude Code never sends it.
-- The call to `/v1/messages/cache_touch` needs a subscriber login and the `cache-keepalive-2026-09-03` beta.
-  It repeats every 30 seconds (10 to 120), with the body `{"request_id": ...}`.
+- The call to `/v1/messages/cache_touch` needs a subscriber login and the `cache-keepalive-2026-09-03` beta. It repeats every 30 seconds (10 to 120), with the body `{"request_id": ...}`.
 
 ## What You Can Change
 
@@ -207,16 +202,6 @@ No model call left the machine.
 | Avoid a miss | Pick the model and effort at the start of a session. |
 | Keep machine facts out of the system prompt | Use `--exclude-dynamic-system-prompt-sections`. It moves the working folder, environment, memory paths, and git status into the first user message. See [The System Prompt](system-prompt.md). |
 
-## Example
-
-You switch models in the middle of a task with `/model`.
-The next request has no cache hits, because each model has its own cache.
-Pick the model at the start of a session to avoid this.
-
-```bash
-ENABLE_PROMPT_CACHING_1H=1 claude --model sonnet
-```
-
 ## Related Pages
 
 - [The System Prompt](system-prompt.md)
@@ -224,3 +209,18 @@ ENABLE_PROMPT_CACHING_1H=1 claude --model sonnet
 - [The Agent Loop](agent-loop.md)
 - [Models](models.md)
 - [API Endpoints](../reference/api/endpoints.md) and [API Betas](../reference/api/betas.md) pages in Reference.
+
+## Sources
+
+[^body-fields]: The official docs, and `api-request` lines that version `2.1.305` wrote to a local transcript, including a stub run of `2.1.305`.
+[^markers]: The program.
+[^plain-markers]: A print-mode run of `2.1.316` against the local stub with a fake key. The probe captures of `2.1.316`.
+[^attribution]: The program, `chunk-9r6f1wsj.js@2988`.
+[^retry-notes]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-4h798pp0.js`.
+[^retry-match]: The program, `chunk-4h798pp0.js:154748`.
+[^retry-cap]: The program, `chunk-4h798pp0.js:154816`.
+[^overage]: The program, `chunk-2x9ma4k7.js@978103`.
+[^env-wins]: The program, `chunk-3dhh2g49.js@273684`.
+[^ledger]: The program, `chunk-3hya3c3s.js@207`.
+[^usage-line]: The program, `chunk-2x9ma4k7.js@1165674`.
+[^causes]: The program, `chunk-byyfpk0c.js@56059`.

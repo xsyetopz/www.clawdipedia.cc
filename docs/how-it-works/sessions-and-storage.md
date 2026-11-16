@@ -4,10 +4,19 @@ description: How Claude Code saves a session, how resume and branch work, what i
 sidebar_position: 6
 ---
 
-A session is one saved conversation.
-Claude Code writes it to a file on your disk as you work.
-You can leave and come back to continue. You can also branch the conversation to try another path.
-This page covers the flags, the files, and the cleanup rules. The line format is on the [Transcript Format](../reference/transcript-format.md) page.
+A session is one saved conversation. Claude Code writes it to a file on your disk as you work, so you can leave and come back to continue. You can also branch the conversation to try another path.
+
+Use the flags to resume or branch a session. Set `cleanupPeriodDays` to choose how long Claude Code keeps the files, or `CLAUDE_CODE_SKIP_PROMPT_HISTORY` to write none. The line format is on the [Transcript Format](../reference/transcript-format.md) page.
+
+## Example
+
+You close the terminal in the middle of a task. The next day you run `claude --continue` in the same folder. The conversation, the model, and the permission mode come back.
+
+```bash
+claude --continue
+claude --resume my-feature --fork-session
+claude purge --dry-run
+```
 
 ## The Life of a Session
 
@@ -28,7 +37,7 @@ stateDiagram-v2
 
 ## Resume and Branch
 
-Source: [Manage Sessions](https://code.claude.com/docs/en/sessions).
+See [Manage Sessions](https://code.claude.com/docs/en/sessions).
 
 | Item | Status | What it does |
 | --- | --- | --- |
@@ -46,18 +55,15 @@ Source: [Manage Sessions](https://code.claude.com/docs/en/sessions).
 | `claude attach`, `logs`, `stop`, `rm`, `respawn` | <Documented /> | Control background sessions. |
 | `CLAUDE_CODE_RESUME_INTERRUPTED_TURN` | <Documented /> | Resumes a turn that a crash cut off. |
 
-A resumed session restores the history, the model, the agent, the permission mode, an active goal, and scheduled tasks.
-It does not restore the values of `--mcp-config`, `--settings`, `--plugin-dir`, `--fallback-model`, or `--add-dir`. Pass them again.
+A resumed session restores the history, the model, the agent, the permission mode, an active goal, and scheduled tasks. It does not restore the values of `--mcp-config`, `--settings`, `--plugin-dir`, `--fallback-model`, or `--add-dir`. Pass them again.
+
 After a compaction, a resume does not load the lines before the last `compact_boundary` line, unless that line lists kept messages in `preservedSegment` or `preservedMessages`. Then the loader also loads those messages. A missing kept message makes the load abort. See [Compaction Rows](../reference/transcript-format.md#compaction-rows).
+
 If you resume one session in two terminals, the messages mix in one transcript.
 
 ## Where Files Live
 
-Source: [Explore the .claude Directory: Application Data](https://code.claude.com/docs/en/claude-directory#application-data).
-`CLAUDE_CONFIG_DIR` moves `~/.claude`.
-The `<project>` name is the folder path with every character other than a letter or a digit changed to `-`.
-Claude Code cuts a name over 200 characters. It adds a hash.
-`CLAUDE_CODE_PROJECT_DIR_NAME` sets the name by hand. It needs `CLAUDE_CONFIG_DIR`.
+See [Explore the .claude Directory: Application Data](https://code.claude.com/docs/en/claude-directory#application-data). `CLAUDE_CONFIG_DIR` moves `~/.claude`. The `<project>` name is the folder path with every character other than a letter or a digit changed to `-`. Claude Code cuts a name over 200 characters and adds a hash. `CLAUDE_CODE_PROJECT_DIR_NAME` sets the name by hand. It needs `CLAUDE_CONFIG_DIR`.
 
 <FileTree>
 
@@ -120,17 +126,16 @@ The last column shows whether Claude Code deletes the item after `cleanupPeriodD
 | `state/` | <Undocumented /> | Holds `settings-review.json`, the staged settings changes that you review with `/settings-review`. Each entry has the file path, hashes, the proposed content, and the tool and session that staged it. It also holds `unattended-serving-consent.json`. A write there by Claude is denied with the text "Staged Claude Code settings changes". The retention sweep drops staged entries and `unattended-serving-runs` files older than `cleanupPeriodDays`. | ✅ |
 | `seed-admin/` | <Undocumented /> | The root for temp folders `claude-seed-admin-<pid>-...` (mode 0700). They hold the private git directories of cloud-session uploads. Its own sweep removes folders older than one hour, not `cleanupPeriodDays`. Claude cannot write there. It is refused inside a git work tree. | ❌ |
 | `bridge-spawn/` | <Undocumented /> | The root folder (mode 0700) for sessions started over the bridge. Its own cleanup removes entries older than one day, not `cleanupPeriodDays`. The sandbox rules allow it. | ❌ |
-| `cache/model-catalog/` | <Undocumented /> | `masked-ids.json` is a saved list of model IDs (version 1, at most 131072 bytes) that the served model catalog masks. The program reads it at startup. The program keeps a file it cannot parse as `masked-ids.unparseable.json`. The folder also holds cached catalog `.json` files. The retention sweep removes those after `cleanupPeriodDays`. It keeps `masked-ids.json` and the floor marks file. | ✅ |
-| `mods/`, `downloads/` | <Undocumented /> | The program has no `mods/` path in the config folder (it uses `dev-mods/`, listed above). `mods` is the name of the mod folder inside a plugin. `downloads/` is only in the program's list of known folders. No code writes it. The retention sweep does not touch either name. | ❌ |
+| `cache/model-catalog/` | <Undocumented /> | `masked-ids.json` is a saved list of model IDs (version 1, at most 131072 bytes) that the served model catalog masks. Claude Code reads it at startup. It keeps a file it cannot parse as `masked-ids.unparseable.json`.[^model-catalog] The folder also holds cached catalog `.json` files. The retention sweep removes those after `cleanupPeriodDays`. It keeps `masked-ids.json` and the floor marks file. | ✅ |
+| `mods/`, `downloads/` | <Undocumented /> | Claude Code has no `mods/` path in the config folder (it uses `dev-mods/`, listed above). `mods` is the name of the mod folder inside a plugin. `downloads/` is only in the list of known folders. No code writes it.[^mods-downloads] The retention sweep does not touch either name. | ❌ |
 
 `~/.claude.json`, next to the folder, holds app state, the sign-in, and personal MCP servers.
 The default retention is 30 days, and the minimum is 1.
+
 The scratchpad of a session is in the temp folder (`/private/tmp/claude-<uid>/<project>/<session-id>/scratchpad/` on macOS). `claude purge` does not touch it.
 
 :::warning
-The files are plain text and are not encrypted.
-A secret that a tool prints goes into the transcript.
-Lower `cleanupPeriodDays` or set `CLAUDE_CODE_SKIP_PROMPT_HISTORY` if that matters to you.
+The files are plain text and are not encrypted. A secret that a tool prints goes into the transcript. To limit this, lower `cleanupPeriodDays` or set `CLAUDE_CODE_SKIP_PROMPT_HISTORY`.
 :::
 
 ## Controls
@@ -145,29 +150,17 @@ Lower `cleanupPeriodDays` or set `CLAUDE_CODE_SKIP_PROMPT_HISTORY` if that matte
 | `claude purge [path]` | <Documented /> | Deletes the transcripts, tasks, file history, and config entry of a project. Flags: `--all`, `--dry-run`, `-i`, `-y`. |
 | `/export` | <Documented /> | Exports a conversation. Use it, not the JSONL file, for scripts. |
 
-## Example
-
-You close the terminal in the middle of a task.
-The next day you run `claude --continue` in the same folder.
-The conversation, the model, and the permission mode come back.
-
-```bash
-claude --continue
-claude --resume my-feature --fork-session
-claude purge --dry-run
-```
-
 ## Errors
 
 Each row is a family of messages. The backticked text is the start that every message in the family shares. A row marked `Various` gathers the messages of one feature that do not share one start.
 
 | Start of Message | Status | What It Means | Cases |
 | --- | --- | --- | --- |
-| Various | <Undocumented /> | **Self-hosted runner and orchestrator.** A self-hosted runner or orchestrator flag, environment value, or hook was refused. | A flag or `SELF_HOSTED_RUNNER_*` variable is out of range or not one of the listed values. A flag was renamed. The command takes no positional argument and fails with `unexpected argument '<arg>' — this command takes no positional arguments` (the program). `--configure-git` could not prepare its artifacts. A hook is missing or not executable. A proxy authorization source is empty, too long, or unreadable. The environment secret is missing. |
-| Various | <Undocumented /> | **Remote Control and cloud sessions.** Remote Control, a cloud session, or `--teleport` failed or was refused. | The user is not signed in with claude.ai. The policy `disableRemoteControl` is set. The base URL uses HTTP. A cloud session reached its timeout, waits for input that nothing here can give, or lost its connection. `claude --teleport` was run from the wrong checkout. |
-| Various | <Undocumented /> | **Transcripts and storage.** A transcript, session record, or storage backend could not be read or written. | A transcript file is too large, is not valid JSON, or holds no messages. A diskless session has no file to write to. A storage read, write, stat, or delete failed. |
+| Various | <Undocumented /> | Self-hosted runner and orchestrator: A self-hosted runner or orchestrator flag, environment value, or hook was refused. | A flag or `SELF_HOSTED_RUNNER_*` variable is out of range or not one of the listed values. A flag was renamed. The command takes no positional argument and fails with `unexpected argument '<arg>' — this command takes no positional arguments`.[^unexpected-arg] `--configure-git` could not prepare its artifacts. A hook is missing or not executable. A proxy authorization source is empty, too long, or unreadable. The environment secret is missing. |
+| Various | <Undocumented /> | Remote Control and cloud sessions: Remote Control, a cloud session, or `--teleport` failed or was refused. | The user is not signed in with claude.ai. The policy `disableRemoteControl` is set. The base URL uses HTTP. A cloud session reached its timeout, waits for input that nothing here can give, or lost its connection. `claude --teleport` was run from the wrong checkout. |
+| Various | <Undocumented /> | Transcripts and storage: A transcript, session record, or storage backend could not be read or written. | A transcript file is too large, is not valid JSON, or holds no messages. A diskless session has no file to write to. A storage read, write, stat, or delete failed. |
 
-Since `2.1.326`, a transcript write that fails can leave a partial last line. The program then adds a newline before the next append, so the next record does not join the partial line. The same seal runs when the program finds a transcript file whose last byte is not a newline before it re-appends session metadata (`chunk-4h798pp0.js:29157`, `:29248`, `:29438`).
+Since `2.1.326`, a transcript write that fails can leave a partial last line. Claude Code then adds a newline before the next append, so the next record does not join the partial line. The same seal runs when Claude Code finds a transcript file whose last byte is not a newline before it re-appends session metadata.[^seal]
 
 ## Related Pages
 
@@ -175,3 +168,10 @@ Since `2.1.326`, a transcript write that fails can leave a partial last line. Th
 - [Context and Compaction](context-and-compaction.md)
 - [Architecture](architecture.md)
 - [CLI](../configure/cli/index.md) and [Environment Variable](../configure/env-vars/index.md) pages in Configure.
+
+## Sources
+
+[^model-catalog]: The program.
+[^mods-downloads]: The program.
+[^unexpected-arg]: The program.
+[^seal]: The program, `chunk-4h798pp0.js:29157`, `:29248`, `:29438`.

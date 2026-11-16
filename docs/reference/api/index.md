@@ -4,9 +4,9 @@ description: How Claude Code talks to the model server, which endpoints, headers
 sidebar_position: 1
 ---
 
-Claude Code is a client of the Messages API. It sends model requests, counts tokens, and calls a few account and service servers.
-Each request carries headers and a list of beta values. This section lists them all.
-If you run Claude Code behind a gateway or proxy, read these pages first, because the gateway must pass some headers on without a change.
+Claude Code is a client of the Messages API. It sends model requests, counts tokens, and calls a few account and service servers. Each request carries headers and a list of beta values. These pages list them all.
+
+If you run Claude Code behind a gateway or proxy, read these pages first. The gateway must pass some headers on without a change. Set `ANTHROPIC_BASE_URL` to send requests to your gateway.
 
 ## Pages
 

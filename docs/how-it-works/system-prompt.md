@@ -4,14 +4,23 @@ description: How Claude Code builds the system prompt from named sections, how i
 sidebar_position: 4
 ---
 
-The system prompt is the text that Claude Code sends to the model before your first message.
-It tells the model how to behave and what the session looks like.
-You can add to it, replace it, or switch to a shorter version.
-This page explains how the prompt is built. The exact captured texts are on the [Captured System Prompts](../prompts/index.md) page.
+The system prompt is the text that Claude Code sends to the model before your first message. It tells the model how to behave and what the session looks like.
+
+You can add to it, replace it, or switch to a shorter version. Use `--append-system-prompt` to add a rule, or `--system-prompt` to replace the default body. This page explains how the prompt is built. The exact captured texts are on the [Captured System Prompts](../prompts/index.md) page.
+
+## Example
+
+You want the model to follow one more rule. You also want a mod to remove the memory section.
+
+```bash
+claude --append-system-prompt "Always use TypeScript"
+```
+
+Claude Code adds the text to the end of the default prompt. A mod can hook `prompt.section` with `{ name: "memory" }` and return `{ text: null }` to drop the memory section.
 
 ## Ways to Change It
 
-Sources: [CLI Reference](https://code.claude.com/docs/en/cli-reference), [Output Styles](https://code.claude.com/docs/en/output-styles), and [Environment Variables](https://code.claude.com/docs/en/env-vars).
+See [CLI Reference](https://code.claude.com/docs/en/cli-reference), [Output Styles](https://code.claude.com/docs/en/output-styles), and [Environment Variables](https://code.claude.com/docs/en/env-vars).
 
 | Item | Status | What it does |
 | --- | --- | --- |
@@ -47,22 +56,17 @@ flowchart TD
   Flags -->|none| Send
 ```
 
-Claude Code makes a list of sections.
-Each section has a name and a text, or no text when its condition is false.
-A `shared` section is the same for every user of a model.
-A `session` section can change with the session.
-Claude Code sends the `shared` sections first, so that the shared part can stay in the cache.
+Claude Code makes a list of sections. Each section has a name and a text, or no text when its condition is false. A `shared` section is the same for every user of a model. A `session` section can change with the session. Claude Code sends the `shared` sections first, so that the shared part can stay in the cache.
 
-The request has three `system` blocks:
-the attribution line, the identity line, and the body.
-See [Request and Cache](request-and-cache.md#system-blocks-and-cache-markers) for the cache markers.
+The request has three `system` blocks: the attribution line, the identity line, and the body. See [Request and Cache](request-and-cache.md#system-blocks-and-cache-markers) for the cache markers.
 
 ## Short or Full Prompt
 
 A model gets the short prompt (one `lean_body` section, about 5.7k characters) or the full prompt (six longer sections, about 26.9k characters).
-The official docs and the real request captures agree here. Only the old wiki was wrong.
+The official docs and the request captures agree.[^old-wiki]
 
-`2.1.316` removed one line from the short prompt (`lean_body`): "Write code that reads like the surrounding code: match its comment density, naming, and idiom." The line stood between the bullet list that ends with the `file_path:line_number` rule and the `pronouns` paragraph. The `system[2]` block is 96 characters shorter for the short-prompt models and 95 for `claude-fable-5` and `claude-mythos-5`. The full-prompt models (`claude-sonnet-5`, `claude-haiku-4-5`) keep their size, and the memory text is the same as in `2.1.314`. Source: the probe `print.models.matrix` and the re-rendered [captured prompts](../prompts/index.md).
+`2.1.316` removed one line from the short prompt (`lean_body`): "Write code that reads like the surrounding code: match its comment density, naming, and idiom." The line stood between the bullet list that ends with the `file_path:line_number` rule and the `pronouns` paragraph. The `system[2]` block is 96 characters shorter for the short-prompt models and 95 for `claude-fable-5` and `claude-mythos-5`. The full-prompt models (`claude-sonnet-5`, `claude-haiku-4-5`) keep their size, and the memory text is the same as in `2.1.314`. See the re-rendered [captured prompts](../prompts/index.md).[^matrix]
+
 The captures show the following. See [Captured System Prompts](../prompts/index.md) for the texts.
 
 ```mermaid
@@ -88,21 +92,19 @@ flowchart TD
 ### Names That Claude Code Does Not Recognize
 
 Since `2.1.312`, a model name that Claude Code does not recognize gets the short prompt, and `CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=0` keeps the full prompt.
-This covers custom deployment names and inference profile ARNs. The test in the program has no check for the provider.
-The program decides in this order:
+This covers custom deployment names and inference profile ARNs. The test has no check for the provider.[^unknown-name] Claude Code decides in this order:
 
 1. `CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT` set to a true value gives the short prompt. A false value, such as `0`, gives the full prompt.
-2. If the variable is unset, an unknown name gives the short prompt. A known name has `claude-3-` or `haiku` or `sonnet` in it, or is `claude-opus-4-0`, `-4-1`, `-4-5`, `-4-6`, or `-4-7`. A server-side catalog flag `lean_prompt` for the model comes first.
-3. For a known name, the gate `tengu_velvet_tide` gives the short prompt when on. Otherwise the server setting `simple_system_prompt` for the model decides.
+2. If the variable is unset, an unknown name gives the short prompt. A known name has `claude-3-` or `haiku` or `sonnet` in it, or is `claude-opus-4-0`, `-4-1`, `-4-5`, `-4-6`, or `-4-7`. A server-side catalog flag for the model comes first.[^lean-flag]
+3. For a known name, a server-side gate gives the short prompt when on. Otherwise a server setting for the model decides.[^gate]
 
-The program now canonicalizes the name for this test with the option `deterministic`. The option skips the lookup that turns an `application-inference-profile` ARN into the model behind it. So an ARN no longer counts as the Sonnet or Haiku model that it fronts, unless `modelOverrides` maps it.
-Source: the program (`chunk-b9bvke64.js` lines 345 to 374 and `chunk-x4fdscgs.js` lines 27171 to 27190; in `2.1.311` the same test used no `deterministic` option, and that build is not in the `2.1.321` capture).
+Claude Code now canonicalizes the name for this test without the lookup that turns an `application-inference-profile` ARN into the model behind it. So an ARN no longer counts as the Sonnet or Haiku model that it fronts, unless `modelOverrides` maps it.[^deterministic]
 
 ## Prompt by Model
 
-We ran the default prompt for every model in the program's catalog, plus names that end in `-eap` and an unknown name (see [Probes](../reference/probes.md#static-and-print-probes)). The stub accepted every name. The real API may refuse retired models.
+We ran the default prompt for every model in the catalog, plus names that end in `-eap` and an unknown name (see [Probes](../reference/probes.md#static-and-print-probes)). The stub accepted every name. The real API may refuse retired models.
 
-The models with the catalog flag `lean_prompt` get the short prompt: Haiku 5.5, Sonnet 5.5, Opus 4.8, Opus 5, Opus 5.5, Fable 5, Fable 5.1, and Mythos 5.1. `claude-mythos-5` has no such flag. A name rule gives it the short prompt. The same rule applies to a name that ends in `-eap` and to an unknown name. Older models, and `claude-sonnet-5`, get the full prompt. Some models add sections to the short prompt. These sections follow the flags `opus_5_prompt_bundle`, `opus_5_5_prompt_bundle`, `fable_5_mitigations`, and `fable_5_1_prompt_bundle`.
+These models get the short prompt from a catalog flag: Haiku 5.5, Sonnet 5.5, Opus 4.8, Opus 5, Opus 5.5, Fable 5, Fable 5.1, and Mythos 5.1. `claude-mythos-5` has no such flag. A name rule gives it the short prompt. The same rule applies to a name that ends in `-eap` and to an unknown name. Older models, and `claude-sonnet-5`, get the full prompt. Some models add sections to the short prompt, which follow other catalog flags.[^bundles]
 
 | Model | Prompt | System Characters |
 | --- | --- | --- |
@@ -120,17 +122,15 @@ The models with the catalog flag `lean_prompt` get the short prompt: Haiku 5.5, 
 | `claude-haiku-4-5`, `claude-3-5-haiku`, `claude-3-5-sonnet`, `claude-3-7-sonnet`, `claude-sonnet-4-0`, `claude-sonnet-4-5`, `claude-sonnet-4-6`, `claude-opus-4-5`, `claude-opus-4-6`, `claude-opus-4-7` | Full | 27,080 |
 | `claude-opus-4-0`, `claude-opus-4-1` | Claude Code silently changes the request model to `claude-opus-5-5`, so they get the short prompt | 5,776 |
 
-The 3.5 and 3.7 Haiku and Sonnet models also get 25 tools and not 12, because they have no tool search. In `2.1.309` it was 24, before `Monitor` joined the tool list (probe `print.models.matrix`). The captures cover only Opus 5.5, Sonnet 5.5, Haiku 5.5, and the full prompt. The other models have no capture page.
+The 3.5 and 3.7 Haiku and Sonnet models also get 25 tools and not 12, because they have no tool search. In `2.1.309` it was 24, before `Monitor` joined the tool list.[^matrix] The captures cover only Opus 5.5, Sonnet 5.5, Haiku 5.5, and the full prompt. The other models have no capture page.
 
-The [official docs](https://code.claude.com/docs/en/env-vars) say that Haiku 4.5, Sonnet 5, Opus 4.7, and earlier models get the full prompt, and newer models get the short one.
-The captures match this for Sonnet 5.5, Opus 5.5, and Haiku 5.5. The old wiki said Sonnet gets the full prompt. That is wrong.
+The [official docs](https://code.claude.com/docs/en/env-vars) say that Haiku 4.5, Sonnet 5, Opus 4.7, and earlier models get the full prompt, and newer models get the short one. The captures match this for Sonnet 5.5, Opus 5.5, and Haiku 5.5.
 
 Captured texts: [lean prompt](../prompts/defaults/default-lean.md), [Sonnet 5.5](../prompts/defaults/default-sonnet.md), [Haiku 5.5](../prompts/defaults/default-haiku.md), and the [full prompt](../prompts/defaults/full-prompt.md).
 
 ## Where Each Part Goes in the Request
 
-Not everything the model reads as instructions is in `system`.
-The captures show this split.
+Not everything the model reads as instructions is in `system`. The captures show this split.
 
 | Part | Where it goes | Status |
 | --- | --- | --- |
@@ -142,7 +142,7 @@ The captures show this split.
 
 The identity line is `You are a Claude agent, built on Anthropic's Claude Agent SDK.` in print mode.
 With `--append-system-prompt`, print mode sends `You are Claude Code, Anthropic's official CLI for Claude, running within the Claude Agent SDK.`
-The interactive line is `You are Claude Code, Anthropic's official CLI for Claude.` The program picks it when the session is interactive. It also picks it for Google Cloud Agent Platform (Vertex) sessions.
+The interactive line is `You are Claude Code, Anthropic's official CLI for Claude.` Claude Code uses it when the session is interactive. It also uses it for Google Cloud Agent Platform (Vertex) sessions.
 
 ## What Each Flag Does in the Captures
 
@@ -157,14 +157,11 @@ The interactive line is `You are Claude Code, Anthropic's official CLI for Claud
 
 ## Sections
 
-No official docs page lists the sections, so every row below is <Undocumented /> unless the row says otherwise.
-The names matter because of this. A `prompt.compose` hook sees all of them. A `prompt.section` hook sees only the session sections.
+No official docs page lists the sections, so every row below is <Undocumented /> unless the row says otherwise. The names matter for mods. A `prompt.compose` hook sees all of them. A `prompt.section` hook sees only the session sections.
 
 ### Shared Sections
 
-These come first. Claude Code uses either the short row or the full rows.
-From 2.1.302 to 2.1.322, no shared section (`lean_body`, `intro`, `tone`, `doing_tasks`, `memory_static`, and the others) fires `prompt.section`, so a `prompt.section` hook does not see them.
-Only a `prompt.compose` hook sees them.
+These come first. Claude Code uses either the short row or the full rows. From `2.1.302` to `2.1.322`, no shared section (`lean_body`, `intro`, `tone`, `doing_tasks`, `memory_static`, and the others) fires `prompt.section`, so a `prompt.section` hook does not see them. Only a `prompt.compose` hook sees them.
 
 | Section | Status | When | Content |
 | --- | --- | --- | --- |
@@ -210,12 +207,11 @@ They follow in this order. Claude Code omits a section that has no text. Session
 | `total_tokens` | <Gated note="Needs a model with the total_tokens_reminder capability" /> | Not with `CLAUDE_CODE_DISABLE_ATTACHMENTS` or `CLAUDE_CODE_SIMPLE`. The model must carry the `total_tokens_reminder` capability, which Sonnet 5.5 and Opus 5.5 lost in `2.1.314`. The mode comes from `CLAUDE_CODE_TOTAL_TOKENS_REMINDER` | A reminder of the token budget. |
 | `user_pays` | <Gated note="An experiment that is off by default" /> | An experiment that is off by default | The user pays for each token. |
 
-Experiments come from GrowthBook, a flag service that Anthropic runs.
-You cannot set an experiment. But the env vars in the table switch some of the sections.
+Experiments come from GrowthBook, a flag service that Anthropic runs. You cannot set an experiment, but the env vars in the table switch some of the sections.
 
 ## Prompt Variants
 
-Runs of 2.1.316 against a local stub measured the `system[2]` body for each launch. The sizes are characters.
+Runs of `2.1.316` against a local stub measured the `system[2]` body for each launch. The sizes are characters.
 
 | Launch | Status | `system[2]` body | Tools |
 | --- | --- | --- | --- |
@@ -228,34 +224,17 @@ The first two rows differ because Opus 5.5 gets the short prompt and Sonnet 5 th
 
 ## Responsive Mode
 
-The program has a built-in plugin named `cc-plugin-responsive-mode` (the plugin is defined in `chunk-p1x9gjdg.js`, registered in `chunk-mt5heavc.js`, and loads `chunk-9dgv2k67.js`). Its description reads: "Responsive mode: Claude replies to you in a sentence before thinking or using tools, on every prompt".
-The plugin is off by default (`defaultEnabled: false`). It is only available when the experiment `tengu_quiet_ember` is on, and never in a background or daemon session. You cannot set that experiment. The plugin registers when the entry point is not `local-agent`, or when the session is remote. The plugin acts only on a prompt that a person typed and that is not a slash command.
-This page does not state how the plugin changes the prompt, because that text was not read in this run.
+Claude Code has a built-in plugin named `cc-plugin-responsive-mode`. Its description reads: "Responsive mode: Claude replies to you in a sentence before thinking or using tools, on every prompt".[^responsive]
+
+The plugin is off by default. It is only available when a server-side experiment is on, and never in a background or daemon session. You cannot set that experiment. The plugin registers when the entry point is not `local-agent`, or when the session is remote. The plugin acts only on a prompt that a person typed and that is not a slash command. This page does not state how the plugin changes the prompt, because that text was not read in this run.
 
 ## Bare Mode
 
-`--bare` and `CLAUDE_CODE_SIMPLE=1` give the same result: a two-line body (`CWD: <path>` and `Date: <date>`), 3 tools, and an empty environment message.
-Source: [Run Claude Code Programmatically: Start Faster with Bare Mode](https://code.claude.com/docs/en/headless#start-faster-with-bare-mode) for the flag. The body comes from the captures (<Undocumented />).
-See the captured [bare mode prompt](../prompts/defaults/bare.md) and [simple mode env var](../prompts/defaults/simple-env.md).
+`--bare` and `CLAUDE_CODE_SIMPLE=1` give the same result: a two-line body (`CWD: <path>` and `Date: <date>`), 3 tools, and an empty environment message. See [Run Claude Code Programmatically: Start Faster with Bare Mode](https://code.claude.com/docs/en/headless#start-faster-with-bare-mode) for the flag. The body comes from the captures (<Undocumented />). See the captured [bare mode prompt](../prompts/defaults/bare.md) and [simple mode env var](../prompts/defaults/simple-env.md).
 
 ## Subagent Prompt
 
-A subagent gets its own agent text plus short notes.
-The default agent text starts with `You are an agent for Claude Code, Anthropic's official CLI for Claude.`
-The notes say to share absolute paths, to avoid emojis, to avoid a colon before tool calls, and not to write report files.
-Source: the program (<Undocumented />).
-See the captured prompts for [general-purpose](../prompts/agents/subagent-general-purpose.md), [explore](../prompts/agents/subagent-explore.md), [plan](../prompts/agents/subagent-plan.md), and [custom](../prompts/agents/subagent-custom.md) subagents.
-
-## Example
-
-You want the model to follow one more rule. You also want a mod to remove the memory section.
-
-```bash
-claude --append-system-prompt "Always use TypeScript"
-```
-
-Claude Code adds the text to the end of the default prompt.
-A mod can hook `prompt.section` with `{ name: "memory" }` and return `{ text: null }` to drop the memory section.
+A subagent gets its own agent text plus short notes. The default agent text starts with `You are an agent for Claude Code, Anthropic's official CLI for Claude.` The notes say to share absolute paths, to avoid emojis, to avoid a colon before tool calls, and not to write report files (<Undocumented />).[^subagent] See the captured prompts for [general-purpose](../prompts/agents/subagent-general-purpose.md), [explore](../prompts/agents/subagent-explore.md), [plan](../prompts/agents/subagent-plan.md), and [custom](../prompts/agents/subagent-custom.md) subagents.
 
 ## Related Pages
 
@@ -263,3 +242,15 @@ A mod can hook `prompt.section` with `{ name: "memory" }` and return `{ text: nu
 - [Request and Cache](request-and-cache.md)
 - [Models](models.md)
 - [Output Styles](../configure/output-styles.md) and [Mod API](../extend/mod-api/index.md) pages in Configure and Extend.
+
+## Sources
+
+[^old-wiki]: An earlier wiki said Sonnet gets the full prompt. That is wrong.
+[^matrix]: Probe case `print.models.matrix`.
+[^unknown-name]: The program, `chunk-b9bvke64.js` lines 345 to 374 and `chunk-x4fdscgs.js` lines 27171 to 27190.
+[^lean-flag]: The catalog flag is `lean_prompt`. The program.
+[^gate]: The gate is `tengu_velvet_tide` and the server setting is `simple_system_prompt`. The program.
+[^deterministic]: The program, `chunk-b9bvke64.js` lines 345 to 374 and `chunk-x4fdscgs.js` lines 27171 to 27190. The test uses the option `deterministic`. In `2.1.311` the same test used no `deterministic` option, and that build is not in the `2.1.321` capture.
+[^bundles]: The flags are `opus_5_prompt_bundle`, `opus_5_5_prompt_bundle`, `fable_5_mitigations`, and `fable_5_1_prompt_bundle`. The program.
+[^responsive]: The program. The plugin is defined in `chunk-p1x9gjdg.js`, registered in `chunk-mt5heavc.js`, and loads `chunk-9dgv2k67.js`. It has `defaultEnabled: false` and needs the experiment `tengu_quiet_ember`.
+[^subagent]: The program.
