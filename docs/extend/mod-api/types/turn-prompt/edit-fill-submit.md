@@ -4,6 +4,8 @@ description: "Types of the prompt edit, fill, and paint calls, media, mentions, 
 sidebar_position: 2
 ---
 
+These types describe the data of the hooks and calls that change or read the prompt box: edit, fill, paint, media, mention, section, and submit. Use them to type a hook on `prompt.edit`, `prompt.fill`, `prompt.paint`, `prompt.mention`, `prompt.section`, or `prompt.submit`, or a call to `$.prompt`. Each type has a table of its fields.
+
 ## Types with Fields
 
 Each type below has its own table of fields.
@@ -18,9 +20,9 @@ The input of `prompt.edit` (prompt-edit/): one edit that the person makes in the
 | `key` | <Documented /> | The one key that made the edit, in the shape of `Client` `onKey`. Absent for a paste, the newline of a keybinding, and a burst of keys folded into one edit. | Type: `ClientKeyEvent`. Optional. Pinned: which key the person pressed is a fact. A hook may not change it. |
 | `text` | <Documented /> | The draft before the edit. `next({ ...e, text })` applies the edit to another draft instead. | Type: `string`. |
 | `cursor` | <Documented /> | Where the caret of the person stood in `text` before the edit, 0 to `text.length`. | Type: `number`. |
-| `start` | <Documented /> | Where in `text` the edit begins: the start of the span that it replaces, or where what was typed goes in. A bare cursor move begins where it lands. | Type: `number`. |
-| `end` | <Documented /> | Where the replaced span of `text` ends: `start` for an insertion or a move, past it for a deletion (Backspace, a kill). | Type: `number`. |
-| `inputText` | <Documented /> | What goes in between `start` and `end`: the typed or pasted text. It is `''` for a deletion or a move. | Type: `string`. `next({ ...e, inputText })` puts in another, and the cursor lands after it. |
+| `start` | <Documented /> | Where in `text` the edit begins: the start of the span that it replaces, or where the typed text goes in. A bare cursor move begins where it lands. | Type: `number`. |
+| `end` | <Documented /> | Where the replaced span of `text` ends. It is `start` for an insertion or a move, and past `start` for a deletion (Backspace, a kill). | Type: `number`. |
+| `inputText` | <Documented /> | What goes in between `start` and `end`: the typed or pasted text. It is `''` for a deletion or a move. | Type: `string`. `next({ ...e, inputText })` puts in other text, and the cursor lands after it. |
 
 ### `PromptEditOrigin`
 
@@ -32,11 +34,11 @@ Who edits the prompt box at `prompt.edit`, as the engine stamps it where the edi
 
 ### `PromptEditResult`
 
-What a `prompt.edit` hook returns and what `next(e)` resolves to: the box after the edit (PromptBox), which the editor then displays. From core: `e.text` with the splice applied. Rewrite it to change what lands. Answer `{ text: e.text, cursor: e.cursor }` without `next` to consume the key.
+What a `prompt.edit` hook returns, and what `next(e)` resolves to: the box after the edit (PromptBox), which the editor then displays. From core, it is `e.text` with the splice applied. Rewrite it to change what lands. Answer `{ text: e.text, cursor: e.cursor }` without `next` to consume the key.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `decorations` | <Documented /> | Runs to paint over the own `text` of this answer (PromptDecoration). None when absent. | Type: `PromptDecoration[]`. Optional. Kept on the same characters while the answer to the next edit is pending. Then the list of that answer replaces them. |
+| `decorations` | <Documented /> | Runs to paint over the `text` of this answer (PromptDecoration). None when absent. | Type: `PromptDecoration[]`. Optional. They stay on the same characters while the answer to the next edit is pending. Then the list of that answer replaces them. |
 
 ### `PromptFillArgs`
 
@@ -45,18 +47,18 @@ The input of `prompt.fill` as the `$.prompt.fill(args)` of a plugin takes it. It
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `text` | <Documented /> | What the box is to take (PromptFillInput `text`). | Type: `string`. |
-| `mode` | <Documented /> | Where it goes (PromptFillMode). It is `replace` when left out. | Type: `PromptFillMode`. Optional. |
-| `decorations` | <Documented /> | Runs to paint over `text` (PromptDecoration). Offsets into `text` as given. The engine moves them to where it lands. None when absent. | Type: `PromptDecoration[]`. Optional. The next `prompt.edit` answer replaces them. They are gone at the next change of the draft. |
-| `cursor` | <Documented /> | Where the caret stands after the write: an offset into the whole draft the box then holds. Left out: past the text for `insert`, else at the end. | Type: `number`. Optional. Clamped to the draft and moved to the start of a character it falls inside. A value that is not an integer is refused. Since `2.1.309`. |
+| `mode` | <Documented /> | Where the text goes (PromptFillMode). It is `replace` when left out. | Type: `PromptFillMode`. Optional. |
+| `decorations` | <Documented /> | Runs to paint over `text` (PromptDecoration). Offsets are into `text` as given. The engine moves them to where the text lands. None when absent. | Type: `PromptDecoration[]`. Optional. The next `prompt.edit` answer replaces them. They are gone at the next change of the draft. |
+| `cursor` | <Documented /> | Where the caret stands after the write: an offset into the whole draft that the box then holds. Left out, it is past the text for `insert`, else at the end. | Type: `number`. Optional. The engine clamps it to the draft and moves it to the start of a character that it falls inside. It refuses a value that is not an integer. Since `2.1.309`. |
 
 ### `PromptPaintArgs`
 
-What a plugin's `$.prompt.paint(args)` takes, and a hook on `prompt.paint` sees as `e` and may rewrite. Whose runs they are is the caller's name, which no argument or hook sets. Used by `$.prompt.paint`, `prompt.paint`. Since `2.1.311`.
+What the `$.prompt.paint(args)` of a plugin takes. A hook on `prompt.paint` sees it as `e` and may rewrite it. The runs belong to the caller's name, which no argument or hook sets. Used by `$.prompt.paint`, `prompt.paint`. Since `2.1.311`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `text` | <Documented /> | The draft that `decorations` were computed for. Nothing paints unless the box reads exactly this. | Type: `string`. Optional. May be left out only with an empty list. |
-| `decorations` | <Documented /> | The runs of this plugin over the draft (PromptDecoration). They replace those that it painted before. An empty list clears them. | Type: `PromptDecoration[]`. The runs of other plugins stand, and a later one wins for each style key. The next change of the draft drops them, but for a `prompt.edit` hook in the terminal. |
+| `text` | <Documented /> | The draft that `decorations` were computed for. Nothing paints unless the box reads exactly this. | Type: `string`. Optional. You may leave it out only with an empty list. |
+| `decorations` | <Documented /> | The runs of this plugin over the draft (PromptDecoration). They replace those that it painted before. An empty list clears them. | Type: `PromptDecoration[]`. The runs of other plugins stand, and a later one wins for each style key. The next change of the draft drops them, except for a `prompt.edit` hook in the terminal. |
 
 ### `PromptPainted`
 
@@ -65,19 +67,19 @@ What `$.prompt.paint` resolves to: whether the runs were painted, and the box as
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `isPainted` | <Documented /> | True once the runs stand over the draft, or a clear took them off. False where the box does not read `text`, or where no box can take them. | Type: `boolean`. |
-| `text` | <Documented /> | The draft as it stands, which the call did not change. It is `''` where no box is drawn or the caller may not read it (see above). | Type: `string`. |
-| `cursor` | <Documented /> | Where the person types next: an offset into `text`, which the call did not move. | Type: `number`. |
+| `text` | <Documented /> | The draft as it stands. The call did not change it. It is `''` where no box is drawn or the caller may not read it (see above). | Type: `string`. |
+| `cursor` | <Documented /> | Where the person types next: an offset into `text`. The call did not move it. | Type: `number`. |
 
 ### `PromptFilled`
 
-What `$.prompt.fill` resolves to: whether the box took the text, and the box afterwards (PromptBox) as the own `$.prompt.read()` of the caller reads it. The box goes to a plugin whose module calls `$.prompt.read`. A plugin that never does gets the empty box. Used by `$.prompt.fill`.
+What `$.prompt.fill` resolves to: whether the box took the text, and the box afterwards (PromptBox) as the `$.prompt.read()` of the caller reads it. The box goes to a plugin whose module calls `$.prompt.read`. A plugin that never does gets the empty box. Used by `$.prompt.fill`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `isFilled` | <Documented /> | True once the box holds the text. False where no box could take it or a hook kept it out (PromptFillResult). | Type: `boolean`. |
 | `refusal` | <Documented /> | Why the engine refused the text: `no_composer` (no box) or `dialog` (a dialog holds the keys). A refusal by a hook carries no cause. | Type: `'no_composer' \| 'dialog'`. Optional. |
 | `text` | <Documented /> | The draft after the fill. It is unchanged when `isFilled` is false. It is `''` where no box is drawn or the caller may not read it (see above). | Type: `string`. |
-| `cursor` | <Documented /> | Where the person types next: an offset into `text`. It is where the `cursor` of the call put it. Else it is past the text of the fill for `insert`, and at the end for `replace` and `append`. | Type: `number`. |
+| `cursor` | <Documented /> | Where the person types next: an offset into `text`. It is where the `cursor` of the call put it. Without that, it is past the text of the fill for `insert`, and at the end for `replace` and `append`. | Type: `number`. |
 
 ### `PromptFillInput`
 
@@ -85,10 +87,10 @@ The input of `prompt.fill` (prompt-fill/): a text about to be put in the prompt 
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `text` | <Documented /> | What the box takes. The person edits it or presses Enter. `next({ ...e, text })` writes another. | Type: `string`. The box takes it without the code points that a terminal draws as nothing, as the composer removes them when a person sends. All else lands as written. |
+| `text` | <Documented /> | What the box takes. The person edits it or presses Enter. `next({ ...e, text })` writes other text. | Type: `string`. The box takes it without the code points that a terminal draws as nothing, as the composer removes them when a person sends. All else lands as written. |
 | `mode` | <Documented /> | Where the text goes (PromptFillMode): over the draft, after it, or in at the cursor. `next({ ...e, mode })` moves it. If left out of a rewrite, it is kept. | Type: `PromptFillMode`. |
 | `origin` | <Documented /> | Who writes (PromptFillOrigin). The engine sets it where the write starts. Pinned: `next(e)` passes it on as received. | Type: `PromptFillOrigin`. |
-| `decorations` | <Documented /> | Runs to paint over `text` once it lands (PromptDecoration), as offsets into `text`. Absent when the call named none. | Type: `PromptDecoration[]`. Optional. What the chain passes down is what paints. A hook strips them so. Example: `next({ ...e, decorations: [] }))`. |
+| `decorations` | <Documented /> | Runs to paint over `text` once it lands (PromptDecoration), as offsets into `text`. Absent when the call named none. | Type: `PromptDecoration[]`. Optional. What the chain passes down is what paints. A hook strips them this way: `next({ ...e, decorations: [] }))`. |
 | `cursor` | <Documented /> | Where the caret stands after the write (PromptFillArgs `cursor`), an offset into the whole draft. Absent when the call named none. | Type: `number`. Optional. What the chain passes down moves the caret. Left out of a rewrite, the box places it by `mode`. Example: `next({ ...e, cursor: 0 })`. Since `2.1.309`. |
 
 ### `PromptFillOrigin`
@@ -97,13 +99,13 @@ Who writes the prompt box at `prompt.fill`, as the engine stamps it where the wr
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `kind` | <Documented /> | The engine writing the box on its own account. Reserved for its own sites, and none of them raises `prompt.fill` as shipped. | Type: `'engine'`. |
+| `kind` | <Documented /> | The engine writing the box on its own account. It is reserved for the engine's own sites, and none of them raises `prompt.fill` as shipped. | Type: `'engine'`. |
 | `kind` | <Documented /> | The `$.prompt.fill` of a plugin. | Type: `'plugin'`. |
 | `name` | <Documented /> | The name of the filling plugin. | Type: `string`. |
 
 ### `PromptFillResult`
 
-What a `prompt.fill` hook returns and what `next(e)` resolves to: whether the text went into the prompt box. Used by `prompt.fill`, `$.prompt.fill`.
+What a `prompt.fill` hook returns, and what `next(e)` resolves to: whether the text went into the prompt box. Used by `prompt.fill`, `$.prompt.fill`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -114,11 +116,13 @@ What a `prompt.fill` hook returns and what `next(e)` resolves to: whether the te
 
 What `$.prompt.media({ id })` answers: the bytes of one attached item as the engine would send them now, or why there are none to read. The engine reads an image after its resize. One call answers at most 4 MiB. Only a mod that managed settings install gets an answer. Used by `$.prompt.media`.
 
+The rows below show each form of the union in turn: a slice, an unreadable item, and a refused read. A row that says "Never set in this form" has type `undefined` in that form.
+
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `type` | <Documented /> | The kind of the item. | Type: `'image' \| 'document'`. |
 | `mediaType` | <Documented /> | The MIME type of the bytes answered (`image/png`), after the resize. | Type: `string`. |
-| `base64` | <Documented /> | The slice of the item for this call, base64. The strings of the slices, joined in order, are the base64 of the whole item. | Type: `string`. |
+| `base64` | <Documented /> | The slice of the item for this call, in base64. The strings of the slices, joined in order, are the base64 of the whole item. | Type: `string`. |
 | `size` | <Documented /> | How many bytes the whole item holds, decoded. | Type: `number`. |
 | `next` | <Documented /> | The offset that the following slice starts at. Absent on the last one. | Type: `number`. Optional. |
 | `unreadable` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
@@ -130,7 +134,7 @@ What `$.prompt.media({ id })` answers: the bytes of one attached item as the eng
 | `size` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
 | `next` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
 | `deny` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
-| `deny` | <Documented /> | Why the engine refuses this read. No submission in flight carries the id for this caller, the item is not held as inline bytes, or the offset is past its end. | Type: `string`. |
+| `deny` | <Documented /> | Why the engine refuses this read. No submission in flight carries the ID for this caller, the item is not held as inline bytes, or the offset is past its end. | Type: `string`. |
 | `type` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
 | `mediaType` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
 | `base64` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
@@ -153,20 +157,20 @@ The input of `prompt.mention`: one file that a prompt names after an `@`, as the
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `mention` | <Documented /> | What followed the `@`: a path as the person typed it, with a fragment included (`#L10-20`). Pinned: what the prompt said. | Type: `string`. |
+| `mention` | <Documented /> | What followed the `@`: a path as the person typed it, with a fragment included (`#L10-20`). Pinned: it is what the prompt said. | Type: `string`. |
 | `path` | <Documented /> | The absolute path of the file, as the engine resolved the mention. | Type: `string`. `next({ ...e, path })` reads another file. The deny rules judge it where it lands, with links followed. One read for each mention: a second `next` settles with the first. |
-| `offset` | <Documented /> | The first line read, counted from 1, when the mention names lines (`#L10`). Absent for a whole file. A rewrite is where the read starts. | Type: `number`. Optional. |
-| `limit` | <Documented /> | How many lines are read when the mention names lines (`#L10-20` reads 11). Absent for a whole file. A rewrite is how many are read. | Type: `number`. Optional. |
-| `agentId` | <Documented /> | The loop whose prompt carries the mention: the id of a subagent, the `id` that `$.agent.list()` gives it. Absent on main. | Type: `string`. Optional. Pinned: a different value is refused, one left out is kept. |
+| `offset` | <Documented /> | The first line read, counted from 1, when the mention names lines (`#L10`). Absent for a whole file. A rewrite sets where the read starts. | Type: `number`. Optional. |
+| `limit` | <Documented /> | How many lines are read when the mention names lines (`#L10-20` reads 11). Absent for a whole file. A rewrite sets how many lines are read. | Type: `number`. Optional. |
+| `agentId` | <Documented /> | The loop whose prompt carries the mention: the ID of a subagent, the `id` that `$.agent.list()` gives it. Absent on main. | Type: `string`. Optional. Pinned: the engine refuses a different value and keeps one that is left out. |
 
 ### `PromptMentionResult`
 
-What a `prompt.mention` hook returns and what `next(e)` resolves to: how the file was attached (`{ type, context? }`), or `{ deny: reason }`. The text of the file belongs to its attachment, which `prompt.attachment` rewrites. A hook that answers without `next` reads no file. Used by `prompt.mention`.
+What a `prompt.mention` hook returns, and what `next(e)` resolves to: how the file was attached (`{ type, context? }`), or `{ deny: reason }`. The text of the file belongs to its attachment, which `prompt.attachment` rewrites. A hook that answers without `next` reads no file. Used by `prompt.mention`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `type` | <Documented /> | How the engine attached the file. It is null when it attached nothing: no file is there, it is too large, or it cannot be read. | Type: `PromptMentionAttached \| null`. From a hook answering without `next`: null, nothing was read. |
-| `context` | <Documented /> | What the model reads after the mentioned files of the prompt and the person never sees. Each entry is one block. From core, none. | Type: `readonly string[]`. Optional. An answer keeps every entry that its `next` gave. Past 100,000 characters (200,000 together) the model reads a head and a path. |
+| `type` | <Documented /> | How the engine attached the file. It is null when it attached nothing: no file is there, the file is too large, or it cannot be read. | Type: `PromptMentionAttached \| null`. From a hook that answers without `next`: null, because nothing was read. |
+| `context` | <Documented /> | What the model reads after the mentioned files of the prompt. The person never sees it. Each entry is one block. From core, none. | Type: `readonly string[]`. Optional. An answer keeps every entry that its `next` gave. Past 100,000 characters (200,000 together) the model reads a head and a path. |
 | `deny` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
 | `deny` | <Documented /> | Refuses the mention. The engine attaches nothing of the file, and forgets a read already made. The debug log names the reason. | Type: `string`. From core: a deny rule covers the path. The engine drops a context beside it. The engine skips a hook that throws. |
 | `type` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
@@ -174,17 +178,17 @@ What a `prompt.mention` hook returns and what `next(e)` resolves to: how the fil
 
 ### `PromptOrigin`
 
-Where a `prompt.submit` submission came from, as the engine knows it at the site that queued it. It is a closed set, never a text prefix. `e.origin.kind` tells the own Enter of the user from a notification, a peer session, a schedule, or another plugin. No hook sets it.
+Where a `prompt.submit` submission came from, as the engine knows it at the site that queued it. It is a closed set, never a text prefix. `e.origin.kind` tells the Enter of the user apart from a notification, a peer session, a schedule, or another plugin. No hook sets it.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `kind` | <Documented /> | The own gesture of the user at the terminal, as the engine stamped it (never presumed from an unstamped command). | Type: `'composer'`. Enter at the prompt, typed or queued, or a click on a transcript link. The engine never stamps a channel that it cannot attest (a same-user socket). That channel arrives as `unclassified`. |
+| `kind` | <Documented /> | The gesture of the user at the terminal, as the engine stamped it (never presumed from an unstamped command). | Type: `'composer'`. Enter at the prompt, typed or queued, or a click on a transcript link. The engine never stamps a channel that it cannot attest (a same-user socket). That channel arrives as `unclassified`. |
 | `kind` | <Documented /> | The message of the user through the Remote Control bridge (a phone or web client). | Type: `'bridge'`. |
-| `kind` | <Documented /> | The own turn of the SDK host (`claude -p`, the Agent SDK), not typed at a terminal. | Type: `'sdk'`. |
+| `kind` | <Documented /> | The turn of the SDK host (`claude -p`, the Agent SDK), not typed at a terminal. | Type: `'sdk'`. |
 | `kind` | <Documented /> | The notification of a background task, dequeued when the session went idle or delivered into a running turn (`turnId` set). | Type: `'task-notification'`. |
-| `kind` | <Documented /> | A scheduled task, routine or /loop that fires its stored prompt. | Type: `'scheduled-trigger'`. |
+| `kind` | <Documented /> | A scheduled task, routine, or /loop that fires its stored prompt. | Type: `'scheduled-trigger'`. |
 | `kind` | <Documented /> | A message from another Claude session ("Another Claude session sent a message"), as a turn of its own or delivered into a running one. | Type: `'peer'`. |
-| `kind` | <Documented /> | A SendMessage delivery from another session, authored by the model and framed as a notification. | Type: `'peer-send-message'`. |
+| `kind` | <Documented /> | A SendMessage delivery from another session, written by the model and framed as a notification. | Type: `'peer-send-message'`. |
 | `kind` | <Documented /> | A delivery that a coordinating session composed for one of its threads. | Type: `'projects-relay'`. |
 | `kind` | <Documented /> | A message from a channel that an MCP server relays (Slack, Telegram). | Type: `'channel'`. |
 | `server` | <Documented /> | The name of the channel server. | Type: `string`. |
@@ -192,19 +196,19 @@ Where a `prompt.submit` submission came from, as the engine knows it at the site
 | `kind` | <Documented /> | A report from a background observer agent to the agent that it observes. | Type: `'observer'`. |
 | `kind` | <Documented /> | An activity digest delivered to an observer agent. | Type: `'observer-activity'`. |
 | `kind` | <Documented /> | A programmatic follow-up to a UI action of the user. The user started it, but did not type it this turn. | Type: `'auto-continuation'`. |
-| `kind` | <Documented /> | A turn with no provenance that the engine can name. It is one that the ingress could not classify, or a command queued with no stamp at all. | Type: `'unclassified'`. An idle notice or a delivery receipt that the engine queued isMeta with no stamp is one too. The engine frames that shape as a non-user source. |
+| `kind` | <Documented /> | A turn with no provenance that the engine can name. The ingress could not classify it, or a command was queued with no stamp at all. | Type: `'unclassified'`. An idle notice or a delivery receipt that the engine queued isMeta with no stamp is one too. The engine frames that shape as a non-user source. |
 | `kind` | <Documented /> | The owner of the session pinging it from Slack. | Type: `'slack-ping'`. |
 | `kind` | <Documented /> | The `$.prompt.submit` of a plugin. | Type: `'plugin'`. The model reads the prompt under the name of the plugin ("The &lt;name> plugin sent a message: ...") unless the plugin submitted it `asUser`. |
 | `name` | <Documented /> | The name of the submitting plugin. | Type: `string`. |
-| `asUser` | <Documented /> | True when the plugin submitted the text as the own words of the person (`$.prompt.submit({ text, asUser: true })`). | Type: `true`. Optional. The model reads it bare. The origin is still the plugin for every hook and provenance gate. |
+| `asUser` | <Documented /> | True when the plugin submitted the text as the words of the person (`$.prompt.submit({ text, asUser: true })`). | Type: `true`. Optional. The model reads it bare. The origin is still the plugin for every hook and provenance gate. |
 
 ### `PromptSectionInput`
 
-The input of `prompt.section`: one named section of the system prompt, at the moment the engine assembles it. From 2.1.302 to 2.1.322, the engine builds shared sections such as `lean_body` without a `prompt.section` call, so a hook does not see them (the program, `chunk-2x9ma4k7.js:2638354`, `TTn`). A `prompt.compose` hook does. Used by `prompt.section`, `$.prompt.section`.
+The input of `prompt.section`: one named section of the system prompt, at the moment the engine assembles it. From 2.1.302 to 2.1.322, the engine builds shared sections such as `lean_body` without a `prompt.section` call, so a hook does not see them.[^shared-sections] A `prompt.compose` hook does. Used by `prompt.section`, `$.prompt.section`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `name` | <Differs note="Docs say every named section; the program skips shared sections such as lean_body." /> | The section's id (`env_info_simple`, `memory`, ...), the same on every model and the one `prompt.compose` lists, the key a matcher narrows on. A `prompt.section` hook sees only sections the engine asks about by name. Shared sections such as `lean_body` are not among them from 2.1.302 to 2.1.322, but `prompt.compose` lists them. | Type: `string`. |
+| `name` | <Differs note="Docs say every named section; the program skips shared sections such as lean_body." /> | The ID of the section (`env_info_simple`, `memory`, ...). It is the same on every model and is the one `prompt.compose` lists. A matcher narrows on it. A `prompt.section` hook sees only sections that the engine asks about by name. Shared sections such as `lean_body` are not among them from 2.1.302 to 2.1.322, but `prompt.compose` lists them. | Type: `string`. |
 | `text` | <Documented /> | The text of the section as core computed it, or null when core omits it. | Type: `string \| null`. |
 
 ### `PromptSectionResult`
@@ -214,15 +218,15 @@ What a `prompt.section` hook returns: the text that the prompt carries for that 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `text` | <Documented /> | The text that the prompt carries for that section, or `null` to leave it out. | Type: `string \| null`. |
-| `breakPromptCache` | <Documented /> | Sends a changed answer at the next turn (new in `2.1.321`). It rewrites the cache from the system prompt on and drops the earlier thinking of the model. | Type: `boolean`. Optional. Left out, a changed answer waits for a new thread or a compaction. The outermost hook's answer says it, so a hook above that keeps it spreads what `next` gave. |
+| `breakPromptCache` | <Documented /> | Sends a changed answer at the next turn (new in `2.1.321`). It rewrites the cache from the system prompt on and drops the earlier thinking of the model. | Type: `boolean`. Optional. Left out, a changed answer waits for a new thread or a compaction. The answer of the outermost hook sets it, so a hook above that keeps it spreads what `next` gave. |
 
 ### `PromptSubmitArgs`
 
-The input of `prompt.submit` as the call of a plugin takes it. `PromptSubmitInput` leaves out `origin`, `turnId`, `wait`, `context`, `command` and `isMeta`. The engine sets `origin`, `turnId`, `wait`, `command` and `isMeta`, and the hooks attach `context`. The engine carries over the rest of `PromptSubmitInput` (`text`, `attachments`, and so on). `origin` is the name of the calling plugin and `wait` is false, because the prompt of a plugin runs once the session is idle. Used by `$.prompt.submit`.
+The input of `prompt.submit` as the call of a plugin takes it. `PromptSubmitInput` leaves out `origin`, `turnId`, `wait`, `context`, `command`, and `isMeta`. The engine sets `origin`, `turnId`, `wait`, `command`, and `isMeta`, and the hooks attach `context`. The engine carries over the rest of `PromptSubmitInput` (`text`, `attachments`, and so on). `origin` is the name of the calling plugin, and `wait` is false, because the prompt of a plugin runs once the session is idle. Used by `$.prompt.submit`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `asUser` | <Documented /> | Submit the text as the own words of the person. The model reads it bare, without the "The &lt;plugin> plugin sent a message" frame. Absent means framed. | Type: `true`. Optional. The origin that hooks see stays `{ kind: 'plugin', name, asUser: true }`. The engine does not expand `@file` mentions and pasted images for the prompt of a plugin. |
+| `asUser` | <Documented /> | Submit the text as the words of the person. The model reads it bare, without the "The &lt;plugin> plugin sent a message" frame. Absent means framed. | Type: `true`. Optional. The origin that hooks see stays `{ kind: 'plugin', name, asUser: true }`. The engine does not expand `@file` mentions and pasted images for the prompt of a plugin. |
 
 ### `PromptSubmitAttachment`
 
@@ -250,24 +254,24 @@ The input of `prompt.submit`: the prompt as typed, after the input became a user
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `text` | <Documented /> | The text of the prompt as typed, with pastes already expanded. It is what will reach the model, or the line of a slash command as `command.run` left it (`command`). | Type: `string`. |
+| `text` | <Documented /> | The text of the prompt as typed, with pastes already expanded. It is what reaches the model, or the line of a slash command as `command.run` left it (`command`). | Type: `string`. |
 | `command` | <Documented /> | The slash command that the submission runs (PromptSubmitCommand). The engine sets it. The engine then does not apply a rewrite of `text`, and the person is told. | Type: `PromptSubmitCommand`. Optional. A `{ drop }` stops a skill or prompt command before it renders. Pinned: a changed value fails the hook. |
-| `isMeta` | <Documented /> | True on a prompt that the person does not see as typed. The engine sets it. Delivered into a running turn, it takes a rewrite. When it starts a turn, it takes none. | Type: `true`. Optional. Pinned: if left out, it is put back. If changed, it fails the hook. Example: `($, e, next) => (e.isMeta && bad(e) ? { drop: 'no' } : next(masked(e)))`. |
+| `isMeta` | <Documented /> | True on a prompt that the person does not see as typed. The engine sets it. Delivered into a running turn, the prompt takes a rewrite. When it starts a turn, it takes none. | Type: `true`. Optional. Pinned: if left out, it is put back. If changed, it fails the hook. Example: `($, e, next) => (e.isMeta && bad(e) ? { drop: 'no' } : next(masked(e)))`. |
 | `attachments` | <Documented /> | Present only when the submission carried images or other non-text items. | Type: `readonly PromptSubmitAttachment[]`. Optional. |
-| `context` | <Documented /> | What the model reads beside the prompt and the user never sees. Each entry is one block after the prompt as typed. Absent as the engine raises it. | Type: `readonly string[]`. Optional. A hook attaches blocks on the way down. Past 100,000 characters (200,000 together) the model reads a head and a path. |
-| `turnId` | <Documented /> | The id of the model turn that was running when the prompt was submitted (the `turnId` of `turn.start`): typed over that turn, or delivered into it. | Type: `string`. Optional. A queued delivery reaches the model inside a running turn. Absent for a prompt typed while the session was idle. |
+| `context` | <Documented /> | What the model reads beside the prompt. The user never sees it. Each entry is one block after the prompt as typed. Absent as the engine raises it. | Type: `readonly string[]`. Optional. A hook attaches blocks on the way down. Past 100,000 characters (200,000 together) the model reads a head and a path. |
+| `turnId` | <Documented /> | The ID of the model turn that was running when the prompt was submitted (the `turnId` of `turn.start`): typed over that turn, or delivered into it. | Type: `string`. Optional. A queued delivery reaches the model inside a running turn. Absent for a prompt typed while the session was idle. |
 | `wait` | <Documented /> | Whether the user asked the prompt to wait its turn (`chat:queueSubmit`, `ctrl+x enter` by default). It is true for that submission, false otherwise. | Type: `boolean`. The engine queues every prompt typed mid-turn. The flag is for hooks. A hook that cancels the running turn can leave a waiting prompt alone. |
 | `origin` | <Documented /> | Where the submission came from (PromptOrigin). The engine sets it where it queued the submission: the Enter of the user, a notification, a peer, a plugin. | Type: `PromptOrigin`. `next(e)` passes it on as received. No hook may set one. |
 
 ### `PromptSubmitResult`
 
-What a `prompt.submit` hook returns and what `next(e)` resolves to: the prompt that entered, `{ text, context?, origin? }`, or `{ drop: reason }`. `next(e)` resolves once the prompt entered the session, not when the turn ends. Used by `prompt.submit`, `$.prompt.submit`.
+What a `prompt.submit` hook returns, and what `next(e)` resolves to: the prompt that entered, `{ text, context?, origin? }`, or `{ drop: reason }`. `next(e)` resolves once the prompt entered the session, not when the turn ends. Used by `prompt.submit`, `$.prompt.submit`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `text` | <Documented /> | The prompt that entered. From core, it is the text that arrived at the bottom. A rewrite passes it down, `next({ ...e, text })`. | Type: `string`. |
+| `text` | <Documented /> | The prompt that entered. From core, it is the text that arrived at the bottom. A rewrite passes it down: `next({ ...e, text })`. | Type: `string`. |
 | `context` | <Documented /> | What entered beside the prompt for the model. The user never sees it. From core, it is the context that arrived (`e.context`). | Type: `readonly string[]`. Optional. Each entry is one block after the prompt as typed. The engine does not attach context added after `next` resolved, and logs it. |
-| `origin` | <Documented /> | Where the prompt entered from. From core, it is `e.origin` as received. If absent, the prompt is the own prompt of the user. | Type: `PromptOrigin`. Optional. A hook may put back the origin that it received. It may not set another. |
+| `origin` | <Documented /> | Where the prompt entered from. From core, it is `e.origin` as received. If absent, the prompt is the user's own prompt. | Type: `PromptOrigin`. Optional. A hook may put back the origin that it received. It may not set another. |
 | `drop` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
 | `drop` | <Documented /> | The prompt did not enter. A hook refused it, a settings hook beneath blocked it, or the engine itself did (a Stop stands, or a limit of the host). | Type: `string`. The user sees the text of a hook as the reason. The engine logs its own reason. A drop after `next(e)` was answered fails the hook. |
 | `text` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
@@ -278,3 +282,7 @@ What a `prompt.submit` hook returns and what `next(e)` resolves to: the prompt t
 
 - [Turn and Prompt Types](index.md)
 - [Mod API Types](../index.md)
+
+## Sources
+
+[^shared-sections]: The program, `chunk-2x9ma4k7.js:2638354`, `TTn`.

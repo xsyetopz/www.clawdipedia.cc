@@ -4,27 +4,29 @@ description: "Types of the arguments and results of the other $.ui calls: input,
 sidebar_position: 4
 ---
 
+These types describe the arguments and results of the `$.ui` calls and the `ui.*` events that this section does not cover elsewhere: input, log, message, notify, open, place, press, scroll, select, and view. Use them to type a hook on one of these events, or to read the result of one of these calls. Each type has a table of its fields.
+
 ## Types with Fields
 
 Each type below has its own table of fields.
 
 ### `UiInputArgument`
 
-The argument of `ui.input`: a change of, or a submit from, an `Input` that a render hook drew. Flat and frozen like every event argument. A hook that names no `plugin` hears the fields of its own plugin only. Another plugin addresses one field by matcher, and `{ plugin: "*" }` addresses the fields of every plugin: `on("ui.input", { plugin: "roster", element: "reply" }, ...)`. Since `2.1.323` (`schemas/claude-code.d.ts`, `UiInputArgument`). Used by `ui.input`.
+The argument of `ui.input`: a change of, or a submit from, an `Input` that a render hook drew. It is flat and frozen like every event argument. A hook that names no `plugin` hears the fields of its own plugin only. Another plugin addresses one field by matcher, and `{ plugin: "*" }` addresses the fields of every plugin: `on("ui.input", { plugin: "roster", element: "reply" }, ...)`. Since `2.1.323`.[^ui-input] Used by `ui.input`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `plugin` | <Documented /> | Whose `ui.render` hook drew the element. | Type: `string`. |
-| `element` | <Documented /> | The `key` that the hook gave its `Input`: its address, what a matcher names. | Type: `string`. |
+| `element` | <Documented /> | The `key` that the hook gave its `Input`. It is the address of the element, and a matcher names it. | Type: `string`. |
 | `component` | <Documented /> | The render component that the element was drawn in (`AbovePrompt`, `ToolUse`, ...). | Type: `RenderComponent`. |
-| `requestId` | <Documented /> | The instance that the element was drawn in. It is the `requestId` that the `ui.render` hook that drew it saw (the tool_use_id of a tool row, or the id of a pane). | Type: `string`. |
-| `surface` | <Documented /> | Where the typing came from, one literal for each member, so `if (e.surface === "terminal")` narrows `e`. | Type: `RenderSurface`. |
+| `requestId` | <Documented /> | The instance that the element was drawn in. It is the `requestId` that the `ui.render` hook that drew it saw (the tool_use_id of a tool row, or the ID of a pane). | Type: `string`. |
+| `surface` | <Documented /> | Where the typing came from. It is one literal for each member, so `if (e.surface === "terminal")` narrows `e`. | Type: `RenderSurface`. |
 | `kind` | <Documented /> | `change` after every edit of the text, `submit` on Enter. | Type: `'change' \| 'submit'`. |
-| `value` | <Documented /> | The whole text of the field at that moment. A hook above may rewrite it for the plugins beneath and the own handler of the element. | Type: `string`. A field of several lines joins them with `\n`. A submit trims nothing. |
+| `value` | <Documented /> | The whole text of the field at that moment. A hook above may rewrite it for the plugins beneath and the handler of the element. | Type: `string`. A field of several lines joins them with `\n`. A submit trims nothing. |
 
 ### `UiInputResult`
 
-What a `ui.input` hook returns and what `next(e)` resolves to. Core runs the `onInput` (kind `change`) or `onSubmit` (kind `submit`) closure of the element and answers `{ element, value }`. Used by `ui.input`.
+What a `ui.input` hook returns, and what `next(e)` resolves to. Core runs the `onInput` (kind `change`) or `onSubmit` (kind `submit`) closure of the element and answers `{ element, value }`. Used by `ui.input`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -47,14 +49,14 @@ The argument of `ui.message`: what the surface module of a `Client` instance pos
 | --- | --- | --- | --- |
 | `surface` | <Documented /> | Where the instance is drawn: `terminal`, or `desktop` once it has them. | Type: `RenderSurface`. |
 | `component` | <Documented /> | The render component the `Client` was drawn in (`AbovePrompt`, `Pane`, ...). | Type: `RenderComponent`. |
-| `requestId` | <Documented /> | The id of the engine for the drawing that the `Client` sits in: the `requestId` that the `ui.render` hook that drew it saw. | Type: `string`. |
+| `requestId` | <Documented /> | The ID that the engine gave the drawing that the `Client` sits in: the `requestId` that the `ui.render` hook that drew it saw. | Type: `string`. |
 | `element` | <Documented /> | The `key` of the `Client`: which instance posted. | Type: `string`. |
 | `module` | <Documented /> | The `module` of the `Client`: which surface module runs there, as its path under the folder of the plugin. | Type: `string`. |
-| `data` | <Documented /> | What the instance posted: plain data (JsonValue) of at most 100000 characters, typed `unknown` because it came from code. A hook can rewrite it. | Type: `unknown`. |
+| `data` | <Documented /> | What the instance posted: plain data (JsonValue) of at most 100000 characters. It is typed `unknown` because it came from code. A hook can rewrite it. | Type: `unknown`. |
 
 ### `UiMessageResult`
 
-What a `ui.message` hook returns and what `next(e)` resolves to. Core answers `{}`. A hook that answers `{ props }` hands the posting instance its next props with no `ui.render` run. Used by `ui.message`.
+What a `ui.message` hook returns, and what `next(e)` resolves to. Core answers `{}`. A hook that answers `{ props }` hands the posting instance its next props with no `ui.render` run. Used by `ui.message`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -62,33 +64,33 @@ What a `ui.message` hook returns and what `next(e)` resolves to. Core answers `{
 
 ### `UiNotifyResult`
 
-What `$.ui.notify` resolves to and what the `{ value }` of a `ui.notify` hook holds. It says whether a channel sent it (`isSent`) and which, else why not. Example: `if (!(await $.ui.notify(text)).isSent) $.ui.toast(text)`. Used by `$.ui.notify`, `ui.notify`.
+What `$.ui.notify` resolves to, and what the `{ value }` of a `ui.notify` hook holds. It says whether a channel sent the notification (`isSent`) and which channel did, or why none did. Example: `if (!(await $.ui.notify(text)).isSent) $.ui.toast(text)`. Used by `$.ui.notify`, `ui.notify`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `isSent` | <Documented /> | True: the notification channel of the person wrote it to their terminal, as its notification sequence, its bell, or both. | Type: `true`. A terminal does not report back. One that drops the sequence, or a system that mutes its banners, still reads true. |
-| `channel` | <Documented /> | Which channel sent it, spelt as the `preferredNotifChannel` setting spells it. Under `auto`, it is the one that their terminal resolved to. | Type: `'iterm2' \| 'iterm2_with_bell' \| 'kitty' \| 'ghostty' \| 'terminal_bell' \| 'client'`. `terminal_bell` rings and displays neither the text nor the title. Since `2.1.321`, `client` means a host that raises notifications was handed it to raise, and it does not report back. A terminal sends the text as given. A host gets it cleaned and cut to 1,000 characters. With no terminal, the `Notification` hooks run, then such a host is handed it (`captures/2.1.321/types.diff`). |
+| `isSent` | <Documented /> | True: the notification channel of the person wrote it to their terminal, as its notification sequence, its bell, or both. | Type: `true`. A terminal does not report back. A terminal that drops the sequence, or a system that mutes its banners, still reads true. |
+| `channel` | <Documented /> | Which channel sent it, spelled as the `preferredNotifChannel` setting spells it. Under `auto`, it is the channel that their terminal resolved to. | Type: `'iterm2' \| 'iterm2_with_bell' \| 'kitty' \| 'ghostty' \| 'terminal_bell' \| 'client'`. `terminal_bell` rings and displays neither the text nor the title. Since `2.1.321`, `client` means a host that raises notifications was handed it to raise, and it does not report back. A terminal sends the text as given. A host gets it cleaned and cut to 1,000 characters. With no terminal, the `Notification` hooks run, then such a host is handed it.[^notify] |
 | `isSent` | <Documented /> | False: no channel sent it. | Type: `false`. |
-| `reason` | <Documented /> | Why not. It is a closed set: `disabled`, `no-channel`, `no-surface` or `refused`. A hook above says `refused` when it answers without sending. | Type: `'disabled' \| 'no-channel' \| 'no-surface' \| 'refused'`. `disabled` means `notifications_disabled` is set. `no-channel` means no terminal that notifies. Since `2.1.321`, `no-surface` means no terminal and no host that raises notifications (a `-p` run, the SDK, a cloud session), no session bound yet, the session is exiting, or the mod unloaded before the notification went out. |
+| `reason` | <Documented /> | Why not. It is a closed set: `disabled`, `no-channel`, `no-surface`, or `refused`. A hook above says `refused` when it answers without sending. | Type: `'disabled' \| 'no-channel' \| 'no-surface' \| 'refused'`. `disabled` means `notifications_disabled` is set. `no-channel` means no terminal that notifies. Since `2.1.321`, `no-surface` means no terminal and no host that raises notifications (a `-p` run, the SDK, a cloud session), no session bound yet, the session is exiting, or the mod unloaded before the notification went out. |
 
 ### `UiOpenResult`
 
-What `$.ui.open` resolves to and what the `{ value }` of a `ui.open` hook holds. `isPlaced` says if a surface draws the pane now. Asked panes place at any width. Unasked panes need 144 columns (110 for an id that the person opened before). Where a surface seated the pane is on the `Pane` render props (`placement`), per surface (`schemas/claude-code.d.ts`, `UiOpenResult`; the 2.1.323 comment names `placement` where 2.1.322 named `dock` and `inline`).
+What `$.ui.open` resolves to, and what the `{ value }` of a `ui.open` hook holds. `isPlaced` says if a surface draws the pane now. Asked panes place at any width. Unasked panes need 144 columns (110 for an ID that the person opened before). Where a surface seated the pane is on the `Pane` render props (`placement`), per surface.[^ui-open]
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `isPlaced` | <Documented /> | True: the pane is open and drawn (or retitled in place). The first `ui.render` for `{ component: "Pane", requestId: id }` follows. | Type: `true`. |
 | `isPlaced` | <Documented /> | False: the pane is open but undrawn. It was opened unasked on a narrow terminal, or where no surface places panes, or none is attached. | Type: `false`. With none attached, keep the pane, which stays open. `session.attach` is raised when one is attached. `$.ui.panes()` then says placed, and a surface that places panes asks the `ui.render` of the pane. |
-| `reason` | <Documented /> | Why it waits and what seats it. It has the floor that it fell under (144 columns unasked, 110 for an id that the person once opened) and the width now. | Type: `string`. Says why a pane is not placed. It starts with `no-surface` when no surface is attached, such as in a `-p` run. |
+| `reason` | <Documented /> | Why the pane waits and what seats it. It has the floor that the width fell under (144 columns unasked, 110 for an ID that the person once opened) and the width now. | Type: `string`. It says why a pane is not placed. It starts with `no-surface` when no surface is attached, such as in a `-p` run. |
 
 ### `UiPane`
 
-One of the open panes of this plugin as `$.ui.panes()` lists it. It has the id and title of the pane, and where it stands with the person right now. Where the surface seated the pane (`dock`, `inline`, or `widget`) is on the `Pane` render props (`placement`). Since `2.1.323` the type file names `widget` here (`schemas/claude-code.d.ts`, `UiPane`). Used by `$.ui.panes`, `ui.panes`.
+One of the open panes of this plugin as `$.ui.panes()` lists it. It has the ID and title of the pane, and where it stands with the person right now. Where the surface seated the pane (`dock`, `inline`, or `widget`) is on the `Pane` render props (`placement`). Since `2.1.323` the type file names `widget` here.[^ui-pane] Used by `$.ui.panes`, `ui.panes`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `id` | <Documented /> | What `$.ui.open({ id })` named it. `$.ui.close` and its `ui.render` `requestId` name it too. | Type: `string`. |
-| `title` | <Documented /> | The label of its tab: the `title` of its latest open, or the id. | Type: `string`. |
+| `title` | <Documented /> | The label of its tab: the `title` of its latest open, or the ID. | Type: `string`. |
 | `isShown` | <Documented /> | True for the one pane that the surface displays. The rest are tabs behind it. | Type: `boolean`. |
 | `isFocused` | <Documented /> | True while the person has given it the keyboard. | Type: `boolean`. |
 | `isPlaced` | <Documented /> | False while it waits undrawn. It was opened unasked on a terminal too narrow for an unrequested pane, and its `$.ui.open` answered `{ isPlaced: false }`. | Type: `boolean`. It turns true when the person opens the pane or the terminal widens to the floor. It is false on every row while an open answers `no-surface`. |
@@ -99,36 +101,36 @@ The argument of `$.ui.place`. A `ui.render` hook reads the `id` as `e.props.id`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `id` | <Undocumented /> | Names the row among this plugin's rows. | Type: `string`. 1 to 64 letters, digits, `_`, and `-`, as the id of a pane. New in `2.1.314`. |
+| `id` | <Undocumented /> | Names the row among this plugin's rows. | Type: `string`. 1 to 64 letters, digits, `_`, and `-`, as the ID of a pane. New in `2.1.314`. |
 
 ### `UiPlaceResult`
 
-What `$.ui.place` resolves to and what the `{ value }` of a `ui.place` hook holds. The row stands in the conversation in both cases, except past the cap and with no conversation, where there is no `requestId`.
+What `$.ui.place` resolves to, and what the `{ value }` of a `ui.place` hook holds. The row stands in the conversation in both cases. The exceptions are a row past the cap and a call with no conversation, where there is no `requestId`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `isPlaced` | <Undocumented /> | True: a surface is attached to draw the row. | Type: `true`. New in `2.1.314`. |
 | `requestId` | <Undocumented /> | The `e.requestId` of the row at `ui.render`. `$.ui.scroll` takes it. | Type: `string`. New in `2.1.314`. |
 | `isPlaced` | <Undocumented /> | False: nothing draws the row now. | Type: `false`. New in `2.1.314`. |
-| `requestId` | <Undocumented /> | The id of the row when it stands for a surface that is not attached yet. | Type: `string`. Optional. New in `2.1.314`. |
+| `requestId` | <Undocumented /> | The ID of the row when it stands for a surface that is not attached yet. | Type: `string`. Optional. New in `2.1.314`. |
 | `reason` | <Undocumented /> | Why nothing draws it, in one line to show or log. | Type: `string`. New in `2.1.314`. |
 
 ### `UiPressArgument`
 
-The argument of `ui.press`: a press on a `Button` that a render hook drew, or on an answered `Markdown` link. Flat and frozen like every event argument. A hook that names no `plugin` hears the presses of its own plugin only. Another plugin addresses one button by matcher, and `{ plugin: "*" }` addresses the buttons of every plugin: `on("ui.press", { plugin: "explainer", element: "explain" }, ...)`. Since `2.1.323` (`schemas/claude-code.d.ts`, `UiPressArgument`). Used by `ui.press`.
+The argument of `ui.press`: a press on a `Button` that a render hook drew, or on an answered `Markdown` link. It is flat and frozen like every event argument. A hook that names no `plugin` hears the presses of its own plugin only. Another plugin addresses one button by matcher, and `{ plugin: "*" }` addresses the buttons of every plugin: `on("ui.press", { plugin: "explainer", element: "explain" }, ...)`. Since `2.1.323`.[^ui-press] Used by `ui.press`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `plugin` | <Documented /> | Whose `ui.render` hook drew the element. | Type: `string`. |
-| `element` | <Documented /> | The `key` that the hook gave its `Button` or `Markdown`: its address, what a matcher names. | Type: `string`. |
+| `element` | <Documented /> | The `key` that the hook gave its `Button` or `Markdown`. It is the address of the element, and a matcher names it. | Type: `string`. |
 | `component` | <Documented /> | The render component that the element was drawn in (`ToolUse`, `AssistantMessage`, ...). | Type: `RenderComponent`. |
-| `requestId` | <Documented /> | The instance that the element was drawn in. It is the `requestId` that the `ui.render` hook that drew it saw (the tool_use_id of a tool row, or the id of a pane). | Type: `string`. |
-| `surface` | <Documented /> | Where the press came from, one literal for each member, so `if (e.surface === "terminal")` narrows `e`. | Type: `RenderSurface`. |
+| `requestId` | <Documented /> | The instance that the element was drawn in. It is the `requestId` that the `ui.render` hook that drew it saw (the tool_use_id of a tool row, or the ID of a pane). | Type: `string`. |
+| `surface` | <Documented /> | Where the press came from. It is one literal for each member, so `if (e.surface === "terminal")` narrows `e`. | Type: `RenderSurface`. |
 | `link` | <Documented /> | Where the press landed, when the element is a `Markdown` whose links its plugin answers (`onLinkPress`). Absent for a `Button`. | Type: `PressedLink`. Optional. A hook may rewrite its `href` for the hooks and the closure beneath. A hook that adds or drops it fails, and the press goes on beneath it. |
 
 ### `UiPressResult`
 
-What a `ui.press` hook returns and what `next(e)` resolves to. Core runs the `onPress` closure of the element and answers `{ element }`. Used by `ui.press`.
+What a `ui.press` hook returns, and what `next(e)` resolves to. Core runs the `onPress` closure of the element and answers `{ element }`. Used by `ui.press`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -136,12 +138,12 @@ What a `ui.press` hook returns and what `next(e)` resolves to. Core runs the `on
 
 ### `UiScrollArgs`
 
-What the `$.ui.scroll(args)` of a plugin takes: what to bring into view, in which of its sites, and where in the window it lands. The engine resolves it to a window and an offset. A transcript row displays only while the plugin answers the own input of the person. Used by `$.ui.scroll`.
+What the `$.ui.scroll(args)` of a plugin takes: what to bring into view, in which of its sites, and where in the window it lands. The engine resolves it to a window and an offset. A transcript row displays only while the plugin answers the input of the person. Used by `$.ui.scroll`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `to` | <Documented /> | What to reveal (UiScrollTarget): a render instance by `requestId`, one of the elements of this plugin by `key`, or the `start` or `end` of `in`. | Type: `UiScrollTarget`. |
-| `in` | <Documented /> | The site to scroll, by the `requestId` that this plugin draws it under: the id of one of its panes, or the id of the band. | Type: `string`. Optional. Required with `start` and `end`. With `{ key }` it picks the site when the key is drawn in several. |
+| `in` | <Documented /> | The site to scroll, by the `requestId` that this plugin draws it under: the ID of one of its panes, or the ID of the band. | Type: `string`. Optional. Required with `start` and `end`. With `{ key }` it picks the site when the key is drawn in several. |
 | `block` | <Documented /> | Where the target lands in the window (UiScrollBlock). It is `nearest` when left out, so a row that is already on screen does not move. | Type: `UiScrollBlock`. Optional. |
 
 ### `UiScrollInput`
@@ -151,13 +153,13 @@ The input of `ui.scroll`: the window of a site, asked to move. It moves over the
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `component` | <Documented /> | Which site: a `Pane` body or the `AbovePrompt` band. | Type: `UiScrollComponent`. |
-| `requestId` | <Documented /> | The instance that the `ui.render` hook that draws the site sees: the id of the pane, or the one id of the band. | Type: `string`. |
+| `requestId` | <Documented /> | The instance that the `ui.render` hook that draws the site sees: the ID of the pane, or the one ID of the band. | Type: `string`. |
 | `offset` | <Documented /> | The first row that the window is to show, 0 at the top. It is the row that it shows now plus `by`, clamped to the tree, or where `$.ui.scroll` resolved. | Type: `number`. `next({ ...e, offset })` moves it elsewhere (a clamp). One past the end of the tree lands at the end. Nothing has moved when a hook reads it. |
 | `by` | <Documented /> | The rows that the move asks for, signed, negative toward the top. It is what the `scrollBy` of the DOM takes. Read-only. | Type: `number`. The scroll distance. A wheel tick is `-1` or `1`. A page key is `bodyRows`. Home and End are `contentRows`. |
 | `bodyRows` | <Documented /> | How many rows of the tree the window displays at once, as drawn now. Read-only. | Type: `number`. |
 | `contentRows` | <Documented /> | How many rows the tree has, as drawn now. The last offset of the window is `contentRows - bodyRows`, and none when the tree fits. Read-only. | Type: `number`. |
 | `origin` | <Documented /> | Who moves it (UiScrollOrigin). The engine sets it where the move starts. | Type: `UiScrollOrigin`. |
-| `pointer` | <Documented /> | The body cell that the wheel or trackpad of the person was over (UiScrollPointer). Absent for the scroll keys and for `$.ui.scroll`. Read-only. | Type: `UiScrollPointer`. Optional. Tells a tick over the own list of a hook from a tick over the body. |
+| `pointer` | <Documented /> | The body cell that the wheel or trackpad of the person was over (UiScrollPointer). Absent for the scroll keys and for `$.ui.scroll`. Read-only. | Type: `UiScrollPointer`. Optional. It tells a tick over the list of a hook apart from a tick over the body. |
 
 ### `UiScrollOrigin`
 
@@ -180,11 +182,11 @@ The cell that the pointer was over when the wheel of the person raised `ui.scrol
 
 ### `UiScrollResult`
 
-What a `ui.scroll` hook returns, what `next(e)` resolves to, and what `$.ui.scroll` hands back: `{}` once the window moved, or why it did not. Used by `$.ui.scroll`, `ui.scroll`. Since `2.1.321`, `{}` does not say the person saw the move: a band folded away shows nothing, and the closed Mods sheet of a mobile app shows nothing and keeps nothing (`captures/2.1.321/types.diff`).
+What a `ui.scroll` hook returns, what `next(e)` resolves to, and what `$.ui.scroll` hands back: `{}` once the window moved, or why it did not. Used by `$.ui.scroll`, `ui.scroll`. Since `2.1.321`, `{}` does not say the person saw the move: a band folded away shows nothing, and the closed Mods sheet of a mobile app shows nothing and keeps nothing.[^scroll]
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `deny` | <Documented /> | Absent when the window is where the chain left it, else why nothing moved, as `tool.call` and `config.set` spell a refusal. | Type: `string`. Optional. Says why nothing scrolled: a hook kept the window, the target is not of this plugin, or another move came first. With no surface `no-surface` heads it. |
+| `deny` | <Documented /> | Absent when the window is where the chain left it, else why nothing moved, as `tool.call` and `config.set` spell a refusal. | Type: `string`. Optional. It says why nothing scrolled: a hook kept the window, the target is not of this plugin, or another move came first. With no surface, `no-surface` heads it. |
 
 ### `UiScrollTarget`
 
@@ -197,16 +199,16 @@ What `$.ui.scroll` brings into view: never a row number, always a thing drawn so
 
 ### `UiSelectArgument`
 
-The argument of `ui.select`: a pick from a `Select` that a render hook drew. Flat and frozen like every event argument. A hook that names no `plugin` hears the pickers of its own plugin only. Another plugin addresses one picker by matcher, and `{ plugin: "*" }` addresses the pickers of every plugin: `on("ui.select", { plugin: "roster", element: "peer" }, ...)`. Since `2.1.323` (`schemas/claude-code.d.ts`, `UiSelectArgument`). Used by `ui.select`.
+The argument of `ui.select`: a pick from a `Select` that a render hook drew. It is flat and frozen like every event argument. A hook that names no `plugin` hears the pickers of its own plugin only. Another plugin addresses one picker by matcher, and `{ plugin: "*" }` addresses the pickers of every plugin: `on("ui.select", { plugin: "roster", element: "peer" }, ...)`. Since `2.1.323`.[^ui-select] Used by `ui.select`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `plugin` | <Documented /> | Whose `ui.render` hook drew the element. | Type: `string`. |
-| `element` | <Documented /> | The `key` that the hook gave its `Select`: its address, what a matcher names. | Type: `string`. |
+| `element` | <Documented /> | The `key` that the hook gave its `Select`. It is the address of the element, and a matcher names it. | Type: `string`. |
 | `component` | <Documented /> | The render component that the element was drawn in (`AbovePrompt`, `ToolUse`, ...). | Type: `RenderComponent`. |
-| `requestId` | <Documented /> | The instance that the element was drawn in. It is the `requestId` that the `ui.render` hook that drew it saw (the tool_use_id of a tool row, or the id of a pane). | Type: `string`. |
-| `surface` | <Documented /> | Where the pick came from, one literal for each member, so `if (e.surface === "terminal")` narrows `e`. | Type: `RenderSurface`. |
-| `value` | <Documented /> | The value of the picked option. A hook above may rewrite it for the plugins beneath and the own handler of the element. | Type: `string`. |
+| `requestId` | <Documented /> | The instance that the element was drawn in. It is the `requestId` that the `ui.render` hook that drew it saw (the tool_use_id of a tool row, or the ID of a pane). | Type: `string`. |
+| `surface` | <Documented /> | Where the pick came from. It is one literal for each member, so `if (e.surface === "terminal")` narrows `e`. | Type: `RenderSurface`. |
+| `value` | <Documented /> | The value of the picked option. A hook above may rewrite it for the plugins beneath and the handler of the element. | Type: `string`. |
 
 ### `UiSelection`
 
@@ -215,11 +217,11 @@ What the person has selected on screen, as `$.ui.selection()` answers it. It has
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `text` | <Documented /> | The selected text as the person sees it: what a copy would put on the clipboard, with wrapped rows joined back into their lines. | Type: `string`. |
-| `requestId` | <Documented /> | The transcript row that the selection lies in, by the id that its `ui.render` hook reads as `e.requestId` and `$.ui.scroll` takes. | Type: `string`. Optional. The row of a tool call, by its `tool_use_id`. Absent when the selection spans several rows or lies outside the transcript. |
+| `requestId` | <Documented /> | The transcript row that the selection lies in, by the ID that its `ui.render` hook reads as `e.requestId` and `$.ui.scroll` takes. | Type: `string`. Optional. The row of a tool call, by its `tool_use_id`. Absent when the selection spans several rows or lies outside the transcript. |
 
 ### `UiSelectResult`
 
-What a `ui.select` hook returns and what `next(e)` resolves to. Core runs the `onSelect` closure of the element and answers `{ element, value }`. Used by `ui.select`.
+What a `ui.select` hook returns, and what `next(e)` resolves to. Core runs the `onSelect` closure of the element and answers `{ element, value }`. Used by `ui.select`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -228,15 +230,15 @@ What a `ui.select` hook returns and what `next(e)` resolves to. Core runs the `o
 
 ### `UiViewResult`
 
-What `$.ui.view` hands back and what the `{ value }` of a `ui.view` hook holds. It is `{}` once the main view displays what was asked, or the reason why it does not. It is spelled as `ui.scroll` spells it. Example: `$.ui.view({ agentId }).then(shown => shown.deny && $.ui.toast(shown.deny))`. Used by `$.ui.view`, `ui.view`.
+What `$.ui.view` hands back, and what the `{ value }` of a `ui.view` hook holds. It is `{}` once the main view displays what was asked, or the reason why it does not. The reason is spelled as `ui.scroll` spells it. Example: `$.ui.view({ agentId }).then(shown => shown.deny && $.ui.toast(shown.deny))`. Used by `$.ui.view`, `ui.view`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `deny` | <Undocumented /> | Absent when the main view displays the transcript asked for, else why the view did not move. | Type: `string`. Optional. Says why the view did not change. The call was not the own input of the person, no agent has the id, or the view moved meanwhile. |
+| `deny` | <Undocumented /> | Absent when the main view displays the transcript asked for, else why the view did not move. | Type: `string`. Optional. It says why the view did not change. The call was not the input of the person, no agent has the ID, or the view moved meanwhile. |
 
 ### `UserMessageFrom`
 
-Who sent the message that a `UserMessage` row carries, when someone other than the person did: another agent, a teammate, another session, a channel. Read-only. The words of the sender are not the words of the person. The model reads them framed as those of that sender, whatever a hook draws for the row.
+Who sent the message that a `UserMessage` row carries, when someone other than the person did: another agent, a teammate, another session, a channel. It is read-only. The words of the sender are not the words of the person. The model reads them framed as those of that sender, whatever a hook draws for the row.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -244,12 +246,12 @@ Who sent the message that a `UserMessage` row carries, when someone other than t
 
 ### `UserMessageTask`
 
-The background task that a `UserMessage` notification row reports on: a subagent, a background shell, a workflow, a remote agent, a monitor. Read-only. Every field belongs to the notification, so the row names the same task on every draw. Each string is one printable line.
+The background task that a `UserMessage` notification row reports on: a subagent, a background shell, a workflow, a remote agent, a monitor. It is read-only. Every field belongs to the notification, so the row names the same task on every draw. Each string is one printable line.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `id` | <Documented /> | The id of the task as the notification names it. For a subagent, it is the `agentId` that its `turn.complete` carried and `$.agent.list()` keys. | Type: `string`. Optional. |
-| `status` | <Documented /> | How the task ended: `completed`, `failed` or `killed` (stopped, by the person or by Claude), or another word that its producer wrote. | Type: `string`. Optional. |
+| `id` | <Documented /> | The ID of the task as the notification names it. For a subagent, it is the `agentId` that its `turn.complete` carried and `$.agent.list()` keys. | Type: `string`. Optional. |
+| `status` | <Documented /> | How the task ended: `completed`, `failed`, or `killed` (stopped, by the person or by Claude), or another word that its producer wrote. | Type: `string`. Optional. |
 | `type` | <Documented /> | What kind of task, when the notification says (`remote_agent`, the kind of an artifact watch). The notification of a subagent and of a shell leave it out. | Type: `string`. Optional. |
 | `toolUseId` | <Documented /> | Which call started the task: its `tool_use_id`, when the notification carries it. | Type: `string`. Optional. |
 | `durationMs` | <Documented /> | How long the task ran, in milliseconds, when the notification says. The row draws it after the summary (`2m 2s`). | Type: `number`. Optional. |
@@ -258,3 +260,13 @@ The background task that a `UserMessage` notification row reports on: a subagent
 
 - [UI Types](index.md)
 - [Mod API Types](../index.md)
+
+## Sources
+
+[^ui-input]: `schemas/claude-code.d.ts`, `UiInputArgument`.
+[^notify]: `captures/2.1.321/types.diff`.
+[^ui-open]: `schemas/claude-code.d.ts`, `UiOpenResult`. The `2.1.323` comment names `placement` where `2.1.322` named `dock` and `inline`.
+[^ui-pane]: `schemas/claude-code.d.ts`, `UiPane`.
+[^ui-press]: `schemas/claude-code.d.ts`, `UiPressArgument`.
+[^scroll]: `captures/2.1.321/types.diff`.
+[^ui-select]: `schemas/claude-code.d.ts`, `UiSelectArgument`.
