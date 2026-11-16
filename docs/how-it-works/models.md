@@ -109,7 +109,7 @@ Before, such a request could hold a turn for minutes, or for good in that mode.
 
 When a request is too long for the context, Claude Code tries again with a smaller `max_tokens`. It compacts when that is not enough.
 Since `2.1.311`, a session on a standard window (not 1M) that sends more than 200K tokens and gets the error "Usage credits required for 1M context" compacts the conversation and goes on, where it stopped before.[^reactive]
-Since `2.1.325`, Claude Code also knows the context length errors of many third-party gateways and Foundry. It matches phrases such as "maximum context length", "context_length_exceeded", "exceeds the context window", and "reduce the length of the messages". A reply with "policy_blocked" or "dlp_request_denied" does not count. The check runs for the statuses `400`, `413`, `422`, or none. Before, such sessions stopped on every turn instead of compacting.[^gateways]
+Since `2.1.326`, Claude Code also knows the context length errors of many third-party gateways and Foundry. It matches phrases such as "maximum context length", "context_length_exceeded", "exceeds the context window", and "reduce the length of the messages". A reply with "policy_blocked" or "dlp_request_denied" does not count. The check runs for the statuses `400`, `413`, `422`, or none. Before, such sessions stopped on every turn instead of compacting.[^gateways]
 The loop also recovers from a stop at `max_tokens` and from a bad tool call. See [The Agent Loop](agent-loop.md#recovery-inside-the-loop).
 
 ## Related Pages
