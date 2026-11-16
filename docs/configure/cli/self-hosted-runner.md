@@ -7,7 +7,7 @@ sidebar_position: 5
 `claude self-hosted-runner` runs Claude Code cloud sessions on a machine that you control. The root help text does not list the command.
 The [official overview](https://code.claude.com/docs/en/self-hosted-environments) explains environments and runners. The [deploy guide](https://code.claude.com/docs/en/self-hosted-environments-deploy) and the [configuration guide](https://code.claude.com/docs/en/self-hosted-environments-configuration) explain most options. This page lists every option in `2.1.326`, with the options that the official pages do not name, and the exact parser rules.
 
-Source: the text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.326`, and the option parser of the program (`chunk-jmkrmahq.js`, near offset 253048). The variables are on [Remote and Cloud Session Variables](../env-vars/remote-and-cloud-sessions.md).
+The variables are on [Remote and Cloud Session Variables](../env-vars/remote-and-cloud-sessions.md).[^runner-help]
 
 ## Example
 
@@ -28,8 +28,8 @@ The command has its own parser. It does not use the parser of the root `claude` 
 - `--trust-workspace`, `--remove-session-state`, and `--diff-finds-nested-repository` take an optional `true`, `false`, `1`, or `0`. Any other next argument is not used, and the option turns on.
 - An unknown flag stops the runner with `unknown flag <flag>`. An empty argument stops it with `empty argument — a flag value may be unset (failed env/K8s substitution?)`. Any other word stops it with `unexpected argument '<word>' — this command takes no positional arguments`.
 - A flag wins over its variable. Times in variables are in milliseconds; the flags take seconds or minutes, as their names say.
-- Each parser error prints `error: <message>`, then `Run 'claude self-hosted-runner --help' for usage.`, and the runner exits with code 2. The `cli321` probe runs confirmed this.
-- An on-demand runner that the server refuses because it is not needed (the session ended or paused) exits with code 0. The program maps the refusal reasons `session_paused`, `queue_entry_gone`, `pool_moved`, and `standby_gone` to exit code 0. A superseded work order exits with code 1 again; `2.1.321` and `2.1.322` used code 0 ([2.1.323 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323)). A work order that was already used (`already_registered`, `standby_already_redeemed`) and any other reason also exit with code 1 (`chunk-jmkrmahq.js:262763`).
+- Each parser error prints `error: <message>`, then `Run 'claude self-hosted-runner --help' for usage.`, and the runner exits with code 2. [^cli321]
+- An on-demand runner that the server refuses because it is not needed (the session ended or paused) exits with code 0. Claude Code maps the refusal reasons `session_paused`, `queue_entry_gone`, `pool_moved`, and `standby_gone` to exit code 0. A superseded work order exits with code 1 again; `2.1.321` and `2.1.322` used code 0.[^exit-codes] A work order that was already used (`already_registered`, `standby_already_redeemed`) and any other reason also exit with code 1.
 
 ## Connection Options
 
@@ -62,11 +62,11 @@ The command has its own parser. It does not use the parser of the root `claude` 
 | `--git-ssh-rewrite <host>` | <Documented /> | Rewrites `https://<host>/...` source URLs to `git@<host>:...`. Give it more than once for more hosts. | Off |
 | `--git-host-rewrite <from>=<to>` | <Documented /> | Rewrites `https://<from>/...` to `https://<to>/...`, before `--git-ssh-rewrite`. Both sides are bare host names. | Off |
 | `--use-anthropic-git-proxy` | <Documented /> | Uses Anthropic-managed git. Needs `--capacity 1`, git 2.32 or later, and a global git config that is not a device such as `/dev/null`. It deletes and replaces the home-level git config of the runner account at startup and before each session. See [Harden Your Deployment](https://code.claude.com/docs/en/self-hosted-environments-deploy#harden-your-deployment). | Off |
-| `--no-clone-through-agent-proxy` | <Undocumented /> | Since `2.1.326`, a hidden flag. With `--agent-proxy-url`, the runner then does not clone http(s) repositories through the proxy. It skips the git version check and the warning about the proxy credential that go with that clone (the program, `chunk-747xd1vs.js:13426`, `chunk-747xd1vs.js:13688`). | Off |
-| `--use-anthropic-gh [bool]` | <Undocumented /> | Since `2.1.326`, it offers the built-in `gh api` of Claude Code to sessions where no `gh` is installed. It reaches the REST API of github.com only, and its requests go through Anthropic, which adds the GitHub credential it holds for the session, if any. `false`, `0`, `no`, or `off` turns it off. The runner withholds it on Windows, above `--capacity 1`, with `--agent-proxy-url`, with `--exec-path` or a command hook, with a model provider other than the Anthropic API, in code reviews, and in tools-only sessions (the program, `chunk-747xd1vs.js:13137`, `chunk-747xd1vs.js:12305`). It reads `SELF_HOSTED_RUNNER_USE_ANTHROPIC_GH`. | On |
+| `--no-clone-through-agent-proxy` | <Undocumented /> | Since `2.1.326`, a hidden flag. With `--agent-proxy-url`, the runner then does not clone http(s) repositories through the proxy. It skips the git version check and the warning about the proxy credential that go with that clone.[^no-clone] | Off |
+| `--use-anthropic-gh [bool]` | <Undocumented /> | Since `2.1.326`, it offers the built-in `gh api` of Claude Code to sessions where no `gh` is installed. It reaches the REST API of github.com only, and its requests go through Anthropic, which adds the GitHub credential it holds for the session, if any. `false`, `0`, `no`, or `off` turns it off. The runner withholds it on Windows, above `--capacity 1`, with `--agent-proxy-url`, with `--exec-path` or a command hook, with a model provider other than the Anthropic API, in code reviews, and in tools-only sessions.[^gh] It reads `SELF_HOSTED_RUNNER_USE_ANTHROPIC_GH`. | On |
 | `--configure-git` | <Documented /> | Sets the git identity to `Claude <noreply@anthropic.com>` with commit signing. Needs git 2.34 or later. See [Configure Git](https://code.claude.com/docs/en/self-hosted-environments-deploy#configure-git). | Off |
 | `--push-outcome-on-release` | <Documented /> | Pushes each outcome branch before the runner ends a session that did not complete. See [Prompt Sessions to Push Their Work](https://code.claude.com/docs/en/self-hosted-environments-configuration#prompt-sessions-to-push-their-work). | Off |
-| `--trust-workspace [bool]` | <Documented /> | Trusts the repository paths of each session, so repo `permissions.allow` and `additionalDirectories` apply. With `false`, the runner sets `CLAUDE_CODE_IGNORE_PERSISTED_TRUST=1` for each session, and no workspace trust record counts (the program, `chunk-jmkrmahq.js:176984`, `chunk-x4fdscgs.js:85193`). | `true` |
+| `--trust-workspace [bool]` | <Documented /> | Trusts the repository paths of each session, so repo `permissions.allow` and `additionalDirectories` apply. With `false`, the runner sets `CLAUDE_CODE_IGNORE_PERSISTED_TRUST=1` for each session, and no workspace trust record counts.[^trust] | `true` |
 | `--remove-session-state [bool]` | <Documented /> | Removes the per-session state under `<base-dir>/_sessions/` when a session ends. See [Reuse a Pre-Warmed Checkout](https://code.claude.com/docs/en/self-hosted-environments-deploy#reuse-a-pre-warmed-checkout). | `false` |
 | `--diff-finds-nested-repository [bool]` | <Undocumented /> | Lets the Changes pane show a repository cloned in a subfolder of a session started with no repository. Needs `--capacity 1`, and works only while the tool sandbox is off. | `false` |
 | `--confine-repo-settings <mode>` | <Documented /> | Sets the guard for settings committed in the repository: `warn`, `enforce`, or `off`. | `warn` |
@@ -101,43 +101,41 @@ The host config folder has no flag. Set `SELF_HOSTED_RUNNER_HOST_CONFIG_DIR`; `-
 
 ## Runner Errors
 
-Source: the program, in its parser (`chunk-jmkrmahq.js`, offsets 245200–255000). The `cli321` probe ran the cases with a probe name.
+Each row is an error of the parser.[^parser-errors]
 
-| Message | When | Probe |
-| --- | --- | --- |
-| `--capacity must be a positive integer, got: <value>` | The value is not an integer of 1 or more. | |
-| `--health-port must be an integer in [0, 65535] (0 disables), got: <value>` | The port is out of range. | |
-| `--git-ssh-rewrite requires a hostname` | No value. | |
-| `--git-host-rewrite requires <from>=<to>` | No value, or no text on one side of `=`. | |
-| `--git-host-rewrite expects bare hostnames (e.g. ext.example.com=int.example.com), not URLs. Got: <value>` | A side holds `://` or `/`. | `runner-git-host-rewrite-url` |
-| `duplicate --git-host-rewrite for '<host>'` | The same `<from>` host twice. | |
-| `[runner:warn] --git-ssh-rewrite '<host>' will not match: --git-host-rewrite rewrites it to '<to>' first.` | A warning. The runner goes on. | |
-| `--confine-repo-settings requires one of enforce/warn/off (got: "<value>")` | A bad mode. | `runner-confine-bad` |
-| `--server-auto-mode-lists requires one of all/no-allow/none (got: "<value>")` | A bad mode. | `runner-lists-bad` |
-| `--host-config-snapshot requires one of disk/memory (got: "<value>")` | A bad mode. | `runner-snapshot-bad` |
-| `--<flag> must be a non-negative number of minutes (0 disables, max 10080), got: <value>` | A bad value of `--kill-session-after-min`, `--exit-if-unused-min`, `--release-idle-session-min`, `--startup-timeout-min`, `--checkout-hook-timeout-min`, `--max-hold-min`, or `--defer-shutdown-max-min`. | |
-| `--<flag> must be a positive number of seconds, got: <value>` | A bad value of `--session-stop-grace-sec` or `--post-session-hook-timeout-sec`. | |
-| `--<flag> must be a non-negative number of seconds (max 86400), got: <value>` | A bad value of `--drain-wait-sec` or `--drain-wait-bg-tasks-sec`. | `runner-drain-wait-bg-tasks` |
-| `--drain-grace-sec must be a non-negative number of seconds (0 = immediate, max 604800), got: <value>` | A bad value. | |
-| `--retire-at must be an absolute Unix timestamp in whole SECONDS (...), got: <value>` | Milliseconds, a duration, or text. | `runner-retire-at-ms` |
-| `--sigkill-timeout-sec was renamed to --session-stop-grace-sec. ...` | The old flag. | `runner-sigkill` |
-| `--drain-marker-file requires a file path (the marker your host writes to announce a graceful drain), got: <value>` | No value, an empty value, or a value that starts with `--`. | |
-| `--hold-idle-file requires a file path (a file your host keeps fresh while the session has processes left running), got: <value>` | No value, an empty value, or a value that starts with `--`. | |
-| `the path, or a link on the way to it, leads to a network location; point --hold-idle-file at a local file` | The hold file is on a network location (`chunk-jmkrmahq.js:267472`). | |
-| `the path could not be checked for links to a network location: a folder or link on the way could not be read` | A folder or link on the way to the hold file cannot be read. | |
-| `--agent-proxy-url requires your proxy's https:// URL` | No value, an empty value, or a value that starts with `--`. | |
-| `--proxy-authorization-command / --proxy-authorization-file requires a value` | No value, or a value that starts with `--`. | |
-| `--diff-finds-nested-repository requires --capacity 1. ...` | The option is on with a capacity over 1. | |
-| `Failed to read environment secret file <path> (<system error>)` | The secret file cannot be read. | `runner-pool-secret-file` |
-| `unknown flag <flag>` | An unknown flag. | `runner-host-config-dir-flag` |
-| `empty argument — a flag value may be unset (failed env/K8s substitution?)` | An empty argument. | `runner-empty-argument` |
-| `unexpected argument '<word>' — this command takes no positional arguments` | A word that is not a flag. | `runner-positional` |
+| Message | When |
+| --- | --- |
+| `--capacity must be a positive integer, got: <value>` | The value is not an integer of 1 or more. |
+| `--health-port must be an integer in [0, 65535] (0 disables), got: <value>` | The port is out of range. |
+| `--git-ssh-rewrite requires a hostname` | No value. |
+| `--git-host-rewrite requires <from>=<to>` | No value, or no text on one side of `=`. |
+| `--git-host-rewrite expects bare hostnames (e.g. ext.example.com=int.example.com), not URLs. Got: <value>` | A side holds `://` or `/`.[^probe-git-host-rewrite-url] |
+| `duplicate --git-host-rewrite for '<host>'` | The same `<from>` host twice. |
+| `[runner:warn] --git-ssh-rewrite '<host>' will not match: --git-host-rewrite rewrites it to '<to>' first.` | A warning. The runner goes on. |
+| `--confine-repo-settings requires one of enforce/warn/off (got: "<value>")` | A bad mode.[^probe-confine-bad] |
+| `--server-auto-mode-lists requires one of all/no-allow/none (got: "<value>")` | A bad mode.[^probe-lists-bad] |
+| `--host-config-snapshot requires one of disk/memory (got: "<value>")` | A bad mode.[^probe-snapshot-bad] |
+| `--<flag> must be a non-negative number of minutes (0 disables, max 10080), got: <value>` | A bad value of `--kill-session-after-min`, `--exit-if-unused-min`, `--release-idle-session-min`, `--startup-timeout-min`, `--checkout-hook-timeout-min`, `--max-hold-min`, or `--defer-shutdown-max-min`. |
+| `--<flag> must be a positive number of seconds, got: <value>` | A bad value of `--session-stop-grace-sec` or `--post-session-hook-timeout-sec`. |
+| `--<flag> must be a non-negative number of seconds (max 86400), got: <value>` | A bad value of `--drain-wait-sec` or `--drain-wait-bg-tasks-sec`.[^probe-drain-wait-bg-tasks] |
+| `--drain-grace-sec must be a non-negative number of seconds (0 = immediate, max 604800), got: <value>` | A bad value. |
+| `--retire-at must be an absolute Unix timestamp in whole SECONDS (...), got: <value>` | Milliseconds, a duration, or text.[^probe-retire-at-ms] |
+| `--sigkill-timeout-sec was renamed to --session-stop-grace-sec. ...` | The old flag.[^probe-sigkill] |
+| `--drain-marker-file requires a file path (the marker your host writes to announce a graceful drain), got: <value>` | No value, an empty value, or a value that starts with `--`. |
+| `--hold-idle-file requires a file path (a file your host keeps fresh while the session has processes left running), got: <value>` | No value, an empty value, or a value that starts with `--`. |
+| `the path, or a link on the way to it, leads to a network location; point --hold-idle-file at a local file` | The hold file is on a network location.[^hold-network] |
+| `the path could not be checked for links to a network location: a folder or link on the way could not be read` | A folder or link on the way to the hold file cannot be read. |
+| `--agent-proxy-url requires your proxy's https:// URL` | No value, an empty value, or a value that starts with `--`. |
+| `--proxy-authorization-command / --proxy-authorization-file requires a value` | No value, or a value that starts with `--`. |
+| `--diff-finds-nested-repository requires --capacity 1. ...` | The option is on with a capacity over 1. |
+| `Failed to read environment secret file <path> (<system error>)` | The secret file cannot be read.[^probe-pool-secret-file] |
+| `unknown flag <flag>` | An unknown flag.[^probe-host-config-dir-flag] |
+| `empty argument — a flag value may be unset (failed env/K8s substitution?)` | An empty argument.[^probe-empty-argument] |
+| `unexpected argument '<word>' — this command takes no positional arguments` | A word that is not a flag.[^probe-positional] |
 
 ## `orchestrator`
 
-`claude self-hosted-runner orchestrator` polls the spawn-hints queue and runs the `spawn-runner` hook in `--hooks-dir` once for each hint. The hook must start the work and exit within `--hook-timeout`. Exit code `0` is success, `1` is a failure to retry, and `2` or more stops further tries. See [On-Demand Runners](https://code.claude.com/docs/en/self-hosted-environments-configuration#on-demand-runners) and [The Spawn-Runner Hook](https://code.claude.com/docs/en/self-hosted-environments-configuration#the-spawn-runner-hook).
-
-Source: the program, in its help text and its orchestrator parser (`chunk-pr8txaye.js`, near offset 24075).
+`claude self-hosted-runner orchestrator` polls the spawn-hints queue and runs the `spawn-runner` hook in `--hooks-dir` once for each hint. The hook must start the work and exit within `--hook-timeout`. Exit code `0` is success, `1` is a failure to retry, and `2` or more stops further tries. See [On-Demand Runners](https://code.claude.com/docs/en/self-hosted-environments-configuration#on-demand-runners) and [The Spawn-Runner Hook](https://code.claude.com/docs/en/self-hosted-environments-configuration#the-spawn-runner-hook).[^orch]
 
 | Option | Status | What it does | Default |
 | --- | --- | --- | --- |
@@ -159,13 +157,13 @@ Source: the program, in its help text and its orchestrator parser (`chunk-pr8txa
 | `--agent-proxy-url <url>` | <Undocumented /> | Passes the agent proxy to the hook as `SELF_HOSTED_RUNNER_AGENT_PROXY_URL`. | Off |
 | `--debug-dir <path>` | <Undocumented /> | Writes each work order and hook stderr to files in the folder. They are deleted after 5 minutes. For development only. | Off |
 
-Orchestrator errors that the `cli321` probe printed (exit code 2, then `Run 'claude self-hosted-runner orchestrator --help' for usage.`):
+These orchestrator errors exit with code 2, then print `Run 'claude self-hosted-runner orchestrator --help' for usage.`:
 
-- `--hook-timeout (200s) + 5s SIGKILL grace must be less than --expected-spawn-seconds (120s) — otherwise an HA replica re-claims the lease while this hook is still running and both spawn a runner` (`runner-orchestrator-hook-timeout`).
-- `--min-idle must be an integer in [0, 200]` (`runner-orchestrator-min-idle`).
-- `--scm-connector-id / --scm-connector-provider / --scm-connector-ca-file / --scm-connector-host-rewrite require --scm-connector-host` (`runner-orchestrator-scm-id-only`).
+- `--hook-timeout (200s) + 5s SIGKILL grace must be less than --expected-spawn-seconds (120s) — otherwise an HA replica re-claims the lease while this hook is still running and both spawn a runner`.[^orch-timeout]
+- `--min-idle must be an integer in [0, 200]`.[^orch-min-idle]
+- `--scm-connector-id / --scm-connector-provider / --scm-connector-ca-file / --scm-connector-host-rewrite require --scm-connector-host`.[^orch-scm]
 
-With no hook folder, the orchestrator prints `[runner:fatal] orchestrator requires --hooks-dir (or SELF_HOSTED_RUNNER_HOOKS_DIR) — no spawn-runner hook directory configured` on stdout and exits with code 1 (`runner-orchestrator-no-hooks`). The code also refuses a `spawn-runner` hook that is missing, not a regular file, or not executable, and an environment secret without the `ccr:pool_id` claim.
+With no hook folder, the orchestrator prints `[runner:fatal] orchestrator requires --hooks-dir (or SELF_HOSTED_RUNNER_HOOKS_DIR) — no spawn-runner hook directory configured` on stdout and exits with code 1.[^orch-no-hooks] The code also refuses a `spawn-runner` hook that is missing, not a regular file, or not executable, and an environment secret without the `ccr:pool_id` claim.
 
 ## `setup` And `doctor`
 
@@ -198,3 +196,30 @@ The default of `--api-url` is `ANTHROPIC_BASE_URL`, else the built-in API URL.
 - [Subcommands](subcommands.md)
 - [Remote and Cloud Session Variables](../env-vars/remote-and-cloud-sessions.md)
 - [Remote Control Server](remote-control.md)
+
+## Sources
+
+[^runner-help]: The text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.326`, and the option parser of the program, `chunk-jmkrmahq.js`, near offset 253048.
+[^cli321]: Probe group `cli321`.
+[^exit-codes]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-jmkrmahq.js:262763`.
+[^no-clone]: The program, `chunk-747xd1vs.js:13426` and `chunk-747xd1vs.js:13688`.
+[^gh]: The program, `chunk-747xd1vs.js:13137` and `chunk-747xd1vs.js:12305`.
+[^trust]: The program, `chunk-jmkrmahq.js:176984` and `chunk-x4fdscgs.js:85193`.
+[^parser-errors]: The program, `chunk-jmkrmahq.js`, offsets 245200 to 255000. Probe group `cli321`.
+[^orch]: The program, help text and orchestrator parser, `chunk-pr8txaye.js`, near offset 24075.
+[^orch-timeout]: Probe case `runner-orchestrator-hook-timeout`, group `cli321`.
+[^orch-min-idle]: Probe case `runner-orchestrator-min-idle`, group `cli321`.
+[^orch-scm]: Probe case `runner-orchestrator-scm-id-only`, group `cli321`.
+[^orch-no-hooks]: Probe case `runner-orchestrator-no-hooks`, group `cli321`.
+[^hold-network]: The program, `chunk-jmkrmahq.js:267472`.
+[^probe-git-host-rewrite-url]: Probe case `runner-git-host-rewrite-url`.
+[^probe-confine-bad]: Probe case `runner-confine-bad`.
+[^probe-lists-bad]: Probe case `runner-lists-bad`.
+[^probe-snapshot-bad]: Probe case `runner-snapshot-bad`.
+[^probe-drain-wait-bg-tasks]: Probe case `runner-drain-wait-bg-tasks`.
+[^probe-retire-at-ms]: Probe case `runner-retire-at-ms`.
+[^probe-sigkill]: Probe case `runner-sigkill`.
+[^probe-pool-secret-file]: Probe case `runner-pool-secret-file`.
+[^probe-host-config-dir-flag]: Probe case `runner-host-config-dir-flag`.
+[^probe-empty-argument]: Probe case `runner-empty-argument`.
+[^probe-positional]: Probe case `runner-positional`.

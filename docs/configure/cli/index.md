@@ -23,7 +23,7 @@ git diff | claude -p "review this diff"  # pipe in text
 
 ## Ways to Start
 
-Source: the official [CLI Reference](https://code.claude.com/docs/en/cli-reference) and [Run Claude Code Programmatically](https://code.claude.com/docs/en/headless) pages.
+Official pages: [CLI Reference](https://code.claude.com/docs/en/cli-reference) and [Run Claude Code Programmatically](https://code.claude.com/docs/en/headless).
 
 | Command | Status | What it does |
 | --- | --- | --- |
@@ -62,12 +62,11 @@ Some of them work only together, for example `--include-partial-messages` needs 
 | `--init`, `--init-only`, `--maintenance` | <Documented /> | Run `Setup` hooks. `--help` hides the flags. |
 
 The result of `--output-format json` has a `usage` field.
-Its `cache_creation` part is split into `ephemeral_1h_input_tokens` and `ephemeral_5m_input_tokens`.
-Source: the official [How Claude Code Uses Prompt Caching](https://code.claude.com/docs/en/prompt-caching#choose-the-ttl-yourself) page.
+Its `cache_creation` part is split into `ephemeral_1h_input_tokens` and `ephemeral_5m_input_tokens`. See [How Claude Code Uses Prompt Caching](https://code.claude.com/docs/en/prompt-caching#choose-the-ttl-yourself).
 
 ## How It Works
 
-Claude Code reads your flags first. A flag then wins over the same choice in an environment variable or a settings file, There are a few exceptions. [Environment Variables](../env-vars/index.md#which-value-wins) lists them.
+Claude Code reads your flags first. A flag wins over the same choice in an environment variable or a settings file, with a few exceptions. [Environment Variables](../env-vars/index.md#which-value-wins) lists them.
 
 ```mermaid
 flowchart TD
@@ -80,7 +79,7 @@ flowchart TD
   One --> Loop
 ```
 
-Source: the program (`claude --help`, `2.1.326`).
+The flow matches the `claude --help` output.[^help]
 
 ## Related Pages
 
@@ -90,3 +89,7 @@ Source: the program (`claude --help`, `2.1.326`).
 - [Permissions](../permissions/index.md) explains `--permission-mode` and the tool allow lists.
 - [Sessions and Storage](../../how-it-works/sessions-and-storage.md) explains `-c` and `-r`.
 - [The Agent Loop](../../how-it-works/agent-loop.md) shows what runs after startup.
+
+## Sources
+
+[^help]: The program, `claude --help`, `2.1.326`.

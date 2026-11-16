@@ -7,7 +7,7 @@ sidebar_position: 2
 A flag changes how one `claude` run behaves.
 `claude --help` shows 66 flags. Another 68 work but stay hidden from the help text.
 This page lists both kinds in one place, grouped by what they do.
-Two hidden flags have no row, because no code reads them: `--runner-declares` and `--agents-view-if-allowed` (the program).
+Two hidden flags have no row, because no code reads them: `--runner-declares` and `--agents-view-if-allowed`.[^no-row]
 
 Pass a flag after `claude`, for example `claude --model opus`. Most flags last for one run only. A flag is on when you pass it. Some flags have a `--no-` twin, such as `--no-chrome`.
 
@@ -62,7 +62,7 @@ Flags that choose how a run starts and how print mode reads input and writes out
 | `--client-data-url <url>` | <Undocumented /> | ❌ | Loads a signed configuration document from a URL and exits if it fails. |
 | `--allow-other-models` | <Undocumented /> | ❌ | With `--client-data-url`, starts on a model that the document does not list. |
 | `--managed-settings` `<json>` | <Undocumented /> | ❌ | Gives policy settings as JSON from a parent process, for the SDK. |
-| `--managed-settings-in-initialize` | <Undocumented /> | ❌ | Reads the policy settings from the `managedSettings` field of the `initialize` request, not from `--managed-settings`. It exits if the settings cannot be used. For SDK use only; it needs `--await-initialize` (the program, `chunk-9tj6jrqc.js:64543`). |
+| `--managed-settings-in-initialize` | <Undocumented /> | ❌ | Reads the policy settings from the `managedSettings` field of the `initialize` request, not from `--managed-settings`. It exits if the settings cannot be used. For SDK use only; it needs `--await-initialize`.[^managed-init] |
 | `--host-auth-is-org-sign-in` | <Undocumented /> | ❌ | Says that the token of the host is an organization sign-in, for desktop hosts. |
 
 ### Safe Modes, Settings, and Debug
@@ -80,10 +80,10 @@ Flags that strip your setup down, load extra settings, or turn on logs.
 | `--bare` | <Documented /> | ✅ | Starts with a minimal setup that has no hooks, no plugin sync, no auto memory, and no background work. It skips hooks, LSP, plugin sync, attribution, auto memory, background prefetches, keychain reads, and `CLAUDE.md` discovery. |
 | `--safe-mode` | <Documented /> | ✅ | Starts with all customizations off, such as `CLAUDE.md`, skills, plugins, hooks, and MCP servers. |
 | `--restricted` | <Documented /> | ✅ | Removes the tools that run code and `WebFetch`. Also ignores user, project, and local settings. It suits untrusted input. |
-| `--ignore-persisted-trust` | <Undocumented /> | ❌ | No saved workspace trust record counts in this process. `CLAUDE_CODE_IGNORE_PERSISTED_TRUST` does the same. The program reads the flag from the arguments; it has no help text (`chunk-rqvvpwt0.js:8192`, `chunk-x4fdscgs.js:85193`). |
+| `--ignore-persisted-trust` | <Undocumented /> | ❌ | No saved workspace trust record counts in this process. `CLAUDE_CODE_IGNORE_PERSISTED_TRUST` does the same. It has no help text.[^persisted-trust] |
 | `--ax-screen-reader` | <Documented /> | ✅ | Draws flat text with no borders or animations, for screen readers. |
 | `--settings` `<file-or-json>` | <Documented /> | ✅ | Loads more settings from a JSON file or a JSON string. |
-| `--setting-sources` `<sources>` | <Documented /> | ✅ | Chooses which setting sources load: `user`, `project`, and `local`. A source that you leave out supplies no auto-mode rules and no saved permission consents. Managed settings and `--settings` stay (the program). |
+| `--setting-sources` `<sources>` | <Documented /> | ✅ | Chooses which setting sources load: `user`, `project`, and `local`. A source that you leave out supplies no auto-mode rules and no saved permission consents. Managed settings and `--settings` stay.[^setting-sources] |
 | `--project-config-root` `<dir>` | <Undocumented /> | ❌ | Reads project settings and the `.claude` trees from another folder. |
 
 ### Permissions and Tools
@@ -96,9 +96,9 @@ Flags that set the permission mode and the tools the model may use. See [Permiss
 | `--inherit-permission-mode` `<mode>` | <Undocumented /> | ❌ | Sets a permission mode from a parent session, used only when nothing else sets one. |
 | `--dangerously-skip-permissions` | <Documented /> <Caution note="Skips all permission checks" /> | ✅ | Skips all permission checks. Use it only in a sandbox with no internet access. |
 | `--allow-dangerously-skip-permissions` | <Documented /> | ✅ | Makes skipping all permission checks a choice, without turning it on. |
-| `--allowedTools`, `--allowed-tools` `<tools...>` | <Documented /> | ✅ | Lists the tools that run without a permission prompt. Since `2.1.326`, a rule that looks incomplete, such as one with a missing `)`, prints a warning that names the first bad rule and how many more the list holds (`chunk-97e8zgw1.js:4128`, `:4160`). |
-| `--disallowedTools`, `--disallowed-tools` `<tools...>` | <Documented /> | ✅ | Lists the tools that the model cannot use. Since `2.1.326`, an incomplete rule prints the same kind of warning, and says that a tool you meant to block may still run (`chunk-97e8zgw1.js:4128`). |
-| `--tools` `<tools...>` | <Documented /> | ✅ | Lists the built-in tools that the model can use. `"default"` uses the default set. Since `2.1.326`, a name that does not look like a tool name, such as one with parentheses, prints a warning (`chunk-97e8zgw1.js:4140`). |
+| `--allowedTools`, `--allowed-tools` `<tools...>` | <Documented /> | ✅ | Lists the tools that run without a permission prompt. Since `2.1.326`, a rule that looks incomplete, such as one with a missing `)`, prints a warning that names the first bad rule and how many more the list holds.[^allowed-warn] |
+| `--disallowedTools`, `--disallowed-tools` `<tools...>` | <Documented /> | ✅ | Lists the tools that the model cannot use. Since `2.1.326`, an incomplete rule prints the same kind of warning, and says that a tool you meant to block may still run.[^disallowed-warn] |
+| `--tools` `<tools...>` | <Documented /> | ✅ | Lists the built-in tools that the model can use. `"default"` uses the default set. Since `2.1.326`, a name that does not look like a tool name, such as one with parentheses, prints a warning.[^tools-warn] |
 | `--permission-prompts` `<target>` | <Documented /> | ✅ | Sets who answers permission prompts: `host` or `none`. `host` means the SDK host or `--permission-prompt-tool`. `none` denies anything that would prompt. The permission mode decides the rest. |
 | `--permission-prompt-tool <tool>` | <Documented /> | ❌ | Names an MCP tool that answers permission prompts, with `--print` only. |
 | `--plan-mode-instructions` `<instructions>` | <Undocumented /> | ❌ | Replaces the default steps of plan mode with your own text. |
@@ -119,7 +119,7 @@ Flags that pick the model and set how hard it thinks.
 | `--thinking-display` `<display>` | <Undocumented /> | ❌ | Sets how the thinking text appears in the response. |
 | `--max-thinking-tokens` `<tokens>` | <Undocumented /> <Deprecated note="Use --thinking" /> | ❌ | Sets a thinking token limit. The flag is deprecated. Use `--thinking` instead. |
 | `--task-budget` `<tokens>` | <Undocumented /> | ❌ | Sets a task budget in tokens on the API side (`output_config.task_budget`). |
-| `--fast-mode` `<on\|off>` | <Undocumented /> | ❌ | Turns fast mode on or off. It sets `fastMode` in the flag settings of the session, so it also works on Vertex (case `print.cli322.fast-vertex-flag`). See [Fast Mode](../models-and-providers/fast-mode.md#controls). |
+| `--fast-mode` `<on\|off>` | <Undocumented /> | ❌ | Turns fast mode on or off. It sets `fastMode` in the flag settings of the session, so it also works on Vertex.[^fast-vertex] See [Fast Mode](../models-and-providers/fast-mode.md#controls). |
 | `--include-unsupported-models` | <Undocumented /> | ❌ | Offers models that your account can use and this version does not know. |
 | `--autocompact` `<auto\|tokens>` | <Documented /> | ✅ | Sets the auto-compact window to `auto` or to 100k to 1M tokens. |
 
@@ -153,7 +153,7 @@ Flags that continue, fork, name, or rewind a session, or run it in a worktree or
 | `--resume-session-at` `<message id>` | <Undocumented /> | ❌ | Resumes only up to one message of the chain, with `--resume` in print mode. |
 | `--resume-drops-turn` `<message id>` | <Undocumented /> | ❌ | Names the turn that a truncating resume drops. The resume fails if more would go. |
 | `--reply-on-resume` | <Undocumented /> | ❌ | Asks the model to reply at once when the transcript ends with a user message. |
-| `--session-began-as-copy` `<value>` | <Undocumented /> | ❌ | Hidden. A server sends it. The value `1` marks a session that began as a copy of another. Then `--resume` in print mode does not continue the last turn of the session it was copied from, and does not run a tool call that a hook deferred there. Any other value is ignored. It means the same as `CLAUDE_CODE_SESSION_BEGAN_AS_COPY=1`, and either one is enough (the program). |
+| `--session-began-as-copy` `<value>` | <Undocumented /> | ❌ | Hidden. A server sends it. The value `1` marks a session that began as a copy of another. Then `--resume` in print mode does not continue the last turn of the session it was copied from, and does not run a tool call that a hook deferred there. Any other value is ignored. It means the same as `CLAUDE_CODE_SESSION_BEGAN_AS_COPY=1`, and either one is enough.[^copy-flag] |
 | `--rewind-files` `<user-message-id>` | <Undocumented /> | ❌ | Restores the files to the state at a user message and exits. It needs `--resume`. |
 | `--bg`, `--background` | <Documented /> | ✅ | Starts the session in the background and prints its ID. |
 | `-w, --worktree [name]` | <Documented /> | ✅ | Creates a new git worktree for the session. |
@@ -181,7 +181,7 @@ Flags that add agents, plugins, MCP servers, folders, and files.
 | `--watch-artifact` `<artifact>` | <Undocumented /> | ❌ | Watches a Claude artifact for new versions and comments. |
 | `--watch-artifact-no-autoreact` `<artifact>` | <Undocumented /> | ❌ | Watches an artifact and does not react to it by itself. |
 | `--messaging-socket-path` `<path>` | <Undocumented /> | ❌ | Sets the socket or pipe path of the cross-session messaging server. |
-| `--proactivity` `<level>` | <Undocumented /> | ❌ | Sets the level of proactivity. The bundle gives no help text. |
+| `--proactivity` `<level>` | <Undocumented /> | ❌ | Sets the level of proactivity. `--help` gives no text for it. |
 
 ### Teammate Flags
 
@@ -194,8 +194,8 @@ Flags that a lead agent passes to a teammate process it starts. You rarely set t
 | `--team-name` `<name>` | <Undocumented /> | ❌ | Sets the team name for teammate coordination. |
 | `--agent-color` `<color>` | <Undocumented /> | ❌ | Sets the UI color of a teammate. |
 | `--plan-mode-required` | <Undocumented /> | ❌ | Requires plan mode before the teammate implements anything. |
-| `--teammate-mode` `<mode>` | <Documented /> | ❌ | Sets the mode of a teammate. The bundle gives no help text. |
-| `--lead-verify-key` `<time.key>` | <Undocumented /> | ❌ | Gives a teammate the public key that checks the messages of its team lead. The lead passes it when it starts the teammate (the program, `chunk-9tj6jrqc.js:71266`, `chunk-b5mt6th9.js:29769`). |
+| `--teammate-mode` `<mode>` | <Documented /> | ❌ | Sets the mode of a teammate. `--help` gives no text for it. |
+| `--lead-verify-key` `<time.key>` | <Undocumented /> | ❌ | Gives a teammate the public key that checks the messages of its team lead. The lead passes it when it starts the teammate.[^lead-key] |
 | `--agent-type` `<type>` | <Undocumented /> | ❌ | Sets a custom agent type for a teammate. |
 | `--parent-session-id` `<id>` | <Undocumented /> | ❌ | Gives the parent session ID for analytics. |
 
@@ -207,7 +207,7 @@ Flags that connect to an IDE, the desktop app, or a deep link.
 | --- | --- | --- | --- |
 | `--ide` | <Documented /> | ✅ | Connects to the IDE at startup when exactly one valid IDE is open. |
 | `--desktop` | <Documented /> | ✅ | Opens the session in the Claude Desktop app instead of the terminal. |
-| `--chrome` | <Documented /> | ✅ | Turns on the Claude in Chrome integration. If the first-run setup cannot connect, the program tells you to restart with `claude --chrome --resume`, not to run `/chrome` (`chunk-1xmjf4e6.js:1397247`, `chunk-3k6k02vw.js:41832`). |
+| `--chrome` | <Documented /> | ✅ | Turns on the Claude in Chrome integration. If the first-run setup cannot connect, Claude Code tells you to restart with `claude --chrome --resume`, not to run `/chrome`.[^chrome-restart] |
 | `--no-chrome` | <Documented /> | ✅ | Turns off the Claude in Chrome integration. |
 | `--prefill` `<text>` | <Undocumented /> | ❌ | Fills the prompt box with text and does not send it. |
 | `--prefill-b64` `<b64>` | <Undocumented /> | ❌ | Fills the prompt box with base64url text, for deep links. |
@@ -242,10 +242,10 @@ Each row is a family of messages. The backticked text is the start that every me
 
 | Start of Message | Status | What It Means | Cases |
 | --- | --- | --- | --- |
-| Various | <Undocumented /> | **Deep links.** Claude Code refused a deep link. | The `cwd` is not an absolute path. The `cwd` holds `..`, control characters, or a network path. The plugin or marketplace value is not valid. The scheme or action is unknown. The launch command cannot be quoted safely. |
-| Various | <Undocumented /> | **Flag values.** Claude Code refused a command-line flag value or combination. | A flag needs another flag. For example, `--resume-session-at` needs `--resume`. A flag cannot be combined with a prompt. A flag needs a value in a range. `claude auth login --gateway-json` is used with `--console`, `--claudeai`, `--sso`, or `--email` (`--gateway-json cannot be used together with --console, --claudeai, --sso, or --email.`). The socket path of `--messaging-socket-path` is not a private local socket. A cloud session host (`ccr-session` or `ccr-gateway`) needs `--sdk-url` and checks its host, with `ccr-session host requires --sdk-url` or `ccr-session --sdk-url rejected: ...` (the program). A settings file in an `--add-dir` folder names another host (`an --add-dir settings file names another host`). |
-| `Error: auto mode could not check some actions Claude tried` | <Undocumented /> | A `-p` run in auto mode stopped with exit code 1. | The server check for an action was not available, so the actions did not run. Use another permission mode. Probe case `print.err319.auto-mode-print-refused` printed this text. |
-| Various | <Undocumented /> | **Claude in Chrome.** The Claude in Chrome connection failed. | The bridge is not connected. No extension connected. The browser is not paired. The socket directory or socket has the wrong owner or permissions. Claude Code could not find the browser helper. A targeted browser or tab did not take the message. Only the paired browser may answer. The socket closed before a reply came. Live run (case `live.err319`, `--chrome`, subscription token): the debug file said `[Claude in Chrome] Disabled: OAuth token has no scope accepted by /api/oauth/validate (needs user:profile, user:office, or user:ccr_inference; env-var and setup-token sessions default to user:inference only)`, and no Chrome tool was listed. Paired-extension messages are a hard limit: they need a browser extension and a login with those scopes. Earlier, with `--chrome` and a fake login, the program printed no Chrome line and gave no Chrome tool (case `print.err319.chrome-no-extension`). Without an accepted account scope it disables Chrome (`OAuth token has no scope accepted by /api/oauth/validate`), and a real browser extension is needed for the rest. |
+| Various | <Undocumented /> | Deep links. Claude Code refused a deep link. | The `cwd` is not an absolute path. The `cwd` holds `..`, control characters, or a network path. The plugin or marketplace value is not valid. The scheme or action is unknown. The launch command cannot be quoted safely. |
+| Various | <Undocumented /> | Flag values. Claude Code refused a command-line flag value or combination. | A flag needs another flag. For example, `--resume-session-at` needs `--resume`. A flag cannot be combined with a prompt. A flag needs a value in a range. `claude auth login --gateway-json` is used with `--console`, `--claudeai`, `--sso`, or `--email` (`--gateway-json cannot be used together with --console, --claudeai, --sso, or --email.`). The socket path of `--messaging-socket-path` is not a private local socket. A cloud session host (`ccr-session` or `ccr-gateway`) needs `--sdk-url` and checks its host, with `ccr-session host requires --sdk-url` or `ccr-session --sdk-url rejected: ...`.[^ccr-host] A settings file in an `--add-dir` folder names another host (`an --add-dir settings file names another host`). |
+| `Error: auto mode could not check some actions Claude tried` | <Undocumented /> | A `-p` run in auto mode stopped with exit code 1. | The server check for an action was not available, so the actions did not run. Use another permission mode. Claude Code prints this text.[^auto-refused] |
+| Various | <Undocumented /> | Claude in Chrome. The Claude in Chrome connection failed. | The bridge is not connected. No extension connected. The browser is not paired. The socket directory or socket has the wrong owner or permissions. Claude Code could not find the browser helper. A targeted browser or tab did not take the message. Only the paired browser may answer. The socket closed before a reply came. With a subscription token, the debug file says `[Claude in Chrome] Disabled: OAuth token has no scope accepted by /api/oauth/validate (needs user:profile, user:office, or user:ccr_inference; env-var and setup-token sessions default to user:inference only)`, and no Chrome tool is listed.[^chrome-live] Paired-extension messages are a hard limit: they need a browser extension and a login with those scopes. With `--chrome` and a fake login, Claude Code prints no Chrome line and gives no Chrome tool.[^chrome-fake] |
 
 ## Related Pages
 
@@ -253,3 +253,21 @@ Each row is a family of messages. The backticked text is the start that every me
 - [Subcommands](subcommands.md)
 - [Environment Variables](../env-vars/index.md) for variables that match many flags.
 - [Permission Modes](../permissions/modes.md) for the values of `--permission-mode`.
+
+## Sources
+
+[^no-row]: The program.
+[^managed-init]: The program, `chunk-9tj6jrqc.js:64543`.
+[^persisted-trust]: The program, `chunk-rqvvpwt0.js:8192` and `chunk-x4fdscgs.js:85193`. The program reads the flag from the arguments.
+[^setting-sources]: The program.
+[^allowed-warn]: The program, `chunk-97e8zgw1.js:4128` and `:4160`.
+[^disallowed-warn]: The program, `chunk-97e8zgw1.js:4128`.
+[^tools-warn]: The program, `chunk-97e8zgw1.js:4140`.
+[^fast-vertex]: Probe case `print.cli322.fast-vertex-flag`.
+[^copy-flag]: The program.
+[^lead-key]: The program, `chunk-9tj6jrqc.js:71266` and `chunk-b5mt6th9.js:29769`.
+[^chrome-restart]: The program, `chunk-1xmjf4e6.js:1397247` and `chunk-3k6k02vw.js:41832`.
+[^ccr-host]: The program.
+[^auto-refused]: Probe case `print.err319.auto-mode-print-refused`.
+[^chrome-live]: Live run, case `live.err319`, with `--chrome` and a subscription token.
+[^chrome-fake]: Probe case `print.err319.chrome-no-extension`.
