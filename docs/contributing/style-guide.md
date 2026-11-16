@@ -73,10 +73,10 @@ sidebar_position: 7
 
 A surface page has this order.
 
-1. A 2 to 4 sentence intro.
-2. Item tables, grouped by topic.
-3. An Example section with a real config or command.
-4. Related pages and sources.
+1. A 2 to 4 sentence intro: what the feature does, why you would change it, and how to turn it on.
+2. An Example section with a real config or command, and one or two sentences on what it does.
+3. Item tables, grouped by topic. Each row gives the default, the values, the scope, and the reason for a limit when a source states it.
+4. Related pages, then a Sources section with the footnotes.
 
 ### Item Table Template
 
@@ -259,9 +259,20 @@ Lines inside code fences are safe.
 
 Every fact needs a source.
 
-- Official docs: link to the page.
-- The program: write "Source: the program" and name the string, key, or type in inline code.
-- Probe results: link to the Probes page.
+- Official docs: link to the page in the sentence or in a footnote.
+- The program: put the evidence in a footnote, not in the sentence. Write "The program," and the module citation, such as `chunk-m33vdkhs.js:5402`.
+- Release notes: link the release page in a footnote, such as `[2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)`.
+- Probe results: name the probe case in a footnote, or link to the Probes page.
+
+Keep internal parts out of the sentence: module citations, minified names, server-side flag names, and probe case ids go in the footnote. Give each footnote a short name, such as `[^windows-backend]`, and put the definitions under a `## Sources` heading at the end of the page.
+
+```markdown
+`mxc` runs commands in a container.[^windows-backend]
+
+## Sources
+
+[^windows-backend]: The program, `chunk-m33vdkhs.js:5402`.
+```
 
 Leave out anything you could not check.
 
