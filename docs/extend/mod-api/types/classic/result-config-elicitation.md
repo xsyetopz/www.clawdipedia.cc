@@ -4,6 +4,8 @@ description: "Types of classic results, the base hook input, and the config, dir
 sidebar_position: 1
 ---
 
+These types describe the base hook input, the result of a classic hook, and the inputs of the config, directory, elicitation, file, instructions, and message events. Use `BaseHookInput` for the fields that every classic input has. Use `ClassicResultOf` for what a `classic.*` hook returns.
+
 ## Types with Fields
 
 Each type below has its own table of fields.
@@ -37,7 +39,7 @@ Each type below has its own table of fields.
 
 ### `ClassicEventOf`
 
-The classic (settings) hook events, one for each classic event name. `e` is the whole stdin input of the hook, with the base fields (`transcript_path`, `cwd`) included. Object. One key for each classic event. The chain is managed settings hooks, then hooks modules, then the other settings hooks. A managed block ends it above every module.
+The classic (settings) hook events, one for each classic event name. `e` is the whole stdin input of the hook, with the base fields (`transcript_path`, `cwd`) included. Object. One key for each classic event. The chain is managed settings hooks, then hooks modules, then the other settings hooks. A managed block ends it, so no module above it runs.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -92,7 +94,7 @@ The event-specific fields of ClassicResult that each classic event reads (its `h
 
 ### `ClassicResultOf`
 
-What the hook of each classic hook event returns and its `next(e)` resolves to: the own subset of ClassicResult for the event. [E in ClassicHookEvent as `classic.${E}`] ``. `classic.PreToolUse` keeps its `allow` / `ask` / `deny` result (PreToolUseResult).
+What the hook of each classic hook event returns and its `next(e)` resolves to: the subset of ClassicResult that the event reads. `classic.PreToolUse` keeps its `allow` / `ask` / `deny` result (PreToolUseResult).
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -100,7 +102,7 @@ What the hook of each classic hook event returns and its `next(e)` resolves to: 
 
 ### `ConfigChangeHookInput`
 
-Combines `ConfigChangeHookInput`, `BaseHookInput`.
+Fields of `ConfigChangeHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -110,7 +112,7 @@ Combines `ConfigChangeHookInput`, `BaseHookInput`.
 
 ### `CwdChangedHookInput`
 
-Combines `CwdChangedHookInput`, `BaseHookInput`.
+Fields of `CwdChangedHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -120,7 +122,7 @@ Combines `CwdChangedHookInput`, `BaseHookInput`.
 
 ### `DirectoryAddedHookInput`
 
-Combines `DirectoryAddedHookInput`, `BaseHookInput`.
+Fields of `DirectoryAddedHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -130,7 +132,7 @@ Combines `DirectoryAddedHookInput`, `BaseHookInput`.
 
 ### `ElicitationHookInput`
 
-Hook input for the Elicitation event. Fired when an MCP server requests user input. Hooks can auto-respond (accept/decline) instead of displaying the dialog. Combines `ElicitationHookInput`, `BaseHookInput`.
+Hook input for the Elicitation event. Fires when an MCP server requests user input. Hooks can auto-respond (accept/decline) instead of displaying the dialog. Fields of `ElicitationHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -144,7 +146,7 @@ Hook input for the Elicitation event. Fired when an MCP server requests user inp
 
 ### `ElicitationResultHookInput`
 
-Hook input for the ElicitationResult event. Fired after the user responds to an MCP elicitation. Hooks can observe or override the response before the engine sends it to the server. Combines `ElicitationResultHookInput`, `BaseHookInput`.
+Hook input for the ElicitationResult event. Fires after the user responds to an MCP elicitation. Hooks can observe or override the response before the engine sends it to the server. Fields of `ElicitationResultHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -157,7 +159,7 @@ Hook input for the ElicitationResult event. Fired after the user responds to an 
 
 ### `FileChangedHookInput`
 
-Combines `FileChangedHookInput`, `BaseHookInput`.
+Fields of `FileChangedHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -167,7 +169,7 @@ Combines `FileChangedHookInput`, `BaseHookInput`.
 
 ### `InstructionsLoadedHookInput`
 
-Combines `InstructionsLoadedHookInput`, `BaseHookInput`.
+Fields of `InstructionsLoadedHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -181,7 +183,7 @@ Combines `InstructionsLoadedHookInput`, `BaseHookInput`.
 
 ### `MessageDisplayHookInput`
 
-Hook input for the MessageDisplay event. Fired with each batch of newly completed lines while an assistant message streams. Display-only: the stored message and what the model sees are untouched. Combines `MessageDisplayHookInput`, `BaseHookInput`.
+Hook input for the MessageDisplay event. Fires with each batch of newly completed lines while an assistant message streams. Display-only: the stored message and what the model sees are untouched. Fields of `MessageDisplayHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |

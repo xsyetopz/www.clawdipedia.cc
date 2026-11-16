@@ -4,13 +4,15 @@ description: "Types of the notification, permission, compact, model switch, tool
 sidebar_position: 2
 ---
 
+These types describe the input of the notification, permission, compact, model switch, and tool batch events, with the permission update types. Use them to type the `e` of a `classic.*` hook for one of these events. Each input has the fields of `BaseHookInput`, so see [Classic Result, Config, and Elicitation Types](result-config-elicitation.md) for those.
+
 ## Types with Fields
 
 Each type below has its own table of fields.
 
 ### `NotificationHookInput`
 
-Combines `NotificationHookInput`, `BaseHookInput`.
+Fields of `NotificationHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -21,7 +23,7 @@ Combines `NotificationHookInput`, `BaseHookInput`.
 
 ### `PermissionDeniedHookInput`
 
-Combines `PermissionDeniedHookInput`, `BaseHookInput`.
+Fields of `PermissionDeniedHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -47,7 +49,7 @@ The `decision` of a `classic.PermissionRequest` answer, as the `hookSpecificOutp
 
 ### `PermissionRequestHookInput`
 
-Combines `PermissionRequestHookInput`, `BaseHookInput`.
+Fields of `PermissionRequestHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -92,7 +94,7 @@ Combines `PermissionRequestHookInput`, `BaseHookInput`.
 
 ### `PostCompactHookInput`
 
-Combines `PostCompactHookInput`, `BaseHookInput`.
+Fields of `PostCompactHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -102,7 +104,7 @@ Combines `PostCompactHookInput`, `BaseHookInput`.
 
 ### `PostModelSwitchHookInput`
 
-Combines `PostModelSwitchHookInput`, `BaseHookInput`.
+Fields of `PostModelSwitchHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -119,7 +121,7 @@ Combines `PostModelSwitchHookInput`, `BaseHookInput`.
 
 ### `PostToolBatchHookInput`
 
-Hook input for `PostToolBatch`. Fires once after every tool call in a batch resolved, before the next model request. `PostToolUse` fires for each tool. Combines `PostToolBatchHookInput`, `BaseHookInput`.
+Hook input for `PostToolBatch`. Fires once after every tool call in a batch resolves, before the next model request. `PostToolUse` fires for each tool. Fields of `PostToolBatchHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -137,7 +139,7 @@ Hook input for `PostToolBatch`. Fires once after every tool call in a batch reso
 
 ### `PostToolUseFailureHookInput`
 
-Combines `PostToolUseFailureHookInput`, `BaseHookInput`.
+Fields of `PostToolUseFailureHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -152,7 +154,7 @@ Combines `PostToolUseFailureHookInput`, `BaseHookInput`.
 
 ### `PostToolUseHookInput`
 
-Combines `PostToolUseHookInput`, `BaseHookInput`.
+Fields of `PostToolUseHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -166,7 +168,7 @@ Combines `PostToolUseHookInput`, `BaseHookInput`.
 
 ### `PreCompactHookInput`
 
-Combines `PreCompactHookInput`, `BaseHookInput`.
+Fields of `PreCompactHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -176,7 +178,7 @@ Combines `PreCompactHookInput`, `BaseHookInput`.
 
 ### `PreModelSwitchHookInput`
 
-Combines `PreModelSwitchHookInput`, `BaseHookInput`.
+Fields of `PreModelSwitchHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |

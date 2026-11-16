@@ -4,6 +4,8 @@ description: "Types of the pre tool use, session, setup, stop, subagent, task, t
 sidebar_position: 3
 ---
 
+These types describe the input of the pre tool use, session, setup, stop, subagent, task, teammate, prompt, and worktree events, with the `PreToolUse` result. Use them to type the `e` of a `classic.*` hook for one of these events. `PreToolUseResult` lets a hook allow, ask, or deny a tool call.
+
 ## Types with Fields
 
 Each type below has its own table of fields.
@@ -29,7 +31,7 @@ The decision of a `classic.PreToolUse` result: `allow`, `ask`, `deny`, or none.
 
 ### `PreToolUseHookInput`
 
-Combines `PreToolUseHookInput`, `BaseHookInput`.
+Fields of `PreToolUseHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -41,7 +43,7 @@ Combines `PreToolUseHookInput`, `BaseHookInput`.
 
 ### `PreToolUseResult`
 
-What a `classic.PreToolUse` hook returns: one of `allow`, `ask`, `deny`, or none of them. None passes the call on to the normal permission flow. Intersection of `PreToolUseResult` and `PreToolUseDecision`. The event fires inside `tool.call`, beneath the `tool.call` hook of every plugin.
+What a `classic.PreToolUse` hook returns: one of `allow`, `ask`, `deny`, or none of them. None passes the call on to the normal permission flow. The type is the intersection of `PreToolUseResult` and `PreToolUseDecision`. The event fires inside `tool.call`, beneath the `tool.call` hook of every plugin.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -50,7 +52,7 @@ What a `classic.PreToolUse` hook returns: one of `allow`, `ask`, `deny`, or none
 
 ### `SessionEndHookInput`
 
-Combines `SessionEndHookInput`, `BaseHookInput`.
+Fields of `SessionEndHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -59,7 +61,7 @@ Combines `SessionEndHookInput`, `BaseHookInput`.
 
 ### `SessionStartHookInput`
 
-Combines `SessionStartHookInput`, `BaseHookInput`.
+Fields of `SessionStartHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -75,7 +77,7 @@ Combines `SessionStartHookInput`, `BaseHookInput`.
 
 ### `SetupHookInput`
 
-Combines `SetupHookInput`, `BaseHookInput`.
+Fields of `SetupHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -84,18 +86,18 @@ Combines `SetupHookInput`, `BaseHookInput`.
 
 ### `StopFailureHookInput`
 
-Combines `StopFailureHookInput`, `BaseHookInput`.
+Fields of `StopFailureHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `hook_event_name` | <Documented /> | The event name: always `StopFailure`. | Type: `'StopFailure'`. |
 | `error` | <Documented /> | The error that ended the turn. | Type: `SDKAssistantMessageError`. |
 | `error_details` | <Documented /> | More detail about the error. | Type: `string`. Optional. |
-| `last_assistant_message` | <Documented /> | The rendered API error text that the conversation displays, such as `API Error: Rate limit reached`. It is not the own words of Claude. | Type: `string`. Optional. See [StopFailure input](https://code.claude.com/docs/en/hooks#stopfailure-input). |
+| `last_assistant_message` | <Documented /> | The rendered API error text that the conversation displays, such as `API Error: Rate limit reached`. It is not text that Claude wrote. | Type: `string`. Optional. See [StopFailure input](https://code.claude.com/docs/en/hooks#stopfailure-input). |
 
 ### `StopHookInput`
 
-Combines `StopHookInput`, `BaseHookInput`.
+Fields of `StopHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -107,7 +109,7 @@ Combines `StopHookInput`, `BaseHookInput`.
 
 ### `SubagentStartHookInput`
 
-Combines `SubagentStartHookInput`, `BaseHookInput`.
+Fields of `SubagentStartHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -117,7 +119,7 @@ Combines `SubagentStartHookInput`, `BaseHookInput`.
 
 ### `SubagentStopHookInput`
 
-Combines `SubagentStopHookInput`, `BaseHookInput`.
+Fields of `SubagentStopHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -132,7 +134,7 @@ Combines `SubagentStopHookInput`, `BaseHookInput`.
 
 ### `TaskCompletedHookInput`
 
-Combines `TaskCompletedHookInput`, `BaseHookInput`.
+Fields of `TaskCompletedHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -145,7 +147,7 @@ Combines `TaskCompletedHookInput`, `BaseHookInput`.
 
 ### `TaskCreatedHookInput`
 
-Combines `TaskCreatedHookInput`, `BaseHookInput`.
+Fields of `TaskCreatedHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -158,7 +160,7 @@ Combines `TaskCreatedHookInput`, `BaseHookInput`.
 
 ### `TeammateIdleHookInput`
 
-Combines `TeammateIdleHookInput`, `BaseHookInput`.
+Fields of `TeammateIdleHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -168,7 +170,7 @@ Combines `TeammateIdleHookInput`, `BaseHookInput`.
 
 ### `UserPromptExpansionHookInput`
 
-Combines `UserPromptExpansionHookInput`, `BaseHookInput`.
+Fields of `UserPromptExpansionHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -181,7 +183,7 @@ Combines `UserPromptExpansionHookInput`, `BaseHookInput`.
 
 ### `UserPromptSubmitHookInput`
 
-Combines `UserPromptSubmitHookInput`, `BaseHookInput`.
+Fields of `UserPromptSubmitHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -192,7 +194,7 @@ Combines `UserPromptSubmitHookInput`, `BaseHookInput`.
 
 ### `WorktreeCreateHookInput`
 
-Combines `WorktreeCreateHookInput`, `BaseHookInput`.
+Fields of `WorktreeCreateHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -201,7 +203,7 @@ Combines `WorktreeCreateHookInput`, `BaseHookInput`.
 
 ### `WorktreeRemoveHookInput`
 
-Combines `WorktreeRemoveHookInput`, `BaseHookInput`.
+Fields of `WorktreeRemoveHookInput` and `BaseHookInput`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |

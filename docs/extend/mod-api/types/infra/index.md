@@ -4,8 +4,7 @@ description: "Types behind $.fs, $.store, $.state, $.clock, $.http, $.process, $
 sidebar_position: 5
 ---
 
-These are the types behind `$.fs`, `$.store`, `$.state`, `$.clock`, `$.http`, `$.process`, `$.env`, and `$.settings`.
-They describe files, stored values, timers, web requests, child processes, and settings.
+These types describe the calls on `$.fs`, `$.store`, `$.state`, `$.clock`, `$.http`, `$.process`, `$.env`, and `$.settings`. They cover files, stored values, timers, web requests, child processes, and settings. Use them to type the input and result of these calls in your mod.
 
 ## Pages
 
@@ -35,7 +34,7 @@ These types are aliases, unions, or plain shapes. Each row gives its use and its
 | `MemberOfFunction` | <Documented /> | `memberOf(family, e)`: the member of a family for the instance being drawn, keyed by `e.requestId`. For an atom over a family, it is the atom of that member. | Alias of the call forms of `memberOf`. It picks one member of a state family for a render instance. Example: `read($, memberOf(isOpen, e))`. |
 | `ReadFunction` | <Documented /> | `read($, source)`: the value of an atom (its initial while absent), of a derived value, or under a plain reference. It makes one `$.state.get` for each value. | Alias of the call forms of `read`. Called while a `ui.render` hook draws, it subscribes the drawing. Example: `const n = await read($, count)`. |
 | `Settings` | <Documented /> | What `$.settings.read` answers: an object keyed as a settings.json is (`permissions`, `env`, `hooks`, `model`, `enabledPlugins`, ...). | Alias of `Readonly<Record<string, unknown>>`. Each key is as the settings docs describe it. A snapshot in plain data: a write to it changes nothing. Since 2.1.304 a `settings.read` hook gets each settings layer (`layers`, each with `settings`) and rewrites this merged value, so a managed mod can make an organization's setting a ceiling, including `cleanupPeriodDays`. Used by `$.settings.read`, `settings.read`. |
-| `SettingsSource` | <Documented /> | One source of settings by the name a plugin gives it, lowest precedence first. The own name in the engine is the same word with `Settings` appended. | Alias of `'user' \| 'project' \| 'local' \| 'flag' \| 'policy'`. They match `~/.claude/settings.json`, `.claude/settings.json`, `.claude/settings.local.json`, `--settings`, and managed settings. |
+| `SettingsSource` | <Documented /> | One source of settings by the name a plugin gives it, lowest precedence first. The engine name is the same word with `Settings` appended. | Alias of `'user' \| 'project' \| 'local' \| 'flag' \| 'policy'`. They match `~/.claude/settings.json`, `.claude/settings.json`, `.claude/settings.local.json`, `--settings`, and managed settings. |
 | `StateDollar` | <Documented /> | What `read` and `update` of the state library take of `$`: its `state` noun, on which they make the calls that a hook would make itself. | Alias of `Pick<CoreEngineInterface, 'state'>`. |
 | `StateGetEvent` | <Documented /> | `e` of `state.get`: one variant for each value that a contract declares, so a matcher on `plugin` and `key` narrows it. While none does, it is the untyped address. | Alias of `[DeclaredPair] extends [never] ? StateAddress : DeclaredEvents<DeclaredPair>['get']`. Example: `on("state.get", { plugin: "swarm" }, ($, e, next) => next(e))`. Used by `state.get`. |
 | `StateRef` | <Documented /> | A typed reference to one named value: the owning plugin and the key, both literals, and for a StateFamily key the `id` of the member. | Alias of the reference to a state value: `plugin` and `key`, plus `id` for a family. Write it once as a constant, with `plugin` and `key` as literals in the source. |

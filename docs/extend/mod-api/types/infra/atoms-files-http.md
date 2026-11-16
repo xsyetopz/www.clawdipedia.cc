@@ -4,13 +4,15 @@ description: "Types of atoms, the clock wait, the env result, file entries and o
 sidebar_position: 1
 ---
 
+These types describe atoms, the clock wait, the `$.env.set` result, the `$.fs` file types, the `$.http` types, and JSON values. Use them to type the input and result of these calls in your mod.
+
 ## Types with Fields
 
 Each type below has its own table of fields.
 
 ### `Atom`
 
-A named value with its initial, as `atom(ref, initial)` makes it. A read is never `undefined`: while nothing is written, it reads as the initial. Object with fields `ref`, `initial`, `shape?`. Plain frozen data, the own data of the plugin: pass it to `read`, `update`, `derive` and `memberOf`. The engine knows nothing of it.
+A named value with its initial, as `atom(ref, initial)` makes it. A read is never `undefined`: while nothing is written, it reads as the initial. Object with fields `ref`, `initial`, `shape?`. Plain frozen data, the data of the plugin: pass it to `read`, `update`, `derive` and `memberOf`. The engine knows nothing of it.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -36,7 +38,7 @@ The argument of the `$.clock` waits (`sleep`, `after`, `every`): how long, in mi
 
 ### `Derived`
 
-A value computed from other values, as `derive(sources, fn)` makes it. `read` runs `fn` again only when the version of a source moved. Object with fields `sources`, `compute`. It holds nothing on the host: the cache is the own cache of the plugin. A reload of its code loses the cache, and the next read rebuilds it.
+A value computed from other values, as `derive(sources, fn)` makes it. `read` runs `fn` again only when the version of a source moved. Object with fields `sources`, `compute`. It holds nothing on the host: the cache belongs to the plugin. A reload of its code loses the cache, and the next read rebuilds it.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -49,7 +51,7 @@ What `$.env.set` resolves to and what the `{ value }` of an `env.set` hook holds
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `deny` | <Documented /> | Absent when the write was made. Otherwise it says why not, in one line. | Type: `string`. Optional. In a session that takes settings from its organization, the engine holds a write by a plugin that is not built in. The own `{ deny }` of a hook rejects the caller. |
+| `deny` | <Documented /> | Absent when the write was made. Otherwise it says why not, in one line. | Type: `string`. Optional. In a session that takes settings from its organization, the engine holds a write by a plugin that is not built in. The `{ deny }` result of a hook rejects the caller. |
 
 ### `FsAncestor`
 

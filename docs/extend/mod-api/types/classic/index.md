@@ -4,10 +4,7 @@ description: "Input and result types of the classic.* events, which mirror the s
 sidebar_position: 2
 ---
 
-These are the input and result types of the `classic.*` events.
-Each input type matches the data that a settings hook of the same name receives on `stdin`.
-The result types match the JSON that a settings hook prints.
-Use them when you write a mod hook for an event such as `classic.Stop`.
+These types describe the input and result of each `classic.*` event. Each input type matches the data that a settings hook of the same name receives on `stdin`. Each result type matches the JSON that a settings hook prints. Use them when you write a mod hook for an event such as `classic.Stop`, so your editor checks the fields for you.
 
 ## Pages
 
@@ -27,8 +24,9 @@ on("classic.Stop", ($, e, next) => next(e));
 
 ## How It Works
 
-Every settings hook event has a twin event under `classic`. The twin fires wherever the engine runs the classic hook, even with no settings hook configured.
-The chain runs managed settings hooks first, then hooks modules, then the other settings hooks. A managed block ends the chain above every module.
+Every settings hook event has a twin event under `classic`. The twin fires wherever the engine runs the classic hook, even when you configure no settings hook.
+
+The chain runs managed settings hooks first, then hooks modules, then the other settings hooks. A managed block ends the chain, so no module above it runs.
 
 ```mermaid
 flowchart TD
@@ -44,7 +42,7 @@ These types are aliases, unions, or plain shapes. Each row gives its use and its
 
 | Type | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
-| `ClassicEventName` | <Documented /> | The name of a classic hook event as a function-hooks event: the own name of the settings hook under `classic` (`classic.Stop`, `classic.PreToolUse`). | Alias of `` `classic.${ClassicHookEvent}` ``. Each fires wherever the engine runs the classic hook, even when no settings hook is configured. |
+| `ClassicEventName` | <Documented /> | The name of a classic hook event as a function-hooks event: the name of the settings hook under `classic` (`classic.Stop`, `classic.PreToolUse`). | Alias of `` `classic.${ClassicHookEvent}` ``. Each fires wherever the engine runs the classic hook, even when no settings hook is configured. |
 | `ClassicHookEvent` | <Documented /> | The name of a classic hook event: `PreToolUse`, `Stop`, and the rest. | Alias of `HookInput['hook_event_name']`. |
 | `ClassicHookInputs` | <Documented /> | What a classic hook receives on stdin for each event, by event name: the Agent SDK's `<Event>HookInput`. | Alias of `{ [I in HookInput as I['hook_event_name']]: I, }`. |
 | `ExitReason` | <Documented /> | Why a session ended, as `SessionEndHookInput.reason` reports it. | Alias of `'clear' \| 'resume' \| 'logout' \| 'prompt_input_exit' \| 'other'`. |
@@ -52,7 +50,7 @@ These types are aliases, unions, or plain shapes. Each row gives its use and its
 | `PermissionBehavior` | <Documented /> | What a permission rule does: allow, deny, or ask. | Alias of `'allow' \| 'deny' \| 'ask'`. |
 | `PermissionMode` | <Documented /> | How tool runs are handled: `default`, `acceptEdits`, `bypassPermissions`, `plan`, `dontAsk`, or `auto`. `bypassPermissions` needs `allowDangerouslySkipPermissions`. | Alias of `'default' \| 'acceptEdits' \| 'bypassPermissions' \| 'plan' \| 'dontAsk' \| 'auto'`. |
 | `PermissionUpdateDestination` | <Documented /> | Where a permission update is saved: user, project, or local settings, the session only, or the CLI argument. | Alias of `'userSettings' \| 'projectSettings' \| 'localSettings' \| 'session' \| 'cliArg'`. |
-| `PermissionUpdates` | <Documented /> | The permission rules that a PermissionRequest allow may add. It is the shape of the own `permission_suggestions` of the request (the PermissionUpdate list of the SDK). | Alias of `NonNullable<ClassicHookInputs['PermissionRequest']['permission_suggestions']>`. |
+| `PermissionUpdates` | <Documented /> | The permission rules that a PermissionRequest allow may add. It is the shape of the `permission_suggestions` field of the request (the PermissionUpdate list of the SDK). | Alias of `NonNullable<ClassicHookInputs['PermissionRequest']['permission_suggestions']>`. |
 | `SDKAssistantMessageError` | <Documented /> | The error that a failed assistant turn can carry, as `StopFailureHookInput.error` reports it. | Alias of 13 error names, from `authentication_failed` and `billing_error` to `rate_limit`, `overloaded`, `model_not_found`, `server_error`, `max_output_tokens`, and `unknown`. |
 
 ## Related Pages

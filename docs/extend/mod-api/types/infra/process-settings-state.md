@@ -4,6 +4,8 @@ description: "Types of process runs and spawns, settings reads, sleep options, s
 sidebar_position: 2
 ---
 
+These types describe the `$.process` calls, settings reads, sleep options, the `$.state` calls, and timers. Use them to type the input and result of these calls in your mod.
+
 ## Types with Fields
 
 Each type below has its own table of fields.
@@ -15,7 +17,7 @@ Options of `$.process.run`. Object with fields `cwd?`, `env?`, `stdin?`, `timeou
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `cwd` | <Documented /> | The working directory of the child, relative to the working directory of the session, or absolute. If absent, it is the working directory of the session. | Type: `string`. Optional. |
-| `env` | <Documented /> | Variables set over the own environment of the host process. | Type: `Record<string, string>`. Optional. |
+| `env` | <Documented /> | Variables set over the environment of the host process. | Type: `Record<string, string>`. Optional. |
 | `stdin` | <Documented /> | Text written to the standard input of the child, then closed. | Type: `string`. Optional. |
 | `timeoutMs` | <Documented /> | How long the child may run before the engine kills it and the call rejects, in milliseconds. It is 30 seconds when absent, and ten minutes at most. | Type: `number`. Optional. |
 
@@ -26,7 +28,7 @@ What `$.process.run` resolves with once the child has exited. Object with fields
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `exitCode` | <Documented /> | The exit status of the child. A child that a signal ended reads as 1. | Type: `number`. |
-| `stdout` | <Documented /> | What the child wrote to standard output, as text: its first 4194304 bytes (4 MiB). The engine reads and drops the rest (`isStdoutTruncated`). | Type: `string`. The limit counts bytes, not characters, and is the own limit of standard output: standard error has the same limit again. A cut inside a multi-byte character drops that character. |
+| `stdout` | <Documented /> | What the child wrote to standard output, as text: its first 4194304 bytes (4 MiB). The engine reads and drops the rest (`isStdoutTruncated`). | Type: `string`. The limit counts bytes, not characters, and applies to standard output alone: standard error has the same limit again. A cut inside a multi-byte character drops that character. |
 | `stderr` | <Documented /> | What the child wrote to standard error, as text: its first 4194304 bytes (4 MiB). The engine reads and drops the rest (`isStderrTruncated`). | Type: `string`. |
 | `isStdoutTruncated` | <Documented /> | True when the child wrote more than 4194304 bytes to standard output and `stdout` is only the first of them. False when `stdout` is whole. | Type: `boolean`. |
 | `isStderrTruncated` | <Documented /> | True when the child wrote more than 4194304 bytes to standard error and `stderr` is only the first of them. False when `stderr` is whole. | Type: `boolean`. |
@@ -48,7 +50,7 @@ The argument of `$.process.spawn(request)`, and the `e` that its hooks see: the 
 | --- | --- | --- | --- |
 | `argv` | <Documented /> | The command and its arguments, with `argv[0]` the executable. | Type: `readonly string[]`. |
 | `cwd` | <Documented /> | The working directory of the child, relative to the working directory of the session, or absolute. If absent, it is the working directory of the session. | Type: `string`. Optional. |
-| `env` | <Documented /> | Variables set over the own environment of the host process. | Type: `Record<string, string>`. Optional. |
+| `env` | <Documented /> | Variables set over the environment of the host process. | Type: `Record<string, string>`. Optional. |
 | `input` | <Documented /> | Text written to the standard input of the child, which is then closed. If absent, standard input is closed from the start. | Type: `string`. Optional. A string today. A later form may take the text in pieces. |
 
 ### `ProcessSpawnResult`
@@ -58,7 +60,7 @@ How a spawned child ended, as the stream of `$.process.spawn` returns it once ev
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `code` | <Documented /> | The exit status of the child. It is null when a signal ended it. | Type: `number \| null`. |
-| `signal` | <Documented /> | What ended the child from outside (`SIGTERM`), It is null when the child exited on its own. On Windows a killed child reads as an exit code, and this is null. | Type: `string \| null`. |
+| `signal` | <Documented /> | What ended the child from outside (`SIGTERM`), It is null when the child exited by itself. On Windows a killed child reads as an exit code, and this is null. | Type: `string \| null`. |
 
 ### `SettingsReadArgs`
 
@@ -122,7 +124,7 @@ The options of `$.state.set`: `ifVersion` makes the write conditional on the val
 
 ### `StateSetResult`
 
-What `$.state.set` answers: whether the write landed, and the version the value stands at now. A landed write has its own version. A missed write has the current version. Object with fields `isSet` and `version`. `isSet` is false only for a write given `ifVersion` that another write beat. Nothing changes then, and `$.state.get` reads what stands.
+What `$.state.set` answers: whether the write landed, and the version the value stands at now. A landed write has a new version. A missed write has the current version. Object with fields `isSet` and `version`. `isSet` is false only for a write given `ifVersion` that another write beat. Nothing changes then, and `$.state.get` reads what stands.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |

@@ -4,11 +4,9 @@ description: A map of the type reference pages for the Mod API, from classic eve
 sidebar_position: 1
 ---
 
-The Mod API ships a type file that your editor reads. These pages follow the copy inside the 2.1.323 program.
-This site publishes that copy unchanged as `https://clawdipedia.cc/schemas/claude-code.d.ts`.
-These pages list every type in that file that you can use, grouped by topic.
-Each type is a row or a field row, with its use and its shape.
-Import the types with `import type { ... } from 'claude-code'`. The import is empty at run time.
+The Mod API ships a type file that your editor reads. These pages list every type in that file that you can use, grouped by topic. Each type is a row or a field row, with its use and its shape.
+
+Import the types with `import type { ... } from 'claude-code'`. The import is empty at run time, so it adds no code to your mod. The pages follow the copy inside the `2.1.323` program.[^copy] This site publishes that copy unchanged as `https://clawdipedia.cc/schemas/claude-code.d.ts`.
 
 ## Pages
 
@@ -44,3 +42,7 @@ The type file is the full list of fields for this release. Build on the fields i
 ## Related Pages
 
 - [Mod API Overview](../index.md)
+
+## Sources
+
+[^copy]: The program, the type file inside the `2.1.323` build.

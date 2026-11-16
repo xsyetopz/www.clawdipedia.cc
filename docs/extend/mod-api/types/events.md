@@ -4,13 +4,9 @@ description: "Types that map an event name to its input, its result, and its cal
 sidebar_position: 3
 ---
 
-These types map an event name to its input, its result, and its call on `$`.
-Your editor uses them to know the shape of `e` and `next` for each event.
-For example, `$.fs.read(...)` is both a call and the event `fs.read`, so a hook can answer it.
+These types map an event name to its input, its result, and its call on `$`. Your editor uses them to know the shape of `e` and `next` for each event. For example, `$.fs.read(...)` is both a call and the event `fs.read`, so a hook can answer it.
 
-A plugin adds its own nouns by declaration merging into `EngineInterface`.
-
-Source: the Mod API type file of the 2.1.322 program (`schemas/claude-code.d.ts`). Official page: [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference).
+A plugin can add its own nouns by declaration merging into `EngineInterface`. The shapes follow the Mod API type file of the `2.1.322` program.[^type-file] See [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference) for the official page.
 
 ## Example
 
@@ -23,7 +19,7 @@ type ReadInput = EventOf["fs.read"];
 type ReadResult = EventResult<"fs.read">;
 ```
 
-To add your own noun, merge into `EngineInterface`:
+To add a noun, merge it into `EngineInterface`:
 
 ```ts title="types.d.ts"
 declare module "claude-code" {
@@ -33,7 +29,7 @@ declare module "claude-code" {
 }
 ```
 
-After this, `voice.say` is also an event, and a hook can use `on('voice.say', ...)`.
+Now `voice.say` is also an event, and a hook can use `on('voice.say', ...)`.
 
 ## How It Works
 
@@ -57,7 +53,7 @@ These types are aliases, unions, or plain shapes. Each row gives its use and its
 | `AnyKeyOf` | <Documented /> | Every key of every variant, index signatures included. | Alias of `I extends unknown ? keyof I : never`. |
 | `Chunk` | <Documented /> | What a hook on streaming event `N` yields. It is also what its `next(e)` yields to the hook (see ChunkOf, by name). | Generic alias of `ChunkOf[N]`. |
 | `ChunkOf` | <Documented /> | The chunk type of each streaming event, by name. It is what the stream of the event yields. | Object with fields `turn.step`, `process.spawn`. |
-| `ChunkRef` | <Documented /> | What every `turn.step` chunk may carry. It is the handle of the engine on the item of its own stream that the engine read the chunk from. A chunk that a hook made has no handle. | Object with the field `ref?`. A hook that passes a chunk on keeps the handle. A hook that spreads a chunk also keeps it. A chunk that a hook builds afresh has none. |
+| `ChunkRef` | <Documented /> | What every `turn.step` chunk may carry. It is the handle of the engine on the item of the stream that the engine read the chunk from. A chunk that a hook made has no handle. | Object with the field `ref?`. A hook that passes a chunk on keeps the handle. A hook that spreads a chunk also keeps it. A chunk that a hook builds afresh has none. |
 | `CoreEventName` | <Documented /> | The name of an event that the engine defines itself (a key of CoreEventOf). EventName adds the events of the declared plugin nouns. | Alias of `keyof CoreEventOf`. |
 | `CoreEventOf` | <Documented /> | The argument of each event that the engine defines itself. It covers the events of its call sites (EngineEventOf), the events of the classic hooks (ClassicEventOf), and the calls on `$`. | Alias of `EngineEventOf & ClassicEventOf & OpEventOf`. |
 | `DeclaredEvents` | <Documented /> | The state events of each declared value, in a union of `[plugin, key]` pairs with one variant for each pair (it distributes). So a matcher narrows `e`. | Alias of `Pair extends readonly [ infer P extends keyof PluginState & string, infer K ] ? K extends keyof PluginState[P] & string ? DeclaredEventsOf<P, K> : never : never`. |
@@ -66,7 +62,7 @@ These types are aliases, unions, or plain shapes. Each row gives its use and its
 | `DeclaredStateChange` | <Documented /> | What a `state.set` on one declared value carries beside its reference. It carries the value to write and the value that stood there, of the declared type. | Object with fields `value`, `previous`, `ifVersion?`. |
 | `EngineEventOf` | <Documented /> | The events that the engine raises at its call sites, and `engine.create`. The events of the classic settings hooks are in ClassicEventOf. | Object. One key for each event that hooks can handle. The engine skips a hook that fails, and the next hook runs. So a guard needs a `.catch` to fail closed. |
 | `EngineResultOf` | <Documented /> | The results of the events of the engine. | Object. One key for each event. Its value is the result type that a hook for the event may return. |
-| `EventCalls` | <Documented /> | The engine's own events as calls on `$`, with one signature each. `$.<noun>.<event>(input)` resolves to its result, or to its stream. | Object with one key for each noun that raises events (`tool`, `command`, `config`, `prompt`, and more). A plugin's call runs the same chain, and the chain skips the calling hook. 10 calls use it, such as `$.session.compact`. |
+| `EventCalls` | <Documented /> | The events of the engine as calls on `$`, with one signature each. `$.<noun>.<event>(input)` resolves to its result, or to its stream. | Object with one key for each noun that raises events (`tool`, `command`, `config`, `prompt`, and more). A plugin's call runs the same chain, and the chain skips the calling hook. 10 calls use it, such as `$.session.compact`. |
 | `EventName` | <Documented /> | The name of an event: a key of EventOf. It covers the engine's own events (CoreEventName) and the events of the declared plugin nouns (NounEventName). | Alias of `keyof EventOf`. |
 | `EventOf` | <Documented /> | The argument of each event, by event name. A hook receives it as `e`, and the call on `$` takes it. It is plain data, frozen to every depth. | Alias of `CoreEventOf & NounEventOf`. The engine's own events plus the methods of the nouns that plugins add. |
 | `EventResult` | <Documented /> | The result of event `N`: what its hooks return and what their `next(e)` resolves to. | Generic alias of `ResultOf[N]`. |
@@ -97,3 +93,7 @@ These types are aliases, unions, or plain shapes. Each row gives its use and its
 - [Mod API Overview](../index.md)
 - [Hooks and the Hook Chain](../events/hooks.md)
 - [Mod API Types](index.md)
+
+## Sources
+
+[^type-file]: The program, the Mod API type file of the `2.1.322` build (`schemas/claude-code.d.ts`).

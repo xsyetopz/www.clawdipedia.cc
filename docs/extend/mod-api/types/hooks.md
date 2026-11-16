@@ -4,9 +4,7 @@ description: "Types that describe how on, next, matchers, and traces are typed."
 sidebar_position: 4
 ---
 
-These types give the shapes of `on`, `next`, matchers, and traces.
-A mod author rarely writes them by hand, because your editor fills them in from the type files in `.claude-plugin/types/`.
-They help when a type error is hard to read.
+These types give the shapes of `on`, `next`, matchers, and traces. You rarely write them by hand, because your editor fills them in from the type files in `.claude-plugin/types/`. Read them when a type error is hard to understand.
 
 ## Example
 
@@ -66,14 +64,14 @@ These types are aliases, unions, or plain shapes. Each row gives its use and its
 | `MatcherValueAcross` | <Documented /> | The type of key `K` across the variants of `I` that declare it, read variant by variant. MatcherValueOf reads this for a key as wide as `symbol`. | Alias of `I extends unknown ? K extends KnownKeys<I> ? I[K & keyof I] : never : never`. |
 | `MatcherValueOf` | <Documented /> | The type of key `K` across the variants of `I` that declare it. It is one read of their table by key (MatcherValues), for a key that some variant declares. | Helper type. It reads the matcher type of a key across all variants of an event. |
 | `MatcherValues` | <Documented /> | The type of each declared key of `I` across the variants that declare it, as one table by key. TypeScript builds the table once for each `I`, then reads it at a key. | Helper type. It joins the key entries of every event variant into one table. |
-| `NarrowDepth` | <Documented /> | How many object or array levels a matcher narrows `e` through, counted as the length of a tuple. It is the own limit of the runtime, which refuses a deeper matcher. | Alias of `8`. Past it a field keeps its declared type, and nothing becomes `any`. |
+| `NarrowDepth` | <Documented /> | How many object or array levels a matcher narrows `e` through, counted as the length of a tuple. The runtime sets this limit and refuses a deeper matcher. | Alias of `8`. Past it a field keeps its declared type, and nothing becomes `any`. |
 | `Narrowed` | <Documented /> | `e` in a matched hook. It has the members of the argument union `E` that matcher `P` can match. Each member has the keys that `P` names narrowed to what a match implies. | Helper type. It narrows an event type with a matcher. A scalar narrows to a literal. Other keys stay as declared. |
 | `NarrowedByAny` | <Documented /> | A value of declared type `V` under a one-of, folded over the tuple into `Found`: the union of what each alternative narrows `V` to (NarrowedByOne). | Helper type. It narrows by a one-of list. An alternative that cannot match adds nothing. |
 | `NarrowedByOne` | <Documented /> | A value of declared type `V` under one matcher node `Q` that is not a one-of, member of `V` by member. A member that cannot match is `never`. | Helper type. It narrows by one matcher value. A `RegExp` keeps the member. An object recurses one level down. |
 | `NarrowedMember` | <Documented /> | One object member `E` under object pattern `P`, `D` levels down: `never` when a key of `P` is impossible on it (ImpossibleKeys), else `E` narrowed. | Helper type. It narrows each key that the matcher names. Other keys stay as declared. Since `2.1.323`, `plugin` under `"*"` stays as declared too: the wildcard of a default matcher key says nothing of the value. |
 | `NarrowedValue` | <Documented /> | A value of declared type `V` where the matcher gives `Q`, `D` levels down: NarrowedByAny under a one-of (an array), NarrowedByOne otherwise. | Helper type. It stops narrowing at a set depth, and for a field typed `unknown`, such as the input of a tool. |
 | `NonEmpty` | <Documented /> | Array type `V`, of element `Item`, once some element of it is known to match: a tuple of at least one `Item`, readonly when `V` is. | Helper type. It turns an array into a non-empty tuple, so `e` is still valid where the declared array is taken. |
-| `OpenMatcher` | <Documented /> | The keys that a variant with a string index signature (the input of an MCP tool) takes beyond its own. They are the key of another variant as typed there, and others free. | Object type. A wrong value for a key that an event declares (`command: 5`) fails to compile on every variant. |
+| `OpenMatcher` | <Documented /> | The keys that a variant with a string index signature (the input of an MCP tool) takes beyond the keys it declares. They are the key of another variant as typed there, and others free. | Object type. A wrong value for a key that an event declares (`command: 5`) fails to compile on every variant. |
 | `OrderedOverloads` | <Documented /> | One call signature for each event in `Names`, intersected, with the ambiguous ones (LateOverload) after the rest: `next` for a hook that covers several events. | Helper type that orders the call forms of `next`. An empty group adds nothing. |
 | `Overloads` | <Documented /> | One call signature per event in `Names`, intersected into an overload set. | Alias of `UnionToIntersection<{ [N in Names]: (e: Args<N>) => Promise<NextResult<N>>, }[Names]>`. |
 | `PatternOver` | <Documented /> | The patterns that `next.is` takes in a hook that covers the events `N`: their names, `*`, a glob over one of their namespaces, or a negation. | Helper type for the first argument of `on`. A name that no event has is a compile error. |
@@ -82,7 +80,7 @@ These types are aliases, unions, or plain shapes. Each row gives its use and its
 | `Selection` | <Documented /> | The literal that matcher `M` holds each tag key of `I` to: one-of arrays flattened, RegExps widened to `unknown`. | Object with fields `[K in keyof M & TagKeys<I, keyof M>]`. |
 | `Shaped` | <Documented /> | A value kept with a shape tag, as an `atom` given `{ shape }` keeps it. A reload whose code names another tag reads the value as absent. | Object with the fields `shape` and `value`. Declare a key as `Shaped<T>` in `PluginState` when its atom names a shape. |
 | `ShapedValue` | <Documented /> | What an atom given a shape reads and takes for a key declared `Shaped<T>`: `T`. For a key declared otherwise it is `never`, so that atom does not compile. | Alias of `V extends Shaped<infer T> ? T : never`. |
-| `SourceValues` | <Documented /> | The values that the function of `derive` receives for its sources, in their order. They are the own value of an atom or of a derived value, and the value of a plain reference or `undefined`. | Object with fields `[I in keyof S]`. |
+| `SourceValues` | <Documented /> | The values that the function of `derive` receives for its sources, in their order. They are the value of an atom or of a derived value, and the value of a plain reference or `undefined`. | Object with fields `[I in keyof S]`. |
 | `StreamHook` | <Documented /> | The hook that a streaming event takes: `async function* ($, e, next) {}`. It yields the chunks of the event and returns its result. | Helper type for a streaming hook. `return yield* next(e)` passes the stream on. `for await (const c of next(e)) yield f(c)` changes it. |
 | `StreamHookBody` | <Documented /> | What a hook on a streaming event evaluates to: the async generator that an `async function*` makes. It yields `C` and returns `R` or nothing. | Object with the field `result?`. Returning nothing lets the result of the last `next(e)` stand. The hook must be a generator. |
 | `TagKeys` | <Documented /> | The keys among `Among` that a matcher may use to select variants of `I`. Their values are literals in every variant, with one literal for each variant (IsDiscriminant). | Helper type. It finds the keys of a matcher that tag one event variant. |
@@ -108,8 +106,8 @@ The rest of the chain, as one hook receives it. The engine makes it once for eac
 | --- | --- | --- | --- |
 | `[K in N]` | <Documented /> | What `next.is` narrows `e` to, for each event `K` in `N`: an optional value of any type. | Type: `unknown`. Optional. |
 | `[K in N]` | <Documented /> | The default for each event `K` in `N`: the event argument `Args<K>`. | Type: `Args<K>`. |
-| `to` | <Documented /> | Continues this dispatch at a tier: `next(e)` with every link between the own tier of this hook and that tier skipped, by tier and narrowing only. | Type: `object`. Lets a managed hook skip to a lower tier. It never skips a tier with more authority, so a user hook cannot skip the tier of the organization. Read-only. |
-| `signal` | <Documented /> | Aborts when the call this dispatch belongs to is abandoned. Either the user interrupted, a hook above settled first, or this hook exhausted its budget. | Type: `AbortSignal`. Anything the hook started (timers, requests) should stop on it. It is an AbortSignal of the own environment of the plugin, driven by the signal of the chain. Read-only. |
+| `to` | <Documented /> | Continues this dispatch at a tier: `next(e)` with every link between the tier of this hook and that tier skipped, by tier and narrowing only. | Type: `object`. Lets a managed hook skip to a lower tier. It never skips a tier with more authority, so a user hook cannot skip the tier of the organization. Read-only. |
+| `signal` | <Documented /> | Aborts when the call this dispatch belongs to is abandoned. Either the user interrupted, a hook above settled first, or this hook exhausted its budget. | Type: `AbortSignal`. Anything the hook started (timers, requests) should stop on it. It is an AbortSignal in the environment of the plugin, driven by the signal of the chain. Read-only. |
 | `is` | <Documented /> | Whether `pattern` (a name, a glob, a negation) selects the event of this dispatch, as a type predicate on `e`: `next.is("tool.call", e)`. | Type: `<M extends PatternOver<N>>(pattern: M, e: unknown) => e is ...`. Narrows `e` to the events that the pattern names. A name outside the events of the hook is a compile error. Read-only. |
 | `event` | <Documented /> | The name of the event of this dispatch, as a value, for a glob hook to log or switch on. | Type: `N`. Read-only. |
 | `origin` | <Documented /> | Who raised this dispatch: the name of the calling plugin and the tier it sits in (Origin). The engine reads `{ plugin: "engine", tier: "core" }`. | Type: `Origin`. Only the host sets it. A plugin cannot write it. Every hook of one dispatch sees the same origin. Read-only. |
@@ -132,7 +130,7 @@ The rest of the chain, as one hook receives it. The engine makes it once for eac
 
 ### `StreamNext`
 
-The rest of the chain as a hook on a streaming event receives it. It is Next, except that `next(e)` is the stream beneath (HookStream), not a promise. Type with the fields `to` and `trace`. Each call opens a fresh stream, so a hook that calls it twice makes two. A hook that does not call it yields its own chunks.
+The rest of the chain as a hook on a streaming event receives it. It is Next, except that `next(e)` is the stream beneath (HookStream), not a promise. Type with the fields `to` and `trace`. Each call opens a fresh stream, so a hook that calls it twice makes two. A hook that does not call it yields its chunks.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -162,11 +160,11 @@ Why a hook failed, as its `.catch` handler reads it on `next.error`. It is plain
 
 ### `HookBudget`
 
-The time bounds that every hook runs under, in milliseconds. These members type the constants of the engine, and `next.budget` reads the live one. Object with the fields `ms`, `catchMs`, `lingerMs`. Each bounds the own time of the hook. The clock stops during a `next(e)` or `$` call of the hook.
+The time bounds that every hook runs under, in milliseconds. These members type the constants of the engine, and `next.budget` reads the live one. Object with the fields `ms`, `catchMs`, `lingerMs`. Each bounds the time of the hook itself. The clock stops during a `next(e)` or `$` call of the hook.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `ms` | <Documented /> | The budget of a hook for each dispatch, from its call to its return. Past it the hook is absent (the engine asks its `.catch`, else runs `next(e)` on its behalf). | Type: `10_000`. A streaming hook counts only the time that its own code runs, not the time at a `yield`. Since `2.1.323`, on `tool.list` the `$` calls of a hook hold it for 30 seconds in all, then fail it. Read-only. |
+| `ms` | <Documented /> | The budget of a hook for each dispatch, from its call to its return. Past it the hook is absent (the engine asks its `.catch`, else runs `next(e)` on its behalf). | Type: `10_000`. A streaming hook counts only the time that the code of the hook runs, not the time at a `yield`. Since `2.1.323`, on `tool.list` the `$` calls of a hook hold it for 30 seconds in all, then fail it. Read-only. |
 | `catchMs` | <Documented /> | The grace of a `.catch` handler: a fresh budget from the moment the engine calls it, on the same clock. Its `next` replay and its `$` calls are free. | Type: `1_000`. Past it the hook is absent as if it had no handler. `next.error.budget` and `next.budget.ms` both read it there. `engine.create` has no budget. Read-only. |
 | `lingerMs` | <Documented /> | How long a hook may keep running after `next.signal` aborted (the person interrupted, a hook above settled first, or the hook exhausted its own budget). | Type: `5_000`. Past it the engine reports the hook as lingering. The dispatch had already gone on without it when the signal aborted. Read-only. |
 
@@ -186,12 +184,12 @@ One settled run of a link beneath the caller, as `next.trace` lists it: data, no
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `index` | <Documented /> | The place of the link in the chain. 0 is the outermost. | Type: `number`. Read-only. |
-| `plugin` | <Documented /> | The plugin of the hook, `"engine"` for the own core or bottom of the engine. | Type: `string`. Read-only. |
-| `tier` | <Documented /> | The tier of the link (Tier), `"core"` for the own core or bottom of the engine. | Type: `Tier`. Read-only. |
+| `plugin` | <Documented /> | The plugin of the hook, `"engine"` for the core or bottom of the engine. | Type: `string`. Read-only. |
+| `tier` | <Documented /> | The tier of the link (Tier), `"core"` for the core or bottom of the engine. | Type: `Tier`. Read-only. |
 | `event` | <Documented /> | The event the link ran on. | Type: `N`. Read-only. |
 | `outcome` | <Documented /> | What the chain decided for this link. | Type: `TraceOutcome`. Read-only. |
 | `reason` | <Documented /> | Why the link was skipped without running, when it was: `bypassed by <plugin>`, whose `next.to` went beneath this tier. Absent when it ran. | Type: `string`. Optional. Read-only. |
-| `ms` | <Documented /> | Its own wall time, without the time that its `next()` calls were in flight. | Type: `number`. The entry of the engine is everything beneath the last hook: in a hooks module, the host round trip. Read-only. |
+| `ms` | <Documented /> | Its wall time, without the time that its `next()` calls were in flight. | Type: `number`. The entry of the engine is everything beneath the last hook: in a hooks module, the host round trip. Read-only. |
 | `chunks` | <Documented /> | How many chunks the link yielded up, on a streaming event. Absent on every other event. A link left mid-stream counts what it yielded before. | Type: `number`. Optional. Read-only. |
 | `received` | <Documented /> | The argument the link received. | Type: `E`. Read-only. |
 | `returned` | <Documented /> | What the link settled on. Undefined when it was skipped or rejected. | Type: `O \| undefined`. Read-only. |
