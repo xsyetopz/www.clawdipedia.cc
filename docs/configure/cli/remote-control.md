@@ -84,6 +84,17 @@ Claude Code checks your account and setup before it reads the options.[^order] S
 
 The [official page](https://code.claude.com/docs/en/remote-control#troubleshooting) explains how to fix the sign-in, policy, and connection errors.
 
+### Exit Codes
+
+Since `2.1.326`, the exit code tells a service manager, such as `systemd` or `launchd`, whether to start the server again.[^exit-codes]
+
+| Code | When |
+| --- | --- |
+| `0` | You stop the server, for example with Ctrl+C, or a `--spawn session` server ends with its one session. |
+| `4` | The server stops by itself in `same-dir` or `worktree` mode. |
+| `69` | The server cannot register with Remote Control. The error message prints first. |
+| `1` | A check or an option fails. See [Order of the Checks](#order-of-the-checks) and [Option Errors](#option-errors). |
+
 Each option error below prints `Error: <message>` on stderr and exits with code 1.[^cli321]
 
 ### Option Errors
@@ -124,4 +135,5 @@ Each option error below prints `Error: <message>` on stderr and exits with code 
 [^startup]: The program, `chunk-2dg5mr3x.js`, the run-time code after `Ai`.
 [^order]: The program, `chunk-ngtnhntk.js`, the `remote-control` entry, and `chunk-ajh9vqm0.js`, function `Knn`, exported as `getBridgeDisabledDiagnosis`.
 [^flag]: The program, flag `tengu_ccr_bridge`. Probe group `cli321`.
+[^exit-codes]: The program, `chunk-jh1meyy3.js:5-8` and `chunk-y5hjhy3x.js:6333`, `:6797-6798`. [2.1.325 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
 [^cli321]: The program, `chunk-2dg5mr3x.js:107633`, function `Ai`. Probe group `cli321` (`rc-*` cases), run with a fake `max` login, only `DISABLE_TELEMETRY` set, and no network.
