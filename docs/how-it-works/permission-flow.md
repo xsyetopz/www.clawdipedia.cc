@@ -61,6 +61,8 @@ Claude Code also checks `deny` and `ask` rules at startup. It warns about a rule
 Since 2.1.323 the program also warns about a Bash `allow` rule that has `*` in a variable's value (`chunk-3dhh2g49.js:191921`).
 Since `2.1.311`, a warning about a rule from a settings file shows once per user until the rule changes. The program saves a key for each shown warning in the `seenSecurityWarnings` entry of the user config file (the last 256 keys), and the key holds the source, the settings file, and the warning text (`chunk-r2xdymmc.js:1239`, `chunk-mk1dn8k6.js:10`).
 
+<Gated /> Since `2.1.326`, when a server-side flag is on (`chunk-4h798pp0.js:71295`), a read-only `git` command asks first if git would use a repository that Claude Code cannot match to the project or to one you trusted. The program says "Its settings can make git run programs." To run such commands without a prompt, name that folder with `--add-dir` at the start, which also loads its skills and commands. The `additionalDirectories` setting does not do this. If you trust a folder that holds no trust yet, start Claude Code there once and accept the trust dialog. When the program cannot offer `--add-dir`, the text says "An allow rule for git would apply in every repository." (`chunk-4h798pp0.js:71313`).
+
 Built-in safety checks, called circuit breakers, can also force a prompt. Some are immune to `bypassPermissions`. See [Permission Modes](../configure/permissions/modes.md#safety-checks). The diagram omits them because the program does not show where they run.
 
 The working folders matter too.

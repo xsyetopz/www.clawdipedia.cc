@@ -173,6 +173,10 @@ These keys do nothing in `2.1.322`, so the pages do not list them.
 - `permissionExplainerEnabled` — Removed in v2.1.257.
 - `teammateDefaultModel` — Removed in v2.1.234.
 
+## Deep Nesting
+
+Since `2.1.326`, a settings file with values nested more than 64 levels deep loads without them. The program drops those values and shows a warning: "A value under "key" is nested more than 64 levels deep, so Claude Code ignores it. Reduce the nesting under "key"." For a file that Claude Code writes, the warning also says it leaves the value out when it saves a setting to that file. A `hooks` entry written as nested arrays is different: that case is a fatal error, and the text asks you to write `hooks` as an object of event names (`chunk-m33vdkhs.js:16540`).
+
 ## Errors
 
 Each row is a family of messages. The backticked text is the start that every message in the family shares.

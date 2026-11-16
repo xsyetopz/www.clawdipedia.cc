@@ -115,6 +115,11 @@ Since `2.1.323`, an `addRules` or `replaceRules` update that adds an `allow` rul
 A rule that the `allow` list of the destination file already holds is not moved. A `removeRules` update for an `allow` rule in a saved destination also removes the rule from `session`.
 Source: the program (`chunk-ny35jjxw.js:212300`).
 
+## Warnings About Rules
+
+- Since `2.1.326`, a startup warning shows when an entry of `--allowedTools`, `--disallowedTools`, or `--tools` does not look like a complete rule. For `--allowedTools` the text says the list "may allow more or less than you meant". For `--disallowedTools` it says "a tool you meant to block may still run". The text names the first bad entry, cut to 64 characters, and counts the others. It points you to a missing `)`, a space before `(`, or text after `)`, and to `permissions.allow` or `permissions.deny` in settings. A `--tools` entry that holds parentheses gets a warning to use plain names (`chunk-97e8zgw1.js:4137`, `:4139`, `:7325`).
+- Since `2.1.326`, when a rule change from `/permissions`, a tool prompt, or `/add-dir` cannot be written to a settings file, the terminal warns: "Couldn't save this change to ... so it may stop applying when settings change or Claude Code restarts." If a file may hold broken JSON, the warning adds "Check that the file holds valid JSON and that you can write to it and its folder, then restart Claude Code and make the change again." (`chunk-2e8vamz8.js:10912`). When managed settings allow only managed permission rules, the warning says "Your permission change wasn't saved: Your organization allows only its own managed permission rules. Ask an admin to add the rule to managed settings." (`chunk-2e8vamz8.js:10906`).
+
 ## How It Works
 
 [Permission Flow](../../how-it-works/permission-flow.md) shows how Claude Code walks the lists, the hooks, and the mode.

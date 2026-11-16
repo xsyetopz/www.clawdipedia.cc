@@ -45,7 +45,7 @@ Official page: [Customize Your Status Line](https://code.claude.com/docs/en/stat
 | `statusLine.padding` | <Documented /> | Extra horizontal space in characters | The default is `0`. It adds to the built-in spacing | Same |
 | `statusLine.refreshInterval` | <Documented /> | Re-runs the command every N seconds | The minimum is `1`. The bundle uses `Math.max(1, n) * 1000` ms. It suits clocks and idle sessions | Same |
 | `statusLine.hideVimModeIndicator` | <Documented /> | Hides the built-in `-- INSERT --` text | Use it when the script prints `vim.mode` itself | Same |
-| `subagentStatusLine` | <Documented /> <Deprecated note="No effect since 2.1.323" /> | Custom row for each subagent in the agent panel | In 2.1.323 the program removed its runner. Subagent rows always use the default look. A settings file that still holds the key loads as before. See [Subagent Status Line](#subagent-status-line) | Same |
+| `subagentStatusLine` | <Documented /> <Deprecated note="Works; will stop in a future release" /> | Custom row for each subagent in the agent panel | Since `2.1.326`, the program runs the command again. See [Subagent Status Line](#subagent-status-line) | Same |
 | `/statusline` | <Documented /> | Writes a script in `~/.claude/` and the setting | It takes natural language. `/statusline delete` removes it | Interactive |
 | Workspace trust | <Documented /> | The command waits for trust | `--debug` logs `Status line command skipped: workspace trust not accepted` | Project files |
 | `CLAUDE_CODE_SAFE_MODE` | <Documented /> | Status line commands do not load | Managed policy still applies | Env |
@@ -75,7 +75,13 @@ Source for this list: the official [Customize Your Status Line](https://code.cla
 
 ## Subagent Status Line
 
-`subagentStatusLine` has no effect in 2.1.323. The program no longer runs its command, and it builds no input for it. Subagent rows in the agent panel always use the default look. The settings schema still lists the key, so a settings file that holds it loads without an error. See [Agents and Remote Settings](settings/agents-and-remote.md).
+Since `2.1.326`, `subagentStatusLine` works again. In `2.1.323` it had no effect. The schema now says: "Deprecated: still works, and will stop working in a future release. Custom per-subagent status line shown in the agent panel; receives row context as JSON on stdin" (`chunk-m33vdkhs.js:9208`).
+
+- The key takes `type: "command"` and a `command`. Managed settings win. Otherwise the command comes from a settings file or a plugin (`chunk-y9bdpp8r.js:56551`).
+- The command waits for workspace trust. Without trust, `--debug` logs "Skipping subagentStatusLine execution - workspace trust not accepted" (`chunk-y9bdpp8r.js:56560`).
+- The program sends one JSON object on stdin. Besides the base session fields it holds `columns` and a `tasks` list. Each task has `id`, `name`, `type`, `agentType`, `status`, `description`, `label`, `startTime`, `model`, `effort`, `contextWindowSize`, `tokenCount`, `tokenSamples`, and `cwd` (`chunk-y9bdpp8r.js:56598`).
+- The command prints one JSON object per line, such as `{"id": "...", "content": "..."}`. The row for that `id` shows `content`. A line that is not JSON, or has another shape, is logged and skipped. A non-zero exit code leaves every row at its default look. The run has a 5-second timeout (`chunk-y9bdpp8r.js:56544`, `:56654`, `:56667`, `:56675`).
+- The program logs "subagentStatusLine is deprecated in favor of mods and will stop working in a future release" and queues a notice for the model. A plugin that sets `subagentStatusLine` in its own `settings.json` also gets a deprecation warning (`chunk-kek2xxjw.js:371`, `chunk-y9bdpp8r.js:120735`). See [Agents and Remote Settings](settings/agents-and-remote.md).
 
 ## JSON Fields
 
