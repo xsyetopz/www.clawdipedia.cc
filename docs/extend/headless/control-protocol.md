@@ -79,7 +79,7 @@ Source: the program (the bundled schema of `2.1.311`; for the `2.1.311` addition
 | `stop_task` | <Undocumented /> | Stops a running task. |
 | `background_tasks` | <Undocumented /> | No description in the program schema. |
 | `get_task_output` | <Undocumented /> | Reads the last 8 KiB of the output of a background task. |
-| `apply_flag_settings` | <Undocumented /> | Merges settings into the flag settings layer. |
+| `apply_flag_settings` | <Undocumented /> | Merges settings into the flag settings layer. Since `2.1.326`, the program refuses a request that holds an invalid setting: it applies nothing, keeps the earlier settings, and answers `apply_flag_settings: nothing in this request was applied and earlier settings stay in force` with the invalid paths (`chunk-a55h33gj.js:4374`, `:4384`). |
 | `get_settings` | <Undocumented /> | Returns the merged settings and the settings of each source. In `2.1.316` the `applied` object can have `ultrathinkAvailable`, a boolean. It is `true` when typing `ultrathink` runs the turn at `xhigh` effort, and when the session is already at `xhigh` or `max`. If it is absent, the Claude Code is too old to report it (the program). |
 | `update_settings` | <Undocumented /> | Writes settings through the writer of Claude Code. |
 | `get_hooks_listing` | <Undocumented /> | Returns the hooks that the read-only `/hooks` menu shows. |

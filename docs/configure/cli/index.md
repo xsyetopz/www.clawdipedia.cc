@@ -1,6 +1,6 @@
 ---
 title: CLI Overview
-description: How to start claude, what print mode does, and a map of the flags and subcommands of Claude Code 2.1.323.
+description: How to start claude, what print mode does, and a map of the flags and subcommands of Claude Code 2.1.326.
 sidebar_position: 1
 ---
 
@@ -80,7 +80,7 @@ flowchart TD
   One --> Loop
 ```
 
-Source: the program (`claude --help`, `2.1.323`).
+Source: the program (`claude --help`, `2.1.326`).
 
 ## Related Pages
 

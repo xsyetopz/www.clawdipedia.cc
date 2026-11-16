@@ -1,13 +1,13 @@
 ---
 title: Self-Hosted Runner
-description: Every option of claude self-hosted-runner and its orchestrator, setup, doctor, and decode-token subcommands in 2.1.323, with the parser rules and each error.
+description: Every option of claude self-hosted-runner and its orchestrator, setup, doctor, and decode-token subcommands in 2.1.326, with the parser rules and each error.
 sidebar_position: 5
 ---
 
 `claude self-hosted-runner` runs Claude Code cloud sessions on a machine that you control. The root help text does not list the command.
-The [official overview](https://code.claude.com/docs/en/self-hosted-environments) explains environments and runners. The [deploy guide](https://code.claude.com/docs/en/self-hosted-environments-deploy) and the [configuration guide](https://code.claude.com/docs/en/self-hosted-environments-configuration) explain most options. This page lists every option in `2.1.323`, with the options that the official pages do not name, and the exact parser rules.
+The [official overview](https://code.claude.com/docs/en/self-hosted-environments) explains environments and runners. The [deploy guide](https://code.claude.com/docs/en/self-hosted-environments-deploy) and the [configuration guide](https://code.claude.com/docs/en/self-hosted-environments-configuration) explain most options. This page lists every option in `2.1.326`, with the options that the official pages do not name, and the exact parser rules.
 
-Source: the text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.323`, and the option parser of the program (`chunk-jmkrmahq.js`, near offset 253048). The variables are on [Remote and Cloud Session Variables](../env-vars/remote-and-cloud-sessions.md).
+Source: the text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.326`, and the option parser of the program (`chunk-jmkrmahq.js`, near offset 253048). The variables are on [Remote and Cloud Session Variables](../env-vars/remote-and-cloud-sessions.md).
 
 ## Example
 
@@ -62,6 +62,8 @@ The command has its own parser. It does not use the parser of the root `claude` 
 | `--git-ssh-rewrite <host>` | <Documented /> | Rewrites `https://<host>/...` source URLs to `git@<host>:...`. Give it more than once for more hosts. | Off |
 | `--git-host-rewrite <from>=<to>` | <Documented /> | Rewrites `https://<from>/...` to `https://<to>/...`, before `--git-ssh-rewrite`. Both sides are bare host names. | Off |
 | `--use-anthropic-git-proxy` | <Documented /> | Uses Anthropic-managed git. Needs `--capacity 1`, git 2.32 or later, and a global git config that is not a device such as `/dev/null`. It deletes and replaces the home-level git config of the runner account at startup and before each session. See [Harden Your Deployment](https://code.claude.com/docs/en/self-hosted-environments-deploy#harden-your-deployment). | Off |
+| `--no-clone-through-agent-proxy` | <Undocumented /> | Since `2.1.326`, a hidden flag. With `--agent-proxy-url`, the runner then does not clone http(s) repositories through the proxy. It skips the git version check and the warning about the proxy credential that go with that clone (the program, `chunk-747xd1vs.js:13426`, `chunk-747xd1vs.js:13688`). | Off |
+| `--use-anthropic-gh [bool]` | <Undocumented /> | Since `2.1.326`, it offers the built-in `gh api` of Claude Code to sessions where no `gh` is installed. It reaches the REST API of github.com only, and its requests go through Anthropic, which adds the GitHub credential it holds for the session, if any. `false`, `0`, `no`, or `off` turns it off. The runner withholds it on Windows, above `--capacity 1`, with `--agent-proxy-url`, with `--exec-path` or a command hook, with a model provider other than the Anthropic API, in code reviews, and in tools-only sessions (the program, `chunk-747xd1vs.js:13137`, `chunk-747xd1vs.js:12305`). It reads `SELF_HOSTED_RUNNER_USE_ANTHROPIC_GH`. | On |
 | `--configure-git` | <Documented /> | Sets the git identity to `Claude <noreply@anthropic.com>` with commit signing. Needs git 2.34 or later. See [Configure Git](https://code.claude.com/docs/en/self-hosted-environments-deploy#configure-git). | Off |
 | `--push-outcome-on-release` | <Documented /> | Pushes each outcome branch before the runner ends a session that did not complete. See [Prompt Sessions to Push Their Work](https://code.claude.com/docs/en/self-hosted-environments-configuration#prompt-sessions-to-push-their-work). | Off |
 | `--trust-workspace [bool]` | <Documented /> | Trusts the repository paths of each session, so repo `permissions.allow` and `additionalDirectories` apply. With `false`, the runner sets `CLAUDE_CODE_IGNORE_PERSISTED_TRUST=1` for each session, and no workspace trust record counts (the program, `chunk-jmkrmahq.js:176984`, `chunk-x4fdscgs.js:85193`). | `true` |

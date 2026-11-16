@@ -1,6 +1,6 @@
 ---
 title: Subcommands
-description: Every claude subcommand in 2.1.323, including background sessions, auth, plugins, and the hidden commands.
+description: Every claude subcommand in 2.1.326, including background sessions, auth, plugins, and the hidden commands.
 sidebar_position: 3
 ---
 
@@ -21,7 +21,7 @@ claude stop <id>                        # stop it, keep the conversation
 
 ## Commands
 
-Source: the text of `claude <command> --help` in `2.1.323`.
+Source: the text of `claude <command> --help` in `2.1.326`.
 
 | Command | Status | What it does |
 | --- | --- | --- |
@@ -52,6 +52,7 @@ Source: the text of `claude <command> --help` in `2.1.323`.
 | `claude workspace-trust --json` | <Undocumented /> | A hidden command that reports, as JSON, whether the current folder holds a saved workspace trust record. `--json` is required, and no other argument is allowed. The text says the VS Code extension uses it. The JSON has `trusted`, `directory`, `root` and `unsafe_path` when they apply, and `sandbox_limits_files`. If the record cannot be read, it prints `claude workspace-trust: the trust record could not be read: <message>` (the program, `chunk-2jz0wx1x.js:37057`). |
 | `claude apply-project-settings` | <Undocumented /> | A hidden command that shows how your user and project settings differ from what you accepted for cloud sessions on this computer. It lets you accept them. It needs a terminal. |
 | `claude project` | <Undocumented /> <Deprecated note="Use claude purge" /> | A hidden command with one subcommand, `purge`. The program says that `claude project purge` is now `claude purge` and that the old name still works for now. |
+| `claude worktree-hook` | <Undocumented /> | Since `2.1.326`, a hidden command that runs the WorktreeCreate or WorktreeRemove hooks for the current directory and reports the result as JSON. The help text says Claude Desktop uses it (`chunk-sqnqta3y.js:646`). It needs `--json` and `--event <create\|remove>`. `--name <slug>` names the worktree to create, `--path <absolute>` names the worktree to remove, and `--trusted-folder <absolute>` is also accepted. The outcome is `refused`, `failed`, or `started`. |
 | `claude import-conversations <exportPath>` | <Undocumented /> | A hidden command that archives an export, with `--cwd` and `--dry-run`. |
 
 :::note[Hidden Commands]
@@ -80,7 +81,7 @@ In eval mode, `--json`, `--timeout`, `--post`, `--no-post`, and `--trust-workspa
 ### `daemon` Subcommands
 
 `claude daemon --help` lists `run [json-path]`, `status`, `logs`, `uninstall`, and `stop` (with `--any` and `--keep-workers`), and the options `--json-path <p>` (default `~/.claude/daemon.json`) and `--log-file <p>` (default `~/.claude/daemon.log`). The help text says: "Service install is disabled in this version — the daemon runs on demand and exits when the last client disconnects."
-Source: the program, in its help text in `2.1.323` and its argument parser (`chunk-8009tpd5.js`, near offset 75628).
+Source: the program, in its help text in `2.1.326` and its argument parser (`chunk-8009tpd5.js`, near offset 75628).
 
 - With no subcommand, the daemon opens the hub on a terminal, and runs in the foreground (`run`) when stdin is not a terminal.
 - `log` is an alias of `logs`. Both options also take the `--option=value` form.

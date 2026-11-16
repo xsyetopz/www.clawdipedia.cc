@@ -167,6 +167,8 @@ Each row is a family of messages. The backticked text is the start that every me
 | Various | <Undocumented /> | **Remote Control and cloud sessions.** Remote Control, a cloud session, or `--teleport` failed or was refused. | The user is not signed in with claude.ai. The policy `disableRemoteControl` is set. The base URL uses HTTP. A cloud session reached its timeout, waits for input that nothing here can give, or lost its connection. `claude --teleport` was run from the wrong checkout. |
 | Various | <Undocumented /> | **Transcripts and storage.** A transcript, session record, or storage backend could not be read or written. | A transcript file is too large, is not valid JSON, or holds no messages. A diskless session has no file to write to. A storage read, write, stat, or delete failed. |
 
+Since `2.1.326`, a transcript write that fails can leave a partial last line. The program then adds a newline before the next append, so the next record does not join the partial line. The same seal runs when the program finds a transcript file whose last byte is not a newline before it re-appends session metadata (`chunk-4h798pp0.js:29157`, `:29248`, `:29438`).
+
 ## Related Pages
 
 - [Transcript Format](../reference/transcript-format.md)

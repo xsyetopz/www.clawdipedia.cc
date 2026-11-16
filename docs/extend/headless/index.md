@@ -57,6 +57,7 @@ flowchart TD
 ```
 
 The loop is the same as in interactive mode. See [Agent Loop](../../how-it-works/agent-loop.md).
+Since `2.1.326`, print mode writes a dim line to `stderr` while it waits to retry an API request, such as `... · retrying in 10s · attempt 2 of 10`, or `No response from the API after ...` when the API sent nothing. The line appears only when the retry wait reaches 5 seconds, when `stderr` is a terminal, and not with `--output-format stream-json`. With `json` it appears only when `stdout` is not a terminal (`chunk-xt4nsgp1.js:28984`, `:11114`, `:29010`).
 Permission prompts have no screen to appear on, so a host program (or `--permission-prompts none`) must decide.
 
 ## Pages in This Section

@@ -115,6 +115,7 @@ flowchart TD
 | Run | <Documented /> | Read-only tools and subagents run in parallel, up to `CLAUDE_CODE_MAX_TOOL_USE_CONCURRENCY` (default 10). Other tools run one after another. |
 | `PostToolUse` and `PostToolUseFailure` hooks | <Documented /> | They run after each call. |
 | `PostToolBatch` hook | <Documented /> | It runs after a batch of parallel calls and before the next model call. It can stop the loop. |
+| Shell working directory | <Undocumented /> | Since `2.1.326`, a Bash command does not run in the launch folder when the working directory is gone. The command fails with `Working directory "<path>" is gone` (deleted, moved, replaced by a link, or unreadable) and the model can issue it again. An agent in a worktree that was removed is refused too, and a session pinned to its folder stays blocked until the folder is back (`chunk-4h798pp0.js:183893`, `chunk-4h798pp0.js:183937`, `chunk-4h798pp0.js:183949`). |
 
 ## Recovery Inside the Loop
 
@@ -124,9 +125,11 @@ The loop does not fail on every error. It tries to fix the problem and continue.
 | --- | --- | --- |
 | The output stops at `max_tokens` | <Undocumented /> | It adds a nudge message and asks again, a limited number of times. |
 | The response is cut off | <Undocumented /> | It does the same. |
+| A subagent's text reply hits the output token limit | <Undocumented /> | Since `2.1.326`, the nudge tells the subagent that its caller gets no answer in pieces, and asks for the whole answer again, more briefly, up to 3 times. (`chunk-27vawgnx.js:8693`, `chunk-27vawgnx.js:8711`, `chunk-dezyqkh5.js:221`). |
 | A `tool_use` block has no valid call | <Undocumented /> | It drops the reply and asks once more. Then it ends with a message that the tool call could not be parsed. |
 | The model sends only thinking | <Undocumented /> | It sends one nudge. |
 | A safety refusal | <Documented /> | It runs again on the fallback model of that category. See [Models](models.md#fallback). |
+| The API says `max_tokens` is above the model limit | <Undocumented /> | Since `2.1.326`, when the error text reads `max_tokens: N > M, which is the maximum allowed number of output tokens for <model>` (status 400, 402, 413, 422, or 429) and `M` is at least 4096, Claude Code sends the request again with `max_tokens` set to `M` (`chunk-4h798pp0.js:154749`, `chunk-4h798pp0.js:154785`). |
 | The context is too long | <Documented /> | It lowers `max_tokens` or compacts. |
 | Autocompact refills 3 times in a row | <Documented /> | It ends the turn with an error that starts `Autocompact is thrashing`. See [Troubleshooting](https://code.claude.com/docs/en/troubleshooting) in the official docs. |
 | A `Stop` hook blocks | <Documented /> | It sends the reason back to the model. After `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` blocks in a row (default 8), it ends the turn. |

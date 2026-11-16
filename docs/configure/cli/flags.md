@@ -1,6 +1,6 @@
 ---
 title: All Flags
-description: Every claude flag in 2.1.323, with the ones that claude --help hides, grouped by job.
+description: Every claude flag in 2.1.326, with the ones that claude --help hides, grouped by job.
 sidebar_position: 2
 ---
 
@@ -96,9 +96,9 @@ Flags that set the permission mode and the tools the model may use. See [Permiss
 | `--inherit-permission-mode` `<mode>` | <Undocumented /> | ❌ | Sets a permission mode from a parent session, used only when nothing else sets one. |
 | `--dangerously-skip-permissions` | <Documented /> <Caution note="Skips all permission checks" /> | ✅ | Skips all permission checks. Use it only in a sandbox with no internet access. |
 | `--allow-dangerously-skip-permissions` | <Documented /> | ✅ | Makes skipping all permission checks a choice, without turning it on. |
-| `--allowedTools`, `--allowed-tools` `<tools...>` | <Documented /> | ✅ | Lists the tools that run without a permission prompt. |
-| `--disallowedTools`, `--disallowed-tools` `<tools...>` | <Documented /> | ✅ | Lists the tools that the model cannot use. |
-| `--tools` `<tools...>` | <Documented /> | ✅ | Lists the built-in tools that the model can use. `"default"` uses the default set. |
+| `--allowedTools`, `--allowed-tools` `<tools...>` | <Documented /> | ✅ | Lists the tools that run without a permission prompt. Since `2.1.326`, a rule that looks incomplete, such as one with a missing `)`, prints a warning that names the first bad rule and how many more the list holds (`chunk-97e8zgw1.js:4128`, `:4160`). |
+| `--disallowedTools`, `--disallowed-tools` `<tools...>` | <Documented /> | ✅ | Lists the tools that the model cannot use. Since `2.1.326`, an incomplete rule prints the same kind of warning, and says that a tool you meant to block may still run (`chunk-97e8zgw1.js:4128`). |
+| `--tools` `<tools...>` | <Documented /> | ✅ | Lists the built-in tools that the model can use. `"default"` uses the default set. Since `2.1.326`, a name that does not look like a tool name, such as one with parentheses, prints a warning (`chunk-97e8zgw1.js:4140`). |
 | `--permission-prompts` `<target>` | <Documented /> | ✅ | Sets who answers permission prompts: `host` or `none`. `host` means the SDK host or `--permission-prompt-tool`. `none` denies anything that would prompt. The permission mode decides the rest. |
 | `--permission-prompt-tool <tool>` | <Documented /> | ❌ | Names an MCP tool that answers permission prompts, with `--print` only. |
 | `--plan-mode-instructions` `<instructions>` | <Undocumented /> | ❌ | Replaces the default steps of plan mode with your own text. |
