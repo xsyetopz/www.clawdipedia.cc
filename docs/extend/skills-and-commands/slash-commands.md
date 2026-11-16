@@ -92,7 +92,7 @@ Each line is a separate command. The text after the name is the argument.
 | `/auto-mode-setup` `[--request-id <uuid>] (--wizard ... --propose \| --expect-sha256 <hex> --apply-file <path>)` | <Gated note="An environment-onboarding policy flag." /> | Teaches auto mode about your environment, with optional rule changes. It reads your project and recent sessions. | Panel. The text form is non-interactive. Since `2.1.304` it is also on Bedrock, Vertex, Foundry, a Claude apps gateway, and with telemetry off. `skillOverrides["auto-mode-setup"]: "off"` turns it off.[^auto-setup] |
 | `/import` `[codex\|gemini\|cursor] [--dry-run]` | <Gated note="Server flag tengu_import, off by default. You cannot enable it" /> | Imports config from another AI coding agent. | Panel and text form. |
 | `/help` | <Documented /> | Shows help and the command list. | Panel. Terminal only. Since `2.1.326`, it takes an optional `[command]` argument.[^help] |
-| `/status` | <Documented /> | Shows version, model, account, API connectivity, and tool status. | Panel. Lists skills whose `allowed-tools` were ignored. |
+| `/status` | <Documented /> | Shows version, model, account, API connectivity, and tool status. | Panel. Lists skills whose `allowed-tools` were ignored. Since `2.1.326`, a `Features` row says when your provider or an environment variable turns features off, such as "some aren't available while `DISABLE_TELEMETRY` is set", with a link to the official page.[^status-features] |
 | `/usage` (aliases `/cost`, `/stats`) | <Documented /> | Shows session cost, plan use, and activity stats. | Panel and text form. Since `2.1.304` it says when a rate limit ends. `CLAUDE_CODE_OAUTH_TOKEN` shows the limit rows too. Since `2.1.305` each warning is a one-line fix that names its source, and `f` applies the fixes. The same fixes appear in VS Code and `/doctor`.[^v305] See [How `/usage` and `/artifacts` Work](#how-usage-and-artifacts-work). |
 | `/release-notes` | <Documented /> | Shows release notes. | Panel. |
 | `/statusline` | <Documented /> | Configures the status line. | A prompt command. Not in safe mode. Interactive only. |
@@ -164,6 +164,18 @@ Claude Code loads custom commands from `.claude/commands/` and skills together. 
 - **File errors.** If one file in `.claude/commands/` cannot load, Claude Code logs `[skills] failed to load command from <path>: <error>` at the error level. It loads the other files.[^file-errors]
 
 The release note says that one bad command name could leave `claude -p` with no output.[^v312]
+
+## When a Command Is Off
+
+Since `2.1.326`, a built-in command that is off for your provider, your sign-in, or an environment variable says why, instead of `Unknown command`:[^off-commands]
+
+| Cause | Message |
+| --- | --- |
+| Provider | `/<name> isn't available with <provider>. See https://code.claude.com/docs/en/feature-availability` |
+| Environment variable | `/<name> isn't available while <VARIABLE> is set.` If managed settings set the variable, the message adds `Your admin set it.` |
+| Sign-in | `/<name> needs a Claude subscription.` It then adds `This session uses <source> instead.` when `ANTHROPIC_API_KEY`, `ANTHROPIC_AUTH_TOKEN`, or `apiKeyHelper` signs the session in. Otherwise it adds `Run /login to sign in with one.` when you are not signed in and `/login` is on, or `Run /status to see how this session is signed in.` |
+
+`/status` shows the same cause in its `Features` row.[^status-features]
 
 ## How `/restart` Works
 
@@ -282,3 +294,5 @@ Each row is a family of messages. The backticked text is the start that every me
 [^channel-api]: The program, `chunk-6jd11p1d.js:200`.
 [^cd-taller]: The program, `chunk-q43jj74r.js:390`, `chunk-q43jj74r.js:403`, and `chunk-q43jj74r.js:414`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^rewind-skip]: The program, `chunk-y9bdpp8r.js:22895-22920` and `chunk-3zn9cw12.js:3144`. The release notes say this applies on macOS, Linux, and WSL when the sandbox is on. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^status-features]: The program, `chunk-gn1ntjav.js:90-124`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^off-commands]: The program, `chunk-gn1ntjav.js:130-175`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
