@@ -2949,10 +2949,10 @@
 				"type": "string"
 			},
 			"anchors": [
-				"classifier_category:s",
+				"classifier_category:«»}}",
 				"let «»=«»(«».category);return{classifier_verdict:\"block\",...«»!==void 0&&«»()&&{classifier_category:«»}}"
 			],
-			"note": "From cst(e,n): classifier_category:s with s=ED(n.category), a string; added only for auto-mode classifier blocks when kc()."
+			"note": "From tOt(e,n): classifier_category:a with a=GF(n.category), a string; added only for auto-mode classifier blocks when kc()."
 		},
 		"event:tool_decision.permission_mode": {
 			"schema": {
@@ -2989,7 +2989,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"tool_result_size_bytes:String(«»),...«»&&{decision_source:«».source,decision_type:«».decision}",
+				"tool_result_size_bytes:String(«»)},...«»&&{decision_source:«».source,decision_type:«».decision}",
 				"tool_input_size_bytes:String(«»),...«»&&{decision_source:«».source,decision_type:«».decision}"
 			],
 			"note": "Added with decision_type when qr=s.toolDecisions.get(n) is set: qr.source is the string we from tool_decision."
@@ -2999,7 +2999,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"tool_result_size_bytes:String(«»),...«»&&{decision_source:«».source,decision_type:«».decision}",
+				"tool_result_size_bytes:String(«»)},...«»&&{decision_source:«».source,decision_type:«».decision}",
 				"tool_input_size_bytes:String(«»),...«»&&{decision_source:«».source,decision_type:«».decision}"
 			],
 			"note": "qr.decision is \"accept\" or \"reject\" (the decision of tool_decision)."

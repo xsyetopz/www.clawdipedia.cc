@@ -22,9 +22,9 @@
 			},
 			"anchors": [
 				"installMethod:\"native\",autoUpdates:!1,autoUpdatesProtectedForNative:!0",
-				"s=«».autoUpdates??!0"
+				",«»=«».autoUpdates??!0"
 			],
-			"note": "Write sites: the native installer sets autoUpdates:!1; the migration Wo sets s=e.autoUpdates??!0 or s=!1 (disabled); the test config sets autoUpdates:!1. The default is void 0. Always a boolean."
+			"note": "Write sites: the native installer sets autoUpdates:!1; the migration sets a=e.autoUpdates??!0 or a=!1 (disabled), and the auto-update setting row writes autoUpdates:!0 when it enables updates; the test config sets autoUpdates:!1. The default is void 0. Always a boolean."
 		},
 		"autoUpdatesProtectedForNative": {
 			"schema": {
@@ -138,7 +138,7 @@
 				}
 			},
 			"anchors": [
-				"lspRecommendationNeverPlugins:[...H,«»]",
+				"lspRecommendationNeverPlugins:[...«»,«»]",
 				"«».lspRecommendationNeverPlugins??[]"
 			],
 			"note": "Dvt(h) appends the plugin id string h to the array: [...H,h] with H=lspRecommendationNeverPlugins??[] and a includes(h) check."

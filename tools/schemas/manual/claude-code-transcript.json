@@ -259,7 +259,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"pr-link\",sessionId:«»,prNumber:«»,prUrl:«»,prRepository:s"
+				"{type:\"pr-link\",sessionId:«»,prNumber:«»,prUrl:«»,prRepository:«»"
 			],
 			"note": "savePrLink(sessionId, prNumber, prUrl, prRepository) appends the line; prNumber is the PR number (integer), the other three are strings."
 		},
@@ -268,7 +268,7 @@
 				"type": "integer"
 			},
 			"anchors": [
-				"{type:\"pr-link\",sessionId:«»,prNumber:«»,prUrl:«»,prRepository:s"
+				"{type:\"pr-link\",sessionId:«»,prNumber:«»,prUrl:«»,prRepository:«»"
 			],
 			"note": "savePrLink(sessionId, prNumber, prUrl, prRepository) appends the line; prNumber is the PR number (integer), the other three are strings."
 		},
@@ -277,7 +277,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"pr-link\",sessionId:«»,prNumber:«»,prUrl:«»,prRepository:s"
+				"{type:\"pr-link\",sessionId:«»,prNumber:«»,prUrl:«»,prRepository:«»"
 			],
 			"note": "savePrLink(sessionId, prNumber, prUrl, prRepository) appends the line; prNumber is the PR number (integer), the other three are strings."
 		},
@@ -286,7 +286,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"pr-link\",sessionId:«»,prNumber:«»,prUrl:«»,prRepository:s"
+				"{type:\"pr-link\",sessionId:«»,prNumber:«»,prUrl:«»,prRepository:«»"
 			],
 			"note": "savePrLink(sessionId, prNumber, prUrl, prRepository) appends the line; prNumber is the PR number (integer), the other three are strings."
 		},
@@ -703,7 +703,7 @@
 			},
 			"anchors": [
 				"{type:\"cost-state\",sessionId:«»(),totalCostUSD:«»(),totalAPIDuration:«»()",
-				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»()}}function «»("
+				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»(),...«»>0&&{modelCallCostUSD:«»}}}function «»("
 			],
 			"note": "The cost snapshot builder fills every total from the cost tracker's getters (finite non-negative numbers; the reader's zod schema AZt requires nonnegative().finite() for each and a record of model name to usage for modelUsage). totalCostUSD is a float; the durations (ms), line counts and startTime (epoch ms) are integers in practice but the schema is number. hasUnknownModelCost is a boolean (optional in the reader schema). modelUsage maps a model name to {inputTokens, outputTokens, thinkingTokens (optional), cacheReadInputTokens, cacheCreationInputTokens, cacheCreationEphemeral5mInputTokens, cacheCreationEphemeral1hInputTokens (both since 2.1.311), webSearchRequests, costUSD}."
 		},
@@ -713,7 +713,7 @@
 			},
 			"anchors": [
 				"{type:\"cost-state\",sessionId:«»(),totalCostUSD:«»(),totalAPIDuration:«»()",
-				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»()}}function «»("
+				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»(),...«»>0&&{modelCallCostUSD:«»}}}function «»("
 			],
 			"note": "The cost snapshot builder fills every total from the cost tracker's getters (finite non-negative numbers; the reader's zod schema AZt requires nonnegative().finite() for each and a record of model name to usage for modelUsage). totalCostUSD is a float; the durations (ms), line counts and startTime (epoch ms) are integers in practice but the schema is number. hasUnknownModelCost is a boolean (optional in the reader schema). modelUsage maps a model name to {inputTokens, outputTokens, thinkingTokens (optional), cacheReadInputTokens, cacheCreationInputTokens, cacheCreationEphemeral5mInputTokens, cacheCreationEphemeral1hInputTokens (both since 2.1.311), webSearchRequests, costUSD}."
 		},
@@ -723,7 +723,7 @@
 			},
 			"anchors": [
 				"{type:\"cost-state\",sessionId:«»(),totalCostUSD:«»(),totalAPIDuration:«»()",
-				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»()}}function «»("
+				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»(),...«»>0&&{modelCallCostUSD:«»}}}function «»("
 			],
 			"note": "The cost snapshot builder fills every total from the cost tracker's getters (finite non-negative numbers; the reader's zod schema AZt requires nonnegative().finite() for each and a record of model name to usage for modelUsage). totalCostUSD is a float; the durations (ms), line counts and startTime (epoch ms) are integers in practice but the schema is number. hasUnknownModelCost is a boolean (optional in the reader schema). modelUsage maps a model name to {inputTokens, outputTokens, thinkingTokens (optional), cacheReadInputTokens, cacheCreationInputTokens, cacheCreationEphemeral5mInputTokens, cacheCreationEphemeral1hInputTokens (both since 2.1.311), webSearchRequests, costUSD}."
 		},
@@ -733,7 +733,7 @@
 			},
 			"anchors": [
 				"{type:\"cost-state\",sessionId:«»(),totalCostUSD:«»(),totalAPIDuration:«»()",
-				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»()}}function «»("
+				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»(),...«»>0&&{modelCallCostUSD:«»}}}function «»("
 			],
 			"note": "The cost snapshot builder fills every total from the cost tracker's getters (finite non-negative numbers; the reader's zod schema AZt requires nonnegative().finite() for each and a record of model name to usage for modelUsage). totalCostUSD is a float; the durations (ms), line counts and startTime (epoch ms) are integers in practice but the schema is number. hasUnknownModelCost is a boolean (optional in the reader schema). modelUsage maps a model name to {inputTokens, outputTokens, thinkingTokens (optional), cacheReadInputTokens, cacheCreationInputTokens, cacheCreationEphemeral5mInputTokens, cacheCreationEphemeral1hInputTokens (both since 2.1.311), webSearchRequests, costUSD}."
 		},
@@ -743,7 +743,7 @@
 			},
 			"anchors": [
 				"{type:\"cost-state\",sessionId:«»(),totalCostUSD:«»(),totalAPIDuration:«»()",
-				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»()}}function «»("
+				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»(),...«»>0&&{modelCallCostUSD:«»}}}function «»("
 			],
 			"note": "The cost snapshot builder fills every total from the cost tracker's getters (finite non-negative numbers; the reader's zod schema AZt requires nonnegative().finite() for each and a record of model name to usage for modelUsage). totalCostUSD is a float; the durations (ms), line counts and startTime (epoch ms) are integers in practice but the schema is number. hasUnknownModelCost is a boolean (optional in the reader schema). modelUsage maps a model name to {inputTokens, outputTokens, thinkingTokens (optional), cacheReadInputTokens, cacheCreationInputTokens, cacheCreationEphemeral5mInputTokens, cacheCreationEphemeral1hInputTokens (both since 2.1.311), webSearchRequests, costUSD}."
 		},
@@ -753,7 +753,7 @@
 			},
 			"anchors": [
 				"{type:\"cost-state\",sessionId:«»(),totalCostUSD:«»(),totalAPIDuration:«»()",
-				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»()}}function «»("
+				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»(),...«»>0&&{modelCallCostUSD:«»}}}function «»("
 			],
 			"note": "The cost snapshot builder fills every total from the cost tracker's getters (finite non-negative numbers; the reader's zod schema AZt requires nonnegative().finite() for each and a record of model name to usage for modelUsage). totalCostUSD is a float; the durations (ms), line counts and startTime (epoch ms) are integers in practice but the schema is number. hasUnknownModelCost is a boolean (optional in the reader schema). modelUsage maps a model name to {inputTokens, outputTokens, thinkingTokens (optional), cacheReadInputTokens, cacheCreationInputTokens, cacheCreationEphemeral5mInputTokens, cacheCreationEphemeral1hInputTokens (both since 2.1.311), webSearchRequests, costUSD}."
 		},
@@ -763,7 +763,7 @@
 			},
 			"anchors": [
 				"{type:\"cost-state\",sessionId:«»(),totalCostUSD:«»(),totalAPIDuration:«»()",
-				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»()}}function «»("
+				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»(),...«»>0&&{modelCallCostUSD:«»}}}function «»("
 			],
 			"note": "The cost snapshot builder fills every total from the cost tracker's getters (finite non-negative numbers; the reader's zod schema AZt requires nonnegative().finite() for each and a record of model name to usage for modelUsage). totalCostUSD is a float; the durations (ms), line counts and startTime (epoch ms) are integers in practice but the schema is number. hasUnknownModelCost is a boolean (optional in the reader schema). modelUsage maps a model name to {inputTokens, outputTokens, thinkingTokens (optional), cacheReadInputTokens, cacheCreationInputTokens, cacheCreationEphemeral5mInputTokens, cacheCreationEphemeral1hInputTokens (both since 2.1.311), webSearchRequests, costUSD}."
 		},
@@ -773,7 +773,7 @@
 			},
 			"anchors": [
 				"{type:\"cost-state\",sessionId:«»(),totalCostUSD:«»(),totalAPIDuration:«»()",
-				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»()}}function «»("
+				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»(),...«»>0&&{modelCallCostUSD:«»}}}function «»("
 			],
 			"note": "The cost snapshot builder fills every total from the cost tracker's getters (finite non-negative numbers; the reader's zod schema AZt requires nonnegative().finite() for each and a record of model name to usage for modelUsage). totalCostUSD is a float; the durations (ms), line counts and startTime (epoch ms) are integers in practice but the schema is number. hasUnknownModelCost is a boolean (optional in the reader schema). modelUsage maps a model name to {inputTokens, outputTokens, thinkingTokens (optional), cacheReadInputTokens, cacheCreationInputTokens, cacheCreationEphemeral5mInputTokens, cacheCreationEphemeral1hInputTokens (both since 2.1.311), webSearchRequests, costUSD}."
 		},
@@ -783,7 +783,7 @@
 			},
 			"anchors": [
 				"{type:\"cost-state\",sessionId:«»(),totalCostUSD:«»(),totalAPIDuration:«»()",
-				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»()}}function «»("
+				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»(),...«»>0&&{modelCallCostUSD:«»}}}function «»("
 			],
 			"note": "The cost snapshot builder fills every total from the cost tracker's getters (finite non-negative numbers; the reader's zod schema AZt requires nonnegative().finite() for each and a record of model name to usage for modelUsage). totalCostUSD is a float; the durations (ms), line counts and startTime (epoch ms) are integers in practice but the schema is number. hasUnknownModelCost is a boolean (optional in the reader schema). modelUsage maps a model name to {inputTokens, outputTokens, thinkingTokens (optional), cacheReadInputTokens, cacheCreationInputTokens, cacheCreationEphemeral5mInputTokens, cacheCreationEphemeral1hInputTokens (both since 2.1.311), webSearchRequests, costUSD}."
 		},
@@ -793,7 +793,7 @@
 			},
 			"anchors": [
 				"{type:\"cost-state\",sessionId:«»(),totalCostUSD:«»(),totalAPIDuration:«»()",
-				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»()}}function «»("
+				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»(),...«»>0&&{modelCallCostUSD:«»}}}function «»("
 			],
 			"note": "The cost snapshot builder fills every total from the cost tracker's getters (finite non-negative numbers; the reader's zod schema AZt requires nonnegative().finite() for each and a record of model name to usage for modelUsage). totalCostUSD is a float; the durations (ms), line counts and startTime (epoch ms) are integers in practice but the schema is number. hasUnknownModelCost is a boolean (optional in the reader schema). modelUsage maps a model name to {inputTokens, outputTokens, thinkingTokens (optional), cacheReadInputTokens, cacheCreationInputTokens, cacheCreationEphemeral5mInputTokens, cacheCreationEphemeral1hInputTokens (both since 2.1.311), webSearchRequests, costUSD}."
 		},
@@ -835,7 +835,7 @@
 			},
 			"anchors": [
 				"{type:\"cost-state\",sessionId:«»(),totalCostUSD:«»(),totalAPIDuration:«»()",
-				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»()}}function «»("
+				"modelUsage:«»(«»(),(«»)=>({inputTokens:«».inputTokens,outputTokens:«».outputTokens,thinkingTokens:«».thinkingTokens,cacheReadInputTokens:«».cacheReadInputTokens,cacheCreationInputTokens:«».cacheCreationInputTokens,cacheCreationEphemeral5mInputTokens:«».cacheCreationEphemeral5mInputTokens,cacheCreationEphemeral1hInputTokens:«».cacheCreationEphemeral1hInputTokens,webSearchRequests:«».webSearchRequests,costUSD:«».costUSD})),hasUnknownModelCost:«»(),...«»>0&&{modelCallCostUSD:«»}}}function «»("
 			],
 			"note": "The cost snapshot builder fills every total from the cost tracker's getters (finite non-negative numbers; the reader's zod schema AZt requires nonnegative().finite() for each and a record of model name to usage for modelUsage). totalCostUSD is a float; the durations (ms), line counts and startTime (epoch ms) are integers in practice but the schema is number. hasUnknownModelCost is a boolean (optional in the reader schema). modelUsage maps a model name to {inputTokens, outputTokens, thinkingTokens (optional), cacheReadInputTokens, cacheCreationInputTokens, cacheCreationEphemeral5mInputTokens, cacheCreationEphemeral1hInputTokens (both since 2.1.311), webSearchRequests, costUSD}."
 		},
@@ -1784,7 +1784,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"subtype:\"informational\",content:«»,isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:n",
+				"subtype:\"informational\",content:«»,isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:«»",
 				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
 				"subtype:\"permission_retry\",content:`${«»(«»)} ${e.join(\", \")}. ${«»(e.length)}`"
 			],
@@ -1795,7 +1795,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"subtype:\"informational\",content:«»,isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:n",
+				"subtype:\"informational\",content:«»,isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:«»",
 				"{type:\"system\",subtype:\"local_command\",content:«».local_command_source,level:\"info\",timestamp:«».timestamp??new Date().toISOString(),uuid:«».uuid??«»(),isMeta:!1"
 			],
 			"note": "The program builds system lines in the message constructors of the session code (createSystemMessage and the other subtype builders), and the remote-session path rebuilds some from stream-json frames. timestamp is new Date().toISOString(), a clock-function string of the same form, or the timestamp string of the source message."
@@ -1805,7 +1805,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"subtype:\"informational\",content:«»,isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:n",
+				"subtype:\"informational\",content:«»,isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:«»",
 				"{type:\"system\",subtype:\"local_command\",content:«».local_command_source,level:\"info\",timestamp:«».timestamp??new Date().toISOString(),uuid:«».uuid??«»(),isMeta:!1"
 			],
 			"note": "The program builds system lines in the message constructors of the session code (createSystemMessage and the other subtype builders), and the remote-session path rebuilds some from stream-json frames. uuid is crypto.randomUUID() (imported as h_ and _io), or the uuid string of the frame the line is rebuilt from."
@@ -1815,7 +1815,7 @@
 				"enum": ["info", "notice", "suggestion", "warning", "error"]
 			},
 			"anchors": [
-				"subtype:\"informational\",content:«»,isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:n",
+				"subtype:\"informational\",content:«»,isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:«»",
 				"subtype:\"api_error\",level:\"error\",error:«»,retryInMs:«»,retryAttempt:«»,maxRetries:«»,source:h",
 				"yield «»(«»,«»,«»,«»,«»,«»,\"suggestion\",«»,void 0,void 0,«»)",
 				"subtype:\"cloud_session_status\",content:«»,entry:«»,url:«»,level:\"notice\""
@@ -2036,14 +2036,14 @@
 			"schema": {
 				"type": "number"
 			},
-			"anchors": ["pendingBackgroundAgentCount:«»,pendingWorkflowCount:s"],
+			"anchors": ["pendingBackgroundAgentCount:«»,pendingWorkflowCount:«»"],
 			"note": "turn_duration: a count (callers pass pendingBackgroundAgentCount fields of the turn state)."
 		},
 		"system.pendingWorkflowCount": {
 			"schema": {
 				"type": "number"
 			},
-			"anchors": ["pendingBackgroundAgentCount:«»,pendingWorkflowCount:s"],
+			"anchors": ["pendingBackgroundAgentCount:«»,pendingWorkflowCount:«»"],
 			"note": "turn_duration: a count; the call site passes `count||void 0`, so it is a positive number or not written."
 		},
 		"system.writtenPaths": {
@@ -3253,7 +3253,9 @@
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»"],
+			"anchors": [
+				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«».changes)"
+			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; requestId is bl ?? undefined, the request id string from the response (fXe returns a string or null, null becomes undefined, so it is not written)."
 		},
 		"assistant.apiBlockIndex": {
@@ -3271,9 +3273,9 @@
 				"type": "string"
 			},
 			"anchors": [
-				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model",
-				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model",
-				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model"
+				"apiBlockIndex:0,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model",
+				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model",
+				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; requestedModel is the model id string of the request (Q.model)."
 		},
@@ -3285,9 +3287,9 @@
 				"attributionAgent:«».slice(14),...«»(«»)",
 				"attributionSkill:«»,...«»&&{attributionPlugin:«»}",
 				"attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
-				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+				"apiBlockIndex:0,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionAgent is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
 		},
@@ -3299,9 +3301,9 @@
 				"attributionAgent:«».slice(14),...«»(«»)",
 				"attributionSkill:«»,...«»&&{attributionPlugin:«»}",
 				"attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
-				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+				"apiBlockIndex:0,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionSkill is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
 		},
@@ -3313,9 +3315,9 @@
 				"attributionAgent:«».slice(14),...«»(«»)",
 				"attributionSkill:«»,...«»&&{attributionPlugin:«»}",
 				"attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
-				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+				"apiBlockIndex:0,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionPlugin is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
 		},
@@ -3327,9 +3329,9 @@
 				"attributionAgent:«».slice(14),...«»(«»)",
 				"attributionSkill:«»,...«»&&{attributionPlugin:«»}",
 				"attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
-				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+				"apiBlockIndex:0,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionMcpServer is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
 		},
@@ -3341,9 +3343,9 @@
 				"attributionAgent:«».slice(14),...«»(«»)",
 				"attributionSkill:«»,...«»&&{attributionPlugin:«»}",
 				"attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
-				"apiBlockIndex:0,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».length,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».index,requestId:«»??void 0,requestRef:«»,requestNotRecorded:«»,requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+				"apiBlockIndex:0,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionMcpTool is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
 		},
@@ -3809,7 +3811,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"\"user-rejected\"",
 				"\"permission-rule\"",
 				"\"interrupted\"",
@@ -3822,7 +3824,7 @@
 				"type": "boolean"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"«».behavior===\"deny\"&&«».endsTurn?!0:void 0"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. toolDenialEndsTurn is true when written, else undefined."
@@ -3832,7 +3834,7 @@
 				"type": "boolean"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"«».decisionReason.monitorBlocked===!0?!0:void 0"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. toolDenialMonitorBlocked is true when written (the spread is guarded by the value)."
@@ -3842,7 +3844,7 @@
 				"type": "array"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"«» instanceof «»?«».sandboxViolations:void 0"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. sandboxViolations is an array of sandbox violation records from the sandbox runtime; the items are not typed here."
@@ -3852,7 +3854,7 @@
 				"type": "boolean"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"«» instanceof «»?«».sandboxed:void 0"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. sandboxed is a boolean flag."
@@ -3929,7 +3931,7 @@
 				}
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"fileName:«»(),bytesDone:«»(),bytesTotal:«»(),connectorName:«»(),place:«»().optional(),savedAs:«»().optional(),fileIndex:«»().int().positive(),fileCount:«»().int().positive(),groupedFiles:«»().int().min(2).optional()"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module, and by the stream-json rebuild sites. connectorFileLines lists the files a connector (an MCP server that delivers files) fetched or sent in the tool call. The reader checks each item with a zod object (chunk-fm0g04m5.js, about offset 27900, in 2.1.322) and drops items that fail: direction is fetching or sending; state is done, stopped, stopped-maybe-saved, or {refused, leftBehind?}. New in 2.1.321."
@@ -3939,7 +3941,7 @@
 				"type": "boolean"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"toolEndsTurn:«»"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. toolEndsTurn is a boolean flag set when the tool ends the turn."
@@ -3957,7 +3959,7 @@
 				}
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"mcpMeta:«».mcpMeta"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. mcpMeta holds the MCP CallToolResult fields _meta and structuredContent (@modelcontextprotocol/sdk CallToolResult: _meta?: object, structuredContent?: object); only the keys present in the tool result are written."
@@ -3970,7 +3972,7 @@
 				}
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"imagePasteIds:«».length>0?«»:void 0,permissionMode:«»"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. imagePasteIds is an array of paste ids (numbers) of images pasted in the prompt. The prompt write site drops the key when the list is empty (chunk-7nmpvy5x.js:2338 in 2.1.322)."
@@ -3980,7 +3982,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"sourceToolAssistantUUID:«».uuid"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. sourceToolAssistantUUID is the uuid string of the assistant line holding the tool_use."
@@ -3997,7 +3999,7 @@
 				]
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"«»=[\"acceptEdits\",\"auto\",\"bypassPermissions\",\"default\",\"dontAsk\",\"plan\"]"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. permissionMode is a permission mode string; the program's list of modes is acceptEdits, auto, bypassPermissions, default, dontAsk, plan, and the reader drops other values."
@@ -4027,7 +4029,7 @@
 				}
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»"
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. origin is an object with a kind string ('human', 'plugin', 'channel', 'task-notification', 'peer', 'coordinator', 'unclassified', 'observer', 'auto-continuation', 'observer-activity', 'slack-ping' are handled by the origin helper dle), plus kind-specific keys: name and asUser (plugin), server (channel), subkind (task-notification), plugin (peer, coordinator)."
 		},
@@ -4036,7 +4038,7 @@
 				"enum": ["typed", "queued", "suggestion_accepted", "sdk", "system"]
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"case\"typed\":case\"queued\":case\"suggestion_accepted\":return{kind:\"unclassified\"};case\"sdk\""
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. promptSource is one of the five values the origin helper switches on."
@@ -4046,7 +4048,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"interruptedMessageId:«»"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. interruptedMessageId is a message uuid string."
@@ -4056,7 +4058,7 @@
 				"type": "boolean"
 			},
 			"anchors": [
-				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
+				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"function «»(«»){return «»(«».reason)===\"shutdown\"?!0:void 0}"
 			],
 			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. interruptedByShutdown is true when the abort reason is 'shutdown' and is not written otherwise."
@@ -5057,7 +5059,7 @@
 				"type": "boolean",
 				"enum": [true]
 			},
-			"anchors": ["if(«»(«»))«».healsDistinctCarrier=!0"],
+			"anchors": ["if(«»(«»)){if(«».healsDistinctCarrier=!0"],
 			"note": "Ws(...) (API-error assistant message builder, chunk-a1cg2ptw ~3682) builds K=r7n({...}) then `if(y7n(K))K.healsDistinctCarrier=!0;return K`. Only ever assigned !0; otherwise the key is absent. The other mention (GLo) only copies it into a test fixture."
 		},
 		"assistant.isMeta": {
@@ -5086,7 +5088,7 @@
 			},
 			"anchors": [
 				"{return{serverClassifierRequest:«».key,serverClassifierResults:«»}}",
-				"isVoidedByAnotherCall(«»){for(let[«»,«»]of this.#«»)if(«»===void 0||«»!==«»&&!«».has(«»))return!0;return!1}toJSON(){return}}"
+				"isVoidedByAnotherCall(«»){for(let[«»,«»]of this.#«»)if(«»===void 0||«»!==«»&&!«».has(«»))return!0;return!1}settledUnchanged(){return this.#«».size>0?void 0:this.#«»}toJSON(){return}}"
 			],
 			"note": "Written in memory only: the factory returns {serverClassifierRequest:a1.key,serverClassifierResults:a1}, where a1 is the server-classifier handle (chunk-6cetpjxd.js:1651 in 2.1.322). The handle is an instance of class ge (:1484), which ends in toJSON(){return}, so JSON.stringify drops the key. The input-rewrite path also destructures both keys out before it rebuilds the line (`let{serverClassifierRequest:L,serverClassifierResults:U,...w}=e`). So the transcript never holds it, and no value is valid."
 		},
@@ -5110,7 +5112,7 @@
 			"anchors": [
 				"isMeta:!0,forwardedIntent:{lineage:«».lineage,source:«».source},...«»({forwardedIntent:{lineage:«».lineage,source:«».source}})",
 				"source:«»===\"human-principal\"?\"relay\":\"unattributed\"",
-				"if(«».frame===\"relay-human\")return\"relay\";if(«».verifiedSlackHumanTurn===!0)return\"stop\"",
+				"if(«».frame===\"relay-human\")return «».answeredPost===void 0?\"relay\":\"stop\";if(«».verifiedSlackHumanTurn===!0)return\"stop\"",
 				"«».kind===\"human\"&&(«»===\"queued_command\"||«».isMeta!==!0))return\"typed\"",
 				"source:«»?\"owner\":\"unattributed\",projectsRow:!0",
 				"function «»(«»){return «»===\"owner\"&&«»()?\"unattributed\":«»}",

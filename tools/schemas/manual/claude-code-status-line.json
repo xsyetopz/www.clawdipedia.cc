@@ -21,10 +21,10 @@
 				"type": "number"
 			},
 			"anchors": [
-				"total_cost_usd:«»(),...!1",
+				"total_cost_usd:«»??«»(),...!1",
 				"total_cost_usd:«»(),total_api_duration_ms:«»(),total_duration_ms:«»()"
 			],
-			"note": "ZUr builds cost:{total_cost_usd:Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalCostUSD() returns #e, a running sum (#e+=e in recordCost) that starts at 0, so a number (a float: US dollars)."
+			"note": "ZUr builds cost:{total_cost_usd:remoteSessionCostUsd??Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalCostUSD() returns #e, a running sum (#e+=e in recordCost) that starts at 0, so a number (a float: US dollars)."
 		},
 		"cost.total_duration_ms": {
 			"schema": {
@@ -34,7 +34,7 @@
 				"...!1,total_duration_ms:«»()",
 				"total_api_duration_ms:«»(),total_duration_ms:«»()"
 			],
-			"note": "ZUr builds cost:{total_cost_usd:Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalDuration() returns Math.max(0,Date.now()-#r): a number of milliseconds."
+			"note": "ZUr builds cost:{total_cost_usd:remoteSessionCostUsd??Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalDuration() returns Math.max(0,Date.now()-#r): a number of milliseconds."
 		},
 		"cost.total_api_duration_ms": {
 			"schema": {
@@ -44,7 +44,7 @@
 				"total_duration_ms:«»(),total_api_duration_ms:«»()",
 				"total_cost_usd:«»(),total_api_duration_ms:«»(),total_duration_ms:«»()"
 			],
-			"note": "ZUr builds cost:{total_cost_usd:Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalAPIDuration() returns #t, a running sum of the durations passed to recordApiDuration (#t+=e), starting at 0: a number of milliseconds."
+			"note": "ZUr builds cost:{total_cost_usd:remoteSessionCostUsd??Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalAPIDuration() returns #t, a running sum of the durations passed to recordApiDuration (#t+=e), starting at 0: a number of milliseconds."
 		},
 		"cost.total_lines_added": {
 			"schema": {
@@ -54,17 +54,17 @@
 				"total_api_duration_ms:«»(),total_lines_added:«»()",
 				"total_duration_ms:«»(),total_lines_added:«»()"
 			],
-			"note": "ZUr builds cost:{total_cost_usd:Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalLinesAdded() returns #i, a running count (#i+=e in recordLinesChanged), starting at 0: a number."
+			"note": "ZUr builds cost:{total_cost_usd:remoteSessionCostUsd??Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalLinesAdded() returns #i, a running count (#i+=e in recordLinesChanged), starting at 0: a number."
 		},
 		"cost.total_lines_removed": {
 			"schema": {
 				"type": "number"
 			},
 			"anchors": [
-				"total_cost_usd:«»(),...!1,total_duration_ms:«»(),total_api_duration_ms:«»(),total_lines_added:«»(),total_lines_removed:«»()",
+				"total_cost_usd:«»??«»(),...!1,total_duration_ms:«»(),total_api_duration_ms:«»(),total_lines_added:«»(),total_lines_removed:«»()",
 				"total_cost_usd:«»(),total_api_duration_ms:«»(),total_duration_ms:«»(),total_lines_added:«»(),total_lines_removed:«»()"
 			],
-			"note": "ZUr builds cost:{total_cost_usd:Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalLinesRemoved() returns #l, a running count (#l+=t in recordLinesChanged), starting at 0: a number."
+			"note": "ZUr builds cost:{total_cost_usd:remoteSessionCostUsd??Rh(),...!1,total_duration_ms:fSe(),total_api_duration_ms:yF(),total_lines_added:RNe(),total_lines_removed:xNe()}. Each reads the cost ledger class (totalCostUSD, totalDuration, totalAPIDuration, totalLinesAdded, totalLinesRemoved). totalLinesRemoved() returns #l, a running count (#l+=t in recordLinesChanged), starting at 0: a number."
 		},
 		"exceeds_200k_tokens": {
 			"schema": {
