@@ -4,11 +4,9 @@ description: The six permission modes, how Claude Code picks one, the reasons it
 sidebar_position: 2
 ---
 
-A permission mode sets which tool calls run without a prompt.
-The modes go from `plan`, which only reads, to `bypassPermissions`, which skips most checks.
-For example, `claude --permission-mode acceptEdits` starts a session that edits files with no prompt.
+A permission mode sets which tool calls run without a prompt. The modes go from `plan`, which only reads, to `bypassPermissions`, which skips most checks. Pick a stricter mode when you want to review each action. Pick a looser mode for long tasks that you trust.
 
-Run `/permissions` in the chat. Or start with `--permission-mode`, which wins for one session. Set `permissions.defaultMode` for the start mode. `permissions.disableBypassPermissionsMode: "disable"` removes `bypassPermissions`. `permissions.disableAutoMode: "disable"` removes `auto`.
+Run `/permissions` in the chat to change the mode. Start with `claude --permission-mode acceptEdits` to set the mode for one session. Set `permissions.defaultMode` to choose the mode that new sessions start in. Set `permissions.disableBypassPermissionsMode: "disable"` to remove `bypassPermissions`. Set `permissions.disableAutoMode: "disable"` to remove `auto`.
 
 ## Example
 
@@ -26,36 +24,33 @@ New sessions start in `acceptEdits`. Nobody can switch the session to `bypassPer
 
 ## The Six Modes
 
-The program accepts `acceptEdits`, `auto`, `bypassPermissions`, `default`, `dontAsk`, and `plan`.
-The word `manual` is an alias of `default`.
-The error text is `Cannot set permission mode: must be one of acceptEdits, auto, bypassPermissions, default, dontAsk, plan`.
+Claude Code accepts `acceptEdits`, `auto`, `bypassPermissions`, `default`, `dontAsk`, and `plan`. The word `manual` is an alias of `default`. Any other value gives the error `Cannot set permission mode: must be one of acceptEdits, auto, bypassPermissions, default, dontAsk, plan`.[^mode-names]
 Official pages: [Configure Permissions](https://code.claude.com/docs/en/permissions) and [Choose a Permission Mode](https://code.claude.com/docs/en/permission-modes).
+The advice that starts with "Use it" comes from the official page.[^mode-use]
 
 | Item | Status | What it does | How it works | Where to set it |
 | --- | --- | --- | --- | --- |
-| `default` | <Documented /> | Standard behavior | Prompts for dangerous operations. The picker text is `default (ask each time)` | `--permission-mode`, `defaultMode`, `/permissions` |
-| `acceptEdits` | <Documented /> | Auto-accepts file edits | The picker text is `accept edits (auto-approve file edits and common file commands)`. It allows edits inside the workspace. A Bash check says `would be allowed in acceptEdits mode` | Same |
-| `plan` | <Documented /> | Analysis only, no edits | The picker text is `plan mode (research and propose changes without making them)`. With auto mode available, plan mode uses auto mode semantics unless `useAutoModeDuringPlan` is `false` | Same |
-| `auto` | <Documented /> | A classifier screens each action | The picker text is `auto (no routine prompts, a reviewer model screens actions)`. See [Auto Mode](auto-mode.md) | Same. Not from project or local `defaultMode` |
-| `dontAsk` | <Documented /> | Denies what would prompt | The picker text is `don't ask (auto-deny anything that would prompt)`. The deny reason says `Claude Code is running in don't ask mode` | Same |
-| `bypassPermissions` | <Documented /> <Caution /> | Skips permission checks | The picker text is `BYPASS PERMISSIONS (no further prompts)`. Explicit `deny` rules still apply. Safety checks marked bypass-immune still ask | Needs `--dangerously-skip-permissions` or `--allow-dangerously-skip-permissions`. Not from project or local `defaultMode` |
+| `default` | <Documented /> | Standard behavior | Prompts for dangerous operations. The picker text is `default (ask each time)`. Use it to review each action yourself, for sensitive work | `--permission-mode`, `defaultMode`, `/permissions` |
+| `acceptEdits` | <Documented /> | Auto-accepts file edits | The picker text is `accept edits (auto-approve file edits and common file commands)`. It allows edits inside the workspace. A Bash check says `would be allowed in acceptEdits mode`. Use it to iterate on code that you review | Same |
+| `plan` | <Documented /> | Analysis only, no edits | The picker text is `plan mode (research and propose changes without making them)`. With auto mode available, plan mode uses auto mode semantics unless `useAutoModeDuringPlan` is `false`. Use it to explore a codebase before you change it | Same |
+| `auto` | <Documented /> | A classifier screens each action | The picker text is `auto (no routine prompts, a reviewer model screens actions)`. See [Auto Mode](auto-mode.md). Use it for long tasks, to reduce prompt fatigue | Same. Project and local settings cannot set it as `defaultMode`[^project-default] |
+| `dontAsk` | <Documented /> | Denies what would prompt | The picker text is `don't ask (auto-deny anything that would prompt)`. The deny reason says `Claude Code is running in don't ask mode`. Use it for locked-down CI and scripts | Same |
+| `bypassPermissions` | <Documented /> <Caution /> | Skips permission checks | The picker text is `BYPASS PERMISSIONS (no further prompts)`. Explicit `deny` rules still apply. Safety checks marked bypass-immune still ask. Use it only in isolated containers and VMs | Needs `--dangerously-skip-permissions` or `--allow-dangerously-skip-permissions`. Project and local settings cannot set it as `defaultMode`[^project-default] |
 
 Captured system prompts for some modes: [Plan](../../prompts/modes/mode-plan.md), [Accept Edits](../../prompts/modes/mode-acceptEdits.md), and [Don't Ask](../../prompts/modes/mode-dontAsk.md).
 
 ## Choosing and Cycling a Mode
 
 - `permissions.defaultMode` sets the start mode. `--permission-mode` wins for one session.
-- Project and local settings cannot set `auto` or `bypassPermissions` as the default. Source: the program.
-- Since `2.1.323`, when the auto mode killswitch is active, `--permission-mode auto` and `defaultMode: auto` start the session in `default` (Manual), which asks first. The program logs `auto mode killswitch active (override- or payload-served) — falling back to default` (`chunk-2xn4gen7.js:4930`, `:8151`). The same fallback applies to an agent definition's `permissionMode: auto`.
-- `permissions.disableBypassPermissionsMode` stops `bypassPermissions`. So does a bypass dialog that you did not accept.
-  The program texts are `bypassPermissions mode is disabled by settings` and `Cannot set permission mode to bypassPermissions because the session was not launched with --dangerously-skip-permissions`.
-- A cloud session cannot use `bypassPermissions`. Source: the program error text.
+- Project and local settings cannot set `auto` or `bypassPermissions` as the default.[^project-default]
+- Since `2.1.323`, when the auto mode killswitch is active, `--permission-mode auto` and `defaultMode: auto` start the session in `default` (Manual), which asks first. The same fallback applies to an agent definition's `permissionMode: auto`.[^killswitch]
+- `permissions.disableBypassPermissionsMode` stops `bypassPermissions`. So does a bypass dialog that you did not accept. The errors are `bypassPermissions mode is disabled by settings` and `Cannot set permission mode to bypassPermissions because the session was not launched with --dangerously-skip-permissions`.[^bypass-errors]
+- A cloud session cannot use `bypassPermissions`.[^cloud-bypass]
 - The IDE host cycles through `acceptEdits`, `plan`, `default`, and `auto`. The order in the terminal is not documented.
 
 ## Decision Reasons
 
-Every permission decision carries a `decisionReason` with one of these types.
-Source: the program. Hooks and SDK hosts can see these types.
+Every permission decision carries a `decisionReason` with one of these types. Hooks and SDK hosts can see these types.[^reasons]
 
 | Reason Type | Status | What it means | Text or detail | Seen In |
 | --- | --- | --- | --- | --- |
@@ -79,7 +74,7 @@ A `safetyCheck` reason carries a `circuitBreaker` name. Three flags describe the
 
 | Check | Status | What it covers | Behavior | Seen In |
 | --- | --- | --- | --- | --- |
-| `dangerousRemoval` | <Undocumented /> | Critical-path `rm` prompts | Bypass-immune, classifier-routed. A time limit applies unless `CLAUDE_CODE_DISABLE_DANGEROUS_RM_TIMEOUT=1`. Since `2.1.309`, in `bypassPermissions` mode in the desktop app and VS Code, a dangerous `rm` or `rmdir` is denied at once with a hint to rewrite it, so unattended sessions keep going ([v2.1.309 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.309)) | `Bash` |
+| `dangerousRemoval` | <Undocumented /> | Critical-path `rm` prompts | Bypass-immune, classifier-routed. A time limit applies unless `CLAUDE_CODE_DISABLE_DANGEROUS_RM_TIMEOUT=1`. Since `2.1.309`, in `bypassPermissions` mode in the desktop app and VS Code, a dangerous `rm` or `rmdir` is denied at once with a hint to rewrite it, so unattended sessions keep going.[^v309] | `Bash` |
 | `backgroundOperator` | <Undocumented /> | Background operator calls | Classifier-routed | Background sessions |
 | `suspiciousWindowsPath` | <Undocumented /> | Odd Windows paths | Classifier-routed | Windows |
 | `isolatePeerMachines` | <Documented /> | Peer machine isolation | Bypass-immune. Setting `isolatePeerMachines` | Managed |
@@ -99,3 +94,14 @@ A `safetyCheck` reason carries a `circuitBreaker` name. Three flags describe the
 - [Auto Mode](auto-mode.md) for the classifier behind `auto`.
 - [Sandbox](sandbox.md) for the operating-system wall around `Bash`.
 - [All Flags](../cli/flags.md) for the permission flags.
+
+## Sources
+
+[^mode-names]: The program.
+[^project-default]: The program.
+[^killswitch]: The program, `chunk-2xn4gen7.js:4930`, `:8151`. The program logs `auto mode killswitch active (override- or payload-served) — falling back to default`.
+[^bypass-errors]: The program.
+[^cloud-bypass]: The program error text.
+[^reasons]: The program.
+[^v309]: [`2.1.309` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.309).
+[^mode-use]: Official page [Choose a Permission Mode](https://code.claude.com/docs/en/permission-modes), table "Available modes", column "Best for".

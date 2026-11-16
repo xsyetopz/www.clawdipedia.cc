@@ -4,14 +4,9 @@ description: Where Claude Code settings live, which value wins, how managed sett
 sidebar_position: 1
 ---
 
-Settings are JSON files that change how Claude Code behaves.
-You can pick a model, add permission rules, turn off a feature, or share the same rules with a whole team.
-Create or edit a settings file, pass `--settings`, or use `/config` and `/model` for some keys.
-An administrator can deploy managed settings.
-Each key is its own switch. `disableAllHooks` turns off hooks, the status line, and file suggestions at once.
+Settings are JSON files that change how Claude Code behaves. Use them to pick a model, add permission rules, turn off a feature, or share the same rules with a whole team. Create or edit a settings file, pass `--settings`, or use `/config` and `/model` for some keys. An administrator can deploy managed settings. Each key is its own switch. `disableAllHooks` turns off hooks, the status line, and file suggestions at once.
 
-The managed schema of `2.1.322` lists 197 top-level keys. The user schema lists 173, and the other 24 are managed-only.
-Source: the program (the published settings schemas).
+The managed schema of `2.1.322` lists 197 top-level keys. The user schema lists 173, and the other 24 are managed-only.[^schemas]
 
 ## Example
 
@@ -27,8 +22,7 @@ A project can share one small file with the whole team.
 }
 ```
 
-Every session in that folder starts on Opus and may run `bun test` without asking.
-A teammate can still override `model` in `.claude/settings.local.json`.
+Every session in that folder starts on Opus and may run `bun test` without asking. A teammate can still override `model` in `.claude/settings.local.json`.
 
 ## Pages for Each Group of Keys
 
@@ -66,15 +60,15 @@ Each key has a row on one of these pages.
 | Managed | `managed-settings.json` and the other managed sources | Everyone your organization deploys it to. |
 | Global config | `~/.claude.json` | You. Claude Code writes it. It holds sign-in data, MCP servers, per-project state, and a few keys. |
 
-Source: [Settings Files and Precedence](https://code.claude.com/docs/en/settings) and [Explore the .claude Directory](https://code.claude.com/docs/en/claude-directory).
+Official pages: [Settings Files and Precedence](https://code.claude.com/docs/en/settings) and [Explore the .claude Directory](https://code.claude.com/docs/en/claude-directory).
 
 - Settings files are strict JSON. A comment or a trailing comma is a syntax error.
 - Claude Code reads the shared project file from the primary working directory.
   After `/cd`, it reads the new directory (v2.1.246 or later).
 - In a git repository, the local file lives at the repository root. In a worktree, it lives at the main checkout root.
 - Claude Code adds `**/.claude/settings.local.json` to your global git excludes file when it writes the local file.
-  Since `2.1.323`, it does this also when the folder is not a git repository yet (`chunk-rqvvpwt0.js:6395`, called from `chunk-rqvvpwt0.js:85856`).
-- A write to a settings file reads the file from disk first, so a hand edit made moments before is kept. A file that was deleted starts again as a new file that holds only that change. Since `2.1.323`, a write seeds from the last parse only when the file is empty, broken, or locked, or when a `ConfigChange` hook blocked the latest change (`chunk-rqvvpwt0.js:88588`).
+  Since `2.1.323`, it does this also when the folder is not a git repository yet.[^gitignore]
+- A write to a settings file reads the file from disk first, so a hand edit made moments before is kept. A file that was deleted starts again as a new file that holds only that change. Since `2.1.323`, a write seeds from the last parse only when the file is empty, broken, or locked, or when a `ConfigChange` hook blocked the latest change.[^seed]
 - Claude Code watches the files and reloads them. It runs the `ConfigChange` hook for each change in a settings file.
 - Managed settings from MDM or the console reach a running session on a schedule, not on save.
 - A cloud session reads only the shared project file and server-managed settings.
@@ -82,7 +76,7 @@ Source: [Settings Files and Precedence](https://code.claude.com/docs/en/settings
 - The flag `--setting-sources <sources>` loads only the sources you name (`user`, `project`, `local`).
   A source you leave out no longer supplies auto mode rules or saved permission consents (v2.1.314 or later).
 
-Source: the program names the five sources `userSettings`, `projectSettings`, `localSettings`, `flagSettings`, and `policySettings`.
+Claude Code names the five sources `userSettings`, `projectSettings`, `localSettings`, `flagSettings`, and `policySettings`.[^sources]
 
 ## Which Value Wins
 
@@ -106,8 +100,7 @@ flowchart TB
 Read the chart from the top. The first level that sets the key decides its value.
 Environment variables are not a level.
 Each pair of key and variable decides alone, such as `ANTHROPIC_MODEL` over `model`.
-See [Models and Effort Variables](../env-vars/models-and-effort.md) for examples.
-Source: [Settings Files and Precedence](https://code.claude.com/docs/en/settings).
+See [Models and Effort Variables](../env-vars/models-and-effort.md) for examples. Official page: [Settings Files and Precedence](https://code.claude.com/docs/en/settings).
 
 ## How Lists and Model Keys Merge
 
@@ -120,12 +113,11 @@ Source: [Settings Files and Precedence](https://code.claude.com/docs/en/settings
 - `modelSettings` resolves one model at a time, together with `effortLevel`.
 - Managed `env` blocks merge per key across admin sources. `CLAUDE_CODE_DISABLE_ADMIN_ENV_UNION=1` turns that off.
 
-Source: [Settings Files and Precedence](https://code.claude.com/docs/en/settings) and [Environment Variables](https://code.claude.com/docs/en/env-vars).
+Official pages: [Settings Files and Precedence](https://code.claude.com/docs/en/settings) and [Environment Variables](https://code.claude.com/docs/en/env-vars).
 
 ## Managed Settings
 
-An administrator puts managed settings on a machine in one of these ways.
-Source: [Deploy Managed Settings](https://code.claude.com/docs/en/managed-settings).
+An administrator puts managed settings on a machine in one of these ways. Official page: [Deploy Managed Settings](https://code.claude.com/docs/en/managed-settings).
 
 | Platform | Where Claude Code looks |
 | --- | --- |
@@ -137,7 +129,7 @@ Source: [Deploy Managed Settings](https://code.claude.com/docs/en/managed-settin
 
 - Claude Code merges `managed-settings.json` first, then each `*.json` file of `managed-settings.d/` in alphabetical order.
   Number the files to set the order, such as `10-telemetry.json`.
-- Since `2.1.323`, start-up reads a managed file again when the first read found it absent, empty, or not loadable, so a program that rewrites the file at that moment does not hide it. The re-read covers `managed-settings.json` and the files of `managed-settings.d/`. It has a limit of 5 seconds. When the limit passes, Claude Code keeps the managed settings it already read (`chunk-x4fdscgs.js:551395`, `:552600`).
+- Since `2.1.323`, start-up reads a managed file again when the first read found it absent, empty, or not loadable, so a program that rewrites the file at that moment does not hide it. The re-read covers `managed-settings.json` and the files of `managed-settings.d/`. It has a limit of 5 seconds. When the limit passes, Claude Code keeps the managed settings it already read.[^managed-reread]
 - `managedSourcesBehavior` decides how sources combine. `first-wins` uses the highest source alone. `merge` deep-merges them.
 - `parentSettingsBehavior` does the same for the SDK parent tier.
 - `policyHelper` and `policyHelpers` compute managed settings at startup.
@@ -147,8 +139,7 @@ The keys are in [Enterprise Settings](enterprise.md).
 
 ## Exceptions to Managed Precedence
 
-For a few keys, a lower scope may set a stricter value, and Claude Code honors it over the managed value.
-Source: [Settings Files and Precedence](https://code.claude.com/docs/en/settings).
+For a few keys, a lower scope may set a stricter value, and Claude Code honors it over the managed value. Official page: [Settings Files and Precedence](https://code.claude.com/docs/en/settings).
 
 | Keys | Status | Value Claude Code honors | Where it can come from |
 | --- | --- | --- | --- |
@@ -159,7 +150,7 @@ Source: [Settings Files and Precedence](https://code.claude.com/docs/en/settings
 | `crossSessionInbound` | <Documented /> | A stricter value on the ladder `accept`, `hold`, `refuse` | `.claude/settings.json` or `.claude/settings.local.json` |
 | `useAutoModeDuringPlan`, `syncClaudeAiSkills`, `syncClaudeAiPlugins` | <Documented /> | `false` | Managed, `--settings`, `~/.claude/settings.json`, or `.claude/settings.local.json` |
 | `maxEffortLevel` | <Documented /> | The lowest cap (v2.1.267 or later) | Any scope |
-| `modelProposedGoals`, `feedbackDrafts`, `availableModelsMatch`, `askUserQuestionTimeout`, `dialogExpiry` | <Undocumented /> | A strict value | Source: the program lists them as keys with a strict value. The docs do not list them here. |
+| `modelProposedGoals`, `feedbackDrafts`, `availableModelsMatch`, `askUserQuestionTimeout`, `dialogExpiry` | <Undocumented /> | A strict value | The docs do not list them here.[^strict] |
 
 An app that runs Claude Code inside itself and sets `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` is also an exception.
 Claude Code then takes the model keys of that app over the managed values.
@@ -168,14 +159,14 @@ Claude Code then takes the model keys of that app over the managed values.
 
 These keys do nothing in `2.1.322`, so the pages do not list them.
 
-- `taskOutputMaxChars` — Claude Code removed the `TaskOutput` tool.
-- `keybindingFlavor` — Word-editing keys always follow Bash (readline) rules now.
-- `permissionExplainerEnabled` — Removed in v2.1.257.
-- `teammateDefaultModel` — Removed in v2.1.234.
+- `taskOutputMaxChars`: Claude Code removed the `TaskOutput` tool.
+- `keybindingFlavor`: Word-editing keys always follow Bash (readline) rules now.
+- `permissionExplainerEnabled`: Removed in v2.1.257.
+- `teammateDefaultModel`: Removed in v2.1.234.
 
 ## Deep Nesting
 
-Since `2.1.326`, a settings file with values nested more than 64 levels deep loads without them. The program drops those values and shows a warning: "A value under "key" is nested more than 64 levels deep, so Claude Code ignores it. Reduce the nesting under "key"." For a file that Claude Code writes, the warning also says it leaves the value out when it saves a setting to that file. A `hooks` entry written as nested arrays is different: that case is a fatal error, and the text asks you to write `hooks` as an object of event names (`chunk-m33vdkhs.js:16540`).
+Since `2.1.326`, a settings file with values nested more than 64 levels deep loads without them. Claude Code drops those values and shows a warning: "A value under "key" is nested more than 64 levels deep, so Claude Code ignores it. Reduce the nesting under "key"." For a file that Claude Code writes, the warning also says it leaves the value out when it saves a setting to that file. A `hooks` entry written as nested arrays is different: that case is a fatal error, and the text asks you to write `hooks` as an object of event names.[^nesting]
 
 ## Errors
 
@@ -183,7 +174,7 @@ Each row is a family of messages. The backticked text is the start that every me
 
 | Start of Message | Status | What It Means | Cases |
 | --- | --- | --- | --- |
-| `These settings files are not used: they are in a connector-downloads folder` | <Undocumented /> | Claude Code skipped the settings files in the project folder. | The folder is a `connector-downloads` folder that has a `.gitignore`. Claude Code saves files from claude.ai connectors there. Probe case `print.err319.settings-connector-downloads` ran this setup. |
+| `These settings files are not used: they are in a connector-downloads folder` | <Undocumented /> | Claude Code skipped the settings files in the project folder. | The folder is a `connector-downloads` folder that has a `.gitignore`. Claude Code saves files from claude.ai connectors there.[^connector] |
 
 ## Related Pages
 
@@ -192,3 +183,14 @@ Each row is a family of messages. The backticked text is the start that every me
 - [Undocumented Items](../../reference/undocumented.md) indexes every undocumented item.
 - [Permissions](../permissions/index.md) covers `permissions`, `sandbox`, and `autoMode`.
 - [Settings Reference](https://code.claude.com/docs/en/settings-reference) lists each key in the official docs.
+
+## Sources
+
+[^schemas]: The program, the published settings schemas.
+[^gitignore]: The program, `chunk-rqvvpwt0.js:6395`, called from `chunk-rqvvpwt0.js:85856`.
+[^seed]: The program, `chunk-rqvvpwt0.js:88588`.
+[^sources]: The program.
+[^managed-reread]: The program, `chunk-x4fdscgs.js:551395` and `:552600`.
+[^strict]: The program lists them as keys with a strict value.
+[^nesting]: The program, `chunk-m33vdkhs.js:16540`.
+[^connector]: Probe case `print.err319.settings-connector-downloads` ran this setup.

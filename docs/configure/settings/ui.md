@@ -4,16 +4,27 @@ description: Keys that change the theme, spinner, notices, terminal display, voi
 sidebar_position: 5
 ---
 
-These keys change how Claude Code looks and feels in the terminal.
-They cover the theme, the spinner, notices, view modes, and vim keys.
-Many boolean keys are written as the thing to hide, so check each row before you pick a value.
+These keys change how Claude Code looks and feels in the terminal. They cover the theme, the spinner, notices, view modes, and vim keys. Use `/config` for some keys, or edit a settings file. Most boolean keys switch one display feature. Many are written as the thing to hide, so check each row before you pick a value.
 
-Use `/config` for some keys. Most boolean keys switch one display feature.
+## Example
+
+### Calm Terminal
+
+This file hides spinner tips. It reduces animation. It starts every session in focus view. It picks the fullscreen renderer.
+
+```json title="~/.claude/settings.json"
+{
+  "$schema": "https://clawdipedia.cc/schemas/claude-code-settings.json",
+  "spinnerTipsEnabled": false,
+  "prefersReducedMotion": true,
+  "viewMode": "focus",
+  "tui": "fullscreen"
+}
+```
 
 ## Keys
 
-Source: [Settings Reference](https://code.claude.com/docs/en/settings-reference) for rows marked <Documented />. For rows marked <Undocumented />, Source: the program (its bundled settings schema).
-Where to Set It tells you which files may set the key. See [Settings Files and Scopes](index.md#where-settings-live).
+Official page: [Settings Reference](https://code.claude.com/docs/en/settings-reference) for rows marked <Documented />. For rows marked <Undocumented />, the facts come from the settings schema.[^schema] Where to Set It tells you which files may set the key. See [Settings Files and Scopes](index.md#where-settings-live).
 
 | Key | Status | Type | Default | What It Does | Where to Set It |
 | --- | --- | --- | --- | --- | --- |
@@ -23,7 +34,7 @@ Where to Set It tells you which files may set the key. See [Settings Files and S
 | `breakReminder.enabled` | <Undocumented /> | boolean | `false` | Turn on the break reminder. The reminder fires only when this is `true`. | Settings files |
 | `breakReminder.intervalMinutes` | <Undocumented /> | integer | `30` | Set the minutes of continuous use before the reminder fires. It fires again every interval until you take a break. | Settings files |
 | `breakReminder.message` | <Undocumented /> | string | - | Set your own reminder text. Leave it unset for a rotating set of friendly nudges. | Settings files |
-| `clawdFileProgressEnabled` | <Undocumented /> | boolean | `false` | Show Clawd, Claude Code's mascot, on the progress line when a file goes to or from a connector. Clawd does not show in screen reader mode or while Reduce motion is on. In a terminal without image support it shows as text, only above progress bars. The `/config` list shows it as "Show Clawd carrying files" and not in Apple Terminal. Source: the settings schema and the `/config` code | Any settings file |
+| `clawdFileProgressEnabled` | <Undocumented /> | boolean | `false` | Show Clawd, Claude Code's mascot, on the progress line when a file goes to or from a connector. Clawd does not show in screen reader mode or while Reduce motion is on. In a terminal without image support it shows as text, only above progress bars. The `/config` list shows it as "Show Clawd carrying files" and not in Apple Terminal.[^clawd] | Any settings file |
 | `companyAnnouncements` | <Documented /> | array of string | - | Show your organization's announcements at startup. | Any settings file |
 | `editorMode` | <Documented /> | string | - | Use vim key bindings in the input prompt. | Any settings file |
 | `emojiCompletionEnabled` | <Documented /> | boolean | - | Turn off `:shortcode:` emoji suggestions and replacement in the prompt input. | Any settings file |
@@ -72,22 +83,6 @@ Where to Set It tells you which files may set the key. See [Settings Files and S
 | `voice.mode` | <Documented /> | enum: `hold`, `tap` | `hold` | Hold the key to talk, or tap once to start and again to stop and send. | Any settings file |
 | `wheelScrollAccelerationEnabled` | <Documented /> | boolean | - | Turn off mouse-wheel acceleration in fullscreen rendering. | Any settings file |
 
-## Example
-
-### Calm Terminal
-
-This file hides spinner tips. It reduces animation. It starts every session in focus view. It picks the fullscreen renderer.
-
-```json title="~/.claude/settings.json"
-{
-  "$schema": "https://clawdipedia.cc/schemas/claude-code-settings.json",
-  "spinnerTipsEnabled": false,
-  "prefersReducedMotion": true,
-  "viewMode": "focus",
-  "tui": "fullscreen"
-}
-```
-
 ## Related Pages
 
 - [Settings Files and Scopes](index.md) explains the scopes, precedence, and managed settings.
@@ -96,3 +91,8 @@ This file hides spinner tips. It reduces animation. It starts every session in f
 - [Keybindings](../keybindings/index.md) lists every context and action with its default key.
 - [Status Line](../status-line.md) and [Output Styles](../output-styles.md) cover two related features.
 - [UI and Terminal Variables](../env-vars/ui-and-terminal.md) lists the matching environment variables.
+
+## Sources
+
+[^schema]: The program, its bundled settings schema.
+[^clawd]: The settings schema and the `/config` code.
