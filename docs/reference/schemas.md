@@ -4,7 +4,7 @@ description: JSON Schemas and the Mod API type file for every Claude Code 2.1.32
 sidebar_position: 6
 ---
 
-This site publishes the exact fields of every Claude Code `2.1.322` payload and config file: 17 JSON Schemas and the Mod API type file.
+This site publishes the exact fields of every Claude Code `2.1.326` payload and config file: 17 JSON Schemas and the Mod API type file.
 Most are made by running the program's own validators, so they list every key that this release knows.
 To use one, add the `$schema` URL of a config file to the file. Your editor then suggests keys and flags mistakes.
 Look a field up in the schemas before you rely on it.

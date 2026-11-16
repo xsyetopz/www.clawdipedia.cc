@@ -4,7 +4,7 @@ description: How Claude Code reads environment variables, which value wins, how 
 sidebar_position: 1
 ---
 
-An environment variable is a named setting that a program reads when it starts. Claude Code `2.1.322` reads well over a thousand of them. This section lists 1664 variables that you can use and splits them into groups, so you can find them. The [official docs](https://code.claude.com/docs/en/env-vars) list a few of them. Only the program shows most of them.
+An environment variable is a named setting that a program reads when it starts. Claude Code `2.1.326` reads well over a thousand of them. This section lists 1663 variables that you can use and splits them into groups, so you can find them. The [official docs](https://code.claude.com/docs/en/env-vars) list a few of them. Only the program shows most of them.
 
 Set a variable in your shell, or under the `env` key of `~/.claude/settings.json`, `.claude/settings.json`, `.claude/settings.local.json`, or managed settings. To change a value, edit it, then restart `claude`. When the file changes, values in a settings `env` block also apply to a running session.
 
@@ -105,7 +105,7 @@ Numeric variables, such as timeouts and token budgets, accept forms like `2e3` (
 | [Tools and Bash](tools-and-bash.md) | Environment variables for the Bash tool, file tools, search, permissions, and the sandbox | 109 |
 | [UI and Terminal](ui-and-terminal.md) | Environment variables for the terminal screen, colors, voice, keys, and notifications | 93 |
 | [Sessions and Storage](sessions-and-storage.md) | Environment variables for config folders, session files, resume, install, and updates | 88 |
-| [Telemetry and Debug](telemetry-and-debug.md) | Environment variables for usage data, OpenTelemetry, debug logs, and error reports | 146 |
+| [Telemetry and Debug](telemetry-and-debug.md) | Environment variables for usage data, OpenTelemetry, debug logs, and error reports | 145 |
 | [Plugins and MCP](plugins-and-mcp.md) | Environment variables for plugins, MCP servers, skills, hooks, and marketplaces | 117 |
 | [Agents and Teams](agents-and-teams.md) | Environment variables for subagents, agent teams, background tasks, and workers | 85 |
 | [Features and Toggles](features-and-toggles.md) | Environment variables that turn single features on or off, including server-gated features | 71 |
@@ -127,7 +127,7 @@ Every group page has the same columns.
 | Notes | Where it applies, and whether a project `env` block can set it before you trust the folder. |
 
 :::warning
-Treat <Undocumented /> and <Gated /> rows with care. They work in `2.1.322`. Nothing promises that they work in the next release.
+Treat <Undocumented /> and <Gated /> rows with care. They work in `2.1.326`. Nothing promises that they work in the next release.
 :::
 
 Some rows cite a probe. A probe is a run of the real binary against a local stub. It shows what the variable changed in the request. No model call leaves the machine in a probe. A run with no visible effect does not prove that a variable does nothing.

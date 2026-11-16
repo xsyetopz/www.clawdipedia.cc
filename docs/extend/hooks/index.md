@@ -6,7 +6,7 @@ sidebar_position: 1
 
 A hook is a small action that Claude Code runs by itself at a fixed point in a session. The point can be before a tool runs, when you send a prompt, or when the session ends. Use a hook to block a risky command, add context, or run a check every time. A prompt to Claude cannot promise that, but a hook can.
 
-Add hooks under the `hooks` key of a settings file, a plugin, or skill or subagent frontmatter. Claude Code `2.1.323` has 33 hook events, and the [official docs](https://code.claude.com/docs/en/hooks) list the same 33 names.[^events] Each hook uses one of 5 handler types: `command`, `http`, `mcp_tool`, `prompt`, or `agent`.
+Add hooks under the `hooks` key of a settings file, a plugin, or skill or subagent frontmatter. Claude Code `2.1.326` has 33 hook events, and the [official docs](https://code.claude.com/docs/en/hooks) list the same 33 names.[^events] Each hook uses one of 5 handler types: `command`, `http`, `mcp_tool`, `prompt`, or `agent`.
 
 ## Example
 
