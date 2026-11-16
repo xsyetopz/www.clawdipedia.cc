@@ -63,6 +63,7 @@ Each key has a row on one of these pages.
 Official pages: [Settings Files and Precedence](https://code.claude.com/docs/en/settings) and [Explore the .claude Directory](https://code.claude.com/docs/en/claude-directory).
 
 - Settings files are strict JSON. A comment or a trailing comma is a syntax error.
+- Since `2.1.326`, when a settings file is not valid JSON, the error gives the line and the column of the first syntax error, for example `Invalid or malformed JSON (line 3, column 5)`. Both numbers start at 1.[^json-position]
 - Claude Code reads the shared project file from the primary working directory.
   After `/cd`, it reads the new directory (v2.1.246 or later).
 - In a git repository, the local file lives at the repository root. In a worktree, it lives at the main checkout root.
@@ -196,3 +197,4 @@ Each row is a family of messages. The backticked text is the start that every me
 [^nesting]: The program, `chunk-m33vdkhs.js:16540`.
 [^file-error]: The program, `chunk-y9bdpp8r.js:123261-123311`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^connector]: Probe case `print.err319.settings-connector-downloads` ran this setup.
+[^json-position]: The program, `chunk-bwzce3yt.js:1283-1297`, `chunk-m33vdkhs.js:15714-15718`, `:15790`, and `:17679-17685`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

@@ -76,6 +76,11 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 | `worktree.sparsePaths` | <Documented /> | array of strings | - | Check out only the listed directories in each worktree through git sparse-checkout. Add `.claude` to keep the repository settings in each worktree. | Any settings file |
 | `worktree.symlinkDirectories` | <Documented /> | array of strings | - | Symlink these directories from the main repository into each worktree. Claude Code symlinks none by default. | Any settings file |
 
+## Git Path for Worktrees
+
+Since `2.1.326`, when a server-side flag is on, Claude Code runs git with a stricter `PATH` when it creates a worktree, for `/teleport`, and for IDE checkouts. The stricter `PATH` keeps only entries that are absolute paths. It drops empty entries and relative entries. When no entry is left, `PATH` is `/dev/null`. A git filter or helper that you start by a bare name may no longer be found. Give it by its full path.[^git-path]
+Status: <Gated />. The official docs do not state it.
+
 ## Related Pages
 
 - [Settings Files and Scopes](index.md) explains the scopes, precedence, and managed settings.
@@ -95,3 +100,4 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 [^attr-project]: The settings schema. Probe cases `print.cli319.attr.claude-proj`, `print.cli319.attr.chan`, `print.cli319.attr.bad-prefix`, and `print.cli319.attr.number`. Live probe case `live.cli319.attribution`, with a real login.
 [^plans-fallback]: The program, `chunk-2e8vamz8.js:8219-8240`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
 [^away-skip]: The program, `chunk-y9bdpp8r.js:123871-123898`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^git-path]: The program, `chunk-cr3cxkm7.js:123` and `:175-188`, called from `chunk-4h798pp0.js:213654` and `:213714` for `git worktree add` and the checkout after it, and gated by the server flag `tengu_proud_perlis` (`chunk-f35zn8q8.js:34-41`). That `/teleport` and IDE checkouts use it rests on the [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). This page did not find those calls in the program.

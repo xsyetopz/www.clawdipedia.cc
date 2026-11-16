@@ -84,6 +84,8 @@ A `safetyCheck` reason carries a `circuitBreaker` name. Three flags describe the
 | `internalHardDeny` | <Undocumented /> | Built-in hard deny | Cannot be placed on a served classifier | Each tool |
 | `unfinishedCheck` | <Undocumented /> | A check did not finish | Bypass-immune, person only | Each tool |
 
+Since `2.1.326`, a tool call in `bypassPermissions` mode asks for approval when the permission check of its tool fails with an error. The check has the decision reason `permission_check_crashed`. The message says: "This call has not run: its permission check failed with an error, so it needs approval. Allow rules and bypass mode cannot give that approval." Where no one can be asked, the call is denied.[^crashed-check]
+
 ## How It Works
 
 [Permission Flow](../../how-it-works/permission-flow.md) shows the order of the checks and where the mode decides.
@@ -105,3 +107,4 @@ A `safetyCheck` reason carries a `circuitBreaker` name. Three flags describe the
 [^reasons]: The program.
 [^v309]: [`2.1.309` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.309).
 [^mode-use]: Official page [Choose a Permission Mode](https://code.claude.com/docs/en/permission-modes), table "Available modes", column "Best for".
+[^crashed-check]: The program, `chunk-4h798pp0.js:179495-179530`, `:179995-180010`, `:180155-180161`, and `:175736`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The denial where no one can be asked rests on the release notes. This page did not find that line in the program.

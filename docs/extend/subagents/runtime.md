@@ -107,6 +107,30 @@ flowchart TD
     J --> K
 ```
 
+## Git Commands in a Worktree Subagent
+
+Since `2.1.326`, when a server-side flag is on, a subagent that runs isolated in a worktree cannot run some git commands in `Bash`. These commands can rewrite what the worktree shares with your own checkout, such as its branches. The rule holds in every repository. A main session is not affected.[^worktree-guard]
+Status: <Gated />. The official docs do not state it.
+
+The message names the worktree and the command. It says that the command is refused in every repository. It tells the agent to change its own branch with `git commit`, `git reset`, or `git rebase`, to start another with `git branch <new-branch> <commit>`, and to leave your branches as they are. It ends with "If the task needs it, say so when you report back."[^worktree-guard]
+
+| Git Command | Status | What Is Refused |
+| --- | --- | --- |
+| `git for-each-repo` | <Undocumented /> | Every use. |
+| `git worktree` | <Undocumented /> | Every verb except `add`, `list`, `lock`, `prune`, `remove`, and `unlock`. `git worktree add` works for a path under the worktree or in a scratch directory. |
+| `git fast-import` | <Undocumented /> | Every use. |
+| `git filter-branch` | <Undocumented /> | A call with arguments. |
+| `git filter-repo` | <Undocumented /> | Every option except `--analyze` and `--version`. |
+| `git history` | <Undocumented /> | The verbs `drop`, `fixup`, `reword`, and `split`. |
+| `git replay` | <Undocumented /> | A call with arguments. |
+| `git update-ref` | <Undocumented /> | A change to a ref, except refs under `refs/bisect/`, `refs/rewritten/`, and `refs/worktree/`, and refs such as `HEAD`. |
+| `git refs` | <Undocumented /> | Every verb except `exists`, `list`, `optimize`, and `verify`. |
+| `git symbolic-ref` | <Undocumented /> | A form that changes a ref. |
+| `git replace` | <Undocumented /> | Every form except `list`. |
+| `git reflog` | <Undocumented /> | The verbs `delete`, `drop`, `expire`, and `write`. |
+
+Without the flag, these commands run as before.[^worktree-guard]
+
 ## Errors
 
 Each row is a family of messages. The backticked text is the start that every message in the family shares.
@@ -141,3 +165,4 @@ Each row is a family of messages. The backticked text is the start that every me
 [^swarm]: The program, `chunk-5erhnvzw.js`, search `initializeSessionTeam`. Probe cases `pty.cli319.tmux-swarm-session` and `pty.cli319.tmux-swarm-window`, with a stand-in `tmux` whose `new-session` and `new-window` fail.
 
 Official pages: [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), [Environment Variables](https://code.claude.com/docs/en/env-vars), and [Hooks Reference](https://code.claude.com/docs/en/hooks).
+[^worktree-guard]: The program, `chunk-4h798pp0.js:183990-184020` and `chunk-6z99tr3b.js:144-370` and `:640-650`. The program applies the check only when the agent has its own worktree. The server flag `tengu_level_meadow` turns it on. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

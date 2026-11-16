@@ -147,6 +147,7 @@ Code Mode is an experimental opt-in.[^code-mode] Claude writes JavaScript that c
 | Refusals | <Undocumented /> | When Claude Code asks for Code Mode and cannot start it, it prints "Code Mode (experimental) isn't available" with the reason, then starts with the ordinary tools. Reasons in the program include: your organization's settings do not allow it, managed settings or `~/.claude.json` also set the variable, the model is not Opus 5.5, Sonnet 5.5, or later, the provider is not the Anthropic API, and a deny rule or `--tools` leaves the tool out. It is off in background jobs, in teammates' panes, and with Remote Control. Since `2.1.326`, agent teams no longer block Code Mode: the 2.1.323 reason "it can't be used together with agent teams yet" is gone from the reason list.[^code-mode-teams] |
 | Server flag | <Gated note="Server flag" /> | The program also needs a server flag on for your account, with the reason "it isn't open to your account yet". |
 | Other tools | <Undocumented /> | With Code Mode on, `Yield` is off.[^yield-gate] |
+| `$` shell helper | <Undocumented /> | Since `2.1.326`, the helper refuses some values with an error, and nothing runs. The program leaves a value unquoted only when it is a marked raw template literal.[^shell-helper] |
 
 ## Result Fields New In `2.1.311`
 
@@ -231,3 +232,4 @@ Each row is a family of messages. The backticked text is the start that every me
 [^trigger-cases]: Probe cases `live.err319` and `print.err319.remote-trigger-bad-cursor`.
 [^reserved-paths]: The program, `chunk-hp5tht7v.js:39220` for write, `chunk-hp5tht7v.js:40151` for delete.
 [^write-refused]: The program, `chunk-qkje5ysj.js:39862`. `2.1.319` does not have this text.
+[^shell-helper]: The program, `chunk-a3ny36n2.js:6991-6998` and `:7646-7671`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The rule that decides which values the helper refuses sits in a packed script of the program that this page could not read. That part rests on the release notes only.

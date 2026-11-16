@@ -118,6 +118,9 @@ Status: <Undocumented /> in the official docs.
 
 - After a login, when an approved `ANTHROPIC_API_KEY` still serves requests, Claude Code says "Signed in, but requests still use ANTHROPIC_API_KEY. To use this login, turn off "Use custom API key" in /config".[^api-key-note]
 - The footer says "Not logged in · /login, or /config to use ANTHROPIC_API_KEY" when an unused key is set. Otherwise it says "Not logged in · Run /login".[^footer]
+- The not-logged-in message and the login screen add the dim note "ANTHROPIC_API_KEY is set but not in use · /config to use it".[^unused-note]
+- `/status` adds an "Unused key" row. Its value is `ANTHROPIC_API_KEY`, followed by "· /config to use it".[^status-row]
+- While the note shows, Claude Code checks the login again each time the unused state changes. Turn on the key in `/config`, and the "Not logged in" state clears.[^follow-key]
 
 ## Finishing a Login
 
@@ -203,6 +206,9 @@ Claude Code shows "Couldn't load your current spend limit, so it can't be change
 [^v326]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^api-key-note]: The program, `chunk-szf5xyqt.js:496`.
 [^footer]: The program, `chunk-y9bdpp8r.js:55210`.
+[^unused-note]: The program, `chunk-d73xe1mr.js:31340-31384`, `chunk-s3j7dx93.js:4213-4221`, `chunk-0py32h2p.js:1884-1892`.
+[^status-row]: The program, `chunk-hkrxqjz2.js:567-575`.
+[^follow-key]: The program, `chunk-y9bdpp8r.js:15138-15150`.
 [^refusal]: The program, `chunk-x4fdscgs.js:33710`, `:21940`, `chunk-2x9ma4k7.js:102650`.
 [^desktop]: The program, `chunk-x4fdscgs.js:21609`, `chunk-5c342mz1.js:97`, `:440`.
 [^v311]: [`2.1.311` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.311).
