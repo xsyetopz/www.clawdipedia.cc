@@ -8,7 +8,7 @@ These variables choose which model Claude Code uses and how hard it thinks.
 They also pin what the aliases `opus`, `sonnet`, `haiku`, and `fable` mean, add your own entry to the `/model` picker, and limit output size.
 Use them when you want the same model in every session or when a gateway needs custom model IDs.
 
-This page lists 86 variables. A `--model` flag or `/model` overrides `ANTHROPIC_MODEL`. `CLAUDE_CODE_EFFORT_LEVEL` overrides `--effort` and `/effort`.
+This page lists 87 variables. A `--model` flag or `/model` overrides `ANTHROPIC_MODEL`. `CLAUDE_CODE_EFFORT_LEVEL` overrides `--effort` and `/effort`.
 
 ## Example
 
@@ -84,6 +84,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_EFFORT_LEVEL` | <Documented /> | Sets the effort level for the session and wins over `/effort` and settings. | Text. Trimmed `str`. `unset` and `auto` (any case) give the model default | All sessions. Project `env` can set it before trust |
 | `CLAUDE_CODE_ENABLE_EXPERIMENTAL_ADVISOR_TOOL` | <Undocumented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> <Experimental /> | Forces the server-side advisor tool on, and lets a base model with no advisor rank use it. | On or off, off by default. Still blocked by `CLAUDE_CODE_DISABLE_ADVISOR_TOOL` and by provider checks | First-party and eligible providers |
 | `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY` | <Documented /> | Fills the `/model` picker from the gateway `/v1/models` endpoint. | On or off, off by default. Needs the `firstParty` provider and a non-Anthropic `ANTHROPIC_BASE_URL`. The `gateway` provider also checks it at bootstrap | Gateway setups |
+| `CLAUDE_CODE_FIRST_CALL_THINKING_TITLES` | <Undocumented /> | Turns on thinking titles in the request data (`thinkingTitles`) (`chunk-4h798pp0.js:169436`). A second check returns false when `showThinkingSummaries` is `true` (`chunk-27vawgnx.js:11361`). | On or off | Model requests |
 | `CLAUDE_CODE_FORCE_MID_CONVERSATION_SYSTEM` | <Undocumented /> | Forces mid-conversation system messages on for every model. | On or off, off by default. Skips the model checks and the flags for system turns | API requests |
 | `CLAUDE_CODE_MAX_OUTPUT_TOKENS` | <Documented /> | Sets the maximum output tokens for most requests, clamped to the model cap. | A number. The default depends on the model. Claude Code lowers a value above the model cap to the cap | All sessions. Project `env` can set it before trust |
 | `CLAUDE_CODE_MESSAGES_PROMPT_CACHE_TTL` | <Undocumented /> | Forces the prompt cache TTL to `5m` for the requests that use this helper. | `enum` with the single value `5m`. Any other value leaves the chosen TTL as is | All sessions. Project `env` can set it before trust |

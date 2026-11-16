@@ -8,7 +8,7 @@ These variables flip one feature each.
 Some turn off a feature that is on by default. Others turn on a feature that a server flag controls.
 A row with the Gated badge works only when a feature flag or server gate allows it. A variable that overrides the gate works without that permission.
 
-This page lists 70 variables. Most take `1` to turn on and `0` to turn off.
+This page lists 71 variables. Most take `1` to turn on and `0` to turn off.
 
 ## Example
 
@@ -40,6 +40,7 @@ The table is sorted by name. The Gated badge tells you a flag or gate is involve
 | `CLAUDE_CODE_ARTIFACT_FRESH_READ` | <Undocumented /> | Lets artifact reads fetch fresh data from the docs store. Set to `0` to turn this off. | On, off, or unset, on by default. Only the value `false` turns it off | Artifacts with the docs store. Not set from project `env` before trust |
 | `CLAUDE_CODE_ARTIFACT_HOT` | <Undocumented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> | Overrides a gate for artifact hot updates. No visible effect in a print-mode probe ([Probes](../../reference/probes.md)). | On, off, or unset, off by default. A session value `frozenHotUpdate` wins first | Artifacts, gated by a feature flag |
 | `CLAUDE_CODE_ARTIFACT_INHERITED_TYPE_GRANT` | <Undocumented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> | Overrides the artifact inherited-type-grant gate. Claude Code logs the result as a feature flag. | Off by default. Env read | Artifacts, gated by a feature flag |
+| `CLAUDE_CODE_ARTIFACT_LIVE_WATCH` | <Undocumented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> | Overrides the gate `tengu_slate_lantern` for artifact live watch (`chunk-838we53j.js:1683`). | On or off. When unset, the gate decides, and it defaults to on | Artifacts |
 | `CLAUDE_CODE_ARTIFACT_MULTI_FILE` | <Undocumented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> | Forces the artifact multi-file gate on or off. No visible effect in a print-mode probe ([Probes](../../reference/probes.md)). | On, off, or unset, off by default | Artifacts, gated by a feature flag |
 | `CLAUDE_CODE_ARTIFACT_OPEN_ACTION` | <Undocumented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> | Forces the artifact open-action gate on or off. No visible effect in a print-mode probe ([Probes](../../reference/probes.md)). | On, off, or unset, off by default | Artifacts, gated by a feature flag |
 | `CLAUDE_CODE_ARTIFACT_OPENING_PREFETCH` | <Undocumented /> | Set to `false` to turn off the artifact prefetch at session start. | On, off, or unset. Only `false` has an effect. Otherwise the result follows the artifact REPL tool and quickstart checks | Artifacts, when the base check passes |

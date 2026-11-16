@@ -98,6 +98,14 @@ These rules change the Fable entry:
 - **Credits-only plans.** The server config `tengu_saffron_credits_only_tiers` names the plans that use models only with credits. Its default is `["enterprise"]` (`chunk-32xrm2zt.js:183363`).
 - To limit the models people can pick, use `availableModels` and `deniedModels`. See [Model Settings](../configure/settings/model.md).
 
+## Login and an Unused API Key
+
+The `2.1.326` release notes say: "Fixed `/login` ending on "Login successful" while an approved `ANTHROPIC_API_KEY` was still used; it now says requests still use the key" ([`2.1.326` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)), and "Fixed "Not logged in" staying after turning on the API key in `/config`; "Not logged in", `/login` and `/status` now name an unused `ANTHROPIC_API_KEY`" ([`2.1.326` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)).
+Status: <Undocumented /> in the official docs. The text below is read from the program.
+
+- After a login, when an approved `ANTHROPIC_API_KEY` still serves requests, the program says "Signed in, but requests still use ANTHROPIC_API_KEY. To use this login, turn off "Use custom API key" in /config" (`chunk-szf5xyqt.js:496`).
+- The footer says "Not logged in · /login, or /config to use ANTHROPIC_API_KEY" when an unused key is set. Otherwise it says "Not logged in · Run /login" (`chunk-y9bdpp8r.js:55210`).
+
 ## What a Refusal Says
 
 When something needs usage credits, such as fast mode or the 1M context window, the message names where to turn them on (`chunk-x4fdscgs.js:33710`, `:21940`, `chunk-2x9ma4k7.js:102650`).

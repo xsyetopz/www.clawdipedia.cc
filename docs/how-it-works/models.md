@@ -101,6 +101,7 @@ Source: the [Claude Code changelog](https://code.claude.com/docs/en/changelog), 
 When a request is too long for the context, Claude Code tries again with a smaller `max_tokens`. It compacts when that is not enough.
 Since `2.1.311`, a session on a standard window (not 1M) that sends more than 200K tokens and gets the error "Usage credits required for 1M context" compacts the conversation and goes on, where it stopped before.
 Source: the [Claude Code changelog](https://code.claude.com/docs/en/changelog), and the program (`chunk-fxkn94rg.js:7801` checks for that refusal on a model whose window is standard, then the code at `chunk-fxkn94rg.js:13826` to `:13930` runs the reactive compaction).
+Since `2.1.326`, the program also knows the context length errors of many third-party gateways and Foundry. It matches phrases such as "maximum context length", "context_length_exceeded", "exceeds the context window", and "reduce the length of the messages" (`chunk-p95xxxdb.js:221`). A reply with "policy_blocked" or "dlp_request_denied" does not count. The check runs for the statuses `400`, `413`, `422`, or none (`chunk-4h798pp0.js:106713`). The [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325) says such sessions stopped on every turn instead of compacting. The phrase list is not in the `2.1.323` program.
 The loop also recovers from a stop at `max_tokens` and from a bad tool call. See [The Agent Loop](agent-loop.md#recovery-inside-the-loop).
 
 ## Example

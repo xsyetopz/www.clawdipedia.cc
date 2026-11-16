@@ -8,7 +8,7 @@ These variables control how Claude Code reaches the network.
 They set the API base URL, proxies, custom certificates, timeouts, and retry counts.
 Use them behind a company proxy or when you route traffic through a gateway.
 
-This page lists 75 variables. `HTTPS_PROXY`, `NO_PROXY`, and `ANTHROPIC_BASE_URL` are the usual ones. Project settings cannot set some endpoint variables before you trust the folder.
+This page lists 76 variables. `HTTPS_PROXY`, `NO_PROXY`, and `ANTHROPIC_BASE_URL` are the usual ones. Project settings cannot set some endpoint variables before you trust the folder.
 
 ## Example
 
@@ -27,6 +27,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 
 | Variable | Status | What it does | Values and default | Notes |
 | --- | --- | --- | --- | --- |
+| `CLAUDE_BG_GATEWAY_ROUTED` | <Undocumented /> | Since `2.1.326`, the background dispatcher sets it to `1` in the environment of a background session that it routed through an LLM gateway (`chunk-a6z2y3ae.js:1141`). The session reads it to know that the gateway carried it (`chunk-45jdt5k6.js:23`). If a session that has the mark loses its gateway, the program stops it with "No LLM gateway: session stopped." and "No model request was sent." (`chunk-45jdt5k6.js:59`). | The program sets it. Do not set it by hand. The gate `tengu_bg_gateway_mark` defaults to on (`chunk-45jdt5k6.js:19`) | Background sessions |
 | `CLAUDE_CODE_DISABLE_HTTPS_AGENT_KEEPING` | <Undocumented /> | Stops Claude Code from tying the HTTPS agent to the TLS switches. Normally it builds a signature of `NODE_TLS_REJECT_UNAUTHORIZED` and `BUN_TLS_REFUSE_DISTRUSTED_KEYS` (`length:value` for each). It builds a new agent and drops pooled sockets when the signature changes. Set, there is no signature, so a change of those two variables in a session keeps the agent and its sockets. The agent uses keep-alive with no socket limit (the program). | On or off. Off by default | All sessions |
 | `CLAUDE_CODE_DISABLE_LOOPED_CROSS_CERT_DROP` | <Undocumented /> | Keeps the cross-certificates that Claude Code would drop from the system store. A certificate is dropped when it is a single, unexpired entry whose issuer links lead back to itself, and the store holds a valid self-signed root with the same subject, key, and subject key identifier that does not expire sooner. A certificate that `NODE_EXTRA_CA_CERTS` also lists stays. If a store entry does not parse, nothing is dropped. The log says `CA certs: Dropped N cross-certificate(s) ...` (the program). | On or off. Off by default. A client certificate (`CLAUDE_CODE_CLIENT_CERT`) also skips the drop | All sessions |
 | `CLAUDE_CODE_DISABLE_SELF_NAMED_CERT_DROP` | <Undocumented /> | Keeps every certificate in the `NODE_EXTRA_CA_CERTS` file whose subject and issuer match, whoever signed it. Normally Claude Code drops such a certificate when its own key did not sign it, or it cannot check that, unless a kept certificate issued it or it is in the built-in root list. If all or none would be dropped, the list stays whole. The log says `CA certs: Dropped the certificate with SHA-256 fingerprint ...` at error level (the program). | On or off. Off by default. A client certificate also skips the drop | All sessions |
@@ -153,6 +154,34 @@ The program starts the message with `Unable to connect to API: SSL certificate v
 | `UNSUPPORTED_CONSTRAINT_TYPE` | The limit covers a kind of name that Claude Code cannot check, usually IP addresses. Claude Code refuses any certificate under such an authority that lists a name of that kind. Issue a certificate whose chain has no such limit, or one that lists only DNS names that every authority in the chain allows. Clients must then use those names to reach the server. |
 
 **Source:** the program. The code set and the message function are in `chunk-x4fdscgs.js` (`324812`, about `325089`), and the error text that carries them is at `329887`.
+
+## Certificate Signature Errors
+
+The `2.1.326` release notes say: "Improved the `CERT_SIGNATURE_FAILURE` connection error to name a possible cause after a CA renewal and what IT can change" ([`2.1.326` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)).
+Status: <Undocumented /> in the official docs. The message text is read from the program.
+
+The program starts the message with `Unable to connect to API: SSL certificate verification failed (CERT_SIGNATURE_FAILURE).` (`chunk-d73xe1mr.js:18463`).
+The message then says:
+
+- After a CA renewal, this computer can trust two CA certificates with the same name but different keys. The server's certificates do not say which key signed them.
+- The fix is to issue certificates with authority key identifiers, or to trust only the one CA that still signs.
+- "If no CA was renewed, don't work around this error, because it can also mean that something on the network changed the connection."
+
+When the program knows that an IT team manages the computer, the message words the fix for that team (`chunk-d73xe1mr.js:18369`).
+
+**Source:** the program. The code check is the function at `chunk-d73xe1mr.js:8298`.
+
+## Proxy Requests with Only `ALL_PROXY`
+
+The `2.1.325` release notes say: "Changed plugin marketplace and plugin downloads to use a CONNECT tunnel when `ALL_PROXY` is the only proxy set; a proxy that refuses CONNECT now fails them" ([`2.1.325` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325)).
+The `2.1.326` release notes say: "Fixed plugin and marketplace requests waiting forever when `ALL_PROXY` is the only proxy set and the proxy never answers; they now fail after 25 seconds" ([`2.1.326` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)).
+Status: <Undocumented /> in the official docs. The code is a shared HTTP client, so the program applies it to the requests of that client and not only to plugin requests.
+
+- When `ALL_PROXY` is the only proxy variable, the client sends its requests through a CONNECT tunnel (`chunk-f57bmeqs.js:10666`).
+- The connect timeout is 25000 ms (`chunk-f57bmeqs.js:10686`). After that, the error says "Timed out connecting through the proxy set in HTTPS_PROXY or ALL_PROXY. Check that the proxy is running and can reach the destination server. You can also add that server to NO_PROXY."
+- A proxy value that is not an http or https URL gives "The proxy setting (HTTPS_PROXY or ALL_PROXY) is not an http or https URL, so this request was not sent." (`chunk-f57bmeqs.js:10681`).
+
+**Source:** the program, `chunk-f57bmeqs.js`.
 
 ## How It Works
 

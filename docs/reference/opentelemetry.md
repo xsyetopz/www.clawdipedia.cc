@@ -44,7 +44,7 @@ Only `tool_decision` is marked <Documented />, because earlier pages of this sit
 | `tool` | <Undocumented /> | A tool definition, or its hash. | `tool_name`, `tool_hash`, `tool`, `tool_truncated` |
 | `tool_decision` | <Documented /> | A tool use was accepted or rejected. `OTEL_LOG_TOOL_DETAILS` adds `classifier_category`. | `decision`, `source`, `tool_name`, `tool_use_id`, `tool_source`, `tool_parameters`, `classifier_verdict`, `classifier_category`, `permission_mode` |
 | `tool_result` | <Undocumented /> | A tool call finished. After a git commit it also carries the `vcs.ref.head.*` fields. | `tool_name`, `tool_use_id`, `success`, `duration_ms`, `tool_parameters`, `tool_input`, `tool_input_size_bytes`, `tool_result_size_bytes`, `decision_source`, `decision_type`, `mcp_server_scope`, `vcs.ref.head.revision`, `vcs.ref.head.name`, `vcs.ref.head.type`, `error_type`, `error` |
-| `user_prompt` | <Undocumented /> | A user prompt. The text is in `prompt` only when `OTEL_LOG_USER_PROMPTS` is on. | `prompt_length`, `prompt`, `prompt_text` |
+| `user_prompt` | <Undocumented /> | A user prompt. The text is in `prompt` only when `OTEL_LOG_USER_PROMPTS` is on. Since `2.1.326`, a message sent while tool calls run also gives this event, with the attribute `delivery.mode` set to `mid_turn` (`chunk-27vawgnx.js:4052`; [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325)). | `prompt_length`, `prompt`, `prompt_text` |
 
 ## What Two Attributes Report
 
@@ -82,6 +82,17 @@ Since `2.1.318`, the program adds `anthropic.provider`, `anthropic.custom_base_u
 
 Every event carries these base attributes: `user.id`, `user.email`, `user.groups`, `event.name`, `event.timestamp`, `event.sequence`, `prompt.id`, and `workspace.host_paths`.
 When `OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES` is set, the program also copies the keys of `OTEL_RESOURCE_ATTRIBUTES`.
+
+## Host Resource Attributes
+
+The `2.1.326` release notes say: "Added `OTEL_RESOURCE_INCLUDE_HOST` to include `host.name` and `host.id` in OpenTelemetry resource attributes (off by default)" ([`2.1.326` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)).
+Status: <Undocumented /> in the official docs.
+
+The program adds `host.name` and `host.id` to the resource only when `OTEL_RESOURCE_INCLUDE_HOST` is `true` (`chunk-7a41jn20.js:1798`).
+The same check also needs telemetry on and no OTEL exporter variable that names `console`.
+It does not apply to some hosted and remote runs.
+
+**Source:** the program. The check is the function `$3f913b` in `chunk-7a41jn20.js`, and the resource is built at `chunk-7a41jn20.js:1831`.
 
 ## Export Behavior
 

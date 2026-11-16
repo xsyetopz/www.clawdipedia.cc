@@ -8,7 +8,7 @@ These variables change how tools run.
 They set Bash time limits and output size, shell choice, search behavior, permission helpers, and the sandbox.
 Use them when long commands reach their time limit or when you need to limit what a tool can see.
 
-This page lists 105 variables. `BASH_DEFAULT_TIMEOUT_MS` and `BASH_MAX_OUTPUT_LENGTH` are common. Switch rows take `1` or `0`.
+This page lists 109 variables. `BASH_DEFAULT_TIMEOUT_MS` and `BASH_MAX_OUTPUT_LENGTH` are common. Switch rows take `1` or `0`.
 
 ## Example
 
@@ -61,8 +61,10 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `CLAUDE_CODE_DISABLE_ADVISOR_TOOL` | <Documented /> | Turns off the advisor tool and the `/advisor` command. | On or off. Checked first in the advisor enable check | First-party and AWS platform. Project `env` can set it before trust |
 | `CLAUDE_CODE_DISABLE_BG_SHELL_PRESSURE_REAP` | <Documented /> | Stops Claude Code from ending background shells under critical memory pressure. | On or off. The prompt says it works only from the environment at start | MacOS and Linux |
 | `CLAUDE_CODE_DISABLE_DANGEROUS_RM_TIMEOUT` | <Documented /> | Turns off the time limit on critical-path removal prompts. | On or off. Forces a feature flag timeout config to disabled | All sessions |
+| `CLAUDE_CODE_DISABLE_EXPORTED_VARIABLE_PROMPT` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Skips the check that asks about Bash lines that set or export variables. The check says "A variable set in this command can't be checked before it runs" (`chunk-4h798pp0.js:82421`). | On or off. The protected gate `bot_protected_tengu_zazzy_parasol` turns the check on | Bash tool |
 | `CLAUDE_CODE_DISABLE_INLINE_SHELL_RM_PROMPT` | <Documented /> | Stops Claude Code from reading `bash -c` scripts for critical-path removal prompts. | On or off. The check returns null at once when the variable has a value | All sessions |
 | `CLAUDE_CODE_DISABLE_MOUNTED_DRIVE_RM_PROMPT` | <Undocumented /> | Turns off the prompt for `rm -r` on a mounted drive, the folder that holds mounted drives, or a top-level file or folder of a drive. Since 2.1.304 these paths (such as `/Volumes`, `/media`, and WSL `/mnt/c`) get a prompt that permission rules cannot auto-allow. | On or off. The program skips the check when it is set | Bash tool |
+| `CLAUDE_CODE_DISABLE_POWERSHELL_ALIAS_SHADOW_CHECK` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Turns off the PowerShell check that refuses functions named like built-in commands (`chunk-4h798pp0.js:60089`). The `2.1.326` release notes mention that check. | On or off. The protected gate `bot_protected_tengu_dynamic_pike` turns the check on | PowerShell tool |
 | `CLAUDE_CODE_DISABLE_POWERSHELL_CMD_RM_DENY` | <Documented /> | Turns off the PowerShell check that denies `rd`, `rmdir`, `del` and `erase` on system paths. | On or off. Without it a feature flag decides | PowerShell tool |
 | `CLAUDE_CODE_DISABLE_SUBSTITUTION_RM_PROMPT` | <Documented /> | Turns off the critical-path check for a recursive `rm` whose target is only command substitution output. | On or off. Checked together with a feature flag | Bash tool |
 | `CLAUDE_CODE_DISABLE_WEB_FETCH` | <Documented /> | Turns off the `WebFetch` tool. `WebSearch` stays on. | On or off. Docs: needs v2.1.285 or later. Also disables the web fetch agent | All sessions |
@@ -129,6 +131,8 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `LINES` | <Documented /> | Claude Code sets it to the terminal row count for hook commands. | - | - |
 | `LOCALAPPDATA` | <Documented /> <Gated note="Works only behind a feature flag or server gate" /> | Claude Code uses it on Windows to find the `WindowsApps` alias folder and for path checks. | - | - |
 | `NoDefaultCurrentDirectoryInExePath` | <Undocumented /> | Claude Code sets it to `1` at startup so executable search skips the current directory. | - | - |
+| `SANDBOX_OFFICE_PDF_DIR` | <Undocumented /> | Names the folder for the PDF copies of `.docx` and `.pptx` attachments (`chunk-4bt5ggtq.js:336`). | An absolute path. Not used on Windows | Sandbox attachments |
+| `SANDBOX_OFFICE_PDF_SEND` | <Undocumented /> | Chooses which converted attachment types the program sends as PDF (`chunk-4bt5ggtq.js:384`). | A comma-separated list of `docx` and `pptx` | Sandbox attachments |
 | `SHELL` | <Documented /> | Names the user shell. Claude Code uses it to find tools, to describe the shell in the prompt, and to run login-shell probes. | Text. Non-empty string. Falls back to `/bin/zsh` for one probe and to `unknown` in the prompt text | All sessions, Windows sets it itself |
 | `SSH_ASKPASS` | <Undocumented /> | Claude Code passes the user value to git child processes. It falls back to a default and then to an empty string. | Text. `GIT_ASKPASS` falls back to it in one path | Git child processes |
 | `SUDO_GID` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Holds the group id of the user who ran `sudo`. Claude Code uses it with `SUDO_UID` and `SUDO_USER` to find the real user when it runs as root. | A number. Integer, digits only, min `0`. Used only when the process uid is `0` | Linux and macOS as root |

@@ -8,7 +8,7 @@ These variables control what Claude Code reports and how much it logs.
 They turn telemetry on or off, configure OpenTelemetry (OTEL) exporters, and set debug output.
 Use them to opt out of reporting or to send metrics to your own collector.
 
-This page lists 144 variables. `DISABLE_TELEMETRY` opts out when it has any non-empty value, even `0` or `false`. Unset it to turn telemetry back on. `DO_NOT_TRACK=1` has the same effect. Set these in your shell or managed settings. OTEL exporter variables in project or local settings do not apply, apart from a few off values.
+This page lists 145 variables. `DISABLE_TELEMETRY` opts out when it has any non-empty value, even `0` or `false`. Unset it to turn telemetry back on. `DO_NOT_TRACK=1` has the same effect. Set these in your shell or managed settings. OTEL exporter variables in project or local settings do not apply, apart from a few off values.
 
 ## Example
 
@@ -154,6 +154,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `OTEL_METRICS_INCLUDE_SESSION_ID` | <Documented /> | Adds `session.id` (and the remote session id) to metric attributes. | On or off, on by default. Claude Code parses any set value as a boolean | Metrics. Project `env` can set it before trust |
 | `OTEL_METRICS_INCLUDE_VERSION` | <Documented /> | Adds the Claude Code version as `app.version` to metric attributes. | On or off, off by default. Claude Code parses any set value as a boolean | Metrics. Project `env` can set it before trust |
 | `OTEL_RESOURCE_ATTRIBUTES` | <Documented /> | Adds custom resource attributes to telemetry, and to metric labels. | Text. Claude Code drops bad pairs | All entrypoints. Project `env` can set it before trust |
+| `OTEL_RESOURCE_INCLUDE_HOST` | <Undocumented /> | Since `2.1.326`, it adds the host attributes `host.name` and `host.id` to the OpenTelemetry resource (`chunk-7a41jn20.js:1798`). It also needs telemetry on, and no OTEL exporter variable that names `console`. See [OpenTelemetry](../../reference/opentelemetry.md). | `true`. Off by default | Telemetry export |
 | `OTEL_SERVICE_NAME` | <Undocumented /> | Sets the `service.name` resource attribute of exported telemetry. | Text | Telemetry. Project `env` can set it before trust |
 | `OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT` | <Undocumented /> | Limits the attributes on each span. | A number. Falls back to `OTEL_ATTRIBUTE_COUNT_LIMIT`, then 128 | Tracing. Not set from project `env` before trust |
 | `OTEL_SPAN_ATTRIBUTE_PER_EVENT_COUNT_LIMIT` | <Undocumented /> | Limits the attributes on each span event. | A number, 128 by default | Tracing. Not set from project `env` before trust |

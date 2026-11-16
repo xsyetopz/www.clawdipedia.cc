@@ -104,6 +104,16 @@ The `cc_` names say which client, entry point, and turn made the request.
 
 The block has no cache marker.
 
+## Output Limit Retry
+
+The `2.1.326` release notes say: "Fixed an error when `max_tokens` exceeded the model's limit: Claude Code now retries the request with the maximum the Anthropic API reports" ([`2.1.326` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)).
+Status: <Undocumented /> in the official docs. The program text is read from `chunk-4h798pp0.js`.
+
+- The program matches the error text `max_tokens: <n> > <limit>, which is the maximum allowed number of output tokens for <model>` (`chunk-4h798pp0.js:154748`).
+- It acts on the statuses `400`, `402`, `413`, `422`, and `429`, and it retries once.
+- The retry uses the limit that the API reports, when that limit is at least 4096. Otherwise it uses a cached or default limit.
+- After the provider accepts the resent request, the program caps `max_tokens` for that model and warns: "Until the next /clear, compaction, resume or provider change, max_tokens for this model is capped at N. Set CLAUDE_CODE_MAX_OUTPUT_TOKENS to pick a different limit." (`chunk-4h798pp0.js:154816`).
+
 ## Cache Lifetime
 
 Sources: [How Claude Code Uses Prompt Caching: Cache Lifetime](https://code.claude.com/docs/en/prompt-caching#cache-lifetime) and [Environment Variables](https://code.claude.com/docs/en/env-vars).

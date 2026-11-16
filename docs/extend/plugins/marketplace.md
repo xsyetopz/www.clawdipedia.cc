@@ -61,7 +61,7 @@ These sources go in `extraKnownMarketplaces`, `strictKnownMarketplaces`, and `bl
 
 | Source | Status | Fields | How It Works |
 | --- | --- | --- | --- |
-| `github` | <Documented /> | `repo`, `ref`, `path`, `sparsePaths` | The form `owner/*` works only in policy lists. Since `2.1.326`, `ref` takes a branch, a tag, or the full ID of a commit (40 or 64 lowercase hex digits). A full commit ID holds the marketplace at that commit: refreshes and auto-updates do not move it, and a branch or tag of the repository must hold the commit. A client before `2.1.326` cannot clone such a pin, so a marketplace pinned this way stops loading there (`325:123`; the program, `chunk-m33vdkhs.js:3554`). |
+| `github` | <Documented /> | `repo`, `ref`, `path`, `sparsePaths` | The form `owner/*` works only in policy lists. Since `2.1.326`, `ref` takes a branch, a tag, or the full ID of a commit (40 or 64 lowercase hex digits). A full commit ID holds the marketplace at that commit: refreshes and auto-updates do not move it, and a branch or tag of the repository must hold the commit. A client before `2.1.326` cannot clone such a pin, so a marketplace pinned this way stops loading there ([`2.1.325` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325); the program, `chunk-m33vdkhs.js:3554`). |
 | `git` | <Documented /> | `url`, `ref`, `path`, `sparsePaths` | Claude Code accepts `skipLfs` and ignores it. `ref` takes the same values as for `github`. |
 | `url` | <Documented /> | `url`, `headers`, `headersHelper` | Gets only the JSON file, so plugin entries cannot use relative sources. |
 | `file`, `directory` | <Documented /> | `path` | Read in place. |

@@ -8,7 +8,7 @@ Claude Code reads many variables that it does not define.
 Your system, your terminal, CI services, and other tools own them.
 Examples are `HOME`, `PATH`, `EDITOR`, `TERM`, and `ALL_PROXY`. Claude Code reads them to find files, pick colors, and detect where it runs.
 
-This page lists 221 variables. You set many of them for your system anyway. Set them in your shell, or in the `env` key of a settings file.
+This page lists 222 variables. You set many of them for your system anyway. Set them in your shell, or in the `env` key of a settings file.
 
 ## Example
 
@@ -210,6 +210,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `SSL_CLIENT_CERT` | <Undocumented /> | Names a client certificate file. When a plugin eval run grants Bash, Claude Code hides the file and its folder from Bash. | Absolute path. A relative path stops the run | `claude plugin eval` with a Bash grant |
 | `STY` | <Undocumented /> | Holds the GNU screen session id. Claude Code uses it to detect a `screen` multiplexer. | Text. Non-empty string. Sets the multiplexer to `screen` when `TMUX` is not set | All sessions |
 | `SYSTEM_WGETRC` | <Undocumented /> | Names the system `wget` config file. When a plugin eval run grants Bash, Claude Code hides the file from Bash. | Absolute path. A relative path stops the run | `claude plugin eval` with a Bash grant |
+| `SystemDrive` | <Undocumented /> | On Windows, the program reads it to build the sandbox, with `C:` as the default (`chunk-z4j4mjgn.js:42832`). The program sets `SystemDrive=C:` in a sandbox environment (`chunk-caex36kk.js:3177`). | A drive such as `C:` | Windows sandbox |
 | `SYSTEMROOT` | <Undocumented /> | Holds the Windows system directory. Claude Code uses it to find `powershell.exe` and other Windows tools. | Text. Non-empty string. Falls back to `SystemRoot`, then to `windir`, then to `C:\Windows` | Windows |
 | `SystemRoot` | <Documented /> | Holds the Windows system directory in its usual mixed case. Claude Code reads it as a fallback and sets it in a clean git env. | Text. Non-empty string. On Windows a sanitized env sets it to `C:\Windows` | Windows |
 | `TERM` | <Documented /> | Holds the terminal type. Claude Code reads it to pick color level, key dialect, and terminal-feature support. | Text. Non-empty string. Names like `xterm-kitty` or `xterm-ghostty` raise the color level to 3 | All sessions |
