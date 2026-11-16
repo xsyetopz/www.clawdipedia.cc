@@ -125,7 +125,7 @@ On 2.1.319, an auto mode run with a custom base URL that gives no server-side ve
 | 0 | <Documented /> | Success. | Claude Code reads JSON from `stdout`. Plain `stdout` becomes context only on `UserPromptSubmit`, `UserPromptExpansion`, `SessionStart`, and `PostModelSwitch`. Claude never sees `stderr` from an exit 0 hook. |
 | 2 | <Documented /> | A blocking error on events that can block. | `stderr` is the reason. Claude Code reads JSON fields. They cannot override the block. `Elicitation` and `ElicitationResult` ignore them. |
 | 1 | <Documented /> | Not a block. | Exit 1 is a non-blocking error. Use exit 2 for policy. |
-| Any other code | <Documented /> | A non-blocking error. | The action continues. The notice has the first line of `stderr`. JSON on `stdout` can still decide. |
+| Any other code | <Documented /> | A non-blocking error. | The action continues. The notice has the first line of `stderr`. JSON on `stdout` can still decide. Since `2.1.326`, exit 127 on `PreToolUse` adds a line that says a program the hook needs may be missing, so its check may not have run (the program, `chunk-s3j7dx93.js:10508`; [`2.1.326` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)). |
 | Invalid JSON | <Documented /> | A non-blocking error. | The rules for one object, text, and several JSON lines are in the Exit code 0 section of the Hooks Reference. |
 
 :::tip

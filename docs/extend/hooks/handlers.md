@@ -86,7 +86,7 @@ Source: a probe of the program (see [Probes](../../reference/probes.md)).
 | Field | Status | What it does | Notes |
 | --- | --- | --- | --- |
 | `url` | <Documented /> | The POST target. | Must pass `allowedHttpHookUrls` when that setting exists. |
-| `headers` | <Documented /> | Extra request headers. | Claude Code replaces `$VAR` and `${VAR}` only for names in `allowedEnvVars`. |
+| `headers` | <Documented /> | Extra request headers. | Claude Code replaces `$VAR` and `${VAR}` only for names in `allowedEnvVars`. Since `2.1.326`, it drops `Content-Length` and `Transfer-Encoding` and writes a warning to the debug log, because it works out the request length from the body (the program, `chunk-4h798pp0.js:200461`; [`2.1.326` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)). |
 | `allowedEnvVars` | <Documented /> | Names that Claude Code may replace in headers. | Other references become empty strings. `httpHookAllowedEnvVars` narrows the list. |
 | `onFailure` | <Documented /> | `continue` or `block`. | A non-2xx status or a connection error counts as a failure. |
 
