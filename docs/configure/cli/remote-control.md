@@ -31,7 +31,7 @@ The command has its own parser. It does not use the parser of the root `claude` 
 | `--chrome`, `--no-chrome` | <Documented /> | Turns Claude in Chrome on or off for the sessions the server starts. A session started from a project follows the `/chrome` setting of this computer. Claude Code refuses `--chrome` when a policy blocks Chrome ("Start Remote Control without --chrome."). | Off |
 | `-d`, `--debug[=<filter>]` | <Documented /> | Turns on debug logs for this process. Give a filter only in the `=` form, such as `--debug=api,hooks`. | Off |
 | `--debug-file <path>` | <Documented /> | Writes debug logs to the file. Also `--debug-file=<path>`. | Off |
-| `-v`, `--verbose` | <Documented /> | Shows detailed connection and session logs. The official page names only `--verbose`. | Off |
+| `-v`, `--verbose` | <Documented /> | Shows detailed connection and session logs. The official page names only `--verbose`. Since `2.1.326`, the session debug logs go to `~/.claude/child-logs/`, unless you set `--debug-file`. If Claude Code cannot use that folder, it shows `Session debug logs are off: <reason>`.[^child-logs] | Off |
 | `-h`, `--help` | <Documented /> | Prints the help text. | |
 | `--spawn <mode>` | <Documented /> | Sets how the server makes sessions: `same-dir`, `worktree`, or `session` (one session; the server exits when it ends). Give it only once. Press `w` while the server runs to switch between `same-dir` and `worktree`. | `same-dir`, or the mode saved for this project |
 | `--capacity <N>` | <Documented /> | Sets the maximum number of sessions at the same time in `same-dir` or `worktree` mode. Give it only once. | `32` |
@@ -137,3 +137,4 @@ Each option error below prints `Error: <message>` on stderr and exits with code 
 [^flag]: The program, flag `tengu_ccr_bridge`. Probe group `cli321`.
 [^exit-codes]: The program, `chunk-jh1meyy3.js:5-8` and `chunk-y5hjhy3x.js:6333`, `:6797-6798`. [2.1.325 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
 [^cli321]: The program, `chunk-2dg5mr3x.js:107633`, function `Ai`. Probe group `cli321` (`rc-*` cases), run with a fake `max` login, only `DISABLE_TELEMETRY` set, and no network.
+[^child-logs]: The program, `chunk-y5hjhy3x.js:5706-5712`, `chunk-y5hjhy3x.js:6519-6528`, `chunk-zyq9kffp.js:378`, and `chunk-z4j4mjgn.js:44893-44944`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

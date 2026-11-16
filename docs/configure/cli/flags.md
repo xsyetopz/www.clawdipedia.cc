@@ -154,7 +154,7 @@ Flags that continue, fork, name, or rewind a session, or run it in a worktree or
 | `--resume-drops-turn` `<message id>` | <Undocumented /> | ❌ | Names the turn that a truncating resume drops. The resume fails if more would go. |
 | `--reply-on-resume` | <Undocumented /> | ❌ | Asks the model to reply at once when the transcript ends with a user message. |
 | `--session-began-as-copy` `<value>` | <Undocumented /> | ❌ | Hidden. A server sends it. The value `1` marks a session that began as a copy of another. Then `--resume` in print mode does not continue the last turn of the session it was copied from, and does not run a tool call that a hook deferred there. Any other value is ignored. It means the same as `CLAUDE_CODE_SESSION_BEGAN_AS_COPY=1`, and either one is enough.[^copy-flag] |
-| `--rewind-files` `<user-message-id>` | <Undocumented /> | ❌ | Restores the files to the state at a user message and exits. It needs `--resume`. |
+| `--rewind-files` `<user-message-id>` | <Undocumented /> | ❌ | Restores the files to the state at a user message and exits. It needs `--resume`. Since `2.1.326`, it prints `Warning: N tracked paths were skipped: <reason>. Run with --debug for the paths.` when it leaves files untouched.[^rewind-skip] |
 | `--bg`, `--background` | <Documented /> | ✅ | Starts the session in the background and prints its ID. |
 | `-w, --worktree [name]` | <Documented /> | ✅ | Creates a new git worktree for the session. |
 | `--tmux` | <Documented /> | ✅ | Creates a tmux session for the worktree. It needs `--worktree`. |
@@ -173,7 +173,7 @@ Flags that add agents, plugins, MCP servers, folders, and files.
 | `--plugin-url` `<url>` | <Documented /> | ✅ | Fetches a plugin `.zip` file from a URL for this session only. |
 | `--plugin-dir-no-mcp` `<path>` | <Undocumented /> | ❌ | Works like `--plugin-dir` but does not read the `.mcp.json` of the plugin. |
 | `--disable-slash-commands` | <Documented /> | ✅ | Turns off all skills and commands. |
-| `--add-dir` `<directories...>` | <Documented /> | ✅ | Gives the tools access to more folders. |
+| `--add-dir` `<directories...>` | <Documented /> | ✅ | Gives the tools access to more folders. Since `2.1.326`, in a local terminal session, `--add-dir` and `/add-dir` show the trust prompt for a folder you have not trusted yet. `claude --bg` refuses such a folder and exits with `Added folder not trusted: <path>`.[^add-dir-trust] |
 | `--brief` | <Undocumented /> | ✅ | Turns on the `SendUserMessage` tool so the agent can message the user. |
 | `--file` `<specs...>` | <Undocumented /> | ✅ | Downloads file resources at startup, in the form `file_id:relative_path`. |
 | `--channels` `<servers...>` | <Documented /> | ❌ | Lists the MCP servers whose channel notifications may register this session. |
@@ -271,3 +271,5 @@ Each row is a family of messages. The backticked text is the start that every me
 [^auto-refused]: Probe case `print.err319.auto-mode-print-refused`.
 [^chrome-live]: Live run, case `live.err319`, with `--chrome` and a subscription token.
 [^chrome-fake]: Probe case `print.err319.chrome-no-extension`.
+[^add-dir-trust]: The program, `chunk-fdjay46b.js:2019-2026` and `chunk-fdjay46b.js:2068-2082`. The trust prompt in a local terminal session is from the [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^rewind-skip]: The program, `chunk-xt4nsgp1.js:36495-36499`. The reasons are in `chunk-3zn9cw12.js:3144`.

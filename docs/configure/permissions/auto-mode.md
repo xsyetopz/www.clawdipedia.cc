@@ -6,7 +6,7 @@ sidebar_position: 5
 
 Auto mode lets Claude Code run without routine prompts. A classifier model reads each action and blocks what is risky, such as a deploy to production or a push of secrets. Tune the classifier with the `autoMode` setting when it blocks too much or too little for your setup.
 
-Pick `auto` as the permission mode to turn it on. Set `permissions.defaultMode: "auto"` to start in it. Set `permissions.disableAutoMode: "disable"` to turn it off. User settings, `--settings`, and managed settings can set `autoMode`. Project and local settings cannot, because both files live in the repository, where a checked-in repository or a build step could add its own allow rules.[^auto-sources][^official-project]
+Pick `auto` as the permission mode to turn it on. Set `permissions.defaultMode: "auto"` to start in it. Since `2.1.326`, if the served policy settings fail to load, a session that started in auto mode by the built-in default falls back to another mode. The mode is the `defaultMode` that policy settings name, other than `auto` or `bypassPermissions`. For an organization policy or HIPAA, the mode is `default`.[^auto-fallback] Set `permissions.disableAutoMode: "disable"` to turn it off. User settings, `--settings`, and managed settings can set `autoMode`. Project and local settings cannot, because both files live in the repository, where a checked-in repository or a build step could add its own allow rules.[^auto-sources][^official-project]
 
 ## Example
 
@@ -100,6 +100,8 @@ Claude Code removes these allow rules:
 - A `PowerShell` rule for an interpreter or a cmdlet that runs code, also in the `.exe` forms.
 - Allow rules for the `Agent` and `Monitor` tools, the REPL tool, and some MCP tools.
 - Every `Bash` and `PowerShell` allow rule, when `autoMode.classifyAllShell` is `true`.
+- Since `2.1.326`, a `Bash` wildcard rule when its program word is not a plain name.[^odd-word] That is the case when the text before the `*` has no program, or when the word has a character other than letters, digits, `_`, `.`, `+`, `@`, `%`, `,`, `:`, `~`, `/`, and `-`, such as `$HOME`. It is also the case when the word is a variable assignment such as `NAME=value`. If the `*` touches the last word, a word that starts with `~`, `/`, `\`, or a drive letter, or that has a `..` segment, counts too. The safety check then decides these commands. A rule without a `*` stays.
+- Since `2.1.326`, a `Bash` wildcard rule whose program is a Windows path with backslashes, such as `C:\tools\git.exe *`. The rule goes, and the safety check decides those calls. An exact rule keeps its allow.[^win-path]
 
 ### Classifier Billing Notice
 
@@ -251,3 +253,6 @@ It works in `-p` mode when `CLAUDE_CODE_REMOTE` is not set and a classifier mode
 [^ignored-env]: The program lists the name in its environment table as a boolean, and no code reads it.
 [^chrome-flag]: The program. The flag is `tengu_cowork_chrome_automode_default`.
 [^bg-rules]: The program.
+[^auto-fallback]: [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-mdf23c0f.js:76-82` and `:116-135`, which logs `[auto-mode] the built-in auto default gave way to ... served settings failed`. The program skips the fallback when `CLAUDE_CODE_BRIDGE_CHILD_AUTO_DEFAULT` is set. The release note also says terminal and VS Code sessions with no mode set start in auto mode when the policy has not loaded. The cleaned code does not show that start, so this page does not state it.
+[^odd-word]: [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-88hf417t.js:28` calls `chunk-3q9v3gt8.js:590-616`. The rule applies to `Bash` only. A run of the same expressions on sample rules, such as `$HOME *`, `~/bin/x*`, and `FOO=1 *`, removed them. It kept `git *`, `~/bin/x *`, and `/usr/bin/git *`.
+[^win-path]: [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-3q9v3gt8.js:593-598` and `:599-616`. A backslash is not in the set of plain characters, so a wildcard rule with a backslash path as its program goes. The release note also says Claude Code plans to restore rules that start with `.\`. The cleaned code does not show that, so this page does not state it.

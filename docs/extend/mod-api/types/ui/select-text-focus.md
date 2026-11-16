@@ -117,7 +117,8 @@ The props of `Text`: colors, styles, and the size, weight, face and digits that 
 | `strikethrough` | <Documented /> | `true` strikes the text through. | Type: `boolean`. Optional. |
 | `inverse` | <Documented /> | `true` swaps the text and background colors. | Type: `boolean`. Optional. |
 | `dir` | <Documented /> | The direction that the text reads in. Use `rtl` for a right-to-left script, so a row of it that opens with a Latin word or a number reads right to left. | Type: `'ltr' \| 'rtl'`. Optional. When absent, each row reads by its first strong letter. `rtl` rows are flush right. |
-| `wrap` | <Documented /> | How text that is too long is wrapped or cut. | Type: `'wrap' \| 'end' \| 'middle' \| 'truncate' \| 'truncate-start' \| 'truncate-middle' \| 'truncate-end'`. Optional. |
+| `wrap` | <Documented /> | How text that is too long is wrapped or cut. | Type: `'wrap' \| 'end' \| 'middle' \| 'truncate' \| 'truncate-start' \| 'truncate-middle' \| 'truncate-end' \| 'clip'`. Optional. Since `2.1.326`, `'clip'` is a value.[^maxlines] |
+| `maxLines` | <Documented /> | Limits the number of lines. Since `2.1.326`. | Type: `number`, a whole number from 1 to 10000. Optional. Some surfaces keep it only with `wrap` set to `'wrap'`, `'end'`, `'truncate'`, or `'truncate-end'`, and drop it with other values.[^maxlines] |
 
 ### `ToastOptions`
 
@@ -230,3 +231,4 @@ What a `ui.focus` hook returns, what `next(e)` resolves to, and what `$.ui.focus
 ## Sources
 
 [^focus-input]: The Mod API type file, `schemas/claude-code.d.ts`, `UiFocusInput`.
+[^maxlines]: The program, `chunk-fvkvyefp.js:3627`, `chunk-fvkvyefp.js:3736-3741`, and `chunk-fvkvyefp.js:5141-5153`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

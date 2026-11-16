@@ -35,7 +35,7 @@ Each line is a separate command. The text after the name is the argument.
 | Command | Status | What it does | Notes |
 | --- | --- | --- | --- |
 | `/add-dir` `<path>` | <Documented /> | Adds a working folder. | Panel. Runs at once when you give a path. Loads `.claude/skills`, `.claude/commands`, and `.claude/agents` of that folder. A text form runs for some SDK entry points. |
-| `/cd` `<path>` | <Documented /> | Moves this session to a new working folder. | Panel. The new folder adds its project skills (since `2.1.246`). |
+| `/cd` `<path>` | <Documented /> | Moves this session to a new working folder. | Panel. The new folder adds its project skills (since `2.1.246`). Since `2.1.326`, in fullscreen mode, when the trust prompt does not fit the window, `Yes` is refused and the line `To trust this folder, first make the window taller` shows.[^cd-taller] |
 | `/clear` (aliases `/reset`, `/new`) `[name]` | <Documented /> | Starts a new session with empty context. | The old session stays on disk. `/resume` opens it. Works non-interactive too. |
 | `/compact` `<optional custom summarization instructions>` | <Documented /> | Summarizes the conversation to free context. | Off when env var `DISABLE_COMPACT` is truthy. See [Context and Compaction](../../how-it-works/context-and-compaction.md). |
 | `/autocompact` `[auto\|<tokens>]` | <Documented /> | Sets how full the context gets before it auto-summarizes. | Panel in interactive mode. A text form, "Configure the auto-compact window size", runs non-interactive or in a remote workspace. |
@@ -55,7 +55,7 @@ Each line is a separate command. The text after the name is the argument.
 | `/copy` `[N]` | <Documented /> | Copies the last reply to the clipboard. `/copy N` copies the Nth latest. | Panel. |
 | `/exit` (alias `/quit`) | <Documented /> | Exits the CLI. In a background session, it detaches. The session keeps running. | Panel and text form. |
 | `/restart` (alias `/update`) | <Gated note="Interactive terminal on macOS or Linux, native install only, and a server-side feature flag." /> | Restarts Claude Code on the newly installed version. Resumes this session. | Interactive only. See [How `/restart` Works](#how-restart-works). |
-| `/rewind` (aliases `/checkpoint`, `/undo`) | <Documented /> | Restores the code, the conversation, or both to an earlier point. | Interactive only. Each point says what code it can restore. Since `2.1.326`, a turn whose changes were not tracked reads `Code changes unknown` instead of `No code changes`, and a file that a shell command changed reads `Can't restore <file> changed while a command ran`.[^rewind] |
+| `/rewind` (aliases `/checkpoint`, `/undo`) | <Documented /> | Restores the code, the conversation, or both to an earlier point. | Interactive only. Each point says what code it can restore. Since `2.1.326`, a turn whose changes were not tracked reads `Code changes unknown` instead of `No code changes`, and a file that a shell command changed reads `Can't restore <file> changed while a command ran`.[^rewind] Also since `2.1.326`, a restore leaves some files untouched: a link or other file that is not regular, a file whose folder changed since the checkpoint, a file behind a link in a folder that sandboxed commands can write, and a file whose backup cannot be read safely. The result says `Restored the code, but skipped N file(s): <reason>`, and `--debug` lists the paths.[^rewind-skip] |
 | `/tasks` (alias `/bashes`) | <Documented /> | Shows and manages everything that runs in the background. | Panel. |
 | `/list-agents` (alias `/peers`) | <Documented /> | Lists subagents, teammates, and other sessions you can message. | Off when the org setting `messagingBeyondOwnAgentsDisabled` is set. |
 | `/focus` `[on\|off]` | <Documented /> | Toggles focus view: only your prompt, a summary, and the reply. | Needs the fullscreen renderer (`/tui fullscreen` or `CLAUDE_CODE_NO_FLICKER=1`). The setting `viewMode: "focus"` does the same. |
@@ -280,3 +280,5 @@ Each row is a family of messages. The backticked text is the start that every me
 [^unseen]: The program.
 [^usage-sources]: The program.
 [^channel-api]: The program, `chunk-6jd11p1d.js:200`.
+[^cd-taller]: The program, `chunk-q43jj74r.js:390`, `chunk-q43jj74r.js:403`, and `chunk-q43jj74r.js:414`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^rewind-skip]: The program, `chunk-y9bdpp8r.js:22895-22920` and `chunk-3zn9cw12.js:3144`. The release notes say this applies on macOS, Linux, and WSL when the sandbox is on. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

@@ -164,6 +164,8 @@ sequenceDiagram
 Claude Code checks policy lists before any download.
 If a marketplace fails to refresh, Claude Code keeps the old checkout only when `CLAUDE_CODE_PLUGIN_KEEP_MARKETPLACE_ON_FAILURE` is `1`.
 
+Since `2.1.326`, the add-marketplace confirmation says: "Plugins from this marketplace can run code on your computer, with access to your files and shell. Only add marketplaces you trust."[^run-code-add] The plugin install warning and the plugin recommendation prompt say: "Plugins can run code on your computer, with access to your files and shell."[^run-code-install]
+
 ## Errors
 
 Each row is a family of messages. The backticked text is the start that every message in the family shares.
@@ -217,3 +219,5 @@ Each row is a family of messages. The backticked text is the start that every me
 [^list-unread]: The program, `chunk-2x9ma4k7.js:4820574` and `chunk-2x9ma4k7.js:4895063`. `2.1.319` has no such texts.
 [^copy-proof]: The program, `chunk-2x9ma4k7.js:853964`.
 [^submodule]: The program, `chunk-2x9ma4k7.js:4734372`. The gate is the server-side flag `tengu_tidal_kestrel`.
+[^run-code-add]: The program, `chunk-15b1e2ff.js:4325`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
+[^run-code-install]: The program, `chunk-15b1e2ff.js:2804` (install warning, which goes on with more text) and `chunk-y9bdpp8r.js:78269` (recommendation prompt).

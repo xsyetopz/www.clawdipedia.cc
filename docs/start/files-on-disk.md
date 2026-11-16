@@ -146,6 +146,7 @@ The line format of a transcript is on [Transcript Format](../reference/transcrip
 | `~/.claude/cache/changelog.md` | <Documented /> | A cached copy of the [changelog](https://code.claude.com/docs/en/changelog) for `/release-notes`. | [What Changed](what-changed.md) |
 | `~/.claude/daemon/roster.json`, `~/.claude/jobs/<id>/state.json`, `~/.claude/jobs/<id>/tmp/` | <Documented /> | The list of running background sessions, the state of each session, and its scratch folder. Keep them. The official "Agent View" page describes them. | [Sessions and Storage](../how-it-works/sessions-and-storage.md) |
 | `state/`, `mods/`, `bridge-spawn/`, `seed-admin/`, `downloads/`, `cache/model-catalog/` | <Undocumented /> | Present on a `2.1.305` machine, or named in the program. After `2.1.305` was installed, only `cache/model-catalog/` and a type file under `mods/handoff/` were written. `bridge-spawn/`, `seed-admin/`, and `downloads/` are empty, and `state/` was last written before the install. No docs page describes them. See the link for what the program says about `state/`, `seed-admin/`, `bridge-spawn/`, and `cache/model-catalog/`.[^config-folders] | [Sessions and Storage](../how-it-works/sessions-and-storage.md) |
+| `~/.claude/child-logs/` | <Undocumented /> | Since `2.1.326`, the debug logs of sessions started over Remote Control with `--verbose`. Claude Code does not write them when you set `--debug-file`.[^child-logs] | [Sessions and Storage](../how-it-works/sessions-and-storage.md) |
 
 ## Names in the Config Folder
 
@@ -262,3 +263,4 @@ Claude Code builds this payload in code, with no validator, so the schema comes 
 [^local]: The program.
 [^loop]: The program.
 [^claude-json]: The program.
+[^child-logs]: The program, `chunk-y5hjhy3x.js:6528`, `chunk-zyq9kffp.js:378`, and `chunk-z4j4mjgn.js:44893-44944`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

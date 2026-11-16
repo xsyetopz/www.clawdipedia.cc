@@ -81,6 +81,7 @@ The props of `Box`: the layout, position, margin, padding and border props of th
 | `borderDimColor` | <Documented /> | `true` dims the border color. | Type: `boolean`. Optional. |
 | `backgroundColor` | <Documented /> | The background color. | Type: `Color`. Optional. |
 | `overflow` | <Documented /> | Whether content outside the box is displayed or cut. | Type: `'visible' \| 'hidden'`. Optional. |
+| `overflowX` | <Documented /> | Whether content wider than the box is displayed or scrolled. Since `2.1.326`. | Type: `'visible' \| 'scroll'`. Optional. On a surface that rewrites it, `'scroll'` stops the box from wrapping its children and cuts their text at the edge.[^overflowx] |
 | `display` | <Documented /> | `flex` displays the box. `none` hides it. | Type: `'flex' \| 'none'`. Optional. |
 
 ### `ButtonProps`
@@ -242,3 +243,4 @@ The picture that an `Image` displays. It is base64 bytes that the plugin holds (
 
 [^hotkey]: The Mod API type file, `schemas/claude-code.d.ts`.
 [^iterm]: The program.
+[^overflowx]: The program, `chunk-fvkvyefp.js:3615` and `chunk-fvkvyefp.js:5120-5136`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

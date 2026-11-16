@@ -45,7 +45,7 @@ A channel is a way for a server to push messages into your session.
 
 | Item | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
-| Elicitation dialog | <Documented /> | Asks you for input. | `form` mode shows fields. `url` mode asks to open a link. The escaped URL has a cap of about 8000 characters. Claude Code declares `elicitation: {form: {}, url: {}}`. |
+| Elicitation dialog | <Documented /> | Asks you for input. | `form` mode shows fields. `url` mode asks to open a link. The escaped URL has a cap of about 8000 characters. Claude Code declares `elicitation: {form: {}, url: {}}`. Since `2.1.326`, when a background MCP task asks the question, the Esc hint reads `answer later` instead of `cancel`. Esc then sends nothing to the server, and the question stays in `/tasks` as `the server is waiting for your answer`.[^answer-later] The Ctrl+C hint on such a question reads `answer later` too.[^answer-later-notes] |
 | `Elicitation` hook | <Documented /> | Answers a request. | Input: `mcp_server_name`, `message`, `mode`, `url`, `elicitation_id`, `requested_schema`. Output action: `accept` (with `content`), `decline`, or `cancel`. |
 | `ElicitationResult` hook | <Documented /> | Observes or overrides the answer. | Input has `action` and `content`. Runs before the answer goes to the server. |
 | `claude/channel` capability | <Documented /> | Lets a server push messages. | You opt in with `--channels`. Claude Code does not register it on a v2 connection that agreed on revision 2026-07-28. |
@@ -148,3 +148,5 @@ Rows with a start of a message are families. The backticked text is the start th
 [^schema-checks]: The program, `chunk-qnbq0cf3.js:180221` and `chunk-8fw1gbv7.js:9594`.
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
 [^registry]: The program, `chunk-x4fdscgs.js:920495`.
+[^answer-later]: The program, `chunk-y9bdpp8r.js:84336`, `chunk-y9bdpp8r.js:84403`, `chunk-3gmv67w3.js:496`, `chunk-av04ye68.js:34`, and `chunk-6w6hs8a0.js:359`. The task puts the question aside and sends no response to the server. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
+[^answer-later-notes]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

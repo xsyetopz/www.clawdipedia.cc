@@ -92,7 +92,7 @@ A queued message shows a hint under the prompt. In fullscreen rendering with mou
 | Input | Status | What it does | Notes |
 | --- | --- | --- | --- |
 | Click on the "send now" hint | <Undocumented /> | Sends the queued message at once. | Since `2.1.312`. The click needs mouse mode `full`, so `CLAUDE_CODE_DISABLE_MOUSE` and `CLAUDE_CODE_DISABLE_MOUSE_CLICKS` both stop it.[^click-send] |
-| Hint text | <Undocumented /> | Names the key for `chat:sendNow`, or reads "click to send now" when no key is bound to it. | Since `2.1.312`. With no key bound, the hint shows only in mouse mode `full`.[^hint-text] |
+| Hint text | <Undocumented /> | Names the key for `chat:sendNow`, or reads "click to send now" when no key is bound to it. | Since `2.1.312`. With no key bound, the hint shows only in mouse mode `full`.[^hint-text] Since `2.1.326`, the hint reads `Queued · <key> send now`, or `Queued · click to send now` with no key bound, when the line is wide enough for it.[^hint-queued] |
 
 ## Vim Mode Operators with `gj` And `gk`
 
@@ -114,3 +114,4 @@ The vim keys of the input prompt are not in `keybindings.json`. The setting `edi
 [^click-send]: The program reports the click as `chat:sendNowHintPress`. `chunk-1xmjf4e6.js` lines 8948 and 9341 to 9374.
 [^hint-text]: The program, `chunk-1xmjf4e6.js` lines 9498 to 9522.
 [^vim-count]: The program, `chunk-wjynqhds.js` lines 327 to 332 and 812.
+[^hint-queued]: The program, `chunk-y9bdpp8r.js:9843-9863`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
