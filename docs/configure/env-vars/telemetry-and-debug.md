@@ -23,7 +23,7 @@ Claude Code sends OTEL metrics to your local collector.
 
 ## Variables
 
-The rows are in name order. See [Environment Variables](index.md#how-to-read-the-tables) for what each column and badge means.
+The rows are in name order.[^variable-names] See [Environment Variables](index.md#how-to-read-the-tables) for what each column and badge means.
 
 | Variable | Status | What it does | Values and default | Notes |
 | --- | --- | --- | --- | --- |
@@ -42,7 +42,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `CLAUDE_CODE_DEBUG_LOG_LEVEL` | <Documented /> | Sets the minimum level written to the debug log. | Text, `debug` by default. Valid levels only, default `debug` | All sessions |
 | `CLAUDE_CODE_DEBUG_LOGS_DIR` | <Documented /> | Sets the path of the debug log file. Despite the name it is a file path. One code branch adds `<session-id>.txt` to a learned directory. | Text. Default `~/.claude/debug/<session-id>.txt`. Debug mode must be on | All sessions |
 | `CLAUDE_CODE_DIAGNOSTICS_FILE` | <Undocumented /> | Sets a file that receives diagnostics events as JSON lines with a timestamp, level, event and data. It also enables extra diagnostics code. | Text. Other code only tests whether it has a value | All sessions, also forwarded to child processes |
-| `CLAUDE_CODE_DISABLE_OTEL_EVENT_SKIP` | <Undocumented /> | Turns off a shortcut that ends an event log call early. The shortcut applies when the program has already warned that no event logger is set up, and the session is idle and unwatched. Added in `2.1.311`. | On or off, off by default | All sessions |
+| `CLAUDE_CODE_DISABLE_OTEL_EVENT_SKIP` | <Undocumented /> | Turns off a shortcut that ends an event log call early. The shortcut applies when Claude Code has already warned that no event logger is set up, and the session is idle and unwatched. Added in `2.1.311`. | On or off, off by default | All sessions |
 | `CLAUDE_CODE_DISABLE_VITALS_EMITTER` | <Undocumented /> | Turns off the helper that emits guest vitals. The helper is also off in essential-traffic-only mode. | On or off, off by default. The log says guest vitals are disabled | Guest and container sessions |
 | `CLAUDE_CODE_EMIT_STARTUP_TIMING` | <Undocumented /> | Turns on collection and reporting of startup timing phases, as `CLAUDE_CODE_REMOTE` does. | On or off, off by default. Reported fields include the `entrypoint` value | All sessions |
 | `CLAUDE_CODE_ENABLE_FEEDBACK_SURVEY_FOR_OTEL` | <Documented /> | Routes the session quality survey to your own OTEL collector when Anthropic-bound traffic is blocked. | On or off, off by default. When on, the survey gate no longer follows the nonessential-traffic check | All sessions. Project `env` can set it before trust |
@@ -73,7 +73,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `DEBUG` | <Documented /> | Turns on debug mode when truthy. | - | - |
 | `DEBUG_CLAUDE_AGENT_SDK` | <Undocumented /> | In the SDK, forwards the CLI stderr to the caller and sets `DEBUG` to `1` for the child. | - | - |
 | `DEBUG_SDK` | <Undocumented /> | Turns on debug mode at start. | - | - |
-| `DISABLE_ERROR_REPORTING` | <Documented /> | Opts out of error reporting. A background session that you start keeps the value: the program passes it to the background process (`chunk-ph0kyf9w.js:37656`, `:39586`). | On or off | - |
+| `DISABLE_ERROR_REPORTING` | <Documented /> | Opts out of error reporting. A background session that you start keeps the value, because Claude Code passes it to the background process.[^error-reporting] | On or off | - |
 | `DISABLE_TELEMETRY` | <Documented /> | Opts out of telemetry. The bundle also treats it as "no-telemetry" mode for other non-essential traffic checks. | Text. Any non-empty string counts, so `0` and `false` still opt out. Claude Code passes it to remote child sessions | All sessions. Not set from project `env` before trust |
 | `DO_NOT_TRACK` | <Documented /> | Opts out of telemetry like `DISABLE_TELEMETRY` does. | On or off. Claude Code parses it as a standard boolean, so `0` or `false` leaves telemetry on | All sessions. Not set from project `env` before trust |
 | `ENABLE_BETA_TRACING_DETAILED` | <Documented /> <Gated note="Works only behind a feature flag or server gate" /> <Experimental /> | Turns on detailed beta tracing. It needs `BETA_TRACING_ENDPOINT` as well. | On or off. Also needs a non-empty `BETA_TRACING_ENDPOINT`. Gated by an org check or a feature flag | Tracing. Not set from project `env` before trust |
@@ -111,7 +111,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `OTEL_EXPORTER_OTLP_LOGS_HEADERS` | <Documented /> | Sets OTLP headers for logs only. | - | - |
 | `OTEL_EXPORTER_OTLP_LOGS_INSECURE` | <Undocumented /> | Makes the gRPC OTLP logs exporter use an insecure channel when `true`. | - | - |
 | `OTEL_EXPORTER_OTLP_LOGS_PROTOCOL` | <Documented /> | Chooses the OTLP protocol for logs. Falls back to `OTEL_EXPORTER_OTLP_PROTOCOL`. | - | - |
-| `OTEL_EXPORTER_OTLP_LOGS_TIMEOUT` | <Undocumented /> | Sets the OTLP export timeout in ms for the logs signal. It wins over `OTEL_EXPORTER_OTLP_TIMEOUT`. | A number, read as text | Behind a proxy, Claude Code waits for the largest of the three signal timeouts to open the tunnel, 30000 ms at most (read in `chunk-gma0wa2s.js@54863`). Run `env319b.otel-timeout.generic-500-logs-5000`: with the generic value `500` and this one `5000`, Claude Code stayed up past 500 ms and did not time out. Release note 2.1.317 describes the limits |
+| `OTEL_EXPORTER_OTLP_LOGS_TIMEOUT` | <Undocumented /> | Sets the OTLP export timeout in ms for the logs signal. It wins over `OTEL_EXPORTER_OTLP_TIMEOUT`. | A number, read as text | Behind a proxy, Claude Code waits for the largest of the three signal timeouts to open the tunnel, 30000 ms at most. With the generic value `500` and this one `5000`, Claude Code stays up past 500 ms and does not time out.[^otel-timeout-logs] |
 | `OTEL_EXPORTER_OTLP_METRICS_CERTIFICATE` | <Undocumented /> | Gives the root CA file for the OTLP metrics exporter. | - | - |
 | `OTEL_EXPORTER_OTLP_METRICS_CLIENT_CERTIFICATE` | <Undocumented /> | Gives the client certificate file for the OTLP metrics exporter. | - | - |
 | `OTEL_EXPORTER_OTLP_METRICS_CLIENT_KEY` | <Documented /> | Gives the client key file for the OTLP metrics exporter. | Text (a secret) | - |
@@ -121,9 +121,9 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `OTEL_EXPORTER_OTLP_METRICS_INSECURE` | <Undocumented /> | Allows an insecure (non-TLS) connection for the OTLP metrics exporter. | Text | Metrics exporter. Ignored in project and local `env` |
 | `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` | <Documented /> | Picks the OTLP wire protocol for metrics. Falls back to `OTEL_EXPORTER_OTLP_PROTOCOL`. | Text. Another value throws an `Unknown protocol` error | Metrics exporter when `OTEL_METRICS_EXPORTER` has `otlp`. Ignored in project and local `env` |
 | `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` | <Documented /> | Chooses delta or cumulative temporality for exported OTLP metrics. | Text. When unset, Claude Code sets it to `delta` at telemetry start | Metrics exporter. Project `env` can set it before trust |
-| `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT` | <Undocumented /> | Sets the OTLP export timeout in ms for the metrics signal. It wins over `OTEL_EXPORTER_OTLP_TIMEOUT`. | A number, read as text | Behind a proxy, Claude Code waits for the largest of the three signal timeouts to open the tunnel, 30000 ms at most (read in `chunk-gma0wa2s.js@54863`). Run `env319b.otel-timeout.generic-500-metrics-5000`: with the generic value `500` and this one `5000`, Claude Code stayed up past 500 ms and did not time out. Release note 2.1.317 describes the limits |
+| `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT` | <Undocumented /> | Sets the OTLP export timeout in ms for the metrics signal. It wins over `OTEL_EXPORTER_OTLP_TIMEOUT`. | A number, read as text | Behind a proxy, Claude Code waits for the largest of the three signal timeouts to open the tunnel, 30000 ms at most. With the generic value `500` and this one `5000`, Claude Code stays up past 500 ms and does not time out.[^otel-timeout-metrics] |
 | `OTEL_EXPORTER_OTLP_PROTOCOL` | <Documented /> | Sets the default OTLP wire protocol for metrics, logs and traces. | Text. A per-signal `..._PROTOCOL` wins | Telemetry exporters with `otlp`. Ignored in project and local `env` |
-| `OTEL_EXPORTER_OTLP_TIMEOUT` | <Undocumented /> | Sets the OTLP export timeout in ms for every signal. | A number, read as text, `10000` by default, 30000 at most. A per-signal `OTEL_EXPORTER_OTLP_<SIGNAL>_TIMEOUT` wins. A bad value logs a warning | Behind a proxy, the tunnel wait is the largest of the three signal timeouts (`chunk-gma0wa2s.js@54869`). Run `env319b.otel-timeout.generic-500`: with `500` and a proxy that never answers, the export timed out and Claude Code exited in 1422 ms; run `env319b.otel-timeout.default` with no value exited in 2834 ms with no time-out line. Run `all-three-500` (generic `20000`, each signal `500`) timed out in 1383 ms |
+| `OTEL_EXPORTER_OTLP_TIMEOUT` | <Undocumented /> | Sets the OTLP export timeout in ms for every signal. | A number, read as text, `10000` by default, 30000 at most. A per-signal `OTEL_EXPORTER_OTLP_<SIGNAL>_TIMEOUT` wins. A bad value logs a warning | Behind a proxy, the tunnel wait is the largest of the three signal timeouts. With `500` and a proxy that never answers, the export times out and Claude Code exits in 1422 ms. With no value, it exits in 2834 ms with no time-out line. With generic `20000` and each signal `500`, the export times out in 1383 ms.[^otel-timeout] |
 | `OTEL_EXPORTER_OTLP_TRACES_CERTIFICATE` | <Undocumented /> | Sets the root CA file that the OTLP traces exporter trusts. | Falls back to `OTEL_EXPORTER_OTLP_CERTIFICATE`. A read failure logs a warning | Traces exporter. Ignored in project and local `env` |
 | `OTEL_EXPORTER_OTLP_TRACES_CLIENT_CERTIFICATE` | <Undocumented /> | Sets the client certificate file for mTLS on the OTLP traces exporter. | Falls back to `OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE`. Needs the matching client key | Traces exporter. Ignored in project and local `env` |
 | `OTEL_EXPORTER_OTLP_TRACES_CLIENT_KEY` | <Undocumented /> | Sets the client private key file for mTLS on the OTLP traces exporter. | Text (a secret). Falls back to `OTEL_EXPORTER_OTLP_CLIENT_KEY`. Needs the matching client certificate | Traces exporter. Ignored in project and local `env` |
@@ -132,10 +132,10 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `OTEL_EXPORTER_OTLP_TRACES_HEADERS` | <Documented /> | Sets extra HTTP headers on the OTLP traces export. | Text. Overrides `OTEL_EXPORTER_OTLP_HEADERS` | Traces exporter. Ignored in project and local `env` |
 | `OTEL_EXPORTER_OTLP_TRACES_INSECURE` | <Undocumented /> | Allows an insecure (non-TLS) connection for the OTLP traces exporter. | Text | Traces exporter. Ignored in project and local `env` |
 | `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` | <Documented /> | Picks the OTLP wire protocol for traces. Falls back to `OTEL_EXPORTER_OTLP_PROTOCOL`. | Text. A valid remote `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` forces `http/protobuf` | Traces exporter when `OTEL_TRACES_EXPORTER` has `otlp`. Ignored in project and local `env` |
-| `OTEL_EXPORTER_OTLP_TRACES_TIMEOUT` | <Undocumented /> | Sets the OTLP export timeout in ms for the traces signal. It wins over `OTEL_EXPORTER_OTLP_TIMEOUT`. | A number, read as text | Behind a proxy, Claude Code waits for the largest of the three signal timeouts to open the tunnel, 30000 ms at most (read in `chunk-gma0wa2s.js@54869`). Run `env319b.otel-timeout.generic-500-traces-5000`: with the generic value `500` and this one `5000`, Claude Code stayed up past 500 ms and did not time out. Release note 2.1.317 describes the limits |
+| `OTEL_EXPORTER_OTLP_TRACES_TIMEOUT` | <Undocumented /> | Sets the OTLP export timeout in ms for the traces signal. It wins over `OTEL_EXPORTER_OTLP_TIMEOUT`. | A number, read as text | Behind a proxy, Claude Code waits for the largest of the three signal timeouts to open the tunnel, 30000 ms at most. With the generic value `500` and this one `5000`, Claude Code stays up past 500 ms and does not time out.[^otel-timeout-traces] |
 | `OTEL_EXPORTER_PROMETHEUS_HOST` | <Documented /> | Sets the host that the Prometheus metrics exporter binds to. | Falls back to the SDK default | Metrics exporter with `prometheus`. Ignored in project and local `env` |
 | `OTEL_EXPORTER_PROMETHEUS_PORT` | <Documented /> | Sets the port that the Prometheus metrics exporter listens on. | A number, port by default. Falls back to the SDK default port | Metrics exporter with `prometheus`. Ignored in project and local `env` |
-| `OTEL_LOG_ASSISTANT_RESPONSES` | <Documented /> | Includes the model response text in `assistant_response` log events. Since `2.1.323`, `0` also keeps the reply of a background agent out of `user_prompt` events and interaction spans ([2.1.323 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323); the program, `chunk-1p5scy1s.js:17283`). | On, off, or unset. When unset, the value of `OTEL_LOG_USER_PROMPTS` applies. `0` keeps responses redacted | All entrypoints. Ignored in project and local `env`. Project `env` may set only an off value |
+| `OTEL_LOG_ASSISTANT_RESPONSES` | <Documented /> | Includes the model response text in `assistant_response` log events. Since `2.1.323`, `0` also keeps the reply of a background agent out of `user_prompt` events and interaction spans.[^log-responses] | On, off, or unset. When unset, the value of `OTEL_LOG_USER_PROMPTS` applies. `0` keeps responses redacted | All entrypoints. Ignored in project and local `env`. Project `env` may set only an off value |
 | `OTEL_LOG_MANAGED_SETTINGS` | <Documented /> | Adds redacted managed settings and a SHA-256 digest to `managed_settings_resolved` events. | On or off. Reads managed and user layers first, and skips project and local scopes | All entrypoints. Ignored in project and local `env` |
 | `OTEL_LOG_RAW_API_BODIES` | <Documented /> | Logs raw Messages API request and response JSON as events. | Off by default. `1` (bool values) means inline. `file:<dir>` writes full bodies to disk with a `body_ref` | All entrypoints, not diskless hosts. Ignored in project and local `env` |
 | `OTEL_LOG_TOOL_CONTENT` | <Documented /> | Includes tool content in the `tool.output` span event. | On or off. Needs tracing on | All entrypoints with tracing. Ignored in project and local `env`. Project `env` may set only an off value |
@@ -154,7 +154,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `OTEL_METRICS_INCLUDE_SESSION_ID` | <Documented /> | Adds `session.id` (and the remote session id) to metric attributes. | On or off, on by default. Claude Code parses any set value as a boolean | Metrics. Project `env` can set it before trust |
 | `OTEL_METRICS_INCLUDE_VERSION` | <Documented /> | Adds the Claude Code version as `app.version` to metric attributes. | On or off, off by default. Claude Code parses any set value as a boolean | Metrics. Project `env` can set it before trust |
 | `OTEL_RESOURCE_ATTRIBUTES` | <Documented /> | Adds custom resource attributes to telemetry, and to metric labels. | Text. Claude Code drops bad pairs | All entrypoints. Project `env` can set it before trust |
-| `OTEL_RESOURCE_INCLUDE_HOST` | <Undocumented /> | Since `2.1.326`, it adds the host attributes `host.name` and `host.id` to the OpenTelemetry resource (`chunk-7a41jn20.js:1798`). It also needs telemetry on, and no OTEL exporter variable that names `console`. See [OpenTelemetry](../../reference/opentelemetry.md). | `true`. Off by default | Telemetry export |
+| `OTEL_RESOURCE_INCLUDE_HOST` | <Undocumented /> | Since `2.1.326`, it adds the host attributes `host.name` and `host.id` to the OpenTelemetry resource.[^resource-host] It also needs telemetry on, and no OTEL exporter variable that names `console`. See [OpenTelemetry](../../reference/opentelemetry.md). | `true`. Off by default | Telemetry export |
 | `OTEL_SERVICE_NAME` | <Undocumented /> | Sets the `service.name` resource attribute of exported telemetry. | Text | Telemetry. Project `env` can set it before trust |
 | `OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT` | <Undocumented /> | Limits the attributes on each span. | A number. Falls back to `OTEL_ATTRIBUTE_COUNT_LIMIT`, then 128 | Tracing. Not set from project `env` before trust |
 | `OTEL_SPAN_ATTRIBUTE_PER_EVENT_COUNT_LIMIT` | <Undocumented /> | Limits the attributes on each span event. | A number, 128 by default | Tracing. Not set from project `env` before trust |
@@ -179,16 +179,16 @@ Telemetry features read their variables once at startup, so a change to `env` in
 `DISABLE_TELEMETRY` and `DO_NOT_TRACK` also turn off feature-flag fetching, so features that depend on server flags stop working.
 The official docs list the affected features under [Features That Need Feature-Flag Fetching](https://code.claude.com/docs/en/env-vars#features-that-need-feature-flag-fetching).
 
-Since `2.1.307` Claude Code logs a `claude_code.safety_event` OpenTelemetry event for each tool call that a permission rule, auto mode, a safety check, a hook, or the sandbox stopped, prompted, or sent back ([release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307)).
-In the program the event is `safety_event`, behind a feature flag that is on by default.
+Since `2.1.307` Claude Code logs a `claude_code.safety_event` OpenTelemetry event for each tool call that a permission rule, auto mode, a safety check, a hook, or the sandbox stopped, prompted, or sent back.[^safety-event]
+The event is `safety_event`, behind a feature flag that is on by default.
 Its attributes include `category` (such as `permission_rule`, `auto_mode_block`, `hook`, `hook_review`, `sandbox_network`, and `user_rejected`), `decision`, `decision_source`, `reason_type`, `reason_code`, `rule_source`, `tool_name`, `tool_class`, `tool_source`, `permission_mode`, `tool_use_id`, `sandbox_enabled`, and `sandbox_violation_count`.
-A `PostToolUse` hook that sends a result back gives `category` `hook_review`, `decision` `sent_back`, and `decision_source` `hook` (the program).
+A `PostToolUse` hook that sends a result back gives `category` `hook_review`, `decision` `sent_back`, and `decision_source` `hook`.[^safety-event-hook]
 
-When the output of a command shows a git commit, the `tool_result` event for that call also has `vcs.ref.head.revision` (the commit ID). When Claude Code knows the branch, the event also has `vcs.ref.head.name` and `vcs.ref.head.type` `branch` (the program).
+When the output of a command shows a git commit, the `tool_result` event for that call also has `vcs.ref.head.revision` (the commit ID). When Claude Code knows the branch, the event also has `vcs.ref.head.name` and `vcs.ref.head.type` `branch`.[^vcs-ref]
 
 ## Exact Fields
 
-Find the exact fields of each OpenTelemetry metric, span, and event at `https://clawdipedia.cc/schemas/claude-code-otel.json`. The program builds this payload in code, not with a validator. The schema comes from that code. A field marked `x-unverified` has a type the code does not show. The mark `x-observed` shows a field that a probe saw.
+Find the exact fields of each OpenTelemetry metric, span, and event at `https://clawdipedia.cc/schemas/claude-code-otel.json`. Claude Code builds each payload in code with no validator, so the schema comes from that code.[^otel-schema] A field marked `x-unverified` has a type the code does not show. The mark `x-observed` shows a field that a probe saw.
 It lists every field of this release. Build on the fields it names. Look each field up there before you rely on it.
 
 ## Errors
@@ -197,7 +197,7 @@ Each row is a family of messages. The backticked text is the start that every me
 
 | Start of Message | Status | What It Means | Cases |
 | --- | --- | --- | --- |
-| `Unknown protocol set in OTEL_EXPORTER_OTLP_` | <Undocumented /> | A `_PROTOCOL` variable of the logs, metrics, or traces exporter has a value that Claude Code does not know. | The text names the variable of the signal and `OTEL_EXPORTER_OTLP_PROTOCOL`, then the value. The program writes it to the debug log after `[3P telemetry] Telemetry init failed:`, and the session goes on. Run: `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL=bogus` gave `Unknown protocol set in OTEL_EXPORTER_OTLP_METRICS_PROTOCOL or OTEL_EXPORTER_OTLP_PROTOCOL env var: bogus` and exit code 0. Probe cases `print.env319b.otlp-protocol.logs`, `.metrics`, `.traces`, and `.logs-general`. |
+| `Unknown protocol set in OTEL_EXPORTER_OTLP_` | <Undocumented /> | A `_PROTOCOL` variable of the logs, metrics, or traces exporter has a value that Claude Code does not know. | The text names the variable of the signal and `OTEL_EXPORTER_OTLP_PROTOCOL`, then the value. Claude Code writes it to the debug log after `[3P telemetry] Telemetry init failed:`, and the session goes on. With `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL=bogus`, the text is `Unknown protocol set in OTEL_EXPORTER_OTLP_METRICS_PROTOCOL or OTEL_EXPORTER_OTLP_PROTOCOL env var: bogus` and the exit code is 0.[^otlp-protocol] |
 
 ## Related Pages
 
@@ -206,4 +206,18 @@ Each row is a family of messages. The backticked text is the start that every me
 - [Monitoring](https://code.claude.com/docs/en/monitoring-usage) (see the official docs)
 - [Undocumented Items](../../reference/undocumented.md): every item that only the program shows.
 
-Source: the program (variable names found in the `2.1.314` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+## Sources
+
+[^otel-timeout-logs]: The program, `chunk-gma0wa2s.js@54863`. Probe case `env319b.otel-timeout.generic-500-logs-5000`. [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317) describe the limits.
+[^otel-timeout-metrics]: The program, `chunk-gma0wa2s.js@54863`. Probe case `env319b.otel-timeout.generic-500-metrics-5000`. [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317) describe the limits.
+[^otel-timeout-traces]: The program, `chunk-gma0wa2s.js@54869`. Probe case `env319b.otel-timeout.generic-500-traces-5000`. [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317) describe the limits.
+[^otel-timeout]: The program, `chunk-gma0wa2s.js@54869`. Probe cases `env319b.otel-timeout.generic-500`, `env319b.otel-timeout.default`, and `all-three-500`.
+[^error-reporting]: The program, `chunk-ph0kyf9w.js:37656` and `:39586`.
+[^log-responses]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-1p5scy1s.js:17283`.
+[^resource-host]: The program, `chunk-7a41jn20.js:1798`.
+[^safety-event]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307). The program.
+[^safety-event-hook]: The program.
+[^vcs-ref]: The program.
+[^otel-schema]: The program.
+[^otlp-protocol]: Probe cases `print.env319b.otlp-protocol.logs`, `.metrics`, `.traces`, and `.logs-general`.
+[^variable-names]: The program, variable names found in the `2.1.314` binary. The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
