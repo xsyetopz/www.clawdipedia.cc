@@ -126,6 +126,16 @@ A hook may rewrite the content keys of `AgentSpawnInput`. The type pins every ot
 
 `AgentSpawnResult` is either `{ model, agentId, teammateId? }` or `{ deny }`. The answer of the subagent comes in its own `turn.complete` with this `agentId`.
 
+### Agent Limits
+
+`AgentLimits` is what `$.agent.limits()` returns, since `2.1.326`. Claude Code reads it at each call.[^limits]
+
+| Item | Status | What it is for | Shape and limits |
+| --- | --- | --- | --- |
+| `AgentLimits.concurrent` | <Documented /> | How many agents may run at once. A plugin's `$.agent.spawn` calls stop at this number. | `number`. Set it with `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`. The default is 20. Spawns that the model starts can go past it. |
+| `AgentLimits.depth` | <Documented /> | How deep agents may nest. An agent that the main conversation starts is at depth 1. An agent at this depth starts no agents. | `number`. Set it with `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH`. If the variable is not set, the value stays the same for the session after the first read. |
+| `AgentLimits.isBackgroundEnabled` | <Documented /> | Whether an agent can run in the background. | `boolean`. `false` when the session keeps its agents in the foreground. `true` does not promise one launch: on the hosted server the host decides each launch, and a subagent's own launch there runs in the foreground. |
+
 ### Agent Spec
 
 `AgentSpec` is what `$.agent.register` takes. It is an agent definition as spelled in settings JSON, plus a `name`. It accepts every field that an agent file or a `--agents` entry accepts.
