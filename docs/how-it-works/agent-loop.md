@@ -7,7 +7,27 @@ sidebar_position: 2
 A turn is everything that happens from your prompt to the final answer.
 Inside a turn, the model asks for tools. Claude Code runs them. The model reads the results.
 This repeats until the model answers without a tool call.
-This page explains each stage. It also shows where you can act.
+You can act at each stage with a hook, a mod event, a setting, or an environment variable. To change a stage, find it in the tables below. The Example section shows a hook that blocks a `Bash` call.
+
+## Example
+
+This hook in `.claude/settings.json` runs a script before every `Bash` call.
+If the script exits with code 2, Claude Code blocks the call. The reason goes back to the model.
+
+```json title=".claude/settings.json"
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/check-bash.sh" }
+        ]
+      }
+    ]
+  }
+}
+```
 
 ## The Turn at a Glance
 
@@ -50,7 +70,7 @@ sequenceDiagram
 
 ## The Stages
 
-Sources: [Hooks Reference: Hook Lifecycle](https://code.claude.com/docs/en/hooks#hook-lifecycle) and [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference#events) for the events. Source: the program for the rest.
+Official pages for the events: [Hooks Reference: Hook Lifecycle](https://code.claude.com/docs/en/hooks#hook-lifecycle) and [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference#events).[^stages]
 
 ```mermaid
 flowchart TD
@@ -87,7 +107,7 @@ See the [Mod API](../extend/mod-api/index.md) pages in Extend.
 
 ## The Tool Stage
 
-Sources: [Hooks Reference](https://code.claude.com/docs/en/hooks) and [Environment Variables](https://code.claude.com/docs/en/env-vars).
+Official pages: [Hooks Reference](https://code.claude.com/docs/en/hooks) and [Environment Variables](https://code.claude.com/docs/en/env-vars).
 
 ```mermaid
 flowchart TD
@@ -115,7 +135,7 @@ flowchart TD
 | Run | <Documented /> | Read-only tools and subagents run in parallel, up to `CLAUDE_CODE_MAX_TOOL_USE_CONCURRENCY` (default 10). Other tools run one after another. |
 | `PostToolUse` and `PostToolUseFailure` hooks | <Documented /> | They run after each call. |
 | `PostToolBatch` hook | <Documented /> | It runs after a batch of parallel calls and before the next model call. It can stop the loop. |
-| Shell working directory | <Undocumented /> | Since `2.1.326`, a Bash command does not run in the launch folder when the working directory is gone. The command fails with `Working directory "<path>" is gone` (deleted, moved, replaced by a link, or unreadable) and the model can issue it again. An agent in a worktree that was removed is refused too, and a session pinned to its folder stays blocked until the folder is back (`chunk-4h798pp0.js:183893`, `chunk-4h798pp0.js:183937`, `chunk-4h798pp0.js:183949`). |
+| Shell working directory | <Undocumented /> | Since `2.1.326`, a Bash command does not run in the launch folder when the working directory is gone. The command fails with `Working directory "<path>" is gone` (deleted, moved, replaced by a link, or unreadable) and the model can issue it again. An agent in a worktree that was removed is refused too, and a session pinned to its folder stays blocked until the folder is back.[^cwd] |
 
 ## Recovery Inside the Loop
 
@@ -125,11 +145,11 @@ The loop does not fail on every error. It tries to fix the problem and continue.
 | --- | --- | --- |
 | The output stops at `max_tokens` | <Undocumented /> | It adds a nudge message and asks again, a limited number of times. |
 | The response is cut off | <Undocumented /> | It does the same. |
-| A subagent's text reply hits the output token limit | <Undocumented /> | Since `2.1.326`, the nudge tells the subagent that its caller gets no answer in pieces, and asks for the whole answer again, more briefly, up to 3 times. (`chunk-27vawgnx.js:8693`, `chunk-27vawgnx.js:8711`, `chunk-dezyqkh5.js:221`). |
+| A subagent's text reply hits the output token limit | <Undocumented /> | Since `2.1.326`, the nudge tells the subagent that its caller gets no answer in pieces, and asks for the whole answer again, more briefly, up to 3 times.[^sub-limit] |
 | A `tool_use` block has no valid call | <Undocumented /> | It drops the reply and asks once more. Then it ends with a message that the tool call could not be parsed. |
 | The model sends only thinking | <Undocumented /> | It sends one nudge. |
 | A safety refusal | <Documented /> | It runs again on the fallback model of that category. See [Models](models.md#fallback). |
-| The API says `max_tokens` is above the model limit | <Undocumented /> | Since `2.1.326`, when the error text reads `max_tokens: N > M, which is the maximum allowed number of output tokens for <model>` (status 400, 402, 413, 422, or 429) and `M` is at least 4096, Claude Code sends the request again with `max_tokens` set to `M` (`chunk-4h798pp0.js:154749`, `chunk-4h798pp0.js:154785`). |
+| The API says `max_tokens` is above the model limit | <Undocumented /> | Since `2.1.326`, when the error text reads `max_tokens: N > M, which is the maximum allowed number of output tokens for <model>` (status 400, 402, 413, 422, or 429) and `M` is at least 4096, Claude Code sends the request again with `max_tokens` set to `M`.[^max-tokens] |
 | The context is too long | <Documented /> | It lowers `max_tokens` or compacts. |
 | Autocompact refills 3 times in a row | <Documented /> | It ends the turn with an error that starts `Autocompact is thrashing`. See [Troubleshooting](https://code.claude.com/docs/en/troubleshooting) in the official docs. |
 | A `Stop` hook blocks | <Documented /> | It sends the reason back to the model. After `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` blocks in a row (default 8), it ends the turn. |
@@ -169,7 +189,7 @@ stateDiagram-v2
 | `blocking_limit` | The context hit the blocked level. See [Context and Compaction](context-and-compaction.md#when-compaction-runs). |
 | `rapid_refill_breaker` | Autocompact refilled the context too fast. |
 | `model_error`, `api_error`, `image_error` | The API or an image failed. |
-| `malformed_tool_use_exhausted` | The model sent a tool call that could not be parsed, and the retries failed too. Since `2.1.307` Claude Code retries the call up to twice ([release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307)). Before, the turn ended after two bad calls in a row. |
+| `malformed_tool_use_exhausted` | The model sent a tool call that could not be parsed, and the retries failed too. Since `2.1.307` Claude Code retries the call up to twice.[^v307] Before, the turn ended after two bad calls in a row. |
 | `prompt_too_long` | The prompt did not fit the context window. |
 | `budget_exhausted` | The run used all of its budget. |
 | `structured_output_retry_exhausted` | The model did not give valid structured output after the allowed retries. |
@@ -187,29 +207,17 @@ stateDiagram-v2
 | Rewrite a part of the system prompt | A mod listening to `prompt.section` or `prompt.compose`. See [The System Prompt](system-prompt.md). |
 | Change the compaction point | See [Context and Compaction](context-and-compaction.md#controls). |
 
-## Example
-
-This hook in `.claude/settings.json` runs a script before every `Bash` call.
-If the script exits with code 2, Claude Code blocks the call. The reason goes back to the model.
-
-```json title=".claude/settings.json"
-{
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          { "type": "command", "command": ".claude/hooks/check-bash.sh" }
-        ]
-      }
-    ]
-  }
-}
-```
-
 ## Related Pages
 
 - [Architecture](architecture.md)
 - [Request and Cache](request-and-cache.md)
 - [Context and Compaction](context-and-compaction.md)
 - [Hooks](../extend/hooks/index.md), [Tools](../reference/tools/index.md), [Subagents](../extend/subagents/index.md), and [Mod API](../extend/mod-api/index.md) pages in Extend and Reference.
+
+## Sources
+
+[^stages]: The program, for the stages that the official pages do not cover.
+[^cwd]: The program, `chunk-4h798pp0.js:183893`, `chunk-4h798pp0.js:183937`, `chunk-4h798pp0.js:183949`.
+[^sub-limit]: The program, `chunk-27vawgnx.js:8693`, `chunk-27vawgnx.js:8711`, `chunk-dezyqkh5.js:221`.
+[^max-tokens]: The program, `chunk-4h798pp0.js:154749`, `chunk-4h798pp0.js:154785`.
+[^v307]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307).

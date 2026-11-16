@@ -6,7 +6,7 @@ sidebar_position: 5.5
 
 The context window is shared by everything the model reads.
 Some of it is there before you type a word.
-This page counts that start. It shows what each tool and setting adds. It lists ways to keep it small.
+A smaller start leaves more room for your work and costs less on each request. This page counts that start and shows what each tool and setting adds. To shrink it, deny tools with `permissions.deny` or `--tools`, as the Best Practices section shows.
 For compaction and what fills the window later, see [Context and Compaction](context-and-compaction.md).
 
 :::note[Your Numbers May Differ]
@@ -22,8 +22,7 @@ Run `/context` to see your own numbers.
 Method: live runs on `2.1.305` with a subscription login, a fresh config folder, and an empty project (a `README.md` only, no git repo).
 We ran `claude -p "/context" --output-format stream-json`. We read the `context_usage` object.
 For the second column we ran `claude -p "Reply with 'OK'."` (the reply was exactly `OK` in every run). Then we ran `claude -p --continue "/context"`.
-All numbers are tokens on Opus 5.5. See [Probes](../reference/probes.md#context-budget).
-Source: the program (<Undocumented />).
+All numbers are tokens on Opus 5.5.[^method] This breakdown is <Undocumented />.
 
 | Category | Empty | After `Reply with 'OK'.` |
 | --- | --- | --- |
@@ -32,7 +31,7 @@ Source: the program (<Undocumented />).
 | System tools (deferred, not in the total) | 13,425 | 13,425 |
 | Skills (listing) | 2,210 | 2,210 |
 | Messages | 10 | 3,698 |
-| **Total** | **12,524** | **16,277** |
+| Total | 12,524 | 16,277 |
 
 The window is 1,000,000 tokens on Opus, Sonnet, and Haiku 5.5.
 The autocompact buffer is 33,000 tokens. See [Context and Compaction](context-and-compaction.md) for the levels.
@@ -50,7 +49,7 @@ Your own prompt (`Reply with 'OK'.`) is a few tokens.
 See the captured [first-turn messages](../prompts/index.md).
 
 The real first request matched `/context` exactly: input 2, cache write 5,441, and cache read 10,834 make 16,277.
-Reruns on `2.1.306`, `2.1.307`, `2.1.308`, `2.1.309`, `2.1.310`, and `2.1.311` matched the same way: input, cache write, and cache read of the first reply added up to the `/context` total. Those runs used the default model, `claude-sonnet-5-5`, and a warm cache, so their counts are not shown here. They listed the same categories, no memory files, no agents, and no MCP tools. See [Probes](../reference/probes.md#context-budget).
+Reruns on `2.1.306`, `2.1.307`, `2.1.308`, `2.1.309`, `2.1.310`, and `2.1.311` matched the same way: input, cache write, and cache read of the first reply added up to the `/context` total. Those runs used the default model, `claude-sonnet-5-5`, and a warm cache, so their counts are not shown here. They listed the same categories, no memory files, no agents, and no MCP tools.[^method]
 The split between cache write and cache read depends on the cache, not on the request. A subscription login writes with a 1-hour lifetime. So another session on the account with the same tools and system prompt within the last hour lets this one read them. A cold first request wrote almost all of it and read nothing.
 `/context` itself only calls the token counting endpoint, so it does not run a model turn. We checked this: `claude -p "/context"` against the stub sent 24 requests to `/v1/messages/count_tokens` and none to `/v1/messages`.
 
@@ -69,8 +68,8 @@ We did not run a tool alone with `--tools`. Those numbers carry shared overhead 
 | `ListAgents` | 12,179 | -345 | |
 | `Edit` | 12,184 | -340 | |
 | `Write` | 12,294 | -230 | |
-| `Bash` | 12,908 | +384 | The program adds `Glob` and `Grep` in its place. So the loaded tools rise to 8,273. |
-| `Skill` | 18,123 | +5,599 | The skills listing goes. The `Workflow` tool (description and schema) grows from 5,313 to 22,089 characters. With no `Skill` tool to load the `workflow-authoring` skill, the program puts that guidance in the tool text. |
+| `Bash` | 12,908 | +384 | Claude Code adds `Glob` and `Grep` in its place. So the loaded tools rise to 8,273. |
+| `Skill` | 18,123 | +5,599 | The skills listing goes. The `Workflow` tool (description and schema) grows from 5,313 to 22,089 characters. With no `Skill` tool to load the `workflow-authoring` skill, Claude Code puts that guidance in the tool text. |
 | `ToolSearch` | 28,422 | +15,898 | Every deferred tool loads (deferred 0, tools 23,781). |
 | `WebSearch` (deferred) | 12,394 | -130 | The deferred pool shrinks, 13,425 to 13,190. The system prompt was also 128 tokens smaller in this run. |
 
@@ -83,7 +82,7 @@ In the default session the deferred tools would add 13,425 tokens.
 
 ### Definition Sizes in Characters
 
-The token numbers above are from `2.1.305`. The table below counts characters in the tool texts that the `2.1.316` probe captured (`print` captures with the stub API, model `claude-opus-5-5`, 12 tools). A denied tool leaves the request, so its description and schema characters are the saving. The request body also holds a little JSON framing around each tool. Source: the probe captures, shown in [Tool Descriptions](../prompts/tools/tools.md).
+The token numbers above are from `2.1.305`. The table below counts characters in the tool texts that the `2.1.316` probe captured (`print` captures with the stub API, model `claude-opus-5-5`, 12 tools). A denied tool leaves the request, so its description and schema characters are the saving. The request body also holds a little JSON framing around each tool.[^captures]
 
 | Tool | Description | Schema | Sum | Sent in the first request |
 | --- | --- | --- | --- | --- |
@@ -107,7 +106,7 @@ The token numbers above are from `2.1.305`. The table below counts characters in
 | `NotebookEdit` | 619 | 940 | 1,559 | Deferred |
 
 - A deferred tool sends only its name until `ToolSearch` loads it. Denying it saves nothing in the first request.
-- The probe `print.dsc.sizes` runs the same request with `--disable-slash-commands`. The `Skill` tool leaves (1,811 bytes in the body). The skills section of the messages leaves (6,191 bytes). The `Workflow` tool grows from 5,383 to 22,511 bytes. The request body changes from 46,108 to 54,967 bytes, which is 8,859 bytes more, not less. This is the same effect as denying `Skill` in the table above.
+- A probe runs the same request with `--disable-slash-commands`.[^dsc] The `Skill` tool leaves (1,811 bytes in the body). The skills section of the messages leaves (6,191 bytes). The `Workflow` tool grows from 5,383 to 22,511 bytes. The request body changes from 46,108 to 54,967 bytes, which is 8,859 bytes more, not less. This is the same effect as denying `Skill` in the table above.
 - Sizes in this table are for one model and one account state. A server flag or a setting can change the tool list.
 
 ### Deny-List Savings in Characters
@@ -164,7 +163,14 @@ Each row is a session after `Reply with 'OK'.` on Opus 5.5, compared to the defa
 | Haiku 5.5 | 17,459 | +1,182 | The system prompt is 3,198. |
 
 Messages still vary by a few tokens between runs, even though every reply was exactly `OK`. Two runs of the default session gave totals of 16,274 and 16,277. The split differed more. For example, deferred tools were 15,919 in one run and 13,425 in the other, and messages were 3,769 and 3,698. So trust the totals more than single categories.
-`--disable-slash-commands` makes the request larger, not smaller. In a test with `2.1.305` (`claude -p "Reply with 'OK'."` against a local stub, Opus 5.5, no skills of your own), the request body grew by 9,057 bytes (from 44,332 to 53,389 here; the totals shift a little with the length of the project path; on `2.1.307` the growth was the same 9,057 bytes, from 45,388 to 54,445, and on `2.1.309` too, from 45,671 to 54,728, after the `Bash` tool description grew, and on `2.1.310` too, from 45,766 to 54,823, after `Monitor` joined the tool list), about 2,300 more tokens at 4 bytes per token (an estimate, not a count). The `Skill` tool (1,803 bytes) and the list of skills in the messages (the text of that message fell from 8,947 to 2,952 bytes, 5,995 bytes less) went away. The `Workflow` tool description grew by 16,955 bytes, because it then holds the workflow authoring reference that it otherwise loads through the `workflow-authoring` skill. Your own skills and commands are left out too, so with many of them the net change is smaller.
+
+`--disable-slash-commands` makes the request larger, not smaller. The test ran `claude -p "Reply with 'OK'."` with `2.1.305` against a local stub, on Opus 5.5, with no skills of your own. The request body grew by 9,057 bytes, from 44,332 to 53,389. The totals shift a little with the length of the project path. The growth was the same 9,057 bytes on later builds:
+
+- `2.1.307`: from 45,388 to 54,445.
+- `2.1.309`: from 45,671 to 54,728, after the `Bash` tool description grew.
+- `2.1.310`: from 45,766 to 54,823, after `Monitor` joined the tool list.
+
+That is about 2,300 more tokens at 4 bytes per token (an estimate, not a count). The `Skill` tool (1,803 bytes) went away. So did the list of skills in the messages: the text of that message fell from 8,947 to 2,952 bytes, which is 5,995 bytes less. The `Workflow` tool description grew by 16,955 bytes, because it then holds the workflow authoring reference that it otherwise loads through the `workflow-authoring` skill. Your own skills and commands are left out too, so with many of them the net change is smaller.
 
 ## Best Practices
 
@@ -200,7 +206,7 @@ Do not deny tools that are part of the loading machinery:
 
 - Denying `ToolSearch` loads every deferred tool: +15,898.
 - Denying `Skill` raised the total by 5,599. The `workflow-authoring` reference moves into the `Workflow` text. Denying both `Skill` and `Workflow` gives 9,875, which saves 2,649.
-- Denying `Bash` raised the total by 384. The program adds `Glob` and `Grep` in its place.
+- Denying `Bash` raised the total by 384. Claude Code adds `Glob` and `Grep` in its place.
 
 ### Keep `CLAUDE.md` Short
 
@@ -251,7 +257,7 @@ See [Subagents](../extend/subagents/index.md).
 ### Keep the Start Stable for the Cache
 
 The start of the request (tools and system prompt) is cached.
-In live tests with 2.1.305 (a two-turn session, the second turn resumed with `--continue`):
+In live tests with `2.1.305` (a two-turn session, the second turn resumed with `--continue`):
 
 | Change Before Turn Two | Cache Read | Cache Written |
 | --- | --- | --- |
@@ -274,3 +280,9 @@ See [Request and Cache](request-and-cache.md).
 - [Request and Cache](request-and-cache.md)
 - [System Prompt](system-prompt.md)
 - [Probes](../reference/probes.md)
+
+## Sources
+
+[^method]: Live runs on `2.1.305`; see [Probes](../reference/probes.md#context-budget).
+[^captures]: The probe captures, shown in [Tool Descriptions](../prompts/tools/tools.md).
+[^dsc]: Probe case `print.dsc.sizes`.

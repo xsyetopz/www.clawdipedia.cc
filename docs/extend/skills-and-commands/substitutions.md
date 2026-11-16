@@ -6,7 +6,6 @@ sidebar_position: 3
 
 A skill body can hold placeholders that Claude Code fills in when the skill runs.
 It can also run shell commands and insert their output.
-This page lists the placeholders, the shell syntax, and the rules for who can start a skill.
 For example, `$ARGUMENTS` in a `SKILL.md` file becomes the text that you type after the command.
 
 `disableSkillShellExecution` disables shell injection. `disable-model-invocation` and `user-invocable` control who can run a skill.
@@ -42,7 +41,7 @@ Type `/fix-issue 42`. Claude Code runs `gh issue view 42`. It inserts the output
 | `${CLAUDE_PROJECT_DIR}` | <Documented /> | The project root. | Claude Code replaces it in the body and in `allowed-tools`. |
 | `${CLAUDE_PLUGIN_ROOT}`, `${CLAUDE_PLUGIN_DATA}` | <Documented /> | Plugin paths. | Plugin skills only. |
 | `${user_config.KEY}` | <Documented /> | A saved plugin option. | Claude Code fills only non-sensitive values in skill and agent content. |
-| Total size cap | <Undocumented /> | Stops huge fills. | The error says "This skill, command or hook and the arguments filled into it add up to more than N characters". The program marks argument values. A `$` inside them is then not expanded. |
+| Total size cap | <Undocumented /> | Stops huge fills. | The error says "This skill, command or hook and the arguments filled into it add up to more than N characters". Claude Code marks argument values, so a `$` inside them is not expanded.[^size-cap] |
 
 ## Shell Injection
 
@@ -65,7 +64,7 @@ Type `/fix-issue 42`. Claude Code runs `gh issue view 42`. It inserts the output
 | `Skill(name)` and `Skill(name *)` rules | <Documented /> | Permission rules for the `Skill` tool. | A deny on an alias blocks the bundled skill. Allow rules match the skill name only. |
 | Lifecycle | <Documented /> | The skill text stays in the conversation. | An identical second run adds a short note. Compaction keeps 5,000 tokens for each skill and 25,000 in total. See [Context and Compaction](../../how-it-works/context-and-compaction.md). |
 | `context: fork` | <Documented /> | Runs the skill in a subagent. | Background by default. It waits in `-p`, with `CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1`, and for scheduled tasks. |
-| Commit-time skills | <Undocumented /> | The names `verify`, `pr`, `commit`, `code-review`, `simplify`, and `go`. | The program uses this set when it builds commit text. The docs name `verify` and `simplify` (2.1.286). |
+| Commit-time skills | <Undocumented /> | The names `verify`, `pr`, `commit`, `code-review`, `simplify`, and `go`. | Claude Code uses this set when it builds commit text. The docs name `verify` and `simplify` (since `2.1.286`).[^commit-skills] |
 
 ## Related Pages
 
@@ -73,4 +72,9 @@ Type `/fix-issue 42`. Claude Code runs `gh issue view 42`. It inserts the output
 - [Skill Frontmatter](frontmatter.md): `arguments`, `allowed-tools`, `context`.
 - [Subagent Runtime](../subagents/runtime.md): what a forked skill runs in.
 
-Source: [Extend Claude with Skills](https://code.claude.com/docs/en/skills), [Settings Reference](https://code.claude.com/docs/en/settings-reference), and the program (the strings quoted in the tables).
+## Sources
+
+[^size-cap]: The program, the strings quoted in this table.
+[^commit-skills]: The program, the commit text builder.
+
+Official pages: [Extend Claude with Skills](https://code.claude.com/docs/en/skills) and [Settings Reference](https://code.claude.com/docs/en/settings-reference).

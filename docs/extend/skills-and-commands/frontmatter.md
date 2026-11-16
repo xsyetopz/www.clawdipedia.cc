@@ -35,7 +35,7 @@ Review the changes under $ARGUMENTS and list the bugs you find.
 - Claude Code reads the frontmatter only when the first line is `---`.
 - A YAML error loads the skill with no fields. You see the warning `[skills] YAML frontmatter ... failed to parse and was ignored`.
 - Keys are case-sensitive. Claude Code ignores an unknown key with no error.
-- Booleans accept `true`, `false`, `yes`, `no`, `on`, `off`, `1`, and `0` in any case (2.1.218 or later).
+- Booleans accept `true`, `false`, `yes`, `no`, `on`, `off`, `1`, and `0` in any case (since `2.1.218`).
 - A top-level `PreToolUse` or `PermissionRequest` key outside `hooks` is an error. The skill then loads with no hooks and no `allowed-tools`.
 - If `description` is missing, Claude Code uses the first line of the body. It removes heading marks and cuts the text at 100 characters.
 
@@ -43,20 +43,20 @@ Review the changes under $ARGUMENTS and list the bugs you find.
 
 | Key | Status | What it does | Notes |
 | --- | --- | --- | --- |
-| `name` | <Documented /> | The command name. | Defaults to the folder name. At most 256 characters. Skills and plugin skills only, not command files. Claude Code refuses a skill or command name with a Bamum letter, which some fonts draw as blank ([2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321)). The program's set of blank-looking characters holds `U+16910`, a Bamum letter (`chunk-dazyb5h4.js:5959`). I did not trace the call from the skill name check. |
+| `name` | <Documented /> | The command name. | Defaults to the folder name. At most 256 characters. Skills and plugin skills only, not command files. Claude Code refuses a skill or command name with a Bamum letter, which some fonts draw as blank.[^bamum] |
 | `description` | <Documented /> | Tells Claude when to use the skill. | Numbers and booleans become strings. The listing cuts it at 1,536 characters. |
 | `when_to_use` | <Documented /> | More trigger text. | Claude Code adds it after `description`. Counts toward the 1,536 limit. The only documented key with an underscore. |
 | `argument-hint` | <Documented /> | An autocomplete hint. | Text, for example `[issue-number]`. |
 | `arguments` | <Documented /> | Names for `$name` placeholders. | A space-separated string or a YAML list. Claude Code drops names made only of digits. |
 | `disable-model-invocation` | <Documented /> | Stops Claude from loading the skill by itself. | Also blocks preload into subagents and use by scheduled tasks. |
 | `user-invocable` | <Documented /> | `false` hides the skill from the `/` menu. | Default `true`. |
-| `allowed-tools` | <Documented /> | Tools allowed without a prompt for the turn. | A space or comma string, or a list. The grant clears at your next message. Ignored under `allowManagedPermissionRulesOnly` (2.1.282). Since 2.1.305, plugins that Claude Desktop mounts by path no longer keep their `allowed-tools` when your organization's managed settings set it ([v2.1.305 release](https://github.com/anthropics/claude-code/releases/tag/v2.1.305)). `${CLAUDE_SKILL_DIR}` works in Bash rules. |
-| `disallowed-tools` | <Documented /> | Removes tools while the skill is active. | The same format. The program also reads `disallowedTools`. |
+| `allowed-tools` | <Documented /> | Tools allowed without a prompt for the turn. | A space or comma string, or a list. The grant clears at your next message. Ignored under `allowManagedPermissionRulesOnly` (since `2.1.282`). Since `2.1.305`, plugins that Claude Desktop mounts by path no longer keep their `allowed-tools` when your organization's managed settings set it.[^v305] `${CLAUDE_SKILL_DIR}` works in Bash rules. |
+| `disallowed-tools` | <Documented /> | Removes tools while the skill is active. | The same format. Claude Code also reads `disallowedTools`. |
 | `model` | <Documented /> | The model for the turn. | `inherit` keeps the active model. A model outside `availableModels` is not used. With `context: fork` it sets the subagent model. |
-| `effort` | <Differs note="Docs: low, medium, high, xhigh, max. The program also accepts an integer." /> | The effort level for the turn. | The program warns `Valid options: ... or an integer`. |
+| `effort` | <Differs note="Docs: low, medium, high, xhigh, max. The program also accepts an integer." /> | The effort level for the turn. | Claude Code warns `Valid options: ... or an integer`. |
 | `context` | <Documented /> | `fork` runs the skill in a subagent. | Claude Code ignores any other value. |
 | `agent` | <Documented /> | The subagent type for `context: fork`. | Default `general-purpose`. |
-| `background` | <Documented /> | `false` waits for the forked result. | Default `true`. 2.1.218 or later. |
+| `background` | <Documented /> | `false` waits for the forked result. | Default `true`. Since `2.1.218`. |
 | `hooks` | <Documented /> | Hooks that start when the skill runs. | They last for the session. See [Hooks](../hooks/index.md). |
 | `paths` | <Documented /> | A glob limit for automatic loading. | Claude Code removes a trailing `/**`. A list of only `**` means no limit. Skills only. |
 | `shell` | <Documented /> | The shell for `` !`cmd` `` blocks. | `bash` or `powershell`. Other values cause a warning. Claude Code then uses bash. |
@@ -71,17 +71,16 @@ Review the changes under $ARGUMENTS and list the bugs you find.
 ## Skill Discovery with Bash `cd`
 
 Since `2.1.312`, Claude Code finds per-directory skills and `paths` skills after a Bash command moves the working directory deeper into the same git repository.
-When a file is read or written, the program walks up from the file to a base directory. It looks for `.claude/skills` on the way.
+When Claude Code reads or writes a file, it walks up from the file to a base directory and looks for `.claude/skills` on the way.
 It also tests the `paths` globs of conditional skills against the file path, relative to that base.
-The base is now the directory where the session started, when all of these are true:
+The base is the directory where the session started when all of these are true:
 
 - The working directory is not the directory where the session started.
 - The working directory is inside that directory.
 - Both directories are in the same git repository.
 
 In any other case, the base is the working directory.
-For a file outside the working directory, the program skips a `.claude/skills` folder that git ignores or that it cannot confirm.
-Source: the program (`chunk-2x9ma4k7.js` lines 179922 to 179936 and 171993 to 172054).
+For a file outside the working directory, Claude Code skips a `.claude/skills` folder that git ignores or that it cannot confirm.[^discovery]
 
 ## Outside Claude Code
 
@@ -90,8 +89,7 @@ Other keys fail the upload.
 
 ## Exact Fields
 
-The exact fields are in the `skill` definition in `https://clawdipedia.cc/schemas/claude-code-frontmatter.json`. It comes from the program's frontmatter validators.
-It lists every field of this release. Build on the fields that it names. Look each one up there before you rely on it.
+The exact fields are in the `skill` definition in `https://clawdipedia.cc/schemas/claude-code-frontmatter.json`. It comes from the frontmatter validators of Claude Code and lists every field of this release. Look a field up there before you rely on it.[^validators]
 
 ## Related Pages
 
@@ -100,4 +98,9 @@ It lists every field of this release. Build on the fields that it names. Look ea
 - [Hooks](../hooks/index.md): the `hooks` key.
 - [Subagent Frontmatter](../subagents/frontmatter.md): the keys of an agent file.
 
-Source: [Extend Claude with Skills](https://code.claude.com/docs/en/skills), [Settings Reference](https://code.claude.com/docs/en/settings-reference), and the program (the frontmatter parser).
+## Sources
+
+[^bamum]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-dazyb5h4.js:5959`: its set of blank-looking characters holds `U+16910`, a Bamum letter. The call from the skill name check is not traced.
+[^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
+[^discovery]: The program, `chunk-2x9ma4k7.js` lines 179922 to 179936 and 171993 to 172054.
+[^validators]: The program, the frontmatter parser. See also [Extend Claude with Skills](https://code.claude.com/docs/en/skills) and [Settings Reference](https://code.claude.com/docs/en/settings-reference).

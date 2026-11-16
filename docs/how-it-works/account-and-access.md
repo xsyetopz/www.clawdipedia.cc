@@ -6,8 +6,21 @@ sidebar_position: 7.2
 
 Your account is the login that Claude Code uses: a claude.ai login, a Console login, an API key, or a cloud provider.
 Your plan is the subscription of that account, such as Pro or Max.
-This page explains where Claude Code gets these facts, where it keeps them, and what they change.
-Source for all facts: the program (Claude Code `2.1.311`), with the module and line in its cleaned code.
+Claude Code reads both once from the server and saves them, so it does not ask again at each start. The plan decides which usage messages you see and which model entries the picker shows. To change what Claude Code knows, log in again, or set the environment variables in the Example section.[^scope]
+
+## Example
+
+Run a script with a long-lived token. Tell Claude Code the plan of that token, because it cannot ask for it:
+
+```bash
+CLAUDE_CODE_OAUTH_TOKEN="$TOKEN" CLAUDE_CODE_SUBSCRIPTION_TYPE=max claude -p "Reply with 'OK'."
+```
+
+Pick a Mythos model by its full ID, because `/model` does not list it:
+
+```bash
+claude --model claude-mythos-5-1
+```
 
 ## Where the Plan Comes From
 
@@ -25,24 +38,24 @@ flowchart TD
   D -- no --> N
 ```
 
-- The plan is one of `max`, `pro`, `team`, or `enterprise` (`chunk-x4fdscgs.js:33728`, `:33737`).
-- The server names the plan by its organization type. Claude Code maps `claude_max` to `max`, `claude_pro` to `pro`, `claude_team` to `team`, and `claude_enterprise` to `enterprise`. Any other value gives no plan (`chunk-x4fdscgs.js:19257`).
-- With `CLAUDE_CODE_OAUTH_TOKEN`, Claude Code does not ask the server for the plan. It takes the plan from `CLAUDE_CODE_SUBSCRIPTION_TYPE` and the rate limit tier from `CLAUDE_CODE_RATE_LIMIT_TIER`. Each is empty when unset (`chunk-x4fdscgs.js:32372`). See [Auth and Accounts](../configure/env-vars/auth-and-accounts.md).
-- A host can pass the account with `CLAUDE_CODE_ACCOUNT_UUID`, `CLAUDE_CODE_USER_EMAIL`, and `CLAUDE_CODE_ORGANIZATION_UUID`. Claude Code uses them only when the host sets all three and no account record exists yet (`chunk-x4fdscgs.js:19344`).
+- The plan is one of `max`, `pro`, `team`, or `enterprise`.[^plan-values]
+- The server names the plan by its organization type. Claude Code maps `claude_max` to `max`, `claude_pro` to `pro`, `claude_team` to `team`, and `claude_enterprise` to `enterprise`. Any other value gives no plan.[^plan-map]
+- With `CLAUDE_CODE_OAUTH_TOKEN`, Claude Code does not ask the server for the plan. It takes the plan from `CLAUDE_CODE_SUBSCRIPTION_TYPE` and the rate limit tier from `CLAUDE_CODE_RATE_LIMIT_TIER`. Each is empty when unset.[^oauth-token] See [Auth and Accounts](../configure/env-vars/auth-and-accounts.md).
+- A host can pass the account with `CLAUDE_CODE_ACCOUNT_UUID`, `CLAUDE_CODE_USER_EMAIL`, and `CLAUDE_CODE_ORGANIZATION_UUID`. Claude Code uses them only when the host sets all three and no account record exists yet.[^host-account]
 
 ## The Profile Request
 
 Claude Code reads the account and plan from one request.
 
-| Login | Request | Source |
-| --- | --- | --- |
-| claude.ai | `GET https://api.anthropic.com/api/oauth/profile`, with a 10 second timeout | `chunk-x4fdscgs.js@340379` |
-| API key | `GET https://api.anthropic.com/api/claude_cli_profile` | `chunk-x4fdscgs.js@339914` |
+| Login | Request |
+| --- | --- |
+| claude.ai | `GET https://api.anthropic.com/api/oauth/profile`, with a 10 second timeout[^oauth-profile] |
+| API key | `GET https://api.anthropic.com/api/claude_cli_profile`[^key-profile] |
 
 `ANTHROPIC_BASE_URL` does not change the host of these requests.
 Only `CLAUDE_CODE_CUSTOM_OAUTH_URL` changes it, and only to an approved Anthropic host. See [Auth and Accounts](../configure/env-vars/auth-and-accounts.md).
 
-The table below comes from a run of `2.1.319` (see [Account Probes](../reference/probes.md#account-probes)).
+The table below comes from a run of `2.1.319`.[^probe-run]
 A claude.ai login sent the profile request to a local copy of `api.anthropic.com`, which gave a reply with every field set.
 The right column shows where each value went.
 
@@ -67,62 +80,62 @@ The right column shows where each value went.
 ## Where Claude Code Keeps It
 
 - The account record is the `oauthAccount` key of `~/.claude.json`. It holds the keys in the table above and `profileFetchedAt`, the time of the last request in milliseconds.
-- Claude Code saves the plan and the rate limit tier with the login. On macOS, Claude Code reads the login from the keychain with `security find-generic-password` (`chunk-vsgwhfxn.js:2026`). The file store is `~/.claude/.credentials.json`. See [Sessions and Storage](sessions-and-storage.md#where-files-live).
-- Claude Code saves the plan with the login only when the reply has a `request-id` header that starts with `req_` (`chunk-fknzn91z.js@415`). In the run, a reply with no `request-id` header left the login as it was, and the debug log said `OAuth: stored login plan not recorded from the profile (unstamped)`. The `oauthAccount` record was written in both runs.
-- You can edit these records. The Mod API type file describes the account that Claude Code gives a mod. The account takes `organizationType` from the login record on disk. The person can edit that record (`schemas/claude-code.d.ts`).
+- Claude Code saves the plan and the rate limit tier with the login. On macOS, Claude Code reads the login from the keychain with `security find-generic-password`.[^keychain] The file store is `~/.claude/.credentials.json`. See [Sessions and Storage](sessions-and-storage.md#where-files-live).
+- Claude Code saves the plan with the login only when the reply has a `request-id` header that starts with `req_`.[^request-id] In the run, a reply with no `request-id` header left the login as it was, and the debug log said `OAuth: stored login plan not recorded from the profile (unstamped)`. The `oauthAccount` record was written in both runs.
+- You can edit these records. The Mod API type file describes the account that Claude Code gives a mod. The account takes `organizationType` from the login record on disk. The person can edit that record.[^mod-type]
 
 ## When It Asks Again
 
-- At start, Claude Code skips the profile request when `profileFetchedAt` is less than 24 hours old and the record has its billing, onboarding, and creation fields (`chunk-x4fdscgs.js:18889`, `:19365`).
-- It also skips the request when there is no claude.ai login with the inference scope (`chunk-x4fdscgs.js:33543`).
-- Since `2.1.311`, Pro and Max accounts skip two more requests at start. The Consumer Terms check calls `GET /api/oauth/account/settings` and `GET /api/claude_code_grove`. When the server confirmed your answer less than one hour ago, Claude Code saves that time under `groveChoiceSeenAt` in `~/.claude.json`, keyed by your account id, and does not ask again (`chunk-apxgwx0a.js:33`, `:281`, `:338`). The check runs only for the `max` and `pro` plans (`chunk-x4fdscgs.js:34023`).
+- At start, Claude Code skips the profile request when `profileFetchedAt` is less than 24 hours old and the record has its billing, onboarding, and creation fields.[^skip-profile]
+- It also skips the request when there is no claude.ai login with the inference scope.[^scope-check]
+- Since `2.1.311`, Pro and Max accounts skip two more requests at start. The Consumer Terms check calls `GET /api/oauth/account/settings` and `GET /api/claude_code_grove`. When the server confirmed your answer less than one hour ago, Claude Code saves that time under `groveChoiceSeenAt` in `~/.claude.json`, keyed by your account id, and does not ask again.[^grove] The check runs only for the `max` and `pro` plans.[^grove-plans]
 
 ## How Model Access Is Decided
 
 The plan does not hide models from `/model`.
-The picker lists a model when the model catalog has an ID for your provider. It also lists a model when the `modelOverrides` setting maps it (`chunk-x4fdscgs.js:14791`).
+The picker lists a model when the model catalog has an ID for your provider. It also lists a model when the `modelOverrides` setting maps it.[^picker]
 So the provider decides which models the picker lists. The plan changes only the Fable entry below.
 
 | Model | How it reaches the picker |
 | --- | --- |
-| Fable | The picker lists the `fable` alias when the catalog has a Fable ID for your provider. `ANTHROPIC_DEFAULT_FABLE_MODEL` replaces it with your own model (`chunk-32xrm2zt.js:13368`, `:13768`). |
-| Mythos | The picker never lists a Mythos model. There is no `mythos` alias (`chunk-mq6f50pn.js:41`). Pick it by its full ID, such as `claude-mythos-5-1`. The model-name check also accepts `claude-mythos-preview` (`chunk-mq6f50pn.js:52`). |
+| Fable | The picker lists the `fable` alias when the catalog has a Fable ID for your provider. `ANTHROPIC_DEFAULT_FABLE_MODEL` replaces it with your own model.[^fable] |
+| Mythos | The picker never lists a Mythos model. There is no `mythos` alias.[^mythos] Pick it by its full ID, such as `claude-mythos-5-1`. The model-name check also accepts `claude-mythos-preview`. |
 
 These rules change the Fable entry:
 
-- **Usage credits.** A server config, `tengu_saffron_lattice`, says for each model whether it needs usage credits. When it does, the entry ends in "· Requires usage credits" (`chunk-32xrm2zt.js:10969`, `:13382`). Users cannot set this config.
-- **Disabled entry.** The server flag `tengu_saffron_picker_dim` must be on. Then the entry turns into "Fable (disabled)" if all of these are true (`chunk-32xrm2zt.js:14579`):
-  - Your plan is not `max` or `pro`, and your organization role is not `admin`, `billing`, `owner`, or `primary_owner` (`chunk-32xrm2zt.js:10885`, `chunk-x4fdscgs.js:33706`). Without a claude.ai login with the inference scope, neither the plan nor the role keeps the entry on (`chunk-x4fdscgs.js:33543`).
+- **Usage credits.** A server config says for each model whether it needs usage credits. When it does, the entry ends in "· Requires usage credits". You cannot set this config.[^credits]
+- **Disabled entry.** A server flag must be on. Then the entry turns into "Fable (disabled)" if all of these are true:[^disabled]
+  - Your plan is not `max` or `pro`, and your organization role is not `admin`, `billing`, `owner`, or `primary_owner`. Without a claude.ai login with the inference scope, neither the plan nor the role keeps the entry on.
   - Usage credits are off for the organization, or not set up (`org_level_disabled` or `overage_not_provisioned`).
   - The model's billing mode is not `pay_per_request` or `included_in_plan`.
-- **Credits-only plans.** The server config `tengu_saffron_credits_only_tiers` names the plans that use models only with credits. Its default is `["enterprise"]` (`chunk-32xrm2zt.js:183363`).
+- **Credits-only plans.** A server config names the plans that use models only with credits. Its default is `["enterprise"]`.[^credits-only]
 - To limit the models people can pick, use `availableModels` and `deniedModels`. See [Model Settings](../configure/settings/model.md).
 
 ## Login and an Unused API Key
 
-The `2.1.326` release notes say: "Fixed `/login` ending on "Login successful" while an approved `ANTHROPIC_API_KEY` was still used; it now says requests still use the key" ([`2.1.326` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)), and "Fixed "Not logged in" staying after turning on the API key in `/config`; "Not logged in", `/login` and `/status` now name an unused `ANTHROPIC_API_KEY`" ([`2.1.326` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)).
-Status: <Undocumented /> in the official docs. The text below is read from the program.
+Since `2.1.326`, `/login` no longer ends on "Login successful" while an approved `ANTHROPIC_API_KEY` is still used. It says that requests still use the key. "Not logged in", `/login`, and `/status` now name an unused `ANTHROPIC_API_KEY`, and "Not logged in" no longer stays after you turn on the API key in `/config`.[^v326]
+Status: <Undocumented /> in the official docs.
 
-- After a login, when an approved `ANTHROPIC_API_KEY` still serves requests, the program says "Signed in, but requests still use ANTHROPIC_API_KEY. To use this login, turn off "Use custom API key" in /config" (`chunk-szf5xyqt.js:496`).
-- The footer says "Not logged in · /login, or /config to use ANTHROPIC_API_KEY" when an unused key is set. Otherwise it says "Not logged in · Run /login" (`chunk-y9bdpp8r.js:55210`).
+- After a login, when an approved `ANTHROPIC_API_KEY` still serves requests, Claude Code says "Signed in, but requests still use ANTHROPIC_API_KEY. To use this login, turn off "Use custom API key" in /config".[^api-key-note]
+- The footer says "Not logged in · /login, or /config to use ANTHROPIC_API_KEY" when an unused key is set. Otherwise it says "Not logged in · Run /login".[^footer]
 
 ## What a Refusal Says
 
-When something needs usage credits, such as fast mode or the 1M context window, the message names where to turn them on (`chunk-x4fdscgs.js:33710`, `:21940`, `chunk-2x9ma4k7.js:102650`).
+When something needs usage credits, such as fast mode or the 1M context window, the message names where to turn them on.[^refusal]
 In most cases it is "turn on usage credits at" your own usage page, whatever the plan.
 
-A Team or Enterprise plan gets other wording only in one case. Claude Code runs as the main session with no terminal. It runs inside Claude Desktop (`claude-desktop` or `claude-desktop-3p`) or a `local-agent` host (`chunk-x4fdscgs.js:21609`, `chunk-5c342mz1.js:97`, `:440`):
+A Team or Enterprise plan gets other wording only in one case. Claude Code runs as the main session with no terminal. It runs inside Claude Desktop (`claude-desktop` or `claude-desktop-3p`) or a `local-agent` host:[^desktop]
 
 | Who | Message |
 | --- | --- |
 | A claude.ai login with the inference scope and an `admin`, `billing`, `owner`, or `primary_owner` role | "turn on usage credits at" the organization's admin usage page |
 | Other roles | "ask your admin to turn on usage credits" |
 
-Since `2.1.311`, Pro and Max subscribers get the billing settings link in place of "ask your admin" ([release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.311)).
+Since `2.1.311`, Pro and Max subscribers get the billing settings link in place of "ask your admin".[^v311]
 
 ## What the Usage Limits Are Called
 
-The program names each rate limit window in its usage limit messages (`chunk-byyfpk0c.js:1417`).
+Claude Code names each rate limit window in its usage limit messages.[^windows]
 
 | Window | Name in Messages |
 | --- | --- |
@@ -133,11 +146,11 @@ The program names each rate limit window in its usage limit messages (`chunk-byy
 | `seven_day_overage_included` | "Fable limit" |
 | `overage` | "usage credit limit" |
 
-Since `2.1.312`, the program calls the five-hour window the "5-hour limit". Earlier it said "session limit" (`2.1.311`). The same change reaches the reset messages, such as "Resetting your 5-hour limit… this usually takes a few seconds" (`chunk-4fvxxc4n.js:683`) and "Couldn't reset your 5-hour limit with this login · run /login, then try again" (`chunk-p4hfkr8w.js:2534`). Source: the [release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312) and the program.
+Since `2.1.312`, Claude Code calls the five-hour window the "5-hour limit". Earlier it said "session limit" (`2.1.311`). The same change reaches the reset messages, such as "Resetting your 5-hour limit… this usually takes a few seconds" and "Couldn't reset your 5-hour limit with this login · run /login, then try again".[^five-hour]
 
 ## The Usage Limit Menu
 
-`/rate-limit-options` opens a menu at a usage limit (`chunk-2x9ma4k7.js:2368416`; the rows are built at `chunk-d338x18r.js:39591`). These rows can appear:
+`/rate-limit-options` opens a menu at a usage limit.[^menu] These rows can appear:
 
 | Row | When |
 | --- | --- |
@@ -146,26 +159,12 @@ Since `2.1.312`, the program calls the five-hour window the "5-hour limit". Earl
 | "Upgrade your plan" | The limit lists an upgrade path. |
 | "Stop and wait for limit to reset", or "Stop" | Always. |
 
-The program shows "Couldn't load your current spend limit, so it can't be changed right now. Try /rate-limit-options again later." when it cannot read the current spend limit. Since `2.1.323`, the menu does not offer a lower limit then (`chunk-d338x18r.js:31796`). The string is not in the `2.1.322` program.
+Claude Code shows "Couldn't load your current spend limit, so it can't be changed right now. Try /rate-limit-options again later." when it cannot read the current spend limit. Since `2.1.323`, the menu does not offer a lower limit then.[^spend]
 
 ## What Others Can See
 
-- An SDK host gets the account from the control protocol: `email`, `organization`, `subscriptionType`, `tokenSource`, `apiKeySource`, and `apiProvider` (`schemas/claude-code-control-protocol.json`).
-- A mod gets `kind` (`claude.ai`, `console`, `api-key`, `oauth-token`, `none`, or a cloud provider), `email`, and `isVerified`. It gets `organizationId` and `organizationType` only when managed `forceLoginOrgUUID` names that organization (`schemas/claude-code.d.ts`).
-
-## Example
-
-Run a script with a long-lived token. Tell Claude Code the plan of that token, because it cannot ask for it:
-
-```bash
-CLAUDE_CODE_OAUTH_TOKEN="$TOKEN" CLAUDE_CODE_SUBSCRIPTION_TYPE=max claude -p "Reply with 'OK'."
-```
-
-Pick a Mythos model by its full ID, because `/model` does not list it:
-
-```bash
-claude --model claude-mythos-5-1
-```
+- An SDK host gets the account from the control protocol: `email`, `organization`, `subscriptionType`, `tokenSource`, `apiKeySource`, and `apiProvider`.[^control]
+- A mod gets `kind` (`claude.ai`, `console`, `api-key`, `oauth-token`, `none`, or a cloud provider), `email`, and `isVerified`. It gets `organizationId` and `organizationType` only when managed `forceLoginOrgUUID` names that organization.[^mod-account]
 
 ## Related Pages
 
@@ -173,3 +172,39 @@ claude --model claude-mythos-5-1
 - [Models and Providers](../configure/models-and-providers/index.md)
 - [Auth and Accounts](../configure/env-vars/auth-and-accounts.md)
 - [Sessions and Storage](sessions-and-storage.md)
+
+## Sources
+
+[^scope]: The program (Claude Code `2.1.311`), with the module and line in its cleaned code. Each footnote below names the module.
+[^plan-values]: The program, `chunk-x4fdscgs.js:33728`, `:33737`.
+[^plan-map]: The program, `chunk-x4fdscgs.js:19257`.
+[^oauth-token]: The program, `chunk-x4fdscgs.js:32372`.
+[^host-account]: The program, `chunk-x4fdscgs.js:19344`.
+[^oauth-profile]: The program, `chunk-x4fdscgs.js@340379`.
+[^key-profile]: The program, `chunk-x4fdscgs.js@339914`.
+[^probe-run]: See [Account Probes](../reference/probes.md#account-probes).
+[^keychain]: The program, `chunk-vsgwhfxn.js:2026`.
+[^request-id]: The program, `chunk-fknzn91z.js@415`.
+[^mod-type]: `schemas/claude-code.d.ts`.
+[^skip-profile]: The program, `chunk-x4fdscgs.js:18889`, `:19365`.
+[^scope-check]: The program, `chunk-x4fdscgs.js:33543`.
+[^grove]: The program, `chunk-apxgwx0a.js:33`, `:281`, `:338`.
+[^grove-plans]: The program, `chunk-x4fdscgs.js:34023`.
+[^picker]: The program, `chunk-x4fdscgs.js:14791`.
+[^fable]: The program, `chunk-32xrm2zt.js:13368`, `:13768`.
+[^mythos]: The program, `chunk-mq6f50pn.js:41`. The model-name check is at `chunk-mq6f50pn.js:52`.
+[^credits]: The program, `chunk-32xrm2zt.js:10969`, `:13382`. The server config is `tengu_saffron_lattice`.
+[^disabled]: The program, `chunk-32xrm2zt.js:14579`. The server flag is `tengu_saffron_picker_dim`. The plan and role check is at `chunk-32xrm2zt.js:10885` and `chunk-x4fdscgs.js:33706`. The login scope check is at `chunk-x4fdscgs.js:33543`.
+[^credits-only]: The program, `chunk-32xrm2zt.js:183363`. The server config is `tengu_saffron_credits_only_tiers`.
+[^v326]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^api-key-note]: The program, `chunk-szf5xyqt.js:496`.
+[^footer]: The program, `chunk-y9bdpp8r.js:55210`.
+[^refusal]: The program, `chunk-x4fdscgs.js:33710`, `:21940`, `chunk-2x9ma4k7.js:102650`.
+[^desktop]: The program, `chunk-x4fdscgs.js:21609`, `chunk-5c342mz1.js:97`, `:440`.
+[^v311]: [`2.1.311` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.311).
+[^windows]: The program, `chunk-byyfpk0c.js:1417`.
+[^five-hour]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312). The program, `chunk-4fvxxc4n.js:683` and `chunk-p4hfkr8w.js:2534`.
+[^menu]: The program, `chunk-2x9ma4k7.js:2368416`. The rows are built at `chunk-d338x18r.js:39591`.
+[^spend]: The program, `chunk-d338x18r.js:31796`. The string is not in the `2.1.322` program.
+[^control]: `schemas/claude-code-control-protocol.json`.
+[^mod-account]: `schemas/claude-code.d.ts`.

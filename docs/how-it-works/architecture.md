@@ -7,7 +7,17 @@ sidebar_position: 1
 Claude Code is one program that runs a loop.
 You give it a task. It asks a model what to do. It runs tools. It repeats until the task is done.
 Settings, hooks, plugins, skills, MCP servers, and subagents are layers around this loop. You can change each of them.
-This page shows the pieces, the processes, and the order of the startup.
+Knowing the pieces helps you find the layer to change when something behaves in a way you do not want. You can change startup with flags and environment variables, such as `--plugin-dir` and `CLAUDE_CONFIG_DIR`. The Startup Steps and What You Can Change at Startup sections list them.
+
+## Example
+
+You run `claude --debug` in a project folder.
+The log shows the settings files it read, the plugins it loaded, and each MCP server it connected.
+Then the screen opens and waits for you.
+
+```bash
+CLAUDE_CODE_PROFILE_STARTUP=1 claude --debug
+```
 
 ## The Big Picture
 
@@ -25,7 +35,7 @@ flowchart TD
   App --> UI[Terminal screen]
 ```
 
-Source: [How Claude Code Works](https://code.claude.com/docs/en/how-claude-code-works).
+See [How Claude Code Works](https://code.claude.com/docs/en/how-claude-code-works).
 
 | Piece | Status | What it is |
 | --- | --- | --- |
@@ -36,7 +46,7 @@ Source: [How Claude Code Works](https://code.claude.com/docs/en/how-claude-code-
 | Model loop | <Documented /> | Gather context, act, check the result, and repeat. See [The Agent Loop](agent-loop.md). |
 | Tools | <Documented /> | File, search, shell, web, and agent tools. |
 | Extensions | <Documented /> | Hooks, skills, plugins, MCP, subagents, and mods. |
-| Feature flags | <Undocumented /> | The program asks a flag service (GrowthBook) which experiments are on for you. You cannot set them. |
+| Feature flags | <Undocumented /> | Claude Code asks a flag service (GrowthBook) which experiments are on for you.[^flags] You cannot set them. |
 | Telemetry | <Documented /> | OpenTelemetry export is off until you set it up. See [Monitoring](https://code.claude.com/docs/en/monitoring-usage) in the official docs. |
 | Session store | <Documented /> | Transcripts live under `~/.claude/projects`. See [Sessions and Storage](sessions-and-storage.md). |
 
@@ -45,10 +55,9 @@ Source: [How Claude Code Works](https://code.claude.com/docs/en/how-claude-code-
 The [official docs](https://code.claude.com/docs/en/how-claude-code-works#environments-and-interfaces) list these places: the terminal, the desktop app, IDE extensions, `claude.ai/code`, Remote Control, Slack, and CI.
 All of them run the same loop.
 The code can run on your machine, in the cloud, or on your machine under remote control.
-Source: [How Claude Code Works: Environments and Interfaces](https://code.claude.com/docs/en/how-claude-code-works#environments-and-interfaces).
 
 The environment variable `CLAUDE_CODE_ENTRYPOINT` names the host.
-The program sets it when the host did not.
+Claude Code sets it when the host did not.[^entrypoint]
 The official [Monitoring](https://code.claude.com/docs/en/monitoring-usage) page shows some of the values as `app.entrypoint`.
 
 | Value | Status | Set when |
@@ -85,7 +94,7 @@ Its files are `~/.claude/daemon.json` and `~/.claude/daemon.log`.
 
 ## Startup Steps
 
-The order below comes from the program (the bundled code).
+The order below is the order of the bundled code.[^startup]
 It runs before your first prompt, so a slow step here makes every start slow.
 
 ```mermaid
@@ -142,19 +151,15 @@ So an `mcp_tool` hook cannot run in them. See the [Hooks Reference](https://code
 | Skip the bundled search helper | Set `USE_BUILTIN_RIPGREP=0`. |
 | Move `~/.claude` | Set `CLAUDE_CONFIG_DIR`. |
 
-## Example
-
-You run `claude --debug` in a project folder.
-The log shows the settings files it read, the plugins it loaded, and each MCP server it connected.
-Then the screen opens and waits for you.
-
-```bash
-CLAUDE_CODE_PROFILE_STARTUP=1 claude --debug
-```
-
 ## Related Pages
 
 - [The Agent Loop](agent-loop.md) for what happens after startup.
 - [Request and Cache](request-and-cache.md) for what one model call holds.
 - [Sessions and Storage](sessions-and-storage.md) for the files on disk.
 - The [CLI](../configure/cli/index.md), [Settings](../configure/settings/index.md), and [Hooks](../extend/hooks/index.md) pages in Configure and Extend.
+
+## Sources
+
+[^entrypoint]: The program, the entry point setup.
+[^startup]: The program, the bundled code.
+[^flags]: The program, the flag client.
