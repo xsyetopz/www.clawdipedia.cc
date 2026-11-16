@@ -175,6 +175,7 @@ Each row is a family of messages. The backticked text is the start that every me
 | Start of Message | Status | What It Means | Cases |
 | --- | --- | --- | --- |
 | `These settings files are not used: they are in a connector-downloads folder` | <Undocumented /> | Claude Code skipped the settings files in the project folder. | The folder is a `connector-downloads` folder that has a `.gitignore`. Claude Code saves files from claude.ai connectors there.[^connector] |
+| `<file> has an error and didn't load` | <Undocumented /> | Since `2.1.326`, a settings file that you save with an error during a session gets a warning that names the file. It ends with `run claude doctor`. | The warning stays pinned. It covers a file that had no error when the session started or when the last change was read. Claude Code does not warn again for a file that already had an error, or for a file it cannot read.[^file-error] |
 
 ## Related Pages
 
@@ -193,4 +194,5 @@ Each row is a family of messages. The backticked text is the start that every me
 [^managed-reread]: The program, `chunk-x4fdscgs.js:551395` and `:552600`.
 [^strict]: The program lists them as keys with a strict value.
 [^nesting]: The program, `chunk-m33vdkhs.js:16540`.
+[^file-error]: The program, `chunk-y9bdpp8r.js:123261-123311`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^connector]: Probe case `print.err319.settings-connector-downloads` ran this setup.

@@ -26,7 +26,7 @@ Handlers: all five types.
 | `tool_use_id` | <Documented /> | Input | The tool call ID. |
 | `permissionDecision` | <Documented /> | Output, in `hookSpecificOutput` | `allow`, `deny`, `ask`, or `defer`. `allow` skips the prompt but not deny or ask rules. Order of strength: `deny`, then `defer`, then `ask`, then `allow`. `defer` works only in `-p` with one tool call. |
 | `permissionDecisionReason` | <Documented /> | Output, in `hookSpecificOutput` | The reason text. For `ask` it shows in the prompt. For `deny` it goes to Claude. Otherwise it goes to the debug log. |
-| `updatedInput` | <Documented /> | Output, in `hookSpecificOutput` | Replaces the whole tool input. Rules and background checks use the new input. Needed with `allow` for `AskUserQuestion` and `ExitPlanMode`. Claude Code ignores it with `defer`. |
+| `updatedInput` | <Documented /> | Output, in `hookSpecificOutput` | Replaces the whole tool input. Rules and background checks use the new input. Needed with `allow` for `AskUserQuestion` and `ExitPlanMode`. Claude Code ignores it with `defer`. When several hooks answer one call, the last `updatedInput` wins, and the strongest decision wins. Since `2.1.326`, the release note says Claude Code keeps the rewrite in more of these cases.[^several-hooks] |
 | `additionalContext` | <Documented /> | Output, in `hookSpecificOutput` | Text placed next to the tool result. Claude Code ignores it with `defer`. |
 | `permissionDisplay` | <Undocumented /> | Output, in `hookSpecificOutput` | Words for a permission card. For the desktop host only. An object with `title` (200 characters), `description` (2000), and `displayName` (64). Claude Code ignores it, with a debug line, if it cannot show the text. |
 | Top-level `decision` and `reason` | <Differs note="Deprecated for this event. The program schema accepts the enum on all events." /> | Output | `approve` maps to `allow`. `block` maps to `deny`. Use `permissionDecision` instead. |
@@ -190,3 +190,4 @@ On `2.1.319` in `-p`, these results do not show in the table:[^third-probe]
 [^shapes-probe]: A `PostToolUse` command hook logged its stdin in `-p` on `2.1.305`, with one scripted call per tool.
 [^interactive-shapes]: A second probe ran the same hook in the interactive screen on `2.1.305` with `acceptEdits` and one scripted call per tool.
 [^third-probe]: A third probe on `2.1.319` in `-p` ran `Read` of a notebook, `Glob`, `Grep`, `NotebookEdit`, `WebFetch`, and `WebSearch`, with `ENABLE_TOOL_SEARCH=false` so that no tool was deferred. The `Glob`, `Grep`, `NotebookEdit`, and `WebSearch` rows above come from it.
+[^several-hooks]: The program, `chunk-4h798pp0.js:55307-55354`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

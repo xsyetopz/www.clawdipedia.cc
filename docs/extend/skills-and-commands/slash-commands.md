@@ -91,7 +91,7 @@ Each line is a separate command. The text after the name is the argument.
 | `/init` | <Documented /> | Creates a `CLAUDE.md` file with codebase notes. | A prompt command. With env var `CLAUDE_CODE_NEW_INIT` it also configures skills and hooks. Claude can call it through the `Skill` tool. |
 | `/auto-mode-setup` `[--request-id <uuid>] (--wizard ... --propose \| --expect-sha256 <hex> --apply-file <path>)` | <Gated note="An environment-onboarding policy flag." /> | Teaches auto mode about your environment, with optional rule changes. It reads your project and recent sessions. | Panel. The text form is non-interactive. Since `2.1.304` it is also on Bedrock, Vertex, Foundry, a Claude apps gateway, and with telemetry off. `skillOverrides["auto-mode-setup"]: "off"` turns it off.[^auto-setup] |
 | `/import` `[codex\|gemini\|cursor] [--dry-run]` | <Gated note="Server flag tengu_import, off by default. You cannot enable it" /> | Imports config from another AI coding agent. | Panel and text form. |
-| `/help` | <Documented /> | Shows help and the command list. | Panel. Terminal only. Since `2.1.326`, it takes an optional `[command]` argument.[^help] |
+| `/help` | <Documented /> | Shows help and the command list. | Panel. Terminal only. Since `2.1.326`, it takes an optional `[command]` argument. Typing `/<command> --help` or `/<command> -h` for a built-in command runs `/help <command>`, unless that command answers `--help` itself. `/help <command>` for such a command runs `/<command> --help`.[^help] |
 | `/status` | <Documented /> | Shows version, model, account, API connectivity, and tool status. | Panel. Lists skills whose `allowed-tools` were ignored. Since `2.1.326`, a `Features` row says when your provider or an environment variable turns features off, such as "some aren't available while `DISABLE_TELEMETRY` is set", with a link to the official page.[^status-features] |
 | `/usage` (aliases `/cost`, `/stats`) | <Documented /> | Shows session cost, plan use, and activity stats. | Panel and text form. Since `2.1.304` it says when a rate limit ends. `CLAUDE_CODE_OAUTH_TOKEN` shows the limit rows too. Since `2.1.305` each warning is a one-line fix that names its source, and `f` applies the fixes. The same fixes appear in VS Code and `/doctor`.[^v305] See [How `/usage` and `/artifacts` Work](#how-usage-and-artifacts-work). |
 | `/release-notes` | <Documented /> | Shows release notes. | Panel. |
@@ -100,7 +100,7 @@ Each line is a separate command. The text after the name is the argument.
 | `/chrome` | <Gated note="Availability claude-ai, policy allow_claude_browser_extension, interactive only." /> | Opens Claude in Chrome settings. | Panel. |
 | `/insights` | <Gated note="Policy allow_insights, and needs a workspace." /> | Makes a report that analyzes your sessions. | A prompt command. |
 | `/privacy-settings` | <Gated note="A signed-in subscriber with an eligible plan." /> | Views and updates privacy settings. | Panel. |
-| `/login` | <Documented /> | Signs in, or switches accounts. | Off when env var `DISABLE_LOGIN_COMMAND` is set. Since `2.1.326`, the code prompt refuses a web address, a `localhost` address, or a short number code, says what to do instead, and stays open for the right code. The right code has a `#` in the middle.[^login] |
+| `/login` | <Documented /> | Signs in, or switches accounts. | Off when env var `DISABLE_LOGIN_COMMAND` is set. Since `2.1.326`, the code prompt refuses a web address, a `localhost` address, or a short number code, says what to do instead, and stays open for the right code. The right code has a `#` in the middle.[^login] Since `2.1.326`, the sign-in request also asks permission to change your privacy settings (the scope `user:privacy_consents:write`).[^login-privacy] |
 | `/logout` | <Documented /> | Signs out. | Off when env var `DISABLE_LOGOUT_COMMAND` is set. |
 | `/install` `[options]` | <Documented /> | Installs the native build. | Takes `--force` and a target. Interactive only. |
 
@@ -262,6 +262,7 @@ Each row is a family of messages. The backticked text is the start that every me
 [^memory]: The program, `chunk-eqmsy9y5.js:2145-2153`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^tui]: The program, `chunk-y9bdpp8r.js:13655-13662` and `:123405-123480`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^terminal-setup]: The program, `chunk-gnqb58r1.js:351-379`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^login-privacy]: The program, `chunk-rrxbrq23.js:33-50` and `chunk-d73xe1mr.js:18994-18996`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
 [^login]: The program, `chunk-1sk1fatq.js:7-31`. [2.1.326 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^count]: The program, the command objects. `/keybindings`, `/release-notes`, `/rewind`, `/chrome`, `/statusline`, and `/sandbox` are missing from the program inventory file because of the key order in their objects. The program itself has them. Official page: [Commands](https://code.claude.com/docs/en/commands).
 [^diff]: The program, `chunk-rszfmg4b.js:30037`.
@@ -272,7 +273,7 @@ Each row is a family of messages. The backticked text is the start that every me
 [^config-panel]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-qczvx9vm.js:24182`, `chunk-kpnan531.js:1395`.
 [^terminal-note]: The program, `chunk-3mq1sw8h.js:12946`, `MYr`. `2.1.322` has no such note.
 [^auto-setup]: The program.
-[^help]: The program, `chunk-4h798pp0.js:113442`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^help]: The program, `chunk-4h798pp0.js:113442` and `chunk-y9bdpp8r.js:113030-113052`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
 [^upgrade]: The program ships the text in its command table. The flag is `tengu_idle_amber_finch`. Probe case `pty.cli319.slash.upgrade` (fake key) gives `Unknown command: /upgrade`. Probe case `live.cli319.upgrade-typeahead` (real login, typed `/upg`, no Enter) lists only `/rate-limit-options`, whose text holds "upgrade options".
 [^project]: Probe case `pty.cli319.slash.project`. The program, the command table: `isEnabled: Hys() && k("tengu_gentle_cupcake")` until `2.1.319`, and `isEnabled: mvs() && k(ywr, !1)` since `2.1.321`, where `ywr` is `"tengu_gentle_cupcake"` (`chunk-2x9ma4k7.js:2006746`). In `2.1.323` the flag name is `T0r` and still holds `"tengu_gentle_cupcake"` (`chunk-2x9ma4k7.js:2006741`). The gate is the same; only the minified names changed.
