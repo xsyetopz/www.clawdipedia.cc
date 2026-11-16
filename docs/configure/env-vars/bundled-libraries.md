@@ -4,11 +4,9 @@ description: Environment variables read only by libraries bundled inside Claude 
 sidebar_position: 17
 ---
 
-Claude Code ships with libraries inside its program.
-These libraries read their own environment variables, and Claude Code itself does not use them.
-A variable here only works when the library code runs. Setting one can change behavior in a way Claude Code does not plan for.
+Claude Code ships with libraries inside its program. These libraries read their own environment variables. Claude Code does not use them itself.
 
-This page lists 128 variables. The effect depends on the library and the feature that runs it. Set them in your shell.
+Set a variable here in your shell when you need to change a library, for example to get more log output from gRPC. A variable has an effect only when the library code runs, and it can change behavior in ways Claude Code does not plan for. This page lists 128 variables.
 
 ## Example
 
@@ -21,7 +19,7 @@ The bundled gRPC library prints more log lines. This helps when an OTEL gRPC exp
 
 ## Variables
 
-The table is sorted by name. See [Environment Variables](index.md#how-to-read-the-tables) for what each column and badge means.
+The table is sorted by name. The official [Environment Variables](https://code.claude.com/docs/en/env-vars) page lists the documented ones. See [Environment Variables](index.md#how-to-read-the-tables) for what each column and badge means.
 
 | Variable | Status | Library | What it does |
 | --- | --- | --- | --- |
@@ -66,7 +64,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `BUN_DISABLE_DYNAMIC_CHUNK_SIZE` | <Undocumented /> | Bun runtime | Turns off dynamic chunk size tuning for native readable streams in the Bun runtime. |
 | `BUN_FEATURE_FLAG_VERBOSE_WARNINGS` | <Undocumented /> | Bun runtime | Shows the Bun runtime warning for unsupported `async_hooks` use. |
 | `BUN_INSPECT_NOTIFY` | <Undocumented /> | Bun runtime | Tells the Bun inspector where to report that it listens. |
-| `BUN_OPTIONS` | <Undocumented /> | Bun runtime | Adds Bun command-line options to every Bun process, including the child processes of MCP servers. A Probes run with a bad value made a plugin MCP server fail with `CONNECTION_CLOSED` and removed its tool. |
+| `BUN_OPTIONS` | <Undocumented /> | Bun runtime | Adds Bun command-line options to every Bun process, including the child processes of MCP servers. A run with a bad value made a plugin MCP server fail with `CONNECTION_CLOSED` and removed its tool.[^bun-options] |
 | `BUN_PORT` | <Undocumented /> | Bun runtime | Gives a fallback port for the Bun dev server when the default port is busy. |
 | `CHOKIDAR_INTERVAL` | <Undocumented /> | chokidar | Sets the poll interval for the bundled `chokidar` file watcher when polling is on. |
 | `CHOKIDAR_USEPOLLING` | <Undocumented /> | chokidar | Forces the bundled `chokidar` file watcher to use polling or not. |
@@ -156,8 +154,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 
 ## How It Works
 
-A scan of strings in the program found the names, so the list can miss names that the program builds at run time.
-Rows describe what the library does with the name, not what Claude Code does.
+A scan of the strings in the program found the names.[^scan] The list can miss names that the program builds at run time. Each row says what the library does with the name. It does not say what Claude Code does.
 
 ## Related Pages
 
@@ -166,4 +163,7 @@ Rows describe what the library does with the name, not what Claude Code does.
 - [Telemetry and Debug](telemetry-and-debug.md)
 - [Undocumented Items](../../reference/undocumented.md): every item that only the program shows.
 
-Source: the program (variable names found in the `2.1.314` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+## Sources
+
+[^scan]: The program, variable names found in the `2.1.314` binary.
+[^bun-options]: Probes page, run with a bad `BUN_OPTIONS` value.

@@ -4,11 +4,9 @@ description: Environment variables for Amazon Bedrock, Google Vertex AI, Microso
 sidebar_position: 4
 ---
 
-These variables point Claude Code at a cloud provider instead of the Anthropic API.
-Switch a provider on with a `CLAUDE_CODE_USE_*` variable. Then set the region, credentials, and endpoints for it.
-They also cover LLM gateways that sit in front of a provider.
+These variables point Claude Code at a cloud provider instead of the Anthropic API. They also cover LLM gateways that sit in front of a provider. Use them when your company runs Claude through Amazon Bedrock, Google Vertex AI, or Microsoft Foundry.
 
-This page lists 80 variables. Set `CLAUDE_CODE_USE_BEDROCK`, `CLAUDE_CODE_USE_VERTEX`, or the Foundry switch to `1`. Then set region, project, and endpoint variables. To turn one off, unset the `CLAUDE_CODE_USE_*` variable. You can override a stale shell export with an empty string in `settings.json` `env`.
+To turn a provider on, set its `CLAUDE_CODE_USE_*` variable to `1`, for example `CLAUDE_CODE_USE_BEDROCK` or `CLAUDE_CODE_USE_VERTEX`. Then set the region, project, and endpoint variables for it. To turn the provider off, unset the variable. If a shell export keeps a stale value, override it with an empty string in the `env` key of `settings.json`. This page lists 80 variables.
 
 ## Example
 
@@ -26,12 +24,12 @@ Claude Code now talks to Amazon Bedrock in `us-east-1`.
 
 ## Variables
 
-The table is sorted by name. See [Environment Variables](index.md#how-to-read-the-tables) for what each column and badge means.
+The table is sorted by name.[^names] See [Environment Variables](index.md#how-to-read-the-tables) for what each column and badge means.
 
 | Variable | Status | What it does | Values and default | Notes |
 | --- | --- | --- | --- | --- |
 | `ANTHROPIC_AWS_BASE_URL` | <Documented /> | Overrides the Claude Platform on AWS endpoint URL. | Text. A set value also changes first-party checks for this provider | Provider `anthropicAws`. Not set from project `env` before trust |
-| `ANTHROPIC_AWS_WORKSPACE_ID` | <Documented /> | Gives the workspace ID for Claude Platform on AWS. Claude Code shows it as `Workspace ID` and passes `workspaceId` to the AWS client. | Text, headers by default. The client gets `workspaceId` only when this var is set and an `anthropic-workspace-id` header exists in the default headers. Header source not traced | Provider `anthropicAws`. Not set from project `env` before trust |
+| `ANTHROPIC_AWS_WORKSPACE_ID` | <Documented /> | Gives the workspace ID for Claude Platform on AWS. Claude Code shows it as `Workspace ID` and passes it to the AWS client. | Text. The client gets the ID only when this variable is set and an `anthropic-workspace-id` header exists in the default headers | Provider `anthropicAws`. Not set from project `env` before trust |
 | `ANTHROPIC_BEDROCK_BASE_URL` | <Documented /> | Overrides the Amazon Bedrock endpoint URL. | Text. Defaults are `https://bedrock-runtime.<region>.amazonaws.com` for requests and `https://bedrock.<region>.amazonaws.com` for the control plane | Provider `bedrock`. Not set from project `env` before trust |
 | `ANTHROPIC_BEDROCK_MANTLE_BASE_URL` | <Documented /> | Overrides the Amazon Bedrock Mantle endpoint URL. | Text. Default is `https://bedrock-mantle.<region>.api.aws` | Provider `mantle`. Not set from project `env` before trust |
 | `ANTHROPIC_BEDROCK_REGION_PREFIX` | <Documented /> | Sets the cross-region inference profile prefix that Claude Code tries first. Ignored in `us-gov-` regions. | One of `us`, `eu`, `apac`, `jp`, `au`, or `global`. Claude Code rejects any other value. Without it, Claude Code derives `us`, `eu`, `apac`, or `global` from the AWS region. Claude Code never picks `jp` and `au` for you | Provider `bedrock`. Project `env` can set it before trust |
@@ -55,7 +53,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `AWS_ENDPOINT_URL_BEDROCK_RUNTIME` | <Documented /> | Overrides the Bedrock runtime endpoint URL. Claude Code lists it as a Bedrock base URL source for provider checks. | Text. In the Bedrock variable list right after `ANTHROPIC_BEDROCK_BASE_URL` | Bedrock. Not set from project `env` before trust |
 | `AWS_ENDPOINT_URL_STS` | <Undocumented /> | Sets the AWS STS endpoint. Claude Code reads it first, then `AWS_ENDPOINT_URL`, then `https://sts.<region>.amazonaws.com`. | Text. Also used by the gateway STS role-assume code | Bedrock and AWS STS. Not set from project `env` before trust |
 | `AWS_PROFILE` | <Documented /> | Selects the AWS shared config profile for Bedrock credentials and region lookup. | Text. Part of the credential fingerprint and of the `awsAuthRefresh` cache key | Bedrock. Project `env` can set it before trust |
-| `AWS_REGION` | <Documented /> | Sets the AWS region for Bedrock. Claude Code reads it first, then `AWS_DEFAULT_REGION`, then the shared config, then `us-east-1`. | Text. An invalid value gives source `env-invalid` and falls back to the default | Bedrock. Project `env` can set it before trust |
+| `AWS_REGION` | <Documented /> | Sets the AWS region for Bedrock. Claude Code reads it first, then `AWS_DEFAULT_REGION`, then the shared config, then `us-east-1`. | Text. An invalid value falls back to the default[^region-source] | Bedrock. Project `env` can set it before trust |
 | `AWS_ROLE_ARN` | <Undocumented /> | Gives the role for AWS web identity login. Claude Code also uses it as a credential source marker for Bedrock auth refresh. | Text | Bedrock |
 | `AWS_SECRET_ACCESS_KEY` | <Documented /> | Gives the AWS secret key for Bedrock. It pairs with `AWS_ACCESS_KEY_ID` and `AWS_SESSION_TOKEN`. | Text. Claude Code also writes it into an env object built from a Bedrock access key setup | Bedrock. Not set from project `env` before trust |
 | `AWS_SESSION_TOKEN` | <Documented /> | Gives the temporary AWS session token that goes with the access key pair for Bedrock. | Text. Claude Code also writes it into an env object built from a Bedrock access key setup | Bedrock. Not set from project `env` before trust |
@@ -73,12 +71,12 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_SKIP_ANTHROPIC_GOOGLE_CLOUD_AUTH` | <Undocumented /> | Skips Google credentials for Claude Platform on Google Cloud. The client runs with `skipAuth` and keeps your own `Authorization` header. | On or off, Credentials by default. Also skips the Application Default Credentials setup and refresh hints | Claude Platform on Google Cloud. Project `env` can set it before trust |
 | `CLAUDE_CODE_SKIP_AWS_CRED_CACHE` | <Documented /> | Turns off the in-process cache of AWS default-chain credentials. Claude Code then resolves the chain on each API request. | On or off. It also skips the credential lookup in the retry check | Bedrock and other AWS paths |
 | `CLAUDE_CODE_SKIP_BEDROCK_AUTH` | <Documented /> | Skips AWS auth for Amazon Bedrock, for example behind an LLM gateway. Requests use the no-auth scheme. | On or off. Also stops the startup credential refresh for Bedrock | Bedrock. Project `env` can set it before trust |
-| `CLAUDE_CODE_SKIP_FOUNDRY_AUTH` | <Documented /> | Skips Azure auth for Microsoft Foundry. Claude Code sends a placeholder token and keeps your own `Authorization` header. | On or off. Ignored when `ANTHROPIC_FOUNDRY_AUTH_TOKEN` or `ANTHROPIC_FOUNDRY_API_KEY` is set. Docs note a change in v2.1.203 | Microsoft Foundry. Project `env` can set it before trust |
+| `CLAUDE_CODE_SKIP_FOUNDRY_AUTH` | <Documented /> | Skips Azure auth for Microsoft Foundry. Claude Code sends a placeholder token and keeps your own `Authorization` header. | On or off. Ignored when `ANTHROPIC_FOUNDRY_AUTH_TOKEN` or `ANTHROPIC_FOUNDRY_API_KEY` is set. The official page notes a change in `2.1.203` | Microsoft Foundry. Project `env` can set it before trust |
 | `CLAUDE_CODE_SKIP_MANTLE_AUTH` | <Documented /> | Skips AWS auth for Amazon Bedrock Mantle, for example behind an LLM gateway. Claude Code keeps your own `Authorization` header. | On or off. Claude Code reads an `AWS_BEARER_TOKEN_BEDROCK` value first. Also skips the startup credential refresh | Bedrock Mantle. Project `env` can set it before trust |
 | `CLAUDE_CODE_SKIP_MODEL_ACCESS_MEMORY` | <Documented /> | Turns off the saved memory of models the startup checks found your account cannot invoke on Bedrock and Vertex. | On or off. When set, Claude Code does not build the key for the saved file, so it reads and writes nothing | Bedrock and Vertex startup model checks |
 | `CLAUDE_CODE_SKIP_VERTEX_AUTH` | <Documented /> | Skips Google auth for Google Cloud Agent Platform (Vertex), for example behind an LLM gateway. | On or off. The Google auth builder gets the `skip` kind. Also stops the startup credential refresh | Vertex. Project `env` can set it before trust |
 | `CLAUDE_CODE_USE_ANTHROPIC_AWS` | <Documented /> | Selects Claude Platform on AWS as the provider. | On or off. Provider order: gateway, Bedrock, Foundry, this, Google Cloud, Mantle, Vertex. Allowed in project `env` before trust | Claude Platform on AWS |
-| `CLAUDE_CODE_USE_ANTHROPIC_GOOGLE_CLOUD` | <Undocumented /> | Selects the Anthropic Google Cloud provider. Docs have no row for it. Auth errors are handled like Vertex. | On or off. Provider order puts it after Claude Platform on AWS. Allowed in project `env` before trust | Anthropic Google Cloud provider |
+| `CLAUDE_CODE_USE_ANTHROPIC_GOOGLE_CLOUD` | <Undocumented /> | Selects the Anthropic Google Cloud provider. The official page has no row for it. Auth errors are handled like Vertex. | On or off. Provider order puts it after Claude Platform on AWS. Allowed in project `env` before trust | Anthropic Google Cloud provider |
 | `CLAUDE_CODE_USE_BEDROCK` | <Documented /> | Selects Amazon Bedrock as the provider. | On or off. Wins over Foundry, Vertex, and others. With `CLAUDE_CODE_USE_MANTLE` it routes `anthropic.*` models to Mantle | Amazon Bedrock |
 | `CLAUDE_CODE_USE_FOUNDRY` | <Documented /> | Selects Microsoft Foundry as the provider. | On or off. Wins over Claude Platform on AWS, Vertex, and Mantle. Allowed in project `env` before trust | Microsoft Foundry |
 | `CLAUDE_CODE_USE_GATEWAY` | <Undocumented /> | Marks a host-managed gateway session. Claude Code needs `ANTHROPIC_BASE_URL` and a token. Without them, it warns and ignores the flag. | On or off. Needs `ANTHROPIC_AUTH_TOKEN` or a descriptor token. Some paths also need `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` | Desktop and host-managed gateway |
@@ -86,7 +84,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_USE_VERTEX` | <Documented /> | Selects Google Cloud's Agent Platform (Vertex) as the provider. | On or off. Last in the provider order before first party. Allowed in project `env` before trust | Google Vertex |
 | `CLAUDE_GATEWAY_ALLOW_LOOPBACK` | <Documented /> | Lets the gateway server reach loopback addresses. Otherwise it blocks them as SSRF. | On or off. The error text says to set `1` in the gateway environment | `claude gateway` server |
 | `CLAUDE_GATEWAY_DRAIN_TIMEOUT_MS` | <Documented /> | Sets how long open requests may finish after a shutdown signal. | A number of milliseconds, `25000` by default. Plain digits 1 to 2147000000 | `claude gateway` server |
-| `CLAUDE_GATEWAY_LOG_FORMAT` | <Undocumented /> | Sets the log line format of the gateway server. `json` writes each line to stderr as a JSON object with `severity`, `time`, and `message`, and drops the startup banner. | `json`, any case, turns it on. Any other value gives plain text. Unset gives plain text | `claude gateway` server. Read in `chunk-s712g3je.js@470`. Runs `env319b.gateway.bad-config-json` and `bad-config-JSON-upper` gave a JSON error line; `bad-config-default` and `bad-config-text` gave a plain line |
+| `CLAUDE_GATEWAY_LOG_FORMAT` | <Undocumented /> | Sets the log line format of the gateway server. `json` writes each line to stderr as a JSON object with `severity`, `time`, and `message`, and drops the startup banner. | `json`, any case, turns it on. Any other value gives plain text. Unset gives plain text | `claude gateway` server. Read in the program[^gateway-log] |
 | `CLAUDE_GATEWAY_LOG_LEVEL` | <Documented /> | Sets the log level of the gateway server. | `info` by default. `debug`, `info`, `warn`, or `error`, any case | `claude gateway` server |
 | `CLAUDE_GATEWAY_PROXY_IS_EGRESS_BOUNDARY` | <Documented /> | Treats the forward proxy as the egress boundary. The gateway passes hostnames and does not resolve them itself. | On or off. Needs `HTTPS_PROXY` or `HTTP_PROXY` and no `NO_PROXY`. Warns when it clashes with `CLAUDE_GATEWAY_ALLOW_LOOPBACK` | `claude gateway` server |
 | `CLOUD_ML_REGION` | <Documented /> | Sets the Vertex AI region. | - | - |
@@ -109,14 +107,11 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `K_SERVICE` | <Undocumented /> | Detects Google Cloud Run in the bundled Google auth library and in Claude Code's environment report. | - | - |
 | `METADATA_SERVER_DETECTION` | <Undocumented /> | Controls how the bundled Google auth library detects the GCE metadata server. | - | - |
 | `VERTEX_REGION_CLAUDE_*` | <Undocumented /> | Sets the Google Cloud region for one model family. One variable exists for each suffix. | Text. The first table entry whose model prefix matches the model id wins, then `CLOUD_ML_REGION`, then `us-east5` | Google Cloud Agent Platform (`CLAUDE_CODE_USE_VERTEX`) |
-| `VERTEX_REGION_CLAUDE_FABLE_5_2` | <Documented /> | Overrides the Google Cloud region for Claude Fable 5.2 on Vertex. It is the variable that the model entry names for the model id `claude-fable-5-2`. Added in `2.1.321`. | Text. It comes before `CLOUD_ML_REGION`, then `us-east5` | Google Cloud Agent Platform (`CLAUDE_CODE_USE_VERTEX`). Listed on the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs. The model entry is at `chunk-gep2e53q.js:19206`. The match table is at `chunk-myegr98p.js:1804` |
+| `VERTEX_REGION_CLAUDE_FABLE_5_2` | <Documented /> | Overrides the Google Cloud region for Claude Fable 5.2 on Vertex. It is the variable that the model entry names for the model id `claude-fable-5-2`. Added in `2.1.321`. | Text. It comes before `CLOUD_ML_REGION`, then `us-east5` | Google Cloud Agent Platform (`CLAUDE_CODE_USE_VERTEX`). Listed on the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs[^vertex-fable] |
 
 ## How It Works
 
-Claude Code picks one provider when it starts.
-The provider decides which auth path, endpoint, and model IDs it uses.
-If a shell profile exports a provider switch you cannot remove, set it to an empty string in the `env` block.
-Claude Code treats an empty value as unset for provider selection.
+Claude Code picks one provider when it starts. The provider decides which auth path, endpoint, and model IDs it uses. If a shell profile exports a provider switch you cannot remove, set it to an empty string in the `env` block. Claude Code treats an empty value as unset for provider selection.
 
 ## Related Pages
 
@@ -126,4 +121,9 @@ Claude Code treats an empty value as unset for provider selection.
 - [Network and Proxy](network-and-proxy.md)
 - [Undocumented Items](../../reference/undocumented.md): every item that only the program shows.
 
-Source: the program (variable names found in the `2.1.314` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+## Sources
+
+[^region-source]: The program reports the source as `env-invalid` in this case.
+[^gateway-log]: The program, `chunk-s712g3je.js@470`. Probe cases `env319b.gateway.bad-config-json` and `bad-config-JSON-upper` gave a JSON error line. Probe cases `bad-config-default` and `bad-config-text` gave a plain line.
+[^vertex-fable]: The program, `chunk-gep2e53q.js:19206` (model entry) and `chunk-myegr98p.js:1804` (match table).
+[^names]: The program, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.

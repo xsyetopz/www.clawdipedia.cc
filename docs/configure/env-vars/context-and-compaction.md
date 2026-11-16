@@ -4,11 +4,9 @@ description: Environment variables for the context window, compaction, memory, a
 sidebar_position: 6
 ---
 
-These variables change how Claude Code manages the conversation size.
-They set when compaction starts, how big the context window is, how memory files load, and how the prompt cache behaves.
-Use them for long sessions or when a gateway needs different cache behavior.
+These variables change how Claude Code manages the size of the conversation. They set when compaction starts, how big the context window is, how memory files load, and how the prompt cache behaves. Use them for long sessions, or when a gateway needs different cache behavior.
 
-This page lists 50 variables. Set a new value and start a new session. Many rows are on or off switches.
+Set a variable in your shell or in the `env` key of `settings.json`, then start a new session. This page lists 50 variables. Many rows are on or off switches.
 
 ## Example
 
@@ -21,11 +19,11 @@ This page lists 50 variables. Set a new value and start a new session. Many rows
 }
 ```
 
-Compaction starts earlier than the default.
+Compaction starts when the conversation fills 70% of the window, earlier than the default.
 
 ## Variables
 
-The table is sorted by name. See [Environment Variables](index.md#how-to-read-the-tables) for what each column and badge means.
+The table is sorted by name.[^names] See [Environment Variables](index.md#how-to-read-the-tables) for what each column and badge means.
 
 | Variable | Status | What it does | Values and default | Notes |
 | --- | --- | --- | --- | --- |
@@ -34,12 +32,12 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD` | <Documented /> | Loads memory files from `--add-dir` directories. | On or off. The remote `add_directory` request also needs it set in the container | All sessions. Not set from project `env` before trust |
 | `CLAUDE_CODE_AUTO_COMPACT_WINDOW` | <Documented /> | Sets the auto-compact window in tokens. It is capped at the model context window. | Text. Accepts `k` and `M` suffixes, such as `200k`, like `--autocompact` (since [2.1.304](https://github.com/anthropics/claude-code/releases/tag/v2.1.304)). Claude Code warns when a value is out of range or ignored. Project `env` may set it before trust | All sessions, allowed in. Project `env` can set it before trust |
 | `CLAUDE_CODE_BLOCKING_LIMIT_OVERRIDE` | <Undocumented /> | Overrides the context blocking limit for tests. Claude Code passes it as `testBlockingOverride`. | A number | All sessions |
-| `CLAUDE_CODE_CURRIED_TRINKET` | <Undocumented /> | Replaces the instructions of the compact request that runs when the API answers "prompt is too long". The text goes into that request as its prompt. | Text that contains `<summary>`, trimmed. Text without `<summary>` is ignored. Unset reads a feature flag. Not read in a session that keeps no files on disk | Read in `chunk-2x9ma4k7.js@2436025`. Run `env319b.curried-trinket.set` (stub answers the second model request with the 400 "prompt is too long"): the third request, the compact request, held the text; `unset` and `no-summary-tag` held none |
+| `CLAUDE_CODE_CURRIED_TRINKET` | <Undocumented /> | Replaces the instructions of the compact request that runs when the API answers "prompt is too long". The text goes into that request as its prompt. | Text that contains `<summary>`, trimmed. Text without `<summary>` is ignored. Unset reads a feature flag. Not read in a session that keeps no files on disk | The compact request holds the text[^trinket] |
 | `CLAUDE_CODE_DISABLE_1M_CONTEXT` | <Documented /> | Turns off 1M context. Removes `[1m]` model variants and keeps 1M models at 200K. | On or off. Claude Code warns about a missing auto compact window when it is set | All sessions |
-| `CLAUDE_CODE_DISABLE_ATTACHMENTS` | <Documented /> | Turns off attachment processing, so `@` mentions stay plain text. It also turns off kept deferred tools. | On or off. Docs: ignored in project and local settings | All sessions |
+| `CLAUDE_CODE_DISABLE_ATTACHMENTS` | <Documented /> | Turns off attachment processing, so `@` mentions stay plain text. It also turns off kept deferred tools. | On or off. The official page says it is ignored in project and local settings | All sessions |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | <Documented /> | Turns auto memory off. A value of `0` forces it on, even in bare mode or with `autoMemoryEnabled: false`. | On or off | All sessions |
 | `CLAUDE_CODE_DISABLE_CLAUDE_MDS` | <Documented /> | Stops all `CLAUDE.md` memory files from loading. | On or off. The loaders return an empty list when set | All sessions |
-| `CLAUDE_CODE_DISABLE_FILE_MENTIONS` | <Documented /> | Stops `@` mention expansion. Claude gets the paths with a note to read them. | On or off. Docs: ignored in project and local settings. Claude Code also passes it to auto mode classifier children | All sessions |
+| `CLAUDE_CODE_DISABLE_FILE_MENTIONS` | <Documented /> | Stops `@` mention expansion. Claude gets the paths with a note to read them. | On or off. The official page says it is ignored in project and local settings. Claude Code also passes it to auto mode classifier children | All sessions |
 | `CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS` | <Documented /> | Removes built-in commit and PR instructions and the git status snapshot. Beats `includeGitInstructions`. | On, off, or unset, on by default. When set to any parsed value, the result is its negation. Else the setting, default on | All sessions |
 | `CLAUDE_CODE_DISABLE_MEMORY_BULK_INFLATE` | <Undocumented /> | Skips the bulk pull of all memory files from a memory store backend. | On or off. A feature flag also gates it | Memory store sync |
 | `CLAUDE_CODE_DISABLE_MEMORY_MASS_DELETE_HOLD` | <Undocumented /> | Sets the memory mass delete threshold to infinity. The threshold is otherwise the larger of 50 and 10 percent of the files. | On or off, off by default | Memory store sync |
@@ -50,9 +48,9 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT` | <Documented /> | Skips proactive auto-compaction at an assumed window for a model id that Claude Code does not know. | On or off. Messages say it restores the earlier wait-for-the-API behavior | All sessions. Project `env` can set it before trust |
 | `CLAUDE_CODE_ENABLE_TOKEN_USAGE_ATTACHMENT` | <Undocumented /> | Adds a `token_usage` attachment with used, total, and remaining tokens to the turn. | On or off, off by default | All sessions |
 | `CLAUDE_CODE_IDLE_COMPACT_MIN_TOKENS` | <Documented /> | Sets the context size in tokens where idle compaction applies. It also feeds the sleep compaction timer. | A number. Whole number min `1`, whole value. Unset uses a built-in default | All sessions. Project `env` can set it before trust |
-| `CLAUDE_CODE_JUNIPER_SUNDIAL` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Sets the number of turns between maintenance runs, default `10`. A print-mode probe showed no visible effect ([Probes](../../reference/probes.md)). | A number. Whole number min `1`, digits only. Order is env, then client data a feature flag, then the flag of that name, then `10` | All sessions |
-| `CLAUDE_CODE_MAX_CONTEXT_TOKENS` | <Documented /> | Overrides the context window that Claude Code assumes for the model, when the model id allows it. Since `2.1.326`, it applies to every model id that the program does not recognize (`chunk-d73xe1mr.js:28085`, `:28209`). Before, it applied only when the id did not start with `claude-` or differed from the canonical form. | A number. A value above `0` counts. Also used with `DISABLE_COMPACT` | All sessions. Project `env` can set it before trust |
-| `CLAUDE_CODE_MEMORY_PUSH_DELETE_MODE` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Sets how memory push deletes shared memory files. In `recorded` mode, the program records a removal when a command that is only an `rm` deletes a file under the shared memory mount, and the push deletes the remote file only if the id and hash match. | `corroborate` by default. `immediate`, `never`, or `recorded`; any other value gives `corroborate`. A set value is used as is. Unset reads a feature flag | Memory sync. Read in `chunk-hyywv5x7.js@106381` and `@107932`. Without a deletable file, Claude is told that files cannot be deleted from shared memory right now |
+| `CLAUDE_CODE_JUNIPER_SUNDIAL` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Sets the number of turns between maintenance runs, default `10`. A print-mode probe showed no visible effect.[^juniper] | A number. Whole number min `1`, digits only. Order is env, then client data a feature flag, then the flag of that name, then `10` | All sessions |
+| `CLAUDE_CODE_MAX_CONTEXT_TOKENS` | <Documented /> | Overrides the context window that Claude Code assumes for the model, when the model id allows it. Since `2.1.326`, it applies to every model id that Claude Code does not recognize.[^max-context] Before, it applied only when the id did not start with `claude-` or differed from the canonical form. | A number. A value above `0` counts. Also used with `DISABLE_COMPACT` | All sessions. Project `env` can set it before trust |
+| `CLAUDE_CODE_MEMORY_PUSH_DELETE_MODE` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Sets how memory push deletes shared memory files. In `recorded` mode, Claude Code records a removal when a command that is only an `rm` deletes a file under the shared memory mount, and the push deletes the remote file only if the id and hash match. | `corroborate` by default. `immediate`, `never`, or `recorded`; any other value gives `corroborate`. A set value is used as is. Unset reads a feature flag | Memory sync. Without a deletable file, Claude is told that files cannot be deleted from shared memory right now[^memory-push] |
 | `CLAUDE_CODE_POST_TURN_MEMORY` | <Undocumented /> | Turns on the hosted post-turn memory extraction pass. It needs a valid `CLAUDE_CODE_POST_TURN_MEMORY_CONFIG`. | On or off. With a missing or bad config the code logs a warning and the pass stays off | Cloud and hosted sessions |
 | `CLAUDE_CODE_POST_TURN_MEMORY_CONFIG` | <Undocumented /> | Gives the JSON config of the post-turn memory pass. | JSON text | Cloud and hosted sessions |
 | `CLAUDE_CODE_POST_TURN_MEMORY_SYNC` | <Undocumented /> | Makes the post-turn memory pass run after every turn with no idle flush delay. | On or off. Sets `every_n_turns` to 1 and the idle flush to 0 | Cloud and hosted sessions |
@@ -78,14 +76,11 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `DISABLE_PROMPT_CACHING_MYTHOS` | <Undocumented /> | Turns off prompt caching for models that the Mythos check matches. | On or off | - |
 | `MAX_MCP_OUTPUT_TOKENS` | <Documented /> | Sets the token limit for one MCP tool result. | A number. Default `25000`. The warning at `10000` stays fixed | - |
 | `SLASH_COMMAND_TOOL_CHAR_BUDGET` | <Documented /> | Overrides the character budget for the skill listing shown to the model. | Unset by default. An integer of `1` or more. If set, it wins over the dynamic budget. The dynamic budget is the context window times a fraction, times the characters per token. That number is 4 for Claude 3 to 4.6 models and 3 for newer ones. The default fraction is 1% | All sessions |
-| `USE_API_CONTEXT_MANAGEMENT` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Would turn on the API context-management beta. It is inert in 2.1.314. | On or off. The code ANDs it with a constant false, so it has no effect | Inert, first-party models |
+| `USE_API_CONTEXT_MANAGEMENT` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Would turn on the API context-management beta. It is inert in `2.1.314`. | On or off. The code ANDs it with a constant false, so it has no effect | Inert, first-party models |
 
 ## How It Works
 
-Claude Code counts the tokens in the conversation.
-When the count passes a limit, Claude Code compacts the conversation. It asks the model to summarize older turns. Then it keeps the summary.
-The variables here move that limit, turn compaction off, or change what stays in the prompt cache.
-See [Context and Compaction](../../how-it-works/context-and-compaction.md) for the full flow.
+Claude Code counts the tokens in the conversation. When the count passes a limit, Claude Code compacts the conversation. It asks the model to summarize older turns, then keeps the summary. The variables here move that limit, turn compaction off, or change what stays in the prompt cache. See [Context and Compaction](../../how-it-works/context-and-compaction.md) for the full flow.
 
 ## Related Pages
 
@@ -94,4 +89,10 @@ See [Context and Compaction](../../how-it-works/context-and-compaction.md) for t
 - [Models and Effort](models-and-effort.md)
 - [Undocumented Items](../../reference/undocumented.md): every item that only the program shows.
 
-Source: the program (variable names found in the `2.1.314` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+## Sources
+
+[^names]: The program, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^trinket]: The program, `chunk-2x9ma4k7.js@2436025`. Probe case `env319b.curried-trinket.set` (a stub answers the second model request with the 400 "prompt is too long"): the third request, the compact request, held the text. Probe cases `unset` and `no-summary-tag` held none.
+[^max-context]: The program, `chunk-d73xe1mr.js:28085` and `:28209`.
+[^memory-push]: The program, `chunk-hyywv5x7.js@106381` and `@107932`.
+[^juniper]: [Probes](../../reference/probes.md).

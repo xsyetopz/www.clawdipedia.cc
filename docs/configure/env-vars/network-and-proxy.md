@@ -4,11 +4,9 @@ description: Environment variables for API addresses, proxies, TLS certificates,
 sidebar_position: 5
 ---
 
-These variables control how Claude Code reaches the network.
-They set the API base URL, proxies, custom certificates, timeouts, and retry counts.
-Use them behind a company proxy or when you route traffic through a gateway.
+These variables control how Claude Code reaches the network. They set the API base URL, proxies, custom certificates, timeouts, and retry counts. Use them behind a company proxy, or when you route traffic through a gateway.
 
-This page lists 76 variables. `HTTPS_PROXY`, `NO_PROXY`, and `ANTHROPIC_BASE_URL` are the usual ones. Project settings cannot set some endpoint variables before you trust the folder.
+Set a variable in your shell or in the `env` key of `settings.json`. `HTTPS_PROXY`, `NO_PROXY`, and `ANTHROPIC_BASE_URL` are the usual ones. Project settings cannot set some endpoint variables before you trust the folder. This page lists 79 variables.
 
 ## Example
 
@@ -23,21 +21,21 @@ API calls go through the proxy and wait up to 20 minutes.
 
 ## Variables
 
-The table is sorted by name. See [Environment Variables](index.md#how-to-read-the-tables) for what each column and badge means.
+The table is sorted by name.[^names] See [Environment Variables](index.md#how-to-read-the-tables) for what each column and badge means.
 
 | Variable | Status | What it does | Values and default | Notes |
 | --- | --- | --- | --- | --- |
-| `CLAUDE_BG_GATEWAY_ROUTED` | <Undocumented /> | Since `2.1.326`, the background dispatcher sets it to `1` in the environment of a background session that it routed through an LLM gateway (`chunk-a6z2y3ae.js:1141`). The session reads it to know that the gateway carried it (`chunk-45jdt5k6.js:23`). If a session that has the mark loses its gateway, the program stops it with "No LLM gateway: session stopped." and "No model request was sent." (`chunk-45jdt5k6.js:59`). | The program sets it. Do not set it by hand. The gate `tengu_bg_gateway_mark` defaults to on (`chunk-45jdt5k6.js:19`) | Background sessions |
-| `CLAUDE_CODE_DISABLE_HTTPS_AGENT_KEEPING` | <Undocumented /> | Stops Claude Code from tying the HTTPS agent to the TLS switches. Normally it builds a signature of `NODE_TLS_REJECT_UNAUTHORIZED` and `BUN_TLS_REFUSE_DISTRUSTED_KEYS` (`length:value` for each). It builds a new agent and drops pooled sockets when the signature changes. Set, there is no signature, so a change of those two variables in a session keeps the agent and its sockets. The agent uses keep-alive with no socket limit (the program). | On or off. Off by default | All sessions |
-| `CLAUDE_CODE_DISABLE_LOOPED_CROSS_CERT_DROP` | <Undocumented /> | Keeps the cross-certificates that Claude Code would drop from the system store. A certificate is dropped when it is a single, unexpired entry whose issuer links lead back to itself, and the store holds a valid self-signed root with the same subject, key, and subject key identifier that does not expire sooner. A certificate that `NODE_EXTRA_CA_CERTS` also lists stays. If a store entry does not parse, nothing is dropped. The log says `CA certs: Dropped N cross-certificate(s) ...` (the program). | On or off. Off by default. A client certificate (`CLAUDE_CODE_CLIENT_CERT`) also skips the drop | All sessions |
-| `CLAUDE_CODE_DISABLE_SELF_NAMED_CERT_DROP` | <Undocumented /> | Keeps every certificate in the `NODE_EXTRA_CA_CERTS` file whose subject and issuer match, whoever signed it. Normally Claude Code drops such a certificate when its own key did not sign it, or it cannot check that, unless a kept certificate issued it or it is in the built-in root list. If all or none would be dropped, the list stays whole. The log says `CA certs: Dropped the certificate with SHA-256 fingerprint ...` at error level (the program). | On or off. Off by default. A client certificate also skips the drop | All sessions |
+| `CLAUDE_BG_GATEWAY_ROUTED` | <Undocumented /> | Since `2.1.326`, the background dispatcher sets it to `1` in the environment of a background session that it routed through an LLM gateway. The session reads it to know that the gateway carried it. If a session that has the mark loses its gateway, Claude Code stops it with "No LLM gateway: session stopped." and "No model request was sent."[^bg-gateway] | Claude Code sets it. Do not set it by hand. A server gate for it defaults to on | Background sessions |
+| `CLAUDE_CODE_DISABLE_HTTPS_AGENT_KEEPING` | <Undocumented /> | Stops Claude Code from tying the HTTPS agent to the TLS switches. Normally it builds a signature of `NODE_TLS_REJECT_UNAUTHORIZED` and `BUN_TLS_REFUSE_DISTRUSTED_KEYS` (`length:value` for each). It builds a new agent and drops pooled sockets when the signature changes. Set, there is no signature, so a change of those two variables in a session keeps the agent and its sockets. The agent uses keep-alive with no socket limit.[^https-agent] | On or off. Off by default | All sessions |
+| `CLAUDE_CODE_DISABLE_LOOPED_CROSS_CERT_DROP` | <Undocumented /> | Keeps the cross-certificates that Claude Code would drop from the system store. A certificate is dropped when it is a single, unexpired entry whose issuer links lead back to itself, and the store holds a valid self-signed root with the same subject, key, and subject key identifier that does not expire sooner. A certificate that `NODE_EXTRA_CA_CERTS` also lists stays. If a store entry does not parse, nothing is dropped. The log says `CA certs: Dropped N cross-certificate(s) ...`.[^cross-cert] | On or off. Off by default. A client certificate (`CLAUDE_CODE_CLIENT_CERT`) also skips the drop | All sessions |
+| `CLAUDE_CODE_DISABLE_SELF_NAMED_CERT_DROP` | <Undocumented /> | Keeps every certificate in the `NODE_EXTRA_CA_CERTS` file whose subject and issuer match, whoever signed it. Normally Claude Code drops such a certificate when its own key did not sign it, or it cannot check that, unless a kept certificate issued it or it is in the built-in root list. If all or none would be dropped, the list stays whole. The log says `CA certs: Dropped the certificate with SHA-256 fingerprint ...` at error level.[^self-named] | On or off. Off by default. A client certificate also skips the drop | All sessions |
 | `all_proxy` | <Undocumented /> | Lower case proxy variable. It is the last fallback after `HTTPS_PROXY` and `ALL_PROXY` for git proxy settings. | Text. Non-empty string. Also listed with proxy names | All sessions |
-| `ANTHROPIC_BASE_URL` | <Documented /> | Overrides the API endpoint. A non-first-party host changes first-party checks, such as Remote Control. Since 2.1.304 tool search stays on behind a custom URL, and a 400 or 422 from the gateway is retried without it. | Text. An unset value or an Anthropic host counts as first party | All sessions. Not set from project `env` before trust |
+| `ANTHROPIC_BASE_URL` | <Documented /> | Overrides the API endpoint. A non-first-party host changes first-party checks, such as Remote Control. Since `2.1.304` tool search stays on behind a custom URL, and a 400 or 422 from the gateway is retried without it. | Text. An unset value or an Anthropic host counts as first party | All sessions. Not set from project `env` before trust |
 | `ANTHROPIC_CUSTOM_HEADERS` | <Documented /> | Adds custom request headers. | Text. Split on new lines, each `Name: Value` at the first colon. Claude Code drops bad header names or values with a warning. A bad `Authorization` value stops each request instead (see [Errors](../settings/auth.md#errors)) | All sessions. Not set from project `env` before trust |
 | `ANTHROPIC_UNIX_SOCKET` | <Documented /> | Sends first-party API requests over this Unix socket path. | Text. Claude Code passes it as the `unix` fetch option. Also in the host-managed provider list with `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` | First-party API client, all. Not set from project `env` before trust |
 | `API_FORCE_IDLE_TIMEOUT` | <Documented /> | Forces the streaming body idle timeout on or off. | A number. A true value forces it on and a false value (`0`) turns the fetch timeout off | Anthropic API client, all. Not set from project `env` before trust |
 | `API_TIMEOUT_MS` | <Documented /> | Sets the API request timeout in milliseconds. | A number of milliseconds, `600000` (10 minutes) by default. Whole number. Errors show a hint to raise it | All sessions. Not set from project `env` before trust |
-| `BUN_TLS_REFUSE_DISTRUSTED_KEYS` | <Undocumented /> | A Bun runtime variable. The program counts any value except `1` as a TLS trust override, as it does for `NODE_TLS_REJECT_UNAUTHORIZED`. The program does not show what Bun does with it. Added in `2.1.314`. | Text. Raw string. Any set value other than `1` counts | All sessions |
+| `BUN_TLS_REFUSE_DISTRUSTED_KEYS` | <Undocumented /> | A Bun runtime variable. Claude Code counts any value except `1` as a TLS trust override, as it does for `NODE_TLS_REJECT_UNAUTHORIZED`. What Bun does with it is not shown. Added in `2.1.314`.[^bun-tls] | Text. Raw string. Any set value other than `1` counts | All sessions |
 | `CARGO_HTTP_CAINFO` | <Undocumented /> | Names the CA bundle file for Cargo. Claude Code sets it to the sandbox CA bundle for sandboxed commands, next to `SSL_CERT_FILE` and others. | Text. Also in a list of CA env names | Sandboxed commands and remote sessions |
 | `CLAUDE_AGENT_SDK_CLIENT_APP` | <Documented /> | Names the client app of an Agent SDK host. Claude Code adds it to the user agent as `client-app/<value>`. | Text | SDK hosts. Not set from project `env` before trust |
 | `CLAUDE_AGENT_SDK_VERSION` | <Undocumented /> | Reports the Agent SDK version. Claude Code adds it to the user agent as `agent-sdk/<value>`. | Text. The SDK host sets it | SDK hosts. Not set from project `env` before trust |
@@ -46,15 +44,15 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_ADDITIONAL_PROTECTION` | <Undocumented /> | Adds the `x-anthropic-additional-protection: true` header to API requests. | On or off. Read when Claude Code builds the API client | API requests. Not set from project `env` before trust |
 | `CLAUDE_CODE_API_BASE_URL` | <Undocumented /> | Gives a fallback API base URL. The Files API uses it when `ANTHROPIC_BASE_URL` is unset. Default `https://api.anthropic.com`. | Text. `ANTHROPIC_BASE_URL` wins when both are set. Credential checks also treat it as a base URL source | First-party API and Files API. Not set from project `env` before trust |
 | `CLAUDE_CODE_ATTRIBUTION_HEADER` | <Documented /> | Controls the attribution block at the start of the system prompt. A falsy value such as `0` omits it. | Text. Policy settings have a rule for it. Repo-committed settings may not re-point it | First-party API, not `CLAUDE_CODE_REMOTE` |
-| `CLAUDE_CODE_CERT_STORE` | <Documented /> | Chooses the CA certificate sources for TLS. | A comma-separated list, `bundled,system` by default. When no certificate authority is left, startup fails with `No certificate authority to trust: ...` or `No root certificates are left to trust: ...`. Some of these messages name this variable, `SSL_CERT_FILE`, or `SSL_CERT_DIR` (the program) | All sessions |
+| `CLAUDE_CODE_CERT_STORE` | <Documented /> | Chooses the CA certificate sources for TLS. | A comma-separated list, `bundled,system` by default. When no certificate authority is left, startup fails with `No certificate authority to trust: ...` or `No root certificates are left to trust: ...`. Some of these messages name this variable, `SSL_CERT_FILE`, or `SSL_CERT_DIR`[^cert-store] | All sessions |
 | `CLAUDE_CODE_CLIENT_CERT` | <Documented /> | Gives the path of the client certificate file for mTLS. | Text. Claude Code reads the file and skips a cert and key that do not match | All sessions |
 | `CLAUDE_CODE_CLIENT_KEY` | <Documented /> | Gives the path of the client private key file for mTLS. | Text. Claude Code reads the file | All sessions |
 | `CLAUDE_CODE_CLIENT_KEY_PASSPHRASE` | <Documented /> | Gives the passphrase of an encrypted client key. | Text. Claude Code uses it for the key check and the TLS agent | All sessions |
 | `CLAUDE_CODE_DISABLE_MTLS_RELOAD_ON_STALE_CONNECTION` | <Documented /> | Stops the re-read of the mTLS client cert and key after a connection-level API error. | On or off. Only matters when `CLAUDE_CODE_CLIENT_CERT` is set | MTLS setups |
 | `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` | <Documented /> | Turns off nonessential network traffic such as updates, telemetry and error reporting. | On or off | All sessions |
 | `CLAUDE_CODE_DISABLE_NONSTREAMING_FALLBACK` | <Documented /> | Stops the non-streaming retry after a stream fails mid-stream. | On or off | All sessions. Project `env` can set it before trust |
-| `CLAUDE_CODE_DISABLE_POOLED_CONNECTION_IDLE_LIMIT` | <Undocumented /> | Stops the idle limit on pooled connections in a cloud session. Without it, the program turns TCP keepalive off and sets a 35000 ms socket timeout when a pooled connection goes idle. It turns keepalive on (1000 ms) and clears the timeout when the connection is reused. Added in `2.1.314`. | On or off, off by default. The limit applies only when `CLAUDE_CODE_REMOTE` is true and `CLAUDE_CODE_ENVIRONMENT_KIND` is unset | Cloud sessions |
-| `CLAUDE_CODE_ENABLE_FINE_GRAINED_TOOL_STREAMING` | <Documented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> | Forces tool input streaming on or off. Code matches the docs. | On, off, or unset. `0` is off. Else first party needs a feature flag, Vertex and Bedrock need model support and no custom base URL, `1` forces on. Since `2.1.309` a Bedrock base URL on Amazon's own `https://bedrock-runtime.<region>.amazonaws.com` host does not count as custom | All sessions. Project `env` can set it before trust |
+| `CLAUDE_CODE_DISABLE_POOLED_CONNECTION_IDLE_LIMIT` | <Undocumented /> | Stops the idle limit on pooled connections in a cloud session. Without it, Claude Code turns TCP keepalive off and sets a 35000 ms socket timeout when a pooled connection goes idle. It turns keepalive on (1000 ms) and clears the timeout when the connection is reused. Added in `2.1.314`. | On or off, off by default. The limit applies only when `CLAUDE_CODE_REMOTE` is true and `CLAUDE_CODE_ENVIRONMENT_KIND` is unset | Cloud sessions |
+| `CLAUDE_CODE_ENABLE_FINE_GRAINED_TOOL_STREAMING` | <Documented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> | Forces tool input streaming on or off. The code matches the official page. | On, off, or unset. `0` is off. Else first party needs a feature flag, Vertex and Bedrock need model support and no custom base URL, `1` forces on. Since `2.1.309` a Bedrock base URL on Amazon's own `https://bedrock-runtime.<region>.amazonaws.com` host does not count as custom | All sessions. Project `env` can set it before trust |
 | `CLAUDE_CODE_EXTRA_BODY` | <Documented /> | Merges a JSON object into the top level of every API request body. | JSON text. Ignored when org policy blocks experimental betas. Passed on to background sessions | All sessions |
 | `CLAUDE_CODE_EXTRA_METADATA` | <Undocumented /> | Merges a JSON object into the metadata of API requests. | JSON text. Claude Code logs an error and ignores a bad value | All sessions |
 | `CLAUDE_CODE_GATEWAY_HINT_HEADERS` | <Documented /> <Gated note="Works only behind a feature flag or server gate" /> | Sends or stops the gateway hint headers such as `x-claude-code-request-class`. | On, off, or unset. Unset sends them on some connections and else uses a feature flag on first party | All sessions |
@@ -66,17 +64,17 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_GZIP_REQUEST_BODY_LEVEL` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Sets the gzip level for request bodies. | A number, `0` by default. Whole number from `0` to `9`, plain digits. Only `1` to `9` act | All API requests |
 | `CLAUDE_CODE_HTTP_PROXY` | <Undocumented /> | Gives the fallback HTTP proxy. Claude Code uses it to build the proxy variables of child tools when `HTTP_PROXY` and `http_proxy` are empty. | Text. Fills `YARN_*`, `npm_config_*`, and `GLOBAL_AGENT_*` proxy vars that are unset | All sessions, child process env |
 | `CLAUDE_CODE_HTTPS_PROXY` | <Undocumented /> | Gives the fallback HTTPS proxy. Claude Code uses it to build the proxy variables of child tools when `HTTPS_PROXY` and `https_proxy` are empty. | Text. Fills `YARN_*`, `npm_config_*`, and `GLOBAL_AGENT_*` proxy vars that are unset | All sessions, child process env |
-| `CLAUDE_CODE_INCREMENTAL_REQUEST_BODY` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Builds API request bodies step by step, from the body of an earlier request. Added in `2.1.311`. | A number, `0` by default. Needs the first-party provider and the feature flag `tengu_soft_kurzweil`. A request with `output_format` set is not built this way. A body that fails a check is not used | First-party API requests |
+| `CLAUDE_CODE_INCREMENTAL_REQUEST_BODY` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Builds API request bodies step by step, from the body of an earlier request. Added in `2.1.311`. | A number, `0` by default. Needs the first-party provider and a feature flag.[^kurzweil] A request with `output_format` set is not built this way. A body that fails a check is not used | First-party API requests |
 | `CLAUDE_CODE_MAX_RETRIES` | <Documented /> | Sets how many times Claude Code retries a failed API request. | A number. Whole number, `0` or more. Claude Code clamps a value above the cap with a warning unless the retry watchdog is on | All sessions |
 | `CLAUDE_CODE_NONSTREAMING_TIMEOUT_RETRIES` | <Documented /> | Limits the re-sends of a non-streaming request that reaches its timeout. `0` fails on the first timeout. | A number. Whole number min `0`, digits only. Unset uses a built-in count only when the retry watchdog is on | All sessions |
 | `CLAUDE_CODE_OVERLOADED_RETRY_BASE_DELAY_MS` | <Documented /> | Sets the first delay of the exponential backoff for retries of an overloaded API error. | A number of milliseconds. Whole number from `500` to `32000` in plain digits, else unset. Used only on the overloaded branch of the retry loop | All API requests |
 | `CLAUDE_CODE_OVERLOADED_RETRY_MAX_DELAY_MS` | <Documented /> | Sets the ceiling of the backoff for retries of an overloaded API error. | A number of milliseconds. Whole number from `32000` to `300000` in plain digits, else unset. The maximum was `64000` before `2.1.323`. A longer wait than the ceiling plus a margin raises a retry-after error | All API requests |
-| `CLAUDE_CODE_OVERLOADED_RETRY_MAX_WAIT_MS` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Lets the main conversation keep retrying an overloaded API error, with this value as the wait limit. | A number of milliseconds. It has no effect when `CLAUDE_CODE_MAX_RETRIES` or `CLAUDE_CODE_RETRY_WATCHDOG` is set, or outside the main conversation. The feature flag `tengu_steady_heron` gates it and the program defaults it to on (the program, `chunk-2x9ma4k7.js:2986823`) | Main conversation API requests |
-| `CLAUDE_CODE_PROXY_RESOLVES_HOSTS` | <Documented /> | Lets the proxy resolve DNS names. | On or off. When set the proxy agent `lookup` returns the host name as is. When `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` is set, the program ignores this variable from a settings file `env` and logs `Ignoring CLAUDE_CODE_PROXY_RESOLVES_HOSTS` (the program, 2.1.319, `chunk-5qrjxad9.js`; cases `print.env319a.proxy-resolves-hosts-from-settings.unset`, `.v1`) | HTTP proxy setups |
-| `CLAUDE_CODE_RETRY_WATCHDOG` | <Documented /> | Retries `429` and `529` capacity errors without end for unattended sessions. Docs match the code path that reads it. | On or off. The self-hosted runner sets it to `1` and also clears `CLAUDE_CODE_MAX_RETRIES`. Docs also cover the spend-limit rule | Unattended runs, CI, remote workers. Set by Claude Code for self-hosted runners |
-| `CLAUDE_CODE_RETRY_WATCHDOG_USAGE_LIMIT_RECHECK_MS` | <Documented /> | Lets the retry watchdog notice a usage limit that was lifted before its reset. Added in `2.1.305` ([v2.1.305 release](https://github.com/anthropics/claude-code/releases/tag/v2.1.305)). The program logs `[usage limit recheck]` lines when it sends or skips a probe request. | A number of milliseconds. The program shows no format check in the strings | Sessions with `CLAUDE_CODE_RETRY_WATCHDOG` |
+| `CLAUDE_CODE_OVERLOADED_RETRY_MAX_WAIT_MS` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Lets the main conversation keep retrying an overloaded API error, with this value as the wait limit. | A number of milliseconds. It has no effect when `CLAUDE_CODE_MAX_RETRIES` or `CLAUDE_CODE_RETRY_WATCHDOG` is set, or outside the main conversation. A feature flag gates it and defaults to on[^steady-heron] | Main conversation API requests |
+| `CLAUDE_CODE_PROXY_RESOLVES_HOSTS` | <Documented /> | Lets the proxy resolve DNS names. | On or off. When set the proxy agent `lookup` returns the host name as is. When `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` is set, Claude Code ignores this variable from a settings file `env` and logs `Ignoring CLAUDE_CODE_PROXY_RESOLVES_HOSTS`[^proxy-hosts] | HTTP proxy setups |
+| `CLAUDE_CODE_RETRY_WATCHDOG` | <Documented /> | Retries `429` and `529` capacity errors without end for unattended sessions. The official page matches the code path that reads it. | On or off. The self-hosted runner sets it to `1` and also clears `CLAUDE_CODE_MAX_RETRIES`. The official page also covers the spend-limit rule | Unattended runs, CI, remote workers. Set by Claude Code for self-hosted runners |
+| `CLAUDE_CODE_RETRY_WATCHDOG_USAGE_LIMIT_RECHECK_MS` | <Documented /> | Lets the retry watchdog notice a usage limit that was lifted before its reset. Added in `2.1.305`.[^v305] Claude Code logs `[usage limit recheck]` lines when it sends or skips a probe request. | A number of milliseconds. No format check is shown | Sessions with `CLAUDE_CODE_RETRY_WATCHDOG` |
 | `CLAUDE_CODE_RETRY_WATCHDOG_MAX_USAGE_LIMIT_WAIT_MS` | <Undocumented /> | Caps the total ms that the retry watchdog waits for usage-limit `429` errors to end. When the wait is longer than what is left, the request fails. | A number of milliseconds. Integer 1 or more, digits only. Unset means no limit | Sessions with the retry watchdog on |
-| `CLAUDE_CODE_RETRY_WATCHDOG_MAX_WAIT_MS` | <Documented /> | Caps the ms each API request spends waiting out `429` and `529` errors under the watchdog. After that the next error ends the request. | A number of milliseconds. Integer 1 or more, digits only. Unset means no limit | Sessions with `CLAUDE_CODE_RETRY_WATCHDOG`. Docs say v2.1.295 or later |
+| `CLAUDE_CODE_RETRY_WATCHDOG_MAX_WAIT_MS` | <Documented /> | Caps the ms each API request spends waiting out `429` and `529` errors under the watchdog. After that the next error ends the request. | A number of milliseconds. Integer 1 or more, digits only. Unset means no limit | Sessions with `CLAUDE_CODE_RETRY_WATCHDOG`. The official page says `2.1.295` or later |
 | `CLAUDE_CODE_RETRY_WATCHDOG_SCOPE` | <Undocumented /> | Narrows the retry watchdog to capacity errors. New in `2.1.310`. With `capacity`, the watchdog still retries `429` and `529` errors without end, but its other extensions are off: more retries after no response or a non-streaming timeout, keeping background requests on `529`, and the server-error model fallback. | Text. Only `capacity` has an effect | Sessions with `CLAUDE_CODE_RETRY_WATCHDOG` |
 | `CLAUDE_CODE_UNWATCHED_REPLY_HOLD_MS` | <Undocumented /> | Holds the streamed reply of a subagent, an auxiliary, or a compaction request for up to this many ms before it passes the data on. Added in `2.1.311`. | A number of ms, `0` by default (no hold). Applies to content block delta and ping events. Held data goes on at 262144 bytes | Streaming replies of subagent, auxiliary, and compaction requests |
 | `CLAUDE_ENABLE_BYTE_WATCHDOG` | <Documented /> | Forces the byte-level streaming idle watchdog on or off. | On, off, or unset, on by default. Unset uses a feature flag with default true. Direct, AWS, and gateway only | Anthropic API, AWS, gateway |
@@ -100,14 +98,14 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `NODE_TLS_REJECT_UNAUTHORIZED` | <Documented /> | Set to `0` to turn off TLS certificate checks (Bun). Claude Code counts any value except `1` as a trust override. | - | - |
 | `NODE_USE_ENV_PROXY` | <Undocumented /> | A value other than empty or `0` makes the Bun `http` client use `HTTP_PROXY` and `HTTPS_PROXY`. A bundled proxy tip names it for Node 22.21 and later. | - | - |
 | `NODE_USE_SYSTEM_CA` | <Undocumented /> | The value `1` makes the Bun runtime add the OS CA store to the default CA list. | - | - |
-| `SSL_CERT_DIR` | <Undocumented /> | Gives the directory of CA certificates. Claude Code counts it as a custom CA setting. | Text. Raw string (`rawStr`). Together with `NODE_EXTRA_CA_CERTS` and `SSL_CERT_FILE`, it makes the TLS setup treat custom certs as set | All sessions |
+| `SSL_CERT_DIR` | <Undocumented /> | Gives the directory of CA certificates. Claude Code counts it as a custom CA setting. | Text. Raw string. Together with `NODE_EXTRA_CA_CERTS` and `SSL_CERT_FILE`, it makes the TLS setup treat custom certs as set | All sessions |
 | `SSL_CERT_FILE` | <Documented /> | Gives the CA bundle file path. Claude Code treats it as a custom CA setting, and passes it to proxy helpers and the MCP agent proxy. | Text. Raw string. The MCP agent proxy fallback reads the file as PEM | All sessions |
-| `_CLAUDE_CODE_ASSUME_FIRST_PARTY_BASE_URL` | <Undocumented /> | Makes Claude Code treat a custom base URL as first party. A Probes run with it set raised the beta headers from 9 to 12 (added `prompt-caching-scope-2026-01-05`, `thinking-binding-controls-2026-08-01`, `cache-diagnosis-2026-04-07`) and added a `diagnostics` key to the request body. | Any set value. Not set by default | All sessions |
+| `_CLAUDE_CODE_ASSUME_FIRST_PARTY_BASE_URL` | <Undocumented /> | Makes Claude Code treat a custom base URL as first party. A probe with it set raised the beta headers from 9 to 12 (added `prompt-caching-scope-2026-01-05`, `thinking-binding-controls-2026-08-01`, `cache-diagnosis-2026-04-07`) and added a `diagnostics` key to the request body.[^assume-first-party] | Any set value. Not set by default | All sessions |
 
 ## `NODE_EXTRA_CA_CERTS` File Faults
 
 The `2.1.318` release notes say: "Fixed every connection failing when the `NODE_EXTRA_CA_CERTS` file is empty, not PEM, or starts with a damaged certificate: readable certificates are now used, with a warning on stderr".
-Status: <Documented /> in the release notes the program shows. The behavior below is measured.
+Status: <Documented /> in the release notes. The behavior below is measured.
 
 Each file below was written to the sandbox `HOME` and named in `NODE_EXTRA_CA_CERTS`.
 The valid certificate is a throw-away CA made with `openssl`.
@@ -123,15 +121,13 @@ Each case ran on `2.1.316` and on `2.1.319` with `--debug-file` set.
 | Valid certificate, then a damaged one | No warning on stderr | Runtime line on stderr only. The debug log says one certificate in the CA list "could not be read" |
 | A path with no file | No warning on stderr. The debug log says `Failed to read NODE_EXTRA_CA_CERTS file` | The same |
 
-**Source:** the program. The message texts are in `chunk-ghk767xs.js` of the cleaned `2.1.323` module dump, in the function that builds the CA list (`CA certs: The runtime cannot load ... the NODE_EXTRA_CA_CERTS file as one CA list entry`) and in the stderr texts that follow it.
-
-**Runs:** `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only cacerts319` (cases `extra-ca.*` and `extra-ca-tls.*`), repeated with `--from 2.1.316 --to 2.1.316`.
+The message texts and the probe runs have sources.[^ca-faults]
 
 **FAFO:**
 
 - Hypothesis: on `2.1.316`, a file that starts with a damaged certificate stops every TLS connection; on `2.1.319` it does not.
   Prediction: with a TLS stub whose certificate chains to the valid CA at the end of the file, `2.1.316` makes no request to the stub, and `2.1.319` does.
-  Command: case `extra-ca-tls.damaged-first`. The program reaches `api.anthropic.com` through a local CONNECT proxy (`HTTPS_PROXY`) and the stub.
+  Command: case `extra-ca-tls.damaged-first`. Claude Code reaches `api.anthropic.com` through a local CONNECT proxy (`HTTPS_PROXY`) and the stub.
   Result: on `2.1.316` the run did not end in 60 s, with 0 requests to the stub. On `2.1.319` the run exited with code 0, with 9 requests to the stub, and the stderr text above.
 - Control: the same case with a valid file (`extra-ca-tls.valid`) and with a first line of plain text (`extra-ca-tls.not-pem-first`) reached the stub on both versions, 9 requests each. Text before a valid block does not break the file.
 - Empty and not-PEM files did not stop the run on `2.1.316` against the plain HTTP stub (exit 0, 1 request). The stderr warning is the only change the cases show for them. A TLS stub cannot test them, because the file then holds no CA for the stub. The `2.1.318` and `2.1.319` runs gave the same results.
@@ -140,12 +136,12 @@ Each case ran on `2.1.316` and on `2.1.319` with `--debug-file` set.
 ## Certificate Name-Constraint Errors
 
 The `2.1.323` release notes say: "Fixed certificate name-constraint errors being retried for minutes; they now fail at once with a message that says what to fix".
-Status: <Documented /> in the release notes the program shows. The message text below is read from the program. The retry change is not checked.
+Status: <Documented /> in the release notes. The message text below comes from the program.[^name-constraint] The retry change is not checked.
 
 A certificate authority in the server's chain can limit the names it may certify (a name constraint).
-When a server certificate breaks that limit, the program shows a message that says what to fix.
+When a server certificate breaks that limit, Claude Code shows a message that says what to fix.
 Whoever runs the server, proxy, or gateway makes the fix.
-The program starts the message with `Unable to connect to API: SSL certificate verification failed (<code>).`
+The message starts with `Unable to connect to API: SSL certificate verification failed (<code>).`
 
 | Code | What the message says to do |
 | --- | --- |
@@ -153,42 +149,33 @@ The program starts the message with `Unable to connect to API: SSL certificate v
 | `NAME_CONSTRAINTS_WITHOUT_SANS` | Issue a new certificate that lists its names as subject alternative names. |
 | `UNSUPPORTED_CONSTRAINT_TYPE` | The limit covers a kind of name that Claude Code cannot check, usually IP addresses. Claude Code refuses any certificate under such an authority that lists a name of that kind. Issue a certificate whose chain has no such limit, or one that lists only DNS names that every authority in the chain allows. Clients must then use those names to reach the server. |
 
-**Source:** the program. The code set and the message function are in `chunk-x4fdscgs.js` (`324812`, about `325089`), and the error text that carries them is at `329887`.
-
 ## Certificate Signature Errors
 
-The `2.1.326` release notes say: "Improved the `CERT_SIGNATURE_FAILURE` connection error to name a possible cause after a CA renewal and what IT can change" ([`2.1.326` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)).
-Status: <Undocumented /> in the official docs. The message text is read from the program.
+The `2.1.326` release notes say: "Improved the `CERT_SIGNATURE_FAILURE` connection error to name a possible cause after a CA renewal and what IT can change".[^v326]
+Status: <Undocumented /> in the official docs. The message text comes from the program.[^signature]
 
-The program starts the message with `Unable to connect to API: SSL certificate verification failed (CERT_SIGNATURE_FAILURE).` (`chunk-d73xe1mr.js:18463`).
+The message starts with `Unable to connect to API: SSL certificate verification failed (CERT_SIGNATURE_FAILURE).`
 The message then says:
 
 - After a CA renewal, this computer can trust two CA certificates with the same name but different keys. The server's certificates do not say which key signed them.
 - The fix is to issue certificates with authority key identifiers, or to trust only the one CA that still signs.
 - "If no CA was renewed, don't work around this error, because it can also mean that something on the network changed the connection."
 
-When the program knows that an IT team manages the computer, the message words the fix for that team (`chunk-d73xe1mr.js:18369`).
-
-**Source:** the program. The code check is the function at `chunk-d73xe1mr.js:8298`.
+When Claude Code knows that an IT team manages the computer, the message words the fix for that team.
 
 ## Proxy Requests with Only `ALL_PROXY`
 
-The `2.1.325` release notes say: "Changed plugin marketplace and plugin downloads to use a CONNECT tunnel when `ALL_PROXY` is the only proxy set; a proxy that refuses CONNECT now fails them" ([`2.1.325` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325)).
-The `2.1.326` release notes say: "Fixed plugin and marketplace requests waiting forever when `ALL_PROXY` is the only proxy set and the proxy never answers; they now fail after 25 seconds" ([`2.1.326` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)).
-Status: <Undocumented /> in the official docs. The code is a shared HTTP client, so the program applies it to the requests of that client and not only to plugin requests.
+The `2.1.325` release notes say: "Changed plugin marketplace and plugin downloads to use a CONNECT tunnel when `ALL_PROXY` is the only proxy set; a proxy that refuses CONNECT now fails them".[^v325]
+The `2.1.326` release notes say: "Fixed plugin and marketplace requests waiting forever when `ALL_PROXY` is the only proxy set and the proxy never answers; they now fail after 25 seconds".[^v326]
+Status: <Undocumented /> in the official docs. The code is a shared HTTP client, so the change applies to the requests of that client and not only to plugin requests.[^all-proxy]
 
-- When `ALL_PROXY` is the only proxy variable, the client sends its requests through a CONNECT tunnel (`chunk-f57bmeqs.js:10666`).
-- The connect timeout is 25000 ms (`chunk-f57bmeqs.js:10686`). After that, the error says "Timed out connecting through the proxy set in HTTPS_PROXY or ALL_PROXY. Check that the proxy is running and can reach the destination server. You can also add that server to NO_PROXY."
-- A proxy value that is not an http or https URL gives "The proxy setting (HTTPS_PROXY or ALL_PROXY) is not an http or https URL, so this request was not sent." (`chunk-f57bmeqs.js:10681`).
-
-**Source:** the program, `chunk-f57bmeqs.js`.
+- When `ALL_PROXY` is the only proxy variable, the client sends its requests through a CONNECT tunnel.
+- The connect timeout is 25000 ms. After that, the error says "Timed out connecting through the proxy set in HTTPS_PROXY or ALL_PROXY. Check that the proxy is running and can reach the destination server. You can also add that server to NO_PROXY."
+- A proxy value that is not an http or https URL gives "The proxy setting (HTTPS_PROXY or ALL_PROXY) is not an http or https URL, so this request was not sent.".
 
 ## How It Works
 
-Claude Code reads shell variables once at startup, so restart after a change.
-Claude Code reapplies values in a settings `env` block when the file changes.
-It does not reapply them for features that read their variables only at startup.
-Numeric variables such as timeouts accept forms like `2e3` and `64_000` in addition to plain digits, except where a row says digits only.
+Claude Code reads shell variables once at startup, so restart after a change. Claude Code reapplies values in a settings `env` block when the file changes. It does not reapply them for features that read their variables only at startup. Numeric variables such as timeouts accept forms like `2e3` and `64_000` in addition to plain digits, except where a row says digits only.
 
 ## Related Pages
 
@@ -197,4 +184,23 @@ Numeric variables such as timeouts accept forms like `2e3` and `64_000` in addit
 - [System and Third-Party](system-and-third-party.md): `ALL_PROXY` and CA bundle names owned by other tools.
 - [Undocumented Items](../../reference/undocumented.md): every item that only the program shows.
 
-Source: the program (variable names found in the `2.1.314` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+## Sources
+
+[^names]: The program, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^bg-gateway]: The program, `chunk-a6z2y3ae.js:1141` (the dispatcher sets it), `chunk-45jdt5k6.js:23` (the session reads it), and `chunk-45jdt5k6.js:59` (the stop messages). Gate `tengu_bg_gateway_mark`, default on, at `chunk-45jdt5k6.js:19`.
+[^https-agent]: The program.
+[^cross-cert]: The program.
+[^self-named]: The program.
+[^bun-tls]: The program.
+[^cert-store]: The program.
+[^proxy-hosts]: The program, `2.1.319`, `chunk-5qrjxad9.js`. Probe cases `print.env319a.proxy-resolves-hosts-from-settings.unset` and `.v1`.
+[^steady-heron]: The program, `chunk-2x9ma4k7.js:2986823`. Feature flag `tengu_steady_heron`.
+[^kurzweil]: The program, feature flag `tengu_soft_kurzweil`.
+[^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
+[^assume-first-party]: [Probes](../../reference/probes.md).
+[^ca-faults]: The program. The message texts are in `chunk-ghk767xs.js` of the cleaned `2.1.323` module dump, in the function that builds the CA list (`CA certs: The runtime cannot load ... the NODE_EXTRA_CA_CERTS file as one CA list entry`) and in the stderr texts that follow it. Runs: `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only cacerts319` (cases `extra-ca.*` and `extra-ca-tls.*`), repeated with `--from 2.1.316 --to 2.1.316`.
+[^name-constraint]: The program, `chunk-x4fdscgs.js`. The code set and the message function are at `324812` and about `325089`. The error text that carries them is at `329887`.
+[^signature]: The program, `chunk-d73xe1mr.js:18463` (message start), `:18369` (IT team wording), and `:8298` (the code check).
+[^all-proxy]: The program, `chunk-f57bmeqs.js`. The CONNECT tunnel is at `:10666`, the timeout at `:10686`, and the proxy URL check at `:10681`.
+[^v325]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
+[^v326]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

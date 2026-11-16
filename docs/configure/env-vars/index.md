@@ -4,19 +4,13 @@ description: How Claude Code reads environment variables, which value wins, how 
 sidebar_position: 1
 ---
 
-An environment variable is a named setting that a program reads when it starts.
-Claude Code `2.1.322` reads well over a thousand of them.
-This section lists 1595 variables that you can use. It splits them into groups, so you can find them.
-The [official docs](https://code.claude.com/docs/en/env-vars) list a few of them. Only the program shows most of them.
+An environment variable is a named setting that a program reads when it starts. Claude Code `2.1.322` reads well over a thousand of them. This section lists 1664 variables that you can use and splits them into groups, so you can find them. The [official docs](https://code.claude.com/docs/en/env-vars) list a few of them. Only the program shows most of them.
 
-Set a variable in your shell, or under the `env` key of `~/.claude/settings.json`, `.claude/settings.json`, `.claude/settings.local.json`, or managed settings.
-To change a value, edit it, then restart `claude`. When the file changes, values in a settings `env` block also apply to a running session.
+Set a variable in your shell, or under the `env` key of `~/.claude/settings.json`, `.claude/settings.json`, `.claude/settings.local.json`, or managed settings. To change a value, edit it, then restart `claude`. When the file changes, values in a settings `env` block also apply to a running session.
 
 ## How Claude Code Reads Variables
 
-Claude Code starts with the environment it inherits from your shell.
-It then reads the `env` key of every settings file and writes each entry into its own process environment.
-Source: the official [Environment Variables](https://code.claude.com/docs/en/env-vars) page.
+Claude Code starts with the environment it inherits from your shell. It then reads the `env` key of every settings file and writes each entry into its own process environment.[^env-doc]
 
 ```mermaid
 flowchart TD
@@ -28,7 +22,7 @@ flowchart TD
   Merge -->|"replaces shell value<br/>in most sessions"| Proc
 ```
 
-A feature then reads the variable from the process environment. For some variables, a CLI flag or a settings key can win instead.
+A feature then reads the variable from the process environment. For some variables, a CLI flag or a settings key wins instead. The next section says which.
 
 ```mermaid
 flowchart TD
@@ -63,15 +57,14 @@ Put variables under the `env` key. Claude Code copies the values as written. No 
 }
 ```
 
-Alternatively, set one in your shell for one session.
+To set a variable for one session only, export it in your shell.
 
 ```bash
 export API_TIMEOUT_MS=1200000
 claude
 ```
 
-Removing a variable from the file does not unset it in a running session. The removal applies the next time you start `claude`.
-Features that read their variables only once at startup, such as OpenTelemetry, keep their startup values until you restart.
+Removing a variable from the file does not unset it in a running session. The removal applies the next time you start `claude`. Features that read their variables only once at startup, such as OpenTelemetry, keep their startup values until you restart.
 
 Numeric variables, such as timeouts and token budgets, accept forms like `2e3` (2000) and `64_000` (64000) as well as plain digits. A few rows say they take plain digits only.
 
@@ -104,22 +97,22 @@ Numeric variables, such as timeouts and token budgets, accept forms like `2e3` (
 
 | Page | What is in it | Variables |
 | --- | --- | --- |
-| [Models and Effort](models-and-effort.md) | Environment variables that pick the model, pin model aliases, set thinking effort, and limit output size | 85 |
-| [Auth and Accounts](auth-and-accounts.md) | Environment variables for API keys, login tokens, credential helpers, and account details | 79 |
-| [Cloud Providers](cloud-providers.md) | Environment variables for Amazon Bedrock, Google Vertex AI, Microsoft Foundry, and gateway setups | 78 |
-| [Network and Proxy](network-and-proxy.md) | Environment variables for API addresses, proxies, TLS certificates, time limits, and retries | 72 |
-| [Context and Compaction](context-and-compaction.md) | Environment variables for the context window, compaction, memory, and the prompt cache | 49 |
-| [Tools and Bash](tools-and-bash.md) | Environment variables for the Bash tool, file tools, search, permissions, and the sandbox | 106 |
-| [UI and Terminal](ui-and-terminal.md) | Environment variables for the terminal screen, colors, voice, keys, and notifications | 91 |
-| [Sessions and Storage](sessions-and-storage.md) | Environment variables for config folders, session files, resume, install, and updates | 82 |
-| [Telemetry and Debug](telemetry-and-debug.md) | Environment variables for usage data, OpenTelemetry, debug logs, and error reports | 142 |
-| [Plugins and MCP](plugins-and-mcp.md) | Environment variables for plugins, MCP servers, skills, hooks, and marketplaces | 108 |
-| [Agents and Teams](agents-and-teams.md) | Environment variables for subagents, agent teams, background tasks, and workers | 80 |
-| [Features and Toggles](features-and-toggles.md) | Environment variables that turn single features on or off, including server-gated features | 68 |
-| [Remote and Cloud Sessions](remote-and-cloud-sessions.md) | Environment variables for cloud sessions, the bridge, the desktop app, Chrome, Cowork, and Slack | 192 |
-| [SDK and Automation](sdk-and-automation.md) | Environment variables for programs that host Claude Code, the Agent SDK, and automation | 27 |
+| [Models and Effort](models-and-effort.md) | Environment variables that pick the model, pin model aliases, set thinking effort, and limit output size | 87 |
+| [Auth and Accounts](auth-and-accounts.md) | Environment variables for API keys, login tokens, credential helpers, and account details | 81 |
+| [Cloud Providers](cloud-providers.md) | Environment variables for Amazon Bedrock, Google Vertex AI, Microsoft Foundry, and gateway setups | 80 |
+| [Network and Proxy](network-and-proxy.md) | Environment variables for API addresses, proxies, TLS certificates, time limits, and retries | 79 |
+| [Context and Compaction](context-and-compaction.md) | Environment variables for the context window, compaction, memory, and the prompt cache | 50 |
+| [Tools and Bash](tools-and-bash.md) | Environment variables for the Bash tool, file tools, search, permissions, and the sandbox | 109 |
+| [UI and Terminal](ui-and-terminal.md) | Environment variables for the terminal screen, colors, voice, keys, and notifications | 93 |
+| [Sessions and Storage](sessions-and-storage.md) | Environment variables for config folders, session files, resume, install, and updates | 88 |
+| [Telemetry and Debug](telemetry-and-debug.md) | Environment variables for usage data, OpenTelemetry, debug logs, and error reports | 146 |
+| [Plugins and MCP](plugins-and-mcp.md) | Environment variables for plugins, MCP servers, skills, hooks, and marketplaces | 117 |
+| [Agents and Teams](agents-and-teams.md) | Environment variables for subagents, agent teams, background tasks, and workers | 85 |
+| [Features and Toggles](features-and-toggles.md) | Environment variables that turn single features on or off, including server-gated features | 71 |
+| [Remote and Cloud Sessions](remote-and-cloud-sessions.md) | Environment variables for cloud sessions, the bridge, the desktop app, Chrome, Cowork, and Slack | 198 |
+| [SDK and Automation](sdk-and-automation.md) | Environment variables for programs that host Claude Code, the Agent SDK, and automation | 30 |
 | [System and Third-Party](system-and-third-party.md) | Environment variables owned by your system or other tools that Claude Code reads, such as HOME, TERM, and ALL_PROXY | 222 |
-| [Bundled Libraries](bundled-libraries.md) | Environment variables read only by libraries bundled inside Claude Code, such as the AWS SDK, gRPC, and cloud detectors | 127 |
+| [Bundled Libraries](bundled-libraries.md) | Environment variables read only by libraries bundled inside Claude Code, such as the AWS SDK, gRPC, and cloud detectors | 128 |
 
 ## How to Read the Tables
 
@@ -130,23 +123,25 @@ Every group page has the same columns.
 | Variable | The exact name. Names are case sensitive. |
 | Status | Badges. <Documented /> means the [official docs](https://code.claude.com/docs/en/env-vars) name it. <Undocumented /> means only the program shows it. <Differs /> means the docs and the program disagree. <Gated /> means a feature flag or server gate affects it. |
 | What it does | The effect, in plain words. |
-| Values and default | The accepted values and the default, as far as the program shows. A dash means the source gave no detail. |
+| Values and default | The accepted values and the default, as far as the sources show. A dash means the source gave no detail. |
 | Notes | Where it applies, and whether a project `env` block can set it before you trust the folder. |
 
 :::warning
-Treat <Undocumented /> and <Gated /> rows with care.
-They work in `2.1.322`, but nothing promises they will work in the next release.
+Treat <Undocumented /> and <Gated /> rows with care. They work in `2.1.322`. Nothing promises that they work in the next release.
 :::
 
-Some rows mention a probe. That means a run of the real binary against a local stub showed what the variable changed in the request. No model call leaves the machine in a probe. A run with no visible effect does not prove that a variable does nothing.
+Some rows cite a probe. A probe is a run of the real binary against a local stub. It shows what the variable changed in the request. No model call leaves the machine in a probe. A run with no visible effect does not prove that a variable does nothing.
 
 ## What Is Left Out
 
-The tables list only variables you can use. They leave out removed or inert names, test-only names, names for Anthropic staff, and flags whose purpose nobody knows.
-For every item that only the program shows, see [Undocumented Items](../../reference/undocumented.md).
+The tables list only variables you can use. They leave out removed or inert names, test-only names, names for Anthropic staff, and flags whose purpose nobody knows. For every item that only the program shows, see [Undocumented Items](../../reference/undocumented.md).
 
 ## Related Pages
 
 - [How to Read These Docs](../../start/how-to-read.md)
 - [What Changed](../../start/what-changed.md)
 - [Settings Files and Scopes](../settings/index.md) and the `env` key
+
+## Sources
+
+[^env-doc]: The official [Environment Variables](https://code.claude.com/docs/en/env-vars) page.
