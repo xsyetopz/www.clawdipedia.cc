@@ -4,6 +4,23 @@ description: The default keys of the plugin panel, diff, picker, select, plugin,
 sidebar_position: 3
 ---
 
+These are the keys that Claude Code binds in the plugin panels, the diff views, the pickers, and the `Select`, `Plugin`, `Scroll`, and `Agents` contexts.[^defaults] Use this page to find the key of an action before you rebind it. To rebind a key, see [Keybindings](index.md).
+
+## Example
+
+This block moves the install action in the `Plugin` context from `i` to `p`. It sets `i` to `null` to free the default key.
+
+```json title="~/.claude/keybindings.json"
+{
+  "bindings": [
+    {
+      "context": "Plugin",
+      "bindings": { "i": null, "p": "plugin:install" }
+    }
+  ]
+}
+```
+
 ## Default Keys for Panels, Dialogs, and Views
 
 The first contexts are on [Default Keys by Context](default-keys.md#default-keys-by-context). The same rules for platforms and overrides apply here.
@@ -185,3 +202,7 @@ The first contexts are on [Default Keys by Context](default-keys.md#default-keys
 ## Related Pages
 
 - [Keybindings](index.md) lists the contexts and shows how to write `keybindings.json`.
+
+## Sources
+
+[^defaults]: The program.

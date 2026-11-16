@@ -29,9 +29,7 @@ Restart `claude` so it finds the new file. Then Claude answers as a terse review
 
 ## Built-In Styles
 
-Each non-default style keeps the standard coding instructions and adds its own.
-Source: the program sets `keepCodingInstructions: true` and `source: "built-in"` for the four styles.
-Official page: [Output Styles](https://code.claude.com/docs/en/output-styles).
+Each non-default style keeps the standard coding instructions and adds its own.[^built-in] See [Output Styles](https://code.claude.com/docs/en/output-styles) for the official page.
 The captured prompts are on these pages: [Proactive](../prompts/output-styles/style-proactive.md), [Concise](../prompts/output-styles/style-concise.md), [Explanatory](../prompts/output-styles/style-explanatory.md), and [Learning](../prompts/output-styles/style-learning.md).
 
 | Item | Status | What it does | How it works | Where to set it |
@@ -81,10 +79,10 @@ Captured prompts for custom styles: [Custom Style](../prompts/output-styles/styl
 
 ## How It Works
 
-- The active style text goes with every request. Source: the official [Output Styles](https://code.claude.com/docs/en/output-styles) page.
-- A style applies to the main thread and to a fork. Other subagents use their own system prompt. Source: the same page.
+- The active style text goes with every request.[^official]
+- A style applies to the main thread and to a fork. Other subagents use their own system prompt.[^official]
 - The style name shows in the status line field `output_style.name`. See [Status Line](status-line.md).
-- The SDK init message can report `outputStyle` as `null` or as `{ name, isKeepingCodingInstructions }`. Source: the program string `no { outputStyle } (null, or { name, isKeepingCodingInstructions })`.
+- The SDK init message can report `outputStyle` as `null` or as `{ name, isKeepingCodingInstructions }`.[^init-message]
 
 ```mermaid
 flowchart TD
@@ -98,20 +96,20 @@ flowchart TD
 ```
 
 :::note
-A probe set `outputStyle` in user settings and added a plugin style with `force-for-plugin: true`. The system prompt used the forced style and not the configured one. The `init` event still showed the setting's name. With several forced styles, the first wins. A warning lists all. In a user style, Claude Code ignores `force-for-plugin`. A managed `outputStyle` with its style file in the managed folder won over user, project, local, and `--settings` values. See [Probes](../reference/probes.md#configure-and-memory) and [Managed Folder Probe](../reference/probes.md#managed-folder-probe).
-The captures linked above hold the full text of each built-in style prompt. We compared them with the strings in the program. The only difference is the blank lines that the capture adds after the style header and between paragraphs.
+A probe set `outputStyle` in user settings and added a plugin style with `force-for-plugin: true`. The system prompt used the forced style. It did not use the configured one. The `init` event still showed the setting's name. With several forced styles, the first wins. A warning lists all. In a user style, Claude Code ignores `force-for-plugin`. A managed `outputStyle` with its style file in the managed folder won over user, project, local, and `--settings` values.[^probe-force]
+The captures linked above hold the full text of each built-in style prompt. They match the strings in the program. The only difference is the blank lines that the capture adds after the style header and between paragraphs.
 :::
 
 ## Where the Style Text Goes
 
-The probe of 2.1.316 shows that the style text does not go in `system[2]`. Claude Code puts it in the environment message, a system-role message in `messages`, under the line `# Output Style: <name>`. The front matter is not sent. Source: [Style Custom](../prompts/output-styles/style-custom.md).
+The style text does not go in `system[2]`. Claude Code puts it in the environment message, a system-role message in `messages`, under the line `# Output Style: <name>`. The front matter is not sent. See [Style Custom](../prompts/output-styles/style-custom.md).[^probe-316]
 The first line of the body, `You are an agent working with the user ...`, becomes `You are an interactive agent that helps users according to your "Output Style", which describes how you should respond to user queries.` when a style is active and keeps no coding instructions.
 A reminder line follows the deferred tool list and the command list: `<name> output style is active. Remember to follow the specific guidelines for this style.`
-A run of 2.1.316 against a local stub sent three user messages in one session. The reminder came after each user message. The `# Output Style: <name>` header appeared once in each request and was not repeated. So the reminder repeats on every turn, and the header does not.
+A run against a local stub sent three user messages in one session. The reminder came after each user message. The `# Output Style: <name>` header appeared once in each request and was not repeated. So the reminder repeats on every turn, and the header does not.
 
 ## Styles and Prompt Overrides
 
-A run of 2.1.316 against a local stub used a custom style named `Terse` with `keep-coding-instructions: true`. The run compared four launches. In each, the style text and the reminder stayed in `messages`.
+A run against a local stub used a custom style named `Terse` with `keep-coding-instructions: true`. The run compared four launches. In each, the style text and the reminder stayed in `messages`.
 
 | Launch | What happens to the system prompt body |
 | --- | --- |
@@ -124,7 +122,7 @@ So a replacing flag removes the standard body, and the style still reaches the m
 
 ## Exact Fields
 
-The exact fields are in the `output-style` definition in `https://clawdipedia.cc/schemas/claude-code-frontmatter.json`. The program's frontmatter validators produce it.
+The exact fields are in the `output-style` definition in `https://clawdipedia.cc/schemas/claude-code-frontmatter.json`. The frontmatter validators of the program produce it.
 It lists every field of this release. Build on the fields it names. Look each one up there before you rely on it.
 
 ## Related Pages
@@ -133,3 +131,11 @@ It lists every field of this release. Build on the fields it names. Look each on
 - [Status Line](status-line.md)
 - [The System Prompt](../how-it-works/system-prompt.md)
 - [Captured Prompts](../prompts/index.md)
+
+## Sources
+
+[^built-in]: The program sets `keepCodingInstructions: true` and `source: "built-in"` for the four styles.
+[^official]: [Output Styles](https://code.claude.com/docs/en/output-styles).
+[^init-message]: The program string `no { outputStyle } (null, or { name, isKeepingCodingInstructions })`.
+[^probe-force]: Probes: [Configure and Memory](../reference/probes.md#configure-and-memory) and [Managed Folder Probe](../reference/probes.md#managed-folder-probe).
+[^probe-316]: Probe of `2.1.316`. Another run of `2.1.316` against a local stub gave the reminder and header results below, and a third run gave the launch table in the next section.

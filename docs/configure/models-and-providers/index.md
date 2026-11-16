@@ -4,12 +4,10 @@ description: The model catalog, every alias, effort and thinking controls, provi
 sidebar_position: 1
 ---
 
-Claude Code has a built-in list of 22 models.
-It also knows the model names of each cloud provider, and a set of short aliases such as `opus`.
-You choose a model with a flag, an environment variable, a setting, or the `/model` command.
-For example, run `claude --model opus`. Or set `ANTHROPIC_MODEL`, `ANTHROPIC_DEFAULT_*_MODEL`, or the `model` and `modelOverrides` settings.
-Pick a provider with `CLAUDE_CODE_USE_BEDROCK` and its siblings. Limit choices with `availableModels`.
-Settings live in `~/.claude/settings.json` (user), `.claude/settings.json` (project), managed settings, and your shell environment.
+Claude Code has a built-in list of 22 models. It also knows the model names of each cloud provider and a set of short aliases such as `opus`. Change the model when you need a different cost, speed, or provider.
+
+Choose a model with a flag, an environment variable, a setting, or the `/model` command. For example, run `claude --model opus`, or set `ANTHROPIC_MODEL`, `ANTHROPIC_DEFAULT_*_MODEL`, or the `model` and `modelOverrides` settings. Pick a provider with `CLAUDE_CODE_USE_BEDROCK` and its siblings. Limit choices with `availableModels`. Settings live in `~/.claude/settings.json` (user), `.claude/settings.json` (project), managed settings, and your shell environment.
+
 The pages below list every model, alias, and provider switch. To see how Claude Code makes the choice at run time, read [Models](../../how-it-works/models.md).
 
 ## Pages in This Section

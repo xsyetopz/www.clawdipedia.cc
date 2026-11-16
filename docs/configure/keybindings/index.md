@@ -5,15 +5,9 @@ sidebar_position: 1
 ---
 
 
-Claude Code reads your keyboard shortcuts from `~/.claude/keybindings.json`.
-Each block names a context and maps key strokes to actions. A context is where the block applies.
-This page lists the contexts, the default key of each action, and the actions that have no default key.
+Claude Code reads your keyboard shortcuts from `~/.claude/keybindings.json`. Change a key to match your terminal or your habits. Each block names a context, which is where the block applies, and maps key strokes to actions. Run `/keybindings` to open the file.
 
-Run `/keybindings` to open the file.
-
-Source: [Customize Keyboard Shortcuts](https://code.claude.com/docs/en/keybindings) and the program.
-The tables below come from the default keys in the program.
-An action marked <Undocumented /> is not named on the official page.
+This page lists the contexts. The pages in this section list the default key of each action and the actions that have no default key. See [Customize Keyboard Shortcuts](https://code.claude.com/docs/en/keybindings) for the official page.[^source] An action marked <Undocumented /> is not named on that page.
 
 ## Example
 
@@ -37,7 +31,7 @@ This file binds `ctrl+k` in the chat input to the stash action. It frees `ctrl+s
 
 A binding value is an action name, `command:<name>`, or `null`. `command:<name>` runs the slash command as if you typed it. `null` removes a default key.
 The `command:` name may use letters, digits, `:`, `-`, and `_`.
-Each part of a key before the last must be a modifier: `ctrl`, `control`, `alt`, `opt`, `option`, `shift`, `meta`, `cmd`, `command`, `super`, or `win`. Since `2.1.323`, Claude Code ignores a binding such as `ctl+k` that has a misspelled modifier, where before it bound the bare key. The program reports `"ctl" is not a modifier, so the binding "ctl+k" is ignored` and suggests a fix (`chunk-qmcxj60c.js:4615`). For keys pressed one after another, put a space between them, as in `ctrl+x ctrl+s`.
+Each part of a key before the last must be a modifier: `ctrl`, `control`, `alt`, `opt`, `option`, `shift`, `meta`, `cmd`, `command`, `super`, or `win`. Since `2.1.323`, Claude Code ignores a binding such as `ctl+k` that has a misspelled modifier. Before, it bound the bare key. Claude Code reports `"ctl" is not a modifier, so the binding "ctl+k" is ignored` and suggests a fix.[^modifier] For keys pressed one after another, put a space between them, as in `ctrl+x ctrl+s`.
 The schema is [claude-code-keybindings.json](https://xsyetopz.github.io/clawdipedia/schemas/claude-code-keybindings.json).
 
 ## Contexts
@@ -69,7 +63,7 @@ A context says where a block of bindings applies. `Global` bindings work everywh
 | `DiffDialog` | <Documented /> | When the diff dialog is open. |
 | `DiffPanel` | <Documented /> | When the diff sidebar panel is open. |
 | `FeedbackSurvey` | <Undocumented /> | When you type over the session feedback survey. |
-| `SessionTabs` | <Gated /> | When a session on screen can be closed under the session tabs. The program lists no default key for it and leaves it out of its own generated context list. |
+| `SessionTabs` | <Gated /> | When a session on screen can be closed under the session tabs. It has no default key and is not in the generated context list.[^session-tabs] |
 | `ModelPicker` | <Documented /> | When the model picker is open. |
 | `EffortSlider` | <Documented /> | When the effort slider is open. |
 | `Select` | <Documented /> | When a select or list component has focus. |
@@ -90,3 +84,9 @@ A context says where a block of bindings applies. `Global` bindings work everywh
 - [Interface Settings](../settings/ui.md) lists the keys that change how the terminal looks and feels.
 - [Slash Commands](../../extend/skills-and-commands/slash-commands.md) covers `/keybindings`.
 - [Files on Disk](../../start/files-on-disk.md) lists `keybindings.json`.
+
+## Sources
+
+[^source]: [Customize Keyboard Shortcuts](https://code.claude.com/docs/en/keybindings) and the program. The tables come from the default keys in the program.
+[^modifier]: The program, `chunk-qmcxj60c.js:4615`.
+[^session-tabs]: The program.

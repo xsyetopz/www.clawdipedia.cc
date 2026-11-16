@@ -9,7 +9,7 @@ An `allow` entry is an exception to a block rule.
 A `soft_deny` entry blocks an action unless an `allow` entry applies or you clearly asked for it.
 For example, `Production Deploy` blocks a deploy to production until you ask for it by name.
 
-The entries apply whenever the permission mode is `auto`. Add or replace entries with the `autoMode` setting. Keep the defaults with `$defaults`. Drop `$defaults` from a list to remove the built-in entries of that list. The entries live inside the program. `claude auto-mode defaults` prints them as JSON.
+The entries apply whenever the permission mode is `auto`. Add or replace entries with the `autoMode` setting. Keep the defaults with `$defaults`. Drop `$defaults` from a list to remove the built-in entries of that list. The entries are built in. `claude auto-mode defaults` prints them as JSON.
 
 ## Example
 
@@ -20,9 +20,9 @@ claude auto-mode defaults --label "Production Deploy"
 This prints the full text of one rule. `--label` matches the start of a label, without regard to case.
 In the JSON, some labels end in `[named+specifics ...]`. For those rules, your request must name the listed item to count as direction.
 
-Rule summaries below are short. Official page: [Configure Auto Mode](https://code.claude.com/docs/en/auto-mode-config). Rules marked <Undocumented /> come from `claude auto-mode defaults`.
+The rule summaries below are short. See [Configure Auto Mode](https://code.claude.com/docs/en/auto-mode-config) for the official page. Rules marked <Undocumented /> come from `claude auto-mode defaults`.
 
-A run of `claude auto-mode defaults` on `2.1.316` printed 16 `allow` entries, 72 `soft_deny` entries, 1 `hard_deny` entry, and 21 `environment` entries. The `Scheduled-Task Fires` rule is not in that output. The program reads it from its own template and keeps it when an `allow` list replaces the defaults (`chunk-rqvvpwt0.js`).
+A run of `claude auto-mode defaults` on `2.1.316` printed 16 `allow` entries, 72 `soft_deny` entries, 1 `hard_deny` entry, and 21 `environment` entries. The `Scheduled-Task Fires` rule is not in that output. Claude Code reads it from its own template and keeps it when an `allow` list replaces the defaults.[^scheduled]
 
 ## Allow Rules
 
@@ -41,7 +41,7 @@ Each `allow` rule is an exception to the soft deny rules.
 | `Session-Created Job Cleanup` | <Undocumented /> | Deleting the jobs that the agent itself made in this session is fine. |
 | `Git Push Destination` | <Undocumented /> | Pushing to any branch of the session repo is normal, also the default branch. |
 | `Trusted Internal Infra (Data Flow)` | <Undocumented /> | Domains, buckets, and services in `Environment` count as internal, not external. |
-| `Scheduled-Task Fires` | <Undocumented /> | A scheduled-task prompt is not a live human instruction. This rule is not in the `claude auto-mode defaults` output. The program adds it from its own template (`chunk-rqvvpwt0.js`). |
+| `Scheduled-Task Fires` | <Undocumented /> | A scheduled-task prompt is not a live human instruction. This rule is not in the `claude auto-mode defaults` output. Claude Code adds it from its own template.[^scheduled] |
 | `Multi-Agent Coordination` | <Undocumented /> | Messages between teammates and subagents are normal traffic. |
 | `Memory Directory` | <Undocumented /> | Routine writes to and deletes from the memory directory are fine. |
 | `CLAUDE.md Content` | <Undocumented /> | Editing `CLAUDE.md` is fine when the text does not change permissions or auto mode. |
@@ -59,7 +59,7 @@ A scoped exception sends commits and pushes of sensitive material to the `Sensit
 ## Environment Fields
 
 Most fields say `None configured`. Fill them with `autoMode.environment`.
-The built-in list has the 21 entries below, one per field label. Write each entry of your own as `Field: text`. With `$defaults` in the list, the program puts the built-in entries where `$defaults` is and adds each of your entries as a separate line. It does not compare field labels, so your entry does not replace the built-in entry for the same field (the program, `chunk-3dhh2g49.js`).
+The built-in list has the 21 entries below, one per field label. Write each entry of your own as `Field: text`. With `$defaults` in the list, Claude Code puts the built-in entries where `$defaults` is and adds each of your entries as a separate line. It does not compare field labels, so your entry does not replace the built-in entry for the same field.[^environment]
 
 | Field | Status | Default text |
 | --- | --- | --- |
@@ -166,3 +166,8 @@ The built-in list has the 21 entries below, one per field label. Write each entr
 
 - [Auto Mode](auto-mode.md)
 - [Permission Rules](rules.md)
+
+## Sources
+
+[^scheduled]: The program, `chunk-rqvvpwt0.js`.
+[^environment]: The program, `chunk-3dhh2g49.js`.

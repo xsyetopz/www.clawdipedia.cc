@@ -4,13 +4,23 @@ description: The default keys of the Global, Chat, Autocomplete, Confirmation, H
 sidebar_position: 2
 ---
 
+These are the keys that Claude Code binds before it reads your `keybindings.json`.[^defaults] Use this page to find the key of an action before you rebind it. See [Keybindings](index.md) for the file format.
+
+## Example
+
+This block frees `ctrl+s` in `Chat`, which the table below binds to `chat:stash`.
+
+```json title="~/.claude/keybindings.json"
+{
+  "bindings": [{ "context": "Chat", "bindings": { "ctrl+s": null } }]
+}
+```
+
 ## Default Keys by Context
 
-The program holds these defaults. Your file overrides them.
-Two contexts have no default key in this list. They are `ProactivityMenu` and `MessageSelector`.
-Two defaults depend on the platform:
+Your file overrides these defaults. Two contexts have no default key in this list: `ProactivityMenu` and `MessageSelector`. Two defaults depend on the platform:
 
-- `chat:cycleMode` and `confirm:cycleMode` use `shift+tab`. On Windows with an older runtime, the program uses `meta+m` instead.
+- `chat:cycleMode` and `confirm:cycleMode` use `shift+tab`. On Windows with an older runtime, they use `meta+m` instead.
 - `chat:imagePaste` uses `ctrl+v`. On Windows and WSL it uses `alt+v`. WSL keeps `ctrl+v` too.
 
 ### `Global`
@@ -202,3 +212,7 @@ Two defaults depend on the platform:
 ## Related Pages
 
 - [Keybindings](index.md) lists the contexts and shows how to write `keybindings.json`.
+
+## Sources
+
+[^defaults]: The program.

@@ -4,9 +4,21 @@ description: The provider switches, endpoint and region variables, provider mode
 sidebar_position: 4
 ---
 
+Claude Code talks to the Anthropic API by default. Set an environment variable to send requests to Amazon Bedrock, Google Cloud Agent Platform (Vertex), Microsoft Foundry, or another provider instead. Use this page to find the switch, the endpoint and region variables, and the model name that each provider uses.
+
+## Example
+
+```bash
+export CLAUDE_CODE_USE_BEDROCK=1
+export AWS_REGION=us-east-1
+claude --model sonnet
+```
+
+Claude Code sends this session to Amazon Bedrock in `us-east-1`.
+
 ## Providers
 
-The program knows these provider keys: `first_party`, `bedrock`, `vertex`, `foundry`, `anthropic_aws`, `anthropic_google_cloud`, `mantle`, and `gateway`.
+Claude Code knows these provider keys: `first_party`, `bedrock`, `vertex`, `foundry`, `anthropic_aws`, `anthropic_google_cloud`, `mantle`, and `gateway`.[^keys]
 These environment variables choose the provider.
 When you set several, the order is: gateway, Bedrock, Foundry, Claude Platform on AWS, Google Cloud, Mantle, Vertex.
 
@@ -106,10 +118,14 @@ Since `2.1.322`, fast mode on Vertex needs the region `global`, `us`, or `eu`. S
 ### Gateways
 
 A gateway is a server between Claude Code and a model API.
-Set `ANTHROPIC_BASE_URL` to point at it. That variable changes where requests go, not which model answers.
+Set `ANTHROPIC_BASE_URL` to point at it. This variable changes where requests go. It does not choose the model.
 Pin the model IDs the gateway serves with the `ANTHROPIC_DEFAULT_*_MODEL` variables. Let the picker find them with `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1`.
 A gateway that does not serve `claude-fable-5-1` rejects it, so the `fable` alias falls back to `claude-fable-5` on gateways.
 
 ## Related Pages
 
 - [Models and Providers](index.md) lists the pages of this section and shows an example.
+
+## Sources
+
+[^keys]: The program.

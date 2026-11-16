@@ -4,10 +4,21 @@ description: Actions that have no default key, keys that Claude Code will not le
 sidebar_position: 4
 ---
 
+Some actions have no default key, and some keys Claude Code does not let you rebind. This page lists both, so you know what you can bind in `keybindings.json`. It also covers click to send and the vim operators with `gj` and `gk`.
+
+## Example
+
+This block binds the unbound action `app:redraw` to `ctrl+x r` in the `Global` context.
+
+```json title="~/.claude/keybindings.json"
+{
+  "bindings": [{ "context": "Global", "bindings": { "ctrl+x r": "app:redraw" } }]
+}
+```
+
 ## Actions without a Default Key
 
-The program lists these actions as valid, but its default keys do not bind them.
-You can bind them in `keybindings.json`.
+Claude Code accepts these actions, but no default key binds them.[^unbound] You can bind them in `keybindings.json`.
 
 | Action | Status |
 | --- | --- |
@@ -54,23 +65,17 @@ You can bind them in `keybindings.json`.
 
 New in `2.1.319`. Context: `SessionTabs`. Default key: none.
 The footer reads the key you bind for `app:closeSession` in `SessionTabs` and shows a close confirmation when you press it twice.
-The context is active only when the program draws session tabs. A plain terminal session does not.
+The context is active only when Claude Code draws session tabs. A plain terminal session does not.
 
-Hypothesis: `keybindings.json` accepts the binding but a plain terminal session never makes it active.
-Prediction: no validation warning, and no keybinding line after two presses of `ctrl+g`.
-Command: `bun run release:probe:pty -- --to 2.1.319 --only cli319.keybinding`.
-Result: with `{"context": "SessionTabs", "bindings": {"ctrl+g": "app:closeSession"}}` the debug log shows "Loaded 1 user bindings" and "0 warnings", and the log holds no keybinding line after the two presses of `ctrl+g`.
-Two controls warn: an unknown action ("Unknown action ... in SessionTabs - this binding is ignored") and an unknown context ("Unknown context ... Valid contexts: ...").
-Cases: `pty.cli319.keybinding.session-tabs`, `pty.cli319.keybinding.control-bad-action`, `pty.cli319.keybinding.control-bad-context`.
-Read site: the footer code calls `getDisplayText("app:closeSession", "SessionTabs")`, and the context list in the keybinding schema names `SessionTabs`.
+`keybindings.json` accepts the binding, but a plain terminal session never makes it active. With `{"context": "SessionTabs", "bindings": {"ctrl+g": "app:closeSession"}}` the debug log shows "Loaded 1 user bindings" and "0 warnings", and holds no keybinding line after two presses of `ctrl+g`. An unknown action warns "Unknown action ... in SessionTabs - this binding is ignored". An unknown context warns "Unknown context ... Valid contexts: ...".[^close-session]
 
 ## Keys You Cannot Rebind
 
-The program refuses some keys and warns about others.
+Claude Code refuses some keys and warns about others.[^reserved]
 
-| Key | Result | Reason in the program |
+| Key | Result | Reason |
 | --- | --- | --- |
-| `ctrl+c`, `ctrl+d` | Error | The program hardcodes them for interrupt and exit. |
+| `ctrl+c`, `ctrl+d` | Error | Claude Code hardcodes them for interrupt and exit. |
 | `ctrl+m` | Error | It is the same as `enter` in terminals. |
 | `ctrl+[` | Error | It is the same as `escape` in terminals. |
 | `ctrl+i` | Error | It is the same as `tab` in terminals. |
@@ -86,17 +91,26 @@ A queued message shows a hint under the prompt. In fullscreen rendering with mou
 
 | Input | Status | What it does | Notes |
 | --- | --- | --- | --- |
-| Click on the "send now" hint | <Undocumented /> | Sends the queued message at once. | Since `2.1.312`. The program needs mouse mode `full`, so `CLAUDE_CODE_DISABLE_MOUSE` and `CLAUDE_CODE_DISABLE_MOUSE_CLICKS` both stop the click. The program reports the click as `chat:sendNowHintPress`. Source: `chunk-1xmjf4e6.js` lines 8948 and 9341 to 9374. |
-| Hint text | <Undocumented /> | Names the key for `chat:sendNow`, or reads "click to send now" when no key is bound to it. | Since `2.1.312`. With no key bound, the hint shows only in mouse mode `full`. Source: `chunk-1xmjf4e6.js` lines 9498 to 9522. |
+| Click on the "send now" hint | <Undocumented /> | Sends the queued message at once. | Since `2.1.312`. The click needs mouse mode `full`, so `CLAUDE_CODE_DISABLE_MOUSE` and `CLAUDE_CODE_DISABLE_MOUSE_CLICKS` both stop it.[^click-send] |
+| Hint text | <Undocumented /> | Names the key for `chat:sendNow`, or reads "click to send now" when no key is bound to it. | Since `2.1.312`. With no key bound, the hint shows only in mouse mode `full`.[^hint-text] |
 
 ## Vim Mode Operators with `gj` And `gk`
 
-Vim keys of the input prompt are not in `keybindings.json`. The setting `editorMode` turns them on. See [Interface Settings](../settings/ui.md).
+The vim keys of the input prompt are not in `keybindings.json`. The setting `editorMode` turns them on. See [Interface Settings](../settings/ui.md).
 
 | Input | Status | What it does | Notes |
 | --- | --- | --- | --- |
-| `d`, `c`, or `y` with `gj` or `gk` and a count | <Undocumented /> | When the count is larger than the display lines left, the keys only move the cursor. | Since `2.1.312`. Before, the keys could delete or copy text. The program tests the count against the wrapped lines below the cursor for `gj` and above it for `gk`. Source: `chunk-wjynqhds.js` lines 327 to 332 and 812. |
+| `d`, `c`, or `y` with `gj` or `gk` and a count | <Undocumented /> | When the count is larger than the display lines left, the keys only move the cursor. | Since `2.1.312`. Before, the keys could delete or copy text. Claude Code tests the count against the wrapped lines below the cursor for `gj` and above it for `gk`.[^vim-count] |
 
 ## Related Pages
 
 - [Keybindings](index.md) lists the contexts and shows how to write `keybindings.json`.
+
+## Sources
+
+[^unbound]: The program lists these actions as valid, and its default keys do not bind them.
+[^close-session]: The program. Probe cases `pty.cli319.keybinding.session-tabs`, `pty.cli319.keybinding.control-bad-action`, and `pty.cli319.keybinding.control-bad-context`, run with `bun run release:probe:pty -- --to 2.1.319 --only cli319.keybinding`. The footer code calls `getDisplayText("app:closeSession", "SessionTabs")`, and the context list in the keybinding schema names `SessionTabs`.
+[^reserved]: The program.
+[^click-send]: The program reports the click as `chat:sendNowHintPress`. `chunk-1xmjf4e6.js` lines 8948 and 9341 to 9374.
+[^hint-text]: The program, `chunk-1xmjf4e6.js` lines 9498 to 9522.
+[^vim-count]: The program, `chunk-wjynqhds.js` lines 327 to 332 and 812.
