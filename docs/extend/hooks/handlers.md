@@ -4,16 +4,13 @@ description: The five hook handler types, command, http, mcp_tool, prompt, and a
 sidebar_position: 3
 ---
 
-A handler is the part of a hook that does the work.
-It can run a command, call a URL, call an MCP tool, ask a model, or start a subagent.
-The `type` key picks which one.
-For example, `{"type": "command", "command": "./check.sh"}` runs a script.
+A handler is the part of a hook that does the work. It can run a command, call a URL, call an MCP tool, ask a model, or start a subagent. Pick the kind with the `type` key. For example, `{"type": "command", "command": "./check.sh"}` runs a script.[^hooks-reference]
 
-To disable a handler, remove the entry or use `disableAllHooks`.
+To turn a handler off, remove the entry or set `disableAllHooks`.
 
 ## Example
 
-An HTTP hook that posts every `Stop` event to a local service.
+This HTTP hook posts every `Stop` event to a local service.
 
 ```json title=".claude/settings.json"
 {
@@ -43,7 +40,7 @@ Claude Code fills only names in `allowedEnvVars` into headers. Other references 
 | --- | --- | --- | --- |
 | `command` | <Documented /> | Runs a shell command or an executable. Input on `stdin`. Result by exit code, `stdout`, and `stderr`. | All 33 events. |
 | `http` | <Documented /> | Sends the input as JSON in a POST to a URL. The result is the response body, and needs a 2xx status. | 31 events. Not `SessionStart` and not `Setup`. |
-| `mcp_tool` | <Documented /> | Calls a tool on a configured MCP server. Claude Code reads the text result like `stdout`. A result with `isError: true` is a non-blocking error. A `PreToolUse` hook on a stdio or HTTP MCP server whose answer is over 16 MiB now makes Claude Code refuse the tool call, not skip the hook ([2.1.321 notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321)). The program has an MCP answer limit of `16777216` bytes (`chunk-sstb45zf.js:1310`), and the hook error path reports a message from the server that was too large (`chunk-2x9ma4k7.js:3861419`). | 33 events. Claude Code skips it on `Setup`, and on `SessionStart` when Claude Code starts. |
+| `mcp_tool` | <Documented /> | Calls a tool on a configured MCP server. Claude Code reads the text result like `stdout`. A result with `isError: true` is a non-blocking error. A `PreToolUse` hook on a stdio or HTTP MCP server whose answer is over 16 MiB now makes Claude Code refuse the tool call, not skip the hook. The MCP answer limit is `16777216` bytes, and the hook error path reports a message from the server that was too large.[^mcp-limit] | 33 events. Claude Code skips it on `Setup`, and on `SessionStart` when Claude Code starts. |
 | `prompt` | <Documented /> | One model call that returns `ok`. | 12 events, plus `PermissionRequest`. |
 | `agent` | <Documented /> <Experimental /> | A subagent that checks a condition. Up to 50 turns. Experimental, and the docs say it may change. | 12 events. Not `PermissionRequest`. |
 | `callback` | <Undocumented /> | A function that an SDK host or a mod registers. | Events that run device hooks. It is not a config key. |
@@ -53,8 +50,7 @@ The 12 events of `prompt` and `agent` are `PermissionDenied`, `PostToolBatch`, `
 `SessionStart` and `Setup` accept `command` and `mcp_tool` only.
 
 :::warning
-A `script` hook never runs in `2.1.305`. Worse, one `script` entry under `PreToolUse` turns off every hook in that settings file.
-Source: a probe of the program (see [Probes](../../reference/probes.md)).
+A `script` hook never runs in `2.1.305`. One `script` entry under `PreToolUse` also turns off every hook in that settings file.[^script-probe] See [Probes](../../reference/probes.md).
 :::
 
 ## Common Fields
@@ -73,10 +69,10 @@ Source: a probe of the program (see [Probes](../../reference/probes.md)).
 | --- | --- | --- | --- |
 | `command` | <Documented /> | The command string, or the program to run when you set `args`. | Shell form uses `sh -c`, Git Bash, or PowerShell. |
 | `args` | <Documented /> | An argument list for exec form. | No shell runs. Claude Code replaces placeholders in `command` and in each element. |
-| `shell` | <Documented /> | `bash` or `powershell`. | Claude Code ignores it when you set `args`. With `powershell`, Claude Code adds `; if (-not $?) { if ($LASTEXITCODE -eq 2) { exit 2 } }` after the command, so exit code 2 blocks. It does not add it for `PermissionRequest`. It also does not add it when the command starts with `using`, `param(`, a `[type]` cast or attribute, or a named block, and also has a `begin`, `process`, `end`, `clean`, or `dynamicparam` block. Before `2.1.316`, any of those starts was enough to leave it out, so exit code 2 did not block (the program, `chunk-2x9ma4k7.js`). |
+| `shell` | <Documented /> | `bash` or `powershell`. | Claude Code ignores it when you set `args`. With `powershell`, Claude Code adds `; if (-not $?) { if ($LASTEXITCODE -eq 2) { exit 2 } }` after the command, so exit code 2 blocks. It does not add it for `PermissionRequest`. It also does not add it when the command starts with `using`, `param(`, a `[type]` cast or attribute, or a named block, and also has a `begin`, `process`, `end`, `clean`, or `dynamicparam` block. Before `2.1.316`, any of those starts was enough to leave it out, so exit code 2 did not block.[^powershell-suffix] |
 | `async` | <Documented /> | Runs in the background. | Claude Code does not enforce `timeout`. The hook cannot block. Output arrives on the next turn. |
 | `asyncRewake` | <Documented /> | A background run that wakes the model on exit 2. | `stderr` (or `stdout` if `stderr` is empty) becomes a system reminder. `timeout` still applies. Implies `async`. |
-| `onFailure` | <Documented /> | `continue` or `block`. | Needs 2.1.295. See [Configuration](configuration.md#failure-handling). Also works on `http`. |
+| `onFailure` | <Documented /> | `continue` or `block`. | Needs `2.1.295`. See [Configuration](configuration.md#failure-handling). Also works on `http`. |
 | `rewakeMessage` | <Undocumented /> | A custom prefix for the system reminder of `asyncRewake`. | An internal field. |
 | `rewakeSummary` | <Undocumented /> | A one-line summary that Claude Code shows to you for `asyncRewake`. | An internal field. Default text is `Stop hook feedback`. |
 | `cloud` | <Undocumented /> | `device` or `skip` for cloud sessions that this machine drives. | An internal field. An unknown value reads as `skip`. Also works on `http`. |
@@ -86,7 +82,7 @@ Source: a probe of the program (see [Probes](../../reference/probes.md)).
 | Field | Status | What it does | Notes |
 | --- | --- | --- | --- |
 | `url` | <Documented /> | The POST target. | Must pass `allowedHttpHookUrls` when that setting exists. |
-| `headers` | <Documented /> | Extra request headers. | Claude Code replaces `$VAR` and `${VAR}` only for names in `allowedEnvVars`. Since `2.1.326`, it drops `Content-Length` and `Transfer-Encoding` and writes a warning to the debug log, because it works out the request length from the body (the program, `chunk-4h798pp0.js:200461`; [`2.1.326` notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326)). |
+| `headers` | <Documented /> | Extra request headers. | Claude Code replaces `$VAR` and `${VAR}` only for names in `allowedEnvVars`. Since `2.1.326`, it drops `Content-Length` and `Transfer-Encoding` and writes a warning to the debug log, because it works out the request length from the body.[^headers] |
 | `allowedEnvVars` | <Documented /> | Names that Claude Code may replace in headers. | Other references become empty strings. `httpHookAllowedEnvVars` narrows the list. |
 | `onFailure` | <Documented /> | `continue` or `block`. | A non-2xx status or a connection error counts as a failure. |
 
@@ -98,9 +94,7 @@ Source: a probe of the program (see [Probes](../../reference/probes.md)).
 | `tool` | <Documented /> | The tool to call. | A string. |
 | `input` | <Documented /> | The tool arguments. | String values accept `${path}` from the hook input, such as `${tool_input.file_path}`. |
 
-On events that can block, Claude Code waits for a server that is still connecting.
-The wait lasts at most `MCP_TIMEOUT` and the hook `timeout`.
-On observer events, it does not wait.
+On events that can block, Claude Code waits for a server that is still connecting. The wait lasts at most `MCP_TIMEOUT` and the hook `timeout`. On observer events, it does not wait.
 
 ## Prompt and Agent Fields
 
@@ -115,18 +109,15 @@ On observer events, it does not wait.
 
 ## Prompt Hooks on `Stop` And `SubagentStop`
 
-On `Stop` and `SubagentStop`, the program wraps the `prompt` as a stopping condition that the model judges on transcript evidence only (the program, `chunk-2x9ma4k7.js`).
-The model must answer with a JSON object. `ok` and `reason` are required, and `impossible` is optional.
-On a repeat block, the feedback to Claude holds the hook prompt in square brackets, then the `reason`.
-Claude Code cuts the bracketed prompt to 500 characters on a repeat.
+On `Stop` and `SubagentStop`, Claude Code wraps the `prompt` as a stopping condition that the model judges on transcript evidence only.[^stop-wrap] The model must answer with a JSON object. `ok` and `reason` are required, and `impossible` is optional. On a repeat block, the feedback to Claude holds the hook prompt in square brackets, then the `reason`. Claude Code cuts the bracketed prompt to 500 characters on a repeat.
 
-The turn ends after a number of consecutive blocks. The default is 8. `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` sets it, and a value of 0 or less removes the cap. The program prints a warning when the cap ends the turn (the program, `chunk-fxkn94rg.js`).
-When the cap ends the turn in a subagent or a teammate, Claude Code does not show the notice to you. Only the main session shows it (the program, `chunk-fxkn94rg.js`). So a subagent can end with no sign in the parent.
+The turn ends after a number of consecutive blocks. The default is 8. `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` sets it, and a value of 0 or less removes the cap. Claude Code prints a warning when the cap ends the turn.[^stop-cap] When the cap ends the turn in a subagent or a teammate, Claude Code does not show the notice to you. Only the main session shows it. So a subagent can end with no sign in the parent.
+
 A timeout, an API error, a reply that is not JSON, and a reply that fails the schema all leave the stop alone. The hook fails open. See the next section.
 
 ## Calls of `prompt` And `agent` Hooks
 
-Source: the program (`chunk-2x9ma4k7.js`). All rows are <Undocumented />, except where a note says otherwise.
+All rows are <Undocumented />, except where a note says otherwise.[^calls]
 
 | Item | `prompt` hook | `agent` hook |
 | --- | --- | --- |
@@ -139,7 +130,7 @@ Source: the program (`chunk-2x9ma4k7.js`). All rows are <Undocumented />, except
 | Tools | None. | The tools of the session, minus some, in `dontAsk` mode. A `Read` of the transcript file is allowed. |
 | Turn cap | One call. | 50 assistant turns. Then the hook is `cancelled`, and it does not block. |
 
-- On a stop event, the transcript is cut to fit. The program keeps the newest messages up to half of the window of the evaluator model. It puts a note first that says how many earlier messages it left out. The note tells the model to answer `insufficient evidence in transcript` when the proof may be in the part that was cut.
+- On a stop event, the transcript is cut to fit. Claude Code keeps the newest messages up to half of the window of the evaluator model. It puts a note first that says how many earlier messages it left out. The note tells the model to answer `insufficient evidence in transcript` when the proof may be in the part that was cut.
 - If the evaluator says the prompt is too long, Claude Code tries once more with a smaller share of the window.
 - An API error, a reply that is not JSON, a reply that fails the schema, and any other error give a non-blocking error. The stop or the tool call goes on.
 - A timeout gives the outcome `cancelled`. Nothing blocks.
@@ -148,17 +139,19 @@ Source: the program (`chunk-2x9ma4k7.js`). All rows are <Undocumented />, except
 
 ## Prompt and Agent Concurrency
 
-Since `2.1.312`, the program limits how many `prompt` and `agent` hooks run at the same time.
-The limits do not cover `command`, `http`, or `mcp_tool` hooks.
+Since `2.1.312`, Claude Code limits how many `prompt` and `agent` hooks run at the same time. The limits do not cover `command`, `http`, or `mcp_tool` hooks.
 
 | Limit | Status | What it does | Notes |
 | --- | --- | --- | --- |
-| 24 at a time | <Documented /> | At most 24 `prompt` and `agent` hooks run at once. | The program counts them per session host, not per agent. A hook over the limit waits for a free place. |
+| 24 at a time | <Documented /> | At most 24 `prompt` and `agent` hooks run at once. | Claude Code counts them per session host, not per agent. A hook over the limit waits for a free place. |
 | 12 overdue | <Documented /> | At most 12 more run when they waited longer than the timeout of their event. | These hooks use a second count of 12. It is separate from the first. |
-| 12 per event | <Undocumented /> | When one event starts several of these hooks, at most 12 start together. | The program also uses this number to size the time budget of the event. |
+| 12 per event | <Undocumented /> | When one event starts several of these hooks, at most 12 start together. | Claude Code also uses this number to size the time budget of the event. |
 
-Source: the program (`chunk-2x9ma4k7.js:1136462` in `2.1.323`, the constants 12, 24, and 12 and the `model hooks` and `overdue model hooks` counts).
-We did not trace that a subagent shares the session host of its parent.
+The sources do not show whether a subagent shares the session host of its parent.[^concurrency]
+
+## Cloud Sessions
+
+Cloud sessions forward only your own hooks of kind `command` and `http` from user settings, `settings.local.json`, or `--settings`. They never forward `prompt`, `agent`, or `mcp_tool` hooks, or plugin or managed hooks. A device client registers up to 128 hooks with a lease of 60 to 3600 seconds (600 by default). The cloud worker calls back with `hook_callback`.[^cloud]
 
 ## Related Pages
 
@@ -166,5 +159,15 @@ We did not trace that a subagent shares the session host of its parent.
 - [Configuration](configuration.md): matchers, `if`, timeouts, and failure handling.
 - [Input and Output](input-and-output.md): what each handler can answer.
 
-Source: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the program (handler schemas for `command`, `prompt`, `mcp_tool`, `http`, and `agent`).
-Cloud sessions forward only your own hooks of kind `command` and `http` from user settings, `settings.local.json`, or `--settings`. They never forward `prompt`, `agent`, or `mcp_tool` hooks, or plugin or managed hooks. A device client registers up to 128 hooks with a lease of 60 to 3600 seconds (600 by default). The cloud worker calls back with `hook_callback`. We read these rules in the program. We did not run them, because a cloud session needs a login (needs a cloud session, not run).
+## Sources
+
+[^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the program (handler schemas for `command`, `prompt`, `mcp_tool`, `http`, and `agent`).
+[^mcp-limit]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-sstb45zf.js:1310` for the limit and `chunk-2x9ma4k7.js:3861419` for the hook error path.
+[^script-probe]: A probe of the program.
+[^powershell-suffix]: The program, `chunk-2x9ma4k7.js`.
+[^headers]: The program, `chunk-4h798pp0.js:200461`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^stop-wrap]: The program, `chunk-2x9ma4k7.js`.
+[^stop-cap]: The program, `chunk-fxkn94rg.js`, for the warning and for the main-session-only notice.
+[^calls]: The program, `chunk-2x9ma4k7.js`.
+[^concurrency]: The program, `chunk-2x9ma4k7.js:1136462` in `2.1.323`: the constants 12, 24, and 12 and the `model hooks` and `overdue model hooks` counts. We did not trace that a subagent shares the session host of its parent.
+[^cloud]: We read these rules in the program. We did not run them, because a cloud session needs a login.

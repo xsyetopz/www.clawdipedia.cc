@@ -4,16 +4,15 @@ description: The session, prompt, and turn hook events, when each fires, what in
 sidebar_position: 6
 ---
 
+These hook events cover the life of a session and each turn in it. Use them to add context at start, to check or block a prompt, to react to a notification, or to keep Claude working when it stops. Turn one on by adding its key to the `hooks` map. See the [Hooks Reference](https://code.claude.com/docs/en/hooks) for the official fields.
+
 ## Session Events
 
 These events fire when a session starts or ends, and when its settings, files, or folders change.
 
 ### `SessionStart`
 
-Fires when a session starts or resumes.
-Interactive starts run it in the background, but the first reply waits for it.
-Exit 2 shows `stderr` to you only.
-Handlers: `command` and `mcp_tool` (skipped when Claude Code starts).
+Fires when a session starts or resumes. Interactive starts run it in the background, but the first reply waits for it. Exit 2 shows `stderr` to you only. Handlers: `command` and `mcp_tool` (skipped when Claude Code starts).
 
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
@@ -21,7 +20,7 @@ Handlers: `command` and `mcp_tool` (skipped when Claude Code starts).
 | `model` | <Documented /> | Input | The active model ID. Can be missing, for example after `/clear`. |
 | `agent_type` | <Documented /> | Input | The agent name from `--agent`. Optional. |
 | `session_title` | <Documented /> | Input | The custom title. Present only when one exists. |
-| `seconds_since_last_response`, `context_tokens`, `prompt_cache_likely_expired`, `estimated_cache_write_usd` | <Documented /> | Input | The cost of a stale resume. Only for `resume` and `fork` with an earlier reply. Needs 2.1.251. |
+| `seconds_since_last_response`, `context_tokens`, `prompt_cache_likely_expired`, `estimated_cache_write_usd` | <Documented /> | Input | The cost of a stale resume. Only for `resume` and `fork` with an earlier reply. Needs `2.1.251`. |
 | `additionalContext` | <Documented /> | Output, in `hookSpecificOutput` | Text before the first prompt. Plain `stdout` works too. |
 | `initialUserMessage` | <Documented /> | Output | The first user message. Only in `-p`. From a plugin it works only if the plugin was installed before the start. |
 | `sessionTitle` | <Documented /> | Output | Sets the title. Works for `startup`, `resume`, `fork`. Same as `/rename`. |
@@ -30,9 +29,7 @@ Handlers: `command` and `mcp_tool` (skipped when Claude Code starts).
 
 ### `Setup`
 
-Fires for `--init-only`, or for `--init` or `--maintenance` with `-p`. It does not fire on a normal start.
-`--init-only` also runs `SessionStart` with `startup`.
-Handler: `command` only.
+Fires for `--init-only`, or for `--init` or `--maintenance` with `-p`. It does not fire on a normal start. `--init-only` also runs `SessionStart` with `startup`. Handler: `command` only.
 
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
@@ -43,9 +40,7 @@ Handler: `command` only.
 
 ### `SessionEnd`
 
-Fires when a session ends.
-The budget is 1.5 seconds for all hooks together. Exit 2 shows `stderr` to you. Claude Code drops JSON.
-Handlers: `command`, `http`, `mcp_tool`.
+Fires when a session ends. The budget is 1.5 seconds for all hooks together. Exit 2 shows `stderr` to you. Claude Code drops JSON. Handlers: `command`, `http`, `mcp_tool`.
 
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
@@ -53,9 +48,7 @@ Handlers: `command`, `http`, `mcp_tool`.
 
 ### `InstructionsLoaded`
 
-Fires when `CLAUDE.md` or a `.claude/rules/*.md` file loads.
-It runs async and has no decision. It does not fire for an `AGENTS.md` file read directly.
-Handlers: `command`, `http`, `mcp_tool`.
+Fires when `CLAUDE.md` or a `.claude/rules/*.md` file loads. It runs async and has no decision. It does not fire for an `AGENTS.md` file read directly. Handlers: `command`, `http`, `mcp_tool`.
 
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
@@ -66,10 +59,7 @@ Handlers: `command`, `http`, `mcp_tool`.
 
 ### `ConfigChange`
 
-Fires when a settings, managed policy, or skill file changes.
-It does not fire for server-managed or MDM changes.
-Exit 2 or `decision: "block"` stops the change, except for `policy_settings`.
-Handlers: `command`, `http`, `mcp_tool`.
+Fires when a settings, managed policy, or skill file changes. It does not fire for server-managed or MDM changes. Exit 2 or `decision: "block"` stops the change, except for `policy_settings`. Handlers: `command`, `http`, `mcp_tool`.
 
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
@@ -79,10 +69,7 @@ Handlers: `command`, `http`, `mcp_tool`.
 
 ### `CwdChanged`
 
-Fires when a shell command in the main conversation changes the directory.
-It has no matcher and cannot block.
-Claude Code clears `CLAUDE_ENV_FILE` at the next event.
-Handlers: `command`, `http`, `mcp_tool`.
+Fires when a shell command in the main conversation changes the directory. It has no matcher and cannot block. Claude Code clears `CLAUDE_ENV_FILE` at the next event. Handlers: `command`, `http`, `mcp_tool`.
 
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
@@ -91,11 +78,7 @@ Handlers: `command`, `http`, `mcp_tool`.
 
 ### `FileChanged`
 
-Fires when a watched file changes on disk.
-A file watcher drives it, not tool calls.
-The matcher names the files to watch, and Claude Code filters by base name.
-It cannot block.
-Handlers: `command`, `http`, `mcp_tool`.
+Fires when a watched file changes on disk. A file watcher drives it, not tool calls. The matcher names the files to watch, and Claude Code filters by base name. It cannot block. Handlers: `command`, `http`, `mcp_tool`.
 
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
@@ -105,10 +88,7 @@ Handlers: `command`, `http`, `mcp_tool`.
 
 ### `DirectoryAdded`
 
-Fires after `/add-dir`, or after the SDK `register_repo_root` request.
-It runs in the background with a 600 second timeout.
-It does not fire for `--add-dir`, `/permissions`, or a directory Claude Code already knows.
-Handlers: `command`, `http`, `mcp_tool`.
+Fires after `/add-dir`, or after the SDK `register_repo_root` request. It runs in the background with a 600 second timeout. It does not fire for `--add-dir`, `/permissions`, or a directory Claude Code already knows. Handlers: `command`, `http`, `mcp_tool`.
 
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
@@ -121,11 +101,7 @@ These events fire around a turn: when you send a prompt, while text shows, when 
 
 ### `UserPromptSubmit`
 
-Fires when you submit a prompt, before Claude reads it.
-It has no matcher. It also fires for scheduled tasks, background subagent reports, and messages from other sessions.
-The default timeout is 30 seconds.
-Exit 2 blocks the prompt. Claude Code adds plain `stdout` as context.
-Handlers: all five types.
+Fires when you submit a prompt, before Claude reads it. It has no matcher. It also fires for scheduled tasks, background subagent reports, and messages from other sessions. The default timeout is 30 seconds. Exit 2 blocks the prompt. Claude Code adds plain `stdout` as context. Handlers: all five types.
 
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
@@ -139,11 +115,7 @@ Handlers: all five types.
 
 ### `UserPromptExpansion`
 
-Fires when a typed command expands into a prompt.
-The matcher is `command_name`.
-It covers typing `/skill`, which skips `PreToolUse`.
-Exit 2 blocks. Plain `stdout` is context.
-Handlers: all five types.
+Fires when a typed command expands into a prompt. The matcher is `command_name`. It covers typing `/skill`, which skips `PreToolUse`. Exit 2 blocks. Plain `stdout` is context. Handlers: all five types.
 
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
@@ -155,11 +127,7 @@ Handlers: all five types.
 
 ### `MessageDisplay`
 
-Fires while assistant text streams, once for each batch of finished lines.
-It has no matcher. The timeout is 10 seconds.
-It only changes what you see. The transcript and Claude keep the original.
-In `-p` mode it runs once with the full text.
-Handlers: `command`, `http`, `mcp_tool`.
+Fires while assistant text streams, once for each batch of finished lines. It has no matcher. The timeout is 10 seconds. It only changes what you see. The transcript and Claude keep the original. In `-p` mode it runs once with the full text. Handlers: `command`, `http`, `mcp_tool`.
 
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
@@ -170,44 +138,36 @@ Handlers: `command`, `http`, `mcp_tool`.
 
 ### `Notification`
 
-Fires when Claude Code sends a notification.
-The matcher is the notification type.
-It runs even if desktop notifications are off.
-Claude Code ignores the exit code and `stderr`, but `terminalSequence` still works.
-Handlers: `command`, `http`, `mcp_tool`.
+Fires when Claude Code sends a notification. The matcher is the notification type. It runs even if desktop notifications are off. Claude Code ignores the exit code and `stderr`, but `terminalSequence` still works. Handlers: `command`, `http`, `mcp_tool`.
 
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
 | `message`, `title`, `notification_type` | <Documented /> | Input | The text, an optional title, and the type. |
-| `permission_prompt` | <Documented /> | Type | A prompt waited about 6 seconds. Seen live in the interactive screen (2.1.305) with the message `Claude needs your permission`. |
+| `permission_prompt` | <Documented /> | Type | A prompt waited about 6 seconds. Seen live in the interactive screen (`2.1.305`) with the message `Claude needs your permission`. |
 | `idle_prompt` | <Documented /> | Type | The session was idle for about 60 seconds. Both depend on typing and running agents. Seen live: the message was `Claude is waiting for your input`, about 60 seconds after the turn ended (the config key `messageIdleNotifThresholdMs` sets the 60 seconds, default 60000). |
 | `auth_success`, `elicitation_dialog`, `elicitation_url_dialog`, `elicitation_complete`, `elicitation_response` | <Documented /> | Type | Auth finished, and the steps of an MCP question. The two dialog types wait 6 seconds. Seen live in the interactive screen: all four `elicitation_*` values (messages `Claude Code needs your input` for the two dialogs, `Elicitation response for server "probe": accept`, and `MCP server "probe" confirmed elicitation el-1 complete`). `auth_success` needs a login and was not seen. |
-| `agent_needs_input`, `agent_completed` | <Documented /> | Type | Background session events in agent view. `agent_needs_input` for a teammate setup question needs 2.1.248. `agent_needs_input` was seen live on 2.1.319 for the dialog `Auto mode can't check actions in this session` (message `Auto mode can't check actions in this session and needs your choice`). Auto mode shows that dialog with a custom base URL that gives no server-side verdict, or that refuses the dangerous-tool-use beta with HTTP 400 (cases `pty.notifications.agent-needs-input` and `-refused`). Up to 2.1.316, the classifier billing notice fired it with the message `Auto mode has a classifier billing notice to acknowledge`. `agent_completed` was not seen (it needs a background session). |
-| `quota_auto_resume_fired`, `quota_auto_resume_stale`, `quota_auto_resume_disabled` | <Documented /> | Type | Usage limit wait events. Need 2.1.234. Not seen live: they need a login. |
+| `agent_needs_input`, `agent_completed` | <Documented /> | Type | Background session events in agent view. `agent_needs_input` for a teammate setup question needs `2.1.248`. `agent_needs_input` was seen live on `2.1.319` for the dialog `Auto mode can't check actions in this session` (message `Auto mode can't check actions in this session and needs your choice`). Auto mode shows that dialog with a custom base URL that gives no server-side verdict, or that refuses the dangerous-tool-use beta with HTTP 400.[^agent-needs-input] Up to `2.1.316`, the classifier billing notice fired it with the message `Auto mode has a classifier billing notice to acknowledge`. `agent_completed` was not seen (it needs a background session). |
+| `quota_auto_resume_fired`, `quota_auto_resume_stale`, `quota_auto_resume_disabled` | <Documented /> | Type | Usage limit wait events. Need `2.1.234`. Not seen live: they need a login. |
 | `plugin_notification` | <Undocumented /> | Type | The mod call `$.ui.notify` sends it. Seen live: the hook got `message`, `title`, and `notification_type`, even with no notification channel. |
 | `auth_storage_failure` | <Undocumented /> | Type | Sent after the OAuth token exchange, when saving the credentials fails. Not seen live. Message: `Claude Code login needs attention: credentials may not have been saved`, or `Claude Code login needs attention: credentials could not be saved`. |
-| `worker_permission_prompt` | <Undocumented /> <Gated note="Set CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 or use --agent-teams" /> | Type | Sent by the team lead's inbox poller when a teammate asks for permission. Needs agent teams and at least one teammate. It fires only when the lead is idle and shows no dialog. Seen live: the message was `A subagent needs permission for Bash`, with no `title`. A normal `permission_prompt` followed when the dialog showed. The message `<worker> needs network access to <host>` comes from the program and was not run. |
-| `push_notification` | <Undocumented /> <Gated note="The PushNotification tool is behind a server-side flag that is off by default" /> | Type | Sent with the message from the `PushNotification` tool. Skipped when the config is off (`config_off`) or the user is present (`user_present`). Setting `CLAUDE_CODE_DISABLE_NOTIFICATION_PRESENCE_CHECK` disables the presence check. Seen live: the input had the common fields, `message`, and `notification_type`, with no `title`. When skipped, the hook does not fire (from the program, not run). |
+| `worker_permission_prompt` | <Undocumented /> <Gated note="Set CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 or use --agent-teams" /> | Type | Sent by the team lead's inbox poller when a teammate asks for permission. Needs agent teams and at least one teammate. It fires only when the lead is idle and shows no dialog. Seen live: the message was `A subagent needs permission for Bash`, with no `title`. A normal `permission_prompt` followed when the dialog showed. The message `<worker> needs network access to <host>` was not run.[^worker-message] |
+| `push_notification` | <Undocumented /> <Gated note="The PushNotification tool is behind a server-side flag that is off by default" /> | Type | Sent with the message from the `PushNotification` tool. Skipped when the config is off (`config_off`) or the user is present (`user_present`). Setting `CLAUDE_CODE_DISABLE_NOTIFICATION_PRESENCE_CHECK` disables the presence check. Seen live: the input had the common fields, `message`, and `notification_type`, with no `title`. When skipped, the hook does not fire (not run).[^push] |
 | `computer_use_enter` | <Undocumented /> <Gated note="Needs a Pro or Max plan, a server flag, and not HIPAA" /> | Type | Not seen live. Message when computer use starts: `Claude is using your computer · press Esc to stop` (or `Ctrl+C`). |
 | `computer_use_exit` | <Undocumented /> <Gated note="Needs a Pro or Max plan, a server flag, and not HIPAA" /> | Type | Not seen live. Sent at the end of a turn that sent `computer_use_enter`. Message when computer use ends: `Claude is done using your computer`. |
 
 Seen live: `push_notification` and `worker_permission_prompt`. See [Probes](../../reference/probes.md#notification-types) for how we triggered them.
 
-These come from the program and were not seen live:
+These types were not seen live:[^not-seen]
 
 - `auth_storage_failure` fires only after a real OAuth login. A probe cannot point the token request at a local server. On macOS the save goes to the real keychain, so we did not run it.
 - `computer_use_enter` and `computer_use_exit` fire when the program takes the computer-use lock. The program seems to take it only for tools that act on the screen, so we did not run this. The probe enabled the built-in computer-use server, but its listing and wait calls did not fire the hook.
 - We did not run the network form of `worker_permission_prompt`.
 
-The program also lists `model_refusal_fallback` as a type. The probe found no code that sends a Notification with it (a reading of the program, not a live result). The same name is a system message subtype (see [Stream JSON](../headless/stream-json.md)) for a retry on a fallback model after a refusal. The program runs Notification hooks for each type that it sends before it chooses a notification channel.
+The type list also holds `model_refusal_fallback`. No code was found that sends a Notification with it.[^refusal] The same name is a system message subtype (see [Stream JSON](../headless/stream-json.md)) for a retry on a fallback model after a refusal. Claude Code runs Notification hooks for each type that it sends before it chooses a notification channel.
 
 ### `Stop`
 
-Fires when the main agent finishes. It does not fire on a user interrupt.
-It has no matcher.
-Exit 2 or `decision: "block"` keeps Claude working.
-The cap is 8 continuations in a row. `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` sets it.
-Handlers: all five types.
+Fires when the main agent finishes. It does not fire on a user interrupt. It has no matcher. Exit 2 or `decision: "block"` keeps Claude working. The cap is 8 continuations in a row. `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` sets it. Handlers: all five types.
 
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
@@ -220,10 +180,7 @@ Handlers: all five types.
 
 ### `StopFailure`
 
-Fires instead of `Stop` when the turn ends on an API error.
-The matcher is `error`.
-Claude Code ignores output and the exit code, but `terminalSequence` works.
-Handlers: `command`, `http`, `mcp_tool`.
+Fires instead of `Stop` when the turn ends on an API error. The matcher is `error`. Claude Code ignores output and the exit code, but `terminalSequence` works. Handlers: `command`, `http`, `mcp_tool`.
 
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
@@ -236,3 +193,11 @@ Handlers: `command`, `http`, `mcp_tool`.
 - [Hook Events](events.md): all 33 events and where each one is documented.
 - [Input and Output](input-and-output.md): common fields, decisions, and exit codes.
 - [Configuration](configuration.md): matchers and timeouts.
+
+## Sources
+
+[^agent-needs-input]: Probe cases `pty.notifications.agent-needs-input` and `pty.notifications.agent-needs-input-refused`.
+[^worker-message]: The program.
+[^push]: A reading of the program.
+[^not-seen]: Readings of the program, not live results.
+[^refusal]: A reading of the program, not a live result.

@@ -4,18 +4,16 @@ description: Every message type that print mode writes with --output-format stre
 sidebar_position: 2
 ---
 
-With `--output-format stream-json`, Claude Code writes one JSON object per line to stdout.
-With `--input-format stream-json`, you send JSON lines on stdin, and the same channel carries [control requests](control-protocol.md).
-For example, `claude -p "Explain this repo" --output-format stream-json --verbose --include-partial-messages` prints a `system` / `init` line, then `stream_event` lines while the answer grows, then a final `result` line.
+Stream JSON lets a host program read each step of a run as it happens, and send messages back while the run goes on. Use it to build a UI or a tool on top of print mode.
 
-Flags add more lines: `--include-partial-messages`, `--include-hook-events`, `--forward-subagent-text`, and `--replay-user-messages`. Turn the format on with `--output-format stream-json` and `--input-format stream-json`.
+With `--output-format stream-json`, Claude Code writes one JSON object per line to stdout. With `--input-format stream-json`, you send JSON lines on stdin, and the same channel carries [control requests](control-protocol.md). For example, `claude -p "Explain this repo" --output-format stream-json --verbose --include-partial-messages` prints a `system` / `init` line, then `stream_event` lines while the answer grows, then a final `result` line.
+
+These flags add more lines: `--include-partial-messages`, `--include-hook-events`, `--forward-subagent-text`, and `--replay-user-messages`.
 
 ## Message Types
 
-The tables list the message types that the bundled schema of `2.1.311` defines.
-Each row has a short form of the schema description. A row without a description says so.
-A type has the status <Documented /> when a docs page other than the [changelog](https://code.claude.com/docs/en/changelog) and the Agent SDK pages names it.
-Source: [Run Claude Code Programmatically](https://code.claude.com/docs/en/headless), [CLI Reference](https://code.claude.com/docs/en/cli-reference), and the program (the message schema).
+The tables list the message types that the bundled schema of `2.1.311` defines.[^message-schema] Each row has a short form of the schema description. A row without a description says so. A type has the status <Documented /> when a docs page other than the [changelog](https://code.claude.com/docs/en/changelog) and the Agent SDK pages names it. See [Run Claude Code Programmatically](https://code.claude.com/docs/en/headless) and the [CLI Reference](https://code.claude.com/docs/en/cli-reference).
+
 A type written as `system` / `init` means `type` is `system` and `subtype` is `init`.
 
 ### Documented Types
@@ -24,7 +22,7 @@ A type written as `system` / `init` means `type` is `system` and `subtype` is `i
 | --- | --- | --- |
 | `user` | <Documented /> | A user message, such as a message of a subagent when `--forward-subagent-text` is on. |
 | `result` | <Documented /> | The final result of the run. |
-| `system` / `init` | <Documented /> | Session data at the start of each turn: session ID, model, working folder, tools, MCP servers, slash commands, and plugins. In `2.1.316` it can have `ultrathink_available`, a boolean. It is `true` when typing `ultrathink` runs the turn at `xhigh` effort on the `model` of this line, and when the session is already at `xhigh` or `max`. After a `system` / `per_turn_effort_changed` line, treat it as `false` until the next `init` line. If the field is absent, the answer is unknown, and a host colors nothing. The stream-json host sends it, and `get_settings` gives the same answer as `applied.ultrathinkAvailable` (the program). |
+| `system` / `init` | <Documented /> | Session data at the start of each turn: session ID, model, working folder, tools, MCP servers, slash commands, and plugins. In `2.1.316` it can have `ultrathink_available`, a boolean. It is `true` when typing `ultrathink` runs the turn at `xhigh` effort on the `model` of this line, and when the session is already at `xhigh` or `max`. After a `system` / `per_turn_effort_changed` line, treat it as `false` until the next `init` line. If the field is absent, the answer is unknown, and a host colors nothing. The stream-json host sends it, and `get_settings` gives the same answer as `applied.ultrathinkAvailable`.[^ultrathink] |
 | `stream_event` | <Documented /> | A step of the answer as it grows, only with `--include-partial-messages`. |
 | `system` / `compact_boundary` | <Documented /> | Claude Code compacted the conversation here. |
 | `system` / `api_retry` | <Documented /> | An API request failed with an error that can be retried, and Claude Code will try again after a wait. |
@@ -37,7 +35,7 @@ A type written as `system` / `init` means `type` is `system` and `subtype` is `i
 
 ### Undocumented Types
 
-Only the program shows these. They can change without notice.
+No official page names these types. They can change without notice.
 
 | `type` / `subtype` | Status | What It Does |
 | --- | --- | --- |
@@ -67,7 +65,7 @@ Only the program shows these. They can change without notice.
 | `system` / `turn_duration` | <Undocumented /> | The wall-clock time of a turn, with the budget and the number of background jobs. |
 | `system` / `api_error` | <Undocumented /> | An API error that can be retried, with the error data and the retry counts. |
 | `system` / `local_command_output` | <Undocumented /> | The output of a local slash command, such as `/usage`. |
-| `tool_progress` | <Undocumented /> | No description in the program schema. Since `2.1.323`, a hook that runs long in a `UserPromptSubmit`, `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `Stop`, `PreCompact`, or `PostCompact` event sends this message every 30 s with `heartbeat: true`, so a client sees that the hook still runs. Source: `chunk-2x9ma4k7.js` lines 1141240 and 1141898. |
+| `tool_progress` | <Undocumented /> | No description in the program schema. Since `2.1.323`, a hook that runs long in a `UserPromptSubmit`, `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `Stop`, `PreCompact`, or `PostCompact` event sends this message every 30 s with `heartbeat: true`, so a client sees that the hook still runs. [^heartbeat] |
 | `auth_status` | <Undocumented /> | No description in the program schema. |
 | `system` / `files_persisted` | <Undocumented /> | No description in the program schema. |
 | `system` / `task_notification` | <Undocumented /> | No description in the program schema. |
@@ -81,8 +79,8 @@ Only the program shows these. They can change without notice.
 | `system` / `turn_handoff_available` | <Undocumented /> | Sent once by a cloud worker that accepts the `turn_handoff` control request. It carries what the worker wrote to `external_metadata.turn_handoff`. Since `2.1.311` it can have `requires_rewind_request_id` (see [Fields New in `2.1.311`](#fields-new-in-21311)). |
 | `system` / `ui_invalidate` | <Undocumented /> | No description in the program schema. |
 | `system` / `ui_log` | <Undocumented /> | A plugin called `$.ui.log(text)`, and the screen adds a dim notice under the name of the plugin. |
-| `system` / `ui_notify` | <Undocumented /> | New in `2.1.321`. A plugin called `$.ui.notify(text)`, and the client raises a notification under the name of the plugin. The line has `plugin`, `source` (`name@marketplace`), `title`, `text`, and `rewritten`. It can have `key`, `delay_ms`, `at`, and `until_back`. Source: the program (`chunk-h3xwema8.js:550569`, `2.1.323`). |
-| `system` / `ui_notify_cancel` | <Undocumented /> | New in `2.1.321`. A plugin called `$.ui.cancelNotify(key)`, or the engine removed the plugin. The client removes the notification with this `source` and `key`. Source: the program (`chunk-h3xwema8.js:552895`, `2.1.323`). |
+| `system` / `ui_notify` | <Undocumented /> | New in `2.1.321`. A plugin called `$.ui.notify(text)`, and the client raises a notification under the name of the plugin. The line has `plugin`, `source` (`name@marketplace`), `title`, `text`, and `rewritten`. It can have `key`, `delay_ms`, `at`, and `until_back`. [^ui-notify] |
+| `system` / `ui_notify_cancel` | <Undocumented /> | New in `2.1.321`. A plugin called `$.ui.cancelNotify(key)`, or the engine removed the plugin. The client removes the notification with this `source` and `key`. [^ui-notify-cancel] |
 | `system` / `ui_toast` | <Undocumented /> | A plugin called `$.ui.toast(text)`, and the screen shows a short note under the prompt. |
 | `system` / `ui_status` | <Undocumented /> | A plugin called `$.ui.status(text)`, and the screen pins a line under the prompt. |
 | `system` / `ui_scroll` | <Undocumented /> | A plugin scrolled a site that a remote screen draws. |
@@ -101,7 +99,7 @@ Only the program shows these. They can change without notice.
 | `system` / `turn_preempted` | <Undocumented /> | No description in the program schema. |
 | `system` / `per_turn_effort_changed` | <Undocumented /> | The conversation stopped sending the effort with each turn, because the server refused it. |
 | `system` / `file_attachments_missing` | <Undocumented /> | No description in the program schema. |
-| `system` / `inherited_asks_settled` | <Undocumented /> | New in `2.1.311`. A cloud worker reports, before its first turn, which asks it inherited and keeps. Any ask stored before this event that it does not name is over. The line has `kept_request_ids`, an array of the request IDs (strings) of the earlier worker's asks that stay answerable. Source: the program (`chunk-h3xwema8.js:17104`, `chunk-f40wgdh8.js:19688`). |
+| `system` / `inherited_asks_settled` | <Undocumented /> | New in `2.1.311`. A cloud worker reports, before its first turn, which asks it inherited and keeps. Any ask stored before this event that it does not name is over. The line has `kept_request_ids`, an array of the request IDs (strings) of the earlier worker's asks that stay answerable. [^inherited-asks] |
 | `system` / `cloud_session_delta` | <Undocumented /> | No description in the program schema. |
 | `control_request` | <Undocumented /> | A request of the control protocol, which either side can send on the same stream. |
 | `control_response` | <Undocumented /> | The single reply to a `control_request`. |
@@ -112,13 +110,9 @@ Only the program shows these. They can change without notice.
 ## Capabilities of the `init` Line
 
 The `system` / `init` line can carry a `capabilities` array of strings.
-A host reads it to feature-detect, so the host does not need to read the version.
-The array is an open set, so ignore each value that you do not know.
-Check each capability for exactly the behavior that you use.
-An older CLI does not write the array, so treat a missing array as no capabilities.
-Read the newest `init` line, because the array can change between lines.
-No page of the official docs names these values.
-They can change without notice.
+A host reads it to detect features, so it does not need to read the version. The array is an open set, so ignore each value that you do not know. Check each capability for exactly the behavior that you use. An older CLI does not write the array, so treat a missing array as no capabilities. Read the newest `init` line, because the array can change between lines.
+
+No official page names these values. They can change without notice.
 
 | Capability | Status | When It Appears | What It Means |
 | --- | --- | --- | --- |
@@ -126,47 +120,34 @@ They can change without notice.
 | `interrupt_cancel_queued_v1` | <Undocumented /> | Always. | The `interrupt` request honors `cancel_queued: true`. It cancels queued and pending-dispatch commands with the abort, and the response lists them in `cancelled`. Then `still_queued` is empty. A client of a hosted session still lists what it can no longer recall: a send in flight, or the first prompt of the session. |
 | `interrupt_send_now_v1` | <Undocumented /> | Always. | The `interrupt` request honors `send_now: true` and `message_uuid`. The response then has a `send_now` field with the value `stopped`, `delivering`, or `nothing_waiting`. A CLI without it handles the request as a plain interrupt. |
 | `interrupt_requeue_taken_v1` | <Undocumented /> | Always, except in a cloud-hosted session (see below). | The interrupt response can carry `put_back`. It lists the uuids under `still_queued` that the interrupt returned to the queue after a turn took them. A CLI without it ignores the field. |
-| `msg_lifecycle_v1` | <Undocumented /> | Always. | This page gives only the name. The program does not say more. |
-| `request_marker_lists_v1` | <Undocumented /> | Always. | This page gives only the name. The program does not say more. |
+| `msg_lifecycle_v1` | <Undocumented /> | Always. | Only the name is known. |
+| `request_marker_lists_v1` | <Undocumented /> | Always. | Only the name is known. |
 | `ask_user_question_unanswered_v1` | <Undocumented /> | Always. New in `2.1.312`. | An `AskUserQuestion` answer can set `annotations[question].unanswered` to `skipped`, `replied_in_chat`, or `dismissed`. The tool result echoes it. Send it only to a session that has this value. An older CLI on a strict host refuses the whole answer. A strict host also refuses any other value. |
 | `lifecycle_wakeup_source_v1` | <Undocumented /> | When the session installs its command lifecycle forwarder. | A `command_lifecycle` line in state `started` can carry `wakeup_source`. It is `loop_wakeup` for a `ScheduleWakeup` fire, or `schedule_wakeup` for any other scheduler fire. |
-| `sdk_mcp_tools_list_changed` | <Undocumented /> | When the server flag `tengu_sdk_mcp_manifests` is on. It is on by default. Except in a cloud-hosted session. | This page gives only the name. The program does not say more. |
+| `sdk_mcp_tools_list_changed` | <Undocumented /> | When the server flag `tengu_sdk_mcp_manifests` is on. It is on by default. Except in a cloud-hosted session. | Only the name is known. |
 | `sdk_mcp_manifests` | <Undocumented /> | Same flag as above, and on a remote transport also when the checks for remote manifests pass. Except in a cloud-hosted session. | The `initialize` request can carry `sdkMcpServerManifests`. The members are handshake results that the host already got from its in-process MCP servers. The CLI uses them to skip the handshake round trips. The response reports what became of each entry in `sdk_mcp_manifests_parked`. |
 | `mcp_read_resource_v1` | <Undocumented /> | Unless the lane redacts what it persists. Except in a cloud-hosted session. | A control request reads one `ui://` resource from an MCP server that the CLI connected itself. A host that renders MCP Apps uses it. Treat the reply as untrusted HTML. Render it in a sandbox. |
 | `mcp_tool_ui_meta_v1` | <Undocumented /> | Unless the lane redacts what it persists. | A tool entry can carry the MCP Apps members of its `_meta`: `ui` and the flat `ui/resourceUri`. The CLI checks them, limits their size, and withholds every other `_meta` key. |
-| `ui_surface_v1` | <Undocumented /> | When the UI features are on and the lane does not redact what it persists. On a remote transport, only for a `remote_cowork` session. | This page gives only the name. The program does not say more. |
+| `ui_surface_v1` | <Undocumented /> | When the UI features are on and the lane does not redact what it persists. On a remote transport, only for a `remote_cowork` session. | Only the name is known. |
 | `mcp_call_result_not_for_model_v1` | <Undocumented /> | Unless the lane redacts what it persists. Never on a remote transport. | An MCP tool call can say that a program, not a model, takes the result. The result then holds the server content blocks unchanged. A result over 10485760 characters fails. A CLI without it ignores the member. |
-| `task_list_restore_v1` | <Undocumented /> | On a remote transport. | This page gives only the name. The program reads a session field `external.task_list_restore` with `count` and `highest_id`. |
-| `task_list_restored_v1` | <Undocumented /> | After the CLI honored a task list restore request at the start of the session. | This page gives only the name. |
+| `task_list_restore_v1` | <Undocumented /> | On a remote transport. | Only the name is known. Claude Code reads a session field `external.task_list_restore` with `count` and `highest_id`. |
+| `task_list_restored_v1` | <Undocumented /> | After the CLI honored a task list restore request at the start of the session. | Only the name is known. |
 | `read_file_as_written_v1` | <Undocumented /> | When the lane does not redact what it persists, no HIPAA policy applies, and a server flag that is off by default is on. | A file read request can take a path copied from a reply of Claude. The session looks for one matching file and answers with `absPath`. Send it only to a session that lists this value. |
-| `start_shell_task_v1` | <Undocumented /> | Only on a cloud worker on Linux with a `Bash` tool, and when a server flag is on. Except in a cloud-hosted session. | A request starts a long-running command, such as a dev server, as a background shell task. It is one call of the `Bash` tool. The program marks it `@internal`. |
-| `prompts_screened_v1` | <Undocumented /> | While a hook or plugin can change what the transcript records of a typed line. | The CLI says it again when a plugin load or reload changes this. The program marks it `@internal`. |
-| `ui_hooked_v1` | <Undocumented /> | When the UI features are on and the session finished its hook registration. | The array can also hold `ui_hooked_v1:<component>` entries for components that hooks can change. This page gives only the names. |
-| `register_repo_root_v1` | <Undocumented /> | This page cannot say. The program names it only in the cloud-hosted list below. | This page gives only the name. |
-| `queued_notifications` | <Undocumented /> | When the session offers the notification tool, and either the environment has `CLAUDE_CODE_REMOTE` in non-interactive mode or a second check passes. This page does not decode the second check. | The CLI accepts inbound `queued_notification` stream messages and removes them with `ReadNotifications`. The cloud session backend reads this value from the saved `init` event to decide whether it can send them. |
-| `third_party_notification_caution` | <Undocumented /> | The program adds it next to `queued_notifications` under a condition on tool descriptions. This page does not decode that condition. | This page gives only the name. |
-| `session_notices` | <Undocumented /> | In `auto` mode, on a remote transport, when the environment has `CLAUDE_CODE_REMOTE` and a server flag is on. | This page gives only the name. The program accepts `session_notice` messages with `notice_class`, `from_session_id`, and `content`. |
+| `start_shell_task_v1` | <Undocumented /> | Only on a cloud worker on Linux with a `Bash` tool, and when a server flag is on. Except in a cloud-hosted session. | A request starts a long-running command, such as a dev server, as a background shell task. It is one call of the `Bash` tool. The schema marks it `@internal`. |
+| `prompts_screened_v1` | <Undocumented /> | While a hook or plugin can change what the transcript records of a typed line. | The CLI says it again when a plugin load or reload changes this. The schema marks it `@internal`. |
+| `ui_hooked_v1` | <Undocumented /> | When the UI features are on and the session finished its hook registration. | The array can also hold `ui_hooked_v1:<component>` entries for components that hooks can change. Only the names are known. |
+| `register_repo_root_v1` | <Undocumented /> | Not known. It appears only in the cloud-hosted list below. | Only the name is known. |
+| `queued_notifications` | <Undocumented /> | When the session offers the notification tool, and either the environment has `CLAUDE_CODE_REMOTE` in non-interactive mode or a second check passes. The second check is not known. | The CLI accepts inbound `queued_notification` stream messages and removes them with `ReadNotifications`. The cloud session backend reads this value from the saved `init` event to decide whether it can send them. |
+| `third_party_notification_caution` | <Undocumented /> | Added next to `queued_notifications` under a condition on tool descriptions. The condition is not known. | Only the name is known. |
+| `session_notices` | <Undocumented /> | In `auto` mode, on a remote transport, when the environment has `CLAUDE_CODE_REMOTE` and a server flag is on. | Only the name is known. Claude Code accepts `session_notice` messages with `notice_class`, `from_session_id`, and `content`. |
 
-The program removes six names from the `init` line when this process drives a cloud-hosted session.
-These names are `mcp_read_resource_v1`, `sdk_mcp_tools_list_changed`, `sdk_mcp_manifests`, `register_repo_root_v1`, `interrupt_requeue_taken_v1`, and `start_shell_task_v1`.
-The same list sits next to the message "MCP server changes are not available in a cloud-hosted session yet".
-A real run of this release, in print mode, wrote the first 14 rows in the order of the table.
-The capture shows the fifth entry hidden, and the program source shows it is `msg_lifecycle_v1`.
+When this process drives a cloud-hosted session, Claude Code removes six names from the `init` line: `mcp_read_resource_v1`, `sdk_mcp_tools_list_changed`, `sdk_mcp_manifests`, `register_repo_root_v1`, `interrupt_requeue_taken_v1`, and `start_shell_task_v1`. The same list sits next to the message "MCP server changes are not available in a cloud-hosted session yet".
 
-Source: the program. These lines are in `captures/2.1.314/clean/modules/`.
-The program builds the array at `chunk-jvdknfvn.js:5261`. The names and the always-on list are at `chunk-3jam9ybg.js:94-126`.
-The MCP names are at `chunk-9rqchmhd.js:55`. The UI names are at `chunk-9rqchmhd.js:202` and `:226`.
-The notification names are at `chunk-4mykgg5q.js:352`. `session_notices` is at `chunk-jvdknfvn.js:780`.
-The gate of `read_file_as_written_v1` is at `chunk-jvdknfvn.js:710`. The lifecycle forwarder is at `chunk-jvdknfvn.js:5264`.
-The task list field is at `chunk-f40wgdh8.js:14667`. The cloud list is at `chunk-5erhnvzw.js:1539` and `chunk-f9zxq8va.js:3093`.
-The meanings come from `chunk-h3xwema8.js:18742`, `:16427`, `:12659`, `:20121`, `:19966`, `:19273`, `:21431`, and `:17820`.
-The first 14 rows come from `captures/2.1.314/print/request.baseline-a.json`.
-The schema describes the array at `schemas/claude-code-stream-json.json:5708`.
+A real run of this release, in print mode, wrote the first 14 rows in the order of the table. The capture shows the fifth entry hidden, and the program source shows it is `msg_lifecycle_v1`.[^capabilities]
 
 ## Fields New in `2.1.311`
 
-Each field below is in [`claude-code-stream-json.json`](../../reference/schemas.md) of `2.1.311`, and it was not in `2.1.310`.
-The schema marks the `system` and `result` fields as `@internal`, so they can change without notice.
+Each field below is in [`claude-code-stream-json.json`](../../reference/schemas.md) of `2.1.311`, and it was not in `2.1.310`. The schema marks the `system` and `result` fields as `@internal`, so they can change without notice.
 
 | Field | Status | Where | Type | What It Means |
 | --- | --- | --- | --- | --- |
@@ -175,11 +156,11 @@ The schema marks the `system` and `result` fields as `@internal`, so they can ch
 | `api_error` values `unattended_start_limit` and `unattended_start_unconfirmed` | <Undocumented /> | `assistant` and `result` lines | Two new values of an existing string field | Both describe a cloud session process that starts where an earlier one died and would carry on its unfinished work. `unattended_start_limit`: the session record shows that the allowed number of such starts (a configured number) already happened within 24 hours. No message from a person came in between. So the process sent no request. It ends the turn, so a consumer must not send the same prompt again. `unattended_start_unconfirmed`: the process could not check whether the limit allowed it to start, so it sent no request. It does not end the turn, and a later process may carry it on. |
 | `requires_rewind_request_id` | <Undocumented /> | `system` / `turn_handoff_available` | `true` | Present only on a worker that reads the `requires_rewind_request_id` member of a `turn_handoff` [control request](control-protocol.md). A worker without this key ignores the member. |
 | `background_color` | <Undocumented /> | Each pane of a `system` / `ui_panes` line | String | What the surface paints under the body of the pane while it is the one shown: a theme key, a raw color, or `transparent` for nothing. When absent, the look of the surface stands. |
-| `main_stream_count`, `main_stream_chunk_count`, `main_stream_event_count`, `process_wall_ms_streaming`, `process_cpu_ms_streaming` | <Undocumented /> | `result` line, success | Integer | Streaming counters and times of the process. This page gives only the names and types. |
-| `process_start_tuning`, `process_start_purge_delay_ms` | <Undocumented /> | `result` line, success and error | Integer | Start-up tuning data of the process. This page gives only the names and types. |
-| `process_garbage_collections` | <Undocumented /> | `result` line, success and error | Object | Has `to_first_message` and `to_first_result`. Each holds the integers `eden`, `full`, `wall_ms`, and `heap_after_mib`. This page gives only the names and types. |
+| `main_stream_count`, `main_stream_chunk_count`, `main_stream_event_count`, `process_wall_ms_streaming`, `process_cpu_ms_streaming` | <Undocumented /> | `result` line, success | Integer | Streaming counters and times of the process. Only the names and types are known. |
+| `process_start_tuning`, `process_start_purge_delay_ms` | <Undocumented /> | `result` line, success and error | Integer | Start-up tuning data of the process. Only the names and types are known. |
+| `process_garbage_collections` | <Undocumented /> | `result` line, success and error | Object | Has `to_first_message` and `to_first_result`. Each holds the integers `eden`, `full`, `wall_ms`, and `heap_after_mib`. Only the names and types are known. |
 
-Source: the program (`chunk-h3xwema8.js:12337` for the cache fields, `chunk-2x9ma4k7.js:64657` where the two counts add up, `chunk-h3xwema8.js:14945` and `chunk-2x9ma4k7.js:115023` for the `api_error` values, `chunk-h3xwema8.js:17163` and `chunk-rnev1xt9.js:1019` for `requires_rewind_request_id`, `chunk-h3xwema8.js:17357` for `background_color`).
+[^fields-311]
 
 ## Field New in `2.1.318`
 
@@ -187,17 +168,12 @@ Source: the program (`chunk-h3xwema8.js:12337` for the cache fields, `chunk-2x9m
 | --- | --- | --- | --- | --- |
 | `credential_expires_at` | <Undocumented /> | `result` line, and the `result` object of `--output-format json` | String, an ISO 8601 date | The end of the stored claude.ai sign-in: the end of its refresh token. The real end can fall up to 3 days earlier, so treat it as the latest day. The key is absent when the program has no such date. |
 
-Source: the program. The field is built in `chunk-x4fdscgs.js` (function `$767814`) from the stored `refreshTokenExpiresAt` and set on the result in `chunk-f40wgdh8.js:23786`. The `2.1.318` release notes name it: "Added the date a stored claude.ai sign-in ends to `claude auth status` (`loginExpiresAt`) and to `claude -p` JSON results (`credential_expires_at`)".
+The `2.1.318` release notes name it: "Added the date a stored claude.ai sign-in ends to `claude auth status` (`loginExpiresAt`) and to `claude -p` JSON results (`credential_expires_at`)".[^credential]
 
-**Runs:** `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only notes319.login-expiry` (cases `result-stream-json`, `result-json`, `result-json-no-date`).
+To check it, a probe sets a fake stored login and reads the `result` line.[^credential-probe] The result:
 
-**FAFO:**
-
-- Hypothesis: a stored claude.ai login with a refresh end date puts `credential_expires_at` on the `result` line only, with that date as an ISO string.
-  Prediction: the `result` line has the key and equals the stored date. The `system` / `init` and `assistant` lines do not have it.
-  Command: case `result-stream-json` (stub API, fake `.credentials.json` with `refreshTokenExpiresAt` set to 2030-01-15T12:00:00Z, first-party base URL assumed).
-  Result: the `result` line had the key and it equalled the stored date. The `system` / `init`, `assistant`, and `rate_limit_event` lines did not have it. Case `result-json` gave the same on the `result` object.
-- The key is missing, not `null`, when the access token ends more than 3 days after the refresh token (case `result-json-no-date`: the `result` object had no key). In `claude auth status`, the same login and four more (no stored refresh date, a Bedrock provider, a stored date before 2025-01-01, and a stored date over 10 years ahead) print `loginExpiresAt: null`. See [`claude auth status` Sign-In Date](../../configure/cli/subcommands.md#claude-auth-status-sign-in-date).
+- A stored claude.ai login with a refresh end date puts `credential_expires_at` on the `result` line only, with that date as an ISO string. The `system` / `init`, `assistant`, and `rate_limit_event` lines do not have it. The `result` object of `--output-format json` has it too.
+- The key is missing, not `null`, when the access token ends more than 3 days after the refresh token. In `claude auth status`, the same login and four more (no stored refresh date, a Bedrock provider, a stored date before 2025-01-01, and a stored date over 10 years ahead) print `loginExpiresAt: null`. See [`claude auth status` Sign-In Date](../../configure/cli/subcommands.md#claude-auth-status-sign-in-date).
 
 ## Example
 
@@ -232,11 +208,24 @@ Mirror lines (`transcript_mirror`) follow each local transcript write. For the f
 
 ## Exact Fields
 
-The exact fields: `https://clawdipedia.cc/schemas/claude-code-stream-json.json`, made from the program's own validators. It has a definition for each output and input message type.
-It lists every field of this release, so build on the fields it names and look each one up there before you rely on it.
+The exact fields are in `https://clawdipedia.cc/schemas/claude-code-stream-json.json`. It has a definition for each output and input message type, and it lists every field of this release. Look up a field there before you rely on it.[^validators]
 
 ## Related Pages
 
 - [Headless and Print Mode](index.md)
 - [Control Protocol](control-protocol.md)
 - [CLI Flags](../../configure/cli/flags.md)
+
+## Sources
+
+[^message-schema]: The program, the message schema.
+[^ultrathink]: The program.
+[^heartbeat]: The program, `chunk-2x9ma4k7.js` lines 1141240 and 1141898.
+[^ui-notify]: The program, `chunk-h3xwema8.js:550569` (`2.1.323`).
+[^ui-notify-cancel]: The program, `chunk-h3xwema8.js:552895` (`2.1.323`).
+[^inherited-asks]: The program, `chunk-h3xwema8.js:17104` and `chunk-f40wgdh8.js:19688`.
+[^capabilities]: The program. The lines are in `captures/2.1.314/clean/modules/`. The array is built at `chunk-jvdknfvn.js:5261`. The names and the always-on list are at `chunk-3jam9ybg.js:94-126`. The MCP names are at `chunk-9rqchmhd.js:55`. The UI names are at `chunk-9rqchmhd.js:202` and `:226`. The notification names are at `chunk-4mykgg5q.js:352`. `session_notices` is at `chunk-jvdknfvn.js:780`. The gate of `read_file_as_written_v1` is at `chunk-jvdknfvn.js:710`. The lifecycle forwarder is at `chunk-jvdknfvn.js:5264`. The task list field is at `chunk-f40wgdh8.js:14667`. The cloud list is at `chunk-5erhnvzw.js:1539` and `chunk-f9zxq8va.js:3093`. The meanings come from `chunk-h3xwema8.js:18742`, `:16427`, `:12659`, `:20121`, `:19966`, `:19273`, `:21431`, and `:17820`. The first 14 rows come from `captures/2.1.314/print/request.baseline-a.json`. The schema describes the array at `schemas/claude-code-stream-json.json:5708`.
+[^fields-311]: The program. `chunk-h3xwema8.js:12337` for the cache fields, `chunk-2x9ma4k7.js:64657` where the two counts add up, `chunk-h3xwema8.js:14945` and `chunk-2x9ma4k7.js:115023` for the `api_error` values, `chunk-h3xwema8.js:17163` and `chunk-rnev1xt9.js:1019` for `requires_rewind_request_id`, and `chunk-h3xwema8.js:17357` for `background_color`.
+[^credential]: The program. The field is built in `chunk-x4fdscgs.js` (function `$767814`) from the stored `refreshTokenExpiresAt` and set on the result in `chunk-f40wgdh8.js:23786`. [`2.1.318` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.318).
+[^credential-probe]: `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only notes319.login-expiry`. Probe cases `result-stream-json`, `result-json`, and `result-json-no-date`, with a stub API, a fake `.credentials.json` with `refreshTokenExpiresAt` set to 2030-01-15T12:00:00Z, and a first-party base URL assumed.
+[^validators]: The schema is made from the program's own validators.

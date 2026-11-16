@@ -4,16 +4,13 @@ description: All 33 hook events, when each fires, what input it gets, and which 
 sidebar_position: 4
 ---
 
-Claude Code has 33 hook events.
-Each event fires at one point in a session. Each event gets its own input fields and accepts its own output fields.
-This page lists them in groups: tool, tool result, session, prompt and turn, agent and task, and other events.
-The fields that every event shares are on [Input and Output](input-and-output.md).
+Claude Code has 33 hook events. Each event fires at one point in a session, gets its own input fields, and accepts its own output fields. Use this page to find the event that fits your check.
 
-Add the event key to the `hooks` map to enable an event. Remove it to disable the event.
+Add the event key to the `hooks` map to turn an event on. Remove it to turn the event off. The groups are tool, tool result, session, prompt and turn, agent and task, and other events. The fields that every event shares are on [Input and Output](input-and-output.md).[^hooks-reference]
 
 ## Example
 
-A `SessionStart` hook that adds your open tickets as context.
+This `SessionStart` hook adds your open tickets as context.
 
 ```json title=".claude/settings.json"
 {
@@ -80,6 +77,10 @@ echo "Open tickets: $(gh issue list --limit 5 --json title -q '.[].title' | past
 | [Session, Prompt, and Turn Hook Events](session-events.md) | Session events, and prompt and turn events. |
 | [Agent, Task, and Other Hook Events](agent-events.md) | Agent and task events, compaction, model switch, elicitation, and worktree events. |
 
+## Probe Findings
+
+A print-mode probe showed these shapes.[^probe-print] A `Workflow` call has `tool_input` `{script}`, and its `PostToolUse` `tool_response` has `status` (`async_launched`), `taskId`, `taskType` (`local_workflow`), `workflowName`, `runId`, `summary`, and `transcriptDir`. A `Skill` call has `tool_input` `{skill}` and `tool_response` `{success, commandName}`. An MCP tool's `tool_response` is the list of content blocks that the server returned, for example `[{"type":"text","text":"pong"}]`. Built-in tool outputs differ per tool (see [`PostToolUse` `tool_response` Shapes](tool-events.md#posttooluse-tool_response-shapes)). We did not probe every built-in tool, and `WebFetch`, `ScheduleWakeup`, and `NotebookEdit` calls did not reach `PostToolUse` in our run.
+
 ## Related Pages
 
 - [Hooks](index.md): the overview.
@@ -87,5 +88,7 @@ echo "Open tickets: $(gh issue list --limit 5 --json title -q '.[].title' | past
 - [Input and Output](input-and-output.md): common fields, decisions, and exit codes.
 - [Subagent Runtime](../subagents/runtime.md): subagents and teams.
 
-Source: [Hooks Reference](https://code.claude.com/docs/en/hooks), the `HookInput` types in the program type file, and the hook output schema in the program.
-Probed in `-p`: a `Workflow` call has `tool_input` `{script}`, and its `PostToolUse` `tool_response` has `status` (`async_launched`), `taskId`, `taskType` (`local_workflow`), `workflowName`, `runId`, `summary`, and `transcriptDir`. A `Skill` call has `tool_input` `{skill}` and `tool_response` `{success, commandName}`. An MCP tool's `tool_response` is the list of content blocks that the server returned, for example `[{"type":"text","text":"pong"}]`. Built-in tool outputs differ per tool (see [`PostToolUse` `tool_response` Shapes](tool-events.md#posttooluse-tool_response-shapes)). We did not probe every built-in tool, and `WebFetch`, `ScheduleWakeup`, and `NotebookEdit` calls did not reach `PostToolUse` in our run.
+## Sources
+
+[^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks), the `HookInput` types in the program type file, and the hook output schema in the program.
+[^probe-print]: Probed in `-p`.

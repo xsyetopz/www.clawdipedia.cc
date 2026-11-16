@@ -4,30 +4,25 @@ description: Every control request subtype that a host program can send to a run
 sidebar_position: 3
 ---
 
-Control requests let a host program steer a running Claude Code process.
-They travel on the same JSON line channel as the [stream messages](stream-json.md).
-The Agent SDK uses them, for example to change the model or to answer a permission question.
-A host sends a line with `type` set to `control_request` and `request.subtype` set to `set_model`. Claude Code answers with a `control_response` line.
+Control requests let a host program steer a running Claude Code process, for example to change the model or to answer a permission question. The Agent SDK uses them. They travel on the same JSON line channel as the [stream messages](stream-json.md).
 
-The protocol is on whenever you start `claude -p --input-format stream-json --output-format stream-json`. You write requests to stdin and read answers on stdout. You choose which requests to send.
+The protocol is on whenever you start `claude -p --input-format stream-json --output-format stream-json`. You write requests to stdin and read answers on stdout. A host sends a line with `type` set to `control_request` and `request.subtype` set to a subtype, such as `set_model`. Claude Code answers with a `control_response` line. You choose which requests to send.
 
 ## Subtypes
 
-The schema does not mark the direction of each request.
-Only the Agent SDK pages describe most of them, and no other docs page does, so every row has the status <Undocumented />.
-Source: the program (the bundled schema of `2.1.311`; for the `2.1.311` additions, `chunk-h3xwema8.js:23072` for `ui_prompt_paint`, `chunk-h3xwema8.js:22939` for the `ui_attach` list, `chunk-h3xwema8.js:20945` for `turn_handoff`, `chunk-h3xwema8.js:21930` for `oauth_token_refresh`, `chunk-h3xwema8.js:21711` for `mcpMount`, `chunk-h3xwema8.js:17357` for `background_color`, and `chunk-h3xwema8.js:19417` for the transcript note).
+The schema does not mark the direction of each request. Only the Agent SDK pages describe most of them, and no other docs page does, so every row has the status <Undocumented />.[^subtypes]
 
 | `subtype` | Status | What It Does |
 | --- | --- | --- |
-| `initialize` | <Undocumented /> | Starts the SDK session with hooks, MCP servers, and agent settings. Since `2.1.321` the reply can have two internal fields (the program, `chunk-h3xwema8.js:629581` and `chunk-h3xwema8.js:632420`). `auth_conflict` is `{token_source, api_key_source}`, two source names (for example `ANTHROPIC_AUTH_TOKEN` and `/login managed key`), never credential values. It appears when both an auth token and an API key are configured, and the terminal then warns that auth may not work as expected. It is absent when at most one is set, when one `apiKeyHelper` supplies both, and from older CLIs. `other_hook_ask_outranks_host` is `true` when the CLI ranks the `ask` of another `PreToolUse` hook above the `ask` of a hook that the host registered. The `can_use_tool` request then carries the reason of the other hook, whichever hook finished first. It is absent for a remote client, in a Cowork cloud session, in a Code cloud worker, and from older CLIs. |
-| `interrupt` | <Undocumented /> | Stops the turn that runs now. Since `2.1.321` the request can have `spare_background_tasks` (boolean, internal; `chunk-h3xwema8.js:650897`). `true` ends the turn and leaves running background agents and workflows alone. A running observer still stops. The value holds for this request only. A CLI that does not read it stops those tasks as for any other `interrupt`. |
+| `initialize` | <Undocumented /> | Starts the SDK session with hooks, MCP servers, and agent settings. Since `2.1.321` the reply can have two internal fields.[^initialize] `auth_conflict` is `{token_source, api_key_source}`, two source names (for example `ANTHROPIC_AUTH_TOKEN` and `/login managed key`), never credential values. It appears when both an auth token and an API key are configured, and the terminal then warns that auth may not work as expected. It is absent when at most one is set, when one `apiKeyHelper` supplies both, and from older CLIs. `other_hook_ask_outranks_host` is `true` when the CLI ranks the `ask` of another `PreToolUse` hook above the `ask` of a hook that the host registered. The `can_use_tool` request then carries the reason of the other hook, whichever hook finished first. It is absent for a remote client, in a Cowork cloud session, in a Code cloud worker, and from older CLIs. |
+| `interrupt` | <Undocumented /> | Stops the turn that runs now. Since `2.1.321` the request can have `spare_background_tasks` (boolean, internal)[^interrupt]. `true` ends the turn and leaves running background agents and workflows alone. A running observer still stops. The value holds for this request only. A CLI that does not read it stops those tasks as for any other `interrupt`. |
 | `can_use_tool` | <Undocumented /> | Asks for permission to use a tool with the given input. |
 | `set_permission_mode` | <Undocumented /> | Sets the permission mode. |
 | `set_model` | <Undocumented /> | Sets the model for the next turns. |
 | `set_max_thinking_tokens` | <Undocumented /> | No description in the program schema. |
 | `rename_session` | <Undocumented /> | Sets the title of the session. |
 | `set_color` | <Undocumented /> | No description in the program schema. |
-| `mcp_status` | <Undocumented /> | Asks for the state of all MCP server connections. Since `2.1.309`, `liveReply: true` sends a success reply only to the clients attached at that moment, when the CLI writes through a cloud session or Remote Control worker. The reply is not stored, and a reply sent while the stream is down is lost. In `2.1.316` an entry of `mcpServers` can have `cloudServiceProvided`. It is `true` for an `http` or `sse` server that the cloud service added to the session, and it is set only when `sessionProxied` is `true`. The session judges it by the address of the server and can miss one. `reload_plugins` entries have the same field (the program). |
+| `mcp_status` | <Undocumented /> | Asks for the state of all MCP server connections. Since `2.1.309`, `liveReply: true` sends a success reply only to the clients attached at that moment, when the CLI writes through a cloud session or Remote Control worker. The reply is not stored, and a reply sent while the stream is down is lost. In `2.1.316` an entry of `mcpServers` can have `cloudServiceProvided`. It is `true` for an `http` or `sse` server that the cloud service added to the session, and it is set only when `sessionProxied` is `true`. The session judges it by the address of the server and can miss one. `reload_plugins` entries have the same field. |
 | `file_suggestions` | <Undocumented /> | Asks for `@` file suggestions for a partial path. |
 | `get_context_usage` | <Undocumented /> | Asks for the use of the context window by category. |
 | `get_session_cost` | <Undocumented /> | Asks for the cost summary that `/usage` prints in print mode. |
@@ -63,7 +58,7 @@ Source: the program (the bundled schema of `2.1.311`; for the `2.1.311` addition
 | `remote_tools_reannounce` | <Undocumented /> | A new worker asks the client to announce its tools again. |
 | `turn_handoff` | <Undocumented /> | Hands a turn to a cloud worker. Since `2.1.311` it can have `requires_rewind_request_id` (string): the `request_id` of a `rewind_conversation` request that the client sent first. A worker that reads it appends the turn only if that rewind was its last one, the last user or assistant message is still the one the rewind left at the end, and nothing waits to be appended ahead of the turn. Otherwise it appends nothing and answers an error that starts with `invalid_handoff: required_rewind_` and then `unknown`, `other`, `moved_on`, or `lines_waiting`. A worker announces that it reads the member with `requires_rewind_request_id: true` in `turn_handoff_available`. A worker without that key ignores the member, so send it only once every worker that could read it has the key. |
 | `mcp_message` | <Undocumented /> | Carries one MCP message for an MCP server that the SDK hosts. |
-| `mcp_set_servers` | <Undocumented /> | Replaces the set of MCP servers that the host manages. Since `2.1.321` the request can have `denied_tools` (array of strings, internal; `chunk-h3xwema8.js:785180`). Each entry is a deny rule on one MCP tool, written `mcp__<server>__<tool>`. The rules hold for any kind of server that lists the tool, also one that `servers` leaves out. The list replaces the one the session holds. A request without the list keeps the held one. A list of more than 2,048 names, or an entry in another form, is ignored and the session keeps its list. The program then logs the warning `mcp_set_servers: denied_tools ignored, so the session keeps its list. denied_tools must be an array of at most 2,048 single MCP tool names` (`chunk-f40wgdh8.js:792584`). |
+| `mcp_set_servers` | <Undocumented /> | Replaces the set of MCP servers that the host manages. Since `2.1.321` the request can have `denied_tools` (array of strings, internal)[^denied-tools]. Each entry is a deny rule on one MCP tool, written `mcp__<server>__<tool>`. The rules hold for any kind of server that lists the tool, also one that `servers` leaves out. The list replaces the one the session holds. A request without the list keeps the held one. A list of more than 2,048 names, or an entry in another form, is ignored and the session keeps its list. Claude Code then logs the warning `mcp_set_servers: denied_tools ignored, so the session keeps its list. denied_tools must be an array of at most 2,048 single MCP tool names`. |
 | `reload_plugins` | <Undocumented /> | Reloads plugins from disk. |
 | `reload_skills` | <Undocumented /> | Reloads skills from disk. |
 | `reload_output_styles` | <Undocumented /> | Reads the output style folders again. |
@@ -79,8 +74,8 @@ Source: the program (the bundled schema of `2.1.311`; for the `2.1.311` addition
 | `stop_task` | <Undocumented /> | Stops a running task. |
 | `background_tasks` | <Undocumented /> | No description in the program schema. |
 | `get_task_output` | <Undocumented /> | Reads the last 8 KiB of the output of a background task. |
-| `apply_flag_settings` | <Undocumented /> | Merges settings into the flag settings layer. Since `2.1.326`, the program refuses a request that holds an invalid setting: it applies nothing, keeps the earlier settings, and answers `apply_flag_settings: nothing in this request was applied and earlier settings stay in force` with the invalid paths (`chunk-a55h33gj.js:4374`, `:4384`). |
-| `get_settings` | <Undocumented /> | Returns the merged settings and the settings of each source. In `2.1.316` the `applied` object can have `ultrathinkAvailable`, a boolean. It is `true` when typing `ultrathink` runs the turn at `xhigh` effort, and when the session is already at `xhigh` or `max`. If it is absent, the Claude Code is too old to report it (the program). |
+| `apply_flag_settings` | <Undocumented /> | Merges settings into the flag settings layer. Since `2.1.326`, Claude Code refuses a request that holds an invalid setting: it applies nothing, keeps the earlier settings, and answers `apply_flag_settings: nothing in this request was applied and earlier settings stay in force` with the invalid paths.[^apply-flag] |
+| `get_settings` | <Undocumented /> | Returns the merged settings and the settings of each source. In `2.1.316` the `applied` object can have `ultrathinkAvailable`, a boolean. It is `true` when typing `ultrathink` runs the turn at `xhigh` effort, and when the session is already at `xhigh` or `max`. If it is absent, the Claude Code is too old to report it. |
 | `update_settings` | <Undocumented /> | Writes settings through the writer of Claude Code. |
 | `get_hooks_listing` | <Undocumented /> | Returns the hooks that the read-only `/hooks` menu shows. |
 | `list_permission_rules` | <Undocumented /> | Returns the permission rules and workspace folders that `/permissions` lists. Since `2.1.311` the `source` of a rule can be `mcpMount` (string). |
@@ -117,7 +112,8 @@ Source: the program (the bundled schema of `2.1.311`; for the `2.1.311` addition
 
 Some requests go from Claude Code to the host, such as `can_use_tool`, `elicitation`, `hook_callback`, `request_user_dialog`, and the token refresh requests.
 The host must answer them or the turn waits.
-A `control_response` can carry `pending_elicitation_requests` (new in `2.1.316`). It is an array of the `elicitation` requests that Claude Code sent and nobody answered or withdrew yet. A client that joins late can show the question. It is on a success `initialize` response when Claude Code lists them, which not every session does. If it is absent, nothing is known about what is pending. Show a `request_id` once, even if it also arrives as a live `control_request` line (the program).
+
+A `control_response` can carry `pending_elicitation_requests` (new in `2.1.316`). It is an array of the `elicitation` requests that Claude Code sent and nobody answered or withdrew yet. A client that joins late can show the question. It is on a success `initialize` response when Claude Code lists them, which not every session does. If it is absent, nothing is known about what is pending. Show a `request_id` once, even if it also arrives as a live `control_request` line.[^elicitation]
 
 ## Example
 
@@ -129,18 +125,9 @@ A `control_response` can carry `pending_elicitation_requests` (new in `2.1.316`)
 {"type":"control_response","response":{"subtype":"success","request_id":"req-1","response":{"model":"claude-sonnet-5-5"}}}
 ```
 
-The `set_model` request has a `model` field.
-A success reply has `subtype: "success"` and the `request_id`.
-Since `2.1.307` a `set_model` success reply also has `response.model`, the model the session now uses.
-An alias comes back as the full model ID.
-An error reply has `subtype: "error"`, the `request_id`, an `error` text, and sometimes an `error_code`.
-Source: the program (strings of the request and response builders). The fields of the other subtypes are not listed here.
+The `set_model` request has a `model` field. A success reply has `subtype: "success"` and the `request_id`. Since `2.1.307` a `set_model` success reply also has `response.model`, the model the session now uses. An alias comes back as the full model ID. An error reply has `subtype: "error"`, the `request_id`, an `error` text, and sometimes an `error_code`.[^builders] The fields of the other subtypes are not listed here.
 
-We ran both examples on `2.1.309` with `claude -p --input-format stream-json --output-format stream-json --verbose` (see [Probes](../../reference/probes.md#static-and-print-probes)). The reply matches.
-The `request_id` is any text you pick, and the reply repeats it.
-`set_model` takes an alias such as `sonnet` or a full model ID. It replies `success` even for a name the API does not know, and `response.model` repeats that name, so the error shows up on the next request.
-The Agent SDK's `setModel()` waits up to 15 seconds for this reply (5 seconds before `2.1.307`). Source: the [release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307).
-A reply can come before the first `system` `init` line, because `init` appears only after the first user message.
+Both examples ran on `2.1.309` with `claude -p --input-format stream-json --output-format stream-json --verbose`, and the reply matches (see [Probes](../../reference/probes.md#static-and-print-probes)). The `request_id` is any text you pick, and the reply repeats it. `set_model` takes an alias such as `sonnet` or a full model ID. It replies `success` even for a name the API does not know, and `response.model` repeats that name, so the error shows up on the next request. The Agent SDK's `setModel()` waits up to 15 seconds for this reply (5 seconds before `2.1.307`).[^set-model] A reply can come before the first `system` `init` line, because `init` appears only after the first user message.
 
 ```json skip-lint title="Ask for the version"
 {"type":"control_request","request_id":"req-2","request":{"subtype":"get_binary_version"}}
@@ -174,17 +161,26 @@ sequenceDiagram
   H->>C: control_cancel_request (no longer needed)
 ```
 
-Each reply is a single `control_response` that matches the `request_id`.
-A sender can cancel its own request with `control_cancel_request`.
-Long requests send `control_request_progress` lines first.
+Each reply is a single `control_response` that matches the `request_id`. A sender can cancel its own request with `control_cancel_request`. Long requests send `control_request_progress` lines first.
 
 ## Exact Fields
 
-The exact fields: `https://clawdipedia.cc/schemas/claude-code-control-protocol.json`, made from the program's own validators. It has a `Request` and a `Response` definition for each subtype.
-It lists every field of this release, so build on the fields it names and look each one up there before you rely on it.
+The exact fields are in `https://clawdipedia.cc/schemas/claude-code-control-protocol.json`. It has a `Request` and a `Response` definition for each subtype, and it lists every field of this release. Look up a field there before you rely on it.[^validators]
 
 ## Related Pages
 
 - [Headless and Print Mode](index.md)
 - [Stream JSON Messages](stream-json.md)
 - [MCP Runtime](../mcp/runtime.md) for the MCP requests (`mcp_status`, `mcp_call`, `mcp_toggle`)
+
+## Sources
+
+[^subtypes]: The program, the bundled schema of `2.1.311`. For the `2.1.311` additions: `chunk-h3xwema8.js:23072` for `ui_prompt_paint`, `chunk-h3xwema8.js:22939` for the `ui_attach` list, `chunk-h3xwema8.js:20945` for `turn_handoff`, `chunk-h3xwema8.js:21930` for `oauth_token_refresh`, `chunk-h3xwema8.js:21711` for `mcpMount`, `chunk-h3xwema8.js:17357` for `background_color`, and `chunk-h3xwema8.js:19417` for the transcript note.
+[^initialize]: The program, `chunk-h3xwema8.js:629581` and `chunk-h3xwema8.js:632420`.
+[^interrupt]: The program, `chunk-h3xwema8.js:650897`.
+[^denied-tools]: The program, `chunk-h3xwema8.js:785180`. The warning is at `chunk-f40wgdh8.js:792584`.
+[^apply-flag]: The program, `chunk-a55h33gj.js:4374` and `:4384`.
+[^elicitation]: The program.
+[^builders]: The program, the strings of the request and response builders.
+[^set-model]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307).
+[^validators]: The schema is made from the program's own validators.

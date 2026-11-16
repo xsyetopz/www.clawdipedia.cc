@@ -4,11 +4,9 @@ description: Show your own text under the prompt, with every setting, trigger, a
 sidebar_position: 7
 ---
 
-The status line is a bar at the bottom of Claude Code that shows the output of a script you write.
-The script gets session data as JSON on `stdin`, such as the model and the cost. It prints what to show on `stdout`.
-It does not use API tokens.
-Set it with the `statusLine` key of a user, project, local, or managed settings file. The key names the script.
-To remove it, delete `statusLine`, or run `/statusline delete`.
+The status line is a bar at the bottom of Claude Code that shows the output of a script you write. Use it to keep the model, the cost, or the context use in view. It does not use API tokens.
+
+Your script gets session data as JSON on `stdin`, such as the model and the cost. It prints what to show on `stdout`. To turn it on, set the `statusLine` key in a user, project, local, or managed settings file, or run `/statusline`. To remove it, delete `statusLine`, or run `/statusline delete`.
 
 ## Example
 
@@ -32,7 +30,7 @@ echo "$model | context ${used}%"
 }
 ```
 
-The bar shows the model name and how full the context window is. The script also re-runs every 30 seconds.
+The bar shows the model name and how full the context window is. The script runs again every 30 seconds.
 
 ## Settings
 
@@ -43,9 +41,9 @@ Official page: [Customize Your Status Line](https://code.claude.com/docs/en/stat
 | `statusLine.type` | <Documented /> | Kind of status line | Must be `"command"`. Required | User, project, local, managed |
 | `statusLine.command` | <Documented /> | Script path or inline shell command | Runs in a shell. A change to it runs the new command at once, without the debounce | Same |
 | `statusLine.padding` | <Documented /> | Extra horizontal space in characters | The default is `0`. It adds to the built-in spacing | Same |
-| `statusLine.refreshInterval` | <Documented /> | Re-runs the command every N seconds | The minimum is `1`. The bundle uses `Math.max(1, n) * 1000` ms. It suits clocks and idle sessions | Same |
+| `statusLine.refreshInterval` | <Documented /> | Re-runs the command every N seconds | The minimum is `1` second. Use it for clocks and idle sessions | Same |
 | `statusLine.hideVimModeIndicator` | <Documented /> | Hides the built-in `-- INSERT --` text | Use it when the script prints `vim.mode` itself | Same |
-| `subagentStatusLine` | <Documented /> <Deprecated note="Works; will stop in a future release" /> | Custom row for each subagent in the agent panel | Since `2.1.326`, the program runs the command again. See [Subagent Status Line](#subagent-status-line) | Same |
+| `subagentStatusLine` | <Documented /> <Deprecated note="Works; will stop in a future release" /> | Custom row for each subagent in the agent panel | Since `2.1.326`, the command runs again. See [Subagent Status Line](#subagent-status-line) | Same |
 | `/statusline` | <Documented /> | Writes a script in `~/.claude/` and the setting | It takes natural language. `/statusline delete` removes it | Interactive |
 | Workspace trust | <Documented /> | The command waits for trust | `--debug` logs `Status line command skipped: workspace trust not accepted` | Project files |
 | `CLAUDE_CODE_SAFE_MODE` | <Documented /> | Status line commands do not load | Managed policy still applies | Env |
@@ -59,7 +57,7 @@ Two hook settings also act on the status line. `disableAllHooks` set outside man
 | Session start and resume | <Documented /> | First run | Runs once | Each session |
 | New assistant message, `/compact` done, permission mode change, vim mode toggle | <Documented /> | Re-runs the command | Claude Code debounces it at 300ms. A new trigger cancels a running script | Each session |
 | Rate-limit `resets_at` and cache `expires_at` | <Documented /> | Re-runs at the earliest time | The time comes from the data the script last received | Each session |
-| Model, fast mode, effort, thinking, and PR status change | <Differs /> | Also re-run the command | The bundle watches `mainLoopModel`, `fastMode`, `effortValue`, `thinkingEnabled`, `prStatus`. The list in the docs does not name them | Each session |
+| Model, fast mode, effort, thinking, and PR status change | <Differs /> | Also re-run the command | The official list does not name these triggers.[^extra-triggers] | Each session |
 
 ## Output Rules
 
@@ -71,17 +69,17 @@ Two hook settings also act on the status line. `disableAllHooks` set outside man
 - The line hides during the help menu and permission prompts. The command does not run while a permission or MCP input dialog is open (checked). Outside fullscreen, notifications share the row.
 - On Windows, use forward slashes in `command`. `CLAUDE_CODE_POWERSHELL_RESPECT_EXECUTION_POLICY` changes the PowerShell policy flag.
 
-Source for this list: the official [Customize Your Status Line](https://code.claude.com/docs/en/statusline) and [Environment Variables](https://code.claude.com/docs/en/env-vars) pages.
+See the official [Customize Your Status Line](https://code.claude.com/docs/en/statusline) and [Environment Variables](https://code.claude.com/docs/en/env-vars) pages.
 
 ## Subagent Status Line
 
-Since `2.1.326`, `subagentStatusLine` works again. In `2.1.323` it had no effect. The schema now says: "Deprecated: still works, and will stop working in a future release. Custom per-subagent status line shown in the agent panel; receives row context as JSON on stdin" (`chunk-m33vdkhs.js:9208`).
+Since `2.1.326`, `subagentStatusLine` works again. In `2.1.323` it had no effect. The settings schema now marks it as deprecated: it still works, and will stop working in a future release.[^sub-schema]
 
-- The key takes `type: "command"` and a `command`. Managed settings win. Otherwise the command comes from a settings file or a plugin (`chunk-y9bdpp8r.js:56551`).
-- The command waits for workspace trust. Without trust, `--debug` logs "Skipping subagentStatusLine execution - workspace trust not accepted" (`chunk-y9bdpp8r.js:56560`).
-- The program sends one JSON object on stdin. Besides the base session fields it holds `columns` and a `tasks` list. Each task has `id`, `name`, `type`, `agentType`, `status`, `description`, `label`, `startTime`, `model`, `effort`, `contextWindowSize`, `tokenCount`, `tokenSamples`, and `cwd` (`chunk-y9bdpp8r.js:56598`).
-- The command prints one JSON object per line, such as `{"id": "...", "content": "..."}`. The row for that `id` shows `content`. A line that is not JSON, or has another shape, is logged and skipped. A non-zero exit code leaves every row at its default look. The run has a 5-second timeout (`chunk-y9bdpp8r.js:56544`, `:56654`, `:56667`, `:56675`).
-- The program logs "subagentStatusLine is deprecated in favor of mods and will stop working in a future release" and queues a notice for the model. A plugin that sets `subagentStatusLine` in its own `settings.json` also gets a deprecation warning (`chunk-kek2xxjw.js:371`, `chunk-y9bdpp8r.js:120735`). See [Agents and Remote Settings](settings/agents-and-remote.md).
+- The key takes `type: "command"` and a `command`. Managed settings win. Otherwise the command comes from a settings file or a plugin.[^sub-source]
+- The command waits for workspace trust. Without trust, `--debug` logs "Skipping subagentStatusLine execution - workspace trust not accepted".[^sub-trust]
+- Claude Code sends one JSON object on stdin. Besides the base session fields it holds `columns` and a `tasks` list. Each task has `id`, `name`, `type`, `agentType`, `status`, `description`, `label`, `startTime`, `model`, `effort`, `contextWindowSize`, `tokenCount`, `tokenSamples`, and `cwd`.[^sub-input]
+- The command prints one JSON object per line, such as `{"id": "...", "content": "..."}`. The row for that `id` shows `content`. A line that is not JSON, or has another shape, is logged and skipped. A non-zero exit code leaves every row at its default look. The run has a 5-second timeout.[^sub-output]
+- Claude Code logs "subagentStatusLine is deprecated in favor of mods and will stop working in a future release" and queues a notice for the model. A plugin that sets `subagentStatusLine` in its own `settings.json` also gets a deprecation warning.[^sub-deprecation] See [Agents and Remote Settings](settings/agents-and-remote.md).
 
 ## JSON Fields
 
@@ -114,7 +112,7 @@ Always read optional fields with a default, for example `jq -r '.vim.mode // emp
 | Field | Status | What it holds | Notes | Where |
 | --- | --- | --- | --- | --- |
 | `workspace.current_dir` | <Documented /> | Current directory | Preferred over `cwd` | Status line |
-| `workspace.project_dir` | <Documented /> | Launch directory | The bundle fills it from the original cwd | Status line |
+| `workspace.project_dir` | <Documented /> | Launch directory | Claude Code fills it from the original working directory | Status line |
 | `workspace.added_dirs` | <Documented /> | Directories from `/add-dir` or `--add-dir` | It is an empty array if there are none | Status line |
 | `workspace.git_worktree` | <Documented /> | Linked worktree name | It is absent in the main tree | Status line |
 | `workspace.repo.host`, `.owner`, `.name` | <Documented /> | Repository identity from `origin` | May be absent. GitLab subgroups give a slash path in `owner` | Status line |
@@ -153,7 +151,7 @@ The object `prompt_cache` appears after the first main-conversation response (ne
 | `prompt_cache.hit_ratio` | <Documented /> | Cache reads over all input tokens | The value is 0 to 1. It is `null` when counts are zero | Status line |
 | `prompt_cache.cache_write_tokens`, `.miss_recache_tokens` | <Documented /> | Tokens written | Totals for the session and for misses | Status line |
 | `prompt_cache.last_miss_at` | <Documented /> | Time of the last miss | Epoch seconds. `null` if none | Status line |
-| `prompt_cache.last_miss_cause` | <Documented /> | The cause that the program gives for the last miss | `causes` array (such as `tools_changed`, `system_prompt_changed`, `ttl_expired_5m`, `likely_server_side`), plus `tools_added`, `tools_removed`, `system_char_delta`. Needs `2.1.260` | Status line |
+| `prompt_cache.last_miss_cause` | <Documented /> | The cause Claude Code gives for the last miss | `causes` array (such as `tools_changed`, `system_prompt_changed`, `ttl_expired_5m`, `likely_server_side`), plus `tools_added`, `tools_removed`, `system_char_delta`. Needs `2.1.260` | Status line |
 | `prompt_cache.miss_causes` | <Documented /> | Count per cause | Map | Status line |
 | `prompt_cache.recache_tokens_if_cold` | <Documented /> | Tokens a cold cache re-caches | `null` after a compaction until the next request | Status line |
 
@@ -182,8 +180,7 @@ Checked in the interactive screen (2.1.305, local stub, fake key, clean environm
 
 ## Exact Fields
 
-The exact fields are in `https://clawdipedia.cc/schemas/claude-code-status-line.json`. The program builds this payload in code, not with a validator, so the schema comes from that code. A field marked `x-unverified` has a type the code does not show. `x-observed` marks a field that a probe saw.
-It lists every field of this release. Build on the fields it names. Look each one up there before you rely on it.
+The exact fields are in `https://clawdipedia.cc/schemas/claude-code-status-line.json`. It lists every field of this release. Look up a field there before you rely on it. A field marked `x-unverified` has a type that is not confirmed. `x-observed` marks a field that a probe saw.[^schema-origin]
 
 ## Related Pages
 
@@ -191,3 +188,14 @@ It lists every field of this release. Build on the fields it names. Look each on
 - [Environment Variables](env-vars/index.md)
 - [Context and Compaction](../how-it-works/context-and-compaction.md) for what `context_window` counts.
 - [Request and Cache](../how-it-works/request-and-cache.md) for what `prompt_cache` measures.
+
+## Sources
+
+[^extra-triggers]: The program watches `mainLoopModel`, `fastMode`, `effortValue`, `thinkingEnabled`, and `prStatus`.
+[^sub-schema]: The program, `chunk-m33vdkhs.js:9208`. Schema text: "Deprecated: still works, and will stop working in a future release. Custom per-subagent status line shown in the agent panel; receives row context as JSON on stdin".
+[^sub-source]: The program, `chunk-y9bdpp8r.js:56551`.
+[^sub-trust]: The program, `chunk-y9bdpp8r.js:56560`.
+[^sub-input]: The program, `chunk-y9bdpp8r.js:56598`.
+[^sub-output]: The program, `chunk-y9bdpp8r.js:56544`, `:56654`, `:56667`, and `:56675`.
+[^sub-deprecation]: The program, `chunk-kek2xxjw.js:371` and `chunk-y9bdpp8r.js:120735`.
+[^schema-origin]: The program builds this payload in code, not with a validator, so the schema comes from that code.
