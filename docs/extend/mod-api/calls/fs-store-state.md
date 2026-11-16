@@ -4,15 +4,13 @@ description: The $.fs, $.store, and $.state nouns, the state helpers you import 
 sidebar_position: 13
 ---
 
-`$.fs` reads and writes files as the Claude Code process.
-`$.store` keeps values of the plugin between sessions.
-`$.state` holds named values with versions during a session.
-When a state value changes, the engine draws again each render hook that reads it.
+Use these nouns to keep data. `$.fs` reads and writes files as the Claude Code process. `$.store` keeps values of the plugin between sessions. `$.state` holds named values with versions during a session. When a state value changes, the engine draws again each render hook that reads it.
 
-There is no switch. A file is at most 4 MiB. `$.store` holds at most 4 MiB of JSON. `$.fs` uses the real file system. `$.store` and `$.state` belong to the plugin.
+There is no switch to turn them on. A file is at most 4 MiB. `$.store` holds at most 4 MiB of JSON. `$.fs` uses the real file system. `$.store` and `$.state` belong to the plugin.
 
-Official pages: [Draw in the Interface](https://code.claude.com/docs/en/plugins/mods/interface), [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.322 program (`schemas/claude-code.d.ts`).
-"Run time" appears in a "Where it can be used" cell. It means in a hook, in a closure that a hook drew, or in a timer callback. It does not mean inside `register`.
+Official pages: [Draw in the Interface](https://code.claude.com/docs/en/plugins/mods/interface) and [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference).[^types]
+
+"Run time" in a "Where it can be used" cell means in a hook, in a closure that a hook drew, or in a timer callback. It does not mean inside `register`.
 
 ## Example
 
@@ -77,3 +75,7 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 - [Mod API Overview](../index.md)
 - [Clock, HTTP, Process, Env, and Settings](clock-http-process-env-settings.md)
 - [Files, State, Clock, HTTP, Process, and Settings Types](../types/infra/index.md) (shapes of `FsEntry`, `FsStat`, `StateRef`, and more)
+
+## Sources
+
+[^types]: The Mod API type file of the `2.1.322` program, `schemas/claude-code.d.ts`.

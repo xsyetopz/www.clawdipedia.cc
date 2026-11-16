@@ -4,14 +4,11 @@ description: The $.telemetry noun, the telemetry.log and telemetry.mark events, 
 sidebar_position: 15
 ---
 
-`$.telemetry` logs analytics records.
-Only a call from Claude Code or a built-in mod sends a record.
-A mod you install can watch and rewrite records, but it must give its telemetry hook the filter `{ to: 'collector' }`.
-Without the filter the mod fails `claude plugin validate`. `*` does not select these events.
+`$.telemetry` logs analytics records. Only a call from Claude Code or a built-in mod sends a record. The built-in `cc-plugin-telemetry` sends the records to the collector that the operator of the session configured.
 
-A hook can return `{ deny }`. The built-in `cc-plugin-telemetry` sends the records. The collector is the one the operator of the session configured.
+A mod you install can watch and rewrite records, and a hook can return `{ deny }`. Give the telemetry hook the filter `{ to: 'collector' }`. Without the filter the mod fails `claude plugin validate`. `*` does not select these events.
 
-Official page: [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.322 program (`schemas/claude-code.d.ts`).
+Official page: [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference).[^types]
 
 ## Example
 
@@ -55,3 +52,7 @@ on("telemetry.log", { to: "collector" }, ($, e, next) => next(e));
 
 - [Mod API Overview](../index.md)
 - [Files, Nouns, and Gates](../nouns-and-gates.md#built-in-mods)
+
+## Sources
+
+[^types]: The Mod API type file of the `2.1.322` program, `schemas/claude-code.d.ts`.

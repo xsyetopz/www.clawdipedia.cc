@@ -4,14 +4,13 @@ description: How a mod gets each settings hook event as a classic event, with th
 sidebar_position: 16
 ---
 
-Each settings hook event is also an event named `classic.<Event>` for a mod.
-The event `e` is the `stdin` JSON of the settings hook, with the base fields.
-The chain is the managed settings hooks, then the hooks modules, then the other settings hooks as core.
-A managed block ends the chain above every module.
+Each settings hook event is also an event named `classic.<Event>` for a mod. Use one to handle a settings hook event in code. The event `e` is the `stdin` JSON of the settings hook, with the base fields.
+
+The chain runs the managed settings hooks first, then the hooks modules, then the other settings hooks as core. A managed block ends the chain above every module.
 
 Remove the `on` call to turn a hook off. `disableAllHooks` stops installed mods. The same events come from `hooks` in settings.
 
-Official pages: [Hooks Reference](https://code.claude.com/docs/en/hooks), [React to Events](https://code.claude.com/docs/en/plugins/mods/events). Source: the Mod API type file (the `*HookInput` types of `schemas/claude-code.d.ts`, from the 2.1.322 program). For what each event means, see [Hook Events](../../hooks/events.md).
+Official pages: [Hooks Reference](https://code.claude.com/docs/en/hooks) and [React to Events](https://code.claude.com/docs/en/plugins/mods/events).[^types] For what each event means, see [Hook Events](../../hooks/events.md).
 
 ## Example
 
@@ -72,3 +71,7 @@ In this table, "Base" means `block`, `preventContinuation`, and `stopReason`.
 - [Hooks and the Hook Chain](hooks.md)
 - [Classic Event Types](../types/classic/index.md) (the full input and result types)
 - [Hook Events](../../hooks/events.md)
+
+## Sources
+
+[^types]: The Mod API type file, the `*HookInput` types of `schemas/claude-code.d.ts`, from the `2.1.322` program.

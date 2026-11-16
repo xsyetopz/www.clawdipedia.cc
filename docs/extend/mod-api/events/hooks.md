@@ -4,14 +4,11 @@ description: The register entry point, the on function, the arguments of a hook,
 sidebar_position: 2
 ---
 
-A hook is a function that Claude Code calls when an event happens.
-You register it with `on`.
-It can watch the event, change it, or answer it.
-The events themselves are on the page of their namespace. See the [Mod API Overview](../index.md) for the map.
+A hook is a function that Claude Code calls when an event happens. Register it with `on`. A hook can watch the event, change it, or answer it. Each event is on the page of its namespace. See the [Mod API Overview](../index.md) for the map.
 
 Remove the `on` call to turn a hook off. `disableAllHooks` stops installed mods.
 
-Official pages: [React to Events](https://code.claude.com/docs/en/plugins/mods/events), [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference), [Mods Overview](https://code.claude.com/docs/en/plugins/mods/overview#how-a-mod-works).
+Official pages: [React to Events](https://code.claude.com/docs/en/plugins/mods/events), [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference), and [Mods Overview](https://code.claude.com/docs/en/plugins/mods/overview#how-a-mod-works).
 
 ## Example
 
@@ -37,8 +34,7 @@ export const register = (on) => {
 
 ## Arguments of a Hook
 
-A hook is `async ($, e, next) => result`.
-Hooks on `turn.step` and `process.spawn` are async generators.
+A hook is `async ($, e, next) => result`. Hooks on `turn.step` and `process.spawn` are async generators.
 
 | Item | Status | What it does | How it works | Where it can be used |
 | --- | --- | --- | --- | --- |
@@ -57,12 +53,9 @@ Hooks on `turn.step` and `process.spawn` are async generators.
 
 ## Failure Behavior
 
-The engine skips a hook that throws, overruns its budget, or returns a wrong shape.
-The hooks beneath and the engine run in its place, or its last `next` result stands.
-So a guard fails open unless its registration carries a `.catch` that refuses in its place.
+The engine skips a hook that throws, overruns its budget, or returns a wrong shape. The hooks beneath and the engine run in its place, or its last `next` result stands. So a guard fails open unless its registration carries a `.catch` that refuses in its place.
 
-Since 2.1.304, when a plugin that runs first skips one of your mod's hooks, the transcript shows a line naming the event and the plugin: `its <event> hook was skipped. "<plugin>" runs first and sent the event on past it.` (the program's text).
-The type file gives this advice at each event where an answer can refuse.
+Since `2.1.304`, when a plugin that runs first skips one of your mod's hooks, the transcript shows a line naming the event and the plugin: `its <event> hook was skipped. "<plugin>" runs first and sent the event on past it.`[^skipped] The type file gives this advice at each event where an answer can refuse.
 
 | Event | Status | What happens when the hook fails | The advice |
 | --- | --- | --- | --- |
@@ -90,7 +83,7 @@ The type file gives this advice at each event where an answer can refuse.
 | Item | Status | What it does | How it works | Where it can be used |
 | --- | --- | --- | --- | --- |
 | Hook time per event | <Documented /> | 10 seconds of the hook's own code. | The clock stops during `next` and `$` calls, but a `$.clock.sleep` counts. `HookBudget.ms` is 10000. A streaming hook counts its own code only, never a `yield` or a read beneath. | Every hook. |
-| `prompt.edit` hook time | <Documented /> | 50 milliseconds. | `HookBudget` has one `ms` value. The program sets the 50 millisecond value on the event (`budgetMs`). It replaces the 10 second default. If a hook fails, the editor's own edit stands. | `prompt.edit` hooks. |
+| `prompt.edit` hook time | <Documented /> | 50 milliseconds. | `HookBudget` has one `ms` value. The event sets the 50 millisecond value (`budgetMs`). It replaces the 10 second default.[^budget-ms] If a hook fails, the editor's own edit stands. | `prompt.edit` hooks. |
 | `.catch` grace | <Documented /> | 1 second. | `HookBudget.catchMs` is 1000. The handler gets a fresh budget. | `.catch` handlers. |
 | Linger after abort | <Documented /> | 5 seconds. | `HookBudget.lingerMs` is 5000. Past it the engine reports the hook as lingering. The dispatch continued without it. | Every hook. |
 | `session.end` hooks together | <Documented /> | The `SessionEnd` hook budget, 1.5 seconds by default. | The whole chain shares one short wall-clock bound that `next.budget` reads. | `session.end` hooks. |
@@ -101,3 +94,8 @@ The type file gives this advice at each event where an answer can refuse.
 - [Event Table Types](../types/events.md)
 - [Files, Nouns, and Gates](../nouns-and-gates.md)
 - [Hook Machinery Types](../types/hooks.md)
+
+## Sources
+
+[^skipped]: The program, the text of the transcript line.
+[^budget-ms]: The program.

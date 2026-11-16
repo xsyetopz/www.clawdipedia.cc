@@ -4,14 +4,11 @@ description: The claude-code/testing module that test files import, and the clau
 sidebar_position: 17
 ---
 
-`claude-code/testing` is the test kit that `*.test.ts` and `*.test.tsx` files import.
-`claude plugin test` runs those files with no session, no sign-in, and no network.
-A test runs in an environment like that of a hook, with no files, no network, and no process.
-A hooks module in a session cannot import this module.
+`claude-code/testing` is the test kit that `*.test.ts` and `*.test.tsx` files import. Run those files with `claude plugin test`. The command runs them with no session, no sign-in, and no network.
 
-Each test ends after 5 seconds unless it sets `timeoutMs`. Test files live in the plugin folder.
+A test runs in an environment like that of a hook, with no files, no network, and no process. A hooks module in a session cannot import this module. Test files live in the plugin folder. Each test ends after 5 seconds unless it sets `timeoutMs`.
 
-Official page: [Test a Mod](https://code.claude.com/docs/en/plugins/mods/test), [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.322 program (`schemas/claude-code.d.ts`).
+Official pages: [Test a Mod](https://code.claude.com/docs/en/plugins/mods/test) and [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference).[^types]
 
 ## Example
 
@@ -40,7 +37,7 @@ test("/tally reports the tool calls the mod has seen", async ($, on) => {
 | `expect(received, message?)` | <Documented /> | Assertions: `Matchers` (the `toBe` family), `AsyncMatchers`, `Negatable` (`not`), and the asymmetric matchers `expect.any` and `expect.objectContaining`. | `Expect`, `Expectation`, `Matchers`, and `Matching` type it. | Test files. |
 | `tier(tier)` | <Documented /> | Sets the tier that the plugin under test loads in. `PluginTier` excludes `core`. | Call it before the tests. | Test files. |
 | `mock` | <Documented /> | Memory-backed answers for the nouns beneath the plugins: clock, store, env, session, and more. | The testing module types `MockClock`, `MockSession`, and the options. | Test files. |
-| `$.tool.call(input)` | <Documented /> | Raises a tool call as the engine does. `agentId` names the loop it runs in, a subagent's or a teammate's (new in 2.1.307). Left out, the main loop. | A hooked `tool.check` runs as for a background subagent: a test's `classic.PermissionRequest` answers an ask, and no test plays a person's yes. Typed by `EngineToolCall`. | Tests only. |
+| `$.tool.call(input)` | <Documented /> | Raises a tool call as the engine does. `agentId` names the loop it runs in, a subagent's or a teammate's (new in `2.1.307`). Left out, the main loop. | A hooked `tool.check` runs as for a background subagent: a test's `classic.PermissionRequest` answers an ask, and no test plays a person's yes. Typed by `EngineToolCall`. | Tests only. |
 | `$.ui.mount(...)` | <Documented /> | Draws a component through the plugin on the surface that the test names. Returns a handle to read and act on by key. | Surfaces: `terminal`, `desktop`, `vscode`, `mobile`. The handle finds, presses, types, selects, resizes, and unmounts. It tests the mod, not the paint. | Tests only. |
 
 ## Errors
@@ -55,10 +52,15 @@ Each row is a family of messages. The backticked text is the start that every me
 | `advance(` | <Undocumented /> | `advance()` fired timer ticks and more were due. | Advance in smaller steps. Or check for an `every` that the module re-arms on each tick. |
 | `claude plugin test:` | <Undocumented /> | `claude plugin test` could not run. | A folder is not in the plugin, holds no `*.test.ts` or `*.test.tsx` files, or holds more test files than the limit. |
 | `the kit's` | <Undocumented /> | The test kit imports a module that is not part of it. | The text names the file and the import. |
-| Various | <Undocumented /> | **Plugin evals.** A plugin eval suite or its mocks did not run. | The eval directory, a case, a mock, or a fixture is not a plain readable directory or file. Examples are a symbolic link, a hard link, a name that differs only by letter case, or a path that escapes the plugin. A `tools:`, `error:`, or `abort_when:` key appears where it does not apply. Or a saved `tools/list` response is not valid JSON. |
-| `keepsBeneath: this test has its own ui.render hook at this site` | <Undocumented /> | A test called `keepsBeneath` on a drawing, and the test itself has a `ui.render` hook at that site. | The drawing at that site is a stub, not what the plugin drew. The text goes on: `so look for what it drew with find`. Use `find` to look for the element that the hook drew. Since `2.1.321`: `2.1.319` does not have this text. Source: the program (`chunk-g7hwsczr.js:38302`). |
+| Various | <Undocumented /> | Plugin evals. A plugin eval suite or its mocks did not run. | The eval directory, a case, a mock, or a fixture is not a plain readable directory or file. Examples are a symbolic link, a hard link, a name that differs only by letter case, or a path that escapes the plugin. A `tools:`, `error:`, or `abort_when:` key appears where it does not apply. Or a saved `tools/list` response is not valid JSON. |
+| `keepsBeneath: this test has its own ui.render hook at this site` | <Undocumented /> | A test called `keepsBeneath` on a drawing, and the test itself has a `ui.render` hook at that site. | The drawing at that site is a stub, not what the plugin drew. The text goes on: `so look for what it drew with find`. Use `find` to look for the element that the hook drew. Since `2.1.321`.[^keeps-beneath] |
 
 ## Related Pages
 
 - [Mod API Overview](../index.md)
 - [Testing Types](../types/testing/index.md) (types of the test kit)
+
+## Sources
+
+[^types]: The Mod API type file of the `2.1.322` program, `schemas/claude-code.d.ts`.
+[^keeps-beneath]: The program, `chunk-g7hwsczr.js:38302`. `2.1.319` does not have this text.

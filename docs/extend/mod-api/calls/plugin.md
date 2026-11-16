@@ -4,14 +4,11 @@ description: The $.plugin noun, the plugin.register and engine.create events, an
 sidebar_position: 5
 ---
 
-`$.plugin` names the plugin.
-`plugin.register` lets a mod refuse another module.
-`engine.create` builds `$` and lets a mod add a noun.
-A plugin ships the types of its noun in the `.d.ts` file that `types` names in `plugin.json`.
+`$.plugin` names the plugin. The `plugin.register` event lets a mod refuse another module. The `engine.create` event builds `$` and lets a mod add a noun.
 
-Return `{ refuse }` from `plugin.register` to keep a module out. `plugin.json` names the `types` file.
+Return `{ refuse }` from `plugin.register` to keep a module out. To ship the types of a new noun, put them in a `.d.ts` file and name it as `types` in `plugin.json`.
 
-Official page: [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.326 program (`schemas/claude-code.d.ts`).
+Official page: [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference).[^types]
 
 ## Example
 
@@ -41,8 +38,8 @@ on("engine.create", async ($, e, next) => {
 
 | Item | Status | What it does | How it works | Where it can be used |
 | --- | --- | --- | --- | --- |
-| `plugin.register` | <Documented /> | Fires once for each plugin about to load, with a hooks module or without one, at load and at reload. Core allows by default. | Input `PluginRegisterInput`. Result `PluginRegisterResult`: `{ allow: true }` or `{ refuse }`. A refused plugin never joins, and none of its other parts take effect: command hooks, MCP and LSP servers, skills, commands, agents, output styles, themes, monitors, settings, and `bin/` (a monitor armed before the refusal runs on). The engine skips a judge that fails, and the plugin joins. Since `2.1.326`, a hook narrows what loads: pass `provides` on with entries removed, and those parts stay out while the rest load (the program, `chunk-4h798pp0.js:238035`). | Hook via `on('plugin.register', ...)`. |
-| `engine.create` | <Documented /> | Runs while the engine builds `$`, once per load or reload of this plugin, before any other hook of it. `next(e)` resolves to `$` built so far. | Input `EngineCreateInput`. Result `EngineCreateResult`. A step may add nouns to `$` only when the hook names `engine.create`: a `*`, namespace, or negated hook only observes ([v2.1.323 release](https://github.com/anthropics/claude-code/releases/tag/v2.1.323)). If no hook names `engine.create`, `claude plugin validate` reports that the plugin never adds nouns (the program, `chunk-xq1041h8.js:43699`). Outside `user` it may also withhold nouns. If it replaces another plugin's noun, it fails and the plugin unloads. | Hook via `on('engine.create', ...)`. |
+| `plugin.register` | <Documented /> | Fires once for each plugin about to load, with a hooks module or without one, at load and at reload. Core allows by default. | Input `PluginRegisterInput`. Result `PluginRegisterResult`: `{ allow: true }` or `{ refuse }`. A refused plugin never joins, and none of its other parts take effect: command hooks, MCP and LSP servers, skills, commands, agents, output styles, themes, monitors, settings, and `bin/` (a monitor armed before the refusal runs on). The engine skips a judge that fails, and the plugin joins. Since `2.1.326`, a hook narrows what loads: pass `provides` on with entries removed, and those parts stay out while the rest load.[^provides] | Hook via `on('plugin.register', ...)`. |
+| `engine.create` | <Documented /> | Runs while the engine builds `$`, once per load or reload of this plugin, before any other hook of it. `next(e)` resolves to `$` built so far. | Input `EngineCreateInput`. Result `EngineCreateResult`. A step may add nouns to `$` only when the hook names `engine.create`: a `*`, namespace, or negated hook only observes.[^v323] If no hook names `engine.create`, `claude plugin validate` reports that the plugin never adds nouns.[^validate] Outside `user` it may also withhold nouns. If it replaces another plugin's noun, it fails and the plugin unloads. | Hook via `on('engine.create', ...)`. |
 
 ## Types
 
@@ -71,3 +68,10 @@ on("engine.create", async ($, e, next) => {
 - [Mod API Overview](../index.md)
 - [Hooks and the Hook Chain](../events/hooks.md)
 - [Files, Nouns, and Gates](../nouns-and-gates.md)
+
+## Sources
+
+[^types]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`.
+[^provides]: The program, `chunk-4h798pp0.js:238035`.
+[^v323]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323).
+[^validate]: The program, `chunk-xq1041h8.js:43699`.

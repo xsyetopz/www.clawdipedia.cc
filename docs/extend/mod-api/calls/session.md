@@ -4,13 +4,13 @@ description: The $.session noun that reads the running session, compacts it, and
 sidebar_position: 9
 ---
 
-`$.session` lets a mod read the running session as plain data, compact it, and send messages to other agents or sessions.
-Its events tell a mod when a session starts, ends, compacts, or gets a message.
+`$.session` lets a mod read the running session as plain data, compact it, and send messages to other agents or sessions. Its events tell a mod when a session starts, ends, compacts, or gets a message.
 
-Return `{ skip }`, `{ consumed }`, or `{ deny }` from a hook to stop an action.
+To stop an action, return `{ skip }`, `{ consumed }`, or `{ deny }` from a hook.
 
-Official pages: [Use the Mods API](https://code.claude.com/docs/en/plugins/mods/api), [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference). Source: the Mod API type file of the 2.1.322 program (`schemas/claude-code.d.ts`).
-"Run time" appears in a "Where it can be used" cell. It means in a hook, in a closure that a hook drew, or in a timer callback. It does not mean inside `register`.
+Official pages: [Use the Mods API](https://code.claude.com/docs/en/plugins/mods/api) and [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference).[^types]
+
+"Run time" in a "Where it can be used" cell means in a hook, in a closure that a hook drew, or in a timer callback. It does not mean inside `register`.
 
 ## Example
 
@@ -38,12 +38,12 @@ on("session.start", async ($, e, next) => {
 | `$.session.surface` | <Documented /> <Deprecated note="Use surfaces()" /> | Returns the first of `$.session.surfaces()`, or `null` where nothing draws. | `() => Promise<RenderSurface \| null>`. Deprecated. Use `surfaces()`, because a session may draw on several surfaces. | Run time. |
 | `$.session.usage` | <Documented /> | Returns when the session began, the context window fill, the rate-limit windows, and the cost, as the status line has them. | `(args?) => Promise<SessionUsage>`. A plain call costs nothing. `breakdown: "full"` uses the token-count API. `"summary"` estimates locally. | Run time. |
 | `$.session.version` | <Documented /> | Returns the engine's version, its base release, and its build time. | `() => Promise<SessionVersion>`: `version`, `base` (absent unless the version is a release), `builtAt`. Works in every mode. | Run time. |
-| `$.session.info` | <Documented /> | Since `2.1.326`, returns the transcript file, the scratchpad, the prompt id, the agent type, the config root, the platform, and the hosting of the session, as they stand at the call. | `() => Promise<SessionInfo>`. Resolves `{ transcriptPath, scratchpadDir?, promptId?, agentType?, configRoot?, platform, isHosted }`. A settings hook reads the same on its input (the program, `chunk-4h798pp0.js:57382`). | Run time. |
+| `$.session.info` | <Documented /> | Since `2.1.326`, returns the transcript file, the scratchpad, the prompt id, the agent type, the config root, the platform, and the hosting of the session, as they stand at the call. | `() => Promise<SessionInfo>`. Resolves `{ transcriptPath, scratchpadDir?, promptId?, agentType?, configRoot?, platform, isHosted }`. A settings hook reads the same on its input.[^info] | Run time. |
 | `$.session.compact` | <Documented /> | Compacts the conversation. It is the event `session.compact` with `trigger` `plugin`, the same call `/compact` makes. | `(input?) => Promise<SessionCompactResult>`. Runs the hooks, then core. Resolves `{ skip }` if a hook vetoed it. Rejects while a turn runs. | Between turns. |
 | `$.session.send` | <Documented /> | Sends a plain-text message to another agent or session. It is the event `session.send`, the same delivery as the model's SendMessage tool. | `(input) => Promise<SessionSendResult>`. `to` is a name, an agent id, `{ sessionId }`, or `{ agentId }`. Resolves once queued. | Run time. |
 | `$.session.append` | <Documented /> | Appends a row to a conversation of the session. It is the event `session.append`, the engine's own call for every row it keeps. | `(args) => Promise<SessionAppendResult>`. Adds a user-role row of text blocks. Resolves `{ deny: reason }` if a plugin above refused it. | Run time. |
 | `$.session.identity` | <Documented /> | Returns the sign-in identity of the session, to a mod that the organization's managed settings install. Any other mod gets `{ deny }`. The call makes no request. | `() => Promise<SessionIdentity>`. Full account data only where managed `forceLoginOrgUUID` lists the organization. Otherwise only `kind`. | Mods that managed settings install. |
-| `$.session.authorize` | <Documented /> | Holds the session's Anthropic credential on the host and returns an opaque handle with its kind, for example `{ handle: "auth_00000000000000000000000000000000", kind: "bearer" }`. The secret never reaches the mod. Returns `null` when the session has no first-party credential (a third-party provider, a cloud gateway, no login or key) and, since 2.1.307, when the desktop app's sign-in is in use. | `() => Promise<SessionAuthorization>`. Spend the handle with `$.http.fetch(url, { auth: handle })`. The engine sets the credential header, and only for a first-party host. A handle belongs to the mod that minted it, and a mod keeps at most 4 live handles (a fifth evicts the oldest). An unknown or foreign handle makes `$.http.fetch` throw. `kind` is `bearer` or `api-key`. No managed-settings gate, unlike `$.session.identity`. | Run time. |
+| `$.session.authorize` | <Documented /> | Holds the session's Anthropic credential on the host and returns an opaque handle with its kind, for example `{ handle: "auth_00000000000000000000000000000000", kind: "bearer" }`. The secret never reaches the mod. Returns `null` when the session has no first-party credential (a third-party provider, a cloud gateway, no login or key) and, since `2.1.307`, when the desktop app's sign-in is in use. | `() => Promise<SessionAuthorization>`. Spend the handle with `$.http.fetch(url, { auth: handle })`. The engine sets the credential header, and only for a first-party host. A handle belongs to the mod that minted it, and a mod keeps at most 4 live handles (a fifth evicts the oldest). An unknown or foreign handle makes `$.http.fetch` throw. `kind` is `bearer` or `api-key`. No managed-settings gate, unlike `$.session.identity`. | Run time. |
 
 ## Engine Events
 
@@ -57,7 +57,7 @@ on("session.start", async ($, e, next) => {
 | `session.attach` | <Documented /> | Fires when a remote client joins the roster of attached surfaces. | Input `SessionAttachInput`. Result `{ clientId }`. A hook observes a client that joins. `$.session.surfaces()` reads the roster. | `on('session.attach', ...)`. |
 | `session.detach` | <Documented /> | Fires when a client leaves the roster: it detached, or the session ended with it attached (`e.reason`). | Input `SessionDetachInput`. Result `{ clientId }`. With reason `end` it runs inside the short bound of `session.end`. | `on('session.detach', ...)`. |
 | `session.measure` | <Documented /> | Fires when the engine measures the session and a unit moved: after each main-thread turn, and when a rate-limit window moves a whole point. | Input `SessionMeasureInput`. Result `{ changed }`. It pushes the figures of `$.session.usage()`. Calls arrive one at a time. | `on('session.measure', ...)`. |
-| `session.stop` | <Documented /> | Since `2.1.326`, fires when the person presses Stop: Esc or Ctrl+C on a turn, the Stop of a client, or Ctrl+C at an idle prompt where it stops running scripts. | Input `SessionStopInput`. Result `{ isTurnRunning }`. Observe only: the Stop goes on whatever a hook does. It never fires for send now, a priority message, `$.turn.abort`, or a denied permission. A client's Stop fires for each request, so one Stop sent two ways may fire twice. Raised before the abort, and nothing waits on it: note the Stop before the first `await` (the program, `chunk-4h798pp0.js:10027`). | `on('session.stop', ...)`. |
+| `session.stop` | <Documented /> | Since `2.1.326`, fires when the person presses Stop: Esc or Ctrl+C on a turn, the Stop of a client, or Ctrl+C at an idle prompt where it stops running scripts. | Input `SessionStopInput`. Result `{ isTurnRunning }`. Observe only: the Stop goes on whatever a hook does. It never fires for send now, a priority message, `$.turn.abort`, or a denied permission. A client's Stop fires for each request, so one Stop sent two ways may fire twice. Raised before the abort, and nothing waits on it: note the Stop before the first `await`.[^stop] | `on('session.stop', ...)`. |
 | `session.end` | <Documented /> | Fires once when the session ends (exit, `/clear`, resume, logout, signal, a finished `-p` run), after its `SessionEnd` settings hooks. `e.reason` says which. | Input `SessionEndInput`. Result `{ sessionId }`. The whole chain shares one short time bound that `next.budget` reads. | `on('session.end', ...)`. |
 
 ## Events Raised by Session Calls
@@ -80,10 +80,17 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 
 When `auth` is set, the `$.http.fetch` handler runs a pre-check before it resolves the handle. The pre-check has one refusal. If [`CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC`](../../../configure/env-vars/network-and-proxy.md) is set, the request throws an error. The error ends "the session's credential is withheld: nonessential network traffic is disabled for this session".
 
-When no credential resolves, `$.session.authorize` logs `$.session.authorize (<plugin>): no first-party credential (<reason>)` and returns `null`. It does the same if a workload-identity token is minted for another host, or if the auth mode changes during the call. Since 2.1.307 it also returns `null` when the desktop app signed the session in, and logs `$.session.authorize (<plugin>): no first-party credential (the desktop app's sign-in is not lent to plugins)` (the program).
+When no credential resolves, `$.session.authorize` logs `$.session.authorize (<plugin>): no first-party credential (<reason>)` and returns `null`. It does the same if a workload-identity token is minted for another host, or if the auth mode changes during the call. Since `2.1.307` it also returns `null` when the desktop app signed the session in, and logs `$.session.authorize (<plugin>): no first-party credential (the desktop app's sign-in is not lent to plugins)`.[^desktop]
 
 ## Related Pages
 
 - [Mod API Overview](../index.md)
 - [Agent](agent.md)
 - [Session Types](../types/session/index.md) (context, messages, usage, and send types)
+
+## Sources
+
+[^types]: The Mod API type file of the `2.1.322` program, `schemas/claude-code.d.ts`.
+[^info]: The program, `chunk-4h798pp0.js:57382`.
+[^stop]: The program, `chunk-4h798pp0.js:10027`.
+[^desktop]: The program.
