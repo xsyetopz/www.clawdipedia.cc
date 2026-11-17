@@ -34,6 +34,7 @@ Sources: the release notes of [`2.1.325`](https://github.com/anthropics/claude-c
 | `github` marketplace `ref` | <Documented /> | `ref` takes a branch, a tag, or a full commit ID. A full ID holds the marketplace at that commit. A client before `2.1.326` cannot clone such a pin. | [Marketplace](../extend/plugins/marketplace.md#marketplace-sources) |
 | `pluginDigests` | <Differs /> | It is deprecated and ignored. Settings that hold it still load. A plugin must be the copy that its install record holds, or it does not load. | [Marketplace](../extend/plugins/marketplace.md#plugin-digests) |
 | Marketplace trust text | <Documented /> | The add-marketplace confirmation, the install warning, and the recommendation prompt now say that plugins can run code on your computer. | [Marketplace](../extend/plugins/marketplace.md#how-it-works) |
+| `cc-plugin-privacy` | <Undocumented /> | It also refuses your account email as a client identity in `Write`, `Edit`, `NotebookEdit`, `WebFetch`, and MCP tool calls, and in script files that a shell command runs. | [Files, Nouns, and Gates](../extend/mod-api/nouns-and-gates.md#built-in-mods) |
 
 ### Mod API Type File
 
@@ -59,6 +60,10 @@ Source: the program: the Mod API type file (`schemas/claude-code.d.ts`) of `2.1.
 | `AgentSpawnInput.parentAgentId` | <Documented /> | A plugin can start a spawn under a running or resting agent of the session. | [Agent Calls](../extend/mod-api/calls/agent.md#spawn-types) |
 | `ui.pointer` | <Documented /> | It fires when the person clicks or taps the backdrop. Only the hooks of the plugin that set the theme see it. | [UI Events](../extend/mod-api/ui/ui-events.md#engine-events), [UI Call Argument and Result Types](../extend/mod-api/types/ui/call-arguments.md#uipointerinput) |
 | `overflowX` box prop | <Documented /> | The value `'scroll'` stops the box from wrapping its children. | [UI Element Props Types](../extend/mod-api/types/ui/element-props.md#boxprops) |
+| `AgentRow` and `ContextMenu` | <Documented /> | Two new render components. A hook can relabel, redraw, or hide a row of the agent list, and add rows to the menu that the person opens on the transcript in the desktop app. | [UI Elements](../extend/mod-api/ui/ui-elements.md#agentrow), [UI Elements](../extend/mod-api/ui/ui-elements.md#contextmenu) |
+| `Shader` element | <Documented /> | A desktop or mobile drawing can hold a shader, and a `Backdrop` answer may hold one. | [UI Elements](../extend/mod-api/ui/ui-elements.md#shader-element), [Input, Pane, and Render Types](../extend/mod-api/types/ui/input-pane-render.md#shaderprops) |
+| `claude plugin validate --json` report | <Documented /> | The type file now describes the report, with its shaders and notes. | [Plugin CLI](../extend/plugins/cli.md#validate-json-report) |
+| `ToolDescribeInput.mcpServer` and `SessionCost.hasUnknownPrice` | <Documented /> | A describe hook sees the transport and origin of the MCP server that a tool comes from. The session cost says when it includes a model with no known price, counted at another model's rates. | [Tool Call, Check, and Describe Types](../extend/mod-api/types/tool-command-config/tool-calls.md), [Session Types](../extend/mod-api/types/session/compact-measure-messages.md) |
 | `wrap` `'clip'` and `maxLines` | <Documented /> | `'clip'` is a new `wrap` value. `maxLines` limits the lines from 1 to 10000. | [UI Select, Text, and Focus Types](../extend/mod-api/types/ui/select-text-focus.md#textprops) |
 
 ### Settings, Permissions, and Startup
@@ -106,7 +111,7 @@ Source: the program: the Mod API type file (`schemas/claude-code.d.ts`) of `2.1.
 | `Monitor` with only stderr output | <Documented /> | A watch that ends with no events, and whose command wrote to stderr, tells Claude so. | [Shell and Web Tools](../reference/tools/shell-and-web.md#how-it-works) |
 | Code Mode and agent teams | <Undocumented /> | Agent teams no longer block Code Mode. | [Gated and Other Tools](../reference/tools/gated-and-other.md#code-mode) |
 | Code Mode `$` helper | <Undocumented /> | The helper refuses some values with an error, and nothing runs. | [Gated and Other Tools](../reference/tools/gated-and-other.md#code-mode) |
-| Git commands in a worktree subagent | <Gated /> | A subagent isolated in a worktree cannot run git commands that rewrite shared branches or refs. A main session is not affected. | [Subagent Runtime](../extend/subagents/runtime.md#git-commands-in-a-worktree-subagent) |
+| Git commands in a worktree subagent | <Gated /> | A subagent isolated in a worktree, or a main session in a worktree it created, cannot run git commands that rewrite shared branches or refs. Other refused commands include `git bisect run`, `git maintenance register` and `start`, and the `scalar` set-up commands. The refusal says what still works. | [Subagent Runtime](../extend/subagents/runtime.md#git-commands-in-a-worktree-subagent) |
 | Shell working directory | <Undocumented /> | A Bash command no longer runs in the launch folder when its working directory is gone. It fails with a message. | [Agent Loop](../how-it-works/agent-loop.md#the-tool-stage) |
 | Subagent output limit | <Undocumented /> | A subagent whose reply stops at the token limit is asked up to 3 times to answer again, more briefly. | [Subagent Runtime](../extend/subagents/runtime.md#limits-and-switches), [Agent Loop](../how-it-works/agent-loop.md#recovery-inside-the-loop) |
 | `decision: "block"` hook output | <Documented /> | It also blocks when `hookSpecificOutput` names a different event. Claude Code ignores that field and logs a warning. | [Hook Input and Output](../extend/hooks/input-and-output.md#decision-patterns) |
@@ -119,6 +124,7 @@ Source: the program: the Mod API type file (`schemas/claude-code.d.ts`) of `2.1.
 | `claude mcp add-json` messages | <Documented /> | A bad entry gets a message that says what to change. | [MCP CLI](../extend/mcp/cli.md#subcommands) |
 | `claude mcp serve` and the sandbox | <Documented /> | It ignores `dangerouslyDisableSandbox` and `sandbox.excludedCommands`. | [MCP CLI](../extend/mcp/cli.md#subcommands) |
 | `managed-mcp.json` that appears late | <Documented /> | Claude Code shows a notice, and may ignore a late file that the running account could have written. | [MCP Settings](../extend/mcp/settings.md#files-and-flags) |
+| MCP server held by connector settings | <Undocumented /> | When your organization's connector settings do not allow a server, or cannot check it, Claude Code does not send it a message or show its question. The error says which. | [MCP Runtime](../extend/mcp/runtime.md#errors) |
 
 ### CLI, Sessions, and Accounts
 
@@ -144,6 +150,17 @@ Source: the program: the Mod API type file (`schemas/claude-code.d.ts`) of `2.1.
 | `/terminal-setup`, `/help`, `/status` | <Documented /> | `/terminal-setup` names the tmux lines that Shift+Enter needs. `/help` takes `[command]`, and `/<command> --help` opens it for a built-in command. `/status` has a `Features` row. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands) |
 | Command that is off | <Documented /> | A built-in command that is off says why, instead of `Unknown command`. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#when-a-command-is-off) |
 | Queued message hint | <Undocumented /> | The hint reads `Queued · <key> send now`, or `Queued · click to send now`. | [Unbound and Reserved Keys](../configure/keybindings/unbound-and-reserved.md#click-to-send-a-queued-message) |
+| `/upgrade` with an API key | <Documented /> | It says that it needs a Claude subscription and names the key source, instead of `Unknown command`. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#when-a-command-is-off) |
+
+### Headless Mode and Transcripts
+
+| Change | Status | What it means for you | Where to read more |
+| --- | --- | --- | --- |
+| Control request replies | <Undocumented /> | `get_cloud_session_transcript` takes `limit`. `get_binary_version` returns `oldestDesktopSdk`. `list_permission_rules` marks a cut answer with `state.withheld`. `oauth_token_refresh` can carry `refused_bearer_sha256` and `refused_call`. | [Control Protocol](../extend/headless/control-protocol.md#subtypes) |
+| `late_allow_not_run` | <Undocumented /> | A cloud worker says that a permission card's call will not run when you allow it late. | [Stream-JSON](../extend/headless/stream-json.md#undocumented-types) |
+| `init` capabilities | <Undocumented /> | `reload_plugins_refuse_if_busy_v1` and `silent_resend_files_v1` are new. | [Stream-JSON](../extend/headless/stream-json.md#capabilities-of-the-init-line) |
+| Hook, task, and plugin error fields | <Undocumented /> | `hook_started` lines can carry `origin`, `label`, and `plugin_name`. `hook_progress` can carry `backgrounded`. `task_notification` can carry `summary_is_report`. A `plugin_errors` entry can carry `managed_lock`. An `informational` line can carry `hook_no_verdict`. | [Stream-JSON](../extend/headless/stream-json.md#fields-new-in-21326) |
+| Transcript `madeBy` and `modelCallCostUSD` | <Undocumented /> | An `assistant` entry can say whether the model, your input, or something else made it. A `cost-state` line can hold the cost of model calls. | [Transcript Format](../reference/transcript-format.md#line-types) |
 
 ### Models, Network, and Telemetry
 
@@ -162,6 +179,7 @@ Source: the program: the Mod API type file (`schemas/claude-code.d.ts`) of `2.1.
 | `user_prompt` event | <Undocumented /> | A message sent while tool calls run also gives this event, with `delivery.mode` set to `mid_turn`. | [OpenTelemetry](../reference/opentelemetry.md#events) |
 | `tool_decision` event | <Documented /> | A managed `PreToolUse` hook that refuses a tool call also leaves this event and an entry in `permission_denials`. | [OpenTelemetry](../reference/opentelemetry.md#events) |
 | `OTEL_RESOURCE_INCLUDE_HOST` | <Undocumented /> | It adds `host.name` and `host.id` to the OpenTelemetry resource. | [Telemetry and Debug Variables](../configure/env-vars/telemetry-and-debug.md#variables) |
+| Fast mode price | <Undocumented /> | The price text takes the model catalog price. `claude-sonnet-5` shows `$2/$10 per Mtok`, not `$30/$150`. | [Fast Mode](../configure/models-and-providers/fast-mode.md#price-text) |
 
 ## Earlier Releases
 
