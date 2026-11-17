@@ -11,6 +11,7 @@ import { dirname, join, relative, sep } from "node:path";
 import { normalizeHost, numberUuids } from "../capture-prompts/normalize.ts";
 import { countProblems } from "../undocumented-counts.ts";
 import { badEmoji, checkBody, emojiIn } from "./docs-body.ts";
+import { type FrontMatter, parseFrontMatter } from "./front-matter.ts";
 import { titleCaseProblems } from "./title-case.ts";
 
 export { bareCodeTokens } from "./docs-body.ts";
@@ -47,37 +48,6 @@ const walk = async (dir: string): Promise<string[]> => {
 		}),
 	);
 	return found.flat();
-};
-
-interface FrontMatter {
-	data: Record<string, string>;
-	bodyStart: number;
-}
-
-const parseFrontMatter = (text: string): FrontMatter | null => {
-	const lines = text.split("\n");
-	if (lines[0]?.trim() !== "---") {
-		return null;
-	}
-	const data: Record<string, string> = {};
-	for (const [i, line] of lines.entries()) {
-		if (i === 0) {
-			continue;
-		}
-		if (line.trim() === "---") {
-			return { data, bodyStart: i + 1 };
-		}
-		const m = /^([A-Za-z_][\w-]*):\s*(.*)$/u.exec(line);
-		if (m !== null) {
-			const [, key = "", raw = ""] = m;
-			let v = raw.trim();
-			if (/^(['"]).*\1$/u.test(v)) {
-				v = v.slice(1, -1);
-			}
-			data[key] = v;
-		}
-	}
-	return null;
 };
 
 // docs/prompts/ holds verbatim program text, so it is exempt.
@@ -159,7 +129,13 @@ const checkDoc = (
 	text: string,
 	docs: Map<string, string>,
 ): void => {
-	const fm = parseFrontMatter(text);
+	let fm: FrontMatter | null;
+	try {
+		fm = parseFrontMatter(text);
+	} catch (error) {
+		report(file, 1, String(error));
+		return;
+	}
 	if (fm === null) {
 		report(file, 1, "missing front matter");
 		return;

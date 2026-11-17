@@ -1,6 +1,6 @@
 ---
 title: Clock, HTTP, Process, Env, and Settings
-description: The $ nouns that reach the machine: time and timers, web requests, commands, environment variables, and merged settings.
+description: "The $ nouns that reach the machine: time and timers, web requests, commands, environment variables, and merged settings."
 sidebar_position: 14
 ---
 
