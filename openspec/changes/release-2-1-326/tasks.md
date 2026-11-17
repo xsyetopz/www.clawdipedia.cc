@@ -34,6 +34,6 @@ Ids are lines of the release notes: `325` is `captures/2.1.326/notes-2.1.325.md`
 
 - [x] 6.1 Bump `src/version.ts`, run `bun run schemas`, `bun run surface`, and `bun run surface:check` (`752c822f`).
 - [x] 6.2 Render the prompt pages, move program citations to `2.1.326`, and run `bun run check:citations` (`00e63093`).
-- [ ] 6.3 Bump clawdipedia-docs and clawdipedia-docs-cli to 3.0.6, and add a `CHANGELOG.md` entry.
-- [ ] 6.4 Run `just verify` and `just verify-project`, push, and check CI.
-- [ ] 6.5 Run `release:probe:live -- --yes`.
+- [x] 6.3 Bump clawdipedia-docs and clawdipedia-docs-cli to 3.0.6, and add a `CHANGELOG.md` entry (`e6f29849`, bundles `4d23fa73`).
+- [x] 6.4 Run `just verify` and `just verify-project`, push, and check CI (CI run `43990581907`; the local site build passes the server bundle and stops at the 8 GB process limit, so CI builds the site).
+- [x] 6.5 Run `release:probe:live -- --yes` (16 cases ok, 0 invalid).
