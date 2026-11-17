@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-settings.json",
-	"title": "Claude Code settings.json (Claude Code 2.1.323)",
-	"$comment": "For settings.json (user, project, local). Generated from Claude Code 2.1.323 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code settings.json (Claude Code 2.1.326)",
+	"$comment": "For settings.json (user, project, local). Generated from Claude Code 2.1.326 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
 	"type": "object",
 	"properties": {
 		"$schema": {
@@ -639,7 +639,7 @@
 			}
 		},
 		"disableClaudeAiConnectors": {
-			"description": "When true in any settings source, claude.ai MCP cloud connectors are not auto-fetched or connected, and a claudeai-proxy server passed explicitly (e.g. via --mcp-config or the SDK mcpServers option) does not connect either. Any-source-true wins: a project can opt out, but a project-level false cannot override a user-level true.",
+			"description": "When true in any settings source, claude.ai MCP cloud connectors are not auto-fetched or connected, and a claudeai-proxy server passed explicitly (e.g. via --mcp-config or the SDK mcpServers option) does not connect either. Where a managed or served source sets it, the connectors that the desktop app's Code tab hands to a session do not connect either, from the app version that shows them as turned off. Any-source-true wins: a project can opt out, but a project-level false cannot override a user-level true.",
 			"type": "boolean"
 		},
 		"skillOverrides": {
@@ -953,7 +953,7 @@
 												"enum": ["continue", "block"]
 											},
 											"headers": {
-												"description": "Additional headers to include in the request. Values may reference environment variables using $VAR_NAME or ${VAR_NAME} syntax (e.g., \"Authorization\": \"Bearer $MY_TOKEN\"). Only variables listed in allowedEnvVars will be interpolated.",
+												"description": "Additional headers to include in the request. Values may reference environment variables using $VAR_NAME or ${VAR_NAME} syntax (e.g., \"Authorization\": \"Bearer $MY_TOKEN\"). Only variables listed in allowedEnvVars will be interpolated. Content-Length and Transfer-Encoding given here are ignored: Claude Code works out the request's length from its body.",
 												"type": "object",
 												"propertyNames": {
 													"type": "string"
@@ -1093,11 +1093,11 @@
 			"type": "boolean"
 		},
 		"disableArtifact": {
-			"description": "Deprecated: use enableArtifact: false. Still honored — true disables the Artifact tool; false is ignored.",
+			"description": "Deprecated: use enableArtifact: false. Still honored — true turns Artifacts off; false is ignored.",
 			"type": "boolean"
 		},
 		"enableArtifact": {
-			"description": "Turn the Artifact tool on or off. Off in any of managed, --settings, or user settings wins; project and local settings can only turn it off. Unset defaults to on once the feature is available.",
+			"description": "Turn Artifacts on or off. Off in any of managed, --settings, or user settings wins; project and local settings can only turn it off. Unset defaults to on once the feature is available.",
 			"type": "boolean"
 		},
 		"enableWorkflows": {
@@ -1143,14 +1143,14 @@
 			"type": "boolean"
 		},
 		"allowedHttpHookUrls": {
-			"description": "Allowlist of URL patterns that HTTP hooks may target. Supports * as a wildcard (e.g. \"https://hooks.example.com/*\"). When set, HTTP hooks with non-matching URLs are blocked. If undefined, all URLs are allowed. If empty array, no HTTP hooks are allowed. Arrays merge across settings sources (same semantics as allowedMcpServers).",
+			"description": "Allowlist of URL patterns that HTTP hooks may target. Supports * as a wildcard (e.g. \"https://hooks.example.com/*\"). When set, HTTP hooks with non-matching URLs are blocked. If undefined, all URLs are allowed. If empty array, no HTTP hooks are allowed. Arrays merge across settings sources (same semantics as allowedMcpServers). Where managed settings do not set this list, a list in any other settings file does not apply to hooks that managed settings define, or that come from a plugin they enable from a local folder they name.",
 			"type": "array",
 			"items": {
 				"type": "string"
 			}
 		},
 		"httpHookAllowedEnvVars": {
-			"description": "Allowlist of environment variable names HTTP hooks may interpolate into headers. When set, each hook's effective allowedEnvVars is the intersection with this list. If undefined, no restriction is applied. Arrays merge across settings sources (same semantics as allowedMcpServers).",
+			"description": "Allowlist of environment variable names HTTP hooks may interpolate into headers. When set, each hook's effective allowedEnvVars is the intersection with this list. If undefined, no restriction is applied. Arrays merge across settings sources (same semantics as allowedMcpServers). Where managed settings do not set this list, a list in any other settings file does not apply to hooks that managed settings define, or that come from a plugin they enable from a local folder they name.",
 			"type": "array",
 			"items": {
 				"type": "string"
@@ -1230,7 +1230,7 @@
 			}
 		},
 		"subagentStatusLine": {
-			"description": "Deprecated: no longer has any effect. Subagent rows always use the default look.",
+			"description": "Deprecated: still works, and will stop working in a future release. Custom per-subagent status line shown in the agent panel; receives row context as JSON on stdin",
 			"type": "object",
 			"properties": {
 				"type": {
@@ -1316,7 +1316,7 @@
 										"description": "GitHub repository in owner/repo format. ONLY in the managed-settings policy lists (strictKnownMarketplaces / blockedMarketplaces) the owner-wildcard form \"owner/*\" matches every repository under exactly that owner. Everywhere else (marketplace add, extraKnownMarketplaces, known_marketplaces.json) the value must name a single repository — a wildcard is taken literally and fails to clone."
 									},
 									"ref": {
-										"description": "Git branch or tag to use (e.g., \"main\", \"v1.0.0\"). Defaults to repository default branch.",
+										"description": "Git branch, tag or full commit id to use (e.g., \"main\", \"v1.0.0\"). Defaults to repository default branch. A full commit id (40 or 64 lowercase hex digits) holds the marketplace at that commit: refreshes and auto-updates do not move it. A branch or tag of the repository must hold the commit. Plugins listed with a remote source follow that source unless they name a `sha`. Reserved Anthropic marketplace names do not accept a commit id.",
 										"type": "string"
 									},
 									"path": {
@@ -1349,7 +1349,7 @@
 										"description": "Full git repository URL"
 									},
 									"ref": {
-										"description": "Git branch or tag to use (e.g., \"main\", \"v1.0.0\"). Defaults to repository default branch.",
+										"description": "Git branch, tag or full commit id to use (e.g., \"main\", \"v1.0.0\"). Defaults to repository default branch. A full commit id (40 or 64 lowercase hex digits) holds the marketplace at that commit: refreshes and auto-updates do not move it. A branch or tag of the repository must hold the commit. Plugins listed with a remote source follow that source unless they name a `sha`. Reserved Anthropic marketplace names do not accept a commit id.",
 										"type": "string"
 									},
 									"path": {
@@ -1741,7 +1741,7 @@
 						"type": "boolean"
 					},
 					"pluginDigests": {
-						"description": "Managed settings only: the plugins of this marketplace that an organization delivers with its own tier, by plugin name, each with the digests of its releases. A plugin also enabled and listed in prependPlugins or appendPlugins by managed settings the session vouches for loads its hooks module only from a folder that proves one of them, and is then seated in that tier; any other copy does not load. A digest is sha256- and the base64 SHA-256 of, for every regular file in the folder in UTF-16 code unit order of its path, not normalized, \"f PATH\" NUL BYTE-LENGTH NUL BYTES, with / in paths; .git, .in_use, .orphaned_at, .claude-plugin-link, .claude-directory-proof.json and .links_materialized at the root are left out. The plugin keeps its manifest at .claude-plugin/plugin.json and names one module in hooks/hooks.json. A string of any other form, or a list that is empty or of any other shape, matches no folder. A symbolic link, or a surface module, proves nothing. A proved plugin ships bundled with no install step: the digest covers the whole folder, node_modules included. A checkout whose line endings were converted proves nothing.",
+						"description": "Deprecated and ignored: settings that hold it still load. A plugin takes the organization tier when managed settings enable it, declare its marketplace with a remote source and list it in prependPlugins or appendPlugins.",
 						"type": "object",
 						"propertyNames": {
 							"type": "string"
@@ -1810,7 +1810,7 @@
 										"description": "GitHub repository in owner/repo format. ONLY in the managed-settings policy lists (strictKnownMarketplaces / blockedMarketplaces) the owner-wildcard form \"owner/*\" matches every repository under exactly that owner. Everywhere else (marketplace add, extraKnownMarketplaces, known_marketplaces.json) the value must name a single repository — a wildcard is taken literally and fails to clone."
 									},
 									"ref": {
-										"description": "Git branch or tag to use (e.g., \"main\", \"v1.0.0\"). Defaults to repository default branch.",
+										"description": "Git branch, tag or full commit id to use (e.g., \"main\", \"v1.0.0\"). Defaults to repository default branch. A full commit id (40 or 64 lowercase hex digits) holds the marketplace at that commit: refreshes and auto-updates do not move it. A branch or tag of the repository must hold the commit. Plugins listed with a remote source follow that source unless they name a `sha`. Reserved Anthropic marketplace names do not accept a commit id.",
 										"type": "string"
 									},
 									"path": {
@@ -1843,7 +1843,7 @@
 										"description": "Full git repository URL"
 									},
 									"ref": {
-										"description": "Git branch or tag to use (e.g., \"main\", \"v1.0.0\"). Defaults to repository default branch.",
+										"description": "Git branch, tag or full commit id to use (e.g., \"main\", \"v1.0.0\"). Defaults to repository default branch. A full commit id (40 or 64 lowercase hex digits) holds the marketplace at that commit: refreshes and auto-updates do not move it. A branch or tag of the repository must hold the commit. Plugins listed with a remote source follow that source unless they name a `sha`. Reserved Anthropic marketplace names do not accept a commit id.",
 										"type": "string"
 									},
 									"path": {
@@ -2235,7 +2235,7 @@
 						"type": "boolean"
 					},
 					"pluginDigests": {
-						"description": "Managed settings only: the plugins of this marketplace that an organization delivers with its own tier, by plugin name, each with the digests of its releases. A plugin also enabled and listed in prependPlugins or appendPlugins by managed settings the session vouches for loads its hooks module only from a folder that proves one of them, and is then seated in that tier; any other copy does not load. A digest is sha256- and the base64 SHA-256 of, for every regular file in the folder in UTF-16 code unit order of its path, not normalized, \"f PATH\" NUL BYTE-LENGTH NUL BYTES, with / in paths; .git, .in_use, .orphaned_at, .claude-plugin-link, .claude-directory-proof.json and .links_materialized at the root are left out. The plugin keeps its manifest at .claude-plugin/plugin.json and names one module in hooks/hooks.json. A string of any other form, or a list that is empty or of any other shape, matches no folder. A symbolic link, or a surface module, proves nothing. A proved plugin ships bundled with no install step: the digest covers the whole folder, node_modules included. A checkout whose line endings were converted proves nothing.",
+						"description": "Deprecated and ignored: settings that hold it still load. A plugin takes the organization tier when managed settings enable it, declare its marketplace with a remote source and list it in prependPlugins or appendPlugins.",
 						"type": "object",
 						"propertyNames": {
 							"type": "string"
@@ -2298,7 +2298,7 @@
 								"description": "GitHub repository in owner/repo format. ONLY in the managed-settings policy lists (strictKnownMarketplaces / blockedMarketplaces) the owner-wildcard form \"owner/*\" matches every repository under exactly that owner. Everywhere else (marketplace add, extraKnownMarketplaces, known_marketplaces.json) the value must name a single repository — a wildcard is taken literally and fails to clone."
 							},
 							"ref": {
-								"description": "Git branch or tag to use (e.g., \"main\", \"v1.0.0\"). Defaults to repository default branch.",
+								"description": "Git branch, tag or full commit id to use (e.g., \"main\", \"v1.0.0\"). Defaults to repository default branch. A full commit id (40 or 64 lowercase hex digits) holds the marketplace at that commit: refreshes and auto-updates do not move it. A branch or tag of the repository must hold the commit. Plugins listed with a remote source follow that source unless they name a `sha`. Reserved Anthropic marketplace names do not accept a commit id.",
 								"type": "string"
 							},
 							"path": {
@@ -2331,7 +2331,7 @@
 								"description": "Full git repository URL"
 							},
 							"ref": {
-								"description": "Git branch or tag to use (e.g., \"main\", \"v1.0.0\"). Defaults to repository default branch.",
+								"description": "Git branch, tag or full commit id to use (e.g., \"main\", \"v1.0.0\"). Defaults to repository default branch. A full commit id (40 or 64 lowercase hex digits) holds the marketplace at that commit: refreshes and auto-updates do not move it. A branch or tag of the repository must hold the commit. Plugins listed with a remote source follow that source unless they name a `sha`. Reserved Anthropic marketplace names do not accept a commit id.",
 								"type": "string"
 							},
 							"path": {
@@ -2715,7 +2715,7 @@
 			}
 		},
 		"blockedMarketplaces": {
-			"description": "Enterprise blocklist of marketplace sources. When set in managed settings, these sources are blocked from being added as marketplaces. Entries match exactly, except that a github entry may use the owner-wildcard form {\"source\":\"github\",\"repo\":\"owner/*\"} to block every repository under that owner. The check happens BEFORE downloading, so blocked sources never touch the filesystem.",
+			"description": "Enterprise blocklist of marketplace sources. When set in managed settings, these sources are blocked from being added as marketplaces. Entries match exactly, except that a github entry may use the owner-wildcard form {\"source\":\"github\",\"repo\":\"owner/*\"} to block every repository under that owner, and an entry naming a branch or tag in `ref` also blocks every full commit id in that repository. The check happens BEFORE downloading, so blocked sources never touch the filesystem.",
 			"type": "array",
 			"items": {
 				"oneOf": [
@@ -2772,7 +2772,7 @@
 								"description": "GitHub repository in owner/repo format. ONLY in the managed-settings policy lists (strictKnownMarketplaces / blockedMarketplaces) the owner-wildcard form \"owner/*\" matches every repository under exactly that owner. Everywhere else (marketplace add, extraKnownMarketplaces, known_marketplaces.json) the value must name a single repository — a wildcard is taken literally and fails to clone."
 							},
 							"ref": {
-								"description": "Git branch or tag to use (e.g., \"main\", \"v1.0.0\"). Defaults to repository default branch.",
+								"description": "Git branch, tag or full commit id to use (e.g., \"main\", \"v1.0.0\"). Defaults to repository default branch. A full commit id (40 or 64 lowercase hex digits) holds the marketplace at that commit: refreshes and auto-updates do not move it. A branch or tag of the repository must hold the commit. Plugins listed with a remote source follow that source unless they name a `sha`. Reserved Anthropic marketplace names do not accept a commit id.",
 								"type": "string"
 							},
 							"path": {
@@ -2805,7 +2805,7 @@
 								"description": "Full git repository URL"
 							},
 							"ref": {
-								"description": "Git branch or tag to use (e.g., \"main\", \"v1.0.0\"). Defaults to repository default branch.",
+								"description": "Git branch, tag or full commit id to use (e.g., \"main\", \"v1.0.0\"). Defaults to repository default branch. A full commit id (40 or 64 lowercase hex digits) holds the marketplace at that commit: refreshes and auto-updates do not move it. A branch or tag of the repository must hold the commit. Plugins listed with a remote source follow that source unless they name a `sha`. Reserved Anthropic marketplace names do not accept a commit id.",
 								"type": "string"
 							},
 							"path": {
@@ -3258,10 +3258,11 @@
 					"type": "boolean"
 				},
 				"failIfUnavailable": {
-					"description": "Exit with an error at startup if sandbox.enabled is true but the sandbox cannot start (missing dependencies or unsupported platform). When false (default), a warning is shown and commands run unsandboxed. Intended for managed-settings deployments that require sandboxing as a hard gate. When managed settings or a --settings file set allowUnsandboxedCommands: false, or managed settings set network.allowManagedDomainsOnly: true, and managed, --settings or user settings set true, false from project settings (.claude/settings.json and .claude/settings.local.json) is ignored (true there still applies).",
+					"description": "Exit with an error at startup if sandbox.enabled is true but the sandbox cannot start (missing dependencies or unsupported platform). When false (default), a warning is shown and commands run unsandboxed. Intended for managed-settings deployments that require sandboxing as a hard gate. A Claude Code on the web, scheduled-task or Cowork cloud session (Anthropic's cloud container, which has no command sandbox) starts anyway with a warning: the container isolates it, and the sandbox.filesystem and sandbox.network rules in settings are not enforced there. When managed settings or a --settings file set allowUnsandboxedCommands: false, or managed settings set network.allowManagedDomainsOnly: true, and managed, --settings or user settings set true, false from project settings (.claude/settings.json and .claude/settings.local.json) is ignored (true there still applies).",
 					"type": "boolean"
 				},
 				"autoAllowBashIfSandboxed": {
+					"description": "macOS and Linux/WSL only: approve a Bash command that will run inside the sandbox without a permission prompt, unless a deny rule, a command-specific ask rule or a safety check stops it. Default: false, so sandboxed commands go through the same permission flow as any other command. Has no effect on native Windows.",
 					"type": "boolean"
 				},
 				"allowUnsandboxedCommands": {
@@ -3371,7 +3372,7 @@
 							"type": "boolean"
 						},
 						"disabled": {
-							"description": "macOS and Linux/WSL only: skip filesystem isolation entirely while keeping network and seccomp isolation. Ignored on native Windows, where the sandboxed process runs as a separate user with no inherent rights, so skipping the filesystem rules would withhold every access grant rather than loosen them — filesystem isolation stays on there. Sandboxed commands get unrestricted read/write access to the host filesystem; network egress is still confined to network.allowedDomains. Intended for deployments whose goal is egress control rather than filesystem containment. Does not change Bash prompting: sandbox.autoAllowBashIfSandboxed is independent and still defaults to true, so set it to false to keep prompting for sandboxed commands. Drops the read protection from filesystem.denyRead and credentials.files deny entries for sandboxed commands, since both are enforced by the filesystem layer this turns off; credentials.files mask entries (sentinel binds) and credentials.envVars deny/mask are unaffected. Only honored from user, managed/policy, or CLI (`--settings`) settings — project settings (.claude/settings.json and .claude/settings.local.json) are ignored. If managed settings configure sandbox.filesystem at all, or list any sandbox.credentials.files deny entry, only managed settings can set this: an admin who deployed filesystem restrictions must not have them switched off by a user-writable file. (sandbox.credentials.envVars and credentials.files mask entries do not pin it — env scrubbing and sentinel binds are independent of the filesystem layer and survive this setting.) When unset, filesystem isolation stays on.",
+							"description": "macOS and Linux/WSL only: skip filesystem isolation entirely while keeping network and seccomp isolation. Ignored on native Windows, where the sandboxed process runs as a separate user with no inherent rights, so skipping the filesystem rules would withhold every access grant rather than loosen them — filesystem isolation stays on there. Sandboxed commands get unrestricted read/write access to the host filesystem; network egress is still confined to network.allowedDomains. Intended for deployments whose goal is egress control rather than filesystem containment. Does not change Bash prompting: sandbox.autoAllowBashIfSandboxed is independent and still defaults to false, so sandboxed commands keep going through the permission flow unless it is set to true. Drops the read protection from filesystem.denyRead and credentials.files deny entries for sandboxed commands, since both are enforced by the filesystem layer this turns off; credentials.files mask entries (sentinel binds) and credentials.envVars deny/mask are unaffected. Only honored from user, managed/policy, or CLI (`--settings`) settings — project settings (.claude/settings.json and .claude/settings.local.json) are ignored. If managed settings configure sandbox.filesystem at all, or list any sandbox.credentials.files deny entry, only managed settings can set this: an admin who deployed filesystem restrictions must not have them switched off by a user-writable file. (sandbox.credentials.envVars and credentials.files mask entries do not pin it — env scrubbing and sentinel binds are independent of the filesystem layer and survive this setting.) When unset, filesystem isolation stays on.",
 							"type": "boolean"
 						}
 					}
@@ -3528,6 +3529,17 @@
 									"enum": ["deny", "passthrough"]
 								}
 							}
+						}
+					}
+				},
+				"windows": {
+					"description": "@internal Settings of the sandbox on native Windows.",
+					"type": "object",
+					"properties": {
+						"backend": {
+							"description": "Windows only: how sandboxed commands are confined. \"sandboxuser\" (default) runs them as the dedicated sandbox account that the sandbox set-up creates. \"mxc\" runs them in a Microsoft eXecution Container (BaseContainer) through the MXC SDK, with no install step; experimental. Claude Code ignores \"mxc\" and uses the sandbox account, with a note in /sandbox, when this build lacks the MXC SDK, when a higher settings tier or another managed source sets network.tlsTerminate, or when an administrator requires the sandbox or locks reads (filesystem.allowManagedReadPathsOnly) unless managed settings picked \"mxc\" and no other managed source sets network.allowManagedDomainsOnly. On \"mxc\" only the PowerShell tool is enabled and Bash commands are refused (MXC cannot run Git Bash yet); network.tlsTerminate and network.allowLocalBinding do not apply. Read from user, managed/policy or --settings settings only; a value in project settings (.claude/settings.json and .claude/settings.local.json) is ignored.",
+							"type": "string",
+							"enum": ["sandboxuser", "mxc"]
 						}
 					}
 				},
@@ -3811,7 +3823,7 @@
 			"type": "string"
 		},
 		"modelProposedGoals": {
-			"description": "@internal Controls the ProposeGoal tool (model-proposed session goals). 'auto' (the default when absent) lets the model choose per proposal whether to ask for approval via its ask_user parameter; 'alwaysAsk' routes every model-proposed goal through the approval dialog; 'disabled' turns the tool off. A typed /goal is unaffected. Consent-affecting, so it is read from trusted sources only (user/policy/flag) — workspace-resident project and local settings are ignored.",
+			"description": "@internal Controls the session goal tools (model-proposed goals). 'auto' (the default when absent) lets the model choose per proposal whether to ask for approval via its ask_user parameter; 'alwaysAsk' routes every model-proposed goal through the approval dialog; 'disabled' turns the tools off. Typing /goal works under every value. Unless disabled, the model can pause any active goal until the user's next message. Consent-affecting, so it is read from trusted sources only (user/policy/flag) — workspace-resident project and local settings are ignored.",
 			"type": "string",
 			"enum": ["auto", "alwaysAsk", "disabled"]
 		},

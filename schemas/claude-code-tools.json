@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-tools.json",
-	"title": "Claude Code built-in tool payloads (Claude Code 2.1.323)",
-	"$comment": "For the input and result of each built-in tool (definitions <Tool>Input and <Tool>Result). Generated from Claude Code 2.1.323 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the tool factory that copies a tool definition's properties (getters included), read as inputSchema and outputSchema on each tool. Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code built-in tool payloads (Claude Code 2.1.326)",
+	"$comment": "For the input and result of each built-in tool (definitions <Tool>Input and <Tool>Result). Generated from Claude Code 2.1.326 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the tool factory that copies a tool definition's properties (getters included), read as inputSchema and outputSchema on each tool. Do not edit by hand: run \"bun run schemas\".",
 	"description": "The program did not give these definitions: ObserverReportResult, TestingPermissionResult, ArtifactCommentsInput, ArtifactDataInput, ArtifactCheckInput, SendMessageResult, ArtifactInput.",
 	"$defs": {
 		"AgentInput": {
@@ -575,6 +575,32 @@
 						"served_root": {
 							"type": "string"
 						},
+						"files_written": {
+							"maxItems": 255,
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"path": {
+										"type": "string",
+										"maxLength": 512
+									},
+									"sha256": {
+										"type": "string",
+										"pattern": "^[0-9a-f]{64}$"
+									}
+								},
+								"required": ["path", "sha256"]
+							}
+						},
+						"files_removed": {
+							"maxItems": 255,
+							"type": "array",
+							"items": {
+								"type": "string",
+								"maxLength": 512
+							}
+						},
 						"auto_open": {
 							"type": "string",
 							"enum": ["at_create", "after_first_write"]
@@ -922,6 +948,10 @@
 						"audience": {
 							"type": "string"
 						},
+						"folder_audience": {
+							"type": "string",
+							"enum": ["others", "unknown"]
+						},
 						"seq": {
 							"type": "integer",
 							"minimum": 0,
@@ -999,8 +1029,105 @@
 							"type": "string",
 							"pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 						},
+						"files_written": {
+							"maxItems": 255,
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"path": {
+										"type": "string",
+										"maxLength": 512
+									},
+									"sha256": {
+										"type": "string",
+										"pattern": "^[0-9a-f]{64}$"
+									}
+								},
+								"required": ["path", "sha256"]
+							}
+						},
+						"files_removed": {
+							"maxItems": 255,
+							"type": "array",
+							"items": {
+								"type": "string",
+								"maxLength": 512
+							}
+						},
 						"pinned": {
 							"type": "boolean"
+						},
+						"type": {
+							"description": "The Artifact type (and release) this Artifact was created from",
+							"type": "object",
+							"properties": {
+								"url": {
+									"type": "string"
+								},
+								"release": {
+									"type": "string"
+								},
+								"latest": {
+									"type": "string"
+								},
+								"blocked": {
+									"type": "object",
+									"properties": {
+										"to": {
+											"type": "string"
+										},
+										"reason": {
+											"type": "string"
+										},
+										"conflict_count": {
+											"type": "integer",
+											"minimum": 0,
+											"maximum": 1000000
+										},
+										"paths": {
+											"maxItems": 4096,
+											"type": "array",
+											"items": {
+												"type": "string",
+												"maxLength": 1024
+											}
+										}
+									},
+									"required": ["reason"]
+								}
+							},
+							"required": ["url", "release"]
+						},
+						"own_files": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"type_files": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"served_at": {
+							"type": "string"
+						},
+						"served_root": {
+							"type": "string"
+						},
+						"new_files": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"unchanged_files": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
 						}
 					},
 					"required": ["url", "path"]
@@ -1996,6 +2123,21 @@
 								"token_expires_at": {
 									"type": "number"
 								},
+								"auto_reply": {
+									"type": "string"
+								},
+								"can_edit": {
+									"type": "boolean"
+								},
+								"user_turn": {
+									"type": "boolean"
+								},
+								"named_by_user": {
+									"type": "boolean"
+								},
+								"replies_declined": {
+									"type": "boolean"
+								},
 								"rail": {
 									"type": "string"
 								},
@@ -2113,6 +2255,21 @@
 											},
 											"armed_via": {
 												"type": "string"
+											},
+											"auto_reply": {
+												"type": "string"
+											},
+											"unread_plain_comments": {
+												"type": "number"
+											},
+											"summons_awaiting_reply": {
+												"type": "number"
+											},
+											"comments_uncounted": {
+												"type": "boolean"
+											},
+											"comments_partially_counted": {
+												"type": "boolean"
 											}
 										},
 										"required": [
@@ -2171,11 +2328,14 @@
 											"armed_via": {
 												"type": "string"
 											},
+											"auto_reply": {
+												"type": "string"
+											},
 											"stop_kind": {
 												"type": "string"
 											}
 										},
-										"required": ["url", "rail", "stop_kind"]
+										"required": ["url", "rail", "auto_reply", "stop_kind"]
 									}
 								]
 							}
@@ -3767,6 +3927,32 @@
 						"served_root": {
 							"type": "string"
 						},
+						"files_written": {
+							"maxItems": 255,
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"path": {
+										"type": "string",
+										"maxLength": 512
+									},
+									"sha256": {
+										"type": "string",
+										"pattern": "^[0-9a-f]{64}$"
+									}
+								},
+								"required": ["path", "sha256"]
+							}
+						},
+						"files_removed": {
+							"maxItems": 255,
+							"type": "array",
+							"items": {
+								"type": "string",
+								"maxLength": 512
+							}
+						},
 						"auto_open": {
 							"type": "string",
 							"enum": ["at_create", "after_first_write"]
@@ -4114,6 +4300,10 @@
 						"audience": {
 							"type": "string"
 						},
+						"folder_audience": {
+							"type": "string",
+							"enum": ["others", "unknown"]
+						},
 						"seq": {
 							"type": "integer",
 							"minimum": 0,
@@ -4191,8 +4381,105 @@
 							"type": "string",
 							"pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 						},
+						"files_written": {
+							"maxItems": 255,
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"path": {
+										"type": "string",
+										"maxLength": 512
+									},
+									"sha256": {
+										"type": "string",
+										"pattern": "^[0-9a-f]{64}$"
+									}
+								},
+								"required": ["path", "sha256"]
+							}
+						},
+						"files_removed": {
+							"maxItems": 255,
+							"type": "array",
+							"items": {
+								"type": "string",
+								"maxLength": 512
+							}
+						},
 						"pinned": {
 							"type": "boolean"
+						},
+						"type": {
+							"description": "The Artifact type (and release) this Artifact was created from",
+							"type": "object",
+							"properties": {
+								"url": {
+									"type": "string"
+								},
+								"release": {
+									"type": "string"
+								},
+								"latest": {
+									"type": "string"
+								},
+								"blocked": {
+									"type": "object",
+									"properties": {
+										"to": {
+											"type": "string"
+										},
+										"reason": {
+											"type": "string"
+										},
+										"conflict_count": {
+											"type": "integer",
+											"minimum": 0,
+											"maximum": 1000000
+										},
+										"paths": {
+											"maxItems": 4096,
+											"type": "array",
+											"items": {
+												"type": "string",
+												"maxLength": 1024
+											}
+										}
+									},
+									"required": ["reason"]
+								}
+							},
+							"required": ["url", "release"]
+						},
+						"own_files": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"type_files": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"served_at": {
+							"type": "string"
+						},
+						"served_root": {
+							"type": "string"
+						},
+						"new_files": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"unchanged_files": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
 						}
 					},
 					"required": ["url", "path"]
@@ -5188,6 +5475,21 @@
 								"token_expires_at": {
 									"type": "number"
 								},
+								"auto_reply": {
+									"type": "string"
+								},
+								"can_edit": {
+									"type": "boolean"
+								},
+								"user_turn": {
+									"type": "boolean"
+								},
+								"named_by_user": {
+									"type": "boolean"
+								},
+								"replies_declined": {
+									"type": "boolean"
+								},
 								"rail": {
 									"type": "string"
 								},
@@ -5305,6 +5607,21 @@
 											},
 											"armed_via": {
 												"type": "string"
+											},
+											"auto_reply": {
+												"type": "string"
+											},
+											"unread_plain_comments": {
+												"type": "number"
+											},
+											"summons_awaiting_reply": {
+												"type": "number"
+											},
+											"comments_uncounted": {
+												"type": "boolean"
+											},
+											"comments_partially_counted": {
+												"type": "boolean"
 											}
 										},
 										"required": [
@@ -5363,11 +5680,14 @@
 											"armed_via": {
 												"type": "string"
 											},
+											"auto_reply": {
+												"type": "string"
+											},
 											"stop_kind": {
 												"type": "string"
 											}
 										},
-										"required": ["url", "rail", "stop_kind"]
+										"required": ["url", "rail", "auto_reply", "stop_kind"]
 									}
 								]
 							}
@@ -6959,6 +7279,32 @@
 						"served_root": {
 							"type": "string"
 						},
+						"files_written": {
+							"maxItems": 255,
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"path": {
+										"type": "string",
+										"maxLength": 512
+									},
+									"sha256": {
+										"type": "string",
+										"pattern": "^[0-9a-f]{64}$"
+									}
+								},
+								"required": ["path", "sha256"]
+							}
+						},
+						"files_removed": {
+							"maxItems": 255,
+							"type": "array",
+							"items": {
+								"type": "string",
+								"maxLength": 512
+							}
+						},
 						"auto_open": {
 							"type": "string",
 							"enum": ["at_create", "after_first_write"]
@@ -7306,6 +7652,10 @@
 						"audience": {
 							"type": "string"
 						},
+						"folder_audience": {
+							"type": "string",
+							"enum": ["others", "unknown"]
+						},
 						"seq": {
 							"type": "integer",
 							"minimum": 0,
@@ -7383,8 +7733,105 @@
 							"type": "string",
 							"pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 						},
+						"files_written": {
+							"maxItems": 255,
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"path": {
+										"type": "string",
+										"maxLength": 512
+									},
+									"sha256": {
+										"type": "string",
+										"pattern": "^[0-9a-f]{64}$"
+									}
+								},
+								"required": ["path", "sha256"]
+							}
+						},
+						"files_removed": {
+							"maxItems": 255,
+							"type": "array",
+							"items": {
+								"type": "string",
+								"maxLength": 512
+							}
+						},
 						"pinned": {
 							"type": "boolean"
+						},
+						"type": {
+							"description": "The Artifact type (and release) this Artifact was created from",
+							"type": "object",
+							"properties": {
+								"url": {
+									"type": "string"
+								},
+								"release": {
+									"type": "string"
+								},
+								"latest": {
+									"type": "string"
+								},
+								"blocked": {
+									"type": "object",
+									"properties": {
+										"to": {
+											"type": "string"
+										},
+										"reason": {
+											"type": "string"
+										},
+										"conflict_count": {
+											"type": "integer",
+											"minimum": 0,
+											"maximum": 1000000
+										},
+										"paths": {
+											"maxItems": 4096,
+											"type": "array",
+											"items": {
+												"type": "string",
+												"maxLength": 1024
+											}
+										}
+									},
+									"required": ["reason"]
+								}
+							},
+							"required": ["url", "release"]
+						},
+						"own_files": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"type_files": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"served_at": {
+							"type": "string"
+						},
+						"served_root": {
+							"type": "string"
+						},
+						"new_files": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"unchanged_files": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
 						}
 					},
 					"required": ["url", "path"]
@@ -8380,6 +8827,21 @@
 								"token_expires_at": {
 									"type": "number"
 								},
+								"auto_reply": {
+									"type": "string"
+								},
+								"can_edit": {
+									"type": "boolean"
+								},
+								"user_turn": {
+									"type": "boolean"
+								},
+								"named_by_user": {
+									"type": "boolean"
+								},
+								"replies_declined": {
+									"type": "boolean"
+								},
 								"rail": {
 									"type": "string"
 								},
@@ -8497,6 +8959,21 @@
 											},
 											"armed_via": {
 												"type": "string"
+											},
+											"auto_reply": {
+												"type": "string"
+											},
+											"unread_plain_comments": {
+												"type": "number"
+											},
+											"summons_awaiting_reply": {
+												"type": "number"
+											},
+											"comments_uncounted": {
+												"type": "boolean"
+											},
+											"comments_partially_counted": {
+												"type": "boolean"
 											}
 										},
 										"required": [
@@ -8555,11 +9032,14 @@
 											"armed_via": {
 												"type": "string"
 											},
+											"auto_reply": {
+												"type": "string"
+											},
 											"stop_kind": {
 												"type": "string"
 											}
 										},
-										"required": ["url", "rail", "stop_kind"]
+										"required": ["url", "rail", "auto_reply", "stop_kind"]
 									}
 								]
 							}
@@ -10151,6 +10631,32 @@
 						"served_root": {
 							"type": "string"
 						},
+						"files_written": {
+							"maxItems": 255,
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"path": {
+										"type": "string",
+										"maxLength": 512
+									},
+									"sha256": {
+										"type": "string",
+										"pattern": "^[0-9a-f]{64}$"
+									}
+								},
+								"required": ["path", "sha256"]
+							}
+						},
+						"files_removed": {
+							"maxItems": 255,
+							"type": "array",
+							"items": {
+								"type": "string",
+								"maxLength": 512
+							}
+						},
 						"auto_open": {
 							"type": "string",
 							"enum": ["at_create", "after_first_write"]
@@ -10498,6 +11004,10 @@
 						"audience": {
 							"type": "string"
 						},
+						"folder_audience": {
+							"type": "string",
+							"enum": ["others", "unknown"]
+						},
 						"seq": {
 							"type": "integer",
 							"minimum": 0,
@@ -10575,8 +11085,105 @@
 							"type": "string",
 							"pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 						},
+						"files_written": {
+							"maxItems": 255,
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"path": {
+										"type": "string",
+										"maxLength": 512
+									},
+									"sha256": {
+										"type": "string",
+										"pattern": "^[0-9a-f]{64}$"
+									}
+								},
+								"required": ["path", "sha256"]
+							}
+						},
+						"files_removed": {
+							"maxItems": 255,
+							"type": "array",
+							"items": {
+								"type": "string",
+								"maxLength": 512
+							}
+						},
 						"pinned": {
 							"type": "boolean"
+						},
+						"type": {
+							"description": "The Artifact type (and release) this Artifact was created from",
+							"type": "object",
+							"properties": {
+								"url": {
+									"type": "string"
+								},
+								"release": {
+									"type": "string"
+								},
+								"latest": {
+									"type": "string"
+								},
+								"blocked": {
+									"type": "object",
+									"properties": {
+										"to": {
+											"type": "string"
+										},
+										"reason": {
+											"type": "string"
+										},
+										"conflict_count": {
+											"type": "integer",
+											"minimum": 0,
+											"maximum": 1000000
+										},
+										"paths": {
+											"maxItems": 4096,
+											"type": "array",
+											"items": {
+												"type": "string",
+												"maxLength": 1024
+											}
+										}
+									},
+									"required": ["reason"]
+								}
+							},
+							"required": ["url", "release"]
+						},
+						"own_files": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"type_files": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"served_at": {
+							"type": "string"
+						},
+						"served_root": {
+							"type": "string"
+						},
+						"new_files": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"unchanged_files": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
 						}
 					},
 					"required": ["url", "path"]
@@ -11572,6 +12179,21 @@
 								"token_expires_at": {
 									"type": "number"
 								},
+								"auto_reply": {
+									"type": "string"
+								},
+								"can_edit": {
+									"type": "boolean"
+								},
+								"user_turn": {
+									"type": "boolean"
+								},
+								"named_by_user": {
+									"type": "boolean"
+								},
+								"replies_declined": {
+									"type": "boolean"
+								},
 								"rail": {
 									"type": "string"
 								},
@@ -11689,6 +12311,21 @@
 											},
 											"armed_via": {
 												"type": "string"
+											},
+											"auto_reply": {
+												"type": "string"
+											},
+											"unread_plain_comments": {
+												"type": "number"
+											},
+											"summons_awaiting_reply": {
+												"type": "number"
+											},
+											"comments_uncounted": {
+												"type": "boolean"
+											},
+											"comments_partially_counted": {
+												"type": "boolean"
 											}
 										},
 										"required": [
@@ -11747,11 +12384,14 @@
 											"armed_via": {
 												"type": "string"
 											},
+											"auto_reply": {
+												"type": "string"
+											},
 											"stop_kind": {
 												"type": "string"
 											}
 										},
-										"required": ["url", "rail", "stop_kind"]
+										"required": ["url", "rail", "auto_reply", "stop_kind"]
 									}
 								]
 							}
@@ -14627,6 +15267,10 @@
 				},
 				"message": {
 					"type": "string"
+				},
+				"sandboxNote": {
+					"description": "@internal Told to the model and shown to the person where the sandbox stays on only through this move.",
+					"type": "string"
 				}
 			},
 			"required": ["worktreePath", "message"]
@@ -14695,10 +15339,10 @@
 				"action": {
 					"type": "string",
 					"enum": ["keep", "remove"],
-					"description": "\"keep\" leaves the worktree and branch on disk; \"remove\" deletes both."
+					"description": "\"keep\" leaves the worktree and branch on disk; \"remove\" deletes the worktree and, unless a hook made it or git refuses, its branch."
 				},
 				"discard_changes": {
-					"description": "Required true when action is \"remove\" and the worktree has uncommitted files or unmerged commits. The tool will refuse and list them otherwise.",
+					"description": "Required true when action is \"remove\" and the worktree has uncommitted files or unmerged commits. The tool will refuse and list them otherwise. It also removes the worktree under any task still running there, so set it only after the user has confirmed.",
 					"type": "boolean"
 				}
 			},
@@ -14739,6 +15383,10 @@
 					"type": "boolean"
 				},
 				"message": {
+					"type": "string"
+				},
+				"sandboxNote": {
+					"description": "@internal Told to the model and shown to the person where the sandbox stays on only through this move.",
 					"type": "string"
 				}
 			},
@@ -14797,6 +15445,29 @@
 				}
 			},
 			"required": ["ok"]
+		},
+		"GetGoalInput": {
+			"type": "object",
+			"properties": {},
+			"additionalProperties": false
+		},
+		"GetGoalResult": {
+			"type": "object",
+			"properties": {
+				"condition": {
+					"description": "The goal condition, or null when no goal is active",
+					"type": ["string", "null"]
+				},
+				"lastReason": {
+					"description": "The evaluator's last reason the goal isn't met",
+					"type": "string"
+				},
+				"paused": {
+					"description": "Whether the goal is paused until the user's next message",
+					"type": "boolean"
+				}
+			},
+			"required": ["condition"]
 		},
 		"GetTaskInput": {
 			"type": "object",
@@ -15689,6 +16360,29 @@
 			},
 			"required": ["outcome"]
 		},
+		"PauseGoalInput": {
+			"type": "object",
+			"properties": {
+				"reason": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 500,
+					"description": "What blocks you and what you need from the user, who reads this. At most 500 characters."
+				}
+			},
+			"required": ["reason"],
+			"additionalProperties": false
+		},
+		"PauseGoalResult": {
+			"type": "object",
+			"properties": {
+				"condition": {
+					"type": "string",
+					"description": "The goal that was paused"
+				}
+			},
+			"required": ["condition"]
+		},
 		"PollInput": {
 			"type": "object",
 			"properties": {},
@@ -16399,37 +17093,6 @@
 					]
 				}
 			]
-		},
-		"ProposeGoalInput": {
-			"type": "object",
-			"properties": {
-				"condition": {
-					"type": "string",
-					"minLength": 1,
-					"maxLength": 500,
-					"description": "The completion condition to propose, written so a separate evaluator can verify it from the conversation (e.g. \"all tests in test/auth pass (bun test exits 0)\"). At most 500 characters — the user must be able to read the whole condition in the approval dialog."
-				},
-				"ask_user": {
-					"description": "Whether to ask the user for approval before the goal is set. Defaults to true — an approval dialog is shown. Set false ONLY when the user's own words in this conversation stated this outcome as what they want; the goal is then set directly, with a visible notice in the transcript, and the user can clear it with /goal clear.",
-					"type": "boolean"
-				}
-			},
-			"required": ["condition"],
-			"additionalProperties": false
-		},
-		"ProposeGoalResult": {
-			"type": "object",
-			"properties": {
-				"condition": {
-					"type": "string",
-					"description": "The condition shown to the user for approval, or set directly when ask_user was false"
-				},
-				"askUser": {
-					"type": "boolean",
-					"description": "Whether the user was asked for approval (true) or the goal was set directly (false)"
-				}
-			},
-			"required": ["condition", "askUser"]
 		},
 		"PublishPluginInput": {
 			"type": "object",
@@ -18546,6 +19209,37 @@
 			},
 			"required": ["message"]
 		},
+		"SetGoalInput": {
+			"type": "object",
+			"properties": {
+				"condition": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 500,
+					"description": "The completion condition to set, written so a separate evaluator can verify it from the conversation (e.g. \"all tests in test/auth pass (bun test exits 0)\"). At most 500 characters — the user must be able to read the whole condition in the approval dialog."
+				},
+				"ask_user": {
+					"description": "Whether to ask the user for approval before the goal is set. Defaults to true — an approval dialog is shown. Set false ONLY when the user's own words in this conversation stated this outcome as what they want; the goal is then set directly, with a visible notice in the transcript, and the user can clear it with /goal clear. While a goal is active the dialog is shown whatever this says.",
+					"type": "boolean"
+				}
+			},
+			"required": ["condition"],
+			"additionalProperties": false
+		},
+		"SetGoalResult": {
+			"type": "object",
+			"properties": {
+				"condition": {
+					"type": "string",
+					"description": "The condition shown to the user for approval, or set directly"
+				},
+				"askUser": {
+					"type": "boolean",
+					"description": "Whether the user was asked for approval (true) or the goal was set directly (false)"
+				}
+			},
+			"required": ["condition", "askUser"]
+		},
 		"ShareOnboardingGuideInput": {
 			"type": "object",
 			"properties": {
@@ -19619,7 +20313,7 @@
 					"type": "string"
 				},
 				"resumeFromRunId": {
-					"description": "Run ID of a prior Workflow invocation to resume from. Completed agent() calls with unchanged (prompt, opts) return their cached results instantly; only edited or new calls re-run. Same-session only. Stop the prior run first (TaskStop) before resuming.",
+					"description": "Run ID of a prior Workflow invocation to resume from. The cache is positional: agent() calls replay from cache up to the first call that failed, no longer matches the earlier run (edited, added, removed or reordered) or never started in it; that call and every call after it run again, even when their own (prompt, opts) are unchanged. A call a usage limit refused, or one still running when the run stopped, usually runs again without ending reuse: finished calls after it still come from cache. Same-session only. Stop the prior run first (TaskStop) before resuming.",
 					"type": "string",
 					"pattern": "^wf_[a-z0-9-]{6,}$"
 				}
@@ -19739,15 +20433,15 @@
 					"description": "Whether the call put a question to the user"
 				},
 				"nextStep": {
-					"description": "The next-step box for this call, to draw without reading the tool's input. Open the box when blocked is true or actions isn't empty; otherwise draw no box. Trust it only when the result's entry in tool_result_meta has built_in_tool set to this tool. It is built from the input the call ran with, which a permission answer or a hook before the call may have rewritten, so built_in_tool does not say that Claude wrote it. The recap and the question are each cleaned to one line of at most 500 UTF-16 units, ending in an ellipsis where that limit cut it, with no whole <cc-memory> markers, no terminal escape sequences and no invisible characters other than those an emoji or a word needs. A placeholder such as [REDACTED] or <token> stands in place of most keys and tokens recognised by their shape. A private key that could not be masked, or a tool call's own markup, is cut with all the text after it, and an ellipsis then shows only if what is left still passes that limit or the text ran past 2000 units. Draw the recap and the question as plain text, as they stand: they may hold Markdown, HTML or links, and normalizing them can undo the cleaning. Absent from a result stored by an earlier version of Claude Code.",
+					"description": "The next-step box for this call, to draw without reading the tool's input. Open the box when blocked is true or actions isn't empty; otherwise draw no box. Trust it only when the result's entry in tool_result_meta has built_in_tool set to this tool. It is built from the input the call ran with; where a permission answer or a hook before the call changed that input, the entry has no built_in_tool. The recap and the question are each cleaned to one line of at most 500 UTF-16 units, ending in an ellipsis where that limit cut it, with no whole <cc-memory> markers, no terminal escape sequences and no invisible characters other than those an emoji or a word needs. A placeholder such as [REDACTED] or <token> stands in place of most keys and tokens recognised by their shape. A private key that could not be masked, or a tool call's own markup, is cut with all the text after it, and an ellipsis then shows only if what is left still passes that limit or the text ran past 2000 units. Draw the recap and the question as plain text, as they stand: they may hold Markdown, HTML or links, and normalizing them can undo the cleaning. Absent from a result stored by an earlier version of Claude Code.",
 					"type": "object",
 					"properties": {
 						"recap": {
 							"type": "string",
-							"description": "Claude's short summary of the turn. Empty when nothing visible is left, even when ask is present."
+							"description": "Claude's short summary of the turn. Empty when nothing visible is left, or when it holds a key that cannot be masked alone (one that an invisible character, an accent or nested markers part, or whose rest comes to stand right after its mask), even when ask is present."
 						},
 						"ask": {
-							"description": "The decision Claude asks of the user. Absent when Claude asked none, or when nothing visible is left.",
+							"description": "The decision Claude asks of the user. Absent when Claude asked none, when nothing visible is left, or when it holds a key that cannot be masked alone, as for recap.",
 							"type": "string"
 						},
 						"blocked": {
@@ -19786,7 +20480,7 @@
 									}
 								]
 							},
-							"description": "The buttons to draw under the question, in Claude's order, its pick first. Two replies with the same label are listed once, and a reply whose label holds a key or token is left out. Empty when there is no question."
+							"description": "The buttons to draw under the question, in Claude's order, its pick first. Two replies with the same label are listed once, and a reply whose label holds a key or token is left out. Empty when there is no question, and when the first button is left out."
 						}
 					},
 					"required": ["recap", "blocked", "actions"]
@@ -20386,12 +21080,33 @@
 									"type": "string"
 								}
 							},
+							"edits": {
+								"description": "For an improvement, in place of skillMd: your changes to the skill's SKILL.md, applied in order. They apply to that file as it is now, not to an earlier proposal of yours. The card shows the whole updated file. The name and description come from the fields above, not from the frontmatter.",
+								"minItems": 1,
+								"maxItems": 100,
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"old_string": {
+											"type": "string",
+											"minLength": 1,
+											"description": "Text to replace. It must occur exactly once in that SKILL.md"
+										},
+										"new_string": {
+											"type": "string",
+											"description": "Text to put in its place"
+										}
+									},
+									"required": ["old_string", "new_string"]
+								}
+							},
 							"skillMd": {
-								"type": "string",
-								"description": "The complete SKILL.md exactly as it should be saved: frontmatter plus the full body. When the user saves, the body below the frontmatter becomes the skill's entire instructions and the name and description come from the fields above; other frontmatter keys are not kept. For an improvement this replaces the existing skill's SKILL.md entirely, so read that skill's current SKILL.md first and include everything worth keeping, not only the changes."
+								"description": "For a new skill or a full rewrite. The complete SKILL.md exactly as it should be saved: frontmatter plus the full body. When the user saves, the body below the frontmatter becomes the skill's entire instructions and the name and description come from the fields above; other frontmatter keys are not kept. For an improvement this replaces the existing skill's SKILL.md entirely, so read that skill's current SKILL.md first and include everything worth keeping, not only the changes.",
+								"type": "string"
 							}
 						},
-						"required": ["name", "kind", "description", "skillMd"]
+						"required": ["name", "kind", "description"]
 					}
 				}
 			},

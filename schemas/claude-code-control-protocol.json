@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-control-protocol.json",
-	"title": "Claude Code control protocol (Claude Code 2.1.323)",
-	"$comment": "For the request and response of each control_request subtype in stream-json mode (definitions <subtype>Request and <subtype>Response, direction in x-direction). Generated from Claude Code 2.1.323 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, table of rows {request, originator, response}; the request union is described as \"Control requests a client sends to drive the loop\". Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code control protocol (Claude Code 2.1.326)",
+	"$comment": "For the request and response of each control_request subtype in stream-json mode (definitions <subtype>Request and <subtype>Response, direction in x-direction). Generated from Claude Code 2.1.326 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, table of rows {request, originator, response}; the request union is described as \"Control requests a client sends to drive the loop\". Do not edit by hand: run \"bun run schemas\".",
 	"$defs": {
 		"apply_flag_settingsRequest": {
 			"type": "object",
@@ -713,6 +713,10 @@
 			"properties": {
 				"cancelled": {
 					"type": "boolean"
+				},
+				"message_uuid": {
+					"type": "string",
+					"description": "The uuid of the message that was dropped, when cancelled is true and no turn can have read it. Use this, not the request, to tell which message went: a client can reuse a request id. Older versions of Claude Code leave it out."
 				}
 			},
 			"required": ["cancelled"],
@@ -1006,6 +1010,10 @@
 				},
 				"buildTime": {
 					"type": "string"
+				},
+				"oldestDesktopSdk": {
+					"type": "string",
+					"description": "@internal The oldest Agent SDK version, a plain x.y.z, that a Claude Desktop may bundle and still run this CLI."
 				}
 			},
 			"required": ["version"],
@@ -1224,6 +1232,10 @@
 				"cursor": {
 					"type": "string",
 					"description": "The next_cursor of the page before. Absent for the first page."
+				},
+				"limit": {
+					"type": "number",
+					"description": "The most entries the page may hold: a whole number from 1 to 1000, 200 when absent. A page of large entries holds fewer. An older CLI ignores it."
 				}
 			},
 			"required": ["subtype", "session_id"],
@@ -2031,7 +2043,7 @@
 						}
 					},
 					"required": ["exitHint"],
-					"description": "Present only under --bare / CLAUDE_CODE_SIMPLE with the hooks surface gated off: settings-file, flag, policy, and plugin hooks never fire there; session hooks still run."
+					"description": "Present only under --bare / CLAUDE_CODE_SIMPLE with the hooks surface gated off: settings-file, flag, policy, and a person's plugin hooks never fire there; session hooks and the hooks of plugins managed settings enable still run."
 				},
 				"errors": {
 					"type": "array",
@@ -2341,7 +2353,7 @@
 						}
 					},
 					"required": ["errors", "warnings"],
-					"description": "The sandbox runtime's dependency check, as the terminal's Dependencies tab lists it."
+					"description": "The sandbox runtime's dependency check, as the terminal's Dependencies tab lists it. This request runs the check only when supported and enabled_in_settings are both true. Otherwise both lists are empty and say nothing about missing tools."
 				},
 				"excluded_commands": {
 					"type": "array",
@@ -2601,10 +2613,14 @@
 				"remote_control_policy_lock_reason": {
 					"type": "string",
 					"description": "@internal Why org policy or managed settings lock `remoteControlAtStartup`; absent when allowed. Fails closed while the policy is unverified."
+				},
+				"withheld": {
+					"type": "boolean",
+					"description": "True when this answer was cut because the connection stores its answers (a cloud or self-hosted session): `effective` and each `sources` entry's `settings` hold at most the `allow`, `ask`, `deny` and `additionalDirectories` lists of `permissions` and the members named below, and each entry of `errors` holds only a fixed `message` and an empty `path`. The `policySettings` entry also keeps `disableSideloadFlags` where it is true. Where session folders are withheld, `additionalDirectories` is left out too, and a rule other than a bare tool name is sent as its tool name followed by `(withheld)`. On a worker whose `CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE` is `cloud_default`, `effective` also holds `skillOverrides` unless session folders are withheld, and `env` with each variable a client sent with `apply_flag_settings` whose value is in force and that policy does not set; the `policySettings` source's `env` lists the names a client sent that policy also sets, each with the value `(withheld)`, and that source has no `env` if there are none. `effective.env` is present even when empty. A missing key may have been withheld, so do not read it as unset. Absent when nothing was cut."
 				}
 			},
 			"required": ["effective", "sources"],
-			"description": "Effective merged settings plus raw per-source settings in merge order.",
+			"description": "Effective merged settings plus raw per-source settings in merge order. Cut when `withheld` is true.",
 			"x-direction": "client"
 		},
 		"get_skills_dialogRequest": {
@@ -6164,6 +6180,36 @@
 									"type": "string",
 									"enum": ["continue", "block"],
 									"description": "What a failure of these callbacks does: the client answered the hook_callback request with an error, or with an answer that fails validation. 'continue' (default): the failure is reported and the action goes ahead. 'block': the failure counts as a block, as it does for a command hook, so the action the event guards (a tool call, a permission request, a prompt) is blocked. Ignored on Stop, SubagentStop, TaskCompleted and TeammateIdle."
+								},
+								"whenUnanswered": {
+									"type": "object",
+									"properties": {
+										"afterSeconds": {
+											"type": "number",
+											"exclusiveMinimum": 0
+										},
+										"within": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"readsAlsoWithin": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"noWritesWithin": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										}
+									},
+									"required": ["afterSeconds", "within"],
+									"additionalProperties": false,
+									"description": "@internal PreToolUse only, and only from the process that owns the CLI's stdin. What judges a tool call that these callbacks leave unanswered for `afterSeconds`, in place of the refusal at `timeout`: the CLI compares the path that the tool would open with these folders (docs/desktop-host-contract.md D160). A malformed value, or any value where onFailure is set to 'continue', is ignored whole, with a warning; a CLI that predates the field ignores it."
 								}
 							},
 							"required": ["hookCallbackIds"],
@@ -6231,7 +6277,7 @@
 								"description": "@internal When true, the CLI never moves a call to this server's tools to a background task on its own: not after the auto-background delay, and not early for a priority 'now' message, which instead interrupts the turn and so ends the call. Meant for a server whose calls wait on a person. The turn waits for the call's own result, up to the server's timeout, so set timeout too. A tool that advertises MCP task support can still run as a task. Any value but true counts as unset. Read when the server is first registered, from initialize, mcp_set_servers or --mcp-config."
 							},
 							"connectorId": {
-								"$ref": "#/$defs/initializeRequest____schema16"
+								"$ref": "#/$defs/initializeRequest____schema22"
 							},
 							"autoModeVerdictTools": {
 								"maxItems": 64,
@@ -6242,73 +6288,27 @@
 								"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 							},
 							"dataFlowServer": {
-								"anyOf": [
-									{
-										"type": "object",
-										"properties": {
-											"type": {
-												"type": "string",
-												"const": "anthropic"
-											},
-											"id": {
-												"type": "string",
-												"minLength": 1
-											}
-										},
-										"required": ["type", "id"]
-									},
-									{
-										"type": "object",
-										"properties": {
-											"type": {
-												"type": "string",
-												"const": "claude_ai_connector"
-											},
-											"id": {
-												"type": "string",
-												"minLength": 1
-											},
-											"directory_id": {
-												"anyOf": [
-													{
-														"type": "string",
-														"minLength": 1
-													},
-													{
-														"type": "null"
-													}
-												]
-											}
-										},
-										"required": ["type", "id", "directory_id"]
-									},
-									{
-										"type": "object",
-										"properties": {
-											"type": {
-												"type": "string",
-												"const": "client_configured"
-											},
-											"transport": {
-												"type": "string",
-												"enum": ["stdio", "http", "in_process"]
-											},
-											"plugin_id_hash": {
-												"type": "string",
-												"minLength": 1
-											}
-										},
-										"required": ["type", "transport"]
+								"$ref": "#/$defs/initializeRequest____schema27"
+							},
+							"onPersonsMachine": {
+								"type": "object",
+								"properties": {
+									"exceptTools": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										}
 									}
-								],
-								"description": "@internal Where the host got this server, for the data flow records of calls to it: one of Anthropic's, by its registry id; a claude.ai connector, by its id (tagged or a bare UUID) and its directory id or null; or one the user configured, by the transport the host reaches it over. The first two are taken only in a session a desktop host started. Without it, or with a value of another shape, the records say unknown (docs/desktop-host-contract.md, D139). Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+								},
+								"required": ["exceptTools"],
+								"description": "@internal States that this server runs on the person's own computer. In a session that runs elsewhere (cloud, SSH, a VM), the CLI then refuses an mcp_tool hook's or a mod's call to it. exceptTools names, exactly as this server lists them, the tools that a hook may still call; it lifts nothing for a mod (docs/desktop-host-contract.md, D166a). Leave it out for any other server: a value of another shape marks the server and excepts nothing. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 							},
 							"tools": {
-								"$ref": "#/$defs/initializeRequest____schema23"
+								"$ref": "#/$defs/initializeRequest____schema31"
 							}
 						}
 					},
-					"description": "Settings for the SDK-hosted MCP servers named in sdkMcpServers, keyed by server name. Sent as a separate field so a CLI that predates it ignores it; entries whose name is not in sdkMcpServers, and values that do not match this shape, are ignored rather than rejected. timeout, disableAutoBackground, connectorId, autoModeVerdictTools and dataFlowServer apply when the server is first registered; tools (the per-tool permission policy) adds its ask and deny rules on every initialize that names the server. An initialize never removes a rule; mcp_set_servers replaces them."
+					"description": "Settings for the SDK-hosted MCP servers named in sdkMcpServers, keyed by server name. Sent as a separate field so a CLI that predates it ignores it; entries whose name is not in sdkMcpServers, and values that do not match this shape, are ignored rather than rejected. timeout, disableAutoBackground, connectorId, autoModeVerdictTools, dataFlowServer and onPersonsMachine apply when the server is first registered; tools (the per-tool permission policy) adds its ask and deny rules on every initialize that names the server. An initialize never removes a rule; mcp_set_servers replaces them."
 				},
 				"sdkMcpServerManifests": {
 					"type": "object",
@@ -6446,296 +6446,7 @@
 												"type": "string"
 											},
 											"additionalProperties": {
-												"anyOf": [
-													{
-														"type": "object",
-														"properties": {
-															"type": {
-																"type": "string",
-																"const": "stdio"
-															},
-															"command": {
-																"type": "string"
-															},
-															"args": {
-																"type": "array",
-																"items": {
-																	"type": "string"
-																}
-															},
-															"env": {
-																"type": "object",
-																"propertyNames": {
-																	"type": "string"
-																},
-																"additionalProperties": {
-																	"type": "string"
-																}
-															},
-															"timeout": {
-																"type": "integer",
-																"exclusiveMinimum": 0,
-																"maximum": 9007199254740991,
-																"description": "Per-server tool-call timeout in milliseconds. Overrides the MCP_TOOL_TIMEOUT environment variable for this server. Hard wall-clock limit per call; progress notifications do not extend it. Values below 1000ms are ignored (falls through to MCP_TOOL_TIMEOUT or the default)."
-															},
-															"alwaysLoad": {
-																"type": "boolean",
-																"description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built."
-															},
-															"role": {
-																"type": "string",
-																"const": "comms",
-																"description": "@internal Coordinator-mode role for this MCP server. 'comms' marks the server the coordinator uses to address the user; the coordinator tool filter lets comms-roled servers' tools through. Claude Code extension to .mcp.json — host-side config, not part of the MCP wire protocol. Coordinator mode is activated via the CLAUDE_CODE_COORDINATOR_MODE environment variable; this field only takes effect when coordinator mode is active."
-															}
-														},
-														"required": ["command"]
-													},
-													{
-														"type": "object",
-														"properties": {
-															"type": {
-																"type": "string",
-																"const": "sse"
-															},
-															"url": {
-																"type": "string"
-															},
-															"headers": {
-																"type": "object",
-																"propertyNames": {
-																	"type": "string"
-																},
-																"additionalProperties": {
-																	"type": "string"
-																}
-															},
-															"tools": {
-																"type": "array",
-																"items": {
-																	"type": "object",
-																	"properties": {
-																		"name": {
-																			"type": "string"
-																		},
-																		"permission_policy": {
-																			"type": "string",
-																			"enum": [
-																				"always_allow",
-																				"always_ask",
-																				"always_deny"
-																			]
-																		},
-																		"org_max_permission": {
-																			"type": "string",
-																			"enum": ["allow", "ask", "blocked"],
-																			"description": "Org admin's per-tool ceiling. Drives the auto-mode isOrgAskCeiling gate so an admin 'ask' cap forces a user prompt even in auto mode."
-																		}
-																	},
-																	"required": ["name"],
-																	"description": "Per-tool permission policy for an MCP server: carried on mcp_set_servers for remote (http/sse) servers, and on mcp_set_servers or initialize (sdkMcpServerConfigs) for host-registered sdk servers, where only always_ask and always_deny take effect."
-																}
-															},
-															"timeout": {
-																"type": "integer",
-																"exclusiveMinimum": 0,
-																"maximum": 9007199254740991,
-																"description": "Per-server tool-call timeout in milliseconds. Overrides the MCP_TOOL_TIMEOUT environment variable for this server. Hard wall-clock limit per call; progress notifications do not extend it. Values below 1000ms are ignored (falls through to MCP_TOOL_TIMEOUT or the default)."
-															},
-															"request_timeout_ms": {
-																"type": "integer",
-																"exclusiveMinimum": 0,
-																"maximum": 9007199254740991,
-																"description": "Per-server HTTP request timeout in milliseconds, set by the host on the mcp_set_servers control event. Raises the per-request fetch first-byte budget and the tool-call watchdog for this server. Capped at 5 minutes. Ignored when `timeout` is also set.\n@internal"
-															},
-															"displayName": {
-																"type": "string",
-																"description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects."
-															},
-															"alwaysLoad": {
-																"type": "boolean",
-																"description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built."
-															},
-															"role": {
-																"type": "string",
-																"const": "comms",
-																"description": "@internal Coordinator-mode role for this MCP server. 'comms' marks the server the coordinator uses to address the user; the coordinator tool filter lets comms-roled servers' tools through. Claude Code extension to .mcp.json — host-side config, not part of the MCP wire protocol. Coordinator mode is activated via the CLAUDE_CODE_COORDINATOR_MODE environment variable; this field only takes effect when coordinator mode is active."
-															}
-														},
-														"required": ["type", "url"]
-													},
-													{
-														"type": "object",
-														"properties": {
-															"type": {
-																"type": "string",
-																"const": "http"
-															},
-															"url": {
-																"type": "string"
-															},
-															"headers": {
-																"type": "object",
-																"propertyNames": {
-																	"type": "string"
-																},
-																"additionalProperties": {
-																	"type": "string"
-																}
-															},
-															"tools": {
-																"type": "array",
-																"items": {
-																	"type": "object",
-																	"properties": {
-																		"name": {
-																			"type": "string"
-																		},
-																		"permission_policy": {
-																			"type": "string",
-																			"enum": [
-																				"always_allow",
-																				"always_ask",
-																				"always_deny"
-																			]
-																		},
-																		"org_max_permission": {
-																			"type": "string",
-																			"enum": ["allow", "ask", "blocked"],
-																			"description": "Org admin's per-tool ceiling. Drives the auto-mode isOrgAskCeiling gate so an admin 'ask' cap forces a user prompt even in auto mode."
-																		}
-																	},
-																	"required": ["name"],
-																	"description": "Per-tool permission policy for an MCP server: carried on mcp_set_servers for remote (http/sse) servers, and on mcp_set_servers or initialize (sdkMcpServerConfigs) for host-registered sdk servers, where only always_ask and always_deny take effect."
-																}
-															},
-															"timeout": {
-																"type": "integer",
-																"exclusiveMinimum": 0,
-																"maximum": 9007199254740991,
-																"description": "Per-server tool-call timeout in milliseconds. Overrides the MCP_TOOL_TIMEOUT environment variable for this server. Hard wall-clock limit per call; progress notifications do not extend it. Values below 1000ms are ignored (falls through to MCP_TOOL_TIMEOUT or the default)."
-															},
-															"request_timeout_ms": {
-																"type": "integer",
-																"exclusiveMinimum": 0,
-																"maximum": 9007199254740991,
-																"description": "Per-server HTTP request timeout in milliseconds, set by the host on the mcp_set_servers control event. Raises the per-request fetch first-byte budget and the tool-call watchdog for this server. Capped at 5 minutes. Ignored when `timeout` is also set.\n@internal"
-															},
-															"displayName": {
-																"type": "string",
-																"description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects."
-															},
-															"alwaysLoad": {
-																"type": "boolean",
-																"description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built."
-															},
-															"role": {
-																"type": "string",
-																"const": "comms",
-																"description": "@internal Coordinator-mode role for this MCP server. 'comms' marks the server the coordinator uses to address the user; the coordinator tool filter lets comms-roled servers' tools through. Claude Code extension to .mcp.json — host-side config, not part of the MCP wire protocol. Coordinator mode is activated via the CLAUDE_CODE_COORDINATOR_MODE environment variable; this field only takes effect when coordinator mode is active."
-															}
-														},
-														"required": ["type", "url"]
-													},
-													{
-														"type": "object",
-														"properties": {
-															"type": {
-																"type": "string",
-																"const": "sdk"
-															},
-															"name": {
-																"type": "string"
-															},
-															"timeout": {
-																"type": "integer",
-																"exclusiveMinimum": 0,
-																"maximum": 9007199254740991,
-																"description": "Per-server tool-call timeout in milliseconds. Overrides the MCP_TOOL_TIMEOUT environment variable for this server. Hard wall-clock limit per call; progress notifications do not extend it. Values below 1000ms are ignored (falls through to MCP_TOOL_TIMEOUT or the default). Applies when the server is first registered; changing it for an already-registered server has no effect until it is removed and re-added."
-															},
-															"disableAutoBackground": {
-																"type": "boolean",
-																"description": "@internal When true, the CLI never moves a call to this server's tools to a background task on its own: not after the auto-background delay, and not early for a priority 'now' message, which instead interrupts the turn and so ends the call. Meant for a server whose calls wait on a person. The turn waits for the call's own result, up to the server's timeout, so set timeout too. A tool that advertises MCP task support can still run as a task. Any value but true counts as unset. Read when the server is first registered, from initialize, mcp_set_servers or --mcp-config."
-															},
-															"connectorId": {
-																"$ref": "#/$defs/initializeRequest____schema16"
-															},
-															"autoModeVerdictTools": {
-																"maxItems": 64,
-																"type": "array",
-																"items": {
-																	"type": "string"
-																},
-																"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
-															},
-															"dataFlowServer": {
-																"anyOf": [
-																	{
-																		"type": "object",
-																		"properties": {
-																			"type": {
-																				"type": "string",
-																				"const": "anthropic"
-																			},
-																			"id": {
-																				"type": "string",
-																				"minLength": 1
-																			}
-																		},
-																		"required": ["type", "id"]
-																	},
-																	{
-																		"type": "object",
-																		"properties": {
-																			"type": {
-																				"type": "string",
-																				"const": "claude_ai_connector"
-																			},
-																			"id": {
-																				"type": "string",
-																				"minLength": 1
-																			},
-																			"directory_id": {
-																				"anyOf": [
-																					{
-																						"type": "string",
-																						"minLength": 1
-																					},
-																					{
-																						"type": "null"
-																					}
-																				]
-																			}
-																		},
-																		"required": ["type", "id", "directory_id"]
-																	},
-																	{
-																		"type": "object",
-																		"properties": {
-																			"type": {
-																				"type": "string",
-																				"const": "client_configured"
-																			},
-																			"transport": {
-																				"type": "string",
-																				"enum": ["stdio", "http", "in_process"]
-																			},
-																			"plugin_id_hash": {
-																				"type": "string",
-																				"minLength": 1
-																			}
-																		},
-																		"required": ["type", "transport"]
-																	}
-																],
-																"description": "@internal Where the host got this server, for the data flow records of calls to it: one of Anthropic's, by its registry id; a claude.ai connector, by its id (tagged or a bare UUID) and its directory id or null; or one the user configured, by the transport the host reaches it over. The first two are taken only in a session a desktop host started. Without it, or with a value of another shape, the records say unknown (docs/desktop-host-contract.md, D139). Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
-															},
-															"tools": {
-																"$ref": "#/$defs/initializeRequest____schema23"
-															}
-														},
-														"required": ["type", "name"]
-													}
-												]
+												"$ref": "#/$defs/initializeRequest____schema70"
 											}
 										}
 									]
@@ -6887,12 +6598,27 @@
 							"skipMcpDiscovery": {
 								"type": "boolean",
 								"description": "When true, the engine loads skills/hooks/agents/commands from this plugin but does NOT read its .mcp.json or manifest mcpServers. Use when the SDK host owns this plugin's MCP connections."
+							},
+							"requiredByOrganization": {
+								"type": "boolean",
+								"const": true,
+								"description": "@internal States that the person's organization requires this plugin. Mods see it on plugin.register, and an unmarked copy of its name does not load beside it; it grants no tier or permission (docs/desktop-host-contract.md, D109a). The Agent SDK sends a marked entry in the initialize request under --await-initialize (Claude Code 2.1.261 or newer) whatever pluginDelivery says."
 							}
 						},
 						"required": ["type", "path"],
 						"description": "Configuration for loading a plugin."
 					},
 					"description": "Plugins to load for the session, in the same shape as the SDK `plugins` option: the stdin form of one --plugin-dir flag per entry (--plugin-dir-no-mcp when skipMcpDiscovery is set), so the launch command line does not grow with the plugin count. Loaded only by a CLI launched with --await-initialize, which reads this request during startup before any plugin work. Without that flag, on a repeated initialize, or over a remote session transport the field loads nothing; plugins_applied in the response reports whether the listed plugins are in fact loaded."
+				},
+				"mcpServers": {
+					"type": "object",
+					"propertyNames": {
+						"type": "string"
+					},
+					"additionalProperties": {
+						"$ref": "#/$defs/initializeRequest____schema70"
+					},
+					"description": "MCP servers for Claude Code to run or connect to, keyed by server name: the serializable entries of the SDK `mcpServers` option (host-resident servers go in sdkMcpServers), as the stdin form of one --mcp-config item, which keeps server credentials (stdio `env`, http and sse `headers`) off the command line. Read only at launch under --await-initialize, and then handled as --mcp-config: an invalid entry is skipped and reported in system/init, not fatal; one difference is that a Claude Code process this one starts is not handed them. Without that flag, on a repeated initialize, or over a remote session transport it loads nothing; use mcp_set_servers in a running session. mcp_servers_applied in the response says whether these are the set read at launch."
 				},
 				"managedSettings": {
 					"type": "object",
@@ -6939,12 +6665,74 @@
 			"description": "Initializes the SDK session with hooks, MCP servers, and agent configuration.",
 			"x-direction": "client"
 		},
-		"initializeRequest____schema16": {
+		"initializeRequest____schema22": {
 			"type": "string",
 			"minLength": 1,
 			"description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. With or without that declaration, deny and ask rules, hook matchers and disallowed-tool lists that spell mcp__<connectorId> also reach this server's tools, and nothing that allows does; the id is read as a tool's name would spell it (a character other than a letter, a digit, '-' and '_' as '_'), and one that is then longer than 128 characters or holds '__' is not used for that. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered."
 		},
-		"initializeRequest____schema23": {
+		"initializeRequest____schema27": {
+			"anyOf": [
+				{
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"const": "anthropic"
+						},
+						"id": {
+							"type": "string",
+							"minLength": 1
+						}
+					},
+					"required": ["type", "id"]
+				},
+				{
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"const": "claude_ai_connector"
+						},
+						"id": {
+							"type": "string",
+							"minLength": 1
+						},
+						"directory_id": {
+							"anyOf": [
+								{
+									"type": "string",
+									"minLength": 1
+								},
+								{
+									"type": "null"
+								}
+							]
+						}
+					},
+					"required": ["type", "id", "directory_id"]
+				},
+				{
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"const": "client_configured"
+						},
+						"transport": {
+							"type": "string",
+							"enum": ["stdio", "http", "in_process"]
+						},
+						"plugin_id_hash": {
+							"type": "string",
+							"minLength": 1
+						}
+					},
+					"required": ["type", "transport"]
+				}
+			],
+			"description": "@internal Where the host got this server, for the data flow records of calls to it: one of Anthropic's, by its registry id; a claude.ai connector, by its id (tagged or a bare UUID) and its directory id or null; or one the user configured, by the transport the host reaches it over. The first two are taken only in a session a desktop host started; in a session the VS Code extension started, the first is taken too, but only with the id of its claude-vscode server. Without it, or with a value of another shape, the records say unknown (docs/desktop-host-contract.md, D139). Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+		},
+		"initializeRequest____schema31": {
 			"type": "array",
 			"items": {
 				"type": "object",
@@ -6965,7 +6753,245 @@
 				"required": ["name"],
 				"description": "Per-tool permission policy for an MCP server: carried on mcp_set_servers for remote (http/sse) servers, and on mcp_set_servers or initialize (sdkMcpServerConfigs) for host-registered sdk servers, where only always_ask and always_deny take effect."
 			},
-			"description": "Per-tool permission policy the host declares for this server's tools (not the tool definitions passed to createSdkMcpServer). always_ask: the CLI asks the host (canUseTool or the permission prompt tool) before each call, even where an allow rule or allowedTools covers the tool, and under bypassPermissions outside a hosted remote session (CLAUDE_CODE_REMOTE); under dontAsk the call is denied; in auto mode the classifier decides, except that by default a tool annotated destructiveHint still asks. always_deny: calls are denied. always_allow and org_max_permission are ignored on sdk servers; grant allows with allowedTools or canUseTool. Read from initialize (sdkMcpServerConfigs) and from each mcp_set_servers entry that names the server. On the wire an entry without tools states no policy: on initialize the stored list and the rules stand; on mcp_set_servers the rules are replaced without them. The Agent SDK always re-sends the registered list. An entry whose policy is not one of the three asks; an entry without a string name is dropped and the rest apply; a value that is not a list reads as absent."
+			"description": "Per-tool permission policy the host declares for this server's tools (not the tool definitions passed to createSdkMcpServer). always_ask: the CLI asks the host (canUseTool or the permission prompt tool) before each call, even where an allow rule or allowedTools covers the tool, and under bypassPermissions outside a hosted remote session (CLAUDE_CODE_REMOTE); under dontAsk the call is denied; in auto mode the classifier decides, except that by default a tool annotated destructiveHint still asks. always_deny: calls are denied, except a mod's own ($.tool.call, $.mcp.call). always_allow and org_max_permission are ignored on sdk servers; grant allows with allowedTools or canUseTool. Read from initialize (sdkMcpServerConfigs) and from each mcp_set_servers entry that names the server. On the wire an entry without tools states no policy: on initialize the stored list and the rules stand; on mcp_set_servers the rules are replaced without them. The Agent SDK always re-sends the registered list. An entry whose policy is not one of the three asks; an entry without a string name is dropped and the rest apply; a value that is not a list reads as absent."
+		},
+		"initializeRequest____schema70": {
+			"anyOf": [
+				{
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"const": "stdio"
+						},
+						"command": {
+							"type": "string"
+						},
+						"args": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"env": {
+							"type": "object",
+							"propertyNames": {
+								"type": "string"
+							},
+							"additionalProperties": {
+								"type": "string"
+							}
+						},
+						"timeout": {
+							"type": "integer",
+							"exclusiveMinimum": 0,
+							"maximum": 9007199254740991,
+							"description": "Per-server tool-call timeout in milliseconds. Overrides the MCP_TOOL_TIMEOUT environment variable for this server. Hard wall-clock limit per call; progress notifications do not extend it. Values below 1000ms are ignored (falls through to MCP_TOOL_TIMEOUT or the default)."
+						},
+						"alwaysLoad": {
+							"type": "boolean",
+							"description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built."
+						},
+						"role": {
+							"type": "string",
+							"const": "comms",
+							"description": "@internal Coordinator-mode role for this MCP server. 'comms' marks the server the coordinator uses to address the user; the coordinator tool filter lets comms-roled servers' tools through. Claude Code extension to .mcp.json — host-side config, not part of the MCP wire protocol. Coordinator mode is activated via the CLAUDE_CODE_COORDINATOR_MODE environment variable; this field only takes effect when coordinator mode is active."
+						}
+					},
+					"required": ["command"]
+				},
+				{
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"const": "sse"
+						},
+						"url": {
+							"type": "string"
+						},
+						"headers": {
+							"type": "object",
+							"propertyNames": {
+								"type": "string"
+							},
+							"additionalProperties": {
+								"type": "string"
+							}
+						},
+						"tools": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"permission_policy": {
+										"type": "string",
+										"enum": ["always_allow", "always_ask", "always_deny"]
+									},
+									"org_max_permission": {
+										"type": "string",
+										"enum": ["allow", "ask", "blocked"],
+										"description": "Org admin's per-tool ceiling. Drives the auto-mode isOrgAskCeiling gate so an admin 'ask' cap forces a user prompt even in auto mode."
+									}
+								},
+								"required": ["name"],
+								"description": "Per-tool permission policy for an MCP server: carried on mcp_set_servers for remote (http/sse) servers, and on mcp_set_servers or initialize (sdkMcpServerConfigs) for host-registered sdk servers, where only always_ask and always_deny take effect."
+							}
+						},
+						"timeout": {
+							"type": "integer",
+							"exclusiveMinimum": 0,
+							"maximum": 9007199254740991,
+							"description": "Per-server tool-call timeout in milliseconds. Overrides the MCP_TOOL_TIMEOUT environment variable for this server. Hard wall-clock limit per call; progress notifications do not extend it. Values below 1000ms are ignored (falls through to MCP_TOOL_TIMEOUT or the default)."
+						},
+						"request_timeout_ms": {
+							"type": "integer",
+							"exclusiveMinimum": 0,
+							"maximum": 9007199254740991,
+							"description": "Per-server HTTP request timeout in milliseconds, set by the host on the mcp_set_servers control event. Raises the per-request fetch first-byte budget and the tool-call watchdog for this server. Capped at 5 minutes. Ignored when `timeout` is also set.\n@internal"
+						},
+						"displayName": {
+							"type": "string",
+							"description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects."
+						},
+						"alwaysLoad": {
+							"type": "boolean",
+							"description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built."
+						},
+						"role": {
+							"type": "string",
+							"const": "comms",
+							"description": "@internal Coordinator-mode role for this MCP server. 'comms' marks the server the coordinator uses to address the user; the coordinator tool filter lets comms-roled servers' tools through. Claude Code extension to .mcp.json — host-side config, not part of the MCP wire protocol. Coordinator mode is activated via the CLAUDE_CODE_COORDINATOR_MODE environment variable; this field only takes effect when coordinator mode is active."
+						}
+					},
+					"required": ["type", "url"]
+				},
+				{
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"const": "http"
+						},
+						"url": {
+							"type": "string"
+						},
+						"headers": {
+							"type": "object",
+							"propertyNames": {
+								"type": "string"
+							},
+							"additionalProperties": {
+								"type": "string"
+							}
+						},
+						"tools": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"permission_policy": {
+										"type": "string",
+										"enum": ["always_allow", "always_ask", "always_deny"]
+									},
+									"org_max_permission": {
+										"type": "string",
+										"enum": ["allow", "ask", "blocked"],
+										"description": "Org admin's per-tool ceiling. Drives the auto-mode isOrgAskCeiling gate so an admin 'ask' cap forces a user prompt even in auto mode."
+									}
+								},
+								"required": ["name"],
+								"description": "Per-tool permission policy for an MCP server: carried on mcp_set_servers for remote (http/sse) servers, and on mcp_set_servers or initialize (sdkMcpServerConfigs) for host-registered sdk servers, where only always_ask and always_deny take effect."
+							}
+						},
+						"timeout": {
+							"type": "integer",
+							"exclusiveMinimum": 0,
+							"maximum": 9007199254740991,
+							"description": "Per-server tool-call timeout in milliseconds. Overrides the MCP_TOOL_TIMEOUT environment variable for this server. Hard wall-clock limit per call; progress notifications do not extend it. Values below 1000ms are ignored (falls through to MCP_TOOL_TIMEOUT or the default)."
+						},
+						"request_timeout_ms": {
+							"type": "integer",
+							"exclusiveMinimum": 0,
+							"maximum": 9007199254740991,
+							"description": "Per-server HTTP request timeout in milliseconds, set by the host on the mcp_set_servers control event. Raises the per-request fetch first-byte budget and the tool-call watchdog for this server. Capped at 5 minutes. Ignored when `timeout` is also set.\n@internal"
+						},
+						"displayName": {
+							"type": "string",
+							"description": "@internal A readable name for this server, for when its key in mcpServers is not readable (for example \"Google Drive\" for \"Google_Drive-1a2b3c4d\"). Used only to label the server's tools. The name is shortened to one line without escape sequences, control or invisible characters, at most 128 UTF-16 code units. Changing only this field does not reconnect the server, so the new name shows from the next time the server connects."
+						},
+						"alwaysLoad": {
+							"type": "boolean",
+							"description": "When true, all tools from this server are always included in the prompt and never deferred behind tool search, except a tool the server itself lists with _meta anthropic/alwaysLoad set to false. Equivalent to setting defer_loading: false on the API. When false, all tools from this server are deferred behind tool search. Default: tools are deferred when tool search is enabled. As a side effect, true also blocks startup until the server is connected (capped at the standard 5s connect timeout) even though MCP startup is otherwise non-blocking by default, since the tools must be present when the turn-1 prompt is built."
+						},
+						"role": {
+							"type": "string",
+							"const": "comms",
+							"description": "@internal Coordinator-mode role for this MCP server. 'comms' marks the server the coordinator uses to address the user; the coordinator tool filter lets comms-roled servers' tools through. Claude Code extension to .mcp.json — host-side config, not part of the MCP wire protocol. Coordinator mode is activated via the CLAUDE_CODE_COORDINATOR_MODE environment variable; this field only takes effect when coordinator mode is active."
+						}
+					},
+					"required": ["type", "url"]
+				},
+				{
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"const": "sdk"
+						},
+						"name": {
+							"type": "string"
+						},
+						"timeout": {
+							"type": "integer",
+							"exclusiveMinimum": 0,
+							"maximum": 9007199254740991,
+							"description": "Per-server tool-call timeout in milliseconds. Overrides the MCP_TOOL_TIMEOUT environment variable for this server. Hard wall-clock limit per call; progress notifications do not extend it. Values below 1000ms are ignored (falls through to MCP_TOOL_TIMEOUT or the default). Applies when the server is first registered; changing it for an already-registered server has no effect until it is removed and re-added."
+						},
+						"disableAutoBackground": {
+							"type": "boolean",
+							"description": "@internal When true, the CLI never moves a call to this server's tools to a background task on its own: not after the auto-background delay, and not early for a priority 'now' message, which instead interrupts the turn and so ends the call. Meant for a server whose calls wait on a person. The turn waits for the call's own result, up to the server's timeout, so set timeout too. A tool that advertises MCP task support can still run as a task. Any value but true counts as unset. Read when the server is first registered, from initialize, mcp_set_servers or --mcp-config."
+						},
+						"connectorId": {
+							"$ref": "#/$defs/initializeRequest____schema22"
+						},
+						"autoModeVerdictTools": {
+							"maxItems": 64,
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+						},
+						"dataFlowServer": {
+							"$ref": "#/$defs/initializeRequest____schema27"
+						},
+						"onPersonsMachine": {
+							"type": "object",
+							"properties": {
+								"exceptTools": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								}
+							},
+							"required": ["exceptTools"],
+							"description": "@internal States that this server runs on the person's own computer. In a session that runs elsewhere (cloud, SSH, a VM), the CLI then refuses an mcp_tool hook's or a mod's call to it. exceptTools names, exactly as this server lists them, the tools that a hook may still call; it lifts nothing for a mod (docs/desktop-host-contract.md, D166a). Leave it out for any other server: a value of another shape marks the server and excepts nothing. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+						},
+						"tools": {
+							"$ref": "#/$defs/initializeRequest____schema31"
+						}
+					},
+					"required": ["type", "name"]
+				}
+			]
 		},
 		"initializeResponse": {
 			"type": "object",
@@ -7136,6 +7162,12 @@
 					"type": "boolean",
 					"description": "True on every initialize reply from a CLI that honors `onFailure` on hook matchers. Absent on CLIs that predate the option, which ignore it (a failed callback set to \"block\" lets the action run), and from responders that do not run the host's hooks. A host that sets \"block\" must not go on without it; the TypeScript SDK refuses the session. It says nothing of this request's hooks: `hooks_applied` does, and the TypeScript SDK also refuses a first initialize that reads `hooks_applied: false` when a matcher sets \"block\"."
 				},
+				"hooks_when_unanswered_kept": {
+					"type": "integer",
+					"minimum": 0,
+					"maximum": 9007199254740991,
+					"description": "@internal How many of the hook matchers that the host has registered, as this reply is written, have a `whenUnanswered` that this CLI kept. 0 where none arrived (the host sent none, or an SDK in between dropped it) and where each was ignored, with the `hook_when_unanswered_ignored` warning. It says how many were kept, not which lists. Absent from a CLI that predates this count, whether or not it reads `whenUnanswered`, and from responders that do not run the host's hooks."
+				},
 				"other_hook_ask_outranks_host": {
 					"type": "boolean",
 					"description": "@internal True on an initialize reply that goes over the pipes of the host that spawned this CLI, from a CLI that ranks another PreToolUse hook's ask above the host's own: where a hook that this host registered asks, and any other hook asks on the same call, the can_use_tool request carries the other hook's reason, whichever finished first. A plugin's hooks module may still re-word an ask, and a hook may copy the host's words (docs/desktop-host-contract.md D65a). Absent for a remote client, whose hooks are never the host's own, in a Cowork cloud session or a Code cloud worker, and on CLIs that predate it, which may send the host's own reason even when another hook asked: there a host must not take its own reason to mean that nobody else asked."
@@ -7160,6 +7192,10 @@
 				"managed_settings_applied": {
 					"type": "boolean",
 					"description": "@internal Whether the `managedSettings` in this initialize are the ones the process stored at launch under --managed-settings-in-initialize, so a re-sent initialize with the same settings also reads true. True does not say that they are in force: state.parentSettingsIncluded of list_permission_rules says whether they count beside the machine's own managed settings. The request's `managedSettings` field sets nothing after launch. Absent when the request carried none, on CLIs that predate this field (those never read `managedSettings`), and from responders that do not store them. A host that sent them must send no prompt until this is true; the TypeScript SDK holds the prompt, and ends the session on any other answer."
+				},
+				"mcp_servers_applied": {
+					"type": "boolean",
+					"description": "Whether the `mcpServers` in this initialize are the set the process read at launch under --await-initialize, so a re-sent initialize naming the same set also reads true; false otherwise. True says they were taken as an --mcp-config item, not that each one connected: a server missing from system/init mcp_servers was not loaded. The field loads nothing after launch. Absent when the request named none, and on CLIs that predate the field, which never read `mcpServers`: a host that sent servers must treat absence as not applied."
 				},
 				"host_worded_asks": {
 					"type": "boolean",
@@ -7786,7 +7822,7 @@
 				}
 			},
 			"required": ["subtype"],
-			"description": "Requests the session's live permission rules and workspace directories — the same data /permissions lists in the terminal: rules from settings files plus session-only approvals, slash-command grants, and --allowedTools flag rules, each with its source.",
+			"description": "Requests the session's live permission rules and workspace directories — the same data /permissions lists in the terminal: rules from settings files plus session-only approvals, slash-command grants, and --allowedTools flag rules, each with its source. A connection that stores its answers cuts these: see `withheld` on the state.",
 			"x-direction": "client"
 		},
 		"list_permission_rulesResponse": {
@@ -7824,7 +7860,7 @@
 									},
 									"rule": {
 										"type": "string",
-										"description": "The stored rule string VERBATIM, exactly as the session holds it. Two stored spellings that parse identically each get their own entry. Can carry invisible or control characters by design — escape at display."
+										"description": "The stored rule string VERBATIM, exactly as the session holds it; where the state's `withheld` is true, the text may be cut. Two stored spellings that parse identically each get their own entry. Can carry invisible or control characters by design — escape at display."
 									},
 									"description": {
 										"type": "object",
@@ -7903,6 +7939,10 @@
 								"description": "A settings file parse or validation error. When a settings.json file fails to parse (invalid JSON, JSON comments, schema mismatch), the file is skipped and any rules it contained — including permission allow/deny lists — are not applied."
 							},
 							"description": "Settings parse and validation errors, as get_settings reports them. When non-empty, the listed files were skipped — their rules are not in the session and not listed above."
+						},
+						"withheld": {
+							"type": "boolean",
+							"description": "True when this answer was cut because the connection stores its answers (a cloud or self-hosted session): `rules` holds only rows from settings sources and `mcpServerPolicy`, `workspaceDirectories` only folders from settings sources, each entry of `errors` only a fixed `message` and an empty `path`, and `parentSettingsIncluded` is absent. Where session folders are withheld, `workspaceDirectories` is empty, `originalCwd` is an empty string, and each rule other than a bare tool name the session can send loses its `description` and goes as `Tool(withheld)`, or as `(withheld)` where its tool name cannot be sent. An `ask` or `deny` rule of that last kind goes as `*(withheld)`, so a client that matches rules by tool name treats it as covering every tool. Absent from an answer that was not cut."
 						}
 					},
 					"required": [
@@ -7911,7 +7951,7 @@
 						"originalCwd",
 						"managedOnly"
 					],
-					"description": "The session's live permission rules state, as list_permission_rules reports it."
+					"description": "The session's live permission rules state, as list_permission_rules reports it. Cut when `withheld` is true."
 				}
 			},
 			"required": ["state"],
@@ -7951,7 +7991,7 @@
 				},
 				"check_permissions": {
 					"type": "boolean",
-					"description": "The call is someone else's (a page a host renders), so it is decided as the model's own call to this tool is: permission rules under every spelling, the permission mode, requiresUserInteraction, managed settings, and PreToolUse and PostToolUse hooks, which see the arguments and the result. An ask reaches the host as a can_use_tool control request; where no host can answer, and in dontAsk or plan mode, it is refused. A refused call never reaches the server: on a plain call the error subtype, on a staged call staging error_code=tool_error, each with text starting 'The tool did not run: '. The other refusals of mcp_call come first and keep their own words. A PostToolUse hook's rewrite replaces content and drops structuredContent and _meta. The result stays out of the model's context. Only a CLI that says mcp_call_check_permissions_v1 honours this member: an older one ignores it and runs the tool with no check. Honoured only on the pipes of the host that spawned the process; elsewhere the call is refused. A value that is not a boolean is refused."
+					"description": "The call is someone else's (a page a host renders), so it is decided as the model's own call to this tool is, except that a slash command's allowed-tools and connector card answers never allow it, even during a turn: permission rules under every spelling, the permission mode, requiresUserInteraction, managed settings, and PreToolUse and PostToolUse hooks, which see the arguments and the result. An ask reaches the host as a can_use_tool control request; where no host can answer, and in dontAsk or plan mode, it is refused. A refused call never reaches the server: on a plain call the error subtype, on a staged call staging error_code=tool_error, each with text starting 'The tool did not run: '. The other refusals of mcp_call come first and keep their own words. A PostToolUse hook's rewrite replaces content and drops structuredContent and _meta. The result stays out of the model's context. Only a CLI that says mcp_call_check_permissions_v1 honours this member: an older one ignores it and runs the tool with no check. Honoured only on the pipes of the host that spawned the process; elsewhere the call is refused. A value that is not a boolean is refused."
 				},
 				"input_files": {
 					"maxItems": 64,
@@ -8501,7 +8541,20 @@
 												"required": ["type", "transport"]
 											}
 										],
-										"description": "@internal Where the host got this server, for the data flow records of calls to it: one of Anthropic's, by its registry id; a claude.ai connector, by its id (tagged or a bare UUID) and its directory id or null; or one the user configured, by the transport the host reaches it over. The first two are taken only in a session a desktop host started. Without it, or with a value of another shape, the records say unknown (docs/desktop-host-contract.md, D139). Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+										"description": "@internal Where the host got this server, for the data flow records of calls to it: one of Anthropic's, by its registry id; a claude.ai connector, by its id (tagged or a bare UUID) and its directory id or null; or one the user configured, by the transport the host reaches it over. The first two are taken only in a session a desktop host started; in a session the VS Code extension started, the first is taken too, but only with the id of its claude-vscode server. Without it, or with a value of another shape, the records say unknown (docs/desktop-host-contract.md, D139). Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+									},
+									"onPersonsMachine": {
+										"type": "object",
+										"properties": {
+											"exceptTools": {
+												"type": "array",
+												"items": {
+													"type": "string"
+												}
+											}
+										},
+										"required": ["exceptTools"],
+										"description": "@internal States that this server runs on the person's own computer. In a session that runs elsewhere (cloud, SSH, a VM), the CLI then refuses an mcp_tool hook's or a mod's call to it. exceptTools names, exactly as this server lists them, the tools that a hook may still call; it lifts nothing for a mod (docs/desktop-host-contract.md, D166a). Leave it out for any other server: a value of another shape marks the server and excepts nothing. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 									},
 									"tools": {
 										"type": "array",
@@ -8524,7 +8577,7 @@
 											"required": ["name"],
 											"description": "Per-tool permission policy for an MCP server: carried on mcp_set_servers for remote (http/sse) servers, and on mcp_set_servers or initialize (sdkMcpServerConfigs) for host-registered sdk servers, where only always_ask and always_deny take effect."
 										},
-										"description": "Per-tool permission policy the host declares for this server's tools (not the tool definitions passed to createSdkMcpServer). always_ask: the CLI asks the host (canUseTool or the permission prompt tool) before each call, even where an allow rule or allowedTools covers the tool, and under bypassPermissions outside a hosted remote session (CLAUDE_CODE_REMOTE); under dontAsk the call is denied; in auto mode the classifier decides, except that by default a tool annotated destructiveHint still asks. always_deny: calls are denied. always_allow and org_max_permission are ignored on sdk servers; grant allows with allowedTools or canUseTool. Read from initialize (sdkMcpServerConfigs) and from each mcp_set_servers entry that names the server. On the wire an entry without tools states no policy: on initialize the stored list and the rules stand; on mcp_set_servers the rules are replaced without them. The Agent SDK always re-sends the registered list. An entry whose policy is not one of the three asks; an entry without a string name is dropped and the rest apply; a value that is not a list reads as absent."
+										"description": "Per-tool permission policy the host declares for this server's tools (not the tool definitions passed to createSdkMcpServer). always_ask: the CLI asks the host (canUseTool or the permission prompt tool) before each call, even where an allow rule or allowedTools covers the tool, and under bypassPermissions outside a hosted remote session (CLAUDE_CODE_REMOTE); under dontAsk the call is denied; in auto mode the classifier decides, except that by default a tool annotated destructiveHint still asks. always_deny: calls are denied, except a mod's own ($.tool.call, $.mcp.call). always_allow and org_max_permission are ignored on sdk servers; grant allows with allowedTools or canUseTool. Read from initialize (sdkMcpServerConfigs) and from each mcp_set_servers entry that names the server. On the wire an entry without tools states no policy: on initialize the stored list and the rules stand; on mcp_set_servers the rules are replaced without them. The Agent SDK always re-sends the registered list. An entry whose policy is not one of the three asks; an entry without a string name is dropped and the rest apply; a value that is not a list reads as absent."
 									}
 								},
 								"required": ["type", "name"]
@@ -8541,7 +8594,7 @@
 					"items": {
 						"type": "string"
 					},
-					"description": "@internal Deny rules on single MCP tools, each as mcp__<server>__<tool>. They hold whatever kind of server lists the tool, also one that `servers` leaves out. The list replaces the one that the session holds; a claude-code-server worker reads it only from the session service's own push of a newer stored server set. A request without the list keeps the held one, and so does a list of more than 2,048 names or with an entry in another form."
+					"description": "@internal Deny rules on single MCP tools, each as mcp__<server>__<tool>. They hold whatever kind of server lists the tool, also one that `servers` leaves out, and don't cover a mod's own call. The list replaces the one that the session holds; a claude-code-server worker reads it only from the session service's own push of a newer stored server set. A request without the list keeps the held one, and so does a list of more than 2,048 names or with an entry in another form."
 				}
 			},
 			"required": ["subtype", "servers"],
@@ -8639,9 +8692,10 @@
 									"CLAUDEAI_BEARER_REJECTED",
 									"FIRST_PARTY_AUTH_REJECTED",
 									"APPROVAL_REQUIRED",
+									"CLAUDEAI_CONNECTORS_DISABLED",
 									"CLIENT_REGISTRATION_UNAVAILABLE"
 								],
-								"description": "@internal Why a row is not connected, where a host can act on it. On a 'failed' row: CLAUDEAI_BEARER_REJECTED (a claude.ai connector rejected the claude.ai login — sign in again), FIRST_PARTY_AUTH_REJECTED (a first-party Anthropic server rejected its credential — the claude.ai login, or for the Claude Design server its /design-login authorization; the row's error names which sign-in fixes it, except over a transport that stores its frames, where it reads 'Connection failed'), APPROVAL_REQUIRED (a project-scoped server awaiting the user's approval). On a 'failed' or a 'needs-auth' row: CLIENT_REGISTRATION_UNAVAILABLE (the last look at the server's authorization server, under 30 days ago, found no way to register a client, so mcp_authenticate is expected to fail; the row keeps this value until the server is dialed again, for example by mcp_reconnect or a completed sign-in, so keep sign-in and reconnect available). Absent in every other case; new values are additive."
+								"description": "@internal Why a row is not connected, where a host can act on it. On a 'failed' row: CLAUDEAI_BEARER_REJECTED (a claude.ai connector rejected the claude.ai login — sign in again), FIRST_PARTY_AUTH_REJECTED (a first-party Anthropic server rejected its credential — the claude.ai login, or for the Claude Design server its /design-login authorization; the row's error names which sign-in fixes it, except over a transport that stores its frames, where it reads 'Connection failed'), APPROVAL_REQUIRED (a project-scoped server awaiting the user's approval), CLAUDEAI_CONNECTORS_DISABLED (a claude.ai connector that the desktop app handed over in process, left out because a managed or served source sets disableClaudeAiConnectors: nothing to reconnect). On a 'failed' or a 'needs-auth' row: CLIENT_REGISTRATION_UNAVAILABLE (the last look at the server's authorization server, under 30 days ago, found no way to register a client, so mcp_authenticate is expected to fail; the row keeps this value until the server is dialed again, for example by mcp_reconnect or a completed sign-in, so keep sign-in and reconnect available). Absent in every other case; new values are additive."
 							},
 							"config": {
 								"anyOf": [
@@ -8929,7 +8983,20 @@
 																"required": ["type", "transport"]
 															}
 														],
-														"description": "@internal Where the host got this server, for the data flow records of calls to it: one of Anthropic's, by its registry id; a claude.ai connector, by its id (tagged or a bare UUID) and its directory id or null; or one the user configured, by the transport the host reaches it over. The first two are taken only in a session a desktop host started. Without it, or with a value of another shape, the records say unknown (docs/desktop-host-contract.md, D139). Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+														"description": "@internal Where the host got this server, for the data flow records of calls to it: one of Anthropic's, by its registry id; a claude.ai connector, by its id (tagged or a bare UUID) and its directory id or null; or one the user configured, by the transport the host reaches it over. The first two are taken only in a session a desktop host started; in a session the VS Code extension started, the first is taken too, but only with the id of its claude-vscode server. Without it, or with a value of another shape, the records say unknown (docs/desktop-host-contract.md, D139). Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+													},
+													"onPersonsMachine": {
+														"type": "object",
+														"properties": {
+															"exceptTools": {
+																"type": "array",
+																"items": {
+																	"type": "string"
+																}
+															}
+														},
+														"required": ["exceptTools"],
+														"description": "@internal States that this server runs on the person's own computer. In a session that runs elsewhere (cloud, SSH, a VM), the CLI then refuses an mcp_tool hook's or a mod's call to it. exceptTools names, exactly as this server lists them, the tools that a hook may still call; it lifts nothing for a mod (docs/desktop-host-contract.md, D166a). Leave it out for any other server: a value of another shape marks the server and excepts nothing. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 													},
 													"tools": {
 														"type": "array",
@@ -8956,7 +9023,7 @@
 															"required": ["name"],
 															"description": "Per-tool permission policy for an MCP server: carried on mcp_set_servers for remote (http/sse) servers, and on mcp_set_servers or initialize (sdkMcpServerConfigs) for host-registered sdk servers, where only always_ask and always_deny take effect."
 														},
-														"description": "Per-tool permission policy the host declares for this server's tools (not the tool definitions passed to createSdkMcpServer). always_ask: the CLI asks the host (canUseTool or the permission prompt tool) before each call, even where an allow rule or allowedTools covers the tool, and under bypassPermissions outside a hosted remote session (CLAUDE_CODE_REMOTE); under dontAsk the call is denied; in auto mode the classifier decides, except that by default a tool annotated destructiveHint still asks. always_deny: calls are denied. always_allow and org_max_permission are ignored on sdk servers; grant allows with allowedTools or canUseTool. Read from initialize (sdkMcpServerConfigs) and from each mcp_set_servers entry that names the server. On the wire an entry without tools states no policy: on initialize the stored list and the rules stand; on mcp_set_servers the rules are replaced without them. The Agent SDK always re-sends the registered list. An entry whose policy is not one of the three asks; an entry without a string name is dropped and the rest apply; a value that is not a list reads as absent."
+														"description": "Per-tool permission policy the host declares for this server's tools (not the tool definitions passed to createSdkMcpServer). always_ask: the CLI asks the host (canUseTool or the permission prompt tool) before each call, even where an allow rule or allowedTools covers the tool, and under bypassPermissions outside a hosted remote session (CLAUDE_CODE_REMOTE); under dontAsk the call is denied; in auto mode the classifier decides, except that by default a tool annotated destructiveHint still asks. always_deny: calls are denied, except a mod's own ($.tool.call, $.mcp.call). always_allow and org_max_permission are ignored on sdk servers; grant allows with allowedTools or canUseTool. Read from initialize (sdkMcpServerConfigs) and from each mcp_set_servers entry that names the server. On the wire an entry without tools states no policy: on initialize the stored list and the rules stand; on mcp_set_servers the rules are replaced without them. The Agent SDK always re-sends the registered list. An entry whose policy is not one of the three asks; an entry without a string name is dropped and the rest apply; a value that is not a list reads as absent."
 													}
 												},
 												"required": ["type", "name"]
@@ -9143,10 +9210,22 @@
 					"const": "sessions",
 					"description": "Which host-handed bearer the CLI asks for. Absent: the claude.ai sign-in token (the only meaning hosts that predate the field know). 'sessions': the second token that authorizes the cloud-sessions API, which a host that set CLAUDE_CODE_SDK_HAS_SESSIONS_OAUTH_REFRESH answers; it must belong to the same account and organization as the sign-in token."
 				},
+				"refused_bearer_sha256": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Sent with an ask of kind 'sessions' and with no other, empty when no bearer was refused: lowercase-hex SHA-256 digests of the bearers of that kind that servers refused under the current sign-in token, the newest 16 at most, the latest refusal last. A host that reads them forces a renewal only when the bearer it would hand over is among them. Absent: a CLI that predates the field, or one whose outbound frames are stored server-side."
+				},
 				"token_state": {
 					"type": "string",
 					"enum": ["refused", "not_refused"],
 					"description": "What brought this ask. 'refused': it follows a 401, or a 403 for a revoked token, on a request that carried the sign-in token. 'not_refused': it does not (a Remote Control close code asked for a fresh credential, a request went with no credential, or the CLI holds no token yet), so the token may still be good and the host may answer with it again. Present on every ask without kind, from a CLI that knows the field. A host takes any other value as absent."
+				},
+				"refused_call": {
+					"type": "string",
+					"enum": ["model", "connector", "other"],
+					"description": "The kind of call that the server refused. 'model': a call to the model, which fails at once if the host answers with the same token or none, so the host renews. 'connector': a request to a claude.ai connector. 'other': neither, at a call site that someone has checked: its failure on an unchanged token ends no turn, start or session. To 'connector' or 'other' the host may first ask the server whether the token that it holds is still good, and keep it: it then answers with that token, which is no fault to these two; if the CLI held another, it takes this one. The check and the answer must fit well inside the CLI's 30 s limit, because a model call that joined the ask shares a timeout and fails. Only with token_state 'refused'. Absent on a 'refused' ask: the call site sets none, or the CLI is older, and the host renews, as before the field: such an ask can come from a call whose failure ends a turn. A caller does not settle for the answer 'no new token' to an ask that wanted less than its own ('not_refused', then 'connector' or 'other', then no refused_call, then 'model'): it asks again, and the host judges that ask on its own. A host takes any other value as absent."
 				}
 			},
 			"required": ["subtype"],
@@ -9173,6 +9252,18 @@
 			"required": ["accessToken"],
 			"description": "@internal Fresh OAuth access token returned by the SDK host getOAuthToken callback, or null when the host has no token available.",
 			"x-direction": "agent"
+		},
+		"prompt_draft_activityRequest": {
+			"type": "object",
+			"properties": {
+				"subtype": {
+					"type": "string",
+					"const": "prompt_draft_activity"
+				}
+			},
+			"required": ["subtype"],
+			"description": "@internal The person is typing a prompt for this session in the host's own composer. It carries none of the text. Send it at the first key and about every 10 seconds while typing goes on. Between turns the CLI may use the time to get the next request ready; during a turn it does nothing. Acknowledged with an empty success either way. An older CLI answers an unknown-subtype error, and a CLI that drives a cloud-hosted session refuses the request.",
+			"x-direction": "client"
 		},
 		"read_fileRequest": {
 			"type": "object",
@@ -9255,7 +9346,7 @@
 				},
 				"for_upload": {
 					"type": "boolean",
-					"description": "@internal When true, the caller means to hand the file on, for example into an artifact that other people can open, so a file that every other gate has passed also goes through Claude Code's test for credential files (takenByPathRefusal). One whose path has a credential's name or place, as sent or as it resolves, or is too dressed or too deep for the test to judge, is refused with the error_code credential_name (read_denied with the anchor as_written); one of Claude Code's own files, or a kernel or device path, is refused with no error_code. A file with more than one hard link is served: a caller that minds looks for itself. Only an answer that has `upload_screened` used the member. A CLI that predates it, the Remote Control bridge that a session itself runs, the engine's readFile and a session that reads through a tool container ignore it and answer as for a plain read_file, so a caller must take a success without `upload_screened` as a file whose name was not tested."
+					"description": "@internal When true, the caller means to hand the file on, for example into an artifact that other people can open, so a file that every other gate has passed also goes through Claude Code's test for credential files (takenByPathRefusal). One whose path has a credential's name or place, as sent or as it resolves, or is too dressed or too deep for the test to judge, is refused with the error_code credential_name (read_denied with the anchor as_written); one of Claude Code's own files, a kernel or device path, or a path with a part spelled ..namedfork, is refused with no error_code. A file with more than one hard link is served: a caller that minds looks for itself. Only an answer that has `upload_screened` used the member. A CLI that predates it, the Remote Control bridge that a session itself runs, the engine's readFile and a session that reads through a tool container ignore it and answer as for a plain read_file, so a caller must take a success without `upload_screened` as a file whose name was not tested."
 				},
 				"liveReply": {
 					"type": "boolean",
@@ -9760,12 +9851,21 @@
 							"skipMcpDiscovery": {
 								"type": "boolean",
 								"description": "When true, the engine loads skills/hooks/agents/commands from this plugin but does NOT read its .mcp.json or manifest mcpServers. Use when the SDK host owns this plugin's MCP connections."
+							},
+							"requiredByOrganization": {
+								"type": "boolean",
+								"const": true,
+								"description": "@internal States that the person's organization requires this plugin. Mods see it on plugin.register, and an unmarked copy of its name does not load beside it; it grants no tier or permission (docs/desktop-host-contract.md, D109a). The Agent SDK sends a marked entry in the initialize request under --await-initialize (Claude Code 2.1.261 or newer) whatever pluginDelivery says."
 							}
 						},
 						"required": ["type", "path"],
 						"description": "Configuration for loading a plugin."
 					},
 					"description": "Plugins for the reload to load as well, in the same shape as the SDK `plugins` option: each entry joins the session as one more --plugin-dir would (--plugin-dir-no-mcp when skipMcpDiscovery is set). Plugins already loaded stay; nothing is removed. A held or failed reload adds none of them. Refused for a malformed list or a path that is not absolute, when managed settings set disableSideloadFlags, on a connection whose frames persist server-side (any Remote Control or cloud worker), in a cloud-hosted session, and when a running sandbox cannot keep shell commands out of the folders (always on Windows)."
+				},
+				"refuse_if_busy": {
+					"type": "boolean",
+					"description": "When true, a request that finds the session busy reloads nothing and gets an error whose error_code is reload_plugins_busy; ask again once the session is idle. Busy: a turn is running or still ending, a message is queued for one, a permission prompt taken over from an earlier process is unanswered, background work that keeps the session at running (an agent, a workflow and the like) is live, or an in-process teammate is at work; a session that only waits for a background shell command is not busy. For a host whose request can arrive late, such as one that reaches the session over SSH: a reload changes the commands, agents, hooks and servers under a running turn, agent or teammate. Default false: the request is served in a turn too. Only `claude -p` reads it, and says so in system/init.capabilities (reload_plugins_refuse_if_busy_v1) to a host on its pipes; a CLI that does not say so may ignore the field."
 				}
 			},
 			"required": ["subtype"],
@@ -9899,9 +9999,10 @@
 									"CLAUDEAI_BEARER_REJECTED",
 									"FIRST_PARTY_AUTH_REJECTED",
 									"APPROVAL_REQUIRED",
+									"CLAUDEAI_CONNECTORS_DISABLED",
 									"CLIENT_REGISTRATION_UNAVAILABLE"
 								],
-								"description": "@internal Why a row is not connected, where a host can act on it. On a 'failed' row: CLAUDEAI_BEARER_REJECTED (a claude.ai connector rejected the claude.ai login — sign in again), FIRST_PARTY_AUTH_REJECTED (a first-party Anthropic server rejected its credential — the claude.ai login, or for the Claude Design server its /design-login authorization; the row's error names which sign-in fixes it, except over a transport that stores its frames, where it reads 'Connection failed'), APPROVAL_REQUIRED (a project-scoped server awaiting the user's approval). On a 'failed' or a 'needs-auth' row: CLIENT_REGISTRATION_UNAVAILABLE (the last look at the server's authorization server, under 30 days ago, found no way to register a client, so mcp_authenticate is expected to fail; the row keeps this value until the server is dialed again, for example by mcp_reconnect or a completed sign-in, so keep sign-in and reconnect available). Absent in every other case; new values are additive."
+								"description": "@internal Why a row is not connected, where a host can act on it. On a 'failed' row: CLAUDEAI_BEARER_REJECTED (a claude.ai connector rejected the claude.ai login — sign in again), FIRST_PARTY_AUTH_REJECTED (a first-party Anthropic server rejected its credential — the claude.ai login, or for the Claude Design server its /design-login authorization; the row's error names which sign-in fixes it, except over a transport that stores its frames, where it reads 'Connection failed'), APPROVAL_REQUIRED (a project-scoped server awaiting the user's approval), CLAUDEAI_CONNECTORS_DISABLED (a claude.ai connector that the desktop app handed over in process, left out because a managed or served source sets disableClaudeAiConnectors: nothing to reconnect). On a 'failed' or a 'needs-auth' row: CLIENT_REGISTRATION_UNAVAILABLE (the last look at the server's authorization server, under 30 days ago, found no way to register a client, so mcp_authenticate is expected to fail; the row keeps this value until the server is dialed again, for example by mcp_reconnect or a completed sign-in, so keep sign-in and reconnect available). Absent in every other case; new values are additive."
 							},
 							"config": {
 								"anyOf": [
@@ -10189,7 +10290,20 @@
 																"required": ["type", "transport"]
 															}
 														],
-														"description": "@internal Where the host got this server, for the data flow records of calls to it: one of Anthropic's, by its registry id; a claude.ai connector, by its id (tagged or a bare UUID) and its directory id or null; or one the user configured, by the transport the host reaches it over. The first two are taken only in a session a desktop host started. Without it, or with a value of another shape, the records say unknown (docs/desktop-host-contract.md, D139). Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+														"description": "@internal Where the host got this server, for the data flow records of calls to it: one of Anthropic's, by its registry id; a claude.ai connector, by its id (tagged or a bare UUID) and its directory id or null; or one the user configured, by the transport the host reaches it over. The first two are taken only in a session a desktop host started; in a session the VS Code extension started, the first is taken too, but only with the id of its claude-vscode server. Without it, or with a value of another shape, the records say unknown (docs/desktop-host-contract.md, D139). Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+													},
+													"onPersonsMachine": {
+														"type": "object",
+														"properties": {
+															"exceptTools": {
+																"type": "array",
+																"items": {
+																	"type": "string"
+																}
+															}
+														},
+														"required": ["exceptTools"],
+														"description": "@internal States that this server runs on the person's own computer. In a session that runs elsewhere (cloud, SSH, a VM), the CLI then refuses an mcp_tool hook's or a mod's call to it. exceptTools names, exactly as this server lists them, the tools that a hook may still call; it lifts nothing for a mod (docs/desktop-host-contract.md, D166a). Leave it out for any other server: a value of another shape marks the server and excepts nothing. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 													},
 													"tools": {
 														"type": "array",
@@ -10216,7 +10330,7 @@
 															"required": ["name"],
 															"description": "Per-tool permission policy for an MCP server: carried on mcp_set_servers for remote (http/sse) servers, and on mcp_set_servers or initialize (sdkMcpServerConfigs) for host-registered sdk servers, where only always_ask and always_deny take effect."
 														},
-														"description": "Per-tool permission policy the host declares for this server's tools (not the tool definitions passed to createSdkMcpServer). always_ask: the CLI asks the host (canUseTool or the permission prompt tool) before each call, even where an allow rule or allowedTools covers the tool, and under bypassPermissions outside a hosted remote session (CLAUDE_CODE_REMOTE); under dontAsk the call is denied; in auto mode the classifier decides, except that by default a tool annotated destructiveHint still asks. always_deny: calls are denied. always_allow and org_max_permission are ignored on sdk servers; grant allows with allowedTools or canUseTool. Read from initialize (sdkMcpServerConfigs) and from each mcp_set_servers entry that names the server. On the wire an entry without tools states no policy: on initialize the stored list and the rules stand; on mcp_set_servers the rules are replaced without them. The Agent SDK always re-sends the registered list. An entry whose policy is not one of the three asks; an entry without a string name is dropped and the rest apply; a value that is not a list reads as absent."
+														"description": "Per-tool permission policy the host declares for this server's tools (not the tool definitions passed to createSdkMcpServer). always_ask: the CLI asks the host (canUseTool or the permission prompt tool) before each call, even where an allow rule or allowedTools covers the tool, and under bypassPermissions outside a hosted remote session (CLAUDE_CODE_REMOTE); under dontAsk the call is denied; in auto mode the classifier decides, except that by default a tool annotated destructiveHint still asks. always_deny: calls are denied, except a mod's own ($.tool.call, $.mcp.call). always_allow and org_max_permission are ignored on sdk servers; grant allows with allowedTools or canUseTool. Read from initialize (sdkMcpServerConfigs) and from each mcp_set_servers entry that names the server. On the wire an entry without tools states no policy: on initialize the stored list and the rules stand; on mcp_set_servers the rules are replaced without them. The Agent SDK always re-sends the registered list. An entry whose policy is not one of the three asks; an entry without a string name is dropped and the rest apply; a value that is not a list reads as absent."
 													}
 												},
 												"required": ["type", "name"]
@@ -10598,7 +10712,7 @@
 						"type": "string"
 					},
 					"additionalProperties": {},
-					"description": "@internal The remote-tool protocol's request envelope, exactly what rides under the reserved arguments key on the device bridge: a call (call id = tool_use id, the session's permission mode, expiry, and on a second leg the session's answer to the machine's question) or an outcome query by its op. call_id is the serving side's run-at-most-once key across legs, redeliveries and queries; request_id is per leg. Parsed strictly by that protocol on the client."
+					"description": "@internal The remote-tool protocol's request envelope or, where the machine and the service both take one, a ToolHost permission request for the same call. A `step` member marks the second, whose call id is its tool_use_id. The envelope is exactly what rides under the reserved arguments key on the device bridge: a call (call id = tool_use id, the session's permission mode, expiry, and on a second leg the session's answer to the machine's question) or an outcome query by its op. call_id is the serving side's run-at-most-once key across legs, redeliveries and queries; request_id is per leg. The client parses either format strictly."
 				},
 				"tool_use_id": {
 					"type": "string"
@@ -10878,7 +10992,7 @@
 				}
 			},
 			"required": ["subtype", "worker_epoch", "deadline_ms"],
-			"description": "@internal A replacement worker asks the attached client that serves this session's tools to announce it, when a call names a machine its roster lacks. Not addressed to an instance: the worker knows none. A client that serves the machine announces, overriding once what it believes the worker already holds; it honours one ask per epoch, another only when the announce that one made failed or went unanswered, and at most one per ten seconds, and does nothing for an ask it cannot date or read, or whose sender it would refuse a tool call from. Any other client, and a client that predates the request, does nothing or error-replies, and the worker reads no reply: it withdraws the request with control_cancel_request when its wait ends.",
+			"description": "@internal A replacement worker asks the attached client that serves this session's tools to announce it, when a call names a machine its roster lacks. Not addressed to an instance: the worker knows none. A client that serves the machine announces, overriding once what it believes the worker already holds; it honours one ask per epoch, another only when the announce that one made failed or went unanswered, and at most one per ten seconds, and does nothing for an ask it cannot date or read, or whose sender it would refuse a tool call from. Any other client, and a client that predates the request, does nothing or error-replies, and the worker reads no reply: it withdraws the request with control_cancel_request when its wait ends. A worker that the desktop app hosts also asks the app this way, as it starts and at a turn's start while it holds no host, and withdraws none of those asks. The session service answers such an ask with the error device_announce_refused where it would refuse the app's announce now, or device_stream_closed where the device's stream to it is closed; the worker reads either reply to its newest ask alone, and it ends that turn's wait for the announce.",
 			"x-direction": "agent"
 		},
 		"rename_sessionRequest": {
@@ -10996,7 +11110,7 @@
 				},
 				"skippedLinks": {
 					"type": "number",
-					"description": "Count of tracked files NOT restored or deleted because a symlink, hard link, or other non-regular file was detected at the tracked path, its parent directory no longer resolves to where it pointed when the checkpoint was taken, or its backup could not be safely read. Only populated by a real (non-dryRun) rewind — on a dryRun response the field is never set and the preview counts do not reflect link-safety refusals. Absent or 0 on a real rewind means no link-safety refusals occurred; other per-file failures (for example a missing backup file) are not counted here; they are reported in telemetry, and when every differing file fails to restore the rewind itself fails (canRewind: false)."
+					"description": "Count of tracked files NOT restored or deleted because a symlink, hard link, or other non-regular file was detected at the tracked path, its parent directory no longer resolves to where it pointed when the checkpoint was taken, it is behind a link in a folder that sandboxed commands can write, or its backup could not be safely read. Only populated by a real (non-dryRun) rewind — on a dryRun response the field is never set and the preview counts do not reflect link-safety refusals. Absent or 0 on a real rewind means no link-safety refusals occurred; other per-file failures (for example a missing backup file) are not counted here; they are reported in telemetry, and when every differing file fails to restore the rewind itself fails (canRewind: false)."
 				}
 			},
 			"required": ["canRewind"],
@@ -11306,6 +11420,21 @@
 			},
 			"required": ["subtype", "serverName"],
 			"description": "@internal Pin (or clear, with mode:null) an MCP server's per-tool permission-mode override. Tighten-only over this channel: only 'default', 'auto', or null are accepted (clampControlChannelOverride); any other mode is rejected without changing state. The override substitutes for the session mode at every per-tool engine decision (effectiveModeForTool) — and only when the session mode would already auto-allow — so e.g. a server can be held at 'default' or routed through the auto-mode classifier under global bypassPermissions.",
+			"x-direction": "client"
+		},
+		"set_message_waitingRequest": {
+			"type": "object",
+			"properties": {
+				"subtype": {
+					"type": "string",
+					"const": "set_message_waiting"
+				},
+				"waiting": {
+					"type": "boolean"
+				}
+			},
+			"required": ["subtype", "waiting"],
+			"description": "@internal Says that the host holds a person's message until the running turn's result (true), or no longer does (false). While true, in a Claude Desktop Code session (elsewhere it changes nothing), the turn's end does not wait for the model call behind its post_turn_summary, so the result comes sooner and the summary is written without the model. The turn's end, or the next user message that the host sends, sets it back to false. Acknowledged with an empty success; an older CLI answers an unknown-subtype error.",
 			"x-direction": "client"
 		},
 		"set_modelRequest": {
@@ -11838,7 +11967,7 @@
 						"type": "string",
 						"maxLength": 64
 					},
-					"description": "@internal What this client draws beyond what every client of its surface draws: `Theme` (what `$.theme.set` sets, the scene behind the conversation and the look alike; only a `desktop` or `mobile` client's word counts), `Input` and `Select` (on `mobile`: a client that does not name one is sent an empty Box in its place, as is an ask with no `client_id`, since no attach can name its default id), `Progress` (on `mobile`: a client that does not name it, or an ask with no `client_id`, is sent the Box and Text that draw it). Held per client like `answers`: a later `ui_attach` under the same id that names it replaces it, and it leaves with the client. A name this version does not know, or one said twice, is ignored, so a newer client keeps its attach; a list of more than 16 names, or a name of more than 64 characters, is refused with the attach. Absent: a client still attached, or one put back, keeps what it said, and a first attach draws none. Empty, or nothing known in it: none, and `$.theme.set` answers that nothing draws it."
+					"description": "@internal What this client draws beyond what every client of its surface draws: `Theme` (what `$.theme.set` sets, the scene behind the conversation and the look alike; only a `desktop` or `mobile` client's word counts), `Input` and `Select` (on `mobile`: a client that does not name one is sent an empty Box in its place, as is an ask with no `client_id`, since no attach can name its default id), `Progress` (on `mobile`: a client that does not name it, or an ask with no `client_id`, is sent the Box and Text that draw it), `Shader` (in a backdrop: a client that does not name it is sent the Svg it holds). Held per client like `answers`: a later `ui_attach` under the same id that names it replaces it, and it leaves with the client. A name this version does not know, or one said twice, is ignored, so a newer client keeps its attach; a list of more than 16 names, or a name of more than 64 characters, is refused with the attach. Absent: a client still attached, or one put back, keeps what it said, and a first attach draws none. Empty, or nothing known in it: none, and `$.theme.set` answers that nothing draws it."
 				}
 			},
 			"required": ["subtype", "surface", "client_id"],
@@ -11887,6 +12016,8 @@
 						"SessionMode",
 						"PromptHint",
 						"AbovePrompt",
+						"AgentRow",
+						"ContextMenu",
 						"Pane",
 						"Placed",
 						"Theme"
@@ -12078,6 +12209,8 @@
 						"SessionMode",
 						"PromptHint",
 						"AbovePrompt",
+						"AgentRow",
+						"ContextMenu",
 						"Pane",
 						"Placed",
 						"Theme"
@@ -12461,6 +12594,8 @@
 						"SessionMode",
 						"PromptHint",
 						"AbovePrompt",
+						"AgentRow",
+						"ContextMenu",
 						"Pane",
 						"Placed",
 						"Theme"
@@ -12533,6 +12668,8 @@
 						"SessionMode",
 						"PromptHint",
 						"AbovePrompt",
+						"AgentRow",
+						"ContextMenu",
 						"Pane",
 						"Placed",
 						"Theme"
@@ -12558,6 +12695,16 @@
 					"type": "string",
 					"const": "ui_message"
 				},
+				"surface": {
+					"type": "string",
+					"enum": ["desktop", "mobile", "vscode"],
+					"description": "@internal Where it was sent from; absent, `desktop`."
+				},
+				"client_id": {
+					"type": "string",
+					"pattern": "^[A-Za-z0-9._-]{1,64}$",
+					"description": "@internal The client that sent it; absent, its surface's default one."
+				},
 				"data": {
 					"description": "@internal What the instance posted (`surface.post(data)`): plain JSON, bounded as a Client post is (2000 values, depth 32, 100 000 characters); the hooks reached see `e.data`."
 				}
@@ -12571,7 +12718,7 @@
 				"subtype",
 				"data"
 			],
-			"description": "@internal A post from a `Client` instance the desktop drew: runs the owning plugin's `ui.message` chain alone (origin `client`) with `surface: \"desktop\"`. One naming a Client the latest ui_render of that instance did not carry answers `{handled: false}`; data past the bounds errors.",
+			"description": "@internal A post from a `Client` instance the desktop drew: runs the owning plugin's `ui.message` chain alone (origin `client`) with `surface: \"desktop\"`. One naming a Client the latest ui_render of that instance did not carry answers `{handled: false}`; data past the bounds errors. One whose `component` is `Theme` is a click on the backdrop instead, `data` `{ type: \"click\", x, y }` with `x` and `y` 0 to 1 from the top left: it runs the `ui.pointer` hooks of the plugin that set the theme, and answers `{handled: false}` when `plugin` is not that one.",
 			"x-direction": "client"
 		},
 		"ui_messageResponse": {
@@ -12884,11 +13031,17 @@
 								"SessionMode",
 								"PromptHint",
 								"AbovePrompt",
+								"AgentRow",
+								"ContextMenu",
 								"Pane",
 								"Placed",
 								"Theme"
 							],
-							"description": "@internal What to draw, or `Theme`, the session's theme, by `instance_id`. Under `theme` no hook draws: the engine answers itself, `props` of `plugin` with whichever of `colors`, `overrideColorScheme` and a still `backdrop` stands to `desktop` and `mobile`, and `{}` with none standing, with a scene and no `colors`, under another id or to any other surface. Under `backdrop` a mod's `ui.render` hook for `Backdrop` draws the scene that stands, with `props` of `scene`, `plugin`, `glass` and `overrideColorScheme` where a plugin said it."
+							"description": "@internal What to draw, or `Theme`, the session's theme, by `instance_id`. Under `theme` and `image:<id>:<n>` no hook draws: the engine answers itself, `props` of `plugin` with whichever of `colors`, `overrideColorScheme` and a still `backdrop` stands, or `data`, `index`, `of`, `hash` and `bytes` for a piece of an image, to `desktop` and `mobile`, and `{}` with none standing, with a scene and no `colors`, under another id or to any other surface. Under `backdrop` a mod's `ui.render` hook for `Backdrop` draws the scene that stands, with `props` of `scene`, `plugin`, `glass` and `overrideColorScheme` where a plugin said it."
+						},
+						"liveReply": {
+							"type": "boolean",
+							"description": "@internal On a `ui_render` `Theme` ask for a piece of an image: when true and the CLI writes through CCR, the success reply goes only to the clients attached now, as a `control_response` marked `live_only: true`, and is not stored with the session's events. Semantics as `mcp_status`'s `liveReply`: a reply sent while the client's stream is down is lost, so ask again, and a host with no live channel sends an ordinary reply. Over a remote transport such an ask without it draws nothing."
 						},
 						"instance_id": {
 							"type": "string",
@@ -12900,7 +13053,7 @@
 								"type": "string"
 							},
 							"additionalProperties": {},
-							"description": "@internal The component's plain-data props as the asking surface holds them; the `ui.render` site rule validates their shape per component. `output` on a ToolUse is capped at 64 KB before the chain sees it."
+							"description": "@internal The component's plain-data props as the asking surface holds them; the `ui.render` site rule validates their shape per component. `output` on a ToolUse is capped at 64 KB before the chain sees it. An `AgentRow` ask names its agent by `instance_id` and may say `columns`, its row's width: the engine fills the rest from the task it holds, answers its own node and `{}` for an agent it does not hold, and says in the answer's `props.isHidden` whether the row leaves the surface's at-a-glance list. The answer's `props.label` is there only when a hook changed it. A `Theme` ask under `backdrop` may say `held`, at most 8 lowercase SHA-256 hashes of what the client already holds (an Svg's `source` as UTF-8, a Shader's `ir` as RFC 8785 JSON); no hook sees it, and that answer alone may name those parts by hash. A `ContextMenu` ask says what the person opened the menu on, each part optional: `row` ({component, requestId}: the transcript row, named as in that row's own ui_render ask), `link` ({href, text?}), `selection` ({text, requestId?}) and `code` ({text, isBlock}); a part of another shape, empty, or too long (text over 64 KB, an `href` over 2,048 characters, an id over 256) is dropped. The answer's `props` are empty. Use one `instance_id` per window. A new menu asked under it can release the buttons of the menu before it, so press only buttons from the newest menu. The engine asks each plugin by itself and answers their trees stacked in one column, or its own node when none drew: the surface makes a row of each Button and each Link, leaves out the rest, and reads neither `props` nor `rewritten`."
 						},
 						"viewport": {
 							"type": "object",
@@ -13036,11 +13189,11 @@
 								"type": "string"
 							},
 							"additionalProperties": {},
-							"description": "@internal What to draw the first engine node with: the chain's rewrite of the props, or the input's own. Props under any later engine node do not cross (the ledger holding them is process-local)."
+							"description": "@internal What to draw the first engine node with: the chain's rewrite of the props, or the input's own; for a `Theme` ask under `backdrop`, with `isPointerHeard: true` when the plugin that set the theme hooks `ui.pointer`. Props under any later engine node do not cross (the ledger holding them is process-local)."
 						},
 						"rewritten": {
 							"type": "boolean",
-							"description": "@internal True when `props` is not the object the request carried."
+							"description": "@internal True when `props` is not the object the request carried; for an `AgentRow`, when `props` carries a `label` or hides the row."
 						},
 						"hooked": {
 							"type": "boolean",
@@ -13476,6 +13629,9 @@
 								"source": {
 									"type": "string"
 								},
+								"sourceHash": {
+									"type": "string"
+								},
 								"alt": {
 									"type": "string"
 								},
@@ -13489,11 +13645,14 @@
 									"type": "boolean"
 								}
 							},
-							"required": ["source", "alt"],
-							"description": "@internal A vector leaf of the desktop and mobile surfaces: `source` is SVG markup the surface draws in an isolated box (the desktop an image, or a sandboxed frame when `isInteractive`; the mobile app a sandboxed web view), `alt` what it says. Bounded by the engine (128 KiB of source, 4096 px) before it crossed; no children."
+							"required": ["alt"],
+							"description": "@internal A vector leaf of the desktop and mobile surfaces: `source` is SVG markup the surface draws in an isolated box (the desktop an image, or a sandboxed frame when `isInteractive`; the mobile app a sandboxed web view), `alt` what it says. Bounded by the engine (128 KiB of source, 4096 px) before it crossed; no children. `source` is always there, but in the answer to a `Theme` ask under `backdrop` whose `held` names its hash, where `sourceHash` may stand in its place."
 						}
 					},
 					"required": ["type", "props"]
+				},
+				{
+					"$ref": "#/$defs/ui_pressResponse____schema72"
 				},
 				{
 					"type": "object",
@@ -13541,7 +13700,7 @@
 					"required": ["type", "ref"]
 				}
 			],
-			"description": "@internal A plain-data tree a `ui.render` hook returned, as the hooks engine validated it: Box, Text, div, span or b with children, a Button, Input or Select leaf carrying the `press` that names its handler, a Link with its text, a Code leaf, a Markdown leaf, a Client leaf (a surface-module region, carried as data; never on mobile), an Svg leaf (desktop and mobile; never the terminal), a Progress leaf (mobile alone), or an engine node the surface draws itself (src/plugins/functionHooks/types/element/render-element.ts)."
+			"description": "@internal A plain-data tree a `ui.render` hook returned, as the hooks engine validated it: Box, Text, div, span or b with children, a Button, Input or Select leaf carrying the `press` that names its handler, a Link with its text, a Code leaf, a Markdown leaf, a Client leaf (a surface-module region, carried as data; never on mobile), an Svg leaf (desktop and mobile; never the terminal), a Shader over one Svg (a backdrop alone), a Progress leaf (mobile alone), or an engine node the surface draws itself (src/plugins/functionHooks/types/element/render-element.ts)."
 		},
 		"ui_pressResponse____schema6": {
 			"type": "object",
@@ -13598,6 +13757,45 @@
 				}
 			},
 			"required": ["type"]
+		},
+		"ui_pressResponse____schema72": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "string",
+					"const": "Shader"
+				},
+				"props": {
+					"type": "object",
+					"properties": {
+						"ir": {
+							"type": "object",
+							"propertyNames": {
+								"type": "string"
+							},
+							"additionalProperties": {}
+						},
+						"irHash": {
+							"type": "string"
+						},
+						"values": {
+							"type": "array",
+							"items": {
+								"type": "number"
+							}
+						}
+					},
+					"required": ["values"],
+					"description": "@internal A backdrop the surface plays on its GPU, at most one, in the answer to a `Theme` ask under `backdrop`, and sent only to a client that names `Shader` in `ui_attach`'s `draws`; any other client is sent its Svg in its place. `ir` is the checked IR the engine compiled from the mod's shader file, which the surface checks again before it runs it, and `values` one number for each entry of `ir.values`, in that order: never source, a path or GLSL. `irHash` stands in place of `ir` where the ask's `held` names it. The one child is the Svg that shows wherever the shader does not run."
+				},
+				"children": {
+					"type": "array",
+					"items": {
+						"$ref": "#/$defs/ui_pressResponse____schema13"
+					}
+				}
+			},
+			"required": ["type", "props", "children"]
 		},
 		"ui_prompt_autocompleteRequest": {
 			"type": "object",
@@ -14164,11 +14362,17 @@
 						"SessionMode",
 						"PromptHint",
 						"AbovePrompt",
+						"AgentRow",
+						"ContextMenu",
 						"Pane",
 						"Placed",
 						"Theme"
 					],
-					"description": "@internal What to draw, or `Theme`, the session's theme, by `instance_id`. Under `theme` no hook draws: the engine answers itself, `props` of `plugin` with whichever of `colors`, `overrideColorScheme` and a still `backdrop` stands to `desktop` and `mobile`, and `{}` with none standing, with a scene and no `colors`, under another id or to any other surface. Under `backdrop` a mod's `ui.render` hook for `Backdrop` draws the scene that stands, with `props` of `scene`, `plugin`, `glass` and `overrideColorScheme` where a plugin said it."
+					"description": "@internal What to draw, or `Theme`, the session's theme, by `instance_id`. Under `theme` and `image:<id>:<n>` no hook draws: the engine answers itself, `props` of `plugin` with whichever of `colors`, `overrideColorScheme` and a still `backdrop` stands, or `data`, `index`, `of`, `hash` and `bytes` for a piece of an image, to `desktop` and `mobile`, and `{}` with none standing, with a scene and no `colors`, under another id or to any other surface. Under `backdrop` a mod's `ui.render` hook for `Backdrop` draws the scene that stands, with `props` of `scene`, `plugin`, `glass` and `overrideColorScheme` where a plugin said it."
+				},
+				"liveReply": {
+					"type": "boolean",
+					"description": "@internal On a `ui_render` `Theme` ask for a piece of an image: when true and the CLI writes through CCR, the success reply goes only to the clients attached now, as a `control_response` marked `live_only: true`, and is not stored with the session's events. Semantics as `mcp_status`'s `liveReply`: a reply sent while the client's stream is down is lost, so ask again, and a host with no live channel sends an ordinary reply. Over a remote transport such an ask without it draws nothing."
 				},
 				"instance_id": {
 					"type": "string",
@@ -14180,7 +14384,7 @@
 						"type": "string"
 					},
 					"additionalProperties": {},
-					"description": "@internal The component's plain-data props as the asking surface holds them; the `ui.render` site rule validates their shape per component. `output` on a ToolUse is capped at 64 KB before the chain sees it."
+					"description": "@internal The component's plain-data props as the asking surface holds them; the `ui.render` site rule validates their shape per component. `output` on a ToolUse is capped at 64 KB before the chain sees it. An `AgentRow` ask names its agent by `instance_id` and may say `columns`, its row's width: the engine fills the rest from the task it holds, answers its own node and `{}` for an agent it does not hold, and says in the answer's `props.isHidden` whether the row leaves the surface's at-a-glance list. The answer's `props.label` is there only when a hook changed it. A `Theme` ask under `backdrop` may say `held`, at most 8 lowercase SHA-256 hashes of what the client already holds (an Svg's `source` as UTF-8, a Shader's `ir` as RFC 8785 JSON); no hook sees it, and that answer alone may name those parts by hash. A `ContextMenu` ask says what the person opened the menu on, each part optional: `row` ({component, requestId}: the transcript row, named as in that row's own ui_render ask), `link` ({href, text?}), `selection` ({text, requestId?}) and `code` ({text, isBlock}); a part of another shape, empty, or too long (text over 64 KB, an `href` over 2,048 characters, an id over 256) is dropped. The answer's `props` are empty. Use one `instance_id` per window. A new menu asked under it can release the buttons of the menu before it, so press only buttons from the newest menu. The engine asks each plugin by itself and answers their trees stacked in one column, or its own node when none drew: the surface makes a row of each Button and each Link, leaves out the rest, and reads neither `props` nor `rewritten`."
 				},
 				"viewport": {
 					"type": "object",
@@ -14301,11 +14505,11 @@
 						"type": "string"
 					},
 					"additionalProperties": {},
-					"description": "@internal What to draw the first engine node with: the chain's rewrite of the props, or the input's own. Props under any later engine node do not cross (the ledger holding them is process-local)."
+					"description": "@internal What to draw the first engine node with: the chain's rewrite of the props, or the input's own; for a `Theme` ask under `backdrop`, with `isPointerHeard: true` when the plugin that set the theme hooks `ui.pointer`. Props under any later engine node do not cross (the ledger holding them is process-local)."
 				},
 				"rewritten": {
 					"type": "boolean",
-					"description": "@internal True when `props` is not the object the request carried."
+					"description": "@internal True when `props` is not the object the request carried; for an `AgentRow`, when `props` carries a `label` or hides the row."
 				},
 				"hooked": {
 					"type": "boolean",
@@ -14615,6 +14819,9 @@
 								"source": {
 									"type": "string"
 								},
+								"sourceHash": {
+									"type": "string"
+								},
 								"alt": {
 									"type": "string"
 								},
@@ -14628,11 +14835,14 @@
 									"type": "boolean"
 								}
 							},
-							"required": ["source", "alt"],
-							"description": "@internal A vector leaf of the desktop and mobile surfaces: `source` is SVG markup the surface draws in an isolated box (the desktop an image, or a sandboxed frame when `isInteractive`; the mobile app a sandboxed web view), `alt` what it says. Bounded by the engine (128 KiB of source, 4096 px) before it crossed; no children."
+							"required": ["alt"],
+							"description": "@internal A vector leaf of the desktop and mobile surfaces: `source` is SVG markup the surface draws in an isolated box (the desktop an image, or a sandboxed frame when `isInteractive`; the mobile app a sandboxed web view), `alt` what it says. Bounded by the engine (128 KiB of source, 4096 px) before it crossed; no children. `source` is always there, but in the answer to a `Theme` ask under `backdrop` whose `held` names its hash, where `sourceHash` may stand in its place."
 						}
 					},
 					"required": ["type", "props"]
+				},
+				{
+					"$ref": "#/$defs/ui_renderResponse____schema67"
 				},
 				{
 					"type": "object",
@@ -14680,7 +14890,7 @@
 					"required": ["type", "ref"]
 				}
 			],
-			"description": "@internal A plain-data tree a `ui.render` hook returned, as the hooks engine validated it: Box, Text, div, span or b with children, a Button, Input or Select leaf carrying the `press` that names its handler, a Link with its text, a Code leaf, a Markdown leaf, a Client leaf (a surface-module region, carried as data; never on mobile), an Svg leaf (desktop and mobile; never the terminal), a Progress leaf (mobile alone), or an engine node the surface draws itself (src/plugins/functionHooks/types/element/render-element.ts)."
+			"description": "@internal A plain-data tree a `ui.render` hook returned, as the hooks engine validated it: Box, Text, div, span or b with children, a Button, Input or Select leaf carrying the `press` that names its handler, a Link with its text, a Code leaf, a Markdown leaf, a Client leaf (a surface-module region, carried as data; never on mobile), an Svg leaf (desktop and mobile; never the terminal), a Shader over one Svg (a backdrop alone), a Progress leaf (mobile alone), or an engine node the surface draws itself (src/plugins/functionHooks/types/element/render-element.ts)."
 		},
 		"ui_renderResponse____schema1": {
 			"type": "object",
@@ -14848,6 +15058,45 @@
 				}
 			},
 			"required": ["type", "props"]
+		},
+		"ui_renderResponse____schema67": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "string",
+					"const": "Shader"
+				},
+				"props": {
+					"type": "object",
+					"properties": {
+						"ir": {
+							"type": "object",
+							"propertyNames": {
+								"type": "string"
+							},
+							"additionalProperties": {}
+						},
+						"irHash": {
+							"type": "string"
+						},
+						"values": {
+							"type": "array",
+							"items": {
+								"type": "number"
+							}
+						}
+					},
+					"required": ["values"],
+					"description": "@internal A backdrop the surface plays on its GPU, at most one, in the answer to a `Theme` ask under `backdrop`, and sent only to a client that names `Shader` in `ui_attach`'s `draws`; any other client is sent its Svg in its place. `ir` is the checked IR the engine compiled from the mod's shader file, which the surface checks again before it runs it, and `values` one number for each entry of `ir.values`, in that order: never source, a path or GLSL. `irHash` stands in place of `ir` where the ask's `held` names it. The one child is the Svg that shows wherever the shader does not run."
+				},
+				"children": {
+					"type": "array",
+					"items": {
+						"$ref": "#/$defs/ui_renderResponse____schema8"
+					}
+				}
+			},
+			"required": ["type", "props", "children"]
 		},
 		"ui_renderResponse____schema8": {
 			"anyOf": [
@@ -15040,6 +15289,8 @@
 						"SessionMode",
 						"PromptHint",
 						"AbovePrompt",
+						"AgentRow",
+						"ContextMenu",
 						"Pane",
 						"Placed",
 						"Theme"
