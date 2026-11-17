@@ -8757,7 +8757,7 @@
 	},
 	"error:The proxy setting (HTTPS_PROXY or ALL_PROXY) is not an http or https URL, so this request was not sent.": {
 		"route": "/configure/env-vars/network-and-proxy",
-		"anchor": "proxy-requests-with-only-allproxy"
+		"anchor": "proxy-requests-with-only-all_proxy"
 	},
 	"error:The reason is empty once whitespace and invisible characters are removed. Give a visible reason.": {
 		"route": "/reference/tools/agents-and-tasks",

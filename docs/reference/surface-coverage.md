@@ -4904,7 +4904,7 @@ Items: 4246.
 | `The prelude checksum specified in the message (${…}) does not match the calculated CRC32 checksum (${…})` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `The provided access boundary has more than ${…} access boundary rules.` | Excluded: Bundled Google auth library (google-auth-library) |
 | `The provided fetch function does not support file uploads with the current global FormData class.` | Excluded: Bundled Anthropic SDK (@anthropic-ai/sdk) |
-| `The proxy setting (HTTPS_PROXY or ALL_PROXY) is not an http or https URL, so this request was not sent.` | [/configure/env-vars/network-and-proxy#proxy-requests-with-only-allproxy](/configure/env-vars/network-and-proxy#proxy-requests-with-only-allproxy) |
+| `The proxy setting (HTTPS_PROXY or ALL_PROXY) is not an http or https URL, so this request was not sent.` | [/configure/env-vars/network-and-proxy#proxy-requests-with-only-all_proxy](/configure/env-vars/network-and-proxy#proxy-requests-with-only-all_proxy) |
 | `The reason is empty once whitespace and invisible characters are removed. Give a visible reason.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `The repo's MCP servers have been closed` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | ``The request is not an instance of `HttpRequest` and cannot be signed`` | Excluded: Bundled AWS SDK and Smithy libraries |
