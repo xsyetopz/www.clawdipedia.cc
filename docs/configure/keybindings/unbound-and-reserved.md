@@ -12,7 +12,9 @@ This block binds the unbound action `app:redraw` to `ctrl+x r` in the `Global` c
 
 ```json title="~/.claude/keybindings.json"
 {
-  "bindings": [{ "context": "Global", "bindings": { "ctrl+x r": "app:redraw" } }]
+  "bindings": [
+    { "context": "Global", "bindings": { "ctrl+x r": "app:redraw" } }
+  ]
 }
 ```
 

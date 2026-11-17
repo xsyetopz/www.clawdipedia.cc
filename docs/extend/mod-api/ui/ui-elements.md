@@ -319,13 +319,22 @@ A surface may open the menu before a slow answer arrives. Then those rows are mi
 | `selection` | <Documented /> | The text that the person selected, when the menu opened on it. | `UiSelection`, optional. |
 | `code` | <Documented /> | The code under the pointer. `isBlock` is true for a fenced block, and `text` is then the whole block. It is false for code inside a line. | `{ text: string; isBlock: boolean }`, optional. |
 
-```javascript
-on("ui.render",
-  { component: "ContextMenu", props: { link: { href: /^https:\/\/example\.com\// } } },
+```javascript skip-lint
+on(
+  "ui.render",
+  {
+    component: "ContextMenu",
+    props: { link: { href: /^https:\/\/example\.com\// } },
+  },
   ($, e) => {
     const { Button } = $.ui.resolve(e);
-    const fill = () => $.prompt.fill({ text: `Summarize ${e.props.link?.href}` });
-    return <Button key="summarize" onPress={fill}>Summarize this page</Button>;
+    const fill = () =>
+      $.prompt.fill({ text: `Summarize ${e.props.link?.href}` });
+    return (
+      <Button key="summarize" onPress={fill}>
+        Summarize this page
+      </Button>
+    );
   },
 );
 ```
@@ -386,13 +395,13 @@ The module `claude-code/shader` declares the language of the file. A file ends w
 - A file's numbers, ints, and tables hold 16384 bits in all. A `table` holds up to 256 rows of 1 to 4 numbers. A pass is a `picture` (exactly one, what shows over the `Svg`), a `buffer` (a texture that lasts between frames), or `shapes`. A file has 24 passes at most with tables.
 - The inputs are `time`, `dt`, `frame`, `first`, `fresh`, `turn`, `still` (1 under Reduce Motion), `size`, `res`, `px`, `composer`, `pixel`, `scene` (a picture of the `Svg`), and up to four pointers. `values({ ... })` declares the numbers that the mod sets, each held to its range.
 
-```javascript
-import { picture, shader, sin, time, vec3, vec4 } from 'claude-code/shader'
-const sky = picture(p => {
-  const glow = 0.2 + 0.1 * sin(time + p.uv.x * 6)
-  return vec4(vec3(0.3, 0.5, 1) * glow, glow)
-})
-export default shader({ fps: 30, passes: [sky] })
+```javascript skip-lint
+import { picture, shader, sin, time, vec3, vec4 } from "claude-code/shader";
+const sky = picture((p) => {
+  const glow = 0.2 + 0.1 * sin(time + p.uv.x * 6);
+  return vec4(vec3(0.3, 0.5, 1) * glow, glow);
+});
+export default shader({ fps: 30, passes: [sky] });
 ```
 
 ## JSX and Globals
