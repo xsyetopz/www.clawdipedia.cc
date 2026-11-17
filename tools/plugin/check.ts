@@ -16,8 +16,16 @@ import {
 	versionProblems,
 } from "../version/bump.ts";
 import { bundleProblems, validateProblems } from "./bundle.ts";
-import { exists, manifestFile, PLUGINS, ROOT, text } from "./plugins.ts";
-import type { Plugin } from "./plugins.ts";
+import {
+	exists,
+	manifestFile,
+	marketplaceEntries,
+	mirrorProblems,
+	type Plugin,
+	PLUGINS,
+	ROOT,
+	text,
+} from "./plugins.ts";
 
 type Json = Record<string, unknown>;
 
@@ -83,19 +91,12 @@ const schemaProblems = async (): Promise<string[]> => {
 const RESERVED =
 	/^(claude-|anthropic-|anthropics-|cc-plugin-)|^(claude|anthropic|claude-code|claude-mods)$/u;
 
-const marketplacePlugins = (): Json[] => {
-	const plugins = read(MARKETPLACE)["plugins"];
-	return Array.isArray(plugins)
-		? plugins.filter((p): p is Json => isJson(p))
-		: [];
-};
-
 const str = (v: unknown): string => (typeof v === "string" ? v : "");
 
 const nameProblems = (): string[] => {
 	const names = [
 		...PLUGINS.map((p) => read(manifestFile(p.dir))["name"]),
-		...marketplacePlugins().map((p) => p["name"]),
+		...marketplaceEntries(read).map((p) => p["name"]),
 	];
 	return names
 		.filter(
@@ -142,7 +143,7 @@ const descriptionProblems = async (): Promise<string[]> => {
 	const market = read(MARKETPLACE);
 	const descriptions: (readonly [where: string, text: string])[] = [
 		[MARKETPLACE, str(market["description"])],
-		...marketplacePlugins().map((p): readonly [string, string] => [
+		...marketplaceEntries(read).map((p): readonly [string, string] => [
 			`${MARKETPLACE} ${String(p["name"])}`,
 			str(p["description"]),
 		]),
@@ -272,6 +273,7 @@ const main = async (): Promise<void> => {
 	const problems = [
 		...(await schemaProblems()),
 		...nameProblems(),
+		...mirrorProblems(read),
 		...versionProblems(read),
 		...(await versionTextProblems()),
 		...(await descriptionProblems()),
