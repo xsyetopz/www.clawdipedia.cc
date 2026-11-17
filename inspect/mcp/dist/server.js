@@ -24755,11 +24755,11 @@ var init_package = __esm(() => {
     dependencies: {
       "@modelcontextprotocol/sdk": "^1.32.2",
       "eslint-scope": "9.1.2",
-      "oxc-parser": "0.158.0",
+      "oxc-parser": "0.159.0",
       zod: "^4.6.7"
     },
     devDependencies: {
-      "@oxc-project/types": "0.158.0"
+      "@oxc-project/types": "0.159.0"
     },
     patchedDependencies: {
       "eslint-scope@9.1.2": "patches/eslint-scope@9.1.2.patch"

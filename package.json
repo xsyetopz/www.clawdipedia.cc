@@ -8,13 +8,13 @@
 		"catalog": {
 			"@types/bun": "1.4.4",
 			"@types/node": "26.6.6",
-			"eslint-plugin-jsdoc": "65.4.5",
-			"markdownlint-cli2": "0.24.0",
+			"eslint-plugin-jsdoc": "65.4.9",
+			"markdownlint-cli2": "0.24.1",
 			"markdownlint-rule-title-case-style": "0.4.3",
-			"oxlint": "1.93.0",
-			"oxlint-tsgolint": "7.0.2006",
+			"oxlint": "1.94.0",
+			"oxlint-tsgolint": "7.0.2007",
 			"typescript": "7.0.2",
-			"typescript-bedrock": "0.1.13"
+			"typescript-bedrock": "0.1.15"
 		}
 	},
 	"scripts": {
@@ -95,7 +95,7 @@
 		"oxlint-tsgolint": "catalog:",
 		"typescript": "catalog:",
 		"typescript-bedrock": "catalog:",
-		"wrangler": "^4.161.0"
+		"wrangler": "^4.163.0"
 	},
 	"overrides": {
 		"@types/node": "26.6.6"
