@@ -28979,8 +28979,8 @@ var init_claude_code_transcript = __esm(() => {
   claude_code_transcript_default = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
     $id: "https://clawdipedia.cc/schemas/claude-code-transcript.json",
-    title: "Claude Code transcript JSONL entry (Claude Code 2.1.323)",
-    $comment: `For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.323 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to "transcript"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:"<entry type>" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.`,
+    title: "Claude Code transcript JSONL entry (Claude Code 2.1.326)",
+    $comment: `For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.326 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to "transcript"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:"<entry type>" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.`,
     type: "object",
     oneOf: [
       {
@@ -29993,7 +29993,17 @@ var init_claude_code_transcript = __esm(() => {
           isMeta: {
             not: {}
           },
+          madeBy: {
+            "x-unverified": true,
+            "x-observed": true
+          },
+          endedRemoteTurn: {
+            type: "boolean"
+          },
           isUnmetered: {
+            type: "boolean"
+          },
+          modWroteCall: {
             type: "boolean"
           },
           cloudMemoryToolUseIds: {
@@ -30004,6 +30014,9 @@ var init_claude_code_transcript = __esm(() => {
           },
           apiErrorCode: {
             type: "string"
+          },
+          apiErrorType: {
+            "x-unverified": true
           },
           sessionFailureNotice: {
             type: "boolean"
@@ -30035,6 +30048,9 @@ var init_claude_code_transcript = __esm(() => {
           healsDistinctCarrier: {
             type: "boolean",
             enum: [true]
+          },
+          refusedToolUseIds: {
+            "x-unverified": true
           },
           isAbortedMidStream: {
             type: "boolean"
@@ -30074,11 +30090,22 @@ var init_claude_code_transcript = __esm(() => {
             type: "integer"
           },
           requestRef: {
-            type: ["object", "string"],
+            type: "string",
             "x-observed": true
           },
           requestNotRecorded: {
             "x-unverified": true
+          },
+          requestHookChanged: {
+            type: "object",
+            properties: {
+              record: {
+                type: "string"
+              },
+              what: {
+                "x-unverified": true
+              }
+            }
           },
           requestedModel: {
             "x-observed": true,
@@ -30220,14 +30247,6 @@ var init_claude_code_transcript = __esm(() => {
             const: "attachment",
             "x-observed": true
           },
-          uuid: {
-            "x-observed": true,
-            type: "string"
-          },
-          timestamp: {
-            "x-observed": true,
-            type: "string"
-          },
           attachment: {
             properties: {
               type: {
@@ -30246,21 +30265,36 @@ var init_claude_code_transcript = __esm(() => {
                   }
                 ]
               },
-              source_uuid: {
-                type: "string"
+              commandMode: {
+                "x-unverified": true
+              },
+              isMeta: {
+                type: "boolean"
               },
               origin: {
                 properties: {
                   kind: {
                     type: "string"
+                  },
+                  name: {
+                    "x-unverified": true
                   }
                 }
               },
-              timestamp: {
+              plugin: {
+                "x-unverified": true
+              },
+              rowUuid: {
+                "x-unverified": true
+              },
+              content: {
+                "x-unverified": true
+              },
+              source_uuid: {
                 type: "string"
               },
-              isMeta: {
-                type: "boolean"
+              timestamp: {
+                type: "string"
               },
               forwardedIntent: {
                 properties: {
@@ -30297,6 +30331,14 @@ var init_claude_code_transcript = __esm(() => {
             },
             "x-observed": true
           },
+          uuid: {
+            "x-observed": true,
+            type: "string"
+          },
+          timestamp: {
+            "x-observed": true,
+            type: "string"
+          },
           renderedRole: {
             type: "string",
             "x-observed": true
@@ -30308,6 +30350,9 @@ var init_claude_code_transcript = __esm(() => {
           renderedBesideToolResult: {
             type: "boolean",
             "x-observed": true
+          },
+          renderedWithdrawn: {
+            type: "array"
           },
           renderedInHumanTurn: {
             type: "array"
@@ -30349,6 +30394,9 @@ var init_claude_code_transcript = __esm(() => {
           agentId: {
             type: "string"
           },
+          madeBy: {
+            const: "other"
+          },
           sessionKind: {
             enum: ["bg", "daemon", "daemon-worker"]
           },
@@ -30380,7 +30428,7 @@ var init_claude_code_transcript = __esm(() => {
             type: "string"
           }
         },
-        $comment: "Registry policy: transcript. Code sites used: 7."
+        $comment: "Registry policy: transcript. Code sites used: 10."
       },
       "attribution-snapshot": {
         type: "object",
@@ -30559,6 +30607,9 @@ var init_claude_code_transcript = __esm(() => {
           hasUnknownModelCost: {
             "x-observed": true,
             type: "boolean"
+          },
+          modelCallCostUSD: {
+            "x-unverified": true
           }
         },
         $comment: "Registry policy: last-wins. Code sites used: 1."
@@ -31139,6 +31190,10 @@ var init_claude_code_transcript = __esm(() => {
               query: {
                 type: "string"
               },
+              status: {
+                type: ["string", "integer"],
+                enum: ["started", "completed", "failed", "progress", 429, 503]
+              },
               index: {
                 type: "integer"
               },
@@ -31294,10 +31349,6 @@ var init_claude_code_transcript = __esm(() => {
               scriptStartedAt: {
                 "x-unverified": true
               },
-              status: {
-                type: ["string", "integer"],
-                enum: ["started", "completed", "failed", "progress", 429, 503]
-              },
               maxAttempts: {
                 type: "integer",
                 enum: [2, 3]
@@ -31345,6 +31396,9 @@ var init_claude_code_transcript = __esm(() => {
           agentId: {
             type: "string"
           },
+          madeBy: {
+            const: "other"
+          },
           sessionKind: {
             enum: ["bg", "daemon", "daemon-worker"]
           },
@@ -31370,7 +31424,7 @@ var init_claude_code_transcript = __esm(() => {
             type: "string"
           }
         },
-        $comment: "Registry policy: boundary-cleared. Code sites used: 51."
+        $comment: "Registry policy: boundary-cleared. Code sites used: 53."
       },
       "queue-operation": {
         type: "object",
@@ -31453,7 +31507,7 @@ var init_claude_code_transcript = __esm(() => {
             "x-unverified": true
           }
         },
-        $comment: "Registry policy: last-wins. Code sites used: 2."
+        $comment: "Registry policy: last-wins. Code sites used: 3."
       },
       summary: {
         type: "object",
@@ -32026,6 +32080,9 @@ var init_claude_code_transcript = __esm(() => {
           agentId: {
             type: "string"
           },
+          madeBy: {
+            const: "other"
+          },
           sessionKind: {
             enum: ["bg", "daemon", "daemon-worker"]
           },
@@ -32349,6 +32406,9 @@ var init_claude_code_transcript = __esm(() => {
           toolDenialAfterRun: {
             "x-unverified": true
           },
+          toolDenialBeforeRun: {
+            "x-unverified": true
+          },
           toolDenialFromHost: {
             "x-unverified": true
           },
@@ -32544,6 +32604,9 @@ var init_claude_code_transcript = __esm(() => {
                 required: ["kind", "path"]
               }
             ]
+          },
+          toolResultTypedCommand: {
+            "x-unverified": true
           },
           permissionDecision: {
             "x-observed": true,
@@ -32797,6 +32860,9 @@ var init_claude_code_transcript = __esm(() => {
           mcpCallNotReadOnly: {
             "x-unverified": true
           },
+          holdsPersonsWords: {
+            "x-unverified": true
+          },
           imagePasteIds: {
             type: "array",
             items: {
@@ -32902,6 +32968,9 @@ var init_claude_code_transcript = __esm(() => {
           },
           agentId: {
             type: "string"
+          },
+          madeBy: {
+            const: "other"
           },
           sessionKind: {
             enum: ["bg", "daemon", "daemon-worker"]
