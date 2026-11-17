@@ -9708,7 +9708,7 @@ Items: 76.
 | `claude-opus-4-5` | [Model Catalog, Aliases, and Pricing](../configure/models-and-providers/model-catalog.md) |
 | `claude-opus-4-5-20251101` | [/configure/models-and-providers/providers#provider-names](/configure/models-and-providers/providers#provider-names) |
 | `claude-opus-4-5@20251101` | [/configure/models-and-providers/providers#provider-names](/configure/models-and-providers/providers#provider-names) |
-| `claude-opus-4-6` | [Model Catalog, Aliases, and Pricing](../configure/models-and-providers/model-catalog.md) |
+| `claude-opus-4-6` | [Fast Mode](../configure/models-and-providers/fast-mode.md) |
 | `claude-opus-4-6[1m]` | [Model Catalog, Aliases, and Pricing](../configure/models-and-providers/model-catalog.md) |
 | `claude-opus-4-7` | [Effort, Thinking, and Fallback](../configure/models-and-providers/effort-thinking-and-fallback.md) |
 | `claude-opus-4-8` | [Effort, Thinking, and Fallback](../configure/models-and-providers/effort-thinking-and-fallback.md) |
