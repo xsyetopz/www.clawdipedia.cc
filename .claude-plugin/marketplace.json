@@ -1,0 +1,71 @@
+{
+	"$schema": "https://clawdipedia.cc/schemas/claude-code-marketplace.json",
+	"name": "clawdipedia",
+	"owner": {
+		"name": "xsyetopz",
+		"url": "https://github.com/xsyetopz"
+	},
+	"description": "Anthropic documentation as plugins, from four sources: Clawdipedia (unofficial Claude Code docs, 2.1.326), platform.claude.com, code.claude.com, and claude.com/resources.",
+	"metadata": {
+		"version": "3.0.6"
+	},
+	"plugins": [
+		{
+			"name": "clawdipedia-docs",
+			"displayName": "Anthropic Docs",
+			"source": "./plugin",
+			"description": "MCP server and skill for four doc sources: clawdipedia (the unofficial Claude Code Wikipedia), platform.claude.com, code.claude.com, and claude.com/resources. Searches, reads pages, serves schemas.",
+			"category": "documentation",
+			"license": "MIT",
+			"keywords": [
+				"anthropic",
+				"clawdipedia",
+				"clawdipedia-docs",
+				"claude",
+				"claude-api",
+				"claude-api-docs",
+				"claude-code",
+				"claude-code-docs",
+				"claude-docs",
+				"claude-mcp",
+				"claude-mcp-server",
+				"claude-api-mcp",
+				"claude-api-mcp-server",
+				"claude-code-mcp",
+				"claude-code-mcp-server",
+				"claude-docs-mcp",
+				"claude-docs-mcp-server",
+				"claude-resources",
+				"docs",
+				"docs-mcp",
+				"docs-mcp-server",
+				"mcp",
+				"mcp-server"
+			]
+		},
+		{
+			"name": "clawdipedia-docs-cli",
+			"displayName": "Anthropic Docs CLI",
+			"source": "./cli",
+			"description": "Anthropic docs from four sources as a clawdipedia command for the Bash tool, plus a light skill. No MCP server, so it adds no tool list. Needs Bun. Claude Code only. Tracks 2.1.326.",
+			"category": "documentation",
+			"license": "MIT",
+			"keywords": [
+				"anthropic",
+				"claude-code",
+				"claude-api",
+				"docs",
+				"cli",
+				"clawdipedia"
+			]
+		},
+		{
+			"name": "cc-inspect",
+			"source": "./inspect",
+			"description": "MCP server with four tools: sessions (your transcripts), code and surface (the installed Claude Code binary), and release (diffs between two versions). Local, and writes only its own cache.",
+			"category": "development",
+			"license": "MIT",
+			"keywords": ["claude-code", "sessions", "transcripts", "binary", "mcp"]
+		}
+	]
+}

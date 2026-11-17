@@ -1,5 +1,5 @@
 // Usage: bun tools/plugin/check.ts   (also: bun run plugin:check)
-// Validates each plugin manifest against schemas/ with ajv, and checks
+// Validates each plugin manifest and the marketplace file against schemas/ with ajv, and checks
 // that each plugin's .mcp.json, skill, and committed server bundle exist, pass their tests, and are fresh.
 import { readdir } from "node:fs/promises";
 import { join } from "node:path";
@@ -9,7 +9,12 @@ import Ajv2020 from "ajv/dist/2020.js";
 
 import { SCHEMA_NAMES, TYPE_FILE } from "../../plugin/mcp/src/content.ts";
 import { CLAUDE_CODE_VERSION } from "../../src/version.ts";
-import { SKILL_FILES, TARGETS, versionProblems } from "../version/bump.ts";
+import {
+	MARKETPLACE,
+	SKILL_FILES,
+	TARGETS,
+	versionProblems,
+} from "../version/bump.ts";
 import { bundleProblems, validateProblems } from "./bundle.ts";
 import { exists, manifestFile, PLUGINS, ROOT, text } from "./plugins.ts";
 import type { Plugin } from "./plugins.ts";
@@ -44,10 +49,13 @@ const CC_VERSION_RE = /\b2\.\d+\.\d+\b/gu;
 
 const schemaProblems = async (): Promise<string[]> => {
 	const problems: string[] = [];
-	const targets = PLUGINS.map((p): [string, string] => [
-		manifestFile(p.dir),
-		"claude-code-plugin-manifest",
-	]);
+	const targets: [string, string][] = [
+		...PLUGINS.map((p): [string, string] => [
+			manifestFile(p.dir),
+			"claude-code-plugin-manifest",
+		]),
+		[MARKETPLACE, "claude-code-marketplace"],
+	];
 	const loaded = await Promise.all(
 		targets.map(async ([file, kind]) => ({
 			file,
@@ -75,16 +83,28 @@ const schemaProblems = async (): Promise<string[]> => {
 const RESERVED =
 	/^(claude-|anthropic-|anthropics-|cc-plugin-)|^(claude|anthropic|claude-code|claude-mods)$/u;
 
+const marketplacePlugins = (): Json[] => {
+	const plugins = read(MARKETPLACE)["plugins"];
+	return Array.isArray(plugins)
+		? plugins.filter((p): p is Json => isJson(p))
+		: [];
+};
+
 const str = (v: unknown): string => (typeof v === "string" ? v : "");
 
-const nameProblems = (): string[] =>
-	PLUGINS.map((p) => read(manifestFile(p.dir))["name"])
+const nameProblems = (): string[] => {
+	const names = [
+		...PLUGINS.map((p) => read(manifestFile(p.dir))["name"]),
+		...marketplacePlugins().map((p) => p["name"]),
+	];
+	return names
 		.filter(
 			(n) => typeof n !== "string" || !n || /\s/u.test(n) || RESERVED.test(n),
 		)
 		.map(
 			(n) => `plugin name "${String(n)}" is empty, has spaces, or is reserved`,
 		);
+};
 
 const staleVersions = (file: string, body: string, prefix: string): string[] =>
 	[...new Set([...body.matchAll(CC_VERSION_RE)].map((m) => m[0]))]
@@ -119,7 +139,13 @@ const skillDescription = async (
 };
 
 const descriptionProblems = async (): Promise<string[]> => {
+	const market = read(MARKETPLACE);
 	const descriptions: (readonly [where: string, text: string])[] = [
+		[MARKETPLACE, str(market["description"])],
+		...marketplacePlugins().map((p): readonly [string, string] => [
+			`${MARKETPLACE} ${String(p["name"])}`,
+			str(p["description"]),
+		]),
 		...PLUGINS.map((p): readonly [string, string] => [
 			manifestFile(p.dir),
 			str(read(manifestFile(p.dir))["description"]),
@@ -240,6 +266,7 @@ const main = async (): Promise<void> => {
 	await Promise.all([
 		...slotFiles.map((f) => load(f)),
 		...PLUGINS.map((p) => load(manifestFile(p.dir))),
+		load(MARKETPLACE),
 	]);
 	const bundles = await Promise.all(PLUGINS.map((p) => bundleProblems(p)));
 	const problems = [

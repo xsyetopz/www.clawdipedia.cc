@@ -4,7 +4,7 @@ import { join } from "node:path";
 export const ROOT = join(import.meta.dir, "..", "..");
 
 /**
- * The plugins of this repo: folder, skill, bundle source and output, tests, whether it has an MCP server,
+ * The plugins of the marketplace: folder, skill, bundle source and output, tests, whether it has an MCP server,
  * and the packages its bundle leaves out (a native package, which Bun installs on first run).
  */
 export const PLUGINS = [

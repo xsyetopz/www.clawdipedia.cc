@@ -4,6 +4,7 @@ import { describe, expect, test } from "bun:test";
 import { CLAUDE_CODE_VERSION } from "../../src/version.ts";
 import {
 	bumpVersion,
+	MARKETPLACE,
 	syncDescriptions,
 	syncVersions,
 	TARGETS,
@@ -46,9 +47,17 @@ describe("syncVersions", () => {
 
 type Doc = Record<string, unknown>;
 
-/** Every target file at version `v`. */
-const files = (v: string) => {
-	const out = new Map<string, Doc>();
+/** Every target file at version `v`, and a marketplace that names Claude Code `cc`. */
+const files = (v: string, cc = CLAUDE_CODE_VERSION) => {
+	const out = new Map<string, Doc>([
+		[
+			MARKETPLACE,
+			{
+				description: `Docs for Claude Code ${cc}.`,
+				plugins: [{ description: `Docs (version ${cc}).` }],
+			},
+		],
+	]);
 	for (const slots of Object.values(TARGETS)) {
 		for (const s of slots) {
 			const [first = "", second = ""] = s.path;
@@ -64,7 +73,7 @@ const problemsOf = (f: Map<string, Doc>): string[] =>
 	versionProblems((p) => f.get(p) ?? {});
 
 describe("versionProblems", () => {
-	test("passes when each target's files agree", () => {
+	test("passes when each target's files agree and the texts name the tracked version", () => {
 		const f = files("0.2.0");
 		expect(problemsOf(f)).toEqual([]);
 	});
@@ -74,5 +83,11 @@ describe("versionProblems", () => {
 		const problems = problemsOf(f);
 		expect(problems).toHaveLength(1);
 		expect(problems[0]).toContain("cc-inspect versions differ");
+	});
+	test("flags a marketplace text that names an older Claude Code", () => {
+		const f = files("0.2.0", "2.1.1");
+		const problems = problemsOf(f);
+		expect(problems).toHaveLength(1);
+		expect(problems[0]).toContain("names Claude Code 2.1.1");
 	});
 });
