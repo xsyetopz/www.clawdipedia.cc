@@ -71,7 +71,7 @@ See [Probes](../../reference/probes.md#subagents-and-hooks).
 | `CLAUDE_CODE_SUBAGENT_PROMPT_CACHE_TTL`, `subagentPromptCacheTtl` | <Documented /> | The cache TTL for subagent requests. | `5m` or `1h`. Frontmatter `experimental.cacheTtl` is the third source. See [Request and Cache](../../how-it-works/request-and-cache.md). |
 | `CLAUDE_CODE_ENABLE_APPEND_SUBAGENT_PROMPT`, `CLAUDE_CODE_MEMORY_SUBAGENT_APPEND`, `CLAUDE_CODE_SUBAGENT_PROMPT_SNAPSHOT`, `CLAUDE_CODE_SUBAGENT_CACHE_EVICT`, `CLAUDE_CODE_SUBAGENT_CONFIG_WARNING` | <Undocumented /> | Other subagent variables in the program. | `--append-subagent-system-prompt <text>` (or `--append-subagent-system-prompt-file <file>`, print mode only, hidden) adds text to the end of every subagent system prompt. It turns on `CLAUDE_CODE_ENABLE_APPEND_SUBAGENT_PROMPT`, and the variable alone changes nothing. Using both flags gives an error. `CLAUDE_CODE_SUBAGENT_CONFIG_WARNING` turns the startup notice that your config asks for subagents on (`1`) or off (`0`). `CLAUDE_CODE_SUBAGENT_CACHE_EVICT` adds the `prompt-caching-evict-2026-05-12` beta to a subagent's last request, on a first-party login. `CLAUDE_CODE_SUBAGENT_PROMPT_SNAPSHOT` and `CLAUDE_CODE_MEMORY_SUBAGENT_APPEND` showed no change in print mode.[^probes] |
 | Settings `agent`, `teammateMode` | <Documented /> | `agent` sets the main-session agent. `teammateMode` picks the teammate display. | `teammateMode` takes `auto`, `tmux`, `iterm2`, or `in-process`.[^teammate-mode] |
-| Setting `subagentStatusLine` | <Differs /> | Has no effect since `2.1.323`. Subagent rows always use the default look. A settings file that still holds the key loads as before. | The setting text reads "Deprecated: no longer has any effect. Subagent rows always use the default look." The `2.1.323` release notes say "Removed the `subagentStatusLine` setting".[^status-line] |
+| Setting `subagentStatusLine` | <Documented /> <Deprecated note="Works; will stop in a future release" /> | Custom row for each subagent in the agent panel. Since `2.1.326`, the command runs again. In `2.1.323`, it had no effect. | The program logs "subagentStatusLine is deprecated in favor of mods and will stop working in a future release".[^status-line] |
 | Safeguards stop a subagent | <Undocumented /> | The text that Claude gets when safeguards stop an agent. | It starts `Safeguards stopped this agent.` The text adds `, and automatic model switching is off` when that is the case for the stopped model. For a `cyber` stop where a retry is allowed, it says Claude can start a new agent with a clearer prompt that asks for no more than it needs, and that the same content reworded is likely to be stopped too. Otherwise it says to pass the message on to the user. It ends `Don't do the agent's work yourself: safeguards cover this conversation too.`[^safeguards] |
 | Subagent output limit | <Undocumented /> | What a subagent gets when its reply stops at the output token limit. | Since `2.1.326`, a subagent whose reply stops at the limit with some text, and no unfinished block, gets this text: "Output token limit hit. Your caller does not receive an answer in pieces." It asks for the whole answer again, more briefly, if this was the final answer, and otherwise for the work in smaller pieces. Claude Code does this at most 3 times.[^output-limit] |
 
@@ -109,27 +109,39 @@ flowchart TD
 
 ## Git Commands in a Worktree Subagent
 
-Since `2.1.326`, when a server-side flag is on, a subagent that runs isolated in a worktree cannot run some git commands in `Bash`. These commands can rewrite what the worktree shares with your own checkout, such as its branches. The rule holds in every repository. A main session is not affected.[^worktree-guard]
+Since `2.1.326`, a subagent that runs isolated in a worktree cannot run some git commands in `Bash`. A main session that runs in a worktree it created is covered in the same way. A main session in your own checkout is not affected. These commands can rewrite what the worktree shares with your own checkout, such as its branches, or start a program that Claude Code cannot check. The rule holds in every repository. Most of these commands are refused only when a server-side flag is on; the Status column says which.[^worktree-guard]
 Status: <Gated />. The official docs do not state it.
 
-The message names the worktree and the command. It says that the command is refused in every repository. It tells the agent to change its own branch with `git commit`, `git reset`, or `git rebase`, to start another with `git branch <new-branch> <commit>`, and to leave your branches as they are. It ends with "If the task needs it, say so when you report back."[^worktree-guard]
+The message names the worktree and the command. For the commands in the first part of the table, it says that the command is refused in every repository. It tells the agent to change its own branch with `git commit`, `git reset`, or `git rebase`, to start another with `git branch <new-branch> <commit>`, and to leave your branches as they are. It ends with "If the task needs it, say so when you report back."[^worktree-guard]
 
 | Git Command | Status | What Is Refused |
 | --- | --- | --- |
-| `git for-each-repo` | <Undocumented /> | Every use. |
-| `git worktree` | <Undocumented /> | Every verb except `add`, `list`, `lock`, `prune`, `remove`, and `unlock`. `git worktree add` works for a path under the worktree or in a scratch directory. |
-| `git fast-import` | <Undocumented /> | Every use. |
-| `git filter-branch` | <Undocumented /> | A call with arguments. |
-| `git filter-repo` | <Undocumented /> | Every option except `--analyze` and `--version`. |
-| `git history` | <Undocumented /> | The verbs `drop`, `fixup`, `reword`, and `split`. |
-| `git replay` | <Undocumented /> | A call with arguments. |
-| `git update-ref` | <Undocumented /> | A change to a ref, except refs under `refs/bisect/`, `refs/rewritten/`, and `refs/worktree/`, and refs such as `HEAD`. |
-| `git refs` | <Undocumented /> | Every verb except `exists`, `list`, `optimize`, and `verify`. |
-| `git symbolic-ref` | <Undocumented /> | A form that changes a ref. |
-| `git replace` | <Undocumented /> | Every form except `list`. |
-| `git reflog` | <Undocumented /> | The verbs `delete`, `drop`, `expire`, and `write`. |
+| `git for-each-repo` | <Undocumented />. Needs a server flag. | Every use. |
+| `git worktree` | <Undocumented />. Needs a server flag. | Every verb except `add`, `list`, `lock`, `prune`, `remove`, and `unlock`. `git worktree add` works for a path under the worktree or in a scratch directory. |
+| `git fast-import` | <Undocumented />. Needs a server flag. | Every use. Without the server flag, only `--allow-unsafe-features` is refused, and `git fast-import` works without it.[^worktree-optout] |
+| `git filter-branch` | <Undocumented />. Needs a server flag. | A call with arguments. |
+| `git filter-repo` | <Undocumented />. Needs a server flag. | Every option except `--analyze` and `--version`. |
+| `git history` | <Undocumented />. Needs a server flag. | The verbs `drop`, `fixup`, `reword`, and `split`. |
+| `git replay` | <Undocumented />. Needs a server flag. | A call with arguments. |
+| `git update-ref` | <Undocumented />. Needs a server flag. | A change to a ref, except refs under `refs/bisect/`, `refs/rewritten/`, and `refs/worktree/`, and refs such as `HEAD`. |
+| `git refs` | <Undocumented />. Needs a server flag. | Every verb except `exists`, `list`, `optimize`, and `verify`. |
+| `git symbolic-ref` | <Undocumented />. Needs a server flag. | A form that changes a ref. |
+| `git replace` | <Undocumented />. Needs a server flag. | Every form except `list`. |
+| `git reflog` | <Undocumented />. Needs a server flag. | The verbs `delete`, `drop`, `expire`, and `write`. |
 
-Without the flag, these commands run as before.[^worktree-guard]
+| `git bisect` | <Undocumented />. Needs a server flag. | `git bisect run`. Also `git bisect view` and `git bisect visualize` with a word that is not an option, and a first word that the shell can expand. `git bisect good` and `git bisect bad` still work: run the test yourself, then mark each commit. `git bisect view` still works with only `git log` options, such as `--oneline`.[^worktree-optout] |
+| `git maintenance` | <Undocumented />. Needs a server flag. | `git maintenance register` and `git maintenance start`. Also a word after `git maintenance` that the shell can expand, as the program cannot tell which verb it is. `git gc` and `git maintenance run`, `stop`, `unregister`, and `is-needed` still work.[^worktree-optout] |
+| `scalar` | <Undocumented />. Needs a server flag. | `scalar register`, `scalar clone`, `scalar reconfigure`, `scalar run all`, and `scalar run config`. `git gc` and `git maintenance run` still work, and so does `scalar run` with one task: `fetch`, `commit-graph`, `loose-objects`, or `pack-files`.[^worktree-optout] |
+| `git checkout` and `git switch` | <Undocumented /> | The option `--ignore-other-worktrees`. Use a branch of its own: `git checkout -b <new-branch> <commit>` or `git switch -c <new-branch> <commit>`.[^worktree-optout] |
+| `git worktree add` | <Undocumented /> | The option `--force`. Run it without the option, and add `-b <new-branch>` for a new branch. If git says that the path is registered but missing, run `git worktree prune` first.[^worktree-optout] |
+| `git fetch` | <Undocumented /> | The option `--update-head-ok`. Fetch into a branch of its own.[^worktree-optout] |
+| `git apply` | <Undocumented /> | The option `--unsafe-paths`. Use a patch whose paths stay inside the worktree.[^worktree-optout] |
+| `git merge-index` | <Undocumented />. Needs a server flag. | Every call with arguments. Use `git merge-file` or `git merge`.[^worktree-optout] |
+| `git config` | <Undocumented />. Needs a server flag. | `--edit`, `--remove-section`, and `--rename-section`. Also a set or an unset of a setting that is not on a short list of harmless settings, and of any setting in a file named with `--file`. Pass a setting for one command with `git -c`, or ask the person to set it.[^worktree-optout] |
+| A git command that starts a program | <Undocumented />. Needs a server flag. | An option that names a program, such as `--upload-pack`, `--exec`, `--extcmd`, `--receive-pack`, `--httpd`, or the filter options of `git filter-branch`. Also `git remote-ext`, and a URL that starts with `ext::` or `fd::`. Run it without that option or remote.[^worktree-optout] |
+| A git internal helper | <Undocumented /> | A name that looks like an internal helper, which is a git command with `--` in its name. Run the ordinary git command, add the missing space if `--` starts an option, or write a path as `./name`.[^worktree-optout] |
+
+Without its flag, a command that needs one runs as before.[^worktree-guard]
 
 ## Errors
 
@@ -153,16 +165,17 @@ Each row is a family of messages. The backticked text is the start that every me
 [^builtins]: The program, the agent definitions and the `Agent` tool schema.
 [^v307]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307).
 [^probes]: The program and [Probes](../../reference/probes.md#subagents-and-hooks).
-[^resume]: The program, `chunk-azbqr28e.js`.
+[^resume]: The program, `chunk-856xesd8.js`.
 [^depth]: The program, the `Agent` tool.
 [^refusals]: The program, the `Agent` tool.
 [^hook-cap]: The program, the agent hook runner.
 [^max-turns]: The program, the agent loop.
 [^teammate-mode]: The program.
-[^status-line]: The program, `chunk-3dhh2g49.js:255110`. [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323).
-[^safeguards]: The program, `2.1.323`: `chunk-jaky6hhv.js:9459`.
+[^status-line]: The program, `chunk-y9bdpp8r.js:56552-56589`, `chunk-kek2xxjw.js:365-372`. For `2.1.323`, the program, `chunk-m33vdkhs.js:256567`, and the [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323).
+[^safeguards]: The program, `2.1.323`: `chunk-cr640x0r.js:10186`.
 [^output-limit]: The program, `chunk-dezyqkh5.js:222`, `chunk-27vawgnx.js:8688`, `chunk-27vawgnx.js:8711`.
-[^swarm]: The program, `chunk-5erhnvzw.js`, search `initializeSessionTeam`. Probe cases `pty.cli319.tmux-swarm-session` and `pty.cli319.tmux-swarm-window`, with a stand-in `tmux` whose `new-session` and `new-window` fail.
+[^swarm]: The program, `chunk-97e8zgw1.js`, search `initializeSessionTeam`. Probe cases `pty.cli319.tmux-swarm-session` and `pty.cli319.tmux-swarm-window`, with a stand-in `tmux` whose `new-session` and `new-window` fail.
+[^worktree-optout]: The program, `chunk-6z99tr3b.js:1448-1605`, `:1608-1655`, and `:1657-1672`, called from `chunk-6z99tr3b.js:433-434`, `:1694`, `:1777`, and `:1788`, and from `chunk-4h798pp0.js:183990-184020`. The server flag `tengu_mellow_platypus` turns on the `git bisect` row, `tengu_buzzing_emerson` turns on the `git maintenance` and `scalar` rows, and `tengu_gentle_harbor` turns on the `git merge-index`, `git config`, and program rows (`chunk-6z99tr3b.js:784-793`). The other rows need none of these flags. The `git bisect`, `git maintenance`, and `scalar` rows are in the [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325), which this site dates as `2.1.326`.
 
 Official pages: [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), [Environment Variables](https://code.claude.com/docs/en/env-vars), and [Hooks Reference](https://code.claude.com/docs/en/hooks).
-[^worktree-guard]: The program, `chunk-4h798pp0.js:183990-184020` and `chunk-6z99tr3b.js:144-370` and `:640-650`. The program applies the check only when the agent has its own worktree. The server flag `tengu_level_meadow` turns it on. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^worktree-guard]: The program, `chunk-4h798pp0.js:183990-184020` and `chunk-6z99tr3b.js:144-370` and `:640-650`. The program applies the check to an agent that has its own worktree and to a main session that runs in a worktree it created (`chunk-zhheyb24.js:1270-1277`, `chunk-wxs36rx3.js:21786-21790`, `chunk-cr640x0r.js:7065`). The server flag `tengu_level_meadow` turns on the rows without a separate flag in the table. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

@@ -32,14 +32,14 @@ The schema does not mark the direction of each request. Only the Agent SDK pages
 | `export_conversation` | <Undocumented /> | Asks for the conversation as the text that `/export` writes. |
 | `list_cloud_sessions` | <Undocumented /> | Asks for the cloud sessions of the signed-in account. The CLI reads them with its own sign-in. Refused in a cloud-hosted session. New in `2.1.307`. |
 | `get_cloud_session` | <Undocumented /> | Asks for the title, branch, and environment kind of one cloud session. Refused in a cloud-hosted session. New in `2.1.307`. |
-| `get_cloud_session_transcript` | <Undocumented /> | Asks for one page of the stored transcript of a cloud session that the account owns. Refused in a cloud-hosted session. New in `2.1.307`. Since `2.1.311` the schema warns that a page is not always the whole transcript: for a compacted session the service sends the rows its last compaction kept, then the `compact_boundary` entry and what followed, so the messages that the compaction summarized can be on no page. |
+| `get_cloud_session_transcript` | <Undocumented /> | Asks for one page of the stored transcript of a cloud session that the account owns. Refused in a cloud-hosted session. New in `2.1.307`. Since `2.1.311` the schema warns that a page is not always the whole transcript: for a compacted session the service sends the rows its last compaction kept, then the `compact_boundary` entry and what followed, so the messages that the compaction summarized can be on no page. Since `2.1.326` the request has `limit`: the most entries that a page may hold, a whole number from 1 to 1000. The default is 200. A page of large entries holds fewer. An older CLI ignores it.[^v2326] |
 | `get_memory_dialog` | <Undocumented /> | Asks for the rows and switches of the `/memory` dialog. |
 | `get_skills_dialog` | <Undocumented /> | Asks for the rows of the `/skills` menu. |
 | `get_chrome_dialog` | <Undocumented /> | Asks for the state of the `/chrome` dialog. |
 | `get_chrome_browsers` | <Undocumented /> | Asks for the browsers that have a connection to Claude in Chrome. |
 | `select_chrome_browser` | <Undocumented /> | Switches Claude in Chrome to the browser that you name. |
 | `get_sandbox_dialog` | <Undocumented /> | Asks for the state of the `/sandbox` dialog. |
-| `get_binary_version` | <Undocumented /> | Asks for the version of the binary. |
+| `get_binary_version` | <Undocumented /> | Asks for the version of the binary. Since `2.1.326` the reply also has `oldestDesktopSdk`, the oldest Agent SDK version (a plain x.y.z) that a Claude Desktop can bundle and still run this CLI.[^v2326] |
 | `mcp_call` | <Undocumented /> | Calls an MCP tool without a model turn. |
 | `rewind_files` | <Undocumented /> | Undoes the file changes made since a user message. |
 | `cancel_async_message` | <Undocumented /> | Removes a waiting async user message from the queue. |
@@ -78,12 +78,12 @@ The schema does not mark the direction of each request. Only the Agent SDK pages
 | `get_settings` | <Undocumented /> | Returns the merged settings and the settings of each source. In `2.1.316` the `applied` object can have `ultrathinkAvailable`, a boolean. It is `true` when typing `ultrathink` runs the turn at `xhigh` effort, and when the session is already at `xhigh` or `max`. If it is absent, the Claude Code is too old to report it. |
 | `update_settings` | <Undocumented /> | Writes settings through the writer of Claude Code. |
 | `get_hooks_listing` | <Undocumented /> | Returns the hooks that the read-only `/hooks` menu shows. |
-| `list_permission_rules` | <Undocumented /> | Returns the permission rules and workspace folders that `/permissions` lists. Since `2.1.311` the `source` of a rule can be `mcpMount` (string). |
+| `list_permission_rules` | <Undocumented /> | Returns the permission rules and workspace folders that `/permissions` lists. Since `2.1.311` the `source` of a rule can be `mcpMount` (string). Since `2.1.326` the reply `state` has `withheld`: `true` when the connection stores its answers (a cloud or self-hosted session) and the CLI cut the answer. Then `rules` holds only rows from settings sources and `mcpServerPolicy`, `workspaceDirectories` holds only folders from settings sources, and each `errors` entry has a fixed `message` and an empty `path`. A rule other than a bare tool name goes as `Tool(withheld)`. `withheld` is absent from an answer that was not cut.[^v2326] |
 | `elicitation` | <Undocumented /> | Asks the SDK consumer to handle an MCP elicitation. |
 | `request_user_dialog` | <Undocumented /> | Asks the SDK consumer to show a dialog and return the choice. |
 | `submit_feedback` | <Undocumented /> | Sends a `/feedback` report with the transcript and a cleaned error log. |
 | `remote_control_work_secret` | <Undocumented /> | Asks the host for a fresh work secret for Remote Control. |
-| `oauth_token_refresh` | <Undocumented /> | Asks the host for a fresh OAuth token after a `401` error. Since `2.1.311` the request can also have `kind: "sessions"`, and then the CLI asks for the second token that authorizes the cloud-sessions API. A host that set `CLAUDE_CODE_SDK_HAS_SESSIONS_OAUTH_REFRESH` answers it, and the token must belong to the same account and organization as the sign-in token. Without `kind`, the request is for the claude.ai sign-in token. |
+| `oauth_token_refresh` | <Undocumented /> | Asks the host for a fresh OAuth token after a `401` error. Since `2.1.311` the request can also have `kind: "sessions"`, and then the CLI asks for the second token that authorizes the cloud-sessions API. A host that set `CLAUDE_CODE_SDK_HAS_SESSIONS_OAUTH_REFRESH` answers it, and the token must belong to the same account and organization as the sign-in token. Without `kind`, the request is for the claude.ai sign-in token. Since `2.1.326` a request of `kind: "sessions"` has `refused_bearer_sha256`: up to 16 lowercase-hex SHA-256 digests of the bearers that servers refused under the current sign-in token, the latest last. A host that reads them renews only when the bearer it would hand over is among them. A request with `token_state: "refused"` can have `refused_call`: `model`, `connector`, or `other`, the kind of call that the server refused. A host takes an unknown value as absent.[^v2326] |
 | `host_auth_token_refresh` | <Undocumented /> | Asks the host for a fresh provider credential after a credential failure. |
 | `message_rated` | <Undocumented /> | Records a thumbs up or down for a message. |
 | `ui_attach` | <Undocumented /> | A remote screen joins the session. Since `2.1.311` its `answers` list can name `ui_prompt_paint` too, and holds up to 6 names (5 before). |
@@ -175,12 +175,13 @@ The exact fields are in `https://clawdipedia.cc/schemas/claude-code-control-prot
 
 ## Sources
 
-[^subtypes]: The program, the bundled schema of `2.1.311`. For the `2.1.311` additions: `chunk-h3xwema8.js:23072` for `ui_prompt_paint`, `chunk-h3xwema8.js:22939` for the `ui_attach` list, `chunk-h3xwema8.js:20945` for `turn_handoff`, `chunk-h3xwema8.js:21930` for `oauth_token_refresh`, `chunk-h3xwema8.js:21711` for `mcpMount`, `chunk-h3xwema8.js:17357` for `background_color`, and `chunk-h3xwema8.js:19417` for the transcript note.
-[^initialize]: The program, `chunk-h3xwema8.js:629581` and `chunk-h3xwema8.js:632420`.
-[^interrupt]: The program, `chunk-h3xwema8.js:650897`.
-[^denied-tools]: The program, `chunk-h3xwema8.js:785180`. The warning is at `chunk-f40wgdh8.js:792584`.
+[^subtypes]: The program, the bundled schema of `2.1.311`. For the `2.1.311` additions: `chunk-bprgtdg6.js:23050` for `ui_prompt_paint`, `chunk-bprgtdg6.js:22917` for the `ui_attach` list, `chunk-bprgtdg6.js:20855` for `turn_handoff`, `chunk-bprgtdg6.js:21868` for `oauth_token_refresh`, `chunk-bprgtdg6.js:21644` for `mcpMount`, `chunk-bprgtdg6.js:17209` for `background_color`, and `chunk-bprgtdg6.js:19312` for the transcript note.
+[^initialize]: The program, `chunk-bprgtdg6.js:643019` and `chunk-bprgtdg6.js:645858`.
+[^interrupt]: The program, `chunk-bprgtdg6.js:665463`.
+[^denied-tools]: The program, `chunk-bprgtdg6.js:801281`. The warning is at `chunk-xt4nsgp1.js:861445`.
 [^apply-flag]: The program, `chunk-a55h33gj.js:4374` and `:4384`.
 [^elicitation]: The program.
 [^builders]: The program, the strings of the request and response builders.
 [^set-model]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307).
 [^validators]: The schema is made from the program's own validators.
+[^v2326]: The program, `chunk-z7jksvp5.js:127` and `:144` for `oldestDesktopSdk`, `chunk-bprgtdg6.js:19299-19310` for `limit`, `chunk-bprgtdg6.js:21692-21697` for `withheld`, `chunk-bprgtdg6.js:21873-21890` for `refused_bearer_sha256` and `refused_call`, and `chunk-9enk3ymf.js:3142` and `:3154` for where the CLI sends them.

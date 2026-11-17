@@ -264,11 +264,12 @@ Options of `$.audio.speak`. Used by `$.audio.speak`.
 
 ### `SpeakRequest`
 
-The argument of `$.audio.speak(text, options)` as the event carries it. It combines `SpeakRequest` and `SpeakOptions`. Used by `audio.speak`.
+The argument of `$.audio.speak(text, options)` as the event carries it. The signal does not cross. Before `2.1.326`, it combined `SpeakRequest` and `SpeakOptions`. Used by `audio.speak`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `text` | <Documented /> | What to say, as plain text. The system speaks the first 4096 characters. | Type: `string`. |
+| `voice` | <Documented /> | The exact name of the system voice (`SpeakOptions`). If you leave it out, the synthesizer uses its default voice. | Type: `string`. Optional. |
 
 ### `SpeakResult`
 

@@ -1,6 +1,6 @@
 ---
 title: Remote Control Server
-description: Every option of claude remote-control in 2.1.323, with the hidden and removed flags and each error the option parser prints.
+description: Every option of claude remote-control in 2.1.326, with the hidden and removed flags and each error the option parser prints.
 sidebar_position: 4
 ---
 
@@ -37,12 +37,12 @@ The command has its own parser. It does not use the parser of the root `claude` 
 | `--capacity <N>` | <Documented /> | Sets the maximum number of sessions at the same time in `same-dir` or `worktree` mode. Give it only once. | `32` |
 | `--create-session-in-dir`, `--no-create-session-in-dir` | <Documented /> | Makes one session in the current folder when the server starts. In `worktree` mode, this session stays in the current folder and the other sessions get worktrees. A session keeps the folder it started in: a connected client cannot move it to another folder. Claude Code refuses with "This Remote Control session stays in the folder it was started in. To work in another folder, start a new session there." (changed in `2.1.321`).[^same-folder] | On |
 | `--allow-unattended-tool-calls` | <Undocumented /> | A hidden option. The help text shows it only when an internal condition holds.[^unattended-help] See [Unattended Tool Calls](#unattended-tool-calls). | Off |
-| `--enable-live-preview`, `--preview-port <port>` | <Undocumented /> | Hidden options for a preview tunnel. In `2.1.323` the parser always refuses them with `--enable-live-preview and --preview-port are not available in this build.` | Not available |
+| `--enable-live-preview`, `--preview-port <port>` | <Undocumented /> | Hidden options for a preview tunnel. In `2.1.326` the parser always refuses them with `--enable-live-preview and --preview-port are not available in this build.` | Not available |
 | `--sandbox`, `--no-sandbox` | <Documented /> <Deprecated note="Removed in 2.1.300" /> | Removed. The server does not start. See [Errors](#errors). To sandbox the sessions, set `sandbox.enabled` to `true` in settings. | |
 
 ### Unattended Tool Calls
 
-`--allow-unattended-tool-calls` is in the parser of `2.1.323`. The official docs do not show it.[^parser]
+`--allow-unattended-tool-calls` is in the parser of `2.1.326`. The official docs do not show it.[^parser]
 Use it only from your own terminal. Claude Code does these checks:
 
 1. The parser refuses it with `--spawn=session`, `--session-id`, or `--continue`.
@@ -114,7 +114,7 @@ Each option error below prints `Error: <message>` on stderr and exits with code 
 | `--session-id and --continue cannot be used with --spawn, --capacity, or --create-session-in-dir.` | <Documented /> | You give a resume option with a spawn option. |
 | `--session-id and --continue cannot be used together.` | <Documented /> | You give both. |
 | `--allow-unattended-tool-calls cannot be used with --spawn=session, --session-id, or --continue.` | <Undocumented /> | You give a single-session or resume option with it. |
-| `--enable-live-preview and --preview-port are not available in this build.` | <Undocumented /> | You give either option. The checks that follow it in the parser (`--preview-port requires an integer in [1024, 65535]`, and the pairing of the two options) do not run in `2.1.323`, except the port range check, which runs first while the parser reads `--preview-port`. |
+| `--enable-live-preview and --preview-port are not available in this build.` | <Undocumented /> | You give either option. The checks that follow it in the parser (`--preview-port requires an integer in [1024, 65535]`, and the pairing of the two options) do not run in `2.1.326`, except the port range check, which runs first while the parser reads `--preview-port`. |
 | `Unknown argument: <arg>` and `Run 'claude remote-control --help' for usage.` | <Undocumented /> | Any other argument. |
 | `Error: No recent session found in this directory or its worktrees...` | <Documented /> | `--continue` finds no record. |
 
@@ -127,14 +127,14 @@ Each option error below prints `Error: <message>` on stderr and exits with code 
 
 ## Sources
 
-[^parser]: The text of `claude remote-control --help` in `2.1.323`, and the option parser of the program, `chunk-2dg5mr3x.js:109786`.
-[^identity]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-jgdw2xgs.js:2101`.
-[^same-folder]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-nf5gr30q.js:9791`, behind the `tengu_idempotent_blossom` gate.
-[^unattended-help]: The program, `chunk-qhjgwj5g.js:3413`.
-[^grant]: The program, export `writeUnattendedRunGrant`, `chunk-h4gfgf2k.js`.
-[^startup]: The program, `chunk-2dg5mr3x.js`, the run-time code after `Ai`.
-[^order]: The program, `chunk-ngtnhntk.js`, the `remote-control` entry, and `chunk-ajh9vqm0.js`, function `Knn`, exported as `getBridgeDisabledDiagnosis`.
+[^parser]: The text of `claude remote-control --help` in `2.1.326`, and the option parser of the program, `chunk-y5hjhy3x.js:5411` and `chunk-y5hjhy3x.js:5489-5527`.
+[^identity]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-w62tkse3.js:2100`.
+[^same-folder]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-qqth59zk.js:9887`, behind the `tengu_idempotent_blossom` gate.
+[^unattended-help]: The program, `chunk-0n02x2cx.js:60-62`.
+[^grant]: The program, export `writeUnattendedRunGrant`, `chunk-7zp3n9ks.js`.
+[^startup]: The program, `chunk-y5hjhy3x.js`, the run-time code after `Ai`.
+[^order]: The program, `chunk-wz7dh45s.js`, the `remote-control` entry, and `chunk-p8vgtxat.js`, function `Knn`, exported as `getBridgeDisabledDiagnosis`.
 [^flag]: The program, flag `tengu_ccr_bridge`. Probe group `cli321`.
 [^exit-codes]: The program, `chunk-jh1meyy3.js:5-8` and `chunk-y5hjhy3x.js:6333`, `:6797-6798`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^cli321]: The program, `chunk-2dg5mr3x.js:107633`, function `Ai`. Probe group `cli321` (`rc-*` cases), run with a fake `max` login, only `DISABLE_TELEMETRY` set, and no network.
+[^cli321]: The program, `chunk-y5hjhy3x.js:108769`, function `Ai`. Probe group `cli321` (`rc-*` cases), run with a fake `max` login, only `DISABLE_TELEMETRY` set, and no network.
 [^child-logs]: The program, `chunk-y5hjhy3x.js:5706-5712`, `chunk-y5hjhy3x.js:6519-6528`, `chunk-zyq9kffp.js:378`, and `chunk-z4j4mjgn.js:44893-44944`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

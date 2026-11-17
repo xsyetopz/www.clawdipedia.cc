@@ -51,7 +51,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CCR_SHR_SSE_HINTS` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Makes the self-hosted runner open a server-sent events stream for work hints, so it wakes sooner. | On or off. Logs `CCR_SHR_SSE_HINTS enabled` when on | Self-hosted runner |
 | `CCR_SHR_START_MARKS` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Names a start marks key that the self-hosted runner blanks in the session env. It is also tied to prewarm marker files in `/tmp`. | Set to undefined in the child env | Self-hosted runner |
 | `CLAUDE_ARTIFACT_HOST_GRANT` | <Undocumented /> | Holds the host app grant for local MCP servers. Artifact publish uses it to check the MCP manifest of a page. | `rawStr`, parsed by a grant reader. The app that starts the session sets it | Artifact publish in a host-launched session. Not set from project `env` before trust |
-| `CLAUDE_BRIDGE_BASE_URL` | <Undocumented /> | Does not change the Remote Control API host (checked in `2.1.323`). Claude Code takes the host from `BASE_API_URL` of its OAuth config, because the function that gives an override returns nothing.[^bridge-host] One effect stays. `FetchInboxMessage` first compares this variable, `USE_LOCAL_OAUTH`, `USE_STAGING_OAUTH`, `CLAUDE_LOCAL_OAUTH_API_BASE`, and `CLAUDE_CODE_CUSTOM_OAUTH_URL` with the copy of the environment that Claude Code saved before it applied the settings.[^bridge-copy] If one value is different, the tool does not read the message. | Text. The tool then gives this result: "The Remote Control API host is overridden by a settings file rather than this process's own environment, so the inbox was not read. Tell the user; don't retry."[^bridge-message] | `FetchInboxMessage` in a session with Remote Control connected. A value in the `env` of a settings file causes the difference. A value in the environment at launch is in the saved copy too, so it causes none |
+| `CLAUDE_BRIDGE_BASE_URL` | <Undocumented /> | Does not change the Remote Control API host (checked in `2.1.326`). Claude Code takes the host from `BASE_API_URL` of its OAuth config, because the function that gives an override returns nothing.[^bridge-host] One effect stays. `FetchInboxMessage` first compares this variable, `USE_LOCAL_OAUTH`, `USE_STAGING_OAUTH`, `CLAUDE_LOCAL_OAUTH_API_BASE`, and `CLAUDE_CODE_CUSTOM_OAUTH_URL` with the copy of the environment that Claude Code saved before it applied the settings.[^bridge-copy] If one value is different, the tool does not read the message. | Text. The tool then gives this result: "The Remote Control API host is overridden by a settings file rather than this process's own environment, so the inbox was not read. Tell the user; don't retry."[^bridge-message] | `FetchInboxMessage` in a session with Remote Control connected. A value in the `env` of a settings file causes the difference. A value in the environment at launch is in the saved copy too, so it causes none |
 | `CLAUDE_BRIDGE_REATTACH_NO_BACKFILL` | <Undocumented /> | Tells a reattached bridge session to skip the history backfill. | On or off. Claude Code sets it to `1` on a reattach spawn. The new process reads it once and deletes it | Remote Control bridge reattach. Not set from project `env` before trust |
 | `CLAUDE_BRIDGE_REATTACH_OUTBOUND_ONLY` | <Undocumented /> | Makes a reattached bridge session send only outbound (mirror mode). Without it the reattach is a full bridge. | On or off. Claude Code sets `1` unless the caller passes `false`. It feeds the bridge enable logic | Remote Control bridge reattach. Not set from project `env` before trust |
 | `CLAUDE_BRIDGE_REATTACH_OWNER_ACCT` | <Undocumented /> | Passes the owner account UUID to a reattached bridge session. | Text. Claude Code sets it on a reattach spawn. The new process reads it once and deletes it | Remote Control bridge reattach. Not set from project `env` before trust |
@@ -239,23 +239,23 @@ Check the Notes column. Claude Code itself sets some variables. Do not set them 
 
 The program (variable names found in the `2.1.314` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 
-[^bridge-host]: The program, `chunk-5mstejbz.js@1421` and `chunk-fknzn91z.js@468`, in `2.1.323`.
-[^bridge-copy]: The program, `chunk-4105n21a.js@9366`.
-[^bridge-message]: The program, `chunk-4105n21a.js@15218`.
-[^start-dir]: The program sets it at `chunk-a93gqq12.js:8559` and reads it at `chunk-2jz0wx1x.js:39741`. It did not show the condition `Gh()` that the check also needs.
-[^settings-binding]: The program sets it at `chunk-a93gqq12.js:6859` and reads it at `chunk-z2s1c1yg.js:2287`.
+[^bridge-host]: The program, `chunk-0ygy7c0s.js@1417` and `chunk-9fc4h4n9.js@1344`, in `2.1.326`.
+[^bridge-copy]: The program, `chunk-7p8dym99.js@10015`.
+[^bridge-message]: The program, `chunk-7p8dym99.js@15908`.
+[^start-dir]: The program sets it at `chunk-zyq9kffp.js:8663` and reads it at `chunk-v1v0p7r0.js:41880`. It did not show the condition `Gh()` that the check also needs.
+[^settings-binding]: The program sets it at `chunk-zyq9kffp.js:6929` and reads it at `chunk-n7pmxfv4.js:2295`.
 [^source-dir]: The program.
 [^long-poll]: The feature flag is `tengu_ccr_sse_long_poll_fallback`.
-[^requests-by-fetch]: `2.1.323` has no code that reads it. The program, `chunk-5jtfp8jv.js@13071` and `chunk-5qrjxad9.js@5653`.
+[^requests-by-fetch]: `2.1.323` has no code that reads it. The program, `chunk-wqz933wn.js@13382` and `chunk-40ntpkc0.js@5871`.
 [^held-message]: The program. The gate is `tengu_mellow_heron`.
 [^host-spawn-env]: The program, `chunk-7wddka1w.js:15` and `:23`. The gate is `tengu_sleepy_wicket`.
 [^memory-no-wait]: The feature flag is `tengu_misty_anchor`.
 [^off-machine-mark]: The program, `chunk-4k4w82vm.js:536`.
 [^off-machine-relay]: The program, `chunk-4k4w82vm.js:548`.
 [^off-machine-child]: The program, `chunk-ygknbk6n.js:170`.
-[^pr-merged]: The program reads it at `chunk-dcft79a2.js:29927` and sets it at `chunk-gsszj2j9.js:2650`. It did not show the check that decides if the merged review is available.
+[^pr-merged]: The program reads it at `chunk-wjgz1yny.js:28670` and sets it at `chunk-jtqejyef.js:2694`. It did not show the check that decides if the merged review is available.
 [^withhold]: The program, `chunk-gv7etbm6.js:419`.
-[^renewal]: Probe cases `runner.renewal-unset` and `runner.renewal-disabled`. The program, `chunk-jmkrmahq.js@156100`.
-[^offers-machine]: Probe cases `runner.base` and `runner.offers-1`. The program sets it at `chunk-jmkrmahq.js@178124` and passes no move callback at `chunk-jmkrmahq.js@352055`.
-[^spawn-reason]: Probe cases `orchestrator.reason-set`, `reason-none`, `reason-bad`, `reason-token`, `reason-long`, and `reason-upper-colon`. The program, `chunk-pr8txaye.js@8973`.
+[^renewal]: Probe cases `runner.renewal-unset` and `runner.renewal-disabled`. The program, `chunk-747xd1vs.js@170444`.
+[^offers-machine]: Probe cases `runner.base` and `runner.offers-1`. The program sets it at `chunk-747xd1vs.js@195653` and passes no move callback at `chunk-747xd1vs.js@374298`.
+[^spawn-reason]: Probe cases `orchestrator.reason-set`, `reason-none`, `reason-bad`, `reason-token`, `reason-long`, and `reason-upper-colon`. The program, `chunk-t4h0810z.js@58235`.
 [^anthropic-gh]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-747xd1vs.js:888` and `:12204`.

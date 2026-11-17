@@ -34,7 +34,7 @@ The last column says where the key may appear: the manifest, a marketplace entry
 | `defaultEnabled` | <Documented /> | Sets the start state when the user chose nothing. | Default `true`. The entry value wins. `enabledPlugins` always wins. | Both |
 | `dependencies` | <Documented /> | Lists plugins that must be enabled too. | Each item is `"name"`, `"name@marketplace"`, or an object. Claude Code also accepts a trailing `@^range`. It strips the range.[^schema] | Both |
 | `engines` | <Undocumented /> | Names the hosts the plugin runs on. | `engines["claude-code"]` is a semver range such as `>=2.1.320`. Outside the range the plugin is not installed, updated, or loaded. Other keys are ignored. An invalid range is reported as `engine-range-invalid`.[^engines] | Manifest |
-| `settings` | <Documented /> | Applies settings while the plugin is enabled. | Only `agent` takes effect, and it is deprecated: it will stop applying in a future release.[^settings-key] `subagentStatusLine` has no effect in 2.1.323.[^status-line] A `settings.json` in the plugin root wins. | Manifest |
+| `settings` | <Documented /> | Applies settings while the plugin is enabled. | Only `agent` and `subagentStatusLine` take effect. Both are deprecated and will stop applying in a future release.[^settings-key] For each key, the last enabled plugin that sets it wins. If Claude Code cannot create the plugin data directory, the plugin `subagentStatusLine` command does not run.[^status-line] A `settings.json` in the plugin root wins. | Manifest |
 | `userConfig` | <Documented /> | Asks the user for values when the plugin is enabled. | See [`userConfig` Option Keys](#userconfig-option-keys). | Manifest |
 | `channels` | <Documented /> | Declares message channels. | Items have `server`, `displayName`, and `userConfig`. Strict. | Manifest |
 | `types` | <Documented /> | Points to a `.d.ts` file for a mod. | Must end in `.d.ts` and must not contain `..`. | Manifest |
@@ -171,9 +171,9 @@ Since `2.1.326`, a malformed display field, such as `author` or `homepage`, no l
 ## Sources
 
 [^schema]: The program, bundled manifest schema.
-[^engines]: The program, `chunk-3dhh2g49.js:55813` and `chunk-xvwfyath.js:30869`.
-[^settings-key]: The program, `chunk-xvwfyath.js:11364`.
-[^status-line]: The program, `chunk-3dhh2g49.js:255136`.
+[^engines]: The program, `chunk-m33vdkhs.js:54911` and `chunk-kek2xxjw.js:28071`.
+[^settings-key]: The program, `chunk-kek2xxjw.js:365-375`.
+[^status-line]: The program, `chunk-4h798pp0.js:266445-266456` and `chunk-4h798pp0.js:270680-270690`.
 [^v310]: [`2.1.310` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.310).
-[^icon]: The program, `chunk-xerchq1h.js@2908` and `chunk-xerchq1h.js@31921`.
+[^icon]: The program, `chunk-he1aw2h7.js@4484` and `chunk-he1aw2h7.js@33433`.
 [^display-field]: The program, `chunk-4h798pp0.js:265352-265395` and `chunk-kek2xxjw.js:788`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

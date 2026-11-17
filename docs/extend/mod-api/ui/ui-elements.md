@@ -1,6 +1,6 @@
 ---
 title: Surfaces, Elements, and Render Sites
-description: "What a mod may draw and where: the surfaces, the 18 render sites with their props, and the JSX globals."
+description: "What a mod may draw and where: the surfaces, the 20 render sites with their props, and the JSX globals."
 sidebar_position: 8
 ---
 
@@ -31,9 +31,10 @@ At such a site, a `ui.render` hook makes one of four choices.
 | Wrap it | A tree that holds the result of `await next(e)` | The engine's drawing, with the elements of the mod beside it. |
 | Replace it | A tree of its own, with no call to `next` | The tree of the mod alone. An invalid tree draws the engine's drawing. |
 
-Four sites are empty until a hook draws them. A mod draws something new there.
+Five sites are empty until a hook draws them. A mod draws something new there.
 
 - [Pane](#pane): a framed region that a mod opens with `$.ui.open`.
+- [`ContextMenu`](#contextmenu): the rows that a mod adds to the menu that the person opens on the transcript.
 - [`Placed`](#placed): a row that a mod places in the transcript with `$.ui.place`.
 - [`AbovePrompt`](#aboveprompt): the band above the prompt. It is always there, and every mod shares it.
 - [`Backdrop`](#backdrop): the drawing behind the conversation, which a mod sets with `$.theme.set`.
@@ -71,8 +72,8 @@ on("ui.render", { component: "Pane" }, async ($, e) => {
 | Item | Status | What it does | Elements | Where it can be used |
 | --- | --- | --- | --- | --- |
 | `terminal` | <Documented /> | Ink. Draws the whole tree of the hook. | `Box`, `Text`, `Button`, `Input`, `Select`, `Link`, `Code`, `Markdown`, `Client`, `Raster`, `Image`. No `Svg`. | `e.surface === 'terminal'` |
-| `desktop` | <Documented /> | Claude Code Desktop. Asks over the wire. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Client`. | `e.surface === 'desktop'` |
-| `mobile` | <Documented /> | The mobile app. Asks over the wire. | `Box`, `Text`, `Button`, `Svg`, `Link`, `Code`, `Markdown`. Since `2.1.323`, `Progress` too, when the client names it in `draws`; any other client gets its Box and Text. No `Input`, `Select`, or `Client` yet. The docs name no mobile surface. | `e.surface === 'mobile'` |
+| `desktop` | <Documented /> | Claude Code Desktop. Asks over the wire. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Client`. Since `2.1.326`, `Shader` too. | `e.surface === 'desktop'` |
+| `mobile` | <Documented /> | The mobile app. Asks over the wire. | `Box`, `Text`, `Button`, `Svg`, `Link`, `Code`, `Markdown`. Since `2.1.323`, `Progress` too, when the client names it in `draws`; any other client gets its Box and Text. Since `2.1.326`, `Shader` too. No `Input`, `Select`, or `Client` yet. The docs name no mobile surface. | `e.surface === 'mobile'` |
 | `vscode` | <Differs note="The type file says no surface is attached yet. The docs say the extension draws from 2.1.299 in a session that fetches feature flags." /> | The editor webview. The same table as `desktop` without `Client`. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`. | `e.surface === 'vscode'` |
 
 ## Render Sites and Props
@@ -96,6 +97,8 @@ Each name in this table is a value of `e.component`. The sections below give the
 | [`PromptHint`](#prompthint) | <Documented /> | The hint line under the prompt. | The engine. |
 | [`AbovePrompt`](#aboveprompt) | <Documented /> | The band directly above the prompt input. | A hook of a mod. A survey also draws there. |
 | [`AbovePromptList`](#abovepromptlist) | <Documented /> | The arrangement of the `AbovePrompt` rows of the band. New in `2.1.323`. | The engine stacks the rows that hooks settled. |
+| [`AgentRow`](#agentrow) | <Documented /> | One agent's row in the agent list. Since `2.1.326`. | The engine. |
+| [`ContextMenu`](#contextmenu) | <Documented /> | The rows that a mod adds to the menu on a transcript row. Since `2.1.326`. | A hook of a mod. The desktop app only. |
 | [Pane](#pane) | <Documented /> | A framed region. | A hook of a mod, after `$.ui.open`. |
 | [`Placed`](#placed) | <Documented /> | A row in the transcript. | A hook of a mod, after `$.ui.place`. |
 | [`Backdrop`](#backdrop) | <Documented /> | The drawing behind the conversation. | A hook of a mod, after `$.theme.set`. |
@@ -277,6 +280,56 @@ New in `2.1.323`. The arrangement of the band once its rows settled. A hook that
 | `scroll` | <Documented /> | As on `AbovePrompt`: the window over the whole stacked tree. | `SiteScroll`. Read-only. |
 | `view` | <Documented /> | As on `AbovePrompt`. | `SiteView`. Read-only. A rewrite carries it on as received. |
 
+### `AgentRow`
+
+Since `2.1.326`. One agent's row in the agent list: the list under the prompt in the terminal, the Background tasks of the session rail in the desktop app, and the running subagents in VS Code. A row is for a subagent or a teammate. `requestId` is its `id`. The props are the agent as `$.agent.list()` gives it (see [Agents](../calls/agent.md)), and `parentId` names the agent that spawned it. The props are read-only, but `label` (the words that the engine's row shows beside the name), `body`, and `isHidden`. A tree, or `body`, stands for everything after the pointer, connector, and bullet of the row. The surface keeps opening and stopping the agent, and hiding a row never removes an agent from the full list. The site is not raised where the layout draws no agent rows, nor for the `main` row, a row of a workflow, or the folded idle summary. It is raised on every attached surface.[^agent-row]
+
+The engine asks for every agent that has `hasRow`, drawn now or not, and again when a prop changes. It reads `tokenCount`, `tokenSamples`, `lastRequest`, `usage`, and `cost` every five seconds, on `$.ui.invalidate`, and with a new `status` or `taskStatus`. The last answer stands until the next one comes. A new row waits 300 ms at most for its first answer, then shows with no text until it comes (in VS Code and the desktop app, it shows as the engine's).
+
+- The mobile background tasks sheet asks only for the subagents on screen. It keeps its own row, draws the tree or `body` under it, and shows a changed `label` in the row. A hidden row stays listed, with nothing of the mod.
+- The desktop app shows one line and takes no presses in the tree. A tree stands for the words of the row, a `Link` is drawn as its text, and a `Button` is left out.
+
+| Item | Status | What it is for | Shape and limits |
+| --- | --- | --- | --- |
+| `rowIds` | <Documented /> | The `id` of every agent that has `hasRow`, so each row is asked again as one comes or goes. | `string[]`. Read-only. |
+| `columns` | <Documented /> | The columns that the body of a top-level row has, where the surface measures them. A nested row's connector takes two of them for each level. | `number`, optional. Read-only. |
+| `body` | <Documented /> | Text drawn as the whole body of the row in place of the engine's columns, cut at the edge of the row. `""` hides the row, as `isHidden` does. | `string`, optional. It arrives set where the settings of the person already draw the row; leave it out for the engine's columns. It alone may hold escape sequences: SGR styles and OSC 8 links are drawn, any other is dropped. A line break makes the row taller. A remote surface gets it as `Text` and `Link` elements. |
+| `isHidden` | <Documented /> | Whether the row is left out of the list: of its drawing, its count, and its keys. A hidden row is still asked, so a hook may show it again. | `boolean`. What the last `next` in the chain passed decides, whoever draws. Pass `false` to show a row that arrives hidden by the settings of the person. |
+
+```javascript
+on("ui.render", { component: "AgentRow" }, ($, e, next) =>
+  next({ ...e, props: { ...e.props, isHidden: e.props.status === "idle" } }),
+);
+```
+
+### `ContextMenu`
+
+Since `2.1.326`. The menu that the person opens on something in the transcript (a right-click in the desktop app). A mod adds rows to it. The engine draws none. It is raised on the desktop surface only.[^context-menu]
+
+The engine asks once for each plugin that hooks it, and `e.plugin` names the plugin. A hook answers the rows of that plugin, passes with `next(e)` to the next hook of its plugin, or adds none. Another plugin takes rows away with a hook above that names their plugin or `"*"` and answers over them. The props say what the pointer was on. Each prop is absent when the pointer was on none, so a matcher that names `link` runs only when the menu opened on a link. A hook cannot change the props. `e.requestId` names the menu, not the row: read `e.props.row`.
+
+The surface makes a row of each `Button`: its `label`, or its text, is the label of the row, a dim `Text` inside it is the line under the label, and `onPress` runs when the person picks the row. It makes a row of each `Link` to an `https:` address, with one line and no second, and opens it on the computer of the person. It leaves out the rest of the tree, keeps its own rows whatever a hook answers, and chooses where the rows go and how many it shows.
+
+A surface may open the menu before a slow answer arrives. Then those rows are missing from that menu. A part that is too long to hand over whole is absent: text past 64 KB, or an address too long for a `Link`. The last answer for the same props stands until a `$.state` value that it read changes, or until `$.ui.invalidate()`.
+
+| Item | Status | What it is for | Shape and limits |
+| --- | --- | --- | --- |
+| `row` | <Documented /> | The transcript row that the menu opened on: the `component` that its own `ui.render` hook names, and the id that this hook reads as `e.requestId`. | `{ component: RenderComponent; requestId: string }`, optional. Absent where the surface cannot name the row. |
+| `link` | <Documented /> | The link under the pointer. `href` is the address as the surface resolved it. `text` is the visible text of the link, when the surface sends it. | `{ href: string; text?: string }`, optional. |
+| `selection` | <Documented /> | The text that the person selected, when the menu opened on it. | `UiSelection`, optional. |
+| `code` | <Documented /> | The code under the pointer. `isBlock` is true for a fenced block, and `text` is then the whole block. It is false for code inside a line. | `{ text: string; isBlock: boolean }`, optional. |
+
+```javascript
+on("ui.render",
+  { component: "ContextMenu", props: { link: { href: /^https:\/\/example\.com\// } } },
+  ($, e) => {
+    const { Button } = $.ui.resolve(e);
+    const fill = () => $.prompt.fill({ text: `Summarize ${e.props.link?.href}` });
+    return <Button key="summarize" onPress={fill}>Summarize this page</Button>;
+  },
+);
+```
+
 ### Pane
 
 The framed region a plugin opened with `$.ui.open({ id })`. There is one instance for each id (`requestId`). The body is the hook's tree. One pane shows, the rest are tabs. The surface places it (docked in fullscreen, otherwise above the prompt). The person closes it, which raises `ui.close` with origin `person`, and a hook may refuse.
@@ -304,7 +357,7 @@ A row that a plugin placed in the transcript with `$.ui.place`. It is empty unti
 
 ### `Backdrop`
 
-The backdrop of the session, which a plugin set with `$.theme.set`. Only the desktop and mobile surfaces raise it, and they draw it behind the conversation. It is empty until a hook draws it. Every plugin's hook hears it, so read `plugin` beside `scene`. The surface sizes the drawing to its window or screen, and presses go through to what is over it. Each surface asks separately, so a hook can read `e.surface` and draw a different scene on each. A `Client` draws nothing on mobile.
+The backdrop of the session, which a plugin set with `$.theme.set`. Only the desktop and mobile surfaces raise it, and they draw it behind the conversation. It is empty until a hook draws it. Every plugin's hook hears it, so read `plugin` beside `scene`. The surface sizes the drawing to its window or screen, and presses go through to what is over it. Each surface asks separately, so a hook can read `e.surface` and draw a different scene on each. A `Client` draws nothing on mobile. Since `2.1.326`, an answer holds only `Box`, `Text`, `Svg`, and one [`Shader`](#shader-element). An `Svg` in it must be pure vector, or the engine refuses the answer.
 
 | Item | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
@@ -312,6 +365,35 @@ The backdrop of the session, which a plugin set with `$.theme.set`. Only the des
 | `plugin` | <Documented /> | Who set the backdrop, so a hook can leave the backdrop of another plugin alone. | `string`. Read-only. |
 | `glass` | <Documented /> | How the surface frosts its panels over the drawing, with the defaults filled in. | `{ blur: number; tint?: string; opacity: number } \| false`. Read-only. `false` where the panels stay as they are. |
 | `overrideColorScheme` | <Documented /> | The `overrideColorScheme` of `$.theme.set`: whether to force light or dark. Since `2.1.323`, this prop is `overrideColorScheme`, not `colorScheme`. | `'light' \| 'dark'`, optional. Read-only. Absent where the plugin did not say. |
+
+## Shader Element
+
+Since `2.1.326`. `Shader` is an element for the `Backdrop` site. It plays a scene on the GPU of the desktop app: the shader file that `module` names, fed `values`, over one `Svg` child. The mobile app shows the `Svg` alone. The `desktop` and `mobile` element tables have it, and the `vscode` table does not.[^shader] See [`ShaderProps`](../types/ui/input-pane-render.md#shaderprops) for the props.
+
+- A `Shader` draws only in a `Backdrop`, one at most, at the root or in a `Box`. Anywhere else, or over anything but one `Svg`, the engine refuses the tree.
+- The file is TypeScript written against `claude-code/shader`, never GLSL. The engine reads it at load and never runs it: it sends the app a checked form. The app feeds the time and the pointers of the person itself. None of that comes back to the mod, except a click on the bare backdrop (`ui.pointer`).
+- The `Svg` shows alone on an app that plays no shaders, under Reduce Motion, when the shader fails, flashes, or runs too slowly, and when the engine refuses the file or a prop. A hook cannot tell which the person got, so draw the `Svg` as a finished scene.
+- The `Svg` can be the scene of another mod (`await next(e)`) where that is a bare `Svg`. A hook may keep a `Shader` that `next(e)` gave it and change its `values`, not its `module`. Otherwise the hook fails and the engine skips it.
+- `claude plugin validate` lists each shader file with its cost, or names the line that it refuses.
+
+### The Shader Language
+
+The module `claude-code/shader` declares the language of the file. A file ends with `export default shader({ fps: 30, passes: [sky] })`, and its passes run in order. The engine compiles the file and never runs it.
+
+- Allowed: `const`, `let`, functions and arrows (inlined), `if` and `else`, `?:`, `for` loops whose start, end, and step are known while reading (or up to `pointerCount`, 64 turns at most), `for...of` over `pointers` or a written list, `break`, `continue`, `return`, and destructuring.
+- Refused: `while`, `do`, recursion, classes, `new`, `async`, strings as values, spread, and any other import or global.
+- Numbers are 32-bit floats and are never NaN or infinite. `y` points up. The vector types are `vec2`, `vec3`, and `vec4`, with lanes `xyzw` or `rgba`. A 32-bit `int` wraps.
+- A file's numbers, ints, and tables hold 16384 bits in all. A `table` holds up to 256 rows of 1 to 4 numbers. A pass is a `picture` (exactly one, what shows over the `Svg`), a `buffer` (a texture that lasts between frames), or `shapes`. A file has 24 passes at most with tables.
+- The inputs are `time`, `dt`, `frame`, `first`, `fresh`, `turn`, `still` (1 under Reduce Motion), `size`, `res`, `px`, `composer`, `pixel`, `scene` (a picture of the `Svg`), and up to four pointers. `values({ ... })` declares the numbers that the mod sets, each held to its range.
+
+```javascript
+import { picture, shader, sin, time, vec3, vec4 } from 'claude-code/shader'
+const sky = picture(p => {
+  const glow = 0.2 + 0.1 * sin(time + p.uv.x * 6)
+  return vec4(vec3(0.3, 0.5, 1) * glow, glow)
+})
+export default shader({ fps: 30, passes: [sky] })
+```
 
 ## JSX and Globals
 
@@ -334,9 +416,12 @@ The backdrop of the session, which a plugin set with `$.theme.set`. Only the des
 
 [^types]: The Mod API type file of the `2.1.322` program, `schemas/claude-code.d.ts`.
 [^types-323]: The Mod API type file, `schemas/claude-code.d.ts`.
-[^waiting]: The Mod API type file, `schemas/claude-code.d.ts`, `WaitingFor` and `WaitingAgent`. The program, `chunk-jjj74jck.js:217077`.
-[^above-prompt]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-s82q53mp.js:120485`.
-[^collapsed]: The program, `chunk-1xmjf4e6.js:545725`.
-[^list]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-s82q53mp.js:125489` and `chunk-s82q53mp.js:120485`.
-[^covered]: The program, `chunk-1xmjf4e6.js:558301`.
-[^anchored]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-s82q53mp.js:119983`.
+[^waiting]: The Mod API type file, `schemas/claude-code.d.ts`, `WaitingFor` and `WaitingAgent`. The program, `chunk-s3j7dx93.js:215530`.
+[^above-prompt]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-fvkvyefp.js:197780`.
+[^collapsed]: The program, `chunk-y9bdpp8r.js:541869`.
+[^list]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-fvkvyefp.js:170774` and `chunk-fvkvyefp.js:197780`.
+[^covered]: The program, `chunk-y9bdpp8r.js:554445`.
+[^anchored]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-fvkvyefp.js:168072`.
+[^agent-row]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`, the `AgentRow` member of `RenderPropsOf`.
+[^context-menu]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`, the `ContextMenu` member of `RenderPropsOf`.
+[^shader]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`, `ShaderProps` and the module `claude-code/shader`.

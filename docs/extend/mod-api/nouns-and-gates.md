@@ -127,9 +127,9 @@ Claude Code `2.1.316` registers up to 13 built-in plugins at start.[^registry] E
 | `cc-plugin-easel` | Draws charts in the transcript. | Normal run, or the `remote_cowork` entry point |
 | `cc-plugin-claude-platform` | A built-in plugin of the same registry. | Normal run |
 | `cc-plugin-claude-test` | A built-in plugin of the same registry. | Normal run |
-| `cc-plugin-privacy` | Since `2.1.321`, refuses a `Bash`, `Monitor`, or `PowerShell` call when its text holds your account email and names a User-Agent. It refuses with a deny and does not ask you. The refusal tells Claude to run the call again without the address (with a generic client name), without the User-Agent setting, or as two calls. A call that holds the email but no User-Agent runs on. | A server gate, which is on by default[^privacy-gate] |
+| `cc-plugin-privacy` | Since `2.1.321`, refuses a call when it sends your account email as the identity of a client, for example beside a User-Agent. Since `2.1.326`, it checks `Write`, `Edit`, `NotebookEdit`, `WebFetch`, and MCP tool calls, and the script files that a shell call names, and not only `Bash`, `Monitor`, and `PowerShell` calls. It refuses with a deny and does not ask you. The refusal tells Claude to use a generic client name, to ask you for a real contact that a site needs, and that you can set the address in an environment variable or run the command yourself with `!`. | A server gate, which is on by default[^privacy-gate] |
 
-The `cc-plugin-privacy` check is a `tool.check` hook, and it reads the account email with `session.identity`. It looks for `curl -A`, `wget -U`, a `--user-agent` or `-user` option, and `user-agent`, `user_agent`, or `ua:` text, and it also tests the percent-encoded `%40` form of the address. The plugin sets `defaultEnabled: true` and `enabledFromTrustedSettingsOnly`.[^privacy]
+The `cc-plugin-privacy` check is a `tool.check` hook, and it reads the account email with `session.identity`. It looks for `curl -A`, `wget -U`, a `--user-agent` or `-user` option, `user-agent`, `user_agent`, or `ua:` text, a `From` header, and text such as `set_identity`, `mailto=`, or `--identity`. It also tests the percent-encoded `%40` form of the address, and a `git config user.email` or `GIT_AUTHOR_EMAIL` text in a line that has such an identity. A `WebFetch` call is refused when its `url` holds the address. For a shell call, the hook reads up to 8 script files that the command names, in the working folder and without links, and checks their text the same way. The hook also answers `session.identity` for other mods: it denies a mod of the `user` tier, and it removes `contextEmail` from the answer for a mod of any tier but `builtin`. The plugin sets `defaultEnabled: true` and `enabledFromTrustedSettingsOnly`.[^privacy]
 
 "Normal run" means the entry point is not `local-agent` and does not start with `remote`. A plugin can also hide itself with its own `isAvailable` test. For example, `cc-plugin-easel` needs Linux or macOS and no `hipaa` or `zdr` data policy.[^easel]
 
@@ -165,18 +165,18 @@ See [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plu
 ## Sources
 
 [^modules-text]: The program.
-[^validate]: The program, `chunk-xq1041h8.js:43699`.
-[^validate-form]: The program, `chunk-2x9ma4k7.js:920863`.
-[^types-dir]: The program, `chunk-2x9ma4k7.js@4690447`.
+[^validate]: The program, `chunk-rsdn630x.js:49358`.
+[^validate-form]: The program, `chunk-4h798pp0.js:962434`.
+[^types-dir]: The program, `chunk-4h798pp0.js@4922199`.
 [^off-text]: The program.
 [^safe-mode-text]: The program.
 [^v321]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321).
-[^written-mods]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-ber0zrm3.js:5705`.
+[^written-mods]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-9vv3cg4s.js:5749`.
 [^prompt-edit]: The program.
-[^registry]: The program, `chunk-mt5heavc.js@0`, the start function that calls the registry one plugin at a time.
+[^registry]: The program, `chunk-wvm9g54y.js@0`, the start function that calls the registry one plugin at a time.
 [^privacy-gate]: The program. The gate is `tengu_wise_newt`.
-[^privacy]: The program, `chunk-9ap1dkjt.js:6517` for the match, the refusal text at `:6741`, the hook at `:7017`.
-[^easel]: The program, `chunk-mt5heavc.js@0`.
-[^enable-order]: The program, `chunk-ydkr07sk.js@72675`.
+[^privacy]: The program, `chunk-s29hk2f6.js@7930` for the match, the refusal text at `@8612`, the `tool.check` hook at `@10426`, and the `session.identity` hook at `@11159`.
+[^easel]: The program, `chunk-wvm9g54y.js@0`.
+[^enable-order]: The program, `chunk-qg227pzf.js@78645`.
 [^enabled-plugins]: The program.
-[^responsive]: The program, `chunk-p1x9gjdg.js@583`.
+[^responsive]: The program, `chunk-ht4bh06j.js@583`.

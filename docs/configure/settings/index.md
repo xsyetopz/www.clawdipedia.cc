@@ -6,7 +6,7 @@ sidebar_position: 1
 
 Settings are JSON files that change how Claude Code behaves. Use them to pick a model, add permission rules, turn off a feature, or share the same rules with a whole team. Create or edit a settings file, pass `--settings`, or use `/config` and `/model` for some keys. An administrator can deploy managed settings. Each key is its own switch. `disableAllHooks` turns off hooks, the status line, and file suggestions at once.
 
-The managed schema of `2.1.322` lists 197 top-level keys. The user schema lists 173, and the other 24 are managed-only.[^schemas]
+The managed schema of `2.1.326` lists 197 top-level keys. The user schema lists 173, and the other 24 are managed-only.[^schemas]
 
 ## Example
 
@@ -47,7 +47,7 @@ Each key has a row on one of these pages.
 - `Where to Set It` says which files may set the key. `Any settings file` means the user, project, local, and managed files.
   `Settings files` means the settings files without a narrower scope in the source.
 - Many boolean keys are written as the thing to switch off, such as `spinnerTipsEnabled`. Read the row before you pick a value.
-- Items that are removed or do nothing in `2.1.322` are left out. See the end of this page.
+- Items that are removed or do nothing in `2.1.326` are left out. See the end of this page.
 
 ## Where Settings Live
 
@@ -158,7 +158,7 @@ Claude Code then takes the model keys of that app over the managed values.
 
 ## Left Out on Purpose
 
-These keys do nothing in `2.1.322`, so the pages do not list them.
+These keys do nothing in `2.1.326`, so the pages do not list them.
 
 - `taskOutputMaxChars`: Claude Code removed the `TaskOutput` tool.
 - `keybindingFlavor`: Word-editing keys always follow Bash (readline) rules now.
@@ -189,10 +189,10 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^schemas]: The program, the published settings schemas.
-[^gitignore]: The program, `chunk-rqvvpwt0.js:6395`, called from `chunk-rqvvpwt0.js:85856`.
-[^seed]: The program, `chunk-rqvvpwt0.js:88588`.
+[^gitignore]: The program, `chunk-caex36kk.js:28840`, called from `chunk-caex36kk.js:111287`.
+[^seed]: The program, `chunk-caex36kk.js:6373-6405` and `chunk-caex36kk.js:6436-6462`.
 [^sources]: The program.
-[^managed-reread]: The program, `chunk-x4fdscgs.js:551395` and `:552600`.
+[^managed-reread]: The program, `chunk-d73xe1mr.js:563333` and `:564541`.
 [^strict]: The program lists them as keys with a strict value.
 [^nesting]: The program, `chunk-m33vdkhs.js:16540`.
 [^file-error]: The program, `chunk-y9bdpp8r.js:123261-123311`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

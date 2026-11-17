@@ -27,10 +27,10 @@ Counts are table rows. A row can name several items, such as a list of related v
 | [API Endpoints and Betas](#api-endpoints-and-betas) | 99 |
 | [System Prompt](#system-prompt) | 34 |
 | [Transcript and Sessions](#transcript-and-sessions) | 13 |
-| [Headless Protocol](#headless-protocol) | 195 |
+| [Headless Protocol](#headless-protocol) | 205 |
 | [Mod API](#mod-api) | 0 |
 | [Other](#other) | 108 |
-| Total | 1870 |
+| Total | 1880 |
 
 ## Settings Keys
 
@@ -542,12 +542,12 @@ Count: 13.
 
 Message types of `--output-format stream-json` and of the control protocol. Nearly every row is undocumented, so this page links to the two pages with counts.
 
-Count: 195.
+Count: 205.
 
 | Page | Undocumented Rows |
 | --- | --- |
 | [Control Protocol](../extend/headless/control-protocol.md) | 95 |
-| [Stream JSON Messages](../extend/headless/stream-json.md) | 100 |
+| [Stream JSON Messages](../extend/headless/stream-json.md) | 110 |
 
 ## Mod API
 
@@ -723,30 +723,30 @@ These items exist in the official docs, but Claude Code works in another way. Th
 
 ## In the Program
 
-The program of `2.1.323` holds 10117 items in 18 kinds, counted from `schemas/surface.json`.
+The program of `2.1.326` holds 10382 items in 18 kinds, counted from `schemas/surface.json`.
 [Surface Coverage](surface-coverage.md) lists each item with its page.
 
 | Kind | Items | Not on a Page Yet |
 | --- | --- | --- |
 | [Betas](surface-coverage.md#betas) | 54 | 0 |
-| [API Endpoints](surface-coverage.md#api-endpoints) | 455 | 0 |
-| [Environment Variables](surface-coverage.md#environment-variables) | 2084 | 0 |
-| [Error Texts](surface-coverage.md#error-texts) | 4188 | 0 |
+| [API Endpoints](surface-coverage.md#api-endpoints) | 460 | 0 |
+| [Environment Variables](surface-coverage.md#environment-variables) | 2108 | 0 |
+| [Error Texts](surface-coverage.md#error-texts) | 4246 | 0 |
 | [Files](surface-coverage.md#files) | 78 | 0 |
-| [CLI Flags](surface-coverage.md#cli-flags) | 414 | 0 |
-| [Gates](surface-coverage.md#gates) | 1544 | 0 |
+| [CLI Flags](surface-coverage.md#cli-flags) | 421 | 0 |
+| [Gates](surface-coverage.md#gates) | 1697 | 0 |
 | [Hook Events](surface-coverage.md#hook-events) | 33 | 0 |
 | [Keybindings](surface-coverage.md#keybindings) | 207 | 0 |
-| [Mod API](surface-coverage.md#mod-api) | 239 | 0 |
+| [Mod API](surface-coverage.md#mod-api) | 253 | 0 |
 | [Models](surface-coverage.md#models) | 76 | 0 |
 | [OpenTelemetry Events](surface-coverage.md#opentelemetry-events) | 28 | 0 |
 | [Permission Rules](surface-coverage.md#permission-rules) | 6 | 0 |
 | [Settings](surface-coverage.md#settings) | 199 | 0 |
-| [Nested Setting Keys](surface-coverage.md#nested-setting-keys) | 197 | 0 |
+| [Nested Setting Keys](surface-coverage.md#nested-setting-keys) | 198 | 0 |
 | [Slash Commands](surface-coverage.md#slash-commands) | 140 | 0 |
-| [Subcommands](surface-coverage.md#subcommands) | 80 | 0 |
-| [Tools](surface-coverage.md#tools) | 95 | 0 |
-| All kinds | 10117 | 0 |
+| [Subcommands](surface-coverage.md#subcommands) | 81 | 0 |
+| [Tools](surface-coverage.md#tools) | 97 | 0 |
+| All kinds | 10382 | 0 |
 
 ## Related Pages
 

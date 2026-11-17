@@ -4,7 +4,7 @@ description: Keys the settings schema leaves out, desktop-only keys, and the key
 sidebar_position: 10
 ---
 
-Some keys are not in the settings schema, or they live in another file. This page covers the auto mode and display keys, the keys that only the desktop app reads, and the global config keys of `~/.claude.json`. Claude Code writes the global config file, and `/config` changes some of its keys. Edit a settings file for the first two tables. Use `/config` or edit `~/.claude.json` for the global config keys in the last table. All keys here work in `2.1.322`. Most keys are booleans.
+Some keys are not in the settings schema, or they live in another file. This page covers the auto mode and display keys, the keys that only the desktop app reads, and the global config keys of `~/.claude.json`. Claude Code writes the global config file, and `/config` changes some of its keys. Edit a settings file for the first two tables. Use `/config` or edit `~/.claude.json` for the global config keys in the last table. All keys here work in `2.1.326`. Most keys are booleans.
 
 ## Example
 
@@ -93,5 +93,5 @@ These keys live in `~/.claude.json`, not in a settings file. The `/config` comma
 
 [^program]: The program.
 [^desktop-local]: The program, `2.1.305`.
-[^fast-key]: The program, `chunk-x4fdscgs.js:407767` and `:408067`.
+[^fast-key]: The program, `chunk-d73xe1mr.js:410398` and `:410698`.
 [^subkeys]: The program.

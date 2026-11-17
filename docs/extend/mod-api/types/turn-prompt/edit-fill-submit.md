@@ -226,7 +226,7 @@ The input of `prompt.submit` as the call of a plugin takes it. `PromptSubmitInpu
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `asUser` | <Documented /> | Submit the text as the words of the person. The model reads it bare, without the "The &lt;plugin> plugin sent a message" frame. Absent means framed. | Type: `true`. Optional. The origin that hooks see stays `{ kind: 'plugin', name, asUser: true }`. The engine does not expand `@file` mentions and pasted images for the prompt of a plugin. |
+| `asUser` | <Documented /> | Submit the text as the words of the person. The model reads it bare, without the "The &lt;plugin> plugin sent a message" frame. Absent means framed. | Type: `true`. Optional. The origin that hooks see stays `{ kind: 'plugin', name, asUser: true }`. The engine does not expand `@file` mentions and pasted images for the prompt of a plugin. Since `2.1.326`, the turn is listed in `/rewind`, as a typed prompt is. |
 
 ### `PromptSubmitAttachment`
 
@@ -285,4 +285,4 @@ What a `prompt.submit` hook returns, and what `next(e)` resolves to: the prompt 
 
 ## Sources
 
-[^shared-sections]: The program, `chunk-2x9ma4k7.js:2638354`, `TTn`.
+[^shared-sections]: The program, `chunk-4h798pp0.js:2762277`, `TTn`.

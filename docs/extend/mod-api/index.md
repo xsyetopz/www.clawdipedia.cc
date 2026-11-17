@@ -6,7 +6,7 @@ sidebar_position: 1
 
 A mod is a plugin whose code runs inside Claude Code. Claude Code calls the code when an event happens, such as a tool call or a submitted prompt. The code can watch the event, change it, or answer it.
 
-The object `$` is the Mod API. The type file that Claude Code publishes marks it as early access, so it may change between releases. These pages cover `2.1.323`. To load a mod, put it in a plugin folder with a `hooks/hooks.json` file. See [A First Mod](#a-first-mod).
+The object `$` is the Mod API. The type file that Claude Code publishes marks it as early access, so it may change between releases. These pages cover `2.1.326`. To load a mod, put it in a plugin folder with a `hooks/hooks.json` file. See [A First Mod](#a-first-mod).
 
 Official pages: [Mods Overview](https://code.claude.com/docs/en/plugins/mods/overview), [Create a Mod](https://code.claude.com/docs/en/plugins/mods/create), [Use the Mods API](https://code.claude.com/docs/en/plugins/mods/api), [React to Events](https://code.claude.com/docs/en/plugins/mods/events), [Draw in the Interface](https://code.claude.com/docs/en/plugins/mods/interface), [Test a Mod](https://code.claude.com/docs/en/plugins/mods/test), [Troubleshoot a Mod](https://code.claude.com/docs/en/plugins/mods/troubleshoot), and [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference).
 
@@ -146,6 +146,11 @@ The [type pages](types/index.md) hold the detailed shapes of inputs and results.
 
 Each entry compares a type file with the one before it. The type file and the program were last compared in full on `2.1.305`.
 
+- `2.1.326`, compared with `2.1.323`:
+  - Adds the render components `AgentRow` and `ContextMenu`, the element `Shader` to the desktop and mobile tables, and `UiPointerResult` (see [UI Elements](./ui/ui-elements.md)).
+  - Adds the calls `$.session.info`, `$.agent.call`, `$.agent.limits`, `$.wasm.compile`, and `$.process.hookEnv`, and the events `session.stop`, `tool.judge`, `tool.run`, and `ui.pointer`.
+  - Adds `offset` and `length` to `$.fs.read`, `provides` to `plugin.register`, `mcpServer` to `ToolDescribeInput`, and `hasUnknownPrice` to `SessionCost`. A spawn's `parentAgentId` can now name a running or resting agent.
+  - Adds the `claude plugin validate --json` report types (see [Plugin CLI](../plugins/cli.md#validate-json-report)), and makes `SpeakRequest` one flat type.
 - `2.1.323`, compared with `2.1.322`:
   - Changes `$.theme.set`: `backdrop.id` is now `backdrop.scene`, `backdrop` may be a still ground (`ThemeGround`: a color, a gradient, or a vector), and `colorScheme` is now the top-level `overrideColorScheme` (see [UI Methods](./ui/ui.md)).
   - Adds the element `Progress` to every surface table except `ClientElements`, the type `AbovePromptRow`, the render component `AbovePromptList`, and `tool.list` to `InvalidatableEventName`.
@@ -206,8 +211,8 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^types]: The Mod API type file of the `2.1.323` program, published unchanged as `schemas/claude-code.d.ts`.
+[^types]: The Mod API type file of the `2.1.326` program, published unchanged as `schemas/claude-code.d.ts`.
 [^prompt-edit]: The program.
 [^rollout]: The program. The server flag is `tengu_plugin_hooks_modules`.
 [^re-entry]: The program.
-[^paint]: The program, `chunk-s82q53mp.js:11897`.
+[^paint]: The program, `chunk-fvkvyefp.js:13148`.

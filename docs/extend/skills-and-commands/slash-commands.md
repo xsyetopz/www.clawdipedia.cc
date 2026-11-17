@@ -109,7 +109,7 @@ Each line is a separate command. The text after the name is the argument.
 | Command | Status | What it does | Notes |
 | --- | --- | --- | --- |
 | `/usage-credits` | <Gated note="Env var DISABLE_EXTRA_USAGE_COMMAND not set, and the account can use credits." /> | Configures usage credits, or asks your admin for them at a limit. | Panel and text form. |
-| `/upgrade` | <Gated note="Availability claude-ai, env var DISABLE_UPGRADE_COMMAND not set, plan is not enterprise." /> | Upgrades your plan for higher rate limits and more Opus (the description in `2.1.319`; `2.1.316` said "Upgrade to Max for higher rate limits and more Opus"). | Panel. The command is on only when a server flag is off, `DISABLE_UPGRADE_COMMAND` is not set, and the plan is not enterprise. With a fake API key it gives `Unknown command: /upgrade`. In a real login the typed `/upg` listed only `/rate-limit-options`, so that account does not get `/upgrade` and no run shows its description.[^upgrade] |
+| `/upgrade` | <Gated note="Availability claude-ai, env var DISABLE_UPGRADE_COMMAND not set, plan is not enterprise." /> | Upgrades your plan for higher rate limits and more Opus (the description in `2.1.319`; `2.1.316` said "Upgrade to Max for higher rate limits and more Opus"). | Panel. The command is on only when a server flag is off, `DISABLE_UPGRADE_COMMAND` is not set, and the plan is not enterprise. With a fake API key, `2.1.323` gave `Unknown command: /upgrade`. Since `2.1.326`, it gives `/upgrade needs a Claude subscription. This session uses ANTHROPIC_API_KEY instead.` See [When a Command Is Off](#when-a-command-is-off). In a real login the typed `/upg` listed only `/rate-limit-options`, so that account does not get `/upgrade` and no run shows its description.[^upgrade] |
 | `/project` `[Project ID or claude.ai address] [--save] \| clear [--save]` | <Undocumented /> <Gated note="Needs a claude.ai login and the server flag tengu_gentle_cupcake." /> | Sets the claude.ai Project that this session names in usage reports. It takes a Project ID or an address such as `https://claude.ai/project/<ID>`. `--save` keeps it for the folder in `attributionProject`. `clear` removes it. The variable `CLAUDE_CODE_ATTRIBUTION_PROJECT` wins over it, and managed settings can stop it. A one-shot `claude -p` run ends before a request uses it. New in `2.1.319`. With a fake API key the command is not in the list: "Unknown command: /project".[^project] | Text command. |
 | `/use-case` `[use case]` | <Undocumented /> <Gated note="Needs a claude.ai login, a workspace, and the server flag tengu_federated_possum. Hidden when the program has no use case to list." /> | Chooses the Life Sciences use case that applies to your requests. It ties to the variables `CLAUDE_CODE_PROGRAM_USE_CASE_ID` and `CLAUDE_CODE_PROGRAM_USE_CASE_STAMPED` and to the beta `program-use-case-ids`. New in `2.1.319`. With a fake API key: "Unknown command: /use-case".[^use-case] | Panel. |
 | `/pro-trial-expired` | <Undocumented /> | Options shown when the Pro plan trial ends. | Hidden. The UI shows it. You do not type it. |
@@ -265,34 +265,34 @@ Each row is a family of messages. The backticked text is the start that every me
 [^login-privacy]: The program, `chunk-rrxbrq23.js:33-50` and `chunk-d73xe1mr.js:18994-18996`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
 [^login]: The program, `chunk-1sk1fatq.js:7-31`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^count]: The program, the command objects. `/keybindings`, `/release-notes`, `/rewind`, `/chrome`, `/statusline`, and `/sandbox` are missing from the program inventory file because of the key order in their objects. The program itself has them. Official page: [Commands](https://code.claude.com/docs/en/commands).
-[^diff]: The program, `chunk-rszfmg4b.js:30037`.
-[^more-models]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-1xmjf4e6.js:719561`.
+[^diff]: The program, `chunk-fnr2psn2.js:30588`.
+[^more-models]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-y9bdpp8r.js:762589`.
 [^fast-vertex]: [`2.1.322` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.322). Probe cases `print.cli322.fast-vertex-global`, `.fast-vertex-us`, `.fast-vertex-eu`.
-[^fast-notice]: The program, `chunk-63td8kgj.js`.
-[^fast-labels]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-x4fdscgs.js:402842`, `chunk-qczvx9vm.js:18383`.
-[^config-panel]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-qczvx9vm.js:24182`, `chunk-kpnan531.js:1395`.
-[^terminal-note]: The program, `chunk-3mq1sw8h.js:12946`, `MYr`. `2.1.322` has no such note.
+[^fast-notice]: The program, `chunk-mr4jhpdh.js`.
+[^fast-labels]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-d73xe1mr.js:405473`, `chunk-h6sz1831.js:18810`.
+[^config-panel]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-h6sz1831.js:24607`, `chunk-nqb5kdg0.js:1399`.
+[^terminal-note]: The program, `chunk-gnqb58r1.js:14299`, `MYr`. `2.1.322` has no such note.
 [^auto-setup]: The program.
 [^help]: The program, `chunk-4h798pp0.js:113442` and `chunk-y9bdpp8r.js:113030-113052`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^upgrade]: The program ships the text in its command table. The flag is `tengu_idle_amber_finch`. Probe case `pty.cli319.slash.upgrade` (fake key) gives `Unknown command: /upgrade`. Probe case `live.cli319.upgrade-typeahead` (real login, typed `/upg`, no Enter) lists only `/rate-limit-options`, whose text holds "upgrade options".
-[^project]: Probe case `pty.cli319.slash.project`. The program, the command table: `isEnabled: Hys() && k("tengu_gentle_cupcake")` until `2.1.319`, and `isEnabled: mvs() && k(ywr, !1)` since `2.1.321`, where `ywr` is `"tengu_gentle_cupcake"` (`chunk-2x9ma4k7.js:2006746`). In `2.1.323` the flag name is `T0r` and still holds `"tengu_gentle_cupcake"` (`chunk-2x9ma4k7.js:2006741`). The gate is the same; only the minified names changed.
+[^upgrade]: The program ships the text in its command table. The flag is `tengu_idle_amber_finch`. Probe case `pty.cli319.slash.upgrade` (fake key) gave `Unknown command: /upgrade` in `2.1.323` and gives `/upgrade needs a Claude subscription. This session uses ANTHROPIC_API_KEY instead.` in `2.1.326`; the program, `chunk-gn1ntjav.js:126-173`. Probe case `live.cli319.upgrade-typeahead` (real login, typed `/upg`, no Enter) lists only `/rate-limit-options`, whose text holds "upgrade options".
+[^project]: Probe case `pty.cli319.slash.project`. The program, the command table: `isEnabled: Hys() && k("tengu_gentle_cupcake")` until `2.1.319`, and `isEnabled: mvs() && k(ywr, !1)` since `2.1.321`, where `ywr` is `"tengu_gentle_cupcake"` (`chunk-4h798pp0.js:2113710`). In `2.1.323` the flag name is `T0r` and still holds `"tengu_gentle_cupcake"` (`chunk-4h798pp0.js:2113705`). The gate is the same; only the minified names changed.
 [^use-case]: Probe case `pty.cli319.slash.use-case`. The program, the command table: `isEnabled: Y0() && !Tt()`.
 [^remote-bang]: The program.
-[^stickers]: The program, `chunk-2x9ma4k7.js:2359835`. The output is in `chunk-642768bz.js`.
-[^name-rule]: The program, `chunk-2x9ma4k7.js:65335`, `:65339`, and `:178527`.
-[^name-type]: The program, `chunk-2x9ma4k7.js:64118`. In `2.1.311` the same loop made no such check (that build is not in the `2.1.321` capture).
-[^file-errors]: The program, `chunk-2x9ma4k7.js:179200`.
+[^stickers]: The program, `chunk-4h798pp0.js:2479604`. The output is in `chunk-s9e02cqw.js`.
+[^name-rule]: The program, `chunk-4h798pp0.js:68289`, `:68293`, and `:186772`.
+[^name-type]: The program, `chunk-4h798pp0.js:67050`. In `2.1.311` the same loop made no such check (that build is not in the `2.1.321` capture).
+[^file-errors]: The program, `chunk-4h798pp0.js:187453`.
 [^v312]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312). The program code does not show that link.
 [^delete]: The program, the `/artifacts` panel.
 [^fix-lines]: The program, the `/usage` fix lines.
-[^fix-hours]: The program, `chunk-8ye6xbqs.js:8278`. `2.1.322` has no such text.
-[^fix-subagent]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-8ye6xbqs.js:8246`.
+[^fix-hours]: The program, `chunk-csjmq9tx.js:8278`. `2.1.322` has no such text.
+[^fix-subagent]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-csjmq9tx.js:8246`.
 [^usage-scopes]: The program, the `/usage` panel.
 [^v312-text]: The program. No `2.1.312` run reached the usage endpoint.
 [^unseen]: The program.
 [^usage-sources]: The program.
-[^channel-api]: The program, `chunk-6jd11p1d.js:200`.
+[^channel-api]: The program, `chunk-xx0p55yz.js:41`.
 [^cd-taller]: The program, `chunk-q43jj74r.js:390`, `chunk-q43jj74r.js:403`, and `chunk-q43jj74r.js:414`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^rewind-skip]: The program, `chunk-y9bdpp8r.js:22895-22920` and `chunk-3zn9cw12.js:3144`. The release notes say this applies on macOS, Linux, and WSL when the sandbox is on. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^status-features]: The program, `chunk-gn1ntjav.js:90-124`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

@@ -97,6 +97,35 @@ Since `2.1.326`, a plugin whose `plugin.json` has a malformed display field, suc
 
 Since `2.1.326`, the `/plugin` questions to uninstall a plugin, remove a marketplace, and switch a plugin to another copy are lists. Move with the arrow keys and press Enter to answer, or press Esc to cancel. The keys `y`, `n`, and `u` no longer answer them.[^plugin-lists]
 
+## Validate JSON Report
+
+Since `2.1.326`, the Mod API type file declares the shape of what `claude plugin validate --json` prints as `PluginValidateReport`. It is a public contract: Claude Code adds fields and renames or retypes none. Names are the true spelling of the author, never cut or cleaned, so a program that prints one must scrub it first. On an unexpected failure (exit code 2), the command prints nothing to stdout. A file entry with no `modules` comes from an older CLI.[^validate-report]
+
+| Field | Status | What it holds |
+| --- | --- | --- |
+| `success` | <Documented /> | The verdict under the flags given (`--strict` counts warnings). It is true exactly when the exit code is 0. |
+| `strict` | <Documented /> | Whether `--strict` was given. |
+| `target` | <Documented /> | The manifest path that was validated, or the component directory. |
+| `manifest` | <Documented /> | The `plugin.json` or `marketplace.json`, as one file entry. Null for a bare skills, agents, or commands directory. |
+| `contents` | <Documented /> | Each other file entry with an error, a warning, or a note. A hooks file that names a module is always listed. |
+| `provides` | <Documented /> | What `plugin.register` carries as `e.provides` for an installed copy of the folder (`PluginProvides`). Null when it was not read: a target that is no plugin folder, one with errors, or one with a hooks or server file left unread. A report from an older CLI leaves it out. |
+| `advice` | <Documented /> | What the validator advises without counting it under any flag. Today, it is the install line that the README of a plugin lacks. Each item has `file`, `message`, and `installLine`. |
+| `directory` | <Documented /> | The checks of the plugin directory, which count under `--profile directory` alone. Null when they had nothing to run on and that was not passed. It holds `profile`, `findings`, `notes`, `undecided` (rule ids that could not be decided), `incomplete`, and `failure`. A finding has `code`, `title`, `severity` (`error`, `warning`, or `info`), `blocking`, `hold`, `file`, `field`, `message`, and `fix`. |
+
+A file entry (`PluginValidateFile`) has these fields.
+
+| Field | Status | What it holds |
+| --- | --- | --- |
+| `file` | <Documented /> | Where the findings were read from. It is a label that may be cleaned and cut, not a path to open. |
+| `type` | <Documented /> | Which check made the entry: `plugin`, `marketplace`, `skill`, `agent`, `command`, `hooks`, or `mcp`. |
+| `errors`, `warnings` | <Documented /> | Findings, each with `path` (a dotted JSON path, a frontmatter key, `root`, or `json`), `message`, and `code` (always null today). The file failed exactly when `errors` holds something. |
+| `notes` | <Documented /> | Display lines of what the validator knows beyond pass or fail. Since `2.1.326`, the lists of hooks, calls, and nouns are notes, and they fail nothing. |
+| `gatingHooks` | <Documented /> | Each hook at a site whose answer can refuse what was asked, except a `command.run` hook that answers its own command. A row has `module`, `pattern`, `hook`, and `hasCatch`. It is a fact for the author, never a verdict. |
+| `wasm` | <Documented /> | What the `$.wasm.compile` calls of the module compile. A row has `module` and `file`; `file` is null for bytes that the module makes at run time, else `path`, `size`, `sha256`, `imports`, and `exports`. |
+| `modules` | <Documented /> | What the hooks module that the file names does (`PluginValidateModule`). Null when it was not read. Each item has `module`, `uses`, `hooks`, `nextTo`, `telemetry`, `clients`, `breaksPromptCache`, `nouns`, and `shaders`. |
+
+In a module item, each `hooks` row is one `on(...)` call: `pattern`, `matcher` (`{ has: {} }` for none), `defaultKeys` (the matcher keys that the engine fills in), `isGate`, and `hasCatch`. `nouns` is null when the `engine.create` hook is outside the one form that validate reads. Else it has `adds`, `addsUnlessThere`, `withholds` (a list, or `'everything'`), and `replaces`. `shaders` has one item for each file that a `Shader` element names, or is null when that is not all known. An item has `module`, `verdict` (`any`, `fast`, or `refused`), `refusal` (`line` and `message`), and `cost` (null when the file was refused before it was costed). A cost is the worst case in a window of 1512x945 points: `sharpness`, `fps` (30 or 60), `passes`, `reads`, `steps`, `guards`, `bytes`, `bits`, and `dearest` (up to three lines with their share of the work).
+
 ## Errors
 
 Each row is a family of messages. The backticked text is the start that every message in the family shares.
@@ -108,7 +137,7 @@ Each row is a family of messages. The backticked text is the start that every me
 | `focus file` | <Undocumented /> | `claude plugin eval` could not read a focus file. | The file does not exist, is unreadable, or is not a regular file. It has more than one hard link, is over the size limit, or changed during the read. |
 | `git metadata file` | <Undocumented /> | `claude plugin eval` refused a git metadata file. | The file is not a plain readable file, is not a regular file, or is larger than the byte limit. |
 | `output base`, `output location`, `refusing to write`, `refusing to open through`, `refusing to use`, `append to ${…} made no progress`, `not a directory:`, `no variant directories`, `${…}/ has no result rows` | <Undocumented /> | A report or scaffold step refused to write or read a path. | The path is outside the allowed root or holds a `.` or `..` segment. It is a symbolic link or passes through one. It is not a regular file, has a second hard link, or is not a directory. |
-| `Error: ${…} cannot be evaluated`, `Error: ${…} has a recorded install path`, `plugin eval:`, `claude plugin eval can't`, `git on this host did not`, `git ${…}.${…} is too old`, `judge call failed`, `No TTY available`, `results directory`, `${…} case file(s) failed`, `Interrupted — finishing up`, `Terminated — finishing up`, `Note: --scaffold`, `warning: eval result`, `warning: --json result`, `Publishing is unavailable`, `Skipped publishing`, `Publishing report to claude.ai`, `Published:` | <Undocumented /> | `claude plugin eval` could not run, or printed a notice. | The plugin cannot be evaluated where sessions load it. Git is missing or too old. The judge call failed. No TTY is available for the authoring interview. A results directory already existed. Case files failed to load. The run was interrupted. Publishing was unavailable or skipped. The result does not match the schema. |
+| `Error: ${…} cannot be evaluated`, `Error: ${…} has a recorded install path`, `plugin eval:`, `claude plugin eval can't`, `git on this host did not`, `git ${…}.${…} is too old`, `judge call failed`, `No TTY available`, `results directory`, `${…} case file(s) failed`, `Interrupted — finishing up`, `Stopped — finishing up`, `Note: --scaffold`, `warning: eval result`, `warning: --json result`, `Publishing is unavailable`, `Skipped publishing`, `Publishing report to claude.ai`, `Published:` | <Undocumented /> | `claude plugin eval` could not run, or printed a notice. | The plugin cannot be evaluated where sessions load it. Git is missing or too old. The judge call failed. No TTY is available for the authoring interview. A results directory already existed. Case files failed to load. The run was interrupted. Publishing was unavailable or skipped. The result does not match the schema. |
 | `the run created`, `the run made more`, `the run was granted artifact publishing`, `the run's artifact-publish`, `the case's scaffold`, `a corroborated artifact publish`, `the stub publish directory`, `the kept directory`, `the harness is running as root`, `directory modes do not`, `the directory modes`, `the sealed directory`, `home/ or tmp/`, `the operator's home`, `the home, Claude config`, `a cloud credential file`, `the Anthropic profile configs`, `a PATH directory could not`, `the organization policy snapshot`, `A shell tool was granted`, `${…} could not be examined after`, `${…} became a symlink`, `${…} already exists; refusing`, `${…} is a symlink`, `${…} is a directory, not a file`, `${…} could not be opened`, `${…} changed while being opened`, `${…} is not a regular file`, `${…} is hard-linked`, `${…} (this machine's managed settings`, `${…} directory name`, `${…} is on a network (UNC) path`, `${…} was not written by this run`, `${…} already exists and was not written`, `${…} no longer holds`, `${…} is no longer the directory`, `${…} vanished from`, `${…} is ${…} bytes (cap`, `${…} changed while being read`, `${…}/`, `${…} is not a directory`, `case ${…}`, `recording name`, `value nested too deep` | <Undocumented /> | `claude plugin eval` refused to run because a path, folder, or environment failed a safety check. | A file is a symbolic link, is hard-linked, is not a regular file, changed during the read, or is over its cap. A folder is not the one the harness created, has a glob character in its path, or is on a network (UNC) path. Folder modes did not take effect. The harness runs as root. A shell tool was granted, but the sandbox cannot exclude a home or credential path. The run created a name that is reserved for artifact publishes. The run was granted artifact publishing, but the child was not offered the stand-in tool. As a result, the local Artifacts server did not attach. |
 | `${…}: frontmatter`, `${…}: unknown frontmatter key`, `${…}: invalid YAML frontmatter`, `${…}: unterminated frontmatter` | <Undocumented /> | A grader or responder file has bad frontmatter. | A key is not known. `type:` is missing (it is one of regex, tool_order, tool_used, file_exists, llm, baseline). The opening `---` has no closing one. The YAML is invalid. |
 | `--config expects`, `--config key`, `--config ${…}`, `--config validation failed`, `--config was given`, `Aborted — the command was not run` | <Undocumented /> | `claude plugin install` refused `--config`. | The value is not `KEY=VALUE`. The plugin's `userConfig` does not declare the key, or more than one bundled MCP server declares it. A value is empty, not a number, or not a boolean (use true/false, 1/0, yes/no, on/off). The plugin failed to load after the install. |
@@ -124,12 +153,13 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^cowork]: The program.
-[^install-json]: The program, `chunk-1wgffhvx.js:17521`.
-[^restore]: The program, `chunk-y3tc9w2j.js:21575`.
+[^install-json]: The program, `chunk-esb15jzb.js:17475`.
+[^restore]: The program, `chunk-cdgwqjfr.js:21482`.
 [^validate]: The program.
-[^validate-ts]: The program, `chunk-xq1041h8.js:49623`.
-[^engine-create]: The program, `chunk-xq1041h8.js:38806`.
-[^agent-dep]: The program, `chunk-xvwfyath.js:11364`.
+[^validate-report]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`, `PluginValidateReport` and the types that it names.
+[^validate-ts]: The program, `chunk-rsdn630x.js:59253`.
+[^engine-create]: The program, `chunk-rsdn630x.js:43754`.
+[^agent-dep]: The program, `chunk-kek2xxjw.js:7839`.
 [^output-dir]: The program, `chunk-5w1qg79z.js:13383`.
 [^clone]: The program, `chunk-4h798pp0.js:252421`.
 [^mcpb]: The program, `chunk-nhfp95ss.js:160-168`.

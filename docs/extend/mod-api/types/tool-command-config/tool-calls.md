@@ -89,6 +89,7 @@ The input of `tool.describe`: the description of one tool, at the moment the eng
 | `description` | <Documented /> | The description of the tool as the tool computed it. | Type: `string`. |
 | `isDeferred` | <Documented /> | Present, and true, when the engine lists the tool behind ToolSearch. Its schema loads when the model asks for it by name. Absent for a tool that the engine lists in front. | Type: `true`. Optional. The tool of an MCP server loads on demand, and so does a tool that asks to. A plugin tool with `isDeferred: false` stays in front. |
 | `provider` | <Documented /> | Who provides this tool: the plugin and its tier, or `{ plugin: "engine", tier: "core" }` for a built-in. Pinned: the engine refuses a rewrite. | Type: `Origin`. The tool of a configured MCP server is `mcp:<server>`. It is in `prepend` when the policy settings source configures the server, else in `user`. |
+| `mcpServer` | <Documented /> | Since `2.1.326`, the MCP server that the tool comes from, read off the connection that listed it. A config file need not be read, and a server added at runtime is covered. Pinned: the engine refuses a rewrite that changes or adds it, and restores it when a rewrite leaves it out. | Type: `ToolMcpServer`. Optional. Absent on any other tool (a built-in, or one of a `tool.list` hook) and on an MCP tool whose server facts are not known.[^tool-mcp-server] |
 
 ### `ToolDescribeResult`
 
@@ -157,6 +158,16 @@ The input of `tool.judge`. Since `2.1.326`, it is the question of `tool.check` a
 
 The other fields are those of [`ToolCheckInput`](#toolcheckinput).[^tool-judge]
 
+### `ToolMcpServer`
+
+The MCP server that a tool comes from, as `tool.describe` reports it in `mcpServer`. Since `2.1.326`. Used by `tool.describe`.
+
+| Field | Status | What it is for | Type and limits |
+| --- | --- | --- | --- |
+| `type` | <Documented /> | The transport in the config of the server. A config with no `type` reads `stdio`. | Type: `'stdio' \| 'http' \| 'sse' \| 'ws' \| 'sdk' \| 'sse-ide' \| 'ws-ide' \| 'claudeai-proxy'`. |
+| `origin` | <Documented /> | Where the server is: scheme, host, and a port that is not the default, as WHATWG `URL.origin` gives it, of the URL after `${VAR}` expansion. Never a login, path, query, or fragment. An entry on a session proxy reads the host dialed, not the server that the proxy reaches. | Type: `string`. Optional. Absent for `stdio` and `sdk`; for a URL that does not parse or has no origin of its own; for a connector whose address claude.ai withholds; for a `claudeai-proxy` entry with no route to dial; and for a server that the tool container of a cloud session relays, whatever its `type`. |
+| `connectorId` | <Documented /> | The ID of the claude.ai connector, only where it is vouched for: the own connector of claude.ai, or the `connectorId` that a host states on its own `sdk` entry. Never one written in a file, a plugin, or `--mcp-config`. | Type: `string`. Optional. |
+
 ### `ToolNamed`
 
 An input that names its tool as the literal `T`. `next` and `$.tool.call` read it to type the result of the call for each tool (NextResultFor).
@@ -224,6 +235,7 @@ One tool_use block of an assistant message, with its outcome once the transcript
 [^ceiling-result]: `schemas/claude-code.d.ts`, `ToolCheckInput`.
 [^decider]: The program.
 [^break-cache]: `captures/2.1.321/types.diff`.
-[^tool-info]: `schemas/claude-code.d.ts`, `ToolInfo`. The program, `chunk-620k1a78.js:105325`, `chunk-2x9ma4k7.js:4502683`.
-[^op-hold]: `opHoldMs: 30000`, `chunk-s82q53mp.js:201764`.
+[^tool-info]: `schemas/claude-code.d.ts`, `ToolInfo`. The program, `chunk-vehym80v.js:122549`, `chunk-4h798pp0.js:4729396`.
+[^tool-mcp-server]: `schemas/claude-code.d.ts`, `ToolDescribeInput` and `ToolMcpServer`.
+[^op-hold]: `opHoldMs: 30000`, `chunk-fvkvyefp.js:218187`.
 [^tool-judge]: `schemas/claude-code.d.ts`, `ToolJudgeInput`. The program, `chunk-3epcmdpn.js:19-20`.

@@ -129,7 +129,7 @@ Rows with a start of a message are families. The backticked text is the start th
 | Start of Message | Status | What It Means | Cases |
 | --- | --- | --- | --- |
 | `.mcp.json is malformed (not valid JSON, or mcpServers is not an object)` | <Undocumented /> | Claude Code could not read the project `.mcp.json`. | The file is not valid JSON, or `mcpServers` is not an object. Since `2.1.326`, for broken JSON the error carries the line and column of the first syntax error. Its message is "MCP config is not a valid JSON" and suggests "Fix the JSON syntax errors in the file".[^json-position] |
-| `MCP server "` | <Undocumented /> | A tool call or command named a server that cannot be used. | Managed policy blocks the server, the server is disabled (re-enable it with `/mcp`), or Claude Code did not find it. |
+| `MCP server "` | <Undocumented /> | A tool call or command named a server that cannot be used. | Managed policy blocks the server, the server is disabled (re-enable it with `/mcp`), or Claude Code did not find it. Since `2.1.326`, your organization's connector settings can also hold a server. Then Claude Code does not send a message to the server, or does not show the question the server asks. The text says whether the settings do not allow the server or could not check it. Try again shortly, or ask your administrator.[^connector-hold] |
 | `Server "` | <Undocumented /> | A server operation failed. | The server does not support resources, is not connected, or was not found. The last case lists the available servers. |
 | `No MCP server named` | <Undocumented /> | A server name is not in the scope that the command searched. | The scope is `.mcp.json`, local, or user. |
 | `StdioClientTransport already started`, `MCP tool call to server`, `Missing required ${…}: ${…}. Usage: /mcp__`, `The tool call was interrupted`, `Unsupported server type`, `claude.ai MCP proxy is not available`, `No claude.ai OAuth token`, `The "${…}" connector`, `"${…}" was disabled while reconnecting`, `Connection failed`, `Server status:`, `The result of MCP tool` | <Undocumented /> | An MCP server or tool call failed. | One of these causes applies. The server or client does not support a capability that the call needs (roots, sampling, elicitation, tasks, resources). The tool call was interrupted or aborted because the account changed. A required argument is missing. The server type is not supported. |
@@ -145,11 +145,12 @@ Rows with a start of a message are families. The backticked text is the start th
 ## Sources
 
 [^undoc]: The program, for rows marked <Undocumented />.
-[^schema-checks]: The program, `chunk-qnbq0cf3.js:180221` and `chunk-8fw1gbv7.js:9594`.
+[^schema-checks]: The program, `chunk-j76re4j2.js:198970` and `chunk-15b1e2ff.js:8842`.
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^registry]: The program, `chunk-x4fdscgs.js:920495`.
+[^registry]: The program, `chunk-d73xe1mr.js:943142`.
 [^answer-later]: The program, `chunk-y9bdpp8r.js:84336`, `chunk-y9bdpp8r.js:84403`, `chunk-3gmv67w3.js:496`, `chunk-av04ye68.js:34`, and `chunk-6w6hs8a0.js:359`. The task puts the question aside and sends no response to the server. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
 [^answer-later-notes]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^task-question-closed]: The program, `chunk-y9bdpp8r.js:47602`, `chunk-y9bdpp8r.js:56229-56275`, `chunk-6w6hs8a0.js:208-232`, and `chunk-av04ye68.js:30-35`. The task row and the footer show `needs your input`. Enter in the task detail calls the stored question opener. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
 [^task-question-draft]: The program, `chunk-70p69fbk.js:133-152`. The question dialog of a background MCP task is requested with `alsoHideWhile: ["draft"]`. The wait for the send or the clear comes from the [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325), which also say the spinner and turn timer keep running.
 [^json-position]: The program, `chunk-bwzce3yt.js:1283-1297` and `chunk-4h798pp0.js:229650-229670`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^connector-hold]: The program, `chunk-4h798pp0.js:228213-228256`.

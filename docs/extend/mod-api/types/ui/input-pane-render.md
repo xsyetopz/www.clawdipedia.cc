@@ -4,7 +4,7 @@ description: "Types of Input, Link, Markdown, notify options, panes, Raster, and
 sidebar_position: 2
 ---
 
-These types describe the `Input`, `Link`, `Markdown`, `Progress`, and `Raster` elements, the options of `$.ui.notify`, the panes, and the inputs and results of `ui.render`. Use them to type the props that a mod draws with and to read what a render hook receives. Each type below has its own table of fields.
+These types describe the `Input`, `Link`, `Markdown`, `Progress`, `Raster`, and (since `2.1.326`) `Shader` elements, the options of `$.ui.notify`, the panes, and the inputs and results of `ui.render`. Use them to type the props that a mod draws with and to read what a render hook receives. Each type below has its own table of fields.
 
 ## Types with Fields
 
@@ -137,6 +137,15 @@ The props of `Progress`, how far along a task is. A leaf: no children. Use it fo
 | `valueText` | <Documented /> | The figure as a person reads it, such as `412 of 900`. | Type: `string`. Optional. Absent, a surface draws the whole percent, or says the task is running. |
 | `color` | <Documented /> | The fill, as the `backgroundColor` of a Box takes it. | Type: `Color`. Optional. Absent, the surface's own. |
 
+### `ShaderProps`
+
+The props of `Shader`, a scene that the `desktop` surface plays on the GPU: the shader file that `module` names, fed `values`, over one `Svg` child. The `mobile` surface shows the `Svg` alone. It draws in a `Backdrop` alone, one at most. See [Shader Element](../../ui/ui-elements.md#shader-element) for the rules. Since `2.1.326`.[^shader-props]
+
+| Field | Status | What it is for | Type and limits |
+| --- | --- | --- | --- |
+| `module` | <Documented /> | The path of the shader file, relative to the file of the hook. | Type: `string`. A string literal, written in the `Shader` element itself: `module="./beam.ts"`. The engine reads it off the source. A variable, a renamed `Shader`, a path outside the plugin, or no such file leaves the `Svg`; the mod still loads. |
+| `values` | <Documented /> | Finite numbers under the names that `values({ ... })` of the file declares. A redraw that changes only these keeps the shader running and eases it to them. | Type: `{ readonly [name: string]: number }`. Optional. 8 at most, each held to its range; one left out is its low end. Another name is refused. The app rounds each to 10 bits of its range and clears the buffers of the shader once many have changed. Send state, never a stream on a timer. |
+
 ### `RasterBlitArgs`
 
 A `$.ui.blit` argument that repaints one of the mounted Rasters of the caller. `columns` and `rows`, when given, must be the mounted size. A resize is a redraw (`$.ui.invalidate("ui.render")`), not a blit.
@@ -203,6 +212,10 @@ What a render hook returns, and what `next(e)` resolves to: a plain-data tree of
 | `type` | <Documented /> | How far along a task is, or that it is still running. Hooks above wrap it, replace it, or rewrite its props. | Type: `'Progress'`. A leaf. A mobile client that names it in `draws` is sent this node. Any other client, on any surface, gets its Box and Text. A surface module cannot draw one. Since `2.1.323`.[^progress-node] |
 | `props` | <Documented /> | The props of the element, typed `ProgressProps`. | Type: `ProgressProps`. |
 | `children` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
+| `type` | <Documented /> | Since `2.1.326`, the scene of a `Backdrop`, played on the GPU over the one `Svg` that shows wherever the scene does not play. | Type: `'Shader'`. |
+| `props` | <Documented /> | The props of the element, typed `ShaderProps`. | Type: `ShaderProps`. |
+| `shader` | <Documented /> | Whose file `props.module` names: the plugin whose hook drew the element. The runtime stamps it as the tree leaves it. | Type: `PluginStamp`. Optional. |
+| `children` | <Documented /> | The `Svg` that shows where the shader does not play. | Type: `RenderNode[]`. Optional. |
 | `type` | <Documented /> | A grid of terminal cells, for the terminal surface alone. Each cell is a glyph, a foreground and a background, packed in `props.cells`. | Type: `'Raster'`. A leaf, one node however many cells. `$.ui.blit` repaints it in place. A surface whose table lacks it refuses the tree. |
 | `props` | <Documented /> | The props of the element, typed `RasterProps`. | Type: `RasterProps`. |
 | `raster` | <Documented /> | Whose Raster: the plugin whose hook drew the element. The runtime stamps it as the tree leaves it. It is the one plugin whose blit reaches it. | Type: `object`. |
@@ -252,9 +265,10 @@ The size that a surface draws into, in character cells of the monospace metric o
 
 ## Sources
 
-[^notify-read]: The program, checks `chunk-2x9ma4k7.js:4543213` (`HEs`), call `chunk-s82q53mp.js:285501`, and the `ui_notify` message `chunk-h3xwema8.js:551765`.
+[^notify-read]: The program, checks `chunk-4h798pp0.js:4774303` (`HEs`), call `chunk-fvkvyefp.js:314112`, and the `ui_notify` message `chunk-bprgtdg6.js:563309`.
 [^dock]: The program. [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^placement]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-h3xwema8.js:556803`.
-[^progress-props]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-s82q53mp.js:21347`.
-[^progress-node]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-h3xwema8.js:845092`.
-[^render-plugin]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-s82q53mp.js:76755`.
+[^placement]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-bprgtdg6.js:568347`.
+[^progress-props]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-fvkvyefp.js:22132`.
+[^progress-node]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-bprgtdg6.js:868314`.
+[^shader-props]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`, `ShaderProps`.
+[^render-plugin]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-fvkvyefp.js:175342`.

@@ -129,6 +129,10 @@ The input of `ui.pointer`. Since `2.1.326`, it tells what the pointer did on the
 | `x` | <Documented /> | The place from the left edge of the backdrop (0) to its right edge (1). | Type: `number`. In steps of 1/64. |
 | `y` | <Documented /> | The place from the top edge of the backdrop (0) to its bottom edge (1). | Type: `number`. In steps of 1/64. The y of a shader points up, so give it `1 - e.y`. |
 
+### `UiPointerResult`
+
+What a `ui.pointer` hook returns, and what `next(e)` resolves to: `{}`. A hook only observes the pointer. Since `2.1.326`.
+
 ### `UiPressArgument`
 
 The argument of `ui.press`: a press on a `Button` that a render hook drew, or on an answered `Markdown` link. It is flat and frozen like every event argument. A hook that names no `plugin` hears the presses of its own plugin only. Another plugin addresses one button by matcher, and `{ plugin: "*" }` addresses the buttons of every plugin: `on("ui.press", { plugin: "explainer", element: "explain" }, ...)`. Since `2.1.323`.[^ui-press] Used by `ui.press`.

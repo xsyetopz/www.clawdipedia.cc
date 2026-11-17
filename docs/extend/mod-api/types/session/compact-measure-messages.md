@@ -93,6 +93,7 @@ What the session has cost, as `/cost` and the status line add it up.
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `usd` | <Documented /> | US dollars, summed over every priced API response in this session. | Type: `number`. |
+| `hasUnknownPrice` | <Documented /> | Since `2.1.326`, present once `usd` includes a model with no known price, which goes at the rates of another model: the note that `/cost` prints. On an agent, only its own requests set it. | Type: `true`. Optional. |
 
 ### `SessionCronSummary`
 
@@ -256,5 +257,5 @@ A `$.session.messages({ as: "api" })` call that names no agent. It reads the mai
 
 ## Sources
 
-[^resume-loader]: The program, `chunk-2x9ma4k7.js`.
+[^resume-loader]: The program, `chunk-4h798pp0.js`.
 [^session-info]: `schemas/claude-code.d.ts`, `SessionInfo`. The program, `chunk-4h798pp0.js:57382`.

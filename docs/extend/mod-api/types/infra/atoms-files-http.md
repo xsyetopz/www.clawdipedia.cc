@@ -110,14 +110,28 @@ The options of `$.fs.read` that ask for the bytes. The call then answers `{ base
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `as` | <Documented /> | `bytes`. | Type: `'bytes'`. |
+| `offset` | <Documented /> | Since `2.1.326`, where the read starts, in bytes. | Type: `number`. Optional. |
+| `length` | <Documented /> | Since `2.1.326`, the most bytes to read. | Type: `number`. Optional. Up to 4 MiB. |
 
 ### `FsReadOptions`
 
-The options of `$.fs.read`. Object with fields `as`.
+The options of `$.fs.read`: how it answers, and, since `2.1.326`, which bytes of the file. Object with fields `as`, `offset`, `length`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `as` | <Documented /> | `bytes` answers `{ base64 }` for a binary file. `text` (the default) answers the text of the file. | Type: `FsReadAs`. |
+| `offset` | <Documented /> | Since `2.1.326`, where the read starts, a whole number of bytes from the start of the file. | Type: `number`. Optional. Absent, the start. Past the end, the read is empty. |
+| `length` | <Documented /> | Since `2.1.326`, the most bytes to read. Fewer come back where the file ends first. | Type: `number`. Optional. A whole number up to 4 MiB. Absent, the rest of the file, refused when over 4 MiB. |
+
+### `FsReadTextOptions`
+
+The options of `$.fs.read` that ask for the text. The call answers a string, with U+FFFD at an edge where the range cuts a character. Since `2.1.326`.
+
+| Field | Status | What it is for | Type and limits |
+| --- | --- | --- | --- |
+| `as` | <Documented /> | `text`, the default. | Type: `'text'`. Optional. |
+| `offset` | <Documented /> | Where the read starts, in bytes. | Type: `number`. Optional. |
+| `length` | <Documented /> | The most bytes to read. | Type: `number`. Optional. Up to 4 MiB. |
 
 ### `FsStat`
 
