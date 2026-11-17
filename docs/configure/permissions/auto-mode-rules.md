@@ -169,5 +169,5 @@ The built-in list has the 21 entries below, one per field label. Write each entr
 
 ## Sources
 
-[^scheduled]: The program, `chunk-rqvvpwt0.js`.
-[^environment]: The program, `chunk-3dhh2g49.js`.
+[^scheduled]: The program, `chunk-caex36kk.js`.
+[^environment]: The program, `chunk-m33vdkhs.js`.

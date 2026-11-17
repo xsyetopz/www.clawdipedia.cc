@@ -119,19 +119,19 @@ Both rows are about a model name that Claude Code does not recognize, such as a 
 ## Sources
 
 [^effort-field]: The program.
-[^cache-warning]: The program, `chunk-1xmjf4e6.js:61444`, `:61480-61485`. Also the [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312).
-[^per-turn]: The program, `chunk-gep2e53q.js:4264`, `:9687`, `:16328`, `:18418`, `:19530`, `:21653` of `2.1.323`. Also the [Claude Code changelog](https://code.claude.com/docs/en/changelog).
-[^ultrathink-submit]: The program, `chunk-fxkn94rg.js:5302` and `chunk-hb73eaq1.js:3699`.
-[^ultrathink-gate]: The program, `chunk-x4fdscgs.js:21399` and `chunk-1xmjf4e6.js:58687`.
-[^note-flag]: The program and the [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312), `chunk-1xmjf4e6.js:65395`.
-[^note-clear]: The program, `chunk-1xmjf4e6.js:64309`.
-[^prompt-text]: The program, `chunk-1xmjf4e6.js:11629`.
-[^request-level]: The program, `chunk-2x9ma4k7.js:155263` and `chunk-2x9ma4k7.js:161428`.
-[^sent-level]: The program, `chunk-1xmjf4e6.js:102413`, `:102420`.
-[^spinner-level]: The program, `chunk-7x2pe6hg.js:1475` and `chunk-2xn4gen7.js:1638-1600`.
-[^model-settings]: The program, `chunk-2xn4gen7.js`.
+[^cache-warning]: The program, `chunk-y9bdpp8r.js:64768`, `:64804-64809`. Also the [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312).
+[^per-turn]: The program, `chunk-9vmv3a50.js:221`, `:448`, `:753`, `:847`, `:896`, `:1001` of `2.1.326`. Also the [Claude Code changelog](https://code.claude.com/docs/en/changelog).
+[^ultrathink-submit]: The program, `chunk-27vawgnx.js:5687` and `chunk-q67vgc7s.js:3691`.
+[^ultrathink-gate]: The program, `chunk-d73xe1mr.js:21260` and `chunk-y9bdpp8r.js:61534`.
+[^note-flag]: The program and the [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312), `chunk-y9bdpp8r.js:68331`.
+[^note-clear]: The program, `chunk-y9bdpp8r.js:67246`.
+[^prompt-text]: The program, `chunk-y9bdpp8r.js:13207`.
+[^request-level]: The program, `chunk-4h798pp0.js:164452` and `chunk-4h798pp0.js:168159`.
+[^sent-level]: The program, `chunk-y9bdpp8r.js:107414`, `:107421`.
+[^spinner-level]: The program, `chunk-w7xs2jdy.js:260` and `chunk-69n3keqc.js:1626-1588`.
+[^model-settings]: The program, `chunk-69n3keqc.js`.
 [^effort-source]: [Model Configuration](https://code.claude.com/docs/en/model-config), section "Adjust effort level", and the program.
-[^should-retry]: The program, `chunk-2x9ma4k7.js:153069`.
-[^overload-delay]: The program, `chunk-79qzet0c.js:44813`. The default is in `chunk-x4fdscgs.js:320880`.
-[^max-wait]: The program, `chunk-79qzet0c.js:44862` and `chunk-2x9ma4k7.js:2986823`. The gate is `tengu_steady_heron`.
-[^refusal]: The program, `chunk-32xrm2zt.js` lines 15723, 15725 to 15732, and 15813 to 15829.
+[^should-retry]: The program, `chunk-4h798pp0.js:159807`.
+[^overload-delay]: The program, `chunk-07n5vvax.js:45637`. The default is in `chunk-2j4zzfx7.js:304`.
+[^max-wait]: The program, `chunk-07n5vvax.js:45686` and `chunk-4h798pp0.js:3114765`. The gate is `tengu_steady_heron`.
+[^refusal]: The program, `chunk-vawgpkfg.js` lines 15723, 15725 to 15732, and 15813 to 15829.

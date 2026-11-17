@@ -74,4 +74,4 @@ In this table, "Base" means `block`, `preventContinuation`, and `stopReason`.
 
 ## Sources
 
-[^types]: The Mod API type file, the `*HookInput` types of `schemas/claude-code.d.ts`, from the `2.1.322` program.
+[^types]: The Mod API type file, the `*HookInput` types of `schemas/claude-code.d.ts`, from the `2.1.326` program.

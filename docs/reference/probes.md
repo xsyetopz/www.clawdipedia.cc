@@ -366,10 +366,10 @@ A change in a header, the system prompt, the tool list, or an event is an effect
 ## Sources
 
 [^cache-touch]: The program, the `cache_touch` request code.
-[^oauth-config]: The program, `chunk-40c7f7c7.js@415`, `function E(){return"prod"}`.
-[^req-id-pattern]: The program, `chunk-fknzn91z.js@415`.
+[^oauth-config]: The program, `chunk-rrxbrq23.js@415`, `function E(){return"prod"}`.
+[^req-id-pattern]: The program, `chunk-b9pvc345.js@224`.
 [^managed-note]: The program text.
-[^managed-note-entry]: The program, `chunk-s82q53mp.js@86054`, `chunk-2x9ma4k7.js@1557842`.
+[^managed-note-entry]: The program, `chunk-fvkvyefp.js@160064`, `chunk-4h798pp0.js@1636160`.
 [^push-flag]: The flag is `tengu_kairos_push_notifications`.
 [^inbox-verified]: The program.
 [^notes-322]: [`2.1.322` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.322).

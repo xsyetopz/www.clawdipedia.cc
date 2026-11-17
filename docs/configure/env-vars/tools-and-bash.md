@@ -175,8 +175,8 @@ While the scrub is on (`CLAUDE_CODE_SUBPROCESS_ENV_SCRUB` true, or `GITHUB_ACTIO
 [^mounted-rm]: The program.
 [^ps-alias]: The program, `chunk-4h798pp0.js:60089`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326) mention the check.
 [^ps-alias-gate]: The gate is `bot_protected_tengu_dynamic_pike`.
-[^git-check]: The program, `chunk-2x9ma4k7.js:1008122` (the read of the variable) and `chunk-2x9ma4k7.js:1008427` (the hook check).
-[^perforce]: The program, `chunk-1xmjf4e6.js:1830874`.
+[^git-check]: The program, `chunk-4h798pp0.js:1056025` (the read of the variable) and `chunk-4h798pp0.js:1056330` (the hook check).
+[^perforce]: The program, `chunk-y9bdpp8r.js:1924567`.
 [^thrifty]: The program. The gate is `tengu_thrifty_sonic`.
 [^native-search]: The program lists the name in its environment table as a boolean.
 [^office-pdf-dir]: The program, `chunk-4bt5ggtq.js:336`.

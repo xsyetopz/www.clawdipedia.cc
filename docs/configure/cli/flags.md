@@ -257,16 +257,16 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^no-row]: The program.
-[^managed-init]: The program, `chunk-9tj6jrqc.js:64543`.
-[^persisted-trust]: The program, `chunk-rqvvpwt0.js:8192` and `chunk-x4fdscgs.js:85193`. The program reads the flag from the arguments.
+[^managed-init]: The program, `chunk-g7cw7kap.js:63044`.
+[^persisted-trust]: The program, `chunk-caex36kk.js:32815` and `chunk-d73xe1mr.js:85743`. The program reads the flag from the arguments.
 [^setting-sources]: The program.
 [^allowed-warn]: The program, `chunk-97e8zgw1.js:4128` and `:4160`.
 [^disallowed-warn]: The program, `chunk-97e8zgw1.js:4128`.
 [^tools-warn]: The program, `chunk-97e8zgw1.js:4140`.
 [^fast-vertex]: Probe case `print.cli322.fast-vertex-flag`.
 [^copy-flag]: The program.
-[^lead-key]: The program, `chunk-9tj6jrqc.js:71266` and `chunk-b5mt6th9.js:29769`.
-[^chrome-restart]: The program, `chunk-1xmjf4e6.js:1397247` and `chunk-3k6k02vw.js:41832`.
+[^lead-key]: The program, `chunk-g7cw7kap.js:69686` and `chunk-6amag46d.js:31234`.
+[^chrome-restart]: The program, `chunk-y9bdpp8r.js:1463034` and `chunk-qb6rgffc.js:42177`.
 [^ccr-host]: The program.
 [^auto-refused]: Probe case `print.err319.auto-mode-print-refused`.
 [^chrome-live]: Live run, case `live.err319`, with `--chrome` and a subscription token.

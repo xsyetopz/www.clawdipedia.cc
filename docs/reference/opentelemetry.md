@@ -102,15 +102,15 @@ The rows above come from the program.[^export-code]
 ## Sources
 
 [^events]: The program.
-[^hook-complete]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program writes both counts at `chunk-2x9ma4k7.js:4013776` after it starts the event at `:3974674`. The two `internal: true` callback hooks are at `chunk-84780akh.js:5892` (post-commit) and `chunk-33jgggfc.js:10111` (post-push).
+[^hook-complete]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program writes both counts at `chunk-4h798pp0.js:4192167` after it starts the event at `:4151026`. The two `internal: true` callback hooks are at `chunk-zc8ekyag.js:6048` (post-commit) and `chunk-y6ncajgm.js:10657` (post-push).
 [^safety-gate]: The program. The gate is `tengu_snoopy_creek`.
 [^mid-turn]: The program, `chunk-27vawgnx.js:4052`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^two-attrs]: The program. The level in force is in `chunk-2x9ma4k7.js` lines 148959, 150468, and 155307. The server name is in `chunk-x4fdscgs.js` lines 52415 to 52428 and 52520 to 52531, with `custom` at line 46109. The `safety_event` gate is in `chunk-2x9ma4k7.js` lines 203596, 203677, 203720, and 203781.
+[^two-attrs]: The program. The level in force is in `chunk-4h798pp0.js` lines 148959, 150468, and 155307. The server name is in `chunk-d73xe1mr.js` lines 53370 to 53383 and 52520 to 52531, with `custom` at line 46109. The `safety_event` gate is in `chunk-4h798pp0.js` lines 203596, 203677, 203720, and 203781.
 [^account-notes]: The `2.1.318` release notes: "Added `anthropic.plan`, `anthropic.seat_type`, `anthropic.provider` and `anthropic.custom_base_url` to OTel metrics, events and spans".
-[^attr-set]: The program. The set is built in `chunk-1p5scy1s.js` (function `$1d9e2a`, line 136). The plan list is on line 116, and the tier map follows it.
+[^attr-set]: The program. The set is built in `chunk-agqs570q.js` (function `$1d9e2a`, line 136). The plan list is on line 116, and the tier map follows it.
 [^probe-attrs]: `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only notes319.otel-attrs`. Cases `api-key`, `max-plan`, `team-premium`, `enterprise-usage-based`, `free-plan`. Each case exports metrics, logs, and traces to a local OTLP receiver (`tools/release/lib/otlp.ts`) with `http/json`.
 [^host-notes]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326): "Added `OTEL_RESOURCE_INCLUDE_HOST` to include `host.name` and `host.id` in OpenTelemetry resource attributes (off by default)".
 [^host-check]: The program, `chunk-7a41jn20.js:1798`. The check is the function `$3f913b` in `chunk-7a41jn20.js`, and the resource is built at `chunk-7a41jn20.js:1831`.
 [^export-notes]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323).
-[^export-code]: The program. The default protocol is at `chunk-gma0wa2s.js@36711` and `@41500`. The loopback check and the 25 second cap are at `chunk-gma0wa2s.js@54350`. The resource attribute parser is at `chunk-br8g301d.js@400`.
+[^export-code]: The program. The default protocol is at `chunk-7a41jn20.js@37369` and `@41500`. The loopback check and the 25 second cap are at `chunk-7a41jn20.js@55746`. The resource attribute parser is at `chunk-x9cwn3h2.js@672`.
 [^managed-denial]: The program, `chunk-4h798pp0.js:222660-222698` and `:233193-233262`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

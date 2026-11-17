@@ -136,8 +136,8 @@ Each row is a family of messages. The backticked text is the start that every me
 [^auth-rows]: The program, for the rows marked <Undocumented /> or <Gated />.
 [^cimd-env]: The program.
 [^xaa-gate]: The program.
-[^xaa-changed]: The program, `chunk-mghdt42f.js:847`.
-[^list-timeout]: The program, `chunk-2x9ma4k7.js:4330619`.
-[^settings-check]: The program, `chunk-2x9ma4k7.js:4330619` and `chunk-mghdt42f.js:6533`. The flag is `require_connector_block_on_plugin_servers`.
-[^many-hosts]: The program, `chunk-2x9ma4k7.js:4314036`. The program does not show here what a caller does with the error.
+[^xaa-changed]: The program, `chunk-cyt43yzs.js:683`.
+[^list-timeout]: The program, `chunk-4h798pp0.js:4536411`.
+[^settings-check]: The program, `chunk-4h798pp0.js:4536411` and `chunk-cyt43yzs.js:3277`. The flag is `require_connector_block_on_plugin_servers`.
+[^many-hosts]: The program, `chunk-rbbv3rz7.js:22439`. The program does not show here what a caller does with the error.
 [^helper-failed]: The program, `chunk-cyt43yzs.js:354-365` and `chunk-j76re4j2.js:5662-5697`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

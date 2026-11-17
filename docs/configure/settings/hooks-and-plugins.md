@@ -75,8 +75,8 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 
 [^schema]: The program, its bundled settings schema.
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^plugin-versions]: The program, `chunk-xvwfyath.js:25832`.
-[^takeover]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-y3tc9w2j.js:20945`.
+[^plugin-versions]: The program, `chunk-kek2xxjw.js:22644`.
+[^takeover]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-cdgwqjfr.js:20852`.
 [^suggest]: The schema text of `2.1.319` says "Anthropic's own plugins" where `2.1.316` named only the `frontend-design` tip. Probe cases `print.cli319.plugin-sugg.user` and `print.cli319.plugin-sugg.bad-type`. A managed tier on macOS needs root, so no run shows the tip.
 [^strict]: The program.
 [^managed-lists]: The program, `chunk-4h798pp0.js:200481-200497`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

@@ -74,4 +74,4 @@ on("engine.create", async ($, e, next) => {
 [^types]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`.
 [^provides]: The program, `chunk-4h798pp0.js:238035`.
 [^v323]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323).
-[^validate]: The program, `chunk-xq1041h8.js:43699`.
+[^validate]: The program, `chunk-rsdn630x.js:49358`.

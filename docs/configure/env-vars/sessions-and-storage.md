@@ -130,17 +130,17 @@ Settings files copy `env` values as written. No shell expands them, so `~` and `
 
 The program (variable names found in the `2.1.314` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 
-[^automount]: The program, `chunk-pjwmcabb.js:736`.
+[^automount]: The program, `chunk-90bjqvre.js@736`.
 [^child-notes-set]: The program, `chunk-y6p7c7eh.js:62`.
 [^child-notes-read]: The program, `chunk-y6p7c7eh.js:68`.
 [^resume-return]: The program, `chunk-y9bdpp8r.js:25048-25068`. The server flag is `tengu_gleaming_fair` or `tengu_gleaming_fair_reuse`. The prompt is skipped when `resumeReturnDismissed` is set.
-[^config-lock]: The program, `chunk-x4fdscgs.js@112048` and `chunk-2x9ma4k7.js@4339015`. Probe cases `env319a.config-lock-wait.*`.
-[^nested-id]: [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317). The program, `chunk-ktwx41ck.js@794` (`MKn` returns no ID when the variable is unset, and the derived ID when it is set). Probe cases `env319a.nested-session-id.unset` and `.v1`.
-[^drop-deferred]: The program, `chunk-f40wgdh8.js@84835` (the message) and `chunk-f40wgdh8.js@641857` (strict `true` check). Probe cases `env319a.drop-unavailable-deferred-tool.unset` and `.v1`.
-[^host-owned]: The program reads it at `chunk-x4fdscgs.js:124729`, shows the message at `chunk-x4fdscgs.js:124930`, and passes it on in an env list at `chunk-5qrjxad9.js:7932`. It did not show the path check.
+[^config-lock]: The program, `chunk-d73xe1mr.js@112645` and `chunk-4h798pp0.js@4545907`. Probe cases `env319a.config-lock-wait.*`.
+[^nested-id]: [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317). The program, `chunk-xzaxmedp.js@793` (`MKn` returns no ID when the variable is unset, and the derived ID when it is set). Probe cases `env319a.nested-session-id.unset` and `.v1`.
+[^drop-deferred]: The program, `chunk-xt4nsgp1.js@185203` (the message) and `chunk-xt4nsgp1.js@718959` (strict `true` check). Probe cases `env319a.drop-unavailable-deferred-tool.unset` and `.v1`.
+[^host-owned]: The program reads it at `chunk-d73xe1mr.js:125383`, shows the message at `chunk-d73xe1mr.js:125584`, and passes it on in an env list at `chunk-40ntpkc0.js:8150`. It did not show the path check.
 [^hover-rest]: The program.
 [^launched-trim]: The program, `chunk-p95xxxdb.js:451`.
 [^launched-write]: The program, `chunk-p95xxxdb.js:477`.
-[^personal-hooks]: The program, `chunk-j1ynz02m.js@654`. Probe cases `env319b.personal-hooks-off.launch-restricted`, `retry-restricted`, `fix-restricted`, `host-restricted`, `other-restricted`, `off-restricted`, and `host-plain`.
-[^resume-hint]: The program, `chunk-2x9ma4k7.js:328225`.
+[^personal-hooks]: The program, `chunk-a2gc8rcj.js@654`. Probe cases `env319b.personal-hooks-off.launch-restricted`, `retry-restricted`, `fix-restricted`, `host-restricted`, `other-restricted`, `off-restricted`, and `host-plain`.
+[^resume-hint]: The program, `chunk-4h798pp0.js:349101`.
 [^began-as-copy]: The program.

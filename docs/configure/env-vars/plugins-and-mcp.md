@@ -166,21 +166,21 @@ Claude Code passes some variables to MCP server and hook processes. It can strip
 The program (variable names found in the `2.1.314` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 
 [^one-plugin-load]: The program.
-[^cowork-skill]: The program, `chunk-3k6k02vw.js@101747`. Probe cases `env319a.cowork-plugin-skill.*`.
+[^cowork-skill]: The program, `chunk-qb6rgffc.js@102093`. Probe cases `env319a.cowork-plugin-skill.*`.
 [^room-count]: The program, `chunk-j76re4j2.js:1614`.
-[^mcp-tasks]: The program, `chunk-n9dz90xq.js@469`, `chunk-2x9ma4k7.js@4319475`, and `chunk-ph0kyf9w.js@39486` (child processes). The feature flag is `tengu_glowing_lark`. Probe cases `env319a.disable-mcp-tasks.unset` and `.v1`.
-[^mcp-task-bg]: The program, `chunk-qnbq0cf3.js` and `chunk-n9dz90xq.js`. Probe case `print.env319a.disable-mcp-task-background.unset`, and `.v1` for the value `1`.
+[^mcp-tasks]: The program, `chunk-pdbmj9rf.js@470`, `chunk-4h798pp0.js@4519067`, and `chunk-fdjay46b.js@39129` (child processes). The feature flag is `tengu_glowing_lark`. Probe cases `env319a.disable-mcp-tasks.unset` and `.v1`.
+[^mcp-task-bg]: The program, `chunk-j76re4j2.js` and `chunk-39ka6efv.js`. Probe case `print.env319a.disable-mcp-task-background.unset`, and `.v1` for the value `1`.
 [^apps-route]: The program, `chunk-4h798pp0.js:225940`.
 [^prewait-list]: The program, `chunk-xt4nsgp1.js:14527`.
 [^prewait-reader]: The program, `chunk-xt4nsgp1.js:15410`.
-[^serve-gc]: The program parses the value at `chunk-ps0240wm.js:1914` and uses it at `chunk-ps0240wm.js:5178`. It did not show what an unset variable means.
-[^memory-walks]: The program, `chunk-j800tms2.js:4379`.
-[^startup-wait]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-f40wgdh8.js:241748`.
-[^dir-watch]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-r00dzszr.js:3696`.
+[^serve-gc]: The program parses the value at `chunk-3zfj48ar.js:1914` and uses it at `chunk-3zfj48ar.js:5178`. It did not show what an unset variable means.
+[^memory-walks]: The program, `chunk-szfz4132.js:4379`.
+[^startup-wait]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-xt4nsgp1.js:336994`.
+[^dir-watch]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-agcn5b0k.js:4076`.
 [^mcpb-dir]: The program, `chunk-nhfp95ss.js:168`.
 [^required-hold]: The program, `chunk-hr6w5saz.js:125`.
 [^sorted-otter]: The program. The feature flag is `tengu_sorted_otter`.
-[^tool-picture]: The program, `chunk-2x9ma4k7.js:4283300`. The minified names `q5n`, `Ob`, and `Sf` hold the other checks, which the program did not show.
+[^tool-picture]: The program, `chunk-4h798pp0.js:4496060`. The minified names `q5n`, `Ob`, and `Sf` hold the other checks, which the program did not show.
 [^no-redial]: The program.
 [^test-no-open]: The program.
-[^sdk-generation]: The program, `chunk-yze97b10.js:1037`.
+[^sdk-generation]: The program, `chunk-mb94kgaf.js:1037`.

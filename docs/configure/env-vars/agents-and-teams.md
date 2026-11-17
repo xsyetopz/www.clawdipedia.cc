@@ -125,11 +125,11 @@ The Notes column says which when the code shows it.
 
 ## Sources
 
-[^dispatch-entrypoint]: The program, read at `chunk-h3xwema8.js:151694`. The list of valid values is at `chunk-5jtfp8jv.js:1540`.
+[^dispatch-entrypoint]: The program, read at `chunk-bprgtdg6.js@153009`. The list of valid values is at `chunk-wqz933wn.js@1539`.
 [^silent-peer]: The program.
 [^admit-silent]: The program. The gate is `bot_protected_tengu_merry_bear`.
-[^summaries]: The program, `chunk-jaky6hhv.js@154447` and `chunk-jaky6hhv.js@191959`; passed to child processes at `chunk-ph0kyf9w.js@39486`. Probe cases `env319a.agent-summaries.unset` and `env319a.agent-summaries.v1`: a stream-json session whose initialize request sets `agentProgressSummaries`, and a forked subagent whose Bash tool runs for 70 s. Unset, the 2 `Forking for summary` lines had 9 and 14 messages in context.
-[^handback]: The program, `chunk-m4b9tjry.js@1637`. Probe cases `env319a.subagent-handback.unset` and `env319a.subagent-handback.v1` (`--permission-mode auto`, server verdict `not_flagged`).
-[^keepalive]: The program, flag `tengu_kairos_loop_keepalive` and `chunk-y4x16pd8.js`. Probe cases `pty.cli319.loop-keepalive.unset`, `.v0`, and `.v1`.
+[^summaries]: The program, `chunk-cr640x0r.js@166595` and `chunk-cr640x0r.js@205526`; passed to child processes at `chunk-fdjay46b.js@39129`. Probe cases `env319a.agent-summaries.unset` and `env319a.agent-summaries.v1`: a stream-json session whose initialize request sets `agentProgressSummaries`, and a forked subagent whose Bash tool runs for 70 s. Unset, the 2 `Forking for summary` lines had 9 and 14 messages in context.
+[^handback]: The program, `chunk-j2s0am8r.js@1838`. Probe cases `env319a.subagent-handback.unset` and `env319a.subagent-handback.v1` (`--permission-mode auto`, server verdict `not_flagged`).
+[^keepalive]: The program, flag `tengu_kairos_loop_keepalive` and `chunk-46yvn24a.js`. Probe cases `pty.cli319.loop-keepalive.unset`, `.v0`, and `.v1`.
 [^plan-required]: The program, `safe_env_allowlist_AS: true`.
 [^variable-names]: The program (variable names found in the `2.1.314` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.

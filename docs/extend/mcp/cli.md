@@ -99,9 +99,9 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^add-json]: The program, `chunk-4h798pp0.js:228852`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^header-help]: The program, `chunk-7j145bsn.js:21068`.
+[^header-help]: The program, `chunk-ydynwxdc.js:22404`.
 [^web]: Probe case `print.cli319.mcp-add-web`. The gate is the server-side flag `tengu_twinkling_aurora`.
-[^reconnect]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-8fw1gbv7.js:26827`.
+[^reconnect]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-15b1e2ff.js:26197`.
 [^connector-dl]: Probe case `print.err319.mcp-add-connector-downloads` printed this text. Without the `.gitignore`, the control case printed no error.
 [^bad-env]: Probe case `print.err319.mcp-add-bad-env` printed this text and exited with code 1.
 [^serve-sandbox]: The program, `chunk-7g7tnv4g.js:821`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

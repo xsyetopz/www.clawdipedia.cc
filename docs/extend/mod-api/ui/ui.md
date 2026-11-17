@@ -115,9 +115,9 @@ In a `-p` run with no app attached, the debug log shows `{"isDrawn":false,"reque
 
 ## Sources
 
-[^types-323]: The Mod API type file of the `2.1.323` program, `schemas/claude-code.d.ts`.
+[^types-323]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`.
 [^theme-run]: Probe case `print.cli319.theme.engine`, run on the `2.1.319` program in a `-p` run with a mod that calls the function from `session.start`. The function table of the hooks engine holds `theme.set`, with a `check` and a `run`.
-[^theme-323]: The program, `chunk-2x9ma4k7.js:4531212`. The attribute check names `backdrop` and `colors`.
-[^theme-321]: The program, `chunk-2x9ma4k7.js:4338044`. The type text is in `captures/2.1.321/types.diff`.
-[^blur]: The program, `chunk-2x9ma4k7.js:4531212`.
-[^cancel-notify]: The program, call `chunk-s82q53mp.js:285547`, check and run `chunk-2x9ma4k7.js:4543522` (`jEs`), table `chunk-2x9ma4k7.js:4573061`.
+[^theme-323]: The program, `chunk-v9tz3rn8.js:18015`. The attribute check names `backdrop` and `colors`.
+[^theme-321]: The program, `chunk-4h798pp0.js:4544936`. The type text is in `captures/2.1.321/types.diff`.
+[^blur]: The program, `chunk-v9tz3rn8.js:10906`.
+[^cancel-notify]: The program, call `chunk-fvkvyefp.js:314158`, check and run `chunk-4h798pp0.js:4774612` (`jEs`), table `chunk-4h798pp0.js:4802296`.

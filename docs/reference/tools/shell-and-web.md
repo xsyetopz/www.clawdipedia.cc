@@ -107,18 +107,18 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^tools-source]: The program.
-[^taskstop-trunc]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-rbmj8zjp.js:52021`.
+[^taskstop-trunc]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-zk95hkj7.js:54240`.
 [^gettask]: The program. The flag is `tengu_violin_rosin`.
 [^bash-schema]: The program, the `Bash` input schema.
 [^monitor-schema]: The program, the `Monitor` input schema.
 [^disk-full]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305). The program.
-[^edquot]: The program, `chunk-2x9ma4k7.js:3514498`.
+[^edquot]: The program, `chunk-4h798pp0.js:3675910`.
 [^monitor-flag]: [`2.1.310` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.310). The program. The flag is `tengu_amber_sentinel`.
 [^monitor-stderr]: The program, `chunk-pvr1jj26.js:78`.
 [^sleep]: The program.
-[^cap]: The program, `chunk-2x9ma4k7.js:272996`, `chunk-15g8sh48.js:5809`, `chunk-j0cwsygn.js:46`, and `chunk-2x9ma4k7.js:177296`.
+[^cap]: The program, `chunk-4h798pp0.js:291994`, `chunk-jbnhv5yy.js:6004`, `chunk-xj0yvmna.js:46`, and `chunk-4h798pp0.js:185479`.
 [^called-back]: The program.
-[^bg-output]: The program, `chunk-2x9ma4k7.js:272397`, `:257687`, and `:169613`.
+[^bg-output]: The program, `chunk-4h798pp0.js:284805`, `:269674`, and `:181397`.
 [^bash-hook]: The program. It counts `Bash` as another name of `Monitor` for hook matchers.
 [^which]: The program. The flag is `tengu_swirling_koala`.
 [^git-grep]: The program.
@@ -126,7 +126,7 @@ Each row is a family of messages. The backticked text is the start that every me
 [^set-o]: [`2.1.316` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.316).
 [^auto-bg]: The program, the env name.
 [^monitor-ws]: Probe case `print.err319.monitor-ws-unresolvable`.
-[^ps-quote]: The program, `chunk-wd8yzmmb.js@269` and `chunk-2x9ma4k7.js@1040842`. Probe case `print.err319.powershell-tmpdir-quote`.
-[^fetch-refused]: The program, `chunk-2x9ma4k7.js:2532640`.
-[^fetch-empty]: The program, `chunk-2x9ma4k7.js:2528822`. `2.1.319` has no such text.
-[^no-task]: The program, `chunk-4pz2b5hr.js:42418` for the list form and `chunk-4pz2b5hr.js:43517` for the short form. `2.1.319` has no short form.
+[^ps-quote]: The program, `chunk-krewyxbw.js@269` and `chunk-4h798pp0.js@1092506`. Probe case `print.err319.powershell-tmpdir-quote`.
+[^fetch-refused]: The program, `chunk-4h798pp0.js:2657070`.
+[^fetch-empty]: The program, `chunk-4h798pp0.js:2653249`. `2.1.319` has no such text.
+[^no-task]: The program, `chunk-fkkma3m4.js:43779` for the list form and `chunk-fkkma3m4.js:44889` for the short form. `2.1.319` has no short form.

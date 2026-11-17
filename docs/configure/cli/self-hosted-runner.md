@@ -199,19 +199,19 @@ The default of `--api-url` is `ANTHROPIC_BASE_URL`, else the built-in API URL.
 
 ## Sources
 
-[^runner-help]: The text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.326`, and the option parser of the program, `chunk-jmkrmahq.js`, near offset 253048.
+[^runner-help]: The text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.326`, and the option parser of the program, `chunk-747xd1vs.js`, near offset 253048.
 [^cli321]: Probe group `cli321`.
-[^exit-codes]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-jmkrmahq.js:262763`.
+[^exit-codes]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-747xd1vs.js:282039`.
 [^no-clone]: The program, `chunk-747xd1vs.js:13426` and `chunk-747xd1vs.js:13688`.
 [^gh]: The program, `chunk-747xd1vs.js:13137` and `chunk-747xd1vs.js:12305`.
-[^trust]: The program, `chunk-jmkrmahq.js:176984` and `chunk-x4fdscgs.js:85193`.
-[^parser-errors]: The program, `chunk-jmkrmahq.js`, offsets 245200 to 255000. Probe group `cli321`.
-[^orch]: The program, help text and orchestrator parser, `chunk-pr8txaye.js`, near offset 24075.
+[^trust]: The program, `chunk-747xd1vs.js:194514` and `chunk-d73xe1mr.js:85743`.
+[^parser-errors]: The program, `chunk-747xd1vs.js`, offsets 245200 to 255000. Probe group `cli321`.
+[^orch]: The program, help text and orchestrator parser, `chunk-39j7s0fm.js`, near offset 24075.
 [^orch-timeout]: Probe case `runner-orchestrator-hook-timeout`, group `cli321`.
 [^orch-min-idle]: Probe case `runner-orchestrator-min-idle`, group `cli321`.
 [^orch-scm]: Probe case `runner-orchestrator-scm-id-only`, group `cli321`.
 [^orch-no-hooks]: Probe case `runner-orchestrator-no-hooks`, group `cli321`.
-[^hold-network]: The program, `chunk-jmkrmahq.js:267472`.
+[^hold-network]: The program, `chunk-747xd1vs.js:286610`.
 [^probe-git-host-rewrite-url]: Probe case `runner-git-host-rewrite-url`.
 [^probe-confine-bad]: Probe case `runner-confine-bad`.
 [^probe-lists-bad]: Probe case `runner-lists-bad`.

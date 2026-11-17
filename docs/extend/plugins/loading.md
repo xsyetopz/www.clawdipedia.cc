@@ -125,9 +125,9 @@ Each row is a family of messages. The backticked text is the start that every me
 [^cache-path]: The program.
 [^registry]: The program.
 [^bash-bin]: Probe case `print.plugindata.bash-bin`.
-[^watch]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-r00dzszr.js:3696`.
+[^watch]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-agcn5b0k.js:4076`.
 [^zip]: The program.
-[^not-installed]: The program, `chunk-xvwfyath.js:21465`.
-[^lsp]: The program, `chunk-xvwfyath.js:19231`.
+[^not-installed]: The program, `chunk-kek2xxjw.js:18102`.
+[^lsp]: The program, `chunk-kek2xxjw.js:15868`.
 [^unsafe-paths]: The program, `chunk-4h798pp0.js:44080-44106`, `chunk-4h798pp0.js:225540-225566`, and `chunk-4h798pp0.js:44324`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325) for the `validate` part, which the code lines do not show.
 [^worktree-skip]: The program, `chunk-hm39agsh.js:282-295`, `chunk-sahanck2.js:141`, and `chunk-y9bdpp8r.js:120238`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

@@ -208,12 +208,12 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^otel-timeout-logs]: The program, `chunk-gma0wa2s.js@54863`. Probe case `env319b.otel-timeout.generic-500-logs-5000`. [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317) describe the limits.
-[^otel-timeout-metrics]: The program, `chunk-gma0wa2s.js@54863`. Probe case `env319b.otel-timeout.generic-500-metrics-5000`. [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317) describe the limits.
-[^otel-timeout-traces]: The program, `chunk-gma0wa2s.js@54869`. Probe case `env319b.otel-timeout.generic-500-traces-5000`. [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317) describe the limits.
-[^otel-timeout]: The program, `chunk-gma0wa2s.js@54869`. Probe cases `env319b.otel-timeout.generic-500`, `env319b.otel-timeout.default`, and `all-three-500`.
-[^error-reporting]: The program, `chunk-ph0kyf9w.js:37656` and `:39586`.
-[^log-responses]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-1p5scy1s.js:17283`.
+[^otel-timeout-logs]: The program, `chunk-7a41jn20.js@56234`. Probe case `env319b.otel-timeout.generic-500-logs-5000`. [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317) describe the limits.
+[^otel-timeout-metrics]: The program, `chunk-7a41jn20.js@56234`. Probe case `env319b.otel-timeout.generic-500-metrics-5000`. [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317) describe the limits.
+[^otel-timeout-traces]: The program, `chunk-7a41jn20.js@56240`. Probe case `env319b.otel-timeout.generic-500-traces-5000`. [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317) describe the limits.
+[^otel-timeout]: The program, `chunk-7a41jn20.js@56240`. Probe cases `env319b.otel-timeout.generic-500`, `env319b.otel-timeout.default`, and `all-three-500`.
+[^error-reporting]: The program, `chunk-fdjay46b.js:37250` and `:39229`.
+[^log-responses]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-agqs570q.js:17375`.
 [^resource-host]: The program, `chunk-7a41jn20.js:1798`.
 [^safety-event]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307). The program.
 [^safety-event-hook]: The program.

@@ -88,5 +88,5 @@ A context says where a block of bindings applies. `Global` bindings work everywh
 ## Sources
 
 [^source]: [Customize Keyboard Shortcuts](https://code.claude.com/docs/en/keybindings) and the program. The tables come from the default keys in the program.
-[^modifier]: The program, `chunk-qmcxj60c.js:4615`.
+[^modifier]: The program, `chunk-mp4ch7yg.js:4669`.
 [^session-tabs]: The program.

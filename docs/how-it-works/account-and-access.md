@@ -183,39 +183,39 @@ Claude Code shows "Couldn't load your current spend limit, so it can't be change
 ## Sources
 
 [^scope]: The program (Claude Code `2.1.311`), with the module and line in its cleaned code. Each footnote below names the module.
-[^plan-values]: The program, `chunk-x4fdscgs.js:33728`, `:33737`.
-[^plan-map]: The program, `chunk-x4fdscgs.js:19257`.
-[^oauth-token]: The program, `chunk-x4fdscgs.js:32372`.
-[^host-account]: The program, `chunk-x4fdscgs.js:19344`.
-[^oauth-profile]: The program, `chunk-x4fdscgs.js@340379`.
-[^key-profile]: The program, `chunk-x4fdscgs.js@339914`.
+[^plan-values]: The program, `chunk-d73xe1mr.js:34212`, `:34221`.
+[^plan-map]: The program, `chunk-d73xe1mr.js:19326`.
+[^oauth-token]: The program, `chunk-d73xe1mr.js:32831`.
+[^host-account]: The program, `chunk-d73xe1mr.js:20082`.
+[^oauth-profile]: The program, `chunk-d73xe1mr.js@343401`.
+[^key-profile]: The program, `chunk-d73xe1mr.js@342936`.
 [^probe-run]: See [Account Probes](../reference/probes.md#account-probes).
-[^keychain]: The program, `chunk-vsgwhfxn.js:2026`.
-[^request-id]: The program, `chunk-fknzn91z.js@415`.
+[^keychain]: The program, `chunk-6pphp15b.js:2034`.
+[^request-id]: The program, `chunk-b9pvc345.js@224`.
 [^mod-type]: `schemas/claude-code.d.ts`.
-[^skip-profile]: The program, `chunk-x4fdscgs.js:18889`, `:19365`.
-[^scope-check]: The program, `chunk-x4fdscgs.js:33543`.
-[^grove]: The program, `chunk-apxgwx0a.js:33`, `:281`, `:338`.
-[^grove-plans]: The program, `chunk-x4fdscgs.js:34023`.
-[^picker]: The program, `chunk-x4fdscgs.js:14791`.
-[^fable]: The program, `chunk-32xrm2zt.js:13368`, `:13768`.
-[^mythos]: The program, `chunk-mq6f50pn.js:41`. The model-name check is at `chunk-mq6f50pn.js:52`.
-[^credits]: The program, `chunk-32xrm2zt.js:10969`, `:13382`. The server config is `tengu_saffron_lattice`.
-[^disabled]: The program, `chunk-32xrm2zt.js:14579`. The server flag is `tengu_saffron_picker_dim`. The plan and role check is at `chunk-32xrm2zt.js:10885` and `chunk-x4fdscgs.js:33706`. The login scope check is at `chunk-x4fdscgs.js:33543`.
-[^credits-only]: The program, `chunk-32xrm2zt.js:183363`. The server config is `tengu_saffron_credits_only_tiers`.
+[^skip-profile]: The program, `chunk-d73xe1mr.js:18953`, `:20103`.
+[^scope-check]: The program, `chunk-d73xe1mr.js:34020`.
+[^grove]: The program, `chunk-ex45rbsy.js:33`, `:289`, `:346`.
+[^grove-plans]: The program, `chunk-d73xe1mr.js:34507`.
+[^picker]: The program, `chunk-d73xe1mr.js:17247`.
+[^fable]: The program, `chunk-vawgpkfg.js:14340`, `:14740`.
+[^mythos]: The program, `chunk-5h5hxvwy.js:41`. The model-name check is at `chunk-5h5hxvwy.js:52`.
+[^credits]: The program, `chunk-vawgpkfg.js:11052`, `:14354`. The server config is `tengu_saffron_lattice`.
+[^disabled]: The program, `chunk-vawgpkfg.js:15557`. The server flag is `tengu_saffron_picker_dim`. The plan and role check is at `chunk-vawgpkfg.js:10957` and `chunk-d73xe1mr.js:34184`. The login scope check is at `chunk-d73xe1mr.js:34020`.
+[^credits-only]: The program, `chunk-vawgpkfg.js:185706`. The server config is `tengu_saffron_credits_only_tiers`.
 [^v326]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^api-key-note]: The program, `chunk-szf5xyqt.js:496`.
 [^footer]: The program, `chunk-y9bdpp8r.js:55210`.
 [^unused-note]: The program, `chunk-d73xe1mr.js:31340-31384`, `chunk-s3j7dx93.js:4213-4221`, `chunk-0py32h2p.js:1884-1892`.
 [^status-row]: The program, `chunk-hkrxqjz2.js:567-575`.
 [^follow-key]: The program, `chunk-y9bdpp8r.js:15138-15150`.
-[^refusal]: The program, `chunk-x4fdscgs.js:33710`, `:21940`, `chunk-2x9ma4k7.js:102650`.
-[^desktop]: The program, `chunk-x4fdscgs.js:21609`, `chunk-5c342mz1.js:97`, `:440`.
+[^refusal]: The program, `chunk-d73xe1mr.js:34457`, `:21905`, `chunk-4h798pp0.js:107776`.
+[^desktop]: The program, `chunk-d73xe1mr.js:21573`, `chunk-4k4w82vm.js:103`, `:467`.
 [^v311]: [`2.1.311` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.311).
-[^windows]: The program, `chunk-byyfpk0c.js:1417`.
-[^five-hour]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312). The program, `chunk-4fvxxc4n.js:683` and `chunk-p4hfkr8w.js:2534`.
-[^menu]: The program, `chunk-2x9ma4k7.js:2368416`. The rows are built at `chunk-d338x18r.js:39591`.
-[^spend]: The program, `chunk-d338x18r.js:31796`. The string is not in the `2.1.322` program.
+[^windows]: The program, `chunk-p95xxxdb.js:1815`.
+[^five-hour]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312). The program, `chunk-mpb1rtff.js:715` and `chunk-48s6a53p.js:2580`.
+[^menu]: The program, `chunk-4h798pp0.js:2488492`. The rows are built at `chunk-dj71vevt.js:42111`.
+[^spend]: The program, `chunk-dj71vevt.js:1071`. The string is not in the `2.1.322` program.
 [^control]: `schemas/claude-code-control-protocol.json`.
 [^mod-account]: `schemas/claude-code.d.ts`.
 [^finishing]: The program, `chunk-0py32h2p.js:616` and `chunk-0py32h2p.js:2294`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

@@ -207,16 +207,16 @@ The betas `per-turn-control-2026-07-01` and `timing-2026-09-09` match the flags 
 ## Sources
 
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^best]: The program, `chunk-gep2e53q.js:22518`.
+[^best]: The program, `chunk-9vmv3a50.js:22518`.
 [^opusplan]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The program, `chunk-d73xe1mr.js:26449`, `chunk-4h798pp0.js:139321`.
 [^aliases]: The aliases are from the official page, and the exceptions are from the program.
-[^suffix]: The `[1m]` change is in the [Claude Code changelog](https://code.claude.com/docs/en/changelog). The program, `chunk-x4fdscgs.js:26199`, `:27326`, and `:27583`.
+[^suffix]: The `[1m]` change is in the [Claude Code changelog](https://code.claude.com/docs/en/changelog). The program, `chunk-d73xe1mr.js:26357`, `:27504`, and `:27761`.
 [^catalog]: The program holds a JavaScript object with the comment `Hand-maintained baked-in model catalog`.
-[^fallback-3p]: The program, field `fallback_3p`, `chunk-gep2e53q.js:19238` of `2.1.323`.
-[^window-default]: The program, `chunk-x4fdscgs.js:523799`, `return!PM()&&KC(e)?Uz:bvt`; `Uz` is `1e6`, `bvt` is `200000`. In `2.1.322`, the constant was `bSt`.
-[^window-hint]: The program, `chunk-xh991wft.js:3049`.
+[^fallback-3p]: The program, field `fallback_3p`, `chunk-9vmv3a50.js:737`, `:836`, and `:885` of `2.1.326`.
+[^window-default]: The program, `chunk-d73xe1mr.js:530716`, `return!PM()&&KC(e)?Uz:bvt`; `Uz` is `1e6`, `bvt` is `200000`. In `2.1.322`, the constant was `bSt`.
+[^window-hint]: The program, `chunk-bg3yp1yb.js:3051`.
 [^zeta-probe]: Probe of `2.1.316`, `/model claude-zeta-9` with `-p`.
 [^sonnet-migration]: The program, `chunk-g7cw7kap.js:698`.
 [^v325]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^fable-migration]: The program, `chunk-5erhnvzw.js:79428`.
-[^fable-deadline]: The program, `chunk-5erhnvzw.js:79650`.
+[^fable-migration]: The program, `chunk-97e8zgw1.js:89388`.
+[^fable-deadline]: The program, `chunk-97e8zgw1.js:89610`.

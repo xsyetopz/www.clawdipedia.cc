@@ -223,32 +223,32 @@ It works in `-p` mode when `CLAUDE_CODE_REMOTE` is not set and a classifier mode
 [^deny-kinds]: The `autoMode` schema text.
 [^unavailable]: The program.
 [^server-lists]: The program.
-[^server-check]: The program, `2.1.319`. `chunk-c39c4txm.js@29336` parses the verdict, `chunk-2x9ma4k7.js@3156866` reads it from the stream, and `chunk-2x9ma4k7.js@3385693` acts on it.
+[^server-check]: The program, `2.1.319`. `chunk-jfnh5wnd.js@30847` parses the verdict, `chunk-4h798pp0.js@3293228` reads it from the stream, and `chunk-4h798pp0.js@3532304` acts on it.
 [^server-probe]: Probe cases `print.automode.classifier-server.server-1`, `print.automode.classifier-server.server-1-betas-off`, and `print.automode.classifier-server.betas-off`, run on `2.1.319`.
-[^gateway-guide]: The program, `chunk-xqw0kbdk.js@1497453`. The gateway guide in the program says this.
-[^stages]: The program, `chunk-2x9ma4k7.js` (the classifier) and `chunk-xmxh26v7.js` (the defaults). A probe captured the requests.
+[^gateway-guide]: The program, `chunk-ajpqe291.js@1497771`. The gateway guide in the program says this.
+[^stages]: The program, `chunk-4h798pp0.js` (the classifier) and `chunk-3bs9fgrf.js` (the defaults). A probe captured the requests.
 [^stage-flag]: The program. Server config `tengu_auto_mode_config.twoStageClassifier` picks the mode.
-[^stage-defaults]: The program, `chunk-xmxh26v7.js`.
-[^stage-code]: The program, `chunk-2x9ma4k7.js`.
-[^stage-think]: The program, `chunk-x4fdscgs.js`.
-[^stage-probe]: The program, `chunk-2x9ma4k7.js`, and a probe that captured the classifier requests.
+[^stage-defaults]: The program, `chunk-3bs9fgrf.js`.
+[^stage-code]: The program, `chunk-4h798pp0.js`.
+[^stage-think]: The program, `chunk-d73xe1mr.js`.
+[^stage-probe]: The program, `chunk-4h798pp0.js`, and a probe that captured the classifier requests.
 [^official-project]: [Auto Mode Configuration](https://code.claude.com/docs/en/auto-mode-config) in the official docs.
 [^official-broad]: [Permission Modes](https://code.claude.com/docs/en/permission-modes) in the official docs.
-[^broad-rules]: The program, `chunk-r2xdymmc.js` and `chunk-b8q0kwgb.js`.
-[^billing]: The program, `chunk-2x9ma4k7.js@1500321` to `@1501302`, `chunk-64gae3y3.js@4372`, and `chunk-dj7ngekh.js@1905`, `2.1.319`.
+[^broad-rules]: The program, `chunk-88d8nvn3.js` and `chunk-3q9v3gt8.js`.
+[^billing]: The program, `chunk-4h798pp0.js@1575760` to `@1501302`, `chunk-nany1zhx.js@4984`, and `chunk-fv3hzthg.js@1954`, `2.1.319`.
 [^billing-flag]: The program. The flag is `tengu_velvet_heron`.
-[^billing-latch]: The program, `chunk-2x9ma4k7.js@3383202`.
+[^billing-latch]: The program, `chunk-4h798pp0.js@3528160`.
 [^billing-probe]: Probe cases `pty.notifications.agent-needs-input`, `pty.notifications.agent-needs-input-refused`, and `pty.notifications.auto-mode-local`, in table order.
 [^classify-all]: The program.
 [^sources-probe]: A probe ran `claude auto-mode config` with `autoMode.allow` set in each source. The program logs `tengu_settings_auto_mode_rules_untrusted_source_ignored` for an ignored source. Its message says only policy, user, and flag settings may set the rules. The run did not check `classifyAllShell`, because it is not in the `auto-mode config` output.
-[^strip-defaults]: The program, `chunk-rqvvpwt0.js` and `chunk-fxkn94rg.js`.
+[^strip-defaults]: The program, `chunk-caex36kk.js` and `chunk-27vawgnx.js`.
 [^classify-probe]: A probe counted classifier requests for a `curl` command that a user allow rule covered. The count was 1 with `true` in user settings or `--settings`, and 0 with `false` or unset. A managed `false` with `true` in user settings or `--settings` gave 1. A managed `true` gave 1 in every case. Without `CLAUDE_CODE_AUTO_MODE_SERVER=0` on `2.1.319`, a stub that gives the server-side check no verdict gets no classifier request.
 [^defaults-probe]: A probe with the cc-inspect `code` action `cli`.
 [^setup-off]: The program.
 [^settings-order]: A probe on `2.1.314` and `2.1.316`.
-[^critique]: The program, `chunk-ehm6jcnf.js`.
-[^setup-form]: The program, `chunk-qmz13t7c.js` and `chunk-2x9ma4k7.js:107357`.
-[^model-env]: The program, `chunk-x4fdscgs.js`.
+[^critique]: The program, `chunk-3ysj8kb8.js`.
+[^setup-form]: The program, `chunk-4drpmqc0.js` and `chunk-4h798pp0.js:112903`.
+[^model-env]: The program, `chunk-d73xe1mr.js`.
 [^summary-flag]: The program.
 [^ignored-env]: The program lists the name in its environment table as a boolean, and no code reads it.
 [^chrome-flag]: The program. The flag is `tengu_cowork_chrome_automode_default`.

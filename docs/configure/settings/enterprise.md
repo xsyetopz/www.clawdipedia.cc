@@ -83,8 +83,8 @@ The prompt-free path and the stored-copy check are also in `2.1.314`.
 [^schema]: The program, its bundled settings schema.
 [^reply-check]: The settings schema. Probe case `print.cli319.reply-check.user` shows the debug line, with `CLAUDE_CODE_REPLY_GATE_POLICY` set and the key in user settings. The turn-end code reads the key from the vouched settings tiers and logs "Reply gate: verdict=skip why=disableReplyCheck" when it is on. The vouched tiers come from the function that lists them. In `2.1.319` the function that reads `CLAUDE_CODE_MANAGED_SETTINGS_PATH` returns nothing. A run with a file in that variable logged `verdict=no_bounce`, so a file there is not a managed tier. Probe case `print.cli319.reply-check.managed-root` reads the root file and logs the gate verdict. The runner skips it, with the reason in its capture, until that file exists. Put `{"disableReplyCheck": true}` in it first. Run it with `bun run release:probe:print -- --from 2.1.316 --to 2.1.319 --only cli319.reply-check.managed-root` after you write the file as root.
 [^windows-split]: The settings schema. The Bash command path checks the platform (`windows`), the command length, and `policySettings.disableWindowsBashCommandSplit`. The path cannot run on macOS, so no run shows the split. Probe cases `print.cli319.dwb.user` (a `true` in user settings writes no warning line) and `print.cli319.dwb.bad-type` (`"yes"`).
-[^helper-env]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-jhw62zmp.js:19199`.
+[^helper-env]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-taj2mjv8.js:20221`.
 [^internal]: The program.
-[^policy-default]: The program, `chunk-3dhh2g49.js:8446-9824`.
-[^policy-entry]: The settings schema and the program, `chunk-3dhh2g49.js:8489-9811`.
-[^approval]: The program, `chunk-ss0c63q3.js`, `chunk-j2a9et02.js`, `chunk-4bqvyng6.js`, and `chunk-3dhh2g49.js`.
+[^policy-default]: The program, `chunk-m33vdkhs.js:8418-9824`.
+[^policy-entry]: The settings schema and the program, `chunk-m33vdkhs.js:8461-9811`.
+[^approval]: The program, `chunk-gh04g7ms.js`, `chunk-xkcgfqvr.js`, `chunk-gznmf7ky.js`, and `chunk-m33vdkhs.js`.

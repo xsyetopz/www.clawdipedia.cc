@@ -136,29 +136,29 @@ The program uses the scan in four places.
 
 ## Sources
 
-[^where-1]: The program, `chunk-h88m2nft.js@35745`, `chunk-8009tpd5.js@23190`.
-[^where-2]: The program, `chunk-wy9j6n8y.js@2790`, `@3031`.
-[^where-3]: The program, `chunk-2x9ma4k7.js@340437` to `@341015`.
-[^where-4]: The program, `chunk-2x9ma4k7.js@1111958` to `@1112219`.
-[^where-5]: The program, `chunk-hb73eaq1.js@16351` to `@29323`.
-[^where-6]: The program, `chunk-r6311kzt.js@13045`, `@13057`.
-[^where-7]: The program, `chunk-0yyc2ww7.js@10004`.
-[^where-8]: The program, `chunk-cqa4e4mh.js@27335`, `@27771`.
-[^where-9]: The program, `chunk-a93gqq12.js@11782`.
-[^where-10]: The program, `chunk-scpexdac.js@5057`.
-[^where-11]: The program, `chunk-zz9qk1fe.js@23368`.
-[^where-12]: The program, `chunk-2x9ma4k7.js@5446069`.
-[^where-13]: The program, `chunk-rsxftb23.js@31830` to `@32480`.
-[^where-14]: The program, `chunk-4a2dz0vy.js@2776` to `@5480`.
-[^where-15]: The program, `chunk-d8k9an7w.js@39186`, `@41424`, `@43183`.
-[^where-16]: The program, `chunk-a2hfg0sc.js@92602`, `@92852`, `chunk-vvws40wq.js@9447` to `@19106`.
-[^where-17]: The program, `chunk-7wd42psp.js@6291`.
-[^where-18]: The program, `chunk-bpjxpkfp.js@24606` to `@36185`.
-[^rule-table]: The program, `chunk-dazyb5h4.js`, rule table `@21739` to `@29414`.
-[^more-calls]: The program, `chunk-32wpx3nn.js:1852`, `chunk-rj5j2fvy.js:2429`, `chunk-jtqg8j1s.js:186`, `chunk-zx658dag.js:16`, `chunk-stk6hasv.js:600`, `chunk-ddbhkydx.js:4280`, `chunk-cqa4e4mh.js:769`, `chunk-xp75z6ch.js:155`, `chunk-ph0kyf9w.js:2496`, and `chunk-9c8s95a6.js:310`. The masker method names are in no other module.
+[^where-1]: The program, `chunk-qvaw5eph.js@36724`, `chunk-3kehpsc0.js@546`.
+[^where-2]: The program, `chunk-nc3yrkaf.js@2790`, `@3031`.
+[^where-3]: The program, `chunk-4h798pp0.js@361390` to `@341015`.
+[^where-4]: The program, `chunk-4h798pp0.js@1165043` to `@1112219`.
+[^where-5]: The program, `chunk-q67vgc7s.js@16920` to `@29323`.
+[^where-6]: The program, `chunk-n4p7gn96.js@13245`, `@13257`.
+[^where-7]: The program, `chunk-0b0795s0.js@10004`.
+[^where-8]: The program, `chunk-dbfcmtq3.js@28938`, `@29374`.
+[^where-9]: The program, `chunk-zyq9kffp.js@12224`.
+[^where-10]: The program, `chunk-gaf3g84v.js@5481`.
+[^where-11]: The program, `chunk-2q5tbzqy.js@24578`.
+[^where-12]: The program, `chunk-4h798pp0.js@5698103`.
+[^where-13]: The program, `chunk-1448amj6.js@33404` to `@32480`.
+[^where-14]: The program, `chunk-hfdwkv62.js@2791` to `@5480`.
+[^where-15]: The program, `chunk-rmt7sg4a.js@39963`, `@42227`, `@44174`.
+[^where-16]: The program, `chunk-jrfhc244.js@94211`, `@94461`, `chunk-q6dkrxcc.js@9778` to `@19106`.
+[^where-17]: The program, `chunk-ygknbk6n.js@6291`.
+[^where-18]: The program, `chunk-g0q4egdb.js@25690` to `@36185`.
+[^rule-table]: The program, `chunk-t1sy1zdg.js`, rule table `@21739` to `@29414`.
+[^more-calls]: The program, `chunk-5spg7c3h.js:1975`, `chunk-1rn7p4q1.js:2499`, `chunk-j73afaft.js:248`, `chunk-32z0j99y.js:451`, `chunk-265293gc.js:633`, `chunk-m79z131q.js:4291`, `chunk-dbfcmtq3.js:810`, `chunk-cpycaw0p.js:158`, `chunk-fdjay46b.js:2535`, and `chunk-a6z2y3ae.js:333`. The masker method names are in no other module.
 [^leak-probe]: Probes of `2.1.316` and `2.1.319` with cc-inspect `code` `cli` and `query`, which names each request, stream, and transcript file that holds a text. The tool runs used the `calls` option, which makes the stub call tools in order.
-[^scan-memory]: The program, `chunk-b7hxyn17.js`.
-[^scan-denial]: The program, `chunk-1xmjf4e6.js@1734442`.
-[^scan-sync]: The program, `chunk-ny35jjxw.js@210351`.
-[^scan-skill]: The program, `chunk-egtw0zen.js@36887`.
+[^scan-memory]: The program, `chunk-t4veb8qt.js`.
+[^scan-denial]: The program, `chunk-y9bdpp8r.js@1827888`.
+[^scan-sync]: The program, `chunk-2e8vamz8.js@215469`.
+[^scan-skill]: The program, `chunk-p6p1sx09.js@38072`.
 [^where-masker]: The program, `chunk-t1sy1zdg.js:1473`, `chunk-hfdwkv62.js:463-466`, and `chunk-q6dkrxcc.js:633`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

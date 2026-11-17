@@ -139,7 +139,7 @@ The variables on this page override that guess.
 [^early-key]: The program, `chunk-wn91neyj.js:287`, `:1581` (option `timesPresses`). The server gate is `tengu_cheeky_newt`.
 [^probes]: [Probes](../../reference/probes.md).
 [^new-renderer]: The program, `chunk-wn91neyj.js:357`. The gate is `tengu_idempotent_willow`.
-[^notif-host]: The program, read at `chunk-f40wgdh8.js:708722` and used at `chunk-f40wgdh8.js:685500`.
+[^notif-host]: The program, read at `chunk-xt4nsgp1.js:586139` and used at `chunk-xt4nsgp1.js:764518`.
 [^hidden-chars]: The program, `chunk-xkq7evww.js:620`. The gate is `tengu_bubbly_gadget`.
 [^tui-asked]: The program, `chunk-6pypa14x.js:89`.
-[^ysk-send]: The program, value parsed at `chunk-3h84qwch.js:77316` and read at `chunk-3h84qwch.js:78143`.
+[^ysk-send]: The program, value parsed at `chunk-na8s6d5h.js:77754` and read at `chunk-na8s6d5h.js:78581`.

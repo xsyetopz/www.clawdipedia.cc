@@ -148,14 +148,14 @@ Each row is a family of messages. The backticked text is the start that every me
 [^tools-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Configure Permissions](https://code.claude.com/docs/en/permissions), and the program, the tool input schemas.
 [^memory-flags]: The program. The first server flag is `tengu_linen_orbit`. The second is `tengu_haze_glass`.
 [^restricted-316]: The program, and the [`2.1.316` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.316).
-[^glob-grep]: The program, `chunk-2x9ma4k7.js` of `2.1.323`.
+[^glob-grep]: The program, `chunk-4h798pp0.js:16247-16263` (the `local-agent` entry point and the tools taken out of the list) and `chunk-4h798pp0.js:232408-232412` (the notes for a tool that is not offered) of `2.1.326`.
 [^size-flag]: The program. The server flag is `tengu_quizzical_mango`.
-[^partial-read]: The program, `chunk-2x9ma4k7.js` lines 188391 to 188436, 79474 to 79478, 10570 to 10583, and 84376; `chunk-0ygy9gam.js` line 112; `chunk-7y6ksdfc.js` line 11.
+[^partial-read]: The program, `chunk-4h798pp0.js` lines 196919 to 196964, 79474 to 79478, 10570 to 10583, and 84376; `chunk-jr5c4yae.js` line 112; `chunk-4yvqjdc7.js` line 11.
 [^write-verify]: Probe cases `print.err319.write-verify-devnull`, `print.err319.write-verify-race`, `print.err319.write-verify-full-disk`, `print.err319.write-verify-watcher`, and `print.err319.write-verify-pretooluse-order`, in the order of the sentences above.
-[^read-blocked]: The program, `2.1.323`, `chunk-c239rpqd.js:1662`; `chunk-kpnan531.js:6715`.
-[^exit-worktree-stop]: The program, `chunk-4pz2b5hr.js:174943`.
-[^import-read]: The program, `chunk-4gr9jngq.js`.
-[^notebook-checks]: The program, `chunk-2x9ma4k7.js:5201403` and `chunk-2x9ma4k7.js:5202465`.
-[^notebook-size]: The program, `chunk-2x9ma4k7.js:5203624`.
+[^read-blocked]: The program, `2.1.323`, `chunk-cx2gd43x.js:1767`; `chunk-nqb5kdg0.js:6719`.
+[^exit-worktree-stop]: The program, `chunk-fkkma3m4.js:179680`.
+[^import-read]: The program, `chunk-q7ww9960.js`.
+[^notebook-checks]: The program, `chunk-4h798pp0.js:5448381` and `chunk-4h798pp0.js:5449444`.
+[^notebook-size]: The program, `chunk-4h798pp0.js:5450603`.
 [^signin-files]: The program, `chunk-2e8vamz8.js:1533-1551` and `chunk-2e8vamz8.js:11631-11693`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^device-files]: The program, `chunk-bprgtdg6.js:8760-8794` and `chunk-z4j4mjgn.js:47220`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

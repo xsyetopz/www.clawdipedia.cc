@@ -172,22 +172,22 @@ Each row is a family of messages. The backticked text is the start that every me
 [^tools-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Configure Permissions](https://code.claude.com/docs/en/permissions), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program.
 [^exit-worktree-refusal]: The program, `chunk-fkkma3m4.js:7971`.
 [^exit-worktree-text]: The program, `chunk-fkkma3m4.js:7601`.
-[^afk-timeout]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-6mq0yjnk.js:2845`.
+[^afk-timeout]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-v1gdxa56.js:2695`.
 [^setgoal-alias]: The program, `chunk-85qjfjsd.js:72`, `chunk-qzqcbad8.js:229`.
 [^getgoal]: The program, `chunk-a5yh78h1.js:11`.
 [^pausegoal]: The program, `chunk-js4t58af.js:7`.
 [^agent-schema]: The program, the `Agent` input schema.
 [^result-311]: `AgentResult` and `SkillResult` in [`claude-code-tools.json`](../schemas.md), and the program.
-[^tools-used]: The program, `chunk-jaky6hhv.js:9427`, `chunk-jaky6hhv.js:9704`.
-[^tools-used-line]: The program, `chunk-w3bqrzfg.js:662`, `chunk-w3bqrzfg.js:1418`.
-[^tools-used-321]: The program, `chunk-b67kdazn.js:1857`, `chunk-b67kdazn.js:4285`, `chunk-b67kdazn.js:4652`.
+[^tools-used]: The program, `chunk-cr640x0r.js:10153`, `chunk-cr640x0r.js:10433`.
+[^tools-used-line]: The program, `chunk-e5m0wp87.js:668`, `chunk-e5m0wp87.js:1445`.
+[^tools-used-321]: The program, `chunk-9fnnyw59.js:1869`, `chunk-9fnnyw59.js:4321`, `chunk-9fnnyw59.js:4676`.
 [^result-321]: `CronDeleteResult` in [`claude-code-tools.json`](../schemas.md), and the program.
-[^ended-loop]: The program, `chunk-rw4s0xwq.js:7745`, `chunk-620k1a78.js:20532`.
-[^enable-tests]: The program, `chunk-2x9ma4k7.js`, `chunk-wf3hrn2k.js`, `chunk-ekd5hf8v.js`, and `chunk-4pz2b5hr.js` of `2.1.323`. The minified names are `lc()` (picks the teammate branch), `lte()` (the `denyInsteadOfPrompting` test), `yie()` (`!lte()` and the shared test), and `rRs()` (the shared test).
-[^exit-plan-test]: The program, `chunk-pcbqgshh.js:333`. The shared test is `chunk-wf3hrn2k.js:63`. The teammate test is `chunk-ekd5hf8v.js:88`.
-[^teams-flags]: The program, `chunk-5erhnvzw.js@112405`.
+[^ended-loop]: The program, `chunk-c93dfh89.js:8174`, `chunk-vehym80v.js:21881`.
+[^enable-tests]: The program, `chunk-fz0vez9c.js:337-339`, `chunk-fm2mt1pb.js:41-70`, `chunk-ns2y85h0.js:662-664`, and `chunk-4ppe8dvb.js:507-510` of `2.1.326`. The minified names are `$bfbfc6()` (picks the teammate branch), `$554847()` (the `denyInsteadOfPrompting` test), `$0cbb4f()` (`!$554847()` and the shared test), and `$320b23()` (the shared test).
+[^exit-plan-test]: The program, `chunk-fz0vez9c.js:338`. The shared test is `chunk-fm2mt1pb.js:63`. The teammate test is `chunk-aacwty0k.js:88`.
+[^teams-flags]: The program, `chunk-97e8zgw1.js@123747`.
 [^tool-search-cases]: Probe cases `print.api319.tool.exit-plan.prompt-tool`, `.prompt-tool-deny`, `.plan-mode`, `.plan-mode-deny`, and `.print`.
 [^baseline-probe]: Probe case `print.request.baseline-a`.
-[^worktree-outside]: The program, `chunk-2x9ma4k7.js:4088932`.
+[^worktree-outside]: The program, `chunk-4h798pp0.js:4270590`.
 [^exit-plan-cases]: Probe cases `print.api319.tool.exit-plan.*`. Each row names the case suffix.
 [^send-auth]: The program, `chunk-q0t5bnq3.js:477` and `chunk-q0t5bnq3.js:488`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

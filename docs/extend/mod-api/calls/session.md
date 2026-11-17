@@ -90,7 +90,7 @@ When no credential resolves, `$.session.authorize` logs `$.session.authorize (<p
 
 ## Sources
 
-[^types]: The Mod API type file of the `2.1.322` program, `schemas/claude-code.d.ts`.
+[^types]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`.
 [^info]: The program, `chunk-4h798pp0.js:57382`.
 [^stop]: The program, `chunk-4h798pp0.js:10027`.
 [^desktop]: The program.

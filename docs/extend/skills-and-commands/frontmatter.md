@@ -100,7 +100,7 @@ The exact fields are in the `skill` definition in `https://clawdipedia.cc/schema
 
 ## Sources
 
-[^bamum]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-dazyb5h4.js:5959`: its set of blank-looking characters holds `U+16910`, a Bamum letter. The call from the skill name check is not traced.
+[^bamum]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-qjk55dsn.js:10471`: its set of blank-looking characters holds `U+16910`, a Bamum letter. The call from the skill name check is not traced.
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^discovery]: The program, `chunk-2x9ma4k7.js` lines 179922 to 179936 and 171993 to 172054.
+[^discovery]: The program, `chunk-4h798pp0.js` lines 188196 to 188210 and 171993 to 172054.
 [^validators]: The program, the frontmatter parser. See also [Extend Claude with Skills](https://code.claude.com/docs/en/skills) and [Settings Reference](https://code.claude.com/docs/en/settings-reference).

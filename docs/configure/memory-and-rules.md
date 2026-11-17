@@ -183,23 +183,23 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^managed-probe]: [Probes](../reference/probes.md#managed-folder-probe).
-[^cloud-memory]: The program, `chunk-q0tbfqvm.js@6524` and `chunk-5rkp51vy.js@36200`.
+[^cloud-memory]: The program, `chunk-130j7a99.js@6520` and `chunk-rfa29qme.js@39731`.
 [^post-turn-case]: Probe case `print.configmem.cowork-memory.post-turn`.
 [^post-turn-mounted]: Probe case `print.configmem.cowork-memory.post-turn-mounted`.
 [^cowork-run]: The four `CLAUDE_COWORK_MEMORY_*` variables were run in `-p`.
-[^labels]: The program (`2.1.322`, `chunk-s82q53mp.js@87559` and `chunk-s82q53mp.js@88120`), and the print case `modcontext.prompt-context.added-files`. In that case, a mod added one file of each kind in its `prompt.context` hook. See [Probes](../reference/probes.md#release-probes-for-21322).
+[^labels]: The program (`2.1.322`, `chunk-fvkvyefp.js@161626` and `chunk-fvkvyefp.js@162187`), and the print case `modcontext.prompt-context.added-files`. In that case, a mod added one file of each kind in its `prompt.context` hook. See [Probes](../reference/probes.md#release-probes-for-21322).
 [^label-vouched]: The managed case `managed.vouch.mod-vouch-managed`.
 [^label-print]: The print case `modcontext.prompt-context.added-files`.
-[^cond-mod]: The program, `chunk-s82q53mp.js@87135`.
-[^cond-vouch]: The program, `chunk-s82q53mp.js@87307`, `chunk-7gsd8h8z.js@6684`.
-[^vouch-builtin]: The program, `chunk-tw5rajh3.js@254`.
-[^vouch-managed]: The program, `chunk-92tthkz2.js@14847`, `chunk-92tthkz2.js@17690`.
-[^vouch-warning]: The program, `chunk-92tthkz2.js@16581`.
+[^cond-mod]: The program, `chunk-fvkvyefp.js@161202`.
+[^cond-vouch]: The program, `chunk-fvkvyefp.js@161374`, `chunk-a2efqzw7.js@9042`.
+[^vouch-builtin]: The program, `chunk-bdsa2mba.js@255`.
+[^vouch-managed]: The program, `chunk-w288hm0h.js@14990`, `chunk-w288hm0h.js@17830`.
+[^vouch-warning]: The program, `chunk-w288hm0h.js@16722`.
 [^vouch-cases]: Cases `managed.vouch.mod-vouch-managed` and `managed.baseline.mod-vouch-user`.
-[^vouch-test]: The program, `chunk-g7hwsczr.js@42770`.
-[^cond-cowork]: The program, `chunk-s82q53mp.js@86054`, `chunk-2x9ma4k7.js@1557843`.
+[^vouch-test]: The program, `chunk-76k679vx.js@44586`.
+[^cond-cowork]: The program, `chunk-fvkvyefp.js@160064`, `chunk-4h798pp0.js@1636161`.
 [^cowork-cases]: Cases `managed.owned.claudemd-remote-cowork`, `managed.main.claudemd-remote-cowork`, and `managed.owned.claudemd-order`.
-[^same-host]: The program, `chunk-s82q53mp.js@66224`, `chunk-s82q53mp.js@87307`.
+[^same-host]: The program, `chunk-fvkvyefp.js@67587`, `chunk-fvkvyefp.js@161374`.
 [^size-warning]: The program (read), and a probe of the interactive screen (2.1.305, local stub, fake key). See [Interactive Probes](../reference/probes.md#interactive-probes).
 [^v309]: [v2.1.309 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.309).
 [^nested-limit]: Cases `print.misc.nested-claude-md-over-limit.*`, a 200,022-character `sub/CLAUDE.md` loaded by a Read under `sub/`.

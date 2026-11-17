@@ -236,10 +236,10 @@ sequenceDiagram
 [^usage-params]: The program, `chunk-p95xxxdb.js:1609`.
 [^grove]: The program.
 [^skills-flag]: The program. The flag is `tengu_skills_dashboard_enabled`.
-[^agent-proxy]: The program, read site `chunk-x4fdscgs.js@906505`.
+[^agent-proxy]: The program, read site `chunk-d73xe1mr.js@928190`.
 [^cost-notes]: [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317).
-[^cost-run]: The program, read sites `chunk-xqw0kbdk.js@1461748` (the route) and `chunk-xqw0kbdk.js@1446024` (the handler). Probe cases `print.api319.gateway.cost-route-admin`, `print.api319.gateway.cost-route-no-key`, and `print.api319.gateway.no-postgres` start the gateway with a Postgres container (none for the last). `GET /v1/organizations/analytics/cost?starting_at=…&ending_at=…&time_bucket_width=1d` and an admin read key in `x-api-key` answered 200 with `{"data":[],"has_more":false,"next_page":null,"data_refreshed_at":…}`. Without the key it answered 401 "missing or invalid admin credentials". Without a reachable Postgres the gateway exits with code 1 and a "could not connect to Postgres" message, and never listens, so the route never starts.
-[^auth-warm]: The program, `chunk-hb73eaq1.js@35864`. Run: with the real sign-in in a temporary `HOME`, `CLAUDE_CODE_REMOTE=1`, `CLAUDE_CODE_ENTRYPOINT=remote_cowork`, `DISABLE_TELEMETRY=1`, and `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` unset, one `-p` turn sent `GET /v1/me` (answer 404, which the program counts as a passed check) before `POST /v1/messages`. With `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1`, the same run sent no `/v1/me`. Probe case `live.api319.auth-warm`.
+[^cost-run]: The program, read sites `chunk-ajpqe291.js@1462066` (the route) and `chunk-ajpqe291.js@1446343` (the handler). Probe cases `print.api319.gateway.cost-route-admin`, `print.api319.gateway.cost-route-no-key`, and `print.api319.gateway.no-postgres` start the gateway with a Postgres container (none for the last). `GET /v1/organizations/analytics/cost?starting_at=…&ending_at=…&time_bucket_width=1d` and an admin read key in `x-api-key` answered 200 with `{"data":[],"has_more":false,"next_page":null,"data_refreshed_at":…}`. Without the key it answered 401 "missing or invalid admin credentials". Without a reachable Postgres the gateway exits with code 1 and a "could not connect to Postgres" message, and never listens, so the route never starts.
+[^auth-warm]: The program, `chunk-q67vgc7s.js@35237`. Run: with the real sign-in in a temporary `HOME`, `CLAUDE_CODE_REMOTE=1`, `CLAUDE_CODE_ENTRYPOINT=remote_cowork`, `DISABLE_TELEMETRY=1`, and `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` unset, one `-p` turn sent `GET /v1/me` (answer 404, which the program counts as a passed check) before `POST /v1/messages`. With `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1`, the same run sent no `/v1/me`. Probe case `live.api319.auth-warm`.
 [^runner-runs]: The program, and the release probe cases `env319b.runner.*` and `env319b.orchestrator.*`.
 [^reg]: Probe case `env319b.runner.base` made this the first call. The run used the runner ID `runner-probe`.
 [^retire]: Probe case `env319b.runner.retire-at`.
@@ -248,15 +248,15 @@ sequenceDiagram
 [^nack]: Probe case `env319b.orchestrator.hook-fails`.
 [^refresh]: Probe case `env319b.runner.token-ttl-8`.
 [^signin-paths]: The program. The paths are strings in the program code.
-[^org-pin]: The program, read sites `chunk-x4fdscgs.js@341815` (the call) and `chunk-x4fdscgs.js@650158` (the check). Run with the real sign-in in a temporary `HOME`. Probe case `live.api319.org-pin`.
+[^org-pin]: The program, read sites `chunk-d73xe1mr.js@344862` (the call) and `chunk-d73xe1mr.js@664561` (the check). Run with the real sign-in in a temporary `HOME`. Probe case `live.api319.org-pin`.
 [^file-upload]: The program, `chunk-av7771ew.js:2901`.
-[^host-req]: The program, client `chunk-gvfz56pz.js:10458`, caller `chunk-2dg5mr3x.js:34916`.
-[^host-result]: The program, `chunk-gvfz56pz.js:10458`, `chunk-2dg5mr3x.js:34916`.
+[^host-req]: The program, client `chunk-76eaa4n6.js:10521`, caller `chunk-y5hjhy3x.js:36148`.
+[^host-result]: The program, `chunk-76eaa4n6.js:10521`, `chunk-y5hjhy3x.js:36148`.
 [^consents]: The program, `chunk-bty85apn.js:1196` (the `PUT`), `chunk-bty85apn.js:1210` (the `POST`), and `chunk-bty85apn.js:1106` (the entry points).
-[^checkup]: The program, read site `chunk-qbe325as.js:7148` (the path is the constant at `:5244`). The gate is `tengu_quiet_almanac`.
+[^checkup]: The program, read site `chunk-6xgqh92m.js:7343` (the path is the constant at `:5439`). The gate is `tengu_quiet_almanac`.
 [^oauth-config]: The program.
-[^dir-urls]: The program, `chunk-x4fdscgs.js@920479`.
-[^billing]: The program, `chunk-2x9ma4k7.js@1881709` and `@1910654`.
-[^provenance-paths]: The program, read sites `chunk-z21ybfjz.js@1188` and `chunk-z21ybfjz.js@4504`. In the run `print.api319.beta.provenance.fake-key` (first-party stub URL, one MCP server) the only request path was `/v1/messages?beta=true`. In the live runs `live.api319.provenance` and `live.api319.startup` (real sign-in, nonessential traffic on) the program made no call to these paths or to `/v1/code`. Startup calls were `/api/claude_code/policy_limits`, `/api/claude_code/settings`, `/api/claude_cli/bootstrap`, and `/mcp-registry/v0/servers`.
-[^platform-plugin]: The program, `chunk-bppp6xk2.js:609` (the server) and `chunk-bppp6xk2.js:585` (the checks).
+[^dir-urls]: The program, `chunk-d73xe1mr.js@943126`.
+[^billing]: The program, `chunk-4h798pp0.js@1979737` and `@1910654`.
+[^provenance-paths]: The program, read sites `chunk-wwkzqad9.js@1188` and `chunk-wwkzqad9.js@4509`. In the run `print.api319.beta.provenance.fake-key` (first-party stub URL, one MCP server) the only request path was `/v1/messages?beta=true`. In the live runs `live.api319.provenance` and `live.api319.startup` (real sign-in, nonessential traffic on) the program made no call to these paths or to `/v1/code`. Startup calls were `/api/claude_code/policy_limits`, `/api/claude_code/settings`, `/api/claude_cli/bootstrap`, and `/mcp-registry/v0/servers`.
+[^platform-plugin]: The program, `chunk-m935gg7t.js:669` (the server) and `chunk-m935gg7t.js:685` (the checks).
 [^attr-fields]: The program.

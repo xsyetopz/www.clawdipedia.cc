@@ -131,12 +131,12 @@ Claude Code picks the model in a fixed order: the `--model` flag or `/model` fir
 
 [^names]: The program, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 [^amber]: [Probes](../../reference/probes.md).
-[^fast-vertex]: The program, `chunk-x4fdscgs.js:399771`. Probe case `print.cli322.fast-vertex-disabled`.
-[^refusal-name]: The program, `chunk-32xrm2zt.js` lines 15044 to 15060.
+[^fast-vertex]: The program, `chunk-d73xe1mr.js:402401`. Probe case `print.cli322.fast-vertex-disabled`.
+[^refusal-name]: The program, `chunk-vawgpkfg.js` lines 16037 to 16053.
 [^ultrathink]: The program, gate `tengu_turtle_carbon`.
 [^thinking-titles]: The program, `chunk-4h798pp0.js:169436`. The second check is at `chunk-27vawgnx.js:11361`.
 [^fast-capability]: Probe case `print.cli322.fast-vertex-capability-on`.
-[^canonical]: The program, `chunk-b9bvke64.js` lines 345 to 374 (the name is canonicalized with `deterministic: true`).
-[^vertex-org]: The program, `chunk-x4fdscgs.js:399996`.
-[^subagent-effort]: The program, `chunk-fd8dnhta.js`, `chunk-2x9ma4k7.js`, and `chunk-y6yq8zee.js`. Flag `tengu_snappy_pelican`. Telemetry event `subagent_effort_default` records `unknown_level` for a bad value.
+[^canonical]: The program, `chunk-pm46v9cv.js` lines 324 to 353 (the name is canonicalized with `deterministic: true`).
+[^vertex-org]: The program, `chunk-d73xe1mr.js:402626`.
+[^subagent-effort]: The program, `chunk-j0r1dmyb.js`, `chunk-4h798pp0.js`, and `chunk-2emsfnec.js`. Flag `tengu_snappy_pelican`. Telemetry event `subagent_effort_default` records `unknown_level` for a bad value.
 [^workflow-model]: [Probes](../../reference/probes.md#subagents-and-hooks).

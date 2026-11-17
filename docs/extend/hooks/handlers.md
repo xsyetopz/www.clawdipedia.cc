@@ -162,12 +162,12 @@ Cloud sessions forward only your own hooks of kind `command` and `http` from use
 ## Sources
 
 [^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the program (handler schemas for `command`, `prompt`, `mcp_tool`, `http`, and `agent`).
-[^mcp-limit]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-sstb45zf.js:1310` for the limit and `chunk-2x9ma4k7.js:3861419` for the hook error path.
+[^mcp-limit]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-1x4v8d9q.js:1310` for the limit and `chunk-4h798pp0.js:4035085` for the hook error path.
 [^script-probe]: A probe of the program.
-[^powershell-suffix]: The program, `chunk-2x9ma4k7.js`.
+[^powershell-suffix]: The program, `chunk-4h798pp0.js`.
 [^headers]: The program, `chunk-4h798pp0.js:200461`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^stop-wrap]: The program, `chunk-2x9ma4k7.js`.
-[^stop-cap]: The program, `chunk-fxkn94rg.js`, for the warning and for the main-session-only notice.
-[^calls]: The program, `chunk-2x9ma4k7.js`.
-[^concurrency]: The program, `chunk-2x9ma4k7.js:1136462` in `2.1.323`: the constants 12, 24, and 12 and the `model hooks` and `overdue model hooks` counts. We did not trace that a subagent shares the session host of its parent.
+[^stop-wrap]: The program, `chunk-4h798pp0.js`.
+[^stop-cap]: The program, `chunk-27vawgnx.js`, for the warning and for the main-session-only notice.
+[^calls]: The program, `chunk-4h798pp0.js`.
+[^concurrency]: The program, `chunk-4h798pp0.js:65905-65919` in `2.1.326`: the constants 12, 24, and 12 and the `model hooks` and `overdue model hooks` counts. We did not trace that a subagent shares the session host of its parent.
 [^cloud]: We read these rules in the program. We did not run them, because a cloud session needs a login.

@@ -62,7 +62,7 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 
 ## Sources
 
-[^types]: The Mod API type file of the `2.1.323` program, `schemas/claude-code.d.ts`.
+[^types]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`.
 [^complete-cost]: The program, `chunk-4h798pp0.js:67625`. The release note says `$.session.usage()` and `--max-budget-usd` count it too. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
 [^fork-diff]: `captures/2.1.321/types.diff`.
-[^connect-event]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-2x9ma4k7.js:4508402` and `chunk-s82q53mp.js:104498`.
+[^connect-event]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-4h798pp0.js:4735372` and `chunk-fvkvyefp.js:186078`.

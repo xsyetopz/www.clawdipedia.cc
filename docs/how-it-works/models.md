@@ -122,6 +122,6 @@ The loop also recovers from a stop at `max_tokens` and from a bad tool call. See
 ## Sources
 
 [^no-fallback]: The program, a message that names the variable.
-[^retry-rule]: The [Claude Code changelog](https://code.claude.com/docs/en/changelog). The program, `chunk-2x9ma4k7.js:153069`. The old rule was in the `2.1.310` program, which is not in the `2.1.321` capture.
-[^reactive]: The [Claude Code changelog](https://code.claude.com/docs/en/changelog). The program, `chunk-fxkn94rg.js:7801` checks for that refusal on a model whose window is standard, then the code at `chunk-fxkn94rg.js:13826` to `:13930` runs the reactive compaction.
+[^retry-rule]: The [Claude Code changelog](https://code.claude.com/docs/en/changelog). The program, `chunk-4h798pp0.js:159807`. The old rule was in the `2.1.310` program, which is not in the `2.1.321` capture.
+[^reactive]: The [Claude Code changelog](https://code.claude.com/docs/en/changelog). The program, `chunk-27vawgnx.js:8475` checks for that refusal on a model whose window is standard, then the code at `chunk-27vawgnx.js:15748` to `:15852` runs the reactive compaction.
 [^gateways]: The program, `chunk-p95xxxdb.js:221` for the phrases and `chunk-4h798pp0.js:106713` for the statuses. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The phrase list is not in the `2.1.323` program.

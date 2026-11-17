@@ -247,10 +247,10 @@ A subagent gets its own agent text plus short notes. The default agent text star
 
 [^old-wiki]: An earlier wiki said Sonnet gets the full prompt. That is wrong.
 [^matrix]: Probe case `print.models.matrix`.
-[^unknown-name]: The program, `chunk-b9bvke64.js` lines 345 to 374 and `chunk-x4fdscgs.js` lines 27171 to 27190.
+[^unknown-name]: The program, `chunk-pm46v9cv.js` lines 324 to 353 and `chunk-d73xe1mr.js` lines 27350 to 27369.
 [^lean-flag]: The catalog flag is `lean_prompt`. The program.
 [^gate]: The gate is `tengu_velvet_tide` and the server setting is `simple_system_prompt`. The program.
-[^deterministic]: The program, `chunk-b9bvke64.js` lines 345 to 374 and `chunk-x4fdscgs.js` lines 27171 to 27190. The test uses the option `deterministic`. In `2.1.311` the same test used no `deterministic` option, and that build is not in the `2.1.321` capture.
+[^deterministic]: The program, `chunk-pm46v9cv.js` lines 324 to 353 and `chunk-d73xe1mr.js` lines 27350 to 27369. The test uses the option `deterministic`. In `2.1.311` the same test used no `deterministic` option, and that build is not in the `2.1.321` capture.
 [^bundles]: The flags are `opus_5_prompt_bundle`, `opus_5_5_prompt_bundle`, `fable_5_mitigations`, and `fable_5_1_prompt_bundle`. The program.
-[^responsive]: The program. The plugin is defined in `chunk-p1x9gjdg.js`, registered in `chunk-mt5heavc.js`, and loads `chunk-9dgv2k67.js`. It has `defaultEnabled: false` and needs the experiment `tengu_quiet_ember`.
+[^responsive]: The program. The plugin is defined in `chunk-ht4bh06j.js`, registered in `chunk-wvm9g54y.js`, and loads `chunk-bbjk1ht9.js`. It has `defaultEnabled: false` and needs the experiment `tengu_quiet_ember`.
 [^subagent]: The program.

@@ -294,7 +294,7 @@ These cases show more detail.[^evalcreds-more]
 [^krb5-probe]: Probe of the `2.1.319` binary.
 [^kube-probe]: Probe of the `2.1.319` binary.
 [^netrc-probe]: Probe case `print.evalcreds.netrc.unset` and `print.evalcreds.netrc.set` of `2.1.319`.
-[^all-proxy]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-ss0c63q3.js:2885`.
+[^all-proxy]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-gh04g7ms.js:2958`.
 [^bash-env-gate]: The server gate is `tengu_golden_wirth`.
 [^bash-env]: The program.
 [^system-drive]: The program, `chunk-z4j4mjgn.js:42832` (read) and `chunk-caex36kk.js:3177` (set).

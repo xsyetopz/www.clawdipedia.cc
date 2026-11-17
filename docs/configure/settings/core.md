@@ -94,7 +94,7 @@ Status: <Gated />. The official docs do not state it.
 [^schema]: The program, its bundled settings schema.
 [^bash-diff]: The program.
 [^cleanup-runs]: Probe cases `print.cli319.cleanup.sweep-7`, `print.cli319.cleanup.sweep-default`, `print.cli319.cleanup.sweep-365`, `print.cli319.cleanup.zero`, and `print.cli319.cleanup.float`. A `-p` run used a Bash call that sleeps 9 seconds, because the sweep starts 5 seconds after launch. The runs made only `/v1/messages` requests. The wording of the `0` message is the program's.
-[^cleanup-error]: The program, `chunk-35q9t2xd.js:11801`.
+[^cleanup-error]: The program, `chunk-721w3jzh.js:12594`.
 [^cleanup-min]: The schema is `int().positive()` and its text says "Minimum 1".
 [^cleanup-local]: The schema text, since `2.1.319`.
 [^attr-project]: The settings schema. Probe cases `print.cli319.attr.claude-proj`, `print.cli319.attr.chan`, `print.cli319.attr.bad-prefix`, and `print.cli319.attr.number`. Live probe case `live.cli319.attribution`, with a real login.

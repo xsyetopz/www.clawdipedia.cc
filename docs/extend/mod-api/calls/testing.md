@@ -62,5 +62,5 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^types]: The Mod API type file of the `2.1.322` program, `schemas/claude-code.d.ts`.
-[^keeps-beneath]: The program, `chunk-g7hwsczr.js:38302`. `2.1.319` does not have this text.
+[^types]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`.
+[^keeps-beneath]: The program, `chunk-76k679vx.js:40114`. `2.1.319` does not have this text.

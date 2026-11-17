@@ -223,14 +223,14 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^levels]: The program, `chunk-2x9ma4k7.js@1852902`.
-[^subagent-window]: The program, `chunk-2x9ma4k7.js` line 94212 and `chunk-jaky6hhv.js` line 7020.
-[^reactive]: The program, `chunk-fxkn94rg.js:7801`.
-[^second-ask]: The program, `chunk-2x9ma4k7.js:127218`, and the note at `:126641`.
-[^summary-error]: The program, `chunk-2x9ma4k7.js:140019`. The `2.1.311` text, `no <summary> block in the second reply either`, is not in `2.1.321`.
-[^gate]: The program, `chunk-2x9ma4k7.js:127216`.
-[^gates]: The program, `chunk-2x9ma4k7.js@1858905` to `@2602150`. The reactive route and the larger-model retry are in `chunk-2x9ma4k7.js`.
-[^check-timing]: The program, `chunk-fxkn94rg.js`.
+[^levels]: The program, `chunk-4h798pp0.js@1951557`.
+[^subagent-window]: The program, `chunk-4h798pp0.js` line 94212 and `chunk-cr640x0r.js` line 7020.
+[^reactive]: The program, `chunk-27vawgnx.js:8475`.
+[^second-ask]: The program, `chunk-4h798pp0.js:133366`, and the note at `:132787`.
+[^summary-error]: The program, `chunk-4h798pp0.js:146077`. The `2.1.311` text, `no <summary> block in the second reply either`, is not in `2.1.321`.
+[^gate]: The program, `chunk-4h798pp0.js:133364`.
+[^gates]: The program, `chunk-4h798pp0.js@1957497` to `@2602150`. The reactive route and the larger-model retry are in `chunk-4h798pp0.js`.
+[^check-timing]: The program, `chunk-27vawgnx.js`.
 [^cleared]: The program, the server-side clearing code.
 [^prompt]: The program, the compaction prompt.
-[^spinner]: The program, `chunk-njga1hyq.js`.
+[^spinner]: The program, `chunk-qjp551xg.js`.

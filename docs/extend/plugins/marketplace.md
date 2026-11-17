@@ -201,23 +201,23 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^reserved]: The program, `chunk-3dhh2g49.js:54098`.
-[^renames]: The program, `chunk-3dhh2g49.js:99672`.
+[^reserved]: The program, `chunk-m33vdkhs.js:53196`.
+[^renames]: The program, `chunk-m33vdkhs.js:99464`.
 [^pin]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The program, `chunk-m33vdkhs.js:3554`.
-[^npm-wild]: The program, `chunk-3dhh2g49.js:81700`.
-[^npm-opts]: The program, `chunk-3dhh2g49.js:82000`, its bundled settings schema.
+[^npm-wild]: The program, `chunk-m33vdkhs.js:81492`.
+[^npm-opts]: The program, `chunk-m33vdkhs.js:81792`, its bundled settings schema.
 [^digest-tier]: The program, `chunk-m33vdkhs.js:8108`.
 [^digest-warn]: The program, `chunk-4h798pp0.js:56283`.
-[^digest-schema]: The settings schema and the program, `chunk-92tthkz2.js:148` and `chunk-2x9ma4k7.js:51961`.
-[^digest-limits]: The program, `chunk-2x9ma4k7.js:53744`, `:49376`, and `:49446`.
-[^digest-refuse]: The program, `chunk-2x9ma4k7.js:53904`.
-[^digest-line]: The program, `chunk-3dhh2g49.js:12697`.
+[^digest-schema]: The settings schema and the program, `chunk-m33vdkhs.js:8108` and `chunk-4h798pp0.js:55365`.
+[^digest-limits]: The program, `chunk-4h798pp0.js:57149`, `:52777`, and `:52847`.
+[^digest-refuse]: The program, `chunk-4h798pp0.js:57309`.
+[^digest-line]: The program, `chunk-m33vdkhs.js:11985`.
 [^settings-schema]: The program, its bundled settings schema.
 [^copy]: The program.
-[^withdraw]: The program, `chunk-2x9ma4k7.js:4724369`. `2.1.319` has no such text.
-[^take-back]: The program, `chunk-2x9ma4k7.js:4820574`.
-[^list-unread]: The program, `chunk-2x9ma4k7.js:4820574` and `chunk-2x9ma4k7.js:4895063`. `2.1.319` has no such texts.
-[^copy-proof]: The program, `chunk-2x9ma4k7.js:853964`.
-[^submodule]: The program, `chunk-2x9ma4k7.js:4734372`. The gate is the server-side flag `tengu_tidal_kestrel`.
+[^withdraw]: The program, `chunk-4h798pp0.js:4960121`. `2.1.319` has no such text.
+[^take-back]: The program, `chunk-4h798pp0.js:5058426`.
+[^list-unread]: The program, `chunk-4h798pp0.js:5058426` and `chunk-4h798pp0.js:5133591`. `2.1.319` has no such texts.
+[^copy-proof]: The program, `chunk-4h798pp0.js:891805`.
+[^submodule]: The program, `chunk-4h798pp0.js:4970207`. The gate is the server-side flag `tengu_tidal_kestrel`.
 [^run-code-add]: The program, `chunk-15b1e2ff.js:4325`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
 [^run-code-install]: The program, `chunk-15b1e2ff.js:2804` (install warning, which goes on with more text) and `chunk-y9bdpp8r.js:78269` (recommendation prompt).

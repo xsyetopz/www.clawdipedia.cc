@@ -193,13 +193,13 @@ Claude Code reads shell variables once at startup, so restart after a change. Cl
 [^self-named]: The program.
 [^bun-tls]: The program.
 [^cert-store]: The program.
-[^proxy-hosts]: The program, `2.1.319`, `chunk-5qrjxad9.js`. Probe cases `print.env319a.proxy-resolves-hosts-from-settings.unset` and `.v1`.
-[^steady-heron]: The program, `chunk-2x9ma4k7.js:2986823`. Feature flag `tengu_steady_heron`.
+[^proxy-hosts]: The program, `2.1.319`, `chunk-40ntpkc0.js`. Probe cases `print.env319a.proxy-resolves-hosts-from-settings.unset` and `.v1`.
+[^steady-heron]: The program, `chunk-4h798pp0.js:3114765`. Feature flag `tengu_steady_heron`.
 [^kurzweil]: The program, feature flag `tengu_soft_kurzweil`.
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
 [^assume-first-party]: [Probes](../../reference/probes.md).
-[^ca-faults]: The program. The message texts are in `chunk-ghk767xs.js` of the cleaned `2.1.323` module dump, in the function that builds the CA list (`CA certs: The runtime cannot load ... the NODE_EXTRA_CA_CERTS file as one CA list entry`) and in the stderr texts that follow it. Runs: `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only cacerts319` (cases `extra-ca.*` and `extra-ca-tls.*`), repeated with `--from 2.1.316 --to 2.1.316`.
-[^name-constraint]: The program, `chunk-x4fdscgs.js`. The code set and the message function are at `324812` and about `325089`. The error text that carries them is at `329887`.
+[^ca-faults]: The program. The message texts are in `chunk-f57bmeqs.js` of the cleaned `2.1.323` module dump, in the function that builds the CA list (`CA certs: The runtime cannot load ... the NODE_EXTRA_CA_CERTS file as one CA list entry`) and in the stderr texts that follow it. Runs: `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only cacerts319` (cases `extra-ca.*` and `extra-ca-tls.*`), repeated with `--from 2.1.316 --to 2.1.316`.
+[^name-constraint]: The program, `chunk-d73xe1mr.js`. The code set and the message function are at `324812` and about `325089`. The error text that carries them is at `329887`.
 [^signature]: The program, `chunk-d73xe1mr.js:18463` (message start), `:18369` (IT team wording), and `:8298` (the code check).
 [^all-proxy]: The program, `chunk-f57bmeqs.js`. The CONNECT tunnel is at `:10666`, the timeout at `:10686`, and the proxy URL check at `:10681`.
 [^v325]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).

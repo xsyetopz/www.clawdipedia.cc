@@ -123,8 +123,8 @@ Claude Code sets some variables on this page for remote sessions and refreshes t
 ## Sources
 
 [^variable-names]: The program (variable names found in the `2.1.314` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^delegated-models]: The program, read at `chunk-c39c4txm.js:23080` and set at `chunk-jmkrmahq.js:176376`.
-[^delegated-direct]: The program, read at `chunk-c39c4txm.js:21022`, background check at `chunk-ph0kyf9w.js:77305`, set at `chunk-jmkrmahq.js:176376`.
-[^local-oauth]: The program, `chunk-40c7f7c7.js@415`, `2.1.323`.
-[^use-local]: The program, `chunk-yjm6xzes.js@21558` and `chunk-f46y2sa6.js@8860`.
-[^use-staging]: The program, `chunk-yjm6xzes.js@21558`.
+[^delegated-models]: The program, read at `chunk-jfnh5wnd.js:24472` and set at `chunk-747xd1vs.js:193906`.
+[^delegated-direct]: The program, read at `chunk-jfnh5wnd.js:22340`, background check at `chunk-fdjay46b.js:78183`, set at `chunk-747xd1vs.js:193906`.
+[^local-oauth]: The program, `chunk-rrxbrq23.js@415`, `2.1.323`.
+[^use-local]: The program, `chunk-ymvany90.js@22807` and `chunk-gwh639eg.js@9028`.
+[^use-staging]: The program, `chunk-ymvany90.js@22807`.

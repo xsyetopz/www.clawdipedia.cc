@@ -86,14 +86,14 @@ This table holds the size of one line and the order of the `skillOverrides` valu
 ## Sources
 
 [^switch]: The program.
-[^skill-switches]: The program, `chunk-2x9ma4k7.js`.
+[^skill-switches]: The program, `chunk-4h798pp0.js`.
 [^allow-list]: The program, list of bundled skill names and the `allow_bundled_skills` key.
-[^listing]: The program, `chunk-2x9ma4k7.js`.
+[^listing]: The program, `chunk-4h798pp0.js`.
 [^v307]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307).
 [^claude-api]: The program. The flags are `tengu_cosmic_sketch` and `tengu_typed_trinket`.
-[^claude-api-311]: The program, `chunk-3k6k02vw.js:5250` (startup registration) and `chunk-d1t6z6wp.js:385` (definition).
-[^platform]: The program, `chunk-bppp6xk2.js:585` and `chunk-bppp6xk2.js:609`.
+[^claude-api-311]: The program, `chunk-qb6rgffc.js:5303` (startup registration) and `chunk-pcxjjtda.js:385` (definition).
+[^platform]: The program, `chunk-m935gg7t.js:685` and `chunk-m935gg7t.js:669`.
 [^secure]: [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304). The program.
-[^verify]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312). The program, `chunk-3k6k02vw.js:5160` (short text) and `chunk-3k6k02vw.js:5154` (long description).
+[^verify]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312). The program, `chunk-qb6rgffc.js:5213` (short text) and `chunk-qb6rgffc.js:5207` (long description).
 [^v304]: [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304).
-[^security]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-2x9ma4k7.js:2073625` and `chunk-2x9ma4k7.js:2073914`.
+[^security]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-4h798pp0.js:2181659` and `chunk-4h798pp0.js:2181948`.

@@ -50,4 +50,4 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 
 [^schema]: The program, its bundled settings schema.
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^exact-match]: The program, `chunk-qa312d5s.js:24566`. A gate `tengu_misty_oasis`, on by default, selects exact matching.
+[^exact-match]: The program, `chunk-ssnna3vp.js:24941`. A gate `tengu_misty_oasis`, on by default, selects exact matching.

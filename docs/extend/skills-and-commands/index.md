@@ -110,7 +110,7 @@ See [Substitutions](substitutions.md#invocation-control) for what compaction kee
 
 ## Sources
 
-[^plugin-skip]: The program, `chunk-2x9ma4k7.js:3573784` and `chunk-t7certa9.js:3380` of `2.1.323`. [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321).
+[^plugin-skip]: The program, `chunk-4h798pp0.js@3738569` and `chunk-nhfp95ss.js@3393`. [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321).
 [^v309]: [`2.1.309` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.309).
 [^v304]: [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304).
 [^loaded-from]: The program, the skill loader and its `loadedFrom` tags.

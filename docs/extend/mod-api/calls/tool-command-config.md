@@ -101,9 +101,9 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 ## Sources
 
 [^types]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`.
-[^tool-call]: The type file `schemas/claude-code.d.ts`, `$.tool.call`. The program, `chunk-2x9ma4k7.js:1498546` and `chunk-2x9ma4k7.js:3355647`. [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321).
+[^tool-call]: The type file `schemas/claude-code.d.ts`, `$.tool.call`. The program, `chunk-4h798pp0.js:86129-86163` and `chunk-4h798pp0.js:7990-7992`. [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321).
 [^judge]: The program, `chunk-3epcmdpn.js:19`.
 [^run]: The program, `chunk-3epcmdpn.js:20`.
-[^describe-resolve]: The program, `chunk-x4fdscgs.js@558533`, `resolveToolDescription`.
-[^resolver]: The program in `2.1.316`. `chunk-x4fdscgs.js` holds the resolver. `chunk-2x9ma4k7.js` holds the request builder.
-[^tool-list]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-bgb5bg9p.js:22177`.
+[^describe-resolve]: The program, `chunk-d73xe1mr.js@570487`, `resolveToolDescription`.
+[^resolver]: The program in `2.1.316`. `chunk-d73xe1mr.js` holds the resolver. `chunk-4h798pp0.js` holds the request builder.
+[^tool-list]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-gw8n74pw.js:21167`.

@@ -175,12 +175,12 @@ Each row is a family of messages. The backticked text is the start that each mes
 [^v309]: [`2.1.309` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.309).
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305) and the settings schema. The `2.1.305` and `2.1.306` schemas also named rootless podman and buildah; the `2.1.307` schema does not.
 [^windows-backend]: The program, `chunk-m33vdkhs.js:5402`.
-[^worktrees]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-2x9ma4k7.js:3671663`. `2.1.322` has no such text.
-[^lsof]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-2x9ma4k7.js:3672996`. `2.1.322` has no such text.
+[^worktrees]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-4h798pp0.js:3839858`. `2.1.322` has no such text.
+[^lsof]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-4h798pp0.js:3841191`. `2.1.322` has no such text.
 [^add-dir]: The program, `chunk-z4j4mjgn.js:51340`, `:52210` (flag `bot_protected_tengu_elegant_gosling`), and `chunk-z4j4mjgn.js:48827` (flag `bot_protected_tengu_gleaming_bonbon`). The [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326) say the sandbox creates some missing `--add-dir` folders. The program creates them in `chunk-z4j4mjgn.js:59460-59482` and `:45081-45100`, called at `:58160`. The Linux and WSL check is at `:52229-52231`.
 [^v304]: [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304).
 [^v310]: [`2.1.310` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.310) and the program warning texts.
-[^prompt]: The program, `chunk-2x9ma4k7.js:183135`. Settings schema in `chunk-3dhh2g49.js`.
+[^prompt]: The program, `chunk-4h798pp0.js:191423`. Settings schema in `chunk-m33vdkhs.js`.
 [^proc]: [Bubblewrap Fails to Start Inside a Container](https://code.claude.com/docs/en/sandboxing#bubblewrap-fails-to-start-inside-a-container).
 [^go-tls]: [Go-Based CLIs Fail TLS Verification on macOS](https://code.claude.com/docs/en/sandboxing#go-based-clis-fail-tls-verification-on-macos).
 [^apple]: [Configure the Sandboxed Bash Tool](https://code.claude.com/docs/en/sandboxing), Apple Events.

@@ -136,9 +136,9 @@ A rule that the `allow` list of the destination file already holds is not moved.
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
 [^syntax]: The program text `tool name case-sensitive, non-empty content with no leading/trailing whitespace inside the parens`.
 [^skill]: The program.
-[^cp-mv]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-2x9ma4k7.js:1298309`, used at `:1294726`. The path count for `cp` and `mv` is at `chunk-2x9ma4k7.js:1285399`. The page did not read the code that builds the written file for a directory target.
-[^update-type]: `PermissionUpdate` in the Mod API type file of the `2.1.322` program, `schemas/claude-code.d.ts`.
-[^session-only]: The program, `chunk-ny35jjxw.js:212300`.
+[^cp-mv]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-4h798pp0.js:74791-74797`, used at `:74577`, `:74590`, `:74614`, `:77098`, `:77255`, `:80356`, `:80560`, and `:83452`. The path count for `cp` and `mv` is at `chunk-4h798pp0.js:74737-74745`. The page did not read the code that builds the written file for a directory target.
+[^update-type]: `PermissionUpdate` in the Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`.
+[^session-only]: The program, `chunk-2e8vamz8.js:217418`.
 [^tools-warning]: The program, `chunk-97e8zgw1.js:4137`, `:4139`, `:7325`.
 [^save-warning]: The program, `chunk-2e8vamz8.js:10912` and `:10906`.
 [^trust-drop]: The program, `chunk-t903d1gh.js:342-400`, `:478-560`, and `chunk-d73xe1mr.js:5040-5126`. The program also drops the `allow` entries of the local file when git tracks `.claude/settings.local.json`. That the rule covers a worktree, a submodule, or a container mount rests on the [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The program does not show that link.

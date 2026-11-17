@@ -111,7 +111,7 @@ The vim keys of the input prompt are not in `keybindings.json`. The setting `edi
 [^unbound]: The program lists these actions as valid, and its default keys do not bind them.
 [^close-session]: The program. Probe cases `pty.cli319.keybinding.session-tabs`, `pty.cli319.keybinding.control-bad-action`, and `pty.cli319.keybinding.control-bad-context`, run with `bun run release:probe:pty -- --to 2.1.319 --only cli319.keybinding`. The footer code calls `getDisplayText("app:closeSession", "SessionTabs")`, and the context list in the keybinding schema names `SessionTabs`.
 [^reserved]: The program.
-[^click-send]: The program reports the click as `chat:sendNowHintPress`. `chunk-1xmjf4e6.js` lines 8948 and 9341 to 9374.
-[^hint-text]: The program, `chunk-1xmjf4e6.js` lines 9498 to 9522.
-[^vim-count]: The program, `chunk-wjynqhds.js` lines 327 to 332 and 812.
+[^click-send]: The program reports the click as `chat:sendNowHintPress`. `chunk-y9bdpp8r.js` lines 9400 and 9873 to 9884.
+[^hint-text]: The program, `chunk-y9bdpp8r.js` lines 9833 to 9884.
+[^vim-count]: The program, `chunk-607j00qa.js` lines 327 to 332 and 812.
 [^hint-queued]: The program, `chunk-y9bdpp8r.js:9843-9863`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

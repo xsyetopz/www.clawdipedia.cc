@@ -81,13 +81,13 @@ The [`2.1.312` changelog](https://code.claude.com/docs/en/changelog) names it, b
 
 [^schema]: The program, its bundled settings schema.
 [^providers]: The program.
-[^force-login]: The program, `chunk-3dhh2g49.js:261747`. The `2.1.319` text said "Claude Pro/Max". That build is not in the `2.1.321` capture.
+[^force-login]: The program, `chunk-m33vdkhs.js:263519`. The `2.1.319` text said "Claude Pro/Max". That build is not in the `2.1.321` capture.
 [^console-login]: Run against a local stand-in server. Probe case `print.err319.console-login-no-key`.
 [^profile-dir]: Probe case `pty.cli319.login-console-profile-no-dir`.
-[^gateway-login]: The program, `chunk-wy6zmjgd.js`.
-[^org-check]: The program, `chunk-wy6zmjgd.js:701`.
-[^provider-setup]: The program, `chunk-x4fdscgs.js:294010`. The `2.1.321` text can hold a detail after `(allowedProviders)`.
-[^headers]: Probe case `print.err319.custom-headers-bad-authorization`. The program, `chunk-x4fdscgs.js@430803`.
-[^overlay]: The program, `chunk-xqw0kbdk.js:1387520` and `chunk-xqw0kbdk.js:1390143`. `2.1.319` does not have this text. The program does not show which call supplies the `${…}` label.
-[^delegated]: The program, `chunk-2x9ma4k7.js:3199498`, `chunk-2x9ma4k7.js:3325343`, and `chunk-c39c4txm.js:22099`.
-[^oidc]: The program, `chunk-xqw0kbdk.js` lines 58194, 62433, and 61545.
+[^gateway-login]: The program, `chunk-n2fe6sbj.js`.
+[^org-check]: The program, `chunk-n2fe6sbj.js:743`.
+[^provider-setup]: The program, `chunk-d73xe1mr.js:188338`. The `2.1.321` text can hold a detail after `(allowedProviders)`.
+[^headers]: Probe case `print.err319.custom-headers-bad-authorization`. The program, `chunk-d73xe1mr.js@436675`.
+[^overlay]: The program, `chunk-ajpqe291.js:1387883` and `chunk-ajpqe291.js:1390506`. `2.1.319` does not have this text. The program does not show which call supplies the `${…}` label.
+[^delegated]: The program, `chunk-4h798pp0.js:3336927`, `chunk-4h798pp0.js:3465799`, and `chunk-jfnh5wnd.js:23491`.
+[^oidc]: The program, `chunk-ajpqe291.js` lines 58194, 62433, and 61545.

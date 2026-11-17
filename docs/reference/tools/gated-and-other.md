@@ -203,33 +203,33 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^gated-sources]: The program, the tool definitions and their `searchHint` text, for the tools that the Tools Reference does not cover.
-[^propose-test]: The program, `chunk-d5m0r1p4.js@31649` in `2.1.323`. The test is unchanged from `2.1.322`, where it sat at `chunk-d5m0r1p4.js@31649`.
+[^propose-test]: The program, `chunk-b4m2xrg1.js:1065-1088` in `2.1.326`. The test is unchanged from `2.1.322`, where it sat at `chunk-b4m2xrg1.js@31976`.
 [^propose-cases]: Probe cases `print.api319.tool.propose-skills.cowork`, `.trigger`, `.trigger-chat`, and `.chat-only`.
-[^widget]: The program, `chunk-2x9ma4k7.js@1158500`; the definition is `chunk-4pz2b5hr.js@16368`. The server flag is `tengu_amber_trellis`. Probe cases `print.api319.tool.widget.off` and `.remote-flag`.
-[^wrap-gate]: The program, `chunk-4pz2b5hr.js@35232`, `chunk-5erhnvzw.js@19789`. The server flag is `tengu_merry_thunder`. The Code Mode check is the function `Ny()`.
-[^wrap-mobile]: The program, `chunk-4pz2b5hr.js@35364`, `chunk-5erhnvzw.js@19790`. The server flag is `tengu_refactored_crystal`.
+[^widget]: The program, `chunk-4h798pp0.js@1213502`; the definition is `chunk-fkkma3m4.js@16842`. The server flag is `tengu_amber_trellis`. Probe cases `print.api319.tool.widget.off` and `.remote-flag`.
+[^wrap-gate]: The program, `chunk-fkkma3m4.js@35892`, `chunk-97e8zgw1.js@20587`. The server flag is `tengu_merry_thunder`. The Code Mode check is the function `Ny()`.
+[^wrap-mobile]: The program, `chunk-fkkma3m4.js@36024`, `chunk-97e8zgw1.js@20588`. The server flag is `tengu_refactored_crystal`.
 [^wrap-cases]: Probe cases `print.api319.tool.wrap-up.env-flag`, `.env`, `.flag-only`, and `.off`.
-[^yield-gate]: The program, `chunk-30ykagaf.js@5337`. The server flag is `tengu_dazzling_acorn`.
-[^yield-description]: The program, `chunk-wsbdy0t0.js@22262`, `chunk-m7hqs62q.js@1094`.
+[^yield-gate]: The program, `chunk-9vn1dyjv.js@5381`. The server flag is `tengu_dazzling_acorn`.
+[^yield-description]: The program, `chunk-4xgyekb3.js@23307`, `chunk-pvr1jj26.js@723`.
 [^plugin-sources]: The program, the tool names and the input schemas in [`claude-code-tools.json`](../schemas.md).
-[^shared-gate]: The program, `chunk-arh3hz21.js` and `chunk-phz964my.js`.
+[^shared-gate]: The program, `chunk-m3n09j30.js` and `chunk-fah9arjg.js`.
 [^rollout-flag]: The server flag is `tengu_saddle_lantern`.
-[^computer-gate]: The program, `chunk-656gy9e9.js`, `isEnabled`.
-[^profile-test]: The program, `chunk-793j3w2k.js`.
+[^computer-gate]: The program, `chunk-ajkd77mt.js`, `isEnabled`.
+[^profile-test]: The program, `chunk-6f76x56x.js`.
 [^chat-test]: The server flag is `tengu_merry_tide`.
 [^stub-cases]: Probe cases `print.api319.tool.enable-stubs.profile`, `.profile-bad-id`, `.profile-http-ingress`, `.direct`, and `.chat-flag`.
-[^runner-tools]: The program, `chunk-5erhnvzw.js`, search `baseTools`.
-[^code-mode]: The program, `chunk-h780xah3.js@6142`, `chunk-6hmtgpqk.js@2000`, `chunk-64gae3y3.js@1100`.
+[^runner-tools]: The program, `chunk-97e8zgw1.js`, search `baseTools`.
+[^code-mode]: The program, `chunk-cr3cxkm7.js@6451`, `chunk-ska4acgg.js@1963`, `chunk-nany1zhx.js@1125`.
 [^code-mode-teams]: The program, `chunk-nany1zhx.js:68`, `chunk-nany1zhx.js:92`. The server flag in the next row is `tengu_rustling_blossom`.
 [^result-311]: `AppifactReplResult`, `PollResult`, and `ProjectsResult` in [`claude-code-tools.json`](../schemas.md), and the program.
-[^appifact-used]: The program, `chunk-y00rsa8r.js:1870`, `chunk-y00rsa8r.js:1964`, `chunk-y00rsa8r.js:2082`.
-[^poll-used]: The program, `chunk-2x9ma4k7.js:187123`.
-[^local-file]: The program, `chunk-qkje5ysj.js:1804`, `chunk-qkje5ysj.js:1835`.
-[^tools-used-321]: The program, `chunk-b67kdazn.js:1857`, `chunk-b67kdazn.js:4285`.
+[^appifact-used]: The program, `chunk-6fhe3rx9.js:1906`, `chunk-6fhe3rx9.js:2000`, `chunk-6fhe3rx9.js:2118`.
+[^poll-used]: The program, `chunk-4h798pp0.js:195638`.
+[^local-file]: The program, `chunk-kyzh6yvt.js:1877`, `chunk-kyzh6yvt.js:1910`.
+[^tools-used-321]: The program, `chunk-9fnnyw59.js:1869`, `chunk-9fnnyw59.js:4321`.
 [^result-321]: `SendUserFileResult` in [`claude-code-tools.json`](../schemas.md), and the program.
-[^thumbnail]: The program, `chunk-jqk6zhc4.js:12878`, `chunk-ewf4bz8j.js@2032`.
+[^thumbnail]: The program, `chunk-1vkbegmn.js:14271`, `chunk-jagz0xpm.js@2185`.
 [^runner-spawn]: Probe case `print.err319.runner-spawn-missing-binary`.
 [^trigger-cases]: Probe cases `live.err319` and `print.err319.remote-trigger-bad-cursor`.
-[^reserved-paths]: The program, `chunk-hp5tht7v.js:39220` for write, `chunk-hp5tht7v.js:40151` for delete.
-[^write-refused]: The program, `chunk-qkje5ysj.js:39862`. `2.1.319` does not have this text.
+[^reserved-paths]: The program, `chunk-qy20gsvm.js:39571` for write, `chunk-qy20gsvm.js:40502` for delete.
+[^write-refused]: The program, `chunk-kyzh6yvt.js:41967`. `2.1.319` does not have this text.
 [^shell-helper]: The program, `chunk-a3ny36n2.js:6991-6998` and `:7646-7671`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The rule that decides which values the helper refuses sits in a packed script of the program that this page could not read. That part rests on the release notes only.

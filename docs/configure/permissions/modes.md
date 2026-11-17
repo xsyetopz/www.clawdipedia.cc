@@ -101,7 +101,7 @@ Since `2.1.326`, a tool call in `bypassPermissions` mode asks for approval when 
 
 [^mode-names]: The program.
 [^project-default]: The program.
-[^killswitch]: The program, `chunk-2xn4gen7.js:4930`, `:8151`. The program logs `auto mode killswitch active (override- or payload-served) — falling back to default`.
+[^killswitch]: The program, `chunk-69n3keqc.js:4773`, `:7994`. The program logs `auto mode killswitch active (override- or payload-served) — falling back to default`.
 [^bypass-errors]: The program.
 [^cloud-bypass]: The program error text.
 [^reasons]: The program.

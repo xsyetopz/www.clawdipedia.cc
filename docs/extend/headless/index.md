@@ -86,4 +86,4 @@ Each row is a family of messages. The backticked text is the start that every me
 
 [^help]: `claude --help`.
 [^retry]: The program, `chunk-xt4nsgp1.js:28984`, `:11114`, and `:29010`.
-[^lost-writes]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-f40wgdh8.js:98109` and `:99435`. Schema text, `chunk-h3xwema8.js:597534`.
+[^lost-writes]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-xt4nsgp1.js:191758` and `:193087`. Schema text, `chunk-bprgtdg6.js:609234`.

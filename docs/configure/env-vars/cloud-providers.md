@@ -124,6 +124,6 @@ Claude Code picks one provider when it starts. The provider decides which auth p
 ## Sources
 
 [^region-source]: The program reports the source as `env-invalid` in this case.
-[^gateway-log]: The program, `chunk-s712g3je.js@470`. Probe cases `env319b.gateway.bad-config-json` and `bad-config-JSON-upper` gave a JSON error line. Probe cases `bad-config-default` and `bad-config-text` gave a plain line.
-[^vertex-fable]: The program, `chunk-gep2e53q.js:19206` (model entry) and `chunk-myegr98p.js:1804` (match table).
+[^gateway-log]: The program, `chunk-rx7rnssj.js@470`. Probe cases `env319b.gateway.bad-config-json` and `bad-config-JSON-upper` gave a JSON error line. Probe cases `bad-config-default` and `bad-config-text` gave a plain line.
+[^vertex-fable]: The program, `chunk-9vmv3a50.js:19206` (model entry) and `chunk-4m8bc75e.js:1806` (match table).
 [^names]: The program, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.

@@ -173,7 +173,7 @@ Each row is a family of messages. The backticked text is the start that every me
 [^restrict]: The program.
 [^same-thread]: The program.
 [^powershell]: Probe case `print.err319.hook-powershell` printed this text.
-[^gitbash]: The program checks `x()==="windows"`, a platform check (read site `chunk-2x9ma4k7.js`, search `requires bash but Git Bash was not found`). On this macOS build the platform is a baked-in `"darwin"` literal, and `CLAUDE_CODE_HOST_PLATFORM` only sets the telemetry `platform` field. Not run: hard limit on this host.
-[^absolute]: The program, `chunk-95t7prpp.js:40200` and `chunk-qyghbmn1.js:17617`.
+[^gitbash]: The program checks `x()==="windows"`, a platform check (read site `chunk-4h798pp0.js`, search `requires bash but Git Bash was not found`). On this macOS build the platform is a baked-in `"darwin"` literal, and `CLAUDE_CODE_HOST_PLATFORM` only sets the telemetry `platform` field. Not run: hard limit on this host.
+[^absolute]: The program, `chunk-yatas16f.js:42152` and `chunk-q1593s9n.js:19664`.
 [^managed-lists]: The program, `chunk-4h798pp0.js:200481-200497` and the field text of both settings. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^transcript-colors]: The program, `chunk-s3j7dx93.js:10448-10630`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
