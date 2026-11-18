@@ -11,7 +11,18 @@ import { counts } from "./ingest.ts";
 
 type Sandbox = Awaited<ReturnType<typeof makeSandbox>>;
 
+// A made-up, unsigned session token, written to a file in the sandbox. With CLAUDE_CODE_REMOTE_SESSION_ID set, the
+// program reads the organization and account of the base OpenTelemetry attributes from its payload
+// (organization.id, user.account_uuid, user.account_id; ccr.session.id is the session id). Only the stub sees it.
+const FAKE_UUID = "00000000-0000-4000-8000-000000000000";
+const tokenPart = (v: object): string =>
+	Buffer.from(JSON.stringify(v)).toString("base64url");
+const fakeSessionToken = (): string =>
+	`${tokenPart({ alg: "none" })}.${tokenPart({ organization_uuid: FAKE_UUID, account_uuid: FAKE_UUID })}.x`;
+
 const otelEnv = (collectorPort: number): Record<string, string> => ({
+	OTEL_METRICS_INCLUDE_ENTRYPOINT: "true",
+	CLAUDE_CODE_REMOTE_SESSION_ID: `session_${FAKE_UUID}`,
 	DISABLE_TELEMETRY: "",
 	CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "",
 	CLAUDE_CODE_ENABLE_TELEMETRY: "1",
@@ -82,7 +93,10 @@ export const createRunner = async (version: string) => {
 		const base = await stub.register(c.id, {
 			log,
 			...(c.seq ? { seq: seqOf(c, sb) } : {}),
+			...(c.respHeaders ? { respHeaders: c.respHeaders } : {}),
 		});
+		const tokenFile = `${sb.root}/session-ingress-token`;
+		await Bun.write(tokenFile, fakeSessionToken());
 		const env = childEnv({
 			home: sb.home,
 			configDir: sb.cfg,
@@ -92,7 +106,11 @@ export const createRunner = async (version: string) => {
 				"DISABLE_TELEMETRY",
 				"CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC",
 			],
-			extra: { ...otelEnv(collectorPort), ...c.env },
+			extra: {
+				...otelEnv(collectorPort),
+				CLAUDE_SESSION_INGRESS_TOKEN_FILE: tokenFile,
+				...c.env,
+			},
 		});
 		const r = await runChild([bin, ...argsFor(c, sb)], {
 			cwd: sb.proj,

@@ -66,7 +66,7 @@ Steps 1 to 8 are unattended and safe in a fresh session. Steps 9 and 10 need the
      It rewrites `tools/schemas/observed/`.
    - To audit the hand-read types in `tools/schemas/manual/`, run `bun run schemas:observe -- --user --raw DIR`, then `bun tools/schemas/audit-run.ts --ref REF --raw DIR`. `REF` is a commit whose schemas still had `x-unverified` fields.
      `--raw DIR` writes the type counts of every path to `DIR` and leaves `tools/schemas/observed/` as it is.
-     The audit gives each formerly unverified field a verdict: `samples agree` (real payloads match the type), `code only` (the program has every anchor of the entry, and no payload was seen), `conflict`, `anchor gone`, or `no entry`. It sets exit code 1 for the last three.
+     The audit gives each formerly unverified field a verdict: `samples agree` (real payloads match the type), `site sampled` (no payload was seen, but a field with the same type and the same anchors has agreeing payloads, so the same code writes both), `code only` (the program has every anchor of the entry, and no payload was seen), `removed` (the current schema no longer has the field), `conflict`, `anchor gone`, or `no entry`. It sets exit code 1 for the last three.
    - User: no.
 
 4. **Diff.** `bun run release:diff`. Read `captures/<to>/diff/report.md` first. It shows which docs pages are affected.

@@ -276,10 +276,12 @@
 							"enum": ["laptop-account-memory", "tool-mark-address"]
 						},
 						"cuts": {
-							"type": "number"
+							"type": "integer",
+							"minimum": 0
 						},
 						"placeholders": {
-							"type": "number"
+							"type": "integer",
+							"minimum": 0
 						},
 						"messages": {
 							"type": "array",
@@ -289,7 +291,7 @@
 							}
 						},
 						"markAddresses": {
-							"type": "number",
+							"type": "integer",
 							"exclusiveMinimum": 0
 						}
 					}
@@ -2690,15 +2692,6 @@
 					},
 					"required": ["type"]
 				},
-				"plugin": {
-					"type": "string"
-				},
-				"id": {
-					"type": "string"
-				},
-				"persist": {
-					"type": "boolean"
-				},
 				"commands": {
 					"type": "array",
 					"items": {
@@ -2943,7 +2936,7 @@
 					}
 				},
 				"isDisplayOnly": {
-					"type": "boolean"
+					"const": true
 				},
 				"submitUuid": {
 					"type": "string"
@@ -3199,7 +3192,7 @@
 					"type": "string"
 				}
 			},
-			"$comment": "Registry policy: transcript. Code sites used: 43."
+			"$comment": "Registry policy: transcript. Code sites used: 42."
 		},
 		"tag": {
 			"type": "object",

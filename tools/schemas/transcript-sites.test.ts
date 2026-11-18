@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { isTranscriptSite } from "./transcript-sites.ts";
+import { isTranscriptSite, isUnpersisted } from "./transcript-sites.ts";
 
 const streamKeys = new Set([
 	"session_id",
@@ -61,5 +61,41 @@ describe("isTranscriptSite", () => {
 		expect(isTranscriptSite("user", ["type", "message"], streamKeys)).toBe(
 			false,
 		);
+	});
+});
+
+describe("isUnpersisted", () => {
+	test("is true for a literal with persist: false", () => {
+		// Arrange
+		const entries = [
+			{ key: "subtype", opt: false, val: { k: "str" as const, v: "placed" } },
+			{ key: "persist", opt: false, val: { k: "bool" as const, v: false } },
+		];
+
+		// Act
+		const out = isUnpersisted(entries);
+
+		// Assert
+		expect(out).toBe(true);
+	});
+
+	test("is false for persist: true, an optional persist, or no persist", () => {
+		// Arrange
+		const yes = {
+			key: "persist",
+			opt: false,
+			val: { k: "bool" as const, v: true },
+		};
+		const opt = {
+			key: "persist",
+			opt: true,
+			val: { k: "bool" as const, v: false },
+		};
+
+		// Act
+		const out = [isUnpersisted([yes]), isUnpersisted([opt]), isUnpersisted([])];
+
+		// Assert
+		expect(out).toEqual([false, false, false]);
 	});
 });

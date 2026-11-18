@@ -12,7 +12,12 @@ export interface Case {
 	prompt?: string;
 	/** Points the API base URL at a closed port: connection errors. */
 	deadBase?: boolean;
+	/** Headers the stub adds to each reply. */
+	respHeaders?: Record<string, string>;
 }
+// The API sends a request id with each reply; the program passes it into the tool events as request_id. The
+// program accepts only ids of the form /^req_[A-Za-z0-9_-]{1,36}$/.
+const REQUEST_ID = { "request-id": "req_observe_stub_0000000000000000" };
 const TOOLS = "Bash,Read,Write,Edit,Glob,Grep,Agent,Skill,TodoWrite";
 const SEQ = [
 	{ name: "Read", input: { file_path: "{PROJ}/a.txt" } },
@@ -80,11 +85,12 @@ export const cases: Case[] = [
 	{
 		id: "tools-allowed",
 		seq: SEQ,
+		respHeaders: REQUEST_ID,
 		args: ["--allowedTools", TOOLS],
 		...FILES,
 		git: true,
 	},
-	{ id: "tools-denied", seq: SEQ, ...FILES },
+	{ id: "tools-denied", seq: SEQ, respHeaders: REQUEST_ID, ...FILES },
 	{
 		id: "auto",
 		seq: SEQ.slice(0, 3),

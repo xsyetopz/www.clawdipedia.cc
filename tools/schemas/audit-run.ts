@@ -2,12 +2,18 @@
 // Audits the hand-read types of every field that was "x-unverified" in schemas/ at the git ref REF (see audit.ts).
 // The program is the build of src/version.ts, loaded as tools/schemas/code.ts loads it. --raw DIR holds the counts
 // from `bun run schemas:observe -- --raw DIR`; without it, each field has no samples. --list prints every row.
-// Sets exit code 1 when a field has no entry, an anchor the program lacks, or a payload type its entry does not allow.
+// A field the current schema no longer has is "removed". Sets exit code 1 when a field has no entry, an anchor the program lacks, or a payload type its entry does not allow.
 import { CLAUDE_CODE_VERSION } from "../../src/version.ts";
-import { auditFields, auditPasses, type AuditRow } from "./audit.ts";
+import {
+	auditFields,
+	auditPasses,
+	type AuditRow,
+	markRemoved,
+	shareSamples,
+} from "./audit.ts";
 import { argv, isJson, mods, ROOT } from "./code/ctx.ts";
 import { anchorIn, readManual } from "./manual.ts";
-import { type Seen, unverifiedPaths } from "./observed.ts";
+import { type Seen, unverifiedPaths, walkFields } from "./observed.ts";
 
 const arg = (name: string): string | undefined =>
 	argv.includes(name) ? argv[argv.indexOf(name) + 1] : undefined;
@@ -62,7 +68,16 @@ const auditFile = async (file: string): Promise<AuditRow[]> => {
 	if (paths.length === 0) {
 		return [];
 	}
-	return auditFields(paths, await readManual(file), has, await readSeen(file));
+	const manual = await readManual(file);
+	const now: unknown = await Bun.file(`${ROOT}/schemas/${file}`).json();
+	const present = new Set<string>();
+	if (isJson(now)) {
+		walkFields(now, (p) => present.add(p));
+	}
+	return markRemoved(
+		shareSamples(auditFields(paths, manual, has, await readSeen(file)), manual),
+		(p) => present.has(p),
+	);
 };
 
 const perFile = await Promise.all(
@@ -81,11 +96,12 @@ for (const { file, rows } of perFile) {
 	);
 }
 for (const r of all) {
-	const bad = r.verdict !== "code only" && r.verdict !== "samples agree";
+	const bad = !auditPasses([r]);
 	if (bad || argv.includes("--list")) {
 		const extra = [
 			...r.missing.map((a) => `missing ${a}`),
 			...r.missed.map((t) => `seen ${t}`),
+			...(r.via === undefined ? [] : [`via ${r.via}`]),
 		];
 		console.info(
 			`  ${r.verdict}: ${r.path} (${r.samples} samples)${extra.length > 0 ? ` ${extra.join("; ")}` : ""}`,

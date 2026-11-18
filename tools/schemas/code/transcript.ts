@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 import { type Entry, mergeEntries } from "../../../inspect/mcp/src/resolve.ts";
 import { mapSeq } from "../../../inspect/mcp/src/seq.ts";
-import { isTranscriptSite } from "../transcript-sites.ts";
+import { isTranscriptSite, isUnpersisted } from "../transcript-sites.ts";
 import {
 	CAPTURES,
 	group,
@@ -162,14 +162,15 @@ interface Shared {
 const useSites = (t: string, x: Shared): Site[] => {
 	const all = x.sites.get(t) ?? [];
 	if (CHAIN.has(t)) {
-		// Message constructors: they carry uuid, and no stream-json snake_case key.
-		return all.filter((s) =>
-			isTranscriptSite(
-				t,
-				keysOf(s.entries),
-				x.streamKeys,
-				s.src.text.slice(Math.max(0, s.at - 8), s.at),
-			),
+		// Message constructors: they carry uuid, no stream-json snake_case key, and no persist:false.
+		return all.filter(
+			(s) =>
+				isTranscriptSite(
+					t,
+					keysOf(s.entries),
+					x.streamKeys,
+					s.src.text.slice(Math.max(0, s.at - 8), s.at),
+				) && !isUnpersisted(s.entries),
 		);
 	}
 	const use = all.filter((s) => keysOf(s.entries).includes("sessionId"));

@@ -1,6 +1,11 @@
 import { expect, test } from "bun:test";
 
-import { auditFields, auditPasses } from "./audit.ts";
+import {
+	auditFields,
+	auditPasses,
+	markRemoved,
+	shareSamples,
+} from "./audit.ts";
 
 const manual = {
 	$comment: "",
@@ -76,4 +81,70 @@ test("the audit passes when every field is 'code only' or 'samples agree'", () =
 
 	// Assert
 	expect(auditPasses(rows)).toBe(true);
+});
+
+const shared = {
+	$comment: "",
+	version: "",
+	fields: {
+		"e1.id": { schema: { type: "string" }, anchors: ["id:"], note: "" },
+		"e2.id": { schema: { type: "string" }, anchors: ["id:"], note: "" },
+		"e3.id": { schema: { type: "integer" }, anchors: ["id:"], note: "" },
+	},
+};
+
+test("a code-only field with the same entry as a sampled field is 'site sampled'", () => {
+	// Arrange
+	const rows = auditFields(["e1.id", "e2.id"], shared, has, {
+		"e1.id": { string: 4 },
+	});
+
+	// Act
+	const out = shareSamples(rows, shared);
+
+	// Assert
+	expect(out[1]).toMatchObject({ verdict: "site sampled", via: "e1.id" });
+	expect(auditPasses(out)).toBe(true);
+});
+
+test("a code-only field with a different type stays 'code only'", () => {
+	// Arrange
+	const rows = auditFields(["e1.id", "e3.id"], shared, has, {
+		"e1.id": { string: 4 },
+	});
+
+	// Act
+	const out = shareSamples(rows, shared);
+
+	// Assert
+	expect(out[1]?.verdict).toBe("code only");
+	expect(out[1]?.via).toBeUndefined();
+});
+
+test("a conflict is not lifted by a sampled field", () => {
+	// Arrange
+	const rows = auditFields(["e1.id", "e2.id"], shared, has, {
+		"e1.id": { string: 4 },
+		"e2.id": { number: 1 },
+	});
+
+	// Act
+	const out = shareSamples(rows, shared);
+
+	// Assert
+	expect(out[1]?.verdict).toBe("conflict");
+	expect(auditPasses(out)).toBe(false);
+});
+
+test("a field the current schema lacks is 'removed', and the audit passes", () => {
+	// Arrange
+	const rows = auditFields(["gone.id", "a.id"], manual, has, {});
+
+	// Act
+	const out = markRemoved(rows, (p) => p !== "gone.id");
+
+	// Assert
+	expect(out[0]).toMatchObject({ path: "gone.id", verdict: "removed" });
+	expect(out[1]?.verdict).toBe("code only");
+	expect(auditPasses(out)).toBe(true);
 });

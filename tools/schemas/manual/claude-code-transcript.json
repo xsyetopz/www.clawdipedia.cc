@@ -5908,23 +5908,25 @@
 		},
 		"api-request.cut.cuts": {
 			"schema": {
-				"type": "number"
-			},
-			"anchors": [
-				"messages:«»?.messages??[]}:void 0",
-				"cut:{kind:\"laptop-account-memory\",cuts:"
-			],
-			"note": "Cut count. tool-mark-address cut at chunk-m14bt1pz.js@279934 passes a count from the mark-address cutter (chunk-qpav394c.js@465998 returns {cuts: count, messages: indices}); laptop-account-memory cut at chunk-cfxefa64.js@1617260 passes the numeric hits counter (chunk-x8wnwjxg.js hits+=m.length-1)."
-		},
-		"api-request.cut.placeholders": {
-			"schema": {
-				"type": "number"
+				"type": "integer",
+				"minimum": 0
 			},
 			"anchors": [
 				"kind:\"tool-mark-address\",cuts:",
 				"cut:{kind:\"laptop-account-memory\",cuts:"
 			],
-			"note": "Placeholder count. chunk-m14bt1pz.js@279934 reuses the cut count; chunk-cfxefa64.js@1617260 passes the numeric placeholders counter."
+			"note": "Non-negative integer count. The tool-mark-address cut (chunk-m14bt1pz.js@279959) passes the count from the mark-address cutter (chunk-qpav394c.js@465998), which counts with t+=+!!n(r) (chunk-p0jfg33m.js). The laptop-account-memory cut (chunk-cfxefa64.js@1617260) passes the hits counter, which grows by m.length-1 (chunk-x8wnwjxg.js@3817)."
+		},
+		"api-request.cut.placeholders": {
+			"schema": {
+				"type": "integer",
+				"minimum": 0
+			},
+			"anchors": [
+				"cuts:«»,placeholders:«»,messages:",
+				"cut:{kind:\"laptop-account-memory\",cuts:"
+			],
+			"note": "Non-negative integer count. chunk-m14bt1pz.js@279984 reuses the cut count; chunk-cfxefa64.js@1617260 passes a counter that only grows with placeholders++ (chunk-cfxefa64.js@1618322)."
 		},
 		"api-request.cut.messages": {
 			"schema": {
@@ -5934,16 +5936,19 @@
 					"minimum": 0
 				}
 			},
-			"anchors": ["messages:«»?.messages??[]}:void 0", "n.flatMap(("],
-			"note": "Message indices. chunk-m14bt1pz.js@279934 uses the cutter messages or []; the cutter (chunk-qpav394c.js@465998) builds them with flatMap((u,h)=>u>0?[h]:[]), an index list. chunk-cfxefa64.js@1617260 collects row indices."
+			"anchors": [
+				"messages:«»?.messages??[]}:void 0",
+				"messages:«».flatMap((«»,«»)=>«»>0?[«»]:[])"
+			],
+			"note": "Message indices. chunk-m14bt1pz.js@280008 uses the cutter messages or []; the cutter builds them with flatMap((u,h)=>u>0?[h]:[]) (chunk-qpav394c.js@466206), so each item is an array index. chunk-cfxefa64.js@1617260 collects row indices."
 		},
 		"api-request.cut.markAddresses": {
 			"schema": {
-				"type": "number",
+				"type": "integer",
 				"exclusiveMinimum": 0
 			},
 			"anchors": ["...«»>0&&{markAddresses:«»}"],
-			"note": "Written only when the count is above 0 (chunk-m14bt1pz.js@279934)."
+			"note": "Integer count, written only when it is above 0 (chunk-m14bt1pz.js@279924)."
 		},
 		"assistant.madeBy": {
 			"schema": {
@@ -5963,10 +5968,9 @@
 			},
 			"anchors": [
 				"if(«»!==void 0)«».apiErrorType=«»",
-				"/^[a-z][a-z0-9_]{0,63}$/",
-				"return typeof «»===\"string\"&&«».test(«»)?«»:void 0}"
+				"let «»=«».error?.error?.type;return typeof «»===\"string\"&&«».test(«»)?«»:void 0}"
 			],
-			"note": "Set only from Dqa (chunk-asj6f58y.js:340006), which returns e.error.error.type only if it is a string matching KA=/^[a-z][a-z0-9_]{0,63}$/ (:339901)."
+			"note": "Set only at chunk-m14bt1pz.js@2043189 from the helper at chunk-asj6f58y.js@340059, which returns e.error.error.type only if it is a string that matches /^[a-z][a-z0-9_]{0,63}$/."
 		},
 		"assistant.cutInUnfinishedBlock": {
 			"schema": {
@@ -6042,18 +6046,21 @@
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["...«»!==void 0&&{plugin:«»}"],
-			"note": "plugin_note attachments (chunk-asj6f58y.js@717351, chunk-4cvmbydf.js@768); the reader checks typeof string at chunk-asj6f58y.js@717150."
+			"anchors": [
+				"type:\"plugin_note\",...«»!==void 0&&{plugin:«»},rowUuid:«»",
+				"typeof «»===\"string\"&&{plugin:«»}"
+			],
+			"note": "plugin_note writers (chunk-asj6f58y.js@717405, chunk-4cvmbydf.js@768, @1510) spread plugin only when defined; the source keeps it only when typeof is string (chunk-asj6f58y.js@717163; chunk-pkvf3w4c.js@701)."
 		},
 		"attachment.attachment.rowUuid": {
 			"schema": {
 				"type": "string"
 			},
 			"anchors": [
-				"type:\"plugin_note\",...«»!==void 0&&{plugin:«»},rowUuid:«»,content:[...«»]",
+				"type:\"plugin_note\",...«»!==void 0&&{plugin:«»},rowUuid:«»",
 				"{rowUuid:«».uuid,"
 			],
-			"note": "plugin_note rowUuid is the user row uuid (chunk-pkvf3w4c.js:3030); the reader checks typeof string (chunk-asj6f58y.js:716987)."
+			"note": "plugin_note writers (chunk-asj6f58y.js@717405, chunk-4cvmbydf.js@768, @1510) copy rowUuid, which is the user row uuid (chunk-pkvf3w4c.js@3029)."
 		},
 		"attachment.attachment.content": {
 			"schema": {
@@ -6077,8 +6084,15 @@
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["{type:\"data-flow-incomplete\",v:1,sessionId:"],
-			"note": "Session id string from the session id getter (chunk-m14bt1pz.js@501146, @528599; chunk-tzmg9srt.js@1616)."
+			"anchors": [
+				"{type:\"data-flow-incomplete\",v:1,sessionId:«»,agentId:«»}",
+				"!Ee.incomplete)V.push({type:\"data-flow-incomplete\",v:1,sessionId:«»})",
+				"{type:\"data-flow-incomplete\",v:1,sessionId:«»,...«»}",
+				"unshift({type:\"data-flow-incomplete\",v:1,sessionId:«»})",
+				"IYe({type:\"data-flow-incomplete\",v:1,sessionId:W()})",
+				"r.push({type:\"data-flow-incomplete\",v:1,sessionId:«»})"
+			],
+			"note": "Each of the six writers (chunk-m14bt1pz.js@495394, @502448, @528598, @614503, @621416; chunk-tzmg9srt.js@1461) passes the session id string from the session id getter W()."
 		},
 		"data-flow-incomplete.agentId": {
 			"schema": {
@@ -6096,8 +6110,14 @@
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["{type:\"data-flow-records\",v:1,sessionId:"],
-			"note": "Session id string from the session id getter (chunk-m14bt1pz.js@501146, @528599; chunk-tzmg9srt.js@1616)."
+			"anchors": [
+				"{type:\"data-flow-records\",v:1,sessionId:«»,agentId:«»,records:«»",
+				"{type:\"data-flow-records\",v:1,sessionId:«»,records:«»,...«»&&{snapshot:!0}}",
+				"{type:\"data-flow-records\",v:1,sessionId:«»,...«»,records:«»",
+				"[{type:\"data-flow-records\",v:1,sessionId:«»,records:«»}]",
+				"{type:\"data-flow-records\",v:1,sessionId:«»,records:[...«».records],snapshot:!0}"
+			],
+			"note": "Each of the five writers (chunk-m14bt1pz.js@495531, @502640, @528791, @614417; chunk-tzmg9srt.js@1529) passes the session id string."
 		},
 		"data-flow-records.agentId": {
 			"schema": {
@@ -6116,17 +6136,26 @@
 				"type": "array"
 			},
 			"anchors": [
-				"records:[...«».records]",
-				"{type:\"data-flow-records\",v:1,sessionId:"
+				"{type:\"data-flow-records\",v:1,sessionId:«»,agentId:«»,records:«»",
+				"{type:\"data-flow-records\",v:1,sessionId:«»,records:«»,...«»&&{snapshot:!0}}",
+				"{type:\"data-flow-records\",v:1,sessionId:«»,...«»,records:«»",
+				"[{type:\"data-flow-records\",v:1,sessionId:«»,records:«»}]",
+				"{type:\"data-flow-records\",v:1,sessionId:«»,records:[...«».records],snapshot:!0}",
+				"takeRecordsForEntry(«»,«»){let «»=this."
 			],
-			"note": "takeRecordsForEntry (chunk-ytkczbf2.js@26842) returns an array; the reader checks Array.isArray and validates each item itself. Item shape is not typed here."
+			"note": "Each writer (chunk-m14bt1pz.js@495531, @502640, @528791, @614417; chunk-tzmg9srt.js@1529) passes an array from takeRecordsForEntry (chunk-ytkczbf2.js@26842) or a copy of one. The reader checks Array.isArray and validates each item itself. Item shape is not typed here."
 		},
 		"derived-from.sessionId": {
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["{type:\"derived-from\",v:1,sessionId:"],
-			"note": "Session id string (chunk-tzmg9srt.js@1616, chunk-b1r44a63.js@48499)."
+			"anchors": [
+				"{type:\"derived-from\",v:1,sessionId:«»,sessions:«».derivedFrom()}",
+				"{type:\"derived-from\",v:1,sessionId:«»,sessions:h}",
+				"{type:\"derived-from\",v:1,sessionId:«»,sessions:«»(",
+				"{type:\"derived-from\",v:1,sessionId:«»,sessions:[{type:\"unknown\""
+			],
+			"note": "Each of the four writers (chunk-m14bt1pz.js@502820, @528099; chunk-tzmg9srt.js@1615; chunk-b1r44a63.js@48498) passes the session id string."
 		},
 		"derived-from.sessions": {
 			"schema": {
@@ -6135,8 +6164,13 @@
 					"type": "object"
 				}
 			},
-			"anchors": ["{type:\"derived-from\",v:1,sessionId:«»,sessions:["],
-			"note": "Array of source objects, e.g. {type:\"unknown\",id:null,via:\"import\"} (chunk-b1r44a63.js@48499) or the branch entry in chunk-tzmg9srt.js@1616."
+			"anchors": [
+				"{type:\"derived-from\",v:1,sessionId:«»,sessions:«».derivedFrom()}",
+				"{type:\"derived-from\",v:1,sessionId:«»,sessions:h}",
+				"{type:\"derived-from\",v:1,sessionId:«»,sessions:«»(",
+				"{type:\"derived-from\",v:1,sessionId:«»,sessions:[{type:\"unknown\""
+			],
+			"note": "Array of source objects at each writer (chunk-m14bt1pz.js@502820, @528099; chunk-tzmg9srt.js@1615), for example {type:\"unknown\",id:null,via:\"import\"} (chunk-b1r44a63.js@48498)."
 		},
 		"last-prompt.explicit": {
 			"schema": {
@@ -6144,9 +6178,10 @@
 			},
 			"anchors": [
 				"leafUuid:null,explicit:!0,sessionId:",
-				"...«»&&{explicit:«»}"
+				"...«»&&{explicit:«»}",
+				"type:\"last-prompt\",sessionId:«»,leafUuid:«»,explicit:!0}"
 			],
-			"note": "Every writer passes explicit:!0 (chunk-m14bt1pz.js@543588, @543981, @544106; chunk-cfxefa64.js@75866)."
+			"note": "Every writer passes explicit:!0 (chunk-m14bt1pz.js@543689, @543980, @544000; chunk-cfxefa64.js@75866, @1622035)."
 		},
 		"observer-ref.observerTaskIds": {
 			"schema": {
@@ -6162,18 +6197,20 @@
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["{type:\"resume-head-vouch\",sessionId:"],
-			"note": "Basename of the transcript file without .jsonl (chunk-m14bt1pz.js@646426)."
+			"anchors": [
+				"{type:\"resume-head-vouch\",sessionId:«»(«»,\".jsonl\"),sum:«»}"
+			],
+			"note": "Basename of the transcript file without .jsonl (chunk-m14bt1pz.js@646425)."
 		},
 		"resume-head-vouch.sum": {
 			"schema": {
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"resume-head-vouch\",sessionId:",
+				"{type:\"resume-head-vouch\",sessionId:«»(«»,\".jsonl\"),sum:«»}",
 				"typeof «».sum===\"string\""
 			],
-			"note": "Writer chunk-m14bt1pz.js@646426 passes the head sum; the reader (chunk-m14bt1pz.js@643011) only accepts typeof string."
+			"note": "The writer (chunk-m14bt1pz.js@646425) passes the head sum, a 64-character latin1 string (chunk-m14bt1pz.js@389963); the reader (chunk-m14bt1pz.js@643002) only accepts typeof string."
 		},
 		"session-owner.sessionId": {
 			"schema": {
@@ -6218,29 +6255,15 @@
 			],
 			"note": "Parsed from stop_details.cyber_verification by the zod object at chunk-m14bt1pz.js@3036569 and written at @2933738, @3320655, @3354602."
 		},
-		"system.plugin": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": ["subtype:\"placed\",plugin:"],
-			"note": "placed rows copy the plugin name (chunk-m14bt1pz.js@4839916)."
-		},
-		"system.id": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": ["subtype:\"placed\",plugin:«»,id:«».id,"],
-			"note": "placed row id, from the plugin's ui.place call (chunk-m14bt1pz.js@4839916)."
-		},
 		"system.isDisplayOnly": {
 			"schema": {
-				"type": "boolean"
+				"const": true
 			},
 			"anchors": [
-				"isDisplayOnly:!0}",
-				"isDisplayOnly!==void 0&&{isDisplayOnly:"
+				"...«»?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly}",
+				"isDisplayOnly:«»?.display===\"displayOnly\"?!0:void 0"
 			],
-			"note": "Hook runs set isDisplayOnly:!0 (chunk-m14bt1pz.js@4285364, @4286507); the system builder copies it (@5961388)."
+			"note": "Literal true. The builder copies it when defined (chunk-m14bt1pz.js@5961382); the sources set !0 or undefined (chunk-z02chaqz.js@33234, chunk-cfxefa64.js@1806975)."
 		},
 		"tools-used.tools": {
 			"schema": {
@@ -6250,22 +6273,39 @@
 					"minLength": 1
 				}
 			},
-			"anchors": ["{type:\"tools-used\",tools:"],
-			"note": "names() of the tool set (chunk-m14bt1pz.js@527576) and a copy at chunk-tzmg9srt.js@7781; the reader keeps only non-empty strings."
+			"anchors": [
+				"{type:\"tools-used\",tools:«».names(),sessionId:«»}",
+				"{type:\"tools-used\",tools:«».names(),sessionId:«»,...«»&&{uuid:",
+				"{type:\"tools-used\",sessionId:«»,tools:«»}",
+				"{type:\"tools-used\",sessionId:«»,tools:[...«».toolsUsedAtEntry]}",
+				"{type:\"tools-used\",tools:«»(«»),sessionId:«»}",
+				"function xO(«»){return «».test(«»)?«»:«»}"
+			],
+			"note": "Each writer (chunk-m14bt1pz.js@502243, @527575; chunk-tzmg9srt.js@4809, @7780; chunk-b1r44a63.js@48621) passes tool names. xO (chunk-ytkczbf2.js@21064) keeps a name only if it matches /^[A-Za-z0-9_.:-]{1,256}$/, else it uses a fixed non-empty constant."
 		},
 		"tools-used.sessionId": {
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["{type:\"tools-used\",tools:"],
-			"note": "Session id string."
+			"anchors": [
+				"{type:\"tools-used\",tools:«».names(),sessionId:«»}",
+				"{type:\"tools-used\",tools:«».names(),sessionId:«»,...«»&&{uuid:",
+				"{type:\"tools-used\",sessionId:«»,tools:«»}",
+				"{type:\"tools-used\",sessionId:«»,tools:[...«».toolsUsedAtEntry]}",
+				"{type:\"tools-used\",tools:«»(«»),sessionId:«»}"
+			],
+			"note": "Each of the five writers (chunk-m14bt1pz.js@502243, @527575; chunk-tzmg9srt.js@4809, @7780; chunk-b1r44a63.js@48621) passes the session id string."
 		},
 		"worktree-state.worktreeSession.extensionRoot": {
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["extensionRoot:«».extensionRoot}"],
-			"note": "Copied from the worktree session (chunk-m14bt1pz.js@624231); set from a path string at chunk-1vttvse2.js@163193."
+			"anchors": [
+				"extensionRoot:«».extensionRoot}",
+				"if(«»&&«»)«».extensionRoot=«»;",
+				"{originalCwd:«»(«»),projectRoot:«»(«»),cwd:«»(«»)}"
+			],
+			"note": "Copied from the worktree session (chunk-m14bt1pz.js@624231). Set at chunk-1vttvse2.js@163183 from Wo(), which returns a projectRoot (chunk-ytkczbf2.js@104450). Each projectRoot is built with yn(r) (chunk-ytkczbf2.js@70852), and yn returns t.normalize(\"NFC\"), a string (chunk-g2zqbq8k.js@3657)."
 		},
 		"user.invokedSkill": {
 			"schema": {
@@ -6290,8 +6330,11 @@
 			"schema": {
 				"const": true
 			},
-			"anchors": [".toolDenialAfterRun=!0"],
-			"note": "Literal true (chunk-m14bt1pz.js@4545821); builder spreads only when truthy."
+			"anchors": [
+				".toolDenialAfterRun=!0",
+				"toolDenialAfterRun:«».toolDenialKind!==void 0?«».executed:void 0"
+			],
+			"note": "Literal true. chunk-m14bt1pz.js@4545820 sets .toolDenialAfterRun=!0; chunk-t31w6vd4.js@206236 copies executed, which the program only sets to !0."
 		},
 		"user.toolDenialBeforeRun": {
 			"schema": {
@@ -6311,15 +6354,21 @@
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["toolResultTypedCommand:«».typedCommand"],
-			"note": "typedCommand is a string or undefined (helper at chunk-m14bt1pz.js@3945946); builder spreads only when truthy."
+			"anchors": [
+				"toolResultTypedCommand:«».typedCommand",
+				"...«»&&{toolResultTypedCommand:«»}"
+			],
+			"note": "typedCommand is a string or undefined (chunk-m14bt1pz.js@4752428); the builder spreads it only when truthy (chunk-m14bt1pz.js@5789675)."
 		},
 		"user.mcpCallNotReadOnly": {
 			"schema": {
 				"enum": ["declared", "no_hint"]
 			},
-			"anchors": ["return «».readOnlyHint===!1?\"declared\":\"no_hint\""],
-			"note": "Writer at chunk-c7v3vnh0.js@108631 returns undefined or one of the two literals."
+			"anchors": [
+				"readOnlyHint===!1?\"declared\":\"no_hint\"",
+				"...«»!==void 0&&{mcpCallNotReadOnly:«»}"
+			],
+			"note": "The writer returns undefined or one of the two literals (chunk-q75nj9we.js@19113); the builder spreads it only when defined (chunk-m14bt1pz.js@5789887)."
 		},
 		"user.holdsPersonsWords": {
 			"schema": {
@@ -6327,31 +6376,34 @@
 			},
 			"anchors": [
 				"holdsPersonsWords:«»?!0:void 0",
-				"...«»&&{holdsPersonsWords:«»}",
-				"&&{holdsPersonsWords:!0}"
+				"holdsPersonsWords:«»(«»,«»)!==void 0?!0:void 0",
+				"...«»&&{holdsPersonsWords:«»}"
 			],
-			"note": "Every writer yields !0 or undefined (chunk-m14bt1pz.js:4762732, :4778103, :5789935; chunk-c7v3vnh0.js:88889, :108631)."
+			"note": "Literal true or undefined at every writer (chunk-m14bt1pz.js@4762732, @4778103, @4787064; chunk-zgpk86bb.js@89750); the builder spreads it only when truthy (chunk-m14bt1pz.js@5789927)."
 		},
 		"progress.data.toolInput.query": {
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["<non-string ${typeof"],
-			"note": "Value is a string sliced to a length limit, or a placeholder string for a non-string input. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": [
+				"{query:«»(«»),...typeof «»===\"number\"&&{max:«»}}",
+				"<non-string ${typeof «»}>"
+			],
+			"note": "A string sliced to a length limit, or a placeholder string for a non-string input (chunk-t31w6vd4.js@79081, @79149). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.toolInput.max": {
 			"schema": {
 				"type": "number"
 			},
-			"anchors": ["typeof «»===\"number\"&&{max:«»}"],
-			"note": "Written only for numbers. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": ["{query:«»(«»),...typeof «»===\"number\"&&{max:«»}}"],
+			"note": "Written only when typeof is number (chunk-t31w6vd4.js@79149). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.toolInput.name": {
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["{name:«»(«»)}"],
-			"note": "describeTool passes the stringified name. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": ["{name:«»(«»)},()=>«».describeTool(«»))"],
+			"note": "describeTool passes the name through the same string helper as query (chunk-t31w6vd4.js@79253). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.toolUseId": {
 			"schema": {
@@ -6359,7 +6411,8 @@
 			},
 			"anchors": [
 				"data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"start\"}",
-				"«»=«»?.toolUseID??`${«»}${«»()}`"
+				"«»=«»?.toolUseID??`${«»}${«»()}`",
+				"toolUseId:«»,phase:\"executing\",nativeTimeoutMs:«»"
 			],
 			"note": "The id @ of every repl_tool_call row is the caller's toolUseID or a template string (chunk-t31w6vd4.js:117041). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
@@ -6388,15 +6441,15 @@
 			"schema": {
 				"const": true
 			},
-			"anchors": ["toolUseId:«»,phase:«»,...«»,scriptHelper:!0}"],
-			"note": "Literal true (chunk-t31w6vd4.js:78808). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": ["phase:«»,...«»,scriptHelper:!0}"],
+			"note": "Literal true (chunk-t31w6vd4.js@78865). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.declined": {
 			"schema": {
 				"const": true
 			},
-			"anchors": ["{declined:!0}"],
-			"note": "Literal true. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": ["phase:\"error\",error:«»,...«»&&{declined:!0}"],
+			"note": "Literal true (chunk-t31w6vd4.js@118065). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.permissionDecision": {
 			"schema": {
@@ -6434,7 +6487,8 @@
 				"type": "number"
 			},
 			"anchors": [
-				"phase:\"executing\",nativeTimeoutMs:«»,...«»&&{executed:!0}}"
+				"phase:\"executing\",nativeTimeoutMs:«»,...«»&&{executed:!0}}",
+				"toolUseId:«»,phase:\"executing\",nativeTimeoutMs:«»"
 			],
 			"note": "Qr (chunk-t31w6vd4.js) returns Math.min of two timeouts for Bash and PowerShell, 1e4 for some tools, or undefined; the caller passes it at :129174. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
@@ -6462,9 +6516,10 @@
 				"required": ["elapsedTimeSeconds", "totalLines"]
 			},
 			"anchors": [
-				"{elapsedTimeSeconds:«».data.elapsedTimeSeconds,totalLines:«».data.totalLines}"
+				"{elapsedTimeSeconds:«».data.elapsedTimeSeconds,totalLines:«».data.totalLines}",
+				"phase:\"executing\",shellProgress:"
 			],
-			"note": "Copied from shell progress data. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"note": "Written at chunk-t31w6vd4.js@118882 from the shell progress data copy at @131078. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.mcpContent": {
 			"schema": {
@@ -6493,7 +6548,10 @@
 					"type": "string"
 				}
 			},
-			"anchors": ["...«».length>0&&{carriedMarkers:«»}"],
+			"anchors": [
+				"...«».length>0&&{carriedMarkers:«»}",
+				"return «».filter((«»)=>«».some((«»)=>«».includes(«»)))}"
+			],
 			"note": "H4e (chunk-rj3e7agr.js:152573) filters the fixed marker string list ih (:152076). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.notes": {
@@ -6531,7 +6589,10 @@
 		},
 		"progress.data.resultBeforeReadBack": {
 			"schema": {},
-			"anchors": ["&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}"],
+			"anchors": [
+				"&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}",
+				"{resultBeforeReadBack:«»}"
+			],
 			"note": "Any JSON value, written only when it differs from the result (chunk-t31w6vd4.js:120748). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.servedText": {
@@ -6540,7 +6601,8 @@
 			},
 			"anchors": [
 				"...«»!==void 0&&{servedText:«»}}})",
-				"\"result\"in «»&&typeof «».result===\"string\"?«».result:void 0"
+				"\"result\"in «»&&typeof «».result===\"string\"?«».result:void 0",
+				"{servedText:«»}"
 			],
 			"note": "BOs (chunk-bw2ty92s.js:1728) returns the result only when it is a string. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
@@ -6550,7 +6612,8 @@
 			},
 			"anchors": [
 				"data:{...«»,scriptStartedAt:«»}",
-				"...«».scriptStartedAt!==void 0&&{scriptStartedAt:«».scriptStartedAt}"
+				"...«».scriptStartedAt!==void 0&&{scriptStartedAt:«».scriptStartedAt}",
+				"...«»,scriptStartedAt:«»}"
 			],
 			"note": "The tick's startedAt, set only by Date.now() (chunk-7gaz5x38.js:4900); written at chunk-9wr2tbyv.js:4351. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		}
