@@ -5270,7 +5270,7 @@
 				"kind:\"tool-mark-address\",cuts:",
 				"cut:{kind:\"laptop-account-memory\",cuts:"
 			],
-			"note": "Non-negative integer count. The tool-mark-address cut (chunk-m14bt1pz.js@279959) passes the count from the mark-address cutter (chunk-qpav394c.js@465998), which counts with t+=+!!n(r) (chunk-p0jfg33m.js). The laptop-account-memory cut (chunk-cfxefa64.js@1617260) passes the hits counter, which grows by m.length-1 (chunk-x8wnwjxg.js@3817)."
+			"note": "Non-negative integer count. The tool-mark-address cut (chunk-m14bt1pz.js:279959) passes the count from the mark-address cutter (chunk-qpav394c.js:465998), which counts with t+=+!!n(r) (chunk-p0jfg33m.js). The laptop-account-memory cut (chunk-cfxefa64.js:1617260) passes the hits counter, which grows by m.length-1 (chunk-x8wnwjxg.js:3817)."
 		},
 		"api-request.cut.placeholders": {
 			"schema": {
@@ -5281,7 +5281,7 @@
 				"cuts:«»,placeholders:«»,messages:",
 				"cut:{kind:\"laptop-account-memory\",cuts:"
 			],
-			"note": "Non-negative integer count. chunk-m14bt1pz.js@279984 reuses the cut count; chunk-cfxefa64.js@1617260 passes a counter that only grows with placeholders++ (chunk-cfxefa64.js@1618322)."
+			"note": "Non-negative integer count. chunk-m14bt1pz.js:279984 reuses the cut count; chunk-cfxefa64.js:1617260 passes a counter that only grows with placeholders++ (chunk-cfxefa64.js:1618322)."
 		},
 		"api-request.cut.messages": {
 			"schema": {
@@ -5295,7 +5295,7 @@
 				"messages:«»?.messages??[]}:void 0",
 				"messages:«».flatMap((«»,«»)=>«»>0?[«»]:[])"
 			],
-			"note": "Message indices. chunk-m14bt1pz.js@280008 uses the cutter messages or []; the cutter builds them with flatMap((u,h)=>u>0?[h]:[]) (chunk-qpav394c.js@466206), so each item is an array index. chunk-cfxefa64.js@1617260 collects row indices."
+			"note": "Message indices. chunk-m14bt1pz.js:280008 uses the cutter messages or []; the cutter builds them with flatMap((u,h)=>u>0?[h]:[]) (chunk-qpav394c.js:466206), so each item is an array index. chunk-cfxefa64.js:1617260 collects row indices."
 		},
 		"api-request.cut.markAddresses": {
 			"schema": {
@@ -5303,7 +5303,7 @@
 				"exclusiveMinimum": 0
 			},
 			"anchors": ["...«»>0&&{markAddresses:«»}"],
-			"note": "Integer count, written only when it is above 0 (chunk-m14bt1pz.js@279924)."
+			"note": "Integer count, written only when it is above 0 (chunk-m14bt1pz.js:279924)."
 		},
 		"assistant.madeBy": {
 			"schema": {
@@ -5314,7 +5314,7 @@
 				"{...«»,madeBy:\"input\"}",
 				".madeBy=\"model\""
 			],
-			"note": "Three literal writers: model reply (chunk-jxtnvz5q.js@721), other (chunk-b1r44a63.js@41949), input for local_command rows (chunk-rap1tzf6.js@198502). A pass-through copies an existing value."
+			"note": "Three literal writers: model reply (chunk-jxtnvz5q.js:721), other (chunk-b1r44a63.js:41949), input for local_command rows (chunk-rap1tzf6.js:198502). A pass-through copies an existing value."
 		},
 		"assistant.apiErrorType": {
 			"schema": {
@@ -5325,7 +5325,7 @@
 				"if(«»!==void 0)«».apiErrorType=«»",
 				"let «»=«».error?.error?.type;return typeof «»===\"string\"&&«».test(«»)?«»:void 0}"
 			],
-			"note": "Set only at chunk-m14bt1pz.js@2043189 from the helper at chunk-asj6f58y.js@340059, which returns e.error.error.type only if it is a string that matches /^[a-z][a-z0-9_]{0,63}$/."
+			"note": "Set only at chunk-m14bt1pz.js:2043189 from the helper at chunk-asj6f58y.js:340059, which returns e.error.error.type only if it is a string that matches /^[a-z][a-z0-9_]{0,63}$/."
 		},
 		"assistant.cutInUnfinishedBlock": {
 			"schema": {
@@ -5349,14 +5349,14 @@
 				}
 			},
 			"anchors": [".refusedToolUseIds="],
-			"note": "Set from toolUseIds of the refusal map in chunk-m14bt1pz.js; each id comes from a tool_use_id (helper at chunk-m14bt1pz.js@184279 returns u.tool_use_id or undefined)."
+			"note": "Set from toolUseIds of the refusal map in chunk-m14bt1pz.js; each id comes from a tool_use_id (helper at chunk-m14bt1pz.js:184279 returns u.tool_use_id or undefined)."
 		},
 		"assistant.requestNotRecorded": {
 			"schema": {
 				"type": "string"
 			},
 			"anchors": ["return{requestRef:«»,requestNotRecorded:«»}"],
-			"note": "Built by chunk-18d5r2hb.js@296106 and spread at chunk-m14bt1pz.js@3330516, @3339394, @3349496. The reason is the literal tool_mark_address_copy_failed or a string checked with typeof ...===\"string\"."
+			"note": "Built by chunk-18d5r2hb.js:296106 and spread at chunk-m14bt1pz.js:3330516, @3339394, @3349496. The reason is the literal tool_mark_address_copy_failed or a string checked with typeof ...===\"string\"."
 		},
 		"assistant.requestHookChanged.what": {
 			"schema": {
@@ -5375,7 +5375,7 @@
 				"{requestHookChanged:{record:«»,what:[...«»].sort()}}",
 				".changes.add(\"answered\")"
 			],
-			"note": "Sorted set of change names. chunk-18d5r2hb.js@295543 adds body, beta-header, version-header, destination; chunk-18d5r2hb.js@341859 adds answered."
+			"note": "Sorted set of change names. chunk-18d5r2hb.js:295543 adds body, beta-header, version-header, destination; chunk-18d5r2hb.js:341859 adds answered."
 		},
 		"attachment.attachment.commandMode": {
 			"schema": {
@@ -5388,14 +5388,14 @@
 				]
 			},
 			"anchors": ["commandMode:«».mode,origin:"],
-			"note": "Writer chunk-m14bt1pz.js@4008427 copies the queue mode; the queue accepts the five modes listed at chunk-2eyv6kgt.js@1196 and each has a literal enqueue site. The list is not proven exhaustive."
+			"note": "Writer chunk-m14bt1pz.js:4008427 copies the queue mode; the queue accepts the five modes listed at chunk-2eyv6kgt.js:1196 and each has a literal enqueue site. The list is not proven exhaustive."
 		},
 		"attachment.attachment.origin.name": {
 			"schema": {
 				"type": "string"
 			},
 			"anchors": ["{kind:\"hook\",name:"],
-			"note": "Hook (event name, chunk-m14bt1pz.js@4235328), plugin, skill and server origins all pass a string name."
+			"note": "Hook (event name, chunk-m14bt1pz.js:4235328), plugin, skill and server origins all pass a string name."
 		},
 		"attachment.attachment.plugin": {
 			"schema": {
@@ -5405,7 +5405,7 @@
 				"type:\"plugin_note\",...«»!==void 0&&{plugin:«»},rowUuid:«»",
 				"typeof «»===\"string\"&&{plugin:«»}"
 			],
-			"note": "plugin_note writers (chunk-asj6f58y.js@717405, chunk-4cvmbydf.js@768, @1510) spread plugin only when defined; the source keeps it only when typeof is string (chunk-asj6f58y.js@717163; chunk-pkvf3w4c.js@701)."
+			"note": "plugin_note writers (chunk-asj6f58y.js:717405, chunk-4cvmbydf.js:768, @1510) spread plugin only when defined; the source keeps it only when typeof is string (chunk-asj6f58y.js:717163; chunk-pkvf3w4c.js:701)."
 		},
 		"attachment.attachment.rowUuid": {
 			"schema": {
@@ -5415,14 +5415,14 @@
 				"type:\"plugin_note\",...«»!==void 0&&{plugin:«»},rowUuid:«»",
 				"{rowUuid:«».uuid,"
 			],
-			"note": "plugin_note writers (chunk-asj6f58y.js@717405, chunk-4cvmbydf.js@768, @1510) copy rowUuid, which is the user row uuid (chunk-pkvf3w4c.js@3029)."
+			"note": "plugin_note writers (chunk-asj6f58y.js:717405, chunk-4cvmbydf.js:768, @1510) copy rowUuid, which is the user row uuid (chunk-pkvf3w4c.js:3029)."
 		},
 		"attachment.attachment.content": {
 			"schema": {
 				"type": ["string", "null", "array", "object"]
 			},
 			"anchors": ["content:[...«»]"],
-			"note": "plugin_note writes array content (chunk-asj6f58y.js@717351); other attachment kinds could not all be enumerated with search, so the plain JSON union stays. Least certain entry."
+			"note": "plugin_note writes array content (chunk-asj6f58y.js:717351); other attachment kinds could not all be enumerated with search, so the plain JSON union stays. Least certain entry."
 		},
 		"cost-state.modelCallCostUSD": {
 			"schema": {
@@ -5433,7 +5433,7 @@
 				"...«»>0&&{modelCallCostUSD:«»}",
 				"recordModelCallCost(«»){if(Number.isFinite(«»)&&«»>=0)"
 			],
-			"note": "Written only when above 0 (chunk-m14bt1pz.js@1246317); source is the finite non-negative sum from chunk-ytkczbf2.js@33747."
+			"note": "Written only when above 0 (chunk-m14bt1pz.js:1246317); source is the finite non-negative sum from chunk-ytkczbf2.js:33747."
 		},
 		"data-flow-incomplete.sessionId": {
 			"schema": {
@@ -5447,7 +5447,7 @@
 				"IYe({type:\"data-flow-incomplete\",v:1,sessionId:W()})",
 				"r.push({type:\"data-flow-incomplete\",v:1,sessionId:«»})"
 			],
-			"note": "Each of the six writers (chunk-m14bt1pz.js@495394, @502448, @528598, @614503, @621416; chunk-tzmg9srt.js@1461) passes the session id string from the session id getter W()."
+			"note": "Each of the six writers (chunk-m14bt1pz.js:495394, @502448, @528598, @614503, @621416; chunk-tzmg9srt.js:1461) passes the session id string from the session id getter W()."
 		},
 		"data-flow-incomplete.agentId": {
 			"schema": {
@@ -5472,7 +5472,7 @@
 				"[{type:\"data-flow-records\",v:1,sessionId:«»,records:«»}]",
 				"{type:\"data-flow-records\",v:1,sessionId:«»,records:[...«».records],snapshot:!0}"
 			],
-			"note": "Each of the five writers (chunk-m14bt1pz.js@495531, @502640, @528791, @614417; chunk-tzmg9srt.js@1529) passes the session id string."
+			"note": "Each of the five writers (chunk-m14bt1pz.js:495531, @502640, @528791, @614417; chunk-tzmg9srt.js:1529) passes the session id string."
 		},
 		"data-flow-records.agentId": {
 			"schema": {
@@ -5878,7 +5878,7 @@
 				"if(e.response_id!==void 0)return a8t(e.response_id)?{response_id:",
 				"recordScriptCall(«»,«»,«»,«»={}){"
 			],
-			"note": "Each writer (chunk-m14bt1pz.js@495531, @502640, @528791, @614417; chunk-tzmg9srt.js@1529) passes an array from takeRecordsForEntry (chunk-ytkczbf2.js@26842). An item is a response marker {response_id, listed?, mark_sent_by?} (chunk-ytkczbf2.js@26246) or a call record from recordCall, recordEvent, recordScriptCall, or recordTouch (chunk-ytkczbf2.js@23150 to @25600). The reader Hsi (chunk-s7x4n0qs.js@783) keeps only these shapes: ids pass yce, a string of 1 to 256 characters with no control character (chunk-hzvpv59r.js@19131); response ids match /^msg_(?:staging_|local_)?[A-Za-z0-9]{1,64}$/; inner_call_index is a safe integer from 0 below 2147483648; server passes Mls (chunk-hzvpv59r.js@18642) or is {type:\"unknown\"} (chunk-fchyqr5f.js@15685); a call record has tool_use_id or event_id."
+			"note": "Each writer (chunk-m14bt1pz.js:495531, @502640, @528791, @614417; chunk-tzmg9srt.js:1529) passes an array from takeRecordsForEntry (chunk-ytkczbf2.js:26842). An item is a response marker {response_id, listed?, mark_sent_by?} (chunk-ytkczbf2.js:26246) or a call record from recordCall, recordEvent, recordScriptCall, or recordTouch (chunk-ytkczbf2.js:23150 to @25600). The reader Hsi (chunk-s7x4n0qs.js:783) keeps only these shapes: ids pass yce, a string of 1 to 256 characters with no control character (chunk-hzvpv59r.js:19131); response ids match /^msg_(?:staging_|local_)?[A-Za-z0-9]{1,64}$/; inner_call_index is a safe integer from 0 below 2147483648; server passes Mls (chunk-hzvpv59r.js:18642) or is {type:\"unknown\"} (chunk-fchyqr5f.js:15685); a call record has tool_use_id or event_id."
 		},
 		"derived-from.sessionId": {
 			"schema": {
@@ -5890,7 +5890,7 @@
 				"{type:\"derived-from\",v:1,sessionId:«»,sessions:«»(",
 				"{type:\"derived-from\",v:1,sessionId:«»,sessions:[{type:\"unknown\""
 			],
-			"note": "Each of the four writers (chunk-m14bt1pz.js@502820, @528099; chunk-tzmg9srt.js@1615; chunk-b1r44a63.js@48498) passes the session id string."
+			"note": "Each of the four writers (chunk-m14bt1pz.js:502820, @528099; chunk-tzmg9srt.js:1615; chunk-b1r44a63.js:48498) passes the session id string."
 		},
 		"derived-from.sessions": {
 			"schema": {
@@ -5948,7 +5948,7 @@
 				"{type:\"derived-from\",v:1,sessionId:«»,sessions:[{type:\"unknown\"",
 				"let n=_il.find((s)=>s===e.type),t=gil.find((s)=>s===e.via);"
 			],
-			"note": "Array of source objects at each writer (chunk-m14bt1pz.js@502820, @528099; chunk-tzmg9srt.js@1615), for example {type:\"unknown\",id:null,via:\"import\"} (chunk-b1r44a63.js@48498). The reader F (chunk-s7x4n0qs.js@2101) keeps only an item whose type is in [\"claude_code_session\",\"unknown\"] and whose via is in the 12 values of gil (chunk-ytkczbf2.js@21951); id is a yce string, or null for type unknown; started is an optional yce string. The writer helper _F builds {type:\"claude_code_session\",id,via}."
+			"note": "Array of source objects at each writer (chunk-m14bt1pz.js:502820, @528099; chunk-tzmg9srt.js:1615), for example {type:\"unknown\",id:null,via:\"import\"} (chunk-b1r44a63.js:48498). The reader F (chunk-s7x4n0qs.js:2101) keeps only an item whose type is in [\"claude_code_session\",\"unknown\"] and whose via is in the 12 values of gil (chunk-ytkczbf2.js:21951); id is a yce string, or null for type unknown; started is an optional yce string. The writer helper _F builds {type:\"claude_code_session\",id,via}."
 		},
 		"last-prompt.explicit": {
 			"schema": {
@@ -5959,7 +5959,7 @@
 				"...«»&&{explicit:«»}",
 				"type:\"last-prompt\",sessionId:«»,leafUuid:«»,explicit:!0}"
 			],
-			"note": "Every writer passes explicit:!0 (chunk-m14bt1pz.js@543689, @543980, @544000; chunk-cfxefa64.js@75866, @1622035)."
+			"note": "Every writer passes explicit:!0 (chunk-m14bt1pz.js:543689, @543980, @544000; chunk-cfxefa64.js:75866, @1622035)."
 		},
 		"observer-ref.observerTaskIds": {
 			"schema": {
@@ -5969,7 +5969,7 @@
 				}
 			},
 			"anchors": ["...«».size>1&&{observerTaskIds:Object.fromEntries(«»)}"],
-			"note": "Object.fromEntries of a map from observerAgentType to observerTaskId (chunk-0cnnff0k.js@18461)."
+			"note": "Object.fromEntries of a map from observerAgentType to observerTaskId (chunk-0cnnff0k.js:18461)."
 		},
 		"resume-head-vouch.sessionId": {
 			"schema": {
@@ -5978,7 +5978,7 @@
 			"anchors": [
 				"{type:\"resume-head-vouch\",sessionId:«»(«»,\".jsonl\"),sum:«»}"
 			],
-			"note": "Basename of the transcript file without .jsonl (chunk-m14bt1pz.js@646425)."
+			"note": "Basename of the transcript file without .jsonl (chunk-m14bt1pz.js:646425)."
 		},
 		"resume-head-vouch.sum": {
 			"schema": {
@@ -5988,28 +5988,28 @@
 				"{type:\"resume-head-vouch\",sessionId:«»(«»,\".jsonl\"),sum:«»}",
 				"typeof «».sum===\"string\""
 			],
-			"note": "The writer (chunk-m14bt1pz.js@646425) passes the head sum, a 64-character latin1 string (chunk-m14bt1pz.js@389963); the reader (chunk-m14bt1pz.js@643002) only accepts typeof string."
+			"note": "The writer (chunk-m14bt1pz.js:646425) passes the head sum, a 64-character latin1 string (chunk-m14bt1pz.js:389963); the reader (chunk-m14bt1pz.js:643002) only accepts typeof string."
 		},
 		"session-owner.sessionId": {
 			"schema": {
 				"type": "string"
 			},
 			"anchors": ["{type:\"session-owner\",...«»,sessionId:"],
-			"note": "Session id string (chunk-m14bt1pz.js@501260, @621501)."
+			"note": "Session id string (chunk-m14bt1pz.js:501260, @621501)."
 		},
 		"session-owner.accountUuid": {
 			"schema": {
 				"type": "string"
 			},
 			"anchors": ["{accountUuid:«»,organizationUuid:«»}"],
-			"note": "Owner from the bridge owner env variables or the account profile; the function at chunk-zfmsqnn9.js@1668 returns it only if both values are truthy strings."
+			"note": "Owner from the bridge owner env variables or the account profile; the function at chunk-zfmsqnn9.js:1668 returns it only if both values are truthy strings."
 		},
 		"session-owner.organizationUuid": {
 			"schema": {
 				"type": "string"
 			},
 			"anchors": ["{accountUuid:«»,organizationUuid:«»}"],
-			"note": "Owner from the bridge owner env variables or the account profile; the function at chunk-zfmsqnn9.js@1668 returns it only if both values are truthy strings."
+			"note": "Owner from the bridge owner env variables or the account profile; the function at chunk-zfmsqnn9.js:1668 returns it only if both values are truthy strings."
 		},
 		"system.apiRefusalCyberVerification": {
 			"schema": {
@@ -6031,7 +6031,7 @@
 				"...«»!==void 0&&{apiRefusalCyberVerification:«»}",
 				"cyber_verification:«»({type:«»(),tier:«»().optional(),reason:«»().optional()})"
 			],
-			"note": "Parsed from stop_details.cyber_verification by the zod object at chunk-m14bt1pz.js@3036569 and written at @2933738, @3320655, @3354602."
+			"note": "Parsed from stop_details.cyber_verification by the zod object at chunk-m14bt1pz.js:3036569 and written at @2933738, @3320655, @3354602."
 		},
 		"system.isDisplayOnly": {
 			"schema": {
@@ -6041,7 +6041,7 @@
 				"...«»?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly}",
 				"isDisplayOnly:«»?.display===\"displayOnly\"?!0:void 0"
 			],
-			"note": "Literal true. The builder copies it when defined (chunk-m14bt1pz.js@5961382); the sources set !0 or undefined (chunk-z02chaqz.js@33234, chunk-cfxefa64.js@1806975)."
+			"note": "Literal true. The builder copies it when defined (chunk-m14bt1pz.js:5961382); the sources set !0 or undefined (chunk-z02chaqz.js:33234, chunk-cfxefa64.js:1806975)."
 		},
 		"tools-used.tools": {
 			"schema": {
@@ -6059,7 +6059,7 @@
 				"{type:\"tools-used\",tools:«»(«»),sessionId:«»}",
 				"function xO(«»){return «».test(«»)?«»:«»}"
 			],
-			"note": "Each writer (chunk-m14bt1pz.js@502243, @527575; chunk-tzmg9srt.js@4809, @7780; chunk-b1r44a63.js@48621) passes tool names. xO (chunk-ytkczbf2.js@21064) keeps a name only if it matches /^[A-Za-z0-9_.:-]{1,256}$/, else it uses a fixed non-empty constant."
+			"note": "Each writer (chunk-m14bt1pz.js:502243, @527575; chunk-tzmg9srt.js:4809, @7780; chunk-b1r44a63.js:48621) passes tool names. xO (chunk-ytkczbf2.js:21064) keeps a name only if it matches /^[A-Za-z0-9_.:-]{1,256}$/, else it uses a fixed non-empty constant."
 		},
 		"tools-used.sessionId": {
 			"schema": {
@@ -6072,7 +6072,7 @@
 				"{type:\"tools-used\",sessionId:«»,tools:[...«».toolsUsedAtEntry]}",
 				"{type:\"tools-used\",tools:«»(«»),sessionId:«»}"
 			],
-			"note": "Each of the five writers (chunk-m14bt1pz.js@502243, @527575; chunk-tzmg9srt.js@4809, @7780; chunk-b1r44a63.js@48621) passes the session id string."
+			"note": "Each of the five writers (chunk-m14bt1pz.js:502243, @527575; chunk-tzmg9srt.js:4809, @7780; chunk-b1r44a63.js:48621) passes the session id string."
 		},
 		"worktree-state.worktreeSession.extensionRoot": {
 			"schema": {
@@ -6083,7 +6083,7 @@
 				"if(«»&&«»)«».extensionRoot=«»;",
 				"{originalCwd:«»(«»),projectRoot:«»(«»),cwd:«»(«»)}"
 			],
-			"note": "Copied from the worktree session (chunk-m14bt1pz.js@624231). Set at chunk-1vttvse2.js@163183 from Wo(), which returns a projectRoot (chunk-ytkczbf2.js@104450). Each projectRoot is built with yn(r) (chunk-ytkczbf2.js@70852), and yn returns t.normalize(\"NFC\"), a string (chunk-g2zqbq8k.js@3657)."
+			"note": "Copied from the worktree session (chunk-m14bt1pz.js:624231). Set at chunk-1vttvse2.js:163183 from Wo(), which returns a projectRoot (chunk-ytkczbf2.js:104450). Each projectRoot is built with yn(r) (chunk-ytkczbf2.js:70852), and yn returns t.normalize(\"NFC\"), a string (chunk-g2zqbq8k.js:3657)."
 		},
 		"user.invokedSkill": {
 			"schema": {
@@ -6102,7 +6102,7 @@
 				"...«»!==void 0&&{invokedSkill:«»}",
 				"invokedSkill:{name:«».name,path:"
 			],
-			"note": "Writer chunk-z02chaqz.js@50579; path is source:name or name. Builder spread at chunk-m14bt1pz.js@5788183."
+			"note": "Writer chunk-z02chaqz.js:50579; path is source:name or name. Builder spread at chunk-m14bt1pz.js:5788183."
 		},
 		"user.toolDenialAfterRun": {
 			"schema": {
@@ -6112,21 +6112,21 @@
 				".toolDenialAfterRun=!0",
 				"toolDenialAfterRun:«».toolDenialKind!==void 0?«».executed:void 0"
 			],
-			"note": "Literal true. chunk-m14bt1pz.js@4545820 sets .toolDenialAfterRun=!0; chunk-t31w6vd4.js@206236 copies executed, which the program only sets to !0."
+			"note": "Literal true. chunk-m14bt1pz.js:4545820 sets .toolDenialAfterRun=!0; chunk-t31w6vd4.js:206236 copies executed, which the program only sets to !0."
 		},
 		"user.toolDenialBeforeRun": {
 			"schema": {
 				"const": true
 			},
 			"anchors": ["toolDenialBeforeRun:«»?!0:void 0"],
-			"note": "Literal true or undefined (chunk-8g2nr9dn.js@74600)."
+			"note": "Literal true or undefined (chunk-8g2nr9dn.js:74600)."
 		},
 		"user.toolDenialFromHost": {
 			"schema": {
 				"const": true
 			},
 			"anchors": ["toolDenialFromHost:«»!==void 0?!0:void 0"],
-			"note": "Literal true or undefined (chunk-c7v3vnh0.js@108591)."
+			"note": "Literal true or undefined (chunk-c7v3vnh0.js:108591)."
 		},
 		"user.toolResultTypedCommand": {
 			"schema": {
@@ -6136,7 +6136,7 @@
 				"toolResultTypedCommand:«».typedCommand",
 				"...«»&&{toolResultTypedCommand:«»}"
 			],
-			"note": "typedCommand is a string or undefined (chunk-m14bt1pz.js@4752428); the builder spreads it only when truthy (chunk-m14bt1pz.js@5789675)."
+			"note": "typedCommand is a string or undefined (chunk-m14bt1pz.js:4752428); the builder spreads it only when truthy (chunk-m14bt1pz.js:5789675)."
 		},
 		"user.mcpCallNotReadOnly": {
 			"schema": {
@@ -6146,7 +6146,7 @@
 				"readOnlyHint===!1?\"declared\":\"no_hint\"",
 				"...«»!==void 0&&{mcpCallNotReadOnly:«»}"
 			],
-			"note": "The writer returns undefined or one of the two literals (chunk-q75nj9we.js@19113); the builder spreads it only when defined (chunk-m14bt1pz.js@5789887)."
+			"note": "The writer returns undefined or one of the two literals (chunk-q75nj9we.js:19113); the builder spreads it only when defined (chunk-m14bt1pz.js:5789887)."
 		},
 		"user.holdsPersonsWords": {
 			"schema": {
@@ -6157,7 +6157,7 @@
 				"holdsPersonsWords:«»(«»,«»)!==void 0?!0:void 0",
 				"...«»&&{holdsPersonsWords:«»}"
 			],
-			"note": "Literal true or undefined at every writer (chunk-m14bt1pz.js@4762732, @4778103, @4787064; chunk-zgpk86bb.js@89750); the builder spreads it only when truthy (chunk-m14bt1pz.js@5789927)."
+			"note": "Literal true or undefined at every writer (chunk-m14bt1pz.js:4762732, @4778103, @4787064; chunk-zgpk86bb.js:89750); the builder spreads it only when truthy (chunk-m14bt1pz.js:5789927)."
 		},
 		"api-request.withheld": {
 			"schema": {

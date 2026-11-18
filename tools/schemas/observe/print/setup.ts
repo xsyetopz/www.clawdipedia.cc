@@ -15,10 +15,12 @@ export type Sandbox = Awaited<ReturnType<typeof makeSandbox>>;
 const FAKE_UUID = "00000000-0000-4000-8000-000000000000";
 const tokenPart = (v: object): string =>
 	Buffer.from(JSON.stringify(v)).toString("base64url");
-const fakeSessionToken = (): string =>
+/** A made-up, unsigned session token (see above). */
+export const fakeSessionToken = (): string =>
 	`${tokenPart({ alg: "none" })}.${tokenPart({ organization_uuid: FAKE_UUID, account_uuid: FAKE_UUID })}.x`;
 
-const otelEnv = (collectorPort: number): Record<string, string> => ({
+/** The env that sends every log, metric, and attribute the program can export to the local collector. */
+export const otelEnv = (collectorPort: number): Record<string, string> => ({
 	OTEL_METRICS_INCLUDE_ENTRYPOINT: "true",
 	CLAUDE_CODE_REMOTE_SESSION_ID: `session_${FAKE_UUID}`,
 	DISABLE_TELEMETRY: "",
@@ -169,7 +171,13 @@ export const envFor = async (
 			...otelEnv(collectorPort),
 			CLAUDE_SESSION_INGRESS_TOKEN_FILE: tokenFile,
 			...host,
-			...c.env,
+			// {COLLECTOR} in a case env value is the collector URL, for a second telemetry endpoint
+			...Object.fromEntries(
+				Object.entries(c.env ?? {}).map(([k, v]) => [
+					k,
+					v.replaceAll("{COLLECTOR}", `http://127.0.0.1:${collectorPort}`),
+				]),
+			),
 		},
 	});
 };

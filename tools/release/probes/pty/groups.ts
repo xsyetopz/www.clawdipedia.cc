@@ -5,9 +5,9 @@ import type { PtyGroup } from "./harness.ts";
 import { hooksGroup } from "./hooks.ts";
 import { notificationsGroup } from "./notifications.ts";
 import { perfettoGroup } from "./perfetto.ts";
+import { SCHEMA_GROUPS } from "./schema-groups.ts";
 import { sizesGroup } from "./sizes.ts";
 import { statuslineGroup } from "./statusline.ts";
-import { transcriptGroup } from "./transcript.ts";
 
 export const GROUPS: PtyGroup[] = [
 	hooksGroup,
@@ -18,5 +18,5 @@ export const GROUPS: PtyGroup[] = [
 	capturesGroup,
 	perfettoGroup,
 	cli319Group,
-	transcriptGroup,
+	...SCHEMA_GROUPS,
 ];

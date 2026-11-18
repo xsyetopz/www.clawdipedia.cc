@@ -6,6 +6,7 @@ import { GATED_CASES } from "./cases-gated.ts";
 import { HOST_CASES } from "./cases-host.ts";
 import { ITEM_CASES } from "./cases-items.ts";
 import { MOD_CASES } from "./cases-mods.ts";
+import { OTEL_CASES } from "./cases-otel.ts";
 import { REPLY_CASES } from "./cases-replies.ts";
 import { RESUME_CASES } from "./cases-resume.ts";
 
@@ -110,4 +111,5 @@ export const cases: Case[] = [
 	...CUT_CASES,
 	...ITEM_CASES,
 	...HOST_CASES,
+	...OTEL_CASES,
 ];
