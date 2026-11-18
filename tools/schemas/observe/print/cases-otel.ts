@@ -152,10 +152,10 @@ export const OTEL_CASES: Case[] = [
 	},
 	{
 		// LCt() logs the number and boolean entries of a hook's `metrics` output only for a plugin whose marketplace
-		// has an official name (RM() in chunk-m14bt1pz.js:1141673, LCt() in chunk-m14bt1pz.js:4208964). The add
+		// has an official name (RM() in chunk-m14bt1pz.js:1141673, LCt() in chunk-m14bt1pz.js:4208955). The add
 		// command refuses such a name from a local source, so the case seeds the install records of an official
 		// marketplace that points at a local folder. A valid answer loses `metrics` in the schema parse; only the
-		// fallback for an async answer that fails the schema keeps it (zyn() in chunk-m14bt1pz.js:1203719), and the
+		// fallback for an async answer that fails the schema keeps it (zyn() in chunk-m14bt1pz.js:1203710), and the
 		// next request after the answer sends it (chunk-m14bt1pz.js:4072580). The Bash call outlasts the 1 s hook.
 		id: "otel-hook-plugin-metrics",
 		cfgFiles: OFFICIAL_PLUGIN,

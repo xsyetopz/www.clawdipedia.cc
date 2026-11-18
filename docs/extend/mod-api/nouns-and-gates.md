@@ -177,7 +177,7 @@ See [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plu
 [^rollout-gate]: The program (`2.1.327`), the gate `tengu_plugin_hooks_modules` at `chunk-asj6f58y.js:758548` and the message at `chunk-3v3y00c0.js:3084`.
 [^tips-mermaid]: The program (`2.1.327`), `chunk-4mdk5bh7.js:276-277` for the tips description and `chunk-x2aesrg6.js:185` for the Mermaid description.
 [^privacy-gate]: The program, `chunk-9w197n8j.js:6439`. The gate is `tengu_wise_newt`.
-[^privacy]: The program, `chunk-9w197n8j.js:8065` for the match, the refusal text at `chunk-9w197n8j.js:8612`, the `tool.check` hook at `chunk-9w197n8j.js:10426`, and the `session.identity` hook at `chunk-9w197n8j.js:11159`.
+[^privacy]: The program, `chunk-9w197n8j.js:8065` for the match, the refusal text at `chunk-9w197n8j.js:8751`, the `tool.check` hook at `chunk-9w197n8j.js:10610`, and the `session.identity` hook at `chunk-9w197n8j.js:11294`.
 [^easel]: The program, `chunk-syz79m2z.js:0`.
 [^enable-order]: The program, `chunk-dafpvz32.js:80614`.
 [^enabled-plugins]: The program, `chunk-4zn1ct5c.js:31994`, `chunk-9w197n8j.js:11965`, `chunk-dafpvz32.js:80614`.

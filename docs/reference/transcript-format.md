@@ -211,7 +211,7 @@ Content block types seen: `text`, `thinking`, `tool_use` (in `assistant` lines),
 
 ## Compaction Rows
 
-Source: the program (`chunk-m14bt1pz.js:5961662` and `chunk-m14bt1pz.js:2777505`).
+Source: the program (`chunk-m14bt1pz.js:5961662` for the boundary line, `chunk-m14bt1pz.js:2948721` for the summary line, and `chunk-m14bt1pz.js:372849` and `chunk-m14bt1pz.js:373313` for the loader).
 
 A compaction writes a `system` line with `subtype: compact_boundary` and the content `Conversation compacted`. Its `compactMetadata` object holds these keys.
 

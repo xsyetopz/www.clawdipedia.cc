@@ -135,26 +135,26 @@ The program uses the scan in four places.
 ## Sources
 
 [^where-1]: The program, `chunk-0kfay0s8.js:38036`, `chunk-k1zz035e.js:546`.
-[^where-2]: The program, `chunk-teybq4x3.js:2790`, `chunk-teybq4x3.js:3134`.
-[^where-3]: The program, `chunk-m14bt1pz.js:362420` to `chunk-m14bt1pz.js:341015`.
-[^where-4]: The program, `chunk-m14bt1pz.js:1191452` to `chunk-m14bt1pz.js:1112219`.
-[^where-5]: The program, `chunk-p47p1nn1.js:17477` to `chunk-p47p1nn1.js:29323`.
-[^where-6]: The program, `chunk-78jpnzf7.js:13177`, `chunk-78jpnzf7.js:13257`.
+[^where-2]: The program, `chunk-teybq4x3.js:2790` (the `error` line) and `chunk-teybq4x3.js:3031` (the `debug` line).
+[^where-3]: The program, `chunk-m14bt1pz.js:362420` (the message) and `chunk-m14bt1pz.js:363000` (the stack).
+[^where-4]: The program, `chunk-m14bt1pz.js:1191452` (the hook name) and `chunk-m14bt1pz.js:1191722` (the stderr text).
+[^where-5]: The program, `chunk-p47p1nn1.js:17477-30422`.
+[^where-6]: The program, `chunk-78jpnzf7.js:13177` (the title) and `chunk-78jpnzf7.js:13189` (the body).
 [^where-7]: The program, `chunk-85edda7m.js:10004`.
-[^where-8]: The program, `chunk-et57k8s4.js:30225`, `chunk-et57k8s4.js:29374`.
+[^where-8]: The program, `chunk-et57k8s4.js:30225` and `chunk-et57k8s4.js:30661`.
 [^where-9]: The program, `chunk-40s100gp.js:12265`.
 [^where-10]: The program, `chunk-54kjbfv8.js:5481`.
 [^where-11]: The program, `chunk-wbj8g7m8.js:24694`.
 [^where-12]: The program, `chunk-m14bt1pz.js:5766791`.
-[^where-13]: The program, `chunk-35vt2ywn.js:33710` to `chunk-35vt2ywn.js:32480`.
-[^where-14]: The program, `chunk-2abk45dn.js:2791` to `chunk-2abk45dn.js:5480`.
-[^where-15]: The program, `chunk-2wacym39.js:40243`, `chunk-2wacym39.js:42227`, `chunk-2wacym39.js:44174`.
-[^where-16]: The program, `chunk-vyv768we.js:94395`, `chunk-vyv768we.js:94461`, `chunk-20ygw9qd.js:9739` to `chunk-20ygw9qd.js:19106`.
-[^where-18]: The program, `chunk-vnrqfqqg.js:25813` to `chunk-vnrqfqqg.js:36185`.
+[^where-13]: The program, `chunk-35vt2ywn.js:33710-34357`.
+[^where-14]: The program, `chunk-2abk45dn.js:2791-5481`: the field names at `chunk-2abk45dn.js:2791` and the values at `chunk-2abk45dn.js:5481`.
+[^where-15]: The program, `chunk-2wacym39.js:40243` (the path), `chunk-2wacym39.js:42380` (the skill), and `chunk-2wacym39.js:44656` (the description and the skill summary).
+[^where-16]: The program, `chunk-vyv768we.js:94395` and `chunk-vyv768we.js:94659`, and `chunk-20ygw9qd.js:9739-11035` (the plan reason, the command, and the description).
+[^where-18]: The program, `chunk-vnrqfqqg.js:25813` (the intent, 1,000 characters), `chunk-vnrqfqqg.js:26212` (the latest question, 600 characters), and `chunk-vnrqfqqg.js:36197` (the output tail).
 [^rule-table]: The program, `chunk-5xvwhrne.js:12147-19991`.
 [^more-calls]: The program, `chunk-7mvt1nqk.js:1975`, `chunk-qz9vmqrb.js:2499`, `chunk-fb4pfkgq.js:248`, `chunk-z9bq4nhm.js:451`, `chunk-b9cxwrwa.js:635`, `chunk-1a0qmst9.js:4295`, `chunk-et57k8s4.js:843`, `chunk-6rveqv0x.js:157`, `chunk-dfq3y18g.js:2562`, and `chunk-d0ernz1g.js:333`. The masker method names are in no other module.
 [^leak-probe]: Probes of `2.1.316` and `2.1.319` with cc-inspect `code` `cli` and `query`, which names each request, stream, and transcript file that holds a text. The tool runs used the `calls` option, which makes the stub call tools in order.
 [^scan-memory]: The program, `chunk-b9agxpps.js:3943-4505`.
 [^scan-denial]: The program, `chunk-cfxefa64.js:1820077`.
 [^scan-skill]: The program, `chunk-7rp876m5.js:38072`.
-[^where-masker]: The program, `chunk-5xvwhrne.js:1537`, `chunk-2abk45dn.js:463-466`, and `chunk-20ygw9qd.js:638`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^where-masker]: The program, `chunk-5xvwhrne.js:28282-28340` (the host marker and the masker), `chunk-2abk45dn.js:7659` (the tool summary passes through the masker), and `chunk-20ygw9qd.js:10959` (the notification body). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

@@ -56,7 +56,7 @@ The site documents Claude Code `2.1.327`, the only release it tracks. The versio
 
 - Each program citation in `docs/` names its chunk with its place, as in `chunk-m14bt1pz.js:2777505`, and not only `@N` or `:N`. `check:citations` now reports a place in backticks with no chunk on a line that names the program.
 - The OpenTelemetry page states when `hook_plugin_metrics` and `retention_sweep` are sent. `hook_plugin_metrics` comes only from a plugin of an official Anthropic marketplace, and only for an async hook answer that fails the output schema. `retention_sweep` runs 5 seconds after the start in print mode.
-- Each OpenTelemetry span that `2.1.327` cannot send has a note in the schema that says why.
+- The OpenTelemetry schema leaves out the four spans that `2.1.327` never sends: `claude_code.bash.subprocess`, `claude_code.compaction`, `claude_code.mcp.rpc`, and `claude_code.subagent.spawn`. The generator (`tools/schemas/code/otel-gate.ts`) drops a span when the function that starts it returns at once through a gate that always returns `false`. The OpenTelemetry page lists them under Spans That Are Never Sent.
 - The transcript schema no longer lists `attachment.attachment.hooks`. Only the display builds the `async_hook_response_batch` and `teammate_shutdown_batch` attachments (the program, chunk-a2xjwn0h.js:168458 at `2.1.327`), and the transcript write-site check now counts them as not kept.
 - The note of `api-request.renderedWithdrawn` states why `2.1.327` cannot write it (the program, chunk-m14bt1pz.js:3987339 at `2.1.327`).
 - The transcript schema no longer lists the `data` fields of `progress` lines: in `2.1.327` the writer drops each `progress` line before it writes it. The Transcript Format page says so, and the transcript write-site check counts `progress` as a type that the program does not keep.
@@ -135,6 +135,8 @@ The site documents Claude Code `2.1.327`, the only release it tracks. The versio
 
 ### Fixed
 
+- Program citations whose second place was a stale offset from an earlier build now point at the code they name in `2.1.327`: Secret Masking, Mod API Nouns and Gates, the feature toggle and context environment variable pages, Transcript Format, and OpenTelemetry.
+- The hook output table lists `metrics`, which the output schema drops, and links to the `hook_plugin_metrics` event.
 - The Slash Commands page gave the `2.1.311` text of a rate-limited `/usage`, though the site documents `2.1.312`. Both rows now give the `2.1.312` text, and the page says that the text comes from the program, because no `2.1.312` run reached the usage endpoint.
 - What Changed held a second copy of the whole `## Version 2.1.311` section, byte for byte the same as the one in the Release Archive. The page keeps `2.1.312` only, as its first sentence says.
 - The CLI skill and the Use with Agents page told a reader to run `bunx clawdipedia-docs`, which fails because the package is not on the npm registry. The skill now names `"$CLAUDE_PLUGIN_ROOT/bin/clawdipedia"`, the file the plugin ships, and the page says to clone the repository.
