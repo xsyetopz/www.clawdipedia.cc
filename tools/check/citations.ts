@@ -1,4 +1,5 @@
-// Chunk citations in docs/ and tools/surface/exclusions.json must name a module of the build of src/version.ts.
+// Chunk citations in docs/ and tools/surface/exclusions.json must name a module of the build of src/version.ts,
+// and each program citation must name its chunk and its `:N` place.
 // Run with: bun tools/check/citations.ts [--bin <binary>]
 // With --move-from <older binary>, it instead writes those files with each stale citation moved to the build of --bin (or of src/version.ts).
 // A move cleans each build once (about 14 seconds and a few GB of memory for each), because a `:N` can be a line of the cleaned module.
@@ -6,6 +7,7 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 
 import { extractModules } from "../../inspect/mcp/src/bunfs.ts";
+import { unlocatedCitations } from "../../inspect/mcp/src/citation-form.ts";
 import {
 	moveCitations,
 	staleCitations,
@@ -35,6 +37,16 @@ if (moveFlag === -1) {
 		files,
 		modules.map((m) => m.name),
 	);
+	const unlocated = unlocatedCitations(files);
+	for (const u of unlocated) {
+		console.error(`${u.file}:${u.line}: ${u.problem}`);
+	}
+	if (unlocated.length > 0) {
+		console.error(
+			`\n${unlocated.length} program citation(s) without a chunk-x.js:N place.`,
+		);
+		process.exitCode = 1;
+	}
 	if (stale.length > 0) {
 		for (const c of stale) {
 			console.error(
@@ -43,7 +55,7 @@ if (moveFlag === -1) {
 		}
 		console.error(`\n${stale.length} stale citation(s) found.`);
 		process.exitCode = 1;
-	} else {
+	} else if (unlocated.length === 0) {
 		console.info(
 			`check-citations: ok (${Object.keys(files).length} files, build ${CLAUDE_CODE_VERSION})`,
 		);
