@@ -7765,9 +7765,10 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»[\"user.id\"]=«»,«»(\"OTEL_METRICS_INCLUDE_SESSION_ID\")){if(«»[\"session.id\"]=«»,«».CLAUDE_CODE_REMOTE_SESSION_ID)«»[\"ccr.session.id\"]=«».CLAUDE_CODE_REMOTE_SESSION_ID}"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"session.id\"]=n with n=W(), the session id string, set only when OTEL_METRICS_INCLUDE_SESSION_ID is on."
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:3744985. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.session.id. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"session.id\"]=n with n=W(), the session id string, set only when OTEL_METRICS_INCLUDE_SESSION_ID is on."
 		},
 		"span:claude_code.bash.subprocess.ccr.session.id": {
 			"schema": {
@@ -7775,9 +7776,10 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»[\"user.id\"]=«»,«»(\"OTEL_METRICS_INCLUDE_SESSION_ID\")){if(«»[\"session.id\"]=«»,«».CLAUDE_CODE_REMOTE_SESSION_ID)«»[\"ccr.session.id\"]=«».CLAUDE_CODE_REMOTE_SESSION_ID}"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"ccr.session.id\"]=s.CLAUDE_CODE_REMOTE_SESSION_ID, an environment string, set only when it is non-empty and OTEL_METRICS_INCLUDE_SESSION_ID is on."
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:3744985. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.ccr.session.id. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"ccr.session.id\"]=s.CLAUDE_CODE_REMOTE_SESSION_ID, an environment string, set only when it is non-empty and OTEL_METRICS_INCLUDE_SESSION_ID is on."
 		},
 		"span:claude_code.bash.subprocess.app.version": {
 			"schema": {
@@ -7785,9 +7787,10 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»(\"OTEL_METRICS_INCLUDE_VERSION\"))«»[\"app.version\"]={ISSUES_EXPLAINER:"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"app.version\"]={...,VERSION:\"2.1.327\",...}.VERSION: the build's version string literal."
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:3744985. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.app.version. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"app.version\"]={...,VERSION:\"2.1.327\",...}.VERSION: the build's version string literal."
 		},
 		"span:claude_code.bash.subprocess.app.entrypoint": {
 			"schema": {
@@ -7823,11 +7826,12 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»(\"OTEL_METRICS_INCLUDE_ENTRYPOINT\")){let «»=«»();if(«»)«»[\"app.entrypoint\"]=«»}",
 				"{return «»(«».CLAUDE_CODE_ENTRYPOINT)}function «»(«»){return «»&&«»(«»)?«»:void 0}",
 				"\"claude-coworker-terminal\":!0}"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"app.entrypoint\"]=l with l=Am(): Am() returns CLAUDE_CODE_ENTRYPOINT only when it is a key of the entrypoint table (chunk-zfmsqnn9.js:573, var bcs={cli:!0,...}), else undefined, which the if drops. So the value is one of the table's keys."
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:3744985. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.app.entrypoint. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"app.entrypoint\"]=l with l=Am(): Am() returns CLAUDE_CODE_ENTRYPOINT only when it is a key of the entrypoint table (chunk-zfmsqnn9.js:573, var bcs={cli:!0,...}), else undefined, which the if drops. So the value is one of the table's keys."
 		},
 		"span:claude_code.bash.subprocess.organization.id": {
 			"schema": {
@@ -7835,10 +7839,11 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"«»=«».organizationUuid,«»=!«»()?«».emailAddress:",
 				"if(«»)«»[\"organization.id\"]=«»;"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"organization.id\"]=l with l=account.organizationUuid of the OAuth account (a UUID string); set only when truthy."
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:3744985. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.organization.id. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"organization.id\"]=l with l=account.organizationUuid of the OAuth account (a UUID string); set only when truthy."
 		},
 		"span:claude_code.bash.subprocess.user.account_uuid": {
 			"schema": {
@@ -7846,9 +7851,10 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»&&«»(\"OTEL_METRICS_INCLUDE_ACCOUNT_UUID\")){«»[\"user.account_uuid\"]=«»;let «»=«».CLAUDE_CODE_ACCOUNT_TAGGED_ID||«»(\"user\",«»);if(«»)«»[\"user.account_id\"]=«»}"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"user.account_uuid\"]=p with p=account.accountUuid (a UUID string); set only when truthy and OTEL_METRICS_INCLUDE_ACCOUNT_UUID is on."
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:3744985. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.user.account_uuid. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"user.account_uuid\"]=p with p=account.accountUuid (a UUID string); set only when truthy and OTEL_METRICS_INCLUDE_ACCOUNT_UUID is on."
 		},
 		"span:claude_code.bash.subprocess.user.account_id": {
 			"schema": {
@@ -7856,10 +7862,11 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»&&«»(\"OTEL_METRICS_INCLUDE_ACCOUNT_UUID\")){«»[\"user.account_uuid\"]=«»;let «»=«».CLAUDE_CODE_ACCOUNT_TAGGED_ID||«»(\"user\",«»);if(«»)«»[\"user.account_id\"]=«»}",
 				"return`${«»}_01${«»(«»)}`"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"user.account_id\"]=f with f=s.CLAUDE_CODE_ACCOUNT_TAGGED_ID (an environment string) || wuo(\"user\",p) (chunk-hzvpv59r.js:1600), which returns the template string `user_01<base58>` or undefined on a bad UUID; set only when truthy."
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:3744985. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.user.account_id. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"user.account_id\"]=f with f=s.CLAUDE_CODE_ACCOUNT_TAGGED_ID (an environment string) || wuo(\"user\",p) (chunk-hzvpv59r.js:1600), which returns the template string `user_01<base58>` or undefined on a bad UUID; set only when truthy."
 		},
 		"span:claude_code.bash.subprocess.terminal.type": {
 			"schema": {
@@ -7867,10 +7874,73 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"let «»=«»()?«»:«».terminal;if(«»)«»[\"terminal.type\"]=«»;return «»}",
 				"«»=\"non-interactive\",«»={terminal:«».TERMINAL_EMULATOR===\"JetBrains-JediTerm\"&&«».platform!==\"darwin\"?\"pycharm\":«».terminal"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"terminal.type\"]=u with u=\"non-interactive\" in non-interactive mode, else the detected terminal name string (chunk-asj6f58y.js:905135: \"pycharm\" for JetBrains-JediTerm off macOS, else the platform terminal string); set only when truthy. The detector returns open-ended names, so no enum."
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:3744985. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.terminal.type. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"terminal.type\"]=u with u=\"non-interactive\" in non-interactive mode, else the detected terminal name string (chunk-asj6f58y.js:905135: \"pycharm\" for JetBrains-JediTerm off macOS, else the platform terminal string); set only when truthy. The detector returns open-ended names, so no enum."
+		},
+		"span:claude_code.bash.subprocess.gen_ai.provider.name": {
+			"schema": {
+				"enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}"
+			],
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:3744985. Mt() sets it to Wt(Te()) (chunk-epqcnh2q.js:9054): aws.bedrock, gcp.vertex_ai, or anthropic; for another provider Wt() returns undefined and the key is not exported."
+		},
+		"span:claude_code.bash.subprocess.span.type": {
+			"schema": {
+				"const": "bash.subprocess"
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"attrs:{\"shell.type\":«»,command_length:«».length,timeout_ms:«»},contentAttrs:{command:«»(«»).content}}"
+			],
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:3744985. spanType at the creation site."
+		},
+		"span:claude_code.bash.subprocess.shell.type": {
+			"schema": {
+				"enum": ["bash", "powershell"]
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"attrs:{\"shell.type\":«»,command_length:«».length,timeout_ms:«»},contentAttrs:{command:«»(«»).content}}"
+			],
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:3744985. The shell key `o` of X8e(); the shell table oxs (chunk-m14bt1pz.js:3728481) has the keys bash and powershell."
+		},
+		"span:claude_code.bash.subprocess.command_length": {
+			"schema": {
+				"type": "integer",
+				"minimum": 0
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"attrs:{\"shell.type\":«»,command_length:«».length,timeout_ms:«»},contentAttrs:{command:«»(«»).content}}"
+			],
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:3744985. e.length of the command string."
+		},
+		"span:claude_code.bash.subprocess.timeout_ms": {
+			"schema": {
+				"type": "number",
+				"exclusiveMinimum": 0
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"attrs:{\"shell.type\":«»,command_length:«».length,timeout_ms:«»},contentAttrs:{command:«»(«»).content}}"
+			],
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:3744985. Xt=E||QAs: the timeout option, else QAs=1800000 (chunk-m14bt1pz.js:3726957)."
+		},
+		"span:claude_code.bash.subprocess.command": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"attrs:{\"shell.type\":«»,command_length:«».length,timeout_ms:«»},contentAttrs:{command:«»(«»).content}}"
+			],
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:3744985. A content attribute: vz(e).content, set only when bH() is false (O8r)."
 		},
 		"span:claude_code.compaction.session.id": {
 			"schema": {
@@ -7878,9 +7948,10 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»[\"user.id\"]=«»,«»(\"OTEL_METRICS_INCLUDE_SESSION_ID\")){if(«»[\"session.id\"]=«»,«».CLAUDE_CODE_REMOTE_SESSION_ID)«»[\"ccr.session.id\"]=«».CLAUDE_CODE_REMOTE_SESSION_ID}"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"session.id\"]=n with n=W(), the session id string, set only when OTEL_METRICS_INCLUDE_SESSION_ID is on."
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:2945379. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.session.id. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"session.id\"]=n with n=W(), the session id string, set only when OTEL_METRICS_INCLUDE_SESSION_ID is on."
 		},
 		"span:claude_code.compaction.ccr.session.id": {
 			"schema": {
@@ -7888,9 +7959,10 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»[\"user.id\"]=«»,«»(\"OTEL_METRICS_INCLUDE_SESSION_ID\")){if(«»[\"session.id\"]=«»,«».CLAUDE_CODE_REMOTE_SESSION_ID)«»[\"ccr.session.id\"]=«».CLAUDE_CODE_REMOTE_SESSION_ID}"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"ccr.session.id\"]=s.CLAUDE_CODE_REMOTE_SESSION_ID, an environment string, set only when it is non-empty and OTEL_METRICS_INCLUDE_SESSION_ID is on."
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:2945379. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.ccr.session.id. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"ccr.session.id\"]=s.CLAUDE_CODE_REMOTE_SESSION_ID, an environment string, set only when it is non-empty and OTEL_METRICS_INCLUDE_SESSION_ID is on."
 		},
 		"span:claude_code.compaction.app.version": {
 			"schema": {
@@ -7898,9 +7970,10 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»(\"OTEL_METRICS_INCLUDE_VERSION\"))«»[\"app.version\"]={ISSUES_EXPLAINER:"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"app.version\"]={...,VERSION:\"2.1.327\",...}.VERSION: the build's version string literal."
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:2945379. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.app.version. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"app.version\"]={...,VERSION:\"2.1.327\",...}.VERSION: the build's version string literal."
 		},
 		"span:claude_code.compaction.app.entrypoint": {
 			"schema": {
@@ -7936,11 +8009,12 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»(\"OTEL_METRICS_INCLUDE_ENTRYPOINT\")){let «»=«»();if(«»)«»[\"app.entrypoint\"]=«»}",
 				"{return «»(«».CLAUDE_CODE_ENTRYPOINT)}function «»(«»){return «»&&«»(«»)?«»:void 0}",
 				"\"claude-coworker-terminal\":!0}"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"app.entrypoint\"]=l with l=Am(): Am() returns CLAUDE_CODE_ENTRYPOINT only when it is a key of the entrypoint table (chunk-zfmsqnn9.js:573, var bcs={cli:!0,...}), else undefined, which the if drops. So the value is one of the table's keys."
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:2945379. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.app.entrypoint. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"app.entrypoint\"]=l with l=Am(): Am() returns CLAUDE_CODE_ENTRYPOINT only when it is a key of the entrypoint table (chunk-zfmsqnn9.js:573, var bcs={cli:!0,...}), else undefined, which the if drops. So the value is one of the table's keys."
 		},
 		"span:claude_code.compaction.organization.id": {
 			"schema": {
@@ -7948,10 +8022,11 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"«»=«».organizationUuid,«»=!«»()?«».emailAddress:",
 				"if(«»)«»[\"organization.id\"]=«»;"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"organization.id\"]=l with l=account.organizationUuid of the OAuth account (a UUID string); set only when truthy."
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:2945379. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.organization.id. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"organization.id\"]=l with l=account.organizationUuid of the OAuth account (a UUID string); set only when truthy."
 		},
 		"span:claude_code.compaction.user.account_uuid": {
 			"schema": {
@@ -7959,9 +8034,10 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»&&«»(\"OTEL_METRICS_INCLUDE_ACCOUNT_UUID\")){«»[\"user.account_uuid\"]=«»;let «»=«».CLAUDE_CODE_ACCOUNT_TAGGED_ID||«»(\"user\",«»);if(«»)«»[\"user.account_id\"]=«»}"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"user.account_uuid\"]=p with p=account.accountUuid (a UUID string); set only when truthy and OTEL_METRICS_INCLUDE_ACCOUNT_UUID is on."
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:2945379. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.user.account_uuid. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"user.account_uuid\"]=p with p=account.accountUuid (a UUID string); set only when truthy and OTEL_METRICS_INCLUDE_ACCOUNT_UUID is on."
 		},
 		"span:claude_code.compaction.user.account_id": {
 			"schema": {
@@ -7969,10 +8045,11 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»&&«»(\"OTEL_METRICS_INCLUDE_ACCOUNT_UUID\")){«»[\"user.account_uuid\"]=«»;let «»=«».CLAUDE_CODE_ACCOUNT_TAGGED_ID||«»(\"user\",«»);if(«»)«»[\"user.account_id\"]=«»}",
 				"return`${«»}_01${«»(«»)}`"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"user.account_id\"]=f with f=s.CLAUDE_CODE_ACCOUNT_TAGGED_ID (an environment string) || wuo(\"user\",p) (chunk-hzvpv59r.js:1600), which returns the template string `user_01<base58>` or undefined on a bad UUID; set only when truthy."
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:2945379. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.user.account_id. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"user.account_id\"]=f with f=s.CLAUDE_CODE_ACCOUNT_TAGGED_ID (an environment string) || wuo(\"user\",p) (chunk-hzvpv59r.js:1600), which returns the template string `user_01<base58>` or undefined on a bad UUID; set only when truthy."
 		},
 		"span:claude_code.compaction.terminal.type": {
 			"schema": {
@@ -7980,10 +8057,52 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"let «»=«»()?«»:«».terminal;if(«»)«»[\"terminal.type\"]=«»;return «»}",
 				"«»=\"non-interactive\",«»={terminal:«».TERMINAL_EMULATOR===\"JetBrains-JediTerm\"&&«».platform!==\"darwin\"?\"pycharm\":«».terminal"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"terminal.type\"]=u with u=\"non-interactive\" in non-interactive mode, else the detected terminal name string (chunk-asj6f58y.js:905135: \"pycharm\" for JetBrains-JediTerm off macOS, else the platform terminal string); set only when truthy. The detector returns open-ended names, so no enum."
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:2945379. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.terminal.type. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"terminal.type\"]=u with u=\"non-interactive\" in non-interactive mode, else the detected terminal name string (chunk-asj6f58y.js:905135: \"pycharm\" for JetBrains-JediTerm off macOS, else the platform terminal string); set only when truthy. The detector returns open-ended names, so no enum."
+		},
+		"span:claude_code.compaction.gen_ai.provider.name": {
+			"schema": {
+				"enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}"
+			],
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:2945379. Mt() sets it to Wt(Te()) (chunk-epqcnh2q.js:9054): aws.bedrock, gcp.vertex_ai, or anthropic; for another provider Wt() returns undefined and the key is not exported."
+		},
+		"span:claude_code.compaction.span.type": {
+			"schema": {
+				"const": "compaction"
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"\"claude_code.compaction\",{spanType:\"compaction\",attrs:{trigger:«»?\"auto\":\"manual\",message_count:«».length}}"
+			],
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:2945379. spanType at the creation site."
+		},
+		"span:claude_code.compaction.trigger": {
+			"schema": {
+				"enum": ["auto", "manual"]
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"\"claude_code.compaction\",{spanType:\"compaction\",attrs:{trigger:«»?\"auto\":\"manual\",message_count:«».length}}"
+			],
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:2945379. y?\"auto\":\"manual\" from isAutoCompact."
+		},
+		"span:claude_code.compaction.message_count": {
+			"schema": {
+				"type": "integer",
+				"minimum": 0
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"\"claude_code.compaction\",{spanType:\"compaction\",attrs:{trigger:«»?\"auto\":\"manual\",message_count:«».length}}"
+			],
+			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-m14bt1pz.js:2945379. e.length of the message list."
 		},
 		"span:claude_code.mcp.rpc.session.id": {
 			"schema": {
@@ -7991,9 +8110,10 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»[\"user.id\"]=«»,«»(\"OTEL_METRICS_INCLUDE_SESSION_ID\")){if(«»[\"session.id\"]=«»,«».CLAUDE_CODE_REMOTE_SESSION_ID)«»[\"ccr.session.id\"]=«».CLAUDE_CODE_REMOTE_SESSION_ID}"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"session.id\"]=n with n=W(), the session id string, set only when OTEL_METRICS_INCLUDE_SESSION_ID is on."
+			"note": "Never sent in 2.1.327: aFa(), which calls the span wrapper O8r() (chunk-epqcnh2q.js:20551), returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-sqn39hq2.js:257045. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.session.id. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"session.id\"]=n with n=W(), the session id string, set only when OTEL_METRICS_INCLUDE_SESSION_ID is on."
 		},
 		"span:claude_code.mcp.rpc.ccr.session.id": {
 			"schema": {
@@ -8001,9 +8121,10 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»[\"user.id\"]=«»,«»(\"OTEL_METRICS_INCLUDE_SESSION_ID\")){if(«»[\"session.id\"]=«»,«».CLAUDE_CODE_REMOTE_SESSION_ID)«»[\"ccr.session.id\"]=«».CLAUDE_CODE_REMOTE_SESSION_ID}"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"ccr.session.id\"]=s.CLAUDE_CODE_REMOTE_SESSION_ID, an environment string, set only when it is non-empty and OTEL_METRICS_INCLUDE_SESSION_ID is on."
+			"note": "Never sent in 2.1.327: aFa(), which calls the span wrapper O8r() (chunk-epqcnh2q.js:20551), returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-sqn39hq2.js:257045. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.ccr.session.id. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"ccr.session.id\"]=s.CLAUDE_CODE_REMOTE_SESSION_ID, an environment string, set only when it is non-empty and OTEL_METRICS_INCLUDE_SESSION_ID is on."
 		},
 		"span:claude_code.mcp.rpc.app.version": {
 			"schema": {
@@ -8011,9 +8132,10 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»(\"OTEL_METRICS_INCLUDE_VERSION\"))«»[\"app.version\"]={ISSUES_EXPLAINER:"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"app.version\"]={...,VERSION:\"2.1.327\",...}.VERSION: the build's version string literal."
+			"note": "Never sent in 2.1.327: aFa(), which calls the span wrapper O8r() (chunk-epqcnh2q.js:20551), returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-sqn39hq2.js:257045. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.app.version. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"app.version\"]={...,VERSION:\"2.1.327\",...}.VERSION: the build's version string literal."
 		},
 		"span:claude_code.mcp.rpc.app.entrypoint": {
 			"schema": {
@@ -8049,11 +8171,12 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»(\"OTEL_METRICS_INCLUDE_ENTRYPOINT\")){let «»=«»();if(«»)«»[\"app.entrypoint\"]=«»}",
 				"{return «»(«».CLAUDE_CODE_ENTRYPOINT)}function «»(«»){return «»&&«»(«»)?«»:void 0}",
 				"\"claude-coworker-terminal\":!0}"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"app.entrypoint\"]=l with l=Am(): Am() returns CLAUDE_CODE_ENTRYPOINT only when it is a key of the entrypoint table (chunk-zfmsqnn9.js:573, var bcs={cli:!0,...}), else undefined, which the if drops. So the value is one of the table's keys."
+			"note": "Never sent in 2.1.327: aFa(), which calls the span wrapper O8r() (chunk-epqcnh2q.js:20551), returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-sqn39hq2.js:257045. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.app.entrypoint. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"app.entrypoint\"]=l with l=Am(): Am() returns CLAUDE_CODE_ENTRYPOINT only when it is a key of the entrypoint table (chunk-zfmsqnn9.js:573, var bcs={cli:!0,...}), else undefined, which the if drops. So the value is one of the table's keys."
 		},
 		"span:claude_code.mcp.rpc.organization.id": {
 			"schema": {
@@ -8061,10 +8184,11 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"«»=«».organizationUuid,«»=!«»()?«».emailAddress:",
 				"if(«»)«»[\"organization.id\"]=«»;"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"organization.id\"]=l with l=account.organizationUuid of the OAuth account (a UUID string); set only when truthy."
+			"note": "Never sent in 2.1.327: aFa(), which calls the span wrapper O8r() (chunk-epqcnh2q.js:20551), returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-sqn39hq2.js:257045. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.organization.id. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"organization.id\"]=l with l=account.organizationUuid of the OAuth account (a UUID string); set only when truthy."
 		},
 		"span:claude_code.mcp.rpc.user.account_uuid": {
 			"schema": {
@@ -8072,9 +8196,10 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»&&«»(\"OTEL_METRICS_INCLUDE_ACCOUNT_UUID\")){«»[\"user.account_uuid\"]=«»;let «»=«».CLAUDE_CODE_ACCOUNT_TAGGED_ID||«»(\"user\",«»);if(«»)«»[\"user.account_id\"]=«»}"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"user.account_uuid\"]=p with p=account.accountUuid (a UUID string); set only when truthy and OTEL_METRICS_INCLUDE_ACCOUNT_UUID is on."
+			"note": "Never sent in 2.1.327: aFa(), which calls the span wrapper O8r() (chunk-epqcnh2q.js:20551), returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-sqn39hq2.js:257045. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.user.account_uuid. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"user.account_uuid\"]=p with p=account.accountUuid (a UUID string); set only when truthy and OTEL_METRICS_INCLUDE_ACCOUNT_UUID is on."
 		},
 		"span:claude_code.mcp.rpc.user.account_id": {
 			"schema": {
@@ -8082,10 +8207,11 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»&&«»(\"OTEL_METRICS_INCLUDE_ACCOUNT_UUID\")){«»[\"user.account_uuid\"]=«»;let «»=«».CLAUDE_CODE_ACCOUNT_TAGGED_ID||«»(\"user\",«»);if(«»)«»[\"user.account_id\"]=«»}",
 				"return`${«»}_01${«»(«»)}`"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"user.account_id\"]=f with f=s.CLAUDE_CODE_ACCOUNT_TAGGED_ID (an environment string) || wuo(\"user\",p) (chunk-hzvpv59r.js:1600), which returns the template string `user_01<base58>` or undefined on a bad UUID; set only when truthy."
+			"note": "Never sent in 2.1.327: aFa(), which calls the span wrapper O8r() (chunk-epqcnh2q.js:20551), returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-sqn39hq2.js:257045. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.user.account_id. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"user.account_id\"]=f with f=s.CLAUDE_CODE_ACCOUNT_TAGGED_ID (an environment string) || wuo(\"user\",p) (chunk-hzvpv59r.js:1600), which returns the template string `user_01<base58>` or undefined on a bad UUID; set only when truthy."
 		},
 		"span:claude_code.mcp.rpc.terminal.type": {
 			"schema": {
@@ -8093,10 +8219,92 @@
 			},
 			"anchors": [
 				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"let «»=«»()?«»:«».terminal;if(«»)«»[\"terminal.type\"]=«»;return «»}",
 				"«»=\"non-interactive\",«»={terminal:«».TERMINAL_EMULATOR===\"JetBrains-JediTerm\"&&«».platform!==\"darwin\"?\"pycharm\":«».terminal"
 			],
-			"note": "Never sent in 2.1.327: the span wrapper O8r() (chunk-epqcnh2q.js:20551) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"terminal.type\"]=u with u=\"non-interactive\" in non-interactive mode, else the detected terminal name string (chunk-asj6f58y.js:905135: \"pycharm\" for JetBrains-JediTerm off macOS, else the platform terminal string); set only when truthy. The detector returns open-ended names, so no enum."
+			"note": "Never sent in 2.1.327: aFa(), which calls the span wrapper O8r() (chunk-epqcnh2q.js:20551), returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-sqn39hq2.js:257045. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.terminal.type. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"terminal.type\"]=u with u=\"non-interactive\" in non-interactive mode, else the detected terminal name string (chunk-asj6f58y.js:905135: \"pycharm\" for JetBrains-JediTerm off macOS, else the platform terminal string); set only when truthy. The detector returns open-ended names, so no enum."
+		},
+		"span:claude_code.mcp.rpc.gen_ai.provider.name": {
+			"schema": {
+				"enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}"
+			],
+			"note": "Never sent in 2.1.327: aFa(), which calls the span wrapper O8r() (chunk-epqcnh2q.js:20551), returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-sqn39hq2.js:257045. Mt() sets it to Wt(Te()) (chunk-epqcnh2q.js:9054): aws.bedrock, gcp.vertex_ai, or anthropic; for another provider Wt() returns undefined and the key is not exported."
+		},
+		"span:claude_code.mcp.rpc.span.type": {
+			"schema": {
+				"const": "mcp.rpc"
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"attrs:{\"rpc.system\":\"mcp\",\"rpc.service\":«».name,\"rpc.method\":\"tools/call\",mcp_tool:«»,attempt:«»},...«»!==void 0&&{contentAttrs:{mcp_args:«»}}"
+			],
+			"note": "Never sent in 2.1.327: aFa(), which calls the span wrapper O8r() (chunk-epqcnh2q.js:20551), returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-sqn39hq2.js:257045. spanType at the creation site."
+		},
+		"span:claude_code.mcp.rpc.rpc.system": {
+			"schema": {
+				"const": "mcp"
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"attrs:{\"rpc.system\":\"mcp\",\"rpc.service\":«».name,\"rpc.method\":\"tools/call\",mcp_tool:«»,attempt:«»},...«»!==void 0&&{contentAttrs:{mcp_args:«»}}"
+			],
+			"note": "Never sent in 2.1.327: aFa(), which calls the span wrapper O8r() (chunk-epqcnh2q.js:20551), returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-sqn39hq2.js:257045. Left out when bH() is true: O8r keeps only the keys in zt (chunk-epqcnh2q.js:9529)."
+		},
+		"span:claude_code.mcp.rpc.rpc.service": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"attrs:{\"rpc.system\":\"mcp\",\"rpc.service\":«».name,\"rpc.method\":\"tools/call\",mcp_tool:«»,attempt:«»},...«»!==void 0&&{contentAttrs:{mcp_args:«»}}"
+			],
+			"note": "Never sent in 2.1.327: aFa(), which calls the span wrapper O8r() (chunk-epqcnh2q.js:20551), returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-sqn39hq2.js:257045. e.name, the MCP server name; zt keeps it when bH() is true."
+		},
+		"span:claude_code.mcp.rpc.rpc.method": {
+			"schema": {
+				"const": "tools/call"
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"attrs:{\"rpc.system\":\"mcp\",\"rpc.service\":«».name,\"rpc.method\":\"tools/call\",mcp_tool:«»,attempt:«»},...«»!==void 0&&{contentAttrs:{mcp_args:«»}}"
+			],
+			"note": "Never sent in 2.1.327: aFa(), which calls the span wrapper O8r() (chunk-epqcnh2q.js:20551), returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-sqn39hq2.js:257045. Left out when bH() is true (zt)."
+		},
+		"span:claude_code.mcp.rpc.mcp_tool": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"attrs:{\"rpc.system\":\"mcp\",\"rpc.service\":«».name,\"rpc.method\":\"tools/call\",mcp_tool:«»,attempt:«»},...«»!==void 0&&{contentAttrs:{mcp_args:«»}}"
+			],
+			"note": "Never sent in 2.1.327: aFa(), which calls the span wrapper O8r() (chunk-epqcnh2q.js:20551), returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-sqn39hq2.js:257045. n, the MCP tool name; zt keeps it when bH() is true."
+		},
+		"span:claude_code.mcp.rpc.attempt": {
+			"schema": {
+				"type": "integer",
+				"minimum": 0
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"attrs:{\"rpc.system\":\"mcp\",\"rpc.service\":«».name,\"rpc.method\":\"tools/call\",mcp_tool:«»,attempt:«»},...«»!==void 0&&{contentAttrs:{mcp_args:«»}}"
+			],
+			"note": "Never sent in 2.1.327: aFa(), which calls the span wrapper O8r() (chunk-epqcnh2q.js:20551), returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-sqn39hq2.js:257045. The retry counter of `for(let Le=0;;Le++)` (chunk-sqn39hq2.js:256489). Left out when bH() is true (zt)."
+		},
+		"span:claude_code.mcp.rpc.mcp_args": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": [
+				"function «»(«»,«»){if(!«»())return;return «»().startSpan(«»,{attributes:{...«»(),\"span.type\":«».spanType,",
+				"attrs:{\"rpc.system\":\"mcp\",\"rpc.service\":«».name,\"rpc.method\":\"tools/call\",mcp_tool:«»,attempt:«»},...«»!==void 0&&{contentAttrs:{mcp_args:«»}}"
+			],
+			"note": "Never sent in 2.1.327: aFa(), which calls the span wrapper O8r() (chunk-epqcnh2q.js:20551), returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-sqn39hq2.js:257045. A content attribute: vz(_(u)).content, the call arguments as text, set only when bH() is false."
 		},
 		"span:claude_code.subagent.spawn.session.id": {
 			"schema": {
@@ -8104,9 +8312,10 @@
 			},
 			"anchors": [
 				"function «»(«»){if(!«»())return;let «»=«»(),«»=«»(«».agentId),",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»[\"user.id\"]=«»,«»(\"OTEL_METRICS_INCLUDE_SESSION_ID\")){if(«»[\"session.id\"]=«»,«».CLAUDE_CODE_REMOTE_SESSION_ID)«»[\"ccr.session.id\"]=«».CLAUDE_CODE_REMOTE_SESSION_ID}"
 			],
-			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"session.id\"]=n with n=W(), the session id string, set only when OTEL_METRICS_INCLUDE_SESSION_ID is on."
+			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-epqcnh2q.js:21401. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.session.id. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"session.id\"]=n with n=W(), the session id string, set only when OTEL_METRICS_INCLUDE_SESSION_ID is on."
 		},
 		"span:claude_code.subagent.spawn.ccr.session.id": {
 			"schema": {
@@ -8114,9 +8323,10 @@
 			},
 			"anchors": [
 				"function «»(«»){if(!«»())return;let «»=«»(),«»=«»(«».agentId),",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»[\"user.id\"]=«»,«»(\"OTEL_METRICS_INCLUDE_SESSION_ID\")){if(«»[\"session.id\"]=«»,«».CLAUDE_CODE_REMOTE_SESSION_ID)«»[\"ccr.session.id\"]=«».CLAUDE_CODE_REMOTE_SESSION_ID}"
 			],
-			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"ccr.session.id\"]=s.CLAUDE_CODE_REMOTE_SESSION_ID, an environment string, set only when it is non-empty and OTEL_METRICS_INCLUDE_SESSION_ID is on."
+			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-epqcnh2q.js:21401. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.ccr.session.id. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"ccr.session.id\"]=s.CLAUDE_CODE_REMOTE_SESSION_ID, an environment string, set only when it is non-empty and OTEL_METRICS_INCLUDE_SESSION_ID is on."
 		},
 		"span:claude_code.subagent.spawn.app.version": {
 			"schema": {
@@ -8124,9 +8334,10 @@
 			},
 			"anchors": [
 				"function «»(«»){if(!«»())return;let «»=«»(),«»=«»(«».agentId),",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»(\"OTEL_METRICS_INCLUDE_VERSION\"))«»[\"app.version\"]={ISSUES_EXPLAINER:"
 			],
-			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"app.version\"]={...,VERSION:\"2.1.327\",...}.VERSION: the build's version string literal."
+			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-epqcnh2q.js:21401. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.app.version. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"app.version\"]={...,VERSION:\"2.1.327\",...}.VERSION: the build's version string literal."
 		},
 		"span:claude_code.subagent.spawn.app.entrypoint": {
 			"schema": {
@@ -8162,11 +8373,12 @@
 			},
 			"anchors": [
 				"function «»(«»){if(!«»())return;let «»=«»(),«»=«»(«».agentId),",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»(\"OTEL_METRICS_INCLUDE_ENTRYPOINT\")){let «»=«»();if(«»)«»[\"app.entrypoint\"]=«»}",
 				"{return «»(«».CLAUDE_CODE_ENTRYPOINT)}function «»(«»){return «»&&«»(«»)?«»:void 0}",
 				"\"claude-coworker-terminal\":!0}"
 			],
-			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"app.entrypoint\"]=l with l=Am(): Am() returns CLAUDE_CODE_ENTRYPOINT only when it is a key of the entrypoint table (chunk-zfmsqnn9.js:573, var bcs={cli:!0,...}), else undefined, which the if drops. So the value is one of the table's keys."
+			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-epqcnh2q.js:21401. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.app.entrypoint. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"app.entrypoint\"]=l with l=Am(): Am() returns CLAUDE_CODE_ENTRYPOINT only when it is a key of the entrypoint table (chunk-zfmsqnn9.js:573, var bcs={cli:!0,...}), else undefined, which the if drops. So the value is one of the table's keys."
 		},
 		"span:claude_code.subagent.spawn.organization.id": {
 			"schema": {
@@ -8174,10 +8386,11 @@
 			},
 			"anchors": [
 				"function «»(«»){if(!«»())return;let «»=«»(),«»=«»(«».agentId),",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"«»=«».organizationUuid,«»=!«»()?«».emailAddress:",
 				"if(«»)«»[\"organization.id\"]=«»;"
 			],
-			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"organization.id\"]=l with l=account.organizationUuid of the OAuth account (a UUID string); set only when truthy."
+			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-epqcnh2q.js:21401. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.organization.id. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"organization.id\"]=l with l=account.organizationUuid of the OAuth account (a UUID string); set only when truthy."
 		},
 		"span:claude_code.subagent.spawn.user.account_uuid": {
 			"schema": {
@@ -8185,9 +8398,10 @@
 			},
 			"anchors": [
 				"function «»(«»){if(!«»())return;let «»=«»(),«»=«»(«».agentId),",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»&&«»(\"OTEL_METRICS_INCLUDE_ACCOUNT_UUID\")){«»[\"user.account_uuid\"]=«»;let «»=«».CLAUDE_CODE_ACCOUNT_TAGGED_ID||«»(\"user\",«»);if(«»)«»[\"user.account_id\"]=«»}"
 			],
-			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"user.account_uuid\"]=p with p=account.accountUuid (a UUID string); set only when truthy and OTEL_METRICS_INCLUDE_ACCOUNT_UUID is on."
+			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-epqcnh2q.js:21401. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.user.account_uuid. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"user.account_uuid\"]=p with p=account.accountUuid (a UUID string); set only when truthy and OTEL_METRICS_INCLUDE_ACCOUNT_UUID is on."
 		},
 		"span:claude_code.subagent.spawn.user.account_id": {
 			"schema": {
@@ -8195,10 +8409,11 @@
 			},
 			"anchors": [
 				"function «»(«»){if(!«»())return;let «»=«»(),«»=«»(«».agentId),",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"if(«»&&«»(\"OTEL_METRICS_INCLUDE_ACCOUNT_UUID\")){«»[\"user.account_uuid\"]=«»;let «»=«».CLAUDE_CODE_ACCOUNT_TAGGED_ID||«»(\"user\",«»);if(«»)«»[\"user.account_id\"]=«»}",
 				"return`${«»}_01${«»(«»)}`"
 			],
-			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"user.account_id\"]=f with f=s.CLAUDE_CODE_ACCOUNT_TAGGED_ID (an environment string) || wuo(\"user\",p) (chunk-hzvpv59r.js:1600), which returns the template string `user_01<base58>` or undefined on a bad UUID; set only when truthy."
+			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-epqcnh2q.js:21401. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.user.account_id. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"user.account_id\"]=f with f=s.CLAUDE_CODE_ACCOUNT_TAGGED_ID (an environment string) || wuo(\"user\",p) (chunk-hzvpv59r.js:1600), which returns the template string `user_01<base58>` or undefined on a bad UUID; set only when truthy."
 		},
 		"span:claude_code.subagent.spawn.terminal.type": {
 			"schema": {
@@ -8206,10 +8421,61 @@
 			},
 			"anchors": [
 				"function «»(«»){if(!«»())return;let «»=«»(),«»=«»(«».agentId),",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}",
 				"let «»=«»()?«»:«».terminal;if(«»)«»[\"terminal.type\"]=«»;return «»}",
 				"«»=\"non-interactive\",«»={terminal:«».TERMINAL_EMULATOR===\"JetBrains-JediTerm\"&&«».platform!==\"darwin\"?\"pycharm\":«».terminal"
 			],
-			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The type is that of the base attribute on every live span. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"terminal.type\"]=u with u=\"non-interactive\" in non-interactive mode, else the detected terminal name string (chunk-asj6f58y.js:905135: \"pycharm\" for JetBrains-JediTerm off macOS, else the platform terminal string); set only when truthy. The detector returns open-ended names, so no enum."
+			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-epqcnh2q.js:21401. Its base attributes come from Mt() (chunk-epqcnh2q.js:9452): Kt() (chunk-epqcnh2q.js:9298) when bH() (chunk-epqcnh2q.js:9271) is true, else BAn(), which reads Ke() (chunk-f41c8jb6.js:5920). The live tool spans take the same Mt() through w() (chunk-epqcnh2q.js:10778), so the type is that of span:claude_code.tool.terminal.type. Base attributes, built in chunk-f41c8jb6.js:6440 (2.1.327) for every event, metric, and span. o[\"terminal.type\"]=u with u=\"non-interactive\" in non-interactive mode, else the detected terminal name string (chunk-asj6f58y.js:905135: \"pycharm\" for JetBrains-JediTerm off macOS, else the platform terminal string); set only when truthy. The detector returns open-ended names, so no enum."
+		},
+		"span:claude_code.subagent.spawn.gen_ai.provider.name": {
+			"schema": {
+				"enum": ["aws.bedrock", "gcp.vertex_ai", "anthropic"]
+			},
+			"anchors": [
+				"function «»(«»){if(!«»())return;let «»=«»(),«»=«»(«».agentId),",
+				"function «»(){return{...«»()?«»():«»(),\"gen_ai.provider.name\":«»(«»())}}"
+			],
+			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-epqcnh2q.js:21401. Mt() sets it to Wt(Te()) (chunk-epqcnh2q.js:9054): aws.bedrock, gcp.vertex_ai, or anthropic; for another provider Wt() returns undefined and the key is not exported."
+		},
+		"span:claude_code.subagent.spawn.span.type": {
+			"schema": {
+				"const": "subagent.spawn"
+			},
+			"anchors": [
+				"function «»(«»){if(!«»())return;let «»=«»(),«»=«»(«».agentId),",
+				"{...«»!==void 0&&{agent_id:«»},agent_type:«»()&&!«».isBuiltIn?\"custom\":«».agentType,...«»!==void 0&&{parent_agent_id:«»}}"
+			],
+			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-epqcnh2q.js:21401. w(\"subagent.spawn\",...) (chunk-epqcnh2q.js:10778)."
+		},
+		"span:claude_code.subagent.spawn.agent_id": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": [
+				"function «»(«»){if(!«»())return;let «»=«»(),«»=«»(«».agentId),",
+				"{...«»!==void 0&&{agent_id:«»},agent_type:«»()&&!«».isBuiltIn?\"custom\":«».agentType,...«»!==void 0&&{parent_agent_id:«»}}"
+			],
+			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-epqcnh2q.js:21401. $sr(n.agentId) (chunk-f41c8jb6.js:9657): the raw agent id, or when tXt() is true `a` plus 16 hex digits or a UUID; left out when that form does not match."
+		},
+		"span:claude_code.subagent.spawn.agent_type": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": [
+				"function «»(«»){if(!«»())return;let «»=«»(),«»=«»(«».agentId),",
+				"{...«»!==void 0&&{agent_id:«»},agent_type:«»()&&!«».isBuiltIn?\"custom\":«».agentType,...«»!==void 0&&{parent_agent_id:«»}}"
+			],
+			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-epqcnh2q.js:21401. n.agentType, or `custom` when bH() is true and the agent is not built in (chunk-epqcnh2q.js:21307)."
+		},
+		"span:claude_code.subagent.spawn.parent_agent_id": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": [
+				"function «»(«»){if(!«»())return;let «»=«»(),«»=«»(«».agentId),",
+				"{...«»!==void 0&&{agent_id:«»},agent_type:«»()&&!«».isBuiltIn?\"custom\":«».agentType,...«»!==void 0&&{parent_agent_id:«»}}"
+			],
+			"note": "Never sent in 2.1.327: the subagent span function lFa() (chunk-epqcnh2q.js:21142) returns first, because XXe() is `function XXe(){return!1}` (chunk-epqcnh2q.js:8867). The span is created at chunk-epqcnh2q.js:21401. $sr(n.parentAgentId), set only when a parent agent id exists."
 		}
 	}
 }
