@@ -230,12 +230,12 @@ It works in `-p` mode when `CLAUDE_CODE_REMOTE` is not set and a classifier mode
 [^stages]: The program, `chunk-m14bt1pz.js:3515000-3517935` (the classifier) and `chunk-vs4735qw.js:262-744` (the defaults). A probe captured the requests.
 [^stage-flag]: The program, `chunk-m14bt1pz.js:3536553`. Server config `tengu_auto_mode_config.twoStageClassifier` picks the mode.
 [^stage-defaults]: The program, `chunk-vs4735qw.js:262-744`.
-[^stage-code]: The program, `chunk-m14bt1pz.js:1193020`, `:3511409`, and `:3521545-3521833`.
+[^stage-code]: The program, `chunk-m14bt1pz.js:1193020`, `chunk-m14bt1pz.js:3511409`, and `chunk-m14bt1pz.js:3521545-3521833`.
 [^stage-think]: The program, `chunk-asj6f58y.js:555109`.
 [^stage-probe]: The program, `chunk-m14bt1pz.js:3533722`, and a probe that captured the classifier requests.
 [^official-project]: [Auto Mode Configuration](https://code.claude.com/docs/en/auto-mode-config) in the official docs.
 [^official-broad]: [Permission Modes](https://code.claude.com/docs/en/permission-modes) in the official docs.
-[^broad-rules]: The program, `chunk-7at7cxxb.js:3992` and `:5994`.
+[^broad-rules]: The program, `chunk-7at7cxxb.js:3992` and `chunk-7at7cxxb.js:5994`.
 [^billing]: The program, `chunk-m14bt1pz.js:1609756-1611404`, `2.1.319`. The upcoming-release sentence is at `chunk-m14bt1pz.js:1610222`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^billing-desktop]: The program, `chunk-m14bt1pz.js:1609746`.
 [^billing-flag]: The program, `chunk-m14bt1pz.js:1611200`. The flag is `tengu_velvet_heron`.
@@ -257,7 +257,7 @@ It works in `-p` mode when `CLAUDE_CODE_REMOTE` is not set and a classifier mode
 [^bg-rules]: The program, `chunk-61wd57dm.js:14760` and `chunk-9r83vch1.js:12899`.
 [^auto-reresolve]: The program, `chunk-7at7cxxb.js:24370`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^auto-fallback]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-ssqtkyx2.js:2301`, which logs `[auto-mode] the built-in auto default gave way to ... served settings failed`. The program skips the fallback when `CLAUDE_CODE_BRIDGE_CHILD_AUTO_DEFAULT` is set.
-[^odd-word]: The program, `chunk-y7vqg8jc.js:12472-12989`, which is used for `Bash` rules at `:13567`. The rule applies to `Bash` only. Rules that fail the check in `2.1.326` form, such as `$HOME *`, `~/bin/x*`, and `FOO=1 *`, still go. Rules such as `git *`, `~/bin/x *`, and `/usr/bin/git *` stay. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^odd-word]: The program, `chunk-y7vqg8jc.js:12472-12989`, which is used for `Bash` rules at `chunk-y7vqg8jc.js:13567`. The rule applies to `Bash` only. Rules that fail the check in `2.1.326` form, such as `$HOME *`, `~/bin/x*`, and `FOO=1 *`, still go. Rules such as `git *`, `~/bin/x *`, and `/usr/bin/git *` stay. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^runners-327]: The program, `chunk-y7vqg8jc.js:12681-12989`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^ps-dot-slash]: The program, `chunk-y7vqg8jc.js:12635` and `:14430`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^ps-dot-slash]: The program, `chunk-y7vqg8jc.js:12635` and `chunk-y7vqg8jc.js:14430`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^win-path]: The program, `chunk-y7vqg8jc.js:12472-12989` (the character test and the word scan). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). A backslash is not in the set of plain characters, so the word is skipped and no program word is left.

@@ -170,7 +170,7 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^tools-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Configure Permissions](https://code.claude.com/docs/en/permissions), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program, `chunk-1vttvse2.js:203832`.
-[^list-agents]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-2z1xbrys.js:7451` (the `cursor` input) and `:8177` (`isEnabled`: the org setting `messagingBeyondOwnAgentsDisabled` turns the tool on for a list of this session's own agents, and cross-session messaging turns it on for the rest).
+[^list-agents]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-2z1xbrys.js:7451` (the `cursor` input) and `chunk-2z1xbrys.js:8177` (`isEnabled`: the org setting `messagingBeyondOwnAgentsDisabled` turns the tool on for a list of this session's own agents, and cross-session messaging turns it on for the rest).
 [^exit-worktree-ask]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^exit-worktree-refusal]: The program, `chunk-1vttvse2.js:174421`, `chunk-1vttvse2.js:177032`.
 [^exit-worktree-text]: The program, `chunk-1vttvse2.js:171251`.

@@ -137,7 +137,7 @@ The variables on this page override that guess.
 
 [^source]: The program, `chunk-2ew0jg68.js:26216` (variable names found in the `2.1.314` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 [^ax-env]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307).
-[^early-key]: The program, `chunk-k8g096c0.js:5147`, `:23382` (option `timesPresses`). The server gate is `tengu_cheeky_newt`.
+[^early-key]: The program, `chunk-k8g096c0.js:5147`, `chunk-k8g096c0.js:23382` (option `timesPresses`). The server gate is `tengu_cheeky_newt`.
 [^probes]: [Probes](../../reference/probes.md).
 [^new-renderer]: The program, `chunk-k8g096c0.js:387-396`. Since `2.1.327` the gates are `tengu_functional_pebble` and `tengu_kind_puzzle`. `tengu_idempotent_willow` is gone. The `tengu_functional_pebble` value holds `add` and `remove` lists of terminal names. The second gate, `tengu_kind_puzzle`, has the same list shape. It decides whether the old renderer runs the cursor check (`chunk-k8g096c0.js:397-405` and `chunk-k8g096c0.js:1627`, read at `chunk-maqjh9z8.js:25489-25493`). That check is on when the gate value is valid, `CLAUDE_CODE_NEW_RENDERER` is not off, the terminal is not in `remove` or Windows, and the session is not in tmux control mode. A value in `CLAUDE_CODE_NEW_RENDERER` wins over the first gate.
 [^notif-host]: The program, read at `chunk-rap1tzf6.js:589855` and used at `chunk-rap1tzf6.js:762030`.

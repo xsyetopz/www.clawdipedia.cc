@@ -227,7 +227,7 @@ Each row is a family of messages. The backticked text is the start that every me
 
 [^levels]: The program, `chunk-m14bt1pz.js:1992614`.
 [^subagent-window]: The program, `chunk-m14bt1pz.js:1995867`.
-[^reactive]: The program, `chunk-m14bt1pz.js:2605452` (the reactive route) and `:2071974` (the "Usage credits are required for long context" test).
+[^reactive]: The program, `chunk-m14bt1pz.js:2605452` (the reactive route) and `chunk-m14bt1pz.js:2071974` (the "Usage credits are required for long context" test).
 [^second-ask]: The program, `chunk-m14bt1pz.js:2606453`.
 [^summary-error]: The program, `chunk-m14bt1pz.js:2941304`. The `2.1.311` text, `no <summary> block in the second reply either`, is not in `2.1.321`.
 [^gate]: The program, `chunk-6ydtrx6k.js:2567`, the server flag read at `chunk-m14bt1pz.js:2606453`.

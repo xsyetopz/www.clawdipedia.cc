@@ -119,18 +119,18 @@ Each row is a family of messages. The backticked text is the start that every me
 [^edquot]: The program, `chunk-m14bt1pz.js:3748143`.
 [^monitor-flag]: [`2.1.310` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.310). The program, `chunk-zwpe0yha.js:17000` (`isEnabled` calls the check) and `chunk-83arnb78.js:2589`. The check returns true off Windows. On Windows it returns false when the build withholds `Bash`, and else true only if Git Bash is found. It has no flag in `2.1.327`.
 [^monitor-stderr]: The program, `chunk-r6jrtd34.js:78`.
-[^sleep]: The program, `chunk-m14bt1pz.js:5724771`, `:3759305`, and `:5717258`.
-[^cap]: The program, `chunk-4azxnffa.js:843`, `chunk-m14bt1pz.js:5713047`, and `:3761728`.
+[^sleep]: The program, `chunk-m14bt1pz.js:5724771`, `chunk-m14bt1pz.js:3759305`, and `chunk-m14bt1pz.js:5717258`.
+[^cap]: The program, `chunk-4azxnffa.js:843`, `chunk-m14bt1pz.js:5713047`, and `chunk-m14bt1pz.js:3761728`.
 [^called-back]: The program, `chunk-m14bt1pz.js:3761432`. The `2.1.323`, `2.1.326`, and `2.1.327` programs hold neither the field name nor the old text; `2.1.322` holds both.
 [^bg-output]: The program, `chunk-m14bt1pz.js:3761432-3761775` and `chunk-m14bt1pz.js:189155-189159`. The notice reads `Command did not complete within its Ns timeout and was moved to the background (ID: ...). Output is being written to: ...`.
-[^bash-hook]: The program, `chunk-m14bt1pz.js:1068387` (`Bash` is another name of `Monitor` for hook matchers), `:4187526` (the hook input is rewritten as a `Bash` call), and `:4221002` (the skipped `if` condition). The same code is at `chunk-m14bt1pz.js:60256-60267`, `:209113-209118`, and `:210902-210912`.
+[^bash-hook]: The program, `chunk-m14bt1pz.js:1068387` (`Bash` is another name of `Monitor` for hook matchers), `chunk-m14bt1pz.js:4187526` (the hook input is rewritten as a `Bash` call), and `chunk-m14bt1pz.js:4221002` (the skipped `if` condition). The same code is at `chunk-m14bt1pz.js:60256-60267`, `chunk-m14bt1pz.js:209113-209118`, and `chunk-m14bt1pz.js:210902-210912`.
 [^fetch-long]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-m14bt1pz.js:2699439` and the limit in `chunk-ez3vve9s.js:400`.
 [^bash-diff]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-nyjvrwjv.js:103-135`. The diff view lists the changed files that it cannot show, and its text for files that did not get a diff reads `... changed (binary, mode only or too large to show)`, followed by the file names.
 [^ps-ask]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-8vhagegy.js:3469` (the prompt text), `chunk-8vhagegy.js:3938-3945` (the ask with `ruleProof`), `chunk-8vhagegy.js:4029` (the names `get-module`, `gmo`, and `module`), `chunk-8vhagegy.js:4594` (no saved-rule suggestion), and `chunk-588h17j6.js:17433` (the server flag `bot_protected_tengu_sienna_grebe`).
 [^head-start]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-m14bt1pz.js:1108951`, `chunk-m14bt1pz.js:3725480`, `chunk-8g2nr9dn.js:67635`.
 [^which]: The program, `chunk-m14bt1pz.js:3709551`. The flag is `tengu_swirling_koala`.
 [^git-grep]: The program, `chunk-m14bt1pz.js:3688806`.
-[^snapshot]: The program, `chunk-m14bt1pz.js:3693511`, `:3696065`, and `:3697034`.
+[^snapshot]: The program, `chunk-m14bt1pz.js:3693511`, `chunk-m14bt1pz.js:3696065`, and `chunk-m14bt1pz.js:3697034`.
 [^set-o]: [`2.1.316` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.316).
 [^auto-bg]: The program, `chunk-ry6xe4gr.js:16164`.
 [^monitor-ws]: Probe case `print.err319.monitor-ws-unresolvable`.

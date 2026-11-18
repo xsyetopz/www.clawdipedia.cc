@@ -111,7 +111,7 @@ Since `2.1.326`, a tool call in `bypassPermissions` mode asks for approval when 
 
 [^mode-names]: The program, `chunk-k57p2hm4.js:1526`.
 [^project-default]: The program, `chunk-rthqjjhy.js:6971-7046` and the picker text in `chunk-rqrmxgcm.js:10403`.
-[^killswitch]: The [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-rthqjjhy.js:4773` (the `--permission-mode` flag), `:5258` (an agent definition's `permissionMode: auto`), `:6475` (`defaultMode: auto` in an IDE session), and `:7994`. The program logs `auto mode killswitch active (override- or payload-served) — falling back to default`.
+[^killswitch]: The [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-rthqjjhy.js:4773` (the `--permission-mode` flag), `chunk-rthqjjhy.js:5258` (an agent definition's `permissionMode: auto`), `chunk-rthqjjhy.js:6475` (`defaultMode: auto` in an IDE session), and `chunk-rthqjjhy.js:7994`. The program logs `auto mode killswitch active (override- or payload-served) — falling back to default`.
 [^bypass-errors]: The program, `chunk-rthqjjhy.js:8470` and `chunk-7at7cxxb.js:9835`.
 [^cloud-bypass]: The program error text, `chunk-61wd57dm.js:23679`.
 [^reasons]: The program, `chunk-k57p2hm4.js:4328`.
@@ -119,5 +119,5 @@ Since `2.1.326`, a tool call in `bypassPermissions` mode asks for approval when 
 [^long-vars]: The program, `chunk-m14bt1pz.js:83610`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^v309]: [`2.1.309` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.309).
 [^mode-use]: Official page [Choose a Permission Mode](https://code.claude.com/docs/en/permission-modes), table "Available modes", column "Best for".
-[^crashed-check]: The program, `chunk-m14bt1pz.js:3632674` (the decision reason), `:3632940` (the message), `:3643325` (the crash becomes an ask before the mode decides), and `:3641116` (the refusal text where no one can be asked). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^crashed-check]: The program, `chunk-m14bt1pz.js:3632674` (the decision reason), `chunk-m14bt1pz.js:3632940` (the message), `chunk-m14bt1pz.js:3643325` (the crash becomes an ask before the mode decides), and `chunk-m14bt1pz.js:3641116` (the refusal text where no one can be asked). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^rm-unparsed]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-m14bt1pz.js:1489671`. The `2.1.326` message ends after `This requires explicit approval.`

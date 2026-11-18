@@ -11,6 +11,8 @@ The site documents Claude Code `2.1.327`, the only release it tracks. The versio
 
 ### Added
 
+- Print-mode observe cases in `tools/schemas/observe/print/cases-otel.ts` sample the OpenTelemetry sites that the other cases do not reach: `otel-hook-span`, `otel-pull-request-count`, `otel-permission-mode`, `otel-safety-deny`, `otel-safety-hook`, `otel-internal-error`, `otel-hook-plugin-metrics`, and `otel-retention-sweep`. A case `env` value can use `{COLLECTOR}` for the URL of the local collector.
+- An `otel` PTY group in `tools/release/probes/pty/otel.ts` samples the events that only the interactive session sends: `otel.auth-logout`, `otel.feedback-survey`, and `otel.plugin-installed`. Each case runs the print-mode collector as a mock (`tools/schemas/observe/print/otel-mock.ts`) and keeps the value-free field types as `<case>.fields.json`.
 - cc-inspect `0.18.4`: the `sessions` tool has a `fields` action. It lists the JSON types at each key path of the matched transcript lines and keeps no value.
 - A `transcript` PTY group in `tools/release/probes/pty/transcript.ts`. Its `transcript.loop-noop-fold` case samples `system.foldedUuids`, `system.noOpStreak`, and `system.streakStartedAt`, and keeps the value-free field types of each transcript as `<case>.fields.json`.
 - The PTY cases `transcript.memory-recall-cut` and `transcript.memory-recall-cut-address` resume a session that has an account memory recall and sample `api-request.cut` in the interactive session. The second case also samples `api-request.cut.markAddresses` through a mock claude.ai connector list (`tools/release/lib/stub/connector.ts`). A PTY case can now run a `mock` server for the length of the run. The TLS server and proxy of the Remote Control mock are now shared in `tools/release/lib/stub/tls-proxy.ts`.
@@ -52,6 +54,9 @@ The site documents Claude Code `2.1.327`, the only release it tracks. The versio
 
 ### Changed
 
+- Each program citation in `docs/` names its chunk with its place, as in `chunk-m14bt1pz.js:2777505`, and not only `@N` or `:N`. `check:citations` now reports a place in backticks with no chunk on a line that names the program.
+- The OpenTelemetry page states when `hook_plugin_metrics` and `retention_sweep` are sent. `hook_plugin_metrics` comes only from a plugin of an official Anthropic marketplace, and only for an async hook answer that fails the output schema. `retention_sweep` runs 5 seconds after the start in print mode.
+- Each OpenTelemetry span that `2.1.327` cannot send has a note in the schema that says why.
 - The transcript schema no longer lists `attachment.attachment.hooks`. Only the display builds the `async_hook_response_batch` and `teammate_shutdown_batch` attachments (the program, chunk-a2xjwn0h.js:168458 at `2.1.327`), and the transcript write-site check now counts them as not kept.
 - The note of `api-request.renderedWithdrawn` states why `2.1.327` cannot write it (the program, chunk-m14bt1pz.js:3987339 at `2.1.327`).
 - The transcript schema no longer lists the `data` fields of `progress` lines: in `2.1.327` the writer drops each `progress` line before it writes it. The Transcript Format page says so, and the transcript write-site check counts `progress` as a type that the program does not keep.

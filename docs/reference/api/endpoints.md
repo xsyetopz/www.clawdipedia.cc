@@ -232,7 +232,7 @@ sequenceDiagram
 
 ## Sources
 
-[^checksum]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-18d5r2hb.js:319068` (the header name), `:238176` (hint headers on) `:319837` (the conditions), `chunk-enmznns5.js:685` (the direct `api.anthropic.com` test that stops the header), and `chunk-f892tj2r.js:36390` (the host test).
+[^checksum]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-18d5r2hb.js:319068` (the header name), `chunk-18d5r2hb.js:238176` (hint headers on) `chunk-18d5r2hb.js:319837` (the conditions), `chunk-enmznns5.js:685` (the direct `api.anthropic.com` test that stops the header), and `chunk-f892tj2r.js:36390` (the host test).
 [^m365-origins]: The program, `chunk-eyze44ee.js:6777`.
 [^max-tokens-retry]: The program, `chunk-m14bt1pz.js:3109407` (the text pattern and the limit of 4096), `chunk-m14bt1pz.js:3109862` (`lowerAfter`: the limit from the text, 32,000 for a model with no list entry, a resend only when the limit is lower, and `onReplyBegun` with the warning and the cap), and `chunk-m14bt1pz.js:3327124` (the retry rule, which excludes status 401). The [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326) list the fix.
 [^account-paths]: The program. The paths are strings in the program code, for example `chunk-asj6f58y.js:360405` (profile), `chunk-8b50zmfk.js:30412` (usage), `chunk-fjqvkwj2.js:246` (policy limits), `chunk-asj6f58y.js:1076778` (event logging), `chunk-rj3e7agr.js:203508` (triggers), `chunk-p47p1nn1.js:22103` (feedback), `chunk-z8m162ec.js:1190` (ultrareview quota) and `chunk-ptjfa0wc.js:858` (voice stream).
@@ -243,7 +243,7 @@ sequenceDiagram
 [^cost-notes]: [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317).
 [^cost-run]: The program, read sites `chunk-5z0ytfrt.js:1462474` (the route) and `chunk-5z0ytfrt.js:1446751` (the handler). Probe cases `print.api319.gateway.cost-route-admin`, `print.api319.gateway.cost-route-no-key`, and `print.api319.gateway.no-postgres` start the gateway with a Postgres container (none for the last). `GET /v1/organizations/analytics/cost?starting_at=…&ending_at=…&time_bucket_width=1d` and an admin read key in `x-api-key` answered 200 with `{"data":[],"has_more":false,"next_page":null,"data_refreshed_at":…}`. Without the key it answered 401 "missing or invalid admin credentials". Without a reachable Postgres the gateway exits with code 1 and a "could not connect to Postgres" message, and never listens, so the route never starts.
 [^auth-warm]: The program, `chunk-p47p1nn1.js:37141`. Run: with the real sign-in in a temporary `HOME`, `CLAUDE_CODE_REMOTE=1`, `CLAUDE_CODE_ENTRYPOINT=remote_cowork`, `DISABLE_TELEMETRY=1`, and `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` unset, one `-p` turn sent `GET /v1/me` (answer 404, which the program counts as a passed check) before `POST /v1/messages`. With `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1`, the same run sent no `/v1/me`. Probe case `live.api319.auth-warm`.
-[^runner-runs]: The program, `chunk-e8yeh7g4.js:10144` (register `:10225`, poll `:10583`, nack `:11644`, report `:11894`, refresh `:15404`), and the release probe cases `env319b.runner.*` and `env319b.orchestrator.*`.
+[^runner-runs]: The program, `chunk-e8yeh7g4.js:10144` (register `chunk-e8yeh7g4.js:10225`, poll `chunk-e8yeh7g4.js:10583`, nack `chunk-e8yeh7g4.js:11644`, report `chunk-e8yeh7g4.js:11894`, refresh `chunk-e8yeh7g4.js:15404`), and the release probe cases `env319b.runner.*` and `env319b.orchestrator.*`.
 [^reg]: Probe case `env319b.runner.base` made this the first call. The run used the runner ID `runner-probe`.
 [^retire]: Probe case `env319b.runner.retire-at`.
 [^report-fail]: Probe cases `env319b.runner.child-exits-1` and `env319b.runner.child-exits-0`.
@@ -256,7 +256,7 @@ sequenceDiagram
 [^host-req]: The program, client `chunk-cw9a0k5b.js:10609`, caller `chunk-0tqcm9e3.js:38625`.
 [^host-result]: The program, `chunk-cw9a0k5b.js:11300`, `chunk-0tqcm9e3.js:41016`.
 [^consents]: The program, `chunk-swqbc88x.js:20866` (the `PUT`), `chunk-swqbc88x.js:21126` (the `POST`), and `chunk-swqbc88x.js:18824` (the type and the entry points). The type is in `2.1.325` and not in `2.1.323`.
-[^checkup]: The program, read site `chunk-pmrfk28m.js:7382` (the path is the constant at `:5478`). The gate is `tengu_quiet_almanac`.
+[^checkup]: The program, read site `chunk-pmrfk28m.js:7382` (the path is the constant at `chunk-pmrfk28m.js:5478`). The gate is `tengu_quiet_almanac`.
 [^oauth-config]: The program, `chunk-p5kfs9w9.js:1561` (the production config) and `chunk-p5kfs9w9.js:3869` (the `CLAUDE_CODE_CUSTOM_OAUTH_URL` check).
 [^dir-urls]: The program, `chunk-asj6f58y.js:981984`.
 [^billing]: The program, `chunk-m14bt1pz.js:2021886` and `chunk-m14bt1pz.js:1910654`.

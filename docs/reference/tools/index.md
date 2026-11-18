@@ -151,5 +151,5 @@ It lists every field of this release. Build on the fields it names. Look each on
 
 [^definitions]: The program, the tool definitions, `chunk-1vttvse2.js:203832`.
 [^toolsearch-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program, `chunk-ngdgttt1.js:6476`.
-[^custom-base-url]: The program, `chunk-m14bt1pz.js:3262624` and `:2031543`, and the [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304).
+[^custom-base-url]: The program, `chunk-m14bt1pz.js:3262624` and `chunk-m14bt1pz.js:2031543`, and the [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304).
 [^bfs-ugrep]: The program, `chunk-m14bt1pz.js:3691209`.

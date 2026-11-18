@@ -7,7 +7,7 @@ const DOC = [
 	"",
 	"## Sources",
 	"",
-	"[^a]: The program, `chunk-aaaaaaaa.js:12` and `:40-44`.",
+	"[^a]: The program, `chunk-aaaaaaaa.js:12` and `chunk-aaaaaaaa.js:40-44`.",
 	"[^b]: The program, the agent loop.",
 	"[^c]: The program, `chunk-bbbbbbbb.js@340`.",
 	"[^d]: The program, `chunk-cccccccc.js` lines 5 to 9.",
@@ -38,13 +38,12 @@ test("unlocatedCitations reports each form that lacks :N, and a program footnote
 	]);
 });
 
-test("unlocatedCitations reports a range that ends before it starts, after a chunk or alone", () => {
+test("unlocatedCitations reports a range that ends before it starts", () => {
 	// Arrange
 	const files = {
 		"r.md": [
-			"[^a]: The program, `chunk-aaaaaaaa.js:40-44` and `:50-52`.",
+			"[^a]: The program, `chunk-aaaaaaaa.js:40-44`.",
 			"[^b]: The program, `chunk-bbbbbbbb.js:632-616`.",
-			"[^c]: The program, `chunk-cccccccc.js:9` and `:593-58`.",
 		].join("\n"),
 	};
 
@@ -54,7 +53,26 @@ test("unlocatedCitations reports a range that ends before it starts, after a chu
 	// Assert
 	expect(found).toEqual([
 		[2, ":632-616 ends before it starts: write the range as :A-B with A <= B"],
-		[3, ":593-58 ends before it starts: write the range as :A-B with A <= B"],
+	]);
+});
+
+test("unlocatedCitations reports a place without its chunk on a line that names the program", () => {
+	// Arrange
+	const files = {
+		"b.md": [
+			"[^a]: The program, `chunk-aaaaaaaa.js:9` and `:50-52`.",
+			"Source: the program (`chunk-bbbbbbbb.js:7` and `@12`).",
+			"Bind `:0` for a free port.",
+		].join("\n"),
+	};
+
+	// Act
+	const found = unlocatedCitations(files).map((u) => [u.line, u.problem]);
+
+	// Assert
+	expect(found).toEqual([
+		[1, ":50-52 names no chunk: write the place as chunk-x.js:50-52"],
+		[2, "@12 names no chunk: write the place as chunk-x.js:12"],
 	]);
 });
 

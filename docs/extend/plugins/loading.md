@@ -130,4 +130,4 @@ Each row is a family of messages. The backticked text is the start that every me
 [^not-installed]: The program, `chunk-dfwkett1.js:18118`.
 [^lsp]: The program, `chunk-dfwkett1.js:15884`.
 [^unsafe-paths]: The program, `chunk-m14bt1pz.js:44656-44684`, `chunk-m14bt1pz.js:229475-229669`, and `chunk-m14bt1pz.js:44900`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325) for the `validate` part, which the code lines do not show.
-[^agents-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program loads the `--agents` agents at `chunk-61wd57dm.js:1435` and `:7932`. The reload and resume behavior is from the release notes.
+[^agents-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program loads the `--agents` agents at `chunk-61wd57dm.js:1435` and `chunk-61wd57dm.js:7932`. The reload and resume behavior is from the release notes.

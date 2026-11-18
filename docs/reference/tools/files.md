@@ -144,17 +144,17 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^tools-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Configure Permissions](https://code.claude.com/docs/en/permissions), and the program, the tool input schemas, `chunk-m14bt1pz.js:3837298` (`Read`), `:1750237` (`Write`), and `:5523036` (`NotebookEdit`).
-[^memory-flags]: The program, `chunk-jvme5rqc.js:67579` and `:29800`. The first server flag is `tengu_linen_orbit`. The second is `tengu_haze_glass`.
+[^tools-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Configure Permissions](https://code.claude.com/docs/en/permissions), and the program, the tool input schemas, `chunk-m14bt1pz.js:3837298` (`Read`), `chunk-m14bt1pz.js:1750237` (`Write`), and `chunk-m14bt1pz.js:5523036` (`NotebookEdit`).
+[^memory-flags]: The program, `chunk-jvme5rqc.js:67579` and `chunk-jvme5rqc.js:29800`. The first server flag is `tengu_linen_orbit`. The second is `tengu_haze_glass`.
 [^restricted-316]: The program, `chunk-acd7ayd3.js:2572` and `chunk-06cjxaee.js:15140`, and the [`2.1.316` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.316).
 [^glob-grep]: The program, `chunk-m14bt1pz.js:4723538` of `2.1.327` (the notes for a tool that is not offered).
-[^size-flag]: The program, `chunk-m14bt1pz.js:142168` and `:4033994`. The server flag is `tengu_quizzical_mango`.
-[^partial-read]: The program, `chunk-m14bt1pz.js:142168`, `:4033994`, and `:1756172` (the `Write` refusal, error code 19), and `chunk-f0zvyy8b.js:2188` (the mark). The [2.1.312 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312) list the change.
+[^size-flag]: The program, `chunk-m14bt1pz.js:142168` and `chunk-m14bt1pz.js:4033994`. The server flag is `tengu_quizzical_mango`.
+[^partial-read]: The program, `chunk-m14bt1pz.js:142168`, `chunk-m14bt1pz.js:4033994`, and `chunk-m14bt1pz.js:1756172` (the `Write` refusal, error code 19), and `chunk-f0zvyy8b.js:2188` (the mark). The [2.1.312 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312) list the change.
 [^write-verify]: Probe cases `print.err319.write-verify-devnull`, `print.err319.write-verify-race`, `print.err319.write-verify-full-disk`, `print.err319.write-verify-watcher`, and `print.err319.write-verify-pretooluse-order`, in the order of the sentences above.
 [^read-blocked]: The program, `2.1.323`, `chunk-acd7ayd3.js:2572`; `chunk-k57p2hm4.js:6712`.
 [^exit-worktree-stop]: The program, `chunk-1vttvse2.js:184209`.
-[^import-read]: The program, `chunk-5yk47jx3.js:6140` and `:1917`.
-[^notebook-checks]: The program, `chunk-m14bt1pz.js:5528398`, `:5528606`, `:5529488`, and `:5529669`.
+[^import-read]: The program, `chunk-5yk47jx3.js:6140` and `chunk-5yk47jx3.js:1917`.
+[^notebook-checks]: The program, `chunk-m14bt1pz.js:5528398`, `chunk-m14bt1pz.js:5528606`, `chunk-m14bt1pz.js:5529488`, and `chunk-m14bt1pz.js:5529669`.
 [^notebook-size]: The program, `chunk-m14bt1pz.js:5530854`.
 [^grep-page]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327)
 [^read-nb]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327)

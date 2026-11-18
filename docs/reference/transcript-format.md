@@ -74,7 +74,7 @@ The key lists come from transcripts that 2.1.305 wrote on a real machine and in 
 | `type` | Main keys | Meaning |
 | --- | --- | --- |
 | `user` | `message`, `promptId`, `permissionMode`, `permissionDecision`, `toolUseResult`, `sourceToolAssistantUUID`, `origin`, `promptSource`, `turnOrigin`, `turnPosition`, `sandboxed`, `madeBy` | A user turn or a tool result. Since `2.1.307` a shell tool result can carry `sandboxed`, whether the command ran in the sandbox (the program, and probe `print.transcripts.lines`). A tool result can carry `connectorFileLines` (`chunk-m14bt1pz.js:4778188`, `chunk-n9wersv3.js:42432`): an array of rows, one per file that a connector tool fetched to or sent from the machine, which the screen shows under the result. A row has `direction` (`fetching` or `sending`), `state`, `fileName`, `bytesDone`, `bytesTotal`, `connectorName`, `fileIndex`, and `fileCount` (integer, 1 or more). `state` is `done`, `stopped`, `stopped-maybe-saved`, or an object `{refused: string, leftBehind?: true}`. The optional keys are `place` (a folder), `savedAs` (the saved path), and `groupedFiles` (integer, 2 or more, how many files the row stands for). The screen drops a row that does not match this shape. |
-| `assistant` | `message`, `requestId`, `requestRef`, `requestedModel`, `effort`, `perTurnEffort`, `advisorModel`, `apiBlockIndex`, `madeBy` | A reply of the model. Since `2.1.326` an entry can have `madeBy`, which tells what made it: `model` (the model wrote it), `input` (the entry was made from user input; the program also sets it on a `system` `local_command` entry), or `other` (Claude Code made the entry, not the model). The program counts an `other` entry as a model reply only when it is also `handedOff` (`chunk-jxtnvz5q.js:703` and `:1262`, `chunk-rap1tzf6.js:198502`). On a `user` entry the value is `other` (the transcript schema). |
+| `assistant` | `message`, `requestId`, `requestRef`, `requestedModel`, `effort`, `perTurnEffort`, `advisorModel`, `apiBlockIndex`, `madeBy` | A reply of the model. Since `2.1.326` an entry can have `madeBy`, which tells what made it: `model` (the model wrote it), `input` (the entry was made from user input; the program also sets it on a `system` `local_command` entry), or `other` (Claude Code made the entry, not the model). The program counts an `other` entry as a model reply only when it is also `handedOff` (`chunk-jxtnvz5q.js:703` and `chunk-jxtnvz5q.js:1262`, `chunk-rap1tzf6.js:198502`). On a `user` entry the value is `other` (the transcript schema). |
 | `system` | `subtype`, `content`, `level`, `durationMs`, `messageCount` | A note that the model never reads. |
 | `attachment` | `attachment`, `rendered`, `renderedRole`, `renderedInHumanTurn`, `renderedBesideToolResult` | Context that Claude Code adds beside the conversation. `rendered` is the text the model sees and `renderedRole` is `user` or `system`. `renderedBesideToolResult` is `true` on a `remote_session_change` attachment, and `renderedInHumanTurn` is on a `queued_command` attachment whose text differs inside a human turn (the program). |
 | `queue-operation` | `operation`, `content`, `commandUuid`, `deliveryId`, `reason` | A prompt or command that waits in the queue. |
@@ -111,10 +111,10 @@ These names are in the program next to the writer. The meanings come from the wr
 | `fork-context-ref` | `agentId`, `parentSessionId`, `parentLastUuid`, `contextLength` | A forked agent's pointer to its parent. The fork reads the parent's lines and does not copy them. |
 | `observer-ref` | `observerTaskId`, `observerAgentType`, `agentId`, `timestamp` | An observer agent's pointer. |
 | `session-owner` | `sessionId`, `accountUuid`, `organizationUuid` | The account and organization that own the session. The program writes it only when it has an account with an `accountUuid` (`chunk-m14bt1pz.js:501260`, `chunk-sge9jngd.js:413`). |
-| `data-flow-records` | `v`, `sessionId`, `agentId`, `records`, `snapshot` | Records of which responses and tool calls fed the work of the main loop or of an agent (`agentId`). Each record has a `response_id`, or a `tool_name` with `tool_use_id` or `event_id`. `snapshot` is `true` when the line holds all records, not only the new ones (`chunk-m14bt1pz.js:495532`, `:502641`). |
+| `data-flow-records` | `v`, `sessionId`, `agentId`, `records`, `snapshot` | Records of which responses and tool calls fed the work of the main loop or of an agent (`agentId`). Each record has a `response_id`, or a `tool_name` with `tool_use_id` or `event_id`. `snapshot` is `true` when the line holds all records, not only the new ones (`chunk-m14bt1pz.js:495532`, `chunk-m14bt1pz.js:502641`). |
 | `data-flow-incomplete` | `v`, `sessionId`, `agentId` | Marks that the records of the main loop or of an agent are not complete, for example after a server tool with a bad name (`chunk-m14bt1pz.js:495395`). |
 | `derived-from` | `v`, `sessionId`, `sessions` | The sessions that this one came from. Each item has `type`, `id`, `via` (for example `clear`, `fork`, `resume`, or `import`), and can have `started`. A child process reads them from `CLAUDE_CODE_LAUNCHED_BY_SESSION_IDS` (`chunk-m14bt1pz.js:502821`, `chunk-2mvk3gke.js:979`). |
-| `resume-head-vouch` | `sessionId`, `sum` | A hex `sum` that vouches for `resume-head.jsonl`. The program calls this file "the side file that speeds up loading" the transcript. It writes the file in the session folder when you resume a large session file (`chunk-m14bt1pz.js:646401`, `:677956`). See the conditions below the table. |
+| `resume-head-vouch` | `sessionId`, `sum` | A hex `sum` that vouches for `resume-head.jsonl`. The program calls this file "the side file that speeds up loading" the transcript. It writes the file in the session folder when you resume a large session file (`chunk-m14bt1pz.js:646401`, `chunk-m14bt1pz.js:677956`). See the conditions below the table. |
 | `progress` | `toolUseID`, `parentToolUseID`, `data` | Progress of a running tool, hook, skill, or agent. `data.type` is `hook_progress`, `tool_heartbeat`, `bash_progress`, `powershell_progress`, `agent_progress`, `agent_api_retry`, `skill_progress`, `search_results_received`, `query_update`, `workflow_log`, `workflow_phase`, `workflow_agent`, or `artifact_publish_retry`. In `2.1.327` the transcript writer drops each `progress` row before it writes, so only older session files hold these lines (`chunk-m14bt1pz.js:696693`). The schema lists only the shared fields for this type. |
 | `isolation-latch` | `side` | Records a one-time choice about where the session runs, kept for resume. |
 | `memory-mode` | `mode`, `afterUuid`, `reason`, `account` | A stamp that auto memory switched mode. One per switch. |
@@ -134,7 +134,7 @@ The program writes `resume-head-vouch` on `--resume` only when all of these are 
 
 - `CLAUDE_CODE_TRANSCRIPT_TAIL_LOAD` is `on` or `verify`.
 - The session file is larger than 5 MiB (`chunk-a8mwmqtf.js:21433`).
-- The file has a `compact_boundary` line at 4 MiB or more from the start, and no `user`, `assistant`, `system`, `attachment`, or `progress` line comes before it (`chunk-m14bt1pz.js:377907`, `:390481`, `:642878`).
+- The file has a `compact_boundary` line at 4 MiB or more from the start, and no `user`, `assistant`, `system`, `attachment`, or `progress` line comes before it (`chunk-m14bt1pz.js:377907`, `chunk-m14bt1pz.js:390481`, `chunk-m14bt1pz.js:642878`).
 - The `compact_boundary` line is at most 1 MiB (`chunk-m14bt1pz.js:390481`).
 - The resume continues the same session, not a fork (`chunk-m14bt1pz.js:679723`).
 
@@ -194,7 +194,7 @@ Content block types seen: `text`, `thinking`, `tool_use` (in `assistant` lines),
 | `requestId` | The request ID from the API. |
 | `requestRef` | A reference to the matching `api-request` line. |
 | `requestedModel` | The model Claude Code asked for. The `message.model` field shows the model that answered. |
-| `effort`, `perTurnEffort` | The effort level of the call. Since `2.1.312`, `effort` is the level in force: if the conversation already holds an effort change that the model applied, the request uses that level, not a newly picked one. The program reads `effort` from `output_config.effort` of the request it built (`chunk-m14bt1pz.js:3288669` and `:3114127`). Before `2.1.312` it was the newly picked level, as the [2.1.312 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312) say. |
+| `effort`, `perTurnEffort` | The effort level of the call. Since `2.1.312`, `effort` is the level in force: if the conversation already holds an effort change that the model applied, the request uses that level, not a newly picked one. The program reads `effort` from `output_config.effort` of the request it built (`chunk-m14bt1pz.js:3288669` and `chunk-m14bt1pz.js:3114127`). Before `2.1.312` it was the newly picked level, as the [2.1.312 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312) say. |
 | `advisorModel` | The advisor model, if the advisor tool was on. |
 | `apiBlockIndex` | The index of this block in the API reply. One reply can produce several lines. |
 | `thinkingDisplay`, `thinkingDurationMs` | How Claude Code showed the thinking text, and how long it took. |
@@ -211,7 +211,7 @@ Content block types seen: `text`, `thinking`, `tool_use` (in `assistant` lines),
 
 ## Compaction Rows
 
-Source: the program (`chunk-m14bt1pz.js:5961662` and `@2777505`).
+Source: the program (`chunk-m14bt1pz.js:5961662` and `chunk-m14bt1pz.js:2777505`).
 
 A compaction writes a `system` line with `subtype: compact_boundary` and the content `Conversation compacted`. Its `compactMetadata` object holds these keys.
 
@@ -321,4 +321,4 @@ It lists every field of this release. Build on the fields it names. Look each on
 ## Sources
 
 [^unverified-marks]: A count in the generated files. `schemas/claude-code-transcript.json` for `2.1.326` has 68 `"x-unverified": true` marks, and the file for `2.1.327` has none. The typed fields come from the generator input in `tools/schemas/manual/`, which the generator checks against the code on each run. The probe counts come from `tools/schemas/audit-run.ts`, run against the print-mode cases in `tools/schemas/observe/print/`.
-[^output-limit-note]: The program, `chunk-m14bt1pz.js:1637556` (the kind list), `:5846814` (the reader), and `:5905070` (the renderer) of `2.1.327`.
+[^output-limit-note]: The program, `chunk-m14bt1pz.js:1637556` (the kind list), `chunk-m14bt1pz.js:5846814` (the reader), and `chunk-m14bt1pz.js:5905070` (the renderer) of `2.1.327`.

@@ -212,7 +212,7 @@ Each row is a family of messages. The backticked text is the start that every me
 [^otel-timeout-metrics]: The program, `chunk-rd5tcjx6.js:56357`. Probe case `env319b.otel-timeout.generic-500-metrics-5000`. [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317) describe the limits.
 [^otel-timeout-traces]: The program, `chunk-rd5tcjx6.js:56363`. Probe case `env319b.otel-timeout.generic-500-traces-5000`. [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317) describe the limits.
 [^otel-timeout]: The program, `chunk-rd5tcjx6.js:56363`. Probe cases `env319b.otel-timeout.generic-500`, `env319b.otel-timeout.default`, and `all-three-500`.
-[^error-reporting]: The program, `chunk-dfq3y18g.js:37250` and `:39242`.
+[^error-reporting]: The program, `chunk-dfq3y18g.js:37250` and `chunk-dfq3y18g.js:39242`.
 [^log-responses]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-f41c8jb6.js:19516`.
 [^resource-host]: The program, `chunk-rd5tcjx6.js:1805`.
 [^safety-event]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307). The program, `chunk-m14bt1pz.js:4525556`.

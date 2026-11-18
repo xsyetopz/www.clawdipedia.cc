@@ -284,7 +284,7 @@ Each row is a family of messages. The backticked text is the start that every me
 [^use-case]: Probe case `pty.cli319.slash.use-case`. The program, `chunk-m14bt1pz.js:2530464`, the command table: `isEnabled:()=>n1()&&!Et()`. The flag is `tengu_federated_possum`, `chunk-rj3e7agr.js:220676`.
 [^remote-bang]: The program, `chunk-rap1tzf6.js:238010`.
 [^stickers]: The program, `chunk-m14bt1pz.js:2523591`. The output is in `chunk-qr4wps7c.js:1370`.
-[^name-rule]: The program, `chunk-m14bt1pz.js:69872`, `:69876`, and `:190483`.
+[^name-rule]: The program, `chunk-m14bt1pz.js:69872`, `chunk-m14bt1pz.js:69876`, and `chunk-m14bt1pz.js:190483`.
 [^name-type]: The program, `chunk-m14bt1pz.js:68501`.
 [^file-errors]: The program, `chunk-m14bt1pz.js:191164`.
 [^v312]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312).

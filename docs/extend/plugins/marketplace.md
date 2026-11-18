@@ -209,7 +209,7 @@ Each row is a family of messages. The backticked text is the start that every me
 [^digest-tier]: The program, `chunk-ja5z738t.js:207021` for the schema text and `chunk-m14bt1pz.js:997069` for the record check. The text of `2.1.326` named `prependPlugins` and `appendPlugins`. The text of `2.1.327` does not.
 [^digest-warn]: The program, `chunk-m14bt1pz.js:56944`.
 [^digest-schema]: The settings schema and the program, `chunk-ja5z738t.js:8161` and `chunk-m14bt1pz.js:56002`.
-[^digest-limits]: The program, `chunk-m14bt1pz.js:57833`, `:53395`, and `:53465`.
+[^digest-limits]: The program, `chunk-m14bt1pz.js:57833`, `chunk-m14bt1pz.js:53395`, and `chunk-m14bt1pz.js:53465`.
 [^digest-refuse]: The program, `chunk-m14bt1pz.js:57993`.
 [^digest-line]: The program, `chunk-ja5z738t.js:354671`.
 [^settings-schema]: The program, its bundled settings schema, `chunk-ja5z738t.js:206693`.

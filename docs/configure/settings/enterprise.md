@@ -89,7 +89,7 @@ The prompt-free path and the stored-copy check are also in `2.1.314`.
 [^internal]: The program, `chunk-ja5z738t.js:223888`.
 [^policy-default]: The program, `chunk-ja5z738t.js:8471-9824`.
 [^policy-entry]: The settings schema and the program, `chunk-ja5z738t.js:8514-9811`.
-[^approval]: The program, `chunk-b1grgrc4.js:3582` and `:34407`, `chunk-fw32tasq.js:6834`, `chunk-k5zeysxp.js:293`, and `chunk-ja5z738t.js:348386`.
+[^approval]: The program, `chunk-b1grgrc4.js:3582` and `chunk-b1grgrc4.js:34407`, `chunk-fw32tasq.js:6834`, `chunk-k5zeysxp.js:293`, and `chunk-ja5z738t.js:348386`.
 [^version-range]: The program, its bundled settings schema, `chunk-ja5z738t.js:285180` (`requiredMinimumVersion`) and `chunk-ja5z738t.js:266767` (`managedSourcesBehavior`).
 
 [^checksum-header]: The program, `chunk-18d5r2hb.js:238176` (hint headers on) `chunk-18d5r2hb.js:319837` (the conditions), `chunk-enmznns5.js:685` (the direct `api.anthropic.com` test that stops the header), and `chunk-f892tj2r.js:36390` (the host test). The [gateway compatibility guide](https://code.claude.com/docs/en/llm-gateway-protocol#gateway-hint-headers) names the hint headers but not this header, and the [settings page](https://code.claude.com/docs/en/settings) and [network page](https://code.claude.com/docs/en/network-config) do not mention it.

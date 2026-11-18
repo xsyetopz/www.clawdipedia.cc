@@ -216,7 +216,7 @@ The betas `per-turn-control-2026-07-01` and `timing-2026-09-09` match the flags 
 [^suffix]: The [`2.1.311` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.311). The program, `chunk-asj6f58y.js:536807` (the `(1M context)` label needs a model with `supports_1m_suffix`), and `chunk-jtw26wbb.js:933` (the alias list with `[1m]`).
 [^signed-file]: The [`2.1.311` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.311). The program, `chunk-14xs3dfy.js:2582` (the URL `downloads.claude.ai/model-catalog/v1/catalog.json` and the signature file), `chunk-asj6f58y.js:215723` (Bedrock, Vertex, Foundry, and Mantle), and `chunk-p15vna4f.js:4788` (the `env_off` result).
 [^catalog]: The program holds a JavaScript object with the comment `Hand-maintained baked-in model catalog`, `chunk-f892tj2r.js:668`.
-[^fallback-3p]: The program, field `fallback_3p`, `chunk-f892tj2r.js:737`, `:836`, and `:885` of `2.1.326`.
+[^fallback-3p]: The program, field `fallback_3p`, `chunk-f892tj2r.js:737`, `chunk-f892tj2r.js:836`, and `chunk-f892tj2r.js:885` of `2.1.326`.
 [^window-default]: The program, `chunk-asj6f58y.js:549753`, `return $H()?Hht:tY`; `tY` is `1e6`, `Hht` is `200000` (`chunk-asj6f58y.js:546603`). The [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). In `2.1.322`, the constant was `bSt`.
 [^window-hint]: The program, `chunk-v761y4yt.js:2830`.
 [^zeta-probe]: Probe of `2.1.316`, `/model claude-zeta-9` with `-p`. The program in `2.1.327`, `chunk-wp1gtpmf.js:11199` (the `/model` reply) and `chunk-a2xjwn0h.js:79660` (the startup notice).

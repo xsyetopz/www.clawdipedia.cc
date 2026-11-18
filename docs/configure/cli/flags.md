@@ -265,8 +265,8 @@ Each row is a family of messages. The backticked text is the start that every me
 [^autocompact]: The program, `chunk-rnt5hbrt.js:70098`: "Auto-compact window size (auto, or at least 100k tokens)".
 [^persisted-trust]: The program, `chunk-bpr7n093.js:32875` and `chunk-asj6f58y.js:94695`. The program reads the flag from the arguments.
 [^setting-sources]: The program, `chunk-rnt5hbrt.js:67323`. The program text lists `user`, `project`, and `local`. The earlier cites `chunk-271f7twe.js:5474` and `chunk-bpr7n093.js:123762` are not checked in `2.1.327`.
-[^allowed-warn]: The program, `chunk-61wd57dm.js:79507`, `:79672`, and `:80222`.
-[^disallowed-warn]: The program, `chunk-61wd57dm.js:79507`, `:79672`, and `:80222`.
+[^allowed-warn]: The program, `chunk-61wd57dm.js:79507`, `chunk-61wd57dm.js:79672`, and `chunk-61wd57dm.js:80222`.
+[^disallowed-warn]: The program, `chunk-61wd57dm.js:79507`, `chunk-61wd57dm.js:79672`, and `chunk-61wd57dm.js:80222`.
 [^tools-warn]: The program, `chunk-61wd57dm.js:80268`.
 [^fast-vertex]: Probe case `print.cli322.fast-vertex-flag`.
 [^copy-flag]: The program, `chunk-rnt5hbrt.js:73054` and `chunk-rnt5hbrt.js:73367`.

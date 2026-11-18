@@ -93,6 +93,6 @@ Claude Code counts the tokens in the conversation. When the count passes a limit
 
 [^names]: The program, `chunk-2ew0jg68.js:26216`, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 [^trinket]: The program, `chunk-m14bt1pz.js:2603450`. Probe case `env319b.curried-trinket.set` (a stub answers the second model request with the 400 "prompt is too long"): the third request, the compact request, held the text. Probe cases `unset` and `no-summary-tag` held none.
-[^max-context]: The program, `chunk-asj6f58y.js:28884` and `:29008`.
-[^memory-push]: The program, `chunk-qpav394c.js:144460` and `@107932`.
+[^max-context]: The program, `chunk-asj6f58y.js:28884` and `chunk-asj6f58y.js:29008`.
+[^memory-push]: The program, `chunk-qpav394c.js:144460` and `chunk-qpav394c.js:107932`.
 [^juniper]: [Probes](../../reference/probes.md).

@@ -261,7 +261,7 @@ The program (variable names found in the `2.1.314` binary) and the [Environment 
 [^long-poll]: The feature flag is `tengu_ccr_sse_long_poll_fallback`.
 [^requests-by-fetch]: `2.1.323` has no code that reads it. The program, `chunk-57bg7pbc.js:13654` and `chunk-asj6f58y.js:703690`.
 [^held-message]: The program, `chunk-vbykdcyz.js:8414`. The gate is `tengu_mellow_heron`.
-[^host-spawn-env]: The program, `chunk-csdzx1e3.js:15` and `:23`. The gate is `tengu_sleepy_wicket`.
+[^host-spawn-env]: The program, `chunk-csdzx1e3.js:15` and `chunk-csdzx1e3.js:23`. The gate is `tengu_sleepy_wicket`.
 [^memory-no-wait]: The feature flag is `tengu_misty_anchor`.
 [^off-machine-mark]: The program, `chunk-zfmsqnn9.js:542`.
 [^off-machine-relay]: The program, `chunk-zfmsqnn9.js:554`.
@@ -271,9 +271,9 @@ The program (variable names found in the `2.1.314` binary) and the [Environment 
 [^renewal]: Probe cases `runner.renewal-unset` and `runner.renewal-disabled`. The program, `chunk-xa2mcav9.js:205837`.
 [^offers-machine]: Probe cases `runner.base` and `runner.offers-1`. The program sets it at `chunk-xa2mcav9.js:234773` in the environment of each session process.
 [^spawn-reason]: Probe cases `orchestrator.reason-set`, `reason-none`, `reason-bad`, `reason-token`, `reason-long`, and `reason-upper-colon`. The program, `chunk-e8yeh7g4.js:58235`.
-[^anthropic-gh]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-xa2mcav9.js:1057` and `:14114`.
+[^anthropic-gh]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-xa2mcav9.js:1057` and `chunk-xa2mcav9.js:14114`.
 [^proxy-limits]: The program, `chunk-qfmvqh64.js:4391` and `chunk-qfmvqh64.js:4554` (the variable is read), `chunk-qfmvqh64.js:4750-4753` (it sets `maxClientConnections` and `requestHeadTimeoutMs` to no limit), and `chunk-qfmvqh64.js:921-922` (the defaults, `8192` and `30000`). A client over the limit is refused at `chunk-qfmvqh64.js:1523-1534`.
 [^setup-wait]: The program, `chunk-xa2mcav9.js:5159` (the constant `180`), `chunk-xa2mcav9.js:5244` (the runner passes it as text), and `chunk-xa2mcav9.js:5158` and `chunk-xa2mcav9.js:5205` (the script limit of `600000` ms).
 [^result-first]: The program, `chunk-zfmsqnn9.js:733-744` (read once, then removed), `chunk-8g2nr9dn.js:6775-6785` (the desktop condition, the gate and the signal that a new message cuts the summary), `chunk-8g2nr9dn.js:6804` (the hold is `0`), and `chunk-8g2nr9dn.js:6834` (the `summary_follows_result` field of `tengu_turn_end_classifier_hold`). The gate is at `chunk-8g2nr9dn.js:6647`.
 [^desktop-app-host]: The program, `chunk-zfmsqnn9.js:697-698` (the mark is set to off and the variable removed), `chunk-zfmsqnn9.js:619-621` (the mark reader), `chunk-ykpgqjh9.js:10-13` (the mark makes remote tools forward mode count as on), and `chunk-57bg7pbc.js:686-689` (the variable name is in the forward lists).
-[^tee-stdout]: The program, `chunk-zdy3v5xw.js:4555` (the read), `:4563-4571` and `:5691-5697` (the activity pipe, or standard output), `:4978-4980` (a system line), and `chunk-xa2mcav9.js:10586` (the runner child gets `1`).
+[^tee-stdout]: The program, `chunk-zdy3v5xw.js:4555` (the read), `chunk-zdy3v5xw.js:4563-4571` and `chunk-zdy3v5xw.js:5691-5697` (the activity pipe, or standard output), `chunk-zdy3v5xw.js:4978-4980` (a system line), and `chunk-xa2mcav9.js:10586` (the runner child gets `1`).

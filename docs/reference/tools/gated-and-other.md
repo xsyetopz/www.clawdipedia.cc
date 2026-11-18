@@ -228,8 +228,8 @@ Each row is a family of messages. The backticked text is the start that every me
 [^chat-test]: The server flag is `tengu_merry_tide`.
 [^stub-cases]: Probe cases `print.api319.tool.enable-stubs.profile`, `.profile-bad-id`, `.profile-http-ingress`, `.direct`, and `.chat-flag`.
 [^runner-tools]: The program, `chunk-61wd57dm.js:15447`, `chunk-9yz3qb8p.js:304`, search `baseTools`.
-[^code-mode]: The program, `chunk-g2wcp8ss.js:1253`, `:2850`, and `:3514` (the switch and the reasons), and `chunk-vdvdr3hp.js:2023` (the server flag `tengu_rustling_blossom`).
-[^code-mode-teams]: The program, `chunk-g2wcp8ss.js:1253` to `:3514` (the reason list has no agent teams entry). The server flag in the next row is `tengu_rustling_blossom`.
+[^code-mode]: The program, `chunk-g2wcp8ss.js:1253`, `chunk-g2wcp8ss.js:2850`, and `chunk-g2wcp8ss.js:3514` (the switch and the reasons), and `chunk-vdvdr3hp.js:2023` (the server flag `tengu_rustling_blossom`).
+[^code-mode-teams]: The program, `chunk-g2wcp8ss.js:1253` to `chunk-g2wcp8ss.js:3514` (the reason list has no agent teams entry). The server flag in the next row is `tengu_rustling_blossom`.
 [^result-311]: `AppifactReplResult`, `PollResult`, and `ProjectsResult` in [`claude-code-tools.json`](../schemas.md), and the program, `chunk-w37m0jsn.js:48466`, `chunk-m14bt1pz.js:4009867`, `chunk-agrwxrdb.js:27599`.
 [^appifact-used]: The program, `chunk-w37m0jsn.js:48466`.
 [^poll-used]: The program, `chunk-m14bt1pz.js:4009867`.
@@ -241,7 +241,7 @@ Each row is a family of messages. The backticked text is the start that every me
 [^trigger-cases]: Probe cases `live.err319` and `print.err319.remote-trigger-bad-cursor`.
 [^reserved-paths]: The program, `chunk-z5ytjy1p.js:39693` for write, `chunk-z5ytjy1p.js:40624` for delete.
 [^write-refused]: The program, `chunk-agrwxrdb.js:42273`.
-[^shell-helper]: The program, `chunk-t31w6vd4.js:172563` and `:178464` (the helper receives the check), `:187085` (the raw mark, its check, and the flag `bot_protected_tengu_logical_meadow`), and `:87267` (the reserved name `__replRaw`). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326) name which values the helper refuses.
+[^shell-helper]: The program, `chunk-t31w6vd4.js:172563` and `chunk-t31w6vd4.js:178464` (the helper receives the check), `chunk-t31w6vd4.js:187085` (the raw mark, its check, and the flag `bot_protected_tengu_logical_meadow`), and `chunk-t31w6vd4.js:87267` (the reserved name `__replRaw`). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326) name which values the helper refuses.
 [^artifact-off]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-4xhk2fyb.js:18622`.
 [^artifact-read]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327)
 [^artifact-ignore]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327)

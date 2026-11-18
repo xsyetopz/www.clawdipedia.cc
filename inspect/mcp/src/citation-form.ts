@@ -35,8 +35,18 @@ const chunkProblem = (
 	return `${name} names no :N place`;
 };
 
-// A range place follows a chunk name or stands alone in backticks, as in "`chunk-a.js:12` and `:40-44`".
+// A range place follows a chunk name, as in "`chunk-a.js:40-44`"; a bare place (BARE) is reported on its own.
 const RANGE = /(?:chunk-[\da-z]+\.js|`):(\d+)-(\d+)/gu;
+
+// A place in backticks with no chunk name, as in "`:40`" or "`@40`". A reader cannot open it without the chunk.
+const BARE = /`([:@]\d+(?:-\d+)?)`/gu;
+
+/** The problem of each bare place in `line`. */
+const bareProblems = (line: string): string[] =>
+	[...line.matchAll(BARE)].map(
+		(m) =>
+			`${m[1]} names no chunk: write the place as chunk-x.js${m[1]?.replace("@", ":")}`,
+	);
 
 /** The problem of each `:A-B` range in `line` whose end comes before its start. */
 const rangeProblems = (line: string): string[] =>
@@ -53,7 +63,8 @@ const isSourceLine = (file: string, line: string): boolean =>
 
 /**
  * The program citations in `files` (file name to text) that do not name a chunk and its `:N` place:
- * each chunk mention without `:N`, and each footnote (each JSON line) that names the program and no located chunk.
+ * each chunk mention without `:N`, each place without its chunk on a line that names the program, and each footnote
+ * (each JSON line) that names the program and no located chunk.
  */
 export const unlocatedCitations = (
 	files: Record<string, string>,
@@ -67,7 +78,8 @@ export const unlocatedCitations = (
 					out.push({ file, line: i + 1, problem });
 				}
 			}
-			for (const problem of rangeProblems(line)) {
+			const bare = PROGRAM.test(line) ? bareProblems(line) : [];
+			for (const problem of [...bare, ...rangeProblems(line)]) {
 				out.push({ file, line: i + 1, problem });
 			}
 			if (isSourceLine(file, line) && !LOCATED.test(line)) {

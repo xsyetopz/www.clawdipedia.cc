@@ -87,10 +87,10 @@ The [`2.1.312` changelog](https://code.claude.com/docs/en/changelog) names it, b
 [^force-login-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^console-login]: Run against a local stand-in server. Probe case `print.err319.console-login-no-key`.
 [^profile-dir]: Probe case `pty.cli319.login-console-profile-no-dir`.
-[^gateway-login]: The program, `chunk-jhpfacch.js:27377` and `:28080`.
+[^gateway-login]: The program, `chunk-jhpfacch.js:27377` and `chunk-jhpfacch.js:28080`.
 [^org-check]: The program, `chunk-jhpfacch.js:26127`.
 [^provider-setup]: The program, `chunk-asj6f58y.js:197677`. The `2.1.321` text can hold a detail after `(allowedProviders)`.
 [^headers]: Probe case `print.err319.custom-headers-bad-authorization`. The program, `chunk-asj6f58y.js:454516`.
 [^overlay]: The program, `chunk-5z0ytfrt.js:1388292` and `chunk-5z0ytfrt.js:1390506`. The `${…}` label is `managed.policies[N].desktop`, where `N` is the index of the policy in the gateway file (`chunk-5z0ytfrt.js:1424857`).
 [^delegated]: The program, `chunk-m14bt1pz.js:3394248`, `chunk-m14bt1pz.js:3523901`, and `chunk-270tbjq0.js:24192`.
-[^oidc]: The program, `chunk-5z0ytfrt.js:1406810`, `:1531847`, and `:1532005`.
+[^oidc]: The program, `chunk-5z0ytfrt.js:1406810`, `chunk-5z0ytfrt.js:1531847`, and `chunk-5z0ytfrt.js:1532005`.

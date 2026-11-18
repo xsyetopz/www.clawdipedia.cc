@@ -218,8 +218,8 @@ The default of `--api-url` is `ANTHROPIC_BASE_URL`, else the built-in API URL.
 [^exit-codes]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-xa2mcav9.js:323890`.
 [^no-clone]: The program, `chunk-xa2mcav9.js:14525-14526` (the parser) and `chunk-xa2mcav9.js:15720-15740` (the warning and the git version check, which both depend on the flag).
 [^gh]: The program, the parser `chunk-xa2mcav9.js:14224`, the help text `chunk-xa2mcav9.js:15121-15140`, and the reasons for withholding `chunk-xa2mcav9.js:1035-1066`.
-[^nested-model]: The program, `chunk-xa2mcav9.js:313134` (`--nested-model-access`), `:313330` (`--nested-model-call-budget`), `:321218` (the variables), `:321263` and `:370834-371157` (the errors), `:352985` (the help text), and `:379526` (the start-up log). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^git-config-global]: The program, `chunk-xa2mcav9.js:330655-331228` (the reset) and `:389000-389400` (the warning). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^nested-model]: The program, `chunk-xa2mcav9.js:313134` (`--nested-model-access`), `chunk-xa2mcav9.js:313330` (`--nested-model-call-budget`), `chunk-xa2mcav9.js:321218` (the variables), `chunk-xa2mcav9.js:321263` and `chunk-xa2mcav9.js:370834-371157` (the errors), `chunk-xa2mcav9.js:352985` (the help text), and `chunk-xa2mcav9.js:379526` (the start-up log). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^git-config-global]: The program, `chunk-xa2mcav9.js:330655-331228` (the reset) and `chunk-xa2mcav9.js:389000-389400` (the warning). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^trust]: The program, `chunk-asj6f58y.js:94695` and `chunk-bpr7n093.js:32875`.
 [^parser-errors]: The program, `chunk-xa2mcav9.js:320702-372037`. Probe group `cli321`.
 [^orch]: The program, help text and orchestrator parser, `chunk-x7dh6k8v.js:38815` and `chunk-x7dh6k8v.js:18585`.
@@ -239,5 +239,5 @@ The default of `--api-url` is `ANTHROPIC_BASE_URL`, else the built-in API URL.
 [^probe-host-config-dir-flag]: Probe case `runner-host-config-dir-flag`.
 [^probe-empty-argument]: Probe case `runner-empty-argument`.
 [^probe-positional]: Probe case `runner-positional`.
-[^watchdog]: The program, the parser `chunk-xa2mcav9.js:14305`, `:14412`, `:14434-14470`, the help text `:15367-15418`, and the constants `:14029` (10080 minutes), `:14837-14839` (180 seconds, 30 seconds, 1440 minutes), `:11477` (the 15 minutes of the kill grace).
+[^watchdog]: The program, the parser `chunk-xa2mcav9.js:14305`, `chunk-xa2mcav9.js:14412`, `chunk-xa2mcav9.js:14434-14470`, the help text `chunk-xa2mcav9.js:15367-15418`, and the constants `chunk-xa2mcav9.js:14029` (10080 minutes), `chunk-xa2mcav9.js:14837-14839` (180 seconds, 30 seconds, 1440 minutes), `chunk-xa2mcav9.js:11477` (the 15 minutes of the kill grace).
 [^runner-retry]: The program, `chunk-xa2mcav9.js:234493` (the session environment), and `chunk-57bg7pbc.js:13781` with `chunk-ra0f27e4.js:748`: in a remote session whose `CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE` is `self_hosted`, the environment of a child process drops `CLAUDE_CODE_RETRY_WATCHDOG`. The `2.1.326` list of dropped names has no such case. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).

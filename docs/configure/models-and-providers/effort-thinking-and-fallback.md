@@ -119,17 +119,17 @@ Both rows are about a model name that Claude Code does not recognize, such as a 
 ## Sources
 
 [^effort-field]: The program, `chunk-m14bt1pz.js:168442-168453`.
-[^cache-warning]: The program, `chunk-cfxefa64.js:64254`, `:64290-64295`. Also the [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312).
-[^per-turn]: The program, `chunk-f892tj2r.js:221`, `:448`, `:753`, `:847`, `:896`, `:1001`. Also the [Claude Code changelog](https://code.claude.com/docs/en/changelog).
+[^cache-warning]: The program, `chunk-cfxefa64.js:64254`, `chunk-cfxefa64.js:64290-64295`. Also the [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312).
+[^per-turn]: The program, `chunk-f892tj2r.js:221`, `chunk-f892tj2r.js:448`, `chunk-f892tj2r.js:753`, `chunk-f892tj2r.js:847`, `chunk-f892tj2r.js:896`, `chunk-f892tj2r.js:1001`. Also the [Claude Code changelog](https://code.claude.com/docs/en/changelog).
 [^ultrathink-submit]: The program (`2.1.327`), `chunk-p47p1nn1.js:3794-3806` for the submit, where the turn effort is `xhigh` when the model passes the gate, and `chunk-8g2nr9dn.js:5947-5972` for a prompt that joins the turn while it runs, called at `chunk-8g2nr9dn.js:16739`.
 [^ultrathink-gate]: The program. The prompt input colors a word only when the gate `chunk-rthqjjhy.js:29275` passes for the model (it needs ultrathink on, and `chunk-rthqjjhy.js:29536` checks that the model can run the turn at `xhigh`): `chunk-cfxefa64.js:990610` picks the words, and `chunk-cfxefa64.js:994390` paints each letter with a rainbow color. The word finder is `chunk-qpav394c.js:37293`. The SDK schema says "The terminal colors the word by this rule", `chunk-rj3e7agr.js:484442`.
 [^note-flag]: The program and the [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312), `chunk-cfxefa64.js:67245-67270`.
 [^note-clear]: The program, `chunk-cfxefa64.js:67258`.
 [^prompt-text]: The program, `chunk-cfxefa64.js:13338`.
-[^request-level]: The program, `chunk-m14bt1pz.js:3281207` and `:3356273`.
+[^request-level]: The program, `chunk-m14bt1pz.js:3281207` and `chunk-m14bt1pz.js:3356273`.
 [^sent-level]: The program, `chunk-rvc7d09c.js:8060`.
 [^spinner-level]: The program, `chunk-rthqjjhy.js:30570` and `chunk-br8rsn5f.js:9750`.
-[^model-settings]: The program, `chunk-rthqjjhy.js:26687`, `:27090`.
+[^model-settings]: The program, `chunk-rthqjjhy.js:26687`, `chunk-rthqjjhy.js:27090`.
 [^effort-source]: [Model Configuration](https://code.claude.com/docs/en/model-config), section "Adjust effort level", and the program, `chunk-rthqjjhy.js:26687`.
 [^should-retry]: The program, `chunk-m14bt1pz.js:162762`.
 [^overload-delay]: The program, `chunk-2ew0jg68.js:80683`. The default is in `chunk-asj6f58y.js:335569`.
