@@ -11,6 +11,7 @@ The site documents Claude Code `2.1.327`, the only release it tracks. The versio
 
 ### Added
 
+- `release:facts -- --remap [--base REF]` rewrites `tools/release/facts/map.json` after a docs edit. An edited sentence keeps the entry of its old text, and a new `change` fact takes its entry from its footnotes. The command exits 1 for a `change` fact with no citation.
 - A second plugin, `cc-inspect`, with an MCP server and a skill that read your session transcripts (list, read, search, and check each line against the transcript schema) and the installed Claude Code binary (installs, modules, search, read, and the keys of an object literal or an OpenTelemetry event).
 - `cc-inspect` 0.3.0: a `list_surface` tool that lists the items of one kind in the installed binary (environment variables, flags, subcommands, slash commands, settings, hook events, gates, tools, OpenTelemetry events, Mod API calls and events, keybindings, models, betas, endpoints, files, permission modes, and error texts), with a name filter and paging. Without a kind, it gives the count of each kind. Error texts from bundled CommonJS library modules are left out. Those from ES-module libraries are still listed.
 - A surface snapshot of the program (`schemas/surface.json`, made by `bun run surface`) that `schemas:check` compares with a fresh run, and a `surface:check` script that lists the items no page maps yet. A generated Surface Coverage page lists every item with its page, and the Undocumented Items page shows the count of each kind.

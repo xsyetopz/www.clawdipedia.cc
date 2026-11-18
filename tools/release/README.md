@@ -40,6 +40,8 @@ The toolkit runs the program only against a local stub with a fake key. Results 
 | `--samples` | `compare` | Include trimmed sample text. |
 | `--check` | `facts` | Check the fact map against the docs and the probes. Writes nothing except its `run.json` entry. |
 | `--all` | `facts` | Include `gap` and `info` facts, not only `change` facts. |
+| `--remap` | `facts` | Rewrite `map.json` after a docs edit. See [Fact Map](#fact-map). |
+| `--base REF` | `facts --remap` | The git ref that holds the old sentences. Default: `HEAD`. |
 | `--no-render` | `prompts` | Skip the rewrite of `docs/prompts/`. |
 | `--selftest` | `check` | Run the env-leak self-test instead of the preflight. |
 
@@ -174,7 +176,7 @@ tools/release/secret-runner.sh apikey /bin/sh -c 'OPENAI_API_KEY="$ANTHROPIC_API
 - Facts are version-labelled sentences in `docs/`, such as "since 2.1.304". `tools/release/facts/map.json` is hand-edited. It maps each fact to a probe or to a kind.
 - Kinds: `behaviour`, `env`, `flag`, `command`, `setting`, `hook`, `gate`, `schema`, `manual`, `static`, `external`.
 - `release:facts -- --check` fails on an `unmapped` fact. Add a `map.json` entry for each new fact.
-- A fact id ends with a hash of its sentence (a table row is one sentence). An edit of the sentence, such as a new chunk name, changes the id. Rename the key in `map.json` then, and keep its entry.
+- A fact id ends with a hash of its sentence (a table row is one sentence). An edit of the sentence, such as a new chunk name, changes the id. Run `bun run release:facts -- --remap` then. It gives each new `change` fact the entry of the old sentence in the same file when the two share at least 85% of the words of the shorter one. It reads the old sentences at `--base` (default `HEAD`). A new `change` fact with no old sentence gets an entry from its footnotes: a program chunk gives `manual`, and release notes or a `code.claude.com` page give `external`. A fact with no footnote gets no entry, and the command exits 1, because the sentence needs a citation. Entries that no fact uses are dropped. Read the `git diff` of `map.json` after the run: a passed-on note can describe only the old part of a row that grew.
 - A probe result lists the fact ids it checks in its `facts` array.
   Writing the result adds every fact that `map.json` maps to the case. `--check` warns when the probe and the map disagree, so rerun the probe after you map a fact to it.
 

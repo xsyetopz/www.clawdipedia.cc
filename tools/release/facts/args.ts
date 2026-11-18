@@ -1,7 +1,7 @@
 // Argument shape for `facts` and `compare`: `compare <from> <to>` is shorthand for `--from/--to`; any other
 // positional is an error (so `compare 2.1.305` or `compare 2.1.305 ../x` cannot run against the wrong version).
 const VER = /^\d+\.\d+\.\d+$/u;
-const VALUE_FLAGS = new Set(["--from", "--to", "--only"]);
+const VALUE_FLAGS = new Set(["--from", "--to", "--only", "--base"]);
 
 export const normaliseArgs = (
 	name: string | undefined,
