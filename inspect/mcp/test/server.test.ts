@@ -34,7 +34,7 @@ describe("tools", () => {
 		const r = await call("sessions", { action: "nope" });
 		expect(r.isError).toBe(true);
 		expect(r.content[0]?.text).toBe(
-			'Error: unknown action "nope"; actions: list, read, search, validate, tool-calls',
+			'Error: unknown action "nope"; actions: list, read, search, validate, fields, tool-calls',
 		);
 	});
 });

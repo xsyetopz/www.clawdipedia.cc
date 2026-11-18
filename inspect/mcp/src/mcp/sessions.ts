@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { type FieldTypes, scanFields } from "../fields.ts";
 import {
 	checkLine,
 	configDir,
@@ -54,7 +55,7 @@ const searchFiles = async (
 
 group(
 	"sessions",
-	"Read Claude Code session transcripts: list, read, search, or validate them against the transcript schema, or count tool calls by name.",
+	"Read Claude Code session transcripts: list, read, search, or validate them against the transcript schema, count tool calls by name, or list the JSON types at each key path (fields).",
 	"action",
 	{
 		list: async ({ project, limit = 20 }) => {
@@ -147,6 +148,33 @@ group(
 					byType,
 					failures: shown,
 				},
+			);
+		},
+		fields: async ({ query, regex: isRegex = false, session, project }) => {
+			const match = has(query) ? regex(query, isRegex) : undefined;
+			const files = has(session)
+				? [{ id: session, path: await sessionPath(session) }]
+				: await listTranscripts(project);
+			const fields: FieldTypes = {};
+			const linesOf = await Promise.all(files.map((f) => readLines(f.path)));
+			for (const lines of linesOf) {
+				scanFields(lines, match, fields);
+			}
+			const rows = Object.entries(fields).toSorted((a, b) =>
+				a[0].localeCompare(b[0]),
+			);
+			return text(
+				rows.length > 0
+					? rows
+							.map(
+								([path, types]) =>
+									`${path}: ${Object.entries(types)
+										.map(([t, n]) => `${t} ${n}`)
+										.join(", ")}`,
+							)
+							.join("\n")
+					: `No fields${match ? ` matching ${match}` : ""} in ${files.length} sessions.`,
+				{ fields },
 			);
 		},
 		"tool-calls": async ({

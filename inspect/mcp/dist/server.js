@@ -24744,7 +24744,7 @@ var package_default;
 var init_package = __esm(() => {
   package_default = {
     name: "cc-inspect-mcp",
-    version: "0.18.3",
+    version: "0.18.4",
     private: true,
     description: "MCP server that reads Claude Code session transcripts and the modules inside the Claude Code binary. Source for dist/server.js, which is committed.",
     license: "MIT",
@@ -28973,6 +28973,58 @@ var init_app = __esm(() => {
   });
 });
 
+// inspect/mcp/src/fields.ts
+var MAX_DEPTH = 8, typeOf = (v) => {
+  if (v === null) {
+    return "null";
+  }
+  if (Array.isArray(v)) {
+    return "array";
+  }
+  return typeof v === "number" && Number.isInteger(v) ? "integer" : typeof v;
+}, add = (into, path, v, depth) => {
+  const t = typeOf(v);
+  const c = into[path] ?? {};
+  into[path] = c;
+  c[t] = (c[t] ?? 0) + 1;
+  if (depth >= MAX_DEPTH) {
+    return;
+  }
+  if (Array.isArray(v)) {
+    for (const item of v) {
+      add(into, `${path}[]`, item, depth + 1);
+    }
+    return;
+  }
+  if (typeof v === "object" && v !== null) {
+    for (const [k, item] of Object.entries(v)) {
+      add(into, `${path}.${k}`, item, depth + 1);
+    }
+  }
+}, scanFields = (lines, match, into = {}) => {
+  const all = {};
+  for (const l of lines) {
+    if (l.json === undefined) {
+      continue;
+    }
+    const root = typeof l.json.type === "string" ? l.json.type : "?";
+    for (const [k, v] of Object.entries(l.json)) {
+      add(all, `${root}.${k}`, v, 1);
+    }
+  }
+  for (const [path, types] of Object.entries(all)) {
+    if (match !== undefined && !match.test(path)) {
+      continue;
+    }
+    const c = into[path] ?? {};
+    into[path] = c;
+    for (const [t, n] of Object.entries(types)) {
+      c[t] = (c[t] ?? 0) + n;
+    }
+  }
+  return into;
+};
+
 // schemas/claude-code-transcript.json
 var claude_code_transcript_default;
 var init_claude_code_transcript = __esm(() => {
@@ -30371,25 +30423,6 @@ var init_claude_code_transcript = __esm(() => {
               },
               text: {
                 type: ["string", "null"]
-              },
-              hooks: {
-                type: "array",
-                items: {
-                  type: "object",
-                  properties: {
-                    hookEvent: {
-                      type: "string"
-                    },
-                    count: {
-                      type: "integer",
-                      minimum: 2
-                    }
-                  },
-                  required: ["hookEvent", "count"]
-                }
-              },
-              count: {
-                type: "number"
               }
             },
             "x-observed": true
@@ -30587,7 +30620,7 @@ var init_claude_code_transcript = __esm(() => {
             type: "string"
           }
         },
-        $comment: "Registry policy: transcript. Code sites used: 11."
+        $comment: "Registry policy: transcript. Code sites used: 9."
       },
       "attribution-snapshot": {
         type: "object",
@@ -33687,7 +33720,7 @@ var init_sessions2 = __esm(() => {
   init_zod();
   init_sessions();
   init_app();
-  group("sessions", "Read Claude Code session transcripts: list, read, search, or validate them against the transcript schema, or count tool calls by name.", "action", {
+  group("sessions", "Read Claude Code session transcripts: list, read, search, or validate them against the transcript schema, count tool calls by name, or list the JSON types at each key path (fields).", "action", {
     list: async ({ project, limit = 20 }) => {
       const all = await listSessions(project);
       const sessions = all.slice(0, limit);
@@ -33754,6 +33787,18 @@ ${shown.map((f) => `- line ${f.line} [${String(f.type)}]: ${f.problems.slice(0, 
         byType,
         failures: shown
       });
+    },
+    fields: async ({ query, regex: isRegex = false, session, project }) => {
+      const match = has(query) ? regex(query, isRegex) : undefined;
+      const files = has(session) ? [{ id: session, path: await sessionPath(session) }] : await listTranscripts(project);
+      const fields = {};
+      const linesOf = await Promise.all(files.map((f) => readLines(f.path)));
+      for (const lines of linesOf) {
+        scanFields(lines, match, fields);
+      }
+      const rows = Object.entries(fields).toSorted((a, b) => a[0].localeCompare(b[0]));
+      return text(rows.length > 0 ? rows.map(([path, types]) => `${path}: ${Object.entries(types).map(([t, n]) => `${t} ${n}`).join(", ")}`).join(`
+`) : `No fields${match ? ` matching ${match}` : ""} in ${files.length} sessions.`, { fields });
     },
     "tool-calls": async ({
       query,
@@ -36872,7 +36917,7 @@ class KeyWalk {
     this.gate = gate;
   }
   async walk(cx, n) {
-    if (!n || cx.depth > MAX_DEPTH) {
+    if (!n || cx.depth > MAX_DEPTH2) {
       return;
     }
     if (n.type === "ArrowFunctionExpression" || n.type === "FunctionExpression") {
@@ -37001,7 +37046,7 @@ class KeyWalk {
     await mapSeq(args.filter((a) => isFn(a)), (a) => this.go(cx, a));
   }
 }
-var MAX_DEPTH = 40;
+var MAX_DEPTH2 = 40;
 var init_nested = __esm(() => {
   init_ast();
   init_common();
@@ -37152,7 +37197,7 @@ var TYPES2, NAME4, builders, nameSource = (p) => {
     gates.push(`isEnabled ${short(m.src(enabled), 120)}`);
   }
   return gates.join("; ");
-}, typeOf = async (m, o) => {
+}, typeOf2 = async (m, o) => {
   const parent = m.parent(o);
   return await constString(m, prop(o, "type")) ?? (parent?.type === "CallExpression" && parent.arguments[0] === o ? builderType(m, parent) : factoryType(m, o));
 }, extractSlashCommands = async (bundle) => {
@@ -37162,7 +37207,7 @@ var TYPES2, NAME4, builders, nameSource = (p) => {
     if (name === undefined || !NAME4.test(name)) {
       return;
     }
-    const type = await typeOf(m, n);
+    const type = await typeOf2(m, n);
     if (type === undefined || !TYPES2.has(type)) {
       return;
     }
@@ -37324,7 +37369,7 @@ var init_toolvalue = __esm(() => {
 });
 
 // inspect/mcp/src/tools.ts
-var MAX_FN = 300, clip2 = (s) => s.length > MAX_FN ? `${s.slice(0, MAX_FN)}\u2026` : s, add = (out, when, tool) => {
+var MAX_FN = 300, clip2 = (s) => s.length > MAX_FN ? `${s.slice(0, MAX_FN)}\u2026` : s, add2 = (out, when, tool) => {
   out.push({
     tool: { ...tool, when: when.map((c) => c.text) },
     conds: when
@@ -37332,11 +37377,11 @@ var MAX_FN = 300, clip2 = (s) => s.length > MAX_FN ? `${s.slice(0, MAX_FN)}\u202
 }, toolItem = async (R, m, e, when, out) => {
   const found = await toolName(R, m, e);
   if (!found) {
-    add(out, when, { name: m.src(e), when: [], unresolved: true });
+    add2(out, when, { name: m.src(e), when: [], unresolved: true });
     return;
   }
   if (!found.enabled) {
-    add(out, when, { name: found.name, when: [] });
+    add2(out, when, { name: found.name, when: [] });
     return;
   }
   const src = found.enabled.m.src(found.enabled.n);
@@ -37405,7 +37450,7 @@ var MAX_FN = 300, clip2 = (s) => s.length > MAX_FN ? `${s.slice(0, MAX_FN)}\u202
   return r !== undefined && typeof r !== "string" ? [r] : [];
 }, items = async (R, m, n, when, out, depth = 0) => {
   if (depth > 8) {
-    add(out, when, { name: `...${m.src(n)}`, when: [], unresolved: true });
+    add2(out, when, { name: `...${m.src(n)}`, when: [], unresolved: true });
     return;
   }
   if (n.type === "ArrayExpression") {
@@ -37426,7 +37471,7 @@ var MAX_FN = 300, clip2 = (s) => s.length > MAX_FN ? `${s.slice(0, MAX_FN)}\u202
   const next = await partsOf(m, n, r);
   await mapSeq(next, (x) => items(R, x.m, x.n, when, out, depth + 1));
   if (next.length === 0) {
-    add(out, when, {
+    add2(out, when, {
       name: `...${typeof r === "string" ? r : m.src(n)}`,
       when: [],
       unresolved: true

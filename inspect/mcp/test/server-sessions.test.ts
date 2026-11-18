@@ -51,6 +51,27 @@ describe("sessions", () => {
 		expect(failures.map((f) => f.line)).toEqual([2, 3, 4]);
 	});
 
+	test("sessions fields lists the JSON types at each matched key path", async () => {
+		// Arrange
+		const args = {
+			action: "fields",
+			session: SESSION,
+			query: String.raw`^last-prompt\.`,
+			regex: true,
+		};
+		// Act
+		const r = await call("sessions", args);
+		// Assert
+		const fields = z
+			.record(z.string(), z.record(z.string(), z.number()))
+			.parse(r.structuredContent?.["fields"]);
+		expect(Object.keys(fields).length).toBeGreaterThan(0);
+		expect(Object.keys(fields).every((k) => k.startsWith("last-prompt."))).toBe(
+			true,
+		);
+		expect(fields["last-prompt.type"]).toEqual({ string: 1 });
+	});
+
 	test("an unknown session is a tool error", async () => {
 		const r = await call("sessions", {
 			action: "read",
