@@ -1,6 +1,6 @@
 {
-	"$comment": "Types read by hand from the Claude Code 2.1.308 program for fields of schemas/claude-code-otel.json that tools/schemas/code.ts leaves x-unverified. Every attribute is an OpenTelemetry AttributeValue (string, number, boolean or an array of those); the type here follows the value the program passes.",
-	"version": "2.1.308",
+	"$comment": "Types read by hand from the Claude Code 2.1.327 program for fields of schemas/claude-code-otel.json that tools/schemas/code.ts leaves x-unverified. Every attribute is an OpenTelemetry AttributeValue (string, number, boolean or an array of those); the type here follows the value that the call site passes, and each note cites that call site.",
+	"version": "2.1.327",
 	"fields": {
 		"event:api_error.user.id": {
 			"schema": {

@@ -12,6 +12,9 @@ export interface UnlocatedCitation {
 }
 
 const CHUNK = /chunk-[\da-z]+\.js/gu;
+// A chunk name without `.js`, as in "(chunk-a1cg2ptw)". The stale-module check reads only the file name form,
+// so this form can name a module of an older build and pass unseen.
+const NAMELESS = /chunk-[\da-z]{8}(?![\da-z.])/gu;
 const LOCATED = /chunk-[\da-z]+\.js:\d+(?:-\d+)?/u;
 const FOOTNOTE = /^\[\^[^\]]+\]:/u;
 const PROGRAM = /\bthe program\b/iu;
@@ -77,6 +80,13 @@ export const unlocatedCitations = (
 				if (problem !== undefined) {
 					out.push({ file, line: i + 1, problem });
 				}
+			}
+			for (const m of line.matchAll(NAMELESS)) {
+				out.push({
+					file,
+					line: i + 1,
+					problem: `${m[0]} has no .js: write the place as ${m[0]}.js:N`,
+				});
 			}
 			const bare = PROGRAM.test(line) ? bareProblems(line) : [];
 			for (const problem of [...bare, ...rangeProblems(line)]) {

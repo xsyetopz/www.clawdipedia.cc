@@ -76,6 +76,24 @@ test("unlocatedCitations reports a place without its chunk on a line that names 
 	]);
 });
 
+test("unlocatedCitations reports a chunk name without .js", () => {
+	// Arrange
+	const files = {
+		"n.json": [
+			'\t"a": "Built by Pe (chunk-a1cg2ptw ~3682), see chunk-bbbbbbbb.js:7.",',
+			'\t"b": "Read at chunk-cccccccc.js:9 in a chunk-level map.",',
+		].join("\n"),
+	};
+
+	// Act
+	const found = unlocatedCitations(files).map((u) => [u.line, u.problem]);
+
+	// Assert
+	expect(found).toEqual([
+		[1, "chunk-a1cg2ptw has no .js: write the place as chunk-a1cg2ptw.js:N"],
+	]);
+});
+
 test("unlocatedCitations ignores the program in prose, and checks every JSON line", () => {
 	const files = {
 		"p.md": "The program prints it in a table row.",

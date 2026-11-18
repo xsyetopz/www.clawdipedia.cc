@@ -1,4 +1,4 @@
-// Chunk citations in docs/ and tools/surface/exclusions.json must name a module of the build of src/version.ts,
+// Chunk citations in docs/, tools/surface/exclusions.json, and tools/schemas/manual/ must name a module of the build of src/version.ts,
 // and each program citation must name its chunk and its `:N` place.
 // Run with: bun tools/check/citations.ts [--bin <binary>]
 // With --move-from <older binary>, it instead writes those files with each stale citation moved to the build of --bin (or of src/version.ts).
@@ -28,8 +28,18 @@ const EXCLUSIONS = "tools/surface/exclusions.json";
 const files: Record<string, string> = {
 	[EXCLUSIONS]: await Bun.file(join(ROOT, EXCLUSIONS)).text(),
 };
-for await (const f of new Bun.Glob("docs/**/*.md").scan(ROOT)) {
-	files[f] = await Bun.file(join(ROOT, f)).text();
+// The notes of the hand-read schema types (tools/schemas/manual/) cite the code each type was read from.
+const scans = await Promise.all(
+	["docs/**/*.md", "tools/schemas/manual/*.json"].map((g) =>
+		Array.fromAsync(new Bun.Glob(g).scan(ROOT)),
+	),
+);
+const names = scans.flat();
+const texts = await Promise.all(
+	names.map((f) => Bun.file(join(ROOT, f)).text()),
+);
+for (const [i, f] of names.entries()) {
+	files[f] = texts[i] ?? "";
 }
 const moveFlag = process.argv.indexOf("--move-from");
 if (moveFlag === -1) {

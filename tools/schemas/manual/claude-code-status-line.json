@@ -1,6 +1,6 @@
 {
-	"$comment": "Types read by hand from the Claude Code 2.1.308 program for the status line input fields that tools/schemas/code.ts leaves x-unverified.",
-	"version": "2.1.308",
+	"$comment": "Types read by hand from the Claude Code 2.1.327 program for the status line input fields that tools/schemas/code.ts leaves x-unverified.",
+	"version": "2.1.327",
 	"fields": {
 		"scratchpad_dir": {
 			"schema": {

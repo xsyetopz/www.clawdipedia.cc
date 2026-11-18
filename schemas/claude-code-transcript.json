@@ -3629,7 +3629,7 @@
 					"type": "boolean"
 				},
 				"modelOnlyText": {
-					"not": {}
+					"type": "string"
 				},
 				"summarizeMetadata": {
 					"type": "object",

@@ -24744,7 +24744,7 @@ var package_default;
 var init_package = __esm(() => {
   package_default = {
     name: "cc-inspect-mcp",
-    version: "0.18.4",
+    version: "0.18.5",
     private: true,
     description: "MCP server that reads Claude Code session transcripts and the modules inside the Claude Code binary. Source for dist/server.js, which is committed.",
     license: "MIT",
@@ -32659,7 +32659,7 @@ var init_claude_code_transcript = __esm(() => {
             type: "boolean"
           },
           modelOnlyText: {
-            not: {}
+            type: "string"
           },
           summarizeMetadata: {
             type: "object",
