@@ -2239,11 +2239,6 @@
 		"probes": [],
 		"note": "cites the 2.1.325 and 2.1.326 release notes and the program (~/.claude/child-logs/)"
 	},
-	"docs/configure/cli/flags.md#sessions-and-worktrees:2a6a957a": {
-		"kind": "manual",
-		"probes": [],
-		"note": "read in the 2.1.327 program at chunk-m14bt1pz.js:72801-72811; release notes 2.1.327"
-	},
 	"docs/configure/cli/remote-control.md#how-the-server-starts:b1e2f0e2": {
 		"kind": "manual",
 		"probes": [],
@@ -2876,5 +2871,10 @@
 		"kind": "manual",
 		"probes": [],
 		"note": "read in the 2.1.327 program at chunk-dfq3y18g.js:1096-1130; release notes 2.1.326"
+	},
+	"docs/configure/cli/flags.md#sessions-and-worktrees:8d1abb7d": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.327 program at chunk-m14bt1pz.js:72801-72811 (--add-dir) and chunk-cfxefa64.js:1881293 with chunk-m14bt1pz.js:361511 (kept-worktree message on exit); release notes 2.1.327"
 	}
 }

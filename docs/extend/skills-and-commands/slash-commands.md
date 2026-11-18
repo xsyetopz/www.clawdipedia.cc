@@ -208,7 +208,7 @@ The footer lists the keys. `Enter` attaches the selected artifact to the session
 
 To delete, press `d` or choose `Delete` from the actions menu. Only the owner can delete, so the key works only on your own artifacts. The panel asks `Delete <title>? This cannot be undone.` Choose `No, keep it` or `Yes, delete it`. Since `2.1.304` the keys are 1 or Enter to keep and 2 to delete, and `y`, `n`, and Esc still worked. Since `2.1.305` `y` and `n` no longer answer, and Esc goes back with nothing sent.[^v305]
 
-Since `2.1.327` the panel shows the warning `Couldn't load the whole list` when a request for more of the list fails. Before, it showed part of the list, or `No artifacts yet`. The release notes say Claude Code tries the request again first.[^artifacts-list]
+Since `2.1.327` the panel shows the warning `Couldn't load the whole list` when a request for more of the list fails. Before, it showed part of the list, or `No artifacts yet`. Before it shows the warning, Claude Code sends the request two more times, after about 1 second and then about 5 seconds, if the request fails to connect or returns HTTP status 408, 429, or 500 or higher.[^artifacts-list]
 
 A yes sends `DELETE /api/frame/<slug>`. Claude Code retries once on `409`, `429`, or `503`.[^delete] Success shows `Artifact deleted`. The link stops working for everyone. You cannot restore it. Republishing makes a new URL.
 
@@ -316,4 +316,4 @@ Each row is a family of messages. The backticked text is the start that every me
 [^resume-327]: The program, `chunk-81q6b6k0.js:9627` (the session list). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^resend-hint]: The program, `chunk-cfxefa64.js:586809` (an `account_limit` error gets `wait`, which has no hint) and `chunk-cfxefa64.js:587648` (the hint text). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^config-theme]: The program, `chunk-t9m6p74b.js:21880`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^artifacts-list]: The program, `chunk-116p7pz2.js:47208` (the warning) and `chunk-116p7pz2.js:47632` (the empty text). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^artifacts-list]: The program, `chunk-116p7pz2.js:47208` (the warning), `chunk-116p7pz2.js:47632` (the empty text), `chunk-116p7pz2.js:28892` (the delays), `chunk-116p7pz2.js:32798` (the retry), `chunk-r9pae5cc.js:37050` (the status codes), and `chunk-e2gsfdam.js:203` (each delay varies by up to a quarter). The `2.1.326` program has no retry. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).

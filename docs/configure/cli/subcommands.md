@@ -55,7 +55,7 @@ Each command has its own help text.[^cmd-help]
 | `claude worktree-hook` | <Undocumented /> | Since `2.1.326`, a hidden command that runs the WorktreeCreate or WorktreeRemove hooks for the current directory and reports the result as JSON. The help text says Claude Desktop uses it.[^worktree-hook] It needs `--json` and `--event <create\|remove>`. `--name <slug>` names the worktree to create, `--path <absolute>` names the worktree to remove, and `--trusted-folder <absolute>` is also accepted. The outcome is `refused`, `failed`, or `started`. |
 | `claude import-conversations <exportPath>` | <Undocumented /> | A hidden command that archives an export, with `--cwd` and `--dry-run`. |
 
-Since `2.1.327`, after the terminal resumes (for example when you run `fg` after you suspend Claude Code), most prompts ignore every answer except Esc for a moment. The release notes say this. The program counts a moment of up to `150` ms from the resume signal.[^fg-guard]
+Since `2.1.327`, after the terminal resumes (for example when you run `fg` after you suspend Claude Code), most prompts ignore every answer except Esc for a moment. In a list prompt, Esc cancels at once, and Enter on an option is ignored for up to `150` ms from the resume signal.[^fg-guard]
 
 :::note[Hidden Commands]
 The `edit-*` commands and `design-login` read one JSON edit from stdin.
@@ -262,4 +262,4 @@ Each row is a family of messages. The backticked text is the start that every me
 [^logout-revoke]: The program, `chunk-368tyytn.js:166-168` (the text), `chunk-368tyytn.js:320-335` (the second request when the first answer is `retryable`, and the unconfirmed result), `chunk-368tyytn.js:416-420` (the text goes to stderr), and `chunk-asj6f58y.js:19996` (a server error or a network failure is `retryable`). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^purge-pipe]: The program, `chunk-kp3dwsaa.js:823-836`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
 [^head-file]: The program, `chunk-m14bt1pz.js:4405164` (the check for `claude rm`), and `chunk-m14bt1pz.js:4384311`. These `git rev-list` calls now end with `--`, so git reads `HEAD` as a revision and not as a path. The message text is at `chunk-dfq3y18g.js:13912`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^fg-guard]: The program, `chunk-maqjh9z8.js:243039` (the resume time, set on `SIGCONT`) and `chunk-0ppsbjks.js:484` (the `150` ms limit). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^fg-guard]: The program, `chunk-maqjh9z8.js:243039` (the resume time, set on `SIGCONT`) and `chunk-0ppsbjks.js:484` (the `150` ms limit), and `chunk-d2dqtfhk.js:42392` (in a list prompt, the accept key checks the limit and the cancel key does not). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
