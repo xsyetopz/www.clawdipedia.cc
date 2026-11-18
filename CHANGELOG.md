@@ -136,6 +136,7 @@ The site documents Claude Code `2.1.327`, the only release it tracks. The versio
 ### Fixed
 
 - Program citations whose second place was a stale offset from an earlier build now point at the code they name in `2.1.327`: Secret Masking, Mod API Nouns and Gates, the feature toggle and context environment variable pages, Transcript Format, and OpenTelemetry.
+- Secret Masking said that a permission request to a connected client also masks with `redactContext` then `redactTokens`. That module calls only `redactForDisplay`; the `redactContext` then `redactTokens` path is the tool summary of a remote or push notice, and the page now says so. The footnotes of that page name each masked part at its own place.
 - The hook output table lists `metrics`, which the output schema drops, and links to the `hook_plugin_metrics` event.
 - The Slash Commands page gave the `2.1.311` text of a rate-limited `/usage`, though the site documents `2.1.312`. Both rows now give the `2.1.312` text, and the page says that the text comes from the program, because no `2.1.312` run reached the usage endpoint.
 - What Changed held a second copy of the whole `## Version 2.1.311` section, byte for byte the same as the one in the Release Archive. The page keeps `2.1.312` only, as its first sentence says.
