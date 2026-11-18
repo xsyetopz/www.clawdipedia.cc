@@ -14,7 +14,7 @@ Counts are table rows. A row can name several items, such as a list of related v
 | Group | Count |
 | --- | --- |
 | [Settings Keys](#settings-keys) | 25 |
-| [Environment Variables](#environment-variables) | 1135 |
+| [Environment Variables](#environment-variables) | 1136 |
 | [CLI Flags and Subcommands](#cli-flags-and-subcommands) | 52 |
 | [Permissions](#permissions) | 121 |
 | [Hooks](#hooks) | 15 |
@@ -30,7 +30,7 @@ Counts are table rows. A row can name several items, such as a list of related v
 | [Headless Protocol](#headless-protocol) | 217 |
 | [Mod API](#mod-api) | 0 |
 | [Other](#other) | 108 |
-| Total | 1906 |
+| Total | 1907 |
 
 ## Settings Keys
 
@@ -70,7 +70,7 @@ Count: 25.
 
 Too many variables exist to list here. Each page below holds a table, and every undocumented variable in it has the Undocumented badge. The pages sort variables by what they do.
 
-Count: 1135.
+Count: 1136.
 
 | Page | Undocumented Rows |
 | --- | --- |
@@ -85,7 +85,7 @@ Count: 1135.
 | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) | 69 |
 | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) | 169 |
 | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) | 29 |
-| [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) | 57 |
+| [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) | 58 |
 | [System and Third-Party](../configure/env-vars/system-and-third-party.md) | 196 |
 | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) | 84 |
 | [Tools and Bash](../configure/env-vars/tools-and-bash.md) | 61 |

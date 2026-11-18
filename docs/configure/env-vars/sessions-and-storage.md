@@ -8,7 +8,7 @@ These variables decide where Claude Code keeps its files and how it handles save
 
 `CLAUDE_CONFIG_DIR` is the most used one. It moves the whole `.claude` folder, so you can keep separate setups. To change a variable, set it in your shell before you start `claude`. Project and local settings cannot set `CLAUDE_CONFIG_DIR`.
 
-This page lists 88 variables. Use absolute paths. Set `DISABLE_AUTOUPDATER` to stop updates.
+This page lists 89 variables. Use absolute paths. Set `DISABLE_AUTOUPDATER` to stop updates.
 
 ## Example
 
@@ -96,6 +96,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `CLAUDE_CODE_TMPDIR` | <Documented /> | Overrides the temp directory for internal temp files. Claude Code also passes it to child shells and uses it as `TMPDIR` in the sandbox. | Text. Falls back to `/tmp`. The sandbox also reads undocumented `CLAUDE_TMPDIR` and uses `/tmp/claude` last | All sessions |
 | `CLAUDE_CODE_TRANSCRIPT_LOCAL_GC` | <Documented /> <Differs note="The official docs and the program disagree. The row says how." /> | Trims the transcript before each compaction once the file passes 5 MB. The docs match this. The docs omit that `0` also blocks a flag-driven path. | On, off, or unset. For the remote path it overrides a feature flag. The local path needs non-interactive and not `CLAUDE_CODE_REMOTE` | `-p` and SDK sessions |
 | `CLAUDE_CODE_TRANSCRIPT_SLIM_TOOL_RESULTS` | <Undocumented /> | Picks `slim` over `counted` mode for tool results in the transcript of SDK sessions that use an SDK URL. | On or off. Read at startup in non-interactive sessions with an SDK URL | SDK URL sessions |
+| `CLAUDE_CODE_TRANSCRIPT_TAIL_LOAD` | <Undocumented /> | With `on` or `verify`, a `--resume` of a session file larger than 5 MiB writes `resume-head.jsonl` in the session folder, a side file that the program uses to load the transcript faster, and adds a `resume-head-vouch` line to the transcript. See [Transcript Format](../../reference/transcript-format.md).[^tail-load] | `on` or `verify`. Read at startup | `--resume` of large session files |
 | `CLAUDE_CONFIG_DIR` | <Documented /> | Sets the config directory in place of `~/.claude`. It also changes the name of the secure storage entry with a hash of the path. | Text | All sessions |
 | `CLAUDE_IMPORT_CONVERSATIONS` | <Undocumented /> | Enables the import-conversations command. Without it the command says it is not enabled. | On or off. The command also needs `--cwd` | CLI import command |
 | `CLAUDE_JOB_DIR` | <Documented /> | Holds the job directory of a background session. Claude Code writes `exit-cause` and `exit-detail` files there. | A path. Claude Code sets it | Background sessions |
@@ -144,3 +145,4 @@ The program (variable names found in the `2.1.314` binary) and the [Environment 
 [^personal-hooks]: The program, `chunk-nnpsqanp.js:688`. Probe cases `env319b.personal-hooks-off.launch-restricted`, `retry-restricted`, `fix-restricted`, `host-restricted`, `other-restricted`, `off-restricted`, and `host-plain`.
 [^resume-hint]: The program, `chunk-m14bt1pz.js:350132`.
 [^began-as-copy]: The program, `chunk-rap1tzf6.js:951079` and `chunk-rnt5hbrt.js:73355` (the flag).
+[^tail-load]: The program, `chunk-2ew0jg68.js:77466` (the values) and `chunk-61wd57dm.js:17185` (the read). Probe case `resume-head-vouch` in `tools/schemas/observe/print/cases-resume.ts`.

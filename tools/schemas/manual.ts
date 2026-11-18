@@ -172,8 +172,14 @@ export const missedObserved = (schema: Json, seen: Seen): string[] => {
 	return ok ? typeNames(seen).filter((t) => !ok.has(t)) : [];
 };
 
+// The code builder marks a field it cannot type "x-unverified", and it types an array whose items it cannot read
+// as a bare {type:"array"}; a hand-read entry fills either one.
+const isOpen = (node: Json): boolean =>
+	node["x-unverified"] === true ||
+	(node["type"] === "array" && !("items" in node));
+
 /**
- * Give each "x-unverified" field with a live entry its hand-read type. Works on a copy, because the builders
+ * Give each open field (see isOpen) with a live entry its hand-read type. Works on a copy, because the builders
  * share one `{ "x-unverified": true }` node between fields. `has` tells if a string is in the program. `missed` lists
  * the types real payloads had (tools/schemas/observed/) that the entry does not allow.
  */
@@ -198,7 +204,7 @@ export const applyManual = async (
 	let n = 0;
 	walkFields(schema, (path, node) => {
 		const e = fx.fields[path];
-		if (e === undefined || node["x-unverified"] !== true) {
+		if (e === undefined || !isOpen(node)) {
 			return;
 		}
 		used.add(path);
@@ -218,7 +224,7 @@ export const applyManual = async (
 	});
 	for (const p of Object.keys(fx.fields)) {
 		if (!used.has(p)) {
-			stale.push(`${p}: no x-unverified field at this path`);
+			stale.push(`${p}: no x-unverified field or item-less array at this path`);
 		}
 	}
 	return { schema, n, stale, missed };

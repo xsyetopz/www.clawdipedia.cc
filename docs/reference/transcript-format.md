@@ -110,7 +110,12 @@ These names are in the program next to the writer. The meanings come from the wr
 | `attribution-snapshot` | `messageId` | A snapshot of file-contribution data for commits. On load the program keeps only the last one and trims a large one. In `2.1.314` the program exports its writer function and no code calls it, so only older sessions hold these lines (the program). |
 | `fork-context-ref` | `agentId`, `parentSessionId`, `parentLastUuid`, `contextLength` | A forked agent's pointer to its parent. The fork reads the parent's lines and does not copy them. |
 | `observer-ref` | `observerTaskId`, `observerAgentType`, `agentId`, `timestamp` | An observer agent's pointer. |
-| `progress` | `toolUseID`, `parentToolUseID`, `data` | Progress of a running tool, hook, skill, or agent. `data.type` is `hook_progress`, `tool_heartbeat`, `bash_progress`, `powershell_progress`, `agent_progress`, `agent_api_retry`, `skill_progress`, `search_results_received`, `query_update`, `workflow_log`, `workflow_phase`, `workflow_agent`, or `artifact_publish_retry`. |
+| `session-owner` | `sessionId`, `accountUuid`, `organizationUuid` | The account and organization that own the session. The program writes it only when it has an account with an `accountUuid` (`chunk-m14bt1pz.js:501260`, `chunk-sge9jngd.js:413`). |
+| `data-flow-records` | `v`, `sessionId`, `agentId`, `records`, `snapshot` | Records of which responses and tool calls fed the work of the main loop or of an agent (`agentId`). Each record has a `response_id`, or a `tool_name` with `tool_use_id` or `event_id`. `snapshot` is `true` when the line holds all records, not only the new ones (`chunk-m14bt1pz.js:495532`, `:502641`). |
+| `data-flow-incomplete` | `v`, `sessionId`, `agentId` | Marks that the records of the main loop or of an agent are not complete, for example after a server tool with a bad name (`chunk-m14bt1pz.js:495395`). |
+| `derived-from` | `v`, `sessionId`, `sessions` | The sessions that this one came from. Each item has `type`, `id`, `via` (for example `clear`, `fork`, `resume`, or `import`), and can have `started`. A child process reads them from `CLAUDE_CODE_LAUNCHED_BY_SESSION_IDS` (`chunk-m14bt1pz.js:502821`, `chunk-2mvk3gke.js:979`). |
+| `resume-head-vouch` | `sessionId`, `sum` | A hex `sum` that vouches for `resume-head.jsonl`. The program calls this file "the side file that speeds up loading" the transcript. It writes the file in the session folder when you resume a large session file (`chunk-m14bt1pz.js:646401`, `:677956`). See the conditions below the table. |
+| `progress` | `toolUseID`, `parentToolUseID`, `data` | Progress of a running tool, hook, skill, or agent. `data.type` is `hook_progress`, `tool_heartbeat`, `bash_progress`, `powershell_progress`, `agent_progress`, `agent_api_retry`, `skill_progress`, `search_results_received`, `query_update`, `workflow_log`, `workflow_phase`, `workflow_agent`, or `artifact_publish_retry`. In `2.1.327` the transcript writer drops each `progress` row before it writes, so only older session files hold these lines (`chunk-m14bt1pz.js:696693`). The schema lists only the shared fields for this type. |
 | `isolation-latch` | `side` | Records a one-time choice about where the session runs, kept for resume. |
 | `memory-mode` | `mode`, `afterUuid`, `reason`, `account` | A stamp that auto memory switched mode. One per switch. |
 | `dev-mods` | `folder` | The folder of a mod under development that the session uses. |
@@ -122,6 +127,16 @@ These names are in the program next to the writer. The meanings come from the wr
 | `summary` | `leafUuid`, `summary` | A summary line. The program reads these lines on load, and no code in `2.1.314` writes them, so only older sessions hold them. |
 | `continued-in` | `continuedInSessionId` | Points to the session that continued this one. |
 | `history-suppression`, `artifact-comment-monitor` | | Also in the program's table. We read no further meaning. |
+
+The program writes the `data-flow-records`, `data-flow-incomplete`, and `derived-from` lines only when a feature flag and an organization policy allow data-flow records (`chunk-asj6f58y.js:741816`).
+
+The program writes `resume-head-vouch` on `--resume` only when all of these are true (the program, `2.1.327`):
+
+- `CLAUDE_CODE_TRANSCRIPT_TAIL_LOAD` is `on` or `verify`.
+- The session file is larger than 5 MiB (`chunk-a8mwmqtf.js:21433`).
+- The file has a `compact_boundary` line at 4 MiB or more from the start, and no `user`, `assistant`, `system`, `attachment`, or `progress` line comes before it (`chunk-m14bt1pz.js:377907`, `:390481`, `:642878`).
+- The `compact_boundary` line is at most 1 MiB (`chunk-m14bt1pz.js:390481`).
+- The resume continues the same session, not a fork (`chunk-m14bt1pz.js:679723`).
 
 `proactivity` and `language` are not line types. They are kinds of `attachment` (`attachment.type`). `proactivity` carries `status`, `level`, and `tools`. `language` carries the reply `language`.
 
@@ -280,7 +295,13 @@ Set `cleanupPeriodDays` low, or `CLAUDE_CODE_SKIP_PROMPT_HISTORY`, if that matte
 
 ## Exact Fields
 
-The exact fields are in this schema: `https://clawdipedia.cc/schemas/claude-code-transcript.json`, with one definition for each line `type`. The program builds this payload in code, not with a validator. So the schema comes from that code. A field marked `x-unverified` has a type that the code does not show. A field marked `x-observed` is a field that a probe saw. In `2.1.327` the schema has no `x-unverified` mark left. It lost 68 marks and gained a type or an `enum` for each of those fields, among them `madeBy`, `apiErrorType`, `toolCallCutAtOutputLimit`, and the `shellProgress` fields of `progress` lines. No line field was removed. The schema now also lists nested fields of `shellProgress` (`elapsedTimeSeconds`, `totalLines`), `apiRefusalCyberVerification` (`type`, `tier`, `reason`), and `invokedSkill` (`name`, `path`), which were untyped objects before.[^unverified-marks]
+The exact fields are in this schema: `https://clawdipedia.cc/schemas/claude-code-transcript.json`, with one definition for each line `type`. The program builds this payload in code, not with a validator. So the schema comes from that code. A field marked `x-unverified` has a type that the code does not show. A field marked `x-observed` is a field that a probe saw. In `2.1.327` the schema has no `x-unverified` mark left. Of the 68 fields that had the mark in `2.1.326`:
+
+- 42 fields now have a type or an `enum`, among them `madeBy`, `apiErrorType`, `toolCallCutAtOutputLimit`, and `toolDenialFromHost`. A probe line agrees with each of these types.
+- 25 fields are gone. 23 are the `data` fields of `progress` lines, because the writer drops each `progress` line (`chunk-m14bt1pz.js:696693`). The other 2 are `plugin` and `id` of `system` lines, which the program does not keep in the file.
+- 1 field has a type from the code only: `api-request.cut.markAddresses`. Only the interactive session registers the cutter that writes it (`chunk-cfxefa64.js:1702425`), so a print-mode probe cannot make the program write it.
+
+An array field now also states the type of its items where the code shows it, for example `api-request.withheld`, `api-request.cacheControl`, `user.sandboxViolations`, and the hook lists of `stop_hook_summary` lines. Only `toolUseResult.content` keeps items of any type, because it holds the result of any tool.[^unverified-marks]
 It lists every field of this release. Build on the fields it names. Look each one up there before you rely on it.
 
 ## Related Pages
@@ -292,5 +313,5 @@ It lists every field of this release. Build on the fields it names. Look each on
 
 ## Sources
 
-[^unverified-marks]: A count in the generated files. `schemas/claude-code-transcript.json` for `2.1.326` has 68 `"x-unverified": true` marks, and the file for `2.1.327` has none. The typed fields come from the generator input in `tools/schemas/manual/`, which the generator checks against the code on each run.
+[^unverified-marks]: A count in the generated files. `schemas/claude-code-transcript.json` for `2.1.326` has 68 `"x-unverified": true` marks, and the file for `2.1.327` has none. The typed fields come from the generator input in `tools/schemas/manual/`, which the generator checks against the code on each run. The probe counts come from `tools/schemas/audit-run.ts`, run against the print-mode cases in `tools/schemas/observe/print/`.
 [^output-limit-note]: The program, `chunk-m14bt1pz.js:1637556` (the kind list), `:5846814` (the reader), and `:5905070` (the renderer) of `2.1.327`.

@@ -362,7 +362,6 @@
 	"env:CLAUDE_CODE_TICKLISH_WHISPER": "Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out.",
 	"env:CLAUDE_CODE_TICKLISH_WHISPER_TIMEOUT_MS": "Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out.",
 	"env:CLAUDE_CODE_TOOL_USE_ID": "Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-asj6f58y.js:706085). It has no known effect.",
-	"env:CLAUDE_CODE_TRANSCRIPT_TAIL_LOAD": "Load tuning for transcripts (chunk-61wd57dm.js:17192); no output change. Run: env319b.inert.transcript-tail-load.",
 	"env:CLAUDE_CODE_TWO_STAGE_CLASSIFIER": "Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-2ew0jg68.js:19605). It has no known effect.",
 	"env:CLAUDE_CODE_ULTRAREVIEW_LAUNCH_RECORD": "Set by the parent ultrareview process for its child (chunk-52b5pkrw.js:2653); the child writes the session id after a cloud launch (chunk-gqt67z8h.js:24736). Offline runs offline.ur-base and offline.ur-record exit 1 with 'Ultrareview is currently unavailable.' and write no file, so the write path is not reached without the cloud. Run: env319b.inert.ultrareview-launch-record.",
 	"env:CLAUDE_CODE_ULTRAREVIEW_PREFLIGHT_FIXTURE": "Test or evaluation harness variable. It is not meant for normal use.",

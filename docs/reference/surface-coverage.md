@@ -14,7 +14,7 @@ Each row below names the page that covers an item, or the reason the item is lef
 | --- | --- | --- | --- | --- | --- |
 | [Betas](#betas) | 55 | 55 | 0 | 0 | 0 |
 | [API Endpoints](#api-endpoints) | 462 | 133 | 18 | 311 | 0 |
-| [Environment Variables](#environment-variables) | 2112 | 1574 | 20 | 518 | 0 |
+| [Environment Variables](#environment-variables) | 2112 | 1575 | 20 | 517 | 0 |
 | [Error Texts](#error-texts) | 4302 | 48 | 2245 | 2009 | 0 |
 | [Files](#files) | 78 | 54 | 0 | 24 | 0 |
 | [CLI Flags](#cli-flags) | 425 | 125 | 299 | 1 | 0 |
@@ -30,7 +30,7 @@ Each row below names the page that covers an item, or the reason the item is lef
 | [Slash Commands](#slash-commands) | 140 | 103 | 30 | 7 | 0 |
 | [Subcommands](#subcommands) | 81 | 7 | 74 | 0 | 0 |
 | [Tools](#tools) | 97 | 91 | 0 | 6 | 0 |
-| Total | 10508 | 2983 | 2889 | 4636 | 0 |
+| Total | 10508 | 2984 | 2889 | 4635 | 0 |
 
 ## Betas
 
@@ -1723,7 +1723,7 @@ Items: 2112.
 | `CLAUDE_CODE_TOTAL_TOKENS_REMINDER_BUDGET` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
 | `CLAUDE_CODE_TRANSCRIPT_LOCAL_GC` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_TRANSCRIPT_SLIM_TOOL_RESULTS` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
-| `CLAUDE_CODE_TRANSCRIPT_TAIL_LOAD` | Excluded: Load tuning for transcripts (chunk-61wd57dm.js:17192); no output change. Run: env319b.inert.transcript-tail-load. |
+| `CLAUDE_CODE_TRANSCRIPT_TAIL_LOAD` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_TRIGGER_ID` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `CLAUDE_CODE_TUI_ASKED` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_TUI_JUST_SWITCHED` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |

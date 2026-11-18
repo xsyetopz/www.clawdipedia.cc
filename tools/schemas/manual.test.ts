@@ -59,7 +59,51 @@ describe("applyManual", () => {
 			},
 			{},
 		);
-		expect(out.stale).toEqual(["a.gone: no x-unverified field at this path"]);
+		expect(out.stale).toEqual([
+			"a.gone: no x-unverified field or item-less array at this path",
+		]);
+	});
+	test("gives an item-less array its hand-read items, and leaves a typed array alone", async () => {
+		// Arrange
+		const arrays = {
+			$defs: {
+				a: {
+					properties: {
+						open: { type: "array" },
+						typed: { type: "array", items: { type: "integer" } },
+					},
+				},
+			},
+		};
+		const entry = {
+			schema: { type: "array", items: { type: "string" } },
+			anchors: ["id:"],
+			note: "",
+		};
+		const manual = {
+			$comment: "",
+			version: "",
+			fields: { "a.open": entry, "a.typed": entry },
+		};
+
+		// Act
+		const out = await applyManual("x.json", arrays, () => true, manual, {});
+
+		// Assert
+		expect(out.n).toBe(1);
+		expect(out.stale).toEqual([
+			"a.typed: no x-unverified field or item-less array at this path",
+		]);
+		expect(out.schema).toEqual({
+			$defs: {
+				a: {
+					properties: {
+						open: { type: "array", items: { type: "string" } },
+						typed: { type: "array", items: { type: "integer" } },
+					},
+				},
+			},
+		});
 	});
 	test("reports a type real payloads had that the entry does not allow", async () => {
 		const out = await applyManual("x.json", schema, () => true, fx(["id:"]), {

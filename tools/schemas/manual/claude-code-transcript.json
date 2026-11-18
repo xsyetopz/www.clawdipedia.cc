@@ -3760,15 +3760,29 @@
 						]
 					},
 					"commands": {
-						"type": "array"
+						"type": "array",
+						"minItems": 1,
+						"items": {
+							"type": "object",
+							"properties": {
+								"command": {
+									"type": "string"
+								},
+								"tool": {
+									"type": "string"
+								}
+							},
+							"required": ["command", "tool"]
+						}
 					}
 				}
 			},
 			"anchors": [
 				"type:\"user\",message:{role:\"user\",content:«»||«»},isMeta:«»,promptShellHandOff:«»,mcpSkill:«»,ephemeral:«»,turnCompanion:«»,usageLimitNote:«»,replacesSpan:«»,isVisibleInTranscriptOnly:«»,isVirtual:«»,isCompactSummary:«»,...«»!==void 0&&{[«»]:«»},...«»!==void 0&&{invokedSkill:«»},...«»!==void 0&&{repeatsCompactSummary:«»},...«»!==void 0&&{modelOnlyText:«»},summarizeMetadata:«»,uuid:«»||(«»?«»():«»()),timestamp:«»??(«»?«»():new «»().toISOString()),toolUseResult:«»",
-				"{promptShellHandOff:{agentId:«»,commands:«»}}"
+				"{promptShellHandOff:{agentId:«»,commands:«»}}",
+				"{command:«».trim(),tool:«».name}"
 			],
-			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. promptShellHandOff is {agentId: string or null (agentId ?? null), commands: non-empty array of the shell commands}."
+			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. promptShellHandOff is {agentId: string or null (agentId ?? null), commands: non-empty array of the shell commands}. Each item of commands is {command: the shell command text trimmed, tool: the name of the tool that would run it}, built in the inline-command expansion in chunk-m14bt1pz and pushed to the hand-off list; the reader Rvs() uses both as strings."
 		},
 		"user.mcpSkill": {
 			"schema": {
@@ -3841,13 +3855,47 @@
 		},
 		"user.sandboxViolations": {
 			"schema": {
-				"type": "array"
+				"type": "array",
+				"maxItems": 20,
+				"items": {
+					"anyOf": [
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "network"
+								},
+								"host": {
+									"type": "string"
+								},
+								"port": {
+									"type": "integer",
+									"minimum": 0,
+									"maximum": 65535
+								}
+							},
+							"required": ["kind", "host"],
+							"additionalProperties": false
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "other"
+								}
+							},
+							"required": ["kind"],
+							"additionalProperties": false
+						}
+					]
+				}
 			},
 			"anchors": [
 				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
-				"«» instanceof «»?«».sandboxViolations:void 0"
+				"«» instanceof «»?«».sandboxViolations:void 0",
+				"getSandboxViolationStore().getViolationsForCommand("
 			],
-			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. sandboxViolations is an array of sandbox violation records from the sandbox runtime; the items are not typed here."
+			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. sandboxViolations comes from DNo (session module, near the deny-line patterns mxs and gxs), which both shell tools call: hxs maps each violation line of the command to {kind:\"network\",host,port?} when the line is a denied network-outbound or http-request with a valid host (port only when a safe integer <= 65535), else to {kind:\"other\"}; it drops repeats (one \"other\" at most) and stops at pxs = 20 items."
 		},
 		"user.sandboxed": {
 			"schema": {
@@ -4290,484 +4338,6 @@
 			"anchors": ["type:\"goal_status\",met:«»,sentinel:!0,condition:«»"],
 			"note": "The attachment line is {type:'attachment', uuid, timestamp, attachment} built by the attachment constructors (a different object shape per attachment type); the key below is the union over those shapes. condition (goal_status) is the goal condition string."
 		},
-		"progress.uuid": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"return{type:\"progress\",data:«»,toolUseID:«»,parentToolUseID:«»,uuid:«»(),timestamp:«»()}"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. uuid is a randomUUID string."
-		},
-		"progress.toolUseID": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"toolUseID:`bash-progress-${«»++}`",
-				"toolUseID:`${«»}-heartbeat-${«»++}`"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. toolUseID is a string: the tool_use id, or a generated id such as 'bash-progress-N', 'workflow_log', 'agent_<message id>'."
-		},
-		"progress.parentToolUseID": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"return{type:\"progress\",data:«»,toolUseID:«»,parentToolUseID:«»,uuid:«»(),timestamp:«»()}"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. parentToolUseID is the tool_use id string of the parent tool call."
-		},
-		"progress.data.type": {
-			"schema": {
-				"enum": [
-					"hook_progress",
-					"tool_heartbeat",
-					"bash_progress",
-					"powershell_progress",
-					"mcp_progress",
-					"agent_progress",
-					"skill_progress",
-					"agent_api_retry",
-					"search_results_received",
-					"query_update",
-					"workflow_log",
-					"workflow_phase",
-					"workflow_agent",
-					"artifact_publish_retry"
-				]
-			},
-			"anchors": [
-				"type:\"hook_progress\",hookEvent:«»,hookName:«»,command:«»(«»,«».get(«»))",
-				"type:\"tool_heartbeat\",toolName:«»,elapsedTimeSeconds:Math.floor((Date.now()-«»)/1000)",
-				"data:{type:\"bash_progress\",output:«».output,fullOutput:«».fullOutput,",
-				"data:{type:\"powershell_progress\",output:«».output,fullOutput:«».fullOutput,",
-				"type:\"mcp_progress\",status:\"started\",serverName:«».name,toolName:«».name",
-				"type:\"agent_progress\",prompt:«»,agentId:«»,agentType:«».agentType,isBuiltIn:«»(«»),description:«»,resolvedModel:«»,modelsUsed:«»",
-				"type:\"agent_progress\",prompt:«»,agentId:«»,agentType:«».agentType,isBuiltIn:«».source===\"built-in\",description:«».description}",
-				"type:\"agent_progress\",prompt:\"\",agentId:«»,agentType:«».agentType,isBuiltIn:«»(«»),resolvedModel:«»,",
-				"type:\"skill_progress\",prompt:«»,agentId:«»,agentType:«».agentType,description:«».description}",
-				"type:\"agent_api_retry\",agentId:«»,agentType:«».agentType,attempt:«».retryAttempt,maxRetries:«».maxRetries,retryDelayMs:«».retryInMs,errorStatus:«».error.status,errorCategory:«»",
-				"type:\"agent_api_retry\",resolved:!0,agentId:«»,agentType:«».agentType}",
-				"type:\"search_results_received\",resultCount:«».results.length,query:«»",
-				"type:\"query_update\",query:«»}",
-				"data:{type:\"workflow_log\",message:«»}",
-				"data:{type:\"workflow_phase\",index:«».index,title:«».title,kind:«».kind}",
-				"type:\"workflow_agent\",index:«»,label:«»,phaseIndex:«»,phaseTitle:«»,agentId:«»,",
-				"type:\"artifact_publish_retry\",resolved:!0}",
-				"type:\"artifact_publish_retry\",status:«».status,attempt:«».attempt,maxAttempts:«».maxAttempts"
-			],
-			"note": "Every producer of a progress line's data object in the program (grep of type:\"progress\" and of the generic wrapper ODt/qMn that forwards data): hook_progress (hook runner, chunk-a1cg2ptw), tool_heartbeat (chunk-a1cg2ptw), bash_progress (chunk-a1cg2ptw, and the REPL in chunk-f3waybkd), powershell_progress (chunk-n4seqtct), mcp_progress (chunk-9dvdjy85/tvv9e5m1, forwarded as data:wt), agent_progress (chunk-sj79q3n5, chunk-z2ctr57c, chunk-zjfzcfy1), skill_progress (chunk-cws6a3x0), agent_api_retry (chunk-sj79q3n5), search_results_received and query_update (chunk-y97djc3b), workflow_log, workflow_phase, workflow_agent (chunk-5vm6s6e2), artifact_publish_retry (chunk-e4nj3r2k). The data forwarded as data:xt.data / R.data / b.data / e.data comes from these same tool onProgress calls (every tool call site that passes data was found: a search for 'toolUseID:..,data:' gives only these). compact_progress, thinking_progress, task_progress, control_request_progress are other message kinds, not progress data. So a closed enum of 14 values."
-		},
-		"progress.data.hookEvent": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"hook_progress\",hookEvent:«»,hookName:«»,command:«»(«»,«».get(«»))"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. hookEvent (hook_progress) is the hook event name string."
-		},
-		"progress.data.hookName": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"hook_progress\",hookEvent:«»,hookName:«»,command:«»(«»,«».get(«»))"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. hookName (hook_progress) is the string name 'Event:matcher'."
-		},
-		"progress.data.command": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"hook_progress\",hookEvent:«»,hookName:«»,command:«»(«»,«».get(«»))"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. command (hook_progress) is the display string of the hook command."
-		},
-		"progress.data.toolName": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"tool_heartbeat\",toolName:«»,elapsedTimeSeconds:Math.floor((Date.now()-«»)/1000)"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. toolName (tool_heartbeat) is the tool name string."
-		},
-		"progress.data.elapsedTimeSeconds": {
-			"schema": {
-				"type": "number"
-			},
-			"anchors": [
-				"type:\"tool_heartbeat\",toolName:«»,elapsedTimeSeconds:Math.floor((Date.now()-«»)/1000)",
-				"type:\"bash_progress\",output:«».output,fullOutput:«».fullOutput,elapsedTimeSeconds:«».elapsedTimeSeconds,totalLines:«».totalLines,totalBytes:«».totalBytes,taskId:«».taskId,timeoutMs:«».timeoutMs",
-				"type:\"powershell_progress\",output:«».output,fullOutput:«».fullOutput,elapsedTimeSeconds:«».elapsedTimeSeconds,totalLines:«».totalLines,totalBytes:«».totalBytes,timeoutMs:«».timeoutMs,taskId:«».taskId"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. elapsedTimeSeconds (tool_heartbeat, bash_progress, powershell_progress) is a number of seconds (Math.floor(...) at the heartbeat)."
-		},
-		"progress.data.output": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"bash_progress\",output:«».output,fullOutput:«».fullOutput,elapsedTimeSeconds:«».elapsedTimeSeconds,totalLines:«».totalLines,totalBytes:«».totalBytes,taskId:«».taskId,timeoutMs:«».timeoutMs",
-				"type:\"powershell_progress\",output:«».output,fullOutput:«».fullOutput,elapsedTimeSeconds:«».elapsedTimeSeconds,totalLines:«».totalLines,totalBytes:«».totalBytes,timeoutMs:«».timeoutMs,taskId:«».taskId"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. output (bash_progress, powershell_progress) is the output text string."
-		},
-		"progress.data.fullOutput": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"bash_progress\",output:«».output,fullOutput:«».fullOutput,elapsedTimeSeconds:«».elapsedTimeSeconds,totalLines:«».totalLines,totalBytes:«».totalBytes,taskId:«».taskId,timeoutMs:«».timeoutMs",
-				"type:\"powershell_progress\",output:«».output,fullOutput:«».fullOutput,elapsedTimeSeconds:«».elapsedTimeSeconds,totalLines:«».totalLines,totalBytes:«».totalBytes,timeoutMs:«».timeoutMs,taskId:«».taskId"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. fullOutput (bash_progress, powershell_progress) is the full output text string."
-		},
-		"progress.data.totalLines": {
-			"schema": {
-				"type": "number"
-			},
-			"anchors": [
-				"type:\"bash_progress\",output:«».output,fullOutput:«».fullOutput,elapsedTimeSeconds:«».elapsedTimeSeconds,totalLines:«».totalLines,totalBytes:«».totalBytes,taskId:«».taskId,timeoutMs:«».timeoutMs",
-				"type:\"powershell_progress\",output:«».output,fullOutput:«».fullOutput,elapsedTimeSeconds:«».elapsedTimeSeconds,totalLines:«».totalLines,totalBytes:«».totalBytes,timeoutMs:«».timeoutMs,taskId:«».taskId"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. totalLines (bash_progress, powershell_progress) is a line count."
-		},
-		"progress.data.totalBytes": {
-			"schema": {
-				"type": "number"
-			},
-			"anchors": [
-				"type:\"bash_progress\",output:«».output,fullOutput:«».fullOutput,elapsedTimeSeconds:«».elapsedTimeSeconds,totalLines:«».totalLines,totalBytes:«».totalBytes,taskId:«».taskId,timeoutMs:«».timeoutMs",
-				"type:\"powershell_progress\",output:«».output,fullOutput:«».fullOutput,elapsedTimeSeconds:«».elapsedTimeSeconds,totalLines:«».totalLines,totalBytes:«».totalBytes,timeoutMs:«».timeoutMs,taskId:«».taskId"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. totalBytes (bash_progress, powershell_progress) is a byte count."
-		},
-		"progress.data.taskId": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"bash_progress\",output:«».output,fullOutput:«».fullOutput,elapsedTimeSeconds:«».elapsedTimeSeconds,totalLines:«».totalLines,totalBytes:«».totalBytes,taskId:«».taskId,timeoutMs:«».timeoutMs",
-				"type:\"powershell_progress\",output:«».output,fullOutput:«».fullOutput,elapsedTimeSeconds:«».elapsedTimeSeconds,totalLines:«».totalLines,totalBytes:«».totalBytes,timeoutMs:«».timeoutMs,taskId:«».taskId"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. taskId (bash_progress, powershell_progress) is the background task id string."
-		},
-		"progress.data.timeoutMs": {
-			"schema": {
-				"type": "number"
-			},
-			"anchors": [
-				"type:\"bash_progress\",output:«».output,fullOutput:«».fullOutput,elapsedTimeSeconds:«».elapsedTimeSeconds,totalLines:«».totalLines,totalBytes:«».totalBytes,taskId:«».taskId,timeoutMs:«».timeoutMs",
-				"type:\"powershell_progress\",output:«».output,fullOutput:«».fullOutput,elapsedTimeSeconds:«».elapsedTimeSeconds,totalLines:«».totalLines,totalBytes:«».totalBytes,timeoutMs:«».timeoutMs,taskId:«».taskId"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. timeoutMs (bash_progress, powershell_progress) is the timeout in ms."
-		},
-		"progress.data.message": {
-			"schema": {
-				"anyOf": [
-					{
-						"type": "string"
-					},
-					{
-						"type": "object"
-					}
-				]
-			},
-			"anchors": [
-				"type:\"workflow_log\",message:«»",
-				"type:\"agent_progress\",prompt:«»,agentId:«»,agentType:«».agentType,isBuiltIn:«»(«»),description:«»,resolvedModel:«»,modelsUsed:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. message is a string for workflow_log and a user or assistant message object for agent_progress and skill_progress."
-		},
-		"progress.data.prompt": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"agent_progress\",prompt:«»,agentId:«»,agentType:«».agentType,isBuiltIn:«»(«»),description:«»,resolvedModel:«»,modelsUsed:«»",
-				"type:\"agent_progress\",prompt:\"\""
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. prompt (agent_progress, skill_progress) is the prompt string ('' for later updates)."
-		},
-		"progress.data.agentId": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"agent_progress\",prompt:«»,agentId:«»,agentType:«».agentType,isBuiltIn:«»(«»),description:«»,resolvedModel:«»,modelsUsed:«»",
-				"type:\"agent_api_retry\",agentId:«»,agentType:«».agentType,attempt:«».retryAttempt,maxRetries:«».maxRetries,retryDelayMs:«».retryInMs,errorStatus:«».error.status,errorCategory:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. agentId is the agent id string."
-		},
-		"progress.data.agentType": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"agent_progress\",prompt:«»,agentId:«»,agentType:«».agentType,isBuiltIn:«»(«»),description:«»,resolvedModel:«»,modelsUsed:«»",
-				"type:\"agent_api_retry\",agentId:«»,agentType:«».agentType,attempt:«».retryAttempt,maxRetries:«».maxRetries,retryDelayMs:«».retryInMs,errorStatus:«».error.status,errorCategory:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. agentType is the agent type string."
-		},
-		"progress.data.isBuiltIn": {
-			"schema": {
-				"type": "boolean"
-			},
-			"anchors": [
-				"type:\"agent_progress\",prompt:«»,agentId:«»,agentType:«».agentType,isBuiltIn:«»(«»),description:«»,resolvedModel:«»,modelsUsed:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. isBuiltIn (agent_progress) is a boolean (source === 'built-in')."
-		},
-		"progress.data.description": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"agent_progress\",prompt:«»,agentId:«»,agentType:«».agentType,isBuiltIn:«»(«»),description:«»,resolvedModel:«»,modelsUsed:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. description (agent_progress, skill_progress) is the description string."
-		},
-		"progress.data.resolved": {
-			"schema": {
-				"type": "boolean"
-			},
-			"anchors": [
-				"type:\"agent_api_retry\",resolved:!0",
-				"type:\"artifact_publish_retry\",resolved:!0"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. resolved (agent_api_retry, artifact_publish_retry) is true."
-		},
-		"progress.data.attempt": {
-			"schema": {
-				"type": "number"
-			},
-			"anchors": [
-				"type:\"agent_api_retry\",agentId:«»,agentType:«».agentType,attempt:«».retryAttempt,maxRetries:«».maxRetries,retryDelayMs:«».retryInMs,errorStatus:«».error.status,errorCategory:«»",
-				"type:\"workflow_agent\",index:«»,label:«»,phaseIndex:«»,phaseTitle:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. attempt (agent_api_retry, workflow_agent, artifact_publish_retry) is the attempt number."
-		},
-		"progress.data.maxRetries": {
-			"schema": {
-				"type": "number"
-			},
-			"anchors": [
-				"type:\"agent_api_retry\",agentId:«»,agentType:«».agentType,attempt:«».retryAttempt,maxRetries:«».maxRetries,retryDelayMs:«».retryInMs,errorStatus:«».error.status,errorCategory:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. maxRetries (agent_api_retry) is the retry limit number."
-		},
-		"progress.data.retryDelayMs": {
-			"schema": {
-				"type": "number"
-			},
-			"anchors": [
-				"type:\"agent_api_retry\",agentId:«»,agentType:«».agentType,attempt:«».retryAttempt,maxRetries:«».maxRetries,retryDelayMs:«».retryInMs,errorStatus:«».error.status,errorCategory:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. retryDelayMs (agent_api_retry) is a delay in ms."
-		},
-		"progress.data.errorStatus": {
-			"schema": {
-				"type": "number"
-			},
-			"anchors": [
-				"type:\"agent_api_retry\",agentId:«»,agentType:«».agentType,attempt:«».retryAttempt,maxRetries:«».maxRetries,retryDelayMs:«».retryInMs,errorStatus:«».error.status,errorCategory:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. errorStatus (agent_api_retry) is the HTTP status of the error (a number; not written when the error has none)."
-		},
-		"progress.data.resultCount": {
-			"schema": {
-				"type": "number"
-			},
-			"anchors": [
-				"type:\"search_results_received\",resultCount:«».results.length,query:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. resultCount (search_results_received) is a count."
-		},
-		"progress.data.query": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"search_results_received\",resultCount:«».results.length,query:«»",
-				"type:\"query_update\",query:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. query (search_results_received, query_update) is the search query string."
-		},
-		"progress.data.index": {
-			"schema": {
-				"type": "integer"
-			},
-			"anchors": [
-				"type:\"workflow_phase\",index:«».index,title:«».title,kind:«».kind",
-				"{index:++«»,kind:«»,announced:!1,title:«»}",
-				"type:\"workflow_agent\",index:«»,label:«»,phaseIndex:«»,phaseTitle:«»,agentId:«».agentId,model:",
-				"let «»=++«»,«»=«»(«»),"
-			],
-			"note": "workflow_phase (chunk-5vm6s6e2): index is the phase counter ++bn (1, 2, ...), an integer. workflow_agent: index is the agent counter ve=++U (an integer) passed to the writers as idx/M, in the running, queued, cached, blocked and remote writers. Always an integer, never null."
-		},
-		"progress.data.title": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"workflow_phase\",index:«».index,title:«».title,kind:«».kind"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. title (workflow_phase) is the phase title string."
-		},
-		"progress.data.kind": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"workflow_phase\",index:«».index,title:«».title,kind:«».kind"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. kind (workflow_phase) is the phase kind string."
-		},
-		"progress.data.label": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"workflow_agent\",index:«»,label:«»,phaseIndex:«»,phaseTitle:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. label (workflow_agent) is the agent label string."
-		},
-		"progress.data.phaseIndex": {
-			"schema": {
-				"type": "number"
-			},
-			"anchors": [
-				"type:\"workflow_agent\",index:«»,label:«»,phaseIndex:«»,phaseTitle:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. phaseIndex (workflow_agent) is a phase index number."
-		},
-		"progress.data.phaseTitle": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"workflow_agent\",index:«»,label:«»,phaseIndex:«»,phaseTitle:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. phaseTitle (workflow_agent) is the phase title string."
-		},
-		"progress.data.isolation": {
-			"schema": {
-				"enum": ["worktree", "remote"]
-			},
-			"anchors": [
-				"type:\"workflow_agent\",index:«»,label:«»,phaseIndex:«»,phaseTitle:«»,agentType:«»?.agentType!=null?String(«».agentType):void 0,isolation:«»?.isolation===\"worktree\"||«»?.isolation===\"remote\"?«».isolation:void 0,model:«»(«»?.model),state:\"start\",queuedAt:«»,promptPreview:«»,lastProgressAt:«»",
-				"isolation:\"remote\",remoteSessionId:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. isolation (workflow_agent) is 'worktree' or 'remote'; not written otherwise."
-		},
-		"progress.data.state": {
-			"schema": {
-				"enum": ["start", "progress", "done", "error"]
-			},
-			"anchors": [
-				"state:\"error\",blocked:!0,error:«»,queuedAt:«»,promptPreview:«»(«»),lastProgressAt:Date.now()",
-				"model:«»(«»?.model),state:\"done\",startedAt:Date.now(),lastProgressAt:Date.now(),cached:!0",
-				"model:«»(«»?.model),state:\"start\",queuedAt:«»,promptPreview:«»,lastProgressAt:«»}",
-				"model:«»(«»?.model),state:\"error\",error:«» instanceof Error?",
-				"fallbackModel:«»,state:«»,startedAt:«»,queuedAt:«»,attempt:«»",
-				"«»(\"start\",«»||«»?{tokens:«»,toolCalls:«»}:void 0)",
-				"«»(\"progress\",{tokens:«»+«»,toolCalls:«»+«»})",
-				"«»(\"done\",{tokens:",
-				"«»(\"error\",{error:",
-				"«»(«»,{state:\"start\"})",
-				"«»(«»,{state:\"error\",error:«»,durationMs:",
-				"isolation:\"remote\",remoteSessionId:«»,state:«»,startedAt:«»,queuedAt:«»,promptPreview:«»,lastProgressAt:Date.now(),...«»}",
-				"«»(\"start\"),«»(«»);let «»;try{"
-			],
-			"note": "workflow_agent writers (chunk-5vm6s6e2). Literal states: blocked spawn 'error', cached result 'done', queued 'start' and the queued failure 'error'; the running-agent writer Dt(state,extra) is only called with 'start', 'progress', 'done' and 'error'; the queued-update writer passes the object {state:'start'} or {state:'error',...} through a spread; the remote writer (isolation 'remote', not reachable in this build) takes its state from calls Ve('start'|'progress'|'done'|'error'). No call passes another value, so the set is closed. Only workflow_agent has a state key."
-		},
-		"progress.data.blocked": {
-			"schema": {
-				"type": "boolean"
-			},
-			"anchors": [
-				"state:\"error\",blocked:!0,error:«»,queuedAt:«»,promptPreview:«»(«»),lastProgressAt:Date.now()"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. blocked (workflow_agent) is true."
-		},
-		"progress.data.error": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"state:\"error\",blocked:!0,error:«»,queuedAt:«»,promptPreview:«»(«»),lastProgressAt:Date.now()"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. error (workflow_agent) is the error message string."
-		},
-		"progress.data.queuedAt": {
-			"schema": {
-				"type": "number"
-			},
-			"anchors": [
-				"state:\"error\",blocked:!0,error:«»,queuedAt:«»,promptPreview:«»(«»),lastProgressAt:Date.now()",
-				"type:\"workflow_agent\",index:«»,label:«»,phaseIndex:«»,phaseTitle:«»,agentType:«»?.agentType!=null?String(«».agentType):void 0,isolation:«»?.isolation===\"worktree\"||«»?.isolation===\"remote\"?«».isolation:void 0,model:«»(«»?.model),state:\"start\",queuedAt:«»,promptPreview:«»,lastProgressAt:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. queuedAt (workflow_agent) is a Date.now() millisecond timestamp."
-		},
-		"progress.data.startedAt": {
-			"schema": {
-				"type": "number"
-			},
-			"anchors": [
-				"type:\"workflow_agent\",index:«»,label:«»,phaseIndex:«»,phaseTitle:«»,agentId:«».agentId,model:«»(«»?.model),state:\"done\",startedAt:Date.now(),lastProgressAt:Date.now(),cached:!0,resultPreview:«»(«».result),promptPreview:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. startedAt (workflow_agent) is a Date.now() millisecond timestamp."
-		},
-		"progress.data.lastProgressAt": {
-			"schema": {
-				"type": "number"
-			},
-			"anchors": [
-				"state:\"error\",blocked:!0,error:«»,queuedAt:«»,promptPreview:«»(«»),lastProgressAt:Date.now()",
-				"type:\"workflow_agent\",index:«»,label:«»,phaseIndex:«»,phaseTitle:«»,agentId:«».agentId,model:«»(«»?.model),state:\"done\",startedAt:Date.now(),lastProgressAt:Date.now(),cached:!0,resultPreview:«»(«».result),promptPreview:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. lastProgressAt (workflow_agent) is a Date.now() millisecond timestamp."
-		},
-		"progress.data.promptPreview": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"state:\"error\",blocked:!0,error:«»,queuedAt:«»,promptPreview:«»(«»),lastProgressAt:Date.now()",
-				"type:\"workflow_agent\",index:«»,label:«»,phaseIndex:«»,phaseTitle:«»,agentId:«».agentId,model:«»(«»?.model),state:\"done\",startedAt:Date.now(),lastProgressAt:Date.now(),cached:!0,resultPreview:«»(«».result),promptPreview:«»",
-				"type:\"workflow_agent\",index:«»,label:«»,phaseIndex:«»,phaseTitle:«»,agentType:«»?.agentType!=null?String(«».agentType):void 0,isolation:«»?.isolation===\"worktree\"||«»?.isolation===\"remote\"?«».isolation:void 0,model:«»(«»?.model),state:\"start\",queuedAt:«»,promptPreview:«»,lastProgressAt:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. promptPreview (workflow_agent) is a truncated prompt string."
-		},
-		"progress.data.cached": {
-			"schema": {
-				"type": "boolean"
-			},
-			"anchors": [
-				"type:\"workflow_agent\",index:«»,label:«»,phaseIndex:«»,phaseTitle:«»,agentId:«».agentId,model:«»(«»?.model),state:\"done\",startedAt:Date.now(),lastProgressAt:Date.now(),cached:!0,resultPreview:«»(«».result),promptPreview:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. cached (workflow_agent) is true."
-		},
-		"progress.data.resultPreview": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"workflow_agent\",index:«»,label:«»,phaseIndex:«»,phaseTitle:«»,agentId:«».agentId,model:«»(«»?.model),state:\"done\",startedAt:Date.now(),lastProgressAt:Date.now(),cached:!0,resultPreview:«»(«».result),promptPreview:«»"
-			],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. resultPreview (workflow_agent) is a truncated result string."
-		},
-		"progress.data.remoteSessionId": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": ["isolation:\"remote\",remoteSessionId:«»"],
-			"note": "The progress line is {type:'progress', data, toolUseID, parentToolUseID, uuid}; data is a different object per progress type (hook_progress, bash_progress, powershell_progress, tool_heartbeat, agent_progress, skill_progress, agent_api_retry, search_results_received, query_update, workflow_log, workflow_phase, workflow_agent, artifact_publish_retry, ...); the key below is the union over the literals of those types. remoteSessionId (workflow_agent) is the remote session id string."
-		},
 		"api-request.sessionId": {
 			"schema": {
 				"type": "string"
@@ -5040,20 +4610,6 @@
 			"anchors": ["isVirtual:«»", "isVirtual:«».isVirtual"],
 			"note": "assistant lines: isVirtual is the boolean flag of the message factory (written true for virtual messages; the stream-json schema is_virtual is the literal true)."
 		},
-		"progress.data.tokens": {
-			"schema": {
-				"type": "number"
-			},
-			"anchors": ["tokens:«»+«».tokens,toolCalls:«»+«».toolCalls"],
-			"note": "workflow_agent progress: tokens is a sum of two token counts (wt + te.tokens), a number."
-		},
-		"progress.data.toolCalls": {
-			"schema": {
-				"type": "number"
-			},
-			"anchors": ["tokens:«»+«».tokens,toolCalls:«»+«».toolCalls"],
-			"note": "workflow_agent progress: toolCalls is a sum of two call counts (ft + te.toolCalls), a number."
-		},
 		"assistant.healsDistinctCarrier": {
 			"schema": {
 				"type": "boolean",
@@ -5136,206 +4692,6 @@
 				"{type:\"total_tokens_reminder\",text:«»(\"padded-countdown\",«».totalTokensBudget)}"
 			],
 			"note": "Attachment kinds whose object literal sets `text` (found by scanning every {type:\"<kind>\"...} literal for a top-level text key, and checking the spread ones: artifact_opening_prefetch, *_delta, cowork_memory_context, instructions have no text): batching_reminder and secondary_reminder (enhx8a0q, only built when the reminder text is non-null: the latched string), elapsed_time_reminder (template string 'Elapsed time so far: Nm SSs'), fork_briefing (template string about the forked worktree), prefix_delta (text from the prefix ledger, K.text, a string, only used when not undefined), silent_turn_reminder (env override string, a feature flag string, or the HTn default string), total_tokens_reminder (template '<total_tokens>N tokens left</total_tokens>'). The model kind sets text from Hbt('env_info_model', text), which returns `cache.get(key) ?? null` or the prompt-section resolver result, and the reader schema for it is string|null|undefined, so model.text can be null. Every other kind writes a string. Only model can write null, so the union is string|null. 2.1.314 no longer writes output_limit_note: the builder that set {type:\"output_limit_note\",model,text} is gone, and only the reader, the renderer (which still reads text) and the kind lists are left, so the kind still parses in an older transcript."
-		},
-		"progress.data.durationMs": {
-			"schema": {
-				"type": "number"
-			},
-			"anchors": [
-				"«»(\"done\",{tokens:«»,toolCalls:«»+«»,durationMs:«»+«»,resultPreview:«»(«»?«»:«»)})",
-				"«»(\"error\",{error:«»,tokens:«»,toolCalls:«»+«»,durationMs:«»+«»})",
-				"«»(\"error\",{error:«» instanceof Error?«».message:String(«»),tokens:«»+«»,toolCalls:«»+«»,durationMs:«»+(Date.now()-«»)})",
-				"«»(\"error\",{error:\"skipped by user\",skipped:!0,tokens:«»+«»,toolCalls:«»+«»,durationMs:«»+(Date.now()-«»)})",
-				"(«»,{state:\"error\",error:«»,durationMs:«»+«».durationMs})",
-				"«»(\"error\",{error:\"skipped by user\",skipped:!0,durationMs:Date.now()-«»})",
-				"«»(\"done\",{tokens:«»?«»(«»):0,toolCalls:«»,durationMs:Date.now()-«»,resultPreview:"
-			],
-			"note": "workflow_agent (chunk-5vm6s6e2): durationMs is spread into the state 'done' and 'error' writes as a millisecond number: the running writer Dt gets xt+(Date.now()-Zt) or xt+Pn (xt=0 plus accumulated ms; Pn=Date.now()-Zt), the queued usage-limit-wait error gets xt+ae.durationMs, and the unused remote writer Ve gets Date.now()-Ke. Always a number; absent on 'start' and 'progress'."
-		},
-		"progress.data.errorCategory": {
-			"schema": {
-				"enum": [
-					"overloaded",
-					"rate_limit",
-					"authentication_failed",
-					"server_error",
-					"cloud_credential_error",
-					"unknown"
-				]
-			},
-			"anchors": [
-				"errorStatus:«».error.status,errorCategory:«»}",
-				"function «»(«»){if(«».status===529||«».message?.includes('\"type\":\"overloaded_error\"'))return\"overloaded\";if(«».status===429)return\"rate_limit\";if(«».status===401||«».status===403)return\"authentication_failed\";if(«».status!==void 0&&«».status>=408)return\"server_error\";if(«».isCloudCredentialError)return\"cloud_credential_error\";return\"unknown\"}"
-			],
-			"note": "agent_api_retry (chunk-sj79q3n5): errorCategory:V where V=cBn(b.error) for each system api_error event of the agent loop. cBn (chunk-a1cg2ptw) returns one of six string literals. The resolved:true form of agent_api_retry has no errorCategory. No other writer."
-		},
-		"progress.data.fallbackModel": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"fallbackModel:«»,state:«»,startedAt:«»,queuedAt:«»,attempt:«»",
-				"=«».message.model;if(«»&&«»&&«»(«»,«»))«»=«»}"
-			],
-			"note": "workflow_agent running writer Dt (chunk-5vm6s6e2): fallbackModel:No. No starts undefined (key then absent in JSON) and is set to the message.model of an assistant message from the API when the check wOe(message, resolvedModel) holds; message.model is a model-name string. No other writer."
-		},
-		"progress.data.lastAttemptReason": {
-			"schema": {
-				"enum": ["stalled", "throttled", "user-retry"]
-			},
-			"anchors": [
-				"attempt:«»,lastAttemptReason:«»===\"rate_limited\"?\"throttled\":«»,lastToolName:",
-				"if(«»===\"stalled\"||«»===\"user-retry\"){if(«»===\"stalled\"&&«»!==void 0)",
-				"stalledReason:«»,replyLost:«»===\"stalled\"&&«»,",
-				"let «»=«».stalledReason??\"stalled\",",
-				"«»(«»,`${«»} (throttle-retry)`,2,\"throttled\")",
-				"`${«»}${«»}`,«»,\"rate_limited\")",
-				"«»(«»,`${«»} (retry ${«»})`,«»+1,«»)"
-			],
-			"note": "workflow_agent running writer Dt, via the ts(...) parameter te (chunk-5vm6s6e2). The agent is run by vn(...,reason): no reason on the first run (key absent), 'rate_limited' after a usage-limit wait (mapped to 'throttled' at the write), 'throttled' for the throttle retry, and A.stalledReason??'stalled' for stall retries; stalledReason is the abort reason when it is 'stalled' or 'user-retry' (else the run is not marked stalled). So the set is closed: stalled, throttled, user-retry."
-		},
-		"progress.data.lastToolName": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"lastToolName:«»,lastToolSummary:«»,promptPreview:«»,promptFramed:«»,lastProgressAt:Date.now()",
-				"«»=«».name,«»=«»(«».input,«».name)||void 0,«»=«».id,"
-			],
-			"note": "workflow_agent running writer Dt (chunk-5vm6s6e2): lastToolName:be, set to the name of the latest tool_use block of the agent's assistant message (a string). The other assignment, from yi(), reads the name of an entry of the Qn/ns maps; those maps are created empty in ts and never filled in the module, so it only sets undefined. Key absent before the first tool call."
-		},
-		"progress.data.lastToolSummary": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"lastToolName:«»,lastToolSummary:«»,promptPreview:«»,promptFramed:«»,lastProgressAt:Date.now()",
-				"«»=«».name,«»=«»(«».input,«».name)||void 0,«»=«».id,",
-				"for(let «» of Object.values(«»))if(typeof «»===\"string\")return «»(«».replace(/\\s+/g,\" \").trim(),60);return\"\"}"
-			],
-			"note": "workflow_agent running writer Dt (chunk-5vm6s6e2): lastToolSummary:Ge = A8t(tool_use.input, name)||void 0. A8t (chunk-9paxzxzz) returns '' or ps(text,60), a string of at most 60 cells; '' becomes undefined (key absent). So a string."
-		},
-		"progress.data.maxAttempts": {
-			"schema": {
-				"type": "integer",
-				"enum": [2, 3]
-			},
-			"anchors": [
-				"type:\"artifact_publish_retry\",status:«».status,attempt:«».attempt,maxAttempts:«».maxAttempts",
-				"«»({status:503,attempt:«»,maxAttempts:«»,delayMs:«»})",
-				"«»({status:429,attempt:2,maxAttempts:2,delayMs:«»})",
-				"«»?.({status:503,attempt:2,maxAttempts:2,delayMs:«»})",
-				"var «»=3,«»=5000,«»=20000,«»=30000",
-				"function «»(«»){let «»=«»(«»)??2000;return «»<=«»?«»:void 0}"
-			],
-			"note": "artifact_publish_retry only (chunk-e4nj3r2k forwards the event of chunk-eawd4gc3): maxAttempts is the literal 2, or the constant 3 (var Cs=3,hc=5000,Yr=20000,gc=30000 in 2.1.312, passed as maxAttempts:Cs). The 'attempt' of the same event is 2 or the loop counter V from 2 up to 3. The resolved:true form has no maxAttempts."
-		},
-		"progress.data.model": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"agentId:«»,agentType:«»?.agentType,isolation:«»?\"worktree\":void 0,model:«»,fallbackModel:«»,state:«»,startedAt:«»,queuedAt:«»,attempt:«»",
-				"model:«»(«»?.model),state:\"start\",queuedAt:«»,promptPreview:«»,lastProgressAt:«»}",
-				"model:«»(«»?.model),state:\"error\",error:«» instanceof Error?«».message:String(«»),queuedAt:",
-				"model:«»(«»?.model),state:\"done\",startedAt:Date.now(),lastProgressAt:Date.now(),cached:!0",
-				"model:«»(«»?.model),state:\"error\",blocked:!0,error:",
-				"model:«»,queuedAt:Date.now(),tokens:«»+«».tokens,toolCalls:«»+«».toolCalls,promptPreview:«»,promptFramed:«»,lastProgressAt:Date.now(),...«»}",
-				"function «»(«»){if(«»)return «»;let «»=«»();if(«»!==void 0)return «»;let «»=«»();return «»!==\"inherit\"?«»:«».options.mainLoopModel}"
-			],
-			"note": "workflow_agent (chunk-5vm6s6e2, the workflow runtime): five writers set model. The running-agent writer Dt and the queued-update writer use ze=fW(...), the model resolver (a model-name string on every branch). The queued (start), error, blocked and cached writers use Sn(opts.model): opts.model if truthy, else sMe() (the CLAUDE_CODE_WORKFLOW_SUBAGENT_MODEL env string), else _ae() (CLAUDE_CODE_SUBAGENT_MODEL env string), else mainLoopModel (string). So a string. The queued, blocked and cached writers pass Sn(opts.model), which returns opts.model unchanged when it is truthy; the workflow script API declares model as a string but the program does not check its type there (Ao tests typeof model==='string' only later), so a non-string from a script is unconfirmed."
-		},
-		"progress.data.modelsUsed": {
-			"schema": {
-				"type": "array",
-				"items": {
-					"type": "string"
-				}
-			},
-			"anchors": [
-				"resolvedModel:«»,modelsUsed:«»}",
-				"function «»(«»,«»){return «».at(-1)===«»?«»:[...«»,«»]}",
-				"=«»,«»=«»([],«»);if(«».length>0){"
-			],
-			"note": "agent_progress (chunk-sj79q3n5, both sites): modelsUsed:E where E starts as ZMn([],model) and becomes ZMn(E,toModel) on each query_model_change. ZMn(list,model) returns list or [...list,model], so it is an array of the model-name strings (at least one entry). Not written by the other agent_progress writers (chunk-z2ctr57c, chunk-zjfzcfy1)."
-		},
-		"progress.data.promptFramed": {
-			"schema": {
-				"type": "boolean"
-			},
-			"anchors": [
-				"promptFramed:«»,lastProgressAt:Date.now()",
-				"let «»=«»();if(await «»({idx:«»,promptStr:«»,label:«»,ownPhaseTitle:«»,ownPhaseIndex:«»,opts:«»,queuedAt:«»,provenanceOn:«»}))return null",
-				"function «»(){let «»=«».CLAUDE_CODE_WORKFLOW_PROMPT_PROVENANCE;if(«»!==void 0)return «»;return «»(\"tengu_bubbly_harbor\",!0)}",
-				"udsInboxShape,«»=«»(«»,null)"
-			],
-			"note": "workflow_agent running writer Dt and the queued-update writer (chunk-5vm6s6e2): promptFramed:Q with Q=Iio() (chunk-9paxzxzz). Iio reads a key of Jn, an env proxy built from an empty key table (chunk-96zs3wmc: kN={}, Jn=SG(kN,null)), so it is always undefined, and it returns k('tengu_bubbly_harbor',true), the feature-flag value with default true. A boolean; the flag value is not coerced, so a non-boolean server value is unconfirmed."
-		},
-		"progress.data.promptText": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"type:\"hook_progress\",hookEvent:«»,hookName:«»,command:«»(«»,«».get(«»)),...«».type===\"prompt\"&&{promptText:«»(«».prompt)}",
-				"function «»(«»){return «»(«»).replace(/\\n/g,\"\\u2424\").replace(/\\t/g,\"\\u2409\")}",
-				"prompt:«»().describe(\"Prompt to evaluate with LLM."
-			],
-			"note": "hook_progress (a1cg2ptw, the hook runner): promptText is only spread in when the hook's type is \"prompt\", as tu(hook.prompt). tu (chunk-awtg6f5t) is nH(t) with newline and tab replaced by visible symbols; nH returns t unchanged or a rebuilt string, so a string stays a string. A prompt hook's prompt is a string by the hook schema (chunk-p709670a, PromptHookSchema). No other producer writes promptText."
-		},
-		"progress.data.resolvedModel": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"resolvedModel:«»,modelsUsed:«»}",
-				"if(«».type===\"query_model_change\"){«»=«».toModel,«»=«»(«»,«».toModel);return}",
-				"resolvedModel:«»,...«»&&{description:«»}}",
-				"if(«».type===\"query_model_change\"){«»=«».toModel,yield «»;continue}",
-				"function «»(«»,«»){return «».at(-1)===«»?«»:[...«»,«»]}"
-			],
-			"note": "agent_progress, written at two sites in chunk-sj79q3n5 (the Agent tool run: data {message,type:'agent_progress',prompt,agentId,agentType,isBuiltIn,description,resolvedModel,modelsUsed}) and one in chunk-zjfzcfy1 (background sub-agent run, resolvedModel:ze). The value starts as the result of the model resolver fW/tRs (chunk-a1cg2ptw; every branch returns a model-name string) and is replaced by the toModel of each query_model_change event (the model chain or fallback model name). So it is a model-name string. Not every toModel source was traced one by one; all read as model ids."
-		},
-		"progress.data.skipped": {
-			"schema": {
-				"type": "boolean",
-				"const": true
-			},
-			"anchors": [
-				"«»(\"error\",{error:\"skipped by user\",skipped:!0,",
-				"«»(\"error\",{error:\"skipped by user\",skipped:!0,durationMs:"
-			],
-			"note": "workflow_agent (chunk-5vm6s6e2): skipped:!0 is written only with state 'error' and error 'skipped by user' (user-skip abort), by Dt and by the remote writer Ve. Only the value true is written; the key is absent otherwise."
-		},
-		"progress.data.status": {
-			"schema": {
-				"type": ["string", "integer"],
-				"enum": ["started", "completed", "failed", "progress", 429, 503]
-			},
-			"anchors": [
-				"type:\"mcp_progress\",status:\"started\",serverName:«».name,toolName:«».name",
-				"type:\"mcp_progress\",status:\"completed\",serverName:«».name,toolName:«».name,elapsedTimeMs:",
-				"type:\"mcp_progress\",status:\"failed\",serverName:«».name,toolName:«».name,elapsedTimeMs:",
-				"type:\"mcp_progress\",status:\"progress\",serverName:«»,toolName:«»,progress:",
-				"«»(\"progress\",«».boundMcpStatusMessage(",
-				"type:\"mcp_progress\",status:«»,serverName:«»,toolName:«»,progress:«»,progressMessage:«»})",
-				"type:\"artifact_publish_retry\",status:«».status,attempt:«».attempt,maxAttempts:«».maxAttempts",
-				"«»({status:429,attempt:2,maxAttempts:2,delayMs:«»})",
-				"«»({status:503,attempt:2,maxAttempts:2,delayMs:«»})",
-				"«»({status:503,attempt:«»,maxAttempts:«»,delayMs:«»})",
-				"«»?.({status:503,attempt:2,maxAttempts:2,delayMs:«»})"
-			],
-			"note": "Two producers (chunk-9dvdjy85, plus an older copy in chunk-tvv9e5m1): mcp_progress data from the MCP tool call, status is the literal 'started', 'completed' or 'failed', or 'progress' (the progress notification, and the task-polling updates through Ie('progress',...)); all strings. The other producer is artifact_publish_retry (chunk-e4nj3r2k forwards onRetry events from chunk-eawd4gc3): status is the HTTP status of the retried publish, the literal 429 or 503 (numbers). The resolved:true form has no status. No other progress writer has a status key."
-		},
-		"progress.data.statusMessage": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"...\"statusMessage\"in «»&&«».statusMessage!=null&&{statusMessage:«»(«».statusMessage)}",
-				"function «»(«»){return «»(«»).replace(/\\n/g,\"\\u2424\").replace(/\\t/g,\"\\u2409\")}",
-				"statusMessage:«»().optional().describe(\"Custom status message to display in spinner while hook runs\")"
-			],
-			"note": "hook_progress (a1cg2ptw, hook runner): statusMessage is spread in when the hook has a non-null statusMessage, as tu(hook.statusMessage); tu returns a string for a string. Every hook schema (command, prompt, mcp_tool, http, agent in chunk-p709670a) declares statusMessage as an optional string. No other producer writes statusMessage."
 		},
 		"system.highlight": {
 			"schema": {
@@ -6133,7 +5489,385 @@
 		},
 		"data-flow-records.records": {
 			"schema": {
-				"type": "array"
+				"type": "array",
+				"items": {
+					"anyOf": [
+						{
+							"type": "object",
+							"properties": {
+								"response_id": {
+									"type": "string",
+									"pattern": "^msg_(?:staging_|local_)?[A-Za-z0-9]{1,64}$"
+								},
+								"listed": {
+									"type": "array",
+									"items": {
+										"type": "string",
+										"pattern": "^msg_(?:staging_|local_)?[A-Za-z0-9]{1,64}$"
+									}
+								},
+								"mark_sent_by": {
+									"type": "string",
+									"minLength": 1,
+									"maxLength": 256,
+									"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+								}
+							},
+							"required": ["response_id"],
+							"additionalProperties": false
+						},
+						{
+							"type": "object",
+							"properties": {
+								"tool_name": {
+									"type": "string"
+								},
+								"tool_use_id": {
+									"type": "string",
+									"minLength": 1,
+									"maxLength": 256,
+									"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+								},
+								"event_id": {
+									"type": "string",
+									"minLength": 1,
+									"maxLength": 256,
+									"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+								},
+								"inner_call_index": {
+									"type": "integer",
+									"minimum": 0,
+									"maximum": 2147483647
+								},
+								"no_message": {
+									"const": true
+								},
+								"implicit": {
+									"const": true
+								},
+								"carried": {
+									"const": true
+								},
+								"server": {
+									"anyOf": [
+										{
+											"type": "object",
+											"properties": {
+												"type": {
+													"const": "anthropic"
+												},
+												"id": {
+													"type": "string",
+													"minLength": 1,
+													"maxLength": 256,
+													"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+												}
+											},
+											"required": ["type", "id"],
+											"additionalProperties": false
+										},
+										{
+											"type": "object",
+											"properties": {
+												"type": {
+													"const": "claude_ai_connector"
+												},
+												"id": {
+													"type": "string"
+												},
+												"directory_id": {
+													"anyOf": [
+														{
+															"type": "string",
+															"minLength": 1,
+															"maxLength": 256,
+															"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+														},
+														{
+															"type": "null"
+														}
+													]
+												}
+											},
+											"required": ["type", "id", "directory_id"],
+											"additionalProperties": false
+										},
+										{
+											"type": "object",
+											"properties": {
+												"type": {
+													"const": "client_configured"
+												},
+												"transport": {
+													"enum": ["stdio", "http", "in_process"]
+												},
+												"plugin_id_hash": {
+													"type": "string",
+													"minLength": 1,
+													"maxLength": 256,
+													"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+												}
+											},
+											"required": ["type", "transport"],
+											"additionalProperties": false
+										},
+										{
+											"type": "object",
+											"properties": {
+												"type": {
+													"const": "unknown"
+												}
+											},
+											"required": ["type"],
+											"additionalProperties": false
+										}
+									]
+								},
+								"mcp_tool_name": {
+									"type": "string",
+									"minLength": 1,
+									"maxLength": 256,
+									"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+								},
+								"source": {
+									"type": "object",
+									"properties": {
+										"type": {
+											"type": "string",
+											"minLength": 1,
+											"maxLength": 256,
+											"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+										},
+										"id": {
+											"anyOf": [
+												{
+													"type": "string",
+													"minLength": 1,
+													"maxLength": 256,
+													"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+												},
+												{
+													"type": "null"
+												}
+											]
+										}
+									},
+									"required": ["type", "id"],
+									"additionalProperties": false
+								},
+								"touched": {
+									"type": "object",
+									"properties": {
+										"kind": {
+											"enum": ["artifact", "memory", "session"]
+										},
+										"id": {
+											"anyOf": [
+												{
+													"type": "string",
+													"minLength": 1,
+													"maxLength": 256,
+													"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"action": {
+											"enum": ["read", "write", "copy"]
+										},
+										"to": {
+											"type": "string",
+											"minLength": 1,
+											"maxLength": 256,
+											"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+										}
+									},
+									"required": ["kind", "id", "action"],
+									"additionalProperties": false
+								}
+							},
+							"additionalProperties": false,
+							"required": ["tool_use_id"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"tool_name": {
+									"type": "string"
+								},
+								"tool_use_id": {
+									"type": "string",
+									"minLength": 1,
+									"maxLength": 256,
+									"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+								},
+								"event_id": {
+									"type": "string",
+									"minLength": 1,
+									"maxLength": 256,
+									"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+								},
+								"inner_call_index": {
+									"type": "integer",
+									"minimum": 0,
+									"maximum": 2147483647
+								},
+								"no_message": {
+									"const": true
+								},
+								"implicit": {
+									"const": true
+								},
+								"carried": {
+									"const": true
+								},
+								"server": {
+									"anyOf": [
+										{
+											"type": "object",
+											"properties": {
+												"type": {
+													"const": "anthropic"
+												},
+												"id": {
+													"type": "string",
+													"minLength": 1,
+													"maxLength": 256,
+													"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+												}
+											},
+											"required": ["type", "id"],
+											"additionalProperties": false
+										},
+										{
+											"type": "object",
+											"properties": {
+												"type": {
+													"const": "claude_ai_connector"
+												},
+												"id": {
+													"type": "string"
+												},
+												"directory_id": {
+													"anyOf": [
+														{
+															"type": "string",
+															"minLength": 1,
+															"maxLength": 256,
+															"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+														},
+														{
+															"type": "null"
+														}
+													]
+												}
+											},
+											"required": ["type", "id", "directory_id"],
+											"additionalProperties": false
+										},
+										{
+											"type": "object",
+											"properties": {
+												"type": {
+													"const": "client_configured"
+												},
+												"transport": {
+													"enum": ["stdio", "http", "in_process"]
+												},
+												"plugin_id_hash": {
+													"type": "string",
+													"minLength": 1,
+													"maxLength": 256,
+													"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+												}
+											},
+											"required": ["type", "transport"],
+											"additionalProperties": false
+										},
+										{
+											"type": "object",
+											"properties": {
+												"type": {
+													"const": "unknown"
+												}
+											},
+											"required": ["type"],
+											"additionalProperties": false
+										}
+									]
+								},
+								"mcp_tool_name": {
+									"type": "string",
+									"minLength": 1,
+									"maxLength": 256,
+									"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+								},
+								"source": {
+									"type": "object",
+									"properties": {
+										"type": {
+											"type": "string",
+											"minLength": 1,
+											"maxLength": 256,
+											"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+										},
+										"id": {
+											"anyOf": [
+												{
+													"type": "string",
+													"minLength": 1,
+													"maxLength": 256,
+													"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+												},
+												{
+													"type": "null"
+												}
+											]
+										}
+									},
+									"required": ["type", "id"],
+									"additionalProperties": false
+								},
+								"touched": {
+									"type": "object",
+									"properties": {
+										"kind": {
+											"enum": ["artifact", "memory", "session"]
+										},
+										"id": {
+											"anyOf": [
+												{
+													"type": "string",
+													"minLength": 1,
+													"maxLength": 256,
+													"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"action": {
+											"enum": ["read", "write", "copy"]
+										},
+										"to": {
+											"type": "string",
+											"minLength": 1,
+											"maxLength": 256,
+											"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+										}
+									},
+									"required": ["kind", "id", "action"],
+									"additionalProperties": false
+								}
+							},
+							"additionalProperties": false,
+							"required": ["event_id"]
+						}
+					]
+				}
 			},
 			"anchors": [
 				"{type:\"data-flow-records\",v:1,sessionId:«»,agentId:«»,records:«»",
@@ -6141,9 +5875,11 @@
 				"{type:\"data-flow-records\",v:1,sessionId:«»,...«»,records:«»",
 				"[{type:\"data-flow-records\",v:1,sessionId:«»,records:«»}]",
 				"{type:\"data-flow-records\",v:1,sessionId:«»,records:[...«».records],snapshot:!0}",
-				"takeRecordsForEntry(«»,«»){let «»=this."
+				"takeRecordsForEntry(«»,«»){let «»=this.",
+				"if(e.response_id!==void 0)return a8t(e.response_id)?{response_id:",
+				"recordScriptCall(«»,«»,«»,«»={}){"
 			],
-			"note": "Each writer (chunk-m14bt1pz.js@495531, @502640, @528791, @614417; chunk-tzmg9srt.js@1529) passes an array from takeRecordsForEntry (chunk-ytkczbf2.js@26842) or a copy of one. The reader checks Array.isArray and validates each item itself. Item shape is not typed here."
+			"note": "Each writer (chunk-m14bt1pz.js@495531, @502640, @528791, @614417; chunk-tzmg9srt.js@1529) passes an array from takeRecordsForEntry (chunk-ytkczbf2.js@26842). An item is a response marker {response_id, listed?, mark_sent_by?} (chunk-ytkczbf2.js@26246) or a call record from recordCall, recordEvent, recordScriptCall, or recordTouch (chunk-ytkczbf2.js@23150 to @25600). The reader Hsi (chunk-s7x4n0qs.js@783) keeps only these shapes: ids pass yce, a string of 1 to 256 characters with no control character (chunk-hzvpv59r.js@19131); response ids match /^msg_(?:staging_|local_)?[A-Za-z0-9]{1,64}$/; inner_call_index is a safe integer from 0 below 2147483648; server passes Mls (chunk-hzvpv59r.js@18642) or is {type:\"unknown\"} (chunk-fchyqr5f.js@15685); a call record has tool_use_id or event_id."
 		},
 		"derived-from.sessionId": {
 			"schema": {
@@ -6161,16 +5897,59 @@
 			"schema": {
 				"type": "array",
 				"items": {
-					"type": "object"
+					"type": "object",
+					"properties": {
+						"type": {
+							"enum": ["claude_code_session", "unknown"]
+						},
+						"id": {
+							"anyOf": [
+								{
+									"type": "string",
+									"minLength": 1,
+									"maxLength": 256,
+									"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+								},
+								{
+									"type": "null"
+								}
+							]
+						},
+						"via": {
+							"enum": [
+								"clear",
+								"fork",
+								"branch",
+								"background",
+								"cloud",
+								"teleport",
+								"teammate",
+								"launch",
+								"subprocess",
+								"resume",
+								"import",
+								"compact"
+							]
+						},
+						"started": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 256,
+							"pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+						}
+					},
+					"required": ["type", "id", "via"],
+					"additionalProperties": false
 				}
 			},
 			"anchors": [
 				"{type:\"derived-from\",v:1,sessionId:«»,sessions:«».derivedFrom()}",
 				"{type:\"derived-from\",v:1,sessionId:«»,sessions:h}",
 				"{type:\"derived-from\",v:1,sessionId:«»,sessions:«»(",
-				"{type:\"derived-from\",v:1,sessionId:«»,sessions:[{type:\"unknown\""
+				"{type:\"derived-from\",v:1,sessionId:«»,sessions:[{type:\"unknown\"",
+				"let n=_il.find((s)=>s===e.type),t=gil.find((s)=>s===e.via);"
 			],
-			"note": "Array of source objects at each writer (chunk-m14bt1pz.js@502820, @528099; chunk-tzmg9srt.js@1615), for example {type:\"unknown\",id:null,via:\"import\"} (chunk-b1r44a63.js@48498)."
+			"note": "Array of source objects at each writer (chunk-m14bt1pz.js@502820, @528099; chunk-tzmg9srt.js@1615), for example {type:\"unknown\",id:null,via:\"import\"} (chunk-b1r44a63.js@48498). The reader F (chunk-s7x4n0qs.js@2101) keeps only an item whose type is in [\"claude_code_session\",\"unknown\"] and whose via is in the 12 values of gil (chunk-ytkczbf2.js@21951); id is a yce string, or null for type unknown; started is an optional yce string. The writer helper _F builds {type:\"claude_code_session\",id,via}."
 		},
 		"last-prompt.explicit": {
 			"schema": {
@@ -6381,180 +6160,271 @@
 			],
 			"note": "Literal true or undefined at every writer (chunk-m14bt1pz.js@4762732, @4778103, @4787064; chunk-zgpk86bb.js@89750); the builder spreads it only when truthy (chunk-m14bt1pz.js@5789927)."
 		},
-		"progress.data.toolInput.query": {
+		"api-request.withheld": {
 			"schema": {
-				"type": "string"
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
 			},
 			"anchors": [
-				"{query:«»(«»),...typeof «»===\"number\"&&{max:«»}}",
-				"<non-string ${typeof «»}>"
+				"...«».length>0&&{withheld:«»}",
+				"if(«»!==\"system\"&&«»!==\"tools\"&&«»!==\"messages\"&&«»(Reflect.get(«».params,«»))===«»(«»)){«».push(«»);continue}"
 			],
-			"note": "A string sliced to a length limit, or a placeholder string for a non-string input (chunk-t31w6vd4.js@79081, @79149). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"note": "The request recorder in chunk-m14bt1pz writes withheld only when its list has items. It pushes the key of each request parameter that CLAUDE_CODE_EXTRA_BODY injected (a key of Object.entries of the injected body), so each item is a parameter name string."
 		},
-		"progress.data.toolInput.max": {
+		"api-request.cacheControl": {
 			"schema": {
-				"type": "number"
-			},
-			"anchors": ["{query:«»(«»),...typeof «»===\"number\"&&{max:«»}}"],
-			"note": "Written only when typeof is number (chunk-t31w6vd4.js@79149). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
-		},
-		"progress.data.toolInput.name": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": ["{name:«»(«»)},()=>«».describeTool(«»))"],
-			"note": "describeTool passes the name through the same string helper as query (chunk-t31w6vd4.js@79253). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
-		},
-		"progress.data.toolUseId": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"start\"}",
-				"«»=«»?.toolUseID??`${«»}${«»()}`",
-				"toolUseId:«»,phase:\"executing\",nativeTimeoutMs:«»"
-			],
-			"note": "The id @ of every repl_tool_call row is the caller's toolUseID or a template string (chunk-t31w6vd4.js:117041). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
-		},
-		"progress.data.phase": {
-			"schema": {
-				"enum": ["start", "executing", "complete", "error"]
-			},
-			"anchors": [
-				"data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"start\"}",
-				"toolUseId:«»,phase:\"executing\",nativeTimeoutMs:«»",
-				"toolUseId:«»,phase:\"complete\",executed:!0",
-				"toolUseId:«»,phase:\"error\",error:«»",
-				"toolUseId:«»,phase:«»,...«»,scriptHelper:!0}"
-			],
-			"note": "Literal phases at chunk-t31w6vd4.js:119436, :118629, :120748, :124604, :118003, :134267; the helper row at :78808 passes \"start\", \"complete\" or \"error\". Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
-		},
-		"progress.data.result": {
-			"schema": {},
-			"anchors": [
-				"phase:\"complete\",executed:!0,result:«».value",
-				"phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined"
-			],
-			"note": "Any JSON tool result, passed through (chunk-t31w6vd4.js:120748, :124604). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
-		},
-		"progress.data.scriptHelper": {
-			"schema": {
-				"const": true
-			},
-			"anchors": ["phase:«»,...«»,scriptHelper:!0}"],
-			"note": "Literal true (chunk-t31w6vd4.js@78865). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
-		},
-		"progress.data.declined": {
-			"schema": {
-				"const": true
-			},
-			"anchors": ["phase:\"error\",error:«»,...«»&&{declined:!0}"],
-			"note": "Literal true (chunk-t31w6vd4.js@118065). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
-		},
-		"progress.data.permissionDecision": {
-			"schema": {
-				"type": "object"
-			},
-			"anchors": [
-				"...«»&&{declined:!0},...«»!==void 0&&{permissionDecision:«»}",
-				"«»=«».permissionDecision,«»=«»===void 0?«»:void 0"
-			],
-			"note": "The permissionDecision record of the permission result (chunk-t31w6vd4.js:127718); enums not proven here. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
-		},
-		"progress.data.toolDenialKind": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{toolDenialKind:«»}",
-				"«».behavior===\"deny\")return «»=«».toolDenialKind,«»=«».userFeedback"
-			],
-			"note": "A string: \"user-rejected\" (chunk-t31w6vd4.js:118263), a result's denialKind or toolDenialKind (:123444, :127802), or p2r's \"permission-rule\", \"cancelled\" or \"interrupted\" (chunk-m14bt1pz.js:4715683). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
-		},
-		"progress.data.userFeedback": {
-			"schema": {
-				"type": "string"
-			},
-			"anchors": [
-				"...«»!==void 0&&{toolDenialKind:«»},...«»!==void 0&&{userFeedback:«»}}})",
-				"«».behavior===\"deny\")return «»=«».toolDenialKind,«»=«».userFeedback",
-				"...«»?.feedbackIsFromUser&&«»&&{userFeedback:«»}"
-			],
-			"note": "A string: written at chunk-t31w6vd4.js:118003 from the deny result (:127718), whose userFeedback is the feedback text that cancelAndAbort uses in a template string (chunk-2wacym39.js:35874). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
-		},
-		"progress.data.nativeTimeoutMs": {
-			"schema": {
-				"type": "number"
-			},
-			"anchors": [
-				"phase:\"executing\",nativeTimeoutMs:«»,...«»&&{executed:!0}}",
-				"toolUseId:«»,phase:\"executing\",nativeTimeoutMs:«»"
-			],
-			"note": "Qr (chunk-t31w6vd4.js) returns Math.min of two timeouts for Bash and PowerShell, 1e4 for some tools, or undefined; the caller passes it at :129174. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
-		},
-		"progress.data.executed": {
-			"schema": {
-				"const": true
-			},
-			"anchors": [
-				"phase:\"executing\",nativeTimeoutMs:«»,...«»&&{executed:!0}}",
-				"phase:\"complete\",executed:!0,result:«».value"
-			],
-			"note": "Literal true (chunk-t31w6vd4.js:118629, :124604). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
-		},
-		"progress.data.shellProgress": {
-			"schema": {
-				"type": "object",
-				"properties": {
-					"elapsedTimeSeconds": {
-						"type": "number"
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"path": {
+							"type": "array",
+							"items": {
+								"anyOf": [
+									{
+										"type": "string"
+									},
+									{
+										"type": "integer",
+										"minimum": 0
+									}
+								]
+							}
+						},
+						"value": {}
 					},
-					"totalLines": {
-						"type": "number"
-					}
+					"required": ["path"]
+				}
+			},
+			"anchors": [
+				"cacheControl:«»,...«»===void 0?{requestDigest:«»}",
+				"if(«»===\"cache_control\")«».push({path:«»,value:«»})"
+			],
+			"note": "The recorder in chunk-m14bt1pz fills the list with zse(node, path, list) for the system prompt, the tools, and each message that has a cache_control marker. zse walks the value and pushes {path, value} for each key named cache_control. The path starts with 'system', 'tools', or 'messages' and holds object keys (strings) and array indexes (integers); value is the cache_control value as the request holds it, so its type is not narrowed."
+		},
+		"attachment.attachment.hooks": {
+			"schema": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"hookEvent": {
+							"type": "string"
+						},
+						"count": {
+							"type": "integer",
+							"minimum": 2
+						}
+					},
+					"required": ["hookEvent", "count"]
+				}
+			},
+			"anchors": [
+				"attachment:{type:\"async_hook_response_batch\",hooks:«»}",
+				"«».push({hookEvent:«»,count:«»})",
+				"let «»=«».attachment.hookEvent;«».set(«»,(«».get(«»)??0)+1)"
+			],
+			"note": "async_hook_response_batch: Dd() (chunk-a2xjwn0h) merges a run of async_hook_response attachments into one. It counts the runs per hookEvent (the hook event name of the attachment, a string such as 'SessionStart') and pushes {hookEvent, count} for each. A run of one attachment stays unmerged, so a batch has a run of at least two and each count is an integer."
+		},
+		"attachment.rendered": {
+			"schema": {
+				"type": "array",
+				"minItems": 1,
+				"items": {
+					"type": "object",
+					"properties": {
+						"content": {
+							"anyOf": [
+								{
+									"type": "string",
+									"minLength": 1
+								},
+								{
+									"type": "array",
+									"minItems": 1,
+									"items": {
+										"type": "object",
+										"properties": {
+											"type": {
+												"const": "text"
+											},
+											"text": {
+												"type": "string",
+												"minLength": 1
+											}
+										},
+										"required": ["type", "text"]
+									}
+								}
+							]
+						}
+					},
+					"required": ["content"]
+				}
+			},
+			"anchors": [
+				"function «»(«»){return «».length>0&&«».every(«»)?«».map((«»)=>({content:«».message.content})):void 0}",
+				"function «»(«»){let «»=«».message.content;return typeof «»===\"string\"||«».every((«»)=>«».type===\"text\")}"
+			],
+			"note": "I_n(attachment) in the session module (chunk-m14bt1pz) builds the rendered fields from the messages that the attachment turns into; gjt() keeps them only when every message content is a string or an array of text blocks, and writes each as {content: message.content}. gjt() returns nothing for an empty list, so an array has at least one item. rendered is gjt(DAe(attachment))."
+		},
+		"attachment.renderedWithdrawn": {
+			"schema": {
+				"type": "array",
+				"minItems": 1,
+				"items": {
+					"type": "object",
+					"properties": {
+						"content": {
+							"anyOf": [
+								{
+									"type": "string",
+									"minLength": 1
+								},
+								{
+									"type": "array",
+									"minItems": 1,
+									"items": {
+										"type": "object",
+										"properties": {
+											"type": {
+												"const": "text"
+											},
+											"text": {
+												"type": "string",
+												"minLength": 1
+											}
+										},
+										"required": ["type", "text"]
+									}
+								}
+							]
+						}
+					},
+					"required": ["content"]
+				}
+			},
+			"anchors": [
+				"function «»(«»){return «».length>0&&«».every(«»)?«».map((«»)=>({content:«».message.content})):void 0}",
+				"function «»(«»){let «»=«».message.content;return typeof «»===\"string\"||«».every((«»)=>«».type===\"text\")}",
+				"{rendered:«»,renderedWithdrawn:«»(«»(«»(«»))),renderedRole:«»}"
+			],
+			"note": "I_n(attachment) in the session module (chunk-m14bt1pz) builds the rendered fields from the messages that the attachment turns into; gjt() keeps them only when every message content is a string or an array of text blocks, and writes each as {content: message.content}. gjt() returns nothing for an empty list, so an array has at least one item. renderedWithdrawn is written only for a file attachment over the token limit, from the messages of the withdrawn form."
+		},
+		"attachment.renderedInHumanTurn": {
+			"schema": {
+				"type": "array",
+				"minItems": 1,
+				"items": {
+					"type": "object",
+					"properties": {
+						"content": {
+							"anyOf": [
+								{
+									"type": "string",
+									"minLength": 1
+								},
+								{
+									"type": "array",
+									"minItems": 1,
+									"items": {
+										"type": "object",
+										"properties": {
+											"type": {
+												"const": "text"
+											},
+											"text": {
+												"type": "string",
+												"minLength": 1
+											}
+										},
+										"required": ["type", "text"]
+									}
+								}
+							]
+						}
+					},
+					"required": ["content"]
+				}
+			},
+			"anchors": [
+				"function «»(«»){return «».length>0&&«».every(«»)?«».map((«»)=>({content:«».message.content})):void 0}",
+				"function «»(«»){let «»=«».message.content;return typeof «»===\"string\"||«».every((«»)=>«».type===\"text\")}",
+				"{rendered:«»,renderedInHumanTurn:«»,renderedRole:«»}"
+			],
+			"note": "I_n(attachment) in the session module (chunk-m14bt1pz) builds the rendered fields from the messages that the attachment turns into; gjt() keeps them only when every message content is a string or an array of text blocks, and writes each as {content: message.content}. gjt() returns nothing for an empty list, so an array has at least one item. renderedInHumanTurn is written only for a queued_command attachment whose human-turn rendering differs from rendered."
+		},
+		"system.snapshotFiles": {
+			"schema": {
+				"type": "array",
+				"minItems": 1,
+				"maxItems": 1,
+				"items": {
+					"type": "object",
+					"properties": {
+						"key": {
+							"const": "plan"
+						},
+						"path": {
+							"type": "string"
+						},
+						"content": {
+							"type": "string",
+							"maxLength": 2000000
+						}
+					},
+					"required": ["key", "path", "content"]
+				}
+			},
+			"anchors": [
+				"«».push({key:\"plan\",path:«»()?\"\":«»(),content:«»})",
+				"subtype:\"file_snapshot\",content:\"File snapshot\",level:\"info\",isMeta:!0,timestamp:new Date().toISOString(),uuid:«»(),snapshotFiles:«»}"
+			],
+			"note": "file_snapshot: b3r() (chunk-m14bt1pz) starts with an empty list, pushes one item {key:'plan', path, content} for the plan file, and returns before the write when the list is empty. The content is the plan text; the function skips it when it is longer than the 2000000 character cap (ZXr). path is the plan file path, or an empty string."
+		},
+		"system.foldedUuids": {
+			"schema": {
+				"type": "array",
+				"items": {
+					"type": "string"
 				},
-				"required": ["elapsedTimeSeconds", "totalLines"]
+				"minItems": 1
 			},
 			"anchors": [
-				"{elapsedTimeSeconds:«».data.elapsedTimeSeconds,totalLines:«».data.totalLines}",
-				"phase:\"executing\",shellProgress:"
+				"...«».foldedUuids?.length&&{foldedUuids:«».foldedUuids}",
+				"foldedUuids:«»}),«»(«»)]}function"
 			],
-			"note": "Written at chunk-t31w6vd4.js@118882 from the shell progress data copy at @131078. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"note": "scheduled_task_fire: RWr() (chunk-m14bt1pz) writes foldedUuids only when it has items. The caller in chunk-zcregtra builds it as n.slice(fireIdx).map((m)=>m.uuid), the uuid strings of the messages that a no-op loop tick folds. The load repair rX(e, 'foldedUuids', 'optional') in chunk-m14bt1pz keeps only strings."
 		},
-		"progress.data.mcpContent": {
-			"schema": {
-				"type": "boolean"
-			},
-			"anchors": [
-				"phase:\"complete\",mcpContent:«»,result:",
-				"«»=«»&&Array.isArray(«»)&&«»===«»;"
-			],
-			"note": "Boolean: isMcp===!0 && Array.isArray(...) && a strict equality (chunk-t31w6vd4.js:120650). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
-		},
-		"progress.data.delegatedToolNames": {
+		"system.hookInfos": {
 			"schema": {
 				"type": "array",
 				"items": {
-					"type": "string"
-				}
-			},
-			"anchors": ["...«».length>0&&{delegatedToolNames:«»}"],
-			"note": "Oii (chunk-eb5tp0ww.js:7741) keeps only string items; the caller filters them again (chunk-t31w6vd4.js). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
-		},
-		"progress.data.carriedMarkers": {
-			"schema": {
-				"type": "array",
-				"items": {
-					"type": "string"
+					"type": "object",
+					"properties": {
+						"command": {
+							"type": "string"
+						},
+						"promptText": {
+							"type": "string"
+						},
+						"durationMs": {
+							"type": "number"
+						}
+					},
+					"required": ["command"]
 				}
 			},
 			"anchors": [
-				"...«».length>0&&{carriedMarkers:«»}",
-				"return «».filter((«»)=>«».some((«»)=>«».includes(«»)))}"
+				"«»=«»(()=>«»({command:«»(),promptText:«»().optional(),durationMs:«»().optional()}))",
+				"let «»=«»(«».hookInfos,«»()),",
+				"«».push({command:«».command,promptText:«».promptText})"
 			],
-			"note": "H4e (chunk-rj3e7agr.js:152573) filters the fixed marker string list ih (:152076). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"note": "stop_hook_summary: uSa() (chunk-m14bt1pz) writes the line; z2e() in the same chunk repairs it on load and keeps only valid items (each item is {command, promptText?, durationMs?}). The Stop-hook collector in chunk-8g2nr9dn pushes {command, promptText} from each hook progress message; durationMs is a finite number when present."
 		},
-		"progress.data.notes": {
+		"system.hookErrors": {
 			"schema": {
 				"type": "array",
 				"items": {
@@ -6562,60 +6432,100 @@
 				}
 			},
 			"anchors": [
-				"...«»!==void 0&&{notes:«».notes}",
-				"{joined:«»,notes:«»._notes}"
+				"«»=«»(()=>«»()),«»=«»(()=>«»().min(1))",
+				"hookErrors:«»(«».hookErrors,«»())"
 			],
-			"note": "_notes is a filter of text strings from the MCP text blocks (chunk-t31w6vd4.js:120460). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"note": "stop_hook_summary: uSa() (chunk-m14bt1pz) writes the line; z2e() in the same chunk repairs it on load and keeps only valid items (each item is a string)."
 		},
-		"progress.data.sandboxViolations": {
+		"system.failedHookErrorIndexes": {
 			"schema": {
-				"type": "array"
+				"type": "array",
+				"items": {
+					"type": "integer",
+					"minimum": 0
+				}
 			},
 			"anchors": [
-				"...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations}",
-				"...«» instanceof «»&&«».sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations}"
+				"«»=«»(()=>«»().int().nonnegative())",
+				"...Array.isArray(«».failedHookErrorIndexes)&&{failedHookErrorIndexes:«»(«».failedHookErrorIndexes,«»())}"
 			],
-			"note": "Array from the shell result or ShellError (chunk-z9xgg67q.js:2901); DNo builds it from parsed violation lines (chunk-m14bt1pz.js:3754955). Items not typed. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"note": "stop_hook_summary: uSa() (chunk-m14bt1pz) writes the line; z2e() in the same chunk repairs it on load and keeps only valid items (each item is a safe non-negative integer, the index of an item in hookErrors)."
 		},
-		"progress.data.sandboxed": {
+		"system.hookAdditionalContext": {
 			"schema": {
-				"type": "boolean"
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
 			},
 			"anchors": [
-				"...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed}",
-				"...«» instanceof «»&&«».sandboxed!==void 0&&{sandboxed:«».sandboxed}"
+				"«»=«»(()=>«»()),«»=«»(()=>«»().min(1))",
+				"...Array.isArray(«».hookAdditionalContext)&&{hookAdditionalContext:«»(«».hookAdditionalContext,«»())}"
 			],
-			"note": "Boolean: the shell's sandbox decision Fm (chunk-m14bt1pz.js:1581106) returns only booleans. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"note": "stop_hook_summary: uSa() (chunk-m14bt1pz) writes the line; z2e() in the same chunk repairs it on load and keeps only valid items (each item is a string)."
 		},
-		"progress.data.resultBeforeReadBack": {
-			"schema": {},
-			"anchors": [
-				"&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}",
-				"{resultBeforeReadBack:«»}"
-			],
-			"note": "Any JSON value, written only when it differs from the result (chunk-t31w6vd4.js:120748). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
-		},
-		"progress.data.servedText": {
+		"system.compactMetadata.preCompactDiscoveredTools": {
 			"schema": {
-				"type": "string"
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
 			},
 			"anchors": [
-				"...«»!==void 0&&{servedText:«»}}})",
-				"\"result\"in «»&&typeof «».result===\"string\"?«».result:void 0",
-				"{servedText:«»}"
+				"«».compactMetadata.preCompactDiscoveredTools=[...«»].sort()",
+				"let «»=«».compactMetadata?.preCompactDiscoveredTools;if(«»){for(let «» of «»)«».add(«»)"
 			],
-			"note": "BOs (chunk-bw2ty92s.js:1728) returns the result only when it is a string. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"note": "compact_boundary: the compaction code in chunk-m14bt1pz writes the sorted list of a Set. The set is built by zG(messages) from the preCompactDiscoveredTools of earlier boundaries, the surfacedNames of deferred_tools_delta attachments, and the toolName of tool_reference blocks in user messages. Each item is a tool name string. The load repair rX(..., 'preCompactDiscoveredTools', 'optional') keeps only strings."
 		},
-		"progress.data.scriptStartedAt": {
+		"system.compactMetadata.preCompactArtifactReadVersions": {
 			"schema": {
-				"type": "number"
+				"type": "array",
+				"maxItems": 256,
+				"items": {
+					"type": "object",
+					"properties": {
+						"slug": {
+							"type": "string"
+						},
+						"ver": {
+							"type": "string"
+						}
+					},
+					"required": ["slug", "ver"]
+				}
 			},
 			"anchors": [
-				"data:{...«»,scriptStartedAt:«»}",
-				"...«».scriptStartedAt!==void 0&&{scriptStartedAt:«».scriptStartedAt}",
-				"...«»,scriptStartedAt:«»}"
+				"«».compactMetadata.preCompactArtifactReadVersions=«»",
+				"«».push({slug:«»,ver:«»})",
+				"=256;function «»(«»){let «»=«».artifactReadVersions;"
 			],
-			"note": "The tick's startedAt, set only by Date.now() (chunk-7gaz5x38.js:4900); written at chunk-9wr2tbyv.js:4351. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"note": "compact_boundary: Zpe() (chunk-m14bt1pz) stores the result of Qos(), which pushes {slug, ver} for each read artifact and keeps at most Z_t=256 items (reversed, then sliced). slug is an artifact slug and ver its version; hrs() and mrs() in the same chunk read both back as strings only."
+		},
+		"system.compactMetadata.preservedMessages.uuids": {
+			"schema": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
+			},
+			"anchors": [
+				"preservedMessages:{anchorUuid:«»,uuids:«»,allUuids:«»}",
+				"function «»(«»){return Array.isArray(«»)?«».filter((«»)=>typeof «»===\"string\"):[]}"
+			],
+			"note": "compact_boundary: U2r() (chunk-m14bt1pz) and the writer in chunk-3waybfq1 build uuids and allUuids from eYn(messages), the uuid of each message, in order and without repeats. Each item is a message uuid string; the readers ekt() and the load repair keep only strings."
+		},
+		"system.compactMetadata.preservedMessages.allUuids": {
+			"schema": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
+			},
+			"anchors": [
+				"preservedMessages:{anchorUuid:«»,uuids:«»,allUuids:«»}",
+				"function «»(«»){return Array.isArray(«»)?«».filter((«»)=>typeof «»===\"string\"):[]}"
+			],
+			"note": "compact_boundary: U2r() (chunk-m14bt1pz) and the writer in chunk-3waybfq1 build uuids and allUuids from eYn(messages), the uuid of each message, in order and without repeats. Each item is a message uuid string; the readers ekt() and the load repair keep only strings."
 		}
 	}
 }
