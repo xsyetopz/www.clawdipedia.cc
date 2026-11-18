@@ -12,7 +12,7 @@ const DOC = [
 	"[^c]: The program, `chunk-bbbbbbbb.js@340`.",
 	"[^d]: The program, `chunk-cccccccc.js` lines 5 to 9.",
 	"[^e]: The program, `chunk-dddddddd.js`.",
-	"[^f]: Probe case `pty.x`. Official page: [Commands](https://example.com).",
+	"[^f]: Probe case `pty.x`. Official page: [Commands](https://docs.example.invalid/commands).",
 ].join("\n");
 
 test("unlocatedCitations accepts a footnote with a chunk and a :N place", () => {

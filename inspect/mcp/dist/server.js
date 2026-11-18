@@ -24744,7 +24744,7 @@ var package_default;
 var init_package = __esm(() => {
   package_default = {
     name: "cc-inspect-mcp",
-    version: "0.18.2",
+    version: "0.18.3",
     private: true,
     description: "MCP server that reads Claude Code session transcripts and the modules inside the Claude Code binary. Source for dist/server.js, which is committed.",
     license: "MIT",
@@ -29222,7 +29222,10 @@ var init_claude_code_transcript = __esm(() => {
             "x-observed": true
           },
           withheld: {
-            type: "array"
+            type: "array",
+            items: {
+              type: "string"
+            }
           },
           base: {
             "x-observed": true,
@@ -29241,7 +29244,28 @@ var init_claude_code_transcript = __esm(() => {
           },
           cacheControl: {
             type: "array",
-            "x-observed": true
+            "x-observed": true,
+            items: {
+              type: "object",
+              properties: {
+                path: {
+                  type: "array",
+                  items: {
+                    anyOf: [
+                      {
+                        type: "string"
+                      },
+                      {
+                        type: "integer",
+                        minimum: 0
+                      }
+                    ]
+                  }
+                },
+                value: {}
+              },
+              required: ["path"]
+            }
           },
           requestDigest: {
             "x-observed": true,
@@ -29254,10 +29278,12 @@ var init_claude_code_transcript = __esm(() => {
                 enum: ["laptop-account-memory", "tool-mark-address"]
               },
               cuts: {
-                type: "number"
+                type: "integer",
+                minimum: 0
               },
               placeholders: {
-                type: "number"
+                type: "integer",
+                minimum: 0
               },
               messages: {
                 type: "array",
@@ -29267,7 +29293,7 @@ var init_claude_code_transcript = __esm(() => {
                 }
               },
               markAddresses: {
-                type: "number",
+                type: "integer",
                 exclusiveMinimum: 0
               }
             }
@@ -30347,7 +30373,20 @@ var init_claude_code_transcript = __esm(() => {
                 type: ["string", "null"]
               },
               hooks: {
-                type: "array"
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    hookEvent: {
+                      type: "string"
+                    },
+                    count: {
+                      type: "integer",
+                      minimum: 2
+                    }
+                  },
+                  required: ["hookEvent", "count"]
+                }
               },
               count: {
                 type: "number"
@@ -30369,17 +30408,113 @@ var init_claude_code_transcript = __esm(() => {
           },
           rendered: {
             type: "array",
-            "x-observed": true
+            "x-observed": true,
+            minItems: 1,
+            items: {
+              type: "object",
+              properties: {
+                content: {
+                  anyOf: [
+                    {
+                      type: "string",
+                      minLength: 1
+                    },
+                    {
+                      type: "array",
+                      minItems: 1,
+                      items: {
+                        type: "object",
+                        properties: {
+                          type: {
+                            const: "text"
+                          },
+                          text: {
+                            type: "string",
+                            minLength: 1
+                          }
+                        },
+                        required: ["type", "text"]
+                      }
+                    }
+                  ]
+                }
+              },
+              required: ["content"]
+            }
           },
           renderedBesideToolResult: {
             type: "boolean",
             "x-observed": true
           },
           renderedWithdrawn: {
-            type: "array"
+            type: "array",
+            minItems: 1,
+            items: {
+              type: "object",
+              properties: {
+                content: {
+                  anyOf: [
+                    {
+                      type: "string",
+                      minLength: 1
+                    },
+                    {
+                      type: "array",
+                      minItems: 1,
+                      items: {
+                        type: "object",
+                        properties: {
+                          type: {
+                            const: "text"
+                          },
+                          text: {
+                            type: "string",
+                            minLength: 1
+                          }
+                        },
+                        required: ["type", "text"]
+                      }
+                    }
+                  ]
+                }
+              },
+              required: ["content"]
+            }
           },
           renderedInHumanTurn: {
-            type: "array"
+            type: "array",
+            minItems: 1,
+            items: {
+              type: "object",
+              properties: {
+                content: {
+                  anyOf: [
+                    {
+                      type: "string",
+                      minLength: 1
+                    },
+                    {
+                      type: "array",
+                      minItems: 1,
+                      items: {
+                        type: "object",
+                        properties: {
+                          type: {
+                            const: "text"
+                          },
+                          text: {
+                            type: "string",
+                            minLength: 1
+                          }
+                        },
+                        required: ["type", "text"]
+                      }
+                    }
+                  ]
+                }
+              },
+              required: ["content"]
+            }
           },
           parentUuid: {
             "x-observed": true,
@@ -30690,7 +30825,385 @@ var init_claude_code_transcript = __esm(() => {
             minLength: 1
           },
           records: {
-            type: "array"
+            type: "array",
+            items: {
+              anyOf: [
+                {
+                  type: "object",
+                  properties: {
+                    response_id: {
+                      type: "string",
+                      pattern: "^msg_(?:staging_|local_)?[A-Za-z0-9]{1,64}$"
+                    },
+                    listed: {
+                      type: "array",
+                      items: {
+                        type: "string",
+                        pattern: "^msg_(?:staging_|local_)?[A-Za-z0-9]{1,64}$"
+                      }
+                    },
+                    mark_sent_by: {
+                      type: "string",
+                      minLength: 1,
+                      maxLength: 256,
+                      pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                    }
+                  },
+                  required: ["response_id"],
+                  additionalProperties: false
+                },
+                {
+                  type: "object",
+                  properties: {
+                    tool_name: {
+                      type: "string"
+                    },
+                    tool_use_id: {
+                      type: "string",
+                      minLength: 1,
+                      maxLength: 256,
+                      pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                    },
+                    event_id: {
+                      type: "string",
+                      minLength: 1,
+                      maxLength: 256,
+                      pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                    },
+                    inner_call_index: {
+                      type: "integer",
+                      minimum: 0,
+                      maximum: 2147483647
+                    },
+                    no_message: {
+                      const: true
+                    },
+                    implicit: {
+                      const: true
+                    },
+                    carried: {
+                      const: true
+                    },
+                    server: {
+                      anyOf: [
+                        {
+                          type: "object",
+                          properties: {
+                            type: {
+                              const: "anthropic"
+                            },
+                            id: {
+                              type: "string",
+                              minLength: 1,
+                              maxLength: 256,
+                              pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                            }
+                          },
+                          required: ["type", "id"],
+                          additionalProperties: false
+                        },
+                        {
+                          type: "object",
+                          properties: {
+                            type: {
+                              const: "claude_ai_connector"
+                            },
+                            id: {
+                              type: "string"
+                            },
+                            directory_id: {
+                              anyOf: [
+                                {
+                                  type: "string",
+                                  minLength: 1,
+                                  maxLength: 256,
+                                  pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                                },
+                                {
+                                  type: "null"
+                                }
+                              ]
+                            }
+                          },
+                          required: ["type", "id", "directory_id"],
+                          additionalProperties: false
+                        },
+                        {
+                          type: "object",
+                          properties: {
+                            type: {
+                              const: "client_configured"
+                            },
+                            transport: {
+                              enum: ["stdio", "http", "in_process"]
+                            },
+                            plugin_id_hash: {
+                              type: "string",
+                              minLength: 1,
+                              maxLength: 256,
+                              pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                            }
+                          },
+                          required: ["type", "transport"],
+                          additionalProperties: false
+                        },
+                        {
+                          type: "object",
+                          properties: {
+                            type: {
+                              const: "unknown"
+                            }
+                          },
+                          required: ["type"],
+                          additionalProperties: false
+                        }
+                      ]
+                    },
+                    mcp_tool_name: {
+                      type: "string",
+                      minLength: 1,
+                      maxLength: 256,
+                      pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                    },
+                    source: {
+                      type: "object",
+                      properties: {
+                        type: {
+                          type: "string",
+                          minLength: 1,
+                          maxLength: 256,
+                          pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                        },
+                        id: {
+                          anyOf: [
+                            {
+                              type: "string",
+                              minLength: 1,
+                              maxLength: 256,
+                              pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                            },
+                            {
+                              type: "null"
+                            }
+                          ]
+                        }
+                      },
+                      required: ["type", "id"],
+                      additionalProperties: false
+                    },
+                    touched: {
+                      type: "object",
+                      properties: {
+                        kind: {
+                          enum: ["artifact", "memory", "session"]
+                        },
+                        id: {
+                          anyOf: [
+                            {
+                              type: "string",
+                              minLength: 1,
+                              maxLength: 256,
+                              pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                            },
+                            {
+                              type: "null"
+                            }
+                          ]
+                        },
+                        action: {
+                          enum: ["read", "write", "copy"]
+                        },
+                        to: {
+                          type: "string",
+                          minLength: 1,
+                          maxLength: 256,
+                          pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                        }
+                      },
+                      required: ["kind", "id", "action"],
+                      additionalProperties: false
+                    }
+                  },
+                  additionalProperties: false,
+                  required: ["tool_use_id"]
+                },
+                {
+                  type: "object",
+                  properties: {
+                    tool_name: {
+                      type: "string"
+                    },
+                    tool_use_id: {
+                      type: "string",
+                      minLength: 1,
+                      maxLength: 256,
+                      pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                    },
+                    event_id: {
+                      type: "string",
+                      minLength: 1,
+                      maxLength: 256,
+                      pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                    },
+                    inner_call_index: {
+                      type: "integer",
+                      minimum: 0,
+                      maximum: 2147483647
+                    },
+                    no_message: {
+                      const: true
+                    },
+                    implicit: {
+                      const: true
+                    },
+                    carried: {
+                      const: true
+                    },
+                    server: {
+                      anyOf: [
+                        {
+                          type: "object",
+                          properties: {
+                            type: {
+                              const: "anthropic"
+                            },
+                            id: {
+                              type: "string",
+                              minLength: 1,
+                              maxLength: 256,
+                              pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                            }
+                          },
+                          required: ["type", "id"],
+                          additionalProperties: false
+                        },
+                        {
+                          type: "object",
+                          properties: {
+                            type: {
+                              const: "claude_ai_connector"
+                            },
+                            id: {
+                              type: "string"
+                            },
+                            directory_id: {
+                              anyOf: [
+                                {
+                                  type: "string",
+                                  minLength: 1,
+                                  maxLength: 256,
+                                  pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                                },
+                                {
+                                  type: "null"
+                                }
+                              ]
+                            }
+                          },
+                          required: ["type", "id", "directory_id"],
+                          additionalProperties: false
+                        },
+                        {
+                          type: "object",
+                          properties: {
+                            type: {
+                              const: "client_configured"
+                            },
+                            transport: {
+                              enum: ["stdio", "http", "in_process"]
+                            },
+                            plugin_id_hash: {
+                              type: "string",
+                              minLength: 1,
+                              maxLength: 256,
+                              pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                            }
+                          },
+                          required: ["type", "transport"],
+                          additionalProperties: false
+                        },
+                        {
+                          type: "object",
+                          properties: {
+                            type: {
+                              const: "unknown"
+                            }
+                          },
+                          required: ["type"],
+                          additionalProperties: false
+                        }
+                      ]
+                    },
+                    mcp_tool_name: {
+                      type: "string",
+                      minLength: 1,
+                      maxLength: 256,
+                      pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                    },
+                    source: {
+                      type: "object",
+                      properties: {
+                        type: {
+                          type: "string",
+                          minLength: 1,
+                          maxLength: 256,
+                          pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                        },
+                        id: {
+                          anyOf: [
+                            {
+                              type: "string",
+                              minLength: 1,
+                              maxLength: 256,
+                              pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                            },
+                            {
+                              type: "null"
+                            }
+                          ]
+                        }
+                      },
+                      required: ["type", "id"],
+                      additionalProperties: false
+                    },
+                    touched: {
+                      type: "object",
+                      properties: {
+                        kind: {
+                          enum: ["artifact", "memory", "session"]
+                        },
+                        id: {
+                          anyOf: [
+                            {
+                              type: "string",
+                              minLength: 1,
+                              maxLength: 256,
+                              pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                            },
+                            {
+                              type: "null"
+                            }
+                          ]
+                        },
+                        action: {
+                          enum: ["read", "write", "copy"]
+                        },
+                        to: {
+                          type: "string",
+                          minLength: 1,
+                          maxLength: 256,
+                          pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                        }
+                      },
+                      required: ["kind", "id", "action"],
+                      additionalProperties: false
+                    }
+                  },
+                  additionalProperties: false,
+                  required: ["event_id"]
+                }
+              ]
+            }
           },
           snapshot: {
             type: "boolean"
@@ -30713,7 +31226,49 @@ var init_claude_code_transcript = __esm(() => {
           sessions: {
             type: "array",
             items: {
-              type: "object"
+              type: "object",
+              properties: {
+                type: {
+                  enum: ["claude_code_session", "unknown"]
+                },
+                id: {
+                  anyOf: [
+                    {
+                      type: "string",
+                      minLength: 1,
+                      maxLength: 256,
+                      pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                    },
+                    {
+                      type: "null"
+                    }
+                  ]
+                },
+                via: {
+                  enum: [
+                    "clear",
+                    "fork",
+                    "branch",
+                    "background",
+                    "cloud",
+                    "teleport",
+                    "teammate",
+                    "launch",
+                    "subprocess",
+                    "resume",
+                    "import",
+                    "compact"
+                  ]
+                },
+                started: {
+                  type: "string",
+                  minLength: 1,
+                  maxLength: 256,
+                  pattern: "^[^\\u0000-\\u001f\\u007f]+$"
+                }
+              },
+              required: ["type", "id", "via"],
+              additionalProperties: false
             }
           }
         },
@@ -31093,321 +31648,6 @@ var init_claude_code_transcript = __esm(() => {
           type: {
             const: "progress"
           },
-          toolUseID: {
-            type: "string"
-          },
-          parentToolUseID: {
-            type: "string"
-          },
-          data: {
-            properties: {
-              type: {
-                enum: [
-                  "hook_progress",
-                  "tool_heartbeat",
-                  "bash_progress",
-                  "powershell_progress",
-                  "mcp_progress",
-                  "agent_progress",
-                  "skill_progress",
-                  "agent_api_retry",
-                  "search_results_received",
-                  "query_update",
-                  "workflow_log",
-                  "workflow_phase",
-                  "workflow_agent",
-                  "artifact_publish_retry"
-                ]
-              },
-              toolName: {
-                type: "string"
-              },
-              elapsedTimeSeconds: {
-                type: "number"
-              },
-              hookEvent: {
-                type: "string"
-              },
-              hookName: {
-                type: "string"
-              },
-              command: {
-                type: "string"
-              },
-              promptText: {
-                type: "string"
-              },
-              statusMessage: {
-                type: "string"
-              },
-              output: {
-                type: "string"
-              },
-              fullOutput: {
-                type: "string"
-              },
-              totalLines: {
-                type: "number"
-              },
-              totalBytes: {
-                type: "number"
-              },
-              taskId: {
-                type: "string"
-              },
-              timeoutMs: {
-                type: "number"
-              },
-              message: {
-                anyOf: [
-                  {
-                    type: "string"
-                  },
-                  {
-                    type: "object"
-                  }
-                ]
-              },
-              prompt: {
-                type: "string"
-              },
-              agentId: {
-                type: "string"
-              },
-              agentType: {
-                type: "string"
-              },
-              isBuiltIn: {
-                type: "boolean"
-              },
-              description: {
-                type: "string"
-              },
-              resolvedModel: {
-                type: "string"
-              },
-              modelsUsed: {
-                type: "array",
-                items: {
-                  type: "string"
-                }
-              },
-              resolved: {
-                type: "boolean"
-              },
-              attempt: {
-                type: "number"
-              },
-              maxRetries: {
-                type: "number"
-              },
-              retryDelayMs: {
-                type: "number"
-              },
-              errorStatus: {
-                type: "number"
-              },
-              errorCategory: {
-                enum: [
-                  "overloaded",
-                  "rate_limit",
-                  "authentication_failed",
-                  "server_error",
-                  "cloud_credential_error",
-                  "unknown"
-                ]
-              },
-              resultCount: {
-                type: "number"
-              },
-              query: {
-                type: "string"
-              },
-              status: {
-                type: ["string", "integer"],
-                enum: ["started", "completed", "failed", "progress", 429, 503]
-              },
-              index: {
-                type: "integer"
-              },
-              title: {
-                type: "string"
-              },
-              kind: {
-                type: "string"
-              },
-              label: {
-                type: "string"
-              },
-              phaseIndex: {
-                type: "number"
-              },
-              phaseTitle: {
-                type: "string"
-              },
-              isolation: {
-                enum: ["worktree", "remote"]
-              },
-              model: {
-                type: "string"
-              },
-              state: {
-                enum: ["start", "progress", "done", "error"]
-              },
-              blocked: {
-                type: "boolean"
-              },
-              error: {
-                type: "string"
-              },
-              queuedAt: {
-                type: "number"
-              },
-              promptPreview: {
-                type: "string"
-              },
-              lastProgressAt: {
-                type: "number"
-              },
-              startedAt: {
-                type: "number"
-              },
-              cached: {
-                type: "boolean"
-              },
-              resultPreview: {
-                type: "string"
-              },
-              fallbackModel: {
-                type: "string"
-              },
-              lastAttemptReason: {
-                enum: ["stalled", "throttled", "user-retry"]
-              },
-              lastToolName: {
-                type: "string"
-              },
-              lastToolSummary: {
-                type: "string"
-              },
-              promptFramed: {
-                type: "boolean"
-              },
-              tokens: {
-                type: "number"
-              },
-              toolCalls: {
-                type: "number"
-              },
-              durationMs: {
-                type: "number"
-              },
-              skipped: {
-                type: "boolean",
-                const: true
-              },
-              remoteSessionId: {
-                type: "string"
-              },
-              toolInput: {
-                properties: {
-                  query: {
-                    type: "string"
-                  },
-                  max: {
-                    type: "number"
-                  },
-                  name: {
-                    type: "string"
-                  }
-                }
-              },
-              toolUseId: {
-                type: "string"
-              },
-              phase: {
-                enum: ["start", "executing", "complete", "error"]
-              },
-              result: {},
-              scriptHelper: {
-                const: true
-              },
-              declined: {
-                const: true
-              },
-              permissionDecision: {
-                type: "object"
-              },
-              toolDenialKind: {
-                type: "string"
-              },
-              userFeedback: {
-                type: "string"
-              },
-              nativeTimeoutMs: {
-                type: "number"
-              },
-              executed: {
-                const: true
-              },
-              shellProgress: {
-                type: "object",
-                properties: {
-                  elapsedTimeSeconds: {
-                    type: "number"
-                  },
-                  totalLines: {
-                    type: "number"
-                  }
-                },
-                required: ["elapsedTimeSeconds", "totalLines"]
-              },
-              mcpContent: {
-                type: "boolean"
-              },
-              delegatedToolNames: {
-                type: "array",
-                items: {
-                  type: "string"
-                }
-              },
-              carriedMarkers: {
-                type: "array",
-                items: {
-                  type: "string"
-                }
-              },
-              notes: {
-                type: "array",
-                items: {
-                  type: "string"
-                }
-              },
-              sandboxViolations: {
-                type: "array"
-              },
-              sandboxed: {
-                type: "boolean"
-              },
-              resultBeforeReadBack: {},
-              servedText: {
-                type: "string"
-              },
-              scriptStartedAt: {
-                type: "number"
-              },
-              maxAttempts: {
-                type: "integer",
-                enum: [2, 3]
-              }
-            }
-          },
-          timestamp: {
-            type: "string"
-          },
-          uuid: {
-            type: "string"
-          },
           parentUuid: {
             anyOf: [
               {
@@ -31471,7 +31711,7 @@ var init_claude_code_transcript = __esm(() => {
             type: "string"
           }
         },
-        $comment: "Registry policy: boundary-cleared. Code sites used: 54."
+        $comment: "Registry policy: boundary-cleared. Code sites used: 0. The program reads this type, and no code in this build writes it, so only `type` is known."
       },
       "queue-operation": {
         type: "object",
@@ -31598,7 +31838,25 @@ var init_claude_code_transcript = __esm(() => {
             not: {}
           },
           snapshotFiles: {
-            type: "array"
+            type: "array",
+            minItems: 1,
+            maxItems: 1,
+            items: {
+              type: "object",
+              properties: {
+                key: {
+                  const: "plan"
+                },
+                path: {
+                  type: "string"
+                },
+                content: {
+                  type: "string",
+                  maxLength: 2000000
+                }
+              },
+              required: ["key", "path", "content"]
+            }
           },
           direction: {
             enum: ["retry", "revert", "sticky"]
@@ -31668,15 +31926,6 @@ var init_claude_code_transcript = __esm(() => {
             },
             required: ["type"]
           },
-          plugin: {
-            type: "string"
-          },
-          id: {
-            type: "string"
-          },
-          persist: {
-            type: "boolean"
-          },
           commands: {
             type: "array",
             items: {
@@ -31714,7 +31963,11 @@ var init_claude_code_transcript = __esm(() => {
             type: "string"
           },
           foldedUuids: {
-            type: "array"
+            type: "array",
+            items: {
+              type: "string"
+            },
+            minItems: 1
           },
           hookCount: {
             type: "number",
@@ -31722,19 +31975,44 @@ var init_claude_code_transcript = __esm(() => {
           },
           hookInfos: {
             type: "array",
-            "x-observed": true
+            "x-observed": true,
+            items: {
+              type: "object",
+              properties: {
+                command: {
+                  type: "string"
+                },
+                promptText: {
+                  type: "string"
+                },
+                durationMs: {
+                  type: "number"
+                }
+              },
+              required: ["command"]
+            }
           },
           hookErrors: {
             type: "array",
-            "x-observed": true
+            "x-observed": true,
+            items: {
+              type: "string"
+            }
           },
           failedHookErrorIndexes: {
             type: "array",
-            "x-observed": true
+            "x-observed": true,
+            items: {
+              type: "integer",
+              minimum: 0
+            }
           },
           hookAdditionalContext: {
             type: "array",
-            "x-observed": true
+            "x-observed": true,
+            items: {
+              type: "string"
+            }
           },
           preventedContinuation: {
             type: "boolean",
@@ -31921,7 +32199,7 @@ var init_claude_code_transcript = __esm(() => {
             }
           },
           isDisplayOnly: {
-            type: "boolean"
+            const: true
           },
           submitUuid: {
             type: "string"
@@ -31954,10 +32232,26 @@ var init_claude_code_transcript = __esm(() => {
                 type: "boolean"
               },
               preCompactDiscoveredTools: {
-                type: "array"
+                type: "array",
+                items: {
+                  type: "string"
+                }
               },
               preCompactArtifactReadVersions: {
-                type: "array"
+                type: "array",
+                maxItems: 256,
+                items: {
+                  type: "object",
+                  properties: {
+                    slug: {
+                      type: "string"
+                    },
+                    ver: {
+                      type: "string"
+                    }
+                  },
+                  required: ["slug", "ver"]
+                }
               },
               preservedSegment: {
                 type: "object",
@@ -31980,10 +32274,16 @@ var init_claude_code_transcript = __esm(() => {
                     type: "string"
                   },
                   uuids: {
-                    type: "array"
+                    type: "array",
+                    items: {
+                      type: "string"
+                    }
                   },
                   allUuids: {
-                    type: "array"
+                    type: "array",
+                    items: {
+                      type: "string"
+                    }
                   }
                 }
               }
@@ -32177,7 +32477,7 @@ var init_claude_code_transcript = __esm(() => {
             type: "string"
           }
         },
-        $comment: "Registry policy: transcript. Code sites used: 43."
+        $comment: "Registry policy: transcript. Code sites used: 42."
       },
       tag: {
         type: "object",
@@ -32264,7 +32564,20 @@ var init_claude_code_transcript = __esm(() => {
                 ]
               },
               commands: {
-                type: "array"
+                type: "array",
+                minItems: 1,
+                items: {
+                  type: "object",
+                  properties: {
+                    command: {
+                      type: "string"
+                    },
+                    tool: {
+                      type: "string"
+                    }
+                  },
+                  required: ["command", "tool"]
+                }
               }
             }
           },
@@ -32843,7 +33156,40 @@ var init_claude_code_transcript = __esm(() => {
             required: ["decision", "source"]
           },
           sandboxViolations: {
-            type: "array"
+            type: "array",
+            maxItems: 20,
+            items: {
+              anyOf: [
+                {
+                  type: "object",
+                  properties: {
+                    kind: {
+                      const: "network"
+                    },
+                    host: {
+                      type: "string"
+                    },
+                    port: {
+                      type: "integer",
+                      minimum: 0,
+                      maximum: 65535
+                    }
+                  },
+                  required: ["kind", "host"],
+                  additionalProperties: false
+                },
+                {
+                  type: "object",
+                  properties: {
+                    kind: {
+                      const: "other"
+                    }
+                  },
+                  required: ["kind"],
+                  additionalProperties: false
+                }
+              ]
+            }
           },
           sandboxed: {
             "x-observed": true,
