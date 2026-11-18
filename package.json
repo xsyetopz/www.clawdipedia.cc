@@ -8,7 +8,7 @@
 		"catalog": {
 			"@types/bun": "1.4.4",
 			"@types/node": "26.6.6",
-			"eslint-plugin-jsdoc": "65.4.9",
+			"eslint-plugin-jsdoc": "65.4.11",
 			"markdownlint-cli2": "0.24.1",
 			"markdownlint-rule-title-case-style": "0.4.3",
 			"oxlint": "1.94.0",
@@ -95,7 +95,7 @@
 		"oxlint-tsgolint": "catalog:",
 		"typescript": "catalog:",
 		"typescript-bedrock": "catalog:",
-		"wrangler": "^4.163.0"
+		"wrangler": "^4.164.0"
 	},
 	"overrides": {
 		"@types/node": "26.6.6"
