@@ -6502,5 +6502,367 @@
 			],
 			"note": "compact_boundary: U2r() (chunk-m14bt1pz) and the writer in chunk-3waybfq1 build uuids and allUuids from eYn(messages), the uuid of each message, in order and without repeats. Each item is a message uuid string; the readers ekt() and the load repair keep only strings."
 		}
+	},
+	"unsent": {
+		"progress.data.toolInput.query": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": [
+				"data:{type:\"repl_tool_call\",toolName:«»,toolInput:«»,toolUseId:«»,phase:«»,...«»,scriptHelper:!0}}",
+				"searchTools:(«»,«»)=>«»(\"searchTools\",{query:«»(«»),...typeof «»===\"number\"&&{max:«»}}",
+				"=(«»)=>typeof «»===\"string\"?«».slice(0,«»):`<non-string ${typeof «»}>`"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). The script helper searchTools(query, max) sets toolInput {query: h(query)}; h() returns the string cut to its limit, or the string `<non-string TYPE>` (chunk-t31w6vd4.js:78808)."
+		},
+		"progress.data.toolInput.max": {
+			"schema": {
+				"type": "number"
+			},
+			"anchors": [
+				"data:{type:\"repl_tool_call\",toolName:«»,toolInput:«»,toolUseId:«»,phase:«»,...«»,scriptHelper:!0}}",
+				"searchTools:(«»,«»)=>«»(\"searchTools\",{query:«»(«»),...typeof «»===\"number\"&&{max:«»}}"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). The script helper searchTools sets max only when `typeof max===\"number\"` (chunk-t31w6vd4.js:78808)."
+		},
+		"progress.data.toolInput.name": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": [
+				"data:{type:\"repl_tool_call\",toolName:«»,toolInput:«»,toolUseId:«»,phase:«»,...«»,scriptHelper:!0}}",
+				"describeTool:(«»)=>«»(\"describeTool\",{name:«»(«»)}",
+				"=(«»)=>typeof «»===\"string\"?«».slice(0,«»):`<non-string ${typeof «»}>`"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). The script helper describeTool(name) sets toolInput {name: h(name)}; h() always returns a string (chunk-t31w6vd4.js:78808)."
+		},
+		"progress.data.toolUseId": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": [
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,",
+				"=«»?.toolUseID??`${«»}${«»()}`"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). toolUseId is V = the call's toolUseID or a template string with a generated suffix (chunk-t31w6vd4.js:117041); the script helper passes its own toolUseID string (chunk-t31w6vd4.js:78808)."
+		},
+		"progress.data.phase": {
+			"schema": {
+				"enum": ["start", "executing", "complete", "error"]
+			},
+			"anchors": [
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"start\"}}",
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«».notes},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"error\",error:«»,...«»&&{declined:!0},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{toolDenialKind:«»},...«»!==void 0&&{userFeedback:«»}}",
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"executing\",nativeTimeoutMs:«»,...«»&&{executed:!0}}",
+				"data:{type:\"repl_tool_call\",toolName:«»,toolInput:«»,toolUseId:«»,phase:«»,...«»,scriptHelper:!0}}",
+				"«»(\"start\");try{let «»=await «»();return «»(\"complete\",{result:«»}),«»}catch(«»){throw «»(\"error\","
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). Each emit site sets phase to a literal: \"start\", \"executing\", \"complete\" or \"error\"; the script helper passes the same three of them (chunk-t31w6vd4.js:78808, 117600-134500)."
+		},
+		"progress.data.result": {
+			"schema": {},
+			"anchors": [
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«».notes},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
+				"phase:\"complete\",executed:!0,result:«».value,",
+				"return «»(\"complete\",{result:«»}),«»"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). Any JSON value: the tool's output data (the value the tool returned, or the joined text of an MCP text result) at chunk-t31w6vd4.js:120748 and 124604, or the script helper's return value (chunk-t31w6vd4.js:78808). The code puts no type on it."
+		},
+		"progress.data.scriptHelper": {
+			"schema": {
+				"const": true
+			},
+			"anchors": [
+				"data:{type:\"repl_tool_call\",toolName:«»,toolInput:«»,toolUseId:«»,phase:«»,...«»,scriptHelper:!0}}"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). Set only as the literal `scriptHelper:!0` (chunk-t31w6vd4.js:78808)."
+		},
+		"progress.data.declined": {
+			"schema": {
+				"const": true
+			},
+			"anchors": [
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"error\",error:«»,...«»&&{declined:!0},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{toolDenialKind:«»},...«»!==void 0&&{userFeedback:«»}}"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). Set only as `...Ne&&{declined:!0}` (chunk-t31w6vd4.js:118003)."
+		},
+		"progress.data.permissionDecision": {
+			"schema": {
+				"type": "object",
+				"properties": {
+					"decision": {
+						"enum": ["accept", "reject", "cancelled"]
+					},
+					"source": {
+						"type": "string"
+					},
+					"reasonType": {
+						"type": "string"
+					},
+					"autoModeRule": {
+						"type": "object",
+						"properties": {
+							"list": {
+								"enum": ["allow", "soft_deny"]
+							},
+							"name": {
+								"type": "string"
+							}
+						},
+						"required": ["list", "name"]
+					},
+					"ruleSource": {
+						"type": "string"
+					},
+					"grantScope": {
+						"type": "string"
+					},
+					"reasonCode": {
+						"type": "string"
+					},
+					"circuitBreaker": {
+						"type": "string"
+					},
+					"classifierCategory": {
+						"type": "string"
+					},
+					"pluginApproval": {
+						"enum": ["applied", "refused"]
+					}
+				},
+				"required": ["decision", "source"]
+			},
+			"anchors": [
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"error\",error:«»,...«»&&{declined:!0},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{toolDenialKind:«»},...«»!==void 0&&{userFeedback:«»}}",
+				"return{decision:«»,source:«»,...«»!==void 0&&!«»&&{reasonType:«».type},...«»?.type===\"classifier\"&&«».autoModeRule!==void 0&&!«»&&{autoModeRule:«».autoModeRule},...«»!==void 0&&{ruleSource:«»},...«»!==void 0&&{grantScope:«»},",
+				"return «».length>0?{list:«».list,name:«»}:void 0}"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). The permission record from the authorize step (chunk-t31w6vd4.js:127717): SCt() builds {decision, source, reasonType?, autoModeRule?, ruleSource?, grantScope?, reasonCode?, circuitBreaker?, classifierCategory?, pluginApproval?} (chunk-m14bt1pz.js:4565736). autoModeRule is {list:\"allow\"|\"soft_deny\", name} (chunk-270tbjq0.js:34052); pluginApproval is \"applied\" or \"refused\" (chunk-m14bt1pz.js:4566779). The user line's permissionDecision has the same source."
+		},
+		"progress.data.toolDenialKind": {
+			"schema": {
+				"enum": [
+					"user-rejected",
+					"permission-rule",
+					"automode-blocked",
+					"automode-unavailable",
+					"automode-parsing-error",
+					"interrupted",
+					"cancelled"
+				]
+			},
+			"anchors": [
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"error\",error:«»,...«»&&{declined:!0},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{toolDenialKind:«»},...«»!==void 0&&{userFeedback:«»}}",
+				"[\"user-rejected\",\"permission-rule\",\"automode-blocked\",\"automode-unavailable\",\"automode-parsing-error\",\"interrupted\",\"cancelled\"]"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). The denial kind of the refused call: the literal \"user-rejected\" (chunk-t31w6vd4.js:118262, 126168) or a kind from dSe() and the permission step, which are members of the program's kind list (chunk-rj3e7agr.js:245661)."
+		},
+		"progress.data.userFeedback": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": [
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"error\",error:«»,...«»&&{declined:!0},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{toolDenialKind:«»},...«»!==void 0&&{userFeedback:«»}}",
+				"=«».toolDenialKind,«»=«».userFeedback,"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). The text the user typed when rejecting the call: nt.userFeedback of the authorize result (chunk-t31w6vd4.js:127801), which the permission step sets from Re.userFeedback of an ask (chunk-t31w6vd4.js:115818)."
+		},
+		"progress.data.nativeTimeoutMs": {
+			"schema": {
+				"type": "number"
+			},
+			"anchors": [
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"executing\",nativeTimeoutMs:«»,...«»&&{executed:!0}}",
+				"return «»!==void 0?Math.min(«»(«»,«»()),«»):Math.min(«»(«»,«»()),«»());if(«»()&&(«».name===«»||«».name===«»))return;if(«».has(«».name))return 1e4;return}"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). Qr() returns Math.min(...) for Bash and PowerShell, 1e4 for some tools, or undefined (chunk-t31w6vd4.js:72414); the emit site at chunk-t31w6vd4.js:118629 passes it."
+		},
+		"progress.data.executed": {
+			"schema": {
+				"const": true
+			},
+			"anchors": [
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"executing\",nativeTimeoutMs:«»,...«»&&{executed:!0}}",
+				"phase:\"complete\",executed:!0,result:«».value,"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). Set only as the literal `executed:!0` (chunk-t31w6vd4.js:118629, 124604)."
+		},
+		"progress.data.shellProgress": {
+			"schema": {
+				"type": "object",
+				"properties": {
+					"elapsedTimeSeconds": {
+						"type": "number"
+					},
+					"totalLines": {
+						"type": "number"
+					}
+				}
+			},
+			"anchors": [
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"executing\",shellProgress:«»}",
+				"={elapsedTimeSeconds:«».data.elapsedTimeSeconds,totalLines:«».data.totalLines},"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). Y = {elapsedTimeSeconds, totalLines}, copied from the numbers of a bash_progress or powershell_progress line (chunk-t31w6vd4.js:131075)."
+		},
+		"progress.data.mcpContent": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«».notes},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
+				"=«».isMcp===!0,"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). mcpContent is `tt&&Array.isArray(ne)&&ie===ne` with tt = `e.isMcp===!0`, so a boolean (chunk-t31w6vd4.js:117633, 120748)."
+		},
+		"progress.data.delegatedToolNames": {
+			"schema": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
+			},
+			"anchors": [
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«».notes},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
+				"if(«»!==void 0)return «».filter((«»)=>typeof «»===\"string\").map(«»);"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). Ge = Oii(result).filter(...): Oii() returns the string entries of toolsUsed, or the names split from toolsUsedLine (chunk-eb5tp0ww.js:7741); set only when not empty."
+		},
+		"progress.data.carriedMarkers": {
+			"schema": {
+				"type": "array",
+				"items": {
+					"enum": [
+						"<artifact-content-authored-by-others/>",
+						"<remote-control-device-report/>"
+					]
+				}
+			},
+			"anchors": [
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«».notes},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
+				",«»=[«»,«»];function «»(«»){return «».filter((«»)=>«».includes(«»))}",
+				"=\"<artifact-content-authored-by-others/>\","
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). Ye = hs(...) = H4e(content), which filters the marker list ih = [ff, nE] (chunk-rj3e7agr.js:152076, 152573). ff is \"<artifact-content-authored-by-others/>\" (chunk-6aew3gyn.js:520) and nE is \"<remote-control-device-report/>\" (chunk-rj3e7agr.js:152020)."
+		},
+		"progress.data.notes": {
+			"schema": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
+			},
+			"anchors": [
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«».notes},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
+				"nt={joined:«»,notes:«»._notes}"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). nt.notes is the _notes list: the MCP text parts (strings) that did not parse as the one JSON object (chunk-t31w6vd4.js:120200-120700)."
+		},
+		"progress.data.sandboxViolations": {
+			"schema": {
+				"type": "array",
+				"maxItems": 20,
+				"items": {
+					"anyOf": [
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "network"
+								},
+								"host": {
+									"type": "string"
+								},
+								"port": {
+									"type": "integer",
+									"minimum": 0,
+									"maximum": 65535
+								}
+							},
+							"required": ["kind", "host"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"kind": {
+									"const": "other"
+								}
+							},
+							"required": ["kind"]
+						}
+					]
+				}
+			},
+			"anchors": [
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«».notes},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
+				"sandboxViolations:«»,sandboxed:«»})",
+				"let «»=[],«»=new Set;for(let{line:«»}of «»){let «»=«»(«»),«»=«».kind===\"network\"?`n ${«».host} ${«».port}`:\"o\";"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). The violations of the shell call: DNo() returns hxs(...), a list of {kind:\"network\", host, port?} or {kind:\"other\"} with no repeats, cut at 20 (chunk-m14bt1pz.js:3754955); the ShellError class carries the same list (chunk-z9xgg67q.js:2901). The user line's sandboxViolations has the same type."
+		},
+		"progress.data.sandboxed": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«».notes},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
+				"sandboxViolations:«»,sandboxed:«»})"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). sandboxed is yo = jn = Fm(...), which returns true or false (chunk-m14bt1pz.js:1581106, 5727048)."
+		},
+		"progress.data.resultBeforeReadBack": {
+			"schema": {
+				"type": "object"
+			},
+			"anchors": [
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«».notes},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). De is the Bash or PowerShell output data before read-back, set only for those two tools and only when it differs from the read-back value (chunk-t31w6vd4.js:120748). Those tools return a data object ({stdout, stderr, interrupted, ...}, chunk-8vhagegy.js:120488)."
+		},
+		"progress.data.servedText": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": [
+				"phase:\"complete\",executed:!0,result:«».value,...«»!==void 0&&{servedText:«»}}",
+				"return «»!==null&&typeof «»===\"object\"&&\"result\"in «»&&typeof «».result===\"string\"?«».result:void 0}"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). Qe = BOs(name, value), which returns value.result only when it is a string (chunk-bw2ty92s.js:1728)."
+		},
+		"progress.data.scriptStartedAt": {
+			"schema": {
+				"type": "number"
+			},
+			"anchors": [
+				"=({startedAt:«»,tick:«»})=>«»({type:\"progress\",toolUseID:«».toolUseId,data:{...«»,scriptStartedAt:«»}})",
+				".startedAt=Date.now(),"
+			],
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:117600-137700). The tick replay sets scriptStartedAt to the eval's startedAt (chunk-9wr2tbyv.js:4351), which is Date.now() in milliseconds (chunk-7gaz5x38.js:4901)."
+		},
+		"system.plugin": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": [
+				"=(«»,«»)=>({type:\"system\",subtype:\"placed\",plugin:«»,id:«».id,content:\"\",persist:!1,",
+				"let «»=«»(«»,«».plugin);return «».keep([«»])"
+			],
+			"note": "Never written in 2.1.327: the `placed` system line has `persist:!1`, and the transcript writer drops each line with persist false (chunk-m14bt1pz.js:696693). ibo() builds it (chunk-m14bt1pz.js:4839961). plugin is the calling plugin's name, the string o.plugin of the ui.place call context (chunk-m14bt1pz.js:4840529, 4874193)."
+		},
+		"system.id": {
+			"schema": {
+				"type": "string",
+				"minLength": 1,
+				"maxLength": 64,
+				"pattern": "^[A-Za-z0-9_-]+$"
+			},
+			"anchors": [
+				"=(«»,«»)=>({type:\"system\",subtype:\"placed\",plugin:«»,id:«».id,content:\"\",persist:!1,",
+				"\"ui.place\":{check:(«»)=>«»(«»?.id),run:(«»,«»)=>«»(«»,«»,«»())}",
+				"=64;function «»(«»){return typeof «»===\"string\"&&«».length<=«»&&/^[A-Za-z0-9_-]+$/.test(«»)?void 0:"
+			],
+			"note": "Never written in 2.1.327: the `placed` system line has `persist:!1`, and the transcript writer drops each line with persist false (chunk-m14bt1pz.js:696693). ibo() builds it (chunk-m14bt1pz.js:4839961). id is the ui.place argument's id, which the call check QQe() accepts only as a string of 1 to 64 letters, digits, _ or - (chunk-b0yr0k8v.js:187459, chunk-m14bt1pz.js:4874193)."
+		}
 	}
 }

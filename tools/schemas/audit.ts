@@ -90,24 +90,31 @@ export const shareSamples = (
 };
 
 /**
- * Mark each row "removed" when the current schema no longer has its path: the generator found that no line the
- * program writes holds the field (for example, a row the transcript writer drops), so no type is owed for it.
+ * Mark each row whose path the current schema no longer has: the generator found that the program never writes or
+ * sends the field (for example, a row the transcript writer drops). Such a row is "removed" only when the fixture's
+ * "unsent" map types it from code the program still has; with no unsent entry it is "no entry", and with an anchor
+ * the program lacks it is "anchor gone".
  */
 export const markRemoved = (
 	rows: AuditRow[],
 	present: (path: string) => boolean,
+	manual: ManualFixture | undefined,
+	has: (anchor: string) => boolean,
 ): AuditRow[] =>
-	rows.map((r) =>
-		present(r.path)
-			? r
-			: {
-					path: r.path,
-					verdict: "removed",
-					missing: [],
-					missed: [],
-					samples: r.samples,
-				},
-	);
+	rows.map((r) => {
+		if (present(r.path)) {
+			return r;
+		}
+		const entry = manual?.unsent?.[r.path];
+		const missing = entry?.anchors.filter((a) => !has(a)) ?? [];
+		let verdict: Verdict = "removed";
+		if (entry === undefined) {
+			verdict = "no entry";
+		} else if (missing.length > 0 || entry.anchors.length === 0) {
+			verdict = "anchor gone";
+		}
+		return { path: r.path, verdict, missing, missed: [], samples: r.samples };
+	});
 
 const PASS: ReadonlySet<Verdict> = new Set([
 	"code only",

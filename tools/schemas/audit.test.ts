@@ -136,15 +136,40 @@ test("a conflict is not lifted by a sampled field", () => {
 	expect(auditPasses(out)).toBe(false);
 });
 
-test("a field the current schema lacks is 'removed', and the audit passes", () => {
+test("a field the current schema lacks is 'removed' when an unsent entry types it", () => {
 	// Arrange
-	const rows = auditFields(["gone.id", "a.id"], manual, has, {});
+	const typed = {
+		...manual,
+		unsent: {
+			"gone.id": { schema: { type: "string" }, anchors: ["id:"], note: "" },
+		},
+	};
+	const rows = auditFields(["gone.id", "a.id"], typed, has, {});
 
 	// Act
-	const out = markRemoved(rows, (p) => p !== "gone.id");
+	const out = markRemoved(rows, (p) => p !== "gone.id", typed, has);
 
 	// Assert
 	expect(out[0]).toMatchObject({ path: "gone.id", verdict: "removed" });
 	expect(out[1]?.verdict).toBe("code only");
 	expect(auditPasses(out)).toBe(true);
+});
+
+test("a field the current schema lacks fails without a live unsent entry", () => {
+	// Arrange
+	const typed = {
+		...manual,
+		unsent: {
+			"old.id": { schema: { type: "string" }, anchors: ["x:"], note: "" },
+		},
+	};
+	const rows = auditFields(["gone.id", "old.id"], typed, has, {});
+
+	// Act
+	const out = markRemoved(rows, () => false, typed, has);
+
+	// Assert
+	expect(out.map((r) => r.verdict)).toEqual(["no entry", "anchor gone"]);
+	expect(out[1]?.missing).toEqual(["x:"]);
+	expect(auditPasses(out)).toBe(false);
 });

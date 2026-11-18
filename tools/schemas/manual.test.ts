@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { anchorIn, applyManual } from "./manual.ts";
+import { anchorIn, applyManual, staleUnsent } from "./manual.ts";
 
 const unk = { "x-unverified": true };
 const schema = {
@@ -124,5 +124,34 @@ describe("anchorIn", () => {
 	test("does not match when the fixed text differs", () => {
 		expect(has("name:«»().required()")).toBe(false);
 		expect(has("«».«»")).toBe(false);
+	});
+});
+
+const unsentEntry = (anchors: string[]) => ({
+	schema: { type: "string" },
+	anchors,
+	note: "",
+});
+
+describe("staleUnsent", () => {
+	test("reports an unsent entry whose anchor is gone or whose path the schema has", () => {
+		// Arrange
+		const f = {
+			...fx(["id:"]),
+			unsent: {
+				"a.gone": unsentEntry(["id:"]),
+				"b.lost": unsentEntry(["lost:"]),
+				"b.id": unsentEntry(["id:"]),
+			},
+		};
+
+		// Act
+		const out = staleUnsent(f, schema, (s) => s === "id:");
+
+		// Assert
+		expect(out).toEqual([
+			"unsent b.lost: anchor not in the program: lost:",
+			'unsent b.id: the schema has this path; move the entry to "fields"',
+		]);
 	});
 });

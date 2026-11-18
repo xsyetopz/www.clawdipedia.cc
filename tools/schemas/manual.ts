@@ -3,6 +3,9 @@
 // strings copied from the program at the code that writes the field. code.ts applies an entry only when every
 // anchor is still in the program; then the field gets the type and loses "x-unverified", because the code shows
 // it. An entry whose anchor is gone, or whose path is no longer unverified, is stale.
+// The optional "unsent" map types fields the program builds but never writes or sends (a line the transcript writer
+// drops, a span whose creator returns first). The schema leaves those paths out, so their types live here, and the
+// audit (audit.ts) reads them. An unsent entry is stale when its anchor is gone or the schema has its path again.
 import { join } from "node:path";
 
 import {
@@ -28,6 +31,8 @@ export interface ManualFixture {
 	$comment: string;
 	version: string;
 	fields: Record<string, ManualEntry>;
+	/** Types of fields the program builds but never writes or sends, which the schema leaves out. */
+	unsent?: Record<string, ManualEntry>;
 }
 
 export const MANUAL_DIR = join(import.meta.dir, "manual");
@@ -45,7 +50,10 @@ const isManualFixture = (v: unknown): v is ManualFixture =>
 	typeof v["$comment"] === "string" &&
 	typeof v["version"] === "string" &&
 	isRecord(v["fields"]) &&
-	Object.values(v["fields"]).every((e) => isManualEntry(e));
+	Object.values(v["fields"]).every((e) => isManualEntry(e)) &&
+	(v["unsent"] === undefined ||
+		(isRecord(v["unsent"]) &&
+			Object.values(v["unsent"]).every((e) => isManualEntry(e))));
 
 export const readManual = async (
 	schemaFile: string,
@@ -178,6 +186,25 @@ const isOpen = (node: Json): boolean =>
 	node["x-unverified"] === true ||
 	(node["type"] === "array" && !("items" in node));
 
+/** The unsent entries (see ManualFixture) whose anchor is gone, or whose path `schema` has again. */
+export const staleUnsent = (
+	fx: ManualFixture,
+	schema: Json,
+	has: (s: string) => boolean,
+): string[] => {
+	const present = new Set<string>();
+	walkFields(schema, (p) => present.add(p));
+	return Object.entries(fx.unsent ?? {}).flatMap(([p, e]) => {
+		const gone = e.anchors.filter((a) => !has(a));
+		if (e.anchors.length === 0 || gone.length > 0) {
+			return [`unsent ${p}: anchor not in the program: ${gone.join(" | ")}`];
+		}
+		return present.has(p)
+			? [`unsent ${p}: the schema has this path; move the entry to "fields"`]
+			: [];
+	});
+};
+
 /**
  * Give each open field (see isOpen) with a live entry its hand-read type. Works on a copy, because the builders
  * share one `{ "x-unverified": true }` node between fields. `has` tells if a string is in the program. `missed` lists
@@ -227,5 +254,6 @@ export const applyManual = async (
 			stale.push(`${p}: no x-unverified field or item-less array at this path`);
 		}
 	}
+	stale.push(...staleUnsent(fx, schema, has));
 	return { schema, n, stale, missed };
 };

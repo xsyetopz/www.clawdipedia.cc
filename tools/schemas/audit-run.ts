@@ -2,7 +2,7 @@
 // Audits the hand-read types of every field that was "x-unverified" in schemas/ at the git ref REF (see audit.ts).
 // The program is the build of src/version.ts, loaded as tools/schemas/code.ts loads it. --raw DIR holds the counts
 // from `bun run schemas:observe -- --raw DIR`; without it, each field has no samples. --list prints every row.
-// A field the current schema no longer has is "removed". Sets exit code 1 when a field has no entry, an anchor the program lacks, or a payload type its entry does not allow.
+// A field the current schema no longer has is "removed" when the fixture's "unsent" map types it. Sets exit code 1 when a field has no entry, an anchor the program lacks, or a payload type its entry does not allow.
 import { CLAUDE_CODE_VERSION } from "../../src/version.ts";
 import {
 	auditFields,
@@ -77,6 +77,8 @@ const auditFile = async (file: string): Promise<AuditRow[]> => {
 	return markRemoved(
 		shareSamples(auditFields(paths, manual, has, await readSeen(file)), manual),
 		(p) => present.has(p),
+		manual,
+		has,
 	);
 };
 
