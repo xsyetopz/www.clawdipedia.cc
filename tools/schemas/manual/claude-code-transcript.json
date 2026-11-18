@@ -5961,8 +5961,12 @@
 				"type": "string",
 				"pattern": "^[a-z][a-z0-9_]{0,63}$"
 			},
-			"anchors": ["/^[a-z][a-z0-9_]{0,63}$/", ".apiErrorType="],
-			"note": "Writer sets apiErrorType only from the helper at chunk-asj6f58y.js@340006, which returns e.error.error.type only if it is a string matching /^[a-z][a-z0-9_]{0,63}$/."
+			"anchors": [
+				"if(«»!==void 0)«».apiErrorType=«»",
+				"/^[a-z][a-z0-9_]{0,63}$/",
+				"return typeof «»===\"string\"&&«».test(«»)?«»:void 0}"
+			],
+			"note": "Set only from Dqa (chunk-asj6f58y.js:340006), which returns e.error.error.type only if it is a string matching KA=/^[a-z][a-z0-9_]{0,63}$/ (:339901)."
 		},
 		"assistant.cutInUnfinishedBlock": {
 			"schema": {
@@ -6045,8 +6049,11 @@
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["rowUuid:"],
-			"note": "plugin_note rowUuid is the row uuid (chunk-asj6f58y.js); the reader checks typeof string."
+			"anchors": [
+				"type:\"plugin_note\",...«»!==void 0&&{plugin:«»},rowUuid:«»,content:[...«»]",
+				"{rowUuid:«».uuid,"
+			],
+			"note": "plugin_note rowUuid is the user row uuid (chunk-pkvf3w4c.js:3030); the reader checks typeof string (chunk-asj6f58y.js:716987)."
 		},
 		"attachment.attachment.content": {
 			"schema": {
@@ -6078,8 +6085,12 @@
 				"type": "string",
 				"minLength": 1
 			},
-			"anchors": ["{type:\"data-flow-incomplete\",v:1,sessionId:"],
-			"note": "Key from agentsOwing(), kept only when non-empty (t!==\"\"); a string."
+			"anchors": [
+				"{type:\"data-flow-incomplete\",v:1,sessionId:«»,agentId:«»}",
+				"if(«»!==\"\"&&(«».owed>0||«».incomplete))",
+				"«»=«»===void 0?{}:{agentId:«»}"
+			],
+			"note": "Key from agentsOwing(), kept only when non-empty (chunk-ytkczbf2.js:28532), or an id that passed o0's /^[\\w-]{1,128}$/ in g0t (chunk-91rzah6f.js:2179)."
 		},
 		"data-flow-records.sessionId": {
 			"schema": {
@@ -6093,8 +6104,12 @@
 				"type": "string",
 				"minLength": 1
 			},
-			"anchors": ["{type:\"data-flow-records\",v:1,sessionId:"],
-			"note": "Key from agentsOwing(), kept only when non-empty (t!==\"\"); a string."
+			"anchors": [
+				"{type:\"data-flow-records\",v:1,sessionId:«»,agentId:«»,records:",
+				"if(«»!==\"\"&&(«».owed>0||«».incomplete))",
+				"«»=«»===void 0?{}:{agentId:«»}"
+			],
+			"note": "Key from agentsOwing(), kept only when non-empty (chunk-ytkczbf2.js:28532), or an id that passed o0's /^[\\w-]{1,128}$/ in g0t (chunk-91rzah6f.js:2179)."
 		},
 		"data-flow-records.records": {
 			"schema": {
@@ -6310,8 +6325,12 @@
 			"schema": {
 				"const": true
 			},
-			"anchors": ["?!0:void 0", "holdsPersonsWords:"],
-			"note": "Every writer yields !0 or undefined (chunk-m14bt1pz.js@5788183; chunk-c7v3vnh0.js)."
+			"anchors": [
+				"holdsPersonsWords:«»?!0:void 0",
+				"...«»&&{holdsPersonsWords:«»}",
+				"&&{holdsPersonsWords:!0}"
+			],
+			"note": "Every writer yields !0 or undefined (chunk-m14bt1pz.js:4762732, :4778103, :5789935; chunk-c7v3vnh0.js:88889, :108631)."
 		},
 		"progress.data.toolInput.query": {
 			"schema": {
@@ -6338,27 +6357,39 @@
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["toolUseId:"],
-			"note": "Generated id string or the tool_use id. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": [
+				"data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"start\"}",
+				"«»=«»?.toolUseID??`${«»}${«»()}`"
+			],
+			"note": "The id @ of every repl_tool_call row is the caller's toolUseID or a template string (chunk-t31w6vd4.js:117041). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.phase": {
 			"schema": {
 				"enum": ["start", "executing", "complete", "error"]
 			},
-			"anchors": ["phase:\"executing\"", "phase:\"complete\""],
-			"note": "Literal phase values at the write sites. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": [
+				"data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"start\"}",
+				"toolUseId:«»,phase:\"executing\",nativeTimeoutMs:«»",
+				"toolUseId:«»,phase:\"complete\",executed:!0",
+				"toolUseId:«»,phase:\"error\",error:«»",
+				"toolUseId:«»,phase:«»,...«»,scriptHelper:!0}"
+			],
+			"note": "Literal phases at chunk-t31w6vd4.js:119436, :118629, :120748, :124604, :118003, :134267; the helper row at :78808 passes \"start\", \"complete\" or \"error\". Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.result": {
 			"schema": {},
-			"anchors": ["result:"],
-			"note": "Any JSON tool result; passed through unchanged. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": [
+				"phase:\"complete\",executed:!0,result:«».value",
+				"phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined"
+			],
+			"note": "Any JSON tool result, passed through (chunk-t31w6vd4.js:120748, :124604). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.scriptHelper": {
 			"schema": {
 				"const": true
 			},
-			"anchors": ["scriptHelper:!0"],
-			"note": "Literal true (chunk-t31w6vd4.js@78808). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": ["toolUseId:«»,phase:«»,...«»,scriptHelper:!0}"],
+			"note": "Literal true (chunk-t31w6vd4.js:78808). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.declined": {
 			"schema": {
@@ -6371,36 +6402,51 @@
 			"schema": {
 				"type": "object"
 			},
-			"anchors": ["permissionDecision:"],
-			"note": "Same permission record as the user line; enums not proven here. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": [
+				"...«»&&{declined:!0},...«»!==void 0&&{permissionDecision:«»}",
+				"«»=«».permissionDecision,«»=«»===void 0?«»:void 0"
+			],
+			"note": "The permissionDecision record of the permission result (chunk-t31w6vd4.js:127718); enums not proven here. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.toolDenialKind": {
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["toolDenialKind:"],
-			"note": "String denial kind such as user-rejected. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": [
+				"...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{toolDenialKind:«»}",
+				"«».behavior===\"deny\")return «»=«».toolDenialKind,«»=«».userFeedback"
+			],
+			"note": "A string: \"user-rejected\" (chunk-t31w6vd4.js:118263), a result's denialKind or toolDenialKind (:123444, :127802), or p2r's \"permission-rule\", \"cancelled\" or \"interrupted\" (chunk-m14bt1pz.js:4715683). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.userFeedback": {
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["userFeedback:"],
-			"note": "String from the permission result. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": [
+				"...«»!==void 0&&{toolDenialKind:«»},...«»!==void 0&&{userFeedback:«»}}})",
+				"«».behavior===\"deny\")return «»=«».toolDenialKind,«»=«».userFeedback",
+				"...«»?.feedbackIsFromUser&&«»&&{userFeedback:«»}"
+			],
+			"note": "A string: written at chunk-t31w6vd4.js:118003 from the deny result (:127718), whose userFeedback is the feedback text that cancelAndAbort uses in a template string (chunk-2wacym39.js:35874). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.nativeTimeoutMs": {
 			"schema": {
 				"type": "number"
 			},
-			"anchors": ["nativeTimeoutMs:"],
-			"note": "Timeout in ms; helper not resolved, so number is the plain type. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": [
+				"phase:\"executing\",nativeTimeoutMs:«»,...«»&&{executed:!0}}"
+			],
+			"note": "Qr (chunk-t31w6vd4.js) returns Math.min of two timeouts for Bash and PowerShell, 1e4 for some tools, or undefined; the caller passes it at :129174. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.executed": {
 			"schema": {
 				"const": true
 			},
-			"anchors": ["executed:!0"],
-			"note": "Literal true. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": [
+				"phase:\"executing\",nativeTimeoutMs:«»,...«»&&{executed:!0}}",
+				"phase:\"complete\",executed:!0,result:«».value"
+			],
+			"note": "Literal true (chunk-t31w6vd4.js:118629, :124604). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.shellProgress": {
 			"schema": {
@@ -6424,8 +6470,11 @@
 			"schema": {
 				"type": "boolean"
 			},
-			"anchors": ["mcpContent:"],
-			"note": "Boolean from isMcp and Array.isArray checks. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": [
+				"phase:\"complete\",mcpContent:«»,result:",
+				"«»=«»&&Array.isArray(«»)&&«»===«»;"
+			],
+			"note": "Boolean: isMcp===!0 && Array.isArray(...) && a strict equality (chunk-t31w6vd4.js:120650). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.delegatedToolNames": {
 			"schema": {
@@ -6434,8 +6483,8 @@
 					"type": "string"
 				}
 			},
-			"anchors": ["delegatedToolNames:"],
-			"note": "Filtered strings (chunk-eb5tp0ww.js@7741). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": ["...«».length>0&&{delegatedToolNames:«»}"],
+			"note": "Oii (chunk-eb5tp0ww.js:7741) keeps only string items; the caller filters them again (chunk-t31w6vd4.js). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.carriedMarkers": {
 			"schema": {
@@ -6444,8 +6493,8 @@
 					"type": "string"
 				}
 			},
-			"anchors": ["carriedMarkers:"],
-			"note": "Marker strings filtered from a fixed list (chunk-rj3e7agr.js@152088). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": ["...«».length>0&&{carriedMarkers:«»}"],
+			"note": "H4e (chunk-rj3e7agr.js:152573) filters the fixed marker string list ih (:152076). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.notes": {
 			"schema": {
@@ -6454,41 +6503,56 @@
 					"type": "string"
 				}
 			},
-			"anchors": ["notes:"],
-			"note": "Array of note strings. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": [
+				"...«»!==void 0&&{notes:«».notes}",
+				"{joined:«»,notes:«»._notes}"
+			],
+			"note": "_notes is a filter of text strings from the MCP text blocks (chunk-t31w6vd4.js:120460). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.sandboxViolations": {
 			"schema": {
 				"type": "array"
 			},
-			"anchors": ["sandboxViolations:"],
-			"note": "Array from the sandbox result; items not typed. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": [
+				"...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations}",
+				"...«» instanceof «»&&«».sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations}"
+			],
+			"note": "Array from the shell result or ShellError (chunk-z9xgg67q.js:2901); DNo builds it from parsed violation lines (chunk-m14bt1pz.js:3754955). Items not typed. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.sandboxed": {
 			"schema": {
 				"type": "boolean"
 			},
-			"anchors": ["sandboxed:"],
-			"note": "Boolean flag. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": [
+				"...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed}",
+				"...«» instanceof «»&&«».sandboxed!==void 0&&{sandboxed:«».sandboxed}"
+			],
+			"note": "Boolean: the shell's sandbox decision Fm (chunk-m14bt1pz.js:1581106) returns only booleans. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.resultBeforeReadBack": {
 			"schema": {},
-			"anchors": ["resultBeforeReadBack:"],
-			"note": "Any JSON value, written only when it differs from the result. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": ["&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}"],
+			"note": "Any JSON value, written only when it differs from the result (chunk-t31w6vd4.js:120748). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.servedText": {
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["servedText:"],
-			"note": "Function at chunk-bw2ty92s.js@1728 returns the result only when it is a string. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": [
+				"...«»!==void 0&&{servedText:«»}}})",
+				"\"result\"in «»&&typeof «».result===\"string\"?«».result:void 0"
+			],
+			"note": "BOs (chunk-bw2ty92s.js:1728) returns the result only when it is a string. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		},
 		"progress.data.scriptStartedAt": {
 			"schema": {
 				"type": "number"
 			},
-			"anchors": ["scriptStartedAt:"],
-			"note": "Date.now() epoch ms (chunk-7gaz5x38.js). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+			"anchors": [
+				"data:{...«»,scriptStartedAt:«»}",
+				"...«».scriptStartedAt!==void 0&&{scriptStartedAt:«».scriptStartedAt}"
+			],
+			"note": "The tick's startedAt, set only by Date.now() (chunk-7gaz5x38.js:4900); written at chunk-9wr2tbyv.js:4351. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		}
 	}
 }

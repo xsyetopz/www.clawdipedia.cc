@@ -1,4 +1,4 @@
-// Usage: bun run schemas:observe [-- --user] [--skip print,statusline]
+// Usage: bun run schemas:observe [-- --user] [--skip print,statusline] [--raw DIR]
 // Refreshes tools/schemas/observed/*.json, the value-free fixtures of observed field types that code.ts adds
 // to the schemas as "x-observed-type". Sources:
 //   print       print-mode runs against the local stub with OTLP/JSON sent to a local collector (observe/print.ts)
@@ -8,6 +8,8 @@
 // a schema in schemas/ that carry "x-unverified", and merges them into the fixtures: per path and type, the larger
 // count wins, capped at COUNT_CAP. No value and no key outside the schemas reaches a fixture. The temp dir is removed.
 // Run `bun run schemas` after it to write the schemas.
+// --raw DIR writes the merged counts of every path to DIR/<schema file> and leaves the fixtures as they are.
+// tools/schemas/audit-run.ts reads them, because the fixtures keep only paths that are still unverified.
 import { mkdir, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -33,6 +35,9 @@ const skip = argv.includes("--skip")
 	? new Set((argv[argv.indexOf("--skip") + 1] ?? "").split(",").filter(Boolean))
 	: new Set<string>();
 const withUser = argv.includes("--user");
+const rawDir = argv.includes("--raw")
+	? argv[argv.indexOf("--raw") + 1]
+	: undefined;
 
 const ROOT = join(import.meta.dir, "..", "..", "..");
 const TRANSCRIPT = "claude-code-transcript.json";
@@ -227,6 +232,19 @@ const main = async (): Promise<void> => {
 	try {
 		await runSources(tmp);
 		const merged = await mergeSources(tmp);
+		if (rawDir !== undefined) {
+			await mkdir(rawDir, { recursive: true });
+			await Promise.all(
+				[...merged].map(([schemaFile, paths]) =>
+					Bun.write(
+						join(rawDir, schemaFile),
+						JSON.stringify(Object.fromEntries(paths)),
+					),
+				),
+			);
+			console.info(`observe: raw counts in ${rawDir}`);
+			return;
+		}
 		await mkdir(OBSERVED_DIR, { recursive: true });
 		// One after another so the output lines keep their order.
 		await runEach(
