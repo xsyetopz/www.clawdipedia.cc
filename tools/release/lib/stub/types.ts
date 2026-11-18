@@ -11,7 +11,44 @@ export interface StubOrchestrator {
 	runnerTokenTtlS?: number;
 }
 
+/**
+ * A scripted answer to one main-loop POST /v1/messages: an assistant message with the given content and stop
+ * fields, or an HTTP error with a JSON body.
+ */
+export type StubReply =
+	| {
+			kind: "message";
+			content: { type: string; [k: string]: unknown }[];
+			stop_reason: string;
+			stop_details?: unknown;
+			/** The stream sends no content_block_stop for the last block, as a reply cut at the output limit. */
+			open?: boolean;
+	  }
+	| {
+			kind: "error";
+			status: number;
+			body: unknown;
+			/** Answer only the first request at this index; a retry gets the default reply. */
+			once?: boolean;
+	  };
+
+/** A scripted answer for any main-loop request whose last message contains `match`. */
+export interface StubRule {
+	match: string;
+	reply: StubReply;
+}
+
 export interface StubCase {
+	/**
+	 * Scripted answers by the text of the last message, checked before `turns`. An agent's requests start at
+	 * zero tool results, as the main loop does; a rule tells them apart by the prompt the agent got.
+	 */
+	rules?: StubRule[];
+	/**
+	 * Scripted answers, indexed by the number of `tool_result` blocks in the request, as `seq` is. An entry
+	 * replaces the `seq` turn at its index. Requests without tools (side queries) get the default reply.
+	 */
+	turns?: (StubReply | null)[];
 	/** JSONL request log. */
 	log: string;
 	/** Default "OK". */
@@ -33,6 +70,8 @@ export interface StubCase {
 	deltas?: number;
 	/** HTTP 400 for requests with the dangerous-tool-use beta, as a gateway that does not know it. */
 	refuseServerCheck?: boolean;
+	/** The `input_tokens` that POST /v1/messages/count_tokens answers (default 10); a large value makes a file read exceed its token limit. */
+	countTokens?: number;
 }
 
 export interface LoggedRequest {

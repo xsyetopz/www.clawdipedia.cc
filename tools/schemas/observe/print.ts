@@ -1,4 +1,4 @@
-// Usage: bun tools/schemas/observe/print.ts <out-dir> [--to <version>]
+// Usage: bun tools/schemas/observe/print.ts <out-dir> [--to <version>] [--only <id>,<id>] [--keep <dir>]
 // Runs print-mode cases against the local stub (fake key, temp HOME and CLAUDE_CONFIG_DIR, no real network:
 // the proxy variables point at a closed port) and records, value-free, the key paths and JSON types of:
 //   print-otel.json         OTLP/JSON that the program posts to a local collector (logs, metrics, traces)
@@ -20,16 +20,24 @@ const version =
 	ti === -1
 		? CLAUDE_CODE_VERSION
 		: (process.argv[ti + 1] ?? CLAUDE_CODE_VERSION);
+const oi = process.argv.indexOf("--only");
+// --only runs a subset of the cases, for work on one case; a full observe run needs every case.
+const only =
+	oi === -1 ? undefined : new Set((process.argv[oi + 1] ?? "").split(","));
+// --keep copies each sandbox (transcripts, request log, output) to <dir>/<case id>, to read why a case wrote no row.
+const ki = process.argv.indexOf("--keep");
+const keep = ki === -1 ? undefined : process.argv[ki + 1];
+const chosen = cases.filter((c) => only === undefined || only.has(c.id));
 if (outDir === undefined || outDir === "") {
 	throw new Error("usage: <out-dir> [--to <version>]");
 }
 await mkdir(outDir, { recursive: true });
 
-const runner = await createRunner(version);
+const runner = await createRunner(version, keep);
 
 // The cases run one after another: they share the stub and the counts.
 const runInTurn = async (index = 0): Promise<void> => {
-	const c = cases[index];
+	const c = chosen[index];
 	if (c === undefined) {
 		return;
 	}

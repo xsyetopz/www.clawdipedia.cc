@@ -162,7 +162,7 @@ interface Shared {
 const useSites = (t: string, x: Shared): Site[] => {
 	const all = x.sites.get(t) ?? [];
 	if (CHAIN.has(t)) {
-		// Message constructors: they carry uuid, no stream-json snake_case key, and no persist:false.
+		// Message constructors: they carry uuid and no stream-json snake_case key, and the writer keeps their rows.
 		return all.filter(
 			(s) =>
 				isTranscriptSite(
@@ -170,7 +170,7 @@ const useSites = (t: string, x: Shared): Site[] => {
 					keysOf(s.entries),
 					x.streamKeys,
 					s.src.text.slice(Math.max(0, s.at - 8), s.at),
-				) && !isUnpersisted(s.entries),
+				) && !isUnpersisted(t, s.entries),
 		);
 	}
 	const use = all.filter((s) => keysOf(s.entries).includes("sessionId"));

@@ -1,20 +1,16 @@
 // The print-mode cases of observe/print.ts: the arguments, files, and scripted tool calls of each run.
 import { PROMPT } from "../../../release/lib/env.ts";
+import type { Case } from "./case.ts";
+import { CUT_CASES } from "./cases-cut.ts";
+import { GATED_CASES } from "./cases-gated.ts";
+import { HOST_CASES } from "./cases-host.ts";
+import { ITEM_CASES } from "./cases-items.ts";
+import { MOD_CASES } from "./cases-mods.ts";
+import { REPLY_CASES } from "./cases-replies.ts";
+import { RESUME_CASES } from "./cases-resume.ts";
 
-export interface Case {
-	id: string;
-	args?: string[];
-	env?: Record<string, string>;
-	seq?: { name: string; input: unknown }[];
-	cfgFiles?: Record<string, string>;
-	projFiles?: Record<string, string>;
-	git?: boolean;
-	prompt?: string;
-	/** Points the API base URL at a closed port: connection errors. */
-	deadBase?: boolean;
-	/** Headers the stub adds to each reply. */
-	respHeaders?: Record<string, string>;
-}
+export type { Case } from "./case.ts";
+
 // The API sends a request id with each reply; the program passes it into the tool events as request_id. The
 // program accepts only ids of the form /^req_[A-Za-z0-9_-]{1,36}$/.
 const REQUEST_ID = { "request-id": "req_observe_stub_0000000000000000" };
@@ -107,4 +103,11 @@ export const cases: Case[] = [
 			OTEL_TRACES_EXPORTER: "otlp",
 		},
 	},
+	...REPLY_CASES,
+	...MOD_CASES,
+	...GATED_CASES,
+	...RESUME_CASES,
+	...CUT_CASES,
+	...ITEM_CASES,
+	...HOST_CASES,
 ];

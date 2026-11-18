@@ -73,7 +73,7 @@ describe("isUnpersisted", () => {
 		];
 
 		// Act
-		const out = isUnpersisted(entries);
+		const out = isUnpersisted("system", entries);
 
 		// Assert
 		expect(out).toBe(true);
@@ -93,9 +93,26 @@ describe("isUnpersisted", () => {
 		};
 
 		// Act
-		const out = [isUnpersisted([yes]), isUnpersisted([opt]), isUnpersisted([])];
+		const out = [
+			isUnpersisted("system", [yes]),
+			isUnpersisted("system", [opt]),
+			isUnpersisted("system", []),
+		];
 
 		// Assert
 		expect(out).toEqual([false, false, false]);
+	});
+
+	test("is true for every progress literal", () => {
+		// Arrange
+		const entries = [
+			{ key: "toolUseID", opt: false, val: { k: "str" as const, v: "t" } },
+		];
+
+		// Act
+		const out = isUnpersisted("progress", entries);
+
+		// Assert
+		expect(out).toBe(true);
 	});
 });

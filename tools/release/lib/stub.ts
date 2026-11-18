@@ -5,16 +5,10 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import { FAKE_KEY } from "./env.ts";
+import { memoryMcp } from "./stub/memory.ts";
+import { messagesRoute } from "./stub/messages.ts";
 import { isOrchestratorAuth, orchestratorRoute } from "./stub/orchestrator.ts";
-import {
-	asRecord,
-	memoryMcp,
-	parseApi,
-	reply,
-	slowStream,
-	stream,
-	verdict,
-} from "./stub/replies.ts";
+import { asRecord } from "./stub/replies.ts";
 import type { LoggedRequest, StubCase } from "./stub/types.ts";
 
 export type { LoggedRequest, StubCase } from "./stub/types.ts";
@@ -48,12 +42,6 @@ export interface Stub {
 	strayLog: string;
 }
 
-const apiError = (message: string): Response =>
-	Response.json(
-		{ type: "error", error: { type: "invalid_request_error", message } },
-		{ status: 400 },
-	);
-
 /** The allow-listed headers, and whether each credential header held a key this stub accepts (null when none was sent). */
 const inspectHeaders = (
 	req: Request,
@@ -85,43 +73,13 @@ const parseBody = (raw: string): unknown => {
 	}
 };
 
-const messagesRoute = (
-	req: Request,
-	id: string,
-	o: StubCase,
-	body: unknown,
-	calls: Map<string, number>,
-): Response => {
-	const beta = req.headers.get("anthropic-beta") ?? "";
-	const refused = beta
-		.split(",")
-		.find((b) => b.trim().startsWith("dangerous-tool-use"));
-	if (o.refuseServerCheck === true && refused !== undefined) {
-		return apiError(
-			`Unexpected value(s) \`${refused.trim()}\` for the \`anthropic-beta\` header. Please consult our documentation at docs.claude.com or try again without the header.`,
-		);
-	}
-	const nth = (calls.get(id) ?? 0) + 1;
-	calls.set(id, nth);
-	if (o.tooLongOn === nth) {
-		return apiError("prompt is too long: 250000 tokens > 200000 maximum");
-	}
-	const api = parseApi(body);
-	const msg = verdict(reply(api, o), o);
-	const extra = o.respHeaders ?? {};
-	if (!api.stream) {
-		return Response.json(msg, { headers: extra });
-	}
-	const text = stream(msg, o.deltas);
-	return new Response(
-		o.gapMs !== undefined && o.gapMs > 0 ? slowStream(text, o.gapMs) : text,
-		{ headers: { "content-type": "text/event-stream", ...extra } },
-	);
-};
+/** The fixed answer of POST /v1/messages/count_tokens, unless a case sets `countTokens`. */
+export const DEFAULT_COUNT_TOKENS = 10;
 
-const fallbackRoute = (pathname: string): Response => {
+/** Routes the fixed fallbacks: count_tokens answers `tokens`, anything else is a 404. */
+export const fallbackRoute = (pathname: string, tokens: number): Response => {
 	if (pathname === "/v1/messages/count_tokens") {
-		return Response.json({ input_tokens: 10 });
+		return Response.json({ input_tokens: tokens });
 	}
 	return new Response("{}", {
 		status: 404,
@@ -152,7 +110,7 @@ const routeRest = (
 	}
 	return r.isMem && r.id !== ""
 		? memoryMcp(r.body)
-		: fallbackRoute(url.pathname);
+		: fallbackRoute(url.pathname, r.o.countTokens ?? DEFAULT_COUNT_TOKENS);
 };
 
 const logRequest = (
@@ -225,7 +183,11 @@ export const startStub = async (
 			}
 			await Bun.write(c.log, "");
 			cases.set(id, c);
-			calls.delete(id);
+			for (const k of calls.keys()) {
+				if (k === id || k.startsWith(`${id}#`)) {
+					calls.delete(k);
+				}
+			}
 			return `http://127.0.0.1:${server.port}/${id}`;
 		},
 		strayLog,

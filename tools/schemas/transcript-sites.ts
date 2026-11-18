@@ -22,11 +22,16 @@ export const isTranscriptSite = (
 };
 
 /**
- * Whether an object literal sets `persist: false`. The transcript writer keeps only the rows its filter passes,
- * and that filter drops each row with `"persist" in row && row.persist === false` (chunk-m14bt1pz.js:696693 at
- * 2.1.327), so such a literal is display-only and writes no line. Example: the `placed` system rows of plugins.
+ * Whether a `{type:"<t>",...}` literal writes no line. The transcript writer keeps only the rows its filter passes
+ * (chunk-m14bt1pz.js:696693 at 2.1.327; every insertMessageChain path goes through it). That filter drops each
+ * `progress` row and each row with `"persist" in row && row.persist === false`. Examples: the tool progress rows,
+ * and the `placed` system rows of plugins.
  */
-export const isUnpersisted = (entries: readonly Entry[]): boolean =>
+export const isUnpersisted = (
+	type: string,
+	entries: readonly Entry[],
+): boolean =>
+	type === "progress" ||
 	entries.some(
 		(e) =>
 			"key" in e &&

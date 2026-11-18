@@ -19,7 +19,7 @@ export interface Sandbox {
 export interface SandboxOpts {
 	cfgFiles?: Files;
 	projFiles?: Files;
-	/** {HOME} {CFG} {PROJ} placeholders in contents */
+	/** {HOME} {CFG} {PROJ} placeholders in contents; {PROJKEY} in keys */
 	homeFiles?: Files;
 	git?: boolean;
 	trusted?: boolean;
@@ -47,6 +47,13 @@ export const subst = (
 		.split("{PROJ}")
 		.join(sb.proj);
 
+/**
+ * The name of the program's transcript dir for a project path: each character that is not a letter or a digit
+ * becomes "-". A fixture key may use it as {PROJKEY}, for example `projects/{PROJKEY}/<session>.jsonl`.
+ */
+export const projKey = (proj: string): string =>
+	proj.replaceAll(/[^a-zA-Z0-9]/gu, "-");
+
 const writeFixtures = async (
 	sb: { home: string; cfg: string; proj: string },
 	opts: SandboxOpts,
@@ -58,7 +65,7 @@ const writeFixtures = async (
 		[sb.home, opts.homeFiles],
 	] as const) {
 		for (const [k, v] of Object.entries(files ?? {})) {
-			const target = resolve(base, k);
+			const target = resolve(base, k.split("{PROJKEY}").join(projKey(sb.proj)));
 			if (!target.startsWith(base + sep)) {
 				throw new Error(`fixture path escapes its dir: ${k}`);
 			}

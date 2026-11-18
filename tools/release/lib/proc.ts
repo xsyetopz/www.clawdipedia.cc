@@ -96,7 +96,8 @@ onCleanup(killOwn);
 interface RunOpts {
 	cwd: string;
 	env: Record<string, string>;
-	stdin?: string;
+	/** Text written at once, or a stream the caller paces. */
+	stdin?: string | ReadableStream<Uint8Array>;
 	/** Close stdin this long after writing it, so the child does not see the input end at once. */
 	stdinOpenMs?: number;
 	timeoutMs?: number;
@@ -105,11 +106,14 @@ interface RunOpts {
 }
 
 const stdinFor = (
-	text: string | undefined,
+	text: string | ReadableStream<Uint8Array> | undefined,
 	ms: number | undefined,
 ): "ignore" | Blob | ReadableStream => {
 	if (text === undefined) {
 		return "ignore";
+	}
+	if (typeof text !== "string") {
+		return text;
 	}
 	if (ms === undefined) {
 		return new Blob([text]);

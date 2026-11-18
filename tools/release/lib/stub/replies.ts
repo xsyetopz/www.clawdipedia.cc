@@ -1,5 +1,5 @@
 // Canned Messages API answers: the JSON message, its SSE form, and the cloud memory MCP server.
-import type { StubCase } from "./types.ts";
+import type { StubCase, StubReply } from "./types.ts";
 
 /** An object read as a record, or an empty record for anything else (a raw-text body, null, a number). */
 export const asRecord = (x: unknown): Record<string, unknown> =>
@@ -21,8 +21,11 @@ export interface Msg {
 	content: Block[];
 	stop_reason: string;
 	stop_sequence: null;
+	stop_details?: unknown;
 	usage: Record<string, number>;
 	safeguard_results?: unknown;
+	/** Stub-only: the stream leaves the last block open. Never sent. */
+	open?: boolean;
 }
 
 /** What the replies need from a POST /v1/messages body. */
@@ -32,6 +35,8 @@ export interface ApiReq {
 	/** `tool_result` blocks over all messages. */
 	toolResults: number;
 	toolNames: Set<string>;
+	/** The last message as JSON text, for `rules`. */
+	last: string;
 }
 
 const countResults = (messages: unknown[]): number => {
@@ -62,6 +67,7 @@ export const parseApi = (body: unknown): ApiReq => {
 		stream: r["stream"] === true,
 		toolResults: countResults(messages),
 		toolNames,
+		last: JSON.stringify(messages.at(-1) ?? null),
 	};
 };
 
@@ -112,16 +118,32 @@ const toolTurn = (
 	stop_reason: "tool_use",
 });
 
-export const reply = (api: ApiReq, o: StubCase): Msg => {
+/** The scripted turn for a request: only main-loop requests (with tools) take one. A rule wins over `turns`. */
+export const pickTurn = (
+	api: ApiReq,
+	o: StubCase,
+): StubReply | null | undefined => {
+	if (api.toolNames.size === 0) {
+		return undefined;
+	}
+	const rule = o.rules?.find((r) => api.last.includes(r.match));
+	return rule === undefined ? o.turns?.[api.toolResults] : rule.reply;
+};
+
+// A scripted turn, as the stub sends it.
+const scripted = (base: Base, turn: StubReply & { kind: "message" }): Msg => ({
+	...base,
+	content: turn.content,
+	stop_reason: turn.stop_reason,
+	...(turn.stop_details !== undefined && {
+		stop_details: turn.stop_details,
+	}),
+	...(turn.open === true && { open: true }),
+});
+
+// The next tool call of `seq`, or the one `tool` call; null when the case has none for this request.
+const toolStep = (base: Base, api: ApiReq, o: StubCase): Msg | null => {
 	const results = api.toolResults;
-	const base: Base = {
-		id: "msg_probe",
-		type: "message",
-		role: "assistant",
-		model: api.model ?? "claude-sonnet-5-5",
-		stop_sequence: null,
-		usage: USAGE,
-	};
 	const nx = o.seq?.[results];
 	if (nx !== undefined && api.toolNames.has(nx.name)) {
 		return toolTurn(base, `toolu_probe${results}`, nx.name, nx.input);
@@ -134,14 +156,40 @@ export const reply = (api: ApiReq, o: StubCase): Msg => {
 	) {
 		return toolTurn(base, "toolu_probe1", o.tool, o.toolInput ?? {});
 	}
-	return {
-		...base,
-		content: [{ type: "text", text: o.text ?? "OK" }],
-		stop_reason: "end_turn",
-	};
+	return null;
 };
 
-const blockEvents = (b: Block, i: number, deltas: number): string => {
+export const reply = (
+	api: ApiReq,
+	o: StubCase,
+	turn = pickTurn(api, o),
+): Msg => {
+	const base: Base = {
+		id: "msg_probe",
+		type: "message",
+		role: "assistant",
+		model: api.model ?? "claude-sonnet-5-5",
+		stop_sequence: null,
+		usage: USAGE,
+	};
+	if (turn?.kind === "message") {
+		return scripted(base, turn);
+	}
+	return (
+		toolStep(base, api, o) ?? {
+			...base,
+			content: [{ type: "text", text: o.text ?? "OK" }],
+			stop_reason: "end_turn",
+		}
+	);
+};
+
+const blockEvents = (
+	b: Block,
+	i: number,
+	deltas: number,
+	open = false,
+): string => {
 	const isText = b.type === "text";
 	const start = isText ? { type: "text", text: "" } : { ...b, input: {} };
 	const full = isText ? (b.text ?? "") : JSON.stringify(b.input);
@@ -162,26 +210,32 @@ const blockEvents = (b: Block, i: number, deltas: number): string => {
 				: { type: "input_json_delta", partial_json: p },
 		});
 	}
-	return (
-		out + sse("content_block_stop", { type: "content_block_stop", index: i })
-	);
+	return open
+		? out
+		: out + sse("content_block_stop", { type: "content_block_stop", index: i });
 };
 
 /** The reply as SSE events. */
 export const stream = (m: Msg, deltas = 1): string => {
-	const { safeguard_results: _, ...head } = m;
+	const { safeguard_results: _, open, ...head } = m;
 	let out = sse("message_start", {
 		type: "message_start",
 		message: { ...head, content: [], stop_reason: null },
 	});
 	for (const [i, b] of m.content.entries()) {
-		out += blockEvents(b, i, deltas);
+		out += blockEvents(
+			b,
+			i,
+			deltas,
+			open === true && i === m.content.length - 1,
+		);
 	}
 	out += sse("message_delta", {
 		type: "message_delta",
 		delta: {
 			stop_reason: m.stop_reason,
 			stop_sequence: null,
+			...(m.stop_details !== undefined && { stop_details: m.stop_details }),
 			...(m.safeguard_results !== undefined && {
 				safeguard_results: m.safeguard_results,
 			}),
@@ -212,42 +266,5 @@ export const slowStream = (
 			i += 1;
 			c.enqueue(enc.encode(`${ev}\n\n`));
 		},
-	});
-};
-
-const MEMORY_TOOLS = ["read", "write", "str_replace", "append"].map((t) => ({
-	name: `memory_${t}`,
-	description: `memory ${t}`,
-	inputSchema: { type: "object", properties: {} },
-}));
-
-const memoryResult = (method: unknown, params: unknown): unknown => {
-	if (method === "initialize") {
-		const v = asRecord(params)["protocolVersion"];
-		return {
-			protocolVersion: typeof v === "string" ? v : "2025-06-18",
-			capabilities: { tools: {} },
-			serverInfo: { name: "memory", version: "1" },
-		};
-	}
-	if (method === "tools/list") {
-		return { tools: MEMORY_TOOLS };
-	}
-	if (method === "tools/call") {
-		return { content: [{ type: "text", text: "ok" }] };
-	}
-	return {};
-};
-
-/** Minimal streamable-HTTP MCP server for the cloud memory path: lists the memory tools, answers each call with "ok". */
-export const memoryMcp = (body: unknown): Response => {
-	const q = asRecord(body);
-	if (q["id"] === undefined) {
-		return new Response(null, { status: 202 });
-	}
-	return Response.json({
-		jsonrpc: "2.0",
-		id: q["id"],
-		result: memoryResult(q["method"], q["params"]),
 	});
 };
