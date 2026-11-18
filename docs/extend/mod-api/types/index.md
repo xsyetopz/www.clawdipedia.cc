@@ -28,7 +28,7 @@ Import the types with `import type { ... } from 'claude-code'`. The import is em
 - Each page has a table of types without fields, then one section for each type that has fields.
 - The Documented badge means the type is in the published type file, which the docs call the complete reference.
 - The type file is early access, so a type may change between releases.
-- Types have no switch and hold no settings. They live in the type file. The program also writes that file beside each mod as `.claude-plugin/types/claude-code/index.d.ts`.
+- Types have no switch and hold no settings. They live in the type file. The program also writes that file as `.claude-plugin/types/claude-code/index.d.ts`, beside each mod that it loads from a folder the person owns.
 - Where the type file has a doc comment, the description follows it. Where it has none, the description comes from the name and the shape. It also comes from the pages that document the same thing, such as [Input and Output](../../hooks/input-and-output.md).
 
 ## Check a Field Before You Use It
@@ -45,4 +45,4 @@ The type file is the full list of fields for this release. Build on the fields i
 
 ## Sources
 
-[^copy]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`.
+[^copy]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`. The claims about the import and the copy beside a mod come from its header comment.

@@ -71,10 +71,10 @@ on("ui.render", { component: "Pane" }, async ($, e) => {
 
 | Item | Status | What it does | Elements | Where it can be used |
 | --- | --- | --- | --- | --- |
-| `terminal` | <Documented /> | Ink. Draws the whole tree of the hook. | `Box`, `Text`, `Button`, `Input`, `Select`, `Link`, `Code`, `Markdown`, `Client`, `Raster`, `Image`. No `Svg`. | `e.surface === 'terminal'` |
-| `desktop` | <Documented /> | Claude Code Desktop. Asks over the wire. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Client`. Since `2.1.326`, `Shader` too. | `e.surface === 'desktop'` |
-| `mobile` | <Documented /> | The mobile app. Asks over the wire. | `Box`, `Text`, `Button`, `Svg`, `Link`, `Code`, `Markdown`. Since `2.1.323`, `Progress` too, when the client names it in `draws`; any other client gets its Box and Text. Since `2.1.326`, `Shader` too. No `Input`, `Select`, or `Client` yet. The docs name no mobile surface. | `e.surface === 'mobile'` |
-| `vscode` | <Differs note="The type file says no surface is attached yet. The docs say the extension draws from 2.1.299 in a session that fetches feature flags." /> | The editor webview. The same table as `desktop` without `Client`. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`. | `e.surface === 'vscode'` |
+| `terminal` | <Documented /> | Ink. Draws the whole tree of the hook. | `Box`, `Text`, `Button`, `Input`, `Select`, `Link`, `Code`, `Markdown`, `Progress`, `Client`, `Raster`, `Image`. No `Svg`. | `e.surface === 'terminal'` |
+| `desktop` | <Documented /> | Claude Code Desktop. Asks over the wire. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Progress`, `Client`. Since `2.1.326`, `Shader` too. | `e.surface === 'desktop'` |
+| `mobile` | <Documented /> | The mobile app. Asks over the wire. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Progress`. A client gets `Input`, `Select`, or `Progress` only if it names it in `draws`. Any other client gets an empty Box for `Input` or `Select`, and the Box and Text of a `Progress`. Since `2.1.326`, `Shader` too. No `Client`. The docs name no mobile surface. | `e.surface === 'mobile'` |
+| `vscode` | <Differs note="The type file says no surface is attached yet. The docs say the extension draws from 2.1.299 in a session that fetches feature flags." /> | The editor webview. The same table as `desktop` without `Client`. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Progress`. | `e.surface === 'vscode'` |
 
 ## Render Sites and Props
 
@@ -347,7 +347,7 @@ The framed region a plugin opened with `$.ui.open({ id })`. There is one instanc
 | --- | --- | --- | --- |
 | `title` | <Documented /> | The label of its tab while more than one pane is open. | `string`. Read-only here. Another `$.ui.open`, or a hook on `ui.open`, retitles it. |
 | `isFocused` | <Documented /> | True while the pane holds the keyboard, which the person gave it. Tab walks its elements, a Button's `hotkey` presses it, and the arrows scroll. | `boolean`. Read-only. |
-| `isPromptCovered` | <Documented /> | True while keys typed in the terminal may go to something other than the prompt or this pane: a dialog (a permission prompt, `/model`), a search, or a field in the band. | `true`, optional. Read-only. The prop is left out while it is false.[^covered] Since `2.1.323`, the type is `true`, not `boolean`.[^types-323] |
+| `isPromptCovered` | <Documented /> | True while keys typed in the terminal may go to something other than the prompt or this pane: a dialog (a permission prompt, `/model`), a search, or a field in the band. | `true`, optional. Read-only. The prop is left out while it is false.[^covered] The `2.1.322` type file has no such prop; the `2.1.323` type file declares it.[^types-323] |
 | `bodyColumns` | <Documented /> | Cells across the body, inside the frame. | `number`. Read-only. |
 | `placement` | <Documented /> | Where the surface seated the pane: `dock` beside the transcript (the terminal in fullscreen from 110 columns), or `inline` above the prompt. Since `2.1.323`, on the desktop app also `widget`, the small form of a minimized pane. Draw what reads at a glance there, because clicks may not reach it. The hook runs again when the seat changes. | `'dock' \| 'inline' \| 'widget'`. Read-only. The engine refuses a change. Treat any other value as `dock`. Since `2.1.323`.[^types-323] |
 | `anchoredEdges` | <Documented /> | The edges of the chat area that a `widget` is anchored on, to align the drawing by: `["bottom", "right"]` in that corner, `["right"]` stacked on another widget there, `[]` in the session rail (the column beside the chat). | `readonly ('top' \| 'right' \| 'bottom' \| 'left')[]`, optional. Absent in every other seat. The hook runs again when they change. Ignore a value outside these four. No call moves a widget. Since `2.1.323`.[^anchored] |
@@ -423,8 +423,8 @@ export default shader({ fps: 30, passes: [sky] });
 
 ## Sources
 
-[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`.
-[^types-323]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`.
+[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `Elements` (the element tables of the surfaces) and `RenderPropsOf`.
+[^types-323]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, the `AskUserQuestion` and `Pane` members of `RenderPropsOf`. The `2.1.322` type file is `b3e97149`, and the `2.1.323` type file is `3b4d8783`, in the Git history.
 [^waiting]: The Mod API type file, `schemas/claude-code.d.ts`, `WaitingFor` and `WaitingAgent`. The program, `chunk-36ts0j6v.js:211159`.
 [^above-prompt]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-b0yr0k8v.js:197943`.
 [^collapsed]: The program, `chunk-cfxefa64.js:544668`.

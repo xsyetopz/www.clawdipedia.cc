@@ -115,7 +115,7 @@ In a `-p` run with no app attached, the debug log shows `{"isDrawn":false,"reque
 
 ## Sources
 
-[^types-323]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`.
+[^types-323]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, the `ui` and `theme` members of the `$` type, `InvalidatableEventName`, `PaneOpenArgs`, and `ThemeSetArgs`.
 [^theme-run]: Probe case `print.cli319.theme.engine`, run on the `2.1.319` program in a `-p` run with a mod that calls the function from `session.start`. The function table of the hooks engine holds `theme.set`, with a `check` and a `run`.
 [^theme-323]: The program, `chunk-grrnec65.js:18110`. The attribute check reads the list `E=["backdrop","overrideColorScheme","colors"]` at `chunk-grrnec65.js:17712`, and `glass.blur is a number of points` is at `chunk-grrnec65.js:11001`.
 [^theme-321]: The texts are from the program of `2.1.321`. The text of `2.1.327` no longer holds them; its host check is at `chunk-grrnec65.js:17949` and `chunk-grrnec65.js:18110`. The type text is in `schemas/claude-code.d.ts`, `ThemeColors`.

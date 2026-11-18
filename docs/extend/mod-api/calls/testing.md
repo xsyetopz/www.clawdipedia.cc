@@ -62,5 +62,5 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`.
+[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, the `claude-code/testing` module: `TestBody`, `TestOptions`, `Expect`, `Expectation`, `Matchers`, `Matching`, `PluginTier`, `Mock`, `MockClock`, `MockSession`, `EngineToolCall`, `EngineMount`, and `Mounted`.
 [^keeps-beneath]: The program, `chunk-xg5j0svy.js:40114`.

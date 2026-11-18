@@ -158,7 +158,7 @@ Each row is a family of messages. The backticked text is the start that every me
 [^install-json]: The program, `chunk-1z19r9zf.js:17475`.
 [^restore]: The program, `chunk-az1d7wfg.js:21483`.
 [^validate]: The program, `chunk-c062d8f2.js:4081` and `chunk-c062d8f2.js:11954`.
-[^validate-report]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `PluginValidateReport` and the types that it names.
+[^validate-report]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `PluginValidateReport`, `PluginValidateFile`, `PluginValidateFinding`, `PluginValidateAdvice`, `PluginValidateDirectory`, `PluginValidateDirectoryFinding`, `PluginValidateGatingHook`, `PluginValidateWasm`, `PluginValidateWasmFile`, `PluginValidateModule`, `PluginValidateHook`, `PluginValidateMatcher`, `PluginValidateNouns`, `PluginValidateShader`, `PluginValidateShaderCost`, and `PluginProvides`.
 [^validate-ts]: The program, `chunk-ke2xb8ty.js:59250`.
 [^engine-create]: The program, `chunk-ke2xb8ty.js:43754`.
 [^agent-dep]: The program, `chunk-dfwkett1.js:7853`.

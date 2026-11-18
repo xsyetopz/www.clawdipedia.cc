@@ -114,7 +114,7 @@ What a `prompt.fill` hook returns, and what `next(e)` resolves to: whether the t
 
 ### `PromptMedia`
 
-What `$.prompt.media({ id })` answers: the bytes of one attached item as the engine would send them now, or why there are none to read. The engine reads an image after its resize. One call answers at most 4 MiB. Only a mod that managed settings install gets an answer. Used by `$.prompt.media`.
+What `$.prompt.media({ id })` answers: the bytes of one attached item as the engine would send them now, or why there are none to read. The engine reads an image after its resize. One call answers at most 4 MiB. Only a `prompt.submit` hook that lists the item gets an answer; any other call gets `{ deny }`.[^media-hold] Used by `$.prompt.media`.
 
 The rows below show each form of the union in turn: a slice, an unreadable item, and a refused read. A row that says "Never set in this form" has type `undefined` in that form.
 
@@ -237,7 +237,7 @@ A pasted or attached non-text item of a submitted prompt. It holds the kind of t
 | `type` | <Documented /> | The kind of the item. | Type: `'image' \| 'audio' \| 'document'`. |
 | `mediaType` | <Documented /> | The MIME type of the item (`image/png`), when known. | Type: `string`. Optional. |
 | `filename` | <Documented /> | The name of the pasted file, when it had one. | Type: `string`. Optional. |
-| `id` | <Documented /> | The handle of the engine for the item while this `prompt.submit` is in flight. `$.prompt.media({ id })` reads its bytes, for a mod that managed settings install. | Type: `string`. Optional. Opaque. The engine sets it, as it sets the whole list. Whatever a hook passes down for it, the hooks beneath read the value of the engine. |
+| `id` | <Documented /> | The handle of the engine for the item while this `prompt.submit` is in flight. `$.prompt.media({ id })` reads its bytes from a `prompt.submit` hook that lists the item. | Type: `string`. Optional. Opaque. The engine sets it, as it sets the whole list. Whatever a hook passes down for it, the hooks beneath read the value of the engine. |
 
 ### `PromptSubmitCommand`
 
@@ -286,3 +286,4 @@ What a `prompt.submit` hook returns, and what `next(e)` resolves to: the prompt 
 ## Sources
 
 [^shared-sections]: The program, `chunk-m14bt1pz.js:2806566`, `TTn`.
+[^media-hold]: The program, `chunk-jxtnvz5q.js:3448`, `hfl`, gives each attachment its `id` before the `prompt.submit` hooks run (cap `vpe`, 4194304 bytes, at `chunk-ttwb10ps.js:209`). `chunk-m14bt1pz.js:4853969`, `WNt`, and `chunk-m14bt1pz.js:4854042`, `Fbo`, answer only when the hook in flight lists that `id` (`fFt` at `chunk-m14bt1pz.js:4962328`). No step checks where the mod was installed.

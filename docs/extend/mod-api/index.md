@@ -6,7 +6,7 @@ sidebar_position: 1
 
 A mod is a plugin whose code runs inside Claude Code. Claude Code calls the code when an event happens, such as a tool call or a submitted prompt. The code can watch the event, change it, or answer it.
 
-The object `$` is the Mod API. The type file that Claude Code publishes marks it as early access, so it may change between releases. These pages cover `2.1.326`. To load a mod, put it in a plugin folder with a `hooks/hooks.json` file. See [A First Mod](#a-first-mod).
+The object `$` is the Mod API. The type file that Claude Code publishes marks it as early access, so it may change between releases. These pages cover `2.1.327`. To load a mod, put it in a plugin folder with a `hooks/hooks.json` file. See [A First Mod](#a-first-mod).
 
 Official pages: [Mods Overview](https://code.claude.com/docs/en/plugins/mods/overview), [Create a Mod](https://code.claude.com/docs/en/plugins/mods/create), [Use the Mods API](https://code.claude.com/docs/en/plugins/mods/api), [React to Events](https://code.claude.com/docs/en/plugins/mods/events), [Draw in the Interface](https://code.claude.com/docs/en/plugins/mods/interface), [Test a Mod](https://code.claude.com/docs/en/plugins/mods/test), [Troubleshoot a Mod](https://code.claude.com/docs/en/plugins/mods/troubleshoot), and [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference).
 
@@ -139,7 +139,7 @@ The [type pages](types/index.md) hold the detailed shapes of inputs and results.
 - The event sets the 50 millisecond limit of a `prompt.edit` hook. The type file does not hold it.[^prompt-edit]
 - Installed mods roll out behind a server flag. The program has no local switch for it.[^rollout]
 - The value `re-entry` of `next.error.kind` is in the docs and in a program debug string. It is not in the type file.[^re-entry]
-- The type file says the VS Code extension attaches no surface yet. The docs say it draws from `2.1.299`.
+- The type file says that a name in `RenderSurface` is no promise that its host draws, and that a host which attaches no surface shows nothing drawn. It does not say which host attaches none. The docs say VS Code draws from `2.1.299`.
 - Many doc comments in the type file name code items without backticks. The tables keep the wording of the type file where it matters.
 
 ## Type File Changes by Version
@@ -207,7 +207,7 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^tier-327]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, the text of `Tier`.
-[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`.
+[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `Tier`, `RenderSurface`, `PluginRegisterUses`, `SessionCost`, `ToolDescribeInput`, and `UiPointerResult`.
 [^prompt-edit]: The program, `chunk-b0yr0k8v.js:193534`.
 [^rollout]: The program, `chunk-asj6f58y.js:758552`. The server flag is `tengu_plugin_hooks_modules`.
 [^re-entry]: The program, `chunk-9ns7kxca.js:6139`.

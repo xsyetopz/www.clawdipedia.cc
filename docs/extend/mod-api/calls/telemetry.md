@@ -55,4 +55,4 @@ on("telemetry.log", { to: "collector" }, ($, e, next) => next(e));
 
 ## Sources
 
-[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`.
+[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `TelemetryLogArgs`, `TelemetryLogInput`, `TelemetryLogResult`, `TelemetryMarkInput`, `TelemetryMarkResult`, `TelemetryMarkKind`, `TelemetryAttribute`, `TelemetryChoice`, `TelemetryDestination`, `TelemetryProp`, `TelemetryRecordEntry`, `TelemetryRowArgs`, `TelemetryRowEntry`, `TelemetrySpan`, `Glob`, and the `telemetry.*` entries of `EventOf` and `ResultOf`.
