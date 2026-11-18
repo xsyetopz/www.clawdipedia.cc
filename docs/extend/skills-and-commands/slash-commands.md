@@ -292,7 +292,7 @@ Each row is a family of messages. The backticked text is the start that every me
 [^fix-lines]: The program, the `/usage` fix lines: `chunk-4dyhk64x.js:8557` and `chunk-m14bt1pz.js:3980246`.
 [^fix-hours]: The program, `chunk-4dyhk64x.js:8308`. `2.1.322` has no such text.
 [^fix-subagent]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-4dyhk64x.js:8276`.
-[^usage-scopes]: The program, the `/usage` panel: `chunk-t9m6p74b.js:44723` and `chunk-t9m6p74b.js:47456`.
+[^usage-scopes]: The program, the `/usage` panel: `chunk-t9m6p74b.js:44723` and `chunk-t9m6p74b.js:47456`. The usage report calls the usage endpoint only when the login is a claude.ai login with `user:inference` (`Pt()`, `chunk-asj6f58y.js:665465`, scope test at `chunk-p5kfs9w9.js:786`) and also has `user:profile` (`rf()`, `chunk-asj6f58y.js:665762`): `chunk-wnrpz3b8.js:3709`. In `2.1.327` the breakdown also needs the organization policy `allow_usage_transcript_scan` (`chunk-5khhjtvy.js:1689`), and its title is `What's contributing to your usage?` (`chunk-t9m6p74b.js:47456`).
 [^v312-text]: The program, `chunk-t9m6p74b.js:59915`. The same place holds the `429` text `The usage page is rate limited until <time>.`
 [^unseen]: The program, `chunk-t9m6p74b.js:59473`.
 [^usage-sources]: The program, `chunk-t9m6p74b.js:51774` (`Resets` lines) and `chunk-116p7pz2.js:43169` (`Artifact deleted`).

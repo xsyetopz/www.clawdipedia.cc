@@ -169,7 +169,7 @@ While the scrub is on (`CLAUDE_CODE_SUBPROCESS_ENV_SCRUB` true, or `GITHUB_ACTIO
 ## Sources
 
 [^max-output]: The program, `chunk-8r6vdndw.js:2480`.
-[^auto-full-context]: The program, `chunk-8g2nr9dn.js:169914`. The gate is `tengu_velvet_marble`.
+[^auto-full-context]: The program, `chunk-8g2nr9dn.js:169914`. The gate is `tengu_velvet_marble`, read at `chunk-8g2nr9dn.js:164833`.
 [^edit-diff]: The program, `chunk-m14bt1pz.js:5657444`.
 [^exported-var]: The program, `chunk-m14bt1pz.js:84185`.
 [^exported-var-gate]: The gate is `bot_protected_tengu_zazzy_parasol`.

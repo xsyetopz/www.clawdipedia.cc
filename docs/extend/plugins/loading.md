@@ -125,7 +125,7 @@ Each row is a family of messages. The backticked text is the start that every me
 [^cache-path]: The program, `chunk-m14bt1pz.js:891330` and `chunk-m14bt1pz.js:896884`.
 [^registry]: The program, `chunk-74r3m9rp.js:1509`.
 [^bash-bin]: Probe case `print.plugindata.bash-bin`.
-[^watch]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-9ns7kxca.js:9183` for the default, `chunk-m14bt1pz.js:5005273` for the type files that a reload writes, `chunk-m14bt1pz.js:5003323` for the `tsconfig.json`, and `chunk-m14bt1pz.js:5005522` for the `.claude/skills` watch in print mode. Probe cases `print.cli319.plugin-dir-watch.unset`, `print.cli319.plugin-dir-watch.v1`, `pty.cli319.plugin-dir-watch.unset`, and `pty.cli319.plugin-dir-watch.v0`.
+[^watch]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-9ns7kxca.js:9183` for the default, `chunk-m14bt1pz.js:5002739` for the type files that a reload writes, `chunk-m14bt1pz.js:5003323` for the `tsconfig.json`, and `chunk-m14bt1pz.js:5005522` for the `.claude/skills` watch in print mode. Probe cases `print.cli319.plugin-dir-watch.unset`, `print.cli319.plugin-dir-watch.v1`, `pty.cli319.plugin-dir-watch.unset`, and `pty.cli319.plugin-dir-watch.v0`.
 [^zip]: The program, `chunk-2ew0jg68.js:16766`, `chunk-2ew0jg68.js:34533`, `chunk-a9bnjyrw.js:37401`, and `chunk-f8553xxv.js:2101`.
 [^not-installed]: The program, `chunk-dfwkett1.js:18118`.
 [^lsp]: The program, `chunk-dfwkett1.js:15884`.

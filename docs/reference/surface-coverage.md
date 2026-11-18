@@ -1196,7 +1196,7 @@ Items: 2112.
 | `CLAUDE_CODE_EMIT_TOOL_USE_SUMMARIES` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_EMIT_USER_PROMPT_SUBMIT_HOOK_EVENTS` | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) |
 | `CLAUDE_CODE_ENABLE_APPEND_SUBAGENT_PROMPT` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
-| `CLAUDE_CODE_ENABLE_AUTO_MODE` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:20627). It has no known effect. |
+| `CLAUDE_CODE_ENABLE_AUTO_MODE` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:21991). It has no known effect. |
 | `CLAUDE_CODE_ENABLE_AWAY_SUMMARY` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_ENABLE_BACKGROUND_PLUGIN_REFRESH` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_ENABLE_CFC` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
@@ -1204,11 +1204,11 @@ Items: 2112.
 | `CLAUDE_CODE_ENABLE_EXPERIMENTAL_ADVISOR_TOOL` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `CLAUDE_CODE_ENABLE_FEEDBACK_SURVEY_FOR_OTEL` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `CLAUDE_CODE_ENABLE_FINE_GRAINED_TOOL_STREAMING` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
-| `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:20627). It has no known effect. |
+| `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:26337). It has no known effect. |
 | `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `CLAUDE_CODE_ENABLE_LAUNCH_COMPOSER` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-2ew0jg68.js:13860). It has no known effect. |
 | `CLAUDE_CODE_ENABLE_MENU_KIND_LANES` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
-| `CLAUDE_CODE_ENABLE_OPUS_4_7_FAST_MODE` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-pem2txbt.js:40302). It has no known effect. |
+| `CLAUDE_CODE_ENABLE_OPUS_4_7_FAST_MODE` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-pem2txbt.js:40920). It has no known effect. |
 | `CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_ENABLE_PROXY_AUTH_HELPER` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_ENABLE_REFRESH_MCP_TOOLS` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
@@ -1276,7 +1276,7 @@ Items: 2112.
 | `CLAUDE_CODE_FRAME_TIMING_SAMPLE_EVERY` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `CLAUDE_CODE_GATEWAY_HINT_HEADERS` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 | `CLAUDE_CODE_GATEWAY_MODEL_DISCOVERY_TIMEOUT_MS` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
-| `CLAUDE_CODE_GATEWAY_TOKEN` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-pem2txbt.js:40302). It has no known effect. |
+| `CLAUDE_CODE_GATEWAY_TOKEN` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-pem2txbt.js:41014). It has no known effect. |
 | `CLAUDE_CODE_GATEWAY_TOKEN_FILE_DESCRIPTOR` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_GB_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-2ew0jg68.js:48839). It has no known effect. |
 | `CLAUDE_CODE_GB_DISK_CACHE_WHEN_TELEMETRY_OFF` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
@@ -1343,7 +1343,7 @@ Items: 2112.
 | `CLAUDE_CODE_INCLUDE_PARTIAL_MESSAGES` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_INCREMENTAL_REQUEST_BODY` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 | `CLAUDE_CODE_INLINE_TOOLS` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
-| `CLAUDE_CODE_INSTALLED_VIA_NPM_WRAPPER` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-pem2txbt.js:40302). It has no known effect. |
+| `CLAUDE_CODE_INSTALLED_VIA_NPM_WRAPPER` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-pem2txbt.js:41093). It has no known effect. |
 | `CLAUDE_CODE_INVOKED_SKILLS` | Excluded: Only a name in the program's lists and in a constant that Claude Code uses to set it for child processes (chunk-m14bt1pz.js:1301550). No code reads it by name. It has no setting for it. |
 | `CLAUDE_CODE_IS_COWORK` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_JIT_POLICY_AFTER_STARTUP` | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) |
@@ -1367,7 +1367,7 @@ Items: 2112.
 | `CLAUDE_CODE_MAX_MCP_DESCRIPTION_LENGTH` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_MAX_OUTPUT_TOKENS` | [Environment Variables](../configure/env-vars/index.md) |
 | `CLAUDE_CODE_MAX_RETRIES` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
-| `CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:20627). It has no known effect. |
+| `CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:27222). It has no known effect. |
 | `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_MAX_TOOL_USE_CONCURRENCY` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_MAX_TURNS` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
@@ -1396,7 +1396,7 @@ Items: 2112.
 | `CLAUDE_CODE_MCP_SERVE_TOOL_OUTPUT` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_MCP_SERVE_TUNNEL_BINARY_FRAMES` | Excluded: Set only by the MCP tunnel host in the child env (chunk-dpbss486.js:23583, cleared for runner children at chunk-xa2mcav9.js:236890); no user path sets it. Run: env319b.inert.tunnel-binary-frames. |
 | `CLAUDE_CODE_MCP_SERVE_WORKSPACE_ROOT` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
-| `CLAUDE_CODE_MCP_SKIP_UNCHANGED_RELIST` | Excluded: Only a name in lists of flag names. The program has no read of its value (chunk-asj6f58y.js:700880). |
+| `CLAUDE_CODE_MCP_SKIP_UNCHANGED_RELIST` | Excluded: Only a name in lists of flag names. The program has no read of its value (chunk-asj6f58y.js:704231). |
 | `CLAUDE_CODE_MCP_STARTUP_WAIT_MS` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_MCP_TOOL_IDLE_TIMEOUT` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_MEMORY_API_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:10732). It has no known effect. |
@@ -1431,7 +1431,7 @@ Items: 2112.
 | `CLAUDE_CODE_OAUTH_TOKEN` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_OFF_PERSONS_MACHINE` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
-| `CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-pem2txbt.js:40302). It has no known effect. |
+| `CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-pem2txbt.js:41202). It has no known effect. |
 | `CLAUDE_CODE_ORGANIZATION_UUID` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_OTEL_CONTENT_MAX_LENGTH` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `CLAUDE_CODE_OTEL_DIAG_STDERR` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
@@ -1491,7 +1491,7 @@ Items: 2112.
 | `CLAUDE_CODE_PROFILE_QUERY` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `CLAUDE_CODE_PROFILE_STARTUP` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `CLAUDE_CODE_PROGRAM_USE_CASE_ID` | Excluded: Returns null unless flag tengu_federated_possum holds and the host does not refuse the id (chunk-rj3e7agr.js:220825); no beta header change. Run: env319b.inert.use-case-id. |
-| `CLAUDE_CODE_PROGRAM_USE_CASE_STAMPED` | Excluded: Same gate as the use case id (chunk-rj3e7agr.js:211379); no change. Run: env319b.inert.use-case-id-stamped. |
+| `CLAUDE_CODE_PROGRAM_USE_CASE_STAMPED` | Excluded: Same gate as the use case id (chunk-rj3e7agr.js:221535); no change. Run: env319b.inert.use-case-id-stamped. |
 | `CLAUDE_CODE_PROJECTS_SESSION` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_PROJECT_DIR_NAME` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_PROJECT_DOC_LOOK_TIMEOUT_MS` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
@@ -1717,7 +1717,7 @@ Items: 2112.
 | `CLAUDE_CODE_TOOL_MEMORY_CGROUP_EXCLUDE` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_TOOL_MEMORY_LIMIT` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_TOOL_PICTURE_SERVERS` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
-| `CLAUDE_CODE_TOOL_USE_ID` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-asj6f58y.js:706085). It has no known effect. |
+| `CLAUDE_CODE_TOOL_USE_ID` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-asj6f58y.js:708921). It has no known effect. |
 | `CLAUDE_CODE_TOTAL_TOKENS_REMINDER` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
 | `CLAUDE_CODE_TOTAL_TOKENS_REMINDER_AFTER_USER_TURN` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
 | `CLAUDE_CODE_TOTAL_TOKENS_REMINDER_BUDGET` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
@@ -1775,7 +1775,7 @@ Items: 2112.
 | `CLAUDE_CODE_WORKER_CHECKIN_SCHEDULE` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_WORKER_EPOCH` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_WORKFLOWS` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
-| `CLAUDE_CODE_WORKFLOW_LAUNCH_SHA256` | Excluded: Only a name in the program's lists and in a constant that Claude Code uses to set it for child processes (chunk-5hxz6edf.js:293). No code reads it by name. It has no setting for it. |
+| `CLAUDE_CODE_WORKFLOW_LAUNCH_SHA256` | Excluded: Only a name in the program's lists and in a constant that Claude Code uses to set it for child processes (chunk-5hxz6edf.js:3853). No code reads it by name. It has no setting for it. |
 | `CLAUDE_CODE_WORKFLOW_MAX_CONCURRENT_AGENTS` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_WORKFLOW_PREFIX_STAGGER_MS` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_WORKFLOW_PROMPT_PROVENANCE` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
@@ -2358,13 +2358,13 @@ Items: 2112.
 | `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
-| `OTEL_EXPORTER_OTLP_PROFILES_CERTIFICATE` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:8114). It has no known effect. |
-| `OTEL_EXPORTER_OTLP_PROFILES_CLIENT_CERTIFICATE` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:8114). It has no known effect. |
-| `OTEL_EXPORTER_OTLP_PROFILES_CLIENT_KEY` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:8114). It has no known effect. |
-| `OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:8114). It has no known effect. |
-| `OTEL_EXPORTER_OTLP_PROFILES_HEADERS` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:8114). It has no known effect. |
-| `OTEL_EXPORTER_OTLP_PROFILES_INSECURE` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:8114). It has no known effect. |
-| `OTEL_EXPORTER_OTLP_PROFILES_PROTOCOL` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:8114). It has no known effect. |
+| `OTEL_EXPORTER_OTLP_PROFILES_CERTIFICATE` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:9152). It has no known effect. |
+| `OTEL_EXPORTER_OTLP_PROFILES_CLIENT_CERTIFICATE` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:9152). It has no known effect. |
+| `OTEL_EXPORTER_OTLP_PROFILES_CLIENT_KEY` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:9152). It has no known effect. |
+| `OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:9152). It has no known effect. |
+| `OTEL_EXPORTER_OTLP_PROFILES_HEADERS` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:9152). It has no known effect. |
+| `OTEL_EXPORTER_OTLP_PROFILES_INSECURE` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:9152). It has no known effect. |
+| `OTEL_EXPORTER_OTLP_PROFILES_PROTOCOL` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:9152). It has no known effect. |
 | `OTEL_EXPORTER_OTLP_PROTOCOL` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `OTEL_EXPORTER_OTLP_TIMEOUT` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `OTEL_EXPORTER_OTLP_TRACES_CERTIFICATE` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
@@ -2556,7 +2556,7 @@ Items: 2112.
 | `SYSTEM_WGETRC` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `SystemDrive` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `SystemRoot` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
-| `TASK_MAX_OUTPUT_LENGTH` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:20627). It has no known effect. |
+| `TASK_MAX_OUTPUT_LENGTH` | Excluded: Named in the program's table or lists of environment names, but no code that reads it was found in 2.1.322 (chunk-qhsv8pnt.js:27715). It has no known effect. |
 | `TEAMS_WEBHOOK_URL` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `TEMP` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `TERM` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
@@ -3064,21 +3064,21 @@ Items: 4302.
 | `${…}: a tool server doesn't run a marketplace's headersHelper on its own: the command was not run and the marketplace was not fetched.` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | `${…}: a version-control directory or one of its pointers could not be resolved (${…}) — make it readable or remove it` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: a version-control store holds too many top-level entries to examine — refusing to run` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
-| `${…}: action is not one that this version knows` | Excluded: Cloud session control request (an @internal request, chunk-rj3e7agr.js:717875); no page states the text |
-| `${…}: agent_id must be 1 to 128 letters, digits, _ or -` | Excluded: Cloud session control request (an @internal request, chunk-rj3e7agr.js:717875); no page states the text |
+| `${…}: action is not one that this version knows` | Excluded: Cloud session control request (an @internal request, chunk-rj3e7agr.js:721510); no page states the text |
+| `${…}: agent_id must be 1 to 128 letters, digits, _ or -` | Excluded: Cloud session control request (an @internal request, chunk-rj3e7agr.js:719863); no page states the text |
 | `${…}: an add_dir may only name fixture directories inside this case — not the case directory itself, its graders, a sibling case, an eval directory, or the plugin root` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: an add_dir must name a directory, not a file` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: an add_dirs entry points inside a directory that holds case definitions or version-control data of a plugin under test — point it at the fixtures themselves` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: an add_dirs entry points into version-control metadata — point it at the fixtures themselves` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: an agent responder needs a description of the server it plays as its body${…}` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: an engine.create hook has no budget and its failure fails the load; .catch does not apply` | Excluded: Mod engine load and registration assertions (plugin module shape, hook results) |
-| `${…}: at must be a time such as 2026-11-16T19:00:00Z, or empty` | Excluded: Cloud session control request (an @internal request, chunk-rj3e7agr.js:717875); no page states the text |
+| `${…}: at must be a time such as 2026-11-16T19:00:00Z, or empty` | Excluded: Cloud session control request (an @internal request, chunk-rj3e7agr.js:721510); no page states the text |
 | `${…}: cannot list "${…}" under a plugin or eval directory — make it readable or remove it` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: cannot read ${…} (${…})` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
 | `${…}: cannot tell what "${…}" under the eval directory is — make it readable or remove it` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
-| `${…}: cause must be typing or pickup` | Excluded: Cloud session control request (an @internal request, chunk-rj3e7agr.js:717875); no page states the text |
+| `${…}: cause must be typing or pickup` | Excluded: Cloud session control request (an @internal request, chunk-rj3e7agr.js:721510); no page states the text |
 | `${…}: collection must be an odd-depth path of 1-15 segments and doc_id one segment, within the path byte cap, after permission or hook rewrites` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
-| `${…}: cursor must be a next_cursor as it was given` | Excluded: Cloud session control request (an @internal request, chunk-rj3e7agr.js:717875); no page states the text |
+| `${…}: cursor must be a next_cursor as it was given` | Excluded: Cloud session control request (an @internal request, chunk-rj3e7agr.js:712649); no page states the text |
 | `${…}: cursor must be a non-empty string of at most ${…} characters` | Excluded: Internal consistency and refusal messages (bundled text, tool pairing, import size cap, host checks) |
 | `${…}: disappeared while loading` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: engine.create must return $ ({ ...await next(e), <noun>: { <event>() {} } }), not ${…}` | [/extend/mod-api#errors](/extend/mod-api#errors) |
@@ -3165,7 +3165,7 @@ Items: 4302.
 | `${…}: the on("${…}") hook returned no result` | Excluded: Mod engine load and registration assertions (plugin module shape, hook results) |
 | `${…}: the repository layout keeps revealing further working trees — refusing to run` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: theme.set: ${…}: ${…}` | Excluded: Mod API engine refusal (argument, tenant, size, or hook check); no page states the text |
-| `${…}: title must be a string of 1 to ${…} characters` | Excluded: Cloud session control request (an @internal request, chunk-rj3e7agr.js:717875); no page states the text |
+| `${…}: title must be a string of 1 to ${…} characters` | Excluded: Cloud session control request (an @internal request, chunk-rj3e7agr.js:721510); no page states the text |
 | `${…}: too many directories to examine for eval manifests — refusing to run` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: unknown frontmatter key "${…}" (expected one of: ${…})` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `${…}: unloaded while its module loaded` | Excluded: Mod engine load and registration assertions (plugin module shape, hook results) |
@@ -4702,7 +4702,7 @@ Items: 4302.
 | `ReplSessionScope: used before its screen bound a host` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `Reported message length does not match received message length` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Request aborted` | Excluded: Bundled AWS SDK and Smithy libraries |
-| `Request body gzip: compression stopped` | Excluded: Internal stop signal: it fires when block compression is switched off mid-request, and both callers catch it and send the body the plain way (chunk-18d5r2hb.js:217434 and @220991). |
+| `Request body gzip: compression stopped` | Excluded: Internal stop signal: it fires when block compression is switched off mid-request (chunk-31pcfc6c.js:5569), and both callers catch it and send the body the plain way (chunk-18d5r2hb.js:217434 and chunk-18d5r2hb.js:219809). |
 | `Request not sent: the API connection settings changed while it was being prepared. Try again.` | Excluded: API request refusal when the connection settings changed during preparation; no page states the text |
 | `Request path contains unescaped characters` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `Request timed out while downloading marketplace from ${…}. The server may be slow or unreachable. Technical details: ${…}` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
@@ -5123,7 +5123,7 @@ Items: 4302.
 | `Unsupported JWE "zip" (Compression Algorithm) Header Parameter value.` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `Unsupported JWE Algorithm: ${…}` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `Unsupported JWE Content Encryption Algorithm` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
-| `Unsupported address family: ${…}` | Excluded: The program's own address family check in the proxy host lookup that CLAUDE_CODE_PROXY_RESOLVES_HOSTS turns on (chunk-j9g63hey.js:106054). It accepts 0, 4, 6, IPv4, IPv6, and no family, the values that the socket layer passes. |
+| `Unsupported address family: ${…}` | Excluded: The program's own address family check in the proxy host lookup that CLAUDE_CODE_PROXY_RESOLVES_HOSTS turns on (chunk-j9g63hey.js:208163, used by the lookup at chunk-j9g63hey.js:209707). It accepts 0, 4, 6, IPv4, IPv6, and no family, the values that the socket layer passes. |
 | `Unsupported certificate format ${…}` | Excluded: Bundled Google auth library (google-auth-library) |
 | `Unsupported client authentication method: ${…}` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `Unsupported control request subtype: ${…}` | [/extend/headless/control-protocol#example](/extend/headless/control-protocol#example) |
@@ -5462,7 +5462,7 @@ Items: 4302.
 | `async schema referenced by sync schema` | Excluded: Bundled Ajv JSON Schema validator |
 | `async string format ${…}` | Excluded: Bundled Zod schema library |
 | `auth setup failed: ${…}` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
-| `auth token must be at least 32 characters` | Excluded: Guard: the only caller, `claude mcp serve` over HTTP (chunk-9n3mdzrp.js:8872), passes no token, so the token is the 64-character random default. |
+| `auth token must be at least 32 characters` | Excluded: Guard: the only caller, `claude mcp serve` over HTTP (chunk-9n3mdzrp.js:9407), passes no token (the guard is at chunk-wscqzbdw.js:37937), so the token is the 64-character random default. |
 | `authServerMetadataUrl must use https:// (got: ${…})` | [/extend/mcp/auth#errors](/extend/mcp/auth#errors) |
 | `authentication.type "${…}" is not a known authentication type` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `auto-edit attribution is no longer staged for this publish — nothing was published` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
@@ -6770,7 +6770,7 @@ Items: 4302.
 | `the upstream proxy URL must be http:// or https://` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | ``the value contains an empty `""` token — remove it, or fill in the value it was a placeholder for`` | Excluded: Argument-list setting parser errors (JSON form and quoting) |
 | ``the value contains an unquoted shell metacharacter (one of ; \| & $ ( ) ` < >) — it is an argv list, not a shell command`` | Excluded: Argument-list setting parser errors (JSON form and quoting) |
-| `the write made no progress` | Excluded: Internal short-write assertion in a file writer (chunk-ct0amnvc.js:14136); the program loops the write, no user input reaches it. |
+| `the write made no progress` | Excluded: Internal short-write assertion in a file writer (chunk-42aqyy6a.js:20558); the program loops the write, no user input reaches it. |
 | `the write of a resume head made no progress` | Excluded: Internal short-write assertion in a file writer (chunk-m14bt1pz.js:389821); the program loops the write, no user input reaches it. |
 | `this approval was already used by an earlier attempt — nothing was created now; retry so it is asked again` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `this batch no longer lists the writes that were approved (entries were added or removed) — nothing was read or sent; retry so it is checked again` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
@@ -6781,7 +6781,7 @@ Items: 4302.
 | `this computer's announced MCP tools changed while this request was being checked` | Excluded: Remote-session MCP relay refusals on the computer side (connection state, approved list, announced tools) |
 | `this connector request has ended` | Excluded: MCP connector request relay refusal (chunk-f10vs24n.js:9416); no page states the text |
 | `this drawing was unmounted` | Excluded: Plugin test kit and render-surface assertions (Client drawing, mounted tree, timers) |
-| `this file cannot be written in parts` | Excluded: Internal short-write assertion in a file writer (chunk-ct0amnvc.js:13999); the program loops the write, no user input reaches it. |
+| `this file cannot be written in parts` | Excluded: Internal short-write assertion in a file writer (chunk-42aqyy6a.js:21378); the program loops the write, no user input reaches it. |
 | `this input was approved as a create from an Artifact type and no longer names one — nothing was published; retry so it is checked again` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `this machine could not judge the hook's condition` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `this machine could not judge the hook's matcher` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
@@ -6997,7 +6997,7 @@ Items: 78.
 
 | Item | Where |
 | --- | --- |
-| `.cc-writes` | Excluded: A name in the program's list of config-folder entries (chunk-1yrzf3wn.js:985212). No use that a user can act on was confirmed. |
+| `.cc-writes` | Excluded: The name of a staging folder under `.claude/` (chunk-3kptb39p.js:3836). The program builds a list of these folders (chunk-1yrzf3wn.js:985212). No use that a user can act on was confirmed. |
 | `.config.json` | [Files on Disk](../start/files-on-disk.md) |
 | `.deep-link-register-failed` | [Files on Disk](../start/files-on-disk.md) |
 | `.last-cleanup` | [Files on Disk](../start/files-on-disk.md) |
@@ -7027,7 +7027,7 @@ Items: 78.
 | `drafts` | [Files on Disk](../start/files-on-disk.md) |
 | `dump-prompts` | Excluded: The program has a writer for `dump-prompts/<id>.jsonl`, but what turns it on was not confirmed (chunk-kc622jje.js:33651). |
 | `feedback-bundles` | [Files on Disk](../start/files-on-disk.md) |
-| `file-transfers` | Excluded: Only a name in the program's lists of config-folder entries (chunk-3vy87mp2.js:6245). Its content was not confirmed. |
+| `file-transfers` | Excluded: Only a name in the program's lists of config-folder entries (chunk-3vy87mp2.js:4906). Its content was not confirmed. |
 | `fork-seeds` | Excluded: An internal folder (`remote-control/fork-seeds/`) of `.json` files that the cleanup code removes. Not a file that a user edits. |
 | `gh-pr-status-cache.json` | [Files on Disk](../start/files-on-disk.md) |
 | `hfi-auth.json` | Excluded: An internal auth file that the cleanup code removes. Not a file that a user edits. |
@@ -7040,7 +7040,7 @@ Items: 78.
 | `mcp-discover-verdicts.json` | Excluded: An internal state file (`state/`) that the cleanup code removes. Not a file that a user edits. |
 | `mcp-discovery-cache` | Excluded: Only a name in the program's lists of config-folder entries (chunk-qq23hq95.js:8781). Its content was not confirmed. |
 | `mcp-needs-auth-cache.json` | [Files on Disk](../start/files-on-disk.md) |
-| `mcp-skill-archives` | Excluded: Only a name in the program's lists of config-folder entries (chunk-kc622jje.js:31518). Its content was not confirmed. |
+| `mcp-skill-archives` | Excluded: Only a name in the program's lists of config-folder entries (chunk-kc622jje.js:3652). Its content was not confirmed. |
 | `model-access.json` | Excluded: An internal cache file (`cache/`). Not a file that a user edits. |
 | `model-catalog` | [Files on Disk](../start/files-on-disk.md) |
 | `my-closed-issues.json` | [Files on Disk](../start/files-on-disk.md) |
@@ -10399,12 +10399,12 @@ Items: 140.
 | `/install-slack-app` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/keybindings` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/keybindings-help` | [/extend/skills-and-commands/bundled-skills#skills](/extend/skills-and-commands/bundled-skills#skills) |
-| `/limit-reset` | Excluded: Hidden, and the program gives no description (chunk-m14bt1pz.js:2538061). What it does is not known from the program, so the site does not guess. |
+| `/limit-reset` | Excluded: Hidden (isHidden is true), and on only for a claude.ai login when the server-side flag tengu_nifty_lemur or tengu_cedar_ember is on (chunk-m14bt1pz.js:2538061, chunk-m14bt1pz.js:2537250, chunk-m14bt1pz.js:2534542). Its description is "Reset your 5-hour limit now and keep working; once a week, still counts toward your weekly limit" or "Use an available limit reset and keep working". A user cannot turn it on, so the site does not list it. |
 | `/list-agents` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/login` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/logout` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/loop` | [/extend/skills-and-commands/bundled-skills#skills](/extend/skills-and-commands/bundled-skills#skills) |
-| `/loops` | Excluded: Its isEnabled always returns false in 2.1.322, so no user can run it (the program) (chunk-m14bt1pz.js:2517044). |
+| `/loops` | Excluded: Its isEnabled always returns false in 2.1.327 (isEnabled:()=>!1), so no user can run it (the program) (chunk-m14bt1pz.js:2517044). |
 | `/low-priority` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/mcp` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/memory` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
@@ -10412,7 +10412,7 @@ Items: 140.
 | `/model` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/output-style` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/passes` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
-| `/pause-memory` | Excluded: Its isEnabled always returns false in 2.1.322, so no user can run it (the program) (chunk-m14bt1pz.js:2165956). |
+| `/pause-memory` | Excluded: Its isEnabled always returns false in 2.1.327 (isEnabled:()=>!1), so no user can run it (the program) (chunk-m14bt1pz.js:2165956). |
 | `/permissions` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/plan` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/plugin` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
@@ -10466,10 +10466,10 @@ Items: 140.
 | `/usage-credits` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/use-case` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/verify` | [/extend/skills-and-commands/bundled-skills#skills](/extend/skills-and-commands/bundled-skills#skills) |
-| `/version` | Excluded: Its isEnabled always returns false in 2.1.322, so no user can run it (the program) (chunk-m14bt1pz.js:2521875). |
+| `/version` | Excluded: Its isEnabled always returns false in 2.1.327 (isEnabled:()=>!1), so no user can run it (the program) (chunk-m14bt1pz.js:2521875). |
 | `/voice` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/web-setup` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
-| `/wellbeing` | Excluded: Its isEnabled always returns false in 2.1.322, so no user can run it (the program) (chunk-m14bt1pz.js:2539912). |
+| `/wellbeing` | Excluded: Its isEnabled always returns false in 2.1.327 (isEnabled:()=>!1), so no user can run it (the program) (chunk-m14bt1pz.js:2539912). |
 | `/workflow-authoring` | [/extend/skills-and-commands/bundled-skills#skills](/extend/skills-and-commands/bundled-skills#skills) |
 | `/workflow-launch-exec` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/workflows` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
@@ -10589,7 +10589,7 @@ Items: 97.
 | `ExitWorktree` | [Agents, Tasks, and Planning](tools/agents-and-tasks.md) |
 | `FetchInboxMessage` | [Gated and Surface-Specific Tools](tools/gated-and-other.md) |
 | `GetGoal` | [Agents, Tasks, and Planning](tools/agents-and-tasks.md) |
-| `GetTask` | Excluded: Always off: its isEnabled returns false (chunk-1vttvse2.js:5709-5711) and the tool filter keeps only enabled tools (chunk-1vttvse2.js:9487), so no setting turns it on. A call fails with the text at chunk-b9fe411w.js:87-90. |
+| `GetTask` | Excluded: Always off: its isEnabled returns false (chunk-1vttvse2.js:122468) and the tool list keeps only enabled tools (chunk-1vttvse2.js:209216), so no setting turns it on. A call gets the text "GetTask is not a tool you can call" (chunk-b9fe411w.js:1715, used at chunk-m14bt1pz.js:4719817). |
 | `Glob` | [Files, Search, and Memory](tools/files.md) |
 | `Grep` | [Files, Search, and Memory](tools/files.md) |
 | `LSP` | [Files, Search, and Memory](tools/files.md) |

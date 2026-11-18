@@ -271,4 +271,4 @@ The size that a surface draws into, in character cells of the monospace metric o
 [^progress-props]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-b0yr0k8v.js:22132`.
 [^progress-node]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-rj3e7agr.js:887858`.
 [^shader-props]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `ShaderProps`.
-[^render-plugin]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-b0yr0k8v.js:175506`.
+[^render-plugin]: The Mod API type file, `schemas/claude-code.d.ts`, `RenderInputOf`. The `2.1.323` type file is the first with `plugin?: string` in `RenderInputOf`; the `2.1.322` type file has no such member. The program, `chunk-b0yr0k8v.js:175506`.

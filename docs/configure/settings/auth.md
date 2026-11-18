@@ -80,7 +80,7 @@ The [`2.1.312` changelog](https://code.claude.com/docs/en/changelog) names it, b
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema, `chunk-ja5z738t.js:278919`, and for `xaaIdp`, `chunk-ja5z738t.js:225202`.
+[^schema]: The program, its bundled settings schema, `chunk-ja5z738t.js:269081`, and for `xaaIdp`, `chunk-ja5z738t.js:225202`.
 [^providers]: The program, `chunk-ja5z738t.js:270548` and `chunk-asj6f58y.js:200105`.
 [^force-login]: The program, `chunk-ja5z738t.js:264790`.
 [^nested-login]: The program, `chunk-ja5z738t.js:269081` for the schema text and `chunk-asj6f58y.js:687801` for the check. The key is new in `2.1.327`.

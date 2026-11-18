@@ -252,7 +252,7 @@ The schema comes from the default values and the key list in the code.[^claude-j
 
 ## Sources
 
-[^overview]: The program, `chunk-pmhjgtb5.js:2548` (the `CLAUDE_CONFIG_DIR` variable) and `chunk-2ew0jg68.js:55389` (`CLAUDE_CONFIG_DIR` or the default `~/.claude`).
+[^overview]: The program, `chunk-pmhjgtb5.js:2548` (the `CLAUDE_CONFIG_DIR` variable) and `chunk-2ew0jg68.js:56228` (`CLAUDE_CONFIG_DIR` with a fallback) and `chunk-xa2mcav9.js:35493` (`CLAUDE_CONFIG_DIR` or the default `~/.claude`).
 [^config-folders]: The program, `chunk-kc622jje.js:42567` (`state/` and `cache/model-catalog/` names), `chunk-jvme5rqc.js:245870` (`seed-admin`), and `chunk-1yrzf3wn.js:872150` (`bridge-spawn`).
 [^more-names]: The program, `chunk-xa2mcav9.js:31492`.
 [^config-json]: The program, `chunk-2ew0jg68.js:55389-55900` and `chunk-dt20ra1t.js:41527`.

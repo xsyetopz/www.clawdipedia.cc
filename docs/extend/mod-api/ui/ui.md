@@ -103,7 +103,7 @@ In a `-p` run with no app attached, the debug log shows `{"isDrawn":false,"reque
 - `requestId` is `backdrop` for a scene and `theme` with no scene.[^theme-323] Before `2.1.323`, the second case was "with no `backdrop`". With no scene, no `ui.render` hook is asked to draw.
 - Before `2.1.321`, the only attribute was `backdrop`. It was drawn behind the conversation by a `ui.render` hook for the component `Backdrop`, on the desktop and mobile apps only. The `2.1.319` rule that the only attribute is `backdrop` is gone.
 - Before `2.1.321`, it rejected with the host check text `theme.set does not know the attribute "palette": this build takes backdrop`, `theme.set takes backdrop: { id, glass?, colorScheme? }; $.theme.clear() clears the theme`, `glass.blur is a number of CSS pixels, 0 to 64`, `colorScheme is light or dark`, and `id is 1 to 64 of letters, digits, _ or - (host check)`.[^theme-321]
-- The texts are `this build takes backdrop, colors` and `theme.set takes backdrop: { id, glass?, colorScheme? }, colors, or both; $.theme.clear() clears the theme`. The signature is `{ backdrop?, colors? }`.[^theme-321]
+- In `2.1.321` and `2.1.322`, the texts were `this build takes backdrop, colors` and `theme.set takes backdrop: { id, glass?, colorScheme? }, colors, or both; $.theme.clear() clears the theme`. The signature was `{ backdrop?, colors? }`.[^theme-321]
 - Since `2.1.323`, the program says `theme.set needs at least one of backdrop, overrideColorScheme, colors; $.theme.clear() clears the theme`, `overrideColorScheme is light or dark`, `glass.blur is a number of points, 0 to 64`, `backdrop needs a scene: 1 to 64 of letters, digits, _ or -`, `backdrop.glass is for a scene: a still ground has none`, and `backdrop takes just one of scene, color, gradient or vector, and this names ...`. The attribute error ends `this build takes backdrop, overrideColorScheme, colors`.[^theme-323]
 
 ## Related Pages
@@ -117,7 +117,7 @@ In a `-p` run with no app attached, the debug log shows `{"isDrawn":false,"reque
 
 [^types-323]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`.
 [^theme-run]: Probe case `print.cli319.theme.engine`, run on the `2.1.319` program in a `-p` run with a mod that calls the function from `session.start`. The function table of the hooks engine holds `theme.set`, with a `check` and a `run`.
-[^theme-323]: The program, `chunk-grrnec65.js:18110`. The attribute check names `backdrop` and `colors`.
-[^theme-321]: The program, `chunk-m14bt1pz.js:4615467`. The type text is in `schemas/claude-code.d.ts`, `ThemeColors`.
+[^theme-323]: The program, `chunk-grrnec65.js:18110`. The attribute check reads the list `E=["backdrop","overrideColorScheme","colors"]` at `chunk-grrnec65.js:17712`, and `glass.blur is a number of points` is at `chunk-grrnec65.js:11001`.
+[^theme-321]: The texts are from the program of `2.1.321`. The text of `2.1.327` no longer holds them; its host check is at `chunk-grrnec65.js:17949` and `chunk-grrnec65.js:18110`. The type text is in `schemas/claude-code.d.ts`, `ThemeColors`.
 [^blur]: The program, `chunk-grrnec65.js:11001`.
 [^cancel-notify]: The program, call `chunk-b0yr0k8v.js:314613`, check `chunk-m14bt1pz.js:4846946` (`mri`) and run `chunk-m14bt1pz.js:4848746` (`Rri`), table `chunk-m14bt1pz.js:4874632`.
