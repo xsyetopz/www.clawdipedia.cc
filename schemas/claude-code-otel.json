@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-otel.json",
-	"title": "Claude Code OpenTelemetry metrics, spans, and events (Claude Code 2.1.326)",
-	"$comment": "For the OpenTelemetry data Claude Code emits. Each $defs entry is one metric, span, or event; the kind is in x-otel-kind and the properties are its attributes. Generated from Claude Code 2.1.326 by tools/schemas/code.ts. Anchors: \"Count of CLI sessions started\" (the meter setup that registers each metric with its description and unit) with the counter accessor functions and their .add(value, attributes) call sites; the span helpers (startSpan(\"claude_code.<name>\") with the attribute literal built just before it, and the wrapper that takes {spanType, attrs, contentAttrs}); the event emitter that sets \"event.name\", \"event.timestamp\", \"event.sequence\" and its call sites with the attribute literal; the base attribute builder behind \"OTEL_METRICS_INCLUDE_SESSION_ID\". No probe in captures/ records telemetry, so nothing is marked x-observed. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
+	"title": "Claude Code OpenTelemetry metrics, spans, and events (Claude Code 2.1.327)",
+	"$comment": "For the OpenTelemetry data Claude Code emits. Each $defs entry is one metric, span, or event; the kind is in x-otel-kind and the properties are its attributes. Generated from Claude Code 2.1.327 by tools/schemas/code.ts. Anchors: \"Count of CLI sessions started\" (the meter setup that registers each metric with its description and unit) with the counter accessor functions and their .add(value, attributes) call sites; the span helpers (startSpan(\"claude_code.<name>\") with the attribute literal built just before it, and the wrapper that takes {spanType, attrs, contentAttrs}); the event emitter that sets \"event.name\", \"event.timestamp\", \"event.sequence\" and its call sites with the attribute literal; the base attribute builder behind \"OTEL_METRICS_INCLUDE_SESSION_ID\". No probe in captures/ records telemetry, so nothing is marked x-observed. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
 	"$defs": {
 		"event:api_error": {
 			"x-otel-kind": "event",
@@ -13,31 +13,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -116,31 +144,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -219,31 +275,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -291,8 +375,8 @@
 					"type": "number"
 				},
 				"duration_ms": {
-					"x-unverified": true,
-					"x-observed-type": ["number"]
+					"type": "integer",
+					"minimum": 0
 				},
 				"ttft_ms": {
 					"type": "number"
@@ -341,31 +425,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -420,31 +532,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -493,31 +633,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -554,31 +722,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -624,31 +820,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -700,31 +924,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -785,31 +1037,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -891,31 +1171,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -967,31 +1275,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -1028,31 +1364,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -1104,31 +1468,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -1165,31 +1557,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -1259,31 +1679,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -1344,31 +1792,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -1408,31 +1884,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -1481,31 +1985,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -1575,31 +2107,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -1666,31 +2226,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -1772,31 +2360,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -1845,31 +2461,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -1936,31 +2580,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -2003,31 +2675,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -2070,31 +2770,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -2142,7 +2870,7 @@
 					"type": "string"
 				},
 				"request_id": {
-					"x-unverified": true
+					"type": "string"
 				}
 			}
 		},
@@ -2155,31 +2883,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -2242,7 +2998,7 @@
 					"const": "branch"
 				},
 				"request_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"error_type": {
 					"type": "string"
@@ -2261,31 +3017,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -2326,31 +3110,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -2367,31 +3179,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -2420,31 +3260,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -2461,31 +3329,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -2497,7 +3393,13 @@
 					"const": "fast"
 				},
 				"query_source": {
-					"x-unverified": true
+					"enum": [
+						"main",
+						"subagent",
+						"auxiliary",
+						"plugin_model_complete",
+						"plugin_model_classify"
+					]
 				},
 				"effort": {
 					"enum": ["low", "medium", "high", "xhigh", "max"]
@@ -2532,31 +3434,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -2579,31 +3509,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -2620,31 +3578,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -2661,31 +3647,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -2697,7 +3711,13 @@
 					"const": "fast"
 				},
 				"query_source": {
-					"x-unverified": true
+					"enum": [
+						"main",
+						"subagent",
+						"auxiliary",
+						"plugin_model_complete",
+						"plugin_model_classify"
+					]
 				},
 				"effort": {
 					"enum": ["low", "medium", "high", "xhigh", "max"]
@@ -2734,31 +3754,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -2792,31 +3840,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -2844,31 +3920,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -2905,31 +4009,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -2972,31 +4104,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -3036,31 +4196,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -3100,31 +4288,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -3155,31 +4371,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -3237,31 +4481,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"
@@ -3286,31 +4558,59 @@
 					"type": "string"
 				},
 				"session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"ccr.session.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.version": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"app.entrypoint": {
-					"x-unverified": true
+					"enum": [
+						"cli",
+						"mcp",
+						"sdk-cli",
+						"sdk-ts",
+						"sdk-py",
+						"bench",
+						"claude-vscode",
+						"claude-code-github-action",
+						"local-agent",
+						"local_agent",
+						"claude-desktop",
+						"remote",
+						"remote_baku",
+						"remote_cowork",
+						"remote_trigger",
+						"remote_cowork_trigger",
+						"remote_desktop",
+						"remote_mobile",
+						"remote_projects",
+						"claude_in_slack",
+						"claude-in-slack",
+						"claude-in-teams",
+						"claude-desktop-3p",
+						"claude-security",
+						"ssh-remote",
+						"claude-coworker",
+						"claude-coworker-terminal"
+					]
 				},
 				"organization.id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.email": {
 					"type": "string"
 				},
 				"user.account_uuid": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.account_id": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"terminal.type": {
-					"x-unverified": true
+					"type": "string"
 				},
 				"user.groups": {
 					"type": "string"

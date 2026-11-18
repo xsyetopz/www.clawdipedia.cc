@@ -110,7 +110,7 @@ A fork keeps its tool output out of your context. If you are the fork, execute d
 
 ### `Bash`
 
-Sent in full by default: ✅ Yes. Description: 1,934 characters. Schema: 1,720 characters.
+Sent in full by default: ✅ Yes. Description: 2,110 characters. Schema: 1,720 characters.
 
 ```text
 Executes a bash command and returns its output.
@@ -126,6 +126,7 @@ Executes a bash command and returns its output.
 - Use the `gh` CLI for GitHub operations (PRs, issues, API).
 - GitHub notifies the owner of any `@name` written in a PR, issue, or comment. Write a bare `@name` only for a real login you mean to notify. Put roles, placeholders, and code (`@human`, `@reviewer`, `@types/node`) in backticks or drop the `@`, even when copied from project files.
 - Commit or push only when the user asks. If on the default branch, branch first.
+- Do not commit files that likely contain secrets (.env, credentials.json, .claude/settings.local.json, etc). Warn the user if they specifically request to commit those files.
 - End git commit messages and PR bodies with the attribution lines given in the conversation's system-reminder, when one is present.
 ```
 
@@ -448,10 +449,10 @@ If called outside an EnterWorktree session, the tool is a **no-op**: it reports 
 
 ### `ListAgents`
 
-Sent in full by default: ✅ Yes. Description: 777 characters. Schema: 316 characters.
+Sent in full by default: ✅ Yes. Description: 927 characters. Schema: 472 characters.
 
 ```text
-Lists agents you can SendMessage to — in-process subagents you spawned, the teammates on your team, other local Claude sessions on this machine, your Claude sessions running in the cloud (when this session has cloud access; a cloud session receives your message but cannot message any session back yet — do not ask it to reply, read its answer in its own transcript), and (when Remote Control is connected here) your account's other sessions — Remote Control sessions on other machines and cloud sessions, each row labeled by kind. Names are the address: send with `SendMessage({to: "<name>", message: "..."})`, copying the name exactly as a row prints it. Append a row's ` [ref]` only when the bare name is not enough — two rows share it, or an error asks you to disambiguate.
+Lists agents you can SendMessage to — in-process subagents you spawned, the teammates on your team, other local Claude sessions on this machine, your Claude sessions running in the cloud (when this session has cloud access; a cloud session receives your message but cannot message any session back yet — do not ask it to reply, read its answer in its own transcript), and (when Remote Control is connected here) your account's other sessions — Remote Control sessions on other machines and cloud sessions, each row labeled by kind. Names are the address: send with `SendMessage({to: "<name>", message: "..."})`, copying the name exactly as a row prints it. Append a row's ` [ref]` only when the bare name is not enough — two rows share it, or an error asks you to disambiguate. A long listing comes in pages: for the next one, pass the `cursor` its last line gives — not needed to message a session whose name you already know.
 ```
 
 ```json skip-lint
@@ -466,6 +467,11 @@ Lists agents you can SendMessage to — in-process subagents you spawned, the te
     },
     "q": {
       "description": "Not available in this build; leave unset.",
+      "type": "string",
+      "maxLength": 256
+    },
+    "cursor": {
+      "description": "The cursor the last line of a long listing gave, for its next page. Omit to list from the start.",
       "type": "string",
       "maxLength": 256
     }

@@ -28,7 +28,7 @@ Each line is a separate command. The text after the name is the argument.
 - A prompt command expands into a model prompt.
 - Many commands have two forms: a panel for interactive sessions and a text form for `-p` and the SDK.
 - A `Gated` badge means a flag, policy, plan, provider, or env var must allow the command.
-- Claude Code has about 101 command names. It also makes `/mcp__<server>__<prompt>` commands from MCP prompts.[^count]
+- The `2.1.327` program has 140 command names, counting hidden commands and bundled skills. It also makes `/mcp__<server>__<prompt>` commands from MCP prompts.[^count]
 
 ## Session and Conversation Commands
 
@@ -40,7 +40,7 @@ Each line is a separate command. The text after the name is the argument.
 | `/compact` `<optional custom summarization instructions>` | <Documented /> | Summarizes the conversation to free context. | Off when env var `DISABLE_COMPACT` is truthy. See [Context and Compaction](../../how-it-works/context-and-compaction.md). |
 | `/autocompact` `[auto\|<tokens>]` | <Documented /> | Sets how full the context gets before it auto-summarizes. | Panel in interactive mode. A text form, "Configure the auto-compact window size", runs non-interactive or in a remote workspace. |
 | `/context` | <Documented /> | Shows current context use. | Found only as a text command, enabled in non-interactive mode. |
-| `/resume` (alias `/continue`) `[conversation id or search term]` | <Documented /> | Resumes a past conversation. | Panel. Hidden for a remote viewer. See [Sessions and Storage](../../how-it-works/sessions-and-storage.md). |
+| `/resume` (alias `/continue`) `[conversation id or search term]` | <Documented /> | Resumes a past conversation. | Panel. Hidden for a remote viewer. Since `2.1.327` the list fills the room in the window. The release notes say it showed one session fewer before.[^resume-327] After most spend caps and other account limits, Claude Code no longer shows the hint `Resend your message to try again`, because a resend cannot help.[^resend-hint] See [Sessions and Storage](../../how-it-works/sessions-and-storage.md). |
 | `/rename` (alias `/name`) `[name]` | <Documented /> | Renames the conversation. | Panel and text form. |
 | `/branch` `[name]` | <Documented /> | Branches the conversation at this point. | Panel. |
 | `/fork` `<directive> or [prompt]` | <Documented /> | Starts a background agent that inherits the full conversation. | Panel. Off in coordinator mode. |
@@ -51,11 +51,11 @@ Each line is a separate command. The text after the name is the argument.
 | `/plan` `[open\|<description>]` | <Documented /> | Enables plan mode, or shows the session plan. | Panel. |
 | `/recap` | <Documented /> | Writes a one-line session recap now. | Text command. |
 | `/btw` `[question]` | <Documented /> | Asks a quick side question without interrupting the main conversation. | Panel. |
-| `/export` `[filename]` | <Documented /> | Exports the conversation to a file or the clipboard. | Panel. |
+| `/export` `[filename]` | <Documented /> | Exports the conversation to a file or the clipboard. | Panel. Since `2.1.327`, the dialog asks before it overwrites a file. `/export <name>` keeps an existing file and tells you to run `/export`.[^export] |
 | `/copy` `[N]` | <Documented /> | Copies the last reply to the clipboard. `/copy N` copies the Nth latest. | Panel. |
 | `/exit` (alias `/quit`) | <Documented /> | Exits the CLI. In a background session, it detaches. The session keeps running. | Panel and text form. |
 | `/restart` (alias `/update`) | <Gated note="Interactive terminal on macOS or Linux, native install only, and a server-side feature flag." /> | Restarts Claude Code on the newly installed version. Resumes this session. | Interactive only. See [How `/restart` Works](#how-restart-works). |
-| `/rewind` (aliases `/checkpoint`, `/undo`) | <Documented /> | Restores the code, the conversation, or both to an earlier point. | Interactive only. Each point says what code it can restore. Since `2.1.326`, a turn whose changes were not tracked reads `Code changes unknown` instead of `No code changes`, and a file that a shell command changed reads `Can't restore <file> changed while a command ran`.[^rewind] Also since `2.1.326`, a restore leaves some files untouched: a link or other file that is not regular, a file whose folder changed since the checkpoint, a file behind a link in a folder that sandboxed commands can write, and a file whose backup cannot be read safely. The result says `Restored the code, but skipped N file(s): <reason>`, and `--debug` lists the paths.[^rewind-skip] |
+| `/rewind` (aliases `/checkpoint`, `/undo`) | <Documented /> | Restores the code, the conversation, or both to an earlier point. | Interactive only. Each point says what code it can restore. Since `2.1.326`, a turn whose changes were not tracked reads `Code changes unknown` instead of `No code changes`, and a file that a shell command changed reads `Can't restore <file> changed while a command ran`.[^rewind] Also since `2.1.326`, a restore leaves some files untouched: a link or other file that is not regular, a file whose folder changed since the checkpoint, a file behind a link in a folder that sandboxed commands can write, and a file whose backup cannot be read safely. The result says `Restored the code, but skipped N file(s): <reason>`, and `--debug` lists the paths.[^rewind-skip] Since `2.1.327`, `/rewind` no longer closes without a word when some files could not be restored.[^rewind-327] |
 | `/tasks` (alias `/bashes`) | <Documented /> | Shows and manages everything that runs in the background. | Panel. |
 | `/list-agents` (alias `/peers`) | <Documented /> | Lists subagents, teammates, and other sessions you can message. | Off when the org setting `messagingBeyondOwnAgentsDisabled` is set. |
 | `/focus` `[on\|off]` | <Documented /> | Toggles focus view: only your prompt, a summary, and the reply. | Needs the fullscreen renderer (`/tui fullscreen` or `CLAUDE_CODE_NO_FLICKER=1`). The setting `viewMode: "focus"` does the same. |
@@ -69,19 +69,19 @@ Each line is a separate command. The text after the name is the argument.
 
 | Command | Status | What it does | Notes |
 | --- | --- | --- | --- |
-| `/config` (alias `/settings`) `key=value` | <Documented /> | Sets a setting by key. | The text form works in non-interactive mode only. In the panel, the default permission mode shows "Auto (default)" when new sessions start in auto mode, not Manual. Pressing Space on that row saves Don't Ask, not Plan: the options are Manual, Plan, Accept edits, Auto, and Don't Ask, in that order.[^config-panel] |
+| `/config` (alias `/settings`) `key=value` | <Documented /> | Sets a setting by key. | The text form works in non-interactive mode only. In the panel, the default permission mode shows "Auto (default)" when new sessions start in auto mode, not Manual. Pressing Space on that row saves Don't Ask, not Plan: the options are Manual, Plan, Accept edits, Auto, and Don't Ask, in that order.[^config-panel] Since `2.1.327` the notice after you change the theme and close the panel says `Set theme to <name>`. It no longer says that the dialog was dismissed.[^config-theme] |
 | `/memory` | <Documented /> | Edits `CLAUDE.md` files and memory settings. | Panel. Since `2.1.326`, a read-only file opens with the warning `This file is read-only, so your changes may not save. Check its permissions.` On a read-only file system the warning says to make that file system writable.[^memory] |
 | `/permissions` (alias `/allowed-tools`) | <Documented /> | Manages allow and deny rules. | Panel. |
-| `/hooks` | <Documented /> | Shows your hook configuration. | Panel. Needs no workspace. See [Hooks](../hooks/index.md). |
-| `/mcp` `[reconnect\|enable\|disable [<server>\|all]]` | <Documented /> | Manages MCP servers. | Panel and text form. |
-| `/plugin` (aliases `/plugins`, `/marketplace`) `[subcommand]` | <Documented /> | Manages plugins. | Panel with argument completion. |
+| `/hooks` | <Documented /> | Shows your hook configuration. | Panel. Needs no workspace. The `2.1.327` release notes say it also lists hooks that come from `--settings`.[^hooks-cmd] See [Hooks](../hooks/index.md). |
+| `/mcp` `[reconnect\|enable\|disable [<server>\|all]]` | <Documented /> | Manages MCP servers. | Panel and text form. Since `2.1.327`, local, remote, and agent servers share one page layout, menus end in `Back`, and actions are not numbered outside screen reader mode. When no servers are set up, `/mcp` says what to do, also after you add or decline one during a session.[^mcp-cmd] |
+| `/plugin` (aliases `/plugins`, `/marketplace`) `[subcommand]` | <Documented /> | Manages plugins. | Panel with argument completion. Since `2.1.327`, the question before you remove a marketplace says that its plugins' settings and saved data are deleted.[^plugin-cmd] |
 | `/reload-plugins` `[--force]` | <Documented /> | Activates pending plugin changes in the current session. | Runs non-interactive too (since `2.1.260`). |
 | `/reload-skills` | <Documented /> | Loads skills added or changed on disk during this session. | Works in both modes. |
-| `/skills` | <Documented /> | Lists available skills. `Space` cycles the `skillOverrides` state and `Esc` saves it. | Panel. Since `2.1.326`, pressing Ctrl+C or Ctrl+D a second time saves the changes and closes the panel. After the first press, the panel title says "press Ctrl-C again to close", with the name of the key you pressed.[^skills-exit] |
+| `/skills` | <Documented /> | Lists available skills. `Space` cycles the `skillOverrides` state and `Esc` saves it. | Panel. Since `2.1.326`, pressing Ctrl+C or Ctrl+D a second time saves the changes and closes the panel. After the first press, the panel says "Press Ctrl-C again to close", with the name of the key you pressed.[^skills-exit] |
 | `/skill-doctor` | <Documented /> | Shows which loaded skills are unused and cost context. | Panel (opens the `/plugin` Stats tab) and a text form. Needs feature-flag fetching. |
 | `/output-style` `[style]` | <Documented /> | Lists output styles or switches to one. | Text command. |
 | `/theme` | <Documented /> | Changes the theme. | Panel. |
-| `/tui` `[default\|fullscreen]` | <Documented /> | Sets the terminal UI renderer. | A change restarts and resumes the session. Since `2.1.326`, when something keeps the renderer, `/tui` shows `Still the <renderer> renderer` and names the cause and the fix: the `tui` setting or a `CLAUDE_CODE_NO_FLICKER` or `CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN` value in a settings file, managed settings, screen reader mode, `tmux -CC`, SSH to Windows, or repeated failed fullscreen starts.[^tui] |
+| `/tui` `[classic\|fullscreen]` | <Documented /> | Sets the terminal UI renderer. | A change restarts and resumes the session. Since `2.1.327`, `classic` is the name of the non-fullscreen renderer. `/tui default` still works.[^tui-classic] Since `2.1.326`, when something keeps the renderer, `/tui` shows `Still the <renderer> renderer` and names the cause and the fix: the `tui` setting or a `CLAUDE_CODE_NO_FLICKER` or `CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN` value in a settings file, managed settings, screen reader mode, `tmux -CC`, SSH to Windows, or repeated failed fullscreen starts.[^tui] |
 | `/color` `[color\|default]` | <Documented /> | Sets the prompt bar color for this session. | Panel and text form. |
 | `/brief` | <Gated note="Remote config flag enable_slash_command, and the account needs the Brief tool." /> | Toggles brief-only mode. | Panel. |
 | `/scroll-speed` | <Documented /> | Adjusts mouse wheel scroll speed. | Needs the fullscreen renderer. Off in some terminals, including JetBrains. |
@@ -89,13 +89,13 @@ Each line is a separate command. The text after the name is the argument.
 | `/keybindings` | <Documented /> | Opens your keyboard shortcuts file. | Interactive only. Needs keybinding customization on. |
 | `/ide` `[open]` | <Documented /> | Manages IDE integrations and shows status. | Panel. |
 | `/init` | <Documented /> | Creates a `CLAUDE.md` file with codebase notes. | A prompt command. With env var `CLAUDE_CODE_NEW_INIT` it also configures skills and hooks. Claude can call it through the `Skill` tool. |
-| `/auto-mode-setup` `[--request-id <uuid>] (--wizard ... --propose \| --expect-sha256 <hex> --apply-file <path>)` | <Gated note="An environment-onboarding policy flag." /> | Teaches auto mode about your environment, with optional rule changes. It reads your project and recent sessions. | Panel. The text form is non-interactive. Since `2.1.304` it is also on Bedrock, Vertex, Foundry, a Claude apps gateway, and with telemetry off. `skillOverrides["auto-mode-setup"]: "off"` turns it off.[^auto-setup] |
+| `/auto-mode-setup` `[--request-id <uuid>] (--wizard ... --propose \| --expect-sha256 <hex> --apply-file <path>)` | <Gated note="An environment-onboarding policy flag." /> | Teaches auto mode about your environment. The text form can also apply rule changes. It reads your project and recent sessions. | Panel. The text form is non-interactive. The panel description no longer says "plus optional rule tweaks" since `2.1.327`; the text form keeps it. Since `2.1.304` it is also on Bedrock, Vertex, Foundry, a Claude apps gateway, and with telemetry off. `skillOverrides["auto-mode-setup"]: "off"` turns it off.[^auto-setup] |
 | `/import` `[codex\|gemini\|cursor] [--dry-run]` | <Gated note="Server flag tengu_import, off by default. You cannot enable it" /> | Imports config from another AI coding agent. | Panel and text form. |
 | `/help` | <Documented /> | Shows help and the command list. | Panel. Terminal only. Since `2.1.326`, it takes an optional `[command]` argument. Typing `/<command> --help` or `/<command> -h` for a built-in command runs `/help <command>`, unless that command answers `--help` itself. `/help <command>` for such a command runs `/<command> --help`.[^help] |
-| `/status` | <Documented /> | Shows version, model, account, API connectivity, and tool status. | Panel. Lists skills whose `allowed-tools` were ignored. Since `2.1.326`, a `Features` row says when your provider or an environment variable turns features off, such as "some aren't available while `DISABLE_TELEMETRY` is set", with a link to the official page.[^status-features] |
+| `/status` | <Documented /> | Shows version, model, account, API connectivity, and tool status. | Panel. Lists skills whose `allowed-tools` were ignored. The `2.1.327` release notes say it also lists broken agent, skill, command, and output style files, keybinding errors, an unavailable sandbox, ignored permission settings, and hook matchers that never match, and that narrow terminals lay it out better.[^status-327] Since `2.1.326`, a `Features` row says when your provider or an environment variable turns features off, such as "some aren't available while `DISABLE_TELEMETRY` is set", with a link to the official page.[^status-features] |
 | `/usage` (aliases `/cost`, `/stats`) | <Documented /> | Shows session cost, plan use, and activity stats. | Panel and text form. Since `2.1.304` it says when a rate limit ends. `CLAUDE_CODE_OAUTH_TOKEN` shows the limit rows too. Since `2.1.305` each warning is a one-line fix that names its source, and `f` applies the fixes. The same fixes appear in VS Code and `/doctor`.[^v305] See [How `/usage` and `/artifacts` Work](#how-usage-and-artifacts-work). |
 | `/release-notes` | <Documented /> | Shows release notes. | Panel. |
-| `/statusline` | <Documented /> | Configures the status line. | A prompt command. Not in safe mode. Interactive only. |
+| `/statusline` | <Documented /> | Configures the status line. | A prompt command. Not in safe mode. Interactive only. Since `2.1.327`, it no longer writes to `~/.claude/settings.json` when `CLAUDE_CONFIG_DIR` points to another folder.[^statusline-327] |
 | `/sandbox` `exclude "command pattern"` (Windows also `install`) | <Gated note="Hidden when the platform is not supported or not in the enabled list." /> | Shows sandbox state and opens its settings. | Panel. |
 | `/chrome` | <Gated note="Availability claude-ai, policy allow_claude_browser_extension, interactive only." /> | Opens Claude in Chrome settings. | Panel. |
 | `/insights` | <Gated note="Policy allow_insights, and needs a workspace." /> | Makes a report that analyzes your sessions. | A prompt command. |
@@ -117,7 +117,7 @@ Each line is a separate command. The text after the name is the argument.
 | `/passes` | <Gated note="Hidden unless the account is eligible." /> | Shares a free week of Claude Code with friends. | Panel. |
 | `/feedback` `[report]` | <Gated note="Off when env var DISABLE_FEEDBACK_COMMAND is set." /> | Sends feedback or reports a bug. | Panel. |
 | `/bug` (alias `/share`) `[report]` | <Gated note="Env var DISABLE_BUG_COMMAND exists." /> | Reports a bug or shares your conversation. | Panel. |
-| `/install-github-app` | <Gated note="Availability claude-ai and console. Off when env var DISABLE_INSTALL_GITHUB_APP_COMMAND is set." /> | Configures GitHub Actions for a repository. | Panel. |
+| `/install-github-app` | <Gated note="Availability claude-ai and console. Off when env var DISABLE_INSTALL_GITHUB_APP_COMMAND is set." /> | Configures GitHub Actions for a repository. | Panel. Since `2.1.327`, it asks you to confirm before it changes a repository. The repository, secret, and API key steps use the standard list and keys.[^gh-app] |
 | `/install-slack-app` | <Gated note="Availability claude-ai." /> | Installs the Slack app. | Text command. |
 | `/setup-bedrock` | <Gated note="Hidden unless CLAUDE_CODE_USE_BEDROCK is set." /> | Reconfigures Amazon Bedrock sign-in, region, or model pins. | Panel. See [Models and Providers](../../configure/models-and-providers/index.md). |
 | `/setup-vertex` | <Gated note="Hidden unless CLAUDE_CODE_USE_VERTEX is set." /> | Reconfigures Google Vertex AI sign-in, project, region, or model pins. | Panel. |
@@ -135,7 +135,7 @@ Each line is a separate command. The text after the name is the argument.
 | `/send-to-project` `["project name" or id] [message or note]` | <Gated note="Policy allow_remote_sessions, not CLAUDE_CODE_REMOTE, a claude.ai login, and a hidden server-side flag." /> | Sends this session's work to a Claude Project on claude.ai/code. | Text that Claude acts on (prompt command). Only you can run it. Claude cannot start it, and it does not run in a subagent. Put a project name in double quotes, or give a project id. With no name it asks you to pick a project. Claude drafts a brief, or sends your message, with the `SendToProject` tool. The tool shows its own confirmation pane and sends nothing until you approve. Remote Control must be on for the session. See [Gated and Surface-Specific Tools](../../reference/tools/gated-and-other.md). |
 | `/daemon` | <Undocumented /> | Manages background services and routines. | Panel. |
 | `/workflows` | <Gated note="Setting disableWorkflows and env var CLAUDE_CODE_DISABLE_WORKFLOWS." /> | Browses running and finished workflows. | Panel. |
-| `/artifacts` | <Gated note="claude.ai login on a Pro, Max, Team, or Enterprise plan (or no plan set), and an org policy." /> | Browses your published and shared artifacts. | Panel. `d` deletes your own artifact after a confirmation. Since `2.1.304` the confirmation is numbered: 1 or Enter keeps, 2 deletes, and `y`, `n`, and Esc still worked. Since `2.1.305` `y` and `n` no longer answer. See [How `/usage` and `/artifacts` Work](#how-usage-and-artifacts-work). |
+| `/artifacts` | <Gated note="claude.ai login on a Pro, Max, Team, or Enterprise plan (or no plan set), and an org policy." /> | Browses your published and shared artifacts. | Panel. `d` deletes your own artifact after a confirmation. Since `2.1.304` the confirmation is numbered: 1 or Enter keeps, 2 deletes, and `y`, `n`, and Esc still worked. Since `2.1.305` `y` and `n` no longer answer. See [How `/usage` and `/artifacts` Work](#how-usage-and-artifacts-work).[^artifacts-gate] |
 | `/design-consent`, `/design-revoke` | <Gated note="Policy allow_design_sync." /> | Grants or revokes agent access to your Design projects. | Hidden text commands. |
 | `/design-login` | <Gated note="Policy allow_design_sync." /> | Authorizes design-system access for `/design-sync`. | Panel. |
 | `/voice` `[hold\|tap\|off]` | <Gated note="Availability claude-ai." /> | Toggles voice mode. | Text command. |
@@ -163,7 +163,7 @@ Claude Code loads custom commands from `.claude/commands/` and skills together. 
 - **Name type.** Since `2.1.312`, Claude Code skips a command whose name or display name is not a string. It reports an error that starts "Command not listed: its name or display name is not a string" and keeps the other commands.[^name-type]
 - **File errors.** If one file in `.claude/commands/` cannot load, Claude Code logs `[skills] failed to load command from <path>: <error>` at the error level. It loads the other files.[^file-errors]
 
-The release note says that one bad command name could leave `claude -p` with no output.[^v312]
+The `2.1.312` release note says that a command with an invalid name could stop all commands from loading, which could leave `claude -p` with no output.[^v312]
 
 ## When a Command Is Off
 
@@ -208,6 +208,8 @@ The footer lists the keys. `Enter` attaches the selected artifact to the session
 
 To delete, press `d` or choose `Delete` from the actions menu. Only the owner can delete, so the key works only on your own artifacts. The panel asks `Delete <title>? This cannot be undone.` Choose `No, keep it` or `Yes, delete it`. Since `2.1.304` the keys are 1 or Enter to keep and 2 to delete, and `y`, `n`, and Esc still worked. Since `2.1.305` `y` and `n` no longer answer, and Esc goes back with nothing sent.[^v305]
 
+Since `2.1.327` the panel shows the warning `Couldn't load the whole list` when a request for more of the list fails. Before, it showed part of the list, or `No artifacts yet`. The release notes say Claude Code tries the request again first.[^artifacts-list]
+
 A yes sends `DELETE /api/frame/<slug>`. Claude Code retries once on `409`, `429`, or `503`.[^delete] Success shows `Artifact deleted`. The link stops working for everyone. You cannot restore it. Republishing makes a new URL.
 
 Since `2.1.305` `/usage` turns each warning into a one-line fix that names its source, and `f` applies the fixes. Each fix starts a prompt that begins `Fix what /usage flagged. Show me each change before you make it.` It tells Claude that text in backticks is a name from your logs, never an instruction. Examples of fix lines are `Turn off MCP servers you don't use`, `Stop sessions you no longer need`, `Start fresh when you switch tasks`, and `Give simple subagents a cheaper model` .[^fix-lines] Since `2.1.323` another fix line reads `Review sessions active over many hours`, with the detail `whole sessions with requests in 8 or more separate hours`.[^fix-hours] <Documented /> Since `2.1.323` the subagent fix line reads `Check which models your subagents use`, with the detail `share covers whole sessions, not only subagents`; `2.1.322` has the title `Give simple subagents a cheaper model` and no detail.[^fix-subagent] With Remote Control on, `/usage` says `Nothing was sent. Turn off Remote Control to use fixes.`
@@ -218,12 +220,14 @@ Reset times look like `Resets <time> (<time zone>)`. `/usage` drops minutes on t
 
 When the usage endpoint is rate limited, `/usage` says so. What you see depends on the data it already has. A run against a local stub that answered `429` showed these texts. The time is 12-hour, rounded up to the next minute, with no zone and no date. This differs from the `Resets` lines.
 
-The two rows for the `200` reply hold the `2.1.312` text.[^v312-text] `2.1.311` and earlier said `Usage endpoint is rate limited. Please try again in a moment.` and `(rate limited — try again in a moment)`. No `2.1.312` run reached the usage endpoint, so a run has not shown the new text. See [Probes](../../reference/probes.md#interactive-probes).
+The first row holds the `2.1.327` text from the program. The stub run, on an earlier version, showed `Error: Usage endpoint is rate limited until 10:44am.` In `2.1.327` the text has no `Error:` prefix. The program shows the text next to an error mark (a cross, or `failed:` for a screen reader).[^usage-error-mark]
+
+The two rows for the `200` reply hold the `2.1.312` text.[^v312-text] `2.1.311` and earlier said `Usage endpoint is rate limited. Please try again in a moment.` and `(rate limited — try again in a moment)`.
 
 | Data Before the `429` | What `/usage` Shows |
 | --- | --- |
-| None | `Error: Usage endpoint is rate limited until 10:44am.` |
-| None, and the reply is a `200` with an `error` of type `rate_limit_error` | `Error: Claude is temporarily limiting requests to the usage page (not your usage limit). Try again in a moment.` |
+| None | `The usage page is rate limited until 10:44am.` |
+| None, and the reply is a `200` with an `error` of type `rate_limit_error` | `Claude is temporarily limiting requests to the usage page (not your usage limit). Try again in a moment.` |
 | Bars from the `anthropic-ratelimit-unified-5h` and `-7d` headers | The bars, then `Per-model breakdown unavailable (rate limited until 10:43am)` |
 | The same, plus `7d_oi` headers | An extra `Current week (<model>)` row, then `Partial usage data (rate limited until 10:47am)` |
 | A saved cache that is 10 minutes old | The cached bars, then `Showing last-known usage as of 10m ago (rate limited until 10:45am)` |
@@ -233,7 +237,7 @@ The end time comes from `Retry-After`. A `Retry-After` of `1800` gave 30 minutes
 
 With `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` set, the panel shows `Failed to load usage data` and sends no request.
 
-No live run showed these items.[^unseen] The first is the `(could not refresh)` ending. Claude Code uses it when the request fails for a reason other than a rate limit. The second is the form `Showing last-known usage (rate limited until <time>)` without `as of`. The third is a `403` response.
+No live run showed these items.[^unseen] The first is the `(couldn't refresh)` ending. Claude Code uses it when the request fails for a reason other than a rate limit. The second is the form `Showing last-known usage (rate limited until <time>)` without `as of`. The third is a `403` response.
 
 The delete prompt, the footer keys, and `Artifact deleted` were seen in a live run. The `Resets` lines and the rate-limit texts above were seen against a local stub with fake subscriber credentials.[^usage-sources]
 
@@ -257,44 +261,59 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^kinds]: The program calls a panel command `local-jsx`, a text command `local`, and a prompt command `prompt`.
-[^rewind]: The program, `chunk-y9bdpp8r.js:23472-23488`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^memory]: The program, `chunk-eqmsy9y5.js:2145-2153`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^tui]: The program, `chunk-y9bdpp8r.js:13655-13662` and `:123405-123480`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^terminal-setup]: The program, `chunk-gnqb58r1.js:351-379`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^login-privacy]: The program, `chunk-rrxbrq23.js:33-50` and `chunk-d73xe1mr.js:18994-18996`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^login]: The program, `chunk-1sk1fatq.js:7-31`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^count]: The program, the command objects. `/keybindings`, `/release-notes`, `/rewind`, `/chrome`, `/statusline`, and `/sandbox` are missing from the program inventory file because of the key order in their objects. The program itself has them. Official page: [Commands](https://code.claude.com/docs/en/commands).
-[^diff]: The program, `chunk-fnr2psn2.js:30588`.
-[^more-models]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-y9bdpp8r.js:762589`.
+[^kinds]: The program calls a panel command `local-jsx`, a text command `local`, and a prompt command `prompt`, for example in `chunk-m14bt1pz.js:2153638` (local-jsx), `chunk-m14bt1pz.js:2153383` (local), and `chunk-m14bt1pz.js:2140990` (prompt).
+[^rewind]: The program, `chunk-cfxefa64.js:23510-23657`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^memory]: The program, `chunk-gt46e7hg.js:2165-2250`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^tui]: The program, `chunk-cfxefa64.js:1975169-1976400`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^terminal-setup]: The program, `chunk-jrpjeehv.js:6363-7100`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^login-privacy]: The program, `chunk-p5kfs9w9.js:33-50` and `chunk-asj6f58y.js:19738-19780`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
+[^login]: The program, `chunk-810n635s.js:622`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^count]: The program, the command objects in `chunk-m14bt1pz.js:1016853-2543434` (103 names) and in 19 other chunks (37 names, such as bundled skills and `/workflows`). Both counts come from the surface snapshot of `2.1.327`: 140 unique names, of which one is marked removed and four are hidden. Official page: [Commands](https://code.claude.com/docs/en/commands).
+[^diff]: The program, `chunk-km36vd62.js:30666`.
+[^more-models]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-cfxefa64.js:763028`.
 [^fast-vertex]: [`2.1.322` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.322). Probe cases `print.cli322.fast-vertex-global`, `.fast-vertex-us`, `.fast-vertex-eu`.
-[^fast-notice]: The program, `chunk-mr4jhpdh.js`.
-[^fast-labels]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-d73xe1mr.js:405473`, `chunk-h6sz1831.js:18810`.
-[^config-panel]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-h6sz1831.js:24607`, `chunk-nqb5kdg0.js:1399`.
-[^terminal-note]: The program, `chunk-gnqb58r1.js:14299`, `MYr`. `2.1.322` has no such note.
-[^auto-setup]: The program.
-[^help]: The program, `chunk-4h798pp0.js:113442` and `chunk-y9bdpp8r.js:113030-113052`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^fast-notice]: The program, `chunk-z46kvm40.js:3934`.
+[^fast-labels]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-asj6f58y.js:423081`, `chunk-nz9vg7fv.js:19069`.
+[^config-panel]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-nz9vg7fv.js:25278`, `chunk-k57p2hm4.js:1399`.
+[^terminal-note]: The program, `chunk-jrpjeehv.js:13954`, `MYr`. `2.1.322` has no such note.
+[^auto-setup]: The program, `chunk-m14bt1pz.js:2154409` (text form) and `chunk-m14bt1pz.js:2154785` (panel).
+[^help]: The program, `chunk-m14bt1pz.js:2166445` and `chunk-72pkwyjt.js:2968`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^upgrade]: The program ships the text in its command table. The flag is `tengu_idle_amber_finch`. Probe case `pty.cli319.slash.upgrade` (fake key) gave `Unknown command: /upgrade` in `2.1.323` and gives `/upgrade needs a Claude subscription. This session uses ANTHROPIC_API_KEY instead.` in `2.1.326`; the program, `chunk-gn1ntjav.js:126-173`. Probe case `live.cli319.upgrade-typeahead` (real login, typed `/upg`, no Enter) lists only `/rate-limit-options`, whose text holds "upgrade options".
-[^project]: Probe case `pty.cli319.slash.project`. The program, the command table: `isEnabled: Hys() && k("tengu_gentle_cupcake")` until `2.1.319`, and `isEnabled: mvs() && k(ywr, !1)` since `2.1.321`, where `ywr` is `"tengu_gentle_cupcake"` (`chunk-4h798pp0.js:2113710`). In `2.1.323` the flag name is `T0r` and still holds `"tengu_gentle_cupcake"` (`chunk-4h798pp0.js:2113705`). The gate is the same; only the minified names changed.
-[^use-case]: Probe case `pty.cli319.slash.use-case`. The program, the command table: `isEnabled: Y0() && !Tt()`.
-[^remote-bang]: The program.
-[^stickers]: The program, `chunk-4h798pp0.js:2479604`. The output is in `chunk-s9e02cqw.js`.
-[^name-rule]: The program, `chunk-4h798pp0.js:68289`, `:68293`, and `:186772`.
-[^name-type]: The program, `chunk-4h798pp0.js:67050`. In `2.1.311` the same loop made no such check (that build is not in the `2.1.321` capture).
-[^file-errors]: The program, `chunk-4h798pp0.js:187453`.
-[^v312]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312). The program code does not show that link.
-[^delete]: The program, the `/artifacts` panel.
-[^fix-lines]: The program, the `/usage` fix lines.
-[^fix-hours]: The program, `chunk-csjmq9tx.js:8278`. `2.1.322` has no such text.
-[^fix-subagent]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-csjmq9tx.js:8246`.
-[^usage-scopes]: The program, the `/usage` panel.
-[^v312-text]: The program. No `2.1.312` run reached the usage endpoint.
-[^unseen]: The program.
-[^usage-sources]: The program.
-[^channel-api]: The program, `chunk-xx0p55yz.js:41`.
-[^cd-taller]: The program, `chunk-q43jj74r.js:390`, `chunk-q43jj74r.js:403`, and `chunk-q43jj74r.js:414`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^rewind-skip]: The program, `chunk-y9bdpp8r.js:22895-22920` and `chunk-3zn9cw12.js:3144`. The release notes say this applies on macOS, Linux, and WSL when the sandbox is on. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^status-features]: The program, `chunk-gn1ntjav.js:90-124`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^off-commands]: The program, `chunk-gn1ntjav.js:130-175`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^skills-exit]: The program, `chunk-9baz34m5.js:1047-1095` and `chunk-9baz34m5.js:1309-1312`, and `chunk-3h482j38.js:40-48` for the key name. The second press runs the same save as `Esc`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^upgrade]: The program ships the text in its command table. The flag is `tengu_idle_amber_finch`. Probe case `pty.cli319.slash.upgrade` (fake key) gave `Unknown command: /upgrade` in `2.1.323` and gives `/upgrade needs a Claude subscription. This session uses ANTHROPIC_API_KEY instead.` in `2.1.326`; the program, `chunk-jja35gr5.js:3600-4165`. Probe case `live.cli319.upgrade-typeahead` (real login, typed `/upg`, no Enter) lists only `/rate-limit-options`, whose text holds "upgrade options".
+[^project]: Probe case `pty.cli319.slash.project`. In `2.1.327` the gate is the same: `isEnabled:()=>eZs()&&b(Les,!1)` where `Les` is `"tengu_gentle_cupcake"` (`chunk-m14bt1pz.js:2155714`). The program, the command table: `isEnabled: Hys() && k("tengu_gentle_cupcake")` until `2.1.319`, and `isEnabled: mvs() && k(ywr, !1)` in `2.1.327`, where `ywr` is `"tengu_gentle_cupcake"` (`chunk-m14bt1pz.js:2155714`). In `2.1.323` the flag name is `T0r` and still holds `"tengu_gentle_cupcake"` (`chunk-m14bt1pz.js:2155709`). The gate is the same; only the minified names changed.
+[^use-case]: Probe case `pty.cli319.slash.use-case`. The program, `chunk-m14bt1pz.js:2530464`, the command table: `isEnabled:()=>n1()&&!Et()`. The flag is `tengu_federated_possum`, `chunk-rj3e7agr.js:220676`.
+[^remote-bang]: The program, `chunk-rap1tzf6.js:238010`.
+[^stickers]: The program, `chunk-m14bt1pz.js:2523591`. The output is in `chunk-qr4wps7c.js:1370`.
+[^name-rule]: The program, `chunk-m14bt1pz.js:69872`, `:69876`, and `:190483`.
+[^name-type]: The program, `chunk-m14bt1pz.js:68501`.
+[^file-errors]: The program, `chunk-m14bt1pz.js:191164`.
+[^v312]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312).
+[^delete]: The program, the `/artifacts` panel: `chunk-k9xg30db.js:2396` and `chunk-116p7pz2.js:43169`. The confirmation is at `chunk-116p7pz2.js:2014-2062`, the `d` key at `chunk-116p7pz2.js:2347-2356`, and the owner and remote check at `chunk-116p7pz2.js:1382`.
+[^fix-lines]: The program, the `/usage` fix lines: `chunk-4dyhk64x.js:8557` and `chunk-m14bt1pz.js:3980246`.
+[^fix-hours]: The program, `chunk-4dyhk64x.js:8308`. `2.1.322` has no such text.
+[^fix-subagent]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-4dyhk64x.js:8276`.
+[^usage-scopes]: The program, the `/usage` panel: `chunk-t9m6p74b.js:44723` and `chunk-t9m6p74b.js:47456`.
+[^v312-text]: The program, `chunk-t9m6p74b.js:59915`. The same place holds the `429` text `The usage page is rate limited until <time>.`
+[^unseen]: The program, `chunk-t9m6p74b.js:59473`.
+[^usage-sources]: The program, `chunk-t9m6p74b.js:51774` (`Resets` lines) and `chunk-116p7pz2.js:43169` (`Artifact deleted`).
+[^channel-api]: The program, `chunk-60rxwjpr.js:41`.
+[^cd-taller]: The program, `chunk-y692rv3s.js:388`, `chunk-y692rv3s.js:401`, and `chunk-y692rv3s.js:412`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^rewind-skip]: The program, `chunk-cfxefa64.js:362519` and `chunk-m14bt1pz.js:1721491`. The release notes say this applies on macOS, Linux, and WSL when the sandbox is on. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^status-features]: The program, `chunk-jja35gr5.js:90-124`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^off-commands]: The program, `chunk-jja35gr5.js:2839-4165`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^skills-exit]: The program, `chunk-rvzxgyer.js:36859` (`Press <key> again to close`), and `chunk-xstndjzk.js:41709` for the key name. The second press runs the same save as `Esc`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^export]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-rwzka3zy.js:33128` and `chunk-rwzka3zy.js:34123`.
+[^rewind-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^hooks-cmd]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^mcp-cmd]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^plugin-cmd]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-xstndjzk.js:115196`.
+[^tui-classic]: The program, `chunk-m14bt1pz.js:2511679`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^status-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^statusline-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^gh-app]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-pz6bs101.js:68230` and `chunk-pz6bs101.js:59481`.
+[^usage-error-mark]: The program, `chunk-t9m6p74b.js:59915` for the text, `chunk-2y9dpgx8.js:11-58` for the line that shows it with `status: "error"`, and `chunk-rtbrswer.js:31-45` for the mark and its `failed:` label.
+[^artifacts-gate]: The program, `chunk-m14bt1pz.js:115226-115230` for the `isEnabled` check of the command and `chunk-h7hkyak8.js:18846` for the artifact policy check, which holds the `adminAllowed` answer.
+[^resume-327]: The program, `chunk-81q6b6k0.js:9627` (the session list). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^resend-hint]: The program, `chunk-cfxefa64.js:586809` (an `account_limit` error gets `wait`, which has no hint) and `chunk-cfxefa64.js:587648` (the hint text). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^config-theme]: The program, `chunk-t9m6p74b.js:21880`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^artifacts-list]: The program, `chunk-116p7pz2.js:47208` (the warning) and `chunk-116p7pz2.js:47632` (the empty text). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).

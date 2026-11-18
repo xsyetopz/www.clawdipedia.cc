@@ -43,7 +43,7 @@ claude --agents '{
 | `background` | <Documented /> | Keeps the agent in the background. | `true` or `false`, as a string or boolean. Other values log an error. A teammate may not start such an agent. |
 | `omitClaudeMd` | <Documented /> | Starts without user, project, and local `CLAUDE.md`. | `true` only. Managed policy files still load. `Explore`, `Plan`, and the web-reading agent set it. |
 | `effort` | <Documented /> | The effort level while the agent runs. | `low`, `medium`, `high`, `xhigh`, `max`. The text of Claude Code also lists an integer.[^effort] `CLAUDE_CODE_EFFORT_LEVEL` wins. |
-| `isolation` | <Documented /> | Runs the agent in a temporary git worktree. | The docs name `worktree`. The `--agents` schema also accepts `remote`.[^isolation] The worktree branches from the default branch. In a probe in `-p`, `isolation: remote` in a file ran the agent in a local worktree and started no cloud session. It was not tried with a cloud login. |
+| `isolation` | <Documented /> | Runs the agent apart from your working folder. | You can set `worktree` or `remote` in an agent file. Any other value gives an `invalid isolation value` warning. `worktree` runs the agent in a temporary git worktree that branches from the default branch. `remote` starts the agent in a cloud session, and the agent always runs in the background. It needs a cloud login and a git root, and a server gate must allow it. When `remote` is not available, Claude Code uses a worktree if there is a git root, and a local agent if not. It writes `[remote agent] isolation:'remote' is unavailable` to the debug log. The docs name only `worktree`, and the `--agents` schema describes only `worktree`. A plugin's agent file accepts only `worktree`.[^isolation] In a probe in `-p`, `isolation: remote` in a file ran the agent in a local worktree and started no cloud session. It was not tried with a cloud login. |
 | `color` | <Documented /> | The display color. | `red`, `blue`, `green`, `yellow`, `purple`, `orange`, `pink`, `cyan`. |
 | `initialPrompt` | <Documented /> | The first user turn when the agent is the main session. | Used with `--agent` or the `agent` setting. Claude Code processes commands and skills. Not read when the agent starts as a subagent. Claude Code ignores it in a plugin agent file. |
 | `experimental` | <Documented /> <Experimental /> | A map of experimental options. | `cacheTtl`: `5m` or `1h` sets the prompt cache TTL when neither a `subagentPromptCacheTtl` setting nor an env var sets a value. Claude Code ignores `1h` in subscription overage. Claude Code ignores unknown keys. |
@@ -86,9 +86,9 @@ They list every field of this release. Look up a field there before you rely on 
 
 ## Sources
 
-[^max-turns]: The program, the agent loop.
-[^effort]: The program, the frontmatter schema.
-[^isolation]: The program, the `--agents` schema. Probes: see [Probes](../../reference/probes.md#subagents-and-hooks).
-[^observer]: The program and [Probes](../../reference/probes.md#subagents-and-hooks).
-[^plugin-agent]: The program, the plugin agent loader.
-[^validators]: The program, the frontmatter schema, the frontmatter parser, and the `--agents` JSON schema. Official page: [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents).
+[^max-turns]: The program, the agent loop, `chunk-m14bt1pz.js:2335015`, and the frontmatter parser, `chunk-m14bt1pz.js:2892693`.
+[^effort]: The program, the frontmatter schema, `chunk-m14bt1pz.js:2843458`.
+[^isolation]: The program, the agent file parser, `chunk-m14bt1pz.js:2892112`. The Agent tool input schema and its description of both values, `chunk-3v1e1y2y.js:37141`. The fallback, `chunk-3v1e1y2y.js:6817`. The cloud launch and its checks, `chunk-3v1e1y2y.js:56384`. The `--agents` schema, `chunk-m14bt1pz.js:1035051`. The plugin agent parser, `chunk-m14bt1pz.js:2843156`. Probes: see [Probes](../../reference/probes.md#subagents-and-hooks).
+[^observer]: The program, `chunk-0cnnff0k.js:1199` and `chunk-m14bt1pz.js:1035051`, and [Probes](../../reference/probes.md#subagents-and-hooks).
+[^plugin-agent]: The program, the plugin agent loader, `chunk-m14bt1pz.js:2843458`.
+[^validators]: The program, the frontmatter schema, `chunk-m14bt1pz.js:2882008`, the frontmatter parser, `chunk-m14bt1pz.js:2892112`, and the `--agents` JSON schema, `chunk-3v1e1y2y.js:37141`. Official page: [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents).

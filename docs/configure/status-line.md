@@ -95,7 +95,7 @@ Always read optional fields with a default, for example `jq -r '.vim.mode // emp
 | `prompt_id` | <Documented /> | UUID of the prompt in work | May be absent before the first input | Status line |
 | `transcript_path` | <Documented /> | Transcript file path | String | Status line |
 | `cwd` | <Documented /> | Working directory | Same value as `workspace.current_dir` | Status line |
-| `version` | <Documented /> | Claude Code version | `2.1.323` here | Status line |
+| `version` | <Documented /> | Claude Code version | The version string of the running build, `2.1.327` in this release.[^version-field] | Status line |
 | `model.id`, `model.display_name` | <Documented /> | Model id and name | Strings | Status line |
 | `output_style.name` | <Documented /> | Active style name | `default` when none. See [Output Styles](output-styles.md) | Status line |
 | `fast_mode` | <Documented /> | Fast mode on | Boolean | Status line |
@@ -191,11 +191,12 @@ The exact fields are in `https://clawdipedia.cc/schemas/claude-code-status-line.
 
 ## Sources
 
-[^extra-triggers]: The program watches `mainLoopModel`, `fastMode`, `effortValue`, `thinkingEnabled`, and `prStatus`.
-[^sub-schema]: The program, `chunk-m33vdkhs.js:9208`. Schema text: "Deprecated: still works, and will stop working in a future release. Custom per-subagent status line shown in the agent panel; receives row context as JSON on stdin".
-[^sub-source]: The program, `chunk-y9bdpp8r.js:56551`.
-[^sub-trust]: The program, `chunk-y9bdpp8r.js:56560`.
-[^sub-input]: The program, `chunk-y9bdpp8r.js:56598`.
-[^sub-output]: The program, `chunk-y9bdpp8r.js:56544`, `:56654`, `:56667`, and `:56675`.
-[^sub-deprecation]: The program, `chunk-kek2xxjw.js:371` and `chunk-y9bdpp8r.js:120735`.
-[^schema-origin]: The program builds this payload in code, not with a validator, so the schema comes from that code.
+[^extra-triggers]: The program, `chunk-m14bt1pz.js:4421878`, watches `mainLoopModel`, `fastMode`, `effortValue`, `thinkingEnabled`, and `prStatus`.
+[^sub-schema]: The program, `chunk-ja5z738t.js:257993`. Schema text: "Deprecated: still works, and will stop working in a future release. Custom per-subagent status line shown in the agent panel; receives row context as JSON on stdin". The `2.1.323` program says "Deprecated: no longer has any effect", in the same schema entry. The `2.1.327` program runs the command in `chunk-cfxefa64.js:912711-913300`.
+[^sub-source]: The program, `chunk-cfxefa64.js:912560-913300`.
+[^sub-trust]: The program, `chunk-cfxefa64.js:912711`.
+[^sub-input]: The program, `chunk-cfxefa64.js:913300-913900`.
+[^sub-output]: The program, `chunk-cfxefa64.js:913900-914500`.
+[^sub-deprecation]: The program, `chunk-dfwkett1.js:8085`, `chunk-cfxefa64.js:1930116` (the log line and the notice), and `chunk-m14bt1pz.js:5400306` (the plugin warning).
+[^schema-origin]: The program, `chunk-m14bt1pz.js:4419351`, builds this payload in code, not with a validator, so the schema comes from that code.
+[^version-field]: The program, `chunk-m14bt1pz.js:221117-221125`.

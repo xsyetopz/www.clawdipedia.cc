@@ -186,8 +186,8 @@ On `2.1.319` in `-p`, these results do not show in the table:[^third-probe]
 ## Sources
 
 [^interactive]: Interactive probe on the `PermissionRequest` hook.
-[^denied-probe]: On `2.1.319`, the stub gave the server-side check a `flagged` verdict for a `curl` call. Probe cases `pty.hooks.permissiondenied.auto` and `pty.hooks.permissiondenied.retry`. The hook got `reason: "The server-side auto mode classifier judged this action dangerous (it gave no explanation)"`. The program, `chunk-4h798pp0.js@4691702`.
+[^denied-probe]: On `2.1.319`, the stub gave the server-side check a `flagged` verdict for a `curl` call. Probe cases `pty.hooks.permissiondenied.auto` and `pty.hooks.permissiondenied.retry`. The hook got `reason: "The server-side auto mode classifier judged this action dangerous (it gave no explanation)"`. The program, `chunk-m14bt1pz.js:4763429`.
 [^shapes-probe]: A `PostToolUse` command hook logged its stdin in `-p` on `2.1.305`, with one scripted call per tool.
 [^interactive-shapes]: A second probe ran the same hook in the interactive screen on `2.1.305` with `acceptEdits` and one scripted call per tool.
 [^third-probe]: A third probe on `2.1.319` in `-p` ran `Read` of a notebook, `Glob`, `Grep`, `NotebookEdit`, `WebFetch`, and `WebSearch`, with `ENABLE_TOOL_SEARCH=false` so that no tool was deferred. The `Glob`, `Grep`, `NotebookEdit`, and `WebSearch` rows above come from it.
-[^several-hooks]: The program, `chunk-4h798pp0.js:55307-55354`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^several-hooks]: The program, `chunk-m14bt1pz.js:55944-56009`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-agents-json.json",
-	"title": "Claude Code --agents JSON entry (Claude Code 2.1.326)",
-	"$comment": "For one subagent definition of the --agents JSON (and the SDK agents option). Generated from Claude Code 2.1.326 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, object described as \"Definition for a custom subagent that can be invoked via the Agent tool.\". Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code --agents JSON entry (Claude Code 2.1.327)",
+	"$comment": "For one subagent definition of the --agents JSON (and the SDK agents option). Generated from Claude Code 2.1.327 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, object described as \"Definition for a custom subagent that can be invoked via the Agent tool.\". Do not edit by hand: run \"bun run schemas\".",
 	"type": "object",
 	"properties": {
 		"description": {
@@ -32,6 +32,7 @@
 			"type": "string"
 		},
 		"mcpServers": {
+			"description": "MCP servers for this agent, by name or as inline config. Passing a createSdkMcpServer() server here is deprecated. It is ignored with a warning and will be an error in a later release, so put it in the top-level mcpServers option.",
 			"type": "array",
 			"items": {
 				"anyOf": [
@@ -403,7 +404,7 @@
 			"description": "Token count at which this agent compacts its own conversation when it runs as a subagent. It only lowers the window the subagent would otherwise inherit. No effect on the main session agent.",
 			"type": "integer",
 			"minimum": 100000,
-			"maximum": 1000000
+			"maximum": 9007199254740991
 		},
 		"background": {
 			"description": "Run this agent as a background task (non-blocking, fire-and-forget) when invoked",

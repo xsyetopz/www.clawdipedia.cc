@@ -15,7 +15,7 @@ Official pages: [Connect Claude Code to Tools via MCP](https://code.claude.com/d
 | Command | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
 | `claude mcp add [options] <name> <commandOrUrl> [args...]` | <Documented /> | Adds a server. | Writes to the scope and prints `Added ...`. Put `--` before a stdio command. Then Claude Code does not parse its flags. Claude Code rejects a reserved name. |
-| `claude mcp add-json [options] <name> <json>` | <Documented /> | Adds a server from a JSON string. | Accepts `stdio`, `sse`, `http`, and `ws`. The JSON is the entry object, not the `mcpServers` wrapper. Since `2.1.326`, a bad entry gets a message that says what to change: not a JSON object, a `url` with no `type`, an `mcpServers` wrapper, no `command` or `type`, an unknown `type`, or the failing field paths.[^add-json] |
+| `claude mcp add-json [options] <name> <json>` | <Documented /> | Adds a server from a JSON string. | Accepts `stdio`, `sse`, `http`, and `ws`. The JSON is the entry object, not the `mcpServers` wrapper. Since `2.1.326`, a bad entry gets a message that says what to change: not a JSON object, a `url` with no `type`, an `mcpServers` wrapper, no `command` or `type`, an unknown `type`, or the failing field paths.[^add-json] Since `2.1.327`, `claude mcp add-json <name> -` reads the JSON from stdin, so a token stays off the command line. Claude Code reads at most 1 MiB. It stops with an error when stdin is a terminal or empty, when the JSON is over the limit, or when the command runs inside a Claude Code session, because the permission prompt of the session would not show the server.[^add-json-stdin] |
 | `claude mcp add-from-claude-desktop [options]` | <Documented /> | Imports servers from Claude Desktop. | macOS and WSL only. You pick interactively. Claude Code rejects a name with other characters. A duplicate gets a suffix such as `server_1`. |
 | `claude mcp get <name>` | <Documented /> | Shows one server. | Health-checks approved servers and shows `Issue:` on a failure. An unapproved `.mcp.json` server shows `Pending approval`. A plugin stdio server shows `Command: stdio` and `NAME=[REDACTED]`. |
 | `claude mcp list` | <Documented /> | Lists servers. | Shows `Connected`, `Needs authentication`, `Failed to connect`, `Pending approval`, or `Disabled for this project`. Warnings show here. |
@@ -77,6 +77,8 @@ flowchart TD
   E --> F
 ```
 
+Since `2.1.327`, `claude mcp add` and `claude mcp remove` with `--scope project` keep the other top-level keys of `.mcp.json`, such as `$schema` or the `servers` of another tool.[^project-keys] `claude mcp add --scope project` stops, and does not overwrite the file, when `.mcp.json` lists its servers at the top level with no `mcpServers` key.[^project-stop]
+
 ## Errors
 
 Each row is a family of messages. The backticked text is the start that every message in the family shares. A row marked `Various` gathers the messages of one feature that do not share one start.
@@ -98,10 +100,13 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^add-json]: The program, `chunk-4h798pp0.js:228852`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^header-help]: The program, `chunk-ydynwxdc.js:22404`.
+[^add-json]: The program, `chunk-m14bt1pz.js:232509`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^header-help]: The program, `chunk-92p5dxfr.js:22482`.
 [^web]: Probe case `print.cli319.mcp-add-web`. The gate is the server-side flag `tengu_twinkling_aurora`.
-[^reconnect]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-15b1e2ff.js:26197`.
+[^reconnect]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-xstndjzk.js:26137`.
 [^connector-dl]: Probe case `print.err319.mcp-add-connector-downloads` printed this text. Without the `.gitignore`, the control case printed no error.
 [^bad-env]: Probe case `print.err319.mcp-add-bad-env` printed this text and exited with code 1.
-[^serve-sandbox]: The program, `chunk-7g7tnv4g.js:821`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^serve-sandbox]: The program, `chunk-4xdmvk69.js:821`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^add-json-stdin]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-92p5dxfr.js:1123-1127` for the command text "or - to read it from stdin", `chunk-35vt2ywn.js:1416` for the `-` argument, and `chunk-35vt2ywn.js:1397-1411` for the stdin read, its 1 MiB limit, and the three errors.
+[^project-keys]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-m14bt1pz.js:4655624` for add and `chunk-m14bt1pz.js:4657110` for remove.
+[^project-stop]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-m14bt1pz.js:4655301`.

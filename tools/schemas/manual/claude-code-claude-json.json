@@ -32,7 +32,7 @@
 			},
 			"anchors": [
 				"autoUpdatesProtectedForNative:!0",
-				"r.autoUpdatesProtectedForNative!==!0"
+				"«».autoUpdatesProtectedForNative!==!0"
 			],
 			"note": "Only written as !0 (installMethod native) and compared with !==!0; the migration to settings deletes it."
 		},

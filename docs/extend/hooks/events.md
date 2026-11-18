@@ -90,5 +90,5 @@ A print-mode probe showed these shapes.[^probe-print] A `Workflow` call has `too
 
 ## Sources
 
-[^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks), the `HookInput` types in the program type file, and the hook output schema in the program.
+[^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks), the `HookInput` types in the program type file, and the hook output schema in the program, `chunk-rj3e7agr.js:291182`.
 [^probe-print]: Probed in `-p`.

@@ -1,13 +1,13 @@
 ---
 title: All Flags
-description: Every claude flag in 2.1.326, with the ones that claude --help hides, grouped by job.
+description: Every claude flag in 2.1.327, with the ones that claude --help hides, grouped by job.
 sidebar_position: 2
 ---
 
 A flag changes how one `claude` run behaves.
-`claude --help` shows 66 flags. Another 68 work but stay hidden from the help text.
+`claude --help` shows 66 flags. Another 70 work but stay hidden from the help text.
 This page lists both kinds in one place, grouped by what they do.
-Two hidden flags have no row, because no code reads them: `--runner-declares` and `--agents-view-if-allowed`.[^no-row]
+One hidden flag has no row, because no code reads it: `--agents-view-if-allowed`. The program reads the hidden `--runner-declares`, so it has a row.[^no-row]
 
 Pass a flag after `claude`, for example `claude --model opus`. Most flags last for one run only. A flag is on when you pass it. Some flags have a `--no-` twin, such as `--no-chrome`.
 
@@ -63,6 +63,8 @@ Flags that choose how a run starts and how print mode reads input and writes out
 | `--allow-other-models` | <Undocumented /> | ❌ | With `--client-data-url`, starts on a model that the document does not list. |
 | `--managed-settings` `<json>` | <Undocumented /> | ❌ | Gives policy settings as JSON from a parent process, for the SDK. |
 | `--managed-settings-in-initialize` | <Undocumented /> | ❌ | Reads the policy settings from the `managedSettings` field of the `initialize` request, not from `--managed-settings`. It exits if the settings cannot be used. For SDK use only; it needs `--await-initialize`.[^managed-init] |
+| `--initialize-fields` `<names>` | <Undocumented /> | ❌ | Reads the named fields of the `initialize` request in place of their flags. The names go in a comma list. `settings` stands for `--settings`, and `disallowedTools` for `--disallowedTools`. It exits if a field cannot be used. For SDK use only. It needs `--await-initialize`, `--input-format=stream-json` with stdin piped, and no `--sdk-url` or subcommand. A name that the program does not know is an error, and so is a name whose flag you also pass.[^initialize-fields] Added in `2.1.327`. |
+| `--runner-declares` `<names>` | <Undocumented /> | ❌ | Tells a session what its self-hosted runner can do. The runner passes it as `--runner-declares=<names>` with names such as `diff-finds-nested-repository`, `no-repository-checked-out`, `built-in-gh`, and `built-in-gh-by-default`. An older child program stops with `unknown option`. The first time the list holds `diff-finds-nested-repository`, the flag writes a notice to stderr.[^runner-declares] |
 | `--host-auth-is-org-sign-in` | <Undocumented /> | ❌ | Says that the token of the host is an organization sign-in, for desktop hosts. |
 
 ### Safe Modes, Settings, and Debug
@@ -83,7 +85,7 @@ Flags that strip your setup down, load extra settings, or turn on logs.
 | `--ignore-persisted-trust` | <Undocumented /> | ❌ | No saved workspace trust record counts in this process. `CLAUDE_CODE_IGNORE_PERSISTED_TRUST` does the same. It has no help text.[^persisted-trust] |
 | `--ax-screen-reader` | <Documented /> | ✅ | Draws flat text with no borders or animations, for screen readers. |
 | `--settings` `<file-or-json>` | <Documented /> | ✅ | Loads more settings from a JSON file or a JSON string. |
-| `--setting-sources` `<sources>` | <Documented /> | ✅ | Chooses which setting sources load: `user`, `project`, and `local`. A source that you leave out supplies no auto-mode rules and no saved permission consents. Managed settings and `--settings` stay.[^setting-sources] |
+| `--setting-sources` `<sources>` | <Documented /> | ✅ | Chooses which setting sources load: `user`, `project`, and `local`. A source that you leave out supplies no auto-mode rules. Managed settings and `--settings` stay.[^setting-sources] |
 | `--project-config-root` `<dir>` | <Undocumented /> | ❌ | Reads project settings and the `.claude` trees from another folder. |
 
 ### Permissions and Tools
@@ -121,7 +123,7 @@ Flags that pick the model and set how hard it thinks.
 | `--task-budget` `<tokens>` | <Undocumented /> | ❌ | Sets a task budget in tokens on the API side (`output_config.task_budget`). |
 | `--fast-mode` `<on\|off>` | <Undocumented /> | ❌ | Turns fast mode on or off. It sets `fastMode` in the flag settings of the session, so it also works on Vertex.[^fast-vertex] See [Fast Mode](../models-and-providers/fast-mode.md#controls). |
 | `--include-unsupported-models` | <Undocumented /> | ❌ | Offers models that your account can use and this version does not know. |
-| `--autocompact` `<auto\|tokens>` | <Documented /> | ✅ | Sets the auto-compact window to `auto` or to 100k to 1M tokens. |
+| `--autocompact` `<auto\|tokens>` | <Documented /> | ✅ | Sets the auto-compact window to `auto` or to a number of tokens. Since `2.1.327` the number must be at least 100k, with no upper limit in the help text.[^autocompact] |
 
 ### System Prompt
 
@@ -156,7 +158,7 @@ Flags that continue, fork, name, or rewind a session, or run it in a worktree or
 | `--session-began-as-copy` `<value>` | <Undocumented /> | ❌ | Hidden. A server sends it. The value `1` marks a session that began as a copy of another. Then `--resume` in print mode does not continue the last turn of the session it was copied from, and does not run a tool call that a hook deferred there. Any other value is ignored. It means the same as `CLAUDE_CODE_SESSION_BEGAN_AS_COPY=1`, and either one is enough.[^copy-flag] |
 | `--rewind-files` `<user-message-id>` | <Undocumented /> | ❌ | Restores the files to the state at a user message and exits. It needs `--resume`. Since `2.1.326`, it prints `Warning: N tracked paths were skipped: <reason>. Run with --debug for the paths.` when it leaves files untouched.[^rewind-skip] |
 | `--bg`, `--background` | <Documented /> | ✅ | Starts the session in the background and prints its ID. |
-| `-w, --worktree [name]` | <Documented /> | ✅ | Creates a new git worktree for the session. |
+| `-w, --worktree [name]` | <Documented /> | ✅ | Creates a new git worktree for the session. Since `2.1.327`, a relative `--add-dir` beside the launch folder gives the Bash sandbox that folder, not the one beside the worktree. A relative `--add-dir` above the launch folder, such as `..`, gives the Bash sandbox and a `--bg` session only the worktree, in some starts.[^worktree-add-dir] The release notes say that, since `2.1.327`, exit says when a worktree was kept. The exit dialog prints `Worktree kept. Your work is saved at <path>` when you choose to keep it.[^worktree-kept] |
 | `--tmux` | <Documented /> | ✅ | Creates a tmux session for the worktree. It needs `--worktree`. |
 
 ### Agents, Plugins, MCP, and Context
@@ -207,7 +209,7 @@ Flags that connect to an IDE, the desktop app, or a deep link.
 | --- | --- | --- | --- |
 | `--ide` | <Documented /> | ✅ | Connects to the IDE at startup when exactly one valid IDE is open. |
 | `--desktop` | <Documented /> | ✅ | Opens the session in the Claude Desktop app instead of the terminal. |
-| `--chrome` | <Documented /> | ✅ | Turns on the Claude in Chrome integration. If the first-run setup cannot connect, Claude Code tells you to restart with `claude --chrome --resume`, not to run `/chrome`.[^chrome-restart] |
+| `--chrome` | <Documented /> | ✅ | Turns on the Claude in Chrome integration. If the first-run setup cannot connect, Claude Code tells you to restart with `claude --chrome --resume`, not to run `/chrome`.[^chrome-restart] The release notes say that `2.1.327` changed the integration to refuse to upload some credential files, and that you attach those files to the page yourself. The refusal reads `Cannot upload "<path>": its name or folder is one that credentials are kept under (such as .env, a .pem or .key file, or .ssh), so it is not uploaded on Claude's word alone. Tell the user it was not uploaded.`[^chrome-credentials] |
 | `--no-chrome` | <Documented /> | ✅ | Turns off the Claude in Chrome integration. |
 | `--prefill` `<text>` | <Undocumented /> | ❌ | Fills the prompt box with text and does not send it. |
 | `--prefill-b64` `<b64>` | <Undocumented /> | ❌ | Fills the prompt box with base64url text, for deep links. |
@@ -223,7 +225,7 @@ Flags for cloud sessions and Remote Control.
 | Flag | Status | In `--help` | What it does |
 | --- | --- | --- | --- |
 | `--teleport [session]` | <Documented /> | ✅ | Resumes a teleport session. |
-| `--cloud [description\|session_id\|url]` | <Documented /> | ✅ | Creates a cloud session, or attaches to one by session ID or `claude.ai/code` URL. |
+| `--cloud [description\|session_id\|url]` | <Documented /> | ✅ | Creates a cloud session, or attaches to one by session ID or `claude.ai/code` URL. Since `2.1.327`, when the connection to the session drops and comes back, and the catch-up cannot load part of the earlier messages, the transcript shows the warning `Some earlier messages from this session couldn't be loaded after reconnecting.`[^catch-up] |
 | `--environment <environment_id>` | <Documented /> | ✅ | Creates a cloud session on a self-hosted environment. |
 | `--remote-control [name]` | <Documented /> | ✅ | Starts an interactive session with Remote Control turned on. |
 | `--rc` `[name]` | <Documented /> | ❌ | Is an alias for `--remote-control`. |
@@ -234,7 +236,7 @@ Flags for cloud sessions and Remote Control.
 | `--ref` `<ref>` | <Documented /> | ❌ | Sets the branch, tag, or SHA to check out in the remote session. It needs `--cloud` or `--environment`. |
 | `--on-branch` `<branch>` | <Undocumented /> | ❌ | Works directly on a branch in the remote session, with checkout and push. |
 | `--forward-home-settings` `<true\|false>` | <Undocumented /> | ❌ | Sets whether this machine sends its settings to the cloud session. |
-| `--attach-serve` `<session_id>` | <Undocumented /> | ❌ | Attaches a helper to a cloud session. The desktop app starts it. |
+| `--attach-serve` `<session_id>` | <Undocumented /> | ❌ | Attaches a helper to a cloud session. The desktop app starts it. Since `2.1.327`, the helper emits a warning with the text `Some earlier messages from this session could not be loaded after reconnecting.` when the catch-up cannot load part of the earlier messages.[^catch-up] |
 
 ## Errors
 
@@ -256,20 +258,27 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^no-row]: The program.
-[^managed-init]: The program, `chunk-g7cw7kap.js:63044`.
-[^persisted-trust]: The program, `chunk-caex36kk.js:32815` and `chunk-d73xe1mr.js:85743`. The program reads the flag from the arguments.
-[^setting-sources]: The program.
-[^allowed-warn]: The program, `chunk-97e8zgw1.js:4128` and `:4160`.
-[^disallowed-warn]: The program, `chunk-97e8zgw1.js:4128`.
-[^tools-warn]: The program, `chunk-97e8zgw1.js:4140`.
+[^no-row]: The program. `--agents-view-if-allowed` is defined at `chunk-rnt5hbrt.js:3299` with no description. The only other places that name it are two lists of flag names, `chunk-avas472e.js:269` and `chunk-t8fs63s8.js:62`. No code reads its value. `--runner-declares` is defined at `chunk-rnt5hbrt.js:3393`, and the runner builds it at `chunk-zaa2qn9h.js:5-11`.
+[^managed-init]: The program, `chunk-rnt5hbrt.js:962-993` (the error text), `chunk-rnt5hbrt.js:1036` (the check), and `chunk-ttb87w11.js:416-420` (the field check).
+[^initialize-fields]: The program, `chunk-rnt5hbrt.js:3409` (the flag), `chunk-rnt5hbrt.js:1007-1066` (the checks), and `chunk-ttb87w11.js:432-444` (the field rules). `settings` must be a JSON object, and `disallowedTools` a list of strings. The settings apply like `--settings`, before any settings are read, and the program exits with code `1` if they cannot (`chunk-rnt5hbrt.js:1063-1066`).
+[^runner-declares]: The program, `chunk-rnt5hbrt.js:72880`, `chunk-zaa2qn9h.js:361`, and `chunk-xa2mcav9.js:331875`.
+[^autocompact]: The program, `chunk-rnt5hbrt.js:70098`: "Auto-compact window size (auto, or at least 100k tokens)".
+[^persisted-trust]: The program, `chunk-bpr7n093.js:32875` and `chunk-asj6f58y.js:94695`. The program reads the flag from the arguments.
+[^setting-sources]: The program, `chunk-rnt5hbrt.js:67323`. The program text lists `user`, `project`, and `local`. The earlier cites `chunk-271f7twe.js:5474` and `chunk-bpr7n093.js:123762` are not checked in `2.1.327`.
+[^allowed-warn]: The program, `chunk-61wd57dm.js:79507`, `:79672`, and `:80222`.
+[^disallowed-warn]: The program, `chunk-61wd57dm.js:79507`, `:79672`, and `:80222`.
+[^tools-warn]: The program, `chunk-61wd57dm.js:80268`.
 [^fast-vertex]: Probe case `print.cli322.fast-vertex-flag`.
-[^copy-flag]: The program.
-[^lead-key]: The program, `chunk-g7cw7kap.js:69686` and `chunk-6amag46d.js:31234`.
-[^chrome-restart]: The program, `chunk-y9bdpp8r.js:1463034` and `chunk-qb6rgffc.js:42177`.
-[^ccr-host]: The program.
+[^copy-flag]: The program, `chunk-rnt5hbrt.js:73054` and `chunk-rnt5hbrt.js:73367`.
+[^lead-key]: The program, `chunk-rnt5hbrt.js:3364-3369` (the flag), `chunk-a41wjpwd.js:1042` and `chunk-a41wjpwd.js:1215` (the lead passes it), and `chunk-61wd57dm.js:6170-6171` (the teammate reads it).
+[^chrome-restart]: The program, `chunk-cfxefa64.js:1453268` and `chunk-3z330av7.js:42177`.
+[^ccr-host]: The program, `chunk-asj6f58y.js:968638-968912`; the `--gateway-json` check is `chunk-jhpfacch.js:26509`.
 [^auto-refused]: Probe case `print.err319.auto-mode-print-refused`.
 [^chrome-live]: Live run, case `live.err319`, with `--chrome` and a subscription token.
 [^chrome-fake]: Probe case `print.err319.chrome-no-extension`.
-[^add-dir-trust]: The program, `chunk-fdjay46b.js:2019-2026` and `chunk-fdjay46b.js:2068-2082`. The trust prompt in a local terminal session is from the [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^rewind-skip]: The program, `chunk-xt4nsgp1.js:36495-36499`. The reasons are in `chunk-3zn9cw12.js:3144`.
+[^add-dir-trust]: The program, `chunk-dfq3y18g.js:47920`. The trust prompt in a local terminal session is from the [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^rewind-skip]: The program, `chunk-rap1tzf6.js:36219-36499`. The reasons are in `chunk-ytkczbf2.js:3217`.
+[^worktree-add-dir]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-m14bt1pz.js:72801-72811` (pins each relative `--add-dir` to the launch folder), `chunk-m14bt1pz.js:72843-72859` (the path rule), and `chunk-q22ttn58.js:1150` (the call after the worktree is made). The code runs only when the flag `tengu_rosy_fog` is on (`chunk-m14bt1pz.js:72802-72803`). The release notes name the Bash sandbox; the code shows only the `--add-dir` folders.
+[^catch-up]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-cfxefa64.js:20780-20785` (the terminal view of a cloud session shows the warning), `chunk-pem2txbt.js:4383` and `chunk-3v0n1mqa.js:1172` (the `--cloud` start and the attach path give the view its session settings), and `chunk-9cym6ykn.js:5951-5961` (the `--attach-serve` helper).
+[^worktree-kept]: The program, `chunk-cfxefa64.js:1872824` (the keep choice and its message). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^chrome-credentials]: The program, `chunk-06cjxaee.js:5768` (the refusal text) and `chunk-06cjxaee.js:1799` (the credential error that selects it). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).

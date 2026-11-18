@@ -57,7 +57,7 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 | `clock.sleep` | <Documented /> | `$.clock.sleep(ms, { signal })`. The signal does not cross. It aborts the dispatch. | Input `ClockWait`. Value `void`. |
 | `clock.after` | <Documented /> | `$.clock.after(ms, fn)`. `fn` stays in the plugin's environment. | Input `ClockWait`. Value `void`. |
 | `clock.every` | <Documented /> | `$.clock.every(ms, fn)`. One dispatch for each period. | Input `ClockWait`. Value `void`. |
-| `http.fetch` | <Documented /> | `$.http.fetch(url, init)` | Input `{ url: string, init?: HttpInit }`. Value `HttpResponse`. Since `2.1.321`, a request of the engine itself, such as a model request, also raises this event, with `next.origin.plugin` set to `"engine"`. For such a request, `init.body` can be `{ base64 }`, `init.compress` can be set, and the answer can carry `isStreaming` and `sendIndex`. A plugin's own `$.http.fetch` cannot pass these (see Errors below). [^fetch-engine] |
+| `http.fetch` | <Documented /> | `$.http.fetch(url, init)` | Input `{ url: string, init?: HttpInit }`. Value `HttpResponse`. A request of the engine itself, such as a model request, also raises this event, with `next.origin.plugin` set to `"engine"`. For such a request, `init.body` can be `{ base64 }`, `init.compress` can be set, and the answer can carry `isStreaming` and `sendIndex`. A plugin's own `$.http.fetch` cannot pass these (see Errors below). [^fetch-engine] |
 | `process.run` | <Documented /> | `$.process.run(argv, init)` | Input `{ argv: readonly string[], init?: ProcessRunInit }`. Value `ProcessRunResult`. |
 | `process.spawn` | <Documented /> | `$.process.spawn(request)`. It streams. `{ deny }` kills a running child. | Input `ProcessSpawnRequest`. Value `ProcessSpawnResult`. |
 | `process.hookEnv` | <Documented /> | `$.process.hookEnv()` | Input `NoArgs`. Value `Record<string, string>`. |
@@ -73,8 +73,8 @@ Each row is a family of messages. The backticked text is the start that every me
 | Start of Message | Status | What It Means | Cases |
 | --- | --- | --- | --- |
 | `${…}: http.fetch: ${…}`, `http.fetch: ${…}` | <Undocumented /> | A `$.http.fetch` call was refused. The text is the plugin name, `http.fetch:`, and the reason. A request from the engine itself has no plugin name. | The reason is one of these. `refused:` and the reason of the auth check. `unknown auth handle; $.session.authorize() mints one`. A request body over the character limit, or an answer body over the byte limit.[^fetch-errors] |
-| `a body of bytes and compress ride engine requests alone` | <Undocumented /> | A plugin passed a body that is not a string, or passed `compress`, to `$.http.fetch`. | Full text: `${plugin}: http.fetch: a body of bytes and compress ride engine requests alone`. Only requests of the engine itself may carry bytes or `compress`. Pass the body as a string and drop `compress`. Since `2.1.321`.[^bytes-body] |
-| `http.fetch: a body of bytes cannot be redacted` | <Undocumented /> | A request of the engine to an event endpoint has a body of bytes, and the program cannot redact bytes. | The program passes a string body through the `http.fetch` hooks to redact it. It refuses a body of bytes sent to that path. The text has no plugin name. Since `2.1.321`.[^redact] |
+| `a body of bytes and compress ride engine requests alone` | <Undocumented /> | A plugin passed a body that is not a string, or passed `compress`, to `$.http.fetch`. | Full text: `${plugin}: http.fetch: a body of bytes and compress ride engine requests alone`. Only requests of the engine itself may carry bytes or `compress`. Pass the body as a string and drop `compress`.[^bytes-body] |
+| `http.fetch: a body of bytes cannot be redacted` | <Undocumented /> | A request of the engine to an event endpoint has a body of bytes, and the program cannot redact bytes. | The program passes a string body through the `http.fetch` hooks to redact it. It refuses a body of bytes sent to that path. The text has no plugin name.[^redact] |
 
 ## Related Pages
 
@@ -84,10 +84,10 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^types]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`.
-[^hook-env]: The program, `chunk-4h798pp0.js:237453`.
-[^wasm]: The program, `chunk-4h798pp0.js:240496` and `chunk-qg227pzf.js:2548`.
-[^fetch-engine]: The program, `chunk-4h798pp0.js:4405250` and `chunk-4h798pp0.js:4407406`, and the `http.fetch` types of the type file.
-[^fetch-errors]: The program, `chunk-4h798pp0.js:4407406`.
-[^bytes-body]: The program, `chunk-4h798pp0.js:4407406`. `2.1.319` does not have this text.
-[^redact]: The program, `chunk-4h798pp0.js:4400978`. `2.1.319` does not have this text.
+[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`.
+[^hook-env]: The program, `chunk-m14bt1pz.js:241163`.
+[^wasm]: The program, `chunk-m14bt1pz.js:244222` and `chunk-dafpvz32.js:2646`.
+[^fetch-engine]: The program, `chunk-m14bt1pz.js:4483912` and `chunk-m14bt1pz.js:4486171`, and the `http.fetch` types of the type file.
+[^fetch-errors]: The program, `chunk-m14bt1pz.js:4486171`.
+[^bytes-body]: The program, `chunk-m14bt1pz.js:4486171`.
+[^redact]: The program, `chunk-m14bt1pz.js:4479637`.

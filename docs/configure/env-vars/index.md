@@ -4,7 +4,7 @@ description: How Claude Code reads environment variables, which value wins, how 
 sidebar_position: 1
 ---
 
-An environment variable is a named setting that a program reads when it starts. Claude Code `2.1.326` reads well over a thousand of them. This section lists 1663 variables that you can use and splits them into groups, so you can find them. The [official docs](https://code.claude.com/docs/en/env-vars) list a few of them. Only the program shows most of them.
+An environment variable is a named setting that a program reads when it starts. Claude Code `2.1.327` reads well over a thousand of them. This section lists 1675 variables that you can use and splits them into groups, so you can find them. The [official docs](https://code.claude.com/docs/en/env-vars) list a few of them. Only the program shows most of them.
 
 Set a variable in your shell, or under the `env` key of `~/.claude/settings.json`, `.claude/settings.json`, `.claude/settings.local.json`, or managed settings. To change a value, edit it, then restart `claude`. When the file changes, values in a settings `env` block also apply to a running session.
 
@@ -100,16 +100,16 @@ Numeric variables, such as timeouts and token budgets, accept forms like `2e3` (
 | [Models and Effort](models-and-effort.md) | Environment variables that pick the model, pin model aliases, set thinking effort, and limit output size | 87 |
 | [Auth and Accounts](auth-and-accounts.md) | Environment variables for API keys, login tokens, credential helpers, and account details | 81 |
 | [Cloud Providers](cloud-providers.md) | Environment variables for Amazon Bedrock, Google Vertex AI, Microsoft Foundry, and gateway setups | 80 |
-| [Network and Proxy](network-and-proxy.md) | Environment variables for API addresses, proxies, TLS certificates, time limits, and retries | 79 |
+| [Network and Proxy](network-and-proxy.md) | Environment variables for API addresses, proxies, TLS certificates, time limits, and retries | 77 |
 | [Context and Compaction](context-and-compaction.md) | Environment variables for the context window, compaction, memory, and the prompt cache | 50 |
-| [Tools and Bash](tools-and-bash.md) | Environment variables for the Bash tool, file tools, search, permissions, and the sandbox | 109 |
-| [UI and Terminal](ui-and-terminal.md) | Environment variables for the terminal screen, colors, voice, keys, and notifications | 93 |
+| [Tools and Bash](tools-and-bash.md) | Environment variables for the Bash tool, file tools, search, permissions, and the sandbox | 110 |
+| [UI and Terminal](ui-and-terminal.md) | Environment variables for the terminal screen, colors, voice, keys, and notifications | 94 |
 | [Sessions and Storage](sessions-and-storage.md) | Environment variables for config folders, session files, resume, install, and updates | 88 |
 | [Telemetry and Debug](telemetry-and-debug.md) | Environment variables for usage data, OpenTelemetry, debug logs, and error reports | 145 |
-| [Plugins and MCP](plugins-and-mcp.md) | Environment variables for plugins, MCP servers, skills, hooks, and marketplaces | 117 |
+| [Plugins and MCP](plugins-and-mcp.md) | Environment variables for plugins, MCP servers, skills, hooks, and marketplaces | 116 |
 | [Agents and Teams](agents-and-teams.md) | Environment variables for subagents, agent teams, background tasks, and workers | 85 |
 | [Features and Toggles](features-and-toggles.md) | Environment variables that turn single features on or off, including server-gated features | 71 |
-| [Remote and Cloud Sessions](remote-and-cloud-sessions.md) | Environment variables for cloud sessions, the bridge, the desktop app, Chrome, Cowork, and Slack | 198 |
+| [Remote and Cloud Sessions](remote-and-cloud-sessions.md) | Environment variables for cloud sessions, the bridge, the desktop app, Chrome, Cowork, and Slack | 211 |
 | [SDK and Automation](sdk-and-automation.md) | Environment variables for programs that host Claude Code, the Agent SDK, and automation | 30 |
 | [System and Third-Party](system-and-third-party.md) | Environment variables owned by your system or other tools that Claude Code reads, such as HOME, TERM, and ALL_PROXY | 222 |
 | [Bundled Libraries](bundled-libraries.md) | Environment variables read only by libraries bundled inside Claude Code, such as the AWS SDK, gRPC, and cloud detectors | 128 |

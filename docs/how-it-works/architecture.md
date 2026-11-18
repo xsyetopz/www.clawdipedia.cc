@@ -160,6 +160,6 @@ So an `mcp_tool` hook cannot run in them. See the [Hooks Reference](https://code
 
 ## Sources
 
-[^entrypoint]: The program, the entry point setup.
-[^startup]: The program, the bundled code.
-[^flags]: The program, the flag client.
+[^entrypoint]: The program, `chunk-zfmsqnn9.js:14026`, the entry point setup.
+[^startup]: The program, `chunk-efdpge6k.js:9441`, the bundled code.
+[^flags]: The program, `chunk-asj6f58y.js:47940`, the flag client.

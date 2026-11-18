@@ -44,13 +44,13 @@ Claude Code fills only names in `allowedEnvVars` into headers. Other references 
 | `prompt` | <Documented /> | One model call that returns `ok`. | 12 events, plus `PermissionRequest`. |
 | `agent` | <Documented /> <Experimental /> | A subagent that checks a condition. Up to 50 turns. Experimental, and the docs say it may change. | 12 events. Not `PermissionRequest`. |
 | `callback` | <Undocumented /> | A function that an SDK host or a mod registers. | Events that run device hooks. It is not a config key. |
-| `script` | <Differs note="Rejected in 2.1.305. Do not use." /> | Some text names this type. | `2.1.305` rejects it with `Unknown hook type "script"`. A `script` entry under `PreToolUse` also disables the whole settings file it sits in. |
+| `script` | <Differs note="Rejected in 2.1.327. Do not use." /> | Some text names this type. | `2.1.327` rejects it with `Unknown hook type "script"`. |
 
 The 12 events of `prompt` and `agent` are `PermissionDenied`, `PostToolBatch`, `PostToolUse`, `PostToolUseFailure`, `PreToolUse`, `Stop`, `SubagentStop`, `TaskCompleted`, `TaskCreated`, `TeammateIdle`, `UserPromptExpansion`, and `UserPromptSubmit`.
 `SessionStart` and `Setup` accept `command` and `mcp_tool` only.
 
 :::warning
-A `script` hook never runs in `2.1.305`. One `script` entry under `PreToolUse` also turns off every hook in that settings file.[^script-probe] See [Probes](../../reference/probes.md).
+A `script` hook never runs in `2.1.327`. The hook schema lists only `command`, `prompt`, `agent`, `http`, and `mcp_tool`.[^script-probe]
 :::
 
 ## Common Fields
@@ -161,13 +161,13 @@ Cloud sessions forward only your own hooks of kind `command` and `http` from use
 
 ## Sources
 
-[^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the program (handler schemas for `command`, `prompt`, `mcp_tool`, `http`, and `agent`).
-[^mcp-limit]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-1x4v8d9q.js:1310` for the limit and `chunk-4h798pp0.js:4035085` for the hook error path.
-[^script-probe]: A probe of the program.
-[^powershell-suffix]: The program, `chunk-4h798pp0.js`.
-[^headers]: The program, `chunk-4h798pp0.js:200461`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^stop-wrap]: The program, `chunk-4h798pp0.js`.
-[^stop-cap]: The program, `chunk-27vawgnx.js`, for the warning and for the main-session-only notice.
-[^calls]: The program, `chunk-4h798pp0.js`.
-[^concurrency]: The program, `chunk-4h798pp0.js:65905-65919` in `2.1.326`: the constants 12, 24, and 12 and the `model hooks` and `overdue model hooks` counts. We did not trace that a subagent shares the session host of its parent.
-[^cloud]: We read these rules in the program. We did not run them, because a cloud session needs a login.
+[^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the program (handler schemas for `command` at `chunk-ja5z738t.js:22419`, `prompt` at `chunk-ja5z738t.js:24043`, `mcp_tool` at `chunk-ja5z738t.js:24958`, `http` at `chunk-ja5z738t.js:25820`, and `agent` at `chunk-ja5z738t.js:27047`).
+[^mcp-limit]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-pachw208.js:1338` for the limit and `chunk-m14bt1pz.js:4111518` for the hook error path.
+[^script-probe]: The program, `chunk-ja5z738t.js:24400` for the schema and `chunk-ja5z738t.js:29730` for the message.
+[^powershell-suffix]: The program, `chunk-m14bt1pz.js:4175533` and `chunk-m14bt1pz.js:1113933`.
+[^headers]: The program, `chunk-m14bt1pz.js:204362`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^stop-wrap]: The program, `chunk-m14bt1pz.js:4080294`.
+[^stop-cap]: The program, `chunk-8g2nr9dn.js:278212`, for the warning and for the main-session-only notice.
+[^calls]: The program, `chunk-m14bt1pz.js:4080294` for the `prompt` hook and `chunk-m14bt1pz.js:4092449` for the `agent` hook.
+[^concurrency]: The program, `chunk-m14bt1pz.js:67293-67303` and `chunk-m14bt1pz.js:67340-67360`: the constants 12, 24, and 12 and the `model hooks` and `overdue model hooks` counts. We did not trace that a subagent shares the session host of its parent.
+[^cloud]: We read these rules in the program, `chunk-rj3e7agr.js:787256`. We did not run them, because a cloud session needs a login.

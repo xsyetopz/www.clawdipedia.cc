@@ -26,7 +26,7 @@ Official page: [Plugin Commands Reference](https://code.claude.com/docs/en/plugi
 | `details <name>` | <Documented /> | Shows the component list and projected token cost. | No flags. |
 | `configure <plugin>` | <Documented /> | Shows or saves the `userConfig` values. | `--values-stdin`, `--json`. Needs the full plugin id. |
 | `prune` (alias `autoremove`) | <Documented /> | Removes automatic dependencies that nothing uses. | `-s`, `--dry-run`, `-y` |
-| `restore-set-aside <plugin>` | <Undocumented /> | Gives a plugin id back the options and secrets that Claude Code set aside when a marketplace that your organization declares replaced a marketplace of the same name. Since `2.1.321`. | `--discard` deletes what is set aside in place of a restore. `claude plugin list` names each plugin id with values set aside and gives this command.[^restore] The [plugin commands reference](https://code.claude.com/docs/en/plugins/cli-reference) does not list it. |
+| `restore-set-aside <plugin>` | <Undocumented /> | Gives a plugin id back the options and secrets that Claude Code set aside when a marketplace that your organization declares replaced a marketplace of the same name. | `--discard` deletes what is set aside in place of a restore. `claude plugin list` names each plugin id with values set aside and gives this command.[^restore] The [plugin commands reference](https://code.claude.com/docs/en/plugins/cli-reference) does not list it. |
 | `validate <path>` | <Documented /> | Checks a plugin, marketplace, or component folder. | `--strict`, `--json`, and since `2.1.305` `--profile <name>`. Also `/plugin validate`. With `--profile directory` the command also exits 1 when the plugin directory (the catalog that plugins are submitted to) would refuse the plugin on a check it runs, or when a check could not be made. `--strict` then treats the directory's warnings as errors. Errors (exit 1) include `README_MISSING` and `README_TRIVIAL` (a README under 40 words), `LICENSE_MISSING` (no `LICENSE` file and no `license` in `plugin.json`), `PATH_TRAVERSAL` (a path that climbs out of the plugin), an MCP or hooks file that is unreadable or invalid, and manifest problems such as an invalid `plugin.json` or a badly formed name. A `hooks/hooks.json` must be a regular file under a size cap. Warnings (they fail only with `--strict`) include `ICON_MISSING` and `ICON_INVALID` (the local check reads only the file type; the fix text says the directory wants a square PNG or JPEG, 512 to 2048 px on each side, under 2 MB, and no SVG or WebP), `PRIVACY_URL_MISSING` (checked only when the plugin connects to a remote MCP server or HTTP hook; set `privacyPolicyUrl` in `plugin.json`), and `ARCHIVE_OS_METADATA_FILE` (a system file such as `.DS_Store`), plus others such as a README that does not render or a name that is not kebab-case. "A check could not be made" includes `plugin.json` listing more than 16 files for MCP servers or for hooks (16 of each are checked) and an MCP or hooks file the checks cannot use, such as one that is not valid JSON. The directory runs more checks than the command does. It needs a plugin folder, not a project's `.claude` folder.[^validate] The command also type-checks the TypeScript of a hooks module. Findings are warnings.[^validate-ts] An `engine.create` hook that is not in the one accepted form is an error: "this engine.create hook is outside its form".[^engine-create] `claude plugin list` and `validate` warn that a plugin's `agent` setting is deprecated.[^agent-dep] Since `2.1.326`, `validate` also reports some unsafe paths and links in the plugin folder.[^unsafe-paths] |
 | `tag [path]` | <Documented /> | Creates the git tag `<name>--v<version>`. | `--push`, `--dry-run`, `-f/--force`, `-m/--message <msg>`, `--remote`. Also `/plugin tag`. |
 | `test [dir]` | <Documented /> | Runs the tests of a mod. | Runs every `*.test.ts` and `*.test.tsx` file. |
@@ -84,6 +84,8 @@ flowchart TD
   D --> E["Set <code>enabledPlugins</code> in the scope"]
   E --> F["Next session or <code>/reload-plugins</code>"]
 ```
+
+Since `2.1.327`, `claude plugin eval` keeps its deny rules over a plugin's permission hook. It also flags each call that the hook let through where the eval's own check did not allow it.[^eval-327] A call that a deny rule blocks, or that Claude Code cannot check against the deny rules, is refused.
 
 Since `2.1.326`, `claude plugin eval --output-dir ''` stops with "Error: --output-dir was given an empty path; pass a directory, or omit it to use the default results directory".[^output-dir]
 
@@ -152,19 +154,20 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^cowork]: The program.
-[^install-json]: The program, `chunk-esb15jzb.js:17475`.
-[^restore]: The program, `chunk-cdgwqjfr.js:21482`.
-[^validate]: The program.
-[^validate-report]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`, `PluginValidateReport` and the types that it names.
-[^validate-ts]: The program, `chunk-rsdn630x.js:59253`.
-[^engine-create]: The program, `chunk-rsdn630x.js:43754`.
-[^agent-dep]: The program, `chunk-kek2xxjw.js:7839`.
-[^output-dir]: The program, `chunk-5w1qg79z.js:13383`.
-[^clone]: The program, `chunk-4h798pp0.js:252421`.
-[^mcpb]: The program, `chunk-nhfp95ss.js:160-168`.
-[^mcpb-uninstall]: The program, `chunk-agcn5b0k.js:1040-1101`, `chunk-4h798pp0.js:250602`, and `chunk-nhfp95ss.js:168-176`. The function lists the unpacked bundles, takes the plugin id off each, and deletes a bundle when no other plugin id is left. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^field-ignored]: The program, `chunk-4h798pp0.js:265942` and `chunk-4h798pp0.js:265352-265395` for the load, and `chunk-kek2xxjw.js:788` and `chunk-kek2xxjw.js:878` for the note and its advice. The same note says "Earlier versions of Claude Code refused this plugin". The load rule sits behind a server flag. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^plugin-lists]: The program, `chunk-15b1e2ff.js:11413-11450`, `chunk-15b1e2ff.js:11616-11660`, `chunk-15b1e2ff.js:7623-7680`, and `chunk-15b1e2ff.js:11590-11612`. The lists turn off the printable-key shortcuts, and the cancel entry has the focus at the start. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^nested-skills]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The program, `chunk-4h798pp0.js:188003-188008`, logs "Skipped the nested skills search for a file in a sync-owned or plugin folder". The code does not name `--plugin-dir`, and a server flag guards the plugin-folder check.
+[^cowork]: The program, `chunk-dfwkett1.js:2197`.
+[^install-json]: The program, `chunk-1z19r9zf.js:17475`.
+[^restore]: The program, `chunk-az1d7wfg.js:21483`.
+[^validate]: The program, `chunk-c062d8f2.js:4081` and `chunk-c062d8f2.js:11954`.
+[^validate-report]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `PluginValidateReport` and the types that it names.
+[^validate-ts]: The program, `chunk-ke2xb8ty.js:59250`.
+[^engine-create]: The program, `chunk-ke2xb8ty.js:43754`.
+[^agent-dep]: The program, `chunk-dfwkett1.js:7853`.
+[^output-dir]: The program, `chunk-6zk0h247.js:13441`.
+[^clone]: The program, `chunk-m14bt1pz.js:5113149`.
+[^mcpb]: The program, `chunk-xtjk0n7g.js:162-168`.
+[^mcpb-uninstall]: The program, `chunk-9ns7kxca.js:1234-1290`, `chunk-m14bt1pz.js:254626`, and `chunk-xtjk0n7g.js:170-176`. The function lists the unpacked bundles, takes the plugin id off each, and deletes a bundle when no other plugin id is left. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^field-ignored]: The program, `chunk-m14bt1pz.js:270002` and `chunk-m14bt1pz.js:269326-269465` for the load, and `chunk-dfwkett1.js:792` and `chunk-dfwkett1.js:882` for the note and its advice. The same note says "Earlier versions of Claude Code refused this plugin". The load rule sits behind a server flag. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^plugin-lists]: The program, `chunk-xstndjzk.js:115339` (remove marketplace), `chunk-xstndjzk.js:185220` (switch copy), and `chunk-xstndjzk.js:185769` (uninstall). The lists turn off the printable-key shortcuts, and the cancel entry has the focus at the start. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^nested-skills]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The program, `chunk-m14bt1pz.js:191694-191719`, logs "Skipped the nested skills search for a file in a sync-owned or plugin folder". The code does not name `--plugin-dir`, and a server flag guards the plugin-folder check.
 [^unsafe-paths]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The loading side is on [Plugin Loading](loading.md#unsafe-paths-and-links).
+[^eval-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-rj3e7agr.js:329555`.

@@ -129,6 +129,16 @@ On `2.1.319`, an auto mode run with a custom base URL that gives no server-side 
 Pick one style per hook. Use exit codes alone, or exit 0 with JSON. If you mix them, exit 2 keeps its blocking effect. Claude Code still reads the JSON fields.
 :::
 
+### Where a Failing Hook Shows
+
+The `2.1.327` release notes list a failing hook that showed nothing before in these places:[^failing-shown]
+
+- `SubagentStop` hooks of background agents.
+- `SessionEnd` hooks at `/clear` and `/resume`.
+- `CwdChanged` and `FileChanged` hooks in the fullscreen renderer.
+
+A `Stop` hook that fails to run no longer shows as if it had reported a problem.[^stop-fail] The release notes also say that focus view no longer hides a finished reply while a `Stop` hook runs.[^stop-fail]
+
 ### What Exit 2 Does per Event
 
 | Effect | Status | Events |
@@ -174,7 +184,9 @@ The hook input is in the `*HookInput` types in the Mod API type file `https://cl
 
 ## Sources
 
-[^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the program (`BaseHookInput`, `McpServerProvenance`, `ClassicResultFields`, and the hook output schema). The exit code 2 table was checked against the Hooks Reference.
+[^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the program (`BaseHookInput`, `McpServerProvenance`, `ClassicResultFields`, and the hook output schema at `chunk-rj3e7agr.js:291182`). The exit code 2 table was checked against the Hooks Reference.
 [^probes-print]: Probes in `-p` mode with a local stub.
-[^exit-127]: The program, `chunk-s3j7dx93.js:10508`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^block-mismatch]: The program, `chunk-4h798pp0.js:64591` and `chunk-4h798pp0.js:203690`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^exit-127]: The program, `chunk-36ts0j6v.js:10137`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^block-mismatch]: The program, `chunk-m14bt1pz.js:65964` and `chunk-m14bt1pz.js:207615`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^failing-shown]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, for the `SessionEnd` hook at `chunk-m14bt1pz.js:4129334`, for the `FileChanged` hook at `chunk-m14bt1pz.js:2566771`, and for the `CwdChanged` hook at `chunk-m14bt1pz.js:2567774`. The `2.1.326` program has no such call for `SessionEnd`. The `SubagentStop` part for background agents is from the release notes.
+[^stop-fail]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, the headline `Stop hook failed` or `Stop hook reported a problem`, `chunk-36ts0j6v.js:209150`. The focus view part is from the release notes.

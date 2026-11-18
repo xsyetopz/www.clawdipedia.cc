@@ -1,6 +1,6 @@
 ---
 title: Remote Control Server
-description: Every option of claude remote-control in 2.1.326, with the hidden and removed flags and each error the option parser prints.
+description: Every option of claude remote-control in 2.1.327, with the hidden and removed flags and each error the option parser prints.
 sidebar_position: 4
 ---
 
@@ -27,7 +27,7 @@ The command has its own parser. It does not use the parser of the root `claude` 
 | `-c`, `--continue` | <Documented /> | Brings back the session that the last server in this folder (or in one of its git worktrees) started with. It fails when nothing was recorded here in about the last 4 hours. Since `2.1.323`, a server restarted in the same folder, on the same computer and account, keeps its saved identity for up to 30 days.[^identity] | Off |
 | `--session-id <id>` | <Documented /> | Brings back one session by its ID. An empty value fails. | Off |
 | `--permission-mode <mode>` | <Documented /> | Sets the permission mode of the sessions the server starts: `acceptEdits`, `auto`, `bypassPermissions`, `default`, `dontAsk`, or `plan`. | The mode of your settings |
-| `--settings <file>` | <Undocumented /> | Gives the sessions the server starts a JSON settings file. The server reads the file once, at start. If the file changes, no session starts until you restart the server. Keep the file where sessions cannot write. With this option, a session started from a project does not get the auto-compact and auto mode that Remote Control otherwise turns on for it ahead of this computer's own settings. New in `2.1.321`. | Off |
+| `--settings <file>` | <Undocumented /> | Gives the sessions the server starts a JSON settings file. The server reads the file once, at start. If the file changes, no session starts until you restart the server. Keep the file where sessions cannot write. With this option, a session started from a project does not get the auto-compact and auto mode that Remote Control otherwise turns on for it ahead of this computer's own settings. | Off |
 | `--chrome`, `--no-chrome` | <Documented /> | Turns Claude in Chrome on or off for the sessions the server starts. A session started from a project follows the `/chrome` setting of this computer. Claude Code refuses `--chrome` when a policy blocks Chrome ("Start Remote Control without --chrome."). | Off |
 | `-d`, `--debug[=<filter>]` | <Documented /> | Turns on debug logs for this process. Give a filter only in the `=` form, such as `--debug=api,hooks`. | Off |
 | `--debug-file <path>` | <Documented /> | Writes debug logs to the file. Also `--debug-file=<path>`. | Off |
@@ -37,8 +37,8 @@ The command has its own parser. It does not use the parser of the root `claude` 
 | `--capacity <N>` | <Documented /> | Sets the maximum number of sessions at the same time in `same-dir` or `worktree` mode. Give it only once. | `32` |
 | `--create-session-in-dir`, `--no-create-session-in-dir` | <Documented /> | Makes one session in the current folder when the server starts. In `worktree` mode, this session stays in the current folder and the other sessions get worktrees. A session keeps the folder it started in: a connected client cannot move it to another folder. Claude Code refuses with "This Remote Control session stays in the folder it was started in. To work in another folder, start a new session there." (changed in `2.1.321`).[^same-folder] | On |
 | `--allow-unattended-tool-calls` | <Undocumented /> | A hidden option. The help text shows it only when an internal condition holds.[^unattended-help] See [Unattended Tool Calls](#unattended-tool-calls). | Off |
-| `--enable-live-preview`, `--preview-port <port>` | <Undocumented /> | Hidden options for a preview tunnel. In `2.1.326` the parser always refuses them with `--enable-live-preview and --preview-port are not available in this build.` | Not available |
-| `--sandbox`, `--no-sandbox` | <Documented /> <Deprecated note="Removed in 2.1.300" /> | Removed. The server does not start. See [Errors](#errors). To sandbox the sessions, set `sandbox.enabled` to `true` in settings. | |
+| `--enable-live-preview`, `--preview-port <port>` | <Undocumented /> | Hidden options for a preview tunnel. In `2.1.327` the parser always refuses them with `--enable-live-preview and --preview-port are not available in this build.` | Not available |
+| `--sandbox`, `--no-sandbox` | <Documented /> <Deprecated note="Removed" /> | Removed. The server does not start. See [Errors](#errors). To sandbox the sessions, set `sandbox.enabled` to `true` in settings.[^sandbox-flag] | |
 
 ### Unattended Tool Calls
 
@@ -59,7 +59,7 @@ Claude Code does these steps before the server takes sessions:[^startup]
 - The first time, the server explains Remote Control and asks `Enable Remote Control? (y/n)`. The answer goes to the config key `remoteDialogSeen`.
 - In a folder that you did not trust yet, the server asks whether to trust it. With no terminal to ask on, run `claude` in the folder once first.
 - If you do not give `--spawn` and no mode is saved, the server asks `Spawn mode for this project:`. It saves the answer as `remoteControlSpawnMode` in the project config.
-- `worktree` mode needs a git repository or `WorktreeCreate` and `WorktreeRemove` hooks.
+- `worktree` mode needs a git repository or `WorktreeCreate` and `WorktreeRemove` hooks. Since `2.1.327`, stopping the server in `worktree` mode keeps the worktree of a session that may return, with its git-ignored files such as `.env`. This holds for worktrees that Claude Code makes, not for worktrees that a `WorktreeCreate` hook makes.[^rc-worktree]
 - The server refuses an `http://` API base URL that is not `localhost`.
 - You must sign in with a Claude account that has a subscription. The account checks run before the options are read; see [Order of the Checks](#order-of-the-checks).
 
@@ -91,7 +91,7 @@ Since `2.1.326`, the exit code tells a service manager, such as `systemd` or `la
 | Code | When |
 | --- | --- |
 | `0` | You stop the server, for example with Ctrl+C, or a `--spawn session` server ends with its one session. |
-| `4` | The server stops by itself in `same-dir` or `worktree` mode. |
+| `4` | The server loop ends without a stop signal (`SIGINT`, `SIGTERM`, or `SIGHUP`) and the spawn mode is not the one-session mode, for example in `same-dir` or `worktree` mode.[^exit-codes] |
 | `69` | The server cannot register with Remote Control. The error message prints first. |
 | `1` | A check or an option fails. See [Order of the Checks](#order-of-the-checks) and [Option Errors](#option-errors). |
 
@@ -127,14 +127,16 @@ Each option error below prints `Error: <message>` on stderr and exits with code 
 
 ## Sources
 
-[^parser]: The text of `claude remote-control --help` in `2.1.326`, and the option parser of the program, `chunk-y5hjhy3x.js:5411` and `chunk-y5hjhy3x.js:5489-5527`.
-[^identity]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-w62tkse3.js:2100`.
-[^same-folder]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-qqth59zk.js:9887`, behind the `tengu_idempotent_blossom` gate.
-[^unattended-help]: The program, `chunk-0n02x2cx.js:60-62`.
-[^grant]: The program, export `writeUnattendedRunGrant`, `chunk-7zp3n9ks.js`.
-[^startup]: The program, `chunk-y5hjhy3x.js`, the run-time code after `Ai`.
-[^order]: The program, `chunk-wz7dh45s.js`, the `remote-control` entry, and `chunk-p8vgtxat.js`, function `Knn`, exported as `getBridgeDisabledDiagnosis`.
-[^flag]: The program, flag `tengu_ccr_bridge`. Probe group `cli321`.
-[^exit-codes]: The program, `chunk-jh1meyy3.js:5-8` and `chunk-y5hjhy3x.js:6333`, `:6797-6798`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^cli321]: The program, `chunk-y5hjhy3x.js:108769`, function `Ai`. Probe group `cli321` (`rc-*` cases), run with a fake `max` login, only `DISABLE_TELEMETRY` set, and no network.
-[^child-logs]: The program, `chunk-y5hjhy3x.js:5706-5712`, `chunk-y5hjhy3x.js:6519-6528`, `chunk-zyq9kffp.js:378`, and `chunk-z4j4mjgn.js:44893-44944`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^parser]: The text of `claude remote-control --help` in `2.1.326`, and the option parser of the program, `chunk-0tqcm9e3.js:110411`, `chunk-0tqcm9e3.js:112577`, and `chunk-0tqcm9e3.js:113208`.
+[^identity]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-zbte79pd.js:2100`.
+[^same-folder]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-qbj34c05.js:435-450`, behind the `tengu_idempotent_blossom` gate.
+[^unattended-help]: The program, `chunk-grtvttzf.js:3401`.
+[^grant]: The program, export `writeUnattendedRunGrant`, `chunk-affxt4p4.js:1063` (exported from `chunk-cqp0cssp.js:1770`), called at `chunk-0tqcm9e3.js:125863`.
+[^startup]: The program, `chunk-0tqcm9e3.js:121254` and `chunk-0tqcm9e3.js:123148`, and the help text, `chunk-grtvttzf.js:5456`.
+[^order]: The program, `chunk-stwz912m.js:6208`, the `remote-control` entry, and `chunk-f7bk17mp.js:5541`, the function exported as `getBridgeDisabledDiagnosis`.
+[^flag]: The program, flag `tengu_ccr_bridge`, `chunk-f7bk17mp.js:5541` and `chunk-f7bk17mp.js:8343`. Probe group `cli321`.
+[^exit-codes]: The program, `chunk-ex8n2sn4.js:210` holds the codes `78`, `75`, `69`, `4`, and `70`. `chunk-0tqcm9e3.js:131613` exits with `69` (`KZa`) when registration fails. `chunk-0tqcm9e3.js:781` imports `4` (`YZa`). `chunk-0tqcm9e3.js:6849-6851` exits with it when no stop signal was received and the spawn mode is not `single-session`. `chunk-0tqcm9e3.js:6650-6666` shows that the three signals stop the server. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
+[^cli321]: The program, the option parser, from `chunk-0tqcm9e3.js:5448` (the `--spawn` values) to `chunk-0tqcm9e3.js:5576` (`--enable-live-preview`). Probe group `cli321` (`rc-*` cases), run with a fake `max` login, only `DISABLE_TELEMETRY` set, and no network.
+[^child-logs]: The program, `chunk-0tqcm9e3.js:5759-5767`, `chunk-0tqcm9e3.js:6581`, `chunk-40s100gp.js:387-388`, and `chunk-1yrzf3wn.js:44895-44944`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^rc-worktree]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-0tqcm9e3.js:3342` (a session may return when `preserveOnShutdown` is set), `chunk-0tqcm9e3.js:5120-5127` (the shutdown clean-up passes that value), and `chunk-0tqcm9e3.js:5401-5420` (the worktree is kept when the value is set and no hook made it).
+[^sandbox-flag]: The program, `chunk-0tqcm9e3.js:5491-5494` (the error for both flags) and `chunk-194bvre1.js:9` (the `sandbox.enabled` text).

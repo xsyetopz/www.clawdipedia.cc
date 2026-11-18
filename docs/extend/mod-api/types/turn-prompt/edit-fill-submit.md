@@ -218,7 +218,7 @@ What a `prompt.section` hook returns: the text that the prompt carries for that 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `text` | <Documented /> | The text that the prompt carries for that section, or `null` to leave it out. | Type: `string \| null`. |
-| `breakPromptCache` | <Documented /> | Sends a changed answer at the next turn (new in `2.1.321`). It rewrites the cache from the system prompt on and drops the earlier thinking of the model. | Type: `boolean`. Optional. Left out, a changed answer waits for a new thread or a compaction. The answer of the outermost hook sets it, so a hook above that keeps it spreads what `next` gave. |
+| `breakPromptCache` | <Documented /> | Sends a changed answer at the next turn. It rewrites the cache from the system prompt on and drops the earlier thinking of the model. | Type: `boolean`. Optional. Left out, a changed answer waits for a new thread or a compaction. The answer of the outermost hook sets it, so a hook above that keeps it spreads what `next` gave. |
 
 ### `PromptSubmitArgs`
 
@@ -285,4 +285,4 @@ What a `prompt.submit` hook returns, and what `next(e)` resolves to: the prompt 
 
 ## Sources
 
-[^shared-sections]: The program, `chunk-4h798pp0.js:2762277`, `TTn`.
+[^shared-sections]: The program, `chunk-m14bt1pz.js:2806566`, `TTn`.

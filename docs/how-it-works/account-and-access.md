@@ -117,10 +117,9 @@ Since `2.1.326`, `/login` no longer ends on "Login successful" while an approved
 Status: <Undocumented /> in the official docs.
 
 - After a login, when an approved `ANTHROPIC_API_KEY` still serves requests, Claude Code says "Signed in, but requests still use ANTHROPIC_API_KEY. To use this login, turn off "Use custom API key" in /config".[^api-key-note]
-- The footer says "Not logged in · /login, or /config to use ANTHROPIC_API_KEY" when an unused key is set. Otherwise it says "Not logged in · Run /login".[^footer]
-- The not-logged-in message and the login screen add the dim note "ANTHROPIC_API_KEY is set but not in use · /config to use it".[^unused-note]
-- `/status` adds an "Unused key" row. Its value is `ANTHROPIC_API_KEY`, followed by "· /config to use it".[^status-row]
-- While the note shows, Claude Code checks the login again each time the unused state changes. Turn on the key in `/config`, and the "Not logged in" state clears.[^follow-key]
+- The footer says "Not logged in · run /login".[^footer] The `2.1.327` program has no footer text that names `/config`.
+- The not-logged-in message and the login screen add the dim note `ANTHROPIC_API_KEY not used here · turn on "Use custom API key" in /config`. The note shows only when the key is set, no managed setting fixes the login method or organization, and the key is not already approved.[^unused-note]
+- `/status` adds an "Unused API key" row. Its value is `ANTHROPIC_API_KEY`, followed by "· claude -p uses it · /config to use".[^status-row]
 
 ## Finishing a Login
 
@@ -166,7 +165,7 @@ Since `2.1.312`, Claude Code calls the five-hour window the "5-hour limit". Earl
 | "Upgrade your plan" | The limit lists an upgrade path. |
 | "Stop and wait for limit to reset", or "Stop" | Always. |
 
-Claude Code shows "Couldn't load your current spend limit, so it can't be changed right now. Try /rate-limit-options again later." when it cannot read the current spend limit. Since `2.1.323`, the menu does not offer a lower limit then.[^spend]
+Claude Code shows "Couldn't load your current spend limit, so it can't be changed right now. Try /rate-limit-options again later." when it cannot read the current spend limit. Since `2.1.323`, the menu then shows `unavailable` as the limit, gives no hint to adjust it, and does not change it.[^spend]
 
 ## What Others Can See
 
@@ -182,40 +181,39 @@ Claude Code shows "Couldn't load your current spend limit, so it can't be change
 
 ## Sources
 
-[^scope]: The program (Claude Code `2.1.311`), with the module and line in its cleaned code. Each footnote below names the module.
-[^plan-values]: The program, `chunk-d73xe1mr.js:34212`, `:34221`.
-[^plan-map]: The program, `chunk-d73xe1mr.js:19326`.
-[^oauth-token]: The program, `chunk-d73xe1mr.js:32831`.
-[^host-account]: The program, `chunk-d73xe1mr.js:20082`.
-[^oauth-profile]: The program, `chunk-d73xe1mr.js@343401`.
-[^key-profile]: The program, `chunk-d73xe1mr.js@342936`.
+[^scope]: Claude Code `2.1.327`. Each footnote below names the chunk and the place in it.
+[^plan-values]: The program, `chunk-asj6f58y.js:35144`, `:35153`.
+[^plan-map]: The program, `chunk-asj6f58y.js:20098`.
+[^oauth-token]: The program, `chunk-asj6f58y.js:33757`.
+[^host-account]: The program, `chunk-asj6f58y.js:20833`.
+[^oauth-profile]: The program, `chunk-asj6f58y.js:360405`.
+[^key-profile]: The program, `chunk-asj6f58y.js:359940`.
 [^probe-run]: See [Account Probes](../reference/probes.md#account-probes).
-[^keychain]: The program, `chunk-6pphp15b.js:2034`.
-[^request-id]: The program, `chunk-b9pvc345.js@224`.
+[^keychain]: The program, `chunk-dt20ra1t.js:2036`.
+[^request-id]: The program, `chunk-asj6f58y.js:360802`, `:376635`.
 [^mod-type]: `schemas/claude-code.d.ts`.
-[^skip-profile]: The program, `chunk-d73xe1mr.js:18953`, `:20103`.
-[^scope-check]: The program, `chunk-d73xe1mr.js:34020`.
-[^grove]: The program, `chunk-ex45rbsy.js:33`, `:289`, `:346`.
-[^grove-plans]: The program, `chunk-d73xe1mr.js:34507`.
-[^picker]: The program, `chunk-d73xe1mr.js:17247`.
-[^fable]: The program, `chunk-vawgpkfg.js:14340`, `:14740`.
-[^mythos]: The program, `chunk-5h5hxvwy.js:41`. The model-name check is at `chunk-5h5hxvwy.js:52`.
-[^credits]: The program, `chunk-vawgpkfg.js:11052`, `:14354`. The server config is `tengu_saffron_lattice`.
-[^disabled]: The program, `chunk-vawgpkfg.js:15557`. The server flag is `tengu_saffron_picker_dim`. The plan and role check is at `chunk-vawgpkfg.js:10957` and `chunk-d73xe1mr.js:34184`. The login scope check is at `chunk-d73xe1mr.js:34020`.
-[^credits-only]: The program, `chunk-vawgpkfg.js:185706`. The server config is `tengu_saffron_credits_only_tiers`.
-[^v326]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^api-key-note]: The program, `chunk-szf5xyqt.js:496`.
-[^footer]: The program, `chunk-y9bdpp8r.js:55210`.
-[^unused-note]: The program, `chunk-d73xe1mr.js:31340-31384`, `chunk-s3j7dx93.js:4213-4221`, `chunk-0py32h2p.js:1884-1892`.
-[^status-row]: The program, `chunk-hkrxqjz2.js:567-575`.
-[^follow-key]: The program, `chunk-y9bdpp8r.js:15138-15150`.
-[^refusal]: The program, `chunk-d73xe1mr.js:34457`, `:21905`, `chunk-4h798pp0.js:107776`.
-[^desktop]: The program, `chunk-d73xe1mr.js:21573`, `chunk-4k4w82vm.js:103`, `:467`.
+[^skip-profile]: The program, `chunk-asj6f58y.js:19725`, `:20854`.
+[^scope-check]: The program, `chunk-asj6f58y.js:34946`.
+[^grove]: The program, `chunk-k4dm91ea.js:999` (the account settings read), `:3745` (the Grove read), `:5639` (the save), `:6511` (the one hour test, `3600000` ms).
+[^grove-plans]: The program, `chunk-asj6f58y.js:673592` (`max` or `pro` only).
+[^picker]: The program, `chunk-asj6f58y.js:17694`.
+[^fable]: The program, `chunk-18d5r2hb.js:14347`, `:14747`.
+[^mythos]: The program, `chunk-jtw26wbb.js:41`. The model-name check is at `chunk-jtw26wbb.js:52`.
+[^credits]: The program, `chunk-18d5r2hb.js:11058`, `:14361`. The server config is `tengu_saffron_lattice`.
+[^disabled]: The program, `chunk-18d5r2hb.js:15583`. The server flag is `tengu_saffron_picker_dim`. The plan and role check is at `chunk-18d5r2hb.js:10963` and `chunk-asj6f58y.js:35116`. The login scope check is at `chunk-asj6f58y.js:34946`.
+[^credits-only]: The program, `chunk-18d5r2hb.js:185788`. The server config is `tengu_saffron_credits_only_tiers`.
+[^v326]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-ge30m6jd.js:12156` ("Signed in, but requests still use ANTHROPIC_API_KEY").
+[^api-key-note]: The program, `chunk-ge30m6jd.js:497`.
+[^footer]: The program, `chunk-cfxefa64.js:894357`. The `2.1.327` program has no `to use ANTHROPIC_API_KEY` text.
+[^unused-note]: The program, `chunk-asj6f58y.js:614745-615067` (the test and the text), `chunk-36ts0j6v.js:59851` (the not-logged-in message), and `chunk-j4ptcgj4.js:28748` (the login screen).
+[^status-row]: The program, `chunk-tz27m3ab.js:10968`.
+[^refusal]: The program, `chunk-asj6f58y.js:35389`, `:22661`, `chunk-m14bt1pz.js:110075`.
+[^desktop]: The program, `chunk-asj6f58y.js:22329`, `chunk-zfmsqnn9.js:103`, `:473`.
 [^v311]: [`2.1.311` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.311).
-[^windows]: The program, `chunk-p95xxxdb.js:1815`.
-[^five-hour]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312). The program, `chunk-mpb1rtff.js:715` and `chunk-48s6a53p.js:2580`.
-[^menu]: The program, `chunk-4h798pp0.js:2488492`. The rows are built at `chunk-dj71vevt.js:42111`.
-[^spend]: The program, `chunk-dj71vevt.js:1071`. The string is not in the `2.1.322` program.
+[^windows]: The program, `chunk-8b50zmfk.js:1799`.
+[^five-hour]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312). The program, `chunk-8b50zmfk.js:34225` (the `five_hour` name), `chunk-nxnqr711.js:25131`, and `chunk-7b2p05m1.js:46089`.
+[^menu]: The program, `chunk-m14bt1pz.js:2532459`. The rows are built at `chunk-hsy20e3v.js:42916`.
+[^spend]: The program, `chunk-hsy20e3v.js:32937` (the `unavailable` label and the empty hint) and `:33976` (the message). The string is not in the `2.1.322` program.
 [^control]: `schemas/claude-code-control-protocol.json`.
 [^mod-account]: `schemas/claude-code.d.ts`.
-[^finishing]: The program, `chunk-0py32h2p.js:616` and `chunk-0py32h2p.js:2294`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^finishing]: The program, `chunk-j4ptcgj4.js:606` and `chunk-j4ptcgj4.js:2254`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

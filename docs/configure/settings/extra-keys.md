@@ -54,7 +54,6 @@ The first rows are sub-keys of an object key. Only the desktop app reads the las
 | `disableBrowserExternalNavigation` | <Documented /> | boolean | Unset, so external browsing is on | Turn off external browsing in the desktop Browser pane. Only `true` takes effect. | Managed settings only |
 | `browserExternalPageTools` | <Documented /> | string | Unset, so the tools work on external pages | Stop Claude from using its tools on external pages in the desktop Browser pane. The value is `"disabled"`. | Managed settings only |
 | `disableMobileSimulatorTools` | <Documented /> | boolean | Unset | Block Claude's tools in the desktop iOS Simulator pane. Only `true` takes effect. | Managed settings only |
-| `disableDesktopLocalSessions` | <Documented /> | boolean | - | Turn off Desktop Code sessions that run on the device. SSH and cloud sessions stay on. The `2.1.305` program has no schema entry or reader for it.[^desktop-local] The [official docs](https://code.claude.com/docs/en/settings-reference#disabledesktoplocalsessions) say the desktop app reads it (v1.37937.0 or later), and only `true` takes effect. | Managed settings only |
 
 ## Global Config Keys
 
@@ -91,7 +90,6 @@ These keys live in `~/.claude.json`, not in a settings file. The `/config` comma
 
 ## Sources
 
-[^program]: The program.
-[^desktop-local]: The program, `2.1.305`.
-[^fast-key]: The program, `chunk-d73xe1mr.js:410398` and `:410698`.
-[^subkeys]: The program.
+[^program]: The program, `chunk-ja5z738t.js:184471`.
+[^fast-key]: The program, `chunk-asj6f58y.js:428006` and `:428306`.
+[^subkeys]: The program, `chunk-ja5z738t.js:298151`.

@@ -168,12 +168,12 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the settings schema (`claude-code-settings.json`).
-[^monitor]: The program.
-[^onfailure]: The program.
-[^restrict]: The program.
-[^same-thread]: The program.
+[^monitor]: The program, `chunk-m14bt1pz.js:1068403` and `chunk-m14bt1pz.js:4187418`.
+[^onfailure]: The program, `chunk-m14bt1pz.js:1191338` and the field text at `chunk-ja5z738t.js:21561`.
+[^restrict]: The program, `chunk-m14bt1pz.js:1189020`.
+[^same-thread]: The program, `chunk-m14bt1pz.js:4911482`.
 [^powershell]: Probe case `print.err319.hook-powershell` printed this text.
-[^gitbash]: The program checks `x()==="windows"`, a platform check (read site `chunk-4h798pp0.js`, search `requires bash but Git Bash was not found`). On this macOS build the platform is a baked-in `"darwin"` literal, and `CLAUDE_CODE_HOST_PLATFORM` only sets the telemetry `platform` field. Not run: hard limit on this host.
-[^absolute]: The program, `chunk-yatas16f.js:42152` and `chunk-q1593s9n.js:19664`.
-[^managed-lists]: The program, `chunk-4h798pp0.js:200481-200497` and the field text of both settings. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^transcript-colors]: The program, `chunk-s3j7dx93.js:10448-10630`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^gitbash]: The program checks `P()==="windows"` (`chunk-m14bt1pz.js:4170505`), a platform check (read site `chunk-m14bt1pz.js:4177043`, search `requires bash but Git Bash was not found`). On this macOS build the platform is a baked-in `"darwin"` literal, and `CLAUDE_CODE_HOST_PLATFORM` only sets the telemetry `platform` field. Not run: hard limit on this host.
+[^absolute]: The program, `chunk-3g626wz9.js:49564` and `chunk-ynzkm1p0.js:21336`.
+[^managed-lists]: The program, `chunk-m14bt1pz.js:204382-204399` and the field text of both settings. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^transcript-colors]: The program, `chunk-36ts0j6v.js:10077-10630`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

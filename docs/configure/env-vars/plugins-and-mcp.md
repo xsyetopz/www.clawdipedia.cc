@@ -8,7 +8,7 @@ These variables change how Claude Code loads plugins, runs MCP servers, finds sk
 
 Use them to tune slow MCP servers or to lock down plugin loading. To set one, add it to the `env` key of a settings file, as the example shows, or export it before you start `claude`.
 
-This page lists 116 variables. `MCP_TIMEOUT` and `MCP_TOOL_TIMEOUT` are common. Switch rows take `1`.
+This page lists 115 variables. `MCP_TIMEOUT` and `MCP_TOOL_TIMEOUT` are common. Switch rows take `1`.
 
 ## Example
 
@@ -76,7 +76,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_MCP_PREWAIT_SERVERS_MS_BY_NAME` | <Undocumented /> | Sets the wait time for single servers that `CLAUDE_CODE_MCP_PREWAIT_SERVERS` names .[^prewait-list] | Text such as `name=ms,name2=ms`. A name must appear in `CLAUDE_CODE_MCP_PREWAIT_SERVERS`. A value must be digits, above `0`, and below the total budget. Only `ccr_worker` sessions read it.[^prewait-reader] | Remote SDK-URL sessions |
 | `CLAUDE_CODE_MCP_REGISTRY_FETCH_AT_STARTUP` | <Undocumented /> | Fetches the list of official MCP registry URLs at startup. Without it, some cloud sessions wait for the first `https://` MCP server URL check. Added in `2.1.311`. | On or off, off by default. The wait applies in a tool container daemon, a ccs tenant, or a hosted worker session. Elsewhere the list is fetched at once | Cloud sessions |
 | `CLAUDE_CODE_MCP_SERVE_AUTH_TOKEN` | <Undocumented /> | Gives the MCP serve mode a bearer value for its auth. Without it the mode uses a stdout reader. | Text (a secret). Claude Code reads it from the env once and then removes it. It also clears it from the child process env | MCP serve mode |
-| `CLAUDE_CODE_MCP_SERVE_GARBAGE_COLLECTIONS` | <Undocumented /> | Sets when the tool server of `mcp serve` makes its own garbage collections with `bun:jsc`. A full collection runs `fullGC`. A young collection runs `edenGC`. Added in `2.1.321`. | Parts split by commas: `first=listen`, `first=rest`, `first=skip`, or `first=never`; `later=young` or `later=full`; `rest_delay_ms=N`; `min_growth_mib=N`; `between_growth_mib=N` or `between_growth_mib=off`. `N` has one to six digits. Defaults are `first=listen`, `later=full`, `rest_delay_ms=1500`, `min_growth_mib=16`, `between_growth_mib=8`. `first=never` in any part turns the collections off. A part that fails to parse gives a warning in the debug log, and the server acts as if the variable were unset | `mcp serve` tool server. What an unset variable means is not known, because a second check decides it.[^serve-gc] |
+| `CLAUDE_CODE_MCP_SERVE_GARBAGE_COLLECTIONS` | <Undocumented /> | Sets when the tool server of `mcp serve` makes its own garbage collections with `bun:jsc`. A full collection runs `fullGC`. A young collection runs `edenGC`. | Parts split by commas: `first=listen`, `first=rest`, `first=skip`, or `first=never`; `later=young` or `later=full`; `rest_delay_ms=N`; `min_growth_mib=N`; `between_growth_mib=N` or `between_growth_mib=off`. `N` has one to six digits. Defaults are `first=listen`, `later=full`, `rest_delay_ms=1500`, `min_growth_mib=16`, `between_growth_mib=8`. `first=never` in any part turns the collections off. A part that fails to parse gives a warning in the debug log, and the server acts as if the variable were unset | `mcp serve` tool server. What an unset variable means is not known, because a second check decides it.[^serve-gc] |
 | `CLAUDE_CODE_MCP_SERVE_INTERFACE_MIN_VERSION` | <Undocumented /> | Asks for a minimum `anthropic/toolHostInterface` version. Claude Code ignores and logs a value that differs from the real one. | Text. The log event is `launch_min_version_ignored` | MCP serve mode |
 | `CLAUDE_CODE_MCP_SERVE_MEMORY_WALKS_DEADLINE_MS` | <Undocumented /> | Sets the time limit for the memory file walks of the `mcp serve` tool server. | A number of milliseconds, `2000` by default. When the limit passes or a walk fails, the walk stops and the server logs `memory_walks_late` or `memory_walks_failed`. Since `2.1.323`.[^memory-walks] | `mcp serve` tool server |
 | `CLAUDE_CODE_MCP_SERVE_SETTINGS` | <Undocumented /> | Gives launch settings as JSON with `permissions.allow` and `permissions.deny` rules. Without readable settings the server runs nothing. | Text. Also on the list of vars that force a copy of the env | MCP serve mode |
@@ -90,7 +90,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_PLUGIN_ATTRIBUTION` | <Undocumented /> | Supplies attribution data per plugin ID, such as the marketplace name. It wins over the normal lookup. A Probes run saw no effect. | Text. Bad fields log a warning. Claude Code removes it from the env of shell subprocesses | All sessions |
 | `CLAUDE_CODE_PLUGIN_BINARY_ASSETS` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Turns on fetching of binary plugin assets from a marketplace. It is also on when a feature flag is true. No visible effect in a print-mode probe ([Probes](../../reference/probes.md)). | On or off. Failures raise a `PluginAssetFetchError`. Assets are cached under the plugin asset cache dir | Plugins from some marketplaces |
 | `CLAUDE_CODE_PLUGIN_CACHE_DIR` | <Documented /> | Sets the plugins root dir. No visible effect in a print-mode probe ([Probes](../../reference/probes.md)). | Text. Default is `plugins` under the config dir (`cowork_plugins` in cowork mode). Also the base dir of the zip cache | All sessions |
-| `CLAUDE_CODE_PLUGIN_DIR_WATCH` | <Documented /> | Turns on reload of plugins loaded with `--plugin-dir` when files change. When it is on, Claude Code also writes TypeScript types into the plugin folder (`.claude-plugin/types/` and `tsconfig.json`) and logs `plugin-dir watch: watching <name>` to the debug log ([Probes](../../reference/probes.md)). | On, off, or unset. Default is on in interactive sessions and off in print mode for `--plugin-dir` folders. `1` turns it on in print mode. `0` turns it off everywhere. Since `2.1.321`, print mode reloads mods in `.claude/skills` when their files change unless this is `0`.[^dir-watch] | All sessions |
+| `CLAUDE_CODE_PLUGIN_DIR_WATCH` | <Documented /> | Turns on reload of plugins loaded with `--plugin-dir` when files change. When it is on, Claude Code also writes TypeScript types into the plugin folder (`.claude-plugin/types/` and `tsconfig.json`) and logs `plugin-dir watch: watching <name>` to the debug log ([Probes](../../reference/probes.md)). | On, off, or unset. Default is on in interactive sessions and off in print mode for `--plugin-dir` folders. `1` turns it on in print mode. `0` turns it off everywhere. Print mode reloads mods in `.claude/skills` when their files change unless this is `0`.[^dir-watch] | All sessions |
 | `CLAUDE_CODE_PLUGIN_DIRS` | <Documented /> | Loads plugin dirs for the session like `--plugin-dir`. In a probe, it loads the plugin dir like `--plugin-dir` (same `plugins` list in `init`). See Probes. | Text. Claude Code skips relative paths with a warning. Claude Code writes the cleaned list back to the var | All sessions |
 | `CLAUDE_CODE_PLUGIN_GIT_TIMEOUT_MS` | <Documented /> | Sets the timeout for a plugin marketplace git clone or refresh. No visible effect in a print-mode probe ([Probes](../../reference/probes.md)). | A number of milliseconds, `120000` by default. Whole number in ms above 0. The timeout error text names this var | All sessions |
 | `CLAUDE_CODE_PLUGIN_KEEP_MARKETPLACE_ON_FAILURE` | <Documented /> | Keeps the existing marketplace clone when the remote is unreachable at refresh. No visible effect in a print-mode probe ([Probes](../../reference/probes.md)). | On or off. Logs a warning and returns a `kept-stale` result instead of re-cloning | All sessions |
@@ -125,12 +125,11 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_SYNC_SKILLS_INSTALL_TIMEOUT_MS` | <Documented /> | Sets the timeout in ms for the mid-session skills resync when an SDK app reloads skills. Late skills finish in the background. | A number of milliseconds, `30000` by default. Integer. A value of 0 or less uses the default `30000` | Agent SDK apps |
 | `CLAUDE_CODE_SYNC_SKILLS_WAIT_TIMEOUT_MS` | <Documented /> | Sets how long the first query waits for the first skill list when `CLAUDE_CODE_SYNC_SKILLS` is set. | A number of milliseconds, `5000` by default. Integer. A value of 0 or less uses the default `5000` ms | Print mode `-p` |
 | `CLAUDE_CODE_TERMINAL_MCP_TOOLS` | <Undocumented /> | Lists MCP tool names. A turn that ends with these tool results is checked. | Text. Comma-separated | - |
-| `CLAUDE_CODE_TOOL_PICTURE_SERVERS` | <Undocumented /> | Lists the MCP servers whose tool results can mark pictures as already shown to the user. When a result of a listed server has the `_meta` key `anthropic/deliverImages`, Claude Code adds the note `The pictures in this result are shown to the user with your reply, so they need no sending.` Added in `2.1.321`. | A list of server names split by commas. A name is `mcp__<server>` (a plugin server has one more part). The mark is valid only when the result is not an error, has one to four entries, each entry is an image file name (`png`, `jpg`, `jpeg`, `gif`, `webp`), and the count equals the image blocks. Else Claude Code logs the reason (`malformed`, `miscounted`, or `partly_marked`) and keeps the result as it is | MCP tool results. The other checks are not known.[^tool-picture] |
+| `CLAUDE_CODE_TOOL_PICTURE_SERVERS` | <Undocumented /> | Lists the MCP servers whose tool results can mark pictures as already shown to the user. When a result of a listed server has the `_meta` key `anthropic/deliverImages`, Claude Code adds the note `The pictures in this result are shown to the user with your reply, so they need no sending.` | A list of server names split by commas. A name is `mcp__<server>` (a plugin server has one more part). The mark is valid only when the result is not an error, has one to four entries, each entry is an image file name (`png`, `jpg`, `jpeg`, `gif`, `webp`), and the count equals the image blocks. Else Claude Code logs the reason (`malformed`, `miscounted`, or `partly_marked`) and keeps the result as it is | MCP tool results. The other checks are not known.[^tool-picture] |
 | `CLAUDE_CODE_USE_COWORK_PLUGINS` | <Undocumented /> | Makes Claude Code read and write `cowork_settings.json` in place of the user `settings.json` (hooks, `env`, `enabledPlugins`, and marketplaces too). It also makes Claude Code keep plugins in the `cowork_plugins` folder in place of `plugins`. Project `env` cannot set it. | On or off | Cowork hosts |
 | `CLAUDE_PLUGIN_DATA` | <Documented /> | Gives a plugin hook command the path of the data directory of that plugin. No visible effect in a print-mode probe ([Probes](../../reference/probes.md)). | - | - |
 | `CLAUDE_PLUGIN_ROOT` | <Documented /> | Gives a plugin hook command the path of the plugin root directory. No visible effect in a print-mode probe ([Probes](../../reference/probes.md)). | - | - |
 | `CLAUDE_PROJECT_DIR` | <Documented /> | Gives each hook command the project directory. | A path. Also set in a stdio MCP server env | - |
-| `CLAUDE_TEST_NO_OPEN` | <Undocumented /> | Stops the bundled Claude Test plugin from opening its report. Any set value counts, as do `CI`, `SSH_CONNECTION`, `SSH_TTY`, and `SSH_CLIENT`. Without them the report opens on macOS and Windows, or when `DISPLAY` or `WAYLAND_DISPLAY` is set.[^test-no-open] | Any set value. Not set by default | Claude Test plugin |
 | `ENABLE_CLAUDEAI_MCP_SERVERS` | <Documented /> | Stops the fetch of claude.ai MCP servers when set to `false`. | On, off, or unset. `false`/`0`/`no`/`off` disables and logs "Disabled via env var" | Logged-in users. Not set from project `env` before trust |
 | `ENABLE_MCP_LARGE_OUTPUT_FILES` | <Undocumented /> | When `false`, Claude Code truncates large MCP tool results and does not save them to a file. | On, off, or unset. Only `false` is checked. The event reason is `env_disabled` | MCP tool results. Not set from project `env` before trust |
 | `FORCE_AUTOUPDATE_PLUGINS` | <Documented /> | Keeps plugin auto-update on when the main auto-updater is off. No visible effect in a print-mode probe ([Probes](../../reference/probes.md)). | On or off. Checked first in the plugin auto-update skip check | All sessions. Not set from project `env` before trust |
@@ -165,22 +164,21 @@ Claude Code passes some variables to MCP server and hook processes. It can strip
 
 The program (variable names found in the `2.1.314` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 
-[^one-plugin-load]: The program.
-[^cowork-skill]: The program, `chunk-qb6rgffc.js@102093`. Probe cases `env319a.cowork-plugin-skill.*`.
-[^room-count]: The program, `chunk-j76re4j2.js:1614`.
-[^mcp-tasks]: The program, `chunk-pdbmj9rf.js@470`, `chunk-4h798pp0.js@4519067`, and `chunk-fdjay46b.js@39129` (child processes). The feature flag is `tengu_glowing_lark`. Probe cases `env319a.disable-mcp-tasks.unset` and `.v1`.
-[^mcp-task-bg]: The program, `chunk-j76re4j2.js` and `chunk-39ka6efv.js`. Probe case `print.env319a.disable-mcp-task-background.unset`, and `.v1` for the value `1`.
-[^apps-route]: The program, `chunk-4h798pp0.js:225940`.
-[^prewait-list]: The program, `chunk-xt4nsgp1.js:14527`.
-[^prewait-reader]: The program, `chunk-xt4nsgp1.js:15410`.
-[^serve-gc]: The program parses the value at `chunk-3zfj48ar.js:1914` and uses it at `chunk-3zfj48ar.js:5178`. It did not show what an unset variable means.
-[^memory-walks]: The program, `chunk-szfz4132.js:4379`.
-[^startup-wait]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-xt4nsgp1.js:336994`.
-[^dir-watch]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-agcn5b0k.js:4076`.
-[^mcpb-dir]: The program, `chunk-nhfp95ss.js:168`.
-[^required-hold]: The program, `chunk-hr6w5saz.js:125`.
-[^sorted-otter]: The program. The feature flag is `tengu_sorted_otter`.
-[^tool-picture]: The program, `chunk-4h798pp0.js:4496060`. The minified names `q5n`, `Ob`, and `Sf` hold the other checks, which the program did not show.
-[^no-redial]: The program.
-[^test-no-open]: The program.
-[^sdk-generation]: The program, `chunk-mb94kgaf.js:1037`.
+[^one-plugin-load]: The program, `chunk-2xxka2hx.js:2961`.
+[^cowork-skill]: The program, `chunk-3z330av7.js:102093`. Probe cases `env319a.cowork-plugin-skill.*`.
+[^room-count]: The program, `chunk-sqn39hq2.js:34402`.
+[^mcp-tasks]: The program, `chunk-7gr7kxja.js:470`, `chunk-qpav394c.js:566379`, and `chunk-dfq3y18g.js:39142` (child processes). The feature flag is `tengu_glowing_lark`. Probe cases `env319a.disable-mcp-tasks.unset` and `.v1`.
+[^mcp-task-bg]: The program, `chunk-7gr7kxja.js:1122` and `chunk-sqn39hq2.js:221190`. Probe case `print.env319a.disable-mcp-task-background.unset`, and `.v1` for the value `1`.
+[^apps-route]: The program, `chunk-qpav394c.js:565913`.
+[^prewait-list]: The program, `chunk-rap1tzf6.js:14757`.
+[^prewait-reader]: The program, `chunk-rap1tzf6.js:15643`.
+[^serve-gc]: The program parses the value at `chunk-y5vnvbf6.js:1918` and uses it at `chunk-y5vnvbf6.js:5182`. It did not show what an unset variable means.
+[^memory-walks]: The program, `chunk-w473ha5x.js:4379`.
+[^startup-wait]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-rap1tzf6.js:342935`.
+[^dir-watch]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-9ns7kxca.js:9123`.
+[^mcpb-dir]: The program, `chunk-xtjk0n7g.js:170`.
+[^required-hold]: The program, `chunk-y3511859.js:129`.
+[^sorted-otter]: The program, `chunk-23j5d5d6.js:10641`. The feature flag is `tengu_sorted_otter`.
+[^tool-picture]: The program, `chunk-m14bt1pz.js:4573059`. The minified names `q5n`, `Ob`, and `Sf` hold the other checks, which the program did not show.
+[^no-redial]: The program, `chunk-m14bt1pz.js:250446`.
+[^sdk-generation]: The program, `chunk-z2xpt4t4.js:1037`.

@@ -2287,14 +2287,6 @@
 		"route": "/extend/subagents/runtime",
 		"anchor": "errors"
 	},
-	"error:Failed to create w*": {
-		"route": "/reference/tools/agents-and-tasks",
-		"anchor": "errors"
-	},
-	"error:Failed to create workflow file ${…}: ${…}${…}": {
-		"route": "/extend/skills-and-commands/slash-commands",
-		"anchor": "errors"
-	},
 	"error:Failed to di*": {
 		"route": "/extend/skills-and-commands/slash-commands",
 		"anchor": "errors"
@@ -2409,14 +2401,6 @@
 	},
 	"error:Failed to send command to pane ${…}: ${…}": {
 		"route": "/extend/subagents/runtime",
-		"anchor": "errors"
-	},
-	"error:Failed to set API key secret: ${…}${…}": {
-		"route": "/extend/skills-and-commands/slash-commands",
-		"anchor": "errors"
-	},
-	"error:Failed to set*": {
-		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
 	},
 	"error:Failed to sp*": {
@@ -3409,10 +3393,6 @@
 	},
 	"error:StdioClientTransport already started! If using Client class, note that connect() calls start() automatically.": {
 		"route": "/extend/mcp/runtime",
-		"anchor": "errors"
-	},
-	"error:Stopping. Any review that has launched goes on in the cloud and is billed.": {
-		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
 	},
 	"error:String n*": {
@@ -5172,10 +5152,6 @@
 		"anchor": "errors"
 	},
 	"error:no process group to signal": {
-		"route": "/how-it-works/sessions-and-storage",
-		"anchor": "errors"
-	},
-	"error:no session to remove the browser helper from": {
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
@@ -8770,5 +8746,105 @@
 	"error:Try again in a moment": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
+	},
+	"endpoint:https://microsoft365.mcp.claude.com": {
+		"route": "/reference/api/endpoints",
+		"anchor": "mcp-paths"
+	},
+	"error:${…}, so the session starts with no prompt: ${…}": {
+		"route": "/configure/cli/flags",
+		"anchor": "sessions-and-worktrees"
+	},
+	"error:${…}: ${…} assigns to its import ${…}": {
+		"route": "/extend/mod-api",
+		"anchor": "errors"
+	},
+	"error:${…}: ${…} awaits at its top level, which only the entry file may": {
+		"route": "/extend/mod-api",
+		"anchor": "errors"
+	},
+	"error:${…}: ${…} imports ${…} from ${…}, which does not export it": {
+		"route": "/extend/mod-api",
+		"anchor": "errors"
+	},
+	"error:${…}: ${…}: an import with attributes; a hooks module imports its own files bare": {
+		"route": "/extend/mod-api",
+		"anchor": "errors"
+	},
+	"error:${…}: ${…} passes through a link whose target the operating system may resolve to a different folder than the one Claude Code checked (for example, a target that is not valid UTF-8, or on Windows one …": {
+		"route": "/extend/mod-api/calls/testing",
+		"anchor": "errors"
+	},
+	"error:Reading the JSON from stdin is refused inside a Claude Code session, because its permission prompt would not show the server. Run the command outside the session.": {
+		"route": "/extend/mcp/cli",
+		"anchor": "errors"
+	},
+	"error:The JSON on stdin is over the limit of 1 MiB.": {
+		"route": "/extend/mcp/cli",
+		"anchor": "errors"
+	},
+	"error:There is no JSON on stdin. Pipe it in, or pass it as the argument.": {
+		"route": "/extend/mcp/cli",
+		"anchor": "errors"
+	},
+	"error:Can't add to .mcp.json: it lists servers at the top level, and adding an \"mcpServers\" key would stop a plugin from loading them. Move them under \"mcpServers\", then try again. If they aren't servers, a…": {
+		"route": "/extend/mcp/cli",
+		"anchor": "errors"
+	},
+	"error:Takes the id of the plugin too": {
+		"route": "/extend/hooks/configuration",
+		"anchor": "errors"
+	},
+	"error:oidc.ca_cert_pem holds no PEM certificate the gateway can use (each needs a -----BEGIN CERTIFICATE----- line, base64 lines, and a -----END CERTIFICATE----- line of its own, with no stray markers or NU…": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "errors"
+	},
+	"flag:self-hosted-runner --nested-model-access": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --nested-model-allow": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --nested-model-call-budget": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"setting-key:autoCompactOfferAnswer.at": {
+		"route": "/configure/settings/core",
+		"anchor": "keys"
+	},
+	"setting-key:autoCompactOfferAnswer.choice": {
+		"route": "/configure/settings/core",
+		"anchor": "keys"
+	},
+	"setting-key:autoCompactOfferAnswer.model": {
+		"route": "/configure/settings/core",
+		"anchor": "keys"
+	},
+	"setting-key:autoCompactOfferAnswer.tokens": {
+		"route": "/configure/settings/core",
+		"anchor": "keys"
+	},
+	"error:${…} must be a comma-separated list of model ids, such as <model-id>,<prefix>*. Each id starts with a letter or digit, uses only letters, digits and . _ : @ / -, and may end in one * (got: ${…})": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runner-errors"
+	},
+	"error:${…} must be a whole number from 0 to 999999999 (got: ${…})": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runner-errors"
+	},
+	"error:--nested-model-access cannot be combined with --agent-proxy-url or --proxy-authorization-command / --proxy-authorization-file: the runner would send nested model calls past that proxy. Remove one of t…": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runner-errors"
+	},
+	"error:--nested-model-access cannot be used while ANTHROPIC_UNIX_SOCKET is set in the runner's environment: sessions would send their model calls through that socket, but the runner would send nested model c…": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runner-errors"
+	},
+	"error:--nested-model-access needs a list of models: set --nested-model-allow <models> or SELF_HOSTED_RUNNER_NESTED_MODEL_ALLOW to the comma-separated ids that a nested Claude Code may use, for example <mode…": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runner-errors"
 	}
 }

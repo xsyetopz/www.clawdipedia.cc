@@ -50,8 +50,8 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 | `modelPricing.overrides.*.cacheWrite` | <Documented /> | number, 0 to 10000 | - | USD per million cache-write tokens for this model ID. It covers five-minute and one-hour writes. | Managed settings only |
 | `modelPricing.overrides.*.input` | <Documented /> | number, 0 to 10000 | - | USD per million input tokens for this model ID. | Managed settings only |
 | `modelPricing.overrides.*.output` | <Documented /> | number, 0 to 10000 | - | USD per million output tokens for this model ID. | Managed settings only |
-| `modelSettings` | <Documented /> | object: model name to `{effortLevel, maxEffortLevel, autoCompactWindow}` | - | Keep a saved effort level (`low`, `medium`, `high`, `xhigh`), a top effort cap (`maxEffortLevel`), or an auto-compact window (`"auto"` or 100000 to 1000000 tokens) for each model. `/autocompact` saves here. Claude Code drops invalid values. Across settings files the lowest cap wins.[^model-settings] | Any settings file |
-| `modelSettings.*.autoCompactWindow` | <Documented /> | `"auto"` or 100000 to 1000000 | - | Set the auto-compact window for one model, in tokens. `"auto"` uses the window tuned for the model. In one settings file it replaces the top-level `autoCompactWindow` for that model. `/autocompact` saves here. | Any settings file |
+| `modelSettings` | <Documented /> | object: model name to `{effortLevel, maxEffortLevel, autoCompactWindow}` | - | Keep a saved effort level (`low`, `medium`, `high`, `xhigh`), a top effort cap (`maxEffortLevel`), or an auto-compact window (`"auto"` or at least 100000 tokens) for each model. `/autocompact` saves here. Claude Code drops invalid values. Across settings files the lowest cap wins.[^model-settings] | Any settings file |
+| `modelSettings.*.autoCompactWindow` | <Documented /> | `"auto"` or an integer of at least 100000 | - | Set the auto-compact window for one model, in tokens. `"auto"` uses the window tuned for the model. Since `2.1.327` there is no upper limit. In one settings file it replaces the top-level `autoCompactWindow` for that model. `/autocompact` saves here. | Any settings file |
 | `modelSettings.*.effortLevel` | <Documented /> | `low`, `medium`, `high`, or `xhigh` | - | The saved effort level for one model. In one settings file it takes precedence over the top-level `effortLevel`. | Any settings file |
 | `modelSettings.*.maxEffortLevel` | <Documented /> | `low`, `medium`, `high`, `xhigh`, or `max` | - | The top effort level for one model. In one settings file it replaces the top-level `maxEffortLevel` for that model. `max` removes the cap. Across settings files the lowest cap wins. | Any settings file |
 | `promptCacheTtl` | <Documented /> | string | - | Choose the prompt cache lifetime for the main conversation. The values are `5m` or `1h`. When unset, it is 1 hour on a subscription and 5 minutes on an API key or cloud provider. `CLAUDE_CODE_PROMPT_CACHE_TTL` wins. | Any settings file |
@@ -73,7 +73,7 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema.
-[^vertex-fast]: The program.
+[^schema]: The program, its bundled settings schema, `chunk-ja5z738t.js:278919`.
+[^vertex-fast]: The program, `chunk-ja5z738t.js:280728`.
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^model-settings]: The program.
+[^model-settings]: The program, `chunk-ja5z738t.js:278919`.

@@ -55,4 +55,4 @@ on("telemetry.log", { to: "collector" }, ($, e, next) => next(e));
 
 ## Sources
 
-[^types]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`.
+[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`.

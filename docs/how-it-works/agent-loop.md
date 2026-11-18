@@ -143,13 +143,14 @@ The loop does not fail on every error. It tries to fix the problem and continue.
 
 | Case | Status | What Claude Code does |
 | --- | --- | --- |
-| The output stops at `max_tokens` | <Undocumented /> | It adds a nudge message and asks again, a limited number of times. |
+| The output stops at `max_tokens` | <Undocumented /> | It adds a nudge message and asks again, up to 3 times.[^nudge-count] |
 | The response is cut off | <Undocumented /> | It does the same. |
-| A subagent's text reply hits the output token limit | <Undocumented /> | Since `2.1.326`, the nudge tells the subagent that its caller gets no answer in pieces, and asks for the whole answer again, more briefly, up to 3 times.[^sub-limit] |
+| A subagent's text reply hits the output token limit | <Undocumented /> | Since `2.1.326`, the nudge tells the subagent that its caller gets no answer in pieces, and asks for the whole answer again, more briefly. A second cut gets a harder nudge: the whole answer in at most half the length of the last try, or a first line that says it is partial.[^sub-limit] Since `2.1.327`, such answers more often come back whole or say up front that they are partial.[^v327] |
+| A reply is cut at 32,000 output tokens on an unrecognized model | <Undocumented /> | A model is unrecognized when it has no entry in the model list, is not a `claude-3` Opus, Sonnet, or Haiku model, has no configured limit, and `CLAUDE_CODE_MAX_OUTPUT_TOKENS` is not set above 0. Such a model has a default of 32,000 and an upper limit of 128,000 output tokens. Since `2.1.327`, the continuation of a cut reply uses 128,000.[^cut-limit][^v327] |
 | A `tool_use` block has no valid call | <Undocumented /> | It drops the reply and asks once more. Then it ends with a message that the tool call could not be parsed. |
 | The model sends only thinking | <Undocumented /> | It sends one nudge. |
 | A safety refusal | <Documented /> | It runs again on the fallback model of that category. See [Models](models.md#fallback). |
-| The API says `max_tokens` is above the model limit | <Undocumented /> | Since `2.1.326`, when the error text reads `max_tokens: N > M, which is the maximum allowed number of output tokens for <model>` (status 400, 402, 413, 422, or 429) and `M` is at least 4096, Claude Code sends the request again with `max_tokens` set to `M`.[^max-tokens] |
+| The API says `max_tokens` is above the model limit | <Undocumented /> | Since `2.1.326`, when the error text reads `max_tokens: N > M, which is the maximum allowed number of output tokens for <model>` and `M` is at least 4096, Claude Code sends the request again with `max_tokens` set to `M`.[^max-tokens] |
 | The context is too long | <Documented /> | It lowers `max_tokens` or compacts. |
 | Autocompact refills 3 times in a row | <Documented /> | It ends the turn with an error that starts `Autocompact is thrashing`. See [Troubleshooting](https://code.claude.com/docs/en/troubleshooting) in the official docs. |
 | A `Stop` hook blocks | <Documented /> | It sends the reason back to the model. After `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` blocks in a row (default 8), it ends the turn. |
@@ -216,8 +217,11 @@ stateDiagram-v2
 
 ## Sources
 
-[^stages]: The program, for the stages that the official pages do not cover.
-[^cwd]: The program, `chunk-4h798pp0.js:183893`, `chunk-4h798pp0.js:183937`, `chunk-4h798pp0.js:183949`.
-[^sub-limit]: The program, `chunk-27vawgnx.js:8693`, `chunk-27vawgnx.js:8711`, `chunk-dezyqkh5.js:221`.
-[^max-tokens]: The program, `chunk-4h798pp0.js:154749`, `chunk-4h798pp0.js:154785`.
+[^stages]: The program, `chunk-m14bt1pz.js:108997`, for the stages that the official pages do not cover.
+[^cwd]: The program, `chunk-m14bt1pz.js:3732617`, `chunk-m14bt1pz.js:3733025`, `chunk-m14bt1pz.js:3734390`.
+[^sub-limit]: The program, `chunk-4xhk2fyb.js:10370`, `chunk-4xhk2fyb.js:10635`.
+[^max-tokens]: The program, `chunk-m14bt1pz.js:3109407`, `chunk-m14bt1pz.js:3109520`. The rule has no list of status codes. It skips only a refusal that comes as 401, and a limit below 4096.
+[^nudge-count]: The program, `chunk-8g2nr9dn.js:151434` (the limit of 3) and `chunk-8g2nr9dn.js:154802-154864` (the counter `maxOutputTokensRecoveryCount` ends the retries after the third).
+[^cut-limit]: The program, `chunk-asj6f58y.js:546638` (the 32,000 and 128,000 values), `chunk-asj6f58y.js:550744` (the condition for an unrecognized model), and `chunk-m14bt1pz.js:3109407` (the limit for a reply that continues a cut reply, used only for such a model).
+[^v327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^v307]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307).

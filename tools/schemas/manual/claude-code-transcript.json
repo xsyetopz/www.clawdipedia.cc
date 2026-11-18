@@ -1817,7 +1817,7 @@
 			"anchors": [
 				"subtype:\"informational\",content:«»,isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:«»",
 				"subtype:\"api_error\",level:\"error\",error:«»,retryInMs:«»,retryAttempt:«»,maxRetries:«»,source:h",
-				"yield «»(«»,«»,«»,«»,«»,«»,\"suggestion\",«»,void 0,void 0,«»)",
+				"yield «»(«»,«»,«»,«»,«»,«»,\"suggestion\",«»,void 0,void 0,«»,«»)",
 				"subtype:\"cloud_session_status\",content:«»,entry:«»,url:«»,level:\"notice\""
 			],
 			"note": "The program builds system lines in the message constructors of the session code (createSystemMessage and the other subtype builders), and the remote-session path rebuilds some from stream-json frames. Literals 'info', 'warning', 'notice' ('suggestion' for stop_hook_summary), 'error' for api_error, and the caller's level for informational lines (callers of createSystemMessage pass 'notice', 'warning' or 'suggestion'; the stream-json schema lists info|notice|suggestion|warning)."
@@ -2010,8 +2010,8 @@
 				"type": "string"
 			},
 			"anchors": [
-				"subtype:\"stop_hook_summary\",hookCount:«»,hookInfos:«»,hookErrors:«»,hookAdditionalContext:«»,preventedContinuation:«»,stopReason:«»,hasOutput:«»,level:«»,timestamp:new Date().toISOString(),uuid:«»(),toolUseID:«»,hookLabel:«»,totalDurationMs:«»",
-				"yield «»(«»,«»,«»,«»,«»,«»,\"suggestion\",«»,void 0,void 0,«»)"
+				"subtype:\"stop_hook_summary\",hookCount:«»,hookInfos:«»,hookErrors:«»,failedHookErrorIndexes:«»,hookAdditionalContext:«»,preventedContinuation:«»,stopReason:«»,hasOutput:«»,level:«»,timestamp:new Date().toISOString(),uuid:«»(),toolUseID:«»,hookLabel:«»,totalDurationMs:«»",
+				"yield «»(«»,«»,«»,«»,«»,«»,\"suggestion\",«»,void 0,void 0,«»,«»)"
 			],
 			"note": "stop_hook_summary: stopReason is bt, the string 'Stop hook prevented continuation' or the stopReason string of the hook result."
 		},
@@ -2020,8 +2020,8 @@
 				"type": "string"
 			},
 			"anchors": [
-				"subtype:\"stop_hook_summary\",hookCount:«»,hookInfos:«»,hookErrors:«»,hookAdditionalContext:«»,preventedContinuation:«»,stopReason:«»,hasOutput:«»,level:«»,timestamp:new Date().toISOString(),uuid:«»(),toolUseID:«»,hookLabel:«»,totalDurationMs:«»",
-				"yield «»(«»,«»,«»,«»,«»,«»,\"suggestion\",«»,void 0,void 0,«»)"
+				"subtype:\"stop_hook_summary\",hookCount:«»,hookInfos:«»,hookErrors:«»,failedHookErrorIndexes:«»,hookAdditionalContext:«»,preventedContinuation:«»,stopReason:«»,hasOutput:«»,level:«»,timestamp:new Date().toISOString(),uuid:«»(),toolUseID:«»,hookLabel:«»,totalDurationMs:«»",
+				"yield «»(«»,«»,«»,«»,«»,«»,\"suggestion\",«»,void 0,void 0,«»,«»)"
 			],
 			"note": "The tool use id string (stop_hook_summary takes the Stop hook's tool use id)."
 		},
@@ -2195,7 +2195,7 @@
 			},
 			"anchors": [
 				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
-				"function «»(«»,«»,«»){let «»=«»??«».registeredBy;return{command:«»(«»),args:«»(«»,«»)?\"***\":n"
+				"function «»(«»,«»,«»){let «»=«»??«».registeredBy;return{command:«»(«»),args:«»(«»,«»)?\"***\":«»"
 			],
 			"note": "local_command: command is the command name string (Lo(command))."
 		},
@@ -2205,7 +2205,7 @@
 			},
 			"anchors": [
 				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
-				"args:«»(«»,«»)?\"***\":n"
+				"args:«»(«»,«»)?\"***\":«»"
 			],
 			"note": "local_command: args is the argument string, or '***' when the command is marked sensitive."
 		},
@@ -2256,7 +2256,7 @@
 				"enum": ["manual", "auto"]
 			},
 			"anchors": [
-				"subtype:\"compact_boundary\",content:\"Conversation compacted\",isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:\"info\",compactMetadata:{trigger:«»,preTokens:«»,userContext:«»,messagesSummarized:«»},...r&&{logicalParentUuid:«»}",
+				"subtype:\"compact_boundary\",content:\"Conversation compacted\",isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:\"info\",compactMetadata:{trigger:«»,preTokens:«»,userContext:«»,messagesSummarized:«»},...«»&&{logicalParentUuid:«»}",
 				"function «»(«»){let{preserved_segment:«»,preserved_messages:«»}=«»;return{trigger:«».trigger,preTokens:«».pre_tokens"
 			],
 			"note": "compact_boundary: compactMetadata is built by d2() for local compaction and by qyr() for a remote frame, from the compaction result. trigger is 'auto' or 'manual' (the call sites pass `b?\"auto\":\"manual\"` or a literal; the stream-json schema is the enum manual|auto)."
@@ -2266,7 +2266,7 @@
 				"type": "number"
 			},
 			"anchors": [
-				"subtype:\"compact_boundary\",content:\"Conversation compacted\",isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:\"info\",compactMetadata:{trigger:«»,preTokens:«»,userContext:«»,messagesSummarized:«»},...r&&{logicalParentUuid:«»}",
+				"subtype:\"compact_boundary\",content:\"Conversation compacted\",isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:\"info\",compactMetadata:{trigger:«»,preTokens:«»,userContext:«»,messagesSummarized:«»},...«»&&{logicalParentUuid:«»}",
 				"function «»(«»){let{preserved_segment:«»,preserved_messages:«»}=«»;return{trigger:«».trigger,preTokens:«».pre_tokens"
 			],
 			"note": "compact_boundary: compactMetadata is built by d2() for local compaction and by qyr() for a remote frame, from the compaction result. preTokens is the token count before compaction (a number)."
@@ -2276,7 +2276,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"subtype:\"compact_boundary\",content:\"Conversation compacted\",isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:\"info\",compactMetadata:{trigger:«»,preTokens:«»,userContext:«»,messagesSummarized:«»},...r&&{logicalParentUuid:«»}",
+				"subtype:\"compact_boundary\",content:\"Conversation compacted\",isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:\"info\",compactMetadata:{trigger:«»,preTokens:«»,userContext:«»,messagesSummarized:«»},...«»&&{logicalParentUuid:«»}",
 				"function «»(«»){let{preserved_segment:«»,preserved_messages:«»}=«»;return{trigger:«».trigger,preTokens:«».pre_tokens"
 			],
 			"note": "compact_boundary: compactMetadata is built by d2() for local compaction and by qyr() for a remote frame, from the compaction result. userContext is the focus text the user typed for a manual compaction."
@@ -2286,7 +2286,7 @@
 				"type": "number"
 			},
 			"anchors": [
-				"subtype:\"compact_boundary\",content:\"Conversation compacted\",isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:\"info\",compactMetadata:{trigger:«»,preTokens:«»,userContext:«»,messagesSummarized:«»},...r&&{logicalParentUuid:«»}",
+				"subtype:\"compact_boundary\",content:\"Conversation compacted\",isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:\"info\",compactMetadata:{trigger:«»,preTokens:«»,userContext:«»,messagesSummarized:«»},...«»&&{logicalParentUuid:«»}",
 				"function «»(«»){let{preserved_segment:«»,preserved_messages:«»}=«»;return{trigger:«».trigger,preTokens:«».pre_tokens"
 			],
 			"note": "compact_boundary: compactMetadata is built by d2() for local compaction and by qyr() for a remote frame, from the compaction result. messagesSummarized is a message count (the call passes we.length)."
@@ -5349,7 +5349,7 @@
 				"not": {}
 			},
 			"anchors": [
-				"yield «»(«»,«»,«»,«»,«»,«»,\"suggestion\",«»,void 0,void 0,«»)",
+				"yield «»(«»,«»,«»,«»,«»,«»,\"suggestion\",«»,void 0,void 0,«»,«»)",
 				"toolUseID:«»,hookLabel:«»,totalDurationMs:«»}"
 			],
 			"note": "Only writer is c0s (chunk-a1cg2ptw, stop_hook_summary: ...,hookLabel:H,totalDurationMs:q). The single caller (chunk-enhx8a0q, `yield c0s(xe,an,oo,pe,bt,It,\"suggestion\",Qt,void 0,void 0,Bt)`) passes void 0 for H and q; no other module imports/calls c0s (rg checked all mods). The normalizer (wEe) only copies an existing hookLabel. Never written. The program never writes it, so no value is valid."
@@ -5359,7 +5359,7 @@
 				"not": {}
 			},
 			"anchors": [
-				"yield «»(«»,«»,«»,«»,«»,«»,\"suggestion\",«»,void 0,void 0,«»)",
+				"yield «»(«»,«»,«»,«»,«»,«»,\"suggestion\",«»,void 0,void 0,«»,«»)",
 				"toolUseID:«»,hookLabel:«»,totalDurationMs:«»}"
 			],
 			"note": "Same as hookLabel: c0s argument q is void 0 at the only call site. The pndhv0fp merge that computes Math.max(totalDurationMs) runs only when hookLabel is defined (cS), which is never. Never written. The program never writes it, so no value is valid."
@@ -5905,6 +5905,590 @@
 				"...«».feedback&&{userFeedback:«».feedback}"
 			],
 			"note": "Tool-result path writes userFeedback only for an 'ask' decision. The only producers of that key on a permission result are cancelAndAbort(feedback,...) (truthy feedback string, only when feedbackIsFromUser) and the outside-read decline (v.feedback, truthy). Both are user-typed text; the key is omitted when absent or empty, never null."
+		},
+		"api-request.cut.cuts": {
+			"schema": {
+				"type": "number"
+			},
+			"anchors": [
+				"messages:«»?.messages??[]}:void 0",
+				"cut:{kind:\"laptop-account-memory\",cuts:"
+			],
+			"note": "Cut count. tool-mark-address cut at chunk-m14bt1pz.js@279934 passes a count from the mark-address cutter (chunk-qpav394c.js@465998 returns {cuts: count, messages: indices}); laptop-account-memory cut at chunk-cfxefa64.js@1617260 passes the numeric hits counter (chunk-x8wnwjxg.js hits+=m.length-1)."
+		},
+		"api-request.cut.placeholders": {
+			"schema": {
+				"type": "number"
+			},
+			"anchors": [
+				"kind:\"tool-mark-address\",cuts:",
+				"cut:{kind:\"laptop-account-memory\",cuts:"
+			],
+			"note": "Placeholder count. chunk-m14bt1pz.js@279934 reuses the cut count; chunk-cfxefa64.js@1617260 passes the numeric placeholders counter."
+		},
+		"api-request.cut.messages": {
+			"schema": {
+				"type": "array",
+				"items": {
+					"type": "integer",
+					"minimum": 0
+				}
+			},
+			"anchors": ["messages:«»?.messages??[]}:void 0", "n.flatMap(("],
+			"note": "Message indices. chunk-m14bt1pz.js@279934 uses the cutter messages or []; the cutter (chunk-qpav394c.js@465998) builds them with flatMap((u,h)=>u>0?[h]:[]), an index list. chunk-cfxefa64.js@1617260 collects row indices."
+		},
+		"api-request.cut.markAddresses": {
+			"schema": {
+				"type": "number",
+				"exclusiveMinimum": 0
+			},
+			"anchors": ["...«»>0&&{markAddresses:«»}"],
+			"note": "Written only when the count is above 0 (chunk-m14bt1pz.js@279934)."
+		},
+		"assistant.madeBy": {
+			"schema": {
+				"enum": ["model", "other", "input"]
+			},
+			"anchors": [
+				"madeBy:\"other\",requestId:void 0",
+				"{...«»,madeBy:\"input\"}",
+				".madeBy=\"model\""
+			],
+			"note": "Three literal writers: model reply (chunk-jxtnvz5q.js@721), other (chunk-b1r44a63.js@41949), input for local_command rows (chunk-rap1tzf6.js@198502). A pass-through copies an existing value."
+		},
+		"assistant.apiErrorType": {
+			"schema": {
+				"type": "string",
+				"pattern": "^[a-z][a-z0-9_]{0,63}$"
+			},
+			"anchors": ["/^[a-z][a-z0-9_]{0,63}$/", ".apiErrorType="],
+			"note": "Writer sets apiErrorType only from the helper at chunk-asj6f58y.js@340006, which returns e.error.error.type only if it is a string matching /^[a-z][a-z0-9_]{0,63}$/."
+		},
+		"assistant.cutInUnfinishedBlock": {
+			"schema": {
+				"const": true
+			},
+			"anchors": [".cutInUnfinishedBlock=!0", "cutInUnfinishedBlock:!0}"],
+			"note": "Only literal true, in chunk-m14bt1pz.js (max_output_tokens error and cut message)."
+		},
+		"assistant.toolCallCutAtOutputLimit": {
+			"schema": {
+				"const": true
+			},
+			"anchors": [".toolCallCutAtOutputLimit=!0"],
+			"note": "Only literal true, set when stop_reason is max_tokens and tool calls were cut (chunk-m14bt1pz.js)."
+		},
+		"assistant.refusedToolUseIds": {
+			"schema": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
+			},
+			"anchors": [".refusedToolUseIds="],
+			"note": "Set from toolUseIds of the refusal map in chunk-m14bt1pz.js; each id comes from a tool_use_id (helper at chunk-m14bt1pz.js@184279 returns u.tool_use_id or undefined)."
+		},
+		"assistant.requestNotRecorded": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["return{requestRef:«»,requestNotRecorded:«»}"],
+			"note": "Built by chunk-18d5r2hb.js@296106 and spread at chunk-m14bt1pz.js@3330516, @3339394, @3349496. The reason is the literal tool_mark_address_copy_failed or a string checked with typeof ...===\"string\"."
+		},
+		"assistant.requestHookChanged.what": {
+			"schema": {
+				"type": "array",
+				"items": {
+					"enum": [
+						"body",
+						"beta-header",
+						"version-header",
+						"destination",
+						"answered"
+					]
+				}
+			},
+			"anchors": [
+				"{requestHookChanged:{record:«»,what:[...«»].sort()}}",
+				".changes.add(\"answered\")"
+			],
+			"note": "Sorted set of change names. chunk-18d5r2hb.js@295543 adds body, beta-header, version-header, destination; chunk-18d5r2hb.js@341859 adds answered."
+		},
+		"attachment.attachment.commandMode": {
+			"schema": {
+				"enum": [
+					"prompt",
+					"bash",
+					"orphaned-permission",
+					"task-notification",
+					"poll-event"
+				]
+			},
+			"anchors": ["commandMode:«».mode,origin:"],
+			"note": "Writer chunk-m14bt1pz.js@4008427 copies the queue mode; the queue accepts the five modes listed at chunk-2eyv6kgt.js@1196 and each has a literal enqueue site. The list is not proven exhaustive."
+		},
+		"attachment.attachment.origin.name": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["{kind:\"hook\",name:"],
+			"note": "Hook (event name, chunk-m14bt1pz.js@4235328), plugin, skill and server origins all pass a string name."
+		},
+		"attachment.attachment.plugin": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["...«»!==void 0&&{plugin:«»}"],
+			"note": "plugin_note attachments (chunk-asj6f58y.js@717351, chunk-4cvmbydf.js@768); the reader checks typeof string at chunk-asj6f58y.js@717150."
+		},
+		"attachment.attachment.rowUuid": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["rowUuid:"],
+			"note": "plugin_note rowUuid is the row uuid (chunk-asj6f58y.js); the reader checks typeof string."
+		},
+		"attachment.attachment.content": {
+			"schema": {
+				"type": ["string", "null", "array", "object"]
+			},
+			"anchors": ["content:[...«»]"],
+			"note": "plugin_note writes array content (chunk-asj6f58y.js@717351); other attachment kinds could not all be enumerated with search, so the plain JSON union stays. Least certain entry."
+		},
+		"cost-state.modelCallCostUSD": {
+			"schema": {
+				"type": "number",
+				"exclusiveMinimum": 0
+			},
+			"anchors": [
+				"...«»>0&&{modelCallCostUSD:«»}",
+				"recordModelCallCost(«»){if(Number.isFinite(«»)&&«»>=0)"
+			],
+			"note": "Written only when above 0 (chunk-m14bt1pz.js@1246317); source is the finite non-negative sum from chunk-ytkczbf2.js@33747."
+		},
+		"data-flow-incomplete.sessionId": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["{type:\"data-flow-incomplete\",v:1,sessionId:"],
+			"note": "Session id string from the session id getter (chunk-m14bt1pz.js@501146, @528599; chunk-tzmg9srt.js@1616)."
+		},
+		"data-flow-incomplete.agentId": {
+			"schema": {
+				"type": "string",
+				"minLength": 1
+			},
+			"anchors": ["{type:\"data-flow-incomplete\",v:1,sessionId:"],
+			"note": "Key from agentsOwing(), kept only when non-empty (t!==\"\"); a string."
+		},
+		"data-flow-records.sessionId": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["{type:\"data-flow-records\",v:1,sessionId:"],
+			"note": "Session id string from the session id getter (chunk-m14bt1pz.js@501146, @528599; chunk-tzmg9srt.js@1616)."
+		},
+		"data-flow-records.agentId": {
+			"schema": {
+				"type": "string",
+				"minLength": 1
+			},
+			"anchors": ["{type:\"data-flow-records\",v:1,sessionId:"],
+			"note": "Key from agentsOwing(), kept only when non-empty (t!==\"\"); a string."
+		},
+		"data-flow-records.records": {
+			"schema": {
+				"type": "array"
+			},
+			"anchors": [
+				"records:[...«».records]",
+				"{type:\"data-flow-records\",v:1,sessionId:"
+			],
+			"note": "takeRecordsForEntry (chunk-ytkczbf2.js@26842) returns an array; the reader checks Array.isArray and validates each item itself. Item shape is not typed here."
+		},
+		"derived-from.sessionId": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["{type:\"derived-from\",v:1,sessionId:"],
+			"note": "Session id string (chunk-tzmg9srt.js@1616, chunk-b1r44a63.js@48499)."
+		},
+		"derived-from.sessions": {
+			"schema": {
+				"type": "array",
+				"items": {
+					"type": "object"
+				}
+			},
+			"anchors": ["{type:\"derived-from\",v:1,sessionId:«»,sessions:["],
+			"note": "Array of source objects, e.g. {type:\"unknown\",id:null,via:\"import\"} (chunk-b1r44a63.js@48499) or the branch entry in chunk-tzmg9srt.js@1616."
+		},
+		"last-prompt.explicit": {
+			"schema": {
+				"const": true
+			},
+			"anchors": [
+				"leafUuid:null,explicit:!0,sessionId:",
+				"...«»&&{explicit:«»}"
+			],
+			"note": "Every writer passes explicit:!0 (chunk-m14bt1pz.js@543588, @543981, @544106; chunk-cfxefa64.js@75866)."
+		},
+		"observer-ref.observerTaskIds": {
+			"schema": {
+				"type": "object",
+				"additionalProperties": {
+					"type": "string"
+				}
+			},
+			"anchors": ["...«».size>1&&{observerTaskIds:Object.fromEntries(«»)}"],
+			"note": "Object.fromEntries of a map from observerAgentType to observerTaskId (chunk-0cnnff0k.js@18461)."
+		},
+		"resume-head-vouch.sessionId": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["{type:\"resume-head-vouch\",sessionId:"],
+			"note": "Basename of the transcript file without .jsonl (chunk-m14bt1pz.js@646426)."
+		},
+		"resume-head-vouch.sum": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": [
+				"{type:\"resume-head-vouch\",sessionId:",
+				"typeof «».sum===\"string\""
+			],
+			"note": "Writer chunk-m14bt1pz.js@646426 passes the head sum; the reader (chunk-m14bt1pz.js@643011) only accepts typeof string."
+		},
+		"session-owner.sessionId": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["{type:\"session-owner\",...«»,sessionId:"],
+			"note": "Session id string (chunk-m14bt1pz.js@501260, @621501)."
+		},
+		"session-owner.accountUuid": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["{accountUuid:«»,organizationUuid:«»}"],
+			"note": "Owner from the bridge owner env variables or the account profile; the function at chunk-zfmsqnn9.js@1668 returns it only if both values are truthy strings."
+		},
+		"session-owner.organizationUuid": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["{accountUuid:«»,organizationUuid:«»}"],
+			"note": "Owner from the bridge owner env variables or the account profile; the function at chunk-zfmsqnn9.js@1668 returns it only if both values are truthy strings."
+		},
+		"system.apiRefusalCyberVerification": {
+			"schema": {
+				"type": "object",
+				"properties": {
+					"type": {
+						"type": "string"
+					},
+					"tier": {
+						"type": "string"
+					},
+					"reason": {
+						"type": "string"
+					}
+				},
+				"required": ["type"]
+			},
+			"anchors": [
+				"...«»!==void 0&&{apiRefusalCyberVerification:«»}",
+				"cyber_verification:«»({type:«»(),tier:«»().optional(),reason:«»().optional()})"
+			],
+			"note": "Parsed from stop_details.cyber_verification by the zod object at chunk-m14bt1pz.js@3036569 and written at @2933738, @3320655, @3354602."
+		},
+		"system.plugin": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["subtype:\"placed\",plugin:"],
+			"note": "placed rows copy the plugin name (chunk-m14bt1pz.js@4839916)."
+		},
+		"system.id": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["subtype:\"placed\",plugin:«»,id:«».id,"],
+			"note": "placed row id, from the plugin's ui.place call (chunk-m14bt1pz.js@4839916)."
+		},
+		"system.isDisplayOnly": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": [
+				"isDisplayOnly:!0}",
+				"isDisplayOnly!==void 0&&{isDisplayOnly:"
+			],
+			"note": "Hook runs set isDisplayOnly:!0 (chunk-m14bt1pz.js@4285364, @4286507); the system builder copies it (@5961388)."
+		},
+		"tools-used.tools": {
+			"schema": {
+				"type": "array",
+				"items": {
+					"type": "string",
+					"minLength": 1
+				}
+			},
+			"anchors": ["{type:\"tools-used\",tools:"],
+			"note": "names() of the tool set (chunk-m14bt1pz.js@527576) and a copy at chunk-tzmg9srt.js@7781; the reader keeps only non-empty strings."
+		},
+		"tools-used.sessionId": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["{type:\"tools-used\",tools:"],
+			"note": "Session id string."
+		},
+		"worktree-state.worktreeSession.extensionRoot": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["extensionRoot:«».extensionRoot}"],
+			"note": "Copied from the worktree session (chunk-m14bt1pz.js@624231); set from a path string at chunk-1vttvse2.js@163193."
+		},
+		"user.invokedSkill": {
+			"schema": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"path": {
+						"type": "string"
+					}
+				},
+				"required": ["name", "path"]
+			},
+			"anchors": [
+				"...«»!==void 0&&{invokedSkill:«»}",
+				"invokedSkill:{name:«».name,path:"
+			],
+			"note": "Writer chunk-z02chaqz.js@50579; path is source:name or name. Builder spread at chunk-m14bt1pz.js@5788183."
+		},
+		"user.toolDenialAfterRun": {
+			"schema": {
+				"const": true
+			},
+			"anchors": [".toolDenialAfterRun=!0"],
+			"note": "Literal true (chunk-m14bt1pz.js@4545821); builder spreads only when truthy."
+		},
+		"user.toolDenialBeforeRun": {
+			"schema": {
+				"const": true
+			},
+			"anchors": ["toolDenialBeforeRun:«»?!0:void 0"],
+			"note": "Literal true or undefined (chunk-8g2nr9dn.js@74600)."
+		},
+		"user.toolDenialFromHost": {
+			"schema": {
+				"const": true
+			},
+			"anchors": ["toolDenialFromHost:«»!==void 0?!0:void 0"],
+			"note": "Literal true or undefined (chunk-c7v3vnh0.js@108591)."
+		},
+		"user.toolResultTypedCommand": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["toolResultTypedCommand:«».typedCommand"],
+			"note": "typedCommand is a string or undefined (helper at chunk-m14bt1pz.js@3945946); builder spreads only when truthy."
+		},
+		"user.mcpCallNotReadOnly": {
+			"schema": {
+				"enum": ["declared", "no_hint"]
+			},
+			"anchors": ["return «».readOnlyHint===!1?\"declared\":\"no_hint\""],
+			"note": "Writer at chunk-c7v3vnh0.js@108631 returns undefined or one of the two literals."
+		},
+		"user.holdsPersonsWords": {
+			"schema": {
+				"const": true
+			},
+			"anchors": ["?!0:void 0", "holdsPersonsWords:"],
+			"note": "Every writer yields !0 or undefined (chunk-m14bt1pz.js@5788183; chunk-c7v3vnh0.js)."
+		},
+		"progress.data.toolInput.query": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["<non-string ${typeof"],
+			"note": "Value is a string sliced to a length limit, or a placeholder string for a non-string input. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.toolInput.max": {
+			"schema": {
+				"type": "number"
+			},
+			"anchors": ["typeof «»===\"number\"&&{max:«»}"],
+			"note": "Written only for numbers. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.toolInput.name": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["{name:«»(«»)}"],
+			"note": "describeTool passes the stringified name. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.toolUseId": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["toolUseId:"],
+			"note": "Generated id string or the tool_use id. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.phase": {
+			"schema": {
+				"enum": ["start", "executing", "complete", "error"]
+			},
+			"anchors": ["phase:\"executing\"", "phase:\"complete\""],
+			"note": "Literal phase values at the write sites. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.result": {
+			"schema": {},
+			"anchors": ["result:"],
+			"note": "Any JSON tool result; passed through unchanged. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.scriptHelper": {
+			"schema": {
+				"const": true
+			},
+			"anchors": ["scriptHelper:!0"],
+			"note": "Literal true (chunk-t31w6vd4.js@78808). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.declined": {
+			"schema": {
+				"const": true
+			},
+			"anchors": ["{declined:!0}"],
+			"note": "Literal true. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.permissionDecision": {
+			"schema": {
+				"type": "object"
+			},
+			"anchors": ["permissionDecision:"],
+			"note": "Same permission record as the user line; enums not proven here. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.toolDenialKind": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["toolDenialKind:"],
+			"note": "String denial kind such as user-rejected. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.userFeedback": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["userFeedback:"],
+			"note": "String from the permission result. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.nativeTimeoutMs": {
+			"schema": {
+				"type": "number"
+			},
+			"anchors": ["nativeTimeoutMs:"],
+			"note": "Timeout in ms; helper not resolved, so number is the plain type. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.executed": {
+			"schema": {
+				"const": true
+			},
+			"anchors": ["executed:!0"],
+			"note": "Literal true. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.shellProgress": {
+			"schema": {
+				"type": "object",
+				"properties": {
+					"elapsedTimeSeconds": {
+						"type": "number"
+					},
+					"totalLines": {
+						"type": "number"
+					}
+				},
+				"required": ["elapsedTimeSeconds", "totalLines"]
+			},
+			"anchors": [
+				"{elapsedTimeSeconds:«».data.elapsedTimeSeconds,totalLines:«».data.totalLines}"
+			],
+			"note": "Copied from shell progress data. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.mcpContent": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": ["mcpContent:"],
+			"note": "Boolean from isMcp and Array.isArray checks. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.delegatedToolNames": {
+			"schema": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
+			},
+			"anchors": ["delegatedToolNames:"],
+			"note": "Filtered strings (chunk-eb5tp0ww.js@7741). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.carriedMarkers": {
+			"schema": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
+			},
+			"anchors": ["carriedMarkers:"],
+			"note": "Marker strings filtered from a fixed list (chunk-rj3e7agr.js@152088). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.notes": {
+			"schema": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
+			},
+			"anchors": ["notes:"],
+			"note": "Array of note strings. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.sandboxViolations": {
+			"schema": {
+				"type": "array"
+			},
+			"anchors": ["sandboxViolations:"],
+			"note": "Array from the sandbox result; items not typed. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.sandboxed": {
+			"schema": {
+				"type": "boolean"
+			},
+			"anchors": ["sandboxed:"],
+			"note": "Boolean flag. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.resultBeforeReadBack": {
+			"schema": {},
+			"anchors": ["resultBeforeReadBack:"],
+			"note": "Any JSON value, written only when it differs from the result. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.servedText": {
+			"schema": {
+				"type": "string"
+			},
+			"anchors": ["servedText:"],
+			"note": "Function at chunk-bw2ty92s.js@1728 returns the result only when it is a string. Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
+		},
+		"progress.data.scriptStartedAt": {
+			"schema": {
+				"type": "number"
+			},
+			"anchors": ["scriptStartedAt:"],
+			"note": "Date.now() epoch ms (chunk-7gaz5x38.js). Written by the repl_tool_call progress rows in chunk-t31w6vd4.js."
 		}
 	}
 }

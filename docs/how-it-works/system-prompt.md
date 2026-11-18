@@ -92,7 +92,7 @@ flowchart TD
 ### Names That Claude Code Does Not Recognize
 
 Since `2.1.312`, a model name that Claude Code does not recognize gets the short prompt, and `CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=0` keeps the full prompt.
-This covers custom deployment names and inference profile ARNs. The test has no check for the provider.[^unknown-name] Claude Code decides in this order:
+This covers custom deployment names and inference profile ARNs. The test has no check for the provider.[^unknown-name] The [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312) list the change. Claude Code decides in this order:
 
 1. `CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT` set to a true value gives the short prompt. A false value, such as `0`, gives the full prompt.
 2. If the variable is unset, an unknown name gives the short prompt. A known name has `claude-3-` or `haiku` or `sonnet` in it, or is `claude-opus-4-0`, `-4-1`, `-4-5`, `-4-6`, or `-4-7`. A server-side catalog flag for the model comes first.[^lean-flag]
@@ -161,7 +161,7 @@ No official docs page lists the sections, so every row below is <Undocumented />
 
 ### Shared Sections
 
-These come first. Claude Code uses either the short row or the full rows. From `2.1.302` to `2.1.322`, no shared section (`lean_body`, `intro`, `tone`, `doing_tasks`, `memory_static`, and the others) fires `prompt.section`, so a `prompt.section` hook does not see them. Only a `prompt.compose` hook sees them.
+These come first. Claude Code uses either the short row or the full rows. In `2.1.327`, no shared section (`lean_body`, `intro`, `tone`, `doing_tasks`, `memory_static`, and the others) fires `prompt.section`, so a `prompt.section` hook does not see them. Only a `prompt.compose` hook sees them.[^shared-hook]
 
 | Section | Status | When | Content |
 | --- | --- | --- | --- |
@@ -188,7 +188,7 @@ They follow in this order. Claude Code omits a section that has no text. Session
 | `session_guidance` | <Undocumented /> | When any of its items applies | The `! <command>` tip, the `Agent` tool and forks, skills by `/name`, and `ultrareview`. |
 | `memory` | <Undocumented /> | Not with `--exclude-dynamic-system-prompt-sections` | Instructions for auto memory. |
 | `surface:<kind>`, `system_messages` | <Gated note="An experiment form of the prompt" /> | An experiment form of the prompt | Where Claude Code runs, such as `desktop`, `vscode`, `web`, or `terminal`. |
-| `env_info_simple` | <Undocumented /> | Normally | The latest model IDs, where Claude Code runs, and a note about `/fast`. Since `2.1.322`, the note differs on Vertex (see [Fast Mode](../configure/models-and-providers/fast-mode.md#request)). |
+| `env_info_simple` | <Undocumented /> | Normally | The latest model IDs, where Claude Code runs, and a note about `/fast`. Since `2.1.322`, the note differs on Vertex (see [Fast Mode](../configure/models-and-providers/fast-mode.md#request)).[^env-fast] |
 | `env_info_static` | <Undocumented /> | With `--exclude-dynamic-system-prompt-sections` | The same text, without data of the machine. |
 | `bg-session` | <Gated note="CLAUDE_CODE_SESSION_KIND=bg and CLAUDE_JOB_DIR set" /> | `CLAUDE_CODE_SESSION_KIND=bg` and `CLAUDE_JOB_DIR` set | Rules for background jobs: use `$CLAUDE_JOB_DIR/tmp`, use `EnterWorktree`, and end with a report. |
 | `context_management` | <Undocumented /> | Always | Old context gets summarized, so do not finish early. |
@@ -226,7 +226,7 @@ The first two rows differ because Opus 5.5 gets the short prompt and Sonnet 5 th
 
 Claude Code has a built-in plugin named `cc-plugin-responsive-mode`. Its description reads: "Responsive mode: Claude replies to you in a sentence before thinking or using tools, on every prompt".[^responsive]
 
-The plugin is off by default. It is only available when a server-side experiment is on, and never in a background or daemon session. You cannot set that experiment. The plugin registers when the entry point is not `local-agent`, or when the session is remote. The plugin acts only on a prompt that a person typed and that is not a slash command. This page does not state how the plugin changes the prompt, because that text was not read in this run.
+The plugin is off by default. It is only available when a server-side experiment is on, and never in a background or daemon session. You cannot set that experiment. The plugin registers when the entry point is not `local-agent`, or when the session is remote. The plugin acts only on a prompt that a person typed and that is not a slash command.
 
 ## Bare Mode
 
@@ -247,10 +247,12 @@ A subagent gets its own agent text plus short notes. The default agent text star
 
 [^old-wiki]: An earlier wiki said Sonnet gets the full prompt. That is wrong.
 [^matrix]: Probe case `print.models.matrix`.
-[^unknown-name]: The program, `chunk-pm46v9cv.js` lines 324 to 353 and `chunk-d73xe1mr.js` lines 27350 to 27369.
-[^lean-flag]: The catalog flag is `lean_prompt`. The program.
-[^gate]: The gate is `tengu_velvet_tide` and the server setting is `simple_system_prompt`. The program.
-[^deterministic]: The program, `chunk-pm46v9cv.js` lines 324 to 353 and `chunk-d73xe1mr.js` lines 27350 to 27369. The test uses the option `deterministic`. In `2.1.311` the same test used no `deterministic` option, and that build is not in the `2.1.321` capture.
-[^bundles]: The flags are `opus_5_prompt_bundle`, `opus_5_5_prompt_bundle`, `fable_5_mitigations`, and `fable_5_1_prompt_bundle`. The program.
-[^responsive]: The program. The plugin is defined in `chunk-ht4bh06j.js`, registered in `chunk-wvm9g54y.js`, and loads `chunk-bbjk1ht9.js`. It has `defaultEnabled: false` and needs the experiment `tengu_quiet_ember`.
-[^subagent]: The program.
+[^unknown-name]: The program, `chunk-t907shf5.js:5726`, `chunk-t907shf5.js:6176` (the order: `CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT` true, then false, then an unknown name, then `tengu_velvet_tide`, then the server setting `simple_system_prompt`) and `chunk-asj6f58y.js:534155`.
+[^lean-flag]: The catalog flag is `lean_prompt`. The program, `chunk-t907shf5.js:5726`.
+[^gate]: The gate is `tengu_velvet_tide` and the server setting is `simple_system_prompt`. The program, `chunk-t907shf5.js:6295`.
+[^deterministic]: The program, `chunk-t907shf5.js:5726` and `chunk-asj6f58y.js:534155`. The test uses the option `deterministic`.
+[^bundles]: The flags are `opus_5_prompt_bundle`, `opus_5_5_prompt_bundle`, `fable_5_mitigations`, and `fable_5_1_prompt_bundle`. The program, `chunk-t907shf5.js:1333` and `chunk-f892tj2r.js:26527`.
+[^responsive]: The program. The plugin is defined in `chunk-rknqan46.js:583`, registered in `chunk-syz79m2z.js:1354`, and loads `chunk-pfj6est1.js:5263`. It has `defaultEnabled: false` and needs the experiment `tengu_quiet_ember`.
+[^subagent]: The program, `chunk-m14bt1pz.js:2816835`.
+[^shared-hook]: The program, `chunk-m14bt1pz.js:2812126` (the shared sections, such as `lean_body`, are plain entries of the compose list) and `chunk-m14bt1pz.js:2805974` (the session sections, such as `memory` and `env_info_simple`, go through a call that dispatches the section to hooks).
+[^env-fast]: The program, `chunk-m14bt1pz.js:2816553` (the note names `a model that does` on Vertex and `Claude Opus` elsewhere) and the [`2.1.322` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.322).

@@ -6,7 +6,7 @@ sidebar_position: 1
 
 The Mod API ships a type file that your editor reads. These pages list every type in that file that you can use, grouped by topic. Each type is a row or a field row, with its use and its shape.
 
-Import the types with `import type { ... } from 'claude-code'`. The import is empty at run time, so it adds no code to your mod. The pages follow the copy inside the `2.1.323` program.[^copy] This site publishes that copy unchanged as `https://clawdipedia.cc/schemas/claude-code.d.ts`.
+Import the types with `import type { ... } from 'claude-code'`. The import is empty at run time, so it adds no code to your mod. The pages follow the copy inside the `2.1.327` program.[^copy] This site publishes that copy unchanged as `https://clawdipedia.cc/schemas/claude-code.d.ts`.
 
 ## Pages
 
@@ -45,4 +45,4 @@ The type file is the full list of fields for this release. Build on the fields i
 
 ## Sources
 
-[^copy]: The program, the type file inside the `2.1.323` build.
+[^copy]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`.

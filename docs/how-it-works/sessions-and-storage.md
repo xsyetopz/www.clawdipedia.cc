@@ -119,7 +119,7 @@ The last column shows whether Claude Code deletes the item after `cleanupPeriodD
 | `plans/`, `debug/`, `paste-cache/`, `uploads/<session>/`, `dev-mods/<session>/`, `session-env/` | <Documented /> | Plan files, debug logs, pastes, uploads, mods that Claude wrote, and session data. | ✅ |
 | `tasks/`, `shell-snapshots/`, `backups/` | <Documented /> | Task lists, shell setup, and copies of `~/.claude.json` (Claude Code keeps 5). | ✅ |
 | `sessions/` | <Documented /> | One small file for each running session, deleted at exit. | ❌ |
-| `history.jsonl` | <Documented /> | Every prompt you typed. | ❌ |
+| `history.jsonl` | <Documented /> | Every prompt you typed. Since `2.1.327`, it leaves out most launch prompts of sessions that another Claude Code session started, such as `claude --bg` run by Claude.[^history-launch] | ❌ |
 | `stats-cache.json`, `remote-settings.json`, `policy-limits.json`, `cache/changelog.md` | <Documented /> | Usage totals, cached organization settings, organization limits, and the [changelog](https://code.claude.com/docs/en/changelog). | ❌ |
 | `.credentials.json`, `agent-memory/`, `jobs/`, `daemon/` | <Documented /> | Files that you should keep. | ❌ |
 | `settings.json`, `plugins/`, `skills/`, `agents/`, `CLAUDE.md` | <Documented /> | Your configuration. | ❌ |
@@ -161,7 +161,7 @@ Each row is a family of messages. The backticked text is the start that every me
 | Various | <Undocumented /> | Remote Control and cloud sessions: Remote Control, a cloud session, or `--teleport` failed or was refused. | The user is not signed in with claude.ai. The policy `disableRemoteControl` is set. The base URL uses HTTP. A cloud session reached its timeout, waits for input that nothing here can give, or lost its connection. `claude --teleport` was run from the wrong checkout. |
 | Various | <Undocumented /> | Transcripts and storage: A transcript, session record, or storage backend could not be read or written. | A transcript file is too large, is not valid JSON, or holds no messages. A diskless session has no file to write to. A storage read, write, stat, or delete failed. |
 
-Since `2.1.326`, a transcript write that fails can leave a partial last line. Claude Code then adds a newline before the next append, so the next record does not join the partial line. The same seal runs when Claude Code finds a transcript file whose last byte is not a newline before it re-appends session metadata.[^seal]
+A transcript write that fails can leave a partial last line. Claude Code then marks the file and writes a newline before the next append, so the next record does not join the partial line. When Claude Code re-appends session metadata and finds a transcript whose last byte is not a newline, it marks the file the same way when the caller asks for it.[^seal]
 
 ## Related Pages
 
@@ -172,8 +172,9 @@ Since `2.1.326`, a transcript write that fails can leave a partial last line. Cl
 
 ## Sources
 
-[^model-catalog]: The program.
-[^mods-downloads]: The program.
-[^unexpected-arg]: The program.
-[^seal]: The program, `chunk-4h798pp0.js:29157`, `:29248`, `:29438`.
-[^child-logs]: The program, `chunk-y5hjhy3x.js:5706-5712`, `chunk-y5hjhy3x.js:6528`, `chunk-zyq9kffp.js:378`, and `chunk-z4j4mjgn.js:44893-44944`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^model-catalog]: The program, `chunk-asj6f58y.js:911360`.
+[^mods-downloads]: The program, `chunk-m14bt1pz.js:2385643`.
+[^unexpected-arg]: The program, `chunk-xa2mcav9.js:321061`.
+[^seal]: The program marks the file in `sealTornTailOnNextAppend` and writes the newline in `sealTornTailSync` at `chunk-m14bt1pz.js:489388`. The metadata re-append checks the last byte at `chunk-m14bt1pz.js:494450`.
+[^child-logs]: The program, `chunk-0tqcm9e3.js:116700` (the notice, and the skip when `--debug-file` is set or `--verbose` is not), `chunk-0tqcm9e3.js:135987` (the folder goes to each child session), and `chunk-1yrzf3wn.js:872150-872826` (the `child-logs` folder, mode 448 which is 0700, and the check of its owner and mode). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^history-launch]: The program, `chunk-cfxefa64.js:1800192`: a prompt that does not come from the Enter key of the prompt box is marked not to save when the list of sessions that launched this session (`chunk-2mvk3gke.js:728`) is not empty. The `add` method at `chunk-qpav394c.js:52884` then skips the write. The `2.1.326` program has no such mark. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).

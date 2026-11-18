@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-control-protocol.json",
-	"title": "Claude Code control protocol (Claude Code 2.1.326)",
-	"$comment": "For the request and response of each control_request subtype in stream-json mode (definitions <subtype>Request and <subtype>Response, direction in x-direction). Generated from Claude Code 2.1.326 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, table of rows {request, originator, response}; the request union is described as \"Control requests a client sends to drive the loop\". Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code control protocol (Claude Code 2.1.327)",
+	"$comment": "For the request and response of each control_request subtype in stream-json mode (definitions <subtype>Request and <subtype>Response, direction in x-direction). Generated from Claude Code 2.1.327 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, table of rows {request, originator, response}; the request union is described as \"Control requests a client sends to drive the loop\". Do not edit by hand: run \"bun run schemas\".",
 	"$defs": {
 		"apply_flag_settingsRequest": {
 			"type": "object",
@@ -355,6 +355,10 @@
 				"suppress_always_allow_rule": {
 					"type": "boolean",
 					"description": "True when the dialog must not offer the persistent \"don't ask again\" row for this ask: accepting it would write a whole-tool allow rule broader than the ask's own verb (PermissionAskDecision.suppressAlwaysAllowRule), or the ask comes from a run a plugin started, where Claude Code saves no rule from the answer, not even for the session. Hosts rendering approve options should omit any persistent-rule affordance when set."
+				},
+				"rule_usually_offered": {
+					"type": "boolean",
+					"description": "@internal Sent only beside suppress_always_allow_rule, when this kind of ask usually offers the \"don't ask again\" row (PermissionAskDecision.ruleUsuallyOffered). A terminal attached to the session keeps that row in its place, disabled, so that the keys that usually reach No still do. For display only: it never permits a persistent rule, and a host may ignore it."
 				},
 				"default_to_no": {
 					"type": "boolean",
@@ -846,6 +850,138 @@
 			"description": "@internal Result of a successful claim_session. Failures arrive as a control_response error whose message starts with a reason token (not_a_spare, already_claimed, busy, turn_started, env_key_not_claimable:<KEY>, cwd_not_found, cwd_not_a_directory, …); the spare stays parked after any of them.",
 			"x-direction": "client"
 		},
+		"comparison_forkRequest": {
+			"type": "object",
+			"properties": {
+				"subtype": {
+					"type": "string",
+					"const": "comparison_fork"
+				},
+				"comparison_id": {
+					"type": "string"
+				},
+				"turn_event_uuid": {
+					"type": "string",
+					"description": "The client uuid of the user event that opened the turn: a uuid this worker listed on the requesting row of that turn's first model request."
+				},
+				"fork_mode": {
+					"type": "string",
+					"const": "dry_run",
+					"description": "Not `mode`: Claude Code Remote reads that key of a control request as its own."
+				}
+			},
+			"required": ["subtype", "comparison_id", "turn_event_uuid", "fork_mode"],
+			"description": "@internal From claude.ai's server to a claude-code-server worker that advertises comparison_fork: true in turn_handoff_available. The worker builds, from the inputs of the named turn's first model request, the first request a second run of that turn would send, never sends it, and answers how it compares with the request the turn did send. The answer holds counts, flags and names, never text. Stored with the session's events.",
+			"x-direction": "client"
+		},
+		"comparison_forkResponse": {
+			"type": "object",
+			"properties": {
+				"contract_version": {
+					"type": "number",
+					"const": 4
+				},
+				"comparison_id": {
+					"type": "string"
+				},
+				"turn_event_uuid": {
+					"type": "string"
+				},
+				"fork_mode": {
+					"type": "string",
+					"const": "dry_run"
+				},
+				"end_reason": {
+					"type": "string",
+					"enum": [
+						"dry_run_done",
+						"turn_moved_on",
+						"turn_ended",
+						"folded",
+						"busy",
+						"too_large",
+						"flag_off",
+						"no_first_call",
+						"fork_failed"
+					]
+				},
+				"parts": {
+					"type": "object",
+					"propertyNames": {
+						"type": "string"
+					},
+					"additionalProperties": {}
+				},
+				"shape": {
+					"type": "object",
+					"propertyNames": {
+						"type": "string"
+					},
+					"additionalProperties": {}
+				},
+				"timings_ms": {
+					"type": "object",
+					"properties": {
+						"first_call_to_request": {
+							"type": ["number", "null"]
+						},
+						"request_to_built": {
+							"type": ["number", "null"]
+						},
+						"waited": {
+							"anyOf": [
+								{
+									"type": "number"
+								},
+								{
+									"type": "null"
+								}
+							],
+							"description": "From the request to finding its turn, in ms."
+						},
+						"built": {
+							"anyOf": [
+								{
+									"type": "number"
+								},
+								{
+									"type": "null"
+								}
+							],
+							"description": "From finding the turn to the fork's request being taken, in ms."
+						},
+						"compared": {
+							"anyOf": [
+								{
+									"type": "number"
+								},
+								{
+									"type": "null"
+								}
+							],
+							"description": "From the fork's request being taken to the reply, in ms."
+						}
+					},
+					"required": [
+						"first_call_to_request",
+						"request_to_built",
+						"waited",
+						"built",
+						"compared"
+					]
+				}
+			},
+			"required": [
+				"contract_version",
+				"comparison_id",
+				"turn_event_uuid",
+				"fork_mode",
+				"end_reason",
+				"timings_ms"
+			],
+			"description": "@internal Success payload answering comparison_fork.",
+			"x-direction": "client"
+		},
 		"elicitationRequest": {
 			"type": "object",
 			"properties": {
@@ -1153,7 +1289,7 @@
 				}
 			},
 			"required": ["subtype", "session_id"],
-			"description": "@internal Requests the title, branch and environment kind of one cloud session that the service serves to the signed-in account. Refused where list_cloud_sessions is.",
+			"description": "@internal Requests the details of one cloud session that the service serves to the signed-in account. Refused where list_cloud_sessions is.",
 			"x-direction": "client"
 		},
 		"get_cloud_sessionResponse": {
@@ -1177,6 +1313,237 @@
 							"type": "string",
 							"enum": ["bridge", "anthropic_cloud", "byoc", "snap"],
 							"description": "Where the session runs. bridge is a Remote Control session."
+						},
+						"runner_wait": {
+							"type": "object",
+							"properties": {
+								"spawn_state": {
+									"type": "string",
+									"description": "needs-runner, runner-coming, backing-off, circuit-broken or stuck. The service may add words."
+								},
+								"spawn_eta_at": {
+									"type": "string"
+								},
+								"spawn_consecutive_failures": {
+									"type": "number"
+								},
+								"spawn_failure_code": {
+									"type": "string"
+								},
+								"spawn_user_message": {
+									"type": "string",
+									"description": "A sentence from the organization's own hook. Show it as plain text, say who it is from, and never send it to analytics."
+								},
+								"pool_alive_runner_count": {
+									"type": "number"
+								},
+								"pool_eligible_runner_count": {
+									"type": "number"
+								},
+								"sessions_ahead": {
+									"type": "number"
+								}
+							},
+							"required": ["spawn_state"],
+							"description": "Present while the session waits for a self-hosted runner. The members keep the service's names; an absent one is unknown, not 0."
+						},
+						"waiting_connectors": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"tool_use_id": {
+										"type": "string"
+									},
+									"tool_name": {
+										"type": "string"
+									},
+									"id": {
+										"type": "string"
+									},
+									"name": {
+										"type": "string"
+									},
+									"added_account": {
+										"type": "boolean"
+									}
+								},
+								"required": ["tool_use_id", "tool_name", "id"]
+							},
+							"description": "The connector behind each permission prompt that waits. Match both tool members, show the name as plain text, and decide nothing by it. Absent where the older session API answered."
+						},
+						"session": {
+							"type": "object",
+							"properties": {
+								"id": {
+									"type": "string",
+									"description": "The session id, starting with `session_`."
+								},
+								"title": {
+									"type": "string",
+									"description": "Empty when the session has no title. Text from the service."
+								},
+								"updated_at": {
+									"type": "string",
+									"description": "Time of the last change, as the service wrote it."
+								},
+								"status": {
+									"type": "string",
+									"enum": [
+										"running",
+										"idle",
+										"requires_action",
+										"archived",
+										"pending",
+										"failed"
+									],
+									"description": "Unknown values degrade to undefined at parse time; a host reads undefined as idle."
+								},
+								"environment_kind": {
+									"type": "string",
+									"enum": ["bridge", "anthropic_cloud", "byoc", "snap"],
+									"description": "Where the session runs. bridge is a Remote Control session."
+								},
+								"repository": {
+									"type": "object",
+									"properties": {
+										"owner": {
+											"type": "string"
+										},
+										"name": {
+											"type": "string"
+										}
+									},
+									"required": ["owner", "name"],
+									"description": "The GitHub repository of the session's first git source."
+								},
+								"other_repositories": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"owner": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											}
+										},
+										"required": ["owner", "name"]
+									},
+									"description": "The GitHub repositories of the session's later git sources."
+								},
+								"branch": {
+									"type": "string",
+									"description": "The branch the session works on. Text from the service: check it before it goes to git."
+								},
+								"current_branch": {
+									"type": "string",
+									"description": "The branch that the session says is checked out now. Check it before it goes to git."
+								},
+								"pinned": {
+									"type": "boolean",
+									"description": "Whether the session is pinned. Absent from a CLI that has no update_cloud_session, and where the older session API answered."
+								},
+								"tags": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									},
+									"description": "Every tag that the service shows this account. Absent means unknown, not none. The session can change some of them."
+								},
+								"lifecycle_status": {
+									"type": "string"
+								},
+								"worker_status": {
+									"type": "string"
+								},
+								"connection_status": {
+									"type": "string",
+									"description": "This, lifecycle_status and worker_status are the service's own words, which status is made from. Read a word you do not know as unknown."
+								},
+								"created_at": {
+									"type": "string"
+								},
+								"environment_id": {
+									"type": "string",
+									"description": "The environment the session runs in."
+								},
+								"self_hosted_runner_pool_id": {
+									"type": "string"
+								},
+								"trigger_id": {
+									"type": "string",
+									"description": "The routine that started the session."
+								},
+								"agent_id": {
+									"type": "string",
+									"description": "The agent that owns the session."
+								},
+								"parent_session_id": {
+									"type": "string",
+									"description": "The session that started this one, starting with `session_`. It may not be in this list. The service can leave it out although there is one, so keep a value you already hold."
+								},
+								"suggested_from_session_id": {
+									"type": "string",
+									"description": "The session whose suggested task this one was started from, starting with `session_`. Any client of the session can write it: use it only to link to a row of this list."
+								},
+								"detached_from_parent_at": {
+									"type": "string",
+									"description": "When the session was moved to the top level. It then nests under no other session. Any client of the session can write it."
+								},
+								"last_event_at": {
+									"type": "string",
+									"description": "Sort by this: a pin or a mark moves updated_at too."
+								},
+								"completed_at": {
+									"type": "string",
+									"description": "The mark of mark_completed. It no longer counts once last_event_at is later. Any client of the session can write it."
+								},
+								"opened_in_app_at": {
+									"type": "string",
+									"description": "The mark of mark_opened. Send that only where it is absent."
+								},
+								"unread": {
+									"type": "boolean",
+									"description": "Whether there is something new for this person."
+								},
+								"origin": {
+									"type": "string",
+									"description": "The service's word for where the session was begun."
+								},
+								"model": {
+									"type": "string"
+								},
+								"effort_level": {
+									"type": "string"
+								},
+								"permission_mode": {
+									"type": "string",
+									"description": "The last one that the service stored, as are model and effort_level. The session can write all three: show them, and decide nothing by them."
+								},
+								"recap": {
+									"type": "string",
+									"description": "The session's own recap of where it stands, cleaned and cut as summary is."
+								},
+								"summary": {
+									"type": "object",
+									"properties": {
+										"status_category": {
+											"type": "string"
+										},
+										"status_detail": {
+											"type": "string"
+										},
+										"needs_action": {
+											"type": "string"
+										}
+									},
+									"description": "How the last turn ended, mostly in the session's own words: one line each, cut at about 800 characters, with secrets not masked. Show them as plain text. status_category is blocked, waiting, completed, review_ready or failed today."
+								}
+							},
+							"required": ["id", "title", "updated_at"],
+							"description": "The session as a row of list_cloud_sessions, also where that list leaves it out, such as a shared project's session that this account may read. Never with parent_session_id. Absent where the older session API answered."
 						}
 					},
 					"required": ["status"]
@@ -1204,7 +1571,7 @@
 								"temporarily_unavailable",
 								"failed"
 							],
-							"description": "Why nothing was read, so that a host can choose its own wording. temporarily_unavailable means that asking again may work. Unknown codes degrade to undefined at parse time, so codes can be added without a version bump; a host reads undefined as failed."
+							"description": "Why it was not carried out, so that a host can choose its own wording. temporarily_unavailable means that asking again may work. Unknown codes degrade to undefined at parse time, so codes can be added without a version bump; a host reads undefined as failed."
 						},
 						"message": {
 							"type": "string",
@@ -1212,7 +1579,7 @@
 						}
 					},
 					"required": ["status", "message"],
-					"description": "@internal A cloud-session read that returned nothing, and why."
+					"description": "@internal A cloud-session request that was not carried out, and why."
 				}
 			],
 			"description": "@internal One cloud session, or why it was not read.",
@@ -1236,6 +1603,10 @@
 				"limit": {
 					"type": "number",
 					"description": "The most entries the page may hold: a whole number from 1 to 1000, 200 when absent. A page of large entries holds fewer. An older CLI ignores it."
+				},
+				"agent_id": {
+					"type": "string",
+					"description": "One subagent, whose entries are read in place of the main transcript: the id that they carry as agentId, which for the Agent tool is its task_id. An id that the session does not have answers no entries. A cursor is good only with the agent_id that it came with. An older CLI ignores it and answers the main transcript, without agent_id in the answer."
 				}
 			},
 			"required": ["subtype", "session_id"],
@@ -1261,6 +1632,10 @@
 								"additionalProperties": {}
 							},
 							"description": "Transcript entries as the service stored them, oldest first. Session content: the CLI does not check it."
+						},
+						"agent_id": {
+							"type": "string",
+							"description": "The agent_id of the request, where it had one."
 						},
 						"next_cursor": {
 							"type": "string",
@@ -1292,7 +1667,7 @@
 								"temporarily_unavailable",
 								"failed"
 							],
-							"description": "Why nothing was read, so that a host can choose its own wording. temporarily_unavailable means that asking again may work. Unknown codes degrade to undefined at parse time, so codes can be added without a version bump; a host reads undefined as failed."
+							"description": "Why it was not carried out, so that a host can choose its own wording. temporarily_unavailable means that asking again may work. Unknown codes degrade to undefined at parse time, so codes can be added without a version bump; a host reads undefined as failed."
 						},
 						"message": {
 							"type": "string",
@@ -1300,7 +1675,7 @@
 						}
 					},
 					"required": ["status", "message"],
-					"description": "@internal A cloud-session read that returned nothing, and why."
+					"description": "@internal A cloud-session request that was not carried out, and why."
 				}
 			],
 			"description": "@internal One page of a cloud session's transcript, or why it was not read.",
@@ -1791,6 +2166,23 @@
 							"type": "null"
 						}
 					]
+				},
+				"loadRaise": {
+					"type": "object",
+					"properties": {
+						"fromWindow": {
+							"type": "integer",
+							"minimum": -9007199254740991,
+							"maximum": 9007199254740991
+						},
+						"toWindow": {
+							"type": "integer",
+							"minimum": -9007199254740991,
+							"maximum": 9007199254740991
+						}
+					},
+					"required": ["fromWindow", "toWindow"],
+					"description": "@internal Present while this conversation's auto-compact window is raised from fromWindow to toWindow. That happens where what is still in each request after a summary (system prompt, tools, instruction files, the summary) fills more than half of the size at which it would compact. The other fields measure against toWindow; fromWindow is the window that was saved or served."
 				},
 				"coldResumeQuota": {
 					"type": "object",
@@ -3765,6 +4157,10 @@
 											"required": ["kind", "baseBranch", "baseRef"]
 										}
 									]
+								},
+								"rootId": {
+									"type": "string",
+									"description": "An opaque value that stands for the directory this diff's paths are relative to. To open one of those paths, send it back unchanged as the `rootId` of read_file's diff_root anchor, and keep it with any file view opened that way, so that reloading the view sends the same value. It reveals no path, and only the process that made it accepts it. A Claude Code version that predates it sends none and checks none: it reads a diff_root path against the directory it finds at the time of the read."
 								}
 							},
 							"required": [
@@ -6091,6 +6487,11 @@
 							"const": 403
 						}
 					]
+				},
+				"token_state": {
+					"type": "string",
+					"enum": ["not_refused"],
+					"description": "'not_refused': no server has refused anything; the CLI holds nothing under the variable that CLAUDE_CODE_HOST_AUTH_ENV_VAR names, so the host may answer with the credential that it handed over at the start. Sent with no status, and only to a host that set CLAUDE_CODE_HOST_AUTH_ASK_AT_START. A host takes any other value as absent."
 				}
 			},
 			"required": ["subtype"],
@@ -6210,6 +6611,15 @@
 									"required": ["afterSeconds", "within"],
 									"additionalProperties": false,
 									"description": "@internal PreToolUse only, and only from the process that owns the CLI's stdin. What judges a tool call that these callbacks leave unanswered for `afterSeconds`, in place of the refusal at `timeout`: the CLI compares the path that the tool would open with these folders (docs/desktop-host-contract.md D160). A malformed value, or any value where onFailure is set to 'continue', is ignored whole, with a warning; a CLI that predates the field ignores it."
+								},
+								"contextOnly": {
+									"type": "boolean",
+									"description": "@internal PostToolUse only, and only from the process that owns the CLI's stdin. True says that these callbacks return additionalContext alone, so a next call that this matcher also covers may start without their answer (docs/hooks-runner-design.md). Ignored where onFailure is 'block', and by a CLI that predates the field."
+								},
+								"replacedByFrame": {
+									"type": "string",
+									"const": "shell_cwd",
+									"description": "@internal PostToolUse only, and only from the process that owns the CLI's stdin. These callbacks only read the shell's folder, so the CLI never calls them and sends system/shell_cwd instead (docs/desktop-host-contract.md D170). Ignored where onFailure is 'block' or the matcher names more than Bash and PowerShell, and by a CLI that predates the field: the callbacks are then called."
 								}
 							},
 							"required": ["hookCallbackIds"],
@@ -6277,7 +6687,7 @@
 								"description": "@internal When true, the CLI never moves a call to this server's tools to a background task on its own: not after the auto-background delay, and not early for a priority 'now' message, which instead interrupts the turn and so ends the call. Meant for a server whose calls wait on a person. The turn waits for the call's own result, up to the server's timeout, so set timeout too. A tool that advertises MCP task support can still run as a task. Any value but true counts as unset. Read when the server is first registered, from initialize, mcp_set_servers or --mcp-config."
 							},
 							"connectorId": {
-								"$ref": "#/$defs/initializeRequest____schema22"
+								"$ref": "#/$defs/initializeRequest____schema26"
 							},
 							"autoModeVerdictTools": {
 								"maxItems": 64,
@@ -6288,7 +6698,7 @@
 								"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 							},
 							"dataFlowServer": {
-								"$ref": "#/$defs/initializeRequest____schema27"
+								"$ref": "#/$defs/initializeRequest____schema31"
 							},
 							"onPersonsMachine": {
 								"type": "object",
@@ -6304,7 +6714,7 @@
 								"description": "@internal States that this server runs on the person's own computer. In a session that runs elsewhere (cloud, SSH, a VM), the CLI then refuses an mcp_tool hook's or a mod's call to it. exceptTools names, exactly as this server lists them, the tools that a hook may still call; it lifts nothing for a mod (docs/desktop-host-contract.md, D166a). Leave it out for any other server: a value of another shape marks the server and excepts nothing. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 							},
 							"tools": {
-								"$ref": "#/$defs/initializeRequest____schema31"
+								"$ref": "#/$defs/initializeRequest____schema35"
 							}
 						}
 					},
@@ -6446,11 +6856,12 @@
 												"type": "string"
 											},
 											"additionalProperties": {
-												"$ref": "#/$defs/initializeRequest____schema70"
+												"$ref": "#/$defs/initializeRequest____schema75"
 											}
 										}
 									]
-								}
+								},
+								"description": "MCP servers for this agent, by name or as inline config. Passing a createSdkMcpServer() server here is deprecated. It is ignored with a warning and will be an error in a later release, so put it in the top-level mcpServers option."
 							},
 							"criticalSystemReminder_EXPERIMENTAL": {
 								"type": "string",
@@ -6476,7 +6887,7 @@
 							"autoCompactWindow": {
 								"type": "integer",
 								"minimum": 100000,
-								"maximum": 1000000,
+								"maximum": 9007199254740991,
 								"description": "Token count at which this agent compacts its own conversation when it runs as a subagent. It only lowers the window the subagent would otherwise inherit. No effect on the main session agent."
 							},
 							"background": {
@@ -6581,6 +6992,10 @@
 					"type": "boolean",
 					"description": "@internal Declares that this consumer renders the `system/turn_preempted` frame and expects Claude Code to stop a turn on its own: when a person's follow-up message arrives while the running turn has shown nothing yet, the turn is stopped as an interrupt would stop it (its messages get `command_lifecycle` 'cancelled' and its result is an aborted one) and the follow-up runs next, announced by `turn_preempted`. Honored only while the rollout flag is on. ABSENCE fails closed: the follow-up waits its turn exactly as before, because a consumer that does not know the frame would see a message it never withdrew reported cancelled. Messages arriving over the Remote Control bridge never stop a turn, whatever was declared here. First-attached-client-wins on multi-client sessions; later initializes do not change it."
 				},
+				"cloudStatusBeforeInit": {
+					"type": "boolean",
+					"description": "@internal Asks the client of a cloud-hosted session to write system/cloud_session_delta frames once it has opened the session, without waiting for the first init, so that the host learns the session id (`cloud_session.id`) while the container starts. Read only on the initialize that opens the session. Ignored where Claude Code is not the client of a cloud session."
+				},
 				"plugins": {
 					"type": "array",
 					"items": {
@@ -6602,7 +7017,7 @@
 							"requiredByOrganization": {
 								"type": "boolean",
 								"const": true,
-								"description": "@internal States that the person's organization requires this plugin. Mods see it on plugin.register, and an unmarked copy of its name does not load beside it; it grants no tier or permission (docs/desktop-host-contract.md, D109a). The Agent SDK sends a marked entry in the initialize request under --await-initialize (Claude Code 2.1.261 or newer) whatever pluginDelivery says."
+								"description": "@internal States that the person's organization requires or auto-installs this plugin. Mods see it on plugin.register, which judges it in the organization's tier when it has no hooks module and is shown to be outside every dev-mods folder, and an unmarked copy of its name does not load beside it; it grants no permission (docs/desktop-host-contract.md, D109a). The Agent SDK sends a marked entry in the initialize request under --await-initialize (Claude Code 2.1.261 or newer) whatever pluginDelivery says."
 							}
 						},
 						"required": ["type", "path"],
@@ -6616,7 +7031,7 @@
 						"type": "string"
 					},
 					"additionalProperties": {
-						"$ref": "#/$defs/initializeRequest____schema70"
+						"$ref": "#/$defs/initializeRequest____schema75"
 					},
 					"description": "MCP servers for Claude Code to run or connect to, keyed by server name: the serializable entries of the SDK `mcpServers` option (host-resident servers go in sdkMcpServers), as the stdin form of one --mcp-config item, which keeps server credentials (stdio `env`, http and sse `headers`) off the command line. Read only at launch under --await-initialize, and then handled as --mcp-config: an invalid entry is skipped and reported in system/init, not fatal; one difference is that a Claude Code process this one starts is not handed them. Without that flag, on a repeated initialize, or over a remote session transport it loads nothing; use mcp_set_servers in a running session. mcp_servers_applied in the response says whether these are the set read at launch."
 				},
@@ -6627,6 +7042,21 @@
 					},
 					"additionalProperties": {},
 					"description": "@internal The managed settings of the host that starts Claude Code, in the same shape as the SDK `managedSettings` option, so that the launch command line does not grow with them. Read only by a CLI launched with --await-initialize and --managed-settings-in-initialize. It applies them as it applies --managed-settings, before it reads any settings, and exits with code 1 when it cannot; startup_failure_reason then says why, where the host set CLAUDE_CODE_STARTUP_FAILURE_RESULTS. Without those flags, on a repeated initialize, or over a remote session transport the field sets nothing; managed_settings_applied in the response reports whether these settings are the ones stored at launch."
+				},
+				"settings": {
+					"type": "object",
+					"propertyNames": {
+						"type": "string"
+					},
+					"additionalProperties": {},
+					"description": "@internal The settings of the host that starts Claude Code, in the same shape as an SDK `settings` object, so that the launch command line, which has a length limit, does not grow with them. This hides no credential: a Claude Code process that the session starts would get them on its own command line. Read only by a CLI launched with --await-initialize and --initialize-fields=settings. It applies them as it applies --settings, before it reads any settings, and exits with code 1 when it cannot; startup_failure_reason then says why, where the host set CLAUDE_CODE_STARTUP_FAILURE_RESULTS. Without those flags, on a repeated initialize, or over a remote session transport the field sets nothing; settings_applied in the response reports whether these settings are the ones taken at launch."
+				},
+				"disallowedTools": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "@internal The tools and rules to deny, in the same shape as the SDK `disallowedTools` option, so that the launch command line does not grow with them. Read only by a CLI launched with --await-initialize and --initialize-fields=disallowedTools. It applies them as it applies --disallowedTools with the entries joined by commas, and exits with code 1 when it cannot, as for `settings`. Without those flags, on a repeated initialize, or over a remote session transport the field sets nothing; disallowed_tools_applied in the response reports whether this list is the one taken at launch."
 				},
 				"workspaceTrust": {
 					"type": "object",
@@ -6665,12 +7095,12 @@
 			"description": "Initializes the SDK session with hooks, MCP servers, and agent configuration.",
 			"x-direction": "client"
 		},
-		"initializeRequest____schema22": {
+		"initializeRequest____schema26": {
 			"type": "string",
 			"minLength": 1,
 			"description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. With or without that declaration, deny and ask rules, hook matchers and disallowed-tool lists that spell mcp__<connectorId> also reach this server's tools, and nothing that allows does; the id is read as a tool's name would spell it (a character other than a letter, a digit, '-' and '_' as '_'), and one that is then longer than 128 characters or holds '__' is not used for that. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered."
 		},
-		"initializeRequest____schema27": {
+		"initializeRequest____schema31": {
 			"anyOf": [
 				{
 					"type": "object",
@@ -6732,7 +7162,7 @@
 			],
 			"description": "@internal Where the host got this server, for the data flow records of calls to it: one of Anthropic's, by its registry id; a claude.ai connector, by its id (tagged or a bare UUID) and its directory id or null; or one the user configured, by the transport the host reaches it over. The first two are taken only in a session a desktop host started; in a session the VS Code extension started, the first is taken too, but only with the id of its claude-vscode server. Without it, or with a value of another shape, the records say unknown (docs/desktop-host-contract.md, D139). Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 		},
-		"initializeRequest____schema31": {
+		"initializeRequest____schema35": {
 			"type": "array",
 			"items": {
 				"type": "object",
@@ -6755,7 +7185,7 @@
 			},
 			"description": "Per-tool permission policy the host declares for this server's tools (not the tool definitions passed to createSdkMcpServer). always_ask: the CLI asks the host (canUseTool or the permission prompt tool) before each call, even where an allow rule or allowedTools covers the tool, and under bypassPermissions outside a hosted remote session (CLAUDE_CODE_REMOTE); under dontAsk the call is denied; in auto mode the classifier decides, except that by default a tool annotated destructiveHint still asks. always_deny: calls are denied, except a mod's own ($.tool.call, $.mcp.call). always_allow and org_max_permission are ignored on sdk servers; grant allows with allowedTools or canUseTool. Read from initialize (sdkMcpServerConfigs) and from each mcp_set_servers entry that names the server. On the wire an entry without tools states no policy: on initialize the stored list and the rules stand; on mcp_set_servers the rules are replaced without them. The Agent SDK always re-sends the registered list. An entry whose policy is not one of the three asks; an entry without a string name is dropped and the rest apply; a value that is not a list reads as absent."
 		},
-		"initializeRequest____schema70": {
+		"initializeRequest____schema75": {
 			"anyOf": [
 				{
 					"type": "object",
@@ -6959,7 +7389,7 @@
 							"description": "@internal When true, the CLI never moves a call to this server's tools to a background task on its own: not after the auto-background delay, and not early for a priority 'now' message, which instead interrupts the turn and so ends the call. Meant for a server whose calls wait on a person. The turn waits for the call's own result, up to the server's timeout, so set timeout too. A tool that advertises MCP task support can still run as a task. Any value but true counts as unset. Read when the server is first registered, from initialize, mcp_set_servers or --mcp-config."
 						},
 						"connectorId": {
-							"$ref": "#/$defs/initializeRequest____schema22"
+							"$ref": "#/$defs/initializeRequest____schema26"
 						},
 						"autoModeVerdictTools": {
 							"maxItems": 64,
@@ -6970,7 +7400,7 @@
 							"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 						},
 						"dataFlowServer": {
-							"$ref": "#/$defs/initializeRequest____schema27"
+							"$ref": "#/$defs/initializeRequest____schema31"
 						},
 						"onPersonsMachine": {
 							"type": "object",
@@ -6986,7 +7416,7 @@
 							"description": "@internal States that this server runs on the person's own computer. In a session that runs elsewhere (cloud, SSH, a VM), the CLI then refuses an mcp_tool hook's or a mod's call to it. exceptTools names, exactly as this server lists them, the tools that a hook may still call; it lifts nothing for a mod (docs/desktop-host-contract.md, D166a). Leave it out for any other server: a value of another shape marks the server and excepts nothing. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 						},
 						"tools": {
-							"$ref": "#/$defs/initializeRequest____schema31"
+							"$ref": "#/$defs/initializeRequest____schema35"
 						}
 					},
 					"required": ["type", "name"]
@@ -7127,7 +7557,7 @@
 						}
 					},
 					"required": ["token_source", "api_key_source"],
-					"description": "@internal Where the auth token and the API key come from when both are configured (for example ANTHROPIC_AUTH_TOKEN and '/login managed key'); the terminal then warns that auth may not work as expected. Source names only, never credential values. Absent when at most one is configured, when one apiKeyHelper supplies both, and from CLIs older than this field."
+					"description": "@internal Where the auth token and the API key come from when both are configured (for example ANTHROPIC_AUTH_TOKEN and '/login managed key'); the terminal then shows a start-up warning. Source names only, never credential values. Absent when at most one is configured, when one apiKeyHelper supplies both, and from CLIs older than this field."
 				},
 				"current_model": {
 					"type": "string",
@@ -7192,6 +7622,14 @@
 				"managed_settings_applied": {
 					"type": "boolean",
 					"description": "@internal Whether the `managedSettings` in this initialize are the ones the process stored at launch under --managed-settings-in-initialize, so a re-sent initialize with the same settings also reads true. True does not say that they are in force: state.parentSettingsIncluded of list_permission_rules says whether they count beside the machine's own managed settings. The request's `managedSettings` field sets nothing after launch. Absent when the request carried none, on CLIs that predate this field (those never read `managedSettings`), and from responders that do not store them. A host that sent them must send no prompt until this is true; the TypeScript SDK holds the prompt, and ends the session on any other answer."
+				},
+				"settings_applied": {
+					"type": "boolean",
+					"description": "@internal Whether the `settings` in this initialize are the ones the process took at launch under --initialize-fields=settings, so a re-sent initialize with the same settings also reads true. False: this Claude Code knows the field and does not confirm these settings, for example because the flag was lost on the way, the process was started with others, or they are nested too deeply to compare. Absent when the request carried none, on CLIs that predate this key, and from responders that do not take them. True does not say that every rule in them is in force: list_permission_rules does. The field sets nothing after launch. A host that sent it must send no prompt until this is true; the TypeScript SDK holds the prompt, and ends the session on any other answer."
+				},
+				"disallowed_tools_applied": {
+					"type": "boolean",
+					"description": "@internal The same as settings_applied, for the `disallowedTools` in this initialize and --initialize-fields=disallowedTools."
 				},
 				"mcp_servers_applied": {
 					"type": "boolean",
@@ -7561,6 +7999,18 @@
 				"user_initiated": {
 					"type": "boolean",
 					"description": "True when a person asked for the list now. Absent or false for a background reload."
+				},
+				"only_runs": {
+					"type": "boolean",
+					"description": "True to list the sessions that routines of the account started, which the plain list leaves out, and nothing else. An older CLI, or the older session API, answers the plain list, without only_runs in the answer."
+				},
+				"only_archived": {
+					"type": "boolean",
+					"description": "True to list archived sessions only. Unless the answer has only_archived, it is the plain list."
+				},
+				"cursor": {
+					"type": "string",
+					"description": "next_cursor of the page before, asked the same way. Without it, pinned sessions of later pages follow the first page, so a row can come twice."
 				}
 			},
 			"required": ["subtype"],
@@ -7623,17 +8073,149 @@
 										"required": ["owner", "name"],
 										"description": "The GitHub repository of the session's first git source."
 									},
+									"other_repositories": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"owner": {
+													"type": "string"
+												},
+												"name": {
+													"type": "string"
+												}
+											},
+											"required": ["owner", "name"]
+										},
+										"description": "The GitHub repositories of the session's later git sources."
+									},
 									"branch": {
 										"type": "string",
 										"description": "The branch the session works on. Text from the service: check it before it goes to git."
+									},
+									"current_branch": {
+										"type": "string",
+										"description": "The branch that the session says is checked out now. Check it before it goes to git."
+									},
+									"pinned": {
+										"type": "boolean",
+										"description": "Whether the session is pinned. Absent from a CLI that has no update_cloud_session, and where the older session API answered."
+									},
+									"tags": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"description": "Every tag that the service shows this account. Absent means unknown, not none. The session can change some of them."
+									},
+									"lifecycle_status": {
+										"type": "string"
+									},
+									"worker_status": {
+										"type": "string"
+									},
+									"connection_status": {
+										"type": "string",
+										"description": "This, lifecycle_status and worker_status are the service's own words, which status is made from. Read a word you do not know as unknown."
+									},
+									"created_at": {
+										"type": "string"
+									},
+									"environment_id": {
+										"type": "string",
+										"description": "The environment the session runs in."
+									},
+									"self_hosted_runner_pool_id": {
+										"type": "string"
+									},
+									"trigger_id": {
+										"type": "string",
+										"description": "The routine that started the session."
+									},
+									"agent_id": {
+										"type": "string",
+										"description": "The agent that owns the session."
+									},
+									"parent_session_id": {
+										"type": "string",
+										"description": "The session that started this one, starting with `session_`. It may not be in this list. The service can leave it out although there is one, so keep a value you already hold."
+									},
+									"suggested_from_session_id": {
+										"type": "string",
+										"description": "The session whose suggested task this one was started from, starting with `session_`. Any client of the session can write it: use it only to link to a row of this list."
+									},
+									"detached_from_parent_at": {
+										"type": "string",
+										"description": "When the session was moved to the top level. It then nests under no other session. Any client of the session can write it."
+									},
+									"last_event_at": {
+										"type": "string",
+										"description": "Sort by this: a pin or a mark moves updated_at too."
+									},
+									"completed_at": {
+										"type": "string",
+										"description": "The mark of mark_completed. It no longer counts once last_event_at is later. Any client of the session can write it."
+									},
+									"opened_in_app_at": {
+										"type": "string",
+										"description": "The mark of mark_opened. Send that only where it is absent."
+									},
+									"unread": {
+										"type": "boolean",
+										"description": "Whether there is something new for this person."
+									},
+									"origin": {
+										"type": "string",
+										"description": "The service's word for where the session was begun."
+									},
+									"model": {
+										"type": "string"
+									},
+									"effort_level": {
+										"type": "string"
+									},
+									"permission_mode": {
+										"type": "string",
+										"description": "The last one that the service stored, as are model and effort_level. The session can write all three: show them, and decide nothing by them."
+									},
+									"recap": {
+										"type": "string",
+										"description": "The session's own recap of where it stands, cleaned and cut as summary is."
+									},
+									"summary": {
+										"type": "object",
+										"properties": {
+											"status_category": {
+												"type": "string"
+											},
+											"status_detail": {
+												"type": "string"
+											},
+											"needs_action": {
+												"type": "string"
+											}
+										},
+										"description": "How the last turn ended, mostly in the session's own words: one line each, cut at about 800 characters, with secrets not masked. Show them as plain text. status_category is blocked, waiting, completed, review_ready or failed today."
 									}
 								},
-								"required": ["id", "title", "updated_at"]
+								"required": ["id", "title", "updated_at"],
+								"description": "@internal One cloud session."
 							}
 						},
 						"truncated": {
 							"type": "boolean",
 							"description": "True when the service has more sessions than this page."
+						},
+						"only_runs": {
+							"type": "boolean",
+							"description": "True where the request asked for it and it was applied."
+						},
+						"only_archived": {
+							"type": "boolean"
+						},
+						"next_cursor": {
+							"type": "string",
+							"description": "Only its absence ends the list: a page can be empty."
 						}
 					},
 					"required": ["status", "sessions", "truncated"]
@@ -7661,7 +8243,7 @@
 								"temporarily_unavailable",
 								"failed"
 							],
-							"description": "Why nothing was read, so that a host can choose its own wording. temporarily_unavailable means that asking again may work. Unknown codes degrade to undefined at parse time, so codes can be added without a version bump; a host reads undefined as failed."
+							"description": "Why it was not carried out, so that a host can choose its own wording. temporarily_unavailable means that asking again may work. Unknown codes degrade to undefined at parse time, so codes can be added without a version bump; a host reads undefined as failed."
 						},
 						"message": {
 							"type": "string",
@@ -7669,7 +8251,7 @@
 						}
 					},
 					"required": ["status", "message"],
-					"description": "@internal A cloud-session read that returned nothing, and why."
+					"description": "@internal A cloud-session request that was not carried out, and why."
 				}
 			],
 			"description": "@internal The account's cloud sessions, or why they were not read.",
@@ -9301,6 +9883,10 @@
 								"kind": {
 									"type": "string",
 									"const": "diff_root"
+								},
+								"rootId": {
+									"type": "string",
+									"description": "The `rootId` of the get_workspace_diff answer that `path` came from, sent back unchanged. If the directory the session would diff now is not the one that answer's paths are relative to, or there is none, the read is refused with `read denied: <path>` and the error_code stale_root_id: the directory has changed, or the session's process has restarted. Ask for the diff again rather than resending. Otherwise the read is served as a diff_root read without `rootId` would be. Leave it out when the answer had none: null is refused as a malformed anchor, with no error_code. A CLI that has `anchor` but predates `rootId` ignores it."
 								}
 							},
 							"required": ["kind"]
@@ -9338,7 +9924,7 @@
 							"required": ["kind", "within"]
 						}
 					],
-					"description": "@internal How to find the file `path` names, instead of resolving it against the live cwd, which a `cd` in the shell moves. workspace_root, diff_root and repo each name a directory the session looks up on each request; as_written names none, and has its contract in its own description. workspace_root is the root list_directory lists from. diff_root is the repository get_workspace_diff diffs, so a path taken from that diff opens the file the diff shows. It is refused in a session whose diff follows the shell's cwd between several repositories; a client that knows the repository should send `repo`. repo is the checkout the session declares for that repository or, failing that, diff_root when its origin remote ends in that owner/name. With those three, `path` must stay inside that directory as spelled (the check follows no symlink). Whatever the anchor, the read is gated as any other read_file is. A path that is `~`, starts with `~/` or leaves that directory, or an anchor the session cannot resolve or does not serve, is refused with the error `read denied: <path>`. Leave the field out when there is no anchor: null is refused. A CLI that predates this field ignores it and reads against the live cwd; the response's `anchor` tells the two apart."
+					"description": "@internal How to find the file `path` names, instead of resolving it against the live cwd, which a `cd` in the shell moves. workspace_root, diff_root and repo each name a directory the session looks up on each request; as_written names none, and has its contract in its own description. workspace_root is the root list_directory lists from. diff_root is the repository get_workspace_diff diffs, so a path taken from that diff opens the file the diff shows. It is refused in a session whose diff follows the shell's cwd between several repositories; a client that knows the repository should send `repo`. A diff_root anchor may also carry a `rootId`, which has its contract in its own description. repo is the checkout the session declares for that repository or, failing that, diff_root when its origin remote ends in that owner/name. With those three, `path` must stay inside that directory as spelled (the check follows no symlink). Whatever the anchor, the read is gated as any other read_file is. A path that is `~`, starts with `~/` or leaves that directory, or an anchor the session cannot resolve or does not serve, is refused with the error `read denied: <path>`. Leave the field out when there is no anchor: null is refused. A CLI that predates this field ignores it and reads against the live cwd; the response's `anchor` tells the two apart."
 				},
 				"offset": {
 					"type": "number",
@@ -9797,6 +10383,18 @@
 			"description": "Success payload answering register_repo_root.",
 			"x-direction": "client"
 		},
+		"reload_connectorsRequest": {
+			"type": "object",
+			"properties": {
+				"subtype": {
+					"type": "string",
+					"const": "reload_connectors"
+				}
+			},
+			"required": ["subtype"],
+			"description": "@internal Reads the account's claude.ai connectors again: new ones connect, removed ones close, changed and unconnected ones connect again. Read mcp_status after the reply. Only for the program that started this process, after something a person did.",
+			"x-direction": "client"
+		},
 		"reload_output_stylesRequest": {
 			"type": "object",
 			"properties": {
@@ -9855,7 +10453,7 @@
 							"requiredByOrganization": {
 								"type": "boolean",
 								"const": true,
-								"description": "@internal States that the person's organization requires this plugin. Mods see it on plugin.register, and an unmarked copy of its name does not load beside it; it grants no tier or permission (docs/desktop-host-contract.md, D109a). The Agent SDK sends a marked entry in the initialize request under --await-initialize (Claude Code 2.1.261 or newer) whatever pluginDelivery says."
+								"description": "@internal States that the person's organization requires or auto-installs this plugin. Mods see it on plugin.register, which judges it in the organization's tier when it has no hooks module and is shown to be outside every dev-mods folder, and an unmarked copy of its name does not load beside it; it grants no permission (docs/desktop-host-contract.md, D109a). The Agent SDK sends a marked entry in the initialize request under --await-initialize (Claude Code 2.1.261 or newer) whatever pluginDelivery says."
 							}
 						},
 						"required": ["type", "path"],
@@ -15336,6 +15934,119 @@
 			},
 			"required": ["handled"],
 			"description": "@internal Whether a ui_select reached a handler, which, and with what value.",
+			"x-direction": "client"
+		},
+		"update_cloud_sessionRequest": {
+			"type": "object",
+			"properties": {
+				"subtype": {
+					"type": "string",
+					"const": "update_cloud_session"
+				},
+				"session_id": {
+					"type": "string",
+					"description": "A session id from list_cloud_sessions."
+				},
+				"action": {
+					"type": "string",
+					"enum": [
+						"rename",
+						"archive",
+						"unarchive",
+						"delete",
+						"mark_read",
+						"pin",
+						"unpin",
+						"detach",
+						"mark_completed",
+						"mark_opened",
+						"ping"
+					],
+					"description": "archive and delete also stop the work of the session. delete cannot be undone, and also acts on routines and chats bound to the session. The CLI asks nobody: the host confirms. detach moves the session to the top level of the list. ping asks the service to start the session's machine, or keep it running, ahead of a message. A restarted machine may go on with a turn that was cut off. ok does not say that a machine starts. Send one at a time and show no failure."
+				},
+				"title": {
+					"type": "string",
+					"description": "With rename: the new title, 1 to 500 characters."
+				},
+				"at": {
+					"type": "string",
+					"description": "With mark_completed: the row's last_event_at, an earlier completed_at to put back, or empty for no mark."
+				},
+				"cause": {
+					"type": "string",
+					"enum": ["typing", "pickup"],
+					"description": "With ping, required: a person is typing to the session, or sent a message that no machine took."
+				}
+			},
+			"required": ["subtype", "session_id", "action"],
+			"description": "@internal Changes one cloud session at the service, with the CLI's own sign-in. Every action but ping is safe to repeat. Refused where list_cloud_sessions is.",
+			"x-direction": "client"
+		},
+		"update_cloud_sessionResponse": {
+			"oneOf": [
+				{
+					"type": "object",
+					"properties": {
+						"status": {
+							"type": "string",
+							"const": "ok"
+						}
+					},
+					"required": ["status"]
+				},
+				{
+					"type": "object",
+					"properties": {
+						"status": {
+							"type": "string",
+							"const": "refused"
+						},
+						"message": {
+							"type": "string",
+							"description": "A fixed sentence of the CLI's own for a person."
+						},
+						"service_reason": {
+							"type": "string",
+							"description": "The service's own short word for why it refused, in lower case with underscores."
+						}
+					},
+					"required": ["status", "message"]
+				},
+				{
+					"type": "object",
+					"properties": {
+						"status": {
+							"type": "string",
+							"const": "unavailable"
+						},
+						"reason": {
+							"type": "string",
+							"enum": [
+								"started_by_session",
+								"provider",
+								"evaluation_run",
+								"nonessential_traffic",
+								"policy",
+								"policy_unverified",
+								"not_signed_in",
+								"sign_in_expired",
+								"not_found",
+								"forbidden",
+								"temporarily_unavailable",
+								"failed"
+							],
+							"description": "Why it was not carried out, so that a host can choose its own wording. temporarily_unavailable means that asking again may work. Unknown codes degrade to undefined at parse time, so codes can be added without a version bump; a host reads undefined as failed."
+						},
+						"message": {
+							"type": "string",
+							"description": "A fixed sentence of the CLI's own for a person. Never the text of an error or of a response."
+						}
+					},
+					"required": ["status", "message"],
+					"description": "@internal A cloud-session request that was not carried out, and why."
+				}
+			],
+			"description": "@internal ok when the session is now as asked, also if it already was; a delete of a session that is gone answers not_found. After temporarily_unavailable or failed the change may still have been made.",
 			"x-direction": "client"
 		},
 		"update_settingsRequest": {

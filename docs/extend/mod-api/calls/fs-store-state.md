@@ -78,4 +78,4 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 
 ## Sources
 
-[^types]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`.
+[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`.

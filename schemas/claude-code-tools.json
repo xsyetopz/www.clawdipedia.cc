@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-tools.json",
-	"title": "Claude Code built-in tool payloads (Claude Code 2.1.326)",
-	"$comment": "For the input and result of each built-in tool (definitions <Tool>Input and <Tool>Result). Generated from Claude Code 2.1.326 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the tool factory that copies a tool definition's properties (getters included), read as inputSchema and outputSchema on each tool. Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code built-in tool payloads (Claude Code 2.1.327)",
+	"$comment": "For the input and result of each built-in tool (definitions <Tool>Input and <Tool>Result). Generated from Claude Code 2.1.327 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the tool factory that copies a tool definition's properties (getters included), read as inputSchema and outputSchema on each tool. Do not edit by hand: run \"bun run schemas\".",
 	"description": "The program did not give these definitions: ObserverReportResult, TestingPermissionResult, ArtifactCommentsInput, ArtifactDataInput, ArtifactCheckInput, SendMessageResult, ArtifactInput.",
 	"$defs": {
 		"AgentInput": {
@@ -101,6 +101,10 @@
 								},
 								"warning": {
 									"description": "Auto mode's warning to show above `text`: a SECURITY WARNING, or a note that the review could not run",
+									"type": "string"
+								},
+								"toolUseId": {
+									"description": "Id of the subagent's own SubagentHandback tool_use block that sent the report, not of the call that started the agent. Copies of one report repeat it. Show the report even when no such block is loaded",
 									"type": "string"
 								}
 							},
@@ -822,6 +826,12 @@
 											}
 										},
 										"required": ["path", "text", "chars"]
+									}
+								},
+								"token_files": {
+									"type": "array",
+									"items": {
+										"type": "string"
 									}
 								},
 								"unavailable": {
@@ -1760,6 +1770,12 @@
 													}
 												},
 												"required": ["path", "text", "chars"]
+											}
+										},
+										"token_files": {
+											"type": "array",
+											"items": {
+												"type": "string"
 											}
 										},
 										"unavailable": {
@@ -4176,6 +4192,12 @@
 										"required": ["path", "text", "chars"]
 									}
 								},
+								"token_files": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
 								"unavailable": {
 									"type": "string"
 								}
@@ -5112,6 +5134,12 @@
 													}
 												},
 												"required": ["path", "text", "chars"]
+											}
+										},
+										"token_files": {
+											"type": "array",
+											"items": {
+												"type": "string"
 											}
 										},
 										"unavailable": {
@@ -7528,6 +7556,12 @@
 										"required": ["path", "text", "chars"]
 									}
 								},
+								"token_files": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
 								"unavailable": {
 									"type": "string"
 								}
@@ -8464,6 +8498,12 @@
 													}
 												},
 												"required": ["path", "text", "chars"]
+											}
+										},
+										"token_files": {
+											"type": "array",
+											"items": {
+												"type": "string"
 											}
 										},
 										"unavailable": {
@@ -10880,6 +10920,12 @@
 										"required": ["path", "text", "chars"]
 									}
 								},
+								"token_files": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
 								"unavailable": {
 									"type": "string"
 								}
@@ -11816,6 +11862,12 @@
 													}
 												},
 												"required": ["path", "text", "chars"]
+											}
+										},
+										"token_files": {
+											"type": "array",
+											"items": {
+												"type": "string"
 											}
 										},
 										"unavailable": {
@@ -14227,6 +14279,11 @@
 					"description": "@internal True if the command was moved to the background so a message queued for the model could reach it",
 					"type": "boolean"
 				},
+				"backgroundedForAgentReport": {
+					"description": "@internal True if that message was a subagent's message or report, and the command had run for a minute",
+					"type": "boolean",
+					"const": true
+				},
 				"timedOutAfterMs": {
 					"description": "Set when the command hit its timeout and was auto-backgrounded; the timeout value in ms",
 					"type": "number"
@@ -14278,14 +14335,6 @@
 				"stdoutHoldsOutputEnd": {
 					"description": "@internal True when stdout holds the first part of the persisted output, a line saying that the middle was left out, and then its last lines",
 					"type": "boolean"
-				},
-				"tailInputPath": {
-					"description": "@internal Path to a saved copy of the output that the command piped into tail",
-					"type": "string"
-				},
-				"tailInputNote": {
-					"description": "@internal Model-facing note about the file at tailInputPath",
-					"type": "string"
 				},
 				"memoryLimitNote": {
 					"description": "@internal Tells the model that the kernel killed a process for lack of memory while the command ran",
@@ -14454,6 +14503,13 @@
 						}
 					},
 					"required": ["files", "moreFiles"]
+				},
+				"viewedImagePaths": {
+					"description": "@internal The image files that went to the model with this result, for rendering.",
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
 				}
 			},
 			"required": ["stdout", "stderr", "interrupted"]
@@ -15929,6 +15985,11 @@
 					"description": "Not available in this build; leave unset.",
 					"type": "string",
 					"maxLength": 256
+				},
+				"cursor": {
+					"description": "The cursor the last line of a long listing gave, for its next page. Omit to list from the start.",
+					"type": "string",
+					"maxLength": 256
 				}
 			},
 			"additionalProperties": false
@@ -16238,6 +16299,10 @@
 				},
 				"persistent": {
 					"description": "No timeout — runs until TaskStop or session end.",
+					"type": "boolean"
+				},
+				"keptInSandboxByCheck": {
+					"description": "True when the command ran in the sandbox only because its permission check relied on the sandbox; the settings would otherwise have exempted it.",
 					"type": "boolean"
 				}
 			},
@@ -16619,6 +16684,11 @@
 				"backgroundedToDeliverMessage": {
 					"description": "@internal True if the command was moved to the background so a message queued for the model could reach it",
 					"type": "boolean"
+				},
+				"backgroundedForAgentReport": {
+					"description": "@internal True if that message was a subagent's message or report, and the command had run for a minute",
+					"type": "boolean",
+					"const": true
 				},
 				"timedOutAfterMs": {
 					"description": "Set when the command hit its timeout and was auto-backgrounded; the timeout value in ms",
@@ -20281,6 +20351,11 @@
 				"searchCount": {
 					"description": "Number of web searches performed",
 					"type": "number"
+				},
+				"plainPageText": {
+					"description": "@internal The hits hold page text that goes to the model in the plain string, even with citations on",
+					"type": "boolean",
+					"const": true
 				}
 			},
 			"required": ["query", "results", "durationSeconds"]

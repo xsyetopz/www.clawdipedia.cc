@@ -29,7 +29,7 @@ Hide web tools from Claude. Keep MCP tools loaded at the start when they are sma
 | Page | What It Covers |
 | --- | --- |
 | [Files, Search, and Memory](files.md) | `Read`, `Write`, `Edit`, `NotebookEdit`, `Glob`, `Grep`, `LSP`, memory tools |
-| [Shell, Web, and Background Tasks](shell-and-web.md) | `Bash`, `PowerShell`, `Monitor`, `WebFetch`, `WebSearch`, `TaskStop`, `GetTask` |
+| [Shell, Web, and Background Tasks](shell-and-web.md) | `Bash`, `PowerShell`, `Monitor`, `WebFetch`, `WebSearch`, `TaskStop` |
 | [Agents, Tasks, and Planning](agents-and-tasks.md) | `Agent`, `SendMessage`, task tools, cron, `Workflow`, worktrees, plan mode, `AskUserQuestion` |
 | [Gated and Surface-Specific Tools](gated-and-other.md) | Onboarding, design, connectors, self-hosted runner, notifications, `StructuredOutput`, MCP resource tools |
 
@@ -149,7 +149,7 @@ It lists every field of this release. Build on the fields it names. Look each on
 
 ## Sources
 
-[^definitions]: The program, the tool definitions.
-[^toolsearch-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program.
-[^custom-base-url]: The program, and the [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304).
-[^bfs-ugrep]: The program.
+[^definitions]: The program, the tool definitions, `chunk-1vttvse2.js:203832`.
+[^toolsearch-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program, `chunk-ngdgttt1.js:6476`.
+[^custom-base-url]: The program, `chunk-m14bt1pz.js:3262624` and `:2031543`, and the [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304).
+[^bfs-ugrep]: The program, `chunk-m14bt1pz.js:3691209`.

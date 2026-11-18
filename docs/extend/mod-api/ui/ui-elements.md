@@ -258,7 +258,7 @@ The band directly above the prompt input, where surveys draw. The engine draws a
 | Item | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
 | `hasSurvey` | <Documented /> | True while a survey holds the band. A hook yields to it. | `boolean`. Read-only. |
-| `isCollapsed` | <Documented /> | True while the person has collapsed the band: a tree still returns, and nothing of it is on screen. False where the band cannot collapse. | `boolean`. Read-only. Since `2.1.321`. Claude Code passes it in the props of `AbovePrompt`.[^collapsed] |
+| `isCollapsed` | <Documented /> | True while the person has collapsed the band: a tree still returns, and nothing of it is on screen. False where the band cannot collapse. | `boolean`. Read-only. Claude Code passes it in the props of `AbovePrompt`.[^collapsed] |
 | `isWorking` | <Documented /> | True while a model turn is running. | `boolean`. Read-only. |
 | `maxRows` | <Documented /> | Rows the band may take. In fullscreen, what remains of the bottom slot above the prompt. Otherwise the terminal's height. | `number`. Read-only. The slot has a cap of half the terminal's rows. A taller tree scrolls in a window of `scroll.bodyRows`. |
 | `bodyColumns` | <Documented /> | Cells the tree is laid out in. | `number`. Read-only. Size a table to this value, not to `viewport.columns`. |
@@ -423,14 +423,14 @@ export default shader({ fps: 30, passes: [sky] });
 
 ## Sources
 
-[^types]: The Mod API type file of the `2.1.322` program, `schemas/claude-code.d.ts`.
-[^types-323]: The Mod API type file, `schemas/claude-code.d.ts`.
-[^waiting]: The Mod API type file, `schemas/claude-code.d.ts`, `WaitingFor` and `WaitingAgent`. The program, `chunk-s3j7dx93.js:215530`.
-[^above-prompt]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-fvkvyefp.js:197780`.
-[^collapsed]: The program, `chunk-y9bdpp8r.js:541869`.
-[^list]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-fvkvyefp.js:170774` and `chunk-fvkvyefp.js:197780`.
-[^covered]: The program, `chunk-y9bdpp8r.js:554445`.
-[^anchored]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-fvkvyefp.js:168072`.
-[^agent-row]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`, the `AgentRow` member of `RenderPropsOf`.
-[^context-menu]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`, the `ContextMenu` member of `RenderPropsOf`.
-[^shader]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`, `ShaderProps` and the module `claude-code/shader`.
+[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`.
+[^types-323]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`.
+[^waiting]: The Mod API type file, `schemas/claude-code.d.ts`, `WaitingFor` and `WaitingAgent`. The program, `chunk-36ts0j6v.js:211159`.
+[^above-prompt]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-b0yr0k8v.js:197943`.
+[^collapsed]: The program, `chunk-cfxefa64.js:544668`.
+[^list]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-b0yr0k8v.js:170937` and `chunk-b0yr0k8v.js:197943`.
+[^covered]: The program, `chunk-cfxefa64.js:557246`.
+[^anchored]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-b0yr0k8v.js:168235`.
+[^agent-row]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, the `AgentRow` member of `RenderPropsOf`.
+[^context-menu]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, the `ContextMenu` member of `RenderPropsOf`.
+[^shader]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `ShaderProps` and the module `claude-code/shader`.

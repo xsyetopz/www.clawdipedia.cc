@@ -10,7 +10,7 @@ The variables that turn telemetry on and set the exporters are on [Telemetry and
 
 ## Events
 
-The attribute names come from the call sites of the event emitter, read into [`claude-code-otel.json`](schemas.md).[^events] A key that some call sites leave out may be missing from an event, so treat every attribute as optional. The schema has the type of each attribute. Claude Code sends some numbers as strings, so look a field up there before you rely on its type. Only `tool_decision` is marked <Documented />, because earlier pages of this site name it. We did not check the other events against the official [Monitoring](https://code.claude.com/docs/en/monitoring-usage) page.
+The attribute names come from the call sites of the event emitter, read into [`claude-code-otel.json`](schemas.md).[^events] A key that some call sites leave out may be missing from an event, so treat every attribute as optional. The schema has the type of each attribute. Claude Code sends some numbers as strings, so look a field up there before you rely on its type. Only `tool_decision` is marked <Documented />, because earlier pages of this site name it.
 
 | Event | Status | What It Records | Attributes |
 | --- | --- | --- | --- |
@@ -23,7 +23,7 @@ The attribute names come from the call sites of the event emitter, read into [`c
 | `auth` | <Undocumented /> | An auth action ran. | `action`, `success`, `auth_method`, `error_category`, `status_code` |
 | `compaction` | <Undocumented /> | A context compaction ran. | `trigger`, `success`, `duration_ms`, `pre_tokens`, `post_tokens`, `error`, `precompute_reuse` |
 | `feedback_survey` | <Undocumented /> | A step of the session quality survey. | `event_type`, `appearance_id`, `response`, `survey_type`, `enabled_via_override`, `event_origin`, `event_origin_server`, `trigger_type`, `plugin_id_hash`, `plugin.name` |
-| `hook_execution_complete` | <Undocumented /> | The hooks of one hook event finished. Since `2.1.321`, in non-interactive sessions `num_hooks` and `num_success` leave out two built-in hooks after Bash and PowerShell calls.[^hook-complete] `num_hooks` is the length of the list of hooks that ran. Two built-in callback hooks match `Bash\|PowerShell` on `PostToolUse`: the post-commit hook and the post-push hook. The page did not trace which code drops them from the count in non-interactive sessions. | `hook_event`, `hook_name`, `num_hooks`, `num_success`, `num_blocking`, `num_non_blocking_error`, `num_cancelled`, `total_duration_ms`, `stdout_chars`, `additional_context_chars`, `system_message_chars`, `initial_user_message_chars`, `num_outputs_persisted`, `managed_only`, `hook_source`, `safe_mode`, `hook_definitions` |
+| `hook_execution_complete` | <Undocumented /> | The hooks of one hook event finished. In non-interactive sessions `num_hooks` and `num_success` leave out two built-in hooks after Bash and PowerShell calls.[^hook-complete] `num_hooks` is the length of the list of hooks that ran. Two built-in callback hooks match `Bash\|PowerShell` on `PostToolUse`: the post-commit hook and the post-push hook. | `hook_event`, `hook_name`, `num_hooks`, `num_success`, `num_blocking`, `num_non_blocking_error`, `num_cancelled`, `total_duration_ms`, `stdout_chars`, `additional_context_chars`, `system_message_chars`, `initial_user_message_chars`, `num_outputs_persisted`, `managed_only`, `hook_source`, `safe_mode`, `hook_definitions` |
 | `hook_execution_start` | <Undocumented /> | The hooks of one hook event started. | `hook_event`, `hook_name`, `num_hooks`, `managed_only`, `hook_source`, `safe_mode`, `hook_definitions` |
 | `hook_plugin_metrics` | <Undocumented /> | A hook event of a plugin. | `plugin_id`, `hook_event` |
 | `hook_registered` | <Undocumented /> | A hook was registered. | `hook_event`, `hook_type`, `hook_source`, `safe_mode`, `hook_matcher`, `plugin.name`, `plugin_id_hash` |
@@ -47,7 +47,7 @@ The attribute names come from the call sites of the event emitter, read into [`c
 
 | Attribute | Status | What It Reports | Notes |
 | --- | --- | --- | --- |
-| `effort` | <Undocumented /> | The effort level in force for the request. | Since `2.1.312`. Before, it could name a newly picked level before the model applied it. Claude Code takes the level from the last effort change that the conversation holds, and uses the new pick only when there is none. The `api_request` event reads it from `output_config.effort` of the request, and the refusal path passes the same level. We did not trace `api_error` and `api_retries_exhausted` one by one. |
+| `effort` | <Undocumented /> | The effort level in force for the request. | Since `2.1.312`. Before, it could name a newly picked level before the model applied it. Claude Code takes the level from the last effort change that the conversation holds, and uses the new pick only when there is none. The `api_request` event reads it from `output_config.effort` of the request, and the refusal path passes the same level. The `api_error` and `api_retries_exhausted` events pass the same level.[^effort-events] |
 | `mcp_server.name` | <Undocumented /> | The server name. For most servers that a plugin declares it reports `custom`. | Since `2.1.312`, it reports the real name for a remote MCP server with a fixed URL of type `http`, `sse`, or `ws` that a plugin declares, when the plugin comes from an official marketplace that Claude Code vouches for. A server whose endpoint is a template still reports `custom`. |
 
 These two rows and the `safety_event` gate come from the program.[^two-attrs]
@@ -101,16 +101,17 @@ The rows above come from the program.[^export-code]
 
 ## Sources
 
-[^events]: The program.
-[^hook-complete]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program writes both counts at `chunk-4h798pp0.js:4192167` after it starts the event at `:4151026`. The two `internal: true` callback hooks are at `chunk-zc8ekyag.js:6048` (post-commit) and `chunk-y6ncajgm.js:10657` (post-push).
-[^safety-gate]: The program. The gate is `tengu_snoopy_creek`.
-[^mid-turn]: The program, `chunk-27vawgnx.js:4052`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^two-attrs]: The program. The level in force is in `chunk-4h798pp0.js` lines 148959, 150468, and 155307. The server name is in `chunk-d73xe1mr.js` lines 53370 to 53383 and 52520 to 52531, with `custom` at line 46109. The `safety_event` gate is in `chunk-4h798pp0.js` lines 203596, 203677, 203720, and 203781.
+[^events]: The program, the event emitter at `chunk-f41c8jb6.js:19835`.
+[^hook-complete]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program writes `num_hooks` as the length of the hook list and `num_success` at `chunk-m14bt1pz.js:4270594`, after it starts the event at `:4233065`. The two `internal: true` callback hooks are at `chunk-mysw83fh.js:6087` (post-commit) and `chunk-vyzfbb63.js:11476` (post-push).
+[^safety-gate]: The program, `chunk-m14bt1pz.js:4521892` (the gate `tengu_snoopy_creek` and its default `false` at `chunk-m14bt1pz.js:4525265`). The two call sites test it at `chunk-m14bt1pz.js:4523774` and `chunk-m14bt1pz.js:4524395`. The [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312) say Claude Code stops sending the event.
+[^mid-turn]: The program, `chunk-8g2nr9dn.js:4117`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
+[^two-attrs]: The program. The level in force is in `chunk-m14bt1pz.js:3114127` and `chunk-m14bt1pz.js:3288669`. The server name is in `chunk-asj6f58y.js:990352`, with `custom` at `chunk-asj6f58y.js:986893`. The `safety_event` gate is in `chunk-m14bt1pz.js:4525265`, `chunk-m14bt1pz.js:4523774`, and `chunk-m14bt1pz.js:4524395`.
 [^account-notes]: The `2.1.318` release notes: "Added `anthropic.plan`, `anthropic.seat_type`, `anthropic.provider` and `anthropic.custom_base_url` to OTel metrics, events and spans".
-[^attr-set]: The program. The set is built in `chunk-agqs570q.js` (function `$1d9e2a`, line 136). The plan list is on line 116, and the tier map follows it.
+[^attr-set]: The program. The plan list and the tier map are at `chunk-f41c8jb6.js:3600`. The attribute set is built at `chunk-f41c8jb6.js:4615`.
 [^probe-attrs]: `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only notes319.otel-attrs`. Cases `api-key`, `max-plan`, `team-premium`, `enterprise-usage-based`, `free-plan`. Each case exports metrics, logs, and traces to a local OTLP receiver (`tools/release/lib/otlp.ts`) with `http/json`.
 [^host-notes]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326): "Added `OTEL_RESOURCE_INCLUDE_HOST` to include `host.name` and `host.id` in OpenTelemetry resource attributes (off by default)".
-[^host-check]: The program, `chunk-7a41jn20.js:1798`. The check is the function `$3f913b` in `chunk-7a41jn20.js`, and the resource is built at `chunk-7a41jn20.js:1831`.
+[^host-check]: The program, `chunk-rd5tcjx6.js:38959`. The resource is built at `chunk-rd5tcjx6.js:39177`.
 [^export-notes]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323).
-[^export-code]: The program. The default protocol is at `chunk-7a41jn20.js@37369` and `@41500`. The loopback check and the 25 second cap are at `chunk-7a41jn20.js@55746`. The resource attribute parser is at `chunk-x9cwn3h2.js@672`.
-[^managed-denial]: The program, `chunk-4h798pp0.js:222660-222698` and `:233193-233262`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^export-code]: The program. The default protocol is at `chunk-rd5tcjx6.js:37492` and `@41500`. The loopback check and the 25 second cap are at `chunk-rd5tcjx6.js:55869`. The resource attribute parser is at `chunk-s279yhy6.js:672`.
+[^managed-denial]: The program, `chunk-m14bt1pz.js:226694-226722` (a refusal from a `PreToolUse` hook that managed settings run is kept as `managedDenial`) and `:236904-236948` (that refusal calls `onPermissionDenial` and writes the `tool_decision` event). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^effort-events]: The program, `chunk-m14bt1pz.js:3089324` (`api_error` takes `effort` and `api_retries_exhausted` adds it when it is set). The [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312) list the effort fix and the `mcp_server.name` change.

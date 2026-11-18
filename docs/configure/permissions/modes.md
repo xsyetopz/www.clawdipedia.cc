@@ -66,6 +66,16 @@ Every permission decision carries a `decisionReason` with one of these types. Ho
 | `classifier` | <Undocumented /> | The auto mode classifier decided | The text is `Denied by auto mode classifier` or `Allowed by auto mode classifier` | `auto` mode |
 | `other` | <Undocumented /> | Anything else | For example a closed permission stream | Hosts |
 
+## Path and Prompt Checks
+
+These changes came in `2.1.327`.[^changes-327]
+
+- Path checks refuse some symbolic links.
+- The `2.1.327` release notes say that Claude Code changed what counts as inside a working directory, so some paths now ask for permission.
+- A `Bash` command whose variables expand to very long text is denied. The message says: "This command's variables and substitutions expand to more text than the permission check reads, so it was not run. Use fewer or shorter ones, or put the long text in a file."[^long-vars]
+- On a permission prompt whose list shows numbers and ends with the No answer, the Down key stops at No instead of wrapping around to the first answer. The release notes also say that a number past the last answer moves to No.
+- The release notes say that Esc works on a permission prompt that has just appeared.
+
 ## Safety Checks
 
 A `safetyCheck` reason carries a `circuitBreaker` name. Three flags describe the check.
@@ -74,7 +84,7 @@ A `safetyCheck` reason carries a `circuitBreaker` name. Three flags describe the
 
 | Check | Status | What it covers | Behavior | Seen In |
 | --- | --- | --- | --- | --- |
-| `dangerousRemoval` | <Undocumented /> | Critical-path `rm` prompts | Bypass-immune, classifier-routed. A time limit applies unless `CLAUDE_CODE_DISABLE_DANGEROUS_RM_TIMEOUT=1`. Since `2.1.309`, in `bypassPermissions` mode in the desktop app and VS Code, a dangerous `rm` or `rmdir` is denied at once with a hint to rewrite it, so unattended sessions keep going.[^v309] | `Bash` |
+| `dangerousRemoval` | <Undocumented /> | Critical-path `rm` prompts | Bypass-immune, classifier-routed. A time limit applies unless `CLAUDE_CODE_DISABLE_DANGEROUS_RM_TIMEOUT=1`. Since `2.1.309`, in `bypassPermissions` mode in the desktop app and VS Code, a dangerous `rm` or `rmdir` is denied at once with a hint to rewrite it, so unattended sessions keep going.[^v309] Since `2.1.327`, when the check cannot parse a command that has no `rm`, the refusal message tells Claude that it can send a command that deletes nothing again in plain syntax that `bash` and `zsh` both read. It also tells Claude that a command that deletes anything needs the user.[^rm-unparsed] | `Bash` |
 | `backgroundOperator` | <Undocumented /> | Background operator calls | Classifier-routed | Background sessions |
 | `suspiciousWindowsPath` | <Undocumented /> | Odd Windows paths | Classifier-routed | Windows |
 | `isolatePeerMachines` | <Documented /> | Peer machine isolation | Bypass-immune. Setting `isolatePeerMachines` | Managed |
@@ -99,12 +109,15 @@ Since `2.1.326`, a tool call in `bypassPermissions` mode asks for approval when 
 
 ## Sources
 
-[^mode-names]: The program.
-[^project-default]: The program.
-[^killswitch]: The program, `chunk-69n3keqc.js:4773`, `:7994`. The program logs `auto mode killswitch active (override- or payload-served) — falling back to default`.
-[^bypass-errors]: The program.
-[^cloud-bypass]: The program error text.
-[^reasons]: The program.
+[^mode-names]: The program, `chunk-k57p2hm4.js:1526`.
+[^project-default]: The program, `chunk-rthqjjhy.js:6971-7046` and the picker text in `chunk-rqrmxgcm.js:10403`.
+[^killswitch]: The [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-rthqjjhy.js:4773` (the `--permission-mode` flag), `:5258` (an agent definition's `permissionMode: auto`), `:6475` (`defaultMode: auto` in an IDE session), and `:7994`. The program logs `auto mode killswitch active (override- or payload-served) — falling back to default`.
+[^bypass-errors]: The program, `chunk-rthqjjhy.js:8470` and `chunk-7at7cxxb.js:9835`.
+[^cloud-bypass]: The program error text, `chunk-61wd57dm.js:23679`.
+[^reasons]: The program, `chunk-k57p2hm4.js:4328`.
+[^changes-327]: The symbolic link refusals are in the program at `chunk-0kfay0s8.js:1132-1149`, with the text "Refusing to read a file whose path could not be vetted". The list control stops the Down key at the last row in the program at `chunk-d2dqtfhk.js:3588` (`stopsAtLastRow`). The list turns this on at `chunk-d2dqtfhk.js:27997` when the permission prompt frame sets it, the numbers show, and the last answer is the decline answer. The permission prompt frame sets it at `chunk-we95sh0m.js:3754`. The other items in this list are from the [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^long-vars]: The program, `chunk-m14bt1pz.js:83610`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^v309]: [`2.1.309` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.309).
 [^mode-use]: Official page [Choose a Permission Mode](https://code.claude.com/docs/en/permission-modes), table "Available modes", column "Best for".
-[^crashed-check]: The program, `chunk-4h798pp0.js:179495-179530`, `:179995-180010`, `:180155-180161`, and `:175736`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The denial where no one can be asked rests on the release notes. This page did not find that line in the program.
+[^crashed-check]: The program, `chunk-m14bt1pz.js:3632674` (the decision reason), `:3632940` (the message), `:3643325` (the crash becomes an ask before the mode decides), and `:3641116` (the refusal text where no one can be asked). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^rm-unparsed]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-m14bt1pz.js:1489671`. The `2.1.326` message ends after `This requires explicit approval.`

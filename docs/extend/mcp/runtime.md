@@ -122,6 +122,10 @@ stateDiagram-v2
   Failed --> Connecting: <code>/mcp</code> reconnect
 ```
 
+Since `2.1.327`, Claude Code retries in the background, for about a day, most remote servers that it reaches by hostname over `https`. This helps after a longer outage, such as a VPN drop. Claude Code skips servers at an IP address, at `localhost`, at a private or internal name such as `.local`, `.internal`, or `.lan`, and on the host name of your own machine.[^retry-day]
+
+Since `2.1.327`, MCP server logs record only the mode, the action, and the field names of an elicitation request and of a hook answer. They no longer record the full contents.[^elicit-log]
+
 ## Errors
 
 Rows with a start of a message are families. The backticked text is the start that every message in the family shares.
@@ -144,13 +148,15 @@ Rows with a start of a message are families. The backticked text is the start th
 
 ## Sources
 
-[^undoc]: The program, for rows marked <Undocumented />.
-[^schema-checks]: The program, `chunk-j76re4j2.js:198970` and `chunk-15b1e2ff.js:8842`.
+[^undoc]: The program, for example `chunk-sqn39hq2.js:253429` for `ENABLE_MCP_LARGE_OUTPUT_FILES`, `chunk-77827yq1.js:1305` for the old tool names, and `chunk-asj6f58y.js:982309` for the registry fetch, for rows marked <Undocumented />.
+[^schema-checks]: The program, `chunk-sqn39hq2.js:208794` and `chunk-xstndjzk.js:8834`.
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^registry]: The program, `chunk-d73xe1mr.js:943142`.
-[^answer-later]: The program, `chunk-y9bdpp8r.js:84336`, `chunk-y9bdpp8r.js:84403`, `chunk-3gmv67w3.js:496`, `chunk-av04ye68.js:34`, and `chunk-6w6hs8a0.js:359`. The task puts the question aside and sends no response to the server. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
+[^registry]: The program, `chunk-asj6f58y.js:982000`.
+[^answer-later]: The program, `chunk-cfxefa64.js:1324943`. The task puts the question aside and sends no response to the server. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
 [^answer-later-notes]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^task-question-closed]: The program, `chunk-y9bdpp8r.js:47602`, `chunk-y9bdpp8r.js:56229-56275`, `chunk-6w6hs8a0.js:208-232`, and `chunk-av04ye68.js:30-35`. The task row and the footer show `needs your input`. Enter in the task detail calls the stored question opener. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^task-question-draft]: The program, `chunk-70p69fbk.js:133-152`. The question dialog of a background MCP task is requested with `alsoHideWhile: ["draft"]`. The wait for the send or the clear comes from the [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325), which also say the spinner and turn timer keep running.
-[^json-position]: The program, `chunk-bwzce3yt.js:1283-1297` and `chunk-4h798pp0.js:229650-229670`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^connector-hold]: The program, `chunk-4h798pp0.js:228213-228256`.
+[^task-question-closed]: The program, `chunk-cfxefa64.js:790294` and `chunk-cfxefa64.js:907804`. The task row and the footer show `needs your input`. Enter in the task detail calls the stored question opener. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
+[^task-question-draft]: The program, `chunk-qmnnrdsh.js:2859`. The question dialog of a background MCP task is requested with `alsoHideWhile: ["draft"]`. The wait for the send or the clear comes from the [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325), which also say the spinner and turn timer keep running.
+[^json-position]: The program, `chunk-ej8a0d5c.js:13187` and `chunk-m14bt1pz.js:4669426`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^connector-hold]: The program, `chunk-m14bt1pz.js:4639808-4640026`.
+[^retry-day]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-pachw208.js:2104` for 69 attempts that wait up to 900000 ms each, `chunk-cfxefa64.js:1884729` for the attempt, and `chunk-xstndjzk.js:13559` for the "failed · retrying" label. The test is in `chunk-t1edjgpn.js:957-2790`: the server is `http`, `sse`, or a claude.ai proxy with an error code, the URL scheme is `https`, the host is not an IP address, `localhost`, or a private name, and the gate `tengu_smooth_lark` is on (default on). The name lists are in `chunk-s9vw8wtm.js:1700-3780`, and the own-host test is `BDr` there.
+[^elicit-log]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-sqn39hq2.js:172869` and `chunk-002msphc.js:299`.

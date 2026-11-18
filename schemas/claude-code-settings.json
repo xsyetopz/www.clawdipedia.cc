@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-settings.json",
-	"title": "Claude Code settings.json (Claude Code 2.1.326)",
-	"$comment": "For settings.json (user, project, local). Generated from Claude Code 2.1.326 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code settings.json (Claude Code 2.1.327)",
+	"$comment": "For settings.json (user, project, local). Generated from Claude Code 2.1.327 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
 	"type": "object",
 	"properties": {
 		"$schema": {
@@ -453,7 +453,7 @@
 			]
 		},
 		"attributionProject": {
-			"description": "The claude.ai Project this session names for your organization's usage reports: the Project's ID, starting with \"claude_proj_\" or \"chan_\", or the UUID of a \"claude_proj_\" Project. An empty string names none and stops lower-precedence files from naming one; the organization default still applies. Sent only when Claude Code uses your claude.ai login, connects directly to the Anthropic API, is not in a cloud session, and CLAUDE_CODE_ATTRIBUTION_HEADER is not 0. CLAUDE_CODE_ATTRIBUTION_PROJECT takes precedence over it. Set in managed settings, it overrides people's own settings files. A project's .claude/settings.json and settings.local.json count only once the folder is trusted; for runs in a folder nobody has trusted, such as CI, use CLAUDE_CODE_ATTRIBUTION_PROJECT.",
+			"description": "The claude.ai Project this session names for your organization's usage reports: the Project's ID, starting with \"claude_proj_\" or \"chan_\", or the UUID of a \"claude_proj_\" Project. An empty string names none and stops lower-precedence files from naming one; the organization default still applies. A Project is sent only when Claude Code uses your claude.ai login, connects directly to the Anthropic API, is not in a cloud session, and CLAUDE_CODE_ATTRIBUTION_HEADER is not 0. CLAUDE_CODE_ATTRIBUTION_PROJECT takes precedence over it. Set in managed settings, it overrides people's own settings files. A project's .claude/settings.json and settings.local.json count only once the folder is trusted; for runs in a folder nobody has trusted, such as CI, use CLAUDE_CODE_ATTRIBUTION_PROJECT. Behind a Claude apps gateway that reports usage by group, name one of your groups instead, such as \"payments\"; CLAUDE_CODE_ATTRIBUTION_HEADER does not affect that.",
 			"type": "string"
 		},
 		"includeCoAuthoredBy": {
@@ -1741,7 +1741,7 @@
 						"type": "boolean"
 					},
 					"pluginDigests": {
-						"description": "Deprecated and ignored: settings that hold it still load. A plugin takes the organization tier when managed settings enable it, declare its marketplace with a remote source and list it in prependPlugins or appendPlugins.",
+						"description": "Deprecated and ignored: settings that hold it still load. A plugin takes the organization tier when managed settings enable it and declare its marketplace with a remote source.",
 						"type": "object",
 						"propertyNames": {
 							"type": "string"
@@ -2235,7 +2235,7 @@
 						"type": "boolean"
 					},
 					"pluginDigests": {
-						"description": "Deprecated and ignored: settings that hold it still load. A plugin takes the organization tier when managed settings enable it, declare its marketplace with a remote source and list it in prependPlugins or appendPlugins.",
+						"description": "Deprecated and ignored: settings that hold it still load. A plugin takes the organization tier when managed settings enable it and declare its marketplace with a remote source.",
 						"type": "object",
 						"propertyNames": {
 							"type": "string"
@@ -3211,7 +3211,7 @@
 			"enum": ["first-wins", "merge"]
 		},
 		"managedSourcesBehavior": {
-			"description": "Controls how the managed settings sources compose. \"first-wins\" (default): the highest-priority source present (server-managed > MDM (managed plist / HKLM) > managed-settings.json) is the managed tier alone. \"merge\": every present source deep-merges with fixed precedence server-managed > MDM > managed-settings.json — scalars take the highest source's value (a restrictive boolean or enum — the allowManaged*Only locks, the disable* switches, the sandbox lock family — takes the strictest value any source sets) and arrays union, except fallbackModel, the restriction allowlists allowedMcpServers, allowedProviders, availableModels, strictKnownMarketplaces and allowedChannelPlugins, and sandbox.credentials.awsPairs and sandbox.ripgrep (the highest source that sets one owns it whole), modelOverrides (the whole map of the highest source that sets it, dropped when that source sits below the one that sets availableModels), managedMcpServers (server names union; a name set by two sources takes the higher source's whole entry), and the keys taken from the highest source only: the auth pins forceLoginOrgUUID, forceLoginMethod, forceLoginGatewayUrl and gatewayInternalNetworks, the credential helpers apiKeyHelper, awsAuthRefresh, awsCredentialExport, gcpAuthRefresh, otelHeadersHelper and proxyAuthHelper, modelPicker, permissions.defaultMode, parentSettingsBehavior and the policyHelper configuration (env keeps its own per-key union). In both modes, a forceLoginOrgUUID, or a forceLoginMethod of claudeai or console, that this machine's own MDM policy or managed settings file sets applies ahead of server-managed settings. Honored only from the highest-priority source present; enable it only when every lower source is admin-controlled, since lower sources then contribute entries such as permissions.allow. HKCU and --managed-settings never take part in the merge.",
+			"description": "Controls how the managed settings sources compose. \"first-wins\" (default): the highest-priority source present (server-managed > MDM (managed plist / HKLM) > managed-settings.json) is the managed tier alone. \"merge\": every present source deep-merges with fixed precedence server-managed > MDM > managed-settings.json — scalars take the highest source's value (a restrictive boolean or enum — the allowManaged*Only locks, the disable* switches, the sandbox lock family — takes the strictest value any source sets) and arrays union, except fallbackModel, the restriction allowlists allowedMcpServers, allowedProviders, availableModels, strictKnownMarketplaces and allowedChannelPlugins, and sandbox.credentials.awsPairs and sandbox.ripgrep (the highest source that sets one owns it whole), modelOverrides (the whole map of the highest source that sets it, dropped when that source sits below the one that sets availableModels), managedMcpServers (server names union; a name set by two sources takes the higher source's whole entry), and the keys taken from the highest source only: the auth pins forceLoginOrgUUID, forceLoginMethod, forceLoginGatewayUrl and gatewayInternalNetworks, allowNestedModelAccessUnderForceLogin, the credential helpers apiKeyHelper, awsAuthRefresh, awsCredentialExport, gcpAuthRefresh, otelHeadersHelper and proxyAuthHelper, modelPicker, permissions.defaultMode, parentSettingsBehavior and the policyHelper configuration (env keeps its own per-key union). In both modes, a forceLoginOrgUUID, or a forceLoginMethod of claudeai or console, that this machine's own MDM policy or managed settings file sets applies ahead of server-managed settings. Honored only from the highest-priority source present; enable it only when every lower source is admin-controlled, since lower sources then contribute entries such as permissions.allow. HKCU and --managed-settings never take part in the merge.",
 			"type": "string",
 			"enum": ["first-wins", "merge"]
 		},
@@ -3228,6 +3228,10 @@
 					}
 				}
 			]
+		},
+		"allowNestedModelAccessUnderForceLogin": {
+			"description": "Self-hosted runner hosts only. Set to true to let a Claude Code started by a runner session's command use the runner's model access (--nested-model-access) when this machine's managed settings set forceLoginOrgUUID or forceLoginMethod. It asks the runner which organization the session owner's sign-in belongs to, and stops if the pin does not permit it or the runner does not answer. Without this key it is left signed out. Any program on the machine can pretend to be the runner, so with this key the pin is not a security boundary: set it on runner hosts only, never in a profile that reaches people's own computers. Honored only from this machine's own administrator sources (MDM, the managed settings file, or a policy helper that they name); ignored in server-managed, user, project, local and --settings sources.",
+			"type": "boolean"
 		},
 		"otelHeadersHelper": {
 			"description": "Path to a script that outputs OpenTelemetry headers",
@@ -3757,10 +3761,10 @@
 							{
 								"type": "integer",
 								"minimum": 100000,
-								"maximum": 1000000
+								"maximum": 9007199254740991
 							}
 						],
-						"description": "Auto-compact window for this model, in tokens (100000 to 1000000), or \"auto\" for the window tuned for the model. Within one settings file it replaces the top-level autoCompactWindow for the model. /autocompact saves here. The canonical model name as key also matches its dated, [1m], Bedrock and Vertex spellings."
+						"description": "Auto-compact window for this model, in tokens (at least 100000), or \"auto\" for the window tuned for the model. Within one settings file it replaces the top-level autoCompactWindow for the model. /autocompact saves here. The canonical model name as key also matches its dated, [1m], Bedrock and Vertex spellings."
 					}
 				},
 				"additionalProperties": {}
@@ -3774,7 +3778,7 @@
 			"description": "Auto-compact window size",
 			"type": "integer",
 			"minimum": 100000,
-			"maximum": 1000000
+			"maximum": 9007199254740991
 		},
 		"advisorModel": {
 			"description": "Advisor model for the server-side advisor tool.",
@@ -4169,6 +4173,36 @@
 			"type": "integer",
 			"exclusiveMinimum": 0,
 			"maximum": 9007199254740991
+		},
+		"autoCompactRaisedForLoad": {
+			"description": "@internal Read from the flag settings only, in Claude Desktop's Code tab: true lets a conversation compact at twice what is still in each request after a summary (system prompt, tools, instruction files), where that is above its auto-compact threshold.",
+			"type": "boolean"
+		},
+		"autoCompactOfferAnswer": {
+			"description": "@internal Read from the flag settings only, in Claude Desktop's Code tab: the person's answer to the app's offer of a lower auto-compact window, which Claude Code records on this computer. `tokens` is the window they chose or kept, and `at` is when they answered (epoch ms)",
+			"type": "object",
+			"properties": {
+				"model": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 200
+				},
+				"choice": {
+					"type": "string",
+					"enum": ["accept", "keep", "undo"]
+				},
+				"tokens": {
+					"type": "integer",
+					"exclusiveMinimum": 0,
+					"maximum": 9007199254740991
+				},
+				"at": {
+					"type": "integer",
+					"exclusiveMinimum": 0,
+					"maximum": 9007199254740991
+				}
+			},
+			"required": ["model", "choice", "tokens", "at"]
 		},
 		"idleCompaction": {
 			"description": "Set to false to stop Claude Code from compacting a long conversation while the session is idle. Defaults to true.",

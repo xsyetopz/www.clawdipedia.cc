@@ -63,10 +63,10 @@ Options of `$.ui.notify`. Used by `$.ui.notify`.
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `title` | <Documented /> | What heads the notification, sent as the mod gives it. The engine puts no name of its own beside it. If left out or empty, the name of the plugin. | Type: `string`. Optional. |
-| `key` | <Undocumented /> | A name for this notification. A new notification with the same key from the same plugin replaces the last one. `$.ui.cancelNotify(key)` takes it back. If left out, each call is its own notification. | Type: `string`. Optional. 1 to 64 characters, with no hidden characters or stray spaces, and not a name that every object has, such as `constructor`. Since `2.1.321`. |
-| `delayMs` | <Undocumented /> | How long to wait before the notification shows. The client holds it, so it can show after the session ends. | Type: `number`. Optional. A whole number from 0 to 604800000 (7 days). Do not give it with `at`. Since `2.1.321`. |
-| `at` | <Undocumented /> | The clock time to show the notification. | Type: `number`. Optional. Epoch milliseconds, a whole number from 0 to 7 days from now. Do not give it with `delayMs`. Since `2.1.321`. |
-| `untilBack` | <Undocumented /> | With `delayMs` or `at`: the client drops the notification if the person comes back to the session before it shows. | Type: `boolean`. Optional. Since `2.1.321`. |
+| `key` | <Undocumented /> | A name for this notification. A new notification with the same key from the same plugin replaces the last one. `$.ui.cancelNotify(key)` takes it back. If left out, each call is its own notification. | Type: `string`. Optional. 1 to 64 characters, with no hidden characters or stray spaces, and not a name that every object has, such as `constructor`. |
+| `delayMs` | <Undocumented /> | How long to wait before the notification shows. The client holds it, so it can show after the session ends. | Type: `number`. Optional. A whole number from 0 to 604800000 (7 days). Do not give it with `at`. |
+| `at` | <Undocumented /> | The clock time to show the notification. | Type: `number`. Optional. Epoch milliseconds, a whole number from 0 to 7 days from now. Do not give it with `delayMs`. |
+| `untilBack` | <Undocumented /> | With `delayMs` or `at`: the client drops the notification if the person comes back to the session before it shows. | Type: `boolean`. Optional. |
 
 The engine sends `key`, `delayMs`, `at`, and `untilBack` to the client in the `ui_notify` stream message, as `key`, `delay_ms`, `at`, and `until_back`. Only that message reads the timing fields. The terminal notification channels do not.[^notify-read] A bad option makes the call fail with one of these texts:
 
@@ -265,10 +265,10 @@ The size that a surface draws into, in character cells of the monospace metric o
 
 ## Sources
 
-[^notify-read]: The program, checks `chunk-4h798pp0.js:4774303` (`HEs`), call `chunk-fvkvyefp.js:314112`, and the `ui_notify` message `chunk-bprgtdg6.js:563309`.
-[^dock]: The program. [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^placement]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-bprgtdg6.js:568347`.
-[^progress-props]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-fvkvyefp.js:22132`.
-[^progress-node]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-bprgtdg6.js:868314`.
-[^shader-props]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`, `ShaderProps`.
-[^render-plugin]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-fvkvyefp.js:175342`.
+[^notify-read]: The program, checks `chunk-m14bt1pz.js:4847412` (`kri`), call `chunk-b0yr0k8v.js:314567`, and the `ui_notify` message `chunk-rj3e7agr.js:566707`.
+[^dock]: The program, `chunk-cfxefa64.js:550203`. [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
+[^placement]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-rj3e7agr.js:571341`.
+[^progress-props]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-b0yr0k8v.js:22132`.
+[^progress-node]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-rj3e7agr.js:887858`.
+[^shader-props]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `ShaderProps`.
+[^render-plugin]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-b0yr0k8v.js:175506`.

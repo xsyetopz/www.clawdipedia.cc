@@ -20,7 +20,7 @@ claude -p "/debug the login test fails on CI"
 
 - The setting `disableBundledSkills` and the env var `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS` remove them.
   The switch is on when the env var is set or the setting is exactly `true`.[^switch]
-  It also empties the list of bundled workflows, so no bundled workflow remains for the `Workflow` tool to run.[^switch]
+  It also empties the list of bundled workflows, so no bundled workflow remains for the `Workflow` tool to run.[^switch-workflows]
   The switch does not turn the `Workflow` tool itself off. Use `disableWorkflows` for that, and see [Agents and Remote Settings](../../configure/settings/agents-and-remote.md). Built-in commands that can be typed, such as `/doctor`, stay available to you.
   The model gets a refusal that names the setting and the env var. Skills from plugins, `.claude/skills`, and `.claude/commands` are not affected.
 - Some skills have their own switch. `DISABLE_DOCTOR_COMMAND` hides `/doctor`, and the kill switch above does not remove `/doctor`.
@@ -85,15 +85,16 @@ This table holds the size of one line and the order of the `skillOverrides` valu
 
 ## Sources
 
-[^switch]: The program.
-[^skill-switches]: The program, `chunk-4h798pp0.js`.
-[^allow-list]: The program, list of bundled skill names and the `allow_bundled_skills` key.
-[^listing]: The program, `chunk-4h798pp0.js`.
+[^switch]: The program, `chunk-qtkq440d.js:14-18`.
+[^switch-workflows]: The program, `chunk-dx6t3q39.js:19-23`, which returns an empty list when the switch is on. The setting text in `chunk-ja5z738t.js:9004-9008` says that bundled skills and workflows are removed.
+[^skill-switches]: The program, `chunk-3z330av7.js:225962-226105`.
+[^allow-list]: The program, list of bundled skill names and the `allow_bundled_skills` key, `chunk-f2nneka2.js:435` and `chunk-qtkq440d.js:492`.
+[^listing]: The program, `chunk-m14bt1pz.js:2825289`.
 [^v307]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307).
-[^claude-api]: The program. The flags are `tengu_cosmic_sketch` and `tengu_typed_trinket`.
-[^claude-api-311]: The program, `chunk-qb6rgffc.js:5303` (startup registration) and `chunk-pcxjjtda.js:385` (definition).
-[^platform]: The program, `chunk-m935gg7t.js:685` and `chunk-m935gg7t.js:669`.
-[^secure]: [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304). The program.
-[^verify]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312). The program, `chunk-qb6rgffc.js:5213` (short text) and `chunk-qb6rgffc.js:5207` (long description).
+[^claude-api]: The program, `chunk-2vcnvx3f.js:9494` and `chunk-z52m4nxj.js:24137`. The flags are `tengu_cosmic_sketch` and `tengu_typed_trinket`.
+[^claude-api-311]: The program, `chunk-3z330av7.js:5316` (startup registration) and `chunk-2vcnvx3f.js:402` (definition).
+[^platform]: The program, `chunk-5hejrm7d.js:689` and `chunk-5hejrm7d.js:673`.
+[^secure]: [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304). The program, `chunk-2vcnvx3f.js:11740`.
+[^verify]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312). The program, `chunk-3z330av7.js:5226` (short text) and `chunk-3z330av7.js:5220` (long description).
 [^v304]: [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304).
-[^security]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-4h798pp0.js:2181659` and `chunk-4h798pp0.js:2181948`.
+[^security]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-m14bt1pz.js:2223814` and `chunk-m14bt1pz.js:2224103`.

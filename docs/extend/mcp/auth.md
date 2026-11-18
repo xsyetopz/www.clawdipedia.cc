@@ -133,11 +133,11 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^auth-rows]: The program, for the rows marked <Undocumented /> or <Gated />.
-[^cimd-env]: The program.
-[^xaa-gate]: The program.
-[^xaa-changed]: The program, `chunk-cyt43yzs.js:683`.
-[^list-timeout]: The program, `chunk-4h798pp0.js:4536411`.
-[^settings-check]: The program, `chunk-4h798pp0.js:4536411` and `chunk-cyt43yzs.js:3277`. The flag is `require_connector_block_on_plugin_servers`.
-[^many-hosts]: The program, `chunk-rbbv3rz7.js:22439`. The program does not show here what a caller does with the error.
-[^helper-failed]: The program, `chunk-cyt43yzs.js:354-365` and `chunk-j76re4j2.js:5662-5697`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^auth-rows]: The program, `chunk-kg22edt2.js:33464` and `chunk-kg22edt2.js:44747`, for the rows marked <Undocumented /> or <Gated />.
+[^cimd-env]: The program, `chunk-kg22edt2.js:44747`.
+[^xaa-gate]: The program, `chunk-kg22edt2.js:33464`.
+[^xaa-changed]: The program, `chunk-kg22edt2.js:14086`.
+[^list-timeout]: The program, `chunk-m14bt1pz.js:4607108`.
+[^settings-check]: The program, `chunk-m14bt1pz.js:4607108` and `chunk-kg22edt2.js:3279`. The flag is `require_connector_block_on_plugin_servers`.
+[^many-hosts]: The program, `chunk-a9bnjyrw.js:23791`.
+[^helper-failed]: The program, `chunk-kg22edt2.js:7211`, `chunk-kg22edt2.js:6050`, and `chunk-sqn39hq2.js:278755`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

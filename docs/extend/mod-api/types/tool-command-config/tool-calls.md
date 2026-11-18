@@ -12,13 +12,13 @@ Each type below has its own table of fields.
 
 ### `ToolCallReserved`
 
-The keys that the input of `tool.call` carries beside the arguments of the tool. The engine strips them before the tool runs, so the tool sees none of them. `consent` holds the words of the person for the press that raised the call. The permission path reads it as the request of the user.
+The keys that the input of `tool.call` carries beside the arguments of the tool. The engine strips them before the tool runs, so the tool sees none of them. `consent` holds the words of the person for the press that raised the call. Since `2.1.327`, it joins the context of the run as a human turn, which the permission path reads as the request of the user, only when the call answers the press, input, or pick of the person on an element of this plugin (not one in a desktop `Client`). The call must come from the closure of that element, or from this plugin's own hook on that event before it returns or times out, with no `Stop` standing since the gesture. Any other call runs as it would without `consent`.[^consent]
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `tool` | <Documented /> | The name of the tool. | Type: `T`. |
 | `tool_use_id` | <Documented /> | The ID of the tool call. | Type: `string`. Optional. |
-| `consent` | <Documented /> | The words of the person for the press that raised the call. The tool never sees it. | Type: `string`. Optional. |
+| `consent` | <Documented /> | The words of the person for the press that raised the call. The tool never sees it. | Type: `string`. Optional. Since `2.1.327`, it counts as the request of the user only for a call that answers a press, input, or pick on this plugin's own element (see above). |
 
 ### `ToolCallResult`
 
@@ -99,7 +99,7 @@ What a `tool.describe` hook returns: the description that the model sees for tha
 | --- | --- | --- | --- |
 | `description` | <Documented /> | The description that the model sees for the tool. | Type: `string`. |
 | `isDeferred` | <Documented /> | Where the tool waits. `true` puts it behind ToolSearch. | Type: `ToolDeferral`. Optional. |
-| `breakPromptCache` | <Documented /> | Sends a changed description or placement at the next turn. It rewrites the whole prompt cache and drops the earlier thinking of the model. | Type: `boolean`. Optional. Since `2.1.321`. Left out, a changed description waits for a new thread or a compaction. A changed placement waits for a new thread or `/clear`, because a compaction keeps the tool block. Before `2.1.321`, a changed answer for a tool that a thread had sent went out at the next turn.[^break-cache] |
+| `breakPromptCache` | <Documented /> | Sends a changed description or placement at the next turn. It rewrites the whole prompt cache and drops the earlier thinking of the model. | Type: `boolean`. Optional. Left out, a changed description waits for a new thread or a compaction. A changed placement waits for a new thread or `/clear`, because a compaction keeps the tool block. Before `2.1.321`, a changed answer for a tool that a thread had sent went out at the next turn.[^break-cache] |
 
 ### `ToolEnvelope`
 
@@ -230,12 +230,13 @@ One tool_use block of an assistant message, with its outcome once the transcript
 
 ## Sources
 
-[^read-only]: The program.
+[^read-only]: The program, `chunk-m14bt1pz.js:67175`.
+[^consent]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`. The text of `ToolCallReserved`.
 [^ceiling]: `schemas/claude-code.d.ts`, `ToolCheckInput`.
 [^ceiling-result]: `schemas/claude-code.d.ts`, `ToolCheckInput`.
-[^decider]: The program.
-[^break-cache]: `captures/2.1.321/types.diff`.
-[^tool-info]: `schemas/claude-code.d.ts`, `ToolInfo`. The program, `chunk-vehym80v.js:122549`, `chunk-4h798pp0.js:4729396`.
+[^decider]: The program, `chunk-b0yr0k8v.js:214982`.
+[^break-cache]: `schemas/claude-code.d.ts`, `PromptSectionResult` and `ToolDescribeResult` (`breakPromptCache`).
+[^tool-info]: `schemas/claude-code.d.ts`, `ToolInfo`. The program, `chunk-nx8dehjc.js:123099`, `chunk-m14bt1pz.js:4801441`.
 [^tool-mcp-server]: `schemas/claude-code.d.ts`, `ToolDescribeInput` and `ToolMcpServer`.
-[^op-hold]: `opHoldMs: 30000`, `chunk-fvkvyefp.js:218187`.
-[^tool-judge]: `schemas/claude-code.d.ts`, `ToolJudgeInput`. The program, `chunk-3epcmdpn.js:19-20`.
+[^op-hold]: `opHoldMs: 30000`, `chunk-b0yr0k8v.js:218348`.
+[^tool-judge]: `schemas/claude-code.d.ts`, `ToolJudgeInput`. The program, `chunk-b0yr0k8v.js:217812`.

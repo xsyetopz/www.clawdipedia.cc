@@ -70,13 +70,13 @@ These sources go in `extraKnownMarketplaces`, `strictKnownMarketplaces`, and `bl
 
 ## Plugin Digests
 
-Since `2.1.326`, Claude Code deprecates `pluginDigests` and ignores it. Settings that hold it still load. A plugin takes the organization tier when managed settings enable it, declare its marketplace with a remote source, and list it in `prependPlugins` or `appendPlugins`.[^digest-tier] The folder of the plugin must be the copy that its install record holds. When the record holds no hash, or holds another one, the plugin does not load, and the warning says "its install record holds no hash" or "its folder is not the copy its install record holds".[^digest-warn] The rest of this section describes `2.1.323`.
+Since `2.1.326`, Claude Code deprecates `pluginDigests` and ignores it. Settings that hold it still load. A plugin takes the organization tier when managed settings enable it, and declare its marketplace with a remote source. The plugin no longer needs a place in `prependPlugins` or `appendPlugins`.[^digest-tier] The folder of the plugin must be the copy that its install record holds. When the record holds no hash, or holds another one, the plugin does not load, and the warning says "its install record holds no hash" or "its folder is not the copy its install record holds".[^digest-warn] The rest of this section describes `2.1.323`.
 
 The `pluginDigests` field sits in an entry of `extraKnownMarketplaces` (and its alias `additionalMarketplaces`). The settings schema marks it as managed settings only.[^digest-schema]
 
 | Field | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
-| `pluginDigests` | <Documented /> <Deprecated note="Ignored since 2.1.326" /> <ManagedOnly /> | Lists, by plugin name, the digests of the releases of a plugin that your organization delivers with its own tier. | Type: object of arrays of strings. A plugin that is enabled and listed in `prependPlugins` or `appendPlugins` loads its hooks module only from a folder that proves one of its digests. The plugin then takes its place in that tier. Any other copy does not load. |
+| `pluginDigests` | <Documented /> <Deprecated note="Ignored since 2.1.326" /> <ManagedOnly /> | Held the digests, by plugin name, of the releases of a plugin that your organization delivers with its own tier. Ignored since `2.1.326`. | Type: object of arrays of strings. The schema says: "Deprecated and ignored: settings that hold it still load." Before `2.1.326`, a plugin that managed settings enabled loaded its hooks module only from a folder that proved one of its digests.[^digest-schema] |
 
 - A digest is `sha256-` and the base64 SHA-256 of the folder. The hash covers every regular file, in UTF-16 code unit order of its path. For each file, the hash takes `f PATH`, a NUL byte, the byte length, a NUL byte, and the bytes. Paths use `/`. At the root, the hash leaves out `.git`, `.in_use`, `.orphaned_at`, `.claude-plugin-link`, and `.links_materialized`.
 - The plugin keeps its manifest at `.claude-plugin/plugin.json` and names one module in `hooks/hooks.json`.
@@ -186,9 +186,9 @@ Each row is a family of messages. The backticked text is the start that every me
 | `Could not ${…} ${…}`, `Could not install dependencies for`, `Could not publish`, `Could not archive`, `Could not prepare`, `Could not re-screen`, `Could not vouch`, `Could not link`, `Could not empty`, `Refusing to copy`, `Failed to list the staged`, `Failed to list plugin cache dir`, `Failed to copy plugin`, `The installed copy of this plugin version`, `Refusing to extract a plugin archive`, `Path traversal detected`, `the plugin cache folder` | <Undocumented /> | A plugin could not be placed in the plugin cache. | A link sits at the archive or cache path and could not be removed. Another session uses the entry. The staged tree was replaced before the step. A folder was swapped during the copy. A file became something other than a regular file during a plugin copy (`Refusing to copy ${…}: it is no longer a regular file (swapped during the copy).`). The storage layer refused the folder. The `/import` skill copy uses the same start for `Refusing to copy ${…}: it is no longer a regular file.` and can also stop with `a write made no progress; copy stopped`. Then the message adds that a partial copy may remain and that you can remove the folder and run the import again.[^copy] Most texts end with: retry the load or the install. |
 | `Invalid sha`, `SHA pin verification failed`, `Invalid GitHub repository format`, `git-subdir plugin source`, `Invalid ref`, `Subdirectory`, `Source path does not exist`, `Invalid git URL`, `Invalid ssh git URL`, `Refusing git URL`, `Unsupported git URL protocol`, `Unsupported git source type`, `github-ssh source`, `${…} The retry over SSH failed too`, `git ${…} failed`, `git fetch failed`, `Could not read remote.origin.url`, `Could not correct remote.origin.url`, `Could not determine repository directory`, `Invalid target branch` | <Undocumented /> | A git source of a plugin or marketplace was refused or failed. | A pinned `sha` is not a full commit hash. The pin check failed. The repository or ref is not valid. A subdirectory is missing or passes through a symbolic link. The git URL is not allowed (control characters, `%00`, brackets, a backslash, a bad scheme). A git command failed. |
 | `its ${…} is in an old format`, `its package.json`, `its bun.lock`, `its bun.lockb`, `its ${…}`, `it patches its dependencies`, `${…} is not a package in node_modules`, `${…} has`, `${…} is not a registry package`, `${…} is a folder link`, `${…} is not an object`, `${…} is not a package path`, `could not confirm where the plugin's folder is`, `the plugin's folder was moved`, `the package manager finished`, `a directory moved while`, `an entry that is no file`, `"${…}" was not fetched`, `latest pointer returned empty body` | <Undocumented /> | Claude Code did not get a plugin with an npm source, because its lockfile or package list failed a check. | The lockfile is in an old format or is not valid JSON. It lists different dependencies from `package.json`. It sets overrides or patches that the install does not apply. It names a package that is not a registry package at an exact version, or that has no integrity hash. The npm registry is not a valid address or is unencrypted. |
-| `Could not withdraw the cached plugins of marketplace` | <Undocumented /> | Claude Code could not clear the plugin cache folders of a marketplace whose name managed settings declare, so it did not take the name back from another source. | The text is `Could not withdraw the cached plugins of marketplace ${…}:` and then one reason for each folder, joined with a semicolon. A reason is `it could not be checked (<code>)`, `it resolves outside the plugin cache`, or the system error. Fix the folder that the reason names. Since `2.1.321`.[^withdraw] |
+| `Could not withdraw the cached plugins of marketplace` | <Undocumented /> | Claude Code could not clear the plugin cache folders of a marketplace whose name managed settings declare, so it did not take the name back from another source. | The text is `Could not withdraw the cached plugins of marketplace ${…}:` and then one reason for each folder, joined with a semicolon. A reason is `it could not be checked (<code>)`, `it resolves outside the plugin cache`, or the system error. Fix the folder that the reason names.[^withdraw] |
 | `Marketplace ${…}, which managed settings declare, stands from another source` | <Undocumented /> | A marketplace that managed settings declare is already registered from another source, and Claude Code cannot take its name back while the declared source is unreachable. | The text goes on: `It will be tried again.` The check runs again later, so no action is needed once the declared source can be reached.[^take-back] |
-| `The list of installed plugins (installed_plugins.json) could not be read` | <Undocumented /> | Claude Code could not read `installed_plugins.json`, so it did not change a marketplace that managed settings declare. | Two forms. `... so marketplace ${…}, which managed settings declare, cannot be taken back from another source.` comes from the take-back of a declared name. `... so the plugins of marketplace ${…} cannot be withdrawn.` comes from the removal of the plugins of a marketplace. Both end with `Repair or restore that file and try again.` Since `2.1.321`.[^list-unread] |
+| `The list of installed plugins (installed_plugins.json) could not be read` | <Undocumented /> | Claude Code could not read `installed_plugins.json`, so it did not change a marketplace that managed settings declare. | Two forms. `... so marketplace ${…}, which managed settings declare, cannot be taken back from another source.` comes from the take-back of a declared name. `... so the plugins of marketplace ${…} cannot be withdrawn.` comes from the removal of the plugins of a marketplace. Both end with `Repair or restore that file and try again.`[^list-unread] |
 | `the plugin folder is not in the commit`, `the plugin holds too many folders` | <Undocumented /> | While Claude Code reads a git plugin folder at a commit, the folder path is missing from the commit tree, or the plugin has more than 20000 folders. | Claude Code catches both and writes `no copy proof saved:` and the reason to its debug log at warn level.[^copy-proof] |
 | `SHA pin verification failed: submodule`, `Could not confirm that this repository's submodules are on their recorded commits` | <Undocumented /> <Gated note="tengu_tidal_kestrel" /> | A marketplace or plugin install fails when a git submodule is not on the commit its parent repository records, or when Claude Code cannot check. | The message names the submodule, the commit it is on, and the recorded commit. Run with `--debug` for the reason when the check could not be made.[^submodule] |
 
@@ -201,23 +201,23 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^reserved]: The program, `chunk-m33vdkhs.js:53196`.
-[^renames]: The program, `chunk-m33vdkhs.js:99464`.
-[^pin]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The program, `chunk-m33vdkhs.js:3554`.
-[^npm-wild]: The program, `chunk-m33vdkhs.js:81492`.
-[^npm-opts]: The program, `chunk-m33vdkhs.js:81792`, its bundled settings schema.
-[^digest-tier]: The program, `chunk-m33vdkhs.js:8108`.
-[^digest-warn]: The program, `chunk-4h798pp0.js:56283`.
-[^digest-schema]: The settings schema and the program, `chunk-m33vdkhs.js:8108` and `chunk-4h798pp0.js:55365`.
-[^digest-limits]: The program, `chunk-4h798pp0.js:57149`, `:52777`, and `:52847`.
-[^digest-refuse]: The program, `chunk-4h798pp0.js:57309`.
-[^digest-line]: The program, `chunk-m33vdkhs.js:11985`.
-[^settings-schema]: The program, its bundled settings schema.
-[^copy]: The program.
-[^withdraw]: The program, `chunk-4h798pp0.js:4960121`. `2.1.319` has no such text.
-[^take-back]: The program, `chunk-4h798pp0.js:5058426`.
-[^list-unread]: The program, `chunk-4h798pp0.js:5058426` and `chunk-4h798pp0.js:5133591`. `2.1.319` has no such texts.
-[^copy-proof]: The program, `chunk-4h798pp0.js:891805`.
-[^submodule]: The program, `chunk-4h798pp0.js:4970207`. The gate is the server-side flag `tengu_tidal_kestrel`.
-[^run-code-add]: The program, `chunk-15b1e2ff.js:4325`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^run-code-install]: The program, `chunk-15b1e2ff.js:2804` (install warning, which goes on with more text) and `chunk-y9bdpp8r.js:78269` (recommendation prompt).
+[^reserved]: The program, `chunk-ja5z738t.js:54182`.
+[^renames]: The program, `chunk-ja5z738t.js:100450`.
+[^pin]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The program, `chunk-ja5z738t.js:3600`.
+[^npm-wild]: The program, `chunk-ja5z738t.js:82478`.
+[^npm-opts]: The program, `chunk-ja5z738t.js:82778`, its bundled settings schema.
+[^digest-tier]: The program, `chunk-ja5z738t.js:207021` for the schema text and `chunk-m14bt1pz.js:997069` for the record check. The text of `2.1.326` named `prependPlugins` and `appendPlugins`. The text of `2.1.327` does not.
+[^digest-warn]: The program, `chunk-m14bt1pz.js:56944`.
+[^digest-schema]: The settings schema and the program, `chunk-ja5z738t.js:8161` and `chunk-m14bt1pz.js:56002`.
+[^digest-limits]: The program, `chunk-m14bt1pz.js:57833`, `:53395`, and `:53465`.
+[^digest-refuse]: The program, `chunk-m14bt1pz.js:57993`.
+[^digest-line]: The program, `chunk-ja5z738t.js:354671`.
+[^settings-schema]: The program, its bundled settings schema, `chunk-ja5z738t.js:206693`.
+[^copy]: The program, `chunk-3kptb39p.js:1837` and `chunk-m14bt1pz.js:5352636`.
+[^withdraw]: The program, `chunk-m14bt1pz.js:5038516`.
+[^take-back]: The program, `chunk-m14bt1pz.js:5137444`.
+[^list-unread]: The program, `chunk-m14bt1pz.js:5137859` and `chunk-m14bt1pz.js:5212882`.
+[^copy-proof]: The program, `chunk-m14bt1pz.js:902936`.
+[^submodule]: The program, `chunk-m14bt1pz.js:5048602`. The gate is the server-side flag `tengu_tidal_kestrel`.
+[^run-code-add]: The program, `chunk-xstndjzk.js:4382`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
+[^run-code-install]: The program, `chunk-xstndjzk.js:2936` (install warning, which goes on with more text) and `chunk-cfxefa64.js:77667` (recommendation prompt).

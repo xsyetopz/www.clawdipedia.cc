@@ -1,5 +1,5 @@
 === system[0] (no cache marker) ===
-x-anthropic-billing-header: cc_version=2.1.326.<build>; cc_entrypoint=sdk-cli; cc_is_subagent=true;
+x-anthropic-billing-header: cc_version=2.1.327.<build>; cc_entrypoint=sdk-cli; cc_is_subagent=true;
 
 === system[1] (cache marker: {"type":"ephemeral"}) ===
 You are a Claude agent, built on Anthropic's Claude Agent SDK.
@@ -177,7 +177,7 @@ How to use the statusLine command:
 2. For longer commands, you can save a new file in the user's ~/.claude directory, e.g.:
    - ~/.claude/statusline-command.sh and reference that file in the settings.
 
-3. Update the user's ~/.claude/settings.json with:
+3. Update the user's <config-dir>/settings.json with:
    {
      "statusLine": {
        "type": "command", 
@@ -185,7 +185,7 @@ How to use the statusLine command:
      }
    }
 
-4. If ~/.claude/settings.json is a symlink, update the target file instead.
+4. If <config-dir>/settings.json is a symlink, update the target file instead.
 
 Guidelines:
 - Preserve existing settings when updating

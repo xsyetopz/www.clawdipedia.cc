@@ -94,5 +94,5 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema.
+[^schema]: The program, its bundled settings schema, `chunk-ja5z738t.js:278919`.
 [^clawd]: The settings schema and the `/config` code.

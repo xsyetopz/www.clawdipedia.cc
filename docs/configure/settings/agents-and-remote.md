@@ -68,8 +68,8 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema.
-[^workflow-reasons]: The program.
-[^ssh-host]: The settings schema. Probe cases `print.cli319.ssh.valid`, `print.cli319.ssh.bad`, and `print.cli319.ssh.not-array`. The schema type in the program is `unknown` with the type tag `array`, and its text says "Claude Code itself does not use it". The Desktop and Windows parts cannot run here.
-[^subagent-status]: The program, `chunk-m33vdkhs.js:9208`.
-[^auto-continue]: The program, `chunk-48s6a53p.js:340-342` and `chunk-dpm9m90j.js:825-834`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^schema]: The program, its bundled settings schema, `chunk-ja5z738t.js:278919`.
+[^workflow-reasons]: The program, `chunk-kametp4n.js:2109-2378`.
+[^ssh-host]: The settings schema, `chunk-ja5z738t.js:292210`. Probe cases `print.cli319.ssh.valid`, `print.cli319.ssh.bad`, and `print.cli319.ssh.not-array`. The schema type in the program is `unknown` with the type tag `array`, and its text says "Claude Code itself does not use it". The Desktop and Windows parts cannot run here.
+[^subagent-status]: The program, `chunk-ja5z738t.js:9260`.
+[^auto-continue]: The program, `chunk-7b2p05m1.js:5396` and `:7917`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

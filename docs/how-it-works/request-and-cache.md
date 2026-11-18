@@ -213,14 +213,14 @@ A local stub of the Messages API showed these facts. No model call left the mach
 ## Sources
 
 [^body-fields]: The official docs, and `api-request` lines that version `2.1.305` wrote to a local transcript, including a stub run of `2.1.305`.
-[^markers]: The program.
+[^markers]: The program, `chunk-m14bt1pz.js:3210208`.
 [^plain-markers]: A print-mode run of `2.1.316` against the local stub with a fake key. The probe captures of `2.1.316`.
-[^attribution]: The program, `chunk-d73xe1mr.js@967015`.
-[^retry-notes]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-4h798pp0.js`.
-[^retry-match]: The program, `chunk-4h798pp0.js:154748`.
-[^retry-cap]: The program, `chunk-4h798pp0.js:154816`.
-[^overage]: The program, `chunk-4h798pp0.js@1023646`.
-[^env-wins]: The program, `chunk-m33vdkhs.js@275456`.
-[^ledger]: The program, `chunk-zm2mecb0.js@207`.
-[^usage-line]: The program, `chunk-4h798pp0.js@1220836`.
-[^causes]: The program, `chunk-p95xxxdb.js@65965`.
+[^attribution]: The program, `chunk-asj6f58y.js:1006039`.
+[^retry-notes]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-m14bt1pz.js:3109407`.
+[^retry-match]: The program, `chunk-m14bt1pz.js:3109407`.
+[^retry-cap]: The program, `chunk-m14bt1pz.js:3110546`.
+[^overage]: The program, `chunk-m14bt1pz.js:1035791`.
+[^env-wins]: The program, `chunk-m14bt1pz.js:2564576`.
+[^ledger]: The program, `chunk-1m26cn7p.js:207`.
+[^usage-line]: The program, `chunk-m14bt1pz.js:1251209`.
+[^causes]: The program, `chunk-8b50zmfk.js:65673`.

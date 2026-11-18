@@ -12,11 +12,11 @@ The prompt that a `statusline-setup` subagent gets. The main agent calls the `Ag
 | --- | --- |
 | `system[0]` | 99 |
 | `system[1]` | 62 |
-| `system[2]` | 14,209 |
+| `system[2]` | 14,215 |
 | `messages[0].content[0]` | 36 |
 | `messages[1].content[0]` | 833 |
-| System blocks only | 14,370 |
-| Everything shown here | 15,484 |
+| System blocks only | 14,376 |
+| Everything shown here | 15,490 |
 | Tools sent | 2 |
 
 Sizes count the text after the placeholders are in place. Each placeholder counts at its own length.
@@ -33,7 +33,7 @@ The text below is every part of the request that Claude Code builds before your 
 
 ```text
 === system[0] (no cache marker) ===
-x-anthropic-billing-header: cc_version=2.1.326.<build>; cc_entrypoint=sdk-cli; cc_is_subagent=true;
+x-anthropic-billing-header: cc_version=2.1.327.<build>; cc_entrypoint=sdk-cli; cc_is_subagent=true;
 
 === system[1] (cache marker: {"type":"ephemeral"}) ===
 You are a Claude agent, built on Anthropic's Claude Agent SDK.
@@ -211,7 +211,7 @@ How to use the statusLine command:
 2. For longer commands, you can save a new file in the user's ~/.claude directory, e.g.:
    - ~/.claude/statusline-command.sh and reference that file in the settings.
 
-3. Update the user's ~/.claude/settings.json with:
+3. Update the user's <config-dir>/settings.json with:
    {
      "statusLine": {
        "type": "command",
@@ -219,7 +219,7 @@ How to use the statusLine command:
      }
    }
 
-4. If ~/.claude/settings.json is a symlink, update the target file instead.
+4. If <config-dir>/settings.json is a symlink, update the target file instead.
 
 Guidelines:
 - Preserve existing settings when updating
@@ -260,7 +260,7 @@ Today's date is <date>.
 
 The diff below starts from [Subagent, General Purpose](./subagent-general-purpose.md). Lines that start with `-` are only in the baseline. Lines that start with `+` are only here.
 
-Lines added: 187. Lines removed: 50. Size change: +4,302 characters.
+Lines added: 187. Lines removed: 50. Size change: +4,308 characters.
 
 ```diff
 --- subagent-general-purpose
@@ -447,7 +447,7 @@ Lines added: 187. Lines removed: 50. Size change: +4,302 characters.
 +2. For longer commands, you can save a new file in the user's ~/.claude directory, e.g.:
 +   - ~/.claude/statusline-command.sh and reference that file in the settings.
 +
-+3. Update the user's ~/.claude/settings.json with:
++3. Update the user's <config-dir>/settings.json with:
 +   {
 +     "statusLine": {
 +       "type": "command",
@@ -455,7 +455,7 @@ Lines added: 187. Lines removed: 50. Size change: +4,302 characters.
 +     }
 +   }
 +
-+4. If ~/.claude/settings.json is a symlink, update the target file instead.
++4. If <config-dir>/settings.json is a symlink, update the target file instead.
 +
  Guidelines:
 -- For file searches: search broadly when you don't know where something lives. Use Read when you know the specific file path.

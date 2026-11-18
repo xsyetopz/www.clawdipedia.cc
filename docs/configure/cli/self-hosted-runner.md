@@ -1,11 +1,11 @@
 ---
 title: Self-Hosted Runner
-description: Every option of claude self-hosted-runner and its orchestrator, setup, doctor, and decode-token subcommands in 2.1.326, with the parser rules and each error.
+description: Every option of claude self-hosted-runner and its orchestrator, setup, doctor, and decode-token subcommands in 2.1.327, with the parser rules and each error.
 sidebar_position: 5
 ---
 
 `claude self-hosted-runner` runs Claude Code cloud sessions on a machine that you control. The root help text does not list the command.
-The [official overview](https://code.claude.com/docs/en/self-hosted-environments) explains environments and runners. The [deploy guide](https://code.claude.com/docs/en/self-hosted-environments-deploy) and the [configuration guide](https://code.claude.com/docs/en/self-hosted-environments-configuration) explain most options. This page lists every option in `2.1.326`, with the options that the official pages do not name, and the exact parser rules.
+The [official overview](https://code.claude.com/docs/en/self-hosted-environments) explains environments and runners. The [deploy guide](https://code.claude.com/docs/en/self-hosted-environments-deploy) and the [configuration guide](https://code.claude.com/docs/en/self-hosted-environments-configuration) explain most options. This page lists every option in `2.1.327`, with the options that the official pages do not name, and the exact parser rules.
 
 The variables are on [Remote and Cloud Session Variables](../env-vars/remote-and-cloud-sessions.md).[^runner-help]
 
@@ -61,20 +61,23 @@ The command has its own parser. It does not use the parser of the root `claude` 
 | `--drain-marker-file <path>` | <Undocumented /> | When this file exists at the start of a drain, the runner reports its exit as a host drain. If the first line of a regular file is a Unix time in seconds, the report includes it as the force-delete time. Telemetry only. | Off |
 | `--git-ssh-rewrite <host>` | <Documented /> | Rewrites `https://<host>/...` source URLs to `git@<host>:...`. Give it more than once for more hosts. | Off |
 | `--git-host-rewrite <from>=<to>` | <Documented /> | Rewrites `https://<from>/...` to `https://<to>/...`, before `--git-ssh-rewrite`. Both sides are bare host names. | Off |
-| `--use-anthropic-git-proxy` | <Documented /> | Uses Anthropic-managed git. Needs `--capacity 1`, git 2.32 or later, and a global git config that is not a device such as `/dev/null`. It deletes and replaces the home-level git config of the runner account at startup and before each session. See [Harden Your Deployment](https://code.claude.com/docs/en/self-hosted-environments-deploy#harden-your-deployment). | Off |
+| `--use-anthropic-git-proxy` | <Documented /> | Uses Anthropic-managed git. Needs `--capacity 1`, git 2.32 or later, and a global git config that is not a device such as `/dev/null`. It deletes and replaces the home-level git config of the runner account at startup and before each session. Since `2.1.327`, if `GIT_CONFIG_GLOBAL` names a non-empty directory, or is, or lies in, a place that the runner resets, the runner keeps it. It then ignores the variable for itself and its sessions, gives the sessions a new git config file, and prints a warning. Put operator git config in `/etc/gitconfig` or use `--configure-git`.[^git-config-global] See [Harden Your Deployment](https://code.claude.com/docs/en/self-hosted-environments-deploy#harden-your-deployment). | Off |
 | `--no-clone-through-agent-proxy` | <Undocumented /> | Since `2.1.326`, a hidden flag. With `--agent-proxy-url`, the runner then does not clone http(s) repositories through the proxy. It skips the git version check and the warning about the proxy credential that go with that clone.[^no-clone] | Off |
-| `--use-anthropic-gh [bool]` | <Undocumented /> | Since `2.1.326`, it offers the built-in `gh api` of Claude Code to sessions where no `gh` is installed. It reaches the REST API of github.com only, and its requests go through Anthropic, which adds the GitHub credential it holds for the session, if any. `false`, `0`, `no`, or `off` turns it off. The runner withholds it on Windows, above `--capacity 1`, with `--agent-proxy-url`, with `--exec-path` or a command hook, with a model provider other than the Anthropic API, in code reviews, and in tools-only sessions.[^gh] It reads `SELF_HOSTED_RUNNER_USE_ANTHROPIC_GH`. | On |
+| `--use-anthropic-gh [bool]` | <Undocumented /> | Since `2.1.326`, it offers the built-in `gh api` of Claude Code to sessions where no `gh` is installed. It reaches the REST API of github.com only, and its requests go through Anthropic, which adds the GitHub credential it holds for the session, if any. `false`, `0`, `no`, or `off` turns it off. The runner withholds it on Windows, above `--capacity 1`, with `--agent-proxy-url`, with `--exec-path` or a command hook, while nonessential traffic is disabled, with a model provider other than the Anthropic API, on a runner that a Claude Code session's shell started, in code reviews, in tools-only sessions, and where the older git proxy carries the git of a session.[^gh] It reads `SELF_HOSTED_RUNNER_USE_ANTHROPIC_GH`. | On |
 | `--configure-git` | <Documented /> | Sets the git identity to `Claude <noreply@anthropic.com>` with commit signing. Needs git 2.34 or later. See [Configure Git](https://code.claude.com/docs/en/self-hosted-environments-deploy#configure-git). | Off |
 | `--push-outcome-on-release` | <Documented /> | Pushes each outcome branch before the runner ends a session that did not complete. See [Prompt Sessions to Push Their Work](https://code.claude.com/docs/en/self-hosted-environments-configuration#prompt-sessions-to-push-their-work). | Off |
 | `--trust-workspace [bool]` | <Documented /> | Trusts the repository paths of each session, so repo `permissions.allow` and `additionalDirectories` apply. With `false`, the runner sets `CLAUDE_CODE_IGNORE_PERSISTED_TRUST=1` for each session, and no workspace trust record counts.[^trust] | `true` |
 | `--remove-session-state [bool]` | <Documented /> | Removes the per-session state under `<base-dir>/_sessions/` when a session ends. See [Reuse a Pre-Warmed Checkout](https://code.claude.com/docs/en/self-hosted-environments-deploy#reuse-a-pre-warmed-checkout). | `false` |
-| `--diff-finds-nested-repository [bool]` | <Undocumented /> | Lets the Changes pane show a repository cloned in a subfolder of a session started with no repository. Needs `--capacity 1`, and works only while the tool sandbox is off. | `false` |
+| `--diff-finds-nested-repository [bool]` | <Undocumented /> | Lets the Changes pane show a repository cloned in a subfolder of a session started with no repository. Needs `--capacity 1`, and works only while the tool sandbox is off. The runner tells the child about it with `--runner-declares` (see [All Flags](flags.md)). If `--exec-path` is a script, it must put nothing before `"$@"`. | `false` |
 | `--confine-repo-settings <mode>` | <Documented /> | Sets the guard for settings committed in the repository: `warn`, `enforce`, or `off`. | `warn` |
 | `--server-auto-mode-lists <mode>` | <Undocumented /> | Sets which auto mode classifier lists from the server a session may get: `all`, `no-allow`, or `none`. `no-allow` holds back the allow list and the exceptions to soft block rules. | `no-allow` |
 | `--host-config-snapshot <mode>` | <Undocumented /> | Sets where the startup copy of the host config folder is kept: `disk` (under `--base-dir`, checked at each session start) or `memory` (64 MiB at most). | `disk` |
 | `--health-port <port>` | <Documented /> | Sets the port of the `/healthz` listener. An integer from 0 to 65535; `0` turns it off. See [Kubernetes](https://code.claude.com/docs/en/self-hosted-environments-deploy#kubernetes). | `8080` |
 | `--log-level <level>` | <Documented /> | Sets the log level: `info` or `debug`. It has no variable. | `info` |
 | `--log-file <path>` | <Documented /> | Also writes the runner logs to the file, in append mode. | Off |
+| `--nested-model-access [bool]` | <Undocumented /> | Lets a command that a session runs start a Claude Code of its own, such as `claude -p`, that can use the model. The runner opens a private socket for each session and adds the session's model credential to model calls that arrive there. The commands get no model credential. Needs `--nested-model-allow`. The runner does not apply the model limits of managed settings, does not ask before a model that is billed to usage credits, and does not record the calls in the session. Any process of the same Unix user that holds the session's token can use the socket, so give the sessions of each person a Unix user of their own. The runner opens no socket for a session whose organization is under HIPAA or has server-managed settings, or for a session that uses governed git. The log then says `nested model access NOT OPENED`. The runner asks again at each renewal of the model token. A refusal ends the access, and two failed reads in a row suspend it. It cannot be combined with `--agent-proxy-url`, `--proxy-authorization-command`, `--proxy-authorization-file`, or `ANTHROPIC_UNIX_SOCKET`. It reads `SELF_HOSTED_RUNNER_NESTED_MODEL_ACCESS`.[^nested-model] Added in `2.1.327`. | Off |
+| `--nested-model-allow <models>` | <Undocumented /> | Lists the models that nested calls may use. You can repeat the flag. The values are comma-separated model ids, and an id that ends in `*` matches by prefix. The runner checks the list against the model of the request, each fallback, and the advisor. A call that names another model, or none, is refused. Name every model that a nested Claude Code uses: main, small (side tasks), subagent, fallback, and advisor. It limits which models, not how many tokens. Needs `--nested-model-access`. The environment variable `SELF_HOSTED_RUNNER_NESTED_MODEL_ALLOW` is used only when the flag is not given.[^nested-model] Added in `2.1.327`. | None |
+| `--nested-model-call-budget <n>` | <Undocumented /> | Sets the most model calls that the runner forwards for one session. Further calls are refused, and `0` refuses every call. A call is one request, whatever its model and length. The runner keeps the count while it runs. The count starts again when the runner restarts or the session moves to another runner. The value is a whole number from `0` to `999999999`. The environment variable `SELF_HOSTED_RUNNER_NESTED_MODEL_CALL_BUDGET` is used only when the flag is not given.[^nested-model] Added in `2.1.327`. | `200` |
 
 The host config folder has no flag. Set `SELF_HOSTED_RUNNER_HOST_CONFIG_DIR`; `--host-config-dir` stops the runner with `unknown flag --host-config-dir`. See [MCP Servers](https://code.claude.com/docs/en/self-hosted-environments-configuration#mcp-servers).
 
@@ -89,6 +92,8 @@ The host config folder has no flag. Set `SELF_HOSTED_RUNNER_HOST_CONFIG_DIR`; `-
 
 ## Per-Session Watchdog Options
 
+The help text and the parser give these rows.[^watchdog]
+
 | Option | Status | What it does | Default |
 | --- | --- | --- | --- |
 | `--release-idle-session-min <n>` | <Documented /> | Releases a session after this long with no user input. Any value, `0` included, overrides the idle limit that Anthropic's control plane sends. Maximum 10080. | Never |
@@ -99,6 +104,10 @@ The host config folder has no flag. Set `SELF_HOSTED_RUNNER_HOST_CONFIG_DIR`; `-
 | `--debug-token-dir <path>` | <Undocumented /> | Writes live tokens to disk. For debugging only. | Off |
 | `-h`, `--help` | <Documented /> | Prints the help text. | |
 
+## Retry Setting of a Session
+
+The runner starts each session with `CLAUDE_CODE_RETRY_WATCHDOG` set to `1`, so the session retries rate limits and overload errors without end.[^runner-retry] Since `2.1.327`, the session removes `CLAUDE_CODE_RETRY_WATCHDOG` from the environment of the commands and hooks it starts. A `claude -p` that a script or hook starts thus does not wait out rate limits.[^runner-retry]
+
 ## Runner Errors
 
 Each row is an error of the parser.[^parser-errors]
@@ -108,6 +117,11 @@ Each row is an error of the parser.[^parser-errors]
 | `--capacity must be a positive integer, got: <value>` | The value is not an integer of 1 or more. |
 | `--health-port must be an integer in [0, 65535] (0 disables), got: <value>` | The port is out of range. |
 | `--git-ssh-rewrite requires a hostname` | No value. |
+| `--nested-model-access needs a list of models: ...` | `--nested-model-access` is on, and neither `--nested-model-allow` nor `SELF_HOSTED_RUNNER_NESTED_MODEL_ALLOW` gives a list. |
+| `--nested-model-access cannot be combined with --agent-proxy-url or --proxy-authorization-command / --proxy-authorization-file: ...` | The access is on with an agent proxy or a proxy authorization option. |
+| `--nested-model-access cannot be used while ANTHROPIC_UNIX_SOCKET is set in the runner's environment: ...` | The access is on and the runner's own environment has `ANTHROPIC_UNIX_SOCKET`. |
+| `<name> must be a comma-separated list of model ids, such as <model-id>,<prefix>*. ...` | A value of `--nested-model-allow` has a bad id. An id starts with a letter or digit, uses only letters, digits, and `. _ : @ / -`, and may end in one `*`. |
+| `<name> must be a whole number from 0 to 999999999 (got: <value>)` | The value of `--nested-model-call-budget` is not a whole number in range. |
 | `--git-host-rewrite requires <from>=<to>` | No value, or no text on one side of `=`. |
 | `--git-host-rewrite expects bare hostnames (e.g. ext.example.com=int.example.com), not URLs. Got: <value>` | A side holds `://` or `/`.[^probe-git-host-rewrite-url] |
 | `duplicate --git-host-rewrite for '<host>'` | The same `<from>` host twice. |
@@ -199,19 +213,21 @@ The default of `--api-url` is `ANTHROPIC_BASE_URL`, else the built-in API URL.
 
 ## Sources
 
-[^runner-help]: The text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.326`, and the option parser of the program, `chunk-747xd1vs.js`, near offset 253048.
+[^runner-help]: The text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.327`, and the option parser of the program, `chunk-xa2mcav9.js:320461` and `chunk-xa2mcav9.js:332062`.
 [^cli321]: Probe group `cli321`.
-[^exit-codes]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-747xd1vs.js:282039`.
-[^no-clone]: The program, `chunk-747xd1vs.js:13426` and `chunk-747xd1vs.js:13688`.
-[^gh]: The program, `chunk-747xd1vs.js:13137` and `chunk-747xd1vs.js:12305`.
-[^trust]: The program, `chunk-747xd1vs.js:194514` and `chunk-d73xe1mr.js:85743`.
-[^parser-errors]: The program, `chunk-747xd1vs.js`, offsets 245200 to 255000. Probe group `cli321`.
-[^orch]: The program, help text and orchestrator parser, `chunk-39j7s0fm.js`, near offset 24075.
+[^exit-codes]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-xa2mcav9.js:323890`.
+[^no-clone]: The program, `chunk-xa2mcav9.js:14525-14526` (the parser) and `chunk-xa2mcav9.js:15720-15740` (the warning and the git version check, which both depend on the flag).
+[^gh]: The program, the parser `chunk-xa2mcav9.js:14224`, the help text `chunk-xa2mcav9.js:15121-15140`, and the reasons for withholding `chunk-xa2mcav9.js:1035-1066`.
+[^nested-model]: The program, `chunk-xa2mcav9.js:313134` (`--nested-model-access`), `:313330` (`--nested-model-call-budget`), `:321218` (the variables), `:321263` and `:370834-371157` (the errors), `:352985` (the help text), and `:379526` (the start-up log). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^git-config-global]: The program, `chunk-xa2mcav9.js:330655-331228` (the reset) and `:389000-389400` (the warning). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^trust]: The program, `chunk-asj6f58y.js:94695` and `chunk-bpr7n093.js:32875`.
+[^parser-errors]: The program, `chunk-xa2mcav9.js:320702-372037`. Probe group `cli321`.
+[^orch]: The program, help text and orchestrator parser, `chunk-x7dh6k8v.js:38815` and `chunk-x7dh6k8v.js:18585`.
 [^orch-timeout]: Probe case `runner-orchestrator-hook-timeout`, group `cli321`.
 [^orch-min-idle]: Probe case `runner-orchestrator-min-idle`, group `cli321`.
 [^orch-scm]: Probe case `runner-orchestrator-scm-id-only`, group `cli321`.
 [^orch-no-hooks]: Probe case `runner-orchestrator-no-hooks`, group `cli321`.
-[^hold-network]: The program, `chunk-747xd1vs.js:286610`.
+[^hold-network]: The program, `chunk-xa2mcav9.js:328706`.
 [^probe-git-host-rewrite-url]: Probe case `runner-git-host-rewrite-url`.
 [^probe-confine-bad]: Probe case `runner-confine-bad`.
 [^probe-lists-bad]: Probe case `runner-lists-bad`.
@@ -223,3 +239,5 @@ The default of `--api-url` is `ANTHROPIC_BASE_URL`, else the built-in API URL.
 [^probe-host-config-dir-flag]: Probe case `runner-host-config-dir-flag`.
 [^probe-empty-argument]: Probe case `runner-empty-argument`.
 [^probe-positional]: Probe case `runner-positional`.
+[^watchdog]: The program, the parser `chunk-xa2mcav9.js:14305`, `:14412`, `:14434-14470`, the help text `:15367-15418`, and the constants `:14029` (10080 minutes), `:14837-14839` (180 seconds, 30 seconds, 1440 minutes), `:11477` (the 15 minutes of the kill grace).
+[^runner-retry]: The program, `chunk-xa2mcav9.js:234493` (the session environment), and `chunk-57bg7pbc.js:13781` with `chunk-ra0f27e4.js:748`: in a remote session whose `CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE` is `self_hosted`, the environment of a child process drops `CLAUDE_CODE_RETRY_WATCHDOG`. The `2.1.326` list of dropped names has no such case. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).

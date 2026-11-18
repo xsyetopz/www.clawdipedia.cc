@@ -107,7 +107,7 @@ The table is sorted by name.[^names] See [Environment Variables](index.md#how-to
 | `K_SERVICE` | <Undocumented /> | Detects Google Cloud Run in the bundled Google auth library and in Claude Code's environment report. | - | - |
 | `METADATA_SERVER_DETECTION` | <Undocumented /> | Controls how the bundled Google auth library detects the GCE metadata server. | - | - |
 | `VERTEX_REGION_CLAUDE_*` | <Undocumented /> | Sets the Google Cloud region for one model family. One variable exists for each suffix. | Text. The first table entry whose model prefix matches the model id wins, then `CLOUD_ML_REGION`, then `us-east5` | Google Cloud Agent Platform (`CLAUDE_CODE_USE_VERTEX`) |
-| `VERTEX_REGION_CLAUDE_FABLE_5_2` | <Documented /> | Overrides the Google Cloud region for Claude Fable 5.2 on Vertex. It is the variable that the model entry names for the model id `claude-fable-5-2`. Added in `2.1.321`. | Text. It comes before `CLOUD_ML_REGION`, then `us-east5` | Google Cloud Agent Platform (`CLAUDE_CODE_USE_VERTEX`). Listed on the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs[^vertex-fable] |
+| `VERTEX_REGION_CLAUDE_FABLE_5_2` | <Documented /> | Overrides the Google Cloud region for Claude Fable 5.2 on Vertex. It is the variable that the model entry names for the model id `claude-fable-5-2`. | Text. It comes before `CLOUD_ML_REGION`, then `us-east5` | Google Cloud Agent Platform (`CLAUDE_CODE_USE_VERTEX`). Listed on the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs[^vertex-fable] |
 
 ## How It Works
 
@@ -123,7 +123,7 @@ Claude Code picks one provider when it starts. The provider decides which auth p
 
 ## Sources
 
-[^region-source]: The program reports the source as `env-invalid` in this case.
-[^gateway-log]: The program, `chunk-rx7rnssj.js@470`. Probe cases `env319b.gateway.bad-config-json` and `bad-config-JSON-upper` gave a JSON error line. Probe cases `bad-config-default` and `bad-config-text` gave a plain line.
-[^vertex-fable]: The program, `chunk-9vmv3a50.js:19206` (model entry) and `chunk-4m8bc75e.js:1806` (match table).
-[^names]: The program, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^region-source]: The program, `chunk-rj3e7agr.js:154524`, reports the source as `env-invalid` in this case.
+[^gateway-log]: The program, `chunk-j8m2aj8s.js:470`. Probe cases `env319b.gateway.bad-config-json` and `bad-config-JSON-upper` gave a JSON error line. Probe cases `bad-config-default` and `bad-config-text` gave a plain line.
+[^vertex-fable]: The program, `chunk-f892tj2r.js:19206` (model entry) and `chunk-pmhjgtb5.js:1806` (match table).
+[^names]: The program, `chunk-2ew0jg68.js:26216`, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.

@@ -8,7 +8,7 @@ These variables change how tools run.
 They set Bash time limits and output size, shell choice, search behavior, permission helpers, and the sandbox.
 Use them when long commands reach their time limit or when you need to limit what a tool can see.
 
-This page lists 109 variables.[^variable-names] `BASH_DEFAULT_TIMEOUT_MS` and `BASH_MAX_OUTPUT_LENGTH` are common. Switch rows take `1` or `0`.
+This page lists 110 variables.[^variable-names] `BASH_DEFAULT_TIMEOUT_MS` and `BASH_MAX_OUTPUT_LENGTH` are common. Switch rows take `1` or `0`.
 
 ## Example
 
@@ -66,6 +66,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `CLAUDE_CODE_DISABLE_MOUNTED_DRIVE_RM_PROMPT` | <Undocumented /> | Turns off the prompt for `rm -r` on a mounted drive, the folder that holds mounted drives, or a top-level file or folder of a drive. Since 2.1.304 these paths (such as `/Volumes`, `/media`, and WSL `/mnt/c`) get a prompt that permission rules cannot auto-allow. | On or off. Claude Code skips the check when it is set.[^mounted-rm] | Bash tool |
 | `CLAUDE_CODE_DISABLE_POWERSHELL_ALIAS_SHADOW_CHECK` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Turns off the PowerShell check that refuses functions named like built-in commands.[^ps-alias] | On or off. A protected server gate turns the check on.[^ps-alias-gate] | PowerShell tool |
 | `CLAUDE_CODE_DISABLE_POWERSHELL_CMD_RM_DENY` | <Documented /> | Turns off the PowerShell check that denies `rd`, `rmdir`, `del` and `erase` on system paths. | On or off. Without it a feature flag decides | PowerShell tool |
+| `CLAUDE_CODE_DISABLE_SHELL_HEAD_START` | <Undocumented /> | Stops Claude Code from starting the shell before it approves the first shell command. By default, since `2.1.327`, the shell start-up files can run before approval, even if Claude Code then refuses the command. Set it to turn this off. | On or off, off by default. Any set value turns it off. The head start is also off when the sandbox is on, when `PreToolUse` hooks exist, or in a subagent. On Windows it stops the head start of PowerShell too | Bash and PowerShell tools[^head-start] |
 | `CLAUDE_CODE_DISABLE_SUBSTITUTION_RM_PROMPT` | <Documented /> | Turns off the critical-path check for a recursive `rm` whose target is only command substitution output. | On or off. Checked together with a feature flag | Bash tool |
 | `CLAUDE_CODE_DISABLE_WEB_FETCH` | <Documented /> | Turns off the `WebFetch` tool. `WebSearch` stays on. | On or off. Docs: needs v2.1.285 or later. Also disables the web fetch agent | All sessions |
 | `CLAUDE_CODE_DISABLE_WINDOWS_SHELL_LAUNCHER` | <Documented /> | Starts PowerShell commands on Windows directly, not through the `cmd.exe` launcher. | On or off. The launcher also depends on a flag and logs `env_opt_out` when it has a value | Windows PowerShell tool |
@@ -77,7 +78,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `CLAUDE_CODE_FILE_READ_MAX_PDF_PAGES_PER_MESSAGE` | <Undocumented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> | Caps the PDF pages that Read tool calls may use in one message. | A number. Whole number of at least `1`, plain digits. Active only when a flag enforces the limit | Read tool with PDF files |
 | `CLAUDE_CODE_FILE_READ_MAX_PDF_PAGES_PER_TURN` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Caps the PDF pages that Read tool calls may use in one turn. | A number. Whole number of at least `1`, plain digits. Used only with the per-message cap and an enforcing flag | Read tool with PDF files |
 | `CLAUDE_CODE_GIT_BASH_PATH` | <Documented /> | Sets the path of the Git Bash executable on Windows. | Text. Must exist and be named `bash.exe`, `sh.exe`, `bash`, or `sh`. Else Claude Code warns and detects the path | Windows |
-| `CLAUDE_CODE_GIT_CHECK_ONLY_IN_REPOSITORY` | <Undocumented /> | Turns on an in-process mode for a user-level `Stop` hook that runs the script `~/.claude/<name>` with no `args` or `shell` field. In this mode Claude Code counts how many times it skips such a hook, and it looks for `.git` or `HEAD` in the folder and in each parent folder. Claude Code reads the value once at start-up and then removes the variable from its own env, so child processes do not see it. Added in `2.1.321`. | On or off, off by default. The mode does not apply on Windows. The code does not show what the skipped script does or when the skip happens.[^git-check] | Hooks |
+| `CLAUDE_CODE_GIT_CHECK_ONLY_IN_REPOSITORY` | <Undocumented /> | Turns on an in-process mode for a user-level `Stop` hook that runs the script `~/.claude/<name>` with no `args` or `shell` field. In this mode Claude Code counts how many times it skips such a hook, and it looks for `.git` or `HEAD` in the folder and in each parent folder. Claude Code reads the value once at start-up and then removes the variable from its own env, so child processes do not see it. | On or off, off by default. The mode does not apply on Windows.[^git-check] | Hooks |
 | `CLAUDE_CODE_GLOB_HIDDEN` | <Documented /> | Includes dotfiles in Glob results. | `true` by default. Set `false` to exclude them | Glob tool |
 | `CLAUDE_CODE_GLOB_NO_IGNORE` | <Documented /> | Makes Glob ignore `.gitignore` rules. | `true` by default. Set `false` to respect `.gitignore` | Glob tool |
 | `CLAUDE_CODE_GLOB_TIMEOUT_SECONDS` | <Documented /> | Sets the timeout of Glob file discovery in seconds. | A number of seconds, `20` by default and `60` on WSL. Whole number of at least `1` | Glob tool |
@@ -167,20 +168,21 @@ While the scrub is on (`CLAUDE_CODE_SUBPROCESS_ENV_SCRUB` true, or `GITHUB_ACTIO
 
 ## Sources
 
-[^max-output]: The program.
-[^auto-full-context]: The program. The gate is `tengu_velvet_marble`.
-[^edit-diff]: The program.
-[^exported-var]: The program, `chunk-4h798pp0.js:82421`.
+[^max-output]: The program, `chunk-8r6vdndw.js:2480`.
+[^auto-full-context]: The program, `chunk-8g2nr9dn.js:169914`. The gate is `tengu_velvet_marble`.
+[^edit-diff]: The program, `chunk-m14bt1pz.js:5657444`.
+[^exported-var]: The program, `chunk-m14bt1pz.js:84185`.
 [^exported-var-gate]: The gate is `bot_protected_tengu_zazzy_parasol`.
-[^mounted-rm]: The program.
-[^ps-alias]: The program, `chunk-4h798pp0.js:60089`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326) mention the check.
+[^mounted-rm]: The program, `chunk-m14bt1pz.js:1346512`.
+[^ps-alias]: The program, `chunk-m14bt1pz.js:61136`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326) mention the check.
 [^ps-alias-gate]: The gate is `bot_protected_tengu_dynamic_pike`.
-[^git-check]: The program, `chunk-4h798pp0.js:1056025` (the read of the variable) and `chunk-4h798pp0.js:1056330` (the hook check).
-[^perforce]: The program, `chunk-y9bdpp8r.js:1924567`.
-[^thrifty]: The program. The gate is `tengu_thrifty_sonic`.
-[^native-search]: The program lists the name in its environment table as a boolean.
-[^office-pdf-dir]: The program, `chunk-4bt5ggtq.js:336`.
-[^office-pdf-send]: The program, `chunk-4bt5ggtq.js:384`.
-[^scrub-lists]: The program lists, and a Bash call with the scrub on (see [Probes](../../reference/probes.md#static-and-print-probes)).
+[^git-check]: The program, `chunk-m14bt1pz.js:1076096` (the read of the variable) and `chunk-m14bt1pz.js:1076574` (the hook check).
+[^perforce]: The program, `chunk-cfxefa64.js:1920025`.
+[^thrifty]: The program, `chunk-t907shf5.js:4355`. The gate is `tengu_thrifty_sonic`.
+[^native-search]: The program, `chunk-2ew0jg68.js:19683`, lists the name in its environment table as a boolean.
+[^office-pdf-dir]: The program, `chunk-jp340sez.js:337`.
+[^office-pdf-send]: The program, `chunk-jp340sez.js:385`.
+[^scrub-lists]: The program lists, `chunk-af1ewb74.js:31931` (credential names) and `chunk-af1ewb74.js:33409` (path and config names), and a Bash call with the scrub on (see [Probes](../../reference/probes.md#static-and-print-probes)).
 [^scrub-run]: A Bash call with the scrub on (see [Probes](../../reference/probes.md#static-and-print-probes)).
-[^variable-names]: The program, variable names found in the `2.1.314` binary. The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^variable-names]: The program, `chunk-2ew0jg68.js:26216`, variable names found in the `2.1.314` binary. The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^head-start]: The program, `chunk-8g2nr9dn.js:67635` (shell) and `chunk-m14bt1pz.js:3725480` (PowerShell). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).

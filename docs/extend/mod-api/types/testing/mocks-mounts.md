@@ -68,7 +68,7 @@ Every member that a mounted drawing of component `C` can have. `Mounted<P, C>` k
 | `advance` | <Documented /> | Moves the frame clock of the drawing on. Each `surface.every(ms, fn)` timer of its `Client` elements fires at every interval of its own that the move crosses. | Type: `(ms: number) => Promise<void>`. Parameter `ms`: how far, in milliseconds. Example: `await ui.advance(250)`. |
 | `resize` | <Documented /> | Lays the region of a `Client` out at a size, as the surface that measures it does. Its module reads the size as `surface.columns` and `surface.rows`. | Type: `(size: MountResizeTarget) => Promise<void>`. Parameter `size`: cells across and down, `in`: which `Client`. Example: `await ui.resize({ columns: 40, rows: 3 })`. |
 | `redraw` | <Documented /> | Draws the instance again, as the engine does when its props change (for example, when the output of a tool row arrives). It runs the `ui.render` chain with the next props. | Type: `(props?: RenderPropsOf[C]) => Promise<void>`. Draws again with new props. A call to a plugin's own `$.ui.invalidate` is not needed. |
-| `keepsBeneath` | <Documented /> | Says whether the tree as last drawn holds what `next(e)` answered, so that what is beneath the plugins is drawn with it. False when a hook left it out. | Type: `() => Promise<boolean>`. Since `2.1.321`. A call to it tells `claude plugin test` that the test has looked, so `claude plugin test` prints no advice for this drawing, whichever answer the test expects. It rejects with `keepsBeneath: this test has its own ui.render hook at this site, so look for what it drew with find` when the tree holds a stub and the test has its own `ui.render` hook at that site.[^keeps-beneath] Example: `expect(await ui.keepsBeneath()).toBe(true)`. |
+| `keepsBeneath` | <Documented /> | Says whether the tree as last drawn holds what `next(e)` answered, so that what is beneath the plugins is drawn with it. False when a hook left it out. | Type: `() => Promise<boolean>`. A call to it tells `claude plugin test` that the test has looked, so `claude plugin test` prints no advice for this drawing, whichever answer the test expects. It rejects with `keepsBeneath: this test has its own ui.render hook at this site, so look for what it drew with find` when the tree holds a stub and the test has its own `ui.render` hook at that site.[^keeps-beneath] Example: `expect(await ui.keepsBeneath()).toBe(true)`. |
 | `unmount` | <Documented /> | Lets the drawing go, as the surface that drops the instance does. Its `Client` elements and their timers end. Later acts on the handle reject. | Type: `() => Promise<void>`. Example: `await ui.unmount()`. |
 
 ### `MountInputTarget`
@@ -192,4 +192,4 @@ An error-like value that `toThrow` compares by its whole message. It is an objec
 
 ## Sources
 
-[^keeps-beneath]: The program, `chunk-76k679vx.js:40114`.
+[^keeps-beneath]: The program, `chunk-xg5j0svy.js:40114`.

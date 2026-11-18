@@ -1,6 +1,6 @@
 ---
 title: CLI Overview
-description: How to start claude, what print mode does, and a map of the flags and subcommands of Claude Code 2.1.326.
+description: How to start claude, what print mode does, and a map of the flags and subcommands of Claude Code 2.1.327.
 sidebar_position: 1
 ---
 
@@ -66,7 +66,7 @@ Its `cache_creation` part is split into `ephemeral_1h_input_tokens` and `ephemer
 
 ## Background Sessions and API Keys
 
-Since `2.1.326`, a background session that is not `--bare` cannot use an `ANTHROPIC_API_KEY` that nobody approved. Claude Code refuses it and tells you to run the session in this terminal.[^bg-key] A session that you start with `claude --bare --bg` gets the key only if the background service has it or is not running yet. If the service lacks the key, token, or workload identity, Claude Code refuses and tells you to run the session in this terminal.
+A background session that is not `--bare` cannot use an `ANTHROPIC_API_KEY` that nobody approved. Claude Code refuses it and tells you to run the session in this terminal.[^bg-key] A session that you start with `claude --bare --bg` gets the key only if the background service has it or is not running yet. If the service lacks the key, token, or workload identity, Claude Code refuses and tells you to run the session in this terminal. Since `2.1.326`, `claude --bare --bg` exits with an error in that case.[^bg-key]
 
 ## How It Works
 
@@ -96,5 +96,5 @@ The flow matches the `claude --help` output.[^help]
 
 ## Sources
 
-[^help]: The program, `claude --help`, `2.1.326`.
-[^bg-key]: The program, `chunk-fdjay46b.js:1095-1130` and `chunk-91rhn136.js:22-27`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^help]: The program, `chunk-rnt5hbrt.js:50198`, `claude --help`, `2.1.327`.
+[^bg-key]: The program, `chunk-dfq3y18g.js:1096-1130` (the check), `chunk-dfq3y18g.js:1085-1092` (the service lacks the credential), and `chunk-ft6cbgxw.js:22-27` (the two messages). Release notes: [`2.1.325`](https://github.com/anthropics/claude-code/releases/tag/v2.1.325) for the refusal and the messages, and [`2.1.326`](https://github.com/anthropics/claude-code/releases/tag/v2.1.326) for the exit with an error of `claude --bare --bg`.

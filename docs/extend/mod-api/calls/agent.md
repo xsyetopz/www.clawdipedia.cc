@@ -169,10 +169,10 @@ A hook may rewrite the content keys of `AgentSpawnInput`. The type pins every ot
 
 ## Sources
 
-[^types]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`.
-[^call-workflow]: The program, `chunk-4h798pp0.js:240184` and `chunk-c6j0a43h.js:1218`.
-[^limits]: The program, `chunk-4h798pp0.js:220850`.
-[^offer-refuse]: The program, `chunk-fvkvyefp.js@77174`.
-[^offer-check]: The program, `chunk-fvkvyefp.js@209069`.
-[^kind]: The program, `chunk-4h798pp0.js:220962`.
-[^parent-agent]: The program, `chunk-4h798pp0.js:236187`.
+[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`.
+[^call-workflow]: The program, `chunk-m14bt1pz.js:243910` and `chunk-4zn1ct5c.js:1221`.
+[^limits]: The program, `chunk-m14bt1pz.js:224885`.
+[^offer-refuse]: The program, `chunk-b0yr0k8v.js:77338`.
+[^offer-check]: The program, `chunk-b0yr0k8v.js:209230`.
+[^kind]: The program, `chunk-m14bt1pz.js:224997`.
+[^parent-agent]: The program, `chunk-m14bt1pz.js:239896`.

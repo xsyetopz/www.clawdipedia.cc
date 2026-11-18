@@ -95,11 +95,11 @@ flowchart TD
   E --> F[Register skills, hooks, MCP, LSP, monitors]
 ```
 
+The `2.1.327` release notes say that agents you pass with `--agents` stay when plugins load or reload, and that a plugin's agent stays when you resume a session from the `--resume` picker.[^agents-327]
+
 ## Unsafe Paths and Links
 
 Since `2.1.326`, a plugin that you load from a folder skips a path or link that leads outside the plugin folder. Claude Code logs a warning that names the path, such as `Skipping ".lsp.json" for directory-loaded plugin ...: it resolves outside the plugin directory`. It does the same for an MCP source that climbs out of the folder, and for an MCPB source, which needs a download that the folder load does not do. `claude plugin validate` reports some unsafe paths and links.[^unsafe-paths]
-
-Since `2.1.326`, a session in a git worktree can skip the `extraKnownMarketplaces` from the worktree's own settings. A notice names the first skipped marketplace and the count of the others. It tells you to add the marketplace yourself, with `/plugin` or `claude plugin marketplace add <source>`.[^worktree-skip]
 
 ## Errors
 
@@ -121,13 +121,13 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^undoc]: The program, for the rows marked <Undocumented />.
-[^cache-path]: The program.
-[^registry]: The program.
+[^undoc]: The program, for the rows marked <Undocumented />: `chunk-74r3m9rp.js:1509`, `chunk-2ew0jg68.js:16766`, and `chunk-m14bt1pz.js:891330`.
+[^cache-path]: The program, `chunk-m14bt1pz.js:891330` and `chunk-m14bt1pz.js:896884`.
+[^registry]: The program, `chunk-74r3m9rp.js:1509`.
 [^bash-bin]: Probe case `print.plugindata.bash-bin`.
-[^watch]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-agcn5b0k.js:4076`.
-[^zip]: The program.
-[^not-installed]: The program, `chunk-kek2xxjw.js:18102`.
-[^lsp]: The program, `chunk-kek2xxjw.js:15868`.
-[^unsafe-paths]: The program, `chunk-4h798pp0.js:44080-44106`, `chunk-4h798pp0.js:225540-225566`, and `chunk-4h798pp0.js:44324`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325) for the `validate` part, which the code lines do not show.
-[^worktree-skip]: The program, `chunk-hm39agsh.js:282-295`, `chunk-sahanck2.js:141`, and `chunk-y9bdpp8r.js:120238`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^watch]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-9ns7kxca.js:9183` for the default, `chunk-m14bt1pz.js:5005273` for the type files that a reload writes, `chunk-m14bt1pz.js:5003323` for the `tsconfig.json`, and `chunk-m14bt1pz.js:5005522` for the `.claude/skills` watch in print mode. Probe cases `print.cli319.plugin-dir-watch.unset`, `print.cli319.plugin-dir-watch.v1`, `pty.cli319.plugin-dir-watch.unset`, and `pty.cli319.plugin-dir-watch.v0`.
+[^zip]: The program, `chunk-2ew0jg68.js:16766`, `chunk-2ew0jg68.js:34533`, `chunk-a9bnjyrw.js:37401`, and `chunk-f8553xxv.js:2101`.
+[^not-installed]: The program, `chunk-dfwkett1.js:18118`.
+[^lsp]: The program, `chunk-dfwkett1.js:15884`.
+[^unsafe-paths]: The program, `chunk-m14bt1pz.js:44656-44684`, `chunk-m14bt1pz.js:229475-229669`, and `chunk-m14bt1pz.js:44900`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325) for the `validate` part, which the code lines do not show.
+[^agents-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program loads the `--agents` agents at `chunk-61wd57dm.js:1435` and `:7932`. The reload and resume behavior is from the release notes.

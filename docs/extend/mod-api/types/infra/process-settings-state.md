@@ -167,4 +167,4 @@ What a hook on `wasm.compile` receives. Since `2.1.326`, it holds the bytes that
 
 ## Sources
 
-[^wasm-compile]: `schemas/claude-code.d.ts`, `WasmCompileInput`. The program, `chunk-4h798pp0.js:240496`.
+[^wasm-compile]: `schemas/claude-code.d.ts`, `WasmCompileInput`. The program, `chunk-m14bt1pz.js:244222`.

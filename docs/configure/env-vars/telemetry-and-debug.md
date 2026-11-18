@@ -208,16 +208,16 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^otel-timeout-logs]: The program, `chunk-7a41jn20.js@56234`. Probe case `env319b.otel-timeout.generic-500-logs-5000`. [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317) describe the limits.
-[^otel-timeout-metrics]: The program, `chunk-7a41jn20.js@56234`. Probe case `env319b.otel-timeout.generic-500-metrics-5000`. [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317) describe the limits.
-[^otel-timeout-traces]: The program, `chunk-7a41jn20.js@56240`. Probe case `env319b.otel-timeout.generic-500-traces-5000`. [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317) describe the limits.
-[^otel-timeout]: The program, `chunk-7a41jn20.js@56240`. Probe cases `env319b.otel-timeout.generic-500`, `env319b.otel-timeout.default`, and `all-three-500`.
-[^error-reporting]: The program, `chunk-fdjay46b.js:37250` and `:39229`.
-[^log-responses]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-agqs570q.js:17375`.
-[^resource-host]: The program, `chunk-7a41jn20.js:1798`.
-[^safety-event]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307). The program.
-[^safety-event-hook]: The program.
-[^vcs-ref]: The program.
-[^otel-schema]: The program.
+[^otel-timeout-logs]: The program, `chunk-rd5tcjx6.js:56357`. Probe case `env319b.otel-timeout.generic-500-logs-5000`. [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317) describe the limits.
+[^otel-timeout-metrics]: The program, `chunk-rd5tcjx6.js:56357`. Probe case `env319b.otel-timeout.generic-500-metrics-5000`. [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317) describe the limits.
+[^otel-timeout-traces]: The program, `chunk-rd5tcjx6.js:56363`. Probe case `env319b.otel-timeout.generic-500-traces-5000`. [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317) describe the limits.
+[^otel-timeout]: The program, `chunk-rd5tcjx6.js:56363`. Probe cases `env319b.otel-timeout.generic-500`, `env319b.otel-timeout.default`, and `all-three-500`.
+[^error-reporting]: The program, `chunk-dfq3y18g.js:37250` and `:39242`.
+[^log-responses]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-f41c8jb6.js:19516`.
+[^resource-host]: The program, `chunk-rd5tcjx6.js:1805`.
+[^safety-event]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307). The program, `chunk-m14bt1pz.js:4525556`.
+[^safety-event-hook]: The program, `chunk-m14bt1pz.js:4524518`.
+[^vcs-ref]: The program, `chunk-f41c8jb6.js:4962`.
+[^otel-schema]: The program, `chunk-f41c8jb6.js:20744` (events) and `chunk-ytkczbf2.js:86031` (metrics).
 [^otlp-protocol]: Probe cases `print.env319b.otlp-protocol.logs`, `.metrics`, `.traces`, and `.logs-general`.
-[^variable-names]: The program, variable names found in the `2.1.314` binary. The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^variable-names]: The program, `chunk-2ew0jg68.js:26216`, variable names found in the `2.1.314` binary. The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.

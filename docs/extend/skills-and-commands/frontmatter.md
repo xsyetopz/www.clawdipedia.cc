@@ -100,7 +100,7 @@ The exact fields are in the `skill` definition in `https://clawdipedia.cc/schema
 
 ## Sources
 
-[^bamum]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-qjk55dsn.js:10471`: its set of blank-looking characters holds `U+16910`, a Bamum letter. The call from the skill name check is not traced.
+[^bamum]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-t17tb5vf.js:10828`: its set of blank-looking characters holds `U+16910`, a Bamum letter. The call from the skill name check is not traced.
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^discovery]: The program, `chunk-4h798pp0.js` lines 188196 to 188210 and 171993 to 172054.
-[^validators]: The program, the frontmatter parser. See also [Extend Claude with Skills](https://code.claude.com/docs/en/skills) and [Settings Reference](https://code.claude.com/docs/en/settings-reference).
+[^discovery]: The program, `chunk-m14bt1pz.js:191923-191938` for the base directory and `chunk-m14bt1pz.js:191694-191760` for the walk and the skip.
+[^validators]: The program, the frontmatter parser, `chunk-m14bt1pz.js:1030663`. See also [Extend Claude with Skills](https://code.claude.com/docs/en/skills) and [Settings Reference](https://code.claude.com/docs/en/settings-reference).

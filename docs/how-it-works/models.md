@@ -109,7 +109,7 @@ Before, such a request could hold a turn for minutes, or for good in that mode.
 
 When a request is too long for the context, Claude Code tries again with a smaller `max_tokens`. It compacts when that is not enough.
 Since `2.1.311`, a session on a standard window (not 1M) that sends more than 200K tokens and gets the error "Usage credits required for 1M context" compacts the conversation and goes on, where it stopped before.[^reactive]
-Since `2.1.326`, Claude Code also knows the context length errors of many third-party gateways and Foundry. It matches phrases such as "maximum context length", "context_length_exceeded", "exceeds the context window", and "reduce the length of the messages". A reply with "policy_blocked" or "dlp_request_denied" does not count. The check runs for the statuses `400`, `413`, `422`, or none. Before, such sessions stopped on every turn instead of compacting.[^gateways]
+Since `2.1.325`, Claude Code also knows the context length errors of many third-party gateways and Foundry. It matches phrases such as "maximum context length", "context_length_exceeded", "exceeds the context window", and "reduce the length of the messages". A reply with "policy_blocked" or "dlp_request_denied" does not count. The check runs for the statuses `400`, `413`, `422`, or none. Before, such sessions stopped on every turn instead of compacting.[^gateways]
 The loop also recovers from a stop at `max_tokens` and from a bad tool call. See [The Agent Loop](agent-loop.md#recovery-inside-the-loop).
 
 ## Related Pages
@@ -121,7 +121,7 @@ The loop also recovers from a stop at `max_tokens` and from a bad tool call. See
 
 ## Sources
 
-[^no-fallback]: The program, a message that names the variable.
-[^retry-rule]: The [Claude Code changelog](https://code.claude.com/docs/en/changelog). The program, `chunk-4h798pp0.js:159807`. The old rule was in the `2.1.310` program, which is not in the `2.1.321` capture.
-[^reactive]: The [Claude Code changelog](https://code.claude.com/docs/en/changelog). The program, `chunk-27vawgnx.js:8475` checks for that refusal on a model whose window is standard, then the code at `chunk-27vawgnx.js:15748` to `:15852` runs the reactive compaction.
-[^gateways]: The program, `chunk-p95xxxdb.js:221` for the phrases and `chunk-4h798pp0.js:106713` for the statuses. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The phrase list is not in the `2.1.323` program.
+[^no-fallback]: The program, `chunk-8g2nr9dn.js:139959`, a message that names the variable.
+[^retry-rule]: The [Claude Code changelog](https://code.claude.com/docs/en/changelog). The program, `chunk-m14bt1pz.js:3203585` (a `429`, `529`, or `503` with `x-should-retry: false` is not retried, also when `CLAUDE_CODE_RETRY_WATCHDOG` is set).
+[^reactive]: The [Claude Code changelog](https://code.claude.com/docs/en/changelog). The program, `chunk-m14bt1pz.js:2605452` checks for that refusal on a model whose window is standard, then the code at `chunk-m14bt1pz.js:2617773` runs the reactive compaction.
+[^gateways]: The program, `chunk-8b50zmfk.js:3547` for the phrases and `chunk-m14bt1pz.js:2021706` for the statuses (`undefined`, `400`, `413`, `422`). [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The phrase list is not in the `2.1.323` program.

@@ -91,7 +91,6 @@ The table shows the output that each caller masks in `2.1.319`.
 | The path, the description, and the skill summary in a permission request that the program sends to a connected client[^where-15] | `redactForDisplay`, and `redactContext` then `redactTokens` |
 | The command, the description, and the plan reason in a remote or push permission notice[^where-16] | `redactContext` then `redactTokens` |
 | Since `2.1.326`, the tool description in a push notification from Remote Control or a cloud session[^where-masker] | `redactContext` then `redactTokens`. The masker keeps a `://[REDACTED]` host marker when a `.` or `-` follows it. |
-| The teammate description when a teammate starts (50 characters)[^where-17] | `redactContext` with tracked tokens |
 | The detail, intent, and latest question of a background job (1,000 and 600 characters), and the tail of its output[^where-18] | `redactContext` with tracked tokens, and `redactTokens` |
 
 More calls to `redact` mask a job detail, a task summary line, or a session or job name.[^more-calls] The masker class is the only copy in the program.
@@ -126,7 +125,6 @@ The program uses the scan in four places.
 | --- | --- |
 | A write to a memory file[^scan-memory] | The write fails with `Content contains potential secrets (<labels>) and cannot be written to memory.` The text then names the reason. A team memory file says that team memory is shared with all repository collaborators. A memory file says that memory is synced to your account. |
 | A command in an auto mode denial notice[^scan-denial] | When the scan finds a secret in the command, the tool input, or the reason, the notice shows no command and no reason. The notice also shows none when the check itself fails. |
-| Synced settings and config content[^scan-sync] | The program checks the content for credentials. |
 | The files of a skill package folder[^scan-skill] | The program gets the labels for each file. All `anthropic-*` rules give one label. |
 
 ## Related Pages
@@ -136,29 +134,27 @@ The program uses the scan in four places.
 
 ## Sources
 
-[^where-1]: The program, `chunk-qvaw5eph.js@36724`, `chunk-3kehpsc0.js@546`.
-[^where-2]: The program, `chunk-nc3yrkaf.js@2790`, `@3031`.
-[^where-3]: The program, `chunk-4h798pp0.js@361390` to `@341015`.
-[^where-4]: The program, `chunk-4h798pp0.js@1165043` to `@1112219`.
-[^where-5]: The program, `chunk-q67vgc7s.js@16920` to `@29323`.
-[^where-6]: The program, `chunk-n4p7gn96.js@13245`, `@13257`.
-[^where-7]: The program, `chunk-0b0795s0.js@10004`.
-[^where-8]: The program, `chunk-dbfcmtq3.js@28938`, `@29374`.
-[^where-9]: The program, `chunk-zyq9kffp.js@12224`.
-[^where-10]: The program, `chunk-gaf3g84v.js@5481`.
-[^where-11]: The program, `chunk-2q5tbzqy.js@24578`.
-[^where-12]: The program, `chunk-4h798pp0.js@5698103`.
-[^where-13]: The program, `chunk-1448amj6.js@33404` to `@32480`.
-[^where-14]: The program, `chunk-hfdwkv62.js@2791` to `@5480`.
-[^where-15]: The program, `chunk-rmt7sg4a.js@39963`, `@42227`, `@44174`.
-[^where-16]: The program, `chunk-jrfhc244.js@94211`, `@94461`, `chunk-q6dkrxcc.js@9778` to `@19106`.
-[^where-17]: The program, `chunk-ygknbk6n.js@6291`.
-[^where-18]: The program, `chunk-g0q4egdb.js@25690` to `@36185`.
-[^rule-table]: The program, `chunk-t1sy1zdg.js`, rule table `@21739` to `@29414`.
-[^more-calls]: The program, `chunk-5spg7c3h.js:1975`, `chunk-1rn7p4q1.js:2499`, `chunk-j73afaft.js:248`, `chunk-32z0j99y.js:451`, `chunk-265293gc.js:633`, `chunk-m79z131q.js:4291`, `chunk-dbfcmtq3.js:810`, `chunk-cpycaw0p.js:158`, `chunk-fdjay46b.js:2535`, and `chunk-a6z2y3ae.js:333`. The masker method names are in no other module.
+[^where-1]: The program, `chunk-0kfay0s8.js:38036`, `chunk-k1zz035e.js:546`.
+[^where-2]: The program, `chunk-teybq4x3.js:2790`, `chunk-teybq4x3.js:3134`.
+[^where-3]: The program, `chunk-m14bt1pz.js:362420` to `@341015`.
+[^where-4]: The program, `chunk-m14bt1pz.js:1191452` to `@1112219`.
+[^where-5]: The program, `chunk-p47p1nn1.js:17477` to `@29323`.
+[^where-6]: The program, `chunk-78jpnzf7.js:13177`, `@13257`.
+[^where-7]: The program, `chunk-85edda7m.js:10004`.
+[^where-8]: The program, `chunk-et57k8s4.js:30225`, `@29374`.
+[^where-9]: The program, `chunk-40s100gp.js:12265`.
+[^where-10]: The program, `chunk-54kjbfv8.js:5481`.
+[^where-11]: The program, `chunk-wbj8g7m8.js:24694`.
+[^where-12]: The program, `chunk-m14bt1pz.js:5766791`.
+[^where-13]: The program, `chunk-35vt2ywn.js:33710` to `@32480`.
+[^where-14]: The program, `chunk-2abk45dn.js:2791` to `@5480`.
+[^where-15]: The program, `chunk-2wacym39.js:40243`, `@42227`, `@44174`.
+[^where-16]: The program, `chunk-vyv768we.js:94395`, `@94461`, `chunk-20ygw9qd.js:9739` to `@19106`.
+[^where-18]: The program, `chunk-vnrqfqqg.js:25813` to `@36185`.
+[^rule-table]: The program, `chunk-5xvwhrne.js:12147-19991`.
+[^more-calls]: The program, `chunk-7mvt1nqk.js:1975`, `chunk-qz9vmqrb.js:2499`, `chunk-fb4pfkgq.js:248`, `chunk-z9bq4nhm.js:451`, `chunk-b9cxwrwa.js:635`, `chunk-1a0qmst9.js:4295`, `chunk-et57k8s4.js:843`, `chunk-6rveqv0x.js:157`, `chunk-dfq3y18g.js:2562`, and `chunk-d0ernz1g.js:333`. The masker method names are in no other module.
 [^leak-probe]: Probes of `2.1.316` and `2.1.319` with cc-inspect `code` `cli` and `query`, which names each request, stream, and transcript file that holds a text. The tool runs used the `calls` option, which makes the stub call tools in order.
-[^scan-memory]: The program, `chunk-t4veb8qt.js`.
-[^scan-denial]: The program, `chunk-y9bdpp8r.js@1827888`.
-[^scan-sync]: The program, `chunk-2e8vamz8.js@215469`.
-[^scan-skill]: The program, `chunk-p6p1sx09.js@38072`.
-[^where-masker]: The program, `chunk-t1sy1zdg.js:1473`, `chunk-hfdwkv62.js:463-466`, and `chunk-q6dkrxcc.js:633`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^scan-memory]: The program, `chunk-b9agxpps.js:3943-4505`.
+[^scan-denial]: The program, `chunk-cfxefa64.js:1820077`.
+[^scan-skill]: The program, `chunk-7rp876m5.js:38072`.
+[^where-masker]: The program, `chunk-5xvwhrne.js:1537`, `chunk-2abk45dn.js:463-466`, and `chunk-20ygw9qd.js:638`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

@@ -36,7 +36,7 @@ Pick `auto` as the permission mode to turn it on. Set `permissions.defaultMode: 
 - `soft_deny` rules cover destructive or irreversible actions that your intent can clear. `hard_deny` rules are security boundaries that your intent does not clear.[^deny-kinds]
 - If the classifier cannot answer, Claude Code blocks the call or sends it to a person. The texts are `Classifier unavailable` and `Auto mode classifier transcript exceeded context window - falling back to manual approval`.[^unavailable]
 - Repeated denials trip a circuit breaker.
-- A server-side classifier can review actions instead. See [The Server-Side Check](#the-server-side-check). Server lists can add rules. Claude Code ignores server entries that are not strings, are blank, or hold control characters.[^server-lists]
+- A server-side classifier can review actions instead. See [The Server-Side Check](#the-server-side-check). Server lists can add rules. Claude Code ignores a server entry that is blank, or that holds control or invisible characters. It also ignores an entry that holds one of the classifier's own template tags. It does not read a server list that holds a value that is neither text nor null.[^server-lists]
 
 The default rule lists are on [Auto Mode Default Rules](auto-mode-rules.md).
 
@@ -96,19 +96,20 @@ When a session enters auto mode, Claude Code removes allow rules that would let 
 Claude Code removes these allow rules:
 
 - A `Bash` rule with no content, or a bare `*`.
-- A `Bash` rule for an interpreter or a command runner, in the forms `x`, `x:*`, `x *`, `x*`, or `x -…*`: `python`, `python3`, `python2`, `node`, `deno`, `tsx`, `ruby`, `perl`, `php`, `lua`, `npx`, `bunx`, `npm run`, `yarn run`, `pnpm run`, `bun run`, `bash`, `sh`, `zsh`, `fish`, `ssh`, `eval`, `exec`, `env`, `xargs`, `sudo`. A `python -m <module>` rule stays.
+- A `Bash` rule for an interpreter or a command runner, in the forms `x`, `x:*`, `x *`, `x*`, or `x -…*`: `python`, `python3`, `python2`, `node`, `deno`, `tsx`, `ruby`, `perl`, `php`, `lua`, `npx`, `bunx`, `pnpx`, `npm run`, `yarn run`, `pnpm run`, `bun run`, `npm exec`, `npm x`, `pnpm exec`, `pnpm dlx`, `yarn exec`, `yarn dlx`, `bun exec`, `bun x`, `bash`, `sh`, `zsh`, `fish`, `ssh`, `eval`, `exec`, `env`, `xargs`, `sudo`. A `python -m <module>` rule stays. Since `2.1.327`, the check also catches a path or version form of these programs, such as `/usr/bin/npm run:*`.[^runners-327]
 - A `PowerShell` rule for an interpreter or a cmdlet that runs code, also in the `.exe` forms.
 - Allow rules for the `Agent` and `Monitor` tools, the REPL tool, and some MCP tools.
 - Every `Bash` and `PowerShell` allow rule, when `autoMode.classifyAllShell` is `true`.
-- Since `2.1.326`, a `Bash` wildcard rule when its program word is not a plain name.[^odd-word] That is the case when the text before the `*` has no program, or when the word has a character other than letters, digits, `_`, `.`, `+`, `@`, `%`, `,`, `:`, `~`, `/`, and `-`, such as `$HOME`. It is also the case when the word is a variable assignment such as `NAME=value`. If the `*` touches the last word, a word that starts with `~`, `/`, `\`, or a drive letter, or that has a `..` segment, counts too. The safety check then decides these commands. A rule without a `*` stays.
-- Since `2.1.326`, a `Bash` wildcard rule whose program is a Windows path with backslashes, such as `C:\tools\git.exe *`. The rule goes, and the safety check decides those calls. An exact rule keeps its allow.[^win-path]
+- A `Bash` wildcard rule when no plain program word comes before the `*`.[^odd-word] Claude Code skips the words before the `*` that are options, numbers, variable assignments such as `NAME=value`, words with a character other than letters, digits, `_`, `.`, `+`, `@`, `%`, `,`, `:`, `~`, `/`, and `-` (such as `$HOME`), and wrapper programs such as `env`, `sudo`, and `timeout`. If it reaches the `*` with no other program word, the rule goes. If the `*` touches the last word, a word that starts with `~`, `/`, `\`, or a drive letter, or that has a `..` segment, counts too. The safety check then decides these commands. A rule without a `*` stays. A rule such as `~/bin/x *` or `/usr/bin/git *` stays, because its program is a plain name once the folder is dropped.
+- A `Bash` wildcard rule whose program is a Windows path with backslashes, such as `C:\tools\git.exe *`. A backslash is not a plain character, so the rule goes, and the safety check decides those calls. An exact rule keeps its allow.[^win-path]
+- A `PowerShell` wildcard rule that names a script with `.\`, such as `PowerShell(.\scripts\build.ps1 *)`, was ignored in error before `2.1.327`. Claude Code now reads the backslashes in such a rule as slashes before the check.[^ps-dot-slash]
 
 ### Classifier Billing Notice
 
-When auto mode falls back from the server-side classifier to its own classifier requests, which are billed, Claude Code can show a notice. The title is `We're changing auto mode to no longer charge for classifier requests in Claude Code.` The text says `However, this session isn't eligible.` and links to [Auto Mode Classifier Billing](https://code.claude.com/docs/en/auto-mode-classifier-billing).[^billing]
+When auto mode falls back from the server-side classifier to its own classifier requests, which are billed, Claude Code can show a notice. Since `2.1.327` the text says that an upcoming release removes this fallback, and that each action the classifier would have checked will then be asked about or denied. The title is `We're changing auto mode to no longer charge for classifier requests in Claude Code.` The text says `However, this session isn't eligible.` and links to [Auto Mode Classifier Billing](https://code.claude.com/docs/en/auto-mode-classifier-billing).[^billing]
 
 - When Claude Code detects a gateway, the text names its host. It detects a base URL host outside `anthropic.com`, a custom provider base URL, or the gateway URL. It knows some gateways by name, such as LiteLLM, Helicone, Portkey, Cloudflare AI Gateway, Kong, Braintrust, Bifrost, and Databricks.
-- When the Claude desktop app manages the provider and turned the gateway check on, the title is `Auto mode switched to its built-in safety check for this session`. This form is new in `2.1.316`.
+- When the Claude desktop app manages the provider and turned the gateway check on, the title is `Auto mode switched to its built-in safety check for this session`.[^billing-desktop]
 - In an interactive session, it is a dialog: you continue or interrupt. If you interrupt, the result is `Cancelled at the classifier billing notice`. With no dialog surface, Claude Code logs the fallback and continues.
 - In `-p` mode, it goes to stderr. With `--output-format stream-json --verbose`, it is a warning event.
 
@@ -160,7 +161,7 @@ The [official docs](https://code.claude.com/docs/en/auto-mode-config) confirm th
 | `claude auto-mode config` | <Documented /> | Prints the effective config as JSON | It uses your settings where set and defaults elsewhere | CLI |
 | `claude auto-mode critique` | <Documented /> | Asks a model to review your custom rules | Option `--model <model>`. It checks clarity, completeness, conflicts, and actionability | CLI |
 | `claude auto-mode reset` | <Documented /> | Removes `autoMode` from the user settings file | Option `-y, --yes` skips the prompt | CLI |
-| `/auto-mode-setup` | <Documented /> | Scans the project and recent sessions, and proposes `autoMode` rules | Shows `Auto-mode setup proposal is ready for review`. Since `2.1.304` it is also on Bedrock, Vertex, Foundry, a Claude apps gateway, and with telemetry off. `skillOverrides["auto-mode-setup"]: "off"` turns it off.[^setup-off] | Interactive |
+| `/auto-mode-setup` | <Documented /> | Scans the project and recent sessions, and proposes `autoMode` rules | Shows the notice `Auto mode setup is ready for review`. In `2.1.326` the notice read `Auto-mode setup proposal is ready for review`. Since `2.1.304` it is also on Bedrock, Vertex, Foundry, a Claude apps gateway, and with telemetry off. `skillOverrides["auto-mode-setup"]: "off"` turns it off.[^setup-off] | Interactive |
 
 The `config` output tags custom rules as `(custom rules added alongside the defaults)` or `(custom rules replacing defaults)`.
 
@@ -219,41 +220,44 @@ It works in `-p` mode when `CLAUDE_CODE_REMOTE` is not set and a classifier mode
 
 ## Sources
 
-[^auto-sources]: The `autoMode` schema text and the program.
+[^auto-sources]: The `autoMode` schema text, `chunk-ja5z738t.js:184841`, and the program, `chunk-bpr7n093.js:123762`.
 [^deny-kinds]: The `autoMode` schema text.
-[^unavailable]: The program.
-[^server-lists]: The program.
-[^server-check]: The program, `2.1.319`. `chunk-jfnh5wnd.js@30847` parses the verdict, `chunk-4h798pp0.js@3293228` reads it from the stream, and `chunk-4h798pp0.js@3532304` acts on it.
+[^unavailable]: The program, `chunk-m14bt1pz.js:3521833`, `chunk-270tbjq0.js:47240`, and `chunk-k57p2hm4.js:8503`.
+[^server-lists]: The program, `chunk-ja5z738t.js:6656-6682` (the lists `allow`, `environment`, and `soft_deny`), `chunk-40s100gp.js:677-700` (the `auto_mode_environment` list of the bridge), and `chunk-ywm74c9c.js:230-257` (the control, invisible, and template checks).
+[^server-check]: The program, `2.1.319`. `chunk-270tbjq0.js:31835` parses the verdict, `chunk-m14bt1pz.js:3350348` reads it from the stream, and `chunk-m14bt1pz.js:3592849` acts on it.
 [^server-probe]: Probe cases `print.automode.classifier-server.server-1`, `print.automode.classifier-server.server-1-betas-off`, and `print.automode.classifier-server.betas-off`, run on `2.1.319`.
-[^gateway-guide]: The program, `chunk-ajpqe291.js@1497771`. The gateway guide in the program says this.
-[^stages]: The program, `chunk-4h798pp0.js` (the classifier) and `chunk-3bs9fgrf.js` (the defaults). A probe captured the requests.
-[^stage-flag]: The program. Server config `tengu_auto_mode_config.twoStageClassifier` picks the mode.
-[^stage-defaults]: The program, `chunk-3bs9fgrf.js`.
-[^stage-code]: The program, `chunk-4h798pp0.js`.
-[^stage-think]: The program, `chunk-d73xe1mr.js`.
-[^stage-probe]: The program, `chunk-4h798pp0.js`, and a probe that captured the classifier requests.
+[^gateway-guide]: The program, `chunk-5z0ytfrt.js:1498179`. The gateway guide in the program says this.
+[^stages]: The program, `chunk-m14bt1pz.js:3515000-3517935` (the classifier) and `chunk-vs4735qw.js:262-744` (the defaults). A probe captured the requests.
+[^stage-flag]: The program, `chunk-m14bt1pz.js:3536553`. Server config `tengu_auto_mode_config.twoStageClassifier` picks the mode.
+[^stage-defaults]: The program, `chunk-vs4735qw.js:262-744`.
+[^stage-code]: The program, `chunk-m14bt1pz.js:1193020`, `:3511409`, and `:3521545-3521833`.
+[^stage-think]: The program, `chunk-asj6f58y.js:555109`.
+[^stage-probe]: The program, `chunk-m14bt1pz.js:3533722`, and a probe that captured the classifier requests.
 [^official-project]: [Auto Mode Configuration](https://code.claude.com/docs/en/auto-mode-config) in the official docs.
 [^official-broad]: [Permission Modes](https://code.claude.com/docs/en/permission-modes) in the official docs.
-[^broad-rules]: The program, `chunk-88d8nvn3.js` and `chunk-3q9v3gt8.js`.
-[^billing]: The program, `chunk-4h798pp0.js@1575760` to `@1501302`, `chunk-nany1zhx.js@4984`, and `chunk-fv3hzthg.js@1954`, `2.1.319`.
-[^billing-flag]: The program. The flag is `tengu_velvet_heron`.
-[^billing-latch]: The program, `chunk-4h798pp0.js@3528160`.
+[^broad-rules]: The program, `chunk-7at7cxxb.js:3992` and `:5994`.
+[^billing]: The program, `chunk-m14bt1pz.js:1609756-1611404`, `2.1.319`. The upcoming-release sentence is at `chunk-m14bt1pz.js:1610222`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^billing-desktop]: The program, `chunk-m14bt1pz.js:1609746`.
+[^billing-flag]: The program, `chunk-m14bt1pz.js:1611200`. The flag is `tengu_velvet_heron`.
+[^billing-latch]: The program, `chunk-m14bt1pz.js:3541057`.
 [^billing-probe]: Probe cases `pty.notifications.agent-needs-input`, `pty.notifications.agent-needs-input-refused`, and `pty.notifications.auto-mode-local`, in table order.
-[^classify-all]: The program.
-[^sources-probe]: A probe ran `claude auto-mode config` with `autoMode.allow` set in each source. The program logs `tengu_settings_auto_mode_rules_untrusted_source_ignored` for an ignored source. Its message says only policy, user, and flag settings may set the rules. The run did not check `classifyAllShell`, because it is not in the `auto-mode config` output.
-[^strip-defaults]: The program, `chunk-caex36kk.js` and `chunk-27vawgnx.js`.
+[^classify-all]: The program, `chunk-bpr7n093.js:124789` and `chunk-ja5z738t.js:185593`.
+[^sources-probe]: A probe ran `claude auto-mode config` with `autoMode.allow` set in each source. The program, `chunk-bpr7n093.js:123762`, logs `tengu_settings_auto_mode_rules_untrusted_source_ignored` for an ignored source. Its message says only policy, user, and flag settings may set the rules. The run did not check `classifyAllShell`, because it is not in the `auto-mode config` output.
+[^strip-defaults]: The program, `chunk-bpr7n093.js:124539` and `chunk-270tbjq0.js:30584`.
 [^classify-probe]: A probe counted classifier requests for a `curl` command that a user allow rule covered. The count was 1 with `true` in user settings or `--settings`, and 0 with `false` or unset. A managed `false` with `true` in user settings or `--settings` gave 1. A managed `true` gave 1 in every case. Without `CLAUDE_CODE_AUTO_MODE_SERVER=0` on `2.1.319`, a stub that gives the server-side check no verdict gets no classifier request.
 [^defaults-probe]: A probe with the cc-inspect `code` action `cli`.
-[^setup-off]: The program.
+[^setup-off]: The program, `chunk-m14bt1pz.js:2154299-2154353`. The notice text is at `chunk-cfxefa64.js:25521`, and the command description at `chunk-m14bt1pz.js:115217-115221`.
 [^settings-order]: A probe on `2.1.314` and `2.1.316`.
-[^critique]: The program, `chunk-3ysj8kb8.js`.
-[^setup-form]: The program, `chunk-4drpmqc0.js` and `chunk-4h798pp0.js:112903`.
-[^model-env]: The program, `chunk-d73xe1mr.js`.
-[^summary-flag]: The program.
-[^ignored-env]: The program lists the name in its environment table as a boolean, and no code reads it.
-[^chrome-flag]: The program. The flag is `tengu_cowork_chrome_automode_default`.
-[^bg-rules]: The program.
-[^auto-reresolve]: The program, `chunk-88d8nvn3.js:1255-1285`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^auto-fallback]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-mdf23c0f.js:76-82` and `:116-135`, which logs `[auto-mode] the built-in auto default gave way to ... served settings failed`. The program skips the fallback when `CLAUDE_CODE_BRIDGE_CHILD_AUTO_DEFAULT` is set. The release note also says terminal and VS Code sessions with no mode set start in auto mode when the policy has not loaded. The cleaned code does not show that start, so this page does not state it.
-[^odd-word]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-88hf417t.js:28` calls `chunk-3q9v3gt8.js:590-616`. The rule applies to `Bash` only. A run of the same expressions on sample rules, such as `$HOME *`, `~/bin/x*`, and `FOO=1 *`, removed them. It kept `git *`, `~/bin/x *`, and `/usr/bin/git *`.
-[^win-path]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-3q9v3gt8.js:593-598` and `:599-616`. A backslash is not in the set of plain characters, so a wildcard rule with a backslash path as its program goes. The release note also says Claude Code plans to restore rules that start with `.\`. The cleaned code does not show that, so this page does not state it.
+[^critique]: The program, `chunk-61zrgbqf.js:31657-32260`.
+[^setup-form]: The program, `chunk-5dg1tkx7.js:21666-23951` and `chunk-m14bt1pz.js:2154600`.
+[^model-env]: The program, `chunk-m14bt1pz.js:3534101-3535132`.
+[^summary-flag]: The program, `chunk-a1j0j2en.js:2486-2541`.
+[^ignored-env]: The program lists the name in its environment table as a boolean, and no code reads it, `chunk-2ew0jg68.js:19605`.
+[^chrome-flag]: The program, `chunk-7at7cxxb.js:15302`. The flag is `tengu_cowork_chrome_automode_default`.
+[^bg-rules]: The program, `chunk-61wd57dm.js:14760` and `chunk-9r83vch1.js:12899`.
+[^auto-reresolve]: The program, `chunk-7at7cxxb.js:24370`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^auto-fallback]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-ssqtkyx2.js:2301`, which logs `[auto-mode] the built-in auto default gave way to ... served settings failed`. The program skips the fallback when `CLAUDE_CODE_BRIDGE_CHILD_AUTO_DEFAULT` is set.
+[^odd-word]: The program, `chunk-y7vqg8jc.js:12472-12989`, which is used for `Bash` rules at `:13567`. The rule applies to `Bash` only. Rules that fail the check in `2.1.326` form, such as `$HOME *`, `~/bin/x*`, and `FOO=1 *`, still go. Rules such as `git *`, `~/bin/x *`, and `/usr/bin/git *` stay. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^runners-327]: The program, `chunk-y7vqg8jc.js:12681-12989`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^ps-dot-slash]: The program, `chunk-y7vqg8jc.js:12635` and `:14430`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^win-path]: The program, `chunk-y7vqg8jc.js:12472-12989` (the character test and the word scan). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). A backslash is not in the set of plain characters, so the word is skipped and no program word is left.

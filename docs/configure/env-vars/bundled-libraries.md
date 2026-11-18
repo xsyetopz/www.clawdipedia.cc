@@ -121,7 +121,7 @@ The table is sorted by name. The official [Environment Variables](https://code.c
 | `NODE_DISABLE_COLORS` | <Undocumented /> | Bun runtime | In the Bun runtime, a non-empty value sets the terminal color depth to one color. |
 | `NODE_NO_READLINE` | <Undocumented /> | Bun runtime | In the Bun REPL, a number that parses to non-zero turns off terminal mode. |
 | `NODE_PORT` | <Undocumented /> | Bun runtime | Gives a fallback port for the Bun dev server after `PORT` and `BUN_PORT`, when the port is in use. |
-| `NODE_REPL_EXTERNAL_MODULE` | <Undocumented /> | Bun runtime | Gives the path of a module that the Bun REPL loads in place of the built-in REPL. |
+| `NODE_REPL_EXTERNAL_MODULE` | <Undocumented /> | Claude Code | Is a name in a fixed list of environment variable names, next to `NODE_OPTIONS`, `PYTHONSTARTUP`, and `PERL5DB`.[^repl-module] |
 | `NODE_REPL_HISTORY` | <Undocumented /> | Bun runtime | Sets the file path for persistent history in the Bun REPL. |
 | `NODE_REPL_HISTORY_SIZE` | <Undocumented /> | Bun runtime | Sets the history size of the Bun REPL. |
 | `NODE_REPL_MODE` | <Undocumented /> | Bun runtime | Sets the Bun REPL mode to `strict` or `sloppy`. |
@@ -145,7 +145,7 @@ The table is sorted by name. The official [Environment Variables](https://code.c
 | `POSTGRES_URL` | <Undocumented /> | Bun SQL | Gives the default Postgres connection URL to the embedded Bun SQL client. |
 | `SQLITE_URL` | <Undocumented /> | Bun SQL | Gives the default SQLite connection URL to the embedded Bun SQL client. |
 | `SQLITEURL` | <Undocumented /> | Bun SQL | Is another spelling of `SQLITE_URL` for the embedded Bun SQL client. |
-| `TEAMCITY_VERSION` | <Undocumented /> | color support | Is a TeamCity CI variable. |
+| `TEAMCITY_VERSION` | <Undocumented /> | color support | Is a TeamCity CI variable. A value that starts with `9.` followed by a non-zero number, or with two or more digits and a dot, gives basic color support.[^teamcity] |
 | `TLS_DATABASE_URL` | <Undocumented /> | Bun SQL | Gives a default URL and turns on TLS for the embedded Bun SQL client. |
 | `TLS_MARIADB_DATABASE_URL` | <Undocumented /> | Bun SQL | Gives the MariaDB URL and turns on TLS for the embedded Bun SQL client. |
 | `TLS_MYSQL_DATABASE_URL` | <Undocumented /> | Bun SQL | Gives the MySQL URL and turns on TLS for the embedded Bun SQL client. |
@@ -165,5 +165,7 @@ A scan of the strings in the program found the names.[^scan] The list can miss n
 
 ## Sources
 
-[^scan]: The program, variable names found in the `2.1.314` binary.
+[^scan]: The program, for example `chunk-5n4ee3md.js:5042`, variable names found in the `2.1.314` binary.
 [^bun-options]: Probes page, run with a bad `BUN_OPTIONS` value.
+[^repl-module]: The program, `chunk-2r3tjbfc.js:4102-4146`.
+[^teamcity]: The program, `chunk-j9g63hey.js:2677-2678`.

@@ -58,7 +58,7 @@ See [How Claude Remembers Your Project](https://code.claude.com/docs/en/memory) 
 | HTML block comments | <Documented /> | Claude Code strips them before injection | Comments in code blocks stay | Any `CLAUDE.md` |
 | Symlinks in `.claude/rules/` | <Documented /> | Shares rules across projects | A target outside the working directory counts as an external import. Network paths do not load | `.claude/rules/` |
 | `claudeMdExcludes` | <Documented /> | Skips files by glob | It matches absolute paths with `picomatch`. Arrays merge across scopes. It applies only to user, project, and local files | Any settings scope |
-| **Project instructions** (`/config`) | <Documented /> | Chooses `claude-md-or-agents-md` (default), `claude-md-and-agents-md`, `claude-md`, or `managed-only` | Stored in `pluginConfigs["cc-plugin-agents-md@builtin"].options.instructionFiles`. Read from user, `--settings`, and managed settings. `agents-md@builtin` also works from `2.1.285` | User, managed |
+| **Project instructions** (`/config`) | <Documented /> | Chooses `claude-md-or-agents-md` (default), `claude-md-and-agents-md`, `claude-md`, or `managed-only` | Stored in `pluginConfigs["cc-plugin-agents-md@builtin"].options.instructionFiles`. Read from user, `--settings`, and managed settings. The short name `agents-md` maps to the same plugin.[^instr-files] | User, managed |
 | `includeGitInstructions` | <Documented /> | Removes built-in commit and PR instructions | The default is `true`. The environment variable `CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS=1` wins | Settings |
 | `CLAUDE_CODE_DISABLE_CLAUDE_MDS` | <Documented /> | Keeps `CLAUDE.md` files out of context | `1` disables user, project, and auto memory files | Env |
 
@@ -116,17 +116,16 @@ In the user message, Claude Code writes one line above the text of each instruct
 | `local` | <Undocumented /> | `(user's private project instructions, not checked in)` | Checked on `2.1.322`. The file text is not quoted.[^label-print] |
 | `memory` | <Undocumented /> | `(user's auto-memory, persists across conversations)` | Checked on `2.1.322`. The file text is not quoted.[^label-print] |
 
-The "not verified" label appears in two conditions in `2.1.322`:
+The "not verified" label appears in two conditions in `2.1.327`:
 
 - A mod returns a `managed` file from `prompt.context` that Claude Code did not send to it with the same path and the same content.[^cond-mod] The print case shows this for a file that the mod adds. This condition does not apply to a mod that Claude Code vouches for.[^cond-vouch] Claude Code vouches for the mod of a plugin in these conditions:
   - The plugin id ends with `@builtin`.[^vouch-builtin]
-  - Managed settings that the session vouches for enable the plugin in `enabledPlugins`, and they declare the source of its marketplace under `extraKnownMarketplaces`.[^vouch-managed] When managed settings enable a plugin that does not meet this condition, Claude Code logs a warning that names the cause.[^vouch-warning] On `2.1.322`, a plugin from a `directory` marketplace in the managed folder, which managed settings declared and enabled, added a `managed` file that got the `managed` label. The same plugin, declared and enabled in user settings, added a file that got the "not verified" label.[^vouch-cases]
-  - In `claude plugin test`, the plugin loads in the `prepend` or `append` tier.[^vouch-test]
-- Claude Code loads a file from the managed folder in a session whose entry point is `remote_cowork` or `remote_cowork_trigger`, and the account of the session could write that file.[^cond-cowork] On `2.1.322`, `CLAUDE_CODE_ENTRYPOINT=remote_cowork` with a managed folder that the user owns gave the label. The same entry point with a root-owned folder did not. In a normal session, a managed folder that the user owns did not get the label.[^cowork-cases]
+  - Managed settings that the session vouches for enable the plugin in `enabledPlugins`, and they declare the source of its marketplace under `extraKnownMarketplaces` as a local directory, and that marketplace lists the plugin by a relative path.[^vouch-managed] On `2.1.322`, a plugin from a `directory` marketplace in the managed folder, which managed settings declared and enabled, added a `managed` file that got the `managed` label. The same plugin, declared and enabled in user settings, added a file that got the "not verified" label.[^vouch-cases]
+- Claude Code loads a file from the managed folder, and the account of the session could write that file or a file in its folder.[^cond-cowork]
 
 When mods in a row run on the same hooks host, Claude Code sends `prompt.context` to them in one step. For that step, it keeps the label that each file already has, and does not do the check of the first condition again.[^same-host] [`CLAUDE_CODE_HOOKS_SAME_THREAD`](env-vars/plugins-and-mcp.md) selects the host.
 
-The label text is in each installed version from `2.1.309` to `2.1.322`. Versions `2.1.309`, `2.1.316`, and `2.1.322` have both conditions and the exception for a vouched mod. We did not examine versions before `2.1.309`.
+The label text and both conditions are in the `2.1.327` program.
 
 ## How It Works
 
@@ -183,23 +182,21 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^managed-probe]: [Probes](../reference/probes.md#managed-folder-probe).
-[^cloud-memory]: The program, `chunk-130j7a99.js@6520` and `chunk-rfa29qme.js@39731`.
+[^cloud-memory]: The program, `chunk-vcqnswns.js:6520` and `chunk-9s0gdfgm.js:39873`.
 [^post-turn-case]: Probe case `print.configmem.cowork-memory.post-turn`.
 [^post-turn-mounted]: Probe case `print.configmem.cowork-memory.post-turn-mounted`.
 [^cowork-run]: The four `CLAUDE_COWORK_MEMORY_*` variables were run in `-p`.
-[^labels]: The program (`2.1.322`, `chunk-fvkvyefp.js@161626` and `chunk-fvkvyefp.js@162187`), and the print case `modcontext.prompt-context.added-files`. In that case, a mod added one file of each kind in its `prompt.context` hook. See [Probes](../reference/probes.md#release-probes-for-21322).
+[^labels]: The program (`2.1.327`, `chunk-b0yr0k8v.js:162060` and `chunk-b0yr0k8v.js:162473`), and the print case `modcontext.prompt-context.added-files` on `2.1.322`. In that case, a mod added one file of each kind in its `prompt.context` hook. See [Probes](../reference/probes.md#release-probes-for-21322).
 [^label-vouched]: The managed case `managed.vouch.mod-vouch-managed`.
 [^label-print]: The print case `modcontext.prompt-context.added-files`.
-[^cond-mod]: The program, `chunk-fvkvyefp.js@161202`.
-[^cond-vouch]: The program, `chunk-fvkvyefp.js@161374`, `chunk-a2efqzw7.js@9042`.
-[^vouch-builtin]: The program, `chunk-bdsa2mba.js@255`.
-[^vouch-managed]: The program, `chunk-w288hm0h.js@14990`, `chunk-w288hm0h.js@17830`.
-[^vouch-warning]: The program, `chunk-w288hm0h.js@16722`.
+[^cond-mod]: The program (`2.1.327`), `chunk-b0yr0k8v.js:161463` (a `managed` file is unverified unless it matches a file sent to the mod, or the mod is vouched for) and `chunk-m14bt1pz.js:1677313` (the loader marks a `Managed` file unverified when the file may be written by the session).
+[^cond-vouch]: The program (`2.1.327`), `chunk-b0yr0k8v.js:161537` (`isVouched`) and `chunk-mcjsygy5.js:9042` (a handler is vouched for when it is not a user-origin one and its tier is `prepend` or `append`, or the engine answers for it).
+[^vouch-builtin]: The program (`2.1.327`), `chunk-dafpvz32.js:52165` (an id is built in when it ends with `@builtin`).
+[^vouch-managed]: The program (`2.1.327`), `chunk-0r561xah.js:15280` (the setting text names the rule: managed settings declare the marketplace under `extraKnownMarketplaces` as a local directory, and it lists the plugin by a relative path).
 [^vouch-cases]: Cases `managed.vouch.mod-vouch-managed` and `managed.baseline.mod-vouch-user`.
-[^vouch-test]: The program, `chunk-76k679vx.js@44586`.
-[^cond-cowork]: The program, `chunk-fvkvyefp.js@160064`, `chunk-4h798pp0.js@1636161`.
-[^cowork-cases]: Cases `managed.owned.claudemd-remote-cowork`, `managed.main.claudemd-remote-cowork`, and `managed.owned.claudemd-order`.
-[^same-host]: The program, `chunk-fvkvyefp.js@67587`, `chunk-fvkvyefp.js@161374`.
-[^size-warning]: The program (read), and a probe of the interactive screen (2.1.305, local stub, fake key). See [Interactive Probes](../reference/probes.md#interactive-probes).
+[^cond-cowork]: The program (`2.1.327`), `chunk-b0yr0k8v.js:160227` (the test for a managed file, which asks whether its folder holds a link or a file that the session's account could have changed) and `chunk-b0yr0k8v.js:162424` (the label text).
+[^same-host]: The program (`2.1.327`), `chunk-b0yr0k8v.js:67403` (the merged step of mods in a row, marked `isHop`), `chunk-b0yr0k8v.js:161512` (for such a step the label each file already has is kept; the other step checks managed files again), and `chunk-m14bt1pz.js:4911482` (`CLAUDE_CODE_HOOKS_SAME_THREAD` picks the `same-thread` host, and a build without it uses a `worker`).
+[^size-warning]: The program (read, `chunk-tz27m3ab.js:5204`), and a probe of the interactive screen (2.1.305, local stub, fake key). See [Interactive Probes](../reference/probes.md#interactive-probes).
 [^v309]: [v2.1.309 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.309).
 [^nested-limit]: Cases `print.misc.nested-claude-md-over-limit.*`, a 200,022-character `sub/CLAUDE.md` loaded by a Read under `sub/`.
+[^instr-files]: The program (`2.1.327`), `chunk-5ed61e62.js:2393` (the four values, and the default `claude-md-or-agents-md`), `chunk-e5r4kmft.js:9685` (the plugin reads `instructionFiles`) and `chunk-ja5z738t.js:7673` (the short name `agents-md` maps to `cc-plugin-agents-md`).

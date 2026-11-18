@@ -106,4 +106,4 @@ flowchart TD
 
 ## Sources
 
-[^undoc]: The program.
+[^undoc]: The program, for example `chunk-sqn39hq2.js:253429`, `chunk-m14bt1pz.js:4587321`, `chunk-m14bt1pz.js:817069`, and `chunk-m14bt1pz.js:2646336` for `MCP_TRUNCATION_PROMPT_OVERRIDE`.

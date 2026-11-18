@@ -242,5 +242,5 @@ The picture that an `Image` displays. It is base64 bytes that the plugin holds (
 ## Sources
 
 [^hotkey]: The Mod API type file, `schemas/claude-code.d.ts`.
-[^iterm]: The program.
-[^overflowx]: The program, `chunk-fvkvyefp.js:3615` and `chunk-fvkvyefp.js:5120-5136`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^iterm]: The program, `chunk-kw3b19n6.js:15437` and `chunk-maqjh9z8.js:231935`.
+[^overflowx]: The program, `chunk-b0yr0k8v.js:3630` and `chunk-b0yr0k8v.js:5135-5136`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

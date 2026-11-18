@@ -72,7 +72,7 @@ flowchart TD
 See [Files, Nouns, and Gates](nouns-and-gates.md#gates-that-stop-mods).
 
 Hooks run in five tiers, from outermost: `prepend`, `user`, `append`, `builtin`, `core`.
-Managed plugins in `prependPlugins` and `appendPlugins` take the first and third tier.
+Managed plugins in `prependPlugins` and `appendPlugins` take the first and third tier. Since `2.1.327`, a managed plugin that neither list names takes the first tier, after the listed ones (see [`Tier`](types/hooks.md#types-without-fields)).[^tier-327]
 The engine itself is `core`.
 
 ## Commands for Mod Authors
@@ -158,11 +158,6 @@ Each entry compares a type file with the one before it. The type file and the pr
   - Adds `placement` to `PaneOpenArgs`, and a plain-data rule (no named key on a list, no key `__proto__`, `constructor`, or `prototype`).
   - Two plugins on one `hotkey` press neither, and a matcher that leaves out `plugin` names the hook's own plugin.
   - `claude plugin validate` also reports the `$` nouns that an `engine.create` hook adds or withholds.
-- `2.1.322`: matches `2.1.321` apart from the version in its header.
-- `2.1.321`, compared with `2.1.319`:
-  - Adds the call `$.ui.cancelNotify`, the options `key`, `delayMs`, `at`, and `untilBack` of `$.ui.notify`, and the notify channel `client` (see [UI Methods](./ui/ui.md)).
-  - Lets `$.theme.set` take `colors` (`ThemeColors`) with or without `backdrop`.
-  - Adds `breakPromptCache` to `PromptSectionResult` and `ToolDescribeResult`, `compress` and a base64 `body` to `HttpInit`, `isStreaming` and `sendIndex` to `HttpResponse`, `isCollapsed` to the props of `AbovePrompt`, and `keepsBeneath` to a mounted drawing in tests (see [Types](./types/index.md)).
 - `2.1.319`, compared with `2.1.314`:
   - Adds the calls `$.theme.set` and `$.theme.clear`, their events, and the render component `Backdrop`.
   - Adds `effort` to the `$.model.complete` and fork types, `isTextDisplayOnly` to `CommandRunResult`, `by` to `TurnCompleteResult`, and the elements `Input` and `Select` to one more surface.
@@ -211,8 +206,9 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^types]: The Mod API type file of the `2.1.326` program, published unchanged as `schemas/claude-code.d.ts`.
-[^prompt-edit]: The program.
-[^rollout]: The program. The server flag is `tengu_plugin_hooks_modules`.
-[^re-entry]: The program.
-[^paint]: The program, `chunk-fvkvyefp.js:13148`.
+[^tier-327]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, the text of `Tier`.
+[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`.
+[^prompt-edit]: The program, `chunk-b0yr0k8v.js:193534`.
+[^rollout]: The program, `chunk-asj6f58y.js:758552`. The server flag is `tengu_plugin_hooks_modules`.
+[^re-entry]: The program, `chunk-9ns7kxca.js:6139`.
+[^paint]: The program, `chunk-b0yr0k8v.js:13173`.

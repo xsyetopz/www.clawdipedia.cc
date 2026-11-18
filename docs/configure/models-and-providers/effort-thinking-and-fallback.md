@@ -28,13 +28,13 @@ It comes from the catalog (<Undocumented />). `claude-opus-4-7` has the default 
 | `effortLevel`, `maxEffortLevel`, `modelSettings` | <Documented /> | Settings for the default level and a cap. |
 | `output_config.effort` | <Documented /> | The request field that carries the level. Since `2.1.310`, when the server refuses it, the request goes again without it, and it stays off for that model until the process ends.[^effort-field] |
 | `per-turn-control-2026-07-01` | <Undocumented /> | A beta that lets some models take the effort with each message. |
-| `ultrathink` | <Documented /> | A word in a prompt that asks for deeper thinking on that turn only. Since `2.1.311`, in the interactive terminal on the Anthropic API, it runs the turn at `xhigh` effort on Opus 5.5, Sonnet 5.5, Haiku 5.5, and Fable 5.1. Since `2.1.321`, it does so on Fable 5.2 and Mythos 5.2 too. Typed while Claude is working, it raises the rest of that turn. The rainbow on the word shows only where it can raise effort (see the note below). |
+| `ultrathink` | <Documented /> | A word in a prompt that asks for deeper thinking on that turn only. Since `2.1.311`, in the interactive terminal on the Anthropic API, it runs the turn at `xhigh` effort on Opus 5.5, Sonnet 5.5, Haiku 5.5, and Fable 5.1. It does so on Fable 5.2 and Mythos 5.2 too. Typed while Claude is working, it raises the rest of that turn. The rainbow on the word shows only where it can raise effort (see the note below). |
 | Default effort | <Documented /> | The default is `high`, except `medium` for Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.2, and Mythos 5.2, and `xhigh` for Opus 4.7. |
 | Cache warning | <Undocumented /> | Since `2.1.312`, the dialog `Switch model?` or `Change effort level?` says `This conversation is cached for the current model. Switching to` the new value in bold `means the full history gets re-read.`[^cache-warning] The old text ended with `on your next message`. |
 | Effort note in the prompt | <Undocumented /> | The prompt shows the level and `/effort`. Since `2.1.312`, it shows `may wait for your next message` in place of `/effort` only while the request has not yet carried the shown level (see the note below). |
 | Spinner effort | <Undocumented /> | The spinner adds the text `with <level> effort`. Since `2.1.312`, the level is the one the request carried (see the note below). |
 
-The `ultrathink` boost works on models whose catalog entry has the capability `per_turn_effort`. In `2.1.319` they were four. Since `2.1.321` they are six, with Fable 5.2 and Mythos 5.2 added.[^per-turn] At submit, Claude Code sets the turn effort to `xhigh`. A prompt typed during a turn gets the same level.[^ultrathink-submit] A gate decides whether a model can take the boost. The prompt colors the word only when the model passes.[^ultrathink-gate]
+The `ultrathink` boost works on models whose catalog entry has the capability `per_turn_effort`. Six models have it, among them Fable 5.2 and Mythos 5.2.[^per-turn] At submit, Claude Code sets the turn effort to `xhigh`. A prompt typed during a turn gets the same level.[^ultrathink-submit] A gate decides whether a model can take the boost. The prompt colors the word only when the model passes.[^ultrathink-gate]
 
 The text of the prompt note did not change in `2.1.312`. Only the flag changed. In `2.1.311`, the flag was true after a step key press while Claude was working, on a model that passes the per-turn check, and it cleared when Claude stopped. Since `2.1.312`, the flag is true when the request sent a level, no turn effort is set, the sent level differs from the shown level, and the model passes the per-turn check.[^note-flag] The note clears when one of these stops being true. Claude Code then removes the `effort-level` notification.[^note-clear] Claude Code builds the prompt text in one place.[^prompt-text]
 
@@ -109,7 +109,7 @@ Both rows are about a model name that Claude Code does not recognize, such as a 
 
 | Item | Status | Effect | Notes |
 | --- | --- | --- | --- |
-| `CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK` | <Undocumented /> | Turns off the automatic switch to another model after a flagged message. | Since `2.1.312`, the switch also covers names that Claude Code does not recognize. Before, a name with no catalog flag and no known flagged family got no switch. The setting `switchModelsOnFlag` is a second control.[^refusal] |
+| `CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK` | <Undocumented /> | Turns off the automatic switch to another model after a flagged message. | The setting `switchModelsOnFlag` is a second control.[^refusal] |
 | `CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT` | <Documented /> | `0` keeps the full system prompt. | Since `2.1.312`, an unrecognized name gets the short prompt. See [Names That Claude Code Does Not Recognize](../../how-it-works/system-prompt.md#names-that-claude-code-does-not-recognize). |
 
 ## Related Pages
@@ -118,20 +118,20 @@ Both rows are about a model name that Claude Code does not recognize, such as a 
 
 ## Sources
 
-[^effort-field]: The program.
-[^cache-warning]: The program, `chunk-y9bdpp8r.js:64768`, `:64804-64809`. Also the [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312).
-[^per-turn]: The program, `chunk-9vmv3a50.js:221`, `:448`, `:753`, `:847`, `:896`, `:1001` of `2.1.326`. Also the [Claude Code changelog](https://code.claude.com/docs/en/changelog).
-[^ultrathink-submit]: The program, `chunk-27vawgnx.js:5687` and `chunk-q67vgc7s.js:3691`.
-[^ultrathink-gate]: The program, `chunk-d73xe1mr.js:21260` and `chunk-y9bdpp8r.js:61534`.
-[^note-flag]: The program and the [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312), `chunk-y9bdpp8r.js:68331`.
-[^note-clear]: The program, `chunk-y9bdpp8r.js:67246`.
-[^prompt-text]: The program, `chunk-y9bdpp8r.js:13207`.
-[^request-level]: The program, `chunk-4h798pp0.js:164452` and `chunk-4h798pp0.js:168159`.
-[^sent-level]: The program, `chunk-y9bdpp8r.js:107414`, `:107421`.
-[^spinner-level]: The program, `chunk-w7xs2jdy.js:260` and `chunk-69n3keqc.js:1626-1588`.
-[^model-settings]: The program, `chunk-69n3keqc.js`.
-[^effort-source]: [Model Configuration](https://code.claude.com/docs/en/model-config), section "Adjust effort level", and the program.
-[^should-retry]: The program, `chunk-4h798pp0.js:159807`.
-[^overload-delay]: The program, `chunk-07n5vvax.js:45637`. The default is in `chunk-2j4zzfx7.js:304`.
-[^max-wait]: The program, `chunk-07n5vvax.js:45686` and `chunk-4h798pp0.js:3114765`. The gate is `tengu_steady_heron`.
-[^refusal]: The program, `chunk-vawgpkfg.js` lines 15723, 15725 to 15732, and 15813 to 15829.
+[^effort-field]: The program, `chunk-m14bt1pz.js:168442-168453`.
+[^cache-warning]: The program, `chunk-cfxefa64.js:64254`, `:64290-64295`. Also the [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312).
+[^per-turn]: The program, `chunk-f892tj2r.js:221`, `:448`, `:753`, `:847`, `:896`, `:1001`. Also the [Claude Code changelog](https://code.claude.com/docs/en/changelog).
+[^ultrathink-submit]: The program (`2.1.327`), `chunk-p47p1nn1.js:3794-3806` for the submit, where the turn effort is `xhigh` when the model passes the gate, and `chunk-8g2nr9dn.js:5947-5972` for a prompt that joins the turn while it runs, called at `chunk-8g2nr9dn.js:16739`.
+[^ultrathink-gate]: The program. The prompt input colors a word only when the gate `chunk-rthqjjhy.js:29275` passes for the model (it needs ultrathink on, and `chunk-rthqjjhy.js:29536` checks that the model can run the turn at `xhigh`): `chunk-cfxefa64.js:990610` picks the words, and `chunk-cfxefa64.js:994390` paints each letter with a rainbow color. The word finder is `chunk-qpav394c.js:37293`. The SDK schema says "The terminal colors the word by this rule", `chunk-rj3e7agr.js:484442`.
+[^note-flag]: The program and the [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312), `chunk-cfxefa64.js:67245-67270`.
+[^note-clear]: The program, `chunk-cfxefa64.js:67258`.
+[^prompt-text]: The program, `chunk-cfxefa64.js:13338`.
+[^request-level]: The program, `chunk-m14bt1pz.js:3281207` and `:3356273`.
+[^sent-level]: The program, `chunk-rvc7d09c.js:8060`.
+[^spinner-level]: The program, `chunk-rthqjjhy.js:30570` and `chunk-br8rsn5f.js:9750`.
+[^model-settings]: The program, `chunk-rthqjjhy.js:26687`, `:27090`.
+[^effort-source]: [Model Configuration](https://code.claude.com/docs/en/model-config), section "Adjust effort level", and the program, `chunk-rthqjjhy.js:26687`.
+[^should-retry]: The program, `chunk-m14bt1pz.js:162762`.
+[^overload-delay]: The program, `chunk-2ew0jg68.js:80683`. The default is in `chunk-asj6f58y.js:335569`.
+[^max-wait]: The program, `chunk-2ew0jg68.js:80683` and `chunk-m14bt1pz.js:3170354`. The gate is `tengu_steady_heron`.
+[^refusal]: The program, `chunk-18d5r2hb.js:15973-15982`, which reads the variable and the `switchModelsOnFlag` setting.

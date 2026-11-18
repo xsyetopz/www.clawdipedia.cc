@@ -63,8 +63,8 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 | `ui.selection` | <Documented /> | `$.ui.selection()` | Input `NoArgs`. Value `UiSelection \| undefined`. |
 | `ui.copy` | <Documented /> | `$.ui.copy({ text, surface })`. `surface` takes the session's first surface when left out. | Input `UiCopyArgs`. Value `UiCopyResult`. |
 | `ui.view` | <Undocumented /> | `$.ui.view({ agentId })`: whose transcript the main view shows. None means the main conversation. | Input `SiteView`. Value `UiViewResult`. |
-| `ui.notify` | <Documented /> | `$.ui.notify(text, { title })`. `title` is the plugin's name when left out. Two mods that notify again on hearing a notification can echo each other without end. | Input `{ text: string, title?: string, key?: string, delayMs?: number, at?: number, untilBack?: boolean }`. Value `UiNotifyResult`. `key`, `delayMs`, `at`, and `untilBack` are new in `2.1.321`; see [`NotifyOptions`](../types/ui/input-pane-render.md#notifyoptions). |
-| `ui.cancelNotify` | <Undocumented /> | `$.ui.cancelNotify(key)` | Input `{ key: string }`. Value `{ isSent: boolean }`. New in `2.1.321`. [^cancel-notify] |
+| `ui.notify` | <Documented /> | `$.ui.notify(text, { title })`. `title` is the plugin's name when left out. Two mods that notify again on hearing a notification can echo each other without end. | Input `{ text: string, title?: string, key?: string, delayMs?: number, at?: number, untilBack?: boolean }`. Value `UiNotifyResult`. `key`, `delayMs`, `at`, and `untilBack` are options of `NotifyOptions`; see [`NotifyOptions`](../types/ui/input-pane-render.md#notifyoptions). |
+| `ui.cancelNotify` | <Undocumented /> | `$.ui.cancelNotify(key)` | Input `{ key: string }`. Value `{ isSent: boolean }`. [^cancel-notify] |
 | `ui.blit` | <Documented /> | `$.ui.blit(...)`: the `cells` of a `Raster` or the `source` of a keyed `Image`. A hook above may rewrite either, or `{ deny }`. | Input `UiBlitArgs`. Value `UiBlitResult`. |
 
 ## Related Pages
@@ -76,7 +76,7 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 
 ## Sources
 
-[^types-322]: The Mod API type file of the `2.1.326` program, `schemas/claude-code.d.ts`.
-[^pointer]: The program, `chunk-8c7cqrmr.js:274`.
+[^types-322]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`.
+[^pointer]: The program, `chunk-z7b17x9g.js:277`.
 [^theme-case]: Probe case `print.cli319.theme.engine`.
-[^cancel-notify]: The program, `chunk-4h798pp0.js:4802296`.
+[^cancel-notify]: The program, `chunk-m14bt1pz.js:4874632`.

@@ -14,7 +14,7 @@ Counts are table rows. A row can name several items, such as a list of related v
 | Group | Count |
 | --- | --- |
 | [Settings Keys](#settings-keys) | 25 |
-| [Environment Variables](#environment-variables) | 1120 |
+| [Environment Variables](#environment-variables) | 1135 |
 | [CLI Flags and Subcommands](#cli-flags-and-subcommands) | 52 |
 | [Permissions](#permissions) | 121 |
 | [Hooks](#hooks) | 15 |
@@ -23,14 +23,14 @@ Counts are table rows. A row can name several items, such as a list of related v
 | [Subagents](#subagents) | 8 |
 | [Plugins](#plugins) | 9 |
 | [MCP](#mcp) | 32 |
-| [Tools](#tools) | 30 |
+| [Tools](#tools) | 29 |
 | [API Endpoints and Betas](#api-endpoints-and-betas) | 99 |
 | [System Prompt](#system-prompt) | 34 |
 | [Transcript and Sessions](#transcript-and-sessions) | 13 |
-| [Headless Protocol](#headless-protocol) | 205 |
+| [Headless Protocol](#headless-protocol) | 217 |
 | [Mod API](#mod-api) | 0 |
 | [Other](#other) | 108 |
-| Total | 1880 |
+| Total | 1906 |
 
 ## Settings Keys
 
@@ -70,7 +70,7 @@ Count: 25.
 
 Too many variables exist to list here. Each page below holds a table, and every undocumented variable in it has the Undocumented badge. The pages sort variables by what they do.
 
-Count: 1120.
+Count: 1135.
 
 | Page | Undocumented Rows |
 | --- | --- |
@@ -81,15 +81,15 @@ Count: 1120.
 | [Context and Compaction](../configure/env-vars/context-and-compaction.md) | 31 |
 | [Features and Toggles](../configure/env-vars/features-and-toggles.md) | 59 |
 | [Models and Effort](../configure/env-vars/models-and-effort.md) | 34 |
-| [Network and Proxy](../configure/env-vars/network-and-proxy.md) | 33 |
-| [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) | 70 |
-| [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) | 156 |
+| [Network and Proxy](../configure/env-vars/network-and-proxy.md) | 34 |
+| [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) | 69 |
+| [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) | 169 |
 | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) | 29 |
 | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) | 57 |
 | [System and Third-Party](../configure/env-vars/system-and-third-party.md) | 196 |
 | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) | 84 |
-| [Tools and Bash](../configure/env-vars/tools-and-bash.md) | 60 |
-| [UI and Terminal](../configure/env-vars/ui-and-terminal.md) | 49 |
+| [Tools and Bash](../configure/env-vars/tools-and-bash.md) | 61 |
+| [UI and Terminal](../configure/env-vars/ui-and-terminal.md) | 50 |
 
 ## CLI Flags and Subcommands
 
@@ -330,7 +330,7 @@ Count: 32.
 
 Tools and tool parameters.
 
-Count: 30.
+Count: 29.
 
 | Item | Where |
 | --- | --- |
@@ -363,7 +363,6 @@ Count: 30.
 | Placeholder tool | [Tools](tools/index.md#toolsearch) (ToolSearch) |
 | Server-side never-defer list | [Tools](tools/index.md#switches-for-tool-search) (Switches for Tool Search) |
 | Server-side defer list | [Tools](tools/index.md#switches-for-tool-search) (Switches for Tool Search) |
-| `GetTask` | [Shell, Web, and Background Tasks](tools/shell-and-web.md#tools) (Tools) |
 
 ## API Endpoints and Betas
 
@@ -542,12 +541,12 @@ Count: 13.
 
 Message types of `--output-format stream-json` and of the control protocol. Nearly every row is undocumented, so this page links to the two pages with counts.
 
-Count: 205.
+Count: 217.
 
 | Page | Undocumented Rows |
 | --- | --- |
-| [Control Protocol](../extend/headless/control-protocol.md) | 95 |
-| [Stream JSON Messages](../extend/headless/stream-json.md) | 110 |
+| [Control Protocol](../extend/headless/control-protocol.md) | 98 |
+| [Stream JSON Messages](../extend/headless/stream-json.md) | 119 |
 
 ## Mod API
 
@@ -723,30 +722,30 @@ These items exist in the official docs, but Claude Code works in another way. Th
 
 ## In the Program
 
-The program of `2.1.326` holds 10382 items in 18 kinds, counted from `schemas/surface.json`.
+The program of `2.1.327` holds 10508 items in 18 kinds, counted from `schemas/surface.json`.
 [Surface Coverage](surface-coverage.md) lists each item with its page.
 
 | Kind | Items | Not on a Page Yet |
 | --- | --- | --- |
-| [Betas](surface-coverage.md#betas) | 54 | 0 |
-| [API Endpoints](surface-coverage.md#api-endpoints) | 460 | 0 |
-| [Environment Variables](surface-coverage.md#environment-variables) | 2108 | 0 |
-| [Error Texts](surface-coverage.md#error-texts) | 4246 | 0 |
+| [Betas](surface-coverage.md#betas) | 55 | 0 |
+| [API Endpoints](surface-coverage.md#api-endpoints) | 462 | 0 |
+| [Environment Variables](surface-coverage.md#environment-variables) | 2112 | 0 |
+| [Error Texts](surface-coverage.md#error-texts) | 4302 | 0 |
 | [Files](surface-coverage.md#files) | 78 | 0 |
-| [CLI Flags](surface-coverage.md#cli-flags) | 421 | 0 |
-| [Gates](surface-coverage.md#gates) | 1697 | 0 |
+| [CLI Flags](surface-coverage.md#cli-flags) | 425 | 0 |
+| [Gates](surface-coverage.md#gates) | 1749 | 0 |
 | [Hook Events](surface-coverage.md#hook-events) | 33 | 0 |
 | [Keybindings](surface-coverage.md#keybindings) | 207 | 0 |
 | [Mod API](surface-coverage.md#mod-api) | 253 | 0 |
 | [Models](surface-coverage.md#models) | 76 | 0 |
 | [OpenTelemetry Events](surface-coverage.md#opentelemetry-events) | 28 | 0 |
 | [Permission Rules](surface-coverage.md#permission-rules) | 6 | 0 |
-| [Settings](surface-coverage.md#settings) | 199 | 0 |
-| [Nested Setting Keys](surface-coverage.md#nested-setting-keys) | 198 | 0 |
+| [Settings](surface-coverage.md#settings) | 202 | 0 |
+| [Nested Setting Keys](surface-coverage.md#nested-setting-keys) | 202 | 0 |
 | [Slash Commands](surface-coverage.md#slash-commands) | 140 | 0 |
 | [Subcommands](surface-coverage.md#subcommands) | 81 | 0 |
 | [Tools](surface-coverage.md#tools) | 97 | 0 |
-| All kinds | 10382 | 0 |
+| All kinds | 10508 | 0 |
 
 ## Related Pages
 

@@ -111,17 +111,17 @@ The check runs in the tool stage of every turn. See [The Agent Loop](agent-loop.
 
 ## Sources
 
-[^order]: The program. The official pages do not give the full order.
-[^hook-allow]: The Mod API type file of the `2.1.326` program (`schemas/claude-code.d.ts`) and the program text `hook allows approve the command`.
-[^allow-texts]: The program texts `Read-only command is allowed` and `Auto-allowed with sandbox (autoAllowBashIfSandboxed enabled)`.
-[^mounted]: The program, `2.1.304`.
-[^rule-warn]: The program, `chunk-88d8nvn3.js:1162`.
-[^star-warn]: The program, `chunk-m33vdkhs.js:193726`.
-[^seen-warn]: The program, `chunk-88d8nvn3.js:1236`, `chunk-zgdsjx62.js:10`.
-[^git-trust]: The program, `chunk-4h798pp0.js:71295`. A server-side flag gates it.
-[^git-text]: The program, `chunk-4h798pp0.js:71313`.
-[^block-reads]: The program, `chunk-nqb5kdg0.js:5211`, `chunk-caex36kk.js:93160`.
-[^relative-cd]: The program, `chunk-4h798pp0.js:74436-74455`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^trust-list]: The program, `chunk-hazkmz06.js:970-976` and `chunk-hazkmz06.js:1148-1188`.
-[^cd-list]: The program, `chunk-q43jj74r.js:225-252`.
-[^trust-exit]: The program, `chunk-hazkmz06.js:689-693`.
+[^order]: The program, `chunk-m14bt1pz.js:3634910`. The official pages do not give the full order.
+[^hook-allow]: The Mod API type file of the `2.1.327` program (`schemas/claude-code.d.ts`) and the program text `hook allows approve the command` (`chunk-m14bt1pz.js:1318922`).
+[^allow-texts]: The program texts `Read-only command is allowed` and `Auto-allowed with sandbox (autoAllowBashIfSandboxed enabled)` (`chunk-k57p2hm4.js:4549`).
+[^mounted]: The program, `chunk-m14bt1pz.js:1346815`. [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304).
+[^rule-warn]: The program, `chunk-7at7cxxb.js:22467` (`matches no tool`) and `chunk-7at7cxxb.js:22209` (`never matches`).
+[^star-warn]: The program, `chunk-ja5z738t.js:194854`.
+[^seen-warn]: The program, `chunk-7at7cxxb.js:23513` (the key holds the source, the file, and the text), `chunk-2n08q337.js:383` (the list of keys, 256 at most).
+[^git-trust]: The program, `chunk-m14bt1pz.js:1325934`. The check runs only when the server flag `bot_protected_tengu_frolicking_pelican` is on (`chunk-m14bt1pz.js:1323802`, `chunk-m14bt1pz.js:1325583`, and `chunk-m14bt1pz.js:1325411`, the read with `safe: true`). The server sets the flag.
+[^git-text]: The program, `chunk-m14bt1pz.js:1325934`.
+[^block-reads]: The program, `chunk-k57p2hm4.js:5040` (the setting and its text), `chunk-k57p2hm4.js:6477` and `chunk-m14bt1pz.js:68024` (the ask that stays in every mode), `chunk-k57p2hm4.js:6507` (the sandbox override), `chunk-k57p2hm4.js:7100` (a computed path asks), and `chunk-k57p2hm4.js:7254` (a command that the parser cannot read asks).
+[^relative-cd]: The program, `chunk-m14bt1pz.js:1387435-1387742`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^trust-list]: The program, `chunk-e49x9bxs.js:28645` (the tags) and `chunk-e49x9bxs.js:31755` (the header `Accessing workspace:`).
+[^cd-list]: The program, `chunk-y692rv3s.js:4666` and `chunk-6dg6n9vp.js:463` (the sentence `Trusting this directory loads <files>.`).
+[^trust-exit]: The program, `chunk-e49x9bxs.js:25053`.

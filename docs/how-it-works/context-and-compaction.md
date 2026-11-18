@@ -153,6 +153,8 @@ All rows are <Undocumented /> unless a note says otherwise.[^gates]
 | Larger-model retry | This runs before the normal compaction, not after it. The gate needs at least these: the compaction names no model yet, no earlier auto-compaction failed in a row, the model of the latest assistant reply has a larger window than the current model, and the context is at the blocked level. The attempt gets 1 API try. If it fails, the normal compaction runs next. |
 | Prompt-too-long retry | When the compaction request itself is too long, Claude Code drops the oldest message groups and sends it again. `compactionApiAttemptsLeft` caps the API attempts. At 0 the retry stops. |
 | Second ask | A reply with no `<summary>` block gets one more request. |
+| Compaction after a cut reply | Since `2.1.327`, a compaction right after a reply that the output token limit cut keeps that reply's tool call and its result.[^v327] |
+| Teammate on another model | Since `2.1.327`, an in-process agent teammate on a different model from the lead compacts at its own limit and with its own model, at that model's rate.[^v327] |
 
 ## Server-Side Clearing
 
@@ -198,7 +200,7 @@ See [Explore the Context Window: What Survives Compaction](https://code.claude.c
 | Rules with `paths:` and nested `CLAUDE.md` files | <Documented /> | They load again when needed. |
 | Files that the session read or edited | <Documented /> | Claude Code reads up to five again, newest first. A file over 5,000 tokens comes back as a path. |
 | Skills that ran | <Documented /> | Each keeps 5,000 tokens, up to 25,000 in total. The oldest go first. |
-| Background commands and subagents | <Documented /> | They keep running. |
+| Background commands and subagents | <Documented /> | They keep running. Since `2.1.327`, the reminder about a completed subagent ends with `(if you cannot read it and do not already have its result, ask agent <id> with SendMessage)` when Claude can message that agent.[^agent-reminder] |
 | `SessionStart` hooks with the `compact` matcher | <Documented /> | They run again. |
 
 :::note[Spinner after Compaction]
@@ -223,14 +225,16 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^levels]: The program, `chunk-4h798pp0.js@1951557`.
-[^subagent-window]: The program, `chunk-4h798pp0.js` line 94212 and `chunk-cr640x0r.js` line 7020.
-[^reactive]: The program, `chunk-27vawgnx.js:8475`.
-[^second-ask]: The program, `chunk-4h798pp0.js:133366`, and the note at `:132787`.
-[^summary-error]: The program, `chunk-4h798pp0.js:146077`. The `2.1.311` text, `no <summary> block in the second reply either`, is not in `2.1.321`.
-[^gate]: The program, `chunk-4h798pp0.js:133364`.
-[^gates]: The program, `chunk-4h798pp0.js@1957497` to `@2602150`. The reactive route and the larger-model retry are in `chunk-4h798pp0.js`.
-[^check-timing]: The program, `chunk-27vawgnx.js`.
-[^cleared]: The program, the server-side clearing code.
-[^prompt]: The program, the compaction prompt.
-[^spinner]: The program, `chunk-qjp551xg.js`.
+[^levels]: The program, `chunk-m14bt1pz.js:1992614`.
+[^subagent-window]: The program, `chunk-m14bt1pz.js:1995867`.
+[^reactive]: The program, `chunk-m14bt1pz.js:2605452` (the reactive route) and `:2071974` (the "Usage credits are required for long context" test).
+[^second-ask]: The program, `chunk-m14bt1pz.js:2606453`.
+[^summary-error]: The program, `chunk-m14bt1pz.js:2941304`. The `2.1.311` text, `no <summary> block in the second reply either`, is not in `2.1.321`.
+[^gate]: The program, `chunk-6ydtrx6k.js:2567`, the server flag read at `chunk-m14bt1pz.js:2606453`.
+[^gates]: The program, `chunk-m14bt1pz.js:1998790-2604244`. The reactive route and the larger-model retry are at `chunk-m14bt1pz.js:2604244`.
+[^check-timing]: The program, `chunk-8g2nr9dn.js:216910`.
+[^cleared]: The program, the server-side clearing code, `chunk-m14bt1pz.js:1960724`.
+[^prompt]: The program, the compaction prompt, `chunk-m14bt1pz.js:2578625`.
+[^v327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^spinner]: The program, `chunk-m14bt1pz.js:5991266`.
+[^agent-reminder]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-m14bt1pz.js:5939771`. A server flag, `tengu_shimmering_clock`, can turn the text off; it is on unless the flag is `false`. The `2.1.326` reminder says only `Read the output file to retrieve the result: <path>`.

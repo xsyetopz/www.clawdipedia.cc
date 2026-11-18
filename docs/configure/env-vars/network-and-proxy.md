@@ -35,7 +35,7 @@ The table is sorted by name.[^names] See [Environment Variables](index.md#how-to
 | `ANTHROPIC_UNIX_SOCKET` | <Documented /> | Sends first-party API requests over this Unix socket path. | Text. Claude Code passes it as the `unix` fetch option. Also in the host-managed provider list with `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` | First-party API client, all. Not set from project `env` before trust |
 | `API_FORCE_IDLE_TIMEOUT` | <Documented /> | Forces the streaming body idle timeout on or off. | A number. A true value forces it on and a false value (`0`) turns the fetch timeout off | Anthropic API client, all. Not set from project `env` before trust |
 | `API_TIMEOUT_MS` | <Documented /> | Sets the API request timeout in milliseconds. | A number of milliseconds, `600000` (10 minutes) by default. Whole number. Errors show a hint to raise it | All sessions. Not set from project `env` before trust |
-| `BUN_TLS_REFUSE_DISTRUSTED_KEYS` | <Undocumented /> | A Bun runtime variable. Claude Code counts any value except `1` as a TLS trust override, as it does for `NODE_TLS_REJECT_UNAUTHORIZED`. What Bun does with it is not shown. Added in `2.1.314`.[^bun-tls] | Text. Raw string. Any set value other than `1` counts | All sessions |
+| `BUN_TLS_REFUSE_DISTRUSTED_KEYS` | <Undocumented /> | A Bun runtime variable. Claude Code counts any value except `1` as a TLS trust override, as it does for `NODE_TLS_REJECT_UNAUTHORIZED`. Added in `2.1.314`.[^bun-tls] | Text. Raw string. Any set value other than `1` counts | All sessions |
 | `CARGO_HTTP_CAINFO` | <Undocumented /> | Names the CA bundle file for Cargo. Claude Code sets it to the sandbox CA bundle for sandboxed commands, next to `SSL_CERT_FILE` and others. | Text. Also in a list of CA env names | Sandboxed commands and remote sessions |
 | `CLAUDE_AGENT_SDK_CLIENT_APP` | <Documented /> | Names the client app of an Agent SDK host. Claude Code adds it to the user agent as `client-app/<value>`. | Text | SDK hosts. Not set from project `env` before trust |
 | `CLAUDE_AGENT_SDK_VERSION` | <Undocumented /> | Reports the Agent SDK version. Claude Code adds it to the user agent as `agent-sdk/<value>`. | Text. The SDK host sets it | SDK hosts. Not set from project `env` before trust |
@@ -52,6 +52,7 @@ The table is sorted by name.[^names] See [Environment Variables](index.md#how-to
 | `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` | <Documented /> | Turns off nonessential network traffic such as updates, telemetry and error reporting. | On or off | All sessions |
 | `CLAUDE_CODE_DISABLE_NONSTREAMING_FALLBACK` | <Documented /> | Stops the non-streaming retry after a stream fails mid-stream. | On or off | All sessions. Project `env` can set it before trust |
 | `CLAUDE_CODE_DISABLE_POOLED_CONNECTION_IDLE_LIMIT` | <Undocumented /> | Stops the idle limit on pooled connections in a cloud session. Without it, Claude Code turns TCP keepalive off and sets a 35000 ms socket timeout when a pooled connection goes idle. It turns keepalive on (1000 ms) and clears the timeout when the connection is reused. Added in `2.1.314`. | On or off, off by default. The limit applies only when `CLAUDE_CODE_REMOTE` is true and `CLAUDE_CODE_ENVIRONMENT_KIND` is unset | Cloud sessions |
+| `CLAUDE_CODE_DISABLE_PROXY_SCHEME_REPAIR` | <Undocumented /> | Stops Claude Code from adding `http://` to a bare `host:port` value of `https_proxy` or `HTTPS_PROXY`. Since `2.1.327`, a bare value of this kind no longer blocks startup when neither stdin nor stdout is a terminal, such as in the desktop app, an SDK, or cron. Claude Code repairs it then. | On or off, off by default. The repair applies only to a value such as `proxy.example:8080` (host, colon, port 1 to 65535) from `https_proxy` or `HTTPS_PROXY`. It does not apply when stdin or stdout is a terminal, or when `--bg`, `--background`, or `--routine` is in the arguments.[^scheme-repair] | All sessions |
 | `CLAUDE_CODE_ENABLE_FINE_GRAINED_TOOL_STREAMING` | <Documented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> | Forces tool input streaming on or off. The code matches the official page. | On, off, or unset. `0` is off. Else first party needs a feature flag, Vertex and Bedrock need model support and no custom base URL, `1` forces on. Since `2.1.309` a Bedrock base URL on Amazon's own `https://bedrock-runtime.<region>.amazonaws.com` host does not count as custom | All sessions. Project `env` can set it before trust |
 | `CLAUDE_CODE_EXTRA_BODY` | <Documented /> | Merges a JSON object into the top level of every API request body. | JSON text. Ignored when org policy blocks experimental betas. Passed on to background sessions | All sessions |
 | `CLAUDE_CODE_EXTRA_METADATA` | <Undocumented /> | Merges a JSON object into the metadata of API requests. | JSON text. Claude Code logs an error and ignores a bad value | All sessions |
@@ -90,7 +91,7 @@ The table is sorted by name.[^names] See [Environment Variables](index.md#how-to
 | `HTTP_PROXY` | <Documented /> | Sets the HTTP proxy for Claude Code network traffic. | - | - |
 | `http_proxy` | <Documented /> | Lower case HTTP proxy URL. Claude Code reads it as an alternative to `HTTP_PROXY`. | Text. Non-empty string. Order is `HTTP_PROXY`, this, then `CLAUDE_CODE_HTTP_PROXY` for the sandbox proxy | All sessions |
 | `HTTPS_PROXY` | <Documented /> | Sets the HTTPS proxy for Claude Code network traffic. | - | - |
-| `https_proxy` | <Documented /> | Lower case HTTPS proxy URL. Claude Code reads it as an alternative to `HTTPS_PROXY`. | Text. Non-empty string. Order is `HTTPS_PROXY`, this, then `CLAUDE_CODE_HTTPS_PROXY` for the sandbox proxy | All sessions |
+| `https_proxy` | <Documented /> | Lower case HTTPS proxy URL. Claude Code reads it as an alternative to `HTTPS_PROXY`. | Text. Non-empty string. Order is `HTTPS_PROXY`, this, then `CLAUDE_CODE_HTTPS_PROXY` for the sandbox proxy. A bare `host:port` value is repaired to `http://host:port` in a run with no terminal on stdin and stdout (see `CLAUDE_CODE_DISABLE_PROXY_SCHEME_REPAIR`) | All sessions |
 | `NIX_SSL_CERT_FILE` | <Undocumented /> | Claude Code sets it to the CA bundle path in sandboxed commands, with other CA variables. | A path | - |
 | `NO_PROXY` | <Documented /> | Lists hosts that skip the proxy. `*` skips it for all. | On or off | - |
 | `no_proxy` | <Documented /> | Lower case proxy bypass list. Claude Code reads it with `NO_PROXY`. | A comma-separated list. If both are set and differ, Claude Code joins them with a comma | All sessions |
@@ -186,21 +187,22 @@ Claude Code reads shell variables once at startup, so restart after a change. Cl
 
 ## Sources
 
-[^names]: The program, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^bg-gateway]: The program, `chunk-a6z2y3ae.js:1141` (the dispatcher sets it), `chunk-45jdt5k6.js:23` (the session reads it), and `chunk-45jdt5k6.js:59` (the stop messages). Gate `tengu_bg_gateway_mark`, default on, at `chunk-45jdt5k6.js:19`.
-[^https-agent]: The program.
-[^cross-cert]: The program.
-[^self-named]: The program.
-[^bun-tls]: The program.
-[^cert-store]: The program.
-[^proxy-hosts]: The program, `2.1.319`, `chunk-40ntpkc0.js`. Probe cases `print.env319a.proxy-resolves-hosts-from-settings.unset` and `.v1`.
-[^steady-heron]: The program, `chunk-4h798pp0.js:3114765`. Feature flag `tengu_steady_heron`.
-[^kurzweil]: The program, feature flag `tengu_soft_kurzweil`.
+[^names]: The program, `chunk-2ew0jg68.js:901` (the table of variable names), and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^bg-gateway]: The program, `chunk-d0ernz1g.js:1141` (the dispatcher sets it), `chunk-ra4aapaz.js:23-25` (the session reads it), and `chunk-ra4aapaz.js:59-61` (the stop messages). Gate `tengu_bg_gateway_mark`, default on, at `chunk-ra4aapaz.js:18-20`.
+[^https-agent]: The program, `chunk-j9g63hey.js:8387-8398` (the signature), `chunk-j9g63hey.js:10003-10004` (the log text), and `chunk-j9g63hey.js:10295-10301` (the agent options).
+[^cross-cert]: The program, `chunk-j9g63hey.js:8776` (the log text), `chunk-j9g63hey.js:9766-9769` (the switch and the client certificate check), and `chunk-j9g63hey.js:9466-9470` (the client certificate flag).
+[^self-named]: The program, `chunk-j9g63hey.js:9550-9556` (the switch), `chunk-j9g63hey.js:9651` (the log text), and `chunk-j9g63hey.js:9466-9470` (the client certificate flag).
+[^bun-tls]: The program, `chunk-qhsv8pnt.js:332-335` (the two TLS variable names) and `chunk-j9g63hey.js:8379-8381` (a value other than `1` counts).
+[^cert-store]: The program, `chunk-j9g63hey.js:8503-8513` (the variable), `chunk-j9g63hey.js:9264-9271` (the startup messages), and `chunk-j9g63hey.js:9734` (the message that names the variable).
+[^proxy-hosts]: The program, `chunk-j9g63hey.js:10657-10660` (the proxy agent `lookup`), `chunk-zwpe0yha.js:143-146` (the WebSocket path), `chunk-9gc9sj0j.js:148` (the host-managed list), and `chunk-t9t34d4g.js:842-856` (the `Ignoring` log). Probe cases `print.env319a.proxy-resolves-hosts-from-settings.unset` and `.v1`.
+[^steady-heron]: The program, `chunk-m14bt1pz.js:160805-160813`. Feature flag `tengu_steady_heron`.
+[^kurzweil]: The program, `chunk-m14bt1pz.js:158314-158315`. Feature flag `tengu_soft_kurzweil`.
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
 [^assume-first-party]: [Probes](../../reference/probes.md).
-[^ca-faults]: The program. The message texts are in `chunk-f57bmeqs.js` of the cleaned `2.1.323` module dump, in the function that builds the CA list (`CA certs: The runtime cannot load ... the NODE_EXTRA_CA_CERTS file as one CA list entry`) and in the stderr texts that follow it. Runs: `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only cacerts319` (cases `extra-ca.*` and `extra-ca-tls.*`), repeated with `--from 2.1.316 --to 2.1.316`.
-[^name-constraint]: The program, `chunk-d73xe1mr.js`. The code set and the message function are at `324812` and about `325089`. The error text that carries them is at `329887`.
-[^signature]: The program, `chunk-d73xe1mr.js:18463` (message start), `:18369` (IT team wording), and `:8298` (the code check).
-[^all-proxy]: The program, `chunk-f57bmeqs.js`. The CONNECT tunnel is at `:10666`, the timeout at `:10686`, and the proxy URL check at `:10681`.
+[^ca-faults]: The program. The message texts are in `chunk-j9g63hey.js:8978-8986` (the `Claude Code ...` lines), `chunk-j9g63hey.js:9239` (the runtime line, in the function that builds the CA list), `chunk-j9g63hey.js:9972` (the unreadable certificate count), and `chunk-j9g63hey.js:8491` (the failed read). Runs: `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only cacerts319` (cases `extra-ca.*` and `extra-ca-tls.*`), repeated with `--from 2.1.316 --to 2.1.316`.
+[^name-constraint]: The program, `chunk-asj6f58y.js:18788-18803` (the code set and the message function) and `chunk-asj6f58y.js:19001-19005` (the error text that carries them).
+[^signature]: The program, `chunk-asj6f58y.js:8717-8719` (message start and IT team wording), `chunk-asj6f58y.js:8713-8715` (the code check), and `chunk-asj6f58y.js:19006-19007` (the error text).
+[^all-proxy]: The program, `chunk-j9g63hey.js:10937` (`ALL_PROXY` as the only proxy), `chunk-j9g63hey.js:10887` (the proxy URL check), and `chunk-j9g63hey.js:10891-10910` (the 25000 ms timeout).
 [^v325]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
 [^v326]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^scheme-repair]: The program, `chunk-5mp27d0e.js:10135`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).

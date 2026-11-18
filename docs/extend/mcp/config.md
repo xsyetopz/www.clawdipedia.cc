@@ -37,7 +37,7 @@ Official page: [Connect Claude Code to Tools via MCP](https://code.claude.com/do
 | `headersHelper` | <Documented /> | A command that prints headers. | Runs in a shell on each connect. The output is a JSON object. See [MCP Authentication](auth.md#headershelper). | `http`, `sse`, `ws` |
 | `oauth` | <Documented /> | OAuth client settings. | Object with `clientId`, `callbackPort`, `authServerMetadataUrl`, `scopes`. See [MCP Authentication](auth.md#oauth-options). | `http`, `sse` |
 | `timeout` | <Documented /> | Wall-clock limit of one tool call, in ms. | A positive integer. Claude Code ignores a value below 1000. It overrides `MCP_TOOL_TIMEOUT` for this server. It is a floor for the idle timeout. | All |
-| `alwaysLoad` | <Documented /> | Skips tool search deferral. | `true` loads all tools upfront and makes startup wait for the server (5 s cap). `false` defers all tools, even those the author marked (`2.1.287` and later). In cloud sessions, a new conversation's first turn does not wait for local (stdio) servers of plugins synced from claude.ai unless the server sets `alwaysLoad: true` (since 2.1.304). | All |
+| `alwaysLoad` | <Documented /> | Skips tool search deferral. | `true` loads all tools upfront and makes startup wait for the server (5 s cap). `false` defers all tools, even those the author marked (`2.1.287` and later).[^always-load] | All |
 | `role` | <Documented /> | Sets the coordinator-mode role. | Only `"comms"`. It marks the server the coordinator uses to talk to the user. | `stdio`, `sse`, `http`, `ws`, IDE types |
 | `tools` | <Documented /> | A per-tool policy list. | Array of `{ name, permission_policy }`. The policy is `always_allow`, `always_ask`, or `always_deny`. A host sets it with `mcp_set_servers`. | `sse`, `http`, `sdk` |
 | `name` | <Documented /> | Names the in-process server. | A string. | `sdk` |
@@ -128,6 +128,7 @@ The exact fields are in `https://clawdipedia.cc/schemas/claude-code-mcp.json`, w
 
 ## Sources
 
-[^server-options]: The program server schema, for the rows marked <Undocumented />.
+[^server-options]: The program server schema, `chunk-ja5z738t.js:37677` and `chunk-hzvpv59r.js:19994`, for the rows marked <Undocumented />.
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^validator]: The program.
+[^validator]: The program, `chunk-ja5z738t.js:37561`.
+[^always-load]: The program, `chunk-ngdgttt1.js:236` for the skipped deferral, `chunk-deh86sae.js:423-461` for the blocking connect of these servers, `chunk-2xzaq8ke.js:354` for the 5 s default (`MCP_CONNECT_TIMEOUT_MS` changes it), and `chunk-sqn39hq2.js:10442-10446` and `chunk-sqn39hq2.js:10762-10763` for `false`.

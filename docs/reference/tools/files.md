@@ -87,20 +87,18 @@ Block reads of secret files and all edits to lock files.
 - `Read`, `Glob`, `Grep`, `Write`, and `Edit` carry `remoteExecution` metadata in the program. It marks them as runnable on a remote host.
 - In a `--restricted` session, a file outside the working directories is refused for a file reference or an upload, even when a `Read` allow rule covers it. Before 2.1.316 such a rule could open the file for an upload (`2.1.316`).[^restricted-316]
 - `Read` has no result size cap. So use `offset` and `limit` for large files.
+- Since `2.1.327`, `Grep` sorts `content` and `count` results by file path. Paging with `head_limit` and `offset` no longer repeats or skips results.[^grep-page]
+- Since `2.1.327`, `Read` opens a Jupyter notebook that holds an output of an unknown type. Before, it failed.[^read-nb]
+- Since `2.1.327`, `NotebookEdit` keeps the final newline of the notebook file.[^nb-newline]
+- Since `2.1.327`, when a file of 10 MB or more is too large to read at once, `Read` reports the real size. Before, it said 512KB.[^read-size]
+- Since `2.1.327`, a message looks up only the first 100 `@` mentions as files. A message with thousands of mentions no longer stalls.[^at-100]
 
 ## When `Glob` And `Grep` Are Offered
 
-The build embeds `bfs` and `ugrep`. It shadows `find` and `grep` in `Bash` with them. So it takes `Glob` and `Grep` out of the tool list, and the `Bash` prompt points Claude to `find` and `grep`. A probe with the local stub got the same default tool list, with no `Glob` and no `Grep`, from `2.1.314`, `2.1.316`, and `2.1.322`. The tests below decide this, in order.[^glob-grep]
+A probe with the local stub got the same default tool list, with no `Glob` and no `Grep`, from `2.1.314`, `2.1.316`, and `2.1.322`. When `Glob` or `Grep` is not offered, `Bash` does the work.
 
-| Test | Result |
-| --- | --- |
-| You name `Glob` or `Grep` in `--tools`, or in an `--allowedTools` rule. | Offered |
-| The entrypoint is `local-agent`. | Offered |
-| The platform is Windows and Claude Code finds no Git Bash. | Offered |
-| None of the above. | Not offered. `Bash` does the work |
-
-- The first test is one switch for both tools. A probe on `2.1.316` with `--allowedTools Grep` got both `Glob` and `Grep`. With `--tools Bash,Glob`, the list held only the named tools, because `--tools` limits the list.
-- A call to a tool that is not offered fails with a note. For `Glob`, the note says to find files with `find` through `Bash`. For `Grep`, it says to search file contents with `grep` through `Bash`.
+- A probe on `2.1.316` with `--allowedTools Grep` got both `Glob` and `Grep`. With `--tools Bash,Glob`, the list held only the named tools, because `--tools` limits the list.
+- A call to a tool that is not offered fails with a note. For `Glob`, the note says to find files with `find` through `Bash`. For `Grep`, it says to search file contents with `grep` through `Bash`.[^glob-grep]
 
 ## Write and Edit Limits
 
@@ -109,6 +107,7 @@ The build embeds `bfs` and `ugrep`. It shadows `find` and `grep` in `Bash` with 
 | `permissions.blockWritesOutsideWorkingDirectories` | <Documented /> | `Write`, `Edit`, and `NotebookEdit` refuse a path outside the working directories in every permission mode. | No allow rule lifts it. The setting also refuses a write to a Claude Code settings file inside the working directories. It removes `EnterWorktree` and `ExitWorktree` from the tools on offer. It does not limit shell commands, MCP tools, the programs that hooks run, or the memory tools. See [Permission Rules](../../configure/permissions/rules.md). |
 | Server-managed settings | <Undocumented /> | `Write` and `Edit` ask before they change the local copy of your organization's server-managed settings. | They ask in the same way for a user settings file. See [Settings](../../configure/settings/index.md). |
 | Sign-in files | <Undocumented /> | Since `2.1.326`, `Write` and `Edit` refuse the sign-in token file, the file with the keys that identify this computer, and the lock file that Claude Code takes while it saves tokens. They also refuse a hard link to one of these files.[^signin-files] | The refusal says that Claude Code keeps these files for itself and that tools cannot write them. |
+| `Edit` after compaction | <Undocumented /> | Since `2.1.327`, `Edit` runs on a file outside the project that Claude read in full before a compaction, if the file is unchanged. It no longer fails with `File has not been read yet`.[^edit-compaction] | The file text must equal the text that Claude read. A file that Claude read in part, or a file that changed, still fails. |
 
 ## Write on a File That Claude Read Only in Part
 
@@ -131,7 +130,7 @@ Each row is a family of messages. The backticked text is the start that every me
 | `read not allowed under` | <Undocumented /> | File references and uploads: the program refused to read a file that a file reference, a Chrome file upload, or the upload screen named. The text ends with the path. | `read not allowed under --restricted: ${path}` means a `--restricted` session found the file outside the working directories and no working-directory rule covers it. A Read allow rule does not open it in this mode (`2.1.316`).[^restricted-316] `read not allowed under ${setting}: ${path}` means a read block refuses the path, or the real path behind it. `${setting}` is `permissions.blockReadsOutsideWorkingDirectories`, `permissions.blockFileToolReadsOutsideWorkingDirectories`, or both joined with ` and `.[^read-blocked] |
 | `ExitWorktree stopped before it left or removed any worktree` | <Undocumented /> | `ExitWorktree`: the session entered or left a worktree while the call ran, so the tool changed nothing. | The text goes on: `this session entered or left one while the call ran. Check where the session is now before calling ExitWorktree again.` Check where the session is, then call the tool again.[^exit-worktree-stop] |
 | `Refusing to read` | <Undocumented /> | File import: the gated `/import` command, which imports config from another AI coding agent ([Slash Commands](../../extend/skills-and-commands/slash-commands.md)), opened a file for a project-scope import and the opened handle is not a regular file. The text is `Refusing to read ${path}: it is not a regular file.` | The reader opens the path without following links. A file over `10485760` bytes (`IMPORT_MAX_FILE_BYTES`) fails with `file exceeds IMPORT_MAX_FILE_BYTES; refusing to load`.[^import-read] |
-| `Cannot read '` | <Undocumented /> | `Read`: since `2.1.326`, the tool refuses a path that names a device or process file, such as a file under `/dev` or `/proc`. A link that leads to such a file gets the same refusal.[^device-files] | The text is `Cannot read '<path>': this path names a device or process file that this tool does not read.` `Grep` refuses with `Refusing to search <path>: it leads to a device or process file.` |
+| `Cannot read '` | <Undocumented /> | `Read`: since `2.1.326`, the tool refuses a path that names a device or process file, such as a file under `/dev` or `/proc`. A path that goes through a link into `/proc` or `/dev` gets a refusal that says the tool does not follow that link and asks for the file's own path.[^device-files] | The text is `Cannot read '<path>': this path names a device or process file that this tool does not read.` `Grep` refuses with `Refusing to search <path>: it leads to a device or process file.` |
 | `Unable to compress image`, `Unable to resize image` | <Undocumented /> | An image that a tool read or a user pasted did not fit the size limit and the program could not shrink it. | The text is `Unable to compress image (<size>) to fit within <limit>. Please use a smaller image.` or the same start with a reason and advice. The `Unable to resize image` forms say that the image size could not be checked or that image processing is not available. Use a smaller image. |
 | `Notebook file does not exist.` | <Undocumented /> | `NotebookEdit` found no file at `notebook_path`. | The tool checks the input first, and again when the call runs. Both stop with this text, and nothing is written. Give the path of a notebook that exists.[^notebook-checks] |
 | `Notebook is not valid JSON.` | <Undocumented /> | `NotebookEdit` read the file, and its text is not JSON. | A file with the right name but other content gives this text. The program then also refuses a JSON file that is not a notebook (a separate message). Nothing is written. Repair or restore the file.[^notebook-checks] |
@@ -145,17 +144,23 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^tools-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Configure Permissions](https://code.claude.com/docs/en/permissions), and the program, the tool input schemas.
-[^memory-flags]: The program. The first server flag is `tengu_linen_orbit`. The second is `tengu_haze_glass`.
-[^restricted-316]: The program, and the [`2.1.316` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.316).
-[^glob-grep]: The program, `chunk-4h798pp0.js:16247-16263` (the `local-agent` entry point and the tools taken out of the list) and `chunk-4h798pp0.js:232408-232412` (the notes for a tool that is not offered) of `2.1.326`.
-[^size-flag]: The program. The server flag is `tengu_quizzical_mango`.
-[^partial-read]: The program, `chunk-4h798pp0.js` lines 196919 to 196964, 79474 to 79478, 10570 to 10583, and 84376; `chunk-jr5c4yae.js` line 112; `chunk-4yvqjdc7.js` line 11.
+[^tools-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Configure Permissions](https://code.claude.com/docs/en/permissions), and the program, the tool input schemas, `chunk-m14bt1pz.js:3837298` (`Read`), `:1750237` (`Write`), and `:5523036` (`NotebookEdit`).
+[^memory-flags]: The program, `chunk-jvme5rqc.js:67579` and `:29800`. The first server flag is `tengu_linen_orbit`. The second is `tengu_haze_glass`.
+[^restricted-316]: The program, `chunk-acd7ayd3.js:2572` and `chunk-06cjxaee.js:15140`, and the [`2.1.316` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.316).
+[^glob-grep]: The program, `chunk-m14bt1pz.js:4723538` of `2.1.327` (the notes for a tool that is not offered).
+[^size-flag]: The program, `chunk-m14bt1pz.js:142168` and `:4033994`. The server flag is `tengu_quizzical_mango`.
+[^partial-read]: The program, `chunk-m14bt1pz.js:142168`, `:4033994`, and `:1756172` (the `Write` refusal, error code 19), and `chunk-f0zvyy8b.js:2188` (the mark). The [2.1.312 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312) list the change.
 [^write-verify]: Probe cases `print.err319.write-verify-devnull`, `print.err319.write-verify-race`, `print.err319.write-verify-full-disk`, `print.err319.write-verify-watcher`, and `print.err319.write-verify-pretooluse-order`, in the order of the sentences above.
-[^read-blocked]: The program, `2.1.323`, `chunk-cx2gd43x.js:1767`; `chunk-nqb5kdg0.js:6719`.
-[^exit-worktree-stop]: The program, `chunk-fkkma3m4.js:179680`.
-[^import-read]: The program, `chunk-q7ww9960.js`.
-[^notebook-checks]: The program, `chunk-4h798pp0.js:5448381` and `chunk-4h798pp0.js:5449444`.
-[^notebook-size]: The program, `chunk-4h798pp0.js:5450603`.
-[^signin-files]: The program, `chunk-2e8vamz8.js:1533-1551` and `chunk-2e8vamz8.js:11631-11693`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^device-files]: The program, `chunk-bprgtdg6.js:8760-8794` and `chunk-z4j4mjgn.js:47220`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^read-blocked]: The program, `2.1.323`, `chunk-acd7ayd3.js:2572`; `chunk-k57p2hm4.js:6712`.
+[^exit-worktree-stop]: The program, `chunk-1vttvse2.js:184209`.
+[^import-read]: The program, `chunk-5yk47jx3.js:6140` and `:1917`.
+[^notebook-checks]: The program, `chunk-m14bt1pz.js:5528398`, `:5528606`, `:5529488`, and `:5529669`.
+[^notebook-size]: The program, `chunk-m14bt1pz.js:5530854`.
+[^grep-page]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327)
+[^read-nb]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327)
+[^nb-newline]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327)
+[^read-size]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327)
+[^at-100]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327)
+[^signin-files]: The program, `chunk-jvme5rqc.js:1542-1551` and `chunk-jvme5rqc.js:11662-11693`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^device-files]: The program, `chunk-rj3e7agr.js:8745-8790` (the `Read` refusals and the link refusal) and `chunk-1yrzf3wn.js:47224` (the `Grep` refusal). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^edit-compaction]: The program, `chunk-m14bt1pz.js:5521459` (the test) and `chunk-f0zvyy8b.js:3465` (the reads that a compaction keeps). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).

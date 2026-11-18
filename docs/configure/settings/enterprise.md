@@ -10,7 +10,7 @@ These keys let an administrator control how managed settings arrive and which Cl
 
 ### Require a Version Range
 
-This file stops versions older than `2.1.300` from starting and merges all managed sources instead of using the top one alone.
+This file stops versions older than `2.1.300` from starting and merges all managed sources instead of using the top one alone.[^version-range]
 
 ```json title="/etc/claude-code/managed-settings.json"
 {
@@ -72,6 +72,8 @@ Claude Code checks the stored copy on disk before it uses it. If the copy does n
 In `2.1.316`, Claude Code also refuses to write over a stored copy that is not a regular file, with the error "the stored copy is not a regular file".
 The prompt-free path and the stored-copy check are also in `2.1.314`.
 
+<Undocumented /> Since `2.1.327`, Claude Code also sends a checksum of the managed settings that it loaded in the `x-claude-code-managed-settings-checksum` request header.[^checksum-header] The program sends it only when all of these are true: hint headers are on, `CLAUDE_CODE_GATEWAY_HINT_HEADERS` is set to a true value in the `env` block of managed settings, managed settings exist, the provider is a gateway, or the Anthropic API at a base URL whose host is not `api.anthropic.com`, and `ANTHROPIC_UNIX_SOCKET` is not set. No official page names this header. See [Request Headers](../../reference/api/endpoints.md#request-headers).
+
 ## Related Pages
 
 - [Settings Files and Scopes](index.md) explains the scopes, precedence, and managed settings.
@@ -80,11 +82,14 @@ The prompt-free path and the stored-copy check are also in `2.1.314`.
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema.
-[^reply-check]: The settings schema. Probe case `print.cli319.reply-check.user` shows the debug line, with `CLAUDE_CODE_REPLY_GATE_POLICY` set and the key in user settings. The turn-end code reads the key from the vouched settings tiers and logs "Reply gate: verdict=skip why=disableReplyCheck" when it is on. The vouched tiers come from the function that lists them. In `2.1.319` the function that reads `CLAUDE_CODE_MANAGED_SETTINGS_PATH` returns nothing. A run with a file in that variable logged `verdict=no_bounce`, so a file there is not a managed tier. Probe case `print.cli319.reply-check.managed-root` reads the root file and logs the gate verdict. The runner skips it, with the reason in its capture, until that file exists. Put `{"disableReplyCheck": true}` in it first. Run it with `bun run release:probe:print -- --from 2.1.316 --to 2.1.319 --only cli319.reply-check.managed-root` after you write the file as root.
+[^schema]: The program, its bundled settings schema, `chunk-ja5z738t.js:278919`.
+[^reply-check]: The settings schema. Probe case `print.cli319.reply-check.user` shows the debug line, with `CLAUDE_CODE_REPLY_GATE_POLICY` set and the key in user settings. The turn-end code reads the key from the vouched settings tiers and logs "Reply gate: verdict=skip why=disableReplyCheck" when it is on. The vouched tiers come from the function that lists them. In `2.1.319` the function that reads `CLAUDE_CODE_MANAGED_SETTINGS_PATH` returns nothing. A run with a file in that variable logged `verdict=no_bounce`, so a file there is not a managed tier.
 [^windows-split]: The settings schema. The Bash command path checks the platform (`windows`), the command length, and `policySettings.disableWindowsBashCommandSplit`. The path cannot run on macOS, so no run shows the split. Probe cases `print.cli319.dwb.user` (a `true` in user settings writes no warning line) and `print.cli319.dwb.bad-type` (`"yes"`).
-[^helper-env]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-taj2mjv8.js:20221`.
-[^internal]: The program.
-[^policy-default]: The program, `chunk-m33vdkhs.js:8418-9824`.
-[^policy-entry]: The settings schema and the program, `chunk-m33vdkhs.js:8461-9811`.
-[^approval]: The program, `chunk-gh04g7ms.js`, `chunk-xkcgfqvr.js`, `chunk-gznmf7ky.js`, and `chunk-m33vdkhs.js`.
+[^helper-env]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-bpr7n093.js:82294`.
+[^internal]: The program, `chunk-ja5z738t.js:223888`.
+[^policy-default]: The program, `chunk-ja5z738t.js:8471-9824`.
+[^policy-entry]: The settings schema and the program, `chunk-ja5z738t.js:8514-9811`.
+[^approval]: The program, `chunk-b1grgrc4.js:3582` and `:34407`, `chunk-fw32tasq.js:6834`, `chunk-k5zeysxp.js:293`, and `chunk-ja5z738t.js:348386`.
+[^version-range]: The program, its bundled settings schema, `chunk-ja5z738t.js:285180` (`requiredMinimumVersion`) and `chunk-ja5z738t.js:266767` (`managedSourcesBehavior`).
+
+[^checksum-header]: The program, `chunk-18d5r2hb.js:238176` (hint headers on) `chunk-18d5r2hb.js:319837` (the conditions), `chunk-enmznns5.js:685` (the direct `api.anthropic.com` test that stops the header), and `chunk-f892tj2r.js:36390` (the host test). The [gateway compatibility guide](https://code.claude.com/docs/en/llm-gateway-protocol#gateway-hint-headers) names the hint headers but not this header, and the [settings page](https://code.claude.com/docs/en/settings) and [network page](https://code.claude.com/docs/en/network-config) do not mention it.

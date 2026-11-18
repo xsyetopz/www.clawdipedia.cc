@@ -6,7 +6,7 @@ sidebar_position: 3
 
 These types map an event name to its input, its result, and its call on `$`. Your editor uses them to know the shape of `e` and `next` for each event. For example, `$.fs.read(...)` is both a call and the event `fs.read`, so a hook can answer it.
 
-A plugin can add its own nouns by declaration merging into `EngineInterface`. The shapes follow the Mod API type file of the `2.1.326` program.[^type-file] See [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference) for the official page.
+A plugin can add its own nouns by declaration merging into `EngineInterface`. The shapes follow the Mod API type file of the `2.1.327` program.[^type-file] See [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference) for the official page.
 
 ## Example
 
@@ -96,4 +96,4 @@ These types are aliases, unions, or plain shapes. Each row gives its use and its
 
 ## Sources
 
-[^type-file]: The program, the Mod API type file of the `2.1.326` build (`schemas/claude-code.d.ts`).
+[^type-file]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`.

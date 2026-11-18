@@ -61,7 +61,7 @@ The rows are in name order.[^variable-names] See [Environment Variables](index.m
 | `CARGO_HOME` | <Undocumented /> | Names the Cargo home folder. When a plugin eval run grants Bash, Claude Code hides `credentials` and `credentials.toml` in it from Bash. | Absolute path. A relative path stops the run | `claude plugin eval` with a Bash grant |
 | `CDPATH` | <Undocumented /> | Holds the shell `cd` search path. Claude Code blanks it in `cd` helper commands and treats it as an unsafe env name to override. | Text | Bash tool, Git and settings `env` checks |
 | `CF_PAGES` | <Undocumented /> | Marks Cloudflare Pages. Claude Code reports `cloudflare-pages` as the deployment environment and counts it as a CI signal. | On or off. Truthy value check | All (deployment detection) |
-| `CI` | <Documented /> | Marks a CI run for the terminal color level. | Presence test (`"CI" in env`), any value counts. A CI vendor variable then picks the level | All sessions |
+| `CI` | <Documented /> | Marks a CI run for the terminal color level. | Presence test (`"CI" in env`), any value counts. A CI vendor variable then picks the level.[^ci-color] | All sessions |
 | `CI_NAME` | <Undocumented /> | Names the CI vendor. Claude Code checks for `codeship` when it picks the terminal color depth. | Text. Only the value `codeship` matters | Terminal color detection (all) |
 | `CIRCLECI` | <Undocumented /> | Marks a CircleCI run. Claude Code uses it for CI detection, deployment detection, and terminal color depth. | Text. Presence counts | All sessions |
 | `CLOUDSDK_AUTH_ACCESS_TOKEN_FILE` | <Undocumented /> | Names the `gcloud` access token file. When a plugin eval run grants Bash, Claude Code hides the file and its folder from Bash. | Absolute path. A relative path stops the run | `claude plugin eval` with a Bash grant |
@@ -294,10 +294,11 @@ These cases show more detail.[^evalcreds-more]
 [^krb5-probe]: Probe of the `2.1.319` binary.
 [^kube-probe]: Probe of the `2.1.319` binary.
 [^netrc-probe]: Probe case `print.evalcreds.netrc.unset` and `print.evalcreds.netrc.set` of `2.1.319`.
-[^all-proxy]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-gh04g7ms.js:2958`.
+[^all-proxy]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-b1grgrc4.js:2868`.
 [^bash-env-gate]: The server gate is `tengu_golden_wirth`.
-[^bash-env]: The program.
-[^system-drive]: The program, `chunk-z4j4mjgn.js:42832` (read) and `chunk-caex36kk.js:3177` (set).
+[^bash-env]: The program, `chunk-m14bt1pz.js:1069499`.
+[^system-drive]: The program, `chunk-1yrzf3wn.js:42834` (read) and `chunk-bpr7n093.js:3178` (set).
 [^evalcreds]: Probe cases `print.evalcreds.netrc.unset`, `print.evalcreds.netrc.set`, and `print.evalcreds.relative.KUBECONFIG` of `2.1.319`. Each ran the real binary against a local stub, with no model call.
 [^evalcreds-more]: Probe cases `print.evalcreds.anthropic-profile`, `.anthropic-profile-abs`, `.aws-credential-process`, `.aws-credential-source`, `.ssh-wildcard`, and `.pm` of `2.1.319`.
-[^variable-names]: The program, variable names found in the `2.1.314` binary and in the credential path rows of `2.1.319`. The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^variable-names]: The program, `chunk-2ew0jg68.js:26216`, variable names found in the `2.1.314` binary and in the credential path rows of `2.1.319`. The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^ci-color]: The program, `chunk-j9g63hey.js:2661-2678`.

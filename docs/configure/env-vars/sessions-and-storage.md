@@ -55,7 +55,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `CLAUDE_CODE_HARBOR_KITE_PACING_OFF` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Turns off the pacing of outbound messages to local `uds` inboxes. The code credits and debits a pacer for each send. | On or off. When set, the pacing check returns false. When unset, a feature flag decides | All sessions, cross-session messaging |
 | `CLAUDE_CODE_HOME_SEED_HOLD_TIMEOUT_MS` | <Undocumented /> | Lowers the longest hold time of the home seed step. The value cannot raise the built-in maximum. | A number of milliseconds. A whole number, with a minimum of `0`. The result is the smaller of this value and a built-in cap | Host-seeded home or settings sync |
 | `CLAUDE_CODE_HOME_SEED_VERDICT_TIMEOUT_MS` | <Undocumented /> | Lowers the longest wait for the verdict of the home seed step. The value cannot raise the built-in maximum. | A number of milliseconds. A whole number, with a minimum of `0`. The result is the smaller of this value and a built-in cap | Host-seeded home or settings sync |
-| `CLAUDE_CODE_HOST_OWNED_CONFIG_DIR` | <Undocumented /> | Names a config folder that the app which started Claude Code manages. When the global config file in this folder does not parse, Claude Code starts with default settings and does not print repair advice, because the next save overwrites the file. It writes `Starting with default settings. The application that started Claude Code manages <folder>, as CLAUDE_CODE_HOST_OWNED_CONFIG_DIR says, so nothing needs to be done: a later save overwrites <path>.` to stderr, writes a warning to the debug log, and records the event `config_host_owned_folder` with `started_on_defaults`. Added in `2.1.321`. | A path. It counts only when it passes a path check and equals the config folder that Claude Code uses. The check is not known. No default | Global config file.[^host-owned] |
+| `CLAUDE_CODE_HOST_OWNED_CONFIG_DIR` | <Undocumented /> | Names a config folder that the app which started Claude Code manages. When the global config file in this folder does not parse, Claude Code starts with default settings and does not print repair advice, because the next save overwrites the file. It writes `Starting with default settings. The application that started Claude Code manages <folder>, as CLAUDE_CODE_HOST_OWNED_CONFIG_DIR says, so nothing needs to be done: a later save overwrites <path>.` to stderr, writes a warning to the debug log, and records the event `config_host_owned_folder` with `started_on_defaults`. | A path. It counts only when it passes a path check and equals the config folder that Claude Code uses. The check is not known. No default | Global config file.[^host-owned] |
 | `CLAUDE_CODE_HOST_SESSION_ID` | <Undocumented /> | Records the session id that the host app gave in the session registry entry as `hostSessionId`. | Text. Read only for host-started sessions | Host apps (desktop) |
 | `CLAUDE_CODE_HOST_WORKTREE` | <Undocumented /> | Holds the worktree path that a host declares for the session. Claude Code checks it against the start directory and reports problems. | Text. Claude Code deletes it from the env of child processes | Host apps |
 | `CLAUDE_CODE_HOST_WORKTREE_FENCE` | <Undocumented /> | Holds the fence that a host declares for the worktree. Claude Code checks it and reports a problem such as `fence_too_wide`. | Text. Claude Code deletes it from the env of child processes | Host apps |
@@ -130,17 +130,17 @@ Settings files copy `env` values as written. No shell expands them, so `~` and `
 
 The program (variable names found in the `2.1.314` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 
-[^automount]: The program, `chunk-90bjqvre.js@736`.
-[^child-notes-set]: The program, `chunk-y6p7c7eh.js:62`.
-[^child-notes-read]: The program, `chunk-y6p7c7eh.js:68`.
-[^resume-return]: The program, `chunk-y9bdpp8r.js:25048-25068`. The server flag is `tengu_gleaming_fair` or `tengu_gleaming_fair_reuse`. The prompt is skipped when `resumeReturnDismissed` is set.
-[^config-lock]: The program, `chunk-d73xe1mr.js@112645` and `chunk-4h798pp0.js@4545907`. Probe cases `env319a.config-lock-wait.*`.
-[^nested-id]: [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317). The program, `chunk-xzaxmedp.js@793` (`MKn` returns no ID when the variable is unset, and the derived ID when it is set). Probe cases `env319a.nested-session-id.unset` and `.v1`.
-[^drop-deferred]: The program, `chunk-xt4nsgp1.js@185203` (the message) and `chunk-xt4nsgp1.js@718959` (strict `true` check). Probe cases `env319a.drop-unavailable-deferred-tool.unset` and `.v1`.
-[^host-owned]: The program reads it at `chunk-d73xe1mr.js:125383`, shows the message at `chunk-d73xe1mr.js:125584`, and passes it on in an env list at `chunk-40ntpkc0.js:8150`. It did not show the path check.
-[^hover-rest]: The program.
-[^launched-trim]: The program, `chunk-p95xxxdb.js:451`.
-[^launched-write]: The program, `chunk-p95xxxdb.js:477`.
-[^personal-hooks]: The program, `chunk-a2gc8rcj.js@654`. Probe cases `env319b.personal-hooks-off.launch-restricted`, `retry-restricted`, `fix-restricted`, `host-restricted`, `other-restricted`, `off-restricted`, and `host-plain`.
-[^resume-hint]: The program, `chunk-4h798pp0.js:349101`.
-[^began-as-copy]: The program.
+[^automount]: The program, `chunk-ra17kydb.js:736`.
+[^child-notes-set]: The program, `chunk-7g78pmnc.js:67`.
+[^child-notes-read]: The program, `chunk-7g78pmnc.js:73`.
+[^resume-return]: The program, `chunk-cfxefa64.js:25191-25199`. The server flag is `tengu_gleaming_fair` or `tengu_gleaming_fair_reuse`. The prompt is skipped when `resumeReturnDismissed` is set.
+[^config-lock]: The program, `chunk-asj6f58y.js:121692` and `chunk-m14bt1pz.js:4616438`. Probe cases `env319a.config-lock-wait.*`.
+[^nested-id]: [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317). The program, `chunk-b6ajq4z9.js:794` (`MKn` returns no ID when the variable is unset, and the derived ID when it is set). Probe cases `env319a.nested-session-id.unset` and `.v1`.
+[^drop-deferred]: The program, `chunk-rap1tzf6.js:186339` (the message) and `chunk-rap1tzf6.js:716095` (strict `true` check). Probe cases `env319a.drop-unavailable-deferred-tool.unset` and `.v1`.
+[^host-owned]: The program reads it at `chunk-asj6f58y.js:134300`, shows the message at `chunk-asj6f58y.js:134631`, and passes it on in an env list at `chunk-asj6f58y.js:705927`. It did not show the path check.
+[^hover-rest]: The program, `chunk-asj6f58y.js:133065` (the message) and `chunk-d0ernz1g.js:16402` (the gate).
+[^launched-trim]: The program, `chunk-2mvk3gke.js:979`.
+[^launched-write]: The program, `chunk-2mvk3gke.js:1723`.
+[^personal-hooks]: The program, `chunk-nnpsqanp.js:688`. Probe cases `env319b.personal-hooks-off.launch-restricted`, `retry-restricted`, `fix-restricted`, `host-restricted`, `other-restricted`, `off-restricted`, and `host-plain`.
+[^resume-hint]: The program, `chunk-m14bt1pz.js:350132`.
+[^began-as-copy]: The program, `chunk-rap1tzf6.js:951079` and `chunk-rnt5hbrt.js:73355` (the flag).

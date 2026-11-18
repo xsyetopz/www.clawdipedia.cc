@@ -187,9 +187,9 @@ Claude Code uses more names than this table lists. They are internal files, or n
 | `state` | <Undocumented /> | `~/.claude/` | Staged settings changes and consent records. See [Sessions and Storage](../how-it-works/sessions-and-storage.md). |
 | `seed-admin` | <Undocumented /> | `~/.claude/` | The root for temp folders of cloud-session uploads. See [Sessions and Storage](../how-it-works/sessions-and-storage.md). |
 | `model-catalog` | <Undocumented /> | `~/.claude/cache/` | Cached model catalog files and `masked-ids.json`. See [Sessions and Storage](../how-it-works/sessions-and-storage.md). |
-| `.config.json` | <Undocumented /> | `~/.claude/` | The old place of the global config. Claude Code uses it when it is a non-empty file. Otherwise it uses `~/.claude.json`.[^config-json] |
-| `.last-cleanup` | <Undocumented /> | `~/.claude/` | Holds an ISO time. Claude Code reads the age of the file to skip a new cleanup run.[^last-cleanup] |
-| `.deep-link-register-failed` | <Undocumented /> | `~/.claude/` | A marker that the deep-link registration failed. Claude Code reads the age of the file. It does not try again for a while.[^deep-link] |
+| `.config.json` | <Undocumented /> | `~/.claude/` | The old place of the global config. In most cases, Claude Code uses it when it is a non-empty file. Otherwise it uses `~/.claude.json`. If both files hold data and are different files, Claude Code uses `.config.json`.[^config-json] |
+| `.last-cleanup` | <Undocumented /> | `~/.claude/` | Holds an ISO time. Claude Code reads the age of the file to skip a new cleanup run when the file is less than 24 hours old.[^last-cleanup] |
+| `.deep-link-register-failed` | <Undocumented /> | `~/.claude/` | A marker that the deep-link registration failed. Claude Code reads the age of the file. Claude Code writes it only when the registration fails with `EACCES` or `ENOSPC`. It does not try again while the file is less than 24 hours old.[^deep-link] |
 | `.last-update-result.json` | <Undocumented /> | `~/.claude/` | The result of the last update, with the fields `outcome` (`success` or `failed`), `status`, `version_from`, `version_to`, and `error_code`. |
 | `.update.lock` | <Undocumented /> | `~/.claude/` | The update lock. A lock younger than 5 minutes counts as held.[^update-lock] |
 | `active-time.json` | <Undocumented /> | `~/.claude/` | A ledger of active time, with `version` `1` and a `windows` list. |
@@ -204,8 +204,8 @@ Claude Code uses more names than this table lists. They are internal files, or n
 | `my-closed-issues.json` | <Undocumented /> | `~/.claude/cache/` | A cached list of closed issues. Each entry has `number`, `title`, and `closedAt`. |
 | `startup-perf` | <Undocumented /> | `~/.claude/` | A `.json` and a `.txt` file that `CLAUDE_CODE_PROFILE_STARTUP=1` writes. See [Probes](../reference/probes.md). |
 | `daemon.json` | <Undocumented /> | `~/.claude/` | A file in the config folder that the file tools refuse to write. The same writes to `daemon`, `jobs`, `shell-snapshots`, and `session-env` are also refused.[^daemon-json] |
-| `local` | <Undocumented /> | `~/.claude/` | The folder of a local npm install. After a failed auto-update, Claude Code tells you to run `cd ~/.claude/local && npm update`.[^local] |
-| `loop.md` | <Undocumented /> | `.claude/`, `~/.claude/` | The task list of a `/loop` tick that has no prompt. Claude Code reads the project file first, then the config folder file. It cuts the text to 25000 bytes and adds a warning.[^loop] |
+| `local` | <Undocumented /> | `~/.claude/` | The folder of a local npm install. After a failed auto-update of a local install, Claude Code tells you to run `cd ~/.claude/local && npm update`. Other installs get an `npm i -g` command.[^local] |
+| `loop.md` | <Undocumented /> | `.claude/`, `~/.claude/` | The task list of a `/loop` tick that has no prompt. Claude Code reads the project file first, then the config folder file. It cuts the text to 25000 characters, at the last line break before that limit, and adds a warning.[^loop] |
 | `personal` | <Undocumented /> | `~/.claude/memory/` | The folder of the personal memory store (`memory/personal`). The store takes only Markdown files. The model reads and writes it through a memory store named `personal`, when memory stores are on. |
 | `workflows` | <Undocumented /> | `.claude/` | Predefined workflows, as `.claude/workflows/<name>.js`. A workflow call that gives a `name` resolves it from here or from the built-in list. The save dialog writes a project workflow to this folder. |
 
@@ -241,7 +241,7 @@ The exceptions and the merge rules are on [Settings Files and Scopes](../configu
 
 The exact fields of `~/.claude.json` are in this schema: `https://clawdipedia.cc/schemas/claude-code-claude-json.json`. It lists every field of this release. Look each field up there before you rely on it.
 
-Claude Code builds this payload in code, with no validator, so the schema comes from that code.[^claude-json] A field marked `x-unverified` has a type that the code does not show. A field marked `x-observed` is a field that a probe saw.
+The schema comes from the default values and the key list in the code.[^claude-json] A field marked `x-unverified` has a type that the code does not show. A field marked `x-observed` is a field that a probe saw.
 
 ## Related Pages
 
@@ -252,15 +252,15 @@ Claude Code builds this payload in code, with no validator, so the schema comes 
 
 ## Sources
 
-[^overview]: The program.
-[^config-folders]: The program.
-[^more-names]: The program.
-[^config-json]: The program.
-[^last-cleanup]: The program.
-[^deep-link]: The program.
-[^update-lock]: The program.
-[^daemon-json]: The program.
-[^local]: The program.
-[^loop]: The program.
-[^claude-json]: The program.
-[^child-logs]: The program, `chunk-y5hjhy3x.js:6528`, `chunk-zyq9kffp.js:378`, and `chunk-z4j4mjgn.js:44893-44944`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^overview]: The program, `chunk-pmhjgtb5.js:2548` (the `CLAUDE_CONFIG_DIR` variable) and `chunk-2ew0jg68.js:55389` (`CLAUDE_CONFIG_DIR` or the default `~/.claude`).
+[^config-folders]: The program, `chunk-kc622jje.js:42567` (`state/` and `cache/model-catalog/` names), `chunk-jvme5rqc.js:245870` (`seed-admin`), and `chunk-1yrzf3wn.js:872150` (`bridge-spawn`).
+[^more-names]: The program, `chunk-xa2mcav9.js:31492`.
+[^config-json]: The program, `chunk-2ew0jg68.js:55389-55900` and `chunk-dt20ra1t.js:41527`.
+[^last-cleanup]: The program, `chunk-ddhdrc1h.js:18104-18192` (age check, `86400000` ms) and `:19153` (writes the ISO time), and `chunk-kc622jje.js:39752-40210`.
+[^deep-link]: The program, `chunk-dfe6m3x1.js:4095-4900` (the file, the `EACCES` and `ENOSPC` write, and `86400000` ms) and `chunk-kc622jje.js:40225`.
+[^update-lock]: The program, `chunk-y8q079sf.js:11415-11700` (`300000` ms).
+[^daemon-json]: The program, `chunk-jvme5rqc.js:240069-240700`.
+[^local]: The program, `chunk-brhgskgz.js:31019` and `chunk-318s1str.js:46945`.
+[^loop]: The program, `chunk-h9nzet5j.js:10178-10700`.
+[^claude-json]: The program, `chunk-asj6f58y.js:92055` and `:135330`.
+[^child-logs]: The program, `chunk-1yrzf3wn.js:872835-872890`, `chunk-0tqcm9e3.js:116647` (no logs when the debug file is set or verbose is off), and `:136140`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

@@ -88,6 +88,6 @@ See [Subagent Runtime](runtime.md) for the details, and [Agent Loop](../../how-i
 
 ## Sources
 
-[^desc-cost]: The program, the startup warning.
+[^desc-cost]: The program, the startup warning, `chunk-a2xjwn0h.js:77653`.
 
 Official pages: [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents) and [Environment Variables](https://code.claude.com/docs/en/env-vars).

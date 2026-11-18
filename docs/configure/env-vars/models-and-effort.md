@@ -129,14 +129,14 @@ Claude Code picks the model in a fixed order: the `--model` flag or `/model` fir
 
 ## Sources
 
-[^names]: The program, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^names]: The program, `chunk-2ew0jg68.js:26216`, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 [^amber]: [Probes](../../reference/probes.md).
-[^fast-vertex]: The program, `chunk-d73xe1mr.js:402401`. Probe case `print.cli322.fast-vertex-disabled`.
-[^refusal-name]: The program, `chunk-vawgpkfg.js` lines 16037 to 16053.
-[^ultrathink]: The program, gate `tengu_turtle_carbon`.
-[^thinking-titles]: The program, `chunk-4h798pp0.js:169436`. The second check is at `chunk-27vawgnx.js:11361`.
+[^fast-vertex]: The program, `chunk-asj6f58y.js:420009`. Probe case `print.cli322.fast-vertex-disabled`.
+[^refusal-name]: The program, `chunk-18d5r2hb.js:16063-16079`.
+[^ultrathink]: The program, `chunk-asj6f58y.js:554376`, gate `tengu_turtle_carbon`.
+[^thinking-titles]: The program, `chunk-m14bt1pz.js:3381344`. The second check is at `chunk-8g2nr9dn.js:200064`.
 [^fast-capability]: Probe case `print.cli322.fast-vertex-capability-on`.
-[^canonical]: The program, `chunk-pm46v9cv.js` lines 324 to 353 (the name is canonicalized with `deterministic: true`).
-[^vertex-org]: The program, `chunk-d73xe1mr.js:402626`.
-[^subagent-effort]: The program, `chunk-j0r1dmyb.js`, `chunk-4h798pp0.js`, and `chunk-2emsfnec.js`. Flag `tengu_snappy_pelican`. Telemetry event `subagent_effort_default` records `unknown_level` for a bad value.
+[^canonical]: The program, `chunk-t907shf5.js:324-353` (the name is canonicalized with `deterministic: true`).
+[^vertex-org]: The program, `chunk-asj6f58y.js:420234`.
+[^subagent-effort]: The program, `chunk-stxcwn12.js:4244`, `chunk-m14bt1pz.js:1767587`, and `chunk-48tbdg6k.js:8741`. Flag `tengu_snappy_pelican`. Telemetry event `subagent_effort_default` records `unknown_level` for a bad value.
 [^workflow-model]: [Probes](../../reference/probes.md#subagents-and-hooks).

@@ -140,6 +140,8 @@ Fires while assistant text streams, once for each batch of finished lines. It ha
 
 Fires when Claude Code sends a notification. The matcher is the notification type. It runs even if desktop notifications are off. Claude Code ignores the exit code and `stderr`, but `terminalSequence` still works. Handlers: `command`, `http`, `mcp_tool`.
 
+#### Notification Types
+
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
 | `message`, `title`, `notification_type` | <Documented /> | Input | The text, an optional title, and the type. |
@@ -147,8 +149,8 @@ Fires when Claude Code sends a notification. The matcher is the notification typ
 | `idle_prompt` | <Documented /> | Type | The session was idle for about 60 seconds. Both depend on typing and running agents. Seen live: the message was `Claude is waiting for your input`, about 60 seconds after the turn ended (the config key `messageIdleNotifThresholdMs` sets the 60 seconds, default 60000). |
 | `auth_success`, `elicitation_dialog`, `elicitation_url_dialog`, `elicitation_complete`, `elicitation_response` | <Documented /> | Type | Auth finished, and the steps of an MCP question. The two dialog types wait 6 seconds. Seen live in the interactive screen: all four `elicitation_*` values (messages `Claude Code needs your input` for the two dialogs, `Elicitation response for server "probe": accept`, and `MCP server "probe" confirmed elicitation el-1 complete`). `auth_success` needs a login and was not seen. |
 | `agent_needs_input`, `agent_completed` | <Documented /> | Type | Background session events in agent view. `agent_needs_input` for a teammate setup question needs `2.1.248`. `agent_needs_input` was seen live on `2.1.319` for the dialog `Auto mode can't check actions in this session` (message `Auto mode can't check actions in this session and needs your choice`). Auto mode shows that dialog with a custom base URL that gives no server-side verdict, or that refuses the dangerous-tool-use beta with HTTP 400.[^agent-needs-input] Up to `2.1.316`, the classifier billing notice fired it with the message `Auto mode has a classifier billing notice to acknowledge`. `agent_completed` was not seen (it needs a background session). |
-| `quota_auto_resume_fired`, `quota_auto_resume_stale`, `quota_auto_resume_disabled` | <Documented /> | Type | Usage limit wait events. Need `2.1.234`. Not seen live: they need a login. |
-| `plugin_notification` | <Undocumented /> | Type | The mod call `$.ui.notify` sends it. Seen live: the hook got `message`, `title`, and `notification_type`, even with no notification channel. |
+| `quota_auto_resume_fired`, `quota_auto_resume_stale`, `quota_auto_resume_disabled` | <Documented /> | Type | Usage limit wait events. Need `2.1.234`. Not seen live: they need a login.[^notif-types] |
+| `plugin_notification` | <Undocumented /> | Type | The mod call `$.ui.notify` sends it. Seen live: the hook got `message`, `title`, and `notification_type`, even with no notification channel.[^plugin-notif] |
 | `auth_storage_failure` | <Undocumented /> | Type | Sent after the OAuth token exchange, when saving the credentials fails. Not seen live. Message: `Claude Code login needs attention: credentials may not have been saved`, or `Claude Code login needs attention: credentials could not be saved`. |
 | `worker_permission_prompt` | <Undocumented /> <Gated note="Set CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 or use --agent-teams" /> | Type | Sent by the team lead's inbox poller when a teammate asks for permission. Needs agent teams and at least one teammate. It fires only when the lead is idle and shows no dialog. Seen live: the message was `A subagent needs permission for Bash`, with no `title`. A normal `permission_prompt` followed when the dialog showed. The message `<worker> needs network access to <host>` was not run.[^worker-message] |
 | `push_notification` | <Undocumented /> <Gated note="The PushNotification tool is behind a server-side flag that is off by default" /> | Type | Sent with the message from the `PushNotification` tool. Skipped when the config is off (`config_off`) or the user is present (`user_present`). Setting `CLAUDE_CODE_DISABLE_NOTIFICATION_PRESENCE_CHECK` disables the presence check. Seen live: the input had the common fields, `message`, and `notification_type`, with no `title`. When skipped, the hook does not fire (not run).[^push] |
@@ -196,8 +198,10 @@ Fires instead of `Stop` when the turn ends on an API error. The matcher is `erro
 
 ## Sources
 
+[^notif-types]: The program, the type list of `2.1.327`, `chunk-29d2mwq6.js:521`. It holds all three `quota_auto_resume_*` names and `plugin_notification`.
+[^plugin-notif]: The program, `chunk-m14bt1pz.js:4848367`.
 [^agent-needs-input]: Probe cases `pty.notifications.agent-needs-input` and `pty.notifications.agent-needs-input-refused`.
-[^worker-message]: The program.
-[^push]: A reading of the program.
-[^not-seen]: Readings of the program, not live results.
-[^refusal]: A reading of the program, not a live result.
+[^worker-message]: The program, `chunk-cfxefa64.js:1848836` and `chunk-cfxefa64.js:1852704`.
+[^push]: A reading of the program, `chunk-46dkh8eq.js:9471` and `chunk-46dkh8eq.js:9608`.
+[^not-seen]: Readings of the program, `chunk-j4ptcgj4.js:21032` and `chunk-pqyg7zpy.js:12626`, not live results.
+[^refusal]: A reading of the program, `chunk-29d2mwq6.js:602`, not a live result.
