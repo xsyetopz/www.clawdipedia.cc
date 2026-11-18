@@ -30,6 +30,11 @@ export interface PtyCase {
 	allowOverride?: string[];
 	/** no API key in the child env. */
 	auth?: "none";
+	/** A server that runs for the length of the run; its env (such as HTTPS_PROXY) replaces the fixed keys. */
+	mock?: () => Promise<{
+		env: () => Record<string, string>;
+		stop: () => Promise<void>;
+	}>;
 	schedule: PtyStep[];
 	secs: number;
 	rows?: number;

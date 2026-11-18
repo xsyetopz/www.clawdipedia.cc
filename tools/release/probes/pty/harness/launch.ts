@@ -79,6 +79,32 @@ const argsOf = (c: PtyCase, sb: Sandbox): string[] => [
 	...(c.args ?? []).map((a) => subst(a, sb)),
 ];
 
+const envOf = (
+	c: PtyCase,
+	sb: Sandbox,
+	base: string,
+	mockEnv: Record<string, string>,
+): { env: Record<string, string>; extra: Record<string, string> } => {
+	const extra = {
+		...Object.fromEntries(
+			Object.entries(c.env ?? {}).map(([k, v]) => [k, subst(v, sb)]),
+		),
+		...mockEnv,
+	};
+	// A mock replaces the fixed dead proxy, so its keys may override.
+	const allowOverride = [...(c.allowOverride ?? []), ...Object.keys(mockEnv)];
+	const env = childEnv({
+		home: sb.home,
+		configDir: sb.cfg,
+		baseUrl: base,
+		extra,
+		tty: true,
+		...(allowOverride.length === 0 ? {} : { allowOverride }),
+		...(c.auth === undefined ? {} : { auth: c.auth }),
+	});
+	return { env, extra };
+};
+
 export const launch = async (
 	ctx: PtyCtx,
 	c: PtyCase,
@@ -88,20 +114,8 @@ export const launch = async (
 	const log = join(sb.root, "requests.jsonl");
 	const caseKey = `p${++counter}`;
 	const base = await register(stub, caseKey, c, sb, log);
-	const extra = Object.fromEntries(
-		Object.entries(c.env ?? {}).map(([k, v]) => [k, subst(v, sb)]),
-	);
-	const env = childEnv({
-		home: sb.home,
-		configDir: sb.cfg,
-		baseUrl: base,
-		extra,
-		tty: true,
-		...(c.allowOverride === undefined
-			? {}
-			: { allowOverride: c.allowOverride }),
-		...(c.auth === undefined ? {} : { auth: c.auth }),
-	});
+	const mock = await c.mock?.();
+	const { env, extra } = envOf(c, sb, base, mock?.env() ?? {});
 	const args = argsOf(c, sb);
 	await mkdir(join(sb.root, "pty"), { recursive: true });
 	const pty = await runPty({
@@ -122,5 +136,6 @@ export const launch = async (
 		out: join(sb.root, "pty", "RAW"),
 	});
 	stub.unregister(caseKey);
+	await mock?.stop();
 	return { pty, args, extra, log };
 };

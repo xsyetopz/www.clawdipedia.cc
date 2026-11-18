@@ -4246,10 +4246,9 @@
 			},
 			"anchors": [
 				"attachment:{type:\"queued_command\",prompt:«».text,source_uuid:«»(),origin:{kind:\"unclassified\"},timestamp:«».timestamp,isMeta:!0,forwardedIntent:{lineage:«».lineage,source:«».source}",
-				"type:\"goal_status\",met:«»,sentinel:!0,condition:«»",
-				"type:\"async_hook_response_batch\",hooks:«»"
+				"type:\"goal_status\",met:«»,sentinel:!0,condition:«»"
 			],
-			"note": "The attachment line is {type:'attachment', uuid, timestamp, attachment} built by the attachment constructors (a different object shape per attachment type); the key below is the union over those shapes. attachment.type is the string tag of the attachment kind (queued_command, goal_status, async_hook_response_batch, teammate_shutdown_batch and many more); the list of kinds is long and not enumerated here."
+			"note": "The attachment line is {type:'attachment', uuid, timestamp, attachment} built by the attachment constructors (a different object shape per attachment type); the key below is the union over those shapes. attachment.type is the string tag of the attachment kind (queued_command, goal_status and many more); the list of kinds is long and not enumerated here."
 		},
 		"attachment.attachment.prompt": {
 			"schema": {
@@ -6204,30 +6203,6 @@
 			],
 			"note": "The recorder in chunk-m14bt1pz fills the list with zse(node, path, list) for the system prompt, the tools, and each message that has a cache_control marker. zse walks the value and pushes {path, value} for each key named cache_control. The path starts with 'system', 'tools', or 'messages' and holds object keys (strings) and array indexes (integers); value is the cache_control value as the request holds it, so its type is not narrowed."
 		},
-		"attachment.attachment.hooks": {
-			"schema": {
-				"type": "array",
-				"items": {
-					"type": "object",
-					"properties": {
-						"hookEvent": {
-							"type": "string"
-						},
-						"count": {
-							"type": "integer",
-							"minimum": 2
-						}
-					},
-					"required": ["hookEvent", "count"]
-				}
-			},
-			"anchors": [
-				"attachment:{type:\"async_hook_response_batch\",hooks:«»}",
-				"«».push({hookEvent:«»,count:«»})",
-				"let «»=«».attachment.hookEvent;«».set(«»,(«».get(«»)??0)+1)"
-			],
-			"note": "async_hook_response_batch: Dd() (chunk-a2xjwn0h) merges a run of async_hook_response attachments into one. It counts the runs per hookEvent (the hook event name of the attachment, a string such as 'SessionStart') and pushes {hookEvent, count} for each. A run of one attachment stays unmerged, so a batch has a run of at least two and each count is an integer."
-		},
 		"attachment.rendered": {
 			"schema": {
 				"type": "array",
@@ -6311,7 +6286,7 @@
 				"function «»(«»){let «»=«».message.content;return typeof «»===\"string\"||«».every((«»)=>«».type===\"text\")}",
 				"{rendered:«»,renderedWithdrawn:«»(«»(«»(«»))),renderedRole:«»}"
 			],
-			"note": "I_n(attachment) in the session module (chunk-m14bt1pz) builds the rendered fields from the messages that the attachment turns into; gjt() keeps them only when every message content is a string or an array of text blocks, and writes each as {content: message.content}. gjt() returns nothing for an empty list, so an array has at least one item. renderedWithdrawn is written only for a file attachment over the token limit, from the messages of the withdrawn form."
+			"note": "I_n(attachment) in the session module (chunk-m14bt1pz) builds the rendered fields from the messages that the attachment turns into; gjt() keeps them only when every message content is a string or an array of text blocks, and writes each as {content: message.content}. gjt() returns nothing for an empty list, so an array has at least one item. renderedWithdrawn is written only for a file attachment with overTokenLimit true (chunk-m14bt1pz.js:5917928). In 2.1.327 no write reaches it: the one literal that sets overTokenLimit (chunk-m14bt1pz.js:4041260) needs a context budget, and the caller passes that budget only for a prefetched file buffer in the jlo session set (chunk-m14bt1pz.js:4037550). jlo is read only with peek() (chunk-m14bt1pz.js:3987339), and peek() never creates the set (chunk-t30xhrpz.js:351), so no buffer is ever in it."
 		},
 		"attachment.renderedInHumanTurn": {
 			"schema": {

@@ -3,11 +3,6 @@
 // The program accepts `--sdk-url` only for an Anthropic host name over TLS. The mock therefore runs a local HTTPS
 // server with a throwaway certificate for api.anthropic.com, and a CONNECT proxy that sends every tunnel to it. The
 // child trusts the certificate through NODE_EXTRA_CA_CERTS and reaches the proxy through HTTPS_PROXY.
-import { mkdtemp, rm } from "node:fs/promises";
-import net from "node:net";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
-
 import {
 	announce,
 	answerTo,
@@ -15,6 +10,7 @@ import {
 	sse,
 	toolCalls,
 } from "./host-wire.ts";
+import { startTlsProxy } from "./tls-proxy.ts";
 
 export { HOST_NAME } from "./host-wire.ts";
 
@@ -59,48 +55,6 @@ export interface HostMock {
 }
 
 const enc = new TextEncoder();
-
-const makeCert = async (
-	dir: string,
-): Promise<{ key: string; cert: string }> => {
-	const key = join(dir, "key.pem");
-	const cert = join(dir, "cert.pem");
-	await Bun.$`openssl req -x509 -newkey rsa:2048 -nodes -keyout ${key} -out ${cert} -days 2 -subj /CN=api.anthropic.com -addext subjectAltName=DNS:api.anthropic.com`.quiet();
-	return { key, cert };
-};
-
-// Sends each CONNECT tunnel to the local TLS server, whatever host the child asked for.
-const startProxy = async (target: number): Promise<net.Server> => {
-	const proxy = net.createServer((c) => {
-		c.once("data", () => {
-			const up = net.connect(target, "127.0.0.1", () => {
-				c.write("HTTP/1.1 200 Connection Established\r\n\r\n");
-				c.pipe(up);
-				up.pipe(c);
-			});
-			up.on("error", () => {
-				c.destroy();
-			});
-			c.on("error", () => {
-				up.destroy();
-			});
-		});
-	});
-	await new Promise<void>((resolve) => {
-		proxy.listen(0, "127.0.0.1", () => {
-			resolve();
-		});
-	});
-	return proxy;
-};
-
-const proxyPortOf = (proxy: net.Server): number => {
-	const addr = proxy.address();
-	if (addr === null || typeof addr === "string") {
-		throw new Error("proxy has no TCP address");
-	}
-	return addr.port;
-};
 
 // The SSE stream: the host announces after 1.5 s and the user message follows 3 s later, so the program has
 // registered the host before the model turn starts.
@@ -154,20 +108,10 @@ const answerCalls = (
 	}
 };
 
-const mockEnv = (proxyPort: number, cert: string): Record<string, string> => ({
-	HTTPS_PROXY: `http://127.0.0.1:${proxyPort}`,
-	NO_PROXY: "127.0.0.1",
-	NODE_EXTRA_CA_CERTS: cert,
-	CLAUDE_CODE_REMOTE_TOOLS_FORWARD: "1",
-	CLAUDE_CODE_WORKER_EPOCH: "1",
-});
-
 /** Starts the mock. The caller passes `env()` to the child and `--sdk-url` from `hostSdkUrl()`. */
 export const startHostMock = async (
 	opts: HostMockOptions = {},
 ): Promise<HostMock> => {
-	const dir = await mkdtemp(join(tmpdir(), "hostmock-"));
-	const { key, cert } = await makeCert(dir);
 	const requests: HostRequest[] = [];
 	const calls: unknown[] = [];
 	let seq = 0;
@@ -176,40 +120,32 @@ export const startHostMock = async (
 		seq += 1;
 		stream?.enqueue(enc.encode(sse(seq, p, status)));
 	};
-	const tls = Bun.serve({
-		port: 0,
-		hostname: "127.0.0.1",
-		idleTimeout: 0,
-		tls: { key: Bun.file(key), cert: Bun.file(cert) },
-		fetch: async (req) => {
-			const path = new URL(req.url).pathname;
-			const text = await req.text();
-			requests.push({ method: req.method, path, body: text });
-			if (path.endsWith("/worker/register")) {
-				return Response.json({ worker_epoch: 1 });
-			}
-			if (path.endsWith("/worker/events/stream")) {
-				return eventStream(opts, push, (c) => {
-					stream = c;
-				});
-			}
-			if (req.method === "POST" && path.endsWith("/worker/events")) {
-				answerCalls(text, opts, calls, push);
-			}
-			return Response.json({});
-		},
+	const server = await startTlsProxy(["api.anthropic.com"], async (req) => {
+		const path = new URL(req.url).pathname;
+		const text = await req.text();
+		requests.push({ method: req.method, path, body: text });
+		if (path.endsWith("/worker/register")) {
+			return Response.json({ worker_epoch: 1 });
+		}
+		if (path.endsWith("/worker/events/stream")) {
+			return eventStream(opts, push, (c) => {
+				stream = c;
+			});
+		}
+		if (req.method === "POST" && path.endsWith("/worker/events")) {
+			answerCalls(text, opts, calls, push);
+		}
+		return Response.json({});
 	});
-	const proxy = await startProxy(tls.port ?? 0);
-	const proxyPort = proxyPortOf(proxy);
 	return {
 		requests,
 		calls,
-		env: () => mockEnv(proxyPort, cert),
-		stop: async () => {
-			proxy.close();
-			await tls.stop(true);
-			await rm(dir, { recursive: true, force: true });
-		},
+		env: () => ({
+			...server.env,
+			CLAUDE_CODE_REMOTE_TOOLS_FORWARD: "1",
+			CLAUDE_CODE_WORKER_EPOCH: "1",
+		}),
+		stop: server.stop,
 	};
 };
 

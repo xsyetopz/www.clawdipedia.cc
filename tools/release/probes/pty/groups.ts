@@ -7,6 +7,7 @@ import { notificationsGroup } from "./notifications.ts";
 import { perfettoGroup } from "./perfetto.ts";
 import { sizesGroup } from "./sizes.ts";
 import { statuslineGroup } from "./statusline.ts";
+import { transcriptGroup } from "./transcript.ts";
 
 export const GROUPS: PtyGroup[] = [
 	hooksGroup,
@@ -17,4 +18,5 @@ export const GROUPS: PtyGroup[] = [
 	capturesGroup,
 	perfettoGroup,
 	cli319Group,
+	transcriptGroup,
 ];

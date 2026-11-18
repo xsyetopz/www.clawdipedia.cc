@@ -1393,25 +1393,6 @@
 						},
 						"text": {
 							"type": ["string", "null"]
-						},
-						"hooks": {
-							"type": "array",
-							"items": {
-								"type": "object",
-								"properties": {
-									"hookEvent": {
-										"type": "string"
-									},
-									"count": {
-										"type": "integer",
-										"minimum": 2
-									}
-								},
-								"required": ["hookEvent", "count"]
-							}
-						},
-						"count": {
-							"type": "number"
 						}
 					},
 					"x-observed": true
@@ -1609,7 +1590,7 @@
 					"type": "string"
 				}
 			},
-			"$comment": "Registry policy: transcript. Code sites used: 11."
+			"$comment": "Registry policy: transcript. Code sites used: 9."
 		},
 		"attribution-snapshot": {
 			"type": "object",
