@@ -362,21 +362,6 @@
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectioninput:65a54682": {
-		"kind": "manual",
-		"probes": [],
-		"note": "program behaviour; no probe checks it yet"
-	},
-	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectioninput:e78d3cb1": {
-		"kind": "manual",
-		"probes": [],
-		"note": "program behaviour; no probe checks it yet"
-	},
-	"docs/extend/mod-api/types/turn-prompt/index.md#example:5d938b39": {
-		"kind": "manual",
-		"probes": [],
-		"note": "program behaviour; no probe checks it yet"
-	},
 	"docs/extend/mod-api/types/turn-prompt/suggest-skill-turn.md#skillpromptinput:80e3df7d": {
 		"kind": "manual",
 		"probes": [],
@@ -768,11 +753,6 @@
 		"kind": "manual",
 		"probes": [],
 		"note": "the gj/gk count clamp read in the cleaned 2.1.312 code (chunk-hz2c9q6k.js:316-321, :784)"
-	},
-	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:9518b30b": {
-		"kind": "manual",
-		"probes": [],
-		"note": "the cache warning text read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:58010, :58046-58051)"
 	},
 	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:7469c572": {
 		"kind": "manual",
@@ -1198,11 +1178,6 @@
 		"probes": [],
 		"note": "cites the 2.1.323 release notes and the program"
 	},
-	"docs/extend/skills-and-commands/slash-commands.md#how-usage-and-artifacts-work:17b59a0a": {
-		"kind": "manual",
-		"probes": [],
-		"note": "/usage fix lines read in the 2.1.323 program; the 2.1.322 program lacks it"
-	},
 	"docs/how-it-works/permission-flow.md#rule-warnings:1065af9d": {
 		"kind": "manual",
 		"probes": [],
@@ -1238,11 +1213,6 @@
 		"probes": [],
 		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
 	},
-	"docs/extend/mod-api/types/hooks.md#hookbudget:853ac3be": {
-		"kind": "manual",
-		"probes": [],
-		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
-	},
 	"docs/extend/mod-api/types/hooks.md#matcher:64788cfb": {
 		"kind": "manual",
 		"probes": [],
@@ -1269,16 +1239,6 @@
 		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
 	},
 	"docs/extend/mod-api/types/testing/matchers-engine.md#foundelement:a19d9723": {
-		"kind": "manual",
-		"probes": [],
-		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
-	},
-	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolcheckinput:379b0a05": {
-		"kind": "manual",
-		"probes": [],
-		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
-	},
-	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolcheckresult:3b93fe4d": {
 		"kind": "manual",
 		"probes": [],
 		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
@@ -1558,11 +1518,6 @@
 		"kind": "manual",
 		"probes": [],
 		"note": "change at /permissions read in the 2.1.326 program, compared with the 2.1.323 program"
-	},
-	"docs/configure/permissions/sandbox.md#core-keys:eb2afe21": {
-		"kind": "manual",
-		"probes": [],
-		"note": "change at sandbox.windows.backend read in the 2.1.326 program, compared with the 2.1.323 program"
 	},
 	"docs/configure/permissions/sandbox.md#other-behavior:d6977eba": {
 		"kind": "manual",
@@ -2354,11 +2309,6 @@
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/configure/settings/index.md#which-value-wins:aadb274b": {
-		"kind": "manual",
-		"probes": [],
-		"note": "read in the 2.1.327 program at chunk-cfxefa64.js:13838-13844; release notes 2.1.327"
-	},
 	"docs/configure/settings/index.md#managed-settings:1afb6787": {
 		"kind": "manual",
 		"probes": [],
@@ -2399,17 +2349,7 @@
 		"probes": [],
 		"note": "control request fields in schemas/claude-code-control-protocol.json"
 	},
-	"docs/extend/headless/control-protocol.md#subtypes:ad18f094": {
-		"kind": "manual",
-		"probes": [],
-		"note": "read in the 2.1.327 program at chunk-rj3e7agr.js:712907"
-	},
 	"docs/extend/headless/control-protocol.md#subtypes:6bd7012c": {
-		"kind": "manual",
-		"probes": [],
-		"note": "read in the 2.1.327 program at chunk-rj3e7agr.js:690617"
-	},
-	"docs/extend/headless/control-protocol.md#subtypes:b91efd37": {
 		"kind": "manual",
 		"probes": [],
 		"note": "read in the 2.1.327 program at chunk-rj3e7agr.js:690617"
@@ -2494,30 +2434,15 @@
 		"probes": [],
 		"note": "read in the 2.1.327 program at chunk-g2wcp8ss.js:3186; release notes 2.1.327"
 	},
-	"docs/extend/mod-api/calls/turn-prompt.md#engine-events:d0fd6fa3": {
-		"kind": "manual",
-		"probes": [],
-		"note": "program behaviour; no probe checks it yet"
-	},
 	"docs/extend/mod-api/events/hooks.md#arguments-of-a-hook:fa8af5d9": {
 		"kind": "schema",
 		"probes": [],
 		"note": "next.to TargetTier in schemas/claude-code.d.ts"
 	},
-	"docs/extend/mod-api/nouns-and-gates.md#built-in-mods:d6c73f8f": {
-		"kind": "manual",
-		"probes": [],
-		"note": "program behaviour; no probe checks it yet"
-	},
 	"docs/extend/mod-api/nouns-and-gates.md#enable-test:bf15788d": {
 		"kind": "manual",
 		"probes": [],
 		"note": "read in the 2.1.327 program at chunk-4zn1ct5c.js:31994"
-	},
-	"docs/extend/mod-api/types/hooks.md#types-without-fields:66b632f9": {
-		"kind": "manual",
-		"probes": [],
-		"note": "read in the 2.1.327 program at chunk-gf0qnxzg.js:257"
 	},
 	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolcallreserved:d57e05a8": {
 		"kind": "manual",
@@ -2642,11 +2567,6 @@
 		"kind": "manual",
 		"probes": [],
 		"note": "change at /v1/privacy-consents read in the 2.1.326 program, compared with the 2.1.323 program"
-	},
-	"docs/reference/api/endpoints.md#mcp-paths:f0f64046": {
-		"kind": "manual",
-		"probes": [],
-		"note": "read in the 2.1.327 program at chunk-eyze44ee.js:6777"
 	},
 	"docs/reference/api/endpoints.md#request-headers:38f289fa": {
 		"kind": "manual",
@@ -3096,5 +3016,105 @@
 		"kind": "manual",
 		"probes": [],
 		"note": "read in the program at chunk-56bhcxay.js:3382703; release notes 2.1.312"
+	},
+	"docs/configure/cli/self-hosted-runner.md#start-up-failure-after-registration:2cedaad3": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-gv1b3n3g.js:342519; release notes 2.1.328"
+	},
+	"docs/configure/models-and-providers/effort-thinking-and-fallback.md#effort:ae562a2e": {
+		"kind": "manual",
+		"probes": [],
+		"note": "the cache warning text read in the cleaned 2.1.312 code (chunk-7ss0ryz6.js:58010, :58046-58051)"
+	},
+	"docs/configure/permissions/sandbox.md#core-keys:545374c3": {
+		"kind": "manual",
+		"probes": [],
+		"note": "change at sandbox.windows.backend read in the 2.1.326 program, compared with the 2.1.323 program"
+	},
+	"docs/configure/settings/index.md#which-value-wins:cd86e711": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.327 program at chunk-cfxefa64.js:13838-13844; release notes 2.1.327"
+	},
+	"docs/extend/headless/control-protocol.md#subtypes:a2820043": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.327 program at chunk-rj3e7agr.js:712907"
+	},
+	"docs/extend/headless/control-protocol.md#subtypes:3872714a": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.327 program at chunk-rj3e7agr.js:690617"
+	},
+	"docs/extend/mod-api/calls/turn-prompt.md#engine-events:c8295c16": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/nouns-and-gates.md#built-in-mods:54450b8b": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/nouns-and-gates.md#enable-test:96518571": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-yznsjrsv.js:32811"
+	},
+	"docs/extend/mod-api/nouns-and-gates.md#enable-test:65a84541": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-d3mbd1zj.js:7611 (cc-plugin-hipaa-default flags) and chunk-yznsjrsv.js:32811"
+	},
+	"docs/extend/mod-api/types/hooks.md#types-without-fields:d5115043": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.327 program at chunk-gf0qnxzg.js:257"
+	},
+	"docs/extend/mod-api/types/hooks.md#hookbudget:9adc47f7": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolcheckinput:fe6f0ac5": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:69653"
+	},
+	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolcheckinput:19fbfdc3": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolcheckresult:44905139": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/turn-prompt/edit-fill-submit.md#promptsectioninput:c60dcb71": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/turn-prompt/index.md#example:e9d2b226": {
+		"kind": "manual",
+		"probes": [],
+		"note": "program behaviour; no probe checks it yet"
+	},
+	"docs/extend/plugins/marketplace.md#sources:96dcaa8a": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-jkpzhr7r.js:8088"
+	},
+	"docs/extend/skills-and-commands/slash-commands.md#how-usage-and-artifacts-work:879f07cd": {
+		"kind": "manual",
+		"probes": [],
+		"note": "/usage fix lines read in the 2.1.323 program; the 2.1.322 program lacks it"
+	},
+	"docs/reference/api/endpoints.md#mcp-paths:6c61bb02": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.327 program at chunk-eyze44ee.js:6777"
 	}
 }

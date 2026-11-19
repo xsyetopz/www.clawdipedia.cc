@@ -83,7 +83,7 @@ Claude Code names the five sources `userSettings`, `projectSettings`, `localSett
 
 The highest level that sets a key wins. The `2.1.327` release notes say `/config` shows a note when other settings override a row.[^config-note]
 
-Since `2.1.327`, a settings change from `/config` or a similar command that fails to save shows a line under the prompt that says so.[^save-fail]
+Since `2.1.327`, a settings change from `/config` or a similar command that fails to save shows a message that says so. The message starts with `Couldn't save`.[^save-fail]
 
 1. Managed settings.
 2. Command line (`--settings`).
@@ -192,7 +192,7 @@ Each row is a family of messages. The backticked text is the start that every me
 
 [^schemas]: The published schema files `schemas/claude-code-managed-settings.json` (202 keys under `properties`) and `schemas/claude-code-settings.json` (178 keys), counted for `2.1.327`. The 24 managed-only keys are the ones in the first file and not in the second.
 [^config-note]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^save-fail]: The program, `chunk-j2wfp6sf.js:13885-13891` and `chunk-j2wfp6sf.js:13968-13972`, which show `Couldn't save this setting`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^save-fail]: The program, `chunk-j2wfp6sf.js:201826` (the `/tui` command shows `Couldn't save this setting`), `chunk-79nt6zzq.js:41018` (`/config` with `key=value` shows `Couldn't save <name>: <reason>`), and `chunk-79nt6zzq.js:51421` (the same text for a panel row). The program does not show where the message sits on screen. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^gitignore]: The program, `chunk-sm9djeyx.js:28838`, called from `chunk-sm9djeyx.js:112100`.
 [^seed]: The program, `chunk-sm9djeyx.js:114454` (the write reads the file first and falls back to the last parse when it is "still empty, broken or locked") and `chunk-sm9djeyx.js:115269-115639` (a `ConfigChange` hook that blocked the latest change, or is still deciding).
 [^sources]: The program, `chunk-0fvmdxeb.js:83723`.
@@ -201,6 +201,6 @@ Each row is a family of messages. The backticked text is the start that every me
 [^nesting]: The program, `chunk-jkpzhr7r.js:405691` (the limit of 64) and `chunk-jkpzhr7r.js:430771-430983` (the warning and the fatal `hooks` case).
 [^file-error]: The program, `chunk-j2wfp6sf.js:1970732-1970797`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^connector]: Probe case `print.err319.settings-connector-downloads` ran this setup.
-[^json-position]: The program, `chunk-h9zb4hpp.js:13258` and `chunk-jkpzhr7r.js:414130`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^json-position]: The program, `chunk-h9zb4hpp.js:13258` and `chunk-jkpzhr7r.js:414026`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^left-out]: The program, `chunk-sm9djeyx.js:93654` (reading a source that is not enabled returns nothing), with its use for auto mode rules at `chunk-sm9djeyx.js:123536` and for the saved bypass-permissions consent at `chunk-sm9djeyx.js:121639`.
 [^managed-edit-ask]: The program, `chunk-wchmynj9.js:145039` (the managed settings cache file is in the protected set), `chunk-wchmynj9.js:231322` and `chunk-wchmynj9.js:252438-253250` (a write to a protected settings file is not granted without a prompt).

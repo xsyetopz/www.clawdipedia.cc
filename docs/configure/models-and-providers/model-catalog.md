@@ -217,9 +217,9 @@ The betas `per-turn-control-2026-07-01` and `timing-2026-09-09` match the flags 
 [^signed-file]: The [`2.1.311` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.311). The program, `chunk-xtev9r1a.js:2626` (the URL `downloads.claude.ai/model-catalog/v1/catalog.json` and the signature file), `chunk-xethrx83.js:178964` (Bedrock, Vertex, Foundry, and Mantle), and `chunk-h3hkpjdg.js:4794` (the `env_off` result).
 [^catalog]: The program holds a JavaScript object with the comment `Hand-maintained baked-in model catalog`, `chunk-b60sxmve.js:674`.
 [^fallback-3p]: The program, field `fallback_3p`, `chunk-b60sxmve.js:739`, `chunk-b60sxmve.js:838`, and `chunk-b60sxmve.js:887` of `2.1.326`.
-[^window-default]: The program, `chunk-xethrx83.js:516700`, `return $H()?Hht:tY`; `tY` is `1e6`, `Hht` is `200000` (`chunk-xethrx83.js:513430`). The [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). In `2.1.322`, the constant was `bSt`.
+[^window-default]: The program, `chunk-xethrx83.js:516700`, `return TN()?Ryt:g1`; `g1` is `1e6`, `Ryt` is `200000` (`chunk-xethrx83.js:513430`). `CLAUDE_CODE_MAX_CONTEXT_TOKENS` is checked first, and a model the catalog does not know reaches this line. The [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). In `2.1.322`, the constant was `bSt`.
 [^window-hint]: The program, `chunk-zv7qt1se.js:2828`.
-[^zeta-probe]: Probe of `2.1.316`, `/model claude-zeta-9` with `-p`. The program in `2.1.327`, `chunk-6949vc40.js:11201` (the `/model` reply) and `chunk-4d4nzary.js:77255` (the startup notice).
+[^zeta-probe]: Probe of `2.1.316`, `/model claude-zeta-9` with `-p`. The program in `2.1.328`, `chunk-6949vc40.js:11201` (the `/model` reply) and `chunk-4d4nzary.js:77255` (the startup notice).
 [^zeta-notes]: The [`2.1.316` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.316).
 [^sonnet-migration]: The program, `chunk-gywceass.js:1249`.
 [^v325]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).

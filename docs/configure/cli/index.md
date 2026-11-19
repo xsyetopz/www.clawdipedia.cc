@@ -97,4 +97,4 @@ The flow matches the `claude --help` output.[^help]
 ## Sources
 
 [^help]: The program, `chunk-gywceass.js:59585`, `claude --help`, `2.1.327`.
-[^bg-key]: The program, `chunk-avyyrx5p.js:1099-1133` (the check), `chunk-avyyrx5p.js:1088-1095` (the service lacks the credential), and `chunk-2kcf7y79.js:22-27` (the two messages). Release notes: [`2.1.325`](https://github.com/anthropics/claude-code/releases/tag/v2.1.325) for the refusal and the messages, and [`2.1.326`](https://github.com/anthropics/claude-code/releases/tag/v2.1.326) for the exit with an error of `claude --bare --bg`.
+[^bg-key]: The program, `chunk-avyyrx5p.js:28209` (the check), `chunk-avyyrx5p.js:28495` (the service lacks the credential), and `chunk-2kcf7y79.js:1240` and `chunk-2kcf7y79.js:1797` (the two messages). Release notes: [`2.1.325`](https://github.com/anthropics/claude-code/releases/tag/v2.1.325) for the refusal and the messages, and [`2.1.326`](https://github.com/anthropics/claude-code/releases/tag/v2.1.326) for the exit with an error of `claude --bare --bg`.

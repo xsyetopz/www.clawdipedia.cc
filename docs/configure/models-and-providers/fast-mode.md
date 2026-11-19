@@ -313,7 +313,7 @@ The `result` event of a `/fast on` turn that also changes the model has `fast_mo
 [^system-prompt]: The program, `chunk-56bhcxay.js:2895826`.
 [^price-text]: The program, `chunk-43kcvxxw.js:1708`.
 [^prices]: The program, `chunk-xethrx83.js:401462`, `chunk-xethrx83.js:405032`.
-[^price-tier]: The program, `chunk-xethrx83.js:21700-21704`, `chunk-xethrx83.js:21885-21891`, `chunk-xethrx83.js:21956`; `chunk-b60sxmve.js:400`.
+[^price-tier]: The program, `chunk-xethrx83.js:401045` for the 30 and 150 row and `chunk-xethrx83.js:401482` for the catalog price with that fallback.
 [^panel]: The program, `chunk-j2wfp6sf.js:572428`.
 [^result-state]: The program, `chunk-20bv8pca.js:467012`.
 [^result-switch]: Probe case `print.cli322.fast-vertex-global` and the cc-inspect run in [Models](#models).

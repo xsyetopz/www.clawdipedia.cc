@@ -220,7 +220,7 @@ stateDiagram-v2
 [^stages]: The program, `chunk-56bhcxay.js:113148`, for the stages that the official pages do not cover.
 [^cwd]: The program, `chunk-56bhcxay.js:3827000`, `chunk-56bhcxay.js:3827408`, `chunk-56bhcxay.js:3828773`.
 [^sub-limit]: The program, `chunk-qre0n3qw.js:11518`, `chunk-qre0n3qw.js:11783`.
-[^max-tokens]: The program, `chunk-56bhcxay.js:3190601`, `chunk-56bhcxay.js:3190714`. The rule has no list of status codes. It skips only a refusal that comes as 401, and a limit below 4096.
+[^max-tokens]: The program, `chunk-56bhcxay.js:3190601`, `chunk-56bhcxay.js:3190714`. The rule has no list of status codes. It skips a 401, a `policy_blocked` error (status 400), and a second refusal (`chunk-56bhcxay.js:3420409`, `chunk-56bhcxay.js:3420780`). When `M` is below 4096, it sends again only for an unrecognized model, with 32,000 as the limit.
 [^nudge-count]: The program, `chunk-2b3eg071.js:165951` (the limit of 3) and `chunk-2b3eg071.js:170251-170313` (the counter `maxOutputTokensRecoveryCount` ends the retries after the third).
 [^cut-limit]: The program, `chunk-xethrx83.js:513465` (the 32,000 and 128,000 values), `chunk-xethrx83.js:517691` (the condition for an unrecognized model), and `chunk-56bhcxay.js:3190601` (the limit for a reply that continues a cut reply, used only for such a model).
 [^v327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).

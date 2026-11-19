@@ -30,7 +30,7 @@ It comes from the catalog (<Undocumented />). `claude-opus-4-7` has the default 
 | `per-turn-control-2026-07-01` | <Undocumented /> | A beta that lets some models take the effort with each message. |
 | `ultrathink` | <Documented /> | A word in a prompt that asks for deeper thinking on that turn only. Since `2.1.311`, in the interactive terminal on the Anthropic API, it runs the turn at `xhigh` effort on Opus 5.5, Sonnet 5.5, Haiku 5.5, and Fable 5.1. It does so on Fable 5.2 and Mythos 5.2 too. Typed while Claude is working, it raises the rest of that turn. The rainbow on the word shows only where it can raise effort (see the note below). |
 | Default effort | <Documented /> | The default is `high`, except `medium` for Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.2, and Mythos 5.2, and `xhigh` for Opus 4.7. |
-| Cache warning | <Undocumented /> | Since `2.1.312`, the dialog `Switch model?` or `Change effort level?` says `This conversation is cached for the current model. Switching to` the new value in bold `means the full history gets re-read.`[^cache-warning] The old text ended with `on your next message`. |
+| Cache warning | <Undocumented /> | Since `2.1.312`, the dialog `Switch model?` or `Change effort level?` says `This conversation is cached for the current model. Switching to` the new value in bold `means the full history gets re-read.` A hook reason replaces this text.[^cache-warning] The old text ended with `on your next message`. |
 | Effort note in the prompt | <Undocumented /> | The prompt shows the level and `/effort`. Since `2.1.312`, it shows `may wait for your next message` in place of `/effort` only while the request has not yet carried the shown level (see the note below). |
 | Spinner effort | <Undocumented /> | The spinner adds the text `with <level> effort`. Since `2.1.312`, the level is the one the request carried (see the note below). |
 
@@ -118,17 +118,17 @@ Both rows are about a model name that Claude Code does not recognize, such as a 
 
 ## Sources
 
-[^effort-field]: The program, `chunk-56bhcxay.js:173684-173696`.
-[^cache-warning]: The program, `chunk-j2wfp6sf.js:64247`, `chunk-j2wfp6sf.js:64283-64288`. Also the [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312).
-[^per-turn]: The program, `chunk-b60sxmve.js:223`, `chunk-b60sxmve.js:450`, `chunk-b60sxmve.js:755`, `chunk-b60sxmve.js:849`, `chunk-b60sxmve.js:898`, `chunk-b60sxmve.js:1003`. Also the [Claude Code changelog](https://code.claude.com/docs/en/changelog).
-[^ultrathink-submit]: The program (`2.1.327`), `chunk-yv54xvss.js:3816-3828` for the submit, where the turn effort is `xhigh` when the model passes the gate, and `chunk-2b3eg071.js:6764-6789` for a prompt that joins the turn while it runs, called at `chunk-2b3eg071.js:17762`.
+[^effort-field]: The program, `chunk-56bhcxay.js:3400171-3400439`. A background request that the program marks as leaving effort support alone keeps its effort field for the next requests to that model.
+[^cache-warning]: The program, `chunk-j2wfp6sf.js:1032133` (the title) and `chunk-j2wfp6sf.js:1032729` (the text; a hook reason replaces it). Also the [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312).
+[^per-turn]: The program, `chunk-b60sxmve.js:4270`, `chunk-b60sxmve.js:9693`, `chunk-b60sxmve.js:16334`, `chunk-b60sxmve.js:18424`, `chunk-b60sxmve.js:19536`, `chunk-b60sxmve.js:21659`. Also the [Claude Code changelog](https://code.claude.com/docs/en/changelog).
+[^ultrathink-submit]: The program (`2.1.328`), `chunk-yv54xvss.js:64577` for the submit, where the turn effort is `xhigh` when the model passes the gate, and `chunk-2b3eg071.js:108454` for a prompt that joins the turn while it runs.
 [^ultrathink-gate]: The program. The prompt input colors a word only when the gate `chunk-hscvkewq.js:29250` passes for the model (it needs ultrathink on, and `chunk-hscvkewq.js:29511` checks that the model can run the turn at `xhigh`): `chunk-j2wfp6sf.js:988273` picks the words, and `chunk-j2wfp6sf.js:992053` paints each letter with a rainbow color. The word finder is `chunk-82x5drqv.js:21183`. The SDK schema says "The terminal colors the word by this rule", `chunk-20bv8pca.js:485138`.
-[^note-flag]: The program and the [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312), `chunk-j2wfp6sf.js:67250-67276`.
-[^note-clear]: The program, `chunk-j2wfp6sf.js:67263`.
-[^prompt-text]: The program, `chunk-j2wfp6sf.js:13383`.
+[^note-flag]: The program and the [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312), `chunk-j2wfp6sf.js:1074720`.
+[^note-clear]: The program, `chunk-j2wfp6sf.js:1074952`.
+[^prompt-text]: The program, `chunk-j2wfp6sf.js:192721`.
 [^request-level]: The program, `chunk-56bhcxay.js:3375110` and `chunk-56bhcxay.js:3451575`.
 [^sent-level]: The program, `chunk-9520eh70.js:8060`.
-[^spinner-level]: The program, `chunk-hscvkewq.js:30546` and `chunk-6zjv20ap.js:9761`.
+[^spinner-level]: The program, `chunk-hscvkewq.js:30416` and `chunk-6zjv20ap.js:7304`.
 [^model-settings]: The program, `chunk-hscvkewq.js:26662`, `chunk-hscvkewq.js:27065`.
 [^effort-source]: [Model Configuration](https://code.claude.com/docs/en/model-config), section "Adjust effort level", and the program, `chunk-hscvkewq.js:26662`.
 [^should-retry]: The program, `chunk-56bhcxay.js:167955`.

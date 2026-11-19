@@ -129,7 +129,7 @@ Each option error below prints `Error: <message>` on stderr and exits with code 
 
 [^parser]: The text of `claude remote-control --help` in `2.1.326`, and the option parser of the program, `chunk-kfzma69d.js:111300`, `chunk-kfzma69d.js:113466`, and `chunk-kfzma69d.js:114097`.
 [^identity]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-m6vd4p0a.js:2108`.
-[^same-folder]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-gknmhzj8.js:440-455`, behind the `tengu_idempotent_blossom` gate.
+[^same-folder]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-gknmhzj8.js:10154-10312`, behind the `tengu_idempotent_blossom` gate.
 [^unattended-help]: The program, `chunk-b1xcjakw.js:3401`.
 [^grant]: The program, export `writeUnattendedRunGrant`, `chunk-s0z85waf.js:1070` (exported from `chunk-9pd96srt.js:1809`), called at `chunk-kfzma69d.js:126754`.
 [^startup]: The program, `chunk-kfzma69d.js:122145` and `chunk-kfzma69d.js:124039`, and the help text, `chunk-b1xcjakw.js:5456`.
@@ -138,5 +138,5 @@ Each option error below prints `Error: <message>` on stderr and exits with code 
 [^exit-codes]: The program, `chunk-sg59fpmc.js:210` holds the codes `78`, `75`, `69`, `4`, and `70`. `chunk-kfzma69d.js:132504` exits with `69` when registration fails. `chunk-kfzma69d.js:803` imports `4`. `chunk-kfzma69d.js:6878-6880` exits with it when no stop signal was received and the spawn mode is not `single-session`. `chunk-kfzma69d.js:6679-6695` shows that the three signals stop the server. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
 [^cli321]: The program, the option parser, from `chunk-kfzma69d.js:5477` (the `--spawn` values) to `chunk-kfzma69d.js:5605` (`--enable-live-preview`). Probe group `cli321` (`rc-*` cases), run with a fake `max` login, only `DISABLE_TELEMETRY` set, and no network.
 [^child-logs]: The program, `chunk-kfzma69d.js:5788-5796`, `chunk-kfzma69d.js:6610`, `chunk-b2j77k2b.js:375-376`, and `chunk-kwkzbftg.js:44951-45003`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^rc-worktree]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-kfzma69d.js:3366` (a session may return when `preserveOnShutdown` is set), `chunk-kfzma69d.js:5149-5156` (the shutdown clean-up passes that value), and `chunk-kfzma69d.js:5430-5449` (the worktree is kept when the value is set and no hook made it).
+[^rc-worktree]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-kfzma69d.js:70580` (a session may return when `preserveOnShutdown` is set), `chunk-kfzma69d.js:104631` (the shutdown clean-up passes that value), and `chunk-kfzma69d.js:109628` (the worktree is kept when the value is set and no hook made it).
 [^sandbox-flag]: The program, `chunk-kfzma69d.js:5520-5523` (the error for both flags) and `chunk-r1fd136d.js:9` (the `sandbox.enabled` text).

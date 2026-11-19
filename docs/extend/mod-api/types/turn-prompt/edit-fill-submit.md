@@ -204,11 +204,11 @@ Where a `prompt.submit` submission came from, as the engine knows it at the site
 
 ### `PromptSectionInput`
 
-The input of `prompt.section`: one named section of the system prompt, at the moment the engine assembles it. From 2.1.302 to 2.1.322, the engine builds shared sections such as `lean_body` without a `prompt.section` call, so a hook does not see them.[^shared-sections] A `prompt.compose` hook does. Used by `prompt.section`, `$.prompt.section`.
+The input of `prompt.section`: one named section of the system prompt, at the moment the engine assembles it. Since 2.1.302, and still in 2.1.328, the engine builds shared sections such as `lean_body` without a `prompt.section` call, so a hook does not see them.[^shared-sections] A `prompt.compose` hook does. Used by `prompt.section`, `$.prompt.section`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `name` | <Differs note="Docs say every named section; the program skips shared sections such as lean_body." /> | The ID of the section (`env_info_simple`, `memory`, ...). It is the same on every model and is the one `prompt.compose` lists. A matcher narrows on it. A `prompt.section` hook sees only sections that the engine asks about by name. Shared sections such as `lean_body` are not among them from 2.1.302 to 2.1.322, but `prompt.compose` lists them. | Type: `string`. |
+| `name` | <Differs note="Docs say every named section; the program skips shared sections such as lean_body." /> | The ID of the section (`env_info_simple`, `memory`, ...). It is the same on every model and is the one `prompt.compose` lists. A matcher narrows on it. A `prompt.section` hook sees only sections that the engine asks about by name. Shared sections such as `lean_body` are not among them (still so in 2.1.328), but `prompt.compose` lists them. | Type: `string`. |
 | `text` | <Documented /> | The text of the section as core computed it, or null when core omits it. | Type: `string \| null`. |
 
 ### `PromptSectionResult`
@@ -285,5 +285,5 @@ What a `prompt.submit` hook returns, and what `next(e)` resolves to: the prompt 
 
 ## Sources
 
-[^shared-sections]: The program, `chunk-56bhcxay.js:2885691`, `TTn`.
+[^shared-sections]: The program, `chunk-56bhcxay.js:2891246` (the shared sections are plain entries of the compose list).
 [^media-hold]: The program, `chunk-601pwdc9.js:3447`, gives each attachment its `id` before the `prompt.submit` hooks run (cap 4194304 bytes, at `chunk-yg8ff21f.js:198`). `chunk-56bhcxay.js:4961217` and `chunk-56bhcxay.js:4961290` answer only when the hook in flight lists that `id` (`chunk-56bhcxay.js:5074781`). No step checks where the mod was installed.

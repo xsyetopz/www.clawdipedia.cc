@@ -208,7 +208,7 @@ Each row is a family of messages. The backticked text is the start that every me
 [^npm-opts]: The program, `chunk-jkpzhr7r.js:82029`, its bundled settings schema.
 [^digest-tier]: The program, `chunk-jkpzhr7r.js:206470` for the schema text and `chunk-56bhcxay.js:1037148` for the record check. The text of `2.1.326` named `prependPlugins` and `appendPlugins`. The text of `2.1.327` does not.
 [^digest-warn]: The program, `chunk-56bhcxay.js:59151`.
-[^digest-schema]: The settings schema and the program, `chunk-jkpzhr7r.js:8088` and `chunk-56bhcxay.js:58199`.
+[^digest-schema]: The settings schema, `chunk-jkpzhr7r.js:8088`. The `2.1.328` program has no other code that reads `pluginDigests`. The behavior before `2.1.326` comes from the older program and is not in `2.1.328`.
 [^digest-limits]: The program, `chunk-56bhcxay.js:60051`, `chunk-56bhcxay.js:55572`, and `chunk-56bhcxay.js:55649`.
 [^digest-refuse]: The program, `chunk-56bhcxay.js:60211`.
 [^digest-line]: The program, `chunk-jkpzhr7r.js:355508`.

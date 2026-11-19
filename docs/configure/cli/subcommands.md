@@ -218,9 +218,9 @@ Each row is a family of messages. The backticked text is the start that every me
 [^cmd-help]: The text of `claude <command> --help` in `2.1.326`.
 [^rm]: The program, `chunk-avyyrx5p.js:70769-71059`.
 [^gateway-json]: The program, `chunk-b2ttx9wr.js:57618` and `chunk-00wezk9v.js:27369`.
-[^purge]: The program, `chunk-xba8j2pz.js:1635` in `2.1.326`, with the same options in `claude purge --help`.
+[^purge]: The program, `chunk-xba8j2pz.js:42750` (the plan text), with the same options in `claude purge --help`.
 [^trust-cmd]: The program, `chunk-b2ttx9wr.js:40601`.
-[^worktree-hook]: The program, `chunk-8g8pxk7w.js:672-722`.
+[^worktree-hook]: The program, `chunk-8g8pxk7w.js:24676` (the options and help text) and `chunk-8g8pxk7w.js:25400` (the outcomes).
 [^eval-flags]: The program, the option definitions with `hideHelp()`, `chunk-b2ttx9wr.js:62267`, and the eval handler `ultrareviewEvalHandler`, `chunk-p7ayv134.js:38978`. Probe cases `print.cli319.ultrareview-max-cost`, `-list`, and `-output`. A build without the gate refuses the option. Result: exit 1 with `error: unknown option '--max-cost'`, `'--list'`, and `'--output'`. The server-side config is `tengu_review_bughunter_config.eval_enabled`.
 [^review-md]: The program, `chunk-b2ttx9wr.js:62318` and `chunk-p7ayv134.js:38976`.
 [^review-md-session]: The program, `chunk-12xf8vww.js:29274`.
@@ -249,17 +249,17 @@ Each row is a family of messages. The backticked text is the start that every me
 [^base-url]: The program, `chunk-39421vhy.js:1001432`.
 [^v318]: [`2.1.318` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.318).
 [^expiry-source]: The program: the key in `chunk-00wezk9v.js:37286` (`loginExpiresAt`), and the texts and the 10 day limit in `chunk-gny766vy.js:1005-1299`.
-[^console-profile]: The program, `chunk-00wezk9v.js:1326` (the key is set next to `gatewaySignInOffered` at `chunk-00wezk9v.js:1325`) and `chunk-e2h3663b.js:55-70` (the checks: the first-party provider, no `forceLoginOrgUUID`, and a login method other than `claudeai`, plus other checks that this page does not describe).
+[^console-profile]: The program, `chunk-00wezk9v.js:37286` (the key is set next to `gatewaySignInOffered`) and `chunk-e2h3663b.js:1185` (the checks: the first-party provider, no `forceLoginOrgUUID`, and a login method other than `claudeai`, plus other checks that this page does not describe).
 [^expiry-run]: `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only notes319.login-expiry` (cases `status-json`, `status-text`, `no-login-status`, `no-refresh-date`, `access-outlives-refresh`, `third-party-provider`, `before-2025`, `over-ten-years`, `past`, `soon-print`), with a fake `.credentials.json` in a temporary `CLAUDE_CONFIG_DIR`, and the first-party base URL assumed.
 [^expiry-past]: Probe cases `past` and `soon-print`.
 [^install-version]: Probe case `print.err319.install-version-underscore`.
 [^gw-bearer]: Probe case `print.err319.gateway-assume-role-bearer`.
 [^logout]: Probe cases `print.err319.auth-logout-dir` and `print.err319.auth-logout-unwritable`.
-[^login-ended]: The program, `chunk-7benwghs.js:55-63`.
+[^login-ended]: The program, `chunk-7benwghs.js:1219`.
 [^stopping]: The program, read site `chunk-p7ayv134.js:45511`, search `Stopping. Any review`. The server-side config is `tengu_review_bughunter_config` (`enabled` and `eval_enabled`).
 [^stopping-live]: This site does not run ultrareview live, because each run can bill the account: the repo owner chose the official docs and community reports as the source for it. One gate check used the live login (case `live.err319`, before this rule). Five used cached features, a fake OAuth login, `_CLAUDE_CODE_ASSUME_FIRST_PARTY_BASE_URL`, and `CLAUDE_INTERNAL_FC_OVERRIDES`.
 [^secret-missing]: Probe case `print.err319.runner-secret-file-missing`.
 [^logout-revoke]: The program, `chunk-vx9h1xmf.js:166-168` (the text), `chunk-vx9h1xmf.js:320-335` (the second request when the first answer is `retryable`, and the unconfirmed result), `chunk-vx9h1xmf.js:416-420` (the text goes to stderr), and `chunk-xethrx83.js:18184` (a server error or a network failure is `retryable`). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^purge-pipe]: The program, `chunk-xba8j2pz.js:846-859`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
+[^purge-pipe]: The program, `chunk-xba8j2pz.js:28956`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
 [^head-file]: The program, `chunk-56bhcxay.js:4501350` (the check for `claude rm`), and `chunk-56bhcxay.js:4480534`. These `git rev-list` calls now end with `--`, so git reads `HEAD` as a revision and not as a path. The message text is at `chunk-avyyrx5p.js:14002`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^fg-guard]: The program, `chunk-5g8qs913.js:230102` (the resume time) and `chunk-5g8qs913.js:232401` (the `SIGCONT` handler that sets it) and `chunk-wj81ne1y.js:640` (the `150` ms limit), and `chunk-rmkp9aqw.js:41492` (in a list prompt, the accept key checks the limit and the cancel key does not). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).

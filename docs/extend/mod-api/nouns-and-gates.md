@@ -127,7 +127,7 @@ Claude Code `2.1.316` registers up to 13 built-in plugins at start.[^registry] E
 | `cc-plugin-easel` | Draws charts in the transcript. | Normal run, or the `remote_cowork` entry point |
 | `cc-plugin-claude-platform` | A built-in plugin of the same registry. | Normal run |
 | `cc-plugin-claude-test` | A built-in plugin of the same registry. | Normal run |
-| `cc-plugin-privacy` | Refuses a call when it sends your account email as the identity of a client, for example beside a User-Agent. Since `2.1.326`, it checks `Write`, `Edit`, `NotebookEdit`, `WebFetch`, and MCP tool calls, and the script files that a shell call names, and not only `Bash`, `Monitor`, and `PowerShell` calls. It refuses with a deny and does not ask you. The refusal tells Claude to use a generic client name, to ask you for a real contact that a site needs, and that you can set the address in an environment variable or run the command yourself with `!`. | A server gate, which is on by default[^privacy-gate] |
+| `cc-plugin-privacy` | Refuses a call when it sends your account email as the identity of a client, for example beside a User-Agent. Since `2.1.326`, it checks `Write`, `Edit`, `NotebookEdit`, `WebFetch`, and MCP tool calls, and the script files that a shell call names, and not only `Bash`, `Monitor`, and `PowerShell` calls. It refuses with a deny and does not ask you. The refusal tells Claude to use a generic client name, to ask you for a real contact that a site needs, and that you can set the address in an environment variable or run the command yourself with `!`. Since `2.1.328`, it lets the MCP call of a settings hook pass. | A server gate, which is on by default[^privacy-gate] |
 
 The `cc-plugin-privacy` check is a `tool.check` hook, and it reads the account email with `session.identity`. It looks for `curl -A`, `wget -U`, a `--user-agent` or `-user` option, `user-agent`, `user_agent`, or `ua:` text, a `From` header, and text such as `set_identity`, `mailto=`, or `--identity`. It also tests the percent-encoded `%40` form of the address, and a `git config user.email` or `GIT_AUTHOR_EMAIL` text in a line that has such an identity. A `WebFetch` call is refused when its `url` holds the address. For a shell call, the hook reads up to 8 script files that the command names, in the working folder and without links, and checks their text the same way. The hook also answers `session.identity` for other mods: it denies a mod of the `user` tier, and it removes `contextEmail` from the answer for a mod of any tier but `builtin`. The plugin sets `defaultEnabled: true` and `enabledFromTrustedSettingsOnly`.[^privacy]
 
@@ -139,11 +139,11 @@ Claude Code decides each built-in plugin in this order.[^enable-order]
 
 1. A plugin that fails `isAvailable`, or that failed to load, is not listed.
 2. With `enabledFromPolicyOnly`, only the policy settings value of `cc-plugin-<name>@builtin` counts.
-3. With `enabledFromTrustedSettingsOnly`, only the trusted settings value counts. `cc-plugin-sec-default` sets both flags. `cc-plugin-privacy` sets only this one.
+3. With `enabledFromTrustedSettingsOnly`, only the trusted settings value counts. `cc-plugin-sec-default` sets both flags. `cc-plugin-privacy` sets only this one. `cc-plugin-hipaa-default` (since `2.1.328`) sets both, like `cc-plugin-sec-default`.
 4. Otherwise the `enabledPlugins` key of your settings counts. A plugin that a directory you added with `--add-dir` also lists is read by the loader for that case.
 5. A value that is set decides: only `true` turns the plugin on. With no value, the plugin uses its `defaultEnabled`, and that is `true` when the plugin sets none.
 
-Only `cc-plugin-sec-default` sets both policy-only flags. `cc-plugin-privacy` sets `enabledFromTrustedSettingsOnly`, and it has set it since at least `2.1.322`. The other built-in plugins read `enabledPlugins` from your settings.[^enabled-plugins] Only `cc-plugin-responsive-mode` and `cc-plugin-you-should-know` set `defaultEnabled: false`. To turn one on, set its id as the key:
+Only `cc-plugin-sec-default` and, since `2.1.328`, `cc-plugin-hipaa-default` set both policy-only flags. `cc-plugin-privacy` sets `enabledFromTrustedSettingsOnly`, and it has set it since at least `2.1.322`. The other built-in plugins read `enabledPlugins` from your settings.[^enabled-plugins] Only `cc-plugin-responsive-mode` and `cc-plugin-you-should-know` set `defaultEnabled: false`. To turn one on, set its id as the key:
 
 ```json
 {
@@ -181,6 +181,6 @@ See [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plu
 [^privacy]: The program, `chunk-vaa1bcfr.js:8338` for the match, the refusal text at `chunk-vaa1bcfr.js:9024`, the `tool.check` hook at `chunk-vaa1bcfr.js:10883`, and the `session.identity` hook at `chunk-vaa1bcfr.js:11596`.
 [^easel]: The program, `chunk-pk4bzvs1.js:0`.
 [^enable-order]: The program, `chunk-e3mrctpm.js:77246`.
-[^enabled-plugins]: The program, `chunk-yznsjrsv.js:32811`, `chunk-vaa1bcfr.js:12267`, `chunk-e3mrctpm.js:77246`.
+[^enabled-plugins]: The program, `chunk-yznsjrsv.js:32811`, `chunk-vaa1bcfr.js:12267`, `chunk-d3mbd1zj.js:7611` (`cc-plugin-hipaa-default`, named at `chunk-ym16qx7x.js:357`), `chunk-e3mrctpm.js:77246`.
 [^responsive]: The program, `chunk-czf317f1.js:583`.
 [^v328-tier-calls]: The type file `schemas/claude-code.d.ts`, `EventCalls` and the text on the `$` calls (Tier).

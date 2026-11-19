@@ -215,5 +215,5 @@ Each row is a family of messages. The backticked text is the start that every me
 [^re-entry]: The program, `chunk-9nv3z5ae.js:6443`.
 [^paint]: The program, `chunk-syremzmn.js:13290`.
 [^env-set-codes]: The program, `chunk-r240nspa.js:574` (`OUT_OF_STEP`), `chunk-r240nspa.js:575` (`HOST_RULE`), `chunk-r240nspa.js:576` (`PINNED`), `chunk-r240nspa.js:578` (`HELD`), `chunk-r240nspa.js:602` (`NO_ROW`), `chunk-r240nspa.js:604` (`LOCKED`), `chunk-r240nspa.js:607` (`NOT_WRITTEN`), `chunk-r240nspa.js:608` (the text), and `chunk-r240nspa.js:735` (`NOT_WRITTEN`). `2.1.327` has none of these texts.
-[^hooks-name]: The program, `chunk-56bhcxay.js:59338` and `chunk-56bhcxay.js:59342`.
+[^hooks-name]: The program, `chunk-56bhcxay.js:999067` (`next.to`), `chunk-56bhcxay.js:1016778` (policy or scan), and `chunk-56bhcxay.js:1041381` (the engine's own chain member, and the name that starts with a prefix). The type file `schemas/claude-code.d.ts`, `ToolCheckInput`, names the prefix `hook:`.
 [^handle-codes]: The program, `chunk-r240nspa.js:645` (`UNKNOWN_HANDLE`) and `chunk-r240nspa.js:674` (`NOT_SYNCED`).

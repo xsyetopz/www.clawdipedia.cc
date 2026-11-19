@@ -129,4 +129,4 @@ Claude Code sets some variables on this page for remote sessions and refreshes t
 [^local-oauth]: The program, `chunk-vhzbpgjm.js:415`, `2.1.323`.
 [^use-local]: The program, `chunk-hfmp90ez.js:23787` and `chunk-7nh7p3mh.js:9062`.
 [^use-staging]: The program, `chunk-hfmp90ez.js:23787`.
-[^key-and-profile]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-4d4nzary.js:74661` (the notice and the steps) and `chunk-xethrx83.js:581286` (the `/config` step text). The `2.1.326` program has no text `instead of your Anthropic profile`. The shorter `Both <A> and <B> set` notice still shows for other pairs of sources.
+[^key-and-profile]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-4d4nzary.js:74552` and `chunk-4d4nzary.js:74661` (the notice and the steps) and `chunk-xethrx83.js:581301` (the `/config` step text). The `2.1.326` program has no text `instead of your Anthropic profile`. The shorter `Both <A> and <B> set` notice still shows for other pairs of sources.
