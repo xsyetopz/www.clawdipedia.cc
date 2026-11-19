@@ -57,7 +57,7 @@ Each line is a separate command. The text after the name is the argument.
 | `/restart` (alias `/update`) | <Gated note="Interactive terminal on macOS or Linux, native install only, and a server-side feature flag." /> | Restarts Claude Code on the newly installed version. Resumes this session. | Interactive only. See [How `/restart` Works](#how-restart-works). |
 | `/rewind` (aliases `/checkpoint`, `/undo`) | <Documented /> | Restores the code, the conversation, or both to an earlier point. | Interactive only. Each point says what code it can restore. Since `2.1.326`, a turn whose changes were not tracked reads `Code changes unknown` instead of `No code changes`, and a file that a shell command changed reads `Can't restore <file> changed while a command ran`.[^rewind] Also since `2.1.326`, a restore leaves some files untouched: a link or other file that is not regular, a file whose folder changed since the checkpoint, a file behind a link in a folder that sandboxed commands can write, and a file whose backup cannot be read safely. The result says `Restored the code, but skipped N file(s): <reason>`, and `--debug` lists the paths.[^rewind-skip] Since `2.1.327`, `/rewind` no longer closes without a word when some files could not be restored.[^rewind-327] |
 | `/tasks` (alias `/bashes`) | <Documented /> | Shows and manages everything that runs in the background. | Panel. |
-| `/list-agents` (alias `/peers`) | <Documented /> | Lists subagents, teammates, and other sessions you can message. | Off when the org setting `messagingBeyondOwnAgentsDisabled` is set. |
+| `/list-agents` (alias `/peers`) | <Documented /> | Lists subagents, teammates, and other sessions you can message. | Off when the org setting `messagingBeyondOwnAgentsDisabled` is set. <Gated note="The server flag bot_protected_tengu_virtual_quilt." /> Since `2.1.328`, when the flag is on, the list is shown to you alone, and Claude gets a note that it did not see it. Claude calls its own tool to list sessions when it needs them.[^v328-list-agents] |
 | `/focus` `[on\|off]` | <Documented /> | Toggles focus view: only your prompt, a summary, and the reply. | Needs the fullscreen renderer (`/tui fullscreen` or `CLAUDE_CODE_NO_FLICKER=1`). The setting `viewMode: "focus"` does the same. |
 | `/diff` | <Documented /> | Shows uncommitted changes and per-turn diffs. | Panel. Off when a mod provides its own diff view. Since `2.1.323` the panel hint reads "/diff to close".[^diff] |
 | `/model` `<model> or [model]` | <Documented /> | Sets the model. | Panel and text form. See [Models](../../how-it-works/models.md). In the panel, "More models" is an unnumbered row below the other rows. Older models open under it, and the other rows keep their numbers.[^more-models] |
@@ -97,7 +97,7 @@ Each line is a separate command. The text after the name is the argument.
 | `/release-notes` | <Documented /> | Shows release notes. | Panel. |
 | `/statusline` | <Documented /> | Configures the status line. | A prompt command. Not in safe mode. Interactive only. Since `2.1.327`, it no longer writes to `~/.claude/settings.json` when `CLAUDE_CONFIG_DIR` points to another folder.[^statusline-327] |
 | `/sandbox` `exclude "command pattern"` (Windows also `install`) | <Gated note="Hidden when the platform is not supported or not in the enabled list." /> | Shows sandbox state and opens its settings. | Panel. |
-| `/chrome` | <Gated note="Availability claude-ai, policy allow_claude_browser_extension, interactive only." /> | Opens Claude in Chrome settings. | Panel. |
+| `/chrome` | <Gated note="Availability claude-ai, policy allow_claude_browser_extension, interactive only." /> | Opens Claude in Chrome settings. | Panel. Since `2.1.328`, the welcome text says that Claude Code asks before Claude acts on a site, unless your permission mode or a rule in `/permissions` answers for you.[^v328-chrome] |
 | `/insights` | <Gated note="Policy allow_insights, and needs a workspace." /> | Makes a report that analyzes your sessions. | A prompt command. |
 | `/privacy-settings` | <Gated note="A signed-in subscriber with an eligible plan." /> | Views and updates privacy settings. | Panel. |
 | `/login` | <Documented /> | Signs in, or switches accounts. | Off when env var `DISABLE_LOGIN_COMMAND` is set. Since `2.1.326`, the code prompt refuses a web address, a `localhost` address, or a short number code, says what to do instead, and stays open for the right code. The right code has a `#` in the middle.[^login] Since `2.1.326`, the sign-in request also asks permission to change your privacy settings (the scope `user:privacy_consents:write`).[^login-privacy] |
@@ -261,59 +261,61 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^kinds]: The program calls a panel command `local-jsx`, a text command `local`, and a prompt command `prompt`, for example in `chunk-m14bt1pz.js:2153638` (local-jsx), `chunk-m14bt1pz.js:2153383` (local), and `chunk-m14bt1pz.js:2140990` (prompt).
-[^rewind]: The program, `chunk-cfxefa64.js:23510-23657`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^memory]: The program, `chunk-gt46e7hg.js:2165-2250`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^tui]: The program, `chunk-cfxefa64.js:1975169-1976400`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^terminal-setup]: The program, `chunk-jrpjeehv.js:6363-7100`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^login-privacy]: The program, `chunk-p5kfs9w9.js:33-50` and `chunk-asj6f58y.js:19738-19780`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^login]: The program, `chunk-810n635s.js:622`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^count]: The program, the command objects in `chunk-m14bt1pz.js:1016853-2543434` (103 names) and in 19 other chunks (37 names, such as bundled skills and `/workflows`). Both counts come from the surface snapshot of `2.1.327`: 140 unique names, of which one is marked removed and four are hidden. Official page: [Commands](https://code.claude.com/docs/en/commands).
-[^diff]: The program, `chunk-km36vd62.js:30666`.
-[^more-models]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-cfxefa64.js:763028`.
+[^kinds]: The program calls a panel command `local-jsx`, a text command `local`, and a prompt command `prompt`, for example in `chunk-56bhcxay.js:2231195` (local-jsx), `chunk-56bhcxay.js:2230940` (local), and `chunk-56bhcxay.js:2218392` (prompt).
+[^rewind]: The program, `chunk-j2wfp6sf.js:23691-23838`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^memory]: The program, `chunk-e92vfs7j.js:2187-2272`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^tui]: The program, `chunk-j2wfp6sf.js:1972437-1973646`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^terminal-setup]: The program, `chunk-2428phbc.js:6374-7100`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^login-privacy]: The program, `chunk-vhzbpgjm.js:33-50` and `chunk-xethrx83.js:17926-17968`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
+[^login]: The program, `chunk-5zjcbyak.js:622`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^count]: The program, the command objects in `chunk-56bhcxay.js:1057225-2621509` (103 names) and in 19 other chunks (37 names, such as bundled skills and `/workflows`). Both counts come from the surface snapshot of `2.1.327`: 140 unique names, of which one is marked removed and four are hidden. Official page: [Commands](https://code.claude.com/docs/en/commands).
+[^diff]: The program, `chunk-yh3qh34n.js:31134`.
+[^more-models]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-j2wfp6sf.js:767356`.
 [^fast-vertex]: [`2.1.322` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.322). Probe cases `print.cli322.fast-vertex-global`, `.fast-vertex-us`, `.fast-vertex-eu`.
-[^fast-notice]: The program, `chunk-z46kvm40.js:3934`.
-[^fast-labels]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-asj6f58y.js:423081`, `chunk-nz9vg7fv.js:19069`.
-[^config-panel]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-nz9vg7fv.js:25278`, `chunk-k57p2hm4.js:1399`.
-[^terminal-note]: The program, `chunk-jrpjeehv.js:13954`, `MYr`. `2.1.322` has no such note.
-[^auto-setup]: The program, `chunk-m14bt1pz.js:2154409` (text form) and `chunk-m14bt1pz.js:2154785` (panel).
-[^help]: The program, `chunk-m14bt1pz.js:2166445` and `chunk-72pkwyjt.js:2968`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^fast-notice]: The program, `chunk-43kcvxxw.js:4033`.
+[^fast-labels]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-xethrx83.js:387848`, `chunk-79nt6zzq.js:19715`.
+[^config-panel]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-79nt6zzq.js:25928`, `chunk-rs68es1f.js:1443`.
+[^terminal-note]: The program, `chunk-2428phbc.js:13965`, `MYr`. `2.1.322` has no such note.
+[^auto-setup]: The program, `chunk-56bhcxay.js:2231966` (text form) and `chunk-56bhcxay.js:2232342` (panel).
+[^help]: The program, `chunk-56bhcxay.js:2243997` and `chunk-j2wfp6sf.js:1791843`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^upgrade]: The program ships the text in its command table. The flag is `tengu_idle_amber_finch`. Probe case `pty.cli319.slash.upgrade` (fake key) gave `Unknown command: /upgrade` in `2.1.323` and gives `/upgrade needs a Claude subscription. This session uses ANTHROPIC_API_KEY instead.` in `2.1.326`; the program, `chunk-jja35gr5.js:3600-4165`. Probe case `live.cli319.upgrade-typeahead` (real login, typed `/upg`, no Enter) lists only `/rate-limit-options`, whose text holds "upgrade options".
-[^project]: Probe case `pty.cli319.slash.project`. In `2.1.327` the gate is the same: `isEnabled:()=>eZs()&&b(Les,!1)` where `Les` is `"tengu_gentle_cupcake"` (`chunk-m14bt1pz.js:2155714`). The program, the command table: `isEnabled: Hys() && k("tengu_gentle_cupcake")` until `2.1.319`, and `isEnabled: mvs() && k(ywr, !1)` in `2.1.327`, where `ywr` is `"tengu_gentle_cupcake"` (`chunk-m14bt1pz.js:2155714`). In `2.1.323` the flag name is `T0r` and still holds `"tengu_gentle_cupcake"` (`chunk-m14bt1pz.js:2155709`). The gate is the same; only the minified names changed.
-[^use-case]: Probe case `pty.cli319.slash.use-case`. The program, `chunk-m14bt1pz.js:2530464`, the command table: `isEnabled:()=>n1()&&!Et()`. The flag is `tengu_federated_possum`, `chunk-rj3e7agr.js:220676`.
-[^remote-bang]: The program, `chunk-rap1tzf6.js:238010`.
-[^stickers]: The program, `chunk-m14bt1pz.js:2523591`. The output is in `chunk-qr4wps7c.js:1370`.
-[^name-rule]: The program, `chunk-m14bt1pz.js:69872`, `chunk-m14bt1pz.js:69876`, and `chunk-m14bt1pz.js:190483`.
-[^name-type]: The program, `chunk-m14bt1pz.js:68501`.
-[^file-errors]: The program, `chunk-m14bt1pz.js:191164`.
+[^upgrade]: The program ships the text in its command table. The flag is `tengu_idle_amber_finch`. Probe case `pty.cli319.slash.upgrade` (fake key) gave `Unknown command: /upgrade` in `2.1.323` and gives `/upgrade needs a Claude subscription. This session uses ANTHROPIC_API_KEY instead.` in `2.1.326`; the program, `chunk-pqenrb12.js:3603-4168`. Probe case `live.cli319.upgrade-typeahead` (real login, typed `/upg`, no Enter) lists only `/rate-limit-options`, whose text holds "upgrade options".
+[^project]: Probe case `pty.cli319.slash.project`. In `2.1.327` the gate is the same: `isEnabled:()=>eZs()&&b(Les,!1)` where `Les` is `"tengu_gentle_cupcake"` (`chunk-56bhcxay.js:2233271`). The program, the command table: `isEnabled: Hys() && k("tengu_gentle_cupcake")` until `2.1.319`, and `isEnabled: mvs() && k(ywr, !1)` in `2.1.327`, where `ywr` is `"tengu_gentle_cupcake"` (`chunk-56bhcxay.js:2233271`). In `2.1.323` the flag name is `T0r` and still holds `"tengu_gentle_cupcake"` (`chunk-56bhcxay.js:2233266`). The gate is the same; only the minified names changed.
+[^use-case]: Probe case `pty.cli319.slash.use-case`. The program, `chunk-56bhcxay.js:2608524`, the command table: `isEnabled:()=>n1()&&!Et()`. The flag is `tengu_federated_possum`, `chunk-20bv8pca.js:219940`.
+[^remote-bang]: The program, `chunk-5699r6rq.js:240423`.
+[^stickers]: The program, `chunk-56bhcxay.js:2601644`. The output is in `chunk-g6wjpbcr.js:1370`.
+[^name-rule]: The program, `chunk-56bhcxay.js:72413`, `chunk-56bhcxay.js:72417`, and `chunk-56bhcxay.js:195851`.
+[^name-type]: The program, `chunk-56bhcxay.js:71023`.
+[^file-errors]: The program, `chunk-56bhcxay.js:196537`.
 [^v312]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312).
-[^delete]: The program, the `/artifacts` panel: `chunk-k9xg30db.js:2396` and `chunk-116p7pz2.js:43169`. The confirmation is at `chunk-116p7pz2.js:2014-2062`, the `d` key at `chunk-116p7pz2.js:2347-2356`, and the owner and remote check at `chunk-116p7pz2.js:1382`.
-[^fix-lines]: The program, the `/usage` fix lines: `chunk-4dyhk64x.js:8557` and `chunk-m14bt1pz.js:3980246`.
-[^fix-hours]: The program, `chunk-4dyhk64x.js:8308`. `2.1.322` has no such text.
-[^fix-subagent]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-4dyhk64x.js:8276`.
-[^usage-scopes]: The program, the `/usage` panel: `chunk-t9m6p74b.js:44723` and `chunk-t9m6p74b.js:47456`. The usage report calls the usage endpoint only when the login is a claude.ai login with `user:inference` (`Pt()`, `chunk-asj6f58y.js:665465`, scope test at `chunk-p5kfs9w9.js:786`) and also has `user:profile` (`rf()`, `chunk-asj6f58y.js:665762`): `chunk-wnrpz3b8.js:3709`. In `2.1.327` the breakdown also needs the organization policy `allow_usage_transcript_scan` (`chunk-5khhjtvy.js:1689`), and its title is `What's contributing to your usage?` (`chunk-t9m6p74b.js:47456`).
-[^v312-text]: The program, `chunk-t9m6p74b.js:59915`. The same place holds the `429` text `The usage page is rate limited until <time>.`
-[^unseen]: The program, `chunk-t9m6p74b.js:59473`.
-[^usage-sources]: The program, `chunk-t9m6p74b.js:51774` (`Resets` lines) and `chunk-116p7pz2.js:43169` (`Artifact deleted`).
-[^channel-api]: The program, `chunk-60rxwjpr.js:41`.
-[^cd-taller]: The program, `chunk-y692rv3s.js:388`, `chunk-y692rv3s.js:401`, and `chunk-y692rv3s.js:412`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^rewind-skip]: The program, `chunk-cfxefa64.js:362519` and `chunk-m14bt1pz.js:1721491`. The release notes say this applies on macOS, Linux, and WSL when the sandbox is on. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^status-features]: The program, `chunk-jja35gr5.js:90-124`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^off-commands]: The program, `chunk-jja35gr5.js:2839-4165`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^skills-exit]: The program, `chunk-rvzxgyer.js:36859` (`Press <key> again to close`), and `chunk-xstndjzk.js:41709` for the key name. The second press runs the same save as `Esc`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^export]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-rwzka3zy.js:33128` and `chunk-rwzka3zy.js:34123`.
+[^delete]: The program, the `/artifacts` panel: `chunk-4685cqv3.js:2396` and `chunk-2fg7f6yw.js:44251`. The confirmation is at `chunk-2fg7f6yw.js:2046-2094`, the `d` key at `chunk-2fg7f6yw.js:2374-2383`, and the owner and remote check at `chunk-2fg7f6yw.js:1414`.
+[^fix-lines]: The program, the `/usage` fix lines: `chunk-65ne6cqk.js:8565` and `chunk-56bhcxay.js:4075743`.
+[^fix-hours]: The program, `chunk-65ne6cqk.js:8316`. `2.1.322` has no such text.
+[^fix-subagent]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-65ne6cqk.js:8284`.
+[^usage-scopes]: The program, the `/usage` panel: `chunk-hf20h63w.js:45392` and `chunk-hf20h63w.js:48171`. The usage report calls the usage endpoint only when the login is a claude.ai login with `user:inference` (`Pt()`, `chunk-xethrx83.js:632812`, scope test at `chunk-vhzbpgjm.js:786`) and also has `user:profile` (`rf()`, `chunk-xethrx83.js:633221`): `chunk-7x0smkn1.js:3709`. In `2.1.327` the breakdown also needs the organization policy `allow_usage_transcript_scan` (`chunk-q6qpd9yd.js:1689`), and its title is `What's contributing to your usage?` (`chunk-hf20h63w.js:47456`).
+[^v312-text]: The program, `chunk-hf20h63w.js:60317`. The same place holds the `429` text `The usage page is rate limited until <time>.`
+[^unseen]: The program, `chunk-hf20h63w.js:59875`.
+[^usage-sources]: The program, `chunk-hf20h63w.js:52271` (`Resets` lines) and `chunk-2fg7f6yw.js:44251` (`Artifact deleted`).
+[^channel-api]: The program, `chunk-6hhzbe1q.js:41`.
+[^cd-taller]: The program, `chunk-t5ty4t2x.js:389`, `chunk-t5ty4t2x.js:402`, and `chunk-t5ty4t2x.js:413`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^rewind-skip]: The program, `chunk-j2wfp6sf.js:364921` and `chunk-56bhcxay.js:1795881`. The release notes say this applies on macOS, Linux, and WSL when the sandbox is on. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^status-features]: The program, `chunk-pqenrb12.js:90-124`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^off-commands]: The program, `chunk-pqenrb12.js:2842-4168`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^skills-exit]: The program, `chunk-da7qxqbk.js:37970` (`Press <key> again to close`), and `chunk-8mj3s5dy.js:10468` for the key name. The second press runs the same save as `Esc`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^export]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-64zn2qx5.js:35206` and `chunk-64zn2qx5.js:35257`.
 [^rewind-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^hooks-cmd]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^mcp-cmd]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^plugin-cmd]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-xstndjzk.js:115196`.
-[^tui-classic]: The program, `chunk-m14bt1pz.js:2511679`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^plugin-cmd]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-ejmpea1g.js:113704`.
+[^tui-classic]: The program, `chunk-56bhcxay.js:2589728`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^status-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^statusline-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^gh-app]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-pz6bs101.js:68230` and `chunk-pz6bs101.js:59481`.
-[^usage-error-mark]: The program, `chunk-t9m6p74b.js:59915` for the text, `chunk-2y9dpgx8.js:11-58` for the line that shows it with `status: "error"`, and `chunk-rtbrswer.js:31-45` for the mark and its `failed:` label.
-[^artifacts-gate]: The program, `chunk-m14bt1pz.js:115226-115230` for the `isEnabled` check of the command and `chunk-h7hkyak8.js:18846` for the artifact policy check, which holds the `adminAllowed` answer.
-[^resume-327]: The program, `chunk-81q6b6k0.js:9627` (the session list). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^resend-hint]: The program, `chunk-cfxefa64.js:586809` (an `account_limit` error gets `wait`, which has no hint) and `chunk-cfxefa64.js:587648` (the hint text). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^config-theme]: The program, `chunk-t9m6p74b.js:21880`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^artifacts-list]: The program, `chunk-116p7pz2.js:47208` (the warning), `chunk-116p7pz2.js:47632` (the empty text), `chunk-116p7pz2.js:28892` (the delays), `chunk-116p7pz2.js:32798` (the retry), `chunk-r9pae5cc.js:37050` (the status codes), and `chunk-e2gsfdam.js:203` (each delay varies by up to a quarter). The `2.1.326` program has no retry. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^gh-app]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-c7bxfej7.js:69175` and `chunk-c7bxfej7.js:60395`.
+[^usage-error-mark]: The program, `chunk-hf20h63w.js:60317` for the text, `chunk-1pcqgphq.js:12-48` for the line that shows it with `status: "error"`, and `chunk-30554tfb.js:31-45` for the mark and its `failed:` label.
+[^artifacts-gate]: The program, `chunk-56bhcxay.js:119414-119418` for the `isEnabled` check of the command and `chunk-3h2rfbf3.js:18848` for the artifact policy check, which holds the `adminAllowed` answer.
+[^resume-327]: The program, `chunk-72v8rtp1.js:10605` (the session list). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^resend-hint]: The program, `chunk-j2wfp6sf.js:590382` (an `account_limit` error gets `wait`, which has no hint) and `chunk-j2wfp6sf.js:591218` (the hint text). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^config-theme]: The program, `chunk-hf20h63w.js:22481`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^artifacts-list]: The program, `chunk-2fg7f6yw.js:48272` (the warning), `chunk-2fg7f6yw.js:48695` (the empty text), `chunk-2fg7f6yw.js:29967` (the delays), `chunk-2fg7f6yw.js:33874` (the retry), `chunk-kkscdchq.js:37043` (the status codes), and `chunk-15vjjfkn.js:203` (each delay varies by up to a quarter). The `2.1.326` program has no retry. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^v328-list-agents]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-djw7n09x.js:310` (the note to Claude), `chunk-5699r6rq.js:10421` (the display check), and `chunk-p90ry0yq.js:7` (the flag).
+[^v328-chrome]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-ytavvbnp.js:1240`.

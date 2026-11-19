@@ -170,10 +170,10 @@ Since `2.1.326`, a malformed display field, such as `author` or `homepage`, no l
 
 ## Sources
 
-[^schema]: The program, `chunk-ja5z738t.js:57385`, `chunk-ja5z738t.js:57579`, and `chunk-ja5z738t.js:104813`.
-[^engines]: The program, `chunk-ja5z738t.js:55897` and `chunk-dfwkett1.js:28092`.
-[^settings-key]: The program, `chunk-dfwkett1.js:369-375`.
-[^status-line]: The program, `chunk-m14bt1pz.js:5480692` and `chunk-m14bt1pz.js:5480891`.
+[^schema]: The program, `chunk-jkpzhr7r.js:56021`, `chunk-jkpzhr7r.js:56215`, and `chunk-jkpzhr7r.js:104064`.
+[^engines]: The program, `chunk-jkpzhr7r.js:54138` and `chunk-a3rr42d2.js:24706`.
+[^settings-key]: The program, `chunk-a3rr42d2.js:148-154`.
+[^status-line]: The program, `chunk-56bhcxay.js:5597368` and `chunk-56bhcxay.js:5597567`.
 [^v310]: [`2.1.310` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.310).
-[^icon]: The program, `chunk-c062d8f2.js:4523` and `chunk-c062d8f2.js:33472`.
-[^display-field]: The program, `chunk-m14bt1pz.js:269326-269465` and `chunk-dfwkett1.js:792`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^icon]: The program, `chunk-yj3yxnry.js:4680` and `chunk-yj3yxnry.js:33626`.
+[^display-field]: The program, `chunk-56bhcxay.js:276004-276143` and `chunk-a3rr42d2.js:571`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

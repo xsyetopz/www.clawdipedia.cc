@@ -55,7 +55,8 @@ This table holds the size of one line and the order of the `skillOverrides` valu
 | `/run` | <Documented /> | Launches your app so you can see a change work. | Reads a recorded `run-<name>` skill if one exists. |
 | `/run-skill-generator` | <Documented /> | Records how to run the project as `.claude/skills/run-<name>/`. | `disableModelInvocation`. |
 | `/verify` | <Documented /> | Tries your change and reports if it works. | Records its recipe in `.claude/skills/verify/SKILL.md`. Since `2.1.312`, `/help` and the `/` command menu show the short text "Try your change and report if it works". Claude gets the long description. In `2.1.311` the menu showed the long description.[^verify] |
-| `/code-review` (alias `/review`), `/loop`, `/simplify`, `/workflow-authoring` | <Documented /> | Named in the docs. | `/workflow-authoring` needs dynamic workflows. |
+| `/code-review` (alias `/review`) | <Documented /> | Reviews the current diff, a pull request, a branch, or a path. | Since `2.1.328`, on most models it reports only bugs and `CLAUDE.md` violations. Run `/simplify` for reuse, simplification, and efficiency cleanups. On most models each finding is marked Important, Pre-existing, or Nit, and the summary ends with a suggested fix. A review with no findings reads "Code review found no issues."[^v328-review] |
+| `/loop`, `/simplify`, `/workflow-authoring` | <Documented /> | Named in the docs. | `/workflow-authoring` needs dynamic workflows. |
 | `/plugin-authoring` | <Documented /> | Helps you write and share a mod or plugin. | Since `2.1.304`, sharing no longer stops at the secret scan on machines with managed settings or on Team and Enterprise plans.[^v304] |
 | `/update-config` | <Documented /> | Edits `settings.json`: hooks, permissions, environment variables. | Registered as a bundled skill. |
 | `/fewer-permission-prompts` | <Documented /> | Scans transcripts and adds a read-only allowlist to `.claude/settings.json`. | Needs a workspace. |
@@ -85,16 +86,17 @@ This table holds the size of one line and the order of the `skillOverrides` valu
 
 ## Sources
 
-[^switch]: The program, `chunk-qtkq440d.js:14-18`.
-[^switch-workflows]: The program, `chunk-dx6t3q39.js:19-23`, which returns an empty list when the switch is on. The setting text in `chunk-ja5z738t.js:9004-9008` says that bundled skills and workflows are removed.
-[^skill-switches]: The program, `chunk-3z330av7.js:225962-226105`.
-[^allow-list]: The program, list of bundled skill names and the `allow_bundled_skills` key, `chunk-f2nneka2.js:435` and `chunk-qtkq440d.js:492`.
-[^listing]: The program, `chunk-m14bt1pz.js:2825289`.
+[^switch]: The program, `chunk-9r0p8kv9.js:14-18`.
+[^switch-workflows]: The program, `chunk-79ch6edx.js:19-23`, which returns an empty list when the switch is on. The setting text in `chunk-jkpzhr7r.js:8931-8935` says that bundled skills and workflows are removed.
+[^skill-switches]: The program, `chunk-tsfj8qb8.js:232518-232661`.
+[^allow-list]: The program, list of bundled skill names and the `allow_bundled_skills` key, `chunk-4768tt7f.js:435` and `chunk-9r0p8kv9.js:492`.
+[^listing]: The program, `chunk-56bhcxay.js:2904410`.
 [^v307]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307).
-[^claude-api]: The program, `chunk-2vcnvx3f.js:9494` and `chunk-z52m4nxj.js:24137`. The flags are `tengu_cosmic_sketch` and `tengu_typed_trinket`.
-[^claude-api-311]: The program, `chunk-3z330av7.js:5316` (startup registration) and `chunk-2vcnvx3f.js:402` (definition).
-[^platform]: The program, `chunk-5hejrm7d.js:689` and `chunk-5hejrm7d.js:673`.
-[^secure]: [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304). The program, `chunk-2vcnvx3f.js:11740`.
-[^verify]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312). The program, `chunk-3z330av7.js:5226` (short text) and `chunk-3z330av7.js:5220` (long description).
+[^claude-api]: The program, `chunk-mjbk2ztg.js:9494` and `chunk-1wwg5b1a.js:11694`. The flags are `tengu_cosmic_sketch` and `tengu_typed_trinket`.
+[^claude-api-311]: The program, `chunk-tsfj8qb8.js:5487` (startup registration) and `chunk-mjbk2ztg.js:402` (definition).
+[^platform]: The program, `chunk-2jfxv5rx.js:751` and `chunk-2jfxv5rx.js:735`.
+[^secure]: [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304). The program, `chunk-mjbk2ztg.js:11740`.
+[^verify]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312). The program, `chunk-tsfj8qb8.js:5397` (short text) and `chunk-tsfj8qb8.js:5391` (long description).
 [^v304]: [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304).
-[^security]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-m14bt1pz.js:2223814` and `chunk-m14bt1pz.js:2224103`.
+[^security]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-56bhcxay.js:2301394` and `chunk-56bhcxay.js:2301683`.
+[^v328-review]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, severity labels `chunk-tsfj8qb8.js:1583`, empty result text `chunk-tsfj8qb8.js:1618`, command text `chunk-tsfj8qb8.js:2716`, and `/simplify` text `chunk-tsfj8qb8.js:4721`.

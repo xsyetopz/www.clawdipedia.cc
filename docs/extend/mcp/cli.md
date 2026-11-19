@@ -100,13 +100,13 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^add-json]: The program, `chunk-m14bt1pz.js:232509`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^header-help]: The program, `chunk-92p5dxfr.js:22482`.
+[^add-json]: The program, `chunk-56bhcxay.js:238393`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^header-help]: The program, `chunk-ttgvknfh.js:23340`.
 [^web]: Probe case `print.cli319.mcp-add-web`. The gate is the server-side flag `tengu_twinkling_aurora`.
-[^reconnect]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-xstndjzk.js:26137`.
+[^reconnect]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-ejmpea1g.js:25801`.
 [^connector-dl]: Probe case `print.err319.mcp-add-connector-downloads` printed this text. Without the `.gitignore`, the control case printed no error.
 [^bad-env]: Probe case `print.err319.mcp-add-bad-env` printed this text and exited with code 1.
-[^serve-sandbox]: The program, `chunk-4xdmvk69.js:821`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^add-json-stdin]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-92p5dxfr.js:1123-1127` for the command text "or - to read it from stdin", `chunk-35vt2ywn.js:1416` for the `-` argument, and `chunk-35vt2ywn.js:1397-1411` for the stdin read, its 1 MiB limit, and the three errors.
-[^project-keys]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-m14bt1pz.js:4655624` for add and `chunk-m14bt1pz.js:4657110` for remove.
-[^project-stop]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-m14bt1pz.js:4655301`.
+[^serve-sandbox]: The program, `chunk-qkqqen23.js:892`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^add-json-stdin]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-ttgvknfh.js:1148-1152` for the command text "or - to read it from stdin", `chunk-4nj280gz.js:1441` for the `-` argument, and `chunk-4nj280gz.js:1422-1436` for the stdin read, its 1 MiB limit, and the three errors.
+[^project-keys]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-56bhcxay.js:4759634` for add and `chunk-56bhcxay.js:4761110` for remove.
+[^project-stop]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-56bhcxay.js:4759314`.

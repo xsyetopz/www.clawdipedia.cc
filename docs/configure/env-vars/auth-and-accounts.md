@@ -123,10 +123,10 @@ Claude Code sets some variables on this page for remote sessions and refreshes t
 
 ## Sources
 
-[^variable-names]: The program (variable names found in the `2.1.314` binary, and read in `chunk-asj6f58y.js:698611`) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^delegated-models]: The program, read at `chunk-270tbjq0.js:24180` and set at `chunk-xa2mcav9.js:233410`.
-[^delegated-direct]: The program, read at `chunk-270tbjq0.js:23328`, background check at `chunk-dfq3y18g.js:78724`, set at `chunk-xa2mcav9.js:233100`.
-[^local-oauth]: The program, `chunk-p5kfs9w9.js:415`, `2.1.323`.
-[^use-local]: The program, `chunk-atxs5jhd.js:22927` and `chunk-6kgdm9ga.js:9055`.
-[^use-staging]: The program, `chunk-atxs5jhd.js:22927`.
-[^key-and-profile]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-a2xjwn0h.js:77066` (the notice and the steps) and `chunk-asj6f58y.js:614427` (the `/config` step text). The `2.1.326` program has no text `instead of your Anthropic profile`. The shorter `Both <A> and <B> set` notice still shows for other pairs of sources.
+[^variable-names]: The program (variable names found in the `2.1.314` binary, and read in `chunk-xethrx83.js:668108`) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^delegated-models]: The program, read at `chunk-56bhcxay.js:1363685` and set at `chunk-gv1b3n3g.js:251015`.
+[^delegated-direct]: The program, read at `chunk-56bhcxay.js:1362812`, background check at `chunk-avyyrx5p.js:78817`, set at `chunk-gv1b3n3g.js:250616`.
+[^local-oauth]: The program, `chunk-vhzbpgjm.js:415`, `2.1.323`.
+[^use-local]: The program, `chunk-hfmp90ez.js:23787` and `chunk-7nh7p3mh.js:9062`.
+[^use-staging]: The program, `chunk-hfmp90ez.js:23787`.
+[^key-and-profile]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-4d4nzary.js:74661` (the notice and the steps) and `chunk-xethrx83.js:581286` (the `/config` step text). The `2.1.326` program has no text `instead of your Anthropic profile`. The shorter `Both <A> and <B> set` notice still shows for other pairs of sources.

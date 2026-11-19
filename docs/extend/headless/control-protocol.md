@@ -178,17 +178,17 @@ The exact fields are in `https://clawdipedia.cc/schemas/claude-code-control-prot
 
 ## Sources
 
-[^subtypes]: The program, the bundled schema of `2.1.311`. For the `2.1.311` additions: `chunk-rj3e7agr.js:23376` for `ui_prompt_paint`, `chunk-rj3e7agr.js:23243` for the `ui_attach` list, `chunk-rj3e7agr.js:21120` for `turn_handoff`, `chunk-rj3e7agr.js:22188` for `oauth_token_refresh`, `chunk-rj3e7agr.js:21964` for `mcpMount`, `chunk-rj3e7agr.js:17188` for `background_color`, and `chunk-rj3e7agr.js:19499` for the transcript note.
-[^initialize]: The program, `chunk-rj3e7agr.js:649864` and `chunk-rj3e7agr.js:18459-18466` for `auth_conflict` and `chunk-rj3e7agr.js:653238` for `other_hook_ask_outranks_host`.
-[^interrupt]: The program, `chunk-rj3e7agr.js:673283`.
-[^denied-tools]: The program, `chunk-rj3e7agr.js:819954`. The warning is at `chunk-rap1tzf6.js:861005`.
-[^apply-flag]: The program, `chunk-vbykdcyz.js:73233`.
-[^elicitation]: The program, `chunk-rj3e7agr.js:950084`.
-[^builders]: The program, the strings of the request and response builders, `chunk-rj3e7agr.js:696525`, `chunk-rj3e7agr.js:699916`, and `chunk-rj3e7agr.js:960108`.
+[^subtypes]: The program, the bundled schema of `2.1.311`. For the `2.1.311` additions: `chunk-20bv8pca.js:23409` for `ui_prompt_paint`, `chunk-20bv8pca.js:23276` for the `ui_attach` list, `chunk-20bv8pca.js:21142` for `turn_handoff`, `chunk-20bv8pca.js:22221` for `oauth_token_refresh`, `chunk-20bv8pca.js:21997` for `mcpMount`, `chunk-20bv8pca.js:17188` for `background_color`, and `chunk-20bv8pca.js:19521` for the transcript note.
+[^initialize]: The program, `chunk-20bv8pca.js:652557` and `chunk-20bv8pca.js:18481-18488` for `auth_conflict` and `chunk-20bv8pca.js:655931` for `other_hook_ask_outranks_host`.
+[^interrupt]: The program, `chunk-20bv8pca.js:676059`.
+[^denied-tools]: The program, `chunk-20bv8pca.js:822730`. The warning is at `chunk-5699r6rq.js:870024`.
+[^apply-flag]: The program, `chunk-b8ves7hr.js:73661`.
+[^elicitation]: The program, `chunk-20bv8pca.js:953945`.
+[^builders]: The program, the strings of the request and response builders, `chunk-20bv8pca.js:699301`, `chunk-20bv8pca.js:702692`, and `chunk-20bv8pca.js:963969`.
 [^set-model]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307).
-[^validators]: The schema is made from the program's own validators, for example `chunk-rj3e7agr.js:696525`.
-[^v2326]: The program, `chunk-rj3e7agr.js:738197` for `oldestDesktopSdk`, `chunk-rj3e7agr.js:19481-19490` for `limit`, `chunk-rj3e7agr.js:22012-22018` for `withheld`, `chunk-rj3e7agr.js:22193-22209` for `refused_bearer_sha256` and `refused_call`, and `chunk-s02134r0.js:3154` and `chunk-s02134r0.js:3166` for where the CLI sends them.
-[^v2327-init]: The program, `chunk-rj3e7agr.js:641862` for `settings` and `disallowedTools`, `chunk-rj3e7agr.js:655830` for `settings_applied` and `disallowed_tools_applied`, `chunk-rj3e7agr.js:627348` for `contextOnly` and `replacedByFrame`, and `chunk-rj3e7agr.js:300280` for `requiredByOrganization`.
-[^v2327-rules]: The program, `chunk-rj3e7agr.js:690617` for `rule_usually_offered`, `chunk-rj3e7agr.js:742196` for `loadRaise`, `chunk-rj3e7agr.js:757262` for `rootId`, and `chunk-rj3e7agr.js:875935` for `token_state`.
-[^v2327-cloud]: The program, `chunk-rj3e7agr.js:712907` for `list_cloud_sessions`, `chunk-rj3e7agr.js:717983` and `chunk-rj3e7agr.js:719204` for `get_cloud_session`, `chunk-rj3e7agr.js:720472` for `agent_id`, `chunk-rj3e7agr.js:721734` for `update_cloud_session`, and `chunk-rj3e7agr.js:836268` for `reload_connectors`.
-[^v2327-fork]: The program, `chunk-rj3e7agr.js:817543` for the request and `chunk-rj3e7agr.js:818581` for the reply.
+[^validators]: The schema is made from the program's own validators, for example `chunk-20bv8pca.js:699301`.
+[^v2326]: The program, `chunk-20bv8pca.js:740973` for `oldestDesktopSdk`, `chunk-20bv8pca.js:19503-19512` for `limit`, `chunk-20bv8pca.js:22045-22051` for `withheld`, `chunk-20bv8pca.js:22226-22242` for `refused_bearer_sha256` and `refused_call`, and `chunk-nr7kzzye.js:3215` and `chunk-nr7kzzye.js:3227` for where the CLI sends them.
+[^v2327-init]: The program, `chunk-20bv8pca.js:644555` for `settings` and `disallowedTools`, `chunk-20bv8pca.js:658523` for `settings_applied` and `disallowed_tools_applied`, `chunk-20bv8pca.js:629634` for `contextOnly` and `replacedByFrame`, and `chunk-20bv8pca.js:299711` for `requiredByOrganization`.
+[^v2327-rules]: The program, `chunk-20bv8pca.js:693393` for `rule_usually_offered`, `chunk-20bv8pca.js:744972` for `loadRaise`, `chunk-20bv8pca.js:760038` for `rootId`, and `chunk-20bv8pca.js:879818` for `token_state`.
+[^v2327-cloud]: The program, `chunk-20bv8pca.js:715683` for `list_cloud_sessions`, `chunk-20bv8pca.js:720759` and `chunk-20bv8pca.js:721980` for `get_cloud_session`, `chunk-20bv8pca.js:723248` for `agent_id`, `chunk-20bv8pca.js:724510` for `update_cloud_session`, and `chunk-20bv8pca.js:839752` for `reload_connectors`.
+[^v2327-fork]: The program, `chunk-20bv8pca.js:820319` for the request and `chunk-20bv8pca.js:821357` for the reply.

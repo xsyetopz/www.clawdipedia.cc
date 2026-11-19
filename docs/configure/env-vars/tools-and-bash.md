@@ -103,6 +103,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `CLAUDE_CODE_SCRIPT_CAPS` | <Documented /> | Limits how many times named scripts may run per session. It reads a JSON object of substring keys and number limits. | JSON text. JSON object. Bad JSON, an array, or no valid entries turn the caps off | Bash tool. The docs tie it to `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB` |
 | `CLAUDE_CODE_SHELL` | <Documented /> | Sets the shell for Bash tool commands. It accepts a path to `bash` or `zsh`. An invalid path falls back to detection. | Text. The path must contain `bash` or `zsh` and run. Else Claude Code logs a message and detects a shell from `SHELL` and `PATH` | Bash tool |
 | `CLAUDE_CODE_SHELL_LAUNCHER_SCRIPT` | <Undocumented /> | Passes a launcher script to a PowerShell shell. The wrapper reads it, clears the variable, and runs it with `Invoke-Expression`. | Text. Claude Code sets it for the PowerShell child. The wrapper sets it to `$null` before running | PowerShell tool. Claude Code sets it |
+| `CLAUDE_CODE_SHELL_MCP_SERVERS` | <Undocumented /> | Claude Code sets it for shell child processes. Its value is JSON of the form `{"mcpServers":{"<name>":{"type":"http","url":"<url>"}}}`. It lists HTTPS servers that a client gives under `anthropic/shellMcpServers`. A name is lower-case words with `-`, and a URL has no `$`. Claude Code drops an entry that fails these checks, and it ignores a source text over 16384 characters. Since `2.1.328`.[^shell-mcp] | Text. Claude Code sets it. It sets nothing when no entry passes | Sessions that receive the value |
 | `CLAUDE_CODE_SHELL_PREFIX` | <Documented /> | Wraps shell commands that Claude Code starts with a prefix program. Hooks, Bash, status line, and stdio MCP starts use it. | Text. Claude Code passes the command to the wrapper as one quoted argument. PowerShell and exec-form hooks skip it | Bash tool, hooks, status line, MCP stdio |
 | `CLAUDE_CODE_STRICT_INLINE_SHELL_RM_PROMPT` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Restores the strict `rm` permission prompt for inline shell `-c` scripts that build `rm` at run time. | On or off, on by default. Without it a feature flag (default true) picks the relaxed rule. The [changelog](https://code.claude.com/docs/en/changelog) names this variable | Bash tool permissions |
 | `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB` | <Documented /> <Differs note="The official docs and the program disagree. The row says how." /> | Strips credentials from the env of subprocesses such as Bash, hooks, and stdio MCP servers. | On, off, or unset. The default depends on the host (see Notes). `1` turns it on and `0` turns it off | Bash, hooks, MCP stdio. The docs omit the GitHub Actions and `local-agent` defaults. While the scrub is on, Claude Code forces the permission mode to `default` (see [What the Scrub Removes](#what-the-scrub-removes)) |
@@ -111,11 +112,12 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `CLAUDE_CODE_TOOL_MEMORY_LIMIT` | <Documented /> <Differs note="The official docs and the program disagree. The row says how." /> | Caps memory for tool commands with a cgroup. The docs list `0` and `off` to turn it off. The code also accepts `none`. | Text. When unset, a feature flag decides, which the docs do not say | Linux and WSL |
 | `CLAUDE_CODE_USE_NATIVE_FILE_SEARCH` | <Documented /> | Finds commands, subagents, and output styles with Node file APIs and not ripgrep. Only the docs state this. No code reads the name.[^native-search] | On or off. Set `1` to enable | All sessions |
 | `CLAUDE_CODE_USE_POWERSHELL_TOOL` | <Documented /> | Turns the PowerShell tool on or off. On Windows without Git Bash it is on. With Git Bash the feature flag decides when unset. | On, off, or unset. Non-Windows needs `1`. Windows takes `0` or `1` | Windows, Linux, macOS, WSL |
+| `CLAUDE_CODE_WATCHED_SLEEP` | <Undocumented /> | Claude Code adds `CLAUDE_CODE_WATCHED_SLEEP=1` before a leading `sleep` in a Bash command that it rewrites. The program later looks for a `sleep` process whose environment has this entry, when it watches the sleep. Since `2.1.328`.[^watched-sleep] | Text. Claude Code sets it. The rewrite is skipped when the command already has the name, or when `CLAUDE_CODE_SHELL_PREFIX` is set | Bash tool in `bash` shells |
 | `CLAUDE_CODE_WEB_SEARCH_FAST_ARG` | <Undocumented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> | Turns on a fast `WebSearch` mode with its own description and hint. Env wins over a feature flag. | On, off, or unset. Needs an extra model check to pass | All sessions |
 | `CLAUDE_CODE_WEB_SEARCH_REFILLS_PER_HOUR` | <Documented /> | Sets how fast the session `WebSearch` limit refills, in calls per hour. | `100` by default. Plain digits. Unset gives 0 when non-interactive, else a feature flag with default `100` | All sessions |
 | `CLAUDE_CODE_WEBFETCH_CACHE_TTL_MS` | <Documented /> | Sets how long `WebFetch` keeps a fetched URL in cache. | A number of milliseconds, `900000` by default. Plain digits, at least 1. Claude Code reads it once for each start | All sessions |
 | `CLAUDE_CODE_WEBFETCH_DEADLINE_MS` | <Documented /> | Sets the upper bound on how long `WebFetch` waits for a download. | A number of milliseconds, `300000` by default. Plain digits, 0 or more. Env value has an upper cap | All sessions |
-| `CLAUDE_CODE_WEBSEARCH_CITATIONS` | <Undocumented /> | Changes the `WebSearch` tool prompt so it does not ask for a `Sources:` list. It also gates a citations code path. | On or off. The second path needs two more checks | All sessions |
+| `CLAUDE_CODE_WEBSEARCH_CITATIONS` | <Undocumented /> | Changes the `WebSearch` tool prompt so it does not ask for a `Sources:` list. It also gates a citations code path. Since `2.1.328`, a set value also adds a system prompt section that says the app shows a source chip for each cited web result, so the model must not list those results again.[^websearch-citations] | On or off. The second path needs two more checks | All sessions |
 | `CLAUDE_ENV_FILE` | <Documented /> | Names a shell script that runs before each Bash command in the same shell. | Text. Claude Code reads it and trims it. Claude Code gives hooks for `SessionStart`, `Setup`, `CwdChanged`, and `FileChanged` a path | Bash tool and hooks |
 | `CLAUDE_PID` | <Documented /> | Holds the process ID of Claude Code. Child commands use it to find the parent process. | - | - |
 | `CLAUDECODE` | <Documented /> | Marks a process as running inside Claude Code. Claude Code also reads it to detect a child session and to skip prompt history. | On or off. Claude Code sets it to `1` for shell snapshots, hook and tool subprocesses, and stdio MCP servers | All sessions |
@@ -168,21 +170,24 @@ While the scrub is on (`CLAUDE_CODE_SUBPROCESS_ENV_SCRUB` true, or `GITHUB_ACTIO
 
 ## Sources
 
-[^max-output]: The program, `chunk-8r6vdndw.js:2480`.
-[^auto-full-context]: The program, `chunk-8g2nr9dn.js:169914`. The gate is `tengu_velvet_marble`, read at `chunk-8g2nr9dn.js:164833`.
-[^edit-diff]: The program, `chunk-m14bt1pz.js:5657444`.
-[^exported-var]: The program, `chunk-m14bt1pz.js:84185`.
+[^max-output]: The program, `chunk-4kktgbrd.js:2533`.
+[^auto-full-context]: The program, `chunk-2b3eg071.js:184972`. The gate is `tengu_velvet_marble`, read at `chunk-2b3eg071.js:179754`.
+[^edit-diff]: The program, `chunk-56bhcxay.js:5754973`.
+[^exported-var]: The program, `chunk-56bhcxay.js:88182`.
 [^exported-var-gate]: The gate is `bot_protected_tengu_zazzy_parasol`.
-[^mounted-rm]: The program, `chunk-m14bt1pz.js:1346512`.
-[^ps-alias]: The program, `chunk-m14bt1pz.js:61136`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326) mention the check.
+[^mounted-rm]: The program, `chunk-56bhcxay.js:1420261`.
+[^ps-alias]: The program, `chunk-56bhcxay.js:62604`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326) mention the check.
 [^ps-alias-gate]: The gate is `bot_protected_tengu_dynamic_pike`.
-[^git-check]: The program, `chunk-m14bt1pz.js:1076096` (the read of the variable) and `chunk-m14bt1pz.js:1076574` (the hook check).
-[^perforce]: The program, `chunk-cfxefa64.js:1920025`.
-[^thrifty]: The program, `chunk-t907shf5.js:4355`. The gate is `tengu_thrifty_sonic`.
-[^native-search]: The program, `chunk-2ew0jg68.js:19683`, lists the name in its environment table as a boolean.
-[^office-pdf-dir]: The program, `chunk-jp340sez.js:337`.
-[^office-pdf-send]: The program, `chunk-jp340sez.js:385`.
-[^scrub-lists]: The program lists, `chunk-af1ewb74.js:31931` (credential names) and `chunk-af1ewb74.js:33409` (path and config names), and a Bash call with the scrub on (see [Probes](../../reference/probes.md#static-and-print-probes)).
+[^git-check]: The program, `chunk-56bhcxay.js:1118504` (the read of the variable) and `chunk-56bhcxay.js:1118982` (the hook check).
+[^perforce]: The program, `chunk-j2wfp6sf.js:1918990`.
+[^thrifty]: The program, `chunk-ynemm6ap.js:4363`. The gate is `tengu_thrifty_sonic`.
+[^native-search]: The program, `chunk-7343wm3k.js:19660`, lists the name in its environment table as a boolean.
+[^office-pdf-dir]: The program, `chunk-rp96ggan.js:346`.
+[^office-pdf-send]: The program, `chunk-rp96ggan.js:394`.
+[^scrub-lists]: The program lists, `chunk-2a85tfcs.js:10970` (credential names) and `chunk-2a85tfcs.js:12448` (path and config names), and a Bash call with the scrub on (see [Probes](../../reference/probes.md#static-and-print-probes)).
 [^scrub-run]: A Bash call with the scrub on (see [Probes](../../reference/probes.md#static-and-print-probes)).
-[^variable-names]: The program, `chunk-2ew0jg68.js:26216`, variable names found in the `2.1.314` binary. The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^head-start]: The program, `chunk-8g2nr9dn.js:67635` (shell) and `chunk-m14bt1pz.js:3725480` (PowerShell). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^variable-names]: The program, `chunk-7343wm3k.js:26213`, variable names found in the `2.1.314` binary. The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^head-start]: The program, `chunk-2b3eg071.js:71530` (shell) and `chunk-56bhcxay.js:3819604` (PowerShell). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^shell-mcp]: The program, `chunk-thtytpkk.js:258-282` (the checks and the value) and `chunk-thtytpkk.js:679` (the child env).
+[^watched-sleep]: The program, `chunk-4h0jyvmx.js:23304-23305` (the name), `chunk-4h0jyvmx.js:23393` and `chunk-4h0jyvmx.js:23420` (the rewrite), `chunk-4h0jyvmx.js:23417` (the `CLAUDE_CODE_SHELL_PREFIX` check), and `chunk-2qy1kt0w.js:275` (the watch).
+[^websearch-citations]: The program, `chunk-4h0jyvmx.js:21861` (the section) and `chunk-0jy30rtj.js:136` (its text). Probe case `print.sweep`.

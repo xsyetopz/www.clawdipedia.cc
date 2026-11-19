@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-plugin-manifest.json",
-	"title": "Claude Code plugin.json (Claude Code 2.1.327)",
-	"$comment": "For .claude-plugin/plugin.json. Generated from Claude Code 2.1.327 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code plugin.json (Claude Code 2.1.328)",
+	"$comment": "For .claude-plugin/plugin.json. Generated from Claude Code 2.1.328 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
 	"type": "object",
 	"properties": {
 		"$schema": {
@@ -114,6 +114,20 @@
 				"type": "string"
 			},
 			"additionalProperties": {}
+		},
+		"network": {
+			"description": "The network hosts any part of the plugin reaches, as its author states them, for `claude plugin validate` to list. Shown only: it is not checked, allows no host and limits nothing. In a marketplace entry it is read where the entry is the plugin's only manifest.",
+			"type": "object",
+			"properties": {
+				"hosts": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Hosts in sandbox.network.allowedDomains syntax: a host, with an optional leading \"*.\" and an optional \":port\" (e.g. \"api.example.com\", \"*.example.com\", \"db.example.com:5432\"). An empty list says that none is needed."
+				}
+			},
+			"required": ["hosts"]
 		},
 		"hooks": {
 			"anyOf": [
@@ -424,6 +438,11 @@
 														"description": "Timeout in seconds for this specific tool call",
 														"type": "number",
 														"exclusiveMinimum": 0
+													},
+													"onFailure": {
+														"description": "What happens when this hook's call fails: its MCP server is not connected or not signed in, the call times out or returns an error, or the tool answers with JSON that fails validation. 'continue' (default): the failure is reported and the action goes ahead. 'block': the action the event guards (a tool call, a permission request, a prompt) is blocked each time, for as long as the call fails. With 'block', the tool must answer with a hook's JSON output, with {} or with nothing: plain text, an image, or JSON that holds none of a hook output's fields, or only 'reason', also counts as a failure. That does not hold on PreCompact and WorktreeCreate, where plain text is the hook's answer, or on events whose block stops nothing. Any other value reads as 'block'. Ignored on Setup, SessionStart, Stop, SubagentStop, TaskCompleted and TeammateIdle.",
+														"type": "string",
+														"enum": ["continue", "block"]
 													},
 													"statusMessage": {
 														"description": "Custom status message to display in spinner while hook runs",
@@ -756,6 +775,11 @@
 																	"description": "Timeout in seconds for this specific tool call",
 																	"type": "number",
 																	"exclusiveMinimum": 0
+																},
+																"onFailure": {
+																	"description": "What happens when this hook's call fails: its MCP server is not connected or not signed in, the call times out or returns an error, or the tool answers with JSON that fails validation. 'continue' (default): the failure is reported and the action goes ahead. 'block': the action the event guards (a tool call, a permission request, a prompt) is blocked each time, for as long as the call fails. With 'block', the tool must answer with a hook's JSON output, with {} or with nothing: plain text, an image, or JSON that holds none of a hook output's fields, or only 'reason', also counts as a failure. That does not hold on PreCompact and WorktreeCreate, where plain text is the hook's answer, or on events whose block stops nothing. Any other value reads as 'block'. Ignored on Setup, SessionStart, Stop, SubagentStop, TaskCompleted and TeammateIdle.",
+																	"type": "string",
+																	"enum": ["continue", "block"]
 																},
 																"statusMessage": {
 																	"description": "Custom status message to display in spinner while hook runs",
@@ -1198,6 +1222,20 @@
 									"role": {
 										"type": "string",
 										"const": "comms"
+									},
+									"network": {
+										"description": "The network hosts this server reaches, as its author states them, for `claude plugin validate` to list. Shown only: it is not checked, allows no host, limits nothing and is not passed to the server.",
+										"type": "object",
+										"properties": {
+											"hosts": {
+												"type": "array",
+												"items": {
+													"type": "string"
+												},
+												"description": "Hosts in sandbox.network.allowedDomains syntax: a host, with an optional leading \"*.\" and an optional \":port\" (e.g. \"api.example.com\", \"*.example.com\", \"db.example.com:5432\"). An empty list says that none is needed."
+											}
+										},
+										"required": ["hosts"]
 									}
 								},
 								"required": ["command"]
@@ -1812,6 +1850,20 @@
 												"role": {
 													"type": "string",
 													"const": "comms"
+												},
+												"network": {
+													"description": "The network hosts this server reaches, as its author states them, for `claude plugin validate` to list. Shown only: it is not checked, allows no host, limits nothing and is not passed to the server.",
+													"type": "object",
+													"properties": {
+														"hosts": {
+															"type": "array",
+															"items": {
+																"type": "string"
+															},
+															"description": "Hosts in sandbox.network.allowedDomains syntax: a host, with an optional leading \"*.\" and an optional \":port\" (e.g. \"api.example.com\", \"*.example.com\", \"db.example.com:5432\"). An empty list says that none is needed."
+														}
+													},
+													"required": ["hosts"]
 												}
 											},
 											"required": ["command"]

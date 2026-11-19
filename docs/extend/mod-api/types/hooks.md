@@ -110,7 +110,7 @@ The rest of the chain, as one hook receives it. The engine makes it once for eac
 | `signal` | <Documented /> | Aborts when the call this dispatch belongs to is abandoned. Either the user interrupted, a hook above settled first, or this hook exhausted its budget. | Type: `AbortSignal`. Anything the hook started (timers, requests) should stop on it. It is an AbortSignal in the environment of the plugin, driven by the signal of the chain. Read-only. |
 | `is` | <Documented /> | Whether `pattern` (a name, a glob, a negation) selects the event of this dispatch, as a type predicate on `e`: `next.is("tool.call", e)`. | Type: `<M extends PatternOver<N>>(pattern: M, e: unknown) => e is ...`. Narrows `e` to the events that the pattern names. A name outside the events of the hook is a compile error. Read-only. |
 | `event` | <Documented /> | The name of the event of this dispatch, as a value, for a glob hook to log or switch on. | Type: `N`. Read-only. |
-| `origin` | <Documented /> | Who raised this dispatch: the name of the calling plugin and the tier it sits in (Origin). The engine reads `{ plugin: "engine", tier: "core" }`. | Type: `Origin`. Only the host sets it. A plugin cannot write it. Every hook of one dispatch sees the same origin. Read-only. |
+| `origin` | <Documented /> | Who raised this dispatch: the name of the calling plugin and the tier it sits in (Origin). The engine reads `{ plugin: "engine", tier: "core" }`. | Type: `Origin`. Only the host sets it. A plugin cannot write it. Every hook of one dispatch sees the same origin. Read-only. Since `2.1.328`, the type of `next.origin` is `NextOrigin`.[^v328-next-origin] |
 | `trace` | <Documented /> | What settled beneath this hook on its latest `next()` call, the one started last: one entry for each link beneath, nearest first, with the engine last. | Type: `readonly TraceEntry<N, E, O>[]`. Empty before a call to `next`. Read-only data. Read-only. |
 | `budget` | <Documented /> | How much time this hook runs under and how much is left (NextBudget). It is read fresh on each access. HookBudget says what the clock counts. | Type: `NextBudget`. The clock stops while a `next` or `$` call of the hook is in flight. In a `.catch` handler it is the grace time. Read-only. |
 
@@ -203,6 +203,15 @@ Who raised a dispatch, as `next.origin` holds it: the name of the calling plugin
 | `plugin` | <Documented /> | Whose hook made the `$` call, by name. `"engine"` for a call site. `"client"` for the `ui.message` post of a `Client` surface module. | Type: `string`. Read-only. |
 | `tier` | <Documented /> | Where that plugin sits among the tiers of the chain (Tier). `"core"` for the engine. The tier of the owning plugin for a `client` post. | Type: `Tier`. Read-only. |
 
+### `NextOrigin`
+
+Since `2.1.328`, what `next.origin` holds: an `Origin` and whose code that is. The host sets it. The `provider` of an event carries neither added field.[^v328-next-origin]
+
+| Field | Status | What it is for | Type and limits |
+| --- | --- | --- | --- |
+| `hookOwner` | <Documented /> | On a settings hook's own MCP call alone: whose hook it is. `"unknown"` where it may be the organization's and that could not be told. | Type: `'organization' \| 'unknown' \| 'person'`. Optional. Read-only. |
+| `isOrganizations` | <Documented /> | At `tool.check` alone: the organization's own code made the call as it arrived, from a plugin that managed settings seated or a hook known as theirs. The tier does not say so. It is absent on a call a hook rewrote, and on one that a model, a script, or a `Monitor` watch makes for such a plugin. | Type: `true`. Optional. Read-only. |
+
 ### `Matcher`
 
 What `on(event, matcher, hook)` takes for an argument of type `I`: the shape of the `e` that the hook wants, as a partial of it at any depth. Type of the second argument of `on`. A leaf is `===` or a `RegExp`. An array means any of. An object is a partial match of an object. Since `2.1.323`, `plugin` is a default matcher key: where the engine sets it on `e` (`ui.press`, a band row), a matcher that leaves it out is read as naming the plugin of the hook itself. `"*"` names every plugin, and hears an `e` without the key (`schemas/claude-code.d.ts`).
@@ -236,4 +245,5 @@ What a hooks module exports: `register`, and nothing else that the loader reads.
 
 ## Sources
 
-[^tier-327]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `Tier` and `TIERS`.
+[^tier-327]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `Tier` and `TIERS`.
+[^v328-next-origin]: The type file `schemas/claude-code.d.ts`, `NextOrigin`.

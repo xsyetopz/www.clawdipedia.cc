@@ -80,17 +80,17 @@ The [`2.1.312` changelog](https://code.claude.com/docs/en/changelog) names it, b
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema, `chunk-ja5z738t.js:269081`, and for `xaaIdp`, `chunk-ja5z738t.js:225202`.
-[^providers]: The program, `chunk-ja5z738t.js:270548` and `chunk-asj6f58y.js:200105`.
-[^force-login]: The program, `chunk-ja5z738t.js:264790`.
-[^nested-login]: The program, `chunk-ja5z738t.js:269081` for the schema text and `chunk-asj6f58y.js:687801` for the check. The key is new in `2.1.327`.
+[^schema]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:269305`, and for `xaaIdp`, `chunk-jkpzhr7r.js:224651`.
+[^providers]: The program, `chunk-jkpzhr7r.js:270772` and `chunk-xethrx83.js:163357`.
+[^force-login]: The program, `chunk-jkpzhr7r.js:265014`.
+[^nested-login]: The program, `chunk-jkpzhr7r.js:269305` for the schema text and `chunk-xethrx83.js:655425` for the check. The key is new in `2.1.327`.
 [^force-login-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^console-login]: Run against a local stand-in server. Probe case `print.err319.console-login-no-key`.
 [^profile-dir]: Probe case `pty.cli319.login-console-profile-no-dir`.
-[^gateway-login]: The program, `chunk-jhpfacch.js:27377` and `chunk-jhpfacch.js:28080`.
-[^org-check]: The program, `chunk-jhpfacch.js:26127`.
-[^provider-setup]: The program, `chunk-asj6f58y.js:197677`. The `2.1.321` text can hold a detail after `(allowedProviders)`.
-[^headers]: Probe case `print.err319.custom-headers-bad-authorization`. The program, `chunk-asj6f58y.js:454516`.
-[^overlay]: The program, `chunk-5z0ytfrt.js:1388292` and `chunk-5z0ytfrt.js:1390506`. The `${…}` label is `managed.policies[N].desktop`, where `N` is the index of the policy in the gateway file (`chunk-5z0ytfrt.js:1424857`).
-[^delegated]: The program, `chunk-m14bt1pz.js:3394248`, `chunk-m14bt1pz.js:3523901`, and `chunk-270tbjq0.js:24192`.
-[^oidc]: The program, `chunk-5z0ytfrt.js:1406810`, `chunk-5z0ytfrt.js:1531847`, and `chunk-5z0ytfrt.js:1532005`.
+[^gateway-login]: The program, `chunk-00wezk9v.js:28237` and `chunk-00wezk9v.js:28940`.
+[^org-check]: The program, `chunk-00wezk9v.js:26987`.
+[^provider-setup]: The program, `chunk-xethrx83.js:160929`. The `2.1.321` text can hold a detail after `(allowedProviders)`.
+[^headers]: Probe case `print.err319.custom-headers-bad-authorization`. The program, `chunk-xethrx83.js:421081`.
+[^overlay]: The program, `chunk-39421vhy.js:819247` and `chunk-39421vhy.js:821460`. The `${…}` label is `managed.policies[N].desktop`, where `N` is the index of the policy in the gateway file (`chunk-39421vhy.js:855774`).
+[^delegated]: The program, `chunk-56bhcxay.js:3489351`, `chunk-56bhcxay.js:3618875`, and `chunk-56bhcxay.js:1363697`.
+[^oidc]: The program, `chunk-39421vhy.js:837733`, `chunk-39421vhy.js:962140`, and `chunk-39421vhy.js:962298`.

@@ -127,16 +127,16 @@ Each option error below prints `Error: <message>` on stderr and exits with code 
 
 ## Sources
 
-[^parser]: The text of `claude remote-control --help` in `2.1.326`, and the option parser of the program, `chunk-0tqcm9e3.js:110411`, `chunk-0tqcm9e3.js:112577`, and `chunk-0tqcm9e3.js:113208`.
-[^identity]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-zbte79pd.js:2100`.
-[^same-folder]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-qbj34c05.js:435-450`, behind the `tengu_idempotent_blossom` gate.
-[^unattended-help]: The program, `chunk-grtvttzf.js:3401`.
-[^grant]: The program, export `writeUnattendedRunGrant`, `chunk-affxt4p4.js:1063` (exported from `chunk-cqp0cssp.js:1770`), called at `chunk-0tqcm9e3.js:125863`.
-[^startup]: The program, `chunk-0tqcm9e3.js:121254` and `chunk-0tqcm9e3.js:123148`, and the help text, `chunk-grtvttzf.js:5456`.
-[^order]: The program, `chunk-stwz912m.js:6208`, the `remote-control` entry, and `chunk-f7bk17mp.js:5541`, the function exported as `getBridgeDisabledDiagnosis`.
-[^flag]: The program, flag `tengu_ccr_bridge`, `chunk-f7bk17mp.js:5541` and `chunk-f7bk17mp.js:8343`. Probe group `cli321`.
-[^exit-codes]: The program, `chunk-ex8n2sn4.js:210` holds the codes `78`, `75`, `69`, `4`, and `70`. `chunk-0tqcm9e3.js:131613` exits with `69` (`KZa`) when registration fails. `chunk-0tqcm9e3.js:781` imports `4` (`YZa`). `chunk-0tqcm9e3.js:6849-6851` exits with it when no stop signal was received and the spawn mode is not `single-session`. `chunk-0tqcm9e3.js:6650-6666` shows that the three signals stop the server. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^cli321]: The program, the option parser, from `chunk-0tqcm9e3.js:5448` (the `--spawn` values) to `chunk-0tqcm9e3.js:5576` (`--enable-live-preview`). Probe group `cli321` (`rc-*` cases), run with a fake `max` login, only `DISABLE_TELEMETRY` set, and no network.
-[^child-logs]: The program, `chunk-0tqcm9e3.js:5759-5767`, `chunk-0tqcm9e3.js:6581`, `chunk-40s100gp.js:387-388`, and `chunk-1yrzf3wn.js:44895-44944`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^rc-worktree]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-0tqcm9e3.js:3342` (a session may return when `preserveOnShutdown` is set), `chunk-0tqcm9e3.js:5120-5127` (the shutdown clean-up passes that value), and `chunk-0tqcm9e3.js:5401-5420` (the worktree is kept when the value is set and no hook made it).
-[^sandbox-flag]: The program, `chunk-0tqcm9e3.js:5491-5494` (the error for both flags) and `chunk-194bvre1.js:9` (the `sandbox.enabled` text).
+[^parser]: The text of `claude remote-control --help` in `2.1.326`, and the option parser of the program, `chunk-kfzma69d.js:111300`, `chunk-kfzma69d.js:113466`, and `chunk-kfzma69d.js:114097`.
+[^identity]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-m6vd4p0a.js:2108`.
+[^same-folder]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-gknmhzj8.js:440-455`, behind the `tengu_idempotent_blossom` gate.
+[^unattended-help]: The program, `chunk-b1xcjakw.js:3401`.
+[^grant]: The program, export `writeUnattendedRunGrant`, `chunk-s0z85waf.js:1070` (exported from `chunk-9pd96srt.js:1809`), called at `chunk-kfzma69d.js:126754`.
+[^startup]: The program, `chunk-kfzma69d.js:122145` and `chunk-kfzma69d.js:124039`, and the help text, `chunk-b1xcjakw.js:5456`.
+[^order]: The program, `chunk-2s6nkyn3.js:6403`, the `remote-control` entry, and `chunk-xd8f6j1k.js:5785`, the function exported as `getBridgeDisabledDiagnosis`.
+[^flag]: The program, flag `tengu_ccr_bridge`, `chunk-xd8f6j1k.js:5785` and `chunk-xd8f6j1k.js:8587`. Probe group `cli321`.
+[^exit-codes]: The program, `chunk-sg59fpmc.js:210` holds the codes `78`, `75`, `69`, `4`, and `70`. `chunk-kfzma69d.js:132504` exits with `69` when registration fails. `chunk-kfzma69d.js:803` imports `4`. `chunk-kfzma69d.js:6878-6880` exits with it when no stop signal was received and the spawn mode is not `single-session`. `chunk-kfzma69d.js:6679-6695` shows that the three signals stop the server. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
+[^cli321]: The program, the option parser, from `chunk-kfzma69d.js:5477` (the `--spawn` values) to `chunk-kfzma69d.js:5605` (`--enable-live-preview`). Probe group `cli321` (`rc-*` cases), run with a fake `max` login, only `DISABLE_TELEMETRY` set, and no network.
+[^child-logs]: The program, `chunk-kfzma69d.js:5788-5796`, `chunk-kfzma69d.js:6610`, `chunk-b2j77k2b.js:375-376`, and `chunk-kwkzbftg.js:44951-45003`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^rc-worktree]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-kfzma69d.js:3366` (a session may return when `preserveOnShutdown` is set), `chunk-kfzma69d.js:5149-5156` (the shutdown clean-up passes that value), and `chunk-kfzma69d.js:5430-5449` (the worktree is kept when the value is set and no hook made it).
+[^sandbox-flag]: The program, `chunk-kfzma69d.js:5520-5523` (the error for both flags) and `chunk-r1fd136d.js:9` (the `sandbox.enabled` text).

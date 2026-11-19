@@ -45,4 +45,4 @@ The type file is the full list of fields for this release. Build on the fields i
 
 ## Sources
 
-[^copy]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`. The claims about the import and the copy beside a mod come from its header comment.
+[^copy]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`. The claims about the import and the copy beside a mod come from its header comment.

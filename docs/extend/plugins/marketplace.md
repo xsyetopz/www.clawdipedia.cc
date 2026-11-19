@@ -201,23 +201,23 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^reserved]: The program, `chunk-ja5z738t.js:54182`.
-[^renames]: The program, `chunk-ja5z738t.js:100450`.
-[^pin]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The program, `chunk-ja5z738t.js:3600`.
-[^npm-wild]: The program, `chunk-ja5z738t.js:82478`.
-[^npm-opts]: The program, `chunk-ja5z738t.js:82778`, its bundled settings schema.
-[^digest-tier]: The program, `chunk-ja5z738t.js:207021` for the schema text and `chunk-m14bt1pz.js:997069` for the record check. The text of `2.1.326` named `prependPlugins` and `appendPlugins`. The text of `2.1.327` does not.
-[^digest-warn]: The program, `chunk-m14bt1pz.js:56944`.
-[^digest-schema]: The settings schema and the program, `chunk-ja5z738t.js:8161` and `chunk-m14bt1pz.js:56002`.
-[^digest-limits]: The program, `chunk-m14bt1pz.js:57833`, `chunk-m14bt1pz.js:53395`, and `chunk-m14bt1pz.js:53465`.
-[^digest-refuse]: The program, `chunk-m14bt1pz.js:57993`.
-[^digest-line]: The program, `chunk-ja5z738t.js:354671`.
-[^settings-schema]: The program, its bundled settings schema, `chunk-ja5z738t.js:206693`.
-[^copy]: The program, `chunk-3kptb39p.js:1837` and `chunk-m14bt1pz.js:5352636`.
-[^withdraw]: The program, `chunk-m14bt1pz.js:5038516`.
-[^take-back]: The program, `chunk-m14bt1pz.js:5137444`.
-[^list-unread]: The program, `chunk-m14bt1pz.js:5137859` and `chunk-m14bt1pz.js:5212882`.
-[^copy-proof]: The program, `chunk-m14bt1pz.js:902936`.
-[^submodule]: The program, `chunk-m14bt1pz.js:5048602`. The gate is the server-side flag `tengu_tidal_kestrel`.
-[^run-code-add]: The program, `chunk-xstndjzk.js:4382`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^run-code-install]: The program, `chunk-xstndjzk.js:2936` (install warning, which goes on with more text) and `chunk-cfxefa64.js:77667` (recommendation prompt).
+[^reserved]: The program, `chunk-jkpzhr7r.js:52423`.
+[^renames]: The program, `chunk-jkpzhr7r.js:99701`.
+[^pin]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The program, `chunk-jkpzhr7r.js:3510`.
+[^npm-wild]: The program, `chunk-jkpzhr7r.js:81729`.
+[^npm-opts]: The program, `chunk-jkpzhr7r.js:82029`, its bundled settings schema.
+[^digest-tier]: The program, `chunk-jkpzhr7r.js:206470` for the schema text and `chunk-56bhcxay.js:1037148` for the record check. The text of `2.1.326` named `prependPlugins` and `appendPlugins`. The text of `2.1.327` does not.
+[^digest-warn]: The program, `chunk-56bhcxay.js:59151`.
+[^digest-schema]: The settings schema and the program, `chunk-jkpzhr7r.js:8088` and `chunk-56bhcxay.js:58199`.
+[^digest-limits]: The program, `chunk-56bhcxay.js:60051`, `chunk-56bhcxay.js:55572`, and `chunk-56bhcxay.js:55649`.
+[^digest-refuse]: The program, `chunk-56bhcxay.js:60211`.
+[^digest-line]: The program, `chunk-jkpzhr7r.js:355508`.
+[^settings-schema]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:206143`.
+[^copy]: The program, `chunk-4681nt26.js:1837` and `chunk-56bhcxay.js:5468117`.
+[^withdraw]: The program, `chunk-56bhcxay.js:5151901`.
+[^take-back]: The program, `chunk-56bhcxay.js:5250622`.
+[^list-unread]: The program, `chunk-56bhcxay.js:5251037` and `chunk-56bhcxay.js:5326483`.
+[^copy-proof]: The program, `chunk-56bhcxay.js:938352`.
+[^submodule]: The program, `chunk-56bhcxay.js:5161967`. The gate is the server-side flag `tengu_tidal_kestrel`.
+[^run-code-add]: The program, `chunk-ejmpea1g.js:4252`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
+[^run-code-install]: The program, `chunk-ejmpea1g.js:2822` (install warning, which goes on with more text) and `chunk-j2wfp6sf.js:77657` (recommendation prompt).

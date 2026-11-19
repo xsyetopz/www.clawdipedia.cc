@@ -165,20 +165,10 @@
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
 	},
-	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#events-raised-by-these-calls:6abbb84b": {
-		"kind": "manual",
-		"probes": [],
-		"note": "program behaviour; no probe checks it yet"
-	},
 	"docs/extend/mod-api/events/hooks.md#failure-behavior:9f5dcdc8": {
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour; no probe checks it yet"
-	},
-	"docs/extend/mod-api/index.md#known-gaps:313a0dba": {
-		"kind": "external",
-		"probes": [],
-		"note": "compares the published type file with the official mods docs; no probe checks it"
 	},
 	"docs/extend/mod-api/types/infra/index.md#types-without-fields:9ff82136": {
 		"kind": "manual",
@@ -209,11 +199,6 @@
 		"kind": "manual",
 		"probes": [],
 		"note": "program behaviour (also in the release notes); no probe checks it yet"
-	},
-	"docs/extend/mod-api/ui/ui-elements.md#surfaces:ce5563fb": {
-		"kind": "manual",
-		"probes": [],
-		"note": "program behaviour; no probe checks it yet"
 	},
 	"docs/extend/mod-api/ui/ui-elements.md#placed:5e7079b0": {
 		"kind": "schema",
@@ -1138,11 +1123,6 @@
 		"probes": [],
 		"note": "the six per_turn_effort entries read in the cleaned 2.1.322 model catalog (chunk-9s0rpt1f.js:4264, :9687, :16328, :18418, :19530, :21653)"
 	},
-	"docs/extend/mod-api/types/tool-command-config/command-config.md#commandrunresult:0b0d0350": {
-		"kind": "manual",
-		"probes": [],
-		"note": "isTextDisplayOnly read in the 2.1.322 type file (schemas/claude-code.d.ts), first in captures/2.1.319/types.diff; the readers are chunk-5a8mhnqs.js@100130 and chunk-9r1hbf9p.js@5479390 of 2.1.322; no probe checks it yet"
-	},
 	"docs/extend/mod-api/types/turn-prompt/suggest-skill-turn.md#turncompleteresult:faa7b35e": {
 		"kind": "manual",
 		"probes": [],
@@ -1373,11 +1353,6 @@
 		"probes": [],
 		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
 	},
-	"docs/extend/mod-api/ui/ui-elements.md#surfaces:abf5d8b4": {
-		"kind": "manual",
-		"probes": [],
-		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
-	},
 	"docs/extend/mod-api/ui/ui-elements.md#render-sites-and-props:b58f919a": {
 		"kind": "manual",
 		"probes": [],
@@ -1409,11 +1384,6 @@
 		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
 	},
 	"docs/extend/mod-api/ui/ui-elements.md#abovepromptlist:83522ffe": {
-		"kind": "manual",
-		"probes": [],
-		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
-	},
-	"docs/extend/mod-api/ui/ui-elements.md#pane:dd7537c0": {
 		"kind": "manual",
 		"probes": [],
 		"note": "read in the 2.1.323 Mod API type file (schemas/claude-code.d.ts)"
@@ -1814,20 +1784,10 @@
 		"probes": [],
 		"note": "change at $.process.hookEnv read in schemas/claude-code.d.ts of 2.1.326, compared with the 2.1.323 type file"
 	},
-	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#members:583a01f3": {
-		"kind": "schema",
-		"probes": [],
-		"note": "change at $.wasm.compile read in schemas/claude-code.d.ts of 2.1.326, compared with the 2.1.323 type file"
-	},
 	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#members:9da6c792": {
 		"kind": "schema",
 		"probes": [],
 		"note": "change at WebAssembly read in schemas/claude-code.d.ts of 2.1.326, compared with the 2.1.323 type file"
-	},
-	"docs/extend/mod-api/calls/fs-store-state.md#members:e0462284": {
-		"kind": "schema",
-		"probes": [],
-		"note": "change at $.fs.read read in schemas/claude-code.d.ts of 2.1.326, compared with the 2.1.323 type file"
 	},
 	"docs/extend/mod-api/calls/model-audio-mcp.md#members:bf0935ca": {
 		"kind": "schema",
@@ -1853,11 +1813,6 @@
 		"kind": "schema",
 		"probes": [],
 		"note": "change at PluginHookEntry read in schemas/claude-code.d.ts of 2.1.326, compared with the 2.1.323 type file"
-	},
-	"docs/extend/mod-api/calls/session.md#members:5f21bbca": {
-		"kind": "schema",
-		"probes": [],
-		"note": "change at $.session.info read in schemas/claude-code.d.ts of 2.1.326, compared with the 2.1.323 type file"
 	},
 	"docs/extend/mod-api/calls/session.md#engine-events:54c11896": {
 		"kind": "schema",
@@ -1988,11 +1943,6 @@
 		"kind": "external",
 		"probes": [],
 		"note": "cites the 2.1.325 and 2.1.326 release notes and the program (maxLines)"
-	},
-	"docs/extend/mod-api/ui/ui-elements.md#surfaces:5c85f983": {
-		"kind": "schema",
-		"probes": [],
-		"note": "change at desktop read in schemas/claude-code.d.ts of 2.1.326, compared with the 2.1.323 type file"
 	},
 	"docs/extend/mod-api/ui/ui-elements.md#render-sites-and-props:c528600d": {
 		"kind": "schema",
@@ -2248,11 +2198,6 @@
 		"kind": "manual",
 		"probes": [],
 		"note": "read in the 2.1.327 program at chunk-xa2mcav9.js:330655-331228; release notes 2.1.327"
-	},
-	"docs/configure/cli/self-hosted-runner.md#runtime-options:391e5030": {
-		"kind": "manual",
-		"probes": [],
-		"note": "change at --use-anthropic-gh [bool] read in the 2.1.326 program, compared with the 2.1.323 program"
 	},
 	"docs/configure/cli/self-hosted-runner.md#runtime-options:53df41c3": {
 		"kind": "manual",
@@ -2549,11 +2494,6 @@
 		"probes": [],
 		"note": "read in the 2.1.327 program at chunk-g2wcp8ss.js:3186; release notes 2.1.327"
 	},
-	"docs/extend/mod-api/calls/tool-command-config.md#engine-events:ae03da63": {
-		"kind": "manual",
-		"probes": [],
-		"note": "read in the 2.1.327 program at chunk-m14bt1pz.js:87911-87946; release notes 2.1.321"
-	},
 	"docs/extend/mod-api/calls/turn-prompt.md#engine-events:d0fd6fa3": {
 		"kind": "manual",
 		"probes": [],
@@ -2687,11 +2627,6 @@
 		"kind": "manual",
 		"probes": [],
 		"note": "read in the 2.1.327 program at chunk-cfxefa64.js:1800192; release notes 2.1.327"
-	},
-	"docs/how-it-works/system-prompt.md#session-sections:d010c4bb": {
-		"kind": "manual",
-		"probes": [],
-		"note": "system prompt sentence read in the cleaned 2.1.322 code (chunk-9r1hbf9p.js:2502794); the 2.1.321 function has one text for all providers (cc-inspect release diff)"
 	},
 	"docs/reference/api/betas.md#registry:33bab855": {
 		"kind": "manual",
@@ -2843,25 +2778,6 @@
 		"probes": [],
 		"note": "read in the 2.1.327 program at chunk-m14bt1pz.js:1108951; release notes 2.1.327"
 	},
-	"docs/reference/transcript-format.md#line-types:4a3b8656": {
-		"kind": "behaviour",
-		"probes": ["print.transcripts.lines"]
-	},
-	"docs/reference/transcript-format.md#line-types:71237911": {
-		"kind": "manual",
-		"probes": [],
-		"note": "change at assistant read in the 2.1.326 program, compared with the 2.1.323 program"
-	},
-	"docs/reference/transcript-format.md#line-types:b5c333be": {
-		"kind": "schema",
-		"probes": [],
-		"note": "cost-state.modelUsage keys in schemas/claude-code-transcript.json"
-	},
-	"docs/reference/transcript-format.md#assistant-line-fields:9f23ec78": {
-		"kind": "manual",
-		"probes": [],
-		"note": "read in the 2.1.327 program at chunk-m14bt1pz.js:3288669; release notes 2.1.312"
-	},
 	"docs/extend/mod-api/index.md#how-a-mod-loads:b050084f": {
 		"kind": "manual",
 		"probes": [],
@@ -2876,5 +2792,309 @@
 		"kind": "manual",
 		"probes": [],
 		"note": "read in the 2.1.327 program at chunk-m14bt1pz.js:72801-72811 (--add-dir) and chunk-cfxefa64.js:1881293 with chunk-m14bt1pz.js:361511 (kept-worktree message on exit); release notes 2.1.327"
+	},
+	"docs/configure/cli/self-hosted-runner.md#runtime-options:e5ee400e": {
+		"kind": "manual",
+		"probes": [],
+		"note": "change at --use-anthropic-gh [bool] read in the 2.1.326 program, compared with the 2.1.323 program"
+	},
+	"docs/configure/cli/self-hosted-runner.md#runtime-options:c4a39616": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-gv1b3n3g.js:16118; release notes 2.1.328"
+	},
+	"docs/configure/cli/self-hosted-runner.md#runner-errors:3a642412": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-gv1b3n3g.js:14749; release notes 2.1.328"
+	},
+	"docs/configure/cli/self-hosted-runner.md#runner-errors:f08d2323": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-gv1b3n3g.js:14749; release notes 2.1.328"
+	},
+	"docs/configure/cli/self-hosted-runner.md#orchestrator:3d923ddf": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-ydhgnm30.js:1705; release notes 2.1.328"
+	},
+	"docs/configure/cli/self-hosted-runner.md#orchestrator:76563807": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-ydhgnm30.js:208; release notes 2.1.328"
+	},
+	"docs/configure/cli/self-hosted-runner.md#orchestrator-metrics:298a5193": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-ydhgnm30.js:1118; release notes 2.1.328"
+	},
+	"docs/configure/env-vars/sessions-and-storage.md#sources:390b240a": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-j2wfp6sf.js:25372-25374"
+	},
+	"docs/configure/env-vars/tools-and-bash.md#variables:48487d9d": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-thtytpkk.js:258-282"
+	},
+	"docs/configure/env-vars/tools-and-bash.md#variables:b4d63888": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-4h0jyvmx.js:23304-23305"
+	},
+	"docs/configure/env-vars/ui-and-terminal.md#sources:102b3796": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-5g8qs913.js:26261-26266"
+	},
+	"docs/configure/env-vars/ui-and-terminal.md#sources:a49becc2": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-5g8qs913.js:24198"
+	},
+	"docs/configure/permissions/auto-mode.md#:f8695b70": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-xethrx83.js:27837; release notes 2.1.328"
+	},
+	"docs/extend/hooks/configuration.md#failure-handling:c64d2dfb": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:68285; release notes 2.1.328"
+	},
+	"docs/extend/hooks/handlers.md#mcp-tool-fields:ff34eab3": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:68285; release notes 2.1.328"
+	},
+	"docs/extend/mod-api/calls/agent.md#engine-events:3da6ed01": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-syremzmn.js:77801"
+	},
+	"docs/extend/mod-api/calls/agent.md#agent-spec:6df0e72f": {
+		"kind": "schema",
+		"probes": [],
+		"note": "read in the Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#members:87371076": {
+		"kind": "schema",
+		"probes": [],
+		"note": "read in the Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#members:28109cbd": {
+		"kind": "schema",
+		"probes": [],
+		"note": "change at $.wasm.compile read in schemas/claude-code.d.ts of 2.1.326, compared with the 2.1.323 type file"
+	},
+	"docs/extend/mod-api/calls/clock-http-process-env-settings.md#events-raised-by-these-calls:a2ca1dce": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:4581227"
+	},
+	"docs/extend/mod-api/calls/fs-store-state.md#members:c69f4cec": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-wkbr4m8m.js:257"
+	},
+	"docs/extend/mod-api/calls/session.md#members:05f4d5dc": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:60284"
+	},
+	"docs/extend/mod-api/calls/session.md#members:773252ef": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:60377-60390"
+	},
+	"docs/extend/mod-api/calls/session.md#members:d1829177": {
+		"kind": "schema",
+		"probes": [],
+		"note": "read in the Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/calls/session.md#events-raised-by-session-calls:e86cfb20": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:60377-60390"
+	},
+	"docs/extend/mod-api/calls/telemetry.md#engine-events:42711b19": {
+		"kind": "schema",
+		"probes": [],
+		"note": "read in the Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/calls/tool-command-config.md#members:32d8e1e1": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:92345-92350; release notes 2.1.321"
+	},
+	"docs/extend/mod-api/calls/tool-command-config.md#members:36206b8a": {
+		"kind": "schema",
+		"probes": [],
+		"note": "read in the Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/calls/tool-command-config.md#engine-events:44d87e47": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the 2.1.327 program at chunk-m14bt1pz.js:87911-87946; release notes 2.1.321"
+	},
+	"docs/extend/mod-api/calls/tool-command-config.md#engine-events:5c8d9346": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:8266"
+	},
+	"docs/extend/mod-api/calls/tool-command-config.md#events-raised-by-these-calls:c04b93ec": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:8266"
+	},
+	"docs/extend/mod-api/calls/turn-prompt.md#members:11c3604e": {
+		"kind": "schema",
+		"probes": [],
+		"note": "read in the Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/events/hooks.md#arguments-of-a-hook:7d1b0c33": {
+		"kind": "schema",
+		"probes": [],
+		"note": "read in the Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/index.md#known-gaps:ba51af6b": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-syremzmn.js:194600"
+	},
+	"docs/extend/mod-api/index.md#errors:762cb8ab": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-r240nspa.js:574"
+	},
+	"docs/extend/mod-api/index.md#errors:4637b7e0": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-r240nspa.js:574"
+	},
+	"docs/extend/mod-api/index.md#errors:9b30489b": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-r240nspa.js:645"
+	},
+	"docs/extend/mod-api/nouns-and-gates.md#the-dollar-object:4692a1ec": {
+		"kind": "schema",
+		"probes": [],
+		"note": "read in the Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/nouns-and-gates.md#gates-that-stop-mods:6a78d8e0": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-jkpzhr7r.js:6501; release notes 2.1.328"
+	},
+	"docs/extend/mod-api/types/hooks.md#next:d079b716": {
+		"kind": "schema",
+		"probes": [],
+		"note": "read in the Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/hooks.md#nextorigin:fb310efb": {
+		"kind": "schema",
+		"probes": [],
+		"note": "read in the Mod API type file (schemas/claude-code.d.ts)"
+	},
+	"docs/extend/mod-api/types/session/compact-measure-messages.md#sessionmachine:c9227cd2": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:60377-60390"
+	},
+	"docs/extend/mod-api/types/tool-command-config/command-config.md#commandrunresult:d12b86c0": {
+		"kind": "manual",
+		"probes": [],
+		"note": "isTextDisplayOnly read in the 2.1.322 type file (schemas/claude-code.d.ts), first in captures/2.1.319/types.diff; the readers are chunk-5a8mhnqs.js@100130 and chunk-9r1hbf9p.js@5479390 of 2.1.322; no probe checks it yet"
+	},
+	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolofferinput:3b63facc": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:8266"
+	},
+	"docs/extend/mod-api/types/tool-command-config/tool-calls.md#toolofferresult:2a0afe5b": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:8266"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#surfaces:c07abb18": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-wkbr4m8m.js:257"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#surfaces:ece6a3de": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-wkbr4m8m.js:257"
+	},
+	"docs/extend/mod-api/ui/ui-elements.md#surfaces:b0b0d0e1": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-wkbr4m8m.js:257"
+	},
+	"docs/how-it-works/system-prompt.md#shared-sections:5679b358": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:9817"
+	},
+	"docs/how-it-works/system-prompt.md#shared-sections:4d6644eb": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:9817"
+	},
+	"docs/how-it-works/system-prompt.md#session-sections:07d871d2": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:147061"
+	},
+	"docs/how-it-works/system-prompt.md#session-sections:76b14731": {
+		"kind": "manual",
+		"probes": [],
+		"note": "system prompt sentence read in the cleaned 2.1.322 code (chunk-9r1hbf9p.js:2502794); the 2.1.321 function has one text for all providers (cc-inspect release diff)"
+	},
+	"docs/reference/api/betas.md#registry:8e13d6ac": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-20bv8pca.js:8378"
+	},
+	"docs/reference/api/endpoints.md#account-and-service-endpoints:ab215b01": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-jbxcwws7.js:36-46"
+	},
+	"docs/reference/tools/gated-and-other.md#gated-tools:13a216de": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-rmptwa40.js:20"
+	},
+	"docs/reference/tools/gated-and-other.md#errors:d11b1984": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-dtar9gh9.js:2651; release notes 2.1.328"
+	},
+	"docs/reference/tools/shell-and-web.md#errors:a715d06f": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-r1yxtgw6.js:3690; release notes 2.1.328"
+	},
+	"docs/reference/transcript-format.md#line-types:b446a035": {
+		"kind": "behaviour",
+		"probes": ["print.transcripts.lines"]
+	},
+	"docs/reference/transcript-format.md#line-types:40e57d96": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:4881750"
+	},
+	"docs/reference/transcript-format.md#line-types:a03f508d": {
+		"kind": "schema",
+		"probes": [],
+		"note": "cost-state.modelUsage keys in schemas/claude-code-transcript.json"
+	},
+	"docs/reference/transcript-format.md#assistant-line-fields:d3736122": {
+		"kind": "manual",
+		"probes": [],
+		"note": "read in the program at chunk-56bhcxay.js:3382703; release notes 2.1.312"
 	}
 }

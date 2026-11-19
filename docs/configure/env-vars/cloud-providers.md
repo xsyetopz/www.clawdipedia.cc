@@ -123,7 +123,7 @@ Claude Code picks one provider when it starts. The provider decides which auth p
 
 ## Sources
 
-[^region-source]: The program, `chunk-rj3e7agr.js:154524`, reports the source as `env-invalid` in this case.
-[^gateway-log]: The program, `chunk-j8m2aj8s.js:470`. Probe cases `env319b.gateway.bad-config-json` and `bad-config-JSON-upper` gave a JSON error line. Probe cases `bad-config-default` and `bad-config-text` gave a plain line.
-[^vertex-fable]: The program, `chunk-f892tj2r.js:19206` (model entry) and `chunk-pmhjgtb5.js:1806` (match table).
-[^names]: The program, `chunk-2ew0jg68.js:26216`, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^region-source]: The program, `chunk-20bv8pca.js:167924`, reports the source as `env-invalid` in this case.
+[^gateway-log]: The program, `chunk-61bchtkg.js:470`. Probe cases `env319b.gateway.bad-config-json` and `bad-config-JSON-upper` gave a JSON error line. Probe cases `bad-config-default` and `bad-config-text` gave a plain line.
+[^vertex-fable]: The program, `chunk-b60sxmve.js:19212` (model entry) and `chunk-51eneejf.js:1807` (match table).
+[^names]: The program, `chunk-7343wm3k.js:26213`, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.

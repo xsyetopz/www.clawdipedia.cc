@@ -110,12 +110,12 @@ See [Substitutions](substitutions.md#invocation-control) for what compaction kee
 
 ## Sources
 
-[^plugin-skip]: The program, `chunk-m14bt1pz.js:3811241` and `chunk-xtjk0n7g.js:3393`. [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321).
+[^plugin-skip]: The program, `chunk-56bhcxay.js:3906056` and `chunk-md9n15jc.js:3396`. [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321).
 [^v309]: [`2.1.309` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.309).
 [^v304]: [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304).
-[^loaded-from]: The program, the skill loader and its `loadedFrom` tags, `chunk-q75nj9we.js:1859` and `chunk-m14bt1pz.js:1234485`.
-[^budget]: The program, the skill loader, `chunk-m14bt1pz.js:2825159-2827582`. The server flag minimum, `tengu_typed_pebble`, is read at `chunk-m14bt1pz.js:2825289`.
-[^overrides]: The program, the skill loader, `chunk-m14bt1pz.js:3945636-3947286`. Setting text from `schemas/claude-code-settings.json`.
+[^loaded-from]: The program, the skill loader and its `loadedFrom` tags, `chunk-zjfjwhvb.js:1906` and `chunk-56bhcxay.js:1280809`.
+[^budget]: The program, the skill loader, `chunk-56bhcxay.js:2904280-2906664`. The server flag minimum, `tengu_typed_pebble`, is read at `chunk-56bhcxay.js:2904410`.
+[^overrides]: The program, the skill loader, `chunk-56bhcxay.js:4040587-4042231`. Setting text from `schemas/claude-code-settings.json`.
 [^schema]: Description of `disableSkillShellExecution` in `schemas/claude-code-settings.json`.
 
 Official pages: [Extend Claude with Skills](https://code.claude.com/docs/en/skills) and [Settings Reference](https://code.claude.com/docs/en/settings-reference).

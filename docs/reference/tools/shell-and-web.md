@@ -65,7 +65,7 @@ Official pages: [Tools Reference](https://code.claude.com/docs/en/tools-referenc
 ## How It Works
 
 - Since `2.1.305`, when the disk is full, `Bash` does not start the command and says so: `The command was not started: this computer's disk is full (ENOSPC) on the volume holding <path> (Claude Code's temporary directory), so the file that captures command output could not be created there and nothing ran. Free space on that volume, or restart Claude Code with CLAUDE_CODE_TMPDIR set to a directory on another one, then retry. If this is the user's own computer, tell them before deleting anything to make room.` It no longer shows a raw `ENOSPC` file path alone.[^disk-full] In `2.1.327`, a branch for `EDQUOT` says `the user's disk quota is used up (EDQUOT)` and not `this computer's disk is full`.[^edquot]
-- Since `2.1.310`, `Monitor` and plugin monitors no longer wait for a server-side flag that defaults to off. So they also work on Bedrock, Vertex, and Foundry, and with telemetry or nonessential traffic off, where that flag could not load. In `2.1.327`, `Monitor` is on everywhere except Windows. On Windows, it needs Git Bash, and it stays off when the build withholds `Bash`.[^monitor-flag]
+- Since `2.1.310`, `Monitor` and plugin monitors no longer wait for a server-side flag that defaults to off. So they also work on Bedrock, Vertex, and Foundry, and with telemetry or nonessential traffic off, where that flag could not load. In `2.1.327` and `2.1.328`, `Monitor` is on everywhere except Windows. On Windows, it needs Git Bash, and it stays off when the build withholds `Bash`.[^monitor-flag]
 - Since `2.1.326`, a watch that ends with no events and whose command wrote to stderr tells Claude so. The text says that stderr is not delivered as events and may mean the command failed. It names the file that holds the output. The same text covers a timeout with no events.[^monitor-stderr]
 - `Bash` refuses a command that starts with a `sleep` of 25 seconds or more, while background tasks and their completion notices are on. The `Bash` prompt then tells Claude to poll with `Monitor` and an until-loop. Since `2.1.310`, this also applies where `Monitor` is newly on.[^sleep]
 - Since `2.1.311`, a `Bash` or `PowerShell` result can carry `subagentCapApplied`, which is `true` or left out (`BashResult` and `PowerShellResult` in [`claude-code-tools.json`](../schemas.md)). Claude Code sets it when the caller is not the main agent and the timeout it used is shorter than the one asked for. A subagent cap shortens the timeout only when the command can move to the background. A cap of 0 or less means no cap, and the shortened timeout is never below 2000 ms. The background notice then reads `Command was moved to the background (ID: ...) after running for Ns` and not `Command did not complete within its Ns timeout`.[^cap]
@@ -100,6 +100,7 @@ Each row is a family of messages. The backticked text is the start that every me
 | `Failed to execute PowerShell command: Cannot safely quote` | <Undocumented /> | **PowerShell paths.** `PowerShell` puts the temp-directory path in a single-quoted PowerShell string. A path with a character from U+2018 to U+201F stops the call before PowerShell starts, because PowerShell reads those characters as quotes. Set `CLAUDE_CODE_TMPDIR` to a path without them. | Run: with `CLAUDE_CODE_USE_POWERSHELL_TOOL=1`, a `pwsh` on `PATH`, and `CLAUDE_CODE_TMPDIR` set to a folder whose name holds U+2018, a `PowerShell` call returned the tool result `Failed to execute PowerShell command: Cannot safely quote the temp-directory path (override with CLAUDE_CODE_TMPDIR) in a PowerShell single-quoted string literal: it contains U+2018, which PowerShell's tokenizer treats as a quote delimiter` on macOS.[^ps-quote] |
 | `WebFetch was refused after its check had passed` | <Undocumented /> | **WebFetch.** At call time, `WebFetch` checks `CLAUDE_CODE_DISABLE_WEB_FETCH` and the `allow_web_fetch` org policy again, and one of them now refuses. | The tool was on when the call began, but the switch is set or the policy is off at call time. The error code is `web_fetch_refused`. The check text is `WebFetch is turned off by CLAUDE_CODE_DISABLE_WEB_FETCH.` for the variable, or the policy text for `allow_web_fetch`. New in `2.1.323`: `2.1.322` checks only when it lists the tool.[^fetch-refused] |
 | `The small, fast model that reads the content gave no answer.` | <Undocumented /> | **WebFetch.** The small model that applies the prompt to the fetched page returned empty text. | The page was fetched, but the second step gave an empty answer. The text goes on: `Trying again may work.` Call `WebFetch` again, or word the prompt another way. The text is in `2.1.327`.[^fetch-empty] |
+| `The search was cut off before any results arrived. Try again.` | <Undocumented /> | **WebSearch.** A `WebSearch` call ended with no results because the search was cut off. | The text appears in two cases. A search function that the session holds returned no results. Or the reply of the API stopped after it had begun. Call `WebSearch` again. Since `2.1.328`.[^search-cut] |
 | `No task found with ID:` | <Undocumented /> | **TaskStop.** `TaskStop` found no task for the ID. | The text can add `Did you mean`, the running teammates, and the running named agents. A stop request from a client with an ID of the shape of a shell task ID, that no task holds, gets a shorter text: `An ID of this shape is not looked up as an agent's name: send the agent's task ID.` Use the task ID, not an agent name, in that case. The short form is in `2.1.327`.[^no-task] |
 
 ## Related Pages
@@ -111,32 +112,33 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^tools-source]: The program, `chunk-1vttvse2.js:203832`.
-[^taskstop-trunc]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-b9fe411w.js:54500`.
-[^bash-schema]: The program, the `Bash` input schema, `chunk-m14bt1pz.js:5720214`.
-[^monitor-schema]: The program, the `Monitor` input schema, `chunk-zwpe0yha.js:18152`.
-[^disk-full]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305). The program, `chunk-m14bt1pz.js:3748143` (the text) and `chunk-m14bt1pz.js:334579` (the volume path).
-[^edquot]: The program, `chunk-m14bt1pz.js:3748143`.
-[^monitor-flag]: [`2.1.310` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.310). The program, `chunk-zwpe0yha.js:17000` (`isEnabled` calls the check) and `chunk-83arnb78.js:2589`. The check returns true off Windows. On Windows it returns false when the build withholds `Bash`, and else true only if Git Bash is found. It has no flag in `2.1.327`.
-[^monitor-stderr]: The program, `chunk-r6jrtd34.js:78`.
-[^sleep]: The program, `chunk-m14bt1pz.js:5724771`, `chunk-m14bt1pz.js:3759305`, and `chunk-m14bt1pz.js:5717258`.
-[^cap]: The program, `chunk-4azxnffa.js:843`, `chunk-m14bt1pz.js:5713047`, and `chunk-m14bt1pz.js:3761728`.
-[^called-back]: The program, `chunk-m14bt1pz.js:3761432`. The `2.1.323`, `2.1.326`, and `2.1.327` programs hold neither the field name nor the old text; `2.1.322` holds both.
-[^bg-output]: The program, `chunk-m14bt1pz.js:3761432-3761775` and `chunk-m14bt1pz.js:189155-189159`. The notice reads `Command did not complete within its Ns timeout and was moved to the background (ID: ...). Output is being written to: ...`.
-[^bash-hook]: The program, `chunk-m14bt1pz.js:1068387` (`Bash` is another name of `Monitor` for hook matchers), `chunk-m14bt1pz.js:4187526` (the hook input is rewritten as a `Bash` call), and `chunk-m14bt1pz.js:4221002` (the skipped `if` condition). The same code is at `chunk-m14bt1pz.js:60256-60267`, `chunk-m14bt1pz.js:209113-209118`, and `chunk-m14bt1pz.js:210902-210912`.
-[^fetch-long]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-m14bt1pz.js:2699439` and the limit in `chunk-ez3vve9s.js:400`.
-[^bash-diff]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-nyjvrwjv.js:103-135`. The diff view lists the changed files that it cannot show, and its text for files that did not get a diff reads `... changed (binary, mode only or too large to show)`, followed by the file names.
-[^ps-ask]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-8vhagegy.js:3469` (the prompt text), `chunk-8vhagegy.js:3938-3945` (the ask with `ruleProof`), `chunk-8vhagegy.js:4029` (the names `get-module`, `gmo`, and `module`), `chunk-8vhagegy.js:4594` (no saved-rule suggestion), and `chunk-588h17j6.js:17433` (the server flag `bot_protected_tengu_sienna_grebe`).
-[^head-start]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-m14bt1pz.js:1108951`, `chunk-m14bt1pz.js:3725480`, `chunk-8g2nr9dn.js:67635`.
-[^which]: The program, `chunk-m14bt1pz.js:3709551`. The flag is `tengu_swirling_koala`.
-[^git-grep]: The program, `chunk-m14bt1pz.js:3688806`.
-[^snapshot]: The program, `chunk-m14bt1pz.js:3693511`, `chunk-m14bt1pz.js:3696065`, and `chunk-m14bt1pz.js:3697034`.
+[^tools-source]: The program, `chunk-r1yxtgw6.js:201784`.
+[^taskstop-trunc]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-y8xf3hk8.js:54556`.
+[^bash-schema]: The program, the `Bash` input schema, `chunk-56bhcxay.js:5817629`.
+[^monitor-schema]: The program, the `Monitor` input schema, `chunk-jd85xpd4.js:18243`.
+[^disk-full]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305). The program, `chunk-56bhcxay.js:3842798` (the text) and `chunk-56bhcxay.js:363250` (the volume path).
+[^edquot]: The program, `chunk-56bhcxay.js:3842798`.
+[^monitor-flag]: [`2.1.310` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.310). The program, `chunk-jd85xpd4.js:940-942` (`isEnabled` calls the check) and `chunk-d0qhd3r0.js:116-120`. The check returns true off Windows. On Windows it returns false when the build withholds `Bash`, and else true only if Git Bash is found. It has no flag in `2.1.327` or `2.1.328`.
+[^monitor-stderr]: The program, `chunk-b8ns6r8h.js:78`.
+[^sleep]: The program, `chunk-56bhcxay.js:5822181`, `chunk-56bhcxay.js:3853975`, and `chunk-56bhcxay.js:5814673`.
+[^cap]: The program, `chunk-eb9kp9gc.js:843`, `chunk-56bhcxay.js:5810462`, and `chunk-56bhcxay.js:3856388`.
+[^called-back]: The program, `chunk-56bhcxay.js:3856092`. The `2.1.323`, `2.1.326`, and `2.1.327` programs hold neither the field name nor the old text; `2.1.322` holds both.
+[^bg-output]: The program, `chunk-56bhcxay.js:3856092-3856435` and `chunk-56bhcxay.js:194514-194518`. The notice reads `Command did not complete within its Ns timeout and was moved to the background (ID: ...). Output is being written to: ...`.
+[^bash-hook]: The program, `chunk-56bhcxay.js:1109965` (`Bash` is another name of `Monitor` for hook matchers), `chunk-56bhcxay.js:4280877` (the hook input is rewritten as a `Bash` call), and `chunk-56bhcxay.js:4315926` (the skipped `if` condition). The same code is at `chunk-56bhcxay.js:62539-62550`, `chunk-56bhcxay.js:214448-214453`, and `chunk-56bhcxay.js:230017-230027`.
+[^fetch-long]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-56bhcxay.js:2779077` and the limit in `chunk-p9hbdxgr.js:400`.
+[^bash-diff]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-h6ctx9dd.js:103-135`. The diff view lists the changed files that it cannot show, and its text for files that did not get a diff reads `... changed (binary, mode only or too large to show)`, followed by the file names.
+[^ps-ask]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-cg4whsgy.js:3490` (the prompt text), `chunk-cg4whsgy.js:3959-3966` (the ask with `ruleProof`), `chunk-cg4whsgy.js:4050` (the names `get-module`, `gmo`, and `module`), `chunk-cg4whsgy.js:4615` (no saved-rule suggestion), and `chunk-sgx8zvyg.js:17433` (the server flag `bot_protected_tengu_sienna_grebe`).
+[^head-start]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-56bhcxay.js:1151300`, `chunk-56bhcxay.js:3819604`, `chunk-2b3eg071.js:71530`.
+[^which]: The program, `chunk-56bhcxay.js:3803438`. The flag is `tengu_swirling_koala`.
+[^git-grep]: The program, `chunk-56bhcxay.js:3783614`.
+[^snapshot]: The program, `chunk-56bhcxay.js:3788286`, `chunk-56bhcxay.js:3790840`, and `chunk-56bhcxay.js:3791809`.
 [^set-o]: [`2.1.316` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.316).
-[^auto-bg]: The program, `chunk-ry6xe4gr.js:16164`.
+[^auto-bg]: The program, `chunk-7fpae888.js:16383`.
 [^monitor-ws]: Probe case `print.err319.monitor-ws-unresolvable`.
-[^ps-quote]: The program, `chunk-d2wjnj6w.js:269` and `chunk-m14bt1pz.js:1115045`. Probe case `print.err319.powershell-tmpdir-quote`.
-[^fetch-refused]: The program, `chunk-m14bt1pz.js:2700876`.
-[^fetch-empty]: The program, `chunk-m14bt1pz.js:2697031`.
-[^no-task]: The program, `chunk-1vttvse2.js:44058` for the list form and `chunk-1vttvse2.js:45168` for the short form.
-[^commit-secrets]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-m14bt1pz.js:1835306` (the short git guidance of `Bash`) and `chunk-1453q0ex.js:6039` (the `PowerShell` text). The `2.1.326` `PowerShell` text has no such line.
-[^ps-locate]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-jecwgsrf.js:3084`. In `2.1.326`, the `powershell` lookup on `PATH` ran before the `System32` file.
+[^ps-quote]: The program, `chunk-y5jn7kpt.js:269` and `chunk-56bhcxay.js:1158896`. Probe case `print.err319.powershell-tmpdir-quote`.
+[^fetch-refused]: The program, `chunk-56bhcxay.js:2780514`.
+[^fetch-empty]: The program, `chunk-56bhcxay.js:2776673`.
+[^no-task]: The program, `chunk-r1yxtgw6.js:43516` for the list form and `chunk-r1yxtgw6.js:44766` for the short form.
+[^commit-secrets]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-56bhcxay.js:1909514` (the short git guidance of `Bash`) and `chunk-ws3ynpc3.js:6087` (the `PowerShell` text). The `2.1.326` `PowerShell` text has no such line.
+[^ps-locate]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-pvg3xde6.js:3087`. In `2.1.326`, the `powershell` lookup on `PATH` ran before the `System32` file.
+[^search-cut]: The program, `chunk-r1yxtgw6.js:3690` (no results) and `chunk-r1yxtgw6.js:3897` (the reply stopped after output began). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).

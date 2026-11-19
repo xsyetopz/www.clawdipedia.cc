@@ -87,6 +87,6 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^help]: `claude --help`.
-[^retry]: The program, `chunk-rap1tzf6.js:553592` and `chunk-rap1tzf6.js:553716`.
-[^lost-writes]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-rap1tzf6.js:193675` and `chunk-rap1tzf6.js:10150-10228`. Schema text, `chunk-rj3e7agr.js:613280`.
-[^v2327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-m14bt1pz.js:203757-203790` for the 1.5 s and 10 s wait for the model settings (the wait is on unless the gate `tengu_deep_shore` is off; on timeout the run goes on without them).
+[^retry]: The program, `chunk-5699r6rq.js:559243` and `chunk-5699r6rq.js:559367`.
+[^lost-writes]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-5699r6rq.js:192271` and `chunk-5699r6rq.js:10060-10138`. Schema text, `chunk-20bv8pca.js:615463`.
+[^v2327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-56bhcxay.js:209144-209177` for the 1.5 s and 10 s wait for the model settings (the wait is on unless the gate `tengu_deep_shore` is off; on timeout the run goes on without them).

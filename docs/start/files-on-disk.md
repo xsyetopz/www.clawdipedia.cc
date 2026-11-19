@@ -252,15 +252,15 @@ The schema comes from the default values and the key list in the code.[^claude-j
 
 ## Sources
 
-[^overview]: The program, `chunk-pmhjgtb5.js:2548` (the `CLAUDE_CONFIG_DIR` variable) and `chunk-2ew0jg68.js:56228` (`CLAUDE_CONFIG_DIR` with a fallback) and `chunk-xa2mcav9.js:35493` (`CLAUDE_CONFIG_DIR` or the default `~/.claude`).
-[^config-folders]: The program, `chunk-kc622jje.js:42567` (`state/` and `cache/model-catalog/` names), `chunk-jvme5rqc.js:245870` (`seed-admin`), and `chunk-1yrzf3wn.js:872150` (`bridge-spawn`).
-[^more-names]: The program, `chunk-xa2mcav9.js:31492`.
-[^config-json]: The program, `chunk-2ew0jg68.js:55389-55900` and `chunk-dt20ra1t.js:41527`.
-[^last-cleanup]: The program, `chunk-ddhdrc1h.js:18104-18192` (age check, `86400000` ms) and `chunk-ddhdrc1h.js:19153` (writes the ISO time), and `chunk-kc622jje.js:39752-40210`.
-[^deep-link]: The program, `chunk-dfe6m3x1.js:4095-4900` (the file, the `EACCES` and `ENOSPC` write, and `86400000` ms) and `chunk-kc622jje.js:40225`.
-[^update-lock]: The program, `chunk-y8q079sf.js:11415-11700` (`300000` ms).
-[^daemon-json]: The program, `chunk-jvme5rqc.js:240069-240700`.
-[^local]: The program, `chunk-brhgskgz.js:31019` and `chunk-318s1str.js:46945`.
-[^loop]: The program, `chunk-h9nzet5j.js:10178-10700`.
-[^claude-json]: The program, `chunk-asj6f58y.js:92055` and `chunk-asj6f58y.js:135330`.
-[^child-logs]: The program, `chunk-1yrzf3wn.js:872835-872890`, `chunk-0tqcm9e3.js:116647` (no logs when the debug file is set or verbose is off), and `chunk-0tqcm9e3.js:136140`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^overview]: The program, `chunk-51eneejf.js:2549` (the `CLAUDE_CONFIG_DIR` variable) and `chunk-7343wm3k.js:56417` (`CLAUDE_CONFIG_DIR` with a fallback) and `chunk-gv1b3n3g.js:43885` (`CLAUDE_CONFIG_DIR` or the default `~/.claude`).
+[^config-folders]: The program, `chunk-s08ggwfb.js:42676` (`state/` and `cache/model-catalog/` names), `chunk-wchmynj9.js:245132` (`seed-admin`), and `chunk-kwkzbftg.js:871999` (`bridge-spawn`).
+[^more-names]: The program, `chunk-gv1b3n3g.js:39929`.
+[^config-json]: The program, `chunk-7343wm3k.js:55578-56089` and `chunk-szxhkqtw.js:19529`.
+[^last-cleanup]: The program, `chunk-9n6y18w2.js:18193-18281` (age check, `86400000` ms) and `chunk-9n6y18w2.js:19286` (writes the ISO time), and `chunk-s08ggwfb.js:39861-40319`.
+[^deep-link]: The program, `chunk-hd3tcg68.js:4096-4904` (the file, the `EACCES` and `ENOSPC` write, and `86400000` ms) and `chunk-s08ggwfb.js:40334`.
+[^update-lock]: The program, `chunk-md0nh3vq.js:11419-11702` (`300000` ms).
+[^daemon-json]: The program, `chunk-wchmynj9.js:239324-239963`.
+[^local]: The program, `chunk-c60cxsqk.js:31008` and `chunk-qzkgapzf.js:47803`.
+[^loop]: The program, `chunk-48wennwr.js:10373-10895`.
+[^claude-json]: The program, `chunk-xethrx83.js:55378` and `chunk-xethrx83.js:98583`.
+[^child-logs]: The program, `chunk-kwkzbftg.js:872738-872793`, `chunk-kfzma69d.js:117537` (no logs when the debug file is set or verbose is off), and `chunk-kfzma69d.js:137031`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-stream-json.json",
-	"title": "Claude Code stream-json messages (Claude Code 2.1.327)",
-	"$comment": "For each message type the CLI writes (<type>[_<subtype>]Output) and reads (<type>Input) in stream-json mode. Generated from Claude Code 2.1.327 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, unions described as \"Everything the CLI writes to its output stream\" and \"Everything a client may write to the CLI's input stream\". Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code stream-json messages (Claude Code 2.1.328)",
+	"$comment": "For each message type the CLI writes (<type>[_<subtype>]Output) and reads (<type>Input) in stream-json mode. Generated from Claude Code 2.1.328 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, unions described as \"Everything the CLI writes to its output stream\" and \"Everything a client may write to the CLI's input stream\". Do not edit by hand: run \"bun run schemas\".",
 	"$defs": {
 		"active_goalOutput": {
 			"type": "object",
@@ -596,7 +596,7 @@
 						},
 						"required": ["id", "display_name"]
 					},
-					"description": "@internal Display metadata for this message's tool_use blocks, keyed by block id. display_name is the MCP server's `tool.annotations.title` when provided, otherwise a readable transform of the wire name; server_display_name is the MCP server's display name (claude.ai's name for a connector, else the name its config gives, else the name the server reports, else its key); icon_url is the MCP server's directory icon URL (claude.ai connectors only); server_id is the mcpsrv_ connector id of a server provisioned by claude.ai, set by the CLI from claude.ai's own connector listing, so a client may show the call as that connector's. server_id_stamp is the X-MCP-Server-ID header value, lower-cased, of an http entry in the dynamic scope (passed in at launch or by a later mcp_set_servers push). Claude Code Remote writes the connector's uuid there when the session has one, otherwise an id it generates; the CLI checks only its shape (at most 128 characters of letters, digits, '.', '_', ':' and '-'; anything else yields no stamp), not whose it is, since a --mcp-config or SDK-host entry can write anything. A client may look it up in its own server list, treat a miss as a server it does not know (never as an error), and show a hit as the entry's claim to be that server, not as proof. They are separate fields: a server provisioned by claude.ai carries server_id, a dynamic-scope http entry server_id_stamp. Both absent for a plugin's, a repo's, a settings or an agent entry. Neither is a permission grant. tool_name is the tool's name as its server lists it, without the mcp__<server>__ prefix. artifact_publish is true on a call to a publishing tool of an Artifacts MCP entry that reaches only Anthropic's server, which the CLI tells from the entry itself, never its name. The finished call's tool_use_result usually carries the artifact's url at its top level, from which Claude Code Remote derives the artifact_id it serves, and its title where the server's answer has one. The mark promises neither, and the url can come on an unmarked call. All three are the worker's word, not proof. Sent on the main loop's own frames, never for a subagent's call. The mark goes only on a call in a reply to the sending process's own model request, so a call read back from a stored session is unmarked. In a result that this process made for a marked call, a publishing tool's output is a string or a block list, or is under `content`; the CLI adds the url and title only to a result that its own run of the tool made and no hook rewrote. A result sent from a stored session may hold a url of its own at its top level, even where an earlier process sent the call marked. Omitted for blocks whose display label equals the wire name (built-in tools). Wrapper-level sibling — never inside `message.content` — so it is not replayed to the model."
+					"description": "@internal Display metadata for this message's tool_use blocks, keyed by block id. display_name is the MCP server's `tool.annotations.title` when provided, otherwise a readable transform of the wire name; server_display_name is the MCP server's display name (claude.ai's name for a connector, else the name its config gives, else the name the server reports, else its key); icon_url is the MCP server's directory icon URL (claude.ai connectors only); server_id is the mcpsrv_ connector id of a server provisioned by claude.ai, set by the CLI from claude.ai's own connector listing, so a client may show the call as that connector's. server_id_stamp is the X-MCP-Server-ID header value, lower-cased, of an http entry in the dynamic scope (passed in at launch or by a later mcp_set_servers push). Claude Code Remote writes the connector's uuid there when the session has one, otherwise an id it generates; the CLI checks only its shape (at most 128 characters of letters, digits, '.', '_', ':' and '-'; anything else yields no stamp), not whose it is, since a --mcp-config or SDK-host entry can write anything. A client may look it up in its own server list, treat a miss as a server it does not know (never as an error), and show a hit as the entry's claim to be that server, not as proof. They are separate fields: a server provisioned by claude.ai carries server_id, a dynamic-scope http entry server_id_stamp. Both absent for a plugin's, a repo's, a settings or an agent entry. Neither is a permission grant. tool_name is the tool's name as its server lists it, without the mcp__<server>__ prefix. artifact_publish is true on a call to a publishing tool of an Artifacts MCP entry that reaches only Anthropic's server, which the CLI tells from the entry itself, never its name. The finished call's tool_use_result usually carries the artifact's url at its top level, from which Claude Code Remote derives the artifact_id it serves. It also carries the artifact's title where the server's answer has one, and type.url, the link of the Artifact type it was made from, where this process knows it. The mark promises none of them, and any of them can come on an unmarked call. All of these are the worker's word, not proof. Sent on the main loop's own frames, never for a subagent's call. The mark goes only on a call in a reply to the sending process's own model request, so a call read back from a stored session is unmarked. In a result that this process made for a marked call, a publishing tool's output is a string or a block list, or is under `content`; the CLI adds the url, title and type only to a result that its own run of the tool made and no hook rewrote. A result sent from a stored session may hold any of them of its own at its top level, even where an earlier process sent the call marked. Omitted for blocks whose display label equals the wire name (built-in tools). Wrapper-level sibling — never inside `message.content` — so it is not replayed to the model."
 				},
 				"narration_block_indexes": {
 					"type": "array",
@@ -1149,7 +1149,7 @@
 							"enum": ["output_limit", "context_window"]
 						}
 					},
-					"description": "@internal Parameters of api_error, present only for the kinds that have any. effort: the effort level the API refused (effort_requires_thinking). media (media_removed): the kind of block the API refused; absent for media_budget. media_reason (media_removed): unsupported_by_model — the API said that the model does not accept PDF documents; media_budget — the request's images and documents together exceed the API's limit, and the requests that follow may leave out blocks of either kind; unprocessable — every other refusal, a gateway's report of a model's refusal among them. provider: the API provider whose credentials failed (provider_credentials, gateway_session_expired). remedy (provider_credentials, gateway_session_expired): refresh_command — a configured refresh command (awsAuthRefresh / gcpAuthRefresh) refreshes the credentials; refresh_credentials — refresh the provider's credentials by hand, no command is configured; adc — refresh the Google application default credentials or the GOOGLE_APPLICATION_CREDENTIALS key file; gateway_token — replace the gateway token supplied through ANTHROPIC_AUTH_TOKEN or ANTHROPIC_CUSTOM_HEADERS; host_managed — the host application owns these credentials; model_access — the credentials work but the model is not enabled for this account and region (Amazon Bedrock). rate_limit_info (usage_limit_reached): what the refused request's own response said about the limit, in the shape rate_limit_event carries. It is read from the same values as the message text, so its status, limit and reset are the text's: status is rejected and isUsingOverage false, rateLimitType names the limit, resetsAt is when it resets, and overageStatus, overageResetsAt, overageDisabledReason and limitScope say whose spend cap it is (the person's own cap arrives as org_level_disabled_until, as on rate_limit_event); dailyCapPaused is true when usage is paused for the organization; no other member is sent. It is that refusal's record and is never updated, so compare resetsAt with the clock before calling the limit current. rate_limit_info (model_requires_usage_credits): that refusal's record, read from the same headers as the message text: status is rejected and isUsingOverage false; rateLimitType is the response's claim (seven_day_overage_included when an included allowance was used up) and is absent when it named none; resetsAt, overageStatus, overageResetsAt and limitScope come when the response had them; errorCode is credits_required when the body said so; overageDisabledReason is the disabled-reason header's when that header came with a claim or overage status, else the body's (the message text can also fall back to a reason cached from an earlier response, which the record does not carry); canUserPurchaseCredits and hasChargeableSavedPaymentMethod come from the body; the person's own cap arrives as org_level_disabled_until, as on rate_limit_event; no other member is sent. cut (max_output_tokens): which stop reason of the API cut the reply short, which max_output_tokens alone does not say: output_limit — max_tokens, the request's output-token maximum; context_window — model_context_window_exceeded, the model's context window. Absent on the one other error that carries max_output_tokens, the API's tool_use_block_cut_off, which api_error_code names."
+					"description": "@internal Parameters of api_error, present only for the kinds that have any. effort: the effort level the API refused (effort_requires_thinking). media (media_removed): the kind of block the API refused; absent for media_budget. media_reason (media_removed): unsupported_by_model — the API said that the model does not accept PDF documents; media_budget — the request's images and documents together exceed the API's limit, and the requests that follow may leave out blocks of either kind; unprocessable — every other refusal, a gateway's report of a model's refusal among them. provider: the API provider whose credentials failed (provider_credentials, gateway_session_expired). remedy (provider_credentials, gateway_session_expired): refresh_command — a configured refresh command (awsAuthRefresh / gcpAuthRefresh) refreshes the credentials; refresh_credentials — refresh the provider's credentials by hand, no command is configured; adc — refresh the Google application default credentials or the GOOGLE_APPLICATION_CREDENTIALS key file; gateway_token — replace the gateway token supplied through ANTHROPIC_AUTH_TOKEN or ANTHROPIC_CUSTOM_HEADERS; host_managed — the host application owns these credentials; model_access — the credentials work but the model is not enabled for this account and region (Amazon Bedrock). rate_limit_info (usage_limit_reached): what the refused request's own response said about the limit, in the shape rate_limit_event carries. It is read from the same values as the message text, so its status, limit and reset are the text's: status is rejected and isUsingOverage false, rateLimitType names the limit, resetsAt is when it resets, and overageStatus, overageResetsAt, overageDisabledReason and limitScope say whose spend cap it is (the person's own cap arrives as org_level_disabled_until, as on rate_limit_event, and memberSpendLimit marks it); dailyCapPaused is true when usage is paused for the organization; no other member is sent. It is that refusal's record and is never updated, so compare resetsAt with the clock before calling the limit current. rate_limit_info (model_requires_usage_credits): that refusal's record, read from the same headers as the message text: status is rejected and isUsingOverage false; rateLimitType is the response's claim (seven_day_overage_included when an included allowance was used up) and is absent when it named none; resetsAt, overageStatus, overageResetsAt, limitScope and memberSpendLimit come when the response had them; errorCode is credits_required when the body said so; overageDisabledReason is the disabled-reason header's when that header came with a claim or overage status, else the body's (the message text can also fall back to a reason cached from an earlier response, which the record does not carry); canUserPurchaseCredits and hasChargeableSavedPaymentMethod come from the body; the person's own cap arrives as org_level_disabled_until, as on rate_limit_event; no other member is sent. cut (max_output_tokens): which stop reason of the API cut the reply short, which max_output_tokens alone does not say: output_limit — max_tokens, the request's output-token maximum; context_window — model_context_window_exceeded, the model's context window. Absent on the one other error that carries max_output_tokens, the API's tool_use_block_cut_off, which api_error_code names."
 				},
 				"api_error_code": {
 					"type": "string",
@@ -1373,6 +1373,15 @@
 				"request_id": {
 					"type": "string",
 					"description": "The request_id of the control_request being withdrawn."
+				},
+				"takes_late_allow": {
+					"type": "boolean",
+					"const": true,
+					"description": "@internal Only from a worker of a remote session. Input that no person sent closed this can_use_tool card, which the worker had taken over from an earlier worker. The call is closed as not run, and the stored row that closes it bears the card (closedCard). A worker still reads the session owner's own press of Allow for this request_id (person_tap), and can run the call. A receiver that knows this member may keep the card up. Any other receiver closes the card."
+				},
+				"tool_use_id": {
+					"type": "string",
+					"description": "@internal Only beside takes_late_allow: the id of the call that the card asked about, by which the closing row is found."
 				}
 			},
 			"required": ["type", "request_id"],
@@ -1388,6 +1397,15 @@
 				"request_id": {
 					"type": "string",
 					"description": "The request_id of the control_request being withdrawn."
+				},
+				"takes_late_allow": {
+					"type": "boolean",
+					"const": true,
+					"description": "@internal Only from a worker of a remote session. Input that no person sent closed this can_use_tool card, which the worker had taken over from an earlier worker. The call is closed as not run, and the stored row that closes it bears the card (closedCard). A worker still reads the session owner's own press of Allow for this request_id (person_tap), and can run the call. A receiver that knows this member may keep the card up. Any other receiver closes the card."
+				},
+				"tool_use_id": {
+					"type": "string",
+					"description": "@internal Only beside takes_late_allow: the id of the call that the card asked about, by which the closing row is found."
 				}
 			},
 			"required": ["type", "request_id"],
@@ -1545,6 +1563,10 @@
 								"error_code": {
 									"type": "string",
 									"enum": [
+										"project_settings_not_claimable",
+										"proxy_auth_helper_not_claimable",
+										"api_key_helper_not_claimable",
+										"provider_credentials_not_claimable",
 										"invalid_request",
 										"catalog_unknown",
 										"not_found",
@@ -1805,6 +1827,10 @@
 								"error_code": {
 									"type": "string",
 									"enum": [
+										"project_settings_not_claimable",
+										"proxy_auth_helper_not_claimable",
+										"api_key_helper_not_claimable",
+										"provider_credentials_not_claimable",
 										"invalid_request",
 										"catalog_unknown",
 										"not_found",
@@ -2273,7 +2299,7 @@
 				},
 				"rateLimitGraceActive": {
 					"type": "boolean",
-					"description": "@internal Usage-limit grace signal. Follows the latest served main-loop or subagent response: set when it reports grace-zone utilization > 0 (the server reports that only to a request that sent `anthropic-usage-limit: extended`, tengu_lantern_spool), cleared when a response the limiter ran on reports none or, if the latest in-zone response named the grace window's reset, once that reset passes on this machine's clock. Side calls, and responses with no `anthropic-ratelimit-unified-status` (the limiter did not run), are not read. A refused request's 429 is not read either, so while requests are refused the last value persists: still expire any UI derived from this field via resetsAt. While set, overageStatus allowed / allowed_warning means paid extra usage covers the overflow (nothing will be cut off). Stays true at hard exhaustion (status rejected); combine with status instead of reading this field alone as \"still usable\"."
+					"description": "@internal Usage-limit grace signal. Follows the latest served main-loop or subagent response: set when it reports grace-zone utilization > 0 (the server reports that only to a request that sent `anthropic-usage-limit: extended`, tengu_lantern_spool) and the allowance paid for it (status not rejected), kept while credits pay later responses, cleared when a response the limiter ran on reports none or, if the latest in-zone response named the grace window's reset, once that reset passes on this machine's clock. Side calls, and responses with no `anthropic-ratelimit-unified-status` (the limiter did not run), are not read. A refused request's 429 is not read either, so while requests are refused the last value persists: still expire any UI derived from this field via resetsAt. While set, overageStatus allowed / allowed_warning means paid extra usage covers the overflow (nothing will be cut off). Stays true at hard exhaustion (status rejected); combine with status instead of reading this field alone as \"still usable\"."
 				},
 				"overagePeriodMonthly": {
 					"type": "object",
@@ -2299,6 +2325,16 @@
 					"type": "string",
 					"enum": ["service", "channel", "group_pool"],
 					"description": "Which spend limit blocked the request when it is not the member's own cap: 'group_pool' means a pooled group budget shared by the member's team is used up (the denial otherwise looks like the member's own monthly cap). Absent on a plain member denial and from older CLIs."
+				},
+				"memberSpendLimit": {
+					"type": "object",
+					"properties": {
+						"period": {
+							"type": "string",
+							"enum": ["daily", "weekly", "monthly"]
+						}
+					},
+					"description": "@internal The API reports the member's own spend limit as reached, which overageDisabledReason cannot show. No period means the monthly limit. Absent at other limits, at a limit this CLI does not know and from older CLIs, so absence does not prove the organization's cap."
 				},
 				"errorCode": {
 					"type": "string",
@@ -2375,21 +2411,21 @@
 			"required": ["status"],
 			"description": "Rate limit information for claude.ai subscription users."
 		},
-		"out___schema268": {
+		"out___schema270": {
 			"description": "Structured tool output — the tool's full Output object, not the string content sent to the model. The shape is per-tool, keyed by the matching tool_use block's name (see the *Output types in toolTypes); MCP and dynamic tools carry their own shapes, so the field stays unknown-typed. For the Agent/Task tool the completed shape is the subagent's final report without the model-directed agentId/usage trailer, plus run totals — render from it instead of parsing the tool_result text. A call that stepped aside for a message the user sent (today a WebFetch or WebSearch call) carries `{ detachedToolCall: true }` in place of its Output: the call is still running, and its result reaches the model in a later turn."
 		},
-		"out___schema271": {
+		"out___schema273": {
 			"type": "integer",
 			"exclusiveMinimum": 0,
 			"maximum": 9007199254740991,
 			"description": "@internal Input only. Asks the CLI to put this prompt back in its queue, instead of losing it, when an interrupt crosses with a running turn taking the prompt in: the interrupt was sent while its sender still believed the prompt was waiting. The value says for how long an interrupt is taken to have been sent so: a whole number of milliseconds from 1, and above 10000 it counts as 10000. The time runs from the moment the turn announces the model request that carries the prompt (system/status 'requesting', which is on the wire only with partial messages); until then it has not begun. The prompt is put back when an interrupt control request without cancel_queued stops that turn within the time and before the model's next reply has begun to arrive. It goes back to the front of the queue under the same uuid and runs in a later turn of its own, after any queued prompt of higher priority; prompts queued behind it are not merged into that turn's prompt, though the turn can take them in as any turn does. The interrupt's response lists it under still_queued and under put_back, and from then on cancel_async_message can withdraw it. The stopped turn reports no 'cancelled' for it, counts it in its result's queued_turn_count (if its origin is stamped user-driven, as for any queued prompt) and leaves it out of that result's user_message_uuids (on an error result an empty list, with no user_message_uuid, if nothing else is listed). On stdout it reports command_lifecycle 'queued' a second time; over a remote transport its delivery is not reported 'processed' until its later turn ends. With cancel_queued:true it stays with the stopped turn and is not listed under the response's cancelled. The row the stopped turn wrote for it (a queued_command attachment) leaves the conversation and is never stored, so the model sees the prompt once; until the prompt can no longer be put back, that row and the rows after it are kept out of the stored transcript. UserPromptSubmit hooks run for it twice, and what they added to the stopped turn stays. If a compaction begins while that row is kept out, the row is stored at once and stays in the conversation, so the prompt, if an interrupt puts it back or has just done so, is seen twice. A prompt is put back at most once, and never after the host's own cancel_async_message for it answered cancelled:false. Of several prompts taken in since the model last spoke, only the last can be put back; the others stay with the stopped turn. The field is ignored when it is not such a number, when the message has no uuid or has shouldQuery:false, and when the message is not a person's own typing: a synthetic, hidden, client-composed, seeded, peer or relayed message, one that declares a non-human origin, or one whose client_platform names no app or keyboard that a person types in. claude-code-server also needs a client_platform, and one that names an app. A CLI that does not advertise interrupt_requeue_taken_v1 on system/init ignores the field too."
 		},
-		"out___schema335": {
+		"out___schema337": {
 			"type": "boolean",
 			"const": true,
 			"description": "@internal No person typed this message's text in this session (a server or an app composed it). The text is delivered as written and is not treated as typing: no slash-command dispatch, no at-mention expansion beyond the message's own uploaded files, no reminder or command from keywords in it, and a skill named in it does not count as typed by the user. Who sent the message, and whether a person is present, stays with its origin. A Workflow does not relay the text to its agents as the user's request, unless a server-verified relay delivered it. Auto mode's local classifier and investigator do not read this mark: they go by the origin. Unlike client_composed, the turn-start attachment pass still runs. Any value other than false or null is read as true."
 		},
-		"out___schema351": {
+		"out___schema353": {
 			"type": "array",
 			"items": {
 				"type": "object",
@@ -2431,7 +2467,8 @@
 									"feature_disabled",
 									"policy_denied",
 									"spawn_arg_limit",
-									"staged_for_review"
+									"staged_for_review",
+									"container_limit"
 								]
 							},
 							"servers": {
@@ -2477,7 +2514,7 @@
 							}
 						},
 						"required": ["kind"],
-						"description": "@internal The fix a host can offer for a tool result, stamped from structured producer state (never parsed from the result text). Kinds: mcp_needs_auth, mcp_disabled, mcp_required_missing, auth_expired, auth_overridden, auth_missing_scope, design_needs_authorization, sandbox_violation, outside_reads_blocked, memory_paused, feature_disabled, policy_denied, spawn_arg_limit (the command's exec image exceeded the OS argument limit), staged_for_review (a settings-file write held for the machine owner's review). New kinds are additive; treat an unknown kind as absent."
+						"description": "@internal The fix a host can offer for a tool result, stamped from structured producer state (never parsed from the result text). Kinds: mcp_needs_auth, mcp_disabled, mcp_required_missing, auth_expired, auth_overridden, auth_missing_scope, design_needs_authorization, sandbox_violation, outside_reads_blocked, memory_paused, feature_disabled, policy_denied, spawn_arg_limit (the command's exec image exceeded the OS argument limit), staged_for_review (a settings-file write held for the machine owner's review), container_limit (the call didn't run: a claude-code-server session's cloud environment was refused at the limit on containers running at once). New kinds are additive; treat an unknown kind as absent."
 					},
 					"permission_decision": {
 						"type": "object",
@@ -2536,7 +2573,7 @@
 			},
 			"description": "@internal Display metadata for this message's tool_result blocks, keyed by tool_use_id. non_execution_kind is the harness-stamped reason an is_error:true result did not carry the tool's own execution output (user-rejected / permission-rule / automode-* / interrupted / cancelled); absent means the tool ran to completion. remedy is the fix a host can offer for what the result reports (see SDKToolResultRemedy). An entry may carry a remedy alone, on a result that did run (a staged write, a sandbox violation on exit 0), so whether a call ran is read from non_execution_kind, never from an entry's presence. built_in_tool is the name of the Claude Code built-in tool whose own completed run, in the process that wrote this message, made the result, stamped for the few built-ins a host acts on; it is absent once a hook rewrote the result, where a hook or a permission answer changed the call's input, on a message that the process read from a session file or took from another frame (a resumed session), on the result of a call that a client wrote (a handed-over turn), and on a subagent's messages. History that the same process sends again (historical: true) still carries it. run_input stands only beside built_in_tool, and only from a worker that takes its messages over Claude Code Remote. Its one value today, person_typed, says that a person typed, in the iOS, Android, claude.ai or desktop app, every message that opened the run under way or joined it up to this call, as far as the message itself shows: it came from such an app, with no mark that an app, the server or another session composed it. What a typed command or skill expands to, what hooks add and what tools return is not judged. On any doubt it is absent, and today more often than that meaning requires: also where the person's own message joined the run. A host reads absence, and any value that it does not know, as no. On a subagent's messages (parent_tool_use_id set), entries carry only permission_decision, and beside a reject also non_execution_kind, unless a run had reached the tool before the refusal. So on those messages an absent non_execution_kind does not say that the call ran: a call that was cut has none, and older builds send none. permission_decision is how the call's permission check ended, as Claude Code's claude_code.tool.blocked_on_user trace span reports it. decision is accept, reject or cancelled. source names what decided: config, classifier, hook, user_temporary, user_permanent, user_reject, user_abort, or invalid_input, permission_updated_input_invalid, server_fallback_tombstone or plugin_cut when bad input, the server or a plugin that cancelled its own call ended the wait. Which label a rule gets depends on the session: in SDK sessions a rule for this session or in the user's own settings reports user_temporary, user_permanent or user_reject and other rules report config, while interactive sessions report every rule as config. reason_type is the kind of reason the check gave when it decided by itself, such as 'rule' whenever a rule decided, or 'classifier' for an auto-mode allow, which reports source config. reason_type is absent when a person or the SDK host answered the question, when the check's outcome was still a question, and for user_abort and the last four sources above. auto_mode_rule rides beside a reason_type of 'classifier' when the server-side auto-mode classifier named one of the session's own settings.autoMode entries as deciding the call: list is allow (an allow exception, on an accept) or soft_deny (on a reject), and name is that entry's first line, without escape sequences or hidden characters, up to a colon followed by whitespace or the line's end, or up to a space and '[', trimmed and at most 120 characters. The name's text is the session's own, never classifier output, but which entry is named is the classifier's claim. plugin_approval is set only in a `claude plugin eval` run: applied when the call was allowed because a plugin's permission hook allowed it where the eval's own check did not, refused when a deny rule blocked the call, or it could not be checked against the deny rules, even though a plugin's hook allowed it. permission_decision is absent when the call ended before its permission check, and on some results built apart from the call's own run, such as a plugin hook's refusal, a hook's rewrite of a denied result, or the result the tool executor writes for a queued call that a stop cancelled. user_feedback is the deny comment a human typed at a permission prompt (the local dialog or a bridge client's deny UI), before the CLI's reject-message framing — absent when the deny was resolved by a coordinator, channel relay, or hook rather than a human. A deny answered through the SDK control protocol (can_use_tool / --permission-prompt-tool) currently reports as 'permission-rule' with no user_feedback, because that wire carries no human-provenance signal. Wrapper-level sibling — never inside `message.content` — so it is not replayed to the model. Clients read this instead of string-matching the result prose."
 		},
-		"out___schema385": {
+		"out___schema387": {
 			"type": "object",
 			"properties": {
 				"name": {
@@ -2549,7 +2586,7 @@
 			"required": ["name", "text"],
 			"description": "@internal Output only, and to be read only on a message the CLI wrote, never on one another client of the session posted: on a session event, only where its `source` is `worker`. On a message a plugin sent, what a host can show under the plugin's name in place of `message`. `name` is that name as the wrapper the model reads prints it, on one line and scrubbed; `origin.name` holds it raw. `text` is the prompt as hooks left it, with prompts merged into one turn joined by newlines, when `message` is exactly the wrapper the model reads around that prompt. Or it is the command the plugin ran as a person would type it, such as `/review 12`, when `message` is only that command's tags and `text` holds all their words; arguments can make it more than one line, so show all of it. Absent on any other message, and on a prompt sent as the person's own words; there, show `message`."
 		},
-		"out___schema464": {
+		"out___schema466": {
 			"type": "object",
 			"properties": {
 				"input_tokens": {
@@ -2689,7 +2726,7 @@
 			],
 			"description": "MAIN AGENT LOOP ONLY — excludes Task subagent, sidechain, and auxiliary model calls, and is per-turn in streaming-input sessions. Prefer modelUsage for token/cost accounting."
 		},
-		"out___schema468": {
+		"out___schema470": {
 			"type": "object",
 			"properties": {
 				"spawned": {
@@ -2958,7 +2995,7 @@
 					"description": "Cumulative estimated cost in USD for this query() call, covering the same calls as modelUsage (billed permission classifier calls and stopped or cut calls included, which maxBudgetUsd / --max-budget-usd therefore counts) and sharing its lifecycle: cumulative across turns in streaming-input sessions — each result carries the running total so far, so read the latest result rather than summing across results. Crash/startup-error results may carry zeroed values, a resumed or forked session continues from the total its transcript saved, when it has one (so the first result already carries the earlier turns; maxBudgetUsd counts only the spend since this query() call started or last /clear), and a mid-session /clear resets the running total. An estimate, not a billing statement."
 				},
 				"usage": {
-					"$ref": "#/$defs/out___schema464"
+					"$ref": "#/$defs/out___schema466"
 				},
 				"modelUsage": {
 					"type": "object",
@@ -2982,7 +3019,7 @@
 				},
 				"subagent_stats": {
 					"description": "@internal Running totals of the subagents the Agent tool started this session; see SDKSubagentStats.",
-					"$ref": "#/$defs/out___schema468"
+					"$ref": "#/$defs/out___schema470"
 				},
 				"safety_stops": {
 					"type": "integer",
@@ -3080,6 +3117,11 @@
 						"initialize_fields_not_delivered"
 					],
 					"description": "Set on the zeroed error_during_execution result a stream-json run writes before exiting on a known startup failure; errors carries the failure message. Failures that otherwise end with stderr alone write that result only when the host sets CLAUDE_CODE_STARTUP_FAILURE_RESULTS, except org_config_required_unavailable, org_config_refused and config_file_invalid, which every stream-json run writes. Absent on every other result, on startup failures without a known cause, and from older producers."
+				},
+				"message_undelivered": {
+					"type": "string",
+					"enum": ["session_not_opened", "send_failed"],
+					"description": "@internal On the result the claude --cloud client writes for a message it took and could not deliver. session_not_opened: nothing was sent. send_failed: the session may have the message all the same, which is also how to read an unknown value. Absent on every other result, on the refusal of a frame with a bad uuid or content, and from older producers (docs/desktop-host-contract.md, D16b)."
 				},
 				"invalid_config_file": {
 					"type": "object",
@@ -4706,7 +4748,7 @@
 					"description": "Cumulative estimated cost in USD for this query() call, covering the same calls as modelUsage (billed permission classifier calls and stopped or cut calls included, which maxBudgetUsd / --max-budget-usd therefore counts) and sharing its lifecycle: cumulative across turns in streaming-input sessions — each result carries the running total so far, so read the latest result rather than summing across results. Crash/startup-error results may carry zeroed values, a resumed or forked session continues from the total its transcript saved, when it has one (so the first result already carries the earlier turns; maxBudgetUsd counts only the spend since this query() call started or last /clear), and a mid-session /clear resets the running total. An estimate, not a billing statement."
 				},
 				"usage": {
-					"$ref": "#/$defs/out___schema464"
+					"$ref": "#/$defs/out___schema466"
 				},
 				"modelUsage": {
 					"type": "object",
@@ -4730,7 +4772,7 @@
 				},
 				"subagent_stats": {
 					"description": "@internal Running totals of the subagents the Agent tool started this session; see SDKSubagentStats.",
-					"$ref": "#/$defs/out___schema468"
+					"$ref": "#/$defs/out___schema470"
 				},
 				"safety_stops": {
 					"type": "integer",
@@ -5683,7 +5725,7 @@
 				"uuid",
 				"session_id"
 			],
-			"description": "@internal Written by the headless stream-json client of a cloud-hosted session (the same client that puts `cloud_session` on its init frames), and by nothing else: the session's status changed between two inits — for instance this machine's serving word or its reason, its stream to the session (`connection`), a call it serves starting, waiting on the session's approval or ending (`calls`), a serving notice said (`notices`). Only after the first init, with two exceptions that write these from the start: a serve-only helper (`--attach-serve`), whose stream to the session carries no init, and the client of a host whose initialize set `cloudStatusBeforeInit`. There, a first frame (`seq` 1) written before any init lists every key of the block in `changed`, so a host that has read no init takes that frame's block as its first snapshot. At most a few per second (changes within a quarter second are written as one frame carrying the latest block); none when nothing differs. An init is always a complete snapshot, so a host that (re)attaches resynchronises from the first init it reads and applies these on top. Display-only; ignore it if you do not draw session status."
+			"description": "@internal Written by the headless stream-json client of a cloud-hosted session (the same client that puts `cloud_session` on its init frames), and by nothing else: the session's status changed between two inits — for instance this machine's serving word or its reason, its stream to the session (`connection`), a call it serves starting, waiting on the session's approval or ending (`calls`), a serving notice said (`notices`). Only after the first init, with two exceptions that write these from the start: a serve-only helper (`--attach-serve`), whose stream to the session carries no init, and the client of a host that wants them early: one whose initialize set `cloudStatusBeforeInit`, or Desktop's Code tab. There, a first frame (`seq` 1) written before any init lists every key of the block in `changed`, so a host that has read no init takes that frame's block as its first snapshot. At most a few per second (changes within a quarter second are written as one frame carrying the latest block); none when nothing differs. An init is always a complete snapshot, so a host that (re)attaches resynchronises from the first init it reads and applies these on top. Display-only, except that a host may keep `cloud_session.id`; ignore it if you do not draw session status."
 		},
 		"system_code_change_publishedOutput": {
 			"type": "object",
@@ -6172,7 +6214,7 @@
 							},
 							"reason": {
 								"type": "string",
-								"description": "Why, as a short code. 'download': it could not be downloaded. 'too_large': the file is over the size a session accepts, so sending it again cannot help. 'not_found': the files route answered 404 or 410: the file is most likely deleted, or is not this session's to read, so sending it again rarely helps. 'write': it was downloaded and could not be saved. 'no_container': it was downloaded, and the session has no tool container to save it in and no file tools to open it with, so sending it again rarely helps. 'no_token': the session had no credential to download with. 'not_finished': the step that fetches a message's files was cut short or threw, so all its files are listed, though some may have been saved. 'count_cap': the message named more files than a session fetches, and this one was over the limit. More codes may be added; read an unknown one as 'did not arrive'."
+								"description": "Why, as a short code. 'download': it could not be downloaded. 'too_large': the file is over the size a session accepts, so sending it again cannot help. 'not_found': the files route answered 404 or 410: the file is most likely deleted, or is not this session's to read, so sending it again rarely helps. 'write': it was downloaded and could not be saved. 'no_space': as 'write', and a save of the message's files found the disk full, so sending it again helps only once there is room. 'no_container': it was downloaded, and the session has no tool container to save it in and no file tools to open it with, so sending it again rarely helps. 'no_token': the session had no credential to download with. 'not_finished': the step that fetches a message's files was cut short or threw, so all its files are listed, though some may have been saved. 'count_cap': the message named more files than a session fetches, and this one was over the limit. More codes may be added; read an unknown one as 'did not arrive'."
 							}
 						},
 						"required": ["file_uuid", "reason"]
@@ -6530,6 +6572,25 @@
 					},
 					"required": ["hook_event", "tool_use_id", "timed_out"],
 					"description": "@internal Present on the warning, tagged `hook_no_verdict`, that a PreToolUse hook gave no verdict on the call `tool_use_id` and that its failure did not refuse the call, so a host can word the notice itself instead of reading `content`. Another hook, a rule or the person may still stop that call. Sent once per hook in a session, for the first such call. `timed_out` is true for a hook that ended with no answer, usually at its timeout. `plugin_id` and `plugin_root` are there for a plugin's hook. Not sent for a hook that ran and chose a non-blocking exit, nor where the failure refused the call."
+				},
+				"saved_files": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"line": {
+								"type": "number"
+							},
+							"path": {
+								"type": "string"
+							},
+							"shown": {
+								"type": "string"
+							}
+						},
+						"required": ["line", "path", "shown"]
+					},
+					"description": "@internal Present on the line tagged `connector_files` when a connector's files were saved on this computer, so a host can link each path. `line` counts the lines of `content` from 0; that line ends with `shown`, the absolute `path` as a person reads it. A connector can have chosen the file's name."
 				},
 				"uuid": {
 					"type": "string"
@@ -7648,7 +7709,7 @@
 				"state": {
 					"type": "string",
 					"enum": ["held", "released", "dropped"],
-					"description": "'held' when the receive-side policy parks the message instead of queueing it (once per message per hold cause — a re-announcement under a different cause emits again); then at most one of 'released' (the policy now accepts it: it enters the queue — its command_lifecycle 'queued' and, when it drains, its user replay echo follow under message_uuid) or 'dropped' (it will never reach the model in this session; see outcome)."
+					"description": "'held' when the receive-side policy parks the message instead of queueing it (once per message per hold cause — a re-announcement under a different cause emits again); then at most one of 'released' (the policy now accepts it: it enters the queue — its command_lifecycle 'queued' and, when it drains, its user replay echo follow under message_uuid) or 'dropped' (this process will not give it to the model; see outcome)."
 				},
 				"message_uuid": {
 					"type": "string",
@@ -7683,8 +7744,20 @@
 				},
 				"outcome": {
 					"type": "string",
-					"enum": ["expired", "refused", "dropped", "discarded"],
-					"description": "state 'dropped' only: 'expired' — no one approved it before the approval deadline (a headless host has no approval surface, so every parity hold ends this way unless the mode changes first); 'refused' — the policy turned to refuse while it waited; 'dropped' — released or approved but the ingress guard (rate limit, duplicate, queue cap) discarded it; 'discarded' — the session ended with it still parked."
+					"enum": ["expired", "refused", "dropped", "discarded", "denied"],
+					"description": "state 'dropped' only: 'expired' — no one approved it before the approval deadline (a headless host has no approval surface, so every parity hold ends this way unless the mode changes first); 'refused' — the policy refuses it, on arrival or after it waited; 'dropped' — the ingress guard (rate limit, duplicate, queue cap) or the device check discarded it; 'discarded' — the session ended with it still parked; 'denied' — the person declined it."
+				},
+				"reason": {
+					"type": "string",
+					"enum": [
+						"rate-limited",
+						"duplicate",
+						"hop-loop",
+						"hop-runaway",
+						"queue-full",
+						"unverified"
+					],
+					"description": "outcome 'dropped' only: which check discarded it, where the frame says."
 				},
 				"uuid": {
 					"type": "string"
@@ -7702,7 +7775,7 @@
 				"uuid",
 				"session_id"
 			],
-			"description": "@internal A cross-session (peer) message this session's receive-side policy HELD rather than queued, and how that hold resolved. Lets a host show the human that a message arrived but has not reached the model (and may never) instead of nothing at all; the sending session is told separately over its own transport where one exists. Informational only — there is no host-side approval through this frame. Emitted on the stdout stream in -p/SDK sessions."
+			"description": "@internal A cross-session (peer) message this session's receive-side policy HELD rather than queued, and how that hold resolved. Lets a host show the human that a message arrived but has not reached the model (and may never) instead of nothing at all; the sending session is told separately over its own transport where one exists. Informational only — there is no host-side approval through this frame. Emitted on the stdout stream in -p/SDK sessions. Some frames, for a message that the session service delivered, are only uploaded to it: those have an empty `from` and no cause, a 'dropped' one need not follow a 'held', and their 'expired' also covers an exit or a full hold buffer."
 		},
 		"system_per_turn_effort_changedOutput": {
 			"type": "object",
@@ -8157,6 +8230,43 @@
 				}
 			},
 			"required": ["type", "subtype", "status", "uuid", "session_id"]
+		},
+		"system_task_list_statusesOutput": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "string",
+					"const": "system"
+				},
+				"subtype": {
+					"type": "string",
+					"const": "task_list_statuses"
+				},
+				"statuses": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "string"
+							},
+							"status": {
+								"type": "string",
+								"enum": ["pending", "in_progress", "completed"]
+							}
+						},
+						"required": ["id", "status"]
+					}
+				},
+				"uuid": {
+					"type": "string"
+				},
+				"session_id": {
+					"type": "string"
+				}
+			},
+			"required": ["type", "subtype", "statuses", "uuid", "session_id"],
+			"description": "@internal The statuses of tasks on the task list, in a session where Claude Code sets them itself and no TaskUpdate call shows the change. Sent during turns and after their results, when a status changes. It sets the tasks it names; a task it leaves out keeps its last status. A later TaskUpdate result that changes a status wins."
 		},
 		"system_task_notificationOutput": {
 			"type": "object",
@@ -11292,7 +11402,8 @@
 											"feature_disabled",
 											"policy_denied",
 											"spawn_arg_limit",
-											"staged_for_review"
+											"staged_for_review",
+											"container_limit"
 										]
 									},
 									"servers": {
@@ -11338,7 +11449,7 @@
 									}
 								},
 								"required": ["kind"],
-								"description": "@internal The fix a host can offer for a tool result, stamped from structured producer state (never parsed from the result text). Kinds: mcp_needs_auth, mcp_disabled, mcp_required_missing, auth_expired, auth_overridden, auth_missing_scope, design_needs_authorization, sandbox_violation, outside_reads_blocked, memory_paused, feature_disabled, policy_denied, spawn_arg_limit (the command's exec image exceeded the OS argument limit), staged_for_review (a settings-file write held for the machine owner's review). New kinds are additive; treat an unknown kind as absent."
+								"description": "@internal The fix a host can offer for a tool result, stamped from structured producer state (never parsed from the result text). Kinds: mcp_needs_auth, mcp_disabled, mcp_required_missing, auth_expired, auth_overridden, auth_missing_scope, design_needs_authorization, sandbox_violation, outside_reads_blocked, memory_paused, feature_disabled, policy_denied, spawn_arg_limit (the command's exec image exceeded the OS argument limit), staged_for_review (a settings-file write held for the machine owner's review), container_limit (the call didn't run: a claude-code-server session's cloud environment was refused at the limit on containers running at once). New kinds are additive; treat an unknown kind as absent."
 							},
 							"permission_decision": {
 								"type": "object",
@@ -14239,14 +14350,14 @@
 					"type": "boolean"
 				},
 				"tool_use_result": {
-					"$ref": "#/$defs/out___schema268"
+					"$ref": "#/$defs/out___schema270"
 				},
 				"priority": {
 					"type": "string",
 					"enum": ["now", "next", "later"]
 				},
 				"requeue_if_interrupted_within_ms": {
-					"$ref": "#/$defs/out___schema271"
+					"$ref": "#/$defs/out___schema273"
 				},
 				"origin": {
 					"oneOf": [
@@ -14517,7 +14628,7 @@
 					"description": "The client composed this turn from content the user did not type; the CLI delivers its text as written, with no `@path` file-mention expansion and no slash-command dispatch. On current CLIs the turn-start attachment pass is skipped as a whole: `@server:resource` MCP mentions are not expanded either, and the prompt is sent without the context the CLI normally attaches alongside it (nested `CLAUDE.md` and rules files, skill and tool listings, reminders); the pass the CLI runs between tool calls is unaffected."
 				},
 				"text_not_typed": {
-					"$ref": "#/$defs/out___schema335"
+					"$ref": "#/$defs/out___schema337"
 				},
 				"initiator": {
 					"type": "string",
@@ -14613,7 +14724,7 @@
 					"description": "@internal MCP protocol metadata passed through to SDK consumers, never sent to the model (from internal UserMessage.mcpMeta)."
 				},
 				"tool_result_meta": {
-					"$ref": "#/$defs/out___schema351"
+					"$ref": "#/$defs/out___schema353"
 				},
 				"source_tool_use_id": {
 					"type": "string",
@@ -14664,7 +14775,7 @@
 					"description": "@internal Output only, and to be read only on a message the CLI wrote: on a session event, only where its `source` is `worker`. Only on the synthetic message that asks the model again after a response whose tool call could not be parsed: the uuids of that response's messages, which the CLI has dropped from the conversation. Remove them on receipt; an unknown uuid is a no-op. If another assistant message follows in the turn, it names them again in `supersedes`. Absent if none of the response's messages was sent, on a subagent's messages, over Remote Control, and from older CLIs."
 				},
 				"plugin_prompt": {
-					"$ref": "#/$defs/out___schema385"
+					"$ref": "#/$defs/out___schema387"
 				},
 				"uuid": {
 					"type": "string"
@@ -17447,14 +17558,14 @@
 					"type": "boolean"
 				},
 				"tool_use_result": {
-					"$ref": "#/$defs/out___schema268"
+					"$ref": "#/$defs/out___schema270"
 				},
 				"priority": {
 					"type": "string",
 					"enum": ["now", "next", "later"]
 				},
 				"requeue_if_interrupted_within_ms": {
-					"$ref": "#/$defs/out___schema271"
+					"$ref": "#/$defs/out___schema273"
 				},
 				"origin": {
 					"oneOf": [
@@ -17725,7 +17836,7 @@
 					"description": "The client composed this turn from content the user did not type; the CLI delivers its text as written, with no `@path` file-mention expansion and no slash-command dispatch. On current CLIs the turn-start attachment pass is skipped as a whole: `@server:resource` MCP mentions are not expanded either, and the prompt is sent without the context the CLI normally attaches alongside it (nested `CLAUDE.md` and rules files, skill and tool listings, reminders); the pass the CLI runs between tool calls is unaffected."
 				},
 				"text_not_typed": {
-					"$ref": "#/$defs/out___schema335"
+					"$ref": "#/$defs/out___schema337"
 				},
 				"initiator": {
 					"type": "string",
@@ -17821,7 +17932,7 @@
 					"description": "@internal MCP protocol metadata passed through to SDK consumers, never sent to the model (from internal UserMessage.mcpMeta)."
 				},
 				"tool_result_meta": {
-					"$ref": "#/$defs/out___schema351"
+					"$ref": "#/$defs/out___schema353"
 				},
 				"source_tool_use_id": {
 					"type": "string",
@@ -17872,7 +17983,7 @@
 					"description": "@internal Output only, and to be read only on a message the CLI wrote: on a session event, only where its `source` is `worker`. Only on the synthetic message that asks the model again after a response whose tool call could not be parsed: the uuids of that response's messages, which the CLI has dropped from the conversation. Remove them on receipt; an unknown uuid is a no-op. If another assistant message follows in the turn, it names them again in `supersedes`. Absent if none of the response's messages was sent, on a subagent's messages, over Remote Control, and from older CLIs."
 				},
 				"plugin_prompt": {
-					"$ref": "#/$defs/out___schema385"
+					"$ref": "#/$defs/out___schema387"
 				},
 				"uuid": {
 					"type": "string"

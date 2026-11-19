@@ -83,7 +83,7 @@ The table is sorted by name.[^names] See [Environment Variables](index.md#how-to
 | `CLAUDE_ENABLE_STREAM_WATCHDOG` | <Documented /> | Forces the event-level streaming idle watchdog on or off. It also sets the async agent stall time. | On, off, or unset, on by default | All sessions |
 | `CLAUDE_SLOW_FIRST_BYTE_MS` | <Undocumented /> | Sets the wait before Claude Code logs a slow first byte on a stream. It does not abort. | A number of milliseconds | - |
 | `CLAUDE_STREAM_FIRST_BYTE_TIMEOUT_MS` | <Documented /> | Sets the first-byte deadline of a streaming request in ms. | A number of milliseconds | - |
-| `CLAUDE_STREAM_IDLE_TIMEOUT_MS` | <Documented /> | Sets the idle timeout of the stream watchdogs in ms. | A number of milliseconds | - |
+| `CLAUDE_STREAM_IDLE_TIMEOUT_MS` | <Documented /> | Sets the idle timeout of the stream watchdogs in ms. Since `2.1.328`, a value above 5 minutes also raises the 5-minute connection limit, up to 30 minutes, on gateways, custom base URLs, and cloud providers.[^stream-idle-limit] | A number of milliseconds | - |
 | `CLOUDSDK_CORE_CUSTOM_CA_CERTS_FILE` | <Undocumented /> | Names a CA bundle file for `gcloud`. The Bash sandbox treats it as a CA bundle variable. | A path | - |
 | `CURL_CA_BUNDLE` | <Undocumented /> | Names a CA bundle for `curl`. The Bash sandbox treats it as a CA bundle variable. | - | - |
 | `DENO_CERT` | <Undocumented /> | Names a CA bundle for Deno. The Bash sandbox treats it as a CA bundle variable. | - | - |
@@ -187,22 +187,23 @@ Claude Code reads shell variables once at startup, so restart after a change. Cl
 
 ## Sources
 
-[^names]: The program, `chunk-2ew0jg68.js:901` (the table of variable names), and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^bg-gateway]: The program, `chunk-d0ernz1g.js:1141` (the dispatcher sets it), `chunk-ra4aapaz.js:23-25` (the session reads it), and `chunk-ra4aapaz.js:59-61` (the stop messages). Gate `tengu_bg_gateway_mark`, default on, at `chunk-ra4aapaz.js:18-20`.
-[^https-agent]: The program, `chunk-j9g63hey.js:8387-8398` (the signature), `chunk-j9g63hey.js:10003-10004` (the log text), and `chunk-j9g63hey.js:10295-10301` (the agent options).
-[^cross-cert]: The program, `chunk-j9g63hey.js:8776` (the log text), `chunk-j9g63hey.js:9766-9769` (the switch and the client certificate check), and `chunk-j9g63hey.js:9466-9470` (the client certificate flag).
-[^self-named]: The program, `chunk-j9g63hey.js:9550-9556` (the switch), `chunk-j9g63hey.js:9651` (the log text), and `chunk-j9g63hey.js:9466-9470` (the client certificate flag).
-[^bun-tls]: The program, `chunk-qhsv8pnt.js:332-335` (the two TLS variable names) and `chunk-j9g63hey.js:8379-8381` (a value other than `1` counts).
-[^cert-store]: The program, `chunk-j9g63hey.js:8503-8513` (the variable), `chunk-j9g63hey.js:9264-9271` (the startup messages), and `chunk-j9g63hey.js:9734` (the message that names the variable).
-[^proxy-hosts]: The program, `chunk-j9g63hey.js:10657-10660` (the proxy agent `lookup`), `chunk-zwpe0yha.js:143-146` (the WebSocket path), `chunk-9gc9sj0j.js:148` (the host-managed list), and `chunk-t9t34d4g.js:842-856` (the `Ignoring` log). Probe cases `print.env319a.proxy-resolves-hosts-from-settings.unset` and `.v1`.
-[^steady-heron]: The program, `chunk-m14bt1pz.js:160805-160813`. Feature flag `tengu_steady_heron`.
-[^kurzweil]: The program, `chunk-m14bt1pz.js:158314-158315`. Feature flag `tengu_soft_kurzweil`.
+[^names]: The program, `chunk-7343wm3k.js:901` (the table of variable names), and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^bg-gateway]: The program, `chunk-fcdwedb2.js:1146` (the dispatcher sets it), `chunk-vn6cvxdx.js:23-25` (the session reads it), and `chunk-vn6cvxdx.js:59-61` (the stop messages). Gate `tengu_bg_gateway_mark`, default on, at `chunk-vn6cvxdx.js:18-20`.
+[^https-agent]: The program, `chunk-0tagyyqy.js:8393-8404` (the signature), `chunk-0tagyyqy.js:10009-10010` (the log text), and `chunk-0tagyyqy.js:10301-10307` (the agent options).
+[^cross-cert]: The program, `chunk-0tagyyqy.js:8782` (the log text), `chunk-0tagyyqy.js:9772-9775` (the switch and the client certificate check), and `chunk-0tagyyqy.js:9472-9476` (the client certificate flag).
+[^self-named]: The program, `chunk-0tagyyqy.js:9556-9562` (the switch), `chunk-0tagyyqy.js:9657` (the log text), and `chunk-0tagyyqy.js:9472-9476` (the client certificate flag).
+[^bun-tls]: The program, `chunk-x7g75ktc.js:332-335` (the two TLS variable names) and `chunk-0tagyyqy.js:8385-8387` (a value other than `1` counts).
+[^cert-store]: The program, `chunk-0tagyyqy.js:8509-8519` (the variable), `chunk-0tagyyqy.js:9270-9277` (the startup messages), and `chunk-0tagyyqy.js:9740` (the message that names the variable).
+[^proxy-hosts]: The program, `chunk-0tagyyqy.js:10681-10684` (the proxy agent `lookup`), `chunk-jd85xpd4.js:146-149` (the WebSocket path), `chunk-jyh23dg9.js:150` (the host-managed list), and `chunk-tjre0aph.js:906-920` (the `Ignoring` log). Probe cases `print.env319a.proxy-resolves-hosts-from-settings.unset` and `.v1`.
+[^steady-heron]: The program, `chunk-56bhcxay.js:165998-166006`. Feature flag `tengu_steady_heron`.
+[^kurzweil]: The program, `chunk-56bhcxay.js:163225-163226`. Feature flag `tengu_soft_kurzweil`.
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
 [^assume-first-party]: [Probes](../../reference/probes.md).
-[^ca-faults]: The program. The message texts are in `chunk-j9g63hey.js:8978-8986` (the `Claude Code ...` lines), `chunk-j9g63hey.js:9239` (the runtime line, in the function that builds the CA list), `chunk-j9g63hey.js:9972` (the unreadable certificate count), and `chunk-j9g63hey.js:8491` (the failed read). Runs: `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only cacerts319` (cases `extra-ca.*` and `extra-ca-tls.*`), repeated with `--from 2.1.316 --to 2.1.316`.
-[^name-constraint]: The program, `chunk-asj6f58y.js:18788-18803` (the code set and the message function) and `chunk-asj6f58y.js:19001-19005` (the error text that carries them).
-[^signature]: The program, `chunk-asj6f58y.js:8717-8719` (message start and IT team wording), `chunk-asj6f58y.js:8713-8715` (the code check), and `chunk-asj6f58y.js:19006-19007` (the error text).
-[^all-proxy]: The program, `chunk-j9g63hey.js:10937` (`ALL_PROXY` as the only proxy), `chunk-j9g63hey.js:10887` (the proxy URL check), and `chunk-j9g63hey.js:10891-10910` (the 25000 ms timeout).
+[^ca-faults]: The program. The message texts are in `chunk-0tagyyqy.js:8984-8992` (the `Claude Code ...` lines), `chunk-0tagyyqy.js:9245` (the runtime line, in the function that builds the CA list), `chunk-0tagyyqy.js:9978` (the unreadable certificate count), and `chunk-0tagyyqy.js:8497` (the failed read). Runs: `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only cacerts319` (cases `extra-ca.*` and `extra-ca-tls.*`), repeated with `--from 2.1.316 --to 2.1.316`.
+[^name-constraint]: The program, `chunk-xethrx83.js:16975-16990` (the code set and the message function) and `chunk-xethrx83.js:17189-17193` (the error text that carries them).
+[^signature]: The program, `chunk-xethrx83.js:6851-6853` (message start and IT team wording), `chunk-xethrx83.js:6847-6849` (the code check), and `chunk-xethrx83.js:17194-17195` (the error text).
+[^all-proxy]: The program, `chunk-0tagyyqy.js:10994` (`ALL_PROXY` as the only proxy), `chunk-0tagyyqy.js:10933` (the proxy URL check), and `chunk-0tagyyqy.js:10937-10956` (the 25000 ms timeout).
 [^v325]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
 [^v326]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^scheme-repair]: The program, `chunk-5mp27d0e.js:10135`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^stream-idle-limit]: The program, `chunk-y5weakn8.js:18016` (the 5-minute and 30-minute values), `chunk-y5weakn8.js:18018` (the raised limit), and `chunk-y5weakn8.js:18645` (the request option). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^scheme-repair]: The program, `chunk-t76jkbzv.js:10137`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).

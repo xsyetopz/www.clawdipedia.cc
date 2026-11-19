@@ -26,7 +26,7 @@ on("turn.complete", async ($, e, next) => {
 
 | Item | Status | What it does | How it works | Where it can be used |
 | --- | --- | --- | --- | --- |
-| `$.fs.read` | <Documented /> | Reads a file and returns its text. With `{ as: "bytes" }` it returns the bytes as `{ base64 }`. | Four call forms. Rejects when the file is missing or the answer is over 4 MiB. `options.as` is `"text"` (default) or `"bytes"`. Since `2.1.326`, `options.offset` (bytes from the start, 0 by default) and `options.length` (at most 4 MiB) read a range of bytes of a file; a range on a pipe, a socket, a device, or a directory rejects. A text range that cuts a character gives U+FFFD at that edge. | Run time. |
+| `$.fs.read` | <Documented /> | Reads a file and returns its text. With `{ as: "bytes" }` it returns the bytes as `{ base64 }`. | Four call forms. Rejects when the file is missing or the answer is over 4 MiB. `options.as` is `"text"` (default) or `"bytes"`. Since `2.1.326`, `options.offset` (bytes from the start, 0 by default) and `options.length` (at most 4 MiB) read a range of bytes of a file; a range on a pipe, a socket, a device, or a directory rejects. A text range that cuts a character gives U+FFFD at that edge.[^types] | Run time. |
 | `$.fs.write` | <Documented /> | Writes `text` to a file, creating it and its directories as needed. | `(path, text) => Promise<void>`. `path` is relative to the working directory, or absolute. `text` is the whole new content. | Run time. |
 | `$.fs.list` | <Documented /> | Lists a directory: `{ name, kind, size, mtimeMs, isLink }` for each entry. | `(path?) => Promise<FsEntry[]>`. A symbolic link is `other` with `isLink`. | Run time. |
 | `$.fs.exists` | <Documented /> | Returns whether the path exists. | `(path) => Promise<boolean>`. Rejects only for a network location. | Run time. |
@@ -78,4 +78,4 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 
 ## Sources
 
-[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `FsReadCall`, `FsReadOptions`, `FsEntry`, `FsStat`, `FsAncestor`, `FsAncestorsRequest`, `StateRead`, `StateSetResult`, `AtomFunction`, `DeriveFunction`, `MemberOfFunction`, `ReadFunction`, `UpdateFunction`, and the `fs.*`, `store.*`, and `state.*` entries of `EventOf` and `ResultOf`.
+[^types]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `FsReadCall`, `FsReadOptions`, `FsEntry`, `FsStat`, `FsAncestor`, `FsAncestorsRequest`, `StateRead`, `StateSetResult`, `AtomFunction`, `DeriveFunction`, `MemberOfFunction`, `ReadFunction`, `UpdateFunction`, and the `fs.*`, `store.*`, and `state.*` entries of `EventOf` and `ResultOf`.

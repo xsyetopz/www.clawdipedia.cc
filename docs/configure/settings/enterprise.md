@@ -82,14 +82,14 @@ The prompt-free path and the stored-copy check are also in `2.1.314`.
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema, `chunk-ja5z738t.js:278919`.
+[^schema]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:279143`.
 [^reply-check]: The settings schema. Probe case `print.cli319.reply-check.user` shows the debug line, with `CLAUDE_CODE_REPLY_GATE_POLICY` set and the key in user settings. The turn-end code reads the key from the vouched settings tiers and logs "Reply gate: verdict=skip why=disableReplyCheck" when it is on. The vouched tiers come from the function that lists them. In `2.1.319` the function that reads `CLAUDE_CODE_MANAGED_SETTINGS_PATH` returns nothing. A run with a file in that variable logged `verdict=no_bounce`, so a file there is not a managed tier.
 [^windows-split]: The settings schema. The Bash command path checks the platform (`windows`), the command length, and `policySettings.disableWindowsBashCommandSplit`. The path cannot run on macOS, so no run shows the split. Probe cases `print.cli319.dwb.user` (a `true` in user settings writes no warning line) and `print.cli319.dwb.bad-type` (`"yes"`).
-[^helper-env]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-bpr7n093.js:82294`.
-[^internal]: The program, `chunk-ja5z738t.js:223888`.
-[^policy-default]: The program, `chunk-ja5z738t.js:8471-9824`.
-[^policy-entry]: The settings schema and the program, `chunk-ja5z738t.js:8514-9811`.
-[^approval]: The program, `chunk-b1grgrc4.js:3582` and `chunk-b1grgrc4.js:34407`, `chunk-fw32tasq.js:6834`, `chunk-k5zeysxp.js:293`, and `chunk-ja5z738t.js:348386`.
-[^version-range]: The program, its bundled settings schema, `chunk-ja5z738t.js:285180` (`requiredMinimumVersion`) and `chunk-ja5z738t.js:266767` (`managedSourcesBehavior`).
+[^helper-env]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-sm9djeyx.js:82361`.
+[^internal]: The program, `chunk-jkpzhr7r.js:223337`.
+[^policy-default]: The program, `chunk-jkpzhr7r.js:8398-9752`.
+[^policy-entry]: The settings schema and the program, `chunk-jkpzhr7r.js:8441-9739`.
+[^approval]: The program, `chunk-vz5h5htj.js:3592` and `chunk-vz5h5htj.js:34411`, `chunk-mmyeqkh1.js:6835`, `chunk-yjm9fsrg.js:293`, and `chunk-jkpzhr7r.js:349223`.
+[^version-range]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:285404` (`requiredMinimumVersion`) and `chunk-jkpzhr7r.js:266991` (`managedSourcesBehavior`).
 
-[^checksum-header]: The program, `chunk-18d5r2hb.js:238176` (hint headers on) `chunk-18d5r2hb.js:319837` (the conditions), `chunk-enmznns5.js:685` (the direct `api.anthropic.com` test that stops the header), and `chunk-f892tj2r.js:36390` (the host test). The [gateway compatibility guide](https://code.claude.com/docs/en/llm-gateway-protocol#gateway-hint-headers) names the hint headers but not this header, and the [settings page](https://code.claude.com/docs/en/settings) and [network page](https://code.claude.com/docs/en/network-config) do not mention it.
+[^checksum-header]: The program, `chunk-y5weakn8.js:238761` (hint headers on) `chunk-y5weakn8.js:322501` (the conditions), `chunk-ee3jzhc1.js:685` (the direct `api.anthropic.com` test that stops the header), and `chunk-b60sxmve.js:36464` (the host test). The [gateway compatibility guide](https://code.claude.com/docs/en/llm-gateway-protocol#gateway-hint-headers) names the hint headers but not this header, and the [settings page](https://code.claude.com/docs/en/settings) and [network page](https://code.claude.com/docs/en/network-config) do not mention it.

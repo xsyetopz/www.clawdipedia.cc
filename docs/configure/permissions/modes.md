@@ -109,15 +109,15 @@ Since `2.1.326`, a tool call in `bypassPermissions` mode asks for approval when 
 
 ## Sources
 
-[^mode-names]: The program, `chunk-k57p2hm4.js:1526`.
-[^project-default]: The program, `chunk-rthqjjhy.js:6971-7046` and the picker text in `chunk-rqrmxgcm.js:10403`.
-[^killswitch]: The [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-rthqjjhy.js:4773` (the `--permission-mode` flag), `chunk-rthqjjhy.js:5258` (an agent definition's `permissionMode: auto`), `chunk-rthqjjhy.js:6475` (`defaultMode: auto` in an IDE session), and `chunk-rthqjjhy.js:7994`. The program logs `auto mode killswitch active (override- or payload-served) — falling back to default`.
-[^bypass-errors]: The program, `chunk-rthqjjhy.js:8470` and `chunk-7at7cxxb.js:9835`.
-[^cloud-bypass]: The program error text, `chunk-61wd57dm.js:23679`.
-[^reasons]: The program, `chunk-k57p2hm4.js:4328`.
-[^changes-327]: The symbolic link refusals are in the program at `chunk-0kfay0s8.js:1132-1149`, with the text "Refusing to read a file whose path could not be vetted". The list control stops the Down key at the last row in the program at `chunk-d2dqtfhk.js:3588` (`stopsAtLastRow`). The list turns this on at `chunk-d2dqtfhk.js:27997` when the permission prompt frame sets it, the numbers show, and the last answer is the decline answer. The permission prompt frame sets it at `chunk-we95sh0m.js:3754`. The other items in this list are from the [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^long-vars]: The program, `chunk-m14bt1pz.js:83610`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^mode-names]: The program, `chunk-rs68es1f.js:1570`.
+[^project-default]: The program, `chunk-hscvkewq.js:6981-7056` and the picker text in `chunk-3h9amnsz.js:10412`.
+[^killswitch]: The [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-hscvkewq.js:4783` (the `--permission-mode` flag), `chunk-hscvkewq.js:5268` (an agent definition's `permissionMode: auto`), `chunk-hscvkewq.js:6485` (`defaultMode: auto` in an IDE session), and `chunk-hscvkewq.js:8004`. The program logs `auto mode killswitch active (override- or payload-served) — falling back to default`.
+[^bypass-errors]: The program, `chunk-hscvkewq.js:8480` and `chunk-tew0988b.js:9837`.
+[^cloud-bypass]: The program error text, `chunk-2v0j7fr6.js:24137`.
+[^reasons]: The program, `chunk-rs68es1f.js:4373`.
+[^changes-327]: The symbolic link refusals are in the program at `chunk-rq7vgh0h.js:1132-1149`, with the text "Refusing to read a file whose path could not be vetted". The list control stops the Down key at the last row in the program at `chunk-rmkp9aqw.js:3571` (`stopsAtLastRow`). The list turns this on at `chunk-rmkp9aqw.js:27998` when the permission prompt frame sets it, the numbers show, and the last answer is the decline answer. The permission prompt frame sets it at `chunk-nr1xrxn3.js:3108`. The other items in this list are from the [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^long-vars]: The program, `chunk-56bhcxay.js:87603`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^v309]: [`2.1.309` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.309).
 [^mode-use]: Official page [Choose a Permission Mode](https://code.claude.com/docs/en/permission-modes), table "Available modes", column "Best for".
-[^crashed-check]: The program, `chunk-m14bt1pz.js:3632674` (the decision reason), `chunk-m14bt1pz.js:3632940` (the message), `chunk-m14bt1pz.js:3643325` (the crash becomes an ask before the mode decides), and `chunk-m14bt1pz.js:3641116` (the refusal text where no one can be asked). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^rm-unparsed]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-m14bt1pz.js:1489671`. The `2.1.326` message ends after `This requires explicit approval.`
+[^crashed-check]: The program, `chunk-56bhcxay.js:3724731` (the decision reason), `chunk-56bhcxay.js:3724997` (the message), `chunk-56bhcxay.js:3736639` (the crash becomes an ask before the mode decides), and `chunk-56bhcxay.js:3734494` (the refusal text where no one can be asked). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^rm-unparsed]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-56bhcxay.js:1564037`. The `2.1.326` message ends after `This requires explicit approval.`

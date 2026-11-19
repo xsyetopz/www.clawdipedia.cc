@@ -91,4 +91,4 @@ flowchart TD
 
 ## Sources
 
-[^managed-late]: The program, `chunk-m14bt1pz.js:233380`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^managed-late]: The program, `chunk-56bhcxay.js:239272`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

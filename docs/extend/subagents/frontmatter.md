@@ -86,9 +86,9 @@ They list every field of this release. Look up a field there before you rely on 
 
 ## Sources
 
-[^max-turns]: The program, the agent loop, `chunk-m14bt1pz.js:2335015`, and the frontmatter parser, `chunk-m14bt1pz.js:2892693`.
-[^effort]: The program, the frontmatter schema, `chunk-m14bt1pz.js:2843458`.
-[^isolation]: The program, the agent file parser, `chunk-m14bt1pz.js:2892112`. The Agent tool input schema and its description of both values, `chunk-3v1e1y2y.js:37141`. The fallback, `chunk-3v1e1y2y.js:6817`. The cloud launch and its checks, `chunk-3v1e1y2y.js:56384`. The `--agents` schema, `chunk-m14bt1pz.js:1035051`. The plugin agent parser, `chunk-m14bt1pz.js:2843156`. Probes: see [Probes](../../reference/probes.md#subagents-and-hooks).
-[^observer]: The program, `chunk-0cnnff0k.js:1199` and `chunk-m14bt1pz.js:1035051`, and [Probes](../../reference/probes.md#subagents-and-hooks).
-[^plugin-agent]: The program, the plugin agent loader, `chunk-m14bt1pz.js:2843458`.
-[^validators]: The program, the frontmatter schema, `chunk-m14bt1pz.js:2882008`, the frontmatter parser, `chunk-m14bt1pz.js:2892112`, and the `--agents` JSON schema, `chunk-3v1e1y2y.js:37141`. Official page: [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents).
+[^max-turns]: The program, the agent loop, `chunk-56bhcxay.js:2412588`, and the frontmatter parser, `chunk-56bhcxay.js:2969766`.
+[^effort]: The program, the frontmatter schema, `chunk-56bhcxay.js:2922420`.
+[^isolation]: The program, the agent file parser, `chunk-56bhcxay.js:2969185`. The Agent tool input schema and its description of both values, `chunk-tt7pb888.js:28728`. The fallback, `chunk-tt7pb888.js:6732`. The cloud launch and its checks, `chunk-tt7pb888.js:46950`. The `--agents` schema, `chunk-56bhcxay.js:1075614`. The plugin agent parser, `chunk-56bhcxay.js:2922120`. Probes: see [Probes](../../reference/probes.md#subagents-and-hooks).
+[^observer]: The program, `chunk-6fzqs776.js:1202` and `chunk-56bhcxay.js:1075614`, and [Probes](../../reference/probes.md#subagents-and-hooks).
+[^plugin-agent]: The program, the plugin agent loader, `chunk-56bhcxay.js:2922420`.
+[^validators]: The program, the frontmatter schema, `chunk-56bhcxay.js:2959248`, the frontmatter parser, `chunk-56bhcxay.js:2969185`, and the `--agents` JSON schema, `chunk-tt7pb888.js:28728`. Official page: [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents).

@@ -72,9 +72,9 @@ on("ui.render", { component: "Pane" }, async ($, e) => {
 | Item | Status | What it does | Elements | Where it can be used |
 | --- | --- | --- | --- | --- |
 | `terminal` | <Documented /> | Ink. Draws the whole tree of the hook. | `Box`, `Text`, `Button`, `Input`, `Select`, `Link`, `Code`, `Markdown`, `Progress`, `Client`, `Raster`, `Image`. No `Svg`. | `e.surface === 'terminal'` |
-| `desktop` | <Documented /> | Claude Code Desktop. Asks over the wire. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Progress`, `Client`. Since `2.1.326`, `Shader` too. | `e.surface === 'desktop'` |
-| `mobile` | <Documented /> | The mobile app. Asks over the wire. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Progress`. A client gets `Input`, `Select`, or `Progress` only if it names it in `draws`. Any other client gets an empty Box for `Input` or `Select`, and the Box and Text of a `Progress`. Since `2.1.326`, `Shader` too. No `Client`. The docs name no mobile surface. | `e.surface === 'mobile'` |
-| `vscode` | <Differs note="The type file says no surface is attached yet. The docs say the extension draws from 2.1.299 in a session that fetches feature flags." /> | The editor webview. The same table as `desktop` without `Client`. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Progress`. | `e.surface === 'vscode'` |
+| `desktop` | <Documented /> | Claude Code Desktop. Asks over the wire. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Progress`, `Client`. Since `2.1.326`, `Shader` too.[^shader] | `e.surface === 'desktop'` |
+| `mobile` | <Documented /> | The mobile app. Asks over the wire. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Progress`. A client gets `Input`, `Select`, or `Progress` only if it names it in `draws`. Any other client gets an empty Box for `Input` or `Select`, and the Box and Text of a `Progress`. Since `2.1.326`, `Shader` too.[^shader] No `Client`. The docs name no mobile surface. | `e.surface === 'mobile'` |
+| `vscode` | <Differs note="The type file says no surface is attached yet. The docs say the extension draws from 2.1.299 in a session that fetches feature flags." /> | The editor webview. The same table as `desktop` without `Client`. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Progress`.[^types] | `e.surface === 'vscode'` |
 
 ## Render Sites and Props
 
@@ -423,14 +423,14 @@ export default shader({ fps: 30, passes: [sky] });
 
 ## Sources
 
-[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `Elements` (the element tables of the surfaces) and `RenderPropsOf`.
-[^types-323]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, the `AskUserQuestion` and `Pane` members of `RenderPropsOf`. The `2.1.322` type file is `b3e97149`, and the `2.1.323` type file is `3b4d8783`, in the Git history.
-[^waiting]: The Mod API type file, `schemas/claude-code.d.ts`, `WaitingFor` and `WaitingAgent`. The program, `chunk-36ts0j6v.js:211159`.
-[^above-prompt]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-b0yr0k8v.js:197943`.
-[^collapsed]: The program, `chunk-cfxefa64.js:544668`.
-[^list]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-b0yr0k8v.js:170937` and `chunk-b0yr0k8v.js:197943`.
-[^covered]: The program, `chunk-cfxefa64.js:557246`.
-[^anchored]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-b0yr0k8v.js:168235`.
-[^agent-row]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, the `AgentRow` member of `RenderPropsOf`.
-[^context-menu]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, the `ContextMenu` member of `RenderPropsOf`.
-[^shader]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `ShaderProps` and the module `claude-code/shader`.
+[^types]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `Elements` (the element tables of the surfaces) and `RenderPropsOf`.
+[^types-323]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, the `AskUserQuestion` and `Pane` members of `RenderPropsOf`. The `2.1.322` type file is `b3e97149`, and the `2.1.323` type file is `3b4d8783`, in the Git history.
+[^waiting]: The Mod API type file, `schemas/claude-code.d.ts`, `WaitingFor` and `WaitingAgent`. The program, `chunk-bjgpjqze.js:208659`.
+[^above-prompt]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-syremzmn.js:199009`.
+[^collapsed]: The program, `chunk-j2wfp6sf.js:548379`.
+[^list]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-syremzmn.js:172050` and `chunk-syremzmn.js:199009`.
+[^covered]: The program, `chunk-j2wfp6sf.js:560910`.
+[^anchored]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-syremzmn.js:169348`.
+[^agent-row]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, the `AgentRow` member of `RenderPropsOf`.
+[^context-menu]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, the `ContextMenu` member of `RenderPropsOf`.
+[^shader]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `ShaderProps` and the module `claude-code/shader`.

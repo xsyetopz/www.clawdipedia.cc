@@ -115,6 +115,10 @@
 		"route": "/reference/api/endpoints",
 		"anchor": "account-and-service-endpoints"
 	},
+	"endpoint:https://microsoft365.mcp.claude.com": {
+		"route": "/reference/api/endpoints",
+		"anchor": "mcp-paths"
+	},
 	"env:VERTEX_REGION_CLAUDE_3_5_HAIKU": {
 		"route": "/configure/env-vars/cloud-providers",
 		"anchor": "variables"
@@ -235,6 +239,22 @@
 		"route": "/extend/mod-api/calls/testing",
 		"anchor": "errors"
 	},
+	"error:$.env.set: HELD": {
+		"route": "/extend/mod-api",
+		"anchor": "errors"
+	},
+	"error:$.env.set: HOST_RULE": {
+		"route": "/extend/mod-api",
+		"anchor": "errors"
+	},
+	"error:$.env.set: OUT_OF_STEP": {
+		"route": "/extend/mod-api",
+		"anchor": "errors"
+	},
+	"error:$.env.set: PINNED": {
+		"route": "/extend/mod-api",
+		"anchor": "errors"
+	},
 	"error:$.session.append: *": {
 		"route": "/extend/mod-api",
 		"anchor": "errors"
@@ -295,6 +315,14 @@
 		"route": "/extend/plugins/cli",
 		"anchor": "errors"
 	},
+	"error:${…} A permission rule covers the text that these edits would save, and only a write of the whole text is checked against it. Instead, ${…}": {
+		"route": "/reference/tools/gated-and-other",
+		"anchor": "errors"
+	},
+	"error:${…} Couldn't restore from backup. To restore it yourself, run: defaults import com.apple.Terminal ${…}": {
+		"route": "/extend/skills-and-commands/slash-commands",
+		"anchor": "errors"
+	},
 	"error:${…} Input messages: ${…}": {
 		"route": "/extend/headless",
 		"anchor": "errors"
@@ -307,6 +335,10 @@
 		"route": "/extend/plugins/marketplace",
 		"anchor": "errors"
 	},
+	"error:${…} The blocks contain NUL bytes, which project docs cannot store. Remove them, then send all the blocks again.": {
+		"route": "/reference/tools/gated-and-other",
+		"anchor": "errors"
+	},
 	"error:${…} The retry over SSH failed too: ${…} Check the repository and ref in the marketplace entry and that github.com can be reached. If the repository is private, add an SSH key to your GitHub account o…": {
 		"route": "/extend/plugins/marketplace",
 		"anchor": "errors"
@@ -315,8 +347,20 @@
 		"route": "/configure/settings/auth",
 		"anchor": "errors"
 	},
+	"error:${…} The text is only SEARCH/REPLACE blocks, and would have replaced the whole doc. ${…} the doc's whole new text. Do not delete the doc to write it afresh.": {
+		"route": "/reference/tools/gated-and-other",
+		"anchor": "errors"
+	},
+	"error:${…} There is no text doc at this path to edit. To create one, ${…}": {
+		"route": "/reference/tools/gated-and-other",
+		"anchor": "errors"
+	},
 	"error:${…} This install runs that command; confirm it by running `claude plugin install` in a terminal (or with -y/--yes).": {
 		"route": "/extend/plugins/loading",
+		"anchor": "errors"
+	},
+	"error:${…} This tool cannot find the doc's whole current text in your context. Call project_read on this path. If it shows the whole text, send the blocks again against that text. If it does not, follow wha…": {
+		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
 	},
 	"error:${…} Your settings have been restored from backup.": {
@@ -359,6 +403,14 @@
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
+	"error:${…} cannot be used in agent contexts": {
+		"route": "/reference/tools/agents-and-tasks",
+		"anchor": "errors"
+	},
+	"error:${…} cannot clear a goal. The user can end it with /goal clear.": {
+		"route": "/reference/tools/agents-and-tasks",
+		"anchor": "errors"
+	},
 	"error:${…} changed while being opened; try again": {
 		"route": "/extend/plugins/cli",
 		"anchor": "errors"
@@ -393,6 +445,10 @@
 	},
 	"error:${…} directory name \"${…}\" starts or ends with whitespace, which cannot be scoped safely in a permission rule — rename it": {
 		"route": "/extend/plugins/cli",
+		"anchor": "errors"
+	},
+	"error:${…} edits cannot be used from a script, or with content or local_path. Instead, ${…}": {
+		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
 	},
 	"error:${…} failed validation: ${…}": {
@@ -453,6 +509,10 @@
 	},
 	"error:${…} has no parent directory": {
 		"route": "/extend/plugins/marketplace",
+		"anchor": "errors"
+	},
+	"error:${…} has unexpected owner or mode": {
+		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
 	"error:${…} has unreadable metadata": {
@@ -547,6 +607,14 @@
 		"route": "/configure/settings/auth",
 		"anchor": "errors"
 	},
+	"error:${…} must be <owner>/<repo>=<folder>, or <owner>/*=<folder>/* (got: ${…})": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runner-errors"
+	},
+	"error:${…} must be a comma-separated list of model ids, such as <model-id>,<prefix>*. Each id starts with a letter or digit, uses only letters, digits and . _ : @ / -, and may end in one * (got: ${…})": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runner-errors"
+	},
 	"error:${…} must be a non-negative number of minutes (0 disables, max ${…}), got: ${…}": {
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
@@ -554,6 +622,10 @@
 	"error:${…} must be a non-negative number of seconds (max 86400), got: ${…}": {
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
+	},
+	"error:${…} must be a whole number from 0 to 999999999 (got: ${…})": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runner-errors"
 	},
 	"error:${…} must be an integer in [0, 65535], got: \"${…}\"": {
 		"route": "/how-it-works/sessions-and-storage",
@@ -603,6 +675,10 @@
 		"route": "/extend/plugins/cli",
 		"anchor": "errors"
 	},
+	"error:${…} was added by a tool.list hook, and no tool.run or tool.call hook answered this call": {
+		"route": "/extend/mod-api/calls/tool-command-config",
+		"anchor": "events-raised-by-these-calls"
+	},
 	"error:${…} was not written by this run (it served no mocks) — nothing there is to be adopted": {
 		"route": "/extend/plugins/cli",
 		"anchor": "errors"
@@ -642,6 +718,10 @@
 	"error:${…}, so the session now stands in ${…}, a temporary folder of Claude Code's own. Tell the person to put them right and then start the session again.": {
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
+	},
+	"error:${…}, so the session starts with no prompt: ${…}": {
+		"route": "/configure/cli/flags",
+		"anchor": "sessions-and-worktrees"
 	},
 	"error:${…}. Available agents: ${…}": {
 		"route": "/extend/headless",
@@ -795,10 +875,6 @@
 		"route": "/extend/mod-api",
 		"anchor": "errors"
 	},
-	"error:${…}: $.session.compact: ${…}": {
-		"route": "/extend/mod-api",
-		"anchor": "errors"
-	},
 	"error:${…}: $.session.compact: a turn is running (${…}); the conversation compacts between turns, so call it from turn.complete or later": {
 		"route": "/extend/mod-api",
 		"anchor": "errors"
@@ -847,6 +923,10 @@
 		"route": "/extend/mod-api",
 		"anchor": "errors"
 	},
+	"error:${…}: $.tool.check: the tool container did not answer with a verdict": {
+		"route": "/extend/mod-api",
+		"anchor": "errors"
+	},
 	"error:${…}: $.tool.register: \"${…}\" is a reserved MCP server name": {
 		"route": "/extend/mod-api",
 		"anchor": "errors"
@@ -887,7 +967,19 @@
 		"route": "/extend/mod-api",
 		"anchor": "errors"
 	},
+	"error:${…}: ${…} assigns to its import ${…}": {
+		"route": "/extend/mod-api",
+		"anchor": "errors"
+	},
+	"error:${…}: ${…} awaits at its top level, which only the entry file may": {
+		"route": "/extend/mod-api",
+		"anchor": "errors"
+	},
 	"error:${…}: ${…} does not compile: ${…}": {
+		"route": "/extend/mod-api",
+		"anchor": "errors"
+	},
+	"error:${…}: ${…} imports ${…} from ${…}, which does not export it": {
 		"route": "/extend/mod-api",
 		"anchor": "errors"
 	},
@@ -915,12 +1007,20 @@
 		"route": "/extend/mod-api/calls/testing",
 		"anchor": "errors"
 	},
+	"error:${…}: ${…} passes through a link whose target the operating system may resolve to a different folder than the one Claude Code checked (for example, a target that is not valid UTF-8, or on Windows one …": {
+		"route": "/extend/mod-api/calls/testing",
+		"anchor": "errors"
+	},
 	"error:${…}: ${…} passes through a symlink to a network-reaching path (or a dotted one that cannot be vetted) — refusing it": {
 		"route": "/extend/mod-api/calls/testing",
 		"anchor": "errors"
 	},
 	"error:${…}: ${…} — send only this Artifact's own files": {
 		"route": "/reference/tools/gated-and-other",
+		"anchor": "errors"
+	},
+	"error:${…}: ${…}(${…}) produced no result${…}": {
+		"route": "/extend/mod-api",
 		"anchor": "errors"
 	},
 	"error:${…}: ${…}. Nothing was published; tell the user.": {
@@ -943,10 +1043,6 @@
 		"route": "/extend/mod-api",
 		"anchor": "errors"
 	},
-	"error:${…}: ${…}: ${…} refused: credentials in the URL": {
-		"route": "/extend/mod-api",
-		"anchor": "errors"
-	},
 	"error:${…}: ${…}: ${…} refused: http or https only": {
 		"route": "/extend/mod-api",
 		"anchor": "errors"
@@ -961,6 +1057,10 @@
 	},
 	"error:${…}: ${…}: a body of bytes and compress ride engine requests alone": {
 		"route": "/extend/mod-api/calls/clock-http-process-env-settings",
+		"anchor": "errors"
+	},
+	"error:${…}: ${…}: an import with attributes; a hooks module imports its own files bare": {
+		"route": "/extend/mod-api",
 		"anchor": "errors"
 	},
 	"error:${…}: ${…}: its environment was unloaded": {
@@ -991,6 +1091,10 @@
 		"route": "/extend/mod-api",
 		"anchor": "errors"
 	},
+	"error:${…}: ${…}: refused: credentials in the URL": {
+		"route": "/extend/mod-api",
+		"anchor": "errors"
+	},
 	"error:${…}: ${…}: socketPath ${…} refused: a NUL byte in the path": {
 		"route": "/extend/mod-api",
 		"anchor": "errors"
@@ -1011,16 +1115,20 @@
 		"route": "/extend/mod-api",
 		"anchor": "errors"
 	},
-	"error:${…}: ${…}: unknown auth handle; $.session.authorize() mints one": {
-		"route": "/extend/mod-api",
-		"anchor": "errors"
-	},
 	"error:${…}: Access denied (403)${…}. Check your organization permissions.": {
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
 	"error:${…}: Authentication failed (401)${…}. ${…}": {
 		"route": "/how-it-works/sessions-and-storage",
+		"anchor": "errors"
+	},
+	"error:${…}: NOT_SYNCED": {
+		"route": "/extend/mod-api",
+		"anchor": "errors"
+	},
+	"error:${…}: UNKNOWN_HANDLE": {
+		"route": "/extend/mod-api",
 		"anchor": "errors"
 	},
 	"error:${…}: `abort_when:` needs `type: agent`; a fixed responder guards its input with `expect:`": {
@@ -1152,6 +1260,10 @@
 		"anchor": "errors"
 	},
 	"error:${…}: hooks module not loaded; ${…} (policy/scan)": {
+		"route": "/extend/mod-api",
+		"anchor": "errors"
+	},
+	"error:${…}: hooks module not loaded; a name that starts with \"${…}\" reads as a settings hook's": {
 		"route": "/extend/mod-api",
 		"anchor": "errors"
 	},
@@ -1443,6 +1555,22 @@
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
+	"error:--hook-label cannot be used with --min-idle: a standby runner ignores the labels of the session that it takes. Remove one of the two": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"error:--hook-label cannot read \"${…}\". It takes words, as in size=small,large, or a range from low to high, as in cpus=1..64, of up to nine digits with no leading zero. A label: lower-case letters and digit…": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"error:--hook-label names one label twice: give all its values in one flag, as in size=small,large": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"error:--hook-label takes one argument: put commas between the words, as in size=small,large, and give each label a flag of its own": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
 	"error:--hook-timeout *": {
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
@@ -1463,6 +1591,10 @@
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
+	"error:--max-budget-usd must be a number greater than 0": {
+		"route": "/configure/cli/flags",
+		"anchor": "errors"
+	},
 	"error:--messaging-socket-path*": {
 		"route": "/configure/cli/flags",
 		"anchor": "errors"
@@ -1470,6 +1602,18 @@
 	"error:--min-idle must be an integer in [0, 200]": {
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
+	},
+	"error:--nested-model-access cannot be combined with --agent-proxy-url or --proxy-authorization-command / --proxy-authorization-file: the runner would send nested model calls past that proxy. Remove one of t…": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runner-errors"
+	},
+	"error:--nested-model-access cannot be used while ANTHROPIC_UNIX_SOCKET is set in the runner's environment: sessions would send their model calls through that socket, but the runner would send nested model c…": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runner-errors"
+	},
+	"error:--nested-model-access needs a list of models: set --nested-model-allow <models> or SELF_HOSTED_RUNNER_NESTED_MODEL_ALLOW to the comma-separated ids that a nested Claude Code may use, for example <mode…": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runner-errors"
 	},
 	"error:--post-session-hook-timeout-sec must be a positive number of seconds, got: ${…}": {
 		"route": "/how-it-works/sessions-and-storage",
@@ -1482,6 +1626,10 @@
 	"error:--release-idle-session-min must be a non-negative number of minutes (0 disables, max ${…}), got: ${…}": {
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
+	},
+	"error:--repository-folder cannot be used: ${…} cannot be looked at (${…})": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runner-errors"
 	},
 	"error:--retire-at must be an absolute Unix timestamp in whole SECONDS (e.g. the output of 'date +%s' plus the runner's intended lifetime — not milliseconds, not a duration), got: ${…}": {
 		"route": "/how-it-works/sessions-and-storage",
@@ -1509,6 +1657,10 @@
 	},
 	"error:--startup-timeout-min must be a non-negative number of minutes (0 disables, max ${…}), got: ${…}": {
 		"route": "/how-it-works/sessions-and-storage",
+		"anchor": "errors"
+	},
+	"error:--task-budget must be a positive integer": {
+		"route": "/configure/cli/flags",
 		"anchor": "errors"
 	},
 	"error:--use-anthropic-git-proxy: apiBaseUrl is not a valid URL: ${…}": {
@@ -1587,6 +1739,10 @@
 		"route": "/configure/memory-and-rules",
 		"anchor": "errors"
 	},
+	"error:Added folder not trusted: ${…}. Leave out its --add-dir or, if you trust it and everything in its repository or below it, start `claude` there once and accept the trust prompt.": {
+		"route": "/configure/cli/flags",
+		"anchor": "agents-plugins-mcp-and-context"
+	},
 	"error:Agent ${…} is *": {
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
@@ -1603,12 +1759,28 @@
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
 	},
+	"error:Allowed choices are ${…}.": {
+		"route": "/configure/cli/flags",
+		"anchor": "errors"
+	},
+	"error:Allowed choices are on, off.": {
+		"route": "/configure/cli/flags",
+		"anchor": "errors"
+	},
+	"error:Allowed choices are true, false, 1, 0, yes, no, on, off.": {
+		"route": "/configure/cli/flags",
+		"anchor": "errors"
+	},
 	"error:Already i*": {
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
 	},
 	"error:An artifact's earlier versions are not available in this session.": {
 		"route": "/reference/tools/gated-and-other",
+		"anchor": "errors"
+	},
+	"error:Another process is installing Claude. Try again in a moment.": {
+		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
 	},
 	"error:Applying `edits` changes the file at file_path, and an Edit permission check requires approval here: nothing was published and the file is unchanged. Retry the publish so it can be asked, or Edit the …": {
@@ -1673,6 +1845,10 @@
 	},
 	"error:CLAUDE_S*": {
 		"route": "/how-it-works/sessions-and-storage",
+		"anchor": "errors"
+	},
+	"error:Can't add to .mcp.json: it lists servers at the top level, and adding an \"mcpServers\" key would stop a plugin from loading them. Move them under \"mcpServers\", then try again. If they aren't servers, a…": {
+		"route": "/extend/mcp/cli",
 		"anchor": "errors"
 	},
 	"error:Can't read .mcp.json: it isn't a regular file or is larger than ${…} bytes. Fix or remove it, then run the command again.": {
@@ -2747,6 +2923,10 @@
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
+	"error:It must be 'auto', or at least 100k (e.g. 500k, 200000, or 200 as shorthand)": {
+		"route": "/configure/cli/flags",
+		"anchor": "errors"
+	},
 	"error:Key escapes *": {
 		"route": "/configure/memory-and-rules",
 		"anchor": "errors"
@@ -2955,6 +3135,10 @@
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
+	"error:No session goal is active, so there is nothing to pause.": {
+		"route": "/reference/tools/agents-and-tasks",
+		"anchor": "errors"
+	},
 	"error:No task found with ID: ${…}. An ID of this shape is not looked up*": {
 		"route": "/reference/tools/shell-and-web",
 		"anchor": "errors"
@@ -2967,7 +3151,7 @@
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
-	"error:No walker function defined for node type ${…}": {
+	"error:No walker function defined for node type": {
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
 	},
@@ -3043,6 +3227,10 @@
 		"route": "/extend/headless",
 		"anchor": "errors"
 	},
+	"error:Or switch to the native installation: claude install": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "errors"
+	},
 	"error:Original and edited file match exactly. Failed to apply edit.": {
 		"route": "/reference/tools/files",
 		"anchor": "errors"
@@ -3065,6 +3253,10 @@
 	},
 	"error:Path traversal detected: \"${…}\" would escape the base directory": {
 		"route": "/extend/plugins/marketplace",
+		"anchor": "errors"
+	},
+	"error:Pausing a goal is only available in interactive local sessions, and only while model-proposed goals are on.": {
+		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
 	},
 	"error:Per-exec filesystem.allowRead/allowWrite is not supported on Windows — `srt-win exec` only exposes per-exec denies. Set them at the session level (initialize()).": {
@@ -3167,6 +3359,10 @@
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
 	},
+	"error:Reading the JSON from stdin is refused inside a Claude Code session, because its permission prompt would not show the server. Run the command outside the session.": {
+		"route": "/extend/mcp/cli",
+		"anchor": "errors"
+	},
 	"error:Reconnecting to ${…}…": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
@@ -3229,6 +3425,14 @@
 	},
 	"error:Request t*": {
 		"route": "/extend/plugins/marketplace",
+		"anchor": "errors"
+	},
+	"error:Run claude --teleport ${…} from a checkout of ${…}. This repo is ${…}.": {
+		"route": "/how-it-works/sessions-and-storage",
+		"anchor": "errors"
+	},
+	"error:Run claude --teleport ${…} from a checkout of ${…}.${…}": {
+		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
 	"error:RunMonitorCommand was not run*": {
@@ -3315,6 +3519,10 @@
 		"route": "/extend/hooks/configuration",
 		"anchor": "errors"
 	},
+	"error:SetGoal cannot be used in agent contexts": {
+		"route": "/reference/tools/agents-and-tasks",
+		"anchor": "errors"
+	},
 	"error:Setting up the Windows sandbox. Approve the administrator prompt if Windows shows one. After that, set-up can take a few minutes.": {
 		"route": "/reference/tools/shell-and-web",
 		"anchor": "errors"
@@ -3395,6 +3603,10 @@
 		"route": "/extend/mcp/runtime",
 		"anchor": "errors"
 	},
+	"error:Stopped — finishing up…": {
+		"route": "/extend/plugins/cli",
+		"anchor": "errors"
+	},
 	"error:String n*": {
 		"route": "/reference/tools/files",
 		"anchor": "errors"
@@ -3427,6 +3639,10 @@
 		"route": "/extend/hooks/configuration",
 		"anchor": "errors"
 	},
+	"error:Takes the id of the plugin too": {
+		"route": "/extend/hooks/configuration",
+		"anchor": "errors"
+	},
 	"error:Task ${…} is *": {
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
@@ -3447,7 +3663,7 @@
 		"route": "/extend/plugins/marketplace",
 		"anchor": "errors"
 	},
-	"error:That teammate name is a reserved name (\"main\", \"team-lead\", \"user\" or \"system\", in any spelling) or has the shape of an agent id, which already addresses an agent directly — choose another teammate na…": {
+	"error:That teammate name is a reserved name (\"main\", \"team-lead\", \"user\" or \"system\", in any spelling) or has the shape of an agent id or a session id, which already addresses a recipient directly — choose …": {
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
 	},
@@ -3463,6 +3679,10 @@
 		"route": "/extend/headless",
 		"anchor": "errors"
 	},
+	"error:The JSON on stdin is over the limit of 1 MiB.": {
+		"route": "/extend/mcp/cli",
+		"anchor": "errors"
+	},
 	"error:The acco*": {
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
@@ -3476,6 +3696,10 @@
 		"anchor": "errors"
 	},
 	"error:The background service has no process for session ${…}. A name opens only a running session. Use the id: `claude attach ${…}`": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "errors"
+	},
+	"error:The background service isn't running. Installing it keeps it running across reboots so 'claude agents' stays available.": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
 	},
@@ -3500,6 +3724,14 @@
 		"anchor": "errors"
 	},
 	"error:The goal condition *": {
+		"route": "/reference/tools/agents-and-tasks",
+		"anchor": "errors"
+	},
+	"error:The goal is already paused.": {
+		"route": "/reference/tools/agents-and-tasks",
+		"anchor": "errors"
+	},
+	"error:The goal was set during this turn and has not been checked yet, so it was not paused. ${…} shows it.": {
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
 	},
@@ -3531,6 +3763,10 @@
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
 	},
+	"error:The name that this hook's matcher is tested against (for a tool call, the tool's name) has over ${…} characters, the most that a cloud session tests this matcher against.": {
+		"route": "/extend/hooks/configuration",
+		"anchor": "errors"
+	},
 	"error:The permission rule ${…} asks the user before th*": {
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
@@ -3539,12 +3775,24 @@
 		"route": "/extend/plugins/marketplace",
 		"anchor": "errors"
 	},
+	"error:The proxy setting (HTTPS_PROXY or ALL_PROXY) is not an http or https URL, so this request was not sent.": {
+		"route": "/configure/env-vars/network-and-proxy",
+		"anchor": "proxy-requests-with-only-all_proxy"
+	},
+	"error:The reason is empty once whitespace and invisible characters are removed. Give a visible reason.": {
+		"route": "/reference/tools/agents-and-tasks",
+		"anchor": "errors"
+	},
 	"error:The repo's MCP servers have been closed": {
 		"route": "/extend/hooks/configuration",
 		"anchor": "errors"
 	},
 	"error:The sandbox could not create a folder that it has to hide from the command (${…}), so the command was not started.": {
 		"route": "/configure/permissions/sandbox",
+		"anchor": "errors"
+	},
+	"error:The search was cut off before any results arrived. Try again.": {
+		"route": "/reference/tools/shell-and-web",
 		"anchor": "errors"
 	},
 	"error:The skill \"${…}\" was not loaded because of a fault in Claude Code: it has no record of the files that the skill was verified against. Do not try again.": {
@@ -3563,12 +3811,24 @@
 		"route": "/extend/mcp/runtime",
 		"anchor": "errors"
 	},
+	"error:The user has not yet answered an earlier question about the goal.": {
+		"route": "/reference/tools/agents-and-tasks",
+		"anchor": "errors"
+	},
 	"error:The working directory no longer leads where it did when this call was permission-checked (it was deleted, a part of its path was replaced, or it can't be examined), so the call was not run. Make the c…": {
 		"route": "/reference/tools/shell-and-web",
 		"anchor": "errors"
 	},
+	"error:There is no JSON on stdin. Pipe it in, or pass it as the argument.": {
+		"route": "/extend/mcp/cli",
+		"anchor": "errors"
+	},
 	"error:These settings files are not used: they are in a connector-downloads folder, where Claude Code saves files from claude.ai connectors: ${…}": {
 		"route": "/configure/settings",
+		"anchor": "errors"
+	},
+	"error:This Claude Code does not take \"${…}\" in --initialize-fields. Update Claude Code, or send the value by its flag.": {
+		"route": "/configure/cli/flags",
 		"anchor": "errors"
 	},
 	"error:This agent has been stopped and its stop is still completing; it cannot *": {
@@ -3665,6 +3925,10 @@
 	},
 	"error:Transcript *": {
 		"route": "/how-it-works/sessions-and-storage",
+		"anchor": "errors"
+	},
+	"error:Try again in a moment": {
+		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
 	},
 	"error:Try manually updating with:": {
@@ -4471,6 +4735,14 @@
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
+	"error:config.set: ${…}": {
+		"route": "/extend/mod-api",
+		"anchor": "errors"
+	},
+	"error:config.set: NOT_WRITTEN": {
+		"route": "/extend/mod-api",
+		"anchor": "errors"
+	},
 	"error:confirmWithUser(${…}): *": {
 		"route": "/extend/headless",
 		"anchor": "errors"
@@ -4651,6 +4923,10 @@
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
+	"error:error: ${…}": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runner-errors"
+	},
 	"error:eval mock stand-in: *": {
 		"route": "/extend/mod-api/calls/testing",
 		"anchor": "errors"
@@ -4785,10 +5061,6 @@
 	},
 	"error:gh: this command is run by the gh shim Claude Code writes for a session; it is not for direct use.": {
 		"route": "/reference/tools/shell-and-web",
-		"anchor": "errors"
-	},
-	"error:git ${…} failed${…}: ${…}": {
-		"route": "/extend/plugins/marketplace",
 		"anchor": "errors"
 	},
 	"error:git ${…}.${…} is too old for claude plugin eval: it ignores the environment configuration (GIT_CONFIG_COUNT, added in git ${…}.${…}) that switches off the repository's git hooks and helper programs fo…": {
@@ -4933,10 +5205,6 @@
 	},
 	"error:invalid k*": {
 		"route": "/reference/tools/shell-and-web",
-		"anchor": "errors"
-	},
-	"error:invalid r*": {
-		"route": "/extend/headless",
 		"anchor": "errors"
 	},
 	"error:it answered about another hostname": {
@@ -5099,6 +5367,10 @@
 		"route": "/configure/settings/auth",
 		"anchor": "errors"
 	},
+	"error:must be a number": {
+		"route": "/configure/cli/flags",
+		"anchor": "errors"
+	},
 	"error:named CLAUDE_*_CONFIG export for '${…}' has null ${…}": {
 		"route": "/configure/settings/auth",
 		"anchor": "errors"
@@ -5203,7 +5475,19 @@
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
 	},
+	"error:nothing to branch yet": {
+		"route": "/how-it-works/sessions-and-storage",
+		"anchor": "errors"
+	},
+	"error:nothing to branch yet. Send a message first": {
+		"route": "/how-it-works/sessions-and-storage",
+		"anchor": "errors"
+	},
 	"error:oidc.ca_cert_pem has no usable certificate once those on the CLI's deny list are removed, so the gateway can't verify the identity provider. Set oidc.ca_cert_pem to the identity provider's intermediat…": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "errors"
+	},
+	"error:oidc.ca_cert_pem holds no PEM certificate the gateway can use (each needs a -----BEGIN CERTIFICATE----- line, base64 lines, and a -----END CERTIFICATE----- line of its own, with no stray markers or NU…": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
 	},
@@ -5215,7 +5499,7 @@
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
 	},
-	"error:only a command hook runs on this machine": {
+	"error:only a command hook, or an agent's http hook, runs on this machine": {
 		"route": "/extend/hooks/configuration",
 		"anchor": "errors"
 	},
@@ -6183,6 +6467,14 @@
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
 	},
+	"error:• Network problems": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "errors"
+	},
+	"error:• Run with --debug for details": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "errors"
+	},
 	"error:• npm registry is unreachable": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
@@ -6192,6 +6484,10 @@
 		"anchor": "errors"
 	},
 	"error:⚠ ${…} ${…} `claude doctor` lists every entry.": {
+		"route": "/configure/permissions/sandbox",
+		"anchor": "errors"
+	},
+	"error:⚠ Sandbox disabled: ${…} Commands will run WITHOUT sandboxing. Network and filesystem restrictions will NOT be enforced. ${…}": {
 		"route": "/configure/permissions/sandbox",
 		"anchor": "errors"
 	},
@@ -7163,6 +7459,22 @@
 		"route": "/configure/cli/self-hosted-runner",
 		"anchor": "per-session-watchdog-options"
 	},
+	"flag:self-hosted-runner --nested-model-access": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --nested-model-allow": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --nested-model-call-budget": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --no-clone-through-agent-proxy": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
 	"flag:self-hosted-runner --pool-secret-file": {
 		"route": "/configure/cli/self-hosted-runner",
 		"anchor": "connection-options"
@@ -7191,6 +7503,10 @@
 		"route": "/configure/cli/self-hosted-runner",
 		"anchor": "runtime-options"
 	},
+	"flag:self-hosted-runner --repository-folder": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
 	"flag:self-hosted-runner --retire-at": {
 		"route": "/configure/cli/self-hosted-runner",
 		"anchor": "lifecycle-options"
@@ -7212,6 +7528,10 @@
 		"anchor": "per-session-watchdog-options"
 	},
 	"flag:self-hosted-runner --trust-workspace": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --use-anthropic-gh": {
 		"route": "/configure/cli/self-hosted-runner",
 		"anchor": "runtime-options"
 	},
@@ -7272,6 +7592,10 @@
 		"anchor": "orchestrator"
 	},
 	"flag:self-hosted-runner orchestrator --hook-concurrency": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "orchestrator"
+	},
+	"flag:self-hosted-runner orchestrator --hook-label": {
 		"route": "/configure/cli/self-hosted-runner",
 		"anchor": "orchestrator"
 	},
@@ -7356,6 +7680,26 @@
 		"anchor": "commands"
 	},
 	"flag:workspace-trust --json": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "commands"
+	},
+	"flag:worktree-hook --event": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "commands"
+	},
+	"flag:worktree-hook --json": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "commands"
+	},
+	"flag:worktree-hook --name": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "commands"
+	},
+	"flag:worktree-hook --path": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "commands"
+	},
+	"flag:worktree-hook --trusted-folder": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
 	},
@@ -8083,6 +8427,22 @@
 		"route": "/extend/plugins/marketplace",
 		"anchor": "marketplace-sources"
 	},
+	"setting-key:autoCompactOfferAnswer.at": {
+		"route": "/configure/settings/core",
+		"anchor": "keys"
+	},
+	"setting-key:autoCompactOfferAnswer.choice": {
+		"route": "/configure/settings/core",
+		"anchor": "keys"
+	},
+	"setting-key:autoCompactOfferAnswer.model": {
+		"route": "/configure/settings/core",
+		"anchor": "keys"
+	},
+	"setting-key:autoCompactOfferAnswer.tokens": {
+		"route": "/configure/settings/core",
+		"anchor": "keys"
+	},
 	"setting-key:extraKnownMarketplaces.*.autoUpdate": {
 		"route": "/extend/plugins/marketplace",
 		"anchor": "settings-keys"
@@ -8587,6 +8947,10 @@
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
 	},
+	"subcommand:worktree-hook": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "commands"
+	},
 	"tool:ExitPlanMode": {
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "enable-tests"
@@ -8602,249 +8966,5 @@
 	"tool:propose_skills": {
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "gated-tools"
-	},
-	"error:${…} Couldn't restore from backup. To restore it yourself, run: defaults import com.apple.Terminal ${…}": {
-		"route": "/extend/skills-and-commands/slash-commands",
-		"anchor": "errors"
-	},
-	"error:${…} was added by a tool.list hook, and no tool.run or tool.call hook answered this call": {
-		"route": "/extend/mod-api/calls/tool-command-config",
-		"anchor": "events-raised-by-these-calls"
-	},
-	"error:${…}: ${…}(${…}) produced no result${…}": {
-		"route": "/extend/mod-api",
-		"anchor": "errors"
-	},
-	"error:The background service isn't running. Installing it keeps it running across reboots so 'claude agents' stays available.": {
-		"route": "/configure/cli/subcommands",
-		"anchor": "errors"
-	},
-	"error:Or switch to the native installation: claude install": {
-		"route": "/configure/cli/subcommands",
-		"anchor": "errors"
-	},
-	"error:• Network problems": {
-		"route": "/configure/cli/subcommands",
-		"anchor": "errors"
-	},
-	"error:• Run with --debug for details": {
-		"route": "/configure/cli/subcommands",
-		"anchor": "errors"
-	},
-	"error:⚠ Sandbox disabled: ${…} Commands will run WITHOUT sandboxing. Network and filesystem restrictions will NOT be enforced. ${…}": {
-		"route": "/configure/permissions/sandbox",
-		"anchor": "errors"
-	},
-	"error:Stopped — finishing up…": {
-		"route": "/extend/plugins/cli",
-		"anchor": "errors"
-	},
-	"error:The name that this hook's matcher is tested against (for a tool call, the tool's name) has over ${…} characters, the most that a cloud session tests this matcher against.": {
-		"route": "/extend/hooks/configuration",
-		"anchor": "errors"
-	},
-	"error:${…} has unexpected owner or mode": {
-		"route": "/how-it-works/sessions-and-storage",
-		"anchor": "errors"
-	},
-	"error:nothing to branch yet. Send a message first": {
-		"route": "/how-it-works/sessions-and-storage",
-		"anchor": "errors"
-	},
-	"error:nothing to branch yet": {
-		"route": "/how-it-works/sessions-and-storage",
-		"anchor": "errors"
-	},
-	"flag:self-hosted-runner --no-clone-through-agent-proxy": {
-		"route": "/configure/cli/self-hosted-runner",
-		"anchor": "runtime-options"
-	},
-	"flag:self-hosted-runner --use-anthropic-gh": {
-		"route": "/configure/cli/self-hosted-runner",
-		"anchor": "runtime-options"
-	},
-	"flag:worktree-hook --event": {
-		"route": "/configure/cli/subcommands",
-		"anchor": "commands"
-	},
-	"flag:worktree-hook --json": {
-		"route": "/configure/cli/subcommands",
-		"anchor": "commands"
-	},
-	"flag:worktree-hook --name": {
-		"route": "/configure/cli/subcommands",
-		"anchor": "commands"
-	},
-	"flag:worktree-hook --path": {
-		"route": "/configure/cli/subcommands",
-		"anchor": "commands"
-	},
-	"flag:worktree-hook --trusted-folder": {
-		"route": "/configure/cli/subcommands",
-		"anchor": "commands"
-	},
-	"subcommand:worktree-hook": {
-		"route": "/configure/cli/subcommands",
-		"anchor": "commands"
-	},
-	"error:${…} cannot be used in agent contexts": {
-		"route": "/reference/tools/agents-and-tasks",
-		"anchor": "errors"
-	},
-	"error:${…} cannot clear a goal. The user can end it with /goal clear.": {
-		"route": "/reference/tools/agents-and-tasks",
-		"anchor": "errors"
-	},
-	"error:Added folder not trusted: ${…}. Leave out its --add-dir or, if you trust it and everything in its repository or below it, start `claude` there once and accept the trust prompt.": {
-		"route": "/configure/cli/flags",
-		"anchor": "agents-plugins-mcp-and-context"
-	},
-	"error:Another process is installing Claude. Try again in a moment.": {
-		"route": "/configure/cli/subcommands",
-		"anchor": "errors"
-	},
-	"error:No session goal is active, so there is nothing to pause.": {
-		"route": "/reference/tools/agents-and-tasks",
-		"anchor": "errors"
-	},
-	"error:Pausing a goal is only available in interactive local sessions, and only while model-proposed goals are on.": {
-		"route": "/reference/tools/agents-and-tasks",
-		"anchor": "errors"
-	},
-	"error:Run claude --teleport ${…} from a checkout of ${…}. This repo is ${…}.": {
-		"route": "/how-it-works/sessions-and-storage",
-		"anchor": "errors"
-	},
-	"error:Run claude --teleport ${…} from a checkout of ${…}.${…}": {
-		"route": "/how-it-works/sessions-and-storage",
-		"anchor": "errors"
-	},
-	"error:SetGoal cannot be used in agent contexts": {
-		"route": "/reference/tools/agents-and-tasks",
-		"anchor": "errors"
-	},
-	"error:The goal is already paused.": {
-		"route": "/reference/tools/agents-and-tasks",
-		"anchor": "errors"
-	},
-	"error:The goal was set during this turn and has not been checked yet, so it was not paused. ${…} shows it.": {
-		"route": "/reference/tools/agents-and-tasks",
-		"anchor": "errors"
-	},
-	"error:The proxy setting (HTTPS_PROXY or ALL_PROXY) is not an http or https URL, so this request was not sent.": {
-		"route": "/configure/env-vars/network-and-proxy",
-		"anchor": "proxy-requests-with-only-all_proxy"
-	},
-	"error:The reason is empty once whitespace and invisible characters are removed. Give a visible reason.": {
-		"route": "/reference/tools/agents-and-tasks",
-		"anchor": "errors"
-	},
-	"error:The user has not yet answered an earlier question about the goal.": {
-		"route": "/reference/tools/agents-and-tasks",
-		"anchor": "errors"
-	},
-	"error:Try again in a moment": {
-		"route": "/configure/cli/subcommands",
-		"anchor": "errors"
-	},
-	"endpoint:https://microsoft365.mcp.claude.com": {
-		"route": "/reference/api/endpoints",
-		"anchor": "mcp-paths"
-	},
-	"error:${…}, so the session starts with no prompt: ${…}": {
-		"route": "/configure/cli/flags",
-		"anchor": "sessions-and-worktrees"
-	},
-	"error:${…}: ${…} assigns to its import ${…}": {
-		"route": "/extend/mod-api",
-		"anchor": "errors"
-	},
-	"error:${…}: ${…} awaits at its top level, which only the entry file may": {
-		"route": "/extend/mod-api",
-		"anchor": "errors"
-	},
-	"error:${…}: ${…} imports ${…} from ${…}, which does not export it": {
-		"route": "/extend/mod-api",
-		"anchor": "errors"
-	},
-	"error:${…}: ${…}: an import with attributes; a hooks module imports its own files bare": {
-		"route": "/extend/mod-api",
-		"anchor": "errors"
-	},
-	"error:${…}: ${…} passes through a link whose target the operating system may resolve to a different folder than the one Claude Code checked (for example, a target that is not valid UTF-8, or on Windows one …": {
-		"route": "/extend/mod-api/calls/testing",
-		"anchor": "errors"
-	},
-	"error:Reading the JSON from stdin is refused inside a Claude Code session, because its permission prompt would not show the server. Run the command outside the session.": {
-		"route": "/extend/mcp/cli",
-		"anchor": "errors"
-	},
-	"error:The JSON on stdin is over the limit of 1 MiB.": {
-		"route": "/extend/mcp/cli",
-		"anchor": "errors"
-	},
-	"error:There is no JSON on stdin. Pipe it in, or pass it as the argument.": {
-		"route": "/extend/mcp/cli",
-		"anchor": "errors"
-	},
-	"error:Can't add to .mcp.json: it lists servers at the top level, and adding an \"mcpServers\" key would stop a plugin from loading them. Move them under \"mcpServers\", then try again. If they aren't servers, a…": {
-		"route": "/extend/mcp/cli",
-		"anchor": "errors"
-	},
-	"error:Takes the id of the plugin too": {
-		"route": "/extend/hooks/configuration",
-		"anchor": "errors"
-	},
-	"error:oidc.ca_cert_pem holds no PEM certificate the gateway can use (each needs a -----BEGIN CERTIFICATE----- line, base64 lines, and a -----END CERTIFICATE----- line of its own, with no stray markers or NU…": {
-		"route": "/configure/cli/subcommands",
-		"anchor": "errors"
-	},
-	"flag:self-hosted-runner --nested-model-access": {
-		"route": "/configure/cli/self-hosted-runner",
-		"anchor": "runtime-options"
-	},
-	"flag:self-hosted-runner --nested-model-allow": {
-		"route": "/configure/cli/self-hosted-runner",
-		"anchor": "runtime-options"
-	},
-	"flag:self-hosted-runner --nested-model-call-budget": {
-		"route": "/configure/cli/self-hosted-runner",
-		"anchor": "runtime-options"
-	},
-	"setting-key:autoCompactOfferAnswer.at": {
-		"route": "/configure/settings/core",
-		"anchor": "keys"
-	},
-	"setting-key:autoCompactOfferAnswer.choice": {
-		"route": "/configure/settings/core",
-		"anchor": "keys"
-	},
-	"setting-key:autoCompactOfferAnswer.model": {
-		"route": "/configure/settings/core",
-		"anchor": "keys"
-	},
-	"setting-key:autoCompactOfferAnswer.tokens": {
-		"route": "/configure/settings/core",
-		"anchor": "keys"
-	},
-	"error:${…} must be a comma-separated list of model ids, such as <model-id>,<prefix>*. Each id starts with a letter or digit, uses only letters, digits and . _ : @ / -, and may end in one * (got: ${…})": {
-		"route": "/configure/cli/self-hosted-runner",
-		"anchor": "runner-errors"
-	},
-	"error:${…} must be a whole number from 0 to 999999999 (got: ${…})": {
-		"route": "/configure/cli/self-hosted-runner",
-		"anchor": "runner-errors"
-	},
-	"error:--nested-model-access cannot be combined with --agent-proxy-url or --proxy-authorization-command / --proxy-authorization-file: the runner would send nested model calls past that proxy. Remove one of t…": {
-		"route": "/configure/cli/self-hosted-runner",
-		"anchor": "runner-errors"
-	},
-	"error:--nested-model-access cannot be used while ANTHROPIC_UNIX_SOCKET is set in the runner's environment: sessions would send their model calls through that socket, but the runner would send nested model c…": {
-		"route": "/configure/cli/self-hosted-runner",
-		"anchor": "runner-errors"
-	},
-	"error:--nested-model-access needs a list of models: set --nested-model-allow <models> or SELF_HOSTED_RUNNER_NESTED_MODEL_ALLOW to the comma-separated ids that a nested Claude Code may use, for example <mode…": {
-		"route": "/configure/cli/self-hosted-runner",
-		"anchor": "runner-errors"
 	}
 }

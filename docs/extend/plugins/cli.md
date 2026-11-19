@@ -154,20 +154,20 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^cowork]: The program, `chunk-dfwkett1.js:2197`.
-[^install-json]: The program, `chunk-1z19r9zf.js:17475`.
-[^restore]: The program, `chunk-az1d7wfg.js:21483`.
-[^validate]: The program, `chunk-c062d8f2.js:4081` and `chunk-c062d8f2.js:11954`.
-[^validate-report]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `PluginValidateReport`, `PluginValidateFile`, `PluginValidateFinding`, `PluginValidateAdvice`, `PluginValidateDirectory`, `PluginValidateDirectoryFinding`, `PluginValidateGatingHook`, `PluginValidateWasm`, `PluginValidateWasmFile`, `PluginValidateModule`, `PluginValidateHook`, `PluginValidateMatcher`, `PluginValidateNouns`, `PluginValidateShader`, `PluginValidateShaderCost`, and `PluginProvides`.
-[^validate-ts]: The program, `chunk-ke2xb8ty.js:59250`.
-[^engine-create]: The program, `chunk-ke2xb8ty.js:43754`.
-[^agent-dep]: The program, `chunk-dfwkett1.js:7853`.
-[^output-dir]: The program, `chunk-6zk0h247.js:13441`.
-[^clone]: The program, `chunk-m14bt1pz.js:5113149`.
-[^mcpb]: The program, `chunk-xtjk0n7g.js:162-168`.
-[^mcpb-uninstall]: The program, `chunk-9ns7kxca.js:1234-1290`, `chunk-m14bt1pz.js:254626`, and `chunk-xtjk0n7g.js:170-176`. The function lists the unpacked bundles, takes the plugin id off each, and deletes a bundle when no other plugin id is left. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^field-ignored]: The program, `chunk-m14bt1pz.js:270002` and `chunk-m14bt1pz.js:269326-269465` for the load, and `chunk-dfwkett1.js:792` and `chunk-dfwkett1.js:882` for the note and its advice. The same note says "Earlier versions of Claude Code refused this plugin". The load rule sits behind a server flag. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^plugin-lists]: The program, `chunk-xstndjzk.js:115339` (remove marketplace), `chunk-xstndjzk.js:185220` (switch copy), and `chunk-xstndjzk.js:185769` (uninstall). The lists turn off the printable-key shortcuts, and the cancel entry has the focus at the start. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^nested-skills]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The program, `chunk-m14bt1pz.js:191694-191719`, logs "Skipped the nested skills search for a file in a sync-owned or plugin folder". The code does not name `--plugin-dir`, and a server flag guards the plugin-folder check.
+[^cowork]: The program, `chunk-j7t77bhv.js:1864`.
+[^install-json]: The program, `chunk-rdsw4yg9.js:17475`.
+[^restore]: The program, `chunk-bvs4hre6.js:22583`.
+[^validate]: The program, `chunk-yj3yxnry.js:4238` and `chunk-yj3yxnry.js:12112`.
+[^validate-report]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `PluginValidateReport`, `PluginValidateFile`, `PluginValidateFinding`, `PluginValidateAdvice`, `PluginValidateDirectory`, `PluginValidateDirectoryFinding`, `PluginValidateGatingHook`, `PluginValidateWasm`, `PluginValidateWasmFile`, `PluginValidateModule`, `PluginValidateHook`, `PluginValidateMatcher`, `PluginValidateNouns`, `PluginValidateShader`, `PluginValidateShaderCost`, and `PluginProvides`.
+[^validate-ts]: The program, `chunk-eyez668q.js:60543`.
+[^engine-create]: The program, `chunk-eyez668q.js:44999`.
+[^agent-dep]: The program, `chunk-a3rr42d2.js:4473`.
+[^output-dir]: The program, `chunk-dt7h21xf.js:13470`.
+[^clone]: The program, `chunk-56bhcxay.js:5226365`.
+[^mcpb]: The program, `chunk-md9n15jc.js:163-169`.
+[^mcpb-uninstall]: The program, `chunk-9nv3z5ae.js:1265-1321`, `chunk-9nv3z5ae.js:23663`, and `chunk-md9n15jc.js:171-177`. The function lists the unpacked bundles, takes the plugin id off each, and deletes a bundle when no other plugin id is left. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^field-ignored]: The program, `chunk-56bhcxay.js:276680` and `chunk-56bhcxay.js:276004-276143` for the load, and `chunk-a3rr42d2.js:571` and `chunk-a3rr42d2.js:661` for the note and its advice. The same note says "Earlier versions of Claude Code refused this plugin". The load rule sits behind a server flag. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^plugin-lists]: The program, `chunk-ejmpea1g.js:113847` (remove marketplace), `chunk-ejmpea1g.js:194089` (switch copy), and `chunk-ejmpea1g.js:196136` (uninstall). The lists turn off the printable-key shortcuts, and the cancel entry has the focus at the start. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^nested-skills]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The program, `chunk-56bhcxay.js:197067-197092`, logs "Skipped the nested skills search for a file in a sync-owned or plugin folder". The code does not name `--plugin-dir`, and a server flag guards the plugin-folder check.
 [^unsafe-paths]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The loading side is on [Plugin Loading](loading.md#unsafe-paths-and-links).
-[^eval-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-rj3e7agr.js:329555`.
+[^eval-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-20bv8pca.js:329130`.

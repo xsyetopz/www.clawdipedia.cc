@@ -74,7 +74,7 @@ Type `/fix-issue 42`. Claude Code runs `gh issue view 42`. It inserts the output
 
 ## Sources
 
-[^size-cap]: The program, the strings quoted in this table, `chunk-m14bt1pz.js:1266808`.
-[^commit-skills]: The program, the skill checks, `chunk-m14bt1pz.js:1818220`, the text, `chunk-m14bt1pz.js:1818632`, and the skill names, `chunk-yhzebhhf.js:350`.
+[^size-cap]: The program, the strings quoted in this table, `chunk-56bhcxay.js:1313357`.
+[^commit-skills]: The program, the skill checks, `chunk-56bhcxay.js:1892430`, the text, `chunk-56bhcxay.js:1892842`, and the skill names, `chunk-r8659q9j.js:350`.
 
 Official pages: [Extend Claude with Skills](https://code.claude.com/docs/en/skills) and [Settings Reference](https://code.claude.com/docs/en/settings-reference).

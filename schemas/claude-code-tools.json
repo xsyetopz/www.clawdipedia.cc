@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-tools.json",
-	"title": "Claude Code built-in tool payloads (Claude Code 2.1.327)",
-	"$comment": "For the input and result of each built-in tool (definitions <Tool>Input and <Tool>Result). Generated from Claude Code 2.1.327 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the tool factory that copies a tool definition's properties (getters included), read as inputSchema and outputSchema on each tool. Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code built-in tool payloads (Claude Code 2.1.328)",
+	"$comment": "For the input and result of each built-in tool (definitions <Tool>Input and <Tool>Result). Generated from Claude Code 2.1.328 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the tool factory that copies a tool definition's properties (getters included), read as inputSchema and outputSchema on each tool. Do not edit by hand: run \"bun run schemas\".",
 	"description": "The program did not give these definitions: ObserverReportResult, TestingPermissionResult, ArtifactCommentsInput, ArtifactDataInput, ArtifactCheckInput, SendMessageResult, ArtifactInput.",
 	"$defs": {
 		"AgentInput": {
@@ -383,6 +383,10 @@
 						},
 						"canContinueAgent": {
 							"description": "@internal False when the calling agent cannot continue this agent with a follow-up message (it holds no messaging tool); absent means it can.",
+							"type": "boolean"
+						},
+						"waitsAtPermissionPrompt": {
+							"description": "@internal True when this foreground agent was moved to the background because nobody had answered its permission prompt (drives the model-facing text; not a stable API)",
 							"type": "boolean"
 						},
 						"sharesCwd": {
@@ -3243,6 +3247,23 @@
 										},
 										"required": ["path", "content_type", "size_bytes", "sha256"]
 									}
+								},
+								"can_publish": {
+									"type": "boolean"
+								},
+								"owned": {
+									"type": "boolean"
+								},
+								"audience": {
+									"type": "string",
+									"enum": [
+										"owner",
+										"users",
+										"org",
+										"public",
+										"agent_scoped",
+										"unknown"
+									]
 								},
 								"cowritten": {
 									"type": "boolean",
@@ -6608,6 +6629,23 @@
 										"required": ["path", "content_type", "size_bytes", "sha256"]
 									}
 								},
+								"can_publish": {
+									"type": "boolean"
+								},
+								"owned": {
+									"type": "boolean"
+								},
+								"audience": {
+									"type": "string",
+									"enum": [
+										"owner",
+										"users",
+										"org",
+										"public",
+										"agent_scoped",
+										"unknown"
+									]
+								},
 								"cowritten": {
 									"type": "boolean",
 									"const": true
@@ -9971,6 +10009,23 @@
 										},
 										"required": ["path", "content_type", "size_bytes", "sha256"]
 									}
+								},
+								"can_publish": {
+									"type": "boolean"
+								},
+								"owned": {
+									"type": "boolean"
+								},
+								"audience": {
+									"type": "string",
+									"enum": [
+										"owner",
+										"users",
+										"org",
+										"public",
+										"agent_scoped",
+										"unknown"
+									]
 								},
 								"cowritten": {
 									"type": "boolean",
@@ -13336,6 +13391,23 @@
 										"required": ["path", "content_type", "size_bytes", "sha256"]
 									}
 								},
+								"can_publish": {
+									"type": "boolean"
+								},
+								"owned": {
+									"type": "boolean"
+								},
+								"audience": {
+									"type": "string",
+									"enum": [
+										"owner",
+										"users",
+										"org",
+										"public",
+										"agent_scoped",
+										"unknown"
+									]
+								},
 								"cowritten": {
 									"type": "boolean",
 									"const": true
@@ -15325,7 +15397,7 @@
 					"type": "string"
 				},
 				"sandboxNote": {
-					"description": "@internal Told to the model and shown to the person where the sandbox stays on only through this move.",
+					"description": "@internal Told to the model and shown to the person where the sandbox stays on only through this move, or where commands are refused after it.",
 					"type": "string"
 				}
 			},
@@ -15442,7 +15514,7 @@
 					"type": "string"
 				},
 				"sandboxNote": {
-					"description": "@internal Told to the model and shown to the person where the sandbox stays on only through this move.",
+					"description": "@internal Told to the model and shown to the person where the sandbox stays on only through this move, or where commands are refused after it.",
 					"type": "string"
 				}
 			},
@@ -16248,6 +16320,30 @@
 			},
 			"required": ["results"]
 		},
+		"McpTaskResumePollingInput": {
+			"type": "object",
+			"properties": {
+				"task_id": {
+					"type": "string",
+					"description": "The id of the background MCP task, as its notification gave it."
+				}
+			},
+			"required": ["task_id"],
+			"additionalProperties": false
+		},
+		"McpTaskResumePollingResult": {
+			"type": "object",
+			"properties": {
+				"message": {
+					"type": "string",
+					"description": "What came of the call"
+				},
+				"isError": {
+					"type": "boolean"
+				}
+			},
+			"required": ["message", "isError"]
+		},
 		"MonitorInput": {
 			"type": "object",
 			"properties": {
@@ -16939,7 +17035,7 @@
 							"type": "string"
 						},
 						"version": {
-							"description": "@internal Lowercase hex SHA-256 of the UTF-8 bytes of a text doc's whole text; never on a project_read that delivered only part of the doc. Set where docVersionsOffered; also, while tengu_lovely_rain is on, on a project_read that saved the whole text to a file, and on a project_write by local_path in a conversation (not a script's inner call). A later checked write by path looks for this hash.",
+							"description": "@internal Lowercase hex SHA-256 of the UTF-8 bytes of a text doc's whole text; never on a project_read that delivered only part of the doc. Set where docVersionsOffered; also, while tengu_lovely_rain is on, on a project_read that saved the whole text to a file, and on a project_write by local_path in a conversation (not a script's inner call); always on a project_write with edits. A later checked write by path looks for this hash.",
 							"type": "string"
 						},
 						"file_kind": {
@@ -17054,7 +17150,7 @@
 							"type": "string"
 						},
 						"version": {
-							"description": "@internal Lowercase hex SHA-256 of the UTF-8 bytes of a text doc's whole text; never on a project_read that delivered only part of the doc. Set where docVersionsOffered; also, while tengu_lovely_rain is on, on a project_read that saved the whole text to a file, and on a project_write by local_path in a conversation (not a script's inner call). A later checked write by path looks for this hash.",
+							"description": "@internal Lowercase hex SHA-256 of the UTF-8 bytes of a text doc's whole text; never on a project_read that delivered only part of the doc. Set where docVersionsOffered; also, while tengu_lovely_rain is on, on a project_read that saved the whole text to a file, and on a project_write by local_path in a conversation (not a script's inner call); always on a project_write with edits. A later checked write by path looks for this hash.",
 							"type": "string"
 						},
 						"replaced": {
@@ -18267,7 +18363,7 @@
 							},
 							"summary": {
 								"type": "string",
-								"description": "One-sentence statement of the defect"
+								"description": "Statement of the defect"
 							},
 							"short_summary": {
 								"description": "Compressed label for compact UI (≤60 chars): the claim alone, no rationale or consequence clause",
@@ -18282,6 +18378,11 @@
 								"description": "Short kebab-case slug of the finding type, e.g. \"correctness\", \"simplification\", \"efficiency\", \"test-coverage\"",
 								"type": "string",
 								"maxLength": 40
+							},
+							"severity": {
+								"description": "Set when the review instructions ask for it. important: a bug the change adds or makes worse; pre_existing: a bug that was there before the change; nit: a minor issue",
+								"type": "string",
+								"enum": ["important", "pre_existing", "nit"]
 							},
 							"verdict": {
 								"description": "Set when a verify pass ran; absent on inline-only reviews",
@@ -18331,7 +18432,7 @@
 							},
 							"summary": {
 								"type": "string",
-								"description": "One-sentence statement of the defect"
+								"description": "Statement of the defect"
 							},
 							"short_summary": {
 								"description": "Compressed label for compact UI (≤60 chars): the claim alone, no rationale or consequence clause",
@@ -18346,6 +18447,11 @@
 								"description": "Short kebab-case slug of the finding type, e.g. \"correctness\", \"simplification\", \"efficiency\", \"test-coverage\"",
 								"type": "string",
 								"maxLength": 40
+							},
+							"severity": {
+								"description": "Set when the review instructions ask for it. important: a bug the change adds or makes worse; pre_existing: a bug that was there before the change; nit: a minor issue",
+								"type": "string",
+								"enum": ["important", "pre_existing", "nit"]
 							},
 							"verdict": {
 								"description": "Set when a verify pass ran; absent on inline-only reviews",
@@ -19621,6 +19727,16 @@
 				"trigger": {
 					"type": "string",
 					"enum": ["user_asked", "proactive"]
+				},
+				"answer": {
+					"type": "string",
+					"enum": ["added", "not_added", "not_now"]
+				},
+				"added": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
 				}
 			},
 			"required": ["contextLabel", "plugins", "note"]
@@ -19738,6 +19854,11 @@
 						}
 					},
 					"required": ["id", "subject"]
+				},
+				"appKeepsStatuses": {
+					"description": "@internal Present when the result told Claude that the app sets task statuses.",
+					"type": "boolean",
+					"const": true
 				}
 			},
 			"required": ["task"]

@@ -231,4 +231,4 @@ What a `ui.focus` hook returns, what `next(e)` resolves to, and what `$.ui.focus
 ## Sources
 
 [^focus-input]: The Mod API type file, `schemas/claude-code.d.ts`, `UiFocusInput`.
-[^maxlines]: The program, `chunk-b0yr0k8v.js:3642`, `chunk-b0yr0k8v.js:3751-3757`, and `chunk-b0yr0k8v.js:5156-5168`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^maxlines]: The program, `chunk-syremzmn.js:3663`, `chunk-syremzmn.js:3772-3778`, and `chunk-syremzmn.js:5167-5179`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

@@ -88,7 +88,7 @@ What a `command.run` hook returns and what `next(e)` and `$.command.run` resolve
 | --- | --- | --- | --- |
 | `text` | <Documented /> | The output of the command as a transcript line. Undefined when the command showed no text (a panel, or a prompt for the model). | Type: `string`. Optional. |
 | `context` | <Documented /> | What the model reads after the output of the command. The user never sees it. Each entry is one hidden user message that the engine records after the output row. | Type: `readonly string[]`. Optional. The notes that the command left for the model. Absent when there are none. |
-| `isTextDisplayOnly` | <Gated note="The engine reads it only when every plugin that hooks the command is bundled with Claude Code." /> | True: `text` is for the user only, and `context` is all that the model reads. The engine draws and keeps the output row, and sends it in no request. The engine reads this field on a hook's own answer without `next`, on the queued lanes. A panel that a hook answers in the middle of a turn keeps its text in requests. The text of any other plugin stays in requests. | Type: `true`. Optional. New in `2.1.319`. |
+| `isTextDisplayOnly` | <Gated note="The engine reads it only when every plugin that hooks the command is bundled with Claude Code." /> | True: `text` is for the user only, and `context` is all that the model reads. The engine draws and keeps the output row, and sends it in no request. The engine reads this field on a hook's own answer without `next`, on the queued lanes. A panel that a hook answers in the middle of a turn keeps its text in requests. The text of any other plugin stays in requests. Since `2.1.328`, the text of a run also stays in requests unless that run's output was for the person alone.[^v328-display-only] | Type: `true`. Optional. New in `2.1.319`. |
 | `exitCode` | <Documented /> | The exit code of the process when this command was the whole prompt of a headless run (`claude -p "/lint"`). Use a whole number from 0 to 255. | Type: `number`. Optional. If you leave it out, the run exits as it would have. Any other value fails the hook. An interactive session ignores it. |
 | `ref` | <Documented /> | Core sets it on what `next(e)` resolves to. It names the run of the command by the engine. The result of the run stays on the host side. | Type: `number`. Optional. A hook that returns the object that it got makes the engine use that run verbatim. Absent on a hook's own `{ text }` and on the `{ text }` of `$.command.run`. |
 
@@ -179,3 +179,7 @@ A `ToolSpec` as `$.tool.register` hands it on, with the input schema filled in a
 
 - [Tool, Command, and Config Types](index.md)
 - [Mod API Types](../index.md)
+
+## Sources
+
+[^v328-display-only]: The type file `schemas/claude-code.d.ts`, `isTextDisplayOnly`.

@@ -217,11 +217,11 @@ stateDiagram-v2
 
 ## Sources
 
-[^stages]: The program, `chunk-m14bt1pz.js:108997`, for the stages that the official pages do not cover.
-[^cwd]: The program, `chunk-m14bt1pz.js:3732617`, `chunk-m14bt1pz.js:3733025`, `chunk-m14bt1pz.js:3734390`.
-[^sub-limit]: The program, `chunk-4xhk2fyb.js:10370`, `chunk-4xhk2fyb.js:10635`.
-[^max-tokens]: The program, `chunk-m14bt1pz.js:3109407`, `chunk-m14bt1pz.js:3109520`. The rule has no list of status codes. It skips only a refusal that comes as 401, and a limit below 4096.
-[^nudge-count]: The program, `chunk-8g2nr9dn.js:151434` (the limit of 3) and `chunk-8g2nr9dn.js:154802-154864` (the counter `maxOutputTokensRecoveryCount` ends the retries after the third).
-[^cut-limit]: The program, `chunk-asj6f58y.js:546638` (the 32,000 and 128,000 values), `chunk-asj6f58y.js:550744` (the condition for an unrecognized model), and `chunk-m14bt1pz.js:3109407` (the limit for a reply that continues a cut reply, used only for such a model).
+[^stages]: The program, `chunk-56bhcxay.js:113148`, for the stages that the official pages do not cover.
+[^cwd]: The program, `chunk-56bhcxay.js:3827000`, `chunk-56bhcxay.js:3827408`, `chunk-56bhcxay.js:3828773`.
+[^sub-limit]: The program, `chunk-qre0n3qw.js:11518`, `chunk-qre0n3qw.js:11783`.
+[^max-tokens]: The program, `chunk-56bhcxay.js:3190601`, `chunk-56bhcxay.js:3190714`. The rule has no list of status codes. It skips only a refusal that comes as 401, and a limit below 4096.
+[^nudge-count]: The program, `chunk-2b3eg071.js:165951` (the limit of 3) and `chunk-2b3eg071.js:170251-170313` (the counter `maxOutputTokensRecoveryCount` ends the retries after the third).
+[^cut-limit]: The program, `chunk-xethrx83.js:513465` (the 32,000 and 128,000 values), `chunk-xethrx83.js:517691` (the condition for an unrecognized model), and `chunk-56bhcxay.js:3190601` (the limit for a reply that continues a cut reply, used only for such a model).
 [^v327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^v307]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307).

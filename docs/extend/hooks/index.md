@@ -111,5 +111,5 @@ A mod is a hook that runs as a JavaScript function inside Claude Code. See the [
 
 ## Sources
 
-[^events]: [Hooks Reference](https://code.claude.com/docs/en/hooks). The program lists the same 33 names in its hook schemas and `HookInput` types, `chunk-ja5z738t.js:5665` and `chunk-rj3e7agr.js:268364`.
-[^flag-settings]: The program calls this source `flagSettings`, `chunk-271f7twe.js:3779`.
+[^events]: [Hooks Reference](https://code.claude.com/docs/en/hooks). The program lists the same 33 names in its hook schemas and `HookInput` types, `chunk-jkpzhr7r.js:5583` and `chunk-20bv8pca.js:267795`.
+[^flag-settings]: The program calls this source `flagSettings`, `chunk-yhz0x035.js:3779`.

@@ -5,9 +5,9 @@
 		"name": "xsyetopz",
 		"url": "https://github.com/xsyetopz"
 	},
-	"description": "Anthropic documentation as plugins, from four sources: Clawdipedia (unofficial Claude Code docs, 2.1.327), platform.claude.com, code.claude.com, and claude.com/resources.",
+	"description": "Anthropic documentation as plugins, from four sources: Clawdipedia (unofficial Claude Code docs, 2.1.328), platform.claude.com, code.claude.com, and claude.com/resources.",
 	"metadata": {
-		"version": "3.0.7"
+		"version": "3.0.8"
 	},
 	"plugins": [
 		{
@@ -47,7 +47,7 @@
 			"name": "clawdipedia-docs-cli",
 			"displayName": "Anthropic Docs CLI",
 			"source": "./cli",
-			"description": "Anthropic docs from four sources as a clawdipedia command for the Bash tool, plus a light skill. No MCP server, so it adds no tool list. Needs Bun. Claude Code only. Tracks 2.1.327.",
+			"description": "Anthropic docs from four sources as a clawdipedia command for the Bash tool, plus a light skill. No MCP server, so it adds no tool list. Needs Bun. Claude Code only. Tracks 2.1.328.",
 			"category": "documentation",
 			"license": "MIT",
 			"keywords": [

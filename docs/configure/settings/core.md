@@ -93,16 +93,16 @@ Status: <Gated />. The official docs do not state it.
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema, `chunk-ja5z738t.js:278919`.
-[^bash-diff]: The program, `chunk-m14bt1pz.js:5657444`.
-[^cleanup-runs]: Probe cases `print.cli319.cleanup.sweep-7`, `print.cli319.cleanup.sweep-default`, `print.cli319.cleanup.sweep-365`, `print.cli319.cleanup.zero`, and `print.cli319.cleanup.float`. A `-p` run used a Bash call that sleeps 9 seconds, because the sweep starts 5 seconds after launch. The runs made only `/v1/messages` requests. The wording of the `0` message is the program's, `chunk-ja5z738t.js:414318`.
-[^cleanup-error]: The program, `chunk-kc622jje.js:13717`.
+[^schema]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:279143`.
+[^bash-diff]: The program, `chunk-56bhcxay.js:5754973`.
+[^cleanup-runs]: Probe cases `print.cli319.cleanup.sweep-7`, `print.cli319.cleanup.sweep-default`, `print.cli319.cleanup.sweep-365`, `print.cli319.cleanup.zero`, and `print.cli319.cleanup.float`. A `-p` run used a Bash call that sleeps 9 seconds, because the sweep starts 5 seconds after launch. The runs made only `/v1/messages` requests. The wording of the `0` message is the program's, `chunk-jkpzhr7r.js:415868`.
+[^cleanup-error]: The program, `chunk-s08ggwfb.js:13823`.
 [^cleanup-min]: The schema is `int().positive()` and its text says "Minimum 1".
-[^cleanup-local]: The schema text, since `2.1.319`. The program, `chunk-ja5z738t.js:227432`.
+[^cleanup-local]: The schema text, since `2.1.319`. The program, `chunk-jkpzhr7r.js:226881`.
 [^excludes-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327)
 [^compact-window]: The settings schema, `2.1.327`. The old maximum was `1000000`.
-[^compact-offer]: The program, `chunk-ja5z738t.js:296106`; the reader is at `chunk-rap1tzf6.js:614313`. Both keys are new in `2.1.327`.
-[^attr-project]: The settings schema. Probe cases `print.cli319.attr.claude-proj`, `print.cli319.attr.chan`, `print.cli319.attr.bad-prefix`, and `print.cli319.attr.number`. Live probe case `live.cli319.attribution`, with a real login. The group-name text is from the settings schema, and the gateway side is in the program, `chunk-m14bt1pz.js:1244421` and `chunk-5z0ytfrt.js:1512412`. See also the [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^plans-fallback]: The program, `chunk-jvme5rqc.js:8240-8275`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^away-skip]: The program, `chunk-cfxefa64.js:123335-123898`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^git-path]: The program, `chunk-qhsv8pnt.js:3480` (the `PATH` filter) and `chunk-7ymr37wt.js:625` (flag `tengu_proud_perlis`, on by default; the filter applies when the flag is on), and `chunk-f4hc9y03.js:7149` (the git environment for worktrees). Worktree creation uses it at `chunk-m14bt1pz.js:4352809` and `chunk-m14bt1pz.js:4348980`, the worktree fetch at `chunk-m14bt1pz.js:4305588`, the reset of a resumed worktree at `chunk-m14bt1pz.js:4329862`, and `/teleport` at `chunk-m14bt1pz.js:2423607`.
+[^compact-offer]: The program, `chunk-jkpzhr7r.js:296330`; the reader is at `chunk-5699r6rq.js:620145`. Both keys are new in `2.1.327`.
+[^attr-project]: The settings schema. Probe cases `print.cli319.attr.claude-proj`, `print.cli319.attr.chan`, `print.cli319.attr.bad-prefix`, and `print.cli319.attr.number`. Live probe case `live.cli319.attribution`, with a real login. The group-name text is from the settings schema, and the gateway side is in the program, `chunk-56bhcxay.js:1290945` and `chunk-39421vhy.js:942723`. See also the [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^plans-fallback]: The program, `chunk-wchmynj9.js:8155-8190`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
+[^away-skip]: The program, `chunk-j2wfp6sf.js:123344-123907`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^git-path]: The program, `chunk-x7g75ktc.js:3480` (the `PATH` filter) and `chunk-sgnhnrtc.js:625` (flag `tengu_proud_perlis`, on by default; the filter applies when the flag is on), and `chunk-9k6h19d9.js:7164` (the git environment for worktrees). Worktree creation uses it at `chunk-56bhcxay.js:4449062` and `chunk-56bhcxay.js:4445236`, the worktree fetch at `chunk-56bhcxay.js:4401955`, the reset of a resumed worktree at `chunk-56bhcxay.js:4426164`, and `/teleport` at `chunk-56bhcxay.js:2501212`.

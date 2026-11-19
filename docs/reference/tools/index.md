@@ -121,7 +121,7 @@ Set these switches in the shell or in `env` in settings. See [Connect Claude Cod
 
 ### Which Built-In Tools Are Deferred
 
-- Deferred: `WebFetch`, `WebSearch`, `NotebookEdit`, `TodoWrite`, `LSP`, `Monitor`, `EnterPlanMode`, `ExitPlanMode`, `EnterWorktree`, `ExitWorktree`, `TaskCreate`, `TaskGet`, `TaskUpdate`, `TaskList`, `TaskStop`, `SendMessage`, `SendFile`, `CronCreate`, `CronDelete`, `CronList`, `PushNotification`, `RemoteTrigger`, `EndConversation`, `SetGoal`, `GetGoal`, `PauseGoal`, `FetchInboxMessage`, `PublishPlugin`, `OfferChromeSetup`, `DesignSync`, `SearchMcpRegistry`, `SuggestConnectors`, `ListConnectors`, the three MCP resource tools, and the nine self-hosted runner tools.
+- Deferred: `WebFetch`, `WebSearch`, `NotebookEdit`, `TodoWrite`, `LSP`, `Monitor`, `EnterPlanMode`, `ExitPlanMode`, `EnterWorktree`, `ExitWorktree`, `TaskCreate`, `TaskGet`, `TaskUpdate`, `TaskList`, `TaskStop`, `SendMessage`, `SendFile`, `CronCreate`, `CronDelete`, `CronList`, `PushNotification`, `RemoteTrigger`, `EndConversation`, `SetGoal`, `GetGoal`, `PauseGoal`, `FetchInboxMessage`, `McpTaskResumePolling`, `PublishPlugin`, `OfferChromeSetup`, `DesignSync`, `SearchMcpRegistry`, `SuggestConnectors`, `ListConnectors`, the three MCP resource tools, and the nine self-hosted runner tools.
 - A runtime check decides: `SuggestPluginInstall`, `SuggestSkills`, `SendUserFile`.
 - Not deferred: `Read`, `Write`, `Edit`, `Glob`, `Grep`, `Bash`, `PowerShell`, `Agent`, `Skill`, `AskUserQuestion`, `ListAgents`, `Workflow`, `ReportFindings`, `ToolSearch`, `StructuredOutput`, `SubagentHandback`, `ScheduleWakeup`, `memory_*`, and the rest of the gated tools.
 - The old capture of `2.1.296` lacked `Glob` and `Grep`. In `2.1.305` they are not deferred.
@@ -149,7 +149,7 @@ It lists every field of this release. Build on the fields it names. Look each on
 
 ## Sources
 
-[^definitions]: The program, the tool definitions, `chunk-1vttvse2.js:203832`.
-[^toolsearch-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program, `chunk-ngdgttt1.js:6476`.
-[^custom-base-url]: The program, `chunk-m14bt1pz.js:3262624` and `chunk-m14bt1pz.js:2031543`, and the [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304).
-[^bfs-ugrep]: The program, `chunk-m14bt1pz.js:3691209`.
+[^definitions]: The program, the tool definitions, `chunk-r1yxtgw6.js:201784`.
+[^toolsearch-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program, `chunk-pg7hxy0j.js:6534`.
+[^custom-base-url]: The program, `chunk-56bhcxay.js:3356147` and `chunk-56bhcxay.js:2108317`, and the [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304).
+[^bfs-ugrep]: The program, `chunk-56bhcxay.js:3786010`.

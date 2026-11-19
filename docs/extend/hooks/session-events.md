@@ -198,10 +198,10 @@ Fires instead of `Stop` when the turn ends on an API error. The matcher is `erro
 
 ## Sources
 
-[^notif-types]: The program, the type list of `2.1.327`, `chunk-29d2mwq6.js:521`. It holds all three `quota_auto_resume_*` names and `plugin_notification`.
-[^plugin-notif]: The program, `chunk-m14bt1pz.js:4848367`.
+[^notif-types]: The program, the type list of `2.1.327`, `chunk-eczrspp8.js:521`. It holds all three `quota_auto_resume_*` names and `plugin_notification`.
+[^plugin-notif]: The program, `chunk-56bhcxay.js:4955366`.
 [^agent-needs-input]: Probe cases `pty.notifications.agent-needs-input` and `pty.notifications.agent-needs-input-refused`.
-[^worker-message]: The program, `chunk-cfxefa64.js:1848836` and `chunk-cfxefa64.js:1852704`.
-[^push]: A reading of the program, `chunk-46dkh8eq.js:9471` and `chunk-46dkh8eq.js:9608`.
-[^not-seen]: Readings of the program, `chunk-j4ptcgj4.js:21032` and `chunk-pqyg7zpy.js:12626`, not live results.
-[^refusal]: A reading of the program, `chunk-29d2mwq6.js:602`, not a live result.
+[^worker-message]: The program, `chunk-j2wfp6sf.js:1847749` and `chunk-j2wfp6sf.js:1851616`.
+[^push]: A reading of the program, `chunk-t94s3xy2.js:9791` and `chunk-t94s3xy2.js:9928`.
+[^not-seen]: Readings of the program, `chunk-deg3e0xc.js:20888` and `chunk-6w92w3rt.js:12980`, not live results.
+[^refusal]: A reading of the program, `chunk-eczrspp8.js:602`, not a live result.

@@ -134,8 +134,8 @@ It lists every field of this release. Build on the fields it names. Look each on
 
 ## Sources
 
-[^built-in]: The program, `chunk-m14bt1pz.js:1056198`, sets `keepCodingInstructions: true` and `source: "built-in"` for the four styles.
+[^built-in]: The program, `chunk-56bhcxay.js:1097395`, sets `keepCodingInstructions: true` and `source: "built-in"` for the four styles.
 [^official]: [Output Styles](https://code.claude.com/docs/en/output-styles).
-[^init-message]: The program, `chunk-b0yr0k8v.js:155574`, string `no { outputStyle } (null, or { name, isKeepingCodingInstructions })`.
+[^init-message]: The program, `chunk-syremzmn.js:156635`, string `no { outputStyle } (null, or { name, isKeepingCodingInstructions })`.
 [^probe-force]: Probes: [Configure and Memory](../reference/probes.md#configure-and-memory) and [Managed Folder Probe](../reference/probes.md#managed-folder-probe).
 [^probe-316]: Probe of `2.1.316`. Another run of `2.1.316` against a local stub gave the reminder and header results below, and a third run gave the launch table in the next section.

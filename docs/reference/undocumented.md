@@ -14,7 +14,7 @@ Counts are table rows. A row can name several items, such as a list of related v
 | Group | Count |
 | --- | --- |
 | [Settings Keys](#settings-keys) | 25 |
-| [Environment Variables](#environment-variables) | 1136 |
+| [Environment Variables](#environment-variables) | 1146 |
 | [CLI Flags and Subcommands](#cli-flags-and-subcommands) | 52 |
 | [Permissions](#permissions) | 121 |
 | [Hooks](#hooks) | 15 |
@@ -30,7 +30,7 @@ Counts are table rows. A row can name several items, such as a list of related v
 | [Headless Protocol](#headless-protocol) | 217 |
 | [Mod API](#mod-api) | 0 |
 | [Other](#other) | 108 |
-| Total | 1907 |
+| Total | 1917 |
 
 ## Settings Keys
 
@@ -70,25 +70,25 @@ Count: 25.
 
 Too many variables exist to list here. Each page below holds a table, and every undocumented variable in it has the Undocumented badge. The pages sort variables by what they do.
 
-Count: 1136.
+Count: 1146.
 
 | Page | Undocumented Rows |
 | --- | --- |
-| [Agents and Teams](../configure/env-vars/agents-and-teams.md) | 56 |
+| [Agents and Teams](../configure/env-vars/agents-and-teams.md) | 57 |
 | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) | 52 |
-| [Bundled Libraries](../configure/env-vars/bundled-libraries.md) | 123 |
+| [Bundled Libraries](../configure/env-vars/bundled-libraries.md) | 122 |
 | [Cloud Providers](../configure/env-vars/cloud-providers.md) | 31 |
 | [Context and Compaction](../configure/env-vars/context-and-compaction.md) | 31 |
 | [Features and Toggles](../configure/env-vars/features-and-toggles.md) | 59 |
-| [Models and Effort](../configure/env-vars/models-and-effort.md) | 34 |
+| [Models and Effort](../configure/env-vars/models-and-effort.md) | 35 |
 | [Network and Proxy](../configure/env-vars/network-and-proxy.md) | 34 |
 | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) | 69 |
-| [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) | 169 |
+| [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) | 172 |
 | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) | 29 |
-| [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) | 58 |
-| [System and Third-Party](../configure/env-vars/system-and-third-party.md) | 196 |
+| [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) | 61 |
+| [System and Third-Party](../configure/env-vars/system-and-third-party.md) | 197 |
 | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) | 84 |
-| [Tools and Bash](../configure/env-vars/tools-and-bash.md) | 61 |
+| [Tools and Bash](../configure/env-vars/tools-and-bash.md) | 63 |
 | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) | 50 |
 
 ## CLI Flags and Subcommands
@@ -722,30 +722,30 @@ These items exist in the official docs, but Claude Code works in another way. Th
 
 ## In the Program
 
-The program of `2.1.327` holds 10508 items in 18 kinds, counted from `schemas/surface.json`.
+The program of `2.1.328` holds 10451 items in 18 kinds, counted from `schemas/surface.json`.
 [Surface Coverage](surface-coverage.md) lists each item with its page.
 
 | Kind | Items | Not on a Page Yet |
 | --- | --- | --- |
-| [Betas](surface-coverage.md#betas) | 55 | 0 |
-| [API Endpoints](surface-coverage.md#api-endpoints) | 462 | 0 |
-| [Environment Variables](surface-coverage.md#environment-variables) | 2112 | 0 |
-| [Error Texts](surface-coverage.md#error-texts) | 4302 | 0 |
+| [Betas](surface-coverage.md#betas) | 56 | 0 |
+| [API Endpoints](surface-coverage.md#api-endpoints) | 460 | 0 |
+| [Environment Variables](surface-coverage.md#environment-variables) | 2118 | 0 |
+| [Error Texts](surface-coverage.md#error-texts) | 4194 | 0 |
 | [Files](surface-coverage.md#files) | 78 | 0 |
-| [CLI Flags](surface-coverage.md#cli-flags) | 425 | 0 |
-| [Gates](surface-coverage.md#gates) | 1749 | 0 |
+| [CLI Flags](surface-coverage.md#cli-flags) | 429 | 0 |
+| [Gates](surface-coverage.md#gates) | 1786 | 0 |
 | [Hook Events](surface-coverage.md#hook-events) | 33 | 0 |
 | [Keybindings](surface-coverage.md#keybindings) | 207 | 0 |
-| [Mod API](surface-coverage.md#mod-api) | 253 | 0 |
+| [Mod API](surface-coverage.md#mod-api) | 256 | 0 |
 | [Models](surface-coverage.md#models) | 76 | 0 |
 | [OpenTelemetry Events](surface-coverage.md#opentelemetry-events) | 28 | 0 |
 | [Permission Rules](surface-coverage.md#permission-rules) | 6 | 0 |
-| [Settings](surface-coverage.md#settings) | 202 | 0 |
+| [Settings](surface-coverage.md#settings) | 203 | 0 |
 | [Nested Setting Keys](surface-coverage.md#nested-setting-keys) | 202 | 0 |
 | [Slash Commands](surface-coverage.md#slash-commands) | 140 | 0 |
 | [Subcommands](surface-coverage.md#subcommands) | 81 | 0 |
-| [Tools](surface-coverage.md#tools) | 97 | 0 |
-| All kinds | 10508 | 0 |
+| [Tools](surface-coverage.md#tools) | 98 | 0 |
+| All kinds | 10451 | 0 |
 
 ## Related Pages
 

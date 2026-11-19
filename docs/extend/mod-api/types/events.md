@@ -96,4 +96,4 @@ These types are aliases, unions, or plain shapes. Each row gives its use and its
 
 ## Sources
 
-[^type-file]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`. The types on this page are the ones it declares under the same names, from `AnyEventHook` to `ValueOrDeny`.
+[^type-file]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`. The types on this page are the ones it declares under the same names, from `AnyEventHook` to `ValueOrDeny`.

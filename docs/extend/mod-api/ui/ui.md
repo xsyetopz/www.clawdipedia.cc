@@ -115,9 +115,9 @@ In a `-p` run with no app attached, the debug log shows `{"isDrawn":false,"reque
 
 ## Sources
 
-[^types-323]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, the `ui` and `theme` members of the `$` type, `InvalidatableEventName`, `PaneOpenArgs`, and `ThemeSetArgs`.
+[^types-323]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, the `ui` and `theme` members of the `$` type, `InvalidatableEventName`, `PaneOpenArgs`, and `ThemeSetArgs`.
 [^theme-run]: Probe case `print.cli319.theme.engine`, run on the `2.1.319` program in a `-p` run with a mod that calls the function from `session.start`. The function table of the hooks engine holds `theme.set`, with a `check` and a `run`.
-[^theme-323]: The program, `chunk-grrnec65.js:18110`. The attribute check reads the list `E=["backdrop","overrideColorScheme","colors"]` at `chunk-grrnec65.js:17712`, and `glass.blur is a number of points` is at `chunk-grrnec65.js:11001`.
-[^theme-321]: The texts are from the program of `2.1.321`. The text of `2.1.327` no longer holds them; its host check is at `chunk-grrnec65.js:17949` and `chunk-grrnec65.js:18110`. The type text is in `schemas/claude-code.d.ts`, `ThemeColors`.
-[^blur]: The program, `chunk-grrnec65.js:11001`.
-[^cancel-notify]: The program, call `chunk-b0yr0k8v.js:314613`, check `chunk-m14bt1pz.js:4846946` (`mri`) and run `chunk-m14bt1pz.js:4848746` (`Rri`), table `chunk-m14bt1pz.js:4874632`.
+[^theme-323]: The program, `chunk-4k9psqrm.js:15280`. The attribute check reads the list `E=["backdrop","overrideColorScheme","colors"]` at `chunk-4k9psqrm.js:14873`, and `glass.blur is a number of points` is at `chunk-4k9psqrm.js:8049`.
+[^theme-321]: The texts are from the program of `2.1.321`. The text of `2.1.327` no longer holds them; its host check is at `chunk-4k9psqrm.js:15119` and `chunk-4k9psqrm.js:15280`. The type text is in `schemas/claude-code.d.ts`, `ThemeColors`.
+[^blur]: The program, `chunk-4k9psqrm.js:8049`.
+[^cancel-notify]: The program, call `chunk-syremzmn.js:316688`, check `chunk-56bhcxay.js:4953945` (`mri`) and run `chunk-56bhcxay.js:4955745` (`Rri`), table `chunk-56bhcxay.js:4982259`.

@@ -43,7 +43,7 @@ A hook is `async ($, e, next) => result`. Hooks on `turn.step` and `process.spaw
 | `next(e)` | <Documented /> | The rest of the chain, as middleware. It runs the hooks beneath, then the engine. It resolves to the event result. | Called with no argument it rejects. A hook that returns without `next` ends the chain. Returning nothing is a failure. On a streaming event (`turn.step`, `process.spawn`) it returns a `HookStream`. | Every hook. |
 | `next.to(e, tier)` | <Documented /> | Continues the dispatch at a later tier (`user`, `append`, `builtin`, or `core`). The links between are skipped. | Managed hooks only. `prepend` may name `user`, `append`, `builtin`, or `core`. `user` skips each `prepend` peer below the hook, never one above it, and an outer `next.to` to a deeper tier still wins (since `2.1.311`). `append` may name `core`. No user hook skips the organization. | Mods in the `prepend` or `append` tier: the plugins of `prependPlugins` and `appendPlugins`, and, since `2.1.327`, an organization plugin that neither list names (`prepend`). |
 | `next.signal` | <Documented /> | An `AbortSignal` that aborts when the engine abandons the dispatch. | It aborts when the user interrupts, when a hook above settled first, or when this hook ran out of budget. Pass it to `$.clock.sleep` and other waits. | Every hook. |
-| `next.origin` | <Documented /> | `{ plugin, tier }` of who raised the dispatch. The engine is `{ plugin: 'engine', tier: 'core' }`. | The host sets it. A plugin cannot write it. Every hook of one dispatch sees the same origin. | Every hook. |
+| `next.origin` | <Documented /> | `{ plugin, tier }` of who raised the dispatch. The engine is `{ plugin: 'engine', tier: 'core' }`. | The host sets it. A plugin cannot write it. Every hook of one dispatch sees the same origin. Since `2.1.328`, it is a `NextOrigin`, which adds `hookOwner` and `isOrganizations` (see [Hook Types](../types/hooks.md)).[^v328-next-origin] | Every hook. |
 | `next.is(pattern, e)` | <Documented /> | A type predicate. It says whether `pattern` selects this dispatch event. | Narrows `e` for a hook on a glob or on `*`. Under a matcher the narrowing includes it. | Glob and `*` hooks. |
 | `next.event` | <Documented /> | The name of the dispatch event, as a value. | Use it in a glob hook to log or switch on. | Every hook. |
 | `next.trace` | <Documented /> | A list of `TraceEntry`: what settled beneath on the latest `next()` call. | One entry for each link beneath, nearest first. Empty before the hook calls `next`. Frozen data. | Every hook. |
@@ -97,5 +97,6 @@ Since `2.1.304`, when a plugin that runs first skips one of your mod's hooks, th
 
 ## Sources
 
-[^skipped]: The program, `chunk-m14bt1pz.js:4939401`, the text of the transcript line.
-[^budget-ms]: The program, `chunk-b0yr0k8v.js:193534`.
+[^skipped]: The program, `chunk-56bhcxay.js:5051319`, the text of the transcript line.
+[^budget-ms]: The program, `chunk-syremzmn.js:194600`.
+[^v328-next-origin]: The type file `schemas/claude-code.d.ts`, `NextOrigin`.

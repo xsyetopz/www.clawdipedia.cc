@@ -172,9 +172,9 @@ A transcript write that fails can leave a partial last line. Claude Code then ma
 
 ## Sources
 
-[^model-catalog]: The program, `chunk-asj6f58y.js:911360`.
-[^mods-downloads]: The program, `chunk-m14bt1pz.js:2385643`.
-[^unexpected-arg]: The program, `chunk-xa2mcav9.js:321061`.
-[^seal]: The program marks the file in `sealTornTailOnNextAppend` and writes the newline in `sealTornTailSync` at `chunk-m14bt1pz.js:489388`. The metadata re-append checks the last byte at `chunk-m14bt1pz.js:494450`.
-[^child-logs]: The program, `chunk-0tqcm9e3.js:116700` (the notice, and the skip when `--debug-file` is set or `--verbose` is not), `chunk-0tqcm9e3.js:135987` (the folder goes to each child session), and `chunk-1yrzf3wn.js:872150-872826` (the `child-logs` folder, mode 448 which is 0700, and the check of its owner and mode). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^history-launch]: The program, `chunk-cfxefa64.js:1800192`: a prompt that does not come from the Enter key of the prompt box is marked not to save when the list of sessions that launched this session (`chunk-2mvk3gke.js:728`) is not empty. The `add` method at `chunk-qpav394c.js:52884` then skips the write. The `2.1.326` program has no such mark. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^model-catalog]: The program, `chunk-xethrx83.js:883069`.
+[^mods-downloads]: The program, `chunk-56bhcxay.js:2463351`.
+[^unexpected-arg]: The program, `chunk-gv1b3n3g.js:339784`.
+[^seal]: The program marks the file in `sealTornTailOnNextAppend` and writes the newline in `sealTornTailSync` at `chunk-56bhcxay.js:523574`. The metadata re-append checks the last byte at `chunk-56bhcxay.js:528793`.
+[^child-logs]: The program, `chunk-kfzma69d.js:117590` (the notice, and the skip when `--debug-file` is set or `--verbose` is not), `chunk-kfzma69d.js:136878` (the folder goes to each child session), and `chunk-kwkzbftg.js:871999-872729` (the `child-logs` folder, mode 448 which is 0700, and the check of its owner and mode). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^history-launch]: The program, `chunk-j2wfp6sf.js:1799493`: a prompt that does not come from the Enter key of the prompt box is marked not to save when the list of sessions that launched this session (`chunk-he41ebgj.js:728`) is not empty. The `add` method at `chunk-82x5drqv.js:36730` then skips the write. The `2.1.326` program has no such mark. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).

@@ -1,10 +1,10 @@
 ---
 title: What Changed
-description: What changed in Claude Code 2.1.327, the release this site covers, against 2.1.326, the release before it.
+description: What changed in Claude Code 2.1.328, the release this site covers, against 2.1.327, the release before it.
 sidebar_position: 4
 ---
 
-This page lists the changes in `2.1.327`, the release this site covers, against `2.1.326`, the release before it.
+This page lists the changes in `2.1.328`, the release this site covers, against `2.1.327`, the release before it.
 It lists nothing older. It is short on purpose. The site only repeats what its sources say. It does not guess.
 For every fix and small change, read the official [Changelog](https://code.claude.com/docs/en/changelog).
 
@@ -12,130 +12,103 @@ For every fix and small change, read the official [Changelog](https://code.claud
 
 Run `claude --version`.
 The `/release-notes` command shows a cached copy of the [changelog](https://code.claude.com/docs/en/changelog).
-This site covers `2.1.327`, the version shown in the navbar.
+This site covers `2.1.328`, the version shown in the navbar.
 
-## Version 2.1.327
+## Version 2.1.328
 
-Sources: the [release notes of `2.1.327`](https://github.com/anthropics/claude-code/releases/tag/v2.1.327), and a comparison of the `2.1.326` and `2.1.327` programs and Mod API type files. Each row states what the linked page states. The notes items for VS Code, the web, cloud sessions, Remote Control, and artifacts are not all on this site.
+Sources: the [release notes of `2.1.328`](https://github.com/anthropics/claude-code/releases/tag/v2.1.328), and a comparison of the `2.1.327` and `2.1.328` programs and Mod API type files. Each row states what the linked page states. Notes items about other products (such as VS Code and Remote Control), and fixes with no setting, key, or text that a page states, are not on this page.
 
-### Plugins and Mods
-
-| Change | Status | What it means for you | Where to read more |
-| --- | --- | --- | --- |
-| `claude plugin eval` | <Documented /> | Its deny rules win over a plugin's permission hook. It flags each call that the hook let through where the eval's own check did not allow it. | [Plugin CLI](../extend/plugins/cli.md#how-it-works) |
-| `--agents` and plugin agents | <Documented /> | Agents from `--agents` stay after plugins load or reload. A plugin's agent stays when you resume from the `--resume` picker. | [Plugin Loading](../extend/plugins/loading.md#how-it-works) |
-| `$.model.complete` and `$.model.classify` | <Documented /> | When a usage limit applies, the call gets the API error at once. A mod must handle that error. | [Model, Audio, and MCP Calls](../extend/mod-api/calls/model-audio-mcp.md#members) |
-| Code Mode and mods that hook tool calls | <Documented /> | Code Mode starts when a mod hooks `tool.call`. An administrator can still keep Code Mode off in managed settings. | [Tool, Command, and Config Calls](../extend/mod-api/calls/tool-command-config.md#members), [Gated and Surface-Specific Tools](../reference/tools/gated-and-other.md#code-mode) |
-
-### Mod API Type File
+### Permissions, Hooks, and Settings
 
 | Change | Status | What it means for you | Where to read more |
 | --- | --- | --- | --- |
-| `Tier` of an organization plugin | <Documented /> | A plugin from a marketplace with a remote source takes the organization tier when managed settings set it true in `enabledPlugins` and declare the marketplace in `extraKnownMarketplaces`. It no longer needs `prependPlugins` or `appendPlugins`. Those lists set only the order. | [Hook Types](../extend/mod-api/types/hooks.md#types-without-fields) |
-| `consent` in `tool.call` | <Documented /> | It counts as the request of the user only for a call that answers a press, input, or pick on the plugin's own element. | [Tool Call Types](../extend/mod-api/types/tool-command-config/tool-calls.md#toolcallreserved) |
+| Auto mode on third-party providers | <Documented /> | Auto mode accepts Opus 4.6 and Sonnet 4.6 on Amazon Bedrock, Google Cloud's Agent Platform, Microsoft Foundry, and the Claude apps gateway. In `2.1.327`, the model check refused both models there. | [Auto Mode](../configure/permissions/auto-mode.md) |
+| `onFailure: "block"` on `mcp_tool` hooks | <Documented /> | `"block"` works on `mcp_tool` hooks, as on `command` and `http` hooks. A failed call to the MCP server blocks the action. | [Hook Configuration](../extend/hooks/configuration.md#failure-handling) |
+| `deniedMcpServers` and `allowManagedMcpServersOnly` | <Documented /> | An entry found only in a project's settings file does not apply to a server that the organization provides. An entry of the form `claude.ai <name>` also applies to that connector in cloud and self-hosted runner sessions. The schema text of `allowManagedMcpServersOnly` adds that a user can deny a server that the organization provides. | [MCP and Channels Settings](../configure/settings/mcp-and-channels.md#keys) |
+| `remoteMessageReceipts` | <Undocumented /> | A new setting with the values `on`, `always`, and `off`. It sets delivery notices for messages between this session and cloud or Remote Control sessions. | [Agents and Remote Settings](../configure/settings/agents-and-remote.md#keys) |
 
-### Settings, Permissions, and Startup
-
-| Change | Status | What it means for you | Where to read more |
-| --- | --- | --- | --- |
-| Managed settings checksum header | <Undocumented /> | Claude Code sends `x-claude-code-managed-settings-checksum` to a gateway when managed settings turn on the gateway hint headers. | [Enterprise Settings](../configure/settings/enterprise.md#approval-of-server-managed-settings), [Request Headers](../reference/api/endpoints.md#request-headers) |
-| `attributionProject` | <Undocumented /> | Behind a Claude apps gateway whose admin sets `admin.billing_group_tag`, it can name one of your billing groups. | [Core Settings](../configure/settings/core.md#keys) |
-| `autoCompactWindow` | <Documented /> | The window has no upper limit. The minimum is 100000 tokens. The same applies to `modelSettings.*.autoCompactWindow`. | [Core Settings](../configure/settings/core.md#keys) |
-| `autoCompactOfferAnswer` and `autoCompactRaisedForLoad` | <Undocumented /> | These are new internal keys. The program reads them for the Claude Desktop auto-compact offer. | [Core Settings](../configure/settings/core.md#keys) |
-| `allowNestedModelAccessUnderForceLogin` | <Undocumented /> | This new key is for self-hosted runner hosts. It lets a nested Claude Code use the runner's model access when managed settings set `forceLoginOrgUUID` or `forceLoginMethod`. | [Authentication Settings](../configure/settings/auth.md#keys) |
-| `forceLoginMethod` set to `console` | <Documented /> | Two sign-in error messages no longer point you to the Claude subscription option. | [Authentication Settings](../configure/settings/auth.md#keys) |
-| `claudeMdExcludes` on Windows | <Documented /> | A pattern also matches a path whose drive letter is in the other case. | [Core Settings](../configure/settings/core.md#keys) |
-| `/config` notes and failed saves | <Documented /> | `/config` shows a note when other settings override a row. A change that fails to save shows a line under the prompt. | [Settings Files and Scopes](../configure/settings/index.md#which-value-wins) |
-| `permissions.blockReadsOutsideWorkingDirectories` | <Documented /> | It asks about more `Bash` commands in `bypassPermissions` and auto modes, and denies some in auto mode. It refuses more `Bash` commands that name a path under a `Read` or `Edit` deny rule, where it used to ask. | [Permission Rules](../configure/permissions/rules.md#the-permissions-keys) |
-| Path and prompt checks | <Undocumented /> | Path checks refuse some symbolic links. Some paths now ask. A `Bash` command with very long expanded variables is denied. On a permission prompt, the Down key stops at No. | [Permission Modes](../configure/permissions/modes.md#path-and-prompt-checks) |
-| Auto mode allow rules | <Undocumented /> | Auto mode ignores more package-runner rules such as `Bash(pnpm dlx *)`, and `PowerShell(.\scripts\build.ps1 *)` rules are no longer ignored in error. | [Auto Mode](../configure/permissions/auto-mode.md#broad-allow-rules-in-auto-mode) |
-| Billed classifier notice | <Undocumented /> | The notice says that an upcoming release removes the fallback. Each action the classifier would have checked will be asked about or denied. | [Auto Mode](../configure/permissions/auto-mode.md#classifier-billing-notice) |
-| Sandbox | <Undocumented /> | Claude sees a note when an exempt command stayed in the sandbox. The `/sandbox` lists are not numbered outside screen reader mode. | [Sandbox](../configure/permissions/sandbox.md#other-behavior) |
-| `CLAUDE_CODE_DISABLE_LAYOUT_CHECK` | <Undocumented /> | This new variable turns off the layout check of the terminal screen. | [UI and Terminal Variables](../configure/env-vars/ui-and-terminal.md#variables) |
-
-### Tools, Hooks, and MCP
+### Skills and Slash Commands
 
 | Change | Status | What it means for you | Where to read more |
 | --- | --- | --- | --- |
-| Failing hooks | <Documented /> | A failing background `SubagentStop` hook, `SessionEnd` at `/clear` and `/resume`, and `CwdChanged` and `FileChanged` in fullscreen now show the failure. A `Stop` hook that failed to run no longer shows as a reported problem. | [Hook Input and Output](../extend/hooks/input-and-output.md#where-a-failing-hook-shows) |
-| `claude mcp add-json <name> -` | <Documented /> | It reads the server JSON from stdin, so a token stays off the command line. It is not available inside a session. | [MCP CLI](../extend/mcp/cli.md#subcommands) |
-| `claude mcp add` and `remove` with `--scope project` | <Documented /> | They keep the other top-level keys of `.mcp.json`. `add` stops when the file lists servers at the top level with no `mcpServers` key. | [MCP CLI](../extend/mcp/cli.md#how-it-works) |
-| Remote MCP servers after an outage | <Documented /> | Most remote servers that Claude Code reaches by hostname over `https` are retried in the background for about a day. | [MCP Runtime](../extend/mcp/runtime.md#how-it-works) |
-| MCP server logs | <Documented /> | They record the mode, action, and field names of elicitation requests and hook answers, not their full contents. | [MCP Runtime](../extend/mcp/runtime.md#how-it-works) |
-| Subagent resume | <Documented /> | A subagent started with no model keeps its model when resumed, also after `/model`. A subagent that a sibling's message resumes follows the session's permission settings. | [Subagent Runtime](../extend/subagents/runtime.md#limits-and-switches) |
-| First subagent on a model | <Undocumented /> | It waits up to 1.5 seconds (10 seconds in `claude -p`) for that model's settings from Anthropic. | [Subagent Runtime](../extend/subagents/runtime.md#limits-and-switches) |
-| `ListAgents` | <Documented /> | A long list comes in pages. Each page ends with a cursor line for the next page. | [Agents, Tasks, and Planning](../reference/tools/agents-and-tasks.md#tools) |
-| `ExitWorktree` | <Documented /> | `remove` asks first when the worktree may hold unsaved work. It is refused when nobody can answer, unless an allow rule, auto mode, or bypass permissions mode allows it. | [Agents, Tasks, and Planning](../reference/tools/agents-and-tasks.md#tools) |
-| `Grep`, `Read`, `NotebookEdit`, and `@` mentions | <Documented /> | `Grep` sorts `content` and `count` results by file path, and paging no longer repeats or skips results. `Read` opens notebooks with an output of an unknown type, and reports the real size of a file of 10 MB or more. `NotebookEdit` keeps the final newline. A message looks up only the first 100 `@` mentions. | [Files, Search, and Memory](../reference/tools/files.md#how-it-works) |
-| `WebFetch` and `Bash` | <Documented /> | `WebFetch` refuses a URL over 2,000 characters before any permission prompt. The `Bash` diff of changed files names each file that is binary, too large, or too many to show. | [Shell, Web, and Background Tasks](../reference/tools/shell-and-web.md#how-it-works) |
-| `PowerShell` | <Documented /> | It asks before a command that may run `Get-Module`, even when a rule names it. | [Shell, Web, and Background Tasks](../reference/tools/shell-and-web.md#how-it-works) |
-| First `Bash` command and shell start-up files | <Undocumented /> | Your shell start-up files may run before you approve the first command. Set `CLAUDE_CODE_DISABLE_SHELL_HEAD_START=1` to turn this off. | [Shell, Web, and Background Tasks](../reference/tools/shell-and-web.md#how-it-works), [Tools and Bash Variables](../configure/env-vars/tools-and-bash.md#variables) |
-| `Artifact` | <Documented /> <Gated /> | The tool refuses calls once settings turn Artifacts off. It reads an uploaded file by the address the artifact page shows. The publish prompt stops offering "don't ask again" in some cases. | [Gated and Surface-Specific Tools](../reference/tools/gated-and-other.md#how-it-works) |
-| `Edit` after compaction | <Undocumented /> | `Edit` runs on an unchanged file outside the project that Claude read in full before a compaction. It no longer fails with `File has not been read yet`. | [Files, Search, and Memory](../reference/tools/files.md#write-and-edit-limits) |
-| Commit guidance about secrets | <Undocumented /> | On newer models and in `PowerShell`, Claude is told not to commit files that likely contain secrets, such as `.env`. | [Shell, Web, and Background Tasks](../reference/tools/shell-and-web.md#how-it-works) |
-| Refusal of a command that the `rm` check cannot parse | <Undocumented /> | For a command with no `rm`, the refusal tells Claude that it can send a command that deletes nothing again in plain syntax. | [Permission Modes](../configure/permissions/modes.md#safety-checks) |
-| PowerShell lookup on Windows | <Undocumented /> | With no `pwsh` on `PATH`, Claude Code looks in the standard install folders at the same time. The `powershell.exe` in `System32` comes before one on `PATH`. | [Shell, Web, and Background Tasks](../reference/tools/shell-and-web.md#how-it-works) |
+| `/code-review` | <Documented /> | On most models it reports only bugs and `CLAUDE.md` violations. Run `/simplify` for reuse, simplification, and efficiency cleanups. Each finding is marked Important, Pre-existing, or Nit, and the summary ends with a suggested fix. | [Bundled Skills](../extend/skills-and-commands/bundled-skills.md#skills) |
+| `/list-agents` | <Documented /> | When its server flag is on, the list is shown to you alone. Claude gets a note that it did not see the list. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#session-and-conversation-commands) |
+| `/chrome` | <Gated /> | The welcome text says that Claude Code asks before Claude acts on a site, unless your permission mode or a rule in `/permissions` answers for you. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands) |
 
-### CLI, Sessions, and Accounts
+### Tools
 
 | Change | Status | What it means for you | Where to read more |
 | --- | --- | --- | --- |
-| `--initialize-fields` | <Undocumented /> | This new flag reads the named fields of the `initialize` request in place of their flags. It is for SDK use. | [All Flags](../configure/cli/flags.md#start-and-print-mode) |
-| `--worktree` with a relative `--add-dir` | <Documented /> | A relative `--add-dir` beside the launch folder gives the Bash sandbox that folder. One above the launch folder gives the sandbox and a `--bg` session only the worktree, in some starts. | [All Flags](../configure/cli/flags.md#sessions-and-worktrees) |
-| `--nested-model-*` flags | <Undocumented /> | `--nested-model-access`, `--nested-model-allow`, and `--nested-model-call-budget` let a command in a runner session start a Claude Code that uses the runner's model access. | [Self-Hosted Runner](../configure/cli/self-hosted-runner.md#runtime-options) |
-| `--use-anthropic-git-proxy` and `GIT_CONFIG_GLOBAL` | <Documented /> | The runner keeps a non-empty directory that `GIT_CONFIG_GLOBAL` names, ignores the variable, and prints a warning. | [Self-Hosted Runner](../configure/cli/self-hosted-runner.md#runtime-options) |
-| `remote-control` in `worktree` mode | <Documented /> | Stopping the server keeps the worktree of a session that may return, with its git-ignored files such as `.env`. | [Remote Control](../configure/cli/remote-control.md#how-the-server-starts) |
-| `CLAUDE_CODE_OAUTH_SCOPES` | <Documented /> | Claude Code does not pass it to commands that do not get the session token. A nested `claude` with its own token is no longer refused by `forceLoginOrgUUID`. | [Auth and Accounts Variables](../configure/env-vars/auth-and-accounts.md#variables) |
-| `/status` Unused API key row | <Undocumented /> | When an API key is set and not used, `/status` shows "Unused API key" with "claude -p uses it". | [Account and Access](../how-it-works/account-and-access.md#login-and-an-unused-api-key) |
-| `/export` | <Documented /> | It asks before it overwrites a file. `/export <name>` keeps an existing file and tells you to run `/export`. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#session-and-conversation-commands) |
-| `/hooks`, `/mcp`, and `/plugin` | <Documented /> | `/hooks` lists hooks from `--settings`. `/mcp` pages share one layout and end in Back. `/plugin` says that removing a marketplace deletes its plugins' settings and saved data. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands) |
-| `/tui`, `/status`, `/statusline`, and `/install-github-app` | <Documented /> | `/tui classic` names the non-fullscreen renderer, and `/tui default` still works. `/status` lists broken files and other problems. `/statusline` honors `CLAUDE_CONFIG_DIR`. `/install-github-app` asks before it changes a repository. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands) |
-| `/resume` | <Documented /> | The list fills the room in the window. After most spend caps, Claude Code no longer shows `Resend your message to try again`. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#session-and-conversation-commands) |
-| `/config` theme notice | <Documented /> | After you change the theme and close the panel, the notice says `Set theme to <name>`. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands) |
-| `/artifacts` list | <Gated /> | When a request for more of the list fails, Claude Code sends it two more times, then the panel shows `Couldn't load the whole list`. | [Slash Commands](../extend/skills-and-commands/slash-commands.md#how-usage-and-artifacts-work) |
-| `claude agents` and `claude rm` | <Documented /> | A fully pushed session can be removed when its worktree has a file or folder named `HEAD` at the top level. | [Subcommands](../configure/cli/subcommands.md#commands) |
-| Prompts after `fg` | <Undocumented /> | For a moment after the terminal resumes, most prompts ignore every answer except Esc. | [Subcommands](../configure/cli/subcommands.md#commands) |
-| Exit from a worktree session | <Documented /> | When you keep the worktree, exit also writes `Worktree kept. Your work is saved at <path>` to standard error. | [All Flags](../configure/cli/flags.md#sessions-and-worktrees) |
-| `--chrome` and credential files | <Documented /> | Claude in Chrome also refuses to upload files that secret stores use, such as `credentials.json`, `.vault-token`, or `gh/hosts.yml`. | [All Flags](../configure/cli/flags.md#ide-desktop-and-deep-links) |
-| `claude -p` in a self-hosted runner session | <Undocumented /> | A `claude -p` that a script or hook of the session starts no longer waits out rate limits. | [Self-Hosted Runner](../configure/cli/self-hosted-runner.md#retry-setting-of-a-session) |
-| API key and Anthropic profile | <Undocumented /> | When both are set, the startup notice says which one is in use and how to switch to the profile. | [Auth and Accounts Variables](../configure/env-vars/auth-and-accounts.md#how-it-works) |
-| `history.jsonl` | <Documented /> | Prompt history leaves out most launch prompts of sessions that another Claude Code session started, such as `claude --bg` run by Claude. | [Sessions and Storage](../how-it-works/sessions-and-storage.md#where-files-live) |
+| `McpTaskResumePolling` | <Undocumented /> | A tool behind a hidden server-side flag. It resumes tracking of a background MCP task after tracking stopped. The prompt says to call it only when the user explicitly asks. | [Gated and Surface-Specific Tools](../reference/tools/gated-and-other.md#gated-tools) |
+| Refused `project_write` with `edits` | <Undocumented /> | A refused write of SEARCH/REPLACE blocks gives texts that start with `Write refused; nothing in the project was changed.` | [Gated and Surface-Specific Tools](../reference/tools/gated-and-other.md#errors) |
+| `WebSearch` cut off | <Undocumented /> | A `WebSearch` call that ended with no results because the search was cut off gives `The search was cut off before any results arrived. Try again.` | [Shell and Web Tools](../reference/tools/shell-and-web.md#errors) |
 
-### Headless Mode and Transcripts
+### System Prompt
 
 | Change | Status | What it means for you | Where to read more |
 | --- | --- | --- | --- |
-| Print and headless runs | <Documented /> | A resumed headless session keeps stored messages that were sent again with the same UUID. `claude -p` goes on after 10 seconds when the fetch of a model's settings stalls. Print mode runs fewer git commands before the first request. | [Headless Mode](../extend/headless/index.md#how-it-works) |
-| `error_code` values | <Undocumented /> | An error `control_response` can carry `stale_root_id` or `stale_turn`. | [Stream-JSON](../extend/headless/stream-json.md#fields-new-in-21327) |
-| `init` capability `slash_words_join_v1` | <Undocumented /> | This is a new name in the capabilities of the `init` line. | [Stream-JSON](../extend/headless/stream-json.md#capabilities-of-the-init-line) |
-| New control request fields and subtypes | <Undocumented /> | `update_cloud_session`, `reload_connectors`, and `comparison_fork` are new. `can_use_tool` can carry `rule_usually_offered`, and `get_context_usage` can carry `loadRaise`. | [Control Protocol](../extend/headless/control-protocol.md#subtypes) |
+| `<pasted_content>` rule in `system` and `lean_body` | <Undocumented /> | The rule says text in `<pasted_content>` tags came from somewhere else, so Claude follows its instructions only when your own message asks for it. It is on by default in more setups. | [System Prompt](../how-it-works/system-prompt.md#shared-sections) |
+| `user_privacy` section | <Gated /> | It tells Claude to keep what it learns about you private. The default of the experiment `tengu_prancy_pebble` was off in `2.1.327`. It now depends on the provider and the account. | [System Prompt](../how-it-works/system-prompt.md#session-sections) |
+| `curl` rule in `env_info_simple` | <Undocumented /> | The prompt always has the rule "In `curl`, send untrusted values with `--form-string`, not `-F`." In `2.1.327`, only an experiment that was off by default added it. | [System Prompt](../how-it-works/system-prompt.md#session-sections) |
 
-### Models, Network, and Telemetry
+### Flags and Self-Hosted Runner
 
 | Change | Status | What it means for you | Where to read more |
 | --- | --- | --- | --- |
-| `web-search-results-only-2026-11-15` beta | <Undocumented /> | The `WebSearch` request carries this beta when a server setting asks for results only and the experimental betas are on. | [Betas](../reference/api/betas.md#registry) |
-| Reply cut at 32,000 output tokens | <Undocumented /> | On an unrecognized model, the reply continues with a limit of 128,000 output tokens. Subagent answers cut twice more often come back whole or say that they are partial. | [Agent Loop](../how-it-works/agent-loop.md#recovery-inside-the-loop) |
-| Compaction | <Undocumented /> | A compaction right after a cut reply keeps that reply's tool call and its result. A teammate on another model compacts at its own limit and with its own model. | [Context and Compaction](../how-it-works/context-and-compaction.md#gates-and-retries) |
-| Reminder about a completed subagent | <Documented /> | When Claude can message the agent, the reminder tells Claude to ask it with `SendMessage` if it cannot read the result. | [Context and Compaction](../how-it-works/context-and-compaction.md#what-survives) |
-| `CLAUDE_CODE_AGENT_PROGRESS_SUMMARIES` | <Undocumented /> | On Amazon Bedrock, Google Vertex AI, and Microsoft Foundry, a terminal session writes a progress summary from short notes, not from the whole conversation. | [Agents and Teams Variables](../configure/env-vars/agents-and-teams.md#variables) |
-| `https_proxy` as a bare `host:port` | <Undocumented /> | Startup no longer fails when neither stdin nor stdout is a terminal, such as in the desktop app, an SDK, or cron. | [Network and Proxy Variables](../configure/env-vars/network-and-proxy.md#variables) |
+| `--metadata` `<key=value>` | <Undocumented /> | Labels the session for the script that starts its machine. It needs `--environment` with the ID of a self-hosted environment. | [CLI Flags](../configure/cli/flags.md#cloud-and-remote-sessions) |
+| `--hold-repository-while-parked` | <Undocumented /> | A hidden flag for the SDK. Until the claim, Claude Code holds back parts of the checkout. It needs `--await-claim`. | [CLI Flags](../configure/cli/flags.md#start-and-print-mode) |
+| `--repository-folder` | <Undocumented /> | Names the folder that sessions use for a repository, in place of the path under `--base-dir`. It does nothing at `--capacity` above 1. Two new errors report a bad value or a folder that cannot be looked at. | [Self-Hosted Runner](../configure/cli/self-hosted-runner.md#runner-errors) |
+| `--hook-label` | <Undocumented /> | Hands an entry of a session's metadata to the `spawn-runner` hook as `CLAUDE_RUNNER_META_<LABEL>`. It needs `--min-idle` at 0. Four new errors report a bad use. | [Self-Hosted Runner](../configure/cli/self-hosted-runner.md#runner-errors) |
+| Orchestrator metrics | <Undocumented /> | `GET /metrics` of the orchestrator adds two metrics. | [Self-Hosted Runner](../configure/cli/self-hosted-runner.md#orchestrator-metrics) |
+| `--use-anthropic-gh` | <Undocumented /> | The built-in `gh api` is off by default in a session whose settings guard Claude's GitHub tools by name. `--use-anthropic-gh true` turns it on there. | [Self-Hosted Runner](../configure/cli/self-hosted-runner.md#runtime-options) |
 
-## Earlier Releases
+### Environment Variables
 
-This site keeps no page for an older release. The official [Changelog](https://code.claude.com/docs/en/changelog) lists every release.
+| Change | Status | What it means for you | Where to read more |
+| --- | --- | --- | --- |
+| `CLAUDE_CODE_DISABLE_DEFERRED_TOOL_RESUME` | <Undocumented /> | Lets a host stop `claude -p --resume` and `--continue` from running a tool call that a hook deferred in the session. | [Sessions and Storage Variables](../configure/env-vars/sessions-and-storage.md#variables) |
+| `CLAUDE_STREAM_IDLE_TIMEOUT_MS` | <Documented /> | A value above 5 minutes also raises the 5-minute connection limit, up to 30 minutes, on gateways, custom base URLs, and cloud providers. | [Network and Proxy Variables](../configure/env-vars/network-and-proxy.md#variables) |
+| `CLAUDE_RUNNER_SESSION_UUID` and `CLAUDE_CODE_REMOTE_SESSION_UUID` | <Undocumented /> | The runner sets both for the session and for its `checkout`, `post-session`, and `spawn-runner` hooks. | [Remote and Cloud Session Variables](../configure/env-vars/remote-and-cloud-sessions.md#variables) |
+| `SELF_HOSTED_RUNNER_REPOSITORY_FOLDER` | <Undocumented /> | The variable of `--repository-folder`. It is a comma-separated list of `<owner>/<repo>=<folder>` entries. | [Remote and Cloud Session Variables](../configure/env-vars/remote-and-cloud-sessions.md#variables) |
+| `CCR_CHECKPOINT_URL` and `CLAUDE_CODE_CCR_AFFINITY_KEY` | <Undocumented /> | A set `CCR_CHECKPOINT_URL` stops one system reminder in some resumed remote sessions. `CLAUDE_CODE_CCR_AFFINITY_KEY` sends its value in the `x-ccr-affinity-key` header. | [Remote and Cloud Session Variables](../configure/env-vars/remote-and-cloud-sessions.md#variables) |
+| `CLAUDE_CODE_THINKING_RESUMPTION` | <Undocumented /> | Controls thinking resumption, which resumes a truncated response. The beta `thinking-resumption-2026-07-17` goes with it. | [Models and Effort Variables](../configure/env-vars/models-and-effort.md#variables) |
+| `CLAUDE_CODE_PEPPY_STARLIGHT` | <Undocumented /> | Turns on or off one line at the end of the `Agent` tool description. | [Agents and Teams Variables](../configure/env-vars/agents-and-teams.md#variables) |
+| `CLAUDE_CODE_WEBSEARCH_CITATIONS` | <Undocumented /> | A set value also adds a system prompt section that says the app shows a source chip for each cited web result. | [Tools and Bash Variables](../configure/env-vars/tools-and-bash.md#variables) |
+| `CLAUDE_CODE_SHELL_MCP_SERVERS` and `CLAUDE_CODE_WATCHED_SLEEP` | <Undocumented /> | Claude Code sets both. The first lists HTTPS servers for shell child processes. The second marks a rewritten leading `sleep`. | [Tools and Bash Variables](../configure/env-vars/tools-and-bash.md#variables) |
+| `CLAUDE_CODE_RELAUNCH_SANDBOX_HOLD` and `CLAUDE_CODE_HOST_CHECKED_FOLDER` | <Undocumented /> | Claude Code sets the first on relaunch to carry the held sandbox limits. The program shows no effect for the second. | [Sessions and Storage Variables](../configure/env-vars/sessions-and-storage.md#variables) |
+| `PROGRAMFILES` | <Undocumented /> | Gives the Windows `Program Files` folder as the second choice, behind a feature flag or server gate. | [System and Third-Party Variables](../configure/env-vars/system-and-third-party.md#variables) |
+
+### API Paths and Betas
+
+| Change | Status | What it means for you | Where to read more |
+| --- | --- | --- | --- |
+| `/v1/code/ultrareview/${…}` | <Undocumented /> | A server gate decides whether Claude Code first asks this path for the quota and preflight checks of an ultrareview. It then asks `/v1/ultrareview/${…}` if the first request fails. | [API Endpoints](../reference/api/endpoints.md#account-and-service-endpoints) |
+| `resumption-2026-10-08` | <Undocumented /> | A beta value, behind a server config, for requests that do not resume an incomplete thinking block. | [Betas](../reference/api/betas.md#registry) |
+
+### Mod API Calls
+
+| Change | Status | What it means for you | Where to read more |
+| --- | --- | --- | --- |
+| `$.session.machine` and `session.machine` | <Documented /> | Returns the system name, the kernel release, the hardware, and which of `npm`, `yarn`, `pnpm`, `bun`, `deno`, and `node` are on the `PATH`. | [Session Calls](../extend/mod-api/calls/session.md#members) |
+| `tool.offer` and `$.tool.offer` | <Documented /> | The engine asks once for each tool before the first request of a loop, and again at a call. `{ isOffered: false }` keeps the tool from the model of that loop. | [Tool, Command, and Config Calls](../extend/mod-api/calls/tool-command-config.md#members) |
+| Tier of `$.command.run`, `$.prompt.submit`, `$.session.compact`, and `$.tool.call` | <Documented /> | These calls run through the hooks that hear them. A person's hooks do not hear a call that an organization's mod makes. Every ask in a `$.tool.call` becomes an allow, except for a built-in tool whose dialog is the call itself. | [The Dollar Object](../extend/mod-api/nouns-and-gates.md#the-dollar-object) |
+| `next.origin` | <Documented /> | Its type is `NextOrigin`, which adds `hookOwner` and `isOrganizations`. | [Hook Types](../extend/mod-api/types/hooks.md#nextorigin) |
+| `telemetry.log` | <Documented /> | Where `sec-default` is seated, a collector record passes the `user` tier by. | [Telemetry Calls](../extend/mod-api/calls/telemetry.md#members) |
+| `agent.offer` and `AgentSpec.autoCompactWindow` | <Documented /> | The offer to resume an agent carries its `agentId`. The type file says `autoCompactWindow` is at least 100000. | [Agent Calls](../extend/mod-api/calls/agent.md#agent-spec) |
+| `$.http.fetch` | <Documented /> | A model request that a hook edits keeps the session's credential while `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set. | [Clock, HTTP, Process, Env, and Settings Calls](../extend/mod-api/calls/clock-http-process-env-settings.md#members) |
+| `$.env.set` and `$.config.set` refusals | <Undocumented /> | Error texts that end in a code: `OUT_OF_STEP`, `HOST_RULE`, `PINNED`, `HELD`, `NO_ROW`, `LOCKED`, and `NOT_WRITTEN`. | [Mod API](../extend/mod-api/index.md#errors) |
+| `allowManagedModsOnly` | <Documented /> | An app that embeds Claude Code can also switch it on. The managed settings of an admin still win. | [The Dollar Object](../extend/mod-api/nouns-and-gates.md#gates-that-stop-mods) |
+| `isTextDisplayOnly` | <Gated /> | The text of a run also stays in requests unless that run's output was for the person alone. | [Command and Config Types](../extend/mod-api/types/tool-command-config/command-config.md#commandrunresult) |
 
 ## Example
 
-In `2.1.327`, `claude mcp add-json` can read the server JSON from stdin. The `2.1.326` help text has no such option.
-Check the version, then read the help text of the command:
+In `2.1.328`, `CLAUDE_CODE_DISABLE_DEFERRED_TOOL_RESUME` lets a host stop `claude -p --resume` from running a tool call that a hook deferred.
+Check the version, then set the variable for one run:
 
 ```bash
 claude --version
-claude mcp add-json --help
+CLAUDE_CODE_DISABLE_DEFERRED_TOOL_RESUME=1 claude -p --resume <session-id>
 ```
-
-The help text of `2.1.327` ends the first line with "or - to read it from stdin".
 
 ## Related Pages
 

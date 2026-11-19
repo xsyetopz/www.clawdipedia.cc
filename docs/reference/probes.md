@@ -193,7 +193,7 @@ These runs used a live subscription login on `2.1.305`, not the stub, with a fre
 
 | What We Ran | Status | What We Saw |
 | --- | --- | --- |
-| `claude -p "/context" --output-format stream-json`, empty and after `claude -p "Reply with 'OK'."` | <Undocumented /> | An empty session held 12,524 tokens and 16,277 after `Reply with 'OK'.` (the reply was exactly `OK` in every run). The first request matched `/context` exactly. Reruns on `2.1.306`, `2.1.307`, `2.1.308`, and `2.1.309` (default model `claude-sonnet-5-5`, warm cache) had the same categories and matched again. On `2.1.307` the System tools category was 393 tokens larger than on `2.1.306`, with the same warm cache. On `2.1.309` it was 106 tokens larger than on `2.1.308`, which fits the longer `Bash` tool description. Its token counts are not quoted, because the cache was warm. A live run on `2.1.327` (model `claude-sonnet-5-5`, cold cache) had System tools at 8,326 tokens against 8,185 on `2.1.326` (+141), 12,236 tokens in total when empty, and 15,546 after `Reply with 'OK'.`. See [Context Budget](../how-it-works/context-budget.md). |
+| `claude -p "/context" --output-format stream-json`, empty and after `claude -p "Reply with 'OK'."` | <Undocumented /> | An empty session held 12,524 tokens and 16,277 after `Reply with 'OK'.` (the reply was exactly `OK` in every run). The first request matched `/context` exactly. Reruns on `2.1.306`, `2.1.307`, `2.1.308`, and `2.1.309` (default model `claude-sonnet-5-5`, warm cache) had the same categories and matched again. On `2.1.307` the System tools category was 393 tokens larger than on `2.1.306`, with the same warm cache. On `2.1.309` it was 106 tokens larger than on `2.1.308`, which fits the longer `Bash` tool description. Its token counts are not quoted, because the cache was warm. A live run on `2.1.328` (model `claude-sonnet-5-5`, cold cache) had System tools at 8,432 tokens against 8,326 on `2.1.327` (+106), the System prompt at 2,252 tokens against 1,846 (+406), 12,751 tokens in total when empty, and 16,087 after `Reply with 'OK'.`. The larger System prompt fits the rules that `2.1.328` adds, which [System Prompt](../how-it-works/system-prompt.md) lists. See [Context Budget](../how-it-works/context-budget.md). |
 
 ## Live Login Probes
 
@@ -232,7 +232,7 @@ A hook inherits the environment of the probe, so a change in the probe environme
 | Default `-p "Reply with 'OK'."` for every model in the catalog | <Undocumented /> | Short, extended short, or full prompt by model. See [System Prompt](../how-it-works/system-prompt.md#prompt-by-model). |
 | `CLAUDE_COWORK_MEMORY_*` and `CLAUDE_CODE_POST_TURN_MEMORY` | <Undocumented /> | The four Cowork variables changed the memory section as described in [Memory and Rules](../configure/memory-and-rules.md). The post-turn pass did not run locally: the log said the memory server was not mounted. |
 | `PostToolUse` hook logging per tool | <Undocumented /> | The `tool_response` shapes in [Hook Events](../extend/hooks/tool-events.md#posttooluse-tool_response-shapes). |
-| `claude -p "/context"` | <Undocumented /> | 24 `count_tokens` requests and no `/v1/messages` request. |
+| `claude -p "/context"` | <Undocumented /> | 24 `count_tokens` requests and no `/v1/messages` request. On `2.1.328`, 25 `count_tokens` requests and still no `/v1/messages` request. |
 | Skill variables in the `init` skill list | <Documented /> | `CLAUDE_CODE_DISABLE_CLAUDE_API_SKILL` removed `claude-api`. The other four had no visible effect. |
 | `CLAUDE_CODE_MANAGED_SETTINGS_PATH` | <Undocumented /> | Ignored. The log still read the machine default managed folder. |
 | `/status` size warning with a 45,000-character `CLAUDE.md` in `-p`, `claude doctor`, and `get_status` | <Undocumented /> | No warning in these three. It shows in the interactive screen (see [Interactive Probes](#interactive-probes)). |
@@ -367,12 +367,12 @@ A change in a header, the system prompt, the tool list, or an event is an effect
 
 ## Sources
 
-[^cache-touch]: The program, `chunk-m14bt1pz.js:304625` (path and interval range), `chunk-m14bt1pz.js:313181` (the request code).
-[^oauth-config]: The program, `chunk-p5kfs9w9.js:249`, `function a(){return"prod"}`.
-[^req-id-pattern]: The program, `chunk-3vxj6f44.js:197`, `chunk-asj6f58y.js:1004721`.
-[^managed-note]: The program, `chunk-b0yr0k8v.js:162473`.
-[^managed-note-entry]: The program, `chunk-b0yr0k8v.js:160227`, `chunk-ja5z738t.js:166288`, `chunk-zfmsqnn9.js:3551`.
-[^push-flag]: The program, `chunk-46dkh8eq.js:7910`, flag `tengu_kairos_push_notifications`.
-[^inbox-verified]: The program, `chunk-dvrnw8ty.js:24810`, `chunk-2wqrb7ka.js:612`. The lead-signed path is at `chunk-dvrnw8ty.js:24638`.
+[^cache-touch]: The program, `chunk-56bhcxay.js:332834` (path and interval range), `chunk-56bhcxay.js:341362` (the request code).
+[^oauth-config]: The program, `chunk-vhzbpgjm.js:249`, `function a(){return"prod"}`.
+[^req-id-pattern]: The program, `chunk-bd3d9rns.js:197`, `chunk-xethrx83.js:976811`.
+[^managed-note]: The program, `chunk-syremzmn.js:163586`.
+[^managed-note-entry]: The program, `chunk-syremzmn.js:161372`, `chunk-jkpzhr7r.js:165704`, `chunk-374y7r0w.js:3577`.
+[^push-flag]: The program, `chunk-t94s3xy2.js:8230`, flag `tengu_kairos_push_notifications`.
+[^inbox-verified]: The program, `chunk-namfshcc.js:25254`, `chunk-t0gyw9kd.js:660`. The lead-signed path is at `chunk-namfshcc.js:25082`.
 [^notes-322]: [`2.1.322` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.322).
 [^notes-323]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323).

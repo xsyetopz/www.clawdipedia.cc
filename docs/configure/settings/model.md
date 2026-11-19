@@ -73,7 +73,7 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema, `chunk-ja5z738t.js:278919`.
-[^vertex-fast]: The program, `chunk-ja5z738t.js:280728`.
+[^schema]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:279143`.
+[^vertex-fast]: The program, `chunk-jkpzhr7r.js:280952`.
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^model-settings]: The program, `chunk-ja5z738t.js:278919`.
+[^model-settings]: The program, `chunk-jkpzhr7r.js:279143`.

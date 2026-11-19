@@ -176,6 +176,25 @@ An input that names its tool as the literal `T`. `next` and `$.tool.call` read i
 | --- | --- | --- | --- |
 | `tool` | <Documented /> | The name of the tool being called (`Bash`). | Type: `T`. Read-only. |
 
+### `ToolOfferInput`
+
+Since `2.1.328`, the input of `tool.offer`: one tool, at the moment the engine offers it to the model of one loop. Used by `tool.offer`, `$.tool.offer`.[^tool-offer]
+
+| Field | Status | What it is for | Type and limits |
+| --- | --- | --- | --- |
+| `tool` | <Documented /> | The tool name (`Bash`, `mcp__server__tool`). It is the key that a matcher narrows on. | Type: `string`. |
+| `provider` | <Documented /> | Who provides this tool, as `tool.describe` says in `provider`. | Type: `Origin`. |
+| `agentId` | <Documented /> | The agent whose loop it is. | Type: `string`. Optional. Absent for the main conversation. |
+| `subagentType` | <Documented /> | The type of that agent (`Explore`, or the agent of a plugin). | Type: `string`. Optional. Absent for the main conversation. |
+
+### `ToolOfferResult`
+
+Since `2.1.328`, what a `tool.offer` hook returns: whether the model of the loop is offered the tool, in its tool list and at its call. Used by `tool.offer`.[^tool-offer]
+
+| Field | Status | What it is for | Type and limits |
+| --- | --- | --- | --- |
+| `isOffered` | <Documented /> | `false` keeps the tool from the model of that loop for the life of the loop, compactions and resumes included. At a call it refuses that call alone. | Type: `boolean`. |
+
 ### `ToolRequestMeta`
 
 What a `tool.call` hook sets for the request of the tool of an MCP server.
@@ -230,13 +249,14 @@ One tool_use block of an assistant message, with its outcome once the transcript
 
 ## Sources
 
-[^read-only]: The program, `chunk-m14bt1pz.js:67175`.
-[^consent]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`. The text of `ToolCallReserved`.
+[^read-only]: The program, `chunk-56bhcxay.js:69653`.
+[^consent]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`. The text of `ToolCallReserved`.
 [^ceiling]: `schemas/claude-code.d.ts`, `ToolCheckInput`.
 [^ceiling-result]: `schemas/claude-code.d.ts`, `ToolCheckInput`.
-[^decider]: The program, `chunk-b0yr0k8v.js:214982`.
+[^decider]: The program, `chunk-syremzmn.js:216075`.
 [^break-cache]: `schemas/claude-code.d.ts`, `PromptSectionResult` and `ToolDescribeResult` (`breakPromptCache`).
-[^tool-info]: `schemas/claude-code.d.ts`, `ToolInfo`. The program, `chunk-nx8dehjc.js:123099`, `chunk-m14bt1pz.js:4801441`.
+[^tool-info]: `schemas/claude-code.d.ts`, `ToolInfo`. The program, `chunk-ep7e5a3y.js:124633`, `chunk-56bhcxay.js:4906026`.
 [^tool-mcp-server]: `schemas/claude-code.d.ts`, `ToolDescribeInput` and `ToolMcpServer`.
-[^op-hold]: `opHoldMs: 30000`, `chunk-b0yr0k8v.js:218348`.
-[^tool-judge]: `schemas/claude-code.d.ts`, `ToolJudgeInput`. The program, `chunk-b0yr0k8v.js:217812`.
+[^op-hold]: `opHoldMs: 30000`, `chunk-syremzmn.js:219487`.
+[^tool-judge]: `schemas/claude-code.d.ts`, `ToolJudgeInput`. The program, `chunk-syremzmn.js:218951`.
+[^tool-offer]: `schemas/claude-code.d.ts`, `ToolOfferInput` and `ToolOfferResult`. The program, `chunk-56bhcxay.js:8266` (the input) and `chunk-56bhcxay.js:243090` (the refusal message).

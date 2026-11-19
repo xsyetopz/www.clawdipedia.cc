@@ -107,12 +107,12 @@ Claude Code asks a server for feature flags at startup. A flag turns a feature o
 
 ## Sources
 
-[^names]: The program, `chunk-2ew0jg68.js:26216`, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^names]: The program, `chunk-7343wm3k.js:26213`, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 [^probes]: [Probes](../../reference/probes.md).
-[^ask-first]: The program, `chunk-q2y8vwwg.js:1850`, feature flag `cai_proud_planet`.
-[^live-watch]: The program, `chunk-zn50mqbb.js:1695`, gate `tengu_slate_lantern`.
-[^types-flag]: The program, `chunk-8bwn4zms.js:18522`, feature flag `tengu_cobalt_plinth_larch`.
+[^ask-first]: The program, `chunk-2w8y66tz.js:1271`, feature flag `cai_proud_planet`.
+[^live-watch]: The program, `chunk-2a8fea6t.js:1700`, gate `tengu_slate_lantern`.
+[^types-flag]: The program, `chunk-e1yvpjtb.js:18490`, feature flag `tengu_cobalt_plinth_larch`.
 [^basalt]: Probe result, see [Probes](../../reference/probes.md).
-[^cryptic]: The program, `chunk-m14bt1pz.js:3065004` (the switch), `chunk-m14bt1pz.js:3065044` (the list builder), and `chunk-m14bt1pz.js:3278357` and `chunk-m14bt1pz.js:3287647` (the request calls the list builder and sends `classifier_context`). Server flag `tengu_cryptic_horizon`. Probe cases `env319a.cryptic-horizon-poll.unset` and `.v1` (`CLAUDE_CODE_POLL_EVENTS=1`, `CLAUDE_CODE_REMOTE=1`, `--permission-mode auto`, a `poll_event` control request with authority `peer-agent`, then a Poll call and a Bash call): with `1`, 2 of 3 requests with `classifier_context` have an `events` list, with one entry that has the `peer-agent` authority. Unset, none have it.
-[^disable-flags]: The program, `chunk-pmhjgtb5.js:5368` and `chunk-xa2mcav9.js:234164`. Probe cases `env319a.disable-feature-flags.unset` and `env319a.disable-feature-flags.v1` (flag `tengu_merry_thunder` cached as on, `CLAUDE_CODE_ENABLE_WRAP_UP=1`): the `WrapUp` tool is in the tool list unset and absent with `1`.
-[^wrap-up]: The program, `chunk-61wd57dm.js:20786` and `chunk-1vttvse2.js:36343`. Flag `tengu_merry_thunder`. Probe cases `env319a.wrap-up.unset` and `env319a.wrap-up.v1` (flag cached as on): 12 tools unset, and 13 tools with `1`, the extra one being `WrapUp`.
+[^cryptic]: The program, `chunk-56bhcxay.js:3142464` (the switch), `chunk-56bhcxay.js:3142504` (the list builder), and `chunk-56bhcxay.js:3372077` and `chunk-56bhcxay.js:3381684` (the request calls the list builder and sends `classifier_context`). Server flag `tengu_cryptic_horizon`. Probe cases `env319a.cryptic-horizon-poll.unset` and `.v1` (`CLAUDE_CODE_POLL_EVENTS=1`, `CLAUDE_CODE_REMOTE=1`, `--permission-mode auto`, a `poll_event` control request with authority `peer-agent`, then a Poll call and a Bash call): with `1`, 2 of 3 requests with `classifier_context` have an `events` list, with one entry that has the `peer-agent` authority. Unset, none have it.
+[^disable-flags]: The program, `chunk-51eneejf.js:5370` and `chunk-gv1b3n3g.js:251769`. Probe cases `env319a.disable-feature-flags.unset` and `env319a.disable-feature-flags.v1` (flag `tengu_merry_thunder` cached as on, `CLAUDE_CODE_ENABLE_WRAP_UP=1`): the `WrapUp` tool is in the tool list unset and absent with `1`.
+[^wrap-up]: The program, `chunk-2v0j7fr6.js:21244` and `chunk-r1yxtgw6.js:36465`. Flag `tengu_merry_thunder`. Probe cases `env319a.wrap-up.unset` and `env319a.wrap-up.v1` (flag cached as on): 12 tools unset, and 13 tools with `1`, the extra one being `WrapUp`.

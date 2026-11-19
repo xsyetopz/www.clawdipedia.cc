@@ -191,12 +191,12 @@ The exact fields are in `https://clawdipedia.cc/schemas/claude-code-status-line.
 
 ## Sources
 
-[^extra-triggers]: The program, `chunk-m14bt1pz.js:4421878`, watches `mainLoopModel`, `fastMode`, `effortValue`, `thinkingEnabled`, and `prStatus`.
-[^sub-schema]: The program, `chunk-ja5z738t.js:257993`. Schema text: "Deprecated: still works, and will stop working in a future release. Custom per-subagent status line shown in the agent panel; receives row context as JSON on stdin". The `2.1.323` program says "Deprecated: no longer has any effect", in the same schema entry. The `2.1.327` program runs the command in `chunk-cfxefa64.js:912711-913300`.
-[^sub-source]: The program, `chunk-cfxefa64.js:912560-913300`.
-[^sub-trust]: The program, `chunk-cfxefa64.js:912711`.
-[^sub-input]: The program, `chunk-cfxefa64.js:913300-913900`.
-[^sub-output]: The program, `chunk-cfxefa64.js:913900-914500`.
-[^sub-deprecation]: The program, `chunk-dfwkett1.js:8085`, `chunk-cfxefa64.js:1930116` (the log line and the notice), and `chunk-m14bt1pz.js:5400306` (the plugin warning).
-[^schema-origin]: The program, `chunk-m14bt1pz.js:4419351`, builds this payload in code, not with a validator, so the schema comes from that code.
-[^version-field]: The program, `chunk-m14bt1pz.js:221117-221125`.
+[^extra-triggers]: The program, `chunk-56bhcxay.js:4518321`, watches `mainLoopModel`, `fastMode`, `effortValue`, `thinkingEnabled`, and `prStatus`.
+[^sub-schema]: The program, `chunk-jkpzhr7r.js:258217`. Schema text: "Deprecated: still works, and will stop working in a future release. Custom per-subagent status line shown in the agent panel; receives row context as JSON on stdin". The `2.1.323` program says "Deprecated: no longer has any effect", in the same schema entry. The `2.1.327` program runs the command in `chunk-j2wfp6sf.js:910626-911215`.
+[^sub-source]: The program, `chunk-j2wfp6sf.js:910475-911215`.
+[^sub-trust]: The program, `chunk-j2wfp6sf.js:910626`.
+[^sub-input]: The program, `chunk-j2wfp6sf.js:911215-911844`.
+[^sub-output]: The program, `chunk-j2wfp6sf.js:911844-912444`.
+[^sub-deprecation]: The program, `chunk-a3rr42d2.js:4705`, `chunk-j2wfp6sf.js:1929057` (the log line and the notice), and `chunk-56bhcxay.js:5516016` (the plugin warning).
+[^schema-origin]: The program, `chunk-56bhcxay.js:4515761`, builds this payload in code, not with a validator, so the schema comes from that code.
+[^version-field]: The program, `chunk-56bhcxay.js:226642-226650`.

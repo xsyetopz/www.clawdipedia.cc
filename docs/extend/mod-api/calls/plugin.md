@@ -71,8 +71,8 @@ on("engine.create", async ($, e, next) => {
 
 ## Sources
 
-[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `CoreEngineInterface`, `EngineCreateInput`, `EngineCreateResult`, `EngineInterface`, `EngineInterfaceBuilt`, `NoEngineInterface`, `INSTRUCTION_FILE_KINDS`, `InstructionFile`, `InstructionFileKind`, `PluginOptions`, `PluginRegisterInput`, `PluginProvides`, `PluginHookEntry`, `PluginRegisterResult`, `PluginRegisterUses`, `PluginStamp`, and `PluginState`.
-[^provides]: The program, `chunk-m14bt1pz.js:241756`.
+[^types]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `CoreEngineInterface`, `EngineCreateInput`, `EngineCreateResult`, `EngineInterface`, `EngineInterfaceBuilt`, `NoEngineInterface`, `INSTRUCTION_FILE_KINDS`, `InstructionFile`, `InstructionFileKind`, `PluginOptions`, `PluginRegisterInput`, `PluginProvides`, `PluginHookEntry`, `PluginRegisterResult`, `PluginRegisterUses`, `PluginStamp`, and `PluginState`.
+[^provides]: The program, `chunk-56bhcxay.js:269148`.
 [^v323]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323).
-[^validate]: The program, `chunk-ke2xb8ty.js:49355`.
-[^v2327]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, the text of `PluginRegisterInput` and `Tier`.
+[^validate]: The program, `chunk-eyez668q.js:50642`.
+[^v2327]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, the text of `PluginRegisterInput` and `Tier`.

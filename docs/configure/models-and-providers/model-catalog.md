@@ -207,21 +207,21 @@ The betas `per-turn-control-2026-07-01` and `timing-2026-09-09` match the flags 
 ## Sources
 
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^best]: The program, `chunk-f892tj2r.js:22696`.
+[^best]: The program, `chunk-b60sxmve.js:22702`.
 [^best-history]: The official page [Model Configuration](https://code.claude.com/docs/en/model-config#version-history), section "Version history", row `v2.1.321`.
-[^fable-alias]: The program, `chunk-f892tj2r.js:22608-22696`. The official page [Model Configuration](https://code.claude.com/docs/en/model-config#fable-alias-resolution), section "Fable alias resolution", and its Version history rows `v2.1.321` and `v2.1.257`.
+[^fable-alias]: The program, `chunk-b60sxmve.js:22614-22702`. The official page [Model Configuration](https://code.claude.com/docs/en/model-config#fable-alias-resolution), section "Fable alias resolution", and its Version history rows `v2.1.321` and `v2.1.257`.
 [^min-versions]: The official page [Model Configuration](https://code.claude.com/docs/en/model-config#version-history), section "Version history", and its Fable note ("Fable 5.2 requires Claude Code v2.1.321 or later, and Fable 5.1 requires v2.1.257 or later").
-[^opusplan]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The program, `chunk-asj6f58y.js:27229`, `chunk-m14bt1pz.js:141729`.
-[^aliases]: The aliases are from the official page, and the exceptions are from the program, `chunk-f892tj2r.js:21909-22696`.
-[^suffix]: The [`2.1.311` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.311). The program, `chunk-asj6f58y.js:536807` (the `(1M context)` label needs a model with `supports_1m_suffix`), and `chunk-jtw26wbb.js:933` (the alias list with `[1m]`).
-[^signed-file]: The [`2.1.311` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.311). The program, `chunk-14xs3dfy.js:2582` (the URL `downloads.claude.ai/model-catalog/v1/catalog.json` and the signature file), `chunk-asj6f58y.js:215723` (Bedrock, Vertex, Foundry, and Mantle), and `chunk-p15vna4f.js:4788` (the `env_off` result).
-[^catalog]: The program holds a JavaScript object with the comment `Hand-maintained baked-in model catalog`, `chunk-f892tj2r.js:668`.
-[^fallback-3p]: The program, field `fallback_3p`, `chunk-f892tj2r.js:737`, `chunk-f892tj2r.js:836`, and `chunk-f892tj2r.js:885` of `2.1.326`.
-[^window-default]: The program, `chunk-asj6f58y.js:549753`, `return $H()?Hht:tY`; `tY` is `1e6`, `Hht` is `200000` (`chunk-asj6f58y.js:546603`). The [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). In `2.1.322`, the constant was `bSt`.
-[^window-hint]: The program, `chunk-v761y4yt.js:2830`.
-[^zeta-probe]: Probe of `2.1.316`, `/model claude-zeta-9` with `-p`. The program in `2.1.327`, `chunk-wp1gtpmf.js:11199` (the `/model` reply) and `chunk-a2xjwn0h.js:79660` (the startup notice).
+[^opusplan]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The program, `chunk-xethrx83.js:25534`, `chunk-56bhcxay.js:146105`.
+[^aliases]: The aliases are from the official page, and the exceptions are from the program, `chunk-b60sxmve.js:21915-22702`.
+[^suffix]: The [`2.1.311` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.311). The program, `chunk-xethrx83.js:503491` (the `(1M context)` label needs a model with `supports_1m_suffix`), and `chunk-699j6sfp.js:933` (the alias list with `[1m]`).
+[^signed-file]: The [`2.1.311` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.311). The program, `chunk-xtev9r1a.js:2626` (the URL `downloads.claude.ai/model-catalog/v1/catalog.json` and the signature file), `chunk-xethrx83.js:178964` (Bedrock, Vertex, Foundry, and Mantle), and `chunk-h3hkpjdg.js:4794` (the `env_off` result).
+[^catalog]: The program holds a JavaScript object with the comment `Hand-maintained baked-in model catalog`, `chunk-b60sxmve.js:674`.
+[^fallback-3p]: The program, field `fallback_3p`, `chunk-b60sxmve.js:739`, `chunk-b60sxmve.js:838`, and `chunk-b60sxmve.js:887` of `2.1.326`.
+[^window-default]: The program, `chunk-xethrx83.js:516700`, `return $H()?Hht:tY`; `tY` is `1e6`, `Hht` is `200000` (`chunk-xethrx83.js:513430`). The [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). In `2.1.322`, the constant was `bSt`.
+[^window-hint]: The program, `chunk-zv7qt1se.js:2828`.
+[^zeta-probe]: Probe of `2.1.316`, `/model claude-zeta-9` with `-p`. The program in `2.1.327`, `chunk-6949vc40.js:11201` (the `/model` reply) and `chunk-4d4nzary.js:77255` (the startup notice).
 [^zeta-notes]: The [`2.1.316` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.316).
-[^sonnet-migration]: The program, `chunk-rnt5hbrt.js:708`.
+[^sonnet-migration]: The program, `chunk-gywceass.js:1249`.
 [^v325]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^fable-migration]: The program, `chunk-61wd57dm.js:91673`.
-[^fable-deadline]: The program, `chunk-61wd57dm.js:91895`.
+[^fable-migration]: The program, `chunk-2v0j7fr6.js:97968`.
+[^fable-deadline]: The program, `chunk-2v0j7fr6.js:98190`.

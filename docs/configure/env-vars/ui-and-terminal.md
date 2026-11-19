@@ -135,13 +135,13 @@ The variables on this page override that guess.
 
 ## Sources
 
-[^source]: The program, `chunk-2ew0jg68.js:26216` (variable names found in the `2.1.314` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^source]: The program, `chunk-7343wm3k.js:26213` (variable names found in the `2.1.314` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 [^ax-env]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307).
-[^early-key]: The program, `chunk-k8g096c0.js:5147`, `chunk-k8g096c0.js:23382` (option `timesPresses`). The server gate is `tengu_cheeky_newt`.
+[^early-key]: The program, `chunk-5g8qs913.js:26261-26266` (the default test), `chunk-5g8qs913.js:27436` (it feeds the renderer's key timing), and `chunk-5g8qs913.js:23995` (the timing check). Since `2.1.328` the server gate is `tengu_nifty_lemon`. In `2.1.327` it was `tengu_cheeky_newt`. The gate default is off in both.
 [^probes]: [Probes](../../reference/probes.md).
-[^new-renderer]: The program, `chunk-k8g096c0.js:387-396`. Since `2.1.327` the gates are `tengu_functional_pebble` and `tengu_kind_puzzle`. `tengu_idempotent_willow` is gone. The `tengu_functional_pebble` value holds `add` and `remove` lists of terminal names. The second gate, `tengu_kind_puzzle`, has the same list shape. It decides whether the old renderer runs the cursor check (`chunk-k8g096c0.js:397-405` and `chunk-k8g096c0.js:1627`, read at `chunk-maqjh9z8.js:25489-25493`). That check is on when the gate value is valid, `CLAUDE_CODE_NEW_RENDERER` is not off, the terminal is not in `remove` or Windows, and the session is not in tmux control mode. A value in `CLAUDE_CODE_NEW_RENDERER` wins over the first gate.
-[^notif-host]: The program, read at `chunk-rap1tzf6.js:589855` and used at `chunk-rap1tzf6.js:762030`.
-[^hidden-chars]: The program, `chunk-zke0gvsb.js:620`. The gate is `tengu_bubbly_gadget`.
-[^tui-asked]: The program, `chunk-11sthp5n.js:89`.
-[^ysk-send]: The program, value parsed at `chunk-nvx1z6pc.js:77832` and read at `chunk-nvx1z6pc.js:78659`.
-[^layout-check]: The program, `chunk-maqjh9z8.js:23735-23736` (the variable sets the `ignoresDamage` option), `chunk-maqjh9z8.js:10412-10417` (a value that is not a whole number marks damage unless the option is set), `chunk-maqjh9z8.js:24014-24016` (a damaged layout runs again), and `chunk-maqjh9z8.js:24030-24040` (the option turns on by itself after repeated damage).
+[^new-renderer]: The program, `chunk-5g8qs913.js:26343-26352`. Since `2.1.327` the gates are `tengu_functional_pebble` and `tengu_kind_puzzle`. `tengu_idempotent_willow` is gone. The `tengu_functional_pebble` value holds `add` and `remove` lists of terminal names. The second gate, `tengu_kind_puzzle`, has the same list shape. It decides whether the old renderer runs the cursor check (`chunk-5g8qs913.js:26353-26361` and `chunk-5g8qs913.js:27435`, read at `chunk-5g8qs913.js:25317-25321`). That check is on when the gate value is valid, `CLAUDE_CODE_NEW_RENDERER` is not off, the terminal is not in `remove` or Windows, and the session is not in tmux control mode. A value in `CLAUDE_CODE_NEW_RENDERER` wins over the first gate.
+[^notif-host]: The program, read at `chunk-5699r6rq.js:595700` and used at `chunk-5699r6rq.js:770583`.
+[^hidden-chars]: The program, `chunk-7q6bneac.js:318`. The gate is `tengu_bubbly_gadget`.
+[^tui-asked]: The program, `chunk-mc2z5m5k.js:88`.
+[^ysk-send]: The program, value parsed at `chunk-1kvfxjvh.js:78144` and read at `chunk-1kvfxjvh.js:78971`.
+[^layout-check]: The program, `chunk-5g8qs913.js:24198` (the variable turns the number check off), `chunk-5g8qs913.js:9482-9486` and `chunk-5g8qs913.js:10287-10288` (a value that is not a whole number marks damage only while the number check is on), `chunk-5g8qs913.js:20713-20716` and `chunk-5g8qs913.js:20788` (a damaged layout runs again), and `chunk-5g8qs913.js:20806-20814` (the number check turns off by itself after repeated damage). Since `2.1.328` the program holds this as a number check that is on by default. Before, it held an option that skips the check.

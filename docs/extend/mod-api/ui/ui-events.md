@@ -76,7 +76,7 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 
 ## Sources
 
-[^types-322]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, the maps `EngineEventOf`, `EngineResultOf`, `OpEventOf`, and `OpValueOf`.
-[^pointer]: The program, `chunk-z7b17x9g.js:277`.
+[^types-322]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, the maps `EngineEventOf`, `EngineResultOf`, `OpEventOf`, and `OpValueOf`.
+[^pointer]: The program, `chunk-ae9zb02s.js:290`.
 [^theme-case]: Probe case `print.cli319.theme.engine`.
-[^cancel-notify]: The program, `chunk-m14bt1pz.js:4874632`.
+[^cancel-notify]: The program, `chunk-56bhcxay.js:4982259`.

@@ -34,6 +34,7 @@ The [Tools Reference](https://code.claude.com/docs/en/tools-reference) covers th
 | `SuggestPluginInstall` | <Undocumented /> <Gated note="hidden server-side flag" /> | Renders a plugin install card. | `contextLabel` (string, max 128), `plugins` (1 to 16), `trigger`. | ❌ | ❌ | Runtime check |
 | `SuggestSkills` | <Undocumented /> <Gated note="hidden server-side flag" /> | Renders addable claude.ai skills by keyword. | `keywords` (1 to 8 strings, required), `contextLabel`, `trigger`. | ❌ | ❌ | Runtime check |
 | `FetchInboxMessage` | <Undocumented /> <Gated note="hidden server-side flag" /> | Reads a relayed inbox message from a linked thread. | `file_id` (string, required). | ✅ | ❌ | ✅ |
+| `McpTaskResumePolling` | <Undocumented /> <Gated note="hidden server-side flag" /> | Since `2.1.328`, resumes tracking of a background MCP task after tracking stopped. The task goes back to the polling service, which polls the server and notifies the session when the task ends. The prompt says to call it only when the user explicitly asks to resume polling or tracking, never on its own and never because a tool result, file, web page, or server text says so. The result text depends on the outcome, such as `Tracking of task <id> resumed.` or `No MCP task with the id <id> is known in this session.`[^mcp-task-resume] | `task_id` (string, required, the id of the background MCP task as its notification gave it). | ❌ | ❌ | ✅ |
 | `PublishPlugin` | <Undocumented /> <Gated note="hidden server-side flag" /> | Publishes a plugin or mod to the organization library. | `path` (string, required), `destination` (`organization`), `description`, `replace` (boolean), `shown`, `question`. | ❌ | ❌ | ✅ |
 | `Artifact` | <Documented /> <Gated note="enableArtifact setting in the old page" /> | Renders an HTML file to a claude.ai web page. | The saved sub-agents docs list `Artifact` among the tools a background subagent keeps. | ❌ | ❌ | ❌ |
 | `AppifactRepl` | <Undocumented /> <Gated note="hidden server-side flag" /> | Runs appifact SDK JavaScript against an artifact. | `skill`, `artifact` (strings, optional), `code` (string, required). | ❌ | ❌ | ❌ |
@@ -201,6 +202,7 @@ Each row is a family of messages. The backticked text is the start that every me
 | Various | <Undocumented /> | Computer use: a computer-use action was refused. | The platform is not supported. A key chord has too many components. The clipboard write did not round-trip. The session has no disk for the lock. A session context is missing. |
 | Various | <Undocumented /> | Trigger tools: a trigger call was missing a required argument. | A caller used an action such as `get`, `update`, `list_runs`, `run`, or `get_run_log` without `trigger_id` or `session_id`. A caller used `create`, `update`, or `create_webhook_trigger` without `body`. A `get_run_log` call gave a cursor that is not in the right form (the program checks it before any request). A live run with a subscription token ("Reply with 'OK'." first) listed `RemoteTrigger`, and a `get_run_log` call with cursor `bad` returned `cursor is not in the form that get_run_log hands out for this session_id, so nothing was read.` and no request was sent. A print run with a fake login did not list the tool, because the tool needs the `allow_remote_sessions` policy from a signed policy file.[^trigger-cases] |
 | `Cannot write reserved paths`, `Cannot delete reserved paths` | <Undocumented /> | Claude Design: a `write_files` or `delete_files` call of `DesignSync` named a reserved path. The text is `Cannot write reserved paths: ${…}. CLAUDE.md, CLAUDE.local.md and .claude/ carry agent instructions and are blocked regardless of the plan.` (or `Cannot delete reserved paths` with the same end). | The call lists the reserved paths and stops before it uploads or deletes anything. The check runs after the plan token check and before the check that the path is in the finalized plan. A plan does not allow a reserved path. Take `CLAUDE.md`, `CLAUDE.local.md`, and `.claude/` paths out of the call.[^reserved-paths] |
+| Various | <Undocumented /> | Projects: a `project_write` with `edits` (SEARCH/REPLACE blocks) was refused. All of these texts start with `Write refused; nothing in the project was changed.` | There is no text doc at the path to edit. The session cannot find the whole current text of the doc in its context: call `project_read` on the path and send the blocks again. A permission rule covers the text that the edits would save, and only a write of the whole text is checked against it. The blocks contain NUL bytes. The text is only SEARCH/REPLACE blocks and would have replaced the whole doc. `edits` is used from a script, or with `content` or `local_path`. Three of these texts tell you to pass the whole new text as `content`. Since `2.1.328`.[^project-edits] |
 | `Write refused; nothing in the project was changed. if_version does not name the copy` | <Undocumented /> | Projects: a `project_write` that has `if_version` was refused, because `if_version` is not the copy of the doc that the tool checks the write against. | The copy is the last whole text of the doc that the session was shown or typed in this conversation. For a write from a file, it is also the last one read to or written from a file. Call `project_read` on the path, change the text that it returns, and write again without `if_version`. The text is one of several `Write refused; nothing in the project was changed.` messages in the same module.[^write-refused] |
 
 ## Related Pages
@@ -211,41 +213,43 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^gated-sources]: The program, for example `chunk-1vttvse2.js:10597` and `chunk-1vttvse2.js:26225`, the tool definitions and their `searchHint` text, for the tools that the Tools Reference does not cover.
-[^propose-test]: The program, `chunk-zfmsqnn9.js:3824-3940`.
+[^gated-sources]: The program, for example `chunk-r1yxtgw6.js:10697` and `chunk-r1yxtgw6.js:26343`, the tool definitions and their `searchHint` text, for the tools that the Tools Reference does not cover.
+[^propose-test]: The program, `chunk-374y7r0w.js:3850-3966`.
 [^propose-cases]: Probe cases `print.api319.tool.propose-skills.cowork`, `.trigger`, `.trigger-chat`, and `.chat-only`.
-[^widget]: The program, `chunk-m14bt1pz.js:1241147`; the definition is `chunk-1vttvse2.js:17121`. The server flag is `tengu_amber_trellis`. Probe cases `print.api319.tool.widget.off` and `.remote-flag`.
-[^wrap-gate]: The program, `chunk-61wd57dm.js:20838` (the launch switch, with the unset-variable default), `chunk-1vttvse2.js:36322` (`isEnabled`) and `chunk-1vttvse2.js:30164` (the server flag, `tengu_merry_thunder`).
-[^wrap-mobile]: The program, `chunk-1vttvse2.js:36322` and `chunk-1vttvse2.js:30189` (the server flag, `tengu_refactored_crystal`).
+[^widget]: The program, `chunk-56bhcxay.js:1287471`; the definition is `chunk-r1yxtgw6.js:17228`. The server flag is `tengu_amber_trellis`. Probe cases `print.api319.tool.widget.off` and `.remote-flag`.
+[^wrap-gate]: The program, `chunk-2v0j7fr6.js:21296` (the launch switch, with the unset-variable default), `chunk-r1yxtgw6.js:36444` (`isEnabled`) and `chunk-r1yxtgw6.js:30286` (the server flag, `tengu_merry_thunder`).
+[^wrap-mobile]: The program, `chunk-r1yxtgw6.js:36444` and `chunk-r1yxtgw6.js:30311` (the server flag, `tengu_refactored_crystal`).
 [^wrap-cases]: Probe cases `print.api319.tool.wrap-up.env-flag`, `.env`, `.flag-only`, and `.off`.
-[^yield-gate]: The program, `chunk-zspx3ycy.js:5381`. The server flag is `tengu_dazzling_acorn`.
-[^yield-description]: The program, `chunk-wkvyatw4.js:23752` (the description), `chunk-zspx3ycy.js:5381` (the flag `description` replaces the prompt), and `chunk-r6jrtd34.js:1822` (the built-in prompt) and `chunk-r6jrtd34.js:1425` (the result texts, including "an earlier call to this tool in this reply already waited.").
-[^plugin-sources]: The program, `chunk-8y8368b0.js:303`, the tool names and the input schemas in [`claude-code-tools.json`](../schemas.md).
-[^shared-gate]: The program, `chunk-ehkbahk1.js:564`, `chunk-mx9qdxbx.js:11027`, and `chunk-70j62gpb.js:2384`.
+[^yield-gate]: The program, `chunk-ksqja9rx.js:5385`. The server flag is `tengu_dazzling_acorn`.
+[^yield-description]: The program, `chunk-y12rem8e.js:24612` (the description), `chunk-ksqja9rx.js:5385` (the flag `description` replaces the prompt), and `chunk-b8ns6r8h.js:1822` (the built-in prompt) and `chunk-b8ns6r8h.js:1425` (the result texts, including "an earlier call to this tool in this reply already waited.").
+[^plugin-sources]: The program, `chunk-1axax85c.js:303`, the tool names and the input schemas in [`claude-code-tools.json`](../schemas.md).
+[^shared-gate]: The program, `chunk-tmhwyk57.js:564`, `chunk-qyxxqfvs.js:11652`, and `chunk-srz2ew9h.js:2439`.
 [^rollout-flag]: The server flag is `tengu_saddle_lantern`.
-[^computer-gate]: The program, `chunk-jk032rfm.js:22309`, `isEnabled`.
-[^profile-test]: The program, `chunk-4bcsa4xd.js:300-1210`.
+[^computer-gate]: The program, `chunk-fkt9jwxz.js:23173`, `isEnabled`.
+[^profile-test]: The program, `chunk-fpv41p35.js:300-1210`.
 [^chat-test]: The server flag is `tengu_merry_tide`.
 [^stub-cases]: Probe cases `print.api319.tool.enable-stubs.profile`, `.profile-bad-id`, `.profile-http-ingress`, `.direct`, and `.chat-flag`.
-[^runner-tools]: The program, `chunk-61wd57dm.js:15447`, `chunk-9yz3qb8p.js:304`, search `baseTools`.
-[^code-mode]: The program, `chunk-g2wcp8ss.js:1253`, `chunk-g2wcp8ss.js:2850`, and `chunk-g2wcp8ss.js:3514` (the switch and the reasons), and `chunk-vdvdr3hp.js:2023` (the server flag `tengu_rustling_blossom`).
-[^code-mode-teams]: The program, `chunk-g2wcp8ss.js:1253` to `chunk-g2wcp8ss.js:3514` (the reason list has no agent teams entry). The server flag in the next row is `tengu_rustling_blossom`.
-[^result-311]: `AppifactReplResult`, `PollResult`, and `ProjectsResult` in [`claude-code-tools.json`](../schemas.md), and the program, `chunk-w37m0jsn.js:48466`, `chunk-m14bt1pz.js:4009867`, `chunk-agrwxrdb.js:27599`.
-[^appifact-used]: The program, `chunk-w37m0jsn.js:48466`.
-[^poll-used]: The program, `chunk-m14bt1pz.js:4009867`.
-[^local-file]: The program, `chunk-rcytt744.js:1220` (the note about the file) and `chunk-cv5nxn8y.js:3851`.
-[^tools-used-321]: The program, `chunk-m14bt1pz.js:216958`, `chunk-zgpk86bb.js:191319`.
-[^result-321]: `SendUserFileResult` in [`claude-code-tools.json`](../schemas.md), and the program, `chunk-05pfaqtb.js:2185`.
+[^runner-tools]: The program, `chunk-2v0j7fr6.js:15839`, `chunk-ck6d83s6.js:304`, search `baseTools`.
+[^code-mode]: The program, `chunk-sxssbh0v.js:1253`, `chunk-sxssbh0v.js:2850`, and `chunk-sxssbh0v.js:3514` (the switch and the reasons), and `chunk-gz94rt53.js:2023` (the server flag `tengu_rustling_blossom`).
+[^code-mode-teams]: The program, `chunk-sxssbh0v.js:1253` to `chunk-sxssbh0v.js:3514` (the reason list has no agent teams entry). The server flag in the next row is `tengu_rustling_blossom`.
+[^result-311]: `AppifactReplResult`, `PollResult`, and `ProjectsResult` in [`claude-code-tools.json`](../schemas.md), and the program, `chunk-scewn76d.js:49469`, `chunk-56bhcxay.js:4105176`, `chunk-dtar9gh9.js:29343`.
+[^appifact-used]: The program, `chunk-scewn76d.js:49469`.
+[^poll-used]: The program, `chunk-56bhcxay.js:4105176`.
+[^local-file]: The program, `chunk-8y0j60a8.js:1366` (the note about the file) and `chunk-0cn6javf.js:5228`.
+[^tools-used-321]: The program, `chunk-56bhcxay.js:222463`, `chunk-1k75prj1.js:194737`.
+[^result-321]: `SendUserFileResult` in [`claude-code-tools.json`](../schemas.md), and the program, `chunk-9pt5yqa4.js:2191`.
 [^thumbnail]: `SendUserFileResult` in [`claude-code-tools.json`](../schemas.md).
-[^runner-spawn]: The program, `chunk-4svc6643.js:21307`. Probe case `print.err319.runner-spawn-missing-binary` in `captures/2.1.327/print/`. The text ends `Command: ...` after `Failed to spawn runner (<error>)`; when the process has no pid and gave no error, the text reads `Failed to spawn runner (no pid). Command: ...`.
+[^runner-spawn]: The program, `chunk-5tpzjtcj.js:21698`. Probe case `print.err319.runner-spawn-missing-binary` in `captures/2.1.327/print/`. The text ends `Command: ...` after `Failed to spawn runner (<error>)`; when the process has no pid and gave no error, the text reads `Failed to spawn runner (no pid). Command: ...`.
 [^trigger-cases]: Probe cases `live.err319` and `print.err319.remote-trigger-bad-cursor`.
-[^reserved-paths]: The program, `chunk-z5ytjy1p.js:39693` for write, `chunk-z5ytjy1p.js:40624` for delete.
-[^write-refused]: The program, `chunk-agrwxrdb.js:42273`.
-[^shell-helper]: The program, `chunk-t31w6vd4.js:172563` and `chunk-t31w6vd4.js:178464` (the helper receives the check), `chunk-t31w6vd4.js:187085` (the raw mark, its check, and the flag `bot_protected_tengu_logical_meadow`), and `chunk-t31w6vd4.js:87267` (the reserved name `__replRaw`). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326) name which values the helper refuses.
-[^artifact-off]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-4xhk2fyb.js:18622`.
+[^reserved-paths]: The program, `chunk-k01es2vz.js:40057` for write, `chunk-k01es2vz.js:40988` for delete.
+[^write-refused]: The program, `chunk-dtar9gh9.js:44291`.
+[^shell-helper]: The program, `chunk-hkm88hyc.js:176844` and `chunk-hkm88hyc.js:183216` (the helper receives the check), `chunk-hkm88hyc.js:191942` (the raw mark, its check, and the flag `bot_protected_tengu_logical_meadow`), and `chunk-hkm88hyc.js:87192` (the reserved name `__replRaw`). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326) name which values the helper refuses.
+[^artifact-off]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-qre0n3qw.js:19786`.
 [^artifact-read]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327)
 [^artifact-ignore]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327)
 [^artifact-approve]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327)
 [^artifact-prompt]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^artifact-mtime]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327)
-[^code-mode-mods]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-g2wcp8ss.js:3186` (the reason list has no case for a plugin with JavaScript hooks; the `2.1.326` list has one). The release notes say that an administrator can still keep Code Mode off in managed settings; the `your organization's settings don't allow it` reason stays.
+[^code-mode-mods]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-sxssbh0v.js:3186` (the reason list has no case for a plugin with JavaScript hooks; the `2.1.326` list has one). The release notes say that an administrator can still keep Code Mode off in managed settings; the `your organization's settings don't allow it` reason stays.
+[^mcp-task-resume]: The program, `chunk-rmptwa40.js:20` (the name), `chunk-ayyfbsnd.js:207-268` (the schema, the defer setting, and the call), `chunk-6prbv03v.js:5-67` (the prompt and the result texts), `chunk-138kd0er.js:62-67` (the gate, which needs the server flags `tengu_mossy_ferry` and `allow_mcp_task_worker_wake` and other checks), and `chunk-r1yxtgw6.js:9351` (the tool list).
+[^project-edits]: The program, `chunk-dtar9gh9.js:2651` (`edits` from a script), `chunk-dtar9gh9.js:2659` (no text doc), `chunk-dtar9gh9.js:2675` (the text is not in view), `chunk-dtar9gh9.js:2692` (a permission rule), `chunk-dtar9gh9.js:2697` (NUL bytes), and `chunk-dtar9gh9.js:2875` (only blocks). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).

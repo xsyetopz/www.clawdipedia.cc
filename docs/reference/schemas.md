@@ -130,5 +130,5 @@ This site has no copy of it. It belongs to the Desktop app, and we found no vali
 
 [^comment-strings]: The generator, `tools/schemas/code.ts`.
 [^no-string]: The `2.1.327` program holds none of the four key names.
-[^new-keys]: The program, `chunk-asj6f58y.js:36100` (`allowNestedModelAccessUnderForceLogin`), `chunk-6ydtrx6k.js:123` and `chunk-ja5z738t.js:10015` (`autoCompactRaisedForLoad`), and `chunk-rap1tzf6.js:32279` and `chunk-ja5z738t.js:10022` (`autoCompactOfferAnswer`). The counts come from `schemas/claude-code-settings.json` and the SchemaStore files that were downloaded on 2026-11-18. The WebFetch tool read only the first 100,000 of the 231,532 characters of the settings file, so a script counted the keys of the whole file.
+[^new-keys]: The program, `chunk-xethrx83.js:34469` (`allowNestedModelAccessUnderForceLogin`), `chunk-0qfycjch.js:140` and `chunk-jkpzhr7r.js:9943` (`autoCompactRaisedForLoad`), and `chunk-5699r6rq.js:32506` and `chunk-jkpzhr7r.js:9950` (`autoCompactOfferAnswer`). The counts come from `schemas/claude-code-settings.json` and the SchemaStore files that were downloaded on 2026-11-18. The WebFetch tool read only the first 100,000 of the 231,532 characters of the settings file, so a script counted the keys of the whole file.
 [^launch-validator]: The `2.1.327` program has no validator for `claude-code-launch.json`.

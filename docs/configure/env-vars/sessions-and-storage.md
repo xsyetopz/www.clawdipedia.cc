@@ -40,6 +40,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `CLAUDE_CODE_CONFIG_WATCH_EVENTS` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Makes the config freshness watcher use file system events instead of interval polling. | On or off, off by default. It takes effect only on Linux. Background sessions unset it | Linux only |
 | `CLAUDE_CODE_DISABLE_ADMIN_ENV_UNION` | <Documented /> | Uses only the top admin source `env` block instead of merging `env` per key across admin sources. | On or off. Must be in the environment at start | Managed settings |
 | `CLAUDE_CODE_DISABLE_AWAITING_USER_IDLE` | <Undocumented /> | Turns off the idle accounting that parks session activity while Claude waits for the user. | On or off, off by default | All sessions |
+| `CLAUDE_CODE_DISABLE_DEFERRED_TOOL_RESUME` | <Undocumented /> | Lets a host stop `claude -p --resume` and `--continue` from running a tool call that a hook deferred in the session. Without a prompt, the print-mode error is then the generic input error, not the `No deferred tool marker found` error. Since `2.1.328`.[^disable-deferred] | On or off | Print mode `--resume` and `--continue` |
 | `CLAUDE_CODE_DISABLE_FILE_CHECKPOINTING` | <Documented /> | Turns off file checkpointing, so `/rewind` cannot restore code. Overrides `fileCheckpointingEnabled`. | On or off. SDK sessions also need `CLAUDE_CODE_ENABLE_SDK_FILE_CHECKPOINTING` | All sessions. Project `env` can set it before trust |
 | `CLAUDE_CODE_DISABLE_HOME_SETTINGS_SEED` | <Undocumented /> | Stops the home settings seed from starting in the file sync worker. The start check reports `disabled`. | On or off, off by default. Claude Code reads a truthy string from the child spawn environment | Remote and hosted sessions |
 | `CLAUDE_CODE_DISABLE_NESTED_CHAIN_IDLE` | <Undocumented /> | Stops the session activity tracker from counting nested prompts that block on the user. | On or off, off by default | All sessions |
@@ -55,6 +56,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `CLAUDE_CODE_HARBOR_KITE_PACING_OFF` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Turns off the pacing of outbound messages to local `uds` inboxes. The code credits and debits a pacer for each send. | On or off. When set, the pacing check returns false. When unset, a feature flag decides | All sessions, cross-session messaging |
 | `CLAUDE_CODE_HOME_SEED_HOLD_TIMEOUT_MS` | <Undocumented /> | Lowers the longest hold time of the home seed step. The value cannot raise the built-in maximum. | A number of milliseconds. A whole number, with a minimum of `0`. The result is the smaller of this value and a built-in cap | Host-seeded home or settings sync |
 | `CLAUDE_CODE_HOME_SEED_VERDICT_TIMEOUT_MS` | <Undocumented /> | Lowers the longest wait for the verdict of the home seed step. The value cannot raise the built-in maximum. | A number of milliseconds. A whole number, with a minimum of `0`. The result is the smaller of this value and a built-in cap | Host-seeded home or settings sync |
+| `CLAUDE_CODE_HOST_CHECKED_FOLDER` | <Undocumented /> | Has no effect that the program shows. No code reads its value. Since `2.1.328`.[^checked-folder] | The name is only in lists of variable names | Host apps |
 | `CLAUDE_CODE_HOST_OWNED_CONFIG_DIR` | <Undocumented /> | Names a config folder that the app which started Claude Code manages. When the global config file in this folder does not parse, Claude Code starts with default settings and does not print repair advice, because the next save overwrites the file. It writes `Starting with default settings. The application that started Claude Code manages <folder>, as CLAUDE_CODE_HOST_OWNED_CONFIG_DIR says, so nothing needs to be done: a later save overwrites <path>.` to stderr, writes a warning to the debug log, and records the event `config_host_owned_folder` with `started_on_defaults`. | A path. It counts only when it passes a path check and equals the config folder that Claude Code uses. The check is not known. No default | Global config file.[^host-owned] |
 | `CLAUDE_CODE_HOST_SESSION_ID` | <Undocumented /> | Records the session id that the host app gave in the session registry entry as `hostSessionId`. | Text. Read only for host-started sessions | Host apps (desktop) |
 | `CLAUDE_CODE_HOST_WORKTREE` | <Undocumented /> | Holds the worktree path that a host declares for the session. Claude Code checks it against the start directory and reports problems. | Text. Claude Code deletes it from the env of child processes | Host apps |
@@ -71,6 +73,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `CLAUDE_CODE_RELAUNCH_PROACTIVITY_DECIDED` | <Undocumented /> | Carries across a relaunch whether the proactivity choice was already made. | Claude Code sets it on relaunch. It reads it once and deletes it | Relaunched sessions |
 | `CLAUDE_CODE_RELAUNCH_PROACTIVITY_EVER_ON` | <Undocumented /> | Carries across a relaunch whether proactivity was ever on. | Claude Code sets it on relaunch. It reads it once and deletes it from the env | Relaunched sessions |
 | `CLAUDE_CODE_RELAUNCH_PROACTIVITY_LEVEL` | <Undocumented /> | Carries the proactivity level across a relaunch. An invalid level clears the related relaunch vars. | Claude Code sets it on relaunch. It reads it once and deletes it from the env | Relaunched sessions |
+| `CLAUDE_CODE_RELAUNCH_SANDBOX_HOLD` | <Undocumented /> | Carries the held sandbox limits across a relaunch. The new process reads it once and deletes it from its env. Probe case `print.sweep` showed that setting it changes the request messages and the env of `PostToolUse` and `Stop` hooks.[^sandbox-hold] | Text. A comma-separated list. Claude Code writes `on` first, then the names of the held limits: `isStrict`, `isStrictByFailedRead`, `isRequired`, and `isAutoAllowOff`. Claude Code sets it on relaunch. Since `2.1.328` | Relaunched sessions |
 | `CLAUDE_CODE_PERSONAL_HOOKS_OFF` | <Undocumented /> | Tells Claude why your own hooks are off when `CLAUDE_CODE_RESTRICT_PERSONAL_CONFIG` is on. It adds a notice only and does not stop the hooks. | `launch`, `retry`, `fix`, or `off`. Any other value, such as `host`, says the app that started Claude Code kept them out. Has no effect without `CLAUDE_CODE_RESTRICT_PERSONAL_CONFIG` | All sessions. In probes, `retry` and `fix` add a note to the request, and `launch` adds only an output line.[^personal-hooks] |
 | `CLAUDE_CODE_RESTRICT_PERSONAL_CONFIG` | <Undocumented /> | Restricts use of personal Claude Code files, per a bundle message. The check also reads a settings-level source. | On or off. Part of the env list that background sessions pass on | All sessions |
 | `CLAUDE_CODE_RESUME_FROM_SESSION` | <Undocumented /> | Names a source session to load at start with the sessions API. It applies when a URL or SDK URL start has no messages. | Text. Claude Code clears it for child worker processes | Remote and SDK starts |
@@ -131,18 +134,21 @@ Settings files copy `env` values as written. No shell expands them, so `~` and `
 
 The program (variable names found in the `2.1.314` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 
-[^automount]: The program, `chunk-ra17kydb.js:736`.
-[^child-notes-set]: The program, `chunk-7g78pmnc.js:67`.
-[^child-notes-read]: The program, `chunk-7g78pmnc.js:73`.
-[^resume-return]: The program, `chunk-cfxefa64.js:25191-25199`. The server flag is `tengu_gleaming_fair` or `tengu_gleaming_fair_reuse`. The prompt is skipped when `resumeReturnDismissed` is set.
-[^config-lock]: The program, `chunk-asj6f58y.js:121692` and `chunk-m14bt1pz.js:4616438`. Probe cases `env319a.config-lock-wait.*`.
-[^nested-id]: [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317). The program, `chunk-b6ajq4z9.js:794` (`MKn` returns no ID when the variable is unset, and the derived ID when it is set). Probe cases `env319a.nested-session-id.unset` and `.v1`.
-[^drop-deferred]: The program, `chunk-rap1tzf6.js:186339` (the message) and `chunk-rap1tzf6.js:716095` (strict `true` check). Probe cases `env319a.drop-unavailable-deferred-tool.unset` and `.v1`.
-[^host-owned]: The program reads it at `chunk-asj6f58y.js:134300`, shows the message at `chunk-asj6f58y.js:134631`, and passes it on in an env list at `chunk-asj6f58y.js:705927`. It did not show the path check.
-[^hover-rest]: The program, `chunk-asj6f58y.js:133065` (the message) and `chunk-d0ernz1g.js:16402` (the gate).
-[^launched-trim]: The program, `chunk-2mvk3gke.js:979`.
-[^launched-write]: The program, `chunk-2mvk3gke.js:1723`.
-[^personal-hooks]: The program, `chunk-nnpsqanp.js:688`. Probe cases `env319b.personal-hooks-off.launch-restricted`, `retry-restricted`, `fix-restricted`, `host-restricted`, `other-restricted`, `off-restricted`, and `host-plain`.
-[^resume-hint]: The program, `chunk-m14bt1pz.js:350132`.
-[^began-as-copy]: The program, `chunk-rap1tzf6.js:951079` and `chunk-rnt5hbrt.js:73355` (the flag).
-[^tail-load]: The program, `chunk-2ew0jg68.js:77466` (the values) and `chunk-61wd57dm.js:17185` (the read). Probe case `resume-head-vouch` in `tools/schemas/observe/print/cases-resume.ts`.
+[^automount]: The program, `chunk-ad6wc4v3.js:736`.
+[^child-notes-set]: The program, `chunk-4ka936mb.js:67`.
+[^child-notes-read]: The program, `chunk-4ka936mb.js:73`.
+[^resume-return]: The program, `chunk-j2wfp6sf.js:25372-25374`. Since `2.1.328` the only server flag is `tengu_gleaming_fair_reuse`. Before, `tengu_gleaming_fair` also turned the prompt on. The prompt is skipped when `resumeReturnDismissed` is set.
+[^config-lock]: The program, `chunk-xethrx83.js:84958` and `chunk-56bhcxay.js:4716764`. Probe cases `env319a.config-lock-wait.*`.
+[^nested-id]: [`2.1.317` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.317). The program, `chunk-0cjwsvqm.js:794` (`MKn` returns no ID when the variable is unset, and the derived ID when it is set). Probe cases `env319a.nested-session-id.unset` and `.v1`.
+[^drop-deferred]: The program, `chunk-5699r6rq.js:185049` (the message) and `chunk-5699r6rq.js:724313` (strict `true` check). Probe cases `env319a.drop-unavailable-deferred-tool.unset` and `.v1`.
+[^host-owned]: The program reads it at `chunk-xethrx83.js:97553`, shows the message at `chunk-xethrx83.js:97884`, and passes it on in an env list at `chunk-xethrx83.js:675445`. It did not show the path check.
+[^hover-rest]: The program, `chunk-xethrx83.js:96318` (the message) and `chunk-fcdwedb2.js:16443` (the gate).
+[^launched-trim]: The program, `chunk-he41ebgj.js:979`.
+[^launched-write]: The program, `chunk-he41ebgj.js:1723`.
+[^personal-hooks]: The program, `chunk-6k62pb1c.js:688`. Probe cases `env319b.personal-hooks-off.launch-restricted`, `retry-restricted`, `fix-restricted`, `host-restricted`, `other-restricted`, `off-restricted`, and `host-plain`.
+[^resume-hint]: The program, `chunk-56bhcxay.js:378858`.
+[^began-as-copy]: The program, `chunk-5699r6rq.js:960275` and `chunk-gywceass.js:83335` (the flag).
+[^tail-load]: The program, `chunk-7343wm3k.js:77719` (the values) and `chunk-2v0j7fr6.js:17577` (the read). Probe case `resume-head-vouch` in `tools/schemas/observe/print/cases-resume.ts`.
+[^disable-deferred]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-5699r6rq.js:36592` (the print-mode error) and `chunk-56bhcxay.js:127584` (the resume).
+[^checked-folder]: The program, `chunk-4128y5tp.js:93` and `chunk-xethrx83.js:35274`, two lists of variable names.
+[^sandbox-hold]: The program, `chunk-kwkzbftg.js:52821-52833` (the read and the delete), `chunk-kwkzbftg.js:55587` (the value), `chunk-06q08mbq.js:624` and `chunk-cb8pyhxb.js:307` (the relaunch sets it). Probe case `print.sweep`.

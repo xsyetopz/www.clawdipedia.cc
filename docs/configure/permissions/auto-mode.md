@@ -8,6 +8,8 @@ Auto mode lets Claude Code run without routine prompts. A classifier model reads
 
 Pick `auto` as the permission mode to turn it on. Set `permissions.defaultMode: "auto"` to start in it. Since `2.1.326`, if the served policy settings fail to load, a session that started in auto mode by the built-in default falls back to another mode. The mode is the `defaultMode` that policy settings name, other than `auto` or `bypassPermissions`. For an organization policy or HIPAA, the mode is `default`. A session that starts while the policy verdict is still pending picks its mode again when the verdict arrives, and the debug log says `startup resolved ... re-resolved to ...`.[^auto-fallback][^auto-reresolve] Set `permissions.disableAutoMode: "disable"` to turn it off. User settings, `--settings`, and managed settings can set `autoMode`. Project and local settings cannot, because both files live in the repository, where a checked-in repository or a build step could add its own allow rules.[^auto-sources][^official-project]
 
+Since `2.1.328`, auto mode accepts Opus 4.6 and Sonnet 4.6 on Amazon Bedrock, Google Cloud's Agent Platform, Microsoft Foundry, and the Claude apps gateway. In `2.1.327`, the model check refused both models on these providers.[^auto-46]
+
 ## Example
 
 ```json title="~/.claude/settings.json"
@@ -220,44 +222,45 @@ It works in `-p` mode when `CLAUDE_CODE_REMOTE` is not set and a classifier mode
 
 ## Sources
 
-[^auto-sources]: The `autoMode` schema text, `chunk-ja5z738t.js:184841`, and the program, `chunk-bpr7n093.js:123762`.
+[^auto-sources]: The `autoMode` schema text, `chunk-jkpzhr7r.js:184287`, and the program, `chunk-sm9djeyx.js:123920`.
 [^deny-kinds]: The `autoMode` schema text.
-[^unavailable]: The program, `chunk-m14bt1pz.js:3521833`, `chunk-270tbjq0.js:47240`, and `chunk-k57p2hm4.js:8503`.
-[^server-lists]: The program, `chunk-ja5z738t.js:6656-6682` (the lists `allow`, `environment`, and `soft_deny`), `chunk-40s100gp.js:677-700` (the `auto_mode_environment` list of the bridge), and `chunk-ywm74c9c.js:230-257` (the control, invisible, and template checks).
-[^server-check]: The program, `2.1.319`. `chunk-270tbjq0.js:31835` parses the verdict, `chunk-m14bt1pz.js:3350348` reads it from the stream, and `chunk-m14bt1pz.js:3592849` acts on it.
+[^auto-46]: The program, `chunk-xethrx83.js:27837` (the model check). In `2.1.327`, the same check refused both models when the provider was not the first-party API. [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^unavailable]: The program, `chunk-56bhcxay.js:3616817`, `chunk-56bhcxay.js:1387239`, and `chunk-rs68es1f.js:8550`.
+[^server-lists]: The program, `chunk-jkpzhr7r.js:6576-6682` (the lists `allow`, `environment`, and `soft_deny`), `chunk-b2j77k2b.js:668-700` (the `auto_mode_environment` list of the bridge), and `chunk-4hhwy3p6.js:234-257` (the control, invisible, and template checks).
+[^server-check]: The program, `2.1.319`. `chunk-56bhcxay.js:1371668` parses the verdict, `chunk-56bhcxay.js:3445296` reads it from the stream, and `chunk-56bhcxay.js:3685045` acts on it.
 [^server-probe]: Probe cases `print.automode.classifier-server.server-1`, `print.automode.classifier-server.server-1-betas-off`, and `print.automode.classifier-server.betas-off`, run on `2.1.319`.
-[^gateway-guide]: The program, `chunk-5z0ytfrt.js:1498179`. The gateway guide in the program says this.
-[^stages]: The program, `chunk-m14bt1pz.js:3515000-3517935` (the classifier) and `chunk-vs4735qw.js:262-744` (the defaults). A probe captured the requests.
-[^stage-flag]: The program, `chunk-m14bt1pz.js:3536553`. Server config `tengu_auto_mode_config.twoStageClassifier` picks the mode.
-[^stage-defaults]: The program, `chunk-vs4735qw.js:262-744`.
-[^stage-code]: The program, `chunk-m14bt1pz.js:1193020`, `chunk-m14bt1pz.js:3511409`, and `chunk-m14bt1pz.js:3521545-3521833`.
-[^stage-think]: The program, `chunk-asj6f58y.js:555109`.
-[^stage-probe]: The program, `chunk-m14bt1pz.js:3533722`, and a probe that captured the classifier requests.
+[^gateway-guide]: The program, `chunk-39421vhy.js:928946`. The gateway guide in the program says this.
+[^stages]: The program, `chunk-56bhcxay.js:3609997-3612923` (the classifier) and `chunk-yvz6rqqj.js:928-1410` (the defaults). A probe captured the requests.
+[^stage-flag]: The program, `chunk-56bhcxay.js:3631496`. Server config `tengu_auto_mode_config.twoStageClassifier` picks the mode.
+[^stage-defaults]: The program, `chunk-yvz6rqqj.js:928-1410`.
+[^stage-code]: The program, `chunk-56bhcxay.js:1238693`, `chunk-56bhcxay.js:3606410`, and `chunk-56bhcxay.js:3616529-3616817`.
+[^stage-think]: The program, `chunk-xethrx83.js:521707`.
+[^stage-probe]: The program, `chunk-56bhcxay.js:3628668`, and a probe that captured the classifier requests.
 [^official-project]: [Auto Mode Configuration](https://code.claude.com/docs/en/auto-mode-config) in the official docs.
 [^official-broad]: [Permission Modes](https://code.claude.com/docs/en/permission-modes) in the official docs.
-[^broad-rules]: The program, `chunk-7at7cxxb.js:3992` and `chunk-7at7cxxb.js:5994`.
-[^billing]: The program, `chunk-m14bt1pz.js:1609756-1611404`, `2.1.319`. The upcoming-release sentence is at `chunk-m14bt1pz.js:1610222`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^billing-desktop]: The program, `chunk-m14bt1pz.js:1609746`.
-[^billing-flag]: The program, `chunk-m14bt1pz.js:1611200`. The flag is `tengu_velvet_heron`.
-[^billing-latch]: The program, `chunk-m14bt1pz.js:3541057`.
+[^broad-rules]: The program, `chunk-tew0988b.js:3994` and `chunk-tew0988b.js:5996`.
+[^billing]: The program, `chunk-56bhcxay.js:1690709-1692357`, `2.1.319`. The upcoming-release sentence is at `chunk-56bhcxay.js:1691175`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^billing-desktop]: The program, `chunk-56bhcxay.js:1690699`.
+[^billing-flag]: The program, `chunk-56bhcxay.js:1692153`. The flag is `tengu_velvet_heron`.
+[^billing-latch]: The program, `chunk-56bhcxay.js:3636036`.
 [^billing-probe]: Probe cases `pty.notifications.agent-needs-input`, `pty.notifications.agent-needs-input-refused`, and `pty.notifications.auto-mode-local`, in table order.
-[^classify-all]: The program, `chunk-bpr7n093.js:124789` and `chunk-ja5z738t.js:185593`.
-[^sources-probe]: A probe ran `claude auto-mode config` with `autoMode.allow` set in each source. The program, `chunk-bpr7n093.js:123762`, logs `tengu_settings_auto_mode_rules_untrusted_source_ignored` for an ignored source. Its message says only policy, user, and flag settings may set the rules. The run did not check `classifyAllShell`, because it is not in the `auto-mode config` output.
-[^strip-defaults]: The program, `chunk-bpr7n093.js:124539` and `chunk-270tbjq0.js:30584`.
+[^classify-all]: The program, `chunk-sm9djeyx.js:124947` and `chunk-jkpzhr7r.js:185039`.
+[^sources-probe]: A probe ran `claude auto-mode config` with `autoMode.allow` set in each source. The program, `chunk-sm9djeyx.js:123920`, logs `tengu_settings_auto_mode_rules_untrusted_source_ignored` for an ignored source. Its message says only policy, user, and flag settings may set the rules. The run did not check `classifyAllShell`, because it is not in the `auto-mode config` output.
+[^strip-defaults]: The program, `chunk-sm9djeyx.js:124697` and `chunk-56bhcxay.js:1370409`.
 [^classify-probe]: A probe counted classifier requests for a `curl` command that a user allow rule covered. The count was 1 with `true` in user settings or `--settings`, and 0 with `false` or unset. A managed `false` with `true` in user settings or `--settings` gave 1. A managed `true` gave 1 in every case. Without `CLAUDE_CODE_AUTO_MODE_SERVER=0` on `2.1.319`, a stub that gives the server-side check no verdict gets no classifier request.
 [^defaults-probe]: A probe with the cc-inspect `code` action `cli`.
-[^setup-off]: The program, `chunk-m14bt1pz.js:2154299-2154353`. The notice text is at `chunk-cfxefa64.js:25521`, and the command description at `chunk-m14bt1pz.js:115217-115221`.
+[^setup-off]: The program, `chunk-56bhcxay.js:2231856-2231910`. The notice text is at `chunk-j2wfp6sf.js:25697`, and the command description at `chunk-56bhcxay.js:119145-119149`.
 [^settings-order]: A probe on `2.1.314` and `2.1.316`.
-[^critique]: The program, `chunk-61zrgbqf.js:31657-32260`.
-[^setup-form]: The program, `chunk-5dg1tkx7.js:21666-23951` and `chunk-m14bt1pz.js:2154600`.
-[^model-env]: The program, `chunk-m14bt1pz.js:3534101-3535132`.
-[^summary-flag]: The program, `chunk-a1j0j2en.js:2486-2541`.
-[^ignored-env]: The program lists the name in its environment table as a boolean, and no code reads it, `chunk-2ew0jg68.js:19605`.
-[^chrome-flag]: The program, `chunk-7at7cxxb.js:15302`. The flag is `tengu_cowork_chrome_automode_default`.
-[^bg-rules]: The program, `chunk-61wd57dm.js:14760` and `chunk-9r83vch1.js:12899`.
-[^auto-reresolve]: The program, `chunk-7at7cxxb.js:24370`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^auto-fallback]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-ssqtkyx2.js:2301`, which logs `[auto-mode] the built-in auto default gave way to ... served settings failed`. The program skips the fallback when `CLAUDE_CODE_BRIDGE_CHILD_AUTO_DEFAULT` is set.
-[^odd-word]: The program, `chunk-y7vqg8jc.js:12472-12989`, which is used for `Bash` rules at `chunk-y7vqg8jc.js:13567`. The rule applies to `Bash` only. Rules that fail the check in `2.1.326` form, such as `$HOME *`, `~/bin/x*`, and `FOO=1 *`, still go. Rules such as `git *`, `~/bin/x *`, and `/usr/bin/git *` stay. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^runners-327]: The program, `chunk-y7vqg8jc.js:12681-12989`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^ps-dot-slash]: The program, `chunk-y7vqg8jc.js:12635` and `chunk-y7vqg8jc.js:14430`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^win-path]: The program, `chunk-y7vqg8jc.js:12472-12989` (the character test and the word scan). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). A backslash is not in the set of plain characters, so the word is skipped and no program word is left.
+[^critique]: The program, `chunk-zn7exhn6.js:32720-33323`.
+[^setup-form]: The program, `chunk-a6ejt5xf.js:22523-24807` and `chunk-56bhcxay.js:2232157`.
+[^model-env]: The program, `chunk-56bhcxay.js:3629047-3630078`.
+[^summary-flag]: The program, `chunk-j4v5c1sf.js:2488-2541`.
+[^ignored-env]: The program lists the name in its environment table as a boolean, and no code reads it, `chunk-7343wm3k.js:19582`.
+[^chrome-flag]: The program, `chunk-tew0988b.js:15304`. The flag is `tengu_cowork_chrome_automode_default`.
+[^bg-rules]: The program, `chunk-2v0j7fr6.js:15151` and `chunk-hsqnsn0k.js:12899`.
+[^auto-reresolve]: The program, `chunk-tew0988b.js:24373`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^auto-fallback]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-pd2ry4v7.js:2303`, which logs `[auto-mode] the built-in auto default gave way to ... served settings failed`. The program skips the fallback when `CLAUDE_CODE_BRIDGE_CHILD_AUTO_DEFAULT` is set.
+[^odd-word]: The program, `chunk-0jy30rtj.js:13840-14357`, which is used for `Bash` rules at `chunk-0jy30rtj.js:14935`. The rule applies to `Bash` only. Rules that fail the check in `2.1.326` form, such as `$HOME *`, `~/bin/x*`, and `FOO=1 *`, still go. Rules such as `git *`, `~/bin/x *`, and `/usr/bin/git *` stay. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^runners-327]: The program, `chunk-0jy30rtj.js:14049-14357`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^ps-dot-slash]: The program, `chunk-0jy30rtj.js:14003` and `chunk-0jy30rtj.js:15798`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^win-path]: The program, `chunk-0jy30rtj.js:13840-14357` (the character test and the word scan). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). A backslash is not in the set of plain characters, so the word is skipped and no program word is left.

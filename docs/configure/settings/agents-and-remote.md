@@ -46,6 +46,7 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 | `remote.defaultEnvironmentId` | <Documented /> | string | - | The default cloud environment for `claude --cloud`, such as `env_...` or `ccpool_...`. `/remote-env` writes it. `--environment` wins for one session. Claude Code reads a `ccpool_` ID only from user settings, managed settings, and `--settings`. | Any settings file |
 | `remoteControl` | <Undocumented /> | object | - | Set options for `claude remote-control`. | Settings files |
 | `remoteControlAtStartup` | <Documented /> | boolean | - | Connect Remote Control automatically when a session starts. | Any settings file |
+| `remoteMessageReceipts` | <Undocumented /> | enum: `on`, `always`, `off` | `on` | Set delivery notices for messages between this session and cloud or Remote Control sessions. `on` sends notices, local ones too, at most 30 turns an hour and one for each recipient that holds. `always` removes both limits, so two sessions can keep waking each other. `off` sends no notices about those sessions and no reports on messages received through them; the limits still apply to local ones. Since `2.1.328`.[^receipts] | Managed and user settings. `--settings` counts only with `off` |
 | `remoteTools` | <Undocumented /> | object | - | Choose how this computer serves tool calls to cloud sessions. | Settings files |
 | `skipWorkflowUsageWarning` | <Undocumented /> | boolean | - | Record that you accepted the multi-agent workflow usage warning. Until you set it, auto mode asks before it runs a workflow. | Settings files |
 | `sshConfigs` | <Documented /> | array of object | - | Add SSH connections to the Desktop environment dropdown. | User or managed settings |
@@ -68,8 +69,9 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema, `chunk-ja5z738t.js:278919`.
-[^workflow-reasons]: The program, `chunk-kametp4n.js:2109-2378`.
-[^ssh-host]: The settings schema, `chunk-ja5z738t.js:292210`. Probe cases `print.cli319.ssh.valid`, `print.cli319.ssh.bad`, and `print.cli319.ssh.not-array`. The schema type in the program is `unknown` with the type tag `array`, and its text says "Claude Code itself does not use it". The Desktop and Windows parts cannot run here.
-[^subagent-status]: The program, `chunk-ja5z738t.js:9260`.
-[^auto-continue]: The program, `chunk-7b2p05m1.js:5396` and `chunk-7b2p05m1.js:7917`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^schema]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:279143`.
+[^workflow-reasons]: The program, `chunk-fe4d6pve.js:2109-2378`.
+[^ssh-host]: The settings schema, `chunk-jkpzhr7r.js:292434`. Probe cases `print.cli319.ssh.valid`, `print.cli319.ssh.bad`, and `print.cli319.ssh.not-array`. The schema type in the program is `unknown` with the type tag `array`, and its text says "Claude Code itself does not use it". The Desktop and Windows parts cannot run here.
+[^subagent-status]: The program, `chunk-jkpzhr7r.js:9188`.
+[^auto-continue]: The program, `chunk-322fww3s.js:5444` and `chunk-322fww3s.js:7892`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^receipts]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:10054`. The read: `chunk-8hgq720g.js:12-15`.

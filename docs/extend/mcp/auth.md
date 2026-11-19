@@ -133,11 +133,11 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^auth-rows]: The program, `chunk-kg22edt2.js:33464` and `chunk-kg22edt2.js:44747`, for the rows marked <Undocumented /> or <Gated />.
-[^cimd-env]: The program, `chunk-kg22edt2.js:44747`.
-[^xaa-gate]: The program, `chunk-kg22edt2.js:33464`.
-[^xaa-changed]: The program, `chunk-kg22edt2.js:14086`.
-[^list-timeout]: The program, `chunk-m14bt1pz.js:4607108`.
-[^settings-check]: The program, `chunk-m14bt1pz.js:4607108` and `chunk-kg22edt2.js:3279`. The flag is `require_connector_block_on_plugin_servers`.
-[^many-hosts]: The program, `chunk-a9bnjyrw.js:23791`.
-[^helper-failed]: The program, `chunk-kg22edt2.js:7211`, `chunk-kg22edt2.js:6050`, and `chunk-sqn39hq2.js:278755`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^auth-rows]: The program, `chunk-dkr45esb.js:33533` and `chunk-dkr45esb.js:44816`, for the rows marked <Undocumented /> or <Gated />.
+[^cimd-env]: The program, `chunk-dkr45esb.js:44816`.
+[^xaa-gate]: The program, `chunk-dkr45esb.js:33533`.
+[^xaa-changed]: The program, `chunk-dkr45esb.js:14153`.
+[^list-timeout]: The program, `chunk-56bhcxay.js:4707447`.
+[^settings-check]: The program, `chunk-56bhcxay.js:4707447` and `chunk-dkr45esb.js:3281`. The flag is `require_connector_block_on_plugin_servers`.
+[^many-hosts]: The program, `chunk-bgtq9pxy.js:5087`.
+[^helper-failed]: The program, `chunk-dkr45esb.js:7274`, `chunk-dkr45esb.js:6113`, and `chunk-mt0sg9yk.js:288844`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

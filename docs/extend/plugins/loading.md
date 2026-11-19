@@ -121,13 +121,13 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^undoc]: The program, for the rows marked <Undocumented />: `chunk-74r3m9rp.js:1509`, `chunk-2ew0jg68.js:16766`, and `chunk-m14bt1pz.js:891330`.
-[^cache-path]: The program, `chunk-m14bt1pz.js:891330` and `chunk-m14bt1pz.js:896884`.
-[^registry]: The program, `chunk-74r3m9rp.js:1509`.
+[^undoc]: The program, for the rows marked <Undocumented />: `chunk-m4k9cyf3.js:1509`, `chunk-7343wm3k.js:16704`, and `chunk-56bhcxay.js:926779`.
+[^cache-path]: The program, `chunk-56bhcxay.js:926779` and `chunk-56bhcxay.js:932323`.
+[^registry]: The program, `chunk-m4k9cyf3.js:1509`.
 [^bash-bin]: Probe case `print.plugindata.bash-bin`.
-[^watch]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-9ns7kxca.js:9183` for the default, `chunk-m14bt1pz.js:5002739` for the type files that a reload writes, `chunk-m14bt1pz.js:5003323` for the `tsconfig.json`, and `chunk-m14bt1pz.js:5005522` for the `.claude/skills` watch in print mode. Probe cases `print.cli319.plugin-dir-watch.unset`, `print.cli319.plugin-dir-watch.v1`, `pty.cli319.plugin-dir-watch.unset`, and `pty.cli319.plugin-dir-watch.v0`.
-[^zip]: The program, `chunk-2ew0jg68.js:16766`, `chunk-2ew0jg68.js:34533`, `chunk-a9bnjyrw.js:37401`, and `chunk-f8553xxv.js:2101`.
-[^not-installed]: The program, `chunk-dfwkett1.js:18118`.
-[^lsp]: The program, `chunk-dfwkett1.js:15884`.
-[^unsafe-paths]: The program, `chunk-m14bt1pz.js:44656-44684`, `chunk-m14bt1pz.js:229475-229669`, and `chunk-m14bt1pz.js:44900`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325) for the `validate` part, which the code lines do not show.
-[^agents-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program loads the `--agents` agents at `chunk-61wd57dm.js:1435` and `chunk-61wd57dm.js:7932`. The reload and resume behavior is from the release notes.
+[^watch]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-9nv3z5ae.js:9741` for the default, `chunk-56bhcxay.js:5115300` for the type files that a reload writes, `chunk-56bhcxay.js:5115879` for the `tsconfig.json`, and `chunk-56bhcxay.js:5118119` for the `.claude/skills` watch in print mode. Probe cases `print.cli319.plugin-dir-watch.unset`, `print.cli319.plugin-dir-watch.v1`, `pty.cli319.plugin-dir-watch.unset`, and `pty.cli319.plugin-dir-watch.v0`.
+[^zip]: The program, `chunk-7343wm3k.js:16704`, `chunk-7343wm3k.js:34679`, `chunk-yvbbcep1.js:32311`, and `chunk-2svep2wm.js:2845`.
+[^not-installed]: The program, `chunk-a3rr42d2.js:14734`.
+[^lsp]: The program, `chunk-a3rr42d2.js:12500`.
+[^unsafe-paths]: The program, `chunk-56bhcxay.js:46608-46636`, `chunk-56bhcxay.js:235190-235387`, and `chunk-56bhcxay.js:46852`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325) for the `validate` part, which the code lines do not show.
+[^agents-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program loads the `--agents` agents at `chunk-2v0j7fr6.js:1456` and `chunk-2v0j7fr6.js:7932`. The reload and resume behavior is from the release notes.

@@ -93,6 +93,7 @@ A `script` hook never runs in `2.1.327`. The hook schema lists only `command`, `
 | `server` | <Documented /> | The name of a configured MCP server. | Plugin servers use `plugin:<plugin>:<server>`. |
 | `tool` | <Documented /> | The tool to call. | A string. |
 | `input` | <Documented /> | The tool arguments. | String values accept `${path}` from the hook input, such as `${tool_input.file_path}`. |
+| `onFailure` | <Documented /> | `continue` or `block`. | Since `2.1.328`, `"block"` works on `mcp_tool` hooks. See [Configuration](configuration.md#failure-handling).[^mcp-onfailure] |
 
 On events that can block, Claude Code waits for a server that is still connecting. The wait lasts at most `MCP_TIMEOUT` and the hook `timeout`. On observer events, it does not wait.
 
@@ -161,13 +162,14 @@ Cloud sessions forward only your own hooks of kind `command` and `http` from use
 
 ## Sources
 
-[^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the program (handler schemas for `command` at `chunk-ja5z738t.js:22419`, `prompt` at `chunk-ja5z738t.js:24043`, `mcp_tool` at `chunk-ja5z738t.js:24958`, `http` at `chunk-ja5z738t.js:25820`, and `agent` at `chunk-ja5z738t.js:27047`).
-[^mcp-limit]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-pachw208.js:1338` for the limit and `chunk-m14bt1pz.js:4111518` for the hook error path.
-[^script-probe]: The program, `chunk-ja5z738t.js:24400` for the schema and `chunk-ja5z738t.js:29730` for the message.
-[^powershell-suffix]: The program, `chunk-m14bt1pz.js:4175533` and `chunk-m14bt1pz.js:1113933`.
-[^headers]: The program, `chunk-m14bt1pz.js:204362`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^stop-wrap]: The program, `chunk-m14bt1pz.js:4080294`.
-[^stop-cap]: The program, `chunk-8g2nr9dn.js:278212`, for the warning and for the main-session-only notice.
-[^calls]: The program, `chunk-m14bt1pz.js:4080294` for the `prompt` hook and `chunk-m14bt1pz.js:4092449` for the `agent` hook.
-[^concurrency]: The program, `chunk-m14bt1pz.js:67293-67303` and `chunk-m14bt1pz.js:67340-67360`: the constants 12, 24, and 12 and the `model hooks` and `overdue model hooks` counts. We did not trace that a subagent shares the session host of its parent.
-[^cloud]: We read these rules in the program, `chunk-rj3e7agr.js:787256`. We did not run them, because a cloud session needs a login.
+[^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the program (handler schemas for `command` at `chunk-jkpzhr7r.js:19808`, `prompt` at `chunk-jkpzhr7r.js:21432`, `mcp_tool` at `chunk-jkpzhr7r.js:22347`, `http` at `chunk-jkpzhr7r.js:24148`, and `agent` at `chunk-jkpzhr7r.js:25375`).
+[^mcp-limit]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-kvtp2zzs.js:1338` for the limit and `chunk-56bhcxay.js:4204891` for the hook error path.
+[^script-probe]: The program, `chunk-jkpzhr7r.js:21789` for the schema and `chunk-jkpzhr7r.js:28059` for the message.
+[^powershell-suffix]: The program, `chunk-56bhcxay.js:4268865` and `chunk-56bhcxay.js:1157772`.
+[^headers]: The program, `chunk-56bhcxay.js:4195555`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^stop-wrap]: The program, `chunk-56bhcxay.js:4174767`.
+[^stop-cap]: The program, `chunk-2b3eg071.js:296619`, for the warning and for the main-session-only notice.
+[^calls]: The program, `chunk-56bhcxay.js:4174767` for the `prompt` hook and `chunk-56bhcxay.js:4186875` for the `agent` hook.
+[^concurrency]: The program, `chunk-56bhcxay.js:69771-69781` and `chunk-56bhcxay.js:69818-69838`: the constants 12, 24, and 12 and the `model hooks` and `overdue model hooks` counts. We did not trace that a subagent shares the session host of its parent.
+[^cloud]: We read these rules in the program, `chunk-20bv8pca.js:790032`. We did not run them, because a cloud session needs a login.
+[^mcp-onfailure]: The program, `chunk-56bhcxay.js:68285`. [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).

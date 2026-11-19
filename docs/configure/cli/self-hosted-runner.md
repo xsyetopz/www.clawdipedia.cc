@@ -63,11 +63,12 @@ The command has its own parser. It does not use the parser of the root `claude` 
 | `--git-host-rewrite <from>=<to>` | <Documented /> | Rewrites `https://<from>/...` to `https://<to>/...`, before `--git-ssh-rewrite`. Both sides are bare host names. | Off |
 | `--use-anthropic-git-proxy` | <Documented /> | Uses Anthropic-managed git. Needs `--capacity 1`, git 2.32 or later, and a global git config that is not a device such as `/dev/null`. It deletes and replaces the home-level git config of the runner account at startup and before each session. Since `2.1.327`, if `GIT_CONFIG_GLOBAL` names a non-empty directory, or is, or lies in, a place that the runner resets, the runner keeps it. It then ignores the variable for itself and its sessions, gives the sessions a new git config file, and prints a warning. Put operator git config in `/etc/gitconfig` or use `--configure-git`.[^git-config-global] See [Harden Your Deployment](https://code.claude.com/docs/en/self-hosted-environments-deploy#harden-your-deployment). | Off |
 | `--no-clone-through-agent-proxy` | <Undocumented /> | Since `2.1.326`, a hidden flag. With `--agent-proxy-url`, the runner then does not clone http(s) repositories through the proxy. It skips the git version check and the warning about the proxy credential that go with that clone.[^no-clone] | Off |
-| `--use-anthropic-gh [bool]` | <Undocumented /> | Since `2.1.326`, it offers the built-in `gh api` of Claude Code to sessions where no `gh` is installed. It reaches the REST API of github.com only, and its requests go through Anthropic, which adds the GitHub credential it holds for the session, if any. `false`, `0`, `no`, or `off` turns it off. The runner withholds it on Windows, above `--capacity 1`, with `--agent-proxy-url`, with `--exec-path` or a command hook, while nonessential traffic is disabled, with a model provider other than the Anthropic API, on a runner that a Claude Code session's shell started, in code reviews, in tools-only sessions, and where the older git proxy carries the git of a session.[^gh] It reads `SELF_HOSTED_RUNNER_USE_ANTHROPIC_GH`. | On |
+| `--use-anthropic-gh [bool]` | <Undocumented /> | Since `2.1.326`, it offers the built-in `gh api` of Claude Code to sessions where no `gh` is installed. It reaches the REST API of github.com only, and its requests go through Anthropic, which adds the GitHub credential it holds for the session, if any. `false`, `0`, `no`, or `off` turns it off. The runner withholds it on Windows, above `--capacity 1`, with `--agent-proxy-url`, with `--exec-path` or a command hook, while nonessential traffic is disabled, with a model provider other than the Anthropic API, on a runner that a Claude Code session's shell started, in code reviews, in tools-only sessions, and where the older git proxy carries the git of a session.[^gh] Since `2.1.328`, it is off by default in a session whose settings guard Claude's GitHub tools by name. `--use-anthropic-gh true` turns it on there.[^v328-gh] It reads `SELF_HOSTED_RUNNER_USE_ANTHROPIC_GH`. | On |
 | `--configure-git` | <Documented /> | Sets the git identity to `Claude <noreply@anthropic.com>` with commit signing. Needs git 2.34 or later. See [Configure Git](https://code.claude.com/docs/en/self-hosted-environments-deploy#configure-git). | Off |
 | `--push-outcome-on-release` | <Documented /> | Pushes each outcome branch before the runner ends a session that did not complete. See [Prompt Sessions to Push Their Work](https://code.claude.com/docs/en/self-hosted-environments-configuration#prompt-sessions-to-push-their-work). | Off |
 | `--trust-workspace [bool]` | <Documented /> | Trusts the repository paths of each session, so repo `permissions.allow` and `additionalDirectories` apply. With `false`, the runner sets `CLAUDE_CODE_IGNORE_PERSISTED_TRUST=1` for each session, and no workspace trust record counts.[^trust] | `true` |
 | `--remove-session-state [bool]` | <Documented /> | Removes the per-session state under `<base-dir>/_sessions/` when a session ends. See [Reuse a Pre-Warmed Checkout](https://code.claude.com/docs/en/self-hosted-environments-deploy#reuse-a-pre-warmed-checkout). | `false` |
+| `--repository-folder <owner>/<repo>=<folder>` | <Undocumented /> | Names the folder that sessions use for a repository, such as its pre-warmed checkout on a volume, in place of `<owner>/<repo>` under `--base-dir`. `'<owner>/*=<folder>/*'` (in quotes) covers each repository of the owner: the folder in `<folder>` that has its name. You can repeat the flag. Each folder must exist when the runner starts, under its real path. At `--capacity` above 1 it does nothing, and the runner logs a warning. When a `checkout` hook prepares the repository, the runner does not use the folder. It reads `SELF_HOSTED_RUNNER_REPOSITORY_FOLDER` as a comma-separated list. Since `2.1.328`.[^repo-folder] | None |
 | `--diff-finds-nested-repository [bool]` | <Undocumented /> | Lets the Changes pane show a repository cloned in a subfolder of a session started with no repository. Needs `--capacity 1`, and works only while the tool sandbox is off. The runner tells the child about it with `--runner-declares` (see [All Flags](flags.md)). If `--exec-path` is a script, it must put nothing before `"$@"`. | `false` |
 | `--confine-repo-settings <mode>` | <Documented /> | Sets the guard for settings committed in the repository: `warn`, `enforce`, or `off`. | `warn` |
 | `--server-auto-mode-lists <mode>` | <Undocumented /> | Sets which auto mode classifier lists from the server a session may get: `all`, `no-allow`, or `none`. `no-allow` holds back the allow list and the exceptions to soft block rules. | `no-allow` |
@@ -110,7 +111,7 @@ The runner starts each session with `CLAUDE_CODE_RETRY_WATCHDOG` set to `1`, so 
 
 ## Runner Errors
 
-Each row is an error of the parser.[^parser-errors]
+Each row is an error of the parser.[^parser-errors] The runner writes each one to `stderr` as `error: <message>`, adds `Run 'claude self-hosted-runner --help' for usage.`, and exits with code 2.[^error-prefix]
 
 | Message | When |
 | --- | --- |
@@ -141,6 +142,8 @@ Each row is an error of the parser.[^parser-errors]
 | `the path could not be checked for links to a network location: a folder or link on the way could not be read` | A folder or link on the way to the hold file cannot be read. |
 | `--agent-proxy-url requires your proxy's https:// URL` | No value, an empty value, or a value that starts with `--`. |
 | `--proxy-authorization-command / --proxy-authorization-file requires a value` | No value, or a value that starts with `--`. |
+| `<name> must be <owner>/<repo>=<folder>, or <owner>/*=<folder>/* (got: <value>)` | A value of `--repository-folder` or `SELF_HOSTED_RUNNER_REPOSITORY_FOLDER` has a bad shape. `<name>` is the flag or the variable. Since `2.1.328`.[^repo-folder-errors] |
+| `--repository-folder cannot be used: <folder> cannot be looked at (<system error>)` | The runner cannot look at the folder. Since `2.1.328`.[^repo-folder-errors] |
 | `--diff-finds-nested-repository requires --capacity 1. ...` | The option is on with a capacity over 1. |
 | `Failed to read environment secret file <path> (<system error>)` | The secret file cannot be read.[^probe-pool-secret-file] |
 | `unknown flag <flag>` | An unknown flag.[^probe-host-config-dir-flag] |
@@ -159,6 +162,7 @@ Each row is an error of the parser.[^parser-errors]
 | `--hook-concurrency <n>` | <Undocumented /> | Sets how many hooks run at the same time, and how many hints one poll claims. 1 to 100. | `4` |
 | `--hook-timeout <sec>` | <Documented /> | Sends SIGTERM to the hook after this many seconds. Over 0. The value plus 5 seconds must be less than `--expected-spawn-seconds`. | `60` |
 | `--expected-spawn-seconds <n>` | <Documented /> | Sets the p99 boot time of the runners it starts, sent as the server lease. 10 to 3600. All replicas must use the same value. | `120` |
+| `--hook-label <label>=<values>` | <Undocumented /> | Hands this entry of a session's metadata to the hook as `CLAUDE_RUNNER_META_<LABEL>`. The values are words, as in `size=small,large`, or a range of whole numbers, as in `cpus=1..64`. For a session with another value, the hook does not run. Repeat the flag once for each label. It needs `--min-idle` at 0. Since `2.1.328`.[^hook-label] | None |
 | `--min-idle <n>` | <Documented /> | Keeps at least this many free session slots. 0 to 200. | `0` |
 | `--scm-connector-host <host[:port]>` | <Undocumented /> | Turns on a tunnel to a GitHub Enterprise Server host that only your network can reach. | Off |
 | `--scm-connector-id <n>` | <Undocumented /> | The GitHub Enterprise configuration ID of the organization. A positive integer. Required with `--scm-connector-host`. | None |
@@ -175,9 +179,22 @@ These orchestrator errors exit with code 2, then print `Run 'claude self-hosted-
 
 - `--hook-timeout (200s) + 5s SIGKILL grace must be less than --expected-spawn-seconds (120s) — otherwise an HA replica re-claims the lease while this hook is still running and both spawn a runner`.[^orch-timeout]
 - `--min-idle must be an integer in [0, 200]`.[^orch-min-idle]
+- `--hook-label cannot read "<value>". It takes words, as in size=small,large, or a range from low to high, as in cpus=1..64, of up to nine digits with no leading zero. ...`. Since `2.1.328`.[^hook-label-errors]
+- `--hook-label takes one argument: put commas between the words, as in size=small,large, and give each label a flag of its own`. Since `2.1.328`.[^hook-label-errors]
+- `--hook-label names one label twice: give all its values in one flag, as in size=small,large`. Since `2.1.328`.[^hook-label-errors]
+- `--hook-label cannot be used with --min-idle: a standby runner ignores the labels of the session that it takes. Remove one of the two`. Since `2.1.328`.[^hook-label-errors]
 - `--scm-connector-id / --scm-connector-provider / --scm-connector-ca-file / --scm-connector-host-rewrite require --scm-connector-host`.[^orch-scm]
 
 With no hook folder, the orchestrator prints `[runner:fatal] orchestrator requires --hooks-dir (or SELF_HOSTED_RUNNER_HOOKS_DIR) — no spawn-runner hook directory configured` on stdout and exits with code 1.[^orch-no-hooks] The code also refuses a `spawn-runner` hook that is missing, not a regular file, or not executable, and an environment secret without the `ccr:pool_id` claim.
+
+### Orchestrator Metrics
+
+The orchestrator answers `GET /metrics` in the Prometheus text format. Since `2.1.328`, it adds two metrics.[^orch-metrics]
+
+| Metric | Status | What it counts | Notes |
+| --- | --- | --- | --- |
+| `claude_code_self_hosted_orchestrator_session_queue_wait_by_reason_seconds` | <Undocumented /> | A histogram of the seconds that a session waited in the queue before the orchestrator claimed it. It splits `claude_code_self_hosted_orchestrator_session_queue_wait_seconds` by the `reason` label. | `reason` is `session_created` (a new session), `resumed` (a re-opened session), `none`, or `other`. A retry counts under its own reason. |
+| `claude_code_self_hosted_orchestrator_sessions_given_up_total` | <Undocumented /> | A counter of how often Anthropic gave up starting a runner for a session, since the process started. | The `cause` label is `lease_expiry`, `retries_exhausted`, or `hook_declined`. Each give-up counts in one instance, so add the values across instances. |
 
 ## `setup` And `doctor`
 
@@ -213,21 +230,26 @@ The default of `--api-url` is `ANTHROPIC_BASE_URL`, else the built-in API URL.
 
 ## Sources
 
-[^runner-help]: The text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.327`, and the option parser of the program, `chunk-xa2mcav9.js:320461` and `chunk-xa2mcav9.js:332062`.
+[^runner-help]: The text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.327`, and the option parser of the program, `chunk-gv1b3n3g.js:339184` and `chunk-gv1b3n3g.js:353970`.
 [^cli321]: Probe group `cli321`.
-[^exit-codes]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-xa2mcav9.js:323890`.
-[^no-clone]: The program, `chunk-xa2mcav9.js:14525-14526` (the parser) and `chunk-xa2mcav9.js:15720-15740` (the warning and the git version check, which both depend on the flag).
-[^gh]: The program, the parser `chunk-xa2mcav9.js:14224`, the help text `chunk-xa2mcav9.js:15121-15140`, and the reasons for withholding `chunk-xa2mcav9.js:1035-1066`.
-[^nested-model]: The program, `chunk-xa2mcav9.js:313134` (`--nested-model-access`), `chunk-xa2mcav9.js:313330` (`--nested-model-call-budget`), `chunk-xa2mcav9.js:321218` (the variables), `chunk-xa2mcav9.js:321263` and `chunk-xa2mcav9.js:370834-371157` (the errors), `chunk-xa2mcav9.js:352985` (the help text), and `chunk-xa2mcav9.js:379526` (the start-up log). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^git-config-global]: The program, `chunk-xa2mcav9.js:330655-331228` (the reset) and `chunk-xa2mcav9.js:389000-389400` (the warning). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^trust]: The program, `chunk-asj6f58y.js:94695` and `chunk-bpr7n093.js:32875`.
-[^parser-errors]: The program, `chunk-xa2mcav9.js:320702-372037`. Probe group `cli321`.
-[^orch]: The program, help text and orchestrator parser, `chunk-x7dh6k8v.js:38815` and `chunk-x7dh6k8v.js:18585`.
+[^exit-codes]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-gv1b3n3g.js:345212`.
+[^no-clone]: The program, `chunk-gv1b3n3g.js:15243-15244` (the parser) and `chunk-gv1b3n3g.js:16618-16638` (the warning and the git version check, which both depend on the flag).
+[^gh]: The program, the parser `chunk-gv1b3n3g.js:14939`, the help text `chunk-gv1b3n3g.js:15963-15982`, and the reasons for withholding `chunk-gv1b3n3g.js:1323-1354`.
+[^nested-model]: The program, `chunk-gv1b3n3g.js:331779` (`--nested-model-access`), `chunk-gv1b3n3g.js:331975` (`--nested-model-call-budget`), `chunk-gv1b3n3g.js:339941` (the variables), `chunk-gv1b3n3g.js:339986` and `chunk-gv1b3n3g.js:393621-393944` (the errors), `chunk-gv1b3n3g.js:374893` (the help text), and `chunk-gv1b3n3g.js:403088` (the start-up log). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^git-config-global]: The program, `chunk-gv1b3n3g.js:351977-352550` (the reset) and `chunk-gv1b3n3g.js:413399-414047` (the warning). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^trust]: The program, `chunk-xethrx83.js:58018` and `chunk-sm9djeyx.js:32872`.
+[^parser-errors]: The program, `chunk-gv1b3n3g.js:339425-372037`. Probe group `cli321`.
+[^orch]: The program, help text and orchestrator parser, `chunk-ydhgnm30.js:44033` and `chunk-ydhgnm30.js:20648`.
 [^orch-timeout]: Probe case `runner-orchestrator-hook-timeout`, group `cli321`.
+[^hook-label]: The program, `chunk-ydhgnm30.js:1705` (the help text), `chunk-ydhgnm30.js:790` (the parser), and `chunk-ydhgnm30.js:886` (the `--min-idle` check). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^repo-folder]: The program, `chunk-gv1b3n3g.js:16118` (the help text), `chunk-gv1b3n3g.js:16536` (the warning at `--capacity` above 1), and `chunk-gv1b3n3g.js:8337` (the `checkout` hook). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^repo-folder-errors]: The program, `chunk-gv1b3n3g.js:14749` (the shape check) and `chunk-gv1b3n3g.js:3808` (the look at the folder). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^hook-label-errors]: The program, `chunk-ydhgnm30.js:208` (the words and ranges), `chunk-ydhgnm30.js:794` and `chunk-ydhgnm30.js:798` (the flag form), and `chunk-ydhgnm30.js:886` (the `--min-idle` check). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
 [^orch-min-idle]: Probe case `runner-orchestrator-min-idle`, group `cli321`.
 [^orch-scm]: Probe case `runner-orchestrator-scm-id-only`, group `cli321`.
 [^orch-no-hooks]: Probe case `runner-orchestrator-no-hooks`, group `cli321`.
-[^hold-network]: The program, `chunk-xa2mcav9.js:328706`.
+[^orch-metrics]: The program, `chunk-ydhgnm30.js:1118` (the reason metric), `chunk-ydhgnm30.js:1141` (the give-up metric), and `chunk-ydhgnm30.js:1179` (the `/metrics` route). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^hold-network]: The program, `chunk-gv1b3n3g.js:350028`.
 [^probe-git-host-rewrite-url]: Probe case `runner-git-host-rewrite-url`.
 [^probe-confine-bad]: Probe case `runner-confine-bad`.
 [^probe-lists-bad]: Probe case `runner-lists-bad`.
@@ -239,5 +261,7 @@ The default of `--api-url` is `ANTHROPIC_BASE_URL`, else the built-in API URL.
 [^probe-host-config-dir-flag]: Probe case `runner-host-config-dir-flag`.
 [^probe-empty-argument]: Probe case `runner-empty-argument`.
 [^probe-positional]: Probe case `runner-positional`.
-[^watchdog]: The program, the parser `chunk-xa2mcav9.js:14305`, `chunk-xa2mcav9.js:14412`, `chunk-xa2mcav9.js:14434-14470`, the help text `chunk-xa2mcav9.js:15367-15418`, and the constants `chunk-xa2mcav9.js:14029` (10080 minutes), `chunk-xa2mcav9.js:14837-14839` (180 seconds, 30 seconds, 1440 minutes), `chunk-xa2mcav9.js:11477` (the 15 minutes of the kill grace).
-[^runner-retry]: The program, `chunk-xa2mcav9.js:234493` (the session environment), and `chunk-57bg7pbc.js:13781` with `chunk-ra0f27e4.js:748`: in a remote session whose `CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE` is `self_hosted`, the environment of a child process drops `CLAUDE_CODE_RETRY_WATCHDOG`. The `2.1.326` list of dropped names has no such case. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^watchdog]: The program, the parser `chunk-gv1b3n3g.js:15023`, `chunk-gv1b3n3g.js:15130`, `chunk-gv1b3n3g.js:15152-15188`, the help text `chunk-gv1b3n3g.js:16219-16270`, and the constants `chunk-gv1b3n3g.js:14718` (10080 minutes), `chunk-gv1b3n3g.js:15652-15654` (180 seconds, 30 seconds, 1440 minutes), `chunk-gv1b3n3g.js:12129` (the 15 minutes of the kill grace).
+[^runner-retry]: The program, `chunk-gv1b3n3g.js:252098` (the session environment), and `chunk-thtytpkk.js:14876` with `chunk-427dvgs1.js:2262`: in a remote session whose `CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE` is `self_hosted`, the environment of a child process drops `CLAUDE_CODE_RETRY_WATCHDOG`. The `2.1.326` list of dropped names has no such case. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^error-prefix]: The program, `chunk-gv1b3n3g.js:16365` (the runner) and `chunk-ydhgnm30.js:1772` (the orchestrator, which names `claude self-hosted-runner orchestrator --help`).
+[^v328-gh]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-16v2wsc7.js:31-32`.

@@ -99,8 +99,8 @@ A hook fails when it cannot start or reaches its timeout. It also fails when it 
 
 | Item | Status | What it does | Notes |
 | --- | --- | --- | --- |
-| `onFailure: "continue"` | <Documented /> | The default. The action continues after a failure. | `command` and `http` handlers. |
-| `onFailure: "block"` | <Documented /> | A failure counts as exit 2. | The error text says `blocking because onFailure is "block"`. |
+| `onFailure: "continue"` | <Documented /> | The default. The action continues after a failure. | `command`, `http`, and `mcp_tool` handlers. |
+| `onFailure: "block"` | <Documented /> | A failure counts as exit 2. | The error text says `blocking because onFailure is "block"`. Since `2.1.328`, this works on `mcp_tool` hooks, as on `command` and `http` hooks. A failed call to the MCP server then blocks the action.[^mcp-onfailure] |
 | `onFailure` has no effect | <Undocumented /> | On async hooks and on `Stop`, `SubagentStop`, `TaskCompleted`, `TeammateIdle`. | The program's field text says so.[^onfailure] The Hooks Reference does not. |
 | Windows without Git Bash | <Documented /> | A shell-form `PreToolUse` or `PermissionRequest` hook that fails can block. | Set `shell: "powershell"`, or use exec form with `onFailure`. |
 | Background process keeps `stdout` open | <Documented /> | After an allow, this blocks the call with `refusing to honor the suspect capture`. | Redirect the output of background child processes. |
@@ -168,12 +168,13 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the settings schema (`claude-code-settings.json`).
-[^monitor]: The program, `chunk-m14bt1pz.js:1068403` and `chunk-m14bt1pz.js:4187418`.
-[^onfailure]: The program, `chunk-m14bt1pz.js:1191338` and the field text at `chunk-ja5z738t.js:21561`.
-[^restrict]: The program, `chunk-m14bt1pz.js:1189020`.
-[^same-thread]: The program, `chunk-m14bt1pz.js:4911482`.
+[^monitor]: The program, `chunk-56bhcxay.js:1109981` and `chunk-56bhcxay.js:4280769`.
+[^onfailure]: The program, `chunk-56bhcxay.js:1235784` and the field text at `chunk-jkpzhr7r.js:18950`.
+[^mcp-onfailure]: The program, `chunk-56bhcxay.js:68285` (the handler types that block) and `chunk-56bhcxay.js:68521` (the error text for `mcp_tool`). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^restrict]: The program, `chunk-56bhcxay.js:1233067`.
+[^same-thread]: The program, `chunk-56bhcxay.js:5023455`.
 [^powershell]: Probe case `print.err319.hook-powershell` printed this text.
-[^gitbash]: The program checks `P()==="windows"` (`chunk-m14bt1pz.js:4170505`), a platform check (read site `chunk-m14bt1pz.js:4177043`, search `requires bash but Git Bash was not found`). On this macOS build the platform is a baked-in `"darwin"` literal, and `CLAUDE_CODE_HOST_PLATFORM` only sets the telemetry `platform` field. Not run: hard limit on this host.
-[^absolute]: The program, `chunk-3g626wz9.js:49564` and `chunk-ynzkm1p0.js:21336`.
-[^managed-lists]: The program, `chunk-m14bt1pz.js:204382-204399` and the field text of both settings. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^transcript-colors]: The program, `chunk-36ts0j6v.js:10077-10630`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^gitbash]: The program checks `P()==="windows"` (`chunk-56bhcxay.js:4263780`), a platform check (read site `chunk-56bhcxay.js:4270375`, search `requires bash but Git Bash was not found`). On this macOS build the platform is a baked-in `"darwin"` literal, and `CLAUDE_CODE_HOST_PLATFORM` only sets the telemetry `platform` field. Not run: hard limit on this host.
+[^absolute]: The program, `chunk-xk2sr3vt.js:51495` and `chunk-1xzb1yj9.js:21521`.
+[^managed-lists]: The program, `chunk-56bhcxay.js:209674-209691` and the field text of both settings. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^transcript-colors]: The program, `chunk-bjgpjqze.js:9958-10630`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

@@ -288,4 +288,4 @@ The background task that a `UserMessage` notification row reports on: a subagent
 [^ui-press]: `schemas/claude-code.d.ts`, `UiPressArgument`.
 [^scroll]: `schemas/claude-code.d.ts`, `UiScrollArgs`.
 [^ui-select]: `schemas/claude-code.d.ts`, `UiSelectArgument`.
-[^ui-pointer]: `schemas/claude-code.d.ts`, `UiPointerInput`. The program, `chunk-z7b17x9g.js:277`.
+[^ui-pointer]: `schemas/claude-code.d.ts`, `UiPointerInput`. The program, `chunk-ae9zb02s.js:290`.

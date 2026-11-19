@@ -163,23 +163,23 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^builtins]: The program, the agent definitions, `chunk-m14bt1pz.js:2875362`, and the `Agent` tool schema, `chunk-3v1e1y2y.js:37141`.
+[^builtins]: The program, the agent definitions, `chunk-56bhcxay.js:2952534`, and the `Agent` tool schema, `chunk-tt7pb888.js:28728`.
 [^v307]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307).
-[^probes]: The program, `chunk-cqyrfr7r.js:213` and `chunk-7g5p4114.js:451`, and [Probes](../../reference/probes.md#subagents-and-hooks).
-[^resume]: The program, `chunk-m14bt1pz.js:292401` and `chunk-ry6xe4gr.js:31122`.
-[^resume-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-ry6xe4gr.js:41651` for the saved model, which the resume reads only when the metadata holds one, and for the saved effort model. The sibling model, the sibling effort, and the permission change are from the release notes.
-[^model-wait]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-m14bt1pz.js:203757-203790` for the wait (1500 ms, or 10000 ms when the session is a single print run; the wait is on unless the gate `tengu_deep_shore` is off, and on timeout the run goes on without the settings) and `chunk-zgpk86bb.js:8811` for the call from the subagent start.
-[^depth]: The program, the `Agent` tool, `chunk-ja9j7x1x.js:341` and `chunk-3v1e1y2y.js:42475`.
-[^refusals]: The program, the `Agent` tool, `chunk-3v1e1y2y.js:42475`.
-[^hook-cap]: The program, the agent hook runner, `chunk-m14bt1pz.js:4095730`.
-[^max-turns]: The program, the agent loop, `chunk-m14bt1pz.js:2335015`.
-[^teammate-mode]: The program, `chunk-ja5z738t.js:297897` and `chunk-29d2mwq6.js:798`.
-[^status-line]: The program, `chunk-cfxefa64.js:56044-56589`, `chunk-dfwkett1.js:369-372`. For `2.1.323`, the program, `chunk-ja5z738t.js:257900`, and the [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323).
-[^safeguards]: The program, `2.1.323`: `chunk-zgpk86bb.js:10332`.
-[^output-limit]: The program, `chunk-4xhk2fyb.js:10307` (first text) and `chunk-4xhk2fyb.js:10566` (second text). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^swarm]: The program, `chunk-61wd57dm.js:124450` (`initializeSessionTeam`) and `chunk-rdyr49y5.js:4220`. Probe cases `pty.cli319.tmux-swarm-session` and `pty.cli319.tmux-swarm-window`, with a stand-in `tmux` whose `new-session` and `new-window` fail.
-[^worktree-optout]: The program, `chunk-mzt9ps2f.js:1449-1605`, `chunk-mzt9ps2f.js:1609-1656`, and `chunk-mzt9ps2f.js:1658-1673`, called from `chunk-mzt9ps2f.js:434-434`, `chunk-mzt9ps2f.js:1695`, `chunk-mzt9ps2f.js:1778`, and `chunk-mzt9ps2f.js:1789`. The server flag `tengu_mellow_platypus` turns on the `git bisect` row, `tengu_buzzing_emerson` turns on the `git maintenance` and `scalar` rows, and `tengu_gentle_harbor` turns on the `git merge-index`, `git config`, and program rows (`chunk-mzt9ps2f.js:785-793`). The other rows need none of these flags. The `git bisect`, `git maintenance`, and `scalar` rows are in the [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325), which this site dates as `2.1.326`.
+[^probes]: The program, `chunk-svkxb0xj.js:213` and `chunk-1xegr4vz.js:451`, and [Probes](../../reference/probes.md#subagents-and-hooks).
+[^resume]: The program, `chunk-56bhcxay.js:320663` and `chunk-7fpae888.js:32408`.
+[^resume-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-7fpae888.js:43081` for the saved model, which the resume reads only when the metadata holds one, and for the saved effort model. The sibling model, the sibling effort, and the permission change are from the release notes.
+[^model-wait]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-56bhcxay.js:209144-209177` for the wait (1500 ms, or 10000 ms when the session is a single print run; the wait is on unless the gate `tengu_deep_shore` is off, and on timeout the run goes on without the settings) and `chunk-1k75prj1.js:9013` for the call from the subagent start.
+[^depth]: The program, the `Agent` tool, `chunk-h20nfgdp.js:341` and `chunk-tt7pb888.js:34296`.
+[^refusals]: The program, the `Agent` tool, `chunk-tt7pb888.js:34296`.
+[^hook-cap]: The program, the agent hook runner, `chunk-56bhcxay.js:4190170`.
+[^max-turns]: The program, the agent loop, `chunk-56bhcxay.js:2412588`.
+[^teammate-mode]: The program, `chunk-jkpzhr7r.js:298121` and `chunk-eczrspp8.js:798`.
+[^status-line]: The program, `chunk-j2wfp6sf.js:56038-56589`, `chunk-a3rr42d2.js:148-151`. For `2.1.323`, the program, `chunk-jkpzhr7r.js:258124`, and the [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323).
+[^safeguards]: The program, `2.1.323`: `chunk-1k75prj1.js:10593`.
+[^output-limit]: The program, `chunk-qre0n3qw.js:11455` (first text) and `chunk-qre0n3qw.js:11714` (second text). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^swarm]: The program, `chunk-2v0j7fr6.js:130722` (`initializeSessionTeam`) and `chunk-k1n6v1vy.js:4220`. Probe cases `pty.cli319.tmux-swarm-session` and `pty.cli319.tmux-swarm-window`, with a stand-in `tmux` whose `new-session` and `new-window` fail.
+[^worktree-optout]: The program, `chunk-h473xnp6.js:1454-1610`, `chunk-h473xnp6.js:1614-1661`, and `chunk-h473xnp6.js:1663-1678`, called from `chunk-h473xnp6.js:439-439`, `chunk-h473xnp6.js:1700`, `chunk-h473xnp6.js:1783`, and `chunk-h473xnp6.js:1794`. The server flag `tengu_mellow_platypus` turns on the `git bisect` row, `tengu_buzzing_emerson` turns on the `git maintenance` and `scalar` rows, and `tengu_gentle_harbor` turns on the `git merge-index`, `git config`, and program rows (`chunk-h473xnp6.js:790-798`). The other rows need none of these flags. The `git bisect`, `git maintenance`, and `scalar` rows are in the [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325), which this site dates as `2.1.326`.
 
 Official pages: [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), [Environment Variables](https://code.claude.com/docs/en/env-vars), and [Hooks Reference](https://code.claude.com/docs/en/hooks).
-[^worktree-guard]: The program, `chunk-m14bt1pz.js:3735806` and `chunk-mzt9ps2f.js:5809-6060` and `chunk-mzt9ps2f.js:18517`. The program applies the check to an agent that has its own worktree and to a main session that runs in a worktree it created (`chunk-m14bt1pz.js:3735806`). The server flag `tengu_level_meadow` turns on the rows without a separate flag in the table. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^explore]: The program, `chunk-m14bt1pz.js:16511-16521` for the definition, `chunk-m14bt1pz.js:16523-16529` for the model cap, `chunk-zgpk86bb.js:7890-7893` for the missing git status, and `chunk-m14bt1pz.js:13653` for the environment variable.
+[^worktree-guard]: The program, `chunk-56bhcxay.js:3830215` and `chunk-h473xnp6.js:6004-6255` and `chunk-h473xnp6.js:18712`. The program applies the check to an agent that has its own worktree and to a main session that runs in a worktree it created (`chunk-56bhcxay.js:3830215`). The server flag `tengu_level_meadow` turns on the rows without a separate flag in the table. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^explore]: The program, `chunk-56bhcxay.js:17953-17963` for the definition, `chunk-56bhcxay.js:17965-17971` for the model cap, `chunk-1k75prj1.js:8062-8065` for the missing git status, and `chunk-56bhcxay.js:13956` for the environment variable.

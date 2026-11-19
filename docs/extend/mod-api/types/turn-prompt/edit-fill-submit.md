@@ -285,5 +285,5 @@ What a `prompt.submit` hook returns, and what `next(e)` resolves to: the prompt 
 
 ## Sources
 
-[^shared-sections]: The program, `chunk-m14bt1pz.js:2806566`, `TTn`.
-[^media-hold]: The program, `chunk-jxtnvz5q.js:3448`, `hfl`, gives each attachment its `id` before the `prompt.submit` hooks run (cap `vpe`, 4194304 bytes, at `chunk-ttwb10ps.js:209`). `chunk-m14bt1pz.js:4853969`, `WNt`, and `chunk-m14bt1pz.js:4854042`, `Fbo`, answer only when the hook in flight lists that `id` (`fFt` at `chunk-m14bt1pz.js:4962328`). No step checks where the mod was installed.
+[^shared-sections]: The program, `chunk-56bhcxay.js:2885691`, `TTn`.
+[^media-hold]: The program, `chunk-601pwdc9.js:3447`, gives each attachment its `id` before the `prompt.submit` hooks run (cap 4194304 bytes, at `chunk-yg8ff21f.js:198`). `chunk-56bhcxay.js:4961217` and `chunk-56bhcxay.js:4961290` answer only when the hook in flight lists that `id` (`chunk-56bhcxay.js:5074781`). No step checks where the mod was installed.

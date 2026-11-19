@@ -101,6 +101,7 @@ The table is sorted by name.[^names] See [Environment Variables](index.md#how-to
 | `CLAUDE_CODE_SUBAGENT_MODEL` | <Documented /> | Sets the default model for subagents, teammates, and workflow agents with no model set another way. | Text. The values `inherit` and unset mean the parent model. The official page agrees | Subagents. Project `env` can set it before trust |
 | `CLAUDE_CODE_SUBAGENT_MODEL_FORCE` | <Documented /> | Forces one model onto all subagents, teammates, and workflow agents. The `model` parameter is then ignored. | On or off. The coordinator prompt also reads it | Subagents, teammates, workflows |
 | `CLAUDE_CODE_SUBAGENT_PROMPT_CACHE_TTL` | <Documented /> | Sets the prompt cache TTL to `5m` or `1h` for requests outside the main conversation. | One of a fixed set of values. Enum `5m` or `1h`. It beats the `subagentPromptCacheTtl` setting | Subagents, workflows, background work. Project `env` can set it before trust |
+| `CLAUDE_CODE_THINKING_RESUMPTION` | <Undocumented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> | Controls thinking resumption, which resumes a truncated response. Claude Code logs it as `[thinking-resumption]` and sends the beta `thinking-resumption-2026-07-17` when it is on. A false value turns it off. A true value turns it on only when a further host check and a second gate allow it. Otherwise the gate `tengu_thinking_block_resumption` decides, and it is off by default. Since `2.1.328`.[^thinking-resumption] | On, off, or unset | All sessions. A self-hosted runner passes it on from the session's environment variables |
 | `CLAUDE_CODE_THISTLE_GREBE` | <Undocumented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> | Picks a prompt steer variant. Env wins over client data, then flag, then a per-model default. | Text. Accepts `default`, `no_nudges`, or `counter_steer`. Other values are ignored | All providers |
 | `CLAUDE_CODE_TURN_UPDATES` | <Undocumented /> | Forces the `turn_updates` system prompt section on or off. It asks the model to restate key mid-turn findings in its final message. | On, off, or unset. Without it, the prompt logic decides | All sessions |
 | `CLAUDE_CODE_WILLOW_TERN` | <Undocumented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> | Forces a `willow_tern` prompt switch on. The code names it a writing override. Otherwise client data, the model, or a flag decides. | On or off. Only `true` forces it. Claude Code ignores a non-boolean client data value | Model-dependent |
@@ -129,14 +130,15 @@ Claude Code picks the model in a fixed order: the `--model` flag or `/model` fir
 
 ## Sources
 
-[^names]: The program, `chunk-2ew0jg68.js:26216`, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^names]: The program, `chunk-7343wm3k.js:26213`, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 [^amber]: [Probes](../../reference/probes.md).
-[^fast-vertex]: The program, `chunk-asj6f58y.js:420009`. Probe case `print.cli322.fast-vertex-disabled`.
-[^refusal-name]: The program, `chunk-18d5r2hb.js:16063-16079`.
-[^ultrathink]: The program, `chunk-asj6f58y.js:554376`, gate `tengu_turtle_carbon`.
-[^thinking-titles]: The program, `chunk-m14bt1pz.js:3381344`. The second check is at `chunk-8g2nr9dn.js:200064`.
+[^fast-vertex]: The program, `chunk-xethrx83.js:384776`. Probe case `print.cli322.fast-vertex-disabled`.
+[^refusal-name]: The program, `chunk-y5weakn8.js:16103-16119`.
+[^ultrathink]: The program, `chunk-xethrx83.js:520974`, gate `tengu_turtle_carbon`.
+[^thinking-titles]: The program, `chunk-56bhcxay.js:3476383`. The second check is at `chunk-2b3eg071.js:217932`.
 [^fast-capability]: Probe case `print.cli322.fast-vertex-capability-on`.
-[^canonical]: The program, `chunk-t907shf5.js:324-353` (the name is canonicalized with `deterministic: true`).
-[^vertex-org]: The program, `chunk-asj6f58y.js:420234`.
-[^subagent-effort]: The program, `chunk-stxcwn12.js:4244`, `chunk-m14bt1pz.js:1767587`, and `chunk-48tbdg6k.js:8741`. Flag `tengu_snappy_pelican`. Telemetry event `subagent_effort_default` records `unknown_level` for a bad value.
+[^canonical]: The program, `chunk-ynemm6ap.js:329-353` (the name is canonicalized with `deterministic: true`).
+[^vertex-org]: The program, `chunk-xethrx83.js:385001`.
+[^subagent-effort]: The program, `chunk-8cme85wd.js:4246`, `chunk-56bhcxay.js:1841933`, and `chunk-1vrzmwm5.js:8787`. Flag `tengu_snappy_pelican`. Telemetry event `subagent_effort_default` records `unknown_level` for a bad value.
 [^workflow-model]: [Probes](../../reference/probes.md#subagents-and-hooks).
+[^thinking-resumption]: The program, `chunk-56bhcxay.js:159706-159714` (the read), `chunk-56bhcxay.js:159731` and `chunk-56bhcxay.js:159810` (the gate), and `chunk-gv1b3n3g.js:11208` (the runner).

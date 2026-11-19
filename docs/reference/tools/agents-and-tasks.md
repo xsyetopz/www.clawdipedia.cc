@@ -169,27 +169,27 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^tools-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Configure Permissions](https://code.claude.com/docs/en/permissions), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program, `chunk-1vttvse2.js:203832`.
-[^list-agents]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-2z1xbrys.js:7451` (the `cursor` input) and `chunk-2z1xbrys.js:8177` (`isEnabled`: the org setting `messagingBeyondOwnAgentsDisabled` turns the tool on for a list of this session's own agents, and cross-session messaging turns it on for the rest).
+[^tools-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Configure Permissions](https://code.claude.com/docs/en/permissions), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program, `chunk-r1yxtgw6.js:201784`.
+[^list-agents]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-aey1cypd.js:7916` (the `cursor` input) and `chunk-aey1cypd.js:8642` (`isEnabled`: the org setting `messagingBeyondOwnAgentsDisabled` turns the tool on for a list of this session's own agents, and cross-session messaging turns it on for the rest).
 [^exit-worktree-ask]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^exit-worktree-refusal]: The program, `chunk-1vttvse2.js:174421`, `chunk-1vttvse2.js:177032`.
-[^exit-worktree-text]: The program, `chunk-1vttvse2.js:171251`.
-[^afk-timeout]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-gb3wk3bz.js:2695`.
-[^setgoal-alias]: The program, `chunk-77827yq1.js:1329` (the alias `ProposeGoal` to `SetGoal`), `chunk-5mh30xbq.js:225` (the 500 column limit) and `chunk-ben7jdsh.js:8800` (the checks: agent contexts, empty or too long condition, no clear, approval dialog). `SetGoal` is in `2.1.326` and not in `2.1.325`.
-[^getgoal]: The program, `chunk-s292496z.js:246` (the text) and `chunk-ayk74449.js:8198` (the reply). `GetGoal` is in `2.1.326` and not in `2.1.325`.
-[^pausegoal]: The program, `chunk-09jm4m8e.js:246` (the text) and `chunk-q607mwks.js:7800` (the checks: agent context, active goal, not paused, already checked). `PauseGoal` is in `2.1.326` and not in `2.1.325`.
-[^agent-schema]: The program, `chunk-3v1e1y2y.js:34767`, the `Agent` input schema.
-[^result-311]: `AgentResult` and `SkillResult` in [`claude-code-tools.json`](../schemas.md), and the program, `chunk-zgpk86bb.js:191319`, `chunk-6p2zxmr3.js:12678`.
-[^tools-used]: The program, `chunk-zgpk86bb.js:191082`, `chunk-zgpk86bb.js:191319`.
-[^tools-used-line]: The program, `chunk-6p2zxmr3.js:12678`, `chunk-6p2zxmr3.js:27279`.
-[^tools-used-321]: The program, `chunk-m14bt1pz.js:216958`, `chunk-zgpk86bb.js:191319`.
-[^result-321]: `CronDeleteResult` in [`claude-code-tools.json`](../schemas.md), which has the field in `2.1.327`, and the program, `chunk-e70abxg0.js:8291` (`endedLoopWakeup`).
-[^ended-loop]: The program, `chunk-e70abxg0.js:8291`, `chunk-nx8dehjc.js:22081`.
-[^enable-tests]: The program, `chunk-e7a91x6y.js:11319`, `chunk-q2y8vwwg.js:1027-1384`, and `chunk-mfh50f6x.js:15640` of `2.1.327`. The minified names are `ku()` (picks the teammate branch), `BRe()` (the `denyInsteadOfPrompting` test), `hme()` (`!BRe()` and the shared test), and `boi()` (the shared test).
-[^exit-plan-test]: The program, `chunk-e7a91x6y.js:11319`. The shared test is `chunk-q2y8vwwg.js:1384`. The teammate test is `chunk-cn5xyfc9.js:1938`.
-[^teams-flags]: The program, `chunk-61wd57dm.js:126639`.
+[^exit-worktree-refusal]: The program, `chunk-r1yxtgw6.js:171808`, `chunk-r1yxtgw6.js:171852`.
+[^exit-worktree-text]: The program, `chunk-r1yxtgw6.js:168607`.
+[^afk-timeout]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-7jayty67.js:2704`.
+[^setgoal-alias]: The program, `chunk-mhtpe42j.js:1329` (the alias `ProposeGoal` to `SetGoal`), `chunk-agbay4mv.js:225` (the 500 column limit) and `chunk-t74h12d4.js:9118` (the checks: agent contexts, empty or too long condition, no clear, approval dialog). `SetGoal` is in `2.1.326` and not in `2.1.325`.
+[^getgoal]: The program, `chunk-czz1aqdw.js:246` (the text) and `chunk-bhn1c6ne.js:8516` (the reply). `GetGoal` is in `2.1.326` and not in `2.1.325`.
+[^pausegoal]: The program, `chunk-f6n5x3p4.js:246` (the text) and `chunk-xfc94wgg.js:8118` (the checks: agent context, active goal, not paused, already checked). `PauseGoal` is in `2.1.326` and not in `2.1.325`.
+[^agent-schema]: The program, `chunk-tt7pb888.js:26338`, the `Agent` input schema.
+[^result-311]: `AgentResult` and `SkillResult` in [`claude-code-tools.json`](../schemas.md), and the program, `chunk-1k75prj1.js:194737`, `chunk-z1v4zs3g.js:12591`.
+[^tools-used]: The program, `chunk-1k75prj1.js:194500`, `chunk-1k75prj1.js:194737`.
+[^tools-used-line]: The program, `chunk-z1v4zs3g.js:12591`, `chunk-z1v4zs3g.js:27151`.
+[^tools-used-321]: The program, `chunk-56bhcxay.js:222463`, `chunk-1k75prj1.js:194737`.
+[^result-321]: `CronDeleteResult` in [`claude-code-tools.json`](../schemas.md), which has the field in `2.1.327`, and the program, `chunk-492gd0dc.js:8609` (`endedLoopWakeup`).
+[^ended-loop]: The program, `chunk-492gd0dc.js:8609`, `chunk-ep7e5a3y.js:23272`.
+[^enable-tests]: The program, `chunk-f5fby59j.js:343-345` (`ExitPlanMode`), `chunk-prjcxrfv.js:665-667` (`AskUserQuestion`), `chunk-py588db4.js:88-92` (the teammate test), and `chunk-mfgyas5b.js:12-40` (the `denyInsteadOfPrompting` test, the shared test, and the combination of both).
+[^exit-plan-test]: The program, `chunk-f5fby59j.js:11325`. The shared test is `chunk-mfgyas5b.js:836`. The teammate test is `chunk-py588db4.js:1938`.
+[^teams-flags]: The program, `chunk-2v0j7fr6.js:132909`.
 [^tool-search-cases]: Probe cases `print.api319.tool.exit-plan.prompt-tool`, `.prompt-tool-deny`, `.plan-mode`, `.plan-mode-deny`, and `.print`.
 [^baseline-probe]: Probe case `print.request.baseline-a`.
-[^worktree-outside]: The program, `chunk-m14bt1pz.js:4348424`.
+[^worktree-outside]: The program, `chunk-56bhcxay.js:4444679`.
 [^exit-plan-cases]: Probe cases `print.api319.tool.exit-plan.*`. Each row names the case suffix.
-[^send-auth]: The program, `chunk-ffc1djw7.js:493` and `chunk-ffc1djw7.js:504`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^send-auth]: The program, `chunk-ggqna3k4.js:526` and `chunk-ggqna3k4.js:537`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

@@ -38,7 +38,7 @@ Official pages: [Mods Reference](https://code.claude.com/docs/en/plugins/mods/re
 
 `$` is the first argument of every hook. It is frozen. It has `plugin`, 20 nouns, and every noun that an `engine.create` hook added. Write each call in full, such as `$.fs.read('notes.md')`.
 
-Each `$` call is also an event with the same name, such as `fs.read`. A hook on it can pass the call on, refuse it with `{ deny }`, or answer it with `{ value }`. The dispatch skips the calling hook alone, so a plugin does not trap itself.
+Each `$` call is also an event with the same name, such as `fs.read`. A hook on it can pass the call on, refuse it with `{ deny }`, or answer it with `{ value }`. The dispatch skips the calling hook, so a plugin does not trap itself. Since `2.1.328`, a person's hooks do not hear a call that an organization's mod makes, or what is raised beneath it while it runs.[^v328-tier-calls]
 
 | Item | Status | What it does | Members | Page |
 | --- | --- | --- | --- | --- |
@@ -78,7 +78,7 @@ Each `$` call is also an event with the same name, such as `fs.read`. A hook on 
 | --- | --- | --- | --- | --- |
 | `disableAllHooks` | <Differs note="The schema also says it stops the statusLine command. The Hooks Reference names only hooks." /> | No mod or hook of an installed plugin runs. Built-in mods load. | Row: [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plugins.md#keys). | Settings files. |
 | `allowManagedHooksOnly` | <Documented /> <ManagedOnly /> | Blocks hooks and mods that are not the organization's. | The text in the program is "hooks modules are turned off here (`disableAllHooks`, `allowManagedHooksOnly` or a policy)".[^off-text] Row: [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plugins.md#keys). | Managed settings. |
-| `allowManagedModsOnly` | <Documented /> | Only organization mods and built-in mods run their hooks. | An option of the built-in guard `sec-default`. | Managed settings. |
+| `allowManagedModsOnly` | <Documented /> | Only organization mods and built-in mods run their hooks. | An option of the built-in guard `sec-default`. Since `2.1.328`, an app that embeds Claude Code can also switch it on. The managed settings of an admin still win.[^embed-mods-only] | Managed settings. |
 | `allowModsToOverrideDenyRules` | <Documented /> | Lets an installed mod approve a call that a `deny` rule refuses. | An option of the built-in guard. | Managed settings. |
 | `prependPlugins`, `appendPlugins` | <Differs note="Docs say user or managed scope. The schema says managed only." /> <ManagedOnly /> | Plugin ids that run before or after user mods. Since `2.1.327`, they set the order only: an organization plugin that neither list names is in `prepend`, after the listed ones. | Only plugins in these tiers can call `next.to`. Rows: [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plugins.md#keys). | Managed settings. |
 | `disableSideloadFlags` | <Documented /> <ManagedOnly /> | Rejects `--plugin-dir` and `--plugin-url`. | Row: [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plugins.md#keys). | Managed settings. |
@@ -164,21 +164,23 @@ See [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plu
 
 ## Sources
 
-[^modules-text]: The program, `chunk-ja5z738t.js:58235`.
-[^validate]: The program, `chunk-ke2xb8ty.js:49355`.
-[^validate-form]: The program, `chunk-m14bt1pz.js:974992` and `chunk-ke2xb8ty.js:43773`.
-[^types-dir]: The program, `chunk-m14bt1pz.js:4997583`.
-[^off-text]: The program, `chunk-3v3y00c0.js:3230`.
-[^safe-mode-text]: The program, `chunk-m14bt1pz.js:5018302`.
+[^modules-text]: The program, `chunk-jkpzhr7r.js:57159`.
+[^validate]: The program, `chunk-eyez668q.js:50642`.
+[^validate-form]: The program, `chunk-56bhcxay.js:1014972` and `chunk-eyez668q.js:45018`.
+[^types-dir]: The program, `chunk-56bhcxay.js:5110139`.
+[^embed-mods-only]: The program, `chunk-jkpzhr7r.js:6501` (the option that a host may pass) and `chunk-jkpzhr7r.js:6531` (the copy into the policy plugin options). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^off-text]: The program, `chunk-xqszk37f.js:3236`.
+[^safe-mode-text]: The program, `chunk-56bhcxay.js:5131025`.
 [^v321]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321).
-[^written-mods]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-svvp5w6a.js:5707`.
-[^prompt-edit]: The program, `chunk-b0yr0k8v.js:193534`.
-[^registry]: The program, `chunk-syz79m2z.js:0`, the start function that calls the registry one plugin at a time.
-[^rollout-gate]: The program (`2.1.327`), the gate `tengu_plugin_hooks_modules` at `chunk-asj6f58y.js:758548` and the message at `chunk-3v3y00c0.js:3084`.
-[^tips-mermaid]: The program (`2.1.327`), `chunk-4mdk5bh7.js:276-277` for the tips description and `chunk-x2aesrg6.js:185` for the Mermaid description.
-[^privacy-gate]: The program, `chunk-9w197n8j.js:6439`. The gate is `tengu_wise_newt`.
-[^privacy]: The program, `chunk-9w197n8j.js:8065` for the match, the refusal text at `chunk-9w197n8j.js:8751`, the `tool.check` hook at `chunk-9w197n8j.js:10610`, and the `session.identity` hook at `chunk-9w197n8j.js:11294`.
-[^easel]: The program, `chunk-syz79m2z.js:0`.
-[^enable-order]: The program, `chunk-dafpvz32.js:80614`.
-[^enabled-plugins]: The program, `chunk-4zn1ct5c.js:31994`, `chunk-9w197n8j.js:11965`, `chunk-dafpvz32.js:80614`.
-[^responsive]: The program, `chunk-rknqan46.js:583`.
+[^written-mods]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-4ekmrthb.js:5707`.
+[^prompt-edit]: The program, `chunk-syremzmn.js:194600`.
+[^registry]: The program, `chunk-pk4bzvs1.js:0`, the start function that calls the registry one plugin at a time.
+[^rollout-gate]: The program (`2.1.327`), the gate `tengu_plugin_hooks_modules` at `chunk-xethrx83.js:728148` and the message at `chunk-xqszk37f.js:3090`.
+[^tips-mermaid]: The program (`2.1.327`), `chunk-bgvyhd4f.js:276-277` for the tips description and `chunk-3jdt5qfx.js:193` for the Mermaid description.
+[^privacy-gate]: The program, `chunk-vaa1bcfr.js:6712`. The gate is `tengu_wise_newt`.
+[^privacy]: The program, `chunk-vaa1bcfr.js:8338` for the match, the refusal text at `chunk-vaa1bcfr.js:9024`, the `tool.check` hook at `chunk-vaa1bcfr.js:10883`, and the `session.identity` hook at `chunk-vaa1bcfr.js:11596`.
+[^easel]: The program, `chunk-pk4bzvs1.js:0`.
+[^enable-order]: The program, `chunk-e3mrctpm.js:77246`.
+[^enabled-plugins]: The program, `chunk-yznsjrsv.js:32811`, `chunk-vaa1bcfr.js:12267`, `chunk-e3mrctpm.js:77246`.
+[^responsive]: The program, `chunk-czf317f1.js:583`.
+[^v328-tier-calls]: The type file `schemas/claude-code.d.ts`, `EventCalls` and the text on the `$` calls (Tier).

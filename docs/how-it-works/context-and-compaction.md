@@ -225,16 +225,16 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^levels]: The program, `chunk-m14bt1pz.js:1992614`.
-[^subagent-window]: The program, `chunk-m14bt1pz.js:1995867`.
-[^reactive]: The program, `chunk-m14bt1pz.js:2605452` (the reactive route) and `chunk-m14bt1pz.js:2071974` (the "Usage credits are required for long context" test).
-[^second-ask]: The program, `chunk-m14bt1pz.js:2606453`.
-[^summary-error]: The program, `chunk-m14bt1pz.js:2941304`. The `2.1.311` text, `no <summary> block in the second reply either`, is not in `2.1.321`.
-[^gate]: The program, `chunk-6ydtrx6k.js:2567`, the server flag read at `chunk-m14bt1pz.js:2606453`.
-[^gates]: The program, `chunk-m14bt1pz.js:1998790-2604244`. The reactive route and the larger-model retry are at `chunk-m14bt1pz.js:2604244`.
-[^check-timing]: The program, `chunk-8g2nr9dn.js:216910`.
-[^cleared]: The program, the server-side clearing code, `chunk-m14bt1pz.js:1960724`.
-[^prompt]: The program, the compaction prompt, `chunk-m14bt1pz.js:2578625`.
+[^levels]: The program, `chunk-56bhcxay.js:2068778`.
+[^subagent-window]: The program, `chunk-56bhcxay.js:2072150`.
+[^reactive]: The program, `chunk-56bhcxay.js:2683483` (the reactive route) and `chunk-56bhcxay.js:2149849` (the "Usage credits are required for long context" test).
+[^second-ask]: The program, `chunk-56bhcxay.js:2684494`.
+[^summary-error]: The program, `chunk-56bhcxay.js:3017492`. The `2.1.311` text, `no <summary> block in the second reply either`, is not in `2.1.321`.
+[^gate]: The program, `chunk-0qfycjch.js:2874`, the server flag read at `chunk-56bhcxay.js:2684494`.
+[^gates]: The program, `chunk-56bhcxay.js:2075516-2682275`. The reactive route and the larger-model retry are at `chunk-56bhcxay.js:2682275`.
+[^check-timing]: The program, `chunk-2b3eg071.js:235415`.
+[^cleared]: The program, the server-side clearing code, `chunk-56bhcxay.js:2035582`.
+[^prompt]: The program, the compaction prompt, `chunk-56bhcxay.js:2656691`.
 [^v327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^spinner]: The program, `chunk-m14bt1pz.js:5991266`.
-[^agent-reminder]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-m14bt1pz.js:5939771`. A server flag, `tengu_shimmering_clock`, can turn the text off; it is on unless the flag is `false`. The `2.1.326` reminder says only `Read the output file to retrieve the result: <path>`.
+[^spinner]: The program, `chunk-56bhcxay.js:6091541`.
+[^agent-reminder]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-56bhcxay.js:6039218`. A server flag, `tengu_shimmering_clock`, can turn the text off; it is on unless the flag is `false`. The `2.1.326` reminder says only `Read the output file to retrieve the result: <path>`.

@@ -182,6 +182,7 @@ The rows are in name order.[^variable-names] See [Environment Variables](index.m
 | `PREFIX` | <Documented /> <Gated note="Works only behind a feature flag or server gate" /> | Gives the Termux install prefix. Claude Code uses `$PREFIX/tmp` for daemon and socket paths. | Text. Used only when `TERMUX_VERSION` is set. Else `/tmp` | Termux (Android). Not set from project `env` before trust |
 | `PROGRAMDATA` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Gives the Windows `ProgramData` folder. Claude Code uses it to find the Start Menu folder and as a protected env name in shell checks. | Text. Looked up as `ProgramData`, then `PROGRAMDATA`, then `ALLUSERSPROFILE` | Windows. Not set from project `env` before trust |
 | `ProgramData` | <Documented /> <Gated note="Works only behind a feature flag or server gate" /> | Gives the Windows `ProgramData` folder for the sandbox runtime and the Azure Arc token path. | Text. The sandbox throws `ProgramData is not set` when it is missing | Windows. Not set from project `env` before trust |
+| `PROGRAMFILES` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Gives the Windows `Program Files` folder as the second choice. Claude Code reads `ProgramFiles` first, then `PROGRAMFILES`, and else builds `Program Files` under the drive root. Since `2.1.328`.[^programfiles] | Text | Windows. Not set from project `env` before trust |
 | `ProgramFiles` | <Documented /> <Gated note="Works only behind a feature flag or server gate" /> | Gives the Windows `Program Files` folder. Claude Code uses it to locate PowerShell and Azure Arc tools. | Text | Windows. Not set from project `env` before trust |
 | `PROJECT_DOMAIN` | <Undocumented /> | Marks the host as Glitch in deployment-environment detection. | Text | All platforms. Not set from project `env` before trust |
 | `PWD` | <Documented /> | Holds the standard working directory. Claude Code adds it as a session directory when it differs from the original cwd. | Text. Used in startup permission setup and shell-expression checks | All sessions. Not set from project `env` before trust |
@@ -294,11 +295,12 @@ These cases show more detail.[^evalcreds-more]
 [^krb5-probe]: Probe of the `2.1.319` binary.
 [^kube-probe]: Probe of the `2.1.319` binary.
 [^netrc-probe]: Probe case `print.evalcreds.netrc.unset` and `print.evalcreds.netrc.set` of `2.1.319`.
-[^all-proxy]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-b1grgrc4.js:2868`.
+[^all-proxy]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-vz5h5htj.js:2878`.
 [^bash-env-gate]: The server gate is `tengu_golden_wirth`.
-[^bash-env]: The program, `chunk-m14bt1pz.js:1069499`.
-[^system-drive]: The program, `chunk-1yrzf3wn.js:42834` (read) and `chunk-bpr7n093.js:3178` (set).
+[^bash-env]: The program, `chunk-56bhcxay.js:1111077`.
+[^system-drive]: The program, `chunk-kwkzbftg.js:42856` (read) and `chunk-sm9djeyx.js:3192` (set).
 [^evalcreds]: Probe cases `print.evalcreds.netrc.unset`, `print.evalcreds.netrc.set`, and `print.evalcreds.relative.KUBECONFIG` of `2.1.319`. Each ran the real binary against a local stub, with no model call.
 [^evalcreds-more]: Probe cases `print.evalcreds.anthropic-profile`, `.anthropic-profile-abs`, `.aws-credential-process`, `.aws-credential-source`, `.ssh-wildcard`, and `.pm` of `2.1.319`.
-[^variable-names]: The program, `chunk-2ew0jg68.js:26216`, variable names found in the `2.1.314` binary and in the credential path rows of `2.1.319`. The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^ci-color]: The program, `chunk-j9g63hey.js:2661-2678`.
+[^variable-names]: The program, `chunk-7343wm3k.js:26213`, variable names found in the `2.1.314` binary and in the credential path rows of `2.1.319`. The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^ci-color]: The program, `chunk-0tagyyqy.js:2663-2678`.
+[^programfiles]: The program, `chunk-56bhcxay.js:64600` (the order) and `chunk-56bhcxay.js:77639` (the list of names).

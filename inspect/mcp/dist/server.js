@@ -24744,7 +24744,7 @@ var package_default;
 var init_package = __esm(() => {
   package_default = {
     name: "cc-inspect-mcp",
-    version: "0.18.5",
+    version: "0.18.6",
     private: true,
     description: "MCP server that reads Claude Code session transcripts and the modules inside the Claude Code binary. Source for dist/server.js, which is committed.",
     license: "MIT",
@@ -29031,8 +29031,8 @@ var init_claude_code_transcript = __esm(() => {
   claude_code_transcript_default = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
     $id: "https://clawdipedia.cc/schemas/claude-code-transcript.json",
-    title: "Claude Code transcript JSONL entry (Claude Code 2.1.327)",
-    $comment: `For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.327 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to "transcript"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:"<entry type>" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.`,
+    title: "Claude Code transcript JSONL entry (Claude Code 2.1.328)",
+    $comment: `For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.328 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to "transcript"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:"<entry type>" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.`,
     type: "object",
     oneOf: [
       {
@@ -29052,6 +29052,9 @@ var init_claude_code_transcript = __esm(() => {
       },
       {
         $ref: "#/$defs/api-request-blob"
+      },
+      {
+        $ref: "#/$defs/api-request-resumed"
       },
       {
         $ref: "#/$defs/api-request-shape"
@@ -29377,6 +29380,53 @@ var init_claude_code_transcript = __esm(() => {
           message: {
             "x-observed": true,
             type: "object"
+          }
+        },
+        $comment: "Registry policy: boundary-cleared. Code sites used: 1."
+      },
+      "api-request-resumed": {
+        type: "object",
+        properties: {
+          type: {
+            const: "api-request-resumed"
+          },
+          sessionId: {
+            "x-unverified": true
+          },
+          agentId: {
+            "x-unverified": true
+          },
+          timestamp: {
+            type: "string"
+          },
+          version: {
+            type: "string"
+          },
+          requestRef: {
+            type: "string"
+          },
+          requestNotRecorded: {
+            "x-unverified": true
+          },
+          requestHookChanged: {
+            type: "object",
+            properties: {
+              record: {
+                type: "string"
+              },
+              what: {
+                "x-unverified": true
+              }
+            }
+          },
+          messageId: {
+            "x-unverified": true
+          },
+          pausedRequestId: {
+            "x-unverified": true
+          },
+          resumedRequestId: {
+            "x-unverified": true
           }
         },
         $comment: "Registry policy: boundary-cleared. Code sites used: 1."
@@ -32873,21 +32923,6 @@ var init_claude_code_transcript = __esm(() => {
                 type: "object",
                 properties: {
                   kind: {
-                    const: "mcp_required_missing"
-                  },
-                  servers: {
-                    type: "array",
-                    items: {
-                      type: "string"
-                    }
-                  }
-                },
-                required: ["kind", "servers"]
-              },
-              {
-                type: "object",
-                properties: {
-                  kind: {
                     const: "auth_expired"
                   },
                   provider: {
@@ -34562,7 +34597,7 @@ var CITATION, findCitations = (file, text) => text.split(`
     return r.offset;
   }
   return n < old.text.length && sameFrame(old.text, n, target.text, n) ? n : undefined;
-}, moveChunk = ({ oldByName, newNames, mapModule, moves }, { file, line, terms }, found, chunk, [sep, offset, lead, first, end]) => {
+}, ordered = (a, b) => a === undefined || b === undefined || b === "" || a <= b, moveChunk = ({ oldByName, newNames, mapModule, moves }, { file, line, terms }, found, chunk, [sep, offset, offsetEnd, lead, first, end]) => {
   const old = newNames.has(chunk) ? undefined : oldByName.get(chunk);
   if (!old) {
     return { text: found };
@@ -34576,8 +34611,9 @@ var CITATION, findCitations = (file, text) => text.split(`
   const sameAt = (n, form = ":") => n === undefined ? undefined : sameCode(pair, form, Number(n), terms);
   const name = basename6(target.name);
   const moved = sameAt(offset, sep);
+  const movedEnd = offsetEnd === undefined ? "" : sameAt(offsetEnd, sep);
   const range = [sameAt(first, "lines"), sameAt(end, "lines")];
-  const numbers = moved === undefined ? range.every((n) => n !== undefined) && `${lead}${range[0]} to ${range[1]}` : `${sep}${moved}`;
+  const numbers = moved === undefined ? range.every((n) => n !== undefined) && ordered(range[0], range[1]) && `${lead}${range[0]} to ${range[1]}` : movedEnd !== undefined && ordered(moved, movedEnd) && `${sep}${moved}${movedEnd === "" ? "" : `-${movedEnd}`}`;
   const text = numbers === false ? found.replace(chunk, name) : `${name}${numbers}`;
   moves.push({
     file,
@@ -34592,11 +34628,11 @@ var CITATION, findCitations = (file, text) => text.split(`
   let last;
   const sameAt = (n) => last && n !== undefined ? sameCode(last, ":", Number(n), terms) : undefined;
   return lineText.replaceAll(FOLLOW_ON, (found, ...groups) => {
-    const [chunk, sep, offset, lead, first, end, from, to] = groups;
+    const [chunk, sep, offset, offsetEnd, lead, first, end, from, to] = groups;
     if (chunk === undefined) {
       return `:${sameAt(from) ?? from}${to === undefined ? "" : `-${sameAt(to) ?? to}`}`;
     }
-    const numbers = [sep, offset, lead, first, end];
+    const numbers = [sep, offset, offsetEnd, lead, first, end];
     const moved = moveChunk(ctx, { file, line, terms }, found, chunk, numbers);
     last = moved.pair;
     return moved.text;
@@ -34620,7 +34656,7 @@ var CITATION, findCitations = (file, text) => text.split(`
 var init_citations = __esm(() => {
   init_relocate();
   CITATION = /(chunk-[\da-z]+\.js)(?:[:@]\d+|`? lines \d+ to \d+)?/gu;
-  FOLLOW_ON = /(chunk-[\da-z]+\.js)(?:([:@])(\d+)|(`? lines )(\d+) to (\d+))?|(?<=`):(\d+)(?:-(\d+))?(?=`)/gu;
+  FOLLOW_ON = /(chunk-[\da-z]+\.js)(?:([:@])(\d+)(?:-(\d+))?|(`? lines )(\d+) to (\d+))?|(?<=`):(\d+)(?:-(\d+))?(?=`)/gu;
   LITERAL = /"[^"\\\n]{20,}"/gu;
   HASH_NAME = /\$[\da-f]{6}\b|chunk@[\da-f]{8}\.js/gu;
   cleanLines = new WeakMap;

@@ -106,4 +106,4 @@ flowchart TD
 
 ## Sources
 
-[^undoc]: The program, for example `chunk-sqn39hq2.js:253429` for `ENABLE_MCP_LARGE_OUTPUT_FILES`, `chunk-m14bt1pz.js:4587268` for `CLAUDE_CODE_SKIP_PLUGIN_LOCAL_MCP_SERVERS`, `chunk-m14bt1pz.js:817069` for `CLAUDE_CODE_SYNC_PLUGINS_MCP_TIMEOUT_MS`, and `chunk-m14bt1pz.js:2646336` for `MCP_TRUNCATION_PROMPT_OVERRIDE`.
+[^undoc]: The program, for example `chunk-mt0sg9yk.js:263314` for `ENABLE_MCP_LARGE_OUTPUT_FILES`, `chunk-56bhcxay.js:4687583` for `CLAUDE_CODE_SKIP_PLUGIN_LOCAL_MCP_SERVERS`, `chunk-56bhcxay.js:852699` for `CLAUDE_CODE_SYNC_PLUGINS_MCP_TIMEOUT_MS`, and `chunk-56bhcxay.js:2724512` for `MCP_TRUNCATION_PROMPT_OVERRIDE`.

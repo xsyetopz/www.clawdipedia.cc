@@ -81,7 +81,6 @@ The table is sorted by name. The official [Environment Variables](https://code.c
 | `GCE_METADATA_IP` | <Undocumented /> | Google auth | Sets the address of the Compute Engine metadata server for the bundled Google auth library. |
 | `GOOGLE_API_CERTIFICATE_CONFIG` | <Undocumented /> | Google auth | Gives the path of the certificate config for mTLS in the bundled Google auth library. |
 | `GOOGLE_CLOUD_QUOTA_PROJECT` | <Undocumented /> | Google auth | Sets the quota project of the credential in the bundled Google auth library. |
-| `GRACEFUL_FS_PLATFORM` | <Undocumented /> | graceful-fs | Overrides the platform name that the bundled `graceful-fs` patches use. |
 | `GRPC_DEFAULT_SSL_ROOTS_FILE_PATH` | <Undocumented /> | gRPC | Gives the path of a root certificate file that the bundled gRPC library loads as its TLS roots. |
 | `GRPC_EXPERIMENTAL_ENABLE_OUTLIER_DETECTION` | <Undocumented /> | gRPC | Turns the gRPC outlier detection load balancer on or off. |
 | `GRPC_NODE_TRACE` | <Undocumented /> | gRPC | Lists the gRPC tracers to turn on. |
@@ -165,7 +164,7 @@ A scan of the strings in the program found the names.[^scan] The list can miss n
 
 ## Sources
 
-[^scan]: The program, for example `chunk-5n4ee3md.js:5042`, variable names found in the `2.1.314` binary.
+[^scan]: The program, for example `chunk-90e2ybcp.js:5042`, variable names found in the `2.1.314` binary.
 [^bun-options]: Probes page, run with a bad `BUN_OPTIONS` value.
-[^repl-module]: The program, `chunk-2r3tjbfc.js:4102-4146`.
-[^teamcity]: The program, `chunk-j9g63hey.js:2677-2678`.
+[^repl-module]: The program, `chunk-nf409202.js:4103-4146`.
+[^teamcity]: The program, `chunk-0tagyyqy.js:2679-2680`.

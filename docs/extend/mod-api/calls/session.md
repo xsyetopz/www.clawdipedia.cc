@@ -39,7 +39,8 @@ on("session.start", async ($, e, next) => {
 | `$.session.usage` | <Documented /> | Returns when the session began, the context window fill, the rate-limit windows, and the cost, as the status line has them. | `(args?) => Promise<SessionUsage>`. A plain call costs nothing. `breakdown: "full"` uses the token-count API. `"summary"` estimates locally. | Run time. |
 | `$.session.version` | <Documented /> | Returns the engine's version, its base release, and its build time. | `() => Promise<SessionVersion>`: `version`, `base` (absent unless the version is a release), `builtAt` (absent in a run from source that stamps none). Works in every mode. | Run time. |
 | `$.session.info` | <Documented /> | Since `2.1.326`, returns the transcript file, the scratchpad, the prompt id, the agent type, the config root, the platform, and the hosting of the session, as they stand at the call. | `() => Promise<SessionInfo>`. Resolves `{ transcriptPath, scratchpadDir?, promptId?, agentType?, configRoot?, platform?, isHosted? }`. A settings hook reads the same on its input.[^info] | Run time. |
-| `$.session.compact` | <Documented /> | Compacts the conversation. It is the event `session.compact` with `trigger` `plugin`, the same call `/compact` makes. | `(input?) => Promise<SessionCompactResult>`. Runs the hooks, then core. Resolves `{ skip }` if a hook vetoed it. Rejects while a turn runs. | Between turns. |
+| `$.session.machine` | <Documented /> | Since `2.1.328`, returns the machine the engine runs on: the system name, the kernel release, and the hardware, as `uname -s`, `-r`, and `-m` print them. It also returns which of `npm`, `yarn`, `pnpm`, `bun`, `deno`, and `node` are on the `PATH`. | `() => Promise<SessionMachine>`. Resolves `{ sysname, release, machine, packageManagers, runtimes }`. On Windows `sysname` is `Windows_NT` and `release` is the NT version. The two lists are in a fixed order. On the server, where tools run in another container, the two lists are empty.[^machine] | Run time. |
+| `$.session.compact` | <Documented /> | Compacts the conversation. It is the event `session.compact` with `trigger` `plugin`, the same call `/compact` makes. | `(input?) => Promise<SessionCompactResult>`. Since `2.1.328`, runs through the hooks that hear it (Tier), then core.[^v328-tier-compact] Resolves `{ skip }` if a hook vetoed it. Rejects while a turn runs. | Between turns. |
 | `$.session.send` | <Documented /> | Sends a plain-text message to another agent or session. It is the event `session.send`, the same delivery as the model's SendMessage tool. | `(input) => Promise<SessionSendResult>`. `to` is a name, an agent id, `{ sessionId }`, or `{ agentId }`. Resolves once queued. | Run time. |
 | `$.session.append` | <Documented /> | Appends a row to a conversation of the session. It is the event `session.append`, the engine's own call for every row it keeps. | `(args) => Promise<SessionAppendResult>`. Adds a user-role row of text blocks. Resolves `{ deny: reason }` if a plugin above refused it. | Run time. |
 | `$.session.identity` | <Documented /> | Returns the sign-in identity of the session, to a mod that the organization's managed settings install. Any other mod gets `{ deny }`. The call makes no request. | `() => Promise<SessionIdentity>`. Full account data only where managed `forceLoginOrgUUID` lists the organization. Otherwise only `kind`. | Mods that managed settings install. |
@@ -77,6 +78,7 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 | `session.usage` | <Documented /> | `$.session.usage({ breakdown, columns })` | Input `SessionUsageArgs`. Value `SessionUsage`. |
 | `session.version` | <Documented /> | `$.session.version()` | Input `NoArgs`. Value `SessionVersion`. |
 | `session.info` | <Documented /> | `$.session.info()` | Input `NoArgs`. Value `SessionInfo`. |
+| `session.machine` | <Documented /> | `$.session.machine()` | Since `2.1.328`. Input `NoArgs`. Value `SessionMachine`.[^machine] |
 
 When `auth` is set, the `$.http.fetch` handler runs a pre-check before it resolves the handle. The pre-check has one refusal. If [`CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC`](../../../configure/env-vars/network-and-proxy.md) is set, the request throws an error. The error ends "the session's credential is withheld: nonessential network traffic is disabled for this session".
 
@@ -90,7 +92,9 @@ When no credential resolves, `$.session.authorize` logs `$.session.authorize (<p
 
 ## Sources
 
-[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `SessionMessagesCall`, `SessionInfo`, `SessionVersion`, `SessionAuthorization`, `SessionUsageArgs`, `SessionCompactArgs`, `SessionCompactResult`, `SessionSendResult`, `SessionAppendResult`, and the `session.*` entries of `EventOf` and `ResultOf`.
-[^info]: The program, `chunk-m14bt1pz.js:58066`.
-[^stop]: The program, `chunk-nx8dehjc.js:131700`.
-[^desktop]: The program, `chunk-m14bt1pz.js:1016270`.
+[^types]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `SessionMessagesCall`, `SessionInfo`, `SessionVersion`, `SessionAuthorization`, `SessionUsageArgs`, `SessionCompactArgs`, `SessionCompactResult`, `SessionSendResult`, `SessionAppendResult`, and the `session.*` entries of `EventOf` and `ResultOf`.
+[^info]: The program, `chunk-56bhcxay.js:60284`.
+[^stop]: The program, `chunk-ep7e5a3y.js:133171`.
+[^desktop]: The program, `chunk-56bhcxay.js:1056645`.
+[^machine]: The type file `schemas/claude-code.d.ts`, `$.session.machine` and `SessionMachine`. The program, `chunk-56bhcxay.js:60377-60390` (the read) and `chunk-56bhcxay.js:249951` (the op).
+[^v328-tier-compact]: The type file `schemas/claude-code.d.ts`, `$.session.compact`.

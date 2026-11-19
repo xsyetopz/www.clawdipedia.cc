@@ -187,17 +187,19 @@ Each row is a family of messages. The backticked text is the start that every me
 | `${…}: $.store.`, `${…}: store file` | <Undocumented /> | A `$.store` call failed, or a store file is unusable. | A key is over the length limit. The store would be over the size limit. Or the store file is unreadable or malformed (for example the JSON is not an object). |
 | `${…}: $.prompt.paint` | <Undocumented /> | A `$.prompt.paint` call was refused. | The argument has no `decorations` array of `{ start, end }` runs, or `text` is not a string while `decorations` is not empty.[^paint] |
 | `${…}: $.config.` | <Undocumented /> | A `$.config.set` call named a key that `/config` has no row for. | The text says that `$.config.list` names the keys. |
+| `$.env.set:` | <Undocumented /> | A `$.env.set` call was refused. Since `2.1.328`. | The text ends in a code. `OUT_OF_STEP`: the write is not newer than a write of the same name that the host already applied. `HOST_RULE`: a host rule keeps the name or value; only the environment that Claude Code starts with, or Claude Code itself, sets it. `PINNED`: the managed `env` settings name the variable, or it goes with the managed `processWrapper` setting. `HELD`: the write is held to settings, and the host did not apply it.[^env-set-codes] |
+| `config.set:` | <Undocumented /> | A `$.config.set` call was refused after it passed the key check. Since `2.1.328`. | The text ends in a code. `NO_ROW`: no `/config` row has the key. `LOCKED`: the row has a lock reason. `NOT_WRITTEN`: the write did not take effect.[^env-set-codes] |
 | `${…}: $.` | <Undocumented /> | A refused or failed call on `$` from a plugin. | The text names the call and the reason. Example reasons: a value that is not JSON data or is over a character limit. A `$.clock` delay that is not a non-negative number of milliseconds. A `$.state` reference that is not `{ plugin, key }`. `$.agent.spawn` without a prompt. A refused `$.mcp.call`. `$.prompt.compose` in a process that composes no system prompt. |
 | `$.` | <Undocumented /> | A `$` call failed in the engine. | A `$.telemetry` call names no origin. A caller passed a bad value to `$.skill.prompt`. The environment has no streaming ops from the host. Or the chain has no core at the bottom. |
 | `${…}: next` | <Undocumented /> | A refused `next()` or `next.to()` call of a hook. | `next()` passed an argument that the event does not allow. `next.to()` names no tier. Or it names a tier that a dispatch does not continue at (user, append, builtin, core). Or `next.to()` is not available to this plugin. The host refuses `next.to("user")` when no hook of the same module that spells it stands on this dispatch. |
 | `${…}: on(` | <Undocumented /> | A refused `on()` registration. | The pattern or matcher is wrong. The hook is not a function. Code registered the same hook twice. Or code called `on()` after `register()` returned. |
 | `${…}: registered` | <Undocumented /> | A hook registration does not match what the engine has. | The event is not an event. No loaded plugin provides the call. The call is not an event. Or the scan of the hooks module did not see it. |
 | `${…}: engine.create` | <Undocumented /> | An `engine.create` hook returned a wrong value. | It must return `$` with nouns, and it must not change the identity of the plugin. |
-| `${…}: hooks module not loaded` | <Undocumented /> | A hooks module did not load. | `next.to` is available to managed plugins only, or a policy or scan reason follows. |
+| `${…}: hooks module not loaded` | <Undocumented /> | A hooks module did not load. | `next.to` is available to managed plugins only, or a policy or scan reason follows. The name of the plugin is the engine's own chain member (`plugin.json` name). Or the name starts with the prefix that marks the name of a settings hook.[^hooks-name] |
 | `${…}: matcher` | <Undocumented /> | A refused hook matcher. | A RegExp has a flag that keeps state, or a nested quantifier. A key is not kept, or is reserved. A string is too long. Or the matcher is not a plain object. |
 | `${…}: returned` | <Undocumented /> | A render hook returned a drawing that is not allowed. | It holds a Proxy or a `vm` context (the context since `2.1.310`), a function where plain data goes, an object that is not plain data, or a Client or element that it did not draw. |
 | `${…} after register() returned`, `${…} called twice`, `${…} takes a function` | <Undocumented /> | A `.catch` call on a registration broke a rule. | `.catch()` is for `register()`, a registration takes one `.catch`, and the argument is a function `($, e, next)`. |
-| `${…}: ${…}:` | <Undocumented /> | A refused or failed call from a plugin. | The text names the call and the reason. A `socketPath` is not absolute, has a NUL byte, or is a network location. A URL is not valid, is not http or https, or has credentials. A request body is over the limit, an auth handle is unknown, there were too many redirects, or no complete answer came in time. |
+| `${…}: ${…}:` | <Undocumented /> | A refused or failed call from a plugin. | The text names the call and the reason. A `socketPath` is not absolute, has a NUL byte, or is a network location. A URL is not valid, is not http or https, or has credentials. A request body is over the limit, an auth handle is unknown (the text ends in `UNKNOWN_HANDLE` since `2.1.328`), there were too many redirects, or no complete answer came in time. `$.process.hookEnv` is called for a plugin that is not synced (`NOT_SYNCED`, since `2.1.328`).[^handle-codes] |
 
 ## Related Pages
 
@@ -206,9 +208,12 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^tier-327]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, the text of `Tier`.
-[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `Tier`, `RenderSurface`, `PluginRegisterUses`, `SessionCost`, `ToolDescribeInput`, and `UiPointerResult`.
-[^prompt-edit]: The program, `chunk-b0yr0k8v.js:193534`.
-[^rollout]: The program, `chunk-asj6f58y.js:758552`. The server flag is `tengu_plugin_hooks_modules`.
-[^re-entry]: The program, `chunk-9ns7kxca.js:6139`.
-[^paint]: The program, `chunk-b0yr0k8v.js:13173`.
+[^tier-327]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, the text of `Tier`.
+[^types]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `Tier`, `RenderSurface`, `PluginRegisterUses`, `SessionCost`, `ToolDescribeInput`, and `UiPointerResult`.
+[^prompt-edit]: The program, `chunk-syremzmn.js:194600`.
+[^rollout]: The program, `chunk-xethrx83.js:728152`. The server flag is `tengu_plugin_hooks_modules`.
+[^re-entry]: The program, `chunk-9nv3z5ae.js:6443`.
+[^paint]: The program, `chunk-syremzmn.js:13290`.
+[^env-set-codes]: The program, `chunk-r240nspa.js:574` (`OUT_OF_STEP`), `chunk-r240nspa.js:575` (`HOST_RULE`), `chunk-r240nspa.js:576` (`PINNED`), `chunk-r240nspa.js:578` (`HELD`), `chunk-r240nspa.js:602` (`NO_ROW`), `chunk-r240nspa.js:604` (`LOCKED`), `chunk-r240nspa.js:607` (`NOT_WRITTEN`), `chunk-r240nspa.js:608` (the text), and `chunk-r240nspa.js:735` (`NOT_WRITTEN`). `2.1.327` has none of these texts.
+[^hooks-name]: The program, `chunk-56bhcxay.js:59338` and `chunk-56bhcxay.js:59342`.
+[^handle-codes]: The program, `chunk-r240nspa.js:645` (`UNKNOWN_HANDLE`) and `chunk-r240nspa.js:674` (`NOT_SYNCED`).

@@ -90,6 +90,6 @@ These keys live in `~/.claude.json`, not in a settings file. The `/config` comma
 
 ## Sources
 
-[^program]: The program, `chunk-ja5z738t.js:184471`.
-[^fast-key]: The program, `chunk-asj6f58y.js:428006` and `chunk-asj6f58y.js:428306`.
-[^subkeys]: The program, `chunk-ja5z738t.js:298151`.
+[^program]: The program, `chunk-jkpzhr7r.js:183917`.
+[^fast-key]: The program, `chunk-xethrx83.js:392774` and `chunk-xethrx83.js:393073`.
+[^subkeys]: The program, `chunk-jkpzhr7r.js:298375`.

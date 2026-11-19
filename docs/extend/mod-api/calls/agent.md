@@ -36,7 +36,7 @@ on("agent.spawn", async ($, e, next) =>
 
 | Item | Status | What it does | How it works | Where it can be used |
 | --- | --- | --- | --- | --- |
-| `agent.offer` | <Documented /> | Fires when the engine offers an agent type to the model, in the agent listing and again at dispatch. `next(e)` resolves to `{ isOffered: true }`. | Input `AgentOfferInput`. Result `AgentOfferResult`. Return `{ isOffered: false }` to hide the type from the model and refuse its dispatch. A hook that refuses, or a `{ deny }` result, gives `{ isOffered: false }`.[^offer-refuse] The engine checks that the hook kept `agent`, `description`, and `source` and did not change `provider`.[^offer-check] | `on('agent.offer', ...)`. In tests: `$.agent.offer(...)` on the test engine (not on a hook's `$`). |
+| `agent.offer` | <Documented /> | Fires when the engine offers an agent type to the model, in the agent listing and again at dispatch. `next(e)` resolves to `{ isOffered: true }`. | Input `AgentOfferInput`. Result `AgentOfferResult`. Return `{ isOffered: false }` to hide the type from the model and refuse its dispatch. A hook that refuses, or a `{ deny }` result, gives `{ isOffered: false }`.[^offer-refuse] The engine checks that the hook kept `agent`, `description`, and `source` and did not change `provider`.[^offer-check] Since `2.1.328`, the offer to resume an agent of the type carries that agent's `agentId`.[^v328-offer-id] | `on('agent.offer', ...)`. In tests: `$.agent.offer(...)` on the test engine (not on a hook's `$`). |
 | `agent.spawn` | <Documented /> | Fires when the Agent tool, or a workflow script's `agent()` call, is about to start an agent, before the engine resolves the model. | Input `AgentSpawnInput`. Result `AgentSpawnResult`: `{ model }` or `{ deny }`. The engine skips a guard that fails, and the subagent starts. | `on('agent.spawn', ...)`. Also `$.agent.spawn(...)`. |
 
 ## Events Raised by Agent Calls
@@ -153,7 +153,7 @@ A hook may rewrite the content keys of `AgentSpawnInput`. The type pins every ot
 | `AgentSpec.mcpServers` | <Documented /> | Servers connected over MCP for the agent's run: a configured server's name, or one server's config inline. | `readonly (string \| Record<string, unknown>)[]`, optional. |
 | `AgentSpec.hooks` | <Documented /> | Settings hooks in force while the agent runs, in the `hooks` shape of `settings.json`. | `Record<string, unknown>`, optional. |
 | `AgentSpec.maxTurns` | <Documented /> | The most turns the agent takes before it stops. | `number`, optional. |
-| `AgentSpec.autoCompactWindow` | <Documented /> | Token count, 100000 to 1000000, at which the agent compacts its own conversation. It only lowers the window. | `number`, optional. |
+| `AgentSpec.autoCompactWindow` | <Documented /> | Token count at which the agent compacts its own conversation. Since `2.1.328`, the type file says at least 100000, with no upper bound named. It only lowers the window.[^v328-compact-window] | `number`, optional. |
 | `AgentSpec.skills` | <Documented /> | Skill names preloaded into the agent's context before its first turn. | `readonly string[]`, optional. |
 | `AgentSpec.initialPrompt` | <Documented /> | The agent's first user turn. `{{intent}}` in it takes the spawn's prompt. Left out means the spawn's prompt is the first turn. | `string`, optional. |
 | `AgentSpec.memory` | <Documented /> | A persistent memory the agent keeps between runs, and where. | `'user' \| 'project' \| 'local'`, optional. |
@@ -169,10 +169,12 @@ A hook may rewrite the content keys of `AgentSpawnInput`. The type pins every ot
 
 ## Sources
 
-[^types]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `AgentCallArgs`, `AgentCallOptions`, `AgentCallRecord`, `AgentInfo`, `AgentLimits`, `AgentLoop`, `AgentOfferInput`, `AgentOfferResult`, `AgentRequest`, `AgentSpawnArgs`, `AgentSpawnInput`, `AgentSpawnResult`, `AgentSpec`, `AgentStatus`, and `AgentTeammateRecord`.
-[^call-workflow]: The program, `chunk-m14bt1pz.js:243910` and `chunk-4zn1ct5c.js:1221`.
-[^limits]: The program, `chunk-m14bt1pz.js:224885`.
-[^offer-refuse]: The program, `chunk-b0yr0k8v.js:77338`.
-[^offer-check]: The program, `chunk-b0yr0k8v.js:209230`.
-[^kind]: The program, `chunk-m14bt1pz.js:224997`.
-[^parent-agent]: The program, `chunk-m14bt1pz.js:239896`.
+[^types]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `AgentCallArgs`, `AgentCallOptions`, `AgentCallRecord`, `AgentInfo`, `AgentLimits`, `AgentLoop`, `AgentOfferInput`, `AgentOfferResult`, `AgentRequest`, `AgentSpawnArgs`, `AgentSpawnInput`, `AgentSpawnResult`, `AgentSpec`, `AgentStatus`, and `AgentTeammateRecord`.
+[^call-workflow]: The program, `chunk-56bhcxay.js:250046` and `chunk-yznsjrsv.js:1248`.
+[^limits]: The program, `chunk-56bhcxay.js:230463`.
+[^offer-refuse]: The program, `chunk-syremzmn.js:77801`.
+[^offer-check]: The program, `chunk-syremzmn.js:210297`.
+[^kind]: The program, `chunk-56bhcxay.js:230575`.
+[^parent-agent]: The program, `chunk-56bhcxay.js:267288`.
+[^v328-compact-window]: The type file `schemas/claude-code.d.ts`, `AgentSpec`. The `2.1.327` text said 100000 to 1000000.
+[^v328-offer-id]: The type file `schemas/claude-code.d.ts`, `agent.offer`.

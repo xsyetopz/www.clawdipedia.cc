@@ -110,10 +110,10 @@ The vim keys of the input prompt are not in `keybindings.json`. The setting `edi
 
 ## Sources
 
-[^unbound]: The program lists these actions as valid, and its default keys do not bind them. The valid actions are in `chunk-gzfgydxw.js:12607-16008`, and the default keys are in `chunk-gzfgydxw.js:680-7835`.
-[^close-session]: The program, `chunk-cfxefa64.js:878748`, `chunk-gzfgydxw.js:16008`, `chunk-cdhaj2wt.js:5984`, `chunk-cdhaj2wt.js:7077`. Probe cases `pty.cli319.keybinding.session-tabs`, `pty.cli319.keybinding.control-bad-action`, and `pty.cli319.keybinding.control-bad-context`, run with `bun run release:probe:pty -- --to 2.1.319 --only cli319.keybinding`. The footer code calls `getDisplayText("app:closeSession", "SessionTabs")`, and the context list in the keybinding schema names `SessionTabs`.
-[^reserved]: The program, `chunk-gzfgydxw.js:7836-9035`.
-[^click-send]: The program reports the click as `chat:sendNowHintPress`. `chunk-cfxefa64.js:131378`. The program reads the two mouse variables at `chunk-11sthp5n.js:5967`: `CLAUDE_CODE_DISABLE_MOUSE` gives mode `off`, and `CLAUDE_CODE_DISABLE_MOUSE_CLICKS` gives mode `scroll`, so only unset gives `full`. The hint is a pressable text whose handler runs only in mode `full`, `chunk-cfxefa64.js:9922-9930` and `chunk-cfxefa64.js:9931-9936`. The handler is registered at `chunk-cfxefa64.js:66687` and sends the queued message with `sendQueuedNow`, `chunk-cfxefa64.js:66584-66620`.
-[^hint-text]: The program, `chunk-cfxefa64.js:9880-9931`.
-[^vim-count]: The program, `chunk-52m3dgw0.js:475-482` and `chunk-52m3dgw0.js:955-961`.
-[^hint-queued]: The program, `chunk-cfxefa64.js:9863-9890`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^unbound]: The program lists these actions as valid, and its default keys do not bind them. The valid actions are in `chunk-g4fdykqa.js:12613-16014`, and the default keys are in `chunk-g4fdykqa.js:682-7837`.
+[^close-session]: The program, `chunk-j2wfp6sf.js:874650`, `chunk-g4fdykqa.js:16014`, `chunk-b3qefvbn.js:5989`, `chunk-b3qefvbn.js:7082`. Probe cases `pty.cli319.keybinding.session-tabs`, `pty.cli319.keybinding.control-bad-action`, and `pty.cli319.keybinding.control-bad-context`, run with `bun run release:probe:pty -- --to 2.1.319 --only cli319.keybinding`. The footer code calls `getDisplayText("app:closeSession", "SessionTabs")`, and the context list in the keybinding schema names `SessionTabs`.
+[^reserved]: The program, `chunk-g4fdykqa.js:7838-9037`.
+[^click-send]: The program reports the click as `chat:sendNowHintPress`. `chunk-j2wfp6sf.js:131971`. The program reads the two mouse variables at `chunk-mc2z5m5k.js:5712`: `CLAUDE_CODE_DISABLE_MOUSE` gives mode `off`, and `CLAUDE_CODE_DISABLE_MOUSE_CLICKS` gives mode `scroll`, so only unset gives `full`. The hint is a pressable text whose handler runs only in mode `full`, `chunk-j2wfp6sf.js:9960-9968` and `chunk-j2wfp6sf.js:9969-9974`. The handler is registered at `chunk-j2wfp6sf.js:66692` and sends the queued message with `sendQueuedNow`, `chunk-j2wfp6sf.js:66589-66625`.
+[^hint-text]: The program, `chunk-j2wfp6sf.js:9918-9969`.
+[^vim-count]: The program, `chunk-k6jrg48j.js:475-482` and `chunk-k6jrg48j.js:955-961`.
+[^hint-queued]: The program, `chunk-j2wfp6sf.js:9901-9928`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

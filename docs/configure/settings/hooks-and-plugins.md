@@ -73,10 +73,10 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema, `chunk-ja5z738t.js:278919`.
+[^schema]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:279143`.
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^plugin-versions]: The program, `chunk-dfwkett1.js:22661`.
-[^takeover]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-az1d7wfg.js:20852` and `chunk-az1d7wfg.js:21483`.
+[^plugin-versions]: The program, `chunk-a3rr42d2.js:19278`.
+[^takeover]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-bvs4hre6.js:21952` and `chunk-bvs4hre6.js:22583`.
 [^suggest]: The schema text of `2.1.319` says "Anthropic's own plugins" where `2.1.316` named only the `frontend-design` tip. Probe cases `print.cli319.plugin-sugg.user` and `print.cli319.plugin-sugg.bad-type`. A managed tier on macOS needs root, so no run shows the tip.
-[^strict]: The program, `chunk-ja5z738t.js:256002`.
-[^managed-lists]: The program, `chunk-m14bt1pz.js:204382-204400`, `chunk-m14bt1pz.js:204485`, and `chunk-m14bt1pz.js:63403-63405`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^strict]: The program, `chunk-jkpzhr7r.js:256226`.
+[^managed-lists]: The program, `chunk-56bhcxay.js:209674-209692`, `chunk-56bhcxay.js:209777`, and `chunk-56bhcxay.js:65778-65780`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

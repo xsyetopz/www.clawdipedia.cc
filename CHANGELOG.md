@@ -5,11 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-The site documents Claude Code `2.1.327`, the only release it tracks. The version of the site itself is set in `package.json`, and the tracked Claude Code version is set in `src/version.ts`.
+The site documents Claude Code `2.1.328`, the only release it tracks. The version of the site itself is set in `package.json`, and the tracked Claude Code version is set in `src/version.ts`.
 
 ## [Unreleased]
 
 ### Added
+
+- `cc-inspect` 0.18.6: `moveCitations` moves a `:A-B` citation only when both ends find their code and the start stays before the end. A range whose ends land out of order keeps its numbers and moves only its chunk name, so `check:citations` reports it.
+- `bun tools/surface/coverage.ts --fix` drops each map and exclusion entry whose item the program no longer has, and carries an entry to the unmapped item that rewords it (`tools/surface/carry.ts`).
+- `bun tools/check/docs.ts --fix` writes the actual counts to `docs/reference/undocumented.md` (`fixCounts` in `tools/undocumented-counts.ts`).
+- `release:facts -- --remap` gives a fact that cites only the Mod API type file (`schemas/claude-code.d.ts`) a `schema` entry.
 
 - A manual fixture can hold an `unsent` map: the types of fields that the program builds but never writes or sends, which the schema leaves out. `claude-code-otel.json` types the attributes of the four spans that `2.1.327` never starts (`bash.subprocess`, `compaction`, `mcp.rpc`, `subagent.spawn`: their creators return first through `function XXe(){return!1}`, chunk-epqcnh2q.js:8867). Each span has 8 base attributes from `Mt()` (chunk-epqcnh2q.js:9452), `gen_ai.provider.name` from `Wt()` (chunk-epqcnh2q.js:9054), and its own attributes read from its creation site, such as `shell.type` (`bash` or `powershell`) and `trigger` (`auto` or `manual`): 55 entries. `claude-code-transcript.json` types the 23 `progress.data` fields of the REPL tool's `repl_tool_call` progress lines and `system.plugin` and `system.id` of the `placed` system line, which the transcript writer drops. The audit marks a gone field `removed` only when its `unsent` entry has live anchors; otherwise it fails with `no entry` or `anchor gone`. `bun run schemas` reports an `unsent` entry as stale when its anchor is gone or the schema has its path again.
 
@@ -55,6 +60,8 @@ The site documents Claude Code `2.1.327`, the only release it tracks. The versio
 - `cc-inspect` 0.7.0: `code` `run` takes `env`, extra environment variables for the run (it refuses the names it sets itself, and names or values that could carry a credential or send a request past the fake API, such as a proxy, a base URL, or `NODE_OPTIONS`). A run that times out now reports the stream-json events and the stderr from before the hang.
 
 ### Changed
+
+- Updated to Claude Code `2.1.328`. The sources are the `2.1.328` release notes and a comparison of the programs and Mod API type files. What Changed holds only `2.1.328` compared with `2.1.327`. The comparison finds 9 new environment variables, 3 gone, and 4 changed; 4 new flags; 1 new setting and 2 changed; 1 new tool and 2 changed; 1 new beta (`resumption-2026-10-08`); 3 new endpoints and 5 gone; and 3 new Mod API members. New pages and rows include auto mode for Opus 4.6 and Sonnet 4.6 on other providers, `onFailure: "block"` on `mcp_tool` hooks, `remoteMessageReceipts`, `/list-agents`, the self-hosted runner flags `--metadata`, `--hold-repository-while-parked`, `--repository-folder`, `--hook-label`, and `--use-anthropic-gh`, the orchestrator metrics, `CLAUDE_CODE_DISABLE_DEFERRED_TOOL_RESUME`, the system prompt rules for pasted content, user privacy, and `curl`, and the Mod API tier rules of `$.command.run`, `$.prompt.submit`, `$.session.compact`, and `next.origin`. Each program citation names a `2.1.328` chunk and its place. `clawdipedia-docs` and `clawdipedia-docs-cli` go to 3.0.8, and `cc-inspect` goes to 0.18.6.
 
 - Each program citation in `docs/` names its chunk with its place, as in `chunk-m14bt1pz.js:2777505`, and not only `@N` or `:N`. `check:citations` now reports a place in backticks with no chunk on a line that names the program.
 - The OpenTelemetry page states when `hook_plugin_metrics` and `retention_sweep` are sent. `hook_plugin_metrics` comes only from a plugin of an official Anthropic marketplace, and only for an async hook answer that fails the output schema. `retention_sweep` runs 5 seconds after the start in print mode.

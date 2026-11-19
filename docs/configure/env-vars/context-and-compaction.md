@@ -91,8 +91,8 @@ Claude Code counts the tokens in the conversation. When the count passes a limit
 
 ## Sources
 
-[^names]: The program, `chunk-2ew0jg68.js:26216`, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^trinket]: The program, `chunk-m14bt1pz.js:2603450`. Probe case `env319b.curried-trinket.set` (a stub answers the second model request with the 400 "prompt is too long"): the third request, the compact request, held the text. Probe cases `unset` and `no-summary-tag` held none.
-[^max-context]: The program, `chunk-asj6f58y.js:28884` and `chunk-asj6f58y.js:29008`.
-[^memory-push]: The program, `chunk-qpav394c.js:144460` (the mode), `chunk-qpav394c.js:145978` (the `recorded` check), and `chunk-qpav394c.js:146235` (the id and hash match).
+[^names]: The program, `chunk-7343wm3k.js:26213`, variable names found in the `2.1.314` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^trinket]: The program, `chunk-56bhcxay.js:2681484`. Probe case `env319b.curried-trinket.set` (a stub answers the second model request with the 400 "prompt is too long"): the third request, the compact request, held the text. Probe cases `unset` and `no-summary-tag` held none.
+[^max-context]: The program, `chunk-xethrx83.js:27200` and `chunk-xethrx83.js:27330`.
+[^memory-push]: The program, `chunk-4h0jyvmx.js:114945` (the mode), `chunk-4h0jyvmx.js:116463` (the `recorded` check), and `chunk-4h0jyvmx.js:116720` (the id and hash match).
 [^juniper]: [Probes](../../reference/probes.md).

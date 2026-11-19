@@ -175,6 +175,18 @@ What `$.session.info()` answers. Since `2.1.326`, it holds what a settings hook'
 | `platform` | <Documented /> | The operating system that the engine runs on. | Type: `'macos' \| 'windows' \| 'wsl' \| 'linux' \| 'unknown'`. Optional. `wsl` is Linux under Windows. The engine always gives it. A hook that answers whole may leave it out. |
 | `isHosted` | <Documented /> | Whether the engine runs on the hosted server. That machine is not the session's own, so `platform` is the server's. | Type: `boolean`. Optional. False anywhere else, a cloud session with a machine of its own included. The engine always gives it. A hook that answers whole may leave it out. |
 
+### `SessionMachine`
+
+Since `2.1.328`, what `$.session.machine()` answers: the machine as `uname` names it, and the developer tools on its `PATH`. Used by `$.session.machine`.[^session-machine]
+
+| Field | Status | What it is for | Type and limits |
+| --- | --- | --- | --- |
+| `sysname` | <Documented /> | The system name as `uname -s` prints it. | Type: `string`. `Linux` or `Darwin`. `Windows_NT` on Windows. |
+| `release` | <Documented /> | The kernel release as `uname -r` prints it. | Type: `string`. On Windows it is the NT version. |
+| `machine` | <Documented /> | The hardware name in the words of `uname -m`. | Type: `string`. `x86_64`, and `arm64` or `aarch64` for 64-bit ARM. Either may stand for the other. |
+| `packageManagers` | <Documented /> | Of `npm`, `yarn`, and `pnpm`, those found on the `PATH`, in that order. | Type: `string[]`. Empty on the server, where tools run in another container. |
+| `runtimes` | <Documented /> | Of `bun`, `deno`, and `node`, those found on the `PATH`, in that order. | Type: `string[]`. Empty on the server, where tools run in another container. |
+
 ### `SessionMeasureInput`
 
 The input of `session.measure`. It holds what `$.session.usage()` answers at this moment, and which of its units moved since the last measurement that a hook saw. The figures are the same as in the call, without `context.breakdown`. A hook can only observe. Used by `session.measure`, `$.session.measure`.
@@ -257,5 +269,6 @@ A `$.session.messages({ as: "api" })` call that names no agent. It reads the mai
 
 ## Sources
 
-[^resume-loader]: The program, `chunk-m14bt1pz.js:519880`.
-[^session-info]: `schemas/claude-code.d.ts`, `SessionInfo`. The program, `chunk-m14bt1pz.js:58066`.
+[^resume-loader]: The program, `chunk-56bhcxay.js:554201`.
+[^session-info]: `schemas/claude-code.d.ts`, `SessionInfo`. The program, `chunk-56bhcxay.js:60284`.
+[^session-machine]: `schemas/claude-code.d.ts`, `SessionMachine`. The program, `chunk-56bhcxay.js:60377-60390`.

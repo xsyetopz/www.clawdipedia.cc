@@ -128,7 +128,7 @@ The exact fields are in `https://clawdipedia.cc/schemas/claude-code-mcp.json`, w
 
 ## Sources
 
-[^server-options]: The program server schema, `chunk-ja5z738t.js:37677` and `chunk-hzvpv59r.js:19994`, for the rows marked <Undocumented />.
+[^server-options]: The program server schema, `chunk-jkpzhr7r.js:36780` and `chunk-t1zfnvbv.js:19994`, for the rows marked <Undocumented />.
 [^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^validator]: The program, `chunk-ja5z738t.js:37561`.
-[^always-load]: The program, `chunk-ngdgttt1.js:236` for the skipped deferral, `chunk-deh86sae.js:423-461` for the blocking connect of these servers, `chunk-2xzaq8ke.js:354` for the 5 s default (`MCP_CONNECT_TIMEOUT_MS` changes it), and `chunk-sqn39hq2.js:10442-10446` and `chunk-sqn39hq2.js:10762-10763` for `false`.
+[^validator]: The program, `chunk-jkpzhr7r.js:35893`.
+[^always-load]: The program, `chunk-pg7hxy0j.js:240` for the skipped deferral, `chunk-en05w5ap.js:424-462` for the blocking connect of these servers, `chunk-6zfgjjkg.js:412` for the 5 s default (`MCP_CONNECT_TIMEOUT_MS` changes it), and `chunk-mt0sg9yk.js:10987-10991` and `chunk-mt0sg9yk.js:11308-11309` for `false`.

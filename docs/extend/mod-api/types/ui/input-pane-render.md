@@ -265,10 +265,10 @@ The size that a surface draws into, in character cells of the monospace metric o
 
 ## Sources
 
-[^notify-read]: The program, checks `chunk-m14bt1pz.js:4847412` (`kri`), call `chunk-b0yr0k8v.js:314567`, and the `ui_notify` message `chunk-rj3e7agr.js:566707`.
-[^dock]: The program, `chunk-cfxefa64.js:550203`. [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
-[^placement]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-rj3e7agr.js:571341`.
-[^progress-props]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-b0yr0k8v.js:22132`.
-[^progress-node]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-rj3e7agr.js:887858`.
-[^shader-props]: The program, the Mod API type file loaded at `chunk-gf0qnxzg.js:257`, published as `schemas/claude-code.d.ts`, `ShaderProps`.
-[^render-plugin]: The Mod API type file, `schemas/claude-code.d.ts`, `RenderInputOf`. The `2.1.323` type file is the first with `plugin?: string` in `RenderInputOf`; the `2.1.322` type file has no such member. The program, `chunk-b0yr0k8v.js:175506`.
+[^notify-read]: The program, checks `chunk-56bhcxay.js:4954411` (`kri`), call `chunk-syremzmn.js:316642`, and the `ui_notify` message `chunk-20bv8pca.js:568257`.
+[^dock]: The program, `chunk-j2wfp6sf.js:553915`. [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
+[^placement]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-20bv8pca.js:572891`.
+[^progress-props]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-syremzmn.js:22137`.
+[^progress-node]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-20bv8pca.js:891741`.
+[^shader-props]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `ShaderProps`.
+[^render-plugin]: The Mod API type file, `schemas/claude-code.d.ts`, `RenderInputOf`. The `2.1.323` type file is the first with `plugin?: string` in `RenderInputOf`; the `2.1.322` type file has no such member. The program, `chunk-syremzmn.js:176620`.
