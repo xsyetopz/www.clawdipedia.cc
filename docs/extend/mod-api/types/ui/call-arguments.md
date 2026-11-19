@@ -12,7 +12,7 @@ Each type below has its own table of fields.
 
 ### `UiInputArgument`
 
-The argument of `ui.input`: a change of, or a submit from, an `Input` that a render hook drew. It is flat and frozen like every event argument. A hook that names no `plugin` hears the fields of its own plugin only. Another plugin addresses one field by matcher, and `{ plugin: "*" }` addresses the fields of every plugin: `on("ui.input", { plugin: "roster", element: "reply" }, ...)`. Since `2.1.323`.[^ui-input] Used by `ui.input`.
+The argument of `ui.input`: a change of, or a submit from, an `Input` that a render hook drew. It is flat and frozen like every event argument. A hook that names no `plugin` hears the fields of its own plugin only. Another plugin addresses one field by matcher, and `{ plugin: "*" }` addresses the fields of every plugin: `on("ui.input", { plugin: "roster", element: "reply" }, ...)`.[^ui-input] Used by `ui.input`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -85,7 +85,7 @@ What `$.ui.open` resolves to, and what the `{ value }` of a `ui.open` hook holds
 
 ### `UiPane`
 
-One of the open panes of this plugin as `$.ui.panes()` lists it. It has the ID and title of the pane, and where it stands with the person right now. Where the surface seated the pane (`dock`, `inline`, or `widget`) is on the `Pane` render props (`placement`). Since `2.1.323` the type file names `widget` here.[^ui-pane] Used by `$.ui.panes`, `ui.panes`.
+One of the open panes of this plugin as `$.ui.panes()` lists it. It has the ID and title of the pane, and where it stands with the person right now. Where the surface seated the pane (`dock`, `inline`, or `widget`) is on the `Pane` render props (`placement`). The type file names `widget` here.[^ui-pane] Used by `$.ui.panes`, `ui.panes`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -101,7 +101,7 @@ The argument of `$.ui.place`. A `ui.render` hook reads the `id` as `e.props.id`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `id` | <Undocumented /> | Names the row among this plugin's rows. | Type: `string`. 1 to 64 letters, digits, `_`, and `-`, as the ID of a pane. New in `2.1.314`. |
+| `id` | <Undocumented /> | Names the row among this plugin's rows. | Type: `string`. 1 to 64 letters, digits, `_`, and `-`, as the ID of a pane. |
 
 ### `UiPlaceResult`
 
@@ -109,15 +109,15 @@ What `$.ui.place` resolves to, and what the `{ value }` of a `ui.place` hook hol
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `isPlaced` | <Undocumented /> | True: a surface is attached to draw the row. | Type: `true`. New in `2.1.314`. |
-| `requestId` | <Undocumented /> | The `e.requestId` of the row at `ui.render`. `$.ui.scroll` takes it. | Type: `string`. New in `2.1.314`. |
-| `isPlaced` | <Undocumented /> | False: nothing draws the row now. | Type: `false`. New in `2.1.314`. |
-| `requestId` | <Undocumented /> | The ID of the row when it stands for a surface that is not attached yet. | Type: `string`. Optional. New in `2.1.314`. |
-| `reason` | <Undocumented /> | Why nothing draws it, in one line to show or log. | Type: `string`. New in `2.1.314`. |
+| `isPlaced` | <Undocumented /> | True: a surface is attached to draw the row. | Type: `true`. |
+| `requestId` | <Undocumented /> | The `e.requestId` of the row at `ui.render`. `$.ui.scroll` takes it. | Type: `string`. |
+| `isPlaced` | <Undocumented /> | False: nothing draws the row now. | Type: `false`. |
+| `requestId` | <Undocumented /> | The ID of the row when it stands for a surface that is not attached yet. | Type: `string`. Optional. |
+| `reason` | <Undocumented /> | Why nothing draws it, in one line to show or log. | Type: `string`. |
 
 ### `UiPointerInput`
 
-The input of `ui.pointer`. Since `2.1.326`, it tells what the pointer did on the backdrop, and where. Every key is pinned. Used by `ui.pointer`.[^ui-pointer]
+The input of `ui.pointer`. It tells what the pointer did on the backdrop, and where. Every key is pinned. Used by `ui.pointer`.[^ui-pointer]
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -131,11 +131,11 @@ The input of `ui.pointer`. Since `2.1.326`, it tells what the pointer did on the
 
 ### `UiPointerResult`
 
-What a `ui.pointer` hook returns, and what `next(e)` resolves to: `{}`. A hook only observes the pointer. Since `2.1.326`.
+What a `ui.pointer` hook returns, and what `next(e)` resolves to: `{}`. A hook only observes the pointer.
 
 ### `UiPressArgument`
 
-The argument of `ui.press`: a press on a `Button` that a render hook drew, or on an answered `Markdown` link. It is flat and frozen like every event argument. A hook that names no `plugin` hears the presses of its own plugin only. Another plugin addresses one button by matcher, and `{ plugin: "*" }` addresses the buttons of every plugin: `on("ui.press", { plugin: "explainer", element: "explain" }, ...)`. Since `2.1.323`.[^ui-press] Used by `ui.press`.
+The argument of `ui.press`: a press on a `Button` that a render hook drew, or on an answered `Markdown` link. It is flat and frozen like every event argument. A hook that names no `plugin` hears the presses of its own plugin only. Another plugin addresses one button by matcher, and `{ plugin: "*" }` addresses the buttons of every plugin: `on("ui.press", { plugin: "explainer", element: "explain" }, ...)`.[^ui-press] Used by `ui.press`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -217,7 +217,7 @@ What `$.ui.scroll` brings into view: never a row number, always a thing drawn so
 
 ### `UiSelectArgument`
 
-The argument of `ui.select`: a pick from a `Select` that a render hook drew. It is flat and frozen like every event argument. A hook that names no `plugin` hears the pickers of its own plugin only. Another plugin addresses one picker by matcher, and `{ plugin: "*" }` addresses the pickers of every plugin: `on("ui.select", { plugin: "roster", element: "peer" }, ...)`. Since `2.1.323`.[^ui-select] Used by `ui.select`.
+The argument of `ui.select`: a pick from a `Select` that a render hook drew. It is flat and frozen like every event argument. A hook that names no `plugin` hears the pickers of its own plugin only. Another plugin addresses one picker by matcher, and `{ plugin: "*" }` addresses the pickers of every plugin: `on("ui.select", { plugin: "roster", element: "peer" }, ...)`.[^ui-select] Used by `ui.select`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -281,11 +281,11 @@ The background task that a `UserMessage` notification row reports on: a subagent
 
 ## Sources
 
-[^ui-input]: `schemas/claude-code.d.ts`, `UiInputArgument`. The program, the default matcher keys `plugin` and `component` and the `"*"` wildcard, `chunk-syremzmn.js:176620`. The type file of `2.1.322` has no `plugin` default; the one of `2.1.323` does.
+[^ui-input]: `schemas/claude-code.d.ts`, `UiInputArgument`. The program, the default matcher keys `plugin` and `component` and the `"*"` wildcard, `chunk-syremzmn.js:176758`.
 [^notify]: `schemas/claude-code.d.ts`, `NotifyOptions` and `CancelNotifyArgs`.
-[^ui-open]: `schemas/claude-code.d.ts`, `UiOpenResult`. The `2.1.323` comment names `placement` where `2.1.322` named `dock` and `inline`.
+[^ui-open]: `schemas/claude-code.d.ts`, `UiOpenResult`.
 [^ui-pane]: `schemas/claude-code.d.ts`, `UiPane`.
-[^ui-press]: `schemas/claude-code.d.ts`, `UiPressArgument`. The program, the default matcher keys `plugin` and `component` and the `"*"` wildcard, `chunk-syremzmn.js:176620`. The type file of `2.1.322` has no `plugin` default; the one of `2.1.323` does.
+[^ui-press]: `schemas/claude-code.d.ts`, `UiPressArgument`. The program, the default matcher keys `plugin` and `component` and the `"*"` wildcard, `chunk-syremzmn.js:176758`.
 [^scroll]: `schemas/claude-code.d.ts`, `UiScrollArgs`.
-[^ui-select]: `schemas/claude-code.d.ts`, `UiSelectArgument`. The program, the default matcher keys `plugin` and `component` and the `"*"` wildcard, `chunk-syremzmn.js:176620`. The type file of `2.1.322` has no `plugin` default; the one of `2.1.323` does.
-[^ui-pointer]: `schemas/claude-code.d.ts`, `UiPointerInput`. The program, `chunk-ae9zb02s.js:10443`.
+[^ui-select]: `schemas/claude-code.d.ts`, `UiSelectArgument`. The program, the default matcher keys `plugin` and `component` and the `"*"` wildcard, `chunk-syremzmn.js:176758`.
+[^ui-pointer]: `schemas/claude-code.d.ts`, `UiPointerInput`. The program, `chunk-syremzmn.js:209766`.

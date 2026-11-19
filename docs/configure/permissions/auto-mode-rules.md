@@ -22,7 +22,7 @@ In the JSON, some labels end in `[named+specifics ...]`. For those rules, your r
 
 The rule summaries below are short. See [Configure Auto Mode](https://code.claude.com/docs/en/auto-mode-config) for the official page. Rules marked <Undocumented /> come from `claude auto-mode defaults`.
 
-A run of `claude auto-mode defaults` on `2.1.316` printed 16 `allow` entries, 72 `soft_deny` entries, 1 `hard_deny` entry, and 21 `environment` entries. The `Scheduled-Task Fires` rule is not in that output. Claude Code reads it from its own template and keeps it when an `allow` list replaces the defaults.[^scheduled]
+Claude Code reads the `Scheduled-Task Fires` rule from its own template and keeps it when an `allow` list replaces the defaults.[^scheduled]
 
 ## Allow Rules
 

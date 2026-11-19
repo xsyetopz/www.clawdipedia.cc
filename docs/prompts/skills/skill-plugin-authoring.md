@@ -6,21 +6,21 @@ generated: false
 group: skills
 ---
 
-This is the verbatim text that Claude Code 2.1.311 uses for the built-in `/plugin-authoring` skill.
+This is the verbatim text that Claude Code 2.1.328 uses for the built-in `/plugin-authoring` skill.
 
 ## Where It Comes From
 
-Bundled skill. Captured from the program with `PROBE-ARG`, the argument the test used in place of your input.
+Bundled skill. The program stores the text in the module `SKILL-de696a17.md.zst`. The `PROBE-ARG` below stands for the argument in place of your input.
 
 ## How to Override It
 
-Create `.claude/skills/plugin-authoring/SKILL.md` with the same name. The program then uses your file in place of this text, and it adds a `Base directory` line above the skill text. The same-name rule was tested with `/simplify` only. See [Override a Prompt](../other/override.md).
+Create `.claude/skills/plugin-authoring/SKILL.md` with the same name. The program lists skill files from the skill folders before bundled skills and uses the first command with a matching name, so your file replaces this text (The program, `chunk-56bhcxay.js:2630374`, `chunk-458m0skd.js:2592`). It adds a `Base directory for this skill:` line above your skill text (The program, `chunk-56bhcxay.js:3885828`). See [Override a Prompt](../other/override.md).
 
 ## Full Text
 
-In 2.1.307 the paragraph about dim transcript lines says that a `ui.render` hook whose tree does not validate is skipped alone, in place of saying that the engine drew its own tree.
-
 Temp folder paths were replaced with `<temp-dir>` or `<bundled-skill-dir>`, and emoji not on the site's allow-list are shown in brackets. `PROBE-ARG` is the test's argument.
+
+The program fills `${CLAUDE_DEV_MODS_DIR}` and `${CLAUDE_SKILL_DIR}` when it loads the skill. The text of the paragraph that starts `THIS SESSION` is the one for a `-p` session, from `chunk-z4411sqa.js:6829`.
 
 ````text
 <command-message>plugin-authoring</command-message>
@@ -39,9 +39,9 @@ A mod that keeps values in `$.state` has a fourth file, `types/index.d.ts`: its 
 
 WHERE THE TYPES ARE. The engine writes them; there is no command to run. Before the mod has loaded: `<bundled-skill-dir>/plugin-authoring/types/claude-code.d.ts`, this build's API and built-in tools, written as this skill loaded (this process's own folder: after a restart the next load of this skill writes and names a new one). Once the engine has loaded the mod (from this mods folder, or a `--plugin-dir` folder it hot-reloads), `<mod folder>/.claude-plugin/types/` holds the same for the editor: `claude-code/index.d.ts`, the API; `claude-code-tools/index.d.ts`, so `e.tool === "Bash"` narrows `e`; `claude-code-mcp/index.d.ts`, the MCP tools connected when the mod last reloaded; each `dependencies` plugin's contract; and a `tsconfig.json` the mod's own extends, so `tsc -p <mod folder>` type-checks it. The API file carries every event's input and result, every noun and method on `$` with its doc comment and an example, and every element's props, in about 14,000 lines: grep it for the name at hand (`'tool.call'`, `Pane: {`, `export type ToolCallResult`).
 
-WHAT HAPPENS WHEN THE TURN ENDS. Loading this skill through the Skill tool or its slash command starts the engine's watch on the folder that holds the mod folders. The first file written under it makes the engine ask the person, once, right then, while the turn goes on: "Turn on the mods Claude writes in this session?", with `How does this work?` first, then `Turn them on` and `Not now`. That question is the switch, and the person alone answers it: no permission mode, rule or hook does. On `Turn them on` the folder joins the session's plugin folders and the mod loads when the turn ends, whole, and each later edit reloads it when the turn that made the edit ends. The question stays up until answered. The answer reaches you as a notice at your next turn, which the engine may start for an enabling: enabled, with what the load came to; declined (the mods are written and load the next time this session starts; the person can ask for the question again); still open (dismissed or closed; asked again); or off, with the reason (nobody could be asked, as under `claude -p`; the question got no pick three times; an organization's policy; an untrusted workspace). A process that restarted loads an enabled folder again by itself; otherwise its watch starts the next time this skill loads, and a manifest already in the folder raises the question when that turn ends.
+WHAT HAPPENS WHEN THE TURN ENDS. Loading this skill through the Skill tool or its slash command starts the engine's watch on the folder that holds the mod folders. In auto while its classifier runs, and in bypass, the first file written under it turns the mods on with nobody asked, unless the person declined earlier. dontAsk neither asks nor loads. In any other mode, that write makes the engine ask the person, once, right then: "Turn on the mods Claude writes in this session?", with `How does this work?` first, then `Turn them on` and `Not now`; no rule or hook answers it. Once on, the folder joins the session's plugin folders and the mod loads when the turn ends, whole, and each later edit reloads it when the turn that made the edit ends. The answer reaches you as a notice at your next turn, which the engine may start for an enabling: enabled, with what the load came to; declined (the mods are written and load the next time this session starts); still open (dismissed or closed; asked again); or off, with the reason (nobody could be asked, as under `claude -p` in those other modes; the question got no pick three times; an organization's policy; an untrusted workspace). A restart loads a folder the person enabled by itself; otherwise its watch starts the next time this skill loads, and a manifest already in the folder counts as that first write when that turn ends.
 
-A reload runs `register` and `session.start` again. `$.state` (the session's) and `$.store` (across sessions) stay; the module's own variables start over.
+A reload runs `register` and `session.start` again. `$.state` (the session's) and `$.store` (across sessions) stay; the module's own variables start over. New code meets old values: `shape`, in `reference.md`.
 
 THIS SESSION draws in no terminal of its own: a program started it, and a pane is seated by a surface it attaches, if any. Where hot reloading is off as nobody could be asked, the mod loads in a session started with `--plugin-dir <mod folder>`, or one with the folder named in `CLAUDE_CODE_PLUGIN_DIRS`.
 
@@ -58,8 +58,11 @@ Each example, in `<bundled-skill-dir>/plugin-authoring/examples/`, is one comple
 | The person asks for | What it is | Shown in |
 | --- | --- | --- |
 | a pane, panel, sidebar, live view | `$.ui.open({ id, title })`, drawn by a `ui.render` hook on `{ component: 'Pane', requestId: id }`; it resolves `{ isPlaced }`, whether a surface draws it now | `pane.tsx`, its contract `pane-state.d.ts` |
-| a band or row above the prompt | a `ui.render` hook on `{ component: 'AbovePrompt' }` returning a tree, or `next(e)` with nothing to show | `band.tsx`, its contract `band-state.d.ts` |
+| a band or row above the prompt | a `ui.render` hook on `{ component: 'AbovePrompt' }` returning its row, or `next(e)` for none; `AbovePromptList` hides or orders rows | `band.tsx`, its contract `band-state.d.ts` |
+| something on or under a tool call's row | a `ui.render` hook on `{ component: 'ToolUse' }` with `await next(e)` in its tree to keep the row. Mobile apps draw it as one quiet line, or as a card under the row when `borderStyle` or `backgroundColor` is on the Box that holds the row and your content. Use a card for what a person should see without a tap, such as a chart, a list or a report | its doc in the types |
+| a row in the desktop app's right-click menu | a `ui.render` hook on `{ component: 'ContextMenu' }` returning a `Button` or `Link` for each row, or `next(e)` for none; `e.props` says what was clicked | `menu.tsx`, its test `menu.test.tsx` |
 | a status line entry | `$.ui.status(text)` from any hook; `undefined` clears it | `tool-call.ts` |
+| a theme or a look | `$.theme.set({ colors, backdrop })` at `session.start`: read `<bundled-skill-dir>/plugin-authoring/look.md` first | `look.ts` |
 | a toast | `$.ui.toast(text)` from any hook | `band.tsx` |
 | block, rewrite or react to a tool call | `on('tool.call', { tool }, hook)`: return `{ deny }`, call `next({ ...e, ... })`, or `await next(e)` and act on the result | `tool-call.ts` |
 | change or react to a prompt | `on('prompt.submit', hook)`: `next({ ...e, text })` | `band.tsx` |
@@ -71,9 +74,9 @@ Each example, in `<bundled-skill-dir>/plugin-authoring/examples/`, is one comple
 
 ## Checking it and reading what the engine refused
 
-`claude plugin validate <mod folder>` reads the manifest and the module's source the way the engine will, and reports what the module hooks and calls and all the engine would refuse. Type-check the mod: with its types laid, `tsc -p <mod folder>`; else (the first write, `claude -p`, an SDK host), with the `tsconfig.json` from the types file's header, kept outside the mod folder, its `include` naming that file and the mod's `hooks`. Test what was asked in a `*.test.ts` like the example `pane.test.tsx`: run `claude plugin test <mod folder>`. A finished mod is at its full path, loaded or not by the hot-reloading answer: enabled, it is loaded when the turn ends, with nothing to run; any other answer, it is not loaded.
+`claude plugin validate <mod folder>` reads the manifest and module's source as the engine will and reports what the module hooks, calls, adds to or withholds from `$`, and all the engine would refuse. Type-check the mod: with its types laid, `tsc -p <mod folder>`; else (the first write, `claude -p`, an SDK host), with the `tsconfig.json` from the types file's header, kept outside the mod folder, its `include` naming that file and the mod's `hooks`. Test what was asked in a `*.test.ts` like the example `pane.test.tsx`, seeding what an earlier version stored: run `claude plugin test <mod folder>`. A finished mod is at its full path, loaded or not by the hot-reloading answer: enabled, it is loaded when the turn ends, with nothing to run; any other answer, it is not loaded.
 
-While the session hot-reloads a plugin folder the transcript carries one dim line naming the plugin, the event and the reason when a hook fails or a module does not load, and a hook whose tree does not validate is such a hook, skipped alone: `<plugin>: ui.render hook skipped: returned the wrong shape (a tree <Component> refuses: <reason>)`. In any other session those lines go to the debug log alone, as `<plugin>: <line>`. The debug log (`claude --debug`) carries a line for every occurrence and every result the engine refused.
+While the session hot-reloads a plugin folder the transcript carries one dim line naming the plugin, the event and the reason when a hook fails or a module does not load, and a hook whose tree does not validate is such a hook, skipped alone: `<plugin>: ui.render hook skipped: returned the wrong shape (a tree <Component> refuses: <reason>)`. A failed hook of a mod you wrote comes back to you as a notice at your next turn. In any other session those lines go to the debug log alone, as `<plugin>: <line>`. The debug log (`claude --debug`) carries a line for every occurrence and every result the engine refused.
 
 `<bundled-skill-dir>/plugin-authoring/reference.md` is the long form: the full event list, streaming events, `ui.render` in depth, `$.state` contracts, `--plugin-dir` and `CLAUDE_CODE_PLUGIN_DIRS` while developing, `userConfig` options, what a test holds, and Sharing a mod, the GitHub road, done when the person asks, or says yes where this skill offers it: `.claude-plugin/marketplace.json` in its repository and, in the README, `/plugin install <mod> --marketplace <owner>/<repo>`.
 

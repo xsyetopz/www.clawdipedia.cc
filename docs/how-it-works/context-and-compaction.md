@@ -36,7 +36,7 @@ Official pages: [How Claude Code Works: The Context Window](https://code.claude.
 | `CLAUDE.md`, rules, and auto memory | <Documented /> | The first 200 lines or 25 KB of `MEMORY.md` load. |
 | Skill descriptions | <Documented /> | The body of a skill loads only when the skill runs. |
 | Messages, tool results, and file reads | <Documented /> | This is the part that grows. |
-| Attachments that Claude Code adds | <Undocumented /> | A transcript of `2.1.305` from a stub run shows types such as `total_tokens_reminder`, `output_style`, `nested_memory`, and `skill_listing`. Transcripts of `2.1.305` from a real machine also showed `queued_command`, `edited_text_file`, `deferred_tools_record`, `mcp_instructions_delta`, `credential_org`, and `silent_turn_reminder`. |
+| Attachments that Claude Code adds | <Undocumented /> | The program has attachment types such as `total_tokens_reminder`, `output_style`, `nested_memory`, `skill_listing`, `queued_command`, `edited_text_file`, `deferred_tools_record`, `mcp_instructions_delta`, `credential_org`, and `silent_turn_reminder`.[^attachments] |
 
 The mod event `prompt.attachment` can rewrite or drop one attachment.
 For measured token counts of an empty session and ways to shrink it, see [Context Budget](context-budget.md).
@@ -81,7 +81,7 @@ Claude Code finds the window in this order:
 
 The accepted window is from 100K to 1M tokens.
 
-Since `2.1.312`, the `autoCompactWindow` of a subagent also lowers a window that `CLAUDE_CODE_AUTO_COMPACT_WINDOW` sets. Before, the variable ended the search and the subagent value had no effect.
+The `autoCompactWindow` of a subagent also lowers a window that `CLAUDE_CODE_AUTO_COMPACT_WINDOW` sets.
 The subagent value is a ceiling. If the window found is larger than the ceiling, Claude Code uses the ceiling (limited by the model window). It never raises the window.[^subagent-window]
 See [Model Configuration: Context Window and Auto-Compaction](https://code.claude.com/docs/en/model-config#context-window-and-auto-compaction).
 
@@ -95,7 +95,7 @@ Official pages: [Model Configuration: Set the Auto-Compact Window](https://code.
 | `/autocompact <size\|auto>` | <Documented /> | Saves the window for the current model. |
 | `--autocompact <auto\|tokens>` | <Documented /> | Sets the window for one launch. |
 | `autoCompactWindow`, `autoCompactEnabled` | <Documented /> | Settings. `autoCompactWindow` also works in the frontmatter of a subagent. |
-| `CLAUDE_CODE_AUTO_COMPACT_WINDOW` | <Documented /> | Sets the window. It wins over the command, the flag, and the setting. Accepts `k` and `M` suffixes since `2.1.304`. |
+| `CLAUDE_CODE_AUTO_COMPACT_WINDOW` | <Documented /> | Sets the window. It wins over the command, the flag, and the setting. Accepts `k` and `M` suffixes.[^window-suffix] |
 | `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` | <Documented /> | Sets the percent of the effective window. |
 | `DISABLE_AUTO_COMPACT`, `DISABLE_COMPACT` | <Documented /> | Turn off automatic compaction, or all compaction. |
 | `CLAUDE_CODE_MAX_CONTEXT_TOKENS` | <Documented /> | Sets the window for a model ID that Claude Code does not know. |
@@ -125,12 +125,12 @@ stateDiagram-v2
 | --- | --- | --- |
 | Automatic | <Documented /> | It starts at the compact threshold. The hooks `PreCompact` and `PostCompact` get `trigger: auto`. |
 | Manual | <Documented /> | It starts with `/compact`. The trigger is `manual`. |
-| Reactive | <Undocumented /> | The API refuses a request as too long, and Claude Code compacts and tries again. Since `2.1.311`, this also covers a standard-window session that goes over 200K tokens and gets "Usage credits required for 1M context".[^reactive] It compacts and continues. |
+| Reactive | <Undocumented /> | The API refuses a request as too long, and Claude Code compacts and tries again. This also covers a standard-window session that goes over 200K tokens and gets "Usage credits required for 1M context".[^reactive] It compacts and continues. |
 | Precomputed | <Undocumented /> | A summary made ahead of time replaces the conversation. |
 | Larger-model retry | <Undocumented /> | Claude Code can try the compaction first on a model with a larger window. If that fails, the normal compaction runs. |
 | Server side | <Undocumented /> | The beta `context-management-2025-06-27` lets the API edit the context. |
 
-Since `2.1.311`, when the model's reply to a compaction request has no `<summary>` block, Claude Code usually asks once more for the summary before it replaces the conversation.[^second-ask]
+When the model's reply to a compaction request has no `<summary>` block, Claude Code usually asks once more for the summary before it replaces the conversation.[^second-ask]
 The second request adds a short note that says the reply must hold the summary in `<summary>` tags.
 If the second reply has none either, the compaction fails with `Failed to generate conversation summary - the model's reply has no <summary> block`.[^summary-error]
 A gate decides whether the second ask runs, so "usually" is the right word.[^gate]
@@ -153,8 +153,6 @@ All rows are <Undocumented /> unless a note says otherwise.[^gates]
 | Larger-model retry | This runs before the normal compaction, not after it. The gate needs at least these: the compaction names no model yet, no earlier auto-compaction failed in a row, the model of the latest assistant reply has a larger window than the current model, and the context is at the blocked level. The attempt gets 1 API try. If it fails, the normal compaction runs next. |
 | Prompt-too-long retry | When the compaction request itself is too long, Claude Code drops the oldest message groups and sends it again. `compactionApiAttemptsLeft` caps the API attempts. At 0 the retry stops. |
 | Second ask | A reply with no `<summary>` block gets one more request. |
-| Compaction after a cut reply | Since `2.1.327`, a compaction right after a reply that the output token limit cut keeps that reply's tool call and its result.[^v327] |
-| Teammate on another model | Since `2.1.327`, an in-process agent teammate on a different model from the lead compacts at its own limit and with its own model, at that model's rate.[^v327] |
 
 ## Server-Side Clearing
 
@@ -185,7 +183,6 @@ This prompt is <Undocumented />.[^prompt]
 9. Optional Next Step
 
 The prompt has three forms. One is short ("in 2000 words or fewer"). One asks for an `<analysis>` first. One covers only the recent messages.
-The request uses the thinking setting of the session (since `2.1.198`).
 See the captured [compaction prompt](../prompts/context-and-memory/compact.md).
 
 ## What Survives
@@ -200,11 +197,11 @@ See [Explore the Context Window: What Survives Compaction](https://code.claude.c
 | Rules with `paths:` and nested `CLAUDE.md` files | <Documented /> | They load again when needed. |
 | Files that the session read or edited | <Documented /> | Claude Code reads up to five again, newest first. A file over 5,000 tokens comes back as a path. |
 | Skills that ran | <Documented /> | Each keeps 5,000 tokens, up to 25,000 in total. The oldest go first. |
-| Background commands and subagents | <Documented /> | They keep running. Since `2.1.327`, the reminder about a completed subagent ends with `(if you cannot read it and do not already have its result, ask agent <id> with SendMessage)` when Claude can message that agent.[^agent-reminder] |
+| Background commands and subagents | <Documented /> | They keep running. The reminder about a completed subagent ends with `(if you cannot read it and do not already have its result, ask agent <id> with SendMessage)` when Claude can message that agent.[^agent-reminder] |
 | `SessionStart` hooks with the `compact` matcher | <Documented /> | They run again. |
 
 :::note[Spinner after Compaction]
-In `2.1.316`, when automatic compaction runs in the middle of a turn, the spinner can show `Running SessionStart hooks…` until the turn ends. The turn keeps working. The spinner store sets that text on `hooks_start`, and only `compact_end` and the end-of-turn reset clear it. It has no case for the end of the hooks, so the `SessionStart` run after `compact_end` leaves the text up.[^spinner] A claudetto session saw it.
+When automatic compaction runs in the middle of a turn, the spinner can show `Running SessionStart hooks…` until the turn ends. The turn keeps working. The spinner store sets that text on `hooks_start`, and only `compact_end` and the end-of-turn reset clear it. It has no case for the end of the hooks, so the `SessionStart` run after `compact_end` leaves the text up.[^spinner]
 :::
 
 ## Errors
@@ -227,14 +224,15 @@ Each row is a family of messages. The backticked text is the start that every me
 
 [^levels]: The program, `chunk-56bhcxay.js:2068778`.
 [^subagent-window]: The program, `chunk-56bhcxay.js:2072009` (the ceiling branch: it keeps the window found when that is at most the ceiling, and otherwise uses the smaller of the model window and the ceiling, before the `CLAUDE_CODE_AUTO_COMPACT_WINDOW` branch is read) and `chunk-1k75prj1.js:111353` (the subagent value becomes the ceiling around the inner value).
-[^reactive]: The program, `chunk-2b3eg071.js:162574` (the reactive route) and `chunk-56bhcxay.js:2149849` (the "Usage credits are required for long context" test).
-[^second-ask]: The program, `chunk-56bhcxay.js:2684494`.
-[^summary-error]: The program, `chunk-56bhcxay.js:3017492`. The `2.1.311` text, `no <summary> block in the second reply either`, is not in `2.1.321`.
+[^reactive]: The program, `chunk-2b3eg071.js:162582` (the reactive route), `chunk-56bhcxay.js:2149803` (the "Usage credits are required for long context" test) and `chunk-56bhcxay.js:2124066` (the "Usage credits required for 1M context" message).
+[^second-ask]: The program, `chunk-56bhcxay.js:2684498`.
+[^summary-error]: The program, `chunk-56bhcxay.js:3017556`.
 [^gate]: The program, `chunk-0qfycjch.js:2874`, the server flag read at `chunk-56bhcxay.js:2684494`.
 [^gates]: The program, `chunk-56bhcxay.js:2075516-2682275`. The reactive route and the larger-model retry are at `chunk-56bhcxay.js:2682275`.
 [^check-timing]: The program, `chunk-2b3eg071.js:235415`.
 [^cleared]: The program, the server-side clearing code, `chunk-56bhcxay.js:2035582`.
 [^prompt]: The program, the compaction prompt, `chunk-56bhcxay.js:2656691`.
-[^v327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^spinner]: The program, `chunk-56bhcxay.js:6091541`.
-[^agent-reminder]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-56bhcxay.js:6039017`. A server flag, `tengu_shimmering_clock`, can turn the text off; it is on unless the flag is `false`. The `2.1.326` reminder says only `Read the output file to retrieve the result: <path>`.
+[^attachments]: The program, `chunk-56bhcxay.js:4169753`, `4127083`, `4129346`, `4155646`, `168761`, `4147098`, `4126462` and `4108538`, and `chunk-0fvmdxeb.js:60894` and `60683`.
+[^window-suffix]: The program, `chunk-56bhcxay.js:2066021`.
+[^spinner]: The program, `chunk-9520eh70.js:9255` (the spinner store), `chunk-56bhcxay.js:6091541` (the text), `chunk-56bhcxay.js:2707059` (`compact_end`) and `chunk-56bhcxay.js:2716976` (the `session_start` event after it).
+[^agent-reminder]: The program, `chunk-56bhcxay.js:6039017`. A server flag, `tengu_shimmering_clock`, can turn the text off; it is on unless the flag is `false`.

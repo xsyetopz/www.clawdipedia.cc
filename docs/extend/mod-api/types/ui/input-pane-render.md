@@ -4,7 +4,7 @@ description: "Types of Input, Link, Markdown, notify options, panes, Raster, and
 sidebar_position: 2
 ---
 
-These types describe the `Input`, `Link`, `Markdown`, `Progress`, `Raster`, and (since `2.1.326`) `Shader` elements, the options of `$.ui.notify`, the panes, and the inputs and results of `ui.render`. Use them to type the props that a mod draws with and to read what a render hook receives. Each type below has its own table of fields.
+These types describe the `Input`, `Link`, `Markdown`, `Progress`, `Raster`, and `Shader` elements, the options of `$.ui.notify`, the panes, and the inputs and results of `ui.render`. Use them to type the props that a mod draws with and to read what a render hook receives. Each type below has its own table of fields.
 
 ## Types with Fields
 
@@ -112,10 +112,10 @@ The argument of `$.ui.open`. It has which pane, its title, whether it asks for t
 | `focus` | <Documented /> | A request, not a grant. The surface focuses (and raises) the pane only while the prompt has the keys over an empty composer. | Type: `true`. Optional. An element of the band, a pane that the person holds, text in the composer, a dialog or a survey each refuse it. The pane opens without the keyboard. |
 | `closeOnEscape` | <Documented /> | While the pane holds the keyboard, the key that hands it back (Escape) also closes it, as the close of the person does: `ui.close`, origin `person`. | Type: `true`. Optional. Escape at an idle, empty prompt closes the pane. A hook may refuse the close. Each open sets it anew. |
 | `holdToasts` | <Documented /> | While the pane is the one displayed, the surface holds every transient toast. That includes the `$.ui.toast` of each other plugin, the engine's own toasts, and those of this plugin. | Type: `true`. Optional. Toasts wait while the pane is open. Use it for a dialog that the person answers and leaves. Each open sets it anew. |
-| `backgroundColor` | <Documented /> | What the surface paints under the pane's body while it is the one shown, as a Box takes it: a theme key, a raw color, or `"transparent"`. | Type: `Color`. Optional. `"transparent"` paints nothing, so what lies behind the pane shows through. A color stops at the body. Left out, the surface's own look stands. Anything else is refused. Each open sets it anew, and a `ui.open` hook may drop it. A request, not a grant: a surface with no counterpart for a theme key keeps its own look. Since `2.1.311`. |
+| `backgroundColor` | <Documented /> | What the surface paints under the pane's body while it is the one shown, as a Box takes it: a theme key, a raw color, or `"transparent"`. | Type: `Color`. Optional. `"transparent"` paints nothing, so what lies behind the pane shows through. A color stops at the body. Left out, the surface's own look stands. Anything else is refused. Each open sets it anew, and a `ui.open` hook may drop it. A request, not a grant: a surface with no counterpart for a theme key keeps its own look. |
 | `rows` | <Documented /> | The body rows that the content of the pane wants while seated inline above the prompt. It opens that tall, up to what the layout spares, not a third. | Type: `number`. Optional. A request, not a grant. A size that the person dragged wins. The dock ignores it. A positive whole number. |
-| `columns` | <Documented /> | The body columns the pane's content wants while docked beside a fullscreen transcript: the dock opens that wide, at most 45% of the terminal's columns and at least 24. Each open sets it anew. | Type: `number`. Optional. A request, not a grant. A width the person dragged or keyed wins, under the same ceiling. Since `2.1.305` the dock stays within 45% of the terminal's width, also for a requested or chosen width and a width kept from a wider terminal, with a floor of 24 columns. The cap is also at most the terminal's width minus 60 columns. The dock is hidden below 110 columns, so the floor and the cap never clash.[^dock] The inline block ignores it. A positive whole number. |
-| `placement` | <Documented /> | Asks that the pane start as a `"widget"`, the small form of a minimized pane on the desktop app. Drawn so, its `Pane` props say `placement: "widget"`. | Type: `'widget'`. Optional. A request: the surface decides, and the person can expand or minimize the pane afterwards. A surface with no widgets (the terminal, VS Code, a desktop app without them) opens the pane as if this were left out. Any other value is ignored. Each open sets it anew, but a surface is meant to read it only when it first shows the pane. A `ui.open` hook may set or drop it. Since `2.1.323`.[^placement] |
+| `columns` | <Documented /> | The body columns the pane's content wants while docked beside a fullscreen transcript: the dock opens that wide, at most 45% of the terminal's columns and at least 24. Each open sets it anew. | Type: `number`. Optional. A request, not a grant. A width the person dragged or keyed wins, under the same ceiling. The dock stays within 45% of the terminal's width, also for a requested or chosen width and a width kept from a wider terminal, with a floor of 24 columns. The cap is also at most the terminal's width minus 60 columns. The dock is hidden below 110 columns, so the floor and the cap never clash.[^dock] The inline block ignores it. A positive whole number. |
+| `placement` | <Documented /> | Asks that the pane start as a `"widget"`, the small form of a minimized pane on the desktop app. Drawn so, its `Pane` props say `placement: "widget"`. | Type: `'widget'`. Optional. A request: the surface decides, and the person can expand or minimize the pane afterwards. A surface with no widgets (the terminal, VS Code, a desktop app without them) opens the pane as if this were left out. Any other value is ignored. Each open sets it anew, but a surface is meant to read it only when it first shows the pane. A `ui.open` hook may set or drop it.[^placement] |
 
 ### `PressedLink`
 
@@ -127,7 +127,7 @@ The link that a press landed on. It is one that a `Markdown` drew, pressed where
 
 ### `ProgressProps`
 
-The props of `Progress`, how far along a task is. A leaf: no children. Use it for a task moving toward done. For a level that is not heading anywhere, such as usage against a limit, draw a bar of Boxes instead. The `ToolProgress` render site is unrelated. New in `2.1.323`.[^progress-props]
+The props of `Progress`, how far along a task is. A leaf: no children. Use it for a task moving toward done. For a level that is not heading anywhere, such as usage against a limit, draw a bar of Boxes instead. The `ToolProgress` render site is unrelated.[^progress-props]
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -139,7 +139,7 @@ The props of `Progress`, how far along a task is. A leaf: no children. Use it fo
 
 ### `ShaderProps`
 
-The props of `Shader`, a scene that the `desktop` surface plays on the GPU: the shader file that `module` names, fed `values`, over one `Svg` child. The `mobile` surface shows the `Svg` alone. It draws in a `Backdrop` alone, one at most. See [Shader Element](../../ui/ui-elements.md#shader-element) for the rules. Since `2.1.326`.[^shader-props]
+The props of `Shader`, a scene that the `desktop` surface plays on the GPU: the shader file that `module` names, fed `values`, over one `Svg` child. The `mobile` surface shows the `Svg` alone. It draws in a `Backdrop` alone, one at most. See [Shader Element](../../ui/ui-elements.md#shader-element) for the rules.[^shader-props]
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -196,7 +196,7 @@ What a render hook returns, and what `next(e)` resolves to: a plain-data tree of
 | `children` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
 | `type` | <Documented /> | A block of markdown that every surface draws as it draws the text of an assistant reply. It has its own renderer, theme, hyperlinks and highlighting. | Type: `'Markdown'`. Built by `<Markdown>`. A leaf. Without a `press` its links open as the surface opens links. |
 | `props` | <Documented /> | The props of the element, typed `MarkdownLeafProps`. | Type: `MarkdownLeafProps`. |
-| `part` | <Documented /> | Whose `key` it is: the engine sets it on a keyed element as the tree leaves its hook, as on a Box (new in `2.1.307`). | Type: `PluginStamp`. Optional. |
+| `part` | <Documented /> | Whose `key` it is: the engine sets it on a keyed element as the tree leaves its hook, as on a Box. | Type: `PluginStamp`. Optional. |
 | `children` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
 | `type` | <Documented /> | A `Markdown` whose plugin answers the links that it drew (`onLinkPress`). A press on one raises `ui.press` with `e.link`, and the surface opens none. | Type: `'Markdown'`. |
 | `props` | <Documented /> | The props of the element, typed `MarkdownLeafProps`. | Type: `MarkdownLeafProps`. |
@@ -209,10 +209,10 @@ What a render hook returns, and what `next(e)` resolves to: a plain-data tree of
 | `type` | <Documented /> | A vector drawing, for the remote surfaces alone. The SVG markup is the data of the element, drawn in an isolated box, off the page. | Type: `'Svg'`. A leaf. A surface whose table lacks it refuses the tree. Put a press that others should see on an enclosing `Button`. |
 | `props` | <Documented /> | The props of the element, typed `SvgProps`. | Type: `SvgProps`. |
 | `children` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
-| `type` | <Documented /> | How far along a task is, or that it is still running. Hooks above wrap it, replace it, or rewrite its props. | Type: `'Progress'`. A leaf. A mobile client that names it in `draws` is sent this node. Any other client, on any surface, gets its Box and Text. A surface module cannot draw one. Since `2.1.323`.[^progress-node] |
+| `type` | <Documented /> | How far along a task is, or that it is still running. Hooks above wrap it, replace it, or rewrite its props. | Type: `'Progress'`. A leaf. A mobile client that names it in `draws` is sent this node. Any other client, on any surface, gets its Box and Text. A surface module cannot draw one.[^progress-node] |
 | `props` | <Documented /> | The props of the element, typed `ProgressProps`. | Type: `ProgressProps`. |
 | `children` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
-| `type` | <Documented /> | Since `2.1.326`, the scene of a `Backdrop`, played on the GPU over the one `Svg` that shows wherever the scene does not play. | Type: `'Shader'`. |
+| `type` | <Documented /> | The scene of a `Backdrop`, played on the GPU over the one `Svg` that shows wherever the scene does not play. | Type: `'Shader'`. |
 | `props` | <Documented /> | The props of the element, typed `ShaderProps`. | Type: `ShaderProps`. |
 | `shader` | <Documented /> | Whose file `props.module` names: the plugin whose hook drew the element. The runtime stamps it as the tree leaves it. | Type: `PluginStamp`. Optional. |
 | `children` | <Documented /> | The `Svg` that shows where the shader does not play. | Type: `RenderNode[]`. Optional. |
@@ -237,7 +237,7 @@ One `ui.render` input, for a component narrowed to one surface.
 | `component` | <Documented /> | Which component this instance is, the key a matcher narrows on. | Type: `C`. |
 | `requestId` | <Documented /> | The instance: the tool_use_id for a dialog or tool row, the message id for a message, or the agent id for a spinner. | Type: `string`. Two drawings of one component are two instances. |
 | `viewport` | <Documented /> | The size that the surface draws into, in character cells, and whether its layout docks a pane. Absent where no surface has measured. | Type: `RenderViewport`. Optional. Part of the envelope, so a rewrite keeps it. A change of width re-draws every hooked site once the resize settles. |
-| `plugin` | <Documented /> | Whose this drawing is, where it is one plugin's: the plugin an `AbovePrompt` row is asked of, the plugin that opened a `Pane`. It is a default matcher key: a hook that leaves it out hears the drawings of its own plugin only here. A hook that names it is read as written, `{ plugin: "*" }` for all. | Type: `string`. Optional. Pinned: a rewrite carries it on as received. Since `2.1.323`.[^render-plugin] |
+| `plugin` | <Documented /> | Whose this drawing is, where it is one plugin's: the plugin an `AbovePrompt` row is asked of, the plugin that opened a `Pane`. It is a default matcher key: a hook that leaves it out hears the drawings of its own plugin only here. A hook that names it is read as written, `{ plugin: "*" }` for all. | Type: `string`. Optional. Pinned: a rewrite carries it on as received.[^render-plugin] |
 | `props` | <Documented /> | The plain-data props of the component. | Type: `RenderPropsOf[C]`. |
 
 ### `RenderResultOf`
@@ -266,9 +266,9 @@ The size that a surface draws into, in character cells of the monospace metric o
 ## Sources
 
 [^notify-read]: The program, checks `chunk-56bhcxay.js:4954411` (`kri`), call `chunk-syremzmn.js:316642`, and the `ui_notify` message `chunk-20bv8pca.js:568257`.
-[^dock]: The program, `chunk-j2wfp6sf.js:553915`. [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
+[^dock]: The program, `chunk-j2wfp6sf.js:553915`.
 [^placement]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-20bv8pca.js:572891`.
 [^progress-props]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-syremzmn.js:22137`. Its table of the tags of each surface is at `chunk-syremzmn.js:52168`. A surface other than mobile gets a `Progress` as Box and Text, and mobile gets the `Progress` with its own `value`, at `chunk-syremzmn.js:145078`.
 [^progress-node]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-20bv8pca.js:891741`.
 [^shader-props]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `ShaderProps`.
-[^render-plugin]: The Mod API type file, `schemas/claude-code.d.ts`, `RenderInputOf`. The `2.1.323` type file is the first with `plugin?: string` in `RenderInputOf`; the `2.1.322` type file has no such member. The program, `chunk-syremzmn.js:176620`.
+[^render-plugin]: The Mod API type file, `schemas/claude-code.d.ts`, `RenderInputOf`. The program, `chunk-syremzmn.js:176620`.

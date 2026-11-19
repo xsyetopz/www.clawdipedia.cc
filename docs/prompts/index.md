@@ -205,7 +205,7 @@ Size is the number of characters in everything shown on the variant page, after 
 | [Subagent, Statusline Setup](./agents/subagent-statusline-setup.md) | `Agent` tool, `statusline-setup` | 15,985 | 2 | none |
 | [Subagent, Claude (FleetView)](./agents/subagent-claude.md) | `Agent` tool, `claude` | 12,086 | 8 | none |
 | [Subagent, Web Fetch](./agents/subagent-web-fetch.md) | `CLAUDE_CODE_WEB_FETCH_AGENT=1`, `Agent` tool, `web-fetch` | 7,309 | 1 | none |
-| [Subagent, Claude Code Guide](./agents/subagent-claude-code-guide.md) | Interactive session, `Agent` tool, `claude-code-guide` | 29,062 | 4 | none |
+| [Subagent, Claude Code Guide](./agents/subagent-claude-code-guide.md) | Interactive session, `Agent` tool, `claude-code-guide` | 29,487 | 4 | none |
 | [Override a Built-in Agent with a File](./agents/override-agent-file.md) | Agent file with a built-in name | 10,324 | 8 | none |
 | [Override a Built-in Agent with --agents](./agents/override-agents-flag.md) | `--agents` with a built-in name | 10,305 | 8 | none |
 | [Append to Every Subagent Prompt](./agents/override-append-subagent.md) | `--append-subagent-system-prompt` | 12,245 | 5 | none |

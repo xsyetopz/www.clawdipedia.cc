@@ -42,13 +42,13 @@ A command hook reads this JSON on `stdin`. An HTTP hook gets it as the POST body
 | `transcript_path` | <Documented /> | The path to the conversation JSONL file. | Claude Code writes it async, so it can lag. On `Stop`, use `last_assistant_message`. See [Transcript Format](../../reference/transcript-format.md). |
 | `cwd` | <Documented /> | The working directory when the hook runs. | Follows `cd` and worktrees. |
 | `prompt_id` | <Documented /> | The UUID of the prompt in progress. | Equals `prompt.id` in OpenTelemetry events. Absent before the first input. |
-| `scratchpad_dir` | <Differs note="In the docs and the program string list, but missing from BaseHookInput in the type file." /> | The session scratchpad folder. | Needs `2.1.257`. Sent on most events. |
+| `scratchpad_dir` | <Differs note="In the docs and the program string list, but missing from BaseHookInput in the type file." /> | The session scratchpad folder. | Sent on most events. |
 | `permission_mode` | <Documented /> | `default`, `plan`, `acceptEdits`, `auto`, `dontAsk`, or `bypassPermissions`. | Claude Code sends manual mode as `default`. Not on every event. |
 | `effort` | <Documented /> | An object `{level}` with `low`, `medium`, `high`, `xhigh`, or `max`. | Only in tool-use context, and only when the model supports effort. Claude Code sends it on tool events, `Stop`, and `SubagentStop`. |
 | `hook_event_name` | <Documented /> | The name of the event. | In the type file it is a literal on each event type, not on `BaseHookInput`. |
-| `agent_id` | <Documented /> | The subagent or in-process teammate that the hook fires in. | Absent on the main thread. On task and teammate events it names the actor (`2.1.290`). Since `2.1.323`, `PreCompact`, `PostCompact`, and the `SessionStart` that follows a compaction also carry it when a subagent compacts. |
-| `agent_type` | <Documented /> | The agent name. | Set in a subagent, or on the main thread with `--agent`. Since `2.1.323`, it is also set on those compaction events when a subagent compacts. |
-| `mcp_server` | <Documented /> | An object `{name, source}` for an MCP tool. | Needs `2.1.274`. `source` is an open set: `sdk`, `plugin`, `user`, `project`, `local`, `dynamic`, `managed`, `enterprise`, `claudeai`, `agent`. |
+| `agent_id` | <Documented /> | The subagent or in-process teammate that the hook fires in. | Absent on the main thread. On task and teammate events it names the actor. `PreCompact`, `PostCompact`, and the `SessionStart` that follows a compaction also carry it when a subagent compacts. |
+| `agent_type` | <Documented /> | The agent name. | Set in a subagent, or on the main thread with `--agent`. It is also set on those compaction events when a subagent compacts. |
+| `mcp_server` | <Documented /> | An object `{name, source}` for an MCP tool. | `source` is an open set: `sdk`, `plugin`, `user`, `project`, `local`, `dynamic`, `managed`, `enterprise`, `claudeai`, `agent`. |
 
 ## Universal Output Fields
 
@@ -84,7 +84,7 @@ A probe ran a command hook on each event in `-p` mode. "Stops" means the model m
 | `SubagentStart`, `SubagentStop`, `SessionEnd` | The hook ran. No visible effect. | Not shown. |
 | `InstructionsLoaded`, `Setup` | No effect. | Not shown. |
 
-`PermissionRequest`, `PermissionDenied`, `Notification`, and `PreCompact` do not fire in `-p`. They fired in a probe of the interactive screen (`2.1.305`, local stub, fake key). The rows below are from that run. See [Interactive Probes](../../reference/probes.md#interactive-probes).
+`PermissionRequest`, `PermissionDenied`, `Notification`, and `PreCompact` do not fire in `-p`. They fired in a probe of the interactive screen (local stub, fake key). The rows below are from that run. See [Interactive Probes](../../reference/probes.md#interactive-probes).
 
 | Event | `continue: false` | `systemMessage` |
 | --- | --- | --- |
@@ -98,17 +98,17 @@ A probe ran a command hook on each event in `-p` mode. "Stops" means the model m
 | Event | When it fires | What a reply does |
 | --- | --- | --- |
 | `PermissionRequest` | Before the permission dialog opens, in the same second as `PreToolUse`. It also fires in `auto` mode, but only when auto mode falls back to a dialog (checked after 3 blocked actions in a row). It did not fire for a plain auto mode denial. | `decision.behavior: "allow"`: no dialog, the tool ran, the line says `Allowed by PermissionRequest hook`. `"deny"` with `message`: no dialog, not run, the model gets the `message` text, the line says `Denied by PermissionRequest hook`. `deny` with `interrupt: true`: not run, the turn stops with `Interrupted`. Claude Code ignores exit 2 with no output and a top-level `decision: "block"`. The normal dialog opens. `{}` or no output: the normal dialog. |
-| `PermissionDenied` | Only for an auto mode denial. A manual "No" in the dialog does not fire it. The input has `tool_use_id` and `reason` (`mcp_server` is absent for a built-in tool). | `hookSpecificOutput.retry: true` with a verdict (on `2.1.319`, a `flagged` verdict of the server-side check): the denial stands, and the model gets the extra text `The PermissionDenied hook indicated you may retry this tool call.` after the tool result. With no verdict, it changes nothing. |
+| `PermissionDenied` | Only for an auto mode denial. A manual "No" in the dialog does not fire it. The input has `tool_use_id` and `reason` (`mcp_server` is absent for a built-in tool). | `hookSpecificOutput.retry: true` with a verdict (a `flagged` verdict of the server-side check): the denial stands, and the model gets the extra text `The PermissionDenied hook indicated you may retry this tool call.` after the tool result. With no verdict, it changes nothing. |
 | `Notification` | The permission dialog fires it after about 6 seconds. Answer sooner and it never fires. The input has `notification_type` and `message` (no `title` in these runs). | Cannot change the dialog. For `idle_prompt` nothing visible changed. |
 | `PreCompact` | On `/compact`, with `trigger: "manual"` and `custom_instructions`. With too few messages (`Not enough messages to compact.`) it does not fire. `PostCompact` follows with `compact_summary`. | `decision: "block"` with `reason`: `Compaction blocked by PreCompact hook: [cmd]: <reason>`. Exit 2: `Compaction blocked by PreCompact hook: [cmd]`. |
 
-On `2.1.319`, an auto mode run with a custom base URL that gives no server-side verdict shows the dialog `Auto mode can't check actions in this session`. It fires a `Notification` with `notification_type: "agent_needs_input"`. A custom base URL that refuses the dangerous-tool-use beta with HTTP 400 shows the same dialog.
+An auto mode run with a custom base URL that gives no server-side verdict shows the dialog `Auto mode can't check actions in this session`. It fires a `Notification` with `notification_type: "agent_needs_input"`. A custom base URL that refuses the dangerous-tool-use beta with HTTP 400 shows the same dialog.
 
 ## Decision Patterns
 
 | Pattern | Status | What it does | Events |
 | --- | --- | --- | --- |
-| Top-level `decision: "block"` | <Documented /> | Blocks. `reason` is the message. Since `2.1.326`, it also blocks when `hookSpecificOutput` names a different event than the one that ran. Claude Code ignores `hookSpecificOutput`, logs a warning, and keeps the block.[^block-mismatch] `PermissionRequest` is not covered. | `UserPromptSubmit`, `UserPromptExpansion`, `PostToolUse`, `PostToolUseFailure`, `PostToolBatch`, `Stop`, `SubagentStop`, `ConfigChange`, `PreCompact`, `TaskCreated` |
+| Top-level `decision: "block"` | <Documented /> | Blocks. `reason` is the message. It also blocks when `hookSpecificOutput` names a different event than the one that ran. Claude Code ignores `hookSpecificOutput`, logs a warning, and keeps the block.[^block-mismatch] `PermissionRequest` is not covered. | `UserPromptSubmit`, `UserPromptExpansion`, `PostToolUse`, `PostToolUseFailure`, `PostToolBatch`, `Stop`, `SubagentStop`, `ConfigChange`, `PreCompact`, `TaskCreated` |
 | `hookSpecificOutput.permissionDecision` | <Documented /> | `allow`, `deny`, `ask`, or `defer`. `defer` works only in `-p`. | `PreToolUse`. `PreModelSwitch` has no `defer`. |
 | `hookSpecificOutput.decision.behavior` | <Documented /> | `allow` or `deny`. Needs a `decision` object. | `PermissionRequest` |
 | `continue: false` or exit 2 | <Documented /> | Stops the teammate. | `TeammateIdle`, `TaskCompleted` |
@@ -123,7 +123,7 @@ On `2.1.319`, an auto mode run with a custom base URL that gives no server-side 
 | 0 | <Documented /> | Success. | Claude Code reads JSON from `stdout`. Plain `stdout` becomes context only on `UserPromptSubmit`, `UserPromptExpansion`, `SessionStart`, and `PostModelSwitch`. Claude never sees `stderr` from an exit 0 hook. |
 | 2 | <Documented /> | A blocking error on events that can block. | `stderr` is the reason. Claude Code reads JSON fields. They cannot override the block. `Elicitation` and `ElicitationResult` ignore them. |
 | 1 | <Documented /> | Not a block. | Exit 1 is a non-blocking error. Use exit 2 for policy. |
-| Any other code | <Documented /> | A non-blocking error. | The action continues. The notice has the first line of `stderr`. JSON on `stdout` can still decide. Since `2.1.326`, exit 127 on `PreToolUse` adds a line that says a program the hook needs may be missing, so its check may not have run.[^exit-127] |
+| Any other code | <Documented /> | A non-blocking error. | The action continues. The notice has the first line of `stderr`. JSON on `stdout` can still decide. Exit 127 on `PreToolUse` adds a line that says a program the hook needs may be missing, so its check may not have run.[^exit-127] |
 | Invalid JSON | <Documented /> | A non-blocking error. | The rules for one object, text, and several JSON lines are in the Exit code 0 section of the Hooks Reference. |
 
 :::tip
@@ -132,13 +132,13 @@ Pick one style per hook. Use exit codes alone, or exit 0 with JSON. If you mix t
 
 ### Where a Failing Hook Shows
 
-The `2.1.327` release notes list a failing hook that showed nothing before in these places:[^failing-shown]
+A failing hook shows in these places:[^failing-shown]
 
 - `SubagentStop` hooks of background agents.
 - `SessionEnd` hooks at `/clear` and `/resume`.
 - `CwdChanged` and `FileChanged` hooks in the fullscreen renderer.
 
-A `Stop` hook that fails to run no longer shows as if it had reported a problem.[^stop-fail] The release notes also say that focus view no longer hides a finished reply while a `Stop` hook runs.[^stop-fail]
+A `Stop` hook that fails to run does not show as if it had reported a problem.[^stop-fail] Focus view does not keep a finished reply hidden while a `Stop` hook runs.[^stop-fail]
 
 ### What Exit 2 Does per Event
 
@@ -187,8 +187,8 @@ The hook input is in the `*HookInput` types in the Mod API type file `https://cl
 
 [^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the program (`BaseHookInput`, `McpServerProvenance`, `ClassicResultFields`, and the hook output schema at `chunk-20bv8pca.js:290613`). The exit code 2 table was checked against the Hooks Reference.
 [^probes-print]: Probes in `-p` mode with a local stub.
-[^exit-127]: The program, `chunk-bjgpjqze.js:10018`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^block-mismatch]: The program, `chunk-4h0jyvmx.js:259251` and `chunk-56bhcxay.js:212948`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^failing-shown]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, for the `SessionEnd` hook at `chunk-56bhcxay.js:4222645`, for the `FileChanged` hook at `chunk-56bhcxay.js:2644874`, and for the `CwdChanged` hook at `chunk-56bhcxay.js:2645876`. The `2.1.326` program has no such call for `SessionEnd`. The `SubagentStop` part for background agents is from the release notes.
-[^stop-fail]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, the headline `Stop hook failed` or `Stop hook reported a problem`, `chunk-bjgpjqze.js:206583`. The focus view part is from the release notes.
-[^metrics]: The program. The unrecognized key message is at `chunk-56bhcxay.js:1248876`. The fallback for an async answer that fails the schema keeps the number and boolean entries of `metrics` at `chunk-56bhcxay.js:1249379`. `LCt()` sends the event only for an official marketplace name (`chunk-56bhcxay.js:4302880`, `chunk-56bhcxay.js:1185114`). Probe case `otel-hook-plugin-metrics` sent `probe_count` as an integer and `probe_flag` as a boolean.
+[^exit-127]: The program, `chunk-bjgpjqze.js:137058` and `chunk-bjgpjqze.js:145075`.
+[^block-mismatch]: The program, `chunk-4h0jyvmx.js:259251`.
+[^failing-shown]: The program, for the `SessionEnd` hook at `chunk-56bhcxay.js:4222775`, for the `FileChanged` hook at `chunk-56bhcxay.js:2644980`, and for the `CwdChanged` hook at `chunk-56bhcxay.js:2645679`. The `SubagentStop` part for background agents is from the changelog text in the program, `chunk-4prvwasd.js:11798`.
+[^stop-fail]: The program, the headline `Stop hook failed` or `Stop hook reported a problem`, `chunk-bjgpjqze.js:206583`. The focus view part is from the changelog text in the program, `chunk-4prvwasd.js:11798`.
+[^metrics]: The program. The unrecognized key message is at `chunk-56bhcxay.js:1248876`. The fallback for an async answer that fails the schema keeps the number and boolean entries of `metrics` at `chunk-56bhcxay.js:1249379`. `LCt()` sends the event only for an official marketplace name (`chunk-56bhcxay.js:4302880`, `chunk-56bhcxay.js:1185114`).

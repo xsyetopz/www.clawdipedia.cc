@@ -29,14 +29,14 @@ on("agent.spawn", async ($, e, next) =>
 | `$.agent.spawn` | <Documented /> | Spawns a subagent. It is the event `agent.spawn`, the same call the engine makes when the Agent tool starts one. | `(input: AgentSpawnArgs) => Promise<AgentSpawnResult>`. Starts a subagent in the background and resolves `{ model, agentId }` or `{ deny }`. | Run time. |
 | `$.agent.list` | <Documented /> | Returns the agents of the session so far, subagents and teammates, whoever spawned them. | `() => Promise<AgentInfo[]>`. One entry for each agent until the engine drops its task. The list omits a workflow's agents. | Run time. |
 | `$.agent.register` | <Documented /> | Defines an agent type, named `<plugin>:<name>`, that the Agent tool dispatches from the next turn on. | `(spec: AgentSpec) => Promise<...>`. Takes the same fields as an agent file. A second call with the same name replaces the first. Rejects on an invalid spec. | After the session binds at `session.start` (rejects before). |
-| `$.agent.call` | <Documented /> | Since `2.1.326`, runs a tool as an agent's own call. It is the event `agent.call`, and `tool.call` runs beneath it in the loop of that agent. `$.tool.call` is unchanged. | `(args: AgentCallArgs, options?: AgentCallOptions) => Promise<...>`. `args` holds `tool`, `input`, and `agentId` (absent: the main conversation). The call has the tools, folder, mode, and rules of the agent. It meets the hooks, the dialog, and the classifier of auto mode as a call of the model does. Nothing joins the conversation of the agent. Resolves the tool's result, or `{ deny }` for a refusal, a tool the agent lacks, an agent the session cannot run from, or a cut by `options.signal`. Rejects on a deny from an `agent.call` hook. `Workflow` is refused.[^call-workflow] | Run time. |
-| `$.agent.limits` | <Documented /> | Since `2.1.326`, returns the bounds the agents of the session run under: how many may run at once, how deep they may nest, and whether they may run in the background. | `() => Promise<AgentLimits>`. Resolves `{ concurrent, depth, isBackgroundEnabled }`, read at each call and the same for every plugin.[^limits] `concurrent` follows `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`, 20 unless set. `depth` follows `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH`. | Run time. |
+| `$.agent.call` | <Documented /> | Runs a tool as an agent's own call. It is the event `agent.call`, and `tool.call` runs beneath it in the loop of that agent. `$.tool.call` is unchanged. | `(args: AgentCallArgs, options?: AgentCallOptions) => Promise<...>`. `args` holds `tool`, `input`, and `agentId` (absent: the main conversation). The call has the tools, folder, mode, and rules of the agent. It meets the hooks, the dialog, and the classifier of auto mode as a call of the model does. Nothing joins the conversation of the agent. Resolves the tool's result, or `{ deny }` for a refusal, a tool the agent lacks, an agent the session cannot run from, or a cut by `options.signal`. Rejects on a deny from an `agent.call` hook. `Workflow` is refused.[^call-workflow] | Run time. |
+| `$.agent.limits` | <Documented /> | Returns the bounds the agents of the session run under: how many may run at once, how deep they may nest, and whether they may run in the background. | `() => Promise<AgentLimits>`. Resolves `{ concurrent, depth, isBackgroundEnabled }`, read at each call and the same for every plugin.[^limits] `concurrent` follows `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`, 20 unless set. `depth` follows `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH`. | Run time. |
 
 ## Engine Events
 
 | Item | Status | What it does | How it works | Where it can be used |
 | --- | --- | --- | --- | --- |
-| `agent.offer` | <Documented /> | Fires when the engine offers an agent type to the model, in the agent listing and again at dispatch. `next(e)` resolves to `{ isOffered: true }`. | Input `AgentOfferInput`. Result `AgentOfferResult`. Return `{ isOffered: false }` to hide the type from the model and refuse its dispatch. A hook that refuses, or a `{ deny }` result, gives `{ isOffered: false }`.[^offer-refuse] The engine checks that the hook kept `agent`, `description`, and `source` and did not change `provider`.[^offer-check] Since `2.1.328`, the offer to resume an agent of the type carries that agent's `agentId`.[^v328-offer-id] | `on('agent.offer', ...)`. In tests: `$.agent.offer(...)` on the test engine (not on a hook's `$`). |
+| `agent.offer` | <Documented /> | Fires when the engine offers an agent type to the model, in the agent listing and again at dispatch. `next(e)` resolves to `{ isOffered: true }`. | Input `AgentOfferInput`. Result `AgentOfferResult`. Return `{ isOffered: false }` to hide the type from the model and refuse its dispatch. A hook that refuses, or a `{ deny }` result, gives `{ isOffered: false }`.[^offer-refuse] The engine checks that the hook kept `agent`, `description`, and `source` and did not change `provider`.[^offer-check] The offer to resume an agent of the type carries that agent's `agentId`.[^v328-offer-id] | `on('agent.offer', ...)`. In tests: `$.agent.offer(...)` on the test engine (not on a hook's `$`). |
 | `agent.spawn` | <Documented /> | Fires when the Agent tool, or a workflow script's `agent()` call, is about to start an agent, before the engine resolves the model. | Input `AgentSpawnInput`. Result `AgentSpawnResult`: `{ model }` or `{ deny }`. The engine skips a guard that fails, and the subagent starts. | `on('agent.spawn', ...)`. Also `$.agent.spawn(...)`. |
 
 ## Events Raised by Agent Calls
@@ -44,14 +44,14 @@ on("agent.spawn", async ($, e, next) =>
 | Item | Status | What it does | How it works | Where it can be used |
 | --- | --- | --- | --- | --- |
 | `agent.list` | <Documented /> | The argument of `$.agent.list()`. | Input `NoArgs`. Value `AgentInfo[]`. A hook above the caller returns `next(e)`, `{ deny: reason }`, or `{ value }`. | `on('agent.list', ...)` |
-| `agent.call` | <Documented /> | `$.agent.call(args, options)`. Since `2.1.326`, a hook above the caller reads the abort signal of the call as `next.signal`. | Input `AgentCallArgs`. Value `ToolCallResult`. | `on('agent.call', ...)` |
+| `agent.call` | <Documented /> | `$.agent.call(args, options)`. A hook above the caller reads the abort signal of the call as `next.signal`. | Input `AgentCallArgs`. Value `ToolCallResult`. | `on('agent.call', ...)` |
 | `agent.limits` | <Documented /> | `$.agent.limits()` | Input `NoArgs`. Value `AgentLimits`. | `on('agent.limits', ...)` |
 | `agent.register` | <Documented /> | The argument of `$.agent.register(spec)`. A hook above can rewrite any of it, but the type stays the caller's. | Input `AgentSpec`. Value `{ agent: string }`. | `on('agent.register', ...)` |
 
 ## Listing Cost of an Agent
 
-Each agent the model can use adds its listing line to the request. A run of `2.1.316` against a local stub added one project agent file with a 1000-character `description`. The `messages` text grew from 10011 to 11042 characters, 1031 more. The `Agent` tool description stayed at 3227 characters. So the listing is in `messages` and not in the tool description, and a long `description` costs its length on every session.
-A `agent.offer` hook that returns `{ isOffered: false }` hides the type from the listing, so it saves those characters. This run did not load a mod, so the saving is not measured here.
+Each agent the model can use adds its listing line to the request.
+An `agent.offer` hook that returns `{ isOffered: false }` hides the type from the listing.
 
 ## Agent Types
 
@@ -74,14 +74,14 @@ A `agent.offer` hook that returns `{ isOffered: false }` hides the type from the
 | `AgentInfo.type` | <Documented /> | The agent type it was spawned as (`general-purpose`, `Explore`), or `teammate`. | `string`. |
 | `AgentInfo.status` | <Documented /> | Where its loop stands now. | `AgentStatus`. |
 | `AgentInfo.parentId` | <Documented /> | The id of the agent whose loop spawned it. | `string`, optional. Absent when the main loop did. |
-| `AgentInfo.kind` | <Documented /> | Since `2.1.326`, which kind of task the engine keeps it as. | `'local_agent'` for every subagent, whatever its `type`, or `'in_process_teammate'` [^kind] |
-| `AgentInfo.taskStatus` | <Documented /> | Since `2.1.326`, the task's own status, as the engine stores it, before `status` tells `waiting` and `idle` apart. | `'pending' \| 'running' \| 'completed' \| 'failed' \| 'killed' \| 'paused'`. A subagent that ended its turn is `completed` here. A teammate between turns is `running`. |
-| `AgentInfo.label`, `startTime`, `cwd` | <Documented /> | Since `2.1.326`, what the agent is doing, when it started, and the folder it works in. | `label` is the latest progress summary as stored, else `description`. `startTime` is in milliseconds since the epoch. `cwd` is the agent's own folder (a worktree), else the folder of the session. |
-| `AgentInfo.model`, `effort`, `contextWindowSize` | <Documented /> | Since `2.1.326`, the model the agent runs on, the effort set for it, and the context window of that model in tokens. | All optional. `model` is absent where the engine has none, such as a teammate in a pane of its own. `effort` is a level or a number as written. A request may carry less (`lastRequest`). |
-| `AgentInfo.tokenCount`, `tokenSamples` | <Documented /> | Since `2.1.326`, the tokens the agent has used, and its last 16 readings. | `tokenCount` is the latest request's input and all its output, 0 before the first reading. `tokenSamples` runs oldest first, about five seconds apart, and the last one is `tokenCount`. They start over when the row of the agent goes. |
-| `AgentInfo.lastRequest` | <Documented /> | Since `2.1.326`, the last request of the loop that the API began to answer. | `AgentRequest`, optional. Fields `at` (the start of the request, in `$.clock.now()` milliseconds), `model`, `effort?`, and `cacheTtl?` (`'5m'` or `'1h'`). Absent before the first request and for a teammate in a pane of its own. |
-| `AgentInfo.usage`, `cost` | <Documented /> | Since `2.1.326`, the tokens of the agent's own requests that `/cost` counts, one entry for each model that answered, and the cost `/cost` credited for them. | `usage` is `TurnUsage[]`, absent until `/cost` counts a request. `cost` is `SessionCost`, a part of the cost of `$.session.usage()`, so an estimate. `cost` is absent for a teammate in a pane of its own. |
-| `AgentInfo.hasRow` | <Documented /> | Since `2.1.326`, whether the agent list at a glance holds a row for the agent. | `boolean`. False where the layout draws no agent rows. A finished subagent keeps an undrawn row until the engine drops its task. |
+| `AgentInfo.kind` | <Documented /> | Which kind of task the engine keeps it as. | `'local_agent'` for every subagent, whatever its `type`, or `'in_process_teammate'` [^kind] |
+| `AgentInfo.taskStatus` | <Documented /> | The task's own status, as the engine stores it, before `status` tells `waiting` and `idle` apart. | `'pending' \| 'running' \| 'completed' \| 'failed' \| 'killed' \| 'paused'`. A subagent that ended its turn is `completed` here. A teammate between turns is `running`. |
+| `AgentInfo.label`, `startTime`, `cwd` | <Documented /> | What the agent is doing, when it started, and the folder it works in. | `label` is the latest progress summary as stored, else `description`. `startTime` is in milliseconds since the epoch. `cwd` is the agent's own folder (a worktree), else the folder of the session. |
+| `AgentInfo.model`, `effort`, `contextWindowSize` | <Documented /> | The model the agent runs on, the effort set for it, and the context window of that model in tokens. | All optional. `model` is absent where the engine has none, such as a teammate in a pane of its own. `effort` is a level or a number as written. A request may carry less (`lastRequest`). |
+| `AgentInfo.tokenCount`, `tokenSamples` | <Documented /> | The tokens the agent has used, and its last 16 readings. | `tokenCount` is the latest request's input and all its output, 0 before the first reading. `tokenSamples` runs oldest first, about five seconds apart, and the last one is `tokenCount`. They start over when the row of the agent goes. |
+| `AgentInfo.lastRequest` | <Documented /> | The last request of the loop that the API began to answer. | `AgentRequest`, optional. Fields `at` (the start of the request, in `$.clock.now()` milliseconds), `model`, `effort?`, and `cacheTtl?` (`'5m'` or `'1h'`). Absent before the first request and for a teammate in a pane of its own. |
+| `AgentInfo.usage`, `cost` | <Documented /> | The tokens of the agent's own requests that `/cost` counts, one entry for each model that answered, and the cost `/cost` credited for them. | `usage` is `TurnUsage[]`, absent until `/cost` counts a request. `cost` is `SessionCost`, a part of the cost of `$.session.usage()`, so an estimate. `cost` is absent for a teammate in a pane of its own. |
+| `AgentInfo.hasRow` | <Documented /> | Whether the agent list at a glance holds a row for the agent. | `boolean`. False where the layout draws no agent rows. A finished subagent keeps an undrawn row until the engine drops its task. |
 | `AgentInfo.spawnedBy` | <Documented /> | The plugin whose `$.agent.spawn` (or Agent `$.tool.call`) started it. | `string`, optional. Absent when the model or the person did. |
 | `AgentInfo.name` | <Documented /> | What SendMessage addresses it by, when it has one. | `string`, optional. Two agents may hold one name. `id` tells them apart. |
 
@@ -97,7 +97,7 @@ A `agent.offer` hook that returns `{ isOffered: false }` hides the type from the
 
 ### Spawn Types
 
-`AgentSpawnArgs` is the input of the call: the `prompt` field of `AgentSpawnInput` plus optional `description`, `subagentType`, `model`, `name`, `cwd`, and, since `2.1.326`, `parentAgentId`.
+`AgentSpawnArgs` is the input of the call: the `prompt` field of `AgentSpawnInput` plus optional `description`, `subagentType`, `model`, `name`, `cwd`, and `parentAgentId`.
 A hook may rewrite the content keys of `AgentSpawnInput`. The type pins every other key.
 
 | Item | Status | What it is for | Shape and limits |
@@ -106,7 +106,7 @@ A hook may rewrite the content keys of `AgentSpawnInput`. The type pins every ot
 | `AgentSpawnInput.prompt` | <Documented /> | The task the subagent gets. A rewrite is the prompt it runs with. | `string`. On a workflow run that hides its script, it is a placeholder. The engine does not apply a rewrite. |
 | `AgentSpawnInput.description` | <Documented /> | The short description of the task. A rewrite is what the task shows as. | `string`. |
 | `AgentSpawnInput.subagentType` | <Documented /> | The resolved agent type (`general-purpose`, `Explore`, a plugin's agent, `fork`). | `string`. A name that matches no agent refuses the spawn. |
-| `AgentSpawnInput.parentAgentId` | <Documented /> | Since `2.1.326`, the agent that the spawn is made under, when a plugin gives it to `$.agent.spawn`. Left out, the spawn is the main loop's own spawn. | `string`, optional. Names a running or resting agent of this session. The spawn acts as that agent's own spawn: with `subagentType: "fork"` it copies the conversation, prompt, tools, and model of the agent. A child is one level deeper, shows that agent as `parentId` in `$.agent.list()`, stops with it, and uses its folder and permission mode. The spawn takes no turn of the agent and writes nothing to its conversation. An id the session cannot read or run from answers `{ deny }`, and nothing falls back to the main loop.[^parent-agent] |
+| `AgentSpawnInput.parentAgentId` | <Documented /> | The agent that the spawn is made under, when a plugin gives it to `$.agent.spawn`. Left out, the spawn is the main loop's own spawn. | `string`, optional. Names a running or resting agent of this session. The spawn acts as that agent's own spawn: with `subagentType: "fork"` it copies the conversation, prompt, tools, and model of the agent. A child is one level deeper, shows that agent as `parentId` in `$.agent.list()`, stops with it, and uses its folder and permission mode. The spawn takes no turn of the agent and writes nothing to its conversation. An id the session cannot read or run from answers `{ deny }`, and nothing falls back to the main loop.[^parent-agent] |
 | `AgentSpawnInput.provider` | <Documented /> | Who provides this agent. Pinned. | `Origin`. |
 | `AgentSpawnInput.model` | <Documented /> | The Agent tool's `model` parameter as given, an alias (`haiku`) or a full id. | `string`, optional. A hook sets it to pick the model. Forks inherit the model, so the engine ignores it for them. |
 | `AgentSpawnInput.parentModel` | <Documented /> | The parent's effective model, what `inherit` resolves to. Pinned. | `string`. |
@@ -128,7 +128,7 @@ A hook may rewrite the content keys of `AgentSpawnInput`. The type pins every ot
 
 ### Agent Limits
 
-`AgentLimits` is what `$.agent.limits()` returns, since `2.1.326`. Claude Code reads it at each call.[^limits]
+`AgentLimits` is what `$.agent.limits()` returns. Claude Code reads it at each call.[^limits]
 
 | Item | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
@@ -153,7 +153,7 @@ A hook may rewrite the content keys of `AgentSpawnInput`. The type pins every ot
 | `AgentSpec.mcpServers` | <Documented /> | Servers connected over MCP for the agent's run: a configured server's name, or one server's config inline. | `readonly (string \| Record<string, unknown>)[]`, optional. |
 | `AgentSpec.hooks` | <Documented /> | Settings hooks in force while the agent runs, in the `hooks` shape of `settings.json`. | `Record<string, unknown>`, optional. |
 | `AgentSpec.maxTurns` | <Documented /> | The most turns the agent takes before it stops. | `number`, optional. |
-| `AgentSpec.autoCompactWindow` | <Documented /> | Token count at which the agent compacts its own conversation. Since `2.1.328`, the type file says at least 100000, with no upper bound named. It only lowers the window.[^v328-compact-window] | `number`, optional. |
+| `AgentSpec.autoCompactWindow` | <Documented /> | Token count at which the agent compacts its own conversation. The type file says at least 100000, with no upper bound named. It only lowers the window.[^v328-compact-window] | `number`, optional. |
 | `AgentSpec.skills` | <Documented /> | Skill names preloaded into the agent's context before its first turn. | `readonly string[]`, optional. |
 | `AgentSpec.initialPrompt` | <Documented /> | The agent's first user turn. `{{intent}}` in it takes the spawn's prompt. Left out means the spawn's prompt is the first turn. | `string`, optional. |
 | `AgentSpec.memory` | <Documented /> | A persistent memory the agent keeps between runs, and where. | `'user' \| 'project' \| 'local'`, optional. |
@@ -176,5 +176,5 @@ A hook may rewrite the content keys of `AgentSpawnInput`. The type pins every ot
 [^offer-check]: The program, `chunk-syremzmn.js:210297`.
 [^kind]: The program, `chunk-56bhcxay.js:1061597`.
 [^parent-agent]: The program, `chunk-56bhcxay.js:4898831` (the refusal) and `chunk-56bhcxay.js:4977974` (the op).
-[^v328-compact-window]: The type file `schemas/claude-code.d.ts`, `AgentSpec`. The `2.1.327` text said 100000 to 1000000.
+[^v328-compact-window]: The type file `schemas/claude-code.d.ts`, `AgentSpec`.
 [^v328-offer-id]: The type file `schemas/claude-code.d.ts`, `agent.offer`.

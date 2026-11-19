@@ -65,7 +65,7 @@ Claude Code accepts these actions, but no default key binds them.[^unbound] You 
 
 ### `app:closeSession`
 
-New in `2.1.319`. Context: `SessionTabs`. Default key: none.
+Context: `SessionTabs`. Default key: none.
 The footer reads the key you bind for `app:closeSession` in `SessionTabs` and shows a close confirmation when you press it twice.
 The context is active only when Claude Code draws session tabs. A plain terminal session does not.
 
@@ -93,8 +93,8 @@ A queued message shows a hint under the prompt. In fullscreen rendering with mou
 
 | Input | Status | What it does | Notes |
 | --- | --- | --- | --- |
-| Click on the "send now" hint | <Undocumented /> | Sends the queued message at once. | Since `2.1.312`. The click needs mouse mode `full`, so `CLAUDE_CODE_DISABLE_MOUSE` and `CLAUDE_CODE_DISABLE_MOUSE_CLICKS` both stop it.[^click-send] |
-| Hint text | <Undocumented /> | Names the key for `chat:sendNow`, or reads "click to send now" when no key is bound to it. | Since `2.1.312`. With no key bound, the hint shows only in mouse mode `full`.[^hint-text] Since `2.1.326`, the hint reads `Queued · <key> send now`, or `Queued · click to send now` with no key bound, when the line is wide enough for it.[^hint-queued] |
+| Click on the "send now" hint | <Undocumented /> | Sends the queued message at once. | The click needs mouse mode `full`, so `CLAUDE_CODE_DISABLE_MOUSE` and `CLAUDE_CODE_DISABLE_MOUSE_CLICKS` both stop it.[^click-send] |
+| Hint text | <Undocumented /> | Names the key for `chat:sendNow`, or reads "click to send now" when no key is bound to it. | With no key bound, the hint shows only in mouse mode `full`.[^hint-text] The hint reads `Queued · <key> send now`, or `Queued · click to send now` with no key bound, when the line is wide enough for it.[^hint-queued] |
 
 ## Vim Mode Operators with `gj` And `gk`
 
@@ -102,7 +102,7 @@ The vim keys of the input prompt are not in `keybindings.json`. The setting `edi
 
 | Input | Status | What it does | Notes |
 | --- | --- | --- | --- |
-| `d`, `c`, or `y` with `gj` or `gk` and a count | <Undocumented /> | When the count is larger than the display lines left, the keys only move the cursor. | Since `2.1.312`. Before, the keys could delete or copy text. Claude Code tests the count against the wrapped lines below the cursor for `gj` and above it for `gk`.[^vim-count] |
+| `d`, `c`, or `y` with `gj` or `gk` and a count | <Undocumented /> | When the count is larger than the display lines left, the keys only move the cursor. | Claude Code tests the count against the wrapped lines below the cursor for `gj` and above it for `gk`.[^vim-count] |
 
 ## Related Pages
 
@@ -111,9 +111,9 @@ The vim keys of the input prompt are not in `keybindings.json`. The setting `edi
 ## Sources
 
 [^unbound]: The program lists these actions as valid, and its default keys do not bind them. The valid actions are in `chunk-g4fdykqa.js:12613-16014`, and the default keys are in `chunk-g4fdykqa.js:682-7837`.
-[^close-session]: The program, `chunk-j2wfp6sf.js:874650`, `chunk-g4fdykqa.js:16014`, `chunk-b3qefvbn.js:5989`, `chunk-b3qefvbn.js:7082`. Probe cases `pty.cli319.keybinding.session-tabs`, `pty.cli319.keybinding.control-bad-action`, and `pty.cli319.keybinding.control-bad-context`, run with `bun run release:probe:pty -- --to 2.1.319 --only cli319.keybinding`. The footer code calls `getDisplayText("app:closeSession", "SessionTabs")`, and the context list in the keybinding schema names `SessionTabs`.
+[^close-session]: The program, `chunk-j2wfp6sf.js:874650`, `chunk-g4fdykqa.js:16014`, `chunk-b3qefvbn.js:5989`, `chunk-b3qefvbn.js:7082`. Probe cases `pty.cli319.keybinding.session-tabs`, `pty.cli319.keybinding.control-bad-action`, and `pty.cli319.keybinding.control-bad-context`, run with `bun run release:probe:pty -- --to 2.1.328 --only cli319.keybinding`. The footer code calls `getDisplayText("app:closeSession", "SessionTabs")`, and the context list in the keybinding schema names `SessionTabs`.
 [^reserved]: The program, `chunk-g4fdykqa.js:7838-9037`.
 [^click-send]: The program reports the click as `chat:sendNowHintPress`. `chunk-j2wfp6sf.js:131971`. The program reads the two mouse variables at `chunk-mc2z5m5k.js:5712`: `CLAUDE_CODE_DISABLE_MOUSE` gives mode `off`, and `CLAUDE_CODE_DISABLE_MOUSE_CLICKS` gives mode `scroll`, so only unset gives `full`. The hint is a pressable text whose handler runs only in mode `full`, `chunk-j2wfp6sf.js:139336-139400`. The handler is registered at `chunk-j2wfp6sf.js:1067324` and sends the queued message with `sendQueuedNow`, `chunk-j2wfp6sf.js:1065659`.
 [^hint-text]: The program, `chunk-j2wfp6sf.js:138879-139050`.
 [^vim-count]: The program, `chunk-k6jrg48j.js:14701-14909` (the count test) and `chunk-k6jrg48j.js:26490` (the operator with `gj` or `gk`).
-[^hint-queued]: The program, `chunk-j2wfp6sf.js:138879-139050`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^hint-queued]: The program, `chunk-j2wfp6sf.js:138879-139050`.

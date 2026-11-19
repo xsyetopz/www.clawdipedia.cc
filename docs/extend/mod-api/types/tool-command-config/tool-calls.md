@@ -12,13 +12,13 @@ Each type below has its own table of fields.
 
 ### `ToolCallReserved`
 
-The keys that the input of `tool.call` carries beside the arguments of the tool. The engine strips them before the tool runs, so the tool sees none of them. `consent` holds the words of the person for the press that raised the call. Since `2.1.327`, it joins the context of the run as a human turn, which the permission path reads as the request of the user, only when the call answers the press, input, or pick of the person on an element of this plugin (not one in a desktop `Client`). The call must come from the closure of that element, or from this plugin's own hook on that event before it returns or times out, with no `Stop` standing since the gesture. Any other call runs as it would without `consent`.[^consent]
+The keys that the input of `tool.call` carries beside the arguments of the tool. The engine strips them before the tool runs, so the tool sees none of them. `consent` holds the words of the person for the press that raised the call. It joins the context of the run as a human turn, which the permission path reads as the request of the user, only when the call answers the press, input, or pick of the person on an element of this plugin (not one in a desktop `Client`). The call must come from the closure of that element, or from this plugin's own hook on that event before it returns or times out, with no `Stop` standing since the gesture. Any other call runs as it would without `consent`.[^consent]
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `tool` | <Documented /> | The name of the tool. | Type: `T`. |
 | `tool_use_id` | <Documented /> | The ID of the tool call. | Type: `string`. Optional. |
-| `consent` | <Documented /> | The words of the person for the press that raised the call. The tool never sees it. | Type: `string`. Optional. Since `2.1.327`, it counts as the request of the user only for a call that answers a press, input, or pick on this plugin's own element (see above). |
+| `consent` | <Documented /> | The words of the person for the press that raised the call. The tool never sees it. | Type: `string`. Optional. It counts as the request of the user only for a call that answers a press, input, or pick on this plugin's own element (see above). |
 
 ### `ToolCallResult`
 
@@ -58,11 +58,11 @@ The input of `tool.check`. It has the tool and its arguments. It also has the ce
 | --- | --- | --- | --- |
 | `tool` | <Documented /> | The tool name as the model writes it (`Bash`, `mcp__server__tool`). It is the key that a matcher narrows on. | Type: `string`. A matcher on any name that the host declares for the tool admits it. |
 | `input` | <Documented /> | The arguments of the tool as the permission decision reads them (`{ command }` for Bash, `{ file_path, ... }` for the file tools). | Type: `unknown`. |
-| `tool_use_id` | <Documented /> | The call being decided. Absent on a query, with `op`, and on an MCP call that goes straight to its server (a settings hook's, a `Monitor` watch). | Type: `string`. Optional. `next.origin` names who raised it: `{ plugin: 'engine', tier: 'core' }` for the model's own call, the plugin for its `$.tool.call` or its query, or `hook:<event>` for the call of a settings `mcp_tool` hook (since `2.1.328`). |
+| `tool_use_id` | <Documented /> | The call being decided. Absent on a query, with `op`, and on an MCP call that goes straight to its server (a settings hook's, a `Monitor` watch). | Type: `string`. Optional. `next.origin` names who raised it: `{ plugin: 'engine', tier: 'core' }` for the model's own call, the plugin for its `$.tool.call` or its query, or `hook:<event>` for the call of a settings `mcp_tool` hook. |
 | `agentId` | <Documented /> | The ID of the loop that decides the call. It is on a real call inside the loop of a subagent or a teammate: the one that its `tool.call` carried. | Type: `string`. Optional. Absent on the main loop and on a query. It says which loop made the call, not which plugin caused it (`next.origin` says that). |
-| `isReadOnly` | <Documented /> | Set when the tool call is read-only (new in 2.1.304). | Type: `true`. Optional. The program passes it on as the read-only flag of the permission decision.[^read-only] |
-| `approver` | <Documented /> | Who answers the asks of this evaluation. It is known before any hook runs (new in 2.1.307). | Type: `ToolCheckApprover`. Optional. Set by the engine and pinned. `host` when a hosted session's permission callback or prompt tool answers, or the cloud session a served call is for. `person` when a person can be asked, a pane's card included. Absent when nobody can be asked (`dontAsk` mode, avoid-prompts, headless). |
-| `ceiling` | <Documented /> | The most permissive verdict that the organization lets the model's call of an MCP tool reach: `ask`, or `deny` where an administrator blocked the tool. Since `2.1.328`, on the own call of a plugin or of a settings hook, for any tool, it is also `deny` where a managed deny rule covers the input as it would cover the call of the model. | Type: `ToolCheckDecision`. Optional. Set by the engine, never by a query, and pinned. The own `ceiling` of a hook, on its answer, is dropped. Since `2.1.323`, where the question has none, it is the ceiling that the check of core found for this call. That holds on the verdict of core and on each hook's verdict that asked beneath. Absent where none is set. `deny` here is a block by the organization (a managed deny rule, a block on the tool or its connector, or a host's `always_deny`), not a rule or a switch of the person or of a repository. The engine holds no own call of a plugin or of a settings hook to it: a hook here may.[^ceiling] |
+| `isReadOnly` | <Documented /> | Set when the tool call is read-only. | Type: `true`. Optional. The program passes it on as the read-only flag of the permission decision.[^read-only] |
+| `approver` | <Documented /> | Who answers the asks of this evaluation. It is known before any hook runs. | Type: `ToolCheckApprover`. Optional. Set by the engine and pinned. `host` when a hosted session's permission callback or prompt tool answers, or the cloud session a served call is for. `person` when a person can be asked, a pane's card included. Absent when nobody can be asked (`dontAsk` mode, avoid-prompts, headless). |
+| `ceiling` | <Documented /> | The most permissive verdict that the organization lets the model's call of an MCP tool reach: `ask`, or `deny` where an administrator blocked the tool. On the own call of a plugin or of a settings hook, for any tool, it is also `deny` where a managed deny rule covers the input as it would cover the call of the model. | Type: `ToolCheckDecision`. Optional. Set by the engine, never by a query, and pinned. The own `ceiling` of a hook, on its answer, is dropped. Where the question has none, it is the ceiling that the check of core found for this call. That holds on the verdict of core and on each hook's verdict that asked beneath. Absent where none is set. `deny` here is a block by the organization (a managed deny rule, a block on the tool or its connector, or a host's `always_deny`), not a rule or a switch of the person or of a repository. The engine holds no own call of a plugin or of a settings hook to it: a hook here may.[^ceiling] |
 | `isCeilingUnread` | <Documented /> | Set on the own call of a plugin or of a settings hook when managed deny rules exist and the engine cannot tell whether one covers the call. | Type: `true`. Optional. Set by the engine and pinned. Matching the rules failed or stopped short, or they bind only where or as the tool runs. The engine refuses nothing on it: a hook here may.[^ceiling] |
 | `op` | <Documented /> | Set where no tool is called: the own call of a plugin on `$` that `tool` and `input` stand for, as it is about to run. | Type: `'fs.read' \| 'fs.list' \| 'fs.write' \| 'process.run' \| 'process.spawn'`. Optional. Set by the engine and pinned. Raised only with `ceiling: "deny"` or `isCeilingUnread`, and only to a hook whose matcher names `op`. A file call reads as `Read` or `Write`, a process call as the `Bash` line of its argv. Nobody is asked: a deny refuses the call.[^ceiling] |
 
@@ -77,9 +77,9 @@ What a `tool.check` hook returns, and what `next(e)` resolves to: the verdict, w
 | `rule` | <Documented /> | The settings rule that decided, as written (`Bash(git push:*)`). | Type: `string`. Optional. Absent for a mode or a tool's own check. |
 | `hook` | <Documented /> | The classic hook event that decided, or whose ask the verdict was reached under (`PreToolUse`), whoever configured the hook. | Type: `string`. Optional. Absent on a `$.tool.check` query, which runs no classic hook. |
 | `setting` | <Documented /> | The key of the option whose own check asked, whoever configured it (`permissions.blockReadsOutsideWorkingDirectories`). | Type: `string`. Optional. From core, for the read block: its ask on a shell command that reads outside the working directories or, with the block on, leaves the sandbox. |
-| `plugin` | <Documented /> | The plugin whose hook made this ask (new in 2.1.307). | Type: `string`. Optional. Set by the engine and pinned. What a hook writes here is dropped. Set on an `ask` that a hook answered, a reworded ask included. An ask that a hook passes up unchanged keeps what it carried, so core's own ask names none. Such an ask is a person's: the dialog, the host's callback, or a `PermissionRequest` hook answers it. No classifier's allow settles it, its block still refuses, and a rule for the whole tool is not kept. A narrower rule the person saves settles nothing while the hook asks. Where nobody can be asked (`approver` absent), the program turns the ask into a deny, and its reason is the error of the model. A tool that raises no prompt keeps its own rule. |
-| `decider` | <Undocumented /> <Deprecated note="Removed from the type file in 2.1.307." /> | The 2.1.304 to 2.1.306 way for a hook to put its ask to a person. | Type: `'host' \| 'person'`. Optional. The 2.1.309 program still reads `decider: "person"` on the answer of a hook and marks the answer with `plugin`. It ignores any other value, and no result carries `decider`.[^decider] Since 2.1.307, use `ask` alone: every ask that a hook makes goes to a person. |
-| `ceiling` | <Documented /> | The most permissive verdict that the organization lets the model's call of an MCP tool reach: `ask`, or `deny` where an administrator blocked the tool, or where a managed deny rule covers a plugin's own call of any tool. | Type: `ToolCheckDecision`. Optional. Set by the engine. The own `ceiling` of a hook is dropped. Since `2.1.323`, where the question has none, it is the ceiling that the check of core found for this call.[^ceiling-result] |
+| `plugin` | <Documented /> | The plugin whose hook made this ask. | Type: `string`. Optional. Set by the engine and pinned. What a hook writes here is dropped. Set on an `ask` that a hook answered, a reworded ask included. An ask that a hook passes up unchanged keeps what it carried, so core's own ask names none. Such an ask is a person's: the dialog, the host's callback, or a `PermissionRequest` hook answers it. No classifier's allow settles it, its block still refuses, and a rule for the whole tool is not kept. A narrower rule the person saves settles nothing while the hook asks. Where nobody can be asked (`approver` absent), the program turns the ask into a deny, and its reason is the error of the model. A tool that raises no prompt keeps its own rule. |
+| `decider` | <Undocumented /> | A way for a hook to put its ask to a person. | Type: `'host' \| 'person'`. Optional. The program reads `decider: "person"` on the answer of a hook and marks the answer with `plugin`. It ignores any other value, and no result carries `decider`. An ask that a hook makes goes to a person.[^decider] |
+| `ceiling` | <Documented /> | The most permissive verdict that the organization lets the model's call of an MCP tool reach: `ask`, or `deny` where an administrator blocked the tool, or where a managed deny rule covers a plugin's own call of any tool. | Type: `ToolCheckDecision`. Optional. Set by the engine. The own `ceiling` of a hook is dropped. Where the question has none, it is the ceiling that the check of core found for this call.[^ceiling-result] |
 
 ### `ToolDescribeInput`
 
@@ -91,7 +91,7 @@ The input of `tool.describe`: the description of one tool, at the moment the eng
 | `description` | <Documented /> | The description of the tool as the tool computed it. | Type: `string`. |
 | `isDeferred` | <Documented /> | Present, and true, when the engine lists the tool behind ToolSearch. Its schema loads when the model asks for it by name. Absent for a tool that the engine lists in front. | Type: `true`. Optional. The tool of an MCP server loads on demand, and so does a tool that asks to. A plugin tool with `isDeferred: false` stays in front. |
 | `provider` | <Documented /> | Who provides this tool: the plugin and its tier, or `{ plugin: "engine", tier: "core" }` for a built-in. Pinned: the engine refuses a rewrite. | Type: `Origin`. The tool of a configured MCP server is `mcp:<server>`. It is in `prepend` when the policy settings source configures the server, else in `user`. |
-| `mcpServer` | <Documented /> | Since `2.1.326`, the MCP server that the tool comes from, read off the connection that listed it. A config file need not be read, and a server added at runtime is covered. Pinned: the engine refuses a rewrite that changes or adds it, and restores it when a rewrite leaves it out. | Type: `ToolMcpServer`. Optional. Absent on any other tool (a built-in, or one of a `tool.list` hook) and on an MCP tool whose server facts are not known.[^tool-mcp-server] |
+| `mcpServer` | <Documented /> | The MCP server that the tool comes from, read off the connection that listed it. A config file need not be read, and a server added at runtime is covered. Pinned: the engine refuses a rewrite that changes or adds it, and restores it when a rewrite leaves it out. | Type: `ToolMcpServer`. Optional. Absent on any other tool (a built-in, or one of a `tool.list` hook) and on an MCP tool whose server facts are not known.[^tool-mcp-server] |
 
 ### `ToolDescribeResult`
 
@@ -101,7 +101,7 @@ What a `tool.describe` hook returns: the description that the model sees for tha
 | --- | --- | --- | --- |
 | `description` | <Documented /> | The description that the model sees for the tool. | Type: `string`. |
 | `isDeferred` | <Documented /> | Where the tool waits. `true` puts it behind ToolSearch. | Type: `ToolDeferral`. Optional. |
-| `breakPromptCache` | <Documented /> | Sends a changed description or placement at the next turn. It rewrites the whole prompt cache and drops the earlier thinking of the model. | Type: `boolean`. Optional. Left out, a changed description waits for a new thread or a compaction. A changed placement waits for a new thread or `/clear`, because a compaction keeps the tool block. Before `2.1.321`, a changed answer for a tool that a thread had sent went out at the next turn.[^break-cache] |
+| `breakPromptCache` | <Documented /> | Sends a changed description or placement at the next turn. It rewrites the whole prompt cache and drops the earlier thinking of the model. | Type: `boolean`. Optional. Left out, a changed description waits for a new thread or a compaction. A changed placement waits for a new thread or `/clear`, because a compaction keeps the tool block.[^break-cache] |
 
 ### `ToolEnvelope`
 
@@ -114,9 +114,9 @@ What a `tool.describe` hook returns: the description that the model sees for tha
 
 ### `ToolInfo`
 
-One tool as `$.tool.list()` returns it and as a `tool.list` hook answers it (since `2.1.323`).[^tool-info] Used by `$.tool.list`, `tool.list`.
+One tool as `$.tool.list()` returns it and as a `tool.list` hook answers it.[^tool-info] Used by `$.tool.list`, `tool.list`.
 
-These rules hold since `2.1.323`:
+These rules hold:
 
 - **What the hooks answer.** For the raise of the engine, the answer is the tool pool of the session: for the model, every agent (foreground or background), ToolSearch, and `$.tool.call`. The tools of an MCP server that joins later are asked about before a request carries them. For the `$.tool.list()` of a mod, the answer is only what that call reads.
 - **What `next(e)` holds.** The tools as the engine built them, with what an earlier answer removed and without what it added. Answer the whole list each time. The engine ignores the order of the list, so that the prompt cache holds.
@@ -140,7 +140,7 @@ on("tool.list", async ($, e, next) => {
 | `name` | <Documented /> | What the model calls the tool. | Type: `string`. |
 | `description` | <Documented /> | What the tool does, in its own words: its description, or at most a first sentence for MCP tools without one. | Type: `string`. |
 | `mcp` | <Documented /> | True for the tool of an MCP server. | Type: `boolean`. |
-| `inputSchema` | <Documented /> | On an entry that a `tool.list` hook adds: a JSON schema object for the input (`{ type: "object", properties, required }`). The default is `{ type: "object" }`, as on `$.tool.register`. | Type: `Record<string, unknown>`. Optional. New in `2.1.323`. Never on a tool that the session lists. |
+| `inputSchema` | <Documented /> | On an entry that a `tool.list` hook adds: a JSON schema object for the input (`{ type: "object", properties, required }`). The default is `{ type: "object" }`, as on `$.tool.register`. | Type: `Record<string, unknown>`. Optional. Never on a tool that the session lists. |
 
 ### `ToolInputOf`
 
@@ -152,7 +152,7 @@ on("tool.list", async ($, e, next) => {
 
 ### `ToolJudgeInput`
 
-The input of `tool.judge`. Since `2.1.326`, it is the question of `tool.check` about a real call: all fields of `ToolCheckInput`, with a call that always has its ID. All fields are pinned. Used by `tool.judge`, `$.tool.judge`.
+The input of `tool.judge`. It is the question of `tool.check` about a real call: all fields of `ToolCheckInput`, with a call that always has its ID. All fields are pinned. Used by `tool.judge`, `$.tool.judge`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -162,7 +162,7 @@ The other fields are those of [`ToolCheckInput`](#toolcheckinput).[^tool-judge]
 
 ### `ToolMcpServer`
 
-The MCP server that a tool comes from, as `tool.describe` reports it in `mcpServer`. Since `2.1.326`. Used by `tool.describe`.
+The MCP server that a tool comes from, as `tool.describe` reports it in `mcpServer`. Used by `tool.describe`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -180,7 +180,7 @@ An input that names its tool as the literal `T`. `next` and `$.tool.call` read i
 
 ### `ToolOfferInput`
 
-Since `2.1.328`, the input of `tool.offer`: one tool, at the moment the engine offers it to the model of one loop. Used by `tool.offer`, `$.tool.offer`.[^tool-offer]
+The input of `tool.offer`: one tool, at the moment the engine offers it to the model of one loop. Used by `tool.offer`, `$.tool.offer`.[^tool-offer]
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -191,7 +191,7 @@ Since `2.1.328`, the input of `tool.offer`: one tool, at the moment the engine o
 
 ### `ToolOfferResult`
 
-Since `2.1.328`, what a `tool.offer` hook returns: whether the model of the loop is offered the tool, in its tool list and at its call. Used by `tool.offer`.[^tool-offer]
+What a `tool.offer` hook returns: whether the model of the loop is offered the tool, in its tool list and at its call. Used by `tool.offer`.[^tool-offer]
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -252,13 +252,13 @@ One tool_use block of an assistant message, with its outcome once the transcript
 ## Sources
 
 [^read-only]: The program, `chunk-56bhcxay.js:68733`.
-[^consent]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`. The text of `ToolCallReserved`. The run of `$.tool.call`, `chunk-56bhcxay.js:4896906`, throws unless `consent` is a string, adds it to the messages of the run as a message with origin `human` only when the call answers a vouched press or input of the plugin, and otherwise logs `consent left out, unvouched`. The type file of `2.1.326` has no such text; the one of `2.1.327` has it.
+[^consent]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`. The text of `ToolCallReserved`. The run of `$.tool.call`, `chunk-56bhcxay.js:4896906`, throws unless `consent` is a string, adds it to the messages of the run as a message with origin `human` only when the call answers a vouched press or input of the plugin, and otherwise logs `consent left out, unvouched`.
 [^ceiling]: `schemas/claude-code.d.ts`, `ToolCheckInput`.
 [^ceiling-result]: `schemas/claude-code.d.ts`, `ToolCheckInput`.
-[^decider]: The program, `chunk-syremzmn.js:216075`.
 [^break-cache]: `schemas/claude-code.d.ts`, `PromptSectionResult` and `ToolDescribeResult` (`breakPromptCache`).
 [^tool-info]: `schemas/claude-code.d.ts`, `ToolInfo`. The program, `chunk-ep7e5a3y.js:124633`, `chunk-56bhcxay.js:4906026`.
 [^tool-mcp-server]: `schemas/claude-code.d.ts`, `ToolDescribeInput` and `ToolMcpServer`.
 [^op-hold]: `opHoldMs: 30000`, `chunk-syremzmn.js:219487`.
 [^tool-judge]: `schemas/claude-code.d.ts`, `ToolJudgeInput`. The program, `chunk-syremzmn.js:218951`.
 [^tool-offer]: `schemas/claude-code.d.ts`, `ToolOfferInput` and `ToolOfferResult`. The program, `chunk-56bhcxay.js:62685` (the input) and `chunk-56bhcxay.js:4847751` (the refusal message).
+[^decider]: The program, `chunk-syremzmn.js:216075`.

@@ -135,7 +135,7 @@ flowchart TD
 | Run | <Documented /> | Read-only tools and subagents run in parallel, up to `CLAUDE_CODE_MAX_TOOL_USE_CONCURRENCY` (default 10). Other tools run one after another. |
 | `PostToolUse` and `PostToolUseFailure` hooks | <Documented /> | They run after each call. |
 | `PostToolBatch` hook | <Documented /> | It runs after a batch of parallel calls and before the next model call. It can stop the loop. |
-| Shell working directory | <Undocumented /> | Since `2.1.326`, a Bash command does not run in the launch folder when the working directory is gone. The command fails with `Working directory "<path>" is gone` (deleted, moved, replaced by a link, or unreadable) and the model can issue it again. An agent in a worktree that was removed is refused too, and a session pinned to its folder stays blocked until the folder is back.[^cwd] |
+| Shell working directory | <Undocumented /> | A Bash command does not run in the launch folder when the working directory is gone. The command fails with `Working directory "<path>" is gone` (deleted, moved, replaced by a link, or unreadable) and the model can issue it again. An agent in a worktree that was removed is refused too, and a session pinned to its folder stays blocked until the folder is back.[^cwd] |
 
 ## Recovery Inside the Loop
 
@@ -145,12 +145,12 @@ The loop does not fail on every error. It tries to fix the problem and continue.
 | --- | --- | --- |
 | The output stops at `max_tokens` | <Undocumented /> | It adds a nudge message and asks again, up to 3 times.[^nudge-count] |
 | The response is cut off | <Undocumented /> | It does the same. |
-| A subagent's text reply hits the output token limit | <Undocumented /> | Since `2.1.326`, the nudge tells the subagent that its caller gets no answer in pieces, and asks for the whole answer again, more briefly. A second cut gets a harder nudge: the whole answer in at most half the length of the last try, or a first line that says it is partial.[^sub-limit] Since `2.1.327`, such answers more often come back whole or say up front that they are partial.[^v327] |
-| A reply is cut at 32,000 output tokens on an unrecognized model | <Undocumented /> | A model is unrecognized when it has no entry in the model list, is not a `claude-3` Opus, Sonnet, or Haiku model, has no configured limit, and `CLAUDE_CODE_MAX_OUTPUT_TOKENS` is not set above 0. Such a model has a default of 32,000 and an upper limit of 128,000 output tokens. Since `2.1.327`, the continuation of a cut reply uses 128,000.[^cut-limit][^v327] |
+| A subagent's text reply hits the output token limit | <Undocumented /> | The nudge tells the subagent that its caller gets no answer in pieces, and asks for the whole answer again, more briefly. A second cut gets a harder nudge: the whole answer in at most half the length of the last try, or a first line that says it is partial.[^sub-limit] |
+| A reply is cut at 32,000 output tokens on an unrecognized model | <Undocumented /> | A model is unrecognized when it has no entry in the model list, is not a `claude-3` Opus, Sonnet, or Haiku model, has no configured limit, and `CLAUDE_CODE_MAX_OUTPUT_TOKENS` is not set above 0. Such a model has a default of 32,000 and an upper limit of 128,000 output tokens. The continuation of a cut reply uses 128,000.[^cut-limit] |
 | A `tool_use` block has no valid call | <Undocumented /> | It drops the reply and asks once more. Then it ends with a message that the tool call could not be parsed. |
 | The model sends only thinking | <Undocumented /> | It sends one nudge. |
 | A safety refusal | <Documented /> | It runs again on the fallback model of that category. See [Models](models.md#fallback). |
-| The API says `max_tokens` is above the model limit | <Undocumented /> | Since `2.1.326`, when the error text reads `max_tokens: N > M, which is the maximum allowed number of output tokens for <model>` and `M` is at least 4096, Claude Code sends the request again with `max_tokens` set to `M`.[^max-tokens] |
+| The API says `max_tokens` is above the model limit | <Undocumented /> | When the error text reads `max_tokens: N > M, which is the maximum allowed number of output tokens for <model>` and `M` is at least 4096, Claude Code sends the request again with `max_tokens` set to `M`.[^max-tokens] |
 | The context is too long | <Documented /> | It lowers `max_tokens` or compacts. |
 | Autocompact refills 3 times in a row | <Documented /> | It ends the turn with an error that starts `Autocompact is thrashing`. See [Troubleshooting](https://code.claude.com/docs/en/troubleshooting) in the official docs. |
 | A `Stop` hook blocks | <Documented /> | It sends the reason back to the model. After `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` blocks in a row (default 8), it ends the turn. |
@@ -190,7 +190,7 @@ stateDiagram-v2
 | `blocking_limit` | The context hit the blocked level. See [Context and Compaction](context-and-compaction.md#when-compaction-runs). |
 | `rapid_refill_breaker` | Autocompact refilled the context too fast. |
 | `model_error`, `api_error`, `image_error` | The API or an image failed. |
-| `malformed_tool_use_exhausted` | The model sent a tool call that could not be parsed, and the retries failed too. Since `2.1.307` Claude Code retries the call up to twice.[^v307] Before, the turn ended after two bad calls in a row. |
+| `malformed_tool_use_exhausted` | The model sent a tool call that could not be parsed, and the retries failed too. Claude Code retries the call before the turn ends.[^v307] |
 | `prompt_too_long` | The prompt did not fit the context window. |
 | `budget_exhausted` | The run used all of its budget. |
 | `structured_output_retry_exhausted` | The model did not give valid structured output after the allowed retries. |
@@ -223,5 +223,4 @@ stateDiagram-v2
 [^max-tokens]: The program, `chunk-56bhcxay.js:3190601`, `chunk-56bhcxay.js:3190714`. The rule has no list of status codes. It skips a 401, a `policy_blocked` error (status 400), and a second refusal (`chunk-56bhcxay.js:3420409`, `chunk-56bhcxay.js:3420780`). When `M` is below 4096, it sends again only for an unrecognized model, with 32,000 as the limit.
 [^nudge-count]: The program, `chunk-2b3eg071.js:165951` (the limit of 3) and `chunk-2b3eg071.js:170251-170313` (the counter `maxOutputTokensRecoveryCount` ends the retries after the third).
 [^cut-limit]: The program, `chunk-xethrx83.js:513465` (the 32,000 and 128,000 values), `chunk-xethrx83.js:517691` (the condition for an unrecognized model), and `chunk-56bhcxay.js:3190601` (the limit for a reply that continues a cut reply, used only for such a model).
-[^v327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^v307]: [`2.1.307` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.307).
+[^v307]: The program, `chunk-2b3eg071.js:293471`.

@@ -27,7 +27,7 @@ on("telemetry.log", { to: "collector" }, ($, e, next) => next(e));
 
 | Item | Status | What it does | How it works | Where it can be used |
 | --- | --- | --- | --- | --- |
-| `telemetry.log` | <Documented /> | Fires when a record is about to be logged to the destination `e.to` names. | Input `TelemetryLogInput`. Result `{ value: undefined }` or `{ deny }`. The type pins `e.to`. Since `2.1.328`, where `sec-default` is seated, a collector record passes the `user` tier by.[^v328-collector] | `on('telemetry.log', ...)`. Also `$.telemetry.log(...)`. |
+| `telemetry.log` | <Documented /> | Fires when a record is about to be logged to the destination `e.to` names. | Input `TelemetryLogInput`. Result `{ value: undefined }` or `{ deny }`. The type pins `e.to`. Where `sec-default` is seated, a collector record passes the `user` tier by.[^v328-collector] | `on('telemetry.log', ...)`. Also `$.telemetry.log(...)`. |
 | `telemetry.mark` | <Documented /> | Fires when a caller marks one use of a feature. It always goes to `anthropic`, with no `to`. | Input `TelemetryMarkInput`. Result `{ value: undefined }` or `{ deny }`. `{ deny }` rejects the caller. | `on('telemetry.mark', ...)`. Also `$.telemetry.mark(...)`. |
 
 ## Types

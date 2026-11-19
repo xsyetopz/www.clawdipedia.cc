@@ -6,7 +6,7 @@ sidebar_position: 1
 
 A mod is a plugin whose code runs inside Claude Code. Claude Code calls the code when an event happens, such as a tool call or a submitted prompt. The code can watch the event, change it, or answer it.
 
-The object `$` is the Mod API. The type file that Claude Code publishes marks it as early access, so it may change between releases. These pages cover `2.1.327`. To load a mod, put it in a plugin folder with a `hooks/hooks.json` file. See [A First Mod](#a-first-mod).
+The object `$` is the Mod API. The type file that Claude Code publishes marks it as early access, so it may change between releases. These pages cover `2.1.328`. To load a mod, put it in a plugin folder with a `hooks/hooks.json` file. See [A First Mod](#a-first-mod).
 
 Official pages: [Mods Overview](https://code.claude.com/docs/en/plugins/mods/overview), [Create a Mod](https://code.claude.com/docs/en/plugins/mods/create), [Use the Mods API](https://code.claude.com/docs/en/plugins/mods/api), [React to Events](https://code.claude.com/docs/en/plugins/mods/events), [Draw in the Interface](https://code.claude.com/docs/en/plugins/mods/interface), [Test a Mod](https://code.claude.com/docs/en/plugins/mods/test), [Troubleshoot a Mod](https://code.claude.com/docs/en/plugins/mods/troubleshoot), and [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference).
 
@@ -72,7 +72,7 @@ flowchart TD
 See [Files, Nouns, and Gates](nouns-and-gates.md#gates-that-stop-mods).
 
 Hooks run in five tiers, from outermost: `prepend`, `user`, `append`, `builtin`, `core`.
-Managed plugins in `prependPlugins` and `appendPlugins` take the first and third tier. Since `2.1.327`, a managed plugin that neither list names takes the first tier, after the listed ones (see [`Tier`](types/hooks.md#types-without-fields)).[^tier-327]
+Managed plugins in `prependPlugins` and `appendPlugins` take the first and third tier. A managed plugin that neither list names takes the first tier, after the listed ones (see [`Tier`](types/hooks.md#types-without-fields)).[^tier-327]
 The engine itself is `core`.
 
 ## Commands for Mod Authors
@@ -139,51 +139,8 @@ The [type pages](types/index.md) hold the detailed shapes of inputs and results.
 - The event sets the 50 millisecond limit of a `prompt.edit` hook. The type file does not hold it.[^prompt-edit]
 - Installed mods roll out behind a server flag. The program has no local switch for it.[^rollout]
 - The value `re-entry` of `next.error.kind` is in the docs and in a program debug string. It is not in the type file.[^re-entry]
-- The type file says that a name in `RenderSurface` is no promise that its host draws, and that a host which attaches no surface shows nothing drawn. It does not say which host attaches none. The docs say VS Code draws from `2.1.299`.
+- The type file says that a name in `RenderSurface` is no promise that its host draws, and that a host which attaches no surface shows nothing drawn. It does not say which host attaches none.
 - Many doc comments in the type file name code items without backticks. The tables keep the wording of the type file where it matters.
-
-## Type File Changes by Version
-
-Each entry compares a type file with the one before it. The type file and the program were last compared in full on `2.1.305`.
-
-- `2.1.328`, compared with `2.1.327`:
-  - Adds the call `$.session.machine` and the event `tool.offer`, with its types `ToolOfferInput` and `ToolOfferResult`. The offer to resume an agent carries `agentId`.
-  - An organization's mod can no longer call a tool or run a command that a person's mod registered.
-- `2.1.327`, compared with `2.1.326`: changes only comments. They say how a plugin's `tier` and the `prepend` and `append` lists are judged, and that an organization's plugin with or without a hooks module takes the organization's tier once it is on in `enabledPlugins` and its marketplace is in `extraKnownMarketplaces`.
-- `2.1.326`, compared with `2.1.325` (the type files of `2.1.324` and `2.1.325` are the same):
-  - Adds the render components `AgentRow` and `ContextMenu`, the element `Shader` to the desktop and mobile tables, and `UiPointerResult` (see [UI Elements](./ui/ui-elements.md)).
-  - Adds the calls `$.session.info`, `$.agent.call`, `$.agent.limits`, `$.wasm.compile`, and `$.process.hookEnv`, and the events `session.stop`, `tool.judge`, `tool.run`, and `ui.pointer`.
-  - Adds `offset` and `length` to `$.fs.read`, `provides` to `plugin.register`, `mcpServer` to `ToolDescribeInput`, and `hasUnknownPrice` to `SessionCost`. A spawn's `parentAgentId` can now name a running or resting agent.
-  - Adds the `claude plugin validate --json` report types (see [Plugin CLI](../plugins/cli.md#validate-json-report)), and makes `SpeakRequest` one flat type.
-- `2.1.324`, compared with `2.1.323`:
-  - Adds the still ground `image` (`ThemeImage`, `ThemeImageGround`, `ThemeImageWire`) to `$.theme.set`.
-  - Says that an answered `$.model.complete` or `$.model.classify` request counts toward the session cost, and that `SessionCost` sums a mod's `$.model` calls.
-  - Adds row limits to `AbovePromptList` and `AbovePrompt` trees, and says that a rewrite may hold, but not repeat or change, the rows it was handed.
-  - Says that a hook that throws, or answers a wrong shape, unloads its plugin, and that `claude plugin validate` reports the lists of hooks, calls, and nouns as notes.
-- `2.1.325`: matched `2.1.324`.
-- `2.1.322`: matched `2.1.321`.
-- `2.1.321`, compared with `2.1.319`: adds `$.ui.cancelNotify` and its `CancelNotifyArgs`, and adds `breakPromptCache` to the answers of `tool.describe` and `prompt.section` hooks (see [Tool and Command Config](./calls/tool-command-config.md)).
-- `2.1.323`, compared with `2.1.322`:
-  - Changes `$.theme.set`: `backdrop.id` is now `backdrop.scene`, `backdrop` may be a still ground (`ThemeGround`: a color, a gradient, or a vector), and `colorScheme` is now the top-level `overrideColorScheme` (see [UI Methods](./ui/ui.md)).
-  - Adds the element `Progress` to every surface table except `ClientElements`, the type `AbovePromptRow`, the render component `AbovePromptList`, and `tool.list` to `InvalidatableEventName`.
-  - Lets `$.mcp.connect` bring in any server that `/mcp` lists, and refuses `$.ui.open` and `$.ui.close` on a pane that another plugin holds.
-  - Adds `placement` to `PaneOpenArgs`, and a plain-data rule (no named key on a list, no key `__proto__`, `constructor`, or `prototype`).
-  - Two plugins on one `hotkey` press neither, and a matcher that leaves out `plugin` names the hook's own plugin.
-  - `claude plugin validate` also reports the `$` nouns that an `engine.create` hook adds or withholds.
-- `2.1.319`, compared with `2.1.318`: replaces `$.ui.backdrop` with the calls `$.theme.set` and `$.theme.clear` and their events, and adds `isTextDisplayOnly` to `CommandRunResult` and `by` to `TurnCompleteResult`.
-- `2.1.318`, compared with `2.1.317`: adds `effort` to the `$.model.complete` and fork types, `colorScheme` to the backdrop call, and the elements `Input` and `Select` to one more surface.
-- `2.1.317`, compared with `2.1.316`: adds the call `$.ui.backdrop`, its events, and the render component `Backdrop`.
-- `2.1.316`: matched `2.1.314` apart from the version in its header.
-- `2.1.314`, compared with `2.1.312`:
-  - Adds the call `$.ui.place` and the event `ui.place` (see [UI Methods](./ui/ui.md) and [UI Events](./ui/ui-events.md)).
-  - Adds the types `UiPlaceArgs` and `UiPlaceResult` and the render component `Placed` (see [UI Types](./types/ui/index.md)).
-  - Changes one comment on `SvgProps`: the editor ignores `isInteractive` and always draws an image.
-- `2.1.312`, compared with `2.1.311`: changes only the comment on the `effort` field of `TurnStepInput`. On a model that takes effort per message, a level stands from one message with input to the next, and a number goes out at once.
-- `2.1.311`, compared with `2.1.310`: adds the call `$.prompt.paint` and the event `prompt.paint` (see [Turn and Prompt](./calls/turn-prompt.md)), lets a managed `prepend` hook name `user` in `next.to` (see [Hooks](./events/hooks.md)), and adds `backgroundColor` to a pane (see [UI Types](./types/ui/index.md)).
-- `2.1.310`, compared with `2.1.309`: lets an `Image` draw inside tmux and adds the `fix` code to the `$.ui.blit` result (see [UI Types](./types/ui/index.md)).
-- `2.1.309`, compared with `2.1.308`: adds `cursor` to `$.prompt.fill` and the `prompt.fill` event, and lets a `turn.step` hook name the model by an alias (see [Turn and Prompt Types](./types/turn-prompt/index.md)).
-- `2.1.308`: matched `2.1.307` apart from the version in its header.
-- `2.1.307`, compared with `2.1.306`: changes the `tool.check` types. The input carries `approver`, and the result's `decider` is replaced by `plugin`, which the engine sets (see [Tool and Command Config](./calls/tool-command-config.md)). A test's `$.tool.call` takes `agentId` ([Testing](./calls/testing.md)), and a keyed `Markdown` element carries `part` ([UI Types](./types/ui/index.md)).
 
 ## Errors
 
@@ -199,8 +156,8 @@ Each row is a family of messages. The backticked text is the start that every me
 | `${…}: $.store.`, `${…}: store file` | <Undocumented /> | A `$.store` call failed, or a store file is unusable. | A key is over the length limit. The store would be over the size limit. Or the store file is unreadable or malformed (for example the JSON is not an object). |
 | `${…}: $.prompt.paint` | <Undocumented /> | A `$.prompt.paint` call was refused. | The argument has no `decorations` array of `{ start, end }` runs, or `text` is not a string while `decorations` is not empty.[^paint] |
 | `${…}: $.config.` | <Undocumented /> | A `$.config.set` call named a key that `/config` has no row for. | The text says that `$.config.list` names the keys. |
-| `$.env.set:` | <Undocumented /> | A `$.env.set` call was refused. Since `2.1.328`. | The text ends in a code. `OUT_OF_STEP`: the write is not newer than a write of the same name that the host already applied. `HOST_RULE`: a host rule keeps the name or value; only the environment that Claude Code starts with, or Claude Code itself, sets it. `PINNED`: the managed `env` settings name the variable, or it goes with the managed `processWrapper` setting. `HELD`: the write is held to settings, and the host did not apply it.[^env-set-codes] |
-| `config.set:` | <Undocumented /> | A `$.config.set` call was refused after it passed the key check. Since `2.1.328`. | The text ends in a code. `NO_ROW`: no `/config` row has the key. `LOCKED`: the row has a lock reason. `NOT_WRITTEN`: the write did not take effect.[^env-set-codes] |
+| `$.env.set:` | <Undocumented /> | A `$.env.set` call was refused. | The text ends in a code. `OUT_OF_STEP`: the write is not newer than a write of the same name that the host already applied. `HOST_RULE`: a host rule keeps the name or value; only the environment that Claude Code starts with, or Claude Code itself, sets it. `PINNED`: the managed `env` settings name the variable, or it goes with the managed `processWrapper` setting. `HELD`: the write is held to settings, and the host did not apply it.[^env-set-codes] |
+| `config.set:` | <Undocumented /> | A `$.config.set` call was refused after it passed the key check. | The text ends in a code. `NO_ROW`: no `/config` row has the key. `LOCKED`: the row has a lock reason. `NOT_WRITTEN`: the write did not take effect.[^env-set-codes] |
 | `${…}: $.` | <Undocumented /> | A refused or failed call on `$` from a plugin. | The text names the call and the reason. Example reasons: a value that is not JSON data or is over a character limit. A `$.clock` delay that is not a non-negative number of milliseconds. A `$.state` reference that is not `{ plugin, key }`. `$.agent.spawn` without a prompt. A refused `$.mcp.call`. `$.prompt.compose` in a process that composes no system prompt. |
 | `$.` | <Undocumented /> | A `$` call failed in the engine. | A `$.telemetry` call names no origin. A caller passed a bad value to `$.skill.prompt`. The environment has no streaming ops from the host. Or the chain has no core at the bottom. |
 | `${…}: next` | <Undocumented /> | A refused `next()` or `next.to()` call of a hook. | `next()` passed an argument that the event does not allow. `next.to()` names no tier. Or it names a tier that a dispatch does not continue at (user, append, builtin, core). Or `next.to()` is not available to this plugin. The host refuses `next.to("user")` when no hook of the same module that spells it stands on this dispatch. |
@@ -209,9 +166,9 @@ Each row is a family of messages. The backticked text is the start that every me
 | `${…}: engine.create` | <Undocumented /> | An `engine.create` hook returned a wrong value. | It must return `$` with nouns, and it must not change the identity of the plugin. |
 | `${…}: hooks module not loaded` | <Undocumented /> | A hooks module did not load. | `next.to` is available to managed plugins only, or a policy or scan reason follows. The name of the plugin is the engine's own chain member (`plugin.json` name). Or the name starts with the prefix that marks the name of a settings hook.[^hooks-name] |
 | `${…}: matcher` | <Undocumented /> | A refused hook matcher. | A RegExp has a flag that keeps state, or a nested quantifier. A key is not kept, or is reserved. A string is too long. Or the matcher is not a plain object. |
-| `${…}: returned` | <Undocumented /> | A render hook returned a drawing that is not allowed. | It holds a Proxy or a `vm` context (the context since `2.1.310`), a function where plain data goes, an object that is not plain data, or a Client or element that it did not draw. |
+| `${…}: returned` | <Undocumented /> | A render hook returned a drawing that is not allowed. | It holds a Proxy or a `vm` context, a function where plain data goes, an object that is not plain data, or a Client or element that it did not draw. |
 | `${…} after register() returned`, `${…} called twice`, `${…} takes a function` | <Undocumented /> | A `.catch` call on a registration broke a rule. | `.catch()` is for `register()`, a registration takes one `.catch`, and the argument is a function `($, e, next)`. |
-| `${…}: ${…}:` | <Undocumented /> | A refused or failed call from a plugin. | The text names the call and the reason. A `socketPath` is not absolute, has a NUL byte, or is a network location. A URL is not valid, is not http or https, or has credentials. A request body is over the limit, an auth handle is unknown (the text ends in `UNKNOWN_HANDLE` since `2.1.328`), there were too many redirects, or no complete answer came in time. `$.process.hookEnv` is called for a plugin that is not synced (`NOT_SYNCED`, since `2.1.328`).[^handle-codes] |
+| `${…}: ${…}:` | <Undocumented /> | A refused or failed call from a plugin. | The text names the call and the reason. A `socketPath` is not absolute, has a NUL byte, or is a network location. A URL is not valid, is not http or https, or has credentials. A request body is over the limit, an auth handle is unknown (the text ends in `UNKNOWN_HANDLE`), there were too many redirects, or no complete answer came in time. `$.process.hookEnv` is called for a plugin that is not synced (`NOT_SYNCED`).[^handle-codes] |
 
 ## Related Pages
 
@@ -226,6 +183,6 @@ Each row is a family of messages. The backticked text is the start that every me
 [^rollout]: The program, `chunk-xethrx83.js:728152`. The server flag is `tengu_plugin_hooks_modules`.
 [^re-entry]: The program, `chunk-9nv3z5ae.js:6443`.
 [^paint]: The program, `chunk-syremzmn.js:304985`.
-[^env-set-codes]: The program, `chunk-r240nspa.js:10652` (`OUT_OF_STEP`), `chunk-r240nspa.js:10703` (`HOST_RULE`), `chunk-r240nspa.js:10748` (`PINNED`), `chunk-r240nspa.js:10823` (`HELD`), `chunk-r240nspa.js:11376` (`NO_ROW`, `LOCKED`, `NOT_WRITTEN`, and the `config.set: <code>` text), and `chunk-r240nspa.js:13748` (`NOT_WRITTEN` again, in the `config.set` source branch). `2.1.327` has none of these texts.
+[^env-set-codes]: The program, `chunk-r240nspa.js:10652` (`OUT_OF_STEP`), `chunk-r240nspa.js:10703` (`HOST_RULE`), `chunk-r240nspa.js:10748` (`PINNED`), `chunk-r240nspa.js:10823` (`HELD`), `chunk-r240nspa.js:11376` (`NO_ROW`, `LOCKED`, `NOT_WRITTEN`, and the `config.set: <code>` text), and `chunk-r240nspa.js:13748` (`NOT_WRITTEN` again, in the `config.set` source branch).
 [^hooks-name]: The program, `chunk-56bhcxay.js:999067` (`next.to`), `chunk-56bhcxay.js:1016778` (policy or scan), and `chunk-56bhcxay.js:1041381` (the engine's own chain member, and the name that starts with a prefix). The prefix is the constant `hook:` at `chunk-syremzmn.js:64862`. The type file `schemas/claude-code.d.ts`, `ToolCheckInput`, names the prefix `hook:`.
 [^handle-codes]: The program, `chunk-r240nspa.js:12180` (`UNKNOWN_HANDLE`) and `chunk-r240nspa.js:12679` (`NOT_SYNCED`).

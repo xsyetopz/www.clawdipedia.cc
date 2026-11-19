@@ -34,7 +34,7 @@ The list runs from highest to lowest priority. See [Model Configuration: Setting
 | `model` | <Documented /> | The settings key that stores the default. |
 | `ANTHROPIC_DEFAULT_MODEL` | <Documented /> | Sets the default for new sessions. |
 | `availableModels` | <Documented /> | An allowlist in managed settings. It limits `/model`, `--model`, the env vars, and alias resolution. Entries can be a family (`sonnet`), a version prefix (`claude-sonnet-4-5`), or a full ID. |
-| `modelOverrides` | <Documented /> | Maps an Anthropic model ID to the provider string Claude Code sends, such as a Bedrock inference profile ARN. Since `2.1.305`, `/effort` and `/autocompact` settings apply even when the model name differs from a `modelOverrides` value by letter case or a `[1m]` tag.[^v305] |
+| `modelOverrides` | <Documented /> | Maps an Anthropic model ID to the provider string Claude Code sends, such as a Bedrock inference profile ARN. Claude Code matches a model name to a `modelOverrides` value without regard to letter case or a `[1m]` tag.[^overrides] |
 | `modelPicker` | <Documented /> | Lists your own rows for the `/model` picker, in your order and labels. |
 | `ANTHROPIC_CUSTOM_MODEL_OPTION` | <Documented /> | Adds one custom entry to the picker. Claude Code does not validate the ID. Add `_NAME` and `_DESCRIPTION` for a label. |
 | `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY` | <Documented /> | Fills the picker from the gateway `/v1/models` endpoint. Off by default. |
@@ -54,13 +54,12 @@ The catalog holds `opus`, `sonnet`, `haiku`, and `fable`. The help text of `--mo
 | `opus` | <Documented /> | `claude-opus-5-5` | Foundry uses `claude-opus-4-6`. Gateways use `claude-opus-4-7`. |
 | `sonnet` | <Documented /> | `claude-sonnet-5-5` | Bedrock, Vertex, Foundry, and Mantle use `claude-sonnet-4-5`. Claude Platform on AWS and gateways use `claude-sonnet-4-6`. |
 | `haiku` | <Documented /> | `claude-haiku-5-5` | Every other provider uses `claude-haiku-4-5`. |
-| `fable` | <Documented /> | `claude-fable-5-2` | Gateways use `claude-fable-5`, which the catalog names Fable 5. A session counts as a gateway session when gateway sign-in is active, the gateway server process runs, or host policy requires a gateway. Before `2.1.321`, it resolved to `claude-fable-5-1`.[^fable-alias] |
-| `best` | <Documented /> | The same model as `opus`. Before `2.1.321`, it was the model that `fable` resolves to, where you have Fable.[^best-history] | The alias table sets `best` to `opus`.[^best] |
-| `opusplan` | <Documented /> | `opus` in plan mode, then `sonnet` to run the plan. Since `2.1.326`, a subagent that has its own model keeps it in plan mode. Before, it moved to the plan-mode model when the setting was `opusplan` or `haiku` [^opusplan] | |
-| `sonnet[1m]`, `opus[1m]`, `fable[1m]` | <Documented /> | The alias with a 1M window. | No effect when the alias already has a native 1M window. Since `2.1.311`, Claude Code drops the suffix from the names and IDs it shows, and the `(1M context)` label, where the suffix has no effect. It still accepts the suffix.[^suffix] |
+| `fable` | <Documented /> | `claude-fable-5-2` | Gateways use `claude-fable-5`, which the catalog names Fable 5. A session counts as a gateway session when gateway sign-in is active, the gateway server process runs, or host policy requires a gateway.[^fable-alias] |
+| `best` | <Documented /> | The same model as `opus`. | The alias table sets `best` to `opus`.[^best] |
+| `opusplan` | <Documented /> | `opus` in plan mode, then `sonnet` to run the plan. [^opusplan] | |
+| `sonnet[1m]`, `opus[1m]`, `fable[1m]` | <Documented /> | The alias with a 1M window. | No effect when the alias already has a native 1M window. Claude Code shows the `(1M context)` label only for a model that supports the suffix. It still accepts the suffix on other models.[^suffix] |
 
 See [Model Configuration](https://code.claude.com/docs/en/model-config) for the aliases.[^aliases] Claude Code removes the `[1m]` tag when the name without it has a known window on its own. It adds the `(1M context)` label only when the tag remains and the model allows the suffix.[^suffix]
-Opus 5.5 needs Claude Code v2.1.280 or later, Sonnet 5.5 needs v2.1.284, Haiku 5.5 needs v2.1.293, Fable 5.1 needs v2.1.257, and Fable 5.2 needs v2.1.321. The [Version History](https://code.claude.com/docs/en/model-config#version-history) in the official docs lists the `2.1.321` changes to `fable` and `best`.[^min-versions]
 
 ### Pin the Models Behind an Alias
 
@@ -82,7 +81,6 @@ A native 1M model runs with 1M with no suffix when the pinned ID contains its An
 ## Catalog
 
 The catalog is a built-in list of models.[^catalog] It holds the provider names, the window, the output limits, the price, the default effort, and the capability flags of each model.
-Since `2.1.311`, on Bedrock, Mantle, Vertex, and Foundry, Claude Code can also load model settings from a signed file. `CLAUDE_CODE_MODEL_CATALOG` turns this off (see [Models and Effort](../env-vars/models-and-effort.md)).[^signed-file]
 A row is <Documented /> when an official docs page names the model. It is <Undocumented /> when no page names it.
 The docs do not list the catalog fields, so the window, the limits, and the prices come from the program for all rows.
 
@@ -122,8 +120,8 @@ Notes:
 - The catalog keeps a rank for each model for the advisor tool (`--advisor`). The ranks run from `1` for `claude-haiku-4-5` to `10` for `claude-fable-5-2` and `claude-mythos-5-2`. `claude-fable-5-1` and `claude-mythos-5-1` have `9`.
 - A model can name a model to use instead on a third-party provider. For example, `claude-opus-5-5` falls back to `claude-opus-5`, `claude-fable-5-1` falls back to `claude-fable-5`, and `claude-fable-5-2` falls back to `claude-fable-5-1`.[^fallback-3p] The catalog row of `claude-fable-5-2` has the Vertex region variable `VERTEX_REGION_CLAUDE_FABLE_5_2`; see [Providers](providers.md#vertex-region-variables).
 - The Mythos models have a name on the Anthropic API only, and none on the cloud providers.
-- For an ID that is not in the catalog, Claude Code assumes a 1M window since `2.1.323`. Before, it assumed 200K. The function that picks the window returns 1,000,000 for this case. In `2.1.322`, the same function returned 200,000.[^window-default] With `CLAUDE_CODE_DISABLE_1M_CONTEXT=1`, Claude Code keeps 200K. Claude Code adds a hint to the notice when the window is 1M: "set a smaller auto-compact window with /autocompact". [^window-hint] Use `/autocompact` to compact earlier.
-- Since `2.1.316`, `/model <id>` warns about an ID that is not in the catalog. A probe of `2.1.316` ran `/model claude-zeta-9` with `-p`.[^zeta-probe] Claude Code replied "Set model to `claude-zeta-9` for this session only", then "Claude Code doesn't recognize the model "claude-zeta-9", so it assumes a context window of 200k tokens" (the number is now the assumed window), with a link to [Model Configuration: Correct the Window for a Gateway or Custom Model ID](https://code.claude.com/docs/en/model-config#correct-the-window-for-a-gateway-or-custom-model-id). Before `2.1.316`, `/model` did not warn about such an ID.[^zeta-notes] A known ID, such as `claude-opus-5-5`, gives no warning. At startup, a status notice says the same thing ("Model "…" isn't recognized").
+- For an ID that is not in the catalog, Claude Code assumes a 1M window. The function that picks the window returns 1,000,000 for this case.[^window-default] With `CLAUDE_CODE_DISABLE_1M_CONTEXT=1`, Claude Code keeps 200K. Claude Code adds a hint to the notice when the window is 1M: "set a smaller auto-compact window with /autocompact". [^window-hint] Use `/autocompact` to compact earlier.
+- `/model <id>` warns about an ID that is not in the catalog. For example, `/model claude-zeta-9` replies "Set model to `claude-zeta-9` for this session only", then "Claude Code doesn't recognize the model "claude-zeta-9", so it assumes a context window of 200k tokens" (the number is the assumed window), with a link to [Model Configuration: Correct the Window for a Gateway or Custom Model ID](https://code.claude.com/docs/en/model-config#correct-the-window-for-a-gateway-or-custom-model-id).[^zeta] A known ID, such as `claude-opus-5-5`, gives no warning. At startup, a status notice says the same thing ("Model "…" isn't recognized").
 
 ## Other Model IDs in the Program
 
@@ -134,8 +132,8 @@ These IDs are not catalog rows. Claude Code names them for one task each. All ro
 | `claude-3-opus`, `claude-3-sonnet`, `claude-3-haiku` | <Undocumented /> | The `Read` tool refuses a whole-PDF read on these models. Use the `pages` parameter instead. |
 | `claude-haiku-3-5`, `claude-sonnet-3-7` | <Undocumented /> | Short names in a table that shortens a model name for the commit and pull request attribution line. A name that contains `haiku-3-5` or `sonnet-3-7` maps to the ID. |
 | `claude-mythos-preview` | <Undocumented /> | The model-name validation accepts it as a known name, next to the aliases. It has no catalog row. |
-| `claude-sonnet-4-5-20250929[1m]` | <Undocumented /> | On the Anthropic API, a startup migration changes a user-settings `model` of this value to `sonnet[1m]`.[^sonnet-migration] Since `2.1.326`, Claude Code has no step that rewrites a saved `sonnet[1m]` to a dated model ID. That rewrite gave an ID that the API rejects.[^v325] |
-| `claude-fable-5-1[1m]` | <Undocumented /> | A startup migration changes a user-settings `model` of this value, or of `claude-fable-5-1`, to `fable[1m]` (or `fable`).[^fable-migration] The [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321) say Pro and Max plans move at once, and Team and Enterprise plans move once the organization allows it. A deferred move for those plans stops at 15 December 2026.[^fable-deadline] `/model claude-fable-5-1` switches back. |
+| `claude-sonnet-4-5-20250929[1m]` | <Undocumented /> | On the Anthropic API, a startup migration changes a user-settings `model` of this value to `sonnet[1m]`.[^sonnet-migration] |
+| `claude-fable-5-1[1m]` | <Undocumented /> | A startup migration changes a user-settings `model` of this value, or of `claude-fable-5-1`, to `fable[1m]` (or `fable`).[^fable-migration] Team and Enterprise plans also get a deferred move: it waits until the organization allows `fable`, and it stops at 15 December 2026.[^fable-deadline] `/model claude-fable-5-1` switches back. |
 | `claude-sonnet-4-6[1m]`, `claude-opus-4-6[1m]` | <Undocumented /> | The value of the "1M context" entries in the `/model` picker on the Anthropic API. |
 | `claude-opus-5[1m]`, `claude-opus-5-5[1m]`, `claude-sonnet-5-5[1m]` | <Undocumented /> | The refusal fallback table treats each like the ID without `[1m]`. |
 | `claude-sonnet-5[1m]`, `claude-opus-4-8[1m]` | <Undocumented /> | Keys of a built-in per-model threshold table (`severityByModel`), next to the same IDs without `[1m]`. |
@@ -187,7 +185,7 @@ For pinned models on third-party providers, you can state the capabilities yours
 | `refusal_fallback` | <Undocumented /> | A refused request can run again on a fallback model. | 6 |
 | `silent_turn_reminder` | <Undocumented /> | Claude Code adds a reminder after a turn with no text. | 1 |
 | `fast_mode` | <Undocumented /> | The model supports `/fast` on the Anthropic API. See [Fast Mode](fast-mode.md#models). | 5 |
-| `vertex_fast_mode` | <Undocumented /> | The model supports `/fast` on Vertex, which [`2.1.322`](https://github.com/anthropics/claude-code/releases/tag/v2.1.322) added. `claude-fable-5-2` and `claude-mythos-5-2` have it. | 2 |
+| `vertex_fast_mode` | <Undocumented /> | The model supports `/fast` on Vertex. `claude-fable-5-2` and `claude-mythos-5-2` have it. | 2 |
 | `thinking_disabled_effort_cap` | <Undocumented /> | The purpose is not stated. | 1 |
 | `opus_5_prompt_bundle` | <Undocumented /> | The model gets the prompt sections for Opus 5. | 1 |
 | `opus_5_5_prompt_bundle` | <Undocumented /> | The model gets the prompt sections for Opus 5.5. | 1 |
@@ -206,22 +204,17 @@ The betas `per-turn-control-2026-07-01` and `timing-2026-09-09` match the flags 
 
 ## Sources
 
-[^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
+[^overrides]: The program, `chunk-xethrx83.js:280365` (the lookup from a model name to a `modelOverrides` key) and `chunk-699j6sfp.js:1206` (the comparison that ignores letter case and a trailing `[1m]`).
 [^best]: The program, `chunk-b60sxmve.js:22702`.
-[^best-history]: The official page [Model Configuration](https://code.claude.com/docs/en/model-config#version-history), section "Version history", row `v2.1.321`.
-[^fable-alias]: The program, `chunk-b60sxmve.js:22614-22702` for the alias entry, `chunk-b60sxmve.js:28162` for the lookup that takes `per_provider` first and `default` second, `chunk-b60sxmve.js:34347` for the provider choice, and `chunk-b60sxmve.js:16653` for the `claude-fable-5` entry with display name `Fable 5`. The official page [Model Configuration](https://code.claude.com/docs/en/model-config#fable-alias-resolution), section "Fable alias resolution", and its Version history rows `v2.1.321` and `v2.1.257`.
-[^min-versions]: The official page [Model Configuration](https://code.claude.com/docs/en/model-config). The Opus 5.5, Sonnet 5.5, and Haiku 5.5 versions are in the note after the alias table, section "Model aliases". The Fable versions are in the note in the section "Work with Fable" ("Fable 5.2 requires Claude Code v2.1.321 or later, and Fable 5.1 requires v2.1.257 or later"). The section ["Version history"](https://code.claude.com/docs/en/model-config#version-history) lists the `fable` and `best` changes at v2.1.321, and the versions v2.1.293, v2.1.284, v2.1.280, and v2.1.257 for the alias changes. The program (`2.1.328`) has no check of its own against these versions. The catalog schema allows an optional `min_cli_version` field (`chunk-b60sxmve.js:25042`), and nothing else in the build reads it. The build only recognizes a server refusal with the type `claude_code_version_too_old` and the text `does not support this model; version … or newer is required` (`chunk-xethrx83.js:303138`).
-[^opusplan]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The program, `chunk-xethrx83.js:25534`, `chunk-56bhcxay.js:146105`.
+[^fable-alias]: The program, `chunk-b60sxmve.js:22614` for the alias entry, `chunk-b60sxmve.js:28163` for the lookup that takes `per_provider` first and `default` second, `chunk-b60sxmve.js:34347` for the provider choice, and `chunk-b60sxmve.js:16653` for the `claude-fable-5` entry with display name `Fable 5`.
+[^opusplan]: The program, `chunk-xethrx83.js:479843` (the plan-mode model for `opusplan` and `haiku`) and `chunk-xethrx83.js:480769` (the plan-mode switch).
 [^aliases]: The aliases are from the official page, and the exceptions are from the program, `chunk-b60sxmve.js:21915-22702`.
-[^suffix]: The [`2.1.311` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.311). The program, `chunk-xethrx83.js:503491` (the `(1M context)` label needs a model with `supports_1m_suffix`), and `chunk-699j6sfp.js:933` (the alias list with `[1m]`).
-[^signed-file]: The [`2.1.311` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.311). The program, `chunk-xtev9r1a.js:2626` (the URL `downloads.claude.ai/model-catalog/v1/catalog.json` and the signature file), `chunk-xethrx83.js:178964` (Bedrock, Vertex, Foundry, and Mantle), and `chunk-h3hkpjdg.js:4794` (the `env_off` result).
+[^suffix]: The program, `chunk-xethrx83.js:503403` (the `(1M context)` label needs a model with `supports_1m_suffix`) and `chunk-699j6sfp.js:933` (the alias list with `[1m]`).
 [^catalog]: The program holds a JavaScript object with the comment `Hand-maintained baked-in model catalog`, `chunk-b60sxmve.js:674`.
-[^fallback-3p]: The program, field `fallback_3p`, `chunk-b60sxmve.js:739`, `chunk-b60sxmve.js:838`, and `chunk-b60sxmve.js:887` of `2.1.326`.
-[^window-default]: The program, `chunk-xethrx83.js:516700`, `return TN()?Ryt:g1`; `g1` is `1e6`, `Ryt` is `200000` (`chunk-xethrx83.js:513430`). `CLAUDE_CODE_MAX_CONTEXT_TOKENS` is checked first, and a model the catalog does not know reaches this line. The [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). In `2.1.322`, the constant was `bSt`.
+[^fallback-3p]: The program, field `fallback_3p`, `chunk-b60sxmve.js:16023`, `chunk-b60sxmve.js:18134`, and `chunk-b60sxmve.js:19244`.
+[^window-default]: The program, `chunk-xethrx83.js:516700`, `return TN()?Ryt:g1`; `g1` is `1e6`, `Ryt` is `200000` (`chunk-xethrx83.js:513426`, `chunk-xethrx83.js:513458`). `CLAUDE_CODE_MAX_CONTEXT_TOKENS` is checked first, and a model the catalog does not know reaches this line.
 [^window-hint]: The program, `chunk-zv7qt1se.js:2828`.
-[^zeta-probe]: Probe of `2.1.316`, `/model claude-zeta-9` with `-p`. The program in `2.1.328`, `chunk-6949vc40.js:11201` (the `/model` reply) and `chunk-4d4nzary.js:77255` (the startup notice).
-[^zeta-notes]: The [`2.1.316` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.316).
-[^sonnet-migration]: The program, `chunk-gywceass.js:1249`.
-[^v325]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^fable-migration]: The program, `chunk-2v0j7fr6.js:97968`.
-[^fable-deadline]: The program, `chunk-2v0j7fr6.js:98190`.
+[^zeta]: The program, `chunk-6949vc40.js:11091` (the `/model` reply), `chunk-zv7qt1se.js:3089` (the warning text), and `chunk-4d4nzary.js:77255` (the startup notice).
+[^sonnet-migration]: The program, `chunk-gywceass.js:21483`.
+[^fable-migration]: The program, `chunk-2v0j7fr6.js:97857`.
+[^fable-deadline]: The program, `chunk-2v0j7fr6.js:98560` (the date) and `chunk-2v0j7fr6.js:98584` (the deferred move).

@@ -22,7 +22,7 @@ These types are aliases or unions, so they have no field tables. Each row gives 
 
 | Type | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
-| `McpConnectRefusal` | <Documented /> | Why `$.mcp.connect` left a server unconnected, in one word. `unlisted` applies where the host of the session runs the servers of the plugin itself. | Alias of `'unlisted' \| 'unapproved' \| 'disabled' \| 'policy' \| 'auth' \| 'failed'`. Each name says why the connection was refused, such as `auth` for a missing sign-in. Since `2.1.323`, `unlisted` is a server that is in neither the manifest of the plugin nor `/mcp`. Since `2.1.323`, `failed` also covers a server of a provider other than the one whose hooks were shown. |
+| `McpConnectRefusal` | <Documented /> | Why `$.mcp.connect` left a server unconnected, in one word. `unlisted` applies where the host of the session runs the servers of the plugin itself. | Alias of `'unlisted' \| 'unapproved' \| 'disabled' \| 'policy' \| 'auth' \| 'failed'`. Each name says why the connection was refused, such as `auth` for a missing sign-in. `unlisted` is a server that is in neither the manifest of the plugin nor `/mcp`. `failed` also covers a server of a provider other than the one whose hooks were shown. |
 | `McpToolInputs` | <Documented /> | The inputs of the MCP tools that this project knows, keyed by full tool name, for declaration merging. It is empty by default, so every MCP tool has loose types. | Interface. A `.d.ts` file in the project of the mod author adds entries under `declare module "claude-code"`. Then `e.tool === <name>` narrows to them. |
 | `McpToolName` | <Documented /> | The name of an MCP tool as the engine spells it: `mcp__<server>__<tool>`. | Alias of `` `mcp__${string}__${string}` ``. |
 | `ModelApiError` | <Documented /> | The kind of API failure that ended a model call (a completion or a fork). Claude Code uses this word to classify every API error. It is the same word as in `StopFailure`. | Alias of the `error` field of the `StopFailure` input. `rate_limit`, `overloaded`, and `server_error` may clear on their own. The other values do not. |
@@ -183,7 +183,7 @@ What one model call resolves to. When the model answered, it holds the reply (`i
 | `isAnswered` | <Documented /> | True: the model answered, and `text` and `usage` are its reply. | Type: `true`. Example: `if (r.isAnswered) spent += r.usage.output_tokens`. |
 | `text` | <Documented /> | The text of the reply. For a completion, it is the text blocks joined. On a fork, it is the text of the non-error replies joined by newlines. | Type: `string`. |
 | `usage` | <Documented /> | What the call cost (`ModelUsage`). On a fork, it is the sum of its completions. | Type: `ModelUsage`. On a fork, `cache_read_input_tokens` near zero means the fork paid for the whole prefix. |
-| `effort` | <Documented /> | On a fork, the effort that the last response was asked for. It is the `effort` of the request after the limits, or the level of the session when the request named none. | Type: `ModelEffort`. Optional. Not in `2.1.316`. Absent when the model takes no effort, when `CLAUDE_CODE_EFFORT_LEVEL` is `auto` or `unset` with no `maxEffortLevel` setting, or when the first request was the one refused (see the checks under `ModelForkRequest`). |
+| `effort` | <Documented /> | On a fork, the effort that the last response was asked for. It is the `effort` of the request after the limits, or the level of the session when the request named none. | Type: `ModelEffort`. Optional. Absent when the model takes no effort, when `CLAUDE_CODE_EFFORT_LEVEL` is `auto` or `unset` with no `maxEffortLevel` setting, or when the first request was the one refused (see the checks under `ModelForkRequest`). |
 | `isAnswered` | <Documented /> | `false`: the model gave no text. | Type: `false`. |
 | `reason` | <Documented /> | The API answered with an error, and no reply carried text. | Type: `'api-error'`. Example: `if (!r.isAnswered && r.reason === "api-error") retry(r.status)`. |
 | `status` | <Documented /> | The HTTP status of the error reply (429, 500, 529, ...). It is null when no response arrived at all (a dropped connection, a provider timeout). | Type: `number \| null`. |
@@ -203,7 +203,7 @@ What `$.model.fork` takes. Used by `$.model.fork`, `model.fork`.
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `prompt` | <Documented /> | The one user message. The engine appends it to the transcript of the session as the main thread last sent it. | Type: `string`. The result says what happened: text and usage, or a `reason` such as `nothing-to-fork`. |
-| `effort` | <Documented /> | How hard the fork thinks (`ModelEffort`). Use `low` for a quick side job. The default is the level of the session. A fork may ask for more than the session runs at. | Type: `ModelEffort`. Optional. Not in `2.1.316`. A value outside `low`, `medium`, `high`, `xhigh`, `max` rejects the call. A missing `prompt` also rejects the call (see the checks below). The level stays within what the user and the organization allow (see the checks below). The main thread keeps its own level. |
+| `effort` | <Documented /> | How hard the fork thinks (`ModelEffort`). Use `low` for a quick side job. The default is the level of the session. A fork may ask for more than the session runs at. | Type: `ModelEffort`. Optional. A value outside `low`, `medium`, `high`, `xhigh`, `max` rejects the call. A missing `prompt` also rejects the call (see the checks below). The level stays within what the user and the organization allow (see the checks below). The main thread keeps its own level. |
 
 These checks used a stub API and a mod whose `turn.complete` hook calls `$.model.fork` and logs the result.[^fork-cases] `top` below is `output_config.effort` of the request. `trailer` is the effort on a closing `system` message after the prompt. For the official page, see [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference).[^fork-type]
 
@@ -264,7 +264,7 @@ Options of `$.audio.speak`. Used by `$.audio.speak`.
 
 ### `SpeakRequest`
 
-The argument of `$.audio.speak(text, options)` as the event carries it. The signal does not cross. Before `2.1.326`, it combined `SpeakRequest` and `SpeakOptions`. Used by `audio.speak`.
+The argument of `$.audio.speak(text, options)` as the event carries it. The signal does not cross. Used by `audio.speak`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -287,7 +287,7 @@ What `$.audio.speak` resolves with after the utterance ends. Used by `$.audio.sp
 
 ## Sources
 
-[^fork-type]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`. Its `ModelForkRequest` and `ModelForkResult`, which `2.1.316` lacks.
+[^fork-type]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`. Its `ModelForkRequest` and `ModelForkResult`.
 [^fork-cases]: Probe cases `print.fork319.model-fork.*`.
 [^fork-per-message]: Probe cases `print.fork319.model-fork.per-message` and `print.fork319.model-fork.session-max`.
 [^fork-bad]: Probe case `print.fork319.model-fork.bad-value`.

@@ -264,3 +264,23 @@ test("runArgs with baseUrl false leaves ANTHROPIC_BASE_URL unset", async () => {
 	const withUrl = await runArgs(bin, []);
 	expect(withUrl.stdout.trim()).toMatch(/^http:\/\/127\.0\.0\.1:\d+$/u);
 });
+
+test("runArgs keeps the anthropic-beta names of each request that sends the header", async () => {
+	const bin = await tmp.script(
+		"claude-betas",
+		`#!/usr/bin/env bun
+const base = process.env.ANTHROPIC_BASE_URL;
+await fetch(base + "/v1/messages", {
+  method: "POST",
+  headers: { "anthropic-beta": "claude-code-20250219, context-1m-2025-08-07" },
+  body: "{}",
+});
+await fetch(base + "/v1/messages", { method: "POST", body: "{}" });
+`,
+	);
+	const r = await runArgs(bin, ["x"], {});
+	expect(r.requests.map((q) => q.betas)).toEqual([
+		["claude-code-20250219", "context-1m-2025-08-07"],
+		undefined,
+	]);
+});

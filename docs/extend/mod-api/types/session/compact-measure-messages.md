@@ -93,7 +93,7 @@ What the session has cost, as `/cost` and the status line add it up.
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `usd` | <Documented /> | US dollars, summed over every priced API response in this session. | Type: `number`. |
-| `hasUnknownPrice` | <Documented /> | Since `2.1.326`, present once `usd` includes a model with no known price, which goes at the rates of another model: the note that `/cost` prints. On an agent, only its own requests set it. | Type: `true`. Optional. |
+| `hasUnknownPrice` | <Documented /> | Present once `usd` includes a model with no known price, which goes at the rates of another model: the note that `/cost` prints. On an agent, only its own requests set it. | Type: `true`. Optional. |
 
 ### `SessionCronSummary`
 
@@ -163,7 +163,7 @@ What `$.session.identity()` answers. It says how the session is signed in and, u
 
 ### `SessionInfo`
 
-What `$.session.info()` answers. Since `2.1.326`, it holds what a settings hook's input says of the session that no other read on `$.session` gives, and where the engine runs. Used by `$.session.info`, `session.info`.[^session-info]
+What `$.session.info()` answers. It holds what a settings hook's input says of the session that no other read on `$.session` gives, and where the engine runs. Used by `$.session.info`, `session.info`.[^session-info]
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -177,7 +177,7 @@ What `$.session.info()` answers. Since `2.1.326`, it holds what a settings hook'
 
 ### `SessionMachine`
 
-Since `2.1.328`, what `$.session.machine()` answers: the machine as `uname` names it, and the developer tools on its `PATH`. Used by `$.session.machine`.[^session-machine]
+What `$.session.machine()` answers: the machine as `uname` names it, and the developer tools on its `PATH`. Used by `$.session.machine`.[^session-machine]
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |

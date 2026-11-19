@@ -38,8 +38,8 @@ Claude can now send review work to `reviewer`. You can also write `@reviewer che
 | `--agent` flag and `agent` setting | <Documented /> | Runs an agent as the main session. | `initialPrompt` applies. `Agent(type)` in `tools` limits which types it can start. |
 | `@` mention | <Documented /> | Invokes a subagent by name. | Interactive only. The docs explain this under explicit invocation. |
 | `permissions.deny` with `Agent(name)` | <Documented /> | Disables one agent type. | `Agent(fork)` blocks forks. Deny `Agent` to stop all delegation. `Task(...)` is an alias. |
-| `Task` alias | <Documented /> | The old name of `Agent` (before `2.1.63`). | Works in rules and agent files. |
-| `/subtask` | <Documented /> | Starts a fork by hand (since `2.1.212`). | On `2.1.161` to `2.1.211` the command was `/fork`. |
+| `Task` alias | <Documented /> | An alias of `Agent`. | Works in rules and agent files. |
+| `/subtask` | <Documented /> | Starts a fork by hand. | None. |
 | Description cost | <Documented /> | Subagent descriptions count toward context. | At startup the interactive screen warns `Agent descriptions are over the 15,000-token limit`. It warns when the `name: description` text of all non-built-in agents is over 15,000 tokens. It is not shown in `-p`.[^desc-cost] |
 
 ## Agent Locations and Priority

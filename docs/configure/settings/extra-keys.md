@@ -4,7 +4,7 @@ description: Keys the settings schema leaves out, desktop-only keys, and the key
 sidebar_position: 10
 ---
 
-Some keys are not in the settings schema, or they live in another file. This page covers the auto mode and display keys, the keys that only the desktop app reads, and the global config keys of `~/.claude.json`. Claude Code writes the global config file, and `/config` changes some of its keys. Edit a settings file for the first two tables. Use `/config` or edit `~/.claude.json` for the global config keys in the last table. All keys here work in `2.1.326`. Most keys are booleans.
+Some keys are not in the settings schema, or they live in another file. This page covers the auto mode and display keys, the keys that only the desktop app reads, and the global config keys of `~/.claude.json`. Claude Code writes the global config file, and `/config` changes some of its keys. Edit a settings file for the first two tables. Use `/config` or edit `~/.claude.json` for the global config keys in the last table. Most keys are booleans.
 
 ## Example
 
@@ -36,7 +36,7 @@ Claude Code adds these keys itself, so the schema files do not list them.[^progr
 | `disableDeepLinkRegistration` | <Documented /> | enum: `disable` | - | Stop Claude Code from registering the `claude-cli://` link handler with the operating system. | Any settings file |
 | `voiceEnabled` | <Documented /> | boolean | - | Turn on voice dictation (hold to talk). See also `voice` in [Interface Settings](ui.md). | Any settings file |
 | `defaultView` | <Undocumented /> | enum: `chat`, `transcript` | - | Choose the default transcript view. `chat` shows only `SendUserMessage` checkpoints. `transcript` shows everything. | Settings files |
-| `axScreenReader` | <Documented /> | boolean | - | Render screen-reader friendly output. The `CLAUDE_AX_SCREEN_READER` variable and the `--ax-screen-reader` flag win. Since `2.1.305` Claude Code ignores it in project and local settings, and says "Screen reader mode is off: project settings can't turn it on" if only they ask. | Any settings file |
+| `axScreenReader` | <Documented /> | boolean | - | Render screen-reader friendly output. The `CLAUDE_AX_SCREEN_READER` variable and the `--ax-screen-reader` flag win. Claude Code ignores it in project and local settings, and says "Screen reader mode is off: project settings can't turn it on" if only they ask (the program, `chunk-zq0j9amd.js:5204`). | Any settings file |
 
 ## Other Keys
 

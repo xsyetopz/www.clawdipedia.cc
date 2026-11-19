@@ -36,7 +36,7 @@ The captured prompts are on these pages: [Proactive](../prompts/output-styles/st
 | --- | --- | --- | --- | --- |
 | `default` | <Documented /> | No style instructions | The standard system prompt for software engineering. It shows in the `/output-style` list | All sessions |
 | `Proactive` | <Documented /> | Starts work at once and assumes on routine choices | Claude does not use plan mode unless you ask. It checks in the chat before it deletes data or changes shared systems. It does not change the permission mode | All sessions |
-| `Concise` | <Documented /> | Leads with the result, no preamble, narration, or recap | Simple answers take one to three sentences. Full length stays for requested detail and safety content. Needs `2.1.237`. The bundle gives it a `turnReminder` | All sessions |
+| `Concise` | <Documented /> | Leads with the result, no preamble, narration, or recap | Simple answers take one to three sentences. Full length stays for requested detail and safety content. The program gives it a `turnReminder` | All sessions |
 | `Explanatory` | <Documented /> | Adds `Insight` blocks | Each block has two or three points. Claude does not write them into files | All sessions |
 | `Learning` | <Documented /> | Adds `Insight` blocks and `TODO(human)` tasks | Claude asks you to write 2 to 10 lines when it generates 20 or more lines with a design choice. It then stops and waits | All sessions |
 
@@ -45,9 +45,9 @@ The captured prompts are on these pages: [Proactive](../prompts/output-styles/st
 | Item | Status | What it does | How it works | Where to set it |
 | --- | --- | --- | --- | --- |
 | `outputStyle` | <Documented /> | Names the active style | The value is case-sensitive. `Explanatory` works. `explanatory` gives Default. No value means Default. A project file wins over user settings | Any settings scope |
-| `/output-style <style>` | <Documented /> | Switches the style | Saves to `.claude/settings.local.json`. No argument lists the styles. Ignores case. Works in print mode and the SDK. Needs `2.1.269` for remote lists | Interactive, print |
+| `/output-style <style>` | <Documented /> | Switches the style | Saves to `.claude/settings.local.json`. No argument lists the styles. Ignores case. Works in print mode and the SDK. | Interactive, print |
 | `/config` Output style | <Documented /> | Menu picker | Saves to local settings | Terminal |
-| Switch in a session | <Documented /> | New style applies from the next message | Before `2.1.251` it needed `/clear`. Prompt caching costs the first message | All sessions |
+| Switch in a session | <Documented /> | New style applies from the next message | Prompt caching costs the first message | All sessions |
 | Custom style over Remote Control | <Undocumented /> | You cannot select it | The bundle text tells you to pick one in the session itself | Remote Control |
 | `CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT` | <Documented /> | Chooses the full or short system prompt | `0` selects the full prompt. `keep-coding-instructions` has no effect on the short prompt | Env |
 | Safe mode | <Documented /> | Styles do not load | `CLAUDE_CODE_SAFE_MODE=1` skips output styles | Env |
@@ -102,23 +102,9 @@ The captures linked above hold the full text of each built-in style prompt. They
 
 ## Where the Style Text Goes
 
-The style text does not go in `system[2]`. Claude Code puts it in the environment message, a system-role message in `messages`, under the line `# Output Style: <name>`. The front matter is not sent. See [Style Custom](../prompts/output-styles/style-custom.md).[^probe-316]
+Claude Code sends the style text as a message that starts with the line `# Output Style: <name>`. The program, `chunk-56bhcxay.js:140073`. See [Style Custom](../prompts/output-styles/style-custom.md).
 The first line of the body, `You are an agent working with the user ...`, becomes `You are an interactive agent that helps users according to your "Output Style", which describes how you should respond to user queries.` when a style is active and keeps no coding instructions.
-A reminder line follows the deferred tool list and the command list: `<name> output style is active. Remember to follow the specific guidelines for this style.`
-A run against a local stub sent three user messages in one session. The reminder came after each user message. The `# Output Style: <name>` header appeared once in each request and was not repeated. So the reminder repeats on every turn, and the header does not.
-
-## Styles and Prompt Overrides
-
-A run against a local stub used a custom style named `Terse` with `keep-coding-instructions: true`. The run compared four launches. In each, the style text and the reminder stayed in `messages`.
-
-| Launch | What happens to the system prompt body |
-| --- | --- |
-| Style only | The body is the standard prompt with the style intro line. The style text is not in it. |
-| `--system-prompt "ONLY THIS"` | The body is only `ONLY THIS`. The style intro line is gone. |
-| `--agent mine` | The body is the text of the agent file. The style intro line is gone. |
-| `--append-system-prompt "EXTRA"` | The body is the standard prompt with the text added. |
-
-So a replacing flag removes the standard body, and the style still reaches the model as a message. See [Override](../prompts/other/override.md) for the captured prompts and [Style Custom](../prompts/output-styles/style-custom.md) for the style message.
+A reminder line reads `<name> output style is active. Remember to follow the specific guidelines for this style.` It comes from the `output_style` attachment. A style with a `turnReminder` gives that text in place of the second sentence. The program, `chunk-56bhcxay.js:6002643`.
 
 ## Exact Fields
 
@@ -138,4 +124,3 @@ It lists every field of this release. Build on the fields it names. Look each on
 [^official]: [Output Styles](https://code.claude.com/docs/en/output-styles).
 [^init-message]: The program, `chunk-syremzmn.js:156635`, string `no { outputStyle } (null, or { name, isKeepingCodingInstructions })`.
 [^probe-force]: Probes: [Configure and Memory](../reference/probes.md#configure-and-memory) and [Managed Folder Probe](../reference/probes.md#managed-folder-probe).
-[^probe-316]: Probe of `2.1.316`. Another run of `2.1.316` against a local stub gave the reminder and header results below, and a third run gave the launch table in the next section.

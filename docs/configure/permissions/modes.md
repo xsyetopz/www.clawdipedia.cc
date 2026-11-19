@@ -43,7 +43,7 @@ Captured system prompts for some modes: [Plan](../../prompts/modes/mode-plan.md)
 
 - `permissions.defaultMode` sets the start mode. `--permission-mode` wins for one session.
 - Project and local settings cannot set `auto` or `bypassPermissions` as the default.[^project-default]
-- Since `2.1.323`, when the auto mode killswitch is active, `--permission-mode auto` and `defaultMode: auto` start the session in `default` (Manual), which asks first. The same fallback applies to an agent definition's `permissionMode: auto`.[^killswitch]
+- When the auto mode killswitch is active, `--permission-mode auto` and `defaultMode: auto` start the session in `default` (Manual), which asks first. The same fallback applies to an agent definition's `permissionMode: auto`.[^killswitch]
 - `permissions.disableBypassPermissionsMode` stops `bypassPermissions`. So does a bypass dialog that you did not accept. The errors are `bypassPermissions mode is disabled by settings` and `Cannot set permission mode to bypassPermissions because the session was not launched with --dangerously-skip-permissions`.[^bypass-errors]
 - A cloud session cannot use `bypassPermissions`.[^cloud-bypass]
 - The IDE host cycles through `acceptEdits`, `plan`, `default`, and `auto`. The order in the terminal is not documented.
@@ -68,13 +68,9 @@ Every permission decision carries a `decisionReason` with one of these types. Ho
 
 ## Path and Prompt Checks
 
-These changes came in `2.1.327`.[^changes-327]
-
-- Path checks refuse some symbolic links.
-- The `2.1.327` release notes say that Claude Code changed what counts as inside a working directory, so some paths now ask for permission.
+- Path checks refuse some symbolic links.[^changes-327]
 - A `Bash` command whose variables expand to very long text is denied. The message says: "This command's variables and substitutions expand to more text than the permission check reads, so it was not run. Use fewer or shorter ones, or put the long text in a file."[^long-vars]
-- On a permission prompt whose list shows numbers and ends with the No answer, the Down key stops at No instead of wrapping around to the first answer. The release notes also say that a number past the last answer moves to No.
-- The release notes say that Esc works on a permission prompt that has just appeared.
+- On a permission prompt whose list shows numbers and ends with the No answer, the Down key stops at No instead of wrapping around to the first answer.[^changes-327]
 
 ## Safety Checks
 
@@ -84,7 +80,7 @@ A `safetyCheck` reason carries a `circuitBreaker` name. Three flags describe the
 
 | Check | Status | What it covers | Behavior | Seen In |
 | --- | --- | --- | --- | --- |
-| `dangerousRemoval` | <Undocumented /> | Critical-path `rm` prompts | Bypass-immune, classifier-routed. A time limit applies unless `CLAUDE_CODE_DISABLE_DANGEROUS_RM_TIMEOUT=1`. Since `2.1.309`, in `bypassPermissions` mode in the desktop app and VS Code, a dangerous `rm` or `rmdir` is denied at once with a hint to rewrite it, so unattended sessions keep going.[^v309] Since `2.1.327`, when the check cannot parse a command that has no `rm`, the refusal message tells Claude that it can send a command that deletes nothing again in plain syntax that `bash` and `zsh` both read. It also tells Claude that a command that deletes anything needs the user.[^rm-unparsed] | `Bash` |
+| `dangerousRemoval` | <Undocumented /> | Critical-path `rm` prompts | Bypass-immune, classifier-routed. A time limit applies unless `CLAUDE_CODE_DISABLE_DANGEROUS_RM_TIMEOUT=1`. When the check cannot parse a command that has no `rm`, the refusal message tells Claude that it can send a command that deletes nothing again in plain syntax that `bash` and `zsh` both read. It also tells Claude that a command that deletes anything needs the user.[^rm-unparsed] | `Bash` |
 | `backgroundOperator` | <Undocumented /> | Background operator calls | Classifier-routed | Background sessions |
 | `suspiciousWindowsPath` | <Undocumented /> | Odd Windows paths | Classifier-routed | Windows |
 | `isolatePeerMachines` | <Documented /> | Peer machine isolation | Bypass-immune. Setting `isolatePeerMachines` | Managed |
@@ -94,7 +90,7 @@ A `safetyCheck` reason carries a `circuitBreaker` name. Three flags describe the
 | `internalHardDeny` | <Undocumented /> | Built-in hard deny | Cannot be placed on a served classifier | Each tool |
 | `unfinishedCheck` | <Undocumented /> | A check did not finish | Bypass-immune, person only | Each tool |
 
-Since `2.1.326`, a tool call in `bypassPermissions` mode asks for approval when the permission check of its tool fails with an error. The check has the decision reason `permission_check_crashed`. The message says: "This call has not run: its permission check failed with an error, so it needs approval. Allow rules and bypass mode cannot give that approval." Where no one can be asked, the call is denied.[^crashed-check]
+A tool call in `bypassPermissions` mode asks for approval when the permission check of its tool fails with an error. The check has the decision reason `permission_check_crashed`. The message says: "This call has not run: its permission check failed with an error, so it needs approval. Allow rules and bypass mode cannot give that approval." Where no one can be asked, the call is denied.[^crashed-check]
 
 ## How It Works
 
@@ -111,13 +107,12 @@ Since `2.1.326`, a tool call in `bypassPermissions` mode asks for approval when 
 
 [^mode-names]: The program, `chunk-rs68es1f.js:1570`.
 [^project-default]: The program, `chunk-hscvkewq.js:6981-7056` and the picker text in `chunk-3h9amnsz.js:10412`.
-[^killswitch]: The [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-hscvkewq.js:4783` (the `--permission-mode` flag), `chunk-hscvkewq.js:5268` (an agent definition's `permissionMode: auto`), `chunk-hscvkewq.js:6485` (`defaultMode: auto` in an IDE session), and `chunk-hscvkewq.js:8004`. The program logs `auto mode killswitch active (override- or payload-served) — falling back to default`.
+[^killswitch]: The program, `chunk-hscvkewq.js:4783` (the `--permission-mode` flag), `chunk-hscvkewq.js:5268` (an agent definition's `permissionMode: auto`), `chunk-hscvkewq.js:6513` (`defaultMode: auto` in an IDE session), and `chunk-hscvkewq.js:8004`. The program logs `auto mode killswitch active (override- or payload-served) — falling back to default`.
 [^bypass-errors]: The program, `chunk-hscvkewq.js:8480` and `chunk-tew0988b.js:9837`.
 [^cloud-bypass]: The program error text, `chunk-2v0j7fr6.js:24137`.
 [^reasons]: The program, `chunk-rs68es1f.js:4373`.
-[^changes-327]: The symbolic link refusals are in the program at `chunk-rq7vgh0h.js:1132-1149`, with the text "Refusing to read a file whose path could not be vetted". The list control stops the Down key at the last row in the program at `chunk-rmkp9aqw.js:3571` (`stopsAtLastRow`). The list turns this on at `chunk-rmkp9aqw.js:27998` when the permission prompt frame sets it, the numbers show, and the last answer is the decline answer. The permission prompt frame sets it at `chunk-nr1xrxn3.js:3108`. The other items in this list are from the [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^long-vars]: The program, `chunk-56bhcxay.js:87603`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^v309]: [`2.1.309` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.309).
+[^changes-327]: The symbolic link refusals are in the program at `chunk-rq7vgh0h.js:18656` and `chunk-rq7vgh0h.js:18896`, with the text "Refusing to read a file whose path could not be vetted". The list control stops the Down key at the last row in the program at `chunk-rmkp9aqw.js:3571` (`stopsAtLastRow`). The list turns this on at `chunk-rmkp9aqw.js:27998` when the permission prompt frame sets it, the numbers show, and the last answer is the decline answer. The permission prompt frame sets it at `chunk-nr1xrxn3.js:3108`.
+[^long-vars]: The program, `chunk-56bhcxay.js:1599934` (the message) and `chunk-56bhcxay.js:1600252` (the denial).
 [^mode-use]: Official page [Choose a Permission Mode](https://code.claude.com/docs/en/permission-modes), table "Available modes", column "Best for".
-[^crashed-check]: The program, `chunk-56bhcxay.js:3724731` (the decision reason), `chunk-56bhcxay.js:3724997` (the message), `chunk-56bhcxay.js:3736639` (the crash becomes an ask before the mode decides), and `chunk-56bhcxay.js:3734494` (the refusal text where no one can be asked). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^rm-unparsed]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-56bhcxay.js:1564037`. The `2.1.326` message ends after `This requires explicit approval.`
+[^crashed-check]: The program, `chunk-56bhcxay.js:3724731` (the decision reason), `chunk-56bhcxay.js:3724997` (the message), `chunk-56bhcxay.js:3736639` (the crash becomes an ask before the mode decides), and `chunk-56bhcxay.js:3734494` (the refusal text where no one can be asked).
+[^rm-unparsed]: The program, `chunk-56bhcxay.js:1564443`.

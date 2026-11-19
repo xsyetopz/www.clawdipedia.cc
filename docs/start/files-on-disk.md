@@ -145,8 +145,8 @@ The line format of a transcript is on [Transcript Format](../reference/transcrip
 | `~/.claude/policy-limits.json` | <Documented /> | Cached organization limits. Some account types only. | [Enterprise Settings](../configure/settings/enterprise.md) |
 | `~/.claude/cache/changelog.md` | <Documented /> | A cached copy of the [changelog](https://code.claude.com/docs/en/changelog) for `/release-notes`. | [What Changed](what-changed.md) |
 | `~/.claude/daemon/roster.json`, `~/.claude/jobs/<id>/state.json`, `~/.claude/jobs/<id>/tmp/` | <Documented /> | The list of running background sessions, the state of each session, and its scratch folder. Keep them. The official "Agent View" page describes them. | [Sessions and Storage](../how-it-works/sessions-and-storage.md) |
-| `state/`, `mods/`, `bridge-spawn/`, `seed-admin/`, `downloads/`, `cache/model-catalog/` | <Undocumented /> | Present on a `2.1.305` machine, or named in the program. After `2.1.305` was installed, only `cache/model-catalog/` and a type file under `mods/handoff/` were written. `bridge-spawn/`, `seed-admin/`, and `downloads/` are empty, and `state/` was last written before the install. No docs page describes them. See the link for what the program says about `state/`, `seed-admin/`, `bridge-spawn/`, and `cache/model-catalog/`.[^config-folders] | [Sessions and Storage](../how-it-works/sessions-and-storage.md) |
-| `~/.claude/child-logs/` | <Undocumented /> | Since `2.1.326`, the debug logs of sessions started over Remote Control with `--verbose`. Claude Code does not write them when you set `--debug-file`.[^child-logs] | [Sessions and Storage](../how-it-works/sessions-and-storage.md) |
+| `state/`, `mods/`, `bridge-spawn/`, `seed-admin/`, `downloads/`, `cache/model-catalog/` | <Undocumented /> | Named in the program. No docs page describes them. See the link for what the program says about `state/`, `seed-admin/`, `bridge-spawn/`, and `cache/model-catalog/`.[^config-folders] | [Sessions and Storage](../how-it-works/sessions-and-storage.md) |
+| `~/.claude/child-logs/` | <Undocumented /> | The session debug logs of Remote Control, written under `--verbose`. Claude Code does not write them when you set `--debug-file`.[^child-logs] | [Sessions and Storage](../how-it-works/sessions-and-storage.md) |
 
 ## Names in the Config Folder
 
@@ -263,4 +263,4 @@ The schema comes from the default values and the key list in the code.[^claude-j
 [^local]: The program, `chunk-c60cxsqk.js:31008` and `chunk-qzkgapzf.js:47803`.
 [^loop]: The program, `chunk-48wennwr.js:10373-10895`.
 [^claude-json]: The program, `chunk-xethrx83.js:55378` and `chunk-xethrx83.js:98583`.
-[^child-logs]: The program, `chunk-kwkzbftg.js:872738-872793`, `chunk-kfzma69d.js:117537` (no logs when the debug file is set or verbose is off), and `chunk-kfzma69d.js:137031`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^child-logs]: The program, `chunk-kwkzbftg.js:871999` (the folder name `child-logs` under the Claude home), and `chunk-4prvwasd.js:70250` (the changelog text: Remote Control session debug logs written under `--verbose` go to `~/.claude/child-logs/`). `chunk-kfzma69d.js:117537` (the function returns at once when a debug file is set or `--verbose` is off), and `chunk-kfzma69d.js:137031` (`debugFile` and `childLogDir` passed to the child launcher).

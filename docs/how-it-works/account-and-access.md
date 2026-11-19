@@ -55,9 +55,7 @@ Claude Code reads the account and plan from one request.
 `ANTHROPIC_BASE_URL` does not change the host of these requests.
 Only `CLAUDE_CODE_CUSTOM_OAUTH_URL` changes it, and only to an approved Anthropic host. See [Auth and Accounts](../configure/env-vars/auth-and-accounts.md).
 
-The table below comes from a run of `2.1.319`.[^probe-run]
-A claude.ai login sent the profile request to a local copy of `api.anthropic.com`, which gave a reply with every field set.
-The right column shows where each value went.
+The table shows where each field of the profile reply goes.[^probe-run]
 
 | Reply field | What it is | Where Claude Code keeps it |
 | --- | --- | --- |
@@ -75,20 +73,20 @@ The right column shows where each value went.
 | `organization.subscription_created_at` | When the plan began. | `oauthAccount.subscriptionCreatedAt` |
 | `organization.cc_onboarding_flags` | Onboarding flags for Claude Code. | `oauthAccount.ccOnboardingFlags` (`{}` when the reply has none) |
 | `organization.plan_display_name` | The plan name to show. | `oauthAccount.planDisplayName` |
-| `organization.name` | The organization name. | Not kept. The run wrote no key for it. |
+| `organization.name` | The organization name. | Not kept. The program writes no key for it. |
 
 ## Where Claude Code Keeps It
 
 - The account record is the `oauthAccount` key of `~/.claude.json`. It holds the keys in the table above and `profileFetchedAt`, the time of the last request in milliseconds.
 - Claude Code saves the plan and the rate limit tier with the login. On macOS, Claude Code reads the login from the keychain with `security find-generic-password`.[^keychain] The file store is `~/.claude/.credentials.json`. See [Sessions and Storage](sessions-and-storage.md#where-files-live).
-- Claude Code saves the plan with the login only when the reply has a `request-id` header that starts with `req_`.[^request-id] In the run, a reply with no `request-id` header left the login as it was, and the debug log said `OAuth: stored login plan not recorded from the profile (unstamped)`. The `oauthAccount` record was written in both runs.
+- Claude Code saves the plan with the login only when the reply has a `request-id` header that starts with `req_`.[^request-id] When the reply has no such header, the debug log says `OAuth: stored login plan not recorded from the profile`.
 - You can edit these records. The Mod API type file describes the account that Claude Code gives a mod. The account takes `organizationType` from the login record on disk. The person can edit that record.[^mod-type]
 
 ## When It Asks Again
 
 - At start, Claude Code skips the profile request when `profileFetchedAt` is less than 24 hours old and the record has its billing, onboarding, and creation fields.[^skip-profile]
 - It also skips the request when there is no claude.ai login with the inference scope.[^scope-check]
-- Since `2.1.311`, Pro and Max accounts skip two more requests at start. The Consumer Terms check calls `GET /api/oauth/account/settings` and `GET /api/claude_code_grove`. When the server confirmed your answer less than one hour ago, Claude Code saves that time under `groveChoiceSeenAt` in `~/.claude.json`, keyed by your account id, and does not ask again.[^grove] The check runs only for the `max` and `pro` plans.[^grove-plans]
+- Pro and Max accounts skip two requests at start. The Consumer Terms check calls `GET /api/oauth/account/settings` and `GET /api/claude_code_grove`. When the server confirmed your answer less than one hour ago, Claude Code saves that time under `groveChoiceSeenAt` in `~/.claude.json`, keyed by your account id, and does not ask again.[^grove] The check runs only for the `max` and `pro` plans.[^grove-plans]
 
 ## How Model Access Is Decided
 
@@ -113,17 +111,17 @@ These rules change the Fable entry:
 
 ## Login and an Unused API Key
 
-Since `2.1.326`, `/login` no longer ends on "Login successful" while an approved `ANTHROPIC_API_KEY` is still used. It says that requests still use the key. "Not logged in", `/login`, and `/status` now name an unused `ANTHROPIC_API_KEY`, and "Not logged in" no longer stays after you turn on the API key in `/config`.[^v326]
+`/login` does not end on "Login successful" while an approved `ANTHROPIC_API_KEY` is still used. It says that requests still use the key. "Not logged in", `/login`, and `/status` name an unused `ANTHROPIC_API_KEY`.[^v326]
 Status: <Undocumented /> in the official docs.
 
 - After a login, when an approved `ANTHROPIC_API_KEY` still serves requests, Claude Code says "Signed in, but requests still use ANTHROPIC_API_KEY. To use this login, turn off "Use custom API key" in /config".[^api-key-note]
-- The footer says "Not logged in · run /login".[^footer] The `2.1.327` program has no footer text that names `/config`.
+- The footer says "Not logged in · run /login".[^footer]
 - The not-logged-in message and the login screen add the dim note `ANTHROPIC_API_KEY not used here · turn on "Use custom API key" in /config`. The note shows only when the key is set, no managed setting fixes the login method or organization, and the key is not already approved.[^unused-note]
 - `/status` adds an "Unused API key" row. Its value is `ANTHROPIC_API_KEY`, followed by "· claude -p uses it · /config to use".[^status-row]
 
 ## Finishing a Login
 
-Since `2.1.326`, after you submit the login code, the screen shows "Finishing sign-in…" while Claude Code waits for the login to finish.[^finishing]
+After you submit the login code, the screen shows "Finishing sign-in…" while Claude Code waits for the login to finish.[^finishing]
 
 ## What a Refusal Says
 
@@ -137,7 +135,7 @@ A Team or Enterprise plan gets other wording only in one case. Claude Code runs 
 | A claude.ai login with the inference scope and an `admin`, `billing`, `owner`, or `primary_owner` role | "turn on usage credits at" the organization's admin usage page |
 | Other roles | "ask your admin to turn on usage credits" |
 
-Since `2.1.311`, Pro and Max subscribers get the billing settings link in place of "ask your admin".[^v311]
+Pro and Max subscribers get the billing settings link in place of "ask your admin".[^v311]
 
 ## What the Usage Limits Are Called
 
@@ -152,7 +150,7 @@ Claude Code names each rate limit window in its usage limit messages.[^windows]
 | `seven_day_overage_included` | "Fable limit" |
 | `overage` | "usage credit limit" |
 
-Since `2.1.312`, Claude Code calls the five-hour window the "5-hour limit". Earlier it said "session limit" (`2.1.311`). The same change reaches the reset messages, such as "Resetting your 5-hour limit… this usually takes a few seconds" and "Couldn't reset your 5-hour limit with this login · run /login, then try again".[^five-hour]
+Claude Code calls the five-hour window the "5-hour limit". The name also appears in the reset messages, such as "Resetting your 5-hour limit… this usually takes a few seconds" and "Couldn't reset your 5-hour limit with this login · run /login, then try again".[^five-hour]
 
 ## The Usage Limit Menu
 
@@ -165,7 +163,7 @@ Since `2.1.312`, Claude Code calls the five-hour window the "5-hour limit". Earl
 | "Upgrade your plan" | The limit lists an upgrade path. |
 | "Stop and wait for limit to reset", or "Stop" | Always. |
 
-Claude Code shows "Couldn't load your current spend limit, so it can't be changed right now. Try /rate-limit-options again later." when it cannot read the current spend limit. Since `2.1.323`, the menu then shows `unavailable` as the limit, gives no hint to adjust it, and does not change it.[^spend]
+Claude Code shows "Couldn't load your current spend limit, so it can't be changed right now. Try /rate-limit-options again later." when it cannot read the current spend limit. The menu then shows `unavailable` as the limit, gives no hint to adjust it, and does not change it.[^spend]
 
 ## What Others Can See
 
@@ -181,14 +179,14 @@ Claude Code shows "Couldn't load your current spend limit, so it can't be change
 
 ## Sources
 
-[^scope]: Claude Code `2.1.327`. Each footnote below names the chunk and the place in it.
+[^scope]: Claude Code `2.1.328`. Each footnote below names the chunk and the place in it.
 [^plan-values]: The program, `chunk-xethrx83.js:33508`, `chunk-xethrx83.js:33517`.
 [^plan-map]: The program, `chunk-xethrx83.js:18286`.
 [^oauth-token]: The program, `chunk-xethrx83.js:32105`.
 [^host-account]: The program, `chunk-xethrx83.js:19022`.
 [^oauth-profile]: The program, `chunk-xethrx83.js:324748`.
 [^key-profile]: The program, `chunk-xethrx83.js:324283`.
-[^probe-run]: See [Account Probes](../reference/probes.md#account-probes).
+[^probe-run]: The program, `chunk-xethrx83.js:331829` (the `oauthAccount` writes) and `chunk-xethrx83.js:336536` (the plan type).
 [^keychain]: The program, `chunk-szxhkqtw.js:756`.
 [^request-id]: The program, `chunk-xethrx83.js:325145`, `chunk-xethrx83.js:340955`.
 [^mod-type]: `schemas/claude-code.d.ts`.
@@ -202,18 +200,18 @@ Claude Code shows "Couldn't load your current spend limit, so it can't be change
 [^credits]: The program, `chunk-y5weakn8.js:11134`, `chunk-y5weakn8.js:14391`. The server config is `tengu_saffron_lattice`.
 [^disabled]: The program, `chunk-y5weakn8.js:15613`. The server flag is `tengu_saffron_picker_dim`. The plan and role check is at `chunk-y5weakn8.js:11039` and `chunk-xethrx83.js:33480`. The login scope check is at `chunk-xethrx83.js:33295`.
 [^credits-only]: The program, `chunk-y5weakn8.js:187090`. The server config is `tengu_saffron_credits_only_tiers`.
-[^v326]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-shaz62gz.js:12053` ("Signed in, but requests still use ANTHROPIC_API_KEY").
+[^v326]: The program, `chunk-shaz62gz.js:12038` ("Signed in, but requests still use ANTHROPIC_API_KEY").
 [^api-key-note]: The program, `chunk-shaz62gz.js:495`.
-[^footer]: The program, `chunk-j2wfp6sf.js:892393`. The `2.1.327` program has no `to use ANTHROPIC_API_KEY` text.
+[^footer]: The program, `chunk-j2wfp6sf.js:892393`.
 [^unused-note]: The program, `chunk-xethrx83.js:581604-581926` (the test and the text), `chunk-bjgpjqze.js:58994` (the not-logged-in message), and `chunk-deg3e0xc.js:28738` (the login screen).
 [^status-row]: The program, `chunk-xdedspyt.js:10929`.
 [^refusal]: The program, `chunk-xethrx83.js:33753`, `chunk-xethrx83.js:20874`, `chunk-56bhcxay.js:114270`.
 [^desktop]: The program, `chunk-xethrx83.js:20542`, `chunk-374y7r0w.js:103`, `chunk-374y7r0w.js:474`.
-[^v311]: [`2.1.311` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.311).
+[^v311]: The program, `chunk-xethrx83.js:636154` (the `Jco` text; non-team plans get the `claude.ai/settings/usage` link) and `chunk-xethrx83.js:287280` (the link).
 [^windows]: The program, `chunk-g78ks3d1.js:1815`.
-[^five-hour]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312). The program, `chunk-g78ks3d1.js:34436` (the `five_hour` name), `chunk-xwcpzc12.js:26184`, and `chunk-322fww3s.js:45980`.
+[^five-hour]: The program, `chunk-g78ks3d1.js:34436` (the `five_hour` name), `chunk-xwcpzc12.js:26184`, and `chunk-322fww3s.js:45980`.
 [^menu]: The program, `chunk-56bhcxay.js:2610519`. The rows are built at `chunk-gab9myev.js:44229`.
-[^spend]: The program, `chunk-gab9myev.js:34152` (the `unavailable` label) and `chunk-gab9myev.js:34313` (the empty hint) and `chunk-gab9myev.js:35317` (the message). The string is not in the `2.1.322` program.
+[^spend]: The program, `chunk-gab9myev.js:34152` (the `unavailable` label) and `chunk-gab9myev.js:34313` (the empty hint) and `chunk-gab9myev.js:35317` (the message).
 [^control]: `schemas/claude-code-control-protocol.json`.
 [^mod-account]: `schemas/claude-code.d.ts`.
-[^finishing]: The program, `chunk-deg3e0xc.js:601` and `chunk-deg3e0xc.js:2200`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^finishing]: The program, `chunk-deg3e0xc.js:9752` and `chunk-deg3e0xc.js:33411`.

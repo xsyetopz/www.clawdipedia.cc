@@ -39,7 +39,7 @@ Project context changes at session start, at `/clear`, and at `/compact`.
 
 ## Body Fields
 
-These are the fields of the request body. The local transcript records the keys `model`, `betas`, `max_tokens`, `thinking`, `context_management`, and `output_config`.[^body-fields]
+These are the fields of the request body. The `api-request` transcript line records them as `params`.[^body-fields]
 
 | Field | Status | Content |
 | --- | --- | --- |
@@ -68,7 +68,7 @@ A cache marker (`cache_control`) tells the API: "everything up to here can be re
 | `system[2]` (system prompt) | <Undocumented /> | `ephemeral`, `ttl: 1h`. |
 | Last block of the last message | <Undocumented /> | `ephemeral`, `ttl: 1h`. |
 
-In a second run, the same three blocks carried plain `{"type":"ephemeral"}` markers on `system[1]`, `system[2]`, and the last message block. They had no `ttl` and no `scope`. So the fields `ttl: 1h` and `scope: global` do not always appear. `system[0]` had no marker.[^plain-markers]
+The marker is a plain `{"type":"ephemeral"}`. Claude Code adds `ttl` and `scope: global` only in some cases. So the fields `ttl: 1h` and `scope: global` do not always appear.[^plain-markers]
 
 Claude Code also marks the block of system context in the middle of a conversation, such as file-change notices, on every provider. Set `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS` to turn this off. If a gateway rejects the marker with a `400` error, Claude Code moves it to the last message and keeps it there.
 
@@ -89,7 +89,7 @@ sequenceDiagram
 
 | Pair | When it appears |
 | --- | --- |
-| `cc_version=2.1.316.<suffix>` | Always. The suffix is a short code that Claude Code computes. |
+| `cc_version=2.1.328.<suffix>` | Always. The suffix is a short code that Claude Code computes. |
 | `cc_entrypoint=<value>` | Always. The value is the entry point of the run, or `unknown`. |
 | `cch=00000` | First-party API requests that pass an internal test, and Vertex requests. |
 | `cc_workload=<value>` | A workload tag is set. |
@@ -106,7 +106,7 @@ The block has no cache marker.
 
 ## Output Limit Retry
 
-When `max_tokens` exceeds the model's limit, Claude Code now retries the request with the maximum the Anthropic API reports.[^retry-notes] Status: <Undocumented /> in the official docs.
+When `max_tokens` exceeds the model's limit, Claude Code retries the request with the maximum the Anthropic API reports.[^retry-notes] Status: <Undocumented /> in the official docs.
 
 - Claude Code matches the error text `max_tokens: <n> > <limit>, which is the maximum allowed number of output tokens for <model>`.[^retry-match]
 - It acts on the statuses `400`, `402`, `413`, `422`, and `429`, and it retries once.
@@ -212,11 +212,11 @@ A local stub of the Messages API showed these facts. No model call left the mach
 
 ## Sources
 
-[^body-fields]: The official docs, and `api-request` lines that version `2.1.305` wrote to a local transcript, including a stub run of `2.1.305`.
+[^body-fields]: The official docs. The program, `chunk-56bhcxay.js:308210` (the `api-request` line with `params`).
 [^markers]: The program, `chunk-56bhcxay.js:3302796`.
-[^plain-markers]: A print-mode run of `2.1.316` against the local stub with a fake key. The probe captures of `2.1.316`.
+[^plain-markers]: The program, `chunk-56bhcxay.js:3302796` (`ttl` and `scope` are optional) and `chunk-56bhcxay.js:3303422` (the `5m` and `1h` choice).
 [^attribution]: The program, `chunk-xethrx83.js:978130`.
-[^retry-notes]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-56bhcxay.js:3190601`.
+[^retry-notes]: The program, `chunk-56bhcxay.js:3190601`.
 [^retry-match]: The program, `chunk-56bhcxay.js:3190601`.
 [^retry-cap]: The program, `chunk-56bhcxay.js:3191740`.
 [^overage]: The program, `chunk-56bhcxay.js:1076556`.

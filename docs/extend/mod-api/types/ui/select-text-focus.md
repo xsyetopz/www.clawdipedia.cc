@@ -79,7 +79,7 @@ The props of `Svg`, the vector leaf of the remote surfaces. The markup is the da
 | `alt` | <Documented /> | What the drawing says, for a reader that cannot see it. Required, because a surface without the element draws nothing else of it. | Type: `string`. |
 | `width` | <Documented /> | CSS pixels. If absent, the box takes the markup's own width up to the slot. | Type: `number`. Optional. |
 | `height` | <Documented /> | CSS pixels. If absent, the markup's own height at the drawn width. | Type: `number`. Optional. |
-| `isInteractive` | <Documented /> | `true` draws the SVG in a script-less sandboxed frame so hover, CSS `:hover`, SMIL animation and `<title>` tooltips work. If absent, an image. | Type: `boolean`. Optional. It never enables script or event-handler attributes. Put presses on an enclosing element. New in `2.1.314`: the editor ignores it and always draws an image. SMIL and CSS animation can run there, but hover, CSS `:hover`, and `<title>` tooltips never work. |
+| `isInteractive` | <Documented /> | `true` draws the SVG in a script-less sandboxed frame so hover, CSS `:hover`, SMIL animation and `<title>` tooltips work. If absent, an image. | Type: `boolean`. Optional. It never enables script or event-handler attributes. Put presses on an enclosing element. The editor ignores it and always draws an image. SMIL and CSS animation can run there, but hover, CSS `:hover`, and `<title>` tooltips never work. |
 
 ### `TextHoverProps`
 
@@ -117,8 +117,8 @@ The props of `Text`: colors, styles, and the size, weight, face and digits that 
 | `strikethrough` | <Documented /> | `true` strikes the text through. | Type: `boolean`. Optional. |
 | `inverse` | <Documented /> | `true` swaps the text and background colors. | Type: `boolean`. Optional. |
 | `dir` | <Documented /> | The direction that the text reads in. Use `rtl` for a right-to-left script, so a row of it that opens with a Latin word or a number reads right to left. | Type: `'ltr' \| 'rtl'`. Optional. When absent, each row reads by its first strong letter. `rtl` rows are flush right. |
-| `wrap` | <Documented /> | How text that is too long is wrapped or cut. | Type: `'wrap' \| 'end' \| 'middle' \| 'truncate' \| 'truncate-start' \| 'truncate-middle' \| 'truncate-end' \| 'clip'`. Optional. Since `2.1.326`, `'clip'` is a value.[^maxlines] |
-| `maxLines` | <Documented /> | Limits the number of lines. Since `2.1.326`. | Type: `number`, a whole number from 1 to 10000. Optional. Some surfaces keep it only with `wrap` set to `'wrap'`, `'end'`, `'truncate'`, or `'truncate-end'`, and drop it with other values.[^maxlines] |
+| `wrap` | <Documented /> | How text that is too long is wrapped or cut. | Type: `'wrap' \| 'end' \| 'middle' \| 'truncate' \| 'truncate-start' \| 'truncate-middle' \| 'truncate-end' \| 'clip'`. Optional. `'clip'` is a value.[^maxlines] |
+| `maxLines` | <Documented /> | Limits the number of lines. | Type: `number`, a whole number from 1 to 10000. Optional. Some surfaces keep it only with `wrap` set to `'wrap'`, `'end'`, `'truncate'`, or `'truncate-end'`, and drop it with other values.[^maxlines] |
 
 ### `ToastOptions`
 
@@ -149,7 +149,7 @@ What `$.ui.blit` resolves to and what the `{ value }` of a `ui.blit` hook holds.
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `deny` | <Documented /> | Absent when the engine took the cells or source, else why not. | Type: `string`. Optional. It says why nothing was drawn: not mounted, wrong size, bad cells or source. With no surface, `no-surface` heads it. |
-| `fix` | <Documented /> | With `deny`, a stable code to key on instead of the words of `deny`. | Type: `'tmux-passthrough'`. Optional. New in `2.1.310`. `tmux-passthrough`: tmux 3.3 or later holds back images that the terminal outside it can draw, because `allow-passthrough` or `focus-events` is off. Both must be on. Absent for every other cause. |
+| `fix` | <Documented /> | With `deny`, a stable code to key on instead of the words of `deny`. | Type: `'tmux-passthrough'`. Optional. `tmux-passthrough`: tmux 3.3 or later holds back images that the terminal outside it can draw, because `allow-passthrough` or `focus-events` is off. Both must be on. Absent for every other cause. |
 
 ### `UiCopyArgs`
 
@@ -201,7 +201,7 @@ The input of `ui.focus`: the focus ring of a site, about to move. It moves onto 
 | --- | --- | --- | --- |
 | `component` | <Documented /> | Which site: a `Pane` body or the `AbovePrompt` band. | Type: `UiFocusComponent`. |
 | `requestId` | <Documented /> | The instance that the `ui.render` hook that draws the site sees: the id of the pane, or the one id of the band. | Type: `string`. |
-| `plugin` | <Documented /> | Whose `ui.render` hook drew the element that takes the ring. Absent with `element`. Read-only. | Type: `string`. Optional. Since `2.1.323`, a hook that names no `plugin` hears the elements of its own plugin and the stops of the engine. `{ plugin: "*" }` hears the elements of every plugin.[^focus-input] |
+| `plugin` | <Documented /> | Whose `ui.render` hook drew the element that takes the ring. Absent with `element`. Read-only. | Type: `string`. Optional. A hook that names no `plugin` hears the elements of its own plugin and the stops of the engine. `{ plugin: "*" }` hears the elements of every plugin.[^focus-input] |
 | `element` | <Documented /> | The `key` of the element that takes the ring, as `ui.press` names it. Absent for one of the engine's own stops (the close mark of a pane or the tab of another). | Type: `string`. Optional. `next({ ...e, element })` lands it on another element that `plugin` drew in the site instead. For one not drawn there, core answers `{ deny }`. |
 | `origin` | <Documented /> | Who moves it (UiFocusOrigin). The engine sets it where the move starts. | Type: `UiFocusOrigin`. |
 
@@ -231,4 +231,4 @@ What a `ui.focus` hook returns, what `next(e)` resolves to, and what `$.ui.focus
 ## Sources
 
 [^focus-input]: The Mod API type file, `schemas/claude-code.d.ts`, `UiFocusInput`.
-[^maxlines]: The program, `chunk-syremzmn.js:88217` (the value sets), `chunk-syremzmn.js:90160` (the check of `maxLines`), and `chunk-syremzmn.js:123162` (the rewrite). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^maxlines]: The program, `chunk-syremzmn.js:88217` (the value sets), `chunk-syremzmn.js:90160` (the check of `maxLines`), and `chunk-syremzmn.js:123162` (the rewrite).

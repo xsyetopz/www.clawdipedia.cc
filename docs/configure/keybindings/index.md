@@ -31,7 +31,7 @@ This file binds `ctrl+k` in the chat input to the stash action. It frees `ctrl+s
 
 A binding value is an action name, `command:<name>`, or `null`. `command:<name>` runs the slash command as if you typed it. `null` removes a default key.
 The `command:` name may use letters, digits, `:`, `-`, and `_`.
-Each part of a key before the last must be a modifier: `ctrl`, `control`, `alt`, `opt`, `option`, `shift`, `meta`, `cmd`, `command`, `super`, or `win`. Since `2.1.323`, Claude Code ignores a binding such as `ctl+k` that has a misspelled modifier. Before, it bound the bare key. Claude Code reports `"ctl" is not a modifier, so the binding "ctl+k" is ignored` and suggests a fix.[^modifier] For keys pressed one after another, put a space between them, as in `ctrl+x ctrl+s`.
+Each part of a key before the last must be a modifier: `ctrl`, `control`, `alt`, `opt`, `option`, `shift`, `meta`, `cmd`, `command`, `super`, or `win`. Claude Code ignores a binding such as `ctl+k` that has a misspelled modifier. Claude Code reports `"ctl" is not a modifier, so the binding "ctl+k" is ignored` and suggests a fix.[^modifier] For keys pressed one after another, put a space between them, as in `ctrl+x ctrl+s`.
 The schema is [claude-code-keybindings.json](https://xsyetopz.github.io/clawdipedia/schemas/claude-code-keybindings.json).
 
 ## Contexts
@@ -88,5 +88,5 @@ A context says where a block of bindings applies. `Global` bindings work everywh
 ## Sources
 
 [^source]: [Customize Keyboard Shortcuts](https://code.claude.com/docs/en/keybindings) and the program. The tables come from the default keys in the program, `chunk-g4fdykqa.js:682-7837`.
-[^modifier]: The program, `chunk-b3qefvbn.js:3928` (the modifier names) and `chunk-b3qefvbn.js:5207` (the message and the suggestion).
+[^modifier]: The program, `chunk-b3qefvbn.js:3944` (the modifier names) and `chunk-b3qefvbn.js:5207` (the message and the suggestion).
 [^session-tabs]: The program, `chunk-g4fdykqa.js:16014`, `chunk-j2wfp6sf.js:874650`.

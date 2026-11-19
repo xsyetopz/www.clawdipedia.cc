@@ -35,7 +35,7 @@ claude --agents '{
 | `model` | <Documented /> | The model of the agent. | `sonnet`, `opus`, `haiku`, `fable`, a full model ID, or `inherit`. Order of choice: the per-call `model`, this field, `CLAUDE_CODE_SUBAGENT_MODEL`, the main model. `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1` forces one model. See [Models](../../how-it-works/models.md). |
 | `permissionMode` | <Documented /> | The permission mode of the agent. | `default`, `acceptEdits`, `auto`, `dontAsk`, `bypassPermissions`, `plan`, or `manual` (same as `default`). `bypassPermissions` applies only when the main session has it. Claude Code ignores it for plugin agents, and logs a warning. |
 | `maxTurns` | <Documented /> | The most agentic turns before the agent stops. | A positive integer, as a number or a string. At the limit the loop adds a `max_turns_reached` attachment with `maxTurns` and `turnCount`, and the subagent stops.[^max-turns] A bad value logs `Agent file <path> has invalid maxTurns '<value>'. Must be a positive integer.`, and Claude Code drops the value. A plugin agent file logs the same text with `Plugin agent file`. |
-| `autoCompactWindow` | <Documented /> | Lowers the auto-compact window for this agent. | An integer from `100000` to `1000000`. Needs 2.1.296. Since `2.1.312`, it also lowers the window that `CLAUDE_CODE_AUTO_COMPACT_WINDOW` sets. It never raises a window. See [Context and Compaction](../../how-it-works/context-and-compaction.md). |
+| `autoCompactWindow` | <Documented /> | Lowers the auto-compact window for this agent. | An integer of `100000` or more. It only lowers the window the subagent would otherwise inherit, and has no effect on the main session agent.[^acw] See [Context and Compaction](../../how-it-works/context-and-compaction.md). |
 | `skills` | <Documented /> | Skills preloaded into the agent context. | Claude Code injects the full skill text, for at most 32 names. A skill with `disable-model-invocation: true` cannot be preloaded. Claude Code skips a missing skill and logs it. |
 | `mcpServers` | <Documented /> | MCP servers for this agent. | A list of server names, or inline `{name: config}` objects. Inline servers connect at start and disconnect at the end. Claude Code ignores it for plugin agents. |
 | `hooks` | <Documented /> | Hooks scoped to this agent. | Events: `PreToolUse`, `PostToolUse`, `Stop` (becomes `SubagentStop`). Claude Code ignores it for plugin agents. See [Hooks](../hooks/index.md). |
@@ -68,7 +68,7 @@ claude --agents '{
 
 The `prompt` field replaces the file body.
 These agents have priority 2, below managed settings.
-In print mode (`-p`), `--agents` also takes a file path (since 2.1.281).
+In print mode (`-p`), `--agents` also takes a file path.[^agents-file]
 An interactive session refuses a path.
 The plugin mod call `$.agent.register` uses the same schema.
 
@@ -92,3 +92,5 @@ They list every field of this release. Look up a field there before you rely on 
 [^observer]: The program, `chunk-6fzqs776.js:1202` and `chunk-56bhcxay.js:1075614`, and [Probes](../../reference/probes.md#subagents-and-hooks).
 [^plugin-agent]: The program, the plugin agent loader, `chunk-56bhcxay.js:2922420`.
 [^validators]: The program, the frontmatter schema, `chunk-56bhcxay.js:2959248`, the frontmatter parser, `chunk-56bhcxay.js:2969185`, and the `--agents` JSON schema, `chunk-tt7pb888.js:28728`. Official page: [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents).
+[^acw]: The program, `chunk-20bv8pca.js:297489`.
+[^agents-file]: The program, `chunk-gywceass.js:76740`.

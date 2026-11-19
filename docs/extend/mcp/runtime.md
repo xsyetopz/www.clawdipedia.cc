@@ -45,7 +45,7 @@ A channel is a way for a server to push messages into your session.
 
 | Item | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
-| Elicitation dialog | <Documented /> | Asks you for input. | `form` mode shows fields. `url` mode asks to open a link. The escaped URL has a cap of about 8000 characters. Claude Code declares `elicitation: {form: {}, url: {}}`. Since `2.1.326`, when a background MCP task asks the question, the Esc hint reads `answer later` instead of `cancel`. Esc then sends nothing to the server, and the question stays in `/tasks` as `the server is waiting for your answer`.[^answer-later] The Ctrl+C hint on such a question reads `answer later` too.[^answer-later-notes] Since `2.1.326`, a closed question marks its task as `needs your input`: the task row in `/tasks` and the footer show it. Press Enter on the task in `/tasks` to see the question again.[^task-question-closed] Since `2.1.326`, a question from a background MCP task stays hidden while you have a message in the input box. It opens when you send or clear the message.[^task-question-draft] |
+| Elicitation dialog | <Documented /> | Asks you for input. | `form` mode shows fields. `url` mode asks to open a link. The escaped URL has a cap of about 8000 characters. Claude Code declares `elicitation: {form: {}, url: {}}`. When a background MCP task asks the question, the Esc hint reads `answer later` instead of `cancel`. Esc then sends nothing to the server, and the question stays in `/tasks` as `the server is waiting for your answer`.[^answer-later] The Ctrl+C hint on such a question reads `answer later` too.[^answer-later-notes] A closed question marks its task as `needs your input`: the task row in `/tasks` and the footer show it. Press Enter on the task in `/tasks` to see the question again.[^task-question-closed] A question from a background MCP task stays hidden while you have a message in the input box. It opens when you send or clear the message.[^task-question-draft] |
 | `Elicitation` hook | <Documented /> | Answers a request. | Input: `mcp_server_name`, `message`, `mode`, `url`, `elicitation_id`, `requested_schema`. Output action: `accept` (with `content`), `decline`, or `cancel`. |
 | `ElicitationResult` hook | <Documented /> | Observes or overrides the answer. | Input has `action` and `content`. Runs before the answer goes to the server. |
 | `claude/channel` capability | <Documented /> | Lets a server push messages. | You opt in with `--channels`. Claude Code does not register it on a v2 connection that agreed on revision 2026-07-28. |
@@ -64,7 +64,7 @@ Official pages: [Channels Reference](https://code.claude.com/docs/en/channels-re
 | `ENABLE_MCP_LARGE_OUTPUT_FILES` | <Undocumented /> | Switch for the file path. | When `false`, Claude Code truncates instead of saving to a file. |
 | `_meta["anthropic/maxResultSizeChars"]` | <Documented /> | Raises the threshold for one tool. | Up to 500000 characters. Text only. Set in the `tools/list` entry. |
 | `_meta["anthropic/requiresUserInteraction"]` | <Documented /> | Always asks. | Only JSON `true` counts. It prompts in all modes. `dontAsk` denies. With `--permission-prompt-tool`, an allow becomes a deny. |
-| `_meta["anthropic/alwaysLoad"]` | <Documented /> | Loads a tool upfront. | `false` keeps it deferred when the user config sets `alwaysLoad: true` (`2.1.285` and later). |
+| `_meta["anthropic/alwaysLoad"]` | <Documented /> | Loads a tool upfront. | `false` keeps it deferred when the user config sets `alwaysLoad: true` |
 | Error text | <Documented /> | Shortens long errors. | Over about 11000 characters, the first 5000 and last 5000 stay. For `isError: true` results. |
 | 16 MiB response | <Documented /> | Caps one response or message. | HTTP and SSE stop reading. A WebSocket closes the connection. |
 | Description limits | <Documented /> | Cuts long text. | 4096 characters for server instructions and an upfront tool. 16384 for a tool found by tool search. `CLAUDE_CODE_MAX_MCP_DESCRIPTION_LENGTH` replaces both. |
@@ -80,7 +80,7 @@ Official pages: [Channels Reference](https://code.claude.com/docs/en/channels-re
 | `list_changed` | <Documented /> | Refreshes tools, prompts, and resources. | Interactive sessions refresh all three. `-p` refreshes tools only. A failed refresh keeps the old lists. |
 | Stdio shutdown | <Documented /> | Stops a stdio server. | On macOS and Linux: `SIGINT`, then `SIGTERM` after 100 ms, then `SIGKILL` after 400 ms more. |
 | `roots/list` | <Documented /> | Tells servers which folders Claude Code allows. | Answers with the launch folder and added folders. |
-| Tool search modes | <Documented /> | Controls deferral. | `ENABLE_TOOL_SEARCH`: not set, `true`, `auto`, `auto:N`, or `false`. Since 2.1.304 tool search is on by default behind a custom `ANTHROPIC_BASE_URL`, and a 400 or 422 from the gateway is retried without it. Since 2.1.305 the retry also covers an endpoint or gateway that rejects tool search, and a `ToolSearch` that is disallowed or left out of `--tools`.[^v305] After a refusal Claude Code says `Tool search is off for this conversation: the endpoint refused it earlier in this process.` `ENABLE_TOOL_SEARCH=true` overrides a conversation that ran without `ToolSearch`, which stays that way until it is compacted or cleared.[^undoc] |
+| Tool search modes | <Documented /> | Controls deferral. | `ENABLE_TOOL_SEARCH`: not set, `true`, `auto`, `auto:N`, or `false`. Without the variable, tool search is on.[^v305] After a refusal Claude Code says `Tool search is off for this conversation: the endpoint refused it earlier in this process.` `ENABLE_TOOL_SEARCH=true` overrides a conversation that ran without `ToolSearch`, which stays that way until it is compacted or cleared.[^undoc] |
 
 ## Example
 
@@ -122,9 +122,9 @@ stateDiagram-v2
   Failed --> Connecting: <code>/mcp</code> reconnect
 ```
 
-Since `2.1.327`, Claude Code retries in the background, for about a day, most remote servers that it reaches by hostname over `https`. This helps after a longer outage, such as a VPN drop. Claude Code skips servers at an IP address, at `localhost`, at a private or internal name such as `.local`, `.internal`, or `.lan`, and on the host name of your own machine.[^retry-day]
+Claude Code retries in the background, for about a day, most remote servers that it reaches by hostname over `https`. This helps after a longer outage, such as a VPN drop. Claude Code skips servers at an IP address, at `localhost`, at a private or internal name such as `.local`, `.internal`, or `.lan`, and on the host name of your own machine.[^retry-day]
 
-Since `2.1.327`, MCP server logs record only the mode, the action, and the field names of an elicitation request and of a hook answer. They no longer record the full contents.[^elicit-log]
+MCP server logs record only the mode, the action, and the field names of an elicitation request and of a hook answer. They do not record the full contents.[^elicit-log]
 
 ## Errors
 
@@ -132,8 +132,8 @@ Rows with a start of a message are families. The backticked text is the start th
 
 | Start of Message | Status | What It Means | Cases |
 | --- | --- | --- | --- |
-| `.mcp.json is malformed (not valid JSON, or mcpServers is not an object)` | <Undocumented /> | Claude Code could not read the project `.mcp.json`. | The file is not valid JSON, or `mcpServers` is not an object. Since `2.1.326`, for broken JSON the error carries the line and column of the first syntax error. Its message is "MCP config is not a valid JSON" and suggests "Fix the JSON syntax errors in the file".[^json-position] |
-| `MCP server "` | <Undocumented /> | A tool call or command named a server that cannot be used. | Managed policy blocks the server, the server is disabled (re-enable it with `/mcp`), or Claude Code did not find it. Since `2.1.326`, your organization's connector settings can also hold a server. Then Claude Code does not send a message to the server, or does not show the question the server asks. The text says whether the settings do not allow the server or could not check it. Try again shortly, or ask your administrator.[^connector-hold] |
+| `.mcp.json is malformed (not valid JSON, or mcpServers is not an object)` | <Undocumented /> | Claude Code could not read the project `.mcp.json`. | The file is not valid JSON, or `mcpServers` is not an object. For broken JSON the error carries the line and column of the first syntax error. Its message is "MCP config is not a valid JSON" and suggests "Fix the JSON syntax errors in the file".[^json-position] |
+| `MCP server "` | <Undocumented /> | A tool call or command named a server that cannot be used. | Managed policy blocks the server, the server is disabled (re-enable it with `/mcp`), or Claude Code did not find it. Your organization's connector settings can also hold a server. Then Claude Code does not send a message to the server, or does not show the question the server asks. The text says whether the settings do not allow the server or could not check it. Try again shortly, or ask your administrator.[^connector-hold] |
 | `Server "` | <Undocumented /> | A server operation failed. | The server does not support resources, is not connected, or was not found. The last case lists the available servers. |
 | `No MCP server named` | <Undocumented /> | A server name is not in the scope that the command searched. | The scope is `.mcp.json`, local, or user. |
 | `StdioClientTransport already started`, `MCP tool call to server`, `Missing required ${…}: ${…}. Usage: /mcp__`, `The tool call was interrupted`, `Unsupported server type`, `claude.ai MCP proxy is not available`, `No claude.ai OAuth token`, `The "${…}" connector`, `"${…}" was disabled while reconnecting`, `Connection failed`, `Server status:`, `The result of MCP tool` | <Undocumented /> | An MCP server or tool call failed. | One of these causes applies. The server or client does not support a capability that the call needs (roots, sampling, elicitation, tasks, resources). The tool call was interrupted or aborted because the account changed. A required argument is missing. The server type is not supported. |
@@ -150,13 +150,13 @@ Rows with a start of a message are families. The backticked text is the start th
 
 [^undoc]: The program, for example `chunk-mt0sg9yk.js:263314` for `ENABLE_MCP_LARGE_OUTPUT_FILES`, `chunk-mhtpe42j.js:1305` for the old tool names, and `chunk-xethrx83.js:954095` for the registry fetch, for rows marked <Undocumented />.
 [^schema-checks]: The program, `chunk-mt0sg9yk.js:218082` and `chunk-ejmpea1g.js:8734`.
-[^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
+[^v305]: The program, `chunk-dnmy4w56.js:8148` (the default mode is on) and `chunk-56bhcxay.js:2992936` (the refusal text).
 [^registry]: The program, `chunk-xethrx83.js:953786`.
-[^answer-later]: The program, `chunk-j2wfp6sf.js:1320853`. The task puts the question aside and sends no response to the server. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^answer-later-notes]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^task-question-closed]: The program, `chunk-j2wfp6sf.js:793234` and `chunk-j2wfp6sf.js:905766`. The task row and the footer show `needs your input`. Enter in the task detail calls the stored question opener. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^task-question-draft]: The program, `chunk-xtedtr26.js:2859`. The question dialog of a background MCP task is requested with `alsoHideWhile: ["draft"]`. The wait for the send or the clear comes from the [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325), which also say the spinner and turn timer keep running.
-[^json-position]: The program, `chunk-h9zb4hpp.js:13187` and `chunk-56bhcxay.js:4773617`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^answer-later]: The program, `chunk-j2wfp6sf.js:1320853`. The task puts the question aside and sends no response to the server.
+[^answer-later-notes]: The program, `chunk-4prvwasd.js:37582`.
+[^task-question-closed]: The program, `chunk-j2wfp6sf.js:793234` and `chunk-j2wfp6sf.js:905766`. The task row and the footer show `needs your input`. Enter in the task detail calls the stored question opener.
+[^task-question-draft]: The program, `chunk-xtedtr26.js:2859`. The question dialog of a background MCP task is requested with `alsoHideWhile: ["draft"]`.
+[^json-position]: The program, `chunk-h9zb4hpp.js:13187` and `chunk-56bhcxay.js:4773617`.
 [^connector-hold]: The program, `chunk-56bhcxay.js:4742975-4743193`.
-[^retry-day]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-kvtp2zzs.js:2104` for 69 attempts that wait up to 900000 ms each, `chunk-j2wfp6sf.js:1883722` for the attempt, and `chunk-ejmpea1g.js:13640` for the "failed · retrying" label. The test is in `chunk-kcxv5tz1.js:1000-2832`: the server is `http`, `sse`, or a claude.ai proxy with an error code, the URL scheme is `https`, the host is not an IP address, `localhost`, or a private name, and the gate `tengu_smooth_lark` is on (default on). The name lists are in `chunk-mf7z01h4.js:1700-3780`, and the own-host test is `nUr` there.
-[^elicit-log]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-mt0sg9yk.js:182001` and `chunk-fqzvd647.js:299`.
+[^retry-day]: The program, `chunk-4prvwasd.js:8650` (the changelog text), `chunk-kvtp2zzs.js:2104` for 69 attempts that wait up to 900000 ms each, `chunk-j2wfp6sf.js:1883722` for the attempt, and `chunk-ejmpea1g.js:13640` for the "failed · retrying" label. The test is in `chunk-kcxv5tz1.js:1000-2832`: the server is `http`, `sse`, or a claude.ai proxy with an error code, the URL scheme is `https`, the host is not an IP address, `localhost`, or a private name, and the gate `tengu_smooth_lark` is on (default on). The name lists are in `chunk-mf7z01h4.js:1700-3780`, and the own-host test is `nUr` there.
+[^elicit-log]: The program, `chunk-mt0sg9yk.js:182001`, `chunk-fqzvd647.js:299`, and `chunk-4prvwasd.js:22794`.

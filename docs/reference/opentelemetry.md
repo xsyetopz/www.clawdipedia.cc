@@ -1,6 +1,6 @@
 ---
 title: OpenTelemetry Events
-description: The log events that Claude Code 2.1.323 emits through OpenTelemetry, with the attributes of each, read from the program.
+description: The log events that Claude Code 2.1.328 emits through OpenTelemetry, with the attributes of each, read from the program.
 sidebar_position: 7
 ---
 
@@ -34,40 +34,34 @@ The attribute names come from the call sites of the event emitter, read into [`c
 | `plugin_installed` | <Undocumented /> | A plugin was installed. | `plugin.name`, `plugin.version`, `marketplace.name`, `marketplace.is_official`, `install.trigger`, `install.disabled_by_default` |
 | `plugin_loaded` | <Undocumented /> | A plugin was loaded. | `plugin.name`, `marketplace.name`, `plugin.version`, `plugin.scope`, `enabled_via`, `plugin_id_hash`, `has_hooks`, `has_mcp`, `host_owned_mcp`, `skill_path_count`, `command_path_count`, `agent_path_count`, `safe_mode` |
 | `retention_sweep` | <Undocumented /> | A cleanup of old session data ran, with counts. Print mode runs it 5 seconds after the start. An interactive session runs it only when the user is idle for 60 seconds, and else tries again 10 minutes later. All the counts are strings.[^retention-sweep] | `result`, `period_days`, `used_default`, `skip_reason`, `transcripts_deleted`, `transcripts_exempted_desktop`, `session_files_deleted`, `artifacts_deleted`, `files_retained_fresh`, `files_past_cutoff`, `error_count`, `history_entries_pruned` |
-| `safety_event` | <Gated note="Server flag tengu_snoopy_creek, off by default since 2.1.312" /> | A permission or safety decision. Off by default since `2.1.312`, because a server-side gate now defaults to `false`. In `2.1.311` it defaulted to `true`. The code that sends the event is still in Claude Code, and both of its call sites test the gate, so a server-side flag can turn the event on again.[^safety-gate] | `category`, `decision`, `decision_source`, `reason_type`, `reason_code`, `rule_source`, `grant_scope`, `circuit_breaker`, `classifier_category`, `hook_event`, `tool_class`, `tool_name`, `tool_source`, `permission_mode`, `tool_use_id`, `sandbox_violation_count`, `sandbox_enabled` |
+| `safety_event` | <Gated note="Server flag tengu_snoopy_creek, off by default" /> | A permission or safety decision. Off by default, because a server-side gate defaults to `false`. Both call sites of the code that sends the event test the gate, so a server-side flag can turn the event on.[^safety-gate] | `category`, `decision`, `decision_source`, `reason_type`, `reason_code`, `rule_source`, `grant_scope`, `circuit_breaker`, `classifier_category`, `hook_event`, `tool_class`, `tool_name`, `tool_source`, `permission_mode`, `tool_use_id`, `sandbox_violation_count`, `sandbox_enabled` |
 | `skill_activated` | <Undocumented /> | A skill was activated. | `skill.name`, `invocation_trigger`, `skill.source`, `skill.kind`, `plugin.name`, `marketplace.name` |
 | `subagent_completed` | <Undocumented /> | A subagent finished, with token and tool-use counts. | `agent_type`, `agent.source`, `is_built_in`, `is_async`, `total_tokens`, `total_tool_uses`, `duration_ms`, `model`, `final_model`, `model_swapped`, `plugin_id_hash`, `plugin.name` |
 | `system_prompt` | <Undocumented /> | The system prompt, or its hash. | `system_prompt_hash`, `system_prompt`, `system_prompt_length`, `system_prompt_truncated` |
 | `tool` | <Undocumented /> | A tool definition, or its hash. | `tool_name`, `tool_hash`, `tool`, `tool_truncated` |
-| `tool_decision` | <Documented /> | A tool use was accepted or rejected. `OTEL_LOG_TOOL_DETAILS` adds `classifier_category`. | `decision`, `source`, `tool_name`, `tool_use_id`, `tool_source`, `tool_parameters`, `classifier_verdict`, `classifier_category`, `permission_mode`. Since `2.1.326`, a `PreToolUse` hook from managed settings that refuses a tool call also leaves a `tool_decision` event and an entry in `permission_denials`.[^managed-denial] |
+| `tool_decision` | <Documented /> | A tool use was accepted or rejected. `OTEL_LOG_TOOL_DETAILS` adds `classifier_category`. | `decision`, `source`, `tool_name`, `tool_use_id`, `tool_source`, `tool_parameters`, `classifier_verdict`, `classifier_category`, `permission_mode`. A `PreToolUse` hook from managed settings that refuses a tool call also leaves a `tool_decision` event and an entry in `permission_denials`.[^managed-denial] |
 | `tool_result` | <Undocumented /> | A tool call finished. After a git commit it also carries the `vcs.ref.head.*` fields. | `tool_name`, `tool_use_id`, `success`, `duration_ms`, `tool_parameters`, `tool_input`, `tool_input_size_bytes`, `tool_result_size_bytes`, `decision_source`, `decision_type`, `mcp_server_scope`, `vcs.ref.head.revision`, `vcs.ref.head.name`, `vcs.ref.head.type`, `error_type`, `error` |
-| `user_prompt` | <Undocumented /> | A user prompt. The text is in `prompt` only when `OTEL_LOG_USER_PROMPTS` is on. Since `2.1.326`, a message sent while tool calls run also gives this event, with the attribute `delivery.mode` set to `mid_turn` .[^mid-turn] | `prompt_length`, `prompt`, `prompt_text` |
+| `user_prompt` | <Undocumented /> | A user prompt. The text is in `prompt` only when `OTEL_LOG_USER_PROMPTS` is on. A message sent while tool calls run also gives this event, with the attribute `delivery.mode` set to `mid_turn` .[^mid-turn] | `prompt_length`, `prompt`, `prompt_text` |
 
 ## What Two Attributes Report
 
 | Attribute | Status | What It Reports | Notes |
 | --- | --- | --- | --- |
-| `effort` | <Undocumented /> | The effort level in force for the request. | Since `2.1.312`. Before, it could name a newly picked level before the model applied it. Claude Code takes the level from the last effort change that the conversation holds, and uses the new pick only when there is none. The `api_request` event reads it from `output_config.effort` of the request, and the refusal path passes the same level. The `api_error` and `api_retries_exhausted` events pass the same level.[^effort-events] |
-| `mcp_server.name` | <Undocumented /> | The server name when the server is in a set of loggable servers. Else it reports `custom`. A server joins the set when one of its tools is called and the server passes the checks below.[^mcp-name] | A server that a plugin declares passes only when all of these hold: the plugin comes from an official marketplace that Claude Code vouches for, the server has type `http`, `sse`, or `ws` with a `url`, and its endpoint is fixed (not a template). Some servers that Claude Code or Anthropic provides also pass, such as `claudeai-proxy` servers, URLs in the official MCP registry, and every server under the `local-agent` entry point. Every other server reports `custom`. For a plugin server that passes only by the plugin condition, `mcp_tool.name` also reports `custom`, because Claude Code withholds its tool names. The plugin condition is new in `2.1.312`. `2.1.311` has none, so it reports `custom` for every plugin server. |
+| `effort` | <Undocumented /> | The effort level in force for the request. | The `api_request` event reads it from `output_config.effort` of the request. The `api_error` and `api_retries_exhausted` events pass the same level.[^effort-events] |
+| `mcp_server.name` | <Undocumented /> | The server name when the server is in a set of loggable servers. Else it reports `custom`. A server joins the set when one of its tools is called and the server passes the checks below.[^mcp-name] | A server that a plugin declares passes only when all of these hold: the plugin comes from an official marketplace that Claude Code vouches for, the server has type `http`, `sse`, or `ws` with a `url`, and its endpoint is fixed (not a template). Some servers that Claude Code or Anthropic provides also pass, such as `claudeai-proxy` servers, URLs in the official MCP registry, and every server under the `local-agent` entry point. Every other server reports `custom`. For a plugin server that passes only by the plugin condition, `mcp_tool.name` also reports `custom`, because Claude Code withholds its tool names. |
 
 These two rows and the `safety_event` gate come from the program.[^two-attrs]
 
 ## Account and Provider Attributes
 
-Since `2.1.318`, Claude Code adds `anthropic.provider`, `anthropic.custom_base_url`, `anthropic.plan`, and `anthropic.seat_type` to OpenTelemetry metrics, events, and spans.[^account-notes]
+Claude Code adds `anthropic.provider`, `anthropic.custom_base_url`, `anthropic.plan`, and `anthropic.seat_type` to OpenTelemetry metrics, events, and spans.
 
 | Attribute | Status | Value | When It Is Set |
 | --- | --- | --- | --- |
-| `anthropic.provider` | <Undocumented /> | `firstParty` or `bedrock` in the runs below | Always |
+| `anthropic.provider` | <Undocumented /> | The API provider name, such as `firstParty` or `bedrock` | Always |
 | `anthropic.custom_base_url` | <Undocumented /> | `true` or `false` (a boolean) | When Claude Code can tell. `true` when the API base URL is not the default |
 | `anthropic.plan` | <Undocumented /> | `pro`, `max`, `team`, or `enterprise` | With a claude.ai subscriber login. A `free` plan sets none |
 | `anthropic.seat_type` | <Undocumented /> | `premium`, `standard`, `usage_based`, or `other` | With a claude.ai subscriber login and a stored seat tier. Claude Code maps the tier name to one of the four values.[^attr-set] |
-
-Probe results:
-
-- All three signals carry the same four attributes, and the plan and seat type need a subscriber login. With an API key, only `provider` and `custom_base_url` appear. With a max login, `plan` is `max`. A `team_tier_1` seat gives `premium`, and `enterprise_usage_based` gives `usage_based`.[^probe-attrs]
-- The result matched on metrics, logs, and traces alike. The `team-premium` case gave `plan=team` and `seat_type=premium`. The `enterprise-usage-based` case gave `plan=enterprise` and `seat_type=usage_based`. The `free-plan` case gave neither.
-- `custom_base_url` is `true` for the local stub URL, and `false` with `ANTHROPIC_BASE_URL=https://api.anthropic.com` (case `default-api-url`). With `CLAUDE_CODE_USE_BEDROCK=1`, `provider` is `bedrock`, and `custom_base_url` is `false`, or `true` when `ANTHROPIC_BEDROCK_BASE_URL` is set (cases `bedrock`, `bedrock-custom-url`).
 
 ## Attributes on Every Event
 
@@ -75,26 +69,24 @@ Every event carries these base attributes: `user.id`, `user.email`, `user.groups
 
 ## Host Resource Attributes
 
-Set `OTEL_RESOURCE_INCLUDE_HOST` to include `host.name` and `host.id` in OpenTelemetry resource attributes (off by default).[^host-notes] Status: <Undocumented /> in the official docs.
+Set `OTEL_RESOURCE_INCLUDE_HOST` to include `host.name` and `host.id` in OpenTelemetry resource attributes (off by default).[^host-check] Status: <Undocumented /> in the official docs.
 
 Claude Code adds `host.name` and `host.id` to the resource only when `OTEL_RESOURCE_INCLUDE_HOST` is `true`.[^host-check] The same check also needs telemetry on and no OTEL exporter variable that names `console`. It does not apply to some hosted and remote runs.
 
 ## Export Behavior
 
-Since `2.1.323`, Claude Code changes how it sends OpenTelemetry data.[^export-notes]
-
 | Case | Status | Behavior |
 | --- | --- | --- |
-| An `otlp` exporter has an endpoint but `OTEL_EXPORTER_OTLP_PROTOCOL` is not set | <Undocumented /> | The protocol is `http/protobuf`. Before, export failed with no message. |
-| The endpoint is the default `localhost:4318` | <Undocumented /> | The export does not go through a configured proxy. |
-| One entry of `OTEL_RESOURCE_ATTRIBUTES` is malformed | <Undocumented /> | Claude Code keeps the other entries. Before, one bad entry dropped all of them. |
-| Export through a proxy that is slow to reach the collector | <Undocumented /> | The timeout is 25 seconds, and `OTEL_EXPORTER_OTLP_TIMEOUT` cannot raise it above 25 seconds. Before, the limit was 30 seconds. |
+| An `otlp` exporter has an endpoint but `OTEL_EXPORTER_OTLP_PROTOCOL` is not set | <Undocumented /> | The protocol is `http/protobuf`. |
+| The endpoint host is a loopback host, such as the default `localhost:4318` | <Undocumented /> | The export does not go through a configured proxy. |
+| One entry of `OTEL_RESOURCE_ATTRIBUTES` is malformed | <Undocumented /> | Claude Code keeps the other entries. |
+| Export through a proxy that is slow to reach the collector | <Undocumented /> | The timeout is 25 seconds, and `OTEL_EXPORTER_OTLP_TIMEOUT` cannot raise it above 25 seconds. |
 
 The rows above come from the program.[^export-code]
 
 ## Spans That Are Never Sent
 
-The code of `2.1.327` names four more spans: `claude_code.bash.subprocess`, `claude_code.compaction`, `claude_code.mcp.rpc`, and `claude_code.subagent.spawn`. Claude Code never sends them. Each one starts only when a gate is on, and in this build the gate always returns `false`. No setting or environment variable turns it on, so the OpenTelemetry schema does not list these spans.[^dead-spans]
+The program names four more spans: `claude_code.bash.subprocess`, `claude_code.compaction`, `claude_code.mcp.rpc`, and `claude_code.subagent.spawn`. Claude Code never sends them. Each one starts only when a gate is on, and the gate always returns `false`. No setting or environment variable turns it on, so the OpenTelemetry schema does not list these spans.[^dead-spans]
 
 ## Related Pages
 
@@ -106,20 +98,16 @@ The code of `2.1.327` names four more spans: `claude_code.bash.subprocess`, `cla
 ## Sources
 
 [^events]: The program, the event emitter at `chunk-pw9xqvmf.js:19822`.
-[^hook-complete]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program writes `num_hooks` as the length of the hook list and `num_success` at `chunk-56bhcxay.js:4366639`, after it starts the event at `chunk-56bhcxay.js:4328242`. The two `internal: true` callback hooks are at `chunk-accg1cxy.js:6282` (post-commit) and `chunk-zbyb13d2.js:11911` (post-push).
-[^safety-gate]: The program, `chunk-56bhcxay.js:4619123` (the gate `tengu_snoopy_creek` and its default `false` at `chunk-56bhcxay.js:4622472`). The two call sites test it at `chunk-56bhcxay.js:4621005` and `chunk-56bhcxay.js:4621626`. The [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312) say Claude Code stops sending the event.
-[^mid-turn]: The program, `chunk-2b3eg071.js:4371`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^mcp-name]: The program. The set is `loggableMcpServers` (`chunk-xethrx83.js:957867`). `chunk-mt0sg9yk.js:237865` adds a server on each of its tool calls when `chunk-xethrx83.js:1034016` (`w8`) returns true. The plugin condition is `lN` (`chunk-xethrx83.js:1033753`): a string `pluginSource`, `pluginOfficialSourceVouched` true, `pluginEndpointTemplated` not true, type `http`, `sse`, or `ws` with a `url`, and a marketplace name in a built-in list of official names (`chunk-jkpzhr7r.js:111648`, list at `chunk-jkpzhr7r.js:49381`). The vouched flag is set at `chunk-56bhcxay.js:5531704` when the marketplace name is on that list, its source is `github` or `git`, and two more checks pass. An endpoint counts as templated (`chunk-56bhcxay.js:4695612`) when expanding `${CLAUDE_PROJECT_DIR}`, an environment variable, or `${user_config.*}` changes its URL. The default is `custom` (`chunk-xethrx83.js:958690`). The attribute is built at `chunk-xethrx83.js:962149`, where a tool name stays `custom` when the server is withheld. `2.1.311` has the set and its tool-call site, but its check ends at the shared test for `local-agent`, `claudeai-proxy`, and registry URLs, and the build has no `pluginOfficialSourceVouched`. `2.1.312` has the plugin condition.
+[^hook-complete]: The program writes `num_hooks` as the length of the hook list and `num_success` at `chunk-56bhcxay.js:4366720`, after `hook_execution_complete` at `chunk-56bhcxay.js:4366639`. The event starts at `chunk-56bhcxay.js:4328242`. The two `internal: true` callback hooks are at `chunk-accg1cxy.js:6282` (post-commit) and `chunk-zbyb13d2.js:11911` (post-push).
+[^safety-gate]: The program, `chunk-56bhcxay.js:4619123` (the gate `tengu_snoopy_creek` and its default `false` at `chunk-56bhcxay.js:4622481`). The two call sites test it at `chunk-56bhcxay.js:4621005` and `chunk-56bhcxay.js:4621626`.
+[^mid-turn]: The program, `chunk-2b3eg071.js:65819`.
+[^mcp-name]: The program. The set is `loggableMcpServers` (`chunk-xethrx83.js:957867`). `chunk-mt0sg9yk.js:237865` adds a server on each of its tool calls when `chunk-xethrx83.js:1034016` (`w8`) returns true. The plugin condition is `lN` (`chunk-xethrx83.js:1033753`): a string `pluginSource`, `pluginOfficialSourceVouched` true, `pluginEndpointTemplated` not true, type `http`, `sse`, or `ws` with a `url`, and a marketplace name in a built-in list of official names (`chunk-jkpzhr7r.js:111648`, list at `chunk-jkpzhr7r.js:49381`). The vouched flag is set at `chunk-56bhcxay.js:5531704` when the marketplace name is on that list, its source is `github` or `git`, and two more checks pass. An endpoint counts as templated (`chunk-56bhcxay.js:4695612`) when expanding `${CLAUDE_PROJECT_DIR}`, an environment variable, or `${user_config.*}` changes its URL. The default is `custom` (`chunk-xethrx83.js:958690`). The attribute is built at `chunk-xethrx83.js:962149`, where a tool name stays `custom` when the server is withheld.
 [^two-attrs]: The program. The level in force is in `chunk-56bhcxay.js:3195306` and `chunk-56bhcxay.js:3382703`. The server name is in `chunk-xethrx83.js:962149`, with `custom` at `chunk-xethrx83.js:958690`. The `safety_event` gate is in `chunk-56bhcxay.js:4622472`, `chunk-56bhcxay.js:4621005`, and `chunk-56bhcxay.js:4621626`.
-[^account-notes]: The `2.1.318` release notes: "Added `anthropic.plan`, `anthropic.seat_type`, `anthropic.provider` and `anthropic.custom_base_url` to OTel metrics, events and spans".
-[^attr-set]: The program. The plan list and the tier map are at `chunk-pw9xqvmf.js:3600`. The attribute set is built at `chunk-pw9xqvmf.js:4615`.
-[^probe-attrs]: `bun run release:probe:print -- --from 2.1.319 --to 2.1.319 --only notes319.otel-attrs`. Cases `api-key`, `max-plan`, `team-premium`, `enterprise-usage-based`, `free-plan`. Each case exports metrics, logs, and traces to a local OTLP receiver (`tools/release/lib/otlp.ts`) with `http/json`.
-[^host-notes]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326): "Added `OTEL_RESOURCE_INCLUDE_HOST` to include `host.name` and `host.id` in OpenTelemetry resource attributes (off by default)".
+[^attr-set]: The program. The plan list and the tier map are at `chunk-pw9xqvmf.js:3656`. The attribute set is built at `chunk-pw9xqvmf.js:4354`.
 [^host-check]: The program, `chunk-wnxs29zv.js:40261`. The resource is built at `chunk-wnxs29zv.js:40479`.
-[^export-notes]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323).
-[^export-code]: The program. The default protocol is at `chunk-wnxs29zv.js:38909` and `chunk-wnxs29zv.js:44593`. The loopback check and the 25 second cap are at `chunk-wnxs29zv.js:56971`. The resource attribute parser is at `chunk-ht72pdwf.js:833`.
-[^managed-denial]: The program, `chunk-56bhcxay.js:232274-232302` (a refusal from a `PreToolUse` hook that managed settings run is kept as `managedDenial`) and `chunk-56bhcxay.js:242818-242862` (that refusal calls `onPermissionDenial` and writes the `tool_decision` event). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^effort-events]: The program, `chunk-56bhcxay.js:3170406` (`api_error` takes `effort` and `api_retries_exhausted` adds it when it is set). The [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312) list the effort fix and the `mcp_server.name` change.
-[^dead-spans]: The program. The gate `XXe()` is `function XXe(){return!1}` at `chunk-2n66hc1z.js:8868`. The span wrapper `O8r()` at `chunk-2n66hc1z.js:20549` and the subagent span `lFa()` at `chunk-2n66hc1z.js:21140` return first when it is `false`. Compaction calls `O8r()` at `chunk-56bhcxay.js:3021558`, the Bash tool at `chunk-56bhcxay.js:3839636`, and an MCP tool call through `aFa()` at `chunk-mt0sg9yk.js:266955`.
+[^export-code]: The program. The default protocol is at `chunk-wnxs29zv.js:38909` and `chunk-wnxs29zv.js:44711`. The 25 second cap is at `chunk-wnxs29zv.js:57222`. The loopback check is at `chunk-dwvmg1gh.js:804`. The resource attribute parser is at `chunk-pw9xqvmf.js:6288` and `chunk-ht72pdwf.js:759`.
+[^managed-denial]: The program, `chunk-56bhcxay.js:4631450` (a refusal from a `PreToolUse` hook that managed settings run is kept as `managedDenial`) and `chunk-56bhcxay.js:4843291` (that refusal calls `onPermissionDenial`; the `tool_decision` event is written at `chunk-56bhcxay.js:4845000`).
+[^effort-events]: The program, `chunk-56bhcxay.js:3183961` (`api_request`) and `chunk-56bhcxay.js:3170406` (`api_error` takes `effort` and `api_retries_exhausted` adds it when it is set).
+[^dead-spans]: The program. The gate `xZe()` is `function xZe(){return!1}` at `chunk-2n66hc1z.js:8868`. The span wrapper `JQr()` at `chunk-2n66hc1z.js:20549` and the subagent span `YGa()` at `chunk-2n66hc1z.js:21140` return first when it is `false`. Compaction calls `JQr()` at `chunk-56bhcxay.js:3021563`, the Bash tool at `chunk-56bhcxay.js:3839641`, and an MCP tool call through `qGa()` at `chunk-mt0sg9yk.js:266960`.
 [^plugin-metrics]: The program. `LCt()` sends the event only when `RM()` finds an official marketplace name (`chunk-56bhcxay.js:4302880`, `chunk-56bhcxay.js:1185114`, the names at `chunk-jkpzhr7r.js:49381`). A local source cannot use an official name (`chunk-jkpzhr7r.js:51481`). A valid answer logs "Hook JSON output had unrecognized keys (ignored): metrics" (`chunk-56bhcxay.js:1248876`). The fallback that keeps `metrics` is at `chunk-56bhcxay.js:1249379`, and the next request sends it at `chunk-56bhcxay.js:4167693`. Probe case `otel-hook-plugin-metrics` (`bun tools/schemas/observe/print.ts <dir> --only otel-hook-plugin-metrics`) sent `probe_count` as an integer and `probe_flag` as a boolean.
 [^retention-sweep]: The program. Print mode starts the housekeeping at `chunk-gywceass.js:45549`. The scheduler, its 5 second first run, its 10 minute retry, and its idle check for an interactive session are at `chunk-9n6y18w2.js:18609`. The event is sent at `chunk-pw9xqvmf.js:21537`. Probe case `otel-retention-sweep` sent a `complete` result with all counts as strings.

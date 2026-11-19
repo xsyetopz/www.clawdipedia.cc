@@ -15,7 +15,7 @@ Official pages: [Connect Claude Code to Tools via MCP](https://code.claude.com/d
 | Command | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
 | `claude mcp add [options] <name> <commandOrUrl> [args...]` | <Documented /> | Adds a server. | Writes to the scope and prints `Added ...`. Put `--` before a stdio command. Then Claude Code does not parse its flags. Claude Code rejects a reserved name. |
-| `claude mcp add-json [options] <name> <json>` | <Documented /> | Adds a server from a JSON string. | Accepts `stdio`, `sse`, `http`, and `ws`. The JSON is the entry object, not the `mcpServers` wrapper. Since `2.1.326`, a bad entry gets a message that says what to change: not a JSON object, a `url` with no `type`, an `mcpServers` wrapper, no `command` or `type`, an unknown `type`, or the failing field paths.[^add-json] Since `2.1.327`, `claude mcp add-json <name> -` reads the JSON from stdin, so a token stays off the command line. Claude Code reads at most 1 MiB. It stops with an error when stdin is a terminal or empty, when the JSON is over the limit, or when the command runs inside a Claude Code session, because the permission prompt of the session would not show the server.[^add-json-stdin] |
+| `claude mcp add-json [options] <name> <json>` | <Documented /> | Adds a server from a JSON string. | Accepts `stdio`, `sse`, `http`, and `ws`. The JSON is the entry object, not the `mcpServers` wrapper. A bad entry gets a message that says what to change: not a JSON object, a `url` with no `type`, an `mcpServers` wrapper, no `command` or `type`, an unknown `type`, or the failing field paths.[^add-json] `claude mcp add-json <name> -` reads the JSON from stdin, so a token stays off the command line. Claude Code reads at most 1 MiB. It stops with an error when stdin is a terminal or empty, when the JSON is over the limit, or when the command runs inside a Claude Code session, because the permission prompt of the session would not show the server.[^add-json-stdin] |
 | `claude mcp add-from-claude-desktop [options]` | <Documented /> | Imports servers from Claude Desktop. | macOS and WSL only. You pick interactively. Claude Code rejects a name with other characters. A duplicate gets a suffix such as `server_1`. |
 | `claude mcp get <name>` | <Documented /> | Shows one server. | Health-checks approved servers and shows `Issue:` on a failure. An unapproved `.mcp.json` server shows `Pending approval`. A plugin stdio server shows `Command: stdio` and `NAME=[REDACTED]`. |
 | `claude mcp list` | <Documented /> | Lists servers. | Shows `Connected`, `Needs authentication`, `Failed to connect`, `Pending approval`, or `Disabled for this project`. Warnings show here. |
@@ -23,7 +23,7 @@ Official pages: [Connect Claude Code to Tools via MCP](https://code.claude.com/d
 | `claude mcp login [options] <name>` | <Documented /> | Runs OAuth for a server. | Works for `http`, `sse`, and claude.ai connectors. Without a local browser it prints the URL and asks for the redirect URL. |
 | `claude mcp logout <name>` | <Documented /> | Clears stored OAuth credentials. | Does not remove the server. |
 | `claude mcp reset-project-choices` | <Documented /> | Resets approvals. | Clears every approved and rejected `.mcp.json` server for this project. |
-| `claude mcp serve [options]` | <Documented /> | Runs Claude Code as an MCP server. | Over stdio, or over HTTP with `--transport http`. It prints nothing at start. It offers the Claude Code tools to the client. The client must ask you to confirm. Options: `--transport <transport>`. `--port <port>` with `--transport http` (the default `0` lets the kernel pick, and the server binds to `127.0.0.1` only). `--result-format <raw\|rendered>` (`raw` is the JSON of the tool output, and `rendered` is the text the model would see). `--session-tunnel` with `--transport http --port 28471` dials the session tunnel that relays tool calls. It also reads one JSON line (session id, token, API address) from stdin. Since `2.1.326`, it ignores `dangerouslyDisableSandbox` and `sandbox.excludedCommands`, because it cannot ask for approval. When the sandbox blocks a command, the result adds a note that starts with `[serve-mode] This command ran in the sandbox`.[^serve-sandbox] |
+| `claude mcp serve [options]` | <Documented /> | Runs Claude Code as an MCP server. | Over stdio, or over HTTP with `--transport http`. It prints nothing at start. It offers the Claude Code tools to the client. The client must ask you to confirm. Options: `--transport <transport>`. `--port <port>` with `--transport http` (the default `0` lets the kernel pick, and the server binds to `127.0.0.1` only). `--result-format <raw\|rendered>` (`raw` is the JSON of the tool output, and `rendered` is the text the model would see). `--session-tunnel` with `--transport http --port 28471` dials the session tunnel that relays tool calls. It also reads one JSON line (session id, token, API address) from stdin. It ignores `dangerouslyDisableSandbox` and `sandbox.excludedCommands`, because it cannot ask for approval. When the sandbox blocks a command, the result adds a note that starts with `[serve-mode] This command ran in the sandbox`.[^serve-sandbox] |
 | `claude mcp xaa setup` | <Gated note="CLAUDE_CODE_ENABLE_XAA" /> | Sets the IdP connection for XAA. | Options: `--issuer <url>`, `--client-id <id>`, `--client-secret`, `--callback-port <port>`. Writes `xaaIdp`. The secret comes from `MCP_XAA_IDP_CLIENT_SECRET`. |
 | `claude mcp xaa login` | <Gated note="CLAUDE_CODE_ENABLE_XAA" /> | Caches an IdP `id_token`. | Runs the OIDC browser login. Options: `--force` and `--id-token <jwt>` (stores a ready JWT). |
 | `claude mcp xaa show` | <Gated note="CLAUDE_CODE_ENABLE_XAA" /> | Shows the current IdP connection config. | Prints the issuer, the client ID, the callback port when set, whether Claude Code stores a client secret, and whether it caches an `id_token`. |
@@ -49,8 +49,8 @@ Official pages: [Connect Claude Code to Tools via MCP](https://code.claude.com/d
 
 | Command | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
-| `/mcp` | <Documented /> | Opens the MCP panel. | Shows status, tool count, `cached` state, and `Issue:`. You can enable, disable, reconnect, authenticate, and clear authentication. Since `2.1.323`, a server that needs authentication but still holds its sign-in also shows "Reconnect", and the page opens on it.[^reconnect] |
-| `/mcp reconnect all` | <Documented /> | Retries every failed server. | The interactive terminal needs `2.1.284` or later. |
+| `/mcp` | <Documented /> | Opens the MCP panel. | Shows status, tool count, `cached` state, and `Issue:`. You can enable, disable, reconnect, authenticate, and clear authentication. A server that needs authentication but still holds its sign-in also shows "Reconnect", and the page opens on it.[^reconnect] |
+| `/mcp reconnect all` | <Documented /> | Retries every failed server. | It works as the inline command `/mcp reconnect <name>` or `/mcp reconnect all`.[^reconnect-all] |
 | `/mcp enable\|disable\|reconnect <server>` | <Documented /> | Controls a server without the panel. | Claude Code suggests it when a background session has no terminal attached. |
 | `/mcp__<server>__<prompt>` | <Documented /> | Runs an MCP prompt. | See [MCP Runtime](runtime.md#resources-and-prompts). |
 
@@ -77,7 +77,7 @@ flowchart TD
   E --> F
 ```
 
-Since `2.1.327`, `claude mcp add` and `claude mcp remove` with `--scope project` keep the other top-level keys of `.mcp.json`, such as `$schema` or the `servers` of another tool.[^project-keys] `claude mcp add --scope project` stops, and does not overwrite the file, when `.mcp.json` lists its servers at the top level with no `mcpServers` key.[^project-stop]
+`claude mcp add` and `claude mcp remove` with `--scope project` keep the other top-level keys of `.mcp.json`, such as `$schema` or the `servers` of another tool.[^project-keys] `claude mcp add --scope project` stops, and does not overwrite the file, when `.mcp.json` lists its servers at the top level with no `mcpServers` key.[^project-stop]
 
 ## Errors
 
@@ -100,13 +100,14 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^add-json]: The program, `chunk-56bhcxay.js:238393`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^add-json]: The program, `chunk-56bhcxay.js:4756500` (the messages for a bad entry).
 [^header-help]: The program, `chunk-ttgvknfh.js:23340`.
-[^web]: Probe case `print.cli319.mcp-add-web`. The gate is the server-side flag `tengu_twinkling_aurora`.
-[^reconnect]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-ejmpea1g.js:25801`.
-[^connector-dl]: Probe case `print.err319.mcp-add-connector-downloads` printed this text. Without the `.gitignore`, the control case printed no error.
-[^bad-env]: Probe case `print.err319.mcp-add-bad-env` printed this text and exited with code 1.
-[^serve-sandbox]: The program, `chunk-qkqqen23.js:892`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^add-json-stdin]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-ttgvknfh.js:1148-1152` for the command text "or - to read it from stdin", `chunk-4nj280gz.js:1441` for the `-` argument, and `chunk-4nj280gz.js:1422-1436` for the stdin read, its 1 MiB limit, and the three errors.
-[^project-keys]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-56bhcxay.js:4759634` for add and `chunk-56bhcxay.js:4761110` for remove.
-[^project-stop]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-56bhcxay.js:4759314`.
+[^web]: The program, `chunk-9t1jqzwd.js:24020` (the gate `tengu_twinkling_aurora`) and `chunk-9t1jqzwd.js:24529` (the message).
+[^reconnect]: The program, `chunk-ejmpea1g.js:25700`.
+[^connector-dl]: The program, `chunk-56bhcxay.js:4727153`.
+[^bad-env]: The program, `chunk-51eneejf.js:4835`.
+[^serve-sandbox]: The program, `chunk-qkqqen23.js:16735`.
+[^add-json-stdin]: The program, `chunk-4nj280gz.js:39150` for the stdin read, its 1 MiB limit, and the three errors, and `chunk-ttgvknfh.js:35164` for the command text "or - to read it from stdin".
+[^project-keys]: The program, `chunk-56bhcxay.js:4759200` for add and `chunk-56bhcxay.js:4760900` for remove.
+[^project-stop]: The program, `chunk-56bhcxay.js:4759200`.
+[^reconnect-all]: The program, `chunk-kpeqf50z.js:24150`.

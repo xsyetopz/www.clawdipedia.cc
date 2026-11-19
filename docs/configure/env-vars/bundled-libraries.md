@@ -34,7 +34,7 @@ The table is sorted by name. The official [Environment Variables](https://code.c
 | `AWS_EC2_METADATA_SERVICE_ENDPOINT` | <Undocumented /> | AWS SDK | Sets the EC2 metadata service URL for the bundled AWS SDK. |
 | `AWS_EC2_METADATA_SERVICE_ENDPOINT_MODE` | <Undocumented /> | AWS SDK | Picks `IPv4` or `IPv6` for the EC2 metadata service address in the bundled AWS SDK. |
 | `AWS_EC2_METADATA_V1_DISABLED` | <Undocumented /> | AWS SDK | Blocks the IMDSv1 fallback in the bundled AWS SDK, so the SDK uses only token-based IMDSv2. |
-| `AWS_ENDPOINT_URL_SIGNIN` | <Undocumented /> | AWS SDK | Overrides the AWS sign-in endpoint in the bundled AWS SDK. The `login_session` credential provider (`aws login`) loads the SDK sign-in client to refresh tokens. Added in `2.1.314`. |
+| `AWS_ENDPOINT_URL_SIGNIN` | <Undocumented /> | AWS SDK | Overrides the AWS sign-in endpoint in the bundled AWS SDK. The `login_session` credential provider (`aws login`) loads the SDK sign-in client to refresh tokens. |
 | `AWS_ENDPOINT_URL_SSO` | <Undocumented /> | AWS SDK | Overrides the AWS SSO endpoint in the bundled AWS SDK. |
 | `AWS_ENDPOINT_URL_SSO_OIDC` | <Undocumented /> | AWS SDK | Overrides the AWS SSO OIDC endpoint in the bundled AWS SDK. |
 | `AWS_LAMBDA_MAX_CONCURRENCY` | <Undocumented /> | AWS SDK | Selects the concurrent-aware store in the bundled AWS Lambda `InvokeStore` when present. |
@@ -164,7 +164,7 @@ A scan of the strings in the program found the names.[^scan] The list can miss n
 
 ## Sources
 
-[^scan]: The program, for example `chunk-90e2ybcp.js:5042`, variable names found in the `2.1.314` binary.
+[^scan]: The program, for example `chunk-90e2ybcp.js:5042`, variable names.
 [^bun-options]: Probes page, run with a bad `BUN_OPTIONS` value.
 [^repl-module]: The program, `chunk-nf409202.js:4103-4146`.
 [^teamcity]: The program, `chunk-0tagyyqy.js:2679-2680`.

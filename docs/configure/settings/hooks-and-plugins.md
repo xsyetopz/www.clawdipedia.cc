@@ -28,11 +28,11 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 
 | Key | Status | Type | Default | What It Does | Where to Set It |
 | --- | --- | --- | --- | --- | --- |
-| `additionalMarketplaces` | <Documented /> | object | - | Write `extraKnownMarketplaces` under this alias name. Do not set both in one file. Needs Claude Code `2.1.232` or later. If both are set, Claude Code ignores the alias and warns. | Any settings file |
-| `allowedHttpHookUrls` | <Documented /> | array of string | - | Limit which URLs HTTP hooks can target. Since `2.1.326`, if managed settings do not set it, the list in another file does not apply to managed hooks or to hooks of a plugin that managed settings enable from a local folder.[^managed-lists] | Any settings file |
-| `allowedMarketplaces` | <Documented /> <ManagedOnly /> | array | - | Write `strictKnownMarketplaces` under this alias name. Do not set both in one file. Needs Claude Code `2.1.232` or later. | Managed settings only |
+| `additionalMarketplaces` | <Documented /> | object | - | Write `extraKnownMarketplaces` under this alias name. Do not set both in one file. If both are set, Claude Code ignores the alias and warns. | Any settings file |
+| `allowedHttpHookUrls` | <Documented /> | array of string | - | Limit which URLs HTTP hooks can target. If managed settings do not set it, the list in another file does not apply to managed hooks or to hooks of a plugin that managed settings enable from a local folder.[^managed-lists] | Any settings file |
+| `allowedMarketplaces` | <Documented /> <ManagedOnly /> | array | - | Write `strictKnownMarketplaces` under this alias name. Do not set both in one file. | Managed settings only |
 | `allowManagedHooksOnly` | <Documented /> <ManagedOnly /> | boolean | - | Run only the hooks your organization deploys and the hooks of managed-enabled plugins. It also narrows `statusLine` and `fileSuggestion`. It also blocks hooks and mods that are not the organization's. | Managed settings only |
-| `allowManagedPermissionRulesOnly` | <Documented /> <ManagedOnly /> | boolean | - | Make managed settings the only settings source of permission rules. Since `2.1.305`, plugins that Claude Desktop mounts by path no longer keep their `allowed-tools` when your organization's managed settings set it.[^v305] | Managed settings only |
+| `allowManagedPermissionRulesOnly` | <Documented /> <ManagedOnly /> | boolean | - | Make managed settings the only settings source of permission rules. Plugins that Claude Desktop mounts by path do not keep their `allowed-tools` when your organization's managed settings set it.[^v305] | Managed settings only |
 | `appendPlugins` | <Differs note="Docs say user or managed scope. The schema says managed only." /> <ManagedOnly /> | array of string | - | List managed plugins whose hooks run last, in the listed order. The docs list the scope as user or managed. The schema marks it managed-only. Listed ids run innermost. | User or managed settings |
 | `blockedMarketplaces` | <Documented /> | array | - | Block plugin marketplace sources for your organization. Claude Code checks it before download. | Managed settings only |
 | `disableAllHooks` | <Differs note="The schema also says it stops the statusLine command. The Hooks Reference names only hooks." /> | boolean | - | Turn off hooks, a custom status line, and a custom `@` file suggestion command at once. Managed hooks stay unless you set it in managed settings. In managed settings it also stops organization mods. In user settings, what the organization manages keeps running. When `true` outside managed settings, only a managed `statusLine` runs. With no managed `statusLine`, the status line is off. | Any settings file |
@@ -50,7 +50,7 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 | `pluginConfigs` | <Documented /> | object | - | Store the answers you gave a plugin's configuration dialog. It holds `options` and `mcpServers` by plugin id. | User or managed settings |
 | `pluginConfigs.*.mcpServers` | <Documented /> | object | - | Per-server user configuration values, keyed by server name. Each value is a string, number, boolean, or array of strings. | User or managed settings |
 | `pluginConfigs.*.options` | <Documented /> | object | - | Non-sensitive option values from the plugin's `userConfig`, keyed by option name. Claude Code stores sensitive values in secure storage. | User or managed settings |
-| `pluginSuggestionMarketplaces` | <Documented /> | array of string | - | Choose which marketplaces can surface plugin install suggestions in `/plugin`. Without it, no marketplace suggestion shows. The tips for Anthropic's own plugins stay. A value in user settings gives no warning line, and a string gives `Expected array, but received string`. The tip comes from the startup tip list. It needs the key in a managed tier, the marketplace registered on the machine, and its source declared in `extraKnownMarketplaces` or `strictKnownMarketplaces` of managed settings (otherwise the debug log says `Skipping plugin suggestion tips for marketplace`).[^suggest] | Managed settings only |
+| `pluginSuggestionMarketplaces` | <Documented /> | array of string | - | Choose which marketplaces can surface plugin install suggestions in `/plugin`. Without it, no marketplace suggestion shows. The tips for Anthropic's own plugins stay. The tip comes from the startup tip list. It needs the key in a managed tier, the marketplace registered on the machine, and its source declared in `extraKnownMarketplaces` or `strictKnownMarketplaces` of managed settings (otherwise the debug log says `Skipping plugin suggestion tips for marketplace`).[^suggest] | Managed settings only |
 | `pluginTrustMessage` | <Documented /> <ManagedOnly /> | string | - | Add your own text to the plugin trust warning. | Managed settings only |
 | `prependPlugins` | <Differs note="Docs say user or managed scope. The schema says managed only." /> <ManagedOnly /> | array of string | - | List managed plugins whose hooks run first, in the listed order. The docs list the scope as user or managed. The schema marks it managed-only. Listed ids run outermost. | User or managed settings |
 | `skillListingBudgetFraction` | <Documented /> | number | `0.01` (1%) | Reserve more or less context for the skill listing. | Any settings file |
@@ -74,9 +74,9 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 ## Sources
 
 [^schema]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:279143`.
-[^v305]: [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
+[^v305]: The program, `chunk-jkpzhr7r.js:253770`.
 [^plugin-versions]: The program, `chunk-a3rr42d2.js:19278`.
-[^takeover]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-bvs4hre6.js:21952` and `chunk-bvs4hre6.js:22583`.
-[^suggest]: The schema text of `2.1.319` says "Anthropic's own plugins" where `2.1.316` named only the `frontend-design` tip. Probe cases `print.cli319.plugin-sugg.user` and `print.cli319.plugin-sugg.bad-type`. A managed tier on macOS needs root, so no run shows the tip.
+[^takeover]: The program, `chunk-bvs4hre6.js:21952` and `chunk-bvs4hre6.js:22583`.
+[^suggest]: The program, `chunk-jkpzhr7r.js:263933` and `chunk-yqthnfsf.js:26236`.
 [^strict]: The program, `chunk-jkpzhr7r.js:256226`.
-[^managed-lists]: The program, `chunk-56bhcxay.js:209674-209692`, `chunk-56bhcxay.js:209777`, and `chunk-56bhcxay.js:65778-65780`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^managed-lists]: The program, `chunk-jkpzhr7r.js:252371` and `chunk-jkpzhr7r.js:253498`.

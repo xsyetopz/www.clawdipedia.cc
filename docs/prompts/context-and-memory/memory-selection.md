@@ -6,7 +6,7 @@ generated: false
 group: context-and-memory
 ---
 
-This is the verbatim text that Claude Code 2.1.311 uses for memory selection.
+This is the verbatim text that Claude Code 2.1.328 uses for memory selection.
 
 ## Where It Comes From
 

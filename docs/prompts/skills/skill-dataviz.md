@@ -6,7 +6,7 @@ generated: false
 group: skills
 ---
 
-This is the verbatim text that Claude Code 2.1.311 uses for the built-in `/dataviz` skill.
+This is the verbatim text that Claude Code 2.1.328 uses for the built-in `/dataviz` skill.
 
 ## Where It Comes From
 
@@ -14,7 +14,7 @@ Bundled skill. Captured from the program with `PROBE-ARG`, the argument the test
 
 ## How to Override It
 
-Create `.claude/skills/dataviz/SKILL.md` with the same name. The program then uses your file in place of this text, and it adds a `Base directory` line above the skill text. The same-name rule was tested with `/simplify` only. See [Override a Prompt](../other/override.md).
+Create `.claude/skills/dataviz/SKILL.md` with the same name. The program lists skill files from the skill folders before bundled skills and uses the first command with a matching name, so your file replaces this text (The program, `chunk-56bhcxay.js:2630374`, `chunk-458m0skd.js:2592`). It adds a `Base directory for this skill:` line above your skill text (The program, `chunk-56bhcxay.js:3885828`). See [Override a Prompt](../other/override.md).
 
 ## Full Text
 
@@ -75,6 +75,7 @@ Color comes LAST. Most bad charts pick colors first.
    it), so identity is never color-alone; a table view exists; dark mode is **selected** - its own
    steps from the same ramps, validated against the dark surface, not an automatic
    flip; texture is available for the CVD/print/forced-colors case.
+   One exception to direct name labels: the tall segmented bar (*Figures* in `references/marks-and-anatomy.md`).
 7. **Render it and look at it.** The validator checks color, not layout - open or
    screenshot the output and eyeball it for label collisions, geometry, and overflow
    before calling it done.
@@ -101,6 +102,7 @@ of what goes wrong. If your chart matches an entry, it's wrong.
   obligates visible labels or a table view - it is not dismissable.
 - **Thin marks; a legend always present for >= 2 series (none for one), with
   selective direct labels (never a number on every point); recessive grid/axes.**
+  One exception, legend kept: the tall segmented bar (*Figures* in `references/marks-and-anatomy.md`).
 - **Text wears text tokens, never the series color** - values, labels, and legends
   stay in primary/secondary/muted ink; a colored mark beside them carries identity.
 - **Status colors are reserved** (good/warning/serious/critical) and never reused
@@ -117,7 +119,7 @@ instance - every value filled in - is `references/palette.md`.
 | **Categorical theme** | the fixed hue order (a named theme); default + alternates |
 | **Sequential hue** | the default single hue for magnitude |
 | **Diverging pair** | two warm/cool poles + a neutral midpoint |
-| **Status palette** | good / warning / serious / critical - steps distinct from categorical |
+| **Status palette** | good / warning / serious / critical - steps distinct from categorical, except that dark-mode good is the series green |
 | **Texture fill** | one directional hand-drawn fill, used at 45° / 135° |
 | **Surfaces** | light & dark chart-surface colors (the validator needs these) |
 | **Filter controls** | date-range & dimension controls (behavioral spec in `interaction.md`) |

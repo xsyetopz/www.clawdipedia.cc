@@ -103,13 +103,13 @@ Official pages: [Error Reference: Automatic Retries](https://code.claude.com/doc
 
 The variables, with their defaults, are in [Fallback and Retries](../configure/models-and-providers/effort-thinking-and-fallback.md#fallback-and-retries).
 
-Since `2.1.311`, Claude Code does not retry a `429` or `529` that the API marked with `x-should-retry: false`, and that includes unattended mode (`CLAUDE_CODE_RETRY_WATCHDOG`).
+Claude Code does not retry a `429` or `529` that the API marked with `x-should-retry: false`, and that includes unattended mode (`CLAUDE_CODE_RETRY_WATCHDOG`).[^no-retry]
 Before, such a request could hold a turn for minutes, or for good in that mode.
 [^retry-rule]
 
 When a request is too long for the context, Claude Code tries again with a smaller `max_tokens`. It compacts when that is not enough.
-Since `2.1.311`, a session on a standard window (not 1M) that sends more than 200K tokens and gets the error "Usage credits required for 1M context" compacts the conversation and goes on, where it stopped before.[^reactive]
-Since `2.1.325`, Claude Code also knows the context length errors of many third-party gateways and Foundry. It matches phrases such as "maximum context length", "context_length_exceeded", "exceeds the context window", and "reduce the length of the messages". A reply with "policy_blocked" or "dlp_request_denied" does not count. The check runs for the statuses `400`, `413`, `422`, or none. Before, such sessions stopped on every turn instead of compacting.[^gateways]
+A session on a standard window (not 1M) that sends more than 200K tokens and gets the error "Usage credits required for 1M context" compacts the conversation and goes on.[^reactive]
+Claude Code also knows the context length errors of many third-party gateways. It matches phrases such as "maximum context length", "context_length_exceeded", "exceeds the context window", and "reduce the length of the messages". A reply with "policy_blocked" or "dlp_request_denied" does not count. The check runs for the statuses `400`, `413`, `422`, or none.[^gateways]
 The loop also recovers from a stop at `max_tokens` and from a bad tool call. See [The Agent Loop](agent-loop.md#recovery-inside-the-loop).
 
 ## Related Pages
@@ -123,5 +123,6 @@ The loop also recovers from a stop at `max_tokens` and from a bad tool call. See
 
 [^no-fallback]: The program, `chunk-2b3eg071.js:154168`, a message that names the variable.
 [^retry-rule]: The [Claude Code changelog](https://code.claude.com/docs/en/changelog). The program, `chunk-56bhcxay.js:3296232` (a `429`, `529`, or `503` with `x-should-retry: false` is not retried, also when `CLAUDE_CODE_RETRY_WATCHDOG` is set).
-[^reactive]: The [Claude Code changelog](https://code.claude.com/docs/en/changelog). The program, `chunk-2b3eg071.js:162574` checks for that refusal on a model whose window is standard, then the code at `chunk-56bhcxay.js:2695915` runs the reactive compaction.
-[^gateways]: The program, `chunk-g78ks3d1.js:3646` for the phrases and `chunk-56bhcxay.js:2098498` for the statuses (`undefined`, `400`, `413`, `422`). [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The phrase list is not in the `2.1.323` program.
+[^no-retry]: The program, `chunk-y5weakn8.js:177250` (the shared retry check) and `chunk-56bhcxay.js:3296223` (the Claude Code check for the statuses `429` and `529`).
+[^reactive]: The program, `chunk-56bhcxay.js:2124066` for the error text, `chunk-2b3eg071.js:162574` checks for that refusal on a model whose window is standard (`200000` at `chunk-xethrx83.js:513440`), then the code at `chunk-56bhcxay.js:2695915` runs the reactive compaction.
+[^gateways]: The program, `chunk-g78ks3d1.js:3510` for the phrases and `chunk-56bhcxay.js:2098498` for the statuses (`undefined`, `400`, `413`, `422`).

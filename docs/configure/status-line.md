@@ -43,7 +43,7 @@ Official page: [Customize Your Status Line](https://code.claude.com/docs/en/stat
 | `statusLine.padding` | <Documented /> | Extra horizontal space in characters | The default is `0`. It adds to the built-in spacing | Same |
 | `statusLine.refreshInterval` | <Documented /> | Re-runs the command every N seconds | The minimum is `1` second. Use it for clocks and idle sessions | Same |
 | `statusLine.hideVimModeIndicator` | <Documented /> | Hides the built-in `-- INSERT --` text | Use it when the script prints `vim.mode` itself | Same |
-| `subagentStatusLine` | <Documented /> <Deprecated note="Works; will stop in a future release" /> | Custom row for each subagent in the agent panel | Since `2.1.326`, the command runs again. See [Subagent Status Line](#subagent-status-line) | Same |
+| `subagentStatusLine` | <Documented /> <Deprecated note="Works; will stop in a future release" /> | Custom row for each subagent in the agent panel | The command runs. See [Subagent Status Line](#subagent-status-line) | Same |
 | `/statusline` | <Documented /> | Writes a script in `~/.claude/` and the setting | It takes natural language. `/statusline delete` removes it | Interactive |
 | Workspace trust | <Documented /> | The command waits for trust | `--debug` logs `Status line command skipped: workspace trust not accepted` | Project files |
 | `CLAUDE_CODE_SAFE_MODE` | <Documented /> | Status line commands do not load | Managed policy still applies | Env |
@@ -73,7 +73,7 @@ See the official [Customize Your Status Line](https://code.claude.com/docs/en/st
 
 ## Subagent Status Line
 
-Since `2.1.326`, `subagentStatusLine` works again. In `2.1.323` it had no effect. The settings schema now marks it as deprecated: it still works, and will stop working in a future release.[^sub-schema]
+`subagentStatusLine` works. The settings schema marks it as deprecated: it still works, and will stop working in a future release.[^sub-schema]
 
 - The key takes `type: "command"` and a `command`. Managed settings win. Otherwise the command comes from a settings file or a plugin.[^sub-source]
 - The command waits for workspace trust. Without trust, `--debug` logs "Skipping subagentStatusLine execution - workspace trust not accepted".[^sub-trust]
@@ -95,7 +95,7 @@ Always read optional fields with a default, for example `jq -r '.vim.mode // emp
 | `prompt_id` | <Documented /> | UUID of the prompt in work | May be absent before the first input | Status line |
 | `transcript_path` | <Documented /> | Transcript file path | String | Status line |
 | `cwd` | <Documented /> | Working directory | Same value as `workspace.current_dir` | Status line |
-| `version` | <Documented /> | Claude Code version | The version string of the running build, `2.1.327` in this release.[^version-field] | Status line |
+| `version` | <Documented /> | Claude Code version | The version string of the running build, `2.1.328` in this release.[^version-field] | Status line |
 | `model.id`, `model.display_name` | <Documented /> | Model id and name | Strings | Status line |
 | `output_style.name` | <Documented /> | Active style name | `default` when none. See [Output Styles](output-styles.md) | Status line |
 | `fast_mode` | <Documented /> | Fast mode on | Boolean | Status line |
@@ -134,12 +134,12 @@ Always read optional fields with a default, for example `jq -r '.vim.mode // emp
 | `context_window.current_usage` | <Documented /> | Per-category tokens | Keys `input_tokens`, `output_tokens`, `cache_creation_input_tokens`, `cache_read_input_tokens`. `null` before the first call and after `/compact` | Status line |
 | `exceeds_200k_tokens` | <Documented /> | Last response is over 200k tokens | It is a fixed threshold | Status line |
 | `rate_limits.five_hour`, `.seven_day` | <Documented /> | `used_percentage` and `resets_at` | Claude.ai Pro and Max only. A window drops after its reset time | Status line |
-| `rate_limits.spend_limit.used_percentage`, `.resets_at` | <Documented /> | Gateway spend limit | Needs `2.1.251` | Status line |
-| `rate_limits.spend_limit.used_usd`, `.limit_usd`, `.period` | <Documented /> | Spend in dollars and period `daily`, `weekly`, `monthly` | Needs `2.1.284`. Off with `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` | Status line |
+| `rate_limits.spend_limit.used_percentage`, `.resets_at` | <Documented /> | Gateway spend limit | - | Status line |
+| `rate_limits.spend_limit.used_usd`, `.limit_usd`, `.period` | <Documented /> | Spend in dollars and period `daily`, `weekly`, `monthly` | Off with `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` | Status line |
 
 ### Prompt Cache Fields
 
-The object `prompt_cache` appears after the first main-conversation response (needs `2.1.251`). Subagent requests are not counted.
+The object `prompt_cache` appears after the first main-conversation response. Subagent requests are not counted.
 
 | Field | Status | What it holds | Notes | Where |
 | --- | --- | --- | --- | --- |
@@ -151,7 +151,7 @@ The object `prompt_cache` appears after the first main-conversation response (ne
 | `prompt_cache.hit_ratio` | <Documented /> | Cache reads over all input tokens | The value is 0 to 1. It is `null` when counts are zero | Status line |
 | `prompt_cache.cache_write_tokens`, `.miss_recache_tokens` | <Documented /> | Tokens written | Totals for the session and for misses | Status line |
 | `prompt_cache.last_miss_at` | <Documented /> | Time of the last miss | Epoch seconds. `null` if none | Status line |
-| `prompt_cache.last_miss_cause` | <Documented /> | The cause Claude Code gives for the last miss | `causes` array (such as `tools_changed`, `system_prompt_changed`, `ttl_expired_5m`, `likely_server_side`), plus `tools_added`, `tools_removed`, `system_char_delta`. Needs `2.1.260` | Status line |
+| `prompt_cache.last_miss_cause` | <Documented /> | The cause Claude Code gives for the last miss | `causes` array (such as `tools_changed`, `system_prompt_changed`, `ttl_expired_5m`, `likely_server_side`), plus `tools_added`, `tools_removed`, `system_char_delta`. | Status line |
 | `prompt_cache.miss_causes` | <Documented /> | Count per cause | Map | Status line |
 | `prompt_cache.recache_tokens_if_cold` | <Documented /> | Tokens a cold cache re-caches | `null` after a compaction until the next request | Status line |
 
@@ -168,16 +168,6 @@ flowchart TD
   Ok -->|no| Blank[Blank line]
 ```
 
-:::note[Interactive Probe Findings]
-Checked in the interactive screen (2.1.305, local stub, fake key, clean environment). See [Interactive Probes](../reference/probes.md#interactive-probes).
-
-- For `statusLine`, `transcript_path` is present from the first run, before any message. `prompt_id` is absent until the first prompt. Then it is the same UUID as `prompt_id` in hook input. After the first reply, the input also gains `prompt_cache`. `current_usage` is no longer `null`.
-- `statusLine` runs once at start and once after the first reply (not at prompt submit). Three mode changes gave one run, 0.33 seconds after the last one. This held both when sent 100 ms apart and when sent in one write. This fits the 300 ms debounce. `refreshInterval: 3` ran every 3.0 seconds (3.0 to 3.1 seconds over 14 intervals in a run with no other trigger).
-- Runs paused while a permission or MCP input dialog was on screen. A Bash permission dialog was on screen for 17.4 seconds. The gap between runs was 19.3 seconds.
-- `padding: 1` gave a one-space indent, and two printed lines showed as two rows under the prompt.
-
-:::
-
 ## Exact Fields
 
 The exact fields are in `https://clawdipedia.cc/schemas/claude-code-status-line.json`. It lists every field of this release. Look up a field there before you rely on it. A field marked `x-unverified` has a type that is not confirmed. `x-observed` marks a field that a probe saw.[^schema-origin]
@@ -192,11 +182,11 @@ The exact fields are in `https://clawdipedia.cc/schemas/claude-code-status-line.
 ## Sources
 
 [^extra-triggers]: The program, `chunk-56bhcxay.js:4518321`, watches `mainLoopModel`, `fastMode`, `effortValue`, `thinkingEnabled`, and `prStatus`.
-[^sub-schema]: The program, `chunk-jkpzhr7r.js:258217`. Schema text: "Deprecated: still works, and will stop working in a future release. Custom per-subagent status line shown in the agent panel; receives row context as JSON on stdin". The `2.1.323` program says "Deprecated: no longer has any effect", in the same schema entry. The `2.1.327` program runs the command in `chunk-j2wfp6sf.js:910626-911215`.
+[^sub-schema]: The program, `chunk-jkpzhr7r.js:258217`. Schema text: "Deprecated: still works, and will stop working in a future release. Custom per-subagent status line shown in the agent panel; receives row context as JSON on stdin". The program runs the command in `chunk-j2wfp6sf.js:910626-911215`.
 [^sub-source]: The program, `chunk-j2wfp6sf.js:910475-911215`.
 [^sub-trust]: The program, `chunk-j2wfp6sf.js:910626`.
 [^sub-input]: The program, `chunk-j2wfp6sf.js:911215-911844`.
 [^sub-output]: The program, `chunk-j2wfp6sf.js:911844-912444`.
 [^sub-deprecation]: The program, `chunk-a3rr42d2.js:4705`, `chunk-j2wfp6sf.js:1929057` (the log line and the notice), and `chunk-56bhcxay.js:5516016` (the plugin warning).
 [^schema-origin]: The program, `chunk-56bhcxay.js:4515761`, builds this payload in code, not with a validator, so the schema comes from that code.
-[^version-field]: The program, `chunk-56bhcxay.js:226642-226650`.
+[^version-field]: The program, `chunk-56bhcxay.js:4516950`.

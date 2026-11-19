@@ -6,9 +6,9 @@ sidebar_position: 5
 
 Auto mode lets Claude Code run without routine prompts. A classifier model reads each action and blocks what is risky, such as a deploy to production or a push of secrets. Tune the classifier with the `autoMode` setting when it blocks too much or too little for your setup.
 
-Pick `auto` as the permission mode to turn it on. Set `permissions.defaultMode: "auto"` to start in it. Since `2.1.326`, if the served policy settings fail to load, a session that started in auto mode by the built-in default falls back to another mode. The mode is the `defaultMode` that policy settings name, other than `auto` or `bypassPermissions`. For an organization policy or HIPAA, the mode is `default`. A session that starts while the policy verdict is still pending picks its mode again when the verdict arrives, and the debug log says `startup resolved ... re-resolved to ...`.[^auto-fallback][^auto-reresolve] Set `permissions.disableAutoMode: "disable"` to turn it off. User settings, `--settings`, and managed settings can set `autoMode`. Project and local settings cannot, because both files live in the repository, where a checked-in repository or a build step could add its own allow rules.[^auto-sources][^official-project]
+Pick `auto` as the permission mode to turn it on. Set `permissions.defaultMode: "auto"` to start in it. If the served policy settings fail to load, a session that started in auto mode by the built-in default falls back to another mode. The mode is the `defaultMode` that policy settings name, other than `auto` or `bypassPermissions`. For an organization policy or HIPAA, the mode is `default`. A session that starts while the policy verdict is still pending picks its mode again when the verdict arrives, and the debug log says `startup resolved ... re-resolved to ...`.[^auto-fallback][^auto-reresolve] Set `permissions.disableAutoMode: "disable"` to turn it off. User settings, `--settings`, and managed settings can set `autoMode`. Project and local settings cannot, because both files live in the repository, where a checked-in repository or a build step could add its own allow rules.[^auto-sources][^official-project]
 
-Since `2.1.328`, auto mode accepts Opus 4.6 and Sonnet 4.6 on Amazon Bedrock, Google Cloud's Agent Platform, Microsoft Foundry, and the Claude apps gateway. In `2.1.327`, the model check refused both models on these providers.[^auto-46]
+Auto mode accepts Opus 4.6 and Sonnet 4.6 on Amazon Bedrock, Google Cloud's Agent Platform, Microsoft Foundry, and the Claude apps gateway.[^auto-46]
 
 ## Example
 
@@ -50,21 +50,9 @@ Official page: [Server-Side Classifier Review](https://code.claude.com/docs/en/p
 - The reply carries the verdict in `safeguard_results`, in `message_delta.delta` of a stream or at the top level of a plain reply. The verdict for each call is under the `tool_use` id.
 - `not_flagged` runs the call. `flagged` denies it with `The server-side auto mode classifier judged this action dangerous (it gave no explanation)`, and `PermissionDenied` fires.
 - With no verdict, Claude Code refuses each call that needs the check. The text with a gateway is `Auto mode can't check actions in this session. Its safety check runs on the server, and your requests go through <host>, which doesn't pass it through.` On a direct connection it is `…and the server isn't running it for this session.` The debug log has `[server-classifier] Bash: the server-side classifier does not run for this session (server_no_result) and no local one judges in its place`.[^server-check]
-- `CLAUDE_CODE_AUTO_MODE_SERVER=0` and `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` each remove `safeguards` from the requests. Then Claude Code sends its own classifier requests (stage `xml_s1`, model `claude-sonnet-5[1m]` in the run).[^server-probe]
-- `CLAUDE_CODE_AUTO_MODE_SERVER=1` wins over `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1`: the requests keep `safeguards` and the beta `dangerous-tool-use-2026-09-03`. With both set and no verdict, Claude Code logs `[server-classifier] the platform gave no classification for this request (server_no_result); treating that as this deployment's answer: auto mode classifies locally for the rest of this session and stops sending the classifier context`, and then sends its own classifier requests (stages `xml_s1` and `xml_s2`). With only `CLAUDE_CODE_AUTO_MODE_SERVER=1`, no verdict refuses the call and no local classifier runs.[^server-probe]
+- `CLAUDE_CODE_AUTO_MODE_SERVER=0` and `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` each remove `safeguards` from the requests. Then Claude Code sends its own classifier requests.
+- `CLAUDE_CODE_AUTO_MODE_SERVER=1` wins over `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1`: the requests keep `safeguards` and the beta `dangerous-tool-use-2026-09-03`. With both set and no verdict, Claude Code logs `[server-classifier] the platform gave no classification for this request (server_no_result); treating that as this deployment's answer: auto mode classifies locally for the rest of this session and stops sending the classifier context`, and then sends its own classifier requests. With only `CLAUDE_CODE_AUTO_MODE_SERVER=1`, no verdict refuses the call and no local classifier runs.[^server-check]
 - A gateway must pass the `anthropic-beta` value, `safeguards`, and `safeguard_results` through. A gateway that cannot do this answers `400 invalid_request_error` with a message that names `safeguards`. The client then sends the request again without them and runs the check itself.[^gateway-guide]
-
-| Run (`-p --permission-mode auto`, the model calls `Bash` with `curl -s http://127.0.0.1:9/x`)[^server-probe] | Result |
-| --- | --- |
-| Direct connection (cc-inspect `apiHost: true, baseUrl: false`), verdict `not_flagged` | `curl` ran, `PostToolUse` fired |
-| Direct connection, verdict `flagged` | Denied by the classifier, `PermissionDenied` fired |
-| Direct connection, no verdict | Denied, `the server isn't running it for this session` |
-| Stub base URL (a gateway), verdict `not_flagged` | `curl` ran, `PostToolUse` fired |
-| Stub base URL, no verdict | Denied, `your requests go through 127.0.0.1:<port>, which doesn't pass it through` |
-| `CLAUDE_CODE_AUTO_MODE_SERVER=0`, or `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` with `CLAUDE_CODE_AUTO_MODE_SERVER` unset, verdict `not_flagged` | No `safeguards` field. Local classifier requests, and the `OK` stub reply gave `Auto mode could not evaluate this action and is blocking it for safety` |
-| `CLAUDE_CODE_AUTO_MODE_SERVER=1` and `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1`, no verdict | `safeguards` sent. After `server_no_result`, local classifier requests (`xml_s1`, `xml_s2`) for the rest of the session |
-
-The cc-inspect `code` action `cli` makes these runs, with `calls: [{"name": "Bash", "input": {"command": "curl -s http://127.0.0.1:9/x"}, "safeguard": "not_flagged"}]`.
 
 ### The Two Stages
 
@@ -98,17 +86,17 @@ When a session enters auto mode, Claude Code removes allow rules that would let 
 Claude Code removes these allow rules:
 
 - A `Bash` rule with no content, or a bare `*`.
-- A `Bash` rule for an interpreter or a command runner, in the forms `x`, `x:*`, `x *`, `x*`, or `x -…*`: `python`, `python3`, `python2`, `node`, `deno`, `tsx`, `ruby`, `perl`, `php`, `lua`, `npx`, `bunx`, `pnpx`, `npm run`, `yarn run`, `pnpm run`, `bun run`, `npm exec`, `npm x`, `pnpm exec`, `pnpm dlx`, `yarn exec`, `yarn dlx`, `bun exec`, `bun x`, `bash`, `sh`, `zsh`, `fish`, `ssh`, `eval`, `exec`, `env`, `xargs`, `sudo`. A `python -m <module>` rule stays. Since `2.1.327`, the check also catches a path or version form of these programs, such as `/usr/bin/npm run:*`.[^runners-327]
+- A `Bash` rule for an interpreter or a command runner, in the forms `x`, `x:*`, `x *`, `x*`, or `x -…*`: `python`, `python3`, `python2`, `node`, `deno`, `tsx`, `ruby`, `perl`, `php`, `lua`, `npx`, `bunx`, `pnpx`, `npm run`, `yarn run`, `pnpm run`, `bun run`, `npm exec`, `npm x`, `pnpm exec`, `pnpm dlx`, `yarn exec`, `yarn dlx`, `bun exec`, `bun x`, `bash`, `sh`, `zsh`, `fish`, `ssh`, `eval`, `exec`, `env`, `xargs`, `sudo`. A `python -m <module>` rule stays. The check also catches a path or version form of these programs, such as `/usr/bin/npm run:*`.[^runners-327]
 - A `PowerShell` rule for an interpreter or a cmdlet that runs code, also in the `.exe` forms.
 - Allow rules for the `Agent` and `Monitor` tools, the REPL tool, and some MCP tools.
 - Every `Bash` and `PowerShell` allow rule, when `autoMode.classifyAllShell` is `true`.
 - A `Bash` wildcard rule when no plain program word comes before the `*`.[^odd-word] Claude Code skips the words before the `*` that are options, numbers, variable assignments such as `NAME=value`, words with a character other than letters, digits, `_`, `.`, `+`, `@`, `%`, `,`, `:`, `~`, `/`, and `-` (such as `$HOME`), and wrapper programs such as `env`, `sudo`, and `timeout`. If it reaches the `*` with no other program word, the rule goes. If the `*` touches the last word, a word that starts with `~`, `/`, `\`, or a drive letter, or that has a `..` segment, counts too. The safety check then decides these commands. A rule without a `*` stays. A rule such as `~/bin/x *` or `/usr/bin/git *` stays, because its program is a plain name once the folder is dropped.
 - A `Bash` wildcard rule whose program is a Windows path with backslashes, such as `C:\tools\git.exe *`. A backslash is not a plain character, so the rule goes, and the safety check decides those calls. An exact rule keeps its allow.[^win-path]
-- A `PowerShell` wildcard rule that names a script with `.\`, such as `PowerShell(.\scripts\build.ps1 *)`, was ignored in error before `2.1.327`. Claude Code now reads the backslashes in such a rule as slashes before the check.[^ps-dot-slash]
+- A `PowerShell` wildcard rule that names a script with `.\`, such as `PowerShell(.\scripts\build.ps1 *)`, stays in force. Claude Code reads the backslashes in such a rule as slashes before the check.[^ps-dot-slash]
 
 ### Classifier Billing Notice
 
-When auto mode falls back from the server-side classifier to its own classifier requests, which are billed, Claude Code can show a notice. Since `2.1.327` the text says that an upcoming release removes this fallback, and that each action the classifier would have checked will then be asked about or denied. The title is `We're changing auto mode to no longer charge for classifier requests in Claude Code.` The text says `However, this session isn't eligible.` and links to [Auto Mode Classifier Billing](https://code.claude.com/docs/en/auto-mode-classifier-billing).[^billing]
+When auto mode falls back from the server-side classifier to its own classifier requests, which are billed, Claude Code can show a notice. The text says that an upcoming release removes this fallback, and that each action the classifier would have checked will then be asked about or denied. The title is `We're changing auto mode to no longer charge for classifier requests in Claude Code.` The text says `However, this session isn't eligible.` and links to [Auto Mode Classifier Billing](https://code.claude.com/docs/en/auto-mode-classifier-billing).[^billing]
 
 - When Claude Code detects a gateway, the text names its host. It detects a base URL host outside `anthropic.com`, a custom provider base URL, or the gateway URL. It knows some gateways by name, such as LiteLLM, Helicone, Portkey, Cloudflare AI Gateway, Kong, Braintrust, Bifrost, and Databricks.
 - When the Claude desktop app manages the provider and turned the gateway check on, the title is `Auto mode switched to its built-in safety check for this session`.[^billing-desktop]
@@ -120,14 +108,6 @@ Claude Code shows it only when all of these are true:
 - A hidden server-side flag is on. The default is on.[^billing-flag]
 - The plan is not Pro, Max, or Team.
 - No gateway was detected. Or there is a gateway, and you did not accept the notice (`autoModeClassifierBillingNoticeAcknowledgedAt`) in the last 24 hours.
-
-On `2.1.319`, Claude Code asks for the notice only after a refusal of the server-side check sets a latch for the rest of the session.[^billing-latch] Three interactive runs with a custom base URL did not show the notice:
-
-| Setup | Hypothesis | Result |
-| --- | --- | --- |
-| No verdict from the stub[^billing-probe] | The notice shows, as on 2.1.316. | The dialog `Auto mode can't check actions in this session` showed. The notice did not. |
-| HTTP 400 to the dangerous-tool-use beta, with `--debug-file`[^billing-probe] | The refusal starts the local classifier and the notice. | The debug file logged `the platform rejected a beta on this request (HTTP 400) ... auto mode decides with the local classifier`. The dialog `Auto mode can't check actions in this session` showed. The notice did not. |
-| `CLAUDE_CODE_AUTO_MODE_SERVER=0`[^billing-probe] | Local classifier requests start the notice. | No notice, no `Notification`, and no `safeguards` field in the requests. The local classifier got no usable answer from the stub, and the screen showed `Not run · auto mode's check had no usable answer`. |
 
 ## The `autoMode` Setting
 
@@ -152,7 +132,7 @@ Only user, `--settings`, and managed settings can set the rules. Claude Code ign
 
 A managed `autoMode.allow` list with no `$defaults` replaces the built-in allow rules. Then Claude Code strips `$defaults` from the `autoMode.allow` list of a `--settings` file, so that file cannot add the built-ins back. It also strips it when a managed settings file has a load error at `autoMode` or `autoMode.allow`, or fails to load as a whole. No probe checked this case, because managed settings need a root-owned folder. The "Scheduled-Task Fires" allow rule stays when an allow list replaces the defaults.[^strip-defaults]
 
-The [official docs](https://code.claude.com/docs/en/auto-mode-config) confirm this only for `classifyAllShell` (user and `--settings`). A managed `true` for `classifyAllShell` wins over `false` in user settings or `--settings`. A managed `false` does not cancel `true` in user settings or `--settings`. Claude Code reads no other source. From `2.1.319`, a test of this needs `CLAUDE_CODE_AUTO_MODE_SERVER=0`.[^classify-probe] See [Probes](../../reference/probes.md#auto-mode).
+The [official docs](https://code.claude.com/docs/en/auto-mode-config) confirm this only for `classifyAllShell` (user and `--settings`). A managed `true` for `classifyAllShell` wins over `false` in user settings or `--settings`. A managed `false` does not cancel `true` in user settings or `--settings`. Claude Code reads no other source.[^classify-probe] See [Probes](../../reference/probes.md#auto-mode).
 :::
 
 ## The `claude auto-mode` Commands
@@ -163,11 +143,11 @@ The [official docs](https://code.claude.com/docs/en/auto-mode-config) confirm th
 | `claude auto-mode config` | <Documented /> | Prints the effective config as JSON | It uses your settings where set and defaults elsewhere | CLI |
 | `claude auto-mode critique` | <Documented /> | Asks a model to review your custom rules | Option `--model <model>`. It checks clarity, completeness, conflicts, and actionability | CLI |
 | `claude auto-mode reset` | <Documented /> | Removes `autoMode` from the user settings file | Option `-y, --yes` skips the prompt | CLI |
-| `/auto-mode-setup` | <Documented /> | Scans the project and recent sessions, and proposes `autoMode` rules | Shows the notice `Auto mode setup is ready for review`. In `2.1.326` the notice read `Auto-mode setup proposal is ready for review`. Since `2.1.304` it is also on Bedrock, Vertex, Foundry, a Claude apps gateway, and with telemetry off. `skillOverrides["auto-mode-setup"]: "off"` turns it off.[^setup-off] | Interactive |
+| `/auto-mode-setup` | <Documented /> | Scans the project and recent sessions, and proposes `autoMode` rules | Shows the notice `Auto mode setup is ready for review`. `skillOverrides["auto-mode-setup"]: "off"` turns it off.[^setup-off] | Interactive |
 
 The `config` output tags custom rules as `(custom rules added alongside the defaults)` or `(custom rules replacing defaults)`.
 
-Put `--settings <file>` before the subcommand: `claude --settings f.json auto-mode config` reads the file. `claude auto-mode config --settings f.json` stops with `error: unknown option '--settings'` and exit code 1. A probe got the same result on `2.1.314` and `2.1.316`.[^settings-order]
+Put `--settings <file>` before the subcommand: `claude --settings f.json auto-mode config` reads the file. `claude auto-mode config --settings f.json` stops with `error: unknown option '--settings'` and exit code 1.[^settings-order]
 
 ### `claude auto-mode critique` Details
 
@@ -180,7 +160,7 @@ Use `critique` to find unclear or conflicting rules before you rely on them.[^cr
 
 ### `/auto-mode-setup` Without the Dialog
 
-`/auto-mode-setup` also has a non-interactive form. It is the same in `2.1.314` and `2.1.316`.[^setup-form]
+`/auto-mode-setup` also has a non-interactive form. [^setup-form]
 
 It works in `-p` mode when `CLAUDE_CODE_REMOTE` is not set and a classifier model is set. The interactive command also needs the server-side auto mode config `envOnboarding: true`.
 
@@ -194,10 +174,10 @@ It works in `-p` mode when `CLAUDE_CODE_REMOTE` is not set and a classifier mode
 
 | Variable | Status | What it does | How it works | Scope |
 | --- | --- | --- | --- | --- |
-| `CLAUDE_CODE_AUTO_MODE_SERVER` | <Documented /> | Server-side review of auto mode actions | `0` removes `safeguards` from the requests and uses own classifier requests. `1` keeps `safeguards` also when `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1`; then a reply with no verdict switches the session to the local classifier (runs on `2.1.319`, see [The Server-Side Check](#the-server-side-check)). Needs `2.1.271` | Env |
+| `CLAUDE_CODE_AUTO_MODE_SERVER` | <Documented /> | Server-side review of auto mode actions | `0` removes `safeguards` from the requests and uses own classifier requests. `1` keeps `safeguards` also when `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1`; then a reply with no verdict switches the session to the local classifier (see [The Server-Side Check](#the-server-side-check)) | Env |
 | `CLAUDE_CODE_DISABLE_DANGEROUS_RM_TIMEOUT` | <Documented /> | Removes the time limit of critical-path `rm` prompts | In auto mode these go to the classifier | Launch env only |
 | `CLAUDE_CODE_AUTO_MODE_MODEL` | <Undocumented /> | Model of the classifier | A server-configured classifier model wins, and Claude Code logs `ignoring CLAUDE_CODE_AUTO_MODE_MODEL=`. Claude Code refuses `claude-sonnet-5-5`, `claude-opus-5-5`, and `claude-opus-5` as the value. If `ANTHROPIC_DEFAULT_SONNET_MODEL` names a 5.5 model, Claude Code uses the Sonnet 5 default instead and says so.[^model-env] | Env |
-| `CLAUDE_CODE_AUTO_MODE_FULL_CONTEXT` | <Undocumented /> | Keeps the full context for the auto mode check when the check judges only a set of MCP tools in another permission mode. New in `2.1.316` | See [Tools and Bash](../env-vars/tools-and-bash.md) | Env |
+| `CLAUDE_CODE_AUTO_MODE_FULL_CONTEXT` | <Undocumented /> | Keeps the full context for the auto mode check when the check judges only a set of MCP tools in another permission mode | See [Tools and Bash](../env-vars/tools-and-bash.md) | Env |
 | `CLAUDE_CODE_BG_CLASSIFIER_MODEL` | <Undocumented /> | Classifier model for background sessions | Listed with the model env vars | Env |
 | `CLAUDE_CODE_AUTO_MODE_TIER` | <Undocumented /> | Any value sets the tier to `strict` | The tier source is `env` | Env |
 | `CLAUDE_CODE_CLASSIFIER_SUMMARY` | <Undocumented /> | Chooses `llm` or `heuristic` summaries | Claude Code parses a boolean. A hidden server-side flag picks the default when it is unset[^summary-flag] | Env |
@@ -224,11 +204,10 @@ It works in `-p` mode when `CLAUDE_CODE_REMOTE` is not set and a classifier mode
 
 [^auto-sources]: The `autoMode` schema text, `chunk-jkpzhr7r.js:184287`, and the program, `chunk-sm9djeyx.js:123920`.
 [^deny-kinds]: The `autoMode` schema text.
-[^auto-46]: The program, `chunk-xethrx83.js:27837` (the model check). In `2.1.327`, the same check refused both models when the provider was not the first-party API. [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^auto-46]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
 [^unavailable]: The program, `chunk-56bhcxay.js:3616817`, `chunk-56bhcxay.js:1387239`, and `chunk-rs68es1f.js:8550`.
 [^server-lists]: The program, `chunk-jkpzhr7r.js:6576-6682` (the lists `allow`, `environment`, and `soft_deny`), `chunk-b2j77k2b.js:668-700` (the `auto_mode_environment` list of the bridge), and `chunk-4hhwy3p6.js:234-257` (the control, invisible, and template checks).
-[^server-check]: The program, `2.1.319`. `chunk-56bhcxay.js:1371668` parses the verdict, `chunk-56bhcxay.js:3445296` reads it from the stream, and `chunk-56bhcxay.js:3685045` acts on it.
-[^server-probe]: Probe cases `print.automode.classifier-server.server-1`, `print.automode.classifier-server.server-1-betas-off`, and `print.automode.classifier-server.betas-off`, run on `2.1.319`.
+[^server-check]: The program, `chunk-56bhcxay.js:1371668` parses the verdict, `chunk-56bhcxay.js:3445296` reads it from the stream, and `chunk-56bhcxay.js:3685045` acts on it.
 [^gateway-guide]: The program, `chunk-39421vhy.js:928946`. The gateway guide in the program says this.
 [^stages]: The program, `chunk-56bhcxay.js:3609997-3612923` (the classifier) and `chunk-yvz6rqqj.js:928-1410` (the defaults). A probe captured the requests.
 [^stage-flag]: The program, `chunk-56bhcxay.js:3631496`. Server config `tengu_auto_mode_config.twoStageClassifier` picks the mode.
@@ -239,18 +218,16 @@ It works in `-p` mode when `CLAUDE_CODE_REMOTE` is not set and a classifier mode
 [^official-project]: [Auto Mode Configuration](https://code.claude.com/docs/en/auto-mode-config) in the official docs.
 [^official-broad]: [Permission Modes](https://code.claude.com/docs/en/permission-modes) in the official docs.
 [^broad-rules]: The program, `chunk-tew0988b.js:3994` and `chunk-tew0988b.js:5996`.
-[^billing]: The program, `chunk-56bhcxay.js:1690709-1692357`, `2.1.319`. The upcoming-release sentence is at `chunk-56bhcxay.js:1691175`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^billing]: The program, `chunk-56bhcxay.js:1690709-1692357`. The upcoming-release sentence is at `chunk-56bhcxay.js:1691175`.
 [^billing-desktop]: The program, `chunk-56bhcxay.js:1690699`.
 [^billing-flag]: The program, `chunk-56bhcxay.js:1692153`. The flag is `tengu_velvet_heron`.
-[^billing-latch]: The program, `chunk-56bhcxay.js:3636036`.
-[^billing-probe]: Probe cases `pty.notifications.agent-needs-input`, `pty.notifications.agent-needs-input-refused`, and `pty.notifications.auto-mode-local`, in table order.
 [^classify-all]: The program, `chunk-sm9djeyx.js:124947` and `chunk-jkpzhr7r.js:185039`.
 [^sources-probe]: A probe ran `claude auto-mode config` with `autoMode.allow` set in each source. The program, `chunk-sm9djeyx.js:123920`, logs `tengu_settings_auto_mode_rules_untrusted_source_ignored` for an ignored source. Its message says only policy, user, and flag settings may set the rules. The run did not check `classifyAllShell`, because it is not in the `auto-mode config` output.
 [^strip-defaults]: The program, `chunk-sm9djeyx.js:124697` and `chunk-56bhcxay.js:1370409`.
-[^classify-probe]: A probe counted classifier requests for a `curl` command that a user allow rule covered. The count was 1 with `true` in user settings or `--settings`, and 0 with `false` or unset. A managed `false` with `true` in user settings or `--settings` gave 1. A managed `true` gave 1 in every case. Without `CLAUDE_CODE_AUTO_MODE_SERVER=0` on `2.1.319`, a stub that gives the server-side check no verdict gets no classifier request.
+[^classify-probe]: The program, `chunk-sm9djeyx.js:124947` (the setting is on when any source sets `classifyAllShell` to `true`).
 [^defaults-probe]: A probe with the cc-inspect `code` action `cli`.
 [^setup-off]: The program, `chunk-56bhcxay.js:2231856-2231910`. The notice text is at `chunk-j2wfp6sf.js:25697`, and the command description at `chunk-56bhcxay.js:119145-119149`.
-[^settings-order]: A probe on `2.1.314` and `2.1.316`.
+[^settings-order]: A run of both orders on `2.1.328`.
 [^critique]: The program, `chunk-zn7exhn6.js:32720-33323`.
 [^setup-form]: The program, `chunk-a6ejt5xf.js:22523-24807` and `chunk-56bhcxay.js:2232157`.
 [^model-env]: The program, `chunk-56bhcxay.js:3629047-3630078`.
@@ -258,9 +235,9 @@ It works in `-p` mode when `CLAUDE_CODE_REMOTE` is not set and a classifier mode
 [^ignored-env]: The program lists the name in its environment table as a boolean, and no code reads it, `chunk-7343wm3k.js:19582`.
 [^chrome-flag]: The program, `chunk-tew0988b.js:15304`. The flag is `tengu_cowork_chrome_automode_default`.
 [^bg-rules]: The program, `chunk-2v0j7fr6.js:15151` and `chunk-hsqnsn0k.js:12899`.
-[^auto-reresolve]: The program, `chunk-tew0988b.js:24373`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^auto-fallback]: [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). The program, `chunk-pd2ry4v7.js:2303`, which logs `[auto-mode] the built-in auto default gave way to ... served settings failed`. The program skips the fallback when `CLAUDE_CODE_BRIDGE_CHILD_AUTO_DEFAULT` is set.
-[^odd-word]: The program, `chunk-0jy30rtj.js:13840-14357`, which is used for `Bash` rules at `chunk-0jy30rtj.js:14935`. The rule applies to `Bash` only. Rules that fail the check in `2.1.326` form, such as `$HOME *`, `~/bin/x*`, and `FOO=1 *`, still go. Rules such as `git *`, `~/bin/x *`, and `/usr/bin/git *` stay. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^runners-327]: The program, `chunk-0jy30rtj.js:14049-14357`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^ps-dot-slash]: The program, `chunk-0jy30rtj.js:14003` and `chunk-0jy30rtj.js:15798`. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^win-path]: The program, `chunk-0jy30rtj.js:13840-14357` (the character test and the word scan). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326). A backslash is not in the set of plain characters, so the word is skipped and no program word is left.
+[^auto-reresolve]: The program, `chunk-tew0988b.js:24257`.
+[^auto-fallback]: The program, `chunk-pd2ry4v7.js:2325`, which logs `[auto-mode] the built-in auto default gave way to ... served settings failed`. The program skips the fallback when `CLAUDE_CODE_BRIDGE_CHILD_AUTO_DEFAULT` is set.
+[^odd-word]: The program, `chunk-0jy30rtj.js:13840-14357`, which is used for `Bash` rules at `chunk-0jy30rtj.js:14935`. The rule applies to `Bash` only. Rules that fail the check, such as `$HOME *`, `~/bin/x*`, and `FOO=1 *`, still go. Rules such as `git *`, `~/bin/x *`, and `/usr/bin/git *` stay.
+[^runners-327]: The program, `chunk-0jy30rtj.js:14049-14357`.
+[^ps-dot-slash]: The program, `chunk-0jy30rtj.js:14003` and `chunk-0jy30rtj.js:15798`.
+[^win-path]: The program, `chunk-0jy30rtj.js:13840-14357` (the character test and the word scan). A backslash is not in the set of plain characters, so the word is skipped and no program word is left.

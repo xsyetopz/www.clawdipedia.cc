@@ -110,22 +110,22 @@ The options of `$.fs.read` that ask for the bytes. The call then answers `{ base
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `as` | <Documented /> | `bytes`. | Type: `'bytes'`. |
-| `offset` | <Documented /> | Since `2.1.326`, where the read starts, in bytes. | Type: `number`. Optional. |
-| `length` | <Documented /> | Since `2.1.326`, the most bytes to read. | Type: `number`. Optional. Up to 4 MiB. |
+| `offset` | <Documented /> | Where the read starts, in bytes. | Type: `number`. Optional. |
+| `length` | <Documented /> | The most bytes to read. | Type: `number`. Optional. Up to 4 MiB. |
 
 ### `FsReadOptions`
 
-The options of `$.fs.read`: how it answers, and, since `2.1.326`, which bytes of the file. Object with fields `as`, `offset`, `length`.
+The options of `$.fs.read`: how it answers, and which bytes of the file. Object with fields `as`, `offset`, `length`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `as` | <Documented /> | `bytes` answers `{ base64 }` for a binary file. `text` (the default) answers the text of the file. | Type: `FsReadAs`. |
-| `offset` | <Documented /> | Since `2.1.326`, where the read starts, a whole number of bytes from the start of the file. | Type: `number`. Optional. Absent, the start. Past the end, the read is empty. |
-| `length` | <Documented /> | Since `2.1.326`, the most bytes to read. Fewer come back where the file ends first. | Type: `number`. Optional. A whole number up to 4 MiB. Absent, the rest of the file, refused when over 4 MiB. |
+| `offset` | <Documented /> | Where the read starts, a whole number of bytes from the start of the file. | Type: `number`. Optional. Absent, the start. Past the end, the read is empty. |
+| `length` | <Documented /> | The most bytes to read. Fewer come back where the file ends first. | Type: `number`. Optional. A whole number up to 4 MiB. Absent, the rest of the file, refused when over 4 MiB. |
 
 ### `FsReadTextOptions`
 
-The options of `$.fs.read` that ask for the text. The call answers a string, with U+FFFD at an edge where the range cuts a character. Since `2.1.326`.
+The options of `$.fs.read` that ask for the text. The call answers a string, with U+FFFD at an edge where the range cuts a character.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -162,7 +162,7 @@ Options of `$.http.fetch`. Object with fields `method?`, `headers?`, `body?`, `a
 | `method` | <Documented /> | `GET` (default), `POST`, ... | Type: `string`. Optional. |
 | `headers` | <Documented /> | Request headers. | Type: `Record<string, string>`. Optional. |
 | `body` | <Documented /> | The request body, as text. Bytes that are not UTF-8 go as `{ base64 }`, which only an engine request carries. | Type: `HttpBody`, which is `string \| { base64: string }`. Optional. |
-| `compress` | <Documented /> | What the engine does to the body beneath the hooks, on an engine request alone. `body` is the plain body. Delete this and the body leaves as written. Set this and the engine compresses it. For exact bytes, delete this and write them with your own `content-encoding` header. | Type: `HttpCompress`, which is `boolean \| 'gzip' \| 'deflate' \| 'br' \| 'zstd' \| { encoding, level?: number }`. Optional. Example: `next({ ...e, init: { ...e.init, compress: undefined } })` (`captures/2.1.321/types.diff`; the program rejects a plugin call with `a body of bytes and compress ride engine requests alone`). |
+| `compress` | <Documented /> | What the engine does to the body beneath the hooks, on an engine request alone. `body` is the plain body. Delete this and the body leaves as written. Set this and the engine compresses it. For exact bytes, delete this and write them with your own `content-encoding` header. | Type: `HttpCompress`, which is `boolean \| 'gzip' \| 'deflate' \| 'br' \| 'zstd' \| { encoding, level?: number }`. Optional. Example: `next({ ...e, init: { ...e.init, compress: undefined } })` (the program, `chunk-56bhcxay.js:4583468`, rejects a plugin call with `a body of bytes and compress ride engine requests alone`). |
 | `auth` | <Documented /> | The handle that `$.session.authorize()` answered: the engine sets the credential header of the session itself, only for a first-party host. | Type: `string`. Optional. It rides https only. While `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set, a request that carries it is refused, whichever plugin asks. |
 | `socketPath` | <Documented /> | The absolute path of a Unix domain socket that the request goes over instead of TCP (near 100 B at most). There is one for each session, in a private directory. | Type: `string`. Optional. A Unix socket to use instead of TCP. The URL still gives the path, query, and Host. No proxy. No relative path. |
 
@@ -181,7 +181,7 @@ What `$.http.fetch` resolves with. Object with fields `status`, `ok`, `headers`,
 
 ### `JsonValue`
 
-Plain data is what JSON holds. It is also what crosses whole between the hooks module and the surface module of a plugin. Examples are the props of a `Client` and the data of a post. Union. Fields: `[key: string]`. A function, a class instance, `undefined` or a cycle is not plain data. Since `2.1.323`, a named key on a list, or a key named `__proto__`, `constructor` or `prototype`, is not plain data either. The engine refuses one where it checks, and drops it where it clones.
+Plain data is what JSON holds. It is also what crosses whole between the hooks module and the surface module of a plugin. Examples are the props of a `Client` and the data of a post. Union. Fields: `[key: string]`. A function, a class instance, `undefined` or a cycle is not plain data. A named key on a list, or a key named `__proto__`, `constructor` or `prototype`, is not plain data either. The engine refuses one where it checks, and drops it where it clones.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |

@@ -25,7 +25,7 @@ Sizes count the text after the placeholders are in place. Each placeholder count
 
 ## What to Notice
 
-- A skill folder with the same name as a built-in skill replaces its text. The skill wrapper adds a `Base directory for this skill` line before your file body.
+- A skill folder with the same name as a built-in skill replaces its text, because the program lists skill files before bundled skills and uses the first name match (The program, `chunk-56bhcxay.js:2630374`, `chunk-458m0skd.js:2592`). The program adds a `Base directory for this skill:` line before your file body (The program, `chunk-56bhcxay.js:3885828`).
 
 ## Full Text
 

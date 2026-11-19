@@ -6,7 +6,7 @@ sidebar_position: 12
 
 Claude Code masks text that looks like a secret before it shows or records the text.
 It replaces the secret with `[REDACTED]`. This page describes the algorithm and the rule table, not each pattern. The program has no setting that turns masking on or off. To keep a secret out of the places where masking does not apply, see [Outputs That Keep the Secret](#outputs-that-keep-the-secret).
-The rules are the same in `2.1.319` and `2.1.322`.[^rule-table] Every row is <Undocumented />.
+Every row is <Undocumented />.
 
 ## The Rule Table
 
@@ -70,7 +70,7 @@ A name is sensitive when it holds one of these words, with no case check: `api_k
 ## Where It Applies
 
 No setting or environment variable that turns masking on or off was found in the program.
-The table shows the output that each caller masks in `2.1.319`.
+The table shows the output that each caller masks.
 
 | Output | Function |
 | --- | --- |
@@ -90,12 +90,10 @@ The table shows the output that each caller masks in `2.1.319`.
 | The preview of tool input, including the field names[^where-14] | `redactForDisplay` |
 | The path, the description, and the skill summary in a permission request that the program sends to a connected client[^where-15] | `redactForDisplay` |
 | The command, the description, and the plan reason in a remote or push permission notice[^where-16] | `redactContext` then `redactTokens` |
-| Since `2.1.326`, the tool description in a push notification from Remote Control or a cloud session[^where-masker] | `redactContext` then `redactTokens`. The masker keeps a `://[REDACTED]` host marker when a `.` or `-` follows it. |
+| The tool description in a push notification from Remote Control or a cloud session[^where-masker] | `redactContext` then `redactTokens`. The masker keeps a `://[REDACTED]` host marker when a `.` or `-` follows it. |
 | The detail, intent, and latest question of a background job (1,000 and 600 characters), and the tail of its output[^where-18] | `redactContext` with tracked tokens, and `redactTokens` |
 
 More calls to `redact` mask a job detail, a task summary line, or a session or job name.[^more-calls] The masker class is the only copy in the program.
-
-A probe (`2.1.319`, `-p --debug-file`) used a `UserPromptSubmit` hook that wrote `leak ghp_<token>` to stderr and exited `1`. The debug log had `leak [REDACTED]`, and the token was in no request. The transcript kept the full token.
 
 ### Outputs That Keep the Secret
 
@@ -107,11 +105,12 @@ The full token stayed in each of these outputs:
 | --- | --- |
 | The Messages API request that goes to the model | `-p` against a local stub |
 | The session transcript, `projects/<project>/<session>.jsonl` in the config folder | The same run |
-| The OpenTelemetry `user_prompt` log event | `CLAUDE_CODE_ENABLE_TELEMETRY=1`, `OTEL_LOG_USER_PROMPTS=1`, and the `console` logs exporter. A run with no telemetry did not print the token. |
-| The `tool_result` in the next Messages API request, the `stream-json` output, and the transcript | 2.1.319, `-p --allowedTools Bash`. The stub made the model run `printf 'ghp_%s%s' <half> <half>`, so the full token was only in the tool output. A second run with `Read` of a file that holds the token gave the same result. |
+| The `tool_result` in the next Messages API request, the `stream-json` output, and the transcript | `-p --allowedTools Bash`. The stub made the model run `printf 'ghp_%s%s' <half> <half>`, so the full token was only in the tool output. |
 
-These results come from probes of `2.1.316` and `2.1.319`.[^leak-probe]
-To keep a secret out of these outputs, do not put it in a prompt, and do not let a tool print or read it. Without `OTEL_LOG_USER_PROMPTS`, the prompt is not in the OpenTelemetry events (see [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md)).
+These results come from probes of the program.[^leak-probe]
+To keep a secret out of these outputs, do not put it in a prompt, and do not let a tool print or read it.
+
+The OpenTelemetry `user_prompt` event shows `<REDACTED>` in place of the prompt unless `OTEL_LOG_USER_PROMPTS` is set. With it set, the program passes the prompt through its filter for account memory text. The code of that path does not call `redact`, so a secret in the prompt stays.[^otel-prompt]
 
 ## Secret Scan
 
@@ -153,8 +152,9 @@ The program uses the scan in four places.
 [^where-18]: The program, `chunk-gmcczr1c.js:26750` (the intent, 1,000 characters), `chunk-gmcczr1c.js:27149` (the latest question, 600 characters), and `chunk-gmcczr1c.js:37127` (the output tail).
 [^rule-table]: The program, `chunk-jq8xvscs.js:12990-20834`.
 [^more-calls]: The program. A job detail: `chunk-f2bg3s01.js:33878`, `chunk-mj6016d6.js:44485`, `chunk-wq6qw79p.js:3839`, and `chunk-fcdwedb2.js:5873`. A task summary line: `chunk-3r0fyrgm.js:6585` and `chunk-ckewb6rp.js:3582`. A session or job name: `chunk-h20cnm6k.js:23602`, `chunk-faznt4sc.js:74826`, `chunk-5e06b4s2.js:31239`, and `chunk-avyyrx5p.js:57723`. The masker method names are in no other module.
-[^leak-probe]: Probes of `2.1.316` and `2.1.319` with cc-inspect `code` `cli` and `query`, which names each request, stream, and transcript file that holds a text. The tool runs used the `calls` option, which makes the stub call tools in order.
+[^leak-probe]: Probes with cc-inspect `code` `cli` and `query`, which names each request, stream, and transcript file that holds a text. The tool runs used the `calls` option, which makes the stub call tools in order.
 [^scan-memory]: The program, `chunk-yt808435.js:3947-4509`.
 [^scan-denial]: The program, `chunk-j2wfp6sf.js:1819236`.
 [^scan-skill]: The program, `chunk-5nqgrc1r.js:38840`.
-[^where-masker]: The program, `chunk-jq8xvscs.js:29178-29236` (the host marker and the masker), `chunk-mwfcwvmn.js:7660` (the tool summary passes through the masker), and `chunk-xmg4s9wn.js:11652` (the notification body). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^where-masker]: The program, `chunk-jq8xvscs.js:29160-29408` (the host marker and the masker), `chunk-mwfcwvmn.js:7660` (the tool summary passes through the masker), and `chunk-xmg4s9wn.js:11652` (the notification body).
+[^otel-prompt]: The program, `chunk-xkv5w8yy.js:371` (the event), `chunk-pw9xqvmf.js:19822` (the `<REDACTED>` text and the filter call), and `chunk-pw9xqvmf.js:14251` (the filter).

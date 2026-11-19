@@ -52,7 +52,7 @@ The event decides what the matcher tests.
 | Target | Status | Values | Events |
 | --- | --- | --- | --- |
 | Tool name | <Documented /> | `Bash`, `Edit\|Write`, `mcp__.*`. Plugin MCP tools are `mcp__plugin_<plugin>_<server>__<tool>`. `Bash` also matches a `Monitor` call that has a `command`. Such a hook can block the call or ask, but a `permissionDecision` of `allow` is ignored and `updatedInput` is dropped. A `Monitor` call with `ws` is not covered.[^monitor] | `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `PermissionRequest`, `PermissionDenied` |
-| Start source | <Documented /> | `startup`, `resume`, `clear`, `compact`, `fork`. `fork` needs `2.1.214`. | `SessionStart` |
+| Start source | <Documented /> | `startup`, `resume`, `clear`, `compact`, `fork`. The program lists these five (`chunk-20bv8pca.js:273333`). | `SessionStart` |
 | CLI flag | <Documented /> | `init`, `maintenance` | `Setup` |
 | End reason | <Documented /> | `clear`, `resume`, `logout`, `prompt_input_exit`, `other` | `SessionEnd` |
 | Notification type | <Documented /> | See [Events](session-events.md#notification). | `Notification` |
@@ -76,7 +76,7 @@ The event decides what the matcher tests.
 | --- | --- | --- | --- |
 | `if` | <Documented /> | Runs the handler only when the rule matches the tool call. | Only the five tool events read it. On any other event the hook never runs. You cannot use `&&` or a list. |
 | Bash patterns | <Documented /> | Checked on each subcommand. | Claude Code removes a leading `VAR=value`. It also checks `$()` and backticks. If it cannot parse the command, the hook runs. |
-| File patterns | <Documented /> | For example `Edit(src/**)`. | Matches only `src` in the working directory. Use `**/src/**` for any depth. This changed in `2.1.214`. |
+| File patterns | <Documented /> | For example `Edit(src/**)`. | `Edit(path)` covers every file-writing tool, and `Read(path)` covers reads, as in permission rules (the program, `chunk-tsfj8qb8.js:213119`). |
 
 ## Timeouts
 
@@ -87,7 +87,7 @@ If a hook reaches its timeout, Claude Code cancels it. Claude Code drops its out
 | --- | --- | --- | --- |
 | Default `timeout` | <Documented /> | 600 seconds for `command`, `http`, `mcp_tool`. 30 for `prompt`. 60 for `agent`. | These defaults come from the official docs. |
 | Lower defaults | <Documented /> | 30 seconds on `UserPromptSubmit`, `PreModelSwitch`, `PostModelSwitch`. 10 seconds on `MessageDisplay`. | For `command`, `http`, `mcp_tool`. |
-| `timeout` under 1 second | <Documented /> | On a `prompt` or `agent` hook, a `timeout` under 1 counts as 1 second. | Since `2.1.312`. Claude Code takes the larger of `timeout` and 1. Other types are not changed. See [Handlers](handlers.md#prompt-and-agent-concurrency). |
+| `timeout` under 1 second | <Documented /> | On a `prompt` or `agent` hook, a `timeout` under 1 counts as 1 second. | Claude Code takes the larger of `timeout` and 1 (the program, `chunk-56bhcxay.js:1262033`). Other types are not changed. See [Handlers](handlers.md#prompt-and-agent-concurrency). |
 | `SessionEnd` budget | <Documented /> | 1.5 seconds shared by all hooks. | Claude Code raises it to the largest per-hook `timeout` in settings, up to 60 seconds. Plugin timeouts do not raise it. |
 | `PreModelSwitch` timeout | <Documented /> | A hook that reaches its timeout blocks the switch. | |
 | `PreToolUse` timeout | <Documented /> | A `command`, `http`, or `mcp_tool` hook that reaches its timeout does not block. | Use `onFailure: "block"` to block. An SDK callback that reaches its timeout does block. |
@@ -100,7 +100,7 @@ A hook fails when it cannot start or reaches its timeout. It also fails when it 
 | Item | Status | What it does | Notes |
 | --- | --- | --- | --- |
 | `onFailure: "continue"` | <Documented /> | The default. The action continues after a failure. | `command`, `http`, and `mcp_tool` handlers. |
-| `onFailure: "block"` | <Documented /> | A failure counts as exit 2. | The error text says `blocking because onFailure is "block"`. Since `2.1.328`, this works on `mcp_tool` hooks, as on `command` and `http` hooks. A failed call to the MCP server then blocks the action.[^mcp-onfailure] |
+| `onFailure: "block"` | <Documented /> | A failure counts as exit 2. | The error text says `blocking because onFailure is "block"`. This works on `mcp_tool` hooks, as on `command` and `http` hooks. A failed call to the MCP server then blocks the action.[^mcp-onfailure] |
 | `onFailure` has no effect | <Undocumented /> | On async hooks and on `Stop`, `SubagentStop`, `TaskCompleted`, `TeammateIdle`. | The program's field text says so.[^onfailure] The Hooks Reference does not. |
 | Windows without Git Bash | <Documented /> | A shell-form `PreToolUse` or `PermissionRequest` hook that fails can block. | Set `shell: "powershell"`, or use exec form with `onFailure`. |
 | Background process keeps `stdout` open | <Documented /> | After an allow, this blocks the call with `refusing to honor the suspect capture`. | Redirect the output of background child processes. |
@@ -116,7 +116,7 @@ A hook fails when it cannot start or reaches its timeout. It also fails when it 
 | `CLAUDE_ENV_FILE` | <Documented /> | A file of `export` lines that later Bash commands load. | Append with `>>`. Claude Code sets it for `SessionStart`, `Setup`, `CwdChanged`, `FileChanged`. It does not set it for PowerShell hooks. |
 | `CLAUDE_EFFORT` | <Documented /> | The effort level of the turn. | Also visible in Bash. |
 | `CLAUDE_CODE_REMOTE` | <Documented /> | `"true"` in remote web environments. | Unset in the local CLI. |
-| `CLAUDE_CODE_BRIDGE_SESSION_ID` | <Documented /> | The Remote Control session ID. | Set from `2.1.199` while connected. |
+| `CLAUDE_CODE_BRIDGE_SESSION_ID` | <Documented /> | The Remote Control session ID. | Set while connected, and removed when no bridge session exists (the program, `chunk-1egf0kv9.js:2350`). |
 | Inherited environment | <Documented /> | The parent environment minus `OTEL_*`. | `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` strips more. HIPAA sessions drop Anthropic credentials. |
 | `CLAUDE_MODEL` | <Documented /> | Does not exist. | Use `PostModelSwitch` and `to_model`. |
 | `CLAUDE_CODE_SESSIONEND_HOOKS_TIMEOUT_MS` | <Documented /> | The `SessionEnd` budget. | See [Environment Variables](../../configure/env-vars/index.md). |
@@ -130,15 +130,15 @@ A hook fails when it cannot start or reaches its timeout. It also fails when it 
 | `DISABLE_BRIEF_MODE_STOP_HOOK` | <Undocumented /> | Skips the brief-mode check at the end of a turn. See [Features and Toggles](../../configure/env-vars/features-and-toggles.md). | |
 | `CLAUDE_CODE_RESUME_SESSIONSTART_HOOKS_WAIT_MS` | <Undocumented /> | Sets how long a resume waits for `SessionStart` hooks. See [Sessions and Storage](../../configure/env-vars/sessions-and-storage.md). | |
 
-Since `2.1.326`, the transcript shows a failed hook, a blocking hook, and a hook that timed out in red, with the reason below. A hook that stops Claude shows in yellow with its reason.[^transcript-colors]
+The transcript shows a failed hook and a blocking hook in red, with the reason below. A `UserPromptSubmit` hook that timed out also shows in red. A hook that stops Claude shows as a warning with its message.[^transcript-colors]
 
 ## Settings Keys and Trust
 
 | Item | Status | What it does | Notes |
 | --- | --- | --- | --- |
 | `hooks` | <Documented /> | The event map. | Merges across levels. |
-| `allowedHttpHookUrls` | <Documented /> | A URL allowlist for `http` hooks. | `*` is a wildcard. An empty array blocks all. Arrays merge across levels. Since `2.1.326`, where managed settings do not set it, a list in another settings file does not apply to hooks that managed settings define or that come from a plugin they enable from a local folder.[^managed-lists] |
-| `httpHookAllowedEnvVars` | <Documented /> | A name allowlist for header values. | Claude Code intersects it with each hook's `allowedEnvVars`. Arrays merge. Since `2.1.326`, the same managed-settings rule applies as for `allowedHttpHookUrls`.[^managed-lists] |
+| `allowedHttpHookUrls` | <Documented /> | A URL allowlist for `http` hooks. | `*` is a wildcard. An empty array blocks all. Arrays merge across levels. Where managed settings do not set it, a list in another settings file does not apply to hooks that managed settings define or that come from a plugin they enable from a local folder.[^managed-lists] |
+| `httpHookAllowedEnvVars` | <Documented /> | A name allowlist for header values. | Claude Code intersects it with each hook's `allowedEnvVars`. Arrays merge. The same managed-settings rule applies as for `allowedHttpHookUrls`.[^managed-lists] |
 | Workspace trust | <Documented /> | Settings hooks wait for the trust dialog. | `-p` and SDK sessions treat the folder as trusted. Hooks of project subagents need the dialog. |
 | `/hooks` menu | <Documented /> | A read-only browser of your hooks. | Shows where each one comes from. |
 | Debug output | <Documented /> | `claude --debug-file <path>` writes hook activity. | `CLAUDE_CODE_DEBUG_LOG_LEVEL=verbose` adds matcher lines. |
@@ -176,5 +176,5 @@ Each row is a family of messages. The backticked text is the start that every me
 [^powershell]: Probe case `print.err319.hook-powershell` printed this text.
 [^gitbash]: The program checks `P()==="windows"` (`chunk-56bhcxay.js:4263780`), a platform check (read site `chunk-56bhcxay.js:4270375`, search `requires bash but Git Bash was not found`). On this macOS build the platform is a baked-in `"darwin"` literal, and `CLAUDE_CODE_HOST_PLATFORM` only sets the telemetry `platform` field. Not run: hard limit on this host.
 [^absolute]: The program, `chunk-xk2sr3vt.js:51495` and `chunk-1xzb1yj9.js:21521`.
-[^managed-lists]: The program, `chunk-56bhcxay.js:209674-209691` and the field text of both settings. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^transcript-colors]: The program, `chunk-bjgpjqze.js:9958-10630`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^managed-lists]: The program, `chunk-jkpzhr7r.js:252371` (the field text of both settings).
+[^transcript-colors]: The program, `chunk-bjgpjqze.js:135900-138900` (the `hook_blocking_error`, `hook_non_blocking_error`, `hook_cancelled`, and `hook_stopped_continuation` rows).

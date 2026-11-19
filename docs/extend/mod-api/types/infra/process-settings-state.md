@@ -153,7 +153,7 @@ A pending timer from `$.clock.after` / `$.clock.every`. Object with fields `canc
 
 ### `WasmCompileInput`
 
-What a hook on `wasm.compile` receives. Since `2.1.326`, it holds the bytes that are about to compile, and the file that they were read from when the call named one. Used by `$.wasm.compile`, `wasm.compile`.[^wasm-compile]
+What a hook on `wasm.compile` receives. It holds the bytes that are about to compile, and the file that they were read from when the call named one. Used by `$.wasm.compile`, `wasm.compile`.[^wasm-compile]
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |

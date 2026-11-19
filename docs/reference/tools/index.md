@@ -35,7 +35,7 @@ Hide web tools from Claude. Keep MCP tools loaded at the start when they are sma
 
 ## How to Read the Tool Tables
 
-The inventory for `2.1.305` lists 70 tools. The program holds a few more, such as `Agent`, `Monitor`, `ToolSearch`, `ScheduleWakeup`, and `StructuredOutput`.
+The program holds more tools than the main prompt lists, such as `Agent`, `Monitor`, `ToolSearch`, `ScheduleWakeup`, and `StructuredOutput`.
 Each tool table has three Yes or No columns.
 
 | Column | Yes Means | No Means |
@@ -67,7 +67,6 @@ For example, the query `select:Read,Edit,Grep` fetches those three tools by name
 | Item | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
 | `ToolSearch` | <Documented /> | Loads the full schema of deferred tools. | `query` (string, required) and `max_results` (int, optional, default 5). The result lists `matches`, `total_deferred_tools`, `pending_mcp_servers`, and `failed_mcp_servers`. Works in the main session and in subagents. |
-| `max_results` | <Differs /> | An old `2.1.296` capture showed it as required. | In `2.1.305` it is optional with the default `5`. |
 | Query `select:A,B` | <Undocumented /> | Fetches the named tools. | The prompt gives `select:Read,Edit,Grep`. A tool that is already loaded returns a note. |
 | Query keywords | <Undocumented /> | Searches by keyword and returns up to `max_results` matches. | The prompt gives `notebook jupyter`. |
 | Query `+term rest` | <Undocumented /> | Requires `term` in the tool name and ranks by the rest. | The prompt gives `+slack send`. |
@@ -110,7 +109,7 @@ Set these switches in the shell or in `env` in settings. See [Connect Claude Cod
 
 | Item | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
-| `ENABLE_TOOL_SEARCH` unset | <Documented /> | MCP tools are deferred. | Since `2.1.304` this also holds behind a custom `ANTHROPIC_BASE_URL`. If the gateway answers 400 or 422, Claude Code retries the request without tool search.[^custom-base-url] |
+| `ENABLE_TOOL_SEARCH` unset | <Documented /> | MCP tools are deferred. | The program picks the deferred mode when the variable is unset.[^custom-base-url] |
 | `ENABLE_TOOL_SEARCH=true` | <Documented /> | MCP tools stay deferred, also on a proxy host. | - |
 | `ENABLE_TOOL_SEARCH=auto` and `auto:N` | <Documented /> | Tools load at the start while their definitions fit in N percent of the window. | The default is 10. `auto:0` acts like `true`. `auto:100` acts like `false`. N stays between 0 and 100. |
 | `ENABLE_TOOL_SEARCH=false` | <Documented /> | Every MCP tool loads at the start. | - |
@@ -124,9 +123,8 @@ Set these switches in the shell or in `env` in settings. See [Connect Claude Cod
 - Deferred: `WebFetch`, `WebSearch`, `NotebookEdit`, `TodoWrite`, `LSP`, `Monitor`, `EnterPlanMode`, `ExitPlanMode`, `EnterWorktree`, `ExitWorktree`, `TaskCreate`, `TaskGet`, `TaskUpdate`, `TaskList`, `TaskStop`, `SendMessage`, `SendFile`, `CronCreate`, `CronDelete`, `CronList`, `PushNotification`, `RemoteTrigger`, `EndConversation`, `SetGoal`, `GetGoal`, `PauseGoal`, `FetchInboxMessage`, `McpTaskResumePolling`, `PublishPlugin`, `OfferChromeSetup`, `DesignSync`, `SearchMcpRegistry`, `SuggestConnectors`, `ListConnectors`, the three MCP resource tools, and the nine self-hosted runner tools.
 - A runtime check decides: `SuggestPluginInstall`, `SuggestSkills`, `SendUserFile`.
 - Not deferred: `Read`, `Write`, `Edit`, `Glob`, `Grep`, `Bash`, `PowerShell`, `Agent`, `Skill`, `AskUserQuestion`, `ListAgents`, `Workflow`, `ReportFindings`, `ToolSearch`, `StructuredOutput`, `SubagentHandback`, `ScheduleWakeup`, `memory_*`, and the rest of the gated tools.
-- The old capture of `2.1.296` lacked `Glob` and `Grep`. In `2.1.305` they are not deferred.
-- From `2.1.306` to `2.1.311`, our `-p` stub runs offered neither `Glob` nor `Grep`, not even behind `ToolSearch`. In this build, the `Bash` tool runs `find` and `grep` as the embedded `bfs` and `ugrep`, and the prompts point Claude to them.[^bfs-ugrep]
-- In the `2.1.305` capture, the main prompt lists 12 tools (the site's captures use a local stub as `ANTHROPIC_BASE_URL`, and tool search is on behind a custom base URL, so it is not 20 as before). `CronCreate`, `CronDelete`, `CronList`, `EnterWorktree`, `ExitWorktree`, `NotebookEdit`, `SendMessage`, `TaskStop`, `WebFetch`, and `WebSearch` sit behind `ToolSearch`. See [Tools per Variant](../../prompts/tools/tools-per-variant.md).
+- The `Bash` tool shadows `find` and `grep` with the embedded `bfs` and `ugrep`.[^bfs-ugrep]
+- In the `2.1.328` capture, the main prompt lists 12 tools: `Agent`, `Bash`, `Edit`, `ListAgents`, `Read`, `ReportFindings`, `ScheduleWakeup`, `Skill`, `ToolSearch`, `Workflow`, `Write`, and the placeholder `DeferredToolPlaceholder`. `CronCreate`, `CronDelete`, `CronList`, `EnterWorktree`, `ExitWorktree`, `NotebookEdit`, `SendMessage`, `TaskStop`, `WebFetch`, and `WebSearch` sit behind `ToolSearch`. See [Tools per Variant](../../prompts/tools/tools-per-variant.md).
 
 ## How It Works
 
@@ -151,5 +149,5 @@ It lists every field of this release. Build on the fields it names. Look each on
 
 [^definitions]: The program, the tool definitions, `chunk-r1yxtgw6.js:201784`.
 [^toolsearch-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program, `chunk-pg7hxy0j.js:6534`.
-[^custom-base-url]: The program, `chunk-56bhcxay.js:3356147` and `chunk-56bhcxay.js:2108317`, and the [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304).
-[^bfs-ugrep]: The program, `chunk-56bhcxay.js:3786010`.
+[^custom-base-url]: The program, `chunk-dnmy4w56.js:8148`: with the variable unset, the mode function returns `tst` (deferred).
+[^bfs-ugrep]: The program, `chunk-56bhcxay.js:3794148` (the shell snapshot comment `Shadow find/grep with embedded bfs/ugrep`) and `chunk-56bhcxay.js:3786010` (the `ugrep` options).

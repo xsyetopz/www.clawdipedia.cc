@@ -55,7 +55,7 @@ Where an inbound delivery came from, as the bridge classified it from the stamps
 | `kind` | <Documented /> | A delivery through the agent-team mailbox of this session. `coordinator` comes from the harness of the lead. `peer` comes from a teammate, or from a sender that is unverified. | Type: `'peer' \| 'coordinator'`. |
 | `plugin` | <Documented /> | The plugin whose `$.session.send` composed the delivery, as the mailbox entry says. Absent for a message that the sending model wrote itself. | Type: `string`. Optional. |
 | `teammate` | <Documented /> | The name of the sending member in the team (`team-lead` for the lead). It is the stamp of the harness when `isVerified` is true. Otherwise it is whatever the writer put there. | Type: `string`. Example: `on("session.receive", { origin: { teammate: "researcher" } }, hook)`. |
-| `isVerified` | <Documented /> | Whether this process can vouch for the mailbox entry. It can when it wrote the entry (the process of the lead, for its own sends and the sends of in-process teammates), or when it is a teammate in its own pane that accepted the signature of the lead on the entry. Since `2.1.323`, a teammate in its own pane can also be `true`. | Type: `boolean`. `false` means this process could not check the entry, or the entry failed the check. The process of the lead cannot check the send of a pane teammate. A pane teammate can check only what its lead sends, with a key from that lead. A failed check is no proof of forgery: after a restart, such a teammate fails every entry that its lead writes.[^verified] |
+| `isVerified` | <Documented /> | Whether this process can vouch for the mailbox entry. It can when it wrote the entry (the process of the lead, for its own sends and the sends of in-process teammates), or when it is a teammate in its own pane that accepted the signature of the lead on the entry. | Type: `boolean`. `false` means this process could not check the entry, or the entry failed the check. The process of the lead cannot check the send of a pane teammate. A pane teammate can check only what its lead sends, with a key from that lead. A failed check is no proof of forgery: after a restart, such a teammate fails every entry that its lead writes.[^verified] |
 
 ### `SessionReceiveResult`
 
@@ -157,7 +157,7 @@ What a `session.start` hook returns and what `next(e)` resolves to: `{ cwd }`, w
 
 ### `SessionStopInput`
 
-The input of `session.stop`. Since `2.1.326`, it tells what the Stop of the person found. It is the record of the engine: a hook observes it, and `next(e)` passes it on. Used by `session.stop`, `$.session.stop`.
+The input of `session.stop`. It tells what the Stop of the person found. It is the record of the engine: a hook observes it, and `next(e)` passes it on. Used by `session.stop`, `$.session.stop`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |

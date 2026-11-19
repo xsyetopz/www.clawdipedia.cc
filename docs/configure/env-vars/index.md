@@ -4,7 +4,7 @@ description: How Claude Code reads environment variables, which value wins, how 
 sidebar_position: 1
 ---
 
-An environment variable is a named setting that a program reads when it starts. Claude Code `2.1.327` reads well over a thousand of them. This section lists 1675 variables that you can use and splits them into groups, so you can find them. The [official docs](https://code.claude.com/docs/en/env-vars) list a few of them. Only the program shows most of them.
+An environment variable is a named setting that a program reads when it starts. Claude Code reads many of them. This section lists the variables that you can use and splits them into groups, so you can find them. The [official docs](https://code.claude.com/docs/en/env-vars) list a few of them. Only the program shows most of them.
 
 Set a variable in your shell, or under the `env` key of `~/.claude/settings.json`, `.claude/settings.json`, `.claude/settings.local.json`, or managed settings. To change a value, edit it, then restart `claude`. When the file changes, values in a settings `env` block also apply to a running session.
 
@@ -127,7 +127,7 @@ Every group page has the same columns.
 | Notes | Where it applies, and whether a project `env` block can set it before you trust the folder. |
 
 :::warning
-Treat <Undocumented /> and <Gated /> rows with care. They work in `2.1.326`. Nothing promises that they work in the next release.
+Treat <Undocumented /> and <Gated /> rows with care. They work in `2.1.328`. Nothing promises that they work in the next release.
 :::
 
 Some rows cite a probe. A probe is a run of the real binary against a local stub. It shows what the variable changed in the request. No model call leaves the machine in a probe. A run with no visible effect does not prove that a variable does nothing.

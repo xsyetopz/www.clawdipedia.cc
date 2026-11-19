@@ -40,17 +40,17 @@ Claude Code fills only names in `allowedEnvVars` into headers. Other references 
 | --- | --- | --- | --- |
 | `command` | <Documented /> | Runs a shell command or an executable. Input on `stdin`. Result by exit code, `stdout`, and `stderr`. | All 33 events. |
 | `http` | <Documented /> | Sends the input as JSON in a POST to a URL. The result is the response body, and needs a 2xx status. | 31 events. Not `SessionStart` and not `Setup`. |
-| `mcp_tool` | <Documented /> | Calls a tool on a configured MCP server. Claude Code reads the text result like `stdout`. A result with `isError: true` is a non-blocking error. A `PreToolUse` hook on a stdio or HTTP MCP server whose answer is over 16 MiB now makes Claude Code refuse the tool call, not skip the hook. The MCP answer limit is `16777216` bytes, and the hook error path reports a message from the server that was too large.[^mcp-limit] | 33 events. Claude Code skips it on `Setup`, and on `SessionStart` when Claude Code starts. |
+| `mcp_tool` | <Documented /> | Calls a tool on a configured MCP server. Claude Code reads the text result like `stdout`. A result with `isError: true` is a non-blocking error. The hook error path reports a message from the server that was too large.[^mcp-limit] | 33 events. Claude Code skips it on `Setup`, and on `SessionStart` when Claude Code starts. |
 | `prompt` | <Documented /> | One model call that returns `ok`. | 12 events, plus `PermissionRequest`. |
 | `agent` | <Documented /> <Experimental /> | A subagent that checks a condition. Up to 50 turns. Experimental, and the docs say it may change. | 12 events. Not `PermissionRequest`. |
 | `callback` | <Undocumented /> | A function that an SDK host or a mod registers. | Events that run device hooks. It is not a config key. |
-| `script` | <Differs note="Rejected in 2.1.327. Do not use." /> | Some text names this type. | `2.1.327` rejects it with `Unknown hook type "script"`. |
+| `script` | <Differs note="Rejected. Do not use." /> | Some text names this type. | Claude Code rejects it with `Unknown hook type "script"`. |
 
 The 12 events of `prompt` and `agent` are `PermissionDenied`, `PostToolBatch`, `PostToolUse`, `PostToolUseFailure`, `PreToolUse`, `Stop`, `SubagentStop`, `TaskCompleted`, `TaskCreated`, `TeammateIdle`, `UserPromptExpansion`, and `UserPromptSubmit`.
 `SessionStart` and `Setup` accept `command` and `mcp_tool` only.
 
 :::warning
-A `script` hook never runs in `2.1.327`. The hook schema lists only `command`, `prompt`, `agent`, `http`, and `mcp_tool`.[^script-probe]
+A `script` hook never runs. The hook schema lists only `command`, `prompt`, `agent`, `http`, and `mcp_tool`.[^script-probe]
 :::
 
 ## Common Fields
@@ -69,10 +69,10 @@ A `script` hook never runs in `2.1.327`. The hook schema lists only `command`, `
 | --- | --- | --- | --- |
 | `command` | <Documented /> | The command string, or the program to run when you set `args`. | Shell form uses `sh -c`, Git Bash, or PowerShell. |
 | `args` | <Documented /> | An argument list for exec form. | No shell runs. Claude Code replaces placeholders in `command` and in each element. |
-| `shell` | <Documented /> | `bash` or `powershell`. | Claude Code ignores it when you set `args`. With `powershell`, Claude Code adds `; if (-not $?) { if ($LASTEXITCODE -eq 2) { exit 2 } }` after the command, so exit code 2 blocks. It does not add it for `PermissionRequest`. It also does not add it when the command starts with `using`, `param(`, a `[type]` cast or attribute, or a named block, and also has a `begin`, `process`, `end`, `clean`, or `dynamicparam` block. Before `2.1.316`, any of those starts was enough to leave it out, so exit code 2 did not block.[^powershell-suffix] |
+| `shell` | <Documented /> | `bash` or `powershell`. | Claude Code ignores it when you set `args`. With `powershell`, Claude Code adds `; if (-not $?) { if ($LASTEXITCODE -eq 2) { exit 2 } }` after the command, so exit code 2 blocks. It does not add it for `PermissionRequest`. It also does not add it when the command starts with `using`, `param(`, a `[type]` cast or attribute, or a named block, and also has a `begin`, `process`, `end`, `clean`, or `dynamicparam` block.[^powershell-suffix] |
 | `async` | <Documented /> | Runs in the background. | Claude Code does not enforce `timeout`. The hook cannot block. Output arrives on the next turn. |
 | `asyncRewake` | <Documented /> | A background run that wakes the model on exit 2. | `stderr` (or `stdout` if `stderr` is empty) becomes a system reminder. `timeout` still applies. Implies `async`. |
-| `onFailure` | <Documented /> | `continue` or `block`. | Needs `2.1.295`. See [Configuration](configuration.md#failure-handling). Also works on `http`. |
+| `onFailure` | <Documented /> | `continue` or `block`. | See [Configuration](configuration.md#failure-handling). Also works on `http`. |
 | `rewakeMessage` | <Undocumented /> | A custom prefix for the system reminder of `asyncRewake`. | An internal field. |
 | `rewakeSummary` | <Undocumented /> | A one-line summary that Claude Code shows to you for `asyncRewake`. | An internal field. Default text is `Stop hook feedback`. |
 | `cloud` | <Undocumented /> | `device` or `skip` for cloud sessions that this machine drives. | An internal field. An unknown value reads as `skip`. Also works on `http`. |
@@ -82,7 +82,7 @@ A `script` hook never runs in `2.1.327`. The hook schema lists only `command`, `
 | Field | Status | What it does | Notes |
 | --- | --- | --- | --- |
 | `url` | <Documented /> | The POST target. | Must pass `allowedHttpHookUrls` when that setting exists. |
-| `headers` | <Documented /> | Extra request headers. | Claude Code replaces `$VAR` and `${VAR}` only for names in `allowedEnvVars`. Since `2.1.326`, it drops `Content-Length` and `Transfer-Encoding` and writes a warning to the debug log, because it works out the request length from the body.[^headers] |
+| `headers` | <Documented /> | Extra request headers. | Claude Code replaces `$VAR` and `${VAR}` only for names in `allowedEnvVars`. It drops `Content-Length` and `Transfer-Encoding` and writes a warning to the debug log, because it works out the request length from the body.[^headers] |
 | `allowedEnvVars` | <Documented /> | Names that Claude Code may replace in headers. | Other references become empty strings. `httpHookAllowedEnvVars` narrows the list. |
 | `onFailure` | <Documented /> | `continue` or `block`. | A non-2xx status or a connection error counts as a failure. |
 
@@ -93,7 +93,7 @@ A `script` hook never runs in `2.1.327`. The hook schema lists only `command`, `
 | `server` | <Documented /> | The name of a configured MCP server. | Plugin servers use `plugin:<plugin>:<server>`. |
 | `tool` | <Documented /> | The tool to call. | A string. |
 | `input` | <Documented /> | The tool arguments. | String values accept `${path}` from the hook input, such as `${tool_input.file_path}`. |
-| `onFailure` | <Documented /> | `continue` or `block`. | Since `2.1.328`, `"block"` works on `mcp_tool` hooks. See [Configuration](configuration.md#failure-handling).[^mcp-onfailure] |
+| `onFailure` | <Documented /> | `continue` or `block`. | `"block"` works on `mcp_tool` hooks. See [Configuration](configuration.md#failure-handling).[^mcp-onfailure] |
 
 On events that can block, Claude Code waits for a server that is still connecting. The wait lasts at most `MCP_TIMEOUT` and the hook `timeout`. On observer events, it does not wait.
 
@@ -140,7 +140,7 @@ All rows are <Undocumented />, except where a note says otherwise.[^calls]
 
 ## Prompt and Agent Concurrency
 
-Since `2.1.312`, Claude Code limits how many `prompt` and `agent` hooks run at the same time. The limits do not cover `command`, `http`, or `mcp_tool` hooks.
+Claude Code limits how many `prompt` and `agent` hooks run at the same time. The limits do not cover `command`, `http`, or `mcp_tool` hooks.
 
 | Limit | Status | What it does | Notes |
 | --- | --- | --- | --- |
@@ -163,13 +163,13 @@ Cloud sessions forward only your own hooks of kind `command` and `http` from use
 ## Sources
 
 [^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the program (handler schemas for `command` at `chunk-jkpzhr7r.js:19808`, `prompt` at `chunk-jkpzhr7r.js:21432`, `mcp_tool` at `chunk-jkpzhr7r.js:22347`, `http` at `chunk-jkpzhr7r.js:24148`, and `agent` at `chunk-jkpzhr7r.js:25375`).
-[^mcp-limit]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-kvtp2zzs.js:1338` for the limit and `chunk-56bhcxay.js:4204891` for the hook error path.
-[^script-probe]: The program, `chunk-jkpzhr7r.js:21789` for the schema and `chunk-jkpzhr7r.js:28059` for the message.
+[^mcp-limit]: The program, `chunk-56bhcxay.js:4204891`.
+[^script-probe]: The program, `chunk-jkpzhr7r.js:22347` for the schema and `chunk-jkpzhr7r.js:28059` for the message.
 [^powershell-suffix]: The program, `chunk-56bhcxay.js:4268865` and `chunk-56bhcxay.js:1157772`.
-[^headers]: The program, `chunk-56bhcxay.js:4195555`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^headers]: The program, `chunk-56bhcxay.js:4195555`.
 [^stop-wrap]: The program, `chunk-56bhcxay.js:4174767`.
 [^stop-cap]: The program, `chunk-2b3eg071.js:296619`, for the warning and for the main-session-only notice.
 [^calls]: The program, `chunk-56bhcxay.js:4174767` for the `prompt` hook and `chunk-56bhcxay.js:4186875` for the `agent` hook.
-[^concurrency]: The program, `chunk-56bhcxay.js:69771-69781` and `chunk-56bhcxay.js:69818-69838`: the constants 12, 24, and 12 and the `model hooks` and `overdue model hooks` counts. We did not trace that a subagent shares the session host of its parent.
+[^concurrency]: The program, `chunk-56bhcxay.js:1261936`: the constants 12, 24, and 12 and the `model hooks` and `overdue model hooks` counts. We did not trace that a subagent shares the session host of its parent.
 [^cloud]: We read these rules in the program, `chunk-20bv8pca.js:790032`. We did not run them, because a cloud session needs a login.
 [^mcp-onfailure]: The program, `chunk-56bhcxay.js:68285`. [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).

@@ -39,7 +39,7 @@ Fires when `TaskCreate` makes a task. It has no matcher. It does not fire in a s
 | `task_id`, `task_subject` | <Documented /> | Input | The task ID and title. |
 | `task_description`, `teammate_name` | <Documented /> | Input | Optional detail and the creator. May be absent. |
 | `team_name` | <Documented /> | Input | The session team name. Deprecated, to be removed. |
-| `agent_id` | <Documented /> | Input | The creating subagent or teammate. Needs `2.1.290`. May be absent. |
+| `agent_id` | <Documented /> | Input | The creating subagent or teammate. May be absent. |
 
 ### `TaskCompleted`
 
@@ -48,7 +48,7 @@ Fires when a task changes to done, or when a teammate ends its turn with open ta
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
 | `task_id`, `task_subject`, `task_description`, `teammate_name` | <Documented /> | Input | As in `TaskCreated`. |
-| `team_name`, `agent_id` | <Documented /> | Input | The deprecated team name, and the acting agent. `agent_id` needs 2.1.290. |
+| `team_name`, `agent_id` | <Documented /> | Input | The deprecated team name, and the acting agent. |
 
 ### `TeammateIdle`
 
@@ -57,7 +57,7 @@ Fires when an agent team teammate is about to go idle. It has no matcher. Exit 2
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
 | `teammate_name`, `team_name` | <Documented /> | Input | The teammate and the deprecated team name. |
-| `agent_id` | <Documented /> | Input | The in-process teammate. Needs `2.1.290`. May be absent. |
+| `agent_id` | <Documented /> | Input | The in-process teammate. May be absent. |
 
 ## Other Events
 
@@ -75,7 +75,6 @@ These events cover compaction, model switches, MCP questions, and worktrees. Non
 
 ### `PreModelSwitch` And `PostModelSwitch`
 
-Both need `2.1.251`.
 The matcher is the canonical name of `to_model`. Handlers: `command`, `http`, `mcp_tool`. For how a model is chosen, see [Models](../../how-it-works/models.md).
 
 `PreModelSwitch` fires before a requested switch: `/model`, the picker, `/config`, fast mode, or `set_model`.
@@ -104,7 +103,7 @@ An elicitation is a question that an MCP server asks you. The matcher for both e
 | `mcp_server_name`, `message` | <Documented /> | `Elicitation`, input | The server and the prompt text. |
 | `mode`, `url`, `elicitation_id`, `requested_schema` | <Documented /> | `Elicitation`, input | `form` or `url` mode, the URL, the ID, and the form schema. Optional. |
 | `action`, `content` | <Documented /> | `Elicitation`, output | `accept`, `decline`, `cancel`, and the form values. Read only on exit 0. A hook answer skips `ElicitationResult` hooks. A decline beats an accept. |
-| `decision: "block"` | <Documented /> | `Elicitation`, output | Declines. Works from `2.1.284`. Beats `action`. |
+| `decision: "block"` | <Documented /> | `Elicitation`, output | Declines. Beats `action`. The program treats `decision: "block"` as a block (`chunk-56bhcxay.js:4374312`), and an Elicitation block becomes a decline (`chunk-xtedtr26.js:3982`). |
 | `action`, `content`, `mode`, `elicitation_id` | <Documented /> | `ElicitationResult`, input | Your answer. `action` is `accept`, `decline`, or `cancel`. |
 | `action`, `content` | <Documented /> | `ElicitationResult`, output | Change or block the answer. `content` replaces the whole object. Claude Code ignores an output with no `action`. `cancel` still sends your values. |
 

@@ -33,7 +33,7 @@ The last column says where the key may appear: the manifest, a marketplace entry
 | `icon`, `documentationUrl`, `supportUrl`, `privacyPolicyUrl`, `termsOfServiceUrl` | <Documented /> | Directory listing data. | Claude Code also ignores these names without error: `screenshots`, `classification`, `privacy_policy`, `privacyPolicy`, `support`, `bugs`, `terms_of_service`, `docs`. | Manifest only |
 | `defaultEnabled` | <Documented /> | Sets the start state when the user chose nothing. | Default `true`. The entry value wins. `enabledPlugins` always wins. | Both |
 | `dependencies` | <Documented /> | Lists plugins that must be enabled too. | Each item is `"name"`, `"name@marketplace"`, or an object. Claude Code also accepts a trailing `@^range`. It strips the range.[^schema] | Both |
-| `engines` | <Undocumented /> | Names the hosts the plugin runs on. | `engines["claude-code"]` is a semver range such as `>=2.1.322`. Outside the range the plugin is not installed, updated, or loaded. Other keys are ignored. An invalid range is reported as `engine-range-invalid`.[^engines] | Manifest |
+| `engines` | <Undocumented /> | Names the hosts the plugin runs on. | `engines["claude-code"]` is a semver range such as `>=2.1.328`. Outside the range the plugin is not installed, updated, or loaded. Other keys are ignored. An invalid range is reported as `engine-range-invalid`.[^engines] | Manifest |
 | `settings` | <Documented /> | Applies settings while the plugin is enabled. | Only `agent` and `subagentStatusLine` take effect. Both are deprecated and will stop applying in a future release.[^settings-key] For each key, the last enabled plugin that sets it wins. If Claude Code cannot create the plugin data directory, the plugin `subagentStatusLine` command does not run.[^status-line] A `settings.json` in the plugin root wins. | Manifest |
 | `userConfig` | <Documented /> | Asks the user for values when the plugin is enabled. | See [`userConfig` Option Keys](#userconfig-option-keys). | Manifest |
 | `channels` | <Documented /> | Declares message channels. | Items have `server`, `displayName`, and `userConfig`. Strict. | Manifest |
@@ -47,7 +47,7 @@ The last column says where the key may appear: the manifest, a marketplace entry
 | `outputStyles` | <Documented /> | Lists style files or folders. | Replaces `output-styles/`. | Manifest |
 | `workflows` | <Documented /> | Lists workflow `.js` files or folders. | Replaces `workflows/`. | Manifest |
 | `experimental.themes` | <Documented /> <Experimental /> | Lists theme files or folders. | Replaces `themes/`. A top-level `themes` key still loads. It gives a warning. | Manifest |
-| `experimental.monitors` | <Documented /> <Experimental /> | Declares background watchers. | Items: `name`, `command`, `description`, `when` (`always` or `on-skill-invoke:<skill>`). Interactive sessions only. Since `2.1.310`, they also run on Bedrock, Vertex, and Foundry, and with telemetry or nonessential traffic off.[^v310] | Manifest |
+| `experimental.monitors` | <Documented /> <Experimental /> | Declares background watchers. | Items: `name`, `command`, `description`, `when` (`always` or `on-skill-invoke:<skill>`). Interactive sessions only. | Manifest |
 | `experimental.evals` | <Documented /> <Experimental /> | Names the eval folder. | Default `evals/`. `claude plugin eval` uses it. | Manifest |
 | `experimental.syntaxHighlighting.hljsLanguages` | <Undocumented /> <Experimental /> | Adds highlight.js languages. | Up to 16 items. `id` matches `^[a-z][a-z0-9_-]*$` (64 characters at most). `remote` is `npm:<pkg>[@ver]` or `github:<owner>/<repo>@<ref>#<path>.js`. `integrity` is an SRI hash with `sha256-`, `sha384-`, or `sha512-`. Strict. | Manifest |
 | `binaries` | <Undocumented /> | Lists files fetched into `bin/` at install. | A map of base name to `{ "sha256": <64 hex> }`. At most 64 entries. Names match `^[a-z0-9](?:[a-z0-9._-]*[a-z0-9_-])?$`. The env var `CLAUDE_CODE_PLUGIN_BINARY_ASSETS` also exists. | Manifest |
@@ -77,7 +77,7 @@ The same option shape works inside `channels`.
 | `required`, `default` | <Documented /> | Say whether an empty value is allowed, and what the start value is. | A default is a string, number, boolean, or array of strings. |
 | `multiple`, `sensitive` | <Documented /> | Allow a list, or mark a secret. | A `sensitive` value goes to secure storage, not to settings. |
 | `min`, `max` | <Documented /> | Bound a number. | `number` type only. |
-| `options` | <Documented /> | Gives fixed choices. | `string` type only, not `multiple`, not `sensitive`. Each choice is 1 to 64 characters. Needs Claude Code `2.1.271` or later. |
+| `options` | <Documented /> | Gives fixed choices. | `string` type only, not `multiple`, not `sensitive`. Each choice is 1 to 64 characters. |
 
 ## Components and Layout
 
@@ -159,7 +159,7 @@ flowchart TD
   F --> G["Ask for <code>userConfig</code> values"]
 ```
 
-Since `2.1.326`, a malformed display field, such as `author` or `homepage`, no longer stops an enabled plugin from loading. Claude Code ignores the field. The plugin loads with its hooks and MCP servers, and `/plugin` and `claude plugin list` show a note.[^display-field] See [Plugin Commands](cli.md#how-it-works) for the note.
+A malformed display field, such as `author` or `homepage`, does not stop an enabled plugin from loading. Claude Code ignores the field. The plugin loads with its hooks and MCP servers, and `/plugin` and `claude plugin list` show a note.[^display-field] See [Plugin Commands](cli.md#how-it-works) for the note.
 
 ## Related Pages
 
@@ -174,6 +174,5 @@ Since `2.1.326`, a malformed display field, such as `author` or `homepage`, no l
 [^engines]: The program, `chunk-jkpzhr7r.js:54138` and `chunk-a3rr42d2.js:24706`.
 [^settings-key]: The program, `chunk-a3rr42d2.js:148-154`.
 [^status-line]: The program, `chunk-56bhcxay.js:5597368` and `chunk-56bhcxay.js:5597567`.
-[^v310]: [`2.1.310` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.310).
 [^icon]: The program, `chunk-yj3yxnry.js:4680` and `chunk-yj3yxnry.js:33626`.
-[^display-field]: The program, `chunk-56bhcxay.js:276004-276143` and `chunk-a3rr42d2.js:571`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^display-field]: The program, `chunk-a3rr42d2.js:20037` (the note text) and `chunk-4prvwasd.js:26520` (the changelog line).

@@ -26,7 +26,7 @@ Handlers: all five types.
 | `tool_use_id` | <Documented /> | Input | The tool call ID. |
 | `permissionDecision` | <Documented /> | Output, in `hookSpecificOutput` | `allow`, `deny`, `ask`, or `defer`. `allow` skips the prompt but not deny or ask rules. Order of strength: `deny`, then `defer`, then `ask`, then `allow`. `defer` works only in `-p` with one tool call. |
 | `permissionDecisionReason` | <Documented /> | Output, in `hookSpecificOutput` | The reason text. For `ask` it shows in the prompt. For `deny` it goes to Claude. Otherwise it goes to the debug log. |
-| `updatedInput` | <Documented /> | Output, in `hookSpecificOutput` | Replaces the whole tool input. Rules and background checks use the new input. Needed with `allow` for `AskUserQuestion` and `ExitPlanMode`. Claude Code ignores it with `defer`. When several hooks answer one call, the last `updatedInput` wins, and the strongest decision wins. Since `2.1.326`, the release note says Claude Code keeps the rewrite in more of these cases.[^several-hooks] |
+| `updatedInput` | <Documented /> | Output, in `hookSpecificOutput` | Replaces the whole tool input. Rules and background checks use the new input. Needed with `allow` for `AskUserQuestion` and `ExitPlanMode`. Claude Code ignores it with `defer`. When several hooks answer one call, the last `updatedInput` wins, and the strongest decision wins. Claude Code keeps the rewrite in more of these cases.[^several-hooks] |
 | `additionalContext` | <Documented /> | Output, in `hookSpecificOutput` | Text placed next to the tool result. Claude Code ignores it with `defer`. |
 | `permissionDisplay` | <Undocumented /> | Output, in `hookSpecificOutput` | Words for a permission card. For the desktop host only. An object with `title` (200 characters), `description` (2000), and `displayName` (64). Claude Code ignores it, with a debug line, if it cannot show the text. |
 | Top-level `decision` and `reason` | <Differs note="Deprecated for this event. The program schema accepts the enum on all events." /> | Output | `approve` maps to `allow`. `block` maps to `deny`. Use `permissionDecision` instead. |
@@ -45,7 +45,7 @@ The tool names link to [Tools](../../reference/tools/index.md), which holds the 
 | [`Read`](../../reference/tools/files.md) | <Documented /> | `file_path`, `offset`, `limit` |
 | [`Glob`](../../reference/tools/files.md) | <Documented /> | `pattern`, `path` |
 | [`Grep`](../../reference/tools/files.md) | <Documented /> | `pattern`, `path`, `glob`, `output_mode`, `-i`, `multiline` |
-| [`WebFetch`](../../reference/tools/shell-and-web.md) | <Documented /> <Gated note="CLAUDE_CODE_DISABLE_WEB_FETCH=1 turns it off" /> | `url`, `prompt`, `offset` (2.1.290) |
+| [`WebFetch`](../../reference/tools/shell-and-web.md) | <Documented /> <Gated note="CLAUDE_CODE_DISABLE_WEB_FETCH=1 turns it off" /> | `url`, `prompt`, `offset` |
 | [`WebSearch`](../../reference/tools/shell-and-web.md) | <Documented /> <Gated note="off for the gateway provider. Vertex depends on the model" /> | `query`, `allowed_domains`, `blocked_domains` |
 | [`Agent`](../../reference/tools/agents-and-tasks.md) | <Documented /> | `prompt`, `description`, `subagent_type`, `model` |
 | [`AskUserQuestion`](../../reference/tools/agents-and-tasks.md) | <Documented /> | `questions`, and `answers` (set only through `updatedInput`) |
@@ -87,7 +87,7 @@ Handlers: `command`, `http`, `mcp_tool`, and `prompt`. Claude Code skips an `age
 Fires only when auto mode denies a call, including a denial with no classifier verdict.
 It does not fire for manual denials, `PreToolUse` blocks, or deny rules.
 Claude Code ignores the exit code and `stderr`.
-In the interactive screen, an auto mode denial fires it and a manual "No" does not. The hook gets `reason`, the tool does not run, and the turn goes on. With `retry: true`, the next model request gets the extra text `The PermissionDenied hook indicated you may retry this tool call.` after the denied tool result. Without `retry`, that text is absent. `PermissionRequest` does not fire, and `systemMessage` does not show. Claude Code adds the retry text only when the denial has a verdict and does not end the turn.[^denied-probe] With no verdict through a custom base URL, Claude Code shows the dialog `Auto mode can't check actions in this session` and `PermissionDenied` does not fire.
+In the interactive screen, an auto mode denial fires it and a manual "No" does not. The hook gets `reason`, the tool does not run, and the turn goes on. With `retry: true`, the next model request gets the extra text `The PermissionDenied hook indicated you may retry this tool call.` after the denied tool result. Without `retry`, that text is absent. `PermissionRequest` does not fire, and `systemMessage` does not show. Claude Code adds the retry text only when the denial has a verdict and does not end the turn.[^denied-code] With no verdict through a custom base URL, Claude Code shows the dialog `Auto mode can't check actions in this session` and `PermissionDenied` does not fire.
 This event accepts all five handler types. Claude Code drops output from `prompt` and `agent`.
 
 | Field | Status | Direction | What it does |
@@ -116,11 +116,11 @@ It does not see writes made by `Bash` or by outside processes. Use `FileChanged`
 | `additionalContext` | <Documented /> | Output, in `hookSpecificOutput` | Text next to the result. Claude Code does not deliver it for async hooks. |
 | `updatedToolOutput` | <Documented /> | Output, in `hookSpecificOutput` | Replaces what Claude sees. Must match the tool output shape. For built-in tools, Claude Code ignores a bad shape. The tool already ran. |
 | `updatedMCPToolOutput` | <Documented /> | Output, in `hookSpecificOutput` | The same, for MCP tools only. Prefer `updatedToolOutput`. |
-| `classifierContext` | <Documented /> | Output, in `hookSpecificOutput` | A note for the auto mode classifier. Needs 2.1.236. At most 2,000 characters for one call. Dropped for async hooks and read-only calls. Treated as unverified context. |
-| `tool_response.bashEditDiff` | <Documented /> | Input | Files that a `Bash` run changed. Needs 2.1.269, a public beta, and the setting `bashEditDiffEnabled`. Keys: `changedFiles` (200), `files` (5), `moreFiles`, `unavailable`, `skipped`, `shared`. |
+| `classifierContext` | <Documented /> | Output, in `hookSpecificOutput` | A note for the auto mode classifier. At most 2,000 characters for one call. Dropped for async hooks and read-only calls. Treated as unverified context. |
+| `tool_response.bashEditDiff` | <Documented /> | Input | Files that a `Bash` run changed. Needs the setting `bashEditDiffEnabled`. Keys: `changedFiles` (200), `files` (5), `moreFiles`, `unavailable`, `skipped`, `shared`.[^bash-diff] |
 | `tool_response` of `Agent` | <Documented /> | Input | `status` (`completed` or `async_launched`), `agentId`, `content`, `resolvedModel`, `modelsUsed`, `totalTokens`, `totalDurationMs`, `totalToolUseCount`, `usage`, and `outputFile` when the agent starts in the background. |
 | `tool_response` of `ExitPlanMode` | <Documented /> | Input | `plan` and `filePath`. |
-| `SubagentHandback` tool | <Documented /> | Matcher | The tool that carries a subagent report in auto mode. Match it to read `tool_input.message`. Needs 2.1.271. |
+| `SubagentHandback` tool | <Documented /> | Matcher | The tool that carries a subagent report in auto mode. Match it to read `tool_input.message`. |
 
 ### `PostToolUseFailure`
 
@@ -149,7 +149,7 @@ Exit 2, `decision: "block"`, or `continue: false` stops the loop.
 
 ## `PostToolUse` `tool_response` Shapes
 
-The `tool_response` field holds what each tool returned. It is also the shape that `updatedToolOutput` replaces.[^shapes-probe]
+The `tool_response` field holds what each tool returned. It is also the shape that `updatedToolOutput` replaces.[^shapes-code]
 
 | Tool | Status | `tool_response` |
 | --- | --- | --- |
@@ -162,20 +162,13 @@ The `tool_response` field holds what each tool returned. It is also the shape th
 | `ListAgents` | <Undocumented /> | `listing` (text), `sections`, and `notes`. |
 | `CronCreate` | <Undocumented /> | `id`, `humanSchedule`, `recurring`, `durable`, and `nextFireAt`. |
 | `CronList` | <Undocumented /> | `jobs`. |
-| `Read` (notebook) | <Undocumented /> | `type` (`notebook`) and `file` with `filePath` and `cells` (items with `cellType`, `source`, `cell_id`, and `language`). Seen on 2.1.319. |
-| `Glob` | <Undocumented /> | `filenames`, `durationMs`, `numFiles`, `truncated`, `totalMatches`, and `countIsComplete`. Seen on 2.1.319. |
-| `Grep` (`files_with_matches`) | <Undocumented /> | `mode`, `filenames`, `numFiles`, and `totalFiles`. Seen on 2.1.319. |
-| `NotebookEdit` | <Undocumented /> | `new_source`, `old_source`, `cell_type`, `language`, `edit_mode`, `cell_id`, `error` (empty), `notebook_path`, `original_file`, and `updated_file`. Seen on 2.1.319, after a `Read` of the notebook. |
-| `WebSearch` | <Undocumented /> | `query`, `results`, `durationSeconds`, and `searchCount`. Seen on 2.1.319 against the stub, so `results` held the stub text and `searchCount` was `0`. |
+| `Read` (notebook) | <Undocumented /> | `type` (`notebook`) and `file` with `filePath` and `cells` (items with `cellType`, `source`, `cell_id`, and `language`). |
+| `Glob` | <Undocumented /> | `filenames`, `durationMs`, `numFiles`, `truncated`, `totalMatches`, and `countIsComplete`. |
+| `Grep` (`files_with_matches`) | <Undocumented /> | `mode`, `filenames`, `numFiles`, and `totalFiles`. |
+| `NotebookEdit` | <Undocumented /> | `new_source`, `old_source`, `cell_type`, `language`, `edit_mode`, `cell_id`, `error` (empty), `notebook_path`, `original_file`, and `updated_file`. |
+| `WebSearch` | <Undocumented /> | `query`, `results`, `durationSeconds`, and `searchCount`. |
 
-The interactive screen gives the same shapes for `Bash`, `Read`, `Write`, and `Edit`, with one difference: the `Edit` result after a `Read` has no `contentNotInModelContext` key. An MCP tool's `tool_response` is the array of content blocks the server returned (`[{"type":"text","text":"echo:OK"}]`), and the hook input has `mcp_server`. Every `PostToolUse` input has `hook_event_name`, `tool_name`, `tool_input`, `tool_response`, `tool_use_id`, and `duration_ms`. On `2.1.305`, an `Edit` of a file that was never read is not an error, in `acceptEdits` and in the default mode. The file changes, `PostToolUse` fires, and `PostToolUseFailure` does not. That `tool_response` has `contentNotInModelContext: true`.[^interactive-shapes] See [Interactive Probes](../../reference/probes.md#interactive-probes).
-
-On `2.1.319` in `-p`, these results do not show in the table:[^third-probe]
-
-- `WebFetch` of `example.com` failed the domain check, so only `PostToolUseFailure` fired, with `is_interrupt: false` and the `error` `Unable to verify if domain example.com is safe to fetch. This may be due to network restrictions or enterprise security policies blocking claude.ai.`
-- `NotebookEdit` with no `Read` of the notebook first got the `tool_result` error `File has not been read yet. Read it first before writing to it.` Neither `PostToolUse` nor `PostToolUseFailure` fired.
-- `--allowedTools Glob` added `Glob` and `Grep` to the request tool list. Without it, the `-p` tool list had neither.
-- A `Glob` hook that returned `updatedToolOutput` with `filenames: ["REPLACED.txt"]`, `durationMs`, `numFiles`, and `truncated` changed the `tool_result` in the next request to `REPLACED.txt`. A hook that returned `{"bogus": "REPLACED"}` changed nothing: the model got `a.txt`, the real match. The ignored value was still written to the transcript.
+Every `PostToolUse` input has `hook_event_name`, `tool_name`, `tool_input`, `tool_response`, `tool_use_id`, and `duration_ms`. See [Interactive Probes](../../reference/probes.md#interactive-probes).
 
 ## Related Pages
 
@@ -186,8 +179,7 @@ On `2.1.319` in `-p`, these results do not show in the table:[^third-probe]
 ## Sources
 
 [^interactive]: Interactive probe on the `PermissionRequest` hook.
-[^denied-probe]: On `2.1.319`, the stub gave the server-side check a `flagged` verdict for a `curl` call. Probe cases `pty.hooks.permissiondenied.auto` and `pty.hooks.permissiondenied.retry`. The hook got `reason: "The server-side auto mode classifier judged this action dangerous (it gave no explanation)"`. The program, `chunk-56bhcxay.js:4867920`.
-[^shapes-probe]: A `PostToolUse` command hook logged its stdin in `-p` on `2.1.305`, with one scripted call per tool.
-[^interactive-shapes]: A second probe ran the same hook in the interactive screen on `2.1.305` with `acceptEdits` and one scripted call per tool.
-[^third-probe]: A third probe on `2.1.319` in `-p` ran `Read` of a notebook, `Glob`, `Grep`, `NotebookEdit`, `WebFetch`, and `WebSearch`, with `ENABLE_TOOL_SEARCH=false` so that no tool was deferred. The `Glob`, `Grep`, `NotebookEdit`, and `WebSearch` rows above come from it.
-[^several-hooks]: The program, `chunk-56bhcxay.js:58141-58206`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^denied-code]: The program, the retry text at `chunk-56bhcxay.js:4867700` and the reason text at `chunk-rs68es1f.js:9187`.
+[^shapes-code]: The program, for `Glob` at `chunk-56bhcxay.js:1855972`, for `Grep` at `chunk-56bhcxay.js:1863863`, for `WebSearch` at `chunk-r1yxtgw6.js:67789`, and for `NotebookEdit` at `chunk-56bhcxay.js:5638923`.
+[^bash-diff]: The program, `chunk-jkpzhr7r.js:250770`, `chunk-56bhcxay.js:5666691` and `chunk-56bhcxay.js:5754663` (the caps 5 and 200).
+[^several-hooks]: The program, `chunk-56bhcxay.js:58141-58206` and the changelog text `chunk-4prvwasd.js:57546`.

@@ -69,12 +69,12 @@ These keys appear on `user`, `assistant`, `attachment`, and `system` lines.
 ## Line Types
 
 All rows are <Undocumented />, because no docs page lists the line types.
-The key lists come from transcripts that 2.1.305 wrote on a real machine and in a stub run, and the meanings from the program and its type file where they are clear.
+The meanings come from the program and its type file where they are clear.
 
 | `type` | Main keys | Meaning |
 | --- | --- | --- |
-| `user` | `message`, `promptId`, `permissionMode`, `permissionDecision`, `toolUseResult`, `sourceToolAssistantUUID`, `origin`, `promptSource`, `turnOrigin`, `turnPosition`, `sandboxed`, `madeBy` | A user turn or a tool result. Since `2.1.307` a shell tool result can carry `sandboxed`, whether the command ran in the sandbox (the program, and probe `print.transcripts.lines`). A tool result can carry `connectorFileLines` (`chunk-56bhcxay.js:4881750`, `chunk-nvmgxppz.js:42448`): an array of rows, one per file that a connector tool fetched to or sent from the machine, which the screen shows under the result. A row has `direction` (`fetching` or `sending`), `state`, `fileName`, `bytesDone`, `bytesTotal`, `connectorName`, `fileIndex`, and `fileCount` (integer, 1 or more). `state` is `done`, `stopped`, `stopped-maybe-saved`, or an object `{refused: string, leftBehind?: true}`. The optional keys are `place` (a folder), `savedAs` (the saved path), and `groupedFiles` (integer, 2 or more, how many files the row stands for). The screen drops a row that does not match this shape. |
-| `assistant` | `message`, `requestId`, `requestRef`, `requestedModel`, `effort`, `perTurnEffort`, `advisorModel`, `apiBlockIndex`, `madeBy` | A reply of the model. Since `2.1.326` an entry can have `madeBy`, which tells what made it: `model` (the model wrote it), `input` (the entry was made from user input; the program also sets it on a `system` `local_command` entry), or `other` (Claude Code made the entry, not the model). The program counts an `other` entry as a model reply only when it is also `handedOff` (`chunk-601pwdc9.js:703` and `chunk-601pwdc9.js:1262`, `chunk-5699r6rq.js:197108`). On a `user` entry the value is `other` (the transcript schema). |
+| `user` | `message`, `promptId`, `permissionMode`, `permissionDecision`, `toolUseResult`, `sourceToolAssistantUUID`, `origin`, `promptSource`, `turnOrigin`, `turnPosition`, `sandboxed`, `madeBy` | A user turn or a tool result. A shell tool result can carry `sandboxed`, whether the command ran in the sandbox (the program, `chunk-56bhcxay.js:4628744`). A tool result can carry `connectorFileLines` (`chunk-56bhcxay.js:4881750`, `chunk-nvmgxppz.js:42448`): an array of rows, one per file that a connector tool fetched to or sent from the machine, which the screen shows under the result. A row has `direction` (`fetching` or `sending`), `state`, `fileName`, `bytesDone`, `bytesTotal`, `connectorName`, `fileIndex`, and `fileCount` (integer, 1 or more). `state` is `done`, `stopped`, `stopped-maybe-saved`, or an object `{refused: string, leftBehind?: true}`. The optional keys are `place` (a folder), `savedAs` (the saved path), and `groupedFiles` (integer, 2 or more, how many files the row stands for). The screen drops a row that does not match this shape. |
+| `assistant` | `message`, `requestId`, `requestRef`, `requestedModel`, `effort`, `perTurnEffort`, `advisorModel`, `apiBlockIndex`, `madeBy` | A reply of the model. An entry can have `madeBy`, which tells what made it: `model` (the model wrote it), `input` (the entry was made from user input; the program also sets it on a `system` `local_command` entry), or `other` (Claude Code made the entry, not the model). The program counts an `other` entry as a model reply only when it is also `handedOff` (`chunk-601pwdc9.js:703` and `chunk-601pwdc9.js:1262`, `chunk-5699r6rq.js:197108`). On a `user` entry the value is `other` (the transcript schema). |
 | `system` | `subtype`, `content`, `level`, `durationMs`, `messageCount` | A note that the model never reads. |
 | `attachment` | `attachment`, `rendered`, `renderedRole`, `renderedInHumanTurn`, `renderedBesideToolResult` | Context that Claude Code adds beside the conversation. `rendered` is the text the model sees and `renderedRole` is `user` or `system`. `renderedBesideToolResult` is `true` on a `remote_session_change` attachment, and `renderedInHumanTurn` is on a `queued_command` attachment whose text differs inside a human turn (the program). |
 | `queue-operation` | `operation`, `content`, `commandUuid`, `deliveryId`, `reason` | A prompt or command that waits in the queue. |
@@ -87,7 +87,7 @@ The key lists come from transcripts that 2.1.305 wrote on a real machine and in 
 | `ai-title` | `aiTitle` | The title that the model made for the session. |
 | `mode` | `mode` | The mode of the session. Seen value: `normal`. |
 | `permission-mode` | `permissionMode` | The permission mode. Seen value: `auto`. |
-| `cost-state` | `totalCostUSD`, `totalAPIDuration`, `totalAPIDurationWithoutRetries`, `totalToolDuration`, `totalDuration`, `totalLinesAdded`, `totalLinesRemoved`, `modelUsage`, `hasUnknownModelCost`, `startTime`, `modelCallCostUSD` | Totals for cost and time. Since `2.1.326` the line can have `modelCallCostUSD`, the cost of the model calls that the cost ledger counts apart. The program writes it only when it is above 0 (`chunk-56bhcxay.js:1293506`, `chunk-0fvmdxeb.js:32705`). Since `2.1.311`, each `modelUsage` entry also has `cacheCreationEphemeral5mInputTokens` and `cacheCreationEphemeral1hInputTokens` (see [Stream JSON Messages](../extend/headless/stream-json.md#fields-new-in-21311)). |
+| `cost-state` | `totalCostUSD`, `totalAPIDuration`, `totalAPIDurationWithoutRetries`, `totalToolDuration`, `totalDuration`, `totalLinesAdded`, `totalLinesRemoved`, `modelUsage`, `hasUnknownModelCost`, `startTime`, `modelCallCostUSD` | Totals for cost and time. The line can have `modelCallCostUSD`, the cost of the model calls that the cost ledger counts apart. The program writes it only when it is above 0 (`chunk-56bhcxay.js:1293506`, `chunk-0fvmdxeb.js:32705`). Each `modelUsage` entry also has `cacheCreationEphemeral5mInputTokens` and `cacheCreationEphemeral1hInputTokens` (see [Stream JSON Messages](../extend/headless/stream-json.md#usage-error-and-process-fields)). |
 | `atis-latch` | `atis` | The `atis` value of the session's feature-flag client, Claude Code keeps it once per conversation, so it stays the same. Claude Code sends it as the `x-cc-atis` header. Empty without a flag value (it was empty in our stub run). |
 
 Lines of types `file-history-snapshot`, `file-history-delta`, `last-prompt`, `ai-title`, `mode`, `permission-mode`, `cost-state`, `atis-latch`, and `queue-operation` carry `sessionId` but not the chain fields.
@@ -107,7 +107,7 @@ These names are in the program next to the writer. The meanings come from the wr
 | `pr-link` | `prNumber`, `prUrl`, `prRepository`, `timestamp` | Ties the session to a pull request. |
 | `bridge-session` | `bridgeSessionId`, `lastSequenceNum`, `sessionGroupingId`, owner ids | The Remote Control link. |
 | `content-replacement` | `replacements`, `agentId` | Records which large tool results a short stand-in replaced. A resume then uses the same stand-ins. |
-| `attribution-snapshot` | `messageId` | A snapshot of file-contribution data for commits. On load the program keeps only the last one and trims a large one. In `2.1.314` the program exports its writer function and no code calls it, so only older sessions hold these lines (the program). |
+| `attribution-snapshot` | `messageId` | A snapshot of file-contribution data for commits. On load the program keeps only the last one (`chunk-56bhcxay.js:702428`) and trims a large one. |
 | `fork-context-ref` | `agentId`, `parentSessionId`, `parentLastUuid`, `contextLength` | A forked agent's pointer to its parent. The fork reads the parent's lines and does not copy them. |
 | `observer-ref` | `observerTaskId`, `observerAgentType`, `agentId`, `timestamp` | An observer agent's pointer. |
 | `session-owner` | `sessionId`, `accountUuid`, `organizationUuid` | The account and organization that own the session. The program writes it only when it has an account with an `accountUuid` (`chunk-56bhcxay.js:535598`, `chunk-qar0r4mv.js:413`). |
@@ -115,7 +115,7 @@ These names are in the program next to the writer. The meanings come from the wr
 | `data-flow-incomplete` | `v`, `sessionId`, `agentId` | Marks that the records of the main loop or of an agent are not complete, for example after a server tool with a bad name (`chunk-56bhcxay.js:529738`). |
 | `derived-from` | `v`, `sessionId`, `sessions` | The sessions that this one came from. Each item has `type`, `id`, `via` (for example `clear`, `fork`, `resume`, or `import`), and can have `started`. A child process reads them from `CLAUDE_CODE_LAUNCHED_BY_SESSION_IDS` (`chunk-56bhcxay.js:537154`, `chunk-he41ebgj.js:979`). |
 | `resume-head-vouch` | `sessionId`, `sum` | A hex `sum` that vouches for `resume-head.jsonl`. The program calls this file "the side file that speeds up loading" the transcript. It writes the file in the session folder when you resume a large session file (`chunk-56bhcxay.js:682193`, `chunk-56bhcxay.js:714220`). See the conditions below the table. |
-| `progress` | `toolUseID`, `parentToolUseID`, `data` | Progress of a running tool, hook, skill, or agent. `data.type` is `hook_progress`, `tool_heartbeat`, `bash_progress`, `powershell_progress`, `agent_progress`, `agent_api_retry`, `skill_progress`, `search_results_received`, `query_update`, `workflow_log`, `workflow_phase`, `workflow_agent`, or `artifact_publish_retry`. In `2.1.327` the transcript writer drops each `progress` row before it writes, so only older session files hold these lines (`chunk-56bhcxay.js:732887` for the filter, and `chunk-56bhcxay.js:734907`, where the writer applies it to each line it writes). The schema lists only the shared fields for this type. |
+| `progress` | `toolUseID`, `parentToolUseID`, `data` | Progress of a running tool, hook, skill, or agent. `data.type` is `hook_progress`, `tool_heartbeat`, `bash_progress`, `powershell_progress`, `agent_progress`, `agent_api_retry`, `skill_progress`, `search_results_received`, `query_update`, `workflow_log`, `workflow_phase`, `workflow_agent`, or `artifact_publish_retry`. The transcript writer drops each `progress` row before it writes (`chunk-56bhcxay.js:732887` for the filter, and `chunk-56bhcxay.js:734907`, where the writer applies it to each line it writes). The schema lists only the shared fields for this type. |
 | `isolation-latch` | `side` | Records a one-time choice about where the session runs, kept for resume. |
 | `memory-mode` | `mode`, `afterUuid`, `reason`, `account` | A stamp that auto memory switched mode. One per switch. |
 | `dev-mods` | `folder` | The folder of a mod under development that the session uses. |
@@ -124,19 +124,18 @@ These names are in the program next to the writer. The meanings come from the wr
 | `line-withheld` | `bytes` | Not a stored type. When a transcript is uploaded, `{"type":"line-withheld","bytes":N}` replaces a line that could not be read or was too large. |
 | `artifact-autoreact-ledger` | `artifacts`, `accountUuid`, `v` | Bookkeeping for automatic replies to artifact comments. |
 | `relocated` | `relocatedCwd` | The working folder was moved. |
-| `summary` | `leafUuid`, `summary` | A summary line. The program reads these lines on load, and no code in `2.1.314` writes them, so only older sessions hold them. |
+| `summary` | `leafUuid`, `summary` | A summary line. The program reads these lines on load (`chunk-56bhcxay.js:410770`). |
 | `continued-in` | `continuedInSessionId` | Points to the session that continued this one. |
 | `history-suppression`, `artifact-comment-monitor` | | Also in the program's table. We read no further meaning. |
 
 The program writes the `data-flow-records`, `data-flow-incomplete`, and `derived-from` lines only when a feature flag and an organization policy allow data-flow records (`chunk-xethrx83.js:711407`).
 
-The program writes `resume-head-vouch` on `--resume` only when all of these are true (the program, `2.1.327`):
+The program writes `resume-head-vouch` on `--resume` when all of these are true (the program):
 
 - `CLAUDE_CODE_TRANSCRIPT_TAIL_LOAD` is `on` or `verify`.
 - The session file is larger than 5 MiB (`chunk-grkhn49z.js:21448`).
 - The file has a `compact_boundary` line at 4 MiB or more from the start, and no `user`, `assistant`, `system`, `attachment`, or `progress` line comes before it (`chunk-56bhcxay.js:408287`, `chunk-56bhcxay.js:420855`, `chunk-56bhcxay.js:678488`).
 - The `compact_boundary` line is at most 1 MiB (`chunk-56bhcxay.js:420855`).
-- The resume continues the same session, not a fork (`chunk-56bhcxay.js:715987`).
 
 `proactivity` and `language` are not line types. They are kinds of `attachment` (`attachment.type`). `proactivity` carries `status`, `level`, and `tools`. `language` carries the reply `language`.
 
@@ -194,7 +193,7 @@ Content block types seen: `text`, `thinking`, `tool_use` (in `assistant` lines),
 | `requestId` | The request ID from the API. |
 | `requestRef` | A reference to the matching `api-request` line. |
 | `requestedModel` | The model Claude Code asked for. The `message.model` field shows the model that answered. |
-| `effort`, `perTurnEffort` | The effort level of the call. Since `2.1.312`, `effort` is the level in force: if the conversation already holds an effort change that the model applied, the request uses that level, not a newly picked one. The program reads `effort` from `output_config.effort` of the request it built (`chunk-56bhcxay.js:3382703` and `chunk-56bhcxay.js:3195306`). Before `2.1.312` it was the newly picked level, as the [2.1.312 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312) say. |
+| `effort`, `perTurnEffort` | The effort level of the call. The program reads `effort` from `output_config.effort` of the request it built (`chunk-56bhcxay.js:3382703` and `chunk-56bhcxay.js:3195306`). |
 | `advisorModel` | The advisor model, if the advisor tool was on. |
 | `apiBlockIndex` | The index of this block in the API reply. One reply can produce several lines. |
 | `thinkingDisplay`, `thinkingDurationMs` | How Claude Code showed the thinking text, and how long it took. |
@@ -239,12 +238,11 @@ A subagent writes its lines to its own file, `<session>/subagents/agent-<agentId
 ## `attachment` Types
 
 An `attachment` line holds an object in `attachment` with a `type` key.
-Types seen in real 2.1.305 transcripts: `total_tokens_reminder`, `output_style`, `output_style_instructions`, `queued_command`, `edited_text_file`, `skill_listing`, `agent_listing_delta`, `deferred_tools_delta`, `deferred_tools_record`, `mcp_instructions_delta`, `environment`, `date`, `model`, `session_context`, `instructions`, `auto_mode`, `credential_org`, `prompt_snapshot`, `silent_turn_reminder`, `nested_memory`, and `file`. `goal_status` and `remote_session_change` were not seen there. A 2.1.305 stub run showed `total_tokens_reminder`, `output_style`, `output_style_instructions`, `nested_memory`, `skill_listing`, `agent_listing_delta`, `deferred_tools_delta`, `environment`, `date`, `model`, `session_context`, `instructions`, `auto_mode`, `prompt_snapshot`, and `remote_session_change`:
 
 | `attachment.type` | Meaning |
 | --- | --- |
-| `total_tokens_reminder` | A reminder of the token budget. Only for a model that carries the `total_tokens_reminder` capability, which Sonnet 5.5 and Opus 5.5 lost in `2.1.314`. |
-| `output_limit_note` | A note that the output hit a limit. `2.1.327` has no code that builds it. Only the reader, the renderer and the kind lists are left, so the kind still parses in an older transcript.[^output-limit-note] |
+| `total_tokens_reminder` | A reminder of the token budget. Only for a model that carries the `total_tokens_reminder` capability, (`chunk-jkpzhr7r.js:288928`). |
+| `output_limit_note` | A note that the output hit a limit. The program has no code that builds it. Only the reader, the renderer, and the kind lists remain, so the kind still parses in an older transcript.[^output-limit-note] |
 | `output_style`, `output_style_instructions` | The active output style. |
 | `queued_command` | A prompt that was queued while a turn ran. |
 | `nested_memory` | A nested `CLAUDE.md` that Claude Code loaded. |
@@ -295,20 +293,15 @@ Set `cleanupPeriodDays` low, or `CLAUDE_CODE_SKIP_PROMPT_HISTORY`, if that matte
 
 ## Exact Fields
 
-The exact fields are in this schema: `https://clawdipedia.cc/schemas/claude-code-transcript.json`, with one definition for each line `type`. The program builds this payload in code, not with a validator. So the schema comes from that code. A field marked `x-unverified` has a type that the code does not show. A field marked `x-observed` is a field that a probe saw. In `2.1.327` the schema has no `x-unverified` mark left. Of the 68 fields that had the mark in `2.1.326`:
+The exact fields are in this schema: `https://clawdipedia.cc/schemas/claude-code-transcript.json`, with one definition for each line `type`. The program builds this payload in code, not with a validator. So the schema comes from that code. A field marked `x-unverified` has a type that the code does not show. A field marked `x-observed` is a field that a probe saw.
 
-- 43 fields now have a type or an `enum`, among them `madeBy`, `apiErrorType`, `toolCallCutAtOutputLimit`, `toolDenialFromHost`, and `api-request.cut.markAddresses`. A probe line agrees with each of these types.
-- 25 fields are gone. 23 are the `data` fields of `progress` lines, because the writer drops each `progress` line (`chunk-56bhcxay.js:732887`). The other 2 are `plugin` and `id` of `system` lines, which the program does not keep in the file.
+Details of some typed fields in the program:
 
-Some typed fields need a setup that the print-mode cases do not make. The probes for `2.1.327` handle them as follows:
+- `api-request.cut.markAddresses`: the program writes `cut` with an integer `markAddresses` (`chunk-56bhcxay.js:308084`).
+- `api-request.renderedWithdrawn`: the program sets it for a rendered `file` attachment that has `overTokenLimit` (`chunk-56bhcxay.js:6016902`).
+- `attachment.attachment.hooks` is not in the schema. The display builds the `async_hook_response_batch` and `teammate_shutdown_batch` attachments (`chunk-4d4nzary.js:94980`, `chunk-4d4nzary.js:96946`).
 
-- `system.foldedUuids`, `system.noOpStreak`, and `system.streakStartedAt`: an interactive probe runs a dynamic `/loop` whose second tick reports no work. The program then writes an array of strings, an integer, and a string. The case is `transcript.loop-noop-fold` in `tools/release/probes/pty/transcript.ts`.
-- `system.compactMetadata.preCompactArtifactReadVersions`: a print-mode probe resumes a session whose last compact boundary carries an artifact read version, with `CLAUDE_CODE_ARTIFACT=1`, and runs `/compact`. The program copies the list to the new boundary as items with a string `slug` and a string `ver` (`chunk-56bhcxay.js:2358751`). The case is `compact-artifact-carry`.
-- `api-request.cut.markAddresses`: only the interactive session registers the memory cutter (`chunk-j2wfp6sf.js:1702356`). An interactive probe resumes a session that has an `account_memory_recall` attachment, which the program reads as an account memory snapshot (`chunk-4h0jyvmx.js:44856`). The probe signs in with a made-up login that has the `user:mcp_servers` scope, and a mock connector list returns one connector whose address it marks as reportable. With the tool-provenance beta on, the connector's tool carries that address (`chunk-4h0jyvmx.js:431286`), and the journal counts it (`chunk-4h0jyvmx.js:432902`). The program writes `cut` with an integer `markAddresses` (`chunk-56bhcxay.js:308013`). The cases are `transcript.memory-recall-cut` and `transcript.memory-recall-cut-address`.
-- `attachment.attachment.hooks` is gone from the schema. Only the display builds the `async_hook_response_batch` and `teammate_shutdown_batch` attachments (`chunk-4d4nzary.js:94583`, `chunk-4d4nzary.js:96742`, `chunk-4d4nzary.js:165950`), so they never go to the file.
-- `api-request.renderedWithdrawn` stays in the schema, but this release cannot write it. The writer needs an over-limit marker (`chunk-56bhcxay.js:4136967`), and the program makes that marker only for a buffer in a set that the program reads and never fills. The set is made at `chunk-56bhcxay.js:4082836` with the session store class (`chunk-j4gra6cw.js:351`). Its one use is the read `jlo.peek(n.session)?.has(...)` at `chunk-56bhcxay.js:4133275`; no code calls `.of()` on it, which is the only call that makes the set.
-
-An array field now also states the type of its items where the code shows it, for example `api-request.withheld`, `api-request.cacheControl`, `user.sandboxViolations`, and the hook lists of `stop_hook_summary` lines. Only `toolUseResult.content` keeps items of any type, because it holds the result of any tool.[^unverified-marks]
+An array field states the type of its items where the code shows it, for example `api-request.withheld`, `api-request.cacheControl`, `user.sandboxViolations`, and the hook lists of `stop_hook_summary` lines. Only `toolUseResult.content` keeps items of any type, because it holds the result of any tool.
 It lists every field of this release. Build on the fields it names. Look each one up there before you rely on it.
 
 ## Related Pages
@@ -320,5 +313,4 @@ It lists every field of this release. Build on the fields it names. Look each on
 
 ## Sources
 
-[^unverified-marks]: A count in the generated files. `schemas/claude-code-transcript.json` for `2.1.326` has 68 `"x-unverified": true` marks, and the file for `2.1.327` has none. The typed fields come from the generator input in `tools/schemas/manual/`, which the generator checks against the code on each run. The probe counts come from `tools/schemas/audit-run.ts`, run against the print-mode cases in `tools/schemas/observe/print/`.
-[^output-limit-note]: The program, `chunk-56bhcxay.js:1721582` (the kind list), `chunk-56bhcxay.js:5945210` (the reader), and `chunk-56bhcxay.js:6004019` (the renderer) of `2.1.327`.
+[^output-limit-note]: The program, `chunk-56bhcxay.js:1721582` (the kind list), `chunk-56bhcxay.js:5945210` (the reader), and `chunk-56bhcxay.js:6004019` (the renderer).

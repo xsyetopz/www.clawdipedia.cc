@@ -4,7 +4,7 @@ description: Where fast mode works, its controls, the models and Vertex regions 
 sidebar_position: 5
 ---
 
-Fast mode asks the API for faster output from the same model at a higher price. Use it when you want quicker answers and accept the higher cost. Turn it on with `/fast`, the flag `--fast-mode`, or the setting `fastMode`. Since `2.1.322`, fast mode also works on Vertex in the regions `global`, `us`, and `eu`.[^v322]
+Fast mode asks the API for faster output from the same model at a higher price. Use it when you want quicker answers and accept the higher cost. Turn it on with `/fast`, the flag `--fast-mode`, or the setting `fastMode`. Fast mode also works on Vertex in the regions `global`, `us`, and `eu`.[^v322]
 
 ## Example
 
@@ -28,7 +28,7 @@ Claude Code has one capability name for each provider that supports fast mode.[^
 | Vertex | <Differs /> | `vertex_fast_mode` | Fast mode goes on in the regions `global`, `us`, and `eu`.[^fast-vertex-regions] |
 | Each other provider | <Documented /> | None | `Fast mode is not available on this provider`.[^fast-other] |
 
-The official page [Speed Up Responses with Fast Mode](https://code.claude.com/docs/en/fast-mode#requirements), section "Requirements", says that fast mode is not available on Google Cloud's Agent Platform. Version `2.1.322` supports it there.
+The official page [Speed Up Responses with Fast Mode](https://code.claude.com/docs/en/fast-mode#requirements), section "Requirements", says that fast mode is not available on Google Cloud's Agent Platform. Claude Code `2.1.328` supports it there.
 For all other providers the text is `Fast mode is not available on this provider`.[^provider-text]
 
 ## Controls
@@ -37,7 +37,7 @@ For all other providers the text is `Fast mode is not available on this provider
 | --- | --- | --- |
 | `/fast` `[on\|off]` | <Documented /> | Without an argument, it opens a panel in the interactive terminal, and it toggles fast mode in print mode.[^fast-toggle] Another argument gives `Unknown argument "maybe". Use: /fast [on\|off]`.[^fast-bad-arg] |
 | `--fast-mode <on\|off>` | <Undocumented /> | Sets `fastMode` in the flag settings of the session.[^fast-flag] Another value does nothing. On Vertex with `--fast-mode on`, `/fast on` works in print mode, and a prompt on `claude-fable-5-2` goes out with `speed: "fast"`.[^fast-flag-case] |
-| `fastMode` | <Differs /> | On the Anthropic API, `true` in a settings file starts each session with fast mode on. On Vertex, Claude Code ignores a saved value: only a flag setting (`--settings '{"fastMode": true}'` or `--fast-mode on`) or `/fast` turns fast mode on.[^fast-mode-vertex] Since `2.1.322`, the description of the key ends with `On Vertex a saved value is ignored: use /fast each session.`[^fast-mode-text] The official docs do not state the Vertex rule. |
+| `fastMode` | <Differs /> | On the Anthropic API, `true` in a settings file starts each session with fast mode on. On Vertex, Claude Code ignores a saved value: only a flag setting (`--settings '{"fastMode": true}'` or `--fast-mode on`) or `/fast` turns fast mode on.[^fast-mode-vertex] The description of the key ends with `On Vertex a saved value is ignored: use /fast each session.`[^fast-mode-text] The official docs do not state the Vertex rule. |
 | `fastModePerSessionOptIn` | <Documented /> | Each session starts with fast mode off. In managed settings, it also refuses `/fast on` outside the interactive terminal. |
 | `CLAUDE_CODE_DISABLE_FAST_MODE` | <Documented /> | Turns fast mode off on each provider. On Vertex, `/fast on` then gives `Fast mode is not available`.[^fast-disabled] |
 | `CLAUDE_CODE_SKIP_FAST_MODE_ORG_CHECK`, `CLAUDE_CODE_SKIP_FAST_MODE_NETWORK_ERRORS` | <Documented /> | Change the organization check on the Anthropic API. On Vertex, Claude Code makes no organization check, so they do nothing there.[^org-check] |
@@ -85,7 +85,7 @@ A run as a Vertex client shows the change in the requests.[^vertex-run] The sess
 | --- | --- |
 | `claude-opus-5-5=vertex_fast_mode` on Vertex[^case-cap-on] | `↯ Fast mode ON · 2x Opus 5.5 standard price (this session only)`. The model stays `claude-opus-5-5`, and `fast_mode_state` is `on`. |
 | `claude-fable-5-2=-vertex_fast_mode` on Vertex, model `claude-fable-5-2`[^case-cap-off] | The text says `Fast mode ON`, but `fast_mode_state` stays `off`. With the same value, the next request has no `speed` field. |
-| `claude-sonnet-5=fast_mode` on the Anthropic API[^case-cap-first-party] | `↯ Fast mode ON · $2/$10 per Mtok (this session only)`. The model stays `claude-sonnet-5`. In `2.1.323` the text was `$30/$150`. |
+| `claude-sonnet-5=fast_mode` on the Anthropic API[^case-cap-first-party] | `↯ Fast mode ON · $2/$10 per Mtok (this session only)`. The model stays `claude-sonnet-5`. |
 
 ### Fable 5.2 and Mythos 5.2
 
@@ -130,7 +130,7 @@ In the print cases, the texts for `not_first_party` and for `CLAUDE_CODE_DISABLE
 | --- | --- | --- | --- |
 | `not_first_party` | <Differs /> | `Fast mode is not available on this provider` | The provider is not the Anthropic API or Vertex. The docs say: a provider other than the Anthropic API. |
 | `disabled_by_env` | <Documented /> | `Fast mode is not available` | `CLAUDE_CODE_DISABLE_FAST_MODE` is set. |
-| `disabled_by_env` | <Undocumented /> | `Fast mode needs Vertex region global, us or eu · set VERTEX_REGION_CLAUDE_FABLE_5_2 to one of them and restart` | The Vertex region is not `global`, `us`, or `eu`. New in `2.1.322`. The variable is the one of the checked model. |
+| `disabled_by_env` | <Undocumented /> | `Fast mode needs Vertex region global, us or eu · set VERTEX_REGION_CLAUDE_FABLE_5_2 to one of them and restart` | The Vertex region is not `global`, `us`, or `eu`. The variable is the one of the checked model. |
 | `model_not_allowed` | <Differs /> | `<model> is not in your organization's allowed models` | `availableModels` does not allow the default fast model, and the current model cannot run fast mode. Claude Code also gives this reason after Vertex refuses fast mode for the model with status `400`, which the docs do not state. |
 | `preference` | <Documented /> | `Fast mode has been disabled by your organization` | Managed settings have `fastMode: false`, or `fastModePerSessionOptIn: true` outside the interactive terminal, or the organization turned fast mode off. |
 | `sdk_opt_in_required` | <Documented /> | `Fast mode is not available in the Agent SDK` | Print mode or the SDK without `fastMode: true` in the flag settings. |
@@ -191,7 +191,7 @@ A fast request has `speed: "fast"` in the body.[^speed-body]
 | Print case[^case-request-disabled] | Anthropic API, `CLAUDE_CODE_DISABLE_FAST_MODE=1` | Not sent | Not sent |
 | cc-inspect `code` `cli`, `provider: "vertex"` | Vertex, `claude-fable-5-2` | `fast` | Not sent. The body has `"anthropic_version":"vertex-2023-10-16"`. |
 
-The system prompt has one sentence about fast mode. On Vertex since `2.1.322`, it ends with `switches the session to a model that does`. On the Anthropic API, it ends with `switches the session to Claude Opus`.[^system-prompt]
+The system prompt has one sentence about fast mode. On Vertex, it ends with `switches the session to a model that does`. On the Anthropic API, it ends with `switches the session to Claude Opus`.[^system-prompt]
 
 ## Price Text
 
@@ -210,7 +210,7 @@ Claude Code holds these fast prices in US dollars for each million tokens:[^pric
 | `claude-sonnet-5` | <Undocumented /> | 2 | 10 | 2.5 | 4 | 0.2 |
 
 The official page gives the input and output prices of the first three rows for Fable 5.2, Opus 5.5, Opus 5, and Opus 4.8. The cache prices, the Mythos 5.2 entry, and the last two rows are from the program.
-The last two rows apply when a capability override turns fast mode on for another model.[^case-cap-first-party] Since `2.1.326`, a model that is not in the first four rows gets its price from the model catalog of the program, as `claude-sonnet-5` does.[^price-tier] Only a model with no catalog price gets 30 and 150. In `2.1.323`, every other model got 30 and 150.
+The last two rows apply when a capability override turns fast mode on for another model.[^case-cap-first-party] A model that is not in the first four rows gets its price from the model catalog of the program, as `claude-sonnet-5` does.[^price-tier] Only a model with no catalog price gets 30 and 150.
 
 ## The Panel
 
@@ -249,7 +249,7 @@ The `result` event of a `/fast on` turn that also changes the model has `fast_mo
 
 ## Sources
 
-[^v322]: [`2.1.322` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.322). The program, `chunk-xethrx83.js:386835` (the regions `global`, `us`, and `eu`) and `chunk-xethrx83.js:386894`. Every program offset on this page is from the program `2.1.328`.
+[^v322]: The program, `chunk-xethrx83.js:386835` (the regions `global`, `us`, and `eu`) and `chunk-xethrx83.js:386894`. Every program offset on this page is from the program `2.1.328`.
 [^capability]: The program, `chunk-xethrx83.js:384776`.
 [^fast-first-party]: Probe case `print.cli322.fast-first-party`.
 [^fast-vertex-regions]: Probe cases `print.cli322.fast-vertex-global`, `.fast-vertex-us`, `.fast-vertex-eu`.
@@ -305,7 +305,7 @@ The `result` event of a `/fast on` turn that also changes the model has `fast_mo
 [^cooldown-panel]: The program, `chunk-j2wfp6sf.js:576397`.
 [^cooldown-texts]: The program, `chunk-j2wfp6sf.js:1941590-1942127`.
 [^cooldown-end]: The program, `chunk-j2wfp6sf.js:1941590`.
-[^cooldown-source]: The official page section cited in the sentence, the [`2.1.322` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.322), and the program, `chunk-56bhcxay.js:3282358`.
+[^cooldown-source]: The official page section cited in the sentence, and the program, `chunk-56bhcxay.js:3282358`.
 [^speed-body]: The program, `chunk-56bhcxay.js:3375741`, `chunk-56bhcxay.js:3381872`.
 [^case-request-first-party]: Probe case `print.cli322.fast-request-first-party`.
 [^case-request-off]: Probe case `print.cli322.fast-request-first-party-off`.

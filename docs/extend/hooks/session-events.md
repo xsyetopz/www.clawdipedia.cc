@@ -20,7 +20,7 @@ Fires when a session starts or resumes. Interactive starts run it in the backgro
 | `model` | <Documented /> | Input | The active model ID. Can be missing, for example after `/clear`. |
 | `agent_type` | <Documented /> | Input | The agent name from `--agent`. Optional. |
 | `session_title` | <Documented /> | Input | The custom title. Present only when one exists. |
-| `seconds_since_last_response`, `context_tokens`, `prompt_cache_likely_expired`, `estimated_cache_write_usd` | <Documented /> | Input | The cost of a stale resume. Only for `resume` and `fork` with an earlier reply. Needs `2.1.251`. |
+| `seconds_since_last_response`, `context_tokens`, `prompt_cache_likely_expired`, `estimated_cache_write_usd` | <Documented /> | Input | The cost of a stale resume. Only for `resume` and `fork` with an earlier reply. |
 | `additionalContext` | <Documented /> | Output, in `hookSpecificOutput` | Text before the first prompt. Plain `stdout` works too. |
 | `initialUserMessage` | <Documented /> | Output | The first user message. Only in `-p`. From a plugin it works only if the plugin was installed before the start. |
 | `sessionTitle` | <Documented /> | Output | Sets the title. Works for `startup`, `resume`, `fork`. Same as `/rename`. |
@@ -145,11 +145,11 @@ Fires when Claude Code sends a notification. The matcher is the notification typ
 | Field | Status | Direction | What it does |
 | --- | --- | --- | --- |
 | `message`, `title`, `notification_type` | <Documented /> | Input | The text, an optional title, and the type. |
-| `permission_prompt` | <Documented /> | Type | A prompt waited about 6 seconds. Seen live in the interactive screen (`2.1.305`) with the message `Claude needs your permission`. |
+| `permission_prompt` | <Documented /> | Type | A prompt waited about 6 seconds. Seen live in the interactive screen with the message `Claude needs your permission`. |
 | `idle_prompt` | <Documented /> | Type | The session was idle for about 60 seconds. Both depend on typing and running agents. Seen live: the message was `Claude is waiting for your input`, about 60 seconds after the turn ended (the config key `messageIdleNotifThresholdMs` sets the 60 seconds, default 60000). |
 | `auth_success`, `elicitation_dialog`, `elicitation_url_dialog`, `elicitation_complete`, `elicitation_response` | <Documented /> | Type | Auth finished, and the steps of an MCP question. The two dialog types wait 6 seconds. Seen live in the interactive screen: all four `elicitation_*` values (messages `Claude Code needs your input` for the two dialogs, `Elicitation response for server "probe": accept`, and `MCP server "probe" confirmed elicitation el-1 complete`). `auth_success` needs a login and was not seen. |
-| `agent_needs_input`, `agent_completed` | <Documented /> | Type | Background session events in agent view. `agent_needs_input` for a teammate setup question needs `2.1.248`. `agent_needs_input` was seen live on `2.1.319` for the dialog `Auto mode can't check actions in this session` (message `Auto mode can't check actions in this session and needs your choice`). Auto mode shows that dialog with a custom base URL that gives no server-side verdict, or that refuses the dangerous-tool-use beta with HTTP 400.[^agent-needs-input] Up to `2.1.316`, the classifier billing notice fired it with the message `Auto mode has a classifier billing notice to acknowledge`. `agent_completed` was not seen (it needs a background session). |
-| `quota_auto_resume_fired`, `quota_auto_resume_stale`, `quota_auto_resume_disabled` | <Documented /> | Type | Usage limit wait events. Need `2.1.234`. Not seen live: they need a login.[^notif-types] |
+| `agent_needs_input`, `agent_completed` | <Documented /> | Type | Background session events in agent view. It also fires for a teammate setup question (`Teammate setup needs your input`). `agent_needs_input` was seen live for the dialog `Auto mode can't check actions in this session` (message `Auto mode can't check actions in this session and needs your choice`). Auto mode shows that dialog with a custom base URL that gives no server-side verdict, or that refuses the dangerous-tool-use beta with HTTP 400.[^agent-needs-input] The classifier billing notice fires it with the message `Auto mode has a classifier billing notice to acknowledge`. `agent_completed` was not seen (it needs a background session). |
+| `quota_auto_resume_fired`, `quota_auto_resume_stale`, `quota_auto_resume_disabled` | <Documented /> | Type | Usage limit wait events. Not seen live: they need a login.[^notif-types] |
 | `plugin_notification` | <Undocumented /> | Type | The mod call `$.ui.notify` sends it. Seen live: the hook got `message`, `title`, and `notification_type`, even with no notification channel.[^plugin-notif] |
 | `auth_storage_failure` | <Undocumented /> | Type | Sent after the OAuth token exchange, when saving the credentials fails. Not seen live. Message: `Claude Code login needs attention: credentials may not have been saved`, or `Claude Code login needs attention: credentials could not be saved`. |
 | `worker_permission_prompt` | <Undocumented /> <Gated note="Set CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 or use --agent-teams" /> | Type | Sent by the team lead's inbox poller when a teammate asks for permission. Needs agent teams and at least one teammate. It fires only when the lead is idle and shows no dialog. Seen live: the message was `A subagent needs permission for Bash`, with no `title`. A normal `permission_prompt` followed when the dialog showed. The message `<worker> needs network access to <host>` was not run.[^worker-message] |
@@ -198,9 +198,9 @@ Fires instead of `Stop` when the turn ends on an API error. The matcher is `erro
 
 ## Sources
 
-[^notif-types]: The program, the type list of `2.1.327`, `chunk-eczrspp8.js:521`. It holds all three `quota_auto_resume_*` names and `plugin_notification`.
+[^notif-types]: The program, the type list at `chunk-eczrspp8.js:370` and `chunk-eczrspp8.js:547`. It holds all three `quota_auto_resume_*` names and `plugin_notification`.
 [^plugin-notif]: The program, `chunk-56bhcxay.js:4955366`.
-[^agent-needs-input]: Probe cases `pty.notifications.agent-needs-input` and `pty.notifications.agent-needs-input-refused`.
+[^agent-needs-input]: The program, `chunk-j2wfp6sf.js:403033` (the billing notice), `chunk-j2wfp6sf.js:403281` (the dialog), and `chunk-j2wfp6sf.js:402657` (the teammate setup question). Probe cases `pty.notifications.agent-needs-input` and `pty.notifications.agent-needs-input-refused`.
 [^worker-message]: The program, `chunk-j2wfp6sf.js:1847749` and `chunk-j2wfp6sf.js:1851616`.
 [^push]: A reading of the program, `chunk-t94s3xy2.js:9791` and `chunk-t94s3xy2.js:9928`.
 [^not-seen]: Readings of the program, `chunk-deg3e0xc.js:20888` and `chunk-6w92w3rt.js:12980`, not live results.

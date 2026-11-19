@@ -6,7 +6,7 @@ sidebar_position: 1
 
 Settings are JSON files that change how Claude Code behaves. Use them to pick a model, add permission rules, turn off a feature, or share the same rules with a whole team. Create or edit a settings file, pass `--settings`, or use `/config` and `/model` for some keys. An administrator can deploy managed settings. Each key is its own switch. `disableAllHooks` turns off hooks, the status line, and file suggestions at once.
 
-The managed schema of `2.1.327` lists 202 top-level keys. The user schema lists 178, and the other 24 are managed-only.[^schemas]
+The managed schema lists 203 top-level keys. The user schema lists 178, and the other 25 are managed-only.[^schemas]
 
 ## Example
 
@@ -47,7 +47,7 @@ Each key has a row on one of these pages.
 - `Where to Set It` says which files may set the key. `Any settings file` means the user, project, local, and managed files.
   `Settings files` means the settings files without a narrower scope in the source.
 - Many boolean keys are written as the thing to switch off, such as `spinnerTipsEnabled`. Read the row before you pick a value.
-- Items that are removed or do nothing in `2.1.326` are left out. See the end of this page.
+- Keys that have no effect are left out. See the end of this page.
 
 ## Where Settings Live
 
@@ -63,27 +63,25 @@ Each key has a row on one of these pages.
 Official pages: [Settings Files and Precedence](https://code.claude.com/docs/en/settings) and [Explore the .claude Directory](https://code.claude.com/docs/en/claude-directory).
 
 - Settings files are strict JSON. A comment or a trailing comma is a syntax error.
-- Since `2.1.326`, when a settings file is not valid JSON, the error gives the line and the column of the first syntax error, for example `Invalid or malformed JSON (line 3, column 5)`. Both numbers start at 1.[^json-position]
+- When a settings file is not valid JSON, the error gives the line and the column of the first syntax error, for example `Invalid or malformed JSON (line 3, column 5)`. Both numbers start at 1.[^json-position]
 - Claude Code reads the shared project file from the primary working directory.
-  After `/cd`, it reads the new directory (v2.1.246 or later).
 - In a git repository, the local file lives at the repository root. In a worktree, it lives at the main checkout root.
-- Claude Code adds `**/.claude/settings.local.json` to your global git excludes file when it writes the local file.
-  Since `2.1.323`, it does this also when the folder is not a git repository yet.[^gitignore]
-- A write to a settings file reads the file from disk first, so a hand edit made moments before is kept. A file that was deleted starts again as a new file that holds only that change. Since `2.1.323`, a write seeds from the last parse only when the file is empty, broken, or locked, or when a `ConfigChange` hook blocked the latest change.[^seed]
+- Claude Code adds `**/.claude/settings.local.json` to your global git excludes file when it writes the local file. It does this also when the folder is not a git repository yet.[^gitignore]
+- A write to a settings file reads the file from disk first, so a hand edit made moments before is kept. A file that was deleted starts again as a new file that holds only that change. A write seeds from the last parse only when the file is empty, broken, or locked, or when a `ConfigChange` hook blocked the latest change.[^seed]
 - Claude Code watches the files and reloads them. It runs the `ConfigChange` hook for each change in a settings file.
 - Managed settings from MDM or the console reach a running session on a schedule, not on save.
 - A cloud session reads only the shared project file and server-managed settings.
 - Run `/status` to see the `Setting sources` line. Run `claude doctor` to see the entries that Claude Code dropped.
 - The flag `--setting-sources <sources>` loads only the sources you name (`user`, `project`, `local`).
-  A source you leave out no longer supplies auto mode rules or saved permission consents (v2.1.314 or later).[^left-out]
+  A source you leave out does not supply auto mode rules or saved permission consents.[^left-out]
 
 Claude Code names the five sources `userSettings`, `projectSettings`, `localSettings`, `flagSettings`, and `policySettings`.[^sources]
 
 ## Which Value Wins
 
-The highest level that sets a key wins. The `2.1.327` release notes say `/config` shows a note when other settings override a row.[^config-note]
+The highest level that sets a key wins. `/config` shows a note on a row when settings from another source override what you save there.[^config-note]
 
-Since `2.1.327`, a settings change from `/config` or a similar command that fails to save shows a message that says so. The message starts with `Couldn't save`.[^save-fail]
+A settings change from `/config` or a similar command that fails to save shows a message that says so. The message starts with `Couldn't save`.[^save-fail]
 
 1. Managed settings.
 2. Command line (`--settings`).
@@ -111,7 +109,7 @@ See [Models and Effort Variables](../env-vars/models-and-effort.md) for examples
 - `allowManagedPermissionRulesOnly` stops that merge for permission rules.
 - `fallbackModel` is an ordered chain. The whole value comes from the highest scope that sets it.
 - `modelPicker` never merges. The whole value comes from managed settings, `--settings`, or user settings.
-  Claude Code ignores project and local values (v2.1.242 or later).
+  Claude Code ignores project and local values.
 - For `availableModels`, a managed list applies as it is. Across the other scopes, the arrays merge.
 - `modelSettings` resolves one model at a time, together with `effortLevel`.
 - Managed `env` blocks merge per key across admin sources. `CLAUDE_CODE_DISABLE_ADMIN_ENV_UNION=1` turns that off.
@@ -132,11 +130,11 @@ An administrator puts managed settings on a machine in one of these ways. Offici
 
 - Claude Code merges `managed-settings.json` first, then each `*.json` file of `managed-settings.d/` in alphabetical order.
   Number the files to set the order, such as `10-telemetry.json`.
-- Since `2.1.323`, start-up reads a managed file again when the first read found it absent, empty, or not loadable, so a program that rewrites the file at that moment does not hide it. The re-read covers `managed-settings.json` and the files of `managed-settings.d/`. It has a limit of 5 seconds. When the limit passes, Claude Code keeps the managed settings it already read.[^managed-reread]
+- Start-up reads a managed file again when the first read found it absent, empty, or not loadable, so a program that rewrites the file at that moment does not hide it. The re-read covers `managed-settings.json` and the files of `managed-settings.d/`. It has a limit of 5 seconds. When the limit passes, Claude Code keeps the managed settings it already read.[^managed-reread]
 - `managedSourcesBehavior` decides how sources combine. `first-wins` uses the highest source alone. `merge` deep-merges them.
 - `parentSettingsBehavior` does the same for the SDK parent tier.
 - `policyHelper` and `policyHelpers` compute managed settings at startup.
-- A file tool asks before it writes to the local copy of server-managed settings, `remote-settings.json` in the configuration folder, as it does for a Claude Code settings file (v2.1.314 or later).[^managed-edit-ask]
+- A file tool asks before it writes to the local copy of server-managed settings, `remote-settings.json` in the configuration folder, as it does for a Claude Code settings file.[^managed-edit-ask]
 
 The keys are in [Enterprise Settings](enterprise.md).
 
@@ -152,7 +150,7 @@ For a few keys, a lower scope may set a stricter value, and Claude Code honors i
 | `remoteControlAtStartup` | <Documented /> | `false` | `.claude/settings.json` or `.claude/settings.local.json` |
 | `crossSessionInbound` | <Documented /> | A stricter value on the ladder `accept`, `hold`, `refuse` | `.claude/settings.json` or `.claude/settings.local.json` |
 | `useAutoModeDuringPlan`, `syncClaudeAiSkills`, `syncClaudeAiPlugins` | <Documented /> | `false` | Managed, `--settings`, `~/.claude/settings.json`, or `.claude/settings.local.json` |
-| `maxEffortLevel` | <Documented /> | The lowest cap (v2.1.267 or later) | Any scope |
+| `maxEffortLevel` | <Documented /> | The lowest cap | Any scope |
 | `modelProposedGoals`, `feedbackDrafts`, `availableModelsMatch`, `askUserQuestionTimeout`, `dialogExpiry` | <Undocumented /> | A strict value | The docs do not list them here.[^strict] |
 
 An app that runs Claude Code inside itself and sets `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` is also an exception.
@@ -160,16 +158,14 @@ Claude Code then takes the model keys of that app over the managed values.
 
 ## Left Out on Purpose
 
-These keys do nothing in `2.1.326`, so the pages do not list them.
+These keys have no effect, so the pages do not list them.
 
-- `taskOutputMaxChars`: Claude Code removed the `TaskOutput` tool.
-- `keybindingFlavor`: Word-editing keys always follow Bash (readline) rules now.
-- `permissionExplainerEnabled`: Removed in v2.1.257.
-- `teammateDefaultModel`: Removed in v2.1.234.
+- `taskOutputMaxChars`: The schema marks it as deprecated. The `TaskOutput` tool does not exist.[^left-out-keys]
+- `keybindingFlavor`: The schema marks it as deprecated. Word-editing keys follow Bash (readline) rules.[^left-out-keys]
 
 ## Deep Nesting
 
-Since `2.1.326`, a settings file with values nested more than 64 levels deep loads without them. Claude Code drops those values and shows a warning: "A value under "key" is nested more than 64 levels deep, so Claude Code ignores it. Reduce the nesting under "key"." For a file that Claude Code writes, the warning also says it leaves the value out when it saves a setting to that file. A `hooks` entry written as nested arrays is different: that case is a fatal error, and the text asks you to write `hooks` as an object of event names.[^nesting]
+A settings file with values nested more than 64 levels deep loads without them. Claude Code drops those values and shows a warning: "A value under "key" is nested more than 64 levels deep, so Claude Code ignores it. Reduce the nesting under "key"." For a file that Claude Code writes, the warning also says it leaves the value out when it saves a setting to that file. A `hooks` entry written as nested arrays is different: that case is a fatal error, and the text asks you to write `hooks` as an object of event names.[^nesting]
 
 ## Errors
 
@@ -178,7 +174,7 @@ Each row is a family of messages. The backticked text is the start that every me
 | Start of Message | Status | What It Means | Cases |
 | --- | --- | --- | --- |
 | `These settings files are not used: they are in a connector-downloads folder` | <Undocumented /> | Claude Code skipped the settings files in the project folder. | The folder is a `connector-downloads` folder that has a `.gitignore`. Claude Code saves files from claude.ai connectors there.[^connector] |
-| `<file> has an error and didn't load` | <Undocumented /> | Since `2.1.326`, a settings file that you save with an error during a session gets a warning that names the file. It ends with `run claude doctor`. | The warning stays pinned. It covers a file that had no error when the session started or when the last change was read. Claude Code does not warn again for a file that already had an error, or for a file it cannot read.[^file-error] |
+| `<file> has an error and didn't load` | <Undocumented /> | A settings file that you save with an error during a session gets a warning that names the file. It ends with `run claude doctor`. | The warning stays pinned. It covers a file that had no error when the session started or when the last change was read. Claude Code does not warn again for a file that already had an error, or for a file it cannot read.[^file-error] |
 
 ## Related Pages
 
@@ -190,17 +186,18 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^schemas]: The published schema files `schemas/claude-code-managed-settings.json` (202 keys under `properties`) and `schemas/claude-code-settings.json` (178 keys), counted for `2.1.327`. The 24 managed-only keys are the ones in the first file and not in the second.
-[^config-note]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
-[^save-fail]: The program, `chunk-j2wfp6sf.js:201826` (the `/tui` command shows `Couldn't save this setting`), `chunk-79nt6zzq.js:41018` (`/config` with `key=value` shows `Couldn't save <name>: <reason>`), and `chunk-79nt6zzq.js:51421` (the same text for a panel row). The program does not show where the message sits on screen. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
+[^schemas]: The published schema files `schemas/claude-code-managed-settings.json` (203 keys under `properties`) and `schemas/claude-code-settings.json` (178 keys). The 25 managed-only keys are the ones in the first file and not in the second.
+[^config-note]: The program, `chunk-79nt6zzq.js:8484` (the notice "override what you save here") and `chunk-79nt6zzq.js:33773`.
+[^save-fail]: The program, `chunk-j2wfp6sf.js:201826` (the `/tui` command shows `Couldn't save this setting`), `chunk-79nt6zzq.js:41018` (`/config` with `key=value` shows `Couldn't save <name>: <reason>`), and `chunk-79nt6zzq.js:51421` (the same text for a panel row). The program does not show where the message sits on screen.
 [^gitignore]: The program, `chunk-sm9djeyx.js:28838`, called from `chunk-sm9djeyx.js:112100`.
 [^seed]: The program, `chunk-sm9djeyx.js:114454` (the write reads the file first and falls back to the last parse when it is "still empty, broken or locked") and `chunk-sm9djeyx.js:115269-115639` (a `ConfigChange` hook that blocked the latest change, or is still deciding).
 [^sources]: The program, `chunk-0fvmdxeb.js:83723`.
 [^managed-reread]: The program, `chunk-xethrx83.js:548431` (the 5000 ms limit), `chunk-xethrx83.js:548869`, and `chunk-xethrx83.js:551192` (the timeout message "the managed settings already read are kept").
+[^left-out-keys]: The program, `chunk-jkpzhr7r.js:251607` and `chunk-jkpzhr7r.js:294588`.
 [^strict]: The program lists them as keys with a strict value, `chunk-jkpzhr7r.js:163308-163567`.
 [^nesting]: The program, `chunk-jkpzhr7r.js:405691` (the limit of 64) and `chunk-jkpzhr7r.js:430771-430983` (the warning and the fatal `hooks` case).
-[^file-error]: The program, `chunk-j2wfp6sf.js:1970732-1970797`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
-[^connector]: Probe case `print.err319.settings-connector-downloads` ran this setup.
-[^json-position]: The program, `chunk-h9zb4hpp.js:13258` and `chunk-jkpzhr7r.js:414026`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^file-error]: The program, `chunk-j2wfp6sf.js:1970732-1970797`..
+[^connector]: The program, `chunk-5699r6rq.js:511397` (the message), `chunk-jkpzhr7r.js:394897` (the folder name), and `chunk-jkpzhr7r.js:397467` (the `.gitignore` check).
+[^json-position]: The program, `chunk-h9zb4hpp.js:13258` and `chunk-jkpzhr7r.js:414026`.
 [^left-out]: The program, `chunk-sm9djeyx.js:93654` (reading a source that is not enabled returns nothing), with its use for auto mode rules at `chunk-sm9djeyx.js:123536` and for the saved bypass-permissions consent at `chunk-sm9djeyx.js:121639`.
 [^managed-edit-ask]: The program (`2.1.328`). The file name is `remote-settings.json` (`chunk-jkpzhr7r.js:355865`), placed in the configuration folder by `chunk-jkpzhr7r.js:368489`. `chunk-wchmynj9.js:144986` builds the protected set from those paths, `chunk-wchmynj9.js:231313` tests a path against it, and `chunk-wchmynj9.js:231882` turns the test into the result `certain`, `possible`, or `none`. The write check `chunk-wchmynj9.js:252637` returns an unsafe result with the message "but you haven't granted it yet" and the breaker `claudeSettingsFile` when the result is not `none` (`chunk-wchmynj9.js:253457`).

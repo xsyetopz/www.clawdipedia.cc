@@ -7,6 +7,8 @@ export interface Sent {
 	path: string;
 	host: string;
 	fakeKey: boolean | null;
+	/** The names in the `anthropic-beta` request header, when the request has one. */
+	betas?: string[];
 	body: unknown;
 }
 export interface Tool {
@@ -141,6 +143,13 @@ const messagesReply = (
 		: Response.json(jsonReply(call));
 };
 
+/** The beta names in an `anthropic-beta` header value, in the order sent. */
+export const betaNames = (header: string): string[] =>
+	header
+		.split(",")
+		.map((b) => b.trim())
+		.filter((b) => b !== "");
+
 const VERTEX_COUNT = "count-tokens";
 /** The model in a Vertex path, `…/models/<model>:rawPredict` or `:streamRawPredict`, where the SDK moves it from the body; `count-tokens` for a token count. */
 export const vertexModel = (path: string): string | undefined =>
@@ -171,11 +180,13 @@ export const makeAnswer =
 			req.headers.get("authorization")?.replace(/^Bearer /u, "");
 		const body = parseBody(await req.text());
 		const url = new URL(req.url);
+		const betaHeader = req.headers.get("anthropic-beta");
 		requests.push({
 			method: req.method,
 			path: url.pathname + url.search,
 			host: req.headers.get("host") ?? "",
 			fakeKey: key === undefined ? null : key === FAKE_KEY,
+			...(betaHeader !== null && { betas: betaNames(betaHeader) }),
 			body,
 		});
 		const model = vertexModel(url.pathname);

@@ -19,7 +19,7 @@ Official pages: [Marketplace Reference](https://code.claude.com/docs/en/plugins/
 | `owner` | <Documented /> | Names the maintainer. | `name` is required. `email` and `url` are optional. |
 | `plugins` | <Documented /> | Lists the plugin entries. | An invalid entry becomes a stub with source `unsupported`. The other entries still load. |
 | `$schema`, `description`, `version` | <Documented /> | Info about the marketplace. | `metadata.description` and `metadata.version` work as alternates. |
-| `metadata.pluginRoot` | <Documented /> | Sets the base folder for bare source names. | Needs Claude Code `2.1.239` or later. The folder must be inside the marketplace. |
+| `metadata.pluginRoot` | <Documented /> | Sets the base folder for bare source names. | The folder must be inside the marketplace. |
 | `forceRemoveDeletedPlugins` | <Documented /> | Uninstalls plugins that you removed from the list. | Boolean. |
 | `allowCrossMarketplaceDependenciesOn` | <Documented /> | Names marketplaces that plugin dependencies may come from. | An array of marketplace names. |
 | `renames` | <Documented /> | Maps an old plugin name to a new name or `null`. | An append-only map. An entry whose value is not a string or `null` is read as a rename to itself, so the other renames still apply. Claude Code writes `Unreadable entries in a marketplace's renames map: N` to its debug log.[^renames] |
@@ -33,7 +33,7 @@ An entry also accepts every [`plugin.json` key](manifest.md#top-level-keys) exce
 | `name`, `source` | <Documented /> | Give the id and the place to get the plugin from. Both are required. | The entry name is what users type before `@`. |
 | `category`, `tags` | <Documented /> | Catalog data. | Free text. |
 | `strict` | <Documented /> | Says who owns the manifest. | Default `true`. With `false` and a `plugin.json` present, component keys in the entry cause a `conflicting manifests` error. |
-| `headers`, `headersHelper` | <Documented /> | Add headers to an archive download. | Needs `2.1.238` or later. `headersHelper` needs `strict: false`. Only for `archive` sources. |
+| `headers`, `headersHelper` | <Documented /> | Add headers to an archive download. | `headersHelper` needs `strict: false`. Only for `archive` sources. |
 | `defaultEnabled`, `displayName`, `dependencies`, `metadata` | <Documented /> | Work as in the manifest. | Entry values override the manifest for display and `defaultEnabled`. |
 | `relevance` | <Documented /> | Says when to suggest the plugin. | `topic` (64 characters) and `signals`: `cli`, `hosts`, `filesRead`, `manifestDeps` (`file` and `pattern`), `cwd`. Each list has a limit of 10 or 20 items. Needs the setting `pluginSuggestionMarketplaces`. |
 | `experimental` | <Documented /> <Experimental /> | Holds component declarations. | `validate` warns when it is not an object. |
@@ -49,7 +49,7 @@ The `source` of an entry tells Claude Code where to get the plugin.
 | `url` | <Documented /> | `url`, `ref`, `sha` | A git URL. |
 | `git-subdir` | <Documented /> | `url`, `path`, `ref`, `sha` | Uses a sparse, partial clone. |
 | `npm` | <Documented /> | `package`, `version`, `registry` | Install scripts never run. Claude Code refuses git, file, and alias specs. |
-| `archive` | <Documented /> | `url`, `sha256` | An HTTPS zip file. Needs `2.1.224` or later. |
+| `archive` | <Documented /> | `url`, `sha256` | An HTTPS zip file. |
 | `command` | <Documented /> | `command`, `timeout`, `mode` | The command prints one absolute path (500 characters at most). `timeout` is 1 to 600 seconds, default 60. `mode` is `copy` or `link`. A copy is limited to 256 MiB or 20,000 entries. `link` does not work on Windows. `disableCommandPluginSources` disables it. |
 | `unsupported` | <Undocumented /> | None | A placeholder that the parser makes. An author cannot write it. |
 
@@ -59,7 +59,7 @@ These sources go in `extraKnownMarketplaces`, `strictKnownMarketplaces`, and `bl
 
 | Source | Status | Fields | How It Works |
 | --- | --- | --- | --- |
-| `github` | <Documented /> | `repo`, `ref`, `path`, `sparsePaths` | The form `owner/*` works only in policy lists. Since `2.1.326`, `ref` takes a branch, a tag, or the full ID of a commit (40 or 64 lowercase hex digits). A full commit ID holds the marketplace at that commit: refreshes and auto-updates do not move it, and a branch or tag of the repository must hold the commit. A client before `2.1.326` cannot clone such a pin, so a marketplace pinned this way stops loading there.[^pin] |
+| `github` | <Documented /> | `repo`, `ref`, `path`, `sparsePaths` | The form `owner/*` works only in policy lists. `ref` takes a branch, a tag, or the full ID of a commit (40 or 64 lowercase hex digits). A full commit ID holds the marketplace at that commit: refreshes and auto-updates do not move it, and a branch or tag of the repository must hold the commit.[^pin] |
 | `git` | <Documented /> | `url`, `ref`, `path`, `sparsePaths` | Claude Code accepts `skipLfs` and ignores it. `ref` takes the same values as for `github`. |
 | `url` | <Documented /> | `url`, `headers`, `headersHelper` | Gets only the JSON file, so plugin entries cannot use relative sources. |
 | `file`, `directory` | <Documented /> | `path` | Read in place. |
@@ -70,19 +70,16 @@ These sources go in `extraKnownMarketplaces`, `strictKnownMarketplaces`, and `bl
 
 ## Plugin Digests
 
-Since `2.1.324`, the program marks `pluginDigests` as deprecated and ignores it, and the `2.1.326` release notes announce this. Settings that hold it still load. In `2.1.324` to `2.1.326`, a plugin takes the organization tier when managed settings enable it, declare its marketplace with a remote source, and list the plugin in `prependPlugins` or `appendPlugins`. Since `2.1.327`, the plugin no longer needs a place in `prependPlugins` or `appendPlugins`.[^digest-tier] The folder of the plugin must be the copy that its install record holds. When the record holds no hash, or holds another one, the plugin does not load, and the warning says "its install record holds no hash" or "its folder is not the copy its install record holds".[^digest-warn] The rest of this section describes `2.1.323` and earlier builds that check digests.
+The program marks `pluginDigests` as deprecated and ignores it. Settings that hold it still load. A plugin takes the organization tier when managed settings enable it and declare its marketplace with a remote source.[^digest-tier] The folder of the plugin must be the copy that its install record holds. When the record holds no hash, or holds another one, the plugin does not load, and the warning says "its install record holds no hash" or "its folder is not the copy its install record holds".[^digest-warn]
 
 The `pluginDigests` field sits in an entry of `extraKnownMarketplaces` (and its alias `additionalMarketplaces`). The settings schema marks it as managed settings only.[^digest-schema]
 
 | Field | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
-| `pluginDigests` | <Documented /> <Deprecated note="Ignored since 2.1.324" /> <ManagedOnly /> | Held the digests, by plugin name, of the releases of a plugin that your organization delivers with its own tier. Ignored since `2.1.324`. | Type: object of arrays of strings. The schema says: "Deprecated and ignored: settings that hold it still load." Up to `2.1.323`, a plugin that managed settings enabled and listed in `prependPlugins` or `appendPlugins` loaded its hooks module only from a folder that proved one of its digests, and any other copy did not load.[^digest-schema] |
+| `pluginDigests` | <Documented /> <Deprecated note="Ignored" /> <ManagedOnly /> | Holds digests, by plugin name. The program ignores it. | Type: object of arrays of strings. The schema says: "Deprecated and ignored: settings that hold it still load."[^digest-schema] |
 
-- A digest is `sha256-` and the base64 SHA-256 of the folder. The hash covers every regular file, in UTF-16 code unit order of its path. For each file, the hash takes `f PATH`, a NUL byte, the byte length, a NUL byte, and the bytes. Paths use `/`. At the root, the hash leaves out `.git`, `.in_use`, `.orphaned_at`, `.claude-plugin-link`, and `.links_materialized`.
-- The plugin keeps its manifest at `.claude-plugin/plugin.json` and names one module in `hooks/hooks.json`.
-- A string of any other form, or a list that is empty or of any other shape, matches no folder. A symbolic link, or a surface module, proves nothing.
-- A proved plugin ships bundled with no install step. The digest covers the whole folder, `node_modules` included. A checkout whose line endings were converted proves nothing.
-- Claude Code reads the folder with a limit of 4096 files and 32 MiB in all. One file may hold at most 32 MiB.[^digest-limits] A name that is not UTF-8, a file that is not regular, or a file that changed during the read refuses the folder.
+- A folder digest is `sha256-` and the base64 SHA-256 of the folder. The hash covers every file and, under `node_modules`, every symbolic link, in sorted order of its path. For each entry, the hash takes `f PATH` (`l PATH` for a link), a NUL byte, the byte length, a NUL byte, and the bytes. Paths use `/`. At the root, the hash leaves out `.git`, `.mcpb-cache`, and other names that the program keeps in a set.[^digest-limits]
+- Claude Code reads the folder with a limit of 4096 files and 32 MiB in all. `node_modules` has its own limit of 64000 files and 512 MiB. A name that is not UTF-8, an entry that is not a regular file, or a file that changed during the read refuses the folder.[^digest-limits]
 - When a plugin is refused, Claude Code warns that the plugin "is not treated as the organization's, and does not load", with the reason.[^digest-refuse]
 - A line that Claude Code builds for a `pluginDigests` key reads "code from your organization will run".[^digest-line] No source states where Claude Code displays it.
 
@@ -164,7 +161,7 @@ sequenceDiagram
 Claude Code checks policy lists before any download.
 If a marketplace fails to refresh, Claude Code keeps the old checkout only when `CLAUDE_CODE_PLUGIN_KEEP_MARKETPLACE_ON_FAILURE` is `1`.
 
-Since `2.1.326`, the add-marketplace confirmation says: "Plugins from this marketplace can run code on your computer, with access to your files and shell. Only add marketplaces you trust."[^run-code-add] The plugin install warning and the plugin recommendation prompt say: "Plugins can run code on your computer, with access to your files and shell."[^run-code-install]
+The add-marketplace confirmation says: "Plugins from this marketplace can run code on your computer, with access to your files and shell. Only add marketplaces you trust."[^run-code-add] The plugin install warning and the plugin recommendation prompt say: "Plugins can run code on your computer, with access to your files and shell."[^run-code-install]
 
 ## Errors
 
@@ -203,14 +200,14 @@ Each row is a family of messages. The backticked text is the start that every me
 
 [^reserved]: The program, `chunk-jkpzhr7r.js:52423`.
 [^renames]: The program, `chunk-jkpzhr7r.js:99701`.
-[^pin]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The program, `chunk-jkpzhr7r.js:3510`.
+[^pin]: The program, `chunk-jkpzhr7r.js:79222`.
 [^npm-wild]: The program, `chunk-jkpzhr7r.js:81729`.
 [^npm-opts]: The program, `chunk-jkpzhr7r.js:82029`, its bundled settings schema.
-[^digest-tier]: The program, `chunk-jkpzhr7r.js:206470` for the schema text and `chunk-56bhcxay.js:1037148` for the record check. The text of `2.1.324` to `2.1.326` names `prependPlugins` and `appendPlugins`. The text of `2.1.327` does not.
-[^digest-warn]: The program, `chunk-56bhcxay.js:59151`.
-[^digest-schema]: The settings schema, `chunk-jkpzhr7r.js:8088`. The `2.1.328` program has no other code that reads `pluginDigests`. The `2.1.323` schema text says a plugin "loads its hooks module only from a folder that proves one of them" and "any other copy does not load". The `2.1.324` schema text says "Deprecated and ignored", and the `2.1.324`, `2.1.325`, and `2.1.326` builds have no other code that reads `pluginDigests`. The behavior before `2.1.324` comes from the older program and is not in `2.1.328`.
-[^digest-limits]: The program, `chunk-56bhcxay.js:60051`, `chunk-56bhcxay.js:55572`, and `chunk-56bhcxay.js:55649`.
-[^digest-refuse]: The program, `chunk-56bhcxay.js:60211`.
+[^digest-tier]: The program, `chunk-jkpzhr7r.js:206396` for the schema text and `chunk-56bhcxay.js:1037990` for the record check.
+[^digest-warn]: The program, `chunk-56bhcxay.js:1037144` and `chunk-56bhcxay.js:1037235`.
+[^digest-schema]: The program, `chunk-jkpzhr7r.js:206396`, its bundled settings schema.
+[^digest-limits]: The program, `chunk-56bhcxay.js:1032821` for the limits, `chunk-56bhcxay.js:1033282` for the folder walk, and `chunk-56bhcxay.js:970462` for the root names.
+[^digest-refuse]: The program, `chunk-56bhcxay.js:1037990`.
 [^digest-line]: The program, `chunk-jkpzhr7r.js:355508`.
 [^settings-schema]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:206143`.
 [^copy]: The program, `chunk-4681nt26.js:1837` and `chunk-56bhcxay.js:5468117`.
@@ -219,5 +216,5 @@ Each row is a family of messages. The backticked text is the start that every me
 [^list-unread]: The program, `chunk-56bhcxay.js:5251037` and `chunk-56bhcxay.js:5326483`.
 [^copy-proof]: The program, `chunk-56bhcxay.js:938352`.
 [^submodule]: The program, `chunk-56bhcxay.js:5161967`. The gate is the server-side flag `tengu_tidal_kestrel`.
-[^run-code-add]: The program, `chunk-ejmpea1g.js:4252`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325).
-[^run-code-install]: The program, `chunk-ejmpea1g.js:2822` (install warning, which goes on with more text) and `chunk-j2wfp6sf.js:77657` (recommendation prompt).
+[^run-code-add]: The program, `chunk-ejmpea1g.js:61928`.
+[^run-code-install]: The program, `chunk-ejmpea1g.js:42010` (install warning), `chunk-ejmpea1g.js:113009`, and `chunk-j2wfp6sf.js:1229511` (recommendation prompt).

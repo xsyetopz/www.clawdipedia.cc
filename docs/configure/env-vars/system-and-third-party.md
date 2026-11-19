@@ -30,7 +30,7 @@ The rows are in name order.[^variable-names] See [Environment Variables](index.m
 | `AGENT_NAME` | <Undocumented /> | Confirms an Azure Pipelines agent for the terminal color level. | Text. Presence test together with `TF_BUILD` | All sessions |
 | `ALACRITTY_LOG` | <Undocumented /> | Helps Claude Code detect the terminal. A set value counts as an Alacritty terminal in a terminal-feature check and rules out a plain VTE terminal. | On or off. Truthy test only. Read from the env object and from the `env` of the terminal detector | Terminal UI rendering, all. Not set from project `env` before trust |
 | `ALACRITTY_WINDOW_ID` | <Undocumented /> | Helps Claude Code detect the terminal. A set value rules out a plain `vte-based` or `gnome-terminal` guess, because Alacritty sets it. | On or off. Truthy test only, in the terminal detector | Terminal UI rendering, all. Not set from project `env` before trust |
-| `ALL_PROXY` | <Documented /> | This is a standard proxy variable. Claude Code passes it to `git` as `http.proxy` and `remote.origin.proxy` when it runs `git` commands. | Text. Read after `HTTPS_PROXY` and `https_proxy`, with the lowercase `all_proxy` as the last fallback. Since `2.1.323`, organization settings and policy requests no longer use a proxy that only `ALL_PROXY` sets. Set `HTTPS_PROXY` for them.[^all-proxy] | Git helper commands, all. Not set from project `env` before trust |
+| `ALL_PROXY` | <Documented /> | This is a standard proxy variable. Claude Code passes it to `git` as `http.proxy` and `remote.origin.proxy` when it runs `git` commands. | Text. Read after `HTTPS_PROXY` and `https_proxy`, with the lowercase `all_proxy` as the last fallback. Claude Code does not use a proxy that only `ALL_PROXY` sets to load organization settings. Set `HTTPS_PROXY` for them.[^all-proxy] | Git helper commands, all. Not set from project `env` before trust |
 | `ALLUSERSPROFILE` | <Undocumented /> | This is a Windows path variable. It is the last fallback for the `ProgramData` folder when Claude Code builds the Windows Start Menu path. | Text. Order is `ProgramData`, then `PROGRAMDATA`, then `ALLUSERSPROFILE`. Also in a list of Windows path names | Windows. Not set from project `env` before trust |
 | `ANDROID_HOME` | <Undocumented /> | Helps detect the environment. If the path exists, Claude Code records `android-sdk` in the detected build tools. | Text. Read first, with `ANDROID_SDK_ROOT` as the fallback. Only the path check matters | Environment report, all. Not set from project `env` before trust |
 | `ANDROID_SDK_ROOT` | <Undocumented /> | Helps detect the environment. It is the fallback for `ANDROID_HOME`. If the path exists, Claude Code records `android-sdk` in the detected build tools. | Text. Read only when `ANDROID_HOME` is unset | Environment report, all. Not set from project `env` before trust |
@@ -149,7 +149,7 @@ The rows are in name order.[^variable-names] See [Environment Variables](index.m
 | `KRB5_CONFIG` | <Undocumented /> | Names the Kerberos config file. When a plugin eval run grants Bash, Claude Code reads the file and hides the ticket cache and keytab files that its `libdefaults` section names. A relative path stops the run. The config file itself is not hidden. | Absolute path list. Default `/etc/krb5.conf` | `claude plugin eval` with a Bash grant |
 | `KRB5_KTNAME` | <Undocumented /> | Names the Kerberos keytab. When a plugin eval run grants Bash, Claude Code hides the file from Bash. The `FILE:`, `WRFILE:`, and `DIR:` forms each hide the path after the prefix. A `DIR::` form hides that path and its folder.[^krb5-probe] | Path, or `TYPE:path`. A relative path stops the run | `claude plugin eval` with a Bash grant |
 | `KRB5CCNAME` | <Undocumented /> | Names the Kerberos ticket cache. When a plugin eval run grants Bash, Claude Code hides the file from Bash. The `FILE:`, `WRFILE:`, and `DIR:` forms each hide the path after the prefix. A `DIR::` form hides that path and its folder.[^krb5-probe] | Path, or `TYPE:path`. A relative path stops the run | `claude plugin eval` with a Bash grant |
-| `KUBECONFIG` | <Undocumented /> | Names a kubeconfig file. When a plugin eval run grants Bash, Claude Code hides the file and its folder from Bash. A value of two paths joined by `:` hides both files and their folder.[^kube-probe] | Absolute path. A relative path stops the run | `claude plugin eval` with a Bash grant |
+| `KUBECONFIG` | <Undocumented /> | Names a kubeconfig file. When a plugin eval run grants Bash, Claude Code hides the file from Bash. A value of two paths joined by `:` hides both files.[^kube-probe] | Absolute path. A relative path stops the run | `claude plugin eval` with a Bash grant |
 | `KUBERNETES_SERVICE_HOST` | <Undocumented /> | Detects a Kubernetes pod so Claude Code reports a Kubernetes container runtime. | - | - |
 | `LEIN_HOME` | <Undocumented /> | Names the Leiningen home folder. When a plugin eval run grants Bash, Claude Code hides `credentials.clj`, `credentials.clj.gpg`, and `profiles.clj` in it from Bash. | Absolute path. A relative path stops the run | `claude plugin eval` with a Bash grant |
 | `LEIN_JVM_OPTS` | <Undocumented /> | Holds Leiningen JVM options. When a plugin eval run grants Bash, Claude Code reads them. A `-Duser.home=DIR` option hides the Maven, Gradle, Ivy, and sbt credential files under `DIR`. The options `-Dgradle.user.home`, `-Dmaven.home`, `-Dsbt.global.base`, `-Dsbt.ivy.home`, and `-Dmaven.user.settings` also hide files. `-Dmaven.repo.local`, `-Dsbt.boot.directory`, and an unrelated `-D` key hide nothing.[^jvm-probe] | JVM option text | `claude plugin eval` with a Bash grant |
@@ -158,7 +158,7 @@ The rows are in name order.[^variable-names] See [Environment Variables](index.m
 | `MAVEN_CONFIG` | <Undocumented /> | Holds Maven arguments. When a plugin eval run grants Bash, Claude Code hides the file that a settings option names, for example `--settings=file`. | Maven argument text | `claude plugin eval` with a Bash grant |
 | `MAVEN_HOME` | <Undocumented /> | Names the Maven install folder. When a plugin eval run grants Bash, Claude Code hides `conf/settings.xml` in it from Bash. | Absolute path. A relative path stops the run | `claude plugin eval` with a Bash grant |
 | `MAVEN_OPTS` | <Undocumented /> | Holds Maven JVM options. When a plugin eval run grants Bash, Claude Code reads them. A `-Duser.home=DIR` option hides the Maven, Gradle, Ivy, and sbt credential files under `DIR`. The options `-Dgradle.user.home`, `-Dmaven.home`, `-Dsbt.global.base`, `-Dsbt.ivy.home`, and `-Dmaven.user.settings` also hide files. `-Dmaven.repo.local`, `-Dsbt.boot.directory`, and an unrelated `-D` key hide nothing.[^jvm-probe] | JVM option text | `claude plugin eval` with a Bash grant |
-| `NETRC` | <Undocumented /> | Names the `netrc` file. When a plugin eval run grants Bash, Claude Code hides the file and its folder from Bash. With the variable unset, Bash can read the file. With the variable set, the same read fails with `Operation not permitted`.[^netrc-probe] | Absolute path. A relative path stops the run | `claude plugin eval` with a Bash grant |
+| `NETRC` | <Undocumented /> | Names the `netrc` file. When a plugin eval run grants Bash, Claude Code hides the file from Bash.[^netrc-probe] | Absolute path. A relative path stops the run | `claude plugin eval` with a Bash grant |
 | `NODE_ENV` | <Documented /> | Claude Code sets `production` in the env of some helper child processes. It also lists it in env reports. | - | - |
 | `NODE_OPTIONS` | <Undocumented /> | Holds Node options. Claude Code adds `--max-old-space-size=8192` when `CLAUDE_CODE_REMOTE` is `true`. | - | - |
 | `NODE_PATH` | <Documented /> | Holds the Bun runtime module search path. Claude Code removes it from the env of some helper child processes. | A path | - |
@@ -182,7 +182,7 @@ The rows are in name order.[^variable-names] See [Environment Variables](index.m
 | `PREFIX` | <Documented /> <Gated note="Works only behind a feature flag or server gate" /> | Gives the Termux install prefix. Claude Code uses `$PREFIX/tmp` for daemon and socket paths. | Text. Used only when `TERMUX_VERSION` is set. Else `/tmp` | Termux (Android). Not set from project `env` before trust |
 | `PROGRAMDATA` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Gives the Windows `ProgramData` folder. Claude Code uses it to find the Start Menu folder and as a protected env name in shell checks. | Text. Looked up as `ProgramData`, then `PROGRAMDATA`, then `ALLUSERSPROFILE` | Windows. Not set from project `env` before trust |
 | `ProgramData` | <Documented /> <Gated note="Works only behind a feature flag or server gate" /> | Gives the Windows `ProgramData` folder for the sandbox runtime and the Azure Arc token path. | Text. The sandbox throws `ProgramData is not set` when it is missing | Windows. Not set from project `env` before trust |
-| `PROGRAMFILES` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Gives the Windows `Program Files` folder as the second choice. Claude Code reads `ProgramFiles` first, then `PROGRAMFILES`, and else builds `Program Files` under the drive root. Since `2.1.328`.[^programfiles] | Text | Windows. Not set from project `env` before trust |
+| `PROGRAMFILES` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Gives the Windows `Program Files` folder as the second choice. Claude Code reads `ProgramFiles` first, then `PROGRAMFILES`, and else builds `Program Files` under the drive root.[^programfiles] | Text | Windows. Not set from project `env` before trust |
 | `ProgramFiles` | <Documented /> <Gated note="Works only behind a feature flag or server gate" /> | Gives the Windows `Program Files` folder. Claude Code uses it to locate PowerShell and Azure Arc tools. | Text | Windows. Not set from project `env` before trust |
 | `PROJECT_DOMAIN` | <Undocumented /> | Marks the host as Glitch in deployment-environment detection. | Text | All platforms. Not set from project `env` before trust |
 | `PWD` | <Documented /> | Holds the standard working directory. Claude Code adds it as a session directory when it differs from the original cwd. | Text. Used in startup permission setup and shell-expression checks | All sessions. Not set from project `env` before trust |
@@ -269,7 +269,7 @@ export NETRC="$PWD/creds/netrc"
 claude plugin eval . --allow-tools Bash
 ```
 
-A Bash `cat` of that file with `NETRC` unset prints the file. With `NETRC` set, the same command fails with `cat: ...: Operation not permitted`. A relative `KUBECONFIG` stops the run with the pointer text above.[^evalcreds]
+With `NETRC` set, Claude Code adds that file to the credential files that Bash cannot read. A relative `KUBECONFIG` stops the run with `KUBECONFIG names a relative path`.[^evalcreds]
 
 Variables with rows on other pages work the same way, for example `AWS_CONFIG_FILE` and `GOOGLE_APPLICATION_CREDENTIALS` in [Cloud Providers](cloud-providers.md), and `GIT_CONFIG_GLOBAL` and `JAVA_TOOL_OPTIONS` in [Tools and Bash](tools-and-bash.md). Their rows do not repeat this effect.
 
@@ -278,7 +278,7 @@ These cases show more detail.[^evalcreds-more]
 - `ANTHROPIC_PROFILE` does not choose which profile files are hidden. With `ANTHROPIC_CONFIG_DIR` set, Claude Code hides the credential file of every profile in `configs`, with a profile `a` named. A value that is an absolute path or holds `..` stops the run with `the selected Anthropic profile name leaves the configs directory`.
 - An AWS config with `credential_process`, or with a `credential_source` other than `Environment`, stops the run with `an AWS credential_process / credential_source cannot be excluded from the shell`. `credential_source = Environment` does not. A `web_identity_token_file` line hides the token file.
 - An `ssh_config` `Include` with a wildcard in the folder part stops the run with `an ssh_config Include pattern with a wildcard directory cannot be followed`.
-- The settings list of hidden variables also takes names by value. A variable whose value holds a URL with a user and password is added, and so is a variable named with `PROXY` whose value holds `@`. A variable without `PROXY` in its name that holds `bar@baz` is not added, and a plain proxy URL is not added. Only `EVAL_` variables were tested, because Claude Code filters the other names of the run.[^evalcreds-more]
+- The settings list of hidden variables also takes names by value. A variable whose value holds a URL with a user and a password is added. A URL without a user is not added.[^evalcreds-more]
 
 ## Related Pages
 
@@ -291,16 +291,16 @@ These cases show more detail.[^evalcreds-more]
 
 ## Sources
 
-[^jvm-probe]: Probe of the `2.1.319` binary.
-[^krb5-probe]: Probe of the `2.1.319` binary.
-[^kube-probe]: Probe of the `2.1.319` binary.
-[^netrc-probe]: Probe case `print.evalcreds.netrc.unset` and `print.evalcreds.netrc.set` of `2.1.319`.
-[^all-proxy]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-vz5h5htj.js:2878`.
+[^jvm-probe]: The program, `chunk-dt7h21xf.js:223586` (the option keys and the files they hide) and `chunk-2a85tfcs.js:25399` (the list of keys).
+[^krb5-probe]: The program, `chunk-dt7h21xf.js:225615` (the `FILE:`, `WRFILE:`, and `DIR:` forms and the relative path error).
+[^kube-probe]: The program, `chunk-dt7h21xf.js:153642` (the value splits at the path delimiter, and a relative path stops the run).
+[^netrc-probe]: The program, `chunk-dt7h21xf.js:149264`.
+[^all-proxy]: The program, `chunk-vz5h5htj.js:2878`.
 [^bash-env-gate]: The server gate is `tengu_golden_wirth`.
 [^bash-env]: The program, `chunk-56bhcxay.js:1111077`.
 [^system-drive]: The program, `chunk-kwkzbftg.js:42856` (read) and `chunk-sm9djeyx.js:3192` (set).
-[^evalcreds]: Probe cases `print.evalcreds.netrc.unset`, `print.evalcreds.netrc.set`, and `print.evalcreds.relative.KUBECONFIG` of `2.1.319`. Each ran the real binary against a local stub, with no model call.
-[^evalcreds-more]: Probe cases `print.evalcreds.anthropic-profile`, `.anthropic-profile-abs`, `.aws-credential-process`, `.aws-credential-source`, `.ssh-wildcard`, and `.pm` of `2.1.319`.
-[^variable-names]: The program, `chunk-7343wm3k.js:26213`, variable names found in the `2.1.314` binary and in the credential path rows of `2.1.319`. The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^evalcreds]: The program, `chunk-dt7h21xf.js:149264` (`NETRC`), `chunk-dt7h21xf.js:153642` (`KUBECONFIG`), and `chunk-dt7h21xf.js:147207` (the pointer text).
+[^evalcreds-more]: The program, `chunk-dt7h21xf.js:215446` (profile name), `chunk-dt7h21xf.js:235821` (AWS), `chunk-dt7h21xf.js:222163` (`ssh_config`), and `chunk-2a85tfcs.js:37254` (URL with a user and password).
+[^variable-names]: The program, `chunk-7343wm3k.js:26213`, variable names found in the `2.1.328` binary. The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 [^ci-color]: The program, `chunk-0tagyyqy.js:2663-2678`.
 [^programfiles]: The program, `chunk-56bhcxay.js:64600` (the order) and `chunk-56bhcxay.js:77639` (the list of names).

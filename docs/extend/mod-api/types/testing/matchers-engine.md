@@ -50,7 +50,7 @@ The element that each surface-dependent act of a mounted drawing reaches. A hand
 
 ### `ElementQuery`
 
-What `find` and `findAll` of a mounted drawing match an element on. An element must match every field that you give: its tag, its `key`, and the text that it shows. It is an object with the fields `type?`, `key?`, `text?`, and `in?`. `text` matches the whole shown text: a string by inclusion, a `RegExp` by test. Since `2.1.323`, the shown text of a `Progress` is its label and its figure.[^element-query]
+What `find` and `findAll` of a mounted drawing match an element on. An element must match every field that you give: its tag, its `key`, and the text that it shows. It is an object with the fields `type?`, `key?`, `text?`, and `in?`. `text` matches the whole shown text: a string by inclusion, a `RegExp` by test. The shown text of a `Progress` is its label and its figure.[^element-query]
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -127,7 +127,7 @@ What `expect(received)` answers: the checks, their negation, and the checks on w
 
 ### `FoundElement`
 
-One element of a mounted drawing as `find` returns it. It is the description that the hook of the plugin (or the module of a `Client`) built, read as plain data. It is an object with the fields `type`, `key`, `props`, `text`, and `children`. It is what each surface receives to draw, and it is the same on every surface. It is not what the surface painted. Since `2.1.323`, a `Progress` is `Box` and `Text` on every surface except mobile.[^found-element]
+One element of a mounted drawing as `find` returns it. It is the description that the hook of the plugin (or the module of a `Client`) built, read as plain data. It is an object with the fields `type`, `key`, `props`, `text`, and `children`. It is what each surface receives to draw, and it is the same on every surface. It is not what the surface painted. A `Progress` is `Box` and `Text` on every surface except mobile.[^found-element]
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |

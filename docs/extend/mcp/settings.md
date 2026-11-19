@@ -38,9 +38,9 @@ These keys sit under `projects["<path>"]`.
 | --- | --- | --- | --- |
 | `.mcp.json` | <Documented /> | Holds project servers. | At the project root. Interactive sessions ask for approval. `claude -p`, the SDK, and cloud sessions load it without a prompt. |
 | `~/.claude.json` | <Documented /> | Holds local and user servers. | `claude mcp add` writes it. |
-| `managed-mcp.json` | <Documented /> | A fixed server set from the organization. | Gives the organization exclusive control. Claude Code ignores other sources. In a probe, Claude Code dropped user and project servers with no warning, which matches the [official page](https://code.claude.com/docs/en/managed-mcp#disable-mcp-entirely). See [Managed Folder Probe](../../reference/probes.md#managed-folder-probe). Claude in Chrome and connectors stay blocked unless you set the two `allow` keys above. Since `2.1.326`, when the file appears during a session, Claude Code shows a notice that your organization now manages MCP servers and only allowed servers load from now on. If the file cannot be read, the notice says your own servers will not load. If the account that runs Claude Code could have written the file, Claude Code ignores a late file and logs it, and a restart applies it.[^managed-late] |
+| `managed-mcp.json` | <Documented /> | A fixed server set from the organization. | Gives the organization exclusive control. Claude Code ignores other sources. In a probe, Claude Code dropped user and project servers with no warning, which matches the [official page](https://code.claude.com/docs/en/managed-mcp#disable-mcp-entirely). See [Managed Folder Probe](../../reference/probes.md#managed-folder-probe). Claude in Chrome and connectors stay blocked unless you set the two `allow` keys above. When the file appears during a session, Claude Code shows a notice that your organization now manages MCP servers and only allowed servers load from now on. If the file cannot be read, the notice says your own servers will not load. If the account that runs Claude Code could have written the file, Claude Code ignores a late file and logs it, and a restart applies it.[^managed-late] |
 | `--mcp-config <configs...>` | <Documented /> | Loads servers from files or strings. | Space-separated. Scope `dynamic`. `headersHelper` runs in the primary working folder. |
-| `--strict-mcp-config` | <Documented /> | Uses only the `--mcp-config` servers. | Skips the approval prompt for project servers it does not load (`2.1.246` and later). |
+| `--strict-mcp-config` | <Documented /> | Uses only the `--mcp-config` servers. | - |
 | `--plugin-dir-no-mcp <path>` | <Undocumented /> | Loads an inline plugin without its MCP servers. | Hidden flag. The SDK form is `skipMcpDiscovery`. |
 | `--channels <servers...>` | <Documented /> | Registers channel notifications of the listed servers. | Hidden flag. Space-separated names. See [MCP Runtime](runtime.md#elicitation-and-channels). |
 | `--dangerously-load-development-channels <servers...>` | <Documented /> <Caution /> | Loads channel servers that are not on the allowlist. | Hidden flag for local channel development. Shows a confirmation dialog. |
@@ -50,7 +50,6 @@ These keys sit under `projects["<path>"]`.
 
 - `claude mcp list` and `claude mcp get` read approvals only from files outside the repository until you trust the folder.
 - In an untrusted folder, these sources apply: `~/.claude/settings.json`, managed settings, and `--settings`.
-- An untracked `.claude/settings.local.json` applies only in a trusted folder. Before `2.1.207` it always applied.
 - In `bypassPermissions` mode, Claude Code skips the project prompt when you set `skipDangerousModePermissionPrompt` in user or managed settings.
 
 ## Example
@@ -91,4 +90,4 @@ flowchart TD
 
 ## Sources
 
-[^managed-late]: The program, `chunk-56bhcxay.js:239272`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^managed-late]: The program, `chunk-56bhcxay.js:239272`.

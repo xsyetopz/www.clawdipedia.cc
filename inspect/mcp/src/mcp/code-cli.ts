@@ -147,6 +147,17 @@ const sentOf = (r: RunResult) =>
 			`${x.method} ${x.host === API_HOST ? `https://${API_HOST}` : ""}${x.path}`,
 	);
 
+/** The `anthropic-beta` names of each request that sent the header, as `[request number, names]`. */
+const betasOf = (r: RunResult): [number, string[]][] =>
+	r.requests.flatMap((x, i): [number, string[]][] =>
+		x.betas === undefined ? [] : [[i + 1, x.betas]],
+	);
+
+const betasLine = (betas: [number, string[]][]) =>
+	betas.length === 0
+		? ""
+		: `\nbetas: ${betas.map(([n, b]) => `request ${n}: ${b.join(",")}`).join(" | ")}`;
+
 const lookups = (r: RunResult, a: Args) => {
 	const { query, request, tool } = a;
 	return {
@@ -194,14 +205,16 @@ export const cli = async (a: Args): Promise<Out> => {
 	);
 	const { found, body, entry } = lookups(r, a);
 	const { sent, tools, line } = summary(r, found);
+	const betas = betasOf(r);
 	const stdout = clip(r.stdout, STDOUT_CHARS);
 	const stderr = clip(r.stderr, STDERR_CHARS);
 	const outcomes = outcomeLines(r).map((l) => clip(l, OUTCOME_CHARS));
 	return text(
-		`${bin.version}: ${line}${outcomes.map((l) => `\n${l}`).join("")}\nstdout: ${stdout}\nstderr: ${stderr}${shownFile(r, a)}${bodyText(body)}${toolText(tool, entry)}`,
+		`${bin.version}: ${line}${outcomes.map((l) => `\n${l}`).join("")}\nstdout: ${stdout}\nstderr: ${stderr}${shownFile(r, a)}${betasLine(betas)}${bodyText(body)}${toolText(tool, entry)}`,
 		{
 			exit: r.exit,
 			requests: sent,
+			betas: Object.fromEntries(betas),
 			tools,
 			found,
 			outcomes,

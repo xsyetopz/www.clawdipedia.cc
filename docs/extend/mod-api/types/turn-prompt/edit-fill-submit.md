@@ -49,11 +49,11 @@ The input of `prompt.fill` as the `$.prompt.fill(args)` of a plugin takes it. It
 | `text` | <Documented /> | What the box is to take (PromptFillInput `text`). | Type: `string`. |
 | `mode` | <Documented /> | Where the text goes (PromptFillMode). It is `replace` when left out. | Type: `PromptFillMode`. Optional. |
 | `decorations` | <Documented /> | Runs to paint over `text` (PromptDecoration). Offsets are into `text` as given. The engine moves them to where the text lands. None when absent. | Type: `PromptDecoration[]`. Optional. The next `prompt.edit` answer replaces them. They are gone at the next change of the draft. |
-| `cursor` | <Documented /> | Where the caret stands after the write: an offset into the whole draft that the box then holds. Left out, it is past the text for `insert`, else at the end. | Type: `number`. Optional. The engine clamps it to the draft and moves it to the start of a character that it falls inside. It refuses a value that is not an integer. Since `2.1.309`. |
+| `cursor` | <Documented /> | Where the caret stands after the write: an offset into the whole draft that the box then holds. Left out, it is past the text for `insert`, else at the end. | Type: `number`. Optional. The engine clamps it to the draft and moves it to the start of a character that it falls inside. It refuses a value that is not an integer. |
 
 ### `PromptPaintArgs`
 
-What the `$.prompt.paint(args)` of a plugin takes. A hook on `prompt.paint` sees it as `e` and may rewrite it. The runs belong to the caller's name, which no argument or hook sets. Used by `$.prompt.paint`, `prompt.paint`. Since `2.1.311`.
+What the `$.prompt.paint(args)` of a plugin takes. A hook on `prompt.paint` sees it as `e` and may rewrite it. The runs belong to the caller's name, which no argument or hook sets. Used by `$.prompt.paint`, `prompt.paint`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -62,7 +62,7 @@ What the `$.prompt.paint(args)` of a plugin takes. A hook on `prompt.paint` sees
 
 ### `PromptPainted`
 
-What `$.prompt.paint` resolves to: whether the runs were painted, and the box as it stands (PromptBox). A mod whose text went stale computes again from `text`. The box goes to a plugin whose module calls `$.prompt.read`, through the hooks on it. A plugin that never does, or is refused there, gets the empty box. Used by `$.prompt.paint`. Since `2.1.311`.
+What `$.prompt.paint` resolves to: whether the runs were painted, and the box as it stands (PromptBox). A mod whose text went stale computes again from `text`. The box goes to a plugin whose module calls `$.prompt.read`, through the hooks on it. A plugin that never does, or is refused there, gets the empty box. Used by `$.prompt.paint`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
@@ -91,7 +91,7 @@ The input of `prompt.fill` (prompt-fill/): a text about to be put in the prompt 
 | `mode` | <Documented /> | Where the text goes (PromptFillMode): over the draft, after it, or in at the cursor. `next({ ...e, mode })` moves it. If left out of a rewrite, it is kept. | Type: `PromptFillMode`. |
 | `origin` | <Documented /> | Who writes (PromptFillOrigin). The engine sets it where the write starts. Pinned: `next(e)` passes it on as received. | Type: `PromptFillOrigin`. |
 | `decorations` | <Documented /> | Runs to paint over `text` once it lands (PromptDecoration), as offsets into `text`. Absent when the call named none. | Type: `PromptDecoration[]`. Optional. What the chain passes down is what paints. A hook strips them this way: `next({ ...e, decorations: [] }))`. |
-| `cursor` | <Documented /> | Where the caret stands after the write (PromptFillArgs `cursor`), an offset into the whole draft. Absent when the call named none. | Type: `number`. Optional. What the chain passes down moves the caret. Left out of a rewrite, the box places it by `mode`. Example: `next({ ...e, cursor: 0 })`. Since `2.1.309`. |
+| `cursor` | <Documented /> | Where the caret stands after the write (PromptFillArgs `cursor`), an offset into the whole draft. Absent when the call named none. | Type: `number`. Optional. What the chain passes down moves the caret. Left out of a rewrite, the box places it by `mode`. Example: `next({ ...e, cursor: 0 })`. |
 
 ### `PromptFillOrigin`
 
@@ -204,11 +204,11 @@ Where a `prompt.submit` submission came from, as the engine knows it at the site
 
 ### `PromptSectionInput`
 
-The input of `prompt.section`: one named section of the system prompt, at the moment the engine assembles it. In every build from 2.1.300, the first one checked, through 2.1.328, the engine builds shared sections such as `lean_body` without a `prompt.section` call, so a hook does not see them.[^shared-sections] A `prompt.compose` hook does. Used by `prompt.section`, `$.prompt.section`.
+The input of `prompt.section`: one named section of the system prompt, at the moment the engine assembles it. The engine builds shared sections such as `lean_body` without a `prompt.section` call, so a hook does not see them.[^shared-sections] A `prompt.compose` hook does. Used by `prompt.section`, `$.prompt.section`.
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `name` | <Differs note="Docs say every named section; the program skips shared sections such as lean_body." /> | The ID of the section (`env_info_simple`, `memory`, ...). It is the same on every model and is the one `prompt.compose` lists. A matcher narrows on it. A `prompt.section` hook sees only sections that the engine asks about by name. Shared sections such as `lean_body` are not among them (so in every build from 2.1.300 through 2.1.328), but `prompt.compose` lists them. | Type: `string`. |
+| `name` | <Differs note="Docs say every named section; the program skips shared sections such as lean_body." /> | The ID of the section (`env_info_simple`, `memory`, ...). It is the same on every model and is the one `prompt.compose` lists. A matcher narrows on it. A `prompt.section` hook sees only sections that the engine asks about by name. Shared sections such as `lean_body` are not among them, but `prompt.compose` lists them. | Type: `string`. |
 | `text` | <Documented /> | The text of the section as core computed it, or null when core omits it. | Type: `string \| null`. |
 
 ### `PromptSectionResult`
@@ -226,7 +226,7 @@ The input of `prompt.submit` as the call of a plugin takes it. `PromptSubmitInpu
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `asUser` | <Documented /> | Submit the text as the words of the person. The model reads it bare, without the "The &lt;plugin> plugin sent a message" frame. Absent means framed. | Type: `true`. Optional. The origin that hooks see stays `{ kind: 'plugin', name, asUser: true }`. The engine does not expand `@file` mentions and pasted images for the prompt of a plugin. Since `2.1.326`, the turn is listed in `/rewind`, as a typed prompt is. |
+| `asUser` | <Documented /> | Submit the text as the words of the person. The model reads it bare, without the "The &lt;plugin> plugin sent a message" frame. Absent means framed. | Type: `true`. Optional. The origin that hooks see stays `{ kind: 'plugin', name, asUser: true }`. The engine does not expand `@file` mentions and pasted images for the prompt of a plugin. The turn is listed in `/rewind`, as a typed prompt is. |
 
 ### `PromptSubmitAttachment`
 
@@ -285,5 +285,5 @@ What a `prompt.submit` hook returns, and what `next(e)` resolves to: the prompt 
 
 ## Sources
 
-[^shared-sections]: The program, `chunk-56bhcxay.js:2891246` (the shared sections are plain entries of the compose list). The builds of `2.1.300`, `2.1.301`, and `2.1.302` hold the same plain `lean_body` entry, and the type file names `lean_body` in every version from `2.1.300`.
+[^shared-sections]: The program, `chunk-56bhcxay.js:2891246` and `chunk-56bhcxay.js:2892500` (the shared sections are plain entries of the compose list; only session sections get a decision). The type file names `lean_body` in `PromptComposeSection`.
 [^media-hold]: The program, `chunk-601pwdc9.js:3447`, gives each attachment its `id` before the `prompt.submit` hooks run (cap 4194304 bytes, at `chunk-yg8ff21f.js:198`). `chunk-56bhcxay.js:4961217` and `chunk-56bhcxay.js:4961290` answer only when the hook in flight lists that `id` (`chunk-56bhcxay.js:5074781`). No step checks where the mod was installed.

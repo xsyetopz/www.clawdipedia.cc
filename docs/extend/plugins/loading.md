@@ -36,7 +36,7 @@ Source: [Plugin Manifest Reference](https://code.claude.com/docs/en/plugins/mani
 | `CLAUDE_PLUGIN_OPTION_<KEY>` | <Documented /> | The same value as an env var, with the key in upper case. | Hooks |
 
 These variables are not in the env of commands the Bash tool runs for Claude.
-As of `2.1.309`, that includes a program in a plugin's `bin/` folder, which the Bash tool finds on its `PATH`.[^bash-bin]
+That includes a program in a plugin's `bin/` folder, which the Bash tool finds on its `PATH`.[^bash-bin]
 In a skill, write the reference as Markdown text instead.
 
 Claude Code saves non-sensitive values in `pluginConfigs` of user settings.
@@ -95,11 +95,11 @@ flowchart TD
   E --> F[Register skills, hooks, MCP, LSP, monitors]
 ```
 
-The `2.1.327` release notes say that agents you pass with `--agents` stay when plugins load or reload, and that a plugin's agent stays when you resume a session from the `--resume` picker.[^agents-327]
+Agents that you pass with `--agents` stay in the agent list when plugins load or reload. When you resume a session whose agent is not in the active list, Claude Code loads the plugins again and merges the `--agents` agents back in before it picks the agent.[^agents-327]
 
 ## Unsafe Paths and Links
 
-Since `2.1.326`, a plugin that you load from a folder skips a path or link that leads outside the plugin folder. Claude Code logs a warning that names the path, such as `Skipping ".lsp.json" for directory-loaded plugin ...: it resolves outside the plugin directory`. It does the same for an MCP source that climbs out of the folder, and for an MCPB source, which needs a download that the folder load does not do. `claude plugin validate` reports some unsafe paths and links.[^unsafe-paths]
+A plugin that you load from a folder skips a path or link that leads outside the plugin folder. Claude Code logs a warning that names the path, such as `Skipping ".lsp.json" for directory-loaded plugin ...: it resolves outside the plugin directory`. It does the same for an MCP source that climbs out of the folder, and for an MCPB source, which needs a download that the folder load does not do. `claude plugin validate` reports a hooks-module file that resolves outside the plugin folder.[^unsafe-paths]
 
 ## Errors
 
@@ -124,10 +124,10 @@ Each row is a family of messages. The backticked text is the start that every me
 [^undoc]: The program, for the rows marked <Undocumented />: `chunk-m4k9cyf3.js:1509`, `chunk-7343wm3k.js:16704`, and `chunk-56bhcxay.js:926779`.
 [^cache-path]: The program, `chunk-56bhcxay.js:926779` and `chunk-56bhcxay.js:932323`.
 [^registry]: The program, `chunk-m4k9cyf3.js:1509`.
-[^bash-bin]: Probe case `print.plugindata.bash-bin`.
-[^watch]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-9nv3z5ae.js:9741` for the default, `chunk-56bhcxay.js:5115300` for the type files that a reload writes, `chunk-56bhcxay.js:5115879` for the `tsconfig.json`, and `chunk-56bhcxay.js:5118119` for the `.claude/skills` watch in print mode. Probe cases `print.cli319.plugin-dir-watch.unset`, `print.cli319.plugin-dir-watch.v1`, `pty.cli319.plugin-dir-watch.unset`, and `pty.cli319.plugin-dir-watch.v0`.
+[^bash-bin]: The program, `chunk-56bhcxay.js:3821492` (the `bin/` folders that go on `PATH`). Probe case `print.plugindata.bash-bin`.
+[^watch]: The program, `chunk-9nv3z5ae.js:9741` for the default, `chunk-56bhcxay.js:5115300` for the type files that a reload writes, `chunk-56bhcxay.js:5115879` for the `tsconfig.json`, and `chunk-56bhcxay.js:5118119` for the `.claude/skills` watch in print mode. Probe cases `print.cli319.plugin-dir-watch.unset`, `print.cli319.plugin-dir-watch.v1`, `pty.cli319.plugin-dir-watch.unset`, and `pty.cli319.plugin-dir-watch.v0`.
 [^zip]: The program, `chunk-7343wm3k.js:16704`, `chunk-7343wm3k.js:34679`, `chunk-yvbbcep1.js:32311`, and `chunk-2svep2wm.js:2845`.
 [^not-installed]: The program, `chunk-a3rr42d2.js:14734`.
 [^lsp]: The program, `chunk-a3rr42d2.js:12500`.
-[^unsafe-paths]: The program, `chunk-56bhcxay.js:46608-46636`, `chunk-56bhcxay.js:235190-235387`, and `chunk-56bhcxay.js:46852`. [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325) for the `validate` part, which the code lines do not show.
-[^agents-327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program loads the `--agents` agents at `chunk-2v0j7fr6.js:1456` and `chunk-2v0j7fr6.js:7932`. The reload and resume behavior is from the release notes.
+[^unsafe-paths]: The program, `chunk-56bhcxay.js:804423` and `chunk-56bhcxay.js:804665` (the path and link check), `chunk-56bhcxay.js:4688391` (the MCPB source), `chunk-56bhcxay.js:4688696` (the MCP source), and `chunk-56bhcxay.js:5109173` (the `validate` text for a file that resolves outside the plugin folder).
+[^agents-327]: The program, `chunk-2v0j7fr6.js:20100` (the merge at load), `chunk-ntraaf3w.js:8418` (the merge at reload), and `chunk-ntraaf3w.js:8679` (the reload on resume).
