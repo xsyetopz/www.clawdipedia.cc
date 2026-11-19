@@ -222,7 +222,7 @@ In the interactive terminal, `/fast` without an argument opens a panel.[^panel]
 | Subtitle | `High-speed mode for <model>. Draws from usage credits at a higher rate. Separate rate limits apply.` On Vertex, `Billed` replaces `Draws from usage credits`. |
 | Keys | Space toggles, Enter confirms, Escape cancels |
 | Progress | `Running PreModelSwitch hooks…`, `Applying fast mode…`, `Waiting for the workspace…` |
-| Results | `Kept Fast mode ON`, `Kept Fast mode OFF`, `Fast mode OFF`, `Fast mode unchanged (cancelled)`, `Fast mode was not changed: applying it failed`, `Fast mode was not changed: the PreModelSwitch check failed` |
+| Results | `Kept Fast mode ON`, `Kept Fast mode OFF`, `Fast mode OFF`, `Fast mode unchanged (cancelled)`. With a remote workspace: `No response from the workspace — fast mode may still have been turned on there`, `Fast mode wasn't turned on in the workspace: <reason>`, `Fast mode wasn't turned on: the model changed while PreModelSwitch hooks ran; try again`. A change that turns fast mode off says `turned off`.[^panel-results] |
 | Link | `https://code.claude.com/docs/en/fast-mode` |
 
 No pty probe covers the panel on Vertex. These texts are from the program.
@@ -293,7 +293,7 @@ The `result` event of a `/fast on` turn that also changes the model has `fast_mo
 [^case-region-mythos]: Probe case `print.cli322.fast-vertex-mythos-region`.
 [^case-off]: Probe case `print.cli322.fast-vertex-off`.
 [^remote-workspace]: The program, `chunk-43kcvxxw.js:2616`.
-[^unavailable-prefix]: The program, `chunk-43kcvxxw.js:1905`.
+[^unavailable-prefix]: The program, `chunk-43kcvxxw.js:4491`.
 [^reason-field]: The program, `chunk-xethrx83.js:386045`, `chunk-xethrx83.js:387115`.
 [^free]: The program, `chunk-xethrx83.js:385623`.
 [^reason-source]: The program, `chunk-xethrx83.js:387115`, and the official pages cited in the sentence.
@@ -315,5 +315,6 @@ The `result` event of a `/fast on` turn that also changes the model has `fast_mo
 [^prices]: The program, `chunk-xethrx83.js:401462`, `chunk-xethrx83.js:405032`.
 [^price-tier]: The program, `chunk-xethrx83.js:401045` for the 30 and 150 row and `chunk-xethrx83.js:401482` for the catalog price with that fallback.
 [^panel]: The program, `chunk-j2wfp6sf.js:572428`.
+[^panel-results]: The program, `chunk-j2wfp6sf.js:574576` and `chunk-43kcvxxw.js:1742` for the first four texts, and `fVt` (`chunk-43kcvxxw.js:2280`), which the panel shows for a workspace answer (`chunk-j2wfp6sf.js:573700`).
 [^result-state]: The program, `chunk-20bv8pca.js:467012`.
 [^result-switch]: Probe case `print.cli322.fast-vertex-global` and the cc-inspect run in [Models](#models).

@@ -19,7 +19,7 @@ Some built-in prompt texts can be changed. This page lists each one, says whethe
 - **Indirect** means the text stays the same, but it tells the model to use something you control.
 - **No** means we found no way to change the text.
 
-A subscription (OAuth) login sends the same body keys, the same tool names, and 4 system blocks as an API key (live probe `live.oauth-parity` on 2.1.328, with the prompt `Reply with 'OK'.`). The system text differs by one line, which only the API key side has. The probe runs Sonnet 5.5 on the subscription and Opus 5.5 on the key. The login also sends three betas that the key does not: `oauth-2025-04-20`, `extended-cache-ttl-2025-04-11`, and `tool-provenance-2026-10-26`.
+A subscription (OAuth) login sends the same body keys, the same tool names, and 4 system blocks as an API key (live probe `live.oauth-parity` on 2.1.328, with the prompt `Reply with 'OK'.`). The server refused the login (HTTP 401), so the probe shows only what Claude Code sent. The system text differs by one line, which only the API key side has. The probe runs Sonnet 5.5 on the subscription and Opus 5.5 on the key. The login also sends three betas that the key does not: `oauth-2025-04-20`, `extended-cache-ttl-2025-04-11`, and `tool-provenance-2026-10-26`.
 
 ## Agent Merge Rule
 

@@ -116,8 +116,8 @@ The props of `Text`: colors, styles, and the size, weight, face and digits that 
 | `underline` | <Documented /> | `true` underlines the text. | Type: `boolean`. Optional. |
 | `strikethrough` | <Documented /> | `true` strikes the text through. | Type: `boolean`. Optional. |
 | `inverse` | <Documented /> | `true` swaps the text and background colors. | Type: `boolean`. Optional. |
-| `dir` | <Documented /> | The direction that the text reads in. Use `rtl` for a right-to-left script, so a row of it that opens with a Latin word or a number reads right to left. | Type: `'ltr' \| 'rtl'`. Optional. When absent, each row reads by its first strong letter. `rtl` rows are flush right. |
-| `wrap` | <Documented /> | How text that is too long is wrapped or cut. | Type: `'wrap' \| 'end' \| 'middle' \| 'truncate' \| 'truncate-start' \| 'truncate-middle' \| 'truncate-end' \| 'clip'`. Optional. `'clip'` is a value.[^maxlines] |
+| `dir` | <Documented /> | The direction that the text reads in. Use `rtl` for a right-to-left script, so a row of it that opens with a Latin word or a number reads right to left. | Type: `'ltr' \| 'rtl'`. Optional. When absent, each row reads by its first strong letter. Where the engine orders the letters itself, `rtl` rows are also flush right. A terminal that reorders text by itself draws the Text as without `dir`. |
+| `wrap` | <Documented /> | How text that is too long is wrapped or cut. | Type: `'wrap' \| 'end' \| 'middle' \| 'truncate' \| 'truncate-start' \| 'truncate-middle' \| 'truncate-end' \| 'clip'`. Optional. `wrap`, the default, breaks a long line into rows. The other values keep it on one row with an ellipsis: `end`, `truncate`, and `truncate-end` at its end, `truncate-start` at its start, `middle` and `truncate-middle` in its middle. Desktop and VS Code always cut the end. `clip` leaves no ellipsis, but the terminal draws one. A phone wraps a cut at the end unless `maxLines` is set.[^maxlines] |
 | `maxLines` | <Documented /> | Limits the number of lines. | Type: `number`, a whole number from 1 to 10000. Optional. Some surfaces keep it only with `wrap` set to `'wrap'`, `'end'`, `'truncate'`, or `'truncate-end'`, and drop it with other values.[^maxlines] |
 
 ### `ToastOptions`
@@ -181,7 +181,7 @@ The input of `ui.fault`: a `Client` that this plugin drew failed on a surface, a
 | `requestId` | <Documented /> | The id of the engine for the drawing that the `Client` sits in: the `requestId` that the `ui.render` hook that drew it saw. | Type: `string`. |
 | `element` | <Documented /> | The `key` of the `Client`: which instance failed. | Type: `string`. |
 | `module` | <Documented /> | The `module` of the `Client`: which surface module ran there, as its path under the folder of the plugin. | Type: `string`. |
-| `phase` | <Documented /> | When it failed (UiFaultPhase): loading, drawing, or running after it had drawn. | Type: `UiFaultPhase`. The step that failed. The terminal tries again once with new props or a new size. |
+| `phase` | <Documented /> | When it failed (UiFaultPhase): loading, drawing, or running after it had drawn. | Type: `UiFaultPhase`. The step that failed. After a `render` failure in the terminal, the engine drops the state and draws the tree again when the props change or the terminal size changes. A failure in another phase waits for a reload. |
 | `reason` | <Documented /> | Why, as the surface said it. It is one line of 1 to 200 characters with no control character in it. The engine cuts a longer one and ends it with an ellipsis. | Type: `string`. Untrusted text. It may quote what the module of the plugin threw. Display or log it. Never act on it. |
 
 ### `UiFocusArgs`
@@ -191,7 +191,7 @@ What the `$.ui.focus(args)` of a plugin takes. It takes one of its own elements,
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `requestId` | <Documented /> | The site, by the `requestId` that this plugin draws it under: the id of one of its panes, or the id of the band. | Type: `string`. |
-| `key` | <Documented /> | The `key` of the element: a `Button`, `Input` or `Select` that this plugin drew in that site. Of several under one key, the first in document order. | Type: `string`. The element key. The engine waits a short time for one that the next drawing brings. An element never drawn gets `{ deny }`. |
+| `key` | <Documented /> | The `key` of the element: a `Button`, `Input` or `Select` that this plugin drew in that site. Of several under one key, the first in document order. | Type: `string`. The element key. The engine waits, for a limited time, for one that the next drawing of the site brings. It does not wait when the call runs inside the hook of that drawing. An element never drawn gets `{ deny }`. |
 
 ### `UiFocusInput`
 

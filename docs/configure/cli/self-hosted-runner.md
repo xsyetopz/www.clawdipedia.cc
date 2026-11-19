@@ -243,7 +243,7 @@ The default of `--api-url` is `ANTHROPIC_BASE_URL`, else the built-in API URL.
 
 ## Sources
 
-[^runner-help]: The text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.328`, and the option parser of the program: the parse loop at `chunk-gv1b3n3g.js:329935`, its unknown-option branch at `chunk-gv1b3n3g.js:339184`, and the root help text from `chunk-gv1b3n3g.js:353970`, which runs to its `--help` line at `chunk-gv1b3n3g.js:393087`.
+[^runner-help]: The text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.328`, and the option parser of the program: the parse loop at `chunk-gv1b3n3g.js:329805`, its unknown-option branch at `chunk-gv1b3n3g.js:339555`, and the root help text from `chunk-gv1b3n3g.js:353970`, which runs to its `--help` line at `chunk-gv1b3n3g.js:393087`.
 [^cli321]: Probe group `cli321`.
 [^exit-codes]: The program, `chunk-gv1b3n3g.js:345212`.
 [^no-clone]: The program, `chunk-gv1b3n3g.js:339187` (the parser), `chunk-gv1b3n3g.js:406369` (the warning), and `chunk-gv1b3n3g.js:407369` (the git version check). The warning and the check both depend on the flag.

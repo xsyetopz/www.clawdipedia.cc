@@ -22,7 +22,7 @@ Run `/context` to see your own numbers.
 Method: a live run on `2.1.328` with a subscription login, a fresh config folder, and an empty project (a `README.md` only, no git repo).
 We ran `claude -p "/context" --output-format stream-json`. We read the `context_usage` object.
 For the second column we ran `claude -p "Reply with 'OK'."`. Then we ran `claude -p --continue "/context"`.
-All numbers are tokens on the default model, `claude-sonnet-5-5`.[^method] This breakdown is <Undocumented />.
+The server refused the login (HTTP 401), so `/context` could not get counts from the token counting endpoint. It showed its local estimate instead. All numbers are these estimates, on the model the session reported, `claude-sonnet-5-5`.[^method] This breakdown is <Undocumented />.
 
 | Category | Empty | After `Reply with 'OK'.` |
 | --- | --- | --- |
@@ -35,7 +35,7 @@ All numbers are tokens on the default model, `claude-sonnet-5-5`.[^method] This 
 
 The autocompact buffer is 33,000 tokens. See [Context and Compaction](context-and-compaction.md) for the levels.
 
-Messages hold 3,336 tokens after the first turn.
+Messages hold about 3,336 tokens (estimate) after the first turn.
 The first request carries injected content as messages:
 
 - a system reminder about git attribution
@@ -198,7 +198,7 @@ See [Request and Cache](request-and-cache.md).
 
 ## Sources
 
-[^method]: The probe case `live.context-budget` on `2.1.328`; see [Probes](../reference/probes.md#context-budget).
+[^method]: The probe case `live.context-budget` on `2.1.328`; see [Probes](../reference/probes.md#context-budget). When the count request fails, `/context` logs `analyzeContext: count unavailable, estimating locally` and estimates from the text: the program, `chunk-56bhcxay.js:2973839`.
 [^captures]: The probe captures, shown in [Tool Descriptions](../prompts/tools/tools.md).
 [^dsc]: Probe case `print.dsc.sizes`.
 [^ctx-count]: Probe case `print.misc.context-slash-command` on `2.1.328`. The case records the tools and message text of each count request.

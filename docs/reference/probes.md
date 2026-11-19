@@ -197,7 +197,7 @@ This run used the default model, with a fresh config folder and a project that h
 
 | What We Ran | Status | What We Saw |
 | --- | --- | --- |
-| `claude -p "/context" --output-format stream-json` in an empty session | <Undocumented /> | The default model was `claude-sonnet-5-5`. The session held 12,751 tokens: System prompt 2,252, System tools 8,432, and Skills 2,067. After one prompt and reply, it held 16,087 tokens, with Messages 3,336. See [Context Budget](../how-it-works/context-budget.md). |
+| `claude -p "/context" --output-format stream-json` in an empty session | <Undocumented /> | The server refused the login (HTTP 401), so the numbers are the local estimate of `/context`, not counts from the server. The session reported the model `claude-sonnet-5-5`. The session held 12,751 tokens: System prompt 2,252, System tools 8,432, and Skills 2,067. After one prompt that the server refused, it held 16,087 tokens, with Messages 3,336. See [Context Budget](../how-it-works/context-budget.md). |
 
 ## Live Login Probes
 

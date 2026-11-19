@@ -54,7 +54,7 @@ The catalog holds `opus`, `sonnet`, `haiku`, and `fable`. The help text of `--mo
 | `opus` | <Documented /> | `claude-opus-5-5` | Foundry uses `claude-opus-4-6`. Gateways use `claude-opus-4-7`. |
 | `sonnet` | <Documented /> | `claude-sonnet-5-5` | Bedrock, Vertex, Foundry, and Mantle use `claude-sonnet-4-5`. Claude Platform on AWS and gateways use `claude-sonnet-4-6`. |
 | `haiku` | <Documented /> | `claude-haiku-5-5` | Every other provider uses `claude-haiku-4-5`. |
-| `fable` | <Documented /> | `claude-fable-5-2` | Gateways use `claude-fable-5`, which the catalog names Fable 5. A session counts as a gateway session when gateway sign-in is active, the gateway server process runs, or host policy requires a gateway.[^fable-alias] |
+| `fable` | <Documented /> | `claude-fable-5-2` | Gateways use `claude-fable-5`, which the catalog names Fable 5. A session counts as a gateway session when it holds a gateway sign-in, even an expired one, when the gateway server process runs, or when host policy requires a gateway.[^fable-alias] |
 | `best` | <Documented /> | The same model as `opus`. | The alias table sets `best` to `opus`.[^best] |
 | `opusplan` | <Documented /> | `opus` in plan mode, then `sonnet` to run the plan. [^opusplan] | |
 | `sonnet[1m]`, `opus[1m]`, `fable[1m]` | <Documented /> | The alias with a 1M window. | No effect when the alias already has a native 1M window. Claude Code shows the `(1M context)` label only for a model that supports the suffix. It still accepts the suffix on other models.[^suffix] |
@@ -206,7 +206,7 @@ The betas `per-turn-control-2026-07-01` and `timing-2026-09-09` match the flags 
 
 [^overrides]: The program, `chunk-xethrx83.js:280365` (the lookup from a model name to a `modelOverrides` key) and `chunk-699j6sfp.js:1206` (the comparison that ignores letter case and a trailing `[1m]`).
 [^best]: The program, `chunk-b60sxmve.js:22702`.
-[^fable-alias]: The program, `chunk-b60sxmve.js:22614` for the alias entry, `chunk-b60sxmve.js:28163` for the lookup that takes `per_provider` first and `default` second, `chunk-b60sxmve.js:34347` for the provider choice, and `chunk-b60sxmve.js:16653` for the `claude-fable-5` entry with display name `Fable 5`.
+[^fable-alias]: The program, `chunk-b60sxmve.js:22614` for the alias entry, `chunk-b60sxmve.js:28163` for the lookup that takes `per_provider` first and `default` second, `chunk-b60sxmve.js:34347` for the provider choice, `chunk-0fvmdxeb.js:132200` and `chunk-0fvmdxeb.js:132585` for the three gateway checks, and `chunk-b60sxmve.js:16653` for the `claude-fable-5` entry with display name `Fable 5`.
 [^opusplan]: The program, `chunk-xethrx83.js:479843` (the plan-mode model for `opusplan` and `haiku`) and `chunk-xethrx83.js:480769` (the plan-mode switch).
 [^aliases]: The aliases are from the official page, and the exceptions are from the program, `chunk-b60sxmve.js:21915-22702`.
 [^suffix]: The program, `chunk-xethrx83.js:503403` (the `(1M context)` label needs a model with `supports_1m_suffix`) and `chunk-699j6sfp.js:933` (the alias list with `[1m]`).

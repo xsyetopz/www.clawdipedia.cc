@@ -72,16 +72,16 @@ These sources go in `extraKnownMarketplaces`, `strictKnownMarketplaces`, and `bl
 
 The program marks `pluginDigests` as deprecated and ignores it. Settings that hold it still load. A plugin takes the organization tier when managed settings enable it and declare its marketplace with a remote source.[^digest-tier] The folder of the plugin must be the copy that its install record holds. When the record holds no hash, or holds another one, the plugin does not load, and the warning says "its install record holds no hash" or "its folder is not the copy its install record holds".[^digest-warn]
 
-The `pluginDigests` field sits in an entry of `extraKnownMarketplaces` (and its alias `additionalMarketplaces`). The settings schema marks it as managed settings only.[^digest-schema]
+The `pluginDigests` field sits in an entry of `extraKnownMarketplaces` (and its alias `additionalMarketplaces`). Both the user and the managed settings schemas accept it.[^digest-schema]
 
 | Field | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
-| `pluginDigests` | <Documented /> <Deprecated note="Ignored" /> <ManagedOnly /> | Holds digests, by plugin name. The program ignores it. | Type: object of arrays of strings. The schema says: "Deprecated and ignored: settings that hold it still load."[^digest-schema] |
+| `pluginDigests` | <Documented /> <Deprecated note="Ignored" /> | Holds digests, by plugin name. The program ignores it. | Type: object of arrays of strings. The schema says: "Deprecated and ignored: settings that hold it still load."[^digest-schema] |
 
 - A folder digest is `sha256-` and the base64 SHA-256 of the folder. The hash covers every file and, under `node_modules`, every symbolic link, in sorted order of its path. For each entry, the hash takes `f PATH` (`l PATH` for a link), a NUL byte, the byte length, a NUL byte, and the bytes. Paths use `/`. At the root, the hash leaves out `.git`, `.mcpb-cache`, and other names that the program keeps in a set.[^digest-limits]
 - Claude Code reads the folder with a limit of 4096 files and 32 MiB in all. `node_modules` has its own limit of 64000 files and 512 MiB. A name that is not UTF-8, an entry that is not a regular file, or a file that changed during the read refuses the folder.[^digest-limits]
 - When a plugin is refused, Claude Code warns that the plugin "is not treated as the organization's, and does not load", with the reason.[^digest-refuse]
-- A line that Claude Code builds for a `pluginDigests` key reads "code from your organization will run".[^digest-line] No source states where Claude Code displays it.
+- Claude Code builds a settings key `extraKnownMarketplaces[<name>].listedMods` for a marketplace whose plugins the settings list. Its line reads `<key>: code from your organization will run`.[^digest-line] No source states where Claude Code displays it.
 
 ## Settings Keys
 
@@ -171,7 +171,7 @@ Each row is a family of messages. The backticked text is the start that every me
 | --- | --- | --- | --- |
 | `Plugin source command` | <Undocumented /> | A plugin source command did not give a plugin directory. | The command could not start, reached its timeout, was killed, or exited with an error code. It printed nothing, printed more than one line, printed too much, or printed a path that is not absolute. The path was a network location, the working directory or a parent of it, or a directory with no plugin content. |
 | `Plugin archive` | <Undocumented /> | Claude Code did not install a plugin archive. | The archive held no plugin files or no plugin content at its root. It lacked the component paths its entry declares, or declared unsafe ones. The sha256 check failed. A redirect left the allowed URLs. The archive was too large. |
-| `${…} changed while it was read`, `${…} is not UTF-8`, `${…} is over the size a folder may hold`, `a name under ${…} is not UTF-8`, `it holds more than ${…} bytes`, `it holds more than ${…} files`, `this platform cannot open a file without following it`, `a plugin was placed with no declaration` | <Undocumented /> | Claude Code could not read the folder of a plugin with `pluginDigests` to compute its digest, or could not place its tier. | A file changed during the read, is over 32 MiB, or is not UTF-8 where Claude Code reads its text. A name is not UTF-8. The folder holds more than 4096 files or more than 32 MiB. The platform cannot open a file without following links. The plugin has no declaration for its tier. See [Plugin Digests](#plugin-digests). |
+| `${…} changed while it was read`, `${…} is not UTF-8`, `${…} is over the size a folder may hold`, `a name under ${…} is not UTF-8`, `it holds more than ${…} bytes`, `it holds more than ${…} files`, `this platform cannot open a file without following it`, `a plugin was placed with no declaration` | <Undocumented /> | Claude Code could not read the folder of an organization-tier plugin to compute its digest, or could not place its tier. | A file changed during the read, is over 32 MiB, or is not UTF-8 where Claude Code reads its text. A name is not UTF-8. The folder holds more than 4096 files or more than 32 MiB. The platform cannot open a file without following links. The plugin has no declaration for its tier. See [Plugin Digests](#plugin-digests). |
 | `Plugin directory` | <Undocumented /> | A plugin directory was not loaded or installed. | The directory does not exist, was removed or replaced while it loaded, has too many entries, or is too large. |
 | `Marketplace` | <Undocumented /> | A marketplace was refused, not found, or not refreshed. | Enterprise policy blocks it. It was registered from an untrusted source. It has a corrupted `installLocation`, or has a name that is not a plain directory name. A seed-managed marketplace does not auto-update. A name that is not registered gets a list of the available marketplaces. |
 | `The plugin archive` | <Undocumented /> | A plugin archive from claude.ai was not installed. | The archive has no plugin content at its root, carries a git repository layout, or is not a safe, well-formed zip. This claude.ai login has no plugin access yet. |
@@ -205,10 +205,10 @@ Each row is a family of messages. The backticked text is the start that every me
 [^npm-opts]: The program, `chunk-jkpzhr7r.js:82029`, its bundled settings schema.
 [^digest-tier]: The program, `chunk-jkpzhr7r.js:206396` for the schema text and `chunk-56bhcxay.js:1037990` for the record check.
 [^digest-warn]: The program, `chunk-56bhcxay.js:1037144` and `chunk-56bhcxay.js:1037235`.
-[^digest-schema]: The program, `chunk-jkpzhr7r.js:206396`, its bundled settings schema.
+[^digest-schema]: The program, `chunk-jkpzhr7r.js:206396`, its bundled settings schema. The generated `schemas/claude-code-settings.json` and `schemas/claude-code-managed-settings.json` both hold the field.
 [^digest-limits]: The program, `chunk-56bhcxay.js:1032821` for the limits, `chunk-56bhcxay.js:1033282` for the folder walk, and `chunk-56bhcxay.js:970462` for the root names.
 [^digest-refuse]: The program, `chunk-56bhcxay.js:1037990`.
-[^digest-line]: The program, `chunk-jkpzhr7r.js:355508`.
+[^digest-line]: The program, `chunk-jkpzhr7r.js:341578` for the key and `chunk-jkpzhr7r.js:355482` for the line. The marketplaces come from `chunk-jkpzhr7r.js:347843` (`Uy`).
 [^settings-schema]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:206143`.
 [^copy]: The program, `chunk-4681nt26.js:1837` and `chunk-56bhcxay.js:5468117`.
 [^withdraw]: The program, `chunk-56bhcxay.js:5151901`.

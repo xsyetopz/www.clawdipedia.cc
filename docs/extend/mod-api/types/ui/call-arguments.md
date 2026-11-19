@@ -122,7 +122,7 @@ The input of `ui.pointer`. It tells what the pointer did on the backdrop, and wh
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `surface` | <Documented /> | Where the pointer event came from. | Type: `RenderSurface`. `desktop` or `mobile`. |
-| `component` | <Documented /> | The element that was hit. | Type: `'Backdrop'`. |
+| `component` | <Documented /> | Always `Backdrop`: the pointer acted on the backdrop. | Type: `'Backdrop'`. |
 | `requestId` | <Documented /> | The `requestId` that the `ui.render` hook that drew the backdrop saw. | Type: `string`. |
 | `scene` | <Documented /> | The `scene` that the plugin named in `$.theme.set`. | Type: `string`. |
 | `type` | <Documented /> | The kind of event: a click, or a tap of a finger. | Type: `'click'`. Moves never reach a mod. |
@@ -173,7 +173,7 @@ The input of `ui.scroll`: the window of a site, asked to move. It moves over the
 | `component` | <Documented /> | Which site: a `Pane` body or the `AbovePrompt` band. | Type: `UiScrollComponent`. |
 | `requestId` | <Documented /> | The instance that the `ui.render` hook that draws the site sees: the ID of the pane, or the one ID of the band. | Type: `string`. |
 | `offset` | <Documented /> | The first row that the window is to show, 0 at the top. It is the row that it shows now plus `by`, clamped to the tree, or where `$.ui.scroll` resolved. | Type: `number`. `next({ ...e, offset })` moves it elsewhere (a clamp). One past the end of the tree lands at the end. Nothing has moved when a hook reads it. |
-| `by` | <Documented /> | The rows that the move asks for, signed, negative toward the top. It is what the `scrollBy` of the DOM takes. Read-only. | Type: `number`. The scroll distance. A wheel tick is `-1` or `1`. A page key is `bodyRows`. Home and End are `contentRows`. |
+| `by` | <Documented /> | The rows that the move asks for, signed, negative toward the top. It is what the `scrollBy` of the DOM takes. Read-only. | Type: `number`. The scroll distance. From a person: a wheel tick is `-1` or `1` at rest, and more when ticks come close together or add up during a scroll. An arrow key is one row while the engine has rows to scroll. A page key is `bodyRows`. Home and End are `contentRows`. From a plugin: the distance the plugin gave. |
 | `bodyRows` | <Documented /> | How many rows of the tree the window displays at once, as drawn now. Read-only. | Type: `number`. |
 | `contentRows` | <Documented /> | How many rows the tree has, as drawn now. The last offset of the window is `contentRows - bodyRows`, and none when the tree fits. Read-only. | Type: `number`. |
 | `origin` | <Documented /> | Who moves it (UiScrollOrigin). The engine sets it where the move starts. | Type: `UiScrollOrigin`. |

@@ -11,7 +11,7 @@ A mod draws with elements, at render sites, on a surface. Use this page to find 
 - An element is a building block of a drawing, such as `Box`, `Text`, or `Button`.
 
 The engine (Claude Code) raises `ui.render` when it is about to draw a render site.
-A hook gets the name of the site in `e.component` and returns a tree of elements. JSX needs a `.tsx` or `.jsx` file.
+A hook gets the name of the site in `e.component` and returns a tree of elements. JSX needs a `.tsx` or `.jsx` file.[^jsx-files]
 
 Official pages: [Draw in the Interface](https://code.claude.com/docs/en/plugins/mods/interface), [Mods Overview](https://code.claude.com/docs/en/plugins/mods/overview), and [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference).[^types]
 
@@ -122,7 +122,7 @@ A user-role transcript row: the person's prompt, a background task notification,
 
 | Item | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
-| `text` | <Documented /> | What the row shows. | `string`. The engine draws a rewrite up to 100000 characters. A teammate block with several frames keeps the engine's drawing. |
+| `text` | <Documented /> | What the row shows. | `string`. The engine draws a rewrite up to 100000 characters. A teammate block with several frames, or with a summary line, keeps the engine's drawing. |
 | `origin` | <Documented /> | Where the stored message came from, as `prompt.submit` named it: composer, task notification, peer, channel, or plugin. | `PromptOrigin`. Read-only. `unclassified` for a teammate's message and for a message stored before stamps. |
 | `isExpanded` | <Documented /> | Whether the view draws the row in full: the ctrl+o transcript, `--verbose`, or a surface with no ctrl+o. | `boolean`. Read-only. When false, a message row is one dim line that names the sender. |
 | `task` | <Documented /> | What a notification row (`origin.kind` `task-notification`) reports on: its background task. | `UserMessageTask`, optional. Read-only. |
@@ -355,7 +355,7 @@ The framed region a plugin opened with `$.ui.open({ id })`. There is one instanc
 | `bodyColumns` | <Documented /> | Cells across the body, inside the frame. | `number`. Read-only. |
 | `placement` | <Documented /> | Where the surface seated the pane: `dock` beside the transcript (the terminal in fullscreen from 110 columns), or `inline` above the prompt. On the desktop app also `widget`, the small form of a minimized pane. Draw what reads at a glance there, because clicks may not reach it. The hook runs again when the seat changes. | `'dock' \| 'inline' \| 'widget'`. Read-only. The engine refuses a change. Treat any other value as `dock`.[^types-323] |
 | `anchoredEdges` | <Documented /> | The edges of the chat area that a `widget` is anchored on, to align the drawing by: `["bottom", "right"]` in that corner, `["right"]` stacked on another widget there, `[]` in the session rail (the column beside the chat). | `readonly ('top' \| 'right' \| 'bottom' \| 'left')[]`, optional. Absent in every other seat. The hook runs again when they change. Ignore a value outside these four. No call moves a widget.[^anchored] |
-| `scroll` | <Documented /> | The window of the body over the tree. Engine-owned. | `SiteScroll`. `bodyRows` is the room the frame may use. Inline, the frame fits the tree. |
+| `scroll` | <Documented /> | The window of the body over the tree. Engine-owned. | `SiteScroll`. `bodyRows` is the most rows the frame may take, less the rows the engine uses: two for an inline border, one for the tab row while it shows, and one for the close mark of a dock. It is not the number of rows on screen. Inline, the frame fits the tree. |
 | `view` | <Documented /> | Which transcript is on screen beside the pane. | `SiteView`. The pane stays open across a switch of view. |
 
 ### `Placed`
@@ -434,6 +434,7 @@ export default shader({ fps: 30, passes: [sky] });
 [^collapsed]: The program, `chunk-j2wfp6sf.js:548379`.
 [^list]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-syremzmn.js:172050` and `chunk-syremzmn.js:199009`.
 [^covered]: The program, `chunk-j2wfp6sf.js:560910`.
+[^jsx-files]: The program, `chunk-4nwbbh6e.js:1641` (`Utt`). It loads a `.js`, `.mjs`, or `.cjs` file as it is, and compiles a `.ts`, `.mts`, or `.cts` file without the JSX pragma. Only `.tsx` and `.jsx` files are compiled with `h` and `Fragment`.
 [^anchored]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-syremzmn.js:169348`.
 [^agent-row]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, the `AgentRow` member of `RenderPropsOf`.
 [^context-menu]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, the `ContextMenu` member of `RenderPropsOf`.

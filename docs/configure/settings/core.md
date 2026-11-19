@@ -102,7 +102,7 @@ Status: <Gated />. The official docs do not state it.
 [^excludes-327]: The program, `chunk-56bhcxay.js:1749506` (the match) and `chunk-56bhcxay.js:1742504` (the change of the drive-letter case).
 [^compact-window]: The settings schema, `maximum` of `autoCompactWindow`.
 [^compact-offer]: The program, `chunk-jkpzhr7r.js:296330`; the reader is at `chunk-5699r6rq.js:620145`.
-[^attr-project]: The settings schema. Probe cases `print.cli319.attr.claude-proj`, `print.cli319.attr.chan`, `print.cli319.attr.bad-prefix`, and `print.cli319.attr.number`. Live probe case `live.cli319.attribution`, with a real login. The group-name text is from the settings schema, and the gateway side is in the program, `chunk-56bhcxay.js:1290945` and `chunk-39421vhy.js:942723`.
+[^attr-project]: The settings schema. Probe cases `print.cli319.attr.claude-proj`, `print.cli319.attr.chan`, `print.cli319.attr.bad-prefix`, and `print.cli319.attr.number`. Live probe case `live.cli319.attribution`, with a token that the server refused (HTTP 401). The header is in the request that Claude Code sent. The group-name text is from the settings schema, and the gateway side is in the program, `chunk-56bhcxay.js:1290945` and `chunk-39421vhy.js:942723`.
 [^plans-fallback]: The program, `chunk-wchmynj9.js:179621`.
 [^plans-refuse]: The program, `chunk-wchmynj9.js:177056`. The full text goes on: "Check that the folder exists, that no link leads out of it, and that the plan file is not a link and has no hard link. If this system or drive cannot report that, remove plansDirectory from your settings to use the default plans folder."
 [^away-skip]: The program, `chunk-j2wfp6sf.js:1979555` (the log line `[awaySummary] skipped: last reply billed to usage credits`).
