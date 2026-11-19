@@ -11,6 +11,7 @@ import { pick } from "./cases.ts";
 import { scrubResult } from "./harness.ts";
 import { makeCtx, preflight } from "./run/ctx.ts";
 import { markWarm, messageOf, record, runSafely } from "./run/report.ts";
+import { checkSignIn } from "./run/sign-in.ts";
 
 const main = async (): Promise<number> => {
 	const ctx = await parseCtx(process.argv.slice(2));
@@ -19,6 +20,9 @@ const main = async (): Promise<number> => {
 	if (cases.length === 0) {
 		console.info(`no case matches --only ${ctx.only?.join(",")}`);
 		return 2;
+	}
+	if (!ctx.dry) {
+		await checkSignIn(token);
 	}
 	const suspectWarm = !ctx.dry && (await maybeWarm(ctx.to));
 	const { x, tmp } = await makeCtx(ctx, token, bin);
