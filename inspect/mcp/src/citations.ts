@@ -56,7 +56,7 @@ export interface Move {
 }
 
 const FOLLOW_ON =
-	/(chunk-[\da-z]+\.js)(?:([:@])(\d+)|(`? lines )(\d+) to (\d+))?|(?<=`):(\d+)(?:-(\d+))?(?=`)/gu;
+	/(chunk-[\da-z]+\.js)(?:([:@])(\d+)(?:-(\d+))?|(`? lines )(\d+) to (\d+))?|(?<=`):(\d+)(?:-(\d+))?(?=`)/gu;
 const LITERAL = /"[^"\\\n]{20,}"/gu;
 
 /** Maps an old module to the new module that shares the most long string literals with it, once for each old module. */
@@ -179,13 +179,17 @@ interface Claim {
 	terms: string[];
 }
 
+// Each end of a range finds its code on its own, so the two can land out of order; a reversed range does not move.
+const ordered = (a: number | undefined, b: number | "" | undefined): boolean =>
+	a === undefined || b === undefined || b === "" || a <= b;
+
 /** Moves one citation that names a chunk: gives its new text, and the pair that the numbers after it on the line move with. */
 const moveChunk = (
 	{ oldByName, newNames, mapModule, moves }: Ctx,
 	{ file, line, terms }: Claim,
 	found: string,
 	chunk: string,
-	[sep, offset, lead, first, end]: Group[],
+	[sep, offset, offsetEnd, lead, first, end]: Group[],
 ): { text: string; pair?: Pair } => {
 	const old = newNames.has(chunk) ? undefined : oldByName.get(chunk);
 	if (!old) {
@@ -201,12 +205,17 @@ const moveChunk = (
 		n === undefined ? undefined : sameCode(pair, form, Number(n), terms);
 	const name = basename(target.name);
 	const moved = sameAt(offset, sep);
+	// A `:A-B` moves only when both ends find their code, so a range never mixes builds.
+	const movedEnd = offsetEnd === undefined ? "" : sameAt(offsetEnd, sep);
 	const range = [sameAt(first, "lines"), sameAt(end, "lines")];
 	const numbers =
 		moved === undefined
 			? range.every((n) => n !== undefined) &&
+				ordered(range[0], range[1]) &&
 				`${lead}${range[0]} to ${range[1]}`
-			: `${sep}${moved}`;
+			: movedEnd !== undefined &&
+				ordered(moved, movedEnd) &&
+				`${sep}${moved}${movedEnd === "" ? "" : `-${movedEnd}`}`;
 	const text =
 		numbers === false ? found.replace(chunk, name) : `${name}${numbers}`;
 	moves.push({
@@ -230,11 +239,11 @@ const moveLine = (
 	const sameAt = (n: Group): number | undefined =>
 		last && n !== undefined ? sameCode(last, ":", Number(n), terms) : undefined;
 	return lineText.replaceAll(FOLLOW_ON, (found: string, ...groups: Group[]) => {
-		const [chunk, sep, offset, lead, first, end, from, to] = groups;
+		const [chunk, sep, offset, offsetEnd, lead, first, end, from, to] = groups;
 		if (chunk === undefined) {
 			return `:${sameAt(from) ?? from}${to === undefined ? "" : `-${sameAt(to) ?? to}`}`;
 		}
-		const numbers = [sep, offset, lead, first, end];
+		const numbers = [sep, offset, offsetEnd, lead, first, end];
 		const moved = moveChunk(ctx, { file, line, terms }, found, chunk, numbers);
 		last = moved.pair;
 		return moved.text;
@@ -248,7 +257,7 @@ const moveLine = (
  * A `lines A to B` form counts lines of the cleaned module (`clean` of a source), and so does a `:N` that the cleaned module has as a
  * line, unless the words of the claim stand only near the raw offset `N`: such a line moves to the nearest place with the same lines
  * around it. A `@N`, and each other `:N`, is a raw offset: it moves when `relocate` finds the same code, or stays when the code
- * around that offset is the same in both modules.
+ * around that offset is the same in both modules. A `:A-B` after a chunk moves only when both ends move.
  * A backticked `:N` or `:N-M` after a citation on the same line moves with the last chunk named before it.
  * Gives each move and the rewritten text of each file.
  */

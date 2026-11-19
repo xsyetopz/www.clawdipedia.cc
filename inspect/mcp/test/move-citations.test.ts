@@ -157,6 +157,43 @@ test("moves a follow-on number or range with the last chunk before it", () => {
 	);
 });
 
+test("moves both ends of a range that follows a chunk", () => {
+	const { moves, files } = run(
+		`CLAUDE_CODE_FOO_BAR: \`chunk-aaaaaaaa.js:${OLD_AT}-${OLD_AT + 4}\``,
+	);
+	expect(files["a.md"]).toBe(
+		`CLAUDE_CODE_FOO_BAR: \`chunk-bbbbbbbb.js:${NEW_AT}-${NEW_AT + 4}\``,
+	);
+	expect(moves.map((m) => m.how)).toEqual(["same"]);
+});
+
+test("keeps both ends of a range as a module move when one end is not found", () => {
+	const { moves, files } = run(
+		`CLAUDE_CODE_FOO_BAR: \`chunk-aaaaaaaa.js:${OLD_AT}-9000\``,
+	);
+	expect(files["a.md"]).toBe(
+		`CLAUDE_CODE_FOO_BAR: \`chunk-bbbbbbbb.js:${OLD_AT}-9000\``,
+	);
+	expect(moves.map((m) => m.how)).toEqual(["module"]);
+});
+
+test("keeps a range as a module move when its ends land out of order", () => {
+	// Arrange: the new build puts the second half of the module before the first.
+	const tail = '\nimport "/$bunfs/root/chunk@0693a6aa.js";';
+	const swapped = [...cleanLines(101, 201), ...cleanLines(1, 101)].join("\n");
+
+	// Act
+	const { moves, files } = moveCitations(
+		{ "a.md": "See `chunk-aaaaaaaa.js:50-150`." },
+		[{ name: "chunk-aaaaaaaa.js", text: OLD, clean: CLEAN_OLD }],
+		[{ name: "chunk-bbbbbbbb.js", text: NEW, clean: `${swapped}${tail}` }],
+	);
+
+	// Assert
+	expect(files["a.md"]).toBe("See `chunk-bbbbbbbb.js:50-150`.");
+	expect(moves.map((m) => m.how)).toEqual(["module"]);
+});
+
 test("reports a chunk with no matching module and leaves its text", () => {
 	const text = "See `chunk-cccccccc.js:5`, `:9`.";
 	const { moves, files } = run(text);
