@@ -65,9 +65,10 @@ group(
 			const re = new RegExp(regex(need(query, "query"), isRegex).source, "gu");
 			const hits: { module: string; offset: number; snippet: string }[] = [];
 			const p = await program(version);
+			const entry = p.entry.split("/").pop();
 			for (const m of p.modules) {
 				const name = m.name.split("/").pop() ?? m.name;
-				if (!searchable(name, module)) {
+				if (!searchable(name, module, entry)) {
 					continue;
 				}
 				for (const h of m.source.matchAll(re)) {

@@ -5,6 +5,7 @@
 import { basename } from "node:path";
 
 import { program } from "./binary.ts";
+import { sources } from "./sources.ts";
 
 /** One `chunk-x.js:N` citation and the term of its line that the code holds near N, if any. */
 export interface CitationTerm {
@@ -13,7 +14,12 @@ export interface CitationTerm {
 	citation: string;
 	/** The first term of the line found near the offset; absent for a miss. */
 	term?: string;
+	/** How `:N` read when the term was found: a raw offset, or a line of the cleaned module. */
+	as?: "offset" | "line";
 }
+
+/** Lines on each side of a cleaned-module line that a term may sit in, as the citation mover reads one. */
+const NEAR_LINES = 10;
 
 /** Characters on each side of the offset that a term may sit in: a footnote cites the start of a statement. */
 const WINDOW = 600;
@@ -54,11 +60,15 @@ const footnoteUses = (lines: string[]): Map<string, string[]> => {
 	return uses;
 };
 
-/** The citations of `md` and, for each, the first term of its line (or of the lines that use its footnote) near its offset. */
+/**
+ * The citations of `md` and, for each, the first term of its line (or of the lines that use its footnote) near its place.
+ * The place is the raw offset N, or, when `clean` holds the module, line N of the cleaned module.
+ */
 export const citationTerms = (
 	md: string,
 	modules: ReadonlyMap<string, string>,
 	file = "",
+	clean?: ReadonlyMap<string, readonly string[]>,
 ): CitationTerm[] => {
 	const lines = md.split("\n");
 	const uses = footnoteUses(lines);
@@ -76,7 +86,22 @@ export const citationTerms = (
 				const hit = code.indexOf(t, start);
 				if (hit !== -1 && hit + t.length <= at + WINDOW) {
 					found.term = t;
-					break;
+					found.as = "offset";
+					return found;
+				}
+			}
+			// A `:N` can also be a line of the cleaned module (see tools/check/citations.ts).
+			const rows = clean?.get(m[1] ?? "");
+			if (rows !== undefined && at >= 1 && at <= rows.length) {
+				const near = rows
+					.slice(Math.max(0, at - 1 - NEAR_LINES), at + NEAR_LINES)
+					.join("\n");
+				for (const t of terms) {
+					if (near.includes(t)) {
+						found.term = t;
+						found.as = "line";
+						return found;
+					}
 				}
 			}
 			return found;
@@ -108,8 +133,18 @@ const main = async (args: string[]): Promise<number> => {
 	);
 	const p = await program(version);
 	const modules = new Map(p.modules.map((m) => [basename(m.name), m.source]));
+	const cleaned = await sources(p.path);
+	const clean = new Map(
+		cleaned.flatMap((s) =>
+			s.clean === undefined
+				? []
+				: [[basename(s.name), s.clean.split("\n")] as const],
+		),
+	);
 	const texts = await Promise.all(files.map((f) => Bun.file(f).text()));
-	const all = texts.flatMap((t, i) => citationTerms(t, modules, files[i]));
+	const all = texts.flatMap((t, i) =>
+		citationTerms(t, modules, files[i], clean),
+	);
 	const misses = all.filter((c) => c.term === undefined);
 	for (const c of misses) {
 		console.info(

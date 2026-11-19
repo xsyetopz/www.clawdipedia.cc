@@ -128,6 +128,8 @@ export const binaryPath = async (binary?: string): Promise<string> => {
 export interface Program {
 	path: string;
 	modules: BunModule[];
+	/** The full name of the module the program starts in, such as `/$bunfs/root/cli`: JS code without a `.js` name. */
+	entry: string;
 	/** The JS modules, built on the first call. Each module parses when a reader first asks for it. */
 	bundle: () => Bundle;
 	resolver: Resolver;
@@ -138,11 +140,12 @@ export const program = async (binary?: string): Promise<Program> => {
 	const path = await binaryPath(binary);
 	let p = programs.get(path);
 	if (!p) {
-		const { modules } = await extractModules(path);
+		const { modules, entry } = await extractModules(path);
 		let bundle: Bundle | undefined;
 		p = {
 			path,
 			modules,
+			entry,
 			bundle: () => {
 				bundle ??= new Bundle(
 					modules

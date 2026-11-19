@@ -11,6 +11,14 @@ test("with no module, search reads JS modules only", () => {
 	expect(read).toEqual(["chunk-a.js", "entry.mjs"]);
 });
 
+test("with no module, search also reads the entry module, which has no .js name", () => {
+	const names = ["chunk-a.js", "cli", "claude-code.d.ts-x.txt.zst"];
+
+	const read = names.filter((n) => searchable(n, undefined, "cli"));
+
+	expect(read).toEqual(["chunk-a.js", "cli"]);
+});
+
 test("a named module is searched even when it is not JS", () => {
 	const name = "claude-code.d.ts-x.txt.zst";
 

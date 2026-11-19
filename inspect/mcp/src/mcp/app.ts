@@ -58,12 +58,17 @@ export const regex = (pattern: string, isRegex: boolean) =>
 	);
 
 /**
- * Whether `search` reads a module. With no `module`, only JS modules are read, because the other modules
- * are assets. A named module is read whatever its type, so text in a `.zst` file, such as the Mod API
- * type file, can be found.
+ * Whether `search` reads a module. With no `module`, only JS modules and the `entry` module are read,
+ * because the other modules are assets; the entry holds start-up code (such as the arguments read before
+ * the CLI parser) under a name with no `.js`. A named module is read whatever its type, so text in a
+ * `.zst` file, such as the Mod API type file, can be found.
  */
-export const searchable = (name: string, module?: string): boolean =>
-	has(module) ? name.includes(module) : /\.m?js$/u.test(name);
+export const searchable = (
+	name: string,
+	module?: string,
+	entry?: string,
+): boolean =>
+	has(module) ? name.includes(module) : /\.m?js$/u.test(name) || name === entry;
 
 export const server = new McpServer({
 	name: "cc-inspect",
