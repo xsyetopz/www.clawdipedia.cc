@@ -19,6 +19,15 @@ const failure = async (token: string, get: ProfileFetch): Promise<string> => {
 
 const down: ProfileFetch = () => Promise.reject(new TypeError("offline"));
 
+/** The answer the server gives a `claude setup-token` token, which lacks the profile scope. */
+const scopeRefusal: ProfileFetch = () =>
+	Promise.resolve(
+		new Response(
+			'{"type":"error","error":{"type":"permission_error","details":{"error_code":"oauth_scope_insufficient"}}}',
+			{ status: 403 },
+		),
+	);
+
 describe("checkSignIn", () => {
 	test("an accepted token passes", async () => {
 		expect(await failure("tok", answer(200))).toBe("");
@@ -30,6 +39,16 @@ describe("checkSignIn", () => {
 			/refused the login \(HTTP 401\); refresh CLAUDE_CODE_OAUTH_TOKEN/u,
 		);
 		expect(message).not.toContain("sk-secret-token");
+	});
+
+	test("an inference-only token passes the profile scope refusal", async () => {
+		expect(await failure("tok", scopeRefusal)).toBe("");
+	});
+
+	test("any other 403 stops the run", async () => {
+		expect(await failure("tok", answer(403))).toMatch(
+			/refused the login \(HTTP 403\)/u,
+		);
 	});
 
 	test("a server error stops the run with its status", async () => {

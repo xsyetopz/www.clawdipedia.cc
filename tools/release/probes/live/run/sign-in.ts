@@ -10,12 +10,16 @@ export type ProfileFetch = (
 	init: RequestInit,
 ) => Promise<Response>;
 
-/** Throws unless the server accepts the token. The message names the status only, never the token. */
+/**
+ * Throws unless the server knows the token: a 2xx answer, or a 403 for the profile scope alone.
+ * The message names the status only, never the token.
+ */
 export const checkSignIn = async (
 	token: string,
 	get: ProfileFetch = fetch,
 ): Promise<void> => {
 	let status: number;
+	let body: string;
 	try {
 		const res = await get(PROFILE_URL, {
 			headers: {
@@ -26,10 +30,16 @@ export const checkSignIn = async (
 			signal: AbortSignal.timeout(TIMEOUT_MS),
 		});
 		status = res.status;
+		body = await res.text();
 	} catch (error) {
 		throw new Error(`sign-in check: no answer from ${PROFILE_URL}`, {
 			cause: error,
 		});
+	}
+	// A `claude setup-token` token holds only the inference scope: the server knows it and refuses
+	// the profile read with this code, so the token can still run the cases.
+	if (status === 403 && body.includes('"oauth_scope_insufficient"')) {
+		return;
 	}
 	if (status === 401 || status === 403) {
 		throw new Error(
