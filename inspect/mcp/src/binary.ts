@@ -79,7 +79,24 @@ export const listInstalls = async (): Promise<Install[]> => {
 	return out.toSorted((a, b) => newer(a.version, b.version));
 };
 
-/** The binary for a version or a path; by default the current install, else the newest. */
+/** The npm package that ships the native binary for a platform, such as `@anthropic-ai/claude-code-darwin-arm64`. */
+export const nativePackage = (
+	platform: string = process.platform,
+	arch: string = process.arch,
+): string => `@anthropic-ai/claude-code-${platform}-${arch}`;
+
+// A release that is no longer installed is still on npm, so its history can be read from the published binary.
+const fetchRelease = async (version: string): Promise<string> => {
+	const { fetchPackage } = await import("./npm.ts");
+	const { dir } = await fetchPackage(nativePackage(), version);
+	const exe = process.platform === "win32" ? "claude.exe" : "claude";
+	return join(dir, "package", exe);
+};
+
+/**
+ * The binary for a version or a path; by default the current install, else the newest. A release version
+ * that is not installed comes from the native npm package for this platform.
+ */
 export const binaryPath = async (binary?: string): Promise<string> => {
 	const named = binary === "" ? undefined : binary;
 	if (named !== undefined && (await exists(named))) {
@@ -90,6 +107,9 @@ export const binaryPath = async (binary?: string): Promise<string> => {
 		named === undefined
 			? (all.find((i) => i.current) ?? all[0])
 			: all.find((i) => i.version === named);
+	if (!hit && named !== undefined && /^\d+\.\d+\.\d+$/u.test(named)) {
+		return fetchRelease(named);
+	}
 	if (!hit) {
 		throw new Error(
 			named === undefined
