@@ -43,7 +43,8 @@ const blockOf = (lines: string[], line: number): string => {
 };
 
 /**
- * The map entry that the citations of a fact give: a program chunk first, then release notes, then an official page.
+ * The map entry that the citations of a fact give: a program chunk first, then the Mod API type file, then release notes,
+ * then an official page.
  * The fact's own line wins over its block, so a sentence takes its own footnote before a neighbour's.
  */
 export const entryFromCitations = (
@@ -60,6 +61,8 @@ export const entryFromCitations = (
 	const chunk = /chunk-[a-z0-9]+\.js(?::[0-9-]+)?/u.exec(all)?.[0];
 	const notesVersion = /releases\/tag\/v(\d+\.\d+\.\d+)/u.exec(all)?.[1];
 	const page = /https:\/\/code\.claude\.com\/[^\s)]+/u.exec(all)?.[0];
+	// The type file ships with the program, so a claim read there needs no probe, as a schema change does not.
+	const typeFile = all.includes("schemas/claude-code.d.ts");
 	if (chunk !== undefined) {
 		const rn =
 			notesVersion === undefined ? "" : `; release notes ${notesVersion}`;
@@ -67,6 +70,13 @@ export const entryFromCitations = (
 			kind: "manual",
 			probes: [],
 			note: `read in the program at ${chunk}${rn}`,
+		};
+	}
+	if (typeFile) {
+		return {
+			kind: "schema",
+			probes: [],
+			note: "read in the Mod API type file (schemas/claude-code.d.ts)",
 		};
 	}
 	if (notesVersion !== undefined) {

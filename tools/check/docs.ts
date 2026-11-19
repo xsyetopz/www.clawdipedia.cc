@@ -5,11 +5,12 @@
 // 4. A `Source:` line names a page only as a markdown link.
 // 5. No emoji in a heading or in link text.
 // 6. The counts on docs/reference/undocumented.md match its rows and the linked pages.
+//    With --fix, the check first writes the actual counts to that page, so a release does not recount by hand.
 import { readdir, readFile, stat } from "node:fs/promises";
 import { dirname, join, relative, sep } from "node:path";
 
 import { normalizeHost, numberUuids } from "../capture-prompts/normalize.ts";
-import { countProblems } from "../undocumented-counts.ts";
+import { countProblems, fixCounts } from "../undocumented-counts.ts";
 import { badEmoji, checkBody, emojiIn } from "./docs-body.ts";
 import { type FrontMatter, parseFrontMatter } from "./front-matter.ts";
 import { titleCaseProblems } from "./title-case.ts";
@@ -177,6 +178,20 @@ for (const [file, text] of categoryTexts) {
 }
 
 const docTexts = await readAll(docFiles.filter((f) => DOC_EXT.test(f)));
+if (process.argv.includes("--fix")) {
+	const text = docTexts.get(UNDOCUMENTED) ?? "";
+	const fixed = fixCounts(
+		text,
+		(link) => docTexts.get(join(dirname(UNDOCUMENTED), link)) ?? "",
+	);
+	if (fixed !== text) {
+		await Bun.write(UNDOCUMENTED, fixed);
+		docTexts.set(UNDOCUMENTED, fixed);
+		console.info(
+			`check-docs: wrote the actual counts to ${relative(ROOT, UNDOCUMENTED)}`,
+		);
+	}
+}
 for (const [file, text] of docTexts) {
 	checkDoc(file, text, docTexts);
 }

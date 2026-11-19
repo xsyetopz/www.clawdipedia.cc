@@ -5,6 +5,11 @@ export interface CountProblem {
 	message: string;
 }
 
+interface Found extends CountProblem {
+	stated: number;
+	actual: number;
+}
+
 const badgeRows = (page: string) =>
 	page
 		.split("\n")
@@ -12,12 +17,14 @@ const badgeRows = (page: string) =>
 
 /** Collects the count problems; `report` stores one when the stated and actual counts differ. */
 const reporter =
-	(out: CountProblem[]) =>
+	(out: Found[]) =>
 	(i: number, what: string, stated: number, actual: number): void => {
 		if (stated !== actual) {
 			out.push({
 				line: i + 1,
 				message: `${what} says ${stated}, actual ${actual}`,
+				stated,
+				actual,
 			});
 		}
 	};
@@ -134,18 +141,41 @@ const checkSummary = (
 	}
 };
 
-export const countProblems = (
-	text: string,
-	read: (link: string) => string,
-): CountProblem[] => {
+// Order by line; problems on one line keep the order they were found in.
+const collect = (text: string, read: (link: string) => string): Found[] => {
 	const lines = text.split("\n");
-	const out: CountProblem[] = [];
+	const out: Found[] = [];
 	const bad = reporter(out);
 	checkSummary(lines, checkSections(lines, read, bad), bad);
-	// Order by line; problems on one line keep the order they were found in.
-	const byLine = new Map<number, CountProblem[]>();
+	const byLine = new Map<number, Found[]>();
 	for (const p of out) {
 		byLine.set(p.line, [...(byLine.get(p.line) ?? []), p]);
 	}
 	return lines.flatMap((_, i) => byLine.get(i + 1) ?? []);
+};
+
+/** The counts on the page that differ from its rows and the linked pages, in line order. */
+export const countProblems = (
+	text: string,
+	read: (link: string) => string,
+): CountProblem[] =>
+	collect(text, read).map(({ line, message }) => ({ line, message }));
+
+/**
+ * The page with each stale count replaced by the actual one. A table cell count is the last cell of its row;
+ * any other count is the first number on its line.
+ */
+export const fixCounts = (
+	text: string,
+	read: (link: string) => string,
+): string => {
+	const lines = text.split("\n");
+	for (const { line, stated, actual } of collect(text, read)) {
+		const l = lines[line - 1] ?? "";
+		const cell = new RegExp(String.raw`\| ${stated} \|$`, "u");
+		lines[line - 1] = cell.test(l)
+			? l.replace(cell, `| ${actual} |`)
+			: l.replace(new RegExp(String.raw`\b${stated}\b`, "u"), String(actual));
+	}
+	return lines.join("\n");
 };

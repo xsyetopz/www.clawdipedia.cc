@@ -93,6 +93,28 @@ test("a sentence with no footnote of its own takes the footnote of its paragraph
 	});
 });
 
+test("a sentence that cites only the Mod API type file gets a schema entry", () => {
+	// Arrange
+	const lines = [
+		"Since `2.1.328`, it compacts.[^t]",
+		"",
+		"[^t]: The type file `schemas/claude-code.d.ts`, `AgentSpec`.",
+	];
+
+	// Act
+	const entry = entryFromCitations(lines.join("\n"), {
+		line: 1,
+		text: "Since `2.1.328`, it compacts.",
+	});
+
+	// Assert
+	expect(entry).toEqual({
+		kind: "schema",
+		probes: [],
+		note: "read in the Mod API type file (schemas/claude-code.d.ts)",
+	});
+});
+
 test("a sentence with no citation stays out of the map and is reported", () => {
 	// Arrange
 	const now = page("Since `2.1.327`, it stops.");

@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 
-import { countProblems } from "./undocumented-counts.ts";
+import { countProblems, fixCounts } from "./undocumented-counts.ts";
 
 const page = (counts: { a: number; b: number; total: number; rows: number }) =>
 	`## Summary
@@ -48,4 +48,10 @@ test("each stale count is reported on its line", () => {
 	).map((p) => p.line);
 	// summary A, summary B, total, Count of A, Count of B, page row of B
 	expect(lines).toEqual([5, 6, 7, 11, 21, 25]);
+});
+
+test("fixCounts writes each actual count, and the fixed page has no problem", () => {
+	const fixed = fixCounts(page({ a: 1, b: 9, total: 4, rows: 7 }), read);
+	expect(fixed).toBe(page({ a: 3, b: 3, total: 6, rows: 3 }));
+	expect(countProblems(fixed, read)).toEqual([]);
 });
