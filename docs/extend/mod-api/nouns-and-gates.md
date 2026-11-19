@@ -131,7 +131,7 @@ Claude Code registers up to 14 built-in plugins at start.[^registry] Each id is 
 
 The `cc-plugin-privacy` check is a `tool.check` hook, and it reads the account email with `session.identity`. It looks for `curl -A`, `wget -U`, a `--user-agent` or `-user` option, `user-agent`, `user_agent`, or `ua:` text, a `From` header, and text such as `set_identity`, `mailto=`, or `--identity`. It also tests the percent-encoded `%40` form of the address, and a `git config user.email` or `GIT_AUTHOR_EMAIL` text in a line that has such an identity. A `WebFetch` call is refused when its `url` holds the address. For a shell call, the hook reads up to 8 script files that the command names, in the working folder and without links, and checks their text the same way. The hook also answers `session.identity` for other mods: it denies a mod of the `user` tier, and it removes `contextEmail` from the answer for a mod of any tier but `builtin`. The plugin sets `defaultEnabled: true` and `enabledFromTrustedSettingsOnly`.[^privacy]
 
-"Normal run" means the entry point is not `local-agent` and does not start with `remote`. A plugin can also hide itself with its own `isAvailable` test. For example, `cc-plugin-easel` needs Linux or macOS and no `hipaa` or `zdr` data policy.[^easel]
+"Normal run" means the entry point is not `local-agent` and does not start with `remote`. A plugin can also hide itself with its own `isAvailable` test. For example, `cc-plugin-easel` needs a feature flag that is off by default, Linux or macOS, no managed `managed-mcp.json` file, and no `hipaa` or `zdr` data policy.[^easel]
 
 ### Enable Test
 
@@ -155,7 +155,7 @@ Only `cc-plugin-sec-default` and `cc-plugin-hipaa-default` set both policy-only 
 
 See [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plugins.md#keys) for `enabledPlugins`.
 
-`cc-plugin-responsive-mode` sets `defaultEnabled: false`. It is also available only outside the Teams surface, and only while a server gate that you cannot set is on.[^responsive] So turn it on with `enabledPlugins` and expect it to be missing when the gate is off.
+`cc-plugin-responsive-mode` sets `defaultEnabled: false`. It is also available only outside the Slack and Teams entry points and background, daemon, or teammate sessions, and only while a server gate that you cannot set is on.[^responsive] So turn it on with `enabledPlugins` and expect it to be missing when the gate is off.
 
 ## Related Pages
 
@@ -173,17 +173,17 @@ See [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plu
 [^safe-mode-text]: The program, `chunk-56bhcxay.js:5131025`.
 [^written-mods]: The program, `chunk-4ekmrthb.js:5707`.
 [^prompt-edit]: The program, `chunk-syremzmn.js:194600`.
-[^registry]: The program, `chunk-pk4bzvs1.js:0`, the start function that calls the registry one plugin at a time. It lists 14 plugins.
+[^registry]: The program, `chunk-pk4bzvs1.js:482` (`oLe`), the start function that calls the registry one plugin at a time. It lists 14 plugins.
 [^hipaa-default]: The program, `chunk-d3mbd1zj.js:7611` for the description and the flags, `chunk-ym16qx7x.js:288` for `isAvailable` (`Cgt`, which reads `wo("hipaa")`), and `chunk-nvvfbx3p.js:3241` for the missing-answer check (`Bmo`).
-[^easel-worker]: The program, `chunk-pk4bzvs1.js:0`. The plugin also registers when the session is a cloud worker: `CLAUDE_CODE_REMOTE` is set, an entry point starts with `remote` (but is not `remote_cowork` or `remote_mobile`), and `CLAUDE_CODE_REMOTE_SESSION_ID` is set; and for a self-hosted runner child with such an entry point. `chunk-56bhcxay.js:850283` holds the test.
+[^easel-worker]: The program, `chunk-pk4bzvs1.js:1825`. The plugin also registers when the session is a cloud worker: `CLAUDE_CODE_REMOTE` is `true` and `CLAUDE_CODE_ENVIRONMENT_KIND` is unset (`un`, `chunk-427dvgs1.js:2337`), the entry point is `remote`, `remote_desktop`, or `remote_projects`, and `CLAUDE_CODE_REMOTE_SESSION_ID` is set. It also registers for a self-hosted runner child with one of these entry points. `chunk-56bhcxay.js:850283` holds the test, and `chunk-374y7r0w.js:7888` and `chunk-374y7r0w.js:8083` hold the entry points (`C`, then `Nin`: the entries of `C` that start with `remote`, less `remote_cowork` and `remote_mobile`).
 [^platform-name]: The program, `chunk-2jfxv5rx.js:24737` (`var a="claude-platform"`). The program has no `cc-plugin-claude-test` registry call; `chunk-9n6y18w2.js:15430` only cleans an old data folder of it.
 [^rollout-gate]: The program, the gate `tengu_plugin_hooks_modules` at `chunk-xethrx83.js:728148` and the message at `chunk-xqszk37f.js:3090`.
 [^tips-mermaid]: The program, `chunk-bgvyhd4f.js:8511` for the tips description and `chunk-3jdt5qfx.js:6996` for the Mermaid description. Each plugin sits behind a gate, `tengu_tips_mod` and `tengu_mermaid_mod`.
 [^privacy-gate]: The program, `chunk-vaa1bcfr.js:6712`. The gate is `tengu_wise_newt`.
 [^privacy-scope]: The program, `chunk-vaa1bcfr.js:8625` (the tool list and the script read). The program, `chunk-vaa1bcfr.js:10964`, lets a call through when `origin.hookOwner` is set (the MCP call of a settings hook).
 [^privacy]: The program, `chunk-vaa1bcfr.js:8338` for the match, the refusal text at `chunk-vaa1bcfr.js:9024`, the `tool.check` hook at `chunk-vaa1bcfr.js:10883`, and the `session.identity` hook at `chunk-vaa1bcfr.js:11596`.
-[^easel]: The program, `chunk-pk4bzvs1.js:0`.
+[^easel]: The program, `chunk-pk4bzvs1.js:482` (the normal run test, `i`), and `chunk-6sr15enc.js:6918` (`isAvailable`: the flag from `chunk-6sr15enc.js:6636`, `tengu_joyful_otter` with default `false`, the platform, the managed MCP file test that `chunk-56bhcxay.js:4779557` sets and `chunk-56bhcxay.js:4775552` runs, and the data policies).
 [^enable-order]: The program, `chunk-e3mrctpm.js:77246`.
 [^enabled-plugins]: The program, `chunk-yznsjrsv.js:32811`, `chunk-vaa1bcfr.js:12267`, `chunk-d3mbd1zj.js:7611` (`cc-plugin-hipaa-default`, named at `chunk-ym16qx7x.js:357`), `chunk-e3mrctpm.js:77246`.
-[^responsive]: The program, `chunk-czf317f1.js:583`.
+[^responsive]: The program, `chunk-czf317f1.js:583` (`_Ls`: the session test, the Slack and Teams test, and the gate `tengu_quiet_ember`), `chunk-374y7r0w.js:8270` (`OM`), and `chunk-374y7r0w.js:4628` (`PBe`).
 [^v328-tier-calls]: The type file `schemas/claude-code.d.ts`, `EventCalls` and the text on the `$` calls (Tier).

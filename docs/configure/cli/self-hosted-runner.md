@@ -258,14 +258,14 @@ The default of `--api-url` is `ANTHROPIC_BASE_URL`, else the built-in API URL.
 
 [^drain-reclone]: The program, `chunk-gv1b3n3g.js:383455` (the help text), `chunk-gv1b3n3g.js:194111` (the agent-proxy check that a different session used the folder), and `chunk-gv1b3n3g.js:295584` (the move aside and its log lines).
 [^orch-timeout]: Probe case `runner-orchestrator-hook-timeout`, group `cli321`.
-[^hook-label]: The program, `chunk-ydhgnm30.js:1705` (the help text), `chunk-ydhgnm30.js:790` (the parser), and `chunk-ydhgnm30.js:886` (the `--min-idle` check). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
-[^repo-folder]: The program, `chunk-gv1b3n3g.js:16118` (the help text), `chunk-gv1b3n3g.js:16536` (the warning at `--capacity` above 1), and `chunk-gv1b3n3g.js:8337` (the `checkout` hook). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
-[^repo-folder-errors]: The program, `chunk-gv1b3n3g.js:14749` (the shape check) and `chunk-gv1b3n3g.js:3808` (the look at the folder). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
-[^hook-label-errors]: The program, `chunk-ydhgnm30.js:208` (the words and ranges), `chunk-ydhgnm30.js:794` and `chunk-ydhgnm30.js:798` (the flag form), and `chunk-ydhgnm30.js:886` (the `--min-idle` check). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^hook-label]: The program, `chunk-ydhgnm30.js:45424` (the help text), `chunk-ydhgnm30.js:17559` (the parser), `chunk-ydhgnm30.js:7733` (the `CLAUDE_RUNNER_META_<LABEL>` variable), and `chunk-ydhgnm30.js:19769` (the `--min-idle` check). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^repo-folder]: The program, `chunk-gv1b3n3g.js:379281` (the help text), `chunk-gv1b3n3g.js:332112` (the parser), `chunk-gv1b3n3g.js:326130` (the comma-separated variable), `chunk-gv1b3n3g.js:394783` (the check at start), `chunk-gv1b3n3g.js:403324` (the warning at `--capacity` above 1), and `chunk-gv1b3n3g.js:189250` (the `checkout` hook). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^repo-folder-errors]: The program, `chunk-gv1b3n3g.js:326026` (the shape check) and `chunk-gv1b3n3g.js:89036` (the look at the folder). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^hook-label-errors]: The program, `chunk-ydhgnm30.js:7090` (the words and ranges), `chunk-ydhgnm30.js:17559` (the flag form), and `chunk-ydhgnm30.js:19769` (the `--min-idle` check). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
 [^orch-min-idle]: Probe case `runner-orchestrator-min-idle`, group `cli321`.
 [^orch-scm]: Probe case `runner-orchestrator-scm-id-only`, group `cli321`.
 [^orch-no-hooks]: Probe case `runner-orchestrator-no-hooks`, group `cli321`.
-[^orch-metrics]: The program, `chunk-ydhgnm30.js:1118` (the reason metric), `chunk-ydhgnm30.js:1141` (the give-up metric), and `chunk-ydhgnm30.js:1179` (the `/metrics` route). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^orch-metrics]: The program, `chunk-ydhgnm30.js:28950` (the reason metric), `chunk-ydhgnm30.js:30150` and `chunk-ydhgnm30.js:31300` (the give-up metric and its `cause` label), and `chunk-ydhgnm30.js:32647` (the `/metrics` route). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
 [^hold-network]: The program, `chunk-gv1b3n3g.js:350028`.
 [^probe-git-host-rewrite-url]: Probe case `runner-git-host-rewrite-url`.
 [^probe-confine-bad]: Probe case `runner-confine-bad`.
@@ -280,6 +280,6 @@ The default of `--api-url` is `ANTHROPIC_BASE_URL`, else the built-in API URL.
 [^probe-positional]: Probe case `runner-positional`.
 [^watchdog]: The program, the parser `chunk-gv1b3n3g.js:336066-337956`, the help text `chunk-gv1b3n3g.js:389449` and `chunk-gv1b3n3g.js:391984`, and the constants `chunk-gv1b3n3g.js:325413` (10080 minutes), `chunk-gv1b3n3g.js:349489` (180 seconds, 30 seconds, 1440 minutes), `chunk-gv1b3n3g.js:269208` (the 15 minutes of the kill grace).
 [^runner-retry]: The program, `chunk-gv1b3n3g.js:252098` (the session environment), and `chunk-thtytpkk.js:14876` with `chunk-427dvgs1.js:2262`: in a remote session whose `CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE` is `self_hosted`, the environment of a child process drops `CLAUDE_CODE_RETRY_WATCHDOG`.
-[^error-prefix]: The program, `chunk-gv1b3n3g.js:16365` (the runner) and `chunk-ydhgnm30.js:1772` (the orchestrator, which names `claude self-hosted-runner orchestrator --help`).
+[^error-prefix]: The program, `chunk-gv1b3n3g.js:395500` (the runner) and `chunk-ydhgnm30.js:49200` (the orchestrator, which names `claude self-hosted-runner orchestrator --help`).
 [^startup-fail]: The program, `chunk-gv1b3n3g.js:342519` (the codes and the deregistration reasons), `chunk-gv1b3n3g.js:343139` (the report against each session), `chunk-gv1b3n3g.js:343899` (the 4 s limit on the report), `chunk-gv1b3n3g.js:344102` (the failure path), and `chunk-gv1b3n3g.js:31519` (a work order that names a session). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
 [^v328-gh]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-16v2wsc7.js:1562`.

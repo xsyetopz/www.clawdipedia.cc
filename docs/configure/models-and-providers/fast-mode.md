@@ -51,7 +51,7 @@ See [Speed Up Responses with Fast Mode](https://code.claude.com/docs/en/fast-mod
 
 ## Models
 
-A model supports fast mode when its catalog entry has the capability of the provider.[^model-support]
+A model supports fast mode when its catalog entry has the capability of the provider. On the Anthropic API, a model that the catalog does not give an answer for supports fast mode when its ID contains `opus-4-8` or `opus-5`.[^model-support]
 
 | Provider | Models | Default fast model |
 | --- | --- | --- |
@@ -266,7 +266,7 @@ The `result` event of a `/fast on` turn that also changes the model has `fast_mo
 [^keybinding]: The program, `chunk-g4fdykqa.js:1721`.
 [^fast-print]: Probe cases `print.cli322.fast-vertex-no-settings` and `.fast-vertex-settings-off`.
 [^toggle-source]: The program, `chunk-xethrx83.js:387115`, and the official page section cited in the sentence.
-[^model-support]: The program, `chunk-xethrx83.js:388859`.
+[^model-support]: The program, `chunk-xethrx83.js:388859` (`cy`: the capability lookup `rv`, then, on the Anthropic API only, the ID check). The lookup is `chunk-b60sxmve.js:27186`.
 [^catalog-first-party]: The program, `chunk-b60sxmve.js:14294`, `chunk-b60sxmve.js:15286`, `chunk-b60sxmve.js:16390`, `chunk-b60sxmve.js:19592`, `chunk-b60sxmve.js:21715`.
 [^default-fast]: The program, `chunk-xethrx83.js:387948`.
 [^catalog-vertex]: The program, `chunk-b60sxmve.js:19605`, `chunk-b60sxmve.js:21728`.

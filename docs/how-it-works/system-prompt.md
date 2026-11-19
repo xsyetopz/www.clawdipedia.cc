@@ -213,7 +213,7 @@ Experiments come from GrowthBook, a flag service that Anthropic runs. You cannot
 
 Claude Code has a built-in plugin named `cc-plugin-responsive-mode`. Its description reads: "Responsive mode: Claude replies to you in a sentence before thinking or using tools, on every prompt".[^responsive]
 
-The plugin is off by default. It is only available when a server-side experiment is on, and never in a background or daemon session. You cannot set that experiment. The plugin registers when the entry point is not `local-agent`, or when the session is remote. The plugin acts only on a prompt that a person typed and that is not a slash command.
+The plugin is off by default. It is only available when a server-side experiment is on. You cannot set that experiment. It is never available in a background, daemon, or teammate session, or when `CLAUDE_CODE_ENTRYPOINT` is `claude-in-slack`, `claude_in_slack`, or `claude-in-teams`. A session that is not interactive must also be a top-level session with a known entry point. The plugin registers in a normal run (the entry point is not `local-agent` and does not start with `remote`) and when the entry point is `remote`. The plugin acts only on a prompt that a person typed and that is not a slash command.
 
 ## Bare Mode
 
@@ -239,7 +239,7 @@ A subagent gets its own agent text plus short notes. The default agent text star
 [^gate]: The gate is `tengu_velvet_tide` and the server setting is `simple_system_prompt`. The program, `chunk-ynemm6ap.js:6303`.
 [^deterministic]: The program, `chunk-ynemm6ap.js:5734` and `chunk-xethrx83.js:500839`. The test uses the option `deterministic`.
 [^bundles]: The flags are `opus_5_prompt_bundle`, `opus_5_5_prompt_bundle`, `fable_5_mitigations`, and `fable_5_1_prompt_bundle`. The program, `chunk-ynemm6ap.js:1339` and `chunk-b60sxmve.js:26532`.
-[^responsive]: The program. The plugin is defined in `chunk-czf317f1.js:583`, registered in `chunk-pk4bzvs1.js:1542`, and loads `chunk-xngp7nnr.js:5497`. It has `defaultEnabled: false` and needs the experiment `tengu_quiet_ember`.
+[^responsive]: The program. The plugin is defined in `chunk-czf317f1.js:583`, registered in `chunk-pk4bzvs1.js:1542`, and its module registers at `chunk-xngp7nnr.js:10513`. It has `defaultEnabled: false` and needs the experiment `tengu_quiet_ember` (`_Ls`, default `false`). The session test `OM` is at `chunk-374y7r0w.js:8270`, and the Slack and Teams test `PBe` at `chunk-374y7r0w.js:4628`.
 [^subagent]: The program, `chunk-56bhcxay.js:2895955`.
 [^shared-hook]: The program, `chunk-56bhcxay.js:2891246` (the shared sections, such as `lean_body`, are plain entries of the compose list) and `chunk-56bhcxay.js:2885099` (the session sections, such as `memory` and `env_info_simple`, go through a call that dispatches the section to hooks). The two dispatch helpers (`chunk-56bhcxay.js:2884966` and `chunk-56bhcxay.js:2885099`) call one function that runs the hooks (`chunk-56bhcxay.js:2885387`). The session sections are built from `chunk-56bhcxay.js:2886561` to `chunk-56bhcxay.js:2888582`: `memory` at `chunk-56bhcxay.js:2887236` and `env_info_simple` at `chunk-56bhcxay.js:2887327`.
 [^env-fast]: The program, `chunk-56bhcxay.js:2895673` (the note names `a model that does` on Vertex and `Claude Opus` elsewhere).
