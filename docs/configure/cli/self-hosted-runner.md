@@ -150,6 +150,19 @@ Each row is an error of the parser.[^parser-errors] The runner writes each one t
 | `empty argument — a flag value may be unset (failed env/K8s substitution?)` | An empty argument.[^probe-empty-argument] |
 | `unexpected argument '<word>' — this command takes no positional arguments` | A word that is not a flag.[^probe-positional] |
 
+### Start-Up Failure After Registration
+
+Since `2.1.328`, a runner that fails to start after it registers tells the server before it exits.[^startup-fail] The runner writes these lines in order:
+
+| Line | When |
+| --- | --- |
+| `[runner:fatal] <message> (startup_fatal:<code>)` | Always. `<code>` is `gitconfig_wipe_failed`, `git_proxy_setup_failed`, `configure_git_failed`, or `startup_failed`. For a failure with no code, the code is `startup_failed` and `<message>` starts with `unexpected startup failure:`. |
+| `[runner:exit] Reported this startup failure for session <id>; the server ...` | The work order names a session, as for an on-demand runner. The runner reports the failure against each session it holds. The line then says that the server `will not offer it to another runner until an environment admin retries it` or that the server `may retry it on another runner`. |
+| `[runner:exit] Could not confirm that the server recorded this startup failure (...), so this runner exits without deregistering; ...` | The report gets no answer within 4 s, or it fails. The runner does not deregister. The server removes the runner when its lease expires. |
+| `[runner:exit] Not reporting this startup failure against the session: a shutdown signal had arrived, ...` | A stop signal came before the failure. The runner deregisters with the reason `shutdown_signal`. |
+| `[runner:exit] Deregistered after startup failure (startup_fatal:<code>)` | The runner deregistered. The reason it sends is `startup_git_proxy_setup_failed` for the codes `gitconfig_wipe_failed` and `git_proxy_setup_failed`, `startup_configure_git_failed` for `configure_git_failed`, and `startup_failed` for `startup_failed`. |
+| `[runner:exit] Could not tell the server this runner is leaving (...); after its lease expires the server removes it` | The deregistration failed. |
+
 ## `orchestrator`
 
 `claude self-hosted-runner orchestrator` polls the spawn-hints queue and runs the `spawn-runner` hook in `--hooks-dir` once for each hint. The hook must start the work and exit within `--hook-timeout`. Exit code `0` is success, `1` is a failure to retry, and `2` or more stops further tries. See [On-Demand Runners](https://code.claude.com/docs/en/self-hosted-environments-configuration#on-demand-runners) and [The Spawn-Runner Hook](https://code.claude.com/docs/en/self-hosted-environments-configuration#the-spawn-runner-hook).[^orch]
@@ -233,8 +246,8 @@ The default of `--api-url` is `ANTHROPIC_BASE_URL`, else the built-in API URL.
 [^runner-help]: The text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.327`, and the option parser of the program, `chunk-gv1b3n3g.js:339184` and `chunk-gv1b3n3g.js:353970`.
 [^cli321]: Probe group `cli321`.
 [^exit-codes]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-gv1b3n3g.js:345212`.
-[^no-clone]: The program, `chunk-gv1b3n3g.js:15243-15244` (the parser) and `chunk-gv1b3n3g.js:16618-16638` (the warning and the git version check, which both depend on the flag).
-[^gh]: The program, the parser `chunk-gv1b3n3g.js:14939`, the help text `chunk-gv1b3n3g.js:15963-15982`, and the reasons for withholding `chunk-gv1b3n3g.js:1323-1354`.
+[^no-clone]: The program, `chunk-gv1b3n3g.js:339187` (the parser), `chunk-gv1b3n3g.js:406369` (the warning), and `chunk-gv1b3n3g.js:407369` (the git version check). The warning and the check both depend on the flag.
+[^gh]: The program, the parser `chunk-gv1b3n3g.js:331215`, the help text `chunk-gv1b3n3g.js:365608-366900`, and the reasons for withholding `chunk-gv1b3n3g.js:36300-37917`.
 [^nested-model]: The program, `chunk-gv1b3n3g.js:331779` (`--nested-model-access`), `chunk-gv1b3n3g.js:331975` (`--nested-model-call-budget`), `chunk-gv1b3n3g.js:339941` (the variables), `chunk-gv1b3n3g.js:339986` and `chunk-gv1b3n3g.js:393621-393944` (the errors), `chunk-gv1b3n3g.js:374893` (the help text), and `chunk-gv1b3n3g.js:403088` (the start-up log). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^git-config-global]: The program, `chunk-gv1b3n3g.js:351977-352550` (the reset) and `chunk-gv1b3n3g.js:413399-414047` (the warning). [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^trust]: The program, `chunk-xethrx83.js:58018` and `chunk-sm9djeyx.js:32872`.
@@ -261,7 +274,8 @@ The default of `--api-url` is `ANTHROPIC_BASE_URL`, else the built-in API URL.
 [^probe-host-config-dir-flag]: Probe case `runner-host-config-dir-flag`.
 [^probe-empty-argument]: Probe case `runner-empty-argument`.
 [^probe-positional]: Probe case `runner-positional`.
-[^watchdog]: The program, the parser `chunk-gv1b3n3g.js:15023`, `chunk-gv1b3n3g.js:15130`, `chunk-gv1b3n3g.js:15152-15188`, the help text `chunk-gv1b3n3g.js:16219-16270`, and the constants `chunk-gv1b3n3g.js:14718` (10080 minutes), `chunk-gv1b3n3g.js:15652-15654` (180 seconds, 30 seconds, 1440 minutes), `chunk-gv1b3n3g.js:12129` (the 15 minutes of the kill grace).
+[^watchdog]: The program, the parser `chunk-gv1b3n3g.js:336066-337956`, the help text `chunk-gv1b3n3g.js:389449` and `chunk-gv1b3n3g.js:391984`, and the constants `chunk-gv1b3n3g.js:325413` (10080 minutes), `chunk-gv1b3n3g.js:349489` (180 seconds, 30 seconds, 1440 minutes), `chunk-gv1b3n3g.js:269208` (the 15 minutes of the kill grace).
 [^runner-retry]: The program, `chunk-gv1b3n3g.js:252098` (the session environment), and `chunk-thtytpkk.js:14876` with `chunk-427dvgs1.js:2262`: in a remote session whose `CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE` is `self_hosted`, the environment of a child process drops `CLAUDE_CODE_RETRY_WATCHDOG`. The `2.1.326` list of dropped names has no such case. [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327).
 [^error-prefix]: The program, `chunk-gv1b3n3g.js:16365` (the runner) and `chunk-ydhgnm30.js:1772` (the orchestrator, which names `claude self-hosted-runner orchestrator --help`).
-[^v328-gh]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-16v2wsc7.js:31-32`.
+[^startup-fail]: The program, `chunk-gv1b3n3g.js:342519` (the codes and the deregistration reasons), `chunk-gv1b3n3g.js:343139` (the report against each session), `chunk-gv1b3n3g.js:343899` (the 4 s limit on the report), `chunk-gv1b3n3g.js:344102` (the failure path), and `chunk-gv1b3n3g.js:31519` (a work order that names a session). `2.1.327` has none of these lines. [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^v328-gh]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-16v2wsc7.js:1562`.
