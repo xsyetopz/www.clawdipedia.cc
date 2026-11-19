@@ -56,7 +56,13 @@ test("a release that is not installed comes from its native npm package", async 
 	const path = await binaryPath("9.8.7");
 
 	expect(await Bun.file(path).text()).toBe("native binary");
-	expect(requested[0]).toBe(`/${nativePackage().replace("/", "%2f")}/9.8.7`);
+	expect(requested).toContain(`/${nativePackage().replace("/", "%2f")}/9.8.7`);
+});
+
+test("a release npm does not have names the installs and the npm error", async () => {
+	const message = await rejection(binaryPath("0.0.1"));
+
+	expect(message).toMatch(/no install "0\.0\.1"; installed: .*; npm: /u);
 });
 
 test("a name that is not a release version is still an error", async () => {

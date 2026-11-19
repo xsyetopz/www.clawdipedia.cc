@@ -57,6 +57,14 @@ export const regex = (pattern: string, isRegex: boolean) =>
 		"u",
 	);
 
+/**
+ * Whether `search` reads a module. With no `module`, only JS modules are read, because the other modules
+ * are assets. A named module is read whatever its type, so text in a `.zst` file, such as the Mod API
+ * type file, can be found.
+ */
+export const searchable = (name: string, module?: string): boolean =>
+	has(module) ? name.includes(module) : /\.m?js$/u.test(name);
+
 export const server = new McpServer({
 	name: "cc-inspect",
 	version: pkg.version,

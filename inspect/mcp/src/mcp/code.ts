@@ -4,7 +4,16 @@ import { findUnits } from "../find.ts";
 import { fetchPackage, findText } from "../npm.ts";
 import { prepared } from "../prepare.ts";
 import { readable } from "../readable.ts";
-import { clip, group, has, need, regex, text, WRITES_CACHE } from "./app.ts";
+import {
+	clip,
+	group,
+	has,
+	need,
+	regex,
+	searchable,
+	text,
+	WRITES_CACHE,
+} from "./app.ts";
 import { citations, relocateAction } from "./code-citations.ts";
 import { cli, runCode } from "./code-cli.ts";
 import { CODE_DESCRIPTION, CODE_SHAPE } from "./code-schema.ts";
@@ -58,7 +67,7 @@ group(
 			const p = await program(version);
 			for (const m of p.modules) {
 				const name = m.name.split("/").pop() ?? m.name;
-				if (!/\.m?js$/u.test(name) || (has(module) && !name.includes(module))) {
+				if (!searchable(name, module)) {
 					continue;
 				}
 				for (const h of m.source.matchAll(re)) {

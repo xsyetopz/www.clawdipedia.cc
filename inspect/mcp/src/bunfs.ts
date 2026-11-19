@@ -7,7 +7,8 @@
 //   (each {offset u32, length u32}) and 4 flag bytes.
 /**
  * `bytes` is the raw module (a view into the part of the binary that holds the modules), for compressed
- * assets such as `*.txt.zst`. `source` is `bytes` as text, decoded on the first read.
+ * assets such as `*.txt.zst`. `source` is `bytes` as text, decoded on the first read. A `*.zst` module is
+ * decompressed first, so `code` search and read show its text.
  */
 export interface BunModule {
 	name: string;
@@ -98,7 +99,23 @@ const tableOf = async (
 	};
 };
 
-const moduleOf = (name: string, bytes: Buffer): BunModule => {
+/** The text of a `*.zst` asset (a bundled skill, for one). Bytes that are not valid zstd stay as raw text. */
+const zstText = async (bytes: Buffer): Promise<string> => {
+	try {
+		return new TextDecoder("utf-8", { ignoreBOM: true }).decode(
+			await Bun.zstdDecompress(bytes),
+		);
+	} catch {
+		return bytes.toString("utf8");
+	}
+};
+
+// A `*.zst` module gets its text when it is read from the binary, because decompression is async;
+// the other modules decode on the first read of `source`.
+const moduleOf = async (name: string, bytes: Buffer): Promise<BunModule> => {
+	if (name.endsWith(".zst")) {
+		return { name, bytes, source: await zstText(bytes) };
+	}
 	let source: string | undefined;
 	return {
 		name,
@@ -136,12 +153,16 @@ export const extractModules = async (
 		length === 0
 			? Buffer.alloc(0)
 			: span.subarray(offset - lo, offset - lo + length);
-	const modules = entries.map((e, i) => {
-		const name = bytes(e.name).toString("utf8");
-		if (!name.startsWith("/$bunfs/")) {
-			throw new Error(`bad module name at entry ${i}: ${JSON.stringify(name)}`);
-		}
-		return moduleOf(name, bytes(e.contents));
-	});
+	const modules = await Promise.all(
+		entries.map((e, i) => {
+			const name = bytes(e.name).toString("utf8");
+			if (!name.startsWith("/$bunfs/")) {
+				throw new Error(
+					`bad module name at entry ${i}: ${JSON.stringify(name)}`,
+				);
+			}
+			return moduleOf(name, bytes(e.contents));
+		}),
+	);
 	return { modules, entry: modules[entryId]?.name ?? "" };
 };

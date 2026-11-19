@@ -107,17 +107,22 @@ export const binaryPath = async (binary?: string): Promise<string> => {
 		named === undefined
 			? (all.find((i) => i.current) ?? all[0])
 			: all.find((i) => i.version === named);
-	if (!hit && named !== undefined && /^\d+\.\d+\.\d+$/u.test(named)) {
-		return fetchRelease(named);
+	if (hit) {
+		return hit.path;
 	}
-	if (!hit) {
-		throw new Error(
-			named === undefined
-				? `no Claude Code install under ${versionsDir()}`
-				: `no install "${named}"; installed: ${all.map((i) => i.version).join(", ") || "none"}`,
-		);
+	if (named === undefined) {
+		throw new Error(`no Claude Code install under ${versionsDir()}`);
 	}
-	return hit.path;
+	const missing = `no install "${named}"; installed: ${all.map((i) => i.version).join(", ") || "none"}`;
+	if (!/^\d+\.\d+\.\d+$/u.test(named)) {
+		throw new Error(missing);
+	}
+	try {
+		return await fetchRelease(named);
+	} catch (error) {
+		// The installs stay in the message, so a caller can pick one when npm has no such release.
+		throw new Error(`${missing}; npm: ${String(error)}`, { cause: error });
+	}
 };
 
 export interface Program {

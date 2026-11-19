@@ -95,3 +95,25 @@ test("extractModules rejects a file that has no trailer", async () => {
 		await rm(root, { recursive: true });
 	}
 });
+
+test("a zst module reads as its decompressed text, and bad zstd bytes stay raw", async () => {
+	const root = await mkdtemp(join(tmpdir(), "cc-inspect-test-"));
+	try {
+		const path = join(root, "program");
+		const mods = [
+			{
+				name: "/$bunfs/root/SKILL-x.md.zst",
+				contents: Buffer.from(await Bun.zstdCompress("Python 0.x to 1.x")),
+			},
+			{ name: "/$bunfs/root/bad.zst", contents: Buffer.from("not zstd") },
+		];
+		await Bun.write(path, executable(mods, 0, Buffer.alloc(0), 0));
+		const { modules } = await extractModules(path);
+		expect(modules.map((m) => m.source)).toEqual([
+			"Python 0.x to 1.x",
+			"not zstd",
+		]);
+	} finally {
+		await rm(root, { recursive: true });
+	}
+});
