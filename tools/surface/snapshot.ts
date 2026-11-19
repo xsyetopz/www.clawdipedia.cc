@@ -12,6 +12,7 @@ import { parseArgs } from "node:util";
 
 import {
 	binaryPath,
+	listInstalls,
 	program,
 	releaseTrees,
 } from "../../inspect/mcp/src/binary.ts";
@@ -193,13 +194,11 @@ const write = async (file: string, text: string) => {
 const errorMessage = (error: unknown) =>
 	error instanceof Error ? error.message : String(error);
 
+// Only a local install counts: `binaryPath` falls back to a download from npm, which would make every
+// check read the whole binary.
 const isInstalled = async () => {
-	try {
-		await binaryPath(CLAUDE_CODE_VERSION);
-		return true;
-	} catch {
-		return false;
-	}
+	const installs = await listInstalls();
+	return installs.some((i) => i.version === CLAUDE_CODE_VERSION);
 };
 
 /** The exit code of `--check`. */
