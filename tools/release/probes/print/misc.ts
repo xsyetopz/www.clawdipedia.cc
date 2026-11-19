@@ -4,6 +4,7 @@ import { mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
 
 import { bigClaudeMd, nestedClaudeMd } from "./misc/claudemd.ts";
+import { countSubject } from "./misc/context.ts";
 import { scrubEnv, scrubPerm } from "./misc/scrub.ts";
 import { BASE, MARK } from "./misc/shared.ts";
 import { VALIDATE, validateCase } from "./misc/validate.ts";
@@ -96,6 +97,9 @@ const contextCmd: CaseDef = {
 					countTokens: r.reqs.filter((x) => x.path.includes("count_tokens"))
 						.length,
 					messageRequests: msgs(r).length,
+					subjects: r.reqs
+						.filter((x) => x.path.includes("count_tokens"))
+						.map((x) => countSubject(x.body)),
 				},
 			}),
 		),
