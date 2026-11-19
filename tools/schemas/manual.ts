@@ -8,6 +8,7 @@
 // audit (audit.ts) reads them. An unsent entry is stale when its anchor is gone or the schema has its path again.
 import { join } from "node:path";
 
+import { minifiedNames } from "./anchor-names.ts";
 import {
 	cloneTree,
 	type Fixture,
@@ -71,6 +72,32 @@ export const readManual = async (
 
 /** In an anchor, stands for one identifier, because the minifier renames them each release. */
 export const ID = "«»";
+
+export { ALLOWED_NAMES, minifiedNames } from "./anchor-names.ts";
+
+/** The anchors of `anchors` that spell out a minified identifier, as `names in anchor` lines. */
+const hardCoded = (anchors: string[]): string[] =>
+	anchors.flatMap((a) => {
+		const names = [...new Set(minifiedNames(a))];
+		return names.length > 0
+			? [`${names.join(", ")} in ${a} (use ${ID} for each)`]
+			: [];
+	});
+
+/** Why an entry's anchors fail, or undefined when each is in the program and spells out no minified name. */
+const anchorProblem = (
+	e: ManualEntry,
+	has: (s: string) => boolean,
+): string | undefined => {
+	const gone = e.anchors.filter((a) => !has(a));
+	if (e.anchors.length === 0 || gone.length > 0) {
+		return `anchor not in the program: ${gone.join(" | ")}`;
+	}
+	const named = hardCoded(e.anchors);
+	return named.length > 0
+		? `anchor hard-codes a minified name: ${named.join(" | ")}`
+		: undefined;
+};
 
 /** The longest of the fixed parts of an anchor, which is the best thing to search for. */
 const longest = (parts: string[]): string => {
@@ -195,9 +222,9 @@ export const staleUnsent = (
 	const present = new Set<string>();
 	walkFields(schema, (p) => present.add(p));
 	return Object.entries(fx.unsent ?? {}).flatMap(([p, e]) => {
-		const gone = e.anchors.filter((a) => !has(a));
-		if (e.anchors.length === 0 || gone.length > 0) {
-			return [`unsent ${p}: anchor not in the program: ${gone.join(" | ")}`];
+		const problem = anchorProblem(e, has);
+		if (problem !== undefined) {
+			return [`unsent ${p}: ${problem}`];
 		}
 		return present.has(p)
 			? [`unsent ${p}: the schema has this path; move the entry to "fields"`]
@@ -235,9 +262,9 @@ export const applyManual = async (
 			return;
 		}
 		used.add(path);
-		const gone = e.anchors.filter((a) => !has(a));
-		if (e.anchors.length === 0 || gone.length > 0) {
-			stale.push(`${path}: anchor not in the program: ${gone.join(" | ")}`);
+		const problem = anchorProblem(e, has);
+		if (problem !== undefined) {
+			stale.push(`${path}: ${problem}`);
 			return;
 		}
 		delete node["x-unverified"];

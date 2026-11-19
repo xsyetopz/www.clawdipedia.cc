@@ -9,7 +9,7 @@
 			"anchors": [
 				"installMethod:\"native\",autoUpdates:!1",
 				"installMethod:\"local\"}",
-				"e=\"unknown\";switch(«».installationType)",
+				"«»=\"unknown\";switch(«».installationType)",
 				"\"npm-local\":\"local\",\"npm-global\":\"global\",native:\"native\",development:\"development\",unknown:\"unknown\"",
 				"if(«».outcome===\"landed\")return await «»((«»)=>({...«»,installMethod:\"global\"}),«»)",
 				"case\"landed\":«»}return await «»((«»)=>({...«»,installMethod:\"global\"}),«»)"
@@ -126,7 +126,7 @@
 			},
 			"anchors": [
 				"lspRecommendationDisabled:!0",
-				"h.lspRecommendationDisabled===!0"
+				"«».lspRecommendationDisabled===!0"
 			],
 			"note": "Only write site sets it to !0."
 		},

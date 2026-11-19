@@ -1,6 +1,12 @@
 import { describe, expect, test } from "bun:test";
 
-import { anchorIn, applyManual, staleUnsent } from "./manual.ts";
+import {
+	anchorIn,
+	applyManual,
+	minifiedNames,
+	readManual,
+	staleUnsent,
+} from "./manual.ts";
 
 const unk = { "x-unverified": true };
 const schema = {
@@ -152,6 +158,77 @@ describe("staleUnsent", () => {
 		expect(out).toEqual([
 			"unsent b.lost: anchor not in the program: lost:",
 			'unsent b.id: the schema has this path; move the entry to "fields"',
+		]);
+	});
+});
+
+describe("minifiedNames", () => {
+	test("reports a minified name where the anchor needs «»", () => {
+		expect(
+			minifiedNames("...n?.contextUsage!==void 0&&{contextUsage:«»}"),
+		).toEqual(["n"]);
+		expect(minifiedNames("messageCount:n")).toEqual(["n"]);
+		expect(minifiedNames('IYe({type:"x",sessionId:W()})')).toEqual([
+			"IYe",
+			"W",
+		]);
+		expect(minifiedNames("!Ee.incomplete)V.push({v:1})")).toEqual(["Ee", "V"]);
+		expect(minifiedNames("let n=_il.find((s)=>s===e.type)")).toEqual([
+			"n",
+			"_il",
+			"s",
+			"s",
+			"e",
+		]);
+		expect(minifiedNames("function xO(«»){}")).toEqual(["xO"]);
+	});
+	test("reports a name inside a template expression, not the template text", () => {
+		// Joined from parts so this source holds no "${" that reads as a misplaced template.
+		const anchor = ["`n $", "{e.host} to $", "{«».port}`"].join("");
+		expect(minifiedNames(anchor)).toEqual(["e"]);
+	});
+	test("accepts keys, properties, keywords, literals, strings, and regex literals", () => {
+		const fine = [
+			'{type:"tools-used",v:1,id:«»,as:«»}',
+			"x:«».id,y:«»?.url,...«».at(0)",
+			"uuid:«»(),isMeta:!1,a:!0,b:void 0,c:new Date().toISOString()",
+			'return typeof «»==="string"?this.name:null',
+			"var «»=/^[A-Za-z0-9_.:-]{1,256}$/,",
+			"content:\"e n h\",k:'t'",
+			"for(let «» of «»)new Set",
+		];
+		for (const a of fine) {
+			expect(minifiedNames(a)).toEqual([]);
+		}
+	});
+	test("flags none of the anchors of the committed fixtures", async () => {
+		const files = [
+			"claude-code-claude-json.json",
+			"claude-code-frontmatter.json",
+			"claude-code-otel.json",
+			"claude-code-status-line.json",
+			"claude-code-transcript.json",
+		];
+		const fixtures = await Promise.all(files.map((f) => readManual(f)));
+		const bad = fixtures.flatMap((m, i) =>
+			[...Object.entries(m?.fields ?? {}), ...Object.entries(m?.unsent ?? {})]
+				.flatMap(([p, e]) => e.anchors.map((a) => ({ p, a })))
+				.filter(({ a }) => minifiedNames(a).length > 0)
+				.map(({ p, a }) => `${files[i]} ${p}: ${a}`),
+		);
+		expect(bad).toEqual([]);
+	});
+	test("makes applyManual report an anchor that hard-codes a minified name", async () => {
+		const out = await applyManual(
+			"x.json",
+			schema,
+			() => true,
+			fx(["id:n"]),
+			{},
+		);
+		expect(out.n).toBe(0);
+		expect(out.stale).toEqual([
+			"a.id: anchor hard-codes a minified name: n in id:n (use «» for each)",
 		]);
 	});
 });

@@ -313,7 +313,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"fork-context-ref\",...e}",
+				"{type:\"fork-context-ref\",...«»}",
 				"parentLastUuid:«»,contextLength:«».length"
 			],
 			"note": "The caller passes {agentId: me, parentSessionId: V(), parentLastUuid: x, contextLength}; agentId is the subagent id string, parentSessionId the session id string, parentLastUuid a message uuid string."
@@ -323,7 +323,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"fork-context-ref\",...e}",
+				"{type:\"fork-context-ref\",...«»}",
 				"parentLastUuid:«»,contextLength:«».length"
 			],
 			"note": "The caller passes {agentId: me, parentSessionId: V(), parentLastUuid: x, contextLength}; agentId is the subagent id string, parentSessionId the session id string, parentLastUuid a message uuid string."
@@ -333,7 +333,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"fork-context-ref\",...e}",
+				"{type:\"fork-context-ref\",...«»}",
 				"parentLastUuid:«»,contextLength:«».length"
 			],
 			"note": "The caller passes {agentId: me, parentSessionId: V(), parentLastUuid: x, contextLength}; agentId is the subagent id string, parentSessionId the session id string, parentLastUuid a message uuid string."
@@ -343,7 +343,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"observer-ref\",...e,timestamp:new Date().toISOString()}",
+				"{type:\"observer-ref\",...«»,timestamp:new Date().toISOString()}",
 				"observerTaskId:«».observerTaskId,observerAgentType:«».observerAgentType"
 			],
 			"note": "The caller passes {agentId (only when observedTaskId is set), observerTaskId, observerAgentType}; all three are strings (a task id and an agent type name)."
@@ -353,7 +353,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"observer-ref\",...e,timestamp:new Date().toISOString()}",
+				"{type:\"observer-ref\",...«»,timestamp:new Date().toISOString()}",
 				"observerTaskId:«».observerTaskId,observerAgentType:«».observerAgentType"
 			],
 			"note": "The caller passes {agentId (only when observedTaskId is set), observerTaskId, observerAgentType}; all three are strings (a task id and an agent type name)."
@@ -363,7 +363,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"observer-ref\",...e,timestamp:new Date().toISOString()}",
+				"{type:\"observer-ref\",...«»,timestamp:new Date().toISOString()}",
 				"observerTaskId:«».observerTaskId,observerAgentType:«».observerAgentType"
 			],
 			"note": "The caller passes {agentId (only when observedTaskId is set), observerTaskId, observerAgentType}; all three are strings (a task id and an agent type name)."
@@ -373,7 +373,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"history-suppression\",sessionId:«»,cause:«»,...t&&{vetoedAgainstAccountUuid:«»}"
+				"{type:\"history-suppression\",sessionId:«»,cause:«»,...«»&&{vetoedAgainstAccountUuid:«»}"
 			],
 			"note": "Qnt(sessionId, cause, vetoedAgainstAccountUuid) builds the line; cause is a short code string ('migration', 'fork_inherit', or the caller's value), the account uuid is a string present only when truthy."
 		},
@@ -382,7 +382,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"history-suppression\",sessionId:«»,cause:«»,...t&&{vetoedAgainstAccountUuid:«»}"
+				"{type:\"history-suppression\",sessionId:«»,cause:«»,...«»&&{vetoedAgainstAccountUuid:«»}"
 			],
 			"note": "Qnt(sessionId, cause, vetoedAgainstAccountUuid) builds the line; cause is a short code string ('migration', 'fork_inherit', or the caller's value), the account uuid is a string present only when truthy."
 		},
@@ -391,7 +391,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"history-suppression\",sessionId:«»,cause:«»,...t&&{vetoedAgainstAccountUuid:«»}"
+				"{type:\"history-suppression\",sessionId:«»,cause:«»,...«»&&{vetoedAgainstAccountUuid:«»}"
 			],
 			"note": "Qnt(sessionId, cause, vetoedAgainstAccountUuid) builds the line; cause is a short code string ('migration', 'fork_inherit', or the caller's value), the account uuid is a string present only when truthy."
 		},
@@ -401,7 +401,7 @@
 			},
 			"anchors": [
 				"{type:\"frame-link\",sessionId:«»,path:«»,frameUrl:«».url,title:«»,artifactCount:«».size",
-				"{type:\"frame-link\",artifactCount:this.currentSessionArtifactCount,sessionId:y"
+				"{type:\"frame-link\",artifactCount:this.currentSessionArtifactCount,sessionId:«»"
 			],
 			"note": "Two writes: the frame open (path string, frameUrl string, title, artifactCount from a Set size) and the exit reappend (artifactCount only, a count from Math.max). artifactCount is an integer. title is the page title string."
 		},
@@ -411,7 +411,7 @@
 			},
 			"anchors": [
 				"{type:\"frame-link\",sessionId:«»,path:«»,frameUrl:«».url,title:«»,artifactCount:«».size",
-				"{type:\"frame-link\",artifactCount:this.currentSessionArtifactCount,sessionId:y"
+				"{type:\"frame-link\",artifactCount:this.currentSessionArtifactCount,sessionId:«»"
 			],
 			"note": "Two writes: the frame open (path string, frameUrl string, title, artifactCount from a Set size) and the exit reappend (artifactCount only, a count from Math.max). artifactCount is an integer. title is the page title string."
 		},
@@ -421,7 +421,7 @@
 			},
 			"anchors": [
 				"{type:\"frame-link\",sessionId:«»,path:«»,frameUrl:«».url,title:«»,artifactCount:«».size",
-				"{type:\"frame-link\",artifactCount:this.currentSessionArtifactCount,sessionId:y"
+				"{type:\"frame-link\",artifactCount:this.currentSessionArtifactCount,sessionId:«»"
 			],
 			"note": "Two writes: the frame open (path string, frameUrl string, title, artifactCount from a Set size) and the exit reappend (artifactCount only, a count from Math.max). artifactCount is an integer. title is the page title string."
 		},
@@ -431,7 +431,7 @@
 			},
 			"anchors": [
 				"{type:\"frame-link\",sessionId:«»,path:«»,frameUrl:«».url,title:«»,artifactCount:«».size",
-				"{type:\"frame-link\",artifactCount:this.currentSessionArtifactCount,sessionId:y"
+				"{type:\"frame-link\",artifactCount:this.currentSessionArtifactCount,sessionId:«»"
 			],
 			"note": "Two writes: the frame open (path string, frameUrl string, title, artifactCount from a Set size) and the exit reappend (artifactCount only, a count from Math.max). artifactCount is an integer. title is the page title string."
 		},
@@ -441,7 +441,7 @@
 			},
 			"anchors": [
 				"{type:\"frame-link\",sessionId:«»,path:«»,frameUrl:«».url,title:«»,artifactCount:«».size",
-				"{type:\"frame-link\",artifactCount:this.currentSessionArtifactCount,sessionId:y"
+				"{type:\"frame-link\",artifactCount:this.currentSessionArtifactCount,sessionId:«»"
 			],
 			"note": "Two writes: the frame open (path string, frameUrl string, title, artifactCount from a Set size) and the exit reappend (artifactCount only, a count from Math.max). artifactCount is an integer. title is the page title string."
 		},
@@ -585,7 +585,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...h?.length&&{declaredDialogKinds:«»}",
+				"{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...«»?.length&&{declaredDialogKinds:«»}",
 				"...«»?.accountUuid&&{ownerAccountUuid:«».accountUuid},...«»?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
 			],
 			"note": "saveBridgeSession writes bridgeSessionId (a string; clearBridgeSession writes the empty string with lastSequenceNum 0), lastSequenceNum (the bridge sequence number, an integer), declaredDialogKinds (a non-empty array, added when length is truthy; the reader maps it through a string-kind normalizer), sessionGroupingId, ownerAccountUuid and ownerOrganizationUuid (strings added when truthy)."
@@ -595,7 +595,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...h?.length&&{declaredDialogKinds:«»}",
+				"{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...«»?.length&&{declaredDialogKinds:«»}",
 				"...«»?.accountUuid&&{ownerAccountUuid:«».accountUuid},...«»?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
 			],
 			"note": "saveBridgeSession writes bridgeSessionId (a string; clearBridgeSession writes the empty string with lastSequenceNum 0), lastSequenceNum (the bridge sequence number, an integer), declaredDialogKinds (a non-empty array, added when length is truthy; the reader maps it through a string-kind normalizer), sessionGroupingId, ownerAccountUuid and ownerOrganizationUuid (strings added when truthy)."
@@ -605,7 +605,7 @@
 				"type": "integer"
 			},
 			"anchors": [
-				"{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...h?.length&&{declaredDialogKinds:«»}",
+				"{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...«»?.length&&{declaredDialogKinds:«»}",
 				"...«»?.accountUuid&&{ownerAccountUuid:«».accountUuid},...«»?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
 			],
 			"note": "saveBridgeSession writes bridgeSessionId (a string; clearBridgeSession writes the empty string with lastSequenceNum 0), lastSequenceNum (the bridge sequence number, an integer), declaredDialogKinds (a non-empty array, added when length is truthy; the reader maps it through a string-kind normalizer), sessionGroupingId, ownerAccountUuid and ownerOrganizationUuid (strings added when truthy)."
@@ -618,7 +618,7 @@
 				}
 			},
 			"anchors": [
-				"{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...h?.length&&{declaredDialogKinds:«»}",
+				"{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...«»?.length&&{declaredDialogKinds:«»}",
 				"...«»?.accountUuid&&{ownerAccountUuid:«».accountUuid},...«»?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
 			],
 			"note": "saveBridgeSession writes bridgeSessionId (a string; clearBridgeSession writes the empty string with lastSequenceNum 0), lastSequenceNum (the bridge sequence number, an integer), declaredDialogKinds (a non-empty array, added when length is truthy; the reader maps it through a string-kind normalizer), sessionGroupingId, ownerAccountUuid and ownerOrganizationUuid (strings added when truthy)."
@@ -628,7 +628,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...h?.length&&{declaredDialogKinds:«»}",
+				"{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...«»?.length&&{declaredDialogKinds:«»}",
 				"...«»?.accountUuid&&{ownerAccountUuid:«».accountUuid},...«»?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
 			],
 			"note": "saveBridgeSession writes bridgeSessionId (a string; clearBridgeSession writes the empty string with lastSequenceNum 0), lastSequenceNum (the bridge sequence number, an integer), declaredDialogKinds (a non-empty array, added when length is truthy; the reader maps it through a string-kind normalizer), sessionGroupingId, ownerAccountUuid and ownerOrganizationUuid (strings added when truthy)."
@@ -638,7 +638,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...h?.length&&{declaredDialogKinds:«»}",
+				"{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...«»?.length&&{declaredDialogKinds:«»}",
 				"...«»?.accountUuid&&{ownerAccountUuid:«».accountUuid},...«»?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
 			],
 			"note": "saveBridgeSession writes bridgeSessionId (a string; clearBridgeSession writes the empty string with lastSequenceNum 0), lastSequenceNum (the bridge sequence number, an integer), declaredDialogKinds (a non-empty array, added when length is truthy; the reader maps it through a string-kind normalizer), sessionGroupingId, ownerAccountUuid and ownerOrganizationUuid (strings added when truthy)."
@@ -648,7 +648,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...h?.length&&{declaredDialogKinds:«»}",
+				"{type:\"bridge-session\",sessionId:«»,bridgeSessionId:«»,lastSequenceNum:«»,...«»?.length&&{declaredDialogKinds:«»}",
 				"...«»?.accountUuid&&{ownerAccountUuid:«».accountUuid},...«»?.organizationUuid&&{ownerOrganizationUuid:«».organizationUuid}"
 			],
 			"note": "saveBridgeSession writes bridgeSessionId (a string; clearBridgeSession writes the empty string with lastSequenceNum 0), lastSequenceNum (the bridge sequence number, an integer), declaredDialogKinds (a non-empty array, added when length is truthy; the reader maps it through a string-kind normalizer), sessionGroupingId, ownerAccountUuid and ownerOrganizationUuid (strings added when truthy)."
@@ -1182,7 +1182,7 @@
 			},
 			"anchors": [
 				"sessionKind:«»(),userType:«»(),entrypoint:«»(),cwd:«»()??void 0,sessionId:«»,version:«»",
-				"e===\"bg\"||«»===\"daemon\"||«»===\"daemon-worker\")return «»;return}"
+				"«»===\"bg\"||«»===\"daemon\"||«»===\"daemon-worker\")return «»;return}"
 			],
 			"note": "The session fields function returns sessionKind from the session kind getter, which returns CLAUDE_CODE_SESSION_KIND when it is 'bg', 'daemon' or 'daemon-worker' and undefined otherwise (not written)."
 		},
@@ -1318,7 +1318,7 @@
 			},
 			"anchors": [
 				"sessionKind:«»(),userType:«»(),entrypoint:«»(),cwd:«»()??void 0,sessionId:«»,version:«»",
-				"e===\"bg\"||«»===\"daemon\"||«»===\"daemon-worker\")return «»;return}"
+				"«»===\"bg\"||«»===\"daemon\"||«»===\"daemon-worker\")return «»;return}"
 			],
 			"note": "The session fields function returns sessionKind from the session kind getter, which returns CLAUDE_CODE_SESSION_KIND when it is 'bg', 'daemon' or 'daemon-worker' and undefined otherwise (not written)."
 		},
@@ -1454,7 +1454,7 @@
 			},
 			"anchors": [
 				"sessionKind:«»(),userType:«»(),entrypoint:«»(),cwd:«»()??void 0,sessionId:«»,version:«»",
-				"e===\"bg\"||«»===\"daemon\"||«»===\"daemon-worker\")return «»;return}"
+				"«»===\"bg\"||«»===\"daemon\"||«»===\"daemon-worker\")return «»;return}"
 			],
 			"note": "The session fields function returns sessionKind from the session kind getter, which returns CLAUDE_CODE_SESSION_KIND when it is 'bg', 'daemon' or 'daemon-worker' and undefined otherwise (not written)."
 		},
@@ -1590,7 +1590,7 @@
 			},
 			"anchors": [
 				"sessionKind:«»(),userType:«»(),entrypoint:«»(),cwd:«»()??void 0,sessionId:«»,version:«»",
-				"e===\"bg\"||«»===\"daemon\"||«»===\"daemon-worker\")return «»;return}"
+				"«»===\"bg\"||«»===\"daemon\"||«»===\"daemon-worker\")return «»;return}"
 			],
 			"note": "The session fields function returns sessionKind from the session kind getter, which returns CLAUDE_CODE_SESSION_KIND when it is 'bg', 'daemon' or 'daemon-worker' and undefined otherwise (not written)."
 		},
@@ -1726,7 +1726,7 @@
 			},
 			"anchors": [
 				"sessionKind:«»(),userType:«»(),entrypoint:«»(),cwd:«»()??void 0,sessionId:«»,version:«»",
-				"e===\"bg\"||«»===\"daemon\"||«»===\"daemon-worker\")return «»;return}"
+				"«»===\"bg\"||«»===\"daemon\"||«»===\"daemon-worker\")return «»;return}"
 			],
 			"note": "The session fields function returns sessionKind from the session kind getter, which returns CLAUDE_CODE_SESSION_KIND when it is 'bg', 'daemon' or 'daemon-worker' and undefined otherwise (not written)."
 		},
@@ -1785,8 +1785,8 @@
 			},
 			"anchors": [
 				"subtype:\"informational\",content:«»,isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:«»",
-				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
-				"subtype:\"permission_retry\",content:`${«»(«»)} ${e.join(\", \")}. ${«»(e.length)}`"
+				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...«»?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...«»?.usageReport!==void 0&&{usageReport:«».usageReport},...«»?.commandRun!==void 0&&{commandRun:«».commandRun},...«»?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...«»?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...«»?.submitUuid&&{submitUuid:«».submitUuid}",
+				"subtype:\"permission_retry\",content:`${«»(«»)} ${«».join(\", \")}. ${«»(«».length)}`"
 			],
 			"note": "The program builds system lines in the message constructors of the session code (createSystemMessage and the other subtype builders), and the remote-session path rebuilds some from stream-json frames. content is a string at every site: the caller's text (informational, local_command), a template string (permission_retry, bridge_status), the literal 'Conversation compacted', or the content string of a stream frame. Read at chunk-q8kxnv1p.js:266 and chunk-m14bt1pz.js:5961047 and chunk-m14bt1pz.js:5958972."
 		},
@@ -1816,7 +1816,7 @@
 			},
 			"anchors": [
 				"subtype:\"informational\",content:«»,isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:«»",
-				"subtype:\"api_error\",level:\"error\",error:«»,retryInMs:«»,retryAttempt:«»,maxRetries:«»,source:h",
+				"subtype:\"api_error\",level:\"error\",error:«»,retryInMs:«»,retryAttempt:«»,maxRetries:«»,source:«»",
 				"yield «»(«»,«»,«»,«»,«»,«»,\"suggestion\",«»,void 0,void 0,«»,«»)",
 				"subtype:\"cloud_session_status\",content:«»,entry:«»,url:«»,level:\"notice\""
 			],
@@ -1827,7 +1827,7 @@
 				"enum": ["session", "local"]
 			},
 			"anchors": [
-				"subtype:\"model_refusal_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction,...e.scope!==void 0&&{scope:«».scope},originalModel:«».original_model,fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation",
+				"subtype:\"model_refusal_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction,...«».scope!==void 0&&{scope:«».scope},originalModel:«».original_model,fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation",
 				"direction:\"retry\",scope:\"session\""
 			],
 			"note": "model_refusal_fallback lines: scope is the literal 'session' at one site, 'local' or 'session' at the other, and the optional scope of a stream frame (the stream-json schema: session|local)."
@@ -1837,7 +1837,7 @@
 				"enum": ["retry", "revert", "sticky"]
 			},
 			"anchors": [
-				"subtype:\"model_refusal_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction,...e.scope!==void 0&&{scope:«».scope},originalModel:«».original_model,fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation",
+				"subtype:\"model_refusal_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction,...«».scope!==void 0&&{scope:«».scope},originalModel:«».original_model,fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation",
 				"content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction",
 				"subtype:\"model_refusal_fallback\",direction:\"retry\",scope:\"session\"",
 				"subtype:\"model_refusal_fallback\",direction:\"retry\",scope:«»?\"session\":\"local\"",
@@ -1858,7 +1858,7 @@
 				]
 			},
 			"anchors": [
-				"subtype:\"model_refusal_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction,...e.scope!==void 0&&{scope:«».scope},originalModel:«».original_model,fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation",
+				"subtype:\"model_refusal_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction,...«».scope!==void 0&&{scope:«».scope},originalModel:«».original_model,fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation",
 				"subtype:\"model_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,originalModel:«».original_model,fallbackModel:«».fallback_model",
 				"content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction",
 				"level:\"warning\",trigger:\"refusal\",originalModel:«».originModel",
@@ -1872,7 +1872,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"subtype:\"model_refusal_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction,...e.scope!==void 0&&{scope:«».scope},originalModel:«».original_model,fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation",
+				"subtype:\"model_refusal_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction,...«».scope!==void 0&&{scope:«».scope},originalModel:«».original_model,fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation",
 				"subtype:\"model_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,originalModel:«».original_model,fallbackModel:«».fallback_model",
 				"subtype:\"model_refusal_no_fallback\",content:«».content,level:\"warning\",originalModel:«».original_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation,refusedUserMessageUuid:«».refused_user_message_uuid",
 				"subtype:\"model_consent_fallback\",content:«».content,level:\"warning\",choice:«».choice,originalModel:«».original_model,originalModelName:«»(«».original_model_name)?«».original_model_name:void 0,fallbackModel:«».fallback_model,persistedAsDefault:«».persisted_as_default"
@@ -1884,7 +1884,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"subtype:\"model_refusal_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction,...e.scope!==void 0&&{scope:«».scope},originalModel:«».original_model,fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation",
+				"subtype:\"model_refusal_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction,...«».scope!==void 0&&{scope:«».scope},originalModel:«».original_model,fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation",
 				"subtype:\"model_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,originalModel:«».original_model,fallbackModel:«».fallback_model",
 				"subtype:\"model_consent_fallback\",content:«».content,level:\"warning\",choice:«».choice,originalModel:«».original_model,originalModelName:«»(«».original_model_name)?«».original_model_name:void 0,fallbackModel:«».fallback_model,persistedAsDefault:«».persisted_as_default"
 			],
@@ -1902,7 +1902,7 @@
 				]
 			},
 			"anchors": [
-				"subtype:\"model_refusal_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction,...e.scope!==void 0&&{scope:«».scope},originalModel:«».original_model,fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation",
+				"subtype:\"model_refusal_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction,...«».scope!==void 0&&{scope:«».scope},originalModel:«».original_model,fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation",
 				"subtype:\"model_refusal_no_fallback\",content:«».content,level:\"warning\",originalModel:«».original_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation,refusedUserMessageUuid:«».refused_user_message_uuid"
 			],
 			"note": "requestId is the request id string of the refused request; the stream-json schema marks request_id nullable, and the lines copy it as is, so null is possible."
@@ -1919,7 +1919,7 @@
 				]
 			},
 			"anchors": [
-				"subtype:\"model_refusal_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction,...e.scope!==void 0&&{scope:«».scope},originalModel:«».original_model,fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation",
+				"subtype:\"model_refusal_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction,...«».scope!==void 0&&{scope:«».scope},originalModel:«».original_model,fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation",
 				"subtype:\"model_refusal_no_fallback\",content:«».content,level:\"warning\",originalModel:«».original_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation,refusedUserMessageUuid:«».refused_user_message_uuid",
 				"fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category",
 				"originalModel:«».original_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category",
@@ -1941,7 +1941,7 @@
 				]
 			},
 			"anchors": [
-				"subtype:\"model_refusal_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction,...e.scope!==void 0&&{scope:«».scope},originalModel:«».original_model,fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation",
+				"subtype:\"model_refusal_fallback\",content:«».content,level:\"warning\",trigger:«».trigger,direction:«».direction,...«».scope!==void 0&&{scope:«».scope},originalModel:«».original_model,fallbackModel:«».fallback_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation",
 				"subtype:\"model_refusal_no_fallback\",content:«».content,level:\"warning\",originalModel:«».original_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation,refusedUserMessageUuid:«».refused_user_message_uuid",
 				"apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation,...«».api_refusal_cyber_verification!==void 0&&{apiRefusalCyberVerification:«».api_refusal_cyber_verification},...«».saw_cyber_refusal&&{sawCyberRefusal:!0}",
 				"apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation,refusedUserMessageUuid:«».refused_user_message_uuid",
@@ -1959,7 +1959,7 @@
 				}
 			},
 			"anchors": [
-				"subtype:\"permission_retry\",content:`${«»(«»)} ${e.join(\", \")}. ${«»(e.length)}`,commands:e,heardAtNextPrompt:«»"
+				"subtype:\"permission_retry\",content:`${«»(«»)} ${«».join(\", \")}. ${«»(«».length)}`,commands:«»,heardAtNextPrompt:«»"
 			],
 			"note": "permission_retry: commands is the array e that content joins with ', ', so an array of command strings."
 		},
@@ -1991,7 +1991,7 @@
 				"type": "number"
 			},
 			"anchors": [
-				"...n.noOpStreak!==void 0&&«».noOpStreak>0&&{noOpStreak:«».noOpStreak,streakStartedAt:«».streakStartedAt}"
+				"...«».noOpStreak!==void 0&&«».noOpStreak>0&&{noOpStreak:«».noOpStreak,streakStartedAt:«».streakStartedAt}"
 			],
 			"note": "scheduled_task_fire: written only when n.noOpStreak is a number greater than 0 (the folded loop passes the count i)."
 		},
@@ -2000,7 +2000,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"...n.noOpStreak!==void 0&&«».noOpStreak>0&&{noOpStreak:«».noOpStreak,streakStartedAt:«».streakStartedAt}",
+				"...«».noOpStreak!==void 0&&«».noOpStreak>0&&{noOpStreak:«».noOpStreak,streakStartedAt:«».streakStartedAt}",
 				"since:«».streakStartedAt??«».timestamp"
 			],
 			"note": "scheduled_task_fire: the fold passes streakStartedAt as the earlier fire's streakStartedAt or its timestamp, which are ISO timestamp strings."
@@ -2029,7 +2029,7 @@
 			"schema": {
 				"type": "number"
 			},
-			"anchors": ["subtype:\"turn_duration\",durationMs:«»,messageCount:n"],
+			"anchors": ["subtype:\"turn_duration\",durationMs:«»,messageCount:«»"],
 			"note": "turn_duration: durationMs is the turn time in ms, a number."
 		},
 		"system.pendingBackgroundAgentCount": {
@@ -2053,7 +2053,7 @@
 					"type": "string"
 				}
 			},
-			"anchors": ["subtype:\"memory_saved\",writtenPaths:e"],
+			"anchors": ["subtype:\"memory_saved\",writtenPaths:«»"],
 			"note": "memory_saved: the callers pass an array of path strings (a file list and T.filesTouched)."
 		},
 		"system.contextUsage": {
@@ -2174,7 +2174,7 @@
 				}
 			},
 			"anchors": [
-				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
+				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...«»?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...«»?.usageReport!==void 0&&{usageReport:«».usageReport},...«»?.commandRun!==void 0&&{commandRun:«».commandRun},...«»?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...«»?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...«»?.submitUuid&&{submitUuid:«».submitUuid}",
 				"total_tokens:«».totalTokens,raw_max_tokens:«».rawMaxTokens,percentage:«».percentage"
 			],
 			"note": "local_command: the /context command returns contextUsage from kdi(), an object built from the context breakdown (keys as listed; over_limit and skills appear only when they apply)."
@@ -2184,7 +2184,7 @@
 				"type": "object"
 			},
 			"anchors": [
-				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
+				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...«»?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...«»?.usageReport!==void 0&&{usageReport:«».usageReport},...«»?.commandRun!==void 0&&{commandRun:«».commandRun},...«»?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...«»?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...«»?.submitUuid&&{submitUuid:«».submitUuid}",
 				"return{type:\"text\",value:«»,...«»!==void 0&&{usageReport:«»}}"
 			],
 			"note": "local_command: the /usage command passes the parsed result of the usage-report schema (session and rate_limits data) as an object; its inner keys are set by that zod schema, not typed here."
@@ -2194,7 +2194,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
+				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...«»?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...«»?.usageReport!==void 0&&{usageReport:«».usageReport},...«»?.commandRun!==void 0&&{commandRun:«».commandRun},...«»?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...«»?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...«»?.submitUuid&&{submitUuid:«».submitUuid}",
 				"function «»(«»,«»,«»){let «»=«»??«».registeredBy;return{command:«»(«»),args:«»(«»,«»)?\"***\":«»"
 			],
 			"note": "local_command: command is the command name string (Lo(command))."
@@ -2204,7 +2204,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
+				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...«»?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...«»?.usageReport!==void 0&&{usageReport:«».usageReport},...«»?.commandRun!==void 0&&{commandRun:«».commandRun},...«»?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...«»?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...«»?.submitUuid&&{submitUuid:«».submitUuid}",
 				"args:«»(«»,«»)?\"***\":«»"
 			],
 			"note": "local_command: args is the argument string, or '***' when the command is marked sensitive."
@@ -2214,7 +2214,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
+				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...«»?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...«»?.usageReport!==void 0&&{usageReport:«».usageReport},...«»?.commandRun!==void 0&&{commandRun:«».commandRun},...«»?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...«»?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...«»?.submitUuid&&{submitUuid:«».submitUuid}",
 				"function «»(«»,«»,«»){let «»=«»??«».registeredBy;return{command:«»(«»),args:«»(«»,«»)?\"***\":«»,...«»!==void 0&&{plugin:«»}}}"
 			],
 			"note": "local_command: plugin is the registeredBy string of the command or the plugin name; written only when defined."
@@ -2224,7 +2224,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
+				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...«»?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...«»?.usageReport!==void 0&&{usageReport:«».usageReport},...«»?.commandRun!==void 0&&{commandRun:«».commandRun},...«»?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...«»?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...«»?.submitUuid&&{submitUuid:«».submitUuid}",
 				"commandOutcome:«».outcome??(«».level===\"error\"?{kind:\"failed\"}:void 0)",
 				"«»(`<local-command-stdout>${«»}</local-command-stdout>`,{commandOutcome:{kind:\"unavailable_headless\"}})],shouldQuery:!1,resultText:«»})",
 				"«»(`<local-command-stdout>${«»}</local-command-stdout>`,{commandOutcome:{kind:\"unavailable_headless\"}})],shouldQuery:!1,command:«»,resultText:«»}"
@@ -2236,7 +2236,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
+				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...«»?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...«»?.usageReport!==void 0&&{usageReport:«».usageReport},...«»?.commandRun!==void 0&&{commandRun:«».commandRun},...«»?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...«»?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...«»?.submitUuid&&{submitUuid:«».submitUuid}",
 				"{commandOutcome:{kind:\"unknown\",...«»!==void 0&&{suggestion:«»}}}"
 			],
 			"note": "local_command: suggestion is the suggested command string, written only for kind 'unknown'."
@@ -2246,8 +2246,8 @@
 				"type": "string"
 			},
 			"anchors": [
-				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...n?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...n?.usageReport!==void 0&&{usageReport:«».usageReport},...n?.commandRun!==void 0&&{commandRun:«».commandRun},...n?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...n?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...n?.submitUuid&&{submitUuid:«».submitUuid}",
-				"...n?.submitUuid&&{submitUuid:«».submitUuid}"
+				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...«»?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...«»?.usageReport!==void 0&&{usageReport:«».usageReport},...«»?.commandRun!==void 0&&{commandRun:«».commandRun},...«»?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...«»?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...«»?.submitUuid&&{submitUuid:«».submitUuid}",
+				"...«»?.submitUuid&&{submitUuid:«».submitUuid}"
 			],
 			"note": "local_command: submitUuid is the uuid string of the user message that submitted the command."
 		},
@@ -2297,7 +2297,7 @@
 			},
 			"anchors": [
 				"function «»(«»){let{preserved_segment:«»,preserved_messages:«»}=«»;return{trigger:«».trigger,preTokens:«».pre_tokens",
-				"...e.post_tokens!==void 0&&{postTokens:«».post_tokens}"
+				"...«».post_tokens!==void 0&&{postTokens:«».post_tokens}"
 			],
 			"note": "compact_boundary: compactMetadata is built by d2() for local compaction and by qyr() for a remote frame, from the compaction result. postTokens is a token count, copied from post_tokens (int in the stream-json schema)."
 		},
@@ -2497,7 +2497,7 @@
 				"type": "number"
 			},
 			"anchors": [
-				"subtype:\"api_error\",level:\"error\",error:«»,retryInMs:«»,retryAttempt:«»,maxRetries:«»,source:h"
+				"subtype:\"api_error\",level:\"error\",error:«»,retryInMs:«»,retryAttempt:«»,maxRetries:«»,source:«»"
 			],
 			"note": "api_error: retryAttempt is the attempt counter passed by the retry loop (a number; integer in the stream-json schema)."
 		},
@@ -2506,7 +2506,7 @@
 				"type": "number"
 			},
 			"anchors": [
-				"subtype:\"api_error\",level:\"error\",error:«»,retryInMs:«»,retryAttempt:«»,maxRetries:«»,source:h"
+				"subtype:\"api_error\",level:\"error\",error:«»,retryInMs:«»,retryAttempt:«»,maxRetries:«»,source:«»"
 			],
 			"note": "api_error: maxRetries is the retry limit (a number)."
 		},
@@ -2537,7 +2537,7 @@
 			},
 			"anchors": [
 				"subtype:\"model_refusal_no_fallback\",content:«».content,level:\"warning\",originalModel:«».original_model,requestId:«».request_id,apiRefusalCategory:«».api_refusal_category,apiRefusalExplanation:«».api_refusal_explanation,refusedUserMessageUuid:«».refused_user_message_uuid",
-				"...e.refused_user_message_uuid!==void 0&&{refusedUserMessageUuid:«».refused_user_message_uuid}"
+				"...«».refused_user_message_uuid!==void 0&&{refusedUserMessageUuid:«».refused_user_message_uuid}"
 			],
 			"note": "The uuid of the user message the refused request was for; the stream-json schema marks it nullable (null when the turn was not human-authored)."
 		},
@@ -2545,7 +2545,7 @@
 			"schema": {
 				"type": "boolean"
 			},
-			"anchors": ["...e.provisional&&{provisional:«».provisional}"],
+			"anchors": ["...«».provisional&&{provisional:«».provisional}"],
 			"note": "model_refusal_fallback: written only when truthy, so true."
 		},
 		"system.choice": {
@@ -2586,7 +2586,7 @@
 			"schema": {
 				"type": "string"
 			},
-			"anchors": ["subtype:\"rewind_stand_in\",source_uuid:e"],
+			"anchors": ["subtype:\"rewind_stand_in\",source_uuid:«»"],
 			"note": "rewind_stand_in: source_uuid is the uuid string of the message the stand-in replaces."
 		},
 		"assistant.uuid": {
@@ -3254,7 +3254,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«».changes)"
+				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«»??«».changes)"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; requestId is bl ?? undefined, the request id string from the response (fXe returns a string or null, null becomes undefined, so it is not written)."
 		},
@@ -3274,8 +3274,8 @@
 			},
 			"anchors": [
 				"apiBlockIndex:0,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model",
-				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model",
-				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model"
+				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«»??«».changes),requestedModel:«».model",
+				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«»??«».changes),requestedModel:«».model"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; requestedModel is the model id string of the request (Q.model)."
 		},
@@ -3288,8 +3288,8 @@
 				"attributionSkill:«»,...«»&&{attributionPlugin:«»}",
 				"attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
 				"apiBlockIndex:0,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«»??«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«»??«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionAgent is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
 		},
@@ -3302,8 +3302,8 @@
 				"attributionSkill:«»,...«»&&{attributionPlugin:«»}",
 				"attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
 				"apiBlockIndex:0,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«»??«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«»??«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionSkill is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
 		},
@@ -3316,8 +3316,8 @@
 				"attributionSkill:«»,...«»&&{attributionPlugin:«»}",
 				"attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
 				"apiBlockIndex:0,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«»??«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«»??«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionPlugin is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
 		},
@@ -3330,8 +3330,8 @@
 				"attributionSkill:«»,...«»&&{attributionPlugin:«»}",
 				"attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
 				"apiBlockIndex:0,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«»??«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«»??«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionMcpServer is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
 		},
@@ -3344,8 +3344,8 @@
 				"attributionSkill:«»,...«»&&{attributionPlugin:«»}",
 				"attributionMcpServer=«»,«»)«».attributionMcpTool=«»",
 				"apiBlockIndex:0,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
-				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
+				"apiBlockIndex:«».length,requestId:«»??void 0,...«»(«»,«»,«»??«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)",
+				"apiBlockIndex:«».index,requestId:«»??void 0,...«»(«»,«»,«»??«».changes),requestedModel:«».model,promptCacheRequested:«»,...«»(«».querySource,«».spawnedBySkill,«».activeSkill,«».activeMcpServer,«».activeMcpTool)"
 			],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; attributionMcpTool is set by Hle(): the agent name (query source 'agent:builtin:x' or 'agent:custom:x'), the skill name, the plugin name, the MCP server name and tool name, all strings."
 		},
@@ -3589,7 +3589,7 @@
 			"schema": {
 				"type": "boolean"
 			},
-			"anchors": ["truncatedAfterOutput:«»,isApiErrorMessage:n"],
+			"anchors": ["truncatedAfterOutput:«»,isApiErrorMessage:«»"],
 			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; A boolean flag."
 		},
 		"assistant.isApiErrorMessage": {
@@ -4471,7 +4471,7 @@
 			},
 			"anchors": [
 				"type:\"api-request-blob\",sessionId:«».sessionId",
-				"message:H"
+				"message:«»"
 			],
 			"note": "A journal line the request journal writes (a hash-chained record of API request bodies): message is the request message param object (the journal stores it with cache_control removed)."
 		},
@@ -4579,7 +4579,7 @@
 				"type": "string"
 			},
 			"anchors": [
-				"type:\"artifact-comment-monitor\",v:1,sessionId:«»,artifacts:t"
+				"type:\"artifact-comment-monitor\",v:1,sessionId:«»,artifacts:«»"
 			],
 			"note": "Comment-monitor line: sessionId is a string."
 		},
@@ -4588,7 +4588,7 @@
 				"type": "object"
 			},
 			"anchors": [
-				"type:\"artifact-comment-monitor\",v:1,sessionId:«»,artifacts:t"
+				"type:\"artifact-comment-monitor\",v:1,sessionId:«»,artifacts:«»"
 			],
 			"note": "artifacts is an object keyed by artifact id."
 		},
@@ -5078,21 +5078,6 @@
 						"type": "object",
 						"properties": {
 							"kind": {
-								"const": "mcp_required_missing"
-							},
-							"servers": {
-								"type": "array",
-								"items": {
-									"type": "string"
-								}
-							}
-						},
-						"required": ["kind", "servers"]
-					},
-					{
-						"type": "object",
-						"properties": {
-							"kind": {
 								"const": "auth_expired"
 							},
 							"provider": {
@@ -5242,13 +5227,12 @@
 				"{kind:\"feature_disabled\",feature:\"workflows\",cause:«»}",
 				"{kind:\"policy_denied\",feature:\"artifacts\",policy_kind:«»}",
 				"{kind:\"staged_for_review\",path:«»?.path??«»}",
-				"{kind:\"mcp_required_missing\",servers:«»}",
 				"{kind:\"design_needs_authorization\",provider:\"claude_design\"}",
 				"{kind:\"auth_missing_scope\",provider:\"claude_design\"}",
 				"{kind:\"sandbox_violation\"}",
 				"{kind:\"spawn_arg_limit\"}"
 			],
-			"note": "Sources: validationErrorRemedy(input); MCP validation remedy (fpr/Nfn/ppr: mcp_needs_auth, mcp_disabled, auth_expired); Lfn(decision) for denies (outside_reads_blocked, memory_paused); tool-result remedy (Qr.remedy: sandbox_violation from Bash, memory_paused, mcp_needs_auth/mcp_disabled from the MCP wait tool, staged_for_review from file writes, feature_disabled from the workflow tool validateInput); error remedy via ND(error,{...}) (spawn_arg_limit, auth_*, design_needs_authorization, mcp_required_missing, policy_denied, auth_expired). Per kind properties follow the literal objects at each site. managed for outside_reads_blocked is kFr() = some(settings layer).permissions.blockReadsOutsideWorkingDirectories===true, a boolean; path is added only when blockedPath is defined. auth_overridden managed is true (fd) or false (env). Provider/servers/path/cause are strings from the cited enums or values (server names, setting path). Undefined remedies are not written."
+			"note": "Sources: validationErrorRemedy(input); MCP validation remedy (fpr/Nfn/ppr: mcp_needs_auth, mcp_disabled, auth_expired); Lfn(decision) for denies (outside_reads_blocked, memory_paused); tool-result remedy (Qr.remedy: sandbox_violation from Bash, memory_paused, mcp_needs_auth/mcp_disabled from the MCP wait tool, staged_for_review from file writes, feature_disabled from the workflow tool validateInput); error remedy via ND(error,{...}) (spawn_arg_limit, auth_*, design_needs_authorization, policy_denied, auth_expired). Per kind properties follow the literal objects at each site. managed for outside_reads_blocked is kFr() = some(settings layer).permissions.blockReadsOutsideWorkingDirectories===true, a boolean; path is added only when blockedPath is defined. auth_overridden managed is true (fd) or false (env). Provider/servers/path/cause are strings from the cited enums or values (server names, setting path). Undefined remedies are not written. mcp_required_missing is no variant here: the 2.1.327 Agent tool wrote it from j6(error,{kind:\"mcp_required_missing\",servers}) at three subagent launch sites, and 2.1.328 has no such write; the name stays only in the remedy kind list and its zod schema."
 		},
 		"user.userFeedback": {
 			"schema": {
@@ -5441,11 +5425,11 @@
 			},
 			"anchors": [
 				"{type:\"data-flow-incomplete\",v:1,sessionId:«»,agentId:«»}",
-				"!Ee.incomplete)V.push({type:\"data-flow-incomplete\",v:1,sessionId:«»})",
+				"!«».incomplete)«».push({type:\"data-flow-incomplete\",v:1,sessionId:«»})",
 				"{type:\"data-flow-incomplete\",v:1,sessionId:«»,...«»}",
 				"unshift({type:\"data-flow-incomplete\",v:1,sessionId:«»})",
-				"IYe({type:\"data-flow-incomplete\",v:1,sessionId:W()})",
-				"r.push({type:\"data-flow-incomplete\",v:1,sessionId:«»})"
+				"«»({type:\"data-flow-incomplete\",v:1,sessionId:«»()})",
+				"«».push({type:\"data-flow-incomplete\",v:1,sessionId:«»})"
 			],
 			"note": "Each of the six writers (chunk-m14bt1pz.js:495394, @502448, @528598, @614503, @621416; chunk-tzmg9srt.js:1461) passes the session id string from the session id getter W()."
 		},
@@ -5875,7 +5859,7 @@
 				"[{type:\"data-flow-records\",v:1,sessionId:«»,records:«»}]",
 				"{type:\"data-flow-records\",v:1,sessionId:«»,records:[...«».records],snapshot:!0}",
 				"takeRecordsForEntry(«»,«»){let «»=this.",
-				"if(e.response_id!==void 0)return a8t(e.response_id)?{response_id:",
+				"if(«».response_id!==void 0)return «»(«».response_id)?{response_id:",
 				"recordScriptCall(«»,«»,«»,«»={}){"
 			],
 			"note": "Each writer (chunk-m14bt1pz.js:495531, @502640, @528791, @614417; chunk-tzmg9srt.js:1529) passes an array from takeRecordsForEntry (chunk-ytkczbf2.js:26842). An item is a response marker {response_id, listed?, mark_sent_by?} (chunk-ytkczbf2.js:26246) or a call record from recordCall, recordEvent, recordScriptCall, or recordTouch (chunk-ytkczbf2.js:23150 to @25600). The reader Hsi (chunk-s7x4n0qs.js:783) keeps only these shapes: ids pass yce, a string of 1 to 256 characters with no control character (chunk-hzvpv59r.js:19131); response ids match /^msg_(?:staging_|local_)?[A-Za-z0-9]{1,64}$/; inner_call_index is a safe integer from 0 below 2147483648; server passes Mls (chunk-hzvpv59r.js:18642) or is {type:\"unknown\"} (chunk-fchyqr5f.js:15882); a call record has tool_use_id or event_id."
@@ -5886,7 +5870,7 @@
 			},
 			"anchors": [
 				"{type:\"derived-from\",v:1,sessionId:«»,sessions:«».derivedFrom()}",
-				"{type:\"derived-from\",v:1,sessionId:«»,sessions:h}",
+				"{type:\"derived-from\",v:1,sessionId:«»,sessions:«»}",
 				"{type:\"derived-from\",v:1,sessionId:«»,sessions:«»(",
 				"{type:\"derived-from\",v:1,sessionId:«»,sessions:[{type:\"unknown\""
 			],
@@ -5943,10 +5927,10 @@
 			},
 			"anchors": [
 				"{type:\"derived-from\",v:1,sessionId:«»,sessions:«».derivedFrom()}",
-				"{type:\"derived-from\",v:1,sessionId:«»,sessions:h}",
+				"{type:\"derived-from\",v:1,sessionId:«»,sessions:«»}",
 				"{type:\"derived-from\",v:1,sessionId:«»,sessions:«»(",
 				"{type:\"derived-from\",v:1,sessionId:«»,sessions:[{type:\"unknown\"",
-				"let n=_il.find((s)=>s===e.type),t=gil.find((s)=>s===e.via);"
+				"let «»=«».find((«»)=>«»===«».type),«»=«».find((«»)=>«»===«».via);"
 			],
 			"note": "Array of source objects at each writer (chunk-m14bt1pz.js:502820, @528099; chunk-tzmg9srt.js:1615), for example {type:\"unknown\",id:null,via:\"import\"} (chunk-b1r44a63.js:48498). The reader F (chunk-s7x4n0qs.js:2101) keeps only an item whose type is in [\"claude_code_session\",\"unknown\"] and whose via is in the 12 values of gil (chunk-ytkczbf2.js:21951); id is a yce string, or null for type unknown; started is an optional yce string. The writer helper _F builds {type:\"claude_code_session\",id,via}."
 		},
@@ -6057,7 +6041,8 @@
 				"{type:\"tools-used\",sessionId:«»,tools:«»}",
 				"{type:\"tools-used\",sessionId:«»,tools:[...«».toolsUsedAtEntry]}",
 				"{type:\"tools-used\",tools:«»(«»),sessionId:«»}",
-				"function xO(«»){return «».test(«»)?«»:«»}"
+				"var «»=/^[A-Za-z0-9_.:-]{1,256}$/,",
+				"function «»(«»){return «».test(«»)?«»:«»}"
 			],
 			"note": "Each writer (chunk-m14bt1pz.js:502243, @527575; chunk-tzmg9srt.js:4809, @7780; chunk-b1r44a63.js:48621) passes tool names. xO (chunk-ytkczbf2.js:21064) keeps a name only if it matches /^[A-Za-z0-9_.:-]{1,256}$/, else it uses a fixed non-empty constant."
 		},
@@ -6692,19 +6677,40 @@
 			"schema": {
 				"type": "object",
 				"properties": {
+					"type": {
+						"enum": ["bash_progress", "powershell_progress"]
+					},
+					"output": {
+						"type": "string"
+					},
+					"fullOutput": {
+						"type": "string"
+					},
 					"elapsedTimeSeconds": {
 						"type": "number"
 					},
 					"totalLines": {
+						"type": "number"
+					},
+					"totalBytes": {
+						"type": "number"
+					},
+					"taskId": {
+						"type": "string"
+					},
+					"timeoutMs": {
 						"type": "number"
 					}
 				}
 			},
 			"anchors": [
 				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"executing\",shellProgress:«»}",
-				"={elapsedTimeSeconds:«».data.elapsedTimeSeconds,totalLines:«».data.totalLines},"
+				"\"bash_progress\"&&«».data.type!==\"powershell_progress\")return;«»=«».data,«»(«»)}",
+				"data:{type:\"bash_progress\",output:«».output,fullOutput:«».fullOutput,elapsedTimeSeconds:«».elapsedTimeSeconds,totalLines:«».totalLines,totalBytes:«».totalBytes,taskId:«».taskId,timeoutMs:«».timeoutMs}",
+				"data:{type:\"powershell_progress\",output:«».output,fullOutput:«».fullOutput,elapsedTimeSeconds:«».elapsedTimeSeconds,totalLines:«».totalLines,totalBytes:«».totalBytes,timeoutMs:«».timeoutMs,taskId:«».taskId}",
+				"fullOutput:«»,output:«»,elapsedTimeSeconds:«»,totalLines:«»,totalBytes:«»,taskId:«».taskOutput.taskId,"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line, with shellProgress set, as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:118819). Y = {elapsedTimeSeconds, totalLines}, copied from the numbers of a bash_progress or powershell_progress line (chunk-t31w6vd4.js:131075)."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line, with shellProgress set, as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:118819). In 2.1.328 the value is the whole data object of the last bash_progress or powershell_progress line (the REPL tool keeps nt.data of the progress callback), not only two numbers as in 2.1.327: type, output, fullOutput (strings), elapsedTimeSeconds, totalLines, totalBytes (numbers), taskId (string), and timeoutMs (number, set when the call has a timeout). The Bash and PowerShell progress emitters build it."
 		},
 		"progress.data.mcpContent": {
 			"schema": {
@@ -6755,7 +6761,7 @@
 			},
 			"anchors": [
 				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«».notes},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
-				"nt={joined:«»,notes:«»._notes}"
+				"«»={joined:«»,notes:«»._notes}"
 			],
 			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line, with notes set, as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:120748). nt.notes is the _notes list: the MCP text parts (strings) that did not parse as the one JSON object (_notes at chunk-t31w6vd4.js:120330, nt at chunk-t31w6vd4.js:120460)."
 		},
@@ -6796,7 +6802,7 @@
 			},
 			"anchors": [
 				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«».notes},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
-				"sandboxViolations:«»,sandboxed:«»})",
+				"sandboxViolations:«»,sandboxed:«»,connectorFileLines:«»,",
 				"let «»=[],«»=new Set;for(let{line:«»}of «»){let «»=«»(«»),«»=«».kind===\"network\"?`n ${«».host} ${«».port}`:\"o\";"
 			],
 			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line, with sandboxViolations set, as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:120748, 134267). The violations of the shell call: DNo() returns hxs(...), a list of {kind:\"network\", host, port?} or {kind:\"other\"} with no repeats, cut at 20 (chunk-m14bt1pz.js:3754955); the ShellError class carries the same list (chunk-z9xgg67q.js:2901). The user line's sandboxViolations has the same type."
@@ -6807,7 +6813,7 @@
 			},
 			"anchors": [
 				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«».notes},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
-				"sandboxViolations:«»,sandboxed:«»})"
+				"sandboxViolations:«»,sandboxed:«»,connectorFileLines:«»,"
 			],
 			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-m14bt1pz.js:696693). The REPL tool emits the line, with sandboxed set, as progress data of type `repl_tool_call` (chunk-t31w6vd4.js:120748, 134267). sandboxed is yo = jn = Fm(...), which returns true or false (chunk-m14bt1pz.js:1581106, 5727048)."
 		},
