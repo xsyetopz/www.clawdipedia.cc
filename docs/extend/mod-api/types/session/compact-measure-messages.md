@@ -270,5 +270,5 @@ A `$.session.messages({ as: "api" })` call that names no agent. It reads the mai
 ## Sources
 
 [^resume-loader]: The program, `chunk-56bhcxay.js:554201`.
-[^session-info]: `schemas/claude-code.d.ts`, `SessionInfo`. The program, `chunk-56bhcxay.js:60284`.
-[^session-machine]: `schemas/claude-code.d.ts`, `SessionMachine`. The program, `chunk-56bhcxay.js:60377-60390`.
+[^session-info]: `schemas/claude-code.d.ts`, `SessionInfo`. The program, `chunk-56bhcxay.js:4975754`.
+[^session-machine]: `schemas/claude-code.d.ts`, `SessionMachine`. The program, `chunk-56bhcxay.js:1060862`.

@@ -124,4 +124,4 @@ The check runs in the tool stage of every turn. See [The Agent Loop](agent-loop.
 [^relative-cd]: The program, `chunk-56bhcxay.js:1461043-1461350`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^trust-list]: The program, `chunk-6heyrpzr.js:29628` (the tags) and `chunk-6heyrpzr.js:32701` (the header `Accessing workspace:`).
 [^cd-list]: The program, `chunk-t5ty4t2x.js:4718` and `chunk-g2h4scbp.js:463` (the sentence `Trusting this directory loads <files>.`).
-[^trust-exit]: The program, `chunk-6heyrpzr.js:26036`.
+[^trust-exit]: The program, `chunk-6heyrpzr.js:25982` (the exit function with the two-line message) and `chunk-6heyrpzr.js:28226` (the refusal path, which logs `onboarding_trust_denied` and then calls that function).

@@ -251,8 +251,8 @@ One tool_use block of an assistant message, with its outcome once the transcript
 
 ## Sources
 
-[^read-only]: The program, `chunk-56bhcxay.js:69653`.
-[^consent]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`. The text of `ToolCallReserved`.
+[^read-only]: The program, `chunk-56bhcxay.js:68733`.
+[^consent]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`. The text of `ToolCallReserved`. The run of `$.tool.call`, `chunk-56bhcxay.js:4896906`, throws unless `consent` is a string, adds it to the messages of the run as a message with origin `human` only when the call answers a vouched press or input of the plugin, and otherwise logs `consent left out, unvouched`. The type file of `2.1.326` has no such text; the one of `2.1.327` has it.
 [^ceiling]: `schemas/claude-code.d.ts`, `ToolCheckInput`.
 [^ceiling-result]: `schemas/claude-code.d.ts`, `ToolCheckInput`.
 [^decider]: The program, `chunk-syremzmn.js:216075`.
@@ -261,4 +261,4 @@ One tool_use block of an assistant message, with its outcome once the transcript
 [^tool-mcp-server]: `schemas/claude-code.d.ts`, `ToolDescribeInput` and `ToolMcpServer`.
 [^op-hold]: `opHoldMs: 30000`, `chunk-syremzmn.js:219487`.
 [^tool-judge]: `schemas/claude-code.d.ts`, `ToolJudgeInput`. The program, `chunk-syremzmn.js:218951`.
-[^tool-offer]: `schemas/claude-code.d.ts`, `ToolOfferInput` and `ToolOfferResult`. The program, `chunk-56bhcxay.js:8266` (the input) and `chunk-56bhcxay.js:243090` (the refusal message).
+[^tool-offer]: `schemas/claude-code.d.ts`, `ToolOfferInput` and `ToolOfferResult`. The program, `chunk-56bhcxay.js:62685` (the input) and `chunk-56bhcxay.js:4847751` (the refusal message).

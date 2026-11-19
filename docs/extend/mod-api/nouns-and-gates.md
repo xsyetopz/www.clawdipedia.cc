@@ -78,7 +78,7 @@ Each `$` call is also an event with the same name, such as `fs.read`. A hook on 
 | --- | --- | --- | --- | --- |
 | `disableAllHooks` | <Differs note="The schema also says it stops the statusLine command. The Hooks Reference names only hooks." /> | No mod or hook of an installed plugin runs. Built-in mods load. | Row: [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plugins.md#keys). | Settings files. |
 | `allowManagedHooksOnly` | <Documented /> <ManagedOnly /> | Blocks hooks and mods that are not the organization's. | The text in the program is "hooks modules are turned off here (`disableAllHooks`, `allowManagedHooksOnly` or a policy)".[^off-text] Row: [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plugins.md#keys). | Managed settings. |
-| `allowManagedModsOnly` | <Documented /> | Only organization mods and built-in mods run their hooks. | An option of the built-in guard `sec-default`. Since `2.1.328`, an app that embeds Claude Code can also switch it on. The managed settings of an admin still win.[^embed-mods-only] | Managed settings. |
+| `allowManagedModsOnly` | <Documented /> | Only organization mods and built-in mods run their hooks. | An option of the built-in guard `sec-default`. The `2.1.328` release note says an app that embeds Claude Code can also switch it on, and that the managed settings of an admin still win.[^embed-mods-only] | Managed settings. |
 | `allowModsToOverrideDenyRules` | <Documented /> | Lets an installed mod approve a call that a `deny` rule refuses. | An option of the built-in guard. | Managed settings. |
 | `prependPlugins`, `appendPlugins` | <Differs note="Docs say user or managed scope. The schema says managed only." /> <ManagedOnly /> | Plugin ids that run before or after user mods. Since `2.1.327`, they set the order only: an organization plugin that neither list names is in `prepend`, after the listed ones. | Only plugins in these tiers can call `next.to`. Rows: [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plugins.md#keys). | Managed settings. |
 | `disableSideloadFlags` | <Documented /> <ManagedOnly /> | Rejects `--plugin-dir` and `--plugin-url`. | Row: [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plugins.md#keys). | Managed settings. |
@@ -110,7 +110,7 @@ Hooks and Mod API calls run under time and size limits. Claude Code skips a hook
 
 ## Built-In Mods
 
-Claude Code `2.1.316` registers up to 13 built-in plugins at start.[^registry] Each id is `cc-plugin-<name>@builtin`. The settings and flags that stop installed mods do not stop them.
+Claude Code `2.1.328` registers up to 14 built-in plugins at start.[^registry] `2.1.316` registered up to 13: it had no `cc-plugin-privacy` or `cc-plugin-hipaa-default`, and it had `cc-plugin-claude-test`. Each id is `<name>@builtin`, and the name is `cc-plugin-<name>` for every plugin but `claude-platform`. The settings and flags that stop installed mods do not stop them.
 
 | Name in `/plugin` | What it does | Registered when |
 | --- | --- | --- |
@@ -124,10 +124,9 @@ Claude Code `2.1.316` registers up to 13 built-in plugins at start.[^registry] E
 | `cc-plugin-responsive-mode` | Claude replies in one sentence before it thinks or uses tools, on every prompt. | Normal run, or the `remote` entry point |
 | `cc-plugin-diff` | Takes over `/diff` and draws its pane. | Not `local-agent`, and the entry point does not start with `remote` |
 | `cc-plugin-you-should-know` | Displays a note above the prompt when a side agent finds something you might have missed. Off until you turn it on. | `CLAUDE_CODE_ENTRYPOINT` is not `local-agent` |
-| `cc-plugin-easel` | Draws charts in the transcript. | Normal run, or the `remote_cowork` entry point |
-| `cc-plugin-claude-platform` | A built-in plugin of the same registry. | Normal run |
-| `cc-plugin-claude-test` | A built-in plugin of the same registry. | Normal run |
-| `cc-plugin-privacy` | Refuses a call when it sends your account email as the identity of a client, for example beside a User-Agent. Since `2.1.326`, it checks `Write`, `Edit`, `NotebookEdit`, `WebFetch`, and MCP tool calls, and the script files that a shell call names, and not only `Bash`, `Monitor`, and `PowerShell` calls. It refuses with a deny and does not ask you. The refusal tells Claude to use a generic client name, to ask you for a real contact that a site needs, and that you can set the address in an environment variable or run the command yourself with `!`. Since `2.1.328`, it lets the MCP call of a settings hook pass. | A server gate, which is on by default[^privacy-gate] |
+| `cc-plugin-easel` | Draws charts in the transcript. | Normal run, the `remote_cowork` entry point, or, since `2.1.328`, a cloud worker session[^easel-worker] |
+| `claude-platform` | Connects Claude to the Claude Platform developer docs, and offers the `claude-api` skill. Its name has no `cc-plugin-` prefix since `2.1.324`.[^platform-name] | Normal run |
+| `cc-plugin-privacy` | Refuses a call when it sends your account email as the identity of a client, for example beside a User-Agent. Since `2.1.324`, it checks `Write`, `Edit`, `NotebookEdit`, `WebFetch`, and MCP tool calls, and the script files that a shell call names, and not only `Bash`, `Monitor`, and `PowerShell` calls.[^privacy-scope] It refuses with a deny and does not ask you. The refusal tells Claude to use a generic client name, to ask you for a real contact that a site needs, and that you can set the address in an environment variable or run the command yourself with `!`. Since `2.1.328`, it lets the MCP call of a settings hook pass. | A server gate, which is on by default[^privacy-gate] |
 
 The `cc-plugin-privacy` check is a `tool.check` hook, and it reads the account email with `session.identity`. It looks for `curl -A`, `wget -U`, a `--user-agent` or `-user` option, `user-agent`, `user_agent`, or `ua:` text, a `From` header, and text such as `set_identity`, `mailto=`, or `--identity`. It also tests the percent-encoded `%40` form of the address, and a `git config user.email` or `GIT_AUTHOR_EMAIL` text in a line that has such an identity. A `WebFetch` call is refused when its `url` holds the address. For a shell call, the hook reads up to 8 script files that the command names, in the working folder and without links, and checks their text the same way. The hook also answers `session.identity` for other mods: it denies a mod of the `user` tier, and it removes `contextEmail` from the answer for a mod of any tier but `builtin`. The plugin sets `defaultEnabled: true` and `enabledFromTrustedSettingsOnly`.[^privacy]
 
@@ -143,7 +142,7 @@ Claude Code decides each built-in plugin in this order.[^enable-order]
 4. Otherwise the `enabledPlugins` key of your settings counts. A plugin that a directory you added with `--add-dir` also lists is read by the loader for that case.
 5. A value that is set decides: only `true` turns the plugin on. With no value, the plugin uses its `defaultEnabled`, and that is `true` when the plugin sets none.
 
-Only `cc-plugin-sec-default` and, since `2.1.328`, `cc-plugin-hipaa-default` set both policy-only flags. `cc-plugin-privacy` sets `enabledFromTrustedSettingsOnly`, and it has set it since at least `2.1.322`. The other built-in plugins read `enabledPlugins` from your settings.[^enabled-plugins] Only `cc-plugin-responsive-mode` and `cc-plugin-you-should-know` set `defaultEnabled: false`. To turn one on, set its id as the key:
+Only `cc-plugin-sec-default` and, since `2.1.328`, `cc-plugin-hipaa-default` set both policy-only flags. `cc-plugin-privacy` sets `enabledFromTrustedSettingsOnly`, and it has set it since `2.1.317`, the first release with the plugin. The other built-in plugins read `enabledPlugins` from your settings.[^enabled-plugins] Only `cc-plugin-responsive-mode` and `cc-plugin-you-should-know` set `defaultEnabled: false`. To turn one on, set its id as the key:
 
 ```json
 {
@@ -168,16 +167,19 @@ See [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plu
 [^validate]: The program, `chunk-eyez668q.js:50642`.
 [^validate-form]: The program, `chunk-56bhcxay.js:1014972` and `chunk-eyez668q.js:45018`.
 [^types-dir]: The program, `chunk-56bhcxay.js:5110139`.
-[^embed-mods-only]: The program, `chunk-jkpzhr7r.js:6501` (the option that a host may pass) and `chunk-jkpzhr7r.js:6531` (the copy into the policy plugin options). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^embed-mods-only]: The program, `chunk-jkpzhr7r.js:165565` (the list of policy plugin options, `allowManagedModsOnly` and `forceHotReloadPrompt`) and `chunk-jkpzhr7r.js:166026` (the copy of those options, when boolean, from the settings it is given into the policy plugin options). The code at both places is the same in `2.1.327`, so the program does not show what the `2.1.328` change added; the claim rests on the release note. [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
 [^off-text]: The program, `chunk-xqszk37f.js:3236`.
 [^safe-mode-text]: The program, `chunk-56bhcxay.js:5131025`.
 [^v321]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321).
 [^written-mods]: [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321). The program, `chunk-4ekmrthb.js:5707`.
 [^prompt-edit]: The program, `chunk-syremzmn.js:194600`.
-[^registry]: The program, `chunk-pk4bzvs1.js:0`, the start function that calls the registry one plugin at a time.
+[^registry]: The program, `chunk-pk4bzvs1.js:0`, the start function that calls the registry one plugin at a time. It lists 14 plugins in `2.1.328`. `2.1.327` registers 13 and `2.1.316` registers 13, counted the same way. `2.1.327` dropped `cc-plugin-claude-test` and added `cc-plugin-privacy`; `2.1.328` added `cc-plugin-hipaa-default`.
+[^easel-worker]: The program, `chunk-pk4bzvs1.js:0`. In `2.1.328` the plugin also registers when the session is a cloud worker: `CLAUDE_CODE_REMOTE` is set, an entry point starts with `remote` (but is not `remote_cowork` or `remote_mobile`), and `CLAUDE_CODE_REMOTE_SESSION_ID` is set; and for a self-hosted runner child with such an entry point. `chunk-56bhcxay.js:850283` holds the test. `2.1.327` has neither condition.
+[^platform-name]: The program, `chunk-2jfxv5rx.js:24737` (`var a="claude-platform"`). `2.1.323` names the plugin `cc-plugin-claude-platform` and `2.1.324` names it `claude-platform`. The program has no `cc-plugin-claude-test` registry call in `2.1.327` or `2.1.328`; `chunk-9n6y18w2.js:15430` only cleans an old data folder of it.
 [^rollout-gate]: The program (`2.1.327`), the gate `tengu_plugin_hooks_modules` at `chunk-xethrx83.js:728148` and the message at `chunk-xqszk37f.js:3090`.
-[^tips-mermaid]: The program (`2.1.327`), `chunk-bgvyhd4f.js:276-277` for the tips description and `chunk-3jdt5qfx.js:193` for the Mermaid description.
+[^tips-mermaid]: The program, `chunk-bgvyhd4f.js:8511` for the tips description and `chunk-3jdt5qfx.js:6996` for the Mermaid description. Each plugin sits behind a gate, `tengu_tips_mod` and `tengu_mermaid_mod`.
 [^privacy-gate]: The program, `chunk-vaa1bcfr.js:6712`. The gate is `tengu_wise_newt`.
+[^privacy-scope]: The program, `chunk-vaa1bcfr.js:8625` (the tool list and the script read). `2.1.323` has a list of only `Bash`, `Monitor`, and `PowerShell` and no script read; `2.1.324` has the longer list and the read. The `2.1.328` text, `chunk-vaa1bcfr.js:10964`, lets a call through when `origin.hookOwner` is set (the MCP call of a settings hook); `2.1.327` has no such test.
 [^privacy]: The program, `chunk-vaa1bcfr.js:8338` for the match, the refusal text at `chunk-vaa1bcfr.js:9024`, the `tool.check` hook at `chunk-vaa1bcfr.js:10883`, and the `session.identity` hook at `chunk-vaa1bcfr.js:11596`.
 [^easel]: The program, `chunk-pk4bzvs1.js:0`.
 [^enable-order]: The program, `chunk-e3mrctpm.js:77246`.

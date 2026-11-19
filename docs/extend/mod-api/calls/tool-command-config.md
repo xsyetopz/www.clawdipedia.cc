@@ -103,15 +103,15 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 ## Sources
 
 [^types]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`: `ToolInfo`, `ToolSpec`, `RegisteredToolSpec`, `ToolCallInput`, `ToolCheckArgs`, `ToolCheckInput`, `ToolCheckResult`, `ToolJudgeInput`, `ToolJudgeResult`, `ToolDescribeInput`, `CommandInfo`, `CommandSpec`, `CommandRunArgs`, `CommandRunInput`, `CommandRunResult`, `CommandDescribeInput`, `ConfigRow`, `ConfigSetArgs`, `ConfigSetInput`, `ConfigSetResult`, `ConfigDescribeInput`, and the `$.tool`, `$.command`, and `$.config` text.
-[^tool-call]: The type file `schemas/claude-code.d.ts`, `$.tool.call`. The program, `chunk-56bhcxay.js:87911-87946` and `chunk-56bhcxay.js:8257-8262`. [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321).
-[^tool-call-ask]: The type file `schemas/claude-code.d.ts`, `$.tool.call`. The program, `chunk-56bhcxay.js:92345-92350` (the allow, with the reason `plugin-origin: <plugin>`) and `chunk-56bhcxay.js:184552-184561` (the ask of a mod's own call turns into that allow).
+[^tool-call]: The type file `schemas/claude-code.d.ts`, `$.tool.call`. The program, `chunk-56bhcxay.js:4896906` and `chunk-56bhcxay.js:62541`. [`2.1.321` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.321).
+[^tool-call-ask]: The type file `schemas/claude-code.d.ts`, `$.tool.call`. The program, `chunk-56bhcxay.js:1689984` (the allow, with the reason `plugin-origin: <plugin>`) and `chunk-56bhcxay.js:3655563` (the ask of a mod's own call turns into that allow).
 [^tool-call-org]: The type file `schemas/claude-code.d.ts`, `$.tool.call` (an organization's mod and a person's mod).
 [^judge]: The program, `chunk-syremzmn.js:218951`.
-[^v2327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-sxssbh0v.js:3186`: the list of reasons that Code Mode does not start has no case for a mod that hooks tool calls.
+[^v2327]: [`2.1.327` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.327). The program, `chunk-sxssbh0v.js:3186`: the list of reasons that Code Mode does not start has no case for a mod that hooks tool calls. The `2.1.326` program has that case (`mods`: a plugin with JavaScript hooks that may check tool calls), and the `2.1.327` program does not.
 [^run]: The program, `chunk-syremzmn.js:219890`.
 [^describe-resolve]: The program, `chunk-xethrx83.js:556073`, `resolveToolDescription`.
-[^resolver]: The program in `2.1.316`. `chunk-xethrx83.js:556073` holds the resolver. `chunk-56bhcxay.js:1933443` holds the request builder.
+[^resolver]: The program of `2.1.328`. `chunk-xethrx83.js:556073` holds the resolver. `chunk-56bhcxay.js:1933443` holds the request builder.
 [^tool-list]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-56bhcxay.js:3725123`.
-[^tool-offer]: The type file `schemas/claude-code.d.ts`, `tool.offer`. The program, `chunk-56bhcxay.js:8266`, `chunk-56bhcxay.js:10761`, and `chunk-56bhcxay.js:305485` (the call), and `chunk-56bhcxay.js:243090` (the refusal message).
+[^tool-offer]: The type file `schemas/claude-code.d.ts`, `tool.offer`. The program, `chunk-56bhcxay.js:62685` (the input pass), `chunk-56bhcxay.js:112441` (the core answer), and `chunk-56bhcxay.js:6095317` (the call), and `chunk-56bhcxay.js:4847751` (the refusal message).
 [^v328-command-run]: The type file `schemas/claude-code.d.ts`, `$.command.run`.
 [^v328-check-origin]: The type file `schemas/claude-code.d.ts`, `tool.check`.

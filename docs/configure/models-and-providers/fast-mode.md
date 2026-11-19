@@ -249,7 +249,7 @@ The `result` event of a `/fast on` turn that also changes the model has `fast_mo
 
 ## Sources
 
-[^v322]: [`2.1.322` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.322). The program, `chunk-xethrx83.js:386894`. The offsets on this page are from the program `2.1.327`.
+[^v322]: [`2.1.322` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.322). The program, `chunk-xethrx83.js:386835` (the regions `global`, `us`, and `eu`) and `chunk-xethrx83.js:386894`. Every program offset on this page is from the program `2.1.328`.
 [^capability]: The program, `chunk-xethrx83.js:384776`.
 [^fast-first-party]: Probe case `print.cli322.fast-first-party`.
 [^fast-vertex-regions]: Probe cases `print.cli322.fast-vertex-global`, `.fast-vertex-us`, `.fast-vertex-eu`.
@@ -298,7 +298,7 @@ The `result` event of a `/fast on` turn that also changes the model has `fast_mo
 [^free]: The program, `chunk-xethrx83.js:385623`.
 [^reason-source]: The program, `chunk-xethrx83.js:387115`, and the official pages cited in the sentence.
 [^fallback]: The program, `chunk-56bhcxay.js:3280250`.
-[^cooldown]: The program, `chunk-56bhcxay.js:3282358`, `chunk-56bhcxay.js:3298145`, `chunk-xethrx83.js:389428`, `chunk-xethrx83.js:391481`.
+[^cooldown]: The program, `chunk-56bhcxay.js:3282358`, `chunk-56bhcxay.js:3298145` (the 20-second wait limit and the 10-minute floor), `chunk-xethrx83.js:389377` (the 30-minute default), `chunk-xethrx83.js:389428`, `chunk-xethrx83.js:391481`.
 [^overage]: The program, `chunk-xethrx83.js:394916`.
 [^vertex-refusal]: The program, `chunk-56bhcxay.js:3293561`.
 [^refusal-run]: A cc-inspect run.

@@ -136,7 +136,7 @@ An administrator puts managed settings on a machine in one of these ways. Offici
 - `managedSourcesBehavior` decides how sources combine. `first-wins` uses the highest source alone. `merge` deep-merges them.
 - `parentSettingsBehavior` does the same for the SDK parent tier.
 - `policyHelper` and `policyHelpers` compute managed settings at startup.
-- A file tool asks before it edits the local copy of server-managed settings, as it does for a user settings file (v2.1.314 or later).[^managed-edit-ask]
+- A file tool asks before it writes to the local copy of server-managed settings, `remote-settings.json` in the configuration folder, as it does for a Claude Code settings file (v2.1.314 or later).[^managed-edit-ask]
 
 The keys are in [Enterprise Settings](enterprise.md).
 
@@ -203,4 +203,4 @@ Each row is a family of messages. The backticked text is the start that every me
 [^connector]: Probe case `print.err319.settings-connector-downloads` ran this setup.
 [^json-position]: The program, `chunk-h9zb4hpp.js:13258` and `chunk-jkpzhr7r.js:414026`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
 [^left-out]: The program, `chunk-sm9djeyx.js:93654` (reading a source that is not enabled returns nothing), with its use for auto mode rules at `chunk-sm9djeyx.js:123536` and for the saved bypass-permissions consent at `chunk-sm9djeyx.js:121639`.
-[^managed-edit-ask]: The program, `chunk-wchmynj9.js:145039` (the managed settings cache file is in the protected set), `chunk-wchmynj9.js:231322` and `chunk-wchmynj9.js:252438-253250` (a write to a protected settings file is not granted without a prompt).
+[^managed-edit-ask]: The program (`2.1.328`). The file name is `remote-settings.json` (`chunk-jkpzhr7r.js:355865`), placed in the configuration folder by `chunk-jkpzhr7r.js:368489`. `chunk-wchmynj9.js:144986` builds the protected set from those paths, `chunk-wchmynj9.js:231313` tests a path against it, and `chunk-wchmynj9.js:231882` turns the test into the result `certain`, `possible`, or `none`. The write check `chunk-wchmynj9.js:252637` returns an unsafe result with the message "but you haven't granted it yet" and the breaker `claudeSettingsFile` when the result is not `none` (`chunk-wchmynj9.js:253457`).

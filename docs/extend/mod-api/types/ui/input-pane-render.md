@@ -268,7 +268,7 @@ The size that a surface draws into, in character cells of the monospace metric o
 [^notify-read]: The program, checks `chunk-56bhcxay.js:4954411` (`kri`), call `chunk-syremzmn.js:316642`, and the `ui_notify` message `chunk-20bv8pca.js:568257`.
 [^dock]: The program, `chunk-j2wfp6sf.js:553915`. [`2.1.305` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.305).
 [^placement]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-20bv8pca.js:572891`.
-[^progress-props]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-syremzmn.js:22137`.
+[^progress-props]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-syremzmn.js:22137`. Its table of the tags of each surface is at `chunk-syremzmn.js:52168`. A surface other than mobile gets a `Progress` as Box and Text, and mobile gets the `Progress` with its own `value`, at `chunk-syremzmn.js:145078`.
 [^progress-node]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-20bv8pca.js:891741`.
 [^shader-props]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `ShaderProps`.
 [^render-plugin]: The Mod API type file, `schemas/claude-code.d.ts`, `RenderInputOf`. The `2.1.323` type file is the first with `plugin?: string` in `RenderInputOf`; the `2.1.322` type file has no such member. The program, `chunk-syremzmn.js:176620`.

@@ -238,7 +238,7 @@ What a `prompt.context` hook returns: the blocks that the conversation carries, 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
 | `blocks` | <Documented /> | What the conversation carries, in order. | Type: `readonly PromptContextBlock[]`. A block whose name the engine does not route reaches the model once, when the conversation holds none. |
-| `instructionFiles` | <Documented /> | The files now behind `claudeMd`. If left out, the files from below stand. | Type: `readonly InstructionFile[]`. Optional. Kept in step with the `claudeMd` text. A hook may add, drop, or rewrite any kind. On `2.1.322`, the program gave the "not verified" label to a `managed` file that a mod added, and quoted its text.[^managed-label] See [Labels in the Prompt](../../../../configure/memory-and-rules.md#labels-in-the-prompt). |
+| `instructionFiles` | <Documented /> | The files now behind `claudeMd`. If left out, the files from below stand. | Type: `readonly InstructionFile[]`. Optional. Kept in step with the `claudeMd` text. A hook may add, drop, or rewrite any kind. The program gives the "not verified" label to a `managed` file that a mod added, and quotes its text.[^managed-label] See [Labels in the Prompt](../../../../configure/memory-and-rules.md#labels-in-the-prompt). |
 
 ### `PromptDecoration`
 
@@ -264,4 +264,4 @@ One styled run that a surface paints over the prompt draft: `[start, end)` of a 
 
 ## Sources
 
-[^managed-label]: The program, `chunk-syremzmn.js:162613-163586`.
+[^managed-label]: The program, `chunk-syremzmn.js:162666` (a `managed` file that a mod added is flagged) and `chunk-syremzmn.js:163586` (the label text and the quoted body).

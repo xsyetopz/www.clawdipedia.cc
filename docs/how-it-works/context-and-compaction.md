@@ -226,7 +226,7 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^levels]: The program, `chunk-56bhcxay.js:2068778`.
-[^subagent-window]: The program, `chunk-56bhcxay.js:2072150`.
+[^subagent-window]: The program, `chunk-56bhcxay.js:2072009` (the ceiling branch: it keeps the window found when that is at most the ceiling, and otherwise uses the smaller of the model window and the ceiling, before the `CLAUDE_CODE_AUTO_COMPACT_WINDOW` branch is read) and `chunk-1k75prj1.js:111353` (the subagent value becomes the ceiling around the inner value).
 [^reactive]: The program, `chunk-2b3eg071.js:162574` (the reactive route) and `chunk-56bhcxay.js:2149849` (the "Usage credits are required for long context" test).
 [^second-ask]: The program, `chunk-56bhcxay.js:2684494`.
 [^summary-error]: The program, `chunk-56bhcxay.js:3017492`. The `2.1.311` text, `no <summary> block in the second reply either`, is not in `2.1.321`.

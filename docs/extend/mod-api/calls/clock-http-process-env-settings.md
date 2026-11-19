@@ -61,7 +61,7 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 | `process.run` | <Documented /> | `$.process.run(argv, init)` | Input `{ argv: readonly string[], init?: ProcessRunInit }`. Value `ProcessRunResult`. |
 | `process.spawn` | <Documented /> | `$.process.spawn(request)`. It streams. `{ deny }` kills a running child. | Input `ProcessSpawnRequest`. Value `ProcessSpawnResult`. |
 | `process.hookEnv` | <Documented /> | `$.process.hookEnv()` | Input `NoArgs`. Value `Record<string, string>`. |
-| `settings.read` | <Documented /> | `$.settings.read({ source })`, `$.settings.read()` | Input `SettingsReadInput`. Value `Settings`. Since `2.1.304` the hook also gets each settings layer (`layers`) and rewrites the merged settings. A managed mod can use this to make an organization's setting a ceiling, including `cleanupPeriodDays`, which the retention sweep uses. Each layer is `{ source, settings }`, lowest precedence first. `source` is a settings source or `plugin`. A source with no settings, or one the engine bars from the read, is left out. |
+| `settings.read` | <Documented /> | `$.settings.read({ source })`, `$.settings.read()` | Input `SettingsReadInput`. Value `Settings`. Since `2.1.304` the hook also gets each settings layer (`layers`) and rewrites the merged settings. A managed mod can use this to make an organization's setting a ceiling, including `cleanupPeriodDays`, which the retention sweep uses.[^settings-layers] Each layer is `{ source, settings }`, lowest precedence first. `source` is a settings source or `plugin`. A source with no settings, or one the engine bars from the read, is left out. |
 | `env.get` | <Documented /> | `$.env.get(name)`. The type pins `name`. | Input `{ name: string }`. Value `string \| undefined`. |
 | `env.set` | <Documented /> | `$.env.set(name, value)`. The type pins `name`. No `value` unsets. | Input `{ name: string, value?: string }`. Value `EnvSetResult`. |
 | `wasm.compile` | <Documented /> | `$.wasm.compile(source)` | Input `WasmCompileInput`. Value `WasmBytes`. |
@@ -85,11 +85,13 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^types]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `ClockWait`, `Timer`, `TimerCall`, `SleepOptions`, `HttpInit`, `HttpResponse`, `ProcessRunInit`, `ProcessRunResult`, `ProcessSpawnRequest`, `ProcessSpawnResult`, `SettingsReadOverloads`, `SettingsReadInput`, `SettingsLayer`, `EnvSetResult`, `WasmBytes`, and `WasmCompileInput`.
-[^hook-env]: The program, `chunk-56bhcxay.js:268555`.
-[^wasm]: The program, `chunk-56bhcxay.js:250358` and `chunk-e3mrctpm.js:2462`.
+[^hook-env]: The program, `chunk-56bhcxay.js:4983146` (the op) and `chunk-56bhcxay.js:1350437` (the variable list).
+[^wasm]: The program, `chunk-56bhcxay.js:4983325` and `chunk-e3mrctpm.js:48853`.
 [^fetch-engine]: The program, `chunk-56bhcxay.js:4581227` and `chunk-56bhcxay.js:4583497`, and the `http.fetch` types of the type file.
 [^fetch-errors]: The program, `chunk-56bhcxay.js:4583497`.
 [^bytes-body]: The program, `chunk-56bhcxay.js:4583497`.
 [^redact]: The program, `chunk-56bhcxay.js:4576880`.
 [^v328-wasm-host]: The type file `schemas/claude-code.d.ts`, `$.wasm.compile`.
 [^v328-fetch-cred]: The type file `schemas/claude-code.d.ts`, `$.http.fetch`.
+
+[^settings-layers]: [`2.1.304` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.304): "Changed mods' `settings.read` hooks to receive each settings layer and rewrite the merged settings, so a managed mod can make an organization's setting a ceiling, including the `cleanupPeriodDays` the retention sweep uses". The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`: `SettingsLayer`, `SettingsReadInput`, and `$.settings.read`, where what the hooks answer is what every reader of the merged settings reads. The `2.1.303` type file has no `layers`.

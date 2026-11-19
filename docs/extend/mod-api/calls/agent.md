@@ -170,11 +170,11 @@ A hook may rewrite the content keys of `AgentSpawnInput`. The type pins every ot
 ## Sources
 
 [^types]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `AgentCallArgs`, `AgentCallOptions`, `AgentCallRecord`, `AgentInfo`, `AgentLimits`, `AgentLoop`, `AgentOfferInput`, `AgentOfferResult`, `AgentRequest`, `AgentSpawnArgs`, `AgentSpawnInput`, `AgentSpawnResult`, `AgentSpec`, `AgentStatus`, and `AgentTeammateRecord`.
-[^call-workflow]: The program, `chunk-56bhcxay.js:250046` and `chunk-yznsjrsv.js:1248`.
-[^limits]: The program, `chunk-56bhcxay.js:230463`.
+[^call-workflow]: The program, `chunk-56bhcxay.js:4977795` (the op table) and `chunk-yznsjrsv.js:27771` (the plugin-facing hook).
+[^limits]: The program, `chunk-56bhcxay.js:4597135`.
 [^offer-refuse]: The program, `chunk-syremzmn.js:77801`.
 [^offer-check]: The program, `chunk-syremzmn.js:210297`.
-[^kind]: The program, `chunk-56bhcxay.js:230575`.
-[^parent-agent]: The program, `chunk-56bhcxay.js:267288`.
+[^kind]: The program, `chunk-56bhcxay.js:1061597`.
+[^parent-agent]: The program, `chunk-56bhcxay.js:4898831` (the refusal) and `chunk-56bhcxay.js:4977974` (the op).
 [^v328-compact-window]: The type file `schemas/claude-code.d.ts`, `AgentSpec`. The `2.1.327` text said 100000 to 1000000.
 [^v328-offer-id]: The type file `schemas/claude-code.d.ts`, `agent.offer`.

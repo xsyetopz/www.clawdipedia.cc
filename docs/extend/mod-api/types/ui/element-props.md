@@ -241,6 +241,6 @@ The picture that an `Image` displays. It is base64 bytes that the plugin holds (
 
 ## Sources
 
-[^hotkey]: The Mod API type file, `schemas/claude-code.d.ts`.
+[^hotkey]: The Mod API type file, `schemas/claude-code.d.ts`, `ButtonProps`. The program, `chunk-j2wfp6sf.js:540152`: a later button of the same plugin takes the key, and a key that two plugins draw is marked as clashing. The type file of `2.1.322` lacks the two-plugin rule; the one of `2.1.323` has it.
 [^iterm]: The program, `chunk-bcmd096f.js:4397` and `chunk-5g8qs913.js:211022`.
-[^overflowx]: The program, `chunk-syremzmn.js:3651` and `chunk-syremzmn.js:5146-5147`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).
+[^overflowx]: The program, `chunk-syremzmn.js:88217` (the value set) and `chunk-syremzmn.js:122664` (the rewrite). [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

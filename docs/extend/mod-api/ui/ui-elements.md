@@ -31,12 +31,12 @@ At such a site, a `ui.render` hook makes one of four choices.
 | Wrap it | A tree that holds the result of `await next(e)` | The engine's drawing, with the elements of the mod beside it. |
 | Replace it | A tree of its own, with no call to `next` | The tree of the mod alone. An invalid tree draws the engine's drawing. |
 
-Five sites are empty until a hook draws them. A mod draws something new there.
+At five sites, a mod draws something that the engine does not draw itself.
 
 - [Pane](#pane): a framed region that a mod opens with `$.ui.open`.
 - [`ContextMenu`](#contextmenu): the rows that a mod adds to the menu that the person opens on the transcript.
 - [`Placed`](#placed): a row that a mod places in the transcript with `$.ui.place`.
-- [`AbovePrompt`](#aboveprompt): the band above the prompt. It is always there, and every mod shares it.
+- [`AbovePrompt`](#aboveprompt): the band above the prompt, where a survey also draws. Every mod shares it.
 - [`Backdrop`](#backdrop): the drawing behind the conversation, which a mod sets with `$.theme.set`.
 
 The engine alone draws the permission dialog. A mod adds context to it with `$.ui.notice`.
@@ -73,8 +73,8 @@ on("ui.render", { component: "Pane" }, async ($, e) => {
 | --- | --- | --- | --- | --- |
 | `terminal` | <Documented /> | Ink. Draws the whole tree of the hook. | `Box`, `Text`, `Button`, `Input`, `Select`, `Link`, `Code`, `Markdown`, `Progress`, `Client`, `Raster`, `Image`. No `Svg`. | `e.surface === 'terminal'` |
 | `desktop` | <Documented /> | Claude Code Desktop. Asks over the wire. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Progress`, `Client`. Since `2.1.326`, `Shader` too.[^shader] | `e.surface === 'desktop'` |
-| `mobile` | <Documented /> | The mobile app. Asks over the wire. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Progress`. A client gets `Input`, `Select`, or `Progress` only if it names it in `draws`. Any other client gets an empty Box for `Input` or `Select`, and the Box and Text of a `Progress`. Since `2.1.326`, `Shader` too.[^shader] No `Client`. The docs name no mobile surface. | `e.surface === 'mobile'` |
-| `vscode` | <Differs note="The type file says no surface is attached yet. The docs say the extension draws from 2.1.299 in a session that fetches feature flags." /> | The editor webview. The same table as `desktop` without `Client`. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Progress`.[^types] | `e.surface === 'vscode'` |
+| `mobile` | <Documented /> | The mobile app. Asks over the wire. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Progress`. A client gets `Input`, `Select`, or `Progress` only if it names it in `draws`. Any other client gets an empty Box for `Input` or `Select`, and the Box and Text of a `Progress`. Since `2.1.326`, `Shader` too.[^shader] No `Client`. | `e.surface === 'mobile'` |
+| `vscode` | <Documented /> | The editor webview. The table of `desktop` without `Client` and `Shader`: the `Client` asks name no surface yet, and the surface draws no backdrop. | `Box`, `Text`, `Button`, `Input`, `Select`, `Svg`, `Link`, `Code`, `Markdown`, `Progress`.[^types] | `e.surface === 'vscode'` |
 
 ## Render Sites and Props
 
@@ -152,6 +152,7 @@ A tool call's row in the transcript, such as `Bash(ls -la)` and its result. The 
 | `isRunning` | <Documented /> | True while the call is still running. | `boolean`. |
 | `isErrored` | <Documented /> | True when the call ended in an error. A refusal at the dialog counts. | `boolean`. |
 | `isInterrupted` | <Documented /> | True when an abort ended the call: the user's Esc or a plugin's `$.turn.abort`. | `boolean`. The row draws `Interrupted`. |
+| `isExpanded` | <Documented /> | Whether the view draws the row in full: the ctrl+o transcript, `--verbose`, or a `ToolGroup` that a hook unfolded into rows. A hook that draws a compact row of its own passes when it is true. | `boolean`, optional. Read-only. Absent where the surface does not say. |
 | `output` | <Documented /> | The stored result once the call resolves. Undefined while it runs. | `unknown`, optional. For a failed, refused, or cut call it is the text the model read. |
 | `onScreen` | <Documented /> | Which rows are in the viewport. | See above. |
 
@@ -165,6 +166,7 @@ The result block under a standalone tool row, which the tool's own result render
 | `tool` | <Documented /> | Which tool the result belongs to. | `string`. Read-only. |
 | `output` | <Documented /> | The tool's own result object. The same one `ToolUse.output` carries. A rewrite is drawn. | `unknown`. |
 | `isErrored` | <Documented /> | True when the call ended in an error. The row then draws the error text, not `output`. | `boolean`. Read-only. |
+| `isExpanded` | <Documented /> | Whether the view draws the row in full: the ctrl+o transcript or `--verbose`. A hook that draws a compact row of its own passes when it is true. | `boolean`, optional. Read-only. Absent where the surface does not say. |
 | `onScreen` | <Documented /> | Which rows are in the viewport. | See above. |
 
 ### `ToolGroup`
@@ -176,6 +178,7 @@ A run of tool calls that the transcript folds into one count line, such as `Read
 | `calls` | <Documented /> | The calls of the group, in the order the model made them. | `ReadonlyArray<ToolGroupCall>`. |
 | `isActive` | <Documented /> | True while the group is the live one. A call in it may still run, and the model's next call may join it. | `boolean`. |
 | `isExpanded` | <Documented /> | Whether each call draws as its own `ToolUse` row, or the group draws one line. | `boolean`. True under `--verbose` and in the non-fullscreen ctrl+o transcript. The one prop a rewrite changes on screen. |
+| `isCallsOnly` | <Documented /> | True when the group holds only its `calls` and the model's thinking between them, and no call errored or was interrupted: no recalled memory, hook timing, or other row. A hook that draws the group of its own calls in its own way checks that it is true. | `boolean`, optional. Read-only. Absent where the surface does not say. |
 | `onScreen` | <Documented /> | Which rows are in the viewport. | See above. |
 
 ### `CommandOutput`
@@ -219,7 +222,8 @@ The line that closes a turn in the transcript, such as `Baked for 3s`. Only the 
 | --- | --- | --- | --- |
 | `word` | <Documented /> | The past-tense word the line drew (`Baked`). | `string`. |
 | `durationMs` | <Documented /> | The duration of the turn in milliseconds. | `number`. |
-| `waitingFor` | <Documented /> | What the line waits on while it draws only its waiting text (`Waiting for 2 background agents to finish`). It is read when the row mounts: the pending agents that started at or before the time of the line. Absent while the line draws anything else, or when their count differs from the count it draws. A hook that redraws the line for its own agents checks that each agent is its own and that `workflows` is 0. | `WaitingFor`, optional, read-only: `{ agents: ReadonlyArray<{ id: string, agentType: string, tool_use_id?: string }>, workflows: number }`. `id` is the `task.id` of the `UserMessage` notification row that reports the end of the agent. `agentType` is `general-purpose` or `<plugin>:<agent>`. `tool_use_id` is the call that started it, as `tool.call` carried it, when its task records one. `workflows` is how many workflows the line waits on. New in `2.1.323`.[^waiting] |
+| `isExpanded` | <Documented /> | Whether the view is the ctrl+o transcript or `--verbose`. A hook that draws a compact row of its own passes when it is true. | `boolean`, optional. Read-only. Absent where the surface does not say. |
+| `waitingFor` | <Documented /> | What the line waits on while it draws only its waiting text (`Waiting for 2 background agents to finish`). It is read when the row mounts: the pending agents that started at or before the time of the line. Absent while the line draws anything else, or when their count differs from the count it draws. A hook that redraws the line for its own agents checks that each agent is its own and that `workflows` is 0. | `WaitingFor`, optional, read-only: `{ agents: ReadonlyArray<{ id: string, agentType: string, tool_use_id?: string }>, workflows: number }`. `id` is the `task.id` of the `UserMessage` notification row that reports the end of the agent. `agentType` is `general-purpose` or `<plugin>:<agent>`. `tool_use_id` is the call that started it, as `tool.call` carried it, when its task records one. `workflows` is how many workflows the line waits on.[^waiting] |
 | `onScreen` | <Documented /> | Which rows are in the viewport. | See above. |
 
 ### `InfoNotice`
@@ -267,11 +271,11 @@ The band directly above the prompt input, where surveys draw. The engine draws a
 
 ### `AbovePromptList`
 
-New in `2.1.323`. The arrangement of the band once its rows settled. A hook that names it, or a bare `on("*")`, hears it. What settles is the whole band. The engine asks it itself while it draws `AbovePrompt`. Core stacks `rows`. Filter what `next(e)` gets and wrap its answer, never rows copied by value. An organization's mod wins by the order of the chain. The engine passes over a bad answer. To fail closed, answer no rows in its `.catch`. A `rows` rewrite that drops, adds, or reorders a row is refused. Terminal, desktop, and mobile only.[^list]
+New in `2.1.323`. The arrangement of the band once its rows settled. A hook that names it, or a bare `on("*")`, hears it. What settles is the whole band. The engine asks it itself while it draws `AbovePrompt`. Core stacks `rows`. A hook hides or reorders rows in what `next(e)` gets, and wraps them by answering around it, never with rows copied by value. An organization's mod wins by the order of the chain. The engine passes over a bad answer. To fail closed, answer no rows in its `.catch`. A rewrite of `rows` may drop or reorder the rows it was handed. The program compares them by value, so a row that was not handed over, changed, or repeated fails the hook. The program of `2.1.323` checks the same, and the type file says so since `2.1.324`. A wrapper counts toward the limits of a tree with the rows. Past a limit, the rows that no longer fit are left out. Terminal, desktop, and mobile only.[^list]
 
 | Item | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
-| `rows` | <Documented /> | The settled rows, in chain order, one for each plugin that drew one. A rewrite holds the rows it was handed, and what it leaves is what core stacks. | `readonly AbovePromptRow[]`. |
+| `rows` | <Documented /> | The settled rows that fit, in chain order, one for each plugin that drew one. A rewrite holds the rows it was handed, in any order and no more often than they came. What it leaves is what core stacks. | `readonly AbovePromptRow[]`. |
 | `hasSurvey` | <Documented /> | As on `AbovePrompt`. | `boolean`. Read-only. |
 | `isCollapsed` | <Documented /> | As on `AbovePrompt`. | `boolean`. Read-only. |
 | `isWorking` | <Documented /> | As on `AbovePrompt`. | `boolean`. Read-only. |
@@ -356,17 +360,17 @@ The framed region a plugin opened with `$.ui.open({ id })`. There is one instanc
 
 ### `Placed`
 
-A row that a plugin placed in the transcript with `$.ui.place`. It is empty until a hook draws it, in the row's place in the conversation. Every plugin's hook hears every row, so read `plugin` beside `id`. Outside fullscreen, a compaction ends the row, and the same id then places a new one. The engine raises it on every attached surface.
+A row that a plugin placed in the transcript with `$.ui.place`. It is empty until a hook draws it, in the row's place in the conversation. Every plugin's hook hears every row, so read `plugin` beside `id`. Outside fullscreen, a compaction ends the row, and the same id then places a new one. The engine raises it on every attached surface; the official reference lists the terminal only.[^placed]
 
 | Item | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
-| `id` | <Undocumented /> | What `$.ui.place` was given. It is unique among that plugin's rows. | `string`. Read-only. New in `2.1.314`. |
-| `plugin` | <Undocumented /> | Who placed the row, so a hook can leave the row of another plugin alone. | `string`. Read-only. New in `2.1.314`. |
-| `onScreen` | <Undocumented /> | Which of its rows the viewport of the transcript shows now. It is reported once the row is drawn, and again when it changes. On a scroll, it is reported for the messages at the edges of the viewport only. | `OnScreen \| null`, optional. Read-only. `null` while drawn outside the viewport. Absent where the surface does not say. A rewrite carries it on as received. The engine refuses a rewrite that changes or drops it. New in `2.1.314`. |
+| `id` | <Documented /> | What `$.ui.place` was given. It is unique among that plugin's rows. | `string`. Read-only. |
+| `plugin` | <Documented /> | Who placed the row, so a hook can leave the row of another plugin alone. | `string`. Read-only. |
+| `onScreen` | <Documented /> | Which of its rows the viewport of the transcript shows now. It is reported once the row is drawn, and again when it changes. On a scroll, it is reported for the messages at the edges of the viewport only. | `OnScreen \| null`, optional. Read-only. `null` while drawn outside the viewport. Absent where the surface does not say. A rewrite carries it on as received. The engine refuses a rewrite that changes or drops it. |
 
 ### `Backdrop`
 
-The backdrop of the session, which a plugin set with `$.theme.set`. Only the desktop and mobile surfaces raise it, and they draw it behind the conversation. It is empty until a hook draws it. Every plugin's hook hears it, so read `plugin` beside `scene`. The surface sizes the drawing to its window or screen, and presses go through to what is over it. Each surface asks separately, so a hook can read `e.surface` and draw a different scene on each. A `Client` draws nothing on mobile. Since `2.1.326`, an answer holds only `Box`, `Text`, `Svg`, and one [`Shader`](#shader-element). An `Svg` in it must be pure vector, or the engine refuses the answer.
+The backdrop of the session, which a plugin set with `$.theme.set`. Only the desktop and mobile surfaces raise it, and they draw it behind the conversation. It is empty until a hook draws it. Every plugin's hook hears it, so read `plugin` beside `scene`. The surface sizes the drawing to its window or screen, and presses go through to what is over it. Each surface asks separately, so a hook can read `e.surface` and draw a different scene on each. Since `2.1.326`, an answer holds only `Box`, `Text`, `Svg`, and one [`Shader`](#shader-element). An `Svg` in it must be pure vector, or the engine refuses the answer.
 
 | Item | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
@@ -393,7 +397,7 @@ The module `claude-code/shader` declares the language of the file. A file ends w
 - Refused: `while`, `do`, recursion, classes, `new`, `async`, strings as values, spread, and any other import or global.
 - Numbers are 32-bit floats and are never NaN or infinite. `y` points up. The vector types are `vec2`, `vec3`, and `vec4`, with lanes `xyzw` or `rgba`. A 32-bit `int` wraps.
 - A file's numbers, ints, and tables hold 16384 bits in all. A `table` holds up to 256 rows of 1 to 4 numbers. A pass is a `picture` (exactly one, what shows over the `Svg`), a `buffer` (a texture that lasts between frames), or `shapes`. A file has 24 passes at most with tables.
-- The inputs are `time`, `dt`, `frame`, `first`, `fresh`, `turn`, `still` (1 under Reduce Motion), `size`, `res`, `px`, `composer`, `pixel`, `scene` (a picture of the `Svg`), and up to four pointers. `values({ ... })` declares the numbers that the mod sets, each held to its range.
+- The inputs are `time`, `dt`, `frame`, `first`, `fresh`, `turn`, `still` (1 under Reduce Motion), `size`, `res`, `px`, `composer`, `pixel`, `scene` (a picture of the `Svg`), and up to four pointers. A `shapes` pass also has `vertex` and `instance`, and `coord` where it draws `points`. `values({ ... })` declares the numbers that the mod sets, each held to its range. A file may name 8 at most.
 
 ```javascript skip-lint
 import { picture, shader, sin, time, vec3, vec4 } from "claude-code/shader";
@@ -411,7 +415,7 @@ export default shader({ fps: 30, passes: [sky] });
 | `h(tag, props, ...children)` | <Documented /> | The JSX factory (classic runtime). Returns a plain-data element from a string tag or a component. | JSX compiles to bare `h(...)` calls. A module must not declare, import, or take as a parameter anything named `h` or `Fragment` where it writes JSX. The engine adds the pragma. | Hooks modules and surface modules. |
 | `Fragment` | <Documented /> | `<>...</>`. A column `Box` around the children. | The same naming rule as `h`. | Hooks modules and surface modules. |
 | `JSX` namespace | <Documented /> | `Element` is `RenderElement`. `IntrinsicElements` is empty, so there are no string tags. `IntrinsicAttributes` allows `key`. | Every tag is a constructor from `$.ui.resolve(e)`, as in `const { Box, Text } = $.ui.resolve(e)`. | Files named `.tsx` or `.jsx`. |
-| Web globals | <Documented /> | `URL`, `URLSearchParams`, `TextEncoder`, `TextDecoder`, `AbortController`, `AbortSignal`, `atob`, `btoa`, `structuredClone`, `crypto.subtle.digest`, `crypto.randomUUID`, `crypto.getRandomValues`, and `performance.now`. | There is no DOM, no Node, no `require`, and no `import()`. `eval` and `new Function` over a string throw. There is no `WebAssembly`. A surface module also has `console` and no timers. | Hooks modules and surface modules. |
+| Web globals | <Documented /> | `URL`, `URLSearchParams`, `TextEncoder`, `TextDecoder`, `AbortController`, `AbortSignal`, `atob`, `btoa`, `structuredClone`, `crypto.subtle.digest`, `crypto.randomUUID`, `crypto.getRandomValues`, and `performance.now`. | There is no DOM, no Node, no `require`, and no `import()`. `eval` and `new Function` over a string throw. `WebAssembly` exists only in a hooks module that calls `$.wasm.compile`. A surface module has no `WebAssembly` and has a `console`. No module has timers. | Hooks modules and surface modules. |
 | Module rules | <Documented /> | A file ends in `.ts`, `.tsx`, `.jsx`, `.js`, `.mjs`, `.cjs`, `.mts`, or `.cts`. It is an ES module whatever its suffix. | A module imports a file of the plugin with an `import` declaration. A module with `import()` does not load. `on`, `$`, `$.env` names, and `$.state` references must be spelled literally. | Hooks modules. |
 
 ## Related Pages
@@ -433,4 +437,5 @@ export default shader({ fps: 30, passes: [sky] });
 [^anchored]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-syremzmn.js:169348`.
 [^agent-row]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, the `AgentRow` member of `RenderPropsOf`.
 [^context-menu]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, the `ContextMenu` member of `RenderPropsOf`.
+[^placed]: The Mod API type file, `schemas/claude-code.d.ts`, the `Placed` member of `RenderPropsOf`. [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference.md).
 [^shader]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `ShaderProps` and the module `claude-code/shader`.

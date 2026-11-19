@@ -213,7 +213,7 @@ Claude Code shows "Couldn't load your current spend limit, so it can't be change
 [^windows]: The program, `chunk-g78ks3d1.js:1815`.
 [^five-hour]: [`2.1.312` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.312). The program, `chunk-g78ks3d1.js:34436` (the `five_hour` name), `chunk-xwcpzc12.js:26184`, and `chunk-322fww3s.js:45980`.
 [^menu]: The program, `chunk-56bhcxay.js:2610519`. The rows are built at `chunk-gab9myev.js:44229`.
-[^spend]: The program, `chunk-gab9myev.js:34278` (the `unavailable` label and the empty hint) and `chunk-gab9myev.js:35317` (the message). The string is not in the `2.1.322` program.
+[^spend]: The program, `chunk-gab9myev.js:34152` (the `unavailable` label) and `chunk-gab9myev.js:34313` (the empty hint) and `chunk-gab9myev.js:35317` (the message). The string is not in the `2.1.322` program.
 [^control]: `schemas/claude-code-control-protocol.json`.
 [^mod-account]: `schemas/claude-code.d.ts`.
 [^finishing]: The program, `chunk-deg3e0xc.js:601` and `chunk-deg3e0xc.js:2200`. [`2.1.326` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.326).

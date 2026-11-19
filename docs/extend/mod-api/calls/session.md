@@ -93,9 +93,9 @@ When no credential resolves, `$.session.authorize` logs `$.session.authorize (<p
 ## Sources
 
 [^types]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `SessionMessagesCall`, `SessionInfo`, `SessionVersion`, `SessionAuthorization`, `SessionUsageArgs`, `SessionCompactArgs`, `SessionCompactResult`, `SessionSendResult`, `SessionAppendResult`, and the `session.*` entries of `EventOf` and `ResultOf`.
-[^info]: The program, `chunk-56bhcxay.js:60284`.
+[^info]: The program, `chunk-56bhcxay.js:4975754`.
 [^stop]: The program, `chunk-ep7e5a3y.js:133171`.
 [^desktop]: The program, `chunk-56bhcxay.js:1056645`.
 [^identity]: The program, `chunk-vaa1bcfr.js:11599` (the `user` tier gets the refusal) and `chunk-yznsjrsv.js:26324`.
-[^machine]: The type file `schemas/claude-code.d.ts`, `$.session.machine` and `SessionMachine`. The program, `chunk-56bhcxay.js:60377-60390` (the read) and `chunk-56bhcxay.js:249951` (the op).
+[^machine]: The type file `schemas/claude-code.d.ts`, `$.session.machine` and `SessionMachine`. The program, `chunk-56bhcxay.js:1060862` (the read) and `chunk-56bhcxay.js:4975785` (the op).
 [^v328-tier-compact]: The type file `schemas/claude-code.d.ts`, `$.session.compact`.

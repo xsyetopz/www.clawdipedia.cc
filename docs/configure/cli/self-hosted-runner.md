@@ -1,11 +1,11 @@
 ---
 title: Self-Hosted Runner
-description: Every option of claude self-hosted-runner and its orchestrator, setup, doctor, and decode-token subcommands in 2.1.327, with the parser rules and each error.
+description: Every option of claude self-hosted-runner and its orchestrator, setup, doctor, and decode-token subcommands in 2.1.328, with the parser rules and each error.
 sidebar_position: 5
 ---
 
 `claude self-hosted-runner` runs Claude Code cloud sessions on a machine that you control. The root help text does not list the command.
-The [official overview](https://code.claude.com/docs/en/self-hosted-environments) explains environments and runners. The [deploy guide](https://code.claude.com/docs/en/self-hosted-environments-deploy) and the [configuration guide](https://code.claude.com/docs/en/self-hosted-environments-configuration) explain most options. This page lists every option in `2.1.327`, with the options that the official pages do not name, and the exact parser rules.
+The [official overview](https://code.claude.com/docs/en/self-hosted-environments) explains environments and runners. The [deploy guide](https://code.claude.com/docs/en/self-hosted-environments-deploy) and the [configuration guide](https://code.claude.com/docs/en/self-hosted-environments-configuration) explain most options. This page lists every option in `2.1.328`, with the options that the official pages do not name, and the exact parser rules.
 
 The variables are on [Remote and Cloud Session Variables](../env-vars/remote-and-cloud-sessions.md).[^runner-help]
 
@@ -87,7 +87,7 @@ The host config folder has no flag. Set `SELF_HOSTED_RUNNER_HOST_CONFIG_DIR`; `-
 | Option | Status | What it does | Default |
 | --- | --- | --- | --- |
 | `--exit-if-unused-min <n>` | <Documented /> | Exits the runner if it gets no work for this long. Maximum 10080. See [Make On-Demand Runners Exit When Idle](https://code.claude.com/docs/en/self-hosted-environments-configuration#make-on-demand-runners-exit-when-idle). | Never |
-| `--drain-grace-sec <n>` | <Documented /> | Keeps the runner polling this long after its sessions end. `0` exits at once. Maximum 604800. | `0` |
+| `--drain-grace-sec <n>` | <Documented /> | Keeps the runner polling this long after its sessions end. `0` exits at once. Maximum 604800. At `--capacity 1`, when the runner clones through the agent proxy and a different session already used the repository folder in this process, the runner moves the folder aside and clones the repository again. If it cannot move the folder aside, it logs `[runner:warn] <folder> could not be moved aside, so it is not cloned anew`. Since `2.1.328`.[^drain-reclone] | `0` |
 | `--retire-at <epoch-seconds>` | <Documented /> | Retires the runner at this Unix time in whole seconds. A value from 1000000000 to 100000000000. | Never |
 | `--defer-shutdown-max-min <m>` | <Documented /> | On the first SIGTERM or SIGINT, stops new work and keeps serving sessions for up to `m` minutes before it drains. Fractions are allowed. Maximum 10080. See [Runner Lifecycle](https://code.claude.com/docs/en/self-hosted-environments#runner-lifecycle). | `0` |
 
@@ -165,7 +165,7 @@ Since `2.1.328`, a runner that fails to start after it registers tells the serve
 
 ## `orchestrator`
 
-`claude self-hosted-runner orchestrator` polls the spawn-hints queue and runs the `spawn-runner` hook in `--hooks-dir` once for each hint. The hook must start the work and exit within `--hook-timeout`. Exit code `0` is success, `1` is a failure to retry, and `2` or more stops further tries. See [On-Demand Runners](https://code.claude.com/docs/en/self-hosted-environments-configuration#on-demand-runners) and [The Spawn-Runner Hook](https://code.claude.com/docs/en/self-hosted-environments-configuration#the-spawn-runner-hook).[^orch]
+`claude self-hosted-runner orchestrator` polls the spawn-hints queue and runs the `spawn-runner` hook in `--hooks-dir` once for each hint. The hook must start the work and exit within `--hook-timeout`. Exit code `0` is success, `1` is a failure to retry, and `2` or more stops further tries. On a failure, the orchestrator sends the end of the hook's stderr back as the error. Since `2.1.328`, it also sends the last stderr line that starts with `user-message:` and a space to the user of the session. It does not send the line if the line holds a control character, such as a color, or looks as if it holds a secret, or if the hook timed out or a signal ended it. An exit status of 129 to 159 counts as a signal.[^user-message] See [On-Demand Runners](https://code.claude.com/docs/en/self-hosted-environments-configuration#on-demand-runners) and [The Spawn-Runner Hook](https://code.claude.com/docs/en/self-hosted-environments-configuration#the-spawn-runner-hook).[^orch]
 
 | Option | Status | What it does | Default |
 | --- | --- | --- | --- |
@@ -243,7 +243,7 @@ The default of `--api-url` is `ANTHROPIC_BASE_URL`, else the built-in API URL.
 
 ## Sources
 
-[^runner-help]: The text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.327`, and the option parser of the program, `chunk-gv1b3n3g.js:339184` and `chunk-gv1b3n3g.js:353970`.
+[^runner-help]: The text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.328`, and the option parser of the program: the parse loop at `chunk-gv1b3n3g.js:329935`, its unknown-option branch at `chunk-gv1b3n3g.js:339184`, and the root help text from `chunk-gv1b3n3g.js:353970`, which runs to its `--help` line at `chunk-gv1b3n3g.js:393087`. Compared with `2.1.327`, the root help text of `2.1.328` adds `--repository-folder` and the re-clone note of `--drain-grace-sec`, and the `orchestrator` help adds `--hook-label` and the `user-message:` line. The `decode-token`, `doctor`, and `setup` help texts are the same in both, except for the names of minified variables.
 [^cli321]: Probe group `cli321`.
 [^exit-codes]: [`2.1.323` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.323). The program, `chunk-gv1b3n3g.js:345212`.
 [^no-clone]: The program, `chunk-gv1b3n3g.js:339187` (the parser), `chunk-gv1b3n3g.js:406369` (the warning), and `chunk-gv1b3n3g.js:407369` (the git version check). The warning and the check both depend on the flag.
@@ -253,6 +253,10 @@ The default of `--api-url` is `ANTHROPIC_BASE_URL`, else the built-in API URL.
 [^trust]: The program, `chunk-xethrx83.js:58018` and `chunk-sm9djeyx.js:32872`.
 [^parser-errors]: The program, `chunk-gv1b3n3g.js:339425-372037`. Probe group `cli321`.
 [^orch]: The program, help text and orchestrator parser, `chunk-ydhgnm30.js:44033` and `chunk-ydhgnm30.js:20648`.
+
+[^user-message]: The program, `chunk-ydhgnm30.js:44526` (the help text), `chunk-1ag7mmq0.js:56872` (the `user-message:` prefix), `chunk-1ag7mmq0.js:61471` (the stderr reader and its control-character and secret checks), `chunk-ydhgnm30.js:42559` (the timeout and signal check), and `chunk-ydhgnm30.js:43000` (the `user_message` field of the nack). `2.1.327` has no `user-message` text.
+
+[^drain-reclone]: The program, `chunk-gv1b3n3g.js:383455` (the help text), `chunk-gv1b3n3g.js:194111` (the agent-proxy check that a different session used the folder), and `chunk-gv1b3n3g.js:295584` (the move aside and its log lines). `2.1.327` has no `drain-grace reclone` code.
 [^orch-timeout]: Probe case `runner-orchestrator-hook-timeout`, group `cli321`.
 [^hook-label]: The program, `chunk-ydhgnm30.js:1705` (the help text), `chunk-ydhgnm30.js:790` (the parser), and `chunk-ydhgnm30.js:886` (the `--min-idle` check). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
 [^repo-folder]: The program, `chunk-gv1b3n3g.js:16118` (the help text), `chunk-gv1b3n3g.js:16536` (the warning at `--capacity` above 1), and `chunk-gv1b3n3g.js:8337` (the `checkout` hook). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).

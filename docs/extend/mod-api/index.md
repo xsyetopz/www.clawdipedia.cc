@@ -146,11 +146,23 @@ The [type pages](types/index.md) hold the detailed shapes of inputs and results.
 
 Each entry compares a type file with the one before it. The type file and the program were last compared in full on `2.1.305`.
 
-- `2.1.326`, compared with `2.1.323`:
+- `2.1.328`, compared with `2.1.327`:
+  - Adds the call `$.session.machine` and the event `tool.offer`, with its types `ToolOfferInput` and `ToolOfferResult`. The offer to resume an agent carries `agentId`.
+  - An organization's mod can no longer call a tool or run a command that a person's mod registered.
+- `2.1.327`, compared with `2.1.326`: changes only comments. They say how a plugin's `tier` and the `prepend` and `append` lists are judged, and that an organization's plugin with or without a hooks module takes the organization's tier once it is on in `enabledPlugins` and its marketplace is in `extraKnownMarketplaces`.
+- `2.1.326`, compared with `2.1.325` (the type files of `2.1.324` and `2.1.325` are the same):
   - Adds the render components `AgentRow` and `ContextMenu`, the element `Shader` to the desktop and mobile tables, and `UiPointerResult` (see [UI Elements](./ui/ui-elements.md)).
   - Adds the calls `$.session.info`, `$.agent.call`, `$.agent.limits`, `$.wasm.compile`, and `$.process.hookEnv`, and the events `session.stop`, `tool.judge`, `tool.run`, and `ui.pointer`.
   - Adds `offset` and `length` to `$.fs.read`, `provides` to `plugin.register`, `mcpServer` to `ToolDescribeInput`, and `hasUnknownPrice` to `SessionCost`. A spawn's `parentAgentId` can now name a running or resting agent.
   - Adds the `claude plugin validate --json` report types (see [Plugin CLI](../plugins/cli.md#validate-json-report)), and makes `SpeakRequest` one flat type.
+- `2.1.324`, compared with `2.1.323`:
+  - Adds the still ground `image` (`ThemeImage`, `ThemeImageGround`, `ThemeImageWire`) to `$.theme.set`.
+  - Says that an answered `$.model.complete` or `$.model.classify` request counts toward the session cost, and that `SessionCost` sums a mod's `$.model` calls.
+  - Adds row limits to `AbovePromptList` and `AbovePrompt` trees, and says that a rewrite may hold, but not repeat or change, the rows it was handed.
+  - Says that a hook that throws, or answers a wrong shape, unloads its plugin, and that `claude plugin validate` reports the lists of hooks, calls, and nouns as notes.
+- `2.1.325`: matched `2.1.324`.
+- `2.1.322`: matched `2.1.321`.
+- `2.1.321`, compared with `2.1.319`: adds `$.ui.cancelNotify` and its `CancelNotifyArgs`, and adds `breakPromptCache` to the answers of `tool.describe` and `prompt.section` hooks (see [Tool and Command Config](./calls/tool-command-config.md)).
 - `2.1.323`, compared with `2.1.322`:
   - Changes `$.theme.set`: `backdrop.id` is now `backdrop.scene`, `backdrop` may be a still ground (`ThemeGround`: a color, a gradient, or a vector), and `colorScheme` is now the top-level `overrideColorScheme` (see [UI Methods](./ui/ui.md)).
   - Adds the element `Progress` to every surface table except `ClientElements`, the type `AbovePromptRow`, the render component `AbovePromptList`, and `tool.list` to `InvalidatableEventName`.
@@ -158,9 +170,9 @@ Each entry compares a type file with the one before it. The type file and the pr
   - Adds `placement` to `PaneOpenArgs`, and a plain-data rule (no named key on a list, no key `__proto__`, `constructor`, or `prototype`).
   - Two plugins on one `hotkey` press neither, and a matcher that leaves out `plugin` names the hook's own plugin.
   - `claude plugin validate` also reports the `$` nouns that an `engine.create` hook adds or withholds.
-- `2.1.319`, compared with `2.1.314`:
-  - Adds the calls `$.theme.set` and `$.theme.clear`, their events, and the render component `Backdrop`.
-  - Adds `effort` to the `$.model.complete` and fork types, `isTextDisplayOnly` to `CommandRunResult`, `by` to `TurnCompleteResult`, and the elements `Input` and `Select` to one more surface.
+- `2.1.319`, compared with `2.1.318`: replaces `$.ui.backdrop` with the calls `$.theme.set` and `$.theme.clear` and their events, and adds `isTextDisplayOnly` to `CommandRunResult` and `by` to `TurnCompleteResult`.
+- `2.1.318`, compared with `2.1.317`: adds `effort` to the `$.model.complete` and fork types, `colorScheme` to the backdrop call, and the elements `Input` and `Select` to one more surface.
+- `2.1.317`, compared with `2.1.316`: adds the call `$.ui.backdrop`, its events, and the render component `Backdrop`.
 - `2.1.316`: matched `2.1.314` apart from the version in its header.
 - `2.1.314`, compared with `2.1.312`:
   - Adds the call `$.ui.place` and the event `ui.place` (see [UI Methods](./ui/ui.md) and [UI Events](./ui/ui-events.md)).
@@ -213,7 +225,7 @@ Each row is a family of messages. The backticked text is the start that every me
 [^prompt-edit]: The program, `chunk-syremzmn.js:194600`.
 [^rollout]: The program, `chunk-xethrx83.js:728152`. The server flag is `tengu_plugin_hooks_modules`.
 [^re-entry]: The program, `chunk-9nv3z5ae.js:6443`.
-[^paint]: The program, `chunk-syremzmn.js:13290`.
-[^env-set-codes]: The program, `chunk-r240nspa.js:574` (`OUT_OF_STEP`), `chunk-r240nspa.js:575` (`HOST_RULE`), `chunk-r240nspa.js:576` (`PINNED`), `chunk-r240nspa.js:578` (`HELD`), `chunk-r240nspa.js:602` (`NO_ROW`), `chunk-r240nspa.js:604` (`LOCKED`), `chunk-r240nspa.js:607` (`NOT_WRITTEN`), `chunk-r240nspa.js:608` (the text), and `chunk-r240nspa.js:735` (`NOT_WRITTEN`). `2.1.327` has none of these texts.
-[^hooks-name]: The program, `chunk-56bhcxay.js:999067` (`next.to`), `chunk-56bhcxay.js:1016778` (policy or scan), and `chunk-56bhcxay.js:1041381` (the engine's own chain member, and the name that starts with a prefix). The type file `schemas/claude-code.d.ts`, `ToolCheckInput`, names the prefix `hook:`.
-[^handle-codes]: The program, `chunk-r240nspa.js:645` (`UNKNOWN_HANDLE`) and `chunk-r240nspa.js:674` (`NOT_SYNCED`).
+[^paint]: The program, `chunk-syremzmn.js:304985`.
+[^env-set-codes]: The program, `chunk-r240nspa.js:10652` (`OUT_OF_STEP`), `chunk-r240nspa.js:10703` (`HOST_RULE`), `chunk-r240nspa.js:10748` (`PINNED`), `chunk-r240nspa.js:10823` (`HELD`), `chunk-r240nspa.js:11376` (`NO_ROW`, `LOCKED`, `NOT_WRITTEN`, and the `config.set: <code>` text), and `chunk-r240nspa.js:13748` (`NOT_WRITTEN` again, in the `config.set` source branch). `2.1.327` has none of these texts.
+[^hooks-name]: The program, `chunk-56bhcxay.js:999067` (`next.to`), `chunk-56bhcxay.js:1016778` (policy or scan), and `chunk-56bhcxay.js:1041381` (the engine's own chain member, and the name that starts with a prefix). The prefix is the constant `hook:` at `chunk-syremzmn.js:64862`. The type file `schemas/claude-code.d.ts`, `ToolCheckInput`, names the prefix `hook:`.
+[^handle-codes]: The program, `chunk-r240nspa.js:12180` (`UNKNOWN_HANDLE`) and `chunk-r240nspa.js:12679` (`NOT_SYNCED`).

@@ -281,11 +281,11 @@ The background task that a `UserMessage` notification row reports on: a subagent
 
 ## Sources
 
-[^ui-input]: `schemas/claude-code.d.ts`, `UiInputArgument`.
+[^ui-input]: `schemas/claude-code.d.ts`, `UiInputArgument`. The program, the default matcher keys `plugin` and `component` and the `"*"` wildcard, `chunk-syremzmn.js:176620`. The type file of `2.1.322` has no `plugin` default; the one of `2.1.323` does.
 [^notify]: `schemas/claude-code.d.ts`, `NotifyOptions` and `CancelNotifyArgs`.
 [^ui-open]: `schemas/claude-code.d.ts`, `UiOpenResult`. The `2.1.323` comment names `placement` where `2.1.322` named `dock` and `inline`.
 [^ui-pane]: `schemas/claude-code.d.ts`, `UiPane`.
-[^ui-press]: `schemas/claude-code.d.ts`, `UiPressArgument`.
+[^ui-press]: `schemas/claude-code.d.ts`, `UiPressArgument`. The program, the default matcher keys `plugin` and `component` and the `"*"` wildcard, `chunk-syremzmn.js:176620`. The type file of `2.1.322` has no `plugin` default; the one of `2.1.323` does.
 [^scroll]: `schemas/claude-code.d.ts`, `UiScrollArgs`.
-[^ui-select]: `schemas/claude-code.d.ts`, `UiSelectArgument`.
-[^ui-pointer]: `schemas/claude-code.d.ts`, `UiPointerInput`. The program, `chunk-ae9zb02s.js:290`.
+[^ui-select]: `schemas/claude-code.d.ts`, `UiSelectArgument`. The program, the default matcher keys `plugin` and `component` and the `"*"` wildcard, `chunk-syremzmn.js:176620`. The type file of `2.1.322` has no `plugin` default; the one of `2.1.323` does.
+[^ui-pointer]: `schemas/claude-code.d.ts`, `UiPointerInput`. The program, `chunk-ae9zb02s.js:10443`.

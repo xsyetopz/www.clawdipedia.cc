@@ -70,13 +70,13 @@ These sources go in `extraKnownMarketplaces`, `strictKnownMarketplaces`, and `bl
 
 ## Plugin Digests
 
-Since `2.1.326`, Claude Code deprecates `pluginDigests` and ignores it. Settings that hold it still load. A plugin takes the organization tier when managed settings enable it, and declare its marketplace with a remote source. The plugin no longer needs a place in `prependPlugins` or `appendPlugins`.[^digest-tier] The folder of the plugin must be the copy that its install record holds. When the record holds no hash, or holds another one, the plugin does not load, and the warning says "its install record holds no hash" or "its folder is not the copy its install record holds".[^digest-warn] The rest of this section describes `2.1.323`.
+Since `2.1.324`, the program marks `pluginDigests` as deprecated and ignores it, and the `2.1.326` release notes announce this. Settings that hold it still load. In `2.1.324` to `2.1.326`, a plugin takes the organization tier when managed settings enable it, declare its marketplace with a remote source, and list the plugin in `prependPlugins` or `appendPlugins`. Since `2.1.327`, the plugin no longer needs a place in `prependPlugins` or `appendPlugins`.[^digest-tier] The folder of the plugin must be the copy that its install record holds. When the record holds no hash, or holds another one, the plugin does not load, and the warning says "its install record holds no hash" or "its folder is not the copy its install record holds".[^digest-warn] The rest of this section describes `2.1.323` and earlier builds that check digests.
 
 The `pluginDigests` field sits in an entry of `extraKnownMarketplaces` (and its alias `additionalMarketplaces`). The settings schema marks it as managed settings only.[^digest-schema]
 
 | Field | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
-| `pluginDigests` | <Documented /> <Deprecated note="Ignored since 2.1.326" /> <ManagedOnly /> | Held the digests, by plugin name, of the releases of a plugin that your organization delivers with its own tier. Ignored since `2.1.326`. | Type: object of arrays of strings. The schema says: "Deprecated and ignored: settings that hold it still load." Before `2.1.326`, a plugin that managed settings enabled loaded its hooks module only from a folder that proved one of its digests.[^digest-schema] |
+| `pluginDigests` | <Documented /> <Deprecated note="Ignored since 2.1.324" /> <ManagedOnly /> | Held the digests, by plugin name, of the releases of a plugin that your organization delivers with its own tier. Ignored since `2.1.324`. | Type: object of arrays of strings. The schema says: "Deprecated and ignored: settings that hold it still load." Up to `2.1.323`, a plugin that managed settings enabled and listed in `prependPlugins` or `appendPlugins` loaded its hooks module only from a folder that proved one of its digests, and any other copy did not load.[^digest-schema] |
 
 - A digest is `sha256-` and the base64 SHA-256 of the folder. The hash covers every regular file, in UTF-16 code unit order of its path. For each file, the hash takes `f PATH`, a NUL byte, the byte length, a NUL byte, and the bytes. Paths use `/`. At the root, the hash leaves out `.git`, `.in_use`, `.orphaned_at`, `.claude-plugin-link`, and `.links_materialized`.
 - The plugin keeps its manifest at `.claude-plugin/plugin.json` and names one module in `hooks/hooks.json`.
@@ -206,9 +206,9 @@ Each row is a family of messages. The backticked text is the start that every me
 [^pin]: [`2.1.325` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.325). The program, `chunk-jkpzhr7r.js:3510`.
 [^npm-wild]: The program, `chunk-jkpzhr7r.js:81729`.
 [^npm-opts]: The program, `chunk-jkpzhr7r.js:82029`, its bundled settings schema.
-[^digest-tier]: The program, `chunk-jkpzhr7r.js:206470` for the schema text and `chunk-56bhcxay.js:1037148` for the record check. The text of `2.1.326` named `prependPlugins` and `appendPlugins`. The text of `2.1.327` does not.
+[^digest-tier]: The program, `chunk-jkpzhr7r.js:206470` for the schema text and `chunk-56bhcxay.js:1037148` for the record check. The text of `2.1.324` to `2.1.326` names `prependPlugins` and `appendPlugins`. The text of `2.1.327` does not.
 [^digest-warn]: The program, `chunk-56bhcxay.js:59151`.
-[^digest-schema]: The settings schema, `chunk-jkpzhr7r.js:8088`. The `2.1.328` program has no other code that reads `pluginDigests`. The behavior before `2.1.326` comes from the older program and is not in `2.1.328`.
+[^digest-schema]: The settings schema, `chunk-jkpzhr7r.js:8088`. The `2.1.328` program has no other code that reads `pluginDigests`. The `2.1.323` schema text says a plugin "loads its hooks module only from a folder that proves one of them" and "any other copy does not load". The `2.1.324` schema text says "Deprecated and ignored", and the `2.1.324`, `2.1.325`, and `2.1.326` builds have no other code that reads `pluginDigests`. The behavior before `2.1.324` comes from the older program and is not in `2.1.328`.
 [^digest-limits]: The program, `chunk-56bhcxay.js:60051`, `chunk-56bhcxay.js:55572`, and `chunk-56bhcxay.js:55649`.
 [^digest-refuse]: The program, `chunk-56bhcxay.js:60211`.
 [^digest-line]: The program, `chunk-jkpzhr7r.js:355508`.
