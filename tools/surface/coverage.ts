@@ -1,9 +1,11 @@
-// Usage: bun tools/surface/coverage.ts [--kind <a,b>] [--all] [--root <dir>]   (also: bun run surface:check)
+// Usage: bun tools/surface/coverage.ts [--kind <a,b>] [--all] [--fix] [--root <dir>]   (also: bun run surface:check)
 // Every item of schemas/surface.json must be covered (design D4) by one of:
 //   1. a docs table row whose first cell names it in backticks, exactly, on a page of its kind (PAGES below);
 //   2. an entry of tools/surface/map.json: { "<kind>:<name>": { "route": "/path", "anchor": "id" } };
 //      for the `error` kind only, a key ending in `*` maps a family by its stable prefix (design D3);
 //   3. an entry of tools/surface/exclusions.json: { "<kind>:<name>" or "<kind>:<prefix>*": "reason" }.
+// --fix rewrites map.json and exclusions.json: a stale entry carries, value unchanged, to the unmapped key of the same kind
+// that rewords it (a mutual-best match, see carry.ts); every other stale entry is removed. Unmapped items still fail the run.
 import { readdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 

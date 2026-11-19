@@ -1,9 +1,11 @@
 // The command line of coverage.ts: loads the snapshot, the map, and the exclusions, then prints the check.
 // It prints the counts by kind, then fails on unmapped items (as `<kind>:<name>`, 20 for each kind unless --all)
 // and on stale entries: a map or exclusion key that matches no item. --kind limits the check to some kinds.
+// --fix rewrites map.json and exclusions.json first: a stale entry carries to the unmapped key that rewords it (carry.ts), the rest are removed.
 import { join } from "node:path";
 import { parseArgs } from "node:util";
 
+import { carryPairs } from "./carry.ts";
 import {
 	check,
 	docsNames,
@@ -92,6 +94,59 @@ const rulesOf = async (root: string) => {
 	};
 };
 
+/** Rename a key in place, so the order of the keys, and so the git diff, stays as it is. */
+const renamed = <T>(
+	entries: Record<string, T>,
+	from: string,
+	to: string,
+): Record<string, T> =>
+	Object.fromEntries(
+		Object.entries(entries).map(([k, v]) => [k === from ? to : k, v]),
+	);
+
+const staleKeys = (stale: string[], file: string): string[] =>
+	stale
+		.filter((s) => s.startsWith(`${file}: `))
+		.map((s) => s.slice(file.length + 2));
+
+/** Carry the stale entries that reword an unmapped key, remove the other stale entries, and write both files. */
+const fix = async (
+	root: string,
+	result: { unmapped: string[]; stale: string[] },
+	rules: {
+		map: Record<string, MapEntry>;
+		exclusions: Record<string, string>;
+	},
+): Promise<void> => {
+	const dir = join(root, "tools", "surface");
+	const files = [
+		["map.json", rules.map],
+		["exclusions.json", rules.exclusions],
+	] as const;
+	let left = result.unmapped;
+	const writes = files.map(([file, original]) => {
+		const stale = staleKeys(result.stale, file);
+		const carried = carryPairs(left, stale);
+		left = left.filter((k) => !carried.some(([, to]) => to === k));
+		const gone = new Set(carried.map(([from]) => from));
+		const removed = stale.filter((k) => !gone.has(k));
+		let entries: Record<string, unknown> = original;
+		for (const [from, to] of carried) {
+			entries = renamed(entries, from, to);
+			console.info(`carried ${file}: ${from} -> ${to}`);
+		}
+		for (const key of removed) {
+			console.info(`removed ${file}: ${key}`);
+		}
+		const kept = Object.entries(entries).filter(([k]) => !removed.includes(k));
+		return Bun.write(
+			join(dir, file),
+			`${JSON.stringify(Object.fromEntries(kept), null, "\t")}\n`,
+		);
+	});
+	await Promise.all(writes);
+};
+
 /** Run the check from the command line; failures set `process.exitCode`. */
 export const main = async (): Promise<void> => {
 	const { values: a } = parseArgs({
@@ -99,6 +154,7 @@ export const main = async (): Promise<void> => {
 			kind: { type: "string" },
 			all: { type: "boolean" },
 			root: { type: "string" },
+			fix: { type: "boolean" },
 		},
 	});
 	const root = a.root ?? ROOT;
@@ -120,15 +176,16 @@ export const main = async (): Promise<void> => {
 		process.exitCode = 2;
 		return;
 	}
-	const { map, exclusions } = await rulesOf(root);
+	let rules = await rulesOf(root);
 	const docs = await docsOf(root, only ?? Object.keys(snapshot.kinds));
-	const { rows, unmapped, stale } = check(
-		snapshot,
-		docs,
-		map,
-		exclusions,
-		only,
-	);
+	let result = check(snapshot, docs, rules.map, rules.exclusions, only);
+	if (a.fix === true) {
+		await fix(root, result, rules);
+		rules = await rulesOf(root);
+		result = check(snapshot, docs, rules.map, rules.exclusions, only);
+	}
+	const { map, exclusions } = rules;
+	const { rows, unmapped, stale } = result;
 	const problems = shape(map, exclusions);
 	console.info(`Claude Code ${snapshot.version}\n${table(rows)}`);
 	report(rows, unmapped, a.all, problems, stale);
