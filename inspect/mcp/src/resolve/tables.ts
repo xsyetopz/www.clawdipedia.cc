@@ -4,7 +4,7 @@ import {
 	litValue,
 	type Module,
 	type Node,
-	type NodeOf,
+	type NodeOf
 } from "../ast.ts";
 import { asNode, isNull } from "../ast/node.ts";
 import type { Env, Ty, Val } from "./types.ts";
@@ -18,20 +18,20 @@ export const isVoid = (n: Node | null | undefined): boolean =>
 /** The name a member expression reads: the string a computed key holds, or a plain property name. */
 export const keyOf = (
 	m: Module,
-	x: NodeOf<"MemberExpression">,
+	x: NodeOf<"MemberExpression">
 ): Promise<string | undefined> => {
 	if (x.computed) {
 		return constString(m, asNode(x.property));
 	}
 	return Promise.resolve(
-		x.property.type === "Identifier" ? x.property.name : undefined,
+		x.property.type === "Identifier" ? x.property.name : undefined
 	);
 };
 
 /** The object, property names, and root name of `a.b.c`; undefined for anything else. */
 export const memberPath = async (
 	m: Module,
-	n: Node,
+	n: Node
 ): Promise<{ root: Node; path: string[] } | undefined> => {
 	const path: string[] = [];
 	const walk = async (x: Node): Promise<Node | undefined> => {
@@ -56,7 +56,7 @@ export const bind = (
 	call: NodeOf<"CallExpression" | "NewExpression">,
 	env: Env | undefined,
 	dm: Module,
-	fn: Fn,
+	fn: Fn
 ): Env => {
 	const inner: Env = new Map();
 	const args = call.arguments.map((a) => asNode(a));
@@ -86,7 +86,7 @@ export const GLOBAL_CALLS: Record<string, Ty> = {
 	isNaN: "boolean",
 	isFinite: "boolean",
 	encodeURIComponent: "string",
-	decodeURIComponent: "string",
+	decodeURIComponent: "string"
 };
 export const STATIC_CALLS: Record<string, Record<string, Ty>> = {
 	Math: {},
@@ -100,15 +100,15 @@ export const STATIC_CALLS: Record<string, Record<string, Ty>> = {
 		isNaN: "boolean",
 		isSafeInteger: "boolean",
 		parseInt: "number",
-		parseFloat: "number",
+		parseFloat: "number"
 	},
 	performance: { now: "number" },
-	crypto: { randomUUID: "string" },
+	crypto: { randomUUID: "string" }
 };
 // Functions of Node built-in modules, by module name without `node:`. The program imports these by
 // their real names, so the import specifier tells which one a minified local name is.
 const NODE_CALLS: Record<string, Record<string, Ty>> = {
-	crypto: { randomUUID: "string" },
+	crypto: { randomUUID: "string" }
 };
 export const METHODS: Record<string, Ty> = {
 	toISOString: "string",
@@ -133,7 +133,7 @@ export const METHODS: Record<string, Ty> = {
 	map: "array",
 	filter: "array",
 	flatMap: "array",
-	split: "array",
+	split: "array"
 };
 export const COMPARE = new Set([
 	"==",
@@ -145,7 +145,7 @@ export const COMPARE = new Set([
 	"<=",
 	">=",
 	"instanceof",
-	"in",
+	"in"
 ]);
 
 /** The branches of an expression whose keys are those of either side; undefined for any other. */
@@ -164,7 +164,7 @@ export const spreadParts = (n: Node): Node[] | undefined => {
 /** The name of a property: a plain or literal key, or a computed key that is a constant string. */
 export const propKey = (
 	m: Module,
-	p: NodeOf<"Property">,
+	p: NodeOf<"Property">
 ): Promise<string | undefined> => {
 	const k = p.key;
 	if (p.computed) {
@@ -174,7 +174,7 @@ export const propKey = (
 		return Promise.resolve(k.name);
 	}
 	return Promise.resolve(
-		k.type === "Literal" ? String(litValue(k)) : undefined,
+		k.type === "Literal" ? String(litValue(k)) : undefined
 	);
 };
 
@@ -241,7 +241,7 @@ export const SIMPLE_TYPES = new Map<string, Ty>([
 	["TemplateLiteral", "string"],
 	["ArrayExpression", "array"],
 	["ObjectExpression", "object"],
-	["UpdateExpression", "number"],
+	["UpdateExpression", "number"]
 ]);
 
 /** The type of `!x`, `typeof x`, `delete x`, and the other unary operators. */
@@ -272,7 +272,7 @@ export const importedCallType = (m: Module, id: Node): Ty | undefined => {
 export const memberCallType = (
 	m: Module,
 	object: Node | undefined,
-	name: string,
+	name: string
 ): Ty | undefined => {
 	if (
 		object?.type === "Identifier" &&

@@ -33,7 +33,7 @@ const readPid = async (file: string): Promise<number> => {
 const claimFrom = async (
 	port: number,
 	file: string,
-	attempt: number,
+	attempt: number
 ): Promise<boolean> => {
 	if (attempt >= 2) {
 		return false;
@@ -62,7 +62,7 @@ const claim = async (port: number): Promise<boolean> => {
 };
 onCleanup(async () => {
 	await Promise.all(
-		[...mine].map((p) => rm(join(REG, String(p)), { force: true })),
+		[...mine].map((p) => rm(join(REG, String(p)), { force: true }))
 	);
 });
 
@@ -108,7 +108,7 @@ export const allocPort = (): Promise<number> => allocFrom(0);
 
 const reserveFrom = async (
 	p: number,
-	range: [number, number],
+	range: [number, number]
 ): Promise<number> => {
 	if (p > range[1]) {
 		throw new Error(`no free port in ${range[0]}-${range[1]}`);
@@ -118,5 +118,5 @@ const reserveFrom = async (
 
 /** Pick an unclaimed port from a fixed range (default 18400-18499), for readable logs. Registry only; bind may still fail. */
 export const reserve = (
-	range: [number, number] = [18_400, 18_499],
+	range: [number, number] = [18_400, 18_499]
 ): Promise<number> => reserveFrom(range[0], range);

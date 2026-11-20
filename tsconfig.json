@@ -1,17 +1,47 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"compilerOptions": {
-		"allowUmdGlobalAccess": true,
-		"jsx": "preserve",
+		"target": "ESNext",
 		"lib": ["ESNext", "DOM"],
-		"paths": {
-			"@site/*": ["./*"]
-		},
 		"types": [
 			"@docusaurus/module-type-aliases",
 			"@docusaurus/theme-classic",
 			"bun"
-		]
+		],
+		"module": "Preserve",
+		"moduleResolution": "bundler",
+		"moduleDetection": "force",
+		"jsx": "preserve",
+		"allowArbitraryExtensions": true,
+		"allowImportingTsExtensions": true,
+		"resolveJsonModule": true,
+		"verbatimModuleSyntax": true,
+		"isolatedModules": true,
+		"erasableSyntaxOnly": true,
+		"forceConsistentCasingInFileNames": true,
+		"noUncheckedSideEffectImports": true,
+		"libReplacement": false,
+		"allowJs": true,
+		"checkJs": true,
+		"noEmit": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"exactOptionalPropertyTypes": true,
+		"noUncheckedIndexedAccess": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"useDefineForClassFields": true,
+		"rootDir": ".",
+		"allowUmdGlobalAccess": true,
+		"paths": {
+			"@site/*": ["./*"]
+		}
 	},
 	"exclude": [
 		".docusaurus",
@@ -21,7 +51,8 @@
 		"**/.build",
 		"**/build",
 		"**/coverage",
-		"**/target"
-	],
-	"extends": "typescript-bedrock/tsconfig.base.json"
+		"**/target",
+		".claude",
+		"openspec"
+	]
 }

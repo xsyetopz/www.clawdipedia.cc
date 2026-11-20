@@ -12,7 +12,7 @@ const frontMatterLines = (c: Cap): string[] => [
 	`description: ${yaml(c.v.summary.replaceAll("`", ""))}`,
 	`sidebar_position: ${nextPos(c.v.group)}`,
 	"---",
-	"",
+	""
 ];
 
 const sizeLines = (c: Cap): string[] => {
@@ -30,14 +30,14 @@ const sizeLines = (c: Cap): string[] => {
 		"| Part | Characters |",
 		"| --- | --- |",
 		...c.parts.map(
-			(p) => `| \`${p.label.replace(/ \(.*/u, "")}\` | ${fmt(p.text.length)} |`,
+			(p) => `| \`${p.label.replace(/ \(.*/u, "")}\` | ${fmt(p.text.length)} |`
 		),
 		`| System blocks only | ${fmt(sysChars)} |`,
 		`| Everything shown here | ${fmt(c.chars)} |`,
 		`| Tools sent | ${c.tools.length} |`,
 		"",
 		"Sizes count the text after the placeholders are in place. Each placeholder counts at its own length.",
-		"",
+		""
 	];
 };
 
@@ -49,7 +49,7 @@ const noticeLines = (c: Cap): string[] => {
 				"## What to Notice",
 				"",
 				...notes.map((x) => `- ${relink(c.v.group, x)}`),
-				"",
+				""
 			];
 };
 
@@ -59,7 +59,7 @@ const fullTextLines = (c: Cap, dup: string | undefined): string[] => {
 			"## Full Text",
 			"",
 			`This variant sends exactly the same text and tools as ${pageLink(c.v.group, dup, ctx.caps.get(dup)?.v.title ?? dup)}. The page for that variant has the full text.`,
-			"",
+			""
 		];
 	}
 	return [
@@ -68,7 +68,7 @@ const fullTextLines = (c: Cap, dup: string | undefined): string[] => {
 		"The text below is every part of the request that Claude Code builds before your own message, in the order it is sent.",
 		"",
 		fence(c.text, "text"),
-		"",
+		""
 	];
 };
 
@@ -83,7 +83,7 @@ const diffLines = async (c: Cap, base: Cap): Promise<string[]> => {
 		"## Compared to the Default",
 		"",
 		`The diff below starts from ${pageLink(group, base.v.id, base.v.title)}. Lines that start with \`-\` are only in the baseline. Lines that start with \`+\` are only here.`,
-		"",
+		""
 	];
 	if (d === "") {
 		lines.push("There are no differences in the text.", "");
@@ -93,7 +93,7 @@ const diffLines = async (c: Cap, base: Cap): Promise<string[]> => {
 			`Lines added: ${countLines(d, "+", "+++")}. Lines removed: ${countLines(d, "-", "---")}. Size change: ${sign}${fmt(c.chars - base.chars)} characters.`,
 			"",
 			fence(d, "diff"),
-			"",
+			""
 		);
 	}
 	const td = toolDiff(base.tools, c.tools);
@@ -101,7 +101,7 @@ const diffLines = async (c: Cap, base: Cap): Promise<string[]> => {
 		td === ""
 			? "The tool list is the same as the baseline."
 			: `Tool list: ${td} See ${pageLink(group, "tools-per-variant", "Tools per Variant")}.`,
-		"",
+		""
 	);
 	return lines;
 };
@@ -116,7 +116,7 @@ const baselineLines = (c: Cap): Promise<string[]> => {
 		"## Compared to the Default",
 		"",
 		"This variant is the baseline. Other pages diff against it.",
-		"",
+		""
 	]);
 };
 
@@ -126,11 +126,11 @@ const variantPage = async (id: string, c: Cap): Promise<void> => {
 		...sizeLines(c),
 		...noticeLines(c),
 		...fullTextLines(c, ctx.dupOf.get(id)),
-		...(await baselineLines(c)),
+		...(await baselineLines(c))
 	];
 	await Bun.write(
 		join(groupDir(c.v.group), `${id}.md`),
-		stripTrailing(lines.join("\n")),
+		stripTrailing(lines.join("\n"))
 	);
 };
 

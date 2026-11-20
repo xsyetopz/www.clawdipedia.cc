@@ -11,7 +11,7 @@ import {
 	read,
 	type Result,
 	schema,
-	search,
+	search
 } from "../../plugin/mcp/src/core.ts";
 
 const USAGE = `Usage: clawdipedia <command> [options]
@@ -41,7 +41,7 @@ const COMMANDS = {
 	read: "Usage: clawdipedia read <route> [--source clawdipedia|platform|code|claude-resources] [--section <heading>] [--offset <n>] [--json]\n\nPrints one page as markdown. A route comes from search or list, for example configure/status-line.\n--section prints only the H2 section with that heading.\nA long page ends its header line with the offset for --offset.\n",
 	list: "Usage: clawdipedia list [prefix] [--source clawdipedia|platform|code|claude-resources] [--json]\n\nLists pages in sidebar order. A prefix is a top-level section (clawdipedia) or a group or section (the other sources), for example configure.\n",
 	schema:
-		"Usage: clawdipedia schema <name> [property] [--offset <n>] [--json]\n\nPrints the outline of a JSON Schema (settings, tools, hook-output, ...), one property of it (hooks.PreToolUse), or a definition (BashInput.command).\nWith the name types, prints names of the Mod API type file, or the type, member, call, or event that the property names.\n",
+		"Usage: clawdipedia schema <name> [property] [--offset <n>] [--json]\n\nPrints the outline of a JSON Schema (settings, tools, hook-output, ...), one property of it (hooks.PreToolUse), or a definition (BashInput.command).\nWith the name types, prints names of the Mod API type file, or the type, member, call, or event that the property names.\n"
 } as const;
 type Command = keyof typeof COMMANDS;
 const isCommand = (s: string | undefined): s is Command =>
@@ -60,12 +60,12 @@ const parse = (argv: string[]) => {
 				limit: { type: "string" },
 				offset: { type: "string" },
 				json: { type: "boolean" },
-				help: { type: "boolean", short: "h" },
-			},
+				help: { type: "boolean", short: "h" }
+			}
 		});
 	} catch (error) {
 		throw new UsageError(
-			error instanceof Error ? error.message : String(error),
+			error instanceof Error ? error.message : String(error)
 		);
 	}
 };
@@ -76,12 +76,12 @@ const int = (
 	name: string,
 	v: string | undefined,
 	min: number,
-	max: number,
+	max: number
 ): number | undefined => {
 	const n = v === undefined ? undefined : Number(v);
 	if (n !== undefined && (!Number.isInteger(n) || n < min || n > max)) {
 		throw new UsageError(
-			`--${name} needs a whole number from ${min} to ${max}`,
+			`--${name} needs a whole number from ${min} to ${max}`
 		);
 	}
 	return n;
@@ -106,7 +106,7 @@ const sourceOf = (values: Values): DocSourceName => {
 	const source = values.source ?? "clawdipedia";
 	if (!isDocSource(source)) {
 		throw new UsageError(
-			`--source needs one of ${DOC_SOURCES.join(", ")}, not "${source}"`,
+			`--source needs one of ${DOC_SOURCES.join(", ")}, not "${source}"`
 		);
 	}
 	return source;
@@ -120,7 +120,7 @@ const need = (
 	args: string[],
 	min: number,
 	max: number,
-	what: string,
+	what: string
 ) => {
 	if (args.length < min || args.length > max) {
 		throw new UsageError(`${command} needs ${what}`);
@@ -135,14 +135,14 @@ interface Outcome {
 const runSearch = async (
 	args: string[],
 	values: Values,
-	source: DocSourceName,
+	source: DocSourceName
 ): Promise<Outcome> => {
 	need("search", args, 1, MAX_INT, "<query>");
 	const limit = int("limit", values.limit, 1, 25);
 	const r = await search({
 		query: args.join(" "),
 		source,
-		...(limit === undefined || limit === 0 ? {} : { limit }),
+		...(limit === undefined || limit === 0 ? {} : { limit })
 	});
 	const hits = r.data["hits"];
 	return { r, empty: r.ok && Array.isArray(hits) && hits.length === 0 };
@@ -151,7 +151,7 @@ const runSearch = async (
 const runRead = async (
 	args: string[],
 	values: Values,
-	source: DocSourceName,
+	source: DocSourceName
 ): Promise<Outcome> => {
 	need("read", args, 1, 1, "<route>");
 	const offset = int("offset", values.offset, 0, MAX_INT);
@@ -160,20 +160,20 @@ const runRead = async (
 		route,
 		source,
 		...(present(values.section) ? { heading: values.section } : {}),
-		...(offset === undefined || offset === 0 ? {} : { offset }),
+		...(offset === undefined || offset === 0 ? {} : { offset })
 	});
 	return { r, empty: false };
 };
 
 const runList = async (
 	args: string[],
-	source: DocSourceName,
+	source: DocSourceName
 ): Promise<Outcome> => {
 	need("list", args, 0, 1, "at most one [prefix]");
 	const [prefix] = args;
 	const r = await list({
 		source,
-		...(present(prefix) ? { section: prefix } : {}),
+		...(present(prefix) ? { section: prefix } : {})
 	});
 	return { r, empty: false };
 };
@@ -185,7 +185,7 @@ const runSchema = async (args: string[], values: Values): Promise<Outcome> => {
 	const r = await schema({
 		name,
 		...(present(property) ? { property } : {}),
-		...(offset === undefined || offset === 0 ? {} : { offset }),
+		...(offset === undefined || offset === 0 ? {} : { offset })
 	});
 	return { r, empty: false };
 };
@@ -193,7 +193,7 @@ const runSchema = async (args: string[], values: Values): Promise<Outcome> => {
 const dispatch = (
 	command: Command,
 	args: string[],
-	values: Values,
+	values: Values
 ): Promise<Outcome> => {
 	checkOptions(command, values);
 	const source = sourceOf(values);
@@ -235,7 +235,7 @@ const run = async (argv: string[]): Promise<number> => {
 		return 1;
 	}
 	process.stdout.write(
-		json ? `${JSON.stringify(r.data, null, 2)}\n` : `${r.text}\n`,
+		json ? `${JSON.stringify(r.data, null, 2)}\n` : `${r.text}\n`
 	);
 	return empty ? 1 : 0;
 };

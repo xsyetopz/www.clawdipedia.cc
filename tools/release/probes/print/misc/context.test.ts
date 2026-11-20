@@ -9,10 +9,10 @@ describe("countSubject", () => {
 			messages: [
 				{
 					role: "user",
-					content: [{ type: "text", text: "# Memory\n\nhello" }],
+					content: [{ type: "text", text: "# Memory\n\nhello" }]
 				},
-				{ role: "assistant", content: "ok" },
-			],
+				{ role: "assistant", content: "ok" }
+			]
 		};
 
 		const label = countSubject(body);

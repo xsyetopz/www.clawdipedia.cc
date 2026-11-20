@@ -10,7 +10,7 @@ import {
 	type DocSourceName,
 	fail,
 	guarded,
-	type Result,
+	type Result
 } from "./shared.ts";
 import { remoteOf } from "./sources.ts";
 
@@ -30,8 +30,8 @@ const nearList = (route: string, entries: readonly Entry[]): string => {
 		.map((e) => ({
 			e,
 			n: tokenize(`${e.route.replaceAll(/[/_-]+/gu, " ")} ${e.title}`).filter(
-				(t) => want.has(t),
-			).length,
+				(t) => want.has(t)
+			).length
 		}))
 		.filter((x) => x.n > 0 && x.e.route !== route)
 		.toSorted((a, b) => b.n - a.n)
@@ -52,14 +52,14 @@ export const read = (args: ReadArgs): Promise<Result> =>
 		if (!entry) {
 			const { entries } = await content.manifest();
 			return fail(
-				`No page with route "${normalizeRoute(args.route)}". Routes look like "configure/status-line" (list the pages to see them).${nearList(normalizeRoute(args.route), entries)}`,
+				`No page with route "${normalizeRoute(args.route)}". Routes look like "configure/status-line" (list the pages to see them).${nearList(normalizeRoute(args.route), entries)}`
 			);
 		}
 		const r = await content.readPage(entry);
 		if (r.status === "notfound") {
 			const { entries } = await content.manifest();
 			return fail(
-				`Page "${entry.route}" is listed but no longer exists on ${r.origin}; any cached copy was removed.${nearList(entry.route, entries)}`,
+				`Page "${entry.route}" is listed but no longer exists on ${r.origin}; any cached copy was removed.${nearList(entry.route, entries)}`
 			);
 		}
 		if (r.status === "error") {
@@ -71,6 +71,6 @@ export const read = (args: ReadArgs): Promise<Result> =>
 			heading,
 			offset,
 			maxChars,
-			r.source,
+			r.source
 		);
 	});

@@ -12,7 +12,7 @@ import {
 	runCases,
 	sysText,
 	toolNames,
-	withRun,
+	withRun
 } from "./run/helpers.ts";
 import type { PrintGroup } from "./types.ts";
 
@@ -40,14 +40,14 @@ const ROWS: Row[] = [
 	{ name: "user-false-flag-true", allow: true, user: false, flag: true },
 	{ name: "user-true-flag-false", allow: true, user: true, flag: false },
 	{ name: "project-true", allow: true, proj: true },
-	{ name: "local-true", allow: true, local: true },
+	{ name: "local-true", allow: true, local: true }
 ];
 
 const classifierReqs = (r: Run) =>
 	msgs(r).filter(
 		(q) =>
 			/classif|security monitor|auto mode/iu.test(json(bodyOf(q).system)) &&
-			!(toolNames(q).length > 3),
+			!(toolNames(q).length > 3)
 	);
 
 const classifyCase = (c: Row): CaseDef => ({
@@ -59,10 +59,10 @@ const classifyCase = (c: Row): CaseDef => ({
 				args: [
 					"--permission-mode",
 					"auto",
-					...(c.flag === undefined ? [] : ["--settings", json(as(c.flag))]),
+					...(c.flag === undefined ? [] : ["--settings", json(as(c.flag))])
 				],
 				cfgFiles: {
-					"settings.json": json({ ...(c.allow ? allow : {}), ...as(c.user) }),
+					"settings.json": json({ ...(c.allow ? allow : {}), ...as(c.user) })
 				},
 				projFiles: {
 					...(c.proj === undefined
@@ -70,12 +70,12 @@ const classifyCase = (c: Row): CaseDef => ({
 						: { ".claude/settings.json": json(as(c.proj)) }),
 					...(c.local === undefined
 						? {}
-						: { ".claude/settings.local.json": json(as(c.local)) }),
+						: { ".claude/settings.local.json": json(as(c.local)) })
 				},
 				// From 2.1.319 the server-side check refuses a call that the stub gives no verdict for, and no classifier request follows.
 				env: { CLAUDE_CODE_AUTO_MODE_SERVER: "0" },
 				stub: BASH,
-				timeoutMs: 45_000,
+				timeoutMs: 45_000
 			},
 			(r) => {
 				const m = msgs(r);
@@ -92,11 +92,11 @@ const classifyCase = (c: Row): CaseDef => ({
 						classifierRequests: cls.length,
 						classifierRan: cls.length > 0,
 						initPermissionMode: typeof mode === "string" ? mode : null,
-						toolCounts: m.map((x) => toolNames(x).length).join(","),
-					},
+						toolCounts: m.map((x) => toolNames(x).length).join(",")
+					}
 				};
-			},
-		),
+			}
+		)
 });
 
 const SERVER_VARIANTS: [string, Record<string, string>][] = [
@@ -108,15 +108,15 @@ const SERVER_VARIANTS: [string, Record<string, string>][] = [
 		"server-1-betas-off",
 		{
 			CLAUDE_CODE_AUTO_MODE_SERVER: "1",
-			CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS: "1",
-		},
+			CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS: "1"
+		}
 	],
-	["two-stage-1", { CLAUDE_CODE_TWO_STAGE_CLASSIFIER: "1" }],
+	["two-stage-1", { CLAUDE_CODE_TWO_STAGE_CLASSIFIER: "1" }]
 ];
 
 const serverCase = ([name, env]: [
 	string,
-	Record<string, string>,
+	Record<string, string>
 ]): CaseDef => ({
 	name: `classifier-server.${name}`,
 	run: (ctx) =>
@@ -126,12 +126,12 @@ const serverCase = ([name, env]: [
 				env,
 				stub: BASH,
 				args: ["--permission-mode", "auto", "--debug-file", "{CFG}/d.log"],
-				timeoutMs: 45_000,
+				timeoutMs: 45_000
 			},
 			async (r) => {
 				const d = await readCfg(r, "d.log");
 				const stages = [...d.matchAll(/stage=(\w+) outcome/gu)].map(
-					(x) => x[1],
+					(x) => x[1]
 				);
 				const line = /\[server-classifier\][^\n]*/u.exec(d)?.[0] ?? "";
 				const first = msgs(r)[0];
@@ -149,15 +149,15 @@ const serverCase = ([name, env]: [
 						messages: msgs(r).length,
 						stages: stages.join(","),
 						serverNoResult: d.includes("server_no_result"),
-						safeguards: first ? "safeguards" in bodyOf(first) : null,
+						safeguards: first ? "safeguards" in bodyOf(first) : null
 					},
 					samples: {
 						serverClassifierLine: line.slice(0, 300),
-						classifierBuild: cc?.[1] ?? "",
-					},
+						classifierBuild: cc?.[1] ?? ""
+					}
 				};
-			},
-		),
+			}
+		)
 });
 
 interface Cfg {
@@ -172,7 +172,7 @@ const CFGS: Cfg[] = [
 		name: "user",
 		argv: ["auto-mode", "config"],
 		cfg: { "settings.json": json({ autoMode: { allow: ["ZZUSERALLOW"] } }) },
-		marker: "ZZUSERALLOW",
+		marker: "ZZUSERALLOW"
 	},
 	{
 		name: "settings-flag",
@@ -180,28 +180,28 @@ const CFGS: Cfg[] = [
 			"--settings",
 			json({ autoMode: { allow: ["ZZFLAGALLOW"] } }),
 			"auto-mode",
-			"config",
+			"config"
 		],
-		marker: "ZZFLAGALLOW",
+		marker: "ZZFLAGALLOW"
 	},
 	{
 		name: "project",
 		argv: ["auto-mode", "config"],
 		proj: {
-			".claude/settings.json": json({ autoMode: { allow: ["ZZPROJALLOW"] } }),
+			".claude/settings.json": json({ autoMode: { allow: ["ZZPROJALLOW"] } })
 		},
-		marker: "ZZPROJALLOW",
+		marker: "ZZPROJALLOW"
 	},
 	{
 		name: "local",
 		argv: ["auto-mode", "config"],
 		proj: {
 			".claude/settings.local.json": json({
-				autoMode: { allow: ["ZZLOCALALLOW"] },
-			}),
+				autoMode: { allow: ["ZZLOCALALLOW"] }
+			})
 		},
-		marker: "ZZLOCALALLOW",
-	},
+		marker: "ZZLOCALALLOW"
+	}
 ];
 
 const configCase = (c: Cfg): CaseDef => ({
@@ -213,17 +213,17 @@ const configCase = (c: Cfg): CaseDef => ({
 				argv: c.argv,
 				noPrompt: true,
 				...(c.cfg === undefined ? {} : { cfgFiles: c.cfg }),
-				...(c.proj === undefined ? {} : { projFiles: c.proj }),
+				...(c.proj === undefined ? {} : { projFiles: c.proj })
 			},
 			(r) => ({
 				from: r,
 				data: {
 					precondition: r.code !== null && !r.timedOut,
 					seen: r.stdout.includes(c.marker),
-					stderrHead: r.stderr.slice(0, 80).replaceAll(/\s+/gu, " "),
-				},
-			}),
-		),
+					stderrHead: r.stderr.slice(0, 80).replaceAll(/\s+/gu, " ")
+				}
+			})
+		)
 });
 
 export const automode: PrintGroup = {
@@ -233,6 +233,6 @@ export const automode: PrintGroup = {
 		runCases(ctx, "automode", [
 			...ROWS.map((row) => classifyCase(row)),
 			...SERVER_VARIANTS.map((v) => serverCase(v)),
-			...CFGS.map((c) => configCase(c)),
-		]),
+			...CFGS.map((c) => configCase(c))
+		])
 };

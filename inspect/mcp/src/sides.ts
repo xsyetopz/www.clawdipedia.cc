@@ -30,7 +30,7 @@ export const side = (ix: Index): Side => {
 		parent: parentsOf(us),
 		free: us.map(() => true),
 		match: new Int32Array(us.length).fill(-1),
-		names: namesOf(ix),
+		names: namesOf(ix)
 	};
 };
 
@@ -112,7 +112,7 @@ const underPair = (a: Side, b: Side, hit: Hit): number => {
 		(i, j) => {
 			n++;
 			hit(i, j);
-		},
+		}
 	);
 	return n;
 };

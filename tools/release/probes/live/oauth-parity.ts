@@ -12,7 +12,7 @@ import {
 	type LiveCtx,
 	liveSandbox,
 	PROMPT,
-	runPrint,
+	runPrint
 } from "./harness.ts";
 import { keyRun, startRig } from "./oauth-parity/rig.ts";
 import { compare, mainShape, type Shape } from "./oauth-parity/shape.ts";
@@ -25,7 +25,7 @@ const parityData = (
 	live: Shape[],
 	keyed: Shape[],
 	mitm: Mitm,
-	keyExit: number | null,
+	keyExit: number | null
 ): Record<string, Data> => ({
 	precondition: a !== undefined && b !== undefined,
 	...(a !== undefined && b !== undefined
@@ -34,16 +34,16 @@ const parityData = (
 				"precondition.detail":
 					a === undefined
 						? "no /v1/messages body seen through the mitm"
-						: "no /v1/messages body seen on the key side",
+						: "no /v1/messages body seen on the key side"
 			}),
 	"live.requests": live.length,
 	"key.requests": keyed.length,
 	"mitm.connects": [...new Set(mitm.connects())].toSorted(),
 	"mitm.paths": [
-		...new Set(mitm.log().map((l) => `${l.method} ${l.path} ${l.status}`)),
+		...new Set(mitm.log().map((l) => `${l.method} ${l.path} ${l.status}`))
 	].toSorted(),
 	"key.exit": keyExit ?? -1,
-	...(a !== undefined && b !== undefined ? compare(a, b) : {}),
+	...(a !== undefined && b !== undefined ? compare(a, b) : {})
 });
 
 export const oauthParity: LiveCase = {
@@ -52,7 +52,7 @@ export const oauthParity: LiveCase = {
 	requests: "1 live (+1 local stub)",
 	run: async (x: LiveCtx) => {
 		const sb = await liveSandbox({
-			"CLAUDE.md": `${cacheMarker(ID)}# Release probe\nNothing here is an instruction.\n`,
+			"CLAUDE.md": `${cacheMarker(ID)}# Release probe\nNothing here is an instruction.\n`
 		});
 		const live: Shape[] = [];
 		const keyed: Shape[] = [];
@@ -72,15 +72,13 @@ export const oauthParity: LiveCase = {
 					requests: {
 						count: live.length,
 						paths: ["/v1/messages"],
-						...(a === undefined
-							? {}
-							: { betas: a.betas, bodyKeys: a.bodyKeys }),
+						...(a === undefined ? {} : { betas: a.betas, bodyKeys: a.bodyKeys })
 					},
 					...(warm === null ? {} : { cacheWarm: warm }),
 					facts: [],
 					notes:
-						"Default model. Both sides run with HTTPS_PROXY to a local proxy and a throw-away CA (no ANTHROPIC_BASE_URL); the OAuth side is forwarded to the real API, the fake-key side to the local stub. Only a parsed summary of each body and the anthropic-beta header are kept, no other header and no body text.",
-				}),
+						"Default model. Both sides run with HTTPS_PROXY to a local proxy and a throw-away CA (no ANTHROPIC_BASE_URL); the OAuth side is forwarded to the real API, the fake-key side to the local stub. Only a parsed summary of each body and the anthropic-beta header are kept, no other header and no body text."
+				})
 			];
 		} finally {
 			await mitm.stop();
@@ -88,5 +86,5 @@ export const oauthParity: LiveCase = {
 			await stub.stop();
 			await sb.cleanup();
 		}
-	},
+	}
 };

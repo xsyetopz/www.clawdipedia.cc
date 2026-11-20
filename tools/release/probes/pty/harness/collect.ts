@@ -13,7 +13,7 @@ import {
 	obj,
 	type PtyCase,
 	type PtyCtx,
-	type PtyRun,
+	type PtyRun
 } from "./types.ts";
 
 const parseLog = (text: string): { t: number; json: Obj; line: string }[] =>
@@ -33,14 +33,14 @@ const parseLog = (text: string): { t: number; json: Obj; line: string }[] =>
 
 const readTree = (root: string): Promise<string[]> =>
 	Array.fromAsync(
-		new Bun.Glob("**/*").scan({ cwd: root, dot: true, onlyFiles: true }),
+		new Bun.Glob("**/*").scan({ cwd: root, dot: true, onlyFiles: true })
 	);
 
 /** Every file under a sandbox dir, read once after the run so the case readers stay synchronous. */
 const readDir = async (
 	root: string,
 	dir: string,
-	tree: string[],
+	tree: string[]
 ): Promise<Record<string, string>> => {
 	const names = tree
 		.filter((n) => n.startsWith(`${dir}/`))
@@ -49,8 +49,8 @@ const readDir = async (
 		names.map((n) =>
 			Bun.file(join(root, dir, n))
 				.text()
-				.catch(() => ""),
-		),
+				.catch(() => "")
+		)
 	);
 	return Object.fromEntries(names.map((n, i) => [n, texts[i] ?? ""]));
 };
@@ -58,7 +58,7 @@ const readDir = async (
 export const buildRun = async (
 	sb: Sandbox,
 	pty: PtyResult,
-	log: string,
+	log: string
 ): Promise<PtyRun> => {
 	const reqs = (await pathExists(log)) ? await readLog(log) : [];
 	const tree = await readTree(sb.root);
@@ -75,7 +75,7 @@ export const buildRun = async (
 		hook: (e) => parseLog(files[`hooklog/${e}.log`] ?? ""),
 		file: (rel) => files[rel] ?? "",
 		cfgFile: (rel) => cfg[rel] ?? "",
-		messages: reqs.filter((r) => isSystemMsg(r)),
+		messages: reqs.filter((r) => isSystemMsg(r))
 	};
 };
 
@@ -83,7 +83,7 @@ export const buildRun = async (
 export const archive = async (
 	ctx: PtyCtx,
 	c: PtyCase,
-	run: PtyRun,
+	run: PtyRun
 ): Promise<void> => {
 	const dest = join(ctx.runDir, "pty");
 	await mkdir(dest, { recursive: true });
@@ -94,18 +94,18 @@ export const archive = async (
 			[raw, `${stem}.raw`],
 			[`${raw}.idx`, `${stem}.idx`],
 			[`${raw}.sent`, `${stem}.sent`],
-			[`${raw}.screen.txt`, `${stem}.screen.txt`],
+			[`${raw}.screen.txt`, `${stem}.screen.txt`]
 		] as const,
 		async ([from, to]) => {
 			if (await pathExists(from)) {
 				await copyFile(from, to);
 			}
-		},
+		}
 	);
 	await eachInOrder(
 		Object.entries(c.artifacts?.(run) ?? {}),
 		async ([name, text]) => {
 			await Bun.write(`${stem}.${name}`, text);
-		},
+		}
 	);
 };

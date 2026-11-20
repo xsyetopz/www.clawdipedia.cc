@@ -53,7 +53,7 @@ const write = async (args: string[]): Promise<number> => {
 	// Stamps src/version.ts, as generate.ts does for the JSON Schemas.
 	await Bun.write(OUT, HEADER(CLAUDE_CODE_VERSION) + text);
 	console.info(
-		`schemas/claude-code.d.ts: ${text.split("\n").length} lines from ${bin}`,
+		`schemas/claude-code.d.ts: ${text.split("\n").length} lines from ${bin}`
 	);
 	return 0;
 };

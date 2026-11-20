@@ -25,13 +25,13 @@ export const liveSandbox = (projFiles: Files = {}): Promise<Sandbox> =>
 		projFiles,
 		trusted: true,
 		seedOnboarding: true,
-		live: true,
+		live: true
 	});
 
 export const envFor = async (
 	x: LiveCtx,
 	sb: Sandbox,
-	o: EnvOpts = {},
+	o: EnvOpts = {}
 ): Promise<Record<string, string>> =>
 	liveEnv({
 		home: sb.home,
@@ -46,7 +46,7 @@ export const envFor = async (
 		...(x.dry ? { deadProxy: true } : {}),
 		...(x.dry && o.caseId !== undefined && x.stubBase !== undefined
 			? { baseUrl: await x.stubBase(o.caseId) }
-			: {}),
+			: {})
 	});
 
 /** Print-mode run (-p, stream-json) in the sandbox. One attempt. */
@@ -54,7 +54,7 @@ export const runPrint = async (
 	x: LiveCtx,
 	sb: Sandbox,
 	args: string[],
-	o: EnvOpts & { model?: string } = {},
+	o: EnvOpts & { model?: string } = {}
 ) => {
 	const env = await envFor(x, sb, o);
 	await assertShimReady(env);
@@ -65,9 +65,9 @@ export const runPrint = async (
 			"--output-format",
 			"stream-json",
 			"--verbose",
-			...(o.model === undefined ? [] : ["--model", o.model]),
+			...(o.model === undefined ? [] : ["--model", o.model])
 		],
-		{ cwd: sb.proj, env, timeoutMs: 120_000 },
+		{ cwd: sb.proj, env, timeoutMs: 120_000 }
 	);
 	return { ...res, events: events(res.stdout) };
 };
@@ -83,7 +83,7 @@ export const runLivePty = async (
 		allowNonessential?: boolean;
 		featureGates?: boolean;
 		args?: string[];
-	},
+	}
 ): Promise<PtyResult> => {
 	const out = join(sb.root, "pty", "RAW");
 	await mkdir(dirname(out), { recursive: true });
@@ -96,10 +96,10 @@ export const runLivePty = async (
 			...o.schedule,
 			{ t: o.secs, send: "/exit\r", label: "exit" },
 			{ t: o.secs + 2.5, send: "\u0003", label: "ctrl-c-1" },
-			{ t: o.secs + 2.8, send: "\u0003", label: "ctrl-c-2" },
+			{ t: o.secs + 2.8, send: "\u0003", label: "ctrl-c-2" }
 		],
 		secs: o.secs + 5,
 		out,
-		liveToken: x.token,
+		liveToken: x.token
 	});
 };

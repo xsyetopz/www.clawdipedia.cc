@@ -13,7 +13,7 @@ const translator = new NodeHtmlMarkdown({
 	codeFence: "```",
 	maxConsecutiveNewlines: 2,
 	globalEscape: NEVER,
-	lineStartEscape: NEVER,
+	lineStartEscape: NEVER
 });
 
 const oneLine = (s: string): string => s.replaceAll(/\s+/gu, " ").trim();
@@ -47,7 +47,7 @@ const dropElements = (el: HTMLElement): void => {
 			header
 				.querySelectorAll("h1")
 				.map((h1) => h1.outerHTML)
-				.join(""),
+				.join("")
 		);
 	}
 	for (const drop of el.querySelectorAll(DROPPED)) {
@@ -83,7 +83,7 @@ export const htmlTitle = (html: string): string | undefined => {
 	const root = parse(html);
 	const title = oneLine(root.querySelector("title")?.text ?? "").replace(
 		/\s*[\\|]\s*(?:Claude by )?Anthropic$/u,
-		"",
+		""
 	);
 	if (title !== "") {
 		return title;

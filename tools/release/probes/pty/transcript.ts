@@ -12,14 +12,14 @@ import {
 	type PtyGroup,
 	type PtyRun,
 	READY,
-	WAIT,
+	WAIT
 } from "./harness.ts";
 
 /** Key paths and JSON types of every transcript line under the sandbox config dir, as `<type>.<key>`, `[]` for items. */
 const fieldsOf = (x: PtyRun): Record<string, Record<string, number>> => {
 	const t = new Tally();
 	const files = x.tree.filter(
-		(f) => f.startsWith("cfg/projects/") && f.endsWith(".jsonl"),
+		(f) => f.startsWith("cfg/projects/") && f.endsWith(".jsonl")
 	);
 	for (const f of files) {
 		for (const l of x.cfgFile(f.slice("cfg/".length)).split("\n")) {
@@ -35,7 +35,7 @@ const fieldsOf = (x: PtyRun): Record<string, Record<string, number>> => {
 		}
 	}
 	return Object.fromEntries(
-		Object.entries(t.toJSON()).map(([k, s]) => [k, s.types]),
+		Object.entries(t.toJSON()).map(([k, s]) => [k, s.types])
 	);
 };
 
@@ -47,22 +47,22 @@ const typesAt = (x: PtyRun, paths: string[]): Record<string, Data> => {
 			p,
 			Object.keys(fields[p] ?? {})
 				.toSorted()
-				.join("|") || "absent",
-		]),
+				.join("|") || "absent"
+		])
 	);
 };
 
 const transcriptCase = (
-	c: Omit<PtyCase, "data" | "artifacts"> & { paths: string[] },
+	c: Omit<PtyCase, "data" | "artifacts"> & { paths: string[] }
 ): PtyCase => ({
 	...c,
 	data: (x) => ({
 		...pre(x.messages.length > 0, "the program never reached the stub"),
-		...typesAt(x, c.paths),
+		...typesAt(x, c.paths)
 	}),
 	artifacts: (x) => ({
-		"fields.json": `${JSON.stringify(fieldsOf(x), null, 2)}\n`,
-	}),
+		"fields.json": `${JSON.stringify(fieldsOf(x), null, 2)}\n`
+	})
 });
 
 const WAKE_PROMPT = "PROBE-TICK";
@@ -73,10 +73,10 @@ const wake = (id: string, noop: boolean): StubReply => ({
 			type: "tool_use",
 			id,
 			name: "ScheduleWakeup",
-			input: { delaySeconds: 60, reason: "probe", prompt: WAKE_PROMPT, noop },
-		},
+			input: { delaySeconds: 60, reason: "probe", prompt: WAKE_PROMPT, noop }
+		}
 	],
-	stop_reason: "tool_use",
+	stop_reason: "tool_use"
 });
 
 /**
@@ -89,7 +89,7 @@ const loopFold = (): PtyCase =>
 		id: "transcript.loop-noop-fold",
 		stub: {
 			turns: [wake("toolu_wake0", false)],
-			rules: [{ match: WAKE_PROMPT, reply: wake("toolu_wake1", true) }],
+			rules: [{ match: WAKE_PROMPT, reply: wake("toolu_wake1", true) }]
 		},
 		schedule: [READY, ASK(), WAIT("no-op tick", "folded", 300)],
 		secs: 300,
@@ -99,8 +99,8 @@ const loopFold = (): PtyCase =>
 			"system.foldedUuids",
 			"system.foldedUuids[]",
 			"system.noOpStreak",
-			"system.streakStartedAt",
-		],
+			"system.streakStartedAt"
+		]
 	});
 
 const RECALL_SID = "00000000-0000-4000-8000-0000000000d0";
@@ -119,7 +119,7 @@ const recallFile = (): string => {
 		cwd: "{PROJ}",
 		sessionId: RECALL_SID,
 		version: "2.1.327",
-		timestamp: "2026-11-18T00:00:00.000Z",
+		timestamp: "2026-11-18T00:00:00.000Z"
 	};
 	const rows = [
 		{ type: "user", message: { role: "user", content: "hello" } },
@@ -128,8 +128,8 @@ const recallFile = (): string => {
 			attachment: {
 				type: "account_memory_recall",
 				content: RECALL_TEXT,
-				files: [],
-			},
+				files: []
+			}
 		},
 		{
 			type: "assistant",
@@ -141,9 +141,9 @@ const recallFile = (): string => {
 				content: [{ type: "text", text: "hi" }],
 				stop_reason: "end_turn",
 				stop_sequence: null,
-				usage: { input_tokens: 1, output_tokens: 1 },
-			},
-		},
+				usage: { input_tokens: 1, output_tokens: 1 }
+			}
+		}
 	];
 	return rows
 		.map((r, i) =>
@@ -151,8 +151,8 @@ const recallFile = (): string => {
 				...base,
 				...r,
 				uuid: recallId(i),
-				parentUuid: i === 0 ? null : recallId(i - 1),
-			}),
+				parentUuid: i === 0 ? null : recallId(i - 1)
+			})
 		)
 		.join("\n")
 		.concat("\n");
@@ -165,7 +165,7 @@ const CUT_PATHS = [
 	"api-request.cut.placeholders",
 	"api-request.cut.messages",
 	"api-request.cut.messages[]",
-	"api-request.cut.markAddresses",
+	"api-request.cut.markAddresses"
 ];
 
 const recallBase = {
@@ -176,13 +176,13 @@ const recallBase = {
 			{
 				kind: "message" as const,
 				content: [{ type: "text", text: "PROBE-RECALL-OK" }],
-				stop_reason: "end_turn",
-			},
-		],
+				stop_reason: "end_turn"
+			}
+		]
 	},
 	schedule: [READY, ASK(), WAIT("PROBE-RECALL-OK", "replied", 60)],
 	secs: 90,
-	paths: CUT_PATHS,
+	paths: CUT_PATHS
 };
 
 /**
@@ -195,7 +195,7 @@ const recallCut = (): PtyCase =>
 		...recallBase,
 		id: "transcript.memory-recall-cut",
 		notes:
-			"Resumes a session with an account_memory_recall row, then asks one prompt.",
+			"Resumes a session with an account_memory_recall row, then asks one prompt."
 	});
 
 // A made-up OAuth-shaped login file with the connector scope. The program reads it only when no API key is set.
@@ -205,8 +205,8 @@ const CREDENTIALS = JSON.stringify({
 		refreshToken: "fake-refresh",
 		expiresAt: 4_102_444_800_000,
 		scopes: ["user:inference", "user:profile", "user:mcp_servers"],
-		subscriptionType: "max",
-	},
+		subscriptionType: "max"
+	}
 });
 
 /**
@@ -223,12 +223,12 @@ const recallCutAddress = (): PtyCase =>
 		env: { _CLAUDE_CODE_ASSUME_FIRST_PARTY_BASE_URL: "1" },
 		mock: startConnectorMock,
 		notes:
-			"Resumes a session with an account_memory_recall row under a made-up login, with a mock claude.ai connector list. badAuth is expected: the stub sees the made-up OAuth bearer, not the fake key.",
+			"Resumes a session with an account_memory_recall row under a made-up login, with a mock claude.ai connector list. badAuth is expected: the stub sees the made-up OAuth bearer, not the fake key."
 	});
 
 /** PTY cases that sample transcript fields only the interactive session writes, such as `system.foldedUuids`. */
 export const transcriptGroup: PtyGroup = {
 	id: "transcript",
 	title: "transcript fields that only the interactive session writes",
-	cases: () => [loopFold(), recallCut(), recallCutAddress()],
+	cases: () => [loopFold(), recallCut(), recallCutAddress()]
 };

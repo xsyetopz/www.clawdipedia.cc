@@ -19,7 +19,7 @@ on("session.start", async ($, e, next) => {
   const { exitCode, stdout } = await $.process.run([
     "git",
     "status",
-    "--short",
+    "--short"
   ]);
   if (exitCode === 0) {
     $.ui.log(stdout);

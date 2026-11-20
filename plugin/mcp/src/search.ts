@@ -72,7 +72,7 @@ export interface Hit {
 export const searchByPath = <E extends { path: string }>(
 	idx: SearchIndex,
 	entries: readonly E[],
-	snippet: (entry: E) => string,
+	snippet: (entry: E) => string
 ) => {
 	const byPath = new Map(entries.map((e) => [e.path, e]));
 	return (query: string, limit: number, section?: string) => {
@@ -229,7 +229,7 @@ export interface IndexPage {
 /** llms-search-index.json (design D6) from each page's route, title, description, and markdown with front matter. */
 export const searchIndexJson = (
 	version: string,
-	pages: { route: string; title: string; description: string; text: string }[],
+	pages: { route: string; title: string; description: string; text: string }[]
 ): string => {
 	const out: IndexPage[] = pages.map((p) => {
 		const body = stripFrontMatter(p.text);
@@ -239,7 +239,7 @@ export const searchIndexJson = (
 			description: p.description.replaceAll(/\s+/gu, " ").trim(),
 			headings: headingsOf(body),
 			extra: "",
-			body,
+			body
 		};
 	});
 	const hash = createHash("sha256").update(JSON.stringify(out)).digest("hex");
@@ -247,7 +247,7 @@ export const searchIndexJson = (
 	const bytes = Buffer.byteLength(json);
 	if (bytes > SEARCH_INDEX_MAX) {
 		throw new Error(
-			`${SEARCH_INDEX_FILE} is ${bytes} bytes, above the cap of ${SEARCH_INDEX_MAX} (SEARCH_INDEX_MAX in plugin/mcp/src/search.ts)`,
+			`${SEARCH_INDEX_FILE} is ${bytes} bytes, above the cap of ${SEARCH_INDEX_MAX} (SEARCH_INDEX_MAX in plugin/mcp/src/search.ts)`
 		);
 	}
 	return json;

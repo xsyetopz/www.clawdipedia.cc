@@ -13,7 +13,7 @@ import {
 	R,
 	type Src,
 	type Text,
-	UNVERIFIED,
+	UNVERIFIED
 } from "./ctx.ts";
 import { deadGate } from "./otel-gate.ts";
 import { objSchema } from "./schema.ts";
@@ -21,7 +21,7 @@ import { objSchema } from "./schema.ts";
 export const attrsToProps = async (
 	entries: Entry[] | undefined,
 	into: Record<string, Json>,
-	mode: Mode = "const",
+	mode: Mode = "const"
 ) => {
 	if (!entries) {
 		return;
@@ -48,13 +48,13 @@ const addSpan = (
 	spanType: string | undefined,
 	p: Defs,
 	how: string,
-	gate: string | undefined,
+	gate: string | undefined
 ) => {
 	const cur = spanDefs.get(name) ?? {
 		props: {},
 		sites: 0,
 		comment: [],
-		gates: [],
+		gates: []
 	};
 	cur.gates.push(gate);
 	for (const [k, v] of Object.entries(p)) {
@@ -72,7 +72,7 @@ const addSpan = (
 const style1Attrs = async (
 	m: Src,
 	s: RegExpMatchArray,
-	name: string,
+	name: string
 ): Promise<Defs> => {
 	const winStart = Math.max(0, (s.index ?? 0) - 1800);
 	const win = m.text.slice(winStart, s.index);
@@ -80,9 +80,9 @@ const style1Attrs = async (
 		...win.matchAll(
 			new RegExp(
 				`([\\w$]+)=([\\w$]+)\\("${name.replaceAll(".", String.raw`\.`)}",`,
-				"gu",
-			),
-		),
+				"gu"
+			)
+		)
 	];
 	const last = calls.at(-1);
 	const p: Defs = {};
@@ -102,8 +102,8 @@ const style1Attrs = async (
 	for (const a of between.matchAll(
 		new RegExp(
 			`(?<![\\w$.])${esc(v)}(?:\\["([\\w.-]+)"\\]|\\.([\\w$]+))=`,
-			"gu",
-		),
+			"gu"
+		)
 	)) {
 		const key = a[1] ?? a[2];
 		if (key !== undefined) {
@@ -116,7 +116,7 @@ const style1Attrs = async (
 /** Style 1: a helper builds the attributes, then startSpan("claude_code.<name>"). */
 const spanStyle1 = async (
 	t: Text,
-	spanDefs: Map<string, SpanDef>,
+	spanDefs: Map<string, SpanDef>
 ): Promise<void> => {
 	const found = [...t.text.matchAll(/startSpan\("claude_code\.([\w.]+)"/gu)];
 	if (found.length === 0) {
@@ -132,7 +132,7 @@ const spanStyle1 = async (
 			name,
 			p,
 			"attributes literal at creation",
-			deadGate(m, s.index ?? 0),
+			deadGate(m, s.index ?? 0)
 		);
 	});
 };
@@ -153,10 +153,10 @@ const wrapperGate = async (): Promise<string | undefined> => {
 const spanStyle2 = async (
 	t: Text,
 	spanDefs: Map<string, SpanDef>,
-	gate: string | undefined,
+	gate: string | undefined
 ): Promise<void> => {
 	const found = [
-		...t.text.matchAll(/"claude_code\.([\w.]+)",\{spanType:"([\w.]+)"/gu),
+		...t.text.matchAll(/"claude_code\.([\w.]+)",\{spanType:"([\w.]+)"/gu)
 	];
 	if (found.length === 0) {
 		return;
@@ -185,7 +185,7 @@ const spanStyle2 = async (
 			s[2],
 			p,
 			content.length > 0 ? `contentAttrs: ${content.join(", ")}` : "",
-			gate,
+			gate
 		);
 	});
 };
@@ -193,7 +193,7 @@ const spanStyle2 = async (
 export const buildSpans = async (
 	$defs: Defs,
 	base: Defs,
-	baseNote: string,
+	baseNote: string
 ): Promise<void> => {
 	const spanDefs = new Map<string, SpanDef>();
 	const gate = await wrapperGate();
@@ -205,7 +205,7 @@ export const buildSpans = async (
 		const dead = d.gates.every((g) => g !== undefined);
 		if (dead) {
 			note(
-				`otel: span claude_code.${name} left out: each creation site returns first when ${d.gates[0] ?? ""}() is false, and ${d.gates[0] ?? ""}() always returns false`,
+				`otel: span claude_code.${name} left out: each creation site returns first when ${d.gates[0] ?? ""}() is false, and ${d.gates[0] ?? ""}() always returns false`
 			);
 			continue;
 		}
@@ -216,8 +216,8 @@ export const buildSpans = async (
 			properties: {
 				...base,
 				"gen_ai.provider.name": { ...UNVERIFIED },
-				...d.props,
-			},
+				...d.props
+			}
 		};
 	}
 };

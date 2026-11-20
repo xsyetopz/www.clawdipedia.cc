@@ -12,7 +12,7 @@ import {
 	regex,
 	searchable,
 	text,
-	WRITES_CACHE,
+	WRITES_CACHE
 } from "./app.ts";
 import { citations, relocateAction } from "./code-citations.ts";
 import { cli, runCode } from "./code-cli.ts";
@@ -37,11 +37,11 @@ group(
 					? installs
 							.map(
 								(i) =>
-									`- ${i.version}${i.current ? " (current)" : ""}  ${i.path}`,
+									`- ${i.version}${i.current ? " (current)" : ""}  ${i.path}`
 							)
 							.join("\n")
 					: "No Claude Code install found.",
-				{ installs },
+				{ installs }
 			);
 		},
 		modules: async ({ version, name }) => {
@@ -51,7 +51,7 @@ group(
 				.map((m) => ({ name: m.name, bytes: m.bytes.length }));
 			return text(
 				`${p.path}: ${modules.length} modules\n${modules.map((m) => `- ${m.name}  ${m.bytes} bytes`).join("\n")}`,
-				{ path: p.path, modules },
+				{ path: p.path, modules }
 			);
 		},
 		search: async ({
@@ -60,7 +60,7 @@ group(
 			module,
 			version,
 			context = 150,
-			limit = 20,
+			limit = 20
 		}) => {
 			const re = new RegExp(regex(need(query, "query"), isRegex).source, "gu");
 			const hits: { module: string; offset: number; snippet: string }[] = [];
@@ -77,8 +77,8 @@ group(
 						offset: h.index,
 						snippet: m.source.slice(
 							Math.max(0, h.index - context),
-							h.index + h[0].length + context,
-						),
+							h.index + h[0].length + context
+						)
 					});
 					if (hits.length >= limit) {
 						break;
@@ -94,7 +94,7 @@ group(
 							.map((h) => `- ${h.module}@${h.offset}: ${h.snippet}`)
 							.join("\n\n")
 					: `No match for ${re}.`,
-				{ hits },
+				{ hits }
 			);
 		},
 		read: async ({ module, offset = 0, length = 4000, version, view }) => {
@@ -115,12 +115,12 @@ group(
 				const slice = t.slice(offset, end);
 				return text(
 					`${m.name} (readable) [${offset}, ${end}) of ${t.length}\n${slice}`,
-					{ module: m.name, view, offset, end, total: t.length, text: slice },
+					{ module: m.name, view, offset, end, total: t.length, text: slice }
 				);
 			}
 			const end = Math.min(m.source.length, offset + length);
 			return text(
-				`${m.name} [${offset}, ${end}) of ${m.source.length}\n${m.source.slice(offset, end)}`,
+				`${m.name} [${offset}, ${end}) of ${m.source.length}\n${m.source.slice(offset, end)}`
 			);
 		},
 		find: async ({ query, version, limit = 10 }) => {
@@ -132,14 +132,14 @@ group(
 				hits: f.hits,
 				excerpt: lines(f.u.t)
 					.slice(0, 4)
-					.map((line) => cut(line)),
+					.map((line) => cut(line))
 			}));
 			return text(
 				found.length > 0
 					? `${r.index.version}: top ${found.length} for "${clip(q, 100)}"\n${found
 							.map(
 								({ u, n, hits, excerpt }) =>
-									`## ${u.k}  ${u.m}:${u.s}  score ${n} (${hits.join(", ")})\n${excerpt.join("\n")}`,
+									`## ${u.k}  ${u.m}:${u.s}  score ${n} (${hits.join(", ")})\n${excerpt.join("\n")}`
 							)
 							.join("\n\n")}`
 					: `No unit holds a word of "${clip(q, 100)}".`,
@@ -150,9 +150,9 @@ group(
 						offset: u.s,
 						score: n,
 						hits,
-						excerpt,
-					})),
-				},
+						excerpt
+					}))
+				}
 			);
 		},
 		citations,
@@ -165,7 +165,7 @@ group(
 			return text(`${name}@${pkg.version}: ${npmVerdict(r)}`, {
 				package: name,
 				version: pkg.version,
-				...r,
+				...r
 			});
 		},
 		prepare: async ({ version }) => {
@@ -179,11 +179,11 @@ group(
 					parsed: r.parsed,
 					units: r.index.units.length,
 					skipped,
-					ms: r.ms,
-				},
+					ms: r.ms
+				}
 			);
-		},
+		}
 	},
 	CODE_SHAPE,
-	{ ...WRITES_CACHE, openWorldHint: true },
+	{ ...WRITES_CACHE, openWorldHint: true }
 );

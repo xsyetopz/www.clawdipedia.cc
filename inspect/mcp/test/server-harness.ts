@@ -43,20 +43,20 @@ globalThis.envs = [process.env.CLAUDE_CODE_USE_BEDROCK, process.env.ANTHROPIC_BE
 const LONG_ENV = Array.from(
 	{ length: 400 },
 	(_, i) =>
-		`process.env.FIXTURE_LONG_${String(i).padStart(3, "0")}_${"X".repeat(130)}`,
+		`process.env.FIXTURE_LONG_${String(i).padStart(3, "0")}_${"X".repeat(130)}`
 ).join(",");
 
 const LINES = [
 	{ type: "custom-title", customTitle: "Fixture", sessionId: SESSION },
 	// 2.1.323 writes `explicit` from a parameter, so the schema leaves it untyped.
 	{ type: "last-prompt", lastPrompt: 5, sessionId: SESSION },
-	{ type: "no-such-type" },
+	{ type: "no-such-type" }
 ];
 
 const ResultSchema = z.object({
 	content: z.array(z.object({ type: z.string(), text: z.string() })),
 	structuredContent: z.record(z.string(), z.unknown()).optional(),
-	isError: z.boolean().optional(),
+	isError: z.boolean().optional()
 });
 
 export type Result = z.infer<typeof ResultSchema>;
@@ -81,7 +81,7 @@ export const seen = (r: Result) =>
 export const listOf = <T extends z.ZodType>(
 	r: Result,
 	key: string,
-	item: T,
+	item: T
 ): z.infer<T>[] => z.array(item).parse(structured(r)[key] ?? []);
 
 /** Reads one structured field as an object with string keys. */
@@ -111,11 +111,11 @@ export const exists = async (path: string) => {
 export const compile = async (entry: string, outfile: string) => {
 	const proc = Bun.spawn(
 		["bun", "build", "--compile", "--minify", entry, `--outfile=${outfile}`],
-		{ stderr: "pipe", stdout: "ignore" },
+		{ stderr: "pipe", stdout: "ignore" }
 	);
 	const [err, code] = await Promise.all([
 		new Response(proc.stderr).text(),
-		proc.exited,
+		proc.exited
 	]);
 	if (code !== 0) {
 		throw new Error(err);
@@ -130,12 +130,12 @@ const writeFixtures = async (tmp: string, config: string, versions: string) => {
 	await mkdir(project, { recursive: true });
 	await writeFile(
 		join(project, `${SESSION}.jsonl`),
-		`${LINES.map((l) => JSON.stringify(l)).join("\n")}\nnot json\n`,
+		`${LINES.map((l) => JSON.stringify(l)).join("\n")}\nnot json\n`
 	);
 	await mkdir(versions);
 	await writeFile(
 		join(tmp, "app.mjs"),
-		`${APP}\nglobalThis.longs = [${LONG_ENV}];\nexport * from ${JSON.stringify(join(import.meta.dir, "fixtures/clean-app.ts"))};\n`,
+		`${APP}\nglobalThis.longs = [${LONG_ENV}];\nexport * from ${JSON.stringify(join(import.meta.dir, "fixtures/clean-app.ts"))};\n`
 	);
 	await compile(join(tmp, "app.mjs"), join(tmp, "app.js"));
 	await symlink(join(tmp, "app.js"), join(versions, "9.9.9"));
@@ -160,7 +160,7 @@ const serverEnv = (tmp: string, config: string, versions: string) => {
 		CC_INSPECT_LAUNCHER: join(tmp, "no-launcher"),
 		CC_INSPECT_CACHE: join(tmp, "cache"),
 		CC_INSPECT_WAKARU: join(tmp, "wakaru-stub"),
-		CC_INSPECT_TEST_SECRET: "do-not-pass",
+		CC_INSPECT_TEST_SECRET: "do-not-pass"
 	};
 };
 
@@ -180,8 +180,8 @@ export const startServer = (extra: Record<string, string> = {}) => {
 			new StdioClientTransport({
 				command: "bun",
 				args: [SERVER],
-				env: { ...serverEnv(tmp, config, versions), ...extra },
-			}),
+				env: { ...serverEnv(tmp, config, versions), ...extra }
+			})
 		);
 	}, 60_000);
 

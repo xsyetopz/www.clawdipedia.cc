@@ -12,7 +12,7 @@ import {
 	sourceNumbers,
 	sourceOf,
 	stops,
-	tempDir,
+	tempDir
 } from "./server/harness.ts";
 import { mockSite, newState } from "./server/mocks.ts";
 
@@ -44,22 +44,22 @@ describe("tool list", () => {
 			new StdioClientTransport({
 				command: "bun",
 				args: [SERVER],
-				env: { ...process.env, CLAWDIPEDIA_CACHE_DIR: cache },
-			}),
+				env: { ...process.env, CLAWDIPEDIA_CACHE_DIR: cache }
+			})
 		);
 		clients.push(c);
 		const list = await c.listTools();
 		const bytes = Buffer.byteLength(JSON.stringify(list));
 		const limit = Math.floor(OLD_TOOLS_LIST_BYTES * 0.4);
 		console.info(
-			`tools/list: ${bytes} bytes (limit ${limit} = 40% of ${OLD_TOOLS_LIST_BYTES})`,
+			`tools/list: ${bytes} bytes (limit ${limit} = 40% of ${OLD_TOOLS_LIST_BYTES})`
 		);
 		expect(bytes).toBeLessThanOrEqual(limit);
 		expect(list.tools.map((t) => t.name).toSorted()).toEqual([
 			"get_schema",
 			"list_pages",
 			"read_page",
-			"search_docs",
+			"search_docs"
 		]);
 		for (const t of list.tools) {
 			expect(t.name).not.toContain("platform");
@@ -80,14 +80,14 @@ describe("prebuilt search index", () => {
 		// Only the count is pinned (the index covers the 3 fixture pages), not the wording.
 		expect(sourceNumbers(s)).toContain(3);
 		expect(
-			state.hits.filter((h) => h.path === "/llms-search-index.json"),
+			state.hits.filter((h) => h.path === "/llms-search-index.json")
 		).toHaveLength(1);
 		expect(state.hits.filter((h) => h.path.endsWith(".md"))).toHaveLength(0);
 		// The next search makes no request for the index.
 		state.hits.length = 0;
 		await call("search_docs", { query: "debounced" });
 		expect(state.hits.some((h) => h.path === "/llms-search-index.json")).toBe(
-			false,
+			false
 		);
 	});
 
@@ -112,7 +112,7 @@ describe("prebuilt search index", () => {
 		const env = {
 			CLAWDIPEDIA_BASE_URL: site.url,
 			CLAWDIPEDIA_CACHE_DIR: cache,
-			CLAWDIPEDIA_TTL_SCALE: "0",
+			CLAWDIPEDIA_TTL_SCALE: "0"
 		};
 		const warm = await connect(env);
 		await warm.call("search_docs", { query: "hook" });
@@ -122,7 +122,7 @@ describe("prebuilt search index", () => {
 		expect(s.error).toBe(false);
 		expect(s.text).toContain("configure/hooks");
 		expect(
-			state.hits.find((h) => h.path === "/llms-search-index.json")?.inm,
+			state.hits.find((h) => h.path === "/llms-search-index.json")?.inm
 		).toBe('"i1"');
 	});
 
@@ -132,7 +132,7 @@ describe("prebuilt search index", () => {
 		const env = {
 			CLAWDIPEDIA_BASE_URL: site.url,
 			CLAWDIPEDIA_CACHE_DIR: cache,
-			CLAWDIPEDIA_TTL_SCALE: "0",
+			CLAWDIPEDIA_TTL_SCALE: "0"
 		};
 		const warm = await connect(env);
 		await warm.call("search_docs", { query: "hook" });
@@ -152,7 +152,7 @@ describe("offline read", () => {
 		const env = {
 			CLAWDIPEDIA_BASE_URL: site.url,
 			CLAWDIPEDIA_CACHE_DIR: cache,
-			CLAWDIPEDIA_TTL_SCALE: "0",
+			CLAWDIPEDIA_TTL_SCALE: "0"
 		};
 		const warm = await connect(env);
 		const first = await warm.call("read_page", { route: "configure/hooks" });
@@ -173,13 +173,13 @@ describe("get_schema", () => {
 		const { call } = await connect();
 		const a = await call("get_schema", {
 			name: "settings",
-			property: "hooks.PreToolUse",
+			property: "hooks.PreToolUse"
 		});
 		expect(a.error).toBe(false);
 		expect(a.text).toContain('"type": "array"');
 		const b = await call("get_schema", {
 			name: "settings",
-			property: "hooks.PreToolUse.[]",
+			property: "hooks.PreToolUse.[]"
 		});
 		expect(b.text).toContain('"matcher"');
 	});
@@ -188,8 +188,8 @@ describe("get_schema", () => {
 		const props = ["__proto__", "hooks.__proto__", "constructor"];
 		const answers = await Promise.all(
 			props.map((property) =>
-				call("get_schema", { name: "settings", property }),
-			),
+				call("get_schema", { name: "settings", property })
+			)
 		);
 		expect(answers.map((a) => a.error)).toEqual(props.map(() => true));
 	});
@@ -200,19 +200,19 @@ describe("get_schema definitions", () => {
 		const { call } = await connect();
 		const def = await call("get_schema", {
 			name: "tools",
-			property: "BashInput",
+			property: "BashInput"
 		});
 		expect(def.text).toContain('"required"');
 		const field = await call("get_schema", {
 			name: "tools",
-			property: "BashInput.command",
+			property: "BashInput.command"
 		});
 		expect(field.text).toContain("The command to run");
 		const outline = await call("get_schema", { name: "tools" });
 		expect(outline.text).toContain("1 definitions");
 		const miss = await call("get_schema", {
 			name: "tools",
-			property: "BashInput.decider",
+			property: "BashInput.decider"
 		});
 		expect(miss.error).toBe(true);
 	});
@@ -230,22 +230,22 @@ describe("get_schema types", () => {
 		expect(member).toContain("readonly plugin?: string;");
 		expect(member).not.toContain("decision");
 		expect(await get("$.tool.check")).toContain(
-			"check(input: { tool: string }): Promise<ToolCheckResult>;",
+			"check(input: { tool: string }): Promise<ToolCheckResult>;"
 		);
 		expect(await get("tool.check")).toContain(
-			"'tool.check': { tool: string };",
+			"'tool.check': { tool: string };"
 		);
 	});
 	test("a missing name is an error that gives the closest names", async () => {
 		const { call } = await connect();
 		const r = await call("get_schema", {
 			name: "types",
-			property: "ToolCheckResult.decider",
+			property: "ToolCheckResult.decider"
 		});
 		expect(r.error).toBe(true);
 		// The near names are listed apart from the query, which also starts with the name.
 		expect(r.text.replace("ToolCheckResult.decider", "")).toContain(
-			"ToolCheckResult",
+			"ToolCheckResult"
 		);
 	});
 	test("without property, lists the declared names", async () => {

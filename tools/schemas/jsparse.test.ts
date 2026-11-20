@@ -7,7 +7,7 @@ describe("splitTop", () => {
 		expect(splitTop('"a|b" | { "x": number | null } | null', "|")).toEqual([
 			'"a|b" ',
 			' { "x": number | null } ',
-			" null",
+			" null"
 		]);
 	});
 	test("splits at a two-character separator", () => {

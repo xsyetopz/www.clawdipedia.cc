@@ -55,8 +55,8 @@ const mainChecks = async (step: Step, c: Ctx): Promise<void> => {
 		schedule: [
 			{ wait_for: "ready>", timeout: 5, send: "hello\r", label: "one" },
 			{ wait_for: "never-appears", timeout: 0.5, send: "x", label: "miss" },
-			{ t: 1.5, send: "x\r", label: "two" },
-		],
+			{ t: 1.5, send: "x\r", label: "two" }
+		]
 	});
 	const s = r.screen;
 	step("pty: exact env (no parent leak)", s.includes("leak=[]"), "");
@@ -67,19 +67,19 @@ const mainChecks = async (step: Step, c: Ctx): Promise<void> => {
 		"pty: CR overwrite and cursor-forward",
 		s.split("\n").includes("progress 100%") &&
 			!s.split("\n").some((l) => l.includes("progress 10%progress")) &&
-			s.includes("a b"),
+			s.includes("a b")
 	);
 	step("pty: time step sent", s.includes("second:x"));
 	step(
 		"pty: sent log order and timeout label",
 		r.sent.map((x) => x.label).join(",") === "one,miss:timeout,two",
-		r.sent.map((x) => x.label).join(","),
+		r.sent.map((x) => x.label).join(",")
 	);
 	step(
 		"pty: idx monotonic",
 		r.idx.length > 0 &&
 			r.idx.every((x, i) => i === 0 || x.off >= (r.idx[i - 1]?.off ?? 0)),
-		`${r.idx.length} reads`,
+		`${r.idx.length} reads`
 	);
 	return rebaseCheck(step, c, r.pid);
 };
@@ -88,12 +88,12 @@ const mainChecks = async (step: Step, c: Ctx): Promise<void> => {
 const rebaseCheck = async (
 	step: Step,
 	c: Ctx,
-	firstPid: number,
+	firstPid: number
 ): Promise<void> => {
 	const slow = join(c.dir, "slow.sh");
 	await script(
 		slow,
-		"#!/bin/sh\nsleep 2\nprintf 'up> '\nread a\nprintf 'got:%s\\r\\n' \"$a\"\nsleep 30\n",
+		"#!/bin/sh\nsleep 2\nprintf 'up> '\nread a\nprintf 'got:%s\\r\\n' \"$a\"\nsleep 30\n"
 	);
 	const rb = await runPty({
 		cwd: c.dir,
@@ -103,20 +103,20 @@ const rebaseCheck = async (
 		out: join(c.dir, "RAWSLOW"),
 		schedule: [
 			{ wait_for: "up>", timeout: 10, label: "up", rebase: true },
-			{ t: 1, send: "x\r", label: "after" },
-		],
+			{ t: 1, send: "x\r", label: "after" }
+		]
 	});
 	const up = rb.sent.find((x) => x.label === "up")?.t ?? 0;
 	const after = rb.sent.find((x) => x.label === "after")?.t ?? 0;
 	step(
 		"pty: rebase counts t from the rebased step",
 		up > 0 && after - up >= 0.9 && rb.screen.includes("got:x"),
-		`after - up = ${(after - up).toFixed(2)}s`,
+		`after - up = ${(after - up).toFixed(2)}s`
 	);
 	step(
 		"pty: program killed at the end",
 		!alive(firstPid) && firstPid > 1,
-		`pid ${firstPid}`,
+		`pid ${firstPid}`
 	);
 };
 
@@ -134,7 +134,7 @@ const guardChecks = async (step: Step, c: Ctx): Promise<void> => {
 	const sleeper = join(c.dir, "sleeper.sh");
 	await script(
 		sleeper,
-		`#!/bin/sh\ntouch '${marker}'\ntrap '' HUP TERM INT\nsleep 30\n`,
+		`#!/bin/sh\ntouch '${marker}'\ntrap '' HUP TERM INT\nsleep 30\n`
 	);
 	const badThrew = await rejects(() =>
 		runPty({
@@ -143,14 +143,14 @@ const guardChecks = async (step: Step, c: Ctx): Promise<void> => {
 			bin: sleeper,
 			secs: 2,
 			out: join(c.dir, "BAD"),
-			schedule: [{ wait_for: "(unclosed", send: "x" }],
-		}),
+			schedule: [{ wait_for: "(unclosed", send: "x" }]
+		})
 	);
 	step(
 		"pty: bad wait_for regex fails cleanly, nothing spawned",
 		badThrew &&
 			!(await pathExists(marker)) &&
-			!(await pathExists(join(c.dir, "BAD.pid"))),
+			!(await pathExists(join(c.dir, "BAD.pid")))
 	);
 	const relBinThrew = await rejects(() =>
 		runPty({
@@ -158,8 +158,8 @@ const guardChecks = async (step: Step, c: Ctx): Promise<void> => {
 			env: c.env,
 			bin: "sh",
 			secs: 1,
-			out: join(c.dir, "REL"),
-		}),
+			out: join(c.dir, "REL")
+		})
 	);
 	step("pty: relative bin rejected", relBinThrew);
 	const h = await runPty({
@@ -167,12 +167,12 @@ const guardChecks = async (step: Step, c: Ctx): Promise<void> => {
 		env: c.env,
 		bin: sleeper,
 		secs: 1.5,
-		out: join(c.dir, "HUP"),
+		out: join(c.dir, "HUP")
 	});
 	step(
 		"pty: signal-ignoring program is killed",
 		(await pathExists(marker)) && h.pid > 1 && !alive(h.pid),
-		`pid ${h.pid}`,
+		`pid ${h.pid}`
 	);
 };
 
@@ -184,7 +184,7 @@ export const runPtySelftest = async (step: Step): Promise<void> => {
 			home: dir,
 			configDir: dir,
 			baseUrl: "http://127.0.0.1:1/x",
-			tty: true,
+			tty: true
 		});
 		await mainChecks(step, { dir, env });
 		await guardChecks(step, { dir, env });

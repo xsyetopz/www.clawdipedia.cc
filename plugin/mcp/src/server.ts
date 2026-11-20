@@ -13,7 +13,7 @@ import {
 	read,
 	type Result,
 	schema,
-	search,
+	search
 } from "./core.ts";
 import { present } from "./text.ts";
 
@@ -21,7 +21,7 @@ const READ_ONLY = {
 	readOnlyHint: true,
 	destructiveHint: false,
 	idempotentHint: true,
-	openWorldHint: true,
+	openWorldHint: true
 } as const;
 
 // Claude Code shows the model only structuredContent when a reply has it (design D7), so send it
@@ -30,7 +30,7 @@ const reply = (r: Result) =>
 	r.ok
 		? {
 				content: [{ type: "text" as const, text: r.text }],
-				...(r.complete ? { structuredContent: r.data } : {}),
+				...(r.complete ? { structuredContent: r.data } : {})
 			}
 		: { isError: true, content: [{ type: "text" as const, text: r.text }] };
 
@@ -38,14 +38,14 @@ const source = z
 	.enum(DOC_SOURCES)
 	.default("clawdipedia")
 	.describe(
-		"clawdipedia: these unofficial Claude Code docs. platform: platform.claude.com/docs. code: code.claude.com/docs (official Claude Code docs). claude-resources: claude.com/resources (articles, guides, webinars).",
+		"clawdipedia: these unofficial Claude Code docs. platform: platform.claude.com/docs. code: code.claude.com/docs (official Claude Code docs). claude-resources: claude.com/resources (articles, guides, webinars)."
 	);
 
 const SECTION = "Top-level section (clawdipedia) or group/section (others)";
 
 const server = new McpServer({
 	name: "clawdipedia-docs",
-	version: pkg.version,
+	version: pkg.version
 });
 
 server.registerTool(
@@ -57,11 +57,11 @@ server.registerTool(
 			query: z.string().min(1).max(200).describe("Keywords or an identifier"),
 			source,
 			limit: z.number().int().min(1).max(25).default(8),
-			section: z.string().optional().describe(SECTION),
+			section: z.string().optional().describe(SECTION)
 		},
-		annotations: READ_ONLY,
+		annotations: READ_ONLY
 	},
-	async (a) => reply(await search(a)),
+	async (a) => reply(await search(a))
 );
 
 server.registerTool(
@@ -79,9 +79,9 @@ server.registerTool(
 				.int()
 				.min(1000)
 				.max(MAX_PAGE_CHARS)
-				.default(DEFAULT_PAGE_CHARS),
+				.default(DEFAULT_PAGE_CHARS)
 		},
-		annotations: READ_ONLY,
+		annotations: READ_ONLY
 	},
 	async ({ route, source: docSource, section_heading, offset, max_chars }) =>
 		reply(
@@ -90,9 +90,9 @@ server.registerTool(
 				source: docSource,
 				...(present(section_heading) ? { heading: section_heading } : {}),
 				offset,
-				maxChars: max_chars,
-			}),
-		),
+				maxChars: max_chars
+			})
+		)
 );
 
 server.registerTool(
@@ -102,11 +102,11 @@ server.registerTool(
 			"List the pages of one docs source (see source) with routes and titles. Without a section, remote sources list their groups.",
 		inputSchema: {
 			source,
-			section: z.string().optional().describe(SECTION),
+			section: z.string().optional().describe(SECTION)
 		},
-		annotations: READ_ONLY,
+		annotations: READ_ONLY
 	},
-	async (a) => reply(await list(a)),
+	async (a) => reply(await list(a))
 );
 
 server.registerTool(
@@ -117,11 +117,11 @@ server.registerTool(
 		inputSchema: {
 			name: z.string().min(1).describe("E.g. settings, tools, or types"),
 			property: z.string().optional().describe("Dotted path or type name"),
-			offset: z.number().int().min(0).default(0),
+			offset: z.number().int().min(0).default(0)
 		},
-		annotations: READ_ONLY,
+		annotations: READ_ONLY
 	},
-	async (a) => reply(await schema(a)),
+	async (a) => reply(await schema(a))
 );
 
 await server.connect(new StdioServerTransport());

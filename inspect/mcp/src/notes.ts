@@ -14,14 +14,14 @@ export interface NoteLine {
 // Words of 5 letters or more that say what kind of note a line is, not what it is about.
 const STOP = new Set(
 	"added fixed improved changed which there their about after before being would could should these those where while other through without within instead claude still first every again showing shows error errors their".split(
-		" ",
-	),
+		" "
+	)
 );
 
 /** The notes of a release from its cache file, else from `gh release view`, then cached. */
 export const readNotes = async (
 	version: string,
-	file: string,
+	file: string
 ): Promise<string> => {
 	const cached = Bun.file(file);
 	if (await cached.exists()) {
@@ -38,18 +38,18 @@ export const readNotes = async (
 			"--json",
 			"body",
 			"-q",
-			".body",
+			".body"
 		],
-		{ stdout: "pipe", stderr: "pipe" },
+		{ stdout: "pipe", stderr: "pipe" }
 	);
 	const [stdout, stderr, exitCode] = await Promise.all([
 		new Response(proc.stdout).text(),
 		new Response(proc.stderr).text(),
-		proc.exited,
+		proc.exited
 	]);
 	if (exitCode !== 0) {
 		throw new Error(
-			`gh release view v${version} failed: ${stderr.slice(0, 200)}`,
+			`gh release view v${version} failed: ${stderr.slice(0, 200)}`
 		);
 	}
 	if (stdout.trim() === "") {
@@ -71,7 +71,7 @@ const keysOf = (line: string) => {
 		.replaceAll(/'s\b/gu, "")
 		.split(/[^a-z]+/u);
 	const words = [
-		...new Set(tokens.filter((w) => w.length >= 5 && !STOP.has(w))),
+		...new Set(tokens.filter((w) => w.length >= 5 && !STOP.has(w)))
 	];
 	return { spans, words, tokens: new Set(tokens) };
 };
@@ -80,9 +80,7 @@ const WORDS = 3;
 const stringsOf = (c: Change, side: "from" | "to") =>
 	[
 		...(c[side]?.f ?? []),
-		...(c.kind === "changed"
-			? []
-			: c.calls.map((x) => x.replace(/^\S+ /u, ""))),
+		...(c.kind === "changed" ? [] : c.calls.map((x) => x.replace(/^\S+ /u, "")))
 	].filter((x) => x.startsWith('"'));
 
 /**
@@ -93,10 +91,10 @@ const scoreChange = (k: ReturnType<typeof keysOf>, c: Change) => {
 	const all = [
 		...stringsOf(c, "from"),
 		...stringsOf(c, "to"),
-		...c.calls.map((x) => x.replace(/^\S+ /u, "")),
+		...c.calls.map((x) => x.replace(/^\S+ /u, ""))
 	];
 	const found = k.spans.filter((x) =>
-		all.some((t) => t.includes(x.replace(/^\//u, ""))),
+		all.some((t) => t.includes(x.replace(/^\//u, "")))
 	);
 	const subject =
 		c.subject !== undefined &&
@@ -108,7 +106,7 @@ const scoreChange = (k: ReturnType<typeof keysOf>, c: Change) => {
 	const b = new Set(stringsOf(c, "to"));
 	const changed = [
 		...[...a].filter((x) => !b.has(x)),
-		...[...b].filter((x) => !a.has(x)),
+		...[...b].filter((x) => !a.has(x))
 	];
 	let top: string[] = [];
 	for (const t of changed) {
@@ -123,7 +121,7 @@ const scoreChange = (k: ReturnType<typeof keysOf>, c: Change) => {
 	}
 	return {
 		hits: [...found, ...subject, ...top],
-		n: (found.length + subject.length) * 2 + top.length,
+		n: (found.length + subject.length) * 2 + top.length
 	};
 };
 
@@ -148,7 +146,7 @@ interface Best {
 const bestOf = (
 	k: ReturnType<typeof keysOf>,
 	d: Diff,
-	items: string[],
+	items: string[]
 ): Best => {
 	let best: Best = { n: 0, hits: [] };
 	for (const change of d.changes) {
@@ -184,7 +182,7 @@ const noteOf = (raw: string, d: Diff, items: string[]): NoteLine => {
 	const gated = [
 		...(change.from?.f ?? []),
 		...(change.to?.f ?? []),
-		...change.calls,
+		...change.calls
 	].some((x) => x.includes('"tengu_'));
 	return { line, status: gated ? "gated" : "matched", change, hits };
 };
@@ -193,7 +191,7 @@ const noteOf = (raw: string, d: Diff, items: string[]): NoteLine => {
 export const checkNotes = (
 	notes: string,
 	d: Diff,
-	items: string[] = [],
+	items: string[] = []
 ): NoteLine[] =>
 	notes
 		.split("\n")

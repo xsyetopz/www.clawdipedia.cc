@@ -51,7 +51,7 @@ export interface Case {
 	fakeCredentials?: string[];
 	// Read state after exit, before leftover children are killed.
 	afterExit?: (
-		sb: Sandbox,
+		sb: Sandbox
 	) => Promise<Record<string, unknown>> | Record<string, unknown>;
 	// Run in this subfolder of the project dir (created before the run).
 	cwdSub?: string;

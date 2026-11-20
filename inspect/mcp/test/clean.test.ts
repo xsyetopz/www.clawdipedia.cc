@@ -18,7 +18,7 @@ const build = async (minifyNames: boolean): Promise<string> => {
 		entrypoints: [join(import.meta.dir, "fixtures/clean-app.ts")],
 		format: "esm",
 		target: "bun",
-		minify: { whitespace: true, syntax: true, identifiers: minifyNames },
+		minify: { whitespace: true, syntax: true, identifiers: minifyNames }
 	});
 	if (!r.success) {
 		throw new Error(r.logs.map((l) => l.message).join("\n"));
@@ -37,8 +37,8 @@ test("two builds of the same code clean to the same text", async () => {
 test("keeps shorthand keys, export names, and class names", async () => {
 	const out = renameModule(
 		await mod(
-			"const a=1;function f({b,c=2}){return{a,b,c}}class K{m(){return K}}export{f,K as Z};",
-		),
+			"const a=1;function f({b,c=2}){return{a,b,c}}class K{m(){return K}}export{f,K as Z};"
+		)
 	);
 	expect(out).toMatch(/\{b:a1,c:a2=2\}/u);
 	expect(out).toMatch(/return\{a:\$[0-9a-f]{6},b:a1,c:a2\}/u);
@@ -49,32 +49,32 @@ test("keeps shorthand keys, export names, and class names", async () => {
 test("a local name has the letter of its scope depth and its order in that scope", async () => {
 	const out = renameModule(
 		await mod(
-			"function f(p,q){{let s}return function(r){{let t;let u}return p+q+r}}function g(w){return w}",
-		),
+			"function f(p,q){{let s}return function(r){{let t;let u}return p+q+r}}function g(w){return w}"
+		)
 	);
 	expect(out).toMatch(
-		/\(a1,a2\)\{\{let b1\}return function\(b1\)\{\{let c1;let c2\}return a1\+a2\+b1\}\}/u,
+		/\(a1,a2\)\{\{let b1\}return function\(b1\)\{\{let c1;let c2\}return a1\+a2\+b1\}\}/u
 	);
 	expect(out).toMatch(/\(a1\)\{return a1\}/u);
 });
 
 const moduleLevelName = async (src: string) =>
 	/function (\$[0-9a-f]{6})\(\)\{return"x"\}/u.exec(
-		renameModule(await mod(src)),
+		renameModule(await mod(src))
 	)?.[1];
 
 test("a module-level name stays when other code is added", async () => {
 	const before = await moduleLevelName('function q(){return"x"}export{q};');
 	expect(before).toBeDefined();
 	expect(
-		await moduleLevelName('var z=1;function w(){return"x"}export{w,z};'),
+		await moduleLevelName('var z=1;function w(){return"x"}export{w,z};')
 	).toBe(before);
 });
 
 test("rewrites chunk paths from the map", async () => {
 	const out = renameModule(
 		await mod('var r=import.meta.require("/$bunfs/root/chunk-ab12.js");'),
-		new Map([["chunk-ab12.js", "chunk@f00d.js"]]),
+		new Map([["chunk-ab12.js", "chunk@f00d.js"]])
 	);
 	expect(out).toContain('"/$bunfs/root/chunk@f00d.js"');
 });

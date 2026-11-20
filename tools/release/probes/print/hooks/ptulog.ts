@@ -13,7 +13,7 @@ const entryData = (p: string, j: Record<string, unknown>) => {
 		[`${p}.response`]:
 			typeof resp === "object" && resp !== null
 				? Object.keys(ro)
-				: json(resp).slice(0, 100),
+				: json(resp).slice(0, 100)
 	};
 	if (typeof ro["file"] === "object" && ro["file"] !== null) {
 		data[`${p}.file_keys`] = keys(ro["file"]);

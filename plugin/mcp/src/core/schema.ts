@@ -51,13 +51,13 @@ const schemaPage = (
 	property: string | undefined,
 	out: string,
 	offset: number,
-	source: Source,
+	source: Source
 ): Result => {
 	const LIMIT = 25_000;
 	if (offset >= out.length && out.length > 0) {
 		return fail(
 			`offset ${offset} is past the end (${out.length} characters).`,
-			source,
+			source
 		);
 	}
 	const chunk = out.slice(offset, offset + LIMIT);
@@ -76,9 +76,9 @@ const schemaPage = (
 			total: out.length,
 			...(end < out.length ? { nextOffset: end } : {}),
 			text: chunk,
-			source: sourceData(source),
+			source: sourceData(source)
 		},
-		source,
+		source
 	);
 };
 
@@ -121,7 +121,7 @@ const overview = (sch: Json): string => {
 const typeFileResult = async (
 	name: string,
 	property: string | undefined,
-	offset: number,
+	offset: number
 ): Promise<Result> => {
 	const got = await content.typeFile();
 	if (got.status === "notfound") {
@@ -137,7 +137,7 @@ const typeFileResult = async (
 	if (found.kind === "missing") {
 		return fail(
 			`"${property}" is not in the type file, so its fields are unconfirmed for this release.${found.near.length > 0 ? ` Closest names in the file: ${found.near.join(", ")}. Look one of them up.` : " Call without `property` for the list of names."}`,
-			got.source,
+			got.source
 		);
 	}
 	return schemaPage(
@@ -145,19 +145,19 @@ const typeFileResult = async (
 		property,
 		`// ${found.title}\n${found.text}`,
 		offset,
-		got.source,
+		got.source
 	);
 };
 
 const jsonSchemaResult = async (
 	name: string,
 	property: string | undefined,
-	offset: number,
+	offset: number
 ): Promise<Result> => {
 	const got = await content.schema(name);
 	if (got === "unknown") {
 		return fail(
-			`Unknown schema "${name}". Valid names: ${SCHEMA_NAMES.join(", ")}, types`,
+			`Unknown schema "${name}". Valid names: ${SCHEMA_NAMES.join(", ")}, types`
 		);
 	}
 	if (got.status === "notfound") {
@@ -174,11 +174,11 @@ const jsonSchemaResult = async (
 	if (!sub) {
 		const keys = [
 			...Object.keys(objectOr(sch["properties"])),
-			...Object.keys(objectOr(sch["$defs"])),
+			...Object.keys(objectOr(sch["$defs"]))
 		];
 		return fail(
 			`"${property}" is not in ${name}, so its fields are unconfirmed for this release. Its top-level properties and definitions: ${keys.join(", ")}. Look one of them up.`,
-			source,
+			source
 		);
 	}
 	return schemaPage(
@@ -186,7 +186,7 @@ const jsonSchemaResult = async (
 		property,
 		JSON.stringify(sub, null, 2),
 		offset,
-		source,
+		source
 	);
 };
 

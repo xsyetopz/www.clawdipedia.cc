@@ -15,14 +15,14 @@ const run = (keys: string): CaseResult =>
 		"1.0.0",
 		"print.request.baseline-a",
 		{ evkeys: `sha1:${keys.length} len=${keys.length}` },
-		{ evkeys: keys },
+		{ evkeys: keys }
 	);
 
 test("hashed data that changed names the parts its samples gained and lost", () => {
 	const d = diffCase(
 		run("system:type,uuid|result:type,usage"),
 		run("system:type,uuid|result:type,usage,model_usage_since_last_result"),
-		false,
+		false
 	);
 	expect(d.changed["evkeys"]?.added).toEqual(["model_usage_since_last_result"]);
 	expect(d.changed["evkeys"]?.removed).toEqual([]);

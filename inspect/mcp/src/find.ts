@@ -11,8 +11,8 @@ export const findUnits = (ix: Index, query: string, limit = 10) => {
 			query
 				.toLowerCase()
 				.split(/\s+/u)
-				.filter((w) => w.length >= 2),
-		),
+				.filter((w) => w.length >= 2)
+		)
 	];
 	const score = (u: Unit) => {
 		const f = u.f.map((x) => x.toLowerCase());

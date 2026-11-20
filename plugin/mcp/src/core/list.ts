@@ -12,7 +12,7 @@ import {
 	guarded,
 	heading,
 	ok,
-	type Result,
+	type Result
 } from "./shared.ts";
 import { remoteOf } from "./sources.ts";
 
@@ -47,7 +47,7 @@ export const list = (args: ListArgs = {}): Promise<Result> =>
 			lines.push(
 				present(section)
 					? `- \`${e.route}\`: ${e.title}. ${e.description}`
-					: `- \`${e.route}\`: ${e.title}`,
+					: `- \`${e.route}\`: ${e.title}`
 			);
 		}
 		const version = await content.claudeCode();
@@ -61,13 +61,13 @@ export const list = (args: ListArgs = {}): Promise<Result> =>
 								route: e.route,
 								title: e.title,
 								section: e.section,
-								description: e.description,
+								description: e.description
 							}
-						: { route: e.route, title: e.title, section: e.section },
+						: { route: e.route, title: e.title, section: e.section }
 				),
-				source: sourceData(source),
+				source: sourceData(source)
 			},
 			source,
-			true,
+			true
 		);
 	});

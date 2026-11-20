@@ -7,8 +7,8 @@ describe("exists", () => {
 	test("is true for a folder, a file, and false for a missing path", async () => {
 		const found = await Promise.all(
 			["tools/plugin", "tools/plugin/plugins.ts", "tools/plugin/none"].map(
-				(p) => exists(p),
-			),
+				(p) => exists(p)
+			)
 		);
 		expect(found).toEqual([true, true, false]);
 	});
@@ -22,8 +22,8 @@ const repo = (entries: Json[]): ((file: string) => Json) => {
 		[MARKETPLACE, { plugins: entries }],
 		...PLUGINS.map((p, i): [string, Json] => [
 			manifestFile(p.dir),
-			{ name: `p${i}`, license: "MIT", keywords: [`k${i}`] },
-		]),
+			{ name: `p${i}`, license: "MIT", keywords: [`k${i}`] }
+		])
 	]);
 	return (file) => files.get(file) ?? {};
 };
@@ -35,8 +35,8 @@ describe("mirrorProblems", () => {
 			PLUGINS.map((_, i) => ({
 				name: `p${i}`,
 				license: "MIT",
-				keywords: [`k${i}`],
-			})),
+				keywords: [`k${i}`]
+			}))
 		);
 
 		// Act
@@ -55,7 +55,7 @@ describe("mirrorProblems", () => {
 
 		// Assert
 		expect(problems).toEqual([
-			'marketplace entry "p0" keywords differs from its plugin manifest: copy it from plugin.json',
+			'marketplace entry "p0" keywords differs from its plugin manifest: copy it from plugin.json'
 		]);
 	});
 
@@ -68,7 +68,7 @@ describe("mirrorProblems", () => {
 
 		// Assert
 		expect(problems).toEqual([
-			'marketplace entry "p0" license differs from its plugin manifest: copy it from plugin.json',
+			'marketplace entry "p0" license differs from its plugin manifest: copy it from plugin.json'
 		]);
 	});
 
@@ -81,7 +81,7 @@ describe("mirrorProblems", () => {
 
 		// Assert
 		expect(problems).toEqual([
-			'marketplace entry "missing" has no plugin manifest with that name',
+			'marketplace entry "missing" has no plugin manifest with that name'
 		]);
 	});
 });

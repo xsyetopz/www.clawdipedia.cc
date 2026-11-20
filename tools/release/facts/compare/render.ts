@@ -10,7 +10,7 @@ const DIFF_FILES = [
 	"commands.json",
 	"settings.json",
 	"hooks.json",
-	"gates.json",
+	"gates.json"
 ];
 export interface DiffJson {
 	kind: string;
@@ -37,7 +37,7 @@ export const readDiffs = async (dir: string): Promise<DiffJson[]> => {
 	const paths = DIFF_FILES.map((f) => join(dir, "diff", f));
 	const present = await Promise.all(paths.map((p) => pathExists(p)));
 	return Promise.all(
-		paths.filter((_, i) => present[i] === true).map((p) => readDiff(p)),
+		paths.filter((_, i) => present[i] === true).map((p) => readDiff(p))
 	);
 };
 
@@ -56,11 +56,11 @@ const invalidLines = (c: Compare): string[] =>
 	c.counts.invalid > 0
 		? [
 				`> **${c.counts.invalid} invalid runs - re-run these cases, do not edit docs from them:** ${Object.keys(
-					c.invalidRuns ?? {},
+					c.invalidRuns ?? {}
 				)
 					.map((i) => `\`${i}\``)
 					.join(", ")}`,
-				"",
+				""
 			]
 		: [];
 
@@ -73,7 +73,7 @@ const worklistLines = (c: Compare): string[] => {
 		L.push(`Facts to re-check: ${work.length} of ${c.facts.length}.`, "");
 		for (const r of work) {
 			L.push(
-				`- ${r.result}: \`${r.id}\` (${r.file}:${r.line}, ${r.kind ?? "?"})${r.why === undefined || r.why === "" ? "" : ` - ${r.why}`}`,
+				`- ${r.result}: \`${r.id}\` (${r.file}:${r.line}, ${r.kind ?? "?"})${r.why === undefined || r.why === "" ? "" : ` - ${r.why}`}`
 			);
 		}
 	}
@@ -102,10 +102,10 @@ const caseLines = (id: string, d: CaseDiff): string[] => {
 	for (const [k, v] of Object.entries(d.changed)) {
 		const p = [
 			...(v.added ?? []).map((x) => `+${x}`),
-			...(v.removed ?? []).map((x) => `-${x}`),
+			...(v.removed ?? []).map((x) => `-${x}`)
 		].map((x) => `\`${x.slice(0, 60)}\``);
 		L.push(
-			`- changed \`${k}\`: ${fmt(v.old)} -> ${fmt(v.new)}${p.length > 0 ? ` (${p.join(" ")})` : ""}`,
+			`- changed \`${k}\`: ${fmt(v.old)} -> ${fmt(v.new)}${p.length > 0 ? ` (${p.join(" ")})` : ""}`
 		);
 	}
 	for (const [k, v] of Object.entries(d.added)) {
@@ -130,9 +130,9 @@ const casesLines = (c: Compare): string[] => [
 		`### \`${id}\` (invalid run)`,
 		"",
 		`- ${why}`,
-		"",
+		""
 	]),
-	...Object.entries(c.cases).flatMap(([id, d]) => caseLines(id, d)),
+	...Object.entries(c.cases).flatMap(([id, d]) => caseLines(id, d))
 ];
 
 const noiseLines = (c: Compare): string[] =>
@@ -143,16 +143,16 @@ const noiseLines = (c: Compare): string[] =>
 				"Data that differs but is not a release change (run-to-run noise, or a version string only). Rules: `NOISY` in `tools/release/facts/compare.ts`.",
 				"",
 				...Object.entries(c.noise ?? {}).flatMap(([id, m]) =>
-					Object.entries(m).map(([k, why]) => `- \`${id}\` \`${k}\`: ${why}`),
+					Object.entries(m).map(([k, why]) => `- \`${id}\` \`${k}\`: ${why}`)
 				),
 				...(c.facts ?? []).flatMap((r) =>
 					Object.entries(r.noise ?? {}).flatMap(([id, m]) =>
 						Object.entries(m).map(
-							([k, why]) => `- fact \`${r.id}\`: \`${id}\` \`${k}\`: ${why}`,
-						),
-					),
+							([k, why]) => `- fact \`${r.id}\`: \`${id}\` \`${k}\`: ${why}`
+						)
+					)
 				),
-				"",
+				""
 			]
 		: [];
 
@@ -170,7 +170,7 @@ export const renderCompare = (c: Compare): string => {
 		...casesLines(c),
 		...noiseLines(c),
 		...onlyLines(`## Only in ${c.from}`, c.onlyFrom),
-		...onlyLines(`## Only in ${c.to}`, c.onlyTo),
+		...onlyLines(`## Only in ${c.to}`, c.onlyTo)
 	];
 	return `${L.join("\n")}\n`;
 };

@@ -17,7 +17,7 @@ import {
 	obj,
 	PROMPT,
 	runLivePty,
-	runPrint,
+	runPrint
 } from "./harness.ts";
 
 /** Lines of a rendered screen that show a typeahead row for `name`: not the echoed input line. */
@@ -29,7 +29,7 @@ export const typeaheadLines = (screen: string, name: string): string[] =>
 
 /** Key names of the billing header, and the value of cc_project / cc_project_src. The first system block holds the header. */
 export const headerOf = (
-	body: unknown,
+	body: unknown
 ): { keys: string[]; project: string; src: string } => {
 	const sys = obj(body)["system"];
 	const first = Array.isArray(sys) ? obj(sys[0])["text"] : sys;
@@ -47,7 +47,7 @@ export const headerOf = (
 	return {
 		keys: pairs.map(([n]) => n),
 		project: get("cc_project"),
-		src: get("cc_project_src"),
+		src: get("cc_project_src")
 	};
 };
 
@@ -66,9 +66,9 @@ const upgradeTypeahead: LiveCase = {
 					READY,
 					{ t: 8, send: "/upg", label: "type-upg" },
 					// clear the input so the exit step never turns it into a command
-					{ t: 13, send: "\u0015", label: "clear" },
+					{ t: 13, send: "\u0015", label: "clear" }
 				],
-				secs: 16,
+				secs: 16
 			});
 			const rows = typeaheadLines(pty.screen, "upgrade");
 			const ready = /shortcuts|auto\s*mode|Claude Code/iu.test(pty.screen);
@@ -80,18 +80,18 @@ const upgradeTypeahead: LiveCase = {
 						precondition: ready,
 						...(ready ? {} : { "precondition.detail": "UI never started" }),
 						typeaheadRows: rows.length,
-						unknownCommand: tolerant("Unknown command").test(pty.screen),
+						unknownCommand: tolerant("Unknown command").test(pty.screen)
 					},
 					samples: { rows: rows.join("\n") },
 					facts: [],
 					notes:
-						"Typed `/upg` and cleared the input; Enter was never sent for it, so /upgrade did not run.",
-				}),
+						"Typed `/upg` and cleared the input; Enter was never sent for it, so /upgrade did not run."
+				})
 			];
 		} finally {
 			await sb.cleanup();
 		}
-	},
+	}
 };
 
 const quiet = (x: LiveCtx) =>
@@ -101,8 +101,8 @@ const quiet = (x: LiveCtx) =>
 				upstream: () =>
 					new Response("{}", {
 						status: 404,
-						headers: { "content-type": "application/json" },
-					}),
+						headers: { "content-type": "application/json" }
+					})
 			}
 		: {};
 
@@ -114,13 +114,13 @@ const debugLines = (dbg: string, value: string): string[] =>
 			l
 				.replace(/^\S+\s/u, "")
 				.replace(value, "<value>")
-				.slice(0, 200),
+				.slice(0, 200)
 		);
 
 const attrData = (
 	seen: ReturnType<typeof headerOf>[],
 	dbg: string,
-	value: string,
+	value: string
 ): Record<string, Data> => {
 	const a = seen.find((s) => s.keys.length > 0) ?? seen[0];
 	return {
@@ -130,13 +130,13 @@ const attrData = (
 		"header.hasProject": (a?.project ?? "") !== "",
 		"header.projectIsValue": a?.project === value,
 		"header.src": a?.src ?? "",
-		"debug.lines": debugLines(dbg, value),
+		"debug.lines": debugLines(dbg, value)
 	};
 };
 
 const attrRun = async (
 	x: LiveCtx,
-	value: string,
+	value: string
 ): Promise<{ data: Record<string, Data>; exit: number | null }> => {
 	const sb: Sandbox = await liveSandbox();
 	const seen: ReturnType<typeof headerOf>[] = [];
@@ -144,7 +144,7 @@ const attrRun = async (
 		onMessages: (r) => {
 			seen.push(headerOf(r.body));
 		},
-		...quiet(x),
+		...quiet(x)
 	});
 	try {
 		const log = join(sb.cfg, "d.log");
@@ -152,11 +152,11 @@ const attrRun = async (
 			join(sb.cfg, "settings.json"),
 			JSON.stringify({
 				permissions: { deny: ["Artifact"] },
-				attributionProject: value,
-			}),
+				attributionProject: value
+			})
 		);
 		const res = await runPrint(x, sb, ["-p", PROMPT, "--debug-file", log], {
-			mitm,
+			mitm
 		});
 		const dbg = await Bun.file(log)
 			.text()
@@ -172,7 +172,7 @@ const prefixed = (p: string, d: Record<string, Data>) =>
 	Object.fromEntries(
 		Object.entries(d)
 			.filter(([k]) => k !== "precondition")
-			.map(([k, v]) => [`${p}.${k}`, v]),
+			.map(([k, v]) => [`${p}.${k}`, v])
 	);
 
 const attribution: LiveCase = {
@@ -192,14 +192,14 @@ const attribution: LiveCase = {
 				data: {
 					precondition: pre,
 					...prefixed("good", good.data),
-					...prefixed("bad", bad.data),
+					...prefixed("bad", bad.data)
 				},
 				facts: [],
 				notes:
-					"Real token behind a local proxy with a throw-away CA. attributionProject is set in user settings of a temp config dir. Kept: the key names of the billing header and the cc_project fields (a made-up Project ID that no account has), and the debug lines that start with Attribution Project. No other header, body text or child output is kept.",
-			}),
+					"Real token behind a local proxy with a throw-away CA. attributionProject is set in user settings of a temp config dir. Kept: the key names of the billing header and the cc_project fields (a made-up Project ID that no account has), and the debug lines that start with Attribution Project. No other header, body text or child output is kept."
+			})
 		];
-	},
+	}
 };
 
 export const cli319Cases: LiveCase[] = [upgradeTypeahead, attribution];

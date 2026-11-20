@@ -44,7 +44,7 @@ export const shapeOf = (body: unknown, betas: string): Shape => {
 			.split(",")
 			.map((s) => s.trim())
 			.filter((s) => s !== "")
-			.toSorted(),
+			.toSorted()
 	};
 };
 
@@ -72,5 +72,5 @@ export const compare = (a: Shape, b: Shape): Record<string, Data> => ({
 	"betas.onlyKey": only(b.betas, a.betas),
 	"betas.oauth": a.betas,
 	"model.oauth": a.model,
-	"model.key": b.model,
+	"model.key": b.model
 });

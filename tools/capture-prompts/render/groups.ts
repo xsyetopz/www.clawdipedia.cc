@@ -18,58 +18,58 @@ export const GROUPS: {
 		id: "defaults",
 		label: "Defaults",
 		description:
-			"The base prompts and the whole-prompt views, with the switches that change them.",
+			"The base prompts and the whole-prompt views, with the switches that change them."
 	},
 	{
 		id: "output-styles",
 		label: "Output Styles",
-		description: "The prompt that each built-in or custom output style adds.",
+		description: "The prompt that each built-in or custom output style adds."
 	},
 	{
 		id: "context-and-memory",
 		label: "Context and Memory",
 		description:
-			"The prompts for compaction, memory files, and the repository context.",
+			"The prompts for compaction, memory files, and the repository context."
 	},
 	{
 		id: "agents",
 		label: "Agents",
 		description:
-			"The prompts of the main agent, the built-in subagents, and custom agents.",
+			"The prompts of the main agent, the built-in subagents, and custom agents."
 	},
 	{
 		id: "commands",
 		label: "Commands",
-		description: "The text that a slash command sends to the model.",
+		description: "The text that a slash command sends to the model."
 	},
 	{
 		id: "hooks",
 		label: "Hooks",
-		description: "The prompts that prompt hooks and agent hooks send.",
+		description: "The prompts that prompt hooks and agent hooks send."
 	},
 	{
 		id: "modes",
 		label: "Modes",
 		description:
-			"The prompts for the permission modes, plan mode, and the auto mode classifier.",
+			"The prompts for the permission modes, plan mode, and the auto mode classifier."
 	},
 	{
 		id: "skills",
 		label: "Skills",
-		description: "The prompts of the bundled skills that the Skill tool runs.",
+		description: "The prompts of the bundled skills that the Skill tool runs."
 	},
 	{
 		id: "tools",
 		label: "Tools",
 		description: "The tool descriptions and schemas that each request sends.",
-		ownPage: true,
+		ownPage: true
 	},
 	{
 		id: "other",
 		label: "Other",
 		description:
-			"Prompts that fit no other group, such as overrides and helper requests.",
-	},
+			"Prompts that fit no other group, such as overrides and helper requests."
+	}
 ];
 
 export const isGroup = (g: unknown): g is PromptGroup =>
@@ -88,11 +88,11 @@ export const writeCategories = async (): Promise<void> => {
 							type: "generated-index",
 							slug: `/prompts/${g.id}`,
 							title: g.label,
-							description: g.description,
-						},
+							description: g.description
+						}
 			};
 			const path = join(groupDir(g.id), "_category_.json");
 			await Bun.write(path, await formatJson(cat, path));
-		}),
+		})
 	);
 };

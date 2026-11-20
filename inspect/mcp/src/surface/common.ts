@@ -8,7 +8,7 @@ import {
 	litValue,
 	type Module,
 	type Node,
-	type NodeOf,
+	type NodeOf
 } from "../ast.ts";
 import { asNode } from "../ast/node.ts";
 import type { BunModule } from "../bunfs.ts";
@@ -41,14 +41,14 @@ export interface SurfaceItem {
  */
 export type Extractor = (
 	bundle: Bundle,
-	files?: Pick<BunModule, "name" | "bytes">[],
+	files?: Pick<BunModule, "name" | "bytes">[]
 ) => SurfaceItem[] | Promise<SurfaceItem[]>;
 
 /** Visit every node of each module whose text holds one of `needles`, one module after the other. */
 export const scan = async (
 	bundle: Bundle,
 	needles: string[],
-	visit: (m: Module, n: Node) => void | Promise<void>,
+	visit: (m: Module, n: Node) => void | Promise<void>
 ): Promise<void> => {
 	await mapSeq(bundle.namesWith(needles), async (name) => {
 		const m = await bundle.get(name);
@@ -69,7 +69,7 @@ export const scanOf = async <T extends Node["type"]>(
 	bundle: Bundle,
 	needles: string[],
 	types: T[],
-	visit: (m: Module, n: NodeOf<T>) => void | Promise<void>,
+	visit: (m: Module, n: NodeOf<T>) => void | Promise<void>
 ): Promise<void> => {
 	const wanted = new Set<string>(types);
 	const is = (n: Node): n is NodeOf<T> => wanted.has(n.type);
@@ -78,7 +78,7 @@ export const scanOf = async <T extends Node["type"]>(
 
 /** The key of a non-computed property (identifier or string), or undefined. */
 export const keyOf = (
-	p: NodeOf<"Property" | "SpreadElement">,
+	p: NodeOf<"Property" | "SpreadElement">
 ): string | undefined => {
 	if (p.type === "SpreadElement" || p.computed) {
 		return undefined;
@@ -100,14 +100,14 @@ export type Prop = Exclude<
 /** The value of the property `key` of an object literal; a method gives its function, from the parameters on. */
 export const prop = (
 	o: NodeOf<"ObjectExpression">,
-	key: string,
+	key: string
 ): Node | undefined =>
 	o.properties.find((p): p is Prop => keyOf(p) === key)?.value;
 
 /** The string items of an array literal, or undefined when one item is not a constant string. */
 export const strings = async (
 	m: Module,
-	n: Node | null | undefined,
+	n: Node | null | undefined
 ): Promise<string[] | undefined> => {
 	if (n?.type !== "ArrayExpression") {
 		return undefined;
@@ -138,7 +138,7 @@ const unaryLiteral = (n: Node): string | undefined => {
 /** A literal as short text (`!0` is `true`), or "unknown" for computed code. */
 export const literal = async (
 	m: Module,
-	n: Node | null | undefined,
+	n: Node | null | undefined
 ): Promise<string> => {
 	if (!n) {
 		return "unknown";

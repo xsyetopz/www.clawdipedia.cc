@@ -34,7 +34,7 @@ if (root === undefined || outFile === undefined) {
 	throw new Error("usage: bun driver.ts <tmpRoot> <outFile>");
 }
 const manifestJson: unknown = await Bun.file(
-	join(root, "manifest.json"),
+	join(root, "manifest.json")
 ).json();
 if (!isManifest(manifestJson)) {
 	throw new Error("manifest.json is not a schema manifest");
@@ -86,7 +86,7 @@ const convert = (schema: Zod, reused: "inline" | "ref" = "inline") =>
 			if (defType(ctx.zodSchema) === "catch") {
 				delete ctx.jsonSchema["default"];
 			}
-		},
+		}
 	});
 // A capture may be a plain array or object that holds schemas (tool lists, tables): convert each one inside it.
 // One schema that cannot be read or converted becomes { "x-cc-error": message } so the rest still come out.
@@ -103,7 +103,7 @@ const deep = (v: unknown, reused: "inline" | "ref"): unknown => {
 	}
 	if (typeof v === "object" && v !== null) {
 		return Object.fromEntries(
-			Object.entries(v).map(([k, x]) => [k, deep(x, reused)]),
+			Object.entries(v).map(([k, x]) => [k, deep(x, reused)])
 		);
 	}
 	return v;

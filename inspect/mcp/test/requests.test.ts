@@ -11,7 +11,7 @@ import {
 	placesOf,
 	resultText,
 	toolEntry,
-	toolNames,
+	toolNames
 } from "../src/requests.ts";
 import type { Sent } from "../src/run.ts";
 
@@ -20,19 +20,19 @@ const sent = (path: string, body: unknown): Sent => ({
 	path,
 	host: "127.0.0.1",
 	fakeKey: true,
-	body,
+	body
 });
 
 test("toolNames lists the tools of each messages request and skips other requests", () => {
 	const names = toolNames({
 		requests: [
 			sent("/v1/messages?beta=true", {
-				tools: [{ name: "Bash" }, { name: "Glob" }],
+				tools: [{ name: "Bash" }, { name: "Glob" }]
 			}),
 			sent("/v1/messages/count_tokens", { tools: [{ name: "Read" }] }),
 			sent("/api/oauth/profile", null),
-			sent("/v1/messages", { messages: [] }),
-		],
+			sent("/v1/messages", { messages: [] })
+		]
 	});
 	expect(names).toEqual([["Bash", "Glob"], []]);
 });
@@ -42,18 +42,18 @@ test("placesOf names each request, stream, and file that holds the text", () => 
 		{
 			requests: [
 				sent("/v1/messages", { messages: [{ content: "a tok-123 b" }] }),
-				sent("/v1/messages/count_tokens", { messages: [] }),
+				sent("/v1/messages/count_tokens", { messages: [] })
 			],
 			stdout: "x tok-123",
 			stderr: "",
-			files: { "projects/p/s.jsonl": '{"m":"tok-123"}', "other.jsonl": "{}" },
+			files: { "projects/p/s.jsonl": '{"m":"tok-123"}', "other.jsonl": "{}" }
 		},
-		/tok-123/u,
+		/tok-123/u
 	);
 	expect(places).toEqual([
 		"request 1 POST /v1/messages",
 		"stdout",
-		"file projects/p/s.jsonl",
+		"file projects/p/s.jsonl"
 	]);
 });
 
@@ -61,21 +61,21 @@ test("placesOf with a regular expression matches the same places as a plain text
 	const r = {
 		requests: [
 			sent("/v1/messages", { messages: [{ content: "x" }] }),
-			sent("/v1/messages", { system: "Budget: seven-day 2% used" }),
+			sent("/v1/messages", { system: "Budget: seven-day 2% used" })
 		],
 		stdout: "",
 		stderr: "Budget: 5%",
-		files: {},
+		files: {}
 	};
 	expect(placesOf(r, /Budget: \S+ \d+%/u)).toEqual([
-		"request 2 POST /v1/messages",
+		"request 2 POST /v1/messages"
 	]);
 	expect(placesOf(r, /Budget: \d+%/u)).toEqual(["stderr"]);
 });
 
 test("linesWith keeps the lines that hold the text", () => {
 	expect(linesWith("a\nFast mode x\nb\nfast mode y", /fast mode/iu)).toBe(
-		"Fast mode x\nfast mode y",
+		"Fast mode x\nfast mode y"
 	);
 	expect(linesWith("a\nb", /c/u)).toBe("");
 });
@@ -85,20 +85,20 @@ test("bodyOf gives the JSON size of each part and where each cache_control is", 
 		model: "m",
 		system: [
 			{ type: "text", text: "a" },
-			{ type: "text", text: "b", cache_control: { type: "ephemeral" } },
+			{ type: "text", text: "b", cache_control: { type: "ephemeral" } }
 		],
 		tools: [
 			{ name: "Read" },
-			{ name: "Bash", cache_control: { type: "ephemeral" } },
+			{ name: "Bash", cache_control: { type: "ephemeral" } }
 		],
 		messages: [
 			{
 				role: "user",
 				content: [
-					{ type: "text", text: "é", cache_control: { type: "ephemeral" } },
-				],
-			},
-		],
+					{ type: "text", text: "é", cache_control: { type: "ephemeral" } }
+				]
+			}
+		]
 	};
 	const b = bodyOf(body);
 	expect(b).toEqual({
@@ -106,14 +106,14 @@ test("bodyOf gives the JSON size of each part and where each cache_control is", 
 		tools: Buffer.byteLength(JSON.stringify(body.tools)),
 		system: Buffer.byteLength(JSON.stringify(body.system)),
 		messages: Buffer.byteLength(JSON.stringify(body.messages)),
-		cacheControl: ["system[1]", "tools[1]", "messages[0].content[0]"],
+		cacheControl: ["system[1]", "tools[1]", "messages[0].content[0]"]
 	});
 	expect(bodyOf("not json")).toEqual({
 		bytes: 8,
 		tools: 0,
 		system: 0,
 		messages: 0,
-		cacheControl: [],
+		cacheControl: []
 	});
 });
 
@@ -125,8 +125,8 @@ test("toolEntry gives the entry of a named tool from the last request that sends
 			sent("/v1/messages", { tools: [read1] }),
 			sent("/v1/messages", { tools: [read2, { name: "Bash" }] }),
 			sent("/v1/messages/count_tokens", { tools: [{ name: "Read" }] }),
-			sent("/v1/messages", { tools: [] }),
-		],
+			sent("/v1/messages", { tools: [] })
+		]
 	};
 	expect(toolEntry(r, "Read")).toEqual(read2);
 	expect(toolEntry(r, "Write")).toBeUndefined();
@@ -139,7 +139,7 @@ test("filesOf reads the JSONL files under a folder by relative path", async () =
 		await Bun.write(join(dir, "projects", "p", "s.jsonl"), "{}\n");
 		await Bun.write(join(dir, "notes.txt"), "no");
 		expect(await filesOf(dir)).toEqual({
-			[join("projects", "p", "s.jsonl")]: "{}\n",
+			[join("projects", "p", "s.jsonl")]: "{}\n"
 		});
 	} finally {
 		await rm(dir, { recursive: true, force: true });
@@ -151,9 +151,9 @@ test("resultText reads the last result event", () => {
 		resultText({
 			events: [
 				{ type: "result", result: "a" },
-				{ type: "result", result: "b" },
-			],
-		}),
+				{ type: "result", result: "b" }
+			]
+		})
 	).toBe("b");
 	expect(resultText({ events: [] })).toBeNull();
 });
@@ -169,13 +169,13 @@ test("outcomeLines gives each result and notification event in order", () => {
 					type: "result",
 					result: "Fast mode OFF",
 					fast_mode_state: "off",
-					fast_mode_disabled_reason: "model_not_allowed",
-				},
-			],
-		}),
+					fast_mode_disabled_reason: "model_not_allowed"
+				}
+			]
+		})
 	).toEqual([
 		'result: "OK", fast_mode_state "cooldown"',
 		'notification "k": "t"',
-		'result: "Fast mode OFF", fast_mode_state "off", fast_mode_disabled_reason "model_not_allowed"',
+		'result: "Fast mode OFF", fast_mode_state "off", fast_mode_disabled_reason "model_not_allowed"'
 	]);
 });

@@ -5,7 +5,7 @@ import {
 	type MapEntry,
 	mapOf,
 	PAGES,
-	status,
+	status
 } from "../../../surface/coverage.ts";
 import { ROOT } from "../../util.ts";
 
@@ -15,7 +15,7 @@ export const pageOf = (
 	name: string,
 	docs: Map<string, string>,
 	map: Record<string, MapEntry>,
-	exclusions: Record<string, string>,
+	exclusions: Record<string, string>
 ): string => {
 	const key = `${kind}:${name}`;
 	const how = status(kind, name, { [kind]: docs }, map, exclusions);

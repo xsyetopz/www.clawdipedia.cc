@@ -7,7 +7,7 @@ import type { LoadContext, Plugin } from "@docusaurus/types";
 
 import {
 	SEARCH_INDEX_FILE,
-	searchIndexJson,
+	searchIndexJson
 } from "../../../plugin/mcp/src/search";
 import { CLAUDE_CODE_VERSION } from "../../version";
 import { convertBody } from "./convert";
@@ -16,7 +16,7 @@ import {
 	findVersion,
 	makeResolver,
 	type Page,
-	type Site,
+	type Site
 } from "./pages";
 
 const TITLE = "Clawdipedia";
@@ -27,7 +27,7 @@ const yaml = (s: string) => JSON.stringify(oneLine(s));
 const renderPage = async (
 	page: Page,
 	site: Site,
-	byRepoPath: Map<string, Page>,
+	byRepoPath: Map<string, Page>
 ): Promise<string> => {
 	const raw = await readFile(join(site.siteDir, page.repoPath), "utf8");
 	let body = convertBody(raw, makeResolver(page, byRepoPath, site.base));
@@ -43,7 +43,7 @@ const renderPage = async (
 		"---",
 		"",
 		body,
-		"",
+		""
 	].join("\n");
 };
 
@@ -53,7 +53,7 @@ const link = (p: Page) =>
 const renderLlmsTxt = (
 	pages: Page[],
 	base: string,
-	schemaNames: string[],
+	schemaNames: string[]
 ): string => {
 	const lines = [
 		`# ${TITLE}`,
@@ -61,7 +61,7 @@ const renderLlmsTxt = (
 		`> Unofficial community docs for Claude Code ${CLAUDE_CODE_VERSION}, built from the official docs and the program itself. Not made by or tied to Anthropic. Each item is marked [Documented], [Undocumented], [Differs], [Gated], [Managed Only], [Experimental], [Deprecated], or [Caution].`,
 		"",
 		`Every page below is plain markdown with a small front matter block. The full text of all pages is in llms-full.txt. Pages track version ${CLAUDE_CODE_VERSION} only. For supported behavior, check the official docs first.`,
-		"",
+		""
 	];
 	const sections = [...new Set(pages.map((p) => p.section))];
 	for (const section of sections.filter((s) => s !== OPTIONAL_SECTION)) {
@@ -79,7 +79,7 @@ const renderLlmsTxt = (
 		...schemaNames.map((n) => `- [${n}](${base}schemas/${n}): JSON Schema`),
 		"",
 		"## Optional",
-		"",
+		""
 	);
 	for (const page of pages.filter((p) => p.section === OPTIONAL_SECTION)) {
 		lines.push(link(page));
@@ -91,7 +91,7 @@ const renderLlmsTxt = (
 const buildOutputs = (
 	pages: Page[],
 	files: Map<string, string>,
-	llmsTxt: string,
+	llmsTxt: string
 ): Map<string, string> => {
 	const manifest = pages.map((p) => ({
 		route: p.route,
@@ -99,7 +99,7 @@ const buildOutputs = (
 		description: oneLine(p.doc.description),
 		section: p.section,
 		md: p.mdUrl,
-		url: p.htmlUrl,
+		url: p.htmlUrl
 	}));
 	return new Map([
 		...files,
@@ -114,23 +114,23 @@ const buildOutputs = (
 					route: p.route,
 					title: p.doc.title,
 					description: p.doc.description,
-					text: files.get(p.mdPath) ?? "",
-				})),
-			),
-		],
+					text: files.get(p.mdPath) ?? ""
+				}))
+			)
+		]
 	]);
 };
 
 const writeOutputs = async (
 	outDir: string,
-	out: Map<string, string>,
+	out: Map<string, string>
 ): Promise<void> => {
 	await Promise.all(
 		[...out].map(async ([name, text]) => {
 			const dest = join(outDir, name);
 			await mkdir(dirname(dest), { recursive: true });
 			await writeFile(dest, text);
-		}),
+		})
 	);
 };
 
@@ -140,7 +140,7 @@ export const llmsTxtPlugin = (context: LoadContext): Plugin => {
 		siteDir,
 		url: siteConfig.url,
 		baseUrl: siteConfig.baseUrl,
-		base: `${siteConfig.url}${siteConfig.baseUrl}`,
+		base: `${siteConfig.url}${siteConfig.baseUrl}`
 	};
 
 	let loaded: Record<string, Record<string, unknown>> = {};
@@ -158,7 +158,7 @@ export const llmsTxtPlugin = (context: LoadContext): Plugin => {
 			const pages = collectPages(version, site);
 			const byRepoPath = new Map(pages.map((p) => [p.repoPath, p]));
 			const rendered = await Promise.all(
-				pages.map((page) => renderPage(page, site, byRepoPath)),
+				pages.map((page) => renderPage(page, site, byRepoPath))
 			);
 			// Maps each mdPath to its content.
 			const files = new Map(pages.map((p, i) => [p.mdPath, rendered[i] ?? ""]));
@@ -169,9 +169,9 @@ export const llmsTxtPlugin = (context: LoadContext): Plugin => {
 			const out = buildOutputs(
 				pages,
 				files,
-				renderLlmsTxt(pages, site.base, schemaNames),
+				renderLlmsTxt(pages, site.base, schemaNames)
 			);
 			await writeOutputs(outDir, out);
-		},
+		}
 	};
 };

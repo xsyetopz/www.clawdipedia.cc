@@ -19,5 +19,5 @@ export const groupsB2: PrintGroup[] = [
 	evalcreds,
 	fork319,
 	notes319,
-	cacerts319,
+	cacerts319
 ];

@@ -18,7 +18,7 @@ export const addProbeKeys = async (
 	t: string,
 	schema: Json,
 	withType: Record<string, Json>,
-	seen: unknown,
+	seen: unknown
 ): Promise<void> => {
 	if (!isStringArray(seen)) {
 		return;
@@ -33,7 +33,7 @@ export const addProbeKeys = async (
 			} else {
 				lost.push(k);
 			}
-		},
+		}
 	);
 	markObserved(schema, seen);
 	if (lost.length > 0) {
@@ -44,7 +44,7 @@ export const addProbeKeys = async (
 /** Add the keys the code writes after a constructor builds the line: a spread literal or a member assignment. */
 export const addCodeKeys = async (
 	use: readonly Site[],
-	withType: Record<string, Json>,
+	withType: Record<string, Json>
 ): Promise<void> => {
 	const roots = use.flatMap((s) => {
 		let obj: Node | undefined = s.src.nodeAt(s.at);
@@ -59,7 +59,7 @@ export const addCodeKeys = async (
 			withType[k] = {
 				...(await valType(val)),
 				$comment:
-					"Added after a constructor builds the line, by a spread literal or a member assignment.",
+					"Added after a constructor builds the line, by a spread literal or a member assignment."
 			};
 		}
 	});

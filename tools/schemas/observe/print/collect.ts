@@ -19,7 +19,7 @@ const listJsonl = async (d: string): Promise<string[]> => {
 				return listJsonl(p);
 			}
 			return e.endsWith(".jsonl") ? [p] : [];
-		}),
+		})
 	);
 	return found.flat();
 };

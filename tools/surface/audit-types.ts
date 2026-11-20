@@ -41,7 +41,7 @@ export const isStrings = (v: unknown): v is string[] =>
 /** Run `run` on each item in order, one after the other, and give the first result that is not `undefined`. */
 export const firstOf = async <T, R>(
 	list: T[],
-	run: (item: T) => Promise<R | undefined>,
+	run: (item: T) => Promise<R | undefined>
 ): Promise<R | undefined> => {
 	const [head, ...rest] = list;
 	if (head === undefined) {
@@ -53,7 +53,7 @@ export const firstOf = async <T, R>(
 /** Run `run` on each item in order, one after the other. */
 export const eachOf = async <T>(
 	list: T[],
-	run: (item: T) => Promise<void>,
+	run: (item: T) => Promise<void>
 ): Promise<void> => {
 	const [head, ...rest] = list;
 	if (head === undefined) {

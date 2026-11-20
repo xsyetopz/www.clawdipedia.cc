@@ -13,7 +13,7 @@ import {
 	oneCase,
 	pathExists,
 	type Run,
-	runCase,
+	runCase
 } from "../run.ts";
 import type { PrintCtx } from "../types.ts";
 import { mapInOrder } from "./seq.ts";
@@ -29,7 +29,7 @@ export type Spec = Case & {
 export const withRun = async <T>(
 	ctx: PrintCtx,
 	spec: Spec,
-	fn: (r: Run) => Promise<T> | T,
+	fn: (r: Run) => Promise<T> | T
 ): Promise<T> => {
 	const { stub, ...c } = spec;
 	const r = await runCase(ctx.bin, { ...c, ...stub });
@@ -90,7 +90,7 @@ const resultContents = (message: unknown): string[] =>
 /** The distinct tool_result contents the program sent back (JSON text). */
 export const toolResultTexts = (r: Run): string[] => {
 	const out = msgs(r).flatMap((q) =>
-		arr(bodyField(q, "messages")).flatMap((m) => resultContents(m)),
+		arr(bodyField(q, "messages")).flatMap((m) => resultContents(m))
 	);
 	return [...new Set(out)];
 };
@@ -133,22 +133,22 @@ export interface CaseDef {
 const runDef = (
 	ctx: PrintCtx,
 	group: string,
-	d: CaseDef,
+	d: CaseDef
 ): Promise<CaseResult[]> => {
 	const id = `print.${group}.${d.name}`;
 	return oneCase(ctx, id, async () => {
 		if (d.requires !== undefined && !(await pathExists(d.requires.path))) {
 			return baseResult(ctx, id, null, {
 				data: {
-					skipped: `${d.requires.reason} (missing ${d.requires.path})`,
-				},
+					skipped: `${d.requires.reason} (missing ${d.requires.path})`
+				}
 			});
 		}
 		const o = await d.run(ctx);
 		return baseResult(ctx, id, o.from ?? null, {
 			data: o.data,
 			samples: o.samples,
-			...(o.notes !== undefined && o.notes !== "" ? { notes: o.notes } : {}),
+			...(o.notes !== undefined && o.notes !== "" ? { notes: o.notes } : {})
 		});
 	});
 };
@@ -157,7 +157,7 @@ const runDef = (
 export const runCases = async (
 	ctx: PrintCtx,
 	group: string,
-	defs: CaseDef[],
+	defs: CaseDef[]
 ): Promise<CaseResult[]> => {
 	const groups = await mapInOrder(defs, (d) => runDef(ctx, group, d));
 	return groups.flat();

@@ -14,7 +14,7 @@ import {
 	scanOf,
 	strings,
 	type SurfaceItem,
-	unique,
+	unique
 } from "./common.ts";
 
 const DESCRIPTION =
@@ -47,7 +47,7 @@ export const extractPermissionRules: Extractor = async (bundle) => {
 					name,
 					module: m.name,
 					offset: x.start,
-					detail: "mode",
+					detail: "mode"
 				});
 			}
 			stack.push(...children(x));

@@ -11,7 +11,7 @@ const SMALL = new Set(
 		"below beneath beside between beyond down during inside near past " +
 		"since through throughout toward towards under until upon " +
 		"like unlike despite"
-	).split(" "),
+	).split(" ")
 );
 
 /** Returns the words that break the rule, or an empty list. */

@@ -8,7 +8,7 @@ import {
 	msgs,
 	type Run,
 	type Spec,
-	withRun,
+	withRun
 } from "../run/helpers.ts";
 import { grep, one } from "./one.ts";
 
@@ -21,7 +21,7 @@ const TOKEN = {
 	token_type: "Bearer",
 	scope: "org:create_api_key user:profile",
 	account: { uuid: "probe-account", email_address: "probe@example.invalid" },
-	organization: { uuid: "probe-org", name: "probe" },
+	organization: { uuid: "probe-org", name: "probe" }
 };
 
 const upstream = (req: Request, url: URL): Response => {
@@ -33,7 +33,7 @@ const upstream = (req: Request, url: URL): Response => {
 	}
 	return Response.json(
 		{ path: url.pathname, method: req.method },
-		{ status: 404 },
+		{ status: 404 }
 	);
 };
 
@@ -47,11 +47,11 @@ const loginSpec = (mitm: Mitm): Spec => ({
 	env: {
 		NODE_EXTRA_CA_CERTS: mitm.caFile,
 		HTTPS_PROXY: mitm.proxyUrl,
-		BROWSER: "{HOME}/.probe-bin/open",
+		BROWSER: "{HOME}/.probe-bin/open"
 	},
 	allowOverride: ["HTTPS_PROXY"],
 	argv: ["auth", "login", "--console"],
-	timeoutMs: 30_000,
+	timeoutMs: 30_000
 });
 
 const loginResult = async (r: Run, mitm: Mitm) => ({
@@ -62,9 +62,9 @@ const loginResult = async (r: Run, mitm: Mitm) => ({
 		tlsPaths: mitm
 			.log()
 			.map((l) => `${l.method} ${l.path} ${l.status}`)
-			.join(", "),
+			.join(", ")
 	},
-	samples: { text: await grep(r, /Unable to create API key|rror|^err: \S/u) },
+	samples: { text: await grep(r, /Unable to create API key|rror|^err: \S/u) }
 });
 
 // A stand-in `open` plays the browser: it calls the program's localhost callback with the state of the sign-in URL. A local TLS stub answers the token exchange with no inference scope, and create_api_key with no key.
@@ -74,14 +74,14 @@ const consoleLogin: CaseDef = {
 		const mitm = await startMitm({
 			tunnelOthers: false,
 			hosts: ["platform.claude.com"],
-			upstream,
+			upstream
 		});
 		try {
 			return await withRun(ctx, loginSpec(mitm), (r) => loginResult(r, mitm));
 		} finally {
 			await mitm.stop();
 		}
-	},
+	}
 };
 
 const RUNNER_SPEC: Spec = {
@@ -91,26 +91,26 @@ const RUNNER_SPEC: Spec = {
 				PreToolUse: [
 					{
 						matcher: "self_hosted_runner_spawn_local",
-						hooks: [{ type: "command", command: 'rm -f "$PROBE_BIN"' }],
-					},
-				],
-			},
-		}),
+						hooks: [{ type: "command", command: 'rm -f "$PROBE_BIN"' }]
+					}
+				]
+			}
+		})
 	},
 	args: [
 		"--permission-mode",
 		"bypassPermissions",
 		"--tools",
-		"self_hosted_runner_spawn_local",
+		"self_hosted_runner_spawn_local"
 	],
 	stub: {
 		seq: [
 			{
 				name: "self_hosted_runner_spawn_local",
-				input: { secret_file_path: "{HOME}/secret" },
-			},
-		],
-	},
+				input: { secret_file_path: "{HOME}/secret" }
+			}
+		]
+	}
 };
 
 // The runner tool spawns the program's own file. The case runs a copy, and a PreToolUse hook deletes the copy before the tool call.
@@ -128,14 +128,14 @@ const runnerSpawn: CaseDef = {
 					from: r,
 					data: { exit: r.code, requests: msgs(r).length },
 					samples: {
-						text: await grep(r, /Failed to spawn runner|^tool_result/u),
-					},
-				}),
+						text: await grep(r, /Failed to spawn runner|^tool_result/u)
+					}
+				})
 			);
 		} finally {
 			await rm(dir, { recursive: true, force: true });
 		}
-	},
+	}
 };
 
 export const loginCases: CaseDef[] = [
@@ -152,12 +152,12 @@ export const loginCases: CaseDef[] = [
 						name: "Monitor",
 						input: {
 							description: "probe",
-							ws: { url: "ws://cc-probe.invalid/" },
-						},
-					},
-				],
-			},
+							ws: { url: "ws://cc-probe.invalid/" }
+						}
+					}
+				]
+			}
 		},
-		/could not resolve/u,
-	),
+		/could not resolve/u
+	)
 ];

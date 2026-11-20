@@ -24,8 +24,8 @@ const scopeRefusal: ProfileFetch = () =>
 	Promise.resolve(
 		new Response(
 			'{"type":"error","error":{"type":"permission_error","details":{"error_code":"oauth_scope_insufficient"}}}',
-			{ status: 403 },
-		),
+			{ status: 403 }
+		)
 	);
 
 describe("checkSignIn", () => {
@@ -36,7 +36,7 @@ describe("checkSignIn", () => {
 	test("a refused token stops the run and names the fix, not the token", async () => {
 		const message = await failure("sk-secret-token", answer(401));
 		expect(message).toMatch(
-			/refused the login \(HTTP 401\); refresh CLAUDE_CODE_OAUTH_TOKEN/u,
+			/refused the login \(HTTP 401\); refresh CLAUDE_CODE_OAUTH_TOKEN/u
 		);
 		expect(message).not.toContain("sk-secret-token");
 	});
@@ -47,7 +47,7 @@ describe("checkSignIn", () => {
 
 	test("any other 403 stops the run", async () => {
 		expect(await failure("tok", answer(403))).toMatch(
-			/refused the login \(HTTP 403\)/u,
+			/refused the login \(HTTP 403\)/u
 		);
 	});
 
@@ -68,7 +68,7 @@ describe("checkSignIn", () => {
 		await checkSignIn("tok", spy);
 		expect(seen).toEqual({
 			url: "https://api.anthropic.com/api/oauth/profile",
-			auth: "Bearer tok",
+			auth: "Bearer tok"
 		});
 	});
 });

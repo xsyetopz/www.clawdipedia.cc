@@ -20,7 +20,7 @@ const SOURCE = `throw new Error('No certificate ' + 'authority to trust: ' + \`\
 await writeFile(join(src, "package", "dist", "index.js"), SOURCE);
 await writeFile(
 	join(src, "package", "dist", "index.d.ts"),
-	"// no root certificates are left\n",
+	"// no root certificates are left\n"
 );
 const tar = Bun.spawn([
 	"tar",
@@ -28,7 +28,7 @@ const tar = Bun.spawn([
 	join(src, "lib.tgz"),
 	"-C",
 	src,
-	"package",
+	"package"
 ]);
 await tar.exited;
 const tgz = await Bun.file(join(src, "lib.tgz")).bytes();
@@ -49,7 +49,7 @@ const ustar = (name: string, mode: number, type: "0" | "5", content = "") => {
 		`${head
 			.reduce((a, b) => a + b, 0)
 			.toString(8)
-			.padStart(6, "0")}\0 `,
+			.padStart(6, "0")}\0 `
 	);
 	return Buffer.concat([head, body, Buffer.alloc(-body.length & 511)]);
 };
@@ -58,8 +58,8 @@ const locked = await promisify(gzip)(
 	Buffer.concat([
 		ustar("package/", 0o644, "5"),
 		ustar("package/index.js", 0o644, "0", SOURCE),
-		Buffer.alloc(1024),
-	]),
+		Buffer.alloc(1024)
+	])
 );
 const lockedSum = `sha512-${createHash("sha512").update(locked).digest("base64")}`;
 
@@ -78,23 +78,23 @@ const registry = Bun.serve({
 		if (path === "/@fx%2flocked/1.0.0") {
 			return Response.json({
 				version: "1.0.0",
-				dist: { tarball: `${registry.url}locked.tgz`, integrity: lockedSum },
+				dist: { tarball: `${registry.url}locked.tgz`, integrity: lockedSum }
 			});
 		}
 		if (path === "/@fx%2flib/1.2.3" || path === "/@fx%2flib/latest") {
 			return Response.json({
 				version: "1.2.3",
-				dist: { tarball: `${registry.url}lib.tgz`, integrity: sum },
+				dist: { tarball: `${registry.url}lib.tgz`, integrity: sum }
 			});
 		}
 		if (path === "/@fx%2fbad/1.0.0") {
 			return Response.json({
 				version: "1.0.0",
-				dist: { tarball: `${registry.url}lib.tgz`, integrity: "sha512-AAAA" },
+				dist: { tarball: `${registry.url}lib.tgz`, integrity: "sha512-AAAA" }
 			});
 		}
 		return new Response("no", { status: 404 });
-	},
+	}
 });
 process.env["CC_INSPECT_NPM_REGISTRY"] = registry.url.origin;
 
@@ -110,15 +110,15 @@ describe("code npm", () => {
 			action: "npm",
 			name: "@fx/lib",
 			packageVersion: "1.2.3",
-			query: `No certificate authority to trust: ${HOLE}; set ${HOLE} first`,
+			query: `No certificate authority to trust: ${HOLE}; set ${HOLE} first`
 		});
 		expect(r.structuredContent).toMatchObject({
 			package: "@fx/lib",
 			version: "1.2.3",
-			file: "package/dist/index.js",
+			file: "package/dist/index.js"
 		});
 		const unpacked = await Bun.file(
-			join(tmp, "cache", "npm", "@fx+lib@1.2.3", "package", "dist", "index.js"),
+			join(tmp, "cache", "npm", "@fx+lib@1.2.3", "package", "dist", "index.js")
 		).text();
 		expect(unpacked).toContain("authority");
 	});
@@ -128,7 +128,7 @@ describe("code npm", () => {
 			action: "npm",
 			name: "@fx/lib",
 			packageVersion: "1.2.3",
-			query: "Raw mode is off. Read the guide at https://example.te…",
+			query: "Raw mode is off. Read the guide at https://example.te…"
 		});
 		expect(structured(r)["file"]).toBe("package/dist/index.js");
 	});
@@ -138,7 +138,7 @@ describe("code npm", () => {
 			action: "npm",
 			name: "@fx/locked",
 			packageVersion: "1.0.0",
-			query: "No certificate authority to trust",
+			query: "No certificate authority to trust"
 		});
 		expect(structured(r)["file"]).toBe("package/index.js");
 	});
@@ -146,16 +146,16 @@ describe("code npm", () => {
 	test.each([
 		[
 			"pieces in the wrong order",
-			`set ${HOLE} first${HOLE}No certificate authority`,
+			`set ${HOLE} first${HOLE}No certificate authority`
 		],
 		["text that is absent", "A message that the package does not hold"],
-		["text in a .d.ts file", "no root certificates are left"],
+		["text in a .d.ts file", "no root certificates are left"]
 	])("does not match %s", async (_name, query) => {
 		const r = await call("code", {
 			action: "npm",
 			name: "@fx/lib",
 			packageVersion: "1.2.3",
-			query,
+			query
 		});
 		expect(structured(r)["file"]).toBeUndefined();
 	});
@@ -165,7 +165,7 @@ describe("code npm", () => {
 			action: "npm",
 			name: "@fx/lib",
 			packageVersion: "1.2.3",
-			query: `${HOLE}: ${HOLE}`,
+			query: `${HOLE}: ${HOLE}`
 		});
 		expect(r.structuredContent).toMatchObject({ short: true });
 	});
@@ -174,13 +174,13 @@ describe("code npm", () => {
 		await call("code", {
 			action: "npm",
 			name: "@fx/lib",
-			query: "No certificate authority",
+			query: "No certificate authority"
 		});
 		asked.length = 0;
 		const r = await call("code", {
 			action: "npm",
 			name: "@fx/lib",
-			query: "No certificate authority",
+			query: "No certificate authority"
 		});
 		expect(r.structuredContent).toMatchObject({ version: "1.2.3" });
 		expect(asked).toEqual([]);
@@ -191,7 +191,7 @@ describe("code npm", () => {
 			action: "npm",
 			name: "@fx/bad",
 			packageVersion: "1.0.0",
-			query: "No certificate authority",
+			query: "No certificate authority"
 		});
 		expect(r.isError).toBe(true);
 		expect(text(r)).toContain("integrity");

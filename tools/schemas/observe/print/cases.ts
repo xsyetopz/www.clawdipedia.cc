@@ -22,7 +22,7 @@ const SEQ = [
 	{ name: "Write", input: { file_path: "{PROJ}/b.txt", content: "x\n" } },
 	{
 		name: "Edit",
-		input: { file_path: "{PROJ}/b.txt", old_string: "x", new_string: "y" },
+		input: { file_path: "{PROJ}/b.txt", old_string: "x", new_string: "y" }
 	},
 	{ name: "Glob", input: { pattern: "*.txt" } },
 	{ name: "Grep", input: { pattern: "y", path: "{PROJ}" } },
@@ -32,9 +32,9 @@ const SEQ = [
 		input: {
 			description: "Probe task",
 			prompt: PROMPT,
-			subagent_type: "general-purpose",
-		},
-	},
+			subagent_type: "general-purpose"
+		}
+	}
 ];
 const HOOKS = {
 	hooks: Object.fromEntries(
@@ -43,20 +43,20 @@ const HOOKS = {
 			"UserPromptSubmit",
 			"PreToolUse",
 			"PostToolUse",
-			"Stop",
-		].map((e) => [e, [{ hooks: [{ type: "command", command: "echo ok" }] }]]),
-	),
+			"Stop"
+		].map((e) => [e, [{ hooks: [{ type: "command", command: "echo ok" }] }]])
+	)
 };
 const FILES = {
 	projFiles: { "a.txt": "a\n" },
 	cfgFiles: {
 		"settings.json": JSON.stringify(HOOKS),
 		"skills/probe-skill/SKILL.md":
-			"---\nname: probe-skill\ndescription: Probe skill.\n---\nBody.\n",
-	},
+			"---\nname: probe-skill\ndescription: Probe skill.\n---\nBody.\n"
+	}
 };
 const MCP = JSON.stringify({
-	mcpServers: { bad: { command: "/usr/bin/false" } },
+	mcpServers: { bad: { command: "/usr/bin/false" } }
 });
 export const cases: Case[] = [
 	{ id: "plain" },
@@ -74,10 +74,10 @@ export const cases: Case[] = [
 				name: "Bash",
 				input: {
 					command:
-						"git -c user.name=t -c user.email=t@e.com commit --allow-empty -m x",
-				},
-			},
-		],
+						"git -c user.name=t -c user.email=t@e.com commit --allow-empty -m x"
+				}
+			}
+		]
 	},
 	{
 		id: "tools-allowed",
@@ -85,14 +85,14 @@ export const cases: Case[] = [
 		respHeaders: REQUEST_ID,
 		args: ["--allowedTools", TOOLS],
 		...FILES,
-		git: true,
+		git: true
 	},
 	{ id: "tools-denied", seq: SEQ, respHeaders: REQUEST_ID, ...FILES },
 	{
 		id: "auto",
 		seq: SEQ.slice(0, 3),
 		args: ["--permission-mode", "auto"],
-		...FILES,
+		...FILES
 	},
 	{
 		id: "traces",
@@ -101,8 +101,8 @@ export const cases: Case[] = [
 		...FILES,
 		env: {
 			CLAUDE_CODE_ENHANCED_TELEMETRY_BETA: "1",
-			OTEL_TRACES_EXPORTER: "otlp",
-		},
+			OTEL_TRACES_EXPORTER: "otlp"
+		}
 	},
 	...REPLY_CASES,
 	...MOD_CASES,
@@ -111,5 +111,5 @@ export const cases: Case[] = [
 	...CUT_CASES,
 	...ITEM_CASES,
 	...HOST_CASES,
-	...OTEL_CASES,
+	...OTEL_CASES
 ];

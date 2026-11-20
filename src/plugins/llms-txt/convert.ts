@@ -12,7 +12,7 @@ const BADGE_LABELS: Record<string, string> = {
 	ManagedOnly: "Managed Only",
 	Experimental: "Experimental",
 	Deprecated: "Deprecated",
-	Caution: "Caution",
+	Caution: "Caution"
 };
 const BADGE =
 	/<(Documented|Undocumented|Differs|Gated|ManagedOnly|Experimental|Deprecated|Caution)(?:\s+note=(?:\{?"([^"]*)"\}?))?\s*\/>/gu;
@@ -33,7 +33,7 @@ export const HERO_TEXT = [
 	"- [Managed Only] It works only in managed (organization policy) settings.",
 	"- [Experimental] The program or the official docs call it experimental or beta.",
 	"- [Deprecated] The program or the official docs call it deprecated.",
-	"- [Caution] It deletes data, skips a safety check, or sends data off your machine.",
+	"- [Caution] It deletes data, skips a safety check, or sends data off your machine."
 ].join("\n");
 
 export const stripFrontMatter = (raw: string): string => {
@@ -52,7 +52,7 @@ export const stripFrontMatter = (raw: string): string => {
 const convertInline = (
 	line: string,
 	inTable: boolean,
-	resolve: LinkResolver,
+	resolve: LinkResolver
 ): string => {
 	const spans: string[] = [];
 	let out = line.replaceAll(/(`+)(?!`)[\s\S]*?[^`]\1(?!`)/gu, (m) => {
@@ -94,7 +94,7 @@ const push = (state: State, line: string): void => {
 			out.push(
 				plain
 					? `> **${pendingTitle}:** ${line}`
-					: `> **${pendingTitle}:**\n> ${line}`,
+					: `> **${pendingTitle}:**\n> ${line}`
 			);
 			state.pendingTitle = undefined;
 			return;
@@ -166,7 +166,7 @@ export const convertBody = (source: string, resolve: LinkResolver): string => {
 		out: [],
 		fence: undefined,
 		admonition: false,
-		pendingTitle: undefined,
+		pendingTitle: undefined
 	};
 	for (const line of stripFrontMatter(source).split("\n")) {
 		if (handleFence(state, line) || handleDirective(state, line)) {

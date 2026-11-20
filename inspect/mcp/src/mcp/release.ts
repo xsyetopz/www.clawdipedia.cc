@@ -17,7 +17,7 @@ const changeHead = (c: Change) => {
 	const u = unitOf(c);
 	const at = [
 		c.from && `${c.from.m}:${c.from.s}`,
-		c.to && `${c.to.m}:${c.to.s}`,
+		c.to && `${c.to.m}:${c.to.s}`
 	]
 		.filter((x) => x !== undefined)
 		.join(" -> ");
@@ -102,9 +102,9 @@ group(
 						to: c.to && { module: c.to.m, offset: c.to.s },
 						within: c.within.slice(0, 3),
 						calls: c.calls.slice(0, 6),
-						diff: unitDiff(c, DIFF_LINES),
-					})),
-				},
+						diff: unitDiff(c, DIFF_LINES)
+					}))
+				}
 			);
 		},
 		notes: async ({ version, from }) => {
@@ -119,14 +119,14 @@ group(
 			const lines = checkNotes(
 				await readNotes(b.index.version, join(root, "notes.md")),
 				diffIndexes(a.index, b.index),
-				items,
+				items
 			);
 			const count = (k: string) => lines.filter((l) => l.status === k).length;
 			return text(
 				`${b.index.version} notes against ${a.index.version}: ${lines.length} lines, ${count("matched")} matched, ${count("gated")} gated, ${count("unmatched")} unmatched. Read the code of each match before you state it.\n${lines
 					.map((l) => `- [${l.status}] ${clip(l.line, 160)}${noteWhy(l)}`)
 					.join("\n")}`,
-				{ lines: lines.map((l) => noteJson(l)) },
+				{ lines: lines.map((l) => noteJson(l)) }
 			);
 		},
 		explain: async ({ version, name }) => {
@@ -142,7 +142,7 @@ group(
 					? e.how
 							.map(
 								(x) =>
-									`${x.label} ${x.how}${has(x.value) ? ` (returns ${x.value})` : ""}`,
+									`${x.label} ${x.how}${has(x.value) ? ` (returns ${x.value})` : ""}`
 							)
 							.join("; ")
 					: "no function";
@@ -156,17 +156,17 @@ group(
 					`When: gates ${list(e.when.gates, 10)}; env reads ${list(e.when.env, 10)}${has(e.when.isEnabled) ? `; isEnabled ${e.when.isEnabled}` : ""}`,
 					`How: ${how}`,
 					"What:",
-					...e.what,
+					...e.what
 				].join("\n"),
 				{
 					where: `${h.m}:${h.s}`,
 					via: e.via,
 					who: e.who,
 					when: e.when,
-					how: e.how,
-				},
+					how: e.how
+				}
 			);
-		},
+		}
 	},
 	{
 		version: P.version,
@@ -176,10 +176,10 @@ group(
 			.string()
 			.optional()
 			.describe(
-				"diff: keep changes whose code or enclosing strings hold this; explain: the string, command, or tool name.",
+				"diff: keep changes whose code or enclosing strings hold this; explain: the string, command, or tool name."
 			),
 		offset: P.offset,
-		limit: z.number().int().min(1).max(30).optional(),
+		limit: z.number().int().min(1).max(30).optional()
 	},
-	{ ...WRITES_CACHE, openWorldHint: true },
+	{ ...WRITES_CACHE, openWorldHint: true }
 );

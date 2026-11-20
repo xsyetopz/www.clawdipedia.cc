@@ -23,7 +23,7 @@ import {
 	type Module,
 	type Node,
 	type NodeOf,
-	returnsOf,
+	returnsOf
 } from "../ast.ts";
 import { commandPath, initOf, method } from "./commander/chain.ts";
 import {
@@ -32,7 +32,7 @@ import {
 	scanOf,
 	short,
 	type SurfaceItem,
-	unique,
+	unique
 } from "./common.ts";
 import { helpKind } from "./help.ts";
 
@@ -86,7 +86,7 @@ const hides = (m: Module, n: Node, skip?: Node): boolean => {
 const optionOf = async (
 	m: Module,
 	n: Node,
-	seen = new Set<unknown>(),
+	seen = new Set<unknown>()
 ): Promise<{ m: Module; n: NodeOf<"NewExpression"> } | undefined> => {
 	if (seen.has(n)) {
 		return undefined;
@@ -137,7 +137,7 @@ export const extractSubcommands: Extractor = async (bundle) => {
 			module: m.name,
 			offset: n.start,
 			...(args !== "" && { detail: args }),
-			...(hidden && { gate: "hidden" }),
+			...(hidden && { gate: "hidden" })
 		});
 	});
 	return unique([...out, ...(await helpKind(bundle, "subcommand"))]);
@@ -147,7 +147,7 @@ export const extractSubcommands: Extractor = async (bundle) => {
 const optionGate = (
 	m: Module,
 	arg: Node,
-	o: { m: Module; n: Node },
+	o: { m: Module; n: Node }
 ): string | undefined => {
 	if (arg.type === "ConditionalExpression") {
 		const alternate = asNode(arg.alternate);
@@ -176,7 +176,7 @@ const addFlag = async (
 	owner: Node,
 	args: readonly Node[],
 	gate?: string,
-	om = m,
+	om = m
 ): Promise<void> => {
 	const spec = await constString(m, asNode(args[0]));
 	if (spec === undefined || !SPEC.test(spec)) {
@@ -195,9 +195,9 @@ const addFlag = async (
 		module: m.name,
 		offset: at.start,
 		detail: short(
-			`${spec}${desc !== undefined && desc !== "" ? ` | ${desc}` : ""}`,
+			`${spec}${desc !== undefined && desc !== "" ? ` | ${desc}` : ""}`
 		),
-		...(gate !== undefined && { gate }),
+		...(gate !== undefined && { gate })
 	});
 };
 
@@ -233,10 +233,10 @@ export const extractFlags: Extractor = async (bundle) => {
 					owner,
 					o.n.arguments,
 					optionGate(m, arg, o),
-					m,
+					m
 				);
 			}
-		},
+		}
 	);
 	return unique([...out, ...(await helpKind(bundle, "flag"))]);
 };

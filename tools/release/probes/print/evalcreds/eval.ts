@@ -22,7 +22,7 @@ const ARGV = [
 	"--json",
 	"{PROJ}/out.json",
 	"--output-dir",
-	"{PROJ}/out",
+	"{PROJ}/out"
 ];
 
 export interface Seen {
@@ -54,7 +54,7 @@ const keptOf = async (kept: string): Promise<Kept> => {
 	const settings = `${kept}/config/settings.json`;
 	if (await pathExists(settings)) {
 		const sandbox = obj(
-			obj(JSON.parse(await Bun.file(settings).text()))["sandbox"],
+			obj(JSON.parse(await Bun.file(settings).text()))["sandbox"]
 		);
 		const creds = obj(sandbox["credentials"]);
 		out.files = pick(creds["files"], "path");
@@ -68,7 +68,7 @@ const keptOf = async (kept: string): Promise<Kept> => {
 	for (const l of trace.split("\n")) {
 		if (l.includes('"tool_result"')) {
 			out.toolText = String(
-				obj(arr(obj(obj(JSON.parse(l))["message"])["content"])[0])["content"],
+				obj(arr(obj(obj(JSON.parse(l))["message"])["content"])[0])["content"]
 			);
 		}
 	}
@@ -79,11 +79,11 @@ const keptOf = async (kept: string): Promise<Kept> => {
 const FIXTURE = (o: Opts): Record<string, string> => ({
 	".claude-plugin/plugin.json": JSON.stringify({
 		name: "ecp",
-		version: "1.0.0",
+		version: "1.0.0"
 	}),
 	"evals/c1/prompt.md": `---\nmax_turns: 3\nallowed_tools: [Bash]\n---\n\n${PROMPT}\n`,
 	"evals/c1/graders/used.md": "---\ntype: tool_used\ntool: Bash\n---\n",
-	...o.seed,
+	...o.seed
 });
 
 /** One eval run of a fixture plugin whose case makes the stub model call Bash with `cmd`. */
@@ -99,10 +99,10 @@ const evalRun = async (bin: string, o: Opts): Promise<Seen> => {
 		setup: async ({ proj }) => {
 			await Promise.all(
 				Object.entries(FIXTURE(o)).map(([rel, body]) =>
-					Bun.write(`${proj}/plug/${rel}`, body.split("{PROJ}").join(proj)),
-				),
+					Bun.write(`${proj}/plug/${rel}`, body.split("{PROJ}").join(proj))
+				)
 			);
-		},
+		}
 	});
 	const out = obj(JSON.parse(await Bun.file(`${r.sb.proj}/out.json`).text()));
 	const arm = obj(arr(obj(obj(arr(out["cases"])[0])["arms"])["with"])[0]);
@@ -114,7 +114,7 @@ const evalRun = async (bin: string, o: Opts): Promise<Seen> => {
 	return {
 		r,
 		error: typeof arm["error"] === "string" ? arm["error"] : null,
-		...seen,
+		...seen
 	};
 };
 
@@ -127,7 +127,7 @@ export const entriesFor = (s: Seen, name: string): string[] =>
 export const run = (
 	name: string,
 	o: Opts,
-	data: (s: Seen) => Record<string, Data>,
+	data: (s: Seen) => Record<string, Data>
 ): CaseDef => ({
 	name,
 	run: async (ctx) => {
@@ -136,34 +136,34 @@ export const run = (
 			return {
 				from: s.r,
 				data: { refused: s.error !== null, ...data(s) },
-				samples: { error: scrub(s.error ?? ""), toolResult: scrub(s.toolText) },
+				samples: { error: scrub(s.error ?? ""), toolResult: scrub(s.toolText) }
 			};
 		} finally {
 			await dispose(s.r);
 		}
-	},
+	}
 });
 
 /** Many variables in one run, one entry list for each. */
 export const bulk = (
 	name: string,
 	env: Record<string, string>,
-	seed?: Record<string, string>,
+	seed?: Record<string, string>
 ): CaseDef =>
 	run(name, { env, ...(seed === undefined ? {} : { seed }) }, (s) =>
 		Object.fromEntries(
-			Object.keys(env).map((k) => [`entries.${k}`, entriesFor(s, k)]),
-		),
+			Object.keys(env).map((k) => [`entries.${k}`, entriesFor(s, k)])
+		)
 	);
 
 /** A relative value stops the run; `message` is the predicted reason in the error. */
 export const relative = (
 	name: string,
 	env: Record<string, string>,
-	message: string,
+	message: string
 ): CaseDef =>
 	run(`relative.${name}`, { env }, (s) => ({
-		matchesPrediction: s.error?.includes(message) ?? false,
+		matchesPrediction: s.error?.includes(message) ?? false
 	}));
 
 export const bashRead = (name: string, env: Record<string, string>): CaseDef =>
@@ -172,13 +172,13 @@ export const bashRead = (name: string, env: Record<string, string>): CaseDef =>
 		{
 			env,
 			cmd: `cat ${P}/netrc`,
-			seed: { "cred/netrc": "machine example.test login probe\n" },
+			seed: { "cred/netrc": "machine example.test login probe\n" }
 		},
 		(s) => ({
 			bashRead: s.toolText.includes("machine example.test"),
 			bashDenied: s.toolText.includes("Operation not permitted"),
-			entries: entriesFor(s, "netrc"),
-		}),
+			entries: entriesFor(s, "netrc")
+		})
 	);
 
 /** Entry lists for the fixture folders `names` (each is a path under cred/). */
@@ -187,7 +187,7 @@ export const folders = (s: Seen, dirs: string[]): Record<string, Data> =>
 
 export const refusedWith = (
 	s: Seen,
-	message: string,
+	message: string
 ): Record<string, Data> => ({
-	matchesPrediction: s.error?.includes(message) ?? false,
+	matchesPrediction: s.error?.includes(message) ?? false
 });

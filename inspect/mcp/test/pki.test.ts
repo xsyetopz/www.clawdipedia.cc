@@ -16,7 +16,7 @@ afterEach(async () => {
 const sans = (cert: string): Promise<string> => {
 	const proc = Bun.spawn(
 		["openssl", "x509", "-in", cert, "-noout", "-ext", "subjectAltName"],
-		{ stdout: "pipe", stderr: "pipe" },
+		{ stdout: "pipe", stderr: "pipe" }
 	);
 	return new Response(proc.stdout).text();
 };

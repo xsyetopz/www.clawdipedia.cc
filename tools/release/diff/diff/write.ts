@@ -24,7 +24,7 @@ const pageFinder = (g: Group, r: Rules) => (n: string) => {
 		n.slice(prefix.length),
 		r.names[kind] ?? new Map<string, string>(),
 		r.map,
-		r.exclusions,
+		r.exclusions
 	);
 };
 
@@ -34,7 +34,7 @@ export const writeGroup = async (
 	a: ByKind,
 	b: ByKind,
 	r: Rules,
-	ctx: { from: string; to: string; dir: string },
+	ctx: { from: string; to: string; dir: string }
 ): Promise<KindDiff> => {
 	const items = itemsOf(g, b);
 	const d = diffKind(
@@ -44,14 +44,14 @@ export const writeGroup = async (
 		itemsOf(g, a),
 		items,
 		r.docs,
-		pageFinder(g, r),
+		pageFinder(g, r)
 	);
 	await writeJson(join(ctx.dir, g.file), {
 		...d,
-		items: Object.fromEntries(items),
+		items: Object.fromEntries(items)
 	});
 	console.info(
-		`  ${g.key}: ${d.fromCount} -> ${d.toCount} (+${d.added.length} -${d.removed.length} ~${d.changed.length})`,
+		`  ${g.key}: ${d.fromCount} -> ${d.toCount} (+${d.added.length} -${d.removed.length} ~${d.changed.length})`
 	);
 	return d;
 };

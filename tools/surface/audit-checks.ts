@@ -20,7 +20,7 @@ const namesOfKind = (c: Ctx, kind: string) =>
 	new Set(
 		[...c.items.keys()]
 			.filter((k) => k.startsWith(`${kind}:`))
-			.map((k) => k.slice(kind.length + 1)),
+			.map((k) => k.slice(kind.length + 1))
 	);
 
 /** The module of the read site of an item, when it has one. */
@@ -36,7 +36,7 @@ const moduleOf = async (c: Ctx, i: SurfaceItem) => {
 export const internalError = async (
 	c: Ctx,
 	i: SurfaceItem,
-	pool: string[],
+	pool: string[]
 ): Promise<Verdict> => {
 	// Only the versions the program holds, and whole matches: a short phrase of the program's own often turns up in some old major or inside a longer library message, and a loose match can pair a number of the program with a library constant of another value.
 	const lib = await libCheck(c, pool, i.name, false, true);
@@ -48,19 +48,19 @@ export const internalError = async (
 	const flags = namesOfKind(c, "flag");
 	const names = [
 		...(i.name.match(/\b[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+\b/gu) ?? []).filter((n) =>
-			envs.has(n),
+			envs.has(n)
 		),
 		...(i.name.match(/(?<![\w-])--[a-z][a-z0-9-]+/gu) ?? []).filter((n) =>
-			flags.has(n),
-		),
+			flags.has(n)
+		)
 	];
 	return {
 		ok: !lib.ok && reads === undefined && names.length === 0,
 		evidence: {
 			inLibrary: lib.ok ? lib.evidence : null,
 			functionReads: reads ?? null,
-			textNames: names,
-		},
+			textNames: names
+		}
 	};
 };
 
@@ -72,7 +72,7 @@ const HTTP = new Set([
 	"delete",
 	"request",
 	"fetch",
-	"head",
+	"head"
 ]);
 const PASSES = new Set<Node["type"]>([
 	"TemplateLiteral",
@@ -82,11 +82,11 @@ const PASSES = new Set<Node["type"]>([
 	"Property",
 	"ObjectExpression",
 	"TemplateElement",
-	"Literal",
+	"Literal"
 ]);
 
 const calleeName = (
-	f: Extract<Node, { type: "CallExpression" }>["callee"],
+	f: Extract<Node, { type: "CallExpression" }>["callee"]
 ): string => {
 	if (f.type === "Identifier") {
 		return f.name;
@@ -99,7 +99,7 @@ const calleeName = (
 /** Whether the literal at the site is, through `+`, template, `?:` or an options object, an argument of an HTTP verb call. */
 export const endpointCalled = async (
 	c: Ctx,
-	i: SurfaceItem,
+	i: SurfaceItem
 ): Promise<Verdict> => {
 	const m = await moduleOf(c, i);
 	if (m === undefined || i.offset === null) {
@@ -113,7 +113,7 @@ export const endpointCalled = async (
 			const isArg = p.arguments.some((a) => a === at);
 			return {
 				ok: !(isArg && HTTP.has(callee)),
-				evidence: { callee, argument: isArg },
+				evidence: { callee, argument: isArg }
 			};
 		}
 		if (!PASSES.has(p.type)) {
@@ -137,7 +137,7 @@ const listedBy = async (c: Ctx, name: string) => {
 	const re = new RegExp(`\\\\?"${reEscape(name)}\\\\?"`, "u");
 	const files: string[] = await readdir(dir).catch(() => []);
 	const texts = await Promise.all(
-		files.map((f) => Bun.file(join(dir, f)).text()),
+		files.map((f) => Bun.file(join(dir, f)).text())
 	);
 	return files.filter((_, k) => re.test(texts[k] ?? ""));
 };
@@ -146,12 +146,12 @@ const listedBy = async (c: Ctx, name: string) => {
 export const toolCheck = async (c: Ctx, i: SurfaceItem): Promise<Verdict> => {
 	const defs = occurrences(
 		c,
-		new RegExp(`\\bname:\\s*"${reEscape(i.name)}"`, "gu"),
+		new RegExp(`\\bname:\\s*"${reEscape(i.name)}"`, "gu")
 	);
 	const listed = await listedBy(c, i.name);
 	return {
 		ok: defs === 0 && listed.length === 0,
-		evidence: { nameLiterals: defs, listedBy: listed },
+		evidence: { nameLiterals: defs, listedBy: listed }
 	};
 };
 
@@ -160,7 +160,7 @@ export const settingCheck = (c: Ctx, i: SurfaceItem): Verdict => {
 	const reads = occurrences(c, new RegExp(`\\.${reEscape(i.name)}\\b`, "gu"));
 	return {
 		ok: reads === 0,
-		evidence: { memberReads: reads, detail: i.detail ?? null },
+		evidence: { memberReads: reads, detail: i.detail ?? null }
 	};
 };
 
@@ -172,7 +172,7 @@ export const flagCheck = (c: Ctx, i: SurfaceItem): Verdict => {
 	const reads = occurrences(c, new RegExp(`\\.${camel}\\b`, "gu"));
 	return {
 		ok: i.gate === "hidden" && reads === 0,
-		evidence: { gate: i.gate ?? null, memberReads: reads, property: camel },
+		evidence: { gate: i.gate ?? null, memberReads: reads, property: camel }
 	};
 };
 
@@ -199,11 +199,11 @@ export const commandCheck = (reason: string, i: SurfaceItem): Verdict => {
 /** A gate that has a read site. */
 export const gateCheck = (i: SurfaceItem): Verdict => ({
 	ok: i.module !== null && i.offset !== null,
-	evidence: { limit: "read site only; no run sets a GrowthBook value" },
+	evidence: { limit: "read site only; no run sets a GrowthBook value" }
 });
 
 /** An endpoint that a docs row covers. */
 export const rowCheck = (c: Ctx, row: string): Verdict => ({
 	ok: c.endpointRows.has(row),
-	evidence: { row, file: c.endpointRows.get(row) ?? null },
+	evidence: { row, file: c.endpointRows.get(row) ?? null }
 });

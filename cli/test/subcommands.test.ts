@@ -7,7 +7,7 @@ import {
 	mockPlatform,
 	routesInText,
 	tmp,
-	withSite,
+	withSite
 } from "./helpers.ts";
 import { mcpCall } from "./mcp.ts";
 
@@ -30,7 +30,7 @@ describe("subcommands", () => {
 		const { env } = await withSite();
 		const r = await cc(
 			["read", "configure/hooks", "--section", "Timeouts"],
-			env,
+			env
 		);
 		expect(r.code).toBe(0);
 		expect(r.out).toContain("A hook command stops after the timeout.");
@@ -73,17 +73,17 @@ describe("subcommands", () => {
 		const platform = mockPlatform();
 		const env = {
 			PLATFORM_DOCS_BASE_URL: platform.url,
-			CLAWDIPEDIA_CACHE_DIR: await tmp(),
+			CLAWDIPEDIA_CACHE_DIR: await tmp()
 		};
 		const s = await cc(
 			["search", "prompt caching", "--source", "platform"],
-			env,
+			env
 		);
 		expect(s.code).toBe(0);
 		expect(s.out).toContain("build-with-claude/prompt-caching");
 		const r = await cc(
 			["read", "build-with-claude/overview", "--source", "platform"],
-			env,
+			env
 		);
 		expect(r.code).toBe(0);
 		expect(r.out).toContain("Zebrafinch");
@@ -94,7 +94,7 @@ describe("subcommands", () => {
 		const { env } = await withSite();
 		const ok = await cc(
 			["search", "PreToolUse", "--source", "clawdipedia"],
-			env,
+			env
 		);
 		expect(ok.code).toBe(0);
 		expect(ok.out).toContain("configure/hooks");
@@ -105,7 +105,7 @@ describe("subcommands", () => {
 			"clawdipedia",
 			"platform",
 			"code",
-			"claude-resources",
+			"claude-resources"
 		]) {
 			expect(old.err).toContain(name);
 		}
@@ -120,8 +120,8 @@ describe("--json", () => {
 				["search", "PreToolUse"],
 				["read", "configure/hooks"],
 				["list"],
-				["schema", "tools"],
-			].map((args) => cc([...args, "--json"], env)),
+				["schema", "tools"]
+			].map((args) => cc([...args, "--json"], env))
 		);
 		for (const r of runs) {
 			expect(r.code).toBe(0);
@@ -138,19 +138,19 @@ describe("same answers as the MCP server", () => {
 		const { site } = await withSite();
 		const cli = await cc(["search", "hook", "--json"], {
 			CLAWDIPEDIA_BASE_URL: site.url,
-			CLAWDIPEDIA_CACHE_DIR: await tmp(),
+			CLAWDIPEDIA_CACHE_DIR: await tmp()
 		});
 		const mcp = await mcpCall(
 			{ CLAWDIPEDIA_BASE_URL: site.url, CLAWDIPEDIA_CACHE_DIR: await tmp() },
 			"search_docs",
-			{ query: "hook" },
+			{ query: "hook" }
 		);
 		expect(mcp.routes.length).toBeGreaterThan(1);
 		expect(hitRoutes(cli.out)).toEqual(mcp.routes);
 		// The text lists the same routes too.
 		const cliRun = await cc(["search", "hook"], {
 			CLAWDIPEDIA_BASE_URL: site.url,
-			CLAWDIPEDIA_CACHE_DIR: await tmp(),
+			CLAWDIPEDIA_CACHE_DIR: await tmp()
 		});
 		expect(routesInText(cliRun.out)).toEqual(routesInText(mcp.text));
 	});

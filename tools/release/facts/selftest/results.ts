@@ -23,8 +23,8 @@ const writeFacts = (b: string): Promise<number> =>
 			factRow("c.schema2", [], "schema", { diffNames: ["sandbox.barKey"] }),
 			factRow("c.diffhit", [], "flag", { diffNames: ["--new-flag"] }),
 			factRow("c.diffmiss", [], "flag", { diffNames: ["--other"] }),
-			factRow("c.static", [], "static", { status: "static" }),
-		]),
+			factRow("c.static", [], "static", { status: "static" })
+		])
 	);
 
 const resultChecks = (step: Step, c2: Compare): void => {
@@ -36,7 +36,7 @@ const resultChecks = (step: Step, c2: Compare): void => {
 			res["c.same"] === "unchanged" &&
 			res["c.notrun"] === "not-run" &&
 			res["c.static"] === undefined,
-		json,
+		json
 	);
 	step(
 		"compare: case only on `to` is changed; manual, no-diff and bare facts are not-run",
@@ -45,29 +45,29 @@ const resultChecks = (step: Step, c2: Compare): void => {
 			res["c.nodiff"] === "not-run" &&
 			res["c.prose"] === "not-run" &&
 			res["c.schema"] === "not-run",
-		json,
+		json
 	);
 	step(
 		"compare: sweep fact only sees its own names",
-		res["c.sweep"] === "unchanged",
+		res["c.sweep"] === "unchanged"
 	);
 	const md = renderCompare(c2);
 	step(
 		"compare.md: worklist first",
 		md.indexOf("## Worklist") < md.indexOf("## Cases") &&
 			md.includes("`c.notrun`") &&
-			!md.includes("`c.same`"),
+			!md.includes("`c.same`")
 	);
 };
 
 const writeDiffFiles = async (b: string, docs: string): Promise<void> => {
 	await Bun.write(
 		join(b, "schemas-diff.json"),
-		JSON.stringify({ files: { x: { added: ["sandbox.fooKey"] } } }),
+		JSON.stringify({ files: { x: { added: ["sandbox.fooKey"] } } })
 	);
 	await Bun.write(
 		join(docs, "p.md"),
-		"Uses `--seen <v>` and `--new-flag-ish`.\n",
+		"Uses `--seen <v>` and `--new-flag-ish`.\n"
 	);
 	await Bun.write(
 		join(b, "diff", "flags.json"),
@@ -75,8 +75,8 @@ const writeDiffFiles = async (b: string, docs: string): Promise<void> => {
 			kind: "flags",
 			added: ["--new-flag", "--seen"],
 			removed: [],
-			changed: [],
-		}),
+			changed: []
+		})
 	);
 };
 
@@ -84,7 +84,7 @@ const diffChecks = async (
 	step: Step,
 	base: string,
 	b: string,
-	docs: string,
+	docs: string
 ): Promise<void> => {
 	await writeDiffFiles(b, docs);
 	const c3 = await compareRuns("1.0.0", "1.0.1", base, false, docs);
@@ -92,7 +92,7 @@ const diffChecks = async (
 		"compare: uncovered diff names (whole backtick tokens in docs/)",
 		c3.uncoveredNames?.length === 1 &&
 			c3.uncoveredNames[0]?.name === "--new-flag",
-		JSON.stringify(c3.uncoveredNames),
+		JSON.stringify(c3.uncoveredNames)
 	);
 	const r3 = resultsOf(c3);
 	step(
@@ -102,12 +102,12 @@ const diffChecks = async (
 			r3["c.schema"] === "changed" &&
 			r3["c.schema2"] === "unchanged" &&
 			r3["c.manual"] === "not-run",
-		JSON.stringify(r3),
+		JSON.stringify(r3)
 	);
 	const facts = await Bun.file(join(b, "facts.json")).text();
 	step(
 		"compare: json round trip",
-		facts.length > 0 && structuredClone(c3).to === "1.0.1",
+		facts.length > 0 && structuredClone(c3).to === "1.0.1"
 	);
 };
 
@@ -115,7 +115,7 @@ export const runResultsChecks = async (
 	step: Step,
 	root: string,
 	base: string,
-	b: string,
+	b: string
 ): Promise<void> => {
 	await writeFacts(b);
 	resultChecks(step, await compareRuns("1.0.0", "1.0.1", base, false));

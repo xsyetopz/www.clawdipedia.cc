@@ -16,7 +16,7 @@ const MODULE = /^declare module '([^']+)' \{/u;
 /** Removes comments and string contents, so only code braces count. */
 const code = (
 	line: string,
-	inDoc: boolean,
+	inDoc: boolean
 ): { text: string; inDoc: boolean } => {
 	let out = "";
 	let i = 0;
@@ -119,14 +119,14 @@ const member = (
 	lines: string[],
 	from: number,
 	to: number,
-	name: string,
+	name: string
 ): { start: number; end: number } | undefined => {
 	const indent = /^\s*/u.exec(lines[from + 1] ?? "")?.[0].length ?? 0;
 	const n = name.replaceAll(/[.*+?^${}()|[\]\\]/gu, String.raw`\$&`);
 	// A key as written: bare, or quoted with either quote.
 	const key = new RegExp(
 		`^\\s{${indent}}(?:readonly )?(?:(['"])${n}\\1|${n})\\??\\s*[:(<]`,
-		"u",
+		"u"
 	);
 	let inDoc = false;
 	for (let i = from + 1; i < to; i++) {
@@ -152,7 +152,7 @@ const slice = (lines: string[], a: number, b: number): string =>
 const walkMembers = (
 	lines: string[],
 	d: { start: number; end: number },
-	parts: string[],
+	parts: string[]
 ): { start: number; end: number } | undefined => {
 	let at = { start: d.start, end: d.end };
 	let headLine = lineOfHead(lines, d);
@@ -182,7 +182,7 @@ const nearNames = (decls: Decl[], word: string): string[] => {
 	const low = word.toLowerCase();
 	return [...new Set(decls.map((d) => d.name))]
 		.filter(
-			(n) => n.toLowerCase().includes(low) || low.includes(n.toLowerCase()),
+			(n) => n.toLowerCase().includes(low) || low.includes(n.toLowerCase())
 		)
 		.slice(0, 20);
 };
@@ -202,7 +202,7 @@ export const lookup = (src: string, query: string): Found => {
 		? (head ?? "").split(":")
 		: [undefined, head];
 	const candidates = decls.filter(
-		(d) => d.name === bare && (mod === undefined || d.module === mod),
+		(d) => d.name === bare && (mod === undefined || d.module === mod)
 	);
 	// `$` members live on CoreEngineInterface, which EngineInterface extends.
 	if (q.startsWith("$.")) {
@@ -214,7 +214,7 @@ export const lookup = (src: string, query: string): Found => {
 			return {
 				kind: "text",
 				title: `${d.module === "" ? "" : `${d.module}: `}${[d.name, ...rest].join(".")}`,
-				text: slice(lines, at.start, at.end),
+				text: slice(lines, at.start, at.end)
 			};
 		}
 	}
@@ -244,7 +244,7 @@ export const outline = (src: string): string => {
 		by.set(d.module, [...(by.get(d.module) ?? []), d.name]);
 	}
 	const parts = [...by].map(
-		([m, names]) => `${m || "(global)"} (${names.length}): ${names.join(", ")}`,
+		([m, names]) => `${m || "(global)"} (${names.length}): ${names.join(", ")}`
 	);
 	return `${decls.length} declarations. Pass \`property\`: a name ("ToolCheckResult"), a member path ("ToolCheckResult.plugin"), a call ("$.tool.check"), or an event ("tool.check").\n\n${parts.join("\n\n")}`;
 };

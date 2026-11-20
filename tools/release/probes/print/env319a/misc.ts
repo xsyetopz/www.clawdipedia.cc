@@ -6,7 +6,7 @@ import { type CaseDef, msgs, withRun } from "../run/helpers.ts";
 export const UUID = "0b8f3c52-6a1e-4f7e-9d3a-5c2e8a7b1f40";
 export const CHILD = {
 	CLAUDE_CODE_CHILD_SESSION: "1",
-	CLAUDE_CODE_REMOTE_SESSION_ID: UUID,
+	CLAUDE_CODE_REMOTE_SESSION_ID: UUID
 };
 
 const label = (v?: string): string => (v === undefined ? "unset" : `v${v}`);
@@ -31,13 +31,13 @@ export const lockWait = (v?: string): CaseDef => ({
 					holder = Bun.spawn([
 						"sh",
 						"-c",
-						`i=0; while [ $i -lt ${HOLD_S} ]; do touch "${lock}"; sleep 1; i=$((i+1)); done; rmdir "${lock}"`,
+						`i=0; while [ $i -lt ${HOLD_S} ]; do touch "${lock}"; sleep 1; i=$((i+1)); done; rmdir "${lock}"`
 					]);
 				},
 				afterExit: () => {
 					holder?.kill();
 					return {};
-				},
+				}
 			},
 			(r) => ({
 				from: r,
@@ -46,13 +46,13 @@ export const lockWait = (v?: string): CaseDef => ({
 					exit: r.code,
 					seconds: Math.round((Date.now() - t0) / 5000) * 5,
 					namesVariable: (r.stdout + r.stderr).includes(
-						"CLAUDE_CODE_CONFIG_LOCK_WAIT_MS",
-					),
+						"CLAUDE_CODE_CONFIG_LOCK_WAIT_MS"
+					)
 				},
-				samples: { out: (r.stdout + r.stderr).slice(0, 300) },
-			}),
+				samples: { out: (r.stdout + r.stderr).slice(0, 300) }
+			})
 		);
-	},
+	}
 });
 
 // CLAUDE_CODE_REMOTE=1 makes the program treat the session as a cloud session (chunk-qzv5gd5j.js@813).
@@ -65,19 +65,19 @@ export const replyHold = (v?: string): CaseDef => ({
 			{
 				env: {
 					CLAUDE_CODE_REMOTE: "1",
-					...(v === undefined ? {} : { CLAUDE_CODE_MAIN_REPLY_HOLD_MS: v }),
-				},
+					...(v === undefined ? {} : { CLAUDE_CODE_MAIN_REPLY_HOLD_MS: v })
+				}
 			},
 			(r) => ({
 				from: r,
 				data: {
 					precondition: r.code === 0,
 					seconds: Math.round((Date.now() - t0) / 1000),
-					requests: msgs(r).length,
-				},
-			}),
+					requests: msgs(r).length
+				}
+			})
 		);
-	},
+	}
 });
 
 // The program derives the child session id as a UUID v5 of the remote id (namespace 3ab19d7e-9f35-45c2-926e-75e271cc60b3).
@@ -86,8 +86,8 @@ export const derived = (id: string): string => {
 		.update(
 			Buffer.from(
 				"3ab19d7e-9f35-45c2-926e-75e271cc60b3".replaceAll("-", ""),
-				"hex",
-			),
+				"hex"
+			)
 		)
 		.update(id)
 		.digest();

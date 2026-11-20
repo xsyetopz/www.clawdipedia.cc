@@ -9,7 +9,7 @@ const build = async (minifyNames: boolean): Promise<string> => {
 		entrypoints: [join(import.meta.dir, "fixtures/clean-app.ts")],
 		format: "esm",
 		target: "bun",
-		minify: { whitespace: true, syntax: true, identifiers: minifyNames },
+		minify: { whitespace: true, syntax: true, identifiers: minifyNames }
 	});
 	if (!r.success) {
 		throw new Error(r.logs.map((l) => l.message).join("\n"));
@@ -23,8 +23,8 @@ test("two builds of the same code have no change, and an edited method has one",
 		{
 			changed: 0,
 			added: 0,
-			gone: 0,
-		},
+			gone: 0
+		}
 	);
 	const edited = long.replace('"tengu_example_gate"', '"tengu_other_gate"');
 	const d = diffIndexes(await indexOf(short), await indexOf(edited));
@@ -34,10 +34,10 @@ test("two builds of the same code have no change, and an edited method has one",
 	expect(lines).toHaveLength(3);
 	expect(lines[0]).toBe("  (){");
 	expect(lines[1]).toMatch(
-		/^- return \$[0-9a-f]{6}\("tengu_example_gate",!1\)\}$/u,
+		/^- return \$[0-9a-f]{6}\("tengu_example_gate",!1\)\}$/u
 	);
 	expect(lines[2]).toMatch(
-		/^\+ return \$[0-9a-f]{6}\("tengu_other_gate",!1\)\}$/u,
+		/^\+ return \$[0-9a-f]{6}\("tengu_other_gate",!1\)\}$/u
 	);
 	expect(filterChanges(d, "tengu_other")).toHaveLength(1);
 	expect(filterChanges(d, "nothing like this")).toHaveLength(0);
@@ -48,14 +48,14 @@ const app = (version: string, time: string, sha: string, chunk: string) =>
 
 test("a build stamp and a chunk name are not a change", async () => {
 	const from = await indexOf(
-		app("2.1.321", "2026-11-09T00:00:00Z", "aaaa", "39pr5kn3"),
+		app("2.1.321", "2026-11-09T00:00:00Z", "aaaa", "39pr5kn3")
 	);
 	const to = await indexOf(
-		app("2.1.322", "2026-11-10T00:15:08Z", "bbbb", "bq6gz2p6"),
+		app("2.1.322", "2026-11-10T00:15:08Z", "bbbb", "bq6gz2p6")
 	);
 	expect(diffIndexes(from, to).counts).toEqual({
 		changed: 0,
 		added: 0,
-		gone: 0,
+		gone: 0
 	});
 });

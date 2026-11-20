@@ -7,7 +7,7 @@ import {
 	docsOf,
 	isMapRecord,
 	isStringRecord,
-	readJson,
+	readJson
 } from "../../surface/coverage-cli.ts";
 import { serializeCapture, snapshot } from "../../surface/snapshot.ts";
 import { mapSeq } from "../lib/seq.ts";
@@ -34,7 +34,7 @@ export const runDiff = async (ctx: Ctx): Promise<number> => {
 	console.info(`release:diff ${from} -> ${to}`);
 	if (ctx.dry) {
 		console.info(
-			`plan: surface snapshots of ${from} and ${to} (written to captures/<v>/surface.json)`,
+			`plan: surface snapshots of ${from} and ${to} (written to captures/<v>/surface.json)`
 		);
 		console.info(`plan: write captures/${to}/diff/{<kind>.json,report.md}`);
 		return 0;
@@ -47,17 +47,17 @@ export const runDiff = async (ctx: Ctx): Promise<number> => {
 		docs: await loadDocs(),
 		names: await docsOf(
 			ROOT,
-			gs.flatMap((g) => g.kinds.map(([k]) => k)),
+			gs.flatMap((g) => g.kinds.map(([k]) => k))
 		),
 		map: await readJson(join(surfaceDir, "map.json"), isMapRecord),
 		exclusions: await readJson(
 			join(surfaceDir, "exclusions.json"),
-			isStringRecord,
-		),
+			isStringRecord
+		)
 	};
 	const dir = join(versionDir(to), "diff");
 	const ds = await mapSeq(gs, (g) =>
-		writeGroup(g, a, b, rules, { from, to, dir }),
+		writeGroup(g, a, b, rules, { from, to, dir })
 	);
 	const titles = Object.fromEntries(gs.map((g) => [g.key, g.title]));
 	await Bun.write(join(dir, "report.md"), renderReport(from, to, ds, titles));

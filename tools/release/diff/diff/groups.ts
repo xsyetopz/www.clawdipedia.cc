@@ -18,13 +18,13 @@ export const LEGACY: Group[] = [
 		key: "env",
 		file: "strings-env.json",
 		title: "Environment variables",
-		kinds: [["env", ""]],
+		kinds: [["env", ""]]
 	},
 	{
 		key: "flags",
 		file: "flags.json",
 		title: "CLI flags",
-		kinds: [["flag", ""]],
+		kinds: [["flag", ""]]
 	},
 	{
 		key: "commands",
@@ -32,27 +32,27 @@ export const LEGACY: Group[] = [
 		title: "Commands (cli:name = subcommand, /name = slash command)",
 		kinds: [
 			["subcommand", "cli:"],
-			["slash-command", ""],
-		],
+			["slash-command", ""]
+		]
 	},
 	{
 		key: "settings",
 		file: "settings.json",
 		title: "Settings",
-		kinds: [["setting", ""]],
+		kinds: [["setting", ""]]
 	},
 	{
 		key: "hooks",
 		file: "hooks.json",
 		title: "Hook events",
-		kinds: [["hook-event", ""]],
+		kinds: [["hook-event", ""]]
 	},
 	{
 		key: "gates",
 		file: "gates.json",
 		title: "Gates",
-		kinds: [["gate", ""]],
-	},
+		kinds: [["gate", ""]]
+	}
 ];
 
 /** The legacy groups, then one group for each other kind of either snapshot. */
@@ -67,8 +67,8 @@ export const groups = (kinds: string[]): Group[] => {
 				key: k,
 				file: `${k}.json`,
 				title: title(k),
-				kinds: [[k, ""]],
-			})),
+				kinds: [[k, ""]]
+			}))
 	];
 };
 
@@ -92,6 +92,6 @@ export const itemsOf = (g: Group, byKind: ByKind): Items => {
 		}
 	}
 	return new Map(
-		[...all].map(([n, ds]) => [n, [...new Set(ds)].toSorted().join(" | ")]),
+		[...all].map(([n, ds]) => [n, [...new Set(ds)].toSorted().join(" | ")])
 	);
 };

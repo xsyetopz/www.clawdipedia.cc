@@ -18,7 +18,7 @@ This hook sends every subagent that does not name a model to `haiku`.
 
 ```javascript
 on("agent.spawn", async ($, e, next) =>
-  next(e.model ? e : { ...e, model: "haiku" }),
+  next(e.model ? e : { ...e, model: "haiku" })
 );
 ```
 

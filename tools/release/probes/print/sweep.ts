@@ -23,7 +23,7 @@ const NOTES =
 const result = (
 	ctx: PrintCtx,
 	data: Record<string, Data>,
-	extra?: Partial<CaseResult>,
+	extra?: Partial<CaseResult>
 ): CaseResult => ({
 	schema: 1,
 	id: ID,
@@ -36,53 +36,53 @@ const result = (
 	timedOut: false,
 	data: normalise(data),
 	facts: [],
-	...extra,
+	...extra
 });
 
 const header = (
 	bases: Bases,
 	todo: string[],
-	skipped: string[],
+	skipped: string[]
 ): Record<string, Data> => ({
 	precondition: bases.A.valid && bases.B.valid,
 	"precondition.detail": [
 		bases.A.why && `A: ${bases.A.why}`,
-		bases.B.why && `B: ${bases.B.why}`,
+		bases.B.why && `B: ${bases.B.why}`
 	]
 		.filter(Boolean)
 		.join(" | "),
 	names: todo.length,
 	skipped,
 	"noise.A": bases.A.noise,
-	"noise.B": bases.B.noise,
+	"noise.B": bases.B.noise
 });
 
 const dataOf = (v: unknown): Record<string, Data> =>
 	Object.fromEntries(
 		Object.entries(obj(v)).map(([k, x]) => [
 			k,
-			Array.isArray(x) ? x.map((e) => show(e)) : scalar(x),
-		]),
+			Array.isArray(x) ? x.map((e) => show(e)) : scalar(x)
+		])
 	);
 
 const mergePartial = async (
 	ctx: PrintCtx,
 	data: Record<string, Data>,
 	samples: Record<string, string>,
-	names: string[],
+	names: string[]
 ): Promise<CaseResult> => {
 	const file = join(ctx.runDir, "print", "sweep.json");
 	if (!(await pathExists(file))) {
 		throw new Error(
-			"no print/sweep.json to merge into; run the full sweep first (--only sweep)",
+			"no print/sweep.json to merge into; run the full sweep first (--only sweep)"
 		);
 	}
 	const raw = obj(await Bun.file(file).json());
 	const prev = {
 		data: dataOf(raw["data"]),
 		samples: Object.fromEntries(
-			Object.entries(obj(raw["samples"])).map(([k, x]) => [k, show(x)]),
-		),
+			Object.entries(obj(raw["samples"])).map(([k, x]) => [k, show(x)])
+		)
 	};
 	const merged = mergeSweep(prev, data, samples, names);
 	return result(ctx, merged.data, { samples: merged.samples, notes: NOTES });
@@ -96,9 +96,9 @@ const sweepAll = async (ctx: PrintCtx, want: string[]): Promise<CaseResult> => {
 			childEnv({
 				home: "/x",
 				configDir: "/x",
-				baseUrl: "http://127.0.0.1:1/x",
-			}),
-		),
+				baseUrl: "http://127.0.0.1:1/x"
+			})
+		)
 	);
 	const skipped: string[] = [];
 	const todo: string[] = [];
@@ -112,17 +112,17 @@ const sweepAll = async (ctx: PrintCtx, want: string[]): Promise<CaseResult> => {
 	const bin = binaryPath(ctx.version);
 	const bases = {
 		A: await stableBaseline(bin, baselineA, false),
-		B: await stableBaseline(bin, baselineB, true),
+		B: await stableBaseline(bin, baselineB, true)
 	};
 	console.info(
-		`  sweep: ${todo.length} names, ${skipped.length} skipped, noise A=${bases.A.noise.length} B=${bases.B.noise.length}`,
+		`  sweep: ${todo.length} names, ${skipped.length} skipped, noise A=${bases.A.noise.length} B=${bases.B.noise.length}`
 	);
 	const t = tally(todo, await runJobs(bin, bases, todo));
 	const data = {
 		...header(bases, todo, skipped),
 		...t.data,
 		changed: [...new Set(t.changed)],
-		errors: t.errored,
+		errors: t.errored
 	};
 	if (want.length === 0) {
 		return result(ctx, data, { samples: t.samples, notes: NOTES });
@@ -149,8 +149,8 @@ const run = async (ctx: PrintCtx): Promise<CaseResult[]> => {
 			result(
 				ctx,
 				{ precondition: false, error: errorText(error) },
-				want.length > 0 ? { id: `${ID}.partial` } : {},
-			),
+				want.length > 0 ? { id: `${ID}.partial` } : {}
+			)
 		];
 	}
 };
@@ -158,5 +158,5 @@ const run = async (ctx: PrintCtx): Promise<CaseResult[]> => {
 export const sweepGroup: PrintGroup = {
 	id: "sweep",
 	title: "Environment variable sweep (names from release:diff strings)",
-	run,
+	run
 };

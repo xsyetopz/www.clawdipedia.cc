@@ -9,7 +9,7 @@ export {
 	constString,
 	functionOf,
 	nameOf,
-	returnsOf,
+	returnsOf
 } from "./ast/calls.ts";
 export { Module } from "./ast/module.ts";
 export {
@@ -20,7 +20,7 @@ export {
 	litValue,
 	type Node,
 	type NodeOf,
-	strLit,
+	strLit
 } from "./ast/node.ts";
 export type { Def, Ref, Variable } from "./ast/variables.ts";
 export { mapSeq } from "./seq.ts";

@@ -18,7 +18,7 @@ import {
 	type Fn,
 	functionOf,
 	type Module,
-	type Node,
+	type Node
 } from "../ast.ts";
 import { mapSeq } from "../seq.ts";
 import {
@@ -28,7 +28,7 @@ import {
 	literal,
 	scanOf,
 	type SurfaceItem,
-	unique,
+	unique
 } from "./common.ts";
 
 interface Site {
@@ -62,7 +62,7 @@ const forwards = (
 	fm: Module,
 	fn: Fn,
 	name: string,
-	loggers: Set<Group>,
+	loggers: Set<Group>
 ): Promise<boolean> => {
 	const root = asNode(fn.body);
 	const stack: Node[] = root ? [root] : [];
@@ -94,7 +94,7 @@ const forwards = (
 /** A wrapper `fo(e){…a(e,{…})…}` that passes its first parameter on to a logger is a logger too. Did one join? */
 const growLoggers = async (
 	groups: Map<Group, Site[]>,
-	loggers: Set<Group>,
+	loggers: Set<Group>
 ): Promise<boolean> => {
 	let grew = false;
 	await mapSeq(groups, async ([k, sites]) => {
@@ -124,9 +124,9 @@ const loggersOf = (groups: Map<Group, Site[]>): Set<Group> =>
 			.filter(
 				([, s]) =>
 					s.filter((x) => payload(asNode(x.n.arguments[1]))).length * 2 >
-					s.length,
+					s.length
 			)
-			.map(([k]) => k),
+			.map(([k]) => k)
 	);
 
 export const extractGates: Extractor = async (bundle) => {
@@ -163,7 +163,7 @@ export const extractGates: Extractor = async (bundle) => {
 				name,
 				module: m.name,
 				offset: n.start,
-				...(def !== undefined && { default: def }),
+				...(def !== undefined && { default: def })
 			});
 		});
 	});

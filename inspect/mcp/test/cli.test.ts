@@ -20,15 +20,15 @@ const cli = async (...args: string[]) => {
 			...process.env,
 			CC_INSPECT_VERSIONS_DIR: join(tmp, "versions"),
 			CC_INSPECT_LAUNCHER: join(tmp, "no-launcher"),
-			CC_INSPECT_CACHE: join(tmp, "cache"),
+			CC_INSPECT_CACHE: join(tmp, "cache")
 		},
 		stdout: "pipe",
-		stderr: "pipe",
+		stderr: "pipe"
 	});
 	const [stdout, stderr, exitCode] = await Promise.all([
 		new Response(proc.stdout).text(),
 		new Response(proc.stderr).text(),
-		proc.exited,
+		proc.exited
 	]);
 	return { stdout, stderr, exitCode };
 };
@@ -38,11 +38,11 @@ test("cli calls each tool in order and prints its text", async () => {
 		"code",
 		'{"action":"installs"}',
 		"code",
-		'{"action":"installs"}',
+		'{"action":"installs"}'
 	);
 	expect(r.exitCode).toBe(0);
 	expect(r.stdout.match(/^=== code \{"action":"installs"\}$/gmu)).toHaveLength(
-		2,
+		2
 	);
 });
 

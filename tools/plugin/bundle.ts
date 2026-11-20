@@ -16,7 +16,7 @@ const run = async (cmd: string[]): Promise<Run> => {
 	const [out, err, exitCode] = await Promise.all([
 		new Response(proc.stdout).text(),
 		new Response(proc.stderr).text(),
-		proc.exited,
+		proc.exited
 	]);
 	return { exitCode, out, err };
 };
@@ -25,18 +25,18 @@ const run = async (cmd: string[]): Promise<Run> => {
 export const validateProblems = async (): Promise<string[]> => {
 	if (Bun.which("claude") === null) {
 		console.warn(
-			"plugin:check: claude CLI not on PATH, skipped claude plugin validate",
+			"plugin:check: claude CLI not on PATH, skipped claude plugin validate"
 		);
 		return [];
 	}
 	const targets = [".", ...PLUGINS.map((p) => `./${p.dir}`)];
 	const runs = await Promise.all(
-		targets.map((target) => run(["claude", "plugin", "validate", target])),
+		targets.map((target) => run(["claude", "plugin", "validate", target]))
 	);
 	return runs.flatMap((r, i) =>
 		r.exitCode === 0
 			? []
-			: [`claude plugin validate ${targets[i]}: ${(r.out + r.err).trim()}`],
+			: [`claude plugin validate ${targets[i]}: ${(r.out + r.err).trim()}`]
 	);
 };
 
@@ -45,7 +45,7 @@ const freshnessProblems = async ({
 	dir,
 	src,
 	out: dist,
-	external,
+	external
 }: Plugin): Promise<string[]> => {
 	// bun build is deterministic for the same inputs and versions.
 	const tmp = await mkdtemp(join(tmpdir(), "plugin-check-"));
@@ -57,7 +57,7 @@ const freshnessProblems = async ({
 			src,
 			"--target=bun",
 			...external.map((x) => `--external=${x}`),
-			`--outfile=${bundle}`,
+			`--outfile=${bundle}`
 		]);
 		if (b.exitCode !== 0) {
 			return [`bundle ${dir}: ${b.err.trim()}`];
@@ -67,7 +67,7 @@ const freshnessProblems = async ({
 		}
 		const fresh = Buffer.from(await Bun.file(bundle).arrayBuffer());
 		const committed = Buffer.from(
-			await Bun.file(join(ROOT, dist)).arrayBuffer(),
+			await Bun.file(join(ROOT, dist)).arrayBuffer()
 		);
 		return fresh.equals(committed)
 			? []

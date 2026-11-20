@@ -3,7 +3,7 @@ const AWS = [
 	"@aws-sdk/",
 	"@smithy/",
 	"@aws-crypto/",
-	"@aws-sdk/credential-providers",
+	"@aws-sdk/credential-providers"
 ];
 const GOOGLE = ["google-auth-library", "gaxios", "gcp-metadata"];
 const OTEL = [
@@ -15,7 +15,7 @@ const OTEL = [
 	"@opentelemetry/sdk-logs",
 	"@opentelemetry/otlp-exporter-base",
 	"@opentelemetry/otlp-transformer",
-	"@opentelemetry/exporter-trace-otlp-http",
+	"@opentelemetry/exporter-trace-otlp-http"
 ];
 /** Reason of an entry to the npm packages whose published source must hold its text. A name ending in `/` is every bundled package of that scope. */
 export const LIBS: [RegExp, string[]][] = [
@@ -26,7 +26,7 @@ export const LIBS: [RegExp, string[]][] = [
 	[/helper library/u, ["turndown", "@mixmark-io/domino"]],
 	[
 		/MCP SDK v2/u,
-		["@modelcontextprotocol/client", "@modelcontextprotocol/server"],
+		["@modelcontextprotocol/client", "@modelcontextprotocol/server"]
 	],
 	[/MCP SDK/u, ["@modelcontextprotocol/sdk"]],
 	[/gRPC/u, ["@grpc/grpc-js", "@grpc/proto-loader"]],
@@ -39,8 +39,8 @@ export const LIBS: [RegExp, string[]][] = [
 			"@azure/core-client",
 			"@azure/core-tracing",
 			"@azure/msal-node",
-			"@azure/msal-common",
-		],
+			"@azure/msal-common"
+		]
 	],
 	[/Standard Webhooks/u, ["standardwebhooks"]],
 	[/bundled Agent SDK/u, ["@anthropic-ai/claude-agent-sdk"]],
@@ -53,8 +53,8 @@ export const LIBS: [RegExp, string[]][] = [
 			"@anthropic-ai/bedrock-sdk",
 			"@anthropic-ai/vertex-sdk",
 			"@anthropic-ai/foundry-sdk",
-			"@anthropic-ai/aws-sdk",
-		],
+			"@anthropic-ai/aws-sdk"
+		]
 	],
 	[/Ajv/u, ["ajv", "ajv-formats"]],
 	[/pngjs/u, ["pngjs"]],
@@ -85,9 +85,9 @@ export const LIBS: [RegExp, string[]][] = [
 			"http-proxy-agent",
 			"https-proxy-agent",
 			"socks-proxy-agent",
-			"socks",
-		],
-	],
+			"socks"
+		]
+	]
 ];
 
 /** A reason that starts "Bundled <package>" names the package: its first word when that is a package name, else the first scoped name in the reason. */

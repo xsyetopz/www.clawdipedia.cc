@@ -8,7 +8,7 @@ import { shimDir } from "./shim.ts";
 export {
 	binaryPath,
 	DEFAULT_PROMPT as PROMPT,
-	installedVersions,
+	installedVersions
 } from "../util.ts";
 export const FAKE_KEY = "sk-ant-fake-probe";
 
@@ -62,13 +62,13 @@ export const NON_SECRET_NAMES: ReadonlySet<string> = new Set([
 	"GOOGLE_APPLICATION_CREDENTIALS",
 	"CREDENTIALS_DIRECTORY",
 	"SBT_CREDENTIALS",
-	"COURSIER_CREDENTIALS",
+	"COURSIER_CREDENTIALS"
 ]);
 
 /** Throws on a credential-looking name (other than ANTHROPIC_API_KEY=FAKE_KEY) or a real-looking key value. */
 export const assertSafeEnv = (
 	env: Record<string, string>,
-	fakeCredentials: string[] = [],
+	fakeCredentials: string[] = []
 ): void => {
 	for (const [k, v] of Object.entries(env)) {
 		if (k === "ANTHROPIC_API_KEY" && v === FAKE_KEY) {
@@ -102,7 +102,7 @@ export const childEnv = (o: ChildEnvOpts): Record<string, string> => {
 		AWS_EC2_METADATA_DISABLED: "true",
 		GIT_CONFIG_GLOBAL: join(o.home, ".gitconfig"),
 		// git's osxkeychain helper must not run
-		GIT_CONFIG_NOSYSTEM: "1",
+		GIT_CONFIG_NOSYSTEM: "1"
 	};
 	if ((o.auth ?? "fake-key") === "fake-key") {
 		env["ANTHROPIC_API_KEY"] = FAKE_KEY;
@@ -114,7 +114,7 @@ export const childEnv = (o: ChildEnvOpts): Record<string, string> => {
 	for (const [k, v] of Object.entries(o.extra ?? {})) {
 		if (k in env && o.allowOverride?.includes(k) !== true) {
 			throw new Error(
-				`extra would overwrite fixed key ${k}; list it in allowOverride`,
+				`extra would overwrite fixed key ${k}; list it in allowOverride`
 			);
 		}
 		env[k] = v;
@@ -122,7 +122,7 @@ export const childEnv = (o: ChildEnvOpts): Record<string, string> => {
 	for (const n of o.fakeCredentials ?? []) {
 		if (n.startsWith("ANTHROPIC_") || n.startsWith("CLAUDE_CODE_")) {
 			throw new Error(
-				`fakeCredentials may not name ${n}: the program would use it`,
+				`fakeCredentials may not name ${n}: the program would use it`
 			);
 		}
 		env[n] = FAKE_CREDENTIAL;

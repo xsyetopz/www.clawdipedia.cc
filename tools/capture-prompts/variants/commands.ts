@@ -10,22 +10,22 @@ export const COMMAND_VARIANTS: Variant[] = [
 		id: "override-command-init",
 		group: "commands",
 		projFiles: { ".claude/commands/init.md": OV_CMD("PROBE-OVERRIDE-CMD") },
-		baseline: "command-init",
+		baseline: "command-init"
 	},
 	{
 		...cmdVariant(
 			"simplify",
 			"Override /simplify with a Skill File",
-			"Undocumented",
+			"Undocumented"
 		),
 		id: "override-skill-simplify",
 		group: "other",
 		projFiles: {
 			".claude/skills/simplify/SKILL.md": OV_SKILL(
 				"simplify",
-				"PROBE-OVERRIDE-SKILL",
-			),
+				"PROBE-OVERRIDE-SKILL"
+			)
 		},
-		baseline: "command-simplify",
-	},
+		baseline: "command-simplify"
+	}
 ];

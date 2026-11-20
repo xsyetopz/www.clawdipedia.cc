@@ -9,7 +9,7 @@ const usage = (name: string | undefined): number => {
 		console.error(`unknown command: ${name}`);
 	}
 	console.error(
-		"usage: bun tools/release/cli.ts <command> [--from V] [--to V] [--only a,b] [--dry]",
+		"usage: bun tools/release/cli.ts <command> [--from V] [--to V] [--only a,b] [--dry]"
 	);
 	for (const [n, c] of Object.entries(COMMANDS)) {
 		console.error(`  ${n.padEnd(10)} ${c.summary}`);
@@ -43,7 +43,7 @@ const main = async (): Promise<number> => {
 			args,
 			startedAt,
 			endedAt: new Date().toISOString(),
-			exit,
+			exit
 		});
 	}
 	return exit;

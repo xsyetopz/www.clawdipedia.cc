@@ -9,7 +9,7 @@ import { Bundle } from "../src/ast.ts";
 import { prepare, unitsOf } from "../src/prepare.ts";
 
 const mod = async (
-	text: string,
+	text: string
 ): Promise<NonNullable<Awaited<ReturnType<Bundle["get"]>>>> => {
 	const bundle = new Bundle([{ name: "/$bunfs/root/a.js", text }]);
 	const found = await bundle.get("a.js");
@@ -23,8 +23,8 @@ test("a unit cuts out the functions inside it", async () => {
 	const units = unitsOf(
 		"a.js",
 		await mod(
-			'var t={name:"Monitor",isEnabled(){return g("tengu_x")}};function g(k){return k.length}',
-		),
+			'var t={name:"Monitor",isEnabled(){return g("tengu_x")}};function g(k){return k.length}'
+		)
 	);
 	const top = units.find((u) => u.k === "VariableDeclaration");
 	const method = units.find((u) => u.k === "isEnabled");
@@ -40,13 +40,13 @@ test("a second call for the same binary reads the cache and parses nothing", asy
 		const modules = [
 			{
 				name: "/$bunfs/root/cli.js",
-				text: 'var r=import.meta.require("/$bunfs/root/chunk-ab12.js");',
+				text: 'var r=import.meta.require("/$bunfs/root/chunk-ab12.js");'
 			},
 			{
 				name: "/$bunfs/root/chunk-ab12.js",
-				text: 'export function q(){return"x"}',
+				text: 'export function q(){return"x"}'
 			},
-			{ name: "/$bunfs/root/notes.txt", text: "not code" },
+			{ name: "/$bunfs/root/notes.txt", text: "not code" }
 		];
 		const first = await prepare("9.9.9", import.meta.path, modules, root);
 		expect(first.parsed).toBe(2);
@@ -54,12 +54,12 @@ test("a second call for the same binary reads the cache and parses nothing", asy
 		expect(chunks).toHaveLength(1);
 		expect(chunks[0]).toMatch(/^chunk@[0-9a-f]{8}\.js$/u);
 		expect(first.index.units.find((u) => u.m === "cli.js")?.t).toContain(
-			"chunk@",
+			"chunk@"
 		);
 		const written = await readdir(join(first.dir, "modules"));
 		expect(written.toSorted((x, y) => x.localeCompare(y))).toEqual([
 			"chunk-ab12.js",
-			"cli.js",
+			"cli.js"
 		]);
 		const second = await prepare("9.9.9", import.meta.path, modules, root);
 		expect(second.parsed).toBe(0);
@@ -75,7 +75,7 @@ test("a second call for the same binary reads the cache and parses nothing", asy
 		const again = await prepare("9.9.9", import.meta.path, modules, root);
 		expect(again.parsed).toBe(2);
 		expect(await Bun.file(join(first.dir, "readable", "cli.js")).exists()).toBe(
-			false,
+			false
 		);
 	} finally {
 		await rm(root, { recursive: true, force: true });

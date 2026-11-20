@@ -46,7 +46,7 @@ const walk = async (dir: string): Promise<string[]> => {
 			const path = join(dir, name);
 			const info = await stat(path);
 			return info.isDirectory() ? walk(path) : [path];
-		}),
+		})
 	);
 	return found.flat();
 };
@@ -67,7 +67,7 @@ const checkEmojiLines = (file: string, text: string): void => {
 			report(
 				file,
 				i + 1,
-				`emoji not on the allow-list: U+${bad.codePointAt(0)?.toString(16).toUpperCase()}`,
+				`emoji not on the allow-list: U+${bad.codePointAt(0)?.toString(16).toUpperCase()}`
 			);
 		}
 	}
@@ -121,14 +121,14 @@ const checkHandWritten = (file: string, text: string): void => {
 	report(
 		file,
 		at + 1,
-		"hand-written prompt page has host data (platform, OS version, build suffix, temp path, or random id); use the placeholders from tools/capture-prompts/normalize.ts",
+		"hand-written prompt page has host data (platform, OS version, build suffix, temp path, or random id); use the placeholders from tools/capture-prompts/normalize.ts"
 	);
 };
 
 const checkDoc = (
 	file: string,
 	text: string,
-	docs: Map<string, string>,
+	docs: Map<string, string>
 ): void => {
 	let fm: FrontMatter | null;
 	try {
@@ -165,7 +165,7 @@ const srcFiles = await walk(join(ROOT, "src"));
 const EMOJI_FILES = [...docFiles, ...srcFiles].filter((f) => TEXT_EXT.test(f));
 
 const emojiTexts = await readAll(
-	EMOJI_FILES.filter((f) => !f.startsWith(CAPTURES)),
+	EMOJI_FILES.filter((f) => !f.startsWith(CAPTURES))
 );
 for (const [file, text] of emojiTexts) {
 	checkEmojiLines(file, text);
@@ -182,13 +182,13 @@ if (process.argv.includes("--fix")) {
 	const text = docTexts.get(UNDOCUMENTED) ?? "";
 	const fixed = fixCounts(
 		text,
-		(link) => docTexts.get(join(dirname(UNDOCUMENTED), link)) ?? "",
+		(link) => docTexts.get(join(dirname(UNDOCUMENTED), link)) ?? ""
 	);
 	if (fixed !== text) {
 		await Bun.write(UNDOCUMENTED, fixed);
 		docTexts.set(UNDOCUMENTED, fixed);
 		console.info(
-			`check-docs: wrote the actual counts to ${relative(ROOT, UNDOCUMENTED)}`,
+			`check-docs: wrote the actual counts to ${relative(ROOT, UNDOCUMENTED)}`
 		);
 	}
 }

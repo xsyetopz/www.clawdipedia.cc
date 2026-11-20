@@ -21,7 +21,7 @@ const walk = async (d: string, base: string): Promise<string[]> => {
 			const f = join(d, e);
 			const st = await stat(f);
 			return st.isDirectory() ? walk(f, base) : [f.slice(base.length + 1)];
-		}),
+		})
 	);
 	return parts.flat();
 };

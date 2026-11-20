@@ -49,7 +49,7 @@ This hook adds a tail to the hint line under the prompt.
 
 ```javascript
 on("ui.render", { component: "PromptHint" }, async ($, e, next) =>
-  next({ ...e, props: { ...e.props, tail: " (mod)" } }),
+  next({ ...e, props: { ...e.props, tail: " (mod)" } })
 );
 ```
 
@@ -302,7 +302,7 @@ The engine asks for every agent that has `hasRow`, drawn now or not, and again w
 
 ```javascript
 on("ui.render", { component: "AgentRow" }, ($, e, next) =>
-  next({ ...e, props: { ...e.props, isHidden: e.props.status === "idle" } }),
+  next({ ...e, props: { ...e.props, isHidden: e.props.status === "idle" } })
 );
 ```
 

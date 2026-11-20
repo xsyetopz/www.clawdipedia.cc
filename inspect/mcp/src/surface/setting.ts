@@ -22,7 +22,7 @@ import {
 	scanOf,
 	short,
 	type SurfaceItem,
-	unique,
+	unique
 } from "./common.ts";
 import { describe, item } from "./setting/item.ts";
 import { KeyWalk } from "./setting/nested.ts";
@@ -39,7 +39,7 @@ interface Top {
 
 /** The condition and object of a spread `...cond&&{key:…}` or `...cond?{key:…}:{}`: keys behind a condition. */
 const conditional = (
-	a: Node | undefined,
+	a: Node | undefined
 ): { test: Node; obj: NodeOf<"ObjectExpression"> } | undefined => {
 	if (a?.type === "LogicalExpression" && a.operator === "&&") {
 		return a.right.type === "ObjectExpression"
@@ -56,7 +56,7 @@ const keysOf = (
 	m: Module,
 	o: NodeOf<"ObjectExpression">,
 	out: Top[],
-	gate?: string,
+	gate?: string
 ): void => {
 	for (const p of o.properties) {
 		if (p.type === "SpreadElement") {
@@ -73,7 +73,7 @@ const keysOf = (
 				name: k,
 				value: p.value,
 				offset: p.start,
-				...(gate !== undefined && { gate }),
+				...(gate !== undefined && { gate })
 			});
 		}
 	}
@@ -103,8 +103,8 @@ const topLevel = async (bundle: Bundle): Promise<Top[]> => {
 export const extractSettings: Extractor = async (bundle) =>
 	unique(
 		await mapSeq(await topLevel(bundle), (s) =>
-			item("setting", s.m, s.name, s.value, s.offset, s.gate),
-		),
+			item("setting", s.m, s.name, s.value, s.offset, s.gate)
+		)
 	);
 
 export const extractSettingKeys: Extractor = async (bundle) => {
@@ -112,8 +112,8 @@ export const extractSettingKeys: Extractor = async (bundle) => {
 	await mapSeq(await topLevel(bundle), (s) =>
 		new KeyWalk(out, s.gate).walk(
 			{ m: s.m, path: s.name, env: new Map(), depth: 0 },
-			s.value,
-		),
+			s.value
+		)
 	);
 	// An object key is set through its own keys, so only the leaves are items.
 	const all = unique(out);
@@ -122,8 +122,8 @@ export const extractSettingKeys: Extractor = async (bundle) => {
 			i.name
 				.split(".")
 				.map((_, j, a) => a.slice(0, j).join("."))
-				.slice(2),
-		),
+				.slice(2)
+		)
 	);
 	return all.filter((i) => !parents.has(i.name));
 };

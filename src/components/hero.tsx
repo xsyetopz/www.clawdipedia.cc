@@ -4,7 +4,7 @@ import {
 	Differs,
 	Documented,
 	Gated,
-	Undocumented,
+	Undocumented
 } from "@site/src/components/badge";
 import { CLAUDE_CODE_VERSION } from "@site/src/version";
 import type React from "react";
@@ -13,13 +13,13 @@ const KEY: { badge: React.JSX.Element; text: string }[] = [
 	{ badge: <Documented />, text: "An official docs page names it." },
 	{
 		badge: <Undocumented />,
-		text: "Only the program shows it. It can change without notice.",
+		text: "Only the program shows it. It can change without notice."
 	},
 	{
 		badge: <Differs />,
-		text: "The docs and the program disagree. The row says how.",
+		text: "The docs and the program disagree. The row says how."
 	},
-	{ badge: <Gated />, text: "It works only behind a flag or a server gate." },
+	{ badge: <Gated />, text: "It works only behind a flag or a server gate." }
 ];
 
 const KeyList = (): React.JSX.Element => (
@@ -68,7 +68,7 @@ export const Hero = (): React.JSX.Element => (
 			style={{
 				fontSize: "clamp(2.2rem, 5vw, 3.2rem)",
 				fontWeight: 700,
-				lineHeight: 1.15,
+				lineHeight: 1.15
 			}}
 		>
 			Every Part of Claude Code You Can Use or Change

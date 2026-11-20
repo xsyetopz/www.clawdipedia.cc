@@ -18,21 +18,21 @@ export interface BunModule {
 
 /** The Mod API type file the program embeds (`claude-code.d.ts-<hash>.zst`), as text. */
 export const typeFile = async (
-	modules: Pick<BunModule, "name" | "bytes">[],
+	modules: Pick<BunModule, "name" | "bytes">[]
 ): Promise<{ name: string; text: string }> => {
 	const [found, ...more] = modules.filter((m) =>
-		/\/claude-code\.d\.ts-[^/]*\.zst$/u.test(m.name),
+		/\/claude-code\.d\.ts-[^/]*\.zst$/u.test(m.name)
 	);
 	if (!found || more.length > 0) {
 		throw new Error(
-			`expected one embedded type file, found ${more.length + (found ? 1 : 0)}`,
+			`expected one embedded type file, found ${more.length + (found ? 1 : 0)}`
 		);
 	}
 	return {
 		name: found.name.split("/").pop() ?? found.name,
 		text: new TextDecoder("utf-8", { ignoreBOM: true }).decode(
-			await Bun.zstdDecompress(found.bytes),
-		),
+			await Bun.zstdDecompress(found.bytes)
+		)
 	};
 };
 
@@ -67,7 +67,7 @@ const lastTrailer = async (file: File, end = file.size): Promise<number> => {
 /** The name and contents pointers of each module, from the Offsets that end at `trailerAt`. */
 const tableOf = async (
 	file: File,
-	trailerAt: number,
+	trailerAt: number
 ): Promise<{
 	base: number;
 	entryId: number;
@@ -87,15 +87,15 @@ const tableOf = async (
 	const table = await read(file, tableOffset, tableOffset + tableLength);
 	const part = (i: number): Part => [
 		table.readUInt32LE(i),
-		table.readUInt32LE(i + 4),
+		table.readUInt32LE(i + 4)
 	];
 	return {
 		base,
 		entryId: offsets.readUInt32LE(16),
 		entries: Array.from({ length: tableLength / ENTRY_SIZE }, (_, i) => ({
 			name: part(i * ENTRY_SIZE),
-			contents: part(i * ENTRY_SIZE + 8),
-		})),
+			contents: part(i * ENTRY_SIZE + 8)
+		}))
 	};
 };
 
@@ -103,7 +103,7 @@ const tableOf = async (
 const zstText = async (bytes: Buffer): Promise<string> => {
 	try {
 		return new TextDecoder("utf-8", { ignoreBOM: true }).decode(
-			await Bun.zstdDecompress(bytes),
+			await Bun.zstdDecompress(bytes)
 		);
 	} catch {
 		return bytes.toString("utf8");
@@ -123,13 +123,13 @@ const moduleOf = async (name: string, bytes: Buffer): Promise<BunModule> => {
 		get source() {
 			source ??= bytes.toString("utf8");
 			return source;
-		},
+		}
 	};
 };
 
 /** Reads the modules of a Bun single-file executable. It reads the names and the contents, not the whole file. */
 export const extractModules = async (
-	binaryPath: string,
+	binaryPath: string
 ): Promise<{
 	modules: BunModule[];
 	entry: string;
@@ -138,7 +138,7 @@ export const extractModules = async (
 	const trailerAt = await lastTrailer(file);
 	if (trailerAt === -1) {
 		throw new Error(
-			`${binaryPath} is not a Bun single-file executable (no trailer)`,
+			`${binaryPath} is not a Bun single-file executable (no trailer)`
 		);
 	}
 	const { base, entryId, entries } = await tableOf(file, trailerAt);
@@ -158,11 +158,11 @@ export const extractModules = async (
 			const name = bytes(e.name).toString("utf8");
 			if (!name.startsWith("/$bunfs/")) {
 				throw new Error(
-					`bad module name at entry ${i}: ${JSON.stringify(name)}`,
+					`bad module name at entry ${i}: ${JSON.stringify(name)}`
 				);
 			}
 			return moduleOf(name, bytes(e.contents));
-		}),
+		})
 	);
 	return { modules, entry: modules[entryId]?.name ?? "" };
 };

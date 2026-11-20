@@ -19,7 +19,7 @@ const textOf = (content: unknown): string =>
 export const countSubject = (body: unknown): string => {
 	const b = isObj(body) ? body : {};
 	const tools = list(b["tools"]).flatMap((t) =>
-		isObj(t) && typeof t["name"] === "string" ? [t["name"]] : [],
+		isObj(t) && typeof t["name"] === "string" ? [t["name"]] : []
 	);
 	const text = list(b["messages"])
 		.map((m) => (isObj(m) ? textOf(m["content"]) : ""))

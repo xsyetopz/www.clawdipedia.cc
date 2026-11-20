@@ -25,7 +25,7 @@ describe("packaging", () => {
 		const p = Bun.spawn([BIN, "--help"], {
 			env: process.env,
 			stdout: "pipe",
-			stderr: "pipe",
+			stderr: "pipe"
 		});
 		expect(await p.exited).toBe(0);
 		// The help text names the command; its wording is not pinned.
@@ -37,7 +37,7 @@ describe("packaging", () => {
 		expect(await pathExists(join(cli, ".mcp.json"))).toBe(false);
 		expect(await pathExists(join(cli, "bin", "clawdipedia"))).toBe(true);
 		expect(
-			await pathExists(join(cli, "skills", "clawdipedia-docs-cli", "SKILL.md")),
+			await pathExists(join(cli, "skills", "clawdipedia-docs-cli", "SKILL.md"))
 		).toBe(true);
 		const plugin = await jsonOf(join(cli, ".claude-plugin", "plugin.json"));
 		expect(plugin["name"]).toBe("clawdipedia-docs-cli");

@@ -13,7 +13,7 @@ import {
 	type Extractor,
 	scanOf,
 	type SurfaceItem,
-	unique,
+	unique
 } from "./common.ts";
 
 const ANCHORS = ["history.jsonl", "keybindings.json"];
@@ -21,7 +21,7 @@ const ANCHORS = ["history.jsonl", "keybindings.json"];
 /** The callee `base` and the last constant string of `join(base(), …, "name")`, or undefined for another call. */
 const joinParts = async (
 	m: Module,
-	n: Node,
+	n: Node
 ): Promise<{ callee: Node; name: string } | undefined> => {
 	if (n.type !== "CallExpression" || n.arguments.length < 2) {
 		return undefined;

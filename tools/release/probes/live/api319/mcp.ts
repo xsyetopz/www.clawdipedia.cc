@@ -11,7 +11,7 @@ const answer = (m: Record<string, unknown>, reply: Reply): Response => {
 		return reply({
 			protocolVersion: "2025-06-18",
 			capabilities: { tools: {} },
-			serverInfo: { name: "p", version: "1" },
+			serverInfo: { name: "p", version: "1" }
 		});
 	}
 	if (m["method"] === "tools/list") {
@@ -20,9 +20,9 @@ const answer = (m: Record<string, unknown>, reply: Reply): Response => {
 				{
 					name: "ping",
 					description: "p",
-					inputSchema: { type: "object", properties: {} },
-				},
-			],
+					inputSchema: { type: "object", properties: {} }
+				}
+			]
 		});
 	}
 	return m["id"] === undefined
@@ -38,15 +38,15 @@ export const httpServer = () =>
 		fetch: async (req) => {
 			const m = obj(await req.json().catch(() => ({})));
 			return answer(m, (result) =>
-				Response.json({ jsonrpc: "2.0", id: m["id"], result }),
+				Response.json({ jsonrpc: "2.0", id: m["id"], result })
 			);
-		},
+		}
 	});
 
 /** Writes the stdio server script and the --mcp-config file; returns the config path. */
 export const writeMcp = async (
 	sb: Sandbox,
-	http: ReturnType<typeof httpServer> | undefined,
+	http: ReturnType<typeof httpServer> | undefined
 ): Promise<string> => {
 	const cfg = join(sb.home, "m", "mcp.json");
 	await Bun.write(join(sb.home, "m", "srv.js"), SRV);
@@ -57,9 +57,9 @@ export const writeMcp = async (
 				psrv:
 					http === undefined
 						? { command: "bun", args: [join(sb.home, "m", "srv.js")] }
-						: { type: "http", url: `http://127.0.0.1:${http.port}/mcp` },
-			},
-		}),
+						: { type: "http", url: `http://127.0.0.1:${http.port}/mcp` }
+			}
+		})
 	);
 	return cfg;
 };

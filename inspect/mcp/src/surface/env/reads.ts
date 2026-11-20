@@ -6,7 +6,7 @@ import {
 	isFn,
 	type Module,
 	type Node,
-	type NodeOf,
+	type NodeOf
 } from "../../ast.ts";
 import { mapSeq } from "../../seq.ts";
 import { asNode, keyOf, type Prop } from "../common.ts";
@@ -87,7 +87,7 @@ const keyName = (m: Module, p: Prop): Promise<string | undefined> =>
 const objectNames = async (
 	c: Ctx,
 	m: Module,
-	o: NodeOf<"ObjectExpression">,
+	o: NodeOf<"ObjectExpression">
 ): Promise<Node[]> => {
 	const spread: Node[] = [];
 	await mapSeq(o.properties, async (p) => {
@@ -107,7 +107,7 @@ const objectNames = async (
 const childEnv = async (
 	c: Ctx,
 	m: Module,
-	n: NodeOf<"ObjectExpression">,
+	n: NodeOf<"ObjectExpression">
 ): Promise<void> => {
 	const parent = m.parent(n);
 	const option =
@@ -180,7 +180,7 @@ const enclosingFn = (m: Module, n: Node): Fn | undefined => {
 /** The parameters of `fn` that its body compares with `===`. */
 const comparedParams = (
 	m: Module,
-	fn: Fn,
+	fn: Fn
 ): Omit<Ctx["helpers"][number], "m">[] => {
 	const found: Omit<Ctx["helpers"][number], "m">[] = [];
 	const stack = nodes(fn.body);
@@ -260,7 +260,7 @@ export const SHOWN: Node["type"][] = [
 	"VariableDeclarator",
 	"ObjectExpression",
 	"CallExpression",
-	"ArrayExpression",
+	"ArrayExpression"
 ];
 
 /** Visit one node for anchors 2 to 5. */

@@ -18,7 +18,7 @@ const fakeProgram = (
 		hang?: boolean;
 		say?: string;
 		big?: boolean;
-	} = {},
+	} = {}
 ) => {
 	const say =
 		o.say === undefined
@@ -53,7 +53,7 @@ await fetch(process.env.ANTHROPIC_BASE_URL + "/v1/messages?beta=true", {
     { type: "text", text: "Base: " + skill + " cwd: " + process.cwd() + " home: " + process.env.HOME + " security: " + sec + " env: " + env },
   ] }] }),
 }).then((r) => r.text());
-`,
+`
 	);
 };
 const runDirs = async () => {
@@ -69,10 +69,10 @@ test("run keeps the user turn from the marked block, with temp folders as placeh
 		expect(r.requests.map((q) => q.path)).toEqual(["/v1/messages?beta=true"]);
 		expect(r.events).toEqual([{ type: "system", subtype: "init" }]);
 		expect(userText(r, "<command-name>/x</command-name>")).toBe(
-			"<command-name>/x</command-name>\n/x ARG\n\nBase: <bundled-skill-dir>/x cwd: <project-dir> home: <home> security: 44 env: ANTHROPIC_API_KEY,ANTHROPIC_BASE_URL,AWS_EC2_METADATA_DISABLED",
+			"<command-name>/x</command-name>\n/x ARG\n\nBase: <bundled-skill-dir>/x cwd: <project-dir> home: <home> security: 44 env: ANTHROPIC_API_KEY,ANTHROPIC_BASE_URL,AWS_EC2_METADATA_DISABLED"
 		);
 		const found = await Promise.all(
-			[r.dirs.home, r.dirs.config, r.dirs.project].map((d) => exists(d)),
+			[r.dirs.home, r.dirs.config, r.dirs.project].map((d) => exists(d))
 		);
 		expect(found).toEqual([false, false, false]);
 	} finally {
@@ -89,16 +89,16 @@ test("run fails on another key or host, and removes its folders", async () => {
 	const before = await runDirs();
 	expect(
 		await rejection(
-			runPrompt(await fakeProgram({ key: "sk-ant-other-key" }), "/x ARG"),
-		),
+			runPrompt(await fakeProgram({ key: "sk-ant-other-key" }), "/x ARG")
+		)
 	).toContain("another host or key");
 	expect(
 		await rejection(
 			runPrompt(
 				await fakeProgram({ host: "127.0.0.1.attacker.test" }),
-				"/x ARG",
-			),
-		),
+				"/x ARG"
+			)
+		)
 	).toContain("another host or key");
 	expect(await runDirs()).toEqual(before);
 });
@@ -110,9 +110,9 @@ test("run kills a program that ignores SIGTERM and reports the timeout with its 
 				await fakeProgram({ hang: true, say: "stuck at step 3" }),
 				"/x ARG",
 				undefined,
-				1500,
-			),
-		),
+				1500
+			)
+		)
 	).toMatch(/did not end in 1500 ms; events: system\/init.*stuck at step 3/su);
 });
 
@@ -122,10 +122,10 @@ test("run passes extra env to the program", async () => {
 		"/x ARG",
 		undefined,
 		undefined,
-		{ PROBE_FLAG: "1" },
+		{ PROBE_FLAG: "1" }
 	);
 	expect(userText(r, "<command-name>/x</command-name>")).toContain(
-		"env: ANTHROPIC_API_KEY,ANTHROPIC_BASE_URL,AWS_EC2_METADATA_DISABLED,PROBE_FLAG",
+		"env: ANTHROPIC_API_KEY,ANTHROPIC_BASE_URL,AWS_EC2_METADATA_DISABLED,PROBE_FLAG"
 	);
 });
 
@@ -142,27 +142,27 @@ test.each([
 	"DYLD_INSERT_LIBRARIES",
 	"HOME",
 	"AWS_SECRET_ACCESS_KEY",
-	"CLAUDE_CODE_OAUTH_TOKEN",
+	"CLAUDE_CODE_OAUTH_TOKEN"
 ])(
 	"run refuses extra env %s, which would undo the safety setup or carry a credential",
 	async (k) => {
 		expect(
 			await rejection(
 				runPrompt(await fakeProgram(), "/x ARG", undefined, undefined, {
-					[k]: "1",
-				}),
-			),
+					[k]: "1"
+				})
+			)
 		).toContain(`env ${k}`);
-	},
+	}
 );
 
 test("run refuses an env value shaped like an Anthropic key", async () => {
 	expect(
 		await rejection(
 			runPrompt(await fakeProgram(), "/x ARG", undefined, undefined, {
-				PROBE_X: "sk-ant-api03-zzz",
-			}),
-		),
+				PROBE_X: "sk-ant-api03-zzz"
+			})
+		)
 	).toContain("env PROBE_X");
 });
 
@@ -171,7 +171,7 @@ test("run keeps every stdout event, with multibyte text split across chunks inta
 	expect(r.events.map((e) => e["type"])).toEqual([
 		"system",
 		"assistant",
-		"result",
+		"result"
 	]);
 	expect(r.events[1]?.["text"]).toBe("é".repeat(300_000));
 });
@@ -182,9 +182,9 @@ test("resultText is the text of the last result event, or null", () => {
 			events: [
 				{ type: "system" },
 				{ type: "result", result: "first" },
-				{ type: "result", subtype: "success", result: "Set model to x" },
-			],
-		}),
+				{ type: "result", subtype: "success", result: "Set model to x" }
+			]
+		})
 	).toBe("Set model to x");
 	expect(resultText({ events: [{ type: "result" }] })).toBeNull();
 	expect(resultText({ events: [] })).toBeNull();

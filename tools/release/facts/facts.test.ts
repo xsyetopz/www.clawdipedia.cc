@@ -21,7 +21,7 @@ const freshBase = async () => {
 const write = async (base: string, version: string, facts: string[]) => {
 	await Bun.write(
 		join(base, version, "live", "usage.429.json"),
-		JSON.stringify({ schema: 1, id: "live.usage.429", facts }),
+		JSON.stringify({ schema: 1, id: "live.usage.429", facts })
 	);
 };
 
@@ -31,7 +31,7 @@ test("a case's facts come from its newest capture, not from older ones", async (
 	await write(base, "2.1.10", ["docs/new.md#current:11111111"]);
 	const known = await knownCases(base);
 	expect(known.facts.get("live.usage.429")).toEqual(
-		new Set(["docs/new.md#current:11111111"]),
+		new Set(["docs/new.md#current:11111111"])
 	);
 });
 
@@ -41,12 +41,12 @@ test("with a version, only that build's results count", async () => {
 	await write(base, "2.1.11", ["docs/gone.md#removed:22222222"]);
 	await Bun.write(
 		join(base, "2.1.10", "pty", "old.json"),
-		JSON.stringify({ schema: 1, id: "pty.old", facts: [] }),
+		JSON.stringify({ schema: 1, id: "pty.old", facts: [] })
 	);
 	const known = await knownCases(base, "2.1.11");
 	expect(known.ids.has("pty.old")).toBe(false);
 	expect(known.facts.get("live.usage.429")).toEqual(
-		new Set(["docs/gone.md#removed:22222222"]),
+		new Set(["docs/gone.md#removed:22222222"])
 	);
 });
 
@@ -57,7 +57,7 @@ const repoWithNewPage = async () => {
 	const git = async (...a: string[]) => {
 		const p = Bun.spawn(["git", ...a], {
 			cwd: root,
-			env: { ...process.env, GIT_CONFIG_GLOBAL: "/dev/null" },
+			env: { ...process.env, GIT_CONFIG_GLOBAL: "/dev/null" }
 		});
 		await p.exited;
 	};

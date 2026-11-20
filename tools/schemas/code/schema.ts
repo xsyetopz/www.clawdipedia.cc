@@ -9,7 +9,7 @@ export const objSchema = async (
 	entries: Entry[],
 	mode: Mode,
 	depth = 0,
-	open = false,
+	open = false
 ): Promise<Json> => {
 	const properties: Record<string, Json> = {};
 	const spread = await R.spreads(entries);
@@ -41,7 +41,7 @@ export const objSchema = async (
 export const valSchema = async (
 	v: Val,
 	mode: Mode,
-	depth: number,
+	depth: number
 ): Promise<Json> => {
 	switch (v.k) {
 		case "obj": {

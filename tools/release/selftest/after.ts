@@ -23,7 +23,7 @@ export interface ProgramRun {
 }
 
 const parseDump = async (
-	path: string,
+	path: string
 ): Promise<(readonly [string, string])[]> => {
 	if (!(await pathExists(path))) {
 		return [];
@@ -33,7 +33,7 @@ const parseDump = async (
 		.split("\n")
 		.filter((l) => l.includes("="))
 		.map(
-			(l) => [l.slice(0, l.indexOf("=")), l.slice(l.indexOf("=") + 1)] as const,
+			(l) => [l.slice(0, l.indexOf("=")), l.slice(l.indexOf("=") + 1)] as const
 		);
 };
 
@@ -48,22 +48,22 @@ export const dumpChecks = async (p: ProgramRun): Promise<void> => {
 		.filter(
 			([k, v]) =>
 				k in LEAKS ||
-				(!PROGRAM_SET.has(k) && !names.includes(k) && parentValues[k] === v),
+				(!PROGRAM_SET.has(k) && !names.includes(k) && parentValues[k] === v)
 		)
 		.map(([k]) => k);
 	step(
 		"no parent env leaked into the program",
 		leaked.length === 0,
-		leaked.join(", "),
+		leaked.join(", ")
 	);
 	const dv = Object.fromEntries(pairs);
 	step(
 		"hook saw sandbox HOME and CLAUDE_CONFIG_DIR",
-		dv["HOME"] === sb.home && dv["CLAUDE_CONFIG_DIR"] === sb.cfg,
+		dv["HOME"] === sb.home && dv["CLAUDE_CONFIG_DIR"] === sb.cfg
 	);
 	const seen = dumped.filter((k) => k.startsWith("CLAUDE_CODE_")).toSorted();
 	console.info(
-		`     CLAUDE_CODE_* seen by the hook: ${seen.join(", ") || "(none)"}`,
+		`     CLAUDE_CODE_* seen by the hook: ${seen.join(", ") || "(none)"}`
 	);
 };
 
@@ -71,7 +71,7 @@ export const dumpChecks = async (p: ProgramRun): Promise<void> => {
 export const resultCheck = async (
 	p: ProgramRun,
 	res: { code: number | null; timedOut: boolean },
-	reqs: LoggedRequest[],
+	reqs: LoggedRequest[]
 ): Promise<string> => {
 	const { ctx, step, out, names } = p;
 	const dir = await openRun("0.0.0", out);
@@ -88,16 +88,16 @@ export const resultCheck = async (
 		data: { requests: reqs.length, envNames: names.length },
 		requests: {
 			count: reqs.length,
-			paths: [...new Set(reqs.map((r) => r.path))],
+			paths: [...new Set(reqs.map((r) => r.path))]
 		},
-		facts: [],
+		facts: []
 	});
 	const back = await readRun("0.0.0", out);
 	step(
 		"results.ts write/read",
 		(await pathExists(path)) &&
 			back.length === 1 &&
-			back[0]?.id === "print.selftest.smoke",
+			back[0]?.id === "print.selftest.smoke"
 	);
 	return dir;
 };

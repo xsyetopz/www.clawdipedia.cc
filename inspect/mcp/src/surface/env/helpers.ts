@@ -5,7 +5,7 @@ import {
 	type Fn,
 	isFn,
 	nameOf,
-	type Node,
+	type Node
 } from "../../ast.ts";
 import { mapSeq } from "../../seq.ts";
 import { asNode, type SurfaceItem } from "../common.ts";
@@ -14,7 +14,7 @@ import {
 	eachName,
 	LISTED,
 	type NameList,
-	paramOf,
+	paramOf
 } from "./shared.ts";
 
 /** A helper may pass its parameter on to another helper (`wt(e)` -> `Su(e)` -> `process.env[e]`). */
@@ -28,7 +28,7 @@ export const resolveHelpers = async (c: Ctx): Promise<void> => {
 		if (h.index === 0) {
 			const uses: Node[] = [
 				h.fn,
-				...(nameOf(h.m, h.fn)?.references.map((r) => r.identifier) ?? []),
+				...(nameOf(h.m, h.fn)?.references.map((r) => r.identifier) ?? [])
 			];
 			await mapSeq(uses, async (u) => {
 				for (const s of await eachName(h.m, u)) {
@@ -79,7 +79,7 @@ export const growLists = (c: Ctx, out: SurfaceItem[]): void => {
 				continue;
 			}
 			for (const [l, x] of g.flatMap((list) =>
-				list.names.map((name) => [list, name] as const),
+				list.names.map((name) => [list, name] as const)
 			)) {
 				if (!found.has(x) && LISTED.test(x)) {
 					c.add(l.m, l.n, x, { detail: "listed" });

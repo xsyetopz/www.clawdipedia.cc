@@ -24,7 +24,7 @@ const EMPTY = (c: PrintCtx): CaseResult => ({
 	exit: null,
 	timedOut: false,
 	data: {},
-	facts: [],
+	facts: []
 });
 
 const messageOf = (error: unknown): string =>
@@ -53,7 +53,7 @@ const makeWriter = (ctx: Ctx, pctx: PrintCtx) => {
 		if (seen.has(r.id)) {
 			counts.invalid += 1;
 			console.info(
-				`  INVALID ${r.id} (duplicate case id, second result dropped)`,
+				`  INVALID ${r.id} (duplicate case id, second result dropped)`
 			);
 			return;
 		}
@@ -69,10 +69,10 @@ const makeWriter = (ctx: Ctx, pctx: PrintCtx) => {
 			return;
 		}
 		const detail = String(
-			r.data["error"] ?? r.data["precondition.detail"] ?? "",
+			r.data["error"] ?? r.data["precondition.detail"] ?? ""
 		);
 		console.info(
-			`  ${bad ? "INVALID" : "ok     "} ${r.id}${bad ? ` (${detail})` : ""}`,
+			`  ${bad ? "INVALID" : "ok     "} ${r.id}${bad ? ` (${detail})` : ""}`
 		);
 	};
 	return { counts, write };
@@ -82,7 +82,7 @@ const makeWriter = (ctx: Ctx, pctx: PrintCtx) => {
 const failedGroup = async (
 	g: PrintGroup,
 	pctx: PrintCtx,
-	error: unknown,
+	error: unknown
 ): Promise<CaseResult[]> => {
 	console.info(`  group failed: ${messageOf(error)}`);
 	let planned: CaseResult[] = [];
@@ -99,16 +99,16 @@ const failedGroup = async (
 		Object.assign(r, {
 			data: {
 				precondition: false,
-				error: `group failed: ${messageOf(error)}`,
-			},
-		}),
+				error: `group failed: ${messageOf(error)}`
+			}
+		})
 	);
 };
 
 const runGroup = async (
 	g: PrintGroup,
 	pctx: PrintCtx,
-	write: (r: CaseResult) => Promise<void>,
+	write: (r: CaseResult) => Promise<void>
 ): Promise<void> => {
 	if (!selected(pctx, `print.${g.id}`)) {
 		return;
@@ -136,7 +136,7 @@ export const runProbePrint = async (ctx: Ctx): Promise<number> => {
 		bin,
 		runDir: ctx.dry ? "" : await openRun(ctx.to),
 		...(ctx.only ? { only: ctx.only } : {}),
-		dry: ctx.dry,
+		dry: ctx.dry
 	};
 	if (!ctx.dry && !ctx.only) {
 		await clearStale(join(pctx.runDir, "print"));
@@ -146,19 +146,19 @@ export const runProbePrint = async (ctx: Ctx): Promise<number> => {
 	const { counts, write } = makeWriter(ctx, pctx);
 	try {
 		await eachInOrder([...groupsA, ...groupsB], (g) =>
-			runGroup(g, pctx, write),
+			runGroup(g, pctx, write)
 		);
 	} finally {
 		const stray = await stopStub();
 		if (stray.length > 0) {
 			counts.invalid += 1;
 			console.info(
-				`STRAY ${stray.length} request(s) reached the stub without a case id: ${[...new Set(stray.map((r) => r.path))].join(", ")}`,
+				`STRAY ${stray.length} request(s) reached the stub without a case id: ${[...new Set(stray.map((r) => r.path))].join(", ")}`
 			);
 		}
 	}
 	console.info(
-		`${counts.total} case(s)${ctx.dry ? " planned" : `, ${counts.invalid} invalid probe(s)`}`,
+		`${counts.total} case(s)${ctx.dry ? " planned" : `, ${counts.invalid} invalid probe(s)`}`
 	);
 	return 0;
 };

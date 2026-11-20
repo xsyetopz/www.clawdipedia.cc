@@ -15,6 +15,6 @@ export const err319: PrintGroup = {
 			...configCases,
 			...writeCases,
 			...miscCases,
-			...loginCases,
-		]),
+			...loginCases
+		])
 };

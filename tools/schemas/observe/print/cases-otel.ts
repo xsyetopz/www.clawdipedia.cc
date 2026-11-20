@@ -8,12 +8,12 @@ const SAFETY = { cachedGrowthBookFeatures: { tengu_snoopy_creek: true } };
 const INIT = {
 	type: "control_request",
 	request_id: "init-1",
-	request: { subtype: "initialize" },
+	request: { subtype: "initialize" }
 };
 
 const user = (content: string) => ({
 	type: "user",
-	message: { role: "user", content },
+	message: { role: "user", content }
 });
 
 const OFFICIAL = "claude-plugins-official";
@@ -26,32 +26,32 @@ const METRICS_HOOK = {
 				hooks: [
 					{
 						type: "command",
-						command: `echo '{"async":true}'; sleep 1; echo '{"metrics":{"probe_count":1,"probe_flag":true},"decision":"none"}'`,
-					},
-				],
-			},
-		],
-	},
+						command: `echo '{"async":true}'; sleep 1; echo '{"metrics":{"probe_count":1,"probe_flag":true},"decision":"none"}'`
+					}
+				]
+			}
+		]
+	}
 };
 const OFFICIAL_MARKET = {
 	"m/.claude-plugin/marketplace.json": JSON.stringify({
 		name: OFFICIAL,
 		owner: { name: "probe" },
-		plugins: [{ name: "probe", source: "./probe", version: "1.0.0" }],
+		plugins: [{ name: "probe", source: "./probe", version: "1.0.0" }]
 	}),
 	"m/probe/.claude-plugin/plugin.json": JSON.stringify({
 		name: "probe",
-		version: "1.0.0",
+		version: "1.0.0"
 	}),
-	"m/probe/hooks/hooks.json": JSON.stringify(METRICS_HOOK),
+	"m/probe/hooks/hooks.json": JSON.stringify(METRICS_HOOK)
 };
 const OFFICIAL_PLUGIN = {
 	"plugins/known_marketplaces.json": JSON.stringify({
 		[OFFICIAL]: {
 			source: { source: "github", repo: `anthropics/${OFFICIAL}` },
 			installLocation: "{PROJ}/m",
-			lastUpdated: STAMP,
-		},
+			lastUpdated: STAMP
+		}
 	}),
 	"plugins/installed_plugins.json": JSON.stringify({
 		version: 2,
@@ -62,14 +62,14 @@ const OFFICIAL_PLUGIN = {
 					installPath: "{PROJ}/m/probe",
 					version: "1.0.0",
 					installedAt: STAMP,
-					lastUpdated: STAMP,
-				},
-			],
-		},
+					lastUpdated: STAMP
+				}
+			]
+		}
 	}),
 	"settings.json": JSON.stringify({
-		enabledPlugins: { [`probe@${OFFICIAL}`]: true },
-	}),
+		enabledPlugins: { [`probe@${OFFICIAL}`]: true }
+	})
 };
 
 /** Cases that emit one OpenTelemetry site each. */
@@ -81,22 +81,22 @@ export const OTEL_CASES: Case[] = [
 		id: "otel-hook-span",
 		env: {
 			ENABLE_BETA_TRACING_DETAILED: "1",
-			BETA_TRACING_ENDPOINT: "{COLLECTOR}",
+			BETA_TRACING_ENDPOINT: "{COLLECTOR}"
 		},
 		cfgFiles: {
 			"settings.json": JSON.stringify({
 				hooks: {
-					UserPromptSubmit: [{ hooks: [{ type: "command", command: "true" }] }],
-				},
-			}),
-		},
+					UserPromptSubmit: [{ hooks: [{ type: "command", command: "true" }] }]
+				}
+			})
+		}
 	},
 	{
 		// A Bash command that matches /\bgh\s+pr\s+create\b/ and exits 0 adds 1 to the counter (Rzr() in
 		// chunk-qpav394c.js:513508). The command only prints the words; nothing runs gh.
 		id: "otel-pull-request-count",
 		seq: [{ name: "Bash", input: { command: "echo gh pr create" } }],
-		args: ["--allowedTools", "Bash"],
+		args: ["--allowedTools", "Bash"]
 	},
 	{
 		// set_permission_mode reaches $N(), which logs the change (chunk-7at7cxxb.js:9067); the same mode logs nothing.
@@ -107,11 +107,11 @@ export const OTEL_CASES: Case[] = [
 			{
 				type: "control_request",
 				request_id: "mode-1",
-				request: { subtype: "set_permission_mode", mode: "plan" },
+				request: { subtype: "set_permission_mode", mode: "plan" }
 			},
 			1000,
-			user("Reply with OK."),
-		],
+			user("Reply with OK.")
+		]
 	},
 	{
 		// A deny rule refuses the Bash call; e2r() logs the decision with the permission_rule category
@@ -120,10 +120,10 @@ export const OTEL_CASES: Case[] = [
 		claudeJson: SAFETY,
 		cfgFiles: {
 			"settings.json": JSON.stringify({
-				permissions: { deny: ["Bash(rm:*)"] },
-			}),
+				permissions: { deny: ["Bash(rm:*)"] }
+			})
 		},
-		seq: [{ name: "Bash", input: { command: "rm -f probe-none.txt" } }],
+		seq: [{ name: "Bash", input: { command: "rm -f probe-none.txt" } }]
 	},
 	{
 		// A PostToolUse hook that exits 2 sends the result back; jWs() logs it (chunk-m14bt1pz.js:4524394).
@@ -135,20 +135,20 @@ export const OTEL_CASES: Case[] = [
 					PostToolUse: [
 						{
 							matcher: "Bash",
-							hooks: [{ type: "command", command: "echo blocked >&2; exit 2" }],
-						},
-					],
-				},
-			}),
+							hooks: [{ type: "command", command: "echo blocked >&2; exit 2" }]
+						}
+					]
+				}
+			})
 		},
 		seq: [{ name: "Bash", input: { command: "echo probe" } }],
-		args: ["--allowedTools", "Bash"],
+		args: ["--allowedTools", "Bash"]
 	},
 	{
 		// A 400 reply whose body is not JSON reaches logError(), which logs internal_error through aVa()
 		// (chunk-f41c8jb6.js:22406); the error log sink calls aVa() for each logged error (chunk-teybq4x3.js:2361).
 		id: "otel-internal-error",
-		turns: [{ kind: "error", status: 400, body: "not json" }],
+		turns: [{ kind: "error", status: 400, body: "not json" }]
 	},
 	{
 		// LCt() logs the number and boolean entries of a hook's `metrics` output only for a plugin whose marketplace
@@ -161,7 +161,7 @@ export const OTEL_CASES: Case[] = [
 		cfgFiles: OFFICIAL_PLUGIN,
 		projFiles: OFFICIAL_MARKET,
 		args: ["--allowedTools", "Bash"],
-		seq: [{ name: "Bash", input: { command: "sleep 3" } }],
+		seq: [{ name: "Bash", input: { command: "sleep 3" } }]
 	},
 	{
 		// Print mode starts the housekeeping, which runs the retention sweep 5 s later (chunk-rnt5hbrt.js:36279,
@@ -169,6 +169,6 @@ export const OTEL_CASES: Case[] = [
 		// has no .last-cleanup, so the sweep runs, and wmi() logs it (chunk-f41c8jb6.js:21550). The open stdin keeps
 		// the run alive past the 5 s.
 		id: "otel-retention-sweep",
-		stdin: [user("Reply with OK."), 10_000],
-	},
+		stdin: [user("Reply with OK."), 10_000]
+	}
 ];

@@ -13,7 +13,7 @@ import {
 	scalar,
 	show,
 	type Spec,
-	withRun,
+	withRun
 } from "./run/helpers.ts";
 import type { PrintGroup } from "./types.ts";
 
@@ -48,10 +48,10 @@ const forkSpec = (o: Opt): Spec => ({
 	homeFiles: {
 		"plug/.claude-plugin/plugin.json": json({
 			name: "forkprobe",
-			version: "1.0.0",
+			version: "1.0.0"
 		}),
 		"plug/hooks/hooks.json": json({ modules: ["./register.ts"] }),
-		"plug/hooks/register.ts": forkMod(o.forks),
+		"plug/hooks/register.ts": forkMod(o.forks)
 	},
 	...(o.env === undefined ? {} : { env: o.env }),
 	...(o.settings === undefined
@@ -63,9 +63,9 @@ const forkSpec = (o: Opt): Spec => ({
 		"--debug-file",
 		"{CFG}/d.log",
 		...(o.model === undefined ? [] : ["--model", o.model]),
-		...(o.args ?? []),
+		...(o.args ?? [])
 	],
-	timeoutMs: 90_000,
+	timeoutMs: 90_000
 });
 
 // The first request is the main thread; each later one is a fork. `top` is the request's own `output_config.effort`;
@@ -82,7 +82,7 @@ const perFork = (q: LoggedRequest): string => {
 const forkData = (
 	qs: LoggedRequest[],
 	lines: string[],
-	forks: Fork[],
+	forks: Fork[]
 ): Record<string, Data> => {
 	const first = qs[0];
 	const main = first ? bodyOf(first) : undefined;
@@ -90,7 +90,7 @@ const forkData = (
 		precondition: qs.length > 0 && lines.length === forks.length,
 		forkRequests: qs.length - 1,
 		mainEffort: main ? scalar(obj(main["output_config"])["effort"]) : null,
-		mainMessages: main?.messages?.length ?? null,
+		mainMessages: main?.messages?.length ?? null
 	};
 	for (const [i, [label]] of forks.entries()) {
 		data[`fork.${label}`] = lines[i]?.replace(/^\S+\s/u, "") ?? null;
@@ -115,15 +115,15 @@ const forkCase = (name: string, o: Opt): CaseDef => ({
 					perFork: qs
 						.slice(1)
 						.map((q) => perFork(q))
-						.join("\n"),
-				},
+						.join("\n")
+				}
 			};
-		}),
+		})
 });
 
 const ask = (label: string, effort?: unknown): Fork => [
 	label,
-	effort === undefined ? { prompt: PROMPT } : { prompt: PROMPT, effort },
+	effort === undefined ? { prompt: PROMPT } : { prompt: PROMPT, effort }
 ];
 
 const effortCases = (): CaseDef[] => [
@@ -132,8 +132,8 @@ const effortCases = (): CaseDef[] => [
 			ask("none"),
 			ask("low", "low"),
 			ask("medium", "medium"),
-			ask("max", "max"),
-		],
+			ask("max", "max")
+		]
 	}),
 	forkCase("bad-value", {
 		forks: [
@@ -141,52 +141,52 @@ const effortCases = (): CaseDef[] => [
 			ask("number", 5),
 			ask("empty", ""),
 			["no-prompt", { effort: "low" }],
-			ask("uppercase", "LOW"),
-		],
+			ask("uppercase", "LOW")
+		]
 	}),
 	forkCase("session-max", {
 		args: ["--effort", "max"],
-		forks: [ask("none"), ask("low", "low"), ask("high", "high")],
-	}),
+		forks: [ask("none"), ask("low", "low"), ask("high", "high")]
+	})
 ];
 
 const envCases = (): CaseDef[] => [
 	forkCase("env-ceiling", {
 		env: { CLAUDE_CODE_EFFORT_LEVEL: "medium" },
-		forks: [ask("none"), ask("low", "low"), ask("max", "max")],
+		forks: [ask("none"), ask("low", "low"), ask("max", "max")]
 	}),
 	forkCase("env-auto", {
 		env: { CLAUDE_CODE_EFFORT_LEVEL: "auto" },
-		forks: [ask("none"), ask("low", "low"), ask("max", "max")],
+		forks: [ask("none"), ask("low", "low"), ask("max", "max")]
 	}),
 	forkCase("env-unset", {
 		env: { CLAUDE_CODE_EFFORT_LEVEL: "unset" },
-		forks: [ask("none"), ask("low", "low")],
+		forks: [ask("none"), ask("low", "low")]
 	}),
 	forkCase("max-effort-setting", {
 		settings: { maxEffortLevel: "medium" },
-		forks: [ask("none"), ask("low", "low"), ask("max", "max")],
+		forks: [ask("none"), ask("low", "low"), ask("max", "max")]
 	}),
 	forkCase("whole-request", {
 		model: "claude-opus-4-8",
-		forks: [ask("none"), ask("low", "low"), ask("max", "max")],
+		forks: [ask("none"), ask("low", "low"), ask("max", "max")]
 	}),
 	forkCase("whole-request-capability", {
 		model: "claude-opus-4-8",
 		env: {
 			CLAUDE_CODE_MODEL_CAPABILITIES: "per_turn_effort",
-			...FIRST_PARTY,
+			...FIRST_PARTY
 		},
-		forks: [ask("none"), ask("low", "low")],
+		forks: [ask("none"), ask("low", "low")]
 	}),
 	forkCase("no-effort-model", {
 		model: "claude-haiku-4-5",
-		forks: [ask("none"), ask("low", "low")],
-	}),
+		forks: [ask("none"), ask("low", "low")]
+	})
 ];
 
 export const fork319: PrintGroup = {
 	id: "fork319",
 	title: "Mod API model.fork effort (2.1.318)",
-	run: (ctx) => runCases(ctx, "fork319", [...effortCases(), ...envCases()]),
+	run: (ctx) => runCases(ctx, "fork319", [...effortCases(), ...envCases()])
 };

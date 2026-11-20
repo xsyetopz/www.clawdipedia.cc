@@ -17,7 +17,7 @@ Official pages: [Hooks Reference](https://code.claude.com/docs/en/hooks) and [Re
 ```javascript
 export const register = (on) => {
   on("classic.PreToolUse", { tool_name: "Bash" }, async ($, e, next) =>
-    next(e),
+    next(e)
   );
   on("classic.Stop", async ($, e, next) => next(e));
 };

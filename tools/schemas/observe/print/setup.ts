@@ -38,7 +38,7 @@ export const otelEnv = (collectorPort: number): Record<string, string> => ({
 	OTEL_LOG_ASSISTANT_RESPONSES: "1",
 	OTEL_METRICS_INCLUDE_SESSION_ID: "true",
 	OTEL_METRICS_INCLUDE_VERSION: "true",
-	OTEL_METRICS_INCLUDE_ACCOUNT_UUID: "true",
+	OTEL_METRICS_INCLUDE_ACCOUNT_UUID: "true"
 });
 
 export const sandboxFor = async (c: Case): Promise<Sandbox> => {
@@ -47,7 +47,7 @@ export const sandboxFor = async (c: Case): Promise<Sandbox> => {
 		...(c.projFiles ? { projFiles: c.projFiles } : {}),
 		...(c.git === true ? { git: true } : {}),
 		trusted: true,
-		seedOnboarding: true,
+		seedOnboarding: true
 	});
 	if (c.claudeJson !== undefined) {
 		const file = Bun.file(`${sb.cfg}/.claude.json`);
@@ -55,7 +55,7 @@ export const sandboxFor = async (c: Case): Promise<Sandbox> => {
 		const base = typeof seeded === "object" && seeded !== null ? seeded : {};
 		await Bun.write(
 			file,
-			`${JSON.stringify({ ...base, ...c.claudeJson }, null, 2)}\n`,
+			`${JSON.stringify({ ...base, ...c.claudeJson }, null, 2)}\n`
 		);
 	}
 	if (c.git === true && c.commit === true) {
@@ -66,7 +66,7 @@ export const sandboxFor = async (c: Case): Promise<Sandbox> => {
 				PATH: "/usr/bin:/bin",
 				HOME: sb.home,
 				GIT_CONFIG_GLOBAL: `${sb.home}/.gitconfig`,
-				GIT_CONFIG_NOSYSTEM: "1",
+				GIT_CONFIG_NOSYSTEM: "1"
 			})
 			.quiet();
 	}
@@ -78,7 +78,7 @@ export const sandboxFor = async (c: Case): Promise<Sandbox> => {
 const feed = async (
 	ctl: ReadableStreamDefaultController<Uint8Array>,
 	items: NonNullable<Case["stdin"]>,
-	i: number,
+	i: number
 ): Promise<void> => {
 	const item = items[i];
 	if (item === undefined) {
@@ -94,14 +94,14 @@ const feed = async (
 
 // Writes each line in turn and keeps stdin open 5 s after the last line.
 export const pacedStdin = (
-	items: NonNullable<Case["stdin"]>,
+	items: NonNullable<Case["stdin"]>
 ): ReadableStream<Uint8Array> =>
 	new ReadableStream({
 		async start(ctl) {
 			await feed(ctl, items, 0);
 			await Bun.sleep(5000);
 			ctl.close();
-		},
+		}
 	});
 
 const ioArgs = (c: Case): string[] =>
@@ -113,7 +113,7 @@ const ioArgs = (c: Case): string[] =>
 				"stream-json",
 				"--output-format",
 				"stream-json",
-				"--verbose",
+				"--verbose"
 			];
 
 export const argsFor = (c: Case, sb: Sandbox): string[] => [
@@ -121,8 +121,8 @@ export const argsFor = (c: Case, sb: Sandbox): string[] => [
 	"--model",
 	"claude-opus-5-5",
 	...(c.args ?? []).map((a) =>
-		subst(a, sb).split("{SDK_URL}").join(hostSdkUrl()),
-	),
+		subst(a, sb).split("{SDK_URL}").join(hostSdkUrl())
+	)
 ];
 
 export const seqOf = (c: Case, sb: Sandbox): NonNullable<Case["seq"]> => {
@@ -138,7 +138,7 @@ export const seqOf = (c: Case, sb: Sandbox): NonNullable<Case["seq"]> => {
 		) {
 			out.push({
 				name: step.name,
-				input: "input" in step ? step.input : undefined,
+				input: "input" in step ? step.input : undefined
 			});
 		}
 	}
@@ -151,7 +151,7 @@ export const envFor = async (
 	sb: Sandbox,
 	base: string,
 	collectorPort: number,
-	host: Record<string, string> = {},
+	host: Record<string, string> = {}
 ): Promise<Record<string, string>> => {
 	const tokenFile = `${sb.root}/session-ingress-token`;
 	await Bun.write(tokenFile, fakeSessionToken());
@@ -165,7 +165,7 @@ export const envFor = async (
 		allowOverride: [
 			"DISABLE_TELEMETRY",
 			"CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC",
-			...Object.keys(host),
+			...Object.keys(host)
 		],
 		extra: {
 			...otelEnv(collectorPort),
@@ -175,10 +175,10 @@ export const envFor = async (
 			...Object.fromEntries(
 				Object.entries(c.env ?? {}).map(([k, v]) => [
 					k,
-					v.replaceAll("{COLLECTOR}", `http://127.0.0.1:${collectorPort}`),
-				]),
-			),
-		},
+					v.replaceAll("{COLLECTOR}", `http://127.0.0.1:${collectorPort}`)
+				])
+			)
+		}
 	});
 };
 
@@ -186,7 +186,7 @@ export const envFor = async (
 export const keepCopy = async (
 	sb: Sandbox,
 	r: { stdout: string; stderr: string },
-	dest: string,
+	dest: string
 ): Promise<void> => {
 	await Bun.write(`${sb.root}/stdout.txt`, r.stdout);
 	await Bun.write(`${sb.root}/stderr.txt`, r.stderr);

@@ -17,7 +17,7 @@ export const createTmp = async () => {
 			await writeFile(bin, body);
 			await chmod(bin, 0o755);
 			return bin;
-		},
+		}
 	};
 };
 

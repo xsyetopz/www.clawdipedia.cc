@@ -10,7 +10,7 @@ import {
 	member,
 	outLog,
 	parsed,
-	rejection,
+	rejection
 } from "./run-helpers.ts";
 
 const tmp = await createTmp();
@@ -24,7 +24,7 @@ const f = process.argv.at(-1);
 console.log(JSON.stringify(process.argv.slice(2)) + " " + (await Bun.file(f).text()).trim());
 process.stderr.write("cwd=" + process.cwd());
 process.exit(3);
-`,
+`
 	);
 
 test("runArgs passes the args, writes files in the project, and keeps plain stdout", async () => {
@@ -32,8 +32,8 @@ test("runArgs passes the args, writes files in the project, and keeps plain stdo
 		await argsProgram(),
 		["auto-mode", "<project-dir>/s.json"],
 		{
-			files: { "s.json": '{"a":1}' },
-		},
+			files: { "s.json": '{"a":1}' }
+		}
 	);
 	expect(r.exit).toBe(3);
 	const p = r.dirs.project;
@@ -45,11 +45,11 @@ test("runArgs passes the args, writes files in the project, and keeps plain stdo
 test("runArgs writes input to stdin and keeps the files the run wrote in the project", async () => {
 	const bin = await tmp.script(
 		"claude-stdin",
-		'#!/usr/bin/env bun\nawait Bun.write("d.log", await Bun.stdin.text());\n',
+		'#!/usr/bin/env bun\nawait Bun.write("d.log", await Bun.stdin.text());\n'
 	);
 	const r = await runArgs(bin, [], {
 		input: "one\ntwo\n",
-		files: { "s.json": "{}" },
+		files: { "s.json": "{}" }
 	});
 	expect(r.projectFiles).toEqual({ "d.log": "one\ntwo\n", "s.json": "{}" });
 	expect(r.files["d.log"]).toBeUndefined();
@@ -60,10 +60,10 @@ test.each(["/etc/x", "../x", "a/../../x"])(
 	async (name) => {
 		expect(
 			await rejection(
-				runArgs(await argsProgram(), ["x"], { files: { [name]: "" } }),
-			),
+				runArgs(await argsProgram(), ["x"], { files: { [name]: "" } })
+			)
 		).toContain("outside the project");
-	},
+	}
 );
 
 // Reads the stored login, asks `PROBE_URL` and api.anthropic.com for the profile, and logs what it got.
@@ -89,14 +89,14 @@ const lines = [
   "other " + (await ask("https://probe.invalid/")),
 ];
 await Bun.write(cfg + "/out.log", lines.join("\\n"));
-`,
+`
 	);
 
 test("runArgs with an oauth login, stub replies, and <stub> and <config-dir> placeholders", async () => {
 	const r = await runArgs(await profileProgram(), ["<config-dir>/x"], {
 		login: "oauth",
 		env: { PROBE_URL: "<stub>" },
-		replies: { "GET /api/oauth/profile": { account: { uuid: "u" } } },
+		replies: { "GET /api/oauth/profile": { account: { uuid: "u" } } }
 	});
 	expect(r.exit).toBe(0);
 	expect(outLog(r)).toEqual([
@@ -104,10 +104,10 @@ test("runArgs with an oauth login, stub replies, and <stub> and <config-dir> pla
 		"apiKey unset",
 		'stub 200 req_probe {"account":{"uuid":"u"}}',
 		"api failed",
-		"other failed",
+		"other failed"
 	]);
 	expect(r.requests.map((q) => `${q.method} ${q.path} ${q.fakeKey}`)).toEqual([
-		"GET /api/oauth/profile true",
+		"GET /api/oauth/profile true"
 	]);
 });
 
@@ -116,12 +116,12 @@ test("runArgs with apiHost answers api.anthropic.com and still refuses other hos
 		login: "oauth",
 		env: { PROBE_URL: "<stub>" },
 		replies: { "GET /api/oauth/profile": { ok: 1 } },
-		apiHost: true,
+		apiHost: true
 	});
 	expect(outLog(r).slice(2)).toEqual([
 		'stub 200 req_probe {"ok":1}',
 		'api 200 req_probe {"ok":1}',
-		"other failed",
+		"other failed"
 	]);
 	const hosts = r.requests.map((q) => q.host);
 	expect(hosts).toHaveLength(2);
@@ -150,7 +150,7 @@ const lines = [
   (await ask(true, tools, "hi")).split("\\n").filter((l) => l.includes("tool_use") || l.includes("json_delta")).join("\\n"),
 ];
 await Bun.write(process.env.CLAUDE_CONFIG_DIR + "/out.log", lines.join("\\n"));
-`,
+`
 	);
 
 test("runArgs with calls makes the main turn call them in order, in plain and streamed replies", async () => {
@@ -160,16 +160,16 @@ test("runArgs with calls makes the main turn call them in order, in plain and st
 	const lines = outLog(r);
 	expect(parsed(lines[0])).toMatchObject({
 		content: [{ type: "tool_use", id: "toolu_probe_0", ...read }],
-		stop_reason: "tool_use",
+		stop_reason: "tool_use"
 	});
 	expect(parsed(lines[1])["content"]).toEqual([{ type: "text", text: "OK" }]);
 	expect(parsed(lines[2])["content"]).toMatchObject([
-		{ id: "toolu_probe_1", ...bash },
+		{ id: "toolu_probe_1", ...bash }
 	]);
 	expect(parsed(lines[3])["stop_reason"]).toBe("end_turn");
 	const stream = lines.slice(4).join("\n");
 	expect(stream).toContain(
-		String.raw`"partial_json":"{\"file_path\":\"a.txt\"}"`,
+		String.raw`"partial_json":"{\"file_path\":\"a.txt\"}"`
 	);
 	expect(stream).toContain('"stop_reason":"tool_use"');
 });
@@ -177,7 +177,7 @@ test("runArgs with calls makes the main turn call them in order, in plain and st
 test("runArgs with a call safeguard adds the auto mode verdict for that call id", async () => {
 	const bash = { name: "Bash", input: { command: "echo hi" } };
 	const r = await runArgs(await toolProgram(), [], {
-		calls: [{ ...bash, safeguard: "flagged" }],
+		calls: [{ ...bash, safeguard: "flagged" }]
 	});
 	const lines = outLog(r);
 	const verdict = [
@@ -185,17 +185,14 @@ test("runArgs with a call safeguard adds the auto mode verdict for that call id"
 			type: "dangerous_tool_use",
 			status: {
 				type: "available",
-				tool_uses: { toolu_probe_0: { type: "evaluated", outcome: "flagged" } },
-			},
-		},
+				tool_uses: { toolu_probe_0: { type: "evaluated", outcome: "flagged" } }
+			}
+		}
 	];
 	expect(parsed(lines[0])["safeguard_results"]).toEqual(verdict);
 	const delta = lines.slice(4).find((l) => l.includes("message_delta"));
 	expect(
-		member(
-			parsed(delta?.replace(/^data: /u, ""))["delta"],
-			"safeguard_results",
-		),
+		member(parsed(delta?.replace(/^data: /u, ""))["delta"], "safeguard_results")
 	).toEqual(verdict);
 });
 
@@ -219,13 +216,13 @@ const lines = [
   await ask("count-tokens:rawPredict", { messages: [] }),
 ];
 await Bun.write(e.CLAUDE_CONFIG_DIR + "/out.log", lines.join("\\n"));
-`,
+`
 	);
 
 test("runArgs with provider vertex answers the Vertex paths, and fastRefusal refuses a fast turn", async () => {
 	const r = await runArgs(await vertexProgram(), [], {
 		provider: "vertex",
-		fastRefusal: 400,
+		fastRefusal: 400
 	});
 	const lines = outLog(r);
 	expect(lines[0]).toBe("1 1");
@@ -248,16 +245,16 @@ test("runArgs with provider vertex refuses an env name that it fixes", async () 
 		await rejection(
 			runArgs(await argsProgram(), ["x"], {
 				provider: "vertex",
-				env: { ANTHROPIC_VERTEX_PROJECT_ID: "mine" },
-			}),
-		),
+				env: { ANTHROPIC_VERTEX_PROJECT_ID: "mine" }
+			})
+		)
 	).toContain("is not allowed");
 });
 
 test("runArgs with baseUrl false leaves ANTHROPIC_BASE_URL unset", async () => {
 	const bin = await tmp.script(
 		"claude-base",
-		"#!/usr/bin/env bun\nconsole.log(String(process.env.ANTHROPIC_BASE_URL));\n",
+		"#!/usr/bin/env bun\nconsole.log(String(process.env.ANTHROPIC_BASE_URL));\n"
 	);
 	const without = await runArgs(bin, [], { baseUrl: false });
 	expect(without.stdout.trim()).toBe("undefined");
@@ -276,11 +273,11 @@ await fetch(base + "/v1/messages", {
   body: "{}",
 });
 await fetch(base + "/v1/messages", { method: "POST", body: "{}" });
-`,
+`
 	);
 	const r = await runArgs(bin, ["x"], {});
 	expect(r.requests.map((q) => q.betas)).toEqual([
 		["claude-code-20250219", "context-1m-2025-08-07"],
-		undefined,
+		undefined
 	]);
 });

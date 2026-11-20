@@ -11,7 +11,7 @@ interface TNode {
 
 /** One `"key": type // comment` line of the template, or undefined for a line that is not one. */
 const templateEntry = (
-	t: string,
+	t: string
 ): { key: string; value: string; comment: string } | undefined => {
 	const m = /^"([\w.-]+)":\s*(.*)$/u.exec(t);
 	if (!m) {
@@ -21,7 +21,7 @@ const templateEntry = (
 	return {
 		key: group(m, 1),
 		value: value.trim().replace(/,$/u, "").trim(),
-		comment: rest.join("//").trim(),
+		comment: rest.join("//").trim()
 	};
 };
 
@@ -29,7 +29,7 @@ const templateEntry = (
 export const parseTemplate = (src: Src): TNode => {
 	const start = idx(
 		src,
-		"The statusLine command will receive the following JSON input via stdin:",
+		"The statusLine command will receive the following JSON input via stdin:"
 	);
 	const lines = src.text.slice(start).split("\n").slice(1);
 	const root: TNode = { comment: "", nullable: false, children: new Map() };
@@ -130,7 +130,7 @@ const resolveChild = (found: Json | undefined, child: TNode): Json => {
 	if (child.children === undefined && has(found["x-unverified"])) {
 		return {
 			...templateType(child.type ?? ""),
-			...(has(found["x-observed"]) ? { "x-observed": true } : {}),
+			...(has(found["x-observed"]) ? { "x-observed": true } : {})
 		};
 	}
 	return found;
@@ -142,7 +142,7 @@ const mergeChild = (
 	child: TNode,
 	at: string,
 	codeOnly: string[],
-	tmplOnly: string[],
+	tmplOnly: string[]
 ): void => {
 	const cur = resolveChild(p[k], child);
 	p[k] = cur;
@@ -157,7 +157,7 @@ const mergeChild = (
 		delete inner["description"];
 		p[k] = {
 			description: child.comment === "" ? undefined : child.comment,
-			anyOf: [inner, { type: "null" }],
+			anyOf: [inner, { type: "null" }]
 		};
 		mergeTemplate(inner, child, at, codeOnly, tmplOnly);
 	} else {
@@ -171,7 +171,7 @@ export const mergeTemplate = (
 	node: TNode,
 	path: string,
 	codeOnly: string[],
-	tmplOnly: string[],
+	tmplOnly: string[]
 ) => {
 	const viaVariable = schema["x-unverified"] === true;
 	delete schema["x-unverified"];

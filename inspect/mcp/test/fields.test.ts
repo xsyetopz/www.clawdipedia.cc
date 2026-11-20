@@ -6,7 +6,7 @@ import type { Line } from "../src/sessions.ts";
 const line = (n: number, json: NonNullable<Line["json"]>): Line => ({
 	n,
 	text: JSON.stringify(json),
-	json,
+	json
 });
 
 const lines: Line[] = [
@@ -14,11 +14,11 @@ const lines: Line[] = [
 		type: "system",
 		foldedUuids: ["a", "b"],
 		noOpStreak: 2,
-		meta: { ratio: 0.5, gone: null },
+		meta: { ratio: 0.5, gone: null }
 	}),
 	line(2, { type: "system", noOpStreak: 1 }),
 	line(3, { message: { content: [{ type: "text" }] } }),
-	{ n: 4, text: "not json" },
+	{ n: 4, text: "not json" }
 ];
 
 test("records JSON types at each key path, rooted at the line type", () => {
@@ -37,7 +37,7 @@ test("records JSON types at each key path, rooted at the line type", () => {
 		"?.message": { object: 1 },
 		"?.message.content": { array: 1 },
 		"?.message.content[]": { object: 1 },
-		"?.message.content[].type": { string: 1 },
+		"?.message.content[].type": { string: 1 }
 	});
 });
 

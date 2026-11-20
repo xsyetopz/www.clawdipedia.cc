@@ -21,7 +21,7 @@ const runPhases = async (s: Session, runDir: string): Promise<void> => {
 			printCommands(s);
 		}
 		console.info(
-			"dry: nothing started, nothing installed, stage removed at exit (the commands above only work without --dry). Planned cases:",
+			"dry: nothing started, nothing installed, stage removed at exit (the commands above only work without --dry). Planned cases:"
 		);
 		await eachInOrder(s.phases, (p) => doPhase(s, p, runDir));
 		console.info(`${s.total} case(s) planned`);
@@ -33,7 +33,7 @@ const runPhases = async (s: Session, runDir: string): Promise<void> => {
 	if (s.needsFolder) {
 		printCommands(s);
 		console.info(
-			"Waiting for the install script (it signals each variant; Ctrl-C to stop)...",
+			"Waiting for the install script (it signals each variant; Ctrl-C to stop)..."
 		);
 		await runVariants(s, runDir);
 		// give the script a moment to remove the folder
@@ -53,7 +53,7 @@ export const runProbeManaged = async (ctx: Ctx): Promise<number> => {
 	const state = await folderState();
 	if (state === "foreign") {
 		console.error(
-			`${MANAGED_DIR} exists and has no ${MARKER} marker. It is not ours; refusing to continue.\nRemove or move it yourself, then rerun.`,
+			`${MANAGED_DIR} exists and has no ${MARKER} marker. It is not ours; refusing to continue.\nRemove or move it yourself, then rerun.`
 		);
 		return 2;
 	}
@@ -62,11 +62,11 @@ export const runProbeManaged = async (ctx: Ctx): Promise<number> => {
 	console.info(`release:probe:managed ${ctx.to}${ctx.dry ? " (dry)" : ""}`);
 	console.info(`stage dir: ${s.stage}`);
 	console.info(
-		`managed folder: ${state === "absent" ? "absent" : "left over from an earlier run (ours)"}`,
+		`managed folder: ${state === "absent" ? "absent" : "left over from an earlier run (ours)"}`
 	);
 	if (state === "ours" && s.phases.includes("baseline")) {
 		console.error(
-			`A leftover managed folder of ours exists, so the baseline phase is not valid. Remove it first:\n  ${cleanupCommand(s.scripts)}`,
+			`A leftover managed folder of ours exists, so the baseline phase is not valid. Remove it first:\n  ${cleanupCommand(s.scripts)}`
 		);
 		return 2;
 	}

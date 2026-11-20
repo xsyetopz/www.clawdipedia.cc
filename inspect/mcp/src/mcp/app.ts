@@ -10,13 +10,13 @@ export const READ_ONLY = {
 	readOnlyHint: true,
 	destructiveHint: false,
 	idempotentHint: true,
-	openWorldHint: false,
+	openWorldHint: false
 } as const;
 // `code` and `release` write the cache of cleaned code; `release` `notes` runs `gh release view`, and `code` `read`
 // with `view: "readable"` runs `bunx @wakaru/cli`.
 export const WRITES_CACHE = {
 	...READ_ONLY,
-	readOnlyHint: false,
+	readOnlyHint: false
 } as const;
 export const MAX_CHARS = 40_000;
 
@@ -28,7 +28,7 @@ export interface Out {
 }
 export const text = (t: string, data?: Record<string, unknown>): Out => ({
 	content: [{ type: "text", text: t }],
-	...(data && { structuredContent: data }),
+	...(data && { structuredContent: data })
 });
 /** The message of a thrown value: an error's message, else the value as text. */
 export const messageOf = (error: unknown): string =>
@@ -43,7 +43,7 @@ export const run = async (f: () => Out | Promise<Out>): Promise<Out> => {
 	} catch (error) {
 		return {
 			content: [{ type: "text", text: `Error: ${messageOf(error)}` }],
-			isError: true,
+			isError: true
 		};
 	}
 };
@@ -54,7 +54,7 @@ export const regex = (pattern: string, isRegex: boolean) =>
 		isRegex
 			? pattern
 			: pattern.replaceAll(/[.*+?^${}()|[\]\\]/gu, String.raw`\$&`),
-		"u",
+		"u"
 	);
 
 /**
@@ -66,13 +66,13 @@ export const regex = (pattern: string, isRegex: boolean) =>
 export const searchable = (
 	name: string,
 	module?: string,
-	entry?: string,
+	entry?: string
 ): boolean =>
 	has(module) ? name.includes(module) : /\.m?js$/u.test(name) || name === entry;
 
 export const server = new McpServer({
 	name: "cc-inspect",
-	version: pkg.version,
+	version: pkg.version
 });
 
 /** Every argument a tool takes, by name. A tool lists the ones it takes (with its own descriptions); a handler gets them parsed. */
@@ -107,8 +107,8 @@ export const ARGS = {
 			z.object({
 				name: z.string(),
 				input: z.record(z.string(), z.unknown()),
-				safeguard: z.enum(["flagged", "not_flagged"]).optional(),
-			}),
+				safeguard: z.enum(["flagged", "not_flagged"]).optional()
+			})
 		)
 		.optional(),
 	prompts: z.array(z.string()).min(1).optional(),
@@ -120,7 +120,7 @@ export const ARGS = {
 	max_line_chars: z.number().int().min(100).max(MAX_CHARS).optional(),
 	from: z.string().optional(),
 	to: z.string().optional(),
-	anchor: z.string().optional(),
+	anchor: z.string().optional()
 };
 const ARGS_SCHEMA = z.object(ARGS);
 export type Args = z.infer<typeof ARGS_SCHEMA>;
@@ -128,14 +128,14 @@ export type Args = z.infer<typeof ARGS_SCHEMA>;
 // Shared parameters: the same name means the same thing in each tool.
 export const P = {
 	version: ARGS.version.describe(
-		"Claude Code version or binary path; default: the current install.",
+		"Claude Code version or binary path; default: the current install."
 	),
 	query: ARGS.query.describe("Text to find."),
 	regex: ARGS.regex.describe("Treat query as a regular expression."),
 	name: ARGS.name.describe("Name or filter (any case where it filters)."),
 	module: ARGS.module.describe('Module name, e.g. "chunk-abc.js".'),
 	offset: ARGS.offset,
-	limit: ARGS.limit,
+	limit: ARGS.limit
 };
 
 // The engine does not collect an idle heap, so the release runs the collector.
@@ -145,7 +145,7 @@ const whenIdle = idleRelease(
 		releaseTrees();
 		releasePrepared();
 		Bun.gc(true);
-	},
+	}
 );
 
 /** One tool whose operations are the values of `action`; each handler gets the parsed arguments. */
@@ -155,7 +155,7 @@ export const group = (
 	key: "action" | "kind",
 	handlers: Record<string, (a: Args) => Out | Promise<Out>>,
 	extra: Record<string, z.ZodType>,
-	annotations: Record<string, boolean> = READ_ONLY,
+	annotations: Record<string, boolean> = READ_ONLY
 ) =>
 	server.registerTool(
 		tool,
@@ -166,9 +166,9 @@ export const group = (
 					.string()
 					.optional()
 					.describe(`One of: ${Object.keys(handlers).join(", ")}.`),
-				...extra,
+				...extra
 			},
-			annotations,
+			annotations
 		},
 		(a: Record<string, unknown>) =>
 			whenIdle(() =>
@@ -178,12 +178,12 @@ export const group = (
 					const h = Object.hasOwn(handlers, k) ? handlers[k] : undefined;
 					if (!h) {
 						throw new Error(
-							`unknown ${key} "${k}"; ${key}s: ${Object.keys(handlers).filter(Boolean).join(", ")}`,
+							`unknown ${key} "${k}"; ${key}s: ${Object.keys(handlers).filter(Boolean).join(", ")}`
 						);
 					}
 					return h(args);
-				}),
-			),
+				})
+			)
 	);
 
 export const need = (v: string | undefined, what: string): string => {

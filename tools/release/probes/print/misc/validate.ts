@@ -8,12 +8,12 @@ export const VALIDATE: [string, string, string?][] = [
 	["semver", '"1.2.3"'],
 	["null", "null"],
 	["array", "[1]"],
-	["empty-string-with-author", '""', ',"author":{"name":"a"}'],
+	["empty-string-with-author", '""', ',"author":{"name":"a"}']
 ];
 export const validateCase = ([
 	name,
 	ver,
-	extra,
+	extra
 ]: (typeof VALIDATE)[number]): CaseDef => ({
 	name: `plugin-validate.version-${name}`,
 	run: (ctx) =>
@@ -25,9 +25,9 @@ export const validateCase = ([
 				setup: async ({ home }) => {
 					await Bun.write(
 						`${home}/pl/.claude-plugin/plugin.json`,
-						`{"name":"pp","version":${ver},"description":"x"${extra ?? ""}}`,
+						`{"name":"pp","version":${ver},"description":"x"${extra ?? ""}}`
 					);
-				},
+				}
 			},
 			(r) => {
 				const t = (r.stdout + r.stderr).replaceAll(/\s+/gu, " ");
@@ -38,15 +38,15 @@ export const validateCase = ([
 						exit: r.code,
 						errors: /Found (\d+) errors?/u.exec(t)?.[1] ?? "0",
 						warnings: /Found (\d+) warnings?/u.exec(t)?.[1] ?? "0",
-						problems: /Found (\d+) problems?/u.exec(t)?.[1] ?? "0",
+						problems: /Found (\d+) problems?/u.exec(t)?.[1] ?? "0"
 					},
 					samples: {
 						output: t.replaceAll(
 							/\/\S+\/\.claude-plugin/gu,
-							"<P>/.claude-plugin",
-						),
-					},
+							"<P>/.claude-plugin"
+						)
+					}
 				};
-			},
-		),
+			}
+		)
 });

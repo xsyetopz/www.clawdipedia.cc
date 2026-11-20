@@ -20,7 +20,7 @@ const b64 = (x: string) => Buffer.from(x).toString("base64url");
 export const mintJwt = (
 	claims: Record<string, unknown>,
 	secret = GATEWAY_SECRET,
-	now = Math.floor(Date.now() / 1000),
+	now = Math.floor(Date.now() / 1000)
 ): string => {
 	const kid = createHash("sha256")
 		.update(secret)
@@ -33,8 +33,8 @@ export const mintJwt = (
 			aud: "claude-gateway",
 			iat: now,
 			exp: now + 3600,
-			...claims,
-		}),
+			...claims
+		})
 	);
 	const sig = createHmac("sha256", secret)
 		.update(`${h}.${p}`)
@@ -105,8 +105,8 @@ export const startUpstream = () => {
 				tags,
 				signedWith:
 					/Credential=([^/,\s]+)\//u.exec(
-						req.headers.get("authorization") ?? "",
-					)?.[1] ?? null,
+						req.headers.get("authorization") ?? ""
+					)?.[1] ?? null
 			});
 			return Response.json({
 				id: "m",
@@ -115,14 +115,14 @@ export const startUpstream = () => {
 				model: "x",
 				content: [{ type: "text", text: "OK" }],
 				stop_reason: "end_turn",
-				usage: { input_tokens: 1, output_tokens: 1 },
+				usage: { input_tokens: 1, output_tokens: 1 }
 			});
-		},
+		}
 	});
 	return {
 		url: `http://127.0.0.1:${srv.port}`,
 		seen,
-		stop: () => srv.stop(true),
+		stop: () => srv.stop(true)
 	};
 };
 
@@ -143,32 +143,32 @@ export const startSts = async (answer: "ok" | "denied" = "ok") => {
 				...form,
 				signedWith:
 					/Credential=([^/,\s]+)\//u.exec(
-						req.headers.get("authorization") ?? "",
-					)?.[1] ?? "",
+						req.headers.get("authorization") ?? ""
+					)?.[1] ?? ""
 			});
 			const xml = { headers: { "content-type": "text/xml" } };
 			if (answer === "denied") {
 				return new Response(
 					'<ErrorResponse xmlns="https://sts.amazonaws.com/doc/2011-06-15/"><Error><Type>Sender</Type><Code>AccessDenied</Code><Message>probe: not allowed to assume the role</Message></Error><RequestId>probe</RequestId></ErrorResponse>',
-					{ status: 403, ...xml },
+					{ status: 403, ...xml }
 				);
 			}
 			return new Response(
 				`<AssumeRoleResponse xmlns="https://sts.amazonaws.com/doc/2011-06-15/"><AssumeRoleResult><Credentials><AccessKeyId>${ASSUMED_KEY_ID}</AccessKeyId><SecretAccessKey>probe-assumed-secret</SecretAccessKey><SessionToken>probe-assumed-session</SessionToken><Expiration>2099-01-01T00:00:00Z</Expiration></Credentials><AssumedRoleUser><AssumedRoleId>AROAPROBE:s</AssumedRoleId><Arn>${form["RoleArn"] ?? ""}</Arn></AssumedRoleUser></AssumeRoleResult></AssumeRoleResponse>`,
-				xml,
+				xml
 			);
-		},
+		}
 	});
 	return {
 		/** Environment that sends the gateway's STS calls to the stub. */
 		env: { HTTPS_PROXY: mitm.proxyUrl, NODE_EXTRA_CA_CERTS: mitm.caFile },
 		calls,
-		stop: mitm.stop,
+		stop: mitm.stop
 	};
 };
 
 const watchProcess = (
-	p: ReturnType<typeof Bun.spawn<"ignore", "pipe", "pipe">>,
+	p: ReturnType<typeof Bun.spawn<"ignore", "pipe", "pipe">>
 ): { log: () => string; exited: () => boolean } => {
 	let log = "";
 	let exited = false;
@@ -199,7 +199,7 @@ const reachable = async (url: string): Promise<boolean> => {
 const readyBy = async (
 	url: string,
 	exited: () => boolean,
-	end: number,
+	end: number
 ): Promise<boolean> => {
 	if (exited() || Date.now() >= end) {
 		return false;
@@ -217,7 +217,7 @@ export const startGateway = async (
 	sb: Sandbox,
 	o: Omit<Parameters<typeof gatewayYaml>[0], "port"> & {
 		env?: Record<string, string>;
-	},
+	}
 ) => {
 	const port = await allocPort();
 	const cfg = `${sb.root}/gateway.yaml`;
@@ -231,11 +231,11 @@ export const startGateway = async (
 			baseUrl: o.upstream,
 			auth: "none",
 			extra: { CLAUDE_GATEWAY_ALLOW_LOOPBACK: "1", ...env },
-			allowOverride: Object.keys(env ?? {}),
+			allowOverride: Object.keys(env ?? {})
 		}),
 		stdout: "pipe",
 		stderr: "pipe",
-		detached: true,
+		detached: true
 	});
 	await registerPid(p.pid);
 	const watch = watchProcess(p);
@@ -254,6 +254,6 @@ export const startGateway = async (
 			if (!watch.exited()) {
 				p.kill("SIGKILL");
 			}
-		},
+		}
 	};
 };

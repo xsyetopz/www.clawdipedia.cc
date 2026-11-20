@@ -11,7 +11,7 @@ const textBlocks = (content: unknown[]): string[] =>
 	content.flatMap((b) =>
 		isRecord(b) && b["type"] === "text" && typeof b["text"] === "string"
 			? [b["text"]]
-			: [],
+			: []
 	);
 
 const textsOf = (m: Record<string, unknown>): string[] => {
@@ -29,7 +29,7 @@ const maskDirs = (text: string, dirs: RunResult["dirs"]): string =>
 		.replaceAll(dirs.project, "<project-dir>")
 		.replaceAll(
 			/\S*\/bundled-skills\/[^/\s]+\/[0-9a-f]+/gu,
-			"<bundled-skill-dir>",
+			"<bundled-skill-dir>"
 		)
 		.replaceAll(REAL_TMP, "<temp-dir>")
 		.replaceAll(tmpdir().replace(/\/$/u, ""), "<temp-dir>");
@@ -41,7 +41,7 @@ const maskDirs = (text: string, dirs: RunResult["dirs"]): string =>
  */
 export const userText = (
 	r: Pick<RunResult, "requests" | "dirs">,
-	mark: string,
+	mark: string
 ): string | null => {
 	for (const q of r.requests) {
 		if (!q.path.startsWith("/v1/messages") || q.path.includes("count_tokens")) {
@@ -60,7 +60,7 @@ export const userText = (
 						.slice(i)
 						.map((t) => t.trimEnd())
 						.join("\n\n"),
-					r.dirs,
+					r.dirs
 				);
 			}
 		}

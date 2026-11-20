@@ -23,8 +23,8 @@ on("tool.call", ($, e, next) => {
 on("ui.render", { component: "Spinner" }, async ($, e, next) =>
   next({
     ...e,
-    props: { ...e.props, suffix: ` · tool calls: ${calls}…` },
-  }),
+    props: { ...e.props, suffix: ` · tool calls: ${calls}…` }
+  })
 );
 ```
 

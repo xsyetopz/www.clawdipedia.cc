@@ -24,7 +24,7 @@ const perVariantHead = (def: Cap): string[] => [
 	"| Tool | Description | Schema |",
 	"| --- | --- | --- |",
 	...def.tools.map(
-		(t) => `| ${toolLink(t.name)} | ${fmt(t.desc)} | ${fmt(t.schema)} |`,
+		(t) => `| ${toolLink(t.name)} | ${fmt(t.desc)} | ${fmt(t.schema)} |`
 	),
 	"",
 	"## Differences by Variant",
@@ -32,7 +32,7 @@ const perVariantHead = (def: Cap): string[] => [
 	"Each row compares one variant to the default list. Variants with the same tools and text as the default are grouped at the end.",
 	"",
 	"| Variant | Tools | Difference |",
-	"| --- | --- | --- |",
+	"| --- | --- | --- |"
 ];
 
 const perVariantRows = (def: Cap): string[] => {
@@ -47,7 +47,7 @@ const perVariantRows = (def: Cap): string[] => {
 			same.push(pageLink("tools", id, c.v.title));
 		} else {
 			rows.push(
-				`| ${pageLink("tools", id, c.v.title)} | ${c.tools.length} | ${d} |`,
+				`| ${pageLink("tools", id, c.v.title)} | ${c.tools.length} | ${d} |`
 			);
 		}
 	}
@@ -57,7 +57,7 @@ const perVariantRows = (def: Cap): string[] => {
 		"## Same Tools as the Default",
 		"",
 		`${same.join(", ")}.`,
-		"",
+		""
 	];
 };
 
@@ -70,9 +70,9 @@ const bareLines = (): string[] => {
 				"| Tool | Description | Schema |",
 				"| --- | --- | --- |",
 				...bare.tools.map(
-					(t) => `| \`${t.name}\` | ${fmt(t.desc)} | ${fmt(t.schema)} |`,
+					(t) => `| \`${t.name}\` | ${fmt(t.desc)} | ${fmt(t.schema)} |`
 				),
-				"",
+				""
 			]
 		: [];
 };
@@ -85,7 +85,7 @@ export const toolsPerVariantPage = async (): Promise<void> => {
 	const L = [...perVariantHead(def), ...perVariantRows(def), ...bareLines()];
 	await Bun.write(
 		join(groupDir("tools"), "tools-per-variant.md"),
-		stripTrailing(L.join("\n")),
+		stripTrailing(L.join("\n"))
 	);
 };
 
@@ -120,7 +120,7 @@ export const toolsPage = async (): Promise<void> => {
 		"| Which tools are sent | `--tools`, `--disallowedTools`, or a deny rule removes a tool. | [Tools](../reference/tools/index.md) |",
 		"",
 		"## Tools",
-		"",
+		""
 	].map((s) => relink("tools", s));
 	for (const t of list) {
 		L.push(
@@ -131,11 +131,11 @@ export const toolsPage = async (): Promise<void> => {
 			fence(t.text || "(no description)", "text"),
 			"",
 			fence(t.schemaText, "json skip-lint"),
-			"",
+			""
 		);
 	}
 	await Bun.write(
 		join(groupDir("tools"), "tools.md"),
-		stripTrailing(L.join("\n")),
+		stripTrailing(L.join("\n"))
 	);
 };

@@ -7,12 +7,12 @@ import { mapSeq } from "../src/seq.ts";
 export const str = (key: string, v: string): Entry => ({
 	key,
 	opt: false,
-	val: { k: "str", v },
+	val: { k: "str", v }
 });
 export const unk = (key: string, text: string): Entry => ({
 	key,
 	opt: false,
-	val: { k: "unk", text },
+	val: { k: "unk", text }
 });
 
 /** The bundle of one or more chunks, and a resolver for it. */
@@ -20,8 +20,8 @@ export const load = (files: Record<string, string>) => {
 	const b = new Bundle(
 		Object.entries(files).map(([name, text]) => ({
 			name: `/$bunfs/root/${name}`,
-			text,
-		})),
+			text
+		}))
 	);
 	return { b, r: new Resolver() };
 };
@@ -40,7 +40,7 @@ export const moduleA = async (files: Record<string, string>) => {
 export const spreadKeys = async (
 	src: string,
 	id: string,
-	extra: Record<string, string> = {},
+	extra: Record<string, string> = {}
 ) => {
 	const { m, r } = await moduleA({ "a.js": src, ...extra });
 	const spread = m.at(src.lastIndexOf(`...${id}`), "SpreadElement");
@@ -87,23 +87,23 @@ export const valsOf = async (src: string) => {
 	const { m, r } = await moduleA({ "a.js": src });
 	const entries = await r.objectAt(m, m.text.indexOf("{"));
 	return entries.map((e) =>
-		"key" in e ? [e.key, e.val.k, "v" in e.val && e.val.v] : [],
+		"key" in e ? [e.key, e.val.k, "v" in e.val && e.val.v] : []
 	);
 };
 
 /** The JSON type of each key of the object literal `o={...}`. */
 export const types = async (
 	src: string,
-	extra: Record<string, string> = {},
+	extra: Record<string, string> = {}
 ) => {
 	const { m, r } = await moduleA({ "a.js": src, ...extra });
 	const entries = await r.objectAt(m, src.lastIndexOf("o={") + 2);
 	const typed = await mapSeq(
 		entries,
 		async (
-			e,
+			e
 		): Promise<[string, Awaited<ReturnType<Resolver["typeOfVal"]>>][]> =>
-			"key" in e ? [[e.key, await r.typeOfVal(e.val)]] : [],
+			"key" in e ? [[e.key, await r.typeOfVal(e.val)]] : []
 	);
 	return Object.fromEntries(typed.flat());
 };
@@ -112,7 +112,7 @@ export const types = async (
 export const returnSources = async (
 	src: string,
 	find: string,
-	type: "FunctionDeclaration" | "ArrowFunctionExpression",
+	type: "FunctionDeclaration" | "ArrowFunctionExpression"
 ) => {
 	const { m } = await moduleA({ "a.js": src });
 	const fn: Fn | undefined = m.at(m.text.indexOf(find), type);

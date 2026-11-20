@@ -20,7 +20,7 @@ import {
 	isFn,
 	type Module,
 	type Node,
-	strLit,
+	strLit
 } from "../ast.ts";
 import { asNode, scan, short, type SurfaceItem } from "./common.ts";
 
@@ -28,7 +28,7 @@ const USAGE = /(?:Usage:|USAGE\n)\s*claude ((?:[a-z][\w-]*(?: |$))+)(.*)/u;
 const ARG = String.raw`(?:\[?=?<[^>]+>\]?| <[^>]+>| \[[^\]]+\])`;
 const OPTION_LINE = new RegExp(
 	String.raw`^ {2,}(?:-\w, )?(--(?:\[no-\])?[a-z][\w-]*${ARG}*)(?:, -\w)?(?: +(.*))?$`,
-	"u",
+	"u"
 );
 const USAGE_FLAG = /--[a-z][\w-]*/gu;
 const PARSED = /^(--[a-z][\w-]*)=?$/u;
@@ -113,7 +113,7 @@ const helpOf = (m: Module, n: Node, own: string): Help | undefined => {
 	}
 	const rest = u?.[2]?.trim() ?? "";
 	const flags = new Map(
-		[...rest.matchAll(USAGE_FLAG)].map((f) => [f[0], f[0]] as const),
+		[...rest.matchAll(USAGE_FLAG)].map((f) => [f[0], f[0]] as const)
 	);
 	for (const [k, v] of optionLines(joinedText(m, n, own))) {
 		flags.set(k, v);
@@ -161,7 +161,7 @@ const hiddenFlags = (helps: Help[], parsers: Parser[]): SurfaceItem[] => {
 	for (const p of parsers) {
 		const scored = helps.map((h) => ({
 			h,
-			n: [...p.flags].filter((f) => names(h, f)).length,
+			n: [...p.flags].filter((f) => names(h, f)).length
 		}));
 		const best = scored.toSorted((a, b) => b.n - a.n)[0];
 		const least = best?.h.at.module === p.at.module ? 2 : 3;
@@ -174,7 +174,7 @@ const hiddenFlags = (helps: Help[], parsers: Parser[]): SurfaceItem[] => {
 					kind: "flag",
 					name: `${best.h.path} ${f}`,
 					...p.at,
-					gate: "hidden",
+					gate: "hidden"
 				});
 			}
 		}
@@ -201,7 +201,7 @@ const helpItems = async (bundle: Bundle): Promise<SurfaceItem[]> => {
 		}
 		const p = parsers.get(fn) ?? {
 			at: { module: m.name, offset: fn.start },
-			flags: new Set(),
+			flags: new Set()
 		};
 		p.flags.add(flag);
 		parsers.set(fn, p);
@@ -212,24 +212,24 @@ const helpItems = async (bundle: Bundle): Promise<SurfaceItem[]> => {
 				kind: "subcommand",
 				name: h.path,
 				...h.at,
-				...(h.rest !== "" && { detail: short(h.rest) }),
+				...(h.rest !== "" && { detail: short(h.rest) })
 			},
 			...[...h.flags].map(([name, detail]) => ({
 				kind: "flag",
 				name: `${h.path} ${name}`,
 				module: h.at.module,
 				offset: h.at.offset,
-				detail,
-			})),
+				detail
+			}))
 		]),
-		...hiddenFlags(helps, [...parsers.values()]),
+		...hiddenFlags(helps, [...parsers.values()])
 	];
 };
 
 /** The items of one kind from the help texts. */
 export const helpKind = async (
 	bundle: Bundle,
-	kind: "flag" | "subcommand",
+	kind: "flag" | "subcommand"
 ): Promise<SurfaceItem[]> => {
 	const items = await helpItems(bundle);
 	return items.filter((i) => i.kind === kind);

@@ -40,8 +40,8 @@ const MARKETPLACE = {
 		owner: { name: "probe" },
 		plugins: [
 			{ name: "pp", source: "./pp", description: "two options" },
-			{ name: "none", source: "./none", description: "no options" },
-		],
+			{ name: "none", source: "./none", description: "no options" }
+		]
 	}),
 	"m/pp/.claude-plugin/plugin.json": json({
 		name: "pp",
@@ -49,35 +49,35 @@ const MARKETPLACE = {
 		description: "two options",
 		userConfig: {
 			tok: { type: "string", title: "Tok", description: "first" },
-			two: { type: "string", title: "Two", description: "second" },
-		},
+			two: { type: "string", title: "Two", description: "second" }
+		}
 	}),
 	"m/none/.claude-plugin/plugin.json": json({
 		name: "none",
 		version: "1.0.0",
-		description: "no options",
-	}),
+		description: "no options"
+	})
 };
 const KNOWN = {
 	"plugins/known_marketplaces.json": json({
 		mk: {
 			source: { source: "directory", path: "{PROJ}/m" },
 			installLocation: "{PROJ}/m",
-			lastUpdated: "2026-01-01T00:00:00.000Z",
-		},
-	}),
+			lastUpdated: "2026-01-01T00:00:00.000Z"
+		}
+	})
 };
 const TRUSTED = {
 	".claude.json": json({
 		hasCompletedOnboarding: true,
-		projects: { "{PROJ}": { hasTrustDialogAccepted: true } },
-	}),
+		projects: { "{PROJ}": { hasTrustDialogAccepted: true } }
+	})
 };
 
 const trust = (
 	name: string,
 	argv: string[],
-	extra: Partial<Parameters<typeof withRun>[1]> = {},
+	extra: Partial<Parameters<typeof withRun>[1]> = {}
 ): CaseDef => ({
 	name: `workspace-trust-${name}`,
 	run: (ctx) =>
@@ -91,17 +91,17 @@ const trust = (
 					trusted: scalar(o["trusted"]),
 					directoryIsProject: o["directory"] === r.sb.proj,
 					sandboxLimitsFiles: scalar(o["sandbox_limits_files"]),
-					requests: r.reqs.length,
+					requests: r.reqs.length
 				},
-				samples: { stdout: lines(r.stdout), stderr: lines(r.stderr) },
+				samples: { stdout: lines(r.stdout), stderr: lines(r.stderr) }
 			};
-		}),
+		})
 });
 
 const install = (
 	name: string,
 	plugin: string,
-	args: string[] = [],
+	args: string[] = []
 ): CaseDef => ({
 	name: `plugin-install-${name}`,
 	run: (ctx) =>
@@ -110,7 +110,7 @@ const install = (
 			{
 				argv: ["plugin", "install", plugin, "--json", ...args],
 				projFiles: MARKETPLACE,
-				cfgFiles: KNOWN,
+				cfgFiles: KNOWN
 			},
 			(r) => {
 				const o = firstJson(r);
@@ -123,19 +123,19 @@ const install = (
 						unsetOptionCount: scalar(o["unsetOptionCount"]),
 						configApplied: scalar(o["configApplied"]),
 						keys: Object.keys(o).toSorted().join(","),
-						requests: r.reqs.length,
+						requests: r.reqs.length
 					},
-					samples: { stdout: lines(r.stdout), stderr: lines(r.stderr) },
+					samples: { stdout: lines(r.stdout), stderr: lines(r.stderr) }
 				};
-			},
-		),
+			}
+		)
 });
 
 const SUBAGENT = { subagentStatusLine: { type: "command", command: "echo x" } };
 
 const statusLine = (
 	name: string,
-	spec: Partial<Parameters<typeof withRun>[1]>,
+	spec: Partial<Parameters<typeof withRun>[1]>
 ): CaseDef => ({
 	name: `subagent-status-line-${name}`,
 	run: (ctx) =>
@@ -149,11 +149,11 @@ const statusLine = (
 					isError: scalar(result?.["is_error"]),
 					result: scalar(result?.["result"]),
 					stderrMentions: mentions(r.stderr).length > 0,
-					requests: r.reqs.length,
+					requests: r.reqs.length
 				},
-				samples: { stderr: lines(mentions(r.stderr)) },
+				samples: { stderr: lines(mentions(r.stderr)) }
 			};
-		}),
+		})
 });
 
 export const CASES: CaseDef[] = [
@@ -163,32 +163,32 @@ export const CASES: CaseDef[] = [
 	trust("ignore-first", [
 		"--ignore-persisted-trust",
 		"workspace-trust",
-		"--json",
+		"--json"
 	]),
 	trust("ignore-last", [
 		"workspace-trust",
 		"--json",
-		"--ignore-persisted-trust",
+		"--ignore-persisted-trust"
 	]),
 	trust("persisted", ["workspace-trust", "--json"], { cfgFiles: TRUSTED }),
 	trust(
 		"persisted-ignored",
 		["--ignore-persisted-trust", "workspace-trust", "--json"],
-		{ cfgFiles: TRUSTED },
+		{ cfgFiles: TRUSTED }
 	),
 	trust("persisted-env-ignored", ["workspace-trust", "--json"], {
 		cfgFiles: TRUSTED,
-		env: { CLAUDE_CODE_IGNORE_PERSISTED_TRUST: "1" },
+		env: { CLAUDE_CODE_IGNORE_PERSISTED_TRUST: "1" }
 	}),
 	install("json", "pp@mk"),
 	install("config-one", "pp@mk", ["--config", "tok=x"]),
 	install("no-options", "none@mk"),
 	statusLine("file", {
-		cfgFiles: { "settings.json": json(SUBAGENT) },
+		cfgFiles: { "settings.json": json(SUBAGENT) }
 	}),
 	statusLine("flag", { args: ["--settings", json(SUBAGENT)] }),
 	statusLine("bad-type", {
-		args: ["--settings", json({ subagentStatusLine: 5 })],
+		args: ["--settings", json({ subagentStatusLine: 5 })]
 	}),
 	statusLine("absent", {}),
 	{
@@ -205,16 +205,16 @@ export const CASES: CaseDef[] = [
 						exit: r.code,
 						exampleCount: examples.length,
 						examples: examples.join("\n"),
-						requests: r.reqs.length,
-					},
+						requests: r.reqs.length
+					}
 				};
-			}),
-	},
+			})
+	}
 ];
 
 export const cli323: PrintGroup = {
 	id: "cli323",
 	title:
 		"2.1.323: workspace-trust, plugin install unsetOptionCount, subagentStatusLine, mcp add help",
-	run: (ctx) => runCases(ctx, "cli323", CASES),
+	run: (ctx) => runCases(ctx, "cli323", CASES)
 };

@@ -25,7 +25,7 @@ test("notes lines are matched by a code span, gated by a subject, or left unmatc
 		"gated",
 		"matched",
 		"matched",
-		"unmatched",
+		"unmatched"
 	]);
 	const [monitor, effort, env, cloud] = lines;
 	expect(monitor?.change?.to?.k).toBe("isEnabled");

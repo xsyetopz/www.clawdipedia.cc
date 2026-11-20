@@ -30,10 +30,10 @@ echo "SL-ROW1"; echo "SL-ROW2"
 /** A hook entry that runs the helper for one event. */
 export const hookCmd = (event: string, matcher?: string): Obj => ({
 	...(matcher === undefined ? {} : { matcher }),
-	hooks: [{ type: "command", command: `/bin/bash {HOME}/hook.sh ${event}` }],
+	hooks: [{ type: "command", command: `/bin/bash {HOME}/hook.sh ${event}` }]
 });
 export const hooks = (events: string[]): Obj => ({
-	hooks: Object.fromEntries(events.map((e) => [e, [hookCmd(e)]])),
+	hooks: Object.fromEntries(events.map((e) => [e, [hookCmd(e)]]))
 });
 
 /** Regex text for a phrase on the rendered screen: the full-screen UI drops some spaces, so allow any between characters. */
@@ -60,7 +60,7 @@ export const tolerant = (phrase: string, flags = "i"): RegExp => {
 export const shows = (
 	x: PtyRun,
 	phrase: string,
-	screen: string = x.screen,
+	screen: string = x.screen
 ): boolean => tolerant(phrase).test(screen);
 
 /** Common schedule pieces. */
@@ -69,33 +69,33 @@ export const READY: PtyStep = {
 	timeout: 30,
 	label: "ready",
 	// every later `t` and the `secs` deadline count from the READY screen, not from spawn
-	rebase: true,
+	rebase: true
 };
 export const ASK = (label = "prompt", t = 0): PtyStep => ({
 	t,
 	send: `${PROMPT}\r`,
-	label,
+	label
 });
 export const WAIT = (phrase: string, label: string, timeout = 20): PtyStep => ({
 	wait_for: looseSrc(phrase),
 	timeout,
-	label,
+	label
 });
 export const ESC = (t: number, label = "esc"): PtyStep => ({
 	t,
 	send: "\u001B",
-	label,
+	label
 });
 
 /** A wait_for step that matches any of several phrases (spaces ignored, one missing letter accepted, see tolerant). */
 export const waitAny = (
 	phrases: string[],
 	label: string,
-	timeout = 20,
+	timeout = 20
 ): PtyStep => ({
 	wait_for: phrases.map((p) => tolerant(p).source).join("|"),
 	timeout,
-	label,
+	label
 });
 /** The Bash tool turn the stub sends: a harmless `touch` inside the sandbox home. */
 export const TOUCH = (name: string, command?: string) => ({
@@ -104,10 +104,10 @@ export const TOUCH = (name: string, command?: string) => ({
 			name: "Bash",
 			input: {
 				command: command ?? `touch {HOME}/${name}`,
-				description: `probe ${name}`,
-			},
-		},
-	],
+				description: `probe ${name}`
+			}
+		}
+	]
 });
 /** Project `.mcp.json` for the elicitation server (this repo's mcp-elicit.ts run by the same Bun as the toolkit). */
 export const ELICIT_MCP: Files = {
@@ -116,8 +116,8 @@ export const ELICIT_MCP: Files = {
 			probe: {
 				command: process.execPath,
 				args: [join(import.meta.dir, "..", "mcp-elicit.ts")],
-				env: { ELICIT_LOG: "{HOME}/mcp.log" },
-			},
-		},
-	}),
+				env: { ELICIT_LOG: "{HOME}/mcp.log" }
+			}
+		}
+	})
 };

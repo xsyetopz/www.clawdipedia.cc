@@ -9,7 +9,7 @@ import {
 	internalError,
 	rowCheck,
 	settingCheck,
-	toolCheck,
+	toolCheck
 } from "./audit-checks.ts";
 import { envEffect, envListed, sweepOf } from "./audit-env.ts";
 import { libCheck } from "./audit-libcheck.ts";
@@ -35,7 +35,7 @@ const fileCheck = (c: Ctx, i: SurfaceItem, named: boolean): Verdict => {
 	}
 	return {
 		ok: named ? hits.length > 0 : hits.length === 0,
-		evidence: { textsNamingIt: hits.length, first: hits.slice(0, 2) },
+		evidence: { textsNamingIt: hits.length, first: hits.slice(0, 2) }
 	};
 };
 
@@ -82,7 +82,7 @@ const modelCheck = async (c: Ctx, i: SurfaceItem): Promise<Verdict> => {
 	});
 	return {
 		ok: n > 0 && bad.length === 0,
-		evidence: { occurrences: n, outsideRetiredText: bad.slice(0, 3) },
+		evidence: { occurrences: n, outsideRetiredText: bad.slice(0, 3) }
 	};
 };
 
@@ -93,7 +93,7 @@ const pickEnv = (
 	c: Ctx,
 	reason: string,
 	i: SurfaceItem,
-	all: string[],
+	all: string[]
 ): Picked => {
 	if (reason.includes("Read only by a library bundled")) {
 		return ["library-text", () => libCheck(c, all, i.name)];
@@ -104,7 +104,7 @@ const pickEnv = (
 			() => {
 				const sweep = sweepOf(c, i.name);
 				return { ok: sweep.state === "changed", evidence: { sweep } };
-			},
+			}
 		];
 	}
 	return ENV_LISTED.test(reason)
@@ -116,7 +116,7 @@ const pickEndpoint = (
 	c: Ctx,
 	reason: string,
 	i: SurfaceItem,
-	lib: string[] | undefined,
+	lib: string[] | undefined
 ): Picked => {
 	if (lib !== undefined) {
 		return ["library-text", () => libCheck(c, lib, i.name)];
@@ -134,7 +134,7 @@ const pickOther = (c: Ctx, reason: string, i: SurfaceItem): Picked => {
 		const named = reason.startsWith("Named in a message");
 		return [
 			named ? "file-named-in-text" : "file-unmentioned",
-			() => fileCheck(c, i, named),
+			() => fileCheck(c, i, named)
 		];
 	}
 	if (i.kind === "model") {
@@ -163,7 +163,7 @@ export const pick = (c: Ctx, reason: string, i: SurfaceItem): Picked => {
 	const lib = LIBS.find(([re]) => re.test(reason))?.[1] ?? bundledName(reason);
 	// The Agent SDK ships the program's own code, so every text of the program is in it.
 	const all = [...new Set(LIBS.flatMap(([, p]) => p))].filter(
-		(p) => p !== "@anthropic-ai/claude-agent-sdk",
+		(p) => p !== "@anthropic-ai/claude-agent-sdk"
 	);
 	if (i.kind === "error") {
 		return lib === undefined

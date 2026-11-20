@@ -15,8 +15,8 @@ export const DEFAULT_VARIANTS: Variant[] = [
 			change: "Yes. Use the flags and settings on the other pages.",
 			toggle:
 				"`CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=0` switches to the full prompt.",
-			where: "Built into the program. Nothing on disk.",
-		},
+			where: "Built into the program. Nothing on disk."
+		}
 	},
 	{
 		id: "default-sonnet",
@@ -33,8 +33,8 @@ export const DEFAULT_VARIANTS: Variant[] = [
 			change: "Yes. Use the flags and settings on the other pages.",
 			toggle:
 				"`CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=0` switches to the full prompt.",
-			where: "Built into the program. Nothing on disk.",
-		},
+			where: "Built into the program. Nothing on disk."
+		}
 	},
 	{
 		id: "default-haiku",
@@ -51,8 +51,8 @@ export const DEFAULT_VARIANTS: Variant[] = [
 			change: "Yes. Use the flags and settings on the other pages.",
 			toggle:
 				"`CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=0` switches to the full prompt.",
-			where: "Built into the program. Nothing on disk.",
-		},
+			where: "Built into the program. Nothing on disk."
+		}
 	},
 	{
 		id: "full-prompt",
@@ -71,8 +71,8 @@ export const DEFAULT_VARIANTS: Variant[] = [
 			toggle:
 				"`CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=0` (also `false`, `no`, `off`).",
 			where:
-				"Environment variable. Put it under `env` in `settings.json` to keep it.",
-		},
+				"Environment variable. Put it under `env` in `settings.json` to keep it."
+		}
 	},
 	{
 		id: "simple-prompt-sonnet",
@@ -89,8 +89,8 @@ export const DEFAULT_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "Yes. Set or unset the env var.",
 			toggle: "`CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=1`.",
-			where: "Environment variable.",
-		},
+			where: "Environment variable."
+		}
 	},
 	{
 		id: "simple-prompt-haiku",
@@ -107,8 +107,8 @@ export const DEFAULT_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "Yes. Set or unset the env var.",
 			toggle: "`CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=1`.",
-			where: "Environment variable.",
-		},
+			where: "Environment variable."
+		}
 	},
 	{
 		id: "simple-prompt-opus",
@@ -125,8 +125,8 @@ export const DEFAULT_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "Yes. Set or unset the env var.",
 			toggle: "`CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=1`.",
-			where: "Environment variable.",
-		},
+			where: "Environment variable."
+		}
 	},
 	{
 		id: "bare",
@@ -143,8 +143,8 @@ export const DEFAULT_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "No. The two lines are fixed.",
 			toggle: "`--bare` or `CLAUDE_CODE_SIMPLE=1`.",
-			where: "Command-line flag.",
-		},
+			where: "Command-line flag."
+		}
 	},
 	{
 		id: "simple-env",
@@ -162,8 +162,8 @@ export const DEFAULT_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "No. The two lines are fixed.",
 			toggle: "`CLAUDE_CODE_SIMPLE=1`.",
-			where: "Environment variable.",
-		},
+			where: "Environment variable."
+		}
 	},
 	{
 		id: "exclude-dynamic",
@@ -181,8 +181,8 @@ export const DEFAULT_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "No. It only moves text.",
 			toggle: "`--exclude-dynamic-system-prompt-sections`.",
-			where: "Command-line flag.",
-		},
+			where: "Command-line flag."
+		}
 	},
 	{
 		id: "exclude-dynamic-full",
@@ -200,7 +200,7 @@ export const DEFAULT_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "No. It only moves text.",
 			toggle: "`--exclude-dynamic-system-prompt-sections`.",
-			where: "Command-line flag.",
-		},
-	},
+			where: "Command-line flag."
+		}
+	}
 ];

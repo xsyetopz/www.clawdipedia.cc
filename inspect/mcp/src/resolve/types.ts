@@ -34,7 +34,7 @@ const KIND_TYPE: Record<Exclude<Val["k"], "unk">, JType> = {
 	num: "number",
 	bool: "boolean",
 	arr: "array",
-	obj: "object",
+	obj: "object"
 };
 /** The JSON type of a value that is no unknown. */
 export const kindType = (v: Val): JType | undefined =>
@@ -42,12 +42,12 @@ export const kindType = (v: Val): JType | undefined =>
 /** Both type lists joined, or undefined when either is unknown. */
 export const union = (
 	a: readonly Ty[] | undefined,
-	b: readonly Ty[] | undefined,
+	b: readonly Ty[] | undefined
 ): Ty[] | undefined =>
 	a && b ? [...new Set([...a, ...b])].toSorted() : undefined;
 /** The types JSON can hold; undefined when there are none. */
 export const jsonTypes = (
-	t: readonly Ty[] | undefined,
+	t: readonly Ty[] | undefined
 ): JType[] | undefined => {
 	const out = t?.filter((x): x is JType => x !== "absent");
 	return out !== undefined && out.length > 0 ? out : undefined;
@@ -59,13 +59,13 @@ export const loosen = (v: Val): Val =>
 		? {
 				k: "obj",
 				e: v.e.map((x) => ("key" in x ? { ...x, val: loosen(x.val) } : x)),
-				open: true,
+				open: true
 			}
 		: { k: "unk", text: "" };
 
 type Keyed = Extract<Entry, { key: string }>;
 export type TyOf = (
-	v: Val,
+	v: Val
 ) => JType[] | undefined | Promise<JType[] | undefined>;
 
 /** The JSON types of a value the code shows: its own, or the types it holds when unknown. */
@@ -96,7 +96,7 @@ const mergeUnknown = async (pv: Val, ev: Val, ty: TyOf): Promise<Val> => {
 const mergeKnown = async (
 	pv: Val,
 	ev: Val,
-	ty: TyOf,
+	ty: TyOf
 ): Promise<Val | undefined> => {
 	if (
 		(pv.k === "str" || pv.k === "enum") &&
@@ -109,7 +109,7 @@ const mergeKnown = async (
 		return {
 			k: "obj",
 			e: await mergeEntries([pv.e, ev.e], ty),
-			...(pv.open === true || ev.open === true ? { open: true } : {}),
+			...(pv.open === true || ev.open === true ? { open: true } : {})
 		};
 	}
 	// An object at one site and another value at another: the object is one case only.
@@ -128,13 +128,13 @@ const mergeKnown = async (
 const mergeKeyed = async (
 	prev: Keyed,
 	e: Keyed,
-	ty: TyOf,
+	ty: TyOf
 ): Promise<Keyed | undefined> => {
 	if (prev.val.k === "unk" || e.val.k === "unk") {
 		return {
 			...prev,
 			opt: prev.opt || e.opt,
-			val: await mergeUnknown(prev.val, e.val, ty),
+			val: await mergeUnknown(prev.val, e.val, ty)
 		};
 	}
 	const val = await mergeKnown(prev.val, e.val, ty);
@@ -147,7 +147,7 @@ const mergeKeyed = async (
  */
 export const mergeEntries = async (
 	lists: Entry[][],
-	ty: TyOf = defaultTy,
+	ty: TyOf = defaultTy
 ): Promise<Entry[]> => {
 	const seen = new Map<string, Entry>();
 	const count = new Map<string, number>();
@@ -166,14 +166,14 @@ export const mergeEntries = async (
 			if (merged) {
 				seen.set(e.key, merged);
 			}
-		}),
+		})
 	);
 	const out: Entry[] = [];
 	for (const e of seen.values()) {
 		out.push(
 			"key" in e
 				? { ...e, opt: e.opt || (count.get(e.key) ?? 0) < lists.length }
-				: e,
+				: e
 		);
 	}
 	return out;

@@ -51,7 +51,7 @@ const findPlaces = async (bundle: Bundle): Promise<SurfaceItem[]> => {
 				name,
 				module: m.name,
 				offset: n.start,
-				...extra,
+				...extra
 			});
 		}
 	};

@@ -18,7 +18,7 @@ import {
 	type Module,
 	type Node,
 	type NodeOf,
-	type Variable,
+	type Variable
 } from "../ast.ts";
 import { mapSeq } from "../seq.ts";
 import {
@@ -26,7 +26,7 @@ import {
 	scanOf,
 	short,
 	type SurfaceItem,
-	unique,
+	unique
 } from "./common.ts";
 
 /** Stands for a part that the code computes (short blanks it again). */
@@ -50,7 +50,7 @@ const valueOf = (v: Variable): Node | null | undefined => {
 const errorClass = async (
 	m: Module,
 	id: Node,
-	depth = 0,
+	depth = 0
 ): Promise<string | undefined> => {
 	if (id.type !== "Identifier" || depth > 8) {
 		return undefined;
@@ -78,7 +78,7 @@ const errorClass = async (
 /** The text of a message expression, with unknown parts blanked, or undefined when it holds no literal. */
 const text = async (
 	m: Module,
-	n: Node | undefined,
+	n: Node | undefined
 ): Promise<string | undefined> => {
 	if (!n) {
 		return undefined;
@@ -92,7 +92,7 @@ const text = async (
 			.map(
 				(q, i) =>
 					(q.value.cooked ?? q.value.raw) +
-					(i < n.expressions.length ? BLANK : ""),
+					(i < n.expressions.length ? BLANK : "")
 			)
 			.join("");
 	}
@@ -121,7 +121,7 @@ const inLibrary = (m: Module, at: Node): boolean => {
 		if (hit === undefined) {
 			const p = m.parent(n);
 			const names = n.params.flatMap((x) =>
-				x.type === "Identifier" ? [x.name] : [],
+				x.type === "Identifier" ? [x.name] : []
 			);
 			hit =
 				p?.type === "CallExpression" &&
@@ -178,7 +178,7 @@ export const extractErrors: Extractor = async (bundle) => {
 				name,
 				module: m.name,
 				offset: call.start,
-				detail,
+				detail
 			});
 		}
 	};
@@ -197,7 +197,7 @@ export const extractErrors: Extractor = async (bundle) => {
 			} else if (writesStderr(m, n)) {
 				await add(m, n, "stderr");
 			}
-		},
+		}
 	);
 	return unique(out);
 };

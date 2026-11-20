@@ -9,7 +9,7 @@ export const initModel = (evs: Obj[]): string =>
 	show(
 		evs.find((e) => e["type"] === "system" && e["subtype"] === "init")?.[
 			"model"
-		] ?? "",
+		] ?? ""
 	);
 
 const UUID =
@@ -22,7 +22,7 @@ export const scrub = (s: string): string =>
 		.replaceAll(UUID, "<uuid>")
 		.replaceAll(
 			/\b(org|acct|account|user|artifact)_[A-Za-z0-9]{6,}/giu,
-			"<id>",
+			"<id>"
 		);
 
 const deep = (v: unknown): unknown => {

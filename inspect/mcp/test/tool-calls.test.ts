@@ -8,12 +8,12 @@ import { type Line, listTranscripts, scanToolCalls } from "../src/sessions.ts";
 const line = (n: number, json: NonNullable<Line["json"]>): Line => ({
 	n,
 	text: JSON.stringify(json),
-	json,
+	json
 });
 const use = (name: string, input: unknown) => ({
 	type: "tool_use",
 	name,
-	input,
+	input
 });
 const assistant = (n: number, ...content: unknown[]) =>
 	line(n, { type: "assistant", message: { content } });
@@ -23,19 +23,19 @@ const lines: Line[] = [
 	assistant(2, use("mcp__a__read", { route: "y" })),
 	line(3, {
 		type: "user",
-		message: { content: [use("mcp__a__read", { route: "z" })] },
+		message: { content: [use("mcp__a__read", { route: "z" })] }
 	}),
 	assistant(4, { type: "text", text: "hi" }, { type: "tool_result" }),
-	{ n: 5, text: "not json" },
+	{ n: 5, text: "not json" }
 ];
 
 test("counts tool_use blocks per name", () => {
 	const r = scanToolCalls(lines);
 	expect(
-		Object.fromEntries(Object.entries(r).map(([k, v]) => [k, v.count])),
+		Object.fromEntries(Object.entries(r).map(([k, v]) => [k, v.count]))
 	).toEqual({
 		mcp__a__read: 2,
-		Bash: 1,
+		Bash: 1
 	});
 	expect(r["Bash"]?.samples).toEqual([]);
 });
@@ -45,7 +45,7 @@ test("plain filter keeps names containing the text, with samples", () => {
 	expect(Object.keys(r)).toEqual(["mcp__a__read"]);
 	expect(r["mcp__a__read"]?.samples).toEqual([
 		'{"route":"x"}',
-		'{"route":"y"}',
+		'{"route":"y"}'
 	]);
 });
 
@@ -53,7 +53,7 @@ test("regex filter matches several names", () => {
 	const r = scanToolCalls(lines, { match: /^(Bash|mcp__a__.*)$/u, samples: 1 });
 	expect(Object.keys(r).toSorted((x, y) => x.localeCompare(y))).toEqual([
 		"Bash",
-		"mcp__a__read",
+		"mcp__a__read"
 	]);
 	expect(r["mcp__a__read"]?.count).toBe(2);
 	expect(r["mcp__a__read"]?.samples).toHaveLength(1);
@@ -63,7 +63,7 @@ test("a sample input is clipped to maxChars", () => {
 	const r = scanToolCalls([assistant(1, use("T", { v: "x".repeat(500) }))], {
 		match: /T/u,
 		samples: 1,
-		maxChars: 20,
+		maxChars: 20
 	});
 	const s = firstSample(r["T"]);
 	expect(s.startsWith('{"v":"xxxxxxxx')).toBe(true);
@@ -101,7 +101,7 @@ test("listTranscripts includes subagent transcripts of a session", async () => {
 	try {
 		const transcripts = await listTranscripts();
 		expect(
-			transcripts.map((s) => s.id).toSorted((x, y) => x.localeCompare(y)),
+			transcripts.map((s) => s.id).toSorted((x, y) => x.localeCompare(y))
 		).toEqual(["s1", "s1/agent-a"]);
 	} finally {
 		restoreEnv("CLAUDE_CONFIG_DIR", old);

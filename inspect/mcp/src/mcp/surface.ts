@@ -16,7 +16,7 @@ import {
 	messageOf,
 	need,
 	P,
-	text,
+	text
 } from "./app.ts";
 
 /** An analyzer result as plain JSON: a key ending in "?" is optional. */
@@ -40,8 +40,8 @@ const entriesJson = (entries: Entry[]): Record<string, unknown> =>
 		entries.map((e) =>
 			"key" in e
 				? [`${e.key}${e.opt ? "?" : ""}`, valJson(e.val)]
-				: [`...${clip(e.spread, 80)}`, "unresolved spread"],
-		),
+				: [`...${clip(e.spread, 80)}`, "unresolved spread"]
+		)
 	);
 
 const SURFACE_LIMIT = 200;
@@ -57,7 +57,7 @@ const surfaceLine = (i: SurfaceItem) =>
 const kindCount = async (
 	bundle: Parameters<typeof surface>[0],
 	modules: Parameters<typeof surface>[2],
-	k: string,
+	k: string
 ) => {
 	try {
 		const items = await surface(bundle, k, modules);
@@ -69,13 +69,13 @@ const kindCount = async (
 
 const listKind = async (
 	kind: string,
-	{ name, offset = 0, limit = SURFACE_LIMIT, version }: Args,
+	{ name, offset = 0, limit = SURFACE_LIMIT, version }: Args
 ) => {
 	const p = await program(version);
 	const bundle = p.bundle();
 	if (kind === "") {
 		const rows = await mapSeq(Object.keys(KINDS), (k) =>
-			kindCount(bundle, p.modules, k),
+			kindCount(bundle, p.modules, k)
 		);
 		return text(rows.join("\n"));
 	}
@@ -98,7 +98,7 @@ const listKind = async (
 	}
 	const more = offset + lines.length < all.length;
 	return text(
-		`${kind}: items ${offset + 1}-${offset + lines.length} of ${all.length}${has(name) ? ` matching "${clip(name, 100)}"` : ""}${more ? `, next_offset ${offset + lines.length}` : ""}\n${lines.join("\n")}`,
+		`${kind}: items ${offset + 1}-${offset + lines.length} of ${all.length}${has(name) ? ` matching "${clip(name, 100)}"` : ""}${more ? `, next_offset ${offset + lines.length}` : ""}\n${lines.join("\n")}`
 	);
 };
 
@@ -108,7 +108,7 @@ group(
 	"kind",
 	{
 		...Object.fromEntries(
-			["", ...Object.keys(KINDS)].map((k) => [k, (a: Args) => listKind(k, a)]),
+			["", ...Object.keys(KINDS)].map((k) => [k, (a: Args) => listKind(k, a)])
 		),
 		"object-keys": async ({ module, offset, anchor, version }) => {
 			const p = await program(version);
@@ -122,7 +122,7 @@ group(
 			const pos = has(anchor) ? m.text.indexOf(anchor) : (offset ?? -1);
 			if (pos < 0) {
 				throw new Error(
-					has(anchor) ? `anchor not found: ${anchor}` : "give offset or anchor",
+					has(anchor) ? `anchor not found: ${anchor}` : "give offset or anchor"
 				);
 			}
 			let obj: Node | undefined = m.nodeAt(pos);
@@ -137,7 +137,7 @@ group(
 			const unresolved = [...new Set(R.unresolved.slice(before))];
 			return text(
 				`${JSON.stringify(keys, null, 2)}${unresolved.length > 0 ? `\n\nSpreads not followed:\n${unresolved.map((u) => `- ${u}`).join("\n")}` : ""}`,
-				{ keys, unresolved },
+				{ keys, unresolved }
 			);
 		},
 		"event-keys": async ({ name, version }) => {
@@ -151,15 +151,15 @@ group(
 						.join("\n"),
 					{
 						events: Object.fromEntries(
-							[...events].map(([n, l]) => [n, l.length]),
-						),
-					},
+							[...events].map(([n, l]) => [n, l.length])
+						)
+					}
 				);
 			}
 			const lists = events.get(name.replace(/^claude_code\./u, ""));
 			if (!lists) {
 				throw new Error(
-					`no event "${name}"; events: ${[...events.keys()].join(", ")}`,
+					`no event "${name}"; events: ${[...events.keys()].join(", ")}`
 				);
 			}
 			const keys = entriesJson(await mergeEntries(lists));
@@ -167,8 +167,8 @@ group(
 				`${lists.length} call sites\n${JSON.stringify(keys, null, 2)}`,
 				{
 					sites: lists.length,
-					keys,
-				},
+					keys
+				}
 			);
 		},
 		"env-places": async ({ name, version }) => {
@@ -193,14 +193,14 @@ group(
 				`${r.module}: ${r.tools.length} tools\n${r.tools
 					.map(
 						(t) =>
-							`- ${t.name}${t.unresolved ? " (unresolved)" : ""}${t.when.length > 0 ? `  when: ${t.when.join(" && ")}` : ""}${has(t.enabled) ? `  own: ${t.enabled}` : ""}`,
+							`- ${t.name}${t.unresolved ? " (unresolved)" : ""}${t.when.length > 0 ? `  when: ${t.when.join(" && ")}` : ""}${has(t.enabled) ? `  own: ${t.enabled}` : ""}`
 					)
 					.join("\n")}\n\nFunctions:\n${Object.entries(r.functions)
 					.map(([n, s]) => `- ${n}: ${s}`)
 					.join("\n")}`,
-				r,
+				r
 			);
-		},
+		}
 	},
 	{
 		version: P.version,
@@ -209,7 +209,7 @@ group(
 		offset: P.offset,
 		limit: P.limit,
 		anchor: ARGS.anchor.describe(
-			"For object-keys: text inside the literal, instead of offset.",
-		),
-	},
+			"For object-keys: text inside the literal, instead of offset."
+		)
+	}
 );

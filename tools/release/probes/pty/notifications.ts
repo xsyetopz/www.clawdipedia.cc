@@ -16,27 +16,25 @@ import {
 	shows,
 	TOUCH,
 	WAIT,
-	waitAny,
+	waitAny
 } from "./harness.ts";
 
 const MCP_SETTINGS = {
 	...hooks(["Notification", "Elicitation", "ElicitationResult"]),
 	enableAllProjectMcpServers: true,
-	permissions: { allow: ["mcp__probe"] },
+	permissions: { allow: ["mcp__probe"] }
 };
 
 const types = (x: PtyRun): string[] =>
 	[
 		...new Set(
-			x
-				.hook("Notification")
-				.map((n) => show(n.json["notification_type"] ?? "")),
-		),
+			x.hook("Notification").map((n) => show(n.json["notification_type"] ?? ""))
+		)
 	].toSorted();
 const messageOf = (x: PtyRun, type: string): string =>
 	show(
 		x.hook("Notification").find((n) => n.json["notification_type"] === type)
-			?.json["message"] ?? "",
+			?.json["message"] ?? ""
 	);
 
 const elicitationDialog: PtyCase = {
@@ -49,7 +47,7 @@ const elicitationDialog: PtyCase = {
 		READY,
 		ASK("prompt", 6),
 		WAIT("PROBE-ELICIT", "dialog"),
-		ESC(18, "cancel"),
+		ESC(18, "cancel")
 	],
 	secs: 21,
 	facts: ["notifications.types"],
@@ -63,9 +61,9 @@ const elicitationDialog: PtyCase = {
 			notificationTypes: t,
 			dialogMessage: messageOf(x, "elicitation_dialog"),
 			responseMessage: messageOf(x, "elicitation_response"),
-			resultAction: show(res["action"] ?? ""),
+			resultAction: show(res["action"] ?? "")
 		};
-	},
+	}
 };
 
 const elicitationUrl: PtyCase = {
@@ -78,7 +76,7 @@ const elicitationUrl: PtyCase = {
 		READY,
 		ASK("prompt", 6),
 		WAIT("PROBE-URL", "dialog"),
-		{ t: 18, send: "\r", label: "accept" },
+		{ t: 18, send: "\r", label: "accept" }
 	],
 	secs: 24,
 	facts: ["notifications.types"],
@@ -90,8 +88,8 @@ const elicitationUrl: PtyCase = {
 		urlDialogMessage: messageOf(x, "elicitation_url_dialog"),
 		responseMessage: messageOf(x, "elicitation_response"),
 		completeMessage: messageOf(x, "elicitation_complete"),
-		elicitationMode: show(x.hook("Elicitation")[0]?.json["mode"] ?? ""),
-	}),
+		elicitationMode: show(x.hook("Elicitation")[0]?.json["mode"] ?? "")
+	})
 };
 
 const idle: PtyCase = {
@@ -115,7 +113,7 @@ const idle: PtyCase = {
 			secondsAfterPrompt:
 				n !== undefined && p !== undefined
 					? Math.round((n.t - p) / 5) * 5
-					: null,
+					: null
 		};
 	},
 	samples: (x) => {
@@ -125,9 +123,9 @@ const idle: PtyCase = {
 		const p = x.pty.sent.find((s) => s.label === "prompt")?.t;
 		return {
 			secondsAfterPromptRaw:
-				n !== undefined && p !== undefined ? String(round(n.t - p, 1)) : "",
+				n !== undefined && p !== undefined ? String(round(n.t - p, 1)) : ""
 		};
-	},
+	}
 };
 
 const autoMode: PtyCase = {
@@ -140,7 +138,7 @@ const autoMode: PtyCase = {
 		READY,
 		ASK(),
 		waitAny(["can't check actions", "no longer charge"], "dialog"),
-		ESC(14),
+		ESC(14)
 	],
 	secs: 16,
 	facts: ["notifications.types"],
@@ -148,11 +146,11 @@ const autoMode: PtyCase = {
 	data: (x) => ({
 		...pre(
 			x.hook("Notification").length > 0,
-			"no Notification hook fired in auto mode",
+			"no Notification hook fired in auto mode"
 		),
 		notificationTypes: types(x),
-		message: messageOf(x, "agent_needs_input"),
-	}),
+		message: messageOf(x, "agent_needs_input")
+	})
 };
 
 const autoModeRefused: PtyCase = {
@@ -164,7 +162,7 @@ const autoModeRefused: PtyCase = {
 		READY,
 		ASK(),
 		waitAny(["can't check actions", "no longer charge"], "dialog"),
-		ESC(14),
+		ESC(14)
 	],
 	notes:
 		"Auto mode with a custom base URL that answers HTTP 400 to the dangerous-tool-use beta: which dialog the program shows, and what it logs about the server-side check.",
@@ -174,8 +172,8 @@ const autoModeRefused: PtyCase = {
 			.file("debug.log")
 			.split("\n")
 			.filter((l) => l.includes("[server-classifier]"))
-			.map((l) => l.replace(/^\S+ /u, "").slice(0, 400)),
-	}),
+			.map((l) => l.replace(/^\S+ /u, "").slice(0, 400))
+	})
 };
 
 const autoModeLocal: PtyCase = {
@@ -189,9 +187,9 @@ const autoModeLocal: PtyCase = {
 		notificationTypes: types(x),
 		billingNotice: shows(x, "no longer charge"),
 		serverCheckRequested: x.messages.some(
-			(q) => obj(q.body)["safeguards"] !== undefined,
-		),
-	}),
+			(q) => obj(q.body)["safeguards"] !== undefined
+		)
+	})
 };
 
 export const notificationsGroup: PtyGroup = {
@@ -203,6 +201,6 @@ export const notificationsGroup: PtyGroup = {
 		autoMode,
 		autoModeRefused,
 		autoModeLocal,
-		idle,
-	],
+		idle
+	]
 };

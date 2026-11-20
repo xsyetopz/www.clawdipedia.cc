@@ -14,7 +14,7 @@ import {
 	keepCopy,
 	pacedStdin,
 	sandboxFor,
-	seqOf,
+	seqOf
 } from "./setup.ts";
 
 /** Starts the stub and the collector; `run` does one case, `stop` closes both. `keep` names a dir that gets a copy of each sandbox. */
@@ -33,7 +33,7 @@ export const createRunner = async (version: string, keep?: string) => {
 			...(c.respHeaders ? { respHeaders: c.respHeaders } : {}),
 			...(c.turns ? { turns: c.turns } : {}),
 			...(c.rules ? { rules: c.rules } : {}),
-			...(c.countTokens === undefined ? {} : { countTokens: c.countTokens }),
+			...(c.countTokens === undefined ? {} : { countTokens: c.countTokens })
 		});
 		const mock =
 			c.host === undefined
@@ -44,7 +44,7 @@ export const createRunner = async (version: string, keep?: string) => {
 			cwd: sb.proj,
 			env,
 			timeoutMs: c.timeoutMs ?? 90_000,
-			...(c.stdin === undefined ? {} : { stdin: pacedStdin(c.stdin) }),
+			...(c.stdin === undefined ? {} : { stdin: pacedStdin(c.stdin) })
 		});
 		stub.unregister(c.id);
 		await mock?.stop();

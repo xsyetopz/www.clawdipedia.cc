@@ -16,7 +16,7 @@ const TYPES = new Set([
 	"list",
 	"json",
 	"url",
-	"path",
+	"path"
 ]);
 
 interface RegistryType {
@@ -27,7 +27,7 @@ interface RegistryType {
 
 const registryType = async (
 	m: Module,
-	getter: Node,
+	getter: Node
 ): Promise<RegistryType | undefined> => {
 	if (
 		getter.type !== "ArrowFunctionExpression" ||
@@ -51,12 +51,12 @@ const registryType = async (
 	return {
 		method: c.property.name,
 		detail: `${c.property.name}${opts}`,
-		...(values !== undefined && { values }),
+		...(values !== undefined && { values })
 	};
 };
 
 const namedProps = (
-	o: NodeOf<"ObjectExpression">,
+	o: NodeOf<"ObjectExpression">
 ): { p: Prop; k: string }[] => {
 	const named = o.properties.flatMap((p) => {
 		const k = keyOf(p);
@@ -71,7 +71,7 @@ const namedProps = (
 const addRegistry = async (
 	m: Module,
 	o: NodeOf<"ObjectExpression">,
-	add: Add,
+	add: Add
 ): Promise<boolean> => {
 	const named = namedProps(o);
 	if (named.length < 3) {
@@ -88,7 +88,7 @@ const addRegistry = async (
 			m,
 			p,
 			k,
-			t ? { detail: t.detail, ...(t.values && { values: t.values }) } : {},
+			t ? { detail: t.detail, ...(t.values && { values: t.values }) } : {}
 		);
 	}
 	return true;
@@ -97,7 +97,7 @@ const addRegistry = async (
 /** Add the names of every env registry in the bundle; return their namespaces. */
 export const scanRegistries = async (
 	bundle: Bundle,
-	add: Add,
+	add: Add
 ): Promise<{ m: Module; v: Variable }[]> => {
 	const regs: { m: Module; v: Variable }[] = [];
 	await scanOf(bundle, [":()=>"], ["CallExpression"], async (m, n) => {

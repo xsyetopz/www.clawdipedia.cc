@@ -4,7 +4,7 @@ import {
 	ADDED,
 	enableSettings,
 	marketplaceFiles,
-	MKT,
+	MKT
 } from "../marketplace.ts";
 import { type Def, userCfg } from "./util.ts";
 
@@ -19,19 +19,19 @@ const label = (name: string, c: Def["c"]): Def => ({
 			data: {
 				mod_ran: line !== null,
 				not_verified: line?.includes("not verified") ?? false,
-				label: line,
+				label: line
 			},
-			samples: { stderr: r.stderr.trim().slice(0, 600) },
+			samples: { stderr: r.stderr.trim().slice(0, 600) }
 		};
-	},
+	}
 });
 
 /** The control: user settings enable the plugin from a marketplace in the home folder, which the program does not vouch for. */
 export const vouchUserDef: Def = label("mod-vouch-user", {
 	homeFiles: Object.fromEntries(
-		Object.entries(marketplaceFiles()).map(([k, v]) => [`${MKT}/${k}`, v]),
+		Object.entries(marketplaceFiles()).map(([k, v]) => [`${MKT}/${k}`, v])
 	),
-	cfgFiles: { "settings.json": userCfg(enableSettings(`{HOME}/${MKT}`)) },
+	cfgFiles: { "settings.json": userCfg(enableSettings(`{HOME}/${MKT}`)) }
 });
 
 /** Managed settings of the `vouch` variant enable the plugin from the marketplace in the managed folder. */

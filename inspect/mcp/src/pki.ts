@@ -29,8 +29,8 @@ subjectAltName=${hosts.map((h) => `DNS:${h}`).join(",")}
 const findOpenssl = async (): Promise<string> => {
 	const found = await Promise.all(
 		SSL_CANDIDATES.map(async (p) =>
-			(await Bun.file(p).exists()) ? p : undefined,
-		),
+			(await Bun.file(p).exists()) ? p : undefined
+		)
 	);
 	const ssl = found.find((p) => p !== undefined);
 	if (ssl === undefined) {
@@ -55,7 +55,7 @@ const caArgs = (f: Path): string[] => [
 	"-days",
 	"2",
 	"-config",
-	f("ca.cnf"),
+	f("ca.cnf")
 ];
 
 const leafArgs = (f: Path): string[] => [
@@ -68,7 +68,7 @@ const leafArgs = (f: Path): string[] => [
 	"-out",
 	f("leaf.csr"),
 	"-config",
-	f("leaf.cnf"),
+	f("leaf.cnf")
 ];
 
 const signArgs = (f: Path): string[] => [
@@ -86,23 +86,23 @@ const signArgs = (f: Path): string[] => [
 	"-days",
 	"2",
 	"-extfile",
-	f("leaf.ext"),
+	f("leaf.ext")
 ];
 
 const openssl = async (
 	ssl: string,
 	dir: string,
-	args: string[],
+	args: string[]
 ): Promise<void> => {
 	const proc = Bun.spawn([ssl, ...args], {
 		cwd: dir,
 		env: { PATH: "/usr/bin:/bin", HOME: dir },
 		stdout: "ignore",
-		stderr: "pipe",
+		stderr: "pipe"
 	});
 	const [stderr, exitCode] = await Promise.all([
 		new Response(proc.stderr).text(),
-		proc.exited,
+		proc.exited
 	]);
 	if (exitCode !== 0) {
 		throw new Error(`openssl ${args[0]} failed: ${stderr.slice(0, 300)}`);
@@ -112,7 +112,7 @@ const openssl = async (
 /** Make ca.pem + leaf.key + leaf.pem in `dir` with openssl (Homebrew OpenSSL, else the system LibreSSL). The leaf names api.anthropic.com and `extraHosts`. The CA key is deleted. */
 export const makePki = async (
 	dir: string,
-	extraHosts: string[] = [],
+	extraHosts: string[] = []
 ): Promise<{ ca: string; key: string; cert: string }> => {
 	const ssl = await findOpenssl();
 	const sh = (args: string[]) => openssl(ssl, dir, args);
@@ -121,7 +121,7 @@ export const makePki = async (
 	await Promise.all([
 		Bun.write(f("ca.cnf"), CA_CNF),
 		Bun.write(f("leaf.cnf"), leafCnf(hosts)),
-		Bun.write(f("leaf.ext"), leafExt(hosts)),
+		Bun.write(f("leaf.ext"), leafExt(hosts))
 	]);
 	await sh(caArgs(f));
 	await sh(leafArgs(f));

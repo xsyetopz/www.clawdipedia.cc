@@ -24,17 +24,17 @@ const NOOP = [
 	// `=>{}` is an empty body, not an object.
 	new RegExp(`${HEAD}=>\\{\\}$`, "u"),
 	new RegExp(`${HEAD}=>\\(?(${CONST})?\\)?$`, "u"),
-	new RegExp(`${HEAD}(?:=>)?\\{(?:return ?(${CONST}))?;?\\}$`, "u"),
+	new RegExp(`${HEAD}(?:=>)?\\{(?:return ?(${CONST}))?;?\\}$`, "u")
 ];
 const GUARD = String.raw`if\([^{}]*\)(?:return ?${CONST}|throw [^;{}]*);?`;
 const STUB = new RegExp(
 	`${HEAD}(?:=>)?\\{(?:${GUARD})*(?:throw [^;{}]*|return ?(${CONST}));?\\}$`,
-	"u",
+	"u"
 );
 const SHOW: Record<string, string> = {
 	"!0": "true",
 	"!1": "false",
-	"void 0": "undefined",
+	"void 0": "undefined"
 };
 
 /** `no-op` returns a constant only; `stub` throws, or returns a constant after checks; `handled` is anything else. */
@@ -49,7 +49,7 @@ export const howOf = (t: string): { how: How; value?: string | undefined } => {
 	if (s && (s[1] === undefined || /throw |if\(/u.test(t))) {
 		return {
 			how: "stub",
-			...(s[1] !== undefined && { value: SHOW[s[1]] ?? s[1] }),
+			...(s[1] !== undefined && { value: SHOW[s[1]] ?? s[1] })
 		};
 	}
 	return { how: "handled" };
@@ -74,7 +74,7 @@ interface Hit {
 const findHits = (
 	ix: Index,
 	names: Names,
-	name: string,
+	name: string
 ): { via: "unit" | "text"; hits: Hit[] } => {
 	const bare = name.replace(/^\//u, "");
 	const lits = new Set([JSON.stringify(name), JSON.stringify(bare)]);
@@ -100,12 +100,12 @@ const findHits = (
 		.filter(
 			(u) =>
 				u.f.some(
-					(x) => lits.has(x) || isFlag(x) || (envShaped && x === member),
-				) || refers(u),
+					(x) => lits.has(x) || isFlag(x) || (envShaped && x === member)
+				) || refers(u)
 		)
 		.map((u) => ({
 			u,
-			score: (reads(u) ? 4 : 0) + (named(u) ? 2 : 0) + (u.f.length > 3 ? 1 : 0),
+			score: (reads(u) ? 4 : 0) + (named(u) ? 2 : 0) + (u.f.length > 3 ? 1 : 0)
 		}))
 		.toSorted((a, b) => b.score - a.score || b.u.f.length - a.u.f.length);
 	if (unitHits.length > 0) {
@@ -114,7 +114,7 @@ const findHits = (
 	const word = new RegExp(`(?<![\\w$-])${quote(name)}(?![\\w$-])`, "u");
 	return {
 		via: "text",
-		hits: ix.units.filter((u) => word.test(u.t)).map((u) => ({ u })),
+		hits: ix.units.filter((u) => word.test(u.t)).map((u) => ({ u }))
 	};
 };
 
@@ -123,7 +123,7 @@ const inside = (u: Unit, holder: Unit) => u.s >= holder.s && u.e <= holder.e;
 /** The units that use a name the holder declares, as `label module:offset`. */
 const usersOf = (ix: Index, names: Names, holder: Unit): string[] => {
 	const declared = [...holder.t.matchAll(DECL)].flatMap(([, h]) =>
-		h === undefined ? [] : [h],
+		h === undefined ? [] : [h]
 	);
 	const users = declared.flatMap((h) => names.aliases(`${holder.m}|${h}`));
 	return [
@@ -132,7 +132,7 @@ const usersOf = (ix: Index, names: Names, holder: Unit): string[] => {
 				const [m = "", h = ""] = k.split("|");
 				const re = new RegExp(
 					`${h.replace("$", String.raw`\$`)}(?![\\w])`,
-					"u",
+					"u"
 				);
 				return ix.units
 					.filter(
@@ -141,11 +141,11 @@ const usersOf = (ix: Index, names: Names, holder: Unit): string[] => {
 							u.k !== "ImportDeclaration" &&
 							!u.t.startsWith("export{") &&
 							!(u.m === holder.m && inside(u, holder)) &&
-							re.test(u.t),
+							re.test(u.t)
 					)
 					.map((u) => `${u.k} ${u.m}:${u.s}`);
-			}),
-		),
+			})
+		)
 	];
 };
 
@@ -153,7 +153,7 @@ const usersOf = (ix: Index, names: Names, holder: Unit): string[] => {
 const gatesAndEnv = (
 	units: Unit[],
 	holder: Unit,
-	names: Names,
+	names: Names
 ): { gates: string[]; env: string[] } => {
 	const mod = units.filter((u) => u.m === holder.m);
 	const own = [holder, ...mod.filter((u) => u !== holder && inside(u, holder))];
@@ -161,11 +161,11 @@ const gatesAndEnv = (
 		[...u.t.matchAll(NAME)].flatMap(([h]) => {
 			const f = names.fn(u.m, h);
 			return f && f.f.length <= 3 ? [f] : [];
-		}),
+		})
 	);
 	const all = [...own, ...small];
 	const strings = new Set(
-		all.flatMap((u) => u.f.filter((x) => x.startsWith('"'))),
+		all.flatMap((u) => u.f.filter((x) => x.startsWith('"')))
 	);
 	const env = new Set(
 		all
@@ -173,12 +173,12 @@ const gatesAndEnv = (
 			.flatMap((u) =>
 				u.f
 					.filter((x) => /^\.[A-Z][A-Z0-9_]{2,}$/u.test(x))
-					.map((x) => x.slice(1)),
-			),
+					.map((x) => x.slice(1))
+			)
 	);
 	return {
 		gates: [...strings].filter((x) => x.startsWith('"tengu_')),
-		env: [...env],
+		env: [...env]
 	};
 };
 
@@ -192,7 +192,7 @@ const howEntry = (u: Unit): Explained["how"][number] => {
 export const explain = (
 	ix: Index,
 	name: string,
-	cap = 40,
+	cap = 40
 ): Explained | undefined => {
 	const names = namesOf(ix);
 	const { via, hits } = findHits(ix, names, name);
@@ -217,10 +217,10 @@ export const explain = (
 		who: usersOf(ix, names, holder),
 		when: {
 			...gatesAndEnv(ix.units, holder, names),
-			...(enabled && { isEnabled: enabled.t }),
+			...(enabled && { isEnabled: enabled.t })
 		},
 		how: (isFnLabel(holder.k) ? [holder, ...direct] : direct)
 			.filter((u) => isFnLabel(u.k))
-			.map((u) => howEntry(u)),
+			.map((u) => howEntry(u))
 	};
 };

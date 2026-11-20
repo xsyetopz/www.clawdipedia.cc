@@ -6,19 +6,19 @@ import { KINDS } from "../src/surface/index.ts";
 
 const ROOT = join(import.meta.dir, "..", "..", "..");
 const xml = await Bun.file(
-	join(import.meta.dir, "..", "evaluation.xml"),
+	join(import.meta.dir, "..", "evaluation.xml")
 ).text();
 const between = (text: string, tag: string): string => {
 	const open = `<${tag}>`;
 	return text.slice(
 		text.indexOf(open) + open.length,
-		text.indexOf(`</${tag}>`),
+		text.indexOf(`</${tag}>`)
 	);
 };
 const chunks = xml.split("<qa_pair>").slice(1);
 const pairs = chunks.map((c) => ({
 	q: between(c, "question"),
-	a: between(c, "answer"),
+	a: between(c, "answer")
 }));
 const all = pairs.map((p) => p.q).join("\n");
 const captures = (re: RegExp): string[] =>
@@ -41,14 +41,14 @@ describe("inspect/mcp/evaluation.xml", () => {
 		"exercises the %s tool",
 		(tool) => {
 			expect(all).toContain(`Use ${tool} `);
-		},
+		}
 	);
 
 	test.each(["search", "read", "modules", "tool-calls", "diff"])(
 		"exercises the %s action",
 		(action) => {
 			expect(all).toContain(`action "${action}"`);
-		},
+		}
 	);
 
 	test("every kind that a question passes is a kind of surface", () => {
@@ -63,7 +63,7 @@ describe("inspect/mcp/evaluation.xml", () => {
 		const paths = captures(/session "([^"]+\.jsonl)"/gu);
 		expect(paths.length).toBeGreaterThan(0);
 		const found = await Promise.all(
-			paths.map((p) => Bun.file(join(ROOT, p)).exists()),
+			paths.map((p) => Bun.file(join(ROOT, p)).exists())
 		);
 		expect(found.every(Boolean)).toBe(true);
 	});

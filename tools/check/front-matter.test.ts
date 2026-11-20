@@ -16,9 +16,9 @@ test("reads front matter keys as strings and the line where the body starts", ()
 			title: "Clock",
 			description: "a: b",
 			sidebar_position: "14",
-			generated: "false",
+			generated: "false"
 		},
-		bodyStart: 6,
+		bodyStart: 6
 	});
 });
 

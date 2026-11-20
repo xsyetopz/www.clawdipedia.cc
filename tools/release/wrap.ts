@@ -12,14 +12,14 @@ import {
 	ROOT,
 	toolEnv,
 	versionDir,
-	writeJson,
+	writeJson
 } from "./util.ts";
 
 const bunPath = process.execPath;
 const clean = (extra: Record<string, string> = {}): Record<string, string> => ({
 	...toolEnv(),
 	PATH: `${bunPath.slice(0, bunPath.lastIndexOf("/"))}:${toolEnv()["PATH"]}`,
-	...extra,
+	...extra
 });
 
 const needBinary = async (v: string): Promise<string> => {
@@ -65,7 +65,7 @@ export const diffJson = (oldText: string | null, newText: string | null) => {
 		removed: [...a.keys()].filter((k) => !b.has(k)),
 		changed: [...b]
 			.filter(([k, v]) => a.has(k) && a.get(k) !== v)
-			.map(([path, v]) => ({ path, old: cut(a.get(path) ?? ""), new: cut(v) })),
+			.map(([path, v]) => ({ path, old: cut(a.get(path) ?? ""), new: cut(v) }))
 	};
 };
 
@@ -74,11 +74,11 @@ export const gitHead = async (rel: string): Promise<string | null> => {
 		cwd: ROOT,
 		env: toolEnv(),
 		stdout: "pipe",
-		stderr: "pipe",
+		stderr: "pipe"
 	});
 	const [out, code] = await Promise.all([
 		new Response(p.stdout).text(),
-		p.exited,
+		p.exited
 	]);
 	return code === 0 ? out : null;
 };
@@ -89,7 +89,7 @@ const runInherit = async (step: string, argv: string[]): Promise<number> => {
 		cwd: ROOT,
 		env: clean(),
 		stdout: "inherit",
-		stderr: "inherit",
+		stderr: "inherit"
 	});
 	await p.exited;
 	return exitCodeOf(step, p);
@@ -100,7 +100,7 @@ const gitTypesDiff = async (): Promise<string> => {
 		cwd: ROOT,
 		env: toolEnv(),
 		stdout: "pipe",
-		stderr: "pipe",
+		stderr: "pipe"
 	});
 	const [out] = await Promise.all([new Response(p.stdout).text(), p.exited]);
 	return out;
@@ -116,7 +116,7 @@ const schemaNames = async (dir: string): Promise<string[]> => {
 
 const reportSchemas = async (
 	dir: string,
-	before: Map<string, string | null>,
+	before: Map<string, string | null>
 ): Promise<Record<string, ReturnType<typeof diffJson>>> => {
 	const names = await readdir(dir);
 	const entries = await Promise.all(
@@ -125,14 +125,14 @@ const reportSchemas = async (
 			.map(async (n) => {
 				const d = diffJson(
 					before.get(n) ?? (await gitHead(`schemas/${n}`)),
-					await Bun.file(join(dir, n)).text(),
+					await Bun.file(join(dir, n)).text()
 				);
 				return [n, d] as const;
-			}),
+			})
 	);
 	for (const [n, d] of entries) {
 		console.info(
-			`  ${n}: +${d.added.length} -${d.removed.length} ~${d.changed.length}`,
+			`  ${n}: +${d.added.length} -${d.removed.length} ~${d.changed.length}`
 		);
 	}
 	return Object.fromEntries(entries);
@@ -150,10 +150,10 @@ export const schemaGenerators = (bin: string, from: string): string[][] => [
 		"--bin",
 		bin,
 		"--captures",
-		versionDir(from),
+		versionDir(from)
 	],
 	// The Mod API type file: a text diff against git HEAD, kept beside the schema diff.
-	[bunPath, "tools/schemas/types.ts", "--bin", bin],
+	[bunPath, "tools/schemas/types.ts", "--bin", bin]
 ];
 
 /** Runs each command after the last one exits 0, because code.ts reads the stream-json schema generate.ts writes. */
@@ -170,7 +170,7 @@ export const runSchemas = async (ctx: Ctx): Promise<number> => {
 	const scripts = schemaGenerators(bin, ctx.from);
 	if (CLAUDE_CODE_VERSION !== ctx.to) {
 		console.warn(
-			`warning: the generator stamps src/version.ts (${CLAUDE_CODE_VERSION}) into the schemas, not --to ${ctx.to}. Bump src/version.ts before committing them.`,
+			`warning: the generator stamps src/version.ts (${CLAUDE_CODE_VERSION}) into the schemas, not --to ${ctx.to}. Bump src/version.ts before committing them.`
 		);
 	}
 	for (const argv of scripts) {
@@ -183,8 +183,8 @@ export const runSchemas = async (ctx: Ctx): Promise<number> => {
 	const files = await schemaNames(dir);
 	const before = new Map(
 		await Promise.all(
-			files.map(async (n) => [n, await gitHead(`schemas/${n}`)] as const),
-		),
+			files.map(async (n) => [n, await gitHead(`schemas/${n}`)] as const)
+		)
 	);
 	const code = await runInOrder(scripts);
 	if (code !== 0) {
@@ -193,14 +193,14 @@ export const runSchemas = async (ctx: Ctx): Promise<number> => {
 	const typesDiff = await gitTypesDiff();
 	await Bun.write(join(versionDir(ctx.to), "types.diff"), typesDiff);
 	console.info(
-		`  claude-code.d.ts: ${typesDiff.split("\n").filter((l) => /^[+-][^+-]/u.test(l)).length} changed lines (types.diff)`,
+		`  claude-code.d.ts: ${typesDiff.split("\n").filter((l) => /^[+-][^+-]/u.test(l)).length} changed lines (types.diff)`
 	);
 	const report = await reportSchemas(dir, before);
 	await writeJson(join(versionDir(ctx.to), "schemas-diff.json"), {
 		from: "git HEAD",
 		to: ctx.to,
 		note: "old = schemas/ at git HEAD, new = schemas/ after generation. The generator stamps src/version.ts, not --to.",
-		files: report,
+		files: report
 	});
 	console.info("  next: bun run schemas:check");
 	return 0;
@@ -217,7 +217,7 @@ export const runPrompts = async (ctx: Ctx): Promise<number> => {
 		"--bin",
 		bin,
 		"--out",
-		out,
+		out
 	];
 	if (ctx.only) {
 		argv.push("--only", ctx.only.join(","));

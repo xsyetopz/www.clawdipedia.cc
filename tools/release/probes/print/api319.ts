@@ -17,6 +17,6 @@ export const api319: PrintGroup = {
 			...gatewayFirst,
 			...assumeCases,
 			...gatewayLast,
-			...widgetCases,
-		]),
+			...widgetCases
+		])
 };

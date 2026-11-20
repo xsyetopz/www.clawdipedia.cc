@@ -71,8 +71,8 @@ export class Tally {
 			out[k] = {
 				n: s.n,
 				types: Object.fromEntries(
-					sortedStrings(Object.keys(s.types)).map((t) => [t, s.types[t] ?? 0]),
-				),
+					sortedStrings(Object.keys(s.types)).map((t) => [t, s.types[t] ?? 0])
+				)
 			};
 		}
 		return out;

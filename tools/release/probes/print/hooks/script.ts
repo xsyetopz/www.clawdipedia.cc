@@ -7,25 +7,25 @@ import type { PrintCtx, PrintGroup } from "../types.ts";
 
 const cmd = (n: string) => ({
 	type: "command",
-	command: `cat >> {CFG}/${n}.log; echo >> {CFG}/${n}.log`,
+	command: `cat >> {CFG}/${n}.log; echo >> {CFG}/${n}.log`
 });
 const script = { type: "script", script: "echo x >> {CFG}/script.log" };
 const VARIANTS: Record<string, Record<string, unknown>> = {
 	"pre-script": {
 		PreToolUse: [{ matcher: "Bash", hooks: [script] }],
 		PostToolUse: [{ hooks: [cmd("post")] }],
-		SessionStart: [{ hooks: [cmd("ss")] }],
+		SessionStart: [{ hooks: [cmd("ss")] }]
 	},
 	"post-script": {
 		PostToolUse: [{ hooks: [script, cmd("post")] }],
-		SessionStart: [{ hooks: [cmd("ss")] }],
+		SessionStart: [{ hooks: [cmd("ss")] }]
 	},
 	"pre-script-only": { PreToolUse: [{ matcher: "Bash", hooks: [script] }] },
 	"no-script": {
 		PreToolUse: [{ matcher: "Bash", hooks: [cmd("pre")] }],
 		PostToolUse: [{ hooks: [cmd("post")] }],
-		SessionStart: [{ hooks: [cmd("ss")] }],
-	},
+		SessionStart: [{ hooks: [cmd("ss")] }]
+	}
 };
 
 const debugLines = (dbg: string): string[] =>
@@ -33,8 +33,8 @@ const debugLines = (dbg: string): string[] =>
 		.split("\n")
 		.filter((l) =>
 			/script|Unknown hook|hook.*ignored|Invalid|settings.*(skip|invalid)/iu.test(
-				l,
-			),
+				l
+			)
 		)
 		.slice(0, 4);
 
@@ -44,13 +44,13 @@ const runOne = (ctx: PrintCtx, name: string, hooks: Record<string, unknown>) =>
 			tool: "Bash",
 			toolInput: { command: "echo hi" },
 			args: ["--allowedTools", "Bash", "--debug-file", "{CFG}/debug.log"],
-			cfgFiles: { "settings.json": JSON.stringify({ hooks }) },
+			cfgFiles: { "settings.json": JSON.stringify({ hooks }) }
 		});
 		try {
 			const dbg = await readCfg(r, "debug.log");
 			const logs = await mapInOrder(
 				["script", "pre", "post", "ss"],
-				async (x) => ({ x, on: (await readCfg(r, `${x}.log`)) !== "" }),
+				async (x) => ({ x, on: (await readCfg(r, `${x}.log`)) !== "" })
 			);
 			const ran = logs.filter((l) => l.on).map((l) => l.x);
 			const data: Record<string, Data> = {
@@ -63,15 +63,15 @@ const runOne = (ctx: PrintCtx, name: string, hooks: Record<string, unknown>) =>
 				"tool.results": toolResults(r),
 				ran,
 				"script.rejected": dbg.includes('Unknown hook type "script"'),
-				"settings.skipped": dbg.includes("Invalid setting skipped"),
+				"settings.skipped": dbg.includes("Invalid setting skipped")
 			};
 			return baseResult(ctx, `print.hooks.script.${name}`, r, {
 				data,
 				samples: {
 					debug_lines: debugLines(dbg)
 						.map((l) => l.slice(0, 300))
-						.join("\n"),
-				},
+						.join("\n")
+				}
 			});
 		} finally {
 			await dispose(r);
@@ -83,8 +83,8 @@ export const scriptGroup: PrintGroup = {
 	title: "Script hook type acceptance",
 	run: async (ctx) => {
 		const all = await mapInOrder(Object.entries(VARIANTS), ([n, h]) =>
-			runOne(ctx, n, h),
+			runOne(ctx, n, h)
 		);
 		return all.flat();
-	},
+	}
 };

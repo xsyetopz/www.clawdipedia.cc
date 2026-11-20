@@ -23,7 +23,7 @@ export type {
 	Compare,
 	DataChange,
 	FactResult,
-	FactRow,
+	FactRow
 } from "./compare/types.ts";
 
 const isFactRows = (v: unknown): v is FactRow[] => Array.isArray(v);
@@ -34,7 +34,7 @@ export const compareRuns = async (
 	to: string,
 	base: string,
 	withSamples: boolean,
-	docsDir = join(ROOT, "docs"),
+	docsDir = join(ROOT, "docs")
 ): Promise<Compare> => {
 	const [a, b] = await Promise.all([readRun(from, base), readRun(to, base)]);
 	const c = compareResults(from, to, a, b, withSamples);
@@ -43,8 +43,8 @@ export const compareRuns = async (
 		diffs.flatMap((d) => [
 			...(d.added ?? []),
 			...(d.removed ?? []),
-			...(d.changed ?? []).map((x) => x.name),
-		]),
+			...(d.changed ?? []).map((x) => x.name)
+		])
 	);
 	const cp = join(base, to, "facts.json");
 	if (await pathExists(cp)) {
@@ -59,7 +59,7 @@ export const compareRuns = async (
 			b,
 			diffs.length > 0 ? changedNames : null,
 			(await pathExists(sp)) ? await Bun.file(sp).text() : null,
-			[from, to],
+			[from, to]
 		);
 	}
 	if (diffs.length > 0) {
@@ -67,7 +67,7 @@ export const compareRuns = async (
 		c.uncoveredNames = diffs.flatMap((d) =>
 			(d.added ?? [])
 				.filter((n) => !tokens.has(n))
-				.map((n) => ({ kind: d.kind, name: n })),
+				.map((n) => ({ kind: d.kind, name: n }))
 		);
 	}
 	return c;
@@ -93,23 +93,23 @@ export const runCompare = async (ctx: Ctx): Promise<number> => {
 	// `release:compare` asks for `<v>..<v>`. That run reports nothing and overwrites `compare.md`.
 	if (from === to) {
 		throw new Error(
-			`compare needs two versions, and both are ${to}. Give them: \`release:compare -- <from> ${to}\``,
+			`compare needs two versions, and both are ${to}. Give them: \`release:compare -- <from> ${to}\``
 		);
 	}
 	const found = await Promise.all(
-		[from, to].map((v) => pathExists(join(CAPTURES, v))),
+		[from, to].map((v) => pathExists(join(CAPTURES, v)))
 	);
 	const missing = [from, to].find((_, i) => found[i] !== true);
 	if (missing !== undefined) {
 		throw new Error(
-			`no captures/${missing}/ (run the probes for ${missing} first)`,
+			`no captures/${missing}/ (run the probes for ${missing} first)`
 		);
 	}
 	const c = await compareRuns(
 		from,
 		to,
 		CAPTURES,
-		ctx.rest.includes("--samples"),
+		ctx.rest.includes("--samples")
 	);
 	const old = await readRun(from, CAPTURES);
 	if (old.length === 0) {

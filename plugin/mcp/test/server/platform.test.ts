@@ -13,7 +13,7 @@ describe("platform tools", () => {
 		const { call } = await connect({ PLATFORM_DOCS_BASE_URL: p.url });
 		const s = await call("search_docs", {
 			source: "platform",
-			query: "prompt caching",
+			query: "prompt caching"
 		});
 		expect(s.error).toBe(false);
 		expect(s.text).toContain("build-with-claude/prompt-caching");
@@ -22,19 +22,19 @@ describe("platform tools", () => {
 		const g = await call("search_docs", {
 			source: "platform",
 			query: "caching",
-			section: "Getting Started",
+			section: "Getting Started"
 		});
 		expect(g.error).toBe(false);
 		expect(g.text).not.toContain("build-with-claude/prompt-caching");
 		const none = await call("search_docs", {
 			source: "platform",
-			query: "zzzqqq",
+			query: "zzzqqq"
 		});
 		expect(none.error).toBe(false);
 		expect(none.text).not.toContain("build-with-claude");
 		const r = await call("read_page", {
 			source: "platform",
-			route: "/docs/en/build-with-claude/overview.md",
+			route: "/docs/en/build-with-claude/overview.md"
 		});
 		expect(r.error).toBe(false);
 		expect(r.seen).toContain("Zebrafinch");
@@ -42,42 +42,42 @@ describe("platform tools", () => {
 		const sec = await call("read_page", {
 			source: "platform",
 			route: "build-with-claude/overview",
-			section_heading: "Tools",
+			section_heading: "Tools"
 		});
 		expect(sec.text).toContain("Tool list here");
 		expect(sec.text).not.toContain("Zebrafinch");
 		const groups = await call("list_pages", { source: "platform" });
 		expect(groups.structured?.["groups"]).toContainEqual({
 			group: "Getting Started",
-			count: 2,
+			count: 2
 		});
 		expect(groups.text).not.toMatch(/Erste|Deutsch|evil/u);
 		// Without a group the structured result has counts only, no page list.
 		expect(groups.structured?.["pages"]).toBeUndefined();
 		expect(groups.structured?.["groups"]).toContainEqual({
 			group: "Messages",
-			count: 3,
+			count: 3
 		});
 		const withGroup = await call("list_pages", {
 			source: "platform",
-			section: "messages",
+			section: "messages"
 		});
 		expect(withGroup.structured?.["pages"]).toHaveLength(3);
 		const msgs = await call("list_pages", {
 			source: "platform",
-			section: "messages",
+			section: "messages"
 		});
 		const msg = pagesOf(msgs).find((x) => x.route === "api/messages");
 		expect(msg?.title).toBe("Create a Message");
 		expect(msg?.description).toContain("Send");
 		const nope = await call("list_pages", {
 			source: "platform",
-			section: "Nope",
+			section: "Nope"
 		});
 		expect(nope.error).toBe(true);
 		const missing = await call("read_page", {
 			source: "platform",
-			route: "build-with-claude/caching",
+			route: "build-with-claude/caching"
 		});
 		expect(missing.error).toBe(true);
 		expect(missing.text).toContain("build-with-claude/prompt-caching");
@@ -89,13 +89,13 @@ describe("platform tools", () => {
 		const { call } = await connect({ PLATFORM_DOCS_BASE_URL: p.url });
 		const s = await call("search_docs", {
 			source: "platform",
-			query: "prompt caching",
+			query: "prompt caching"
 		});
 		expect(s.text).toContain("build-with-claude/prompt-caching");
 		expect(s.text).toContain(`${p.url}/docs/en/`);
 		const r = await call("read_page", {
 			source: "platform",
-			route: "build-with-claude/prompt-caching",
+			route: "build-with-claude/prompt-caching"
 		});
 		expect(r.error).toBe(false);
 		expect(r.text).toContain("cache_control");
@@ -108,7 +108,7 @@ describe("platform tools", () => {
 		const { call } = await connect({ PLATFORM_DOCS_BASE_URL: p.url });
 		const s = await call("search_docs", {
 			source: "platform",
-			query: "Messages",
+			query: "Messages"
 		});
 		// The page titled "Create a Message" has no phrase boost from the group name.
 		expect(s.error).toBe(false);
@@ -121,13 +121,13 @@ describe("platform tools", () => {
 		const { call } = await connect({ PLATFORM_DOCS_BASE_URL: p.url });
 		await call("read_page", {
 			source: "platform",
-			route: "build-with-claude/overview",
+			route: "build-with-claude/overview"
 		});
 		await call("search_docs", { source: "platform", query: "streaming" });
 		const n = p.hits.length;
 		const again = await call("read_page", {
 			source: "platform",
-			route: "build-with-claude/overview",
+			route: "build-with-claude/overview"
 		});
 		await call("search_docs", { source: "platform", query: "streaming" });
 		expect(p.hits.length).toBe(n);
@@ -139,22 +139,22 @@ describe("platform tools", () => {
 		stops.push(p.stop);
 		const { call } = await connect({
 			PLATFORM_DOCS_BASE_URL: p.url,
-			CLAWDIPEDIA_TTL_SCALE: "0",
+			CLAWDIPEDIA_TTL_SCALE: "0"
 		});
 		await call("search_docs", { source: "platform", query: "streaming" });
 		await call("read_page", {
 			source: "platform",
-			route: "build-with-claude/overview",
+			route: "build-with-claude/overview"
 		});
 		p.hits.length = 0;
 		const s = await call("search_docs", {
 			source: "platform",
-			query: "streaming",
+			query: "streaming"
 		});
 		expect(s.error).toBe(false);
 		await call("read_page", {
 			source: "platform",
-			route: "build-with-claude/overview",
+			route: "build-with-claude/overview"
 		});
 		const page = p.hits.filter((h) => h.path.endsWith("overview.md"));
 		expect(page.length).toBe(1);
@@ -174,17 +174,17 @@ describe("platform tools", () => {
 			"https://evil.example/docs/en/home.md",
 			"//evil.example/docs/en/home",
 			"Home Page",
-			"docs/home",
+			"docs/home"
 		];
 		const answers = await Promise.all(
-			bad.map((route) => call("read_page", { source: "platform", route })),
+			bad.map((route) => call("read_page", { source: "platform", route }))
 		);
 		expect(answers.map((r) => r.error)).toEqual(bad.map(() => true));
 		expect(p.hits.length).toBe(0);
 		// The configured host and the bare path forms are accepted.
 		const full = await call("read_page", {
 			source: "platform",
-			route: `${p.url}/docs/en/build-with-claude/overview`,
+			route: `${p.url}/docs/en/build-with-claude/overview`
 		});
 		expect(full.error).toBe(false);
 	});
@@ -193,17 +193,17 @@ describe("platform tools", () => {
 		const p = mockPlatform();
 		const { call } = await connect({
 			PLATFORM_DOCS_BASE_URL: p.url,
-			CLAWDIPEDIA_TTL_SCALE: "0",
+			CLAWDIPEDIA_TTL_SCALE: "0"
 		});
 		await call("read_page", {
 			source: "platform",
-			route: "build-with-claude/overview",
+			route: "build-with-claude/overview"
 		});
 		await call("list_pages", { source: "platform" });
 		await p.stop();
 		const r = await call("read_page", {
 			source: "platform",
-			route: "build-with-claude/overview",
+			route: "build-with-claude/overview"
 		});
 		expect(r.error).toBe(false);
 		expect(r.text).toContain("Zebrafinch");
@@ -212,7 +212,7 @@ describe("platform tools", () => {
 		expect(sourceOf(l).state).toBe("stale-offline");
 		const other = await call("read_page", {
 			source: "platform",
-			route: "build-with-claude/prompt-caching",
+			route: "build-with-claude/prompt-caching"
 		});
 		expect(other.error).toBe(true);
 	});
@@ -223,7 +223,7 @@ describe("platform tools", () => {
 		const { call } = await connect({ PLATFORM_DOCS_BASE_URL: p.url });
 		const search = await call("search_docs", {
 			source: "platform",
-			query: "caching",
+			query: "caching"
 		});
 		const list = await call("list_pages", { source: "platform" });
 		expect([search.error, list.error]).toEqual([true, true]);

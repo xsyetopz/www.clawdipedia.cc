@@ -7,7 +7,7 @@ import {
 	minus,
 	parts,
 	PARTS_CAP,
-	same,
+	same
 } from "./data.ts";
 import { noiseReason } from "./noise.ts";
 import type { CaseDiff, Compare, DataChange } from "./types.ts";
@@ -26,7 +26,7 @@ const changeOf = (
 	b: CaseResult,
 	k: string,
 	old: Data,
-	now: Data,
+	now: Data
 ): DataChange => {
 	const change: DataChange = { old, new: now };
 	const so = a.samples?.[k];
@@ -42,12 +42,12 @@ const changeOf = (
 const samplesDiff = (
 	a: CaseResult,
 	b: CaseResult,
-	keep: (k: string) => boolean,
+	keep: (k: string) => boolean
 ): NonNullable<CaseDiff["samples"]> => {
 	const s: NonNullable<CaseDiff["samples"]> = {};
 	const keys = new Set([
 		...Object.keys(a.samples ?? {}),
-		...Object.keys(b.samples ?? {}),
+		...Object.keys(b.samples ?? {})
 	]);
 	for (const k of keys) {
 		const o = a.samples?.[k] ?? null;
@@ -64,7 +64,7 @@ export const diffCase = (
 	b: CaseResult,
 	withSamples: boolean,
 	only?: (key: string) => boolean,
-	opts: DiffOpts = {},
+	opts: DiffOpts = {}
 ): CaseDiff => {
 	const keep = (k: string) =>
 		!IGNORED_DATA.has(k) && (only === undefined || only(k));
@@ -112,7 +112,7 @@ const tally = (
 	to: string,
 	am: Map<string, CaseResult>,
 	bm: Map<string, CaseResult>,
-	withSamples: boolean,
+	withSamples: boolean
 ): Tally => {
 	const cases: Record<string, CaseDiff> = {};
 	const invalidRuns: Record<string, string> = {};
@@ -132,7 +132,7 @@ const tally = (
 		const d = diffCase(o, r, withSamples, undefined, {
 			id,
 			versions: [from, to],
-			ignored,
+			ignored
 		});
 		if (Object.keys(ignored).length > 0) {
 			noise[id] = ignored;
@@ -151,7 +151,7 @@ export const compareResults = (
 	to: string,
 	a: CaseResult[],
 	b: CaseResult[],
-	withSamples: boolean,
+	withSamples: boolean
 ): Compare => {
 	const am = new Map(a.map((r) => [r.id, r]));
 	const bm = new Map(b.map((r) => [r.id, r]));
@@ -160,7 +160,7 @@ export const compareResults = (
 		to,
 		am,
 		bm,
-		withSamples,
+		withSamples
 	);
 	return {
 		from,
@@ -169,12 +169,12 @@ export const compareResults = (
 			cases: [...bm.keys()].filter((id) => am.has(id)).length,
 			changed: Object.keys(cases).length,
 			unchanged,
-			invalid: Object.keys(invalidRuns).length,
+			invalid: Object.keys(invalidRuns).length
 		},
 		...(Object.keys(invalidRuns).length > 0 ? { invalidRuns } : {}),
 		...(Object.keys(noise).length > 0 ? { noise } : {}),
 		onlyFrom: [...am.keys()].filter((id) => !bm.has(id)).toSorted(),
 		onlyTo: [...bm.keys()].filter((id) => !am.has(id)).toSorted(),
-		cases,
+		cases
 	};
 };

@@ -18,7 +18,7 @@ const jwtCheck = (step: Step): void => {
 			/^[0-9a-f]{16}$/u.test(String(jh["kid"])) &&
 			jp["aud"] === "claude-gateway" &&
 			jp["sub"] === "u" &&
-			jp["exp"] === 4600,
+			jp["exp"] === 4600
 	);
 };
 
@@ -27,17 +27,17 @@ const yamlChecks = (step: Step): void => {
 	step(
 		"gateway: the config sets billing_group_tag only when asked",
 		gatewayYaml({ ...base, billingGroupTag: true }).includes(
-			"billing_group_tag: team",
+			"billing_group_tag: team"
 		) &&
 			!gatewayYaml({ ...base, billingGroupTag: false }).includes(
-				"billing_group_tag",
-			),
+				"billing_group_tag"
+			)
 	);
 	const opts = gatewayYaml({
 		...base,
 		billingGroupTag: false,
 		identityRetentionDays: 30,
-		upstreams: "  - provider: mantle\n",
+		upstreams: "  - provider: mantle\n"
 	});
 	step(
 		"gateway: the config sets identity_retention_days and the upstreams only when asked",
@@ -45,8 +45,8 @@ const yamlChecks = (step: Step): void => {
 			opts.includes("provider: mantle") &&
 			!opts.includes("provider: anthropic") &&
 			!gatewayYaml({ ...base, billingGroupTag: false }).includes(
-				"identity_retention_days",
-			),
+				"identity_retention_days"
+			)
 	);
 };
 
@@ -56,8 +56,8 @@ const OTLP_BODY = {
 			resource: {
 				attributes: [
 					{ key: "anthropic.plan", value: { stringValue: "max" } },
-					{ key: "other", value: { stringValue: "x" } },
-				],
+					{ key: "other", value: { stringValue: "x" } }
+				]
 			},
 			scopeMetrics: [
 				{
@@ -69,18 +69,18 @@ const OTLP_BODY = {
 										attributes: [
 											{
 												key: "anthropic.custom_base_url",
-												value: { boolValue: true },
-											},
-										],
-									},
-								],
-							},
-						},
-					],
-				},
-			],
-		},
-	],
+												value: { boolValue: true }
+											}
+										]
+									}
+								]
+							}
+						}
+					]
+				}
+			]
+		}
+	]
 };
 
 const otlpCheck = async (step: Step): Promise<void> => {
@@ -92,10 +92,10 @@ const otlpCheck = async (step: Step): Promise<void> => {
 		JSON.stringify(valuesOf(otlp.bodies.metrics, "anthropic.")) ===
 			JSON.stringify({
 				"anthropic.custom_base_url": ["true"],
-				"anthropic.plan": ["max"],
+				"anthropic.plan": ["max"]
 			}) &&
 			otlp.bodies.metrics.length === 1 &&
-			otlp.bodies.logs.length === 0,
+			otlp.bodies.logs.length === 0
 	);
 	await otlp.stop();
 };

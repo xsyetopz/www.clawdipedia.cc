@@ -101,7 +101,7 @@ const watchPid = (pidFile: string): { stop: () => Promise<void> } => {
 			if (watched !== 0) {
 				unregisterPid(watched);
 			}
-		},
+		}
 	};
 };
 
@@ -114,7 +114,7 @@ const checkInputs = async (o: PtyOpts): Promise<string> => {
 	}
 	if (!isAbsolute(o.bin) || !(await Bun.file(o.bin).exists())) {
 		throw new Error(
-			`bin must be an absolute path to an existing file: ${o.bin}`,
+			`bin must be an absolute path to an existing file: ${o.bin}`
 		);
 	}
 	const python = Bun.which("python3", { PATH: PY_ENV.PATH });
@@ -127,7 +127,7 @@ const checkInputs = async (o: PtyOpts): Promise<string> => {
 const driverArgv = (
 	o: PtyOpts,
 	python: string,
-	paths: { raw: string; env: string; schedule: string },
+	paths: { raw: string; env: string; schedule: string }
 ): string[] => [
 	python,
 	"-I",
@@ -148,11 +148,11 @@ const driverArgv = (
 	String(o.cols ?? 200),
 	"--",
 	o.bin,
-	...(o.args ?? []),
+	...(o.args ?? [])
 ];
 
 const parseInfo = (
-	res: Awaited<ReturnType<typeof runChild>>,
+	res: Awaited<ReturnType<typeof runChild>>
 ): { pid: number; exit: number | null } => {
 	let parsed: unknown;
 	try {
@@ -163,7 +163,7 @@ const parseInfo = (
 	const r = typeof parsed === "object" && parsed !== null ? parsed : {};
 	return {
 		pid: "pid" in r && typeof r.pid === "number" ? r.pid : 0,
-		exit: "exit" in r && typeof r.exit === "number" ? r.exit : null,
+		exit: "exit" in r && typeof r.exit === "number" ? r.exit : null
 	};
 };
 
@@ -178,7 +178,7 @@ export const runPty = async (o: PtyOpts): Promise<PtyResult> => {
 	const paths = {
 		raw: rawPath,
 		env: `${rawPath}.env.json`,
-		schedule: `${rawPath}.schedule.json`,
+		schedule: `${rawPath}.schedule.json`
 	};
 	await Bun.write(paths.schedule, JSON.stringify(o.schedule ?? []));
 	await writeFile(paths.env, JSON.stringify(o.env), { mode: 0o600 });
@@ -188,7 +188,7 @@ export const runPty = async (o: PtyOpts): Promise<PtyResult> => {
 		res = await runChild(driverArgv(o, python, paths), {
 			cwd: dir,
 			env: PY_ENV,
-			timeoutMs: o.secs * 1000 + 45_000,
+			timeoutMs: o.secs * 1000 + 45_000
 		});
 	} finally {
 		await watch.stop();
@@ -207,6 +207,6 @@ export const runPty = async (o: PtyOpts): Promise<PtyResult> => {
 		sent: sent.map(([t, label]) => ({ t, label })),
 		idx: idx.map(([t, off]) => ({ t, off: Number(off) })),
 		pid: info.pid,
-		exit: info.exit,
+		exit: info.exit
 	};
 };

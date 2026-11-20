@@ -20,7 +20,7 @@ interface Outcome {
 /** The sweep holds every env name: look at the data of the fact's names only. */
 const onlyFor = (
 	p: string,
-	c: FactRow,
+	c: FactRow
 ): ((k: string) => boolean) | undefined => {
 	const names = c.diffNames ?? [];
 	return p.endsWith("sweep") && names.length > 0
@@ -32,14 +32,14 @@ const probeOutcome = (
 	c: FactRow,
 	probe: string,
 	[am, bm]: [Runs, Runs],
-	versions?: [string, string],
+	versions?: [string, string]
 ): Outcome => {
 	const n = bm.get(probe);
 	if (n === undefined) {
 		return {
 			probe,
 			state: "not-run",
-			why: `${probe}: no result for the new version`,
+			why: `${probe}: no result for the new version`
 		};
 	}
 	const o = am.get(probe);
@@ -47,7 +47,7 @@ const probeOutcome = (
 		return {
 			probe,
 			state: "changed",
-			why: `${probe}: new case, no result for the old version`,
+			why: `${probe}: new case, no result for the old version`
 		};
 	}
 	const bad = invalidDetail(o, n);
@@ -58,7 +58,7 @@ const probeOutcome = (
 	const d = diffCase(o, n, false, onlyFor(probe, c), {
 		id: probe,
 		ignored,
-		...(versions === undefined ? {} : { versions }),
+		...(versions === undefined ? {} : { versions })
 	});
 	if (isEmpty(d)) {
 		return { probe, state: "same", ignored };
@@ -66,20 +66,20 @@ const probeOutcome = (
 	const names = [
 		...Object.keys(d.changed),
 		...Object.keys(d.added),
-		...Object.keys(d.removed),
+		...Object.keys(d.removed)
 	];
 	return {
 		probe,
 		state: "changed",
 		why: `${probe}: ${names.slice(0, 5).join(", ")}`,
-		ignored,
+		ignored
 	};
 };
 
 const probeResult = (
 	c: FactRow,
 	runs: [Runs, Runs],
-	versions?: [string, string],
+	versions?: [string, string]
 ): FactResult => {
 	const outcomes = c.probes.map((p) => probeOutcome(c, p, runs, versions));
 	const has = (s: Outcome["state"]) => outcomes.some((o) => o.state === s);
@@ -115,24 +115,24 @@ const probeResult = (
 const notRun = (c: FactRow, why: string): FactResult => ({
 	...c,
 	result: "not-run",
-	why,
+	why
 });
 
 const lookup = (c: FactRow, hit: string[], where: string): FactResult => ({
 	...c,
 	result: hit.length > 0 ? "changed" : "unchanged",
-	...(hit.length > 0 ? { why: `${where}: ${hit.join(", ")}` } : {}),
+	...(hit.length > 0 ? { why: `${where}: ${hit.join(", ")}` } : {})
 });
 
 const noProbeResult = (
 	c: FactRow,
 	diffChanged: Set<string> | null,
-	schemaText: string | null,
+	schemaText: string | null
 ): FactResult => {
 	if (c.kind === "manual") {
 		return notRun(
 			c,
-			"manual: program behaviour with no probe; check it by hand",
+			"manual: program behaviour with no probe; check it by hand"
 		);
 	}
 	const names = c.diffNames ?? [];
@@ -143,7 +143,7 @@ const noProbeResult = (
 		return lookup(
 			c,
 			names.filter((n) => schemaText.includes(n.split(".").pop() ?? n)),
-			"in schemas-diff.json",
+			"in schemas-diff.json"
 		);
 	}
 	if (names.length > 0) {
@@ -153,7 +153,7 @@ const noProbeResult = (
 		return lookup(
 			c,
 			names.filter((n) => diffChanged.has(n)),
-			"in diff/",
+			"in diff/"
 		);
 	}
 	return notRun(c, "no probe and no diff name to look up");
@@ -166,11 +166,11 @@ export const factResults = (
 	b: CaseResult[],
 	diffChanged: Set<string> | null,
 	schemaText: string | null = null,
-	versions?: [string, string],
+	versions?: [string, string]
 ): FactResult[] => {
 	const runs: [Runs, Runs] = [
 		new Map(a.map((r) => [r.id, r])),
-		new Map(b.map((r) => [r.id, r])),
+		new Map(b.map((r) => [r.id, r]))
 	];
 	return facts.map((c) => {
 		if (c.status === "static" || c.kind === "static" || c.kind === "external") {
@@ -192,7 +192,7 @@ export const docTokens = async (dir: string): Promise<Set<string>> => {
 	const texts = await Promise.all(
 		entries
 			.filter((n) => /\.mdx?$/u.test(n))
-			.map((n) => Bun.file(join(dir, n)).text()),
+			.map((n) => Bun.file(join(dir, n)).text())
 	);
 	for (const text of texts) {
 		for (const m of text.matchAll(/`([^`\n]+)`/gu)) {

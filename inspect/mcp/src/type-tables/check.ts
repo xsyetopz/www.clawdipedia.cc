@@ -30,7 +30,7 @@ const NO_SECTION: Section = {
 	fields: undefined,
 	elements: false,
 	seen: new Set(),
-	line: 0,
+	line: 0
 };
 
 const cells = (row: string): string[] =>
@@ -47,7 +47,7 @@ const tick = (cell: string): string | undefined =>
 const openSection = (
 	f: TypeFile,
 	line: string,
-	n: number,
+	n: number
 ): Section | undefined => {
 	const h = /^#{2,4} `?([\w$]+)`?\s*$/u.exec(line);
 	if (!h && !/^#{1,4} /u.test(line)) {
@@ -117,13 +117,13 @@ export const checkTables = (md: string, f: TypeFile, file = ""): TableCheck => {
 				line: n + 1,
 				name: o.name,
 				page: r.page,
-				doc: o.doc,
+				doc: o.doc
 			});
 		} else {
 			(o.kind === "bad" ? out.mismatches : out.skipped).push({
 				file,
 				line: n + 1,
-				text: o.text,
+				text: o.text
 			});
 		}
 	}

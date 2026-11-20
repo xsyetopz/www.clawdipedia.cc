@@ -70,13 +70,13 @@ describe("tool", () => {
 	test("the tools getAllBaseTools returns, with their gates", async () => {
 		const t = await items(
 			"tool",
-			'const B=(d)=>({isEnabled:()=>!0,...d});const S=B({name:"Shell"}),G=B({name:"Glob",isEnabled(){return process.env.G==="1"}}),C=B({name:"CronCreate"});function L(){return process.env.L==="1"}function A(){return[S,G,...L()?[C]:[]]}globalThis.api={getAllBaseTools:A};',
+			'const B=(d)=>({isEnabled:()=>!0,...d});const S=B({name:"Shell"}),G=B({name:"Glob",isEnabled(){return process.env.G==="1"}}),C=B({name:"CronCreate"});function L(){return process.env.L==="1"}function A(){return[S,G,...L()?[C]:[]]}globalThis.api={getAllBaseTools:A};'
 		);
 		expect(t.map((i) => i.name)).toEqual(["CronCreate", "Glob", "Shell"]);
 		expect(t.find((i) => i.name === "CronCreate")?.gate).toContain("L()");
 		expect(t.find((i) => i.name === "Glob")?.detail).toContain("process.env.G");
 		expect(t.map((i) => [i.module, i.offset])).toEqual(
-			t.map(() => ["a.js", null]),
+			t.map(() => ["a.js", null])
 		);
 	});
 
@@ -88,9 +88,9 @@ describe("tool", () => {
 		const t = await surface(
 			new Bundle([
 				{ name: "/$bunfs/root/a.js", text: a },
-				{ name: "/$bunfs/root/b.js", text: b },
+				{ name: "/$bunfs/root/b.js", text: b }
 			]),
-			"tool",
+			"tool"
 		);
 		expect(t.map((i) => i.name)).toEqual(["REPL"]);
 	});
@@ -100,11 +100,11 @@ describe("otel-event", () => {
 	test("the emitter's event names with their call site counts", async () => {
 		const e = await items(
 			"otel-event",
-			'const b=()=>({"session.id":"s"});async function e(n,a){globalThis.o={...b(),"event.name":n,"event.sequence":1,...a}}e("tool_result",{tool_name:"Bash"});e("tool_result",{x:1});e("api_error",{status:500});',
+			'const b=()=>({"session.id":"s"});async function e(n,a){globalThis.o={...b(),"event.name":n,"event.sequence":1,...a}}e("tool_result",{tool_name:"Bash"});e("tool_result",{x:1});e("api_error",{status:500});'
 		);
 		expect(e.map((i) => [i.name, i.detail])).toEqual([
 			["api_error", "1 call sites"],
-			["tool_result", "2 call sites"],
+			["tool_result", "2 call sites"]
 		]);
 	});
 });
@@ -137,8 +137,8 @@ describe("mod-api", () => {
 	const embedded = async () => [
 		{
 			name: "/$bunfs/root/claude-code.d.ts-abc.zst",
-			bytes: Buffer.from(await Bun.zstdCompress(DTS)),
-		},
+			bytes: Buffer.from(await Bun.zstdCompress(DTS))
+		}
 	];
 	test("$ calls through nested types, event map keys, and classic events", async () => {
 		const m = await surface(bundle("var a=1"), "mod-api", await embedded());
@@ -150,7 +150,7 @@ describe("mod-api", () => {
 			["classic.PreToolUse", "event"],
 			["classic.Stop", "event"],
 			["model.complete", "event"],
-			["tool.check", "event"],
+			["tool.check", "event"]
 		]);
 		const log = m.find((i) => i.name === "$.ui.log");
 		expect(log).toBeDefined();
@@ -158,14 +158,14 @@ describe("mod-api", () => {
 	});
 	test("throws without the embedded files", async () => {
 		const error = await surface(bundle("var a=1"), "mod-api").catch(
-			(error_: unknown) => error_,
+			(error_: unknown) => error_
 		);
 		expect(error).toHaveProperty("message", expect.stringMatching(/embedded/u));
 	});
 	test("a run that throws is not kept for the bundle", async () => {
 		const b = bundle("var a=1");
 		const error = await surface(b, "mod-api").catch(
-			(error_: unknown) => error_,
+			(error_: unknown) => error_
 		);
 		expect(error).toBeInstanceOf(Error);
 		expect(await surface(b, "mod-api", await embedded())).toHaveLength(8);
@@ -189,7 +189,7 @@ var other=["chat:cancel"];
 
 	test("an array that is not all strings gives nothing", async () => {
 		expect(await names("keybinding", 'var a=["Global","Chat",f()];')).toEqual(
-			[],
+			[]
 		);
 	});
 });

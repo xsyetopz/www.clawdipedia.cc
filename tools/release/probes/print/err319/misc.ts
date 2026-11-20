@@ -17,19 +17,19 @@ const mcpOutputSchema = ([id, url]: readonly [string, string]): CaseDef =>
 					`${sb.home}/m/srv.js`,
 					SRV.replace(
 						'inputSchema:{type:"object",properties:{}}}',
-						`inputSchema:{type:"object",properties:{}},outputSchema:{$schema:${JSON.stringify(url)},type:"object",properties:{n:{type:"number"}}}}`,
+						`inputSchema:{type:"object",properties:{}},outputSchema:{$schema:${JSON.stringify(url)},type:"object",properties:{n:{type:"number"}}}}`
 					).replace(
 						"else if(m.id!==undefined)s({});",
-						String.raw`else if(m.method==="tools/call")s({content:[{type:"text",text:"{\"n\":1}"}],structuredContent:{n:1}});else if(m.id!==undefined)s({});`,
-					),
+						String.raw`else if(m.method==="tools/call")s({content:[{type:"text",text:"{\"n\":1}"}],structuredContent:{n:1}});else if(m.id!==undefined)s({});`
+					)
 				);
 				await Bun.write(
 					`${sb.home}/m/mcp.json`,
 					json({
 						mcpServers: {
-							psrv: { command: "bun", args: [`${sb.home}/m/srv.js`] },
-						},
-					}),
+							psrv: { command: "bun", args: [`${sb.home}/m/srv.js`] }
+						}
+					})
 				);
 			},
 			env: { ENABLE_TOOL_SEARCH: "false" },
@@ -38,16 +38,16 @@ const mcpOutputSchema = ([id, url]: readonly [string, string]): CaseDef =>
 				"{HOME}/m/mcp.json",
 				...BYPASS,
 				"--debug-file",
-				"{CFG}/d.log",
+				"{CFG}/d.log"
 			],
-			stub: { seq: [{ name: "mcp__psrv__ping", input: {} }] },
+			stub: { seq: [{ name: "mcp__psrv__ping", input: {} }] }
 		},
-		/unsupported dialect|"n":1|[Ss]chema|dialect/u,
+		/unsupported dialect|"n":1|[Ss]chema|dialect/u
 	);
 
 const SCHEMAS: (readonly [string, string])[] = [
 	["draft-07", "http://json-schema.org/draft-07/schema#"],
-	["unknown-dialect", "https://example.test/dialect"],
+	["unknown-dialect", "https://example.test/dialect"]
 ];
 
 export const miscCases: CaseDef[] = [
@@ -58,15 +58,15 @@ export const miscCases: CaseDef[] = [
 			cfgFiles: { ".credentials.json": OAUTH_CREDS },
 			args: ["--chrome", "--debug-file", "{CFG}/d.log"],
 			stub: {
-				seq: [{ name: "mcp__claude-in-chrome__tabs_context_mcp", input: {} }],
-			},
+				seq: [{ name: "mcp__claude-in-chrome__tabs_context_mcp", input: {} }]
+			}
 		},
-		/hrome|xtension|bridge|browser|mcp__/u,
+		/hrome|xtension|bridge|browser|mcp__/u
 	),
 	one(
 		"auth-logout-dir",
 		{ argv: ["auth", "logout"], cfgFiles: { ".claude.json/x": "1" } },
-		LOGOUT,
+		LOGOUT
 	),
 	one(
 		"auth-logout-unwritable",
@@ -75,8 +75,8 @@ export const miscCases: CaseDef[] = [
 			cfgFiles: {
 				".claude.json": json({
 					primaryApiKey: "sk-ant-probe",
-					hasCompletedOnboarding: true,
-				}),
+					hasCompletedOnboarding: true
+				})
 			},
 			setup: async (sb) => {
 				await chmod(sb.cfg, 0o555);
@@ -84,9 +84,9 @@ export const miscCases: CaseDef[] = [
 			afterExit: async (sb) => {
 				await chmod(sb.cfg, 0o755);
 				return {};
-			},
+			}
 		},
-		LOGOUT,
+		LOGOUT
 	),
 	one(
 		"grep-untraversable-dir",
@@ -104,17 +104,17 @@ export const miscCases: CaseDef[] = [
 				seq: [
 					{
 						name: "Grep",
-						input: { pattern: "needle", path: "{PROJ}/locked" },
-					},
-				],
-			},
+						input: { pattern: "needle", path: "{PROJ}/locked" }
+					}
+				]
+			}
 		},
-		/Cannot search|traversable/u,
+		/Cannot search|traversable/u
 	),
 	one(
 		"mcp-add-bad-env",
 		{ argv: ["mcp", "add", "probe", "-e", "NOEQUALS", "--", "echo"] },
-		/Invalid environment variable format/u,
+		/Invalid environment variable format/u
 	),
 	// The program drops a known draft `$schema` before the MCP validator. The unknown URL is the case that would reach the dialect guard.
 	...SCHEMAS.map((s) => mcpOutputSchema(s)),
@@ -123,9 +123,9 @@ export const miscCases: CaseDef[] = [
 		"custom-headers-bad-authorization",
 		{
 			args: ["--debug-file", "{CFG}/d.log"],
-			env: { ANTHROPIC_CUSTOM_HEADERS: "Authorization: a\u0100b" },
+			env: { ANTHROPIC_CUSTOM_HEADERS: "Authorization: a\u0100b" }
 		},
-		/Invalid Authorization header value/u,
+		/Invalid Authorization header value/u
 	),
 	// A stand-in pwsh: the quote check runs before the command is spawned.
 	one(
@@ -139,27 +139,27 @@ export const miscCases: CaseDef[] = [
 			env: {
 				CLAUDE_CODE_USE_POWERSHELL_TOOL: "1",
 				CLAUDE_CODE_TMPDIR: "{HOME}/t\u2018mp",
-				PATH: "{HOME}/.probe-bin:{HOME}/bin:/usr/bin:/bin",
+				PATH: "{HOME}/.probe-bin:{HOME}/bin:/usr/bin:/bin"
 			},
 			allowOverride: ["PATH"],
 			args: [...BYPASS, "--tools", "PowerShell"],
 			stub: {
-				seq: [{ name: "PowerShell", input: { command: "Write-Output hi" } }],
-			},
+				seq: [{ name: "PowerShell", input: { command: "Write-Output hi" } }]
+			}
 		},
-		/Cannot safely quote|PowerShell/u,
+		/Cannot safely quote|PowerShell/u
 	),
 	// The argument check takes any `-\S+` suffix; the version check takes only [0-9A-Za-z.-] after the `-`.
 	one(
 		"install-version-underscore",
 		{ argv: ["install", "1.2.3-a_b"] },
-		/Invalid version string|Invalid channel/u,
+		/Invalid version string|Invalid channel/u
 	),
 	// `..` passes the argument check and fails the well-formed check, as `_` does.
 	one(
 		"install-version-dotdot",
 		{ argv: ["install", "1.2.3-a..b"] },
-		/Invalid version string|Invalid channel/u,
+		/Invalid version string|Invalid channel/u
 	),
 	one(
 		"runner-secret-file-missing",
@@ -169,9 +169,9 @@ export const miscCases: CaseDef[] = [
 				"--api-url",
 				"http://127.0.0.1:9",
 				"--environment-secret-file",
-				"{HOME}/missing",
-			],
+				"{HOME}/missing"
+			]
 		},
-		/Failed to read environment secret file/u,
-	),
+		/Failed to read environment secret file/u
+	)
 ];

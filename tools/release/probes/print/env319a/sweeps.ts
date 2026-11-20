@@ -5,13 +5,13 @@ import {
 	msgs,
 	readCfg,
 	type Spec,
-	toolResultTexts,
+	toolResultTexts
 } from "../run/helpers.ts";
 import { DBG, jsonl, STREAM_ARGV, sweep } from "./sweep.ts";
 
 const agent = (
 	background: boolean,
-	type = "general-purpose",
+	type = "general-purpose"
 ): NonNullable<Spec["stub"]> => ({
 	seq: [
 		{
@@ -20,15 +20,15 @@ const agent = (
 				description: "d",
 				prompt: MARK,
 				subagent_type: type,
-				run_in_background: background,
-			},
-		},
-	],
+				run_in_background: background
+			}
+		}
+	]
 });
 
 const USER_OK = {
 	type: "user",
-	message: { role: "user", content: "Reply with 'OK'." },
+	message: { role: "user", content: "Reply with 'OK'." }
 };
 
 const summaryData = async (r: Run) => {
@@ -43,7 +43,7 @@ const summaryData = async (r: Run) => {
 			.filter((l) => /AgentSummary|Bash|sleep|subagent|Agent tool/iu.test(l))
 			.slice(0, 40)
 			.map((l) => l.slice(0, 150))
-			.join("\n"),
+			.join("\n")
 	};
 };
 
@@ -56,10 +56,10 @@ const handbackData = (r: Run) => {
 		denied: r.stdout.includes("permission_denied"),
 		handbackTool: all.includes("SubagentHandback"),
 		handBack: toolResultTexts(r).some((t) =>
-			t.includes("[Subagent hand-back]"),
+			t.includes("[Subagent hand-back]")
 		),
 		deliveredLine: all.includes("final report is delivered through"),
-		result: (toolResultTexts(r)[0] ?? "").slice(0, 200),
+		result: (toolResultTexts(r)[0] ?? "").slice(0, 200)
 	};
 };
 
@@ -74,7 +74,7 @@ const crypticData = (r: Run) => {
 		pollInHistory: all.filter((b) => b.includes("build finished")).length,
 		withContext: withCtx.length,
 		withEvents: withCtx.filter((b) =>
-			/classifier_context[\s\S]*"events"/u.test(b),
+			/classifier_context[\s\S]*"events"/u.test(b)
 		).length,
 		hist: all
 			.map((b) => /.{0,300}build finished.{0,100}/u.exec(b)?.[0] ?? "")
@@ -82,7 +82,7 @@ const crypticData = (r: Run) => {
 			.slice(0, 1)
 			.join(""),
 		events: /"events":.{0,260}/u.exec(last)?.[0] ?? "",
-		sample: /"classifier_context":.{0,400}/u.exec(last)?.[0] ?? "",
+		sample: /"classifier_context":.{0,400}/u.exec(last)?.[0] ?? ""
 	};
 };
 
@@ -97,8 +97,8 @@ const POLL = {
 		wake: false,
 		authority: "peer-agent",
 		sender_id: "peer-1",
-		sender_text: "build finished",
-	},
+		sender_text: "build finished"
+	}
 };
 
 export const summaryCases: CaseDef[] = sweep(
@@ -112,9 +112,9 @@ export const summaryCases: CaseDef[] = sweep(
 			{
 				type: "control_request",
 				request_id: "i1",
-				request: { subtype: "initialize", agentProgressSummaries: true },
+				request: { subtype: "initialize", agentProgressSummaries: true }
 			},
-			USER_OK,
+			USER_OK
 		]),
 		env: { CLAUDE_CODE_FORK_SUBAGENT: "1" },
 		timeoutMs: 240_000,
@@ -123,13 +123,13 @@ export const summaryCases: CaseDef[] = sweep(
 				{ name: "Agent", input: { description: "d", prompt: MARK } },
 				{
 					name: "Bash",
-					input: { command: 'python3 -c "import time; time.sleep(70)"' },
-				},
-			],
-		},
+					input: { command: 'python3 -c "import time; time.sleep(70)"' }
+				}
+			]
+		}
 	},
 	summaryData,
-	/AgentSummary/u,
+	/AgentSummary/u
 );
 
 export const handbackCases: CaseDef[] = sweep(
@@ -140,9 +140,9 @@ export const handbackCases: CaseDef[] = sweep(
 		args: ["--permission-mode", "auto", ...DBG],
 		safeguard: "not_flagged",
 		timeoutMs: 60_000,
-		stub: agent(false),
+		stub: agent(false)
 	},
-	handbackData,
+	handbackData
 );
 
 export const crypticCases: CaseDef[] = sweep(
@@ -159,10 +159,10 @@ export const crypticCases: CaseDef[] = sweep(
 		stub: {
 			seq: [
 				{ name: "Poll", input: {} },
-				{ name: "Bash", input: { command: "echo hi" } },
-			],
-		},
+				{ name: "Bash", input: { command: "echo hi" } }
+			]
+		}
 	},
 	crypticData,
-	/auto_mode_poll_event_listing|poll/iu,
+	/auto_mode_poll_event_listing|poll/iu
 );

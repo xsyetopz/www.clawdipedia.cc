@@ -4,7 +4,7 @@ import {
 	constString,
 	isFn,
 	type Module,
-	type Node,
+	type Node
 } from "../../ast.ts";
 import { asNode } from "../common.ts";
 
@@ -25,7 +25,7 @@ export const initOf = (m: Module, n: Node): Node | undefined => {
 /** The argument that parameter `p` gets at the one known call of its function (`function E(C){C.command("add")}E(mcp)`). */
 const argumentOf = async (
 	m: Module,
-	p: Node,
+	p: Node
 ): Promise<{ m: Module; n: Node } | undefined> => {
 	const def = m.variable(p)?.defs[0];
 	if (def?.type !== "Parameter" || !isFn(def.node)) {
@@ -42,7 +42,7 @@ const argumentOf = async (
 const chainCommands = (
 	m: Module,
 	n: Node,
-	seen = new Set<unknown>(),
+	seen = new Set<unknown>()
 ): Promise<string[]> => {
 	const out: string[] = [];
 	const walk = async (cur: Node | undefined): Promise<string[]> => {

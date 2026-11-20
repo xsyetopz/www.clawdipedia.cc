@@ -26,7 +26,7 @@ const dirSize = async (p: string): Promise<number> => {
 			}
 			const st = await stat(q);
 			return st.size;
-		}),
+		})
 	);
 	let total = 0;
 	for (const n of sizes) {
@@ -51,7 +51,7 @@ export const portChecks = async (): Promise<{
 			{
 				id: "ports.dynamic",
 				level: "ok",
-				detail: `OS-assigned ports bind: ${ports.join(", ")}`,
+				detail: `OS-assigned ports bind: ${ports.join(", ")}`
 			},
 			{
 				id: "ports.fixed-range",
@@ -59,9 +59,9 @@ export const portChecks = async (): Promise<{
 				detail:
 					busy.length > 0
 						? `in use in 18400-18499: ${busy.join(", ")} (the toolkit does not need them)`
-						: "18400-18499 free",
-			},
-		],
+						: "18400-18499 free"
+			}
+		]
 	};
 };
 
@@ -78,15 +78,15 @@ export const managedCheck = async (): Promise<{
 			level: managed ? "warn" : "ok",
 			detail: managed
 				? `${MANAGED_DIR} exists: ${names.length > 0 ? names.join(", ") : "(empty)"}. It changes every run unless it is the expected fixture.`
-				: `${MANAGED_DIR} absent`,
-		},
+				: `${MANAGED_DIR} absent`
+		}
 	};
 };
 
 export const parentEnvCheck = (): Check[] => {
 	const leaked = Object.entries(process.env)
 		.filter(
-			([k, v]) => k.startsWith("CLAUDE_CODE_") && v !== undefined && v !== "",
+			([k, v]) => k.startsWith("CLAUDE_CODE_") && v !== undefined && v !== ""
 		)
 		.map(([k]) => k);
 	return leaked.length > 0
@@ -94,8 +94,8 @@ export const parentEnvCheck = (): Check[] => {
 				{
 					id: "parent-env",
 					level: "warn",
-					detail: `${leaked.length} CLAUDE_CODE_* names set in this shell (${leaked.join(", ")}); the toolkit never passes them on`,
-				},
+					detail: `${leaked.length} CLAUDE_CODE_* names set in this shell (${leaked.join(", ")}); the toolkit never passes them on`
+				}
 			]
 		: [];
 };
@@ -106,13 +106,13 @@ export const capturesSizes = async (): Promise<Record<string, number>> => {
 	}
 	const entries = await readdir(CAPTURES, { withFileTypes: true });
 	const dirs = entries.filter(
-		(e) => e.isDirectory() && /^\d+\.\d+\.\d+$/u.test(e.name),
+		(e) => e.isDirectory() && /^\d+\.\d+\.\d+$/u.test(e.name)
 	);
 	return Object.fromEntries(
 		await Promise.all(
 			dirs.map(
-				async (e) => [e.name, await dirSize(join(CAPTURES, e.name))] as const,
-			),
-		),
+				async (e) => [e.name, await dirSize(join(CAPTURES, e.name))] as const
+			)
+		)
 	);
 };

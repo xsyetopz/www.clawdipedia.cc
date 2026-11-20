@@ -15,7 +15,7 @@ const sh = async (argv: string[]): Promise<Sh> => {
 	const [stdout, stderr, exitCode] = await Promise.all([
 		new Response(p.stdout).text(),
 		new Response(p.stderr).text(),
-		p.exited,
+		p.exited
 	]);
 	return { exitCode, stdout, stderr };
 };
@@ -24,13 +24,13 @@ const sh = async (argv: string[]): Promise<Sh> => {
 export const requireDocker = async (): Promise<void> => {
 	if (Bun.which("docker") === null) {
 		throw new Error(
-			"docker is required for the gateway cases: install Docker (https://docs.docker.com/get-docker/) and start it",
+			"docker is required for the gateway cases: install Docker (https://docs.docker.com/get-docker/) and start it"
 		);
 	}
 	const info = await sh(["docker", "info"]);
 	if (info.exitCode !== 0) {
 		throw new Error(
-			"docker is installed but its daemon is not running: start Docker",
+			"docker is installed but its daemon is not running: start Docker"
 		);
 	}
 };
@@ -47,7 +47,7 @@ const psql = (name: string, args: string[]): Promise<Sh> =>
 		"postgres",
 		"-d",
 		"probe",
-		...args,
+		...args
 	]);
 
 /** The first server of the image listens on its socket only; a TCP query works once the final one is up. */
@@ -65,7 +65,7 @@ const waitReady = async (name: string, attempt: number): Promise<void> => {
 
 /** Runs `fn` with a throwaway Postgres on a loopback port. `query` runs SQL in it and returns the rows as `|` separated text. The container is removed when `fn` ends. */
 export const withPostgres = async <T>(
-	fn: (port: number, query: (sql: string) => Promise<string>) => Promise<T>,
+	fn: (port: number, query: (sql: string) => Promise<string>) => Promise<T>
 ): Promise<T> => {
 	await requireDocker();
 	const port = await allocPort();
@@ -87,11 +87,11 @@ export const withPostgres = async <T>(
 		"POSTGRES_DB=probe",
 		"-p",
 		`127.0.0.1:${port}:5432`,
-		IMAGE,
+		IMAGE
 	]);
 	if (run.exitCode !== 0) {
 		throw new Error(
-			`docker run ${IMAGE} failed: ${run.stderr.trim().slice(0, 200)}`,
+			`docker run ${IMAGE} failed: ${run.stderr.trim().slice(0, 200)}`
 		);
 	}
 	try {

@@ -17,5 +17,5 @@ export const KINDS_A: Record<string, Extractor> = {
 	setting: extractSettings,
 	"setting-key": extractSettingKeys,
 	gate: extractGates,
-	tool: extractTools,
+	tool: extractTools
 };

@@ -16,7 +16,7 @@ export abstract class HeldEntries extends TypeResolver {
 		init: Node | null | undefined,
 		before: number,
 		env: Env | undefined,
-		depth: number,
+		depth: number
 	): Promise<Entry[] | undefined> {
 		const lists: Entry[][] = [];
 		const later: Entry[] = [];
@@ -47,7 +47,7 @@ export abstract class HeldEntries extends TypeResolver {
 					later.push(added);
 				}
 				return undefined;
-			},
+			}
 		);
 		if (failed) {
 			return undefined;
@@ -62,7 +62,7 @@ export abstract class HeldEntries extends TypeResolver {
 		module: Module,
 		id: Node,
 		p: Node | undefined,
-		env: Env | undefined,
+		env: Env | undefined
 	): Promise<Entry | undefined> {
 		const a = p && module.parent(p);
 		if (

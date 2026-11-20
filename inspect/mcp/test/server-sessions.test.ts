@@ -13,7 +13,7 @@ describe("sessions", () => {
 		const s = listOf(
 			r,
 			"sessions",
-			z.object({ id: z.string(), project: z.string() }),
+			z.object({ id: z.string(), project: z.string() })
 		);
 		expect(s.map((x) => [x.id, x.project])).toEqual([[SESSION, "-tmp-demo"]]);
 	});
@@ -23,24 +23,24 @@ describe("sessions", () => {
 		const r = await call("sessions", {
 			action: "read",
 			session: "1111",
-			limit: 1,
+			limit: 1
 		});
 		// Only the range, the total, the next_offset field, and the first line are pinned.
 		expect(seen(r)).toMatch(/1-1 of 4\D.*next_offset 1\n1: \{/u);
 		const t = await call("sessions", {
 			action: "read",
 			session: SESSION,
-			type: "last-prompt",
+			type: "last-prompt"
 		});
 		expect(seen(t)).toMatch(
-			/of 1 with type "last-prompt"\n\d+: \{.*last-prompt/u,
+			/of 1 with type "last-prompt"\n\d+: \{.*last-prompt/u
 		);
 	});
 
 	test("sessions search returns the line of a match", async () => {
 		const r = await call("sessions", { action: "search", query: "Fixture" });
 		expect(r.structuredContent?.["hits"]).toMatchObject([
-			{ session: SESSION, line: 1, type: "custom-title" },
+			{ session: SESSION, line: 1, type: "custom-title" }
 		]);
 	});
 
@@ -57,7 +57,7 @@ describe("sessions", () => {
 			action: "fields",
 			session: SESSION,
 			query: String.raw`^last-prompt\.`,
-			regex: true,
+			regex: true
 		};
 		// Act
 		const r = await call("sessions", args);
@@ -67,7 +67,7 @@ describe("sessions", () => {
 			.parse(r.structuredContent?.["fields"]);
 		expect(Object.keys(fields).length).toBeGreaterThan(0);
 		expect(Object.keys(fields).every((k) => k.startsWith("last-prompt."))).toBe(
-			true,
+			true
 		);
 		expect(fields["last-prompt.type"]).toEqual({ string: 1 });
 	});
@@ -75,7 +75,7 @@ describe("sessions", () => {
 	test("an unknown session is a tool error", async () => {
 		const r = await call("sessions", {
 			action: "read",
-			session: "nope",
+			session: "nope"
 		});
 		expect(r.isError).toBe(true);
 	});

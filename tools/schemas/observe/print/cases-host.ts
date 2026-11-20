@@ -9,8 +9,8 @@ const DISK_FLAGS = { CLAUDE_CODE_GB_DISK_CACHE_WHEN_TELEMETRY_OFF: "1" };
 const FLAGS = {
 	cachedGrowthBookFeatures: {
 		tengu_violin_wood: true,
-		tengu_violin_strad: true,
-	},
+		tengu_violin_strad: true
+	}
 };
 
 // The model calls Bash on the announced machine; `_host` names it.
@@ -21,15 +21,15 @@ const HOST_BASH = {
 			type: "tool_use" as const,
 			id: "toolu_host1",
 			name: "Bash",
-			input: { command: "echo hi", description: "echo", _host: "testhost" },
-		},
+			input: { command: "echo hi", description: "echo", _host: "testhost" }
+		}
 	],
-	stop_reason: "tool_use" as const,
+	stop_reason: "tool_use" as const
 };
 const DONE = {
 	kind: "message" as const,
 	content: [{ type: "text" as const, text: "done" }],
-	stop_reason: "end_turn" as const,
+	stop_reason: "end_turn" as const
 };
 
 const hostCase = (id: string, host: HostDisposition): Case => ({
@@ -42,7 +42,7 @@ const hostCase = (id: string, host: HostDisposition): Case => ({
 	// the fake service delivers the user message over the worker stream; stdin only keeps the run open
 	stdin: [25_000],
 	// a worker session does not end by itself: stop it once the rows are written
-	timeoutMs: 35_000,
+	timeoutMs: 35_000
 });
 
 /**
@@ -52,5 +52,5 @@ const hostCase = (id: string, host: HostDisposition): Case => ({
  */
 export const HOST_CASES: Case[] = [
 	hostCase("host-denied-by-rule", "denied_by_rule"),
-	hostCase("host-denied-by-user", "denied_by_user"),
+	hostCase("host-denied-by-user", "denied_by_user")
 ];

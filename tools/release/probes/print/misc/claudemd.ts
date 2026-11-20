@@ -7,7 +7,7 @@ import {
 	msgs,
 	type Out,
 	type Spec,
-	withRun,
+	withRun
 } from "../run/helpers.ts";
 import type { PrintCtx } from "../types.ts";
 
@@ -21,9 +21,9 @@ const doctorText = (ctx: PrintCtx): Promise<string> =>
 			argv: ["doctor"],
 			noPrompt: true,
 			projFiles: { "CLAUDE.md": BIG },
-			timeoutMs: 30_000,
+			timeoutMs: 30_000
 		},
-		(d) => stripX(d.stdout + d.stderr),
+		(d) => stripX(d.stdout + d.stderr)
 	);
 
 const STATUS_SPEC: Spec = {
@@ -34,10 +34,10 @@ const STATUS_SPEC: Spec = {
 		"stream-json",
 		"--output-format",
 		"stream-json",
-		"--verbose",
+		"--verbose"
 	],
 	stdin: `${json({ type: "control_request", request_id: "g1", request: { subtype: "get_status" } })}\n`,
-	projFiles: { "CLAUDE.md": BIG },
+	projFiles: { "CLAUDE.md": BIG }
 };
 
 const sectionTitles = (line: string): string => {
@@ -56,7 +56,7 @@ const statusInfo = (ctx: PrintCtx) =>
 			g.stdout.split("\n").find((l) => l.includes("control_response")) ?? "";
 		return {
 			titles: sectionTitles(line),
-			mentions: /Large CLAUDE|exceeds|chars/iu.test(line),
+			mentions: /Large CLAUDE|exceeds|chars/iu.test(line)
 		};
 	});
 
@@ -73,23 +73,23 @@ const bigOut = (ctx: PrintCtx): Promise<Out> =>
 				doctorWarns: /Large CLAUDE|exceed|memory files/iu.test(doc),
 				getStatusSections: st.titles,
 				getStatusMentionsSize: st.mentions,
-				events: evKinds(r),
+				events: evKinds(r)
 			},
 			notes:
-				"Three runs (-p, doctor, get_status control request); the doctor and get_status runs send no prompt.",
+				"Three runs (-p, doctor, get_status control request); the doctor and get_status runs send no prompt."
 		};
 	});
 
 export const bigClaudeMd: CaseDef = {
 	name: "large-claude-md",
-	run: (ctx) => bigOut(ctx),
+	run: (ctx) => bigOut(ctx)
 };
 
 const afterNested = (body: string, at: number) => {
 	const rest = body.slice(at + 12);
 	return {
 		charsKept: /^y*/u.exec(rest)?.[0].length ?? 0,
-		after: stripX(rest.replace(/^y+/u, "<ys>")).slice(0, 300),
+		after: stripX(rest.replace(/^y+/u, "<ys>")).slice(0, 300)
 	};
 };
 
@@ -103,11 +103,11 @@ export const nestedClaudeMd = (model: string): CaseDef => ({
 				model,
 				projFiles: {
 					"sub/CLAUDE.md": `NESTED-BEGIN${"y".repeat(200_000)}NESTED-END`,
-					"sub/f.txt": "x\n",
+					"sub/f.txt": "x\n"
 				},
 				stub: {
-					seq: [{ name: "Read", input: { file_path: "{PROJ}/sub/f.txt" } }],
-				},
+					seq: [{ name: "Read", input: { file_path: "{PROJ}/sub/f.txt" } }]
+				}
 			},
 			(r) => {
 				const body = JSON.stringify(msgs(r).at(-1)?.body ?? "");
@@ -119,10 +119,10 @@ export const nestedClaudeMd = (model: string): CaseDef => ({
 						precondition: msgs(r).length >= 2,
 						nestedLoaded: at !== -1,
 						endKept: body.includes("NESTED-END"),
-						charsKept: kept?.charsKept ?? 0,
+						charsKept: kept?.charsKept ?? 0
 					},
-					samples: { after: kept?.after ?? "" },
+					samples: { after: kept?.after ?? "" }
 				};
-			},
-		),
+			}
+		)
 });

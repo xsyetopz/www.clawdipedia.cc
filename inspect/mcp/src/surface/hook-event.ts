@@ -9,7 +9,7 @@ import {
 	scanOf,
 	strings,
 	type SurfaceItem,
-	unique,
+	unique
 } from "./common.ts";
 
 const PASCAL = /^[A-Z][A-Za-z]+$/u;
@@ -39,7 +39,7 @@ export const extractHookEvents: Extractor = async (bundle) => {
 			kind: "hook-event",
 			name,
 			module: m,
-			offset: n.start,
-		})),
+			offset: n.start
+		}))
 	);
 };

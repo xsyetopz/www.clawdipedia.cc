@@ -15,7 +15,7 @@ const EXT: Record<string, string> = {
 	jsx: "jsx",
 	mjs: "mjs",
 	json: "json",
-	jsonc: "jsonc",
+	jsonc: "jsonc"
 };
 
 export interface Block {
@@ -44,7 +44,7 @@ export const walk = async (dir: string): Promise<string[]> => {
 				return inner;
 			}
 			return /\.(md|mdx)$/u.test(entry.name) ? [p] : [];
-		}),
+		})
 	);
 	return found.flat();
 };
@@ -57,7 +57,7 @@ const dedent = (indent: string, l: string) =>
 export const findBlocks = (
 	file: string,
 	text: string,
-	counter: { n: number },
+	counter: { n: number }
 ) => {
 	const lines = text.split("\n");
 	const blocks: Block[] = [];
@@ -91,7 +91,7 @@ export const findBlocks = (
 					indent,
 					lines: end - i - 1,
 					code: `${body.join("\n")}\n`,
-					id: `b${String(counter.n).padStart(4, "0")}`,
+					id: `b${String(counter.n).padStart(4, "0")}`
 				});
 			}
 		}

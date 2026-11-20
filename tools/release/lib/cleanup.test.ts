@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 const crashWith = async (
-	end: string,
+	end: string
 ): Promise<{ code: number; cleaned: boolean }> => {
 	const dir = await mkdtemp(join(tmpdir(), "cleanup-test-"));
 	const mark = join(dir, "cleaned");
@@ -15,11 +15,11 @@ const crashWith = async (
 		`import { onCleanup } from ${JSON.stringify(join(import.meta.dir, "cleanup.ts"))};
 onCleanup(async () => { await Bun.write(${JSON.stringify(mark)}, "1"); });
 ${end}
-`,
+`
 	);
 	const proc = Bun.spawn([process.execPath, script], {
 		stdout: "ignore",
-		stderr: "ignore",
+		stderr: "ignore"
 	});
 	const code = await proc.exited;
 	const cleaned = await Bun.file(mark).exists();
@@ -30,14 +30,14 @@ ${end}
 test("an uncaught error runs cleanup and exits with status 1", async () => {
 	expect(await crashWith(`throw new Error("boom");`)).toEqual({
 		code: 1,
-		cleaned: true,
+		cleaned: true
 	});
 });
 
 test("an unhandled rejection runs cleanup and exits with status 1", async () => {
 	expect(await crashWith(`void Promise.reject(new Error("boom"));`)).toEqual({
 		code: 1,
-		cleaned: true,
+		cleaned: true
 	});
 });
 

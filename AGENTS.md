@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-- Use Bun `1.4.4`; run `bun install` to set up dependencies and Git hooks.
+- Use Bun `1.4.5`; run `bun install` to set up dependencies and Git hooks.
 - Write in Simplified Technical English; use Chicago Title Case for titles, headings, and sidebar labels.
 - Use `<Documented />`, `<Undocumented />`, `<Differs />`, or `<Gated />` for documentation status. Place additional status labels in the Status column, not before item names.
 - Document only functionality users can access or configure. Never invent or make up something of your own.
@@ -19,10 +19,10 @@
 
 <!-- typescript-bedrock -->
 - Install with `bun install`, and run one-off tools with `bunx`.
-- Check each change with the narrowest command: `bun test <file>`, `bun check`, `bun run lint`, or `bun fmt`.
+- Check each change with the narrowest command: `bun test <file>`, `bun check`, `just typescript::lint <path>`, or `bun fmt`. A lint run starts type-aware tsgolint, which holds the whole program in memory, so run it through `just` (one run on the machine at a time) and not as a bare `bunx oxlint`.
 - Fix the cause of each lint or type error in the code, and keep the lint and `tsconfig` settings as they are.
 - Pin each dependency version once, in `workspaces.catalog`, and reference it as `catalog:`.
 - Give a JSDoc comment to each declaration a package exports from its `exports`, `main`, or `module` entry; internal code needs none.
 - Use Bun APIs where Bun has one, such as `Bun.file`, `Bun.$`, and `Bun.spawn`.
-- Change shared lint, type, and Markdown rules in `typescript-bedrock`, which the repo configs extend.
+- Change the shared lint, type, and Markdown rules in bedrock's `templates/typescript`; this repo's configs are copies that `bedrock update` rewrites.
 <!-- /typescript-bedrock -->

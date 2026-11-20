@@ -6,7 +6,7 @@ import {
 	type PtyCase,
 	type PtyGroup,
 	READY,
-	shows,
+	shows
 } from "./harness.ts";
 
 /** About `chars` characters of plain lines, ending with a newline. */
@@ -26,7 +26,7 @@ const SIZES: Size[] = [
 	{ name: "opus-45k", model: "claude-opus-5-5", files: 1, chars: 45_600 },
 	{ name: "sonnet-4x34k", model: "claude-sonnet-4-5", files: 4, chars: 34_400 },
 	{ name: "opus-156k", model: "claude-opus-5-5", files: 1, chars: 156_000 },
-	{ name: "opus-116k", model: "claude-opus-5-5", files: 1, chars: 116_000 },
+	{ name: "opus-116k", model: "claude-opus-5-5", files: 1, chars: 116_000 }
 ];
 
 /** Where the instruction files go: project CLAUDE.md, CLAUDE.local.md, a rules file, and the user CLAUDE.md. */
@@ -34,7 +34,7 @@ const FILES: { dir: "proj" | "cfg"; path: string }[] = [
 	{ dir: "proj", path: "CLAUDE.md" },
 	{ dir: "proj", path: "CLAUDE.local.md" },
 	{ dir: "proj", path: ".claude/rules/size-a.md" },
-	{ dir: "cfg", path: "CLAUDE.md" },
+	{ dir: "cfg", path: "CLAUDE.md" }
 ];
 
 const sizeCase = (s: Size): PtyCase => {
@@ -55,7 +55,7 @@ const sizeCase = (s: Size): PtyCase => {
 		data: (x) => ({
 			...pre(
 				shows(x, "shortcuts") || shows(x, "Claude Code"),
-				"UI never started",
+				"UI never started"
 			),
 			model: s.model,
 			files: s.files,
@@ -66,13 +66,13 @@ const sizeCase = (s: Size): PtyCase => {
 			bannerLine:
 				x.screen
 					.split("\n")
-					.find((l) => /limit/iu.test(l) && /chars/iu.test(l)) ?? "",
-		}),
+					.find((l) => /limit/iu.test(l) && /chars/iu.test(l)) ?? ""
+		})
 	};
 };
 
 export const sizesGroup: PtyGroup = {
 	id: "sizes",
 	title: "instruction file size warnings",
-	cases: () => SIZES.map((s) => sizeCase(s)),
+	cases: () => SIZES.map((s) => sizeCase(s))
 };

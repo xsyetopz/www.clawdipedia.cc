@@ -13,7 +13,7 @@ import {
 	sorted,
 	startServer,
 	structured,
-	text,
+	text
 } from "./server-harness.ts";
 
 const { tmp, client, call } = startServer();
@@ -22,7 +22,7 @@ describe("binary", () => {
 	test("code installs lists the versions dir", async () => {
 		const r = await call("code", { action: "installs" });
 		expect(structured(r)["installs"]).toMatchObject([
-			{ version: "9.9.9", current: false },
+			{ version: "9.9.9", current: false }
 		]);
 	});
 
@@ -31,7 +31,7 @@ describe("binary", () => {
 		const r = await call("code", { action: "prepare", version: "9.9.9" });
 		expect(r.structuredContent).toMatchObject({
 			version: "9.9.9",
-			dir: join(tmp, "cache", "9.9.9", "clean"),
+			dir: join(tmp, "cache", "9.9.9", "clean")
 		});
 		expect(structured(r)["units"]).toBeGreaterThan(10);
 		const again = await call("code", { action: "prepare", version: "9.9.9" });
@@ -43,19 +43,19 @@ describe("binary", () => {
 		const r = await call("code", {
 			action: "search",
 			query: '"api_error"',
-			version: "9.9.9",
+			version: "9.9.9"
 		});
 		const [hit] = listOf(
 			r,
 			"hits",
-			z.object({ module: z.string(), offset: z.number() }),
+			z.object({ module: z.string(), offset: z.number() })
 		);
 		expect(hit?.module).toBe("app.js");
 		const m = await call("code", {
 			action: "read",
 			module: "app.js",
 			offset: hit?.offset,
-			length: 11,
+			length: 11
 		});
 		expect(text(m)).toEndWith('"api_error"');
 	});
@@ -67,11 +67,11 @@ describe("binary", () => {
 			action: "read",
 			module: "app.js",
 			view: "readable",
-			version: "9.9.9",
+			version: "9.9.9"
 		});
 		expect(bad.isError).toBe(true);
 		expect(
-			await exists(join(tmp, "cache", "9.9.9", "clean", "readable", "app.js")),
+			await exists(join(tmp, "cache", "9.9.9", "clean", "readable", "app.js"))
 		).toBe(false);
 		await rm(fail);
 		const args = { action: "read", module: "app.js", view: "readable" };
@@ -105,14 +105,14 @@ describe("binary", () => {
 			...args,
 			version: "9.9.9",
 			offset: 20,
-			length: 30,
+			length: 30
 		});
 		expect(structured(b)["text"]).toBe(
-			String(structured(a)["text"]).slice(20, 50),
+			String(structured(a)["text"]).slice(20, 50)
 		);
 		expect(await Bun.file(cached).text()).toStartWith("// readable:");
 		expect(await Bun.file(join(tmp, "wakaru-runs")).text()).toBe(
-			"run\nrun\nrun\n",
+			"run\nrun\nrun\n"
 		);
 	}, 30_000);
 
@@ -121,21 +121,21 @@ describe("binary", () => {
 		await mkdir(join(dir, "sub"), { recursive: true });
 		await writeFile(
 			join(dir, "sub", "a.md"),
-			"x\nSee `chunk-aaaaaaaa.js:5`.\n",
+			"x\nSee `chunk-aaaaaaaa.js:5`.\n"
 		);
 		await writeFile(join(dir, "b.md"), "No citation.\n");
 		const r = await call("code", {
 			action: "citations",
 			dir,
-			version: "9.9.9",
+			version: "9.9.9"
 		});
 		expect(structured(r)["stale"]).toEqual([
 			{
 				file: join("sub", "a.md"),
 				line: 2,
 				citation: "chunk-aaaaaaaa.js:5",
-				chunk: "chunk-aaaaaaaa.js",
-			},
+				chunk: "chunk-aaaaaaaa.js"
+			}
 		]);
 		expect(text(r)).toContain("sub/a.md:2: chunk-aaaaaaaa.js:5");
 		const none = await call("code", { action: "citations", version: "9.9.9" });
@@ -147,10 +147,10 @@ describe("binary", () => {
 			await call("code", {
 				action: "search",
 				query: "api_error",
-				version: "9.9.9",
+				version: "9.9.9"
 			}),
 			"hits",
-			z.object({ offset: z.number() }),
+			z.object({ offset: z.number() })
 		)[0];
 		const r = await call("code", {
 			action: "relocate",
@@ -158,15 +158,15 @@ describe("binary", () => {
 			version: "9.9.9",
 			module: "app.js",
 			offset: hit?.offset,
-			query: "The program names the event api_error.",
+			query: "The program names the event api_error."
 		});
 		expect(structured(r)["found"]).toMatchObject([
 			{
 				module: "app.js",
 				offset: hit?.offset,
 				anchor: "api_error",
-				same: true,
-			},
+				same: true
+			}
 		]);
 	});
 
@@ -174,15 +174,15 @@ describe("binary", () => {
 		const r = await call("surface", {
 			kind: "object-keys",
 			module: "app.js",
-			anchor: '"Bash"',
+			anchor: '"Bash"'
 		});
 		expect(r.structuredContent).toEqual({
 			keys: {
 				tool_name: { const: "Bash" },
 				success: { const: "true" },
-				"tool.kind": { enum: ["a", "b"] },
+				"tool.kind": { enum: ["a", "b"] }
 			},
-			unresolved: [],
+			unresolved: []
 		});
 	});
 
@@ -190,18 +190,18 @@ describe("binary", () => {
 		const list = await call("surface", { kind: "event-keys" });
 		expect(structured(list)["events"]).toEqual({
 			api_error: 1,
-			tool_result: 2,
+			tool_result: 2
 		});
 		const r = await call("surface", {
 			kind: "event-keys",
-			name: "claude_code.tool_result",
+			name: "claude_code.tool_result"
 		});
 		expect(r.structuredContent).toMatchObject({ sites: 2 });
 		expect(sorted(Object.keys(recordOf(r, "keys")))).toEqual([
 			"duration_ms?",
 			"success?",
 			"tool.kind?",
-			"tool_name",
+			"tool_name"
 		]);
 	});
 
@@ -213,21 +213,21 @@ describe("binary", () => {
 			z.object({
 				name: z.string(),
 				when: z.array(z.string()),
-				enabled: z.string().optional(),
-			}),
+				enabled: z.string().optional()
+			})
 		);
 		expect(tools.map((t) => [t.name, t.when.length])).toEqual([
 			["Shell", 0],
 			["Glob", 1],
 			["Grep", 1],
-			["CronCreate", 1],
+			["CronCreate", 1]
 		]);
 		expect(tools[1]?.when[0]).toContain(".has(");
 		expect(tools.map((t) => t.enabled !== undefined)).toEqual([
 			false,
 			false,
 			true,
-			false,
+			false
 		]);
 		expect(tools[2]?.enabled).toContain("process.env.GREP");
 		const fns = Object.values(recordOf(r, "functions"));
@@ -240,7 +240,7 @@ describe("find and prompts", () => {
 		const r = await call("code", {
 			action: "find",
 			query: "sleep seconds blocked",
-			version: "9.9.9",
+			version: "9.9.9"
 		});
 		const [top] = listOf(r, "found", z.object({ hits: z.array(z.string()) }));
 		expect(top?.hits).toEqual(["sleep", "seconds", "blocked"]);
@@ -256,7 +256,7 @@ describe("find and prompts", () => {
 		const gone = await call("code", {
 			action: "cli",
 			args: ["--version"],
-			version: "0.0.1",
+			version: "0.0.1"
 		});
 		expect(gone.isError).toBe(true);
 		expect(text(gone)).toContain("installed: 9.9.9");
@@ -266,11 +266,11 @@ describe("find and prompts", () => {
 		const { prompts } = await client.listPrompts();
 		expect(sorted(prompts.map((p) => p.name))).toEqual([
 			"explain_change",
-			"release_review",
+			"release_review"
 		]);
 		const p = await client.getPrompt({
 			name: "release_review",
-			arguments: { from: "1.0.0", to: "1.0.1" },
+			arguments: { from: "1.0.0", to: "1.0.1" }
 		});
 		const t = z
 			.object({ text: z.string() })

@@ -14,33 +14,33 @@ type Kind =
 const META: Record<Kind, { label: string; tip: string }> = {
 	documented: {
 		label: "Documented",
-		tip: "An official docs page names this item.",
+		tip: "An official docs page names this item."
 	},
 	undocumented: {
 		label: "Undocumented",
-		tip: "Only the program shows this item. It can change without notice.",
+		tip: "Only the program shows this item. It can change without notice."
 	},
 	differs: {
 		label: "Differs",
-		tip: "The official docs and the program disagree. The row says how.",
+		tip: "The official docs and the program disagree. The row says how."
 	},
 	gated: { label: "Gated", tip: "Works only behind a flag or a server gate." },
 	"managed-only": {
 		label: "Managed Only",
-		tip: "Works only in managed (organization policy) settings.",
+		tip: "Works only in managed (organization policy) settings."
 	},
 	experimental: {
 		label: "Experimental",
-		tip: "The program or the official docs call this experimental or beta.",
+		tip: "The program or the official docs call this experimental or beta."
 	},
 	deprecated: {
 		label: "Deprecated",
-		tip: "The program or the official docs call this deprecated.",
+		tip: "The program or the official docs call this deprecated."
 	},
 	caution: {
 		label: "Caution",
-		tip: "It deletes data, skips a safety check, or sends data off your machine.",
-	},
+		tip: "It deletes data, skips a safety check, or sends data off your machine."
+	}
 };
 
 // Label badges are outlined. The others have no border.
@@ -48,7 +48,7 @@ const OUTLINED = new Set<Kind>([
 	"managed-only",
 	"experimental",
 	"deprecated",
-	"caution",
+	"caution"
 ]);
 
 interface Props {
@@ -66,7 +66,7 @@ const Badge = ({ kind, note }: Props & { kind: Kind }): React.JSX.Element => {
 		"--badge-color": `var(--cc-badge-${kind}-fg)`,
 		"--badge-bd": OUTLINED.has(kind)
 			? "1px solid currentColor"
-			: "1px solid transparent",
+			: "1px solid transparent"
 	};
 	return (
 		<Tooltip

@@ -24,21 +24,21 @@ export const startOtelMock = async (): Promise<OtelMock> => {
 	return {
 		env: () => ({
 			...otelEnv(port),
-			CLAUDE_SESSION_INGRESS_TOKEN_FILE: tokenFile,
+			CLAUDE_SESSION_INGRESS_TOKEN_FILE: tokenFile
 		}),
 		stop: async () => {
 			await server.stop(true);
 			await rm(dir, { recursive: true, force: true });
-		},
+		}
 	};
 };
 
 /** The tallied key paths and their JSON types under the given roots, such as `event:auth`, in the audit's raw format. */
 export const otelPaths = (
-	roots: string[],
+	roots: string[]
 ): Record<string, Record<string, number>> =>
 	Object.fromEntries(
 		Object.entries(otel.toJSON())
 			.filter(([k]) => roots.some((r) => k === r || k.startsWith(`${r}.`)))
-			.map(([k, s]) => [k, s.types]),
+			.map(([k, s]) => [k, s.types])
 	);

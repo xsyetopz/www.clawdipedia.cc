@@ -23,7 +23,7 @@ import {
 	fixturePath,
 	OBSERVED_DIR,
 	readFixture,
-	unverifiedPaths,
+	unverifiedPaths
 } from "../observed.ts";
 import { sorted, sortedStrings } from "../sorted.ts";
 
@@ -47,24 +47,24 @@ const SOURCES: { source: string; file: string; schema: string }[] = [
 	{
 		source: "print",
 		file: "print-claude-json.json",
-		schema: "claude-code-claude-json.json",
+		schema: "claude-code-claude-json.json"
 	},
 	{
 		source: "statusline",
 		file: "statusline.json",
-		schema: "claude-code-status-line.json",
+		schema: "claude-code-status-line.json"
 	},
 	{ source: "user", file: "user-transcripts.json", schema: TRANSCRIPT },
 	{
 		source: "user",
 		file: "user-claude-json.json",
-		schema: "claude-code-claude-json.json",
+		schema: "claude-code-claude-json.json"
 	},
 	{
 		source: "user",
 		file: "user-frontmatter.json",
-		schema: "claude-code-frontmatter.json",
-	},
+		schema: "claude-code-frontmatter.json"
+	}
 ];
 
 const isJson = (v: unknown): v is Json =>
@@ -85,7 +85,7 @@ const runScript = async (script: string, tmp: string): Promise<void> => {
 	const p = Bun.spawn([process.execPath, join(import.meta.dir, script), tmp], {
 		cwd: ROOT,
 		stdout: "inherit",
-		stderr: "inherit",
+		stderr: "inherit"
 	});
 	const code = await p.exited;
 	if (code !== 0) {
@@ -96,7 +96,7 @@ const runScript = async (script: string, tmp: string): Promise<void> => {
 /** Run the sources one after another: they share the stub, the ports and the temp dir. */
 const runEach = async <T>(
 	items: readonly T[],
-	run: (item: T) => Promise<void>,
+	run: (item: T) => Promise<void>
 ): Promise<void> => {
 	const [first, ...rest] = items;
 	if (first === undefined) {
@@ -110,14 +110,14 @@ const runSources = (tmp: string): Promise<void> => {
 	const scripts: [string, string][] = [
 		["print", "print.ts"],
 		["statusline", "statusline.ts"],
-		...(withUser ? [["user", "user.ts"] satisfies [string, string]] : []),
+		...(withUser ? [["user", "user.ts"] satisfies [string, string]] : [])
 	];
 	return runEach(
 		scripts.filter(([source]) => !skip.has(source)),
 		([source, script]) => {
 			console.info(`observe: ${source}`);
 			return runScript(script, tmp);
-		},
+		}
 	);
 };
 
@@ -150,10 +150,10 @@ const addPaths = (into: Map<string, Counts>, paths: Observed): void => {
 
 /** Schema file -> path -> type -> count. */
 const mergeSources = async (
-	tmp: string,
+	tmp: string
 ): Promise<Map<string, Map<string, Counts>>> => {
 	const reports = await Promise.all(
-		SOURCES.map((s) => readRaw(join(tmp, s.file))),
+		SOURCES.map((s) => readRaw(join(tmp, s.file)))
 	);
 	const merged = new Map<string, Map<string, Counts>>();
 	for (const [n, s] of SOURCES.entries()) {
@@ -170,14 +170,14 @@ const mergeSources = async (
 
 const sortedCounts = (counts: Counts): Counts =>
 	Object.fromEntries(
-		sortedStrings(Object.keys(counts)).map((k) => [k, counts[k] ?? 0]),
+		sortedStrings(Object.keys(counts)).map((k) => [k, counts[k] ?? 0])
 	);
 
 /** Fold the counts seen for the schema's unverified fields into the old fields. Give the new fields and how many are new. */
 const mergeFields = (
 	old: Fixture["fields"],
 	schema: Json,
-	paths: Map<string, Counts>,
+	paths: Map<string, Counts>
 ): { fields: Fixture["fields"]; added: number } => {
 	const fields: Fixture["fields"] = { ...old };
 	let added = 0;
@@ -200,10 +200,10 @@ const mergeFields = (
 
 const writeFixture = async (
 	schemaFile: string,
-	paths: Map<string, Counts>,
+	paths: Map<string, Counts>
 ): Promise<void> => {
 	const parsed: unknown = await Bun.file(
-		join(ROOT, "schemas", schemaFile),
+		join(ROOT, "schemas", schemaFile)
 	).json();
 	if (!isJson(parsed)) {
 		throw new TypeError(`${schemaFile} is not a JSON object`);
@@ -215,15 +215,15 @@ const writeFixture = async (
 			"Value-free. Field path -> JSON types seen in real payloads (stub probes and local files) with a count each, capped at 100. Built by tools/schemas/observe/run.ts; tools/schemas/code.ts reads it. Do not edit by hand.",
 		version: CLAUDE_CODE_VERSION,
 		fields: Object.fromEntries(
-			sortedStrings(Object.keys(fields)).map((k) => [k, fields[k] ?? {}]),
-		),
+			sortedStrings(Object.keys(fields)).map((k) => [k, fields[k] ?? {}])
+		)
 	};
 	await Bun.write(
 		fixturePath(schemaFile),
-		await formatJson(out, fixturePath(schemaFile)),
+		await formatJson(out, fixturePath(schemaFile))
 	);
 	console.info(
-		`${schemaFile}: ${Object.keys(out.fields).length} fields (${added} new)`,
+		`${schemaFile}: ${Object.keys(out.fields).length} fields (${added} new)`
 	);
 };
 
@@ -238,9 +238,9 @@ const main = async (): Promise<void> => {
 				[...merged].map(([schemaFile, paths]) =>
 					Bun.write(
 						join(rawDir, schemaFile),
-						JSON.stringify(Object.fromEntries(paths)),
-					),
-				),
+						JSON.stringify(Object.fromEntries(paths))
+					)
+				)
 			);
 			console.info(`observe: raw counts in ${rawDir}`);
 			return;
@@ -249,7 +249,7 @@ const main = async (): Promise<void> => {
 		// One after another so the output lines keep their order.
 		await runEach(
 			sorted([...merged], ([a], [b]) => (a < b ? -1 : 1)),
-			([schemaFile, paths]) => writeFixture(schemaFile, paths),
+			([schemaFile, paths]) => writeFixture(schemaFile, paths)
 		);
 	} finally {
 		await rm(tmp, { recursive: true, force: true });

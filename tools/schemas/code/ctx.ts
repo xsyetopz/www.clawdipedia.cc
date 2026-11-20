@@ -8,7 +8,7 @@ import {
 	type Fn,
 	isFn,
 	type Module,
-	type Node,
+	type Node
 } from "../../../inspect/mcp/src/ast.ts";
 import { extractModules } from "../../../inspect/mcp/src/bunfs.ts";
 import { type Entry, Resolver } from "../../../inspect/mcp/src/resolve.ts";
@@ -48,11 +48,11 @@ const { modules: binModules } = await extractModules(BIN);
 export const bundle = new Bundle(
 	binModules
 		.filter((m) => /\.m?js$/u.test(m.name))
-		.map((m) => ({ name: m.name, text: m.source })),
+		.map((m) => ({ name: m.name, text: m.source }))
 );
 export const mods: Text[] = [...bundle.texts].map(([name, text]) => ({
 	name,
-	text,
+	text
 }));
 export const R = new Resolver();
 /** The parsed module of a file that `mods` lists. */
@@ -92,7 +92,7 @@ export const idx = (src: Src, needle: string | RegExp): number => {
 /** Entries of the object literal that starts at the `{` that ends the regex match. */
 export const literalAfter = async (
 	src: Src,
-	re: RegExp,
+	re: RegExp
 ): Promise<{ entries: Entry[]; at: number }> => {
 	const m = re.exec(src.text);
 	if (!m) {
@@ -105,7 +105,7 @@ export const literalAfter = async (
 export const fnAround = (
 	src: Src,
 	pos: number,
-	test: (f: Fn) => boolean,
+	test: (f: Fn) => boolean
 ): Fn | undefined => {
 	for (let n: Node | undefined = src.nodeAt(pos); n; n = src.parent(n)) {
 		if (isFn(n) && test(n)) {
@@ -129,15 +129,15 @@ const readOptional = async (path: string): Promise<Json | undefined> => {
 const PRELOAD = [
 	join(OUT, "claude-code-stream-json.json"),
 	join(CAPTURES, "print/transcripts.lines.json"),
-	join(CAPTURES, "pty/statusline.refresh-interval.json"),
+	join(CAPTURES, "pty/statusline.refresh-interval.json")
 ];
 const preloaded = new Map<string, Json | undefined>(
 	await Promise.all(
 		PRELOAD.map(async (p): Promise<[string, Json | undefined]> => [
 			p,
-			await readOptional(p),
-		]),
-	),
+			await readOptional(p)
+		])
+	)
 );
 export const readJson = (path: string): Json | undefined => {
 	if (!preloaded.has(path)) {
@@ -155,7 +155,7 @@ export const header = (file: string, title: string, comment: string): Json => ({
 	$schema: "https://json-schema.org/draft/2020-12/schema",
 	$id: `${BASE_URL}/${file}`,
 	title: `${title} (Claude Code ${VERSION})`,
-	$comment: `${comment} A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.`,
+	$comment: `${comment} A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.`
 });
 
 const isProps = (v: unknown): v is Record<string, Json> => isJson(v);

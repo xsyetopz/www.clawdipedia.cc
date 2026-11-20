@@ -14,7 +14,7 @@ import {
 	READY,
 	sha8,
 	toolNames,
-	toolResultText,
+	toolResultText
 } from "./harness.ts";
 
 interface Input {
@@ -27,7 +27,7 @@ export const agentCase = (
 	id: string,
 	input: Input,
 	note: string,
-	extra?: Partial<PtyCase>,
+	extra?: Partial<PtyCase>
 ): PtyCase => ({
 	id,
 	stub: { seq: [{ name: "Agent", input }] },
@@ -36,13 +36,13 @@ export const agentCase = (
 	facts: ["agents.types"],
 	notes: note,
 	data: (x) => agentData(x),
-	...extra,
+	...extra
 });
 
 /** The requests the subagent made (the billing header carries cc_is_subagent=true). */
 export const subRequests = (x: PtyRun) =>
 	x.messages.filter((q) =>
-		JSON.stringify(q.body).includes("cc_is_subagent=true"),
+		JSON.stringify(q.body).includes("cc_is_subagent=true")
 	);
 
 /** System text of the first subagent request without the billing-header block (it holds a build hash). */
@@ -82,7 +82,7 @@ const agentData = (x: PtyRun): Record<string, Data> => {
 		toolResultHead: result.trim().slice(0, 200),
 		backgrounded: /Backgrounded agent/iu.test(result),
 		asyncLaunched: /Async agent launched/iu.test(result),
-		toolResultMentionsType: result.includes("no-such-agent-type"),
+		toolResultMentionsType: result.includes("no-such-agent-type")
 	};
 };
 
@@ -92,28 +92,28 @@ const agents: PtyCase[] = [
 		{
 			description: "Probe task",
 			prompt: PROMPT,
-			subagent_type: "general-purpose",
+			subagent_type: "general-purpose"
 		},
-		"Built-in general-purpose subagent. The Agent input prompt is the standard prompt.",
+		"Built-in general-purpose subagent. The Agent input prompt is the standard prompt."
 	),
 	agentCase(
 		"agents.unknown-type",
 		{
 			description: "Probe task",
 			prompt: PROMPT,
-			subagent_type: "no-such-agent-type",
+			subagent_type: "no-such-agent-type"
 		},
-		"An unknown subagent_type: the tool result should be an error naming the type.",
+		"An unknown subagent_type: the tool result should be an error naming the type."
 	),
 	agentCase(
 		"agents.fork",
 		{ description: "Probe task", prompt: PROMPT },
-		"No subagent_type: either a fork of the main agent or the default type.",
-	),
+		"No subagent_type: either a fork of the main agent or the default type."
+	)
 ];
 
 export const agentsGroup: PtyGroup = {
 	id: "agents",
 	title: "Agent tool: built-in, unknown, and forked subagents",
-	cases: () => agents,
+	cases: () => agents
 };

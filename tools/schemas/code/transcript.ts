@@ -21,7 +21,7 @@ import {
 	readJson,
 	sortedKeys,
 	type Src,
-	VERSION,
+	VERSION
 } from "./ctx.ts";
 import { objSchema } from "./schema.ts";
 import { addCodeKeys, addProbeKeys } from "./transcript-keys.ts";
@@ -31,7 +31,7 @@ const CHAIN = new Set([
 	"assistant",
 	"system",
 	"attachment",
-	"progress",
+	"progress"
 ]);
 
 interface Site {
@@ -45,7 +45,7 @@ const REGISTRY = '{user:"transcript",assistant:"transcript"';
 
 /** Entry types of the registry, and the policy string of each that has one. */
 const readRegistry = async (
-	reg: Src,
+	reg: Src
 ): Promise<{ types: string[]; policy: Map<string, string> }> => {
 	const registry = await R.objectAt(reg, idx(reg, REGISTRY));
 	const types = registry.flatMap((e) => ("key" in e ? [e.key] : []));
@@ -80,7 +80,7 @@ const addSite = (sites: Sites, t: string, site: Site): void => {
 const midSites = async (
 	m: Src,
 	hits: RegExpExecArray[],
-	sites: Sites,
+	sites: Sites
 ): Promise<void> => {
 	await mapSeq(hits, async (h) => {
 		const t = group(h, 1);
@@ -115,7 +115,7 @@ const collectSites = async (types: string[]): Promise<Sites> => {
 			addSite(sites, group(hit, 1), {
 				src: m,
 				at: hit.index,
-				entries: await R.objectAt(m, hit.index),
+				entries: await R.objectAt(m, hit.index)
 			});
 		});
 		await midSites(m, later, sites);
@@ -167,8 +167,8 @@ const useSites = (t: string, x: Shared): Site[] => {
 					t,
 					keysOf(s.entries),
 					x.streamKeys,
-					s.src.text.slice(Math.max(0, s.at - 8), s.at),
-				) && !isUnpersisted(t, s.entries),
+					s.src.text.slice(Math.max(0, s.at - 8), s.at)
+				) && !isUnpersisted(t, s.entries)
 		);
 	}
 	const use = all.filter((s) => keysOf(s.entries).includes("sessionId"));
@@ -179,7 +179,7 @@ const useSites = (t: string, x: Shared): Site[] => {
 const typeDef = async (
 	t: string,
 	x: Shared,
-	noCode: string[],
+	noCode: string[]
 ): Promise<Json> => {
 	const use = useSites(t, x);
 	const pinned = await mapSeq(use, (s) => R.pin(s.entries));
@@ -228,7 +228,7 @@ export const buildTranscript = async (): Promise<{
 		common: await commonFields(),
 		streamKeys: streamKeysOf(),
 		data: isJson(rawData) ? rawData : {},
-		policy,
+		policy
 	};
 
 	const $defs: Record<string, Json> = {};
@@ -238,7 +238,7 @@ export const buildTranscript = async (): Promise<{
 	});
 	if (noCode.length > 0) {
 		note(
-			`transcript: read-only types (the program reads them, and no code in this build writes them): ${noCode.join(", ")}`,
+			`transcript: read-only types (the program reads them, and no code in this build writes them): ${noCode.join(", ")}`
 		);
 	}
 	for (const k of Object.keys(x.data)) {
@@ -248,17 +248,17 @@ export const buildTranscript = async (): Promise<{
 	}
 
 	const ordered = Object.fromEntries(
-		sortedKeys($defs).map((k): [string, Json] => [k, $defs[k] ?? {}]),
+		sortedKeys($defs).map((k): [string, Json] => [k, $defs[k] ?? {}])
 	);
 	const out: Json = {
 		...header(
 			"claude-code-transcript.json",
 			"Claude Code transcript JSONL entry",
-			`For one line of a session transcript (.jsonl). Generated from Claude Code ${VERSION} by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to "transcript"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:"<entry type>" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand.`,
+			`For one line of a session transcript (.jsonl). Generated from Claude Code ${VERSION} by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to "transcript"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:"<entry type>" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand.`
 		),
 		type: "object",
 		oneOf: Object.keys(ordered).map((t) => ({ $ref: `#/$defs/${t}` })),
-		$defs: ordered,
+		$defs: ordered
 	};
 	return { file: "claude-code-transcript.json", schema: out };
 };

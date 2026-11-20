@@ -36,7 +36,7 @@ const markCell = (cell: Node): void => {
 		properties: spoken
 			? { className: ["cc-mark"], ariaHidden: "true" }
 			: { className: ["cc-mark"], role: "img", ariaLabel: label },
-		children: [{ type: "text", value: glyph }],
+		children: [{ type: "text", value: glyph }]
 	};
 	const tail: Node[] = rest === "" ? [] : [{ type: "text", value: rest }];
 	cell.children.splice(0, 1, span, ...tail);

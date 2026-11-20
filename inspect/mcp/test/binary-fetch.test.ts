@@ -33,11 +33,11 @@ const registry = Bun.serve({
 		if (path.endsWith("/9.8.7")) {
 			return Response.json({
 				version: "9.8.7",
-				dist: { tarball: `${registry.url.origin}/p.tgz`, integrity },
+				dist: { tarball: `${registry.url.origin}/p.tgz`, integrity }
 			});
 		}
 		return new Response("no", { status: 404 });
-	},
+	}
 });
 process.env["CC_INSPECT_NPM_REGISTRY"] = registry.url.origin;
 const { binaryPath, nativePackage } = await import("../src/binary.ts");

@@ -13,7 +13,7 @@ export {
 	LEAN_MODEL,
 	type PromptGroup,
 	SUB_MARK,
-	type Variant,
+	type Variant
 } from "./variants/base.ts";
 
 export const VARIANTS: Variant[] = [
@@ -23,5 +23,5 @@ export const VARIANTS: Variant[] = [
 	...AGENT_VARIANTS,
 	...COMMAND_VARIANTS,
 	...HOOK_VARIANTS,
-	...MISC_VARIANTS,
+	...MISC_VARIANTS
 ];

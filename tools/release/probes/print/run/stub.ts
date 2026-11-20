@@ -3,7 +3,7 @@ import {
 	type LoggedRequest,
 	readLog,
 	startStub,
-	type Stub,
+	type Stub
 } from "../../../lib/stub.ts";
 import { pathExists } from "./files.ts";
 

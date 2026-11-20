@@ -15,7 +15,7 @@ const cache = new WeakMap<Bundle, Map<string, Promise<SurfaceItem[]>>>();
 const run = async (
 	f: Extractor,
 	bundle: Bundle,
-	files: Parameters<Extractor>[1],
+	files: Parameters<Extractor>[1]
 ): Promise<SurfaceItem[]> => {
 	const items = await f(bundle, files);
 	return items;
@@ -28,12 +28,12 @@ const run = async (
 export const surface = async (
 	bundle: Bundle,
 	kind: string,
-	files?: Parameters<Extractor>[1],
+	files?: Parameters<Extractor>[1]
 ): Promise<SurfaceItem[]> => {
 	const f = KINDS[kind];
 	if (!f) {
 		throw new Error(
-			`unknown kind "${kind}"; kinds: ${Object.keys(KINDS).join(", ")}`,
+			`unknown kind "${kind}"; kinds: ${Object.keys(KINDS).join(", ")}`
 		);
 	}
 	const byKind = cache.get(bundle) ?? new Map<string, Promise<SurfaceItem[]>>();
@@ -58,8 +58,8 @@ if (import.meta.main) {
 			binary: { type: "string" },
 			kind: { type: "string" },
 			names: { type: "boolean" },
-			json: { type: "boolean" },
-		},
+			json: { type: "boolean" }
+		}
 	});
 	const p = await program(a.binary);
 	const bundle = p.bundle();

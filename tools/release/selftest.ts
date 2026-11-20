@@ -16,13 +16,13 @@ import { binaryPath, type Ctx } from "./util.ts";
 
 const selftestSteps = async (
 	ctx: Ctx,
-	step: (name: string, ok: boolean, detail?: string) => void,
+	step: (name: string, ok: boolean, detail?: string) => void
 ): Promise<number> => {
 	const poisoned = poisonEnv();
 	const sb = await makeSandbox({
 		git: true,
 		trusted: true,
-		cfgFiles: { "settings.json": SETTINGS },
+		cfgFiles: { "settings.json": SETTINGS }
 	});
 	const out = await makeOut();
 	const stubPort = await allocPort();
@@ -43,7 +43,7 @@ const selftestSteps = async (
 			out,
 			bin,
 			names,
-			parentValues: poisoned.parentValues,
+			parentValues: poisoned.parentValues
 		});
 		await runResultChecks({ ctx, step, sb, stub, stubPort, out, dir });
 		return 0;
@@ -59,7 +59,7 @@ export const runSelftest = async (ctx: Ctx): Promise<number> => {
 	let failed = 0;
 	const step = (name: string, ok: boolean, detail = "") => {
 		console.info(
-			`${ok ? "PASS" : "FAIL"} ${name}${detail === "" ? "" : `: ${detail}`}`,
+			`${ok ? "PASS" : "FAIL"} ${name}${detail === "" ? "" : `: ${detail}`}`
 		);
 		if (!ok) {
 			failed++;

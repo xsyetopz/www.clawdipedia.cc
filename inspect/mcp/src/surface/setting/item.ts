@@ -5,7 +5,7 @@ import { asNode, short, type SurfaceItem } from "../common.ts";
 /** The `.describe("…")` text of the outer zod chain of a getter `()=>z…describe("…").optional()`. */
 export const describe = (
 	m: Module,
-	n: Node | undefined,
+	n: Node | undefined
 ): Promise<string | undefined> => {
 	const walk = async (cur: Node | undefined): Promise<string | undefined> => {
 		if (
@@ -31,7 +31,7 @@ export const item = async (
 	name: string,
 	value: Node,
 	offset: number,
-	gate?: string,
+	gate?: string
 ): Promise<SurfaceItem> => {
 	const d = await describe(m, value);
 	return {
@@ -40,6 +40,6 @@ export const item = async (
 		module: m.name,
 		offset,
 		...(d !== undefined && d !== "" && { detail: short(d) }),
-		...(gate !== undefined && gate !== "" && { gate }),
+		...(gate !== undefined && gate !== "" && { gate })
 	};
 };

@@ -5,7 +5,7 @@ import {
 	msgs,
 	readCfg,
 	type Run,
-	withRun,
+	withRun
 } from "../run/helpers.ts";
 import { DBG, lines, USER } from "./util.ts";
 
@@ -13,7 +13,7 @@ export const POLICY = JSON.stringify({
 	terminal_tools: ["mcp__probe__reply"],
 	ask_text: "Call the reply tool.",
 	max_asks_after_person: 1,
-	max_asks_after_server_event: 1,
+	max_asks_after_server_event: 1
 });
 
 export const replyGate = (name: string, value?: string): CaseDef => ({
@@ -23,8 +23,7 @@ export const replyGate = (name: string, value?: string): CaseDef => ({
 			ctx,
 			{
 				args: [...BASE, ...DBG],
-				env:
-					value === undefined ? {} : { CLAUDE_CODE_REPLY_GATE_POLICY: value },
+				env: value === undefined ? {} : { CLAUDE_CODE_REPLY_GATE_POLICY: value }
 			},
 			async (r) => {
 				const log = await readCfg(r, "d.log");
@@ -35,12 +34,12 @@ export const replyGate = (name: string, value?: string): CaseDef => ({
 						precondition: msgs(r).length > 0,
 						capabilities: JSON.stringify(caps ?? null),
 						accepted: log.includes("CLAUDE_CODE_REPLY_GATE_POLICY accepted"),
-						ignored: log.includes("ignoring CLAUDE_CODE_REPLY_GATE_POLICY"),
+						ignored: log.includes("ignoring CLAUDE_CODE_REPLY_GATE_POLICY")
 					},
-					samples: { debug: lines(log, /REPLY_GATE_POLICY/u) },
+					samples: { debug: lines(log, /REPLY_GATE_POLICY/u) }
 				};
-			},
-		),
+			}
+		)
 });
 
 export const delta = (name: string, env: Record<string, string>): CaseDef => ({
@@ -51,7 +50,7 @@ export const delta = (name: string, env: Record<string, string>): CaseDef => ({
 			{
 				args: [...BASE, "--include-partial-messages"],
 				text: "OK ".repeat(40),
-				env,
+				env
 			},
 			(r) => ({
 				from: r,
@@ -60,23 +59,23 @@ export const delta = (name: string, env: Record<string, string>): CaseDef => ({
 					streamEvents: r.stdout
 						.split("\n")
 						.filter((l) => l.includes('"stream_event"')).length,
-					streamBytes: r.stdout.length,
-				},
-			}),
-		),
+					streamBytes: r.stdout.length
+				}
+			})
+		)
 });
 
 const subs = (v: boolean | null) =>
 	JSON.stringify({
 		type: "control_request",
 		request_id: "r1",
-		request: { subtype: "set_has_subscribers", has_subscribers: v },
+		request: { subtype: "set_has_subscribers", has_subscribers: v }
 	});
 
 const holdOut = async (
 	r: Run,
 	t0: number,
-	watched: boolean | null | undefined,
+	watched: boolean | null | undefined
 ) => {
 	const log = await readCfg(r, "d.log");
 	const answered = r.stdout
@@ -85,7 +84,7 @@ const holdOut = async (
 			(l) =>
 				l.includes('"control_response"') &&
 				l.includes('"r1"') &&
-				l.includes('"success"'),
+				l.includes('"success"')
 		);
 	return {
 		from: r,
@@ -94,15 +93,15 @@ const holdOut = async (
 			controlAnswered: watched === undefined ? null : answered,
 			holdLog: log.includes("STREAM_EVENT_HOLD_MS"),
 			noSubscriberCounter: log.includes(
-				"print_stream_event_no_subscriber_hold",
+				"print_stream_event_no_subscriber_hold"
 			),
 			holdCounter: log.includes("print_stream_event_hold"),
 			deltaLines: r.stdout
 				.split("\n")
 				.filter((l) => l.includes('"content_block_delta"')).length,
-			wallMs: Date.now() - t0,
+			wallMs: Date.now() - t0
 		},
-		samples: { debug: lines(log, /stream_event|STREAM_EVENT/iu) },
+		samples: { debug: lines(log, /stream_event|STREAM_EVENT/iu) }
 	};
 };
 
@@ -111,7 +110,7 @@ export const hold = (
 	name: string,
 	env: Record<string, string>,
 	watched?: boolean | null,
-	spaced = false,
+	spaced = false
 ): CaseDef => ({
 	name: `stream-hold.${name}`,
 	run: (ctx) => {
@@ -127,14 +126,14 @@ export const hold = (
 					...DBG,
 					"--input-format",
 					"stream-json",
-					"--include-partial-messages",
+					"--include-partial-messages"
 				],
 				stdin: `${watched === undefined ? "" : `${subs(watched)}\n`}${USER}\n`,
-				env: { CLAUDE_CODE_STREAM_EVENT_MAX_LINE_BYTES: "100000", ...env },
+				env: { CLAUDE_CODE_STREAM_EVENT_MAX_LINE_BYTES: "100000", ...env }
 			},
-			(r) => holdOut(r, t0, watched),
+			(r) => holdOut(r, t0, watched)
 		);
-	},
+	}
 });
 
 const trinketOut = async (r: Run) => {
@@ -148,9 +147,9 @@ const trinketOut = async (r: Run) => {
 			reactiveCompactLogged: /Reactive compact/iu.test(log),
 			requestsWithMark: bodies.filter((b) => b.includes("TRINKET_MARK")).length,
 			markInRequest: bodies.map((b) => b.includes("TRINKET_MARK")).join(","),
-			compactRequests: bodies.filter((b) => b.includes("<summary>")).length,
+			compactRequests: bodies.filter((b) => b.includes("<summary>")).length
 		},
-		samples: { debug: lines(log, /compact/iu, 8) },
+		samples: { debug: lines(log, /compact/iu, 8) }
 	};
 };
 
@@ -166,8 +165,8 @@ export const trinket = (name: string, value?: string): CaseDef => ({
 				text: "<summary>S</summary>OK",
 				args: [...BASE, ...DBG, "--input-format", "stream-json"],
 				stdin: `${USER}\n${USER}\n`,
-				env: value === undefined ? {} : { CLAUDE_CODE_CURRIED_TRINKET: value },
+				env: value === undefined ? {} : { CLAUDE_CODE_CURRIED_TRINKET: value }
 			},
-			trinketOut,
-		),
+			trinketOut
+		)
 });

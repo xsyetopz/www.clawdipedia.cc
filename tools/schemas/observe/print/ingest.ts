@@ -23,7 +23,7 @@ export const counts = {
 	metricPoints: 0,
 	spans: 0,
 	transcriptLines: 0,
-	claudeJsonFiles: 0,
+	claudeJsonFiles: 0
 };
 
 /** OTLP AnyValue to the JSON type the attribute has. intValue is a JSON string in OTLP/JSON. */
@@ -66,7 +66,7 @@ const note = (root: string, attrs: Map<string, string>): void => {
 };
 const bump = (
 	s: { n: number; types: Record<string, number> } | undefined,
-	t: string,
+	t: string
 ) => {
 	const r = s ?? { n: 0, types: {} };
 	r.n++;
@@ -88,7 +88,7 @@ const leaves = (
 	body: Obj,
 	resourceKey: string,
 	scopeKey: string,
-	leafKey: string,
+	leafKey: string
 ): unknown[] =>
 	arr(body[resourceKey])
 		.flatMap((r) => arr(obj(r)[scopeKey]))
@@ -106,7 +106,7 @@ const ingestMetrics = (body: Obj): void => {
 	for (const m of leaves(body, "resourceMetrics", "scopeMetrics", "metrics")) {
 		const mm = obj(m);
 		const pts = arr(
-			obj(mm["sum"])["dataPoints"] ?? obj(mm["gauge"])["dataPoints"],
+			obj(mm["sum"])["dataPoints"] ?? obj(mm["gauge"])["dataPoints"]
 		);
 		for (const dp of pts) {
 			counts.metricPoints++;

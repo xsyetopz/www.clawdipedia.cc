@@ -21,7 +21,7 @@ export const PAGES: Record<string, string[]> = {
 	subcommand: ["docs/configure/cli"],
 	"slash-command": [
 		"docs/configure/cli",
-		"docs/extend/skills-and-commands/slash-commands.md",
+		"docs/extend/skills-and-commands/slash-commands.md"
 	],
 	setting: ["docs/configure/settings"],
 	"setting-key": ["docs/configure", "docs/extend"],
@@ -36,7 +36,7 @@ export const PAGES: Record<string, string[]> = {
 	endpoint: ["docs/reference/api/endpoints.md"],
 	keybinding: ["docs/configure/keybindings"],
 	file: ["docs/start/files-on-disk.md"],
-	error: ["docs"],
+	error: ["docs"]
 };
 
 export interface MapEntry {
@@ -99,14 +99,14 @@ const namesOf = (text: string): string[] => {
 /** The exact backticked names in the name cell (the first) of the table rows of the pages, each with its first file. A missing page names nothing. */
 export const docsNames = async (
 	root: string,
-	pages: string[],
+	pages: string[]
 ): Promise<Map<string, string>> => {
 	const listed = await Promise.all(pages.map((p) => markdown(join(root, p))));
 	const files = listed.flat().filter((f) => f !== join(root, GENERATED));
 	const texts = await Promise.all(files.map((f) => Bun.file(f).text()));
 	const names = new Map<string, string>();
 	const pairs = files.flatMap((file, i) =>
-		namesOf(texts[i] ?? "").map((name): [string, string] => [name, file]),
+		namesOf(texts[i] ?? "").map((name): [string, string] => [name, file])
 	);
 	for (const [name, file] of pairs) {
 		if (!names.has(name)) {
@@ -127,7 +127,7 @@ export const status = (
 	name: string,
 	docs: Names,
 	map: Record<string, MapEntry>,
-	exclusions: Record<string, string>,
+	exclusions: Record<string, string>
 ): Status => {
 	const key = `${kind}:${name}`;
 	if (docs[kind]?.has(name) === true) {
@@ -145,7 +145,7 @@ export const status = (
 /** The map entry of an item key: the key itself, or for an `error` item the longest matching prefix key. */
 export const mapOf = (
 	key: string,
-	map: Record<string, MapEntry>,
+	map: Record<string, MapEntry>
 ): MapEntry | undefined => {
 	if (key in map) {
 		return map[key];
@@ -163,26 +163,26 @@ export const mapOf = (
 /** The exclusion key that covers an item key: the key itself or a matching prefix. */
 export const exclusionOf = (
 	key: string,
-	exclusions: Record<string, string>,
+	exclusions: Record<string, string>
 ): string | undefined =>
 	key in exclusions
 		? key
 		: Object.keys(exclusions).find(
-				(p) => p.endsWith("*") && key.startsWith(p.slice(0, -1)),
+				(p) => p.endsWith("*") && key.startsWith(p.slice(0, -1))
 			);
 
 const staleOf = (
 	file: string,
 	list: string[],
 	keys: Set<string>,
-	left: (key: string) => boolean,
+	left: (key: string) => boolean
 ): string[] =>
 	list
 		.filter((key) => !left(key))
 		.filter((key) =>
 			key.endsWith("*")
 				? ![...keys].some((k) => k.startsWith(key.slice(0, -1)))
-				: !keys.has(key),
+				: !keys.has(key)
 		)
 		.map((key) => `${file}: ${key}`);
 
@@ -192,7 +192,7 @@ export const check = (
 	docs: Names,
 	map: Record<string, MapEntry>,
 	exclusions: Record<string, string>,
-	only?: string[],
+	only?: string[]
 ): Result => {
 	const kinds = only ?? Object.keys(snapshot.kinds);
 	const keys = new Set<string>();
@@ -205,7 +205,7 @@ export const check = (
 			docs: 0,
 			mapped: 0,
 			excluded: 0,
-			unmapped: 0,
+			unmapped: 0
 		};
 		for (const { name } of snapshot.kinds[kind] ?? []) {
 			const key = `${kind}:${name}`;
@@ -226,7 +226,7 @@ export const check = (
 		Object.keys(snapshot.kinds).includes(kindOf(key));
 	const stale = [
 		...staleOf("map.json", Object.keys(map), keys, left),
-		...staleOf("exclusions.json", Object.keys(exclusions), keys, left),
+		...staleOf("exclusions.json", Object.keys(exclusions), keys, left)
 	];
 	return { rows, unmapped, stale };
 };
@@ -245,7 +245,7 @@ const hasReason = (v: unknown) => typeof v === "string" && v.trim() !== "";
 /** Problems with the shape of the map and the exclusions. */
 export const shape = (
 	map: Record<string, MapEntry>,
-	exclusions: Record<string, string>,
+	exclusions: Record<string, string>
 ): string[] => {
 	const bad: string[] = [];
 	for (const [k, v] of Object.entries(map)) {
@@ -256,7 +256,7 @@ export const shape = (
 	for (const k of Object.keys(map)) {
 		if (k.endsWith("*") && !k.startsWith("error:")) {
 			bad.push(
-				`map.json: ${k} ends in "*", a prefix key only for the error kind`,
+				`map.json: ${k} ends in "*", a prefix key only for the error kind`
 			);
 		}
 	}
@@ -267,11 +267,11 @@ export const shape = (
 	}
 	for (const [file, keys] of [
 		["map.json", Object.keys(map)],
-		["exclusions.json", Object.keys(exclusions)],
+		["exclusions.json", Object.keys(exclusions)]
 	] as const) {
 		for (const p of keys.filter((q) => shortPrefix(q))) {
 			bad.push(
-				`${file}: ${p} needs a prefix of ${MIN_PREFIX} characters or more before the *`,
+				`${file}: ${p} needs a prefix of ${MIN_PREFIX} characters or more before the *`
 			);
 		}
 	}

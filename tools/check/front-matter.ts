@@ -19,13 +19,13 @@ export const parseFrontMatter = (text: string): FrontMatter | null => {
 		yaml = Bun.YAML.parse(lines.slice(1, end).join("\n"));
 	} catch (error) {
 		throw new Error(`front matter is not valid YAML: ${String(error)}`, {
-			cause: error,
+			cause: error
 		});
 	}
 	const entries =
 		typeof yaml === "object" && yaml !== null ? Object.entries(yaml) : [];
 	return {
 		data: Object.fromEntries(entries.map(([k, v]) => [k, String(v)])),
-		bodyStart: end + 1,
+		bodyStart: end + 1
 	};
 };

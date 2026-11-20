@@ -67,7 +67,7 @@ export const parseApi = (body: unknown): ApiReq => {
 		stream: r["stream"] === true,
 		toolResults: countResults(messages),
 		toolNames,
-		last: JSON.stringify(messages.at(-1) ?? null),
+		last: JSON.stringify(messages.at(-1) ?? null)
 	};
 };
 
@@ -77,7 +77,7 @@ const USAGE = {
 	input_tokens: 10,
 	output_tokens: 5,
 	cache_creation_input_tokens: 0,
-	cache_read_input_tokens: 0,
+	cache_read_input_tokens: 0
 };
 
 /** Adds the server-side safeguard verdict for each tool call when the case asks for one. */
@@ -97,11 +97,11 @@ export const verdict = (m: Msg, o: StubCase): Msg => {
 				status: {
 					type: "available",
 					tool_uses: Object.fromEntries(
-						ids.map((id) => [id, { type: "evaluated", outcome: o.safeguard }]),
-					),
-				},
-			},
-		],
+						ids.map((id) => [id, { type: "evaluated", outcome: o.safeguard }])
+					)
+				}
+			}
+		]
 	};
 };
 
@@ -111,17 +111,17 @@ const toolTurn = (
 	base: Base,
 	id: string,
 	name: string,
-	input: unknown,
+	input: unknown
 ): Msg => ({
 	...base,
 	content: [{ type: "tool_use", id, name, input }],
-	stop_reason: "tool_use",
+	stop_reason: "tool_use"
 });
 
 /** The scripted turn for a request: only main-loop requests (with tools) take one. A rule wins over `turns`. */
 export const pickTurn = (
 	api: ApiReq,
-	o: StubCase,
+	o: StubCase
 ): StubReply | null | undefined => {
 	if (api.toolNames.size === 0) {
 		return undefined;
@@ -136,9 +136,9 @@ const scripted = (base: Base, turn: StubReply & { kind: "message" }): Msg => ({
 	content: turn.content,
 	stop_reason: turn.stop_reason,
 	...(turn.stop_details !== undefined && {
-		stop_details: turn.stop_details,
+		stop_details: turn.stop_details
 	}),
-	...(turn.open === true && { open: true }),
+	...(turn.open === true && { open: true })
 });
 
 // The next tool call of `seq`, or the one `tool` call; null when the case has none for this request.
@@ -162,7 +162,7 @@ const toolStep = (base: Base, api: ApiReq, o: StubCase): Msg | null => {
 export const reply = (
 	api: ApiReq,
 	o: StubCase,
-	turn = pickTurn(api, o),
+	turn = pickTurn(api, o)
 ): Msg => {
 	const base: Base = {
 		id: "msg_probe",
@@ -170,7 +170,7 @@ export const reply = (
 		role: "assistant",
 		model: api.model ?? "claude-sonnet-5-5",
 		stop_sequence: null,
-		usage: USAGE,
+		usage: USAGE
 	};
 	if (turn?.kind === "message") {
 		return scripted(base, turn);
@@ -179,7 +179,7 @@ export const reply = (
 		toolStep(base, api, o) ?? {
 			...base,
 			content: [{ type: "text", text: o.text ?? "OK" }],
-			stop_reason: "end_turn",
+			stop_reason: "end_turn"
 		}
 	);
 };
@@ -188,7 +188,7 @@ const blockEvents = (
 	b: Block,
 	i: number,
 	deltas: number,
-	open = false,
+	open = false
 ): string => {
 	const isText = b.type === "text";
 	const start = isText ? { type: "text", text: "" } : { ...b, input: {} };
@@ -198,7 +198,7 @@ const blockEvents = (
 	let out = sse("content_block_start", {
 		type: "content_block_start",
 		index: i,
-		content_block: start,
+		content_block: start
 	});
 	for (let k = 0; k < n; k++) {
 		const p = full.slice(k * size, (k + 1) * size);
@@ -207,7 +207,7 @@ const blockEvents = (
 			index: i,
 			delta: isText
 				? { type: "text_delta", text: p }
-				: { type: "input_json_delta", partial_json: p },
+				: { type: "input_json_delta", partial_json: p }
 		});
 	}
 	return open
@@ -220,14 +220,14 @@ export const stream = (m: Msg, deltas = 1): string => {
 	const { safeguard_results: _, open, ...head } = m;
 	let out = sse("message_start", {
 		type: "message_start",
-		message: { ...head, content: [], stop_reason: null },
+		message: { ...head, content: [], stop_reason: null }
 	});
 	for (const [i, b] of m.content.entries()) {
 		out += blockEvents(
 			b,
 			i,
 			deltas,
-			open === true && i === m.content.length - 1,
+			open === true && i === m.content.length - 1
 		);
 	}
 	out += sse("message_delta", {
@@ -237,10 +237,10 @@ export const stream = (m: Msg, deltas = 1): string => {
 			stop_sequence: null,
 			...(m.stop_details !== undefined && { stop_details: m.stop_details }),
 			...(m.safeguard_results !== undefined && {
-				safeguard_results: m.safeguard_results,
-			}),
+				safeguard_results: m.safeguard_results
+			})
 		},
-		usage: { output_tokens: 5 },
+		usage: { output_tokens: 5 }
 	});
 	return out + sse("message_stop", { type: "message_stop" });
 };
@@ -248,7 +248,7 @@ export const stream = (m: Msg, deltas = 1): string => {
 /** The same events as `stream`, one every `gapMs` ms. */
 export const slowStream = (
 	text: string,
-	gapMs: number,
+	gapMs: number
 ): ReadableStream<Uint8Array> => {
 	const events = text.split("\n\n").filter((e) => e !== "");
 	const enc = new TextEncoder();
@@ -265,6 +265,6 @@ export const slowStream = (
 			}
 			i += 1;
 			c.enqueue(enc.encode(`${ev}\n\n`));
-		},
+		}
 	});
 };

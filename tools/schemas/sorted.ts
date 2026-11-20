@@ -4,7 +4,7 @@
  */
 export const sorted = <T>(
 	items: readonly T[],
-	compare: (a: T, b: T) => number,
+	compare: (a: T, b: T) => number
 ): T[] => {
 	const out: T[] = [];
 	for (const item of items) {

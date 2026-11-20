@@ -12,7 +12,7 @@ import type { LiveCtx } from "../harness.ts";
 
 /** Refuses a mismatch of token and mode, and a missing binary. */
 export const preflight = async (
-	ctx: Ctx,
+	ctx: Ctx
 ): Promise<{ token: string; bin: string }> => {
 	if (ctx.to === "") {
 		throw new Error("no --to given and no installed binary found");
@@ -20,7 +20,7 @@ export const preflight = async (
 	const token = liveToken();
 	if (ctx.dry && token !== DRY_TOKEN) {
 		throw new Error(
-			"--dry only runs with the fake dry token; refusing a real one",
+			"--dry only runs with the fake dry token; refusing a real one"
 		);
 	}
 	if (!ctx.dry && token === DRY_TOKEN) {
@@ -37,7 +37,7 @@ export const preflight = async (
 export const makeCtx = async (
 	ctx: Ctx,
 	token: string,
-	bin: string,
+	bin: string
 ): Promise<{ x: LiveCtx; tmp: string }> => {
 	const tmp = ctx.dry
 		? await realpath(await mkdtemp(join(tmpdir(), "ccrel-livedry-")))
@@ -54,9 +54,9 @@ export const makeCtx = async (
 			? {
 					stub,
 					stubBase: (id: string) =>
-						stub.register(id, { log: join(tmp, `${id}.jsonl`) }),
+						stub.register(id, { log: join(tmp, `${id}.jsonl`) })
 				}
-			: {}),
+			: {})
 	};
 	return { x, tmp };
 };

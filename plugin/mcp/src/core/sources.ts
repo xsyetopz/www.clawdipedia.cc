@@ -3,7 +3,7 @@ import {
 	claudeResourcesBase,
 	type ClaudeResourcesEntry,
 	nearClaudeResources,
-	normalizeClaudeResourcesPath,
+	normalizeClaudeResourcesPath
 } from "../claude-resources.ts";
 import { codeBase, nearCode, normalizeCodePath } from "../code.ts";
 import type { Resource, Source } from "../fetcher.ts";
@@ -11,7 +11,7 @@ import { htmlTitle, htmlToMarkdown } from "../html.ts";
 import {
 	nearPlatform,
 	normalizePlatformPath,
-	platformBase,
+	platformBase
 } from "../platform.ts";
 import { present } from "../text.ts";
 import { claudeResources, code, platform } from "./shared.ts";
@@ -38,7 +38,7 @@ export interface RemoteSource {
 		search: (
 			query: string,
 			limit: number,
-			group?: string,
+			group?: string
 		) => { entry: RemoteItem; score: number; snippet: string }[];
 	}>;
 	known: () => readonly RemoteItem[] | undefined;
@@ -66,7 +66,7 @@ const platformSource: RemoteSource = {
 	pageUrl: (p) => `${platformBase()}/docs/en/${p}`,
 	markdown: (body) => body,
 	titleOf: (body) => /^title:\s*(.+)$/mu.exec(body.slice(0, 1000))?.[1]?.trim(),
-	pageTitleFirst: false,
+	pageTitleFirst: false
 };
 
 const codeSource: RemoteSource = {
@@ -82,7 +82,7 @@ const codeSource: RemoteSource = {
 	pageUrl: (p) => `${codeBase()}/docs/en/${p}`,
 	markdown: (body) => body,
 	titleOf: (body) => /^#\s+(.+)$/mu.exec(body)?.[1]?.trim(),
-	pageTitleFirst: false,
+	pageTitleFirst: false
 };
 
 const item = (e: ClaudeResourcesEntry): RemoteItem => ({
@@ -90,7 +90,7 @@ const item = (e: ClaudeResourcesEntry): RemoteItem => ({
 	title: e.title,
 	description: present(e.lastmod) ? `Updated ${e.lastmod.slice(0, 10)}` : "",
 	group: e.section,
-	url: e.url,
+	url: e.url
 });
 
 const claudeResourcesSource: RemoteSource = {
@@ -108,8 +108,8 @@ const claudeResourcesSource: RemoteSource = {
 				ix.search(q, limit, group).map((h) => ({
 					entry: item(h.entry),
 					score: h.score,
-					snippet: h.snippet,
-				})),
+					snippet: h.snippet
+				}))
 		};
 	},
 	known: () => claudeResources.known()?.map((e) => item(e)),
@@ -118,13 +118,13 @@ const claudeResourcesSource: RemoteSource = {
 	pageUrl: (p) => `${claudeResourcesBase()}/${p}`,
 	markdown: htmlToMarkdown,
 	titleOf: htmlTitle,
-	pageTitleFirst: true,
+	pageTitleFirst: true
 };
 
 const REMOTE_SOURCES = new Map<string, RemoteSource>([
 	["platform", platformSource],
 	["code", codeSource],
-	["claude-resources", claudeResourcesSource],
+	["claude-resources", claudeResourcesSource]
 ]);
 
 export const remoteOf = (name: string | undefined): RemoteSource | undefined =>

@@ -21,8 +21,8 @@ const MCP_ORDER: Noisy[] = [
 	{
 		why: "the servers start in parallel, so their order varies from run to run (seen on 2.1.306 to 2.1.308)",
 		data: /^started$/u,
-		unordered: true,
-	},
+		unordered: true
+	}
 ];
 
 export const NOISY: Record<string, Noisy[]> = {
@@ -32,34 +32,34 @@ export const NOISY: Record<string, Noisy[]> = {
 		{
 			why: "the background observer sends 3 or 5 requests from run to run (seen on 2.1.306 to 2.1.308)",
 			data: /^(observerReportToolIn|observerMessageIn)$/u,
-			values: [3, 5],
+			values: [3, 5]
 		},
 		{
 			why: "the request count follows the observer's 3 or 5 requests",
 			data: /^messages$/u,
-			values: [10, 12],
-		},
+			values: [10, 12]
+		}
 	],
 	"print.sweep": [
 		{
 			why: "with Mantle on, the run times out before any stub request, so its stderr varies from run to run",
 			itemData: /^CLAUDE_CODE_USE_MANTLE\.[AB]$/u,
-			items: ["stderr", "cfgfiles"],
+			items: ["stderr", "cfgfiles"]
 		},
 		{
 			why: "API_TIMEOUT_MS sets a tiny timeout, so the retry count depends on machine load",
-			data: /^API_TIMEOUT_MS\.[AB]$/u,
+			data: /^API_TIMEOUT_MS\.[AB]$/u
 		},
 		{
 			why: "cfgfiles flips for a random name on each run",
 			itemData: /\.[AB]$/u,
-			items: ["cfgfiles"],
+			items: ["cfgfiles"]
 		},
 		{
 			why: "list derived from the NAME.A and NAME.B data, which is compared on their own",
-			data: /^changed$/u,
-		},
-	],
+			data: /^changed$/u
+		}
+	]
 };
 
 /** `old` with every `from` replaced by `to` equals `now`: the only change is the version string. */
@@ -82,7 +82,7 @@ const ruleReason = (
 	n: Noisy,
 	k: string,
 	old: Data,
-	now: Data,
+	now: Data
 ): string | null | undefined => {
 	const dataHit = n.data?.test(k) === true;
 	if (n.unordered === true && dataHit) {
@@ -110,7 +110,7 @@ export const noiseReason = (
 	k: string,
 	old: Data,
 	now: Data,
-	v?: [string, string],
+	v?: [string, string]
 ): string | null => {
 	if (versionOnly(old, now, v)) {
 		return "version string only";

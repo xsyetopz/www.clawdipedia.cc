@@ -8,7 +8,7 @@ const at = (version: string): PrintCtx => ({
 	version,
 	bin: "",
 	runDir: "",
-	dry: true,
+	dry: true
 });
 
 test("an older version may accept a missing feature; the first version with it and later may not", () => {

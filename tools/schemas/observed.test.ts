@@ -8,8 +8,8 @@ describe("applyObserved", () => {
 		const schema = {
 			$defs: {
 				a: { properties: { id: unk } },
-				b: { properties: { id: unk } },
-			},
+				b: { properties: { id: unk } }
+			}
 		};
 		const fx = { $comment: "", version: "", fields: { "a.id": { string: 3 } } };
 		const out = await applyObserved("x.json", schema, fx);
@@ -18,11 +18,11 @@ describe("applyObserved", () => {
 			$defs: {
 				a: {
 					properties: {
-						id: { "x-unverified": true, "x-observed-type": ["string"] },
-					},
+						id: { "x-unverified": true, "x-observed-type": ["string"] }
+					}
 				},
-				b: { properties: { id: { "x-unverified": true } } },
-			},
+				b: { properties: { id: { "x-unverified": true } } }
+			}
 		});
 	});
 });

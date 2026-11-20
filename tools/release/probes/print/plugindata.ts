@@ -8,7 +8,7 @@ import {
 	oneCase,
 	readIf,
 	runCase,
-	toolResults,
+	toolResults
 } from "./run.ts";
 import type { PrintGroup } from "./types.ts";
 
@@ -32,7 +32,7 @@ export const plugindata: PrintGroup = {
 				toolInput: {
 					command:
 						"cc-probe {CFG}/by-name.log; {HOME}/plug/bin/cc-probe {CFG}/by-path.log; " +
-						`printf 'CLAUDE_PLUGIN_DATA=%s\\n' "\${CLAUDE_PLUGIN_DATA-<unset>}" > {CFG}/bash.log`,
+						`printf 'CLAUDE_PLUGIN_DATA=%s\\n' "\${CLAUDE_PLUGIN_DATA-<unset>}" > {CFG}/bash.log`
 				},
 				args: ["--plugin-dir", "{HOME}/plug", "--allowedTools", "Bash"],
 				setup: async ({ home }) => {
@@ -41,11 +41,11 @@ export const plugindata: PrintGroup = {
 					await mkdir(`${pl}/bin`, { recursive: true });
 					await Bun.write(
 						`${pl}/.claude-plugin/plugin.json`,
-						JSON.stringify({ name: "pdprobe", version: "1.0.0" }),
+						JSON.stringify({ name: "pdprobe", version: "1.0.0" })
 					);
 					await Bun.write(`${pl}/bin/cc-probe`, PROBE);
 					await chmod(`${pl}/bin/cc-probe`, 0o755);
-				},
+				}
 			});
 			try {
 				const byName = await readIf(`${r.sb.cfg}/by-name.log`);
@@ -60,12 +60,12 @@ export const plugindata: PrintGroup = {
 						"bin.pluginRootSet":
 							(value(byPath, "CLAUDE_PLUGIN_ROOT") ?? "<unset>") !== "<unset>",
 						"bash.pluginDataSet":
-							(value(bash, "CLAUDE_PLUGIN_DATA") ?? "<unset>") !== "<unset>",
+							(value(bash, "CLAUDE_PLUGIN_DATA") ?? "<unset>") !== "<unset>"
 					},
-					samples: { byName, byPath, bash },
+					samples: { byName, byPath, bash }
 				});
 			} finally {
 				await dispose(r);
 			}
-		}),
+		})
 };

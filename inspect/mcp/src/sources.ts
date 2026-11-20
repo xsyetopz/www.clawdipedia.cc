@@ -15,6 +15,6 @@ export const sources = async (binary?: string): Promise<Source[]> => {
 				source.clean = await clean.text();
 			}
 			return source;
-		}),
+		})
 	);
 };

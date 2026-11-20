@@ -14,7 +14,7 @@ const DIFF_KIND: Record<string, Kind> = {
 	"commands.json": "command",
 	"settings.json": "setting",
 	"hooks.json": "hook",
-	"gates.json": "gate",
+	"gates.json": "gate"
 };
 // Kinds that name a place to look (diff/*.json, schemas/) or say nothing needs a re-check; only `behaviour` needs a probe.
 const NO_PROBE = new Set<Kind>([...Object.values(DIFF_KIND), "schema"]);
@@ -42,7 +42,7 @@ const diffDirs = async (to: string, base: string): Promise<string[]> => {
 		.toSorted((a, b) => b.localeCompare(a, undefined, { numeric: true }));
 	return [
 		join(base, to, "diff"),
-		...versions.map((v) => join(base, v, "diff")),
+		...versions.map((v) => join(base, v, "diff"))
 	];
 };
 
@@ -59,11 +59,11 @@ const namesIn = async (dir: string, file: string): Promise<string[]> => {
 /** Names in the latest captures/<v>/diff/*.json (the `to` dir when it has one, else the newest). */
 export const loadDiffNames = async (
 	to: string,
-	base = CAPTURES,
+	base = CAPTURES
 ): Promise<DiffNames | null> => {
 	const dirs = await diffDirs(to, base);
 	const has = await Promise.all(
-		dirs.map((d) => pathExists(join(d, "flags.json"))),
+		dirs.map((d) => pathExists(join(d, "flags.json")))
 	);
 	const dir = dirs.find((_, i) => has[i] === true);
 	if (dir === undefined) {
@@ -96,7 +96,7 @@ const subject = (text: string): string | null => {
 const namesOf = (
 	subj: string | null,
 	diff: DiffNames | null,
-	kind: Kind | undefined,
+	kind: Kind | undefined
 ): string[] => {
 	if (subj === null || subj === "") {
 		return [];
@@ -122,7 +122,7 @@ const statusOf = (kind: Kind | null, probes: string[]): Status => {
 export const applyMap = (
 	facts: Fact[],
 	map: FactMap,
-	diff: DiffNames | null,
+	diff: DiffNames | null
 ): Fact[] =>
 	facts.map((c) => {
 		const e = map[c.id];
@@ -140,6 +140,6 @@ export const applyMap = (
 			kind,
 			probes,
 			status: statusOf(kind, probes),
-			...(names.length > 0 ? { diffNames: names } : {}),
+			...(names.length > 0 ? { diffNames: names } : {})
 		};
 	});

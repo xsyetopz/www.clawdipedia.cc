@@ -3,7 +3,7 @@ import {
 	startGateway,
 	startSts,
 	startUpstream,
-	withPostgres,
+	withPostgres
 } from "../../../lib/gateway.ts";
 import { allocPort } from "../../../lib/ports.ts";
 import type { Data } from "../../../lib/results.ts";
@@ -29,7 +29,7 @@ export interface Live {
 export const MESSAGE = JSON.stringify({
 	model: "claude-sonnet-5-5",
 	max_tokens: 1,
-	messages: [{ role: "user", content: "Reply with 'OK'." }],
+	messages: [{ role: "user", content: "Reply with 'OK'." }]
 });
 
 /** The JSON object of a reply, or `{}` when the body is not JSON. */
@@ -54,14 +54,14 @@ export interface GwOpts {
 /** On a program older than the options of the case, a gateway that exits on its own config check gave an answer. Any other failed start makes the case invalid. */
 const refused = async (
 	g: Gateway,
-	older: boolean,
+	older: boolean
 ): Promise<Record<string, Data>> => {
 	const exitCode = await Promise.race([
 		g.exit(),
-		Bun.sleep(1000).then(() => null),
+		Bun.sleep(1000).then(() => null)
 	]);
 	const line = /claude gateway: .*/u.exec(
-		g.log().replaceAll(/\s+/gu, " "),
+		g.log().replaceAll(/\s+/gu, " ")
 	)?.[0];
 	if (!older || exitCode === null || line === undefined) {
 		throw new Error("gateway did not start");
@@ -71,7 +71,7 @@ const refused = async (
 
 const bootReport = async (
 	g: Gateway,
-	boot: RegExp,
+	boot: RegExp
 ): Promise<Record<string, Data>> => {
 	const listening = await g.ready();
 	await Bun.sleep(300);
@@ -81,19 +81,19 @@ const bootReport = async (
 	return {
 		listening,
 		exitCode: listening ? null : await g.exit(),
-		line: hit ?? null,
+		line: hit ?? null
 	};
 };
 
 const noPostgres = async (g: Gateway): Promise<Record<string, Data>> => {
 	const code = await Promise.race([
 		g.exit(),
-		Bun.sleep(60_000).then(() => null),
+		Bun.sleep(60_000).then(() => null)
 	]);
 	return {
 		exitCode: code,
 		connectError: g.log().includes("could not connect to Postgres"),
-		listening: g.log().includes("listening on"),
+		listening: g.log().includes("listening on")
 	};
 };
 
@@ -110,7 +110,7 @@ const withGateway = async (
 	e: Env,
 	o: GwOpts,
 	calls: Calls,
-	pgPort: number,
+	pgPort: number
 ): Promise<Out> => {
 	const g = await startGateway(e.ctx.bin, e.sb, {
 		...(e.sts === null ? {} : { env: e.sts.env }),
@@ -120,7 +120,7 @@ const withGateway = async (
 		...(o.retention === undefined
 			? {}
 			: { identityRetentionDays: o.retention }),
-		...(o.upstreams === undefined ? {} : { upstreams: o.upstreams(e.up.url) }),
+		...(o.upstreams === undefined ? {} : { upstreams: o.upstreams(e.up.url) })
 	});
 	try {
 		if (o.boot !== undefined) {
@@ -134,7 +134,7 @@ const withGateway = async (
 			return { data: await refused(g, older) };
 		}
 		return {
-			data: await calls({ url: g.url, up: e.up, log: g.log, sts: e.sts }),
+			data: await calls({ url: g.url, up: e.up, log: g.log, sts: e.sts })
 		};
 	} finally {
 		await g.stop();
@@ -145,7 +145,7 @@ const withGateway = async (
 export const gatewayCase = (
 	name: string,
 	o: GwOpts,
-	calls: Calls,
+	calls: Calls
 ): CaseDef => ({
 	name: `gateway.${name}`,
 	run: async (ctx) => {
@@ -162,14 +162,14 @@ export const gatewayCase = (
 			await sts?.stop();
 			await sb.cleanup();
 		}
-	},
+	}
 });
 
 /** POST /v1/messages through the gateway; reports what the upstream saw as booleans. */
 export const viaGateway = async (
 	g: Live,
 	tags: unknown,
-	groups: string[],
+	groups: string[]
 ): Promise<Record<string, Data>> => {
 	g.up.seen.length = 0;
 	const r = await fetch(`${g.url}/v1/messages`, {
@@ -177,12 +177,12 @@ export const viaGateway = async (
 		headers: {
 			"content-type": "application/json",
 			"anthropic-beta": `${REQ_TAGS},prompt-caching-scope-2026-01-05`,
-			authorization: `Bearer ${mintJwt({ sub: "u1", email: "u@example.com", groups })}`,
+			authorization: `Bearer ${mintJwt({ sub: "u1", email: "u@example.com", groups })}`
 		},
 		body: JSON.stringify({
 			...obj(JSON.parse(MESSAGE)),
-			...(tags === undefined ? {} : { tags }),
-		}),
+			...(tags === undefined ? {} : { tags })
+		})
 	});
 	const u = g.up.seen[0];
 	return {
@@ -191,12 +191,12 @@ export const viaGateway = async (
 		upstreamTags: u?.tags ?? null,
 		upstreamRequestTagsBeta: u?.betas.includes(REQ_TAGS) ?? null,
 		upstreamOtherBetaKept:
-			u?.betas.includes("prompt-caching-scope-2026-01-05") ?? null,
+			u?.betas.includes("prompt-caching-scope-2026-01-05") ?? null
 	};
 };
 
 export const prefixed = (
 	p: string,
-	d: Record<string, Data>,
+	d: Record<string, Data>
 ): Record<string, Data> =>
 	Object.fromEntries(Object.entries(d).map(([k, v]) => [`${p}.${k}`, v]));

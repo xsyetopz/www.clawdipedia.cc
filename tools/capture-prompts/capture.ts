@@ -30,7 +30,7 @@ const BIN =
 	argValue("--bin") ??
 	join(
 		requireEnv("HOME"),
-		`.local/share/claude/versions/${CLAUDE_CODE_VERSION}`,
+		`.local/share/claude/versions/${CLAUDE_CODE_VERSION}`
 	);
 const only = argValue("--only")?.split(",");
 
@@ -56,15 +56,15 @@ const prepare = async (v: Variant): Promise<Dirs> => {
 	const [cfg, home, proj] = await Promise.all([
 		tempDir("cap-cfg-"),
 		tempDir("cap-home-"),
-		tempDir("cap-proj-"),
+		tempDir("cap-proj-")
 	]);
 	const writes = [
 		...Object.entries(v.cfgFiles ?? {}).map(([n, c]) =>
-			Bun.write(join(cfg, n), c),
+			Bun.write(join(cfg, n), c)
 		),
 		...Object.entries(v.projFiles ?? {}).map(([n, c]) =>
-			Bun.write(join(proj, n), c),
-		),
+			Bun.write(join(proj, n), c)
+		)
 	];
 	await Promise.all(writes);
 	return { dir, log, cfg, home, proj };
@@ -82,7 +82,7 @@ const spawnOnce = async (
 	shimDir: string,
 	port: number,
 	prompt: string,
-	extra: string[],
+	extra: string[]
 ): Promise<Result> => {
 	const env = probeEnv(v, d, shimDir, port);
 	await assertShimReady(env);
@@ -97,22 +97,22 @@ const spawnOnce = async (
 			"--model",
 			v.model ?? "claude-opus-5-5",
 			...extra,
-			...(v.args ?? []),
+			...(v.args ?? [])
 		],
 		{
 			cwd: d.proj,
 			stdin: "ignore",
 			stdout: "pipe",
 			stderr: "pipe",
-			env,
-		},
+			env
+		}
 	);
 	const t = setTimeout(() => {
 		p.kill();
 	}, 60_000);
 	const [so, se] = await Promise.all([
 		new Response(p.stdout).text(),
-		new Response(p.stderr).text(),
+		new Response(p.stderr).text()
 	]);
 	const code = await p.exited;
 	clearTimeout(t);
@@ -147,10 +147,10 @@ const report = (v: Variant, res: Result, reqs: Rec[]): boolean => {
 	const bad = reqs.filter((r) => r["authIsFakeKey"] === false);
 	const hosts = new Set(reqs.map((r) => hostOf(r)));
 	const leaked = [...hosts].filter(
-		(h) => h !== "" && !h.startsWith("127.0.0.1"),
+		(h) => h !== "" && !h.startsWith("127.0.0.1")
 	);
 	console.info(
-		`${v.id}: exit=${res.code} requests=${reqs.length} messages=${msgs.length} authFake=${bad.length === 0} hosts=${[...hosts].join(",")}`,
+		`${v.id}: exit=${res.code} requests=${reqs.length} messages=${msgs.length} authFake=${bad.length === 0} hosts=${[...hosts].join(",")}`
 	);
 	if (leaked.length > 0 || bad.length > 0) {
 		console.error("UNEXPECTED HOST OR CREDENTIAL");
@@ -158,7 +158,7 @@ const report = (v: Variant, res: Result, reqs: Rec[]): boolean => {
 	}
 	if (msgs.length === 0) {
 		console.warn(
-			`  WARNING: no message request. stderr: ${res.se.slice(0, 200)}`,
+			`  WARNING: no message request. stderr: ${res.se.slice(0, 200)}`
 		);
 	}
 	if (
@@ -179,9 +179,9 @@ const writeResult = async (v: Variant, d: Dirs, res: Result): Promise<void> => {
 			JSON.stringify(
 				{ id: v.id, exit: res.code, cwd: d.proj, cfg: d.cfg, home: d.home },
 				null,
-				1,
-			),
-		),
+				1
+			)
+		)
 	]);
 };
 
@@ -189,7 +189,7 @@ const runPrompts = async (
 	v: Variant,
 	d: Dirs,
 	shimDir: string,
-	port: number,
+	port: number
 ): Promise<Result> => {
 	const res = await spawnOnce(
 		v,
@@ -197,7 +197,7 @@ const runPrompts = async (
 		shimDir,
 		port,
 		v.prompt ?? DEFAULT_PROMPT,
-		[],
+		[]
 	);
 	if (v.followUp === undefined || v.followUp === "") {
 		return res;
@@ -218,7 +218,7 @@ const run = async (v: Variant): Promise<boolean> => {
 		port: Number(process.env["STUB_PORT"] ?? 0),
 		log: d.log,
 		tool: v.tool?.name,
-		toolInput: v.tool?.input,
+		toolInput: v.tool?.input
 	});
 	const res = await runPrompts(v, d, shimDir, stub.port ?? 0);
 	await stub.stop(true);
@@ -227,7 +227,7 @@ const run = async (v: Variant): Promise<boolean> => {
 		return false;
 	}
 	await Promise.all(
-		[d.cfg, d.home, d.proj].map((p) => rm(p, { recursive: true, force: true })),
+		[d.cfg, d.home, d.proj].map((p) => rm(p, { recursive: true, force: true }))
 	);
 	return true;
 };

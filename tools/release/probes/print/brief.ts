@@ -13,7 +13,7 @@ import {
 	runCases,
 	sysText,
 	toolNames,
-	withRun,
+	withRun
 } from "./run/helpers.ts";
 import type { PrintGroup } from "./types.ts";
 
@@ -26,7 +26,7 @@ const view = (r: Run) => {
 					sysText(q).includes("Talking to the user") ||
 					json(bodyOf(q).system).includes("Talking to the user"),
 				beta: q.headers["anthropic-beta"] ?? "",
-				messages: bodyOf(q).messages?.length ?? 0,
+				messages: bodyOf(q).messages?.length ?? 0
 			}
 		: null;
 };
@@ -49,13 +49,13 @@ const brief: CaseDef = {
 					briefTalkingToUser: b?.talking ?? null,
 					sameBeta: a.v?.beta === b?.beta,
 					baseEvents: a.ev,
-					briefEvents: evKinds(r),
+					briefEvents: evKinds(r)
 				},
 				notes:
-					"Two runs: baseline and --brief; args/exit shown are the --brief run.",
+					"Two runs: baseline and --brief; args/exit shown are the --brief run."
 			};
 		});
-	},
+	}
 };
 
 const encode = (p: string) => p.replaceAll(/[^A-Za-z0-9]/gu, "-");
@@ -76,10 +76,10 @@ const resume: CaseDef = {
 						const old = entries[0];
 						if (old !== undefined) {
 							await cp(join(src, old), join(cfg, "projects", encode(proj)), {
-								recursive: true,
+								recursive: true
 							});
 						}
-					},
+					}
 				},
 				(r) => {
 					const q = msgs(r)[0];
@@ -93,19 +93,19 @@ const resume: CaseDef = {
 							earlierPromptCopies:
 								json(m).match(/Reply with 'OK'\./gu)?.length ?? 0,
 							sameSessionId: initEvent(r)?.["session_id"] === sid,
-							resultText: /"result":"([^"]*)"/u.exec(r.stdout)?.[1] ?? "",
+							resultText: /"result":"([^"]*)"/u.exec(r.stdout)?.[1] ?? ""
 						},
 						args: ["--resume", "<session-id>"],
 						notes:
-							"Two runs: the first writes the transcript, the second resumes it from a copy under the new project dir.",
+							"Two runs: the first writes the transcript, the second resumes it from a copy under the new project dir."
 					};
-				},
+				}
 			);
-		}),
+		})
 };
 
 export const briefResume: PrintGroup = {
 	id: "briefresume",
 	title: "--brief and --resume",
-	run: (ctx) => runCases(ctx, "briefresume", [brief, resume]),
+	run: (ctx) => runCases(ctx, "briefresume", [brief, resume])
 };

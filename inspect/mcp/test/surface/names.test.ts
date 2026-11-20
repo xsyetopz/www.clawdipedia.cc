@@ -57,7 +57,7 @@ f(\`\${an().BASE_API_URL}/v1/code/sessions/\${e}/events\`);
 		const by = await byName("endpoint", src);
 		expect(by.get("https://api.anthropic.com")?.detail).toBe("url");
 		expect(by.get("https://platform.claude.com/v1/oauth/token")?.detail).toBe(
-			"url",
+			"url"
 		);
 		expect(by.get("/api/oauth/profile")?.detail).toBe("path");
 		expect(by.has(`/v1/code/sessions/\${…}/events`)).toBe(true);
@@ -73,7 +73,7 @@ f(\`/model/\${m}/invoke\`);
 		expect(await names("endpoint", src)).toEqual([
 			`/model/\${…}/invoke`,
 			"/v1/messages/count_tokens",
-			"/v1/traces",
+			"/v1/traces"
 		]);
 	});
 
@@ -101,7 +101,7 @@ join(proj,"project.json");
 		expect(await names("file", src)).toEqual([
 			"history.jsonl",
 			"keybindings.json",
-			"settings.json",
+			"settings.json"
 		]);
 	});
 
@@ -109,8 +109,8 @@ join(proj,"project.json");
 		expect(
 			await names(
 				"file",
-				'var B=f();join(B(),"history.jsonl");join(B(),"a.json");',
-			),
+				'var B=f();join(B(),"history.jsonl");join(B(),"a.json");'
+			)
 		).toEqual([]);
 	});
 });
@@ -130,8 +130,8 @@ var o=["other","list"];
 		expect(
 			await names(
 				"permission-rule",
-				'z(B(["default","plan"])).describe("Other");',
-			),
+				'z(B(["default","plan"])).describe("Other");'
+			)
 		).toEqual([]);
 	});
 });
@@ -145,7 +145,7 @@ function h(){throw Error("app text outside")}
 `;
 		expect(await names("error", src)).toEqual([
 			"app text outside",
-			"wrapper with no exports",
+			"wrapper with no exports"
 		]);
 	});
 
@@ -172,7 +172,7 @@ process.stderr.write(\`Cloud gateway \${n} is not trusted\`);
 			"Invalid mode value",
 			"Not connected to server",
 			`Out of range: \${…}`,
-			"Subclass of subclass fails",
+			"Subclass of subclass fails"
 		]);
 		expect(by.get("Not connected to server")?.detail).toBe("throw Error");
 		expect(by.get("Subclass of subclass fails")?.detail).toBe("throw Error");
@@ -190,7 +190,7 @@ throw ok?Error("First branch message"):dyn("Factory branch text");
 		expect(found.toSorted(byCode)).toEqual([
 			"First branch message",
 			`read not allowed under --restricted: \${…}`,
-			`read not allowed under the read block: \${…}`,
+			`read not allowed under the read block: \${…}`
 		]);
 	});
 

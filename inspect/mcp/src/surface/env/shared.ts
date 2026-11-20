@@ -25,7 +25,7 @@ export type Add = (
 	m: Module,
 	at: Node,
 	name: string,
-	extra?: Partial<SurfaceItem>,
+	extra?: Partial<SurfaceItem>
 ) => void;
 
 /** The state the parts fill while they scan the bundle. */
@@ -67,7 +67,7 @@ export const paramOf = (m: Module, id: Node): Omit<Helper, "m"> | undefined => {
 	}
 	const fn = def.node;
 	const index = fn.params.findIndex(
-		(p) => p.type === "Identifier" && p.name === id.name,
+		(p) => p.type === "Identifier" && p.name === id.name
 	);
 	return index === -1 ? undefined : { fn, index };
 };

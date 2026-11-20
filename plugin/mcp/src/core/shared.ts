@@ -16,7 +16,7 @@ export const DOC_SOURCES = [
 	"clawdipedia",
 	"platform",
 	"code",
-	"claude-resources",
+	"claude-resources"
 ] as const;
 export type DocSourceName = (typeof DOC_SOURCES)[number];
 export const isDocSource = (s: string): s is DocSourceName =>
@@ -43,14 +43,14 @@ export const ok = (
 	text: string,
 	data: Record<string, unknown>,
 	source: Source | undefined,
-	complete = false,
+	complete = false
 ): Result => ({ ok: true, text, data, source, complete });
 export const fail = (text: string, source?: Source): Result => ({
 	ok: false,
 	text,
 	data: { error: text },
 	source,
-	complete: false,
+	complete: false
 });
 
 /** Network problems with nothing cached become a clean failed result. */

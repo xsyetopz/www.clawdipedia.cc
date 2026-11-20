@@ -11,7 +11,7 @@ const dirs: string[] = [];
 afterEach(async () => {
 	delete process.env["CLAWDIPEDIA_CACHE_CAP_BYTES"];
 	await Promise.all(
-		dirs.splice(0).map((d) => rm(d, { recursive: true, force: true })),
+		dirs.splice(0).map((d) => rm(d, { recursive: true, force: true }))
 	);
 });
 

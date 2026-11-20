@@ -12,7 +12,7 @@ import {
 	type Run,
 	runCase,
 	type Seq,
-	toolResults,
+	toolResults
 } from "../run.ts";
 import { readCfg, show } from "../run/helpers.ts";
 import { mapInOrder } from "../run/seq.ts";
@@ -23,27 +23,27 @@ const logHook = (name: string) => ({
 	hooks: [
 		{
 			type: "command",
-			command: `cat >> {CFG}/${name}.log; echo >> {CFG}/${name}.log`,
-		},
-	],
+			command: `cat >> {CFG}/${name}.log; echo >> {CFG}/${name}.log`
+		}
+	]
 });
 const SETTINGS = JSON.stringify({
 	hooks: {
 		PostToolUse: [logHook("ptu")],
-		PostToolUseFailure: [logHook("ptuf")],
-	},
+		PostToolUseFailure: [logHook("ptuf")]
+	}
 });
 
 const EDIT = {
 	file_path: "{PROJ}/a.txt",
 	old_string: "one",
-	new_string: "two",
+	new_string: "two"
 };
 const READ = { name: "Read", input: { file_path: "{PROJ}/a.txt" } };
 const AGENT = {
 	description: "d",
 	prompt: "say hi",
-	subagent_type: "general-purpose",
+	subagent_type: "general-purpose"
 };
 const CASES: [string, Seq][] = [
 	["bash", [{ name: "Bash", input: { command: "echo hi" } }]],
@@ -53,20 +53,20 @@ const CASES: [string, Seq][] = [
 		[
 			{
 				name: "Write",
-				input: { file_path: "{PROJ}/new.txt", content: "hello\n" },
-			},
-		],
+				input: { file_path: "{PROJ}/new.txt", content: "hello\n" }
+			}
+		]
 	],
 	["edit", [READ, { name: "Edit", input: EDIT }]],
 	["edit-no-read", [{ name: "Edit", input: EDIT }]],
 	[
 		"toolsearch",
-		[{ name: "ToolSearch", input: { query: "select:Read", max_results: 3 } }],
+		[{ name: "ToolSearch", input: { query: "select:Read", max_results: 3 } }]
 	],
 	["agent", [{ name: "Agent", input: AGENT }]],
 	[
 		"agent-bg",
-		[{ name: "Agent", input: { ...AGENT, run_in_background: true } }],
+		[{ name: "Agent", input: { ...AGENT, run_in_background: true } }]
 	],
 	["listagents", [{ name: "ListAgents", input: {} }]],
 	[
@@ -74,9 +74,9 @@ const CASES: [string, Seq][] = [
 		[
 			{
 				name: "CronCreate",
-				input: { cron: "*/5 * * * *", prompt: "x", recurring: true },
-			},
-		],
+				input: { cron: "*/5 * * * *", prompt: "x", recurring: true }
+			}
+		]
 	],
 	["cronlist", [{ name: "CronList", input: {} }]],
 	["glob", [{ name: "Glob", input: { pattern: "*.txt" } }]],
@@ -90,40 +90,40 @@ const CASES: [string, Seq][] = [
 					notebook_path: "{PROJ}/n.ipynb",
 					new_source: "x",
 					edit_mode: "insert",
-					cell_type: "code",
-				},
-			},
-		],
+					cell_type: "code"
+				}
+			}
+		]
 	],
 	[
 		"webfetch",
-		[{ name: "WebFetch", input: { url: "http://127.0.0.1:9/x", prompt: "p" } }],
+		[{ name: "WebFetch", input: { url: "http://127.0.0.1:9/x", prompt: "p" } }]
 	],
 	["websearch", [{ name: "WebSearch", input: { query: "x" } }]],
 	[
 		"edit-after-write",
 		[
 			{ name: "Write", input: { file_path: "{PROJ}/w.txt", content: "one\n" } },
-			{ name: "Edit", input: { ...EDIT, file_path: "{PROJ}/w.txt" } },
-		],
+			{ name: "Edit", input: { ...EDIT, file_path: "{PROJ}/w.txt" } }
+		]
 	],
 	[
 		"edit-after-bash",
 		[
 			{ name: "Bash", input: { command: "cat a.txt" } },
-			{ name: "Edit", input: EDIT },
-		],
+			{ name: "Edit", input: EDIT }
+		]
 	],
 	[
 		"edit-partial-read",
 		[
 			{
 				name: "Read",
-				input: { file_path: "{PROJ}/a.txt", offset: 1, limit: 1 },
+				input: { file_path: "{PROJ}/a.txt", offset: 1, limit: 1 }
 			},
-			{ name: "Edit", input: EDIT },
-		],
-	],
+			{ name: "Edit", input: EDIT }
+		]
+	]
 ];
 
 const outcomeOf = (offered: boolean, results: number, wanted: number) => {
@@ -135,7 +135,7 @@ const outcomeOf = (offered: boolean, results: number, wanted: number) => {
 
 const caseData = async (r: Run, seq: Seq): Promise<Record<string, Data>> => {
 	const toolNames = arr(obj(msgs(r)[0]?.body)["tools"]).map((t) =>
-		show(obj(t)["name"]),
+		show(obj(t)["name"])
 	);
 	const offered = toolNames.includes(seq[0]?.name ?? "");
 	const results = toolResults(r);
@@ -149,7 +149,7 @@ const caseData = async (r: Run, seq: Seq): Promise<Record<string, Data>> => {
 		"tool.offered": offered,
 		"tool.results": results,
 		"hook.calls": lines.length,
-		...hookData(lines),
+		...hookData(lines)
 	};
 };
 
@@ -161,11 +161,11 @@ const runOne = (ctx: PrintCtx, name: string, seq: Seq) =>
 				"--permission-mode",
 				"acceptEdits",
 				"--allowedTools",
-				"Bash,Read,Write,Edit,ToolSearch,Agent",
+				"Bash,Read,Write,Edit,ToolSearch,Agent"
 			],
 			projFiles: { "a.txt": "one\ntwo\n" },
 			cfgFiles: { "settings.json": SETTINGS },
-			timeoutMs: 45_000,
+			timeoutMs: 45_000
 		};
 		const r = await runCase(ctx.bin, c);
 		try {
@@ -175,7 +175,7 @@ const runOne = (ctx: PrintCtx, name: string, seq: Seq) =>
 			return baseResult(ctx, `print.hooks.posttooluse.${name}`, r, {
 				data,
 				samples: fail === "" ? undefined : { failure_hook: fail },
-				notes: "Stub requests the tool; the hook logs its stdin.",
+				notes: "Stub requests the tool; the hook logs its stdin."
 			});
 		} finally {
 			await dispose(r);
@@ -187,8 +187,8 @@ export const ptuGroup: PrintGroup = {
 	title: "PostToolUse hook input and tool_response shapes",
 	run: async (ctx) => {
 		const all = await mapInOrder(CASES, ([name, seq]) =>
-			runOne(ctx, name, seq),
+			runOne(ctx, name, seq)
 		);
 		return all.flat();
-	},
+	}
 };

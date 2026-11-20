@@ -15,12 +15,12 @@ const run = async (argv: string[]): Promise<{ ok: boolean; out: string }> => {
 			env: toolEnv(),
 			stdin: "ignore",
 			stdout: "pipe",
-			stderr: "pipe",
+			stderr: "pipe"
 		});
 		const [stdout, stderr, code] = await Promise.all([
 			new Response(p.stdout).text(),
 			new Response(p.stderr).text(),
-			p.exited,
+			p.exited
 		]);
 		return { ok: code === 0, out: `${stdout}${stderr}`.trim() };
 	} catch {
@@ -41,7 +41,7 @@ const which = async (name: string): Promise<string> => {
 export const binaryChecks = async (
 	from: string,
 	to: string,
-	installed: string[],
+	installed: string[]
 ): Promise<Check[]> => {
 	const bin = binaryPath(to);
 	const hasTo = await pathExists(bin);
@@ -52,15 +52,15 @@ export const binaryChecks = async (
 			level: hasTo ? "ok" : "fail",
 			detail: hasTo
 				? bin
-				: `missing ${bin}; the user must install ${to} (installed: ${installed.length > 0 ? installed.join(", ") : "none"})`,
+				: `missing ${bin}; the user must install ${to} (installed: ${installed.length > 0 ? installed.join(", ") : "none"})`
 		},
 		{
 			id: "binary.from",
 			level: hasFrom ? "ok" : "warn",
 			detail: hasFrom
 				? binaryPath(from)
-				: `missing ${binaryPath(from)}; release:diff needs it`,
-		},
+				: `missing ${binaryPath(from)}; release:diff needs it`
+		}
 	];
 };
 
@@ -85,12 +85,12 @@ export const toolChecks = async (): Promise<{
 				detail:
 					py === ""
 						? "python3 not found"
-						: `${py} (${pyv}); the pty driver needs 3.8+`,
+						: `${py} (${pyv}); the pty driver needs 3.8+`
 			},
 			{
 				id: "strings",
 				level: st === "" ? "fail" : "ok",
-				detail: st === "" ? "strings not found" : st,
+				detail: st === "" ? "strings not found" : st
 			},
 			{
 				id: "openssl",
@@ -98,8 +98,8 @@ export const toolChecks = async (): Promise<{
 				detail:
 					ssl === ""
 						? "openssl not found; only live fault tests need it"
-						: `${ssl} (${sslVersion}); only live fault tests need it`,
-			},
-		],
+						: `${ssl} (${sslVersion}); only live fault tests need it`
+			}
+		]
 	};
 };

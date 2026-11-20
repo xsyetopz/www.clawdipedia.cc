@@ -6,7 +6,7 @@ import {
 	normalizeRoute,
 	parseManifest,
 	parseSearchIndex,
-	siteBase,
+	siteBase
 } from "./manifest.ts";
 import { SEARCH_INDEX_FILE, SEARCH_INDEX_MAX } from "./search.ts";
 import { isRecord, present } from "./text.ts";
@@ -37,7 +37,7 @@ export const SCHEMA_NAMES = [
 	"claude-code-transcript",
 	"claude-code-otel",
 	"claude-code-frontmatter",
-	"claude-code-claude-json",
+	"claude-code-claude-json"
 ] as const;
 
 /** The Mod API type file the program ships; get_schema reads it with the names in TYPE_NAMES. */
@@ -56,7 +56,7 @@ export interface PagesLoad {
 
 const asCached = (source: Source): Source => ({
 	...source,
-	state: source.state === "live" ? "cached" : source.state,
+	state: source.state === "live" ? "cached" : source.state
 });
 
 export class Content {
@@ -90,19 +90,19 @@ export class Content {
 			rel: "site/llms-manifest.json",
 			ttlMs: ttl(MANIFEST_TTL_MS),
 			maxBytes: MANIFEST_MAX,
-			validate: (b) => parseManifest(b).length > 0,
+			validate: (b) => parseManifest(b).length > 0
 		});
 		if (r.status !== "ok") {
 			if (m) {
 				return {
 					entries: m.entries,
-					source: { ...m.source, state: "stale-offline" },
+					source: { ...m.source, state: "stale-offline" }
 				};
 			}
 			throw new ContentError(
 				r.status === "error"
 					? r.message
-					: `the page list was not found on ${r.origin}`,
+					: `the page list was not found on ${r.origin}`
 			);
 		}
 		const entries = parseManifest(r.body);
@@ -117,7 +117,7 @@ export class Content {
 			entries,
 			byRoute: new Map(entries.map((e) => [e.route, e])),
 			source: r.source,
-			at: Date.now(),
+			at: Date.now()
 		};
 		return { entries, source: r.source };
 	}
@@ -135,7 +135,7 @@ export class Content {
 			deleteOn404: true,
 			ttlMs: ttl(INDEX_TTL_MS),
 			maxBytes: SEARCH_INDEX_MAX,
-			validate: (b) => parseSearchIndex(b) !== undefined,
+			validate: (b) => parseSearchIndex(b) !== undefined
 		});
 	}
 
@@ -146,7 +146,7 @@ export class Content {
 			rel: `site/pages/${e.route}.md`,
 			deleteOn404: true,
 			ttlMs: ttl(PAGE_TTL_MS),
-			maxBytes: PAGE_MAX,
+			maxBytes: PAGE_MAX
 		});
 	}
 
@@ -157,7 +157,7 @@ export class Content {
 			total: entries.length,
 			offline: 0,
 			fromCache: 0,
-			oldest: undefined,
+			oldest: undefined
 		};
 		await Promise.all(
 			entries.map(async (e) => {
@@ -175,14 +175,14 @@ export class Content {
 				if (!present(out.oldest) || r.source.fetchedAt < out.oldest) {
 					out.oldest = r.source.fetchedAt;
 				}
-			}),
+			})
 		);
 		return out;
 	}
 
 	/** Short name or full name to the schema, parsed. "unknown" for names outside SCHEMA_NAMES. */
 	async schema(
-		name: string,
+		name: string
 	): Promise<
 		| "unknown"
 		| { status: "ok"; schema: Record<string, unknown>; source: Source }
@@ -205,7 +205,7 @@ export class Content {
 				} catch {
 					return false;
 				}
-			},
+			}
 		});
 		if (r.status !== "ok") {
 			return r;
@@ -214,12 +214,12 @@ export class Content {
 		const schema = isRecord(parsed) ? parsed : {};
 		// The schema title ends with "(Claude Code 2.1.305)": a second source for the version.
 		this.ver ??= /\(Claude Code (\d+\.\d+\.\d+)\)/u.exec(
-			String(schema["title"]),
+			String(schema["title"])
 		)?.[1];
 		return {
 			status: "ok",
 			schema,
-			source: r.source,
+			source: r.source
 		};
 	}
 
@@ -231,7 +231,7 @@ export class Content {
 			deleteOn404: true,
 			ttlMs: ttl(PAGE_TTL_MS),
 			maxBytes: SCHEMA_MAX,
-			validate: (b) => b.includes("declare module"),
+			validate: (b) => b.includes("declare module")
 		});
 	}
 
@@ -247,7 +247,7 @@ export class Content {
 			url: `${siteBase()}/llms.txt`,
 			rel: "site/llms.txt",
 			ttlMs: ttl(MANIFEST_TTL_MS),
-			maxBytes: PAGE_MAX,
+			maxBytes: PAGE_MAX
 		});
 		if (r.status !== "ok") {
 			this.verRetryAt = Date.now() + ttl(MANIFEST_TTL_MS);

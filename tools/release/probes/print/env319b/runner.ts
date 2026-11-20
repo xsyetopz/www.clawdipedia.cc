@@ -5,7 +5,7 @@ import {
 	type Run,
 	show,
 	type Spec,
-	withRun,
+	withRun
 } from "../run/helpers.ts";
 import { b64u, lines, readOrNull, secret, uniquePaths } from "./util.ts";
 
@@ -13,7 +13,7 @@ import { b64u, lines, readOrNull, secret, uniquePaths } from "./util.ts";
 export const gateway = (
 	name: string,
 	argv: string[],
-	env: Record<string, string>,
+	env: Record<string, string>
 ): CaseDef => ({
 	name: `gateway.${name}`,
 	run: (ctx) =>
@@ -25,20 +25,20 @@ export const gateway = (
 				jsonLine: r.stderr
 					.split("\n")
 					.some((l) => l.startsWith('{"severity":')),
-				plainLine: /^claude gateway: /mu.test(r.stderr),
+				plainLine: /^claude gateway: /mu.test(r.stderr)
 			},
 			samples: {
 				stderr: r.stderr.slice(0, 600),
-				stdout: r.stdout.slice(0, 600),
-			},
-		})),
+				stdout: r.stdout.slice(0, 600)
+			}
+		}))
 });
 
 /** Commands that need a server, run against a closed local port. Each name is read only after the server answers. */
 export const offline = (
 	name: string,
 	argv: string[],
-	env: Record<string, string>,
+	env: Record<string, string>
 ): CaseDef => ({
 	name: `offline.${name}`,
 	run: (ctx) =>
@@ -49,7 +49,7 @@ export const offline = (
 				argv,
 				env,
 				timeoutMs: 20_000,
-				homeFiles: { sec: "fake-secret" },
+				homeFiles: { sec: "fake-secret" }
 			},
 			async (r) => {
 				const record = await readOrNull(`${r.sb.home}/ur-record`);
@@ -58,21 +58,21 @@ export const offline = (
 					data: {
 						precondition: r.stderr.length + r.stdout.length > 0,
 						exit: r.code,
-						recordFile: (record ?? "").length > 0,
+						recordFile: (record ?? "").length > 0
 					},
 					samples: {
 						stderr: r.stderr.slice(0, 500),
-						stdout: r.stdout.slice(0, 300),
-					},
+						stdout: r.stdout.slice(0, 300)
+					}
 				};
-			},
-		),
+			}
+		)
 });
 
 const orchestratorSpec = (
 	hint: Record<string, unknown>,
 	env: Record<string, string>,
-	hookTail: string,
+	hookTail: string
 ): Spec => ({
 	noPrompt: true,
 	argv: [
@@ -87,13 +87,13 @@ const orchestratorSpec = (
 		"--health-port",
 		"0",
 		"--log-level",
-		"debug",
+		"debug"
 	],
 	env,
 	timeoutMs: 8000,
 	homeFiles: {
 		sec: `sk-ant-oat-${secret}`,
-		"hooks/spawn-runner": `#!/bin/sh\nprintf "%s" "\${CLAUDE_RUNNER_SPAWN_REASON-UNSET}" > "$HOME/hook-env"\n${hookTail}`,
+		"hooks/spawn-runner": `#!/bin/sh\nprintf "%s" "\${CLAUDE_RUNNER_SPAWN_REASON-UNSET}" > "$HOME/hook-env"\n${hookTail}`
 	},
 	setup: async (sb) => {
 		await chmod(`${sb.home}/hooks/spawn-runner`, 0o755);
@@ -107,13 +107,13 @@ const orchestratorSpec = (
 				jti: "jti-probe",
 				work_order_jwt: `${b64u({ alg: "none" })}.${b64u({ jti: "jti-probe" })}.sig`,
 				sources: [],
-				...hint,
-			},
-		],
+				...hint
+			}
+		]
 	},
 	afterExit: async (sb) => ({
-		hookSaw: await readOrNull(`${sb.home}/hook-env`),
-	}),
+		hookSaw: await readOrNull(`${sb.home}/hook-env`)
+	})
 });
 
 const orchestratorOut = (r: Run) => ({
@@ -122,12 +122,12 @@ const orchestratorOut = (r: Run) => ({
 		precondition: r.stdout.includes("[runner:orchestrator] starting"),
 		hookSaw: show(r.after["hookSaw"] ?? "null"),
 		paths: uniquePaths(r, false),
-		okLine: lines(r.stdout, /ok session=/u, 2),
+		okLine: lines(r.stdout, /ok session=/u, 2)
 	},
 	samples: {
 		stdout: r.stdout.slice(0, 900),
-		stderr: lines(r.stderr, /spawn_reason|spawn-hint/u, 3),
-	},
+		stderr: lines(r.stderr, /spawn_reason|spawn-hint/u, 3)
+	}
 });
 
 /** Orchestrator mode: the stub serves one spawn hint; the spawn-runner hook writes what it sees to {HOME}/hook-env. */
@@ -135,13 +135,13 @@ export const orchestrator = (
 	name: string,
 	hint: Record<string, unknown>,
 	env: Record<string, string>,
-	hookTail = "",
+	hookTail = ""
 ): CaseDef => ({
 	name: `orchestrator.${name}`,
 	run: (ctx) =>
 		withRun(ctx, orchestratorSpec(hint, env, hookTail), (r) =>
-			orchestratorOut(r),
-		),
+			orchestratorOut(r)
+		)
 });
 
 const runnerSpec = (
@@ -149,7 +149,7 @@ const runnerSpec = (
 	refuse: boolean,
 	childBody: string,
 	runnerTokenTtlS: number | undefined,
-	extraArgv: () => string[],
+	extraArgv: () => string[]
 ): Spec => ({
 	noPrompt: true,
 	argv: [
@@ -164,28 +164,28 @@ const runnerSpec = (
 		"debug",
 		"--exec-path",
 		"{HOME}/fakeclaude",
-		...extraArgv(),
+		...extraArgv()
 	],
 	env,
 	timeoutMs: refuse ? 170_000 : 12_000,
 	homeFiles: {
 		sec: `sk-ant-oat-${secret}`,
 		// stands in for the claude child: records its environment, then waits
-		fakeclaude: `#!/bin/sh\nenv | grep "^CLAUDE_RUNNER_" | sort > "$HOME/child-env"\n${childBody}\n`,
+		fakeclaude: `#!/bin/sh\nenv | grep "^CLAUDE_RUNNER_" | sort > "$HOME/child-env"\n${childBody}\n`
 	},
 	setup: async (sb) => {
 		await chmod(`${sb.home}/fakeclaude`, 0o755);
 	},
 	afterExit: async (sb) => ({
-		childEnv: await readOrNull(`${sb.home}/child-env`),
+		childEnv: await readOrNull(`${sb.home}/child-env`)
 	}),
 	orchestrator: {
 		secret: `sk-ant-oat-${secret}`,
 		hints: [],
 		assignment: "11111111-1111-4111-8111-111111111111",
 		refuseRemote: refuse,
-		...(runnerTokenTtlS !== undefined && { runnerTokenTtlS }),
-	},
+		...(runnerTokenTtlS !== undefined && { runnerTokenTtlS })
+	}
 });
 
 const runnerOut = (r: Run) => ({
@@ -196,13 +196,13 @@ const runnerOut = (r: Run) => ({
 		childEnv: show(r.after["childEnv"] ?? "null"),
 		remoteFetches: r.reqs.filter((q) => q.path.endsWith("/remote")).length,
 		warningEvents: r.reqs.filter((q) =>
-			JSON.stringify(q.body).includes("model_access_renewal_refused"),
-		).length,
+			JSON.stringify(q.body).includes("model_access_renewal_refused")
+		).length
 	},
 	samples: {
 		stdout: r.stdout.slice(0, 1500),
-		stderr: r.stderr.slice(-1200),
-	},
+		stderr: r.stderr.slice(-1200)
+	}
 });
 
 /** Runner mode: the stub assigns one session; the case records which routes the runner calls and what it logs. */
@@ -212,13 +212,13 @@ export const runnerSession = (
 	refuse = false,
 	childBody = 'trap "exit 0" TERM\nwhile :; do sleep 1; done',
 	runnerTokenTtlS?: number,
-	extraArgv: () => string[] = () => [],
+	extraArgv: () => string[] = () => []
 ): CaseDef => ({
 	name: `runner.${name}`,
 	run: (ctx) =>
 		withRun(
 			ctx,
 			runnerSpec(env, refuse, childBody, runnerTokenTtlS, extraArgv),
-			(r) => runnerOut(r),
-		),
+			(r) => runnerOut(r)
+		)
 });

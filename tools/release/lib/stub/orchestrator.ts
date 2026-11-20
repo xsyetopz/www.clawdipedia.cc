@@ -38,7 +38,7 @@ const sessionRoute = (
 	url: URL,
 	id: string,
 	o: StubOrchestrator,
-	calls: Calls,
+	calls: Calls
 ): Response | undefined => {
 	const ses = SESSION_PATH.exec(url.pathname);
 	const sub = ses?.[2];
@@ -51,15 +51,15 @@ const sessionRoute = (
 				{
 					error: {
 						type: "invalid_request_error",
-						message: "renewal refused",
-					},
+						message: "renewal refused"
+					}
 				},
-				{ status: 400 },
+				{ status: 400 }
 			);
 		}
 		return Response.json({
 			api_base_url: `${url.origin}/${id}`,
-			inference_auth: { access_token: FAKE_KEY, expires_in_seconds: 10 },
+			inference_auth: { access_token: FAKE_KEY, expires_in_seconds: 10 }
 		});
 	}
 	if (sub === "worker/register") {
@@ -76,7 +76,7 @@ const sessionTokenRoute = (pathname: string): Response | undefined => {
 		return Response.json({
 			released: true,
 			excluded_count: 0,
-			stuck: false,
+			stuck: false
 		});
 	}
 	return undefined;
@@ -86,7 +86,7 @@ const runnerRoute = (
 	pathname: string,
 	id: string,
 	o: StubOrchestrator,
-	calls: Calls,
+	calls: Calls
 ): Response | undefined => {
 	if (pathname === `${RUNNER_BASE}spawn-hints/poll`) {
 		return Response.json({
@@ -94,7 +94,7 @@ const runnerRoute = (
 			warm_hints: [],
 			pending_count: 0,
 			backing_off_count: 0,
-			circuit_broken_count: 0,
+			circuit_broken_count: 0
 		});
 	}
 	if (pathname === `${RUNNER_BASE}spawn-hints/nack`) {
@@ -107,13 +107,13 @@ const runnerRoute = (
 	if (pathname === `${RUNNER_BASE}runners/register`) {
 		return Response.json({
 			runner_id: "runner-probe",
-			runner_token: ttl === undefined ? RUNNER_TOKEN : mintRunnerJwt(ttl),
+			runner_token: ttl === undefined ? RUNNER_TOKEN : mintRunnerJwt(ttl)
 		});
 	}
 	if (pathname === `${RUNNER_BASE}runners/runner-probe/poll`) {
 		return Response.json({
 			assignment_ids:
-				o.assignment === undefined || o.assignment === "" ? [] : [o.assignment],
+				o.assignment === undefined || o.assignment === "" ? [] : [o.assignment]
 		});
 	}
 	if (pathname === `${RUNNER_BASE}deregister`) {
@@ -128,7 +128,7 @@ export const orchestratorRoute = (
 	url: URL,
 	id: string,
 	o: StubOrchestrator,
-	calls: Calls,
+	calls: Calls
 ): Response | undefined =>
 	sessionRoute(req, url, id, o, calls) ??
 	(req.method === "POST" ? runnerRoute(url.pathname, id, o, calls) : undefined);

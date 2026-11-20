@@ -53,14 +53,14 @@ try {
 const stats = (t: Tally) => ({ counts, paths: t.toJSON() });
 await Bun.write(
 	join(outDir, "print-otel.json"),
-	`${JSON.stringify(stats(otel), null, 1)}\n`,
+	`${JSON.stringify(stats(otel), null, 1)}\n`
 );
 await Bun.write(
 	join(outDir, "print-transcripts.json"),
-	`${JSON.stringify(stats(transcripts), null, 1)}\n`,
+	`${JSON.stringify(stats(transcripts), null, 1)}\n`
 );
 await Bun.write(
 	join(outDir, "print-claude-json.json"),
-	`${JSON.stringify(stats(claudeJson), null, 1)}\n`,
+	`${JSON.stringify(stats(claudeJson), null, 1)}\n`
 );
 console.info(JSON.stringify(counts));

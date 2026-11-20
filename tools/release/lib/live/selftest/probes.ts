@@ -17,14 +17,14 @@ export const probeChecks = (step: Step): void => {
 		"artifacts probe: echoed command and Unknown command are not a panel",
 		!artifactsPanelShown("> /artifacts\n") &&
 			!artifactsPanelShown(unknownScreen) &&
-			artifactsPanelShown("> /artifacts\n\n Artifacts\n No artifacts yet\n"),
+			artifactsPanelShown("> /artifacts\n\n Artifacts\n No artifacts yet\n")
 	);
 	const hdr = headerOf({
 		system: [
 			{
-				text: "x-anthropic-billing-header: cc_version=1.a; cc_entrypoint=cli; cc_project=claude_proj_01X; cc_project_src=user;\nrest",
-			},
-		],
+				text: "x-anthropic-billing-header: cc_version=1.a; cc_entrypoint=cli; cc_project=claude_proj_01X; cc_project_src=user;\nrest"
+			}
+		]
 	});
 	step(
 		"attribution probe: header keys and project fields, no header text kept",
@@ -32,12 +32,12 @@ export const probeChecks = (step: Step): void => {
 			"cc_version,cc_entrypoint,cc_project,cc_project_src" &&
 			hdr.project === "claude_proj_01X" &&
 			hdr.src === "user" &&
-			headerOf({ system: [{ text: "plain" }] }).keys.length === 0,
+			headerOf({ system: [{ text: "plain" }] }).keys.length === 0
 	);
 	step(
 		"upgrade typeahead probe: the echoed input line is not a row",
 		typeaheadLines("> /upg\n  /upgrade  Upgrade your plan\n", "upgrade")
-			.length === 1 && typeaheadLines("> /upg\n", "upgrade").length === 0,
+			.length === 1 && typeaheadLines("> /upg\n", "upgrade").length === 0
 	);
 };
 
@@ -46,14 +46,14 @@ export const ptyChecks = async (step: Step, dir: string): Promise<void> => {
 	const prog = join(dir, "prog.sh");
 	await Bun.write(
 		prog,
-		"#!/bin/sh\nprintf 'tok=[%s]\\r\\n' \"$CLAUDE_CODE_OAUTH_TOKEN\"\nsleep 1\n",
+		"#!/bin/sh\nprintf 'tok=[%s]\\r\\n' \"$CLAUDE_CODE_OAUTH_TOKEN\"\nsleep 1\n"
 	);
 	await chmod(prog, 0o755);
 	const ptyEnv = liveEnv({
 		home: dir,
 		configDir: dir,
 		token: DRY_TOKEN,
-		tty: true,
+		tty: true
 	});
 	const out = join(dir, "RAW");
 	let refused = false;
@@ -68,12 +68,12 @@ export const ptyChecks = async (step: Step, dir: string): Promise<void> => {
 		bin: prog,
 		secs: 3,
 		out,
-		liveToken: DRY_TOKEN,
+		liveToken: DRY_TOKEN
 	});
 	step(
 		"runPty: live token only with liveToken, env file removed",
 		refused &&
 			r.screen.includes(`tok=[${DRY_TOKEN}]`) &&
-			!(await pathExists(`${out}.env.json`)),
+			!(await pathExists(`${out}.env.json`))
 	);
 };

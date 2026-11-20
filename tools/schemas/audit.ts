@@ -37,7 +37,7 @@ export const auditFields = (
 	paths: string[],
 	manual: ManualFixture | undefined,
 	has: (anchor: string) => boolean,
-	seen: Record<string, Seen>,
+	seen: Record<string, Seen>
 ): AuditRow[] =>
 	paths.map((path) => {
 		const entry = manual?.fields[path];
@@ -65,7 +65,7 @@ export const auditFields = (
  */
 export const shareSamples = (
 	rows: AuditRow[],
-	manual: ManualFixture | undefined,
+	manual: ManualFixture | undefined
 ): AuditRow[] => {
 	const key = (path: string): string | undefined => {
 		const e = manual?.fields[path];
@@ -99,7 +99,7 @@ export const markRemoved = (
 	rows: AuditRow[],
 	present: (path: string) => boolean,
 	manual: ManualFixture | undefined,
-	has: (anchor: string) => boolean,
+	has: (anchor: string) => boolean
 ): AuditRow[] =>
 	rows.map((r) => {
 		if (present(r.path)) {
@@ -120,7 +120,7 @@ const PASS: ReadonlySet<Verdict> = new Set([
 	"code only",
 	"site sampled",
 	"samples agree",
-	"removed",
+	"removed"
 ]);
 
 /** Whether every row passes: typed, read from code the program still has, and not contradicted by a payload. */

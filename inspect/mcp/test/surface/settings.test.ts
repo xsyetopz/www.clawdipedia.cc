@@ -19,7 +19,7 @@ permissions:()=>z.object({}),
 			"$schema",
 			"apiKeyHelper",
 			"permissions",
-			"xaaIdp",
+			"xaaIdp"
 		]);
 		expect(by.get("apiKeyHelper")?.detail).toBe("Script that prints a key");
 		expect(by.get("permissions")?.detail).toBeUndefined();
@@ -35,7 +35,7 @@ permissions:()=>z.object({}),
 
 	test("an object with no anchor gives no settings", async () => {
 		expect(
-			await names("setting", "var o={apiKeyHelper:()=>z.string()};"),
+			await names("setting", "var o={apiKeyHelper:()=>z.string()};")
 		).toEqual([]);
 	});
 });
@@ -65,7 +65,7 @@ helpers:()=>wrap(helpers().optional()),
 	const b = () =>
 		new Bundle([
 			{ name: "/$bunfs/root/a.js", text: src },
-			{ name: "/$bunfs/root/lib.js", text: lib },
+			{ name: "/$bunfs/root/lib.js", text: lib }
 		]);
 
 	test("gives the leaf keys through helpers, records, memoized schemas, and keys built from a list", async () => {
@@ -76,7 +76,7 @@ helpers:()=>wrap(helpers().optional()),
 			"helpers.linux.path",
 			"helpers.macos.path",
 			"known.*.source.repo",
-			"permissions.allow",
+			"permissions.allow"
 		]);
 	});
 
@@ -100,13 +100,13 @@ var d=["SessionStart","Stop","Other","More","Names"];
 			"PostToolUse",
 			"PreToolUse",
 			"SessionStart",
-			"Stop",
+			"Stop"
 		]);
 	});
 
 	test("no list gives no events", async () => {
 		expect(await names("hook-event", 'var a=["PreToolUse","Stop"];')).toEqual(
-			[],
+			[]
 		);
 	});
 });

@@ -85,7 +85,7 @@ export class Bundle {
 	async origin(
 		m: Module,
 		v: Variable,
-		seen = 0,
+		seen = 0
 	): Promise<{ module: Module; variable: Variable } | undefined> {
 		const def = v.defs[0];
 		if (def?.type !== "ImportBinding") {
@@ -132,7 +132,7 @@ export class Bundle {
 	async #importsOf(m: Module): Promise<Map<string, Import[]>> {
 		const others = await mapSeq(
 			this.importersOf(m.name).filter((n) => n !== m.name),
-			(n) => this.get(n),
+			(n) => this.get(n)
 		);
 		const out = new Map<string, Import[]>();
 		let at = 0;
@@ -154,7 +154,7 @@ export class Bundle {
 	/** The local variables in other modules that import the top-level `v` of `m`. Empty when `v` is not top-level. */
 	async importers(
 		m: Module,
-		v: Variable,
+		v: Variable
 	): Promise<{ module: Module; variable: Variable }[]> {
 		const names = m.topLevel(v.name) === v ? m.exportedAs(v.name) : [];
 		if (names.length === 0) {

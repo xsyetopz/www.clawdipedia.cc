@@ -12,7 +12,7 @@ import {
 	rename,
 	rm,
 	stat,
-	writeFile,
+	writeFile
 } from "node:fs/promises";
 import { dirname, join } from "node:path";
 
@@ -25,7 +25,7 @@ import {
 	isMeta,
 	type Meta,
 	pickVictims,
-	sha,
+	sha
 } from "./cache-meta.ts";
 
 const readMeta = async (file: string): Promise<Meta | undefined> => {
@@ -95,7 +95,7 @@ export class DiskCache {
 	async put(
 		rel: string,
 		body: string,
-		v: { url: string; etag?: string; lastModified?: string },
+		v: { url: string; etag?: string; lastModified?: string }
 	): Promise<void> {
 		const buf = Buffer.from(body, "utf8");
 		const meta: Meta = {
@@ -105,7 +105,7 @@ export class DiskCache {
 			fetchedAt: new Date().toISOString(),
 			status: 200,
 			bytes: buf.length,
-			sha256: sha(buf),
+			sha256: sha(buf)
 		};
 		if (this.memory) {
 			this.memory.set(rel, { body, meta });
@@ -200,7 +200,7 @@ export class DiskCache {
 			return {
 				rel,
 				size: s.size,
-				at: meta ? Date.parse(meta.fetchedAt) : s.mtimeMs,
+				at: meta ? Date.parse(meta.fetchedAt) : s.mtimeMs
 			};
 		} catch {
 			// Gone already.
@@ -216,7 +216,7 @@ export class DiskCache {
 			return [];
 		}
 		const wanted = names.filter(
-			(rel) => !rel.endsWith(".meta.json") && !rel.endsWith(".tmp"),
+			(rel) => !rel.endsWith(".meta.json") && !rel.endsWith(".tmp")
 		);
 		const infos = await Promise.all(wanted.map((rel) => this.fileInfo(rel)));
 		return infos.filter((i) => i !== undefined);
@@ -236,7 +236,7 @@ export class DiskCache {
 		const all = [...mem].map(([rel, c]) => ({
 			rel,
 			size: Buffer.byteLength(c.body),
-			at: c.meta ? Date.parse(c.meta.fetchedAt) : 0,
+			at: c.meta ? Date.parse(c.meta.fetchedAt) : 0
 		}));
 		for (const f of pickVictims(all, keep)) {
 			mem.delete(f.rel);

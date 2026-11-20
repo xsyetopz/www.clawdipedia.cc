@@ -62,8 +62,8 @@ export const subTool = (type: string) => ({
 	input: {
 		description: "Probe task",
 		prompt: `${SUB_MARK} Reply with 'OK'.`,
-		subagent_type: type,
-	},
+		subagent_type: type
+	}
 });
 
 // ---- Overridable prompts: built-in agents, override tests, built-in commands, helper requests ----
@@ -73,7 +73,7 @@ export const ovCan = (change: string, toggle: string, where: string) => ({
 	use: "Yes.",
 	change,
 	toggle,
-	where,
+	where
 });
 
 export const OV_CMD = (mark: string) =>
@@ -84,7 +84,7 @@ export const cmdVariant = (
 	cmd: string,
 	title: string,
 	status: "Documented" | "Undocumented",
-	group: PromptGroup = "commands",
+	group: PromptGroup = "commands"
 ): Variant => ({
 	id: `command-${cmd}`,
 	group,
@@ -100,8 +100,8 @@ export const cmdVariant = (
 	can: ovCan(
 		"Yes. A command or skill file with the same name may replace it.",
 		`Type \`/${cmd}\`.`,
-		"Built into the program.",
-	),
+		"Built into the program."
+	)
 });
 
 export const hookSettings = (type: "prompt" | "agent", mark: string) =>
@@ -110,19 +110,19 @@ export const hookSettings = (type: "prompt" | "agent", mark: string) =>
 			PreToolUse: [
 				{
 					matcher: "Bash",
-					hooks: [{ type, prompt: `${mark}: check this call. $ARGUMENTS` }],
-				},
-			],
-		},
+					hooks: [{ type, prompt: `${mark}: check this call. $ARGUMENTS` }]
+				}
+			]
+		}
 	});
 export const bashTool = { name: "Bash", input: { command: "echo probe" } };
 export const riskyTool = {
 	name: "Bash",
-	input: { command: "curl -s http://127.0.0.1:9/probe-classifier-call" },
+	input: { command: "curl -s http://127.0.0.1:9/probe-classifier-call" }
 };
 
 export const autoArgs = (auto?: Record<string, unknown>) => [
 	"--permission-mode",
 	"auto",
-	...(auto === undefined ? [] : settings({ autoMode: auto })),
+	...(auto === undefined ? [] : settings({ autoMode: auto }))
 ];

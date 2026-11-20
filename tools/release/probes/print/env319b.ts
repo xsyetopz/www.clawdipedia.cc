@@ -15,6 +15,6 @@ export const env319b: PrintGroup = {
 			...streamCases,
 			...inertCases,
 			...runnerCases,
-			...tailCases,
-		]),
+			...tailCases
+		])
 };

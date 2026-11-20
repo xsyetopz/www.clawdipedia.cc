@@ -18,7 +18,7 @@ export {
 	checkTables,
 	type Mismatch,
 	type Prose,
-	type TableCheck,
+	type TableCheck
 } from "./type-tables/check.ts";
 export {
 	aliasOf,
@@ -27,7 +27,7 @@ export {
 	type TypeField,
 	type TypeFile,
 	typeFields,
-	typeFile,
+	typeFile
 } from "./type-tables/parse.ts";
 export { newWords } from "./type-tables/words.ts";
 
@@ -41,7 +41,7 @@ const report = (r: TableCheck, prose: boolean): void => {
 	if (prose) {
 		for (const p of r.checked) {
 			console.info(
-				`${p.file}:${p.line}: ${p.name}\n  page: ${p.page}\n  type: ${p.doc}\n  new: ${newWords(p.page, p.doc).join(" ")}`,
+				`${p.file}:${p.line}: ${p.name}\n  page: ${p.page}\n  type: ${p.doc}\n  new: ${newWords(p.page, p.doc).join(" ")}`
 			);
 		}
 	}
@@ -55,7 +55,7 @@ const main = async (args: string[]): Promise<number> => {
 			? join(import.meta.dir, "..", "..", "..", "schemas", "claude-code.d.ts")
 			: (args[t + 1] ?? "");
 	const files = args.filter(
-		(a, i) => a !== "--prose" && (t === -1 || (i !== t && i !== t + 1)),
+		(a, i) => a !== "--prose" && (t === -1 || (i !== t && i !== t + 1))
 	);
 	const f = typeFile(await Bun.file(types).text());
 	const texts = await Promise.all(files.map((file) => Bun.file(file).text()));
@@ -66,7 +66,7 @@ const main = async (args: string[]): Promise<number> => {
 	const count = results.reduce((n, r) => n + r.mismatches.length, 0);
 	const checked = results.reduce((n, r) => n + r.checked.length, 0);
 	console.info(
-		`${count} mismatches, ${checked} rows compared, in ${files.length} files`,
+		`${count} mismatches, ${checked} rows compared, in ${files.length} files`
 	);
 	return count === 0 ? 0 : 1;
 };

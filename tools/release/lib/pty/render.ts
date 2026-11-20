@@ -7,9 +7,9 @@ const ANSI = new RegExp(
 		String.raw`${ESC}\][^${BEL}${ESC}]*(?:${BEL}|${ESC}\\)`,
 		String.raw`${ESC}[PX^_][^${ESC}]*(?:${ESC}\\)?`,
 		String.raw`${ESC}[=>()][A-Z0-9]?`,
-		String.raw`${ESC}[78MDEHc]`,
+		String.raw`${ESC}[78MDEHc]`
 	].join("|"),
-	"gu",
+	"gu"
 );
 
 /** Readable text: cursor-forward becomes spaces, cursor-down and home become line breaks, CR overwrites the line, other escapes are dropped, spaces collapse. */
@@ -17,10 +17,10 @@ export const renderRaw = (data: Uint8Array): string => {
 	let s = Buffer.from(data).toString("utf8");
 	s = s
 		.replaceAll(new RegExp(String.raw`${ESC}\[(\d*)C`, "gu"), (_m, n: string) =>
-			" ".repeat(Number(n || 1)),
+			" ".repeat(Number(n || 1))
 		)
 		.replaceAll(new RegExp(String.raw`${ESC}\[(\d*)B`, "gu"), (_m, n: string) =>
-			"\n".repeat(Math.min(Number(n || 1), 3)),
+			"\n".repeat(Math.min(Number(n || 1), 3))
 		)
 		.replaceAll(new RegExp(String.raw`${ESC}\[\d*(?:;\d*)?[Hf]`, "gu"), "\n")
 		.replaceAll(ANSI, "");

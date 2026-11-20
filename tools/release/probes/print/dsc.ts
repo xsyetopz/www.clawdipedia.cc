@@ -10,7 +10,7 @@ import {
 	type Run,
 	runCases,
 	toolNames,
-	withRun,
+	withRun
 } from "./run/helpers.ts";
 import type { PrintGroup } from "./types.ts";
 
@@ -39,7 +39,7 @@ const measure = (r: Run): Measure | null => {
 	const b = bodyOf(q);
 	const fx = (v: unknown) => fixed(r, json(v));
 	const tools = Object.fromEntries(
-		(b.tools ?? []).map((t) => [t.name, bytes(fx(t))]),
+		(b.tools ?? []).map((t) => [t.name, bytes(fx(t))])
 	);
 	const first = skillsText(b.messages?.[1]?.content);
 	const a = first.indexOf("The following skills");
@@ -51,7 +51,7 @@ const measure = (r: Run): Measure | null => {
 		nTools: (b.tools ?? []).length,
 		tools,
 		skillsSection: a !== -1 && e > a ? bytes(fixed(r, first.slice(a, e))) : 0,
-		toolNames: toolNames(q),
+		toolNames: toolNames(q)
 	};
 };
 
@@ -79,7 +79,7 @@ const sizeData = (a: Measure | null, b: Measure | null): Out["data"] => ({
 	removedTools:
 		a !== null && b !== null
 			? a.toolNames.filter((n) => !b.toolNames.includes(n))
-			: null,
+			: null
 });
 
 const sizes: CaseDef = {
@@ -91,21 +91,21 @@ const sizes: CaseDef = {
 			{ args: ["--disable-slash-commands"] },
 			(r) => ({
 				r,
-				m: measure(r),
-			}),
+				m: measure(r)
+			})
 		);
 		return {
 			from: on.r,
 			args: ["--disable-slash-commands"],
 			data: sizeData(off.m, on.m),
 			notes:
-				"Two runs: baseline and --disable-slash-commands; args/exit shown are the flag run.",
+				"Two runs: baseline and --disable-slash-commands; args/exit shown are the flag run."
 		};
-	},
+	}
 };
 
 export const dsc: PrintGroup = {
 	id: "dsc",
 	title: "--disable-slash-commands request size",
-	run: (ctx) => runCases(ctx, "dsc", [sizes]),
+	run: (ctx) => runCases(ctx, "dsc", [sizes])
 };

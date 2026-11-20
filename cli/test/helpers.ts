@@ -102,7 +102,7 @@ const manifestOf = (text: string): ManifestEntry[] => {
 		return {
 			route: e["route"],
 			title: e["title"],
-			description: e["description"],
+			description: e["description"]
 		};
 	});
 };
@@ -114,9 +114,9 @@ const siteIndex = async (manifest: string): Promise<string> => {
 			title: e.title,
 			description: e.description,
 			text: await Bun.file(
-				join(SITE, e.route === "/" ? "index.md" : `${e.route.slice(1)}.md`),
-			).text(),
-		})),
+				join(SITE, e.route === "/" ? "index.md" : `${e.route.slice(1)}.md`)
+			).text()
+		}))
 	);
 	return searchIndexJson("test", pages);
 };
@@ -126,7 +126,7 @@ const siteResponse = async (req: Request): Promise<Response> => {
 	const manifest = await Bun.file(join(SITE, "manifest.json")).text();
 	if (url.pathname === "/llms-manifest.json") {
 		return new Response(
-			manifest.replaceAll("https://clawdipedia.cc", url.origin),
+			manifest.replaceAll("https://clawdipedia.cc", url.origin)
 		);
 	}
 	if (url.pathname === "/llms.txt") {
@@ -147,12 +147,12 @@ export const mockSite = () => {
 	const srv = Bun.serve({
 		port: 0,
 		hostname: "127.0.0.1",
-		fetch: siteResponse,
+		fetch: siteResponse
 	});
 	stops.push(() => srv.stop(true));
 	return {
 		url: `http://127.0.0.1:${srv.port}`,
-		stop: () => srv.stop(true),
+		stop: () => srv.stop(true)
 	};
 };
 
@@ -161,7 +161,7 @@ const platformResponse = async (req: Request): Promise<Response> => {
 	if (url.pathname === "/llms.txt") {
 		const text = await Bun.file(join(PLATFORM, "llms.txt")).text();
 		return new Response(
-			text.replaceAll("https://platform.claude.com", url.origin),
+			text.replaceAll("https://platform.claude.com", url.origin)
 		);
 	}
 	const m = /^\/docs\/en\/([a-z0-9/-]+)\.md$/u.exec(url.pathname);
@@ -176,7 +176,7 @@ export const mockPlatform = () => {
 	const srv = Bun.serve({
 		port: 0,
 		hostname: "127.0.0.1",
-		fetch: platformResponse,
+		fetch: platformResponse
 	});
 	stops.push(() => srv.stop(true));
 	return { url: `http://127.0.0.1:${srv.port}` };
@@ -189,9 +189,9 @@ export const envOf = (env: Record<string, string>): Record<string, string> => {
 			(e): e is [string, string] =>
 				typeof e[1] === "string" &&
 				!/^(CLAWDIPEDIA_|CLAUDE_RESOURCES_|CODE_DOCS_|CLAUDE_PLUGIN_DATA|PLATFORM_DOCS_)/u.test(
-					e[0],
-				),
-		),
+					e[0]
+				)
+		)
 	);
 	return { ...clean, ...env };
 };
@@ -201,12 +201,12 @@ export const cc = async (args: string[], env: Record<string, string> = {}) => {
 	const p = Bun.spawn(["bun", BIN, ...args], {
 		env: envOf(env),
 		stdout: "pipe",
-		stderr: "pipe",
+		stderr: "pipe"
 	});
 	const [out, err, code] = await Promise.all([
 		new Response(p.stdout).text(),
 		new Response(p.stderr).text(),
-		p.exited,
+		p.exited
 	]);
 	return { code, out, err };
 };
@@ -218,6 +218,6 @@ export const withSite = async () => {
 	return {
 		site,
 		cache,
-		env: { CLAWDIPEDIA_BASE_URL: site.url, CLAWDIPEDIA_CACHE_DIR: cache },
+		env: { CLAWDIPEDIA_BASE_URL: site.url, CLAWDIPEDIA_CACHE_DIR: cache }
 	};
 };

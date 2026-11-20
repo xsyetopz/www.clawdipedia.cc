@@ -30,7 +30,7 @@ export const writeSecurityShim = async (home: string): Promise<string> => {
 
 /** Guard right before a spawn: the first PATH entry must be a shim dir holding `security`. */
 export const assertShimReady = async (
-	env: Record<string, string>,
+	env: Record<string, string>
 ): Promise<void> => {
 	const first = (env["PATH"] ?? "").split(":")[0] ?? "";
 	if (
@@ -38,7 +38,7 @@ export const assertShimReady = async (
 		!(await pathExists(join(first, "security")))
 	) {
 		throw new Error(
-			`security shim missing: expected ${join(first === "" ? "<PATH entry>" : first, "security")}; refusing to spawn (macOS would show a Keychain dialog)`,
+			`security shim missing: expected ${join(first === "" ? "<PATH entry>" : first, "security")}; refusing to spawn (macOS would show a Keychain dialog)`
 		);
 	}
 };

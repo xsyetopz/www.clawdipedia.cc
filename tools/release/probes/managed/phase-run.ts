@@ -8,7 +8,7 @@ import { folderState, installedVariant, waitFor } from "./state.ts";
 const report = async (
 	s: Session,
 	runDir: string,
-	r: CaseResult,
+	r: CaseResult
 ): Promise<void> => {
 	s.total++;
 	if (s.ctx.dry) {
@@ -21,7 +21,7 @@ const report = async (
 		s.invalid++;
 	}
 	console.info(
-		`  ${bad ? "INVALID" : "ok     "} ${r.id}${bad ? ` (${String(r.data["error"] ?? "")})` : ""}`,
+		`  ${bad ? "INVALID" : "ok     "} ${r.id}${bad ? ` (${String(r.data["error"] ?? "")})` : ""}`
 	);
 };
 
@@ -41,7 +41,7 @@ const guardFor = (p: Phase) => async (): Promise<string | null> => {
 export const doPhase = async (
 	s: Session,
 	p: Phase,
-	runDir: string,
+	runDir: string
 ): Promise<void> => {
 	console.info(`phase ${p}: ${selectedDefs(p, s.pctx).length} case(s)`);
 	const results = await runPhase(
@@ -58,11 +58,11 @@ export const doPhase = async (
 						.trim()
 						.split("\n")
 						.filter((l) => l !== "")
-						.map((l) => l.split(" ")[0] ?? ""),
-				),
+						.map((l) => l.split(" ")[0] ?? "")
+				)
 			];
 		},
-		guardFor(p),
+		guardFor(p)
 	);
 	await eachInOrder(results, (r) => report(s, runDir, r));
 };
@@ -71,7 +71,7 @@ const WAIT_MS = 10 * 60_000;
 
 export const runVariants = async (
 	s: Session,
-	runDir: string,
+	runDir: string
 ): Promise<void> => {
 	let stopped = false;
 	await eachInOrder(VARIANTS, async (v) => {
@@ -86,7 +86,7 @@ export const runVariants = async (
 		const ready = await waitFor(
 			async () =>
 				(await folderState()) === "ours" && (await installedVariant()) === v,
-			WAIT_MS,
+			WAIT_MS
 		);
 		if (!ready) {
 			console.error(`timed out waiting for variant ${v}`);

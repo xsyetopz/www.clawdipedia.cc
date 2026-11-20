@@ -4,7 +4,7 @@ import {
 	msgs,
 	readCfg,
 	type Run,
-	withRun,
+	withRun
 } from "../run/helpers.ts";
 import { diffSig, type Sig, sig } from "../sig.ts";
 import { DBG, lines } from "./util.ts";
@@ -16,7 +16,7 @@ import { DBG, lines } from "./util.ts";
 export const inert = (
 	name: string,
 	env: Record<string, string>,
-	host: Record<string, string> = {},
+	host: Record<string, string> = {}
 ): CaseDef => ({
 	name: `inert.${name}`,
 	run: async (ctx) => {
@@ -43,27 +43,25 @@ export const inert = (
 						precondition: msgs(r).length > 0 && r.code === 0,
 						changedKeys: changed.length > 0 ? changed.join(",") : "none",
 						noiseKeys: noise.size,
-						exit: r.code,
+						exit: r.code
 					},
 					samples: {
-						debug: lines(log, new RegExp(Object.keys(env).join("|"), "u"), 4),
-					},
+						debug: lines(log, new RegExp(Object.keys(env).join("|"), "u"), 4)
+					}
 				};
-			},
+			}
 		);
-	},
+	}
 });
 
 const HOOK_SETTINGS = JSON.stringify({
 	hooks: {
 		UserPromptSubmit: [
 			{
-				hooks: [
-					{ type: "command", command: "echo hook-ran >> {CFG}/hook.log" },
-				],
-			},
-		],
-	},
+				hooks: [{ type: "command", command: "echo hook-ran >> {CFG}/hook.log" }]
+			}
+		]
+	}
 });
 
 const hooksOffOut = async (r: Run) => {
@@ -80,12 +78,12 @@ const hooksOffOut = async (r: Run) => {
 			precondition: msgs(r).length > 0,
 			hookRan: hookLog.includes("hook-ran"),
 			noteInRequest: note !== null,
-			noteInOutput: evLines.length,
+			noteInOutput: evLines.length
 		},
 		samples: {
 			request: note ?? "",
-			output: (evLines[0] ?? "").slice(0, 500),
-		},
+			output: (evLines[0] ?? "").slice(0, 500)
+		}
 	};
 };
 
@@ -93,7 +91,7 @@ const hooksOffOut = async (r: Run) => {
 export const hooksOff = (
 	name: string,
 	value: string | undefined,
-	restricted: boolean,
+	restricted: boolean
 ): CaseDef => ({
 	name: `personal-hooks-off.${name}`,
 	run: (ctx) =>
@@ -106,9 +104,9 @@ export const hooksOff = (
 					...(restricted ? { CLAUDE_CODE_RESTRICT_PERSONAL_CONFIG: "1" } : {}),
 					...(value === undefined
 						? {}
-						: { CLAUDE_CODE_PERSONAL_HOOKS_OFF: value }),
-				},
+						: { CLAUDE_CODE_PERSONAL_HOOKS_OFF: value })
+				}
 			},
-			hooksOffOut,
-		),
+			hooksOffOut
+		)
 });

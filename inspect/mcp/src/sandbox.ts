@@ -26,7 +26,7 @@ export const makeShim = async (home: string): Promise<string> => {
 	await mkdir(shim);
 	await Bun.write(
 		join(shim, "security"),
-		'#!/bin/sh\n[ "$1" = "-i" ] && cat >/dev/null\nexit 44\n',
+		'#!/bin/sh\n[ "$1" = "-i" ] && cat >/dev/null\nexit 44\n'
 	);
 	await chmod(join(shim, "security"), 0o755);
 	return shim;
@@ -34,12 +34,12 @@ export const makeShim = async (home: string): Promise<string> => {
 
 export const checkEnv = (
 	env: Record<string, string>,
-	fixed: Record<string, string>,
+	fixed: Record<string, string>
 ): void => {
 	for (const [k, v] of Object.entries(env)) {
 		if (k.toUpperCase() in fixed || UNSAFE.test(k) || v.includes("sk-ant-")) {
 			throw new Error(
-				`env ${k} is not allowed: run fixes it, or it could carry a credential or route a request`,
+				`env ${k} is not allowed: run fixes it, or it could carry a credential or route a request`
 			);
 		}
 	}
@@ -48,7 +48,7 @@ export const checkEnv = (
 export const writeInputs = async (
 	dirs: Dirs,
 	login: "key" | "oauth",
-	files: Record<string, string>,
+	files: Record<string, string>
 ): Promise<void> => {
 	if (login === "oauth") {
 		await Bun.write(
@@ -59,16 +59,16 @@ export const writeInputs = async (
 					refreshToken: FAKE_KEY,
 					expiresAt: Date.now() + 86_400_000,
 					scopes: ["user:inference", "user:profile"],
-					subscriptionType: null,
-				},
-			}),
+					subscriptionType: null
+				}
+			})
 		);
 	}
 	await Promise.all(
 		Object.entries(files).map(async ([name, body]) => {
 			await mkdir(dirname(join(dirs.project, name)), { recursive: true });
 			await Bun.write(join(dirs.project, name), body);
-		}),
+		})
 	);
 };
 
@@ -80,13 +80,13 @@ export const fixedEnv = (
 		login,
 		baseUrl,
 		self,
-		provider,
+		provider
 	}: {
 		login: string;
 		baseUrl: boolean;
 		self: string;
 		provider: "vertex" | undefined;
-	},
+	}
 ): Record<string, string> => ({
 	PATH: `${shim}:${process.env["PATH"] ?? ""}`,
 	HOME: dirs.home,
@@ -99,7 +99,7 @@ export const fixedEnv = (
 		CLAUDE_CODE_USE_VERTEX: "1",
 		ANTHROPIC_VERTEX_BASE_URL: `http://${self}`,
 		ANTHROPIC_VERTEX_PROJECT_ID: "probe-project",
-		CLAUDE_CODE_SKIP_VERTEX_AUTH: "1",
+		CLAUDE_CODE_SKIP_VERTEX_AUTH: "1"
 	}),
 	CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1",
 	DISABLE_TELEMETRY: "1",
@@ -108,7 +108,7 @@ export const fixedEnv = (
 	NO_PROXY: "127.0.0.1,localhost",
 	// The AWS SDK reaches 169.254.169.254 directly, not through the proxy.
 	AWS_EC2_METADATA_DISABLED: "true",
-	...(net.ca !== undefined && { NODE_EXTRA_CA_CERTS: net.ca }),
+	...(net.ca !== undefined && { NODE_EXTRA_CA_CERTS: net.ca })
 });
 
 export const mk = async (state: Cleanup, p: string): Promise<string> => {
@@ -120,7 +120,7 @@ export const mk = async (state: Cleanup, p: string): Promise<string> => {
 export const makeDirs = async (state: Cleanup): Promise<Dirs> => ({
 	home: await mk(state, "cc-run-home-"),
 	config: await mk(state, "cc-run-cfg-"),
-	project: await mk(state, "cc-run-proj-"),
+	project: await mk(state, "cc-run-proj-")
 });
 
 export const argvOf = (bin: string, args: string[], dirs: Dirs): string[] => [
@@ -128,17 +128,17 @@ export const argvOf = (bin: string, args: string[], dirs: Dirs): string[] => [
 	...args.map((a) =>
 		a
 			.replaceAll("<project-dir>", dirs.project)
-			.replaceAll("<config-dir>", dirs.config),
-	),
+			.replaceAll("<config-dir>", dirs.config)
+	)
 ];
 
 export const stubEnv = (
 	env: Record<string, string>,
-	self: string,
+	self: string
 ): Record<string, string> =>
 	Object.fromEntries(
 		Object.entries(env).map(([k, v]) => [
 			k,
-			v.replaceAll("<stub>", `http://${self}`),
-		]),
+			v.replaceAll("<stub>", `http://${self}`)
+		])
 	);

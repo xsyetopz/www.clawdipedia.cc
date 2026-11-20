@@ -16,7 +16,7 @@ const fail = (message: string): Got => ({ kind: "fail", message });
 
 const readCapped = async (
 	res: Response,
-	max: number,
+	max: number
 ): Promise<string | undefined> => {
 	const len = Number(res.headers.get("content-length"));
 	if (Number.isFinite(len) && len > max) {
@@ -62,7 +62,7 @@ const finish = async (res: Response, maxBytes: number): Promise<Got> => {
 		kind: "ok",
 		body,
 		...(etag !== null && etag !== "" ? { etag } : {}),
-		...(lastModified !== null && lastModified !== "" ? { lastModified } : {}),
+		...(lastModified !== null && lastModified !== "" ? { lastModified } : {})
 	};
 };
 
@@ -71,7 +71,7 @@ const redirectTarget = (
 	res: Response,
 	cur: string,
 	hop: number,
-	origin: string,
+	origin: string
 ): string | Got => {
 	const loc = res.headers.get("location");
 	if (loc === null || loc === "") {
@@ -92,7 +92,7 @@ const conditionalHeaders = (validators: {
 }): Record<string, string> => {
 	const headers: Record<string, string> = {
 		"User-Agent": UA,
-		Accept: ACCEPT,
+		Accept: ACCEPT
 	};
 	if (validators.etag !== undefined && validators.etag !== "") {
 		headers["If-None-Match"] = validators.etag;
@@ -117,7 +117,7 @@ const step = async (cur: string, hop: number, ctx: Ctx): Promise<Got> => {
 	const res = await fetch(cur, {
 		headers: ctx.headers,
 		signal: ctx.signal,
-		redirect: "manual",
+		redirect: "manual"
 	});
 	if (res.status >= 300 && res.status < 400 && res.status !== 304) {
 		await res.body?.cancel();
@@ -131,14 +131,14 @@ const step = async (cur: string, hop: number, ctx: Ctx): Promise<Got> => {
 export const httpGet = async (
 	url: string,
 	maxBytes: number,
-	validators: { etag?: string; lastModified?: string },
+	validators: { etag?: string; lastModified?: string }
 ): Promise<Got> => {
 	try {
 		return await step(url, 0, {
 			origin: new URL(url).origin,
 			maxBytes,
 			headers: conditionalHeaders(validators),
-			signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+			signal: AbortSignal.timeout(FETCH_TIMEOUT_MS)
 		});
 	} catch (error) {
 		return fail(error instanceof Error ? error.message : String(error));

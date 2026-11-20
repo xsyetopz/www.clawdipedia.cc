@@ -34,7 +34,7 @@ const namesIn = async (dir: string): Promise<string[]> => {
 
 const sessionsIn = async (
 	root: string,
-	project: string,
+	project: string
 ): Promise<SessionFile[]> => {
 	const dir = join(root, project);
 	const info = await stat(dir);
@@ -52,15 +52,15 @@ const sessionsIn = async (
 				project,
 				path,
 				bytes: st.size,
-				modified: st.mtime.toISOString(),
+				modified: st.mtime.toISOString()
 			};
-		}),
+		})
 	);
 };
 
 /** Every session file, newest first. `project` keeps those whose project folder name contains it. */
 export const listSessions = async (
-	project?: string,
+	project?: string
 ): Promise<SessionFile[]> => {
 	const root = projectsDir();
 	const all = await namesIn(root);
@@ -71,7 +71,7 @@ export const listSessions = async (
 
 /** Every session file plus the subagent transcripts under <session>/subagents/, where the tool calls of subagents are. */
 export const listTranscripts = async (
-	project?: string,
+	project?: string
 ): Promise<SessionFile[]> => {
 	const sessions = await listSessions(project);
 	const withSubs = await Promise.all(
@@ -85,10 +85,10 @@ export const listTranscripts = async (
 					project: s.project,
 					path: join(dir, f),
 					bytes: s.bytes,
-					modified: s.modified,
+					modified: s.modified
 				}));
 			return { s, subs };
-		}),
+		})
 	);
 	const all: SessionFile[] = [];
 	for (const { s, subs } of withSubs) {
@@ -118,7 +118,7 @@ export const sessionPath = async (session: string): Promise<string> => {
 					.slice(0, 5)
 					.map((s) => s.id)
 					.join(", ")}`
-			: `no session "${session}" under ${projectsDir()}`,
+			: `no session "${session}" under ${projectsDir()}`
 	);
 };
 
@@ -186,7 +186,7 @@ export const checkLine = (line: Line): string[] => {
 	return r.success
 		? []
 		: r.error.issues.map(
-				(i) => `${i.path.join(".") || "(root)"}: ${i.message}`,
+				(i) => `${i.path.join(".") || "(root)"}: ${i.message}`
 			);
 };
 
@@ -209,7 +209,7 @@ const toolUses = (l: Line): ToolUse[] => {
 	return content.flatMap((b: unknown) =>
 		isRecord(b) && b["type"] === "tool_use" && typeof b["name"] === "string"
 			? [{ name: b["name"], input: b["input"] }]
-			: [],
+			: []
 	);
 };
 
@@ -229,7 +229,7 @@ export const scanToolCalls = (
 		samples?: number;
 		maxChars?: number;
 	} = {},
-	into: ToolCalls = {},
+	into: ToolCalls = {}
 ): ToolCalls => {
 	const { match, samples = 0, maxChars = 2000 } = opts;
 	for (const { name, input } of lines.flatMap((l) => toolUses(l))) {

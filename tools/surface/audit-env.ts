@@ -7,7 +7,7 @@ import {
 	type Evidence,
 	isStrings,
 	reEscape,
-	type Verdict,
+	type Verdict
 } from "./audit-types.ts";
 
 const listOf = (v: unknown): string[] | undefined =>
@@ -44,7 +44,7 @@ const envReadSites = (c: Ctx, name: string) => {
 	const end = prefix ? "[A-Z0-9_]*" : String.raw`\b`;
 	const re = new RegExp(
 		`\\.${q}${end}(?!:)|\\[["'\`]${q}${end}["'\`]\\]|\\.get\\(["'\`]${q}${end}["'\`]\\)`,
-		"gu",
+		"gu"
 	);
 	const sites: string[] = [];
 	for (const m of allText(c)) {
@@ -64,7 +64,7 @@ export const envListed = (c: Ctx, i: SurfaceItem): Verdict => {
 	const reads = envReadSites(c, i.name);
 	return {
 		ok: reads.length === 0 && s.state !== "changed",
-		evidence: { detail: i.detail ?? null, reads: reads.slice(0, 3), sweep: s },
+		evidence: { detail: i.detail ?? null, reads: reads.slice(0, 3), sweep: s }
 	};
 };
 
@@ -76,6 +76,6 @@ export const envEffect = (c: Ctx, i: SurfaceItem): Verdict => {
 		ok:
 			(reads.length > 0 || (i.detail !== "listed" && i.module !== null)) &&
 			s.state !== "changed",
-		evidence: { detail: i.detail ?? null, reads: reads.slice(0, 3), sweep: s },
+		evidence: { detail: i.detail ?? null, reads: reads.slice(0, 3), sweep: s }
 	};
 };

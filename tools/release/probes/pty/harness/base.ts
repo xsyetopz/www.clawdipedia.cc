@@ -41,7 +41,7 @@ export const deepSubst = (v: unknown, sb: Sandbox): unknown => {
 	}
 	if (typeof v === "object" && v !== null) {
 		return Object.fromEntries(
-			Object.entries(v).map(([k, x]) => [k, deepSubst(x, sb)]),
+			Object.entries(v).map(([k, x]) => [k, deepSubst(x, sb)])
 		);
 	}
 	return v;
@@ -50,7 +50,7 @@ export const deepSubst = (v: unknown, sb: Sandbox): unknown => {
 export const baseResult = (
 	ctx: PtyCtx,
 	c: Pick<PtyCase, "id" | "facts" | "notes" | "promptReason">,
-	o: Partial<CaseResult> & { data: Record<string, Data> },
+	o: Partial<CaseResult> & { data: Record<string, Data> }
 ): CaseResult => {
 	const note = [c.promptReason, c.notes, o.notes]
 		.filter((n) => n !== undefined && n !== "")
@@ -67,6 +67,6 @@ export const baseResult = (
 		timedOut: false,
 		facts: c.facts ?? [],
 		...o,
-		...(note === "" ? {} : { notes: note }),
+		...(note === "" ? {} : { notes: note })
 	};
 };

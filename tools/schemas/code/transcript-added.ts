@@ -3,7 +3,7 @@ import {
 	callsOf,
 	type Fn,
 	isFn,
-	type Node,
+	type Node
 } from "../../../inspect/mcp/src/ast.ts";
 import type { Module } from "../../../inspect/mcp/src/ast/module.ts";
 import { children } from "../../../inspect/mcp/src/ast/node.ts";
@@ -129,7 +129,7 @@ const returnsName = (x: Node, name: string): boolean =>
 /** The assignments `name.key = value` in a function, and whether it returns `name`. */
 const memberWrites = (
 	body: Node,
-	name: string,
+	name: string
 ): { writes: { key: string; right: Node }[]; returned: boolean } => {
 	const writes: { key: string; right: Node }[] = [];
 	let returned = false;
@@ -187,13 +187,13 @@ const drain = async (st: State): Promise<void> => {
  */
 export const addedKeys = async (
 	resolver: Resolver,
-	roots: readonly Root[],
+	roots: readonly Root[]
 ): Promise<Map<string, Val>> => {
 	const st: State = {
 		resolver,
 		found: new Map(),
 		seen: new Set(),
-		queue: [],
+		queue: []
 	};
 	for (const r of roots) {
 		enqueue(st, r.src, returnedBy(r.src, r.obj));

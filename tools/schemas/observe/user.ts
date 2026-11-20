@@ -35,7 +35,7 @@ const isDirectory = async (p: string): Promise<boolean | undefined> => {
 const eachInTurn = async <T>(
 	items: T[],
 	step: (item: T) => Promise<void>,
-	index = 0,
+	index = 0
 ): Promise<void> => {
 	const item = items[index];
 	if (index >= items.length || item === undefined) {
@@ -58,7 +58,7 @@ const sortedNames = (names: string[]): string[] => {
 const files = async (
 	dir: string,
 	keep: (p: string) => boolean,
-	depth = 0,
+	depth = 0
 ): Promise<string[]> => {
 	if (depth > 9) {
 		return [];
@@ -70,7 +70,7 @@ const files = async (
 		return [];
 	}
 	const names = sortedNames(entries).filter(
-		(e) => e !== "node_modules" && !e.startsWith("."),
+		(e) => e !== "node_modules" && !e.startsWith(".")
 	);
 	const found = await Promise.all(
 		names.map(async (e): Promise<string[]> => {
@@ -80,7 +80,7 @@ const files = async (
 				return files(p, keep, depth + 1);
 			}
 			return isDir === false && keep(p) ? [p] : [];
-		}),
+		})
 	);
 	return found.flat();
 };
@@ -88,14 +88,14 @@ const files = async (
 const write = async (name: string, counts: object, t: Tally): Promise<void> => {
 	await Bun.write(
 		join(outDir, name),
-		`${JSON.stringify({ counts, paths: t }, null, 1)}\n`,
+		`${JSON.stringify({ counts, paths: t }, null, 1)}\n`
 	);
 };
 
 const transcripts = async (): Promise<void> => {
 	const t = new Tally();
 	const fs = await files(join(home, ".claude", "projects"), (p) =>
-		p.endsWith(".jsonl"),
+		p.endsWith(".jsonl")
 	);
 	let lines = 0;
 	await eachInTurn(fs, async (f) => {
@@ -154,11 +154,11 @@ const frontmatter = async (): Promise<void> => {
 	const counts: Record<string, number> = {
 		skill: 0,
 		agent: 0,
-		"output-style": 0,
+		"output-style": 0
 	};
 	const found = await files(
 		join(home, ".claude"),
-		(p) => kindOf(p) !== undefined,
+		(p) => kindOf(p) !== undefined
 	);
 	await eachInTurn(found, async (f) => {
 		const kind = kindOf(f);

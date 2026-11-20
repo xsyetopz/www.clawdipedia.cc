@@ -12,5 +12,5 @@ export {
 	type DocSourceName,
 	isDocSource,
 	MAX_PAGE_CHARS,
-	type Result,
+	type Result
 } from "./core/shared.ts";

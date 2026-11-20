@@ -20,12 +20,12 @@ import {
 	tolerant,
 	toolResultText,
 	TOUCH,
-	waitAny,
+	waitAny
 } from "../harness.ts";
 
 const PR = (decision: Obj): string =>
 	JSON.stringify({
-		hookSpecificOutput: { hookEventName: "PermissionRequest", decision },
+		hookSpecificOutput: { hookEventName: "PermissionRequest", decision }
 	});
 
 interface PrCase {
@@ -38,22 +38,22 @@ export const PR_CASES: PrCase[] = [
 	{
 		name: "deny",
 		ctl: { out: PR({ behavior: "deny", message: "PR-DENY-MSG" }) },
-		note: "deny with message",
+		note: "deny with message"
 	},
 	{
 		name: "interrupt",
 		ctl: {
-			out: PR({ behavior: "deny", message: "PR-INT-MSG", interrupt: true }),
+			out: PR({ behavior: "deny", message: "PR-INT-MSG", interrupt: true })
 		},
-		note: "deny with interrupt",
+		note: "deny with interrupt"
 	},
 	{ name: "exit2", ctl: { exit: 2 }, note: "exit 2, no output" },
 	{
 		name: "block",
 		ctl: { out: JSON.stringify({ decision: "block", reason: "PR-BLOCK" }) },
-		note: "top-level decision block",
+		note: "top-level decision block"
 	},
-	{ name: "empty", note: "no output" },
+	{ name: "empty", note: "no output" }
 ];
 
 const PROCEED_RE = tolerant("proceed?");
@@ -61,7 +61,7 @@ const OUTCOME_RE = new RegExp(
 	["Allowed by", "Denied by", "Interrupted"]
 		.map((p) => tolerant(p).source)
 		.join("|"),
-	"iu",
+	"iu"
 );
 
 export const permissionRequest = (c: PrCase): PtyCase => ({
@@ -75,9 +75,9 @@ export const permissionRequest = (c: PrCase): PtyCase => ({
 		waitAny(
 			["proceed?", "Allowed by", "Denied by", "Interrupted"],
 			"outcome",
-			15,
+			15
 		),
-		ESC(8),
+		ESC(8)
 	],
 	secs: 10,
 	facts: ["hooks.permissionrequest"],
@@ -86,7 +86,7 @@ export const permissionRequest = (c: PrCase): PtyCase => ({
 		const d = firstSeenT(x, PROCEED_RE, "esc");
 		const o = firstSeenT(x, OUTCOME_RE, "esc");
 		return {
-			dialogToOutcomeS: d !== null && o !== null ? String(round(o - d, 2)) : "",
+			dialogToOutcomeS: d !== null && o !== null ? String(round(o - d, 2)) : ""
 		};
 	},
 	data: (x) => {
@@ -106,16 +106,16 @@ export const permissionRequest = (c: PrCase): PtyCase => ({
 			allowedLine: shows(x, "Allowed by PermissionRequest hook", before),
 			deniedLine: shows(x, "Denied by PermissionRequest hook", before),
 			interrupted: shows(x, "Interrupted", before),
-			modelGotDenyMessage: /PR-(DENY|INT)-MSG/u.test(toolResultText(x)),
+			modelGotDenyMessage: /PR-(DENY|INT)-MSG/u.test(toolResultText(x))
 		};
-	},
+	}
 });
 
 const serverChecks = (x: PtyRun): number =>
 	x.messages.filter((q) => obj(q.body)["safeguards"] !== undefined).length;
 
 const RETRY_OUT = JSON.stringify({
-	hookSpecificOutput: { hookEventName: "PermissionDenied", retry: true },
+	hookSpecificOutput: { hookEventName: "PermissionDenied", retry: true }
 });
 
 export const deniedCase = (retry: boolean): PtyCase => ({
@@ -123,11 +123,11 @@ export const deniedCase = (retry: boolean): PtyCase => ({
 	mode: "auto",
 	settings: {
 		...hooks(["PermissionDenied", "PermissionRequest", "Notification"]),
-		skipAutoPermissionPrompt: true,
+		skipAutoPermissionPrompt: true
 	},
 	stub: {
 		...TOUCH("ran-auto", "curl -s http://127.0.0.1:9/x"),
-		safeguard: "flagged",
+		safeguard: "flagged"
 	},
 	...(retry ? { ctl: { PermissionDenied: { out: RETRY_OUT } } } : {}),
 	schedule: [READY, ASK(), ESC(12)],
@@ -148,15 +148,15 @@ export const deniedCase = (retry: boolean): PtyCase => ({
 				...new Set(
 					x
 						.hook("Notification")
-						.map((n) => show(n.json["notification_type"] ?? "")),
-				),
+						.map((n) => show(n.json["notification_type"] ?? ""))
+				)
 			].toSorted(),
 			retryTextSeen: x.messages.some((q) =>
-				JSON.stringify(q.body).includes("may retry this tool call"),
+				JSON.stringify(q.body).includes("may retry this tool call")
 			),
 			toolResult: toolResultText(x).slice(0, 300),
-			serverCheckRequested: serverChecks(x) > 0,
+			serverCheckRequested: serverChecks(x) > 0
 		};
 	},
-	samples: (x) => ({ serverChecks: String(serverChecks(x)) }),
+	samples: (x) => ({ serverChecks: String(serverChecks(x)) })
 });

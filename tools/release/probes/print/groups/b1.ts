@@ -19,5 +19,5 @@ export const groupsB1: PrintGroup[] = [
 	briefResume,
 	cachetouch,
 	models,
-	misc,
+	misc
 ];

@@ -10,7 +10,7 @@ import {
 	isCommitted,
 	isMapRecord,
 	isStringRecord,
-	readJson,
+	readJson
 } from "./coverage-cli.ts";
 import {
 	check,
@@ -19,7 +19,7 @@ import {
 	type MapEntry,
 	mapOf,
 	type Row,
-	status,
+	status
 } from "./coverage.ts";
 import type { Committed } from "./snapshot.ts";
 
@@ -45,7 +45,7 @@ const TITLES: Record<string, string> = {
 	"setting-key": "Nested Setting Keys",
 	"slash-command": "Slash Commands",
 	subcommand: "Subcommands",
-	tool: "Tools",
+	tool: "Tools"
 };
 export const title = (kind: string) => TITLES[kind] ?? kind;
 const slug = (kind: string) => title(kind).toLowerCase().replaceAll(" ", "-");
@@ -60,10 +60,10 @@ export const code = (text: string): string => {
 		.replaceAll("|", String.raw`\|`)
 		.replaceAll(
 			EMOJI,
-			(c) => `U+${c.codePointAt(0)?.toString(16).toUpperCase()}`,
+			(c) => `U+${c.codePointAt(0)?.toString(16).toUpperCase()}`
 		);
 	const fence = "`".repeat(
-		Math.max(0, ...(t.match(/`+/gu) ?? []).map((r) => r.length)) + 1,
+		Math.max(0, ...(t.match(/`+/gu) ?? []).map((r) => r.length)) + 1
 	);
 	const pad = t.startsWith("`") || t.endsWith("`") ? " " : "";
 	return `${fence}${pad}${t}${pad}${fence}`;
@@ -120,9 +120,9 @@ const summaryOf = (rows: Row[]) => [
 	"| --- | --- | --- | --- | --- | --- |",
 	...rows.map(
 		(r) =>
-			`| [${title(r.kind)}](#${slug(r.kind)}) | ${r.items} | ${r.docs} | ${r.mapped} | ${r.excluded} | ${r.unmapped} |`,
+			`| [${title(r.kind)}](#${slug(r.kind)}) | ${r.items} | ${r.docs} | ${r.mapped} | ${r.excluded} | ${r.unmapped} |`
 	),
-	`| Total | ${totalOf(rows, (r) => r.items)} | ${totalOf(rows, (r) => r.docs)} | ${totalOf(rows, (r) => r.mapped)} | ${totalOf(rows, (r) => r.excluded)} | ${totalOf(rows, (r) => r.unmapped)} |`,
+	`| Total | ${totalOf(rows, (r) => r.items)} | ${totalOf(rows, (r) => r.docs)} | ${totalOf(rows, (r) => r.mapped)} | ${totalOf(rows, (r) => r.excluded)} | ${totalOf(rows, (r) => r.unmapped)} |`
 ];
 
 const sectionsOf = (rows: Row[], snapshot: Committed, l: Lookup) =>
@@ -135,8 +135,8 @@ const sectionsOf = (rows: Row[], snapshot: Committed, l: Lookup) =>
 		"| Item | Where |",
 		"| --- | --- |",
 		...(snapshot.kinds[r.kind] ?? []).map(
-			({ name }) => `| ${code(name)} | ${where(l, r.kind, name)} |`,
-		),
+			({ name }) => `| ${code(name)} | ${where(l, r.kind, name)} |`
+		)
 	]);
 
 const pageOf = (rows: Row[], snapshot: Committed, l: Lookup) =>
@@ -156,7 +156,7 @@ const pageOf = (rows: Row[], snapshot: Committed, l: Lookup) =>
 		"",
 		...summaryOf(rows),
 		...sectionsOf(rows, snapshot, l),
-		"",
+		""
 	].join("\n");
 
 // the gap column waits for the coverage page to go live
@@ -171,18 +171,18 @@ const blockOf = (rows: Row[], version: string) => {
 		...(DRAFT
 			? []
 			: [
-					"[Surface Coverage](surface-coverage.md) lists each item with its page.",
+					"[Surface Coverage](surface-coverage.md) lists each item with its page."
 				]),
 		"",
 		`| Kind | Items |${gap("Not on a Page Yet")}`,
 		`| --- | --- |${gap("---")}`,
 		...rows.map(
 			(r) =>
-				`| ${DRAFT ? title(r.kind) : `[${title(r.kind)}](surface-coverage.md#${slug(r.kind)})`} | ${r.items} |${gap(r.unmapped)}`,
+				`| ${DRAFT ? title(r.kind) : `[${title(r.kind)}](surface-coverage.md#${slug(r.kind)})`} | ${r.items} |${gap(r.unmapped)}`
 		),
 		`| All kinds | ${items} |${gap(totalOf(rows, (r) => r.unmapped))}`,
 		"",
-		"",
+		""
 	].join("\n");
 };
 
@@ -204,7 +204,7 @@ export const render = async (
 	snapshot: Committed,
 	map: Record<string, MapEntry>,
 	exclusions: Record<string, string>,
-	undocumented: string,
+	undocumented: string
 ): Promise<Rendered> => {
 	const names = await docsOf(root, Object.keys(snapshot.kinds));
 	const { rows } = check(snapshot, names, map, exclusions);
@@ -217,18 +217,18 @@ export const render = async (
 	const files = [...found];
 	const texts = await Promise.all(files.map((f) => Bun.file(f).text()));
 	const titles = new Map(
-		files.map((f, i) => [f, pageTitle(texts[i] ?? "", f)]),
+		files.map((f, i) => [f, pageTitle(texts[i] ?? "", f)])
 	);
 	const l: Lookup = {
 		dir: join(root, "docs", "reference"),
 		names,
 		titles,
 		map,
-		exclusions,
+		exclusions
 	};
 	return {
 		page: pageOf(rows, snapshot, l),
-		undocumented: withBlock(undocumented, blockOf(rows, snapshot.version)),
+		undocumented: withBlock(undocumented, blockOf(rows, snapshot.version))
 	};
 };
 
@@ -237,7 +237,7 @@ const stalePaths = async (root: string, files: [string, string][]) => {
 		files.map(async ([p, t]) => {
 			const f = Bun.file(join(root, p));
 			return (await f.exists()) && (await f.text()) === t;
-		}),
+		})
 	);
 	return files.filter((_, i) => same[i] !== true);
 };
@@ -245,13 +245,13 @@ const stalePaths = async (root: string, files: [string, string][]) => {
 const main = async (): Promise<void> => {
 	const { parseArgs } = await import("node:util");
 	const { values: a } = parseArgs({
-		options: { check: { type: "boolean" }, root: { type: "string" } },
+		options: { check: { type: "boolean" }, root: { type: "string" } }
 	});
 	const root = a.root ?? join(import.meta.dir, "..", "..");
 	const snapshotFile = join(root, "schemas", "surface.json");
 	if (!(await Bun.file(snapshotFile).exists())) {
 		console.error(
-			'surface render: schemas/surface.json missing (run "bun run surface")',
+			'surface render: schemas/surface.json missing (run "bun run surface")'
 		);
 		process.exitCode = 2;
 		return;
@@ -262,17 +262,17 @@ const main = async (): Promise<void> => {
 		await readJson(snapshotFile, isCommitted),
 		await readJson(join(dir, "map.json"), isMapRecord),
 		await readJson(join(dir, "exclusions.json"), isStringRecord),
-		await Bun.file(join(root, UNDOCUMENTED)).text(),
+		await Bun.file(join(root, UNDOCUMENTED)).text()
 	);
 	const files: [string, string][] = [
 		[GENERATED, out.page],
-		[UNDOCUMENTED, out.undocumented],
+		[UNDOCUMENTED, out.undocumented]
 	];
 	const stale = await stalePaths(root, files);
 	if (a.check === true) {
 		for (const [p] of stale) {
 			console.error(
-				`surface render: ${p} differs from a fresh render (run "bun run surface")`,
+				`surface render: ${p} differs from a fresh render (run "bun run surface")`
 			);
 		}
 		if (stale.length > 0) {
@@ -284,7 +284,7 @@ const main = async (): Promise<void> => {
 	}
 	await Promise.all(stale.map(([p, t]) => Bun.write(join(root, p), t)));
 	console.info(
-		`surface render: wrote ${stale.length} of ${files.length} files`,
+		`surface render: wrote ${stale.length} of ${files.length} files`
 	);
 };
 

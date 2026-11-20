@@ -11,7 +11,7 @@ const message = (error: unknown): string =>
 const viaProxy = async (m: Mitm, url: string): Promise<Response> =>
 	fetch(url, {
 		proxy: m.proxyUrl,
-		tls: { ca: await Bun.file(m.caFile).text() },
+		tls: { ca: await Bun.file(m.caFile).text() }
 	});
 
 const faultSummary = async (m: Mitm, f: Parameters<Mitm["setFault"]>[0]) => {
@@ -29,11 +29,11 @@ const faultSummary = async (m: Mitm, f: Parameters<Mitm["setFault"]>[0]) => {
 const faultChecks = async (step: Step): Promise<void> => {
 	const m = await startMitm({
 		tunnelOthers: false,
-		upstream: () => Promise.resolve(new Response("up", { status: 200 })),
+		upstream: () => Promise.resolve(new Response("up", { status: 200 }))
 	});
 	const seen = await mapSeq(
 		["429", "429-ra", "200-envelope", "pass"] as const,
-		(f) => faultSummary(m, f),
+		(f) => faultSummary(m, f)
 	);
 	const logged = JSON.stringify(m.log());
 	await m.stop();
@@ -41,7 +41,7 @@ const faultChecks = async (step: Step): Promise<void> => {
 		"mitm: 429 / 429+retry-after / 200 envelope / pass-through, path and status only",
 		seen.join(",") === "429+env,429+ra+env,200+env,200" &&
 			!/authorization|x-api-key|body/iu.test(logged),
-		seen.join(" "),
+		seen.join(" ")
 	);
 	step("mitm: throw-away CA deleted on stop", !(await pathExists(m.caFile)));
 };
@@ -51,7 +51,7 @@ const hostChecks = async (step: Step): Promise<void> => {
 	const mh = await startMitm({
 		tunnelOthers: false,
 		hosts: ["sts.us-east-1.amazonaws.com"],
-		upstream: () => Promise.resolve(new Response("sts", { status: 200 })),
+		upstream: () => Promise.resolve(new Response("sts", { status: 200 }))
 	});
 	let viaHost: string;
 	try {
@@ -64,7 +64,7 @@ const hostChecks = async (step: Step): Promise<void> => {
 	step(
 		"mitm: hosts option sends a second host to the TLS stub",
 		viaHost === "sts",
-		viaHost,
+		viaHost
 	);
 };
 

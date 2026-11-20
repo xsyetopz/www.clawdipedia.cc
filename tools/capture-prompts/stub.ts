@@ -54,8 +54,8 @@ const reply = (body: ApiBody | undefined, o: StubOpts) => {
 					type: "tool_use",
 					id: "toolu_probe1",
 					name: tool,
-					input: o.toolInput ?? {},
-				},
+					input: o.toolInput ?? {}
+				}
 			]
 		: [{ type: "text", text: o.text ?? "OK" }];
 	return {
@@ -70,41 +70,41 @@ const reply = (body: ApiBody | undefined, o: StubOpts) => {
 			input_tokens: 10,
 			output_tokens: 5,
 			cache_creation_input_tokens: 0,
-			cache_read_input_tokens: 0,
-		},
+			cache_read_input_tokens: 0
+		}
 	};
 };
 
 const stream = (m: ReturnType<typeof reply>) => {
 	let out = sse("message_start", {
 		type: "message_start",
-		message: { ...m, content: [], stop_reason: null },
+		message: { ...m, content: [], stop_reason: null }
 	});
 	for (const [i, b] of m.content.entries()) {
 		if (b.type === "text") {
 			out += sse("content_block_start", {
 				type: "content_block_start",
 				index: i,
-				content_block: { type: "text", text: "" },
+				content_block: { type: "text", text: "" }
 			});
 			out += sse("content_block_delta", {
 				type: "content_block_delta",
 				index: i,
-				delta: { type: "text_delta", text: b.text },
+				delta: { type: "text_delta", text: b.text }
 			});
 		} else {
 			out += sse("content_block_start", {
 				type: "content_block_start",
 				index: i,
-				content_block: { ...b, input: {} },
+				content_block: { ...b, input: {} }
 			});
 			out += sse("content_block_delta", {
 				type: "content_block_delta",
 				index: i,
 				delta: {
 					type: "input_json_delta",
-					partial_json: JSON.stringify(b.input),
-				},
+					partial_json: JSON.stringify(b.input)
+				}
 			});
 		}
 		out += sse("content_block_stop", { type: "content_block_stop", index: i });
@@ -112,7 +112,7 @@ const stream = (m: ReturnType<typeof reply>) => {
 	out += sse("message_delta", {
 		type: "message_delta",
 		delta: { stop_reason: m.stop_reason, stop_sequence: null },
-		usage: { output_tokens: 5 },
+		usage: { output_tokens: 5 }
 	});
 	out += sse("message_stop", { type: "message_stop" });
 	return out;
@@ -179,15 +179,15 @@ export const startStub = (o: StubOpts) =>
 					path: url.pathname + url.search,
 					authIsFakeKey: authOk,
 					headers,
-					body,
-				})}\n`,
+					body
+				})}\n`
 			);
 			if (url.pathname === "/v1/messages" && req.method === "POST") {
 				const parsed = apiBody(body);
 				const m = reply(parsed, o);
 				if (parsed?.stream === true) {
 					return new Response(stream(m), {
-						headers: { "content-type": "text/event-stream" },
+						headers: { "content-type": "text/event-stream" }
 					});
 				}
 				return Response.json(m);
@@ -197,7 +197,7 @@ export const startStub = (o: StubOpts) =>
 			}
 			return new Response("{}", {
 				status: 404,
-				headers: { "content-type": "application/json" },
+				headers: { "content-type": "application/json" }
 			});
-		},
+		}
 	});

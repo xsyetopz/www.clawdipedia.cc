@@ -6,13 +6,13 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 const run = async (
-	cmd: string[],
+	cmd: string[]
 ): Promise<{ code: number; stdout: string; stderr: string }> => {
 	const p = Bun.spawn(cmd, { stdout: "pipe", stderr: "pipe" });
 	const [stdout, stderr, code] = await Promise.all([
 		new Response(p.stdout).text(),
 		new Response(p.stderr).text(),
-		p.exited,
+		p.exited
 	]);
 	return { code, stdout, stderr };
 };
@@ -43,7 +43,7 @@ const statfsFree = async (dir: string): Promise<number> => {
 const fillFrom = async (
 	fh: FileHandle,
 	dir: string,
-	bytes: number,
+	bytes: number
 ): Promise<void> => {
 	const gap = (await statfsFree(dir)) - bytes;
 	if (gap <= 0) {
@@ -65,18 +65,18 @@ const fillLeaving = async (dir: string, bytes: number): Promise<void> => {
 /** Run fn with a RAM disk of `sectors` 512-byte sectors mounted at a new temp directory. */
 export const withRamDisk = async <T>(
 	sectors: number,
-	fn: (d: RamDisk) => Promise<T> | T,
+	fn: (d: RamDisk) => Promise<T> | T
 ): Promise<T> => {
 	if (process.platform !== "darwin") {
 		throw new Error(
-			"ramdisk: needs macOS (hdiutil); this step is not available here",
+			"ramdisk: needs macOS (hdiutil); this step is not available here"
 		);
 	}
 	const attached = await sh([
 		"hdiutil",
 		"attach",
 		"-nomount",
-		`ram://${sectors}`,
+		`ram://${sectors}`
 	]);
 	const dev = attached.replaceAll(/\s/gu, "");
 	const dir = await mkdtemp(join(tmpdir(), "probe-ram-"));
@@ -88,7 +88,7 @@ export const withRamDisk = async <T>(
 		return await fn({
 			dir,
 			free: () => statfsFree(dir),
-			fillLeaving: (bytes) => fillLeaving(dir, bytes),
+			fillLeaving: (bytes) => fillLeaving(dir, bytes)
 		});
 	} finally {
 		if (mounted) {

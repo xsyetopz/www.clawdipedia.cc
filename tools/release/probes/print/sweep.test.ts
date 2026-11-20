@@ -11,9 +11,9 @@ const prev = {
 		"B.A": ["m0.beta"],
 		"B.B": [],
 		changed: ["B"],
-		errors: [],
+		errors: []
 	},
-	samples: { "B.A.m0.beta": "x => y" },
+	samples: { "B.A.m0.beta": "x => y" }
 };
 
 test("a partial run replaces its names and keeps the others", () => {
@@ -21,7 +21,7 @@ test("a partial run replaces its names and keeps the others", () => {
 		prev,
 		{ "B.A": [], "B.B": [], "C.A": ["m0.system"], "C.B": [], skipped: [] },
 		{ "C.A.m0.system": "p => q" },
-		["B", "C"],
+		["B", "C"]
 	);
 	expect(out.data["B.A"]).toEqual([]);
 	expect(out.data["A.A"]).toEqual([]);

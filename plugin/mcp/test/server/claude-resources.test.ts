@@ -26,22 +26,22 @@ describe("claude-resources tools", () => {
 			{ group: "articles", count: 3 },
 			{ group: "guides", count: 1 },
 			{ group: "webinars", count: 1 },
-			{ group: "webinar-series", count: 1 },
+			{ group: "webinar-series", count: 1 }
 		]);
 		const r = await call("list_pages", {
 			source: "claude-resources",
-			section: "Articles",
+			section: "Articles"
 		});
 		const pages = pagesOf(r);
 		expect(pages.map((x) => x.route)).toEqual([
 			"resources/articles",
 			PAGE,
-			"resources/articles/agent-patterns",
+			"resources/articles/agent-patterns"
 		]);
 		expect(pages.map((x) => x.description).join(" ")).toContain("2026-10-27");
 		const de = await call("list_pages", {
 			source: "claude-resources",
-			section: "de",
+			section: "de"
 		});
 		expect(de.error).toBe(true);
 	});
@@ -50,7 +50,7 @@ describe("claude-resources tools", () => {
 		const { call } = await start();
 		const s = await call("search_docs", {
 			source: "claude-resources",
-			query: "duet",
+			query: "duet"
 		});
 		expect(s.error).toBe(false);
 		expect(s.text).toContain(PAGE);
@@ -59,7 +59,7 @@ describe("claude-resources tools", () => {
 		const guides = await call("search_docs", {
 			source: "claude-resources",
 			query: "agents",
-			section: "guides",
+			section: "guides"
 		});
 		expect(guides.text).toContain("resources/guides/building-agents");
 		expect(guides.text).not.toContain("webinars/agents-live");
@@ -70,13 +70,13 @@ describe("claude-resources tools", () => {
 		const { call, p } = await start();
 		const r = await call("read_page", {
 			source: "claude-resources",
-			route: PAGE,
+			route: PAGE
 		});
 		expect(r.error).toBe(false);
 		expect(r.text).toContain("Introducing Claude Duet");
 		expect(r.text).toContain("Narwhal");
 		expect(r.text).toContain(
-			`[agent guide](${p.url}/resources/guides/building-agents)`,
+			`[agent guide](${p.url}/resources/guides/building-agents)`
 		);
 		expect(r.text).toContain("- Prompt **chaining**");
 		expect(r.text).toContain("```\nif (a < b) {");
@@ -88,14 +88,14 @@ describe("claude-resources tools", () => {
 		const sec = await call("read_page", {
 			source: "claude-resources",
 			route: `/${PAGE}`,
-			section_heading: "Patterns",
+			section_heading: "Patterns"
 		});
 		expect(sec.text).toContain("Routing");
 		expect(sec.text).not.toContain("Narwhal");
 		const past = await call("read_page", {
 			source: "claude-resources",
 			route: PAGE,
-			offset: 100_000,
+			offset: 100_000
 		});
 		expect(past.error).toBe(true);
 	});
@@ -114,18 +114,18 @@ describe("claude-resources tools", () => {
 			"https://evil.example/resources/articles/evil",
 			"//evil.example/resources",
 			"/",
-			"",
+			""
 		];
 		const answers = await Promise.all(
 			bad.map((route) =>
-				call("read_page", { source: "claude-resources", route }),
-			),
+				call("read_page", { source: "claude-resources", route })
+			)
 		);
 		expect(answers.map((r) => r.error)).toEqual(bad.map(() => true));
 		expect(p.hits.length).toBe(0);
 		const full = await call("read_page", {
 			source: "claude-resources",
-			route: `${p.url}/${PAGE}`,
+			route: `${p.url}/${PAGE}`
 		});
 		expect(full.error).toBe(false);
 	});
@@ -134,7 +134,7 @@ describe("claude-resources tools", () => {
 		const { call, p } = await start();
 		const r = await call("read_page", {
 			source: "claude-resources",
-			route: "resources/",
+			route: "resources/"
 		});
 		// The mock has no hub page: the answer is a clean 404, and no request ended in a slash.
 		expect(r.error).toBe(true);
@@ -146,7 +146,7 @@ describe("claude-resources tools", () => {
 		const { call } = await start();
 		const missing = await call("read_page", {
 			source: "claude-resources",
-			route: "resources/articles/duet",
+			route: "resources/articles/duet"
 		});
 		expect(missing.error).toBe(true);
 		expect(missing.text).toContain(PAGE);
@@ -166,7 +166,7 @@ describe("claude-resources tools", () => {
 		await p.stop();
 		const r = await call("read_page", {
 			source: "claude-resources",
-			route: PAGE,
+			route: PAGE
 		});
 		expect(r.error).toBe(false);
 		expect(r.text).toContain("Narwhal");
@@ -175,7 +175,7 @@ describe("claude-resources tools", () => {
 		expect(sourceOf(l).state).toBe("stale-offline");
 		const other = await call("read_page", {
 			source: "claude-resources",
-			route: "resources/guides/building-agents",
+			route: "resources/guides/building-agents"
 		});
 		expect(other.error).toBe(true);
 	});
@@ -186,7 +186,7 @@ describe("claude-resources tools", () => {
 		const { call } = await connect({ CLAUDE_RESOURCES_BASE_URL: p.url });
 		const r = await call("search_docs", {
 			source: "claude-resources",
-			query: "duet",
+			query: "duet"
 		});
 		expect(r.error).toBe(true);
 	});

@@ -6,7 +6,7 @@ sidebar_position: 2
 
 This guide tells you how to write a page for this site.
 Follow it so every page looks and reads the same.
-Run `just verify verify-project` before you open a pull request. It runs the format check, the type check, the code lint, markdownlint, the tests, the docs check, the schema check, and the build. Git hooks run on every commit. The `commit-msg` hook checks that the message is a Conventional Commit.
+Run `just verify` before you open a pull request. It runs the format check, the type check, the code lint, markdownlint, the tests, the docs check, the schema check, and the build. Git hooks run on every commit. The `commit-msg` hook checks that the message is a Conventional Commit.
 
 ## Core Rules
 
@@ -283,5 +283,4 @@ Leave out anything you could not check.
 | `bun run lint` | Runs oxlint on the code and markdownlint on the Markdown files. |
 | `bun run check:docs` | Finds emojis that are not allowed, unlinked sources, missing front matter, and Title Case errors. It prints `file:line`. |
 | `bun run build` | Builds the site. Broken links and anchors fail the build. |
-| `just verify` | Runs the format check, the type check, `bun run lint`, the guard, and the tests. |
-| `just verify-project` | Runs `bun run check:docs`, the example, schema, and surface checks, the build, and the plugin and deploy checks. |
+| `just verify` | Runs the format check, the type check, `just lint`, the guard, and the tests. Then it runs `project-verify`: `bun run check:docs`, the citation, example, host, schema, and surface checks, the build, and the plugin and deploy checks. |

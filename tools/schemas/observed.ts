@@ -46,7 +46,7 @@ export const fixturePath = (schemaFile: string): string =>
 	join(OBSERVED_DIR, schemaFile);
 
 export const readFixture = async (
-	schemaFile: string,
+	schemaFile: string
 ): Promise<Fixture | undefined> => {
 	const file = Bun.file(fixturePath(schemaFile));
 	if (!(await file.exists())) {
@@ -55,7 +55,7 @@ export const readFixture = async (
 	const parsed: unknown = await file.json();
 	if (!isFixture(parsed)) {
 		throw new TypeError(
-			`${fixturePath(schemaFile)} is not an observed fixture`,
+			`${fixturePath(schemaFile)} is not an observed fixture`
 		);
 	}
 	return parsed;
@@ -69,13 +69,13 @@ export const cloneTree = (v: Json): Json => {
 		}
 		if (isJson(x)) {
 			return Object.fromEntries(
-				Object.entries(x).map(([k, item]) => [k, copy(item)]),
+				Object.entries(x).map(([k, item]) => [k, copy(item)])
 			);
 		}
 		return x;
 	};
 	return Object.fromEntries(
-		Object.entries(v).map(([k, item]) => [k, copy(item)]),
+		Object.entries(v).map(([k, item]) => [k, copy(item)])
 	);
 };
 
@@ -100,7 +100,7 @@ const children = (k: string, v: unknown, path: string, walk: Walk): void => {
 /** Call `visit` for every property node of a schema, with its path. */
 export const walkFields = (
 	schema: Json,
-	visit: (path: string, node: Json) => void,
+	visit: (path: string, node: Json) => void
 ): void => {
 	const walk = (n: unknown, path: string, isRoot: boolean): void => {
 		if (Array.isArray(n)) {
@@ -136,7 +136,7 @@ export const unverifiedPaths = (schema: Json): string[] => {
 /** The schema type names for what was seen: `integer` folds into `number`; `null` stays. Sorted. */
 export const typeNames = (seen: Seen): string[] =>
 	sortedStrings([
-		...new Set(Object.keys(seen).map((t) => (t === "integer" ? "number" : t))),
+		...new Set(Object.keys(seen).map((t) => (t === "integer" ? "number" : t)))
 	]);
 
 const nonNull = (seen: Seen): number =>
@@ -150,7 +150,7 @@ const nonNull = (seen: Seen): number =>
 export const applyObserved = async (
 	schemaFile: string,
 	input: Json,
-	fixture?: Fixture,
+	fixture?: Fixture
 ): Promise<{ schema: Json; n: number }> => {
 	const fx = fixture ?? (await readFixture(schemaFile));
 	if (fx === undefined) {

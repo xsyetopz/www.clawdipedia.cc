@@ -4,7 +4,7 @@ import {
 	type Definition,
 	type Reference,
 	type Scope,
-	type Variable as Declared,
+	type Variable as Declared
 } from "eslint-scope";
 
 import { asNode, type Node, type NodeOf } from "./node.ts";
@@ -108,7 +108,7 @@ const refOf = (r: Reference): Ref | undefined => {
 			identifier,
 			write: r.isWrite(),
 			init: r.init === true,
-			writeExpr: asNode(r.writeExpr) ?? null,
+			writeExpr: asNode(r.writeExpr) ?? null
 		}
 	);
 };
@@ -138,7 +138,7 @@ const variableOf = (
 	d: Declared,
 	s: Scope,
 	scope: VarScope,
-	made: Map<Declared, Variable>,
+	made: Map<Declared, Variable>
 ): Variable => {
 	const outer = outerOf(d, s);
 	const v = (outer && made.get(outer)) ?? {
@@ -146,12 +146,12 @@ const variableOf = (
 		scope,
 		defs: d.defs.flatMap((x) => defOf(x) ?? []),
 		identifiers: d.identifiers.flatMap((x) => asNode(x) ?? []),
-		references: [],
+		references: []
 	};
 	made.set(d, v);
 	// A name with a default and a value gets two writes on one identifier; the value comes first.
 	v.references.push(
-		...d.references.toReversed().flatMap((r) => refOf(r) ?? []),
+		...d.references.toReversed().flatMap((r) => refOf(r) ?? [])
 	);
 	return v;
 };
@@ -167,7 +167,7 @@ export const variablesOf = (ast: unknown): Variables => {
 	const options = {
 		ecmaVersion: 2026,
 		sourceType: "module",
-		optimistic: true,
+		optimistic: true
 	} as const;
 	for (const s of analyze(ast, options).scopes) {
 		const scope = { depth: depthOf(s) };
@@ -191,11 +191,11 @@ export const variablesOf = (ast: unknown): Variables => {
 		v.defs = [...v.defs];
 		v.identifiers = [...v.identifiers];
 		v.references = v.references.toSorted(
-			(a, b) => a.identifier.start - b.identifier.start,
+			(a, b) => a.identifier.start - b.identifier.start
 		);
 		const named: Named[] = [
 			...v.identifiers,
-			...v.references.map((r) => r.identifier),
+			...v.references.map((r) => r.identifier)
 		];
 		for (const id of named) {
 			id[VARIABLE] = v;

@@ -84,7 +84,7 @@ export const collectPages = (version: Version, site: Site): Page[] => {
 			mdPath,
 			htmlUrl: `${site.url}${doc.permalink}`,
 			mdUrl: `${site.base}${mdPath}`,
-			repoPath: doc.source.replace(/^@site\//u, ""),
+			repoPath: doc.source.replace(/^@site\//u, "")
 		});
 	};
 	const walk = (items: SidebarItem[], section?: string) => {
@@ -127,7 +127,7 @@ export const makeResolver =
 			.find((d) => d !== undefined);
 		if (!dest) {
 			throw new Error(
-				`llms-txt: ${page.repoPath} links to unknown doc ${target}`,
+				`llms-txt: ${page.repoPath} links to unknown doc ${target}`
 			);
 		}
 		return hash === undefined || hash === ""

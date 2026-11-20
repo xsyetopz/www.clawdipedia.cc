@@ -22,17 +22,17 @@ const normalizer = (meta: { cwd: string; cfg: string; home: string }) => {
 	const pairs: [RegExp, string][] = [];
 	for (const [p, ph] of [
 		[meta.cwd, "<project-slug>"],
-		[meta.cfg, "<config-slug>"],
+		[meta.cfg, "<config-slug>"]
 	] as const) {
 		pairs.push(
 			[new RegExp(esc(slug(p)), "gu"), ph],
-			[new RegExp(esc(slug(p.replace(/^\/private/u, ""))), "gu"), ph],
+			[new RegExp(esc(slug(p.replace(/^\/private/u, ""))), "gu"), ph]
 		);
 	}
 	for (const [p, ph] of [
 		[meta.cwd, "<cwd>"],
 		[meta.cfg, "<config-dir>"],
-		[meta.home, "<home>"],
+		[meta.home, "<home>"]
 	] as const) {
 		for (const q of [p, p.replace(/^\/private/u, "")]) {
 			pairs.push([new RegExp(esc(q), "gu"), ph]);
@@ -84,7 +84,7 @@ const messageRequests = (jsonl: string): Rec[] =>
 			(r) =>
 				str(r["path"]).startsWith("/v1/messages") &&
 				isRec(r["body"]) &&
-				Boolean(r["body"]["messages"]),
+				Boolean(r["body"]["messages"])
 		);
 
 const bodyOf = (r: Rec): Rec => (isRec(r["body"]) ? r["body"] : {});
@@ -104,8 +104,8 @@ const pickRequest = (reqs: Rec[], v: Variant): Rec | undefined => {
 			(q, i) =>
 				i > 0 &&
 				JSON.stringify([bodyOf(q)["system"], bodyOf(q)["messages"]]).includes(
-					v.marker ?? "",
-				),
+					v.marker ?? ""
+				)
 		);
 	}
 	return reqs[0];
@@ -138,7 +138,7 @@ const requestParts = (b: Rec, sys: SysBlock[], n: Normalize): Part[] => {
 		for (const [j, t] of blocks(msg["content"]).entries()) {
 			parts.push({
 				label: `messages[${i}].content[${j}] (role: ${str(msg["role"])})`,
-				text: n(t),
+				text: n(t)
 			});
 		}
 	}
@@ -155,7 +155,7 @@ const requestTools = (b: Rec, n: Normalize): Tool[] =>
 			desc: desc.length,
 			schema: JSON.stringify(schema).length,
 			text: n(desc),
-			schemaText: JSON.stringify(schema, null, 2),
+			schemaText: JSON.stringify(schema, null, 2)
 		};
 	});
 
@@ -167,17 +167,17 @@ const EMPTY_CAP = (v: Variant): Cap => ({
 	tools: [],
 	sections: [],
 	model: "",
-	ok: false,
+	ok: false
 });
 
 export const load = async (v: Variant): Promise<Cap> => {
 	const dir = join(CAPTURES, v.id);
 	const metaRaw: unknown = JSON.parse(
-		await Bun.file(join(dir, "meta.json")).text(),
+		await Bun.file(join(dir, "meta.json")).text()
 	);
 	const n = normalizer(readMeta(metaRaw));
 	const reqs = messageRequests(
-		await Bun.file(join(dir, "requests.jsonl")).text(),
+		await Bun.file(join(dir, "requests.jsonl")).text()
 	);
 	const r = pickRequest(reqs, v);
 	if (!r) {
@@ -192,9 +192,9 @@ export const load = async (v: Variant): Promise<Cap> => {
 	const sections = [
 		...new Set(
 			sys.flatMap((s) =>
-				[...n(s.text).matchAll(/^# (.+)$/gmu)].map((m) => m[1] ?? ""),
-			),
-		),
+				[...n(s.text).matchAll(/^# (.+)$/gmu)].map((m) => m[1] ?? "")
+			)
+		)
 	];
 	return {
 		v,
@@ -204,7 +204,7 @@ export const load = async (v: Variant): Promise<Cap> => {
 		tools: requestTools(b, n),
 		sections,
 		model: str(b["model"]),
-		ok: true,
+		ok: true
 	};
 };
 

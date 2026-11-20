@@ -9,7 +9,7 @@ import {
 	auditPasses,
 	type AuditRow,
 	markRemoved,
-	shareSamples,
+	shareSamples
 } from "./audit.ts";
 import { argv, isJson, mods, ROOT } from "./code/ctx.ts";
 import { anchorIn, readManual } from "./manual.ts";
@@ -21,7 +21,7 @@ const ref = arg("--ref");
 const rawDir = arg("--raw");
 if (ref === undefined) {
 	throw new Error(
-		"audit: give --ref REF, the commit whose schemas still had x-unverified fields",
+		"audit: give --ref REF, the commit whose schemas still had x-unverified fields"
 	);
 }
 
@@ -29,7 +29,7 @@ const gitShow = async (path: string): Promise<string | undefined> => {
 	const p = Bun.spawn(["git", "show", `${ref}:${path}`], {
 		cwd: ROOT,
 		stdout: "pipe",
-		stderr: "ignore",
+		stderr: "ignore"
 	});
 	const text = await new Response(p.stdout).text();
 	return (await p.exited) === 0 ? text : undefined;
@@ -44,7 +44,7 @@ const has = anchorIn(mods.map((m) => m.text).join("\n"));
 const isSeen = (v: unknown): v is Record<string, Seen> =>
 	isJson(v) &&
 	Object.values(v).every(
-		(t) => isJson(t) && Object.values(t).every((c) => typeof c === "number"),
+		(t) => isJson(t) && Object.values(t).every((c) => typeof c === "number")
 	);
 
 /** The raw counts that `observe/run.ts --raw` wrote for a schema file, or none. */
@@ -56,7 +56,7 @@ const readSeen = async (file: string): Promise<Record<string, Seen>> => {
 	const json: unknown = await raw.json();
 	if (!isSeen(json)) {
 		throw new TypeError(
-			`${rawDir}/${file} is not a map of path -> type counts`,
+			`${rawDir}/${file} is not a map of path -> type counts`
 		);
 	}
 	return json;
@@ -78,12 +78,12 @@ const auditFile = async (file: string): Promise<AuditRow[]> => {
 		shareSamples(auditFields(paths, manual, has, await readSeen(file)), manual),
 		(p) => present.has(p),
 		manual,
-		has,
+		has
 	);
 };
 
 const perFile = await Promise.all(
-	files.map(async (file) => ({ file, rows: await auditFile(file) })),
+	files.map(async (file) => ({ file, rows: await auditFile(file) }))
 );
 const all: AuditRow[] = [];
 for (const { file, rows } of perFile) {
@@ -94,7 +94,7 @@ for (const { file, rows } of perFile) {
 	const by = Object.groupBy(rows, (r) => r.verdict);
 	const counts = Object.entries(by).map(([v, rs]) => `${rs?.length ?? 0} ${v}`);
 	console.info(
-		`${file}: ${rows.length} fields x-unverified at ${ref}: ${counts.join(", ")}`,
+		`${file}: ${rows.length} fields x-unverified at ${ref}: ${counts.join(", ")}`
 	);
 }
 for (const r of all) {
@@ -103,14 +103,14 @@ for (const r of all) {
 		const extra = [
 			...r.missing.map((a) => `missing ${a}`),
 			...r.missed.map((t) => `seen ${t}`),
-			...(r.via === undefined ? [] : [`via ${r.via}`]),
+			...(r.via === undefined ? [] : [`via ${r.via}`])
 		];
 		console.info(
-			`  ${r.verdict}: ${r.path} (${r.samples} samples)${extra.length > 0 ? ` ${extra.join("; ")}` : ""}`,
+			`  ${r.verdict}: ${r.path} (${r.samples} samples)${extra.length > 0 ? ` ${extra.join("; ")}` : ""}`
 		);
 	}
 }
 console.info(
-	`audit: ${all.length} fields against the ${CLAUDE_CODE_VERSION} program: ${auditPasses(all) ? "ok" : "FAIL"}`,
+	`audit: ${all.length} fields against the ${CLAUDE_CODE_VERSION} program: ${auditPasses(all) ? "ok" : "FAIL"}`
 );
 process.exitCode = auditPasses(all) ? 0 : 1;

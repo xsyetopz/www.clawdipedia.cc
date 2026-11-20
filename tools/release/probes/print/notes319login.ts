@@ -15,6 +15,6 @@ export const login = (o: Record<string, unknown> = {}, tier = "max") =>
 			refreshTokenExpiresAt: REFRESH_END,
 			scopes: ["user:inference", "user:profile"],
 			subscriptionType: tier,
-			...o,
-		},
+			...o
+		}
 	});

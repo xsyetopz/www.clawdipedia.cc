@@ -59,7 +59,7 @@ const mapStrings = (v: unknown, f: (s: string) => string): unknown => {
 	}
 	if (typeof v === "object" && v !== null) {
 		return Object.fromEntries(
-			Object.entries(v).map(([k, x]) => [f(k), mapStrings(x, f)]),
+			Object.entries(v).map(([k, x]) => [f(k), mapStrings(x, f)])
 		);
 	}
 	return v;
@@ -101,17 +101,17 @@ const normaliseString = (s: string): string =>
 	s
 		.replaceAll(
 			/\/(?:private\/)?(?:var\/folders\/[^\s"']*?\/T|tmp)\/ccrel-[A-Za-z0-9]+/gu,
-			"<TMP>",
+			"<TMP>"
 		)
 		.replaceAll(/\/(?:private\/)?var\/folders\/[^\s"']+/gu, "<TMP>")
 		// the program's dash-encoded project slug: -private-var-folders-xx-yyyy-T-ccrel-AbC123-proj
 		.replaceAll(
 			/-(?:private-)?(?:var-folders-[A-Za-z0-9-]+?-T|tmp)-ccrel-[A-Za-z0-9]+/gu,
-			"<TMP>",
+			"<TMP>"
 		)
 		.replaceAll(
 			/\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/giu,
-			"<uuid>",
+			"<uuid>"
 		)
 		// clock times the screen prints ("done 5:02 AM")
 		.replaceAll(/\b\d{1,2}:\d{2}\s?[AP]M\b/gu, "<time>")
@@ -129,7 +129,7 @@ export function normalise(obj: unknown): unknown {
 
 /** The build suffix of `cc_version=2.1.305.abc`, kept as its own field. */
 export const ccVersion = (
-	s: string,
+	s: string
 ): { version: string; build: string } | null => {
 	const m = /cc_version=(\d+\.\d+\.\d+)(?:\.([0-9a-f]+))?/u.exec(s);
 	const version = m?.[1];
@@ -144,7 +144,7 @@ const dirOf = (version: string, base?: string): string =>
 /** Run dir for a version (default captures/<version>). `base` is for tests. */
 export const openRun = async (
 	version: string,
-	base?: string,
+	base?: string
 ): Promise<string> => {
 	const dir = dirOf(version, base);
 	await mkdir(dir, { recursive: true });
@@ -159,7 +159,7 @@ const assertNoSecret = (id: string, x: unknown): void => {
 	const hit = findSecret(x);
 	if (hit !== null) {
 		throw new Error(
-			`refusing to write ${id}: secret-shaped string (${hit}...)`,
+			`refusing to write ${id}: secret-shaped string (${hit}...)`
 		);
 	}
 };
@@ -171,7 +171,7 @@ const assertNoSecret = (id: string, x: unknown): void => {
 export const writeCase = async (
 	runDir: string,
 	r: CaseResult,
-	mapped: (caseId: string) => string[] = factsForProbe,
+	mapped: (caseId: string) => string[] = factsForProbe
 ): Promise<string> => {
 	if (!ID_RE.test(r.id) || r.id.includes("..")) {
 		throw new Error(`bad case id: ${r.id}`);
@@ -183,14 +183,14 @@ export const writeCase = async (
 			: Object.fromEntries(
 					Object.entries(normalise(r.samples)).map(([k, v]) => [
 						k,
-						v.slice(0, SAMPLE_MAX),
-					]),
+						v.slice(0, SAMPLE_MAX)
+					])
 				);
 	const facts = [...new Set([...r.facts, ...mapped(r.id)])];
 	const out: CaseResult = {
 		...r,
 		facts,
-		...(samples === undefined ? {} : { samples }),
+		...(samples === undefined ? {} : { samples })
 	};
 	assertNoSecret(r.id, out);
 	const dir = join(runDir, r.group);
@@ -221,18 +221,18 @@ const readGroup = async (dir: string, group: string): Promise<CaseResult[]> => {
 	const names = await readdir(d);
 	const files = names.filter((n) => n.endsWith(".json"));
 	const parsed = await Promise.all(
-		files.map((f): Promise<unknown> => Bun.file(join(d, f)).json()),
+		files.map((f): Promise<unknown> => Bun.file(join(d, f)).json())
 	);
 	return parsed.filter((j) => isCaseResult(j));
 };
 
 export const readRun = async (
 	version: string,
-	base?: string,
+	base?: string
 ): Promise<CaseResult[]> => {
 	const dir = dirOf(version, base);
 	const groups = await Promise.all(
-		["print", "pty", "managed", "live"].map((g) => readGroup(dir, g)),
+		["print", "pty", "managed", "live"].map((g) => readGroup(dir, g))
 	);
 	return groups.flat().toSorted((a, b) => a.id.localeCompare(b.id));
 };

@@ -15,7 +15,7 @@ import {
 	extend,
 	type Obj,
 	type Out,
-	type PhaseCtx,
+	type PhaseCtx
 } from "./phases/util.ts";
 import { vouchManagedDef, vouchUserDef } from "./phases/vouch.ts";
 export { type PhaseCtx } from "./phases/util.ts";
@@ -28,7 +28,7 @@ const ROWS: [string, boolean | undefined, boolean | undefined][] = [
 	["flag-true", undefined, true],
 	["flag-false", undefined, false],
 	["user-false-and-flag-true", false, true],
-	["user-true-and-flag-false", true, false],
+	["user-true-and-flag-false", true, false]
 ];
 
 const classifyDefs = (phase: Phase): Def[] => {
@@ -36,7 +36,7 @@ const classifyDefs = (phase: Phase): Def[] => {
 	return ROWS.map(([label, u, f]) => {
 		const user: Obj = {
 			permissions: { allow: ["Bash(curl -s http://127.0.0.1:9/x)"] },
-			enableAllProjectMcpServers: true,
+			enableAllProjectMcpServers: true
 		};
 		if (u !== undefined) {
 			user["autoMode"] = { classifyAllShell: u };
@@ -45,7 +45,7 @@ const classifyDefs = (phase: Phase): Def[] => {
 		if (f !== undefined) {
 			args.push(
 				"--settings",
-				JSON.stringify({ autoMode: { classifyAllShell: f } }),
+				JSON.stringify({ autoMode: { classifyAllShell: f } })
 			);
 		}
 		const expectOld = managed === true || u === true || f === true ? 1 : 0;
@@ -57,7 +57,7 @@ const classifyDefs = (phase: Phase): Def[] => {
 				// From 2.1.319 the server-side check refuses a call that the stub gives no verdict for, and no classifier request follows.
 				env: { CLAUDE_CODE_AUTO_MODE_SERVER: "0" },
 				tool: "Bash",
-				toolInput: { command: "curl -s http://127.0.0.1:9/x" },
+				toolInput: { command: "curl -s http://127.0.0.1:9/x" }
 			},
 			data: (_r, x) => {
 				// the stub reply makes the program retry, so only "any classifier request" is comparable
@@ -67,10 +67,10 @@ const classifyDefs = (phase: Phase): Def[] => {
 						managed: managed ?? "unset",
 						classifier_requested: seen === 1,
 						expected_if_any_true: expectOld === 1,
-						same_as_expected: seen === expectOld,
-					},
+						same_as_expected: seen === expectOld
+					}
 				};
-			},
+			}
 		};
 	});
 };
@@ -118,7 +118,7 @@ const result = (
 	id: string,
 	r: Run | null,
 	o: Out,
-	notes?: string,
+	notes?: string
 ): CaseResult => ({
 	schema: 1,
 	id,
@@ -133,7 +133,7 @@ const result = (
 	...(o.samples ? { samples: o.samples } : {}),
 	...(r ? { requests: requestSummary(r) } : {}),
 	facts: o.facts ?? [],
-	...(notes === undefined || notes === "" ? {} : { notes }),
+	...(notes === undefined || notes === "" ? {} : { notes })
 });
 
 const invalid = (ctx: PhaseCtx, id: string, error: string, notes: string) =>
@@ -144,7 +144,7 @@ const runDef = async (
 	id: string,
 	d: Def,
 	truncate: () => Promise<void>,
-	readStarted: () => Promise<string[]>,
+	readStarted: () => Promise<string[]>
 ): Promise<CaseResult> => {
 	await truncate();
 	let started: string[] = [];
@@ -154,7 +154,7 @@ const runDef = async (
 		afterExit: async (sb) => {
 			started = await readStarted();
 			return (await c.afterExit?.(sb)) ?? {};
-		},
+		}
 	});
 	try {
 		return result(ctx, id, r, d.data(r, extend(r, started)), d.notes);
@@ -170,7 +170,7 @@ export const runPhase = (
 	truncate: () => Promise<void>,
 	readStarted: () => Promise<string[]>,
 	/** Returns an error text when the phase precondition no longer holds (checked before every case). */
-	guard?: () => Promise<string | null>,
+	guard?: () => Promise<string | null>
 ): Promise<CaseResult[]> =>
 	mapInOrder(selectedDefs(phase, ctx), async (d) => {
 		const id = caseId(phase, d);
@@ -188,7 +188,7 @@ export const runPhase = (
 				ctx,
 				id,
 				error instanceof Error ? error.message : String(error),
-				"probe invalid: threw before producing data",
+				"probe invalid: threw before producing data"
 			);
 		}
 	});

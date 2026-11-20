@@ -8,7 +8,7 @@ import {
 	type Module,
 	type Node,
 	type NodeOf,
-	returnsOf,
+	returnsOf
 } from "../../ast.ts";
 import { everySeq, mapSeq, someSeq } from "../../seq.ts";
 import { asNode } from "../common.ts";
@@ -103,9 +103,9 @@ export class EnvObjects {
 			return this.#any(
 				m,
 				n.properties.flatMap((p) =>
-					p.type === "SpreadElement" ? [p.argument] : [],
+					p.type === "SpreadElement" ? [p.argument] : []
 				),
-				seen,
+				seen
 			);
 		}
 		if (n.type === "LogicalExpression") {
@@ -141,7 +141,7 @@ export class EnvObjects {
 		return (
 			rets.length > 0 &&
 			(await everySeq(rets, (r) =>
-				r === null ? Promise.resolve(false) : this.is(f.module, r, seen),
+				r === null ? Promise.resolve(false) : this.is(f.module, r, seen)
 			))
 		);
 	}
@@ -149,7 +149,7 @@ export class EnvObjects {
 	async #identifier(
 		m: Module,
 		n: NodeOf<"Identifier">,
-		seen: Set<unknown>,
+		seen: Set<unknown>
 	): Promise<boolean> {
 		const v = m.variable(n);
 		const def = v?.defs[0];
@@ -170,7 +170,7 @@ export class EnvObjects {
 		m: Module,
 		n: NodeOf<"Identifier">,
 		v: Variable,
-		seen: Set<unknown>,
+		seen: Set<unknown>
 	): Promise<boolean> {
 		const def = v.defs[0];
 		if (def?.type === "ImportBinding") {
@@ -198,7 +198,7 @@ export class EnvObjects {
 		m: Module,
 		fn: Fn,
 		name: string,
-		seen: Set<unknown>,
+		seen: Set<unknown>
 	): Promise<boolean> {
 		const index = fn.params.findIndex((p) => {
 			const id = p.type === "AssignmentPattern" ? p.left : p;

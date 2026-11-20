@@ -23,14 +23,14 @@ export const DOC = [
 	"````",
 	"Removed in 2.1.307 the thing; works on 2.1.300 or later.",
 	"## Another — Heading",
-	"Before 2.1.301 it differed.",
+	"Before 2.1.301 it differed."
 ].join("\n");
 
 export const kase = (
 	version: string,
 	id: string,
 	data: CaseResult["data"],
-	samples?: Record<string, string>,
+	samples?: Record<string, string>
 ): CaseResult => ({
 	schema: 1,
 	id,
@@ -43,14 +43,14 @@ export const kase = (
 	timedOut: false,
 	data,
 	...(samples ? { samples } : {}),
-	facts: [],
+	facts: []
 });
 
 export const factRow = (
 	id: string,
 	probes: string[],
 	kind: string,
-	extra: Partial<FactRow> = {},
+	extra: Partial<FactRow> = {}
 ): FactRow => ({
 	id,
 	file: "docs/x.md",
@@ -59,5 +59,5 @@ export const factRow = (
 	kind,
 	probes,
 	status: "mapped",
-	...extra,
+	...extra
 });

@@ -4,7 +4,7 @@ import {
 	aliasesOf,
 	argEntries,
 	callAt,
-	eventSites,
+	eventSites
 } from "../../../inspect/mcp/src/events.ts";
 import { mergeEntries } from "../../../inspect/mcp/src/resolve.ts";
 import { mapSeq } from "../../../inspect/mcp/src/seq.ts";
@@ -25,7 +25,7 @@ import {
 	type Src,
 	type Text,
 	UNVERIFIED,
-	VERSION,
+	VERSION
 } from "./ctx.ts";
 import { attrsToProps, buildSpans, type Defs } from "./otel-spans.ts";
 
@@ -50,19 +50,19 @@ const buildBase = async (): Promise<{ base: Defs; baseNote: string }> => {
 	// The builder assigns user.id from a variable and merges the gateway OIDC claims (`["user.id"]=r.sub`, `user.groups`), which since 2.1.323 live in a function of another module.
 	const bText = [
 		await fnTextAt(/\["user\.id"\]=[\w$]+,/u),
-		await fnTextAt(/\["user\.id"\]=[\w$]+\.sub\b/u),
+		await fnTextAt(/\["user\.id"\]=[\w$]+\.sub\b/u)
 	].join("\n");
 	const baseKeys = [
 		...new Set(
-			[...bText.matchAll(/\b[\w$]\["([\w.]+)"\]=/gu)].map((m) => group(m, 1)),
-		),
+			[...bText.matchAll(/\b[\w$]\["([\w.]+)"\]=/gu)].map((m) => group(m, 1))
+		)
 	];
 	const baseGates = [
 		...new Set(
 			[...bText.matchAll(/"(OTEL_METRICS_INCLUDE_\w+)"/gu)].map((m) =>
-				group(m, 1),
-			),
-		),
+				group(m, 1)
+			)
+		)
 	];
 	const base: Defs = {};
 	for (const k of baseKeys) {
@@ -100,12 +100,12 @@ const parseString = (text: string): string => {
 const findSlots = (mSrc: Src): Map<string, Slot> => {
 	const slot = new Map<string, Slot>();
 	for (const m of mSrc.text.matchAll(
-		/this\.(#\w+)=[\w$]+\("claude_code\.([\w.]+)",\{description:"((?:[^"\\]|\\.)*)"(?:,unit:[\w$]+\("(\w+)"\))?\}/gu,
+		/this\.(#\w+)=[\w$]+\("claude_code\.([\w.]+)",\{description:"((?:[^"\\]|\\.)*)"(?:,unit:[\w$]+\("(\w+)"\))?\}/gu
 	)) {
 		slot.set(group(m, 1), {
 			name: group(m, 2),
 			description: parseString(`"${group(m, 3)}"`),
-			unit: m[4],
+			unit: m[4]
 		});
 	}
 	return slot;
@@ -113,11 +113,11 @@ const findSlots = (mSrc: Src): Map<string, Slot> => {
 
 const findMethods = (
 	mSrc: Src,
-	slot: Map<string, Slot>,
+	slot: Map<string, Slot>
 ): Map<string, string> => {
 	const method = new Map<string, string>();
 	for (const m of mSrc.text.matchAll(
-		/(\w+Counter)\(\)\{return this\.(#\w+)\}/gu,
+		/(\w+Counter)\(\)\{return this\.(#\w+)\}/gu
 	)) {
 		const s = slot.get(group(m, 2));
 		if (s) {
@@ -132,7 +132,7 @@ const collectAdds = async (
 	t: Text,
 	nm: string,
 	p: Defs,
-	attrib: Defs,
+	attrib: Defs
 ): Promise<void> => {
 	const call = new RegExp(`(?<![\\w$.])${esc(nm)}\\(\\)\\?\\.add\\(`, "gu");
 	const hits = [...t.text.matchAll(call)];
@@ -161,13 +161,13 @@ const buildMetrics = async (
 	$defs: Defs,
 	base: Defs,
 	baseNote: string,
-	attrib: Defs,
+	attrib: Defs
 ): Promise<void> => {
 	const mSrc = await only("Count of CLI sessions started");
 	const slot = findSlots(mSrc);
 	const method = findMethods(mSrc, slot);
 	const accessorSrc = mods.find((m) =>
-		m.text.includes("telemetryHandles.sessionCounter()"),
+		m.text.includes("telemetryHandles.sessionCounter()")
 	);
 	if (!accessorSrc) {
 		throw new Error("metric accessors not found");
@@ -176,7 +176,7 @@ const buildMetrics = async (
 	await mapSeq(method, async ([meth, name]) => {
 		const acc = new RegExp(
 			`function ([\\w$]+)\\(\\)\\{return [\\w$]+\\(\\)\\.host\\.telemetryHandles\\.${meth}\\(\\)\\}`,
-			"u",
+			"u"
 		).exec(accessorSrc.text);
 		const p: Defs = {};
 		metricProps.set(name, p);
@@ -199,7 +199,7 @@ const buildMetrics = async (
 			...(s.unit !== undefined && s.unit !== ""
 				? { $comment: `Unit: ${s.unit}. ${baseNote}` }
 				: { $comment: baseNote }),
-			properties: { ...base, ...own },
+			properties: { ...base, ...own }
 		};
 	}
 };
@@ -208,14 +208,14 @@ const buildMetrics = async (
 const buildEvents = async (
 	$defs: Defs,
 	base: Defs,
-	baseNote: string,
+	baseNote: string
 ): Promise<void> => {
 	const evProps: Defs = {
 		"event.name": { type: "string" },
 		"event.timestamp": { type: "string" },
 		"event.sequence": { type: "number" },
 		"prompt.id": { ...UNVERIFIED },
-		"workspace.host_paths": { type: "array" },
+		"workspace.host_paths": { type: "array" }
 	};
 	const events = await eventSites(bundle, R);
 	await mapSeq(events, async ([name, lists]) => {
@@ -225,7 +225,7 @@ const buildEvents = async (
 			"x-otel-kind": "event",
 			type: "object",
 			$comment: `${baseNote} Call sites read: ${lists.length}. A key missing from some sites is optional.`,
-			properties: { ...base, ...evProps, ...p, "event.name": { const: name } },
+			properties: { ...base, ...evProps, ...p, "event.name": { const: name } }
 		};
 	});
 };
@@ -239,20 +239,20 @@ export const buildOtel = async (): Promise<{ file: string; schema: Json }> => {
 	await buildEvents($defs, base, baseNote);
 
 	const ordered = Object.fromEntries(
-		sortedKeys($defs).map((k): [string, Json] => [k, $defs[k] ?? {}]),
+		sortedKeys($defs).map((k): [string, Json] => [k, $defs[k] ?? {}])
 	);
 	const count = (kind: string) =>
 		Object.values(ordered).filter((d) => d["x-otel-kind"] === kind).length;
 	note(
-		`otel: ${count("metric")} metrics, ${count("span")} spans, ${count("event")} events`,
+		`otel: ${count("metric")} metrics, ${count("span")} spans, ${count("event")} events`
 	);
 	const out: Json = {
 		...header(
 			"claude-code-otel.json",
 			"Claude Code OpenTelemetry metrics, spans, and events",
-			`For the OpenTelemetry data Claude Code emits. Each $defs entry is one metric, span, or event; the kind is in x-otel-kind and the properties are its attributes. Generated from Claude Code ${VERSION} by tools/schemas/code.ts. Anchors: "Count of CLI sessions started" (the meter setup that registers each metric with its description and unit) with the counter accessor functions and their .add(value, attributes) call sites; the span helpers (startSpan("claude_code.<name>") with the attribute literal built just before it, and the wrapper that takes {spanType, attrs, contentAttrs}); the event emitter that sets "event.name", "event.timestamp", "event.sequence" and its call sites with the attribute literal; the base attribute builder behind "OTEL_METRICS_INCLUDE_SESSION_ID". No probe in captures/ records telemetry, so nothing is marked x-observed. Do not edit by hand.`,
+			`For the OpenTelemetry data Claude Code emits. Each $defs entry is one metric, span, or event; the kind is in x-otel-kind and the properties are its attributes. Generated from Claude Code ${VERSION} by tools/schemas/code.ts. Anchors: "Count of CLI sessions started" (the meter setup that registers each metric with its description and unit) with the counter accessor functions and their .add(value, attributes) call sites; the span helpers (startSpan("claude_code.<name>") with the attribute literal built just before it, and the wrapper that takes {spanType, attrs, contentAttrs}); the event emitter that sets "event.name", "event.timestamp", "event.sequence" and its call sites with the attribute literal; the base attribute builder behind "OTEL_METRICS_INCLUDE_SESSION_ID". No probe in captures/ records telemetry, so nothing is marked x-observed. Do not edit by hand.`
 		),
-		$defs: ordered,
+		$defs: ordered
 	};
 	return { file: "claude-code-otel.json", schema: out };
 };

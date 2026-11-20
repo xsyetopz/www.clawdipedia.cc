@@ -2,7 +2,7 @@
 import type { Case } from "./case.ts";
 
 const settings = (o: object): Record<string, string> => ({
-	"settings.json": JSON.stringify(o),
+	"settings.json": JSON.stringify(o)
 });
 
 // A stdio MCP server with one permission tool, `perm`, that allows every call with the input it got.
@@ -29,15 +29,15 @@ const MCP_ALLOW = [
 	"\t\tprocess.stdout.write(JSON.stringify({ jsonrpc: '2.0', id: m.id, result }) + '\\n');",
 	"\t}",
 	"});",
-	"",
+	""
 ].join("\n");
 const PERM_ARGS = [
 	"--mcp-config",
 	JSON.stringify({
-		mcpServers: { s: { command: "bun", args: ["{PROJ}/mcp.js"] } },
+		mcpServers: { s: { command: "bun", args: ["{PROJ}/mcp.js"] } }
 	}),
 	"--permission-prompt-tool",
-	"mcp__s__perm",
+	"mcp__s__perm"
 ];
 
 /** The cases that fill the item types of transcript array fields. */
@@ -54,27 +54,25 @@ export const ITEM_CASES: Case[] = [
 							{
 								type: "command",
 								command:
-									"if [ -f {PROJ}/m ]; then exit 0; fi; touch {PROJ}/m; echo probe-err >&2; exit 2",
-							},
-						],
+									"if [ -f {PROJ}/m ]; then exit 0; fi; touch {PROJ}/m; echo probe-err >&2; exit 2"
+							}
+						]
 					},
 					{
-						hooks: [
-							{ type: "command", command: "echo probe-fail >&2; exit 1" },
-						],
+						hooks: [{ type: "command", command: "echo probe-fail >&2; exit 1" }]
 					},
 					{
 						hooks: [
 							{
 								type: "command",
 								command:
-									'echo \'{"hookSpecificOutput":{"hookEventName":"Stop","additionalContext":"probe-ctx"}}\'',
-							},
-						],
-					},
-				],
-			},
-		}),
+									'echo \'{"hookSpecificOutput":{"hookEventName":"Stop","additionalContext":"probe-ctx"}}\''
+							}
+						]
+					}
+				]
+			}
+		})
 	},
 	{
 		// system.snapshotFiles: the plan snapshot is written only in a byoc or cloud environment, after ExitPlanMode saves a plan
@@ -86,7 +84,7 @@ export const ITEM_CASES: Case[] = [
 		seq: [
 			{
 				name: "ToolSearch",
-				input: { query: "select:ExitPlanMode", max_results: 3 },
+				input: { query: "select:ExitPlanMode", max_results: 3 }
 			},
 			// the first call names the plan file (a random name) in the transcript; the command writes it; the second call
 			// snapshots it, because the tool input is normalized before the call runs
@@ -94,17 +92,17 @@ export const ITEM_CASES: Case[] = [
 			{
 				name: "Bash",
 				input: {
-					command: String.raw`f=$(grep -ho "[^\" ]*/plans/[a-z-]*\.md" "$CLAUDE_CONFIG_DIR"/projects/*/*.jsonl | head -1); mkdir -p "$(dirname "$f")"; printf "# Probe plan\n" > "$f"`,
-				},
+					command: String.raw`f=$(grep -ho "[^\" ]*/plans/[a-z-]*\.md" "$CLAUDE_CONFIG_DIR"/projects/*/*.jsonl | head -1); mkdir -p "$(dirname "$f")"; printf "# Probe plan\n" > "$f"`
+				}
 			},
-			{ name: "ExitPlanMode", input: {} },
-		],
+			{ name: "ExitPlanMode", input: {} }
+		]
 	},
 	{
 		// user.sandboxViolations: a sandboxed Bash that writes outside the allowed paths and connects to a closed port
 		id: "item-sandbox-violation",
 		cfgFiles: settings({
-			sandbox: { enabled: true, autoAllowBashIfSandboxed: true },
+			sandbox: { enabled: true, autoAllowBashIfSandboxed: true }
 		}),
 		args: ["--allowedTools", "Bash"],
 		seq: [
@@ -112,10 +110,10 @@ export const ITEM_CASES: Case[] = [
 				name: "Bash",
 				input: {
 					command:
-						"touch ~/probe-outside.txt; echo x > /etc/probe-outside.txt; curl -s -m 3 http://example.invalid/; sleep 6; true",
-				},
-			},
-		],
+						"touch ~/probe-outside.txt; echo x > /etc/probe-outside.txt; curl -s -m 3 http://example.invalid/; sleep 6; true"
+				}
+			}
+		]
 	},
 	{
 		// user.promptShellHandOff.commands: a forked skill (context: fork, no agent) whose body runs a shell injection in
@@ -123,9 +121,9 @@ export const ITEM_CASES: Case[] = [
 		id: "item-shell-handoff",
 		projFiles: {
 			".claude/skills/hand/SKILL.md":
-				"---\nname: hand\ndescription: probe\ncontext: fork\n---\nOutput: !`touch handoff-probe.txt`\n",
+				"---\nname: hand\ndescription: probe\ncontext: fork\n---\nOutput: !`touch handoff-probe.txt`\n"
 		},
 		args: ["--permission-mode", "auto", "--allowedTools", "Skill"],
-		seq: [{ name: "Skill", input: { skill: "hand" } }],
-	},
+		seq: [{ name: "Skill", input: { skill: "hand" } }]
+	}
 ];

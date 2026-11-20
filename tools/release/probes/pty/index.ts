@@ -17,7 +17,7 @@ import {
 	type PtyGroup,
 	runPtyCase,
 	selected,
-	stopStub,
+	stopStub
 } from "./harness.ts";
 
 interface Tally {
@@ -75,7 +75,7 @@ const stray = async (t: Tally): Promise<void> => {
 	if (reqs.length > 0) {
 		t.invalid++;
 		console.info(
-			`STRAY ${reqs.length} request(s) reached the stub without a case id: ${[...new Set(reqs.map((r) => r.path))].join(", ")}`,
+			`STRAY ${reqs.length} request(s) reached the stub without a case id: ${[...new Set(reqs.map((r) => r.path))].join(", ")}`
 		);
 	}
 };
@@ -93,7 +93,7 @@ export const runProbePty = async (ctx: Ctx): Promise<number> => {
 		bin,
 		runDir: ctx.dry ? "" : await openRun(ctx.to),
 		only: ctx.only,
-		dry: ctx.dry,
+		dry: ctx.dry
 	};
 	if (!ctx.dry && ctx.only === null) {
 		await clearStale(join(pctx.runDir, "pty"));
@@ -111,7 +111,7 @@ export const runProbePty = async (ctx: Ctx): Promise<number> => {
 		return 2;
 	}
 	console.info(
-		`${t.total} case(s)${ctx.dry ? " planned" : `, ${t.invalid} invalid probe(s)`}`,
+		`${t.total} case(s)${ctx.dry ? " planned" : `, ${t.invalid} invalid probe(s)`}`
 	);
 	return t.invalid > 0 && !ctx.dry ? 1 : 0;
 };

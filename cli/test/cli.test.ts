@@ -48,7 +48,7 @@ describe("exit codes", () => {
 			["search", "x", "--nope"],
 			["list", "--section", "x"],
 			["schema", "tools", "--source", "docs"],
-			["list", "--source", "docs"],
+			["list", "--source", "docs"]
 		];
 		const runs = await Promise.all(bad.map((args) => cc(args, env)));
 		for (const r of runs) {
@@ -64,7 +64,7 @@ describe("exit codes", () => {
 		expect(top.out).toContain("clawdipedia");
 		const subs = ["search", "read", "list", "schema"];
 		const runs = await Promise.all(
-			subs.map(async (sub) => ({ sub, r: await cc([sub, "--help"]) })),
+			subs.map(async (sub) => ({ sub, r: await cc([sub, "--help"]) }))
 		);
 		for (const { sub, r } of runs) {
 			expect(top.out).toContain(sub);
@@ -84,7 +84,7 @@ describe("cache", () => {
 		await site.stop();
 		const off = await cc(["read", "configure/hooks"], {
 			...env,
-			CLAWDIPEDIA_TTL_SCALE: "0",
+			CLAWDIPEDIA_TTL_SCALE: "0"
 		});
 		expect(off.code).toBe(0);
 		expect(off.out).toContain("PreToolUse");
@@ -96,23 +96,23 @@ describe("cache", () => {
 		const data = await tmp();
 		const a = await cc(["read", "configure/hooks"], {
 			CLAWDIPEDIA_BASE_URL: site.url,
-			CLAUDE_PLUGIN_DATA: data,
+			CLAUDE_PLUGIN_DATA: data
 		});
 		expect(a.code).toBe(0);
 		expect(
 			await pathExists(
-				join(data, "cache", "site", "pages", "configure", "hooks.md"),
-			),
+				join(data, "cache", "site", "pages", "configure", "hooks.md")
+			)
 		).toBe(true);
 		const dir = await tmp();
 		const data2 = await tmp();
 		await cc(["read", "configure/hooks"], {
 			CLAWDIPEDIA_BASE_URL: site.url,
 			CLAWDIPEDIA_CACHE_DIR: dir,
-			CLAUDE_PLUGIN_DATA: data2,
+			CLAUDE_PLUGIN_DATA: data2
 		});
 		expect(
-			await pathExists(join(dir, "site", "pages", "configure", "hooks.md")),
+			await pathExists(join(dir, "site", "pages", "configure", "hooks.md"))
 		).toBe(true);
 		expect(await pathExists(join(data2, "cache"))).toBe(false);
 		// With neither set, the cache is under the home folder (a temp HOME here).
@@ -120,7 +120,7 @@ describe("cache", () => {
 		await cc(["read", "configure/hooks"], {
 			CLAWDIPEDIA_BASE_URL: site.url,
 			HOME: home,
-			XDG_CACHE_HOME: "",
+			XDG_CACHE_HOME: ""
 		});
 		expect(
 			await pathExists(
@@ -131,9 +131,9 @@ describe("cache", () => {
 					"site",
 					"pages",
 					"configure",
-					"hooks.md",
-				),
-			),
+					"hooks.md"
+				)
+			)
 		).toBe(true);
 	});
 });

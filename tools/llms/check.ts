@@ -24,7 +24,7 @@ const walk = async (dir: string): Promise<string[]> => {
 	const out: string[] = [];
 	for await (const name of new Bun.Glob("**/*.{md,mdx}").scan({
 		cwd: dir,
-		absolute: true,
+		absolute: true
 	})) {
 		out.push(name);
 	}
@@ -50,7 +50,7 @@ const isEntry = (v: unknown): v is ManifestEntry =>
 const readManifest = async (): Promise<ManifestEntry[]> => {
 	try {
 		const parsed: unknown = JSON.parse(
-			(await read("llms-manifest.json")) || "[]",
+			(await read("llms-manifest.json")) || "[]"
 		);
 		return Array.isArray(parsed)
 			? parsed.filter((e: unknown) => isEntry(e))
@@ -71,7 +71,7 @@ const checkLinks = async (links: (string | undefined)[]): Promise<void> => {
 			if (!(await Bun.file(join(BUILD, url.slice(BASE.length))).exists())) {
 				fail(`llms.txt link does not resolve to a built file: ${url}`);
 			}
-		}),
+		})
 	);
 };
 
@@ -79,13 +79,13 @@ const checkLinks = async (links: (string | undefined)[]): Promise<void> => {
 const checkEntry = async (
 	entry: ManifestEntry,
 	links: (string | undefined)[],
-	full: string,
+	full: string
 ): Promise<string | undefined> => {
 	const file = entry.md.slice(BASE.length);
 	const text = await read(file);
 	const m =
 		/^---\ntitle: .*\ndescription: .*\nurl: (.*)\nsource: (.*)\n---\n/u.exec(
-			text,
+			text
 		);
 	if (!m) {
 		fail(`build/${file} has no valid front matter`);
@@ -123,12 +123,12 @@ const checkDocs = async (sources: Set<string>): Promise<void> => {
 			const rel = relative(ROOT, path).split("\\").join("/");
 			// Docusaurus leaves draft pages out of production builds
 			const draft = /^---\n[\s\S]*?^draft: true$/mu.test(
-				await Bun.file(path).text(),
+				await Bun.file(path).text()
 			);
 			if (!sources.has(rel) && !draft) {
 				fail(`${rel} has no page in the llms output`);
 			}
-		}),
+		})
 	);
 };
 
@@ -142,11 +142,11 @@ const main = async (): Promise<void> => {
 	const full = await read("llms-full.txt");
 	const manifest = await readManifest();
 	const links = [...llms.matchAll(/^- \[[^\]]+\]\(([^)]+)\)/gmu)].map(
-		(m) => m[1],
+		(m) => m[1]
 	);
 	await checkLinks(links);
 	const found = await Promise.all(
-		manifest.map((entry) => checkEntry(entry, links, full)),
+		manifest.map((entry) => checkEntry(entry, links, full))
 	);
 	const sources = new Set<string>();
 	for (const source of found) {
@@ -164,7 +164,7 @@ const main = async (): Promise<void> => {
 		return;
 	}
 	console.info(
-		`llms:check ok: ${manifest.length} pages, ${links.length} links.`,
+		`llms:check ok: ${manifest.length} pages, ${links.length} links.`
 	);
 };
 

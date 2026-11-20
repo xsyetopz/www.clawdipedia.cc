@@ -2,7 +2,7 @@
 // Probes spawn the program and record results, so the order must stay fixed.
 export const mapInOrder = async <T, R>(
 	items: readonly T[],
-	fn: (item: T, index: number) => Promise<R>,
+	fn: (item: T, index: number) => Promise<R>
 ): Promise<R[]> => {
 	const out: R[] = [];
 	const it = items.entries();
@@ -20,7 +20,7 @@ export const mapInOrder = async <T, R>(
 
 export const eachInOrder = async <T>(
 	items: readonly T[],
-	fn: (item: T, index: number) => Promise<void>,
+	fn: (item: T, index: number) => Promise<void>
 ): Promise<void> => {
 	await mapInOrder(items, fn);
 };

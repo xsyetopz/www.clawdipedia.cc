@@ -28,7 +28,7 @@ const STEPS: Step[] = [
 	{ name: "probe:pty", extra: [], soft: true },
 	{ name: "facts", extra: ["--check"], soft: true },
 	{ name: "facts", extra: [] },
-	{ name: "compare", extra: [] },
+	{ name: "compare", extra: [] }
 ];
 const ALLOWED = new Set(["--from", "--to", "--dry"]);
 
@@ -50,24 +50,24 @@ const refuse = (ctx: Ctx): number | undefined => {
 	const bad = ctx.rest.filter(
 		(a, i) =>
 			!ALLOWED.has(a) &&
-			!(i > 0 && (ctx.rest[i - 1] === "--from" || ctx.rest[i - 1] === "--to")),
+			!(i > 0 && (ctx.rest[i - 1] === "--from" || ctx.rest[i - 1] === "--to"))
 	);
 	if (bad.length > 0) {
 		console.error(
-			`release:all: unsupported argument(s): ${bad.join(" ")}. Only --from, --to and --dry are accepted.`,
+			`release:all: unsupported argument(s): ${bad.join(" ")}. Only --from, --to and --dry are accepted.`
 		);
 		return 2;
 	}
 	if (ctx.to === "") {
 		console.error(
-			"release:all: no --to version and no installed version found",
+			"release:all: no --to version and no installed version found"
 		);
 		return 1;
 	}
 	// The last step compares the two. Stop now, before the probes, when the defaults collapsed to one.
 	if (ctx.from === ctx.to) {
 		console.error(
-			`release:all: --from and --to are both ${ctx.to}. Give the release before it with --from.`,
+			`release:all: --from and --to are both ${ctx.to}. Give the release before it with --from.`
 		);
 		return 1;
 	}
@@ -80,8 +80,8 @@ const spawnStep = async (step: Step, common: string[]): Promise<number> => {
 		{
 			cwd: join(import.meta.dir, "..", ".."),
 			stdout: "inherit",
-			stderr: "inherit",
-		},
+			stderr: "inherit"
+		}
 	);
 	await p.exited;
 	return exitCodeOf(label(step), p);
@@ -91,7 +91,7 @@ const spawnStep = async (step: Step, common: string[]): Promise<number> => {
 const runSteps = async (
 	i: number,
 	common: string[],
-	failed: Failure[],
+	failed: Failure[]
 ): Promise<number | undefined> => {
 	const step = STEPS[i];
 	if (step === undefined) {
@@ -105,7 +105,7 @@ const runSteps = async (
 	if (step.soft === true) {
 		failed.push({ step, code });
 		console.error(
-			`\nrelease:all: ${label(step)} exited ${code}; going on so the worklist still gets built.`,
+			`\nrelease:all: ${label(step)} exited ${code}; going on so the worklist still gets built.`
 		);
 		return runSteps(i + 1, common, failed);
 	}
@@ -127,7 +127,7 @@ export const runAll = async (ctx: Ctx): Promise<number> => {
 		ctx.from,
 		"--to",
 		ctx.to,
-		...(ctx.dry ? ["--dry"] : []),
+		...(ctx.dry ? ["--dry"] : [])
 	];
 	const failed: Failure[] = [];
 	const stopped = await runSteps(0, common, failed);
@@ -136,7 +136,7 @@ export const runAll = async (ctx: Ctx): Promise<number> => {
 	}
 	if (failed.length > 0) {
 		console.error(
-			`\nrelease:all: failed steps: ${failed.map((f) => `${label(f.step)} (exit ${f.code})`).join(", ")}.`,
+			`\nrelease:all: failed steps: ${failed.map((f) => `${label(f.step)} (exit ${f.code})`).join(", ")}.`
 		);
 		console.error("Fix and re-run these by hand:");
 		for (const f of failed) {
@@ -145,7 +145,7 @@ export const runAll = async (ctx: Ctx): Promise<number> => {
 		return failed[0]?.code ?? 1;
 	}
 	console.info(
-		"\nrelease:all: automatic steps done. Needs you (not run by `all`):",
+		"\nrelease:all: automatic steps done. Needs you (not run by `all`):"
 	);
 	console.info("  bun run release:probe:managed");
 	console.info("  bun run release:probe:live");

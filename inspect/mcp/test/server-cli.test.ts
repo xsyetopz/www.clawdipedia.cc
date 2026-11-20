@@ -26,7 +26,7 @@ for (const l of lines)
       messages: [{ role: "user", content: JSON.parse(l).message.content }],
     }),
   }).then((r) => r.text());
-`,
+`
 	);
 	await chmod(bin, 0o755);
 };
@@ -43,28 +43,28 @@ test("code cli sends prompts in one run, matches a regex query, and shows a requ
 		offset: 0,
 		length: 20,
 		tool: "Ask",
-		show: "d.log",
+		show: "d.log"
 	});
 	const s = structured(r);
 	expect(s["requests"]).toHaveLength(2);
 	expect(s["found"]).toEqual([
 		"request 1 POST /v1/messages",
-		"request 2 POST /v1/messages",
+		"request 2 POST /v1/messages"
 	]);
 	expect(s["body"]).toMatchObject({
 		request: 2,
 		cacheControl: ["system[0]"],
 		offset: 0,
 		end: 20,
-		text: '{"system":[{"type":"',
+		text: '{"system":[{"type":"'
 	});
 	expect(s["tool"]).toEqual({
 		name: "Ask",
 		description: "d",
-		input_schema: {},
+		input_schema: {}
 	});
 	expect(r.content[0]?.text).toContain(
-		'd.log: ["-p","--input-format","stream-json","--output-format","stream-json","--verbose"]',
+		'd.log: ["-p","--input-format","stream-json","--output-format","stream-json","--verbose"]'
 	);
 	const none = await call("code", {
 		action: "cli",
@@ -72,7 +72,7 @@ test("code cli sends prompts in one run, matches a regex query, and shows a requ
 		args: ["-p", "x"],
 		query: String.raw`Budget: \d+%`,
 		regex: true,
-		tool: "Write",
+		tool: "Write"
 	});
 	expect(none.structuredContent?.["found"]).toEqual([]);
 	expect(none.structuredContent?.["tool"]).toBeNull();

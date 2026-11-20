@@ -12,7 +12,7 @@ import {
 	refTarget,
 	rewriteRefs,
 	sortDefs,
-	stringList,
+	stringList
 } from "./defs.ts";
 
 // Walks a union to its object members, following $ref into the schema's own $defs.
@@ -111,7 +111,7 @@ const dedupeName = (
 	name: string,
 	m: Json,
 	have: string[],
-	taken: Map<string, string[]>,
+	taken: Map<string, string[]>
 ): string => {
 	const fresh = stringList(m["required"]).filter((k) => !have.includes(k));
 	const props = getJson(m, "properties") ?? {};
@@ -129,7 +129,7 @@ const addStreamMembers = (
 	named: Set<string>,
 	root: Json,
 	suffix: string,
-	shared: string,
+	shared: string
 ) => {
 	const taken = new Map<string, string[]>();
 	for (const m of members(root)) {
@@ -144,7 +144,7 @@ const addStreamMembers = (
 			? omitLarge(
 					m,
 					"claude-code-control-protocol.json (<subtype>Request and <subtype>Response)",
-					200_000,
+					200_000
 				)
 			: m;
 		addDef(defs, `${name}${suffix}`, body, `${shared}_`);
@@ -153,7 +153,7 @@ const addStreamMembers = (
 
 const STREAM_KINDS = [
 	["stream-out", "Output", "out"],
-	["stream-in", "Input", "in"],
+	["stream-in", "Input", "in"]
 ] as const;
 
 export const streamJson = (raw: Record<string, unknown>): Json => {

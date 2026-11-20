@@ -1,7 +1,7 @@
 /** Runs `f` over `items` one at a time, each call after the one before, and returns the results in order. For steps that depend on the earlier ones. */
 export const mapSeq = <T, R>(
 	items: readonly T[],
-	f: (x: T, i: number) => Promise<R>,
+	f: (x: T, i: number) => Promise<R>
 ): Promise<R[]> => {
 	const it = items[Symbol.iterator]();
 	const out: R[] = [];

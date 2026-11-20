@@ -17,7 +17,7 @@ import {
 	runCases,
 	toolNames,
 	toolResultTexts,
-	withRun,
+	withRun
 } from "./run/helpers.ts";
 import type { PrintGroup } from "./types.ts";
 
@@ -26,7 +26,7 @@ let buf="";process.stdin.on("data",c=>{buf+=c;let i;while((i=buf.indexOf("\\n"))
 
 const agentSetup = async (
 	where: "user" | "project",
-	{ cfg, home, proj }: { cfg: string; home: string; proj: string },
+	{ cfg, home, proj }: { cfg: string; home: string; proj: string }
 ): Promise<void> => {
 	const d = `${home}/mark`;
 	await Bun.write(`${d}/srv.js`, SRV);
@@ -35,7 +35,7 @@ const agentSetup = async (
 	await mkdir(dirname(p), { recursive: true });
 	await Bun.write(
 		p,
-		`---\nname: pa\ndescription: probe agent\nmcpServers:\n  - agentsrv:\n      command: bun\n      args: ["${d}/srv.js"]\n      env:\n        MARK_DIR: "${d}"\n---\nHello.\n`,
+		`---\nname: pa\ndescription: probe agent\nmcpServers:\n  - agentsrv:\n      command: bun\n      args: ["${d}/srv.js"]\n      env:\n        MARK_DIR: "${d}"\n---\nHello.\n`
 	);
 };
 
@@ -54,16 +54,16 @@ const agentMcp = (where: "user" | "project"): CaseDef => ({
 								description: "d",
 								prompt: MARK,
 								subagent_type: "pa",
-								run_in_background: false,
-							},
-						},
-					],
+								run_in_background: false
+							}
+						}
+					]
 				},
 				setup: (sb) => agentSetup(where, sb),
 				afterExit: async ({ home }) => ({
 					started: await pathExists(`${home}/mark/started`),
-					stopped: await pathExists(`${home}/mark/stopped`),
-				}),
+					stopped: await pathExists(`${home}/mark/stopped`)
+				})
 			},
 			(r) => ({
 				from: r,
@@ -72,11 +72,11 @@ const agentMcp = (where: "user" | "project"): CaseDef => ({
 					started: r.after["started"] === true,
 					stopped: r.after["stopped"] === true,
 					handBack: (toolResultTexts(r)[0] ?? "").includes(
-						"[Subagent hand-back]",
-					),
-				},
-			}),
-		),
+						"[Subagent hand-back]"
+					)
+				}
+			})
+		)
 });
 
 const contextCmd: CaseDef = {
@@ -86,7 +86,7 @@ const contextCmd: CaseDef = {
 			ctx,
 			{
 				prompt: "/context",
-				promptReason: "the slash command is the behaviour under test",
+				promptReason: "the slash command is the behaviour under test"
 			},
 			(r) => ({
 				from: r,
@@ -99,10 +99,10 @@ const contextCmd: CaseDef = {
 					messageRequests: msgs(r).length,
 					subjects: r.reqs
 						.filter((x) => x.path.includes("count_tokens"))
-						.map((x) => countSubject(x.body)),
-				},
-			}),
-		),
+						.map((x) => countSubject(x.body))
+				}
+			})
+		)
 };
 
 const managedPath: CaseDef = {
@@ -113,7 +113,7 @@ const managedPath: CaseDef = {
 			{
 				env: { CLAUDE_CODE_MANAGED_SETTINGS_PATH: "{HOME}/ms.json" },
 				homeFiles: { "ms.json": json({ permissions: { deny: ["Bash"] } }) },
-				args: ["--debug-file", "{CFG}/d.log"],
+				args: ["--debug-file", "{CFG}/d.log"]
 			},
 			async (r) => {
 				const q = msgs(r)[0];
@@ -123,7 +123,7 @@ const managedPath: CaseDef = {
 					data: {
 						precondition: q !== undefined && d.length > 0,
 						bashToolPresent: q ? toolNames(q).includes("Bash") : null,
-						defaultManagedFileChecked: d.includes("managed-settings.json"),
+						defaultManagedFileChecked: d.includes("managed-settings.json")
 					},
 					samples: {
 						managedDebugLines: d
@@ -131,11 +131,11 @@ const managedPath: CaseDef = {
 							.filter((l) => /managed/iu.test(l))
 							.slice(0, 3)
 							.map((l) => l.replace(/^\S+\s/u, "").slice(0, 200))
-							.join("\n"),
-					},
+							.join("\n")
+					}
 				};
-			},
-		),
+			}
+		)
 };
 
 export const misc: PrintGroup = {
@@ -156,6 +156,6 @@ export const misc: PrintGroup = {
 			managedPath,
 			bigClaudeMd,
 			nestedClaudeMd("claude-opus-5-5"),
-			nestedClaudeMd("claude-sonnet-4-5"),
-		]),
+			nestedClaudeMd("claude-sonnet-4-5")
+		])
 };

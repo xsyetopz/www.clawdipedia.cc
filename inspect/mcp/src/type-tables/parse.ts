@@ -2,7 +2,7 @@
 import {
 	blockEnd,
 	type Decl,
-	declarations,
+	declarations
 } from "../../../../plugin/mcp/src/types.ts";
 
 /** One member of an object type, as the type file writes it. */
@@ -67,7 +67,7 @@ export const normalizeType = (t: string): string =>
 		t
 			.replaceAll(/\/\*[\s\S]*?\*\//gu, "")
 			.replaceAll(/\s+/gu, " ")
-			.replaceAll('"', "'"),
+			.replaceAll('"', "'")
 	)
 		.replaceAll(/([({[<]) /gu, "$1")
 		.replaceAll(/ ([)}\]>])/gu, "$1")
@@ -115,7 +115,7 @@ const membersIn = (lines: string[], from: number, to: number): TypeField[] => {
 			type: normalizeType(body),
 			doc: docBefore(lines, n),
 			line: n,
-			end: e,
+			end: e
 		});
 		n = e;
 	}
@@ -125,7 +125,7 @@ const membersIn = (lines: string[], from: number, to: number): TypeField[] => {
 /** The head line of declaration `name` and the declaration, or undefined when the file has none. */
 const headOf = (
 	f: TypeFile,
-	name: string,
+	name: string
 ): { line: number; decl: Decl } | undefined => {
 	const decl = f.decls.find((d) => d.name === name);
 	if (!decl) {
@@ -145,7 +145,7 @@ const BASES = /^((?:[\w$]+ & )+)\{/u;
 const withBases = (
 	f: TypeFile,
 	text: string,
-	own: TypeField[],
+	own: TypeField[]
 ): TypeField[] => {
 	const b = BASES.exec(text)?.[1];
 	if (b === undefined) {
@@ -163,7 +163,7 @@ const withBases = (
 /** The members of declaration `name`, or undefined when the file has none. */
 export const typeFields = (
 	f: TypeFile,
-	name: string,
+	name: string
 ): TypeField[] | undefined => {
 	const h = headOf(f, name);
 	if (!h) {

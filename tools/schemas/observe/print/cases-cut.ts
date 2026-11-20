@@ -9,8 +9,8 @@ const CREDENTIALS = JSON.stringify({
 		refreshToken: "fake-refresh",
 		expiresAt: 4_102_444_800_000,
 		scopes: ["user:inference", "user:profile", "user:mcp_servers"],
-		subscriptionType: "max",
-	},
+		subscriptionType: "max"
+	}
 });
 
 // The SDK declares one in-process MCP server and hands over its MCP handshake in the initialize request.
@@ -30,11 +30,11 @@ const INITIALIZE = {
 						experimental: {
 							"anthropic/claudeAiConnector": {
 								serverId: "conn",
-								serverUrl: "https://mcp.example.invalid/v1/conn",
-							},
-						},
+								serverUrl: "https://mcp.example.invalid/v1/conn"
+							}
+						}
 					},
-					serverInfo: { name: "conn", version: "1.0.0" },
+					serverInfo: { name: "conn", version: "1.0.0" }
 				},
 				toolsListResult: {
 					tools: [
@@ -42,13 +42,13 @@ const INITIALIZE = {
 							name: "ping",
 							description: "Ping.",
 							_meta: { "anthropic/alwaysLoad": true },
-							inputSchema: { type: "object", properties: {} },
-						},
-					],
-				},
-			},
-		},
-	},
+							inputSchema: { type: "object", properties: {} }
+						}
+					]
+				}
+			}
+		}
+	}
 };
 
 // Hides the connector tool through the flag-settings deny rules, so the first request leaves it out of tools[].
@@ -57,8 +57,8 @@ const denyTool = (id: string, deny: string[]) => ({
 	request_id: id,
 	request: {
 		subtype: "apply_flag_settings",
-		settings: { permissions: { deny } },
-	},
+		settings: { permissions: { deny } }
+	}
 });
 
 /** Cases whose api-request row carries a `cut`. They run with no API key (`noKey`), so the program reads CREDENTIALS. */
@@ -69,14 +69,14 @@ export const CUT_CASES: Case[] = [
 		noKey: true,
 		env: {
 			CLAUDE_CODE_ENTRYPOINT: "claude-desktop",
-			_CLAUDE_CODE_ASSUME_FIRST_PARTY_BASE_URL: "1",
+			_CLAUDE_CODE_ASSUME_FIRST_PARTY_BASE_URL: "1"
 		},
 		cfgFiles: { ".credentials.json": CREDENTIALS },
 		stdin: [
 			INITIALIZE,
 			1500,
-			{ type: "user", message: { role: "user", content: "Reply with OK." } },
-		],
+			{ type: "user", message: { role: "user", content: "Reply with OK." } }
+		]
 	},
 	{
 		// A tool that joins the pool after the first request goes into a later message as a tool_addition block
@@ -89,7 +89,7 @@ export const CUT_CASES: Case[] = [
 			CLAUDE_CODE_ENTRYPOINT: "claude-desktop",
 			_CLAUDE_CODE_ASSUME_FIRST_PARTY_BASE_URL: "1",
 			CLAUDE_CODE_INLINE_TOOLS: "1",
-			CLAUDE_CODE_FORCE_MID_CONVERSATION_SYSTEM: "1",
+			CLAUDE_CODE_FORCE_MID_CONVERSATION_SYSTEM: "1"
 		},
 		cfgFiles: { ".credentials.json": CREDENTIALS },
 		stdin: [
@@ -103,8 +103,8 @@ export const CUT_CASES: Case[] = [
 			500,
 			{
 				type: "user",
-				message: { role: "user", content: "Reply with OK again." },
-			},
-		],
-	},
+				message: { role: "user", content: "Reply with OK again." }
+			}
+		]
+	}
 ];

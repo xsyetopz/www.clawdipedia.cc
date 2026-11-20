@@ -7,13 +7,13 @@ import {
 	children,
 	isNode,
 	type Node,
-	type NodeOf,
+	type NodeOf
 } from "./node.ts";
 import {
 	type Variable,
 	variableAt,
 	type Variables,
-	variablesOf,
+	variablesOf
 } from "./variables.ts";
 
 // The parser's `Severity` is an ambient const enum, which `verbatimModuleSyntax` cannot import.
@@ -40,7 +40,7 @@ export class Module {
 		name: string,
 		text: string,
 		ast: NodeOf<"Program">,
-		bundle?: Bundle,
+		bundle?: Bundle
 	) {
 		this.name = name;
 		this.text = text;
@@ -64,13 +64,13 @@ export class Module {
 	static async parse(
 		name: string,
 		text: string,
-		bundle?: Bundle,
+		bundle?: Bundle
 	): Promise<Module> {
 		// No `range`: it adds an array to each node, a third of the tree. The patch of eslint-scope reads `start`.
 		const { program, errors } = await parse(name, text, {
 			lang: "js",
 			sourceType: "module",
-			preserveParens: false,
+			preserveParens: false
 		});
 		const error = errors.find((e) => isError(e.severity));
 		if (error) {

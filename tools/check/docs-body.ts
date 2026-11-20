@@ -37,7 +37,7 @@ const BRAND_WORDS = new Set([
 	"iOS",
 	"iTerm2",
 	"VSCode",
-	"JetBrains",
+	"JetBrains"
 ]);
 
 // In order: a --flag, UPPER_SNAKE, a file name, a leading /command, a $.
@@ -49,7 +49,7 @@ const CODE_LIKE = [
 	/^\/[a-z][\w-]*/u,
 	/\$\./u,
 	/\b(?!(?:e\.g|i\.e)\b)[a-z][a-z0-9_]*\.[a-z][a-z0-9_]*\b/u,
-	/\b[a-z][a-z0-9]*_[a-z0-9_]+\b/u,
+	/\b[a-z][a-z0-9]*_[a-z0-9_]+\b/u
 ];
 const CAMEL =
 	/\b[A-Za-z]*[a-z][A-Za-z0-9]*[A-Z][A-Za-z0-9]*\b|\b[A-Z][a-z0-9]+[A-Z][A-Za-z0-9]*\b/gu;
@@ -81,7 +81,7 @@ const checkHeading = (
 	ctx: Ctx,
 	file: string,
 	n: number,
-	title: string,
+	title: string
 ): void => {
 	if (emojiIn(title).length > 0) {
 		ctx.report(file, n, "emoji in a heading");
@@ -96,7 +96,7 @@ const checkHeading = (
 			ctx.report(
 				file,
 				n,
-				`heading has code outside backticks: ${code.join(", ")}`,
+				`heading has code outside backticks: ${code.join(", ")}`
 			);
 		}
 	}
@@ -106,7 +106,7 @@ const checkAdmonition = (
 	ctx: Ctx,
 	file: string,
 	n: number,
-	line: string,
+	line: string
 ): void => {
 	const t = /^\s*:::[a-z]+(?:\[(.*)\]|[ \t]+(\S.*?))\s*$/u.exec(line);
 	if (t === null || file.startsWith(ctx.captures)) {
@@ -117,7 +117,7 @@ const checkAdmonition = (
 		ctx.report(
 			file,
 			n,
-			`admonition title has code outside backticks: ${code.join(", ")}`,
+			`admonition title has code outside backticks: ${code.join(", ")}`
 		);
 	}
 };
@@ -126,7 +126,7 @@ const checkProseLine = (
 	ctx: Ctx,
 	file: string,
 	n: number,
-	line: string,
+	line: string
 ): void => {
 	if (
 		/^\s*Sources?\b[^|]*:/u.test(line) &&
@@ -139,7 +139,7 @@ const checkProseLine = (
 		ctx.report(
 			file,
 			n,
-			"escaped brace inside inline code (write { and } as is)",
+			"escaped brace inside inline code (write { and } as is)"
 		);
 	}
 	for (const m of line.matchAll(/\[([^\]]*)\]\([^)]*\)/gu)) {
@@ -162,7 +162,7 @@ interface Fence {
 /** Returns the fence after `line`, or `undefined` when `line` is no fence marker. */
 const advanceFence = (
 	line: string,
-	fence: Fence | null,
+	fence: Fence | null
 ): Fence | null | undefined => {
 	const f = /^\s*(`{3,}|~{3,})/u.exec(line);
 	if (f === null) {
@@ -183,7 +183,7 @@ export const checkBody = (
 	ctx: Ctx,
 	file: string,
 	text: string,
-	bodyStart: number,
+	bodyStart: number
 ): void => {
 	const lines = text.split("\n");
 	let fence: Fence | null = null;

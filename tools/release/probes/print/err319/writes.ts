@@ -9,8 +9,8 @@ const LONGER = {
 	name: "Write",
 	input: {
 		file_path: "{PROJ}/racy.txt",
-		content: "a longer replacement text that is not one letter",
-	},
+		content: "a longer replacement text that is not one letter"
+	}
 };
 
 const racy: NonNullable<Spec["setup"]> = async (sb) => {
@@ -32,21 +32,21 @@ const fullDisk: CaseDef = {
 								name: "Write",
 								input: {
 									file_path: `${d.dir}/new.txt`,
-									content: "x".repeat(300 * 1024),
-								},
-							},
-						],
-					},
+									content: "x".repeat(300 * 1024)
+								}
+							}
+						]
+					}
 				},
 				async (r) => ({
 					from: r,
 					data: { exit: r.code, free_before: await d.free() },
 					samples: {
-						text: await grep(r, /tool_result|verification|space|ENOSPC/u),
-					},
-				}),
+						text: await grep(r, /tool_result|verification|space|ENOSPC/u)
+					}
+				})
 			);
-		}),
+		})
 };
 
 export const writeCases: CaseDef[] = [
@@ -62,14 +62,14 @@ export const writeCases: CaseDef[] = [
 						name: "Bash",
 						input: {
 							command:
-								"(i=0; while [ $i -lt 40000 ]; do printf 'x' > racy.txt; i=$((i+1)); done) >/dev/null 2>&1 &",
-						},
+								"(i=0; while [ $i -lt 40000 ]; do printf 'x' > racy.txt; i=$((i+1)); done) >/dev/null 2>&1 &"
+						}
 					},
-					LONGER,
-				],
-			},
+					LONGER
+				]
+			}
 		},
-		VERIFY,
+		VERIFY
 	),
 	one(
 		"write-verify-watcher",
@@ -83,14 +83,14 @@ export const writeCases: CaseDef[] = [
 						name: "Bash",
 						input: {
 							// Rewrites the file in place with same-size other bytes as soon as its mtime moves (after the Write began).
-							command: String.raw`python3 -c "import os,time\np='racy.txt'\nm=os.stat(p).st_mtime_ns\nt=time.time()+20\nwhile time.time()<t:\n  if os.stat(p).st_mtime_ns!=m:\n    n=os.stat(p).st_size\n    f=os.open(p,os.O_WRONLY)\n    os.write(f,b'Z'*n)\n    break\n" >/dev/null 2>&1 &`,
-						},
+							command: String.raw`python3 -c "import os,time\np='racy.txt'\nm=os.stat(p).st_mtime_ns\nt=time.time()+20\nwhile time.time()<t:\n  if os.stat(p).st_mtime_ns!=m:\n    n=os.stat(p).st_size\n    f=os.open(p,os.O_WRONLY)\n    os.write(f,b'Z'*n)\n    break\n" >/dev/null 2>&1 &`
+						}
 					},
-					LONGER,
-				],
-			},
+					LONGER
+				]
+			}
 		},
-		VERIFY,
+		VERIFY
 	),
 	one(
 		"write-verify-pretooluse-order",
@@ -103,23 +103,23 @@ export const writeCases: CaseDef[] = [
 						PreToolUse: [
 							{
 								matcher: "Write",
-								hooks: [{ type: "command", command: "printf z >> racy.txt" }],
-							},
-						],
-					},
-				}),
+								hooks: [{ type: "command", command: "printf z >> racy.txt" }]
+							}
+						]
+					}
+				})
 			},
 			stub: {
 				seq: [
 					READ,
 					{
 						name: "Write",
-						input: { file_path: "{PROJ}/racy.txt", content: "replacement" },
-					},
-				],
-			},
+						input: { file_path: "{PROJ}/racy.txt", content: "replacement" }
+					}
+				]
+			}
 		},
-		/tool_result|verification|does not hold|modified/u,
+		/tool_result|verification|does not hold|modified/u
 	),
-	fullDisk,
+	fullDisk
 ];

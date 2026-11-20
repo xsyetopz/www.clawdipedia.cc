@@ -9,7 +9,7 @@ import {
 	type Module,
 	type Node,
 	returnsOf,
-	type Variable,
+	type Variable
 } from "./ast.ts";
 import { asNode } from "./ast/node.ts";
 import { bind } from "./resolve/tables.ts";
@@ -17,7 +17,7 @@ import {
 	type Entry,
 	type Env,
 	mergeEntries,
-	type Val,
+	type Val
 } from "./resolve/types.ts";
 import { isUnset } from "./resolve/undef.ts";
 import { ValueResolver } from "./resolve/value.ts";
@@ -52,7 +52,7 @@ export class Resolver extends ValueResolver {
 		m: Module,
 		v: Variable,
 		fn: Fn,
-		depth: number,
+		depth: number
 	): Promise<Entry[] | undefined> {
 		const params: readonly unknown[] = fn.params;
 		const index = params.indexOf(v.defs[0]?.name);
@@ -76,7 +76,7 @@ export class Resolver extends ValueResolver {
 		m: Module,
 		fn: Fn,
 		index: number,
-		depth: number,
+		depth: number
 	): Promise<Entry[][] | undefined> {
 		// `f(...).then((x)=>...)`: `x` is what `f` returns.
 		const source = thenSource(m, fn, index);
@@ -85,7 +85,7 @@ export class Resolver extends ValueResolver {
 				m,
 				asNode(source) ?? null,
 				undefined,
-				depth + 1,
+				depth + 1
 			);
 			return got && [got];
 		}
@@ -103,10 +103,10 @@ export class Resolver extends ValueResolver {
 					c.module,
 					asNode(args[index]) ?? null,
 					undefined,
-					depth + 1,
+					depth + 1
 				);
 				return got;
-			},
+			}
 		);
 	}
 
@@ -119,7 +119,7 @@ export class Resolver extends ValueResolver {
 		m: Module,
 		call: CallNode,
 		env?: Env,
-		depth = 0,
+		depth = 0
 	): Promise<Entry[] | undefined> {
 		const callee = asNode(call.callee);
 		const f = depth > 10 || !callee ? undefined : await functionOf(m, callee);
@@ -133,7 +133,7 @@ export class Resolver extends ValueResolver {
 		}
 		const inner = bind(m, call, env, dm, fn);
 		const lists = await allSeq(rets, (r) =>
-			this.#returned(dm, inner, r, depth),
+			this.#returned(dm, inner, r, depth)
 		);
 		return (
 			lists && this.pin(await mergeEntries(lists.flat(), this.ty), depth + 1)
@@ -145,7 +145,7 @@ export class Resolver extends ValueResolver {
 		dm: Module,
 		inner: Env,
 		n: Node,
-		depth: number,
+		depth: number
 	): Promise<Entry[][] | undefined> {
 		const next = (x: Node | null | undefined) => {
 			const node = asNode(x);
@@ -166,7 +166,7 @@ export class Resolver extends ValueResolver {
 			const own = await this.entries(dm, n, inner);
 			const spread = await this.spreads(
 				own.filter((e) => !isUnset(dm, inner, e)),
-				depth + 1,
+				depth + 1
 			);
 			return [spread.filter((e) => "key" in e)];
 		}
@@ -192,7 +192,7 @@ export class Resolver extends ValueResolver {
 				}
 			} else {
 				this.unresolved.push(
-					`${e.ref?.m.name ?? "?"}@${e.ref?.n.start ?? -1}: ...${e.spread}`,
+					`${e.ref?.m.name ?? "?"}@${e.ref?.n.start ?? -1}: ...${e.spread}`
 				);
 			}
 		});
@@ -217,13 +217,13 @@ export class Resolver extends ValueResolver {
 	 */
 	async pin(entries: Entry[], depth = 0): Promise<Entry[]> {
 		return mapSeq(await this.spreads(entries, depth), (e) =>
-			"key" in e ? this.#pinValue(e, depth) : Promise.resolve(e),
+			"key" in e ? this.#pinValue(e, depth) : Promise.resolve(e)
 		);
 	}
 
 	async #pinValue(
 		e: Extract<Entry, { key: string }>,
-		depth: number,
+		depth: number
 	): Promise<Entry> {
 		const inner = depth < 8 ? await this.objectValue(e.val, depth) : undefined;
 		if (inner) {
@@ -232,8 +232,8 @@ export class Resolver extends ValueResolver {
 				val: {
 					k: "obj",
 					e: await this.pin(inner, depth + 1),
-					...(e.val.k === "obj" && e.val.open === true && { open: true }),
-				},
+					...(e.val.k === "obj" && e.val.open === true && { open: true })
+				}
 			};
 		}
 		// It keeps its types, which are worked out while its place is known.
@@ -243,8 +243,8 @@ export class Resolver extends ValueResolver {
 					val: {
 						k: "unk",
 						text: e.val.text,
-						t: (await this.typeOfVal(e.val)) ?? null,
-					},
+						t: (await this.typeOfVal(e.val)) ?? null
+					}
 				}
 			: e;
 	}

@@ -6,7 +6,7 @@ import { DOC_SOURCES } from "../src/core/shared.ts";
 
 const ROOT = join(import.meta.dir, "..", "..", "..");
 const xml = await Bun.file(
-	join(import.meta.dir, "..", "evaluation.xml"),
+	join(import.meta.dir, "..", "evaluation.xml")
 ).text();
 const fromXml = (t: string) =>
 	t.replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&");
@@ -17,15 +17,15 @@ const isDocsPage = async (r: string) => {
 		join(ROOT, "docs", `${r}.md`),
 		join(ROOT, "docs", r, "index.md"),
 		// a folder page named like its folder, such as prompts/tools/tools.md
-		join(ROOT, "docs", r, `${r.split("/").pop()}.md`),
+		join(ROOT, "docs", r, `${r.split("/").pop()}.md`)
 	];
 	const found = await Promise.all(candidates.map((c) => exists(c)));
 	return found.includes(true);
 };
 const pairs = [
 	...xml.matchAll(
-		/<qa_pair>\s*<question>([\s\S]*?)<\/question>\s*<answer>([\s\S]*?)<\/answer>\s*<\/qa_pair>/gu,
-	),
+		/<qa_pair>\s*<question>([\s\S]*?)<\/question>\s*<answer>([\s\S]*?)<\/answer>\s*<\/qa_pair>/gu
+	)
 ].map(([, q, a]) => ({ q: fromXml(q ?? ""), a: fromXml(a ?? "") }));
 
 describe("plugin/mcp/evaluation.xml", () => {
@@ -47,7 +47,7 @@ describe("plugin/mcp/evaluation.xml", () => {
 			"search_docs",
 			"read_page",
 			"list_pages",
-			"get_schema",
+			"get_schema"
 		]) {
 			expect(all).toContain(tool);
 		}

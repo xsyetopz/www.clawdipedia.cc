@@ -27,7 +27,7 @@ const initialize = (m: Obj): Promise<void> =>
 	reply(m["id"], {
 		protocolVersion: obj(m["params"])["protocolVersion"] ?? "2025-06-18",
 		capabilities: { tools: {} },
-		serverInfo: { name: "probe", version: "1" },
+		serverInfo: { name: "probe", version: "1" }
 	});
 
 const toolsList = (m: Obj): Promise<void> =>
@@ -35,8 +35,8 @@ const toolsList = (m: Obj): Promise<void> =>
 		tools: ["echo", "askurl", "ask"].map((name) => ({
 			name,
 			description: name,
-			inputSchema: { type: "object", properties: {} },
-		})),
+			inputSchema: { type: "object", properties: {} }
+		}))
 	});
 
 const URL_ELICIT = {
@@ -45,7 +45,7 @@ const URL_ELICIT = {
 	// `.invalid` never resolves (RFC 2606 section 2), so accepting the dialog cannot reach a
 	// third-party host. IANA says not to rely on example.com for testing.
 	url: "https://probe.invalid/auth",
-	elicitationId: "el-1",
+	elicitationId: "el-1"
 };
 
 const FORM_ELICIT = {
@@ -53,8 +53,8 @@ const FORM_ELICIT = {
 	requestedSchema: {
 		type: "object",
 		properties: { color: { type: "string", title: "Color" } },
-		required: ["color"],
-	},
+		required: ["color"]
+	}
 };
 
 const ask = async (m: Obj, url: boolean): Promise<void> => {
@@ -63,19 +63,19 @@ const ask = async (m: Obj, url: boolean): Promise<void> => {
 		jsonrpc: "2.0",
 		id,
 		method: "elicitation/create",
-		params: url ? URL_ELICIT : FORM_ELICIT,
+		params: url ? URL_ELICIT : FORM_ELICIT
 	});
 	pending.set(id, async (r) => {
 		if (url) {
 			await send({
 				jsonrpc: "2.0",
 				method: "notifications/elicitation/complete",
-				params: { elicitationId: "el-1" },
+				params: { elicitationId: "el-1" }
 			});
 		}
 		await reply(
 			m["id"],
-			text(`${url ? "url" : "elicit"} result ${JSON.stringify(r)}`),
+			text(`${url ? "url" : "elicit"} result ${JSON.stringify(r)}`)
 		);
 	});
 };
@@ -86,7 +86,7 @@ const toolCall = (m: Obj): Promise<void> => {
 	if (name === "echo") {
 		return reply(
 			m["id"],
-			text(`echo:${show(obj(params["arguments"])["text"] ?? "")}`),
+			text(`echo:${show(obj(params["arguments"])["text"] ?? "")}`)
 		);
 	}
 	return ask(m, name === "askurl");

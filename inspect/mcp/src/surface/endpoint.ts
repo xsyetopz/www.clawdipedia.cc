@@ -16,7 +16,7 @@ import {
 	scan,
 	short,
 	type SurfaceItem,
-	unique,
+	unique
 } from "./common.ts";
 
 const HOST =
@@ -51,7 +51,7 @@ const addString = (s: string, offset: number, add: Add): void => {
 const addTemplate = (
 	n: NodeOf<"TemplateLiteral">,
 	offset: number,
-	add: Add,
+	add: Add
 ): void => {
 	const parts = n.quasis.map((q) => q.value.cooked ?? q.value.raw);
 	const e = n.expressions[0];
@@ -83,7 +83,7 @@ export const extractEndpoints: Extractor = async (bundle) => {
 			} else if (n.type === "TemplateLiteral") {
 				addTemplate(n, n.start, add);
 			}
-		},
+		}
 	);
 	return unique(out);
 };

@@ -57,7 +57,7 @@ const entryOf = (raw: unknown, base: string): Entry | undefined => {
 		description,
 		section,
 		md: typeof md === "string" ? md : "",
-		url,
+		url
 	};
 };
 
@@ -98,13 +98,13 @@ const indexPageOf = (p: unknown): IndexPage | undefined => {
 		description,
 		headings: headings.filter((h): h is string => typeof h === "string"),
 		extra,
-		body,
+		body
 	};
 };
 
 /** The prebuilt llms-search-index.json (design D6). Undefined when the text is not an index. Pages with a missing field are dropped. */
 export const parseSearchIndex = (
-	text: string,
+	text: string
 ): { hash: string; pages: IndexPage[] } | undefined => {
 	try {
 		const j: unknown = JSON.parse(text);

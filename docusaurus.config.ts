@@ -20,9 +20,9 @@ const schemasPlugin = ({ siteDir }: LoadContext): Plugin => ({
 	async postBuild({ outDir }) {
 		await cp(join(siteDir, "schemas"), join(outDir, "schemas"), {
 			recursive: true,
-			filter: (src) => !basename(src).startsWith("."),
+			filter: (src) => !basename(src).startsWith(".")
 		});
-	},
+	}
 });
 
 // Each Mantine file is its own stylesheet entry. A CSS file that pulls them in with
@@ -42,7 +42,7 @@ const MANTINE_STYLES = [
 	"Anchor",
 	"Group",
 	"Stack",
-	"VisuallyHidden",
+	"VisuallyHidden"
 ].map((name) => `./node_modules/@mantine/core/styles/${name}.layer.css`);
 
 // On Bun, `require.cache` lists the built-in `ws` as a child of webpack-bundle-analyzer
@@ -64,14 +64,14 @@ const clientCachePlugin = ({ siteDir }: LoadContext): Plugin => ({
 					config: [
 						...tracked.filter(
 							(item) =>
-								typeof item !== "string" || basename(item) !== "client.js",
+								typeof item !== "string" || basename(item) !== "client.js"
 						),
-						join(siteDir, "bun.lock"),
-					],
-				},
-			},
+						join(siteDir, "bun.lock")
+					]
+				}
+			}
 		};
-	},
+	}
 });
 
 const config: Config = {
@@ -95,8 +95,8 @@ const config: Config = {
 		mermaid: true,
 		hooks: {
 			onBrokenMarkdownLinks: "throw",
-			onBrokenMarkdownImages: "throw",
-		},
+			onBrokenMarkdownImages: "throw"
+		}
 	},
 
 	themes: [
@@ -107,9 +107,9 @@ const config: Config = {
 				hashed: true,
 				docsRouteBasePath: "/",
 				indexBlog: false,
-				highlightSearchTermsOnTargetPage: true,
-			},
-		],
+				highlightSearchTermsOnTargetPage: true
+			}
+		]
 	],
 
 	plugins: [schemasPlugin, llmsTxtPlugin, clientCachePlugin],
@@ -122,12 +122,12 @@ const config: Config = {
 					routeBasePath: "/",
 					sidebarPath: "./sidebars.config.ts",
 					editUrl: `${REPO}/edit/main/`,
-					rehypePlugins: [rehypeCodeWbr, rehypeTableMarks],
+					rehypePlugins: [rehypeCodeWbr, rehypeTableMarks]
 				},
 				blog: false,
-				theme: { customCss: ["./src/css/custom.css", ...MANTINE_STYLES] },
-			} satisfies Preset.Options,
-		],
+				theme: { customCss: ["./src/css/custom.css", ...MANTINE_STYLES] }
+			} satisfies Preset.Options
+		]
 	],
 
 	themeConfig: {
@@ -137,7 +137,7 @@ const config: Config = {
 			content: `${DISCLAIMER} A community project that describes Claude Code ${CLAUDE_CODE_VERSION}.`,
 			isCloseable: false,
 			backgroundColor: "#141413",
-			textColor: "#faf9f5",
+			textColor: "#faf9f5"
 		},
 		navbar: {
 			title: "Clawdipedia",
@@ -147,22 +147,22 @@ const config: Config = {
 					type: "docSidebar",
 					sidebarId: "docs",
 					position: "left",
-					label: "Docs",
+					label: "Docs"
 				},
 				{ to: "/prompts", label: "System Prompts", position: "left" },
 				{
 					to: "/reference/undocumented",
 					label: "Undocumented",
-					position: "left",
+					position: "left"
 				},
 				{
 					to: "/start/what-changed",
 					label: `Tracks ${CLAUDE_CODE_VERSION}`,
 					position: "right",
-					className: "navbar-version",
+					className: "navbar-version"
 				},
-				{ href: REPO, label: "GitHub", position: "right" },
-			],
+				{ href: REPO, label: "GitHub", position: "right" }
+			]
 		},
 		footer: {
 			style: "dark",
@@ -172,15 +172,15 @@ const config: Config = {
 					items: [
 						{ label: "Start Here", to: "/start/how-to-read" },
 						{ label: "How It Works", to: "/how-it-works/architecture" },
-						{ label: "Style Guide", to: "/contributing/style-guide" },
-					],
+						{ label: "Style Guide", to: "/contributing/style-guide" }
+					]
 				},
 				{
 					title: "Project",
-					items: [{ label: "GitHub", href: REPO }],
-				},
+					items: [{ label: "GitHub", href: REPO }]
+				}
 			],
-			copyright: `${DISCLAIMER} This is a community project. "Claude" and "Claude Code" name the product it describes. Docs: CC BY 4.0. Code: MIT.`,
+			copyright: `${DISCLAIMER} This is a community project. "Claude" and "Claude Code" name the product it describes. Docs: CC BY 4.0. Code: MIT.`
 		},
 		mermaid: {
 			theme: { light: "neutral", dark: "dark" },
@@ -188,7 +188,7 @@ const config: Config = {
 				fontFamily: "Lora, Georgia, serif",
 				themeVariables: {
 					fontFamily: "Lora, Georgia, serif",
-					fontSize: "16px",
+					fontSize: "16px"
 				},
 				flowchart: {
 					htmlLabels: true,
@@ -197,7 +197,7 @@ const config: Config = {
 					padding: 12,
 					nodeSpacing: 32,
 					rankSpacing: 40,
-					curve: "basis",
+					curve: "basis"
 				},
 				sequence: {
 					useMaxWidth: true,
@@ -207,17 +207,17 @@ const config: Config = {
 					messageMargin: 40,
 					noteMargin: 12,
 					boxMargin: 10,
-					width: 160,
+					width: 160
 				},
-				state: { useMaxWidth: true },
-			},
+				state: { useMaxWidth: true }
+			}
 		},
 		prism: {
 			theme: prismThemes.github,
 			darkTheme: prismThemes.dracula,
-			additionalLanguages: ["bash", "json", "diff", "toml", "yaml"],
-		},
-	} satisfies Preset.ThemeConfig,
+			additionalLanguages: ["bash", "json", "diff", "toml", "yaml"]
+		}
+	} satisfies Preset.ThemeConfig
 };
 
 export default config;

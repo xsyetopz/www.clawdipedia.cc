@@ -23,7 +23,7 @@ const PROGRAM = /\bthe program\b/iu;
 const chunkProblem = (
 	line: string,
 	at: number,
-	name: string,
+	name: string
 ): string | undefined => {
 	const rest = line.slice(at + name.length);
 	if (/^:\d/u.test(rest)) {
@@ -48,7 +48,7 @@ const BARE = /`([:@]\d+(?:-\d+)?)`/gu;
 const bareProblems = (line: string): string[] =>
 	[...line.matchAll(BARE)].map(
 		(m) =>
-			`${m[1]} names no chunk: write the place as chunk-x.js${m[1]?.replace("@", ":")}`,
+			`${m[1]} names no chunk: write the place as chunk-x.js${m[1]?.replace("@", ":")}`
 	);
 
 /** The problem of each `:A-B` range in `line` whose end comes before its start. */
@@ -57,7 +57,7 @@ const rangeProblems = (line: string): string[] =>
 		.filter((m) => Number(m[2]) < Number(m[1]))
 		.map(
 			(m) =>
-				`:${m[1]}-${m[2]} ends before it starts: write the range as :A-B with A <= B`,
+				`:${m[1]}-${m[2]} ends before it starts: write the range as :A-B with A <= B`
 		);
 
 /** Whether a line attributes a finding to the program: a footnote definition in Markdown, or any line of JSON. */
@@ -70,7 +70,7 @@ const isSourceLine = (file: string, line: string): boolean =>
  * (each JSON line) that names the program and no located chunk.
  */
 export const unlocatedCitations = (
-	files: Record<string, string>,
+	files: Record<string, string>
 ): UnlocatedCitation[] =>
 	Object.entries(files).flatMap(([file, text]) =>
 		text.split("\n").flatMap((line, i) => {
@@ -85,7 +85,7 @@ export const unlocatedCitations = (
 				out.push({
 					file,
 					line: i + 1,
-					problem: `${m[0]} has no .js: write the place as ${m[0]}.js:N`,
+					problem: `${m[0]} has no .js: write the place as ${m[0]}.js:N`
 				});
 			}
 			const bare = PROGRAM.test(line) ? bareProblems(line) : [];
@@ -96,9 +96,9 @@ export const unlocatedCitations = (
 				out.push({
 					file,
 					line: i + 1,
-					problem: "names the program but no chunk-x.js:N",
+					problem: "names the program but no chunk-x.js:N"
 				});
 			}
 			return out;
-		}),
+		})
 	);

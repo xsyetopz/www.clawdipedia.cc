@@ -39,8 +39,8 @@ export const connect = async (env: Record<string, string> = {}) => {
 	const c = new Client({ name: "test", version: "0" });
 	const clean = Object.fromEntries(
 		Object.entries(process.env).filter(
-			(e): e is [string, string] => typeof e[1] === "string",
-		),
+			(e): e is [string, string] => typeof e[1] === "string"
+		)
 	);
 	const site = given(env["CLAWDIPEDIA_BASE_URL"]) ? undefined : mockSite();
 	const cache = given(env["CLAWDIPEDIA_CACHE_DIR"])
@@ -57,9 +57,9 @@ export const connect = async (env: Record<string, string> = {}) => {
 					? {}
 					: { CLAWDIPEDIA_CACHE_DIR: cache }),
 				...(site ? { CLAWDIPEDIA_BASE_URL: site.url } : {}),
-				...env,
-			},
-		}),
+				...env
+			}
+		})
 	);
 	clients.push(c);
 	const call = async (name: string, args: Record<string, unknown>) => {
@@ -73,7 +73,7 @@ export const connect = async (env: Record<string, string> = {}) => {
 			text,
 			structured,
 			// Claude Code 2.1.309 (`ds` in chunk-gf8e163f.js) shows the model only structuredContent when set.
-			seen: structured ? JSON.stringify(structured) : text,
+			seen: structured ? JSON.stringify(structured) : text
 		};
 	};
 	return { call, cache };
@@ -100,7 +100,7 @@ export const sourceOf = (r: Called): SourceData => {
 	return {
 		origin: s["origin"],
 		state: s["state"],
-		...(typeof line === "string" ? { line } : {}),
+		...(typeof line === "string" ? { line } : {})
 	};
 };
 
@@ -113,7 +113,7 @@ export const sourceNumbers = (r: Called): number[] => {
 
 /** The structured `pages` of a list answer: each route, with title and description when it has them. */
 export const pagesOf = (
-	r: Called,
+	r: Called
 ): { route: string; title: string; description: string }[] => {
 	const pages = r.structured?.["pages"];
 	if (!Array.isArray(pages)) {
@@ -127,7 +127,7 @@ export const pagesOf = (
 		return {
 			route: p["route"],
 			title: typeof title === "string" ? title : "",
-			description: typeof description === "string" ? description : "",
+			description: typeof description === "string" ? description : ""
 		};
 	});
 };

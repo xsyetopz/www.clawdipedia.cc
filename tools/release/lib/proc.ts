@@ -29,7 +29,7 @@ const psField = async (field: string, pid: number): Promise<number> => {
 	const p = Bun.spawn(["/bin/ps", "-o", `${field}=`, "-p", String(pid)], {
 		env: { PATH: "/bin:/usr/bin" },
 		stdout: "pipe",
-		stderr: "pipe",
+		stderr: "pipe"
 	});
 	const [out] = await Promise.all([new Response(p.stdout).text(), p.exited]);
 	return Number(out.trim()) || 0;
@@ -107,7 +107,7 @@ interface RunOpts {
 
 const stdinFor = (
 	text: string | ReadableStream<Uint8Array> | undefined,
-	ms: number | undefined,
+	ms: number | undefined
 ): "ignore" | Blob | ReadableStream => {
 	if (text === undefined) {
 		return "ignore";
@@ -124,7 +124,7 @@ const stdinFor = (
 			setTimeout(() => {
 				c.close();
 			}, ms);
-		},
+		}
 	});
 };
 
@@ -132,7 +132,7 @@ const drain = async (
 	reader: ReadableStreamDefaultReader<Uint8Array>,
 	cut: Promise<null>,
 	dec: TextDecoder,
-	acc: string,
+	acc: string
 ): Promise<string> => {
 	const c = await Promise.race([reader.read(), cut]);
 	if (!c || c.done) {
@@ -144,7 +144,7 @@ const drain = async (
 /** Read a pipe until it ends; a grandchild may hold it open after the child exits, so stop shortly after exit. */
 const readPipe = async (
 	s: ReadableStream<Uint8Array>,
-	exited: Promise<number>,
+	exited: Promise<number>
 ): Promise<string> => {
 	const reader = s.getReader();
 	let stop = false;
@@ -175,7 +175,7 @@ const readPipe = async (
 
 export const runChild = async (
 	argv: string[],
-	o: RunOpts,
+	o: RunOpts
 ): Promise<ChildResult> => {
 	const p = Bun.spawn(argv, {
 		cwd: o.cwd,
@@ -184,7 +184,7 @@ export const runChild = async (
 		stdin: stdinFor(o.stdin, o.stdinOpenMs),
 		stdout: "pipe",
 		stderr: "pipe",
-		detached: true,
+		detached: true
 	});
 	const pid = p.pid;
 	pids.add(pid);
@@ -202,7 +202,7 @@ export const runChild = async (
 	}, o.timeoutMs ?? 60_000);
 	const [stdout, stderr] = await Promise.all([
 		readPipe(p.stdout, p.exited),
-		readPipe(p.stderr, p.exited),
+		readPipe(p.stderr, p.exited)
 	]);
 	const code = await p.exited;
 	clearTimeout(timer);

@@ -56,8 +56,9 @@ var __esm = (fn, res, err) => () => {
     throw err[0];
   return res;
 };
+var __promiseAll = (args) => Promise.all(args);
 
-// node_modules/zod/v4/core/util.js
+// inspect/mcp/node_modules/zod/v4/core/util.js
 function getEnumValues(entries) {
   const numericValues = Object.values(entries).filter((v) => typeof v === "number");
   const values = Object.entries(entries).filter(([k, _]) => numericValues.indexOf(+k) === -1).map(([_, v]) => v);
@@ -652,7 +653,7 @@ var init_util = __esm(() => {
   };
 });
 
-// node_modules/zod/v4/core/core.js
+// inspect/mcp/node_modules/zod/v4/core/core.js
 function newError(Definition) {
   const E = _E;
   if (E) {
@@ -773,7 +774,7 @@ var init_core = __esm(() => {
   globalConfig = globalThis.__zod_globalConfig;
 });
 
-// node_modules/zod/v4/core/errors.js
+// inspect/mcp/node_modules/zod/v4/core/errors.js
 function _getMessage() {
   const internals = this._zod;
   internals.message ?? (internals.message = JSON.stringify(internals.def, jsonStringifyReplacer, 2));
@@ -892,7 +893,7 @@ var init_errors = __esm(() => {
   });
 });
 
-// node_modules/zod/v4/core/parse.js
+// inspect/mcp/node_modules/zod/v4/core/parse.js
 function finalizeParams(callee, params) {
   return { callee: params?.callee ?? callee, Err: params?.Err };
 }
@@ -1036,7 +1037,7 @@ var init_parse = __esm(() => {
   COMPILE_FALLBACK = /* @__PURE__ */ Symbol.for("zod.compile.fallback");
 });
 
-// node_modules/zod/v4/core/regexes.js
+// inspect/mcp/node_modules/zod/v4/core/regexes.js
 var exports_regexes = {};
 __export(exports_regexes, {
   anyString: () => anyString,
@@ -1207,7 +1208,7 @@ var init_regexes = __esm(() => {
   sha512_base64url = /* @__PURE__ */ fixedBase64url(86);
 });
 
-// node_modules/zod/v4/core/checks.js
+// inspect/mcp/node_modules/zod/v4/core/checks.js
 function handleCheckPropertyResult(result, payload, property) {
   if (result.issues.length) {
     payload.issues.push(...prefixIssues(property, result.issues));
@@ -1685,7 +1686,7 @@ var init_checks = __esm(() => {
   });
 });
 
-// node_modules/zod/v4/core/doc.js
+// inspect/mcp/node_modules/zod/v4/core/doc.js
 class Doc {
   constructor(args = [], closed = {}) {
     this.content = [];
@@ -1727,7 +1728,7 @@ ${content.join(`
   }
 }
 
-// node_modules/zod/v4/core/versions.js
+// inspect/mcp/node_modules/zod/v4/core/versions.js
 var version;
 var init_versions = __esm(() => {
   version = {
@@ -1737,7 +1738,7 @@ var init_versions = __esm(() => {
   };
 });
 
-// node_modules/zod/v4/core/schemas.js
+// inspect/mcp/node_modules/zod/v4/core/schemas.js
 async function validateAsync2(inst, value) {
   const ctx = { async: true };
   return toStandardResult(await inst._zod.run({ value, issues: [] }, ctx), ctx);
@@ -4159,7 +4160,7 @@ var init_schemas = __esm(() => {
   });
 });
 
-// node_modules/zod/v4/core/memoizer.js
+// inspect/mcp/node_modules/zod/v4/core/memoizer.js
 function isRef(value) {
   return value !== null && typeof value === "object";
 }
@@ -4428,7 +4429,7 @@ var init_memoizer = __esm(() => {
   };
 });
 
-// node_modules/zod/v4/locales/en.js
+// inspect/mcp/node_modules/zod/v4/locales/en.js
 function en_default() {
   return {
     localeError: error()
@@ -4554,10 +4555,10 @@ var init_en = __esm(() => {
   init_util();
 });
 
-// node_modules/zod/v4/locales/index.js
+// inspect/mcp/node_modules/zod/v4/locales/index.js
 var init_locales = () => {};
 
-// node_modules/zod/v4/core/registries.js
+// inspect/mcp/node_modules/zod/v4/core/registries.js
 class $ZodRegistry {
   constructor() {
     this._map = new WeakMap;
@@ -4607,7 +4608,7 @@ var init_registries = __esm(() => {
   globalRegistry = globalThis.__zod_globalRegistry;
 });
 
-// node_modules/zod/v4/core/compile.js
+// inspect/mcp/node_modules/zod/v4/core/compile.js
 var INVALID, FALLBACK_FLAG, WHEN_DEFAULTED_CHECKS, PATTERN_IS_COMPLETE;
 var init_compile = __esm(() => {
   INVALID = Symbol.for("zod.compile.invalid");
@@ -4648,7 +4649,7 @@ var init_compile = __esm(() => {
   ]);
 });
 
-// node_modules/zod/v4/core/api.js
+// inspect/mcp/node_modules/zod/v4/core/api.js
 function snapshotChecks(def) {
   if (def.checks)
     def.checks = [...def.checks];
@@ -5393,7 +5394,7 @@ var init_api = __esm(() => {
   init_util();
 });
 
-// node_modules/zod/v4/core/to-json-schema.js
+// inspect/mcp/node_modules/zod/v4/core/to-json-schema.js
 function assignProps(target, ...sources) {
   for (const source of sources) {
     for (const key of Reflect.ownKeys(source)) {
@@ -5920,7 +5921,7 @@ var init_to_json_schema = __esm(() => {
   UNION_KEYS = ["oneOf", "anyOf"];
 });
 
-// node_modules/zod/v4/core/json-schema-processors.js
+// inspect/mcp/node_modules/zod/v4/core/json-schema-processors.js
 function aggregateChecks(schema) {
   const agg = {};
   const def = schema._zod.def;
@@ -6621,10 +6622,10 @@ var init_json_schema_processors = __esm(() => {
   };
 });
 
-// node_modules/zod/v4/core/json-schema.js
+// inspect/mcp/node_modules/zod/v4/core/json-schema.js
 var init_json_schema = () => {};
 
-// node_modules/zod/v4/core/index.js
+// inspect/mcp/node_modules/zod/v4/core/index.js
 var init_core2 = __esm(() => {
   init_util();
   init_regexes();
@@ -6643,7 +6644,7 @@ var init_core2 = __esm(() => {
   init_to_json_schema();
 });
 
-// node_modules/zod/v4/classic/checks.js
+// inspect/mcp/node_modules/zod/v4/classic/checks.js
 var exports_checks2 = {};
 __export(exports_checks2, {
   endsWith: () => _endsWith,
@@ -6681,7 +6682,7 @@ var init_checks2 = __esm(() => {
   init_core2();
 });
 
-// node_modules/zod/v4/classic/errors.js
+// inspect/mcp/node_modules/zod/v4/classic/errors.js
 function _lazyMethod(proto, key, make) {
   Object.defineProperty(proto, key, {
     configurable: true,
@@ -6731,7 +6732,7 @@ var init_errors2 = __esm(() => {
   });
 });
 
-// node_modules/zod/v4/classic/parse.js
+// inspect/mcp/node_modules/zod/v4/classic/parse.js
 var parse3, parseAsync2, safeParse2, safeParseAsync2, encode, decode, encodeAsync, decodeAsync, safeEncode, safeDecode, safeEncodeAsync, safeDecodeAsync;
 var init_parse2 = __esm(() => {
   init_core2();
@@ -6751,7 +6752,7 @@ var init_parse2 = __esm(() => {
   safeDecodeAsync = /* @__PURE__ */ _safeDecodeAsync(ZodRealError);
 });
 
-// node_modules/zod/v4/classic/schemas.js
+// inspect/mcp/node_modules/zod/v4/classic/schemas.js
 var exports_schemas2 = {};
 __export(exports_schemas2, {
   ZodAny: () => ZodAny,
@@ -8383,13 +8384,13 @@ var init_schemas2 = __esm(() => {
   });
 });
 
-// node_modules/zod/v4/classic/compat.js
+// inspect/mcp/node_modules/zod/v4/classic/compat.js
 var ZodFirstPartyTypeKind;
 var init_compat = __esm(() => {
   (function(ZodFirstPartyTypeKind) {})(ZodFirstPartyTypeKind || (ZodFirstPartyTypeKind = {}));
 });
 
-// node_modules/zod/v4/classic/iso.js
+// inspect/mcp/node_modules/zod/v4/classic/iso.js
 var exports_iso = {};
 __export(exports_iso, {
   ZodISODate: () => ZodISODate,
@@ -8419,7 +8420,7 @@ var init_iso = __esm(() => {
   init_schemas2();
 });
 
-// node_modules/zod/v4/classic/from-json-schema.js
+// inspect/mcp/node_modules/zod/v4/classic/from-json-schema.js
 function detectVersion(schema, defaultTarget) {
   const $schema = schema.$schema;
   if ($schema === "https://json-schema.org/draft/2020-12/schema") {
@@ -9148,10 +9149,10 @@ var init_from_json_schema = __esm(() => {
   fullTime = /^(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)$/;
 });
 
-// node_modules/zod/v4/classic/coerce.js
+// inspect/mcp/node_modules/zod/v4/classic/coerce.js
 var init_coerce = () => {};
 
-// node_modules/zod/v4/classic/external.js
+// inspect/mcp/node_modules/zod/v4/classic/external.js
 var init_external = __esm(() => {
   init_core2();
   init_from_json_schema();
@@ -9165,17 +9166,17 @@ var init_external = __esm(() => {
   init_compat();
 });
 
-// node_modules/zod/v4/classic/index.js
+// inspect/mcp/node_modules/zod/v4/classic/index.js
 var init_classic = __esm(() => {
   init_external();
 });
 
-// node_modules/zod/v4/index.js
+// inspect/mcp/node_modules/zod/v4/index.js
 var init_v4 = __esm(() => {
   init_classic();
 });
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/types.js
+// inspect/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/types.js
 function assertCompleteRequestPrompt(request) {
   if (request.params.ref.type !== "ref/prompt") {
     throw new TypeError(`Expected CompleteRequestPrompt, but got ${request.params.ref.type}`);
@@ -10013,7 +10014,7 @@ var init_types = __esm(() => {
   };
 });
 
-// node_modules/zod/v3/helpers/util.js
+// inspect/mcp/node_modules/zod/v3/helpers/util.js
 var util, objectUtil, ZodParsedType, getParsedType = (data) => {
   const t = typeof data;
   switch (t) {
@@ -10144,7 +10145,7 @@ var init_util2 = __esm(() => {
   ]);
 });
 
-// node_modules/zod/v3/ZodError.js
+// inspect/mcp/node_modules/zod/v3/ZodError.js
 var ZodIssueCode, ZodError;
 var init_ZodError = __esm(() => {
   init_util2();
@@ -10277,7 +10278,7 @@ var init_ZodError = __esm(() => {
   };
 });
 
-// node_modules/zod/v3/locales/en.js
+// inspect/mcp/node_modules/zod/v3/locales/en.js
 var errorMap = (issue, _ctx) => {
   let message;
   switch (issue.code) {
@@ -10384,7 +10385,7 @@ var init_en2 = __esm(() => {
   en_default2 = errorMap;
 });
 
-// node_modules/zod/v3/errors.js
+// inspect/mcp/node_modules/zod/v3/errors.js
 function getErrorMap() {
   return overrideErrorMap;
 }
@@ -10394,7 +10395,7 @@ var init_errors3 = __esm(() => {
   overrideErrorMap = en_default2;
 });
 
-// node_modules/zod/v3/helpers/parseUtil.js
+// inspect/mcp/node_modules/zod/v3/helpers/parseUtil.js
 function addIssueToContext(ctx, issueData) {
   const overrideMap = getErrorMap();
   const issue = makeIssue({
@@ -10498,10 +10499,10 @@ var init_parseUtil = __esm(() => {
   });
 });
 
-// node_modules/zod/v3/helpers/typeAliases.js
+// inspect/mcp/node_modules/zod/v3/helpers/typeAliases.js
 var init_typeAliases = () => {};
 
-// node_modules/zod/v3/helpers/errorUtil.js
+// inspect/mcp/node_modules/zod/v3/helpers/errorUtil.js
 var errorUtil;
 var init_errorUtil = __esm(() => {
   (function(errorUtil) {
@@ -10510,7 +10511,7 @@ var init_errorUtil = __esm(() => {
   })(errorUtil || (errorUtil = {}));
 });
 
-// node_modules/zod/v3/types.js
+// inspect/mcp/node_modules/zod/v3/types.js
 class ParseInputLazyPath {
   constructor(parent, value, path, key) {
     this._cachedPath = [];
@@ -13825,7 +13826,7 @@ var init_types2 = __esm(() => {
   pipelineType = ZodPipeline.create;
 });
 
-// node_modules/zod/v3/external.js
+// inspect/mcp/node_modules/zod/v3/external.js
 var init_external2 = __esm(() => {
   init_errors3();
   init_parseUtil();
@@ -13835,17 +13836,17 @@ var init_external2 = __esm(() => {
   init_ZodError();
 });
 
-// node_modules/zod/v3/index.js
+// inspect/mcp/node_modules/zod/v3/index.js
 var init_v3 = __esm(() => {
   init_external2();
 });
 
-// node_modules/zod/v4/mini/parse.js
+// inspect/mcp/node_modules/zod/v4/mini/parse.js
 var init_parse3 = __esm(() => {
   init_core2();
 });
 
-// node_modules/zod/v4/mini/schemas.js
+// inspect/mcp/node_modules/zod/v4/mini/schemas.js
 function object2(shape, params) {
   const def = {
     type: "object",
@@ -13915,16 +13916,16 @@ var init_schemas3 = __esm(() => {
   });
 });
 
-// node_modules/zod/v4/mini/checks.js
+// inspect/mcp/node_modules/zod/v4/mini/checks.js
 var init_checks3 = () => {};
 
-// node_modules/zod/v4/mini/iso.js
+// inspect/mcp/node_modules/zod/v4/mini/iso.js
 var init_iso2 = () => {};
 
-// node_modules/zod/v4/mini/coerce.js
+// inspect/mcp/node_modules/zod/v4/mini/coerce.js
 var init_coerce2 = () => {};
 
-// node_modules/zod/v4/mini/external.js
+// inspect/mcp/node_modules/zod/v4/mini/external.js
 var init_external3 = __esm(() => {
   init_core2();
   init_json_schema_processors();
@@ -13936,12 +13937,12 @@ var init_external3 = __esm(() => {
   init_checks3();
 });
 
-// node_modules/zod/v4-mini/index.js
+// inspect/mcp/node_modules/zod/v4-mini/index.js
 var init_v4_mini = __esm(() => {
   init_external3();
 });
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/server/zod-compat.js
+// inspect/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/server/zod-compat.js
 function isZ4Schema(s) {
   const schema = s;
   return !!schema._zod;
@@ -14106,12 +14107,12 @@ var init_zod_compat = __esm(() => {
   init_v4_mini();
 });
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/interfaces.js
+// inspect/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/interfaces.js
 function isTerminal(status) {
   return status === "completed" || status === "failed" || status === "cancelled";
 }
 
-// node_modules/zod-to-json-schema/dist/esm/Options.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/Options.js
 var ignoreOverride, defaultOptions, getDefaultOptions = (options) => typeof options === "string" ? {
   ...defaultOptions,
   name: options
@@ -14147,7 +14148,7 @@ var init_Options = __esm(() => {
   };
 });
 
-// node_modules/zod-to-json-schema/dist/esm/Refs.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/Refs.js
 var getRefs = (options) => {
   const _options = getDefaultOptions(options);
   const currentPath = _options.name !== undefined ? [..._options.basePath, _options.definitionPath, _options.name] : _options.basePath;
@@ -14170,7 +14171,7 @@ var init_Refs = __esm(() => {
   init_Options();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/errorMessages.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/errorMessages.js
 function addErrorMessage(res, key, errorMessage, refs) {
   if (!refs?.errorMessages)
     return;
@@ -14186,7 +14187,7 @@ function setResponseValueAndErrors(res, key, value, errorMessage, refs) {
   addErrorMessage(res, key, errorMessage, refs);
 }
 
-// node_modules/zod-to-json-schema/dist/esm/getRelativePath.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/getRelativePath.js
 var getRelativePath = (pathA, pathB) => {
   let i = 0;
   for (;i < pathA.length && i < pathB.length; i++) {
@@ -14196,7 +14197,7 @@ var getRelativePath = (pathA, pathB) => {
   return [(pathA.length - i).toString(), ...pathB.slice(i)].join("/");
 };
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/any.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/any.js
 function parseAnyDef(refs) {
   if (refs.target !== "openAi") {
     return {};
@@ -14213,7 +14214,7 @@ function parseAnyDef(refs) {
 }
 var init_any = () => {};
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/array.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/array.js
 function parseArrayDef(def, refs) {
   const res = {
     type: "array"
@@ -14241,7 +14242,7 @@ var init_array = __esm(() => {
   init_parseDef();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/bigint.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/bigint.js
 function parseBigintDef(def, refs) {
   const res = {
     type: "integer",
@@ -14288,14 +14289,14 @@ function parseBigintDef(def, refs) {
 }
 var init_bigint = () => {};
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/boolean.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/boolean.js
 function parseBooleanDef() {
   return {
     type: "boolean"
   };
 }
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/branded.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/branded.js
 function parseBrandedDef(_def, refs) {
   return parseDef(_def.type._def, refs);
 }
@@ -14303,7 +14304,7 @@ var init_branded = __esm(() => {
   init_parseDef();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/catch.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/catch.js
 var parseCatchDef = (def, refs) => {
   return parseDef(def.innerType._def, refs);
 };
@@ -14311,7 +14312,7 @@ var init_catch = __esm(() => {
   init_parseDef();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/date.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/date.js
 function parseDateDef(def, refs, overrideDateStrategy) {
   const strategy = overrideDateStrategy ?? refs.dateStrategy;
   if (Array.isArray(strategy)) {
@@ -14357,7 +14358,7 @@ var integerDateParser = (def, refs) => {
 };
 var init_date = () => {};
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/default.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/default.js
 function parseDefaultDef(_def, refs) {
   return {
     ...parseDef(_def.innerType._def, refs),
@@ -14368,7 +14369,7 @@ var init_default = __esm(() => {
   init_parseDef();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/effects.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/effects.js
 function parseEffectsDef(_def, refs) {
   return refs.effectStrategy === "input" ? parseDef(_def.schema._def, refs) : parseAnyDef(refs);
 }
@@ -14377,7 +14378,7 @@ var init_effects = __esm(() => {
   init_any();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/enum.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/enum.js
 function parseEnumDef(def) {
   return {
     type: "string",
@@ -14385,7 +14386,7 @@ function parseEnumDef(def) {
   };
 }
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/intersection.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/intersection.js
 function parseIntersectionDef(def, refs) {
   const allOf = [
     parseDef(def.left._def, {
@@ -14430,7 +14431,7 @@ var init_intersection = __esm(() => {
   init_parseDef();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/literal.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/literal.js
 function parseLiteralDef(def, refs) {
   const parsedType = typeof def.value;
   if (parsedType !== "bigint" && parsedType !== "number" && parsedType !== "boolean" && parsedType !== "string") {
@@ -14450,7 +14451,7 @@ function parseLiteralDef(def, refs) {
   };
 }
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/string.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/string.js
 function parseStringDef(def, refs) {
   const res = {
     type: "string"
@@ -14749,7 +14750,7 @@ var init_string = __esm(() => {
   ALPHA_NUMERIC = new Set("ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvxyz0123456789");
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/record.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/record.js
 function parseRecordDef(def, refs) {
   if (refs.target === "openAi") {
     console.warn("Warning: OpenAI may not support records in schemas! Try an array of key-value pairs instead.");
@@ -14808,7 +14809,7 @@ var init_record = __esm(() => {
   init_any();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/map.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/map.js
 function parseMapDef(def, refs) {
   if (refs.mapStrategy === "record") {
     return parseRecordDef(def, refs);
@@ -14838,7 +14839,7 @@ var init_map = __esm(() => {
   init_any();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/nativeEnum.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/nativeEnum.js
 function parseNativeEnumDef(def) {
   const object = def.values;
   const actualKeys = Object.keys(def.values).filter((key) => {
@@ -14852,7 +14853,7 @@ function parseNativeEnumDef(def) {
   };
 }
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/never.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/never.js
 function parseNeverDef(refs) {
   return refs.target === "openAi" ? undefined : {
     not: parseAnyDef({
@@ -14865,7 +14866,7 @@ var init_never = __esm(() => {
   init_any();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/null.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/null.js
 function parseNullDef(refs) {
   return refs.target === "openApi3" ? {
     enum: ["null"],
@@ -14875,7 +14876,7 @@ function parseNullDef(refs) {
   };
 }
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/union.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/union.js
 function parseUnionDef(def, refs) {
   if (refs.target === "openApi3")
     return asAnyOf(def, refs);
@@ -14946,7 +14947,7 @@ var init_union = __esm(() => {
   };
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/nullable.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/nullable.js
 function parseNullableDef(def, refs) {
   if (["ZodString", "ZodNumber", "ZodBigInt", "ZodBoolean", "ZodNull"].includes(def.innerType._def.typeName) && (!def.innerType._def.checks || !def.innerType._def.checks.length)) {
     if (refs.target === "openApi3") {
@@ -14982,7 +14983,7 @@ var init_nullable = __esm(() => {
   init_union();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/number.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/number.js
 function parseNumberDef(def, refs) {
   const res = {
     type: "number"
@@ -15032,7 +15033,7 @@ function parseNumberDef(def, refs) {
 }
 var init_number = () => {};
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/object.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/object.js
 function parseObjectDef(def, refs) {
   const forceOptionalIntoNullable = refs.target === "openAi";
   const result = {
@@ -15105,7 +15106,7 @@ var init_object = __esm(() => {
   init_parseDef();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/optional.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/optional.js
 var parseOptionalDef = (def, refs) => {
   if (refs.currentPath.toString() === refs.propertyPath?.toString()) {
     return parseDef(def.innerType._def, refs);
@@ -15128,7 +15129,7 @@ var init_optional = __esm(() => {
   init_any();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/pipeline.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/pipeline.js
 var parsePipelineDef = (def, refs) => {
   if (refs.pipeStrategy === "input") {
     return parseDef(def.in._def, refs);
@@ -15151,7 +15152,7 @@ var init_pipeline = __esm(() => {
   init_parseDef();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/promise.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/promise.js
 function parsePromiseDef(def, refs) {
   return parseDef(def.type._def, refs);
 }
@@ -15159,7 +15160,7 @@ var init_promise = __esm(() => {
   init_parseDef();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/set.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/set.js
 function parseSetDef(def, refs) {
   const items = parseDef(def.valueType._def, {
     ...refs,
@@ -15182,7 +15183,7 @@ var init_set = __esm(() => {
   init_parseDef();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/tuple.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/tuple.js
 function parseTupleDef(def, refs) {
   if (def.rest) {
     return {
@@ -15213,7 +15214,7 @@ var init_tuple = __esm(() => {
   init_parseDef();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/undefined.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/undefined.js
 function parseUndefinedDef(refs) {
   return {
     not: parseAnyDef(refs)
@@ -15223,7 +15224,7 @@ var init_undefined = __esm(() => {
   init_any();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/unknown.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/unknown.js
 function parseUnknownDef(refs) {
   return parseAnyDef(refs);
 }
@@ -15231,7 +15232,7 @@ var init_unknown = __esm(() => {
   init_any();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parsers/readonly.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parsers/readonly.js
 var parseReadonlyDef = (def, refs) => {
   return parseDef(def.innerType._def, refs);
 };
@@ -15239,7 +15240,7 @@ var init_readonly = __esm(() => {
   init_parseDef();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/selectParser.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/selectParser.js
 var selectParser = (def, typeName, refs) => {
   switch (typeName) {
     case ZodFirstPartyTypeKind2.ZodString:
@@ -15345,7 +15346,7 @@ var init_selectParser = __esm(() => {
   init_readonly();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parseDef.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parseDef.js
 function parseDef(def, refs, forceResolution = false) {
   const seenItem = refs.seen.get(def);
   if (refs.override) {
@@ -15405,10 +15406,10 @@ var init_parseDef = __esm(() => {
   init_any();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/parseTypes.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/parseTypes.js
 var init_parseTypes = () => {};
 
-// node_modules/zod-to-json-schema/dist/esm/zodToJsonSchema.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/zodToJsonSchema.js
 var zodToJsonSchema = (schema, options) => {
   const refs = getRefs(options);
   let definitions = typeof options === "object" && options.definitions ? Object.entries(options.definitions).reduce((acc, [name, schema]) => ({
@@ -15474,7 +15475,7 @@ var init_zodToJsonSchema = __esm(() => {
   init_any();
 });
 
-// node_modules/zod-to-json-schema/dist/esm/index.js
+// inspect/mcp/node_modules/zod-to-json-schema/dist/esm/index.js
 var init_esm = __esm(() => {
   init_zodToJsonSchema();
   init_Options();
@@ -15510,7 +15511,7 @@ var init_esm = __esm(() => {
   init_zodToJsonSchema();
 });
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/server/zod-json-schema-compat.js
+// inspect/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/server/zod-json-schema-compat.js
 function mapMiniTarget(t) {
   if (!t)
     return "draft-7";
@@ -15557,7 +15558,7 @@ var init_zod_json_schema_compat = __esm(() => {
   init_esm();
 });
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/shared/protocol.js
+// inspect/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/shared/protocol.js
 class Protocol {
   constructor(_options) {
     this._options = _options;
@@ -16424,7 +16425,7 @@ var init_protocol = __esm(() => {
   init_zod_json_schema_compat();
 });
 
-// node_modules/ajv/dist/compile/codegen/code.js
+// inspect/mcp/node_modules/ajv/dist/compile/codegen/code.js
 var require_code = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.regexpCode = exports.getEsmExportName = exports.getProperty = exports.safeStringify = exports.stringify = exports.strConcat = exports.addCodeArg = exports.str = exports._ = exports.nil = exports._Code = exports.Name = exports.IDENTIFIER = exports._CodeOrName = undefined;
@@ -16578,7 +16579,7 @@ var require_code = __commonJS(function(exports) {
   exports.regexpCode = regexpCode;
 });
 
-// node_modules/ajv/dist/compile/codegen/scope.js
+// inspect/mcp/node_modules/ajv/dist/compile/codegen/scope.js
 var require_scope = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.ValueScope = exports.ValueScopeName = exports.Scope = exports.varKinds = exports.UsedValueState = undefined;
@@ -16724,7 +16725,7 @@ var require_scope = __commonJS(function(exports) {
   exports.ValueScope = ValueScope;
 });
 
-// node_modules/ajv/dist/compile/codegen/index.js
+// inspect/mcp/node_modules/ajv/dist/compile/codegen/index.js
 var require_codegen = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.or = exports.and = exports.not = exports.CodeGen = exports.operators = exports.varKinds = exports.ValueScopeName = exports.ValueScope = exports.Scope = exports.Name = exports.regexpCode = exports.stringify = exports.getProperty = exports.nil = exports.strConcat = exports.str = exports._ = undefined;
@@ -17434,7 +17435,7 @@ var require_codegen = __commonJS(function(exports) {
   }
 });
 
-// node_modules/ajv/dist/compile/util.js
+// inspect/mcp/node_modules/ajv/dist/compile/util.js
 var require_util = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.checkStrictMode = exports.getErrorPath = exports.Type = exports.useFunc = exports.setEvaluated = exports.evaluatedPropsToName = exports.mergeEvaluated = exports.eachItem = exports.unescapeJsonPointer = exports.escapeJsonPointer = exports.escapeFragment = exports.unescapeFragment = exports.schemaRefOrVal = exports.schemaHasRulesButRef = exports.schemaHasRules = exports.checkUnknownRules = exports.alwaysValidSchema = exports.toHash = undefined;
@@ -17598,7 +17599,7 @@ var require_util = __commonJS(function(exports) {
   exports.checkStrictMode = checkStrictMode;
 });
 
-// node_modules/ajv/dist/compile/names.js
+// inspect/mcp/node_modules/ajv/dist/compile/names.js
 var require_names = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -17623,7 +17624,7 @@ var require_names = __commonJS(function(exports) {
   exports.default = names;
 });
 
-// node_modules/ajv/dist/compile/errors.js
+// inspect/mcp/node_modules/ajv/dist/compile/errors.js
 var require_errors = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.extendErrors = exports.resetErrorsCount = exports.reportExtraError = exports.reportError = exports.keyword$DataError = exports.keywordError = undefined;
@@ -17741,7 +17742,7 @@ var require_errors = __commonJS(function(exports) {
   }
 });
 
-// node_modules/ajv/dist/compile/validate/boolSchema.js
+// inspect/mcp/node_modules/ajv/dist/compile/validate/boolSchema.js
 var require_boolSchema = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.boolOrEmptySchema = exports.topBoolOrEmptySchema = undefined;
@@ -17789,7 +17790,7 @@ var require_boolSchema = __commonJS(function(exports) {
   }
 });
 
-// node_modules/ajv/dist/compile/rules.js
+// inspect/mcp/node_modules/ajv/dist/compile/rules.js
 var require_rules = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.getRules = exports.isJSONType = undefined;
@@ -17817,7 +17818,7 @@ var require_rules = __commonJS(function(exports) {
   exports.getRules = getRules;
 });
 
-// node_modules/ajv/dist/compile/validate/applicability.js
+// inspect/mcp/node_modules/ajv/dist/compile/validate/applicability.js
 var require_applicability = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.shouldUseRule = exports.shouldUseGroup = exports.schemaHasRulesForType = undefined;
@@ -17837,7 +17838,7 @@ var require_applicability = __commonJS(function(exports) {
   exports.shouldUseRule = shouldUseRule;
 });
 
-// node_modules/ajv/dist/compile/validate/dataType.js
+// inspect/mcp/node_modules/ajv/dist/compile/validate/dataType.js
 var require_dataType = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.reportTypeError = exports.checkDataTypes = exports.checkDataType = exports.coerceAndCheckDataType = exports.getJSONTypes = exports.getSchemaTypes = exports.DataType = undefined;
@@ -18018,7 +18019,7 @@ var require_dataType = __commonJS(function(exports) {
   }
 });
 
-// node_modules/ajv/dist/compile/validate/defaults.js
+// inspect/mcp/node_modules/ajv/dist/compile/validate/defaults.js
 var require_defaults = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.assignDefaults = undefined;
@@ -18052,7 +18053,7 @@ var require_defaults = __commonJS(function(exports) {
   }
 });
 
-// node_modules/ajv/dist/vocabularies/code.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/code.js
 var require_code2 = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.validateUnion = exports.validateArray = exports.usePattern = exports.callValidateCode = exports.schemaProperties = exports.allSchemaProperties = exports.noPropertyInData = exports.propertyInData = exports.isOwnProperty = exports.hasPropFunc = exports.reportMissingProp = exports.checkMissingProp = exports.checkReportMissingProp = undefined;
@@ -18181,7 +18182,7 @@ var require_code2 = __commonJS(function(exports) {
   exports.validateUnion = validateUnion;
 });
 
-// node_modules/ajv/dist/compile/validate/keyword.js
+// inspect/mcp/node_modules/ajv/dist/compile/validate/keyword.js
 var require_keyword = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.validateKeywordUsage = exports.validSchemaType = exports.funcKeywordCode = exports.macroKeywordCode = undefined;
@@ -18296,7 +18297,7 @@ var require_keyword = __commonJS(function(exports) {
   exports.validateKeywordUsage = validateKeywordUsage;
 });
 
-// node_modules/ajv/dist/compile/validate/subschema.js
+// inspect/mcp/node_modules/ajv/dist/compile/validate/subschema.js
 var require_subschema = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.extendSubschemaMode = exports.extendSubschemaData = exports.getSubschema = undefined;
@@ -18376,7 +18377,7 @@ var require_subschema = __commonJS(function(exports) {
   exports.extendSubschemaMode = extendSubschemaMode;
 });
 
-// node_modules/fast-deep-equal/index.js
+// inspect/mcp/node_modules/fast-deep-equal/index.js
 var require_fast_deep_equal = __commonJS(function(exports, module) {
   module.exports = function equal(a, b) {
     if (a === b)
@@ -18418,7 +18419,7 @@ var require_fast_deep_equal = __commonJS(function(exports, module) {
   };
 });
 
-// node_modules/json-schema-traverse/index.js
+// inspect/mcp/node_modules/json-schema-traverse/index.js
 var require_json_schema_traverse = __commonJS(function(exports, module) {
   var traverse = module.exports = function(schema, opts, cb) {
     if (typeof opts == "function") {
@@ -18501,7 +18502,7 @@ var require_json_schema_traverse = __commonJS(function(exports, module) {
   }
 });
 
-// node_modules/ajv/dist/compile/resolve.js
+// inspect/mcp/node_modules/ajv/dist/compile/resolve.js
 var require_resolve = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.getSchemaRefs = exports.resolveUrl = exports.normalizeId = exports._getFullPath = exports.getFullPath = exports.inlineRef = undefined;
@@ -18654,7 +18655,7 @@ var require_resolve = __commonJS(function(exports) {
   exports.getSchemaRefs = getSchemaRefs;
 });
 
-// node_modules/ajv/dist/compile/validate/index.js
+// inspect/mcp/node_modules/ajv/dist/compile/validate/index.js
 var require_validate = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.getData = exports.KeywordCxt = exports.validateFunctionCode = undefined;
@@ -19159,7 +19160,7 @@ var require_validate = __commonJS(function(exports) {
   exports.getData = getData;
 });
 
-// node_modules/ajv/dist/runtime/validation_error.js
+// inspect/mcp/node_modules/ajv/dist/runtime/validation_error.js
 var require_validation_error = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -19173,7 +19174,7 @@ var require_validation_error = __commonJS(function(exports) {
   exports.default = ValidationError;
 });
 
-// node_modules/ajv/dist/compile/ref_error.js
+// inspect/mcp/node_modules/ajv/dist/compile/ref_error.js
 var require_ref_error = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var resolve_1 = require_resolve();
@@ -19188,7 +19189,7 @@ var require_ref_error = __commonJS(function(exports) {
   exports.default = MissingRefError;
 });
 
-// node_modules/ajv/dist/compile/index.js
+// inspect/mcp/node_modules/ajv/dist/compile/index.js
 var require_compile = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.resolveSchema = exports.getCompilingSchema = exports.resolveRef = exports.compileSchema = exports.SchemaEnv = undefined;
@@ -19409,7 +19410,7 @@ var require_compile = __commonJS(function(exports) {
   }
 });
 
-// node_modules/ajv/dist/refs/data.json
+// inspect/mcp/node_modules/ajv/dist/refs/data.json
 var require_data = __commonJS(function(exports, module) {
   module.exports = {
     $id: "https://raw.githubusercontent.com/ajv-validator/ajv/master/lib/refs/data.json#",
@@ -19426,7 +19427,7 @@ var require_data = __commonJS(function(exports, module) {
   };
 });
 
-// node_modules/fast-uri/lib/utils.js
+// inspect/mcp/node_modules/fast-uri/lib/utils.js
 var require_utils = __commonJS(function(exports, module) {
   var isUUID = RegExp.prototype.test.bind(/^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/iu);
   var isIPv4 = RegExp.prototype.test.bind(/^(?:(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)$/u);
@@ -19975,7 +19976,7 @@ var require_utils = __commonJS(function(exports, module) {
   };
 });
 
-// node_modules/fast-uri/lib/schemes.js
+// inspect/mcp/node_modules/fast-uri/lib/schemes.js
 var require_schemes = __commonJS(function(exports, module) {
   var { isUUID } = require_utils();
   var URN_REG = /^([\da-z][\d\-a-z]{0,31}):((?:[\w!$'()*+,\-./:;=@]|%[\da-f]{2})+)$/iu;
@@ -20150,7 +20151,7 @@ var require_schemes = __commonJS(function(exports, module) {
   };
 });
 
-// node_modules/fast-uri/index.js
+// inspect/mcp/node_modules/fast-uri/index.js
 var require_fast_uri = __commonJS(function(exports, module) {
   var { normalizeIPv6, removeDotSegments, removeDotSegmentsRelative, recomposeAuthority, normalizePercentEncoding, normalizePathEncoding, serializePathEncoding, normalizeQueryFragmentEncoding, encodeQuery, encodeFragment, reescapeHostDelimiters, isIPv4, nonSimpleDomain } = require_utils();
   var { SCHEMES, getSchemeHandler } = require_schemes();
@@ -20575,7 +20576,7 @@ var require_fast_uri = __commonJS(function(exports, module) {
   module.exports.fastUri = fastUri;
 });
 
-// node_modules/ajv/dist/runtime/uri.js
+// inspect/mcp/node_modules/ajv/dist/runtime/uri.js
 var require_uri = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var uri = require_fast_uri();
@@ -20583,7 +20584,7 @@ var require_uri = __commonJS(function(exports) {
   exports.default = uri;
 });
 
-// node_modules/ajv/dist/core.js
+// inspect/mcp/node_modules/ajv/dist/core.js
 var require_core = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.CodeGen = exports.Name = exports.nil = exports.stringify = exports.str = exports._ = exports.KeywordCxt = undefined;
@@ -21176,7 +21177,7 @@ var require_core = __commonJS(function(exports) {
   }
 });
 
-// node_modules/ajv/dist/vocabularies/core/id.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/core/id.js
 var require_id = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var def = {
@@ -21188,7 +21189,7 @@ var require_id = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/core/ref.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/core/ref.js
 var require_ref = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.callRef = exports.getValidate = undefined;
@@ -21307,7 +21308,7 @@ var require_ref = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/core/index.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/core/index.js
 var require_core2 = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var id_1 = require_id();
@@ -21325,7 +21326,7 @@ var require_core2 = __commonJS(function(exports) {
   exports.default = core;
 });
 
-// node_modules/ajv/dist/vocabularies/validation/limitNumber.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/validation/limitNumber.js
 var require_limitNumber = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -21354,7 +21355,7 @@ var require_limitNumber = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/validation/multipleOf.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/validation/multipleOf.js
 var require_multipleOf = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -21379,7 +21380,7 @@ var require_multipleOf = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/runtime/ucs2length.js
+// inspect/mcp/node_modules/ajv/dist/runtime/ucs2length.js
 var require_ucs2length = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   function ucs2length(str) {
@@ -21402,7 +21403,7 @@ var require_ucs2length = __commonJS(function(exports) {
   ucs2length.code = 'require("ajv/dist/runtime/ucs2length").default';
 });
 
-// node_modules/ajv/dist/vocabularies/validation/limitLength.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/validation/limitLength.js
 var require_limitLength = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -21431,7 +21432,7 @@ var require_limitLength = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/validation/pattern.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/validation/pattern.js
 var require_pattern = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var code_1 = require_code2();
@@ -21465,7 +21466,7 @@ var require_pattern = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/validation/limitProperties.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/validation/limitProperties.js
 var require_limitProperties = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -21491,7 +21492,7 @@ var require_limitProperties = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/validation/required.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/validation/required.js
 var require_required = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var code_1 = require_code2();
@@ -21570,7 +21571,7 @@ var require_required = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/validation/limitItems.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/validation/limitItems.js
 var require_limitItems = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -21596,7 +21597,7 @@ var require_limitItems = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/runtime/equal.js
+// inspect/mcp/node_modules/ajv/dist/runtime/equal.js
 var require_equal = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var equal = require_fast_deep_equal();
@@ -21604,7 +21605,7 @@ var require_equal = __commonJS(function(exports) {
   exports.default = equal;
 });
 
-// node_modules/ajv/dist/vocabularies/validation/uniqueItems.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/validation/uniqueItems.js
 var require_uniqueItems = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var dataType_1 = require_dataType();
@@ -21668,7 +21669,7 @@ var require_uniqueItems = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/validation/const.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/validation/const.js
 var require_const = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -21694,7 +21695,7 @@ var require_const = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/validation/enum.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/validation/enum.js
 var require_enum = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -21740,7 +21741,7 @@ var require_enum = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/validation/index.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/validation/index.js
 var require_validation = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var limitNumber_1 = require_limitNumber();
@@ -21770,7 +21771,7 @@ var require_validation = __commonJS(function(exports) {
   exports.default = validation;
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/additionalItems.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/applicator/additionalItems.js
 var require_additionalItems = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.validateAdditionalItems = undefined;
@@ -21820,7 +21821,7 @@ var require_additionalItems = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/items.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/applicator/items.js
 var require_items = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.validateTuple = undefined;
@@ -21874,7 +21875,7 @@ var require_items = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/prefixItems.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/applicator/prefixItems.js
 var require_prefixItems = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var items_1 = require_items();
@@ -21888,7 +21889,7 @@ var require_prefixItems = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/items2020.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/applicator/items2020.js
 var require_items2020 = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -21920,7 +21921,7 @@ var require_items2020 = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/contains.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/applicator/contains.js
 var require_contains = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -22011,7 +22012,7 @@ var require_contains = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/dependencies.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/applicator/dependencies.js
 var require_dependencies = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.validateSchemaDeps = exports.validatePropertyDeps = exports.error = undefined;
@@ -22096,7 +22097,7 @@ var require_dependencies = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/propertyNames.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/applicator/propertyNames.js
 var require_propertyNames = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -22136,7 +22137,7 @@ var require_propertyNames = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/additionalProperties.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/applicator/additionalProperties.js
 var require_additionalProperties = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var code_1 = require_code2();
@@ -22239,7 +22240,7 @@ var require_additionalProperties = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/properties.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/applicator/properties.js
 var require_properties = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var validate_1 = require_validate();
@@ -22294,7 +22295,7 @@ var require_properties = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/patternProperties.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/applicator/patternProperties.js
 var require_patternProperties = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var code_1 = require_code2();
@@ -22365,7 +22366,7 @@ var require_patternProperties = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/not.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/applicator/not.js
 var require_not = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var util_1 = require_util();
@@ -22393,7 +22394,7 @@ var require_not = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/anyOf.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/applicator/anyOf.js
 var require_anyOf = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var code_1 = require_code2();
@@ -22407,7 +22408,7 @@ var require_anyOf = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/oneOf.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/applicator/oneOf.js
 var require_oneOf = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -22462,7 +22463,7 @@ var require_oneOf = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/allOf.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/applicator/allOf.js
 var require_allOf = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var util_1 = require_util();
@@ -22486,7 +22487,7 @@ var require_allOf = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/if.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/applicator/if.js
 var require_if = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -22552,7 +22553,7 @@ var require_if = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/thenElse.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/applicator/thenElse.js
 var require_thenElse = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var util_1 = require_util();
@@ -22567,7 +22568,7 @@ var require_thenElse = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/applicator/index.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/applicator/index.js
 var require_applicator = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var additionalItems_1 = require_additionalItems();
@@ -22610,7 +22611,7 @@ var require_applicator = __commonJS(function(exports) {
   exports.default = getApplicator;
 });
 
-// node_modules/ajv/dist/vocabularies/format/format.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/format/format.js
 var require_format = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -22697,7 +22698,7 @@ var require_format = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/vocabularies/format/index.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/format/index.js
 var require_format2 = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var format_1 = require_format();
@@ -22705,7 +22706,7 @@ var require_format2 = __commonJS(function(exports) {
   exports.default = format;
 });
 
-// node_modules/ajv/dist/vocabularies/metadata.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/metadata.js
 var require_metadata = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.contentVocabulary = exports.metadataVocabulary = undefined;
@@ -22725,7 +22726,7 @@ var require_metadata = __commonJS(function(exports) {
   ];
 });
 
-// node_modules/ajv/dist/vocabularies/draft7.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/draft7.js
 var require_draft7 = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var core_1 = require_core2();
@@ -22744,7 +22745,7 @@ var require_draft7 = __commonJS(function(exports) {
   exports.default = draft7Vocabularies;
 });
 
-// node_modules/ajv/dist/vocabularies/discriminator/types.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/discriminator/types.js
 var require_types = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.DiscrError = undefined;
@@ -22755,7 +22756,7 @@ var require_types = __commonJS(function(exports) {
   })(DiscrError || (exports.DiscrError = DiscrError = {}));
 });
 
-// node_modules/ajv/dist/vocabularies/discriminator/index.js
+// inspect/mcp/node_modules/ajv/dist/vocabularies/discriminator/index.js
 var require_discriminator = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -22857,7 +22858,7 @@ var require_discriminator = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// node_modules/ajv/dist/refs/json-schema-draft-07.json
+// inspect/mcp/node_modules/ajv/dist/refs/json-schema-draft-07.json
 var require_json_schema_draft_07 = __commonJS(function(exports, module) {
   module.exports = {
     $schema: "http://json-schema.org/draft-07/schema#",
@@ -23012,7 +23013,7 @@ var require_json_schema_draft_07 = __commonJS(function(exports, module) {
   };
 });
 
-// node_modules/ajv/dist/ajv.js
+// inspect/mcp/node_modules/ajv/dist/ajv.js
 var require_ajv = __commonJS(function(exports, module) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.MissingRefError = exports.ValidationError = exports.CodeGen = exports.Name = exports.nil = exports.stringify = exports.str = exports._ = exports.KeywordCxt = exports.Ajv = undefined;
@@ -23080,7 +23081,7 @@ var require_ajv = __commonJS(function(exports, module) {
   } });
 });
 
-// node_modules/ajv-formats/dist/formats.js
+// inspect/mcp/node_modules/ajv-formats/dist/formats.js
 var require_formats = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.formatNames = exports.fastFormats = exports.fullFormats = undefined;
@@ -23257,7 +23258,7 @@ var require_formats = __commonJS(function(exports) {
   }
 });
 
-// node_modules/ajv-formats/dist/limit.js
+// inspect/mcp/node_modules/ajv-formats/dist/limit.js
 var require_limit = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.formatLimitDefinition = undefined;
@@ -23326,7 +23327,7 @@ var require_limit = __commonJS(function(exports) {
   exports.default = formatLimitPlugin;
 });
 
-// node_modules/ajv-formats/dist/index.js
+// inspect/mcp/node_modules/ajv-formats/dist/index.js
 var require_dist = __commonJS(function(exports, module) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var formats_1 = require_formats();
@@ -23365,7 +23366,7 @@ var require_dist = __commonJS(function(exports, module) {
   exports.default = formatsPlugin;
 });
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/validation/ajv-provider.js
+// inspect/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/validation/ajv-provider.js
 function createDefaultAjvInstance() {
   const ajv = new import_ajv.default({
     strict: false,
@@ -23408,7 +23409,7 @@ var init_ajv_provider = __esm(() => {
   import_ajv_formats = __toESM(require_dist(), 1);
 });
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/server.js
+// inspect/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/server.js
 class ExperimentalServerTasks {
   constructor(_server) {
     this._server = _server;
@@ -23489,7 +23490,7 @@ var init_server = __esm(() => {
   init_types();
 });
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/helpers.js
+// inspect/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/helpers.js
 function assertToolsCallTaskCapability(requests, method, entityName) {
   if (!requests) {
     throw new Error(`${entityName} does not support task creation (required for ${method})`);
@@ -23524,7 +23525,7 @@ function assertClientRequestTaskCapability(requests, method, entityName) {
   }
 }
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/server/index.js
+// inspect/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/server/index.js
 var Server;
 var init_server2 = __esm(() => {
   init_protocol();
@@ -23856,7 +23857,7 @@ var init_server2 = __esm(() => {
   };
 });
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/server/completable.js
+// inspect/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/server/completable.js
 function isCompletable(schema) {
   return !!schema && typeof schema === "object" && COMPLETABLE_SYMBOL in schema;
 }
@@ -23871,7 +23872,7 @@ var init_completable = __esm(() => {
     McpZodTypeKind["Completable"] = "McpCompletable";
   })(McpZodTypeKind || (McpZodTypeKind = {}));
 });
-// node_modules/@modelcontextprotocol/sdk/dist/esm/shared/toolNameValidation.js
+// inspect/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/shared/toolNameValidation.js
 function validateToolName(name) {
   const warnings = [];
   if (name.length === 0) {
@@ -23932,7 +23933,7 @@ var init_toolNameValidation = __esm(() => {
   TOOL_NAME_REGEX = /^[A-Za-z0-9._-]{1,128}$/;
 });
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/mcp-server.js
+// inspect/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/mcp-server.js
 class ExperimentalMcpServerTasks {
   constructor(_mcpServer) {
     this._mcpServer = _mcpServer;
@@ -23947,13 +23948,13 @@ class ExperimentalMcpServerTasks {
   }
 }
 
-// node_modules/zod/index.js
+// inspect/mcp/node_modules/zod/index.js
 var init_zod = __esm(() => {
   init_external();
   init_external();
 });
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/server/mcp.js
+// inspect/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/server/mcp.js
 function toolInputElementCount(value, max) {
   let count = 0;
   const stack = [value];
@@ -24739,12 +24740,12 @@ var init_mcp = __esm(() => {
   };
 });
 
-// package.json
+// inspect/mcp/package.json
 var package_default;
 var init_package = __esm(() => {
   package_default = {
     name: "cc-inspect-mcp",
-    version: "0.19.0",
+    version: "0.19.1",
     private: true,
     description: "MCP server that reads Claude Code session transcripts and the modules inside the Claude Code binary. Source for dist/server.js, which is committed.",
     license: "MIT",
@@ -24767,7 +24768,7 @@ var init_package = __esm(() => {
   };
 });
 
-// src/seq.ts
+// inspect/mcp/src/seq.ts
 var each = (items) => ({
   [Symbol.asyncIterator]: () => {
     const it = items[Symbol.iterator]();
@@ -24818,7 +24819,7 @@ var each = (items) => ({
   return;
 }, someSeq = async (items, test) => await firstSeq(items, async (i) => await test(i) ? true : undefined) === true, everySeq = async (items, test) => !await someSeq(items, async (i) => !await test(i));
 
-// src/ast/node.ts
+// inspect/mcp/src/ast/node.ts
 var isNode = (x) => typeof x === "object" && x !== null && ("type" in x) && typeof x.type === "string" && ("start" in x) && typeof x.start === "number", asNode = (x) => isNode(x) ? x : undefined, isFn = (n) => n?.type === "FunctionDeclaration" || n?.type === "FunctionExpression" || n?.type === "ArrowFunctionExpression", isLit = (n) => n?.type === "Literal", strLit = (n) => n?.type === "Literal" && typeof n.value === "string" ? n.value : undefined, isNull = (n) => n?.type === "Literal" && n.value === null && !("regex" in n), litValue = (n) => {
   if ("regex" in n) {
     return;
@@ -24873,14 +24874,14 @@ var isNode = (x) => typeof x === "object" && x !== null && ("type" in x) && type
   return found;
 };
 
-// node_modules/eslint-scope/lib/assert.js
+// inspect/mcp/node_modules/eslint-scope/lib/assert.js
 function assert(condition, message = "Assertion failed.") {
   if (!condition) {
     throw new Error(message);
   }
 }
 
-// node_modules/estraverse/estraverse.js
+// inspect/mcp/node_modules/estraverse/estraverse.js
 var require_estraverse = __commonJS(function(exports) {
   (function clone(exports2) {
     var Syntax, VisitorOption, VisitorKeys, BREAK, SKIP, REMOVE;
@@ -25484,7 +25485,7 @@ var require_estraverse = __commonJS(function(exports) {
   })(exports);
 });
 
-// node_modules/eslint-scope/lib/reference.js
+// inspect/mcp/node_modules/eslint-scope/lib/reference.js
 class Reference {
   constructor(ident, scope, flag, writeExpr, maybeImplicitGlobal, partial, init) {
     this.identifier = ident;
@@ -25527,7 +25528,7 @@ var init_reference = __esm(() => {
   reference_default = Reference;
 });
 
-// node_modules/eslint-scope/lib/variable.js
+// inspect/mcp/node_modules/eslint-scope/lib/variable.js
 class Variable {
   constructor(name, scope) {
     this.name = name;
@@ -25551,7 +25552,7 @@ var init_variable = __esm(() => {
   variable_default = Variable;
 });
 
-// node_modules/eslint-scope/lib/definition.js
+// inspect/mcp/node_modules/eslint-scope/lib/definition.js
 class Definition {
   constructor(type, name, node, parent, index, kind) {
     this.type = type;
@@ -25573,7 +25574,7 @@ var init_definition = __esm(() => {
   };
 });
 
-// node_modules/eslint-scope/lib/scope.js
+// inspect/mcp/node_modules/eslint-scope/lib/scope.js
 function isStrictScope(scope, block, isMethodDefinition) {
   let body;
   if (scope.upper && scope.upper.isStrict) {
@@ -25964,7 +25965,7 @@ var init_scope = __esm(() => {
   };
 });
 
-// node_modules/eslint-scope/lib/scope-manager.js
+// inspect/mcp/node_modules/eslint-scope/lib/scope-manager.js
 class ScopeManager {
   constructor(options) {
     this.scopes = [];
@@ -26105,7 +26106,7 @@ var init_scope_manager = __esm(() => {
   scope_manager_default = ScopeManager;
 });
 
-// node_modules/esrecurse/package.json
+// inspect/mcp/node_modules/esrecurse/package.json
 var require_package = __commonJS(function(exports, module) {
   module.exports = {
     name: "esrecurse",
@@ -26161,7 +26162,7 @@ var require_package = __commonJS(function(exports, module) {
   };
 });
 
-// node_modules/esrecurse/esrecurse.js
+// inspect/mcp/node_modules/esrecurse/esrecurse.js
 var require_esrecurse = __commonJS(function(exports) {
   (function() {
     var estraverse = require_estraverse();
@@ -26236,7 +26237,7 @@ var require_esrecurse = __commonJS(function(exports) {
   })();
 });
 
-// node_modules/eslint-scope/lib/pattern-visitor.js
+// inspect/mcp/node_modules/eslint-scope/lib/pattern-visitor.js
 function getLast(xs) {
   return xs.at(-1) || null;
 }
@@ -26317,7 +26318,7 @@ var init_pattern_visitor = __esm(() => {
   pattern_visitor_default = PatternVisitor;
 });
 
-// node_modules/eslint-scope/lib/referencer.js
+// inspect/mcp/node_modules/eslint-scope/lib/referencer.js
 function traverseIdentifierInPattern(options, rootPattern, referencer, callback) {
   const visitor = new pattern_visitor_default(options, rootPattern, callback);
   visitor.visit(rootPattern);
@@ -26735,7 +26736,7 @@ var init_referencer = __esm(() => {
   referencer_default = Referencer;
 });
 
-// node_modules/eslint-scope/lib/index.js
+// inspect/mcp/node_modules/eslint-scope/lib/index.js
 function defaultOptions2() {
   return {
     optimistic: false,
@@ -26785,7 +26786,7 @@ var init_lib = __esm(() => {
   init_scope();
 });
 
-// src/ast/variables.ts
+// inspect/mcp/src/ast/variables.ts
 var VARIABLE, variableAt = (id) => {
   const named = id;
   return named[VARIABLE];
@@ -26879,7 +26880,7 @@ var init_variables = __esm(() => {
   VARIABLE = Symbol("variable");
 });
 
-// src/ast/module.ts
+// inspect/mcp/src/ast/module.ts
 import { parse as parse6 } from "oxc-parser";
 
 class Module {
@@ -27057,7 +27058,7 @@ var init_module = __esm(() => {
   PARENT = Symbol("parent");
 });
 
-// src/ast/bundle.ts
+// inspect/mcp/src/ast/bundle.ts
 class Bundle {
   texts = new Map;
   #parsed = new Map;
@@ -27173,7 +27174,7 @@ var init_bundle = __esm(() => {
   init_module();
 });
 
-// src/ast/calls.ts
+// inspect/mcp/src/ast/calls.ts
 var functionOf = async (m, callee, depth = 0) => {
   if (callee.type !== "Identifier") {
     return;
@@ -27308,14 +27309,14 @@ var functionOf = async (m, callee, depth = 0) => {
 };
 var init_calls = () => {};
 
-// src/ast.ts
+// inspect/mcp/src/ast.ts
 var init_ast = __esm(() => {
   init_bundle();
   init_calls();
   init_module();
 });
 
-// src/bunfs.ts
+// inspect/mcp/src/bunfs.ts
 var typeFile = async (modules) => {
   const [found, ...more] = modules.filter((m) => /\/claude-code\.d\.ts-[^/]*\.zst$/u.test(m.name));
   if (!found || more.length > 0) {
@@ -27404,7 +27405,7 @@ var init_bunfs = __esm(() => {
   WINDOW = 4 * 1024 * 1024;
 });
 
-// src/resolve/tables.ts
+// inspect/mcp/src/resolve/tables.ts
 var isVoid = (n) => !n || n.type === "UnaryExpression" && n.operator === "void" || isNull(n) || n.type === "Identifier" && n.name === "undefined", keyOf = (m, x) => {
   if (x.computed) {
     return constString(m, asNode(x.property));
@@ -27603,7 +27604,7 @@ var init_tables = __esm(() => {
   ]);
 });
 
-// src/resolve/types.ts
+// inspect/mcp/src/resolve/types.ts
 var KIND_TYPE, kindType = (v) => v.k === "unk" ? undefined : KIND_TYPE[v.k], union3 = (a, b) => a && b ? [...new Set([...a, ...b])].toSorted() : undefined, jsonTypes = (t) => {
   const out = t?.filter((x) => x !== "absent");
   return out !== undefined && out.length > 0 ? out : undefined;
@@ -27693,7 +27694,7 @@ var init_types3 = __esm(() => {
   };
 });
 
-// src/resolve/undef.ts
+// inspect/mcp/src/resolve/undef.ts
 var isUndefIdentifier = (dm, inner, n, undef) => {
   const v = dm.variable(n);
   if (!v) {
@@ -27734,7 +27735,7 @@ var init_undef = __esm(() => {
   init_tables();
 });
 
-// src/resolve/rules.ts
+// inspect/mcp/src/resolve/rules.ts
 var globalNameType = (name) => {
   if (name === "undefined") {
     return ["absent"];
@@ -27754,7 +27755,7 @@ var init_rules = __esm(() => {
   init_types3();
 });
 
-// src/resolve/vartypes.ts
+// inspect/mcp/src/resolve/vartypes.ts
 class VarTypes {
   #varTypes = new Map;
   async varTypeOf(m, v, depth) {
@@ -27819,7 +27820,7 @@ var init_vartypes = __esm(() => {
   init_types3();
 });
 
-// src/resolve/typeof.ts
+// inspect/mcp/src/resolve/typeof.ts
 var TypeResolver;
 var init_typeof = __esm(() => {
   init_ast();
@@ -28002,7 +28003,7 @@ var init_typeof = __esm(() => {
   };
 });
 
-// src/resolve/held.ts
+// inspect/mcp/src/resolve/held.ts
 var HeldEntries;
 var init_held = __esm(() => {
   init_tables();
@@ -28056,7 +28057,7 @@ var init_held = __esm(() => {
   };
 });
 
-// src/resolve/writes.ts
+// inspect/mcp/src/resolve/writes.ts
 class Writes {
   #byKey = new Map;
   #steps;
@@ -28118,7 +28119,7 @@ var WRITE_STEPS = 20000, writtenValue = (mod, at) => {
 };
 var init_writes = () => {};
 
-// src/resolve/value.ts
+// inspect/mcp/src/resolve/value.ts
 var ValueResolver;
 var init_value = __esm(() => {
   init_ast();
@@ -28278,7 +28279,7 @@ var init_value = __esm(() => {
   };
 });
 
-// src/resolve.ts
+// inspect/mcp/src/resolve.ts
 var thenSource = (m, fn, index) => {
   const p = m.parent(fn);
   return index === 0 && p?.type === "CallExpression" && p.arguments[0] === fn && p.callee.type === "MemberExpression" && p.callee.property.type === "Identifier" && p.callee.property.name === "then" ? p.callee.object : undefined;
@@ -28418,7 +28419,7 @@ var init_resolve = __esm(() => {
   };
 });
 
-// src/fs.ts
+// inspect/mcp/src/fs.ts
 import { access } from "fs/promises";
 var exists = async (path) => {
   try {
@@ -28430,18 +28431,15 @@ var exists = async (path) => {
 };
 var init_fs = () => {};
 
-// src/json.ts
+// inspect/mcp/src/json.ts
 var isRecord = (v) => typeof v === "object" && v !== null, recordsOf = (v) => Array.isArray(v) ? v.filter((x) => isRecord(x)) : [];
 
-// src/clean.ts
+// inspect/mcp/src/clean.ts
 import { createHash } from "crypto";
 var hash2 = (s, n = 6) => createHash("sha1").update(s).digest("hex").slice(0, n), localName = (depth, i) => `${depth <= 26 ? String.fromCodePoint(96 + depth) : `z${depth}_`}${i}`, declared = (m) => m.variables.toSorted((a, b) => (a.identifiers[0]?.start ?? 0) - (b.identifiers[0]?.start ?? 0)).map((v) => ({
   v,
   ids: [
-    ...new Set([
-      ...v.identifiers,
-      ...v.references.map((r) => r.identifier)
-    ])
+    ...new Set([...v.identifiers, ...v.references.map((r) => r.identifier)])
   ]
 })), spell = (m, id, old, name) => {
   const p = m.parent(id);
@@ -28522,7 +28520,7 @@ var hash2 = (s, n = 6) => createHash("sha1").update(s).digest("hex").slice(0, n)
 }, renameChunks = (text, chunkNames) => chunkNames ? text.replaceAll(/\/\$bunfs\/root\/(chunk-[a-z0-9]+\.js)/gu, (_, c) => `/$bunfs/root/${chunkNames.get(c) ?? c}`) : text;
 var init_clean = () => {};
 
-// src/units.ts
+// inspect/mcp/src/units.ts
 var keyName = (k) => {
   if (k.type === "Identifier") {
     return k.name;
@@ -28589,7 +28587,7 @@ var init_units = __esm(() => {
   init_clean();
 });
 
-// src/prepare.ts
+// inspect/mcp/src/prepare.ts
 import { createHash as createHash2 } from "crypto";
 import { mkdir, mkdtemp, readdir, rename, rm } from "fs/promises";
 import { homedir, tmpdir } from "os";
@@ -28762,9 +28760,14 @@ var init_prepare = __esm(() => {
   preparedCache = new Map;
 });
 
-// src/npmtext.ts
+// inspect/mcp/src/npmtext.ts
 import { lstat, readdir as readdir2 } from "fs/promises";
 import { extname, join as join2 } from "path";
+function* starts(src, p, from) {
+  for (let i = src.indexOf(p, from);i >= 0; i = src.indexOf(p, i + 1)) {
+    yield i;
+  }
+}
 var MIN_STATIC = 8, SOURCE, NOT_LIBRARY, files = async (dir) => {
   const names = await readdir2(dir);
   const found = await Promise.all(names.toSorted().map(async (f) => {
@@ -28789,11 +28792,7 @@ var MIN_STATIC = 8, SOURCE, NOT_LIBRARY, files = async (dir) => {
     sources.set(dir, all);
   }
   return all;
-}, pieces = (parts) => parts.flatMap((p) => p.split(/(?<=[.:]) |\d{5,}/u)).map((p) => p.trim()).filter((p) => p.length >= MIN_STATIC), starts = function* (src, p, from) {
-  for (let i = src.indexOf(p, from);i >= 0; i = src.indexOf(p, i + 1)) {
-    yield i;
-  }
-}, QUOTE, afterMid = (src, mid, from) => {
+}, pieces = (parts) => parts.flatMap((p) => p.split(/(?<=[.:]) |\d{5,}/u)).map((p) => p.trim()).filter((p) => p.length >= MIN_STATIC), QUOTE, afterMid = (src, mid, from) => {
   let at = from;
   for (const p of mid) {
     const j = src.indexOf(p, at);
@@ -28866,7 +28865,7 @@ var init_npmtext = __esm(() => {
   QUOTE = /["'`]/u;
 });
 
-// src/npm.ts
+// inspect/mcp/src/npm.ts
 import { createHash as createHash3 } from "crypto";
 import { mkdir as mkdir2, mkdtemp as mkdtemp2, rename as rename2, rm as rm2 } from "fs/promises";
 import { join as join3 } from "path";
@@ -28937,7 +28936,7 @@ var init_npm = __esm(() => {
   init_npmtext();
 });
 
-// src/binary.ts
+// inspect/mcp/src/binary.ts
 import { access as access2, readdir as readdir3, realpath, stat } from "fs/promises";
 import { homedir as homedir2 } from "os";
 import { basename as basename2, join as join4 } from "path";
@@ -29042,7 +29041,7 @@ var init_binary = __esm(() => {
   programs = new Map;
 });
 
-// src/idle.ts
+// inspect/mcp/src/idle.ts
 var idleRelease = (ms, release) => {
   let running = 0;
   let timer;
@@ -29061,7 +29060,7 @@ var idleRelease = (ms, release) => {
   };
 };
 
-// src/mcp/app.ts
+// inspect/mcp/src/mcp/app.ts
 var READ_ONLY, WRITES_CACHE, MAX_CHARS = 40000, text = (t, data) => ({
   content: [{ type: "text", text: t }],
   ...data && { structuredContent: data }
@@ -29174,7 +29173,7 @@ var init_app = __esm(() => {
   });
 });
 
-// src/fields.ts
+// inspect/mcp/src/fields.ts
 var MAX_DEPTH = 8, typeOf = (v) => {
   if (v === null) {
     return "null";
@@ -29226,14 +29225,14 @@ var MAX_DEPTH = 8, typeOf = (v) => {
   return into;
 };
 
-// ../../schemas/claude-code-transcript.json
+// schemas/claude-code-transcript.json
 var claude_code_transcript_default;
 var init_claude_code_transcript = __esm(() => {
   claude_code_transcript_default = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
     $id: "https://clawdipedia.cc/schemas/claude-code-transcript.json",
-    title: "Claude Code transcript JSONL entry (Claude Code 2.1.328)",
-    $comment: `For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.328 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to "transcript"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:"<entry type>" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.`,
+    title: "Claude Code transcript JSONL entry (Claude Code 2.1.329)",
+    $comment: `For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.329 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to "transcript"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:"<entry type>" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.`,
     type: "object",
     oneOf: [
       {
@@ -30337,6 +30336,9 @@ var init_claude_code_transcript = __esm(() => {
           isUnmetered: {
             type: "boolean"
           },
+          closesQuietTurn: {
+            type: "boolean"
+          },
           modWroteCall: {
             type: "boolean"
           },
@@ -30373,25 +30375,6 @@ var init_claude_code_transcript = __esm(() => {
           },
           attributionMcpTool: {
             type: "string"
-          },
-          cutInUnfinishedBlock: {
-            const: true
-          },
-          toolCallCutAtOutputLimit: {
-            const: true
-          },
-          healsDistinctCarrier: {
-            type: "boolean",
-            enum: [true]
-          },
-          refusedToolUseIds: {
-            type: "array",
-            items: {
-              type: "string"
-            }
-          },
-          isAbortedMidStream: {
-            type: "boolean"
           },
           batchToolUses: {
             type: "array",
@@ -30486,9 +30469,15 @@ var init_claude_code_transcript = __esm(() => {
           thinkingDisplay: {
             type: "string"
           },
+          isAbortedMidStream: {
+            type: "boolean"
+          },
           toolInputStreamMs: {
             type: "number",
             "x-observed": true
+          },
+          staysIfReplyIsCut: {
+            type: "boolean"
           },
           resumedFromIncompleteThinking: {
             type: "boolean"
@@ -30565,9 +30554,68 @@ var init_claude_code_transcript = __esm(() => {
           },
           slug: {
             type: "string"
+          },
+          healsDistinctCarrier: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          refusedToolUseIds: {
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment.",
+            type: "array",
+            items: {
+              type: "string"
+            }
+          },
+          scriptErrorCopy: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          failedResponseHadNoToolCall: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          cutInUnfinishedBlock: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          oauthRefreshDiskFull: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          refusedMessageId: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          refusingModel: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          streamCutCause: {
+            type: "string",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          streamCutError: {
+            type: "object",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          streamWatchdogGaveUp: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          summaryMessages: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          retractedMessageUuids: {
+            type: "array",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          toolCallCutAtOutputLimit: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
           }
         },
-        $comment: "Registry policy: transcript. Code sites used: 10."
+        $comment: "Registry policy: transcript. Code sites used: 9."
       },
       "atis-latch": {
         type: "object",
@@ -30869,6 +30917,34 @@ var init_claude_code_transcript = __esm(() => {
           },
           slug: {
             type: "string"
+          },
+          tools: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          system: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          messages: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          fastModeSent: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          durationMs: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          summaryMessages: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          virtualInResumeRun: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
           }
         },
         $comment: "Registry policy: transcript. Code sites used: 9."
@@ -31085,12 +31161,20 @@ var init_claude_code_transcript = __esm(() => {
           sessionId: {
             type: "string"
           },
+          codes: {
+            type: "array",
+            items: {
+              type: "integer",
+              minimum: 1,
+              maximum: 255
+            }
+          },
           agentId: {
-            type: "string",
-            minLength: 1
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment.",
+            type: "string"
           }
         },
-        $comment: "Registry policy: accumulate. Code sites used: 7."
+        $comment: "Registry policy: accumulate. Code sites used: 2."
       },
       "data-flow-records": {
         type: "object",
@@ -32142,6 +32226,74 @@ var init_claude_code_transcript = __esm(() => {
               required: ["key", "path", "content"]
             }
           },
+          error: {
+            type: "object",
+            properties: {
+              message: {
+                type: "string"
+              },
+              status: {
+                type: "number"
+              },
+              requestId: {
+                type: "string"
+              },
+              formatted: {
+                type: "string"
+              },
+              connection: {
+                properties: {
+                  code: {
+                    type: "string"
+                  },
+                  message: {
+                    type: "string"
+                  },
+                  isSSLError: {
+                    type: "boolean"
+                  }
+                }
+              },
+              isNetworkDown: {
+                type: "boolean"
+              },
+              rateLimits: {
+                properties: {
+                  rateLimitType: {
+                    type: "string"
+                  },
+                  resetsAt: {
+                    type: "integer"
+                  }
+                }
+              },
+              noResponse: {
+                properties: {
+                  waitedMs: {
+                    type: "number"
+                  },
+                  retryWaitMs: {
+                    type: "number"
+                  }
+                }
+              },
+              isCloudCredentialError: {
+                type: "boolean"
+              }
+            }
+          },
+          retryInMs: {
+            type: "number"
+          },
+          retryAttempt: {
+            type: "number"
+          },
+          maxRetries: {
+            type: "number"
+          },
+          source: {
+            type: "string"
+          },
           direction: {
             enum: ["retry", "revert", "sticky"]
           },
@@ -32583,74 +32735,6 @@ var init_claude_code_transcript = __esm(() => {
               }
             ]
           },
-          error: {
-            type: "object",
-            properties: {
-              message: {
-                type: "string"
-              },
-              status: {
-                type: "number"
-              },
-              requestId: {
-                type: "string"
-              },
-              formatted: {
-                type: "string"
-              },
-              connection: {
-                properties: {
-                  code: {
-                    type: "string"
-                  },
-                  message: {
-                    type: "string"
-                  },
-                  isSSLError: {
-                    type: "boolean"
-                  }
-                }
-              },
-              isNetworkDown: {
-                type: "boolean"
-              },
-              rateLimits: {
-                properties: {
-                  rateLimitType: {
-                    type: "string"
-                  },
-                  resetsAt: {
-                    type: "integer"
-                  }
-                }
-              },
-              noResponse: {
-                properties: {
-                  waitedMs: {
-                    type: "number"
-                  },
-                  retryWaitMs: {
-                    type: "number"
-                  }
-                }
-              },
-              isCloudCredentialError: {
-                type: "boolean"
-              }
-            }
-          },
-          retryInMs: {
-            type: "number"
-          },
-          retryAttempt: {
-            type: "number"
-          },
-          maxRetries: {
-            type: "number"
-          },
-          source: {
-            type: "string"
-          },
           message: {
             type: "string"
           },
@@ -32691,14 +32775,14 @@ var init_claude_code_transcript = __esm(() => {
           launchedAgentId: {
             type: "string"
           },
+          source_uuid: {
+            type: "string"
+          },
           fromRemoteErrorResult: {
             type: "boolean"
           },
           preventContinuation: {
             type: "boolean"
-          },
-          source_uuid: {
-            type: "string"
           },
           parentUuid: {
             "x-observed": true,
@@ -32759,6 +32843,46 @@ var init_claude_code_transcript = __esm(() => {
           },
           slug: {
             type: "string"
+          },
+          connectorFileLines: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          persist: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          teamCount: {
+            type: "number",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          verb: {
+            type: "string",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          promptSubmitEnding: {
+            type: "object",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          modelRestriction: {
+            type: "object",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          tag: {
+            type: "string",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          detail: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          aboutLine: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          virtualInResumeRun: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
           }
         },
         $comment: "Registry policy: transcript. Code sites used: 42."
@@ -33713,6 +33837,114 @@ var init_claude_code_transcript = __esm(() => {
             type: ["object", "string"],
             $comment: "Added after the line is built, by a copy of the line or a spread into one.",
             "x-observed": true
+          },
+          userContextReminder: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          verifiedSlackHumanTurn: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          dispatchEcho: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          notificationsRead: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          hiddenToolUseIds: {
+            type: "array",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          detachedToolUseIds: {
+            type: "array",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          projectsUserTurn: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          emailSenderTurn: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          answeredPost: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          interruptedBySendNow: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          appendToToolResult: {
+            type: "string",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          durationMs: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          retractedMessageUuids: {
+            type: "array",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          refusedUserMessageUuid: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          length: {
+            type: "number",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          retractedWireUuids: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          sharedHeadBlocks: {
+            type: "number",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          queueSkipSlashCommands: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          remoteSourced: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          persist: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          planContent: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          queueSkipAttachments: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          remoteToolResult: {
+            type: "object",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          withheldScriptToolUseId: {
+            "x-unverified": true,
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          afterNotePass: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          retiredByStop: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
+          },
+          retiredByNoPersonsInput: {
+            type: "boolean",
+            $comment: "Added after a constructor builds the line, by a spread literal or a member assignment."
           }
         },
         $comment: "Registry policy: transcript. Code sites used: 5."
@@ -33776,7 +34008,7 @@ var init_claude_code_transcript = __esm(() => {
   };
 });
 
-// src/sessions.ts
+// inspect/mcp/src/sessions.ts
 import { readdir as readdir4, stat as stat2 } from "fs/promises";
 import { homedir as homedir3 } from "os";
 import { basename as basename3, dirname, join as join5 } from "path";
@@ -33927,7 +34159,7 @@ var init_sessions = __esm(() => {
   SCHEMA_VERSION = /\d+\.\d+\.\d+/u.exec(claude_code_transcript_default.title)?.[0];
 });
 
-// src/mcp/sessions.ts
+// inspect/mcp/src/mcp/sessions.ts
 var searchFiles = async (files, re, limit, hits = [], at = 0) => {
   const f = files[at];
   if (f === undefined || hits.length >= limit) {
@@ -34068,7 +34300,7 @@ ${shown.map((f) => `- line ${f.line} [${String(f.type)}]: ${f.problems.slice(0, 
   });
 });
 
-// src/diff/render.ts
+// inspect/mcp/src/diff/render.ts
 var norm = (t) => t.replaceAll(/\$[0-9a-f]{6}(?:_\d+)?/gu, "$").replaceAll(/chunk[-@][0-9a-z]{8}\.js/gu, "chunk@").replaceAll(/\b(VERSION|BUILD_TIME|GIT_SHA):"[^"]*"/gu, '$1:""').replaceAll("...", "\u2026").replaceAll(/(?<![.\w$])([a-z])\d+\b/gu, "$1"), lines = (t) => t.replaceAll(/([;{}])/gu, `$1
 `).split(`
 `).map((l) => l.trim()).filter((l) => l !== ""), LINE_CHARS = 200, cut = (l) => l.length > LINE_CHARS ? `${l.slice(0, LINE_CHARS)}\u2026` : l, MAX_CELLS = 4000000, at = (a, k) => a[k] ?? 0, str = (a, k) => a[k] ?? "", lcsTable = (nx, ny) => {
@@ -34127,7 +34359,7 @@ var norm = (t) => t.replaceAll(/\$[0-9a-f]{6}(?:_\d+)?/gu, "$").replaceAll(/chun
   return out.length > cap ? [...out.slice(0, cap), `\u2026 ${out.length - cap} more lines`] : out;
 }, filterChanges = (d, name) => d.changes.filter((c) => [c.from, c.to].some((u) => u !== undefined && (u.t.includes(name) || u.f.some((x) => x.includes(name)))) || [...c.calls, ...c.within].some((x) => x.includes(name)));
 
-// src/unitnames.ts
+// inspect/mcp/src/unitnames.ts
 var encloses = (top, u) => top !== undefined && top.m === u.m && top.s <= u.s && u.e <= top.e, parentsOf = (us) => {
   const p = new Int32Array(us.length).fill(-1);
   const stack = [];
@@ -34215,7 +34447,7 @@ var init_unitnames = __esm(() => {
   NAME = /\$[0-9a-f]{6}(?:_\d+)?/gu;
 });
 
-// src/sides.ts
+// inspect/mcp/src/sides.ts
 var MIN_OVERLAP = 0.6, COMMON = 50, glue, side = (ix) => {
   const us = ix.units.filter((u) => !glue.test(u.k));
   return {
@@ -34343,7 +34575,7 @@ var init_sides = __esm(() => {
   glue = /^(Import|Export(Named|All))Declaration$/u;
 });
 
-// src/diff.ts
+// inspect/mcp/src/diff.ts
 var SMALL = 3, callsOf2 = (s, u) => {
   const out = new Set;
   for (const [h] of u.t.matchAll(NAME)) {
@@ -34424,7 +34656,7 @@ var init_diff = __esm(() => {
   init_unitnames();
 });
 
-// src/find.ts
+// inspect/mcp/src/find.ts
 var findUnits = (ix, query, limit = 10) => {
   const words = [
     ...new Set(query.toLowerCase().split(/\s+/u).filter((w) => w.length >= 2))
@@ -34454,7 +34686,7 @@ var findUnits = (ix, query, limit = 10) => {
   return ix.units.map(score).filter((x) => x.n > 0).toSorted((a, b) => b.n - a.n || a.u.t.length - b.u.t.length).slice(0, limit);
 };
 
-// src/readable.ts
+// inspect/mcp/src/readable.ts
 import { mkdir as mkdir3, mkdtemp as mkdtemp3, rename as rename3, rm as rm3 } from "fs/promises";
 import { tmpdir as tmpdir2 } from "os";
 import { basename as basename4, join as join6 } from "path";
@@ -34505,7 +34737,83 @@ var init_readable = __esm(() => {
   init_prepare();
 });
 
-// src/relocate.ts
+// inspect/mcp/src/citation-terms.ts
+var codeLike = (piece) => /[^a-z]/u.test(piece) || piece.length >= 8, lineTerms = (line) => {
+  const spans = [...line.matchAll(/`([^`]+)`/gu)].map((m) => m[1] ?? "");
+  const quotes = [...line.matchAll(/"([^"]{5,})"/gu)].map((m) => m[1] ?? "");
+  const terms = new Set;
+  for (const t of [...spans, ...quotes]) {
+    if (/^chunk-[\da-z]+\.js/u.test(t)) {
+      continue;
+    }
+    for (const piece of [t.trim(), ...t.split(/[\s(),=]+/u)]) {
+      if (piece.length >= 3 && (piece === t.trim() || codeLike(piece))) {
+        terms.add(piece);
+      }
+    }
+  }
+  return [...terms];
+};
+var init_citation_terms = __esm(async () => {
+  if (false) {}
+});
+
+// inspect/mcp/src/clean-lines.ts
+var MIN_WINDOW = 40, HASH_NAME, cleanLines, linesOf = (s) => {
+  if (s.clean === undefined) {
+    return;
+  }
+  const lines = cleanLines.get(s) ?? s.clean.split(`
+`).map((l) => l.trim().replaceAll(HASH_NAME, "$"));
+  cleanLines.set(s, lines);
+  return lines;
+}, sameLine = (a, b, n) => {
+  for (const radius of [4, 2, 1]) {
+    const before = Math.min(radius, n - 1);
+    const want = a.slice(n - 1 - before, n + radius);
+    if (want.join("").length >= MIN_WINDOW) {
+      for (let k = 0;k < Math.max(a.length, b.length); k += 1) {
+        const to = [n - k, n + k].find((line) => {
+          const at = line - 1 - before;
+          return at >= 0 && want.every((l, i) => b[at + i] === l);
+        });
+        if (to !== undefined) {
+          return to;
+        }
+      }
+    }
+  }
+  return;
+};
+var init_clean_lines = __esm(() => {
+  HASH_NAME = /\$[\da-f]{6}\b|chunk@[\da-f]{8}\.js/gu;
+  cleanLines = new WeakMap;
+});
+
+// inspect/mcp/src/module-map.ts
+var LITERAL, moduleMapper = (oldByName, newSources) => {
+  const literals = newSources.map((source) => ({
+    source,
+    literals: new Set(source.text.match(LITERAL))
+  }));
+  const mapped = new Map;
+  return (chunk) => {
+    if (!mapped.has(chunk)) {
+      const old = new Set(oldByName.get(chunk)?.text.match(LITERAL));
+      const [best] = literals.map((n) => ({
+        source: n.source,
+        shared: [...old].filter((l) => n.literals.has(l)).length
+      })).toSorted((a, b) => b.shared - a.shared);
+      mapped.set(chunk, best && best.shared > 0 ? best.source : undefined);
+    }
+    return mapped.get(chunk);
+  };
+};
+var init_module_map = __esm(() => {
+  LITERAL = /"[^"\\\n]{20,}"/gu;
+});
+
+// inspect/mcp/src/relocate.ts
 import { basename as basename5 } from "path";
 var WINDOW2 = 200, MAX_HITS = 300, MAX_ANCHORS = 6, WORD, SAME = 50, NAME2 = 20, shape = (s) => s.replaceAll(/[A-Za-z_$][\w$]{0,2}(?![\w$])/gu, "_"), blank = (s) => s.replaceAll(/chunk-[\da-z]+\.js/gu, (name) => "_".repeat(name.length)), frame = (text, at) => {
   const lo = Math.max(0, at - 2 * SAME - NAME2);
@@ -34558,7 +34866,71 @@ var init_relocate = __esm(() => {
   WORD = /[A-Za-z_$][\w$]{3,}/gu;
 });
 
-// src/citations.ts
+// inspect/mcp/src/term-move.ts
+var NEAR_LINES = 10, TERM_RADIUS = 3, TERM_WINDOW = 600, CONTEXT = 200, WORDS, MIN_TERM = 5, MIN_SCORE = 0.4, MAX_PLACES = 20, specificFirst = (terms) => terms.filter((t) => t.length >= MIN_TERM).toSorted((a, b) => b.length - a.length), bestCandidate = (found, n) => found.filter((c) => c.score >= MIN_SCORE).toSorted((a, b) => b.score - a.score || Math.abs(a.to - n) - Math.abs(b.to - n))[0], termLine = (a, b, n, terms) => {
+  for (const t of specificFirst(terms)) {
+    const found = [];
+    const lo = Math.max(0, n - 1 - NEAR_LINES);
+    const hits = a.slice(lo, n + NEAR_LINES).flatMap((l, k) => l.includes(t) ? [lo + k] : []).toSorted((x, y) => Math.abs(x - (n - 1)) - Math.abs(y - (n - 1)));
+    const [i] = hits;
+    if (i === undefined) {
+      continue;
+    }
+    const places = b.flatMap((l, j) => l.includes(t) ? [j] : []);
+    for (const j of places.length > MAX_PLACES ? [] : places) {
+      let same = 0;
+      for (let k = -TERM_RADIUS;k <= TERM_RADIUS; k += 1) {
+        same += a[i + k] !== undefined && a[i + k] === b[j + k] ? 1 : 0;
+      }
+      const to = j + 1 + (n - 1 - i);
+      if (to >= 1 && to <= b.length) {
+        found.push({ score: same / (2 * TERM_RADIUS + 1), to });
+      }
+    }
+    const best = bestCandidate(found, n);
+    if (best) {
+      return best.to;
+    }
+  }
+  return;
+}, occurrences2 = (text, needle) => {
+  const out = [];
+  for (let i = text.indexOf(needle);i !== -1 && out.length <= MAX_PLACES; i = text.indexOf(needle, i + 1)) {
+    out.push(i);
+  }
+  return out;
+}, wordSet = (s) => new Set(s.match(WORDS)), termOffset = (a, b, n, terms) => {
+  for (const t of specificFirst(terms)) {
+    const found = [];
+    const hit = a.indexOf(t, Math.max(0, n - TERM_WINDOW));
+    if (hit === -1 || hit + t.length > n + TERM_WINDOW) {
+      continue;
+    }
+    const want = wordSet(a.slice(Math.max(0, hit - CONTEXT), hit + t.length + CONTEXT));
+    const places = occurrences2(b, t);
+    for (const at of places.length > MAX_PLACES ? [] : places) {
+      const got = wordSet(b.slice(Math.max(0, at - CONTEXT), at + t.length + CONTEXT));
+      const shared = [...want].filter((w) => got.has(w)).length;
+      const to = at + (n - hit);
+      if (to >= 0 && to <= b.length) {
+        found.push({
+          score: shared / Math.max(1, want.size, got.size),
+          to
+        });
+      }
+    }
+    const best = bestCandidate(found, n);
+    if (best) {
+      return best.to;
+    }
+  }
+  return;
+};
+var init_term_move = __esm(() => {
+  WORDS = /[A-Za-z_$][\w$]{3,}/gu;
+});
+
+// inspect/mcp/src/citations.ts
 import { basename as basename6 } from "path";
 var CITATION, findCitations = (file, text) => text.split(`
 `).flatMap((lineText, i) => [...lineText.matchAll(CITATION)].map((m) => ({
@@ -34569,49 +34941,7 @@ var CITATION, findCitations = (file, text) => text.split(`
 }))), staleCitations = (files, moduleNames) => {
   const known = new Set([...moduleNames].map((n) => basename6(n)));
   return Object.entries(files).flatMap(([file, text]) => findCitations(file, text)).filter((c) => !known.has(c.chunk));
-}, FOLLOW_ON, LITERAL, moduleMapper = (oldByName, newSources) => {
-  const literals = newSources.map((source) => ({
-    source,
-    literals: new Set(source.text.match(LITERAL))
-  }));
-  const mapped = new Map;
-  return (chunk) => {
-    if (!mapped.has(chunk)) {
-      const old = new Set(oldByName.get(chunk)?.text.match(LITERAL));
-      const [best] = literals.map((n) => ({
-        source: n.source,
-        shared: [...old].filter((l) => n.literals.has(l)).length
-      })).toSorted((a, b) => b.shared - a.shared);
-      mapped.set(chunk, best && best.shared > 0 ? best.source : undefined);
-    }
-    return mapped.get(chunk);
-  };
-}, NEAR_LINES = 10, MIN_WINDOW = 40, HASH_NAME, cleanLines, linesOf = (s) => {
-  if (s.clean === undefined) {
-    return;
-  }
-  const lines = cleanLines.get(s) ?? s.clean.split(`
-`).map((l) => l.trim().replaceAll(HASH_NAME, "$"));
-  cleanLines.set(s, lines);
-  return lines;
-}, sameLine = (a, b, n) => {
-  for (const radius of [4, 2, 1]) {
-    const before = Math.min(radius, n - 1);
-    const want = a.slice(n - 1 - before, n + radius);
-    if (want.join("").length >= MIN_WINDOW) {
-      for (let k = 0;k < Math.max(a.length, b.length); k += 1) {
-        const to = [n - k, n + k].find((line) => {
-          const at = line - 1 - before;
-          return at >= 0 && want.every((l, i) => b[at + i] === l);
-        });
-        if (to !== undefined) {
-          return to;
-        }
-      }
-    }
-  }
-  return;
-}, isLine = (old, lines, n, terms) => lines !== undefined && n <= lines.length && (!termNear(old.text, n, terms) || terms.some((t) => lines.slice(Math.max(0, n - 1 - NEAR_LINES), n + NEAR_LINES).join(`
+}, FOLLOW_ON, isLine = (old, lines, n, terms) => lines !== undefined && n <= lines.length && (!termNear(old.text, n, terms) || terms.some((t) => lines.slice(Math.max(0, n - 1 - NEAR_LINES), n + NEAR_LINES).join(`
 `).includes(t))), sameCode = ({ old, target }, form, n, terms) => {
   const a = linesOf(old);
   const b = linesOf(target);
@@ -34623,7 +34953,30 @@ var CITATION, findCitations = (file, text) => text.split(`
     return r.offset;
   }
   return n < old.text.length && sameFrame(old.text, n, target.text, n) ? n : undefined;
-}, ordered = (a, b) => a === undefined || b === undefined || b === "" || a <= b, moveChunk = ({ oldByName, newNames, mapModule, moves }, { file, line, terms }, found, chunk, [sep, offset, offsetEnd, lead, first, end]) => {
+}, termCode = ({ old, target }, form, n, terms) => {
+  if (terms.length === 0) {
+    return;
+  }
+  const a = linesOf(old);
+  const b = linesOf(target);
+  if (form === "lines" || form === ":" && isLine(old, a, n, terms)) {
+    return a && b && n >= 1 && n <= a.length ? termLine(a, b, n, terms) : undefined;
+  }
+  return termOffset(old.text, target.text, n, terms);
+}, ordered = (a, b) => a === undefined || b === undefined || b === "" || a <= b, howMoved = (moved, viaTerm) => {
+  if (!moved) {
+    return "module";
+  }
+  return viaTerm ? "term" : "same";
+}, place = (pair, form, n, { terms, spans }) => {
+  const same = sameCode(pair, form, n, terms);
+  if (same !== undefined) {
+    return { at: same };
+  }
+  const at = termCode(pair, form, n, spans);
+  return at === undefined ? {} : { at, term: true };
+}, moveChunk = ({ oldByName, newNames, mapModule, moves }, claim, found, chunk, [sep, offset, offsetEnd, lead, first, end]) => {
+  const { file, line } = claim;
   const old = newNames.has(chunk) ? undefined : oldByName.get(chunk);
   if (!old) {
     return { text: found };
@@ -34634,7 +34987,12 @@ var CITATION, findCitations = (file, text) => text.split(`
     return { text: found };
   }
   const pair = { old, target };
-  const sameAt = (n, form = ":") => n === undefined ? undefined : sameCode(pair, form, Number(n), terms);
+  let viaTerm = false;
+  const sameAt = (n, form = ":") => {
+    const placed = n === undefined ? {} : place(pair, form, Number(n), claim);
+    viaTerm ||= placed.term === true;
+    return placed.at;
+  };
   const name = basename6(target.name);
   const moved = sameAt(offset, sep);
   const movedEnd = offsetEnd === undefined ? "" : sameAt(offsetEnd, sep);
@@ -34646,20 +35004,21 @@ var CITATION, findCitations = (file, text) => text.split(`
     line,
     from: found,
     to: text,
-    how: numbers === false ? "module" : "same"
+    how: howMoved(numbers !== false, viaTerm)
   });
   return { text, pair };
 }, moveLine = (ctx, file, line, lineText) => {
   const terms = claimTerms(lineText);
+  const spans = lineTerms(lineText);
   let last;
-  const sameAt = (n) => last && n !== undefined ? sameCode(last, ":", Number(n), terms) : undefined;
+  const sameAt = (n) => last && n !== undefined ? sameCode(last, ":", Number(n), terms) ?? termCode(last, ":", Number(n), spans) : undefined;
   return lineText.replaceAll(FOLLOW_ON, (found, ...groups) => {
     const [chunk, sep, offset, offsetEnd, lead, first, end, from, to] = groups;
     if (chunk === undefined) {
       return `:${sameAt(from) ?? from}${to === undefined ? "" : `-${sameAt(to) ?? to}`}`;
     }
     const numbers = [sep, offset, offsetEnd, lead, first, end];
-    const moved = moveChunk(ctx, { file, line, terms }, found, chunk, numbers);
+    const moved = moveChunk(ctx, { file, line, terms, spans }, found, chunk, numbers);
     last = moved.pair;
     return moved.text;
   });
@@ -34679,16 +35038,17 @@ var CITATION, findCitations = (file, text) => text.split(`
   ]));
   return { moves: ctx.moves, files: out };
 };
-var init_citations = __esm(() => {
+var init_citations = __esm(async () => {
+  init_clean_lines();
+  init_module_map();
   init_relocate();
+  init_term_move();
+  await init_citation_terms();
   CITATION = /(chunk-[\da-z]+\.js)(?:[:@]\d+|`? lines \d+ to \d+)?/gu;
   FOLLOW_ON = /(chunk-[\da-z]+\.js)(?:([:@])(\d+)(?:-(\d+))?|(`? lines )(\d+) to (\d+))?|(?<=`):(\d+)(?:-(\d+))?(?=`)/gu;
-  LITERAL = /"[^"\\\n]{20,}"/gu;
-  HASH_NAME = /\$[\da-f]{6}\b|chunk@[\da-f]{8}\.js/gu;
-  cleanLines = new WeakMap;
 });
 
-// src/sources.ts
+// inspect/mcp/src/sources.ts
 import { basename as basename7, join as join7 } from "path";
 var sources2 = async (binary) => {
   const [p, { dir }] = await Promise.all([program(binary), prepared(binary)]);
@@ -34706,7 +35066,7 @@ var init_sources = __esm(() => {
   init_prepare();
 });
 
-// src/mcp/code-citations.ts
+// inspect/mcp/src/mcp/code-citations.ts
 import { basename as basename8, join as join8 } from "path";
 var citations = async ({ dir, from, version }) => {
   const root = need(dir, "dir");
@@ -34746,15 +35106,15 @@ ${stale.map((c) => `- ${c.file}:${c.line}: ${c.citation}`).join(`
 ${found.map((r) => `- ${r.module}@${r.offset}  score ${r.score.toFixed(2)}${r.same ? ", same code" : ""}  anchor ${r.anchor}`).join(`
 `)}` : `${name}@${offset}: no anchor from the query stands near the offset, or ${target.path} lacks it`, { found });
 };
-var init_code_citations = __esm(() => {
+var init_code_citations = __esm(async () => {
   init_binary();
-  init_citations();
   init_relocate();
   init_sources();
   init_app();
+  await init_citations();
 });
 
-// src/stub.ts
+// inspect/mcp/src/stub.ts
 var FAKE_KEY = "sk-ant-fake-probe", sse = (ev, d) => `event: ${ev}
 data: ${JSON.stringify(d)}
 
@@ -34866,7 +35226,7 @@ var init_stub = __esm(() => {
   };
 });
 
-// src/requests.ts
+// inspect/mcp/src/requests.ts
 import { join as join9 } from "path";
 var filesOf = async (dir) => {
   const paths = await Array.fromAsync(new Bun.Glob("**/*.{json,jsonl,log}").scan({ cwd: dir, dot: true }));
@@ -34929,7 +35289,7 @@ var init_requests = __esm(() => {
   init_stub();
 });
 
-// src/pki.ts
+// inspect/mcp/src/pki.ts
 import { rm as rm4 } from "fs/promises";
 import { join as join10 } from "path";
 var SSL_CANDIDATES, CA_CNF = `[req]
@@ -35032,7 +35392,7 @@ var init_pki = __esm(() => {
   EC = ["-newkey", "ec", "-pkeyopt", "ec_paramgen_curve:prime256v1"];
 });
 
-// src/apihost.ts
+// inspect/mcp/src/apihost.ts
 import http from "http";
 import net from "net";
 var API_HOST = "api.anthropic.com", connectTo = (tlsPort) => (req, sock, head) => {
@@ -35092,7 +35452,7 @@ var init_apihost = __esm(() => {
   init_pki();
 });
 
-// src/child.ts
+// inspect/mcp/src/child.ts
 var quiet = async () => {
   await Bun.sleep(1000);
   return "";
@@ -35144,7 +35504,7 @@ var quiet = async () => {
 };
 var init_child = () => {};
 
-// src/sandbox.ts
+// inspect/mcp/src/sandbox.ts
 import { chmod, mkdir as mkdir4, mkdtemp as mkdtemp4, realpath as realpath2 } from "fs/promises";
 import { tmpdir as tmpdir3 } from "os";
 import { dirname as dirname2, join as join11 } from "path";
@@ -35224,7 +35584,7 @@ var init_sandbox = __esm(() => {
   UNSAFE = /KEY|TOKEN|SECRET|PASSWORD|CREDENTIAL|SESSION|PROXY|BASE_URL|ENDPOINT|HEADERS|^(NODE|BUN)_OPTIONS$|^(LD|DYLD)_/iu;
 });
 
-// src/usertext.ts
+// inspect/mcp/src/usertext.ts
 import { realpath as realpath3 } from "fs/promises";
 import { tmpdir as tmpdir4 } from "os";
 var REAL_TMP, textBlocks = (content) => content.flatMap((b) => isRecord(b) && b["type"] === "text" && typeof b["text"] === "string" ? [b["text"]] : []), textsOf = (m) => {
@@ -35258,7 +35618,7 @@ var init_usertext = __esm(async () => {
   REAL_TMP = await realpath3(tmpdir4());
 });
 
-// src/run.ts
+// inspect/mcp/src/run.ts
 import { rm as rm5 } from "fs/promises";
 import { isAbsolute, normalize } from "path";
 var runPrompt = (bin, prompt, model = "claude-opus-5-5", timeoutMs = 60000, env = {}) => runArgs(bin, [
@@ -35348,7 +35708,7 @@ var init_run = __esm(async () => {
   await init_usertext();
 });
 
-// src/mcp/code-cli.ts
+// inspect/mcp/src/mcp/code-cli.ts
 var STREAM_FLAGS, STDOUT_CHARS = 4000, STDERR_CHARS = 2000, SHOW_CHARS = 8000, PAGE_CHARS = 4000, OUTCOME_CHARS = 600, installed = async (version) => {
   const all = await listInstalls();
   const bin = has(version) ? all.find((i) => i.version === version) : all.find((i) => i.current) ?? all[0];
@@ -35537,7 +35897,7 @@ var init_code_cli = __esm(async () => {
   ];
 });
 
-// src/mcp/code-schema.ts
+// inspect/mcp/src/mcp/code-schema.ts
 var CODE_DESCRIPTION = `Read the code inside a Claude Code binary: list installs or modules, search literal text, find code by plain words, read a module slice, prepare a cleaned index for release diffs, run a prompt in an installed version against a local fake API to see the text it sends, or run it with other args (cli), list the chunk citations in the Markdown files of a folder that name no module of the build (citations), find in the build \`version\` the code that sits at \`offset\` of \`module\` in the build \`from\` (relocate; \`query\` is the sentence that names the code), such as a subcommand; check with \`npm\` whether a text (\`query\`, with \${\u2026} holes) is in the published source of the npm package in \`name\`; with \`query\`, cli names each request, stream, and transcript file that holds that text; cli also lists the \`anthropic-beta\` names of each request that sent the header.`, CODE_SHAPE;
 var init_code_schema = __esm(() => {
   init_app();
@@ -35573,7 +35933,7 @@ var init_code_schema = __esm(() => {
   };
 });
 
-// src/mcp/code.ts
+// inspect/mcp/src/mcp/code.ts
 var npmVerdict = (r) => {
   if (has(r.file)) {
     return `text found in ${r.file}`;
@@ -35587,9 +35947,11 @@ var init_code = __esm(async () => {
   init_prepare();
   init_readable();
   init_app();
-  init_code_citations();
   init_code_schema();
-  await init_code_cli();
+  await __promiseAll([
+    init_code_citations(),
+    init_code_cli()
+  ]);
   group("code", CODE_DESCRIPTION, "action", {
     installs: async () => {
       const installs = await listInstalls();
@@ -35713,7 +36075,7 @@ Not JavaScript: ${skipped.join(", ")}` : ""}`, {
   }, CODE_SHAPE, { ...WRITES_CACHE, openWorldHint: true });
 });
 
-// src/events.ts
+// inspect/mcp/src/events.ts
 var esc2 = (id) => id.replaceAll("$", String.raw`\$`), aliasesOf = (src, chunk, exportName) => {
   const out = [];
   const re = new RegExp(`import\\{([^}]*)\\}from"/\\$bunfs/root/${esc2(chunk).replaceAll(".", String.raw`\.`)}"`, "gu");
@@ -35770,7 +36132,7 @@ var esc2 = (id) => id.replaceAll("$", String.raw`\$`), aliasesOf = (src, chunk, 
 };
 var init_events = () => {};
 
-// src/surface/common.ts
+// inspect/mcp/src/surface/common.ts
 var scan = async (bundle, needles, visit) => {
   await mapSeq(bundle.namesWith(needles), async (name) => {
     const m = await bundle.get(name);
@@ -35868,7 +36230,7 @@ var init_common = __esm(() => {
   FALSY = new Set([false, 0, "", null, undefined, 0n]);
 });
 
-// src/surface/env/shared.ts
+// inspect/mcp/src/surface/env/shared.ts
 var NAME3, UPPER, LISTED, EACH, eachName = async (m, n) => {
   const c = m.parent(n);
   if (c?.type !== "CallExpression" || c.arguments[0] !== n || c.callee.type !== "MemberExpression" || c.callee.property.type !== "Identifier" || !EACH.has(c.callee.property.name)) {
@@ -35899,7 +36261,7 @@ var init_shared = __esm(() => {
   EACH = new Set(["map", "flatMap", "forEach", "filter", "some", "every"]);
 });
 
-// src/surface/env/helpers.ts
+// inspect/mcp/src/surface/env/helpers.ts
 var resolveHelpers = async (c) => {
   const done = new Set;
   await mapSeq(c.helpers, async (h) => {
@@ -35964,7 +36326,7 @@ var init_helpers = __esm(() => {
   init_shared();
 });
 
-// src/surface/env/objects.ts
+// inspect/mcp/src/surface/env/objects.ts
 class EnvObjects {
   registries = new Set;
   factories = new Set;
@@ -36098,7 +36460,7 @@ var init_objects = __esm(() => {
   init_common();
 });
 
-// src/surface/env/reads.ts
+// inspect/mcp/src/surface/env/reads.ts
 var CHILD, nodes = (...xs) => xs.flatMap((x) => asNode(x) ?? []), member = async (c, m, n) => {
   if (n.type !== "MemberExpression" || isProcessEnv(n)) {
     return false;
@@ -36295,7 +36657,7 @@ var init_reads = __esm(() => {
   ];
 });
 
-// src/surface/env/registry.ts
+// inspect/mcp/src/surface/env/registry.ts
 var TYPES, registryType = async (m, getter) => {
   if (getter.type !== "ArrowFunctionExpression" || getter.body.type !== "Identifier") {
     return;
@@ -36375,7 +36737,7 @@ var init_registry = __esm(() => {
   ]);
 });
 
-// src/surface/env.ts
+// inspect/mcp/src/surface/env.ts
 var findPlaces = async (bundle) => {
   const out = [];
   const add = (m, n, name, extra = {}) => {
@@ -36418,7 +36780,7 @@ var init_env = __esm(() => {
   found = new WeakMap;
 });
 
-// src/surface/commander/chain.ts
+// inspect/mcp/src/surface/commander/chain.ts
 var method = (n) => n?.type === "CallExpression" && n.callee.type === "MemberExpression" && n.callee.property.type === "Identifier" ? n.callee.property.name : undefined, initOf2 = (m, n) => {
   const def = m.variable(n)?.defs[0];
   return def?.type === "Variable" ? asNode(def.node.init) : undefined;
@@ -36465,7 +36827,7 @@ var init_chain = __esm(() => {
   init_common();
 });
 
-// src/surface/help.ts
+// inspect/mcp/src/surface/help.ts
 var USAGE, ARG, OPTION_LINE, USAGE_FLAG, PARSED, textOf = (n) => n?.type === "TemplateLiteral" ? n.quasis.map((q) => q.value.cooked ?? q.value.raw).join(`\${\u2026}`) : strLit(n), partText = (m, n) => {
   const def = n.type === "Identifier" ? m.variable(n)?.defs[0] : undefined;
   const init = def?.type === "Variable" ? asNode(def.node.init) : undefined;
@@ -36606,7 +36968,7 @@ var init_help = __esm(() => {
   PARSED = /^(--[a-z][\w-]*)=?$/u;
 });
 
-// src/surface/commander.ts
+// inspect/mcp/src/surface/commander.ts
 var SPEC, chainedAfter = (m, call) => {
   const out = [];
   let cur = call;
@@ -36753,7 +37115,7 @@ var init_commander = __esm(() => {
   SPEC = /^(?:-[\w-]+, ?)?--?[a-zA-Z][\w-]*/u;
 });
 
-// src/surface/gate.ts
+// inspect/mcp/src/surface/gate.ts
 var payload = (n) => n?.type === "ObjectExpression" && n.properties.some((p) => keyOf2(p) !== "safe"), groupOf = async (m, c) => {
   const found = await functionOf(m, c);
   if (found) {
@@ -36843,7 +37205,7 @@ var init_gate = __esm(() => {
   init_common();
 });
 
-// src/surface/hook-event.ts
+// inspect/mcp/src/surface/hook-event.ts
 var PASCAL, extractHookEvents = async (bundle) => {
   let best;
   await scanOf(bundle, ['"PreToolUse"'], ["ArrayExpression"], async (m, n) => {
@@ -36871,7 +37233,7 @@ var init_hook_event = __esm(() => {
   PASCAL = /^[A-Z][A-Za-z]+$/u;
 });
 
-// src/surface/setting/item.ts
+// inspect/mcp/src/surface/setting/item.ts
 var describe3 = (m, n) => {
   const walk = async (cur) => {
     if (cur?.type !== "CallExpression" || cur.callee.type !== "MemberExpression") {
@@ -36902,7 +37264,7 @@ var init_item = __esm(() => {
   init_common();
 });
 
-// src/surface/setting/zod.ts
+// inspect/mcp/src/surface/setting/zod.ts
 var SAME_PATH, SAME_PATH_METHODS, zodType = (m, fn) => /\btype:"(\w+)"/u.exec(m.src(fn))?.[1], constOf = async (m, n, env) => {
   const v = n?.type === "Identifier" ? m.variable(n) : undefined;
   const b = v && env.get(v);
@@ -36976,7 +37338,7 @@ var init_zod2 = __esm(() => {
   ]);
 });
 
-// src/surface/setting/nested.ts
+// inspect/mcp/src/surface/setting/nested.ts
 class KeyWalk {
   out;
   gate;
@@ -37122,7 +37484,7 @@ var init_nested = __esm(() => {
   init_zod2();
 });
 
-// src/surface/setting.ts
+// inspect/mcp/src/surface/setting.ts
 var ANCHOR = "JSON Schema reference for Claude Code settings", conditional = (a) => {
   if (a?.type === "LogicalExpression" && a.operator === "&&") {
     return a.right.type === "ObjectExpression" ? { test: a.left, obj: a.right } : undefined;
@@ -37177,7 +37539,7 @@ var init_setting = __esm(() => {
   init_nested();
 });
 
-// src/surface/slash-command.ts
+// inspect/mcp/src/surface/slash-command.ts
 var TYPES2, NAME4, builders, nameSource = (p) => {
   if (p.type === "Identifier") {
     return `${p.name}.name`;
@@ -37302,7 +37664,7 @@ var init_slash_command = __esm(() => {
   builders = new WeakMap;
 });
 
-// src/toolvalue.ts
+// inspect/mcp/src/toolvalue.ts
 var initOf3 = async (m, id) => {
   const v0 = m.variable(id);
   const o = v0 && (await m.bundle?.origin(m, v0) ?? { module: m, variable: v0 });
@@ -37436,7 +37798,7 @@ var init_toolvalue = __esm(() => {
   init_common();
 });
 
-// src/tools.ts
+// inspect/mcp/src/tools.ts
 var MAX_FN = 300, clip2 = (s) => s.length > MAX_FN ? `${s.slice(0, MAX_FN)}\u2026` : s, add2 = (out, when, tool) => {
   out.push({
     tool: { ...tool, when: when.map((c) => c.text) },
@@ -37599,7 +37961,7 @@ var init_tools = __esm(() => {
   init_toolvalue();
 });
 
-// src/surface/tool.ts
+// inspect/mcp/src/surface/tool.ts
 var extractTools = async (bundle) => {
   const r = await baseTools(bundle, new Resolver);
   const items = [];
@@ -37626,7 +37988,7 @@ var init_tool = __esm(() => {
   init_common();
 });
 
-// src/surface/registry-a.ts
+// inspect/mcp/src/surface/registry-a.ts
 var KINDS_A;
 var init_registry_a = __esm(() => {
   init_commander();
@@ -37649,7 +38011,7 @@ var init_registry_a = __esm(() => {
   };
 });
 
-// src/surface/beta.ts
+// inspect/mcp/src/surface/beta.ts
 var BETA, COMPACT, VERSION, extractBetas = async (bundle) => {
   const out = [];
   await scanOf(bundle, ["-20"], ["Literal"], async (m, n) => {
@@ -37686,7 +38048,7 @@ var init_beta = __esm(() => {
   VERSION = /^(?:bedrock|vertex)-/u;
 });
 
-// src/surface/endpoint.ts
+// inspect/mcp/src/surface/endpoint.ts
 var HOST, hostOf = (s) => {
   try {
     return new URL(s).hostname;
@@ -37736,7 +38098,7 @@ var init_endpoint = __esm(() => {
   PATH = /^\/(?:api|v1|model)\/[\w./{}?=*%-]*$/u;
 });
 
-// src/surface/error.ts
+// inspect/mcp/src/surface/error.ts
 var BLANK = `\${}`, BASE, valueOf = (v) => {
   const def = v.defs[0];
   if (def?.type === "ClassName") {
@@ -37849,7 +38211,7 @@ var init_error = __esm(() => {
   cjs = new WeakMap;
 });
 
-// src/surface/file.ts
+// inspect/mcp/src/surface/file.ts
 var ANCHORS, joinParts = async (m, n) => {
   if (n.type !== "CallExpression" || n.arguments.length < 2) {
     return;
@@ -37899,7 +38261,7 @@ var init_file = __esm(() => {
   ANCHORS = ["history.jsonl", "keybindings.json"];
 });
 
-// src/surface/keybinding.ts
+// inspect/mcp/src/surface/keybinding.ts
 var extractKeybindings = async (bundle) => {
   let actions;
   let contexts;
@@ -37937,7 +38299,7 @@ var init_keybinding = __esm(() => {
   init_common();
 });
 
-// ../../plugin/mcp/src/types.ts
+// plugin/mcp/src/types.ts
 var HEAD, MODULE, code = (line, inDoc) => {
   let out = "";
   let i = 0;
@@ -38030,7 +38392,7 @@ var init_types4 = __esm(() => {
   MODULE = /^declare module '([^']+)' \{/u;
 });
 
-// src/surface/mod-api.ts
+// inspect/mcp/src/surface/mod-api.ts
 var KEY2, members2 = (lines, head, end) => {
   const out = [];
   let indent = -1;
@@ -38131,7 +38493,7 @@ var init_mod_api = __esm(() => {
   KEY2 = /^(\s*)(?:readonly )?(['"]?)([\w$.]+)\2\??\s*([:(<])/u;
 });
 
-// src/surface/model.ts
+// inspect/mcp/src/surface/model.ts
 var ID, extractModels = async (bundle) => {
   const out = [];
   let aliases;
@@ -38171,7 +38533,7 @@ var init_model = __esm(() => {
   ID = /^claude-(?:\d[\d-]*-)?(?:opus|sonnet|haiku|fable|mythos)(?:-[a-z0-9]+)*(?:@\d+)?(?:\[1m\])?$/u;
 });
 
-// src/surface/otel-event.ts
+// inspect/mcp/src/surface/otel-event.ts
 var extractOtelEvents = async (bundle) => {
   const [first] = await bundle.withText('"event.sequence"');
   const module = first?.name ?? null;
@@ -38189,7 +38551,7 @@ var init_otel_event = __esm(() => {
   init_common();
 });
 
-// src/surface/permission-rule.ts
+// inspect/mcp/src/surface/permission-rule.ts
 var DESCRIPTION = "Permission mode for controlling how tool executions are handled", extractPermissionRules = async (bundle) => {
   const out = [];
   await scanOf(bundle, [DESCRIPTION], ["CallExpression"], async (m, n) => {
@@ -38228,7 +38590,7 @@ var init_permission_rule = __esm(() => {
   init_common();
 });
 
-// src/surface/registry-b.ts
+// inspect/mcp/src/surface/registry-b.ts
 var KINDS_B;
 var init_registry_b = __esm(() => {
   init_beta();
@@ -38253,7 +38615,7 @@ var init_registry_b = __esm(() => {
   };
 });
 
-// src/surface/index.ts
+// inspect/mcp/src/surface/index.ts
 var KINDS, cache, run3 = async (f, bundle, files) => {
   const items = await f(bundle, files);
   return items;
@@ -38283,7 +38645,7 @@ var init_surface = __esm(async () => {
   if (false) {}
 });
 
-// src/mcp/surface.ts
+// inspect/mcp/src/mcp/surface.ts
 var valJson = (v) => {
   if (v.k === "obj") {
     return entriesJson(v.e);
@@ -38432,7 +38794,7 @@ ${Object.entries(r.functions).map(([n, s]) => `- ${n}: ${s}`).join(`
   });
 });
 
-// src/explain.ts
+// inspect/mcp/src/explain.ts
 var CONST, HEAD2, NOOP, GUARD, STUB, SHOW, howOf = (t) => {
   for (const re of NOOP) {
     const m = re.exec(t);
@@ -38547,7 +38909,7 @@ var init_explain = __esm(() => {
   FN_NAME = /name:(\$[0-9a-f]{6}(?:_\d+)?)/gu;
 });
 
-// src/notes.ts
+// inspect/mcp/src/notes.ts
 var STOP, readNotes = async (version, file) => {
   const cached = Bun.file(file);
   if (await cached.exists()) {
@@ -38586,7 +38948,7 @@ var STOP, readNotes = async (version, file) => {
     ...new Set(tokens.filter((w) => w.length >= 5 && !STOP.has(w)))
   ];
   return { spans, words, tokens: new Set(tokens) };
-}, WORDS = 3, stringsOf = (c, side) => [
+}, WORDS2 = 3, stringsOf = (c, side) => [
   ...c[side]?.f ?? [],
   ...c.kind === "changed" ? [] : c.calls.map((x) => x.replace(/^\S+ /u, ""))
 ].filter((x) => x.startsWith('"')), scoreChange = (k, c) => {
@@ -38611,7 +38973,7 @@ var STOP, readNotes = async (version, file) => {
       top = w;
     }
   }
-  if (top.length < WORDS) {
+  if (top.length < WORDS2) {
     top = [];
   }
   return {
@@ -38622,7 +38984,7 @@ var STOP, readNotes = async (version, file) => {
   const found = k.spans.filter((x) => item.includes(x));
   const lower = item.toLowerCase();
   const w = k.words.filter((x) => lower.includes(x));
-  const top = w.length >= WORDS ? w : [];
+  const top = w.length >= WORDS2 ? w : [];
   return { hits: [...found, ...top], n: found.length * 2 + top.length };
 }, size = (c) => (c.from?.t.length ?? 0) + (c.to?.t.length ?? 0), bestOf2 = (k, d, items) => {
   let best = { n: 0, hits: [] };
@@ -38662,7 +39024,7 @@ var init_notes = __esm(() => {
   STOP = new Set("added fixed improved changed which there their about after before being would could should these those where while other through without within instead claude still first every again showing shows error errors their".split(" "));
 });
 
-// src/mcp/release.ts
+// inspect/mcp/src/mcp/release.ts
 import { dirname as dirname3, join as join12 } from "path";
 var DIFF_LINES = 40, MAX_PAGE = 30, ORDER, unitOf = (c) => c.to ?? c.from, changeHead = (c) => {
   const u = unitOf(c);
@@ -38794,7 +39156,7 @@ ${lines.map((l) => `- [${l.status}] ${clip(l.line, 160)}${noteWhy(l)}`).join(`
   }, { ...WRITES_CACHE, openWorldHint: true });
 });
 
-// src/mcp/prompts.ts
+// inspect/mcp/src/mcp/prompts.ts
 var ask = (t) => ({
   messages: [
     { role: "user", content: { type: "text", text: t } }
@@ -38833,10 +39195,10 @@ var init_prompts = __esm(() => {
 `)));
 });
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/server/stdio.js
+// inspect/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/server/stdio.js
 import process2 from "process";
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/shared/stdio.js
+// inspect/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/shared/stdio.js
 init_types();
 var STDIO_DEFAULT_MAX_BUFFER_SIZE = 10 * 1024 * 1024;
 
@@ -38877,7 +39239,7 @@ function serializeMessage(message) {
 `;
 }
 
-// node_modules/@modelcontextprotocol/sdk/dist/esm/server/stdio.js
+// inspect/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/server/stdio.js
 class StdioServerTransport {
   constructor(_stdin = process2.stdin, _stdout = process2.stdout, options) {
     this._stdin = _stdin;
@@ -38940,7 +39302,7 @@ class StdioServerTransport {
   }
 }
 
-// src/server.ts
+// inspect/mcp/src/server.ts
 init_app();
 await Promise.resolve().then(() => (init_sessions2(), {}));
 await init_code().then(() => ({}));

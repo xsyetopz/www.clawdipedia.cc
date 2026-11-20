@@ -7,7 +7,7 @@ import {
 	MANAGED_DIR,
 	managedCheck,
 	parentEnvCheck,
-	portChecks,
+	portChecks
 } from "./check/host.ts";
 import { binaryChecks, type Check, toolChecks } from "./check/tools.ts";
 import { runSelftest } from "./selftest.ts";
@@ -28,7 +28,7 @@ const gather = async (from: string, to: string, installed: string[]) => {
 		...ports.checks,
 		managed.check,
 		...parentEnvCheck(),
-		{ id: "cache.note", level: "ok", detail: CACHE_NOTE },
+		{ id: "cache.note", level: "ok", detail: CACHE_NOTE }
 	];
 	return { checks, tools, ports, managed, sizes };
 };
@@ -40,7 +40,7 @@ export const runCheck = async (ctx: Ctx): Promise<number> => {
 	const { from, to } = ctx;
 	if (ctx.dry) {
 		console.info(
-			"plan: binary for --to, binary for --from, python3, strings, openssl, free ports, managed folder, captures sizes",
+			"plan: binary for --to, binary for --from, python3, strings, openssl, free ports, managed folder, captures sizes"
 		);
 		console.info(`plan: write captures/${to === "" ? "<to>" : to}/env.json`);
 		return 0;
@@ -60,7 +60,7 @@ export const runCheck = async (ctx: Ctx): Promise<number> => {
 			platform: platform(),
 			arch: arch(),
 			osRelease: release(),
-			bun: Bun.version,
+			bun: Bun.version
 		},
 		installedVersions: installed,
 		python: g.tools.python,
@@ -68,7 +68,7 @@ export const runCheck = async (ctx: Ctx): Promise<number> => {
 		managedFolder: { path: MANAGED_DIR, exists: g.managed.managed },
 		capturesBytes: g.sizes,
 		checks: g.checks,
-		ok: fail.length === 0,
+		ok: fail.length === 0
 	});
 	for (const c of g.checks) {
 		console.info(`${c.level.toUpperCase().padEnd(4)} ${c.id}: ${c.detail}`);

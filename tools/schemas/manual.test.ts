@@ -5,22 +5,22 @@ import {
 	applyManual,
 	minifiedNames,
 	readManual,
-	staleUnsent,
+	staleUnsent
 } from "./manual.ts";
 
 const unk = { "x-unverified": true };
 const schema = {
 	$defs: {
 		a: { properties: { id: unk, n: unk } },
-		b: { properties: { id: unk } },
-	},
+		b: { properties: { id: unk } }
+	}
 };
 const fx = (anchors: string[]) => ({
 	$comment: "",
 	version: "",
 	fields: {
-		"a.id": { schema: { type: ["string", "null"] }, anchors, note: "" },
-	},
+		"a.id": { schema: { type: ["string", "null"] }, anchors, note: "" }
+	}
 });
 
 describe("applyManual", () => {
@@ -30,15 +30,15 @@ describe("applyManual", () => {
 			schema,
 			(s) => s === "id:",
 			fx(["id:"]),
-			{},
+			{}
 		);
 		expect(out.n).toBe(1);
 		expect(out.stale).toEqual([]);
 		expect(out.schema).toEqual({
 			$defs: {
 				a: { properties: { id: { type: ["string", "null"] }, n: unk } },
-				b: { properties: { id: unk } },
-			},
+				b: { properties: { id: unk } }
+			}
 		});
 	});
 	test("leaves the field unverified and reports it when the anchor is gone", async () => {
@@ -47,7 +47,7 @@ describe("applyManual", () => {
 			schema,
 			() => false,
 			fx(["id:"]),
-			{},
+			{}
 		);
 		expect(out.n).toBe(0);
 		expect(out.stale).toEqual(["a.id: anchor not in the program: id:"]);
@@ -61,12 +61,12 @@ describe("applyManual", () => {
 			() => true,
 			{
 				...f,
-				fields: { ...f.fields, "a.gone": f.fields["a.id"] },
+				fields: { ...f.fields, "a.gone": f.fields["a.id"] }
 			},
-			{},
+			{}
 		);
 		expect(out.stale).toEqual([
-			"a.gone: no x-unverified field or item-less array at this path",
+			"a.gone: no x-unverified field or item-less array at this path"
 		]);
 	});
 	test("gives an item-less array its hand-read items, and leaves a typed array alone", async () => {
@@ -76,20 +76,20 @@ describe("applyManual", () => {
 				a: {
 					properties: {
 						open: { type: "array" },
-						typed: { type: "array", items: { type: "integer" } },
-					},
-				},
-			},
+						typed: { type: "array", items: { type: "integer" } }
+					}
+				}
+			}
 		};
 		const entry = {
 			schema: { type: "array", items: { type: "string" } },
 			anchors: ["id:"],
-			note: "",
+			note: ""
 		};
 		const manual = {
 			$comment: "",
 			version: "",
-			fields: { "a.open": entry, "a.typed": entry },
+			fields: { "a.open": entry, "a.typed": entry }
 		};
 
 		// Act
@@ -98,22 +98,22 @@ describe("applyManual", () => {
 		// Assert
 		expect(out.n).toBe(1);
 		expect(out.stale).toEqual([
-			"a.typed: no x-unverified field or item-less array at this path",
+			"a.typed: no x-unverified field or item-less array at this path"
 		]);
 		expect(out.schema).toEqual({
 			$defs: {
 				a: {
 					properties: {
 						open: { type: "array", items: { type: "string" } },
-						typed: { type: "array", items: { type: "integer" } },
-					},
-				},
-			},
+						typed: { type: "array", items: { type: "integer" } }
+					}
+				}
+			}
 		});
 	});
 	test("reports a type real payloads had that the entry does not allow", async () => {
 		const out = await applyManual("x.json", schema, () => true, fx(["id:"]), {
-			"a.id": { string: 5, number: 2, null: 1 },
+			"a.id": { string: 5, number: 2, null: 1 }
 		});
 		expect(out.missed).toEqual(["a.id: real payloads also had number"]);
 	});
@@ -121,7 +121,7 @@ describe("applyManual", () => {
 
 describe("anchorIn", () => {
 	const has = anchorIn(
-		"var aPo={skill:f(()=>sPo().strict())};name:mg().optional()",
+		"var aPo={skill:f(()=>sPo().strict())};name:mg().optional()"
 	);
 	test("matches a renamed identifier at each «»", () => {
 		expect(has("«»={skill:«»(()=>«»().strict())}")).toBe(true);
@@ -136,7 +136,7 @@ describe("anchorIn", () => {
 const unsentEntry = (anchors: string[]) => ({
 	schema: { type: "string" },
 	anchors,
-	note: "",
+	note: ""
 });
 
 describe("staleUnsent", () => {
@@ -147,8 +147,8 @@ describe("staleUnsent", () => {
 			unsent: {
 				"a.gone": unsentEntry(["id:"]),
 				"b.lost": unsentEntry(["lost:"]),
-				"b.id": unsentEntry(["id:"]),
-			},
+				"b.id": unsentEntry(["id:"])
+			}
 		};
 
 		// Act
@@ -157,7 +157,7 @@ describe("staleUnsent", () => {
 		// Assert
 		expect(out).toEqual([
 			"unsent b.lost: anchor not in the program: lost:",
-			'unsent b.id: the schema has this path; move the entry to "fields"',
+			'unsent b.id: the schema has this path; move the entry to "fields"'
 		]);
 	});
 });
@@ -165,12 +165,12 @@ describe("staleUnsent", () => {
 describe("minifiedNames", () => {
 	test("reports a minified name where the anchor needs «»", () => {
 		expect(
-			minifiedNames("...n?.contextUsage!==void 0&&{contextUsage:«»}"),
+			minifiedNames("...n?.contextUsage!==void 0&&{contextUsage:«»}")
 		).toEqual(["n"]);
 		expect(minifiedNames("messageCount:n")).toEqual(["n"]);
 		expect(minifiedNames('IYe({type:"x",sessionId:W()})')).toEqual([
 			"IYe",
-			"W",
+			"W"
 		]);
 		expect(minifiedNames("!Ee.incomplete)V.push({v:1})")).toEqual(["Ee", "V"]);
 		expect(minifiedNames("let n=_il.find((s)=>s===e.type)")).toEqual([
@@ -178,7 +178,7 @@ describe("minifiedNames", () => {
 			"_il",
 			"s",
 			"s",
-			"e",
+			"e"
 		]);
 		expect(minifiedNames("function xO(«»){}")).toEqual(["xO"]);
 	});
@@ -195,7 +195,7 @@ describe("minifiedNames", () => {
 			'return typeof «»==="string"?this.name:null',
 			"var «»=/^[A-Za-z0-9_.:-]{1,256}$/,",
 			"content:\"e n h\",k:'t'",
-			"for(let «» of «»)new Set",
+			"for(let «» of «»)new Set"
 		];
 		for (const a of fine) {
 			expect(minifiedNames(a)).toEqual([]);
@@ -207,14 +207,14 @@ describe("minifiedNames", () => {
 			"claude-code-frontmatter.json",
 			"claude-code-otel.json",
 			"claude-code-status-line.json",
-			"claude-code-transcript.json",
+			"claude-code-transcript.json"
 		];
 		const fixtures = await Promise.all(files.map((f) => readManual(f)));
 		const bad = fixtures.flatMap((m, i) =>
 			[...Object.entries(m?.fields ?? {}), ...Object.entries(m?.unsent ?? {})]
 				.flatMap(([p, e]) => e.anchors.map((a) => ({ p, a })))
 				.filter(({ a }) => minifiedNames(a).length > 0)
-				.map(({ p, a }) => `${files[i]} ${p}: ${a}`),
+				.map(({ p, a }) => `${files[i]} ${p}: ${a}`)
 		);
 		expect(bad).toEqual([]);
 	});
@@ -224,11 +224,11 @@ describe("minifiedNames", () => {
 			schema,
 			() => true,
 			fx(["id:n"]),
-			{},
+			{}
 		);
 		expect(out.n).toBe(0);
 		expect(out.stale).toEqual([
-			"a.id: anchor hard-codes a minified name: n in id:n (use «» for each)",
+			"a.id: anchor hard-codes a minified name: n in id:n (use «» for each)"
 		]);
 	});
 });

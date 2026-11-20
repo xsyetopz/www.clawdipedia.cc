@@ -13,7 +13,7 @@ const entry = (base: string, route: string) => ({
 	description: "d",
 	section: "S",
 	md: `${base}${route}.md`,
-	url: `${base}${route}`,
+	url: `${base}${route}`
 });
 
 const hostileManifest = (base: string): string =>
@@ -24,14 +24,14 @@ const hostileManifest = (base: string): string =>
 		{ ...entry(base, "/evilurl"), url: "https://evil.example/x" },
 		{ route: 5 },
 		null,
-		entry(base, "/dotted.md"),
+		entry(base, "/dotted.md")
 	]);
 
 const ALLOWED = new Set([
 	"/llms-manifest.json",
 	"/zzfreshpage.md",
 	"/llms.txt",
-	"/llms-search-index.json",
+	"/llms-search-index.json"
 ]);
 
 const runBaseUrl = async (value: string) => {
@@ -40,14 +40,14 @@ const runBaseUrl = async (value: string) => {
 		[
 			"bun",
 			"-e",
-			`import { baseUrl } from ${JSON.stringify(fetcher)};console.info(baseUrl("X_BASE", "https://default.example"));`,
+			`import { baseUrl } from ${JSON.stringify(fetcher)};console.info(baseUrl("X_BASE", "https://default.example"));`
 		],
-		{ env: { ...process.env, X_BASE: value }, stdout: "pipe", stderr: "pipe" },
+		{ env: { ...process.env, X_BASE: value }, stdout: "pipe", stderr: "pipe" }
 	);
 	const [stdout, stderr] = await Promise.all([
 		new Response(proc.stdout).text(),
 		new Response(proc.stderr).text(),
-		proc.exited,
+		proc.exited
 	]);
 	return { stdout: stdout.trim(), stderr };
 };
@@ -64,11 +64,11 @@ const hostileServer = (hits: string[]) =>
 			}
 			if (pathname === "/zzfreshpage.md") {
 				return new Response(
-					"---\ntitle: F\n---\n\n# Fresh\nquokkaquokka marker\n",
+					"---\ntitle: F\n---\n\n# Fresh\nquokkaquokka marker\n"
 				);
 			}
 			return new Response("no", { status: 404 });
-		},
+		}
 	});
 
 describe("hostile site", () => {
@@ -79,7 +79,7 @@ describe("hostile site", () => {
 		const cache = await tempDir();
 		const { call } = await connect({
 			CLAWDIPEDIA_CACHE_DIR: cache,
-			CLAWDIPEDIA_BASE_URL: `http://127.0.0.1:${srv.port}`,
+			CLAWDIPEDIA_BASE_URL: `http://127.0.0.1:${srv.port}`
 		});
 		const list = await call("list_pages", {});
 		expect(list.text).toContain("zzfreshpage");
@@ -97,13 +97,13 @@ describe("hostile site", () => {
 			"site",
 			"site/llms-manifest.json",
 			"site/pages",
-			"site/pages/zzfreshpage.md",
+			"site/pages/zzfreshpage.md"
 		]);
 	});
 
 	test("a non-https remote site is ignored with a warning", async () => {
 		const bad = await Promise.all(
-			["http://evil.example", "ftp://x", "nonsense"].map((v) => runBaseUrl(v)),
+			["http://evil.example", "ftp://x", "nonsense"].map((v) => runBaseUrl(v))
 		);
 		for (const r of bad) {
 			expect(r.stdout).toBe("https://default.example");
@@ -112,12 +112,12 @@ describe("hostile site", () => {
 		}
 		const good = await Promise.all(
 			["http://127.0.0.1:9/", "https://mirror.example/"].map((v) =>
-				runBaseUrl(v),
-			),
+				runBaseUrl(v)
+			)
 		);
 		expect(good.map((r) => r.stdout)).toEqual([
 			"http://127.0.0.1:9",
-			"https://mirror.example",
+			"https://mirror.example"
 		]);
 		expect(good.map((r) => r.stderr)).toEqual(["", ""]);
 	});

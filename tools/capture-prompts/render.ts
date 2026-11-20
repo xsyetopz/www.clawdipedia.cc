@@ -21,5 +21,5 @@ await toolsPage();
 await listingPages();
 await indexPage();
 console.info(
-	`rendered ${ctx.caps.size} variants, ${ctx.dupOf.size} duplicates: ${[...ctx.dupOf].map(([a, b]) => `${a}=${b}`).join(" ")}`,
+	`rendered ${ctx.caps.size} variants, ${ctx.dupOf.size} duplicates: ${[...ctx.dupOf].map(([a, b]) => `${a}=${b}`).join(" ")}`
 );

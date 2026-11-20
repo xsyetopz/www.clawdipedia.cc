@@ -18,5 +18,5 @@ export const GROUPS: PtyGroup[] = [
 	capturesGroup,
 	perfettoGroup,
 	cli319Group,
-	...SCHEMA_GROUPS,
+	...SCHEMA_GROUPS
 ];

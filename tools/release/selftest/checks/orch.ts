@@ -16,8 +16,8 @@ const hintCheck = async ({ step, stub, root }: StubEnv) => {
 		orchestrator: {
 			secret: "[REDACTED]",
 			assignment: "sess-1",
-			hints: [{ session_uuid: "s1", attempt: 1 }],
-		},
+			hints: [{ session_uuid: "s1", attempt: 1 }]
+		}
 	});
 	const poll = async (): Promise<unknown[]> => {
 		const r = await post(`${url}${RUNNER}/spawn-hints/poll`, "{}", AUTH);
@@ -34,7 +34,7 @@ const hintCheck = async ({ step, stub, root }: StubEnv) => {
 		op1.length === 1 &&
 			asRecord(op1[0])["session_uuid"] === "s1" &&
 			op2.length === 0 &&
-			logged.every((r) => !r.bad),
+			logged.every((r) => !r.bad)
 	);
 	const workOf = async (path: string) =>
 		jsonOf(await post(`${url}${RUNNER}/${path}`, "{}", AUTH));
@@ -48,21 +48,21 @@ const hintCheck = async ({ step, stub, root }: StubEnv) => {
 			typeof reg["runner_token"] === "string" &&
 			JSON.stringify(w1["assignment_ids"]) === '["sess-1"]' &&
 			JSON.stringify(w2["assignment_ids"]) === '["sess-1"]' &&
-			token["session_token"] === "probe-session-token",
+			token["session_token"] === "probe-session-token"
 	);
 };
 
 const expOf = (jwt: unknown): number => {
 	const payload = typeof jwt === "string" ? (jwt.split(".")[1] ?? "") : "";
 	return Number(
-		asRecord(JSON.parse(Buffer.from(payload, "base64url").toString()))["exp"],
+		asRecord(JSON.parse(Buffer.from(payload, "base64url").toString()))["exp"]
 	);
 };
 
 const jwtCheck = async ({ step, stub, root }: StubEnv) => {
 	const url = await stub.register("jwt", {
 		log: join(root, "jwt.jsonl"),
-		orchestrator: { secret: "[REDACTED]", hints: [], runnerTokenTtlS: 8 },
+		orchestrator: { secret: "[REDACTED]", hints: [], runnerTokenTtlS: 8 }
 	});
 	const jwtPost = async (path: string) =>
 		jsonOf(await post(`${url}${path}`, "{}", AUTH));
@@ -73,14 +73,14 @@ const jwtCheck = async ({ step, stub, root }: StubEnv) => {
 		expOf(reg["runner_token"]) - Date.now() / 1000 <= 8 &&
 			expOf(reg["runner_token"]) > Date.now() / 1000 &&
 			typeof next["token"] === "string" &&
-			next["token"] !== reg["runner_token"],
+			next["token"] !== reg["runner_token"]
 	);
 };
 
 const remoteCheck = async ({ step, stub, root }: StubEnv) => {
 	const url = await stub.register("rr", {
 		log: join(root, "rr.jsonl"),
-		orchestrator: { secret: "[REDACTED]", hints: [], refuseRemote: true },
+		orchestrator: { secret: "[REDACTED]", hints: [], refuseRemote: true }
 	});
 	const remote = async (): Promise<number> => {
 		const r = await fetch(`${url}/v1/code/sessions/s1/remote`);
@@ -91,7 +91,7 @@ const remoteCheck = async ({ step, stub, root }: StubEnv) => {
 	const third = await remote();
 	step(
 		"stub: refuseRemote answers the first two session config fetches and refuses later ones with 400",
-		first === 200 && second === 200 && third === 400,
+		first === 200 && second === 200 && third === 400
 	);
 };
 

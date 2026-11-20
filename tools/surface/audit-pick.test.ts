@@ -14,7 +14,7 @@ const ctx = (): Ctx => ({
 	items: new Map(),
 	sweep: {},
 	endpointRows: new Map(),
-	libraries: {},
+	libraries: {}
 });
 
 const verdict = async (kind: string, name: string) => {
@@ -22,7 +22,7 @@ const verdict = async (kind: string, name: string) => {
 		kind,
 		name,
 		module: "a.js",
-		offset: SRC.indexOf(name),
+		offset: SRC.indexOf(name)
 	});
 	const { ok } = await run();
 	return { check, ok };
@@ -31,21 +31,21 @@ const verdict = async (kind: string, name: string) => {
 test("a model id passes only in a row with the retired status", async () => {
 	expect(await verdict("model", "old-model-1")).toEqual({
 		check: "model-only-in-retired-text",
-		ok: true,
+		ok: true
 	});
 	expect(await verdict("model", "new-model-2")).toEqual({
 		check: "model-only-in-retired-text",
-		ok: false,
+		ok: false
 	});
 });
 
 test("an endpoint in the options object of an HTTP call is called", async () => {
 	expect(await verdict("endpoint", "/api/called")).toEqual({
 		check: "endpoint-not-called",
-		ok: false,
+		ok: false
 	});
 	expect(await verdict("endpoint", "/api/named")).toEqual({
 		check: "endpoint-not-called",
-		ok: true,
+		ok: true
 	});
 });

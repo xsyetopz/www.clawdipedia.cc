@@ -26,25 +26,25 @@ const addHand = (f: string, fm: FrontMatter): void => {
 	const id = basename(f, ".md");
 	if (VARIANTS.some((v) => v.id === id)) {
 		throw new Error(
-			`docs/prompts/${f} is hand-written (generated: false) but its name collides with variant id "${id}".`,
+			`docs/prompts/${f} is hand-written (generated: false) but its name collides with variant id "${id}".`
 		);
 	}
 	const { group } = fm;
 	if (!isGroup(group)) {
 		throw new Error(
-			`docs/prompts/${f} is hand-written but its front matter has no valid "group" (got ${JSON.stringify(group)}).`,
+			`docs/prompts/${f} is hand-written but its front matter has no valid "group" (got ${JSON.stringify(group)}).`
 		);
 	}
 	if (dirname(f) !== group) {
 		throw new Error(
-			`docs/prompts/${f} has group "${group}" but sits in the folder "${dirname(f)}".`,
+			`docs/prompts/${f} has group "${group}" but sits in the folder "${dirname(f)}".`
 		);
 	}
 	ctx.hand.push({
 		id,
 		title: String(fm.title),
 		group,
-		row: fm.index,
+		row: fm.index
 	});
 };
 
@@ -52,10 +52,10 @@ const addHand = (f: string, fm: FrontMatter): void => {
 // index.md and the _category_.json files are not touched.
 export const loadHand = async (): Promise<void> => {
 	const files = sortStrings(await readdir(DOCS, { recursive: true })).filter(
-		(f) => f.endsWith(".md") && f !== "index.md",
+		(f) => f.endsWith(".md") && f !== "index.md"
 	);
 	const fronts = await Promise.all(
-		files.map((f) => frontMatter(join(DOCS, f))),
+		files.map((f) => frontMatter(join(DOCS, f)))
 	);
 	const removals: Promise<void>[] = [];
 	for (const [i, f] of files.entries()) {
@@ -77,7 +77,7 @@ export const handRows = (afterId?: string) =>
 				? h.row.after === undefined ||
 					h.row.after === "" ||
 					!ctx.caps.has(h.row.after)
-				: h.row.after === afterId),
+				: h.row.after === afterId)
 	);
 export const handLink = (h: HandPage, from: Place) =>
 	pageLink(from, h.id, h.title);

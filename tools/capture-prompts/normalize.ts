@@ -24,6 +24,6 @@ export const numberUuids = () => {
 				const id = `<uuid-${ids.size + 1}>`;
 				ids.set(k, id);
 				return id;
-			},
+			}
 		);
 };

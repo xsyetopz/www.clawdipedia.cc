@@ -18,10 +18,10 @@ p.addOption(new O("--shown","Shown"));
 			"--debug",
 			"--init",
 			"--issuer",
-			"--shown",
+			"--shown"
 		]);
 		expect(by.get("--debug")?.detail).toBe(
-			"-d, --debug [filter] | Enable debug",
+			"-d, --debug [filter] | Enable debug"
 		);
 		expect(by.get("--init")?.gate).toBe("hidden");
 		expect(by.get("--shown")?.gate).toBeUndefined();
@@ -72,7 +72,7 @@ function U(){let a=p.command("mcp");T(a)}
 
 	test("a non-flag first argument is dropped", async () => {
 		expect(
-			await names("flag", 'o.option("plain","x");o.option(1,"y");'),
+			await names("flag", 'o.option("plain","x");o.option(1,"y");')
 		).toEqual([]);
 	});
 });
@@ -92,7 +92,7 @@ p.command("auth").command("login");
 			"auth login",
 			"mcp",
 			"mcp add",
-			"secret",
+			"secret"
 		]);
 		expect(by.get("mcp add")?.detail).toBe("<name> [args...]");
 		expect(by.get("secret")?.gate).toBe("hidden");
@@ -101,7 +101,7 @@ p.command("auth").command("login");
 
 	test("a name that starts with a dash or is not constant is dropped", async () => {
 		expect(
-			await names("subcommand", 'p.command("-x");p.command(f());'),
+			await names("subcommand", 'p.command("-x");p.command(f());')
 		).toEqual([]);
 	});
 });
@@ -135,7 +135,7 @@ var d=\`Usage: claude \${u}\`, e="Usage: claude -p --resume <id>";
 		expect([...by.keys()].toSorted((x, y) => x.localeCompare(y))).toEqual([
 			"remote-control",
 			"rm",
-			"self-hosted-runner decode-token",
+			"self-hosted-runner decode-token"
 		]);
 		expect(by.get("remote-control")?.gate).toBe("hidden");
 		expect(by.get("rm")?.detail).toBe("<id> [--discard-unpushed <commit>]");
@@ -149,22 +149,22 @@ var d=\`Usage: claude \${u}\`, e="Usage: claude -p --resume <id>";
 			"remote-control --settings",
 			"rm --discard-unpushed",
 			"self-hosted-runner decode-token --environment-secret-file",
-			"self-hosted-runner decode-token --help",
+			"self-hosted-runner decode-token --help"
 		]);
 		expect(by.get("remote-control --settings")?.detail).toBe(
-			`--settings <file> | JSON settings file for \${…}.`,
+			`--settings <file> | JSON settings file for \${…}.`
 		);
 		expect(by.get("remote-control --chrome")?.detail).toBe(
-			"--[no-]chrome | Claude in Chrome",
+			"--[no-]chrome | Claude in Chrome"
 		);
 		expect(by.get("remote-control --debug")?.detail).toBe(
-			"--debug[=<filter>] | Enable debug mode",
+			"--debug[=<filter>] | Enable debug mode"
 		);
 		expect(
 			by.get("self-hosted-runner decode-token --environment-secret-file")
-				?.detail,
+				?.detail
 		).toBe(
-			"--environment-secret-file <path> | Path to environment secret file",
+			"--environment-secret-file <path> | Path to environment secret file"
 		);
 	});
 
@@ -183,13 +183,13 @@ var t=rn+(c?x:y)+ln;
 `;
 		const by = await byName("flag", joined);
 		expect(
-			by.get("self-hosted-runner orchestrator --scm-connector-ca-file")?.detail,
+			by.get("self-hosted-runner orchestrator --scm-connector-ca-file")?.detail
 		).toBe("--scm-connector-ca-file <path> | Extra CA bundle");
 		expect(
-			by.get("self-hosted-runner orchestrator --git-host-rewrite")?.detail,
+			by.get("self-hosted-runner orchestrator --git-host-rewrite")?.detail
 		).toBe("--git-host-rewrite <from>=<to_host:to_port> | Rewrite a host");
 		expect(by.get("daemon --json-path")?.detail).toBe(
-			"--json-path <p> | Write JSON here",
+			"--json-path <p> | Write JSON here"
 		);
 	});
 
@@ -227,9 +227,9 @@ function filter(a){if(a==="--resume"||a==="--continue"||a==="--fork-session")ret
 		const found = await surface(
 			new Bundle([
 				{ name: "/$bunfs/root/a.js", text: help },
-				{ name: "/$bunfs/root/b.js", text: parsers },
+				{ name: "/$bunfs/root/b.js", text: parsers }
 			]),
-			"flag",
+			"flag"
 		);
 		const hidden = found.filter((i) => i.gate === "hidden").map((i) => i.name);
 		expect(hidden).toEqual(["remote-control --sandbox"]);
@@ -247,10 +247,10 @@ var c={type:"prompt",name:"avail",description:"A",availability:["claude-ai","con
 		expect([...by.keys()].toSorted((a, b) => a.localeCompare(b))).toEqual([
 			"/avail",
 			"/compact",
-			"/hid",
+			"/hid"
 		]);
 		expect(by.get("/compact")?.detail).toBe(
-			"local (aliases c, sq) | Free up context",
+			"local (aliases c, sq) | Free up context"
 		);
 		expect(by.get("/compact")?.gate).toBe("isEnabled ()=>!0");
 		expect(by.get("/hid")?.gate).toBe("hidden");

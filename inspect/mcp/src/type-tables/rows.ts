@@ -6,7 +6,7 @@ import {
 	normalizeType,
 	type TypeField,
 	typeFields,
-	type TypeFile,
+	type TypeFile
 } from "./parse.ts";
 
 /** The verdict on one row. */
@@ -82,7 +82,7 @@ const eventRow = (f: TypeFile, name: string, cell: string): Outcome => {
 	const results = find(RESULT_MAPS);
 	if (result !== undefined && !results.some((x) => same(x, result))) {
 		return bad(
-			`${name}: result \`${result}\`, file has ${typeList(results) || "none"}`,
+			`${name}: result \`${result}\`, file has ${typeList(results) || "none"}`
 		);
 	}
 	return ok(name, input.map((x) => x.doc).join(" / "));
@@ -115,7 +115,7 @@ const rowType = (cell: string, elements: boolean): string | undefined =>
 /** A member row under a type heading. */
 const memberRow = (
 	s: Section & { heading: string; fields: TypeField[] },
-	r: Row,
+	r: Row
 ): Outcome => {
 	const name = `${s.heading}.${r.first}`;
 	// A union of object types repeats a name once per variant; a row matches any of them.
@@ -139,7 +139,7 @@ const memberRow = (
 	}
 	if (!all.some((x) => same(x) && x.optional === optional)) {
 		return bad(
-			`${name}: ${optional ? "member is required" : "member is optional"}`,
+			`${name}: ${optional ? "member is required" : "member is optional"}`
 		);
 	}
 	const doc = all
@@ -152,7 +152,7 @@ const memberRow = (
 const ALIAS = /^(?:Generic )?[Aa]lias of `((?:[^`]|``)+)`(?:\.|$)/u;
 
 const hasFields = (
-	s: Section,
+	s: Section
 ): s is Section & { heading: string; fields: TypeField[] } =>
 	s.heading !== undefined && s.fields !== undefined;
 

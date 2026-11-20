@@ -13,7 +13,7 @@ import {
 	MARKETPLACE,
 	SKILL_FILES,
 	TARGETS,
-	versionProblems,
+	versionProblems
 } from "../version/bump.ts";
 import { bundleProblems, validateProblems } from "./bundle.ts";
 import {
@@ -24,7 +24,7 @@ import {
 	type Plugin,
 	PLUGINS,
 	ROOT,
-	text,
+	text
 } from "./plugins.ts";
 
 type Json = Record<string, unknown>;
@@ -60,17 +60,17 @@ const schemaProblems = async (): Promise<string[]> => {
 	const targets: [string, string][] = [
 		...PLUGINS.map((p): [string, string] => [
 			manifestFile(p.dir),
-			"claude-code-plugin-manifest",
+			"claude-code-plugin-manifest"
 		]),
-		[MARKETPLACE, "claude-code-marketplace"],
+		[MARKETPLACE, "claude-code-marketplace"]
 	];
 	const loaded = await Promise.all(
 		targets.map(async ([file, kind]) => ({
 			file,
 			kind,
 			schema: await load(`schemas/${kind}.json`),
-			doc: await load(file),
-		})),
+			doc: await load(file)
+		}))
 	);
 	for (const { file, kind, schema, doc } of loaded) {
 		const want = `https://clawdipedia.cc/schemas/${kind}.json`;
@@ -96,14 +96,14 @@ const str = (v: unknown): string => (typeof v === "string" ? v : "");
 const nameProblems = (): string[] => {
 	const names = [
 		...PLUGINS.map((p) => read(manifestFile(p.dir))["name"]),
-		...marketplaceEntries(read).map((p) => p["name"]),
+		...marketplaceEntries(read).map((p) => p["name"])
 	];
 	return names
 		.filter(
-			(n) => typeof n !== "string" || !n || /\s/u.test(n) || RESERVED.test(n),
+			(n) => typeof n !== "string" || !n || /\s/u.test(n) || RESERVED.test(n)
 		)
 		.map(
-			(n) => `plugin name "${String(n)}" is empty, has spaces, or is reserved`,
+			(n) => `plugin name "${String(n)}" is empty, has spaces, or is reserved`
 		);
 };
 
@@ -112,7 +112,7 @@ const staleVersions = (file: string, body: string, prefix: string): string[] =>
 		.filter((v) => v !== CLAUDE_CODE_VERSION)
 		.map(
 			(v) =>
-				`${file}: ${prefix}names Claude Code ${v}, but src/version.ts has ${CLAUDE_CODE_VERSION}: run "bun run version:bump"`,
+				`${file}: ${prefix}names Claude Code ${v}, but src/version.ts has ${CLAUDE_CODE_VERSION}: run "bun run version:bump"`
 		);
 
 const versionTextProblems = async (): Promise<string[]> => {
@@ -123,7 +123,7 @@ const versionTextProblems = async (): Promise<string[]> => {
 	});
 	// A skill body tells the model which version the `clawdipedia` source covers, so it must match too.
 	const skills = await Promise.all(
-		SKILL_FILES.map(async (file) => staleVersions(file, await text(file), "")),
+		SKILL_FILES.map(async (file) => staleVersions(file, await text(file), ""))
 	);
 	return [...problems, ...skills.flat()];
 };
@@ -132,7 +132,7 @@ const versionTextProblems = async (): Promise<string[]> => {
 const DESCRIPTION_MAX = 200;
 
 const skillDescription = async (
-	p: Plugin,
+	p: Plugin
 ): Promise<readonly [string, string]> => {
 	const file = `${p.dir}/skills/${p.skill}/SKILL.md`;
 	const body = (await exists(file)) ? await text(file) : "";
@@ -145,19 +145,19 @@ const descriptionProblems = async (): Promise<string[]> => {
 		[MARKETPLACE, str(market["description"])],
 		...marketplaceEntries(read).map((p): readonly [string, string] => [
 			`${MARKETPLACE} ${String(p["name"])}`,
-			str(p["description"]),
+			str(p["description"])
 		]),
 		...PLUGINS.map((p): readonly [string, string] => [
 			manifestFile(p.dir),
-			str(read(manifestFile(p.dir))["description"]),
+			str(read(manifestFile(p.dir))["description"])
 		]),
-		...(await Promise.all(PLUGINS.map((p) => skillDescription(p)))),
+		...(await Promise.all(PLUGINS.map((p) => skillDescription(p))))
 	];
 	return descriptions
 		.filter(([, body]) => body.length > DESCRIPTION_MAX)
 		.map(
 			([where, body]) =>
-				`${where}: description is ${body.length} characters, over ${DESCRIPTION_MAX}`,
+				`${where}: description is ${body.length} characters, over ${DESCRIPTION_MAX}`
 		);
 };
 
@@ -175,7 +175,7 @@ const pluginFileProblems = async (p: Plugin): Promise<string[]> => {
 	const hasMcp = await exists(mcp);
 	if (hasMcp !== p.mcp) {
 		problems.push(
-			`${mcp}: ${p.mcp ? "missing" : "must not exist (no MCP server)"}`,
+			`${mcp}: ${p.mcp ? "missing" : "must not exist (no MCP server)"}`
 		);
 	}
 	// Bun installs a package the bundle leaves out only with this flag when a `node_modules` folder is above the plugin.
@@ -186,7 +186,7 @@ const pluginFileProblems = async (p: Plugin): Promise<string[]> => {
 		!launch.includes('"--install=fallback"')
 	) {
 		problems.push(
-			`${mcp}: args need "--install=fallback", because the bundle leaves out ${p.external.join(", ")}`,
+			`${mcp}: args need "--install=fallback", because the bundle leaves out ${p.external.join(", ")}`
 		);
 	}
 	return problems;
@@ -194,7 +194,7 @@ const pluginFileProblems = async (p: Plugin): Promise<string[]> => {
 
 const fileProblems = async (): Promise<string[]> => {
 	const perPlugin = await Promise.all(
-		PLUGINS.map((p) => pluginFileProblems(p)),
+		PLUGINS.map((p) => pluginFileProblems(p))
 	);
 	const problems = perPlugin.flat();
 	// The command ships only in cli/, so the MCP plugin puts nothing on the Bash PATH.
@@ -207,7 +207,7 @@ const fileProblems = async (): Promise<string[]> => {
 const manifestRoutes = (parsed: unknown): string[] =>
 	Array.isArray(parsed)
 		? parsed.flatMap((e: unknown) =>
-				isJson(e) && typeof e["route"] === "string" ? [e["route"]] : [],
+				isJson(e) && typeof e["route"] === "string" ? [e["route"]] : []
 			)
 		: [];
 
@@ -215,15 +215,15 @@ const routeProblems = async (): Promise<string[]> => {
 	const raw = await text("build/llms-manifest.json");
 	const routes = manifestRoutes(JSON.parse(raw));
 	const rels = routes.map((route) =>
-		route === "/" ? "index" : route.replaceAll(/^\/+|\/+$/gu, ""),
+		route === "/" ? "index" : route.replaceAll(/^\/+|\/+$/gu, "")
 	);
 	const present = await Promise.all(
-		rels.map((rel) => exists(`build/${rel}.md`)),
+		rels.map((rel) => exists(`build/${rel}.md`))
 	);
 	return routes.flatMap((route, i) =>
 		present[i] === true
 			? []
-			: [`build/${rels[i]}.md: missing for manifest route ${route}`],
+			: [`build/${rels[i]}.md: missing for manifest route ${route}`]
 	);
 };
 
@@ -238,12 +238,12 @@ const schemaListProblems = async (): Promise<string[]> => {
 	const names = new Set<string>(SCHEMA_NAMES);
 	if (built.length !== names.size || !built.every((n) => names.has(n))) {
 		problems.push(
-			`SCHEMA_NAMES (${[...SCHEMA_NAMES].join(", ")}) differs from build/schemas/ (${built.join(", ")})`,
+			`SCHEMA_NAMES (${[...SCHEMA_NAMES].join(", ")}) differs from build/schemas/ (${built.join(", ")})`
 		);
 	}
 	if (!(await Bun.file(join(dir, TYPE_FILE)).exists())) {
 		problems.push(
-			`build/schemas/${TYPE_FILE}: missing, so get_schema "types" fails`,
+			`build/schemas/${TYPE_FILE}: missing, so get_schema "types" fails`
 		);
 	}
 	return problems;
@@ -253,7 +253,7 @@ const schemaListProblems = async (): Promise<string[]> => {
 const siteProblems = async (): Promise<string[]> => {
 	if (!(await exists("build/llms-manifest.json"))) {
 		console.warn(
-			'plugin:check: build/ missing, skipped site contract check (run "bun run build")',
+			'plugin:check: build/ missing, skipped site contract check (run "bun run build")'
 		);
 		return [];
 	}
@@ -262,12 +262,12 @@ const siteProblems = async (): Promise<string[]> => {
 
 const main = async (): Promise<void> => {
 	const slotFiles = Object.values(TARGETS).flatMap((slots) =>
-		slots.map((s) => s.file),
+		slots.map((s) => s.file)
 	);
 	await Promise.all([
 		...slotFiles.map((f) => load(f)),
 		...PLUGINS.map((p) => load(manifestFile(p.dir))),
-		load(MARKETPLACE),
+		load(MARKETPLACE)
 	]);
 	const bundles = await Promise.all(PLUGINS.map((p) => bundleProblems(p)));
 	const problems = [
@@ -280,7 +280,7 @@ const main = async (): Promise<void> => {
 		...(await fileProblems()),
 		...(await validateProblems()),
 		...bundles.flat(),
-		...(await siteProblems()),
+		...(await siteProblems())
 	];
 	if (problems.length > 0) {
 		for (const p of problems) {

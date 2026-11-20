@@ -40,7 +40,7 @@ const listingItems = (block: string, head: string) => {
 
 const itemLines = (
 	o: ListingOptions,
-	items: { name: string; text: string }[],
+	items: { name: string; text: string }[]
 ): string[] =>
 	items.flatMap(({ name, text }) => {
 		const page = o.page(name);
@@ -52,7 +52,7 @@ const itemLines = (
 			page
 				? `Prompt: ${pageLink(o.group, page.id, page.title)}.`
 				: "No prompt page.",
-			"",
+			""
 		];
 	});
 
@@ -73,7 +73,7 @@ const listingPage = async (o: ListingOptions): Promise<void> => {
 		"",
 		relink(o.group, o.intro).replace(
 			"<source>",
-			pageLink(o.group, def.v.id, def.v.title),
+			pageLink(o.group, def.v.id, def.v.title)
 		),
 		"",
 		"## How to Override",
@@ -84,7 +84,7 @@ const listingPage = async (o: ListingOptions): Promise<void> => {
 		"",
 		`## Default Text (${items.length})`,
 		"",
-		...itemLines(o, items),
+		...itemLines(o, items)
 	];
 	await Bun.write(join(groupDir(o.group), o.file), stripTrailing(L.join("\n")));
 };
@@ -107,9 +107,9 @@ export const listingPages = async (): Promise<void> => {
 			"| The whole agent | An agent file or an `--agents` entry with the same `name` replaces the built-in agent: its description, tools, model, and prompt. | [Override a Built-in Agent with a File](./override-agent-file.md) and [Override a Built-in Agent with --agents](./override-agents-flag.md) |",
 			"| Text added to every subagent prompt | `--append-subagent-system-prompt` | [Append to Every Subagent Prompt](./override-append-subagent.md) |",
 			"| Remove `Explore` and `Plan` | `CLAUDE_CODE_DISABLE_EXPLORE_PLAN_AGENTS=1` | [Turn Off the Explore and Plan Agents](./disable-explore-plan.md) |",
-			"| Remove the built-in agents in `-p` | `CLAUDE_AGENT_SDK_DISABLE_BUILTIN_AGENTS=1` | [Turn Off All Built-in Agents](./disable-builtin-agents.md) |",
+			"| Remove the built-in agents in `-p` | `CLAUDE_AGENT_SDK_DISABLE_BUILTIN_AGENTS=1` | [Turn Off All Built-in Agents](./disable-builtin-agents.md) |"
 		],
-		page: (n) => titled(`subagent-${n.toLowerCase()}`),
+		page: (n) => titled(`subagent-${n.toLowerCase()}`)
 	});
 	await listingPage({
 		group: "skills",
@@ -123,8 +123,8 @@ export const listingPages = async (): Promise<void> => {
 		override: [
 			"| A skill | A skill folder with the same name replaces the bundled skill. | [Override /simplify with a Skill File](./override-skill-simplify.md) |",
 			"| A command | A command file with the same name replaces the bundled command. | [Override /init with a Command File](./override-command-init.md) |",
-			"| All skills and commands | `--disable-slash-commands` | [Skills and Commands](../extend/skills-and-commands/index.md) |",
+			"| All skills and commands | `--disable-slash-commands` | [Skills and Commands](../extend/skills-and-commands/index.md) |"
 		],
-		page: (n) => titled(`skill-${n}`) ?? titled(`command-${n}`),
+		page: (n) => titled(`skill-${n}`) ?? titled(`command-${n}`)
 	});
 };

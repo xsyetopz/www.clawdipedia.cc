@@ -11,7 +11,7 @@ export const runnerCases: CaseDef[] = [
 	runnerSession(
 		"renewal-disabled",
 		{ CLAUDE_RUNNER_DISABLE_RENEWAL_WARNING: "1" },
-		true,
+		true
 	),
 	runnerSession("offers-1", { CLAUDE_RUNNER_OFFERS_NEW_MACHINE: "1" }),
 	runnerSession("update-bin", { CLAUDE_RUNNER_UPDATE_BIN: "/probe/up" }),
@@ -21,7 +21,7 @@ export const runnerCases: CaseDef[] = [
 	runnerSession("token-ttl-8", {}, false, undefined, 8),
 	runnerSession("retire-at", {}, false, undefined, undefined, () => [
 		"--retire-at",
-		String(Math.floor(Date.now() / 1000) + 7),
+		String(Math.floor(Date.now() / 1000) + 7)
 	]),
 	runnerSession("child-exits-0", {}, false, "exit 0"),
 	orchestrator("reason-none", {}, STALE),
@@ -31,7 +31,7 @@ export const runnerCases: CaseDef[] = [
 	orchestrator("reason-bad", { spawn_reason: "bad value!" }, {}),
 	offline("ur-base", UR, {}),
 	offline("ur-record", UR, {
-		CLAUDE_CODE_ULTRAREVIEW_LAUNCH_RECORD: "{HOME}/ur-record",
+		CLAUDE_CODE_ULTRAREVIEW_LAUNCH_RECORD: "{HOME}/ur-record"
 	}),
 	gateway("help", ["gateway", "--help"], {}),
 	gateway("cmds", ["--help"], {}),
@@ -40,7 +40,7 @@ export const runnerCases: CaseDef[] = [
 	gateway("bad-config-default", BAD_CONFIG, {}),
 	gateway("bad-config-json", BAD_CONFIG, { CLAUDE_GATEWAY_LOG_FORMAT: "json" }),
 	gateway("bad-config-JSON-upper", BAD_CONFIG, {
-		CLAUDE_GATEWAY_LOG_FORMAT: "JSON",
+		CLAUDE_GATEWAY_LOG_FORMAT: "JSON"
 	}),
-	gateway("bad-config-text", BAD_CONFIG, { CLAUDE_GATEWAY_LOG_FORMAT: "text" }),
+	gateway("bad-config-text", BAD_CONFIG, { CLAUDE_GATEWAY_LOG_FORMAT: "text" })
 ];

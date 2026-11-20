@@ -6,7 +6,7 @@ import {
 	type Module,
 	type Node,
 	returnsOf,
-	type Variable,
+	type Variable
 } from "../../ast.ts";
 import { mapSeq } from "../../seq.ts";
 import { asNode } from "../common.ts";
@@ -23,7 +23,7 @@ export const SAME_PATH = new Set([
 	"prefault",
 	"catch",
 	"readonly",
-	"nonoptional",
+	"nonoptional"
 ]);
 /** Methods of a zod schema whose argument adds keys or another schema for the same value. */
 export const SAME_PATH_METHODS = new Set([
@@ -31,7 +31,7 @@ export const SAME_PATH_METHODS = new Set([
 	"safeExtend",
 	"merge",
 	"or",
-	"and",
+	"and"
 ]);
 
 /** The zod type that a constructor builds: the `type:"…"` of the object it passes to the class. */
@@ -54,7 +54,7 @@ export interface Cx {
 export const constOf = async (
 	m: Module,
 	n: Node | undefined,
-	env: Env,
+	env: Env
 ): Promise<string | undefined> => {
 	const v = n?.type === "Identifier" ? m.variable(n) : undefined;
 	const b = v && env.get(v);
@@ -68,7 +68,7 @@ export const constOf = async (
 /** The strings of an array literal, with its `...list` spreads read in. */
 const stringList = async (
 	m: Module,
-	n: Node | null | undefined,
+	n: Node | null | undefined
 ): Promise<string[]> => {
 	if (n?.type === "Identifier") {
 		const v = m.variable(n);
@@ -84,7 +84,7 @@ const stringList = async (
 	const lists = await mapSeq(n.elements, async (e) =>
 		e?.type === "SpreadElement"
 			? stringList(m, asNode(e.argument))
-			: ((await constString(m, asNode(e))) ?? []),
+			: ((await constString(m, asNode(e))) ?? [])
 	);
 	return lists.flat();
 };
@@ -100,7 +100,7 @@ export const spreadTarget = (a: Node | undefined): Node | undefined => {
 /** The list and the callback of `Object.fromEntries(list.map(cb))`. */
 const entriesMap = (
 	m: Module,
-	o: Node | undefined,
+	o: Node | undefined
 ): { list: Node | undefined; cb: Fn } | undefined => {
 	const callee = o?.type === "CallExpression" ? asNode(o.callee) : undefined;
 	if (
@@ -126,7 +126,7 @@ const entriesMap = (
 /** `Object.fromEntries(list.map((k)=>[k,schema]))`: the keys, the variable of `k`, and the schema. */
 export const entriesShape = async (
 	m: Module,
-	o: Node | undefined,
+	o: Node | undefined
 ): Promise<{ keys: string[]; param: Variable; value: Node } | undefined> => {
 	const parts = entriesMap(m, o);
 	if (!parts) {

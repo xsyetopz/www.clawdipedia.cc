@@ -23,7 +23,7 @@ import {
 	isFn,
 	type Module,
 	type Node,
-	type NodeOf,
+	type NodeOf
 } from "../ast.ts";
 import { firstSeq } from "../seq.ts";
 import {
@@ -34,7 +34,7 @@ import {
 	short,
 	strings,
 	type SurfaceItem,
-	unique,
+	unique
 } from "./common.ts";
 
 const TYPES = new Set(["local", "local-jsx", "prompt"]);
@@ -81,7 +81,7 @@ const returnedType = (m: Module, fn: Fn, nameSrc: string): Promise<string> => {
 /** The command type a builder gives its argument: its body holds `{type:"prompt",name:p.name,...}` for its first parameter `p`. */
 const builderType = async (
 	m: Module,
-	call: Node,
+	call: Node
 ): Promise<string | undefined> => {
 	if (call.type !== "CallExpression") {
 		return undefined;
@@ -139,7 +139,7 @@ const factoryType = async (m: Module, n: Node): Promise<string | undefined> => {
 
 const gateOf = async (
 	m: Module,
-	o: NodeOf<"ObjectExpression">,
+	o: NodeOf<"ObjectExpression">
 ): Promise<string> => {
 	const gates: string[] = [];
 	if (/^(!0|true)$/u.test(m.src(prop(o, "isHidden") ?? o).trim())) {
@@ -158,7 +158,7 @@ const gateOf = async (
 
 const typeOf = async (
 	m: Module,
-	o: NodeOf<"ObjectExpression">,
+	o: NodeOf<"ObjectExpression">
 ): Promise<string | undefined> => {
 	const parent = m.parent(o);
 	return (
@@ -190,7 +190,7 @@ export const extractSlashCommands: Extractor = async (bundle) => {
 			module: m.name,
 			offset: n.start,
 			detail: short(`${type}${alias}${desc === "" ? "" : ` | ${desc}`}`),
-			...(gate !== "" && { gate }),
+			...(gate !== "" && { gate })
 		});
 	});
 	return unique(out);

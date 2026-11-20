@@ -13,14 +13,14 @@ const api = (toolResults: number, tools = ["Bash"], last = ""): ApiReq => ({
 	stream: true,
 	toolResults,
 	toolNames: new Set(tools),
-	last,
+	last
 });
 
 const REFUSAL: StubReply = {
 	kind: "message",
 	content: [{ type: "text", text: "no" }],
 	stop_reason: "refusal",
-	stop_details: { cyber_verification: { type: "required" } },
+	stop_details: { cyber_verification: { type: "required" } }
 };
 
 describe("stub turns", () => {
@@ -36,7 +36,7 @@ describe("stub turns", () => {
 		expect(first.stop_reason).toBe("end_turn");
 		expect(second.stop_reason).toBe("refusal");
 		expect(second.stop_details).toEqual({
-			cyber_verification: { type: "required" },
+			cyber_verification: { type: "required" }
 		});
 	});
 
@@ -45,7 +45,7 @@ describe("stub turns", () => {
 		const o: StubCase = {
 			log: "",
 			turns: [null],
-			rules: [{ match: "SUBPROMPT", reply: REFUSAL }],
+			rules: [{ match: "SUBPROMPT", reply: REFUSAL }]
 		};
 
 		// Act
@@ -85,10 +85,10 @@ describe("stub turns", () => {
 			kind: "message",
 			content: [
 				{ type: "text", text: "a" },
-				{ type: "tool_use", id: "toolu_x", name: "Bash", input: {} },
+				{ type: "tool_use", id: "toolu_x", name: "Bash", input: {} }
 			],
 			stop_reason: "max_tokens",
-			open: true,
+			open: true
 		};
 
 		// Act
@@ -107,13 +107,13 @@ describe("stub turns", () => {
 		const log = join(tmpdir(), `stub-turns-${process.pid}.jsonl`);
 		const base = await stub.register("err", {
 			log,
-			turns: [{ kind: "error", status: 529, body }],
+			turns: [{ kind: "error", status: 529, body }]
 		});
 
 		// Act
 		const res = await fetch(`${base}/v1/messages`, {
 			method: "POST",
-			body: JSON.stringify({ tools: [{ name: "Bash" }], messages: [] }),
+			body: JSON.stringify({ tools: [{ name: "Bash" }], messages: [] })
 		});
 
 		// Assert
@@ -129,12 +129,12 @@ describe("stub turns", () => {
 		const log = join(tmpdir(), `stub-once-${process.pid}.jsonl`);
 		const base = await stub.register("once", {
 			log,
-			turns: [{ kind: "error", status: 400, once: true, body: {} }],
+			turns: [{ kind: "error", status: 400, once: true, body: {} }]
 		});
 		const post = () =>
 			fetch(`${base}/v1/messages`, {
 				method: "POST",
-				body: JSON.stringify({ tools: [{ name: "Bash" }], messages: [] }),
+				body: JSON.stringify({ tools: [{ name: "Bash" }], messages: [] })
 			});
 
 		// Act

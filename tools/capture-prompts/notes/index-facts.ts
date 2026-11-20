@@ -5,7 +5,7 @@ export const INDEX_FACTS = {
 		"A system prompt is the text that Claude Code sends to the model before your first message. It tells the model who it is, how to behave, and what the session looks like. The model reads it on every request.",
 		"Claude Code has no single system prompt. It builds one from parts. The parts depend on the model, on flags, on env vars, on your output style, and on whether the request comes from the main agent or a subagent. This section shows every variant that you can pick, in full, with a diff against the default.",
 		"The text on these pages is Anthropic's. It is shown here only to describe how the program works. See the notice on the home page.",
-		'Status badges: <Documented /> means an official docs page names the switch. <Undocumented /> means only the program shows it. <Differs note="example" /> means the docs and the program disagree. <Gated note="example" /> means a flag or a server gate is needed.',
+		'Status badges: <Documented /> means an official docs page names the switch. <Undocumented /> means only the program shows it. <Differs note="example" /> means the docs and the program disagree. <Gated note="example" /> means a flag or a server gate is needed.'
 	],
 	method: [
 		"Every prompt on these pages was captured offline, with no model call and no cost.",
@@ -14,7 +14,7 @@ export const INDEX_FACTS = {
 		"3. The run uses a fake API key, a dead proxy (`HTTPS_PROXY` and `HTTP_PROXY` point to a closed port), `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1`, `DISABLE_TELEMETRY=1`, and a temporary home, config folder, and project folder. No login token is used. The script checks that every request went to the local server.",
 		"4. A second script reads the saved request bodies, replaces machine-specific values with placeholders, and writes these pages. It makes the diffs with `diff -u`, not by hand.",
 		"For the subagent pages, the fake server answers the first turn with an `Agent` tool call. The program then starts a real subagent and sends its request to the fake server.",
-		"For the compaction page, the script runs twice in the same folders: once with `Reply with 'OK'.`, then with `--continue` and `/compact`.",
+		"For the compaction page, the script runs twice in the same folders: once with `Reply with 'OK'.`, then with `--continue` and `/compact`."
 	],
 	blocks: [
 		"Each request has a `system` field with three blocks, then messages. This is what the captures show.",
@@ -34,7 +34,7 @@ export const INDEX_FACTS = {
 		"In `-p` mode the identity line is the SDK line: `You are a Claude agent, built on Anthropic's Claude Agent SDK.` Every capture here uses `-p`, so every page shows that line, except pages where it changes (see below).",
 		"The program has three identity lines. Two more appear in its text:",
 		"- `You are Claude Code, Anthropic's official CLI for Claude.` This is the line for the interactive terminal app. It could not be captured offline: the full-screen app did not accept typed input in the test harness, so no request was sent. Setting `CLAUDE_CODE_ENTRYPOINT=cli` in `-p` mode does not change the line.",
-		"- `You are Claude Code, Anthropic's official CLI for Claude, running within the Claude Agent SDK.` Print mode sends this one when you use `--append-system-prompt`. See [Append System Prompt](./append-system-prompt.md).",
+		"- `You are Claude Code, Anthropic's official CLI for Claude, running within the Claude Agent SDK.` Print mode sends this one when you use `--append-system-prompt`. See [Append System Prompt](./append-system-prompt.md)."
 	],
 	flow: [
 		"The chart shows what the captures prove. The order of the first three checks was not tested with every combination of flags.",
@@ -67,7 +67,7 @@ export const INDEX_FACTS = {
 		"  C --> R",
 		"```",
 		"Subagents skip this chart. They get their own body and notes (see [Subagent, general-purpose](./subagent-general-purpose.md)).",
-		`Captures disagree with the old wiki in one place: the wiki says models with \`sonnet\` or \`haiku\` in the name get the full prompt. In ${CLAUDE_CODE_VERSION} they get the lean prompt, and only \`CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=0\` gives the full one.`,
+		`Captures disagree with the old wiki in one place: the wiki says models with \`sonnet\` or \`haiku\` in the name get the full prompt. In ${CLAUDE_CODE_VERSION} they get the lean prompt, and only \`CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=0\` gives the full one.`
 	],
 	placeholders: [
 		"## Placeholders",
@@ -87,7 +87,7 @@ export const INDEX_FACTS = {
 		"| `<robot-emoji>` | A robot emoji in the pull request line of the attribution reminder. The site shows no emojis. |",
 		"| `<plan-name>` | The random plan file name in plan mode. |",
 		"",
-		"Strings such as `PROBE-CUSTOM-STYLE-TEXT` and `APPENDED-TEXT-FROM-FLAG` are test text that the script supplies, so you can see where your own text lands.",
+		"Strings such as `PROBE-CUSTOM-STYLE-TEXT` and `APPENDED-TEXT-FROM-FLAG` are test text that the script supplies, so you can see where your own text lands."
 	],
 	regen: [
 		"Run these from the repository root. Both steps use `bun` only.",
@@ -96,6 +96,6 @@ export const INDEX_FACTS = {
 		"bun tools/capture-prompts/capture.ts --only default-lean,bare   # capture some variants",
 		"bun tools/capture-prompts/render.ts           # rebuild the pages from saved captures",
 		"```",
-		"Raw requests go to `captures/<version>/prompts/` (not committed). Normalized text goes to `tools/capture-prompts/out/`. The variant list is in `tools/capture-prompts/variants.ts`. For a new release, update `src/version.ts` (or pass `--bin` and `--out`) and run it again.",
-	],
+		"Raw requests go to `captures/<version>/prompts/` (not committed). Normalized text goes to `tools/capture-prompts/out/`. The variant list is in `tools/capture-prompts/variants.ts`. For a new release, update `src/version.ts` (or pass `--bin` and `--out`) and run it again."
+	]
 };

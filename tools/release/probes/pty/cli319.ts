@@ -11,26 +11,26 @@ import {
 	type PtyGroup,
 	READY,
 	shows,
-	toolResultText,
+	toolResultText
 } from "./harness.ts";
 
 const keybinding = (
 	name: string,
 	context: string,
-	action: string,
+	action: string
 ): PtyCase => ({
 	id: `cli319.keybinding.${name}`,
 	cfgFiles: {
 		"keybindings.json": JSON.stringify({
-			bindings: [{ context, bindings: { "ctrl+g": action } }],
-		}),
+			bindings: [{ context, bindings: { "ctrl+g": action } }]
+		})
 	},
 	args: ["--debug-file", "{CFG}/d.log"],
 	schedule: [
 		READY,
 		{ t: 1, send: "\u0007", label: "ctrl+g" },
 		{ t: 2, send: "\u0007", label: "ctrl+g again" },
-		ESC(4),
+		ESC(4)
 	],
 	secs: 6,
 	notes: `keybindings.json binds ctrl+g to ${action} in context ${context}; ctrl+g is pressed twice in a plain terminal session.`,
@@ -38,8 +38,8 @@ const keybinding = (
 		precondition: log(x).length > 0 && shows(x, "shortcuts"),
 		context,
 		action,
-		keybindingLines: lines(x, /eybinding/u),
-	}),
+		keybindingLines: lines(x, /eybinding/u)
+	})
 });
 
 const slash = (cmd: string): PtyCase => ({
@@ -48,15 +48,15 @@ const slash = (cmd: string): PtyCase => ({
 		READY,
 		{ t: 1, send: `/${cmd}`, label: "type" },
 		{ t: 3, send: "\r", label: "run" },
-		ESC(6),
+		ESC(6)
 	],
 	secs: 8,
 	notes: `/${cmd} typed in a session with the fake API key.`,
 	data: (x) => ({
 		precondition: shows(x, "shortcuts"),
 		unknown: shows(x, `Unknown command: /${cmd}`),
-		screenTail: tail(x, 8),
-	}),
+		screenTail: tail(x, 8)
+	})
 });
 
 /** Typed but not run: the typeahead shows the description of each command that is enabled. */
@@ -67,8 +67,8 @@ const typeahead = (cmd: string): PtyCase => ({
 	notes: `/${cmd} typed, not run, in a session with the fake API key.`,
 	data: (x) => ({
 		precondition: shows(x, "shortcuts"),
-		screenTail: tail(x, 6),
-	}),
+		screenTail: tail(x, 6)
+	})
 });
 
 /** Only an interactive session builds the session team (print mode skips it), so a named Agent call reaches the tmux backend here. The stand-in tmux sits in the shim folder, first on PATH, and skips the `-L <socket>` the program puts before each command; `has` is the exit code of `has-session`. */
@@ -77,7 +77,7 @@ const tmuxSwarm = (name: string, has: number): PtyCase => ({
 	setup: (sb) =>
 		writeExec(
 			join(sb.home, ".probe-bin", "tmux"),
-			`#!/bin/sh\n[ "$1" = -L ] && shift 2\ncase "$1" in\n-V) echo "tmux 3.4";;\nhas-session) exit ${has};;\nnew-session|new-window) echo "probe: refused" >&2; exit 1;;\nesac\nexit 0\n`,
+			`#!/bin/sh\n[ "$1" = -L ] && shift 2\ncase "$1" in\n-V) echo "tmux 3.4";;\nhas-session) exit ${has};;\nnew-session|new-window) echo "probe: refused" >&2; exit 1;;\nesac\nexit 0\n`
 		),
 	settings: { teammateMode: "tmux" },
 	env: { CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS: "1" },
@@ -86,9 +86,9 @@ const tmuxSwarm = (name: string, has: number): PtyCase => ({
 		seq: [
 			{
 				name: "Agent",
-				input: { description: "probe", prompt: PROMPT, name: "worker" },
-			},
-		],
+				input: { description: "probe", prompt: PROMPT, name: "worker" }
+			}
+		]
 	},
 	schedule: [READY, ASK()],
 	secs: 16,
@@ -96,8 +96,8 @@ const tmuxSwarm = (name: string, has: number): PtyCase => ({
 	data: (x) => ({
 		precondition: x.messages.length > 0,
 		toolResultHead: toolResultText(x).trim().slice(0, 300),
-		swarmLines: lines(x, /swarm|TmuxBackend|[Tt]eammate/u),
-	}),
+		swarmLines: lines(x, /swarm|TmuxBackend|[Tt]eammate/u)
+	})
 });
 
 /** The keyless Console sign-in of /login stores a profile under ANTHROPIC_CONFIG_DIR, else XDG_CONFIG_HOME, else HOME. All three are empty here; the program keeps its own config in CLAUDE_CONFIG_DIR. */
@@ -106,7 +106,7 @@ const consoleProfileNoDir: PtyCase = {
 	env: {
 		HOME: "",
 		XDG_CONFIG_HOME: "",
-		ANTHROPIC_CONFIG_DIR: "",
+		ANTHROPIC_CONFIG_DIR: ""
 	},
 	allowOverride: ["HOME"],
 	auth: "none",
@@ -118,7 +118,7 @@ const consoleProfileNoDir: PtyCase = {
 		{ t: 5, send: "\u001B[B", label: "down to Console" },
 		{ t: 6, send: "\r", label: "pick Console" },
 		{ t: 8, send: "\r", label: "pick the keyless sign-in" },
-		ESC(12),
+		ESC(12)
 	],
 	secs: 14,
 	notes:
@@ -127,8 +127,8 @@ const consoleProfileNoDir: PtyCase = {
 		precondition: shows(x, "Anthropic Console account"),
 		fallbackNotice: shows(x, "no Anthropic config directory was found"),
 		keylessLines: lines(x, /Keyless|Cannot locate|config directory/u),
-		screenTail: tail(x, 10),
-	}),
+		screenTail: tail(x, 10)
+	})
 };
 
 /** The interactive side of the print case `cli319.plugin-dir-watch.*`: a `--plugin-dir` mod and its watch and type-root debug lines. */
@@ -138,10 +138,10 @@ const pluginDirWatch = (v?: string): PtyCase => ({
 	homeFiles: {
 		"plug/.claude-plugin/plugin.json": JSON.stringify({
 			name: "watchprobe",
-			version: "1.0.0",
+			version: "1.0.0"
 		}),
 		"plug/hooks/hooks.json": JSON.stringify({ modules: ["./register.ts"] }),
-		"plug/hooks/register.ts": "export const register = () => {};\n",
+		"plug/hooks/register.ts": "export const register = () => {};\n"
 	},
 	args: ["--plugin-dir", "{HOME}/plug", "--debug-file", "{CFG}/d.log"],
 	schedule: [READY, ESC(4)],
@@ -152,8 +152,8 @@ const pluginDirWatch = (v?: string): PtyCase => ({
 		typesWritten: x.file("plug/.claude-plugin/types/tsconfig.json") !== "",
 		typeRootLine: log(x).includes("type root of watchprobe at "),
 		watchLine: log(x).includes("plugin-dir watch: watching "),
-		lines: lines(x, /type root of|plugin-dir watch/u),
-	}),
+		lines: lines(x, /type root of|plugin-dir watch/u)
+	})
 });
 
 /** The keepalive arms only on a turn that a scheduled tick started, so the stub schedules one wakeup (60 s is the floor) and answers that tick with text only. */
@@ -170,24 +170,24 @@ const loopKeepalive = (v?: string): PtyCase => ({
 					reason: "Probe wakeup.",
 					prompt: "/loop check the build",
 					// 2.1.316 refuses the call without it; 2.1.319 makes it optional
-					noop: false,
-				},
-			},
-		],
+					noop: false
+				}
+			}
+		]
 	},
 	schedule: [
 		READY,
 		{ t: 1, send: "/loop check the build", label: "type" },
 		{ t: 3, send: "\r", label: "run" },
-		ESC(150),
+		ESC(150)
 	],
 	secs: 155,
 	notes: `/loop with no interval (self-paced), CLAUDE_CODE_LOOP_KEEPALIVE ${v ?? "unset"}; the stub calls ScheduleWakeup once with 60 s, then replies with text only, also to the tick.`,
 	data: (x) => ({
 		precondition: log(x).includes("[loop] dynamic wakeup scheduled"),
 		keepaliveArmed: log(x).includes("[loop] keepalive armed"),
-		loopLines: lines(x, /\[loop\]|loop_ended|ScheduleWakeup/u),
-	}),
+		loopLines: lines(x, /\[loop\]|loop_ended|ScheduleWakeup/u)
+	})
 });
 
 export const cli319Group: PtyGroup = {
@@ -212,6 +212,6 @@ export const cli319Group: PtyGroup = {
 		gatewayLogin(),
 		gatewayLogin(NOTICE),
 		pluginDirWatch(),
-		pluginDirWatch("0"),
-	],
+		pluginDirWatch("0")
+	]
 };

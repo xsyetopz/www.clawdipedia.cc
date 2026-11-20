@@ -49,13 +49,13 @@ const blockOf = (lines: string[], line: number): string => {
  */
 export const entryFromCitations = (
 	content: string,
-	fact: Pick<Fact, "line" | "text">,
+	fact: Pick<Fact, "line" | "text">
 ): MapEntry | null => {
 	const lines = content.split("\n");
 	const own = lines[fact.line - 1] ?? "";
 	const scope = /\[\^[\w-]+\]/u.test(own) ? own : blockOf(lines, fact.line);
 	const notes = [...scope.matchAll(/\[\^([\w-]+)\]/gu)].map(
-		(m) => lines.find((l) => l.startsWith(`[^${m[1]}]:`)) ?? "",
+		(m) => lines.find((l) => l.startsWith(`[^${m[1]}]:`)) ?? ""
 	);
 	const all = [...notes, scope].join(" ");
 	const chunk = /chunk-[a-z0-9]+\.js(?::[0-9-]+)?/u.exec(all)?.[0];
@@ -69,21 +69,21 @@ export const entryFromCitations = (
 		return {
 			kind: "manual",
 			probes: [],
-			note: `read in the program at ${chunk}${rn}`,
+			note: `read in the program at ${chunk}${rn}`
 		};
 	}
 	if (typeFile) {
 		return {
 			kind: "schema",
 			probes: [],
-			note: "read in the Mod API type file (schemas/claude-code.d.ts)",
+			note: "read in the Mod API type file (schemas/claude-code.d.ts)"
 		};
 	}
 	if (notesVersion !== undefined) {
 		return {
 			kind: "external",
 			probes: [],
-			note: `cites the ${notesVersion} release notes`,
+			note: `cites the ${notesVersion} release notes`
 		};
 	}
 	return page === undefined
@@ -110,7 +110,7 @@ export interface RemapResult {
 
 const staleTexts = (
 	stale: string[],
-	before: Map<string, string>,
+	before: Map<string, string>
 ): Map<string, string> => {
 	const texts = new Map<string, string>();
 	for (const file of new Set(stale.map((s) => s.split("#")[0] ?? ""))) {
@@ -132,7 +132,7 @@ const bestStale = (
 	fact: Fact,
 	stale: string[],
 	texts: Map<string, string>,
-	used: Set<string>,
+	used: Set<string>
 ): string | null => {
 	let best: string | null = null;
 	let score = 0;
@@ -156,7 +156,7 @@ export const remap = ({ facts, map, before, now }: RemapInput): RemapResult => {
 	const stale = Object.keys(map).filter((k) => !ids.has(k));
 	const texts = staleTexts(stale, before);
 	const out: FactMap = Object.fromEntries(
-		Object.entries(map).filter(([k]) => ids.has(k)),
+		Object.entries(map).filter(([k]) => ids.has(k))
 	);
 	const used = new Set<string>();
 	const unsourced: Fact[] = [];
@@ -164,7 +164,7 @@ export const remap = ({ facts, map, before, now }: RemapInput): RemapResult => {
 	let sourced = 0;
 	// The gate (`--check`) holds only change facts to a source; an info or gap fact stays unmapped by design.
 	for (const f of facts.filter(
-		(x) => x.status === "unmapped" && x.class === "change",
+		(x) => x.status === "unmapped" && x.class === "change"
 	)) {
 		const old = bestStale(f, stale, texts, used);
 		const kept = old === null ? undefined : map[old];
@@ -187,7 +187,7 @@ export const remap = ({ facts, map, before, now }: RemapInput): RemapResult => {
 		renamed,
 		sourced,
 		dropped: stale.length - used.size,
-		unsourced,
+		unsourced
 	};
 };
 
@@ -195,11 +195,11 @@ export const remap = ({ facts, map, before, now }: RemapInput): RemapResult => {
 export const readTexts = async (
 	facts: Fact[],
 	map: FactMap,
-	ref: string,
+	ref: string
 ): Promise<{ before: Map<string, string>; now: Map<string, string> }> => {
 	const files = new Set([
 		...facts.map((f) => f.file),
-		...Object.keys(map).map((k) => k.split("#")[0] ?? ""),
+		...Object.keys(map).map((k) => k.split("#")[0] ?? "")
 	]);
 	const before = new Map<string, string>();
 	const now = new Map<string, string>();
@@ -209,7 +209,7 @@ export const readTexts = async (
 				cwd: ROOT,
 				env: toolEnv(),
 				stdout: "pipe",
-				stderr: "ignore",
+				stderr: "ignore"
 			});
 			const text = await new Response(p.stdout).text();
 			if ((await p.exited) === 0) {
@@ -219,7 +219,7 @@ export const readTexts = async (
 			if (await current.exists()) {
 				now.set(file, await current.text());
 			}
-		}),
+		})
 	);
 	return { before, now };
 };

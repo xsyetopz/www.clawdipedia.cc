@@ -25,7 +25,7 @@ const HEADER_ALLOW = new Set([
 	"x-client-request-id",
 	"accept",
 	"x-api-key",
-	"authorization",
+	"authorization"
 ]);
 
 const CASE_ID = /^[A-Za-z0-9][A-Za-z0-9._-]*$/u;
@@ -45,7 +45,7 @@ export interface Stub {
 /** The allow-listed headers, and whether each credential header held a key this stub accepts (null when none was sent). */
 const inspectHeaders = (
 	req: Request,
-	o: StubCase,
+	o: StubCase
 ): { headers: Record<string, string>; auth: boolean | null } => {
 	const headers: Record<string, string> = {};
 	let auth: boolean | null = null;
@@ -83,7 +83,7 @@ export const fallbackRoute = (pathname: string, tokens: number): Response => {
 	}
 	return new Response("{}", {
 		status: 404,
-		headers: { "content-type": "application/json" },
+		headers: { "content-type": "application/json" }
 	});
 };
 
@@ -99,7 +99,7 @@ const routeRest = (
 	req: Request,
 	url: URL,
 	r: Routed,
-	calls: Map<string, number>,
+	calls: Map<string, number>
 ): Response => {
 	const orch =
 		r.o.orchestrator === undefined
@@ -117,7 +117,7 @@ const logRequest = (
 	req: Request,
 	url: URL,
 	r: Routed,
-	seen: ReturnType<typeof inspectHeaders>,
+	seen: ReturnType<typeof inspectHeaders>
 ): Promise<void> => {
 	const rec: LoggedRequest = {
 		id: r.id,
@@ -127,7 +127,7 @@ const logRequest = (
 		bad: seen.auth === false || r.id === "",
 		headers: seen.headers,
 		headerNames: [...req.headers.keys()].toSorted(),
-		body: r.body,
+		body: r.body
 	};
 	return appendFile(r.o.log, `${JSON.stringify(rec)}\n`);
 };
@@ -136,7 +136,7 @@ const handle = async (
 	req: Request,
 	strayLog: string,
 	cases: Map<string, StubCase>,
-	calls: Map<string, number>,
+	calls: Map<string, number>
 ): Promise<Response> => {
 	const url = new URL(req.url);
 	// the cloud memory server must sit at the origin root, so its case id is the session id
@@ -164,8 +164,8 @@ export const startStub = async (
 	port: number,
 	strayLog = join(
 		tmpdir(),
-		`cc-release-stub-stray-${process.pid}-${port}.jsonl`,
-	),
+		`cc-release-stub-stray-${process.pid}-${port}.jsonl`
+	)
 ): Promise<Stub> => {
 	await Bun.write(strayLog, "");
 	const cases = new Map<string, StubCase>();
@@ -173,7 +173,7 @@ export const startStub = async (
 	const server = Bun.serve({
 		port,
 		hostname: "127.0.0.1",
-		fetch: (req) => handle(req, strayLog, cases, calls),
+		fetch: (req) => handle(req, strayLog, cases, calls)
 	});
 	return {
 		port: server.port ?? port,
@@ -202,7 +202,7 @@ export const startStub = async (
 			}
 			await rm(strayLog, { force: true });
 			return stray;
-		},
+		}
 	};
 };
 

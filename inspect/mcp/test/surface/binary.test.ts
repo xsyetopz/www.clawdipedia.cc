@@ -30,7 +30,7 @@ describe.skipIf(!has)("installed binary 2.1.309", () => {
 		const bundle = p.bundle();
 		const base = await baseTools(bundle, new Resolver());
 		expect(n).toEqual(
-			[...new Set(base.tools.map((t) => t.name))].toSorted(byCode),
+			[...new Set(base.tools.map((t) => t.name))].toSorted(byCode)
 		);
 		expect(n).toContain("Bash");
 		expect(n).toContain("Agent");
@@ -51,7 +51,7 @@ describe.skipIf(!has)("installed binary 2.1.309", () => {
 
 	test("env", async () => {
 		expect(await get("env")).toContain(
-			"CLAUDE_CODE_DISABLE_ULTRAREVIEW_TRUST_CHECK",
+			"CLAUDE_CODE_DISABLE_ULTRAREVIEW_TRUST_CHECK"
 		);
 	}, 300_000);
 
@@ -114,7 +114,7 @@ describe.skipIf(!has)("installed binary 2.1.309", () => {
 			"interleaved-thinking-2025-05-14",
 			"ccr-byoc-2025-07-29",
 			"afk-mode-2026-01-31",
-			"token-counting-2024-11-01",
+			"token-counting-2024-11-01"
 		]) {
 			expect(n).toContain(beta);
 		}
@@ -122,7 +122,7 @@ describe.skipIf(!has)("installed binary 2.1.309", () => {
 		const p = await prog();
 		const found = await surface(p.bundle(), "beta", p.modules);
 		expect(found.find((i) => i.name === "context-1m-2025-08-07")?.detail).toBe(
-			"long_context",
+			"long_context"
 		);
 	}, 300_000);
 
@@ -138,7 +138,7 @@ describe.skipIf(!has)("installed binary 2.1.309", () => {
 			"/api/oauth/usage",
 			"/api/claude_code/policy_limits",
 			"/api/event_logging/v2/batch",
-			"/v1/traces",
+			"/v1/traces"
 		]) {
 			expect(n).toContain(path);
 		}
@@ -158,7 +158,7 @@ describe.skipIf(!has)("installed binary 2.1.309", () => {
 			"bypassPermissions",
 			"default",
 			"dontAsk",
-			"plan",
+			"plan"
 		]);
 	}, 300_000);
 
@@ -190,10 +190,7 @@ const isSchemaNode = (x: unknown): x is SchemaNode =>
 // The generated managed-settings schema comes from running the program's zod validators, so its nested
 // property paths are an oracle for the `setting-key` walk of the same version's code.
 const schema: unknown = await Bun.file(
-	join(
-		import.meta.dir,
-		"../../../../schemas/claude-code-managed-settings.json",
-	),
+	join(import.meta.dir, "../../../../schemas/claude-code-managed-settings.json")
 ).json();
 const schemaTitle =
 	isSchemaNode(schema) && typeof schema.title === "string" ? schema.title : "";

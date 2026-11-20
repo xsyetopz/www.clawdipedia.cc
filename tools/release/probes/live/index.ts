@@ -23,14 +23,14 @@ const plan = async (ctx: Ctx): Promise<void> => {
 	console.info("Plan (in run order, one attempt each, no retry):");
 	for (const c of cases) {
 		console.info(
-			`  live.${c.id.padEnd(24)} ${c.title}; requests: ${c.requests}`,
+			`  live.${c.id.padEnd(24)} ${c.title}; requests: ${c.requests}`
 		);
 		if (c.note !== undefined) {
 			console.info(`      note: ${c.note}`);
 		}
 	}
 	console.info(
-		"Cost: runs use your subscription quota on the default model. Only the context-budget and OAuth-parity cases send a prompt ('Reply with OK'); the interactive /usage and /artifacts cases send no prompt, but startup makes a few small API requests each. Every sandbox denies the Artifact tool, so nothing is published.",
+		"Cost: runs use your subscription quota on the default model. Only the context-budget and OAuth-parity cases send a prompt ('Reply with OK'); the interactive /usage and /artifacts cases send no prompt, but startup makes a few small API requests each. Every sandbox denies the Artifact tool, so nothing is published."
 	);
 	console.info(await cacheNote(ctx.to));
 };
@@ -39,7 +39,7 @@ const ask = async (): Promise<boolean> => {
 	const rl = createInterface({ input: process.stdin, output: process.stdout });
 	try {
 		const a = await rl.question(
-			"Run these cases with your subscription token? [y/N] ",
+			"Run these cases with your subscription token? [y/N] "
 		);
 		return /^y(es)?$/iu.test(a.trim());
 	} finally {
@@ -54,7 +54,7 @@ const confirm = async (ctx: Ctx): Promise<number | null> => {
 	}
 	if (!process.stdin.isTTY) {
 		console.error(
-			"Refusing: no TTY to ask on. Run it in a terminal, or pass --yes.",
+			"Refusing: no TTY to ask on. Run it in a terminal, or pass --yes."
 		);
 		return 3;
 	}
@@ -77,7 +77,7 @@ export const runProbeLive = async (ctx: Ctx): Promise<number> => {
 	const childArgs = [
 		"--to",
 		ctx.to,
-		...(ctx.only === null ? [] : ["--only", ctx.only.join(",")]),
+		...(ctx.only === null ? [] : ["--only", ctx.only.join(",")])
 	];
 	if (ctx.dry) {
 		// Fake token only in this child; nothing from our env, no secret runner.
@@ -85,9 +85,9 @@ export const runProbeLive = async (ctx: Ctx): Promise<number> => {
 			cwd: ROOT,
 			env: {
 				PATH: `${SYSTEM_PATH}:${dirname(process.execPath)}`,
-				CLAUDE_CODE_OAUTH_TOKEN: DRY_TOKEN,
+				CLAUDE_CODE_OAUTH_TOKEN: DRY_TOKEN
 			},
-			stdio: ["ignore", "inherit", "inherit"],
+			stdio: ["ignore", "inherit", "inherit"]
 		});
 		return p.exited;
 	}
@@ -101,8 +101,8 @@ export const runProbeLive = async (ctx: Ctx): Promise<number> => {
 			cwd: ROOT,
 			// only what the runner itself needs ($HOME for its PATH); it starts the child with env -i
 			env: { PATH: "/usr/bin:/bin", HOME: homedir() },
-			stdio: ["inherit", "inherit", "inherit"],
-		},
+			stdio: ["inherit", "inherit", "inherit"]
+		}
 	);
 	return p.exited;
 };

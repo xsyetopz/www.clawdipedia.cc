@@ -19,22 +19,22 @@ export const marketplaceFiles = (): Record<string, string> => ({
 	".claude-plugin/marketplace.json": JSON.stringify({
 		name: MKT,
 		owner: { name: "probe" },
-		plugins: [{ name: PLUGIN, source: `./${PLUGIN}` }],
+		plugins: [{ name: PLUGIN, source: `./${PLUGIN}` }]
 	}),
 	[`${PLUGIN}/.claude-plugin/plugin.json`]: JSON.stringify({
 		name: PLUGIN,
-		version: "1.0.0",
+		version: "1.0.0"
 	}),
 	[`${PLUGIN}/hooks/hooks.json`]: JSON.stringify({
-		modules: ["./register.ts"],
+		modules: ["./register.ts"]
 	}),
-	[`${PLUGIN}/hooks/register.ts`]: MOD,
+	[`${PLUGIN}/hooks/register.ts`]: MOD
 });
 
 /** Settings that declare the marketplace at `path` and enable the probe plugin. */
 export const enableSettings = (path: string) => ({
 	extraKnownMarketplaces: {
-		[MKT]: { source: { source: "directory", path } },
+		[MKT]: { source: { source: "directory", path } }
 	},
-	enabledPlugins: { [`${PLUGIN}@${MKT}`]: true },
+	enabledPlugins: { [`${PLUGIN}@${MKT}`]: true }
 });

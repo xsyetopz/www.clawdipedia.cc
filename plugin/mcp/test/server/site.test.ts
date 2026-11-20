@@ -8,7 +8,7 @@ import {
 	sourceNumbers,
 	sourceOf,
 	stops,
-	tempDir,
+	tempDir
 } from "./harness.ts";
 import { mockSite, newState } from "./mocks.ts";
 
@@ -29,14 +29,14 @@ describe("search and offline", () => {
 		expect(d.text).not.toContain("configure/hooks");
 		const none = await call("search_docs", {
 			query: "PreToolUse",
-			section: "Overview",
+			section: "Overview"
 		});
 		expect(none.error).toBe(false);
 		// The empty answer has no structured hits; a known route is absent.
 		expect(none.text).not.toContain("configure/");
 		const conf = await call("search_docs", {
 			query: "PreToolUse",
-			section: "Configure",
+			section: "Configure"
 		});
 		expect(conf.text).toContain("configure/hooks");
 	});
@@ -46,7 +46,7 @@ describe("search and offline", () => {
 		const site = mockSite(state);
 		const { call } = await connect({
 			CLAWDIPEDIA_BASE_URL: site.url,
-			CLAWDIPEDIA_TTL_SCALE: "0",
+			CLAWDIPEDIA_TTL_SCALE: "0"
 		});
 		const live = await call("read_page", { route: "configure/hooks" });
 		expect(live.error).toBe(false);
@@ -73,7 +73,7 @@ describe("search and offline", () => {
 		const site = mockSite();
 		const { call } = await connect({
 			CLAWDIPEDIA_BASE_URL: site.url,
-			CLAWDIPEDIA_TTL_SCALE: "0.001",
+			CLAWDIPEDIA_TTL_SCALE: "0.001"
 		});
 		expect(sourceOf(await call("list_pages", {})).state).toBe("live");
 		await site.stop();
@@ -96,7 +96,7 @@ describe("search and offline", () => {
 		stops.push(site.stop);
 		const { call } = await connect({
 			CLAWDIPEDIA_BASE_URL: site.url,
-			CLAWDIPEDIA_TTL_SCALE: "0.001",
+			CLAWDIPEDIA_TTL_SCALE: "0.001"
 		});
 		// "handlers" is only in the body of Hook Events, the page that is missing.
 		const first = await call("search_docs", { query: "handlers" });
@@ -132,7 +132,7 @@ describe("search and offline", () => {
 		const env = {
 			CLAWDIPEDIA_BASE_URL: site.url,
 			CLAWDIPEDIA_CACHE_DIR: cache,
-			CLAWDIPEDIA_TTL_SCALE: "0",
+			CLAWDIPEDIA_TTL_SCALE: "0"
 		};
 		const first = await connect(env);
 		const firstList = await first.call("list_pages", {});
@@ -160,7 +160,7 @@ describe("site cache rules", () => {
 		stops.push(site.stop);
 		const { call } = await connect({
 			CLAWDIPEDIA_BASE_URL: site.url,
-			CLAWDIPEDIA_TTL_SCALE: "0",
+			CLAWDIPEDIA_TTL_SCALE: "0"
 		});
 		const a = await call("read_page", { route: "configure/hooks" });
 		expect(a.error).toBe(false);
@@ -170,7 +170,7 @@ describe("site cache rules", () => {
 		expect(b.error).toBe(false);
 		expect(b.text).toContain("PreToolUse");
 		expect(state.hits.find((h) => h.path === "/configure/hooks.md")?.inm).toBe(
-			'"v1"',
+			'"v1"'
 		);
 	});
 
@@ -180,7 +180,7 @@ describe("site cache rules", () => {
 		stops.push(site.stop);
 		const { call, cache } = await connect({
 			CLAWDIPEDIA_BASE_URL: site.url,
-			CLAWDIPEDIA_TTL_SCALE: "0",
+			CLAWDIPEDIA_TTL_SCALE: "0"
 		});
 		const first = await call("read_page", { route: "configure/hooks" });
 		expect(first.error).toBe(false);

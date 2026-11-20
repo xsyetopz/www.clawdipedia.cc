@@ -17,7 +17,7 @@ export const PLUGINS = [
 		out: "plugin/mcp/dist/server.js",
 		test: "plugin/mcp/test",
 		mcp: true,
-		external: [],
+		external: []
 	},
 	{
 		dir: "inspect",
@@ -26,7 +26,7 @@ export const PLUGINS = [
 		out: "inspect/mcp/dist/server.js",
 		test: "inspect/mcp/test",
 		mcp: true,
-		external: ["oxc-parser"],
+		external: ["oxc-parser"]
 	},
 	{
 		dir: "cli",
@@ -35,8 +35,8 @@ export const PLUGINS = [
 		out: "cli/bin/clawdipedia",
 		test: "cli/test",
 		mcp: false,
-		external: [],
-	},
+		external: []
+	}
 ];
 export type Plugin = (typeof PLUGINS)[number];
 
@@ -68,7 +68,7 @@ export const marketplaceEntries = (read: (file: string) => Json): Json[] => {
 	return Array.isArray(plugins)
 		? plugins.filter(
 				(p): p is Json =>
-					typeof p === "object" && p !== null && !Array.isArray(p),
+					typeof p === "object" && p !== null && !Array.isArray(p)
 			)
 		: [];
 };
@@ -87,22 +87,22 @@ export const mirrorProblems = (read: (file: string) => Json): string[] => {
 		PLUGINS.map((p) => {
 			const m = read(manifestFile(p.dir));
 			return [String(m["name"]), m];
-		}),
+		})
 	);
 	return marketplaceEntries(read).flatMap((entry) => {
 		const name = String(entry["name"]);
 		const manifest = manifests.get(name);
 		if (!manifest) {
 			return [
-				`marketplace entry "${name}" has no plugin manifest with that name`,
+				`marketplace entry "${name}" has no plugin manifest with that name`
 			];
 		}
 		// JSON text compares arrays by value and order, and keeps keyword order a reviewed choice.
 		return MIRRORED_FIELDS.filter(
-			(f) => JSON.stringify(entry[f]) !== JSON.stringify(manifest[f]),
+			(f) => JSON.stringify(entry[f]) !== JSON.stringify(manifest[f])
 		).map(
 			(f) =>
-				`marketplace entry "${name}" ${f} differs from its plugin manifest: copy it from plugin.json`,
+				`marketplace entry "${name}" ${f} differs from its plugin manifest: copy it from plugin.json`
 		);
 	});
 };

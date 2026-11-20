@@ -12,7 +12,7 @@ describe("tools", () => {
 			"code",
 			"release",
 			"sessions",
-			"surface",
+			"surface"
 		]);
 		for (const t of tools) {
 			expect(t.description?.match(/[.!?](\s|$)/gu)).toHaveLength(1);
@@ -26,7 +26,7 @@ describe("tools", () => {
 		const r = await call("release", { action: "constructor" });
 		expect(r.isError).toBe(true);
 		expect(r.content[0]?.text).toBe(
-			'Error: unknown action "constructor"; actions: diff, notes, explain',
+			'Error: unknown action "constructor"; actions: diff, notes, explain'
 		);
 	});
 
@@ -34,7 +34,7 @@ describe("tools", () => {
 		const r = await call("sessions", { action: "nope" });
 		expect(r.isError).toBe(true);
 		expect(r.content[0]?.text).toBe(
-			'Error: unknown action "nope"; actions: list, read, search, validate, fields, tool-calls',
+			'Error: unknown action "nope"; actions: list, read, search, validate, fields, tool-calls'
 		);
 	});
 });

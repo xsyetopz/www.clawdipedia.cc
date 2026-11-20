@@ -37,7 +37,7 @@ const mark = (node: React.ReactNode): React.ReactNode =>
 		if (typeof children === "string") {
 			return children.endsWith("/")
 				? React.cloneElement(child, {
-						className: `${className ?? ""} cc-folder`.trim(),
+						className: `${className ?? ""} cc-folder`.trim()
 					})
 				: child;
 		}
@@ -47,7 +47,7 @@ const mark = (node: React.ReactNode): React.ReactNode =>
 	});
 
 export const FileTree = ({
-	children,
+	children
 }: {
 	children?: React.ReactNode;
 }): React.JSX.Element => (

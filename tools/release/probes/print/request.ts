@@ -11,7 +11,7 @@ const LONG = 200;
 
 const one = (
 	ctx: Parameters<PrintGroup["run"]>[0],
-	name: "baseline-a" | "baseline-b",
+	name: "baseline-a" | "baseline-b"
 ) =>
 	oneCase(ctx, `print.request.${name}`, async () => {
 		const mk = name === "baseline-a" ? baselineA : baselineB;
@@ -26,7 +26,7 @@ const one = (
 					(s["events"] ?? "").includes("system/init") &&
 					(name === "baseline-a" || (s["cfgfiles"] ?? "").includes("hook.log")),
 				"precondition.detail": b.why,
-				noise: b.noise,
+				noise: b.noise
 			};
 			const samples: Record<string, string> = {};
 			for (const [k, v] of Object.entries(s)) {
@@ -45,7 +45,7 @@ const one = (
 				data,
 				samples,
 				notes:
-					"Long values are a hash in data and full text in samples. Keys that differ between two identical runs are listed in noise and left out.",
+					"Long values are a hash in data and full text in samples. Keys that differ between two identical runs are listed in noise and left out."
 			});
 		} finally {
 			await dispose(r);
@@ -59,5 +59,5 @@ export const requestGroup: PrintGroup = {
 		const a = await one(ctx, "baseline-a");
 		const b = await one(ctx, "baseline-b");
 		return [...a, ...b];
-	},
+	}
 };

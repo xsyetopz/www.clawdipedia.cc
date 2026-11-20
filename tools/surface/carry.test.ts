@@ -10,7 +10,7 @@ describe("carryPairs", () => {
 		const pairs = carryPairs(unmapped, stale);
 
 		expect(pairs).toEqual([
-			["error:a layout record is damaged", "error:a layout node is damaged"],
+			["error:a layout record is damaged", "error:a layout node is damaged"]
 		]);
 	});
 
@@ -35,14 +35,14 @@ describe("carryPairs", () => {
 	test("does not carry a pair that is not mutual-best", () => {
 		const unmapped = [
 			"error:a layout node is damaged",
-			"error:a layout record is damaged",
+			"error:a layout record is damaged"
 		];
 		const stale = ["error:a layout record is damaged"];
 
 		const pairs = carryPairs(unmapped, stale);
 
 		expect(pairs).toEqual([
-			["error:a layout record is damaged", "error:a layout record is damaged"],
+			["error:a layout record is damaged", "error:a layout record is damaged"]
 		]);
 	});
 
@@ -67,7 +67,7 @@ describe("carryPairs", () => {
 	test("does not carry a score below the threshold", () => {
 		const unmapped = ["error:--task-budget must be a positive integer"];
 		const stale = [
-			"error:maxEntrySize must be a positive integer if specified",
+			"error:maxEntrySize must be a positive integer if specified"
 		];
 
 		const pairs = carryPairs(unmapped, stale);

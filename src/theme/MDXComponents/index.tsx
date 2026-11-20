@@ -8,7 +8,7 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 	typeof value === "object" && value !== null;
 
 const isCodeComponent = (
-	value: unknown,
+	value: unknown
 ): value is ComponentType<ComponentProps<"code">> =>
 	typeof value === "function";
 
@@ -28,7 +28,7 @@ const components = {
 	...base,
 	code: Code,
 	...Badges,
-	FileTree,
+	FileTree
 };
 
 export default components;

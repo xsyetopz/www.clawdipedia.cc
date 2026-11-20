@@ -17,11 +17,11 @@ export const buildNames = (text: string, current: string): BuildName[] => {
 	const [major, minor] = current.split(".");
 	const re = new RegExp(
 		String.raw`(?<![\d.])${escape(`${major}.${minor}.`)}\d+(?![\d.])`,
-		"gu",
+		"gu"
 	);
 	return text
 		.split("\n")
 		.flatMap((l, i) =>
-			[...l.matchAll(re)].map((m) => ({ line: i + 1, build: m[0] })),
+			[...l.matchAll(re)].map((m) => ({ line: i + 1, build: m[0] }))
 		);
 };

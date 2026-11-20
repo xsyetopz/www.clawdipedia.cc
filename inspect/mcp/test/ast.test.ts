@@ -9,7 +9,7 @@ import { rejection } from "./run-helpers.ts";
 // Claude Code 2.1.309 minifies a `using` binding to the name `as`.
 test.each([
 	"async function f(g){using as=await g();return as}",
-	"async function f(g){await using as=g();return as}",
+	"async function f(g){await using as=g();return as}"
 ])("parses a using declaration bound to `as`: %s", async (src) => {
 	const bundle = new Bundle([{ name: "/$bunfs/root/a.js", text: src }]);
 	const m = await bundle.get("a.js");
@@ -31,7 +31,7 @@ test("a name in a parameter default is not the variable of the function body", a
 	const m = await bundle.get("a.js");
 	expect(m?.topLevel("b")?.references.map((r) => r.identifier.start)).toEqual([
 		src.indexOf("b=1"),
-		src.indexOf("b)"),
+		src.indexOf("b)")
 	]);
 });
 
@@ -45,7 +45,7 @@ test.each([
 	["var a=1; var b=2; var c=3; var d=4; var e=5", " var d", "Program"],
 	["({a})", "a", "Identifier"],
 	[TEMPLATE, "d", "Identifier"],
-	[TEMPLATE, "c", "TemplateElement"],
+	[TEMPLATE, "c", "TemplateElement"]
 ])("the innermost node of `%s` at `%s` is a %s", async (src, at, type) => {
 	const bundle = new Bundle([{ name: "/$bunfs/root/a.js", text: src }]);
 	const m = await bundle.get("a.js");
@@ -57,13 +57,13 @@ test("a bundle leaves out a file that is not JavaScript, and keeps the order of 
 	const bundle = new Bundle([
 		{ name: "/$bunfs/root/zstd.js", text: "(�/�\u0000" },
 		{ name: "/$bunfs/root/b.js", text: "var b=1" },
-		{ name: "/$bunfs/root/a.js", text: "var a=1" },
+		{ name: "/$bunfs/root/a.js", text: "var a=1" }
 	]);
 	const names = [...bundle.texts.keys()];
 	const mods = await mapSeq(names, (n) => bundle.get(n));
 	expect(names.filter((_, i) => mods[i] !== undefined)).toEqual([
 		"b.js",
-		"a.js",
+		"a.js"
 	]);
 });
 
@@ -116,10 +116,10 @@ test("a bundle parses only the modules a reader asks for, each one once", async 
 		const bundle = new Bundle([
 			{
 				name: "/$bunfs/root/a.js",
-				text: 'import{x}from"/$bunfs/root/b.js";var y=x',
+				text: 'import{x}from"/$bunfs/root/b.js";var y=x'
 			},
 			{ name: "/$bunfs/root/b.js", text: "var v=1;export{v as x}" },
-			{ name: "/$bunfs/root/c.js", text: "var c=1" },
+			{ name: "/$bunfs/root/c.js", text: "var c=1" }
 		]);
 		expect(parse).not.toHaveBeenCalled();
 		const o = await originOf(bundle, "a.js", "x");
@@ -139,14 +139,14 @@ test("the importers of a variable come in bundle order, for each name it is expo
 		{ name: "/$bunfs/root/b.js", text: `import{x as r}${from}` },
 		{
 			name: "/$bunfs/root/c.js",
-			text: "var v=1,w=2;export{v as x,v as y,w as z}",
-		},
+			text: "var v=1,w=2;export{v as x,v as y,w as z}"
+		}
 	]);
 	const found = await importersOf(bundle, "c.js", "v");
 	expect(found.map((i) => [i.module.name, i.variable.name])).toEqual([
 		["a.js", "p"],
 		["a.js", "q"],
-		["b.js", "r"],
+		["b.js", "r"]
 	]);
 });
 
@@ -155,9 +155,9 @@ test("a released bundle parses a module again, and gives its importers from the 
 	const bundle = new Bundle([
 		{
 			name: "/$bunfs/root/a.js",
-			text: 'import{x}from"/$bunfs/root/b.js";var y=x',
+			text: 'import{x}from"/$bunfs/root/b.js";var y=x'
 		},
-		{ name: "/$bunfs/root/b.js", text: "var v=1;export{v as x}" },
+		{ name: "/$bunfs/root/b.js", text: "var v=1;export{v as x}" }
 	]);
 	const [old] = await importersOf(bundle, "b.js", "v");
 	bundle.release();
@@ -172,7 +172,7 @@ test("a nested function with the name of an export has no calls in other modules
 	const text = "function v(){function v(){}v()}export{v as x}";
 	const bundle = new Bundle([
 		{ name: "/$bunfs/root/a.js", text: 'import{x}from"/$bunfs/root/b.js";x()' },
-		{ name: "/$bunfs/root/b.js", text },
+		{ name: "/$bunfs/root/b.js", text }
 	]);
 	const calls = await callsAt(bundle, "b.js", text.indexOf("function v(){}"));
 	expect(calls.map((c) => c?.module.name)).toEqual(["b.js"]);
@@ -199,7 +199,7 @@ test("the sequential helpers run one item at a time, in order, and stop early", 
 		"start 1",
 		"end 1",
 		"start 2",
-		"end 2",
+		"end 2"
 	]);
 	log.length = 0;
 	expect(await allSeq([0, 1, 2], step)).toBeUndefined();
@@ -212,6 +212,6 @@ test("the sequential helpers run one item at a time, in order, and stop early", 
 		"start 1",
 		"end 1",
 		"start 2",
-		"end 2",
+		"end 2"
 	]);
 });

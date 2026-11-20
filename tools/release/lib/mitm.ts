@@ -15,7 +15,7 @@ export const USAGE_PATH = "/api/oauth/usage";
 export type Fault = "pass" | "429" | "429-ra" | "200-envelope";
 const ENVELOPE = {
 	type: "error",
-	error: { type: "rate_limit_error", message: "Rate limited" },
+	error: { type: "rate_limit_error", message: "Rate limited" }
 };
 
 export interface MitmLog {
@@ -58,7 +58,7 @@ const realUpstream = (req: Request, url: URL): Promise<Response> => {
 		method: req.method,
 		headers: h,
 		body: ["GET", "HEAD"].includes(req.method) ? null : req.body,
-		redirect: "manual",
+		redirect: "manual"
 	});
 };
 
@@ -74,7 +74,7 @@ const faultResponse = (f: Fault, note: Note): Response => {
 	note(429, f);
 	return Response.json(ENVELOPE, {
 		status: 429,
-		headers: f === "429-ra" ? { ...json, "retry-after": "1800" } : json,
+		headers: f === "429-ra" ? { ...json, "retry-after": "1800" } : json
 	});
 };
 
@@ -82,7 +82,7 @@ const forward = async (
 	req: Request,
 	url: URL,
 	opts: MitmOpts,
-	upstream: Upstream,
+	upstream: Upstream
 ): Promise<Response> => {
 	if (
 		opts.onMessages === undefined ||
@@ -96,7 +96,7 @@ const forward = async (
 		opts.onMessages({
 			path: url.pathname,
 			body: JSON.parse(text),
-			betas: req.headers.get("anthropic-beta") ?? "",
+			betas: req.headers.get("anthropic-beta") ?? ""
 		});
 	} catch {
 		// not JSON: nothing to record
@@ -105,9 +105,9 @@ const forward = async (
 		new Request(req.url, {
 			method: "POST",
 			headers: new Headers(req.headers),
-			body: text,
+			body: text
 		}),
-		url,
+		url
 	);
 };
 
@@ -120,7 +120,7 @@ interface State {
 const serveTls = (
 	pki: { key: string; cert: string },
 	opts: MitmOpts,
-	st: State,
+	st: State
 ): ReturnType<typeof Bun.serve> => {
 	const upstream = opts.upstream ?? realUpstream;
 	return Bun.serve({
@@ -136,7 +136,7 @@ const serveTls = (
 					method: req.method,
 					path: url.pathname,
 					status,
-					...(f === undefined ? {} : { fault: f }),
+					...(f === undefined ? {} : { fault: f })
 				});
 			};
 			if (url.pathname === USAGE_PATH && st.fault !== "pass") {
@@ -154,7 +154,7 @@ const serveTls = (
 			rh.delete("content-encoding");
 			rh.delete("content-length");
 			return new Response(r.body, { status: r.status, headers: rh });
-		},
+		}
 	});
 };
 
@@ -170,7 +170,7 @@ const parseTarget = (target: string): { host: string; port: string } => {
 const makeProxy = (
 	opts: MitmOpts,
 	tlsPort: number,
-	connects: string[],
+	connects: string[]
 ): http.Server => {
 	const proxy = http.createServer((_q, r) => {
 		r.statusCode = 405;
@@ -253,7 +253,7 @@ export const startMitm = async (opts: MitmOpts = {}): Promise<Mitm> => {
 			},
 			log: () => [...st.log],
 			connects: () => [...st.connects],
-			stop,
+			stop
 		};
 	} catch (error) {
 		await stop();

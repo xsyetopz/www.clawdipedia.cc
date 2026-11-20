@@ -36,7 +36,7 @@ const isClient = (v: unknown): v is McpClient =>
 const construct = async (
 	file: string,
 	name: string,
-	args: unknown[],
+	args: unknown[]
 ): Promise<unknown> => {
 	const mod: unknown = await import(sdk(file));
 	const ctor = isRecord(mod) ? mod[name] : undefined;
@@ -58,16 +58,16 @@ const cache = await mkdtemp(join(tmpdir(), "clawdipedia-docs-smoke-"));
 const DROPPED = new Set([
 	"CLAWDIPEDIA_BASE_URL",
 	"PLATFORM_DOCS_BASE_URL",
-	"CLAUDE_PLUGIN_DATA",
+	"CLAUDE_PLUGIN_DATA"
 ]);
 const env: Record<string, string> = {
 	...Object.fromEntries(
 		Object.entries(process.env).filter(
 			(e): e is [string, string] =>
-				typeof e[1] === "string" && !DROPPED.has(e[0]),
-		),
+				typeof e[1] === "string" && !DROPPED.has(e[0])
+		)
 	),
-	CLAWDIPEDIA_CACHE_DIR: cache,
+	CLAWDIPEDIA_CACHE_DIR: cache
 };
 
 const failures: string[] = [];
@@ -76,7 +76,7 @@ const step = async (
 	client: McpClient,
 	label: string,
 	name: string,
-	args: Record<string, unknown>,
+	args: Record<string, unknown>
 ) => {
 	const t0 = Date.now();
 	try {
@@ -99,19 +99,19 @@ const steps: [label: string, name: string, args: Record<string, unknown>][] = [
 	[
 		"search_docs platform",
 		"search_docs",
-		{ query: "messages api", source: "platform" },
+		{ query: "messages api", source: "platform" }
 	],
 	["search_docs code", "search_docs", { query: "hooks", source: "code" }],
 	[
 		"search_docs claude-resources",
 		"search_docs",
-		{ query: "agents", source: "claude-resources" },
-	],
+		{ query: "agents", source: "claude-resources" }
+	]
 ];
 
 const runSteps = async (
 	client: McpClient,
-	rest: typeof steps,
+	rest: typeof steps
 ): Promise<void> => {
 	const [head, ...tail] = rest;
 	if (head === undefined) {
@@ -128,18 +128,18 @@ const cliStep = async (): Promise<void> => {
 			"bun",
 			join(MCP, "..", "..", "cli", "bin", "clawdipedia"),
 			"search",
-			"hooks",
+			"hooks"
 		],
-		{ env, stdout: "pipe", stderr: "pipe" },
+		{ env, stdout: "pipe", stderr: "pipe" }
 	);
 	const [out, err, exitCode] = await Promise.all([
 		new Response(cli.stdout).text(),
 		new Response(cli.stderr).text(),
-		cli.exited,
+		cli.exited
 	]);
 	const ok = exitCode === 0 && out.includes("Source:");
 	console.info(
-		`${ok ? "ok  " : "FAIL"} clawdipedia search (${Date.now() - t0} ms)`,
+		`${ok ? "ok  " : "FAIL"} clawdipedia search (${Date.now() - t0} ms)`
 	);
 	if (!ok) {
 		failures.push(`clawdipedia search: ${(out + err).slice(0, 300)}`);
@@ -148,7 +148,7 @@ const cliStep = async (): Promise<void> => {
 
 const main = async (): Promise<void> => {
 	const client = await construct("client/index.js", "Client", [
-		{ name: "plugin-smoke", version: "0" },
+		{ name: "plugin-smoke", version: "0" }
 	]);
 	if (!isClient(client)) {
 		throw new TypeError("the SDK Client has no connect, callTool, or close");
@@ -157,7 +157,7 @@ const main = async (): Promise<void> => {
 		const transport = await construct(
 			"client/stdio.js",
 			"StdioClientTransport",
-			[{ command: "bun", args: [join(MCP, "dist", "server.js")], env }],
+			[{ command: "bun", args: [join(MCP, "dist", "server.js")], env }]
 		);
 		await client.connect(transport);
 		await runSteps(client, steps);

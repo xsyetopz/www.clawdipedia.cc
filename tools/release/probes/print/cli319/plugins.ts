@@ -7,7 +7,7 @@ import {
 	msgs,
 	readCfg,
 	type Run,
-	withRun,
+	withRun
 } from "../run/helpers.ts";
 
 /** A debug-log line without its timestamp, cut to `n` characters. */
@@ -41,13 +41,13 @@ const PLUGIN_ARGS = [
 	"--plugin-dir",
 	"{HOME}/plug",
 	"--debug-file",
-	"{CFG}/d.log",
+	"{CFG}/d.log"
 ];
 
 const plugin = (name: string, register: string) => ({
 	"plug/.claude-plugin/plugin.json": json({ name, version: "1.0.0" }),
 	"plug/hooks/hooks.json": json({ modules: ["./register.ts"] }),
-	"plug/hooks/register.ts": register,
+	"plug/hooks/register.ts": register
 });
 
 const themeOut = async (r: Run) => {
@@ -57,9 +57,9 @@ const themeOut = async (r: Run) => {
 		from: r,
 		data: {
 			precondition:
-				msgs(r).length > 0 && lines.some((l) => l.includes("THEME ")),
+				msgs(r).length > 0 && lines.some((l) => l.includes("THEME "))
 		},
-		samples: { lines: lines.map((l) => trim(l, 400)).join("\n") },
+		samples: { lines: lines.map((l) => trim(l, 400)).join("\n") }
 	};
 };
 
@@ -69,8 +69,8 @@ export const themeMod = (): CaseDef => ({
 		withRun(
 			ctx,
 			{ homeFiles: plugin("themeprobe", THEME_MOD), args: PLUGIN_ARGS },
-			themeOut,
-		),
+			themeOut
+		)
 });
 
 const watchOut = async (r: Run) => {
@@ -81,18 +81,18 @@ const watchOut = async (r: Run) => {
 		data: {
 			precondition: msgs(r).length > 0 && d.length > 0,
 			added: files.filter(
-				(f) => !/^(\.claude-plugin\/plugin\.json|hooks\/.*)$/u.test(f),
+				(f) => !/^(\.claude-plugin\/plugin\.json|hooks\/.*)$/u.test(f)
 			),
 			typeRootLine: d.includes("type root of watchprobe at "),
-			watchLine: d.includes("plugin-dir watch: watching "),
+			watchLine: d.includes("plugin-dir watch: watching ")
 		},
 		samples: {
 			lines: d
 				.split("\n")
 				.filter((l) => /type root of|plugin-dir watch/u.test(l))
 				.map((l) => trim(l, 400))
-				.join("\n"),
-		},
+				.join("\n")
+		}
 	};
 };
 
@@ -105,10 +105,10 @@ export const dirWatch = (v?: string): CaseDef => ({
 			{
 				env: v === undefined ? {} : { CLAUDE_CODE_PLUGIN_DIR_WATCH: v },
 				homeFiles: plugin("watchprobe", "export const register = () => {};\n"),
-				args: PLUGIN_ARGS,
+				args: PLUGIN_ARGS
 			},
-			watchOut,
-		),
+			watchOut
+		)
 });
 
 export const cowork = (name: string, env: Record<string, string>): CaseDef => ({
@@ -120,8 +120,8 @@ export const cowork = (name: string, env: Record<string, string>): CaseDef => ({
 				precondition: r.reqs.length > 0,
 				env: Object.keys(env).join(","),
 				listed: r.reqs.some((q) =>
-					JSON.stringify(q.body).includes("cowork-plugin"),
-				),
-			},
-		})),
+					JSON.stringify(q.body).includes("cowork-plugin")
+				)
+			}
+		}))
 });

@@ -51,7 +51,7 @@ const scanExport = (ix: Index, u: Unit, t: Tables): void => {
 		return;
 	}
 	for (const [, h = "", name = ""] of u.t.matchAll(
-		/(\$[0-9a-f]{6}(?:_\d+)?) as ([\w$]+)/gu,
+		/(\$[0-9a-f]{6}(?:_\d+)?) as ([\w$]+)/gu
 	)) {
 		t.exp.set(`${ix.chunks[u.m] ?? u.m}|${name}`, `${u.m}|${h}`);
 	}
@@ -63,7 +63,7 @@ const scanImport = (u: Unit, t: Tables): void => {
 		return;
 	}
 	for (const [, name = "", h = ""] of u.t.matchAll(
-		/([\w$]+) as (\$[0-9a-f]{6}(?:_\d+)?)/gu,
+		/([\w$]+) as (\$[0-9a-f]{6}(?:_\d+)?)/gu
 	)) {
 		t.imp.set(`${u.m}|${h}`, `${from}|${name}`);
 	}
@@ -72,13 +72,13 @@ const scanImport = (u: Unit, t: Tables): void => {
 const scanUnit = (ix: Index, u: Unit, t: Tables): void => {
 	if (u.k === "VariableDeclaration") {
 		for (const [, h = "", v = ""] of u.t.matchAll(
-			/(\$[0-9a-f]{6}(?:_\d+)?)="((?:[^"\\]|\\.)*)"/gu,
+			/(\$[0-9a-f]{6}(?:_\d+)?)="((?:[^"\\]|\\.)*)"/gu
 		)) {
 			t.val.set(`${u.m}|${h}`, v);
 		}
 	} else if (u.k === "function") {
 		const h = /^(?:async )?function\*? ?(\$[0-9a-f]{6}(?:_\d+)?)\(/u.exec(
-			u.t,
+			u.t
 		)?.[1];
 		if (h !== undefined) {
 			t.fn.set(`${u.m}|${h}`, u);
@@ -96,7 +96,7 @@ export const namesOf = (ix: Index) => {
 		val: new Map(),
 		fn: new Map(),
 		exp: new Map(),
-		imp: new Map(),
+		imp: new Map()
 	};
 	for (const u of ix.units) {
 		scanUnit(ix, u, t);
@@ -112,13 +112,13 @@ export const namesOf = (ix: Index) => {
 	/** `module|name` and the `module|local` names that import it. */
 	const aliases = (k: string) => [
 		k,
-		...(exported.get(k) ?? []).flatMap((x) => imported.get(x) ?? []),
+		...(exported.get(k) ?? []).flatMap((x) => imported.get(x) ?? [])
 	];
 	return {
 		constant: (m: string, h: string) => val.get(key(m, h)),
 		fn: (m: string, h: string) => fn.get(key(m, h)),
 		aliases,
 		/** the module-level names that hold the string `v`, with their aliases */
-		holding: (v: string) => (byValue.get(v) ?? []).flatMap((k) => aliases(k)),
+		holding: (v: string) => (byValue.get(v) ?? []).flatMap((k) => aliases(k))
 	};
 };

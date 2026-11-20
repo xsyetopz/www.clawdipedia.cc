@@ -4,7 +4,7 @@ import {
 	HOST_SESSION_ID,
 	type HostMock,
 	hostSdkUrl,
-	startHostMock,
+	startHostMock
 } from "./host.ts";
 
 let mock: HostMock | undefined;
@@ -16,14 +16,14 @@ afterEach(async () => {
 const viaProxy = (
 	m: HostMock,
 	path: string,
-	init: RequestInit = {},
+	init: RequestInit = {}
 ): Promise<Response> => {
 	const env = m.env();
 	// Bun's fetch accepts `proxy` and `tls`, which RequestInit does not declare.
 	const bunInit: BunFetchRequestInit = {
 		...init,
 		proxy: env["HTTPS_PROXY"],
-		tls: { ca: Bun.file(env["NODE_EXTRA_CA_CERTS"] ?? "") },
+		tls: { ca: Bun.file(env["NODE_EXTRA_CA_CERTS"] ?? "") }
 	};
 	return fetch(`${hostSdkUrl()}${path}`, bunInit);
 };
@@ -46,7 +46,7 @@ const toFrame = (line: string): Frame => {
 	) {
 		return {
 			payload: Object.fromEntries(Object.entries(raw.payload)),
-			device_attestation_status: raw.device_attestation_status,
+			device_attestation_status: raw.device_attestation_status
 		};
 	}
 	throw new Error(`unexpected frame: ${line}`);
@@ -57,7 +57,7 @@ const frames = async (
 	reader: ReadableStreamDefaultReader<Uint8Array>,
 	count: number,
 	text = "",
-	out: Frame[] = [],
+	out: Frame[] = []
 ): Promise<Frame[]> => {
 	if (out.length >= count) {
 		return out;
@@ -84,12 +84,12 @@ describe("host mock", () => {
 		// Act
 		const res = await viaProxy(mock, "/worker/register", {
 			method: "POST",
-			body: "{}",
+			body: "{}"
 		});
 		// Assert
 		expect(await res.json()).toEqual({ worker_epoch: 1 });
 		expect(mock.requests[0]?.path).toBe(
-			`/v1/code/sessions/${HOST_SESSION_ID}/worker/register`,
+			`/v1/code/sessions/${HOST_SESSION_ID}/worker/register`
 		);
 	});
 
@@ -114,24 +114,24 @@ describe("host mock", () => {
 							request: {
 								subtype: "remote_tool_call",
 								tool_use_id: "toolu_1",
-								envelope: { call_id: "toolu_1" },
-							},
-						},
-					},
-				],
-			}),
+								envelope: { call_id: "toolu_1" }
+							}
+						}
+					}
+				]
+			})
 		});
 		const [answer] = await frames(reader, 1);
 		await reader.cancel();
 		// Assert
 		expect(res.headers.get("x-ccr-session-writers")).toBe(
-			"v=1;owner_account_only=true",
+			"v=1;owner_account_only=true"
 		);
 		expect(first[0]?.payload["type"]).toBe("control_request");
 		expect(first[1]?.payload["type"]).toBe("user");
 		expect(answer?.device_attestation_status).toBe("VERIFIED_BY_GATE");
 		expect(JSON.stringify(answer?.payload)).toContain(
-			'"disposition":"denied_by_user"',
+			'"disposition":"denied_by_user"'
 		);
 		expect(mock.calls).toHaveLength(1);
 	}, 20_000);

@@ -1,4 +1,4 @@
-# Bun 1.4.4+ configuration. Reference: https://bun.com/docs/runtime/bunfig
+# Bun 1.4.5+ configuration. Reference: https://bun.com/docs/runtime/bunfig
 
 # No `.env` file is loaded, so no developer secret reaches a test, script, or hook.
 env = false
@@ -25,8 +25,8 @@ coverageSkipTestFiles = true
 # The threshold is enforced only while the `text` reporter is on.
 coverageReporter = ["text", "lcov"]
 coverageThreshold = { lines = 0, functions = 0 }
-# The npm packages that cc-inspect caches carry their own test files.
-pathIgnorePatterns = ["captures/**"]
+# Agent worktrees and spec drafts hold copies of the tests.
+pathIgnorePatterns = [".claude/**", "openspec/**", "captures/**"]
 
 [fmt]
 useTabs = true
@@ -34,7 +34,8 @@ tabWidth = 2
 printWidth = 80
 semi = true
 singleQuote = false
-trailingComma = "all"
+# Bedrock keeps no trailing comma in any language that lets it choose.
+trailingComma = "none"
 endOfLine = "lf"
 sortImports = true
 sortPackageJson = { sortScripts = true }
@@ -49,10 +50,12 @@ ignorePatterns = [
 	# Cargo.toml and friends follow rustfmt's style in a repo that also has Rust.
 	"**/*.toml",
 	"**/target/",
+	".claude/",
+	"openspec/",
 	# Built by `bun run plugin:build` and committed.
 	"cli/bin/",
 	# The program's type file, published byte for byte.
-	"**/schemas/claude-code.d.ts",
+	"**/schemas/claude-code.d.ts"
 ]
 
 # YAML cannot use tabs. Markdown is left to markdownlint, which keeps tables compact.

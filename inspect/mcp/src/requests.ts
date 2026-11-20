@@ -8,32 +8,32 @@ import { isTurn } from "./stub.ts";
 /** The text of each `.json`, `.jsonl`, and `.log` file under `dir`, such as `.claude.json` or a session transcript, by path relative to `dir`. */
 export const filesOf = async (dir: string): Promise<Record<string, string>> => {
 	const paths = await Array.fromAsync(
-		new Bun.Glob("**/*.{json,jsonl,log}").scan({ cwd: dir, dot: true }),
+		new Bun.Glob("**/*.{json,jsonl,log}").scan({ cwd: dir, dot: true })
 	);
 	return Object.fromEntries(
 		await Promise.all(
 			paths
 				.toSorted()
-				.map(async (p) => [p, await Bun.file(join(dir, p)).text()] as const),
-		),
+				.map(async (p) => [p, await Bun.file(join(dir, p)).text()] as const)
+		)
 	);
 };
 
 /** Where `q` (without the `g` flag) matches in a run: each request body, stdout, stderr, and each file the run wrote. */
 export const placesOf = (
 	r: Pick<RunResult, "requests" | "stdout" | "stderr" | "files">,
-	q: RegExp,
+	q: RegExp
 ): string[] => [
 	...r.requests.flatMap((x, i) =>
 		q.test(JSON.stringify(x.body ?? ""))
 			? [`request ${i + 1} ${x.method} ${x.path}`]
-			: [],
+			: []
 	),
 	...(q.test(r.stdout) ? ["stdout"] : []),
 	...(q.test(r.stderr) ? ["stderr"] : []),
 	...Object.entries(r.files)
 		.filter(([, t]) => q.test(t))
-		.map(([p]) => `file ${p}`),
+		.map(([p]) => `file ${p}`)
 ];
 
 /** The lines of `text` that `q` (without the `g` flag) matches. */
@@ -77,14 +77,14 @@ export const bodyOf = (body: unknown) => {
 		tools: bytes(b["tools"]),
 		system: bytes(b["system"]),
 		messages: bytes(b["messages"]),
-		cacheControl,
+		cacheControl
 	};
 };
 
 /** The entry of tool `name` (name, description, input_schema, ...) in the last Messages API request that sends it. */
 export const toolEntry = (
 	r: Pick<RunResult, "requests">,
-	name: string,
+	name: string
 ): Record<string, unknown> | undefined =>
 	r.requests
 		.filter((q) => isTurn(q.path))
@@ -99,7 +99,7 @@ export const toolNames = (r: Pick<RunResult, "requests">): string[][] =>
 		.map((q) =>
 			(isRecord(q.body) ? recordsOf(q.body["tools"]) : [])
 				.map((t) => t["name"])
-				.filter((n): n is string => typeof n === "string"),
+				.filter((n): n is string => typeof n === "string")
 		);
 
 /** The `result` text of the last stream-json `result` event, where `-p` puts a local command's output, or null. */
@@ -117,7 +117,7 @@ export const outcomeLines = (r: Pick<RunResult, "events">): string[] =>
 	r.events.flatMap((e) => {
 		if (e["type"] === "system" && e["subtype"] === "notification") {
 			return [
-				`notification ${JSON.stringify(e["key"])}: ${JSON.stringify(e["text"])}`,
+				`notification ${JSON.stringify(e["key"])}: ${JSON.stringify(e["text"])}`
 			];
 		}
 		if (e["type"] !== "result") {
@@ -125,6 +125,6 @@ export const outcomeLines = (r: Pick<RunResult, "events">): string[] =>
 		}
 		const reason = e["fast_mode_disabled_reason"];
 		return [
-			`result: ${JSON.stringify(e["result"])}, fast_mode_state ${JSON.stringify(e["fast_mode_state"])}${reason === undefined ? "" : `, fast_mode_disabled_reason ${JSON.stringify(reason)}`}`,
+			`result: ${JSON.stringify(e["result"])}, fast_mode_state ${JSON.stringify(e["fast_mode_state"])}${reason === undefined ? "" : `, fast_mode_disabled_reason ${JSON.stringify(reason)}`}`
 		];
 	});

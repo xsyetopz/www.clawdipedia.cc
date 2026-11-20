@@ -8,7 +8,7 @@ import {
 	msgs,
 	readCfg,
 	toolNames,
-	withRun,
+	withRun
 } from "../run/helpers.ts";
 import {
 	agentCall,
@@ -16,7 +16,7 @@ import {
 	BASE,
 	cwdInSub,
 	firstResult,
-	subReqs,
+	subReqs
 } from "./util.ts";
 
 export const fmCase = (name: string, fm: string): CaseDef => ({
@@ -27,7 +27,7 @@ export const fmCase = (name: string, fm: string): CaseDef => ({
 			{
 				args: BASE,
 				projFiles: agentFile("pa", fm),
-				stub: { seq: agentCall("pa") },
+				stub: { seq: agentCall("pa") }
 			},
 			(r) => {
 				const sub = subReqs(r);
@@ -38,11 +38,11 @@ export const fmCase = (name: string, fm: string): CaseDef => ({
 						subRequests: sub.length,
 						subTools: sub.map((q) => toolNames(q).join(",")),
 						// stable text fragment only, not the whole hand-back
-						handBack: firstResult(r).includes("[Subagent hand-back]"),
-					},
+						handBack: firstResult(r).includes("[Subagent hand-back]")
+					}
 				};
-			},
-		),
+			}
+		)
 });
 
 export const isoCase = (iso: "remote" | "worktree" | "none"): CaseDef => ({
@@ -55,9 +55,9 @@ export const isoCase = (iso: "remote" | "worktree" | "none"): CaseDef => ({
 				commit: true,
 				projFiles: {
 					...agentFile("pa", iso === "none" ? "" : `isolation: ${iso}`),
-					"README.md": "x\n",
+					"README.md": "x\n"
 				},
-				stub: { seq: agentCall("pa") },
+				stub: { seq: agentCall("pa") }
 			},
 			(r) => {
 				const sub = subReqs(r);
@@ -69,11 +69,11 @@ export const isoCase = (iso: "remote" | "worktree" | "none"): CaseDef => ({
 						subRequests: sub.length,
 						cwdInSub: cwd.replace(/agent-[0-9a-f]+/u, "agent-<id>"),
 						inWorktree: cwd.includes("/.claude/worktrees/"),
-						stderrHead: r.stderr.slice(0, 100),
-					},
+						stderrHead: r.stderr.slice(0, 100)
+					}
 				};
-			},
-		),
+			}
+		)
 });
 
 export const HOOK = {
@@ -83,12 +83,12 @@ export const HOOK = {
 				hooks: [
 					{
 						type: "command",
-						command: `echo ran >> {CFG}/setup.ran; echo '{"hookSpecificOutput":{"hookEventName":"Setup","additionalContext":"ZZSETUPCTXZZ"}}'`,
-					},
-				],
-			},
-		],
-	},
+						command: `echo ran >> {CFG}/setup.ran; echo '{"hookSpecificOutput":{"hookEventName":"Setup","additionalContext":"ZZSETUPCTXZZ"}}'`
+					}
+				]
+			}
+		]
+	}
 };
 export const setupCase = (flag: string): CaseDef => ({
 	name: `setup-hook.${flag.slice(2)}`,
@@ -104,11 +104,11 @@ export const setupCase = (flag: string): CaseDef => ({
 						(await pathExists(`${r.sb.cfg}/setup.ran`)) ||
 						(await readCfg(r, "setup.ran")) !== "",
 					contextInRequest: msgs(r).some((q) =>
-						json(bodyOf(q)).includes("ZZSETUPCTXZZ"),
+						json(bodyOf(q)).includes("ZZSETUPCTXZZ")
 					),
 					contextInStdout: r.stdout.includes("ZZSETUPCTXZZ"),
-					requests: msgs(r).length,
-				},
-			}),
-		),
+					requests: msgs(r).length
+				}
+			})
+		)
 });

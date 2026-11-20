@@ -16,7 +16,7 @@ import {
 	makeShim,
 	mk,
 	stubEnv,
-	writeInputs,
+	writeInputs
 } from "./sandbox.ts";
 import type { Cleanup, Dirs } from "./sandbox.ts";
 import { makeAnswer } from "./stub.ts";
@@ -78,7 +78,7 @@ export const runPrompt = (
 	prompt: string,
 	model = "claude-opus-5-5",
 	timeoutMs = 60_000,
-	env: Record<string, string> = {},
+	env: Record<string, string> = {}
 ): Promise<RunResult> =>
 	runArgs(
 		bin,
@@ -89,31 +89,31 @@ export const runPrompt = (
 			"stream-json",
 			"--verbose",
 			"--model",
-			model,
+			model
 		],
-		{ timeoutMs, env },
+		{ timeoutMs, env }
 	);
 
 const assertHosts = (
 	requests: Sent[],
 	self: string,
-	apiHost: boolean,
+	apiHost: boolean
 ): void => {
 	const bad = requests.filter(
 		(r) =>
 			r.fakeKey === false ||
-			(r.host !== self && !(apiHost && r.host === API_HOST)),
+			(r.host !== self && !(apiHost && r.host === API_HOST))
 	);
 	if (bad.length > 0) {
 		throw new Error(
-			`a request had another host or key: ${bad.map((r) => `${r.host}${r.path}`).join(", ")}`,
+			`a request had another host or key: ${bad.map((r) => `${r.host}${r.path}`).join(", ")}`
 		);
 	}
 };
 
 const startStub = (
 	state: Cleanup,
-	answer: (req: Request) => Promise<Response>,
+	answer: (req: Request) => Promise<Response>
 ): string => {
 	state.stub = Bun.serve({ port: 0, hostname: "127.0.0.1", fetch: answer });
 	return `127.0.0.1:${state.stub.port}`;
@@ -123,7 +123,7 @@ const startStub = (
 const startNet = async (
 	state: Cleanup,
 	answer: (req: Request) => Promise<Response>,
-	apiHost: boolean,
+	apiHost: boolean
 ): Promise<{ proxyUrl: string; ca: string | undefined }> =>
 	apiHost
 		? startApiHost(state, answer, await mk(state, "cc-run-pki-"))
@@ -133,7 +133,7 @@ const resultOf = async (
 	done: Finished,
 	events: Record<string, unknown>[],
 	requests: Sent[],
-	dirs: Dirs,
+	dirs: Dirs
 ): Promise<RunResult> => ({
 	exit: done.exit,
 	requests,
@@ -142,14 +142,14 @@ const resultOf = async (
 	events,
 	files: await filesOf(dirs.config),
 	projectFiles: await filesOf(dirs.project),
-	dirs,
+	dirs
 });
 
 const execute = async (
 	bin: string,
 	args: string[],
 	options: RunOptions,
-	state: Cleanup,
+	state: Cleanup
 ): Promise<RunResult> => {
 	const {
 		timeoutMs = 60_000,
@@ -162,7 +162,7 @@ const execute = async (
 		calls,
 		input,
 		provider,
-		fastRefusal,
+		fastRefusal
 	} = options;
 	const dirs = await makeDirs(state);
 	const requests: Sent[] = [];
@@ -173,7 +173,7 @@ const execute = async (
 		login,
 		baseUrl,
 		self,
-		provider,
+		provider
 	});
 	checkEnv(env, fixed);
 	await writeInputs(dirs, login, files);
@@ -182,7 +182,7 @@ const execute = async (
 		dirs.project,
 		{ ...fixed, ...stubEnv(env, self) },
 		input,
-		timeoutMs,
+		timeoutMs
 	);
 	const events = eventsOf(done.out);
 	if (done.timedOut) {
@@ -199,7 +199,7 @@ const execute = async (
 export const runArgs = async (
 	bin: string,
 	args: string[],
-	options: RunOptions = {},
+	options: RunOptions = {}
 ): Promise<RunResult> => {
 	for (const name of Object.keys(options.files ?? {})) {
 		if (isAbsolute(name) || normalize(name).startsWith("..")) {
@@ -215,7 +215,7 @@ export const runArgs = async (
 		state.proxy?.close();
 		state.proxy?.closeAllConnections();
 		await Promise.all(
-			state.made.map((d) => rm(d, { recursive: true, force: true })),
+			state.made.map((d) => rm(d, { recursive: true, force: true }))
 		);
 	}
 };

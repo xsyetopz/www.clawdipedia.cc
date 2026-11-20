@@ -47,7 +47,7 @@ const members = (lines: string[], head: number, end: number): Member[] => {
 			name: k[3] ?? "",
 			line: i,
 			end: /^\s*\{$/u.test(rest) ? e : i,
-			call: k[4] !== ":" || /^\s*[(<]/u.test(rest),
+			call: k[4] !== ":" || /^\s*[(<]/u.test(rest)
 		});
 		i = e;
 	}
@@ -58,7 +58,7 @@ const members = (lines: string[], head: number, end: number): Member[] => {
 const headOf = (
 	lines: string[],
 	decls: ReturnType<typeof declarations>,
-	name: string,
+	name: string
 ): { line: number; end: number } => {
 	const d = decls.find((x) => x.name === name);
 	if (!d) {
@@ -89,7 +89,7 @@ export const extractModApi: Extractor = async (_bundle, files) => {
 			name,
 			module,
 			offset: at[line] ?? null,
-			detail,
+			detail
 		});
 	const decls = declarations(lines);
 	const head = (name: string) => headOf(lines, decls, name);
@@ -116,7 +116,7 @@ export const extractModApi: Extractor = async (_bundle, files) => {
 			name: `classic.${hit[1]}`,
 			module,
 			offset: hit.index,
-			detail: "event",
+			detail: "event"
 		});
 	}
 	return unique(out);

@@ -33,13 +33,13 @@ const stable = (s = "") =>
 		.replaceAll(/chunk-[a-z0-9]{8}/gu, "chunk-_")
 		.replaceAll(
 			/(?<![\w$])[A-Za-z_$][\w$]{0,2}(?=\(|\.|\)|&|;|\}| \(=|$)/gu,
-			"_",
+			"_"
 		);
 
 const filesOf = (docs: DocFile[], name: string): string[] => {
 	const re = new RegExp(
 		`(?<![\\w-])${needle(name).replaceAll(/[.*+?^${}()|[\]\\]/gu, String.raw`\$&`)}(?![\\w-])`,
-		"u",
+		"u"
 	);
 	return docs.filter((d) => re.test(d.text)).map((d) => d.file);
 };
@@ -52,7 +52,7 @@ export const diffKind = (
 	a: Items,
 	b: Items,
 	docs: DocFile[],
-	page: (name: string) => string = () => "",
+	page: (name: string) => string = () => ""
 ): KindDiff => {
 	const added = [...b.keys()].filter((k) => !a.has(k));
 	const removed = [...a.keys()].filter((k) => !b.has(k));
@@ -85,6 +85,6 @@ export const diffKind = (
 		changed,
 		undocumentedAdded,
 		inDocs,
-		pages,
+		pages
 	};
 };

@@ -14,7 +14,7 @@ import {
 	runCases,
 	sysText,
 	toolNames,
-	withRun,
+	withRun
 } from "./run/helpers.ts";
 import type { PrintGroup } from "./types.ts";
 
@@ -53,7 +53,7 @@ const outputStyle: CaseDef = {
 				cfgFiles: {
 					"settings.json": json({ outputStyle: "userstyle" }),
 					"output-styles/userstyle.md":
-						"---\nname: userstyle\ndescription: u\n---\nZZUSERSTYLEZZ text.\n",
+						"---\nname: userstyle\ndescription: u\n---\nZZUSERSTYLEZZ text.\n"
 				},
 				setup: async ({ home }) => {
 					const pl = `${home}/plug`;
@@ -61,13 +61,13 @@ const outputStyle: CaseDef = {
 					await mkdir(`${pl}/output-styles`, { recursive: true });
 					await Bun.write(
 						`${pl}/.claude-plugin/plugin.json`,
-						json({ name: "pp", version: "1.0.0", description: "x" }),
+						json({ name: "pp", version: "1.0.0", description: "x" })
 					);
 					await Bun.write(
 						`${pl}/output-styles/forced.md`,
-						"---\nname: forced\ndescription: forced style\nforce-for-plugin: true\n---\nZZFORCEDSTYLEZZ text.\n",
+						"---\nname: forced\ndescription: forced style\nforce-for-plugin: true\n---\nZZFORCEDSTYLEZZ text.\n"
 					);
-				},
+				}
 			},
 			(r) => {
 				const q = msgs(r)[0];
@@ -79,11 +79,11 @@ const outputStyle: CaseDef = {
 						precondition: s.length > 0,
 						forcedStyleInSystem: s.includes("ZZFORCEDSTYLEZZ"),
 						userStyleInSystem: s.includes("ZZUSERSTYLEZZ"),
-						initOutputStyle: typeof style === "string" ? style : null,
-					},
+						initOutputStyle: typeof style === "string" ? style : null
+					}
 				};
-			},
-		),
+			}
+		)
 };
 
 const MEM_ENVS: [string, Record<string, string>][] = [
@@ -93,13 +93,13 @@ const MEM_ENVS: [string, Record<string, string>][] = [
 		"remote-dir",
 		{
 			CLAUDE_CODE_REMOTE: "1",
-			CLAUDE_CODE_REMOTE_MEMORY_DIR: "{HOME}/ZZMEMDIR",
-		},
+			CLAUDE_CODE_REMOTE_MEMORY_DIR: "{HOME}/ZZMEMDIR"
+		}
 	],
 	[
 		"stores-object",
-		{ CLAUDE_MEMORY_STORES: json([{ name: "s1", path: "{HOME}/ZZMEMDIR2" }]) },
-	],
+		{ CLAUDE_MEMORY_STORES: json([{ name: "s1", path: "{HOME}/ZZMEMDIR2" }]) }
+	]
 ];
 const memCase = ([name, env]: (typeof MEM_ENVS)[number]): CaseDef => ({
 	name: `memory.${name}`,
@@ -116,10 +116,10 @@ const memCase = ([name, env]: (typeof MEM_ENVS)[number]): CaseDef => ({
 					systemChars: sys.length,
 					memoryTools: memTools(r),
 					memdirInSystem: sys.includes("ZZMEMDIR"),
-					events: evKinds(r),
-				},
+					events: evKinds(r)
+				}
 			};
-		}),
+		})
 });
 
 const COW: [string, Record<string, string>][] = [
@@ -132,16 +132,16 @@ const COW: [string, Record<string, string>][] = [
 		"remote-path-override",
 		{
 			CLAUDE_CODE_REMOTE: "1",
-			CLAUDE_COWORK_MEMORY_PATH_OVERRIDE: "{HOME}/ZZCOWPATH",
-		},
+			CLAUDE_COWORK_MEMORY_PATH_OVERRIDE: "{HOME}/ZZCOWPATH"
+		}
 	],
 	[
 		"post-turn",
 		{
 			CLAUDE_CODE_POST_TURN_MEMORY: "1",
-			CLAUDE_CODE_POST_TURN_MEMORY_CONFIG: json({ instruction: "x" }),
-		},
-	],
+			CLAUDE_CODE_POST_TURN_MEMORY_CONFIG: json({ instruction: "x" })
+		}
+	]
 ];
 const cowCase = ([name, env]: (typeof COW)[number]): CaseDef => ({
 	name: `cowork-memory.${name}`,
@@ -155,17 +155,17 @@ const cowCase = ([name, env]: (typeof COW)[number]): CaseDef => ({
 					precondition: t.length > 0 && d.length > 0,
 					systemChars: t.length,
 					markers: ["ZZCOWPATH", "ZZGUIDEZZ", "ZZEXTRAZZ", "ZZINDEXZZ"].filter(
-						(m) => t.includes(m),
+						(m) => t.includes(m)
 					),
 					memHeading: t.includes("# Memory"),
 					debugLine: (
 						/.*(CCR memory server|post-turn|PostTurn).*/iu.exec(d)?.[0] ?? ""
 					)
 						.replace(/^\S+\s/u, "")
-						.slice(0, 160),
-				},
+						.slice(0, 160)
+				}
 			};
-		}),
+		})
 });
 
 // The stub answers as the cloud memory server, at the origin that ANTHROPIC_BASE_URL names (the ingress host fallback).
@@ -178,17 +178,17 @@ const postTurnMounted: CaseDef = {
 				env: {
 					CLAUDE_CODE_POST_TURN_MEMORY: "1",
 					CLAUDE_CODE_POST_TURN_MEMORY_CONFIG: json({
-						instruction: "ZZPOSTTURNZZ",
-					}),
+						instruction: "ZZPOSTTURNZZ"
+					})
 				},
 				args: [
 					"--debug-file",
 					"{CFG}/d.log",
 					"--mcp-config",
 					json({
-						mcpServers: { memory: { type: "http", url: "{MEMORY_MCP}" } },
-					}),
-				],
+						mcpServers: { memory: { type: "http", url: "{MEMORY_MCP}" } }
+					})
+				]
 			},
 			async (r) => {
 				const d = await readCfg(r, "d.log");
@@ -197,24 +197,24 @@ const postTurnMounted: CaseDef = {
 					data: {
 						precondition: msgs(r).length > 0 && d.length > 0,
 						memoryMcpRequests: r.reqs.filter((q) =>
-							q.path.endsWith("/memory/mcp"),
+							q.path.endsWith("/memory/mcp")
 						).length,
 						memoryToolsListed: firstTools(r).filter((n) =>
-							n.startsWith("mcp__memory__"),
+							n.startsWith("mcp__memory__")
 						),
 						notMounted: d.includes("CCR memory server not mounted"),
 						instructionSent: msgs(r).some((q) =>
-							json(q.body).includes("ZZPOSTTURNZZ"),
+							json(q.body).includes("ZZPOSTTURNZZ")
 						),
 						messageRequests: msgs(r).length,
 						extractLines: d
 							.split("\n")
 							.filter((l) => l.includes("[extractMemories]"))
-							.map((l) => l.replace(/^\S+\s/u, "").slice(0, 200)),
-					},
+							.map((l) => l.replace(/^\S+\s/u, "").slice(0, 200))
+					}
 				};
-			},
-		),
+			}
+		)
 };
 
 const FORMS: [string, string][] = [
@@ -222,7 +222,7 @@ const FORMS: [string, string][] = [
 	["string-array", json(["s1", "s2"])],
 	["empty-array", "[]"],
 	["garbage", "garbage"],
-	["id-mount-form", json([{ id: "memstore_01", name: "s1", mount: "/mnt/m" }])],
+	["id-mount-form", json([{ id: "memstore_01", name: "s1", mount: "/mnt/m" }])]
 ];
 const formCase = ([name, f]: [string, string]): CaseDef => ({
 	name: `memory-stores.${name}`,
@@ -235,11 +235,11 @@ const formCase = ([name, f]: [string, string]): CaseDef => ({
 					precondition: msgs(r)[0] !== undefined,
 					sectionChars: m.length,
 					mentionsStore: /ZZMEMDIR2|\bs1\b|\/mnt\/m/u.test(m),
-					memoryTools: memTools(r),
+					memoryTools: memTools(r)
 				},
-				samples: { sectionHead: m.slice(0, 300) },
+				samples: { sectionHead: m.slice(0, 300) }
 			};
-		}),
+		})
 });
 const modeCase = (mode: "rw" | "ro"): CaseDef => ({
 	name: `memory-stores.mode-${mode}`,
@@ -256,12 +256,12 @@ const modeCase = (mode: "rw" | "ro"): CaseDef => ({
 						sectionChars: m.length,
 						readOnlyNote: m.includes("read-only"),
 						teamDir: m.includes("memory/team/st"),
-						memoryTools: memTools(r),
+						memoryTools: memTools(r)
 					},
-					samples: { sectionHead: m.slice(0, 300) },
+					samples: { sectionHead: m.slice(0, 300) }
 				};
-			},
-		),
+			}
+		)
 });
 
 export const configmem: PrintGroup = {
@@ -276,6 +276,6 @@ export const configmem: PrintGroup = {
 			postTurnMounted,
 			...FORMS.map((e) => formCase(e)),
 			modeCase("rw"),
-			modeCase("ro"),
-		]),
+			modeCase("ro")
+		])
 };

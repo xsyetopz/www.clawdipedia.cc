@@ -6,7 +6,7 @@ import {
 	events,
 	msgs,
 	obj,
-	type Run,
+	type Run
 } from "../../print/run.ts";
 import { srvDef } from "../fixtures.ts";
 
@@ -43,7 +43,7 @@ export type Obj = Record<string, unknown>;
 
 export const isCls = (b: unknown): boolean =>
 	JSON.stringify(obj(b)["system"] ?? "").includes(
-		"security monitor for autonomous AI coding agents",
+		"security monitor for autonomous AI coding agents"
 	);
 export const has = (t: string, m: string): boolean => t.includes(m);
 export const toolNames = (b: Obj | undefined): string[] =>
@@ -59,10 +59,10 @@ export const extend = (r: Run, started: string[]): Ex => {
 		main: body,
 		mainText: body ? JSON.stringify(body) : "",
 		init: events(r).find(
-			(e) => e["type"] === "system" && e["subtype"] === "init",
+			(e) => e["type"] === "system" && e["subtype"] === "init"
 		),
 		started,
-		classifierRequests: all.filter((x) => isCls(x.body)).length,
+		classifierRequests: all.filter((x) => isCls(x.body)).length
 	};
 };
 
@@ -76,16 +76,16 @@ export const base = (ctx: PhaseCtx, c: Case): Case => ({
 		"CLAUDE.md": "PROBE-USER-MD\n",
 		".claude.json": JSON.stringify({
 			hasCompletedOnboarding: true,
-			mcpServers: { user_srv: srvDef("user_srv", ctx.startedLog) },
+			mcpServers: { user_srv: srvDef("user_srv", ctx.startedLog) }
 		}),
 		"settings.json": userCfg(),
-		...c.cfgFiles,
+		...c.cfgFiles
 	},
 	projFiles: {
 		"CLAUDE.md": "PROBE-PROJ-MD\n",
 		".mcp.json": JSON.stringify({
-			mcpServers: { proj_srv: srvDef("proj_srv", ctx.startedLog) },
+			mcpServers: { proj_srv: srvDef("proj_srv", ctx.startedLog) }
 		}),
-		...c.projFiles,
-	},
+		...c.projFiles
+	}
 });

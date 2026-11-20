@@ -17,7 +17,7 @@ export const ENV_PREFIXES = [
 	"MCP",
 	"NO",
 	"OTEL",
-	"USE",
+	"USE"
 ];
 
 const compare = (a: string, b: string): number => {
@@ -61,7 +61,7 @@ const readContext = (text: string, i: number, name: string): boolean => {
 export const extractEnv = (text: string): Items => {
 	const re = new RegExp(
 		`(?<![A-Z0-9_])(?:${ENV_PREFIXES.join("|")})_[A-Z0-9_]*[A-Z0-9](?![A-Z0-9_])`,
-		"gu",
+		"gu"
 	);
 	// A name at the start of a line, followed by a letter or the line end, is a string-table entry with stray bytes glued on (e.g. `CLAUDE_CODE_NEW_INITR`).
 	// Real reads sit inside code, so a name counts only when it appears at least once inside a longer line.

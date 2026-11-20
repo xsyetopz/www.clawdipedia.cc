@@ -36,17 +36,17 @@ const run = async (args: string[], empty = true) => {
 			...(empty
 				? {
 						CC_INSPECT_VERSIONS_DIR: join(dir, "versions"),
-						CC_INSPECT_LAUNCHER: join(dir, "claude"),
+						CC_INSPECT_LAUNCHER: join(dir, "claude")
 					}
-				: {}),
+				: {})
 		},
 		stdout: "pipe",
-		stderr: "pipe",
+		stderr: "pipe"
 	});
 	const [out, err, code] = await Promise.all([
 		new Response(p.stdout).text(),
 		new Response(p.stderr).text(),
-		p.exited,
+		p.exited
 	]);
 	return { code, out, err, dir };
 };
@@ -77,7 +77,7 @@ const isCapture = (v: unknown): v is Capture =>
 	typeof v["version"] === "string" &&
 	isRecord(v["kinds"]) &&
 	Object.values(v["kinds"]).every(
-		(items) => Array.isArray(items) && items.every((i) => isCaptureItem(i)),
+		(items) => Array.isArray(items) && items.every((i) => isCaptureItem(i))
 	);
 
 const copyOf = (dir: string) => readText(join(dir, "schemas", "surface.json"));
@@ -86,18 +86,18 @@ const item = (kind: string, name: string, module = "m.js", offset = 1) => ({
 	kind,
 	name,
 	module,
-	offset,
+	offset
 });
 
 test("the committed copy drops module and offset and sorts kinds and items", () => {
 	const a = committed("1.2.3", {
 		flag: [item("flag", "--b"), item("flag", "--a")],
-		env: [{ ...item("env", "Z"), default: '"1"' }, item("env", "A")],
+		env: [{ ...item("env", "Z"), default: '"1"' }, item("env", "A")]
 	});
 	expect(Object.keys(a.kinds)).toEqual(["env", "flag"]);
 	expect(a.kinds["env"]).toEqual([
 		{ name: "A" },
-		{ name: "Z", default: '"1"' },
+		{ name: "Z", default: '"1"' }
 	]);
 	expect(a.kinds["flag"]?.map((i) => i.name)).toEqual(["--a", "--b"]);
 	expect(serialize(a)).not.toContain("module");
@@ -108,7 +108,7 @@ test("the output is the same for the same items in any order", () => {
 	const descending = sorted(items, (x, y) => y.name.localeCompare(x.name));
 	const one = serialize(committed("1.2.3", { env: items, flag: items }));
 	const two = serialize(
-		committed("1.2.3", { flag: descending, env: descending }),
+		committed("1.2.3", { flag: descending, env: descending })
 	);
 	expect(one).toBe(two);
 	expect(JSON.parse(one)).toHaveProperty("version", "1.2.3");
@@ -116,7 +116,7 @@ test("the output is the same for the same items in any order", () => {
 
 test("validate accepts a good file and names each problem", () => {
 	const kinds = Object.fromEntries(
-		Object.keys(KINDS).map((k) => [k, [{ name: "a" }, { name: "b" }]]),
+		Object.keys(KINDS).map((k) => [k, [{ name: "a" }, { name: "b" }]])
 	);
 	expect(validate({ version: "1.2.3", kinds }, "1.2.3")).toEqual([]);
 	const wrongVersion = validate({ version: "1.2.2", kinds }, "1.2.3");
@@ -125,22 +125,22 @@ test("validate accepts a good file and names each problem", () => {
 	expect(wrongVersion[0]).toContain("1.2.3");
 	const emptyKind = validate(
 		{ version: "1.2.3", kinds: { ...kinds, env: [] } },
-		"1.2.3",
+		"1.2.3"
 	);
 	expect(emptyKind).toHaveLength(1);
 	expect(emptyKind[0]).toContain("env");
 	const unsorted = validate(
 		{
 			version: "1.2.3",
-			kinds: { ...kinds, env: [{ name: "b" }, { name: "a" }] },
+			kinds: { ...kinds, env: [{ name: "b" }, { name: "a" }] }
 		},
-		"1.2.3",
+		"1.2.3"
 	);
 	expect(unsorted).toHaveLength(1);
 	expect(unsorted[0]).toContain("env");
 	const { env: _, ...rest } = kinds;
 	expect(validate({ version: "1.2.3", kinds: rest }, "1.2.3")).toEqual([
-		'kind "env" missing',
+		'kind "env" missing'
 	]);
 	expect(validate([], "1.2.3")).toEqual(["not an object"]);
 });
@@ -163,7 +163,7 @@ test("a missing binary given as a path names that path", async () => {
 		"--binary",
 		"/nonexistent/claude-bin",
 		"--out",
-		await tmp(),
+		await tmp()
 	]);
 	expect(r.code).not.toBe(0);
 	expect(r.err).toContain("/nonexistent/claude-bin");
@@ -185,11 +185,11 @@ test("check with no binary still fails on the wrong version", async () => {
 	const out = await tmp();
 	await mkdir(join(out, "schemas"));
 	const kinds = Object.fromEntries(
-		Object.keys(KINDS).map((k) => [k, [{ name: "a" }]]),
+		Object.keys(KINDS).map((k) => [k, [{ name: "a" }]])
 	);
 	await writeFile(
 		join(out, "schemas", "surface.json"),
-		JSON.stringify({ version: "0.0.1", kinds }),
+		JSON.stringify({ version: "0.0.1", kinds })
 	);
 	const r = await run(["--check", "--out", out]);
 	expect(r.code).toBe(1);
@@ -221,19 +221,19 @@ test.skipIf(!installed)(
 		const [copyA, copyB, committedText] = await Promise.all([
 			copyOf(a),
 			copyOf(b),
-			readText(COPY),
+			readText(COPY)
 		]);
 		expect(copyA).toBe(copyB);
 		expect(copyA).toBe(committedText);
 		const cap = await readJson(
-			join(a, "captures", CLAUDE_CODE_VERSION, "surface.json"),
+			join(a, "captures", CLAUDE_CODE_VERSION, "surface.json")
 		);
 		if (!isCapture(cap)) {
 			throw new TypeError("the capture has an unexpected shape");
 		}
 		expect(cap.version).toBe(CLAUDE_CODE_VERSION);
 		expect(sortedStrings(Object.keys(cap.kinds))).toEqual(
-			sortedStrings(Object.keys(KINDS)),
+			sortedStrings(Object.keys(KINDS))
 		);
 		for (const [k, items] of Object.entries(cap.kinds)) {
 			expect(items.length, k).toBeGreaterThan(0);
@@ -244,5 +244,5 @@ test.skipIf(!installed)(
 			}
 		}
 	},
-	900_000,
+	900_000
 );

@@ -18,14 +18,14 @@ const logBody = (name: string): object => ({
 							attributes: [
 								{ key: "event.name", value: { stringValue: name } },
 								{ key: "action", value: { stringValue: "logout" } },
-								{ key: "success", value: { boolValue: true } },
-							],
-						},
-					],
-				},
-			],
-		},
-	],
+								{ key: "success", value: { boolValue: true } }
+							]
+						}
+					]
+				}
+			]
+		}
+	]
 });
 
 test("the mock points the program at its collector, which tallies a posted event", async () => {
@@ -38,18 +38,18 @@ test("the mock points the program at its collector, which tallies a posted event
 	await fetch(`${base}/v1/logs`, {
 		method: "POST",
 		headers: { "content-type": "application/json" },
-		body: JSON.stringify(logBody("mock_probe_event")),
+		body: JSON.stringify(logBody("mock_probe_event"))
 	});
 
 	// Assert
 	expect(
-		await Bun.file(env["CLAUDE_SESSION_INGRESS_TOKEN_FILE"] ?? "").exists(),
+		await Bun.file(env["CLAUDE_SESSION_INGRESS_TOKEN_FILE"] ?? "").exists()
 	).toBe(true);
 	expect(otelPaths(["event:mock_probe_event"])).toEqual({
 		"event:mock_probe_event": { object: 1 },
 		"event:mock_probe_event.action": { string: 1 },
 		"event:mock_probe_event.event.name": { string: 1 },
-		"event:mock_probe_event.success": { boolean: 1 },
+		"event:mock_probe_event.success": { boolean: 1 }
 	});
 });
 
@@ -61,6 +61,6 @@ test("otelPaths keeps only the given roots and their children", () => {
 
 	// Assert
 	expect(
-		Object.keys(paths).filter((k) => k.startsWith("event:mock_probe_")),
+		Object.keys(paths).filter((k) => k.startsWith("event:mock_probe_"))
 	).toEqual([]);
 });

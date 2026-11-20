@@ -6,18 +6,18 @@ import {
 	codeAt,
 	lineTerms,
 	suggest,
-	termsByLine,
+	termsByLine
 } from "../src/citation-terms.ts";
 
 const pad = "x".repeat(2000);
 const modules = new Map([
-	["chunk-abc.js", `${pad}function Moo(o){return!1}${pad}`],
+	["chunk-abc.js", `${pad}function Moo(o){return!1}${pad}`]
 ]);
 
 describe("lineTerms", () => {
 	test("takes code spans, their code-like pieces, and quoted strings, not citations", () => {
 		const terms = lineTerms(
-			'The gate `Moo(o, x_y)` says "turned off" at `chunk-abc.js:2000`.',
+			'The gate `Moo(o, x_y)` says "turned off" at `chunk-abc.js:2000`.'
 		);
 		expect(terms).toEqual(["Moo(o, x_y)", "Moo", "x_y", "turned off"]);
 	});
@@ -32,8 +32,8 @@ describe("citationTerms", () => {
 				line: 1,
 				citation: "chunk-abc.js:2005",
 				term: "Moo",
-				as: "offset",
-			},
+				as: "offset"
+			}
 		]);
 	});
 
@@ -56,7 +56,7 @@ describe("citationTerms", () => {
 	test("reads N as a line of the cleaned module when the offset misses", () => {
 		// Arrange
 		const clean = new Map([
-			["chunk-abc.js", ["// head", "let a = 1;", "function Moo(o) {"]],
+			["chunk-abc.js", ["// head", "let a = 1;", "function Moo(o) {"]]
 		]);
 		const md = "[^g]: The program, `chunk-abc.js:3` (`Moo`).";
 		// Act
@@ -67,7 +67,7 @@ describe("citationTerms", () => {
 			line: 1,
 			citation: "chunk-abc.js:3",
 			term: "Moo",
-			as: "line",
+			as: "line"
 		});
 	});
 
@@ -87,14 +87,14 @@ describe("suggest", () => {
 	test("lists lines of the cited module that hold a term, nearest to N first", () => {
 		// Arrange
 		const clean = new Map([
-			["chunk-abc.js", ["a", "Moo(1)", "b", "c", "d", "Moo(2)"]],
+			["chunk-abc.js", ["a", "Moo(1)", "b", "c", "d", "Moo(2)"]]
 		]);
 		// Act
 		const got = suggest("chunk-abc.js:5", ["Moo"], clean);
 		// Assert
 		expect(got.map((s) => s.place)).toEqual([
 			"chunk-abc.js:6",
-			"chunk-abc.js:2",
+			"chunk-abc.js:2"
 		]);
 	});
 
@@ -102,7 +102,7 @@ describe("suggest", () => {
 		// Arrange
 		const clean = new Map([
 			["chunk-abc.js", ["a"]],
-			["chunk-def.js", ["x", "Zed()"]],
+			["chunk-def.js", ["x", "Zed()"]]
 		]);
 		// Act
 		const got = suggest("chunk-abc.js:1", ["Zed"], clean);
@@ -113,7 +113,7 @@ describe("suggest", () => {
 	test("skips a term at more than 5 places in other modules", () => {
 		// Arrange
 		const clean = new Map([
-			["chunk-def.js", Array.from({ length: 6 }, () => "Zed")],
+			["chunk-def.js", Array.from({ length: 6 }, () => "Zed")]
 		]);
 		// Act
 		const got = suggest("chunk-gone.js:1", ["Zed"], clean);
@@ -147,7 +147,7 @@ describe("toLines", () => {
 		"",
 		"function mooFn(p) {",
 		"  return beta(p);",
-		"}",
+		"}"
 	];
 	const clean = new Map([["chunk-abc.js", rows]]);
 
@@ -182,7 +182,7 @@ describe("toLines", () => {
 		const got = toLines(md, mods, clean);
 		// Assert
 		expect(got.text).toBe(
-			`\`mooFn\` \`chunk-abc.js:2-8\` and \`chunk-abc.js:${first}-3000000\``,
+			`\`mooFn\` \`chunk-abc.js:2-8\` and \`chunk-abc.js:${first}-3000000\``
 		);
 		expect(got.left).toHaveLength(1);
 	});
@@ -203,8 +203,8 @@ describe("toLines", () => {
 		const far = new Map([
 			[
 				"chunk-abc.js",
-				[...Array.from({ length: 30 }, () => "x"), "function mooFn() {"],
-			],
+				[...Array.from({ length: 30 }, () => "x"), "function mooFn() {"]
+			]
 		]);
 		const md = "`chunk-abc.js:5` (`mooFn`)";
 		// Act
@@ -258,7 +258,7 @@ describe("citationTerms with linesOnly", () => {
 			modules,
 			"",
 			clean,
-			true,
+			true
 		);
 		// Assert
 		expect(hit?.as).toBe("line");

@@ -12,8 +12,8 @@ const CHANGED = `${PAD}function aa(x){return i.CLAUDE_CODE_FOO_BAR&&x.timeout===
 test("claimTerms keeps the words that could name code and drops chunk citations", () => {
 	expect(
 		claimTerms(
-			"The program reads `CLAUDE_CODE_FOO_BAR` (chunk-abcd1234.js@12) with a `1e4` timeout, see `chunk-abcd1234.js` lines 1 to 2.",
-		),
+			"The program reads `CLAUDE_CODE_FOO_BAR` (chunk-abcd1234.js@12) with a `1e4` timeout, see `chunk-abcd1234.js` lines 1 to 2."
+		)
 	).toEqual(["program", "reads", "CLAUDE_CODE_FOO_BAR", "timeout"]);
 });
 
@@ -26,17 +26,17 @@ test("relocate keeps the distance from the anchor and says when the code is the 
 		[
 			{
 				name: "/$bunfs/root/chunk-aaaaaaaa.js",
-				text: `${SHIFT}${MOVED}`,
+				text: `${SHIFT}${MOVED}`
 			},
-			{ name: "chunk-bbbbbbbb.js", text: "nothing here" },
-		],
+			{ name: "chunk-bbbbbbbb.js", text: "nothing here" }
+		]
 	);
 	expect(found).toHaveLength(1);
 	expect(found[0]).toMatchObject({
 		module: "chunk-aaaaaaaa.js",
 		offset: SHIFT.length + MOVED.indexOf("x.timeout"),
 		anchor: "CLAUDE_CODE_FOO_BAR",
-		same: true,
+		same: true
 	});
 });
 
@@ -48,12 +48,12 @@ test("relocate puts the module with the same code before one whose code changed"
 		["CLAUDE_CODE_FOO_BAR"],
 		[
 			{ name: "chunk-cccccccc.js", text: CHANGED },
-			{ name: "chunk-dddddddd.js", text: MOVED },
-		],
+			{ name: "chunk-dddddddd.js", text: MOVED }
+		]
 	);
 	expect(found.map((r) => [r.module, r.same])).toEqual([
 		["chunk-dddddddd.js", true],
-		["chunk-cccccccc.js", false],
+		["chunk-cccccccc.js", false]
 	]);
 });
 
@@ -69,8 +69,8 @@ test("relocate takes the nearer of two places with the same code in one module",
 			before,
 			at,
 			["per_turn_effort"],
-			[{ name: "chunk-eeeeeeee.js", text: after }],
-		),
+			[{ name: "chunk-eeeeeeee.js", text: after }]
+		)
 	).toMatchObject([{ offset: at, same: true }]);
 });
 
@@ -80,7 +80,7 @@ test("relocate gives nothing when no anchor stands near the offset", () => {
 			OLD,
 			0,
 			["CLAUDE_CODE_ABSENT"],
-			[{ name: "a.js", text: "unrelated" }],
-		),
+			[{ name: "a.js", text: "unrelated" }]
+		)
 	).toEqual([]);
 });

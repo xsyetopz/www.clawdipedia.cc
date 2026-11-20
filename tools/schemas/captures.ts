@@ -6,9 +6,9 @@ const lazy = (kind: string, after: string): Capture => ({
 	kind,
 	module: new RegExp(
 		String.raw`(${ID})=${ID}\(\(\)=>${ID}\(\{\$schema:${after}`,
-		"u",
+		"u"
 	),
-	expr: (m) => `${m[1]}()`,
+	expr: (m) => `${m[1]}()`
 });
 
 // Stable anchors (text of descriptions and field order), never minified names.
@@ -19,23 +19,23 @@ export const CAPTURES: Capture[] = [
 		kind: "settings",
 		module: new RegExp(
 			String.raw`function (${ID})\((${ID}),(${ID})=\{\}\)\{let (${ID})=${ID}\(\2,\3\);return new ${ID}\(\4\)\.whole\(\)\}`,
-			"u",
+			"u"
 		),
 		expr: (m, src) => {
 			const gate = new RegExp(
 				String.raw`function (${ID})\(\)\{return ${ID}\.filter\(\((${ID})\)=>${ID}\[\2\]\.buildGate\(\)\)\}`,
-				"u",
+				"u"
 			).exec(src);
 			return gate ? `${m[1]}(${gate[1]}())` : null;
-		},
+		}
 	},
 	// The base object (name, version, author, ...). The full manifest merges its shape with the component objects.
 	{
 		...lazy(
 			"plugin-manifest-base",
-			String.raw`${ID}\(\)\.optional\(\)\.describe\("${SCHEMA_DESC}"\),name:${ID}\(\)\.describe\("Unique identifier for the plugin`,
+			String.raw`${ID}\(\)\.optional\(\)\.describe\("${SCHEMA_DESC}"\),name:${ID}\(\)\.describe\("Unique identifier for the plugin`
 		),
-		internal: true,
+		internal: true
 	},
 	{
 		kind: "plugin-manifest",
@@ -44,28 +44,28 @@ export const CAPTURES: Capture[] = [
 			return base !== undefined && base !== ""
 				? new RegExp(
 						String.raw`(${ID})=${ID}\(\(\)=>${ID}\(\{\.\.\.${base.replaceAll("$", String.raw`\$`)}\(\)\.shape,`,
-						"u",
+						"u"
 					)
 				: null;
 		},
-		expr: (m) => `${m[1]}()`,
+		expr: (m) => `${m[1]}()`
 	},
 	{
 		// The marketplace file keeps plugins as unknown[] and checks each entry afterwards with this schema.
 		kind: "marketplace-plugin-entry",
 		module: new RegExp(
 			String.raw`function ${ID}\((${ID})\)\{let (${ID})=(${ID})\(\);return \1\.flatMap\(\((${ID}),(${ID})\)=>\{let (${ID})=\2\.safeParse\(\4\)`,
-			"u",
+			"u"
 		),
-		expr: (m) => `${m[3]}()`,
+		expr: (m) => `${m[3]}()`
 	},
 	lazy(
 		"marketplace",
-		String.raw`${ID}\(\)\.optional\(\)\.describe\("${SCHEMA_DESC}"\),name:${ID}\(${ID}\),version:${ID}\(\)\.optional\(\)\.describe\("Marketplace manifest version"`,
+		String.raw`${ID}\(\)\.optional\(\)\.describe\("${SCHEMA_DESC}"\),name:${ID}\(${ID}\),version:${ID}\(\)\.optional\(\)\.describe\("Marketplace manifest version"`
 	),
 	lazy(
 		"plugin-hooks",
-		String.raw`${ID}\(\)\.optional\(\)\.catch\(void 0\)\.describe\("${SCHEMA_DESC}"\),description:`,
+		String.raw`${ID}\(\)\.optional\(\)\.catch\(void 0\)\.describe\("${SCHEMA_DESC}"\),description:`
 	),
 	{
 		// {mcpServers: record(string, server)}: the .mcp.json file. Followed by a helper that reads connection state.
@@ -73,12 +73,12 @@ export const CAPTURES: Capture[] = [
 		kind: "mcp",
 		module: new RegExp(
 			String.raw`(${ID})=${ID}\(\(\)=>${ID}\(\{mcpServers:${ID}\(${ID}\(\),${ID}\(\)\)\}\)\)[^;]*;function ${ID}\(\w\)\{return \w\.type==="connected"\|\|\w\.type==="cached"\}`,
-			"u",
+			"u"
 		),
-		expr: (m) => `${m[1]}()`,
+		expr: (m) => `${m[1]}()`
 	},
 	lazy(
 		"keybindings",
-		String.raw`${ID}\(\)\.optional\(\)\.describe\("JSON Schema URL for editor validation"\),\$docs:`,
-	),
+		String.raw`${ID}\(\)\.optional\(\)\.describe\("JSON Schema URL for editor validation"\),\$docs:`
+	)
 ];

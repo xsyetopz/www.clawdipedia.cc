@@ -24,14 +24,14 @@ describe("code tools", () => {
 		const g = await call("search_docs", {
 			source: "code",
 			query: "plugin",
-			section: "Resources",
+			section: "Resources"
 		});
 		expect(g.error).toBe(false);
 		expect(g.text).not.toContain("plugins/create");
 		const hit = await call("search_docs", {
 			source: "code",
 			query: "agent sdk",
-			section: "build with claude code",
+			section: "build with claude code"
 		});
 		expect(hit.text).toContain("agent-sdk/overview");
 		const none = await call("search_docs", { source: "code", query: "zzzqqq" });
@@ -45,18 +45,18 @@ describe("code tools", () => {
 		expect(groups.structured?.["groups"]).toEqual([
 			{ group: "Getting started", count: 4 },
 			{ group: "Build with Claude Code", count: 4 },
-			{ group: "Resources", count: 1 },
+			{ group: "Resources", count: 1 }
 		]);
 		expect(groups.text).not.toMatch(/Indexes|evil|_llms/u);
 		const g = await call("list_pages", {
 			source: "code",
-			section: "build with claude code",
+			section: "build with claude code"
 		});
 		expect(pagesOf(g).map((x) => x.route)).toEqual([
 			"plugins/create",
 			"plugins-reference",
 			"agent-sdk/overview",
-			"hooks-guide",
+			"hooks-guide"
 		]);
 		// The first entry wins, so the description is not the repeated copy's.
 		expect(g.text).toContain("Build a plugin with skills");
@@ -68,19 +68,19 @@ describe("code tools", () => {
 		const { call, p } = await start();
 		const r = await call("read_page", {
 			source: "code",
-			route: "/docs/en/overview.md",
+			route: "/docs/en/overview.md"
 		});
 		expect(r.error).toBe(false);
 		expect(r.seen).toContain("Quetzal");
 		const nested = await call("read_page", {
 			source: "code",
-			route: "plugins/create",
+			route: "plugins/create"
 		});
 		expect(nested.seen).toContain("Ocelot");
 		const sec = await call("read_page", {
 			source: "code",
 			route: "overview",
-			section_heading: "Tools",
+			section_heading: "Tools"
 		});
 		expect(sec.text).toContain("Tool list here");
 		expect(sec.text).not.toContain("Quetzal");
@@ -88,7 +88,7 @@ describe("code tools", () => {
 		expect(
 			p.hits
 				.filter((h) => h.path.startsWith("/docs/en/"))
-				.every((h) => h.path.endsWith(".md")),
+				.every((h) => h.path.endsWith(".md"))
 		).toBe(true);
 	});
 
@@ -102,16 +102,16 @@ describe("code tools", () => {
 			"https://evil.example/docs/en/overview.md",
 			"//evil.example/docs/en/overview",
 			"Overview Page",
-			"docs/overview",
+			"docs/overview"
 		];
 		const answers = await Promise.all(
-			bad.map((route) => call("read_page", { source: "code", route })),
+			bad.map((route) => call("read_page", { source: "code", route }))
 		);
 		expect(answers.map((r) => r.error)).toEqual(bad.map(() => true));
 		expect(p.hits.length).toBe(0);
 		const full = await call("read_page", {
 			source: "code",
-			route: `${p.url}/docs/en/overview`,
+			route: `${p.url}/docs/en/overview`
 		});
 		expect(full.error).toBe(false);
 	});
@@ -120,7 +120,7 @@ describe("code tools", () => {
 		const { call } = await start();
 		const missing = await call("read_page", {
 			source: "code",
-			route: "plugins/make",
+			route: "plugins/make"
 		});
 		expect(missing.error).toBe(true);
 		expect(missing.text).toContain("plugins/create");
@@ -139,7 +139,7 @@ describe("code tools", () => {
 		expect(sourceOf(l).state).toBe("stale-offline");
 		const other = await call("read_page", {
 			source: "code",
-			route: "plugins/create",
+			route: "plugins/create"
 		});
 		expect(other.error).toBe(true);
 	});

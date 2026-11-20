@@ -7,8 +7,8 @@ test("isRawSchemas accepts the row lists that the control and tools captures giv
 		isRawSchemas({
 			settings: { type: "object" },
 			control: [{ request: {}, originator: "client", response: {} }],
-			tools: [{ name: "Read", inputSchema: {} }],
-		}),
+			tools: [{ name: "Read", inputSchema: {} }]
+		})
 	).toBe(true);
 });
 

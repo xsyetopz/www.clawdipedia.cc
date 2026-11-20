@@ -21,12 +21,12 @@ on("session.start", async ($, e, next) => {
   await $.command.register({
     name: "standup",
     description: "Summarize what changed today",
-    argumentHint: "[days]",
+    argumentHint: "[days]"
   });
   return next(e);
 });
 on("command.run", { command: "standup" }, async ($, e) => ({
-  text: `Summary for ${e.args === "" ? "1" : e.args} day(s)`,
+  text: `Summary for ${e.args === "" ? "1" : e.args} day(s)`
 }));
 ```
 

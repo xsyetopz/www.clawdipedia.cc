@@ -17,7 +17,7 @@ const wakaru = (): string[] =>
  */
 export const readable = async (
 	binary: string | undefined,
-	module: string,
+	module: string
 ): Promise<string> => {
 	const { dir, index } = await prepared(binary);
 	const name = basename(module);
@@ -29,7 +29,7 @@ export const readable = async (
 	}
 	if (!(await Bun.file(input).exists())) {
 		throw new Error(
-			`"${name}" has no cleaned source (${index.skipped[name] ?? "it is not JavaScript"})`,
+			`"${name}" has no cleaned source (${index.skipped[name] ?? "it is not JavaScript"})`
 		);
 	}
 	const cwd = await mkdtemp(join(tmpdir(), "cc-inspect-wakaru-"));
@@ -38,16 +38,16 @@ export const readable = async (
 			cwd,
 			env: {
 				PATH: process.env["PATH"] ?? "",
-				HOME: process.env["HOME"] ?? "",
+				HOME: process.env["HOME"] ?? ""
 			},
 			stdout: "pipe",
 			stderr: "pipe",
-			timeout: 120_000,
+			timeout: 120_000
 		});
 		const [out, err, code] = await Promise.all([
 			new Response(p.stdout).text(),
 			new Response(p.stderr).text(),
-			p.exited,
+			p.exited
 		]);
 		if (code !== 0) {
 			throw new Error(`wakaru failed (exit ${code}): ${err.slice(0, 300)}`);

@@ -12,7 +12,7 @@ export const udiff = async (
 	a: string,
 	b: string,
 	la: string,
-	lb: string,
+	lb: string
 ): Promise<string> => {
 	// pages render in parallel, so each call gets its own temp files
 	diffRuns += 1;
@@ -20,7 +20,7 @@ export const udiff = async (
 	const fb = join(OUT, `.b${diffRuns}.tmp`);
 	await Promise.all([Bun.write(fa, a), Bun.write(fb, b)]);
 	const proc = Bun.spawn(["diff", "-u", "--label", la, "--label", lb, fa, fb], {
-		stdout: "pipe",
+		stdout: "pipe"
 	});
 	const out = await new Response(proc.stdout).text();
 	await proc.exited;
@@ -41,7 +41,7 @@ export const sortStrings = (xs: string[]): string[] => {
 export const fence = (body: string, lang: string) => {
 	const longest = Math.max(
 		2,
-		...[...body.matchAll(/`+/gu)].map((m) => m[0].length),
+		...[...body.matchAll(/`+/gu)].map((m) => m[0].length)
 	);
 	const f = "`".repeat(longest + 1);
 	return `${f}${lang}\n${body.replace(/\s+$/u, "")}\n${f}`;
@@ -128,7 +128,7 @@ export const toolDiff = (a: Tool[], b: Tool[]): string => {
 	}
 	if (chg.length > 0) {
 		out.push(
-			`changes the text or schema of ${chg.map((x) => `\`${x}\``).join(", ")}.`,
+			`changes the text or schema of ${chg.map((x) => `\`${x}\``).join(", ")}.`
 		);
 	}
 	return out.join(" ");

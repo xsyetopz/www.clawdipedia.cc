@@ -46,7 +46,7 @@ export const sameFrame = (
 	a: string,
 	at: number,
 	b: string,
-	to: number,
+	to: number
 ): boolean => frame(a, at) === frame(b, to);
 
 const windowAt = (text: string, offset: number): string =>
@@ -56,7 +56,7 @@ const windowAt = (text: string, offset: number): string =>
 export const termNear = (
 	text: string,
 	offset: number,
-	terms: string[],
+	terms: string[]
 ): boolean => {
 	const near = windowAt(text, offset);
 	return terms.some((t) => near.includes(t));
@@ -69,18 +69,18 @@ const words = (s: string): Set<string> =>
 export const claimTerms = (claim: string): string[] => {
 	const plain = claim.replaceAll(
 		/chunk-[\da-z]+\.js(?:[:@]\d+|`? lines \d+ to \d+)?/gu,
-		" ",
+		" "
 	);
 	const found = plain.match(/[\w$][\w$.-]{4,}/gu) ?? [];
 	return [...new Set(found.map((t) => t.replaceAll(/[.-]+$/gu, "")))].filter(
-		(t) => t.length >= 5,
+		(t) => t.length >= 5
 	);
 };
 
 /** String literals of at least 8 characters around `offset`, for a claim that names no code. */
 const literalsAround = (text: string, offset: number): string[] =>
 	(windowAt(text, offset).match(/"[^"\\\n]{8,}"/gu) ?? []).map((l) =>
-		l.slice(1, -1),
+		l.slice(1, -1)
 	);
 
 const rank = (r: Relocation): number => r.score + (r.same ? 1 : 0);
@@ -115,7 +115,7 @@ export const relocate = (
 	offset: number,
 	terms: string[],
 	sources: Iterable<Source>,
-	limit = 3,
+	limit = 3
 ): Relocation[] => {
 	const lo = Math.max(0, offset - WINDOW);
 	const around = oldText.slice(lo, offset + WINDOW);
@@ -133,8 +133,8 @@ export const relocate = (
 				const here = words(
 					m.text.slice(
 						Math.max(0, i - (at - lo)),
-						i - (at - lo) + around.length,
-					),
+						i - (at - lo) + around.length
+					)
 				);
 				const score =
 					known.size === 0
@@ -146,7 +146,7 @@ export const relocate = (
 					offset: to,
 					anchor: term,
 					score,
-					same: sameFrame(oldText, offset, m.text, to),
+					same: sameFrame(oldText, offset, m.text, to)
 				};
 				const prior = best.get(found.module);
 				if (prior === undefined || better(found, prior, offset)) {

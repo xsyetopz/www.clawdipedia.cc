@@ -18,14 +18,14 @@ export const spawnProgram = async (
 	cwd: string,
 	env: Record<string, string>,
 	input: string | undefined,
-	timeoutMs: number,
+	timeoutMs: number
 ): Promise<Finished> => {
 	const p = Bun.spawn(argv, {
 		cwd,
 		stdin: input === undefined ? "ignore" : Buffer.from(input),
 		stdout: "pipe",
 		stderr: "pipe",
-		env,
+		env
 	});
 	const err = new Response(p.stderr).text();
 	// Read stdout as it comes, so a killed run still shows the events before the hang.
@@ -54,7 +54,7 @@ export const spawnProgram = async (
 	// A child the program left running can hold stderr open.
 	const [stderr] = await Promise.all([
 		Promise.race([err, quiet()]),
-		Promise.race([read, Bun.sleep(1000)]),
+		Promise.race([read, Bun.sleep(1000)])
 	]);
 	return { exit, out: seen.out, stderr, timedOut };
 };
@@ -75,7 +75,7 @@ const label = (v: unknown): string =>
 export const timeoutMessage = (
 	timeoutMs: number,
 	events: Record<string, unknown>[],
-	stderr: string,
+	stderr: string
 ): string => {
 	const seen = events
 		.map((e) => `${label(e["type"])}/${label(e["subtype"] ?? "")}`)

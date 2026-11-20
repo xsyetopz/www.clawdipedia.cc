@@ -13,10 +13,10 @@ export * from "./harness/steps.ts";
 export * from "./harness/types.ts";
 
 const attemptOf = (
-	f: CaseResult,
+	f: CaseResult
 ): NonNullable<CaseResult["attempts"]>[number] => ({
 	data: f.data,
-	...(f.samples === undefined ? {} : { samples: f.samples }),
+	...(f.samples === undefined ? {} : { samples: f.samples })
 });
 
 const runTimed = async (ctx: PtyCtx, c: PtyCase): Promise<CaseResult[]> => {
@@ -47,7 +47,7 @@ const runTimed = async (ctx: PtyCtx, c: PtyCase): Promise<CaseResult[]> => {
 /** Run one case. Never throws: a failure to run becomes `precondition: false`. Timing cases get one rerun when out of tolerance; an invalid run gets one retry; a case launches the program at most twice. */
 export const runPtyCase = async (
 	ctx: PtyCtx,
-	c: PtyCase,
+	c: PtyCase
 ): Promise<CaseResult[]> => {
 	const one = await runTimed(ctx, c);
 	const f = one[0];

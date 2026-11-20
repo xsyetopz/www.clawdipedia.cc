@@ -20,7 +20,7 @@ const declBefore = (src: string, index: number): string | null => {
 const byDescription = (
 	kind: string,
 	description: string,
-	refs = false,
+	refs = false
 ): Capture => ({
 	kind,
 	...(refs ? { reused: "ref" as const } : {}),
@@ -28,7 +28,7 @@ const byDescription = (
 	expr: (m, src) => {
 		const name = declBefore(src, m.index ?? 0);
 		return name === null ? null : `${name}()`;
-	},
+	}
 });
 
 export const PAYLOAD_CAPTURES: Capture[] = [
@@ -37,18 +37,18 @@ export const PAYLOAD_CAPTURES: Capture[] = [
 		kind: "hook-output",
 		module: new RegExp(
 			String.raw`(${ID})=${ID}\(\(\)=>${ID}\(\{continue:${ID}\(\)\.optional\(\),suppressOutput:${ID}\(\)\.optional\(\),stopReason:`,
-			"u",
+			"u"
 		),
-		expr: (m) => `${m[1]}()`,
+		expr: (m) => `${m[1]}()`
 	},
 	{
 		// The other arm of the output union: {async: true, asyncTimeout}.
 		kind: "hook-output-async",
 		module: new RegExp(
 			String.raw`(${ID})=${ID}\(\(\)=>${ID}\(\{async:${ID}\(!0\),asyncTimeout:`,
-			"u",
+			"u"
 		),
-		expr: (m) => `${m[1]}()`,
+		expr: (m) => `${m[1]}()`
 	},
 	{
 		// Rows built by function X(request, originator, response){return{request,originator,response}}.
@@ -56,24 +56,24 @@ export const PAYLOAD_CAPTURES: Capture[] = [
 		reused: "ref",
 		module: new RegExp(
 			String.raw`function ${ID}\((\w),(\w),(\w)\)\{return\{request:\1,originator:\2,response:\3\}\}var (${ID})=${ID}\(\(\)=>\[`,
-			"u",
+			"u"
 		),
 		expr: (m) =>
-			`${m[4]}().map(r=>({request:r.request,originator:r.originator,response:r.response}))`,
+			`${m[4]}().map(r=>({request:r.request,originator:r.originator,response:r.response}))`
 	},
 	byDescription(
 		"stream-out",
 		"Everything the CLI writes to its output stream",
-		true,
+		true
 	),
 	byDescription(
 		"stream-in",
 		"Everything a client may write to the CLI's input stream",
-		true,
+		true
 	),
 	byDescription(
 		"agents-json",
-		"Definition for a custom subagent that can be invoked via the Agent tool.",
+		"Definition for a custom subagent that can be invoked via the Agent tool."
 	),
 	{
 		// The tool factory copies every property of a tool definition (getters included) onto the tool object it returns.
@@ -81,20 +81,20 @@ export const PAYLOAD_CAPTURES: Capture[] = [
 		kind: "tools",
 		module: new RegExp(
 			String.raw`function (${ID})\((\w)\)\{let (\w)=\2\.create,[\s\S]*?Object\.getOwnPropertyDescriptors\(\2\)\),\w\);return (\w)\}`,
-			"u",
+			"u"
 		),
 		alsoImport: (m, moduleName) =>
 			new RegExp(
 				String.raw`import\{[^}]*(?<![\w$])${escapeRe(m[1] ?? "")}(?![\w$])[^}]*\}from"/\$bunfs/root/${escapeRe(moduleName)}"`,
-				"u",
+				"u"
 			),
 		rewrite: (src) =>
 			src.replace(
 				/(Object\.getOwnPropertyDescriptors\(\w\)\),\w\);)return (\w)\}/u,
-				"$1return(globalThis.__ccTools??=[]).push($2),$2}",
+				"$1return(globalThis.__ccTools??=[]).push($2),$2}"
 			),
 		// A getter that throws (Artifact tools read config) is recorded as an error text instead of a schema.
 		expr: () =>
-			`(globalThis.__ccTools??[]).map(t=>{let r={name:t.name};for(const k of["inputSchema","outputSchema"]){try{r[k]=t[k]}catch(e){r[k+"Error"]=String(e).slice(0,200)}}return r})`,
-	},
+			`(globalThis.__ccTools??[]).map(t=>{let r={name:t.name};for(const k of["inputSchema","outputSchema"]){try{r[k]=t[k]}catch(e){r[k+"Error"]=String(e).slice(0,200)}}return r})`
+	}
 ];

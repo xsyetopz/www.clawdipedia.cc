@@ -3,5 +3,5 @@ description: Install the dependencies of the plugin servers, which keep their ow
 runs:
   using: composite
   steps:
-    - run: just setup-project
+    - run: just project-setup
       shell: bash

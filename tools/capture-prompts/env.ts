@@ -17,20 +17,20 @@ const gitEnv = (home: string): Record<string, string> => ({
 	GIT_AUTHOR_NAME: "t",
 	GIT_AUTHOR_EMAIL: "t@example.com",
 	GIT_COMMITTER_NAME: "t",
-	GIT_COMMITTER_EMAIL: "t@example.com",
+	GIT_COMMITTER_EMAIL: "t@example.com"
 });
 
 const GIT_STEPS = [
 	["init", "-q"],
 	["add", "-A"],
-	["commit", "-q", "--allow-empty", "-m", "initial"],
+	["commit", "-q", "--allow-empty", "-m", "initial"]
 ];
 
 /** Run the git steps one after the other, because each one needs the one before it. */
 const gitSteps = async (
 	steps: string[][],
 	proj: string,
-	env: Record<string, string>,
+	env: Record<string, string>
 ): Promise<void> => {
 	const [c, ...rest] = steps;
 	if (c === undefined) {
@@ -42,7 +42,7 @@ const gitSteps = async (
 
 export const initGit = async ({
 	home,
-	proj,
+	proj
 }: {
 	home: string;
 	proj: string;
@@ -51,7 +51,7 @@ export const initGit = async ({
 	await gitSteps(GIT_STEPS, proj, {
 		PATH: requireEnv("PATH"),
 		HOME: home,
-		...gitEnv(home),
+		...gitEnv(home)
 	});
 	// untracked file so the status is not empty
 	await Bun.write(join(proj, "dirty.txt"), "x\n");
@@ -62,7 +62,7 @@ export const probeEnv = (
 	v: Variant,
 	d: { home: string; cfg: string },
 	shimDir: string,
-	port: number,
+	port: number
 ): Record<string, string> => ({
 	PATH: `${shimDir}:${requireEnv("PATH")}`,
 	HOME: d.home,
@@ -78,5 +78,5 @@ export const probeEnv = (
 	HTTP_PROXY: "http://127.0.0.1:9",
 	NO_PROXY: "127.0.0.1,localhost",
 	...gitEnv(d.home),
-	...v.env,
+	...v.env
 });

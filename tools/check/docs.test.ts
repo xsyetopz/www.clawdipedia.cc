@@ -22,7 +22,7 @@ test("accepts a lowercase article and conjunction", () => {
 
 test("flags a lowercase word that is not small", () => {
 	expect(titleCaseProblems("Pin the models Behind an Alias")).toEqual([
-		"models",
+		"models"
 	]);
 });
 
@@ -39,7 +39,7 @@ test("needs the first and the last word capitalized", () => {
 
 test("ignores a code span and a link", () => {
 	expect(titleCaseProblems("Set `autoCompactWindow` for a Subagent")).toEqual(
-		[],
+		[]
 	);
 	expect(titleCaseProblems("[Read the Hooks Page](hooks.md)")).toEqual([]);
 });

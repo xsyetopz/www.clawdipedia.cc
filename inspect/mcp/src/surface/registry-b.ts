@@ -19,5 +19,5 @@ export const KINDS_B: Record<string, Extractor> = {
 	endpoint: extractEndpoints,
 	file: extractFiles,
 	"permission-rule": extractPermissionRules,
-	error: extractErrors,
+	error: extractErrors
 };

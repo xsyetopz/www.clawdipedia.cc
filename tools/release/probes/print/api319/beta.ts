@@ -6,19 +6,19 @@ import {
 	json,
 	msgs,
 	toolNames,
-	withRun,
+	withRun
 } from "../run/helpers.ts";
 
 const BETAS = [
 	"tool-provenance-2026-10-26",
 	"program-use-case-ids-2026-09-17",
 	"claude-code-side-query-2026-09-29",
-	"request-tags-2026-08-21",
+	"request-tags-2026-08-21"
 ];
 // The harness turns off telemetry, which also turns off the feature flag client; the cached flags in .claude.json need it on.
 const GB_ON = {
 	DISABLE_TELEMETRY: "",
-	CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "",
+	CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: ""
 };
 export const FIRST_PARTY = { _CLAUDE_CODE_ASSUME_FIRST_PARTY_BASE_URL: "1" };
 
@@ -29,8 +29,8 @@ const hasMcp = async (sb: { home: string }): Promise<void> => {
 	await Bun.write(
 		`${sb.home}/m/mcp.json`,
 		JSON.stringify({
-			mcpServers: { psrv: { command: "bun", args: [`${sb.home}/m/srv.js`] } },
-		}),
+			mcpServers: { psrv: { command: "bun", args: [`${sb.home}/m/srv.js`] } }
+		})
 	);
 };
 
@@ -51,9 +51,9 @@ const TITLE = {
 		"stream-json",
 		"--output-format",
 		"stream-json",
-		"--verbose",
+		"--verbose"
 	],
-	stdin: `${json({ type: "control_request", request_id: "t1", request: { subtype: "generate_session_title", description: "Fix the login bug" } })}\n`,
+	stdin: `${json({ type: "control_request", request_id: "t1", request: { subtype: "generate_session_title", description: "Fix the login bug" } })}\n`
 };
 
 const TOOL_NAMES =
@@ -74,7 +74,7 @@ const perRequest = (q: LoggedRequest) => {
 		deferred: json(body.messages ?? []).includes("ExitPlanMode"),
 		useCaseId: body["program_use_case_id"] ?? null,
 		tags: "tags" in body,
-		teamInContext: json([body.system, body.messages]).includes("probe@team"),
+		teamInContext: json([body.system, body.messages]).includes("probe@team")
 	};
 };
 
@@ -88,7 +88,7 @@ export const betaCase = (name: string, o: Opt): CaseDef => ({
 				allowOverride: Object.keys(GB_ON),
 				args: [
 					...(o.mcp === true ? ["--mcp-config", "{HOME}/m/mcp.json"] : []),
-					...(o.args ?? []),
+					...(o.args ?? [])
 				],
 				...(o.user === undefined
 					? {}
@@ -98,12 +98,12 @@ export const betaCase = (name: string, o: Opt): CaseDef => ({
 					if (o.gb !== undefined) {
 						await Bun.write(
 							`${sb.cfg}/.claude.json`,
-							JSON.stringify({ cachedGrowthBookFeatures: o.gb }),
+							JSON.stringify({ cachedGrowthBookFeatures: o.gb })
 						);
 					}
 				},
 				...(o.title === true ? TITLE : {}),
-				timeoutMs: 60_000,
+				timeoutMs: 60_000
 			},
 			(r) => {
 				const qs = msgs(r);
@@ -112,9 +112,9 @@ export const betaCase = (name: string, o: Opt): CaseDef => ({
 					data: {
 						precondition: qs.length > 0,
 						requests: qs.length,
-						perRequest: json(qs.map((q) => perRequest(q))),
-					},
+						perRequest: json(qs.map((q) => perRequest(q)))
+					}
 				};
-			},
-		),
+			}
+		)
 });

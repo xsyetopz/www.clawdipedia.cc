@@ -25,7 +25,7 @@ import {
 	OUT,
 	R,
 	report,
-	ROOT,
+	ROOT
 } from "./code/ctx.ts";
 import { buildFrontmatter } from "./code/frontmatter.ts";
 import { buildOtel } from "./code/otel.ts";
@@ -40,7 +40,7 @@ const builders = [
 	buildTranscript,
 	buildOtel,
 	buildFrontmatter,
-	buildClaudeJson,
+	buildClaudeJson
 ];
 const check = argv.includes("--check");
 const program = mods.map((m) => m.text).join("\n");
@@ -79,7 +79,7 @@ const buildOne = async (build: (typeof builders)[number]): Promise<Built> => {
 		await Bun.write(path, text);
 	}
 	lines.push(
-		`${file}: ${countProps(schema)} properties, ${hand.n} typed by hand, ${typed} with x-observed-type`,
+		`${file}: ${countProps(schema)} properties, ${hand.n} typed by hand, ${typed} with x-observed-type`
 	);
 	return { file, text, lines, stale };
 };

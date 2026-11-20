@@ -18,13 +18,13 @@ export const PROGRAM_SET = new Set([
 	"CLAUDECODE",
 	"CLAUDE_CODE_CHILD_SESSION",
 	"NoDefaultCurrentDirectoryInExePath",
-	"COREPACK_ENABLE_AUTO_PIN",
+	"COREPACK_ENABLE_AUTO_PIN"
 ]);
 
 export const LEAKS = {
 	CLAUDE_CODE_SELFTEST_LEAK: "1",
 	ANTHROPIC_AUTH_TOKEN: "leak-token",
-	ANTHROPIC_MODEL: "leak-model",
+	ANTHROPIC_MODEL: "leak-model"
 };
 
 /** The sandbox settings: a SessionStart hook that dumps the env the program gave it. */
@@ -35,12 +35,12 @@ export const SETTINGS = JSON.stringify({
 				hooks: [
 					{
 						type: "command",
-						command: "/usr/bin/env > {PROJ}/../envdump.txt",
-					},
-				],
-			},
-		],
-	},
+						command: "/usr/bin/env > {PROJ}/../envdump.txt"
+					}
+				]
+			}
+		]
+	}
 });
 
 /** A fresh temp dir for the results round trip. */
@@ -56,7 +56,7 @@ export interface Poisoned {
 /** Puts the leak sentinels into this process env; `restore` puts the old values back. */
 export const poisonEnv = (): Poisoned => {
 	const saved = Object.fromEntries(
-		Object.keys(LEAKS).map((k) => [k, process.env[k]]),
+		Object.keys(LEAKS).map((k) => [k, process.env[k]])
 	);
 	for (const [k, v] of Object.entries(LEAKS)) {
 		process.env[k] = v;
@@ -66,7 +66,7 @@ export const poisonEnv = (): Poisoned => {
 			(k) =>
 				k.startsWith("CLAUDE_CODE_") ||
 				k.startsWith("ANTHROPIC_") ||
-				k === "CLAUDECODE",
+				k === "CLAUDECODE"
 		),
 		parentValues: { ...process.env },
 		restore: () => {
@@ -77,7 +77,7 @@ export const poisonEnv = (): Poisoned => {
 					process.env[k] = v;
 				}
 			}
-		},
+		}
 	};
 };
 
@@ -85,7 +85,7 @@ const sh = async (argv: string[], env: Record<string, string>) => {
 	const p = Bun.spawn(argv, { env, stdout: "pipe", stderr: "pipe" });
 	const [stdout, exitCode] = await Promise.all([
 		new Response(p.stdout).text(),
-		p.exited,
+		p.exited
 	]);
 	return { stdout: stdout.trim(), exitCode };
 };
@@ -96,19 +96,19 @@ const ghostCheck = async (step: Step) => {
 		childEnv({
 			home: ghost,
 			configDir: ghost,
-			baseUrl: "http://127.0.0.1:1/x",
-		}),
+			baseUrl: "http://127.0.0.1:1/x"
+		})
 	);
 	step(
 		"childEnv: pure (no throw, creates nothing)",
-		pure && !(await pathExists(ghost)),
+		pure && !(await pathExists(ghost))
 	);
 };
 
 const shimChecks = async (
 	step: Step,
 	sb: Sandbox,
-	env: Record<string, string>,
+	env: Record<string, string>
 ) => {
 	await writeSecurityShim(sb.home);
 	// idempotent
@@ -117,18 +117,18 @@ const shimChecks = async (
 	step(
 		"childEnv: security shim first on PATH",
 		which.stdout.startsWith(join(shimDir(sb.home), "security")),
-		which.stdout,
+		which.stdout
 	);
 	const shim = await sh(
 		["security", "find-generic-password", "-w", "-s", "x"],
-		env,
+		env
 	);
 	const ghost = "/nonexistent-x";
 	step(
 		"assertShimReady refuses a missing shim",
 		await rejects(() =>
-			assertShimReady(childEnv({ home: ghost, configDir: ghost, baseUrl: "" })),
-		),
+			assertShimReady(childEnv({ home: ghost, configDir: ghost, baseUrl: "" }))
+		)
 	);
 	step("security shim exits 44", shim.exitCode === 44, `${shim.exitCode}`);
 };
@@ -145,12 +145,12 @@ const tmpCheck = async (step: Step, out: string) => {
 	}
 	const tmp = await sh(
 		[process.execPath, "-e", "console.log(require('os').tmpdir())"],
-		env,
+		env
 	);
 	step(
 		"toolEnv: child keeps the parent TMPDIR",
 		tmp.stdout === out,
-		tmp.stdout,
+		tmp.stdout
 	);
 };
 
@@ -159,19 +159,19 @@ export const envChecks = async (
 	step: Step,
 	sb: Sandbox,
 	out: string,
-	parentLeaks: string[],
+	parentLeaks: string[]
 ): Promise<string[]> => {
 	const env = childEnv({
 		home: sb.home,
 		configDir: sb.cfg,
-		baseUrl: "http://127.0.0.1:1/x",
+		baseUrl: "http://127.0.0.1:1/x"
 	});
 	const names = Object.keys(env);
 	step(
 		"childEnv: no parent names",
 		!parentLeaks.some((k) => names.includes(k)) &&
 			!names.includes("CLAUDECODE"),
-		`${names.length} names`,
+		`${names.length} names`
 	);
 	await ghostCheck(step);
 	await shimChecks(step, sb, env);
@@ -180,7 +180,7 @@ export const envChecks = async (
 		"assertSafeEnv rejects CLAUDE_CODE_OAUTH_TOKEN",
 		throws(() => {
 			assertSafeEnv({ CLAUDE_CODE_OAUTH_TOKEN: "x" });
-		}),
+		})
 	);
 	await tmpCheck(step, out);
 	return names;

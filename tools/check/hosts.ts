@@ -35,12 +35,12 @@ const EMAIL = /[a-z0-9._%+-]+@example\.(?:com|org|net)/giu;
 const ALLOWED = new Map<string, string>([
 	[
 		"inspect/mcp/src/surface/endpoint.ts",
-		"a comment that names example.com as a placeholder the extractor leaves out",
+		"a comment that names example.com as a placeholder the extractor leaves out"
 	],
 	[
 		"inspect/mcp/test/surface/names.test.ts",
-		"a source fixture string: the extractor is tested on exactly this input",
-	],
+		"a source fixture string: the extractor is tested on exactly this input"
+	]
 ]);
 
 interface Problem {
@@ -62,7 +62,7 @@ const walk = async (dir: string): Promise<string[]> => {
 				return walk(full);
 			}
 			return CODE_EXT.test(name) ? [full] : [];
-		}),
+		})
 	);
 	return found.flat();
 };
@@ -93,7 +93,7 @@ const scanFile = async (full: string): Promise<Problem[]> => {
 			found.push({
 				file: rel,
 				line: i + 1,
-				message: `uses ${hosts.join(", ")} as a host. IANA says not to rely on it for testing. Use a name under .invalid, or 127.0.0.1 with a port. See docs/contributing/style-guide.md, "Example Hosts".`,
+				message: `uses ${hosts.join(", ")} as a host. IANA says not to rely on it for testing. Use a name under .invalid, or 127.0.0.1 with a port. See docs/contributing/style-guide.md, "Example Hosts".`
 			});
 		}
 	}
@@ -103,7 +103,7 @@ const scanFile = async (full: string): Promise<Problem[]> => {
 // An allow-list entry that no longer matches is dead, so it must go.
 const checkAllowed = async (
 	rel: string,
-	reason: string,
+	reason: string
 ): Promise<Problem[]> => {
 	const full = join(ROOT, rel);
 	let text = "";
@@ -114,8 +114,8 @@ const checkAllowed = async (
 			{
 				file: rel,
 				line: 1,
-				message: `is on the allow-list (${reason}) but does not exist. Remove its entry from tools/check/hosts.ts.`,
-			},
+				message: `is on the allow-list (${reason}) but does not exist. Remove its entry from tools/check/hosts.ts.`
+			}
 		];
 	}
 	if (EXAMPLE_HOST.test(text)) {
@@ -125,8 +125,8 @@ const checkAllowed = async (
 		{
 			file: rel,
 			line: 1,
-			message: `is on the allow-list (${reason}) but names no example host. Remove its entry from tools/check/hosts.ts.`,
-		},
+			message: `is on the allow-list (${reason}) but names no example host. Remove its entry from tools/check/hosts.ts.`
+		}
 	];
 };
 
@@ -134,7 +134,7 @@ const trees = await Promise.all(TREES.map((tree) => walkTree(tree)));
 const files = trees.flat();
 const scanned = await Promise.all(files.map((full) => scanFile(full)));
 const allowed = await Promise.all(
-	[...ALLOWED].map(([rel, reason]) => checkAllowed(rel, reason)),
+	[...ALLOWED].map(([rel, reason]) => checkAllowed(rel, reason))
 );
 const problems = [...scanned.flat(), ...allowed.flat()];
 

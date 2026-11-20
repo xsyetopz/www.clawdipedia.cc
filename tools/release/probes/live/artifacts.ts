@@ -7,7 +7,7 @@ import {
 	baseResult,
 	type LiveCase,
 	liveSandbox,
-	runLivePty,
+	runLivePty
 } from "./harness.ts";
 
 const ID = "artifacts";
@@ -36,9 +36,9 @@ export const artifactsCase: LiveCase = {
 				schedule: [
 					READY,
 					{ t: 10, send: "/artifacts\r", label: "artifacts" },
-					{ t: 17, send: "\u001B", label: "esc" },
+					{ t: 17, send: "\u001B", label: "esc" }
 				],
-				secs: 20,
+				secs: 20
 			});
 			const s = pty.screen;
 			const ready = /shortcuts|auto\s*mode|Claude Code/iu.test(s);
@@ -53,16 +53,16 @@ export const artifactsCase: LiveCase = {
 						panelShown: artifactsPanelShown(s),
 						showsPublished: shows("Published"),
 						showsNone: shows("No artifacts"),
-						showsFailed: shows("Failed to load"),
+						showsFailed: shows("Failed to load")
 					},
 					samples: { screenTail: s.split("\n").slice(-30).join("\n") },
 					facts: [],
 					notes:
-						"No prompt is sent (prompt is empty): /artifacts is a local command and only the panel is read. Matching tolerates dropped letters in the rendered screen. URLs and ids are scrubbed from the sample.",
-				}),
+						"No prompt is sent (prompt is empty): /artifacts is a local command and only the panel is read. Matching tolerates dropped letters in the rendered screen. URLs and ids are scrubbed from the sample."
+				})
 			];
 		} finally {
 			await sb.cleanup();
 		}
-	},
+	}
 };

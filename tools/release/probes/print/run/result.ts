@@ -11,7 +11,7 @@ export const requestSummary = (r: Run): NonNullable<CaseResult["requests"]> => {
 		count: r.reqs.length,
 		paths: [...new Set(r.reqs.map((x) => x.path))].toSorted(),
 		...(beta !== undefined && beta !== "" ? { betas: beta.split(",") } : {}),
-		...(m ? { bodyKeys: Object.keys(obj(m.body)) } : {}),
+		...(m ? { bodyKeys: Object.keys(obj(m.body)) } : {})
 	};
 };
 
@@ -37,7 +37,7 @@ export const baseResult = (
 		samples?: Record<string, string> | undefined;
 		notes?: string;
 		facts?: string[];
-	},
+	}
 ): CaseResult => ({
 	schema: 1,
 	id,
@@ -54,7 +54,7 @@ export const baseResult = (
 	facts: o.facts ?? [],
 	...(hasText(run?.promptReason) || hasText(o.notes)
 		? { notes: [run?.promptReason, o.notes].filter(Boolean).join(" ") }
-		: {}),
+		: {})
 });
 
 /**
@@ -64,7 +64,7 @@ export const baseResult = (
 export const oneCase = async (
 	ctx: PrintCtx,
 	id: string,
-	build: () => Promise<CaseResult>,
+	build: () => Promise<CaseResult>
 ): Promise<CaseResult[]> => {
 	if (!selected(ctx, id)) {
 		return [];
@@ -79,10 +79,10 @@ export const oneCase = async (
 			baseResult(ctx, id, null, {
 				data: {
 					precondition: false,
-					error: error instanceof Error ? error.message : String(error),
+					error: error instanceof Error ? error.message : String(error)
 				},
-				notes: "probe invalid: threw before producing data",
-			}),
+				notes: "probe invalid: threw before producing data"
+			})
 		];
 	}
 };

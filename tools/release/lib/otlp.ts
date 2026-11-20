@@ -30,7 +30,7 @@ const byText = (a: unknown, b: unknown): number => {
 
 const scalar = (v: Attr["value"]): string =>
 	String(
-		v["stringValue"] ?? v["boolValue"] ?? v["intValue"] ?? v["doubleValue"],
+		v["stringValue"] ?? v["boolValue"] ?? v["intValue"] ?? v["doubleValue"]
 	);
 
 /** Every `attributes` list in an OTLP JSON body (resource, data point, log record, span), flattened to key and value text. */
@@ -63,7 +63,7 @@ export const attributesOf = (body: unknown): [string, string][] => {
 /** Distinct values by attribute name, for the names that start with `prefix`, over all exports of one signal. */
 export const valuesOf = (
 	bodies: unknown[],
-	prefix: string,
+	prefix: string
 ): Record<string, string[]> => {
 	const m = new Map<string, Set<string>>();
 	for (const b of bodies) {
@@ -74,7 +74,7 @@ export const valuesOf = (
 		}
 	}
 	return Object.fromEntries(
-		[...m].toSorted(byText).map(([k, v]) => [k, [...v].toSorted(byText)]),
+		[...m].toSorted(byText).map(([k, v]) => [k, [...v].toSorted(byText)])
 	);
 };
 
@@ -82,7 +82,7 @@ export const startOtlp = async () => {
 	const bodies: Record<Signal, unknown[]> = {
 		metrics: [],
 		logs: [],
-		traces: [],
+		traces: []
 	};
 	const srv = Bun.serve({
 		port: await allocPort(),
@@ -97,11 +97,11 @@ export const startOtlp = async () => {
 				}
 			}
 			return Response.json({});
-		},
+		}
 	});
 	return {
 		url: `http://127.0.0.1:${srv.port}`,
 		bodies,
-		stop: () => srv.stop(true),
+		stop: () => srv.stop(true)
 	};
 };

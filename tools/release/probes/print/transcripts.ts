@@ -11,7 +11,7 @@ import {
 	oneCase,
 	readIf,
 	type Run,
-	runCase,
+	runCase
 } from "./run.ts";
 import { eachInOrder } from "./run/seq.ts";
 import { baselineB } from "./sig.ts";
@@ -25,16 +25,16 @@ const STREAM = [
 	"stream-json",
 	"--verbose",
 	"--model",
-	"claude-opus-5-5",
+	"claude-opus-5-5"
 ];
 const userLine = JSON.stringify({
 	type: "user",
-	message: { role: "user", content: "Reply with 'OK'." },
+	message: { role: "user", content: "Reply with 'OK'." }
 });
 const twoTurns = (n: number): Case => ({
 	noPrompt: true,
 	argv: STREAM,
-	stdin: `${Array.from({ length: n }, () => userLine).join("\n")}\n`,
+	stdin: `${Array.from({ length: n }, () => userLine).join("\n")}\n`
 });
 const STYLE = "---\nname: st\ndescription: s\n---\nStyle.";
 const TOP_LINES = new Set([
@@ -42,21 +42,21 @@ const TOP_LINES = new Set([
 	"mode",
 	"permission-mode",
 	"last-prompt",
-	"file-history-snapshot",
+	"file-history-snapshot"
 ]);
 
 /** Parsed lines of every transcript file under the sandbox config dir. */
 const transcript = async (r: Run): Promise<Record<string, unknown>[]> => {
 	const all = await listFiles(r.sb.cfg);
 	const files = all.filter(
-		(f) => f.startsWith("projects") && f.endsWith(".jsonl"),
+		(f) => f.startsWith("projects") && f.endsWith(".jsonl")
 	);
 	const texts = await Promise.all(files.map((f) => readIf(join(r.sb.cfg, f))));
 	return texts.flatMap((text) =>
 		text
 			.split("\n")
 			.filter(Boolean)
-			.map((l) => obj(JSON.parse(l))),
+			.map((l) => obj(JSON.parse(l)))
 	);
 };
 
@@ -140,22 +140,22 @@ const linesCases = (): Case[] => {
 			projFiles: {
 				"CLAUDE.md": "top memory",
 				"sub/CLAUDE.md": "nested memory",
-				"sub/f.txt": "x\n",
+				"sub/f.txt": "x\n"
 			},
 			cfgFiles: { ...b.cfgFiles, "output-styles/st.md": STYLE },
 			seq: [
 				{ name: "Read", input: { file_path: "{PROJ}/sub/f.txt" } },
-				{ name: "Bash", input: { command: "echo hi" } },
-			],
+				{ name: "Bash", input: { command: "echo hi" } }
+			]
 		},
 		{
 			seq: [{ name: "Read", input: { file_path: "{PROJ}/sub/f.txt" } }],
 			projFiles: { "sub/CLAUDE.md": "nested", "sub/f.txt": "x\n" },
 			args: ["--settings", JSON.stringify({ outputStyle: "st" })],
-			cfgFiles: { "output-styles/st.md": STYLE },
+			cfgFiles: { "output-styles/st.md": STYLE }
 		},
 		{ args: ["--permission-mode", "auto"] },
-		twoTurns(2),
+		twoTurns(2)
 	];
 };
 
@@ -177,7 +177,7 @@ const linesData = (acc: Acc): Record<string, Data> => {
 		"api_request.params_keys": [...acc.params].toSorted(),
 		"api_request.base_keys": [...acc.baseKeys].toSorted(),
 		"api_request.betas_count": acc.betas.length,
-		"api_request.betas": acc.betas,
+		"api_request.betas": acc.betas
 	};
 	for (const [t, s] of [...acc.keysByType].toSorted(byKey)) {
 		data[`line.${t}`] = [...s].toSorted();
@@ -194,7 +194,7 @@ const runLines = async (ctx: Parameters<PrintGroup["run"]>[0]) => {
 		betas: [],
 		lineCount: 0,
 		first: null,
-		allOk: true,
+		allOk: true
 	};
 	await eachInOrder(linesCases(), async (c) => {
 		const r = await runCase(ctx.bin, c);
@@ -215,7 +215,7 @@ const runLines = async (ctx: Parameters<PrintGroup["run"]>[0]) => {
 	const res = baseResult(ctx, "print.transcripts.lines", first, {
 		data: linesData(acc),
 		notes:
-			"Four runs merged (tools+memory, output style, auto mode, two stream-json turns); args shown are the first run.",
+			"Four runs merged (tools+memory, output style, auto mode, two stream-json turns); args shown are the first run."
 	});
 	await dispose(first);
 	return res;
@@ -226,21 +226,21 @@ const EDIT_HOOK = JSON.stringify({
 		PostToolUse: [
 			{
 				matcher: "Read",
-				hooks: [{ type: "command", command: "echo changed >> {PROJ}/f.txt" }],
-			},
-		],
-	},
+				hooks: [{ type: "command", command: "echo changed >> {PROJ}/f.txt" }]
+			}
+		]
+	}
 });
 
 const runAttachments = async (ctx: Parameters<PrintGroup["run"]>[0]) => {
 	const edited = await runCase(ctx.bin, {
 		seq: [
 			{ name: "Read", input: { file_path: "{PROJ}/f.txt" } },
-			{ name: "Bash", input: { command: "echo hi" } },
+			{ name: "Bash", input: { command: "echo hi" } }
 		],
 		args: ["--allowedTools", "Bash"],
 		projFiles: { "f.txt": "one\n", "CLAUDE.md": "top" },
-		cfgFiles: { "settings.json": EDIT_HOOK },
+		cfgFiles: { "settings.json": EDIT_HOOK }
 	});
 	const editedTypes = await attTypes(edited);
 	const changedText = await readIf(join(edited.sb.proj, "f.txt"));
@@ -265,10 +265,10 @@ const runAttachments = async (ctx: Parameters<PrintGroup["run"]>[0]) => {
 				"hook.changed_file": fileChanged,
 				edited_file_run: editedTypes,
 				three_prompts: threeTypes,
-				plain: plainTypes,
+				plain: plainTypes
 			},
 			notes:
-				"args/exit are from the plain run; the other two runs are a Read with a file-changing hook and three stream-json turns.",
+				"args/exit are from the plain run; the other two runs are a Read with a file-changing hook and three stream-json turns."
 		});
 	} finally {
 		await dispose(plain);
@@ -280,11 +280,11 @@ export const transcriptsGroup: PrintGroup = {
 	title: "Transcript line shapes and attachments",
 	run: async (ctx) => {
 		const lines = await oneCase(ctx, "print.transcripts.lines", () =>
-			runLines(ctx),
+			runLines(ctx)
 		);
 		const atts = await oneCase(ctx, "print.transcripts.attachments", () =>
-			runAttachments(ctx),
+			runAttachments(ctx)
 		);
 		return [...lines, ...atts];
-	},
+	}
 };

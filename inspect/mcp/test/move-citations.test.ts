@@ -12,11 +12,11 @@ const NEW_AT = NEW.indexOf("x.timeout");
 
 const oldSources = [
 	{ name: "/$bunfs/root/chunk-aaaaaaaa.js", text: OLD },
-	{ name: "chunk-cccccccc.js", text: '"a literal that no new module holds"' },
+	{ name: "chunk-cccccccc.js", text: '"a literal that no new module holds"' }
 ];
 const newSources = [
 	{ name: "/$bunfs/root/chunk-bbbbbbbb.js", text: NEW },
-	{ name: "chunk-dddddddd.js", text: "nothing here" },
+	{ name: "chunk-dddddddd.js", text: "nothing here" }
 ];
 
 const run = (text: string) =>
@@ -24,7 +24,7 @@ const run = (text: string) =>
 
 test("moves an offset to the same code in the mapped module", () => {
 	const { moves, files } = run(
-		`The program reads CLAUDE_CODE_FOO_BAR (chunk-aaaaaaaa.js:${OLD_AT}) and (chunk-aaaaaaaa.js@${OLD_AT}).`,
+		`The program reads CLAUDE_CODE_FOO_BAR (chunk-aaaaaaaa.js:${OLD_AT}) and (chunk-aaaaaaaa.js@${OLD_AT}).`
 	);
 	expect(moves).toEqual([
 		{
@@ -32,42 +32,42 @@ test("moves an offset to the same code in the mapped module", () => {
 			line: 1,
 			from: `chunk-aaaaaaaa.js:${OLD_AT}`,
 			to: `chunk-bbbbbbbb.js:${NEW_AT}`,
-			how: "same",
+			how: "same"
 		},
 		{
 			file: "a.md",
 			line: 1,
 			from: `chunk-aaaaaaaa.js@${OLD_AT}`,
 			to: `chunk-bbbbbbbb.js@${NEW_AT}`,
-			how: "same",
-		},
+			how: "same"
+		}
 	]);
 	expect(files["a.md"]).toBe(
-		`The program reads CLAUDE_CODE_FOO_BAR (chunk-bbbbbbbb.js:${NEW_AT}) and (chunk-bbbbbbbb.js@${NEW_AT}).`,
+		`The program reads CLAUDE_CODE_FOO_BAR (chunk-bbbbbbbb.js:${NEW_AT}) and (chunk-bbbbbbbb.js@${NEW_AT}).`
 	);
 });
 
 test("moves a bare name and a lines form to the mapped module with the numbers kept", () => {
 	const { moves, files } = run(
-		"See `chunk-aaaaaaaa.js` and `chunk-aaaaaaaa.js lines 5 to 9`.",
+		"See `chunk-aaaaaaaa.js` and `chunk-aaaaaaaa.js lines 5 to 9`."
 	);
 	expect(moves.map((m) => [m.from, m.to, m.how])).toEqual([
 		["chunk-aaaaaaaa.js", "chunk-bbbbbbbb.js", "module"],
 		[
 			"chunk-aaaaaaaa.js lines 5 to 9",
 			"chunk-bbbbbbbb.js lines 5 to 9",
-			"module",
-		],
+			"module"
+		]
 	]);
 	expect(files["a.md"]).toBe(
-		"See `chunk-bbbbbbbb.js` and `chunk-bbbbbbbb.js lines 5 to 9`.",
+		"See `chunk-bbbbbbbb.js` and `chunk-bbbbbbbb.js lines 5 to 9`."
 	);
 });
 
 test("keeps the offset as a module move when the code is not found", () => {
 	const { moves, files } = run("The program reads `chunk-aaaaaaaa.js:3`.");
 	expect(moves.map((m) => [m.to, m.how])).toEqual([
-		["chunk-bbbbbbbb.js:3", "module"],
+		["chunk-bbbbbbbb.js:3", "module"]
 	]);
 	expect(files["a.md"]).toBe("The program reads `chunk-bbbbbbbb.js:3`.");
 });
@@ -79,15 +79,15 @@ test("keeps an offset as the same code when the code at it did not move and no a
 	const inName = importing("gggggggg").lastIndexOf("gggg");
 	const { moves } = moveCitations(
 		{
-			"a.md": `See \`chunk-eeeeeeee.js:${inName}\`, \`chunk-eeeeeeee.js:300\` and \`chunk-eeeeeeee.js:9000\`.`,
+			"a.md": `See \`chunk-eeeeeeee.js:${inName}\`, \`chunk-eeeeeeee.js:300\` and \`chunk-eeeeeeee.js:9000\`.`
 		},
 		[{ name: "chunk-eeeeeeee.js", text: importing("gggggggg") }],
-		[{ name: "chunk-ffffffff.js", text: importing("hhhhhhhh") }],
+		[{ name: "chunk-ffffffff.js", text: importing("hhhhhhhh") }]
 	);
 	expect(moves.map((m) => [m.to, m.how])).toEqual([
 		[`chunk-ffffffff.js:${inName}`, "same"],
 		["chunk-ffffffff.js:300", "same"],
-		["chunk-ffffffff.js:9000", "module"],
+		["chunk-ffffffff.js:9000", "module"]
 	]);
 });
 
@@ -95,11 +95,11 @@ const cleanLines = (from: number, to: number) =>
 	Array.from(
 		{ length: to - from },
 		(_, i) =>
-			`let v${from + i} = $a${String(from + i).padStart(5, "0")}("value ${from + i}");`,
+			`let v${from + i} = $a${String(from + i).padStart(5, "0")}("value ${from + i}");`
 	);
 const CLEAN_OLD = [
 	...cleanLines(1, 201),
-	'import "/$bunfs/root/chunk@0693a6aa.js";',
+	'import "/$bunfs/root/chunk@0693a6aa.js";'
 ].join("\n");
 const CLEAN_NEW = [
 	"new line 1",
@@ -108,7 +108,7 @@ const CLEAN_NEW = [
 	...cleanLines(1, 150),
 	"let v150 = changed();",
 	...cleanLines(151, 201),
-	'import "/$bunfs/root/chunk@b5116781.js";',
+	'import "/$bunfs/root/chunk@b5116781.js";'
 ]
 	.join("\n")
 	.replaceAll("$a0", "$b0");
@@ -116,63 +116,63 @@ const runClean = (text: string) =>
 	moveCitations(
 		{ "a.md": text },
 		[{ name: "chunk-aaaaaaaa.js", text: OLD, clean: CLEAN_OLD }],
-		[{ name: "chunk-bbbbbbbb.js", text: NEW, clean: CLEAN_NEW }],
+		[{ name: "chunk-bbbbbbbb.js", text: NEW, clean: CLEAN_NEW }]
 	);
 
 test("moves a line of the cleaned module to the same lines in the new one", () => {
 	const { moves, files } = runClean(
-		"See `chunk-aaaaaaaa.js:12`, `:20-30`, `:201` and `chunk-aaaaaaaa.js` lines 40 to 45.",
+		"See `chunk-aaaaaaaa.js:12`, `:20-30`, `:201` and `chunk-aaaaaaaa.js` lines 40 to 45."
 	);
 	expect(files["a.md"]).toBe(
-		"See `chunk-bbbbbbbb.js:15`, `:23-33`, `:204` and `chunk-bbbbbbbb.js` lines 43 to 48.",
+		"See `chunk-bbbbbbbb.js:15`, `:23-33`, `:204` and `chunk-bbbbbbbb.js` lines 43 to 48."
 	);
 	expect(moves.map((m) => m.how)).toEqual(["same", "same"]);
 });
 
 test("keeps a line whose code changed, as a module move", () => {
 	const { moves, files } = runClean(
-		"See `chunk-aaaaaaaa.js:150` and `chunk-aaaaaaaa.js` lines 149 to 151.",
+		"See `chunk-aaaaaaaa.js:150` and `chunk-aaaaaaaa.js` lines 149 to 151."
 	);
 	expect(files["a.md"]).toBe(
-		"See `chunk-bbbbbbbb.js:150` and `chunk-bbbbbbbb.js` lines 149 to 151.",
+		"See `chunk-bbbbbbbb.js:150` and `chunk-bbbbbbbb.js` lines 149 to 151."
 	);
 	expect(moves.map((m) => m.how)).toEqual(["module", "module"]);
 });
 
 test("reads a number as a raw offset after an at sign, past the last line, or when only the raw code holds the claim's words", () => {
 	const { files } = runClean(
-		`\`chunk-aaaaaaaa.js@${OLD_AT}\`, \`chunk-aaaaaaaa.js:${OLD_AT}\` reads CLAUDE_CODE_FOO_BAR, \`chunk-aaaaaaaa.js:9000\`.`,
+		`\`chunk-aaaaaaaa.js@${OLD_AT}\`, \`chunk-aaaaaaaa.js:${OLD_AT}\` reads CLAUDE_CODE_FOO_BAR, \`chunk-aaaaaaaa.js:9000\`.`
 	);
 	expect(files["a.md"]).toBe(
-		`\`chunk-bbbbbbbb.js@${NEW_AT}\`, \`chunk-bbbbbbbb.js:${NEW_AT}\` reads CLAUDE_CODE_FOO_BAR, \`chunk-bbbbbbbb.js:9000\`.`,
+		`\`chunk-bbbbbbbb.js@${NEW_AT}\`, \`chunk-bbbbbbbb.js:${NEW_AT}\` reads CLAUDE_CODE_FOO_BAR, \`chunk-bbbbbbbb.js:9000\`.`
 	);
 });
 
 test("moves a follow-on number or range with the last chunk before it", () => {
 	const { files } = run(
-		`CLAUDE_CODE_FOO_BAR: \`chunk-aaaaaaaa.js:${OLD_AT}\`, \`:${OLD_AT}-${OLD_AT + 4}\`, \`:7\``,
+		`CLAUDE_CODE_FOO_BAR: \`chunk-aaaaaaaa.js:${OLD_AT}\`, \`:${OLD_AT}-${OLD_AT + 4}\`, \`:7\``
 	);
 	expect(files["a.md"]).toBe(
-		`CLAUDE_CODE_FOO_BAR: \`chunk-bbbbbbbb.js:${NEW_AT}\`, \`:${NEW_AT}-${NEW_AT + 4}\`, \`:7\``,
+		`CLAUDE_CODE_FOO_BAR: \`chunk-bbbbbbbb.js:${NEW_AT}\`, \`:${NEW_AT}-${NEW_AT + 4}\`, \`:7\``
 	);
 });
 
 test("moves both ends of a range that follows a chunk", () => {
 	const { moves, files } = run(
-		`CLAUDE_CODE_FOO_BAR: \`chunk-aaaaaaaa.js:${OLD_AT}-${OLD_AT + 4}\``,
+		`CLAUDE_CODE_FOO_BAR: \`chunk-aaaaaaaa.js:${OLD_AT}-${OLD_AT + 4}\``
 	);
 	expect(files["a.md"]).toBe(
-		`CLAUDE_CODE_FOO_BAR: \`chunk-bbbbbbbb.js:${NEW_AT}-${NEW_AT + 4}\``,
+		`CLAUDE_CODE_FOO_BAR: \`chunk-bbbbbbbb.js:${NEW_AT}-${NEW_AT + 4}\``
 	);
 	expect(moves.map((m) => m.how)).toEqual(["same"]);
 });
 
 test("keeps both ends of a range as a module move when one end is not found", () => {
 	const { moves, files } = run(
-		`CLAUDE_CODE_FOO_BAR: \`chunk-aaaaaaaa.js:${OLD_AT}-9000\``,
+		`CLAUDE_CODE_FOO_BAR: \`chunk-aaaaaaaa.js:${OLD_AT}-9000\``
 	);
 	expect(files["a.md"]).toBe(
-		`CLAUDE_CODE_FOO_BAR: \`chunk-bbbbbbbb.js:${OLD_AT}-9000\``,
+		`CLAUDE_CODE_FOO_BAR: \`chunk-bbbbbbbb.js:${OLD_AT}-9000\``
 	);
 	expect(moves.map((m) => m.how)).toEqual(["module"]);
 });
@@ -186,7 +186,7 @@ test("keeps a range as a module move when its ends land out of order", () => {
 	const { moves, files } = moveCitations(
 		{ "a.md": "See `chunk-aaaaaaaa.js:50-150`." },
 		[{ name: "chunk-aaaaaaaa.js", text: OLD, clean: CLEAN_OLD }],
-		[{ name: "chunk-bbbbbbbb.js", text: NEW, clean: `${swapped}${tail}` }],
+		[{ name: "chunk-bbbbbbbb.js", text: NEW, clean: `${swapped}${tail}` }]
 	);
 
 	// Assert
@@ -198,7 +198,7 @@ test("reports a chunk with no matching module and leaves its text", () => {
 	const text = "See `chunk-cccccccc.js:5`, `:9`.";
 	const { moves, files } = run(text);
 	expect(moves).toEqual([
-		{ file: "a.md", line: 1, from: "chunk-cccccccc.js:5", how: "unmapped" },
+		{ file: "a.md", line: 1, from: "chunk-cccccccc.js:5", how: "unmapped" }
 	]);
 	expect(files["a.md"]).toBe(text);
 });

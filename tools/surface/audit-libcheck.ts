@@ -3,7 +3,7 @@ import {
 	dependenciesOf,
 	fetchPackage,
 	findText,
-	linesAt,
+	linesAt
 } from "../../inspect/mcp/src/npm.ts";
 import { builtAt, gone, library, packagesOf } from "./audit-npm.ts";
 import { type Ctx, eachOf, firstOf, type Verdict } from "./audit-types.ts";
@@ -22,7 +22,7 @@ const look = async (
 	name: string,
 	version: string,
 	from: string,
-	dir: string,
+	dir: string
 ): Promise<Verdict | undefined> => {
 	const r = await findText(dir, s.text, s.exact);
 	if (r.file === undefined) {
@@ -35,8 +35,8 @@ const look = async (
 			package: `${name}@${version}`,
 			versionFrom: from,
 			file: r.file,
-			...(r.loose === true ? { match: "sentences in any order" } : {}),
-		},
+			...(r.loose === true ? { match: "sentences in any order" } : {})
+		}
 	};
 };
 
@@ -77,7 +77,7 @@ const majorHit = async (s: Search, p: Lib) => {
 			return pkg === undefined
 				? undefined
 				: look(s, p.name, v, "major-latest", pkg.dir);
-		},
+		}
 	);
 };
 
@@ -87,7 +87,7 @@ export const libCheck = async (
 	names: string[],
 	text: string,
 	majors = true,
-	exact = false,
+	exact = false
 ): Promise<Verdict> => {
 	const { pkgs, gaps } = await packagesOf(c, names);
 	const s: Search = { c, text, exact, tried: [] };

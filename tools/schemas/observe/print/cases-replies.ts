@@ -9,7 +9,7 @@ const PDF = [
 	"3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 72 72]>>endobj",
 	"trailer<</Root 1 0 R>>",
 	"%%EOF",
-	"",
+	""
 ].join("\n");
 
 /** The cases whose stub answers come from `turns`. */
@@ -26,10 +26,10 @@ export const REPLY_CASES: Case[] = [
 					type: "refusal",
 					category: "cyber",
 					explanation: "probe",
-					cyber_verification: { type: "probe", tier: "probe", reason: "probe" },
-				},
-			},
-		],
+					cyber_verification: { type: "probe", tier: "probe", reason: "probe" }
+				}
+			}
+		]
 	},
 	{
 		id: "cut-tool",
@@ -41,13 +41,13 @@ export const REPLY_CASES: Case[] = [
 						type: "tool_use",
 						id: "toolu_cut",
 						name: "Bash",
-						input: { command: "true" },
-					},
+						input: { command: "true" }
+					}
 				],
 				stop_reason: "max_tokens",
-				open: true,
-			},
-		],
+				open: true
+			}
+		]
 	},
 	{
 		id: "api-error-type",
@@ -57,10 +57,10 @@ export const REPLY_CASES: Case[] = [
 				status: 403,
 				body: {
 					type: "error",
-					error: { type: "permission_error", message: "probe" },
-				},
-			},
-		],
+					error: { type: "permission_error", message: "probe" }
+				}
+			}
+		]
 	},
 	{
 		id: "media-strip",
@@ -77,10 +77,10 @@ export const REPLY_CASES: Case[] = [
 					error: {
 						type: "invalid_request_error",
 						message:
-							"messages.3.content.0.tool_result.content.1.document: probe",
-					},
-				},
-			},
-		],
-	},
+							"messages.3.content.0.tool_result.content.1.document: probe"
+					}
+				}
+			}
+		]
+	}
 ];

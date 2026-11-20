@@ -8,7 +8,7 @@ import { type Case, isSeq, obj, type Seq } from "./types.ts";
 /** Every prompt the argument list or stdin would send: `-p`/`--print` values and stream-json user lines. */
 export const promptsOf = (
 	argv: string[],
-	stdin: string | undefined,
+	stdin: string | undefined
 ): string[] => {
 	const out: string[] = [];
 	for (const [i, a] of argv.entries()) {
@@ -44,24 +44,24 @@ export const commitFixture = async (sb: Sandbox): Promise<void> => {
 		GIT_AUTHOR_NAME: "t",
 		GIT_AUTHOR_EMAIL: "t@example.com",
 		GIT_COMMITTER_NAME: "t",
-		GIT_COMMITTER_EMAIL: "t@example.com",
+		GIT_COMMITTER_EMAIL: "t@example.com"
 	};
 	await eachInOrder(
 		[
 			["add", "-A"],
-			["commit", "-q", "-m", "init"],
+			["commit", "-q", "-m", "init"]
 		],
 		async (c) => {
 			const g = Bun.spawn(["/usr/bin/git", ...c], {
 				cwd: sb.proj,
 				env,
 				stdout: "ignore",
-				stderr: "ignore",
+				stderr: "ignore"
 			});
 			if ((await g.exited) !== 0) {
 				throw new Error(`git ${c[0]} failed in sandbox`);
 			}
-		},
+		}
 	);
 };
 
@@ -93,5 +93,5 @@ export const stubCaseOf = (c: Case, sb: Sandbox, log: string): StubCase => ({
 	...(c.orchestrator === undefined ? {} : { orchestrator: c.orchestrator }),
 	...(nonZero(c.tooLongOn) ? { tooLongOn: c.tooLongOn } : {}),
 	...(nonZero(c.gapMs) ? { gapMs: c.gapMs } : {}),
-	...(nonZero(c.deltas) ? { deltas: c.deltas } : {}),
+	...(nonZero(c.deltas) ? { deltas: c.deltas } : {})
 });

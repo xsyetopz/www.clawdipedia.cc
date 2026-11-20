@@ -8,7 +8,7 @@ import type { DocFile } from "./kind.ts";
 export const loadDocs = async (): Promise<DocFile[]> => {
 	const entries = await readdir(join(ROOT, "docs"), {
 		recursive: true,
-		withFileTypes: true,
+		withFileTypes: true
 	});
 	const files = entries
 		.filter((e) => e.isFile() && /\.mdx?$/u.test(e.name))
@@ -16,7 +16,7 @@ export const loadDocs = async (): Promise<DocFile[]> => {
 	return Promise.all(
 		files.map(async (p) => ({
 			file: p.slice(ROOT.length + 1),
-			text: await Bun.file(p).text(),
-		})),
+			text: await Bun.file(p).text()
+		}))
 	);
 };

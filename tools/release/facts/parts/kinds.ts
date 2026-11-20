@@ -14,6 +14,6 @@ export const KINDS = [
 	"schema",
 	"manual",
 	"static",
-	"external",
+	"external"
 ] as const;
 export type Kind = (typeof KINDS)[number];

@@ -28,7 +28,7 @@ export const parseSleep = (command: string, limit = DEFAULT_LIMIT) => {
 
 export const describe = ({
 	description,
-	seconds = 0,
+	seconds = 0
 }: {
 	description: string;
 	seconds?: number;

@@ -14,13 +14,13 @@ import {
 	binaryPath,
 	listInstalls,
 	program,
-	releaseTrees,
+	releaseTrees
 } from "../../inspect/mcp/src/binary.ts";
 import { mapSeq } from "../../inspect/mcp/src/seq.ts";
 import {
 	KINDS,
 	surface,
-	type SurfaceItem,
+	type SurfaceItem
 } from "../../inspect/mcp/src/surface/index.ts";
 import { CLAUDE_CODE_VERSION } from "../../src/version.ts";
 import { sorted } from "../schemas/sorted.ts";
@@ -63,13 +63,13 @@ const byNameThenJson = (a: CommittedItem, b: CommittedItem) =>
 /** The committed copy of the items by kind: kinds and items sorted. */
 export const committed = (
 	version: string,
-	byKind: Record<string, SurfaceItem[]>,
+	byKind: Record<string, SurfaceItem[]>
 ): Committed => {
 	const kinds: Record<string, CommittedItem[]> = {};
 	for (const k of sorted(Object.keys(byKind), cmp)) {
 		kinds[k] = sorted(
 			(byKind[k] ?? []).map((i) => stripped(i)),
-			byNameThenJson,
+			byNameThenJson
 		);
 	}
 	return { version, kinds };
@@ -113,7 +113,7 @@ export const serialize = (c: Committed): string => {
 	const groups = Object.entries(c.kinds).map(([k, items]) => {
 		const rows = items.map(
 			(i, n) =>
-				`${layout(i, 6, n === items.length - 1)}${n === items.length - 1 ? "" : ","}`,
+				`${layout(i, 6, n === items.length - 1)}${n === items.length - 1 ? "" : ","}`
 		);
 		return rows.length > 0
 			? `\t\t${JSON.stringify(k)}: [\n${rows.map((r) => `\t\t\t${r}`).join("\n")}\n\t\t]`
@@ -125,18 +125,18 @@ export const serialize = (c: Committed): string => {
 /** The bytes of captures/<version>/surface.json: the full items, one per line. */
 export const serializeCapture = (
 	version: string,
-	byKind: Record<string, SurfaceItem[]>,
+	byKind: Record<string, SurfaceItem[]>
 ): string => {
 	const groups = sorted(Object.keys(byKind), cmp).map((k) => {
 		const rows = (byKind[k] ?? []).map((i) => ({
 			name: i.name,
 			json: JSON.stringify(
-				Object.fromEntries([...Object.entries(i), ["version", version]]),
-			),
+				Object.fromEntries([...Object.entries(i), ["version", version]])
+			)
 		}));
 		const lines = sorted(
 			rows,
-			(a, b) => cmp(a.name, b.name) || cmp(a.json, b.json),
+			(a, b) => cmp(a.name, b.name) || cmp(a.json, b.json)
 		).map((r) => r.json);
 		return `${JSON.stringify(k)}: [\n${lines.join(",\n")}\n]`;
 	});
@@ -157,7 +157,7 @@ const wanted = (binary: string) =>
 /** Read the binary and give its version and the items by kind. Throws a message that names the missing path. */
 export const snapshot = async (
 	binary: string,
-	only?: string[],
+	only?: string[]
 ): Promise<{ version: string; byKind: Record<string, SurfaceItem[]> }> => {
 	try {
 		await binaryPath(binary);
@@ -168,7 +168,7 @@ export const snapshot = async (
 	for (const k of kinds) {
 		if (!(k in KINDS)) {
 			throw new Error(
-				`unknown kind "${k}"; kinds: ${Object.keys(KINDS).join(", ")}`,
+				`unknown kind "${k}"; kinds: ${Object.keys(KINDS).join(", ")}`
 			);
 		}
 	}
@@ -223,14 +223,14 @@ const check = async (copy: string): Promise<number> => {
 	}
 	if (!(await isInstalled())) {
 		console.info(
-			`schemas/surface.json ok, skipped the comparison with a fresh run (Claude Code ${CLAUDE_CODE_VERSION} is not installed)`,
+			`schemas/surface.json ok, skipped the comparison with a fresh run (Claude Code ${CLAUDE_CODE_VERSION} is not installed)`
 		);
 		return 0;
 	}
 	const fresh = await snapshot(CLAUDE_CODE_VERSION);
 	if (serialize(committed(fresh.version, fresh.byKind)) !== text) {
 		console.error(
-			'schemas/surface.json: differs from a fresh run on the binary (run "bun run surface")',
+			'schemas/surface.json: differs from a fresh run on the binary (run "bun run surface")'
 		);
 		return 1;
 	}
@@ -245,8 +245,8 @@ const main = async (): Promise<number> => {
 			commit: { type: "boolean" },
 			check: { type: "boolean" },
 			out: { type: "string" },
-			kind: { type: "string" },
-		},
+			kind: { type: "string" }
+		}
 	});
 	const out = a.out ?? ROOT;
 	const copy = join(out, "schemas", "surface.json");
@@ -261,17 +261,17 @@ const main = async (): Promise<number> => {
 	try {
 		const { version, byKind } = await snapshot(
 			a.binary ?? CLAUDE_CODE_VERSION,
-			only,
+			only
 		);
 		if (a.commit === true && version !== CLAUDE_CODE_VERSION) {
 			throw new Error(
-				`--commit needs the site version ${CLAUDE_CODE_VERSION}, not ${version}`,
+				`--commit needs the site version ${CLAUDE_CODE_VERSION}, not ${version}`
 			);
 		}
 		const file = join(out, "captures", version, "surface.json");
 		await write(file, serializeCapture(version, byKind));
 		console.info(
-			`${file}: ${Object.values(byKind).reduce((n, l) => n + l.length, 0)} items in ${Object.keys(byKind).length} kinds`,
+			`${file}: ${Object.values(byKind).reduce((n, l) => n + l.length, 0)} items in ${Object.keys(byKind).length} kinds`
 		);
 		if (a.commit === true) {
 			await write(copy, serialize(committed(version, byKind)));

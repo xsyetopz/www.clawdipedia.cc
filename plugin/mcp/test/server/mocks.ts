@@ -36,7 +36,7 @@ export const newState = (): SiteState => ({
 	gone: new Set(),
 	huge: new Set(),
 	etag: false,
-	hits: [],
+	hits: []
 });
 
 interface ManifestEntry {
@@ -69,9 +69,9 @@ const fixtureIndex = async (): Promise<string> => {
 			title: e.title,
 			description: e.description,
 			text: await text(
-				join(SITE, e.route === "/" ? "index.md" : `${e.route.slice(1)}.md`),
-			),
-		})),
+				join(SITE, e.route === "/" ? "index.md" : `${e.route.slice(1)}.md`)
+			)
+		}))
 	);
 	return searchIndexJson("test", pages);
 };
@@ -85,7 +85,7 @@ const siteIndex = async (state: SiteState, inm: string | null) => {
 		return notModified();
 	}
 	return new Response(await fixtureIndex(), {
-		headers: state.etag ? { etag: tag } : {},
+		headers: state.etag ? { etag: tag } : {}
 	});
 };
 
@@ -133,12 +133,12 @@ export const mockSite = (state: SiteState = newState(), port = 0) => {
 	const srv = Bun.serve({
 		port,
 		hostname: "127.0.0.1",
-		fetch: (req) => siteRoute(state, req),
+		fetch: (req) => siteRoute(state, req)
 	});
 	return {
 		url: `http://127.0.0.1:${srv.port}`,
 		port: srv.port ?? port,
-		stop: stopper(srv),
+		stop: stopper(srv)
 	};
 };
 
@@ -165,9 +165,9 @@ export const mockPlatform = (rewriteLinks = true) => {
 				return new Response(
 					body.replaceAll(
 						"https://platform.claude.com",
-						rewriteLinks ? origin : "https://platform.claude.com",
+						rewriteLinks ? origin : "https://platform.claude.com"
 					),
-					{ headers: { "last-modified": LM } },
+					{ headers: { "last-modified": LM } }
 				);
 			}
 			const m = /^\/docs\/en\/([a-z0-9/-]+)\.md$/u.exec(pathname);
@@ -175,12 +175,12 @@ export const mockPlatform = (rewriteLinks = true) => {
 			return m && (await Bun.file(file).exists())
 				? new Response(Bun.file(file))
 				: notFound();
-		},
+		}
 	});
 	return {
 		url: `http://127.0.0.1:${srv.port}`,
 		hits,
-		stop: stopper(srv),
+		stop: stopper(srv)
 	};
 };
 
@@ -202,7 +202,7 @@ export const mockCode = () => {
 				const body = await text(join(dir, "llms.txt"));
 				return new Response(
 					body.replaceAll("https://code.claude.com", origin),
-					{ headers: { "last-modified": LM } },
+					{ headers: { "last-modified": LM } }
 				);
 			}
 			// The bare path (no .md) is HTML on the real host; the mock has none.
@@ -211,12 +211,12 @@ export const mockCode = () => {
 			return m && (await Bun.file(file).exists())
 				? new Response(Bun.file(file))
 				: notFound();
-		},
+		}
 	});
 	return {
 		url: `http://127.0.0.1:${srv.port}`,
 		hits,
-		stop: stopper(srv),
+		stop: stopper(srv)
 	};
 };
 
@@ -237,27 +237,27 @@ export const mockClaudeResources = () => {
 				}
 				const body = await text(join(dir, "sitemap.xml"));
 				return new Response(body.replaceAll("https://claude.com", origin), {
-					headers: { "last-modified": LM },
+					headers: { "last-modified": LM }
 				});
 			}
 			if (pathname.length > 1 && pathname.endsWith("/")) {
 				return new Response(null, {
 					status: 308,
-					headers: { location: pathname.slice(0, -1) },
+					headers: { location: pathname.slice(0, -1) }
 				});
 			}
 			const m = /^\/([a-z0-9/-]+)$/u.exec(pathname);
 			const file = m ? slugFile(m, join(dir, "pages"), "html") : "";
 			return m && (await Bun.file(file).exists())
 				? new Response(Bun.file(file), {
-						headers: { "content-type": "text/html" },
+						headers: { "content-type": "text/html" }
 					})
 				: notFound();
-		},
+		}
 	});
 	return {
 		url: `http://127.0.0.1:${srv.port}`,
 		hits,
-		stop: stopper(srv),
+		stop: stopper(srv)
 	};
 };

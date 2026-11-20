@@ -6,14 +6,14 @@ import {
 	placesOf,
 	resultText,
 	toolEntry,
-	toolNames,
+	toolNames
 } from "../requests.ts";
 import {
 	API_HOST,
 	runArgs,
 	runPrompt,
 	type RunResult,
-	userText,
+	userText
 } from "../run.ts";
 import { type Args, clip, has, need, type Out, regex, text } from "./app.ts";
 
@@ -26,7 +26,7 @@ const STREAM_FLAGS = [
 	"stream-json",
 	"--output-format",
 	"stream-json",
-	"--verbose",
+	"--verbose"
 ];
 const STDOUT_CHARS = 4000;
 const STDERR_CHARS = 2000;
@@ -42,7 +42,7 @@ export const installed = async (version: string | undefined) => {
 		: (all.find((i) => i.current) ?? all[0]);
 	if (!bin) {
 		throw new Error(
-			`run and cli take an installed version; installed: ${all.map((i) => i.version).join(", ") || "none"}`,
+			`run and cli take an installed version; installed: ${all.map((i) => i.version).join(", ") || "none"}`
 		);
 	}
 	return bin;
@@ -67,7 +67,7 @@ const optionsOf = (a: Args): RunOpts => {
 		replies: a.replies ?? {},
 		login: a.login ?? "key",
 		apiHost: a.apiHost ?? false,
-		baseUrl: a.baseUrl ?? true,
+		baseUrl: a.baseUrl ?? true
 	};
 	if (a.calls) {
 		options.calls = callsOf(a.calls);
@@ -82,7 +82,7 @@ const optionsOf = (a: Args): RunOpts => {
 		options.input = a.prompts
 			.map(
 				(content) =>
-					`${JSON.stringify({ type: "user", message: { role: "user", content } })}\n`,
+					`${JSON.stringify({ type: "user", message: { role: "user", content } })}\n`
 			)
 			.join("");
 	}
@@ -93,7 +93,7 @@ const requestBody = (
 	r: RunResult,
 	request: number,
 	offset: number,
-	length: number,
+	length: number
 ) => {
 	const q = r.requests[request - 1];
 	if (!q) {
@@ -108,7 +108,7 @@ const requestBody = (
 		offset: start,
 		end,
 		total: json.length,
-		text: json.slice(start, end),
+		text: json.slice(start, end)
 	};
 };
 
@@ -144,13 +144,13 @@ const bodyText = (body: ReturnType<typeof requestBody> | undefined) =>
 const sentOf = (r: RunResult) =>
 	r.requests.map(
 		(x) =>
-			`${x.method} ${x.host === API_HOST ? `https://${API_HOST}` : ""}${x.path}`,
+			`${x.method} ${x.host === API_HOST ? `https://${API_HOST}` : ""}${x.path}`
 	);
 
 /** The `anthropic-beta` names of each request that sent the header, as `[request number, names]`. */
 const betasOf = (r: RunResult): [number, string[]][] =>
 	r.requests.flatMap((x, i): [number, string[]][] =>
-		x.betas === undefined ? [] : [[i + 1, x.betas]],
+		x.betas === undefined ? [] : [[i + 1, x.betas]]
 	);
 
 const betasLine = (betas: [number, string[]][]) =>
@@ -169,7 +169,7 @@ const lookups = (r: RunResult, a: Args) => {
 			request === undefined
 				? undefined
 				: requestBody(r, request, a.offset ?? 0, a.length ?? PAGE_CHARS),
-		entry: tool === undefined ? undefined : toolEntry(r, tool),
+		entry: tool === undefined ? undefined : toolEntry(r, tool)
 	};
 };
 
@@ -187,7 +187,7 @@ const summary = (r: RunResult, found: string[] | undefined) => {
 	return {
 		sent,
 		tools,
-		line: `exit ${r.exit}, requests: ${sent.join(", ") || "none"}, files: ${files}.${toolsLine}${foundLine}`,
+		line: `exit ${r.exit}, requests: ${sent.join(", ") || "none"}, files: ${files}.${toolsLine}${foundLine}`
 	};
 };
 
@@ -201,7 +201,7 @@ export const cli = async (a: Args): Promise<Out> => {
 	const r = await runArgs(
 		bin.path,
 		prompts ? [...STREAM_FLAGS, ...args] : args,
-		optionsOf(a),
+		optionsOf(a)
 	);
 	const { found, body, entry } = lookups(r, a);
 	const { sent, tools, line } = summary(r, found);
@@ -221,8 +221,8 @@ export const cli = async (a: Args): Promise<Out> => {
 			stdout,
 			stderr,
 			...(body && { body }),
-			...(tool !== undefined && { tool: entry ?? null }),
-		},
+			...(tool !== undefined && { tool: entry ?? null })
+		}
 	);
 };
 
@@ -233,7 +233,7 @@ export const runCode = async ({
 	version,
 	offset = 0,
 	length = 4000,
-	env,
+	env
 }: Args): Promise<Out> => {
 	const q = need(prompt, "prompt");
 	const cmd = /^\/([\w:-]+)/u.exec(q)?.[1];
@@ -249,7 +249,7 @@ export const runCode = async ({
 		return text(`${head}\nNo user turn holds "${clip(mark, 100)}".${said}`, {
 			exit: r.exit,
 			requests: sent,
-			result: out,
+			result: out
 		});
 	}
 	const start = Math.min(offset, t.length);
@@ -262,7 +262,7 @@ export const runCode = async ({
 			offset: start,
 			end,
 			total: t.length,
-			result: out,
-		},
+			result: out
+		}
 	);
 };

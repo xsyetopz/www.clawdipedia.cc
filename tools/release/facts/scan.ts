@@ -102,7 +102,7 @@ const layoutOf = (lines: string[]) => {
 export const factsFromFile = (
 	file: string,
 	content: string,
-	hitLines: number[],
+	hitLines: number[]
 ): Fact[] => {
 	const lines = content.split("\n");
 	const { headingAt, inFence, skip } = layoutOf(lines);
@@ -128,7 +128,7 @@ export const factsFromFile = (
 				class: classify(u),
 				kind: null,
 				probes: [],
-				status: "unmapped",
+				status: "unmapped"
 			});
 		}
 	}
@@ -150,9 +150,9 @@ export const grepHits = async (root = ROOT): Promise<Map<string, number[]>> => {
 			"-E",
 			String.raw`2\.1\.[0-9]+`,
 			"--",
-			"docs",
+			"docs"
 		],
-		{ cwd: root, env: toolEnv(), stdout: "pipe" },
+		{ cwd: root, env: toolEnv(), stdout: "pipe" }
 	);
 	const out = await new Response(p.stdout).text();
 	const hits = new Map<string, number[]>();
@@ -168,12 +168,12 @@ export const grepHits = async (root = ROOT): Promise<Map<string, number[]>> => {
 
 export const findFacts = async (): Promise<Fact[]> => {
 	const hits = [...(await grepHits())].toSorted(([a], [b]) =>
-		a.localeCompare(b),
+		a.localeCompare(b)
 	);
 	const perFile = await Promise.all(
 		hits.map(async ([file, lines]) =>
-			factsFromFile(file, await Bun.file(join(ROOT, file)).text(), lines),
-		),
+			factsFromFile(file, await Bun.file(join(ROOT, file)).text(), lines)
+		)
 	);
 	return perFile.flat();
 };

@@ -10,7 +10,7 @@ import {
 	runCases,
 	scalar,
 	show,
-	withRun,
+	withRun
 } from "./run/helpers.ts";
 import type { PrintGroup } from "./types.ts";
 
@@ -31,8 +31,8 @@ const statusData = (r: Run, text: boolean): Record<string, Data> => {
 		return {
 			signInLine: l.replaceAll(/\d{4}-\d\d-\d\d(T[\d:.]+Z)?/gu, "<date>"),
 			rangeIsExpected: l.endsWith(
-				`between 2030-01-12 and 2030-01-15 (${END_ISO})`,
-			),
+				`between 2030-01-12 and 2030-01-15 (${END_ISO})`
+			)
 		};
 	}
 	const s = obj(JSON.parse(r.stdout));
@@ -41,7 +41,7 @@ const statusData = (r: Run, text: boolean): Record<string, Data> => {
 		isRefreshEnd: s["loginExpiresAt"] === END_ISO,
 		loggedIn: scalar(s["loggedIn"]),
 		authMethod: scalar(s["authMethod"]),
-		keys: Object.keys(s).join(","),
+		keys: Object.keys(s).join(",")
 	};
 };
 
@@ -54,21 +54,21 @@ const eventData = (r: Run): Record<string, Data> => {
 				.map((e) => [
 					e["type"],
 					e["subtype"],
-					e["credential_expires_at"] === END_ISO,
-				]),
+					e["credential_expires_at"] === END_ISO
+				])
 		),
 		eventsWithout: json(
 			ev
 				.filter((e) => !("credential_expires_at" in e))
-				.map((e) => `${show(e["type"])}/${show(e["subtype"] ?? "")}`),
-		),
+				.map((e) => `${show(e["type"])}/${show(e["subtype"] ?? "")}`)
+		)
 	};
 };
 
 const loginData = (r: Run, o: LoginOpt): Record<string, Data> => {
 	const data: Record<string, Data> = {
 		precondition: r.code !== null && !r.timedOut,
-		exit: r.code,
+		exit: r.code
 	};
 	if (o.argv?.[0] === "auth") {
 		Object.assign(data, statusData(r, o.argv.includes("--text")));
@@ -97,10 +97,10 @@ const loginCase = (name: string, o: LoginOpt): CaseDef => ({
 					? {}
 					: { cfgFiles: { ".credentials.json": o.creds } }),
 				...(o.argv === undefined ? {} : { argv: o.argv, noPrompt: true }),
-				timeoutMs: 60_000,
+				timeoutMs: 60_000
 			},
-			(r) => ({ from: r, data: loginData(r, o) }),
-		),
+			(r) => ({ from: r, data: loginData(r, o) })
+		)
 });
 
 const ARGS_TEXT = ["-p", "Reply with 'OK'.", "--model", "claude-opus-5-5"];
@@ -110,28 +110,28 @@ const statusCases = (): CaseDef[] => [
 	loginCase("status-json", { creds: login(), argv: NO_LOGIN_ARGS }),
 	loginCase("status-text", {
 		creds: login(),
-		argv: [...NO_LOGIN_ARGS, "--text"],
+		argv: [...NO_LOGIN_ARGS, "--text"]
 	}),
 	loginCase("result-stream-json", { creds: login() }),
 	loginCase("result-json", { creds: login(), argv: ARGS_JSON }),
 	loginCase("no-login-status", { argv: NO_LOGIN_ARGS }),
 	loginCase("no-refresh-date", {
 		creds: login({ refreshTokenExpiresAt: undefined }),
-		argv: NO_LOGIN_ARGS,
+		argv: NO_LOGIN_ARGS
 	}),
 	loginCase("access-outlives-refresh", {
 		creds: login({ expiresAt: REFRESH_END + 4 * DAY }),
-		argv: NO_LOGIN_ARGS,
+		argv: NO_LOGIN_ARGS
 	}),
 	loginCase("result-json-no-date", {
 		creds: login({ expiresAt: REFRESH_END + 4 * DAY }),
-		argv: ARGS_JSON,
+		argv: ARGS_JSON
 	}),
 	loginCase("third-party-provider", {
 		creds: login(),
 		argv: NO_LOGIN_ARGS,
-		env: { CLAUDE_CODE_USE_BEDROCK: "1" },
-	}),
+		env: { CLAUDE_CODE_USE_BEDROCK: "1" }
+	})
 ];
 
 const dateCases = (): CaseDef[] => [
@@ -139,30 +139,30 @@ const dateCases = (): CaseDef[] => [
 		argv: ARGS_TEXT,
 		creds: login({
 			expiresAt: Date.now() + 4 * DAY,
-			refreshTokenExpiresAt: Date.now() + 5 * DAY,
-		}),
+			refreshTokenExpiresAt: Date.now() + 5 * DAY
+		})
 	}),
 	loginCase("before-2025", {
 		creds: login({
 			expiresAt: Date.UTC(2024, 5, 1),
-			refreshTokenExpiresAt: Date.UTC(2024, 5, 1),
+			refreshTokenExpiresAt: Date.UTC(2024, 5, 1)
 		}),
-		argv: NO_LOGIN_ARGS,
+		argv: NO_LOGIN_ARGS
 	}),
 	loginCase("over-ten-years", {
 		creds: login({
 			expiresAt: Date.UTC(2050, 0, 1),
-			refreshTokenExpiresAt: Date.UTC(2050, 0, 1),
+			refreshTokenExpiresAt: Date.UTC(2050, 0, 1)
 		}),
-		argv: NO_LOGIN_ARGS,
+		argv: NO_LOGIN_ARGS
 	}),
 	loginCase("past", {
 		creds: login({
 			expiresAt: Date.UTC(2025, 5, 1),
-			refreshTokenExpiresAt: Date.UTC(2025, 5, 1),
+			refreshTokenExpiresAt: Date.UTC(2025, 5, 1)
 		}),
-		argv: [...NO_LOGIN_ARGS, "--text"],
-	}),
+		argv: [...NO_LOGIN_ARGS, "--text"]
+	})
 ];
 
 export const notes319: PrintGroup = {
@@ -172,6 +172,6 @@ export const notes319: PrintGroup = {
 		runCases(ctx, "notes319", [
 			...statusCases(),
 			...dateCases(),
-			...otelCases(),
-		]),
+			...otelCases()
+		])
 };

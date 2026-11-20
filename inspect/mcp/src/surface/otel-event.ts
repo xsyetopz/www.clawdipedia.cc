@@ -15,7 +15,7 @@ export const extractOtelEvents: Extractor = async (bundle) => {
 			name,
 			module,
 			offset: null,
-			detail: `${sites.length} call sites`,
-		})),
+			detail: `${sites.length} call sites`
+		}))
 	);
 };

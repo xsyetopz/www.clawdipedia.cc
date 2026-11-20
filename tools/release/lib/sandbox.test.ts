@@ -16,12 +16,12 @@ test("projKey turns each character that is not a letter or a digit into a dash",
 test("a {PROJKEY} fixture key lands in the transcript dir of the project", async () => {
 	// Arrange
 	const sb = await makeSandbox({
-		cfgFiles: { "projects/{PROJKEY}/s.jsonl": "{PROJ}\n" },
+		cfgFiles: { "projects/{PROJKEY}/s.jsonl": "{PROJ}\n" }
 	});
 
 	// Act
 	const text = await Bun.file(
-		`${sb.cfg}/projects/${projKey(sb.proj)}/s.jsonl`,
+		`${sb.cfg}/projects/${projKey(sb.proj)}/s.jsonl`
 	).text();
 	await sb.cleanup();
 

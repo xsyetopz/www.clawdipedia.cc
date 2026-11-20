@@ -6,7 +6,7 @@ import { childEnv } from "../../../lib/env.ts";
 import {
 	type PtyResult,
 	type PtyStep,
-	runPty,
+	runPty
 } from "../../../lib/pty/driver.ts";
 import type { Sandbox } from "../../../lib/sandbox.ts";
 import type { Stub } from "../../../lib/stub.ts";
@@ -18,7 +18,7 @@ let counter = 0;
 
 export const writeCtl = async (
 	sb: Sandbox,
-	ctl: PtyCase["ctl"],
+	ctl: PtyCase["ctl"]
 ): Promise<void> => {
 	const d = join(sb.home, "hooklog", "ctl");
 	await eachInOrder(Object.entries(ctl ?? {}), async ([ev, v]) => {
@@ -34,7 +34,7 @@ export const writeCtl = async (
 const subStep = (st: PtyStep, sb: Sandbox): PtyStep => {
 	const text = {
 		...(st.send === undefined ? {} : { send: subst(st.send, sb) }),
-		...(st.label === undefined ? {} : { label: subst(st.label, sb) }),
+		...(st.label === undefined ? {} : { label: subst(st.label, sb) })
 	};
 	return st.wait_for === undefined
 		? { ...st, ...text }
@@ -53,7 +53,7 @@ const register = (
 	caseKey: string,
 	c: PtyCase,
 	sb: Sandbox,
-	log: string,
+	log: string
 ): Promise<string> =>
 	stub.register(caseKey, {
 		log,
@@ -66,9 +66,9 @@ const register = (
 			: {
 					seq: c.stub.seq.map((e) => ({
 						...e,
-						input: deepSubst(e.input, sb),
-					})),
-				}),
+						input: deepSubst(e.input, sb)
+					}))
+				})
 	});
 
 const argsOf = (c: PtyCase, sb: Sandbox): string[] => [
@@ -76,20 +76,20 @@ const argsOf = (c: PtyCase, sb: Sandbox): string[] => [
 	c.mode ?? "default",
 	"--model",
 	c.model ?? "claude-opus-5-5",
-	...(c.args ?? []).map((a) => subst(a, sb)),
+	...(c.args ?? []).map((a) => subst(a, sb))
 ];
 
 const envOf = (
 	c: PtyCase,
 	sb: Sandbox,
 	base: string,
-	mockEnv: Record<string, string>,
+	mockEnv: Record<string, string>
 ): { env: Record<string, string>; extra: Record<string, string> } => {
 	const extra = {
 		...Object.fromEntries(
-			Object.entries(c.env ?? {}).map(([k, v]) => [k, subst(v, sb)]),
+			Object.entries(c.env ?? {}).map(([k, v]) => [k, subst(v, sb)])
 		),
-		...mockEnv,
+		...mockEnv
 	};
 	// A mock replaces the fixed dead proxy, so its keys may override.
 	const allowOverride = [...(c.allowOverride ?? []), ...Object.keys(mockEnv)];
@@ -100,7 +100,7 @@ const envOf = (
 		extra,
 		tty: true,
 		...(allowOverride.length === 0 ? {} : { allowOverride }),
-		...(c.auth === undefined ? {} : { auth: c.auth }),
+		...(c.auth === undefined ? {} : { auth: c.auth })
 	});
 	return { env, extra };
 };
@@ -108,7 +108,7 @@ const envOf = (
 export const launch = async (
 	ctx: PtyCtx,
 	c: PtyCase,
-	sb: Sandbox,
+	sb: Sandbox
 ): Promise<Launched> => {
 	const stub = await getStub();
 	const log = join(sb.root, "requests.jsonl");
@@ -128,12 +128,12 @@ export const launch = async (
 			...c.schedule,
 			{ t: c.secs, send: "/exit\r", label: "exit" },
 			{ t: c.secs + 2.5, send: "\u0003", label: "ctrl-c-1" },
-			{ t: c.secs + 2.8, send: "\u0003", label: "ctrl-c-2" },
+			{ t: c.secs + 2.8, send: "\u0003", label: "ctrl-c-2" }
 		].map((st) => subStep(st, sb)),
 		secs: c.secs + 5,
 		...(c.rows === undefined ? {} : { rows: c.rows }),
 		...(c.cols === undefined ? {} : { cols: c.cols }),
-		out: join(sb.root, "pty", "RAW"),
+		out: join(sb.root, "pty", "RAW")
 	});
 	stub.unregister(caseKey);
 	await mock?.stop();

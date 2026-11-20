@@ -32,13 +32,13 @@ const resultOfLine = (line: string): { result: unknown } | undefined => {
 const startServer = async (
 	env: Record<string, string>,
 	name: string,
-	args: Record<string, unknown>,
+	args: Record<string, unknown>
 ) => {
 	const p = Bun.spawn(["bun", SERVER], {
 		env: envOf(env),
 		stdin: "pipe",
 		stdout: "pipe",
-		stderr: "ignore",
+		stderr: "ignore"
 	});
 	const messages = [
 		{
@@ -48,16 +48,16 @@ const startServer = async (
 			params: {
 				protocolVersion: "2025-06-18",
 				capabilities: {},
-				clientInfo: { name: "test", version: "0" },
-			},
+				clientInfo: { name: "test", version: "0" }
+			}
 		},
 		{ jsonrpc: "2.0", method: "notifications/initialized" },
 		{
 			jsonrpc: "2.0",
 			id: 2,
 			method: "tools/call",
-			params: { name, arguments: args },
-		},
+			params: { name, arguments: args }
+		}
 	];
 	await p.stdin.write(messages.map((m) => `${JSON.stringify(m)}\n`).join(""));
 	await p.stdin.flush();
@@ -67,7 +67,7 @@ const startServer = async (
 const readAnswer = async (
 	reader: ReadableStreamDefaultReader<Uint8Array>,
 	decoder: TextDecoder,
-	before: string,
+	before: string
 ): Promise<ToolAnswer> => {
 	const { done, value } = await reader.read();
 	if (done) {
@@ -87,7 +87,7 @@ const readAnswer = async (
 export const mcpCall = async (
 	env: Record<string, string>,
 	name: string,
-	args: Record<string, unknown>,
+	args: Record<string, unknown>
 ): Promise<ToolAnswer> => {
 	const p = await startServer(env, name, args);
 	try {

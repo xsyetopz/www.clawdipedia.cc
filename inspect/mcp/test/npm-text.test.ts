@@ -17,7 +17,7 @@ beforeAll(async () => {
 	await mkdir(join(dir, "package", "lib"), { recursive: true });
 	await Bun.write(
 		join(dir, "package", "package.json"),
-		JSON.stringify({ dependencies: { "get-stream": "^9.0.0" } }),
+		JSON.stringify({ dependencies: { "get-stream": "^9.0.0" } })
 	);
 	await Bun.write(
 		join(dir, "package", "lib", "a.js"),
@@ -27,8 +27,8 @@ beforeAll(async () => {
 			`throw new RangeError(\`value must be >= 0 and <= ${D}{MAX - 1}. Received ${D}{v}\`);`,
 			`throw new Error(\`${D}{name}: is unavailable. ${D}{M.NEED}\`);`,
 			`throw new TypeError(\`Offset direction, ${D}{d}, must be "+" or "-"\`);`,
-			'throw new TypeError("path must be absolute or specify root");',
-		].join("\n"),
+			'throw new TypeError("path must be absolute or specify root");'
+		].join("\n")
 	);
 });
 afterAll(async () => {
@@ -44,7 +44,7 @@ test("a text whose fragments sit in order is a plain match", async () => {
 test("a quoted plus sign is not taken for a string join", async () => {
 	const r = await findText(
 		dir,
-		`Offset direction, ${hole}, must be "+" or "-"`,
+		`Offset direction, ${hole}, must be "+" or "-"`
 	);
 	expect(r.file).toBe("package/lib/a.js");
 });
@@ -57,7 +57,7 @@ test("a whole match needs the text to be a whole string of the file", async () =
 	const longer = await findText(
 		dir,
 		"path must be absolute or specify root",
-		true,
+		true
 	);
 	expect(longer.file).toBe("package/lib/a.js");
 	const holes = await findText(dir, `${hole}: is unavailable. ${hole}`, true);
@@ -67,12 +67,12 @@ test("a whole match needs the text to be a whole string of the file", async () =
 test("a number folded from a constant and an inlined string constant match by pieces", async () => {
 	const folded = await findText(
 		dir,
-		`value must be >= 0 and <= 4294967295. Received ${hole}`,
+		`value must be >= 0 and <= 4294967295. Received ${hole}`
 	);
 	expect(folded.loose).toBe(true);
 	const inlined = await findText(
 		dir,
-		`${hole}: is unavailable. clientId is a required parameter. Set "ID".`,
+		`${hole}: is unavailable. clientId is a required parameter. Set "ID".`
 	);
 	expect(inlined.loose).toBe(true);
 });
@@ -80,7 +80,7 @@ test("a number folded from a constant and an inlined string constant match by pi
 test("a text with a sentence the file lacks does not match", async () => {
 	const r = await findText(
 		dir,
-		`${hole}: is unavailable. tenantId is a required parameter.`,
+		`${hole}: is unavailable. tenantId is a required parameter.`
 	);
 	expect(r.file).toBeUndefined();
 });

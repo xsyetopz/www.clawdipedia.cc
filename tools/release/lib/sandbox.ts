@@ -31,13 +31,13 @@ export interface SandboxOpts {
 const made = new Set<string>();
 onCleanup(async () => {
 	await Promise.all(
-		[...made].map((p) => rm(p, { recursive: true, force: true })),
+		[...made].map((p) => rm(p, { recursive: true, force: true }))
 	);
 });
 
 export const subst = (
 	s: string,
-	sb: { home: string; cfg: string; proj: string },
+	sb: { home: string; cfg: string; proj: string }
 ): string =>
 	s
 		.split("{HOME}")
@@ -56,13 +56,13 @@ export const projKey = (proj: string): string =>
 
 const writeFixtures = async (
 	sb: { home: string; cfg: string; proj: string },
-	opts: SandboxOpts,
+	opts: SandboxOpts
 ): Promise<void> => {
 	const targets: [string, string][] = [];
 	for (const [base, files] of [
 		[sb.cfg, opts.cfgFiles],
 		[sb.proj, opts.projFiles],
-		[sb.home, opts.homeFiles],
+		[sb.home, opts.homeFiles]
 	] as const) {
 		for (const [k, v] of Object.entries(files ?? {})) {
 			const target = resolve(base, k.split("{PROJKEY}").join(projKey(sb.proj)));
@@ -76,7 +76,7 @@ const writeFixtures = async (
 		targets.map(async ([target, text]) => {
 			await mkdir(dirname(target), { recursive: true });
 			await Bun.write(target, text);
-		}),
+		})
 	);
 };
 
@@ -86,8 +86,8 @@ const gitInit = async (home: string, proj: string): Promise<void> => {
 		env: {
 			PATH: "/usr/bin:/bin",
 			HOME: home,
-			GIT_CONFIG_GLOBAL: join(home, ".gitconfig"),
-		},
+			GIT_CONFIG_GLOBAL: join(home, ".gitconfig")
+		}
 	});
 	if ((await g.exited) !== 0) {
 		throw new Error("git init failed in sandbox");
@@ -102,15 +102,15 @@ const claudeJson = (proj: string, opts: SandboxOpts): string => {
 		numStartups: 10,
 		...(opts.live === true
 			? {}
-			: { customApiKeyResponses: { approved: [FAKE_KEY], rejected: [] } }),
+			: { customApiKeyResponses: { approved: [FAKE_KEY], rejected: [] } })
 	};
 	if (opts.trusted === true) {
 		state["projects"] = {
 			[proj]: {
 				hasTrustDialogAccepted: true,
 				allowedTools: [],
-				hasCompletedProjectOnboarding: true,
-			},
+				hasCompletedProjectOnboarding: true
+			}
 		};
 	}
 	return `${JSON.stringify(state, null, 2)}\n`;
@@ -124,8 +124,8 @@ export const makeSandbox = async (opts: SandboxOpts = {}): Promise<Sandbox> => {
 	const proj = join(root, "proj");
 	await Promise.all(
 		[home, cfg, proj, join(home, "tmp")].map((d) =>
-			mkdir(d, { recursive: true }),
-		),
+			mkdir(d, { recursive: true })
+		)
 	);
 	await writeSecurityShim(home);
 	await writeFixtures({ home, cfg, proj }, opts);
@@ -143,6 +143,6 @@ export const makeSandbox = async (opts: SandboxOpts = {}): Promise<Sandbox> => {
 		cleanup: async () => {
 			await rm(root, { recursive: true, force: true });
 			made.delete(root);
-		},
+		}
 	};
 };

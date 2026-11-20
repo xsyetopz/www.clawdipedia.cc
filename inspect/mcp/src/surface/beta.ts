@@ -15,7 +15,7 @@ import {
 	type Extractor,
 	scanOf,
 	type SurfaceItem,
-	unique,
+	unique
 } from "./common.ts";
 
 const BETA = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*-\d{4}-\d\d-\d\d$/u;
@@ -48,7 +48,7 @@ export const extractBetas: Extractor = async (bundle) => {
 			name,
 			module: m.name,
 			offset: n.start,
-			...(hasGroup && { detail: group }),
+			...(hasGroup && { detail: group })
 		});
 	});
 	return unique(out);

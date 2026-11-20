@@ -29,9 +29,9 @@ on("session.start", async ($, e, next) => {
   const r = await $.theme.set({
     backdrop: {
       scene: "lagoon",
-      glass: { blur: 14, opacity: 0.55 },
+      glass: { blur: 14, opacity: 0.55 }
     },
-    overrideColorScheme: "dark",
+    overrideColorScheme: "dark"
   });
   $.ui.log(JSON.stringify(r), { to: "debug" });
   return next(e);

@@ -18,5 +18,5 @@ export const groupsA: PrintGroup[] = [
 	perfettoGroup,
 	transcriptsGroup,
 	env319a,
-	sweepGroup,
+	sweepGroup
 ];

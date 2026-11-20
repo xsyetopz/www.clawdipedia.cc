@@ -69,7 +69,7 @@ export const citationTerms = (
 	modules: ReadonlyMap<string, string>,
 	file = "",
 	clean?: ReadonlyMap<string, readonly string[]>,
-	linesOnly = false,
+	linesOnly = false
 ): CitationTerm[] => {
 	const lines = md.split("\n");
 	const terms = termsByLine(md);
@@ -93,7 +93,7 @@ export const citationTerms = (
 				found.as = "line";
 			}
 			return found;
-		}),
+		})
 	);
 };
 
@@ -101,7 +101,7 @@ export const citationTerms = (
 export const offsetHit = (
 	code: string,
 	at: number,
-	terms: readonly string[],
+	terms: readonly string[]
 ): { term: string; hit: number } | undefined => {
 	const start = Math.max(0, at - WINDOW);
 	for (const term of terms) {
@@ -118,7 +118,7 @@ export const offsetHit = (
 export const lineHit = (
 	rows: readonly string[] | undefined,
 	at: number,
-	terms: readonly string[],
+	terms: readonly string[]
 ): string | undefined => {
 	if (rows === undefined || at < 1 || at > rows.length) {
 		return undefined;
@@ -133,7 +133,7 @@ export const lineHit = (
 export const codeAt = (
 	citation: string,
 	modules: ReadonlyMap<string, string>,
-	length = 200,
+	length = 200
 ): string => {
 	const m = /(chunk-[\da-z]+\.js)[:@](\d+)/u.exec(citation);
 	const code = modules.get(m?.[1] ?? "");
@@ -167,7 +167,7 @@ export const linesWith = (rows: readonly string[], term: string): number[] =>
 export const suggest = (
 	citation: string,
 	terms: readonly string[],
-	clean: ReadonlyMap<string, readonly string[]>,
+	clean: ReadonlyMap<string, readonly string[]>
 ): Suggestion[] => {
 	const m = /(chunk-[\da-z]+\.js)[:@](\d+)/u.exec(citation);
 	const chunk = m?.[1] ?? "";
@@ -184,8 +184,8 @@ export const suggest = (
 			const places = [...clean].flatMap(([name, rows]) =>
 				linesWith(rows, term).map((line) => ({
 					place: `${name}:${line}`,
-					term,
-				})),
+					term
+				}))
 			);
 			return places.length <= MAX_PLACES ? places : [];
 		});

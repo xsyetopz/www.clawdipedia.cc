@@ -5,18 +5,18 @@ const ROOT = join(import.meta.dir, "..", "..");
 /** The text as `bun fmt` leaves it (the [fmt] style of bunfig.toml), for the file at `path`. Throws when `bun fmt` fails. */
 export const formatText = async (
 	text: string,
-	path: string,
+	path: string
 ): Promise<string> => {
 	const p = Bun.spawn([process.execPath, "fmt", `--stdin-filepath=${path}`], {
 		cwd: ROOT,
 		stdin: new Blob([text]),
 		stdout: "pipe",
-		stderr: "pipe",
+		stderr: "pipe"
 	});
 	const [out, err, code] = await Promise.all([
 		new Response(p.stdout).text(),
 		new Response(p.stderr).text(),
-		p.exited,
+		p.exited
 	]);
 	if (code !== 0) {
 		throw new Error(`bun fmt failed:\n${err}`);

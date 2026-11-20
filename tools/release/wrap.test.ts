@@ -8,7 +8,7 @@ test("release:schemas regenerates the code-derived schemas with the probes of --
 	expect(scripts.map((a) => a[1])).toEqual([
 		"tools/schemas/generate.ts",
 		"tools/schemas/code.ts",
-		"tools/schemas/types.ts",
+		"tools/schemas/types.ts"
 	]);
 	expect(scripts[1]).toEqual([
 		process.execPath,
@@ -16,6 +16,6 @@ test("release:schemas regenerates the code-derived schemas with the probes of --
 		"--bin",
 		"/bin/claude",
 		"--captures",
-		versionDir("2.1.319"),
+		versionDir("2.1.319")
 	]);
 });

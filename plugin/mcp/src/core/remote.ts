@@ -10,8 +10,8 @@ export const searchRemote = async (
 	{
 		query,
 		limit = 8,
-		section,
-	}: { query: string; limit?: number; section?: string | undefined },
+		section
+	}: { query: string; limit?: number; section?: string | undefined }
 ): Promise<Result> => {
 	const ix = await s.index();
 	const hits = ix.search(query, limit, section).map((h) => ({
@@ -20,7 +20,7 @@ export const searchRemote = async (
 		url: h.entry.url,
 		section: h.entry.group,
 		score: Math.round(h.score * 100) / 100,
-		snippet: h.snippet,
+		snippet: h.snippet
 	}));
 	const line = sourceLine(ix.source);
 	const src = { ...sourceData(ix.source), line };
@@ -28,20 +28,20 @@ export const searchRemote = async (
 		return ok(
 			`No ${s.name} pages match "${query}"${present(section) ? ` in ${s.groupWord} "${section}"` : ""}. Try fewer or different keywords, drop the ${s.groupWord} filter, or browse the page list.\n\n${line}`,
 			{ query, hits, source: src },
-			ix.source,
+			ix.source
 		);
 	}
 	const md = hits
 		.map(
 			(h, i) =>
-				`${i + 1}. **${h.title}** (route \`${h.route}\`)\n   ${h.url}${present(h.snippet) ? `\n   ${h.snippet}` : ""}`,
+				`${i + 1}. **${h.title}** (route \`${h.route}\`)\n   ${h.url}${present(h.snippet) ? `\n   ${h.snippet}` : ""}`
 		)
 		.join("\n");
 	return ok(
 		`${hits.length} hit(s) for "${query}":\n\n${md}\n\n${line}`,
 		{ query, hits, source: src },
 		ix.source,
-		true,
+		true
 	);
 };
 
@@ -55,7 +55,7 @@ const countGroups = (entries: readonly { group: string }[]) => {
 
 export const listRemote = async (
 	s: RemoteSource,
-	{ section }: { section?: string | undefined },
+	{ section }: { section?: string | undefined }
 ): Promise<Result> => {
 	const { entries, source } = await s.index();
 	const line = sourceLine(source);
@@ -63,28 +63,28 @@ export const listRemote = async (
 	const groups = countGroups(entries);
 	if (!present(section)) {
 		const rows = [...groups].map(
-			([g, n]) => `- ${present(g) ? g : "(none)"}: ${n}`,
+			([g, n]) => `- ${present(g) ? g : "(none)"}: ${n}`
 		);
 		return ok(
 			`${entries.length} page(s) in ${groups.size} ${s.groupWord}(s). Pass a ${s.groupWord} to list its pages:\n\n${rows.join("\n")}\n\n${line}`,
 			{
 				groups: [...groups].map(([group, count]) => ({ group, count })),
-				source: src,
+				source: src
 			},
 			source,
-			true,
+			true
 		);
 	}
 	const want = section.trim().toLowerCase();
 	const list = entries.filter((e) => e.group.toLowerCase() === want);
 	if (list.length === 0) {
 		return fail(
-			`No ${s.groupWord} "${section}". ${s.groupWord[0]?.toUpperCase()}${s.groupWord.slice(1)}s: ${[...groups.keys()].join(", ")}`,
+			`No ${s.groupWord} "${section}". ${s.groupWord[0]?.toUpperCase()}${s.groupWord.slice(1)}s: ${[...groups.keys()].join(", ")}`
 		);
 	}
 	const rows = list.map(
 		(e) =>
-			`- \`${e.path}\`: ${e.title}${present(e.description) ? `. ${e.description}` : ""}`,
+			`- \`${e.path}\`: ${e.title}${present(e.description) ? `. ${e.description}` : ""}`
 	);
 	return ok(
 		`${list.length} page(s) in "${list[0]?.group}":\n\n${rows.join("\n")}\n\n${line}`,
@@ -93,12 +93,12 @@ export const listRemote = async (
 				route: path,
 				title,
 				section: group,
-				description,
+				description
 			})),
-			source: src,
+			source: src
 		},
 		source,
-		true,
+		true
 	);
 };
 
@@ -117,13 +117,13 @@ export const readRemote = async (
 		route: input,
 		heading,
 		offset = 0,
-		maxChars = DEFAULT_PAGE_CHARS,
+		maxChars = DEFAULT_PAGE_CHARS
 	}: {
 		route: string;
 		heading?: string | undefined;
 		offset?: number;
 		maxChars?: number;
-	},
+	}
 ): Promise<Result> => {
 	const path = s.normalize(input);
 	if (path === undefined || path === "") {
@@ -133,7 +133,7 @@ export const readRemote = async (
 	if (r.status === "notfound") {
 		const near = await nearOf(s, path);
 		return fail(
-			`No ${s.name} page "${path}" on ${r.origin}; any cached copy was removed.${near}`,
+			`No ${s.name} page "${path}" on ${r.origin}; any cached copy was removed.${near}`
 		);
 	}
 	if (r.status === "error") {
@@ -149,6 +149,6 @@ export const readRemote = async (
 		heading,
 		offset,
 		maxChars,
-		r.source,
+		r.source
 	);
 };

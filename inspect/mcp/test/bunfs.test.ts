@@ -14,7 +14,7 @@ const executable = (
 	mods: { name: string; contents: Buffer }[],
 	entry: number,
 	before: Buffer,
-	after: number,
+	after: number
 ): Buffer => {
 	// Data that is no name and no contents comes first in the graph, as the bytecode does in the program.
 	const data: Buffer[] = [Buffer.alloc(100, 7)];
@@ -44,21 +44,21 @@ const executable = (
 		table,
 		offsets,
 		Buffer.from(TRAILER),
-		Buffer.alloc(after),
+		Buffer.alloc(after)
 	]);
 };
 
 const MODS = [
 	{ name: "/$bunfs/root/a.js", contents: Buffer.from('var a="zażółć"') },
 	{ name: "/$bunfs/root/empty.js", contents: Buffer.alloc(0) },
-	{ name: "/$bunfs/root/b.zst", contents: Buffer.from([40, 181, 47, 253, 0]) },
+	{ name: "/$bunfs/root/b.zst", contents: Buffer.from([40, 181, 47, 253, 0]) }
 ];
 
 // The trailer text stands in the program's data too, and the last one ends the graph.
 test.each([
 	["at the end of the file", 0],
 	["across the start of the last part the reader takes", WINDOW - 7],
-	["before the last part the reader takes", 2 * WINDOW + 3],
+	["before the last part the reader takes", 2 * WINDOW + 3]
 ])(
 	"extractModules reads the modules when the trailer is %s",
 	async (_, after) => {
@@ -67,22 +67,22 @@ test.each([
 			const path = join(root, "program");
 			await Bun.write(
 				path,
-				executable(MODS, 2, Buffer.from(`junk${TRAILER}junk`), after),
+				executable(MODS, 2, Buffer.from(`junk${TRAILER}junk`), after)
 			);
 			const { modules, entry } = await extractModules(path);
 			expect(entry).toBe("/$bunfs/root/b.zst");
 			expect(modules.map((m) => m.name)).toEqual(MODS.map((m) => m.name));
 			expect(modules.map((m) => m.bytes.toString("hex"))).toEqual(
-				MODS.map((m) => m.contents.toString("hex")),
+				MODS.map((m) => m.contents.toString("hex"))
 			);
 			expect(modules.map((m) => m.source).slice(0, 2)).toEqual([
 				'var a="zażółć"',
-				"",
+				""
 			]);
 		} finally {
 			await rm(root, { recursive: true });
 		}
-	},
+	}
 );
 
 test("extractModules rejects a file that has no trailer", async () => {
@@ -103,15 +103,15 @@ test("a zst module reads as its decompressed text, and bad zstd bytes stay raw",
 		const mods = [
 			{
 				name: "/$bunfs/root/SKILL-x.md.zst",
-				contents: Buffer.from(await Bun.zstdCompress("Python 0.x to 1.x")),
+				contents: Buffer.from(await Bun.zstdCompress("Python 0.x to 1.x"))
 			},
-			{ name: "/$bunfs/root/bad.zst", contents: Buffer.from("not zstd") },
+			{ name: "/$bunfs/root/bad.zst", contents: Buffer.from("not zstd") }
 		];
 		await Bun.write(path, executable(mods, 0, Buffer.alloc(0), 0));
 		const { modules } = await extractModules(path);
 		expect(modules.map((m) => m.source)).toEqual([
 			"Python 0.x to 1.x",
-			"not zstd",
+			"not zstd"
 		]);
 	} finally {
 		await rm(root, { recursive: true });

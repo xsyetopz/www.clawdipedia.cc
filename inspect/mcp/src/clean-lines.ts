@@ -20,7 +20,7 @@ export const linesOf = (s: Source): string[] | undefined => {
 export const sameLine = (
 	a: string[],
 	b: string[],
-	n: number,
+	n: number
 ): number | undefined => {
 	for (const radius of [4, 2, 1]) {
 		const before = Math.min(radius, n - 1);

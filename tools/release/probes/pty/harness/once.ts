@@ -50,9 +50,9 @@ const dataOf = (c: PtyCase, run: PtyRun): Record<string, Data> => {
 		...(stepTimeouts.length > 0
 			? {
 					precondition: false,
-					"precondition.detail": `wait_for timed out: ${stepTimeouts.join(", ")}`,
+					"precondition.detail": `wait_for timed out: ${stepTimeouts.join(", ")}`
 				}
-			: {}),
+			: {})
 	};
 };
 
@@ -61,7 +61,7 @@ const resultOf = (
 	c: PtyCase,
 	prompt: string,
 	l: Launched,
-	run: PtyRun,
+	run: PtyRun
 ): CaseResult => {
 	const samples = c.samples?.(run);
 	const data = dataOf(c, run);
@@ -74,18 +74,18 @@ const resultOf = (
 		exit: null,
 		timedOut: false,
 		data: normalise(
-			run.reqs.some((r) => r.bad) ? { ...data, badAuth: true } : data,
+			run.reqs.some((r) => r.bad) ? { ...data, badAuth: true } : data
 		),
 		samples: normalise({
 			...samples,
 			exitCode: String(run.pty.exit),
-			screenTail: run.pty.screen.split("\n").slice(-40).join("\n"),
+			screenTail: run.pty.screen.split("\n").slice(-40).join("\n")
 		}),
 		requests: {
 			count: run.reqs.length,
 			paths: [...new Set(run.reqs.map((r) => r.path))].toSorted(),
-			...(beta === undefined || beta === "" ? {} : { betas: beta.split(",") }),
-		},
+			...(beta === undefined || beta === "" ? {} : { betas: beta.split(",") })
+		}
 	});
 };
 
@@ -93,7 +93,7 @@ const measure = async (
 	ctx: PtyCtx,
 	c: PtyCase,
 	prompt: string,
-	sb: Sandbox,
+	sb: Sandbox
 ): Promise<CaseResult> => {
 	await writeCtl(sb, c.ctl);
 	await c.setup?.(sb);
@@ -106,7 +106,7 @@ const measure = async (
 const inSandbox = async (
 	ctx: PtyCtx,
 	c: PtyCase,
-	prompt: string,
+	prompt: string
 ): Promise<CaseResult> => {
 	const files: Files = { ...c.cfgFiles };
 	if (c.settings !== undefined) {
@@ -118,7 +118,7 @@ const inSandbox = async (
 		homeFiles: { "hook.sh": HOOK_SH, "sl.sh": SL_SH, ...c.homeFiles },
 		...(c.git === true ? { git: true } : {}),
 		trusted: true,
-		seedOnboarding: true,
+		seedOnboarding: true
 	});
 	try {
 		return await measure(ctx, c, prompt, sb);
@@ -129,7 +129,7 @@ const inSandbox = async (
 
 export const runOnce = async (
 	ctx: PtyCtx,
-	c: PtyCase,
+	c: PtyCase
 ): Promise<CaseResult[]> => {
 	if (!selected(ctx.only, `pty.${c.id}`)) {
 		return [];
@@ -149,10 +149,10 @@ export const runOnce = async (
 			baseResult(ctx, c, {
 				data: {
 					precondition: false,
-					error: error_ instanceof Error ? error_.message : String(error_),
+					error: error_ instanceof Error ? error_.message : String(error_)
 				},
-				notes: "probe invalid: threw before producing data",
-			}),
+				notes: "probe invalid: threw before producing data"
+			})
 		];
 	}
 };

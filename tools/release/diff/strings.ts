@@ -14,7 +14,7 @@ const statOf = async (path: string) =>
 /** Dump (or reuse) the strings of one version. The binary is only read. Returns the dump path. */
 export const dumpStrings = async (
 	version: string,
-	force = false,
+	force = false
 ): Promise<string> => {
 	const bin = binaryPath(version);
 	const out = stringsPath(version);
@@ -37,7 +37,7 @@ export const dumpStrings = async (
 		const p = Bun.spawn(["strings", "-a", bin], {
 			env: toolEnv(),
 			stdout: Bun.file(tmp),
-			stderr: "pipe",
+			stderr: "pipe"
 		});
 		const stderr = await new Response(p.stderr).text();
 		const code = await p.exited;

@@ -23,14 +23,12 @@ jobs:
           fetch-depth: 0
       - uses: oven-sh/setup-bun@v2.2.0
         with:
-          bun-version: 1.4.4
+          bun-version-file: .bun-version
       - uses: taiki-e/install-action@3a3daafd3b7f23b8f65d9f5ba2db203fb59b79e2 # v2.90.2
         with:
           tool: just@1.59.0
       - name: Setup
-        run: just setup setup-project
-      - name: Verify
-        run: just verify
+        run: just setup
       # check:citations reads the build of src/version.ts from ~/.local/share/claude/versions.
       # The docs cite the darwin-arm64 build; other platforms have other chunk names. The step only reads it.
       - name: Download the tracked Claude Code build
@@ -42,8 +40,9 @@ jobs:
           curl -fsSL -o "$dir/$v" "$base/darwin-arm64/claude"
           sum=$(curl -fsSL "$base/manifest.json" | jq -r '.platforms["darwin-arm64"].checksum')
           echo "$sum  $dir/$v" | sha256sum -c -
-      - name: Site checks
-        run: just verify-project
+      # just verify runs project-verify from project.just: the site checks, including check:citations.
+      - name: Verify
+        run: just verify
       # Every step above must pass before this one runs, so a failed check stops the deploy.
       # A pull request never reaches it. See the Deploy section of README.md.
       - name: Deploy to Cloudflare Workers

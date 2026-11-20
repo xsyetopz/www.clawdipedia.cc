@@ -10,7 +10,7 @@ import {
 	MB,
 	type Resource,
 	type Source,
-	ttl,
+	ttl
 } from "./fetcher.ts";
 import type { Entry } from "./manifest.ts";
 import { searchByPath, SearchIndex, tokenize } from "./search.ts";
@@ -48,7 +48,7 @@ const PATH_RE = /^[a-z0-9][a-z0-9/_.-]*$/u;
  * Rejects "..", dot-leading segments, other hosts, and anything outside [a-z0-9/_.-].
  */
 export const normalizeClaudeResourcesPath = (
-	input: string,
+	input: string
 ): string | undefined => {
 	let r = input.trim();
 	if (/^[a-z][a-z0-9+.-]*:\/\//iu.test(r) || r.startsWith("//")) {
@@ -82,7 +82,7 @@ const localName = (name: string): string => name.slice(name.indexOf(":") + 1);
 const childText = (el: XmlElement, name: string): string | undefined => {
 	const child = el.children.find(
 		(c): c is XmlElement =>
-			c instanceof XmlElement && localName(c.name) === name,
+			c instanceof XmlElement && localName(c.name) === name
 	);
 	return child?.text.trim();
 };
@@ -98,7 +98,7 @@ const urlElements = (node: XmlElement): XmlElement[] =>
 /** Parses a flat <urlset>: every <url> with its <loc> and <lastmod>. A repeated path keeps its first entry. Malformed XML gives []. */
 export const parseSitemap = (
 	xml: string,
-	base = claudeResourcesBase(),
+	base = claudeResourcesBase()
 ): ClaudeResourcesEntry[] => {
 	let doc: XmlDocument;
 	try {
@@ -121,7 +121,7 @@ export const parseSitemap = (
 			// The first segment is always "resources", so the second names the section. The hub "resources" is its own.
 			section: path.split("/")[1] ?? SCOPE,
 			lastmod: childText(url, "lastmod") ?? "",
-			url: `${base}/${path}`,
+			url: `${base}/${path}`
 		});
 	}
 	return out;
@@ -138,7 +138,7 @@ export interface ClaudeResourcesIndex {
 	search: (
 		query: string,
 		limit: number,
-		section?: string,
+		section?: string
 	) => ClaudeResourcesHit[];
 }
 
@@ -149,7 +149,7 @@ const asEntry = (p: ClaudeResourcesEntry): Entry => ({
 	description: p.path.replaceAll(/[/_.-]+/gu, " "),
 	section: p.section,
 	md: "",
-	url: p.url,
+	url: p.url
 });
 
 const snippetOf = (e: ClaudeResourcesEntry): string =>
@@ -169,13 +169,13 @@ export class ClaudeResources {
 			rel: "claude-resources/sitemap.xml",
 			ttlMs: ttl(INDEX_TTL_MS),
 			maxBytes: SITEMAP_MAX,
-			validate: (b) => parseSitemap(b).length > 0,
+			validate: (b) => parseSitemap(b).length > 0
 		});
 		if (r.status !== "ok") {
 			throw new ContentError(
 				r.status === "error"
 					? `claude-resources site is offline and not cached yet: could not reach ${r.origin}`
-					: `sitemap.xml was not found on ${r.origin}`,
+					: `sitemap.xml was not found on ${r.origin}`
 			);
 		}
 		if (this.memo?.body !== r.body) {
@@ -184,7 +184,7 @@ export class ClaudeResources {
 			const idx = new SearchIndex({
 				entries: () => asE,
 				text: () => "",
-				extra: (e) => e.section,
+				extra: (e) => e.section
 			});
 			this.memo = { body: r.body, entries, idx };
 		}
@@ -192,7 +192,7 @@ export class ClaudeResources {
 		return {
 			entries,
 			source: r.source,
-			search: searchByPath(idx, entries, snippetOf),
+			search: searchByPath(idx, entries, snippetOf)
 		};
 	}
 
@@ -209,7 +209,7 @@ export class ClaudeResources {
 			rel: `claude-resources/pages/${path}.html`,
 			deleteOn404: true,
 			ttlMs: ttl(PAGE_TTL_MS),
-			maxBytes: PAGE_MAX,
+			maxBytes: PAGE_MAX
 		});
 	}
 }
@@ -219,13 +219,13 @@ const words = (s: string): string[] => tokenize(s.replaceAll(/[/_.-]+/gu, " "));
 /** Entries that share the most words with a path, for "not found" answers. */
 export const nearClaudeResources = (
 	path: string,
-	entries: readonly Pick<ClaudeResourcesEntry, "path" | "title">[],
+	entries: readonly Pick<ClaudeResourcesEntry, "path" | "title">[]
 ): string => {
 	const want = new Set(words(path));
 	const near = entries
 		.map((e) => ({
 			e,
-			n: words(`${e.path} ${e.title}`).filter((t) => want.has(t)).length,
+			n: words(`${e.path} ${e.title}`).filter((t) => want.has(t)).length
 		}))
 		.filter((x) => x.n > 0 && x.e.path !== path)
 		.toSorted((a, b) => b.n - a.n)

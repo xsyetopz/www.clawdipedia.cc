@@ -23,5 +23,5 @@ export const startCollector = (port: number) =>
 				// not JSON (protobuf): counted as nothing
 			}
 			return Response.json({});
-		},
+		}
 	});

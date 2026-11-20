@@ -12,7 +12,7 @@ import {
 	scanOf,
 	strings,
 	type SurfaceItem,
-	unique,
+	unique
 } from "./common.ts";
 
 const ID =
@@ -33,7 +33,7 @@ export const extractModels: Extractor = async (bundle) => {
 					name: id,
 					module: m.name,
 					offset: n.start,
-					detail: "id",
+					detail: "id"
 				});
 			}
 			if (n.type !== "ArrayExpression") {
@@ -47,7 +47,7 @@ export const extractModels: Extractor = async (bundle) => {
 			) {
 				aliases = { m: m.name, start: n.start, names: s };
 			}
-		},
+		}
 	);
 	for (const name of aliases?.names ?? []) {
 		out.push({
@@ -55,7 +55,7 @@ export const extractModels: Extractor = async (bundle) => {
 			name,
 			module: aliases?.m ?? null,
 			offset: aliases?.start ?? null,
-			detail: "alias",
+			detail: "alias"
 		});
 	}
 	return unique(out);

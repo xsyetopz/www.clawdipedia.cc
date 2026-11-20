@@ -8,7 +8,7 @@ import {
 	relocate,
 	sameFrame,
 	type Source,
-	termNear,
+	termNear
 } from "./relocate.ts";
 import { NEAR_LINES, termLine, termOffset } from "./term-move.ts";
 
@@ -32,8 +32,8 @@ export const findCitations = (file: string, text: string): Citation[] =>
 			file,
 			line: i + 1,
 			citation: m[0],
-			chunk: m[1] ?? m[0],
-		})),
+			chunk: m[1] ?? m[0]
+		}))
 	);
 
 /**
@@ -42,7 +42,7 @@ export const findCitations = (file: string, text: string): Citation[] =>
  */
 export const staleCitations = (
 	files: Record<string, string>,
-	moduleNames: Iterable<string>,
+	moduleNames: Iterable<string>
 ): Citation[] => {
 	const known = new Set([...moduleNames].map((n) => basename(n)));
 	return Object.entries(files)
@@ -78,7 +78,7 @@ const isLine = (
 	old: Source,
 	lines: string[] | undefined,
 	n: number,
-	terms: string[],
+	terms: string[]
 ): boolean =>
 	lines !== undefined &&
 	n <= lines.length &&
@@ -87,14 +87,14 @@ const isLine = (
 			lines
 				.slice(Math.max(0, n - 1 - NEAR_LINES), n + NEAR_LINES)
 				.join("\n")
-				.includes(t),
+				.includes(t)
 		));
 
 const sameCode = (
 	{ old, target }: Pair,
 	form: string,
 	n: number,
-	terms: string[],
+	terms: string[]
 ): number | undefined => {
 	const a = linesOf(old);
 	const b = linesOf(target);
@@ -120,7 +120,7 @@ const termCode = (
 	{ old, target }: Pair,
 	form: string,
 	n: number,
-	terms: string[],
+	terms: string[]
 ): number | undefined => {
 	if (terms.length === 0) {
 		return undefined;
@@ -161,7 +161,7 @@ const place = (
 	pair: Pair,
 	form: string,
 	n: number,
-	{ terms, spans }: Claim,
+	{ terms, spans }: Claim
 ): { at?: number; term?: boolean } => {
 	const same = sameCode(pair, form, n, terms);
 	if (same !== undefined) {
@@ -177,7 +177,7 @@ const moveChunk = (
 	claim: Claim,
 	found: string,
 	chunk: string,
-	[sep, offset, offsetEnd, lead, first, end]: Group[],
+	[sep, offset, offsetEnd, lead, first, end]: Group[]
 ): { text: string; pair?: Pair } => {
 	const { file, line } = claim;
 	const old = newNames.has(chunk) ? undefined : oldByName.get(chunk);
@@ -216,7 +216,7 @@ const moveChunk = (
 		line,
 		from: found,
 		to: text,
-		how: howMoved(numbers !== false, viaTerm),
+		how: howMoved(numbers !== false, viaTerm)
 	});
 	return { text, pair };
 };
@@ -225,7 +225,7 @@ const moveLine = (
 	ctx: Ctx,
 	file: string,
 	line: number,
-	lineText: string,
+	lineText: string
 ): string => {
 	const terms = claimTerms(lineText);
 	const spans = lineTerms(lineText);
@@ -246,7 +246,7 @@ const moveLine = (
 			{ file, line, terms, spans },
 			found,
 			chunk,
-			numbers,
+			numbers
 		);
 		last = moved.pair;
 		return moved.text;
@@ -268,14 +268,14 @@ const moveLine = (
 export const moveCitations = (
 	files: Record<string, string>,
 	oldSources: Source[],
-	newSources: Source[],
+	newSources: Source[]
 ): { moves: Move[]; files: Record<string, string> } => {
 	const oldByName = new Map(oldSources.map((s) => [basename(s.name), s]));
 	const ctx: Ctx = {
 		oldByName,
 		newNames: new Set(newSources.map((s) => basename(s.name))),
 		mapModule: moduleMapper(oldByName, newSources),
-		moves: [],
+		moves: []
 	};
 	const out = Object.fromEntries(
 		Object.entries(files).map(([file, text]) => [
@@ -283,8 +283,8 @@ export const moveCitations = (
 			text
 				.split("\n")
 				.map((lineText, i) => moveLine(ctx, file, i + 1, lineText))
-				.join("\n"),
-		]),
+				.join("\n")
+		])
 	);
 	return { moves: ctx.moves, files: out };
 };

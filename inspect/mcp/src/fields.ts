@@ -21,7 +21,7 @@ const add = (
 	into: FieldTypes,
 	path: string,
 	v: unknown,
-	depth: number,
+	depth: number
 ): void => {
 	const t = typeOf(v);
 	const c = into[path] ?? {};
@@ -50,7 +50,7 @@ const add = (
 export const scanFields = (
 	lines: Line[],
 	match?: RegExp,
-	into: FieldTypes = {},
+	into: FieldTypes = {}
 ): FieldTypes => {
 	const all: FieldTypes = {};
 	for (const l of lines) {

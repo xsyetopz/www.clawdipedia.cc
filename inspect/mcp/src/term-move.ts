@@ -36,7 +36,7 @@ const bestCandidate = (found: Candidate[], n: number): Candidate | undefined =>
 	found
 		.filter((c) => c.score >= MIN_SCORE)
 		.toSorted(
-			(a, b) => b.score - a.score || Math.abs(a.to - n) - Math.abs(b.to - n),
+			(a, b) => b.score - a.score || Math.abs(a.to - n) - Math.abs(b.to - n)
 		)[0];
 
 /** Where line `n` of `a` sits in `b`, by a term of the claim that stands near line `n` in `a`: the offset from the term line stays. */
@@ -44,7 +44,7 @@ export const termLine = (
 	a: string[],
 	b: string[],
 	n: number,
-	terms: string[],
+	terms: string[]
 ): number | undefined => {
 	for (const t of specificFirst(terms)) {
 		const found: Candidate[] = [];
@@ -96,7 +96,7 @@ export const termOffset = (
 	a: string,
 	b: string,
 	n: number,
-	terms: string[],
+	terms: string[]
 ): number | undefined => {
 	for (const t of specificFirst(terms)) {
 		const found: Candidate[] = [];
@@ -105,19 +105,19 @@ export const termOffset = (
 			continue;
 		}
 		const want = wordSet(
-			a.slice(Math.max(0, hit - CONTEXT), hit + t.length + CONTEXT),
+			a.slice(Math.max(0, hit - CONTEXT), hit + t.length + CONTEXT)
 		);
 		const places = occurrences(b, t);
 		for (const at of places.length > MAX_PLACES ? [] : places) {
 			const got = wordSet(
-				b.slice(Math.max(0, at - CONTEXT), at + t.length + CONTEXT),
+				b.slice(Math.max(0, at - CONTEXT), at + t.length + CONTEXT)
 			);
 			const shared = [...want].filter((w) => got.has(w)).length;
 			const to = at + (n - hit);
 			if (to >= 0 && to <= b.length) {
 				found.push({
 					score: shared / Math.max(1, want.size, got.size),
-					to,
+					to
 				});
 			}
 		}

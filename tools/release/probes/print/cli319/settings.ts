@@ -7,7 +7,7 @@ import {
 	msgs,
 	readCfg,
 	type Run,
-	withRun,
+	withRun
 } from "../run/helpers.ts";
 import { trim } from "./plugins.ts";
 
@@ -16,7 +16,7 @@ const POLICY = json({
 	terminal_tools: ["reply"],
 	ask_text: "Reply please.",
 	max_asks_after_person: 1,
-	max_asks_after_server_event: 1,
+	max_asks_after_server_event: 1
 });
 /** The machine-wide managed file. Only this path (or the root-owned plist) is a vouched tier on macOS in this build. */
 const ROOT_FILE =
@@ -32,14 +32,14 @@ const replyOut = async (r: Run, where: "user" | "managed-root") => {
 			rootFileHolds: where === "managed-root" && (await pathExists(ROOT_FILE)),
 			accepted: d.includes("CLAUDE_CODE_REPLY_GATE_POLICY accepted"),
 			ignoredWarning: d.includes("disableReplyCheck is ignored in"),
-			gateSkipped: d.includes("Reply gate: verdict=skip why=disableReplyCheck"),
+			gateSkipped: d.includes("Reply gate: verdict=skip why=disableReplyCheck")
 		},
 		samples: {
 			replyLines: lines
 				.slice(0, 6)
 				.map((l) => trim(l, 300))
-				.join("\n"),
-		},
+				.join("\n")
+		}
 	};
 };
 
@@ -49,8 +49,8 @@ export const replyCheck = (where: "user" | "managed-root"): CaseDef => ({
 		? {
 				requires: {
 					path: ROOT_FILE,
-					reason: "needs the root-owned managed file (create it with sudo)",
-				},
+					reason: "needs the root-owned managed file (create it with sudo)"
+				}
 			}
 		: {}),
 	run: (ctx) =>
@@ -62,10 +62,10 @@ export const replyCheck = (where: "user" | "managed-root"): CaseDef => ({
 					where === "user"
 						? { "settings.json": json({ disableReplyCheck: true }) }
 						: {},
-				args: ["--debug-file", "{CFG}/d.log"],
+				args: ["--debug-file", "{CFG}/d.log"]
 			},
-			(r) => replyOut(r, where),
-		),
+			(r) => replyOut(r, where)
+		)
 });
 
 /** A run with settings in the user file; records the debug lines that match `re` and the request count. */
@@ -76,7 +76,7 @@ export const st = (
 	more: {
 		env?: Record<string, string>;
 		cfgFiles?: Record<string, string>;
-	} = {},
+	} = {}
 ): CaseDef => ({
 	name,
 	run: (ctx) =>
@@ -85,7 +85,7 @@ export const st = (
 			{
 				cfgFiles: { "settings.json": json(settings), ...more.cfgFiles },
 				...(more.env === undefined ? {} : { env: more.env }),
-				args: ["--debug-file", "{CFG}/d.log"],
+				args: ["--debug-file", "{CFG}/d.log"]
 			},
 			async (r) => {
 				const d = await readCfg(r, "d.log");
@@ -98,18 +98,18 @@ export const st = (
 							.filter((l) => re.test(l))
 							.slice(0, 8)
 							.map((l) => trim(l, 400))
-							.join("\n"),
-					},
+							.join("\n")
+					}
 				};
-			},
-		),
+			}
+		)
 });
 
 const OLD = "0b8f3c52-6a1e-4f7e-9d3a-5c2e8a7b1f41";
 const NEW = "0b8f3c52-6a1e-4f7e-9d3a-5c2e8a7b1f42";
 const TRANSCRIPTS = [
 	[OLD, 40],
-	[NEW, 0],
+	[NEW, 0]
 ] as const;
 
 const transcriptDir = async (sb: {
@@ -130,11 +130,11 @@ const seedTranscripts = async (sb: {
 			const f = `${dir}/${id}.jsonl`;
 			await Bun.write(
 				f,
-				'{"type":"user","message":{"role":"user","content":"hi"},"uuid":"u1","sessionId":"x"}\n',
+				'{"type":"user","message":{"role":"user","content":"hi"},"uuid":"u1","sessionId":"x"}\n'
 			);
 			const t = new Date(Date.now() - age * 86_400_000);
 			await utimes(f, t, t);
-		}),
+		})
 	);
 };
 
@@ -147,7 +147,7 @@ const sweepOut = async (r: Run) => {
 		data: {
 			precondition: msgs(r).length > 0,
 			oldKept: left.some((f) => f.endsWith("41.jsonl")),
-			newKept: left.some((f) => f.endsWith("42.jsonl")),
+			newKept: left.some((f) => f.endsWith("42.jsonl"))
 		},
 		samples: {
 			lines: d
@@ -155,8 +155,8 @@ const sweepOut = async (r: Run) => {
 				.filter((l) => /cleanup|retention|sweep/iu.test(l))
 				.slice(0, 8)
 				.map((l) => trim(l, 300))
-				.join("\n"),
-		},
+				.join("\n")
+		}
 	};
 };
 
@@ -174,8 +174,8 @@ export const sweep = (days?: number): CaseDef => ({
 				// The sweep starts 5 s after launch, so a tool call that sleeps keeps the run alive.
 				args: ["--debug-file", "{CFG}/d.log", "--allowedTools", "Bash"],
 				stub: { seq: [{ name: "Bash", input: { command: "sleep 9" } }] },
-				setup: seedTranscripts,
+				setup: seedTranscripts
 			},
-			sweepOut,
-		),
+			sweepOut
+		)
 });

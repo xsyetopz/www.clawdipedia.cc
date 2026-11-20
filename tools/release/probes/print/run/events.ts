@@ -17,8 +17,7 @@ export const events = (r: Run): Obj[] =>
 /** Requests that carry a messages array (the model calls). */
 export const msgs = (r: Run): LoggedRequest[] =>
 	r.reqs.filter(
-		(x) =>
-			x.path.startsWith("/v1/messages") && Boolean(obj(x.body)["messages"]),
+		(x) => x.path.startsWith("/v1/messages") && Boolean(obj(x.body)["messages"])
 	);
 
 /** Most tool_result blocks seen in any one request: the tool results the program sent back to the model. */
@@ -31,7 +30,7 @@ export const toolResults = (r: Run): number =>
 					n +
 					arr(obj(m)["content"]).filter((b) => obj(b)["type"] === "tool_result")
 						.length,
-				0,
-			),
-		),
+				0
+			)
+		)
 	);

@@ -10,7 +10,7 @@ const isUndefIdentifier = (
 	dm: Module,
 	inner: Env,
 	n: NodeOf<"Identifier">,
-	undef: Undef,
+	undef: Undef
 ): boolean => {
 	const v = dm.variable(n);
 	if (!v) {
@@ -31,7 +31,7 @@ const isUndefIdentifier = (
 
 const isUndefConditional = (
 	n: NodeOf<"ConditionalExpression">,
-	undef: Undef,
+	undef: Undef
 ): boolean => {
 	let test: Node = n.test;
 	while (test.type === "LogicalExpression" && test.operator === "&&") {
@@ -42,7 +42,7 @@ const isUndefConditional = (
 
 const isUndefLogical = (
 	n: NodeOf<"LogicalExpression">,
-	undef: Undef,
+	undef: Undef
 ): boolean =>
 	n.operator === "??"
 		? undef(n.left) && undef(n.right)
@@ -52,7 +52,7 @@ const isUndefLogical = (
 const isUndef = (
 	dm: Module,
 	inner: Env,
-	n: Node | null | undefined,
+	n: Node | null | undefined
 ): boolean => {
 	if (isNull(n)) {
 		return false;

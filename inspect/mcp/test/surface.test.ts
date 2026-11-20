@@ -33,7 +33,7 @@ const arrayLiterals = async (src: string): Promise<string[]> => {
 	}
 	return mapSeq(
 		array.elements.flatMap((e) => (isNode(e) ? [e] : [])),
-		(e) => literal(m, e),
+		(e) => literal(m, e)
 	);
 };
 
@@ -57,17 +57,17 @@ describe("registry", () => {
 			"setting-key",
 			"slash-command",
 			"subcommand",
-			"tool",
+			"tool"
 		]);
 	});
 
 	test("throws on an unknown kind", async () => {
 		const error = await surface(bundle("var a=1"), "nope").catch(
-			(error_: unknown) => error_,
+			(error_: unknown) => error_
 		);
 		expect(error).toHaveProperty(
 			"message",
-			expect.stringMatching(/unknown kind/u),
+			expect.stringMatching(/unknown kind/u)
 		);
 	});
 
@@ -80,7 +80,7 @@ describe("registry", () => {
 		const b = bundle('var a=["PreToolUse","PostToolUse"]');
 		const [first, second] = await Promise.all([
 			surface(b, "hook-event"),
-			surface(b, "hook-event"),
+			surface(b, "hook-event")
 		]);
 		expect(first).toBe(second);
 	});
@@ -92,7 +92,7 @@ describe("common helpers", () => {
 		const out = unique([
 			{ ...base, name: "b" },
 			{ ...base, name: "a" },
-			{ ...base, name: "b", detail: "d" },
+			{ ...base, name: "b", detail: "d" }
 		]);
 		expect(out.map((i) => i.name)).toEqual(["a", "b"]);
 		expect(out[1]?.detail).toBe("d");
@@ -102,13 +102,13 @@ describe("common helpers", () => {
 		const a = "var x=process.env.AAA_ONE;var y=process.env.AAA_ONE;";
 		const b = new Bundle([
 			{ name: "/$bunfs/root/a.js", text: a },
-			{ name: "/$bunfs/root/b.js", text: a },
+			{ name: "/$bunfs/root/b.js", text: a }
 		]);
 		const found = await surface(b, "env");
 		const hit = found.find((i) => i.name === "AAA_ONE");
 		expect([hit?.module, hit?.offset]).toEqual([
 			"a.js",
-			a.lastIndexOf("process"),
+			a.lastIndexOf("process")
 		]);
 	});
 
@@ -126,7 +126,7 @@ describe("common helpers", () => {
 			"undefined",
 			'"s"',
 			"unknown",
-			"[1,2]",
+			"[1,2]"
 		]);
 	});
 });
@@ -153,7 +153,7 @@ var w=g().VIA_FN_UPPER;
 			"READ_BRACKET",
 			"READ_IN",
 			"READ_DESTRUCT",
-			"VIA_FN_UPPER",
+			"VIA_FN_UPPER"
 		]) {
 			expect(by.has(n)).toBe(true);
 		}
@@ -200,7 +200,7 @@ var w=["VIA_ANY_CASE"].flatMap(Ct);
 			"VIA_LIST_A",
 			"VIA_LIST_B",
 			"VIA_INLINE",
-			"VIA_ANY_CASE",
+			"VIA_ANY_CASE"
 		]) {
 			expect(n).toContain(x);
 		}
@@ -242,7 +242,7 @@ var h=process.env.LONE_A;
 	// The `env` list gives the first place of a name the detail of a later one.
 	test("the places of a bundle are found once, and the env list leaves them as they are", async () => {
 		const b = bundle(
-			'spawn("a",{env:{...process.env,FOO_BAR:"1"}});var x=process.env.FOO_BAR',
+			'spawn("a",{env:{...process.env,FOO_BAR:"1"}});var x=process.env.FOO_BAR'
 		);
 		const places = await envPlaces(b);
 		const details = places.map((p) => p.detail);

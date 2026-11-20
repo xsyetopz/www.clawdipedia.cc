@@ -10,9 +10,9 @@ export const sub = (name: string, argv: string[]): CaseDef => ({
 			data: { exit: r.code },
 			samples: {
 				out: r.stdout.split("\n").slice(0, 4).join("\n").slice(0, 600),
-				err: r.stderr.split("\n").slice(0, 4).join("\n").slice(0, 600),
-			},
-		})),
+				err: r.stderr.split("\n").slice(0, 4).join("\n").slice(0, 600)
+			}
+		}))
 });
 
 const rpc = (id: number, method: string, params: unknown): string =>
@@ -30,11 +30,11 @@ const chromeOut = (r: Run) => {
 		data: {
 			precondition: names.includes("tabs_context_mcp"),
 			tools: names.join(","),
-			shortcutsListed: names.some((n) => n.startsWith("shortcuts_")),
+			shortcutsListed: names.some((n) => n.startsWith("shortcuts_"))
 		},
 		samples: {
-			call: json(replies.find((m) => m["id"] === 3) ?? null).slice(0, 500),
-		},
+			call: json(replies.find((m) => m["id"] === 3) ?? null).slice(0, 500)
+		}
 	};
 };
 
@@ -50,15 +50,15 @@ export const chromeTools = (tool: string): CaseDef => ({
 					rpc(1, "initialize", {
 						protocolVersion: "2025-06-18",
 						capabilities: {},
-						clientInfo: { name: "probe", version: "0" },
+						clientInfo: { name: "probe", version: "0" }
 					}),
 					`${json({ jsonrpc: "2.0", method: "notifications/initialized" })}\n`,
 					rpc(2, "tools/list", {}),
-					rpc(3, "tools/call", { name: tool, arguments: {} }),
+					rpc(3, "tools/call", { name: tool, arguments: {} })
 				].join(""),
 				stdinOpenMs: 8000,
-				timeoutMs: 30_000,
+				timeoutMs: 30_000
 			},
-			chromeOut,
-		),
+			chromeOut
+		)
 });

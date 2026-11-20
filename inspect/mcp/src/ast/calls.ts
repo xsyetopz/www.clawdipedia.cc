@@ -7,7 +7,7 @@ import {
 	type Fn,
 	isFn,
 	type Node,
-	type NodeOf,
+	type NodeOf
 } from "./node.ts";
 
 /**
@@ -17,7 +17,7 @@ import {
 export const functionOf = async (
 	m: Module,
 	callee: Node,
-	depth = 0,
+	depth = 0
 ): Promise<{ module: Module; fn: Fn } | undefined> => {
 	if (callee.type !== "Identifier") {
 		return undefined;
@@ -49,7 +49,7 @@ export const functionOf = async (
 const writtenFunction = (
 	module: Module,
 	w: Node | null,
-	depth: number,
+	depth: number
 ): Promise<{ module: Module; fn: Fn } | undefined> => {
 	if (w?.type === "Identifier") {
 		return setterArgument(module, w, depth);
@@ -61,7 +61,7 @@ const writtenFunction = (
 const setterArgument = async (
 	m: Module,
 	p: Node,
-	depth: number,
+	depth: number
 ): Promise<{ module: Module; fn: Fn } | undefined> => {
 	const def = m.variable(p)?.defs[0];
 	if (depth > 4 || def?.type !== "Parameter" || !isFn(def.node)) {
@@ -109,7 +109,7 @@ export interface Call {
  */
 export const callsOf = async (
 	m: Module,
-	fn: Fn,
+	fn: Fn
 ): Promise<(Call | undefined)[]> => {
 	const v = nameOf(m, fn);
 	if (!v) {
@@ -130,7 +130,7 @@ const scanRefs = (
 	out: (Call | undefined)[],
 	fn: Fn,
 	module: Module,
-	variable: Variable,
+	variable: Variable
 ) => {
 	for (const r of variable.references) {
 		if (r.init || (r.write && r.writeExpr === fn)) {
@@ -150,7 +150,7 @@ const scanRefs = (
 export const constString = async (
 	m: Module,
 	n: Node | null | undefined,
-	depth = 0,
+	depth = 0
 ): Promise<string | undefined> => {
 	if (!n || depth > 8) {
 		return undefined;
@@ -186,7 +186,7 @@ const valuesOf = (variable: Variable) => {
 		...(init ? [init] : []),
 		...variable.references
 			.filter((r) => r.write && !r.init)
-			.map((r) => r.writeExpr),
+			.map((r) => r.writeExpr)
 	];
 };
 

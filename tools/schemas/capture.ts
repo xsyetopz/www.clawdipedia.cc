@@ -74,7 +74,7 @@ const applyCapture = (
 	cap: Capture,
 	src: string,
 	moduleName: string,
-	state: State,
+	state: State
 ): { src: string; line: string } | null => {
 	const re =
 		typeof cap.module === "function" ? cap.module(state.names) : cap.module;
@@ -88,7 +88,7 @@ const applyCapture = (
 	}
 	if (state.found.has(cap.kind)) {
 		throw new Error(
-			`anchor for "${cap.kind}" matches both ${state.found.get(cap.kind)} and ${moduleName}`,
+			`anchor for "${cap.kind}" matches both ${state.found.get(cap.kind)} and ${moduleName}`
 		);
 	}
 	state.found.set(cap.kind, moduleName);
@@ -104,7 +104,7 @@ const applyCapture = (
 	}
 	return {
 		src: cap.rewrite === undefined ? src : cap.rewrite(src, m),
-		line: `;(globalThis.__ccSchemas??={})[${JSON.stringify(cap.kind)}]=()=>${expr};\n`,
+		line: `;(globalThis.__ccSchemas??={})[${JSON.stringify(cap.kind)}]=()=>${expr};\n`
 	};
 };
 
@@ -113,7 +113,7 @@ const writeModule = (
 	mod: Module,
 	rootDir: string,
 	captures: Capture[],
-	state: State,
+	state: State
 ): Promise<number> => {
 	const target = join(rootDir, baseName(mod.name));
 	// Assets (text, wasm) that modules import by path sit beside them.
@@ -154,7 +154,7 @@ const sandboxEnv = (work: string, emptyBin: string): Record<string, string> => {
 		CLAUDE_CODE_ENABLE_XAA: "1",
 		DISABLE_AUTOUPDATER: "1",
 		DISABLE_TELEMETRY: "1",
-		CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1",
+		CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1"
 	};
 };
 
@@ -172,7 +172,7 @@ const runDriver = async (work: string): Promise<void> => {
 		(await Bun.file("/usr/bin/sandbox-exec").exists());
 	if (!sandboxed) {
 		throw new Error(
-			"schemas: needs macOS /usr/bin/sandbox-exec to run the binary's modules with the network denied",
+			"schemas: needs macOS /usr/bin/sandbox-exec to run the binary's modules with the network denied"
 		);
 	}
 	const child = Bun.spawn(
@@ -183,7 +183,7 @@ const runDriver = async (work: string): Promise<void> => {
 			process.execPath,
 			join(import.meta.dir, "driver.ts"),
 			work,
-			join(work, "raw.json"),
+			join(work, "raw.json")
 		],
 		{
 			cwd: work,
@@ -191,16 +191,16 @@ const runDriver = async (work: string): Promise<void> => {
 
 			timeout: 120_000,
 			stdout: "pipe",
-			stderr: "pipe",
-		},
+			stderr: "pipe"
+		}
 	);
 	const [stderr, exitCode] = await Promise.all([
 		new Response(child.stderr).text(),
-		child.exited,
+		child.exited
 	]);
 	if (exitCode !== 0) {
 		throw new Error(
-			`schema driver failed (exit ${exitCode}):\n${stderr.slice(0, 4000)}`,
+			`schema driver failed (exit ${exitCode}):\n${stderr.slice(0, 4000)}`
 		);
 	}
 };
@@ -209,7 +209,7 @@ const isRecord = (v: unknown): v is Record<string, unknown> =>
 	typeof v === "object" && v !== null && !Array.isArray(v);
 
 const isDriverOutput = (
-	v: unknown,
+	v: unknown
 ): v is { schemas: Record<string, unknown>; lossy: string[] } =>
 	isRecord(v) &&
 	isRecord(v["schemas"]) &&
@@ -220,7 +220,7 @@ const isDriverOutput = (
 const patchModules = async (
 	modules: Module[],
 	rootDir: string,
-	captures: Capture[],
+	captures: Capture[]
 ): Promise<State> => {
 	const state: State = {
 		patched: new Set<string>(),
@@ -228,10 +228,10 @@ const patchModules = async (
 		refKinds: [],
 		found: new Map<string, string>(),
 		names: new Map<string, string>(),
-		importers: new Map<string, RegExp>(),
+		importers: new Map<string, RegExp>()
 	};
 	await Promise.all(
-		modules.map((mod) => writeModule(mod, rootDir, captures, state)),
+		modules.map((mod) => writeModule(mod, rootDir, captures, state))
 	);
 	for (const cap of captures) {
 		if (!state.found.has(cap.kind)) {
@@ -251,7 +251,7 @@ const patchModules = async (
 /** Runs the capture lines in an isolated child and returns the raw schemas it wrote. */
 export const runCapture = async (
 	bin: string,
-	captures: Capture[],
+	captures: Capture[]
 ): Promise<Captured> => {
 	const work = await realpath(await mkdtemp(join(tmpdir(), "cc-schemas-")));
 	try {
@@ -264,12 +264,12 @@ export const runCapture = async (
 			JSON.stringify({
 				modules: [...state.patched],
 				kinds: state.kinds,
-				refKinds: state.refKinds,
-			}),
+				refKinds: state.refKinds
+			})
 		);
 		await runDriver(work);
 		const parsed: unknown = JSON.parse(
-			await Bun.file(join(work, "raw.json")).text(),
+			await Bun.file(join(work, "raw.json")).text()
 		);
 		if (!isDriverOutput(parsed)) {
 			throw new Error("schema driver wrote an unexpected result");

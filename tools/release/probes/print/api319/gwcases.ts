@@ -8,7 +8,7 @@ import {
 	MESSAGE,
 	none,
 	prefixed,
-	viaGateway,
+	viaGateway
 } from "./gw.ts";
 import { retentionCase } from "./retention.ts";
 
@@ -19,14 +19,14 @@ const costCase = (name: string, key: boolean): CaseDef =>
 	gatewayCase(`cost-route-${name}`, {}, async (g) => {
 		const r = await fetch(
 			`${g.url}${COST}`,
-			key ? { headers: { "x-api-key": ADMIN_READ_KEY } } : {},
+			key ? { headers: { "x-api-key": ADMIN_READ_KEY } } : {}
 		);
 		const b = await jsonOf(r);
 		return {
 			status: r.status,
 			bodyKeys: Object.keys(b),
 			dataIsEmptyArray: Array.isArray(b["data"]) && b["data"].length === 0,
-			hasMore: typeof b["has_more"] === "boolean" ? b["has_more"] : null,
+			hasMore: typeof b["has_more"] === "boolean" ? b["has_more"] : null
 		};
 	});
 
@@ -45,12 +45,12 @@ const deviceProbe = async (g: Live) => {
 	const auth = await fetch(`${g.url}/oauth/device_authorization`, {
 		method: "POST",
 		headers: { "content-type": "application/json" },
-		body: JSON.stringify({ client_id: "probe" }),
+		body: JSON.stringify({ client_id: "probe" })
 	});
 	const a = await jsonOf(auth);
 	const code = typeof a["user_code"] === "string" ? a["user_code"] : "";
 	const page = await fetch(
-		`${g.url}/device?user_code=${encodeURIComponent(code)}`,
+		`${g.url}/device?user_code=${encodeURIComponent(code)}`
 	);
 	const html = await page.text();
 	const notice = a["login_notice"];
@@ -62,9 +62,9 @@ const deviceProbe = async (g: Live) => {
 		pageStatus: page.status,
 		pageHasRawText: html.includes(NOTICE),
 		pageHasEscapedText: html.includes(
-			"Call IT &lt;i&gt;now&lt;/i&gt; &amp; ask for a code",
+			"Call IT &lt;i&gt;now&lt;/i&gt; &amp; ask for a code"
 		),
-		pageHasNotice: html.includes("Call IT"),
+		pageHasNotice: html.includes("Call IT")
 	};
 };
 
@@ -72,7 +72,7 @@ const deviceProbe = async (g: Live) => {
 const loginNoticeCase = (
 	name: string,
 	notice?: string,
-	admin?: string,
+	admin?: string
 ): CaseDef => {
 	let issuer = "";
 	const inner = gatewayCase(
@@ -81,9 +81,9 @@ const loginNoticeCase = (
 			...(admin === undefined ? {} : { retention: admin }),
 			since: "2.1.319",
 			upstreams: (u) =>
-				`${ANTHROPIC(u)}${oidcYaml(issuer)}${notice === undefined ? "" : `login_notice: ${JSON.stringify(notice)}\n`}`,
+				`${ANTHROPIC(u)}${oidcYaml(issuer)}${notice === undefined ? "" : `login_notice: ${JSON.stringify(notice)}\n`}`
 		},
-		deviceProbe,
+		deviceProbe
 	);
 	return {
 		...inner,
@@ -99,8 +99,8 @@ const loginNoticeCase = (
 						jwks_uri: `${issuer}/jwks`,
 						response_types_supported: ["code"],
 						subject_types_supported: ["public"],
-						id_token_signing_alg_values_supported: ["RS256"],
-					}),
+						id_token_signing_alg_values_supported: ["RS256"]
+					})
 			});
 			issuer = `http://127.0.0.1:${idp.port}`;
 			try {
@@ -108,7 +108,7 @@ const loginNoticeCase = (
 			} finally {
 				await idp.stop(true);
 			}
-		},
+		}
 	};
 };
 
@@ -119,17 +119,17 @@ const blockOrg = async (g: Live) => {
 		body: JSON.stringify({
 			scope: { type: "organization" },
 			amount: "0",
-			period: "monthly",
-		}),
+			period: "monthly"
+		})
 	});
 	g.up.seen.length = 0;
 	const r = await fetch(`${g.url}/v1/messages`, {
 		method: "POST",
 		headers: {
 			"content-type": "application/json",
-			authorization: `Bearer ${mintJwt({ sub: "u1", email: "u@example.com", groups: ["g1"] })}`,
+			authorization: `Bearer ${mintJwt({ sub: "u1", email: "u@example.com", groups: ["g1"] })}`
 		},
-		body: MESSAGE,
+		body: MESSAGE
 	});
 	const reply = await jsonOf(r);
 	const err = obj(reply["error"]);
@@ -139,7 +139,7 @@ const blockOrg = async (g: Live) => {
 		status: r.status,
 		errorType: scalar(err["type"]),
 		message: scalar(err["message"]),
-		upstreamCalls: g.up.seen.length,
+		upstreamCalls: g.up.seen.length
 	};
 };
 
@@ -152,26 +152,26 @@ const blockedCase = (name: string, message?: string): CaseDef =>
 				`write_keys:\n    - id: probe-w\n      key: ${WRITE_KEY}`,
 				...(message === undefined
 					? []
-					: [`blocked_message: ${JSON.stringify(message)}`]),
-			),
+					: [`blocked_message: ${JSON.stringify(message)}`])
+			)
 		},
-		blockOrg,
+		blockOrg
 	);
 
 const bootCase = (
 	name: string,
 	boot: RegExp,
 	retention?: string,
-	top = "",
+	top = ""
 ): CaseDef =>
 	gatewayCase(
 		name,
 		{
 			boot,
 			...(retention === undefined ? {} : { retention }),
-			...(top === "" ? {} : { upstreams: (u) => `${ANTHROPIC(u)}${top}` }),
+			...(top === "" ? {} : { upstreams: (u) => `${ANTHROPIC(u)}${top}` })
 		},
-		none,
+		none
 	);
 
 const billingGroup = async (g: Live) => {
@@ -179,13 +179,13 @@ const billingGroup = async (g: Live) => {
 		...prefixed("listed", await viaGateway(g, { team: "g1" }, ["g1"])),
 		...prefixed("unlisted", await viaGateway(g, { team: "g1" }, ["other"])),
 		...prefixed("otherName", await viaGateway(g, { other: "g1" }, ["g1"])),
-		...prefixed("noTags", await viaGateway(g, undefined, ["g1"])),
+		...prefixed("noTags", await viaGateway(g, undefined, ["g1"]))
 	};
 	await Bun.sleep(300);
 	return {
 		...out,
 		auditBillingGroup: g.log().includes('"billing_group":"g1"'),
-		auditBillingGroupIgnored: g.log().includes('"billing_group_ignored":true'),
+		auditBillingGroupIgnored: g.log().includes('"billing_group_ignored":true')
 	};
 };
 
@@ -196,13 +196,13 @@ const retention: CaseDef[] = [
 	gatewayCase(
 		"identity-retention-zero",
 		{ retention: 0, boot: /identity_retention_days/u },
-		none,
+		none
 	),
 	gatewayCase(
 		"identity-retention-text",
 		{ retention: "ninety", boot: /identity_retention_days/u },
-		none,
-	),
+		none
+	)
 ];
 
 const pooled: CaseDef[] = [
@@ -211,32 +211,32 @@ const pooled: CaseDef[] = [
 		/lists a group more than once/u,
 		adminLines(
 			"pooled_conflict_rule: priority_list",
-			"pooled_priority_order: [a, a]",
-		),
+			"pooled_priority_order: [a, a]"
+		)
 	),
 	bootCase(
 		"pooled-priority-list-empty",
 		/needs at least one group/u,
-		adminLines("pooled_conflict_rule: priority_list"),
+		adminLines("pooled_conflict_rule: priority_list")
 	),
 	bootCase(
 		"pooled-rule-unknown",
 		/pooled_conflict_rule/u,
-		adminLines("pooled_conflict_rule: other"),
+		adminLines("pooled_conflict_rule: other")
 	),
 	bootCase(
 		"pooled-order-ignored",
 		/pooled_priority_order is ignored/u,
-		adminLines("pooled_priority_order: [a, b]"),
+		adminLines("pooled_priority_order: [a, b]")
 	),
 	bootCase(
 		"pooled-order-with-rule",
 		/pooled_priority_order|pooled_conflict_rule/u,
 		adminLines(
 			"pooled_conflict_rule: priority_list",
-			"pooled_priority_order: [a, b]",
-		),
-	),
+			"pooled_priority_order: [a, b]"
+		)
+	)
 ];
 
 const notices: CaseDef[] = [
@@ -244,13 +244,13 @@ const notices: CaseDef[] = [
 		"login-notice-no-oidc",
 		/login_notice \(no one can sign in/u,
 		undefined,
-		'login_notice: "Call IT"\n',
+		'login_notice: "Call IT"\n'
 	),
 	bootCase(
 		"login-notice-too-long",
 		/login_notice/u,
 		undefined,
-		`login_notice: ${"x".repeat(501)}\n`,
+		`login_notice: ${"x".repeat(501)}\n`
 	),
 	loginNoticeCase("login-notice-served", NOTICE),
 	loginNoticeCase("login-notice-unset"),
@@ -260,29 +260,29 @@ const notices: CaseDef[] = [
 		adminLines(
 			`blocked_message: ${JSON.stringify(BLOCKED)}`,
 			"pooled_conflict_rule: priority_list",
-			"pooled_priority_order: [a, b]",
-		),
+			"pooled_priority_order: [a, b]"
+		)
 	),
 	blockedCase("blocked-message-set", BLOCKED),
-	blockedCase("blocked-message-unset"),
+	blockedCase("blocked-message-unset")
 ];
 
 export const gatewayFirst: CaseDef[] = [
 	gatewayCase(
 		"request-tags-billing-group",
 		{ tag: true, since: "2.1.317" },
-		billingGroup,
+		billingGroup
 	),
 	gatewayCase("request-tags-plain", {}, async (g) =>
-		prefixed("listed", await viaGateway(g, { team: "g1" }, ["g1"])),
+		prefixed("listed", await viaGateway(g, { team: "g1" }, ["g1"]))
 	),
 	costCase("no-key", false),
 	costCase("admin", true),
-	...retention,
+	...retention
 ];
 
 export const gatewayLast: CaseDef[] = [
 	...pooled,
 	...notices,
-	gatewayCase("no-postgres", { pg: false }, none),
+	gatewayCase("no-postgres", { pg: false }, none)
 ];

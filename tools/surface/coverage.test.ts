@@ -11,8 +11,8 @@ const snapshot = {
 	version: "1.2.3",
 	kinds: {
 		env: [{ name: "CLAUDE_CODE_EXAMPLE" }, { name: "CLAUDE_CODE_LISTED" }],
-		flag: [{ name: "--one" }, { name: "--two" }],
-	},
+		flag: [{ name: "--one" }, { name: "--two" }]
+	}
 };
 const docs = { env: new Set(["CLAUDE_CODE_LISTED"]), flag: new Set<string>() };
 
@@ -20,7 +20,7 @@ const docs = { env: new Set(["CLAUDE_CODE_LISTED"]), flag: new Set<string>() };
 const repo = async (
 	map: unknown,
 	exclusions: unknown,
-	files: Record<string, string> = {},
+	files: Record<string, string> = {}
 ) => {
 	const root = await mkdtemp(join(tmpdir(), "coverage-"));
 	const put = (path: string, text: string) => Bun.write(join(root, path), text);
@@ -28,19 +28,19 @@ const repo = async (
 		put("schemas/surface.json", JSON.stringify(snapshot)),
 		put("tools/surface/map.json", JSON.stringify(map)),
 		put("tools/surface/exclusions.json", JSON.stringify(exclusions)),
-		...Object.entries(files).map(([p, t]) => put(p, t)),
+		...Object.entries(files).map(([p, t]) => put(p, t))
 	]);
 	return root;
 };
 const exec = async (args: string[]) => {
 	const proc = Bun.spawn(["bun", SCRIPT, ...args], {
 		stdout: "pipe",
-		stderr: "pipe",
+		stderr: "pipe"
 	});
 	const [out, err, code] = await Promise.all([
 		new Response(proc.stdout).text(),
 		new Response(proc.stderr).text(),
-		proc.exited,
+		proc.exited
 	]);
 	return { code, out, err };
 };
@@ -61,8 +61,8 @@ test("an item named in a docs table, in the map, or in the exclusions is covered
 		{ "env:CLAUDE_CODE_EXAMPLE": "internal", "flag:--two": "test only" },
 		{
 			"docs/configure/env-vars/a.md":
-				"| Name | Note |\n| --- | --- |\n| `CLAUDE_CODE_LISTED` | x |\n",
-		},
+				"| Name | Note |\n| --- | --- |\n| `CLAUDE_CODE_LISTED` | x |\n"
+		}
 	);
 	const r = await run(root);
 	expect(r.err).toBe("");
@@ -76,11 +76,11 @@ test("a stale exclusion fails and names the entry", async () => {
 		{ "flag:--one": { route: "/x" }, "flag:--two": { route: "/x" } },
 		{
 			"env:CLAUDE_CODE_GONE": "was removed",
-			"env:CLAUDE_CODE_EXAMPLE": "internal",
+			"env:CLAUDE_CODE_EXAMPLE": "internal"
 		},
 		{
-			"docs/configure/env-vars/a.md": "| `CLAUDE_CODE_LISTED` |\n",
-		},
+			"docs/configure/env-vars/a.md": "| `CLAUDE_CODE_LISTED` |\n"
+		}
 	);
 	const r = await run(root);
 	expect(r.code).toBe(1);
@@ -94,7 +94,7 @@ test("a stale map entry fails", () => {
 		snapshot,
 		docs,
 		{ "flag:--gone": { route: "/x" } },
-		{ "env:CLAUDE_CODE_EXAMPLE": "internal" },
+		{ "env:CLAUDE_CODE_EXAMPLE": "internal" }
 	);
 	expect(out.stale).toEqual(["map.json: flag:--gone"]);
 });
@@ -104,7 +104,7 @@ test("a prefix exclusion covers every item with the prefix and is stale with non
 		snapshot,
 		docs,
 		{},
-		{ "flag:--*": "all flags", "env:CLAUDE_CODE_E*": "x" },
+		{ "flag:--*": "all flags", "env:CLAUDE_CODE_E*": "x" }
 	);
 	expect(ok.unmapped).toEqual([]);
 	expect(ok.stale).toEqual([]);
@@ -119,10 +119,10 @@ test("an error map key ending in * maps a family by prefix, and other kinds do n
 		kinds: {
 			error: [
 				{ name: "Unknown hook type: a" },
-				{ name: "Unknown hook type: b" },
+				{ name: "Unknown hook type: b" }
 			],
-			flag: [{ name: "--one" }],
-		},
+			flag: [{ name: "--one" }]
+		}
 	};
 	const entry = { route: "/extend/hooks", anchor: "errors" };
 	const none = { error: new Set<string>(), flag: new Set<string>() };
@@ -131,8 +131,8 @@ test("an error map key ending in * maps a family by prefix, and other kinds do n
 		none,
 		{ "error:Unknown hook type*": entry },
 		{
-			"flag:--one": "x",
-		},
+			"flag:--one": "x"
+		}
 	);
 	expect(ok.unmapped).toEqual([]);
 	expect(ok.stale).toEqual([]);
@@ -143,8 +143,8 @@ test("an error map key ending in * maps a family by prefix, and other kinds do n
 		{ "error:Nothing*": entry },
 		{
 			"error:Unknown*": "x",
-			"flag:--one": "x",
-		},
+			"flag:--one": "x"
+		}
 	);
 	expect(stale.stale).toEqual(["map.json: error:Nothing*"]);
 	// Only the error kind takes a prefix key, so a star on another kind is one finding that names it.
@@ -165,7 +165,7 @@ test("--kind limits the unmapped items and the stale entries to those kinds", as
 		docs,
 		{},
 		{ "flag:--gone": "x", "env:CLAUDE_CODE_EXAMPLE": "internal" },
-		["env"],
+		["env"]
 	);
 	expect(out.rows.map((r) => r.kind)).toEqual(["env"]);
 	expect(out.unmapped).toEqual([]);
@@ -173,7 +173,7 @@ test("--kind limits the unmapped items and the stale entries to those kinds", as
 	const root = await repo(
 		{},
 		{},
-		{ "docs/configure/env-vars/a.md": "| `CLAUDE_CODE_LISTED` |\n" },
+		{ "docs/configure/env-vars/a.md": "| `CLAUDE_CODE_LISTED` |\n" }
 	);
 	const r = await run(root, "--kind", "env");
 	expect(r.err).toContain("env:CLAUDE_CODE_EXAMPLE");
@@ -189,7 +189,7 @@ test("an exclusion needs a reason and a map entry needs a route", () => {
 	expect(bad.join("\n")).toContain("flag:--a");
 	expect(bad.join("\n")).toContain("env:A");
 	expect(shape({ "flag:--a": { route: "/x" } }, { "env:A": "why" })).toEqual(
-		[],
+		[]
 	);
 });
 
@@ -199,7 +199,7 @@ test("an error prefix key shorter than 8 characters is rejected in both files", 
 	// more before the star, so the count proves which keys passed.
 	const out = shape(
 		{ "error:Unknown*": entry, "error:Unknown hook*": entry },
-		{ "error:q*": "x", [`error:\${…} is r*`]: "x", "error:Not conn*": "x" },
+		{ "error:q*": "x", [`error:\${…} is r*`]: "x", "error:Not conn*": "x" }
 	);
 	expect(out).toHaveLength(2);
 	expect(out.join("\n")).toContain("error:Unknown*");
@@ -216,16 +216,16 @@ test("docs names are the exact backticked names in the name cell of table rows o
 			"docs/a/one.md":
 				"Text with `NOT_IN_TABLE`.\n| `A` | `b\\|c` | x `--f <v>` |\n| `d\\|e`, `F` | y |\n",
 			"docs/a/sub/two.mdx": "| `DEEP` |\n",
-			"docs/other.md": "| `ELSEWHERE` |\n",
-		},
+			"docs/other.md": "| `ELSEWHERE` |\n"
+		}
 	);
 	expect(await docsNames(root, ["docs/a", "docs/missing.md"])).toEqual(
 		new Map([
 			["A", join(root, "docs/a/one.md")],
 			["d|e", join(root, "docs/a/one.md")],
 			["F", join(root, "docs/a/one.md")],
-			["DEEP", join(root, "docs/a/sub/two.mdx")],
-		]),
+			["DEEP", join(root, "docs/a/sub/two.mdx")]
+		])
 	);
 });
 
@@ -235,8 +235,8 @@ test("a token only in a cell other than the name cell does not document an item"
 		{},
 		{
 			"docs/configure/cli/a.md":
-				"| Name | See |\n| --- | --- |\n| `--one` | [`project`](/x), `--two` |\n",
-		},
+				"| Name | See |\n| --- | --- |\n| `--one` | [`project`](/x), `--two` |\n"
+		}
 	);
 	const flagPages = Object.entries(PAGES)
 		.filter(([kind]) => kind === "flag")
@@ -246,11 +246,11 @@ test("a token only in a cell other than the name cell does not document an item"
 	const out = check(
 		{
 			version: "1.2.3",
-			kinds: { flag: [{ name: "--one" }, { name: "--two" }] },
+			kinds: { flag: [{ name: "--one" }, { name: "--two" }] }
 		},
 		{ flag: names },
 		{},
-		{},
+		{}
 	);
 	expect(out.unmapped).toEqual(["flag:--two"]);
 });
@@ -259,7 +259,7 @@ test("the counts add up for each kind", () => {
 	const out = check(snapshot, docs, { "flag:--one": { route: "/x" } }, {});
 	expect(out.rows).toEqual([
 		{ kind: "env", items: 2, docs: 1, mapped: 0, excluded: 0, unmapped: 1 },
-		{ kind: "flag", items: 2, docs: 0, mapped: 1, excluded: 0, unmapped: 1 },
+		{ kind: "flag", items: 2, docs: 0, mapped: 1, excluded: 0, unmapped: 1 }
 	]);
 });
 

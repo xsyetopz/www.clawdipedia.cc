@@ -11,7 +11,7 @@ export const isTranscriptSite = (
 	type: string,
 	keys: string[],
 	streamKeys: ReadonlySet<string>,
-	before = "",
+	before = ""
 ): boolean => {
 	const ok = keys.includes("uuid") || keys.includes("toolUseID");
 	const stream = keys.some((k) => k.includes("_") && streamKeys.has(k));
@@ -29,7 +29,7 @@ export const isTranscriptSite = (
  */
 const DISPLAY_ONLY = new Set([
 	"async_hook_response_batch",
-	"teammate_shutdown_batch",
+	"teammate_shutdown_batch"
 ]);
 
 const attachmentKind = (entries: readonly Entry[]): string | undefined => {
@@ -51,7 +51,7 @@ const attachmentKind = (entries: readonly Entry[]): string | undefined => {
  */
 export const isUnpersisted = (
 	type: string,
-	entries: readonly Entry[],
+	entries: readonly Entry[]
 ): boolean =>
 	type === "progress" ||
 	(type === "attachment" && DISPLAY_ONLY.has(attachmentKind(entries) ?? "")) ||
@@ -61,5 +61,5 @@ export const isUnpersisted = (
 			e.key === "persist" &&
 			!e.opt &&
 			e.val.k === "bool" &&
-			!e.val.v,
+			!e.val.v
 	);

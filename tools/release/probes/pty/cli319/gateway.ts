@@ -20,7 +20,7 @@ const answer = (u: URL, notice?: string): Response => {
 			verification_uri: `${u.origin}/device`,
 			expires_in: 600,
 			interval: 5,
-			...(notice === undefined ? {} : { login_notice: notice }),
+			...(notice === undefined ? {} : { login_notice: notice })
 		});
 	}
 	if (u.pathname === "/oauth/token") {
@@ -39,19 +39,19 @@ const setupGateway = async (sb: Sandbox, notice?: string): Promise<void> => {
 			hits.push(`${req.method} ${u.pathname}`);
 			await Bun.write(join(sb.home, "gateway-hits.txt"), hits.join("\n"));
 			return answer(u, notice);
-		},
+		}
 	});
 	gatewayStub = server;
 	await writeExec(
 		join(sb.home, ".probe-bin", "browser"),
-		`#!/bin/sh\nprintf '%s\\n' "$@" >> "${sb.home}/browser-opened.txt"\n`,
+		`#!/bin/sh\nprintf '%s\\n' "$@" >> "${sb.home}/browser-opened.txt"\n`
 	);
 	await Bun.write(
 		join(sb.cfg, "settings.json"),
 		JSON.stringify({
 			forceLoginMethod: "gateway",
-			forceLoginGatewayUrl: `http://127.0.0.1:${server.port}`,
-		}),
+			forceLoginGatewayUrl: `http://127.0.0.1:${server.port}`
+		})
 	);
 };
 
@@ -66,7 +66,7 @@ const SCHEDULE: PtyCase["schedule"] = [
 	{ t: 1, send: "\u001B[A", label: "up to trust" },
 	{ t: 2, send: "\r", label: "trust" },
 	{ ...WAIT("PRBE-CODE", "code shown", 10), rebase: true },
-	ESC(3),
+	ESC(3)
 ];
 
 export const gatewayLogin = (notice?: string): PtyCase => ({
@@ -89,7 +89,7 @@ export const gatewayLogin = (notice?: string): PtyCase => ({
 				.replace(/:\d+/u, ":<port>")
 				.trim(),
 			screenTail: tail(x, 14),
-			gatewayLines: lines(x, /\[gateway/u),
+			gatewayLines: lines(x, /\[gateway/u)
 		};
 	},
 	samples: (x) => ({
@@ -97,6 +97,6 @@ export const gatewayLogin = (notice?: string): PtyCase => ({
 			.split("\n")
 			.filter((l) => l.trim())
 			.join("\n")
-			.slice(-2900),
-	}),
+			.slice(-2900)
+	})
 });

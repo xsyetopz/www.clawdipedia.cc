@@ -14,8 +14,8 @@ const snapshot: Committed = {
 	version: "1.2.3",
 	kinds: {
 		env: [{ name: "CLAUDE_CODE_LISTED" }, { name: "CLAUDE_CODE_MAPPED" }],
-		error: [{ name: "Bad thing a|b" }, { name: "lib: noise one" }],
-	},
+		error: [{ name: "Bad thing a|b" }, { name: "lib: noise one" }]
+	}
 };
 const UNDOCUMENTED =
 	"## Settings Keys\n\nCount: 0.\n\n## Related Pages\n\n- x\n";
@@ -28,29 +28,29 @@ const repo = async () => {
 		put(
 			"tools/surface/map.json",
 			JSON.stringify({
-				"env:CLAUDE_CODE_MAPPED": { route: "/x", anchor: "y" },
-			}),
+				"env:CLAUDE_CODE_MAPPED": { route: "/x", anchor: "y" }
+			})
 		),
 		put(
 			"tools/surface/exclusions.json",
-			JSON.stringify({ "error:lib: *": "library code" }),
+			JSON.stringify({ "error:lib: *": "library code" })
 		),
 		put(
 			"docs/configure/env-vars/a.md",
-			"---\ntitle: Some Vars\n---\n\n| `CLAUDE_CODE_LISTED` | x |\n",
+			"---\ntitle: Some Vars\n---\n\n| `CLAUDE_CODE_LISTED` | x |\n"
 		),
-		put("docs/reference/undocumented.md", UNDOCUMENTED),
+		put("docs/reference/undocumented.md", UNDOCUMENTED)
 	]);
 	return root;
 };
 const run = async (root: string, ...args: string[]) => {
 	const proc = Bun.spawn(["bun", SCRIPT, "--root", root, ...args], {
 		stdout: "pipe",
-		stderr: "pipe",
+		stderr: "pipe"
 	});
 	const [err, exitCode] = await Promise.all([
 		new Response(proc.stderr).text(),
-		proc.exited,
+		proc.exited
 	]);
 	return { code: exitCode, err };
 };
@@ -78,7 +78,7 @@ test("each item gets its page, its map route, its exclusion, or no page", async 
 	expect(first.code).toBe(0);
 	const page = await read(root, "docs/reference/surface-coverage.md");
 	expect(page).toContain(
-		"| `CLAUDE_CODE_LISTED` | [Some Vars](../configure/env-vars/a.md) |",
+		"| `CLAUDE_CODE_LISTED` | [Some Vars](../configure/env-vars/a.md) |"
 	);
 	expect(page).toContain("| `CLAUDE_CODE_MAPPED` | [/x#y](/x#y) |");
 	// The status cell of an excluded item carries its reason from exclusions.json.
@@ -86,7 +86,7 @@ test("each item gets its page, its map route, its exclusion, or no page", async 
 	// An item on no page has a status cell with no link.
 	expect(page).toMatch(/^\| `Bad thing a\\\|b` \| [^[\]]+ \|$/mu);
 	expect(page).toContain(
-		"| [Environment Variables](#environment-variables) | 2 | 1 | 1 | 0 | 0 |",
+		"| [Environment Variables](#environment-variables) | 2 | 1 | 1 | 0 | 0 |"
 	);
 	expect(page).toContain("| Total | 4 | 1 | 1 | 1 | 1 |");
 });
@@ -98,10 +98,10 @@ test("the undocumented section goes before Related Pages, and a second run keeps
 	const text = await read(root, "docs/reference/undocumented.md");
 	expect(text.split("## In the Program").length).toBe(2);
 	expect(text.indexOf("## In the Program")).toBeLessThan(
-		text.indexOf("## Related Pages"),
+		text.indexOf("## Related Pages")
 	);
 	expect(text).toContain(
-		"| [Error Texts](surface-coverage.md#error-texts) | 2 | 1 |\n",
+		"| [Error Texts](surface-coverage.md#error-texts) | 2 | 1 |\n"
 	);
 	// The header row of the table has one cell for each cell of its rows.
 	const lines = text.split("\n");
@@ -112,7 +112,7 @@ test("the undocumented section goes before Related Pages, and a second run keeps
 	// "| Total | n |" is the summary row that check:docs recounts
 	expect(text).toContain("| All kinds | 4 | 1 |\n");
 	expect(
-		text.startsWith(UNDOCUMENTED.slice(0, UNDOCUMENTED.indexOf("## Related"))),
+		text.startsWith(UNDOCUMENTED.slice(0, UNDOCUMENTED.indexOf("## Related")))
 	).toBe(true);
 });
 
@@ -143,8 +143,8 @@ test("the real page counts equal the snapshot counts", async () => {
 		expect(page).toMatch(
 			new RegExp(
 				`^\\| \\[${title(kind)}\\]\\(#[a-z-]+\\) \\| ${items.length} \\|`,
-				"mu",
-			),
+				"mu"
+			)
 		);
 	}
 	const real = await run(ROOT, "--check");

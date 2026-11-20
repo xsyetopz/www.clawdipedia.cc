@@ -17,7 +17,7 @@ const SCHEMAS = join(ROOT, "schemas");
 
 const { raw, lossy, found } = await runCapture(await findBinary(), [
 	...CAPTURES,
-	...PAYLOAD_CAPTURES,
+	...PAYLOAD_CAPTURES
 ]);
 await mkdir(SCHEMAS, { recursive: true });
 const files = buildFiles(raw, CLAUDE_CODE_VERSION);
@@ -26,7 +26,7 @@ await Promise.all(
 	Object.entries(files).map(async ([name, json]) => {
 		const path = join(SCHEMAS, name);
 		await Bun.write(path, await formatJson(json, path));
-	}),
+	})
 );
 for (const l of lossy) {
 	console.info(`  not representable (emitted as {}): ${l}`);

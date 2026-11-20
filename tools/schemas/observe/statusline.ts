@@ -13,7 +13,7 @@ import {
 	type PtyRun,
 	runPtyCase,
 	stopStub,
-	WAIT,
+	WAIT
 } from "../../release/probes/pty/harness.ts";
 import { statuslineGroup } from "../../release/probes/pty/statusline.ts";
 import { Tally } from "../observe.ts";
@@ -51,14 +51,14 @@ const watch = ({ retryIf: _r, ...c }: PtyCase): PtyCase => ({
 		counts.runs++;
 		feed(x);
 		return c.data(x);
-	},
+	}
 });
 
 // The cases run one after another: each one drives a real terminal.
 const runInTurn = async (
 	ctx: Parameters<typeof runPtyCase>[0],
 	cases: PtyCase[],
-	index = 0,
+	index = 0
 ): Promise<void> => {
 	const c = cases[index];
 	if (c === undefined) {
@@ -76,7 +76,7 @@ try {
 		bin: binaryPath(version),
 		runDir,
 		only: null,
-		dry: false,
+		dry: false
 	};
 	const all = statuslineGroup.cases(ctx);
 	const get = (id: string) => {
@@ -94,8 +94,8 @@ try {
 			...refresh,
 			id: "statusline.obs-turn",
 			schedule: [{ ...WAIT("SL-ROW1", "ready", 30), rebase: true }, ASK()],
-			secs: 22,
-		}),
+			secs: 22
+		})
 	];
 	await runInTurn(ctx, cases);
 } finally {
@@ -105,6 +105,6 @@ try {
 await mkdir(out, { recursive: true });
 await Bun.write(
 	join(out, "statusline.json"),
-	`${JSON.stringify({ counts, paths: tally }, null, 1)}\n`,
+	`${JSON.stringify({ counts, paths: tally }, null, 1)}\n`
 );
 console.info(JSON.stringify(counts));

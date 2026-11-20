@@ -5,7 +5,7 @@ const VALUE_FLAGS = new Set(["--from", "--to", "--only", "--base"]);
 
 export const normaliseArgs = (
 	name: string | undefined,
-	raw: string[],
+	raw: string[]
 ): { args: string[]; error?: string } => {
 	let args = raw;
 	if (name === "compare" && VER.test(raw[0] ?? "") && VER.test(raw[1] ?? "")) {
@@ -24,7 +24,7 @@ export const normaliseArgs = (
 		}
 		return {
 			args,
-			error: `release:${name}: unexpected argument "${a}"${name === "compare" ? " (usage: compare <from> <to> [--samples], both x.y.z)" : ""}`,
+			error: `release:${name}: unexpected argument "${a}"${name === "compare" ? " (usage: compare <from> <to> [--samples], both x.y.z)" : ""}`
 		};
 	}
 	return { args };

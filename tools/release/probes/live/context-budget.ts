@@ -17,7 +17,7 @@ import {
 	obj,
 	PROMPT,
 	runPrint,
-	sumTokens,
+	sumTokens
 } from "./harness.ts";
 
 const ID = "context-budget";
@@ -51,7 +51,7 @@ const contextData = (
 	empty: Obj[],
 	hi: Obj[],
 	cx: Obj[],
-	usage: Obj | null,
+	usage: Obj | null
 ): Record<string, Data> => {
 	const ce = contextUsage(empty);
 	const ca = contextUsage(cx);
@@ -62,11 +62,11 @@ const contextData = (
 		model: initModel(hi) || initModel(empty),
 		"hi.input_tokens": Number(usage?.["input_tokens"] ?? -1),
 		"hi.cache_creation_input_tokens": Number(
-			usage?.["cache_creation_input_tokens"] ?? -1,
+			usage?.["cache_creation_input_tokens"] ?? -1
 		),
 		"hi.cache_read_input_tokens": Number(
-			usage?.["cache_read_input_tokens"] ?? -1,
-		),
+			usage?.["cache_read_input_tokens"] ?? -1
+		)
 	};
 	addUsage(data, "empty", ce);
 	addUsage(data, "after", ca);
@@ -84,7 +84,7 @@ export const contextBudget: LiveCase = {
 			const empty = await runPrint(x, sb, ["-p", "/context"], { caseId: ID });
 			const hi = await runPrint(x, sb, ["-p", PROMPT], { caseId: ID });
 			const cx = await runPrint(x, sb, ["-p", "--continue", "/context"], {
-				caseId: ID,
+				caseId: ID
 			});
 			const usage = firstUsage(hi.events);
 			const warm = warmFromUsage(usage);
@@ -97,11 +97,11 @@ export const contextBudget: LiveCase = {
 					...(warm === null ? {} : { cacheWarm: warm }),
 					facts: ["context.budget"],
 					notes:
-						"Default model (data.model is read from the init event), project with README.md only and no CLAUDE.md, as in docs/how-it-works/context-budget.md. /context is a local command, not a model prompt. cacheWarm comes from cache_read_input_tokens of the first reply.",
-				}),
+						"Default model (data.model is read from the init event), project with README.md only and no CLAUDE.md, as in docs/how-it-works/context-budget.md. /context is a local command, not a model prompt. cacheWarm comes from cache_read_input_tokens of the first reply."
+				})
 			];
 		} finally {
 			await sb.cleanup();
 		}
-	},
+	}
 };

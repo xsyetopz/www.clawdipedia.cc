@@ -26,7 +26,7 @@ export const sweepNames = async (version: string): Promise<string[]> => {
 		"../../../../..",
 		"captures",
 		version,
-		"surface.json",
+		"surface.json"
 	);
 	const surface: unknown = await Bun.file(file).json();
 	const surfaceNames = arr(obj(obj(surface)["kinds"])["env"])
@@ -36,7 +36,7 @@ export const sweepNames = async (version: string): Promise<string[]> => {
 	return [
 		...new Set([
 			...extractEnv(await readFile(dump, "latin1")).keys(),
-			...surfaceNames,
-		]),
+			...surfaceNames
+		])
 	];
 };

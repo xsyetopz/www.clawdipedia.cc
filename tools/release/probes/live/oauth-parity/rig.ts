@@ -16,7 +16,7 @@ const toStub =
 		fetch(`${stubBase}${url.pathname}`, {
 			method: req.method,
 			headers: { "content-type": "application/json" },
-			body: ["GET", "HEAD"].includes(req.method) ? null : req.body,
+			body: ["GET", "HEAD"].includes(req.method) ? null : req.body
 		});
 
 export interface Rig {
@@ -31,29 +31,29 @@ export const startRig = async (
 	x: LiveCtx,
 	sb: Sandbox,
 	live: Shape[],
-	keyed: Shape[],
+	keyed: Shape[]
 ): Promise<Rig> => {
 	const stub = await startStub(await allocPort());
 	const keyBase = await stub.register("parity-key", {
-		log: join(sb.root, "parity-key.jsonl"),
+		log: join(sb.root, "parity-key.jsonl")
 	});
 	const liveBase = x.dry
 		? await stub.register("parity-live", {
-				log: join(sb.root, "parity-live.jsonl"),
+				log: join(sb.root, "parity-live.jsonl")
 			})
 		: "";
 	const mitm = await startMitm({
 		onMessages: (r) => {
 			live.push(shapeOf(r.body, r.betas));
 		},
-		...(x.dry ? { tunnelOthers: false, upstream: toStub(liveBase) } : {}),
+		...(x.dry ? { tunnelOthers: false, upstream: toStub(liveBase) } : {})
 	});
 	const mitmKey = await startMitm({
 		onMessages: (r) => {
 			keyed.push(shapeOf(r.body, r.betas));
 		},
 		tunnelOthers: false,
-		upstream: toStub(keyBase),
+		upstream: toStub(keyBase)
 	});
 	return { stub, mitm, mitmKey };
 };
@@ -67,6 +67,6 @@ export const keyRun = async (x: LiveCtx, sb: Sandbox, mitmKey: Mitm) => {
 	await assertShimReady(env);
 	return runChild(
 		[x.bin, "-p", PROMPT, "--output-format", "stream-json", "--verbose"],
-		{ cwd: sb.proj, env, timeoutMs: 120_000 },
+		{ cwd: sb.proj, env, timeoutMs: 120_000 }
 	);
 };

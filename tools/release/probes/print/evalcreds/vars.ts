@@ -2,7 +2,7 @@ import { P } from "./eval.ts";
 
 export const v = (name: string, sub = "v"): [string, string] => [
 	name,
-	`${P}/${name}/${sub}`,
+	`${P}/${name}/${sub}`
 ];
 export const envOf = (names: string[]): Record<string, string> =>
 	Object.fromEntries(names.map((n) => v(n)));
@@ -57,7 +57,7 @@ export const POINTERS = [
 	"CLOUDSDK_AUTH_AUTHORIZATION_TOKEN_FILE",
 	"AWS_SHARED_CREDENTIALS_FILE",
 	"AWS_CONFIG_FILE",
-	"GOOGLE_APPLICATION_CREDENTIALS",
+	"GOOGLE_APPLICATION_CREDENTIALS"
 ];
 // Pointer variables of the same list that name a folder, not a file.
 export const DIR_POINTERS = [
@@ -69,7 +69,7 @@ export const DIR_POINTERS = [
 	"GH_CONFIG_DIR",
 	"GNUPGHOME",
 	"CREDENTIALS_DIRECTORY",
-	"CLAUDE_CODE_FEDERATION_CACHE_DIR",
+	"CLAUDE_CODE_FEDERATION_CACHE_DIR"
 ];
 // Variables that the code reads by name with a home folder default.
 export const HELPERS = [
@@ -98,7 +98,7 @@ export const HELPERS = [
 	"NPM_CONFIG_PREFIX",
 	"KRB5CCNAME",
 	"KRB5_KTNAME",
-	"KRB5_CLIENT_KTNAME",
+	"KRB5_CLIENT_KTNAME"
 ];
 
 export const JVM = [
@@ -116,5 +116,5 @@ export const JVM = [
 	"LEIN_JVM_OPTS",
 	"ES_JAVA_OPTS",
 	"SONAR_SCANNER_OPTS",
-	"SONAR_SCANNER_JAVA_OPTS",
+	"SONAR_SCANNER_JAVA_OPTS"
 ];

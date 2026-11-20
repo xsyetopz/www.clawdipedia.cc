@@ -73,7 +73,7 @@ export const dialogOpenAt = (x: PtyRun, label: string): boolean => {
 			...phrases.map((p) => {
 				const m = [...t.matchAll(tolerant(p, "gi"))].pop();
 				return m ? m.index : -1;
-			}),
+			})
 		);
 	const d = last(["proceed?", "Esc to cancel"]);
 	return d >= 0 && d > last(["Allowed by", "Denied by", "Interrupted"]);
@@ -82,7 +82,7 @@ export const dialogOpenAt = (x: PtyRun, label: string): boolean => {
 export const firstSeenT = (
 	x: PtyRun,
 	re: RegExp,
-	before?: string,
+	before?: string
 ): number | null => {
 	const cut = before === undefined ? null : offsetAt(x, before);
 	const all = x.raw;
@@ -124,7 +124,7 @@ export const toolResultText = (x: PtyRun): string =>
 				.flatMap((m) => arr(obj(m)["content"]))
 				.filter((b) => obj(b)["type"] === "tool_result")
 				.map((b) => JSON.stringify(obj(b)["content"]))
-				.join("\n"),
+				.join("\n")
 		)
 		.join("\n");
 export const ranFile = (x: PtyRun, name: string): boolean => name in x.files;
@@ -132,5 +132,5 @@ export const ranFile = (x: PtyRun, name: string): boolean => name in x.files;
 /** `precondition` data: true when the feature under test showed up, so a miss reads as "probe invalid". */
 export const pre = (ok: boolean, detail: string): Record<string, Data> => ({
 	precondition: ok,
-	...(ok ? {} : { "precondition.detail": detail }),
+	...(ok ? {} : { "precondition.detail": detail })
 });

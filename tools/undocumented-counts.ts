@@ -24,7 +24,7 @@ const reporter =
 				line: i + 1,
 				message: `${what} says ${stated}, actual ${actual}`,
 				stated,
-				actual,
+				actual
 			});
 		}
 	};
@@ -36,10 +36,10 @@ const lineCount = (
 	l: string,
 	i: number,
 	read: (link: string) => string,
-	bad: Report,
+	bad: Report
 ): number => {
 	const listed = /^The (\d+) .* are all listed on \[[^\]]+\]\(([^)#]+)/u.exec(
-		l,
+		l
 	);
 	if (!listed) {
 		return 0;
@@ -55,7 +55,7 @@ const rowCount = (
 	i: number,
 	table: string,
 	read: (link: string) => string,
-	bad: Report,
+	bad: Report
 ): number => {
 	let sum = 0;
 	if (table.startsWith("| Item |")) {
@@ -74,7 +74,7 @@ const rowCount = (
 const checkSections = (
 	lines: string[],
 	read: (link: string) => string,
-	bad: Report,
+	bad: Report
 ): Map<string, number> => {
 	const actual = new Map<string, number>();
 	let section = "";
@@ -89,7 +89,7 @@ const checkSections = (
 			countAt,
 			`\`Count:\` of ${section}`,
 			Number(lines[countAt]?.match(/\d+/u)?.[0]),
-			sum,
+			sum
 		);
 		actual.set(section, sum);
 	};
@@ -124,7 +124,7 @@ const checkSections = (
 const checkSummary = (
 	lines: string[],
 	actual: Map<string, number>,
-	bad: Report,
+	bad: Report
 ): void => {
 	let total = 0;
 	for (const [i, l] of lines.entries()) {
@@ -157,7 +157,7 @@ const collect = (text: string, read: (link: string) => string): Found[] => {
 /** The counts on the page that differ from its rows and the linked pages, in line order. */
 export const countProblems = (
 	text: string,
-	read: (link: string) => string,
+	read: (link: string) => string
 ): CountProblem[] =>
 	collect(text, read).map(({ line, message }) => ({ line, message }));
 
@@ -167,7 +167,7 @@ export const countProblems = (
  */
 export const fixCounts = (
 	text: string,
-	read: (link: string) => string,
+	read: (link: string) => string
 ): string => {
 	const lines = text.split("\n");
 	for (const { line, stated, actual } of collect(text, read)) {

@@ -93,7 +93,7 @@ export const parseCtx = async (args: string[]): Promise<Ctx> => {
 				: await installedVersion(),
 		only: only !== undefined && only !== "" ? only.split(",") : null,
 		dry: args.includes("--dry"),
-		rest: args,
+		rest: args
 	};
 };
 
@@ -102,7 +102,7 @@ export const toolEnv = (): Record<string, string> => ({
 	PATH: "/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/usr/local/bin",
 	HOME: homedir(),
 	LC_ALL: "C",
-	TMPDIR: tmpdir(),
+	TMPDIR: tmpdir()
 });
 
 export const writeJson = async (path: string, data: unknown): Promise<void> => {
@@ -115,11 +115,11 @@ const gitOut = async (args: string[]): Promise<string> => {
 		cwd: ROOT,
 		env: toolEnv(),
 		stdout: "pipe",
-		stderr: "pipe",
+		stderr: "pipe"
 	});
 	const [out, code] = await Promise.all([
 		new Response(p.stdout).text(),
-		p.exited,
+		p.exited
 	]);
 	return code === 0 ? out.trim() : "";
 };
@@ -141,7 +141,7 @@ export interface CommandRecord {
 /** Append one command entry to captures/<version>/run.json (creates the file on first use). */
 export const recordCommand = async (
 	forVersion: string,
-	rec: CommandRecord,
+	rec: CommandRecord
 ): Promise<void> => {
 	const path = join(versionDir(forVersion), "run.json");
 	const file = Bun.file(path);
@@ -157,7 +157,7 @@ export const recordCommand = async (
 		platform: platform(),
 		arch: arch(),
 		osRelease: release(),
-		bun: Bun.version,
+		bun: Bun.version
 	};
 	run.commands = [...(run.commands ?? []), rec];
 	await writeJson(path, run);
@@ -166,7 +166,7 @@ export const recordCommand = async (
 /** Exit code of a finished Bun.spawnSync child. A signal kill (exitCode null) is reported, not hidden as 1. */
 export const exitCodeOf = (
 	step: string,
-	r: { exitCode: number | null; signalCode?: string | number | null },
+	r: { exitCode: number | null; signalCode?: string | number | null }
 ): number => {
 	if (r.exitCode !== null) {
 		return r.exitCode;

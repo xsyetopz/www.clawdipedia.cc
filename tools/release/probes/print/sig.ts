@@ -14,7 +14,7 @@ import {
 	obj,
 	readIf,
 	type Run,
-	runCase,
+	runCase
 } from "./run.ts";
 
 const MCP_SERVER = `
@@ -34,9 +34,9 @@ const hk = (ev: string) => ({
 	hooks: [
 		{
 			type: "command",
-			command: `cat >> {CFG}/hook.log; echo >> {CFG}/hook.log; env | cut -d= -f1 | sort > {CFG}/hookenv.${ev}`,
-		},
-	],
+			command: `cat >> {CFG}/hook.log; echo >> {CFG}/hook.log; env | cut -d= -f1 | sort > {CFG}/hookenv.${ev}`
+		}
+	]
 });
 
 /** Baseline B: one Bash tool turn, a plugin (skill + MCP server), and a logging hook on five events. */
@@ -47,10 +47,10 @@ export const baselineB = (): Case => {
 		"UserPromptSubmit",
 		"PreToolUse",
 		"PostToolUse",
-		"Stop",
+		"Stop"
 	]) {
 		hooks[ev] = [
-			{ ...(ev.includes("Tool") ? { matcher: "Bash" } : {}), ...hk(ev) },
+			{ ...(ev.includes("Tool") ? { matcher: "Bash" } : {}), ...hk(ev) }
 		];
 	}
 	return {
@@ -62,15 +62,15 @@ export const baselineB = (): Case => {
 			"plug/.claude-plugin/plugin.json": JSON.stringify({
 				name: "pp",
 				version: "1.0.0",
-				description: "probe plugin",
+				description: "probe plugin"
 			}),
 			"plug/skills/pskill/SKILL.md":
 				"---\nname: pskill\ndescription: Probe skill\n---\nDo nothing.\n",
 			"plug/srv.js": MCP_SERVER,
 			"plug/.mcp.json": JSON.stringify({
-				mcpServers: { psrv: { command: "bun", args: ["{HOME}/plug/srv.js"] } },
-			}),
-		},
+				mcpServers: { psrv: { command: "bun", args: ["{HOME}/plug/srv.js"] } }
+			})
+		}
 	};
 };
 
@@ -89,7 +89,7 @@ const norm0 = (s: string, r: Run): string =>
 		.replaceAll(/\d{4}-\d\d-\d\dT[\d:.]+Z/gu, "<TS>")
 		.replaceAll(
 			/"(duration_ms|duration_api_ms|total_cost_usd|ttft_ms)":[\d.]+/gu,
-			'"$1":0',
+			'"$1":0'
 		)
 		.replaceAll(/cc_version=[\d.]+\.[0-9a-f]{3}/gu, "cc_version=<VER>.XXX")
 		.replaceAll(/[0-9a-f]{64}/gu, "<DEV>")
@@ -135,7 +135,7 @@ const INIT_SKIP = new Set([
 	"uuid",
 	"cwd",
 	"memory_paths",
-	"messaging_socket_path",
+	"messaging_socket_path"
 ]);
 
 const eventKind = (e: Record<string, unknown>): string => {
@@ -207,14 +207,14 @@ export const sig = async (r: Run): Promise<Sig> => {
 
 export const diffSig = (a: Sig, b: Sig): string[] =>
 	[...new Set([...Object.keys(a), ...Object.keys(b)])].filter(
-		(k) => a[k] !== b[k],
+		(k) => a[k] !== b[k]
 	);
 
 /** A `cap`-long window of each value from just before their first difference, so a shared prefix does not hide it. */
 export const diffSample = (
 	a: string,
 	b: string,
-	cap = 400,
+	cap = 400
 ): [string, string] => {
 	if (a.length <= cap && b.length <= cap) {
 		return [a, b];
@@ -242,7 +242,7 @@ export interface Baseline {
 export const stableBaseline = async (
 	bin: string,
 	mk: () => Case,
-	needHook: boolean,
+	needHook: boolean
 ): Promise<Baseline> => {
 	const a = await runCase(bin, mk());
 	const sa = await sig(a);
@@ -256,7 +256,7 @@ export const stableBaseline = async (
 	const why = [
 		ok ? "" : `exit ${a.code}`,
 		hasInit ? "" : "no init event",
-		needHook && !hookRan ? "hook did not run" : "",
+		needHook && !hookRan ? "hook did not run" : ""
 	]
 		.filter(Boolean)
 		.join("; ");

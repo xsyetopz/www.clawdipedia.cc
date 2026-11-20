@@ -9,7 +9,7 @@ import {
 	guarded,
 	heading,
 	ok,
-	type Result,
+	type Result
 } from "./shared.ts";
 import { indexLine, indexSource, searchIndex } from "./site-index.ts";
 import { remoteOf } from "./sources.ts";
@@ -36,7 +36,7 @@ export const search = (args: SearchArgs): Promise<Result> =>
 			url: h.entry.url,
 			section: h.entry.section,
 			score: Math.round(h.score * 100) / 100,
-			snippet: h.snippet,
+			snippet: h.snippet
 		}));
 		const head = await heading();
 		const line = indexLine(b);
@@ -46,25 +46,25 @@ export const search = (args: SearchArgs): Promise<Result> =>
 			...(present(version) ? { claudeCode: version } : {}),
 			query,
 			hits,
-			source: { ...sourceData(src), line },
+			source: { ...sourceData(src), line }
 		};
 		if (hits.length === 0) {
 			return ok(
 				`${head}No pages match "${query}"${present(section) ? ` in section "${section}"` : ""}. Try fewer or different keywords, drop the section filter, or browse the page list.\n\n${line}`,
 				data,
-				src,
+				src
 			);
 		}
 		const md = hits
 			.map(
 				(h, i) =>
-					`${i + 1}. **${h.title}** (route \`${h.route}\`)\n   ${h.url}\n   ${h.snippet}`,
+					`${i + 1}. **${h.title}** (route \`${h.route}\`)\n   ${h.url}\n   ${h.snippet}`
 			)
 			.join("\n");
 		return ok(
 			`${head}${hits.length} hit(s) for "${query}":\n\n${md}\n\n${line}`,
 			data,
 			src,
-			true,
+			true
 		);
 	});

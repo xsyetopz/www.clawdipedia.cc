@@ -3,7 +3,7 @@ import type { Run } from "../run/helpers.ts";
 // Same override as err319: the memory sync needs the traffic switches off. The base URL is still the local stub.
 export const GB_ON = {
 	DISABLE_TELEMETRY: "",
-	CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "",
+	CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: ""
 };
 export const DBG = ["--debug-file", "{CFG}/d.log"];
 
@@ -17,7 +17,7 @@ export const lines = (s: string, re: RegExp, n = 6): string =>
 
 export const USER = JSON.stringify({
 	type: "user",
-	message: { role: "user", content: "Reply with 'OK'." },
+	message: { role: "user", content: "Reply with 'OK'." }
 });
 
 export const b64u = (o: unknown): string =>
@@ -31,5 +31,5 @@ export const readOrNull = async (path: string): Promise<string | null> => {
 
 export const uniquePaths = (r: Run, trimQuery: boolean): string =>
 	[
-		...new Set(r.reqs.map((q) => (trimQuery ? q.path.split("?")[0] : q.path))),
+		...new Set(r.reqs.map((q) => (trimQuery ? q.path.split("?")[0] : q.path)))
 	].join(" ");

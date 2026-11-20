@@ -15,7 +15,7 @@ const read = (): Scheme =>
 // Root sits above the Docusaurus color-mode provider, so it cannot call
 // useColorMode(). It copies the data-theme attribute of <html> instead.
 export default function Root({
-	children,
+	children
 }: {
 	children: React.ReactNode;
 }): React.JSX.Element {
@@ -36,7 +36,7 @@ export default function Root({
 				: new MutationObserver(sync);
 		observer?.observe(html, {
 			attributes: true,
-			attributeFilter: ["data-theme"],
+			attributeFilter: ["data-theme"]
 		});
 		return () => {
 			observer?.disconnect();

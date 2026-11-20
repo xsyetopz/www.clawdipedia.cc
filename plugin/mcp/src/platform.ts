@@ -6,7 +6,7 @@ import {
 	MB,
 	type Resource,
 	type Source,
-	ttl,
+	ttl
 } from "./fetcher.ts";
 import type { Entry } from "./manifest.ts";
 import { searchByPath, SearchIndex, tokenize } from "./search.ts";
@@ -63,7 +63,7 @@ export const normalizePlatformPath = (input: string): string | undefined => {
 /** Parses llms.txt: the "## English" section only, `### Group` headings, `- [Title](url.md) - description` lines. */
 export const parseLlmsTxt = (
 	text: string,
-	base = platformBase(),
+	base = platformBase()
 ): PlatformEntry[] => {
 	// Links on the real host and on the configured base (a mirror) both count; pages are always fetched from the base.
 	const hosts = [...new Set([base, PLATFORM])]
@@ -71,7 +71,7 @@ export const parseLlmsTxt = (
 		.join("|");
 	const line = new RegExp(
 		`^- \\[(.+?)\\]\\(((?:${hosts})/docs/en/[^)\\s]+?)\\.md\\)(?: - (.*))?$`,
-		"u",
+		"u"
 	);
 	const out: PlatformEntry[] = [];
 	let inEnglish = false;
@@ -104,7 +104,7 @@ export const parseLlmsTxt = (
 			title: m[1] ?? path,
 			description: m[3] ?? "",
 			group,
-			url: `${base}/docs/en/${path}`,
+			url: `${base}/docs/en/${path}`
 		});
 	}
 	return out;
@@ -128,7 +128,7 @@ const asEntry = (p: PlatformEntry): Entry => ({
 	description: `${p.description} ${p.path.replaceAll(/[/_-]+/gu, " ")}`,
 	section: p.group,
 	md: "",
-	url: p.url,
+	url: p.url
 });
 
 export class Platform {
@@ -142,13 +142,13 @@ export class Platform {
 			rel: "platform/llms.txt",
 			ttlMs: ttl(INDEX_TTL_MS),
 			maxBytes: FILE_MAX,
-			validate: (b) => parseLlmsTxt(b).length > 0,
+			validate: (b) => parseLlmsTxt(b).length > 0
 		});
 		if (r.status !== "ok") {
 			throw new ContentError(
 				r.status === "error"
 					? `platform docs are offline and not cached yet: could not reach ${r.origin}`
-					: `llms.txt was not found on ${r.origin}`,
+					: `llms.txt was not found on ${r.origin}`
 			);
 		}
 		if (this.memo?.body !== r.body) {
@@ -157,7 +157,7 @@ export class Platform {
 			const idx = new SearchIndex({
 				entries: () => asE,
 				text: () => "",
-				extra: (e) => e.section,
+				extra: (e) => e.section
 			});
 			this.memo = { body: r.body, entries, idx };
 		}
@@ -165,7 +165,7 @@ export class Platform {
 		return {
 			entries,
 			source: r.source,
-			search: searchByPath(idx, entries, (e) => e.description || e.title),
+			search: searchByPath(idx, entries, (e) => e.description || e.title)
 		};
 	}
 
@@ -181,7 +181,7 @@ export class Platform {
 			rel: `platform/pages/${path}.md`,
 			deleteOn404: true,
 			ttlMs: ttl(PAGE_TTL_MS),
-			maxBytes: FILE_MAX,
+			maxBytes: FILE_MAX
 		});
 	}
 }
@@ -189,15 +189,15 @@ export class Platform {
 /** Entries that share the most words with a path, for "not found" answers. */
 export const nearPlatform = (
 	path: string,
-	entries: readonly PlatformEntry[],
+	entries: readonly PlatformEntry[]
 ): string => {
 	const want = new Set(tokenize(path.replaceAll(/[/_-]+/gu, " ")));
 	const near = entries
 		.map((e) => ({
 			e,
 			n: tokenize(`${e.path.replaceAll(/[/_-]+/gu, " ")} ${e.title}`).filter(
-				(t) => want.has(t),
-			).length,
+				(t) => want.has(t)
+			).length
 		}))
 		.filter((x) => x.n > 0 && x.e.path !== path)
 		.toSorted((a, b) => b.n - a.n)

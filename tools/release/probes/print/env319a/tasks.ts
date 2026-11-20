@@ -9,7 +9,7 @@ import {
 	initEvent,
 	msgs,
 	toolResultTexts,
-	withRun,
+	withRun
 } from "../run/helpers.ts";
 
 const str = (v: unknown): string => (typeof v === "string" ? v : "");
@@ -35,14 +35,14 @@ const TASK_ENV = {
 	CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "0",
 	DISABLE_TELEMETRY: "0",
 	HTTPS_PROXY: "http://127.0.0.1:9",
-	NO_PROXY: "127.0.0.1,localhost",
+	NO_PROXY: "127.0.0.1,localhost"
 };
 
 const taskSetup = async (cfg: string, stream: boolean): Promise<void> => {
 	await Bun.write(`${cfg}/srv.js`, TASK_SRV);
 	await Bun.write(
 		`${cfg}/.claude.json`,
-		JSON.stringify({ cachedGrowthBookFeatures: { tengu_glowing_lark: true } }),
+		JSON.stringify({ cachedGrowthBookFeatures: { tengu_glowing_lark: true } })
 	);
 	await Bun.write(
 		`${cfg}/mcp.json`,
@@ -51,10 +51,10 @@ const taskSetup = async (cfg: string, stream: boolean): Promise<void> => {
 				ms: {
 					command: "bun",
 					args: [`${cfg}/srv.js`],
-					env: { LOG: `${cfg}/srv.log`, ...(stream && { TASK: "1" }) },
-				},
-			},
-		}),
+					env: { LOG: `${cfg}/srv.log`, ...(stream && { TASK: "1" }) }
+				}
+			}
+		})
 	);
 };
 
@@ -65,7 +65,7 @@ const taskData = (r: Run) => {
 		.filter(Boolean)
 		.map((l) => obj(JSON.parse(l)));
 	const init = rows.find(
-		(x) => x["method"] === "initialize" || x["method"] === "server/discover",
+		(x) => x["method"] === "initialize" || x["method"] === "server/discover"
 	);
 	const call = rows.find((x) => x["method"] === "tools/call");
 	return {
@@ -74,14 +74,14 @@ const taskData = (r: Run) => {
 		initCapabilities: JSON.stringify(obj(init?.["params"])["_meta"]),
 		callParams: JSON.stringify(call?.["params"]),
 		callHasTasksExtension: JSON.stringify(call).includes(
-			"io.modelcontextprotocol/tasks",
+			"io.modelcontextprotocol/tasks"
 		),
 		toolResult: toolResultTexts(r)[0] ?? "",
 		taskEvents: r.stdout
 			.split("\n")
 			.filter((l) => /"subtype":"(task_|background_tasks)/u.test(l))
 			.map((l) => l.slice(0, 160))
-			.slice(0, 5),
+			.slice(0, 5)
 	};
 };
 
@@ -89,7 +89,7 @@ export const mcpTasks = (
 	envName: string,
 	v?: string,
 	extra: Record<string, string> = {},
-	stream = false,
+	stream = false
 ): CaseDef => ({
 	name: `${envName
 		.replace(/^CLAUDE_CODE_/u, "")
@@ -107,29 +107,29 @@ export const mcpTasks = (
 					...BASE,
 					"--mcp-config",
 					"{CFG}/mcp.json",
-					"--strict-mcp-config",
+					"--strict-mcp-config"
 				],
 				env: {
 					...TASK_ENV,
 					...extra,
-					...(v === undefined ? {} : { [envName]: v }),
+					...(v === undefined ? {} : { [envName]: v })
 				},
 				allowOverride: [
 					"ENABLE_TOOL_SEARCH",
 					"CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC",
 					"DISABLE_TELEMETRY",
 					"HTTPS_PROXY",
-					"NO_PROXY",
+					"NO_PROXY"
 				],
 				stub: PING,
 				setup: ({ cfg }) => taskSetup(cfg, stream),
 				afterExit: async ({ cfg }) => {
 					const log = Bun.file(`${cfg}/srv.log`);
 					return { log: (await log.exists()) ? await log.text() : "" };
-				},
+				}
 			},
-			(r) => ({ from: r, data: taskData(r) }),
-		),
+			(r) => ({ from: r, data: taskData(r) })
+		)
 });
 
 const DEFER_HOOK =
@@ -144,10 +144,10 @@ const deferSetup = async (cfg: string): Promise<void> => {
 				ms: {
 					command: "bun",
 					args: [`${cfg}/srv.js`],
-					env: { LOG: `${cfg}/srv.log` },
-				},
-			},
-		}),
+					env: { LOG: `${cfg}/srv.log` }
+				}
+			}
+		})
 	);
 	await Bun.write(
 		`${cfg}/settings.json`,
@@ -156,11 +156,11 @@ const deferSetup = async (cfg: string): Promise<void> => {
 				PreToolUse: [
 					{
 						matcher: "mcp__ms__ping",
-						hooks: [{ type: "command", command: DEFER_HOOK }],
-					},
-				],
-			},
-		}),
+						hooks: [{ type: "command", command: DEFER_HOOK }]
+					}
+				]
+			}
+		})
 	);
 };
 
@@ -180,8 +180,8 @@ const resumeData = (r: Run, first: Run, sid: string) => {
 		requestHasPing: m.includes("ping"),
 		terminal: terminal(r.stdout),
 		notice: (r.stdout + r.stderr).includes(
-			"isn't available, so its deferred call",
-		),
+			"isn't available, so its deferred call"
+		)
 	};
 };
 
@@ -195,12 +195,12 @@ export const dropDeferred = (v?: string): CaseDef => ({
 					...BASE,
 					"--mcp-config",
 					"{CFG}/mcp.json",
-					"--strict-mcp-config",
+					"--strict-mcp-config"
 				],
 				env: { ENABLE_TOOL_SEARCH: "false" },
 				allowOverride: ["ENABLE_TOOL_SEARCH"],
 				stub: PING,
-				setup: ({ cfg }) => deferSetup(cfg),
+				setup: ({ cfg }) => deferSetup(cfg)
 			},
 			(first) => {
 				const sid = str(initEvent(first)?.["session_id"]);
@@ -220,18 +220,18 @@ export const dropDeferred = (v?: string): CaseDef => ({
 									join(src, old),
 									join(cfg, "projects", encodeDir(proj)),
 									{
-										recursive: true,
-									},
+										recursive: true
+									}
 								);
 							}
-						},
+						}
 					},
 					(r) => ({
 						from: r,
 						data: resumeData(r, first, sid),
-						samples: { out: (r.stdout + r.stderr).slice(-400) },
-					}),
+						samples: { out: (r.stdout + r.stderr).slice(-400) }
+					})
 				);
-			},
-		),
+			}
+		)
 });

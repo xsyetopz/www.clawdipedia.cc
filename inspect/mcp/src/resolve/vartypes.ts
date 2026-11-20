@@ -4,7 +4,7 @@ import {
 	isFn,
 	type Module,
 	type Node,
-	type Variable,
+	type Variable
 } from "../ast.ts";
 import { asNode } from "../ast/node.ts";
 import { firstSeq } from "../seq.ts";
@@ -20,14 +20,14 @@ export abstract class VarTypes {
 		m: Module,
 		n: Node | null,
 		env?: Env,
-		depth?: number,
+		depth?: number
 	): Promise<Ty[] | undefined>;
 
 	/** The types of a variable, worked out once; a variable that leads back to itself is not known. */
 	protected async varTypeOf(
 		m: Module,
 		v: Variable,
-		depth: number,
+		depth: number
 	): Promise<Ty[] | undefined> {
 		if (this.#varTypes.has(v)) {
 			return this.#varTypes.get(v);
@@ -41,7 +41,7 @@ export abstract class VarTypes {
 	async #varType(
 		m: Module,
 		v: Variable,
-		depth: number,
+		depth: number
 	): Promise<Ty[] | undefined> {
 		const def = v.defs[0];
 		if (def?.type === "Parameter") {
@@ -60,7 +60,7 @@ export abstract class VarTypes {
 			m,
 			v,
 			def.node.init ? [] : ["absent"],
-			depth,
+			depth
 		);
 		return written;
 	}
@@ -70,7 +70,7 @@ export abstract class VarTypes {
 		m: Module,
 		v: Variable,
 		start: Ty[],
-		depth: number,
+		depth: number
 	): Promise<Ty[] | undefined> {
 		let out: Ty[] | undefined = start;
 		const unknown = await firstSeq(
@@ -84,7 +84,7 @@ export abstract class VarTypes {
 						: await this.typeOf(m, r.writeExpr, undefined, depth + 1);
 				out = writeType(out, op, w);
 				return out ? undefined : true;
-			},
+			}
 		);
 		return unknown ? undefined : out;
 	}
@@ -94,7 +94,7 @@ export abstract class VarTypes {
 		m: Module,
 		name: Node,
 		fn: Fn,
-		depth: number,
+		depth: number
 	): Promise<Ty[] | undefined> {
 		const index = fn.params.map((p) => asNode(p)).indexOf(name);
 		if (index === -1) {
@@ -117,11 +117,11 @@ export abstract class VarTypes {
 						c.module,
 						asNode(args[index]) ?? null,
 						undefined,
-						depth + 1,
-					),
+						depth + 1
+					)
 				);
 				return undefined;
-			},
+			}
 		);
 		return !unknown && out !== undefined && out.length > 0 ? out : undefined;
 	}

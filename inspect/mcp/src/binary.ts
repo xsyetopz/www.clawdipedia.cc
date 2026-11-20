@@ -20,7 +20,7 @@ const envOr = (name: string, fallback: string): string => {
 const versionsDir = () =>
 	envOr(
 		"CC_INSPECT_VERSIONS_DIR",
-		join(homedir(), ".local/share/claude/versions"),
+		join(homedir(), ".local/share/claude/versions")
 	);
 const launcher = () =>
 	envOr("CC_INSPECT_LAUNCHER", join(homedir(), ".local/bin/claude"));
@@ -60,9 +60,9 @@ const installsIn = async (dir: string, cur: string): Promise<Install[]> => {
 			return {
 				version: basename(p),
 				path: p,
-				current: (await realpath(p)) === cur,
+				current: (await realpath(p)) === cur
 			};
-		}),
+		})
 	);
 	return found.filter((i) => i !== null);
 };
@@ -82,7 +82,7 @@ export const listInstalls = async (): Promise<Install[]> => {
 /** The npm package that ships the native binary for a platform, such as `@anthropic-ai/claude-code-darwin-arm64`. */
 export const nativePackage = (
 	platform: string = process.platform,
-	arch: string = process.arch,
+	arch: string = process.arch
 ): string => `@anthropic-ai/claude-code-${platform}-${arch}`;
 
 // A release that is no longer installed is still on npm, so its history can be read from the published binary.
@@ -150,11 +150,11 @@ export const program = async (binary?: string): Promise<Program> => {
 				bundle ??= new Bundle(
 					modules
 						.filter((m) => /\.m?js$/u.test(m.name))
-						.map((m) => ({ name: m.name, text: m.source })),
+						.map((m) => ({ name: m.name, text: m.source }))
 				);
 				return bundle;
 			},
-			resolver: new Resolver(),
+			resolver: new Resolver()
 		};
 		programs.set(path, p);
 	}

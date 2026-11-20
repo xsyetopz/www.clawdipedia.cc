@@ -8,7 +8,7 @@ import {
 	type Module,
 	type Node,
 	type NodeOf,
-	type Variable,
+	type Variable
 } from "../ast.ts";
 import { asNode } from "../ast/node.ts";
 import { allSeq, mapSeq } from "../seq.ts";
@@ -21,7 +21,7 @@ import {
 	propKey,
 	spreadParts,
 	strings,
-	unwrapped,
+	unwrapped
 } from "./tables.ts";
 import { type Entry, type Env, mergeEntries, type Val } from "./types.ts";
 import { Writes } from "./writes.ts";
@@ -34,13 +34,13 @@ export abstract class ValueResolver extends HeldEntries {
 		m: Module,
 		v: Variable,
 		fn: Fn,
-		depth: number,
+		depth: number
 	): Promise<Entry[] | undefined>;
 	abstract call(
 		m: Module,
 		call: CallNode,
 		env?: Env,
-		depth?: number,
+		depth?: number
 	): Promise<Entry[] | undefined>;
 	abstract pin(entries: Entry[], depth?: number): Promise<Entry[]>;
 
@@ -54,7 +54,7 @@ export abstract class ValueResolver extends HeldEntries {
 	async entries(
 		m: Module,
 		obj: NodeOf<"ObjectExpression">,
-		env?: Env,
+		env?: Env
 	): Promise<Entry[]> {
 		const out: Entry[] = [];
 		await mapSeq(obj.properties, async (p) => {
@@ -72,7 +72,7 @@ export abstract class ValueResolver extends HeldEntries {
 				val:
 					p.method || p.kind !== "init"
 						? { k: "unk", text: m.src(p.value) }
-						: await this.value(m, p.value, env),
+						: await this.value(m, p.value, env)
 			});
 		});
 		return out;
@@ -84,7 +84,7 @@ export abstract class ValueResolver extends HeldEntries {
 		n: Node,
 		opt: boolean,
 		env: Env | undefined,
-		out: Entry[],
+		out: Entry[]
 	): Promise<void> {
 		if (n.type === "ObjectExpression") {
 			for (const e of await this.entries(m, n, env)) {
@@ -109,10 +109,10 @@ export abstract class ValueResolver extends HeldEntries {
 	async #branches(
 		m: Module,
 		n: NodeOf<"ConditionalExpression">,
-		env?: Env,
+		env?: Env
 	): Promise<Val | undefined> {
 		const found = await allSeq([n.consequent, n.alternate], async (b) =>
-			strings(await this.value(m, b, env)),
+			strings(await this.value(m, b, env))
 		);
 		if (!found) {
 			return undefined;
@@ -149,7 +149,7 @@ export abstract class ValueResolver extends HeldEntries {
 		m: Module,
 		n: Node | null,
 		env?: Env,
-		depth = 0,
+		depth = 0
 	): Promise<Entry[] | undefined> {
 		if (!n || isVoid(n)) {
 			return [];
@@ -185,7 +185,7 @@ export abstract class ValueResolver extends HeldEntries {
 		m: Module,
 		n: NodeOf<"MemberExpression">,
 		env: Env | undefined,
-		depth: number,
+		depth: number
 	): Promise<Entry[] | undefined> {
 		const p = await memberPath(m, n);
 		if (!p) {
@@ -207,13 +207,13 @@ export abstract class ValueResolver extends HeldEntries {
 	#assigned(
 		m: Module,
 		key: string,
-		depth: number,
+		depth: number
 	): Promise<Entry[] | undefined> {
 		return this.#writes.entries(
 			m,
 			key,
 			(mod, value) => this.expr(mod, value, undefined, depth + 1),
-			(lists) => mergeEntries(lists, this.ty),
+			(lists) => mergeEntries(lists, this.ty)
 		);
 	}
 
@@ -230,7 +230,7 @@ export abstract class ValueResolver extends HeldEntries {
 		m: Module,
 		id: Node,
 		env?: Env,
-		depth = 0,
+		depth = 0
 	): Promise<Entry[] | undefined> {
 		const v = m.variable(id);
 		if (!v) {
@@ -257,7 +257,7 @@ export abstract class ValueResolver extends HeldEntries {
 		o: { module: Module; variable: Variable },
 		def: Variable["defs"][number] | undefined,
 		env: Env | undefined,
-		depth: number,
+		depth: number
 	): Promise<Entry[] | undefined> {
 		if (def?.type !== "Variable" || def.node.id !== def.name) {
 			return undefined;

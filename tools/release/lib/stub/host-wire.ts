@@ -13,7 +13,7 @@ export interface HostPayload {
 export const sse = (
 	seq: number,
 	payload: HostPayload,
-	status: string,
+	status: string
 ): string =>
 	`event: client_event\nid: ${seq}\ndata: ${JSON.stringify({
 		event_id: `ev${seq}`,
@@ -23,7 +23,7 @@ export const sse = (
 		created_at: new Date().toISOString(),
 		payload,
 		device_attestation_status: status,
-		host_frame_admitted: true,
+		host_frame_admitted: true
 	})}\n\n`;
 
 /** The host and its one tool, in the shapes of the program's announce schema. */
@@ -46,13 +46,13 @@ export const announce: HostPayload = {
 			limits: {
 				max_call_ms: 60_000,
 				max_request_bytes: 1_048_576,
-				max_in_flight: 4,
-			},
+				max_in_flight: 4
+			}
 		},
 		tools: [{ name: "Bash", refused_input_fields: [], protocol_versions: [1] }],
 		passthrough: [],
-		plumbing: [],
-	},
+		plumbing: []
+	}
 };
 
 const isRecord = (v: unknown): v is Record<string, unknown> =>
@@ -84,7 +84,7 @@ export const toolCalls = (body: string): Record<string, unknown>[] => {
 /** Builds the host's control_response to a `remote_tool_call` payload. */
 export const answerTo = (
 	req: Record<string, unknown>,
-	disposition: string,
+	disposition: string
 ): HostPayload => {
 	const request = isRecord(req["request"]) ? req["request"] : {};
 	const env = isRecord(request["envelope"]) ? request["envelope"] : {};
@@ -97,7 +97,7 @@ export const answerTo = (
 		target: { name: HOST_NAME, working_dir: "/tmp/hostwd" },
 		is_error: isError,
 		content,
-		disposition,
+		disposition
 	};
 	return {
 		type: "control_response",
@@ -108,9 +108,9 @@ export const answerTo = (
 				result: {
 					content: [{ type: "text", text: content }],
 					isError,
-					structuredContent: { "anthropic/remoteToolExecution": envelope },
-				},
-			},
-		},
+					structuredContent: { "anthropic/remoteToolExecution": envelope }
+				}
+			}
+		}
 	};
 };

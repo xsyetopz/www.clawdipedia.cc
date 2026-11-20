@@ -9,7 +9,7 @@ import {
 	byCode,
 	type Result,
 	startServer,
-	text,
+	text
 } from "./server-harness.ts";
 
 const { tmp, call } = startServer();
@@ -18,13 +18,13 @@ const lines = (r: Result) => text(r).split("\n").slice(1);
 
 const state = async (dir: string) => {
 	const files = await Array.fromAsync(
-		new Bun.Glob("**/*").scan({ cwd: dir, dot: true }),
+		new Bun.Glob("**/*").scan({ cwd: dir, dot: true })
 	);
 	const rows = await Promise.all(
 		files.map(async (f) => {
 			const s = await stat(join(dir, f));
 			return `${f}:${s.size}:${s.mtimeMs}`;
-		}),
+		})
 	);
 	return rows.toSorted(byCode);
 };
@@ -36,8 +36,8 @@ describe("surface", () => {
 		expect(r.structuredContent).toBeUndefined();
 		expect(
 			lines(r).filter((l) =>
-				/^- CLAUDE_CODE_USE_BEDROCK .*\S+\.js:\d+$/u.test(l),
-			),
+				/^- CLAUDE_CODE_USE_BEDROCK .*\S+\.js:\d+$/u.test(l)
+			)
 		).toHaveLength(1);
 	});
 
@@ -46,7 +46,7 @@ describe("surface", () => {
 		const names = lines(r).map((l) => at(l.split(" "), 1));
 		expect(names.toSorted(byCode)).toEqual([
 			"ANTHROPIC_BEDROCK_BASE_URL",
-			"CLAUDE_CODE_USE_BEDROCK",
+			"CLAUDE_CODE_USE_BEDROCK"
 		]);
 	});
 
@@ -60,7 +60,7 @@ describe("surface", () => {
 		const r = await call("surface", {
 			kind: "env",
 			name: "FIXTURE_LONG",
-			limit: 400,
+			limit: 400
 		});
 		const t = text(r);
 		expect(t.length).toBeLessThanOrEqual(40_000);
@@ -73,7 +73,7 @@ describe("surface", () => {
 			kind: "env",
 			name: "FIXTURE_LONG",
 			limit: 400,
-			offset: Number(next?.[1]),
+			offset: Number(next?.[1])
 		});
 		const more = lines(rest).filter((l) => l.startsWith("- "));
 		expect(more.length).toBeGreaterThan(0);
@@ -83,7 +83,7 @@ describe("surface", () => {
 	test("surface env-places gives each place of one name with its source", async () => {
 		const r = await call("surface", {
 			kind: "env-places",
-			name: "FIXTURE_OTHER",
+			name: "FIXTURE_OTHER"
 		});
 		const [head, place, src] = text(r).split("\n");
 		expect(head).toBe("FIXTURE_OTHER: places 1");

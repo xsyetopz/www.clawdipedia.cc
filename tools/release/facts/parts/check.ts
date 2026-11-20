@@ -23,12 +23,12 @@ export interface Known {
  */
 export const knownCases = async (
 	base = CAPTURES,
-	version?: string,
+	version?: string
 ): Promise<Known> => {
 	const k: Known = {
 		ids: new Set(LIVE_CASES.map((c) => `live.${c.id}`)),
 		facts: new Map(),
-		fromDisk: false,
+		fromDisk: false
 	};
 	if (!(await pathExists(base))) {
 		return k;
@@ -59,7 +59,7 @@ const checkMap = (
 	map: FactMap,
 	live: Set<string>,
 	known: Known,
-	out: Check,
+	out: Check
 ): Set<string> => {
 	const used = new Set<string>();
 	for (const [id, e] of Object.entries(map)) {
@@ -73,7 +73,7 @@ const checkMap = (
 			used.add(p);
 			if (!known.ids.has(p) && (known.fromDisk || p.startsWith("live."))) {
 				out.warnings.push(
-					`map.json probe not found in any result: ${p} (${id})`,
+					`map.json probe not found in any result: ${p} (${id})`
 				);
 			}
 			if (known.facts.get(p)?.has(id) === false) {
@@ -89,17 +89,17 @@ const checkDeclared = (
 	map: FactMap,
 	live: Set<string>,
 	known: Known,
-	out: Check,
+	out: Check
 ): void => {
 	for (const [caseId, set] of known.facts) {
 		for (const c of [...set].filter((s) => s.includes("#"))) {
 			if (!live.has(c)) {
 				out.warnings.push(
-					`probe ${caseId} lists a fact id that no longer exists: ${c}`,
+					`probe ${caseId} lists a fact id that no longer exists: ${c}`
 				);
 			} else if (map[c]?.probes.includes(caseId) !== true) {
 				out.warnings.push(
-					`probe ${caseId} lists ${c}, but map.json does not map it to this probe`,
+					`probe ${caseId} lists ${c}, but map.json does not map it to this probe`
 				);
 			}
 		}
@@ -110,7 +110,7 @@ export const checkFacts = (
 	facts: Fact[],
 	map: FactMap,
 	known: Known,
-	all: Fact[] = facts,
+	all: Fact[] = facts
 ): Check => {
 	const out: Check = { errors: [], warnings: [], notes: [] };
 	for (const c of facts) {
@@ -120,7 +120,7 @@ export const checkFacts = (
 	}
 	if (!known.fromDisk) {
 		out.warnings.push(
-			"no result files in captures/: only live.* probe ids are checked (from the live registry)",
+			"no result files in captures/: only live.* probe ids are checked (from the live registry)"
 		);
 	}
 	const live = new Set(all.map((c) => c.id));
@@ -129,7 +129,7 @@ export const checkFacts = (
 	const unused = [...known.ids].filter((p) => !used.has(p));
 	if (unused.length > 0) {
 		out.notes.push(
-			`${unused.length} probe case(s) no fact uses${unused.length > 8 ? ` (first 8: ${unused.slice(0, 8).join(", ")})` : `: ${unused.join(", ")}`}`,
+			`${unused.length} probe case(s) no fact uses${unused.length > 8 ? ` (first 8: ${unused.slice(0, 8).join(", ")})` : `: ${unused.join(", ")}`}`
 		);
 	}
 	return out;

@@ -73,7 +73,7 @@ const fingerprint = (n: Node, here: Open): void => {
 
 const slice = (
 	{ n, holes }: Open,
-	render: (from: number, to: number) => string,
+	render: (from: number, to: number) => string
 ): string => {
 	let text = "";
 	let at = n.start;
@@ -88,7 +88,7 @@ const slice = (
 export const unitsOf = (
 	name: string,
 	m: Module,
-	render = renamer(m),
+	render = renamer(m)
 ): Unit[] => {
 	const done: Open[] = [];
 	const walk = (n: Node, cur?: Open): void => {
@@ -113,6 +113,6 @@ export const unitsOf = (
 		k: labelOf(m, o.n),
 		t: slice(o, render),
 		h: "",
-		f: [...o.f].toSorted(),
+		f: [...o.f].toSorted()
 	}));
 };

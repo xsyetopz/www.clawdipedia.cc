@@ -108,6 +108,6 @@ export const filterChanges = (d: Diff, name: string): Change[] =>
 			[c.from, c.to].some(
 				(u) =>
 					u !== undefined &&
-					(u.t.includes(name) || u.f.some((x) => x.includes(name))),
-			) || [...c.calls, ...c.within].some((x) => x.includes(name)),
+					(u.t.includes(name) || u.f.some((x) => x.includes(name)))
+			) || [...c.calls, ...c.within].some((x) => x.includes(name))
 	);

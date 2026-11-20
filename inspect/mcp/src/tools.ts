@@ -9,7 +9,7 @@ import {
 	type Module,
 	type Node,
 	type NodeOf,
-	returnsOf,
+	returnsOf
 } from "./ast.ts";
 import { asNode } from "./ast/node.ts";
 import type { Resolver } from "./resolve.ts";
@@ -19,7 +19,7 @@ import {
 	calleeFn,
 	initOf,
 	required,
-	toolName,
+	toolName
 } from "./toolvalue.ts";
 
 export interface Tool {
@@ -42,7 +42,7 @@ const clip = (s: string) => (s.length > MAX_FN ? `${s.slice(0, MAX_FN)}…` : s)
 const add = (out: Out, when: Cond[], tool: Tool): void => {
 	out.push({
 		tool: { ...tool, when: when.map((c) => c.text) },
-		conds: when,
+		conds: when
 	});
 };
 
@@ -51,7 +51,7 @@ const toolItem = async (
 	m: Module,
 	e: Node,
 	when: Cond[],
-	out: Out,
+	out: Out
 ): Promise<void> => {
 	const found = await toolName(R, m, e);
 	if (!found) {
@@ -67,9 +67,9 @@ const toolItem = async (
 		tool: {
 			name: found.name,
 			when: when.map((c) => c.text),
-			enabled: clip(src),
+			enabled: clip(src)
 		},
-		conds: [...when, { ...found.enabled, text: src }],
+		conds: [...when, { ...found.enabled, text: src }]
 	});
 };
 
@@ -79,7 +79,7 @@ const listItems = async (
 	n: NodeOf<"ArrayExpression">,
 	when: Cond[],
 	out: Out,
-	depth: number,
+	depth: number
 ): Promise<void> => {
 	await mapSeq(n.elements, async (e) => {
 		if (e === null) {
@@ -99,7 +99,7 @@ const branches = async (
 	n: NodeOf<"ConditionalExpression">,
 	when: Cond[],
 	out: Out,
-	depth: number,
+	depth: number
 ): Promise<void> => {
 	const { test } = n;
 	if (await alwaysNull(m, test)) {
@@ -116,7 +116,7 @@ const branches = async (
 		n.alternate,
 		[...when, { ...site, text: `!(${text})` }],
 		out,
-		depth + 1,
+		depth + 1
 	);
 };
 
@@ -127,7 +127,7 @@ const callItems = async (
 	n: CallNode,
 	when: Cond[],
 	out: Out,
-	depth: number,
+	depth: number
 ): Promise<boolean> => {
 	const c = n.callee;
 	const arg = n.arguments[0];
@@ -161,12 +161,12 @@ const callItems = async (
 const partsOf = async (
 	m: Module,
 	n: Node,
-	r: Awaited<ReturnType<typeof required>>,
+	r: Awaited<ReturnType<typeof required>>
 ): Promise<{ m: Module; n: Node }[]> => {
 	if (n.type === "LogicalExpression") {
 		return [
 			{ m, n: n.left },
-			{ m, n: n.right },
+			{ m, n: n.right }
 		];
 	}
 	const i = n.type === "Identifier" ? await initOf(m, n) : undefined;
@@ -183,7 +183,7 @@ const items = async (
 	n: Node,
 	when: Cond[],
 	out: Out,
-	depth = 0,
+	depth = 0
 ): Promise<void> => {
 	if (depth > 8) {
 		add(out, when, { name: `...${m.src(n)}`, when: [], unresolved: true });
@@ -214,7 +214,7 @@ const items = async (
 		add(out, when, {
 			name: `...${typeof r === "string" ? r : m.src(n)}`,
 			when: [],
-			unresolved: true,
+			unresolved: true
 		});
 	}
 };
@@ -232,7 +232,7 @@ const calledFns = async (
 	m: Module,
 	n: Node,
 	out: Map<string, string>,
-	depth = 2,
+	depth = 2
 ): Promise<void> => {
 	const stack = [n];
 	const nodes: Node[] = [];
@@ -267,7 +267,7 @@ const baseFn = (bundle: Bundle) =>
 /** The built-in tools `getAllBaseTools` returns, and the source of the functions their conditions call. */
 export const baseTools = async (
 	bundle: Bundle,
-	R: Resolver,
+	R: Resolver
 ): Promise<{
 	module: string;
 	tools: Tool[];
@@ -286,11 +286,11 @@ export const baseTools = async (
 	const fns = new Map<string, string>();
 	await mapSeq(
 		out.flatMap(({ conds }) => conds),
-		(c) => calledFns(c.m, c.n, fns),
+		(c) => calledFns(c.m, c.n, fns)
 	);
 	return {
 		module: f.module.name,
 		tools: out.map((o) => o.tool),
-		functions: Object.fromEntries(fns),
+		functions: Object.fromEntries(fns)
 	};
 };

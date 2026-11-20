@@ -6,7 +6,7 @@ import {
 	type Fault,
 	type Mitm,
 	startMitm,
-	USAGE_PATH,
+	USAGE_PATH
 } from "../../lib/mitm.ts";
 import type { Data } from "../../lib/results.ts";
 import { READY } from "../pty/harness.ts";
@@ -15,7 +15,7 @@ import {
 	type LiveCase,
 	type LiveCtx,
 	liveSandbox,
-	runLivePty,
+	runLivePty
 } from "./harness.ts";
 
 const FAULTS: { id: string; fault: Fault; what: string }[] = [
@@ -23,13 +23,13 @@ const FAULTS: { id: string; fault: Fault; what: string }[] = [
 	{
 		id: "usage.429-retry-after",
 		fault: "429-ra",
-		what: "429 with Retry-After: 1800",
+		what: "429 with Retry-After: 1800"
 	},
 	{
 		id: "usage.envelope",
 		fault: "200-envelope",
-		what: "200 with an error envelope body",
-	},
+		what: "200 with an error envelope body"
+	}
 ];
 
 const find = (screen: string, re: RegExp): string =>
@@ -51,10 +51,10 @@ const mitmFor = (x: LiveCtx, f: Fix): Promise<Mitm> =>
 					upstream: () =>
 						new Response("{}", {
 							status: 404,
-							headers: { "content-type": "application/json" },
-						}),
+							headers: { "content-type": "application/json" }
+						})
 				}
-			: {}),
+			: {})
 	});
 
 const usageData = (f: Fix, mitm: Mitm, s: string): Record<string, Data> => {
@@ -71,14 +71,14 @@ const usageData = (f: Fix, mitm: Mitm, s: string): Record<string, Data> => {
 			...new Set(
 				log
 					.filter((l) => l.path !== USAGE_PATH)
-					.map((l) => `${l.method} ${l.path} ${l.status}`),
-			),
+					.map((l) => `${l.method} ${l.path} ${l.status}`)
+			)
 		].toSorted(),
 		showsRateLimitedUntil: /rate limited until/iu.test(s),
 		showsTryAgainInAMoment: /try again in a moment/iu.test(s),
 		showsFailedToLoad: /Failed to load usage data/iu.test(s),
 		showsRefreshing: s.includes("Refreshing"),
-		errorLine: find(s, /rate limited|Failed to load|Error:/iu),
+		errorLine: find(s, /rate limited|Failed to load|Error:/iu)
 	};
 };
 
@@ -94,7 +94,7 @@ const usageCase = (f: Fix): LiveCase => ({
 				schedule: [READY, { t: 10, send: "/usage\r", label: "usage" }],
 				secs: 18,
 				mitm,
-				allowNonessential: true,
+				allowNonessential: true
 			});
 			const hits = mitm.log().filter((l) => l.path === USAGE_PATH);
 			return [
@@ -102,14 +102,14 @@ const usageCase = (f: Fix): LiveCase => ({
 					prompt: "",
 					exit: pty.exit,
 					data: usageData(f, mitm, pty.screen),
-					notes: `Fault: ${f.what}. ${hits.length > 0 ? "" : "The usage endpoint was never called (seen on 2.1.305 with a real token), so the texts could not be checked. "}No prompt is sent (prompt is empty): /usage is a local command, but interactive startup makes its own small API requests.`,
-				}),
+					notes: `Fault: ${f.what}. ${hits.length > 0 ? "" : "The usage endpoint was never called (seen on 2.1.305 with a real token), so the texts could not be checked. "}No prompt is sent (prompt is empty): /usage is a local command, but interactive startup makes its own small API requests.`
+				})
 			];
 		} finally {
 			await mitm.stop();
 			await sb.cleanup();
 		}
-	},
+	}
 });
 
 export const usageCases: LiveCase[] = FAULTS.map((f) => usageCase(f));

@@ -8,7 +8,7 @@ import {
 	answerTo,
 	type HostPayload,
 	sse,
-	toolCalls,
+	toolCalls
 } from "./host-wire.ts";
 import { startTlsProxy } from "./tls-proxy.ts";
 
@@ -61,7 +61,7 @@ const enc = new TextEncoder();
 const eventStream = (
 	opts: HostMockOptions,
 	push: (p: HostPayload, status: string) => void,
-	attach: (c: ReadableStreamDefaultController) => void,
+	attach: (c: ReadableStreamDefaultController) => void
 ): Response => {
 	const user: HostPayload = {
 		type: "user",
@@ -70,8 +70,8 @@ const eventStream = (
 		parent_tool_use_id: null,
 		message: {
 			role: "user",
-			content: opts.userText ?? "run the command echo hi on my machine",
-		},
+			content: opts.userText ?? "run the command echo hi on my machine"
+		}
 	};
 	const body = new ReadableStream({
 		async start(c) {
@@ -80,15 +80,15 @@ const eventStream = (
 			push(announce, "SERVICE_VOUCHED");
 			await Bun.sleep(3000);
 			push(user, "SERVICE_VOUCHED");
-		},
+		}
 	});
 	return new Response(body, {
 		headers: {
 			"content-type": "text/event-stream",
 			// Without this statement the program drops a host announce.
 			"x-ccr-session-writers": "v=1;owner_account_only=true",
-			"x-ccr-shared-tool-request": "1",
-		},
+			"x-ccr-shared-tool-request": "1"
+		}
 	});
 };
 
@@ -97,20 +97,20 @@ const answerCalls = (
 	text: string,
 	opts: HostMockOptions,
 	calls: unknown[],
-	push: (p: HostPayload, status: string) => void,
+	push: (p: HostPayload, status: string) => void
 ): void => {
 	for (const call of toolCalls(text)) {
 		calls.push(call);
 		push(
 			answerTo(call, opts.disposition ?? "denied_by_rule"),
-			"VERIFIED_BY_GATE",
+			"VERIFIED_BY_GATE"
 		);
 	}
 };
 
 /** Starts the mock. The caller passes `env()` to the child and `--sdk-url` from `hostSdkUrl()`. */
 export const startHostMock = async (
-	opts: HostMockOptions = {},
+	opts: HostMockOptions = {}
 ): Promise<HostMock> => {
 	const requests: HostRequest[] = [];
 	const calls: unknown[] = [];
@@ -143,9 +143,9 @@ export const startHostMock = async (
 		env: () => ({
 			...server.env,
 			CLAUDE_CODE_REMOTE_TOOLS_FORWARD: "1",
-			CLAUDE_CODE_WORKER_EPOCH: "1",
+			CLAUDE_CODE_WORKER_EPOCH: "1"
 		}),
-		stop: server.stop,
+		stop: server.stop
 	};
 };
 

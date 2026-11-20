@@ -7,7 +7,7 @@ export const messageOf = (error: unknown): string =>
 /** One attempt; a throw becomes an invalid result with the redacted message. */
 export const runSafely = async (
 	c: LiveCase,
-	x: LiveCtx,
+	x: LiveCtx
 ): Promise<CaseResult[]> => {
 	try {
 		return await c.run(x);
@@ -16,9 +16,9 @@ export const runSafely = async (
 			baseResult(x, c.id, {
 				data: {
 					precondition: false,
-					error: redact(`case failed: ${messageOf(error)}`).slice(0, 300),
-				},
-			}),
+					error: redact(`case failed: ${messageOf(error)}`).slice(0, 300)
+				}
+			})
 		];
 	}
 };
@@ -26,14 +26,14 @@ export const runSafely = async (
 export const markWarm = (
 	r: CaseResult,
 	c: LiveCase,
-	suspectWarm: boolean,
+	suspectWarm: boolean
 ): CaseResult =>
 	c.coldSensitive === true && suspectWarm && r.cacheWarm === undefined
 		? {
 				...r,
 				cacheWarm: true,
 				notes:
-					`${r.notes ?? ""} Previous live run under 1 h ago: cache may be warm.`.trim(),
+					`${r.notes ?? ""} Previous live run under 1 h ago: cache may be warm.`.trim()
 			}
 		: r;
 
@@ -48,7 +48,7 @@ const warmTag = (r: CaseResult): string => {
 export const record = async (
 	runDir: string,
 	r: CaseResult,
-	dry: boolean,
+	dry: boolean
 ): Promise<boolean> => {
 	await writeCase(runDir, r);
 	const bad = r.data["precondition"] === false;

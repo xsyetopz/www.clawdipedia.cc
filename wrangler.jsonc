@@ -17,6 +17,6 @@
 		// /configure/ redirects to /configure. Every content folder has a twin .html file.
 		"html_handling": "drop-trailing-slash",
 		// build/404.html is the Docusaurus not-found page.
-		"not_found_handling": "404-page",
-	},
+		"not_found_handling": "404-page"
+	}
 }

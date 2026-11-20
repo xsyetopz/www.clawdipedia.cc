@@ -6,14 +6,14 @@ import {
 	msgs,
 	runCases,
 	toolNames,
-	withRun,
+	withRun
 } from "./run/helpers.ts";
 import type { PrintGroup } from "./types.ts";
 
 const S = "claude-sonnet-5-5";
 const H = "claude-haiku-5-5";
 const script = (
-	opt: string,
+	opt: string
 ) => `export const meta = { name: 'p', description: 'probe', phases: [{ title: 'A' }] }
 const r = await agent("PROBEMARK Reply with 'OK'.", { label: 'x', phase: 'A'${opt} })
 return { r }`;
@@ -24,26 +24,26 @@ const ROWS: [string, string, Record<string, string>][] = [
 	[
 		"wf-sonnet-opt-haiku",
 		"model: 'haiku'",
-		{ CLAUDE_CODE_WORKFLOW_SUBAGENT_MODEL: S },
+		{ CLAUDE_CODE_WORKFLOW_SUBAGENT_MODEL: S }
 	],
 	["sub-haiku-no-opt", "", { CLAUDE_CODE_SUBAGENT_MODEL: H }],
 	[
 		"sub-haiku-opt-sonnet",
 		"model: 'sonnet'",
-		{ CLAUDE_CODE_SUBAGENT_MODEL: H },
+		{ CLAUDE_CODE_SUBAGENT_MODEL: H }
 	],
 	[
 		"wf-sonnet-sub-haiku",
 		"",
-		{ CLAUDE_CODE_WORKFLOW_SUBAGENT_MODEL: S, CLAUDE_CODE_SUBAGENT_MODEL: H },
+		{ CLAUDE_CODE_WORKFLOW_SUBAGENT_MODEL: S, CLAUDE_CODE_SUBAGENT_MODEL: H }
 	],
 	[
 		"wf-inherit-sub-haiku",
 		"",
 		{
 			CLAUDE_CODE_WORKFLOW_SUBAGENT_MODEL: "inherit",
-			CLAUDE_CODE_SUBAGENT_MODEL: H,
-		},
+			CLAUDE_CODE_SUBAGENT_MODEL: H
+		}
 	],
 	[
 		"wf-sonnet-sub-haiku-force",
@@ -51,9 +51,9 @@ const ROWS: [string, string, Record<string, string>][] = [
 		{
 			CLAUDE_CODE_WORKFLOW_SUBAGENT_MODEL: S,
 			CLAUDE_CODE_SUBAGENT_MODEL: H,
-			CLAUDE_CODE_SUBAGENT_MODEL_FORCE: "1",
-		},
-	],
+			CLAUDE_CODE_SUBAGENT_MODEL_FORCE: "1"
+		}
+	]
 ];
 
 const rowCase = ([name, opt, env]: (typeof ROWS)[number]): CaseDef => ({
@@ -68,10 +68,10 @@ const rowCase = ([name, opt, env]: (typeof ROWS)[number]): CaseDef => ({
 					seq: [
 						{
 							name: "Workflow",
-							input: { script: script(opt ? `, ${opt}` : "") },
-						},
-					],
-				},
+							input: { script: script(opt ? `, ${opt}` : "") }
+						}
+					]
+				}
 			},
 			(r) => {
 				const ms = msgs(r);
@@ -79,7 +79,7 @@ const rowCase = ([name, opt, env]: (typeof ROWS)[number]): CaseDef => ({
 				const sub = ms.filter(
 					(q) =>
 						json(bodyOf(q).messages).includes("PROBEMARK") &&
-						!toolNames(q).includes("Workflow"),
+						!toolNames(q).includes("Workflow")
 				);
 				return {
 					from: r,
@@ -90,11 +90,11 @@ const rowCase = ([name, opt, env]: (typeof ROWS)[number]): CaseDef => ({
 							sub.length > 0,
 						messages: ms.length,
 						mainModel: main ? (bodyOf(main).model ?? null) : null,
-						subagentModels: [...new Set(sub.map((q) => bodyOf(q).model ?? ""))],
-					},
+						subagentModels: [...new Set(sub.map((q) => bodyOf(q).model ?? ""))]
+					}
 				};
-			},
-		),
+			}
+		)
 });
 
 export const workflow: PrintGroup = {
@@ -104,6 +104,6 @@ export const workflow: PrintGroup = {
 		runCases(
 			ctx,
 			"workflow",
-			ROWS.map((row) => rowCase(row)),
-		),
+			ROWS.map((row) => rowCase(row))
+		)
 };

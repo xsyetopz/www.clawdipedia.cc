@@ -30,7 +30,7 @@ const wrapCode = (node: Node): void => {
 	node.children = node.children.flatMap((c) =>
 		c.type === "text" && c.value !== undefined && c.value !== ""
 			? split(c.value)
-			: [c],
+			: [c]
 	);
 };
 

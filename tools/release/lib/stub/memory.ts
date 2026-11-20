@@ -4,7 +4,7 @@ import { asRecord } from "./replies.ts";
 const MEMORY_TOOLS = ["read", "write", "str_replace", "append"].map((t) => ({
 	name: `memory_${t}`,
 	description: `memory ${t}`,
-	inputSchema: { type: "object", properties: {} },
+	inputSchema: { type: "object", properties: {} }
 }));
 
 const memoryResult = (method: unknown, params: unknown): unknown => {
@@ -13,7 +13,7 @@ const memoryResult = (method: unknown, params: unknown): unknown => {
 		return {
 			protocolVersion: typeof v === "string" ? v : "2025-06-18",
 			capabilities: { tools: {} },
-			serverInfo: { name: "memory", version: "1" },
+			serverInfo: { name: "memory", version: "1" }
 		};
 	}
 	if (method === "tools/list") {
@@ -34,6 +34,6 @@ export const memoryMcp = (body: unknown): Response => {
 	return Response.json({
 		jsonrpc: "2.0",
 		id: q["id"],
-		result: memoryResult(q["method"], q["params"]),
+		result: memoryResult(q["method"], q["params"])
 	});
 };

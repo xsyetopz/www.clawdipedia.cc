@@ -1,7 +1,7 @@
 import {
 	startGateway,
 	startUpstream,
-	withPostgres,
+	withPostgres
 } from "../../../lib/gateway.ts";
 import { makeSandbox, type Sandbox } from "../../../lib/sandbox.ts";
 import { type CaseDef, olderThan, type Out } from "../run/helpers.ts";
@@ -26,7 +26,7 @@ const boot = async (e: Env, days?: number) => {
 		upstream: e.up.url,
 		pgPort: e.pgPort,
 		billingGroupTag: false,
-		...(days === undefined ? {} : { identityRetentionDays: days }),
+		...(days === undefined ? {} : { identityRetentionDays: days })
 	});
 	if (!(await g.ready())) {
 		throw new Error("gateway did not start");
@@ -36,7 +36,7 @@ const boot = async (e: Env, days?: number) => {
 
 const until = async (
 	tries: number,
-	done: () => Promise<boolean>,
+	done: () => Promise<boolean>
 ): Promise<void> => {
 	if (tries > 0 && !(await done())) {
 		await Bun.sleep(250);
@@ -52,24 +52,24 @@ const column = async (query: Query, sql: string): Promise<string> => {
 const state = async (query: Query) => ({
 	emails: await column(
 		query,
-		"SELECT principal FROM principal_emails ORDER BY 1",
+		"SELECT principal FROM principal_emails ORDER BY 1"
 	),
 	groups: await column(
 		query,
-		"SELECT principal || '@' || (CURRENT_DATE - day::date) FROM principal_groups ORDER BY 1",
-	),
+		"SELECT principal || '@' || (CURRENT_DATE - day::date) FROM principal_groups ORDER BY 1"
+	)
 });
 
 const backdate = async (query: Query): Promise<void> => {
 	await query(
-		"UPDATE principal_emails SET updated_at = now() - interval '60 days'",
+		"UPDATE principal_emails SET updated_at = now() - interval '60 days'"
 	);
 	await query(`UPDATE principal_groups SET day = ${day(60)}`);
 	await query(
-		"INSERT INTO principal_emails (principal, email, updated_at) VALUES ('old', 'o@example.com', now() - interval '100 days')",
+		"INSERT INTO principal_emails (principal, email, updated_at) VALUES ('old', 'o@example.com', now() - interval '100 days')"
 	);
 	await query(
-		`INSERT INTO principal_groups (day, principal, groups) VALUES (${day(100)}, 'old', '["x"]'), (${day(1)}, 'orphan', '["x"]'), (${day(1)}, 'u1', '["x"]')`,
+		`INSERT INTO principal_groups (day, principal, groups) VALUES (${day(100)}, 'old', '["x"]'), (${day(1)}, 'orphan', '["x"]'), (${day(1)}, 'u1', '["x"]')`
 	);
 };
 
@@ -78,11 +78,11 @@ const flow = async (e: Env, retention?: number): Promise<Out> => {
 	await viaGateway(
 		{ url: g1.url, up: e.up, log: g1.log, sts: null },
 		undefined,
-		["g1", "g2"],
+		["g1", "g2"]
 	);
 	await until(
 		40,
-		async () => (await e.query("SELECT 1 FROM principal_emails")) !== "",
+		async () => (await e.query("SELECT 1 FROM principal_emails")) !== ""
 	);
 	await g1.stop();
 	// a program older than the retention option has no identity group table to sweep
@@ -101,8 +101,8 @@ const flow = async (e: Env, retention?: number): Promise<Out> => {
 			80,
 			async () =>
 				(await e.query(
-					"SELECT 1 FROM principal_emails WHERE principal = 'old'",
-				)) === "",
+					"SELECT 1 FROM principal_emails WHERE principal = 'old'"
+				)) === ""
 		);
 		await Bun.sleep(1500);
 		const after = await state(e.query);
@@ -113,8 +113,8 @@ const flow = async (e: Env, retention?: number): Promise<Out> => {
 				seededEmails: seeded.emails,
 				seededGroups: seeded.groups,
 				afterEmails: after.emails,
-				afterGroups: after.groups,
-			},
+				afterGroups: after.groups
+			}
 		};
 	} finally {
 		await g2.stop();
@@ -129,11 +129,11 @@ export const retentionCase = (name: string, retention?: number): CaseDef => ({
 		const up = startUpstream();
 		try {
 			return await withPostgres((pgPort, query) =>
-				flow({ ctx, sb, up, pgPort, query }, retention),
+				flow({ ctx, sb, up, pgPort, query }, retention)
 			);
 		} finally {
 			await up.stop();
 			await sb.cleanup();
 		}
-	},
+	}
 });

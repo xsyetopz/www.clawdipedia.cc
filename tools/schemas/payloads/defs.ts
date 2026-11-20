@@ -19,7 +19,7 @@ const rewriteRef = (v: string, own: string, prefix: string): string => {
 export const rewriteRefs = (
 	node: unknown,
 	own: string,
-	prefix: string,
+	prefix: string
 ): unknown => {
 	if (Array.isArray(node)) {
 		return node.map((x) => rewriteRefs(x, own, prefix));
@@ -49,7 +49,7 @@ export const addDef = (
 	defs: Json,
 	name: string,
 	schema: Json,
-	prefix = `${name}__`,
+	prefix = `${name}__`
 ) => {
 	if (name in defs) {
 		throw new Error(`duplicate definition "${name}"`);
@@ -155,7 +155,7 @@ const scanRefs = (graph: RefGraph, node: unknown, from: string | null) => {
 
 const isRecursive = (
 	edges: Map<string, Set<string>>,
-	name: string,
+	name: string
 ): boolean => {
 	const seen = new Set<string>();
 	const stack = [...(edges.get(name) ?? [])];
@@ -189,7 +189,7 @@ const findInlinable = (defs: Json, graph: RefGraph, maxSmall: number) => {
 const expandRefs = (
 	node: unknown,
 	defs: Json,
-	inlinable: Set<string>,
+	inlinable: Set<string>
 ): unknown => {
 	if (Array.isArray(node)) {
 		return node.map((x) => expandRefs(x, defs, inlinable));
@@ -203,11 +203,11 @@ const expandRefs = (
 		void _r;
 		return {
 			...asJson(expandRefs(defs[t], defs, inlinable)),
-			...asJson(expandRefs(siblings, defs, inlinable)),
+			...asJson(expandRefs(siblings, defs, inlinable))
 		};
 	}
 	return Object.fromEntries(
-		Object.entries(node).map(([k, v]) => [k, expandRefs(v, defs, inlinable)]),
+		Object.entries(node).map(([k, v]) => [k, expandRefs(v, defs, inlinable)])
 	);
 };
 
@@ -229,7 +229,7 @@ export const inlineDefs = (schema: Json, maxSmall = 700): Json => {
 	const kept = Object.fromEntries(
 		Object.entries(defs)
 			.filter(([k]) => !inlinable.has(k))
-			.map(([k, v]) => [k, expandRefs(v, defs, inlinable)]),
+			.map(([k, v]) => [k, expandRefs(v, defs, inlinable)])
 	);
 	return { ...asJson(expandRefs(root, defs, inlinable)), $defs: kept };
 };
@@ -264,7 +264,7 @@ export const omitLarge = (
 	schema: Json,
 	where: string,
 	limit: number,
-	top = true,
+	top = true
 ): Json => {
 	if (!top) {
 		if (size(schema) <= limit) {
@@ -272,7 +272,7 @@ export const omitLarge = (
 		}
 		if (!subSchemas(schema).some((c) => size(c) > limit)) {
 			return {
-				description: `Left out for size; the definitions are in ${where}.`,
+				description: `Left out for size; the definitions are in ${where}.`
 			};
 		}
 	}
@@ -281,7 +281,7 @@ export const omitLarge = (
 	const props = schema["properties"];
 	if (isObject(props)) {
 		out["properties"] = Object.fromEntries(
-			Object.entries(props).map(([k, v]) => [k, isObject(v) ? walk(v) : v]),
+			Object.entries(props).map(([k, v]) => [k, isObject(v) ? walk(v) : v])
 		);
 	}
 	for (const k of SINGLE_KEYS) {

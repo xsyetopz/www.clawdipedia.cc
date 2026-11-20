@@ -28,7 +28,7 @@ export const IGNORED_DATA = new Set(["retried", "startLagS"]);
 export const invalidDetail = (a: CaseResult, b: CaseResult): string | null => {
 	for (const [side, r] of [
 		["old", a],
-		["new", b],
+		["new", b]
 	] as const) {
 		if (r.data["precondition"] === false) {
 			return `${side}: ${String(r.data["precondition.detail"] ?? r.data["error"] ?? "precondition false")}`;

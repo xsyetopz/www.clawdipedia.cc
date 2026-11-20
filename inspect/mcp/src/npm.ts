@@ -71,11 +71,11 @@ const publishTimes = async (name: string): Promise<Record<string, string>> => {
 export const versionAt = async (
 	name: string,
 	before: string,
-	ranges: string[] = [],
+	ranges: string[] = []
 ): Promise<{ version: string; from: "range-max" | "dated" } | undefined> => {
 	const time = await publishTimes(name);
 	const old = Object.entries(time).filter(
-		([v, t]) => RELEASE.test(v) && t <= before,
+		([v, t]) => RELEASE.test(v) && t <= before
 	);
 	const best = old
 		.map(([v]) => v)
@@ -93,7 +93,7 @@ export const versionAt = async (
 export const linesAt = async (
 	name: string,
 	before: string,
-	major?: string,
+	major?: string
 ): Promise<string[]> => {
 	const time = await publishTimes(name);
 	const top = new Map<string, string>();
@@ -120,7 +120,7 @@ const run = async (cmd: string[]): Promise<void> => {
 	const proc = Bun.spawn(cmd, { stdout: "ignore", stderr: "pipe" });
 	const [stderr, exitCode] = await Promise.all([
 		new Response(proc.stderr).text(),
-		proc.exited,
+		proc.exited
 	]);
 	if (exitCode !== 0) {
 		throw new Error(`${cmd[0]}: ${stderr}`);
@@ -132,7 +132,7 @@ const download = async (
 	name: string,
 	meta: Meta,
 	root: string,
-	target: string,
+	target: string
 ): Promise<void> => {
 	const tmp = await mkdtemp(join(root, ".tmp-"));
 	try {
@@ -161,7 +161,7 @@ const download = async (
 /** The unpacked folder of `name@version` (`latest` is looked up once and then kept); downloads it when the cache lacks it. */
 export const fetchPackage = async (
 	name: string,
-	version?: string,
+	version?: string
 ): Promise<{ version: string; dir: string }> => {
 	const root = join(await cacheRoot(), "npm");
 	await mkdir(root, { recursive: true });
@@ -174,7 +174,7 @@ export const fetchPackage = async (
 		return { version: v, dir: dir(v) };
 	}
 	const meta = await getJson(
-		`${registry()}/${name.replace("/", "%2f")}/${v ?? "latest"}`,
+		`${registry()}/${name.replace("/", "%2f")}/${v ?? "latest"}`
 	);
 	if ((version ?? "") === "") {
 		await Bun.write(pin, meta.version);

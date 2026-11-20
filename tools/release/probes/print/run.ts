@@ -12,7 +12,7 @@ export {
 	type Obj,
 	obj,
 	type Run,
-	type Seq,
+	type Seq
 } from "./run/types.ts";
 
 export const dispose = async (r: Run): Promise<void> => {

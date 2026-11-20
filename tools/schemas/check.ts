@@ -51,7 +51,7 @@ const checkFixture = async (
 	f: string,
 	kind: string,
 	schema: Record<string, unknown>,
-	check: Validate,
+	check: Validate
 ): Promise<void> => {
 	const wantValid = f === `${kind}.good.json`;
 	if (!wantValid && !f.startsWith(`${kind}.bad`)) {
@@ -73,11 +73,11 @@ const checkFixture = async (
 		run(value) === true
 			? []
 			: (run.errors ?? []).map(
-					(e) => `${e.instancePath === "" ? "/" : e.instancePath} ${e.message}`,
+					(e) => `${e.instancePath === "" ? "/" : e.instancePath} ${e.message}`
 				);
 	if (wantValid && errs.length > 0) {
 		problems.push(
-			`fixtures/${f} should be valid: ${errs.slice(0, 3).join("; ")}`,
+			`fixtures/${f} should be valid: ${errs.slice(0, 3).join("; ")}`
 		);
 	}
 	if (!wantValid && errs.length === 0) {
@@ -89,7 +89,7 @@ const checkFixture = async (
 const checkFixtures = async (
 	kind: string,
 	schema: Record<string, unknown>,
-	check: Validate,
+	check: Validate
 ): Promise<void> => {
 	const all = await readdir(join(import.meta.dir, "fixtures"));
 	const names = all.filter((f) => f.startsWith(`${kind}.`));
@@ -123,7 +123,7 @@ const checkSchema = async (name: string): Promise<void> => {
 		check = ajv.compile(schema);
 	} catch (error) {
 		problems.push(
-			`schemas/${name}: not a valid schema: ${errorMessage(error)}`,
+			`schemas/${name}: not a valid schema: ${errorMessage(error)}`
 		);
 		return;
 	}

@@ -18,7 +18,7 @@ export const LIVE_CASES: LiveCase[] = planLive([
 	contextBudget,
 	err319Live,
 	...cli319Cases,
-	codeModeCase,
+	codeModeCase
 ]);
 
 /** --only: exact id, prefix on dotted segments (usage matches usage.429), with or without the `live.` prefix. */
@@ -29,5 +29,5 @@ export const pick = (only: string[] | null): LiveCase[] =>
 			only.some((raw) => {
 				const o = raw.replace(/^live\./u, "");
 				return c.id === o || c.id.startsWith(`${o}.`);
-			}),
+			})
 	);

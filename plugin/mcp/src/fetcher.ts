@@ -103,17 +103,17 @@ const okResource = (
 	origin: string,
 	state: SourceState,
 	fetchedAt: string,
-	revalidated: boolean,
+	revalidated: boolean
 ): Resource => ({
 	status: "ok",
 	body,
-	source: { origin, state, fetchedAt, revalidated },
+	source: { origin, state, fetchedAt, revalidated }
 });
 
 /** The cached copy, or undefined when it is missing, from another URL, or fails validation. */
 const lookup = async (
 	dc: DiskCache,
-	spec: Spec,
+	spec: Spec
 ): Promise<Cached | undefined> => {
 	const cached = await dc.get(spec.rel);
 	// A copy fetched from another URL (other base URL, case-colliding route) is a miss.
@@ -140,7 +140,7 @@ const download = async (spec: Spec, meta: Meta | undefined): Promise<Got> => {
 				: {}),
 			...(meta?.lastModified !== undefined && meta.lastModified !== ""
 				? { lastModified: meta.lastModified }
-				: {}),
+				: {})
 		});
 	} finally {
 		release();
@@ -158,21 +158,21 @@ const download = async (spec: Spec, meta: Meta | undefined): Promise<Got> => {
 const fromOk = async (
 	dc: DiskCache,
 	spec: Spec,
-	got: Extract<Got, { kind: "ok" }>,
+	got: Extract<Got, { kind: "ok" }>
 ): Promise<Resource> => {
 	await dc.put(spec.rel, got.body, {
 		url: spec.url,
 		...(got.etag === undefined ? {} : { etag: got.etag }),
 		...(got.lastModified === undefined
 			? {}
-			: { lastModified: got.lastModified }),
+			: { lastModified: got.lastModified })
 	});
 	return okResource(
 		got.body,
 		new URL(spec.url).host,
 		"live",
 		new Date().toISOString(),
-		false,
+		false
 	);
 };
 
@@ -180,7 +180,7 @@ const fromNetwork = async (
 	dc: DiskCache,
 	spec: Spec,
 	cached: Cached | undefined,
-	got: Got,
+	got: Got
 ): Promise<Resource> => {
 	const origin = new URL(spec.url).host;
 	if (got.kind === "notfound") {
@@ -197,7 +197,7 @@ const fromNetwork = async (
 			origin,
 			"cached",
 			new Date().toISOString(),
-			true,
+			true
 		);
 	}
 	if (cached) {
@@ -206,7 +206,7 @@ const fromNetwork = async (
 			origin,
 			"stale-offline",
 			cached.meta?.fetchedAt ?? new Date(0).toISOString(),
-			false,
+			false
 		);
 	}
 	const message =
@@ -214,7 +214,7 @@ const fromNetwork = async (
 	return {
 		status: "error",
 		origin,
-		message: `could not reach ${origin} and nothing is cached (${message})`,
+		message: `could not reach ${origin} and nothing is cached (${message})`
 	};
 };
 
@@ -227,7 +227,7 @@ const resolveResource = async (spec: Spec): Promise<Resource> => {
 			new URL(spec.url).host,
 			"cached",
 			cached.meta.fetchedAt,
-			false,
+			false
 		);
 	}
 	const got = await download(spec, cached?.meta);
@@ -287,5 +287,5 @@ export const sourceLine = (s: Source): string =>
 export const sourceData = (s: Source) => ({
 	origin: s.origin,
 	state: s.state,
-	fetchedAt: s.fetchedAt,
+	fetchedAt: s.fetchedAt
 });

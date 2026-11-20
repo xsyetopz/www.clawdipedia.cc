@@ -23,7 +23,7 @@ export const installedVariant = async (): Promise<string> => {
 
 export const waitFor = (
 	ok: () => Promise<boolean>,
-	ms: number,
+	ms: number
 ): Promise<boolean> => {
 	const end = Date.now() + ms;
 	const poll = async (): Promise<boolean> => {

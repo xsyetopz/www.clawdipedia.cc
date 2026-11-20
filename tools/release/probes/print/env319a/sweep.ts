@@ -5,7 +5,7 @@ import {
 	msgs,
 	readCfg,
 	type Spec,
-	withRun,
+	withRun
 } from "../run/helpers.ts";
 
 export const DBG = ["--debug-file", "{CFG}/d.log"];
@@ -25,7 +25,7 @@ export const sweep = (
 	values: (string | undefined)[],
 	spec: Spec,
 	read: (r: Run) => Promise<Record<string, Data>> | Record<string, Data>,
-	dbg?: RegExp,
+	dbg?: RegExp
 ): CaseDef[] =>
 	values.map((v) => ({
 		name: `${name}.${v === undefined ? "unset" : `v${v}`}`,
@@ -36,21 +36,21 @@ export const sweep = (
 					...spec,
 					env: {
 						...spec.env,
-						...(v === undefined ? {} : { [envName]: v }),
-					},
+						...(v === undefined ? {} : { [envName]: v })
+					}
 				},
 				async (r) => ({
 					from: r,
 					data: {
 						precondition: msgs(r).length > 0 || r.code !== null,
-						...(await read(r)),
+						...(await read(r))
 					},
 					samples:
 						dbg === undefined
 							? {}
-							: { debug: lines(await readCfg(r, "d.log"), dbg) },
-				}),
-			),
+							: { debug: lines(await readCfg(r, "d.log"), dbg) }
+				})
+			)
 	}));
 
 /** Stream-json input lines, one JSON value per line. */
@@ -63,5 +63,5 @@ export const STREAM_ARGV = [
 	"stream-json",
 	"--output-format",
 	"stream-json",
-	"--verbose",
+	"--verbose"
 ];

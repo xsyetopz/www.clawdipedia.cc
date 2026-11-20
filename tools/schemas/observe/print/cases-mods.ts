@@ -6,15 +6,15 @@ const mod = (body: string[]): Record<string, string> => ({
 	"mod/.claude-plugin/plugin.json": JSON.stringify({
 		name: "probe-mod",
 		version: "1.0.0",
-		description: "Probe mod.",
+		description: "Probe mod."
 	}),
 	"mod/hooks/hooks.json": JSON.stringify({ modules: ["./register.js"] }),
 	"mod/hooks/register.js": [
 		"export const register = (on) => {",
 		...body.map((l) => `\t${l}`),
 		"};",
-		"",
-	].join("\n"),
+		""
+	].join("\n")
 });
 
 const MOD_ARGS = ["--plugin-dir", "{PROJ}/mod"];
@@ -28,7 +28,7 @@ const ANSWER = JSON.stringify({
 	content: [{ type: "text", text: "OK" }],
 	stop_reason: "end_turn",
 	stop_sequence: null,
-	usage: { input_tokens: 1, output_tokens: 1 },
+	usage: { input_tokens: 1, output_tokens: 1 }
 });
 
 /** The cases whose effect comes from a mod hook. */
@@ -40,18 +40,18 @@ export const MOD_CASES: Case[] = [
 			'on("classic.UserPromptSubmit", async ($) => {',
 			'\tawait $.model.complete({ model: "claude-sonnet-4-5", prompt: "probe" });',
 			"\treturn {};",
-			"});",
+			"});"
 		]),
-		args: MOD_ARGS,
+		args: MOD_ARGS
 	},
 	{
 		// a command answered by a hook as display-only text: system.isDisplayOnly
 		id: "mod-display-only",
 		projFiles: mod([
-			'on("command.run", () => ({ text: "probe", isTextDisplayOnly: true }));',
+			'on("command.run", () => ({ text: "probe", isTextDisplayOnly: true }));'
 		]),
 		args: MOD_ARGS,
-		prompt: "/context",
+		prompt: "/context"
 	},
 	{
 		// a model request answered by an http.fetch hook: assistant.requestHookChanged.what = ["answered"]
@@ -59,9 +59,9 @@ export const MOD_CASES: Case[] = [
 		projFiles: mod([
 			'on("http.fetch", () => ({',
 			`\tvalue: { status: 200, headers: { "content-type": "application/json" }, text: ${JSON.stringify(ANSWER)} },`,
-			"}));",
+			"}));"
 		]),
-		args: MOD_ARGS,
+		args: MOD_ARGS
 	},
 	{
 		// a plugin's own row: the plugin_note attachment with plugin and rowUuid
@@ -70,10 +70,10 @@ export const MOD_CASES: Case[] = [
 			'on("classic.UserPromptSubmit", async ($) => {',
 			'\tawait $.session.append({ message: { type: "user", content: [{ type: "text", text: "probe" }] } });',
 			"\treturn {};",
-			"});",
+			"});"
 		]),
 		args: MOD_ARGS,
-		seq: [{ name: "Bash", input: { command: "true" } }],
+		seq: [{ name: "Bash", input: { command: "true" } }]
 	},
 	{
 		// a tool.call hook that refuses while the tool runs, before it has a result: user.toolDenialAfterRun.
@@ -84,9 +84,9 @@ export const MOD_CASES: Case[] = [
 			"\tnext(e).catch(() => undefined);",
 			"\tawait new Promise((r) => setTimeout(r, 500));",
 			'\treturn { deny: "probe" };',
-			"});",
+			"});"
 		]),
 		args: [...MOD_ARGS, "--allowedTools", "Bash"],
-		seq: [{ name: "Bash", input: { command: "sleep 2" } }],
-	},
+		seq: [{ name: "Bash", input: { command: "sleep 2" } }]
+	}
 ];

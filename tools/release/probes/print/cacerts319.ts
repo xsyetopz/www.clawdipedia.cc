@@ -11,7 +11,7 @@ import {
 	olderThan,
 	readCfg,
 	runCases,
-	withRun,
+	withRun
 } from "./run/helpers.ts";
 import type { PrintGroup } from "./types.ts";
 
@@ -36,7 +36,7 @@ const DAMAGED =
 /** `content` is the file text; `null` leaves the path without a file. */
 const caCase = (
 	name: string,
-	content: () => Promise<string | null> | string | null,
+	content: () => Promise<string | null> | string | null
 ): CaseDef => ({
 	name: `extra-ca.${name}`,
 	run: async (ctx) => {
@@ -47,7 +47,7 @@ const caCase = (
 				env: { NODE_EXTRA_CA_CERTS: "{HOME}/extra-ca.pem" },
 				...(text === null ? {} : { homeFiles: { "extra-ca.pem": text } }),
 				args: ["--debug-file", "{CFG}/d.log"],
-				timeoutMs: 60_000,
+				timeoutMs: 60_000
 			},
 			async (r) => {
 				const log = await readCfg(r, "d.log");
@@ -61,16 +61,16 @@ const caCase = (
 						precondition: r.code !== null && !r.timedOut,
 						exit: r.code,
 						requests: r.reqs.length,
-						stderrWarns: /certificate|CA/iu.test(r.stderr),
+						stderrWarns: /certificate|CA/iu.test(r.stderr)
 					},
 					samples: {
 						stderr: r.stderr.replaceAll(r.sb.root, "<SB>").slice(0, 600),
-						debug: d.map((l) => l.slice(0, 260)).join("\n"),
-					},
+						debug: d.map((l) => l.slice(0, 260)).join("\n")
+					}
 				};
-			},
+			}
 		);
-	},
+	}
 });
 
 const okReply = (): Response =>
@@ -81,7 +81,7 @@ const okReply = (): Response =>
 		model: "x",
 		content: [{ type: "text", text: "OK" }],
 		stop_reason: "end_turn",
-		usage: { input_tokens: 1, output_tokens: 1 },
+		usage: { input_tokens: 1, output_tokens: 1 }
 	});
 
 /** The run reaches api.anthropic.com through a TLS stub whose certificate chains to the CA at the end of the file: the run works only when the program uses that CA.
@@ -89,7 +89,7 @@ const okReply = (): Response =>
 const tlsCase = (
 	name: string,
 	before: string,
-	hangsBefore?: string,
+	hangsBefore?: string
 ): CaseDef => ({
 	name: `extra-ca-tls.${name}`,
 	run: async (ctx) => {
@@ -102,13 +102,13 @@ const tlsCase = (
 					env: {
 						NODE_EXTRA_CA_CERTS: "{HOME}/extra-ca.pem",
 						HTTPS_PROXY: mitm.proxyUrl,
-						ANTHROPIC_BASE_URL: "https://api.anthropic.com",
+						ANTHROPIC_BASE_URL: "https://api.anthropic.com"
 					},
 					allowOverride: ["HTTPS_PROXY", "ANTHROPIC_BASE_URL"],
 					homeFiles: {
-						"extra-ca.pem": before + ca,
+						"extra-ca.pem": before + ca
 					},
-					timeoutMs: 60_000,
+					timeoutMs: 60_000
 				},
 				(r) => ({
 					from: r,
@@ -120,17 +120,17 @@ const tlsCase = (
 						exit: r.code,
 						reachedTlsStub: mitm.log().length > 0,
 						tlsRequests: mitm.log().length,
-						connects: mitm.connects().length,
+						connects: mitm.connects().length
 					},
 					samples: {
-						stderr: r.stderr.replaceAll(r.sb.root, "<SB>").slice(0, 400),
-					},
-				}),
+						stderr: r.stderr.replaceAll(r.sb.root, "<SB>").slice(0, 400)
+					}
+				})
 			);
 		} finally {
 			await mitm.stop();
 		}
-	},
+	}
 });
 
 export const cacerts319: PrintGroup = {
@@ -147,6 +147,6 @@ export const cacerts319: PrintGroup = {
 			caCase("missing", () => null),
 			tlsCase("valid", ""),
 			tlsCase("damaged-first", DAMAGED, "2.1.318"),
-			tlsCase("not-pem-first", "this is not a certificate\n"),
-		]),
+			tlsCase("not-pem-first", "this is not a certificate\n")
+		])
 };

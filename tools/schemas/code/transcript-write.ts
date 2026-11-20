@@ -71,7 +71,7 @@ const laterInCopy = (key: string, k: string): Promise<Json | undefined> =>
 			return {
 				...(await valType(e.val)),
 				$comment:
-					"Added after the line is built, by a copy of the line or a spread into one.",
+					"Added after the line is built, by a copy of the line or a spread into one."
 			};
 		});
 	});
@@ -95,7 +95,7 @@ const laterAssign = (k: string): Promise<Json | undefined> =>
 			}
 			return {
 				...(await valType(await R.value(m, assign.right))),
-				$comment: "Added after the line is built, by a property assignment.",
+				$comment: "Added after the line is built, by a property assignment."
 			};
 		});
 	});

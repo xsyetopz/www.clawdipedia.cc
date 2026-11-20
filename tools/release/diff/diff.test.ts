@@ -11,7 +11,7 @@ const item = (kind: string, name: string, extra = {}): SurfaceItem => ({
 	name,
 	module: null,
 	offset: 0,
-	...extra,
+	...extra
 });
 
 const group = (key: string): Group => {
@@ -25,12 +25,12 @@ const group = (key: string): Group => {
 const old = {
 	subcommand: [item("subcommand", "mcp")],
 	"slash-command": [item("slash-command", "/help")],
-	beta: [item("beta", "gone-2025-01-01")],
+	beta: [item("beta", "gone-2025-01-01")]
 };
 const neu = {
 	subcommand: [item("subcommand", "mcp"), item("subcommand", "doctor")],
 	"slash-command": [item("slash-command", "/help", { gate: "hidden" })],
-	beta: [item("beta", "new-2026-01-01", { detail: "x" })],
+	beta: [item("beta", "new-2026-01-01", { detail: "x" })]
 };
 
 test("the six legacy files come first, then one group for each other kind", () => {
@@ -42,7 +42,7 @@ test("the six legacy files come first, then one group for each other kind", () =
 		"settings.json",
 		"hooks.json",
 		"gates.json",
-		"beta.json",
+		"beta.json"
 	]);
 });
 
@@ -52,7 +52,7 @@ test("commands join subcommands as cli:name and slash commands as /name", () => 
 	expect([...items.keys()].toSorted()).toEqual([
 		"/help",
 		"cli:doctor",
-		"cli:mcp",
+		"cli:mcp"
 	]);
 	expect(items.get("/help")).toBe("gate: hidden");
 });
@@ -66,14 +66,14 @@ test("an added item lists its target page under its kind in report.md", () => {
 		itemsOf(beta, old),
 		itemsOf(beta, neu),
 		[],
-		(n) => `docs/reference/api/betas.md (no row yet) for ${n}`,
+		(n) => `docs/reference/api/betas.md (no row yet) for ${n}`
 	);
 	expect(d.added).toEqual(["new-2026-01-01"]);
 	expect(d.removed).toEqual(["gone-2025-01-01"]);
 	const report = renderReport("1.0.0", "1.0.1", [d], { beta: "Betas" });
 	expect(report).toContain("## Betas");
 	expect(report).toContain(
-		"- `new-2026-01-01` new -> docs/reference/api/betas.md (no row yet) for new-2026-01-01",
+		"- `new-2026-01-01` new -> docs/reference/api/betas.md (no row yet) for new-2026-01-01"
 	);
 });
 
@@ -85,7 +85,7 @@ test("a changed detail is a changed item with old and new", () => {
 		"b",
 		itemsOf(commands, old),
 		itemsOf(commands, neu),
-		[],
+		[]
 	);
 	expect(d.changed).toEqual([{ name: "/help", old: "", new: "gate: hidden" }]);
 	expect(d.added).toEqual(["cli:doctor"]);
@@ -98,7 +98,7 @@ test("the page of an item: docs file, map route, exclusion, or the page of its k
 	expect(pageOf("env", "B", docs, map, ex)).toBe("/r#s");
 	expect(pageOf("env", "LIB_X", docs, map, ex)).toBe("excluded: library");
 	expect(pageOf("env", "C", docs, map, ex)).toBe(
-		"docs/configure/env-vars (no row yet)",
+		"docs/configure/env-vars (no row yet)"
 	);
 	expect(pageOf("error", "Some text", docs, map, ex)).toBe("no page yet");
 });
@@ -112,26 +112,26 @@ test("a new minified name or chunk hash is no change, a new default is", () => {
 	const a = new Map([
 		[
 			"/add-dir",
-			"gate: isEnabled ()=>_e()&&tii(); detail: local-jsx | Add a dir",
+			"gate: isEnabled ()=>_e()&&tii(); detail: local-jsx | Add a dir"
 		],
 		[
 			"Artifact",
-			'gate: un (=import.meta.require("/$bunfs/root/chunk-f3waybkd.js").X)',
+			'gate: un (=import.meta.require("/$bunfs/root/chunk-f3waybkd.js").X)'
 		],
 		["xaaIdp", "gate: a.CLAUDE_CODE_ENABLE_XAA"],
-		["tengu_walnut_tiller", "default: false"],
+		["tengu_walnut_tiller", "default: false"]
 	]);
 	const b = new Map([
 		[
 			"/add-dir",
-			"gate: isEnabled ()=>_e()&&kdi(); detail: local-jsx | Add a dir",
+			"gate: isEnabled ()=>_e()&&kdi(); detail: local-jsx | Add a dir"
 		],
 		[
 			"Artifact",
-			'gate: an (=import.meta.require("/$bunfs/root/chunk-1zefh2nd.js").X)',
+			'gate: an (=import.meta.require("/$bunfs/root/chunk-1zefh2nd.js").X)'
 		],
 		["xaaIdp", "gate: i.CLAUDE_CODE_ENABLE_XAA"],
-		["tengu_walnut_tiller", "default: true"],
+		["tengu_walnut_tiller", "default: true"]
 	]);
 	const d = diffKind("x", "a", "b", a, b, []);
 	expect(d.changed.map((c) => c.name)).toEqual(["tengu_walnut_tiller"]);

@@ -10,7 +10,7 @@ const LISTING_PLACE: Record<string, Place> = {
 	tools: "tools",
 	"tools-per-variant": "tools",
 	"built-in-agents": "agents",
-	"built-in-skills": "skills",
+	"built-in-skills": "skills"
 };
 
 export const placeOf = (id: string): Place => {
@@ -46,5 +46,5 @@ export const relink = (from: Place, text: string) =>
 		.replaceAll("](../", from === "root" ? "](../" : "](../../")
 		.replaceAll(
 			/\]\(\.\/([A-Za-z0-9-]+)\.md/gu,
-			(_, id: string) => `](${pagePath(from, id)}`,
+			(_, id: string) => `](${pagePath(from, id)}`
 		);

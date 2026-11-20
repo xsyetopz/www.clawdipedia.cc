@@ -15,7 +15,7 @@ const padRows = (bytes: number): string => {
 			operation: "enqueue",
 			timestamp: ts,
 			sessionId: SID,
-			content: PAD,
+			content: PAD
 		});
 	}
 	return out;
@@ -29,7 +29,7 @@ const seedFile = (): string => {
 		cwd,
 		sessionId: SID,
 		version: "2.1.327",
-		timestamp: ts,
+		timestamp: ts
 	};
 	return (
 		padRows(4_400_000) +
@@ -42,14 +42,14 @@ const seedFile = (): string => {
 			level: "info",
 			uuid: "00000000-0000-4000-8000-0000000000b0",
 			parentUuid: null,
-			compactMetadata: { trigger: "manual", preTokens: 1000 },
+			compactMetadata: { trigger: "manual", preTokens: 1000 }
 		}) +
 		row({
 			...base,
 			type: "user",
 			uuid: "00000000-0000-4000-8000-0000000000b1",
 			parentUuid: "00000000-0000-4000-8000-0000000000b0",
-			message: { role: "user", content: "hello" },
+			message: { role: "user", content: "hello" }
 		}) +
 		row({
 			...base,
@@ -64,8 +64,8 @@ const seedFile = (): string => {
 				content: [{ type: "text", text: "hi" }],
 				stop_reason: "end_turn",
 				stop_sequence: null,
-				usage: { input_tokens: 1, output_tokens: 1 },
-			},
+				usage: { input_tokens: 1, output_tokens: 1 }
+			}
 		}) +
 		padRows(1_000_000)
 	);
@@ -82,7 +82,7 @@ const message = (role: "user" | "assistant", text: string) =>
 				content: [{ type: "text", text }],
 				stop_reason: "end_turn",
 				stop_sequence: null,
-				usage: { input_tokens: 1, output_tokens: 1 },
+				usage: { input_tokens: 1, output_tokens: 1 }
 			};
 
 const carryId = (n: number): string =>
@@ -98,7 +98,7 @@ const carryFile = (): string => {
 		cwd: "{PROJ}",
 		sessionId: SID,
 		version: "2.1.327",
-		timestamp: ts,
+		timestamp: ts
 	};
 	return [
 		{
@@ -111,25 +111,25 @@ const carryFile = (): string => {
 				trigger: "manual",
 				preTokens: 1000,
 				preCompactArtifactReadVersions: [
-					{ slug: "aaaaaaaa-1111-4222-8333-444444444444", ver: "v1" },
-				],
-			},
+					{ slug: "aaaaaaaa-1111-4222-8333-444444444444", ver: "v1" }
+				]
+			}
 		},
 		{
 			type: "user",
 			isCompactSummary: true,
-			message: message("user", "Summary: the user said hello."),
+			message: message("user", "Summary: the user said hello.")
 		},
 		{ type: "user", message: message("user", "hello") },
-		{ type: "assistant", message: message("assistant", "hi") },
+		{ type: "assistant", message: message("assistant", "hi") }
 	]
 		.map((r, i) =>
 			row({
 				...base,
 				...r,
 				uuid: carryId(i),
-				parentUuid: i === 0 ? null : carryId(i - 1),
-			}),
+				parentUuid: i === 0 ? null : carryId(i - 1)
+			})
 		)
 		.join("");
 };
@@ -140,7 +140,7 @@ export const RESUME_CASES: Case[] = [
 		id: "resume-head-vouch",
 		args: ["--resume", SID],
 		env: { CLAUDE_CODE_TRANSCRIPT_TAIL_LOAD: "on" },
-		cfgFiles: { [`projects/{PROJKEY}/${SID}.jsonl`]: seedFile() },
+		cfgFiles: { [`projects/{PROJKEY}/${SID}.jsonl`]: seedFile() }
 	},
 	{
 		// a compaction after a resume that carried an artifact read: compactMetadata.preCompactArtifactReadVersions
@@ -149,6 +149,6 @@ export const RESUME_CASES: Case[] = [
 		prompt: "/compact",
 		// print mode leaves the artifact surface off unless this is set (V() in chunk-h7hkyak8.js:22676)
 		env: { CLAUDE_CODE_ARTIFACT: "1" },
-		cfgFiles: { [`projects/{PROJKEY}/${SID}.jsonl`]: carryFile() },
-	},
+		cfgFiles: { [`projects/{PROJKEY}/${SID}.jsonl`]: carryFile() }
+	}
 ];

@@ -18,7 +18,7 @@ const reply = (method, version) => {
 		return {
 			protocolVersion: typeof version === "string" ? version : "2025-06-18",
 			capabilities: { tools: {} },
-			serverInfo: { name, version: "1.0.0" },
+			serverInfo: { name, version: "1.0.0" }
 		};
 	}
 	if (method === "tools/list") {
@@ -27,9 +27,9 @@ const reply = (method, version) => {
 				{
 					name: "ping",
 					description: `ping from ${name}`,
-					inputSchema: { type: "object", properties: {} },
-				},
-			],
+					inputSchema: { type: "object", properties: {} }
+				}
+			]
 		};
 	}
 	if (method === "tools/call") {

@@ -28,7 +28,7 @@ const writtenValue = (mod: Module, at: number): Node | undefined => {
 const literalValue = (
 	mod: Module,
 	at: number,
-	name: string,
+	name: string
 ): Node | undefined => {
 	const key = mod.nodeAt(at);
 	const prop = mod.parent(key);
@@ -49,13 +49,13 @@ const literalValue = (
  */
 export const propertyWrites = async (
 	m: Module,
-	key: string,
+	key: string
 ): Promise<{ mod: Module; value: Node }[]> => {
 	const out: { mod: Module; value: Node }[] = [];
 	const collect = async (
 		needle: string,
 		skip: number,
-		find: (mod: Module, at: number, key: string) => Node | undefined,
+		find: (mod: Module, at: number, key: string) => Node | undefined
 	) => {
 		const mods = m.bundle ? await m.bundle.withText(needle) : [m];
 		for (const mod of mods) {
@@ -96,7 +96,7 @@ export class Writes {
 		m: Module,
 		key: string,
 		read: (mod: Module, value: Node) => Promise<Entry[] | undefined>,
-		merge: (lists: Entry[][]) => Promise<Entry[]>,
+		merge: (lists: Entry[][]) => Promise<Entry[]>
 	): Promise<Entry[] | undefined> {
 		if (this.#byKey.has(key)) {
 			return this.#byKey.get(key);
@@ -106,7 +106,7 @@ export class Writes {
 		this.#steps ??= WRITE_STEPS;
 		try {
 			const lists = await allSeq(await propertyWrites(m, key), (w) =>
-				read(w.mod, w.value),
+				read(w.mod, w.value)
 			);
 			if (!lists || this.#steps < 0) {
 				return undefined;

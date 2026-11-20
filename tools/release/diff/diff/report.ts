@@ -7,7 +7,7 @@ const list = (items: string[], fmt: (s: string) => string): string[] => [
 	...items.slice(0, LIMIT).map((s) => fmt(s)),
 	...(items.length > LIMIT
 		? [`- ... ${items.length - LIMIT} more (see the JSON)`]
-		: []),
+		: [])
 ];
 
 const docsNote = (d: KindDiff, n: string) => {
@@ -31,9 +31,9 @@ const sections = (d: KindDiff): string[] => {
 			"",
 			...list(
 				d.added,
-				(n) => `- \`${n}\`${undoc.has(n) ? " new" : ""}${pageNote(d, n)}`,
+				(n) => `- \`${n}\`${undoc.has(n) ? " new" : ""}${pageNote(d, n)}`
 			),
-			"",
+			""
 		);
 	}
 	if (d.removed.length > 0) {
@@ -41,7 +41,7 @@ const sections = (d: KindDiff): string[] => {
 			`### Removed (${d.removed.length})`,
 			"",
 			...list(d.removed, (n) => `- \`${n}\`${docsNote(d, n)}`),
-			"",
+			""
 		);
 	}
 	if (d.changed.length > 0) {
@@ -53,12 +53,12 @@ const sections = (d: KindDiff): string[] => {
 				.flatMap((c) => [
 					`- \`${c.name}\`${docsNote(d, c.name)}${pageNote(d, c.name)}`,
 					`  - old: ${c.old === "" ? "(empty)" : c.old}`,
-					`  - new: ${c.new === "" ? "(empty)" : c.new}`,
+					`  - new: ${c.new === "" ? "(empty)" : c.new}`
 				]),
 			...(d.changed.length > LIMIT
 				? [`- ... ${d.changed.length - LIMIT} more (see the JSON)`]
 				: []),
-			"",
+			""
 		);
 	}
 	return out;
@@ -69,7 +69,7 @@ export const renderReport = (
 	from: string,
 	to: string,
 	ds: KindDiff[],
-	titles: Record<string, string> = {},
+	titles: Record<string, string> = {}
 ): string => {
 	const lines: string[] = [
 		`# Release Diff ${from} -> ${to}`,
@@ -80,9 +80,9 @@ export const renderReport = (
 		"| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
 		...ds.map(
 			(d) =>
-				`| ${d.kind} | ${d.fromCount} | ${d.toCount} | ${d.added.length} | ${d.removed.length} | ${d.changed.length} | ${d.undocumentedAdded.length} |`,
+				`| ${d.kind} | ${d.fromCount} | ${d.toCount} | ${d.added.length} | ${d.removed.length} | ${d.changed.length} | ${d.undocumentedAdded.length} |`
 		),
-		"",
+		""
 	];
 	for (const d of ds) {
 		lines.push(`## ${titles[d.kind] ?? d.kind}`, "");
@@ -96,7 +96,7 @@ export const renderReport = (
 		...(touched.size > 0
 			? [...touched].toSorted().map((f) => `- ${f}`)
 			: ["None."]),
-		"",
+		""
 	);
 	return lines.join("\n");
 };

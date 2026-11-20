@@ -17,7 +17,7 @@ test("stdinOpenMs keeps stdin open after the text is written", async () => {
 		cwd: "/tmp",
 		env,
 		stdin: "hi",
-		stdinOpenMs: 1500,
+		stdinOpenMs: 1500
 	});
 	expect(r.stdout).toBe("hi");
 	expect(Date.now() - t).toBeGreaterThanOrEqual(1500);

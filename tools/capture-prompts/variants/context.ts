@@ -3,7 +3,7 @@ import { AGENT_FILE, LEAN_MODEL, type Variant } from "./base.ts";
 const MODE_TITLES = {
 	plan: "Plan",
 	acceptEdits: "Accept Edits",
-	dontAsk: "Don't Ask",
+	dontAsk: "Don't Ask"
 };
 
 export const CONTEXT_VARIANTS: Variant[] = [
@@ -22,8 +22,8 @@ export const CONTEXT_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "Yes. You give the text.",
 			toggle: "`--append-system-prompt` or `--append-system-prompt-file`.",
-			where: "Command-line flags.",
-		},
+			where: "Command-line flags."
+		}
 	},
 	{
 		id: "system-prompt",
@@ -40,8 +40,8 @@ export const CONTEXT_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "Yes. You give the text.",
 			toggle: "`--system-prompt` or `--system-prompt-file`.",
-			where: "Command-line flags.",
-		},
+			where: "Command-line flags."
+		}
 	},
 	{
 		id: "system-prompt-append",
@@ -52,7 +52,7 @@ export const CONTEXT_VARIANTS: Variant[] = [
 			"--system-prompt",
 			"REPLACEMENT-TEXT-FROM-FLAG",
 			"--append-system-prompt",
-			"APPENDED-TEXT-FROM-FLAG",
+			"APPENDED-TEXT-FROM-FLAG"
 		],
 		baseline: "system-prompt",
 		summary: "Both flags together.",
@@ -63,8 +63,8 @@ export const CONTEXT_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "Yes. You give the text.",
 			toggle: "The two flags.",
-			where: "Command-line flags.",
-		},
+			where: "Command-line flags."
+		}
 	},
 	{
 		id: "claude-md",
@@ -82,8 +82,8 @@ export const CONTEXT_VARIANTS: Variant[] = [
 			change: "Yes. You write the file.",
 			toggle:
 				"Add or remove the file. `CLAUDE_CODE_DISABLE_CLAUDE_MDS=1` skips them.",
-			where: "`CLAUDE.md`, `.claude/CLAUDE.md`, `~/.claude/CLAUDE.md`.",
-		},
+			where: "`CLAUDE.md`, `.claude/CLAUDE.md`, `~/.claude/CLAUDE.md`."
+		}
 	},
 	{
 		id: "git-repo",
@@ -101,8 +101,8 @@ export const CONTEXT_VARIANTS: Variant[] = [
 			change: "No.",
 			toggle:
 				"`includeGitInstructions` in settings controls the git rules. The status text always appears in a repo.",
-			where: "Built into the program.",
-		},
+			where: "Built into the program."
+		}
 	},
 	{
 		id: "agent-main",
@@ -120,8 +120,8 @@ export const CONTEXT_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "Yes. You write the agent file.",
 			toggle: "`--agent` or the `agent` setting.",
-			where: "`.claude/agents/*.md` or `~/.claude/agents/*.md`.",
-		},
+			where: "`.claude/agents/*.md` or `~/.claude/agents/*.md`."
+		}
 	},
 	...(["plan", "acceptEdits", "dontAsk"] as const).map((m) => ({
 		id: `mode-${m}`,
@@ -138,8 +138,8 @@ export const CONTEXT_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "No.",
 			toggle: "`--permission-mode` or `defaultMode` in settings.",
-			where: "Flag or settings.",
-		},
+			where: "Flag or settings."
+		}
 	})),
 	{
 		id: "brief",
@@ -156,8 +156,8 @@ export const CONTEXT_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "No.",
 			toggle: "`--brief`.",
-			where: "Command-line flag.",
-		},
+			where: "Command-line flag."
+		}
 	},
 	{
 		id: "compact",
@@ -175,7 +175,7 @@ export const CONTEXT_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "Partly. You can add focus text after `/compact`.",
 			toggle: "`/compact`, or automatic when the context fills.",
-			where: "Built into the program.",
-		},
-	},
+			where: "Built into the program."
+		}
+	}
 ];

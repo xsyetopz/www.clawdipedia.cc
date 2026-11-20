@@ -14,6 +14,6 @@ export const indexOf = async (text: string): Promise<Index> => {
 		binary: { size: 0, mtime: 0 },
 		skipped: {},
 		chunks: {},
-		units: unitsOf("a.js", m),
+		units: unitsOf("a.js", m)
 	};
 };

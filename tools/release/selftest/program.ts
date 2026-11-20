@@ -23,25 +23,25 @@ export const programChecks = async (p: ProgramRun): Promise<string> => {
 			"stream-json",
 			"--verbose",
 			"--model",
-			"claude-opus-5-5",
+			"claude-opus-5-5"
 		],
-		{ cwd: sb.proj, env: progEnv, timeoutMs: 90_000 },
+		{ cwd: sb.proj, env: progEnv, timeoutMs: 90_000 }
 	);
 	const reqs = await readLog(log);
 	step(
 		"program exits 0 against the stub",
 		res.code === 0 && !res.timedOut,
-		`code ${res.code}`,
+		`code ${res.code}`
 	);
 	step(
 		"stub saw requests, fake key only",
 		reqs.length > 0 && reqs.every((r) => !r.bad),
-		`${reqs.length} requests`,
+		`${reqs.length} requests`
 	);
 	step(
 		"reply is OK",
 		res.stdout.includes('"result":"OK"') ||
-			/"result"\s*:\s*"OK"/u.test(res.stdout),
+			/"result"\s*:\s*"OK"/u.test(res.stdout)
 	);
 	await dumpChecks(p);
 	return resultCheck(p, res, reqs);

@@ -5,7 +5,7 @@ import {
 	riskyTool,
 	settings,
 	subTool,
-	type Variant,
+	type Variant
 } from "./base.ts";
 
 export const MISC_VARIANTS: Variant[] = [
@@ -28,8 +28,8 @@ export const MISC_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Partly. The `autoMode` setting edits the rule lists.",
 			'`--permission-mode auto` or `defaultMode: "auto"`.',
-			"`autoMode` in user, flag, or managed settings.",
-		),
+			"`autoMode` in user, flag, or managed settings."
+		)
 	},
 	{
 		id: "auto-classifier-custom",
@@ -41,7 +41,7 @@ export const MISC_VARIANTS: Variant[] = [
 			allow: ["PROBE-AUTO-ALLOW", "$defaults"],
 			soft_deny: ["PROBE-AUTO-SOFT"],
 			hard_deny: ["PROBE-AUTO-HARD", "$defaults"],
-			environment: ["PROBE-AUTO-ENV", "$defaults"],
+			environment: ["PROBE-AUTO-ENV", "$defaults"]
 		}),
 		// 2.1.319 asks the server-side check first and sends no local classifier request.
 		env: { CLAUDE_CODE_AUTO_MODE_SERVER: "0" },
@@ -56,8 +56,8 @@ export const MISC_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Yes. You write the rules.",
 			"`autoMode` setting.",
-			"`autoMode` in user, flag, or managed settings.",
-		),
+			"`autoMode` in user, flag, or managed settings."
+		)
 	},
 	{
 		id: "compact-custom",
@@ -67,16 +67,16 @@ export const MISC_VARIANTS: Variant[] = [
 		followUp: "/compact PROBE-COMPACT-ARG keep the file names",
 		projFiles: {
 			"CLAUDE.md":
-				"# Notes\n\n## Compact Instructions\nPROBE-COMPACT-MD: keep test output.\n",
+				"# Notes\n\n## Compact Instructions\nPROBE-COMPACT-MD: keep test output.\n"
 		},
 		args: settings({
 			hooks: {
 				PreCompact: [
 					{
-						hooks: [{ type: "command", command: "echo PROBE-COMPACT-HOOK" }],
-					},
-				],
-			},
+						hooks: [{ type: "command", command: "echo PROBE-COMPACT-HOOK" }]
+					}
+				]
+			}
 		}),
 		pick: "last",
 		baseline: "compact",
@@ -88,8 +88,8 @@ export const MISC_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Yes. You add focus text. The base summary rules stay.",
 			"`/compact <text>`.",
-			"The command line, `CLAUDE.md`, or a `PreCompact` hook.",
-		),
+			"The command line, `CLAUDE.md`, or a `PreCompact` hook."
+		)
 	},
 	{
 		id: "plan-mode-instructions",
@@ -100,7 +100,7 @@ export const MISC_VARIANTS: Variant[] = [
 			"--permission-mode",
 			"plan",
 			"--plan-mode-instructions",
-			"PROBE-PLAN-WORKFLOW: write a one-line plan.",
+			"PROBE-PLAN-WORKFLOW: write a one-line plan."
 		],
 		baseline: "mode-plan",
 		summary:
@@ -111,8 +111,8 @@ export const MISC_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Yes. You give the workflow text. The read-only rules and the `ExitPlanMode` rule stay.",
 			"`--plan-mode-instructions`.",
-			"Command-line flag.",
-		),
+			"Command-line flag."
+		)
 	},
 	{
 		id: "git-instructions-off",
@@ -130,8 +130,8 @@ export const MISC_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Yes. It removes text.",
 			"`includeGitInstructions` or `CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS=1`.",
-			"Any settings scope, or an environment variable.",
-		),
+			"Any settings scope, or an environment variable."
+		)
 	},
 	{
 		id: "memory-off",
@@ -147,8 +147,8 @@ export const MISC_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Yes. It removes text.",
 			"`CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` or `autoMemoryEnabled`.",
-			"Environment variable or any settings scope.",
-		),
+			"Environment variable or any settings scope."
+		)
 	},
 	{
 		id: "style-override-builtin",
@@ -158,7 +158,7 @@ export const MISC_VARIANTS: Variant[] = [
 		args: settings({ outputStyle: "Explanatory" }),
 		cfgFiles: {
 			"output-styles/explanatory.md":
-				"---\nname: Explanatory\ndescription: A user style with a built-in name\n---\nPROBE-STYLE-OVERRIDE: answer in one short sentence.\n",
+				"---\nname: Explanatory\ndescription: A user style with a built-in name\n---\nPROBE-STYLE-OVERRIDE: answer in one short sentence.\n"
 		},
 		baseline: "style-explanatory",
 		summary:
@@ -169,8 +169,8 @@ export const MISC_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Yes. You write the file.",
 			"`/output-style` or the `outputStyle` setting.",
-			"`~/.claude/output-styles/*.md` or `.claude/output-styles/*.md`.",
-		),
+			"`~/.claude/output-styles/*.md` or `.claude/output-styles/*.md`."
+		)
 	},
 	{
 		id: "subagent-with-prompt-flags",
@@ -181,7 +181,7 @@ export const MISC_VARIANTS: Variant[] = [
 			"--system-prompt",
 			"REPLACEMENT-TEXT-FROM-FLAG",
 			"--append-system-prompt",
-			"APPENDED-TEXT-FROM-FLAG",
+			"APPENDED-TEXT-FROM-FLAG"
 		],
 		tool: subTool("Explore"),
 		pick: "subagent",
@@ -194,8 +194,8 @@ export const MISC_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Not for the subagent. Use `--append-subagent-system-prompt`.",
 			"The flags.",
-			"Command-line flags.",
-		),
+			"Command-line flags."
+		)
 	},
 	{
 		id: "hook-prompt-stop",
@@ -207,11 +207,11 @@ export const MISC_VARIANTS: Variant[] = [
 				Stop: [
 					{
 						hooks: [
-							{ type: "prompt", prompt: "PROBE-HOOK-STOP: is the work done?" },
-						],
-					},
-				],
-			},
+							{ type: "prompt", prompt: "PROBE-HOOK-STOP: is the work done?" }
+						]
+					}
+				]
+			}
 		}),
 		pick: "marker",
 		marker: "PROBE-HOOK-STOP",
@@ -224,8 +224,8 @@ export const MISC_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Partly. You write the prompt and pick the model. The system text is fixed.",
 			"Add or remove the hook.",
-			"`hooks` in any settings scope.",
-		),
+			"`hooks` in any settings scope."
+		)
 	},
 	{
 		id: "tools-upfront",
@@ -242,7 +242,7 @@ export const MISC_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Yes. It adds the deferred tools to the request.",
 			"`ENABLE_TOOL_SEARCH`.",
-			"Environment variable, or `env` in any settings scope.",
-		),
-	},
+			"Environment variable, or `env` in any settings scope."
+		)
+	}
 ];

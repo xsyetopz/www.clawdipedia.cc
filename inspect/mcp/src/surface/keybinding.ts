@@ -10,7 +10,7 @@ import {
 	scanOf,
 	strings,
 	type SurfaceItem,
-	unique,
+	unique
 } from "./common.ts";
 
 interface Best {
@@ -45,7 +45,7 @@ export const extractKeybindings: Extractor = async (bundle) => {
 	const out: SurfaceItem[] = [];
 	for (const [best, detail] of [
 		[actions, "action"],
-		[contexts, "context"],
+		[contexts, "context"]
 	] as const) {
 		for (const name of best?.names ?? []) {
 			out.push({
@@ -53,7 +53,7 @@ export const extractKeybindings: Extractor = async (bundle) => {
 				name,
 				module: best?.m ?? null,
 				offset: best?.n.start ?? null,
-				detail,
+				detail
 			});
 		}
 	}

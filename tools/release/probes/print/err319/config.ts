@@ -32,26 +32,26 @@ export const configCases: CaseDef[] = [
 							{
 								matcher: "Bash",
 								hooks: [
-									{ type: "command", command: "echo hi", shell: "powershell" },
-								],
-							},
-						],
-					},
-				}),
+									{ type: "command", command: "echo hi", shell: "powershell" }
+								]
+							}
+						]
+					}
+				})
 			},
-			stub: { seq: [{ name: "Bash", input: { command: "echo hi" } }] },
+			stub: { seq: [{ name: "Bash", input: { command: "echo hi" } }] }
 		},
-		/PowerShell|powershell/u,
+		/PowerShell|powershell/u
 	),
 	one(
 		"mcp-add-connector-downloads",
 		{ argv: ADD_PROJECT, cwdSub: "connector-downloads", projFiles: GI },
-		/connector-downloads/u,
+		/connector-downloads/u
 	),
 	one(
 		"mcp-add-connector-downloads-no-gitignore",
 		{ argv: ADD_PROJECT, cwdSub: "connector-downloads" },
-		/connector-downloads|Added|added/u,
+		/connector-downloads|Added|added/u
 	),
 	one(
 		"resume-damaged-transcript",
@@ -63,11 +63,11 @@ export const configCases: CaseDef[] = [
 				await mkdir(dir, { recursive: true });
 				await Bun.write(
 					`${dir}/${SESSION}.jsonl`,
-					`{"type":"user","message":{"role":"user","content":"hi"},"uuid":"u1","sessionId":"${SESSION}"}\nnot json at all\n`,
+					`{"type":"user","message":{"role":"user","content":"hi"},"uuid":"u1","sessionId":"${SESSION}"}\nnot json at all\n`
 				);
-			},
+			}
 		},
-		/transcript|damaged|resume|No conversation/iu,
+		/transcript|damaged|resume|No conversation/iu
 	),
 	one(
 		"settings-connector-downloads",
@@ -75,11 +75,11 @@ export const configCases: CaseDef[] = [
 			cwdSub: "connector-downloads",
 			projFiles: {
 				...GI,
-				"connector-downloads/.claude/settings.json": json({ model: "x" }),
+				"connector-downloads/.claude/settings.json": json({ model: "x" })
 			},
-			args: DEBUG,
+			args: DEBUG
 		},
-		/connector-downloads/u,
+		/connector-downloads/u
 	),
 	one(
 		"auto-mode-print-refused",
@@ -90,24 +90,24 @@ export const configCases: CaseDef[] = [
 				"--permission-mode",
 				"auto",
 				"--model",
-				"claude-opus-5-5",
+				"claude-opus-5-5"
 			],
 			stub: {
 				seq: [
-					{ name: "Bash", input: { command: "curl -s http://127.0.0.1:9/x" } },
-				],
+					{ name: "Bash", input: { command: "curl -s http://127.0.0.1:9/x" } }
+				]
 			},
-			refuseServerCheck: true,
+			refuseServerCheck: true
 		},
-		/auto mode|could not check|Exiting|result/u,
+		/auto mode|could not check|Exiting|result/u
 	),
 	one(
 		"gateway-assume-role-bearer",
 		{
 			argv: ["gateway", "--config", "{PROJ}/g.yaml"],
-			projFiles: { "g.yaml": GATEWAY_YAML },
+			projFiles: { "g.yaml": GATEWAY_YAML }
 		},
-		/assume_role/u,
+		/assume_role/u
 	),
 	one(
 		"remote-trigger-bad-cursor",
@@ -117,8 +117,8 @@ export const configCases: CaseDef[] = [
 				".credentials.json": OAUTH_CREDS,
 				".claude.json": json({
 					hasCompletedOnboarding: true,
-					cachedGrowthBookFeatures: { tengu_zippy_cocoa: true },
-				}),
+					cachedGrowthBookFeatures: { tengu_zippy_cocoa: true }
+				})
 			},
 			args: DEBUG,
 			stub: {
@@ -128,12 +128,12 @@ export const configCases: CaseDef[] = [
 						input: {
 							action: "get_run_log",
 							session_id: "session_01ABCDEFGHJKLMNPQRSTUVWX",
-							cursor: "bogus",
-						},
-					},
-				],
-			},
+							cursor: "bogus"
+						}
+					}
+				]
+			}
 		},
-		/RemoteTrigger|cursor|No such tool/u,
-	),
+		/RemoteTrigger|cursor|No such tool/u
+	)
 ];

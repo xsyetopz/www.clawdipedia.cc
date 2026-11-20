@@ -6,7 +6,7 @@ import {
 	type CaseResult,
 	openRun,
 	readRun,
-	writeCase,
+	writeCase
 } from "../lib/results.ts";
 import { makeSandbox, type Sandbox } from "../lib/sandbox.ts";
 import type { Stub } from "../lib/stub.ts";
@@ -29,7 +29,7 @@ export interface ResultChecks {
 const emptyCase = (
 	ctx: Ctx,
 	id: string,
-	extra: Partial<Parameters<typeof writeCase>[1]> = {},
+	extra: Partial<Parameters<typeof writeCase>[1]> = {}
 ): Parameters<typeof writeCase>[1] => ({
 	schema: 1,
 	id,
@@ -42,7 +42,7 @@ const emptyCase = (
 	timedOut: false,
 	data: {},
 	facts: [],
-	...extra,
+	...extra
 });
 
 const skipCheck = async ({ ctx, step, out }: ResultChecks) => {
@@ -56,14 +56,14 @@ const skipCheck = async ({ ctx, step, out }: ResultChecks) => {
 				name: "needs-file",
 				requires: {
 					path: join(out, "no-such-file"),
-					reason: "needs a file",
+					reason: "needs a file"
 				},
 				run: () => {
 					ran = true;
 					return { data: {} };
-				},
-			},
-		],
+				}
+			}
+		]
 	);
 	step(
 		"a print case with a missing required file is skipped, not invalid",
@@ -71,7 +71,7 @@ const skipCheck = async ({ ctx, step, out }: ResultChecks) => {
 			sk.length === 1 &&
 			typeof sk[0]?.data["skipped"] === "string" &&
 			sk[0]?.data["precondition"] === undefined,
-		String(sk[0]?.data["skipped"] ?? "no result"),
+		String(sk[0]?.data["skipped"] ?? "no result")
 	);
 };
 
@@ -82,7 +82,7 @@ const writeChecks = async (c: ResultChecks) => {
 	await writeCase(
 		await openRun("0.0.1", out),
 		emptyCase(ctx, "print.control.requests", { facts: ["control.own"] }),
-		(id) => (id === "print.control.requests" ? mapped : []),
+		(id) => (id === "print.control.requests" ? mapped : [])
 	);
 	const back = await readRun("0.0.1", out);
 	const listed = back[0]?.facts ?? [];
@@ -90,7 +90,7 @@ const writeChecks = async (c: ResultChecks) => {
 		"writeCase adds the map.json facts of the case",
 		mapped.length > 0 &&
 			[...mapped, "control.own"].every((f) => listed.includes(f)),
-		`${listed.length} listed, ${mapped.length} mapped`,
+		`${listed.length} listed, ${mapped.length} mapped`
 	);
 	step(
 		"writeCase refuses secret-shaped strings",
@@ -98,10 +98,10 @@ const writeChecks = async (c: ResultChecks) => {
 			writeCase(
 				dir,
 				emptyCase(ctx, "print.selftest.leak", {
-					data: { k: "sk-ant-oat01-abcdef" },
-				}),
-			),
-		),
+					data: { k: "sk-ant-oat01-abcdef" }
+				})
+			)
+		)
 	);
 };
 
@@ -109,31 +109,31 @@ const envChecks = (step: Step, sb: Sandbox) => {
 	const base = {
 		home: sb.home,
 		configDir: sb.cfg,
-		baseUrl: "http://127.0.0.1:1/x",
+		baseUrl: "http://127.0.0.1:1/x"
 	};
 	step(
 		"childEnv accepts *_TOKENS names",
 		!throws(() =>
-			childEnv({ ...base, extra: { CLAUDE_CODE_MAX_OUTPUT_TOKENS: "9" } }),
-		),
+			childEnv({ ...base, extra: { CLAUDE_CODE_MAX_OUTPUT_TOKENS: "9" } })
+		)
 	);
 	step(
 		"childEnv: extra cannot overwrite fixed keys",
 		throws(() => childEnv({ ...base, extra: { HOME: "/x" } })) &&
 			!throws(() =>
-				childEnv({ ...base, extra: { HOME: "/x" }, allowOverride: ["HOME"] }),
-			),
+				childEnv({ ...base, extra: { HOME: "/x" }, allowOverride: ["HOME"] })
+			)
 	);
 };
 
 const pathCheck = async ({ ctx, step, out }: ResultChecks) => {
 	const badId = await rejects(() => writeCase(out, emptyCase(ctx, "../x")));
 	const badFixture = await rejects(() =>
-		makeSandbox({ projFiles: { "../../evil": "x" } }),
+		makeSandbox({ projFiles: { "../../evil": "x" } })
 	);
 	step(
 		"paths: bad case id and fixture traversal rejected",
-		badId && badFixture,
+		badId && badFixture
 	);
 };
 
@@ -145,7 +145,7 @@ export const runResultChecks = async (c: ResultChecks): Promise<void> => {
 		step: c.step,
 		stub: c.stub,
 		stubPort: c.stubPort,
-		root: c.sb.root,
+		root: c.sb.root
 	};
 	await serverChecks(env);
 	await pathCheck(c);

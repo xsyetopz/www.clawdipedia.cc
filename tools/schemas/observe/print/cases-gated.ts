@@ -4,7 +4,7 @@ import type { Case } from "./case.ts";
 // The disk cache of feature flags is read with telemetry off only when this variable is set.
 const DISK_FLAGS = { CLAUDE_CODE_GB_DISK_CACHE_WHEN_TELEMETRY_OFF: "1" };
 const flags = (f: Record<string, boolean>): Record<string, unknown> => ({
-	cachedGrowthBookFeatures: f,
+	cachedGrowthBookFeatures: f
 });
 const DATA_FLOW = flags({ tengu_pewter_grebe: true });
 
@@ -16,11 +16,11 @@ const BAD_SERVER_TOOL = {
 			type: "server_tool_use",
 			id: "srvtoolu_probe",
 			name: "bad name",
-			input: {},
+			input: {}
 		},
-		{ type: "text", text: "done" },
+		{ type: "text", text: "done" }
 	],
-	stop_reason: "end_turn",
+	stop_reason: "end_turn"
 };
 
 // A stdio MCP server with one tool and no annotations, and a permission tool that denies every call.
@@ -50,13 +50,13 @@ const MCP_JS = [
 	"\t\tprocess.stdout.write(JSON.stringify({ jsonrpc: '2.0', id: m.id, result }) + '\\n');",
 	"\t}",
 	"});",
-	"",
+	""
 ].join("\n");
 const MCP_ARGS = [
 	"--mcp-config",
 	JSON.stringify({
-		mcpServers: { s: { command: "bun", args: ["{PROJ}/mcp.js"] } },
-	}),
+		mcpServers: { s: { command: "bun", args: ["{PROJ}/mcp.js"] } }
+	})
 ];
 
 const SKILL = (extra: string): string =>
@@ -85,14 +85,14 @@ export const GATED_CASES: Case[] = [
 							description: "d",
 							prompt: "SUBPROMPT",
 							subagent_type: "general-purpose",
-							run_in_background: false,
-						},
-					},
+							run_in_background: false
+						}
+					}
 				],
-				stop_reason: "tool_use",
+				stop_reason: "tool_use"
 			},
-			BAD_SERVER_TOOL,
-		],
+			BAD_SERVER_TOOL
+		]
 	},
 	{
 		// derived-from: the sessions that launched this one, from the environment
@@ -103,8 +103,8 @@ export const GATED_CASES: Case[] = [
 			CLAUDECODE: "1",
 			CLAUDE_CODE_SESSION_ID: "11111111-2222-4333-8444-555555555555",
 			CLAUDE_CODE_LAUNCHED_BY_SESSION_IDS:
-				"clear:aaaaaaaa-2222-4333-8444-555555555555,bbbbbbbb-2222-4333-8444-555555555555,junk",
-		},
+				"clear:aaaaaaaa-2222-4333-8444-555555555555,bbbbbbbb-2222-4333-8444-555555555555,junk"
+		}
 	},
 	{
 		// a rewind by control request: last-prompt.explicit
@@ -113,7 +113,7 @@ export const GATED_CASES: Case[] = [
 			{
 				type: "user",
 				uuid: PROMPT_UUID,
-				message: { role: "user", content: "hello one" },
+				message: { role: "user", content: "hello one" }
 			},
 			{
 				type: "control_request",
@@ -122,10 +122,10 @@ export const GATED_CASES: Case[] = [
 					subtype: "rewind_conversation",
 					target_message_uuid: PROMPT_UUID,
 					last_seen_user_message_uuid: PROMPT_UUID,
-					interrupt_if_running: true,
-				},
-			},
-		],
+					interrupt_if_running: true
+				}
+			}
+		]
 	},
 	{
 		// an interrupt while one Bash call runs and a second waits its turn: user.toolDenialBeforeRun on the second
@@ -137,8 +137,8 @@ export const GATED_CASES: Case[] = [
 			{
 				type: "control_request",
 				request_id: "r1",
-				request: { subtype: "interrupt" },
-			},
+				request: { subtype: "interrupt" }
+			}
 		],
 		turns: [
 			{
@@ -148,18 +148,18 @@ export const GATED_CASES: Case[] = [
 						type: "tool_use",
 						id: "toolu_slow",
 						name: "Bash",
-						input: { command: "sleep 5" },
+						input: { command: "sleep 5" }
 					},
 					{
 						type: "tool_use",
 						id: "toolu_queued",
 						name: "Bash",
-						input: { command: "touch b" },
-					},
+						input: { command: "touch b" }
+					}
 				],
-				stop_reason: "tool_use",
-			},
-		],
+				stop_reason: "tool_use"
+			}
+		]
 	},
 	{
 		// two observer agents on the main agent: observer-ref.observerTaskIds
@@ -173,9 +173,9 @@ export const GATED_CASES: Case[] = [
 			JSON.stringify({
 				obsmain: { description: "m", prompt: "main", observer: "oa,ob" },
 				oa: { description: "a", prompt: "watch a" },
-				ob: { description: "b", prompt: "watch b" },
-			}),
-		],
+				ob: { description: "b", prompt: "watch b" }
+			})
+		]
 	},
 	{
 		// EnterWorktree from the project root: worktree-state.worktreeSession.extensionRoot
@@ -187,20 +187,20 @@ export const GATED_CASES: Case[] = [
 		seq: [
 			{
 				name: "ToolSearch",
-				input: { query: "select:EnterWorktree", max_results: 3 },
+				input: { query: "select:EnterWorktree", max_results: 3 }
 			},
-			{ name: "EnterWorktree", input: { name: "wt1" } },
-		],
+			{ name: "EnterWorktree", input: { name: "wt1" } }
+		]
 	},
 	{
 		// an extra body the journal cannot record: assistant.requestNotRecorded
 		id: "extra-body",
-		env: { CLAUDE_CODE_EXTRA_BODY: JSON.stringify({ system: "x" }) },
+		env: { CLAUDE_CODE_EXTRA_BODY: JSON.stringify({ system: "x" }) }
 	},
 	{
 		// an extra body key the journal can leave out of the row: api-request.withheld lists it
 		id: "extra-body-withheld",
-		env: { CLAUDE_CODE_EXTRA_BODY: JSON.stringify({ top_k: 5 }) },
+		env: { CLAUDE_CODE_EXTRA_BODY: JSON.stringify({ top_k: 5 }) }
 	},
 	{
 		// a skill typed as a command: user.invokedSkill
@@ -208,16 +208,16 @@ export const GATED_CASES: Case[] = [
 		claudeJson: flags({ tengu_soft_spark: true }),
 		env: DISK_FLAGS,
 		projFiles: { ".claude/skills/x/SKILL.md": SKILL("") },
-		prompt: "/x",
+		prompt: "/x"
 	},
 	{
 		// the model calls a skill only the user may type: user.toolResultTypedCommand
 		id: "typed-command-skill",
 		projFiles: {
-			".claude/skills/x/SKILL.md": SKILL("disable-model-invocation: true\n"),
+			".claude/skills/x/SKILL.md": SKILL("disable-model-invocation: true\n")
 		},
 		args: ["--allowedTools", "Skill"],
-		seq: [{ name: "Skill", input: { skill: "x" } }],
+		seq: [{ name: "Skill", input: { skill: "x" } }]
 	},
 	{
 		// an MCP tool with no read-only hint: user.mcpCallNotReadOnly
@@ -228,10 +228,10 @@ export const GATED_CASES: Case[] = [
 		seq: [
 			{
 				name: "ToolSearch",
-				input: { query: "select:mcp__s__t1", max_results: 3 },
+				input: { query: "select:mcp__s__t1", max_results: 3 }
 			},
-			{ name: "mcp__s__t1", input: {} },
-		],
+			{ name: "mcp__s__t1", input: {} }
+		]
 	},
 	{
 		// a permission tool that denies: user.holdsPersonsWords
@@ -239,6 +239,6 @@ export const GATED_CASES: Case[] = [
 		projFiles: { "mcp.js": MCP_JS },
 		args: [...MCP_ARGS, "--permission-prompt-tool", "mcp__s__deny"],
 		// a command that writes, so the program asks the permission tool
-		seq: [{ name: "Bash", input: { command: "touch probe" } }],
-	},
+		seq: [{ name: "Bash", input: { command: "touch probe" } }]
+	}
 ];

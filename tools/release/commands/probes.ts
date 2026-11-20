@@ -12,19 +12,19 @@ export interface Command {
 export const PROBE_COMMANDS: Record<string, Command> = {
 	"probe:print": {
 		run: runProbePrint,
-		summary: "print-mode probes against the local stub (--only, --dry)",
+		summary: "print-mode probes against the local stub (--only, --dry)"
 	},
 	"probe:pty": {
 		run: runProbePty,
-		summary: "interactive probes through the pty driver (--only, --dry)",
+		summary: "interactive probes through the pty driver (--only, --dry)"
 	},
 	"probe:live": {
 		run: runProbeLive,
 		summary:
-			"subscription probes via the secret runner; asks first (--only, --dry, --yes)",
+			"subscription probes via the secret runner; asks first (--only, --dry, --yes)"
 	},
 	"probe:managed": {
 		run: runProbeManaged,
-		summary: "managed-folder probes; prints the sudo command (--only, --dry)",
-	},
+		summary: "managed-folder probes; prints the sudo command (--only, --dry)"
+	}
 };

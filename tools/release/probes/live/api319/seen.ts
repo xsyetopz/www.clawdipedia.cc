@@ -26,6 +26,6 @@ export const seenOf = (body: unknown, betas: string): Seen => {
 			.map((t) => `${show(t["name"])}:${keyNames(t)}`),
 		owned: tools
 			.filter((t) => "ownership_metadata" in t)
-			.map((t) => `${show(t["name"])}:${keyNames(t["ownership_metadata"])}`),
+			.map((t) => `${show(t["name"])}:${keyNames(t["ownership_metadata"])}`)
 	};
 };

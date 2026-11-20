@@ -24,12 +24,12 @@ export const rejects = async (f: () => Promise<unknown>): Promise<boolean> => {
 export const post = (
 	url: string,
 	body: unknown,
-	headers: Record<string, string> = {},
+	headers: Record<string, string> = {}
 ): Promise<Response> =>
 	fetch(url, {
 		method: "POST",
 		headers,
-		body: typeof body === "string" ? body : JSON.stringify(body),
+		body: typeof body === "string" ? body : JSON.stringify(body)
 	});
 
 export const jsonOf = async (r: Response): Promise<Record<string, unknown>> =>

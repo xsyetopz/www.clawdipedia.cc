@@ -28,11 +28,11 @@ const planChecks = (step: Step): void => {
 	const planned = planLive([
 		{ id: "a" },
 		{ id: "b", coldSensitive: true },
-		{ id: "c" },
+		{ id: "c" }
 	]).map((c) => c.id);
 	step(
 		"planLive: cold-sensitive first, markers unique",
-		planned.join(",") === "b,a,c" && marker1 !== marker2,
+		planned.join(",") === "b,a,c" && marker1 !== marker2
 	);
 };
 
@@ -43,19 +43,19 @@ const envChecks = (step: Step, dir: string): void => {
 		env["CLAUDE_CODE_OAUTH_TOKEN"] === DRY_TOKEN &&
 			!("ANTHROPIC_BASE_URL" in env) &&
 			!("ANTHROPIC_API_KEY" in env) &&
-			!("HTTPS_PROXY" in env),
+			!("HTTPS_PROXY" in env)
 	);
 	const gates = liveEnv({
 		home: dir,
 		configDir: dir,
 		token: DRY_TOKEN,
-		featureGates: true,
+		featureGates: true
 	});
 	step(
 		"liveEnv: featureGates keeps telemetry and nonessential traffic on",
 		env["DISABLE_TELEMETRY"] === "1" &&
 			!("DISABLE_TELEMETRY" in gates) &&
-			!("CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC" in gates),
+			!("CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC" in gates)
 	);
 	step(
 		"assertLiveEnv rejects other credentials and a different token",
@@ -70,7 +70,7 @@ const envChecks = (step: Step, dir: string): void => {
 			}) &&
 			throws(() => {
 				assertLiveEnv({ FOO: DRY_TOKEN }, DRY_TOKEN);
-			}),
+			})
 	);
 	step(
 		"childEnv still refuses the OAuth token",
@@ -79,9 +79,9 @@ const envChecks = (step: Step, dir: string): void => {
 				home: dir,
 				configDir: dir,
 				baseUrl: "http://127.0.0.1:1/x",
-				extra: { CLAUDE_CODE_OAUTH_TOKEN: DRY_TOKEN },
-			}),
-		),
+				extra: { CLAUDE_CODE_OAUTH_TOKEN: DRY_TOKEN }
+			})
+		)
 	);
 };
 

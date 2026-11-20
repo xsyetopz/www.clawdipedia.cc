@@ -16,16 +16,13 @@ const localName = (depth: number, i: number): string =>
 const declared = (m: Module): { v: Variable; ids: Node[] }[] =>
 	m.variables
 		.toSorted(
-			(a, b) => (a.identifiers[0]?.start ?? 0) - (b.identifiers[0]?.start ?? 0),
+			(a, b) => (a.identifiers[0]?.start ?? 0) - (b.identifiers[0]?.start ?? 0)
 		)
 		.map((v) => ({
 			v,
 			ids: [
-				...new Set([
-					...v.identifiers,
-					...v.references.map((r) => r.identifier),
-				]),
-			],
+				...new Set([...v.identifiers, ...v.references.map((r) => r.identifier)])
+			]
 		}));
 
 /** The replacement text for one identifier, keeping shorthand keys and export names. */
@@ -57,7 +54,7 @@ const renderRange = (
 	edits: Edit[],
 	start: number,
 	end: number,
-	nameOf: NameOf,
+	nameOf: NameOf
 ): string => {
 	let out = "";
 	let at = start;
@@ -101,7 +98,7 @@ const inside = (v: Variable, id: Node): boolean => {
 const nameTop = (
 	names: Map<Variable, string>,
 	top: Variable[],
-	render: (start: number, end: number, nameOf: NameOf) => string,
+	render: (start: number, end: number, nameOf: NameOf) => string
 ): void => {
 	const taken = new Set<string>();
 	for (const v of top) {
@@ -110,7 +107,7 @@ const nameTop = (
 			continue;
 		}
 		const text = render(def.start, def.end, (x, id) =>
-			inside(x, id) ? "$" : (names.get(x) ?? "$"),
+			inside(x, id) ? "$" : (names.get(x) ?? "$")
 		);
 		const base = `$${hash(text)}`;
 		let n = base;
@@ -124,7 +121,7 @@ const nameTop = (
 
 /** Renders any range of the module with stable names, before formatting. */
 export const renamer = (
-	m: Module,
+	m: Module
 ): ((start: number, end: number) => string) => {
 	const all = declared(m);
 	const names = new Map<Variable, string>();
@@ -152,19 +149,19 @@ export const renamer = (
 /** Bun chunk paths renamed by `chunkNames` (old file name to new). */
 export const renameChunks = (
 	text: string,
-	chunkNames?: Map<string, string>,
+	chunkNames?: Map<string, string>
 ): string =>
 	chunkNames
 		? text.replaceAll(
 				/\/\$bunfs\/root\/(chunk-[a-z0-9]+\.js)/gu,
-				(_, c: string) => `/$bunfs/root/${chunkNames.get(c) ?? c}`,
+				(_, c: string) => `/$bunfs/root/${chunkNames.get(c) ?? c}`
 			)
 		: text;
 
 /** The module text with stable names, before formatting. */
 export const renameModule = (
 	m: Module,
-	chunkNames?: Map<string, string>,
+	chunkNames?: Map<string, string>
 ): string => renameChunks(renamer(m)(0, m.text.length), chunkNames);
 
 /** Formats JavaScript with `bun fmt`, run outside any project so no config changes it. */
@@ -176,13 +173,13 @@ export const format = async (js: string): Promise<string> => {
 			stdout: "pipe",
 			stderr: "pipe",
 			cwd: tmpdir(),
-			env: { PATH: process.env["PATH"] ?? "" },
-		},
+			env: { PATH: process.env["PATH"] ?? "" }
+		}
 	);
 	const [stdout, stderr, exitCode] = await Promise.all([
 		new Response(proc.stdout).text(),
 		new Response(proc.stderr).text(),
-		proc.exited,
+		proc.exited
 	]);
 	if (exitCode !== 0) {
 		throw new Error(`bun fmt failed: ${stderr.slice(0, 300)}`);
@@ -192,5 +189,5 @@ export const format = async (js: string): Promise<string> => {
 
 export const cleanModule = (
 	m: Module,
-	chunkNames?: Map<string, string>,
+	chunkNames?: Map<string, string>
 ): Promise<string> => format(renameModule(m, chunkNames));

@@ -21,7 +21,7 @@ const KEYWORDS = new Set([
 	"void",
 	"await",
 	"false",
-	"typeof",
+	"typeof"
 ]);
 /**
  * Short names an anchor may spell out, because they are global classes the minifier cannot rename. Add a name only

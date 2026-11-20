@@ -9,12 +9,12 @@ const cleanOne = async (v: string): Promise<void> => {
 	const extracted = await extractModules(path);
 	const modules = extracted.modules.map((m) => ({
 		name: m.name,
-		text: m.source,
+		text: m.source
 	}));
 	const r = await prepare(v, path, modules, CAPTURES);
 	const skipped = Object.keys(r.index.skipped);
 	console.info(
-		`clean ${v}: ${r.parsed ? `${r.parsed} modules cleaned` : "cached"}, ${r.index.units.length} units, ${r.ms} ms${skipped.length > 0 ? `; not JavaScript: ${skipped.join(", ")}` : ""} -> ${r.dir}`,
+		`clean ${v}: ${r.parsed ? `${r.parsed} modules cleaned` : "cached"}, ${r.index.units.length} units, ${r.ms} ms${skipped.length > 0 ? `; not JavaScript: ${skipped.join(", ")}` : ""} -> ${r.dir}`
 	);
 };
 

@@ -64,14 +64,14 @@ const stale = (key: string, reason: string): Entry => ({
 	site: null,
 	check: "stale",
 	result: "fail",
-	evidence: { note: "no item of surface.json matches the key" },
+	evidence: { note: "no item of surface.json matches the key" }
 });
 
 const entryOf = async (
 	c: Ctx,
 	key: string,
 	reason: string,
-	covered: SurfaceItem[],
+	covered: SurfaceItem[]
 ): Promise<Entry> => {
 	const [head] = covered;
 	if (head === undefined) {
@@ -100,15 +100,15 @@ const entryOf = async (
 			items: covered.length,
 			...(bad.length > 0
 				? { failed: bad.length, firstFailed: bad.slice(0, 3) }
-				: first),
-		},
+				: first)
+		}
 	};
 };
 
 const coveredBy = (
 	items: Map<string, SurfaceItem>,
 	key: string,
-	reason: string,
+	reason: string
 ) =>
 	[...items]
 		.filter(([k]) => exclusionOf(k, { [key]: reason }) !== undefined)
@@ -117,13 +117,13 @@ const coveredBy = (
 /** Run every exclusion through its check; the entries come back sorted by key. */
 export const audit = async (version: string, root: string) => {
 	const exclusions = await readJson(
-		join(root, "tools", "surface", "exclusions.json"),
+		join(root, "tools", "surface", "exclusions.json")
 	);
 	if (!isReasons(exclusions)) {
 		throw new Error("exclusions.json is not a map of reasons");
 	}
 	const items = itemsOf(
-		await readJson(join(root, "captures", version, "surface.json")),
+		await readJson(join(root, "captures", version, "surface.json"))
 	);
 	const p = await program(version);
 	const c: Ctx = {
@@ -132,10 +132,10 @@ export const audit = async (version: string, root: string) => {
 		bundle: p.bundle(),
 		items,
 		sweep: sweepOf(
-			await readJson(join(root, "captures", version, "print", "sweep.json")),
+			await readJson(join(root, "captures", version, "print", "sweep.json"))
 		),
 		endpointRows: await docsNames(root, ["docs/reference/api/endpoints.md"]),
-		libraries: {},
+		libraries: {}
 	};
 	const entries: Entry[] = [];
 	await eachOf(Object.entries(exclusions), async ([key, reason]) => {
@@ -162,7 +162,7 @@ const summary = (entries: Entry[]) => {
 
 const main = async () => {
 	const { values: a } = parseArgs({
-		options: { version: { type: "string" }, root: { type: "string" } },
+		options: { version: { type: "string" }, root: { type: "string" } }
 	});
 	const version = a.version ?? CLAUDE_CODE_VERSION;
 	const result = await audit(version, a.root ?? ROOT);
@@ -170,7 +170,7 @@ const main = async () => {
 		a.root ?? ROOT,
 		"captures",
 		version,
-		"exclusions-audit.json",
+		"exclusions-audit.json"
 	);
 	const body = `{\n"version": ${JSON.stringify(result.version)},\n"libraries": ${JSON.stringify(result.libraries)},\n"entries": [\n${result.entries.map((e) => JSON.stringify(e)).join(",\n")}\n]\n}\n`;
 	await Bun.write(file, body);
@@ -178,7 +178,7 @@ const main = async () => {
 		console.info(line);
 	}
 	console.info(
-		`${file}: ${result.entries.length} entries, ${result.entries.filter((e) => e.result === "fail").length} fail`,
+		`${file}: ${result.entries.length} entries, ${result.entries.filter((e) => e.result === "fail").length} fail`
 	);
 };
 

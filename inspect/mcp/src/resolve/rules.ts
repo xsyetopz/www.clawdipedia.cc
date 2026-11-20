@@ -12,7 +12,7 @@ export const globalNameType = (name: string): Ty[] | undefined => {
 export const writeType = (
 	out: Ty[] | undefined,
 	operator: string,
-	written: Ty[] | undefined,
+	written: Ty[] | undefined
 ): Ty[] | undefined => {
 	if (["=", "??=", "||=", "&&="].includes(operator)) {
 		return union(out, written);
@@ -31,12 +31,12 @@ export const writeType = (
 export const logicalType = (
 	operator: string,
 	a: Ty[] | undefined,
-	b: Ty[] | undefined,
+	b: Ty[] | undefined
 ) =>
 	operator === "??"
 		? union(
 				a?.filter((x) => x !== "null" && x !== "absent"),
-				b,
+				b
 			)
 		: union(a, b);
 

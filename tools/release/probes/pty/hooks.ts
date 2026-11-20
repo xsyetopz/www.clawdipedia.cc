@@ -16,7 +16,7 @@ import {
 	shows,
 	toolNames,
 	TOUCH,
-	WAIT,
+	WAIT
 } from "./harness.ts";
 import { deniedCase, permissionRequest, PR_CASES } from "./hooks/permission.ts";
 
@@ -30,17 +30,17 @@ const notification = (cont: boolean): PtyCase => ({
 					Notification: {
 						out: JSON.stringify({
 							continue: false,
-							systemMessage: "NOTIF-SYSMSG",
-						}),
-					},
-				},
+							systemMessage: "NOTIF-SYSMSG"
+						})
+					}
+				}
 			}
 		: {}),
 	schedule: [
 		READY,
 		ASK(),
 		WAIT("proceed?", "dialog"),
-		cont ? { t: 14, send: "\r", label: "accept" } : ESC(14),
+		cont ? { t: 14, send: "\r", label: "accept" } : ESC(14)
 	],
 	secs: 17,
 	facts: ["hooks.notification"],
@@ -51,7 +51,7 @@ const notification = (cont: boolean): PtyCase => ({
 		const first = x.hook("Notification")[0];
 		const pr = x.hook("PermissionRequest")[0];
 		return {
-			delaySinceRequestS: first && pr ? String(round(first.t - pr.t, 2)) : "",
+			delaySinceRequestS: first && pr ? String(round(first.t - pr.t, 2)) : ""
 		};
 	},
 	data: (x) => {
@@ -66,21 +66,21 @@ const notification = (cont: boolean): PtyCase => ({
 			message: show(first?.json["message"] ?? ""),
 			delayBucketS: first && pr ? round(first.t - pr.t, 0) : null,
 			toolRan: ranFile(x, "ran-notif"),
-			sysMsgShown: shows(x, "NOTIF-SYSMSG"),
+			sysMsgShown: shows(x, "NOTIF-SYSMSG")
 		};
-	},
+	}
 });
 
 const PRECOMPACT: { name: string; ctl?: { out?: string; exit?: number } }[] = [
 	{
 		name: "sysmsg",
-		ctl: { out: JSON.stringify({ systemMessage: "PRECOMPACT-SYSMSG" }) },
+		ctl: { out: JSON.stringify({ systemMessage: "PRECOMPACT-SYSMSG" }) }
 	},
 	{
 		name: "block",
-		ctl: { out: JSON.stringify({ decision: "block", reason: "PC-BLOCK" }) },
+		ctl: { out: JSON.stringify({ decision: "block", reason: "PC-BLOCK" }) }
 	},
-	{ name: "exit2", ctl: { exit: 2 } },
+	{ name: "exit2", ctl: { exit: 2 } }
 ];
 const preCompact = (p: (typeof PRECOMPACT)[number]): PtyCase => ({
 	id: `hooks.precompact.${p.name}`,
@@ -90,7 +90,7 @@ const preCompact = (p: (typeof PRECOMPACT)[number]): PtyCase => ({
 		READY,
 		ASK("p1"),
 		ASK("p2", 6),
-		{ t: 12, send: "/compact\r", label: "compact" },
+		{ t: 12, send: "/compact\r", label: "compact" }
 	],
 	secs: 22,
 	facts: ["hooks.precompact"],
@@ -109,9 +109,9 @@ const preCompact = (p: (typeof PRECOMPACT)[number]): PtyCase => ({
 			blockedLine: shows(x, "Compaction blocked by PreCompact hook"),
 			blockReasonShown: shows(x, "PC-BLOCK"),
 			sysMsgShown: shows(x, "PRECOMPACT-SYSMSG"),
-			notEnoughMessages: shows(x, "Not enough messages to compact"),
+			notEnoughMessages: shows(x, "Not enough messages to compact")
 		};
-	},
+	}
 });
 
 const elicitHook: PtyCase = {
@@ -119,7 +119,7 @@ const elicitHook: PtyCase = {
 	settings: {
 		...hooks(["Elicitation", "ElicitationResult", "Notification"]),
 		enableAllProjectMcpServers: true,
-		permissions: { allow: ["mcp__probe"] },
+		permissions: { allow: ["mcp__probe"] }
 	},
 	projFiles: ELICIT_MCP,
 	env: { ENABLE_TOOL_SEARCH: "false" },
@@ -130,10 +130,10 @@ const elicitHook: PtyCase = {
 				hookSpecificOutput: {
 					hookEventName: "Elicitation",
 					action: "accept",
-					content: { color: "red" },
-				},
-			}),
-		},
+					content: { color: "red" }
+				}
+			})
+		}
 	},
 	schedule: [READY, ASK("prompt", 6)],
 	secs: 18,
@@ -155,12 +155,12 @@ const elicitHook: PtyCase = {
 			mcpToolsInRequests: [
 				...new Set(
 					x.messages.flatMap((q) =>
-						toolNames(q).filter((n) => n.startsWith("mcp__")),
-					),
-				),
+						toolNames(q).filter((n) => n.startsWith("mcp__"))
+					)
+				)
 			].toSorted(),
 			toolSearchInRequests: x.messages.some((q) =>
-				toolNames(q).includes("ToolSearch"),
+				toolNames(q).includes("ToolSearch")
 			),
 			serverStarted: mcp.includes('"method":"initialize"'),
 			serverGotAccept: mcp.includes('"action":"accept"'),
@@ -173,11 +173,11 @@ const elicitHook: PtyCase = {
 				...new Set(
 					x
 						.hook("Notification")
-						.map((n) => show(n.json["notification_type"] ?? "")),
-				),
-			].toSorted(),
+						.map((n) => show(n.json["notification_type"] ?? ""))
+				)
+			].toSorted()
 		};
-	},
+	}
 };
 
 export const hooksGroup: PtyGroup = {
@@ -191,6 +191,6 @@ export const hooksGroup: PtyGroup = {
 		notification(false),
 		notification(true),
 		...PRECOMPACT.map((c) => preCompact(c)),
-		elicitHook,
-	],
+		elicitHook
+	]
 };

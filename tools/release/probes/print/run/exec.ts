@@ -16,7 +16,7 @@ const argsOf = (
 	prompt: string,
 	sb: Sandbox,
 	baseUrl: string,
-	id: string,
+	id: string
 ): string[] =>
 	(
 		c.argv ?? [
@@ -26,21 +26,21 @@ const argsOf = (
 			"--verbose",
 			"--model",
 			c.model ?? "claude-opus-5-5",
-			...(c.args ?? []),
+			...(c.args ?? [])
 		]
 	).map((a) =>
 		subst(a, sb)
 			.split("{BASE}")
 			.join(baseUrl)
 			.split("{MEMORY_MCP}")
-			.join(`${new URL(baseUrl).origin}/v2/ccr-sessions/${id}/memory/mcp`),
+			.join(`${new URL(baseUrl).origin}/v2/ccr-sessions/${id}/memory/mcp`)
 	);
 
 const envOf = (
 	c: Case,
 	sb: Sandbox,
 	baseUrl: string,
-	extra: Record<string, string>,
+	extra: Record<string, string>
 ): Record<string, string> =>
 	childEnv({
 		home: sb.home,
@@ -53,7 +53,7 @@ const envOf = (
 			: { allowOverride: c.allowOverride }),
 		...(c.fakeCredentials === undefined
 			? {}
-			: { fakeCredentials: c.fakeCredentials }),
+			: { fakeCredentials: c.fakeCredentials })
 	});
 
 const exitedWith = async (
@@ -61,7 +61,7 @@ const exitedWith = async (
 	c: Case,
 	sb: Sandbox,
 	args: string[],
-	childEnvVars: Record<string, string>,
+	childEnvVars: Record<string, string>
 ): Promise<{
 	res: Awaited<ReturnType<typeof runChild>>;
 	after: Record<string, unknown>;
@@ -80,11 +80,11 @@ const exitedWith = async (
 			: {
 					beforeReap: async () => {
 						after = await afterExit(sb);
-					},
+					}
 				}),
 		...(c.stdin === undefined ? {} : { stdin: c.stdin }),
 		...(c.stdinOpenMs === undefined ? {} : { stdinOpenMs: c.stdinOpenMs }),
-		timeoutMs: c.timeoutMs ?? 60_000,
+		timeoutMs: c.timeoutMs ?? 60_000
 	});
 	return { res, after };
 };
@@ -94,7 +94,7 @@ const runIn = async (
 	bin: string,
 	c: Case,
 	sb: Sandbox,
-	prompt: string,
+	prompt: string
 ): Promise<Run> => {
 	const s = await getStub();
 	counter += 1;
@@ -107,7 +107,7 @@ const runIn = async (
 	const baseUrl = await s.register(id, stubCaseOf(c, sb, log));
 	const args = argsOf(c, prompt, sb, baseUrl, id);
 	const extra = Object.fromEntries(
-		Object.entries(c.env ?? {}).map(([k, v]) => [k, subst(v, sb)]),
+		Object.entries(c.env ?? {}).map(([k, v]) => [k, subst(v, sb)])
 	);
 	const childEnvVars = envOf(c, sb, baseUrl, extra);
 	await assertShimReady(childEnvVars);
@@ -133,7 +133,7 @@ const runIn = async (
 			: {}),
 		args,
 		envSet: Object.keys(extra),
-		after,
+		after
 	};
 };
 
@@ -150,7 +150,7 @@ export const runCase = async (bin: string, c: Case): Promise<Run> => {
 		...(c.cfgFiles ? { cfgFiles: c.cfgFiles } : {}),
 		...(c.projFiles ? { projFiles: c.projFiles } : {}),
 		...(c.homeFiles ? { homeFiles: c.homeFiles } : {}),
-		...(c.git === true || c.commit === true ? { git: true } : {}),
+		...(c.git === true || c.commit === true ? { git: true } : {})
 	});
 	try {
 		return await runIn(bin, c, sb, prompt);

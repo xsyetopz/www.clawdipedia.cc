@@ -52,17 +52,17 @@ const formatDir = async (files: Map<string, string>, out: string) => {
 	const tmp = await mkdtemp(join(tmpdir(), "cc-inspect-fmt-"));
 	try {
 		await Promise.all(
-			[...files].map(([f, text]) => Bun.write(join(tmp, f), text)),
+			[...files].map(([f, text]) => Bun.write(join(tmp, f), text))
 		);
 		const proc = Bun.spawn([process.execPath, "fmt", "--no-script", "."], {
 			cwd: tmp,
 			env: { PATH: process.env["PATH"] ?? "" },
 			stdout: "ignore",
-			stderr: "pipe",
+			stderr: "pipe"
 		});
 		const [stderr, exitCode] = await Promise.all([
 			new Response(proc.stderr).text(),
-			proc.exited,
+			proc.exited
 		]);
 		if (exitCode !== 0) {
 			throw new Error(`bun fmt failed: ${stderr.slice(0, 300)}`);
@@ -92,19 +92,19 @@ const parsed = async (x: {
 	} catch (error) {
 		return (error instanceof Error ? error.message : String(error)).slice(
 			0,
-			120,
+			120
 		);
 	}
 };
 
 const cleanModules = async (
-	js: { name: string; text: string }[],
+	js: { name: string; text: string }[]
 ): Promise<Cleaned> => {
 	const out: Cleaned = {
 		units: [],
 		texts: new Map(),
 		literals: new Map(),
-		skipped: {},
+		skipped: {}
 	};
 	// One module at a time: its syntax tree stays inside this call, so it is freed before the next parse.
 	const cleaned = await mapSeq(js, async (x) => {
@@ -126,7 +126,7 @@ const cleanModules = async (
 		out.texts.set(c.name, c.text);
 		out.literals.set(
 			c.name,
-			[...new Set(c.units.flatMap((u) => u.f))].toSorted(),
+			[...new Set(c.units.flatMap((u) => u.f))].toSorted()
 		);
 	}
 	return out;
@@ -170,7 +170,7 @@ const isIndex = (x: unknown): x is Index =>
 
 const readCache = async (
 	file: string,
-	binary: Index["binary"],
+	binary: Index["binary"]
 ): Promise<Index | undefined> => {
 	const cached = Bun.file(file);
 	if (!(await cached.exists())) {
@@ -197,7 +197,7 @@ export const prepare = async (
 	version: string,
 	binaryPath: string,
 	modules: { name: string; text: string }[],
-	root?: string,
+	root?: string
 ): Promise<{ dir: string; index: Index; parsed: number; ms: number }> => {
 	const t0 = performance.now();
 	const dir = join(root ?? (await cacheRoot()), version, "clean");
@@ -209,7 +209,7 @@ export const prepare = async (
 			dir,
 			index: cached,
 			parsed: 0,
-			ms: Math.round(performance.now() - t0),
+			ms: Math.round(performance.now() - t0)
 		};
 	}
 	const js = modules.filter((x) => /\.m?js$/u.test(x.name));
@@ -226,20 +226,20 @@ export const prepare = async (
 		binary,
 		skipped,
 		chunks: Object.fromEntries(chunks),
-		units,
+		units
 	};
 	await mkdir(dir, { recursive: true });
 	await rm(join(dir, "readable"), { recursive: true, force: true });
 	await formatDir(
 		new Map([...texts].map(([n, t]) => [n, renameChunks(t, chunks)])),
-		join(dir, "modules"),
+		join(dir, "modules")
 	);
 	await Bun.write(file, JSON.stringify(index));
 	return {
 		dir,
 		index,
 		parsed: js.length - Object.keys(skipped).length,
-		ms: Math.round(performance.now() - t0),
+		ms: Math.round(performance.now() - t0)
 	};
 };
 
@@ -258,7 +258,7 @@ export const releasePrepared = (): void => {
  * result did no work, so it gives `parsed: 0` and its own `ms`.
  */
 export const prepared = async (
-	binary?: string,
+	binary?: string
 ): Promise<Awaited<ReturnType<typeof prepare>>> => {
 	const t0 = performance.now();
 	const p = await program(binary);
@@ -273,7 +273,7 @@ export const prepared = async (
 	const pending = prepare(
 		version,
 		p.path,
-		p.modules.map((m) => ({ name: m.name, text: m.source })),
+		p.modules.map((m) => ({ name: m.name, text: m.source }))
 	);
 	preparedCache.set(p.path, pending);
 	try {

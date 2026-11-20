@@ -12,7 +12,7 @@ import {
 	omitLarge,
 	requireJson,
 	sortDefs,
-	usable,
+	usable
 } from "./defs.ts";
 
 export { addDef } from "./defs.ts";
@@ -50,13 +50,13 @@ export const hookOutput = (raw: Record<string, unknown>): Json => {
 	return {
 		type: "object",
 		...Object.fromEntries(
-			Object.entries(sync).filter(([k]) => k !== "properties"),
+			Object.entries(sync).filter(([k]) => k !== "properties")
 		),
 		properties: {
 			...props,
-			hookSpecificOutput: { ...restUnion, oneOf: refs },
+			hookSpecificOutput: { ...restUnion, oneOf: refs }
 		},
-		$defs: sortDefs(defs),
+		$defs: sortDefs(defs)
 	};
 };
 
@@ -69,7 +69,7 @@ export interface ToolsResult {
 
 const TOOL_SCHEMAS = [
 	["inputSchema", "Input"],
-	["outputSchema", "Result"],
+	["outputSchema", "Result"]
 ] as const;
 
 export const tools = (raw: Record<string, unknown>): ToolsResult => {
@@ -112,7 +112,7 @@ export const control = (raw: Record<string, unknown>): Json => {
 		const request = omitLarge(
 			inlineDefs(requireJson(row["request"], "control request")),
 			"claude-code-stream-json.json (userInput and assistantOutput)",
-			50_000,
+			50_000
 		);
 		const subtype = getJson(request, "properties")?.["subtype"];
 		const literalSubtype = isObject(subtype) ? subtype["const"] : undefined;

@@ -42,7 +42,7 @@ export const pageResult = (
 	heading: string | undefined,
 	offset: number,
 	maxChars: number,
-	source: Source,
+	source: Source
 ): Result => {
 	let md = md0;
 	if (present(heading)) {
@@ -53,7 +53,7 @@ export const pageResult = (
 				.join("\n");
 			return fail(
 				`No H2 section "${heading}" on "${info.route}". Headings:\n${hs}`,
-				source,
+				source
 			);
 		}
 		md = sec;
@@ -62,7 +62,7 @@ export const pageResult = (
 	if (offset >= total && total > 0) {
 		return fail(
 			`offset ${offset} is past the end (${total} characters).`,
-			source,
+			source
 		);
 	}
 	const chunk = md.slice(offset, offset + maxChars);
@@ -79,8 +79,8 @@ export const pageResult = (
 			total,
 			...(end < total ? { nextOffset: end } : {}),
 			text: chunk,
-			source: sourceData(source),
+			source: sourceData(source)
 		},
-		source,
+		source
 	);
 };

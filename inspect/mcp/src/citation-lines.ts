@@ -4,7 +4,7 @@ import {
 	linesWith,
 	offsetHit,
 	termsByLine,
-	WINDOW,
+	WINDOW
 } from "./citation-terms.ts";
 import { wordSet } from "./term-move.ts";
 
@@ -42,19 +42,19 @@ const pickLine = (
 	code: string,
 	rows: readonly string[],
 	at: number,
-	term: string,
+	term: string
 ): { line: number } | { reason: string } => {
 	const hit = code.indexOf(term, Math.max(0, at - WINDOW));
 	const want = wordSet(
 		code.slice(
 			Math.max(0, hit - CONTEXT_CHARS),
-			hit + term.length + CONTEXT_CHARS,
-		),
+			hit + term.length + CONTEXT_CHARS
+		)
 	);
 	const holding = linesWith(rows, term);
 	if (holding.length > MAX_LINES) {
 		return {
-			reason: `"${term}" is on ${holding.length} lines: too common to place`,
+			reason: `"${term}" is on ${holding.length} lines: too common to place`
 		};
 	}
 	const scored = holding
@@ -62,7 +62,7 @@ const pickLine = (
 			const got = wordSet(
 				rows
 					.slice(Math.max(0, line - 1 - CONTEXT_LINES), line + CONTEXT_LINES)
-					.join("\n"),
+					.join("\n")
 			);
 			const shared = [...want].filter((w) => got.has(w)).length;
 			return { line, score: shared / Math.max(1, want.size, got.size) };
@@ -74,7 +74,7 @@ const pickLine = (
 	}
 	if (next !== undefined && next.score === best.score) {
 		return {
-			reason: `tie between lines ${best.line} and ${next.line} for "${term}"`,
+			reason: `tie between lines ${best.line} and ${next.line} for "${term}"`
 		};
 	}
 	return { line: best.line };
@@ -85,7 +85,7 @@ const convertRange = (
 	code: string,
 	rows: readonly string[],
 	ends: readonly (string | undefined)[],
-	terms: readonly string[],
+	terms: readonly string[]
 ): { lines: number[]; term: string } | { reason: string } => {
 	const offsets = ends.flatMap((n) => (n === undefined ? [] : [Number(n)]));
 	// The longest term first: it names its code most exactly, and a short word sits near much code.
@@ -96,7 +96,7 @@ const convertRange = (
 	let first = "";
 	for (const n of offsets) {
 		let got: { line: number } | { reason: string } = {
-			reason: `no term of the line near offset ${n}`,
+			reason: `no term of the line near offset ${n}`
 		};
 		for (const term of byLength) {
 			if (offsetHit(code, n, [term]) === undefined) {
@@ -128,7 +128,7 @@ export const toLines = (
 	md: string,
 	modules: ReadonlyMap<string, string>,
 	clean: ReadonlyMap<string, readonly string[]>,
-	file = "",
+	file = ""
 ): { text: string; done: LineConversion[]; left: LineConversion[] } => {
 	const terms = termsByLine(md);
 	const done: LineConversion[] = [];
@@ -155,7 +155,7 @@ export const toLines = (
 					if (Number(a) <= rows.length) {
 						left.push({
 							...note,
-							reason: "number is also a line of the module",
+							reason: "number is also a line of the module"
 						});
 						return from;
 					}
@@ -167,8 +167,8 @@ export const toLines = (
 					const to = `${chunk}${sep}${got.lines.join("-")}`;
 					done.push({ ...note, to, term: got.term });
 					return to;
-				},
-			),
+				}
+			)
 		)
 		.join("\n");
 	return { text, done, left };

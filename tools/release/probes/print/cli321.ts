@@ -11,8 +11,8 @@ const ORG = json({
 	oauthAccount: {
 		organizationUuid: "00000000-0000-4000-8000-000000000000",
 		accountUuid: "00000000-0000-4000-8000-000000000001",
-		emailAddress: "probe@example.invalid",
-	},
+		emailAddress: "probe@example.invalid"
+	}
 });
 
 const ANY = /\S/u;
@@ -27,15 +27,15 @@ const rc = (name: string, args: string[]): CaseDef =>
 			cfgFiles: { ".credentials.json": OAUTH_CREDS, ".claude.json": ORG },
 			env: {
 				ANTHROPIC_BASE_URL: "https://api.anthropic.com",
-				CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "",
+				CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: ""
 			},
 			allowOverride: [
 				"ANTHROPIC_BASE_URL",
-				"CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC",
+				"CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC"
 			],
-			timeoutMs: 20_000,
+			timeoutMs: 20_000
 		},
-		ANY,
+		ANY
 	);
 
 const runner = (name: string, args: string[]): CaseDef =>
@@ -65,12 +65,12 @@ export const CASES: CaseDef[] = [
 	runner("pool-secret-file", [
 		...DEAD_API,
 		"--pool-secret-file",
-		"{HOME}/missing",
+		"{HOME}/missing"
 	]),
 	runner("drain-wait-bg-tasks", [
 		...DEAD_API,
 		"--drain-wait-bg-tasks-sec",
-		"x",
+		"x"
 	]),
 	runner("retire-at-ms", [...DEAD_API, "--retire-at", "1900000000000"]),
 	runner("confine-bad", [...DEAD_API, "--confine-repo-settings", "strict"]),
@@ -82,25 +82,25 @@ export const CASES: CaseDef[] = [
 	runner("git-host-rewrite-url", [
 		...DEAD_API,
 		"--git-host-rewrite",
-		"https://a=b",
+		"https://a=b"
 	]),
 	runner("orchestrator-min-idle", [
 		"orchestrator",
 		...DEAD_API,
 		"--min-idle",
-		"500",
+		"500"
 	]),
 	runner("orchestrator-hook-timeout", [
 		"orchestrator",
 		...DEAD_API,
 		"--hook-timeout",
-		"200",
+		"200"
 	]),
 	runner("orchestrator-scm-id-only", [
 		"orchestrator",
 		...DEAD_API,
 		"--scm-connector-id",
-		"4",
+		"4"
 	]),
 	runner("orchestrator-no-hooks", ["orchestrator", ...DEAD_API]),
 	daemon("list", ["list"]),
@@ -109,12 +109,12 @@ export const CASES: CaseDef[] = [
 	daemon("start", ["start"]),
 	daemon("restart", ["restart"]),
 	daemon("remote-control", ["remote-control", "list"]),
-	daemon("unknown", ["bogus"]),
+	daemon("unknown", ["bogus"])
 ];
 
 export const cli321: PrintGroup = {
 	id: "cli321",
 	title:
 		"2.1.321: hand-parsed subcommands (remote-control, self-hosted-runner, daemon)",
-	run: (ctx) => runCases(ctx, "cli321", CASES),
+	run: (ctx) => runCases(ctx, "cli321", CASES)
 };

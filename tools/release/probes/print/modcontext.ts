@@ -9,7 +9,7 @@ import {
 	msgs,
 	runCases,
 	show,
-	withRun,
+	withRun
 } from "./run/helpers.ts";
 import type { PrintGroup } from "./types.ts";
 
@@ -17,7 +17,7 @@ const KINDS = ["managed", "user", "project", "local", "memory"];
 const FILES = KINDS.map((kind) => ({
 	path: `/opt/ctxprobe/${kind}.md`,
 	kind,
-	content: `Probe ${kind} text.`,
+	content: `Probe ${kind} text.`
 }));
 
 const MOD = `export const register = (on) => {
@@ -38,12 +38,12 @@ const addedFiles: CaseDef = {
 				homeFiles: {
 					"plug/.claude-plugin/plugin.json": json({
 						name: "ctxprobe",
-						version: "1.0.0",
+						version: "1.0.0"
 					}),
 					"plug/hooks/hooks.json": json({ modules: ["./register.ts"] }),
-					"plug/hooks/register.ts": MOD,
+					"plug/hooks/register.ts": MOD
 				},
-				args: ["--plugin-dir", "{HOME}/plug"],
+				args: ["--plugin-dir", "{HOME}/plug"]
 			},
 			(r) => {
 				const [q] = msgs(r);
@@ -52,7 +52,7 @@ const addedFiles: CaseDef = {
 					.flatMap((c) => show(obj(c)["text"] ?? "").split("\n"))
 					.filter((l) => l.includes("ctxprobe") || l.includes("Probe "));
 				const data: Record<string, Data> = {
-					precondition: lines.some((l) => l.includes("Probe managed text.")),
+					precondition: lines.some((l) => l.includes("Probe managed text."))
 				};
 				for (const kind of KINDS) {
 					data[`label.${kind}`] =
@@ -60,13 +60,13 @@ const addedFiles: CaseDef = {
 					data[`quoted.${kind}`] = lines.includes(`> Probe ${kind} text.`);
 				}
 				return { from: r, data, samples: { lines: lines.join("\n") } };
-			},
-		),
+			}
+		)
 };
 
 export const modcontext: PrintGroup = {
 	id: "modcontext",
 	title:
 		"Mod API prompt.context: the label of an instruction file that a mod adds",
-	run: (ctx) => runCases(ctx, "modcontext", [addedFiles]),
+	run: (ctx) => runCases(ctx, "modcontext", [addedFiles])
 };

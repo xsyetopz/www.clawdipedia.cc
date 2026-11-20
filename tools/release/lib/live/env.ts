@@ -14,16 +14,16 @@ export const liveToken = (): string => {
 	const token = process.env[TOKEN_VAR];
 	if (token === undefined || token === "") {
 		throw new Error(
-			`${TOKEN_VAR} is not set: run through tools/release/secret-runner.sh oauth`,
+			`${TOKEN_VAR} is not set: run through tools/release/secret-runner.sh oauth`
 		);
 	}
 	const other = Object.keys(process.env).filter(
 		(k) =>
-			k !== TOKEN_VAR && CREDENTIAL_NAME.test(k) && !NON_SECRET_NAMES.has(k),
+			k !== TOKEN_VAR && CREDENTIAL_NAME.test(k) && !NON_SECRET_NAMES.has(k)
 	);
 	if (other.length > 0) {
 		throw new Error(
-			`refusing live run: other credential-looking names in the env (${other.join(", ")}); run through tools/release/secret-runner.sh oauth`,
+			`refusing live run: other credential-looking names in the env (${other.join(", ")}); run through tools/release/secret-runner.sh oauth`
 		);
 	}
 	registerSecret(token);
@@ -33,7 +33,7 @@ export const liveToken = (): string => {
 /** Like assertSafeEnv, except exactly CLAUDE_CODE_OAUTH_TOKEN === token is allowed. No API key, ever. */
 export const assertLiveEnv = (
 	env: Record<string, string>,
-	token: string,
+	token: string
 ): void => {
 	if (token === "") {
 		throw new Error("assertLiveEnv needs the token value");
@@ -87,7 +87,7 @@ export const liveEnv = (o: LiveEnvOpts): Record<string, string> => {
 		GIT_CONFIG_GLOBAL: join(o.home, ".gitconfig"),
 		// git's osxkeychain helper must not run
 		GIT_CONFIG_NOSYSTEM: "1",
-		[TOKEN_VAR]: token,
+		[TOKEN_VAR]: token
 	};
 	if (o.allowNonessential !== true && o.featureGates !== true) {
 		env["CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC"] = "1";

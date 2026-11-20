@@ -39,7 +39,7 @@ export interface EnvOpts {
 export const baseResult = (
 	x: LiveCtx,
 	id: string,
-	o: Partial<CaseResult> & { data: Record<string, Data> },
+	o: Partial<CaseResult> & { data: Record<string, Data> }
 ): CaseResult => ({
 	schema: 1,
 	id: `live.${id}`,
@@ -52,5 +52,5 @@ export const baseResult = (
 	exit: null,
 	timedOut: false,
 	facts: [],
-	...o,
+	...o
 });

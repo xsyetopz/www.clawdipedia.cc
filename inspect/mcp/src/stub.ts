@@ -27,7 +27,7 @@ const MESSAGE = {
 	content: [{ type: "text", text: "OK" }],
 	stop_reason: "end_turn",
 	stop_sequence: null,
-	usage: { input_tokens: 10, output_tokens: 5 },
+	usage: { input_tokens: 10, output_tokens: 5 }
 };
 
 // The verdict of the server-side auto mode check, in the shape the program parses.
@@ -39,31 +39,31 @@ const safeguardOf = (call?: Call) =>
 				status: {
 					type: "available",
 					tool_uses: {
-						[call.id]: { type: "evaluated", outcome: call.safeguard },
-					},
-				},
-			},
-		],
+						[call.id]: { type: "evaluated", outcome: call.safeguard }
+					}
+				}
+			}
+		]
 	};
 
 const streamOf = (tool?: Call) =>
 	sse("message_start", {
 		type: "message_start",
-		message: { ...MESSAGE, content: [], stop_reason: null },
+		message: { ...MESSAGE, content: [], stop_reason: null }
 	}) +
 	sse("content_block_start", {
 		type: "content_block_start",
 		index: 0,
 		content_block: tool
 			? { type: "tool_use", id: tool.id, name: tool.name, input: {} }
-			: { type: "text", text: "" },
+			: { type: "text", text: "" }
 	}) +
 	sse("content_block_delta", {
 		type: "content_block_delta",
 		index: 0,
 		delta: tool
 			? { type: "input_json_delta", partial_json: JSON.stringify(tool.input) }
-			: { type: "text_delta", text: "OK" },
+			: { type: "text_delta", text: "OK" }
 	}) +
 	sse("content_block_stop", { type: "content_block_stop", index: 0 }) +
 	sse("message_delta", {
@@ -71,9 +71,9 @@ const streamOf = (tool?: Call) =>
 		delta: {
 			stop_reason: tool ? "tool_use" : "end_turn",
 			stop_sequence: null,
-			...safeguardOf(tool),
+			...safeguardOf(tool)
 		},
-		usage: { output_tokens: 5 },
+		usage: { output_tokens: 5 }
 	}) +
 	sse("message_stop", { type: "message_stop" });
 
@@ -82,7 +82,7 @@ const countToolResults = (messages: Record<string, unknown>[]): number =>
 		const content: unknown = m["content"];
 		const blocks: unknown[] = Array.isArray(content) ? content : [];
 		return blocks.filter(
-			(c: unknown) => isRecord(c) && c["type"] === "tool_result",
+			(c: unknown) => isRecord(c) && c["type"] === "tool_result"
 		);
 	}).length;
 
@@ -104,10 +104,10 @@ const jsonReply = (call: Call | undefined) =>
 		: {
 				...MESSAGE,
 				content: [
-					{ type: "tool_use", id: call.id, name: call.name, input: call.input },
+					{ type: "tool_use", id: call.id, name: call.name, input: call.input }
 				],
 				stop_reason: "tool_use",
-				...safeguardOf(call),
+				...safeguardOf(call)
 			};
 
 const parseBody = (raw: string): unknown => {
@@ -121,7 +121,7 @@ const parseBody = (raw: string): unknown => {
 const messagesReply = (
 	body: unknown,
 	calls: Tool[] | undefined,
-	fastRefusal: number | undefined,
+	fastRefusal: number | undefined
 ): Response => {
 	if (fastRefusal !== undefined && isRecord(body) && body["speed"] === "fast") {
 		return Response.json(
@@ -129,16 +129,16 @@ const messagesReply = (
 				type: "error",
 				error: {
 					type: "invalid_request_error",
-					message: "Fast mode is not enabled for this model",
-				},
+					message: "Fast mode is not enabled for this model"
+				}
 			},
-			{ status: fastRefusal },
+			{ status: fastRefusal }
 		);
 	}
 	const call = calls && callOf(body, calls);
 	return isRecord(body) && body["stream"] === true
 		? new Response(streamOf(call), {
-				headers: { "content-type": "text/event-stream" },
+				headers: { "content-type": "text/event-stream" }
 			})
 		: Response.json(jsonReply(call));
 };
@@ -172,7 +172,7 @@ export const makeAnswer =
 		requests: Sent[],
 		calls: Tool[] | undefined,
 		replies: Record<string, unknown>,
-		fastRefusal?: number,
+		fastRefusal?: number
 	) =>
 	async (req: Request): Promise<Response> => {
 		const key =
@@ -187,7 +187,7 @@ export const makeAnswer =
 			host: req.headers.get("host") ?? "",
 			fakeKey: key === undefined ? null : key === FAKE_KEY,
 			...(betaHeader !== null && { betas: betaNames(betaHeader) }),
-			body,
+			body
 		});
 		const model = vertexModel(url.pathname);
 		if (

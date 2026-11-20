@@ -4,7 +4,7 @@ import {
 	OV_AGENT,
 	ovCan,
 	subTool,
-	type Variant,
+	type Variant
 } from "./base.ts";
 
 export const AGENT_VARIANTS: Variant[] = [
@@ -24,8 +24,8 @@ export const AGENT_VARIANTS: Variant[] = [
 			use: "Yes. The model starts subagents.",
 			change: "Not the built-in text. You can write custom agents.",
 			toggle: "`--disallowedTools Agent` stops all subagents.",
-			where: "Built into the program.",
-		},
+			where: "Built into the program."
+		}
 	})),
 	{
 		id: "subagent-custom",
@@ -44,8 +44,8 @@ export const AGENT_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "Yes. You write the agent file.",
 			toggle: "Add or remove the file.",
-			where: "`.claude/agents/*.md` or `~/.claude/agents/*.md`.",
-		},
+			where: "`.claude/agents/*.md` or `~/.claude/agents/*.md`."
+		}
 	},
 	...(["statusline-setup", "claude"] as const).map((t) => ({
 		id: `subagent-${t}`,
@@ -62,8 +62,8 @@ export const AGENT_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Yes. A user agent file with the same name replaces it.",
 			"`--disallowedTools Agent` stops all subagents.",
-			"Built into the program. Override in `.claude/agents/<name>.md`.",
-		),
+			"Built into the program. Override in `.claude/agents/<name>.md`."
+		)
 	})),
 	{
 		id: "subagent-web-fetch",
@@ -81,8 +81,8 @@ export const AGENT_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Yes. A user agent file with the same name replaces it.",
 			"`CLAUDE_CODE_WEB_FETCH_AGENT=1` adds it. `CLAUDE_CODE_DISABLE_WEB_FETCH` removes it.",
-			"Built into the program. Override in `.claude/agents/web-fetch.md`.",
-		),
+			"Built into the program. Override in `.claude/agents/web-fetch.md`."
+		)
 	},
 	{
 		id: "override-agent-file",
@@ -91,7 +91,7 @@ export const AGENT_VARIANTS: Variant[] = [
 		model: LEAN_MODEL,
 		tool: subTool("Explore"),
 		projFiles: {
-			".claude/agents/Explore.md": OV_AGENT("Explore", "PROBE-OVERRIDE-FILE"),
+			".claude/agents/Explore.md": OV_AGENT("Explore", "PROBE-OVERRIDE-FILE")
 		},
 		pick: "subagent",
 		baseline: "subagent-explore",
@@ -103,8 +103,8 @@ export const AGENT_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Yes. You write the agent file.",
 			"Add or remove the file.",
-			"`.claude/agents/*.md` or `~/.claude/agents/*.md`.",
-		),
+			"`.claude/agents/*.md` or `~/.claude/agents/*.md`."
+		)
 	},
 	{
 		id: "override-agents-flag",
@@ -117,9 +117,9 @@ export const AGENT_VARIANTS: Variant[] = [
 			JSON.stringify({
 				"general-purpose": {
 					description: "Replacement for the built-in agent",
-					prompt: "PROBE-OVERRIDE-FLAG: you replace the built-in agent.",
-				},
-			}),
+					prompt: "PROBE-OVERRIDE-FLAG: you replace the built-in agent."
+				}
+			})
 		],
 		pick: "subagent",
 		baseline: "subagent-general-purpose",
@@ -128,7 +128,7 @@ export const AGENT_VARIANTS: Variant[] = [
 		how: 'Run `claude --agents \'{"general-purpose":{"description":"...","prompt":"..."}}\'`.',
 		select: "`--agents` with a built-in name",
 		status: "Documented",
-		can: ovCan("Yes. You give the JSON.", "`--agents`.", "Command-line flag."),
+		can: ovCan("Yes. You give the JSON.", "`--agents`.", "Command-line flag.")
 	},
 	{
 		id: "override-append-subagent",
@@ -146,8 +146,8 @@ export const AGENT_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Yes. You give the text.",
 			"`--append-subagent-system-prompt` or `--append-subagent-system-prompt-file` (print mode only).",
-			"Command-line flags.",
-		),
+			"Command-line flags."
+		)
 	},
 	{
 		id: "disable-explore-plan",
@@ -164,8 +164,8 @@ export const AGENT_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Yes. It removes text.",
 			"`CLAUDE_CODE_DISABLE_EXPLORE_PLAN_AGENTS=1`.",
-			"Environment variable.",
-		),
+			"Environment variable."
+		)
 	},
 	{
 		id: "disable-builtin-agents",
@@ -182,7 +182,7 @@ export const AGENT_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Yes. It removes text.",
 			"`CLAUDE_AGENT_SDK_DISABLE_BUILTIN_AGENTS=1`.",
-			"Environment variable.",
-		),
-	},
+			"Environment variable."
+		)
+	}
 ];

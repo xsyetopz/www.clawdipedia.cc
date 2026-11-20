@@ -3,7 +3,7 @@ import {
 	hookSettings,
 	LEAN_MODEL,
 	ovCan,
-	type Variant,
+	type Variant
 } from "./base.ts";
 
 export const HOOK_VARIANTS: Variant[] = [
@@ -25,8 +25,8 @@ export const HOOK_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Partly. You write the prompt and pick the model. The system text is fixed.",
 			"Add or remove the hook.",
-			"`hooks` in any settings scope.",
-		),
+			"`hooks` in any settings scope."
+		)
 	},
 	{
 		id: "hook-agent",
@@ -46,7 +46,7 @@ export const HOOK_VARIANTS: Variant[] = [
 		can: ovCan(
 			"Partly. You write the prompt and pick the model. The system text is fixed.",
 			"Add or remove the hook.",
-			"`hooks` in any settings scope.",
-		),
-	},
+			"`hooks` in any settings scope."
+		)
+	}
 ];

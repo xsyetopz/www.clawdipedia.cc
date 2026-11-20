@@ -5,17 +5,17 @@ import { hold, trinket } from "./stream.ts";
 const HOLD1 = { CLAUDE_CODE_STREAM_EVENT_HOLD_MS: "1" };
 const NOSUB = {
 	...HOLD1,
-	CLAUDE_CODE_STREAM_EVENT_NO_SUBSCRIBER_HOLD_MS: "2000",
+	CLAUDE_CODE_STREAM_EVENT_NO_SUBSCRIBER_HOLD_MS: "2000"
 };
 const SPACED = { CLAUDE_CODE_STREAM_EVENT_HOLD_MS: "100" };
 const SPACED_NOSUB = {
 	...SPACED,
-	CLAUDE_CODE_STREAM_EVENT_NO_SUBSCRIBER_HOLD_MS: "3000",
+	CLAUDE_CODE_STREAM_EVENT_NO_SUBSCRIBER_HOLD_MS: "3000"
 };
 const FIRST_PARTY = { _CLAUDE_CODE_ASSUME_FIRST_PARTY_BASE_URL: "1" };
 const COWORK = {
 	CLAUDE_CODE_REMOTE: "1",
-	CLAUDE_CODE_ENTRYPOINT: "remote_cowork",
+	CLAUDE_CODE_ENTRYPOINT: "remote_cowork"
 };
 
 export const streamCases: CaseDef[] = [
@@ -35,20 +35,20 @@ export const streamCases: CaseDef[] = [
 	authWarm("on", { ...FIRST_PARTY, ...COWORK }),
 	otlpProtocol("logs", "LOGS", { OTEL_EXPORTER_OTLP_LOGS_PROTOCOL: "bogus" }),
 	otlpProtocol("metrics", "METRICS", {
-		OTEL_EXPORTER_OTLP_METRICS_PROTOCOL: "bogus",
+		OTEL_EXPORTER_OTLP_METRICS_PROTOCOL: "bogus"
 	}),
 	otlpProtocol("traces", "TRACES", {
-		OTEL_EXPORTER_OTLP_TRACES_PROTOCOL: "bogus",
+		OTEL_EXPORTER_OTLP_TRACES_PROTOCOL: "bogus"
 	}),
 	otlpProtocol("logs-general", "LOGS", {
-		OTEL_EXPORTER_OTLP_PROTOCOL: "bogus",
+		OTEL_EXPORTER_OTLP_PROTOCOL: "bogus"
 	}),
 	authWarm("no-first-party", COWORK),
 	authWarm("no-remote", FIRST_PARTY),
 	trinket("unset"),
 	trinket(
 		"set",
-		"<summary>TRINKET_MARK</summary> Write the summary of this chat.",
+		"<summary>TRINKET_MARK</summary> Write the summary of this chat."
 	),
-	trinket("no-summary-tag", "TRINKET_MARK plain text"),
+	trinket("no-summary-tag", "TRINKET_MARK plain text")
 ];

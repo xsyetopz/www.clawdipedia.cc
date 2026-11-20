@@ -14,7 +14,7 @@ const otelEnv = (url: string): Record<string, string> => ({
 	OTEL_EXPORTER_OTLP_ENDPOINT: url,
 	OTEL_METRIC_EXPORT_INTERVAL: "500",
 	OTEL_LOGS_EXPORT_INTERVAL: "500",
-	OTEL_TRACES_EXPORT_INTERVAL: "500",
+	OTEL_TRACES_EXPORT_INTERVAL: "500"
 });
 
 interface OtelOpt {
@@ -38,47 +38,47 @@ const otelCase = (name: string, o: OtelOpt): CaseDef => ({
 					allowOverride: [
 						...(o.allow ?? []),
 						"DISABLE_TELEMETRY",
-						"CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC",
+						"CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC"
 					],
 					env: {
 						DISABLE_TELEMETRY: "",
 						CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "",
 						...otelEnv(rx.url),
-						...o.env,
+						...o.env
 					},
 					cfgFiles: {
 						...(o.creds === undefined ? {} : { ".credentials.json": o.creds }),
 						".claude.json": json({
 							hasCompletedOnboarding: true,
-							...(o.account ? { oauthAccount: o.account } : {}),
-						}),
+							...(o.account ? { oauthAccount: o.account } : {})
+						})
 					},
-					timeoutMs: 60_000,
+					timeoutMs: 60_000
 				},
 				(r) => {
 					const data: Record<string, Data> = {
-						precondition: SIGNALS.every((x) => rx.bodies[x].length > 0),
+						precondition: SIGNALS.every((x) => rx.bodies[x].length > 0)
 					};
 					for (const s of SIGNALS) {
 						data[s] = json({
 							exports: rx.bodies[s].length,
-							...valuesOf(rx.bodies[s], "anthropic."),
+							...valuesOf(rx.bodies[s], "anthropic.")
 						});
 					}
 					return { from: r, data };
-				},
+				}
 			);
 		} finally {
 			void rx.stop();
 		}
-	},
+	}
 });
 
 const SIGNALS = ["metrics", "logs", "traces"] as const;
 const ACCOUNT = {
 	accountUuid: "00000000-0000-4000-8000-000000000001",
 	emailAddress: "probe@example.com",
-	organizationUuid: "00000000-0000-4000-8000-000000000002",
+	organizationUuid: "00000000-0000-4000-8000-000000000002"
 };
 
 export const otelCases = (): CaseDef[] => [
@@ -88,34 +88,34 @@ export const otelCases = (): CaseDef[] => [
 		auth: "none",
 		creds: login({}, "team"),
 		env: FIRST_PARTY,
-		account: { ...ACCOUNT, seatTier: "team_tier_1" },
+		account: { ...ACCOUNT, seatTier: "team_tier_1" }
 	}),
 	otelCase("enterprise-usage-based", {
 		auth: "none",
 		creds: login({}, "enterprise"),
 		env: FIRST_PARTY,
-		account: { ...ACCOUNT, seatTier: "enterprise_usage_based" },
+		account: { ...ACCOUNT, seatTier: "enterprise_usage_based" }
 	}),
 	otelCase("free-plan", {
 		auth: "none",
 		creds: login({}, "free"),
-		env: FIRST_PARTY,
+		env: FIRST_PARTY
 	}),
 	otelCase("default-api-url", {
 		env: { ANTHROPIC_BASE_URL: "https://api.anthropic.com" },
-		allow: ["ANTHROPIC_BASE_URL"],
+		allow: ["ANTHROPIC_BASE_URL"]
 	}),
 	otelCase("bedrock-custom-url", {
 		env: {
 			CLAUDE_CODE_USE_BEDROCK: "1",
 			CLAUDE_CODE_SKIP_BEDROCK_AUTH: "1",
-			ANTHROPIC_BEDROCK_BASE_URL: "http://127.0.0.1:9",
-		},
+			ANTHROPIC_BEDROCK_BASE_URL: "http://127.0.0.1:9"
+		}
 	}),
 	otelCase("bedrock", {
 		env: {
 			CLAUDE_CODE_USE_BEDROCK: "1",
-			CLAUDE_CODE_SKIP_BEDROCK_AUTH: "1",
-		},
-	}),
+			CLAUDE_CODE_SKIP_BEDROCK_AUTH: "1"
+		}
+	})
 ];

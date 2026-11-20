@@ -8,7 +8,7 @@ import {
 	runCases,
 	sysText,
 	toolNames,
-	withRun,
+	withRun
 } from "./run/helpers.ts";
 import { fmCase, isoCase, setupCase } from "./subagents/iso.ts";
 import {
@@ -16,7 +16,7 @@ import {
 	agentFile,
 	BASE,
 	firstResult,
-	subReqs,
+	subReqs
 } from "./subagents/util.ts";
 import type { PrintGroup } from "./types.ts";
 
@@ -30,7 +30,7 @@ const TYPES = [
 	"claude-code-guide",
 	"comment-thread-analyst",
 	"observer",
-	"workflow-subagent",
+	"workflow-subagent"
 ];
 
 const typeCase = (t: string): CaseDef => ({
@@ -46,10 +46,10 @@ const typeCase = (t: string): CaseDef => ({
 					handBack: res.includes("[Subagent hand-back]"),
 					forkStarted: res.includes("Fork started"),
 					notFound: res.includes("not found. Available agents:"),
-					available: /Available agents: ([^"\\]*)/u.exec(res)?.[1] ?? "",
-				},
+					available: /Available agents: ([^"\\]*)/u.exec(res)?.[1] ?? ""
+				}
 			};
-		}),
+		})
 });
 
 const webFetch: CaseDef = {
@@ -60,7 +60,7 @@ const webFetch: CaseDef = {
 			{
 				args: BASE,
 				env: { CLAUDE_CODE_WEB_FETCH_AGENT: "1" },
-				stub: { seq: agentCall("web-fetch") },
+				stub: { seq: agentCall("web-fetch") }
 			},
 			async (r) => {
 				const ms = msgs(r);
@@ -68,13 +68,13 @@ const webFetch: CaseDef = {
 				const sub = ms.filter(
 					(q) =>
 						json(bodyOf(q).messages).includes("PROBEMARK") &&
-						toolNames(q).length < 5,
+						toolNames(q).length < 5
 				);
 				const base = await withRun(ctx, { args: BASE }, (b) => {
 					const m = msgs(b)[0];
 					return {
 						mainHasWebFetch: m ? toolNames(m).includes("WebFetch") : null,
-						rosterMentions: m ? json(bodyOf(m)).includes("web-fetch") : null,
+						rosterMentions: m ? json(bodyOf(m)).includes("web-fetch") : null
 					};
 				});
 				return {
@@ -87,17 +87,17 @@ const webFetch: CaseDef = {
 							: null,
 						subTools: sub.map((q) => toolNames(q).join(",")),
 						baselineMainHasWebFetch: base.mainHasWebFetch,
-						baselineRosterMentions: base.rosterMentions,
-					},
+						baselineRosterMentions: base.rosterMentions
+					}
 				};
-			},
-		),
+			}
+		)
 };
 
 const appendCase = (
 	name: string,
 	args: string[],
-	env: Record<string, string>,
+	env: Record<string, string>
 ): CaseDef => ({
 	name: `append-subagent-prompt.${name}`,
 	run: (ctx) =>
@@ -106,7 +106,7 @@ const appendCase = (
 			{
 				args: [...BASE, ...args],
 				env,
-				stub: { seq: agentCall("general-purpose") },
+				stub: { seq: agentCall("general-purpose") }
 			},
 			(r) => {
 				const sub = subReqs(r);
@@ -117,16 +117,16 @@ const appendCase = (
 						precondition: sub.length > 0 && Boolean(main),
 						subRequests: sub.length,
 						markerInSubSystem: sub.some((q) =>
-							sysText(q).includes("ZZAPPENDZZ"),
+							sysText(q).includes("ZZAPPENDZZ")
 						),
 						markerInMainSystem: main
 							? sysText(main).includes("ZZAPPENDZZ")
 							: null,
-						subTools: sub.map((q) => toolNames(q).join(",")),
-					},
+						subTools: sub.map((q) => toolNames(q).join(","))
+					}
 				};
-			},
-		),
+			}
+		)
 });
 
 const observerCase = (on: boolean): CaseDef => ({
@@ -139,9 +139,9 @@ const observerCase = (on: boolean): CaseDef => ({
 				env: on ? { CLAUDE_CODE_EXPERIMENTAL_OBSERVER_AGENTS: "1" } : {},
 				projFiles: {
 					...agentFile("pa", "observer: obs\nobserverMessage: ZZOBSMSGZZ"),
-					...agentFile("obs", ""),
+					...agentFile("obs", "")
 				},
-				stub: { seq: agentCall("pa") },
+				stub: { seq: agentCall("pa") }
 			},
 			(r) => {
 				const ms = msgs(r);
@@ -151,15 +151,15 @@ const observerCase = (on: boolean): CaseDef => ({
 						precondition: ms.length >= 2,
 						messages: ms.length,
 						observerReportToolIn: ms.filter((q) =>
-							toolNames(q).includes("ObserverReport"),
+							toolNames(q).includes("ObserverReport")
 						).length,
 						observerMessageIn: ms.filter((q) =>
-							json(bodyOf(q).messages).includes("ZZOBSMSGZZ"),
-						).length,
-					},
+							json(bodyOf(q).messages).includes("ZZOBSMSGZZ")
+						).length
+					}
 				};
-			},
-		),
+			}
+		)
 });
 
 export const subagents: PrintGroup = {
@@ -172,24 +172,24 @@ export const subagents: PrintGroup = {
 			webFetch,
 			appendCase("flag", ["--append-subagent-system-prompt", "ZZAPPENDZZ"], {}),
 			appendCase("env-append-subagent-system-prompt", [], {
-				CLAUDE_CODE_APPEND_SUBAGENT_SYSTEM_PROMPT: "ZZAPPENDZZ",
+				CLAUDE_CODE_APPEND_SUBAGENT_SYSTEM_PROMPT: "ZZAPPENDZZ"
 			}),
 			appendCase("env-enable-append-subagent-prompt", [], {
-				CLAUDE_CODE_ENABLE_APPEND_SUBAGENT_PROMPT: "ZZAPPENDZZ",
+				CLAUDE_CODE_ENABLE_APPEND_SUBAGENT_PROMPT: "ZZAPPENDZZ"
 			}),
 			observerCase(false),
 			observerCase(true),
 			fmCase(
 				"capital-tools-hyphen-disallowed",
-				"Tools: Read\ndisallowed-tools: Bash",
+				"Tools: Read\ndisallowed-tools: Bash"
 			),
 			fmCase(
 				"camel-disallowedTools",
-				"tools: Read, Bash\ndisallowedTools: Bash",
+				"tools: Read, Bash\ndisallowedTools: Bash"
 			),
 			isoCase("remote"),
 			isoCase("worktree"),
 			isoCase("none"),
-			...["--init", "--init-only", "--maintenance"].map((f) => setupCase(f)),
-		]),
+			...["--init", "--init-only", "--maintenance"].map((f) => setupCase(f))
+		])
 };

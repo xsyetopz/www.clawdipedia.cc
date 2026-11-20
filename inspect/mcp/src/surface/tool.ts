@@ -14,7 +14,7 @@ export const extractTools: Extractor = async (bundle) => {
 			kind: "tool",
 			name: t.name,
 			module: r.module,
-			offset: null,
+			offset: null
 		};
 		if (t.when.length > 0) {
 			item.gate = t.when.join(" && ");

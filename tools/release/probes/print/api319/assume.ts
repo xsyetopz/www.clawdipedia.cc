@@ -34,9 +34,9 @@ const bedrockCall = async (g: Live): Promise<Record<string, Data>> => {
 		method: "POST",
 		headers: {
 			"content-type": "application/json",
-			authorization: `Bearer ${mintJwt({ sub: "u1", email: "u@example.com" })}`,
+			authorization: `Bearer ${mintJwt({ sub: "u1", email: "u@example.com" })}`
 		},
-		body: MESSAGE,
+		body: MESSAGE
 	});
 	const body = await r.text();
 	const c = g.sts?.calls[0];
@@ -53,29 +53,28 @@ const bedrockCall = async (g: Live): Promise<Record<string, Data>> => {
 		upstreamSignedWithAssumed: seen?.signedWith === ASSUMED_KEY_ID,
 		upstreamSignedWithSource: seen?.signedWith === BEDROCK_SOURCE_KEY,
 		failClosedLog: failClosed(g.log()),
-		bodyMentionsAssumeRole: body.includes("sts:AssumeRole"),
+		bodyMentionsAssumeRole: body.includes("sts:AssumeRole")
 	};
 };
 
 const stsCase = (
 	name: string,
 	sts: "ok" | "denied" | "down",
-	lines?: string[],
+	lines?: string[]
 ): CaseDef =>
 	gatewayCase(
 		name,
 		{
 			sts,
-			upstreams: (u) =>
-				bedrock(u, lines === undefined ? "" : assumeRole(lines)),
+			upstreams: (u) => bedrock(u, lines === undefined ? "" : assumeRole(lines))
 		},
-		bedrockCall,
+		bedrockCall
 	);
 
 const bootRefusal = (
 	name: string,
 	boot: RegExp,
-	upstreams: (u: string) => string,
+	upstreams: (u: string) => string
 ): CaseDef => gatewayCase(name, { boot, upstreams }, none);
 
 const ANTHROPIC_KEY = "    auth:\n      api_key: sk-ant-fake-probe\n";
@@ -85,47 +84,47 @@ const MANTLE = (u: string): string =>
 export const assumeCases: CaseDef[] = [
 	stsCase("assume-role-sts", "ok", [
 		`role_arn: ${ROLE}`,
-		"external_id: probe-external-id",
+		"external_id: probe-external-id"
 	]),
 	stsCase("assume-role-session-sub", "ok", [
 		`role_arn: ${ROLE}`,
-		"session_name: sub",
+		"session_name: sub"
 	]),
 	stsCase("assume-role-session-email", "ok", [
 		`role_arn: ${ROLE}`,
-		"session_name: email",
+		"session_name: email"
 	]),
 	stsCase("assume-role-sts-denied", "denied", [`role_arn: ${ROLE}`]),
 	stsCase("assume-role-sts-down", "down", [`role_arn: ${ROLE}`]),
 	stsCase("assume-role-none", "ok"),
 	bootRefusal("assume-role-bad-arn", /role_arn|IAM role ARN/u, (u) =>
-		bedrock(u, assumeRole(["role_arn: not-an-arn"])),
+		bedrock(u, assumeRole(["role_arn: not-an-arn"]))
 	),
 	bootRefusal("assume-role-bad-external-id", /external_id|1224/u, (u) =>
-		bedrock(u, assumeRole([`role_arn: ${ROLE}`, "external_id: x"])),
+		bedrock(u, assumeRole([`role_arn: ${ROLE}`, "external_id: x"]))
 	),
 	bootRefusal(
 		"assume-role-bad-session-name",
 		/session_name|Invalid enum/u,
-		(u) => bedrock(u, assumeRole([`role_arn: ${ROLE}`, "session_name: name"])),
+		(u) => bedrock(u, assumeRole([`role_arn: ${ROLE}`, "session_name: name"]))
 	),
 	bootRefusal("assume-role-bearer-token", /assume_role needs SigV4/u, (u) =>
 		bedrock(
 			u,
 			assumeRole([`role_arn: ${ROLE}`]),
-			"      aws_bearer_token: probe-bearer\n",
-		),
+			"      aws_bearer_token: probe-bearer\n"
+		)
 	),
 	bootRefusal(
 		"assume-role-anthropic",
 		/assume_role|Unrecognized/u,
 		(u) =>
-			`  - provider: anthropic\n    base_url: ${u}\n${ANTHROPIC_KEY}${assumeRole([`role_arn: ${ROLE}`])}`,
+			`  - provider: anthropic\n    base_url: ${u}\n${ANTHROPIC_KEY}${assumeRole([`role_arn: ${ROLE}`])}`
 	),
 	bootRefusal(
 		"assume-role-mixed-session",
 		/sets assume_role\.session_name/u,
 		(u) =>
-			`${bedrock(u, assumeRole([`role_arn: ${ROLE}`, "session_name: sub"]))}${MANTLE(u)}`,
-	),
+			`${bedrock(u, assumeRole([`role_arn: ${ROLE}`, "session_name: sub"]))}${MANTLE(u)}`
+	)
 ];

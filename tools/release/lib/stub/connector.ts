@@ -34,10 +34,10 @@ const LIST = {
 			display_name: "Probe",
 			url: CONNECTOR_URL,
 			url_reportable: true,
-			directory_entry_id: "probe-directory-entry",
-		},
+			directory_entry_id: "probe-directory-entry"
+		}
 	],
-	next_page: null,
+	next_page: null
 };
 
 // The tool is always loaded, so the first request lists it in tools[] even when tool search defers MCP tools.
@@ -46,8 +46,8 @@ const TOOLS = [
 		name: "ping",
 		description: "Ping.",
 		_meta: { "anthropic/alwaysLoad": true },
-		inputSchema: { type: "object", properties: {} },
-	},
+		inputSchema: { type: "object", properties: {} }
+	}
 ];
 
 const resultOf = (method: string): unknown => {
@@ -55,7 +55,7 @@ const resultOf = (method: string): unknown => {
 		return {
 			protocolVersion: "2025-06-18",
 			capabilities: { tools: {} },
-			serverInfo: { name: "probe", version: "1.0.0" },
+			serverInfo: { name: "probe", version: "1.0.0" }
 		};
 	}
 	return method === "tools/list" ? { tools: TOOLS } : {};
@@ -78,7 +78,7 @@ const answerMcp = async (req: Request): Promise<Response> => {
 	return Response.json({
 		jsonrpc: "2.0",
 		id: msg["id"],
-		result: resultOf(method),
+		result: resultOf(method)
 	});
 };
 
@@ -98,7 +98,7 @@ export const startConnectorMock = async (): Promise<ConnectorMock> => {
 				return answerMcp(req);
 			}
 			return new Response(null, { status: 404 });
-		},
+		}
 	);
 	return { requests, env: () => server.env, stop: server.stop };
 };

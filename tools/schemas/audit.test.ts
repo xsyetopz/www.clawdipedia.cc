@@ -4,7 +4,7 @@ import {
 	auditFields,
 	auditPasses,
 	markRemoved,
-	shareSamples,
+	shareSamples
 } from "./audit.ts";
 
 const manual = {
@@ -12,8 +12,8 @@ const manual = {
 	version: "",
 	fields: {
 		"a.id": { schema: { type: "string" }, anchors: ["id:"], note: "" },
-		"a.n": { schema: { type: "integer" }, anchors: ["n:"], note: "" },
-	},
+		"a.n": { schema: { type: "integer" }, anchors: ["n:"], note: "" }
+	}
 };
 const has = (s: string): boolean => s === "id:" || s === "n:";
 
@@ -27,7 +27,7 @@ test("a typed field with agreeing payloads is 'samples agree'", () => {
 		verdict: "samples agree",
 		missing: [],
 		missed: [],
-		samples: 3,
+		samples: 3
 	});
 });
 
@@ -76,7 +76,7 @@ test("a field with no manual entry is 'no entry', and the audit fails", () => {
 test("the audit passes when every field is 'code only' or 'samples agree'", () => {
 	// Act
 	const rows = auditFields(["a.id", "a.n"], manual, has, {
-		"a.id": { string: 1 },
+		"a.id": { string: 1 }
 	});
 
 	// Assert
@@ -89,14 +89,14 @@ const shared = {
 	fields: {
 		"e1.id": { schema: { type: "string" }, anchors: ["id:"], note: "" },
 		"e2.id": { schema: { type: "string" }, anchors: ["id:"], note: "" },
-		"e3.id": { schema: { type: "integer" }, anchors: ["id:"], note: "" },
-	},
+		"e3.id": { schema: { type: "integer" }, anchors: ["id:"], note: "" }
+	}
 };
 
 test("a code-only field with the same entry as a sampled field is 'site sampled'", () => {
 	// Arrange
 	const rows = auditFields(["e1.id", "e2.id"], shared, has, {
-		"e1.id": { string: 4 },
+		"e1.id": { string: 4 }
 	});
 
 	// Act
@@ -110,7 +110,7 @@ test("a code-only field with the same entry as a sampled field is 'site sampled'
 test("a code-only field with a different type stays 'code only'", () => {
 	// Arrange
 	const rows = auditFields(["e1.id", "e3.id"], shared, has, {
-		"e1.id": { string: 4 },
+		"e1.id": { string: 4 }
 	});
 
 	// Act
@@ -125,7 +125,7 @@ test("a conflict is not lifted by a sampled field", () => {
 	// Arrange
 	const rows = auditFields(["e1.id", "e2.id"], shared, has, {
 		"e1.id": { string: 4 },
-		"e2.id": { number: 1 },
+		"e2.id": { number: 1 }
 	});
 
 	// Act
@@ -141,8 +141,8 @@ test("a field the current schema lacks is 'removed' when an unsent entry types i
 	const typed = {
 		...manual,
 		unsent: {
-			"gone.id": { schema: { type: "string" }, anchors: ["id:"], note: "" },
-		},
+			"gone.id": { schema: { type: "string" }, anchors: ["id:"], note: "" }
+		}
 	};
 	const rows = auditFields(["gone.id", "a.id"], typed, has, {});
 
@@ -160,8 +160,8 @@ test("a field the current schema lacks fails without a live unsent entry", () =>
 	const typed = {
 		...manual,
 		unsent: {
-			"old.id": { schema: { type: "string" }, anchors: ["x:"], note: "" },
-		},
+			"old.id": { schema: { type: "string" }, anchors: ["x:"], note: "" }
+		}
 	};
 	const rows = auditFields(["gone.id", "old.id"], typed, has, {});
 

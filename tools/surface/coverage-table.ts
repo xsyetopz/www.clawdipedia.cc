@@ -6,7 +6,7 @@ const COLUMNS: [string, number, (r: Row) => number][] = [
 	["docs", 6, (r) => r.docs],
 	["map", 6, (r) => r.mapped],
 	["excluded", 8, (r) => r.excluded],
-	["unmapped", 8, (r) => r.unmapped],
+	["unmapped", 8, (r) => r.unmapped]
 ];
 /** The counts of the rows as a table with a total line. */
 export const table = (rows: Row[]): string => {
@@ -17,6 +17,6 @@ export const table = (rows: Row[]): string => {
 	return [
 		line("kind", ([h, n]) => pad(h, n)),
 		...rows.map((r) => line(r.kind, ([, n, f]) => pad(f(r), n))),
-		line("total", ([, n, f]) => pad(sum(f), n)),
+		line("total", ([, n, f]) => pad(sum(f), n))
 	].join("\n");
 };

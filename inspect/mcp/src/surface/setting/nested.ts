@@ -5,7 +5,7 @@ import {
 	isFn,
 	type Node,
 	type NodeOf,
-	returnsOf,
+	returnsOf
 } from "../../ast.ts";
 import { mapSeq } from "../../seq.ts";
 import { keyOf, type SurfaceItem } from "../common.ts";
@@ -17,7 +17,7 @@ import {
 	SAME_PATH,
 	SAME_PATH_METHODS,
 	spreadTarget,
-	zodType,
+	zodType
 } from "./zod.ts";
 
 const MAX_DEPTH = 40;
@@ -62,7 +62,7 @@ export class KeyWalk {
 	async go(
 		cx: Cx,
 		x: Node | null | undefined,
-		over: Partial<Cx> = {},
+		over: Partial<Cx> = {}
 	): Promise<void> {
 		await this.walk({ ...cx, ...over, depth: cx.depth + 1 }, x);
 	}
@@ -72,7 +72,7 @@ export class KeyWalk {
 		k: string,
 		v: Node,
 		at: number,
-		env = cx.env,
+		env = cx.env
 	): Promise<void> {
 		const path = `${cx.path}.${k}`;
 		const it = await item("setting-key", cx.m, path, v, at, this.gate);
@@ -111,7 +111,7 @@ export class KeyWalk {
 	/** `k === "default" ? a : b` with `k` bound to a constant picks one branch. */
 	async #conditional(
 		cx: Cx,
-		n: NodeOf<"ConditionalExpression">,
+		n: NodeOf<"ConditionalExpression">
 	): Promise<void> {
 		const { test } = n;
 		if (test.type === "BinaryExpression" && /^[!=]==?$/u.test(test.operator)) {
@@ -166,7 +166,7 @@ export class KeyWalk {
 	async #method(
 		cx: Cx,
 		callee: NodeOf<"MemberExpression">,
-		args: Node[],
+		args: Node[]
 	): Promise<void> {
 		const p = callee.property;
 		await this.go(cx, callee.object);
@@ -174,7 +174,7 @@ export class KeyWalk {
 			return;
 		}
 		await mapSeq(args, (a) =>
-			a.type === "ObjectExpression" ? this.#shape(cx, a) : this.go(cx, a),
+			a.type === "ObjectExpression" ? this.#shape(cx, a) : this.go(cx, a)
 		);
 	}
 
@@ -207,12 +207,12 @@ export class KeyWalk {
 			}
 		}
 		await mapSeq(returnsOf(f.fn), (r) =>
-			this.go(cx, r, { m: f.module, env: bound }),
+			this.go(cx, r, { m: f.module, env: bound })
 		);
 		// a callback that a wrapper outside the program calls: `p(()=>z.object({…}))` returns `lib.lazy(e)`
 		await mapSeq(
 			args.filter((a) => isFn(a)),
-			(a) => this.go(cx, a),
+			(a) => this.go(cx, a)
 		);
 	}
 }

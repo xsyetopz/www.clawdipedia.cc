@@ -14,7 +14,7 @@ import {
 	PAGES,
 	type Row,
 	shape,
-	table,
+	table
 } from "./coverage.ts";
 import type { Committed } from "./snapshot.ts";
 
@@ -34,7 +34,7 @@ export const isStringRecord = (v: unknown): v is Record<string, string> =>
 /** Read a JSON file and narrow it with a guard. */
 export const readJson = async <T>(
 	file: string,
-	guard: (v: unknown) => v is T,
+	guard: (v: unknown) => v is T
 ): Promise<T> => {
 	const data: unknown = JSON.parse(await Bun.file(file).text());
 	if (!guard(data)) {
@@ -48,7 +48,7 @@ const report = (
 	unmapped: string[],
 	all: boolean | undefined,
 	problems: string[],
-	stale: string[],
+	stale: string[]
 ): void => {
 	for (const p of problems) {
 		console.error(`surface:check: ${p}`);
@@ -74,10 +74,10 @@ const report = (
 /** The docs names of each kind, read from the pages of that kind. */
 export const docsOf = async (
 	root: string,
-	kinds: string[],
+	kinds: string[]
 ): Promise<Record<string, Map<string, string>>> => {
 	const found = await Promise.all(
-		kinds.map((k) => docsNames(root, PAGES[k] ?? [])),
+		kinds.map((k) => docsNames(root, PAGES[k] ?? []))
 	);
 	const docs: Record<string, Map<string, string>> = {};
 	for (const [i, kind] of kinds.entries()) {
@@ -90,7 +90,7 @@ const rulesOf = async (root: string) => {
 	const dir = join(root, "tools", "surface");
 	return {
 		map: await readJson(join(dir, "map.json"), isMapRecord),
-		exclusions: await readJson(join(dir, "exclusions.json"), isStringRecord),
+		exclusions: await readJson(join(dir, "exclusions.json"), isStringRecord)
 	};
 };
 
@@ -98,10 +98,10 @@ const rulesOf = async (root: string) => {
 const renamed = <T>(
 	entries: Record<string, T>,
 	from: string,
-	to: string,
+	to: string
 ): Record<string, T> =>
 	Object.fromEntries(
-		Object.entries(entries).map(([k, v]) => [k === from ? to : k, v]),
+		Object.entries(entries).map(([k, v]) => [k === from ? to : k, v])
 	);
 
 const staleKeys = (stale: string[], file: string): string[] =>
@@ -116,12 +116,12 @@ const fix = async (
 	rules: {
 		map: Record<string, MapEntry>;
 		exclusions: Record<string, string>;
-	},
+	}
 ): Promise<void> => {
 	const dir = join(root, "tools", "surface");
 	const files = [
 		["map.json", rules.map],
-		["exclusions.json", rules.exclusions],
+		["exclusions.json", rules.exclusions]
 	] as const;
 	let left = result.unmapped;
 	const writes = files.map(([file, original]) => {
@@ -141,7 +141,7 @@ const fix = async (
 		const kept = Object.entries(entries).filter(([k]) => !removed.includes(k));
 		return Bun.write(
 			join(dir, file),
-			`${JSON.stringify(Object.fromEntries(kept), null, "\t")}\n`,
+			`${JSON.stringify(Object.fromEntries(kept), null, "\t")}\n`
 		);
 	});
 	await Promise.all(writes);
@@ -154,14 +154,14 @@ export const main = async (): Promise<void> => {
 			kind: { type: "string" },
 			all: { type: "boolean" },
 			root: { type: "string" },
-			fix: { type: "boolean" },
-		},
+			fix: { type: "boolean" }
+		}
 	});
 	const root = a.root ?? ROOT;
 	const snapshotFile = join(root, "schemas", "surface.json");
 	if (!(await Bun.file(snapshotFile).exists())) {
 		console.error(
-			'surface:check: schemas/surface.json missing (run "bun run surface")',
+			'surface:check: schemas/surface.json missing (run "bun run surface")'
 		);
 		process.exitCode = 2;
 		return;
@@ -171,7 +171,7 @@ export const main = async (): Promise<void> => {
 	const unknown = (only ?? []).filter((k) => !(k in snapshot.kinds));
 	if (unknown.length > 0) {
 		console.error(
-			`surface:check: unknown kind ${unknown.join(", ")}; kinds: ${Object.keys(snapshot.kinds).join(", ")}`,
+			`surface:check: unknown kind ${unknown.join(", ")}; kinds: ${Object.keys(snapshot.kinds).join(", ")}`
 		);
 		process.exitCode = 2;
 		return;

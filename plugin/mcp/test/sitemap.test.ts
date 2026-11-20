@@ -3,7 +3,7 @@ import { describe, expect, test } from "bun:test";
 
 import {
 	normalizeClaudeResourcesPath,
-	parseSitemap,
+	parseSitemap
 } from "../src/claude-resources.ts";
 
 const BASE = "https://claude.com";
@@ -19,12 +19,12 @@ describe("parseSitemap", () => {
 		const got = parseSitemap(xml, BASE);
 		expect(got.map((e) => [e.path, e.lastmod])).toEqual([
 			["resources/guides/a", ""],
-			["resources/articles/b", "2025-01-02"],
+			["resources/articles/b", "2025-01-02"]
 		]);
 		expect(got[1]).toMatchObject({
 			title: "B",
 			section: "articles",
-			url: `${BASE}/resources/articles/b`,
+			url: `${BASE}/resources/articles/b`
 		});
 	});
 
@@ -37,17 +37,17 @@ describe("parseSitemap", () => {
 			"/ja/resources",
 			"/resources-archive/old",
 			"/pricing",
-			"/",
+			"/"
 		];
 		const xml = `<urlset xmlns="${NS}">${locs
 			.map((l) => `<url><loc>${BASE}${l}</loc></url>`)
 			.join(
-				"",
+				""
 			)}<url><loc>https://evil.example/resources/x</loc></url></urlset>`;
 		expect(parseSitemap(xml, BASE).map((e) => [e.path, e.section])).toEqual([
 			["resources", "resources"],
 			["resources/best-practices", "best-practices"],
-			["resources/webinar-series/s", "webinar-series"],
+			["resources/webinar-series/s", "webinar-series"]
 		]);
 	});
 
@@ -59,8 +59,8 @@ describe("parseSitemap", () => {
 				title: "Resources",
 				section: "resources",
 				lastmod: "2025-03-04",
-				url: `${BASE}/resources`,
-			},
+				url: `${BASE}/resources`
+			}
 		]);
 	});
 
@@ -74,7 +74,7 @@ describe("normalizeClaudeResourcesPath", () => {
 		for (const input of [
 			"resources/articles/x",
 			"/resources/articles/x/",
-			`${BASE}/resources/articles/x?a=1#h`,
+			`${BASE}/resources/articles/x?a=1#h`
 		]) {
 			expect(normalizeClaudeResourcesPath(input)).toBe("resources/articles/x");
 		}

@@ -15,7 +15,7 @@ import {
 	READY,
 	sha8,
 	sysText,
-	toolNames,
+	toolNames
 } from "./harness.ts";
 
 const guide: PtyCase = agentCase(
@@ -23,7 +23,7 @@ const guide: PtyCase = agentCase(
 	{
 		description: "Probe task",
 		prompt: PROMPT,
-		subagent_type: "claude-code-guide",
+		subagent_type: "claude-code-guide"
 	},
 	"The claude-code-guide subagent: system text length and hash (docs/prompts/agents/subagent-claude-code-guide.md). Text kept as .system.txt.",
 	{
@@ -37,16 +37,16 @@ const guide: PtyCase = agentCase(
 				subagentTools: (() => {
 					const m =
 						x.messages.find((q) =>
-							JSON.stringify(q.body).includes("cc_is_subagent=true"),
+							JSON.stringify(q.body).includes("cc_is_subagent=true")
 						) ?? x.messages[0];
 					return m === undefined ? 0 : toolNames(m).length;
 				})(),
-				mentionsGuide: sys.includes("Claude Code"),
+				mentionsGuide: sys.includes("Claude Code")
 			};
 		},
 		artifacts: (x) => ({ "system.txt": subSystem(x) }),
-		samples: (x) => ({ systemHead: subSystem(x).slice(0, 1500) }),
-	},
+		samples: (x) => ({ systemHead: subSystem(x).slice(0, 1500) })
+	}
 );
 
 const lastUser = (body: unknown): string => {
@@ -62,7 +62,7 @@ const lastUser = (body: unknown): string => {
 const blocks = (x: PtyRun): string[] =>
 	x.messages.map(
 		(q, i) =>
-			`=== request ${i} system: ${sysText(q)}\n=== request ${i} last user:\n${lastUser(q.body)}\n`,
+			`=== request ${i} system: ${sysText(q)}\n=== request ${i} last user:\n${lastUser(q.body)}\n`
 	);
 
 const insights: PtyCase = {
@@ -73,7 +73,7 @@ const insights: PtyCase = {
 	schedule: [
 		READY,
 		{ t: 0, send: "/insights PROBE-ARG\r", label: "prompt" },
-		ESC(30),
+		ESC(30)
 	],
 	secs: 34,
 	facts: ["prompts.skill-insights"],
@@ -88,14 +88,14 @@ const insights: PtyCase = {
 			userTextChars: b.reduce((n, t) => n + t.length, 0),
 			userTextSha8: sha8(nb.join("\n")),
 			perRequestSha8: nb.map((t) => sha8(t)),
-			mentionsProbeArg: b.some((t) => t.includes("PROBE-ARG")),
+			mentionsProbeArg: b.some((t) => t.includes("PROBE-ARG"))
 		};
 	},
-	artifacts: (x) => ({ "requests.txt": blocks(x).join("\n") }),
+	artifacts: (x) => ({ "requests.txt": blocks(x).join("\n") })
 };
 
 export const capturesGroup: PtyGroup = {
 	id: "captures",
 	title: "claude-code-guide subagent text and /insights skill text",
-	cases: () => [guide, insights],
+	cases: () => [guide, insights]
 };

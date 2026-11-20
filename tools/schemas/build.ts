@@ -4,7 +4,7 @@ import {
 	control,
 	hookOutput,
 	streamJson,
-	tools,
+	tools
 } from "./payloads/build.ts";
 
 export { CODE_FILES, FILES, KINDS } from "./files.ts";
@@ -23,7 +23,7 @@ const MANAGED_ONLY = [
 	/\b(?:honou?red|read|enforced) only (?:from|in) (?:the )?(?:admin-controlled |device )?(?:managed|policy|HKLM)/iu,
 	/(?:^|[.(] ?|\bRead from )managed settings only/iu,
 	/\(and set in (?:device )?managed settings/iu,
-	/^When set in managed settings/u,
+	/^When set in managed settings/u
 ];
 export const isManagedOnly = (description: unknown): boolean =>
 	typeof description === "string" &&
@@ -102,7 +102,7 @@ const graftPluginEntries = (marketplace: Json, entry: Json): Json => {
 	item["required"] = [...new Set([...required, "source"])];
 	return {
 		...marketplace,
-		properties: { ...props, plugins: { ...props["plugins"], items: item } },
+		properties: { ...props, plugins: { ...props["plugins"], items: item } }
 	};
 };
 
@@ -118,7 +118,7 @@ export const pruneUnrepresentable = (node: unknown): unknown => {
 	for (const [k, v] of Object.entries(node)) {
 		if ((k === "anyOf" || k === "oneOf") && Array.isArray(v)) {
 			const kept = v.filter(
-				(x) => !(isObject(x) && x["x-cc-unrepresentable"] === true),
+				(x) => !(isObject(x) && x["x-cc-unrepresentable"] === true)
 			);
 			out[k] = kept.map((x) => pruneUnrepresentable(x));
 		} else {
@@ -144,7 +144,7 @@ const noteGatedKeys = (settings: Json): Json => {
 		`${existing.trim()} Only applies when CLAUDE_CODE_ENABLE_XAA=1 is set in the environment; Claude Code ignores this key otherwise.`.trim();
 	return {
 		...settings,
-		properties: { ...props, xaaIdp: { ...key, description } },
+		properties: { ...props, xaaIdp: { ...key, description } }
 	};
 };
 
@@ -157,7 +157,7 @@ const anchorNote = (name: keyof typeof FILES): string => {
 const withHeader = (
 	name: keyof typeof FILES,
 	body: Json,
-	version: string,
+	version: string
 ): Json => {
 	const rest = withoutSchema(body);
 	return {
@@ -165,7 +165,7 @@ const withHeader = (
 		$id: `${BASE_URL}/${name}`,
 		title: `${FILES[name].title} (Claude Code ${version})`,
 		$comment: `For ${FILES[name].what}. Generated from Claude Code ${version} by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export).${anchorNote(name)} Do not edit by hand: run "bun run schemas".`,
-		...rest,
+		...rest
 	};
 };
 
@@ -182,89 +182,89 @@ type PayloadKind =
 
 const assembleSchemas = (
 	need: Need,
-	version: string,
+	version: string
 ): Record<Exclude<keyof typeof FILES, PayloadKind>, Json> => ({
 	"claude-code-settings.json": withHeader(
 		"claude-code-settings.json",
 		noteGatedKeys(applyManaged(need("settings"), true)),
-		version,
+		version
 	),
 	"claude-code-managed-settings.json": withHeader(
 		"claude-code-managed-settings.json",
 		noteGatedKeys(applyManaged(need("settings"), false)),
-		version,
+		version
 	),
 	"claude-code-plugin-manifest.json": withHeader(
 		"claude-code-plugin-manifest.json",
 		need("plugin-manifest"),
-		version,
+		version
 	),
 	"claude-code-marketplace.json": withHeader(
 		"claude-code-marketplace.json",
 		graftPluginEntries(need("marketplace"), need("marketplace-plugin-entry")),
-		version,
+		version
 	),
 	"claude-code-plugin-hooks.json": withHeader(
 		"claude-code-plugin-hooks.json",
 		need("plugin-hooks"),
-		version,
+		version
 	),
 	"claude-code-keybindings.json": withHeader(
 		"claude-code-keybindings.json",
 		need("keybindings"),
-		version,
+		version
 	),
 	"claude-code-mcp.json": withHeader(
 		"claude-code-mcp.json",
 		need("mcp"),
-		version,
-	),
+		version
+	)
 });
 
 const assemblePayloads = (
 	payloads: RawSchemas,
-	version: string,
+	version: string
 ): Record<PayloadKind, Json> => {
 	const toolDefs = tools(payloads);
 	return {
 		"claude-code-hook-output.json": withHeader(
 			"claude-code-hook-output.json",
 			hookOutput(payloads),
-			version,
+			version
 		),
 		"claude-code-tools.json": withHeader(
 			"claude-code-tools.json",
 			{
 				...(toolDefs.missing.length > 0
 					? {
-							description: `The program did not give these definitions: ${toolDefs.missing.join(", ")}.`,
+							description: `The program did not give these definitions: ${toolDefs.missing.join(", ")}.`
 						}
 					: {}),
-				...toolDefs.body,
+				...toolDefs.body
 			},
-			version,
+			version
 		),
 		"claude-code-control-protocol.json": withHeader(
 			"claude-code-control-protocol.json",
 			control(payloads),
-			version,
+			version
 		),
 		"claude-code-stream-json.json": withHeader(
 			"claude-code-stream-json.json",
 			streamJson(payloads),
-			version,
+			version
 		),
 		"claude-code-agents-json.json": withHeader(
 			"claude-code-agents-json.json",
 			agentsJson(payloads),
-			version,
-		),
+			version
+		)
 	};
 };
 
 export const buildFiles = (
 	raw: RawSchemas,
-	version: string,
+	version: string
 ): Record<keyof typeof FILES, Json> => {
 	const need: Need = (k) => {
 		const v = raw[k];
@@ -283,6 +283,6 @@ export const buildFiles = (
 	}
 	return {
 		...assembleSchemas(need, version),
-		...assemblePayloads(payloads, version),
+		...assemblePayloads(payloads, version)
 	};
 };

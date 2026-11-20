@@ -14,7 +14,7 @@ const NOT_LIBRARY = new Set([
 	"examples",
 	"test",
 	"tests",
-	"__tests__",
+	"__tests__"
 ]);
 const files = async (dir: string): Promise<string[]> => {
 	const names = await readdir(dir);
@@ -26,7 +26,7 @@ const files = async (dir: string): Promise<string[]> => {
 				return NOT_LIBRARY.has(f) ? [] : files(p);
 			}
 			return s.isFile() && SOURCE.has(extname(f)) ? [p] : [];
-		}),
+		})
 	);
 	return found.flat();
 };
@@ -53,8 +53,8 @@ const readSources = async (dir: string): Promise<[string, string][]> => {
 	return Promise.all(
 		paths.map(async (f): Promise<[string, string]> => [
 			f,
-			plain(await Bun.file(f).text()),
-		]),
+			plain(await Bun.file(f).text())
+		])
 	);
 };
 const sourcesOf = (dir: string) => {
@@ -74,11 +74,11 @@ const pieces = (parts: string[]) =>
 		.filter((p) => p.length >= MIN_STATIC);
 
 /** Each start of `p` in `src` at or after `from`. */
-const starts = function* (src: string, p: string, from: number) {
+function* starts(src: string, p: string, from: number) {
 	for (let i = src.indexOf(p, from); i >= 0; i = src.indexOf(p, i + 1)) {
 		yield i;
 	}
-};
+}
 const QUOTE = /["'`]/u;
 
 interface Shape {
@@ -93,7 +93,7 @@ interface Shape {
 const afterMid = (
 	src: string,
 	mid: string[],
-	from: number,
+	from: number
 ): number | undefined => {
 	let at = from;
 	for (const p of mid) {
@@ -135,14 +135,14 @@ const shapeOf = (text: string, want: string[], whole: boolean): Shape => ({
 	mid: want.slice(1, -1),
 	last: want.length > 1 ? want.at(-1) : undefined,
 	open: whole && !text.startsWith("${"),
-	close: whole && !/[}…]$/u.test(text),
+	close: whole && !/[}…]$/u.test(text)
 });
 
 /** The first file of the folder (path order) that holds every fragment of the text, in order. Else the first that holds every piece, in any order (`loose`). With `whole`, only a match from a quote to a quote counts (no `loose`): a short text of the program can sit inside a longer library message. */
 export const findText = async (
 	dir: string,
 	text: string,
-	whole = false,
+	whole = false
 ): Promise<{
 	file?: string;
 	fragments: string[];
@@ -172,21 +172,21 @@ export const findText = async (
 				file: any[0].slice(dir.length + 1),
 				fragments: parts,
 				short,
-				loose: true,
+				loose: true
 			}
 		: { fragments: parts, short };
 };
 
 /** The `dependencies` of the unpacked package. */
 export const dependenciesOf = async (
-	dir: string,
+	dir: string
 ): Promise<Record<string, string>> => {
 	const [top] = await readdir(dir);
 	if (top === undefined) {
 		throw new Error(`${dir} holds no package`);
 	}
 	const pkg: unknown = JSON.parse(
-		await Bun.file(join(dir, top, "package.json")).text(),
+		await Bun.file(join(dir, top, "package.json")).text()
 	);
 	const deps = isRecord(pkg) ? pkg["dependencies"] : undefined;
 	const out: Record<string, string> = {};

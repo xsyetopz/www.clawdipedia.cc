@@ -16,7 +16,7 @@ import {
 	obj,
 	PROMPT,
 	runPrint,
-	scrub,
+	scrub
 } from "./harness.ts";
 
 const ID = "err319";
@@ -25,7 +25,7 @@ const initTools = (evs: Obj[]): string[] =>
 	arr(
 		evs.find((e) => e["type"] === "system" && e["subtype"] === "init")?.[
 			"tools"
-		],
+		]
 	).map((t) => show(t));
 
 const lines = (text: string, re: RegExp, n = 8): string =>
@@ -43,15 +43,15 @@ const trigger = async (
 	x: LiveCtx,
 	sb: Sandbox,
 	data: Record<string, Data>,
-	samples: Record<string, string>,
+	samples: Record<string, string>
 ): Promise<void> => {
 	const rt = await runPrint(
 		x,
 		sb,
 		["-p", TRIGGER, "--allowedTools", "ToolSearch"],
 		{
-			featureGates: true,
-		},
+			featureGates: true
+		}
 	);
 	data["trigger.exit"] = rt.code;
 	samples["trigger.tool_results"] = lines(
@@ -59,7 +59,7 @@ const trigger = async (
 			.flatMap((e) => arr(obj(e["message"])["content"]))
 			.map((c) => JSON.stringify(obj(c)["content"] ?? ""))
 			.join("\n"),
-		/cursor|RemoteTrigger/u,
+		/cursor|RemoteTrigger/u
 	);
 };
 
@@ -77,20 +77,20 @@ export const err319Live: LiveCase = {
 				x,
 				sb,
 				["-p", PROMPT, "--chrome", "--debug-file", dbg],
-				{ featureGates: true },
+				{ featureGates: true }
 			);
 			const tools = initTools(main.events);
 			data["main.exit"] = main.code;
 			data["main.remote_trigger_listed"] = tools.includes("RemoteTrigger");
 			data["main.chrome_tools"] = tools.filter((t) =>
-				/chrome/iu.test(t),
+				/chrome/iu.test(t)
 			).length;
 			const debug = await Bun.file(dbg)
 				.text()
 				.catch(() => "");
 			samples["main.debug"] = lines(
 				debug,
-				/hrome|RemoteTrigger|bughunter|policy/iu,
+				/hrome|RemoteTrigger|bughunter|policy/iu
 			);
 			if (tools.includes("RemoteTrigger")) {
 				await trigger(x, sb, data, samples);
@@ -103,11 +103,11 @@ export const err319Live: LiveCase = {
 					data,
 					samples,
 					notes:
-						"Feature values come from the live account; no model call is made unless RemoteTrigger is listed.",
-				}),
+						"Feature values come from the live account; no model call is made unless RemoteTrigger is listed."
+				})
 			];
 		} finally {
 			await sb.cleanup();
 		}
-	},
+	}
 };

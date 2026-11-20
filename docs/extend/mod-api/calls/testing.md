@@ -23,7 +23,7 @@ test("/tally reports the tool calls the mod has seen", async ($, on) => {
   await $.tool.call({ tool: "Read", file_path: "README.md" });
   const answer = await $.command.run({ command: "tally", args: "" });
   expect(answer.text).toBe(
-    "Claude has made 2 tool calls since this mod loaded",
+    "Claude has made 2 tool calls since this mod loaded"
   );
 });
 ```

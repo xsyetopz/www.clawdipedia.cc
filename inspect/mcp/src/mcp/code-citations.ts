@@ -18,23 +18,23 @@ export const citations = async ({ dir, from, version }: Args): Promise<Out> => {
 		const { moves } = moveCitations(
 			files,
 			await sources(from),
-			await sources(version),
+			await sources(version)
 		);
 		const count = (how: string) => moves.filter((m) => m.how === how).length;
 		return text(
 			`${moves.length} citation(s) of ${from} move to ${p.path}: ${count("same")} same, ${count("module")} module, ${count("unmapped")} unmapped\n${moves.map((m) => `${m.file}:${m.line}: ${m.from} -> ${m.to ?? "unmapped"} (${m.how})`).join("\n")}`,
-			{ moves },
+			{ moves }
 		);
 	}
 	const stale = staleCitations(
 		files,
-		p.modules.map((m) => m.name),
+		p.modules.map((m) => m.name)
 	);
 	return text(
 		stale.length > 0
 			? `${stale.length} citation(s) name a chunk that ${p.path} lacks\n${stale.map((c) => `- ${c.file}:${c.line}: ${c.citation}`).join("\n")}`
 			: `${p.path}: every chunk citation in ${Object.keys(files).length} files names a module`,
-		{ stale },
+		{ stale }
 	);
 };
 
@@ -45,7 +45,7 @@ export const relocateAction = async ({
 	offset = 0,
 	query,
 	version,
-	limit = 3,
+	limit = 3
 }: Args): Promise<Out> => {
 	const name = need(module, "module");
 	const old = await program(need(from, "from"));
@@ -59,12 +59,12 @@ export const relocateAction = async ({
 		offset,
 		claimTerms(query ?? ""),
 		target.modules.map((x) => ({ name: x.name, text: x.source })),
-		limit,
+		limit
 	);
 	return text(
 		found.length > 0
 			? `${name}@${offset} of ${old.path} in ${target.path}\n${found.map((r) => `- ${r.module}@${r.offset}  score ${r.score.toFixed(2)}${r.same ? ", same code" : ""}  anchor ${r.anchor}`).join("\n")}`
 			: `${name}@${offset}: no anchor from the query stands near the offset, or ${target.path} lacks it`,
-		{ found },
+		{ found }
 	);
 };

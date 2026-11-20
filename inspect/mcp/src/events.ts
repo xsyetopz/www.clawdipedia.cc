@@ -11,12 +11,12 @@ const esc = (id: string) => id.replaceAll("$", String.raw`\$`);
 export const aliasesOf = (
 	src: Pick<Module, "text">,
 	chunk: string,
-	exportName: string,
+	exportName: string
 ): string[] => {
 	const out: string[] = [];
 	const re = new RegExp(
 		`import\\{([^}]*)\\}from"/\\$bunfs/root/${esc(chunk).replaceAll(".", String.raw`\.`)}"`,
-		"gu",
+		"gu"
 	);
 	for (const m of src.text.matchAll(re)) {
 		for (const item of m[1]?.split(",") ?? []) {
@@ -44,7 +44,7 @@ export const callAt = (src: Module, open: number): CallNode | undefined => {
 export const argEntries = async (
 	R: Resolver,
 	src: Module,
-	a: Node | undefined,
+	a: Node | undefined
 ): Promise<Entry[] | undefined> => {
 	if (a?.type === "ObjectExpression") {
 		return R.entries(src, a);
@@ -59,7 +59,7 @@ export const argEntries = async (
  */
 export const eventSites = async (
 	bundle: Bundle,
-	R: Resolver,
+	R: Resolver
 ): Promise<Map<string, Entry[][]>> => {
 	const [eSrc, ...more] = await bundle.withText('"event.sequence"');
 	if (!eSrc || more.length > 0) {
@@ -67,7 +67,7 @@ export const eventSites = async (
 	}
 	const fn =
 		/async function ([\w$]+)\([^)]*\)\{[^{}]*\{\.\.\.[\w$]+\(\),"event\.name":/u.exec(
-			eSrc.text,
+			eSrc.text
 		)?.[1];
 	if (fn === undefined) {
 		throw new Error("event emitter not found");

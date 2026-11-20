@@ -22,10 +22,10 @@ const registry = Bun.serve({
 				"1.5.0": "2024-06-01T00:00:00Z",
 				"1.6.0-beta.1": "2024-07-01T00:00:00Z",
 				"2.0.0": "2024-08-01T00:00:00Z",
-				"1.7.0": "2025-03-01T00:00:00Z",
-			},
+				"1.7.0": "2025-03-01T00:00:00Z"
+			}
 		});
-	},
+	}
 });
 process.env["CC_INSPECT_NPM_REGISTRY"] = registry.url.origin;
 const { versionAt, linesAt } = await import("../src/npm.ts");
@@ -37,21 +37,21 @@ afterAll(async () => {
 test("the highest release in every range that was published before the time", async () => {
 	expect(await versionAt("@fx/v", "2024-12-01T00:00:00Z", ["^1.0.0"])).toEqual({
 		version: "1.5.0",
-		from: "range-max",
+		from: "range-max"
 	});
 	expect(
-		await versionAt("@fx/v", "2025-12-01T00:00:00Z", ["^1.0.0", "<1.7.0"]),
+		await versionAt("@fx/v", "2025-12-01T00:00:00Z", ["^1.0.0", "<1.7.0"])
 	).toEqual({ version: "1.5.0", from: "range-max" });
 });
 
 test("with no range, or none that fits, the release published last before the time", async () => {
 	expect(await versionAt("@fx/v", "2024-12-01T00:00:00Z")).toEqual({
 		version: "2.0.0",
-		from: "dated",
+		from: "dated"
 	});
 	expect(await versionAt("@fx/v", "2024-12-01T00:00:00Z", ["^9.0.0"])).toEqual({
 		version: "2.0.0",
-		from: "dated",
+		from: "dated"
 	});
 });
 
@@ -67,7 +67,7 @@ test("the packument is fetched once and kept", async () => {
 
 test("a package the registry does not know is an error that names the status", async () => {
 	const error = await versionAt("@fx/none", "2025-01-01T00:00:00Z").catch(
-		(error_: unknown) => error_,
+		(error_: unknown) => error_
 	);
 	expect(error).toBeInstanceOf(Error);
 	expect(String(error)).toContain("HTTP 404");
@@ -76,11 +76,11 @@ test("a package the registry does not know is an error that names the status", a
 test("the highest release of each major that was published before the time", async () => {
 	expect(await linesAt("@fx/v", "2025-12-01T00:00:00Z")).toEqual([
 		"1.7.0",
-		"2.0.0",
+		"2.0.0"
 	]);
 	expect(await linesAt("@fx/v", "2024-12-01T00:00:00Z")).toEqual([
 		"1.5.0",
-		"2.0.0",
+		"2.0.0"
 	]);
 });
 
@@ -88,6 +88,6 @@ test("with a major, the highest release of each minor of it", async () => {
 	expect(await linesAt("@fx/v", "2025-12-01T00:00:00Z", "1")).toEqual([
 		"1.0.0",
 		"1.5.0",
-		"1.7.0",
+		"1.7.0"
 	]);
 });

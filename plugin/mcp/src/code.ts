@@ -6,7 +6,7 @@ import {
 	MB,
 	type Resource,
 	type Source,
-	ttl,
+	ttl
 } from "./fetcher.ts";
 import type { Entry } from "./manifest.ts";
 import { searchByPath, SearchIndex, tokenize } from "./search.ts";
@@ -71,7 +71,7 @@ export const parseCodeLlms = (text: string, base = codeBase()): CodeEntry[] => {
 		.join("|");
 	const line = new RegExp(
 		`^- \\[(.+?)\\]\\(((?:${hosts})/docs/en/[^)\\s]+?)\\.md\\)(?:: (.*))?$`,
-		"u",
+		"u"
 	);
 	const out: CodeEntry[] = [];
 	const seen = new Set<string>();
@@ -98,7 +98,7 @@ export const parseCodeLlms = (text: string, base = codeBase()): CodeEntry[] => {
 			title: m[1] ?? path,
 			description: m[3] ?? "",
 			group,
-			url: `${base}/docs/en/${path}`,
+			url: `${base}/docs/en/${path}`
 		});
 	}
 	return out;
@@ -122,7 +122,7 @@ const asEntry = (p: CodeEntry): Entry => ({
 	description: `${p.description} ${p.path.replaceAll(/[/_-]+/gu, " ")}`,
 	section: p.group,
 	md: "",
-	url: p.url,
+	url: p.url
 });
 
 export class Code {
@@ -136,13 +136,13 @@ export class Code {
 			rel: "code/llms.txt",
 			ttlMs: ttl(INDEX_TTL_MS),
 			maxBytes: FILE_MAX,
-			validate: (b) => parseCodeLlms(b).length > 0,
+			validate: (b) => parseCodeLlms(b).length > 0
 		});
 		if (r.status !== "ok") {
 			throw new ContentError(
 				r.status === "error"
 					? `code docs are offline and not cached yet: could not reach ${r.origin}`
-					: `llms.txt was not found on ${r.origin}`,
+					: `llms.txt was not found on ${r.origin}`
 			);
 		}
 		if (this.memo?.body !== r.body) {
@@ -151,7 +151,7 @@ export class Code {
 			const idx = new SearchIndex({
 				entries: () => asE,
 				text: () => "",
-				extra: (e) => e.section,
+				extra: (e) => e.section
 			});
 			this.memo = { body: r.body, entries, idx };
 		}
@@ -159,7 +159,7 @@ export class Code {
 		return {
 			entries,
 			source: r.source,
-			search: searchByPath(idx, entries, (e) => e.description || e.title),
+			search: searchByPath(idx, entries, (e) => e.description || e.title)
 		};
 	}
 
@@ -175,7 +175,7 @@ export class Code {
 			rel: `code/pages/${path}.md`,
 			deleteOn404: true,
 			ttlMs: ttl(PAGE_TTL_MS),
-			maxBytes: FILE_MAX,
+			maxBytes: FILE_MAX
 		});
 	}
 }
@@ -183,15 +183,15 @@ export class Code {
 /** Entries that share the most words with a path, for "not found" answers. */
 export const nearCode = (
 	path: string,
-	entries: readonly CodeEntry[],
+	entries: readonly CodeEntry[]
 ): string => {
 	const want = new Set(tokenize(path.replaceAll(/[/_-]+/gu, " ")));
 	const near = entries
 		.map((e) => ({
 			e,
 			n: tokenize(`${e.path.replaceAll(/[/_-]+/gu, " ")} ${e.title}`).filter(
-				(t) => want.has(t),
-			).length,
+				(t) => want.has(t)
+			).length
 		}))
 		.filter((x) => x.n > 0 && x.e.path !== path)
 		.toSorted((a, b) => b.n - a.n)

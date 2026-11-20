@@ -14,7 +14,7 @@ export const PHASES = [
 	"true",
 	"false",
 	"owned",
-	"vouch",
+	"vouch"
 ] as const;
 export type Phase = (typeof PHASES)[number];
 /** Root-owned file in the managed folder naming the installed variant; the tool polls it. */
@@ -29,7 +29,7 @@ export const MCP_SERVER = join(HERE, "mcp", "server.js");
 export const srvDef = (name: string, startedLog: string) => ({
 	type: "stdio",
 	command: process.execPath,
-	args: [MCP_SERVER, name, startedLog],
+	args: [MCP_SERVER, name, startedLog]
 });
 
 const w = async (root: string, rel: string, content: string): Promise<void> => {
@@ -38,20 +38,20 @@ const w = async (root: string, rel: string, content: string): Promise<void> => {
 
 const copyVariants = async (stage: string): Promise<void> => {
 	await cp(join(HERE, "variants"), join(stage, "variants"), {
-		recursive: true,
+		recursive: true
 	});
 	// fail early if a variant file is missing or not JSON
 	await Promise.all(
 		VARIANTS.map((v) =>
-			Bun.file(join(stage, "variants", v, "managed-settings.json")).json(),
-		),
+			Bun.file(join(stage, "variants", v, "managed-settings.json")).json()
+		)
 	);
 };
 
 /** Writes the base `ClaudeCode/` tree (no managed-settings.json) and `variants/<v>/managed-settings.json` under stage. */
 export const buildStage = async (
 	stage: string,
-	startedLog: string,
+	startedLog: string
 ): Promise<void> => {
 	const base = join(stage, "ClaudeCode");
 	await w(base, MARKER, "");
@@ -59,37 +59,37 @@ export const buildStage = async (
 	await w(
 		base,
 		"managed-mcp.json",
-		`${JSON.stringify({ mcpServers: { managed_srv: srvDef("managed_srv", startedLog) } }, null, 2)}\n`,
+		`${JSON.stringify({ mcpServers: { managed_srv: srvDef("managed_srv", startedLog) } }, null, 2)}\n`
 	);
 	await w(
 		base,
 		"managed-settings.d/10-deny.json",
-		'{"permissions":{"deny":["NotebookEdit"]}}\n',
+		'{"permissions":{"deny":["NotebookEdit"]}}\n'
 	);
 	await w(
 		base,
 		"managed-settings.d/20-automode.json",
-		'{"autoMode":{"allow":["PROBE-DROPIN-ALLOW"]}}\n',
+		'{"autoMode":{"allow":["PROBE-DROPIN-ALLOW"]}}\n'
 	);
 	await w(
 		base,
 		".claude/output-styles/managed-style.md",
-		"---\nname: managed-style\ndescription: Managed style\n---\nPROBE-MANAGED-STYLE answer in a managed way.\n",
+		"---\nname: managed-style\ndescription: Managed style\n---\nPROBE-MANAGED-STYLE answer in a managed way.\n"
 	);
 	await w(
 		base,
 		".claude/rules/managed-rule.md",
-		"# Managed rule\nPROBE-MANAGED-RULE\n",
+		"# Managed rule\nPROBE-MANAGED-RULE\n"
 	);
 	await w(
 		base,
 		".claude/skills/managed-skill/SKILL.md",
-		"---\nname: managed-skill\ndescription: PROBE-MANAGED-SKILL-DESC managed policy skill\n---\nPROBE-MANAGED-SKILL-BODY\n",
+		"---\nname: managed-skill\ndescription: PROBE-MANAGED-SKILL-DESC managed policy skill\n---\nPROBE-MANAGED-SKILL-BODY\n"
 	);
 	await Promise.all(
 		Object.entries(marketplaceFiles()).map(([rel, body]) =>
-			w(base, join(MKT, rel), body),
-		),
+			w(base, join(MKT, rel), body)
+		)
 	);
 	await copyVariants(stage);
 };

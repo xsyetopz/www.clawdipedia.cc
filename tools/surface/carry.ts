@@ -52,7 +52,7 @@ const bestOf = (key: string, others: string[]): string | undefined => {
 /** The `[old, new]` pairs to carry. A prefix key (ending in `*`) never pairs; a tie for best does not pair either way. */
 export const carryPairs = (
 	unmapped: string[],
-	stale: string[],
+	stale: string[]
 ): [string, string][] => {
 	const fresh = unmapped.filter((k) => !k.endsWith("*"));
 	const old = stale.filter((k) => !k.endsWith("*"));

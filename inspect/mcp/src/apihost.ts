@@ -59,14 +59,14 @@ const listen = (proxy: http.Server): Promise<number> =>
 export const startApiHost = async (
 	servers: Servers,
 	answer: (req: Request) => Promise<Response>,
-	pkiDir: string,
+	pkiDir: string
 ): Promise<{ proxyUrl: string; ca: string }> => {
 	const pki = await makePki(pkiDir);
 	const tls = Bun.serve({
 		port: 0,
 		hostname: "127.0.0.1",
 		tls: { key: Bun.file(pki.key), cert: Bun.file(pki.cert) },
-		fetch: answer,
+		fetch: answer
 	});
 	servers.tls = tls;
 	const proxy = http.createServer((_q, r) => {

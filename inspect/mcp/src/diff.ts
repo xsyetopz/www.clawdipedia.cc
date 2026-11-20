@@ -71,7 +71,7 @@ const withinOf = (s: Side, i: number): string[] => {
 /** The free units of `s`, as changes that `end` gives the kind and the unit of. */
 const unpaired = (
 	s: Side,
-	end: (u: Unit) => Pick<Change, "kind" | "from" | "to">,
+	end: (u: Unit) => Pick<Change, "kind" | "from" | "to">
 ): Change[] =>
 	s.us.flatMap((u, i) =>
 		s.free[i] === true
@@ -80,10 +80,10 @@ const unpaired = (
 						...end(u),
 						calls: callsOf(s, u),
 						within: withinOf(s, i),
-						subject: subjectOf(s, i),
-					},
+						subject: subjectOf(s, i)
+					}
 				]
-			: [],
+			: []
 	);
 
 /** Matches units by text, then fingerprint, then label and parent, then literal overlap (0.6 or more). */
@@ -101,13 +101,13 @@ export const diffIndexes = (from: Index, to: Index): Diff => {
 				to: y,
 				calls: [...callsOf(a, x), ...callsOf(b, y)],
 				within: withinOf(b, j),
-				subject: subjectOf(b, j),
+				subject: subjectOf(b, j)
 			});
 		}
 	});
 	changes.push(
 		...unpaired(b, (u) => ({ kind: "added", to: u })),
-		...unpaired(a, (u) => ({ kind: "gone", from: u })),
+		...unpaired(a, (u) => ({ kind: "gone", from: u }))
 	);
 	const count = (k: Change["kind"]) =>
 		changes.filter((c) => c.kind === k).length;
@@ -115,9 +115,9 @@ export const diffIndexes = (from: Index, to: Index): Diff => {
 		counts: {
 			changed: count("changed"),
 			added: count("added"),
-			gone: count("gone"),
+			gone: count("gone")
 		},
-		changes,
+		changes
 	};
 };
 

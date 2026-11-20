@@ -6,7 +6,7 @@ const streamKeys = new Set([
 	"session_id",
 	"compact_metadata",
 	"logical_parent_uuid",
-	"live_turn_id",
+	"live_turn_id"
 ]);
 
 /** The entries of an `attachment` row literal whose `attachment.type` is `kind`. */
@@ -17,9 +17,9 @@ const attachmentRow = (kind: string) => [
 		opt: false,
 		val: {
 			k: "obj" as const,
-			e: [{ key: "type", opt: false, val: { k: "str" as const, v: kind } }],
-		},
-	},
+			e: [{ key: "type", opt: false, val: { k: "str" as const, v: kind } }]
+		}
+	}
 ];
 
 describe("isTranscriptSite", () => {
@@ -28,8 +28,8 @@ describe("isTranscriptSite", () => {
 			isTranscriptSite(
 				"system",
 				["type", "subtype", "uuid", "compactMetadata", "logicalParentUuid"],
-				streamKeys,
-			),
+				streamKeys
+			)
 		).toBe(true);
 	});
 
@@ -38,8 +38,8 @@ describe("isTranscriptSite", () => {
 			isTranscriptSite(
 				"system",
 				["type", "subtype", "source_uuid", "uuid"],
-				streamKeys,
-			),
+				streamKeys
+			)
 		).toBe(true);
 	});
 
@@ -48,11 +48,11 @@ describe("isTranscriptSite", () => {
 			isTranscriptSite(
 				"system",
 				["type", "subtype", "uuid", "compact_metadata", "logical_parent_uuid"],
-				streamKeys,
-			),
+				streamKeys
+			)
 		).toBe(false);
 		expect(
-			isTranscriptSite("user", ["type", "uuid", "session_id"], streamKeys),
+			isTranscriptSite("user", ["type", "uuid", "session_id"], streamKeys)
 		).toBe(false);
 	});
 
@@ -62,17 +62,17 @@ describe("isTranscriptSite", () => {
 				"system",
 				["type", "subtype", "uuid"],
 				streamKeys,
-				"event:x,payload:",
-			),
+				"event:x,payload:"
+			)
 		).toBe(false);
 	});
 
 	test("needs a subtype for system and a uuid or toolUseID for all", () => {
 		expect(isTranscriptSite("system", ["type", "uuid"], streamKeys)).toBe(
-			false,
+			false
 		);
 		expect(isTranscriptSite("user", ["type", "message"], streamKeys)).toBe(
-			false,
+			false
 		);
 	});
 });
@@ -82,7 +82,7 @@ describe("isUnpersisted", () => {
 		// Arrange
 		const entries = [
 			{ key: "subtype", opt: false, val: { k: "str" as const, v: "placed" } },
-			{ key: "persist", opt: false, val: { k: "bool" as const, v: false } },
+			{ key: "persist", opt: false, val: { k: "bool" as const, v: false } }
 		];
 
 		// Act
@@ -97,19 +97,19 @@ describe("isUnpersisted", () => {
 		const yes = {
 			key: "persist",
 			opt: false,
-			val: { k: "bool" as const, v: true },
+			val: { k: "bool" as const, v: true }
 		};
 		const opt = {
 			key: "persist",
 			opt: true,
-			val: { k: "bool" as const, v: false },
+			val: { k: "bool" as const, v: false }
 		};
 
 		// Act
 		const out = [
 			isUnpersisted("system", [yes]),
 			isUnpersisted("system", [opt]),
-			isUnpersisted("system", []),
+			isUnpersisted("system", [])
 		];
 
 		// Assert
@@ -119,7 +119,7 @@ describe("isUnpersisted", () => {
 	test("is true for every progress literal", () => {
 		// Arrange
 		const entries = [
-			{ key: "toolUseID", opt: false, val: { k: "str" as const, v: "t" } },
+			{ key: "toolUseID", opt: false, val: { k: "str" as const, v: "t" } }
 		];
 
 		// Act
@@ -134,12 +134,12 @@ describe("isUnpersisted", () => {
 		const kinds = [
 			"async_hook_response_batch",
 			"teammate_shutdown_batch",
-			"async_hook_response",
+			"async_hook_response"
 		];
 
 		// Act
 		const out = kinds.map((kind) =>
-			isUnpersisted("attachment", attachmentRow(kind)),
+			isUnpersisted("attachment", attachmentRow(kind))
 		);
 
 		// Assert

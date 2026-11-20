@@ -17,7 +17,7 @@ export interface TlsProxy {
 
 const makeCert = async (
 	dir: string,
-	names: string[],
+	names: string[]
 ): Promise<{ key: string; cert: string }> => {
 	const key = join(dir, "key.pem");
 	const cert = join(dir, "cert.pem");
@@ -62,7 +62,7 @@ const portOf = (proxy: net.Server): number => {
 /** Starts a TLS server for `names` (the first is the CN) that answers with `fetch`, and a proxy in front of it. */
 export const startTlsProxy = async (
 	names: string[],
-	fetch: (req: Request) => Response | Promise<Response>,
+	fetch: (req: Request) => Response | Promise<Response>
 ): Promise<TlsProxy> => {
 	const dir = await mkdtemp(join(tmpdir(), "tlsmock-"));
 	const { key, cert } = await makeCert(dir, names);
@@ -71,19 +71,19 @@ export const startTlsProxy = async (
 		hostname: "127.0.0.1",
 		idleTimeout: 0,
 		tls: { key: Bun.file(key), cert: Bun.file(cert) },
-		fetch,
+		fetch
 	});
 	const proxy = await startProxy(tls.port ?? 0);
 	return {
 		env: {
 			HTTPS_PROXY: `http://127.0.0.1:${portOf(proxy)}`,
 			NO_PROXY: "127.0.0.1",
-			NODE_EXTRA_CA_CERTS: cert,
+			NODE_EXTRA_CA_CERTS: cert
 		},
 		stop: async () => {
 			proxy.close();
 			await tls.stop(true);
 			await rm(dir, { recursive: true, force: true });
-		},
+		}
 	};
 };

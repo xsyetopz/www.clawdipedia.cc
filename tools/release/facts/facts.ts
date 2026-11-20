@@ -10,7 +10,7 @@ import {
 	ROOT,
 	toolEnv,
 	versionDir,
-	writeJson,
+	writeJson
 } from "../util.ts";
 import { applyMap, loadDiffNames, MAP_PATH, readMap } from "./apply.ts";
 import { checkFacts, knownCases } from "./parts/check.ts";
@@ -31,13 +31,13 @@ const count = (facts: Fact[], f: (c: Fact) => string): string => {
 const runCheck = async (
 	facts: Fact[],
 	found: Fact[],
-	to: string,
+	to: string
 ): Promise<number> => {
 	const r = checkFacts(
 		facts,
 		await readMap(),
 		await knownCases(undefined, to),
-		found,
+		found
 	);
 	for (const n of r.notes) {
 		console.info(`  info: ${n}`);
@@ -58,11 +58,11 @@ const runRemap = async (found: Fact[], ctx: Ctx): Promise<number> => {
 	const texts = await readTexts(
 		found,
 		map,
-		argValue(ctx.rest, "--base") ?? "HEAD",
+		argValue(ctx.rest, "--base") ?? "HEAD"
 	);
 	const r = remap({ facts: found, map, ...texts });
 	console.info(
-		`  remap: ${r.renamed} renamed, ${r.sourced} sourced from citations, ${r.dropped} dropped`,
+		`  remap: ${r.renamed} renamed, ${r.sourced} sourced from citations, ${r.dropped} dropped`
 	);
 	for (const f of r.unsourced) {
 		console.info(`  FAIL no source: ${f.id} (${f.file}:${f.line})`);
@@ -74,7 +74,7 @@ const runRemap = async (found: Fact[], ctx: Ctx): Promise<number> => {
 		const fmt = Bun.spawn([process.execPath, "fmt", MAP_PATH], {
 			cwd: ROOT,
 			env: toolEnv(),
-			stdout: "ignore",
+			stdout: "ignore"
 		});
 		if ((await fmt.exited) !== 0) {
 			console.info("  FAIL bun fmt could not format map.json");
@@ -92,7 +92,7 @@ export const runFacts = async (ctx: Ctx): Promise<number> => {
 		? found
 		: found.filter((c) => c.class === "change");
 	console.info(
-		`release:facts: ${facts.length} facts (${count(facts, (c) => c.class)}); status: ${count(facts, (c) => c.status)}; kind: ${count(facts, (c) => c.kind ?? "none")}`,
+		`release:facts: ${facts.length} facts (${count(facts, (c) => c.class)}); status: ${count(facts, (c) => c.status)}; kind: ${count(facts, (c) => c.kind ?? "none")}`
 	);
 	if (diff === null) {
 		console.info("  no diff/*.json found: automatic kinds skipped");
@@ -119,8 +119,8 @@ export const runFacts = async (ctx: Ctx): Promise<number> => {
 			probes: c.probes,
 			status: c.status,
 			class: c.class,
-			diffNames: c.diffNames,
-		})),
+			diffNames: c.diffNames
+		}))
 	);
 	console.info(`  wrote ${path}`);
 	return 0;

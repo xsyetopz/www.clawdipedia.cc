@@ -22,7 +22,7 @@ on("command.run", { command: "triage" }, async ($, e) => {
     model: "haiku",
     system: "Reply with one word: bug, feature, or question.",
     prompt: e.args,
-    maxTokens: 20,
+    maxTokens: 20
   });
   return { text: `Label: ${r.isAnswered ? r.text.trim() : "unknown"}` };
 });

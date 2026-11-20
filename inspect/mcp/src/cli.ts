@@ -51,7 +51,7 @@ const runCalls = async (client: Client, calls: Call[]): Promise<boolean> => {
 	const r = await client.callTool(
 		{ name: c.name, arguments: c.args },
 		undefined,
-		{ timeout: 600_000 },
+		{ timeout: 600_000 }
 	);
 	const content: unknown = r.content;
 	for (const p of Array.isArray(content) ? content : []) {
@@ -79,8 +79,8 @@ const main = async (): Promise<number> => {
 		new StdioClientTransport({
 			command: process.execPath,
 			args: [join(import.meta.dir, "..", "dist", "server.js")],
-			env,
-		}),
+			env
+		})
 	);
 	const failed = await runCalls(client, calls);
 	await client.close();

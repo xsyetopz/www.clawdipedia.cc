@@ -15,7 +15,7 @@ import {
 	readFixture,
 	type Seen,
 	typeNames,
-	walkFields,
+	walkFields
 } from "./observed.ts";
 
 type Json = Record<string, unknown>;
@@ -57,7 +57,7 @@ const isManualFixture = (v: unknown): v is ManualFixture =>
 			Object.values(v["unsent"]).every((e) => isManualEntry(e))));
 
 export const readManual = async (
-	schemaFile: string,
+	schemaFile: string
 ): Promise<ManualFixture | undefined> => {
 	const file = Bun.file(join(MANUAL_DIR, schemaFile));
 	if (!(await file.exists())) {
@@ -87,7 +87,7 @@ const hardCoded = (anchors: string[]): string[] =>
 /** Why an entry's anchors fail, or undefined when each is in the program and spells out no minified name. */
 const anchorProblem = (
 	e: ManualEntry,
-	has: (s: string) => boolean,
+	has: (s: string) => boolean
 ): string | undefined => {
 	const gone = e.anchors.filter((a) => !has(a));
 	if (e.anchors.length === 0 || gone.length > 0) {
@@ -115,13 +115,13 @@ const matchNearKey = (
 	program: string,
 	anchor: string,
 	parts: string[],
-	key: string,
+	key: string
 ): boolean => {
 	const re = new RegExp(
 		parts
 			.map((p) => p.replaceAll(/[.*+?^${}()|[\]\\]/gu, String.raw`\$&`))
 			.join(String.raw`[\w$]+`),
-		"u",
+		"u"
 	);
 	// Test the pattern on the text around each hit (an identifier is at most 64 characters).
 	const i = parts.indexOf(key);
@@ -217,7 +217,7 @@ const isOpen = (node: Json): boolean =>
 export const staleUnsent = (
 	fx: ManualFixture,
 	schema: Json,
-	has: (s: string) => boolean,
+	has: (s: string) => boolean
 ): string[] => {
 	const present = new Set<string>();
 	walkFields(schema, (p) => present.add(p));
@@ -242,7 +242,7 @@ export const applyManual = async (
 	input: Json,
 	has: (s: string) => boolean,
 	manual?: ManualFixture,
-	seen?: Fixture["fields"],
+	seen?: Fixture["fields"]
 ): Promise<{ schema: Json; n: number; stale: string[]; missed: string[] }> => {
 	const fx = manual ?? (await readManual(schemaFile));
 	const fixture =

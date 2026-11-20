@@ -46,7 +46,7 @@ export const cacheRoot = (): string => {
 	}
 	return join(
 		nonEmpty(env["XDG_CACHE_HOME"]) ?? join(homedir(), ".cache"),
-		"clawdipedia",
+		"clawdipedia"
 	);
 };
 

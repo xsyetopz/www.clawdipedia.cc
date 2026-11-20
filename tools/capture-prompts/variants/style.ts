@@ -17,9 +17,9 @@ export const STYLE_VARIANTS: Variant[] = [
 				use: "Yes.",
 				change: "Not the built-in text. You can write a custom style.",
 				toggle: "`/output-style` or the `outputStyle` setting.",
-				where: "`outputStyle` in any settings scope.",
-			},
-		}),
+				where: "`outputStyle` in any settings scope."
+			}
+		})
 	),
 	{
 		id: "style-custom",
@@ -38,8 +38,8 @@ export const STYLE_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "Yes. You write the file.",
 			toggle: "`/output-style` or the `outputStyle` setting.",
-			where: "`~/.claude/output-styles/*.md` or `.claude/output-styles/*.md`.",
-		},
+			where: "`~/.claude/output-styles/*.md` or `.claude/output-styles/*.md`."
+		}
 	},
 	{
 		id: "style-custom-full",
@@ -59,8 +59,8 @@ export const STYLE_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "Yes. You write the file.",
 			toggle: "`/output-style` or the `outputStyle` setting.",
-			where: "`~/.claude/output-styles/*.md` or `.claude/output-styles/*.md`.",
-		},
+			where: "`~/.claude/output-styles/*.md` or `.claude/output-styles/*.md`."
+		}
 	},
 	{
 		id: "style-custom-keep",
@@ -80,8 +80,8 @@ export const STYLE_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "Yes. You write the file.",
 			toggle: "`keep-coding-instructions` in the style's front matter.",
-			where: "`~/.claude/output-styles/*.md` or `.claude/output-styles/*.md`.",
-		},
+			where: "`~/.claude/output-styles/*.md` or `.claude/output-styles/*.md`."
+		}
 	},
 	{
 		id: "style-custom-keep-lean",
@@ -100,7 +100,7 @@ export const STYLE_VARIANTS: Variant[] = [
 			use: "Yes.",
 			change: "Yes. You write the file.",
 			toggle: "`keep-coding-instructions` in the style's front matter.",
-			where: "`~/.claude/output-styles/*.md` or `.claude/output-styles/*.md`.",
-		},
-	},
+			where: "`~/.claude/output-styles/*.md` or `.claude/output-styles/*.md`."
+		}
+	}
 ];

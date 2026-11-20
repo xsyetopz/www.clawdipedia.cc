@@ -27,7 +27,7 @@ const main = async (): Promise<number> => {
 	const suspectWarm = !ctx.dry && (await maybeWarm(ctx.to));
 	const { x, tmp } = await makeCtx(ctx, token, bin);
 	console.info(
-		`release:probe:live ${ctx.to}${ctx.dry ? " (dry, fake token, local stub)" : ""}`,
+		`release:probe:live ${ctx.to}${ctx.dry ? " (dry, fake token, local stub)" : ""}`
 	);
 	let invalid = 0;
 	// Record before the first real case so an abort still counts as a run (the cache may be warm after it).
@@ -54,7 +54,7 @@ const main = async (): Promise<number> => {
 		await recordLiveRun(ctx.to);
 	}
 	console.info(
-		`${cases.length} case(s), ${invalid} invalid probe(s)${ctx.dry ? " (dry: invalid cases only show the fake token is not a real login)" : ""}`,
+		`${cases.length} case(s), ${invalid} invalid probe(s)${ctx.dry ? " (dry: invalid cases only show the fake token is not a real login)" : ""}`
 	);
 	if (ctx.dry || invalid === 0) {
 		return 0;

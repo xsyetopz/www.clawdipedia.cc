@@ -14,8 +14,8 @@ test("a group whose folder holds a page named after it is marked ownPage", async
 	const listed = await Promise.all(
 		GROUPS.map(async (g) => ({
 			id: g.id,
-			files: await readdir(join(DOCS, g.id)),
-		})),
+			files: await readdir(join(DOCS, g.id))
+		}))
 	);
 	const onDisk = listed
 		.filter((g) => g.files.includes(`${g.id}.md`))
@@ -27,7 +27,7 @@ test("a group whose folder holds a page named after it is marked ownPage", async
 test("every group id is a folder of docs/prompts", async () => {
 	const entries = await readdir(DOCS, { withFileTypes: true });
 	const dirs = new Set(
-		entries.filter((e) => e.isDirectory()).map((e) => e.name),
+		entries.filter((e) => e.isDirectory()).map((e) => e.name)
 	);
 	expect(GROUPS.map((g) => g.id).filter((id) => !dirs.has(id))).toEqual([]);
 });
@@ -39,7 +39,7 @@ test("writeCategories writes each _category_.json as `bun fmt` leaves it", async
 		files.map(async (f) => {
 			const text = await Bun.file(f).text();
 			return [text, await formatText(text, f)];
-		}),
+		})
 	);
 	expect(pairs.filter(([a, b]) => a !== b)).toEqual([]);
 });

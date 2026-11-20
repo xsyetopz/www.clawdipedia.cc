@@ -7,7 +7,7 @@ import {
 	diffSample,
 	diffSig,
 	type Sig,
-	sig,
+	sig
 } from "../sig.ts";
 
 const WORKERS = 8;
@@ -47,7 +47,7 @@ const runJob = async (
 	bin: string,
 	bases: Bases,
 	v: string,
-	k: Kind,
+	k: Kind
 ): Promise<Out> => {
 	try {
 		const c = MAKE[k]();
@@ -63,8 +63,8 @@ const runJob = async (
 			diff,
 			code: r.code,
 			vals: Object.fromEntries(
-				diff.map((x) => [x, diffSample(b.sig[x] ?? "", s[x] ?? "")]),
-			),
+				diff.map((x) => [x, diffSample(b.sig[x] ?? "", s[x] ?? "")])
+			)
 		};
 	} catch (error) {
 		return { err: message(error).slice(0, 200) };
@@ -75,7 +75,7 @@ const runJob = async (
 export const runJobs = async (
 	bin: string,
 	bases: Bases,
-	todo: string[],
+	todo: string[]
 ): Promise<Results> => {
 	const jobs = todo.flatMap((v) => KINDS.map((k) => [v, k] as const));
 	const res: Results = new Map();
@@ -103,7 +103,7 @@ export const runJobs = async (
 const addSamples = (
 	samples: Record<string, string>,
 	prefix: string,
-	vals: Record<string, [string, string]>,
+	vals: Record<string, [string, string]>
 ): void => {
 	for (const [key, [a, b]] of Object.entries(vals)) {
 		if (Object.keys(samples).length < SAMPLE_CAP) {

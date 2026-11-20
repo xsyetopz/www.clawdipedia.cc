@@ -30,14 +30,14 @@ const fromIndexFile = (
 	builtFor: number,
 	entries: readonly Entry[],
 	got: OkResource,
-	parsed: ParsedIndex,
+	parsed: ParsedIndex
 ): Built => {
 	const byRoute = new Map(parsed.pages.map((p) => [p.route, p]));
 	const have = entries.filter((e) => byRoute.has(e.route));
 	const idx = new SearchIndex({
 		entries: () => have,
 		text: (e) => byRoute.get(e.route)?.body,
-		extra: (e) => byRoute.get(e.route)?.extra,
+		extra: (e) => byRoute.get(e.route)?.extra
 	});
 	return {
 		builtFor,
@@ -45,7 +45,7 @@ const fromIndexFile = (
 		idx,
 		source: got.source,
 		pages: have.length,
-		hash: parsed.hash,
+		hash: parsed.hash
 	};
 };
 
@@ -53,12 +53,12 @@ const fromPages = async (
 	builtFor: number,
 	entries: readonly Entry[],
 	source: Source,
-	got: Resource,
+	got: Resource
 ): Promise<Built> => {
 	const load = await content.loadPages(entries);
 	const idx = new SearchIndex({
 		entries: () => entries,
-		text: (e) => load.texts.get(e.route),
+		text: (e) => load.texts.get(e.route)
 	});
 	return {
 		builtFor,
@@ -70,7 +70,7 @@ const fromPages = async (
 		fallback:
 			got.status === "notfound"
 				? "no llms-search-index.json on the site"
-				: "llms-search-index.json not available",
+				: "llms-search-index.json not available"
 	};
 };
 
@@ -148,14 +148,14 @@ export const indexSource = (b: Built): Source => {
 			state:
 				b.source.state === "live" && Date.now() - b.at >= 60_000
 					? "cached"
-					: b.source.state,
+					: b.source.state
 		};
 	}
 	return {
 		origin: b.source.origin,
 		state: pagesState(load, b.at),
 		fetchedAt: load.oldest ?? b.source.fetchedAt,
-		revalidated: false,
+		revalidated: false
 	};
 };
 
