@@ -10,9 +10,7 @@ import {
 	header,
 	idx,
 	isJson,
-	isStringArray,
 	type Json,
-	markObserved,
 	mods,
 	note,
 	only,
@@ -26,7 +24,7 @@ import {
 	VERSION,
 } from "./ctx.ts";
 import { objSchema } from "./schema.ts";
-import { laterWrite } from "./transcript-write.ts";
+import { addCodeKeys, addProbeKeys } from "./transcript-keys.ts";
 
 const CHAIN = new Set([
 	"user",
@@ -177,34 +175,6 @@ const useSites = (t: string, x: Shared): Site[] => {
 	return use.length === 0 ? all.filter((s) => s.src === x.reg) : use;
 };
 
-/** Add the keys a probe saw that no constructor has: find the later write of each. */
-const addProbeKeys = async (
-	t: string,
-	schema: Json,
-	withType: Record<string, Json>,
-	seen: unknown,
-): Promise<void> => {
-	if (!isStringArray(seen)) {
-		return;
-	}
-	const lost: string[] = [];
-	await mapSeq(
-		seen.filter((s) => !(s in withType)),
-		async (k) => {
-			const site = await laterWrite(k);
-			if (site) {
-				withType[k] = site;
-			} else {
-				lost.push(k);
-			}
-		},
-	);
-	markObserved(schema, seen);
-	if (lost.length > 0) {
-		note(`transcript ${t}: probe keys with no write site: ${lost.join(", ")}`);
-	}
-};
-
 /** The schema of one entry type; `noCode` collects types no code writes. */
 const typeDef = async (
 	t: string,
@@ -238,6 +208,7 @@ const typeDef = async (
 		tur["type"] = ["object", "string", "array"];
 	}
 	await addProbeKeys(t, schema, withType, x.data[`line.${t}`]);
+	await addCodeKeys(use, withType);
 	schema["$comment"] =
 		`Registry policy: ${x.policy.get(t) ?? "none"}. Code sites used: ${use.length}.${use.length > 0 ? "" : " The program reads this type, and no code in this build writes it, so only `type` is known."}`;
 	return schema;
