@@ -1,12 +1,11 @@
-// Usage: bun inspect/mcp/src/citation-terms.ts [--version <v>] [--show] [--suggest] <file.md> [...]
+// Usage: bun inspect/mcp/src/citation-terms.ts [--version <v>] [--show] [--suggest] [--lines-only] <file.md> [...]
+//        bun inspect/mcp/src/citation-terms.ts [--version <v>] --to-lines [--write] <file.md> [...]
+// --lines-only counts a citation that matches only as a raw offset as a miss: the site rule is that N is a line of the cleaned module.
+// --to-lines rewrites each raw-offset citation as the cleaned-module line that holds the matched term at the same place; a tie or no hit leaves it as it is and prints a report.
 // --show prints the code at each missed offset; --suggest prints up to 3 cleaned-module lines that hold a term of the line.
 // For each `chunk-x.js:N` citation in the Markdown files, looks for a term of the same line near offset N of the module.
 // A term is a code span (`name`) or a quoted string ("text") of the line (or a code-like piece of one), or, for a footnote, of each line that uses it. A citation with no term near its offset prints
 // as a miss, for a read by hand: the offset can be stale, or the line can name the code only in words.
-import { basename } from "node:path";
-
-import { program } from "./binary.ts";
-import { sources } from "./sources.ts";
 
 /** One `chunk-x.js:N` citation and the term of its line that the code holds near N, if any. */
 export interface CitationTerm {
@@ -23,7 +22,7 @@ export interface CitationTerm {
 const NEAR_LINES = 10;
 
 /** Characters on each side of the offset that a term may sit in: a footnote cites the start of a statement. */
-const WINDOW = 600;
+export const WINDOW = 600;
 
 const CITED = /(chunk-[\da-z]+\.js)[:@](\d+)/gu;
 
@@ -70,44 +69,64 @@ export const citationTerms = (
 	modules: ReadonlyMap<string, string>,
 	file = "",
 	clean?: ReadonlyMap<string, readonly string[]>,
+	linesOnly = false,
 ): CitationTerm[] => {
 	const lines = md.split("\n");
-	const uses = footnoteUses(lines);
-	return lines.flatMap((text, i) => {
-		const label = /^\[\^([\w-]+)\]:/u.exec(text)?.[1];
-		const used = label === undefined ? [] : (uses.get(label) ?? []);
-		const terms = new Set([text, ...used].flatMap((l) => lineTerms(l)));
-		return [...text.matchAll(CITED)].map((m): CitationTerm => {
-			const code = modules.get(m[1] ?? "") ?? "";
+	const terms = termsByLine(md);
+	return lines.flatMap((text, i) =>
+		[...text.matchAll(CITED)].map((m): CitationTerm => {
 			const at = Number(m[2]);
-			const start = Math.max(0, at - WINDOW);
 			const found: CitationTerm = { file, line: i + 1, citation: m[0] };
-			for (const t of terms) {
-				// The first hit after the window start: a later hit is outside too.
-				const hit = code.indexOf(t, start);
-				if (hit !== -1 && hit + t.length <= at + WINDOW) {
-					found.term = t;
-					found.as = "offset";
-					return found;
-				}
+			const mine = terms[i] ?? [];
+			const byOffset = linesOnly
+				? undefined
+				: offsetHit(modules.get(m[1] ?? "") ?? "", at, mine);
+			if (byOffset !== undefined) {
+				found.term = byOffset.term;
+				found.as = "offset";
+				return found;
 			}
 			// A `:N` can also be a line of the cleaned module (see tools/check/citations.ts).
-			const rows = clean?.get(m[1] ?? "");
-			if (rows !== undefined && at >= 1 && at <= rows.length) {
-				const near = rows
-					.slice(Math.max(0, at - 1 - NEAR_LINES), at + NEAR_LINES)
-					.join("\n");
-				for (const t of terms) {
-					if (near.includes(t)) {
-						found.term = t;
-						found.as = "line";
-						return found;
-					}
-				}
+			const term = lineHit(clean?.get(m[1] ?? ""), at, mine);
+			if (term !== undefined) {
+				found.term = term;
+				found.as = "line";
 			}
 			return found;
-		});
-	});
+		}),
+	);
+};
+
+/** The first term held within the window of raw offset `at`, with the place of its first hit. */
+export const offsetHit = (
+	code: string,
+	at: number,
+	terms: readonly string[],
+): { term: string; hit: number } | undefined => {
+	const start = Math.max(0, at - WINDOW);
+	for (const term of terms) {
+		// The first hit after the window start: a later hit is outside too.
+		const hit = code.indexOf(term, start);
+		if (hit !== -1 && hit + term.length <= at + WINDOW) {
+			return { term, hit };
+		}
+	}
+	return undefined;
+};
+
+/** The first term held within 10 lines of line `at` of the cleaned module. */
+export const lineHit = (
+	rows: readonly string[] | undefined,
+	at: number,
+	terms: readonly string[],
+): string | undefined => {
+	if (rows === undefined || at < 1 || at > rows.length) {
+		return undefined;
+	}
+	const near = rows
+		.slice(Math.max(0, at - 1 - NEAR_LINES), at + NEAR_LINES)
+		.join("\n");
+	return terms.find((t) => near.includes(t));
 };
 
 /** The code at the offset of `citation`, one line, for a read by hand next to the cited line. */
@@ -137,7 +156,7 @@ export interface Suggestion {
 	term: string;
 }
 
-const linesWith = (rows: readonly string[], term: string): number[] =>
+export const linesWith = (rows: readonly string[], term: string): number[] =>
 	rows.flatMap((row, i) => (row.includes(term) ? [i + 1] : []));
 
 /**
@@ -189,53 +208,8 @@ export const termsByLine = (md: string): string[][] => {
 	return lines.map((text) => termsOf(text));
 };
 
-const main = async (args: string[]): Promise<number> => {
-	const v = args.indexOf("--version");
-	const version = v === -1 ? undefined : args[v + 1];
-	const show = args.includes("--show");
-	const hints = args.includes("--suggest");
-	const files = args.filter(
-		(a, i) =>
-			a !== "--show" &&
-			a !== "--suggest" &&
-			(v === -1 || (i !== v && i !== v + 1)),
-	);
-	const p = await program(version);
-	const modules = new Map(p.modules.map((m) => [basename(m.name), m.source]));
-	const cleaned = await sources(p.path);
-	const clean = new Map(
-		cleaned.flatMap((s) =>
-			s.clean === undefined
-				? []
-				: [[basename(s.name), s.clean.split("\n")] as const],
-		),
-	);
-	const texts = await Promise.all(files.map((f) => Bun.file(f).text()));
-	const all = texts.flatMap((t, i) =>
-		citationTerms(t, modules, files[i], clean),
-	);
-	const misses = all.filter((c) => c.term === undefined);
-	for (const c of misses) {
-		console.info(
-			`${c.file}:${c.line}: ${c.citation}: no term of the line near it`,
-		);
-		if (show) {
-			console.info(`  > ${codeAt(c.citation, modules)}`);
-		}
-		if (hints) {
-			const terms =
-				termsByLine(texts[files.indexOf(c.file)] ?? "")[c.line - 1] ?? [];
-			for (const s of suggest(c.citation, terms, clean)) {
-				console.info(`  ? ${s.place} (${s.term})`);
-			}
-		}
-	}
-	console.info(
-		`${misses.length} misses, ${all.length} citations, in ${files.length} files`,
-	);
-	return misses.length === 0 ? 0 : 1;
-};
-
 if (import.meta.main) {
+	// Loaded here: the command line reads this module and `citation-lines.ts`, which reads it too.
+	const { main } = await import("./citation-cli.ts");
 	process.exitCode = await main(Bun.argv.slice(2));
 }

@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
+import { toLines } from "../src/citation-lines.ts";
 import {
 	citationTerms,
 	codeAt,
@@ -129,5 +130,137 @@ describe("termsByLine", () => {
 		const got = termsByLine(md);
 		// Assert
 		expect(got[2]).toEqual(["Moo"]);
+	});
+});
+
+describe("toLines", () => {
+	const gap = " ".repeat(300);
+	const code = `${pad}${gap}function mooFn(o){return alpha(o)}${gap}${pad}${gap}function mooFn(p){return beta(p)}${gap}${pad}`;
+	const mods = new Map([["chunk-abc.js", code]]);
+	const rows = [
+		"// head",
+		"function mooFn(o) {",
+		"  return alpha(o);",
+		"}",
+		"",
+		"",
+		"",
+		"function mooFn(p) {",
+		"  return beta(p);",
+		"}",
+	];
+	const clean = new Map([["chunk-abc.js", rows]]);
+
+	test("converts an offset to the line that holds the term at that place", () => {
+		// Arrange
+		const second = code.lastIndexOf("function mooFn");
+		const md = `[^g]: The program, \`chunk-abc.js:${second}\` (\`mooFn\`).`;
+		// Act
+		const got = toLines(md, mods, clean, "a.md");
+		// Assert
+		expect(got.text).toBe("[^g]: The program, `chunk-abc.js:8` (`mooFn`).");
+		expect(got.done[0]?.term).toBe("mooFn");
+	});
+
+	test("leaves a tie unchanged and reports it", () => {
+		// Arrange
+		const tie = new Map([["chunk-abc.js", ["mooFn(1)", "x", "mooFn(2)"]]]);
+		const md = `\`chunk-abc.js:2005\` (\`mooFn\`)`;
+		// Act
+		const got = toLines(md, mods, tie);
+		// Assert
+		expect(got.text).toBe(md);
+		expect(got.left[0]?.reason).toContain("tie");
+	});
+
+	test("converts both ends of a range or neither", () => {
+		// Arrange
+		const first = code.indexOf("function mooFn");
+		const second = code.lastIndexOf("function mooFn");
+		const md = `\`mooFn\` \`chunk-abc.js:${first}-${second}\` and \`chunk-abc.js:${first}-3000000\``;
+		// Act
+		const got = toLines(md, mods, clean);
+		// Assert
+		expect(got.text).toBe(
+			`\`mooFn\` \`chunk-abc.js:2-8\` and \`chunk-abc.js:${first}-3000000\``,
+		);
+		expect(got.left).toHaveLength(1);
+	});
+
+	test("leaves a citation that already reads as a line untouched", () => {
+		// Arrange
+		const md = "`chunk-abc.js:5` (`mooFn`)";
+		// Act
+		const got = toLines(md, mods, clean);
+		// Assert
+		expect(got.text).toBe(md);
+		expect(got.done).toEqual([]);
+	});
+
+	test("leaves a number inside the module's line count for a read by hand", () => {
+		// Arrange
+		const near = new Map([["chunk-abc.js", `function mooFn(){}${gap}`]]);
+		const far = new Map([
+			[
+				"chunk-abc.js",
+				[...Array.from({ length: 30 }, () => "x"), "function mooFn() {"],
+			],
+		]);
+		const md = "`chunk-abc.js:5` (`mooFn`)";
+		// Act
+		const got = toLines(md, near, far);
+		// Assert
+		expect(got.text).toBe(md);
+		expect(got.left[0]?.reason).toBe("number is also a line of the module");
+	});
+
+	test("does not place a citation by a plain word", () => {
+		// Arrange
+		const second = code.lastIndexOf("function mooFn");
+		const md = `\`chunk-abc.js:${second}\` (\`beta\`)`;
+		// Act
+		const got = toLines(md, mods, clean);
+		// Assert
+		expect(got.text).toBe(md);
+		expect(got.left).toHaveLength(1);
+	});
+
+	test("writes a range whose ends land on one line as that line", () => {
+		// Arrange
+		const first = code.indexOf("function mooFn");
+		const md = `\`chunk-abc.js:${first}-${first + 5}\` (\`mooFn\`)`;
+		// Act
+		const got = toLines(md, mods, clean);
+		// Assert
+		expect(got.text).toBe("`chunk-abc.js:2` (`mooFn`)");
+	});
+});
+
+describe("citationTerms with linesOnly", () => {
+	test("counts a citation that matches only as an offset as a miss", () => {
+		// Arrange
+		const clean = new Map([["chunk-abc.js", ["a"]]]);
+		const md = "[^g]: The program, `chunk-abc.js:2005` (`Moo`).";
+		// Act
+		const strict = citationTerms(md, modules, "", clean, true);
+		const loose = citationTerms(md, modules, "", clean);
+		// Assert
+		expect(strict[0]?.term).toBeUndefined();
+		expect(loose[0]?.as).toBe("offset");
+	});
+
+	test("still accepts a line", () => {
+		// Arrange
+		const clean = new Map([["chunk-abc.js", ["function Moo(o) {"]]]);
+		// Act
+		const [hit] = citationTerms(
+			"`chunk-abc.js:1` (`Moo`)",
+			modules,
+			"",
+			clean,
+			true,
+		);
+		// Assert
+		expect(hit?.as).toBe("line");
 	});
 });

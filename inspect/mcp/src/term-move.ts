@@ -88,7 +88,8 @@ const occurrences = (text: string, needle: string): number[] => {
 	return out;
 };
 
-const wordSet = (s: string): Set<string> => new Set(s.match(WORDS));
+/** The identifier-like words of `s`, to tell alike surroundings. */
+export const wordSet = (s: string): Set<string> => new Set(s.match(WORDS));
 
 /** Where raw offset `n` of `a` sits in `b`, by a term of the claim that stands near `n` in `a`: the offset from the term stays. */
 export const termOffset = (
