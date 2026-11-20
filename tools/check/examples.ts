@@ -14,7 +14,7 @@ import {
 	findBlocks,
 	ROOT,
 	SKIP_MARKER,
-	walk,
+	walk
 } from "./example-blocks.ts";
 
 // oxlint skips hidden folders, `bun fmt` and oxlint skip gitignored ones, and both read the repo config only inside the repo.
@@ -29,7 +29,7 @@ const IGNORED_RULES = new Set([
 	"typescript(require-await)",
 	"typescript(strict-boolean-expressions)",
 	"eslint(no-empty-function)",
-	"jest(no-standalone-expect)",
+	"jest(no-standalone-expect)"
 ]);
 const isIgnored = (code: string) =>
 	IGNORED_RULES.has(code) || code.startsWith("typescript(no-unsafe-");
@@ -46,7 +46,7 @@ const run = async (cmd: string[]) => {
 	const [out] = await Promise.all([
 		new Response(p.stdout).text(),
 		new Response(p.stderr).text(),
-		p.exited,
+		p.exited
 	]);
 	return out;
 };
@@ -100,10 +100,10 @@ const format = async (blocks: Block[]) => {
 			writeFile(
 				tmpFile(b),
 				(texts[n] ?? "").replaceAll(/^\t+/gmu, (tabs) =>
-					"  ".repeat(tabs.length),
-				),
-			),
-		),
+					"  ".repeat(tabs.length)
+				)
+			)
+		)
 	);
 };
 
@@ -111,7 +111,7 @@ const format = async (blocks: Block[]) => {
 const applyToFile = async (
 	file: string,
 	list: Block[],
-	byId: Map<string, Block>,
+	byId: Map<string, Block>
 ) => {
 	// Re-read: other agents edit docs.
 	const text = await readFile(file, "utf8");
@@ -127,7 +127,7 @@ const applyToFile = async (
 			cur.map((l) => l.slice(old.indent.length)).join("\n") !== want.join("\n")
 		) {
 			console.error(
-				`${relative(ROOT, file)}:${b.line}: changed meanwhile, not fixed`,
+				`${relative(ROOT, file)}:${b.line}: changed meanwhile, not fixed`
 			);
 			continue;
 		}
@@ -153,13 +153,13 @@ const fix = async (blocks: Block[], byId: Map<string, Block>) => {
 			count++;
 			changed.set(b.file, [
 				...(changed.get(b.file) ?? []),
-				{ ...b, code: next },
+				{ ...b, code: next }
 			]);
 			b.code = next;
 		}
 	}
 	await Promise.all(
-		[...changed].map(([file, list]) => applyToFile(file, list, byId)),
+		[...changed].map(([file, list]) => applyToFile(file, list, byId))
 	);
 	return count;
 };
@@ -174,7 +174,7 @@ const report = async (blocks: Block[], byId: Map<string, Block>) => {
 	const scripts = blocks.filter((b) => b.ext !== "json" && b.ext !== "jsonc");
 	if (files !== scripts.length) {
 		console.error(
-			`oxlint processed ${files} files but ${scripts.length} script blocks were written. The gate would be a no-op.`,
+			`oxlint processed ${files} files but ${scripts.length} script blocks were written. The gate would be a no-op.`
 		);
 		process.exitCode = 1;
 	}
@@ -183,7 +183,7 @@ const report = async (blocks: Block[], byId: Map<string, Block>) => {
 		if (b !== undefined) {
 			problems++;
 			console.error(
-				`${place(b, d.labels?.[0]?.span?.line)}: ${d.code}: ${d.message.split("\n")[0]}`,
+				`${place(b, d.labels?.[0]?.span?.line)}: ${d.code}: ${d.message.split("\n")[0]}`
 			);
 		}
 	}
@@ -218,11 +218,12 @@ const main = async () => {
 	await mkdir(TMP, { recursive: true });
 	try {
 		await Promise.all(blocks.map((b) => writeFile(tmpFile(b), b.code)));
-		const byId = new Map(blocks.map((b) => [b.id, b]));
+		// Copies: `fix` updates each block's code, and `applyToFile` compares the file against the code as read.
+		const byId = new Map(blocks.map((b) => [b.id, { ...b }]));
 		const fixed = fixing ? await fix(blocks, byId) : 0;
 		const problems = await report(blocks, byId);
 		console.info(
-			`Checked ${blocks.length} example blocks (${skipped} skipped with ${SKIP_MARKER}${fixing ? `, ${fixed} fixed` : ""}).`,
+			`Checked ${blocks.length} example blocks (${skipped} skipped with ${SKIP_MARKER}${fixing ? `, ${fixed} fixed` : ""}).`
 		);
 		if (problems > 0) {
 			console.error(`${problems} problem(s) in examples.`);
