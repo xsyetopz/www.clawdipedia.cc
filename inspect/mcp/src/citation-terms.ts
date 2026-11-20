@@ -1,4 +1,5 @@
-// Usage: bun inspect/mcp/src/citation-terms.ts [--version <v>] <file.md> [...]
+// Usage: bun inspect/mcp/src/citation-terms.ts [--version <v>] [--show] [--suggest] <file.md> [...]
+// --show prints the code at each missed offset; --suggest prints up to 3 cleaned-module lines that hold a term of the line.
 // For each `chunk-x.js:N` citation in the Markdown files, looks for a term of the same line near offset N of the module.
 // A term is a code span (`name`) or a quoted string ("text") of the line (or a code-like piece of one), or, for a footnote, of each line that uses it. A citation with no term near its offset prints
 // as a miss, for a read by hand: the offset can be stale, or the line can name the code only in words.
@@ -124,12 +125,80 @@ export const codeAt = (
 	return code.slice(at, at + length).replaceAll(/\s+/gu, " ");
 };
 
+/** At most this many places that hold a term are suggested for one miss. */
+const MAX_SUGGESTIONS = 3;
+
+/** A term at more places than this, in all modules, names no one place. */
+const MAX_PLACES = 5;
+
+/** One cleaned-module line that holds a term of a missed citation's line. */
+export interface Suggestion {
+	place: string;
+	term: string;
+}
+
+const linesWith = (rows: readonly string[], term: string): number[] =>
+	rows.flatMap((row, i) => (row.includes(term) ? [i + 1] : []));
+
+/**
+ * Lines of the cleaned modules that hold a term of `terms`, for a read by hand of a missed `citation`.
+ * The cited module comes first, nearest to N; then, for a term that the cited module does not hold,
+ * other modules where the term is at no more than 5 places. A suggestion is a lead, not a fix.
+ */
+export const suggest = (
+	citation: string,
+	terms: readonly string[],
+	clean: ReadonlyMap<string, readonly string[]>,
+): Suggestion[] => {
+	const m = /(chunk-[\da-z]+\.js)[:@](\d+)/u.exec(citation);
+	const chunk = m?.[1] ?? "";
+	const at = Number(m?.[2]);
+	const longest = [...terms].toSorted((a, b) => b.length - a.length);
+	const own = clean.get(chunk) ?? [];
+	const inOwn = longest
+		.flatMap((term) => linesWith(own, term).map((line) => ({ term, line })))
+		.toSorted((a, b) => Math.abs(a.line - at) - Math.abs(b.line - at))
+		.map((h) => ({ place: `${chunk}:${h.line}`, term: h.term }));
+	const elsewhere = longest
+		.filter((term) => !own.some((row) => row.includes(term)))
+		.flatMap((term) => {
+			const places = [...clean].flatMap(([name, rows]) =>
+				linesWith(rows, term).map((line) => ({
+					place: `${name}:${line}`,
+					term,
+				})),
+			);
+			return places.length <= MAX_PLACES ? places : [];
+		});
+	const seen = new Set<string>();
+	return [...inOwn, ...elsewhere]
+		.filter((s) => !seen.has(s.place) && Boolean(seen.add(s.place)))
+		.slice(0, MAX_SUGGESTIONS);
+};
+
+/** The terms that the term check reads for each line of `md`: its own, and for a footnote, those of each line that uses it. */
+export const termsByLine = (md: string): string[][] => {
+	const lines = md.split("\n");
+	const uses = footnoteUses(lines);
+	const termsOf = (text: string): string[] => {
+		const label = /^\[\^([\w-]+)\]:/u.exec(text)?.[1];
+		const used = label === undefined ? [] : (uses.get(label) ?? []);
+		const terms = new Set([text, ...used].flatMap((l) => lineTerms(l)));
+		return [...terms];
+	};
+	return lines.map((text) => termsOf(text));
+};
+
 const main = async (args: string[]): Promise<number> => {
 	const v = args.indexOf("--version");
 	const version = v === -1 ? undefined : args[v + 1];
 	const show = args.includes("--show");
+	const hints = args.includes("--suggest");
 	const files = args.filter(
-		(a, i) => a !== "--show" && (v === -1 || (i !== v && i !== v + 1)),
+		(a, i) =>
+			a !== "--show" &&
+			a !== "--suggest" &&
+			(v === -1 || (i !== v && i !== v + 1)),
 	);
 	const p = await program(version);
 	const modules = new Map(p.modules.map((m) => [basename(m.name), m.source]));
@@ -152,6 +221,13 @@ const main = async (args: string[]): Promise<number> => {
 		);
 		if (show) {
 			console.info(`  > ${codeAt(c.citation, modules)}`);
+		}
+		if (hints) {
+			const terms =
+				termsByLine(texts[files.indexOf(c.file)] ?? "")[c.line - 1] ?? [];
+			for (const s of suggest(c.citation, terms, clean)) {
+				console.info(`  ? ${s.place} (${s.term})`);
+			}
 		}
 	}
 	console.info(
