@@ -269,7 +269,7 @@ The live `ultrareview` steps were removed by the owner's decision, so this site 
 
 ## Managed Folder Probe
 
-The user ran the 61 managed cases with `sudo` on `2.1.328`. The managed folder `/Library/Application Support/ClaudeCode` was made with `sudo` (owner `root:wheel`) on macOS. It held `CLAUDE.md`, a rule, a skill, an output style, `managed-settings.json`, a `managed-settings.d/` drop-in, and `managed-mcp.json` with one stdio server. Each run also had a user server and a project `.mcp.json` server. A baseline ran without the folder. Runs used `-p --output-format stream-json`, plus `claude mcp list` and `claude mcp get`.
+The user ran the 61 managed cases with `sudo` on `2.1.329`. The managed folder `/Library/Application Support/ClaudeCode` was made with `sudo` (owner `root:wheel`) on macOS. It held `CLAUDE.md`, a rule, a skill, an output style, `managed-settings.json`, a `managed-settings.d/` drop-in, and `managed-mcp.json` with one stdio server. Each run also had a user server and a project `.mcp.json` server. A baseline ran without the folder. Runs used `-p --output-format stream-json`, plus `claude mcp list` and `claude mcp get`.
 
 | What We Ran | Status | What We Saw |
 | --- | --- | --- |

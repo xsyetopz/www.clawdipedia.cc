@@ -8,7 +8,7 @@ Ids are lines of the release notes in `captures/2.1.329/notes-2.1.329.md`. Lines
 - [x] 1.2 `cc-inspect` rewrites raw-offset citations as cleaned-module lines with `--to-lines` (`inspect/mcp/src/citation-lines.ts`).
 - [x] 1.3 `cc-inspect` moves a citation by a term of its sentence (`inspect/mcp/src/term-move.ts`, with `inspect/mcp/test/move-citations-term.test.ts`).
 - [x] 1.4 The surface map covers `2.1.329`, and `surface:check` reports that every item is mapped or excluded.
-- [ ] 1.5 The print probe runs 547 cases, the pty probe 60, the live probe 16, and the managed probe 61 on `2.1.329`.
+- [x] 1.5 The print probe runs 547 cases, the pty probe 60, the live probe 16, and the managed probe 61 on `2.1.329`.
 
 ## 2. Notes Items Stated on a Page
 
@@ -30,4 +30,4 @@ Ids are lines of the release notes in `captures/2.1.329/notes-2.1.329.md`. Lines
 - [x] 5.1 Bump `src/version.ts`, run `bun run schemas`, `bun run surface`, and `bun run surface:check`.
 - [x] 5.2 Move program citations to `2.1.329`, and run `bun run check:citations`.
 - [x] 5.3 Bump clawdipedia-docs, clawdipedia-docs-cli, and cc-inspect, and add the `CHANGELOG.md` entries.
-- [ ] 5.4 Run `just verify`, then push.
+- [x] 5.4 Run `just verify`, then push.
