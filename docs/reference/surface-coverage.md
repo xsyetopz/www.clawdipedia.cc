@@ -2812,9 +2812,9 @@ Items: 4220.
 | `${…} does not support task creation for elicitation/create (required for ${…})` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `${…} does not support task creation for sampling/createMessage (required for ${…})` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `${…} does not support task creation for tools/call (required for ${…})` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
-| `${…} draws an edge ${…} points wide, and the most is 48` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
+| `${…} draws an edge ${…} points wide, and the most is 48` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
 | `${…} edits cannot be used from a script, or with content or local_path. Instead, ${…}` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
-| `${…} ends with one of ${…}, for when no font before it is there` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
+| `${…} ends with one of ${…}, for when no font before it is there` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
 | `${…} failed validation: ${…}` | [/configure/memory-and-rules#errors](/configure/memory-and-rules#errors) |
 | `${…} has a bin folder outside its package` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `${…} has a bin link that points outside its package or has an invalid command name` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
@@ -2842,16 +2842,16 @@ Items: 4220.
 | `${…} invalid: ${…}: unknown to the apps gateway's bundled Claude Desktop schema, and Claude Desktop would drop or misread the entry or key that holds such a field; check the spelling, or upgrade the g…` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `${…} invalid: expected a mapping of desktop keys` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `${…} is ${…} bytes (cap: ${…})` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
-| `${…} is a color: #hex, rgb(), hsl(), transparent or a ThemeColorName such as text-primary` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
+| `${…} is a color: #hex, rgb(), hsl(), transparent or a ThemeColorName such as text-primary` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
 | `${…} is a directory, not a file` | [Plugin Commands](../extend/plugins/cli.md) |
 | `${…} is a folder link or a bundled copy` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
-| `${…} is a list of ${…}` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
-| `${…} is a list of 1 to ${…}` | [/extend/mod-api/ui/ui#sound-values](/extend/mod-api/ui/ui#sound-values) |
-| `${…} is a note name such as "C5" or "F#3", a pitch of 20 to 10000 hertz, or 0 for a rest` | [/extend/mod-api/ui/ui#sound-values](/extend/mod-api/ui/ui#sound-values) |
-| `${…} is a number of ${…}, ${…} to ${…}` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
-| `${…} is a number, ${…} to ${…}` | [/extend/mod-api/ui/ui#sound-values](/extend/mod-api/ui/ui#sound-values) |
+| `${…} is a list of ${…}` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
+| `${…} is a list of 1 to ${…}` | [/extend/mod-api/ui#sound-values](/extend/mod-api/ui#sound-values) |
+| `${…} is a note name such as "C5" or "F#3", a pitch of 20 to 10000 hertz, or 0 for a rest` | [/extend/mod-api/ui#sound-values](/extend/mod-api/ui#sound-values) |
+| `${…} is a number of ${…}, ${…} to ${…}` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
+| `${…} is a number, ${…} to ${…}` | [/extend/mod-api/ui#sound-values](/extend/mod-api/ui#sound-values) |
 | `${…} is a symlink (or its path loops through symlinks); use a regular file at a plain path` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
-| `${…} is an object with any of ${…}` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
+| `${…} is an object with any of ${…}` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
 | `${…} is blocked by your organization. ${…}` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `${…} is built in and not declared in any settings scope. Omit --scope to turn it off.${…}` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `${…} is hard-linked elsewhere (${…} links); use a plain copy` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
@@ -2875,19 +2875,19 @@ Items: 4220.
 | `${…} is not yet supported with the orchestrator subcommand (only worker runners mint Proxy-Authorization for their egress proxy today). Unset it for the orchestrator process; the runners it spawns can…` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `${…} is on a network (UNC) path, which cannot be scoped — run the evaluation from a local checkout` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `${…} is on the declared network ${…}, which Claude Code checks over a direct connection, not through an HTTP proxy. Add ${…} to NO_PROXY and try again.` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
-| `${…} is one of ${…}` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
+| `${…} is one of ${…}` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
 | `${…} is one of ${…}'s own MCP tools; the session runs it on that machine and it cannot run here.` | [/extend/mcp/cli#errors](/extend/mcp/cli#errors) |
-| `${…} is out of place: stops run in order, from 0 to 1` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
+| `${…} is out of place: stops run in order, from 0 to 1` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
 | `${…} is over the size a folder may hold` | [Marketplaces](../extend/plugins/marketplace.md) |
 | `${…} is required but not provided` | Excluded: Plugin configure validation: a required option is blank |
 | `${…} is too large (or, if negative, too small) to represent as an Int64` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `${…} is too long (over 64 KB).` | Excluded: Plugin option value checks (required, length, single line, boolean, integer, JSON object) |
-| `${…} is true or false` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
+| `${…} is true or false` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
 | `${…} is unavailable. No underlying credential could be used. To troubleshoot, visit https://aka.ms/azsdk/js/identity/environmentcredential/troubleshoot.` | Excluded: Bundled Azure SDK (@azure/identity, @azure/core) |
 | `${…} it is outside the plugin's folder (${…})` | Excluded: Mod engine load and registration assertions (plugin module shape, hook results) |
 | `${…} keys cannot be imported as CryptoKey instances` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
-| `${…} lasts ${…} seconds, and the most is 4: shorten its notes, step or release` | [/extend/mod-api/ui/ui#sound-values](/extend/mod-api/ui/ui#sound-values) |
-| `${…} leaves no middle: opposite cuts must add up to less than the viewBox's side` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
+| `${…} lasts ${…} seconds, and the most is 4: shorten its notes, step or release` | [/extend/mod-api/ui#sound-values](/extend/mod-api/ui#sound-values) |
+| `${…} leaves no middle: opposite cuts must add up to less than the viewBox's side` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
 | `${…} links outside node_modules` | Excluded: Plugin mod load limits on file count, file size, and TypeScript file count; no page lists them |
 | `${…} may only contain letters, digits, hyphens, and underscores — it is interpolated into the claude.googleapis.com request path, so URL metacharacters in its value would rewrite the project/workspace…` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `${…} missing or invalid` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
@@ -2904,8 +2904,8 @@ Items: 4220.
 | `${…} must be one of 1/true/yes/on or 0/false/no/off (got: ${…})` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `${…} must be true or false (or 1/0, yes/no, on/off).` | Excluded: Plugin option value checks (required, length, single line, boolean, integer, JSON object) |
 | `${…} must have a value` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `${…} needs exactly one of drone: true and scatter` | [/extend/mod-api/ui/ui#sound-values](/extend/mod-api/ui/ui#sound-values) |
-| `${…} needs exactly one of gradient and vector` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
+| `${…} needs exactly one of drone: true and scatter` | [/extend/mod-api/ui#sound-values](/extend/mod-api/ui#sound-values) |
+| `${…} needs exactly one of gradient and vector` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
 | `${…} no longer holds what this run wrote — something else is writing into ${…}` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `${…} no such file under ${…}` | Excluded: Mod engine load and registration assertions (plugin module shape, hook results) |
 | `${…} path must be absolute: ${…}` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
@@ -2914,14 +2914,14 @@ Items: 4220.
 | `${…} requires a file path (the marker your host writes to announce a graceful drain), got: ${…}` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `${…} requires key modulusLength to be 2048 bits or larger` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `${…} resolves to ${…}, which is in a private, link-local, or cloud-metadata range` | Excluded: Address and URL vetting for outbound connections (private range, scheme, host) |
-| `${…} scatters about ${…} hits at once, and the most is 24: lower a scatter, a release or the reverb` | [/extend/mod-api/ui/ui#sound-values](/extend/mod-api/ui/ui#sound-values) |
+| `${…} scatters about ${…} hits at once, and the most is 24: lower a scatter, a release or the reverb` | [/extend/mod-api/ui#sound-values](/extend/mod-api/ui#sound-values) |
 | `${…} serializes to ${…} characters, over the ${…} limit; not sent` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
 | `${…} setup-token creates a long-lived Claude.ai subscription token, which this machine's allowedProviders policy does not permit.` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `${…} setup-token creates a long-lived Claude.ai subscription token, which this policy does not permit.` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `${…} takes a function, ($, e, next)` | [/extend/mod-api#errors](/extend/mod-api#errors) |
-| `${…} takes no "${…}": it takes ${…}` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
-| `${…} takes no ${…}: ${…}` | [/extend/mod-api/ui/ui#sound-values](/extend/mod-api/ui/ui#sound-values) |
-| `${…} takes one of ${…} alone, such as ["mono"]` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
+| `${…} takes no "${…}": it takes ${…}` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
+| `${…} takes no ${…}: ${…}` | [/extend/mod-api/ui#sound-values](/extend/mod-api/ui#sound-values) |
+| `${…} takes one of ${…} alone, such as ["mono"]` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
 | `${…} that holds a BigInt, which cannot be written out` | Excluded: Mod API engine refusal (argument, tenant, size, or hook check); no page states the text |
 | `${…} value must be ${…}` | Excluded: Bundled Ajv JSON Schema validator |
 | `${…} vanished from ${…}/ while being read; try again` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
@@ -2931,7 +2931,7 @@ Items: 4220.
 | `${…} was not written by this run — something else is writing into ${…}` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `${…} with ${…}` | Excluded: Mod API engine refusal (argument, tenant, size, or hook check); no page states the text |
 | `${…} without a plan_token: this batch includes paths that always require per-batch approval — use finalize_plan with writes (and deletes if needed), then pass the returned plan_token.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
-| `${…} would take ${…} seconds of audio to render, and the most is ${…}. Use fewer or shorter notes, or less reverb` | [/extend/mod-api/ui/ui#sound-values](/extend/mod-api/ui/ui#sound-values) |
+| `${…} would take ${…} seconds of audio to render, and the most is ${…}. Use fewer or shorter notes, or less reverb` | [/extend/mod-api/ui#sound-values](/extend/mod-api/ui#sound-values) |
 | `${…} — ${…} is unavailable (${…})${…}` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `${…} — Remote Control sessions are not started unwrapped; the worker retries once the launcher is fixed` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `${…} — the teammate is not started unwrapped; fix the launcher setting, then retry` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
@@ -2945,12 +2945,12 @@ Items: 4220.
 | `${…}, so this session's http(s) clone was refused. Ask the team that manages your runners to ${…}` | Excluded: Self-hosted runner git version check for the clone through the agent proxy; the Self-Hosted Runner page names the check, not this text |
 | `${…}. Available agents: ${…}` | [/extend/headless#errors](/extend/headless#errors) |
 | `${…}. Nothing was sent.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
-| `${…}.drone is true, or left out` | [/extend/mod-api/ui/ui#sound-values](/extend/mod-api/ui/ui#sound-values) |
-| `${…}.fontWeight is one of ${…}` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
-| `${…}.lineHeight is less than its fontSize, so lines would overlap` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
-| `${…}.lineHeight is points, not a multiple of the font size: 24, not 1.5` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
+| `${…}.drone is true, or left out` | [/extend/mod-api/ui#sound-values](/extend/mod-api/ui#sound-values) |
+| `${…}.fontWeight is one of ${…}` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
+| `${…}.lineHeight is less than its fontSize, so lines would overlap` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
+| `${…}.lineHeight is points, not a multiple of the font size: 24, not 1.5` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
 | `${…}.op is not a write_db operation` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
-| `${…}.shape is linear or radial` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
+| `${…}.shape is linear or radial` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
 | `${…}/ has ${…} .md entries (cap: ${…})` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `${…}/ has no result rows under ${…} - nothing to report${…}` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `${…}/ is a symbolic link whose target does not exist` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
@@ -3208,7 +3208,7 @@ Items: 4220.
 | `${…}; agent ${…} cannot stop it.` | Excluded: TaskStop refusal for a task that another agent owns; no page states the text |
 | `${…}Could not turn off ${…}: ${…} the commit the ${…} lists, and may still be enabled. The known_marketplaces.json entry named "${…}" was left in place: run this remove again once each plugin named he…` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `${…}MCP tool call requires approval` | Excluded: Refusal of a desktop app's tool call for want of an approval; no page states the text |
-| `${…}[${…}] is a font name: 1 to 64 letters, digits, spaces, _ and -, starting with a letter or digit` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
+| `${…}[${…}] is a font name: 1 to 64 letters, digits, spaces, _ and -, starting with a letter or digit` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
 | `${…}data and file_path are not accepted with db_op "${…}"` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `'${…}' is already defined in Reference Record.` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `'${…}' is not a spec method; pass a result schema as the second argument to ctx.mcpReq.send().` | Excluded: Bundled MCP SDK v2 (@modelcontextprotocol/client and server 2.4.0) |
@@ -6495,8 +6495,8 @@ Items: 4220.
 | `simpleCluster: no flatKey on .${…}` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `snapshot copy failed: ${…}${…}` | [/extend/mcp/cli#errors](/extend/mcp/cli#errors) |
 | `something that is not a directory is already named info there` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
-| `sound may hold at most 1500 values, counting every field and list entry` | [/extend/mod-api/ui/ui#sound-values](/extend/mod-api/ui/ui#sound-values) |
-| `sound needs an ambience or at least one cue` | [/extend/mod-api/ui/ui#sound-values](/extend/mod-api/ui/ui#sound-values) |
+| `sound may hold at most 1500 values, counting every field and list entry` | [/extend/mod-api/ui#sound-values](/extend/mod-api/ui#sound-values) |
+| `sound needs an ambience or at least one cue` | [/extend/mod-api/ui#sound-values](/extend/mod-api/ui#sound-values) |
 | `sparse arrays not allowed` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `spawn-hint account_email: control character` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `spawn-hint attempt: unsafe value` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
@@ -6536,8 +6536,8 @@ Items: 4220.
 | `stub preview cannot render a parameter whose display would drop code points` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `stub preview cannot render all parameters completely` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `stub preview cannot render an over-bound parameter` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
-| `style may hold at most 1500 values, counting every field and list entry, and 65536 characters of text` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
-| `style needs at least one of ${…}` | [/extend/mod-api/ui/ui#style-values](/extend/mod-api/ui/ui#style-values) |
+| `style may hold at most 1500 values, counting every field and list entry, and 65536 characters of text` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
+| `style needs at least one of ${…}` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
 | `sub-agent listing incomplete` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `subfield coverage drift: "${…}" lacks subfield() metadata` | Excluded: Build-time schema, model catalog, and field-coverage drift assertions |
 | `submit the setup proposal` | [/extend/skills-and-commands/slash-commands#errors](/extend/skills-and-commands/slash-commands#errors) |
