@@ -1,5 +1,8 @@
 import { basename } from "node:path";
 
+import { lineTerms } from "./citation-terms.ts";
+import { linesOf, sameLine } from "./clean-lines.ts";
+import { moduleMapper } from "./module-map.ts";
 import {
 	claimTerms,
 	relocate,
@@ -7,6 +10,7 @@ import {
 	type Source,
 	termNear,
 } from "./relocate.ts";
+import { NEAR_LINES, termLine, termOffset } from "./term-move.ts";
 
 /** One citation of a program chunk in a Markdown file. */
 export interface Citation {
@@ -52,38 +56,11 @@ export interface Move {
 	line: number;
 	from: string;
 	to?: string;
-	how: "same" | "module" | "unmapped";
+	how: "same" | "term" | "module" | "unmapped";
 }
 
 const FOLLOW_ON =
 	/(chunk-[\da-z]+\.js)(?:([:@])(\d+)(?:-(\d+))?|(`? lines )(\d+) to (\d+))?|(?<=`):(\d+)(?:-(\d+))?(?=`)/gu;
-const LITERAL = /"[^"\\\n]{20,}"/gu;
-
-/** Maps an old module to the new module that shares the most long string literals with it, once for each old module. */
-const moduleMapper = (
-	oldByName: Map<string, Source>,
-	newSources: Source[],
-): ((chunk: string) => Source | undefined) => {
-	const literals = newSources.map((source) => ({
-		source,
-		literals: new Set(source.text.match(LITERAL)),
-	}));
-	const mapped = new Map<string, Source | undefined>();
-	return (chunk) => {
-		if (!mapped.has(chunk)) {
-			const old = new Set(oldByName.get(chunk)?.text.match(LITERAL));
-			const [best] = literals
-				.map((n) => ({
-					source: n.source,
-					shared: [...old].filter((l) => n.literals.has(l)).length,
-				}))
-				.toSorted((a, b) => b.shared - a.shared);
-			mapped.set(chunk, best && best.shared > 0 ? best.source : undefined);
-		}
-		return mapped.get(chunk);
-	};
-};
-
 interface Ctx {
 	oldByName: Map<string, Source>;
 	newNames: Set<string>;
@@ -95,43 +72,6 @@ interface Pair {
 	old: Source;
 	target: Source;
 }
-
-const NEAR_LINES = 10;
-const MIN_WINDOW = 40;
-
-// The cleaner names a declaration, and a chunk, by a hash of its code, so changed code has another name in each build.
-const HASH_NAME = /\$[\da-f]{6}\b|chunk@[\da-f]{8}\.js/gu;
-const cleanLines = new WeakMap<Source, string[]>();
-const linesOf = (s: Source): string[] | undefined => {
-	if (s.clean === undefined) {
-		return undefined;
-	}
-	const lines =
-		cleanLines.get(s) ??
-		s.clean.split("\n").map((l) => l.trim().replaceAll(HASH_NAME, "$"));
-	cleanLines.set(s, lines);
-	return lines;
-};
-
-/** Where line `n` (1-based) of `a` sits in `b`: the nearest place with the same lines around it. A window of little text could match anywhere, so it is skipped. */
-const sameLine = (a: string[], b: string[], n: number): number | undefined => {
-	for (const radius of [4, 2, 1]) {
-		const before = Math.min(radius, n - 1);
-		const want = a.slice(n - 1 - before, n + radius);
-		if (want.join("").length >= MIN_WINDOW) {
-			for (let k = 0; k < Math.max(a.length, b.length); k += 1) {
-				const to = [n - k, n + k].find((line) => {
-					const at = line - 1 - before;
-					return at >= 0 && want.every((l, i) => b[at + i] === l);
-				});
-				if (to !== undefined) {
-					return to;
-				}
-			}
-		}
-	}
-	return undefined;
-};
 
 // A `:N` is a line of the cleaned module in some citations and a raw offset in others: the claim's own words decide, and a line wins a tie.
 const isLine = (
@@ -171,26 +111,75 @@ const sameCode = (
 		: undefined;
 };
 
+/**
+ * The fallback for a number that `sameCode` cannot place: the code spans and quoted strings of the claim line (`lineTerms`, as the term
+ * check reads them) are looked up near the number in the old module, then in the new one. Of the places that hold the term, the one with
+ * the most alike surroundings wins, and the nearest to `n` breaks a tie. The number keeps its offset from the term.
+ */
+const termCode = (
+	{ old, target }: Pair,
+	form: string,
+	n: number,
+	terms: string[],
+): number | undefined => {
+	if (terms.length === 0) {
+		return undefined;
+	}
+	const a = linesOf(old);
+	const b = linesOf(target);
+	if (form === "lines" || (form === ":" && isLine(old, a, n, terms))) {
+		return a && b && n >= 1 && n <= a.length
+			? termLine(a, b, n, terms)
+			: undefined;
+	}
+	return termOffset(old.text, target.text, n, terms);
+};
+
 type Group = string | undefined;
 
 interface Claim {
 	file: string;
 	line: number;
 	terms: string[];
+	/** The code spans and quoted strings of the line, for the term fallback. */
+	spans: string[];
 }
 
 // Each end of a range finds its code on its own, so the two can land out of order; a reversed range does not move.
 const ordered = (a: number | undefined, b: number | "" | undefined): boolean =>
 	a === undefined || b === undefined || b === "" || a <= b;
 
+const howMoved = (moved: boolean, viaTerm: boolean): Move["how"] => {
+	if (!moved) {
+		return "module";
+	}
+	return viaTerm ? "term" : "same";
+};
+
+/** Where number `n` moves: with its code, or by a term of the line when that fails. */
+const place = (
+	pair: Pair,
+	form: string,
+	n: number,
+	{ terms, spans }: Claim,
+): { at?: number; term?: boolean } => {
+	const same = sameCode(pair, form, n, terms);
+	if (same !== undefined) {
+		return { at: same };
+	}
+	const at = termCode(pair, form, n, spans);
+	return at === undefined ? {} : { at, term: true };
+};
+
 /** Moves one citation that names a chunk: gives its new text, and the pair that the numbers after it on the line move with. */
 const moveChunk = (
 	{ oldByName, newNames, mapModule, moves }: Ctx,
-	{ file, line, terms }: Claim,
+	claim: Claim,
 	found: string,
 	chunk: string,
 	[sep, offset, offsetEnd, lead, first, end]: Group[],
 ): { text: string; pair?: Pair } => {
+	const { file, line } = claim;
 	const old = newNames.has(chunk) ? undefined : oldByName.get(chunk);
 	if (!old) {
 		return { text: found };
@@ -201,8 +190,12 @@ const moveChunk = (
 		return { text: found };
 	}
 	const pair = { old, target };
-	const sameAt = (n: Group, form = ":"): number | undefined =>
-		n === undefined ? undefined : sameCode(pair, form, Number(n), terms);
+	let viaTerm = false;
+	const sameAt = (n: Group, form = ":"): number | undefined => {
+		const placed = n === undefined ? {} : place(pair, form, Number(n), claim);
+		viaTerm ||= placed.term === true;
+		return placed.at;
+	};
 	const name = basename(target.name);
 	const moved = sameAt(offset, sep);
 	// A `:A-B` moves only when both ends find their code, so a range never mixes builds.
@@ -223,7 +216,7 @@ const moveChunk = (
 		line,
 		from: found,
 		to: text,
-		how: numbers === false ? "module" : "same",
+		how: howMoved(numbers !== false, viaTerm),
 	});
 	return { text, pair };
 };
@@ -235,16 +228,26 @@ const moveLine = (
 	lineText: string,
 ): string => {
 	const terms = claimTerms(lineText);
+	const spans = lineTerms(lineText);
 	let last: Pair | undefined;
 	const sameAt = (n: Group): number | undefined =>
-		last && n !== undefined ? sameCode(last, ":", Number(n), terms) : undefined;
+		last && n !== undefined
+			? (sameCode(last, ":", Number(n), terms) ??
+				termCode(last, ":", Number(n), spans))
+			: undefined;
 	return lineText.replaceAll(FOLLOW_ON, (found: string, ...groups: Group[]) => {
 		const [chunk, sep, offset, offsetEnd, lead, first, end, from, to] = groups;
 		if (chunk === undefined) {
 			return `:${sameAt(from) ?? from}${to === undefined ? "" : `-${sameAt(to) ?? to}`}`;
 		}
 		const numbers = [sep, offset, offsetEnd, lead, first, end];
-		const moved = moveChunk(ctx, { file, line, terms }, found, chunk, numbers);
+		const moved = moveChunk(
+			ctx,
+			{ file, line, terms, spans },
+			found,
+			chunk,
+			numbers,
+		);
 		last = moved.pair;
 		return moved.text;
 	});
@@ -253,7 +256,8 @@ const moveLine = (
 /**
  * Moves the chunk citations in `files` (file name to Markdown text) from the build of `oldSources` to the build of `newSources`.
  * A citation that names a module of the old build and not of the new one moves to the new module that shares the most long string
- * literals with it. A number moves with its code ("same"); otherwise the numbers stay ("module").
+ * literals with it. A number moves with its code ("same"); when that fails, it moves by a code span or quoted string of its line that stands near it in the
+ * old module and is found in the new one ("term"); otherwise the numbers stay ("module").
  * A `lines A to B` form counts lines of the cleaned module (`clean` of a source), and so does a `:N` that the cleaned module has as a
  * line, unless the words of the claim stand only near the raw offset `N`: such a line moves to the nearest place with the same lines
  * around it. A `@N`, and each other `:N`, is a raw offset: it moves when `relocate` finds the same code, or stays when the code

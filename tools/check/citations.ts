@@ -89,6 +89,6 @@ if (moveFlag === -1) {
 		);
 	}
 	console.info(
-		`${count("same")} same, ${count("module")} module, ${count("unmapped")} unmapped`,
+		`${count("same")} same, ${count("term")} term, ${count("module")} module, ${count("unmapped")} unmapped`,
 	);
 }
