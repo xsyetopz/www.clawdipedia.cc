@@ -18,9 +18,13 @@ export interface Known {
 
 /**
  * Case ids that exist: result files under captures/* plus the live registry (a static list). The print, pty and
- * managed registries build their cases by running, so for those a result file is the cheap source.
+ * managed registries build their cases by running, so for those a result file is the cheap source. With `version`,
+ * only that build's results count, because older captures keep cases and fact ids that later releases removed.
  */
-export const knownCases = async (base = CAPTURES): Promise<Known> => {
+export const knownCases = async (
+	base = CAPTURES,
+	version?: string,
+): Promise<Known> => {
 	const k: Known = {
 		ids: new Set(LIVE_CASES.map((c) => `live.${c.id}`)),
 		facts: new Map(),
@@ -33,6 +37,7 @@ export const knownCases = async (base = CAPTURES): Promise<Known> => {
 	const entries = await readdir(base);
 	const versions = entries
 		.filter((n) => /^\d+\.\d+\.\d+$/u.test(n))
+		.filter((n) => version === undefined || n === version)
 		.toSorted((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 	const runs = await Promise.all(versions.map((v) => readRun(v, base)));
 	for (const r of runs.flat()) {
@@ -46,6 +51,8 @@ export const knownCases = async (base = CAPTURES): Promise<Known> => {
 export interface Check {
 	errors: string[];
 	warnings: string[];
+	/** counts that describe coverage, not a defect: the map holds only version facts, so most cases map to none */
+	notes: string[];
 }
 
 const checkMap = (
@@ -105,7 +112,7 @@ export const checkFacts = (
 	known: Known,
 	all: Fact[] = facts,
 ): Check => {
-	const out: Check = { errors: [], warnings: [] };
+	const out: Check = { errors: [], warnings: [], notes: [] };
 	for (const c of facts) {
 		if (c.status === "unmapped") {
 			out.errors.push(`unmapped: ${c.id} (${c.file}:${c.line})`);
@@ -121,7 +128,7 @@ export const checkFacts = (
 	checkDeclared(map, live, known, out);
 	const unused = [...known.ids].filter((p) => !used.has(p));
 	if (unused.length > 0) {
-		out.warnings.push(
+		out.notes.push(
 			`${unused.length} probe case(s) no fact uses${unused.length > 8 ? ` (first 8: ${unused.slice(0, 8).join(", ")})` : `: ${unused.join(", ")}`}`,
 		);
 	}

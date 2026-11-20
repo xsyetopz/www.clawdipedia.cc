@@ -28,8 +28,20 @@ const count = (facts: Fact[], f: (c: Fact) => string): string => {
 		.join(", ");
 };
 
-const runCheck = async (facts: Fact[], found: Fact[]): Promise<number> => {
-	const r = checkFacts(facts, await readMap(), await knownCases(), found);
+const runCheck = async (
+	facts: Fact[],
+	found: Fact[],
+	to: string,
+): Promise<number> => {
+	const r = checkFacts(
+		facts,
+		await readMap(),
+		await knownCases(undefined, to),
+		found,
+	);
+	for (const n of r.notes) {
+		console.info(`  info: ${n}`);
+	}
 	for (const w of r.warnings) {
 		console.info(`  warn: ${w}`);
 	}
@@ -89,7 +101,7 @@ export const runFacts = async (ctx: Ctx): Promise<number> => {
 		return runRemap(found, ctx);
 	}
 	if (ctx.rest.includes("--check")) {
-		return runCheck(facts, found);
+		return runCheck(facts, found, to);
 	}
 	if (ctx.dry) {
 		console.info(`plan: write captures/${to}/facts.json`);

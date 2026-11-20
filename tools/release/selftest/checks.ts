@@ -1,7 +1,6 @@
 // Result and negative checks of release:check --selftest: the facts a result lists, refused secrets and paths.
 import { join } from "node:path";
 
-import { factsForProbe } from "../facts/map.ts";
 import { childEnv, PROMPT } from "../lib/env.ts";
 import {
 	type CaseResult,
@@ -79,10 +78,11 @@ const skipCheck = async ({ ctx, step, out }: ResultChecks) => {
 const writeChecks = async (c: ResultChecks) => {
 	const { ctx, step, out, dir } = c;
 	// a probe result lists the facts that map.json maps to its case, without each probe asking
-	const mapped = factsForProbe("print.control.requests");
+	const mapped = ["docs/x.md#control:00000000"];
 	await writeCase(
 		await openRun("0.0.1", out),
 		emptyCase(ctx, "print.control.requests", { facts: ["control.own"] }),
+		(id) => (id === "print.control.requests" ? mapped : []),
 	);
 	const back = await readRun("0.0.1", out);
 	const listed = back[0]?.facts ?? [];

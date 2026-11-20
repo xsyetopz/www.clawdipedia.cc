@@ -134,8 +134,10 @@ const checkChecks = (
 		"facts --check: errors and warnings",
 		chk.errors.length === 1 &&
 			chk.errors[0]?.includes("bogus") === true &&
-			chk.warnings.length === 6,
-		`${chk.errors.length} errors, ${chk.warnings.length} warnings`,
+			chk.warnings.length === 5 &&
+			chk.notes.length === 1 &&
+			chk.notes[0]?.includes("print.unused") === true,
+		`${chk.errors.length} errors, ${chk.warnings.length} warnings, ${chk.notes.length} notes`,
 	);
 	step(
 		"facts --check: unmapped fails",

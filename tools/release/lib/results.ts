@@ -164,10 +164,14 @@ const assertNoSecret = (id: string, x: unknown): void => {
 	}
 };
 
-/** Adds the map.json facts of the case, normalises samples, then fails the write if any secret-shaped string remains. */
+/**
+ * Adds the map.json facts of the case, normalises samples, then fails the write if any secret-shaped string remains.
+ * `mapped` defaults to the map.json lookup; a test passes its own, because the real map changes with each release.
+ */
 export const writeCase = async (
 	runDir: string,
 	r: CaseResult,
+	mapped: (caseId: string) => string[] = factsForProbe,
 ): Promise<string> => {
 	if (!ID_RE.test(r.id) || r.id.includes("..")) {
 		throw new Error(`bad case id: ${r.id}`);
@@ -182,7 +186,7 @@ export const writeCase = async (
 						v.slice(0, SAMPLE_MAX),
 					]),
 				);
-	const facts = [...new Set([...r.facts, ...factsForProbe(r.id)])];
+	const facts = [...new Set([...r.facts, ...mapped(r.id)])];
 	const out: CaseResult = {
 		...r,
 		facts,

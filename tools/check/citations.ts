@@ -1,5 +1,5 @@
 // Chunk citations in docs/, tools/surface/exclusions.json, and tools/schemas/manual/ must name a module of the build of src/version.ts,
-// and each program citation must name its chunk and its `:N` place.
+// and each program citation must name its chunk and its `:N` place. An exclusion reason must not name a build of the program: the Surface Coverage page states it.
 // Run with: bun tools/check/citations.ts [--bin <binary>]
 // With --move-from <older binary>, it instead writes those files with each stale citation moved to the build of --bin (or of src/version.ts).
 // A move cleans each build once (about 14 seconds and a few GB of memory for each), because a `:N` can be a line of the cleaned module.
@@ -14,6 +14,7 @@ import {
 } from "../../inspect/mcp/src/citations.ts";
 import { sources } from "../../inspect/mcp/src/sources.ts";
 import { CLAUDE_CODE_VERSION } from "../../src/version.ts";
+import { buildNames } from "./build-names.ts";
 
 const ROOT = join(import.meta.dir, "..", "..");
 const flag = process.argv.indexOf("--bin");
@@ -51,6 +52,18 @@ if (moveFlag === -1) {
 	for (const u of unlocated) {
 		console.error(`${u.file}:${u.line}: ${u.problem}`);
 	}
+	const builds = buildNames(files[EXCLUSIONS] ?? "", CLAUDE_CODE_VERSION);
+	for (const b of builds) {
+		console.error(
+			`${EXCLUSIONS}:${b.line}: names the build ${b.build}; the Surface Coverage page states the build`,
+		);
+	}
+	if (builds.length > 0) {
+		console.error(
+			`\n${builds.length} exclusion reason(s) name a build of the program.`,
+		);
+		process.exitCode = 1;
+	}
 	if (unlocated.length > 0) {
 		console.error(
 			`\n${unlocated.length} program citation(s) without a chunk-x.js:N place.`,
@@ -65,7 +78,7 @@ if (moveFlag === -1) {
 		}
 		console.error(`\n${stale.length} stale citation(s) found.`);
 		process.exitCode = 1;
-	} else if (unlocated.length === 0) {
+	} else if (unlocated.length === 0 && builds.length === 0) {
 		console.info(
 			`check-citations: ok (${Object.keys(files).length} files, build ${CLAUDE_CODE_VERSION})`,
 		);

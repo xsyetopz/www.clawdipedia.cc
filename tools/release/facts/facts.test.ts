@@ -6,12 +6,19 @@ import { join } from "node:path";
 import { knownCases } from "./parts/check.ts";
 import { grepHits } from "./scan.ts";
 
-const base = await mkdtemp(join(tmpdir(), "facts-test-"));
+const dirs: string[] = [];
 afterAll(async () => {
-	await rm(base, { recursive: true, force: true });
+	await Promise.all(dirs.map((d) => rm(d, { recursive: true, force: true })));
 });
 
-const write = async (version: string, facts: string[]) => {
+// Tests run in a random order, so each one gets its own captures folder.
+const freshBase = async () => {
+	const dir = await mkdtemp(join(tmpdir(), "facts-test-"));
+	dirs.push(dir);
+	return dir;
+};
+
+const write = async (base: string, version: string, facts: string[]) => {
 	await Bun.write(
 		join(base, version, "live", "usage.429.json"),
 		JSON.stringify({ schema: 1, id: "live.usage.429", facts }),
@@ -19,11 +26,27 @@ const write = async (version: string, facts: string[]) => {
 };
 
 test("a case's facts come from its newest capture, not from older ones", async () => {
-	await write("2.1.9", ["docs/old.md#renamed:00000000"]);
-	await write("2.1.10", ["docs/new.md#current:11111111"]);
+	const base = await freshBase();
+	await write(base, "2.1.9", ["docs/old.md#renamed:00000000"]);
+	await write(base, "2.1.10", ["docs/new.md#current:11111111"]);
 	const known = await knownCases(base);
 	expect(known.facts.get("live.usage.429")).toEqual(
 		new Set(["docs/new.md#current:11111111"]),
+	);
+});
+
+test("with a version, only that build's results count", async () => {
+	const base = await freshBase();
+	await write(base, "2.1.10", ["docs/new.md#current:11111111"]);
+	await write(base, "2.1.11", ["docs/gone.md#removed:22222222"]);
+	await Bun.write(
+		join(base, "2.1.10", "pty", "old.json"),
+		JSON.stringify({ schema: 1, id: "pty.old", facts: [] }),
+	);
+	const known = await knownCases(base, "2.1.11");
+	expect(known.ids.has("pty.old")).toBe(false);
+	expect(known.facts.get("live.usage.429")).toEqual(
+		new Set(["docs/gone.md#removed:22222222"]),
 	);
 });
 
