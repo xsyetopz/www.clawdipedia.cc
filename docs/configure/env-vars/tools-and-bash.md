@@ -170,24 +170,24 @@ While the scrub is on (`CLAUDE_CODE_SUBPROCESS_ENV_SCRUB` true, or `GITHUB_ACTIO
 
 ## Sources
 
-[^max-output]: The program, `chunk-4kktgbrd.js:2533`.
-[^auto-full-context]: The program, `chunk-2b3eg071.js:184972`. The gate is `tengu_velvet_marble`, read at `chunk-2b3eg071.js:179754`.
-[^edit-diff]: The program, `chunk-56bhcxay.js:5754973`.
-[^exported-var]: The program, `chunk-56bhcxay.js:88182`.
+[^max-output]: The program, `chunk-1zfpw8h2.js:142`.
+[^auto-full-context]: The program, `chunk-wm04tzdx.js:10807` (`CLAUDE_CODE_AUTO_MODE_FULL_CONTEXT` read). The gate is `tengu_velvet_marble`, named at `chunk-wm04tzdx.js:10419` and read as `$85a0c6` at `chunk-wm04tzdx.js:10523`.
+[^edit-diff]: The program, `chunk-hg1yqkjk.js:289078` (`CLAUDE_CODE_BASH_EDIT_DIFF` and `bashEditDiffEnabled`, then the `bash_edit_diff` configuration at `chunk-hg1yqkjk.js:289088`).
+[^exported-var]: The program, `chunk-hg1yqkjk.js:64432`.
 [^exported-var-gate]: The gate is `bot_protected_tengu_zazzy_parasol`.
-[^mounted-rm]: The program, `chunk-56bhcxay.js:1420261`.
-[^ps-alias]: The program, `chunk-56bhcxay.js:1127920`.
+[^mounted-rm]: The program, `chunk-hg1yqkjk.js:53975`.
+[^ps-alias]: The program, `chunk-hg1yqkjk.js:69529`.
 [^ps-alias-gate]: The gate is `bot_protected_tengu_dynamic_pike`.
-[^git-check]: The program, `chunk-56bhcxay.js:1118504` (the read of the variable) and `chunk-56bhcxay.js:1118982` (the hook check).
-[^perforce]: The program, `chunk-j2wfp6sf.js:1918990`.
-[^thrifty]: The program, `chunk-ynemm6ap.js:4363`. The gate is `tengu_thrifty_sonic`.
-[^native-search]: The program, `chunk-7343wm3k.js:19660`, lists the name in its environment table as a boolean.
-[^office-pdf-dir]: The program, `chunk-rp96ggan.js:346`.
-[^office-pdf-send]: The program, `chunk-rp96ggan.js:394`.
-[^scrub-lists]: The program lists, `chunk-2a85tfcs.js:10970` (credential names) and `chunk-2a85tfcs.js:12448` (path and config names), and a Bash call with the scrub on (see [Probes](../../reference/probes.md#static-and-print-probes)).
+[^git-check]: The program, `chunk-g4jweshk.js:12185` (the read of the variable) and `chunk-g4jweshk.js:12231` (the hook check).
+[^perforce]: The program, `chunk-zs9k1w9q.js:120453`.
+[^thrifty]: The program, `chunk-y3bkspwa.js:239`. The gate is `tengu_thrifty_sonic`.
+[^native-search]: The program, `chunk-gvhwnc7g.js:518`, lists the name in its environment table as a boolean.
+[^office-pdf-dir]: The program, `chunk-a8tz5msg.js:362`.
+[^office-pdf-send]: The program, `chunk-a8tz5msg.js:410`.
+[^scrub-lists]: The program lists, `chunk-rjw4t165.js:542` (credential names, from `ANTHROPIC_API_KEY`) and `chunk-rjw4t165.js:645` (path and config names, including `KUBECONFIG`), and a Bash call with the scrub on (see [Probes](../../reference/probes.md#static-and-print-probes)).
 [^scrub-run]: A Bash call with the scrub on (see [Probes](../../reference/probes.md#static-and-print-probes)).
-[^variable-names]: The program, `chunk-7343wm3k.js:26213`. The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^head-start]: The program, `chunk-2b3eg071.js:71530` (shell) and `chunk-56bhcxay.js:3819604` (PowerShell).
-[^shell-mcp]: The program, `chunk-thtytpkk.js:258-282` (the checks and the value) and `chunk-thtytpkk.js:679` (the child env).
-[^watched-sleep]: The program, `chunk-4h0jyvmx.js:23304-23305` (the name), `chunk-4h0jyvmx.js:23393` and `chunk-4h0jyvmx.js:23420` (the rewrite), `chunk-4h0jyvmx.js:23417` (the `CLAUDE_CODE_SHELL_PREFIX` check), and `chunk-2qy1kt0w.js:275` (the watch).
-[^websearch-citations]: The program, `chunk-4h0jyvmx.js:21861` (the section) and `chunk-0jy30rtj.js:136` (its text). Probe case `print.sweep`.
+[^variable-names]: The program, `chunk-gvhwnc7g.js:791` (the environment table). The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^head-start]: The program, `chunk-wm04tzdx.js:4812` (shell) and `chunk-hg1yqkjk.js:247807` (PowerShell).
+[^shell-mcp]: The program, `chunk-59xdgreq.js:264-288` (the checks and the value) and `chunk-59xdgreq.js:705` (`settingsEnvForChildren`, the child env).
+[^watched-sleep]: The program, `chunk-g4jweshk.js:26155-26156` (the name), `chunk-g4jweshk.js:26244` (`$13a39d` check) and `chunk-g4jweshk.js:26271` (the rewrite), `chunk-g4jweshk.js:26268` (the `CLAUDE_CODE_SHELL_PREFIX` check), and `chunk-4e1pfwf0.js:291` (the watch).
+[^websearch-citations]: The program, `chunk-g4jweshk.js:20135` (the section) and `chunk-7b3h6etb.js:135` (its text). Probe case `print.sweep`.

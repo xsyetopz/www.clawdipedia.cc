@@ -127,7 +127,7 @@ Every group page has the same columns.
 | Notes | Where it applies, and whether a project `env` block can set it before you trust the folder. |
 
 :::warning
-Treat <Undocumented /> and <Gated /> rows with care. They work in `2.1.328`. Nothing promises that they work in the next release.
+Treat <Undocumented /> and <Gated /> rows with care. They work in `2.1.329`. Nothing promises that they work in the next release.
 :::
 
 Some rows cite a probe. A probe is a run of the real binary against a local stub. It shows what the variable changed in the request. No model call leaves the machine in a probe. A run with no visible effect does not prove that a variable does nothing.

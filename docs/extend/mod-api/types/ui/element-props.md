@@ -24,7 +24,7 @@ The `Box` props that a `hover` may override, none of which moves the siblings of
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `scope` | <Documented /> | Names a hover group of this plugin. Every element that it draws with the same `scope`, in any site, lights while any is hovered, with reveals included. | Type: `string`. Optional. A `Pane` row and a transcript mark can share one scope. A scope is 1 to 64 characters with no control characters. |
+| `scope` | <Documented /> | Names a hover group of this plugin. Every element that it draws with the same `scope`, in any site but a `Backdrop`, lights while any is hovered, with reveals included.[^scope-site] | Type: `string`. Optional. A `Pane` row and a transcript mark can share one scope. A scope is 1 to 64 characters with no control characters. |
 | `borderStyle` | <Documented /> | Restyles a border that the Box has. It adds none. | Type: `string`. Optional. |
 | `borderColor` | <Documented /> | The border color. | Type: `Color`. Optional. |
 | `borderDimColor` | <Documented /> | `true` dims the border color. | Type: `boolean`. Optional. |
@@ -241,6 +241,7 @@ The picture that an `Image` displays. It is base64 bytes that the plugin holds (
 
 ## Sources
 
-[^hotkey]: The Mod API type file, `schemas/claude-code.d.ts`, `ButtonProps`. The program, `chunk-j2wfp6sf.js:540152`: a later button of the same plugin takes the key, and a key that two plugins draw is marked as clashing.
-[^iterm]: The program, `chunk-bcmd096f.js:4397` and `chunk-5g8qs913.js:211022`.
-[^overflowx]: The program, `chunk-syremzmn.js:88217` (the value set) and `chunk-syremzmn.js:122664` (the rewrite).
+[^hotkey]: The Mod API type file, `schemas/claude-code.d.ts`, `ButtonProps`. The program, `chunk-zs9k1w9q.js:33705` (`let { hotkey: c1 } = b1.props`: a later button of the same plugin takes the key, and a key that two plugins draw is dropped).
+[^iterm]: The program, `chunk-qgx0rrv2.js:183` (`/^iTerm2\s/` test and the 3.5.0 version check), `chunk-qgx0rrv2.js:195` ("yes only on an XTVERSION reply naming iTerm2 3.5 or later"), and `chunk-0b3aev3g.js:13949` (`probe: XTVERSION`).
+[^overflowx]: The program, `chunk-qsd8sbe8.js:3656` (the value set) and `chunk-qsd8sbe8.js:5158` (the rewrite).
+[^scope-site]: The Mod API type file, `schemas/claude-code.d.ts`, `BoxHoverProps` (`scope`: "in any site but a `Backdrop`").

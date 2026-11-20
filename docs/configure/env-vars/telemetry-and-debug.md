@@ -58,7 +58,7 @@ The rows are in name order.[^variable-names] See [Environment Variables](index.m
 | `CLAUDE_CODE_OTEL_FLUSH_TIMEOUT_MS` | <Documented /> | Sets how long Claude Code waits to flush pending OpenTelemetry data. | A number of milliseconds, `5000` by default. Whole number in ms. The trace flush uses half of the value | All sessions, when OTEL is on |
 | `CLAUDE_CODE_OTEL_HEADERS_HELPER_DEBOUNCE_MS` | <Documented /> | Sets how long the output of the OTEL headers helper stays cached before a refresh. | A number of milliseconds. Whole number in ms. The docs default is `1740000` | All sessions, when an OTEL headers helper is set |
 | `CLAUDE_CODE_OTEL_SHUTDOWN_TIMEOUT_MS` | <Documented /> | Sets how long the OpenTelemetry exporters get to finish at exit. | A number of milliseconds, `2000` by default. Whole number in ms. The exporter timeout caps it at an internal maximum and subtracts 250 ms | All sessions, when OTEL is on |
-| `CLAUDE_CODE_PERFETTO_TRACE` | <Undocumented /> | The only read site logs `[Perfetto] initializePerfettoTracing called, env value:` to the debug log. The program, `chunk-2n66hc1z.js:7526`. | Text. Any value only reaches that debug line | All sessions |
+| `CLAUDE_CODE_PERFETTO_TRACE` | <Undocumented /> | The only read site logs `[Perfetto] initializePerfettoTracing called, env value:` to the debug log. The program, `chunk-c76p2516.js:419`. | Text. Any value only reaches that debug line | All sessions |
 | `CLAUDE_CODE_PROFILE_QUERY` | <Undocumented /> | Turns on query profiling. The report shows TTFT, pre-request overhead, and network latency. | Set to `1`. Without it a message says `Query profiling not enabled` | All sessions |
 | `CLAUDE_CODE_PROFILE_STARTUP` | <Undocumented /> | Turns on startup profiling marks. Without it, Claude Code profiles a random sample of runs (5 percent in one profiler and 0.5 percent in another). | On or off. Memory snapshots are part of the report | All sessions |
 | `CLAUDE_CODE_PROPAGATE_TRACEPARENT` | <Documented /> | Sends the W3C `traceparent` header on custom proxy URLs. | On or off. The check is true for direct Anthropic API use or when this variable has a value | All sessions |
@@ -208,17 +208,17 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^otel-timeout-logs]: The program, `chunk-wnxs29zv.js:57459`. Probe case `env319b.otel-timeout.generic-500-logs-5000`.
-[^otel-timeout-metrics]: The program, `chunk-wnxs29zv.js:57500`. Probe case `env319b.otel-timeout.generic-500-metrics-5000`.
-[^otel-timeout-traces]: The program, `chunk-wnxs29zv.js:57544`. Probe case `env319b.otel-timeout.generic-500-traces-5000`.
-[^otel-timeout]: The program, `chunk-wnxs29zv.js:57386` (the tunnel wait and its 25000 ms limit) and `chunk-64x8yw2p.js:1657` (the export default of 10000 ms). Probe cases `env319b.otel-timeout.generic-500`, `env319b.otel-timeout.default`, and `all-three-500`.
-[^error-reporting]: The program, `chunk-avyyrx5p.js:37343` and `chunk-avyyrx5p.js:39335`.
-[^log-responses]: The program, `chunk-pw9xqvmf.js:19503` (the redaction of an agent's reply).
-[^resource-host]: The program, `chunk-wnxs29zv.js:40275` (the conditions), `chunk-2n66hc1z.js:2570` (detailed beta tracing), `chunk-427dvgs1.js:2262` (the self-hosted runner test), `chunk-pw9xqvmf.js:3216` (the endpoint test), and `chunk-wnxs29zv.js:41276` (the wait for the settings).
-[^resource-host-attrs]: The program, `chunk-wnxs29zv.js:41309` (the two entries set to no value), `chunk-tjre0aph.js:44143` and `chunk-x7g75ktc.js:8074` (the list of variables that project and local settings set), and `chunk-20bv8pca.js:139300` (a later resource wins, and an entry with no value leaves the earlier value in place).
-[^safety-event]: The program, `chunk-56bhcxay.js:4622787`.
-[^safety-event-hook]: The program, `chunk-56bhcxay.js:4621749`.
-[^vcs-ref]: The program, `chunk-pw9xqvmf.js:4962`.
-[^otel-schema]: The program, `chunk-pw9xqvmf.js:20731` (events) and `chunk-0fvmdxeb.js:86982` (metrics).
+[^otel-timeout-logs]: The program, `chunk-prrpw8cm.js:2863`. Probe case `env319b.otel-timeout.generic-500-logs-5000`.
+[^otel-timeout-metrics]: The program, `chunk-prrpw8cm.js:2864`. Probe case `env319b.otel-timeout.generic-500-metrics-5000`.
+[^otel-timeout-traces]: The program, `chunk-prrpw8cm.js:2865` (`OTEL_EXPORTER_OTLP_TRACES_TIMEOUT`). Probe case `env319b.otel-timeout.generic-500-traces-5000`.
+[^otel-timeout]: The program, `chunk-prrpw8cm.js:2858` (the tunnel wait and its `25000` ms limit) and `chunk-bm63fq13.js:73` (the export default `timeoutMillis: 1e4`, which is 10000 ms). Probe cases `env319b.otel-timeout.generic-500`, `env319b.otel-timeout.default`, and `all-three-500`.
+[^error-reporting]: The program, `chunk-7kvz9y39.js:1576` (`DISABLE_ERROR_REPORTING` read from the env) and `chunk-7kvz9y39.js:1663` (`DISABLE_ERROR_REPORTING: "1"` passed to the background process).
+[^log-responses]: The program, `chunk-4je1pw3n.js:1051` (the redaction of an agent's reply).
+[^resource-host]: The program, `chunk-prrpw8cm.js:1931` (the conditions of `OTEL_RESOURCE_INCLUDE_HOST`), `chunk-c76p2516.js:143` (detailed beta tracing, `ENABLE_BETA_TRACING_DETAILED`), `chunk-92h2y9s9.js:36` (the self-hosted runner test, `self_hosted`), `chunk-4je1pw3n.js:171` (the endpoint test for each signal, `_ENDPOINT`), and `chunk-prrpw8cm.js:1957` (the wait for the settings, `CLAUDE_CODE_OTEL_SHUTDOWN_TIMEOUT_MS`).
+[^resource-host-attrs]: The program, `chunk-prrpw8cm.js:1993` (the two entries set to no value, `OTEL_RESOURCE_ATTRIBUTES`), `chunk-rqs3939j.js:1097` (the safe-variable set `$45ee7e`, which holds `OTEL_RESOURCE_ATTRIBUTES` and `OTEL_RESOURCE_INCLUDE_HOST`), and `chunk-w03c3634.js:5229` (`merge`, where a later resource wins).
+[^safety-event]: The program, `chunk-hg1yqkjk.js:195805` (`tengu_safety_event`) and `chunk-hg1yqkjk.js:195812` (`safety_event`).
+[^safety-event-hook]: The program, `chunk-hg1yqkjk.js:195739` (`hook_review`, `sent_back`).
+[^vcs-ref]: The program, `chunk-4je1pw3n.js:245`.
+[^otel-schema]: The program, `chunk-4je1pw3n.js:1073` (events, built from `event.name`) and `chunk-kgzzwvwc.js:5043` (metrics, `claude_code.session.count`).
 [^otlp-protocol]: Probe cases `print.env319b.otlp-protocol.logs`, `.metrics`, `.traces`, and `.logs-general`.
-[^variable-names]: The program, `chunk-7343wm3k.js:26213`. The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^variable-names]: The program, `chunk-gvhwnc7g.js:181` (the name table, from `OTEL_RESOURCE_ATTRIBUTES`). The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.

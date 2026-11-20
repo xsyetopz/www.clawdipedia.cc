@@ -145,9 +145,11 @@ Code Mode is an experimental opt-in.[^code-mode] Claude writes JavaScript that c
 | Item | Status | What It Does |
 | --- | --- | --- |
 | `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE` | <Undocumented /> | The switch. The program reads it from the shell, from `env` in user settings, and from `env` in a `--settings` file. A true value asks for Code Mode. A false value turns it off. A value that is neither makes the program refuse it with "must be 1 to turn it on". |
-| Refusals | <Undocumented /> | When Claude Code asks for Code Mode and cannot start it, it prints "Code Mode (experimental) isn't available" with the reason, then starts with the ordinary tools. Reasons in the program include: your organization's settings do not allow it, managed settings or `~/.claude.json` also set the variable, the model is not Opus 5.5, Sonnet 5.5, or later, the provider is not the Anthropic API, and a deny rule or `--tools` leaves the tool out. It is off in background jobs, in teammates' panes, and with Remote Control. |
-| Server flag | <Gated note="Server flag" /> | The program also needs a server flag on for your account, with the reason "it isn't open to your account in this version of Claude Code, or Claude Code couldn't check whether it is". |
+| Refusals | <Undocumented /> | When Claude Code asks for Code Mode and cannot start it, it prints "Code Mode (experimental) isn't available" with the reason, then starts with the ordinary tools. Reasons in the program include: your organization's settings do not allow it, managed settings or `~/.claude.json` also set the variable, the model is not Opus 5.5, Sonnet 5.5, or later, the provider is not the Anthropic API, a deny rule or `--tools` leaves the tool out, and OpenTelemetry tracing is on through `CLAUDE_CODE_ENHANCED_TELEMETRY_BETA`, `ENABLE_ENHANCED_TELEMETRY_BETA`, or `ENABLE_BETA_TRACING_DETAILED`. Telemetry alone does not refuse it. It is off in background jobs, in teammates' panes, and with Remote Control. |
+| Server flag | <Gated note="Server flag" /> | The program refuses Code Mode only when a server flag is explicitly off, with the reason "Anthropic has turned it off for now (updating Claude Code, or starting it again later, may help)". A missing flag does not refuse it. |
+| Telemetry, nonessential traffic, and flags | <Undocumented /> | Turned-off telemetry, turned-off nonessential traffic, and turned-off feature flags do not keep Code Mode off. The program lists no refusal for them, and a flag that it cannot read counts as on. To keep Code Mode off, an administrator sets `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE` to a false value, or to an empty one, in `env` in managed settings; the reason is then "your organization's settings don't allow it".[^code-mode-off] |
 | Other tools | <Undocumented /> | With Code Mode on, `Yield` is off.[^yield-gate] |
+| `PreToolUse` hooks | <Undocumented /> | A tool call from a script is refused when a matching `PreToolUse` hook does not finish. A hook that errors no longer refuses it, as outside Code Mode. Set `"onFailure": "block"` on a `command`, `http` or `mcp_tool` hook that must refuse.[^code-mode-hooks] |
 | `$` shell helper | <Undocumented /> | The program gives the helper a check named `mayLeaveUnquoted`. It is true for a template literal that the REPL marked as raw, and true for every value when a server flag is off.[^shell-helper] |
 
 ## Result Fields
@@ -203,33 +205,35 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^gated-sources]: The program, for example `chunk-r1yxtgw6.js:10697` and `chunk-r1yxtgw6.js:26343`, the tool definitions and their `searchHint` text, for the tools that the Tools Reference does not cover.
-[^propose-test]: The program, `chunk-374y7r0w.js:3850-3966`.
-[^widget]: The program, `chunk-56bhcxay.js:1287471`; the definition is `chunk-r1yxtgw6.js:17228`. The server flag is `tengu_amber_trellis`.
-[^wrap-gate]: The program, `chunk-2v0j7fr6.js:21296` (the launch switch, with the unset-variable default), `chunk-4h0jyvmx.js:257372` (`yZ`, the child-session check that the launch switch applies first: `CLAUDE_CODE_CHILD_SESSION` or `CLAUDECODE` set), `chunk-2742jms1.js:2795` (the prompt-suggestion check `jGt`, which the launch switch applies to every value), `chunk-r1yxtgw6.js:36425` (`isEnabled`: launch offer, then not `q7()`, then the flag read with default false; `q7` at `chunk-x6whz6ke.js:7842` is true only when Code Mode is on and `oS` at `chunk-x6whz6ke.js:7428` passes, which calls `Ba` at `chunk-x6whz6ke.js:3501` to find the engine check passed) and `chunk-r1yxtgw6.js:30286` (the server flag, `tengu_merry_thunder`).
-[^wrap-mobile]: The program, `chunk-r1yxtgw6.js:36425` and `chunk-r1yxtgw6.js:30311` (the server flag, `tengu_refactored_crystal`).
-[^yield-gate]: The program, `chunk-ksqja9rx.js:5385`. The server flag is `tengu_dazzling_acorn`.
-[^yield-description]: The program, `chunk-y12rem8e.js:24612` (the description), `chunk-ksqja9rx.js:5385` (the flag `description` replaces the prompt), and `chunk-b8ns6r8h.js:1822` (the built-in prompt) and `chunk-b8ns6r8h.js:1425` (the result texts, including "an earlier call to this tool in this reply already waited.").
-[^plugin-sources]: The program, `chunk-1axax85c.js:303`, the tool names and the input schemas in [`claude-code-tools.json`](../schemas.md).
-[^shared-gate]: The program, `chunk-tmhwyk57.js:564`, `chunk-qyxxqfvs.js:11652`, and `chunk-srz2ew9h.js:2439`.
+[^gated-sources]: The program, for example `chunk-b2932m4d.js:755` and `chunk-b2932m4d.js:4373`, the tool definitions and their `searchHint` text, for the tools that the Tools Reference does not cover.
+[^propose-test]: The program, `chunk-0v6g5ynk.js:205`.
+[^widget]: The program, `chunk-hg1yqkjk.js:75946`; the definition is `chunk-b2932m4d.js:1090`. The server flag is `tengu_amber_trellis`.
+[^wrap-gate]: The program, `chunk-mjwpm8mh.js:1515-1525` (the launch switch: the cloud origins `remote`, `remote_desktop`, and `remote_mobile`, and `CLAUDE_CODE_ENABLE_WRAP_UP` with the unset-variable default), `chunk-z04qwact.js:36-38` (the child-session check that the launch switch applies first: `CLAUDE_CODE_CHILD_SESSION` or `CLAUDECODE` set), `chunk-tz2fd9t8.js:150-155` (the prompt-suggestion check: `CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION`, else `promptSuggestionEnabled`), `chunk-b2932m4d.js:1860-1866` (`isEnabled`: launch offer, then not Code Mode, then the flag read with default false), `chunk-09zj247f.js:330` (`$e9ec91`, the Code Mode check, true only when Code Mode is on and its engine check passed), and `chunk-b2932m4d.js:1714` (the server flag, `tengu_merry_thunder`).
+[^wrap-mobile]: The program, `chunk-b2932m4d.js:1860-1866` (`isEnabled`) and `chunk-b2932m4d.js:1715` (the server flag, `tengu_refactored_crystal`).
+[^yield-gate]: The program, `chunk-7beyby2a.js:63`. The server flag is `tengu_dazzling_acorn`.
+[^yield-description]: The program, `chunk-h40jhrmz.js:767` (the description), `chunk-7beyby2a.js:97` (the flag `description` replaces the prompt), and `chunk-a4cww0eh.js:29` (the built-in prompt) and `chunk-a4cww0eh.js:29` (the result texts, including "an earlier call to this tool in this reply already waited.").
+[^plugin-sources]: The program, `chunk-ds4gmmrb.js:8` (`SuggestSkills`, `SearchPlugins`), the tool names and the input schemas in [`claude-code-tools.json`](../schemas.md).
+[^shared-gate]: The program, `chunk-r92ge8fc.js:24` (`allow_plugin_skill_search`, the tests in order) and `chunk-r92ge8fc.js:34` (`$81ba0e`, the check for a tool name), `chunk-6wc5zat4.js:613` and `chunk-6wc5zat4.js:1196` (`isEnabled` of the tools), and `chunk-ds4gmmrb.js:11` (`$a9f7f8`, the list of four names).
 [^rollout-flag]: The server flag is `tengu_saddle_lantern`.
-[^computer-gate]: The program, `chunk-fkt9jwxz.js:23173`, `isEnabled`.
-[^profile-test]: The program, `chunk-fpv41p35.js:300-1210`.
+[^computer-gate]: The program, `chunk-g232kg9k.js:691`, `isEnabled`.
+[^profile-test]: The program, `chunk-j77b8v1c.js:28-33`.
 [^chat-test]: The server flag is `tengu_merry_tide`.
-[^runner-tools]: The program, `chunk-2v0j7fr6.js:15839`, `chunk-ck6d83s6.js:304`, search `baseTools`.
-[^code-mode]: The program, `chunk-sxssbh0v.js:1253`, `chunk-sxssbh0v.js:2850`, and `chunk-sxssbh0v.js:3514` (the switch and the reasons), and `chunk-gz94rt53.js:2023` (the server flag `tengu_rustling_blossom`).
-[^thumbnail]: The program, `chunk-9pt5yqa4.js:2191`.
-[^result-311]: `AppifactReplResult`, `PollResult`, and `ProjectsResult` in [`claude-code-tools.json`](../schemas.md), and the program, `chunk-scewn76d.js:49469`, `chunk-56bhcxay.js:4105176`, `chunk-dtar9gh9.js:29343`.
-[^appifact-used]: The program, `chunk-scewn76d.js:49469`.
-[^poll-used]: The program, `chunk-56bhcxay.js:4105176`.
-[^local-file]: The program, `chunk-8y0j60a8.js:1366` (the note about the file) and `chunk-0cn6javf.js:5228`.
-[^tools-used-321]: The program, `chunk-56bhcxay.js:236071` (`WQ`, the tools of the agent's messages that the session recorded) and `chunk-1k75prj1.js:194737` (the `toolsUsed` field, set when the list is not empty).
-[^runner-spawn]: The program, `chunk-5tpzjtcj.js:21698`. The text ends `Command: ...` after `Failed to spawn runner (<error>)`; when the process has no pid and gave no error, the text reads `Failed to spawn runner (no pid). Command: ...`.
-[^reserved-paths]: The program, `chunk-k01es2vz.js:40057` for write, `chunk-k01es2vz.js:40988` for delete.
-[^write-refused]: The program, `chunk-dtar9gh9.js:44291`.
-[^shell-helper]: The program, `chunk-hkm88hyc.js:176844` and `chunk-hkm88hyc.js:183216` (the helper receives the check), `chunk-hkm88hyc.js:191942` (the raw mark, its check, and the flag `bot_protected_tengu_logical_meadow`), and `chunk-hkm88hyc.js:87192` (the reserved name `__replRaw`).
-[^artifact-off]: The program, `chunk-qre0n3qw.js:19786`.
-[^artifact-read]: The program, `chunk-kkscdchq.js:8543`.
-[^artifact-approve]: The program, `chunk-8a569hnv.js:2702` (the `nobody-to-ask` text).
-[^mcp-task-resume]: The program, `chunk-rmptwa40.js:416` (the name), `chunk-ayyfbsnd.js:7281` and `chunk-ayyfbsnd.js:8079` (the schema, the defer setting, and the call), `chunk-6prbv03v.js:194` and `chunk-6prbv03v.js:768` (the prompt and the result texts), `chunk-138kd0er.js:1144` (the gate, which needs the server flags `tengu_mossy_ferry` and `allow_mcp_task_worker_wake` and other checks), and `chunk-r1yxtgw6.js:9351` (the tool list).
-[^project-edits]: The program, `chunk-dtar9gh9.js:72959` (`edits` from a script), `chunk-dtar9gh9.js:73219` (no text doc), `chunk-dtar9gh9.js:73575` (the text is not in view), `chunk-dtar9gh9.js:75015` (a permission rule), `chunk-dtar9gh9.js:75228` (NUL bytes), and `chunk-dtar9gh9.js:79003` (only blocks).
+[^runner-tools]: The program, `chunk-mjwpm8mh.js:1250` (`CLAUDE_CODE_REMOTE`, the background session kind, and `baseTools` from `--tools`) and `chunk-58qn9jnf.js:6` (the "self_hosted_runner_" prefix).
+[^code-mode]: The program, `chunk-mjpt6p5c.js:61` ("must be 1 to turn it on"), `chunk-mjpt6p5c.js:106` ("isn't available"), and `chunk-mjpt6p5c.js:86` (the reasons), and `chunk-3y52b1p1.js:87` (the server flag `tengu_rustling_blossom`), `chunk-3y52b1p1.js:87` (the flag name), `chunk-3y52b1p1.js:201` (`$385739`, the refusal only when the flag is off), `chunk-3y52b1p1.js:215` (`ENABLE_ENHANCED_TELEMETRY_BETA`, the tracing refusal), `chunk-mjpt6p5c.js:73` (its text), and `chunk-mjpt6p5c.js:95` (the "Anthropic has turned it off for now" reason).
+[^thumbnail]: The program, `chunk-jmranccw.js:86` (the `thumbnail` field with `width` and `height`).
+[^result-311]: `AppifactReplResult`, `PollResult`, and `ProjectsResult` in [`claude-code-tools.json`](../schemas.md), and the program, `chunk-2nq52gmc.js:1974` (`toolsUsed`), `chunk-g1dp74dh.js:140` (`toolsUsed`), and `chunk-13k4vvy5.js:1037` (`local_file`).
+[^appifact-used]: The program, `chunk-2nq52gmc.js:2069` (`toolsUsed`, left out when the list is empty).
+[^poll-used]: The program, `chunk-g1dp74dh.js:453` (`toolsUsed`, left out when the list is empty).
+[^local-file]: The program, `chunk-8akkryre.js:65` (the note about the file) and `chunk-qp5sdmv9.js:215`.
+[^tools-used-321]: The program, `chunk-hg1yqkjk.js:15750` (`$487990`, the tools of the messages that the session recorded) and `chunk-f00gew3e.js:11039` (the `toolsUsed` field, set when the list is not empty).
+[^runner-spawn]: The program, `chunk-zvxs314y.js:917`. The text ends `Command: ...` after `Failed to spawn runner (<error>)`; when the process has no pid and gave no error, the text reads `Failed to spawn runner (no pid). Command: ...`.
+[^reserved-paths]: The program, `chunk-gg7q9wsv.js:1729` for write, `chunk-gg7q9wsv.js:1770` for delete.
+[^write-refused]: The program, `chunk-13k4vvy5.js:2769`.
+[^shell-helper]: The program, `chunk-xgav7f9x.js:9119` and `chunk-xgav7f9x.js:9452` (`mayLeaveUnquoted`, the helper receives the check), `chunk-xgav7f9x.js:9912` (the flag `bot_protected_tengu_logical_meadow`) and `chunk-xgav7f9x.js:9939` (the check, which reads the flag as `$28f841`), and `chunk-xgav7f9x.js:3113` (the reserved name `__replRaw`).
+[^artifact-off]: The program, `chunk-e9fhcxkx.js:596` ("Do not retry it", the text of the refusal when settings turn Artifacts off).
+[^artifact-read]: The program, `chunk-0jd48asd.js:422` ("An asset is read one per call by its 32-character id").
+[^artifact-approve]: The program, `chunk-a1rcy6x2.js:71` (the `nobody-to-ask` text).
+[^mcp-task-resume]: The program, `chunk-1s64ehjn.js:20` (the name), `chunk-qwd1kgkt.js:213` and `chunk-qwd1kgkt.js:285` (the schema, the defer setting, and the call), `chunk-p5f8s16g.js:6` and `chunk-p5f8s16g.js:11` (the prompt and the result texts), `chunk-4nxhg5gt.js:69` (the gate, which needs the server flags `tengu_mossy_ferry` and `allow_mcp_task_worker_wake` and other checks), and `chunk-b2932m4d.js:9235` (`McpTaskResumePollingTool`) and `chunk-b2932m4d.js:9343` (the tool list, with `$ab3664`).
+[^project-edits]: The program, `chunk-13k4vvy5.js:2774` (`edits` from a script), `chunk-13k4vvy5.js:2782` (no text doc), `chunk-13k4vvy5.js:2798` (the text is not in view), `chunk-13k4vvy5.js:2815` (a permission rule), `chunk-13k4vvy5.js:2820` (NUL bytes), and `chunk-13k4vvy5.js:2998` (only blocks).
+[^code-mode-off]: The program, `chunk-3y52b1p1.js:126` (`$8496ba`, the off or invalid value in the managed settings), `chunk-3y52b1p1.js:335` (`CLAUDE_CODE_EXPERIMENTAL_CODE_MODE`), `chunk-3y52b1p1.js:201` (`$dd7fc8`, the flag counts as on unless it is read as off), `chunk-3y52b1p1.js:215` (`$f52824`, the only OpenTelemetry refusal), and `chunk-mjpt6p5c.js:65` ("your organization's settings don't allow it").
+[^code-mode-hooks]: The program, `chunk-hg1yqkjk.js:267214` (the `failuresToo` check) and `chunk-hg1yqkjk.js:73676` (the `onFailure` test).

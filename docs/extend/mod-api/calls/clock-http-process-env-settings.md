@@ -84,14 +84,14 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^types]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `ClockWait`, `Timer`, `TimerCall`, `SleepOptions`, `HttpInit`, `HttpResponse`, `ProcessRunInit`, `ProcessRunResult`, `ProcessSpawnRequest`, `ProcessSpawnResult`, `SettingsReadOverloads`, `SettingsReadInput`, `SettingsLayer`, `EnvSetResult`, `WasmBytes`, and `WasmCompileInput`.
-[^hook-env]: The program, `chunk-56bhcxay.js:4983146` (the op) and `chunk-56bhcxay.js:1350437` (the variable list).
-[^wasm]: The program, `chunk-56bhcxay.js:4983325` and `chunk-e3mrctpm.js:48853`.
-[^fetch-engine]: The program, `chunk-56bhcxay.js:4581227` and `chunk-56bhcxay.js:4583497`, and the `http.fetch` types of the type file.
-[^fetch-errors]: The program, `chunk-56bhcxay.js:4583497`.
-[^bytes-body]: The program, `chunk-56bhcxay.js:4583497`.
-[^redact]: The program, `chunk-56bhcxay.js:4576880`.
+[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, `ClockWait`, `Timer`, `TimerCall`, `SleepOptions`, `HttpInit`, `HttpResponse`, `ProcessRunInit`, `ProcessRunResult`, `ProcessSpawnRequest`, `ProcessSpawnResult`, `SettingsReadOverloads`, `SettingsReadInput`, `SettingsLayer`, `EnvSetResult`, `WasmBytes`, and `WasmCompileInput`.
+[^hook-env]: The program, `chunk-hg1yqkjk.js:214907` (the op) and `chunk-hg1yqkjk.js:51776` (the variable list).
+[^wasm]: The program, `chunk-hg1yqkjk.js:214375` and `chunk-43hq1cm6.js:2464`.
+[^fetch-engine]: The program, `chunk-hg1yqkjk.js:193623` and `chunk-hg1yqkjk.js:193650`, and the `http.fetch` types of the type file.
+[^fetch-errors]: The program, `chunk-hg1yqkjk.js:193741`.
+[^bytes-body]: The program, `chunk-hg1yqkjk.js:193761`.
+[^redact]: The program, `chunk-hg1yqkjk.js:193425`.
 [^v328-wasm-host]: The type file `schemas/claude-code.d.ts`, `$.wasm.compile`.
 [^v328-fetch-cred]: The type file `schemas/claude-code.d.ts`, `$.http.fetch`.
 
-[^settings-layers]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`: `SettingsLayer`, `SettingsReadInput`, and `$.settings.read`, where what the hooks answer is what every reader of the merged settings reads.
+[^settings-layers]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`: `SettingsLayer`, `SettingsReadInput`, and `$.settings.read`, where what the hooks answer is what every reader of the merged settings reads.

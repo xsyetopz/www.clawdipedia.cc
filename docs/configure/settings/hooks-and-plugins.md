@@ -73,10 +73,10 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:279143`.
-[^v305]: The program, `chunk-jkpzhr7r.js:253770`.
-[^plugin-versions]: The program, `chunk-a3rr42d2.js:19278`.
-[^takeover]: The program, `chunk-bvs4hre6.js:21952` and `chunk-bvs4hre6.js:22583`.
-[^suggest]: The program, `chunk-jkpzhr7r.js:263933` and `chunk-yqthnfsf.js:26236`.
-[^strict]: The program, `chunk-jkpzhr7r.js:256226`.
-[^managed-lists]: The program, `chunk-jkpzhr7r.js:252371` and `chunk-jkpzhr7r.js:253498`.
+[^schema]: The program, its bundled settings schema, for example `chunk-t39fw2cy.js:8693` (the entry for `allowedHttpHookUrls`).
+[^v305]: The program, `chunk-t39fw2cy.js:8705` (`allowManagedPermissionRulesOnly`) and `chunk-t39fw2cy.js:8710` (`allowed-tools`).
+[^plugin-versions]: The program, `chunk-mf7vnf0k.js:563`.
+[^takeover]: The program, `chunk-kx248ng6.js:1191` and `chunk-kx248ng6.js:1203`.
+[^suggest]: The program, `chunk-t39fw2cy.js:8850` and `chunk-hqhjcxtn.js:867`.
+[^strict]: The program, `chunk-t39fw2cy.js:10345` (the unknown-entry warning for `strictPluginOnlyCustomization`) and `chunk-t39fw2cy.js:10356` (an invalid value acts as `true`).
+[^managed-lists]: The program, `chunk-t39fw2cy.js:8693` (`allowedHttpHookUrls`) and `chunk-t39fw2cy.js:8699`.

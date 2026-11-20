@@ -89,7 +89,7 @@ The table shows the output that each caller masks.
 | An MCP server config that the program shows[^where-13] | `redact`, on each key and value |
 | The preview of tool input, including the field names[^where-14] | `redactForDisplay` |
 | The path, the description, and the skill summary in a permission request that the program sends to a connected client[^where-15] | `redactForDisplay` |
-| The command, the description, and the plan reason in a remote or push permission notice[^where-16] | `redactContext` then `redactTokens` |
+| The command, the description, and the reason of a Claude in Chrome request in a remote or push permission notice[^where-16] | `redactContext` then `redactTokens` |
 | The tool description in a push notification from Remote Control or a cloud session[^where-masker] | `redactContext` then `redactTokens`. The masker keeps a `://[REDACTED]` host marker when a `.` or `-` follows it. |
 | The detail, intent, and latest question of a background job (1,000 and 600 characters), and the tail of its output[^where-18] | `redactContext` with tracked tokens, and `redactTokens` |
 
@@ -124,7 +124,7 @@ The program uses the scan in four places.
 | --- | --- |
 | A write to a memory file[^scan-memory] | The write fails with `Content contains potential secrets (<labels>) and cannot be written to memory.` The text then names the reason. A team memory file says that team memory is shared with all repository collaborators. A memory file says that memory is synced to your account. |
 | A command in an auto mode denial notice[^scan-denial] | When the scan finds a secret in the command, the tool input, or the reason, the notice shows no command and no reason. The notice also shows none when the check itself fails. |
-| The files of a skill package folder[^scan-skill] | The program gets the labels for each file. All `anthropic-*` rules give one label. |
+| The files in the folder of a mod that the `scan_secrets` tool checks[^scan-skill] | The program gets the labels for each file. All `anthropic-*` rules give one label. |
 
 ## Related Pages
 
@@ -133,28 +133,28 @@ The program uses the scan in four places.
 
 ## Sources
 
-[^where-1]: The program, `chunk-rq7vgh0h.js:38098`, `chunk-mq5tkwp3.js:546`.
-[^where-2]: The program, `chunk-mnc5rjsz.js:2790` (the `error` line) and `chunk-mnc5rjsz.js:3031` (the `debug` line).
-[^where-3]: The program, `chunk-56bhcxay.js:391140` (the message) and `chunk-56bhcxay.js:391715` (the stack).
-[^where-4]: The program, `chunk-56bhcxay.js:1235898` (the hook name) and `chunk-56bhcxay.js:1236161` (the stderr text).
-[^where-5]: The program, `chunk-yv54xvss.js:17590-30557`: the error list at `chunk-yv54xvss.js:17590`, the debug log text at `chunk-yv54xvss.js:19410`, the error messages and stacks at `chunk-yv54xvss.js:21435`, the upload error at `chunk-yv54xvss.js:23336`, the description at `chunk-yv54xvss.js:24360`, and the transcript at `chunk-yv54xvss.js:29529-30557`.
-[^where-6]: The program, `chunk-zn693w3h.js:12431` (the title) and `chunk-zn693w3h.js:12443` (the body).
-[^where-7]: The program, `chunk-5sxh0dm8.js:9932`.
-[^where-8]: The program, `chunk-5e06b4s2.js:31239` and `chunk-5e06b4s2.js:31675`.
-[^where-9]: The program, `chunk-b2j77k2b.js:12203`.
-[^where-10]: The program, `chunk-2742jms1.js:5529`.
-[^where-11]: The program, `chunk-9t1jqzwd.js:25560`.
-[^where-12]: The program, `chunk-56bhcxay.js:5864871` (the masked text is compared with the input in `cRt()`, which starts at `chunk-56bhcxay.js:5864555`). The program calls `cRt()` when the server classifier rewrites the tool input, at `chunk-56bhcxay.js:3691181` and `chunk-56bhcxay.js:5865642`.
-[^where-13]: The program, `chunk-4nj280gz.js:34684-35332`.
-[^where-14]: The program, `chunk-mwfcwvmn.js:2790-5481`: the field names at `chunk-mwfcwvmn.js:2790` and the values at `chunk-mwfcwvmn.js:5481`.
-[^where-15]: The program, `chunk-6qx4m5tj.js:39829` (the path), `chunk-6qx4m5tj.js:41967` (the skill), and `chunk-6qx4m5tj.js:44240` (the description and the skill summary). The description is the tool summary that `Ojr()` builds with `redactForDisplay` (`chunk-mwfcwvmn.js:7617`, which calls `W` at `chunk-mwfcwvmn.js:7309`), set at `chunk-6qx4m5tj.js:41903`. The module that sends the request imports only `JJ` (`redactForDisplay`, `chunk-jq8xvscs.js:30130`) from the masker (`chunk-6qx4m5tj.js:709`).
-[^where-16]: The program, `chunk-ggmpjhj1.js:94538` (the command), `chunk-ggmpjhj1.js:94760` (the tool summary from `Aaa()`, which masks with `redactContext` then `redactTokens` at `chunk-mwfcwvmn.js:7660`), and `chunk-ggmpjhj1.js:94802` (the description). Also `chunk-xmg4s9wn.js:10226-11728` (the plan reason, the command, and the description).
-[^where-18]: The program, `chunk-gmcczr1c.js:26750` (the intent, 1,000 characters), `chunk-gmcczr1c.js:27149` (the latest question, 600 characters), and `chunk-gmcczr1c.js:37127` (the output tail).
-[^rule-table]: The program, `chunk-jq8xvscs.js:12990-20834`.
-[^more-calls]: The program. A job detail: `chunk-f2bg3s01.js:33878`, `chunk-mj6016d6.js:44485`, `chunk-wq6qw79p.js:3839`, and `chunk-fcdwedb2.js:5873`. A task summary line: `chunk-3r0fyrgm.js:6585` and `chunk-ckewb6rp.js:3582`. A session or job name: `chunk-h20cnm6k.js:23602`, `chunk-faznt4sc.js:74826`, `chunk-5e06b4s2.js:31239`, and `chunk-avyyrx5p.js:57723`. The masker method names are in no other module.
+[^where-1]: The program, `chunk-c2c9kwmh.js:2302` (the first debug log, masked with `$4b2414`), `chunk-01z39j98.js:22` (the second log file, masked with `$4b2414`).
+[^where-2]: The program, `chunk-2c7hcjds.js:156` (the `error` line) and `chunk-2c7hcjds.js:170` (the `debug` line).
+[^where-3]: The program, `chunk-hg1yqkjk.js:23606` (the message) and `chunk-hg1yqkjk.js:23606` (the stack).
+[^where-4]: The program, `chunk-hg1yqkjk.js:73850` (the hook name, masked with `$4b2414`) and `chunk-hg1yqkjk.js:73859` (the stderr text, masked with `$4b2414`).
+[^where-5]: The program, each masked with `$4b2414`: the error list at `chunk-abjbjs57.js:1063`, the debug log text at `chunk-abjbjs57.js:1181`, the error messages and stacks at `chunk-abjbjs57.js:1290` and `chunk-abjbjs57.js:1291`, the upload error at `chunk-abjbjs57.js:1398`, the description at `chunk-abjbjs57.js:1461`, and the transcript at `chunk-abjbjs57.js:1712` and `chunk-abjbjs57.js:1725`.
+[^where-6]: The program, `chunk-jcja2h7v.js:684` (the title, masked with `$4b2414`) and `chunk-jcja2h7v.js:685` (the body, masked with `$4b2414`).
+[^where-7]: The program, `chunk-733wcnm3.js:488` (the error message, masked with `$4b2414`).
+[^where-8]: The program, `chunk-8kp2jbcm.js:922` (the fork message names the session with `rosterName`).
+[^where-9]: The program, `chunk-2kt0fcxt.js:3549` (the debug line for `writeStdin`, masked with `$4b2414`).
+[^where-10]: The program, `chunk-tz2fd9t8.js:275` (the suggested reply is dropped when `$4b2414` changes it).
+[^where-11]: The program, `chunk-244r6pmb.js:769` (the web address, compared with `$4b2414`) and `chunk-244r6pmb.js:777` (`secret_in_url`).
+[^where-12]: The program, `chunk-hg1yqkjk.js:294435` (the masked text, made with `$4b2414`, is compared with the input in `$85ff33()`, which starts at `chunk-hg1yqkjk.js:294411`). The program calls `$85ff33()` when the server classifier rewrites the tool input, at `chunk-hg1yqkjk.js:275890` and `chunk-hg1yqkjk.js:294487`.
+[^where-13]: The program, `chunk-33j4c5nh.js:1195` and `chunk-33j4c5nh.js:1238` (each value, masked with `$0b3a37`, the `x7` export of the masker, which masks each key and value).
+[^where-14]: The program, `chunk-nshz0skf.js:174` (the field names, masked with `$8cf1a2`) and `chunk-nshz0skf.js:259` (the values, masked with `$8cf1a2`).
+[^where-15]: The program, `chunk-bstm51ez.js:2157` (the path, masked with `$8cf1a2`), `chunk-bstm51ez.js:2319` (the skill), and `chunk-bstm51ez.js:2406` (the description and the skill summary). The description is the tool summary that `mqr()` builds with `$8cf1a2` (`chunk-nshz0skf.js:461`), set at `chunk-bstm51ez.js:2290`. The module that sends the request imports only `CZ` (`redactForDisplay`, `chunk-92tjbk8v.js:1650`) from the masker (`chunk-bstm51ez.js:45`).
+[^where-16]: The program, `chunk-pht9wr0e.js:5261` (the command, masked with `$1208e7`) and `chunk-pht9wr0e.js:5274` (the description). Also `chunk-gs0g683r.js:619` (the reason of a Claude in Chrome request), `chunk-gs0g683r.js:694` (the command), and `chunk-gs0g683r.js:702` (the description). The local name `$1208e7` is the `r9` export, which calls `redactContext` and then `redactTokens` (`chunk-92tjbk8v.js:1596`).
+[^where-18]: The program, `chunk-k5zfhn92.js:929` (the intent, 1,000 characters, masked with `$cfd61f`), `chunk-k5zfhn92.js:951` (the latest question, 600 characters, masked with `$cfd61f`), and `chunk-k5zfhn92.js:1572` (the output tail, masked with `$f1bdc0` and `$2cf60e`).
+[^rule-table]: The program, `chunk-92tjbk8v.js:710-1126` (the table, from `url-userinfo` to `shopify-shared-secret`).
+[^more-calls]: The program. Each call masks with `$4b2414`, the local name of the `Ds` export of the masker module. A job detail: `chunk-bbwcsqwj.js:1976`, `chunk-yzxvzrvh.js:2454`, `chunk-1gwksfzj.js:202`, and `chunk-6g525c94.js:338`. A task summary line: `chunk-9jzv24em.js:453`. A session or job name: `chunk-53093z0c.js:654`, `chunk-53093z0c.js:679`, `chunk-rmx0yhc6.js:4307`, and `chunk-7kvz9y39.js:2579`.
 [^leak-probe]: Probes with cc-inspect `code` `cli` and `query`, which names each request, stream, and transcript file that holds a text. The tool runs used the `calls` option, which makes the stub call tools in order.
-[^scan-memory]: The program, `chunk-yt808435.js:3947-4509`.
-[^scan-denial]: The program, `chunk-j2wfp6sf.js:1819236`.
-[^scan-skill]: The program, `chunk-5nqgrc1r.js:38840`.
-[^where-masker]: The program, `chunk-jq8xvscs.js:29160-29408` (the host marker and the masker), `chunk-mwfcwvmn.js:7660` (the tool summary passes through the masker), and `chunk-xmg4s9wn.js:11652` (the notification body).
-[^otel-prompt]: The program, `chunk-xkv5w8yy.js:371` (the event), `chunk-pw9xqvmf.js:19822` (the `<REDACTED>` text and the filter call), and `chunk-pw9xqvmf.js:14251` (the filter).
+[^scan-memory]: The program, `chunk-fsb1r1ev.js:235`.
+[^scan-denial]: The program, `chunk-zs9k1w9q.js:114569` (the scan call `$f91192` on the command, the input, and the reason, with the error text "Auto mode denial text could not be checked" at `chunk-zs9k1w9q.js:114577`).
+[^scan-skill]: The program, `chunk-z6900286.js:1387` (the labels of each file, where a rule id that starts with `anthropic-` gives one label) and `chunk-z6900286.js:711` (the `scan_secrets` tool).
+[^where-masker]: The program, `chunk-92tjbk8v.js:1599-1606` (the host marker and the masker, which call `redactContext` and `redactTokens`), `chunk-nshz0skf.js:464` (the tool summary passes through the masker `$088991`), and `chunk-gs0g683r.js:704` (the summary becomes the action description of the permission notice, with `$5883d1`).
+[^otel-prompt]: The program, `chunk-vh3kh7c0.js:9` (the event), `chunk-4je1pw3n.js:1051` (the `<REDACTED>` text and the filter call), and `chunk-4je1pw3n.js:1049` (the filter).

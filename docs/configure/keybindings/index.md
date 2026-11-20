@@ -87,6 +87,6 @@ A context says where a block of bindings applies. `Global` bindings work everywh
 
 ## Sources
 
-[^source]: [Customize Keyboard Shortcuts](https://code.claude.com/docs/en/keybindings) and the program. The tables come from the default keys in the program, `chunk-g4fdykqa.js:682-7837`.
-[^modifier]: The program, `chunk-b3qefvbn.js:3944` (the modifier names) and `chunk-b3qefvbn.js:5207` (the message and the suggestion).
-[^session-tabs]: The program, `chunk-g4fdykqa.js:16014`, `chunk-j2wfp6sf.js:874650`.
+[^source]: [Customize Keyboard Shortcuts](https://code.claude.com/docs/en/keybindings) and the program. The tables come from the default keys in the program, `chunk-ghw8dnvs.js:31-381` (the `context` key of the first and last block).
+[^modifier]: The program, `chunk-x22z2cw5.js:65` (the modifier names `ctrl`, `control`, `alt`, `opt`, `option`, `shift`, `meta`, `cmd`, `command`, `super`, `win`) and `chunk-x22z2cw5.js:305` (the message and the suggestion).
+[^session-tabs]: The program, `chunk-ghw8dnvs.js:802`, `chunk-zs9k1w9q.js:53863`.

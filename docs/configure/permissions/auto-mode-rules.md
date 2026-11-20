@@ -169,5 +169,5 @@ The built-in list has the 21 entries below, one per field label. Write each entr
 
 ## Sources
 
-[^scheduled]: The program, `chunk-56bhcxay.js:1370409-1370573`.
-[^environment]: The program, `chunk-4hhwy3p6.js:759-856` and the settings schema in `chunk-jkpzhr7r.js:184287`.
+[^scheduled]: The program, `chunk-avkdw0az.js:1546` (the `Scheduled-Task Fires` rule found in the template) and `chunk-avkdw0az.js:1556` (the message when it is not found).
+[^environment]: The program, `chunk-4t09bv92.js:38` (the `$defaults` entry is replaced in place by the built-in entries) and the settings schema in `chunk-t39fw2cy.js:7006`. The built-in entries are the lines of the `<user_environment_to_replace>` block in the embedded text asset `permissions_external-2ede28fe.txt.zst` (`chunk-jddbvept.js:6`). The program reads each line of that block that starts with a dash and a space as one entry at `chunk-vxsgd0n6.js:645-657`, with the `environment` key at `chunk-vxsgd0n6.js:628`. The block holds 21 lines. A cleaned module does not hold the asset text; it was read from the 2.1.329 binary with cc-inspect `code read`.

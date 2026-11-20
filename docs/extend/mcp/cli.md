@@ -49,7 +49,7 @@ Official pages: [Connect Claude Code to Tools via MCP](https://code.claude.com/d
 
 | Command | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
-| `/mcp` | <Documented /> | Opens the MCP panel. | Shows status, tool count, `cached` state, and `Issue:`. You can enable, disable, reconnect, authenticate, and clear authentication. A server that needs authentication but still holds its sign-in also shows "Reconnect", and the page opens on it.[^reconnect] |
+| `/mcp` | <Documented /> | Opens the MCP panel. | Shows status, tool count, `cached` state, and `Issue:`. You can enable, disable, reconnect, authenticate, and clear authentication. A server that needs authentication but still holds its sign-in also shows "Reconnect", and the page opens on it.[^reconnect] A server that needs authentication and refuses the connection with a message shows that message in a "Server message" row.[^server-message] |
 | `/mcp reconnect all` | <Documented /> | Retries every failed server. | It works as the inline command `/mcp reconnect <name>` or `/mcp reconnect all`.[^reconnect-all] |
 | `/mcp enable\|disable\|reconnect <server>` | <Documented /> | Controls a server without the panel. | Claude Code suggests it when a background session has no terminal attached. |
 | `/mcp__<server>__<prompt>` | <Documented /> | Runs an MCP prompt. | See [MCP Runtime](runtime.md#resources-and-prompts). |
@@ -100,14 +100,15 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^add-json]: The program, `chunk-56bhcxay.js:4756500` (the messages for a bad entry).
-[^header-help]: The program, `chunk-ttgvknfh.js:23340`.
-[^web]: The program, `chunk-9t1jqzwd.js:24020` (the gate `tengu_twinkling_aurora`) and `chunk-9t1jqzwd.js:24529` (the message).
-[^reconnect]: The program, `chunk-ejmpea1g.js:25700`.
-[^connector-dl]: The program, `chunk-56bhcxay.js:4727153`.
-[^bad-env]: The program, `chunk-51eneejf.js:4835`.
-[^serve-sandbox]: The program, `chunk-qkqqen23.js:16735`.
-[^add-json-stdin]: The program, `chunk-4nj280gz.js:39150` for the stdin read, its 1 MiB limit, and the three errors, and `chunk-ttgvknfh.js:35164` for the command text "or - to read it from stdin".
-[^project-keys]: The program, `chunk-56bhcxay.js:4759200` for add and `chunk-56bhcxay.js:4760900` for remove.
-[^project-stop]: The program, `chunk-56bhcxay.js:4759200`.
-[^reconnect-all]: The program, `chunk-kpeqf50z.js:24150`.
+[^add-json]: The program, `chunk-hg1yqkjk.js:202792-202812` (the messages for a bad entry: a bad `type`, a `url` with no `type`, the `mcpServers` wrapper, and the failing field paths).
+[^header-help]: The program, `chunk-br8k7pkh.js:655`.
+[^web]: The program, `chunk-244r6pmb.js:714` (the gate `tengu_twinkling_aurora`) and `chunk-244r6pmb.js:734` (the message).
+[^reconnect]: The program, `chunk-4g68nm9m.js:1643` (the "Reconnect" choice for a `needs-auth` server).
+[^connector-dl]: The program, `chunk-hg1yqkjk.js:201391`.
+[^bad-env]: The program, `chunk-8wtweva8.js:219`.
+[^serve-sandbox]: The program, `chunk-gv51qax6.js:833` (the `[serve-mode]` note, which names `dangerouslyDisableSandbox` and `sandbox.excludedCommands`).
+[^add-json-stdin]: The program, `chunk-33j4c5nh.js:1457-1463` for the stdin read (`stdin`), its 1 MiB limit, and the three errors, and `chunk-br8k7pkh.js:1180` for the command text "or - to read it from stdin".
+[^project-keys]: The program, `chunk-hg1yqkjk.js:202895` for add (`mcpServers` is written back with the other keys) and `chunk-hg1yqkjk.js:202977` for remove.
+[^project-stop]: The program, `chunk-hg1yqkjk.js:202882-202887` (the `mcpServers` check and the error).
+[^reconnect-all]: The program, `chunk-qh2bgkv7.js:682`.
+[^server-message]: The program, `chunk-4g68nm9m.js:1680` (the "Server message" row) and `chunk-w3gpg1a5.js:6626` (`serverMessage` from the error body).

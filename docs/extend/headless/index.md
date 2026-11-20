@@ -87,6 +87,6 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^help]: `claude --help`.
-[^retry]: The program, `chunk-5699r6rq.js:559243` and `chunk-5699r6rq.js:559367`.
-[^lost-writes]: The program, `chunk-5699r6rq.js:192271` and `chunk-5699r6rq.js:10060-10138`. Schema text, `chunk-20bv8pca.js:615463`.
-[^print-rules]: The program, `chunk-4prvwasd.js:5816` (the resume), `chunk-4prvwasd.js:7295` (the 10 second limit), and `chunk-4prvwasd.js:23320` (the wait of the first subagent). These are the change text that the program holds.
+[^retry]: The program, `chunk-614w915w.js:30458` and `chunk-614w915w.js:30458`.
+[^lost-writes]: The program, `chunk-614w915w.js:10725` and `chunk-614w915w.js:10666-10744`. Schema text, `chunk-w03c3634.js:16279`.
+[^print-rules]: The program, `chunk-zthba38p.js:136`. That line holds the change text of the program. It has three items: the resume after a kill ("stored messages on resume"), the 10 second limit of `claude -p`, and the wait of the first subagent ("1.5 seconds (10 in `claude -p`)").

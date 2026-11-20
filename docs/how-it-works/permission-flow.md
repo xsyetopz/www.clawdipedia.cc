@@ -57,6 +57,10 @@ The docs do not give the full order, so treat the exact order as unstable.
 
 A safety check covers `rm -r` on a mounted drive, the folder that holds mounted drives (`/Volumes`, `/media`, WSL `/mnt/c`), or a top-level file or folder of a drive. This call "requires explicit approval and cannot be auto-allowed by permission rules".[^mounted] Set `CLAUDE_CODE_DISABLE_MOUNTED_DRIVE_RM_PROMPT` to turn this prompt off. See [Tools and Bash](../configure/env-vars/tools-and-bash.md).
 
+### Symlink Removal
+
+An `rm` of a symbolic link can raise a safety check with the reason "is a symbolic link; rm removes the link, not what it points to". The auto mode classifier can approve this check.[^rm-symlink]
+
 ### Rule Warnings
 
 Claude Code checks `deny` and `ask` rules at startup. It warns about a rule that matches no tool (`matches no tool · check for typos`). It also warns about a rule that gives a raw string where the tool needs its own matcher (`never matches`).[^rule-warn] It also warns about a Bash `allow` rule that has `*` in a variable's value.[^star-warn]
@@ -111,17 +115,18 @@ The check runs in the tool stage of every turn. See [The Agent Loop](agent-loop.
 
 ## Sources
 
-[^order]: The program, `chunk-56bhcxay.js:3726922`. The official pages do not give the full order.
-[^hook-allow]: The Mod API type file (`schemas/claude-code.d.ts`) and the program text `hook allows approve the command` (`chunk-56bhcxay.js:1392716`).
-[^allow-texts]: The program texts `Read-only command is allowed` and `Auto-allowed with sandbox (autoAllowBashIfSandboxed enabled)` (`chunk-rs68es1f.js:4594`).
-[^mounted]: The program, `chunk-56bhcxay.js:1420564`.
-[^rule-warn]: The program, `chunk-tew0988b.js:22470` (`matches no tool`) and `chunk-tew0988b.js:22212` (`never matches`).
-[^star-warn]: The program, `chunk-jkpzhr7r.js:194304`.
-[^seen-warn]: The program, `chunk-tew0988b.js:23516` (the key holds the source, the file, and the text), `chunk-w8wanava.js:383` (the list of keys, 256 at most).
-[^git-trust]: The program, `chunk-56bhcxay.js:1399711`. The check runs only when the server flag `bot_protected_tengu_frolicking_pelican` is on (`chunk-56bhcxay.js:1397578`, `chunk-56bhcxay.js:1399360`, and `chunk-56bhcxay.js:1399188`, the read with `safe: true`). The server sets the flag.
-[^git-text]: The program, `chunk-56bhcxay.js:1399711`.
-[^block-reads]: The program, `chunk-rs68es1f.js:5085` (the setting and its text), `chunk-rs68es1f.js:6522` and `chunk-56bhcxay.js:69625` (the ask that stays in every mode), `chunk-rs68es1f.js:6552` (the sandbox override), `chunk-rs68es1f.js:7145` (a computed path asks), and `chunk-rs68es1f.js:7299` (a command that the parser cannot read asks).
-[^relative-cd]: The program, `chunk-56bhcxay.js:1461043-1461350`.
-[^trust-list]: The program, `chunk-6heyrpzr.js:29628` (the tags) and `chunk-6heyrpzr.js:32701` (the header `Accessing workspace:`).
-[^cd-list]: The program, `chunk-t5ty4t2x.js:4718` and `chunk-g2h4scbp.js:463` (the sentence `Trusting this directory loads <files>.`).
-[^trust-exit]: The program, `chunk-6heyrpzr.js:25982` (the exit function with the two-line message) and `chunk-6heyrpzr.js:28226` (the refusal path, which logs `onboarding_trust_denied` and then calls that function).
+[^order]: The program, `chunk-hg1yqkjk.js:278085` (the permission decision `$f58996`: `checkPermissions` at `chunk-hg1yqkjk.js:278108`, a `deny` result returned at `chunk-hg1yqkjk.js:278143`, the mode result `type: "mode"` at `chunk-hg1yqkjk.js:278215`, and the rule allow `type: "rule"` at `chunk-hg1yqkjk.js:278242`). The official pages do not give the full order.
+[^hook-allow]: The Mod API type file (`schemas/claude-code.d.ts`) and the program text `hook allows approve the command` (`chunk-hg1yqkjk.js:52664`).
+[^allow-texts]: The program texts `Read-only command is allowed` and `Auto-allowed with sandbox (autoAllowBashIfSandboxed enabled)` (`chunk-phb99ctz.js:272`).
+[^mounted]: The program, `chunk-hg1yqkjk.js:53975`.
+[^rule-warn]: The program, `chunk-0cw29n2z.js:1225` (`matches no tool`) and `chunk-0cw29n2z.js:1214` (`never matches`).
+[^star-warn]: The program, `chunk-t39fw2cy.js:7456` (`has a * in a variable's value`).
+[^seen-warn]: The program, `chunk-0cw29n2z.js:1285` (the `seenKey` holds the source, the file, and the text) and `chunk-k9e5wg96.js:20` (the `seenSecurityWarnings` list, 256 at most, set at `chunk-k9e5wg96.js:8`).
+[^git-trust]: The program, `chunk-hg1yqkjk.js:53046`. The check runs only when the server flag `bot_protected_tengu_frolicking_pelican` is on (`chunk-hg1yqkjk.js:52936`, `chunk-hg1yqkjk.js:53046`, and `chunk-hg1yqkjk.js:53046`, the read with `safe: true`). The server sets the flag.
+[^git-text]: The program, `chunk-hg1yqkjk.js:53046`.
+[^block-reads]: The program, `chunk-t39fw2cy.js:7584` (the setting `blockReadsOutsideWorkingDirectories` and its text: every mode, shell commands asked about in every mode, and the sandbox denies such reads), `chunk-phb99ctz.js:157` (the safety check `outsideReadsBlocked` is `bypassImmune`, so the ask stays in every mode), `chunk-phb99ctz.js:343` (a computed path asks), and `chunk-phb99ctz.js:356` (a command that the parser cannot read asks).
+[^relative-cd]: The program, `chunk-hg1yqkjk.js:56207` (the text "reads a relative path after cd" and the keys and sign-in files).
+[^trust-list]: The program, `chunk-5tx611sw.js:1046` (the tags `runs commands` and `sets environment variables`, set at `chunk-5tx611sw.js:1047`) and `chunk-5tx611sw.js:1273` (the header `Accessing workspace:`).
+[^cd-list]: The program, `chunk-za64d5aq.js:257` (the `/cd` prompt lists its files with `place: "directory"`) and `chunk-2tdzn9nk.js:25` (the sentence `Trusting this directory loads <files>.`).
+[^trust-exit]: The program, `chunk-5tx611sw.js:754` (the exit function with the two-line message) and `chunk-5tx611sw.js:933` (the refusal path, which logs `onboarding_trust_denied` and then calls that function).
+[^rm-symlink]: The program, `chunk-me64k7yy.js:684` (the reason text), with `classifierApprovable` set at `chunk-me64k7yy.js:685`.

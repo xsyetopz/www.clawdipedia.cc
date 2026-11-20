@@ -90,6 +90,6 @@ After a server connects, its tools get names like `mcp__github__create_issue`. S
 
 ## Sources
 
-[^schema]: The program, server schema, `chunk-jkpzhr7r.js:35893` and `chunk-jkpzhr7r.js:38516`.
+[^schema]: The program, server schema, `chunk-t39fw2cy.js:1487` (the entry field `type`) and `chunk-t39fw2cy.js:8524` (`managedMcpServers`).
 [^enterprise]: See [Probes](../../reference/probes.md#managed-folder-probe).
 [^agent]: Checked in `-p` with a user agent.

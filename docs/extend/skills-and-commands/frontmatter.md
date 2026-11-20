@@ -100,9 +100,9 @@ The exact fields are in the `skill` definition in `https://clawdipedia.cc/schema
 
 ## Sources
 
-[^bamum]: The program, `chunk-56bhcxay.js:1311523` (the name check, which calls the shared check) and `chunk-0qz38tc8.js:10831` (its set of blank-looking characters holds `U+16910`, a Bamum letter).
-[^managed-tools]: The program, `chunk-jkpzhr7r.js:253498`, its bundled settings schema.
-[^bool]: The program, `chunk-wchmynj9.js:71391` and `chunk-7n5repac.js:300`.
-[^background]: The program, `chunk-56bhcxay.js:1071843`, its frontmatter schema.
-[^discovery]: The program, `chunk-56bhcxay.js:3910250` for the base directory and `chunk-56bhcxay.js:3905891` and `chunk-56bhcxay.js:3907103` for the walk and the skip.
-[^validators]: The program, the frontmatter parser, `chunk-56bhcxay.js:1030663`. See also [Extend Claude with Skills](https://code.claude.com/docs/en/skills) and [Settings Reference](https://code.claude.com/docs/en/settings-reference).
+[^bamum]: The program, `chunk-hg1yqkjk.js:48543` (the name rule message, "blank-like characters") and `chunk-k936fbc4.js:584` (its pattern of blank-looking characters holds `\u{16910}`, a Bamum letter).
+[^managed-tools]: The program, `chunk-t39fw2cy.js:8705-8710` (`allowManagedPermissionRulesOnly` and its `allowed-tools` text in the bundled settings schema).
+[^bool]: The program, `chunk-32gs4rex.js:4032-4042` (the boolean reader `$c6b0fd`) and `chunk-cqahc80t.js:7-17` (the accepted words `1`, `true`, `yes`, `on`, `0`, `false`, `no`, and `off`, after lowercase and trim).
+[^background]: The program, `chunk-hg1yqkjk.js:46556-46559` (`background` in the frontmatter schema).
+[^discovery]: The program, `chunk-hg1yqkjk.js:281357-281358` for the base directory and the walk of `.claude/skills` folders (`while (c1.startsWith(a7 + $8ec263_7))`), and `chunk-hg1yqkjk.js:281376` and `chunk-hg1yqkjk.js:281381` for the skip ("Skipped gitignored or unconfirmed skills dir").
+[^validators]: The program, the `skill` frontmatter schema, `chunk-hg1yqkjk.js:46530` (it extends the shared schema) and `chunk-hg1yqkjk.js:46588` (the fields for a `skill` only). See also [Extend Claude with Skills](https://code.claude.com/docs/en/skills) and [Settings Reference](https://code.claude.com/docs/en/settings-reference).

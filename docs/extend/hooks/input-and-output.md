@@ -134,11 +134,11 @@ Pick one style per hook. Use exit codes alone, or exit 0 with JSON. If you mix t
 
 A failing hook shows in these places:[^failing-shown]
 
-- `SubagentStop` hooks of background agents.
+- `SubagentStop` hooks.
 - `SessionEnd` hooks at `/clear` and `/resume`.
-- `CwdChanged` and `FileChanged` hooks in the fullscreen renderer.
+- `CwdChanged` and `FileChanged` hooks in an interactive session. The notice shows in the prompt footer in both layouts. A non-interactive run has no footer and shows nothing.
 
-A `Stop` hook that fails to run does not show as if it had reported a problem.[^stop-fail] Focus view does not keep a finished reply hidden while a `Stop` hook runs.[^stop-fail]
+A `Stop` hook that fails to run does not show as if it had reported a problem.[^stop-fail]
 
 ### What Exit 2 Does per Event
 
@@ -185,10 +185,10 @@ The hook input is in the `*HookInput` types in the Mod API type file `https://cl
 
 ## Sources
 
-[^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the program (`BaseHookInput`, `McpServerProvenance`, `ClassicResultFields`, and the hook output schema at `chunk-20bv8pca.js:290613`). The exit code 2 table was checked against the Hooks Reference.
+[^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the program (the hook output schema text, with the `PreToolUse` shape, at `chunk-hg1yqkjk.js:68617-68632` (`$72b4a3`) and the schema at `chunk-g4jweshk.js:12631-12650` (`$e79491`)). The exit code 2 table was checked against the Hooks Reference.
 [^probes-print]: Probes in `-p` mode with a local stub.
-[^exit-127]: The program, `chunk-bjgpjqze.js:137058` and `chunk-bjgpjqze.js:145075`.
-[^block-mismatch]: The program, `chunk-4h0jyvmx.js:259251`.
-[^failing-shown]: The program, for the `SessionEnd` hook at `chunk-56bhcxay.js:4222775`, for the `FileChanged` hook at `chunk-56bhcxay.js:2644980`, and for the `CwdChanged` hook at `chunk-56bhcxay.js:2645679`. The `SubagentStop` part for background agents is from the changelog text in the program, `chunk-4prvwasd.js:11798`.
-[^stop-fail]: The program, the headline `Stop hook failed` or `Stop hook reported a problem`, `chunk-bjgpjqze.js:206583`. The focus view part is from the changelog text in the program, `chunk-4prvwasd.js:11798`.
-[^metrics]: The program. The unrecognized key message is at `chunk-56bhcxay.js:1248876`. The fallback for an async answer that fails the schema keeps the number and boolean entries of `metrics` at `chunk-56bhcxay.js:1249379`. `LCt()` sends the event only for an official marketplace name (`chunk-56bhcxay.js:4302880`, `chunk-56bhcxay.js:1185114`).
+[^exit-127]: The program, `chunk-x69e1gmt.js:10033` (exit code 127 on `PreToolUse`) and `chunk-x69e1gmt.js:10574` (the added line `$5bdfa8`).
+[^block-mismatch]: The program, `chunk-hg1yqkjk.js:264779` (the warning that a `hookSpecificOutput` for another event was ignored while the block holds).
+[^failing-shown]: The program, `chunk-hg1yqkjk.js:77919` (the `hook error:` notice, `$3f048a`), for the `SessionEnd` hook at `chunk-hg1yqkjk.js:263602` (called with the reason "clear" by `chunk-1kf0bnad.js:180` and with the reason "resume" by `chunk-zs9k1w9q.js:29876`), for the `FileChanged` hook at `chunk-hg1yqkjk.js:78009`, for the `CwdChanged` hook at `chunk-hg1yqkjk.js:78062`, and for the `SubagentStop` hook at `chunk-wm04tzdx.js:7281` (the failure rows of `hook_non_blocking_error`). The `CwdChanged` and `FileChanged` notice goes to the footer through `chunk-zs9k1w9q.js:54764` (the `env-hook` notification, set up with `$165874`). The footer component `$6cdc41` renders at `chunk-zs9k1w9q.js:59968` and `chunk-zs9k1w9q.js:68775`.
+[^stop-fail]: The program, the headline `Stop hook failed` or `Stop hook reported a problem`, `chunk-x69e1gmt.js:14952`.
+[^metrics]: The program. The unrecognized key message is at `chunk-hg1yqkjk.js:68542`. The fallback for an async answer that fails the schema keeps the number and boolean entries of `metrics` at `chunk-hg1yqkjk.js:74353-74358`. The event goes out only for an official marketplace name (`chunk-hg1yqkjk.js:71404-71411`, the name check `$4dd9e9`, and `chunk-hg1yqkjk.js:267294-267303`, the `hook_plugin_metrics` event).

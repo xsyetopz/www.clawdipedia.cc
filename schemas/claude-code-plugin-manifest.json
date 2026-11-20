@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-plugin-manifest.json",
-	"title": "Claude Code plugin.json (Claude Code 2.1.328)",
-	"$comment": "For .claude-plugin/plugin.json. Generated from Claude Code 2.1.328 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code plugin.json (Claude Code 2.1.329)",
+	"$comment": "For .claude-plugin/plugin.json. Generated from Claude Code 2.1.329 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
 	"type": "object",
 	"properties": {
 		"$schema": {
@@ -250,6 +250,10 @@
 													},
 													"asyncRewake": {
 														"description": "If true, hook runs in background and wakes the model on exit code 2 (blocking error). Implies async.",
+														"type": "boolean"
+													},
+													"holdsTools": {
+														"description": "@internal UserPromptSubmit hooks of the official security-guidance plugin only. If true, the prompt goes to the model without waiting for this hook, the hook's output is ignored, and tools wait until it exits or times out.",
 														"type": "boolean"
 													},
 													"rewakeMessage": {
@@ -587,6 +591,10 @@
 																},
 																"asyncRewake": {
 																	"description": "If true, hook runs in background and wakes the model on exit code 2 (blocking error). Implies async.",
+																	"type": "boolean"
+																},
+																"holdsTools": {
+																	"description": "@internal UserPromptSubmit hooks of the official security-guidance plugin only. If true, the prompt goes to the model without waiting for this hook, the hook's output is ignored, and tools wait until it exits or times out.",
 																	"type": "boolean"
 																},
 																"rewakeMessage": {

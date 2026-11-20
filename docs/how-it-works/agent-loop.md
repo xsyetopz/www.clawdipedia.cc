@@ -150,7 +150,7 @@ The loop does not fail on every error. It tries to fix the problem and continue.
 | A `tool_use` block has no valid call | <Undocumented /> | It drops the reply and asks once more. Then it ends with a message that the tool call could not be parsed. |
 | The model sends only thinking | <Undocumented /> | It sends one nudge. |
 | A safety refusal | <Documented /> | It runs again on the fallback model of that category. See [Models](models.md#fallback). |
-| The API says `max_tokens` is above the model limit | <Undocumented /> | When the error text reads `max_tokens: N > M, which is the maximum allowed number of output tokens for <model>` and `M` is at least 4096, Claude Code sends the request again with `max_tokens` set to `M`.[^max-tokens] |
+| The API refuses a request on an unrecognized model | <Undocumented /> | When the request asks for more than 32,000 output tokens, Claude Code sends it again once with `max_tokens` set to 32,000. It does not read a limit from the error text.[^max-tokens] |
 | The context is too long | <Documented /> | It lowers `max_tokens` or compacts. |
 | Autocompact refills 3 times in a row | <Documented /> | It ends the turn with an error that starts `Autocompact is thrashing`. See [Troubleshooting](https://code.claude.com/docs/en/troubleshooting) in the official docs. |
 | A `Stop` hook blocks | <Documented /> | It sends the reason back to the model. After `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` blocks in a row (default 8), it ends the turn. |
@@ -217,10 +217,10 @@ stateDiagram-v2
 
 ## Sources
 
-[^stages]: The program, `chunk-56bhcxay.js:113148`, for the stages that the official pages do not cover.
-[^cwd]: The program, `chunk-56bhcxay.js:3827000`, `chunk-56bhcxay.js:3827408`, `chunk-56bhcxay.js:3828773`.
-[^sub-limit]: The program, `chunk-qre0n3qw.js:11518`, `chunk-qre0n3qw.js:11783`.
-[^max-tokens]: The program, `chunk-56bhcxay.js:3190601`, `chunk-56bhcxay.js:3190714`. The rule has no list of status codes. It skips a 401, a `policy_blocked` error (status 400), and a second refusal (`chunk-56bhcxay.js:3420409`, `chunk-56bhcxay.js:3420780`). When `M` is below 4096, it sends again only for an unrecognized model, with 32,000 as the limit.
-[^nudge-count]: The program, `chunk-2b3eg071.js:165951` (the limit of 3) and `chunk-2b3eg071.js:170251-170313` (the counter `maxOutputTokensRecoveryCount` ends the retries after the third).
-[^cut-limit]: The program, `chunk-xethrx83.js:513465` (the 32,000 and 128,000 values), `chunk-xethrx83.js:517691` (the condition for an unrecognized model), and `chunk-56bhcxay.js:3190601` (the limit for a reply that continues a cut reply, used only for such a model).
-[^v307]: The program, `chunk-2b3eg071.js:293471`.
+[^stages]: The program, `chunk-hg1yqkjk.js:67509` (the `PreModelSwitch` hook) and `chunk-hg1yqkjk.js:9817` (the `prompt.attachment` mod event), for the stages that the official pages do not cover.
+[^cwd]: The program, `chunk-hg1yqkjk.js:248255` (`Working directory "<path>" is gone`), `chunk-hg1yqkjk.js:248285` (the agent in a removed worktree), and `chunk-hg1yqkjk.js:248309` (the pinned session).
+[^sub-limit]: The program, `chunk-e9fhcxkx.js:255` (the first nudge, "Your caller does not receive an answer in pieces") and `chunk-e9fhcxkx.js:259` (the second nudge, "Output token limit hit again").
+[^max-tokens]: The program, `chunk-hg1yqkjk.js:154443` (`lowerAfter` sets the cap to the 32000 value), and `chunk-hg1yqkjk.js:167204` (call site, which skips a 401 and a policy-blocked error).
+[^nudge-count]: The program, `chunk-wm04tzdx.js:9980` (the limit of 3, compared with `maxOutputTokensRecoveryCount`) and `chunk-wm04tzdx.js:9979-9981` (the counter `maxOutputTokensRecoveryCount` ends the retries after the third).
+[^cut-limit]: The program, `chunk-aq3ms068.js:24330` (the 32,000 and 128,000 values, and the `claude-3` models before it at `chunk-aq3ms068.js:24327`), `chunk-aq3ms068.js:24315` (the condition for an unrecognized model, with `CLAUDE_CODE_MAX_OUTPUT_TOKENS`), and `chunk-hg1yqkjk.js:154433` (`continuesCutReply`, the limit for a reply that continues a cut reply, used only for such a model).
+[^v307]: The program, `chunk-wm04tzdx.js:17084`.

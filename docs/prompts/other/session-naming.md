@@ -6,7 +6,7 @@ generated: false
 group: other
 ---
 
-This is the verbatim text that Claude Code 2.1.328 uses for session naming.
+This is the verbatim text that Claude Code 2.1.329 uses for session naming.
 
 ## Where It Comes From
 

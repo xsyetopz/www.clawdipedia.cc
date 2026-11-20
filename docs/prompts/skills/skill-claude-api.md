@@ -6,15 +6,15 @@ generated: false
 group: skills
 ---
 
-This is the verbatim text that Claude Code 2.1.328 uses for the built-in `/claude-api` skill.
+This is the verbatim text that Claude Code 2.1.329 uses for the built-in `/claude-api` skill.
 
 ## Where It Comes From
 
-Bundled skill. The program holds the text in the module `SKILL-b7341799.md.zst`.[^body] The program fills the model names and model IDs (the `{{OPUS_NAME}}`-style markers of the file) from a fixed table before it sends the text.[^vars] The program also embeds reference files for the skill, such as `python/claude-api/sdk-upgrade.md` and `shared/api-version-migration.md`.[^files] A second set of replacement pairs changes the authentication text. It applies only when the `tengu_ancient_axolotl` flag is on, so this page shows the text without it.[^patch]
+Bundled skill. The program holds the text in the module `SKILL-b7341799.md.zst`.[^body] The program fills the model names and model IDs (the `{{OPUS_NAME}}`-style markers of the file) from a fixed table (`OPUS_NAME`, `OPUS_ID`, and the like) before it sends the text.[^vars] The program also embeds reference files for the skill, such as `python/claude-api/sdk-upgrade.md` and `shared/api-version-migration.md`.[^files] A second set of replacement pairs changes the authentication text. It applies only when the `tengu_ancient_axolotl` flag is on, so this page shows the text without it.[^patch]
 
 ## How to Override It
 
-Create `.claude/skills/claude-api/SKILL.md` with the same name. The program lists skill files from the skill folders before bundled skills and uses the first command with a matching name, so your file replaces this text (The program, `chunk-56bhcxay.js:2630374`, `chunk-458m0skd.js:2592`). It adds a `Base directory for this skill:` line above your skill text (The program, `chunk-56bhcxay.js:3885828`). See [Override a Prompt](../other/override.md).
+Create `.claude/skills/claude-api/SKILL.md` with the same name. The program lists skill files from the skill folders (`skillDirCommands`) before bundled skills (`bundledSkills`) and uses the first command with a matching name, so your file replaces this text (The program, `chunk-hg1yqkjk.js:190384`, `chunk-6d5r944q.js:115`). It adds a `Base directory for this skill:` line above your skill text (The program, `chunk-hg1yqkjk.js:279997`). See [Override a Prompt](../other/override.md).
 
 ## Full Text
 
@@ -250,7 +250,7 @@ If any model strings above look unfamiliar, that just means they were released a
 
 ## Sources
 
-[^body]: The program, `chunk-mjbk2ztg.js:10868` (the builder of the skill text from `SKILL_PROMPT`, trimmed at its end). The text is the module `SKILL-b7341799.md.zst`, read from offset 0; `Never guess SDK usage` is at offset 1738.
-[^vars]: The program, `chunk-6h5n5v6d.js:9249` (the table of model names and IDs).
-[^files]: The program, `chunk-6h5n5v6d.js:10859` and `chunk-6h5n5v6d.js:11268`.
-[^patch]: The program, `chunk-mjbk2ztg.js:1305` (the replacement pairs) and `chunk-mjbk2ztg.js:1091` (the flag `tengu_ancient_axolotl`).
+[^body]: The program, `chunk-ktx9h89v.js:158` (the builder of the skill text from `SKILL_PROMPT`, trimmed at its end). The text is the module `SKILL-b7341799.md.zst`, read from offset 0; `Never guess SDK usage` is at offset 1738.
+[^vars]: The program, `chunk-q0kqch9v.js:216` (the table of model names and IDs).
+[^files]: The program, `chunk-q0kqch9v.js:259` and `chunk-q0kqch9v.js:272`.
+[^patch]: The program, `chunk-ktx9h89v.js:47` (the replacement pairs) and `chunk-ktx9h89v.js:47` (the flag `tengu_ancient_axolotl`).

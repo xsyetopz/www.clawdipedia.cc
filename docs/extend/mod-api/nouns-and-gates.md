@@ -82,7 +82,7 @@ Each `$` call is also an event with the same name, such as `fs.read`. A hook on 
 | `allowModsToOverrideDenyRules` | <Documented /> | Lets an installed mod approve a call that a `deny` rule refuses. | An option of the built-in guard. | Managed settings. |
 | `prependPlugins`, `appendPlugins` | <Differs note="Docs say user or managed scope. The schema says managed only." /> <ManagedOnly /> | Plugin ids that run before or after user mods. They set the order only: an organization plugin that neither list names is in `prepend`, after the listed ones. | Only plugins in these tiers can call `next.to`. Rows: [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plugins.md#keys). | Managed settings. |
 | `disableSideloadFlags` | <Documented /> <ManagedOnly /> | Rejects `--plugin-dir` and `--plugin-url`. | Row: [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plugins.md#keys). | Managed settings. |
-| `--safe-mode`, `--bare` | <Documented /> | No installed hooks module loads. | The text in the program is "installed plugins are disabled, none of their hooks or hooks modules load, built-in plugins load regardless".[^safe-mode-text] | CLI flags. |
+| `--safe-mode`, `--bare` | <Documented /> | No installed hooks module loads. | The text in the program is "installed plugins are disabled, none of their hooks or hooks modules load; built-in plugins and the organization's managed plugins load regardless".[^safe-mode-text] | CLI flags. |
 | Rollout switch | <Gated note="Remote flag" /> | Installed hooks modules wait for a rollout flag. A message says installed mods are turned off remotely.[^rollout-gate] | Built-in plugins and organization plugins load regardless. | Installed plugins. |
 | `CLAUDE_CODE_PLUGIN_DIRS`, `CLAUDE_CODE_PLUGIN_DIR_WATCH` | <Documented /> | Load plugin dirs as `--plugin-dir` does. Reload on save: on by default in interactive sessions, off in print mode for `--plugin-dir` folders unless set to `1`. Print mode reloads mods in `.claude/skills` unless set to `0` | None. | Environment. |
 | Mods that Claude writes | <Documented /> | A mod that Claude writes into the project turns on without a question in `auto` and `bypassPermissions` modes, also under managed `allowUnsandboxedCommands: false` or `allowManagedDomainsOnly`. It does not load in `dontAsk` mode. | See the sources.[^written-mods] | Project mods, by permission mode. |
@@ -164,26 +164,26 @@ See [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plu
 
 ## Sources
 
-[^modules-text]: The program, `chunk-jkpzhr7r.js:57159`.
-[^validate]: The program, `chunk-eyez668q.js:50642`.
-[^validate-form]: The program, `chunk-56bhcxay.js:1014972` and `chunk-eyez668q.js:45018`.
-[^types-dir]: The program, `chunk-56bhcxay.js:5110139`.
-[^embed-mods-only]: The program, `chunk-jkpzhr7r.js:165565` (the list of policy plugin options, `allowManagedModsOnly` and `forceHotReloadPrompt`) and `chunk-jkpzhr7r.js:166026` (the copy of those options, when boolean, from the settings it is given into the policy plugin options).
-[^off-text]: The program, `chunk-xqszk37f.js:3236`.
-[^safe-mode-text]: The program, `chunk-56bhcxay.js:5131025`.
-[^written-mods]: The program, `chunk-4ekmrthb.js:5707`.
-[^prompt-edit]: The program, `chunk-syremzmn.js:194600`.
-[^registry]: The program, `chunk-pk4bzvs1.js:482` (`oLe`), the start function that calls the registry one plugin at a time. It lists 14 plugins.
-[^hipaa-default]: The program, `chunk-d3mbd1zj.js:7611` for the description and the flags, `chunk-ym16qx7x.js:288` for `isAvailable` (`Cgt`, which reads `wo("hipaa")`), and `chunk-nvvfbx3p.js:3241` for the missing-answer check (`Bmo`).
-[^easel-worker]: The program, `chunk-pk4bzvs1.js:1825`. The plugin also registers when the session is a cloud worker: `CLAUDE_CODE_REMOTE` is `true` and `CLAUDE_CODE_ENVIRONMENT_KIND` is unset (`un`, `chunk-427dvgs1.js:2337`), the entry point is `remote`, `remote_desktop`, or `remote_projects`, and `CLAUDE_CODE_REMOTE_SESSION_ID` is set. It also registers for a self-hosted runner child with one of these entry points. `chunk-56bhcxay.js:850283` holds the test, and `chunk-374y7r0w.js:7888` and `chunk-374y7r0w.js:8083` hold the entry points (`C`, then `Nin`: the entries of `C` that start with `remote`, less `remote_cowork` and `remote_mobile`).
-[^platform-name]: The program, `chunk-2jfxv5rx.js:24737` (`var a="claude-platform"`). The program has no `cc-plugin-claude-test` registry call; `chunk-9n6y18w2.js:15430` only cleans an old data folder of it.
-[^rollout-gate]: The program, the gate `tengu_plugin_hooks_modules` at `chunk-xethrx83.js:728148` and the message at `chunk-xqszk37f.js:3090`.
-[^tips-mermaid]: The program, `chunk-bgvyhd4f.js:8511` for the tips description and `chunk-3jdt5qfx.js:6996` for the Mermaid description. Each plugin sits behind a gate, `tengu_tips_mod` and `tengu_mermaid_mod`.
-[^privacy-gate]: The program, `chunk-vaa1bcfr.js:6712`. The gate is `tengu_wise_newt`.
-[^privacy-scope]: The program, `chunk-vaa1bcfr.js:8625` (the tool list and the script read). The program, `chunk-vaa1bcfr.js:10964`, lets a call through when `origin.hookOwner` is set (the MCP call of a settings hook).
-[^privacy]: The program, `chunk-vaa1bcfr.js:8338` for the match, the refusal text at `chunk-vaa1bcfr.js:9024`, the `tool.check` hook at `chunk-vaa1bcfr.js:10883`, and the `session.identity` hook at `chunk-vaa1bcfr.js:11596`.
-[^easel]: The program, `chunk-pk4bzvs1.js:482` (the normal run test, `i`), and `chunk-6sr15enc.js:6918` (`isAvailable`: the flag from `chunk-6sr15enc.js:6636`, `tengu_joyful_otter` with default `false`, the platform, the managed MCP file test that `chunk-56bhcxay.js:4779557` sets and `chunk-56bhcxay.js:4775552` runs, and the data policies).
-[^enable-order]: The program, `chunk-e3mrctpm.js:77246`.
-[^enabled-plugins]: The program, `chunk-yznsjrsv.js:32811`, `chunk-vaa1bcfr.js:12267`, `chunk-d3mbd1zj.js:7611` (`cc-plugin-hipaa-default`, named at `chunk-ym16qx7x.js:357`), `chunk-e3mrctpm.js:77246`.
-[^responsive]: The program, `chunk-czf317f1.js:583` (`_Ls`: the session test, the Slack and Teams test, and the gate `tengu_quiet_ember`), `chunk-374y7r0w.js:8270` (`OM`), and `chunk-374y7r0w.js:4628` (`PBe`).
+[^modules-text]: The program, `chunk-t39fw2cy.js:2461`.
+[^validate]: The program, `chunk-wae3ndpy.js:2477`.
+[^validate-form]: The program, `chunk-hg1yqkjk.js:88143` (`adds to $`, `withholds from $`, `replaces on $`), `chunk-hg1yqkjk.js:88071` (`a second engine.create hook`), and `chunk-wae3ndpy.js:2186` (`this engine.create hook is outside its form`).
+[^types-dir]: The program, `chunk-hg1yqkjk.js:221497`.
+[^embed-mods-only]: The program, `chunk-t39fw2cy.js:6029` (the list of policy plugin options, `allowManagedModsOnly` and `forceHotReloadPrompt`) and `chunk-t39fw2cy.js:6029` (the copy of those options, when boolean, from the settings it is given into the policy plugin options).
+[^off-text]: The program, `chunk-egqddp29.js:169`.
+[^safe-mode-text]: The program, `chunk-hg1yqkjk.js:222557`.
+[^written-mods]: The program, `chunk-jfjg1q83.js:283`.
+[^prompt-edit]: The program, `chunk-qsd8sbe8.js:8505`.
+[^registry]: The program, `chunk-zmbxxdjn.js:15` (`$f1ef54`), the start function that calls the registry one plugin at a time. It lists 14 plugins.
+[^hipaa-default]: The program, `chunk-vhwr89hs.js:247-249` for the flags, `chunk-4r2j9y65.js:8` for `isAvailable` (`whenUnreadable`), and `chunk-dt01kn47.js:2016` for the missing-answer check (`verdictAbsentUnderHipaaRecord`).
+[^easel-worker]: The program, `chunk-zmbxxdjn.js:78`. The plugin also registers when the session is a cloud worker: `CLAUDE_CODE_REMOTE` is `true` and `CLAUDE_CODE_ENVIRONMENT_KIND` is unset (`$b5815f`, `chunk-92h2y9s9.js:39`), the entry point is `remote`, `remote_desktop`, or `remote_projects`, and `CLAUDE_CODE_REMOTE_SESSION_ID` is set. It also registers for a self-hosted runner child with one of these entry points. `chunk-hg1yqkjk.js:79372` holds the test (`$a68492`), and `chunk-0v6g5ynk.js:35-55` holds the entry points.
+[^platform-name]: The program, `chunk-bgrrn57r.js:764` (`var a="claude-platform"`). The program has no `cc-plugin-claude-test` registry call; `chunk-wxnsvrbv.js:135` only cleans an old data folder of it.
+[^rollout-gate]: The program, the gate `tengu_plugin_hooks_modules` at `chunk-aq3ms068.js:34650` and the message (`turned off remotely`) at `chunk-egqddp29.js:165`.
+[^tips-mermaid]: The program, `chunk-fx4qha4b.js:300` for the tips description and `chunk-01qrg2rf.js:207` for the Mermaid description. Each plugin sits behind a gate, `tengu_tips_mod` and `tengu_mermaid_mod`.
+[^privacy-gate]: The program, `chunk-0nydv2x4.js:215`. The gate is `tengu_wise_newt`.
+[^privacy-scope]: The program, `chunk-0nydv2x4.js:333` (the tool list and the script read). The program, `chunk-0nydv2x4.js:409`, lets a call through when `origin.hookOwner` is set (the MCP call of a settings hook).
+[^privacy]: The program, `chunk-0nydv2x4.js:328` for the match, the refusal text at `chunk-0nydv2x4.js:328`, the `tool.check` hook at `chunk-0nydv2x4.js:418`, and the `session.identity` hook at `chunk-0nydv2x4.js:418`.
+[^easel]: The program, `chunk-zmbxxdjn.js:72-77` (the normal run test), and `chunk-pbx0q5fj.js:211` (`isAvailable`: the flag from `chunk-pbx0q5fj.js:211`, `tengu_joyful_otter` with default `false`, the platform, the managed MCP file test that `chunk-hg1yqkjk.js:203924` (`$f9a79a.set`) sets and `chunk-hg1yqkjk.js:203674` runs, and the data policies).
+[^enable-order]: The program, `chunk-43hq1cm6.js:3730` (`enabledFromPolicyOnly`, `enabledFromTrustedSettingsOnly`, `enabledPlugins`, and `defaultEnabled`).
+[^enabled-plugins]: The program, `chunk-kvgd8rb3.js:1546-1548`, `chunk-0nydv2x4.js:468`, `chunk-vhwr89hs.js:247-249` (`cc-plugin-hipaa-default`, named at `chunk-4r2j9y65.js:10`), `chunk-43hq1cm6.js:3730`.
+[^responsive]: The program, `chunk-gbsks5fa.js:16` (`$fb17bf`, the gate `tengu_quiet_ember`), `chunk-0v6g5ynk.js:268` (`$33d3e2`, the `remote` entry test), and `chunk-zmbxxdjn.js:58-60` (the registration test).
 [^v328-tier-calls]: The type file `schemas/claude-code.d.ts`, `EventCalls` and the text on the `$` calls (Tier).

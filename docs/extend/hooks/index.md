@@ -6,7 +6,7 @@ sidebar_position: 1
 
 A hook is a small action that Claude Code runs by itself at a fixed point in a session. The point can be before a tool runs, when you send a prompt, or when the session ends. Use a hook to block a risky command, add context, or run a check every time. A prompt to Claude cannot promise that, but a hook can.
 
-Add hooks under the `hooks` key of a settings file, a plugin, or skill or subagent frontmatter. Claude Code `2.1.328` has 33 hook events, and the [official docs](https://code.claude.com/docs/en/hooks) list the same 33 names.[^events] Each hook uses one of 5 handler types: `command`, `http`, `mcp_tool`, `prompt`, or `agent`.
+Add hooks under the `hooks` key of a settings file, a plugin, or skill or subagent frontmatter. Claude Code `2.1.329` has 33 hook events, and the [Hook events](https://code.claude.com/docs/en/hooks#hook-events) section of the official docs has one heading for each of the same 33 names.[^events] Each hook uses one of 5 handler types: `command`, `http`, `mcp_tool`, `prompt`, or `agent`.
 
 ## Example
 
@@ -111,5 +111,5 @@ A mod is a hook that runs as a JavaScript function inside Claude Code. See the [
 
 ## Sources
 
-[^events]: [Hooks Reference](https://code.claude.com/docs/en/hooks). The program lists the same 33 names in its hook schemas and `HookInput` types, `chunk-jkpzhr7r.js:5380` and `chunk-20bv8pca.js:267795`.
-[^flag-settings]: The program calls this source `flagSettings`, `chunk-yhz0x035.js:3779`.
+[^events]: [Hooks Reference, Hook events](https://code.claude.com/docs/en/hooks#hook-events). The page has 33 headings from `SessionStart` to `ElicitationResult` in that section. A name-by-name comparison with the program list found no name on one side only. The program lists the same 33 names in its hook schemas and `HookInput` types, `chunk-t39fw2cy.js:270` and `chunk-w03c3634.js:10823` (the list from `PreToolUse` to `MessageDisplay`).
+[^flag-settings]: The program calls this source `flagSettings`, `chunk-jngxzq9c.js:188`.

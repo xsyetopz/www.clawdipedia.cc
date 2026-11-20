@@ -1,9 +1,9 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-tools.json",
-	"title": "Claude Code built-in tool payloads (Claude Code 2.1.328)",
-	"$comment": "For the input and result of each built-in tool (definitions <Tool>Input and <Tool>Result). Generated from Claude Code 2.1.328 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the tool factory that copies a tool definition's properties (getters included), read as inputSchema and outputSchema on each tool. Do not edit by hand: run \"bun run schemas\".",
-	"description": "The program did not give these definitions: ObserverReportResult, TestingPermissionResult, ArtifactCommentsInput, ArtifactDataInput, ArtifactCheckInput, SendMessageResult, ArtifactInput.",
+	"title": "Claude Code built-in tool payloads (Claude Code 2.1.329)",
+	"$comment": "For the input and result of each built-in tool (definitions <Tool>Input and <Tool>Result). Generated from Claude Code 2.1.329 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the tool factory that copies a tool definition's properties (getters included), read as inputSchema and outputSchema on each tool. Do not edit by hand: run \"bun run schemas\".",
+	"description": "The program did not give these definitions: ObserverReportResult, ArtifactCommentsInput, ArtifactDataInput, ArtifactCheckInput, SendMessageResult, ArtifactInput.",
 	"$defs": {
 		"AgentInput": {
 			"type": "object",
@@ -2999,7 +2999,7 @@
 											"size_bytes": {
 												"type": "integer",
 												"minimum": 0,
-												"maximum": 20971520
+												"maximum": 1073741824
 											},
 											"sha256": {
 												"type": "string",
@@ -3080,7 +3080,7 @@
 								"size_bytes": {
 									"type": "integer",
 									"exclusiveMinimum": 0,
-									"maximum": 20971520
+									"maximum": 33554432
 								},
 								"content_type": {
 									"type": "string",
@@ -3177,7 +3177,7 @@
 											"size_bytes": {
 												"type": "integer",
 												"exclusiveMinimum": 0,
-												"maximum": 20971520
+												"maximum": 1073741824
 											},
 											"content_type": {
 												"type": "string",
@@ -3234,7 +3234,7 @@
 											"size_bytes": {
 												"type": "integer",
 												"minimum": 0,
-												"maximum": 20971520
+												"maximum": 1073741824
 											},
 											"sha256": {
 												"type": "string",
@@ -3358,7 +3358,7 @@
 								"size_bytes": {
 									"type": "integer",
 									"minimum": 0,
-									"maximum": 21271521
+									"maximum": 33854433
 								},
 								"content_type": {
 									"type": "string",
@@ -3483,7 +3483,7 @@
 													"size_bytes": {
 														"type": "integer",
 														"minimum": 0,
-														"maximum": 21271521
+														"maximum": 33854433
 													},
 													"content_type": {
 														"type": "string",
@@ -6380,7 +6380,7 @@
 											"size_bytes": {
 												"type": "integer",
 												"minimum": 0,
-												"maximum": 20971520
+												"maximum": 1073741824
 											},
 											"sha256": {
 												"type": "string",
@@ -6461,7 +6461,7 @@
 								"size_bytes": {
 									"type": "integer",
 									"exclusiveMinimum": 0,
-									"maximum": 20971520
+									"maximum": 33554432
 								},
 								"content_type": {
 									"type": "string",
@@ -6558,7 +6558,7 @@
 											"size_bytes": {
 												"type": "integer",
 												"exclusiveMinimum": 0,
-												"maximum": 20971520
+												"maximum": 1073741824
 											},
 											"content_type": {
 												"type": "string",
@@ -6615,7 +6615,7 @@
 											"size_bytes": {
 												"type": "integer",
 												"minimum": 0,
-												"maximum": 20971520
+												"maximum": 1073741824
 											},
 											"sha256": {
 												"type": "string",
@@ -6739,7 +6739,7 @@
 								"size_bytes": {
 									"type": "integer",
 									"minimum": 0,
-									"maximum": 21271521
+									"maximum": 33854433
 								},
 								"content_type": {
 									"type": "string",
@@ -6864,7 +6864,7 @@
 													"size_bytes": {
 														"type": "integer",
 														"minimum": 0,
-														"maximum": 21271521
+														"maximum": 33854433
 													},
 													"content_type": {
 														"type": "string",
@@ -9761,7 +9761,7 @@
 											"size_bytes": {
 												"type": "integer",
 												"minimum": 0,
-												"maximum": 20971520
+												"maximum": 1073741824
 											},
 											"sha256": {
 												"type": "string",
@@ -9842,7 +9842,7 @@
 								"size_bytes": {
 									"type": "integer",
 									"exclusiveMinimum": 0,
-									"maximum": 20971520
+									"maximum": 33554432
 								},
 								"content_type": {
 									"type": "string",
@@ -9939,7 +9939,7 @@
 											"size_bytes": {
 												"type": "integer",
 												"exclusiveMinimum": 0,
-												"maximum": 20971520
+												"maximum": 1073741824
 											},
 											"content_type": {
 												"type": "string",
@@ -9996,7 +9996,7 @@
 											"size_bytes": {
 												"type": "integer",
 												"minimum": 0,
-												"maximum": 20971520
+												"maximum": 1073741824
 											},
 											"sha256": {
 												"type": "string",
@@ -10120,7 +10120,7 @@
 								"size_bytes": {
 									"type": "integer",
 									"minimum": 0,
-									"maximum": 21271521
+									"maximum": 33854433
 								},
 								"content_type": {
 									"type": "string",
@@ -10245,7 +10245,7 @@
 													"size_bytes": {
 														"type": "integer",
 														"minimum": 0,
-														"maximum": 21271521
+														"maximum": 33854433
 													},
 													"content_type": {
 														"type": "string",
@@ -13142,7 +13142,7 @@
 											"size_bytes": {
 												"type": "integer",
 												"minimum": 0,
-												"maximum": 20971520
+												"maximum": 1073741824
 											},
 											"sha256": {
 												"type": "string",
@@ -13223,7 +13223,7 @@
 								"size_bytes": {
 									"type": "integer",
 									"exclusiveMinimum": 0,
-									"maximum": 20971520
+									"maximum": 33554432
 								},
 								"content_type": {
 									"type": "string",
@@ -13320,7 +13320,7 @@
 											"size_bytes": {
 												"type": "integer",
 												"exclusiveMinimum": 0,
-												"maximum": 20971520
+												"maximum": 1073741824
 											},
 											"content_type": {
 												"type": "string",
@@ -13377,7 +13377,7 @@
 											"size_bytes": {
 												"type": "integer",
 												"minimum": 0,
-												"maximum": 20971520
+												"maximum": 1073741824
 											},
 											"sha256": {
 												"type": "string",
@@ -13501,7 +13501,7 @@
 								"size_bytes": {
 									"type": "integer",
 									"minimum": 0,
-									"maximum": 21271521
+									"maximum": 33854433
 								},
 								"content_type": {
 									"type": "string",
@@ -13626,7 +13626,7 @@
 													"size_bytes": {
 														"type": "integer",
 														"minimum": 0,
-														"maximum": 21271521
+														"maximum": 33854433
 													},
 													"content_type": {
 														"type": "string",
@@ -14670,6 +14670,25 @@
 				"nextFireAt": {
 					"description": "Epoch ms of the job's next run, the scheduler's per-job offset included",
 					"type": "number"
+				},
+				"otherOneShots": {
+					"description": "Other session-only one-shot tasks that have yet to fire",
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "string"
+							},
+							"humanSchedule": {
+								"type": "string"
+							},
+							"prompt": {
+								"type": "string"
+							}
+						},
+						"required": ["id", "humanSchedule", "prompt"]
+					}
 				}
 			},
 			"required": ["id", "humanSchedule", "recurring"]
@@ -15014,6 +15033,13 @@
 						"moveState": {
 							"type": "string",
 							"enum": ["moving", "moved"]
+						},
+						"movedTo": {
+							"type": "string"
+						},
+						"movedToHeldBy": {
+							"type": "string",
+							"enum": ["you", "owner", "someone_else"]
 						}
 					},
 					"required": ["method", "projectId", "name"]
@@ -16702,6 +16728,12 @@
 								"type": "null"
 							}
 						]
+					}
+				},
+				"rows": {
+					"type": "array",
+					"items": {
+						"type": ["string", "null"]
 					}
 				}
 			},
@@ -18617,6 +18649,9 @@
 						"required": ["id", "name"],
 						"additionalProperties": {}
 					}
+				},
+				"note": {
+					"type": "string"
 				}
 			},
 			"required": ["results"]
@@ -18672,6 +18707,9 @@
 						"required": ["id", "name"],
 						"additionalProperties": {}
 					}
+				},
+				"note": {
+					"type": "string"
 				}
 			},
 			"required": ["results"]
@@ -20095,11 +20133,6 @@
 			},
 			"required": ["success", "taskId", "updatedFields"]
 		},
-		"TestingPermissionInput": {
-			"type": "object",
-			"properties": {},
-			"additionalProperties": false
-		},
 		"TodoWriteInput": {
 			"type": "object",
 			"properties": {
@@ -20969,6 +21002,12 @@
 								"type": "null"
 							}
 						]
+					}
+				},
+				"rows": {
+					"type": "array",
+					"items": {
+						"type": ["string", "null"]
 					}
 				}
 			},

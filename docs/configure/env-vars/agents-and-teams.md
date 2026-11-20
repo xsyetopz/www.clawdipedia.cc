@@ -126,13 +126,13 @@ The Notes column says which when the code shows it.
 
 ## Sources
 
-[^dispatch-entrypoint]: The program, read at `chunk-20bv8pca.js:166409`. The list of valid values is at `chunk-thtytpkk.js:1798`.
-[^silent-peer]: The program, `chunk-9d1cv9rw.js:2986` and `chunk-he851at9.js:2986`.
-[^admit-silent]: The program, `chunk-he851at9.js:2986`; the supervisor sets it at `chunk-fcdwedb2.js:14056`. The gate is `bot_protected_tengu_merry_bear`.
-[^summaries]: The program, `chunk-1k75prj1.js:171628` and `chunk-1k75prj1.js:210945`; passed to child processes at `chunk-avyyrx5p.js:39235`. Probe cases `env319a.agent-summaries.unset` and `env319a.agent-summaries.v1`: a stream-json session whose initialize request sets `agentProgressSummaries`, and a forked subagent whose Bash tool runs for 70 s. Unset, the 2 `Forking for summary` lines had 9 and 14 messages in context.
-[^handback]: The program, `chunk-a8pk5fmt.js:1838`. Probe cases `env319a.subagent-handback.unset` and `env319a.subagent-handback.v1` (`--permission-mode auto`, server verdict `not_flagged`).
-[^keepalive]: The program, flag `tengu_kairos_loop_keepalive` and `chunk-792cdedw.js:1077`. Probe cases `pty.cli319.loop-keepalive.unset`, `.v0`, and `.v1`.
-[^plan-required]: The program, `chunk-py588db4.js:171-177` (the read, after the process context and the dynamic team context) and `chunk-x7g75ktc.js:930`, `chunk-x7g75ktc.js:1108` and `chunk-x7g75ktc.js:1185-1190` (the name is in the set of names that project settings may set), with `chunk-wjr7c5ff.js:226-229` (a project `env` entry outside that set needs trust).
-[^variable-names]: The program, `chunk-7343wm3k.js:26213` and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^progress-short]: The program, `chunk-1k75prj1.js:164469` (the mode is `short` for the providers `bedrock`, `vertex`, and `foundry`; other providers follow the server flag `tengu_groovy_ember`) and `chunk-1k75prj1.js:167895` (the label prompt, `from short notes about what it is doing`).
-[^peppy]: The program, `chunk-56bhcxay.js:100121-100124` (the read), `chunk-56bhcxay.js:104303` (the cache key), and `chunk-56bhcxay.js:202972` (the line).
+[^dispatch-entrypoint]: The program, read at `chunk-w03c3634.js:6695`. The list of valid values is at `chunk-59xdgreq.js:94`.
+[^silent-peer]: The program, `chunk-f5fw37j8.js:159` and `chunk-13nw0kab.js:109`.
+[^admit-silent]: The program, `chunk-13nw0kab.js:106`; the supervisor sets it at `chunk-6g525c94.js:936`. The gate is `bot_protected_tengu_merry_bear`.
+[^summaries]: The program, `chunk-f00gew3e.js:9718` and `chunk-f00gew3e.js:12294`; passed to child processes at `chunk-7kvz9y39.js:1660` (`CLAUDE_CODE_DISABLE_AGENT_PROGRESS_SUMMARIES`). Probe cases `env319a.agent-summaries.unset` and `env319a.agent-summaries.v1`: a stream-json session whose initialize request sets `agentProgressSummaries`, and a forked subagent whose Bash tool runs for 70 s. Unset, the 2 `Forking for summary` lines had 9 and 14 messages in context.
+[^handback]: The program, `chunk-dqne51rv.js:119`. Probe cases `env319a.subagent-handback.unset` and `env319a.subagent-handback.v1` (`--permission-mode auto`, server verdict `not_flagged`).
+[^keepalive]: The program, flag `tengu_kairos_loop_keepalive` and `chunk-axgpttnq.js:50`. Probe cases `pty.cli319.loop-keepalive.unset`, `.v0`, and `.v1`.
+[^plan-required]: The program, `chunk-fw3g4jx2.js:171-177` (the read, after the process context and the dynamic team context) and `chunk-rqs3939j.js:994` (the set `$45ee7e`), `chunk-rqs3939j.js:1172` (the name `CLAUDE_CODE_PLAN_MODE_REQUIRED`) and `chunk-rqs3939j.js:1249-1254` (the check, `$45ee7e.has`; the name is in the set of names that project settings may set), with `chunk-sa50zt3q.js:241-244` (a project `env` entry outside that set needs trust).
+[^variable-names]: The program, `chunk-gvhwnc7g.js:444` (the table of names, for example `CLAUDE_CODE_PLAN_MODE_REQUIRED`) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^progress-short]: The program, `chunk-f00gew3e.js:9363` (the mode is `short` for the providers `bedrock`, `vertex`, and `foundry`; other providers follow the server flag `tengu_groovy_ember`) and `chunk-f00gew3e.js:9538` (the label prompt, `from short notes about what it is doing`).
+[^peppy]: The program, `chunk-hg1yqkjk.js:104993-104996` (the read), `chunk-hg1yqkjk.js:109171` (the cache key part, `CB1:` or `CB0:`), and `chunk-hg1yqkjk.js:255321` (the line).

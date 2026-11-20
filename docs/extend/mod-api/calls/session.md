@@ -34,8 +34,8 @@ on("session.start", async ($, e, next) => {
 | `$.session.turns` | <Documented /> | Returns how many prompts the user has sent this session. | `() => Promise<number>`. | Run time. |
 | `$.session.id` | <Documented /> | Returns the session id (the transcript file's name). | `() => Promise<string>`. | Run time. |
 | `$.session.repo` | <Documented /> | Returns the git repository the session runs in, read from the working copy on each call. `null` when the directory is not in one. | `() => Promise<SessionRepo \| null>`. | Run time. |
-| `$.session.surfaces` | <Documented /> | Returns every surface the session draws on, each once: `terminal` first, then remote ones in the order they attached. | `() => Promise<readonly RenderSurface[]>`. Never rejects. Empty in a plain `-p` run. | Run time. |
-| `$.session.surface` | <Documented /> <Deprecated note="Use surfaces()" /> | Returns the first of `$.session.surfaces()`, or `null` where nothing draws. | `() => Promise<RenderSurface \| null>`. Deprecated. Use `surfaces()`, because a session may draw on several surfaces. | Run time. |
+| `$.session.surfaces` | <Documented /> | Returns every surface the session draws on, each once: `terminal` first, then remote ones in the order they attached. | `() => Promise<readonly RenderSurface[]>`. Never rejects. Empty in a plain `-p` run.[^surfaces] | Run time. |
+| `$.session.surface` | <Documented /> <Deprecated note="Use surfaces()" /> | Returns the first of `$.session.surfaces()`, or `null` where nothing draws. | `() => Promise<RenderSurface \| null>`. Deprecated. Use `surfaces()`, because a session may draw on several surfaces.[^surfaces] | Run time. |
 | `$.session.usage` | <Documented /> | Returns when the session began, the context window fill, the rate-limit windows, and the cost, as the status line has them. | `(args?) => Promise<SessionUsage>`. A plain call costs nothing. `breakdown: "full"` uses the token-count API. `"summary"` estimates locally. | Run time. |
 | `$.session.version` | <Documented /> | Returns the engine's version, its base release, and its build time. | `() => Promise<SessionVersion>`: `version`, `base` (absent unless the version is a release), `builtAt` (absent in a run from source that stamps none). Works in every mode. | Run time. |
 | `$.session.info` | <Documented /> | Returns the transcript file, the scratchpad, the prompt id, the agent type, the config root, the platform, and the hosting of the session, as they stand at the call. | `() => Promise<SessionInfo>`. Resolves `{ transcriptPath, scratchpadDir?, promptId?, agentType?, configRoot?, platform?, isHosted? }`. A settings hook reads the same on its input.[^info] | Run time. |
@@ -92,10 +92,11 @@ When no credential resolves, `$.session.authorize` logs `$.session.authorize (<p
 
 ## Sources
 
-[^types]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `SessionMessagesCall`, `SessionInfo`, `SessionVersion`, `SessionAuthorization`, `SessionUsageArgs`, `SessionCompactArgs`, `SessionCompactResult`, `SessionSendResult`, `SessionAppendResult`, and the `session.*` entries of `EventOf` and `ResultOf`.
-[^info]: The program, `chunk-56bhcxay.js:1059175`.
-[^stop]: The program, `chunk-j2wfp6sf.js:526702` and `chunk-syremzmn.js:208443`.
-[^desktop]: The program, `chunk-56bhcxay.js:1056645`.
-[^identity]: The program, `chunk-vaa1bcfr.js:11599` (the `user` tier gets the refusal) and `chunk-yznsjrsv.js:26324`.
-[^machine]: The type file `schemas/claude-code.d.ts`, `$.session.machine` and `SessionMachine`. The program, `chunk-56bhcxay.js:1060862` (the read) and `chunk-56bhcxay.js:4975785` (the op).
+[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, `SessionMessagesCall`, `SessionInfo`, `SessionVersion`, `SessionAuthorization`, `SessionUsageArgs`, `SessionCompactArgs`, `SessionCompactResult`, `SessionSendResult`, `SessionAppendResult`, and the `session.*` entries of `EventOf` and `ResultOf`.
+[^info]: The program, `chunk-hg1yqkjk.js:90219` (`transcriptPath`, `scratchpadDir`, `promptId`, `agentType`, `configRoot`, `platform`, and `isHosted`).
+[^stop]: The program, `chunk-nxwpaxwj.js:6509` and `chunk-qsd8sbe8.js:9096`.
+[^desktop]: The program, `chunk-hg1yqkjk.js:90078`.
+[^identity]: The program, `chunk-0nydv2x4.js:449` (the `user` tier gets the refusal) and `chunk-kvgd8rb3.js:1142`.
+[^machine]: The type file `schemas/claude-code.d.ts`, `$.session.machine` and `SessionMachine`. The program, `chunk-hg1yqkjk.js:90316` (the read) and `chunk-hg1yqkjk.js:214510` (the op).
 [^v328-tier-compact]: The type file `schemas/claude-code.d.ts`, `$.session.compact`.
+[^surfaces]: The program, `chunk-hg1yqkjk.js:8610-8613` (the list: `terminal` first when the session is the terminal one, then the remote surfaces), `chunk-hg1yqkjk.js:98751-98757` (`$.session.surface` returns the first or `null`), and `chunk-hg1yqkjk.js:98758-98764` (`$.session.surfaces` returns the list, which is empty when nothing draws). The roster is a `Map` keyed by `clientId`: `chunk-87crjpw7.js:102` builds it, `attach` at `chunk-87crjpw7.js:107-109` adds a first-time client at the end and keeps a returning client in its place, `detach` at `chunk-87crjpw7.js:124` removes it, and `surfaces` at `chunk-87crjpw7.js:132` lists the surfaces of the clients in map order. The list drops repeats with `[...new Set(a1)]` (`chunk-b8e2yqms.js:25-27`), so each surface appears once, at the place of its first client. A client that detaches and attaches again goes to the end.

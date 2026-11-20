@@ -260,8 +260,8 @@ Lines inside code fences are safe.
 Every fact needs a source.
 
 - Official docs: link to the page in the sentence or in a footnote.
-- The program: put the evidence in a footnote, not in the sentence. Write "The program," and the module citation, such as `chunk-jkpzhr7r.js:5826`. Each citation names the chunk, a colon, and the place, such as `chunk-jkpzhr7r.js:5826` for one place or `chunk-jkpzhr7r.js:5826-5840` for a range. Do not write the place with `@`, do not write a line range in words, and write a range from the lower place to the higher one. `bun run check:citations` fails on a footnote or an exclusion that names the program but no chunk with its place, and on a range that ends before it starts.
-- Release notes: link the release page in a footnote, such as ``[`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328)``.
+- The program: put the evidence in a footnote, not in the sentence. Write "The program," and the module citation, such as `chunk-t39fw2cy.js:5055` (the `backend` option of the Windows sandbox). Each citation names the chunk, a colon, and the place, such as `chunk-t39fw2cy.js:5055` for one place or `chunk-t39fw2cy.js:5055-5058` for a range. Do not write the place with `@`, do not write a line range in words, and write a range from the lower place to the higher one. `bun run check:citations` fails on a footnote or an exclusion that names the program but no chunk with its place, and on a range that ends before it starts.
+- Release notes: link the release page in a footnote, such as ``[`2.1.329` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.329)``.
 - Probe results: name the probe case in a footnote, or link to the Probes page.
 
 Keep internal parts out of the sentence: module citations, minified names, server-side flag names, and probe case ids go in the footnote. Give each footnote a short name, such as `[^windows-backend]`, and put the definitions under a `## Sources` heading at the end of the page.
@@ -271,7 +271,7 @@ Keep internal parts out of the sentence: module citations, minified names, serve
 
 ## Sources
 
-[^windows-backend]: The program, `chunk-jkpzhr7r.js:5365`.
+[^windows-backend]: The program, `chunk-t39fw2cy.js:5055`.
 ```
 
 Leave out anything you could not check.

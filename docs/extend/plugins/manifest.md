@@ -33,7 +33,7 @@ The last column says where the key may appear: the manifest, a marketplace entry
 | `icon`, `documentationUrl`, `supportUrl`, `privacyPolicyUrl`, `termsOfServiceUrl` | <Documented /> | Directory listing data. | Claude Code also ignores these names without error: `screenshots`, `classification`, `privacy_policy`, `privacyPolicy`, `support`, `bugs`, `terms_of_service`, `docs`. | Manifest only |
 | `defaultEnabled` | <Documented /> | Sets the start state when the user chose nothing. | Default `true`. The entry value wins. `enabledPlugins` always wins. | Both |
 | `dependencies` | <Documented /> | Lists plugins that must be enabled too. | Each item is `"name"`, `"name@marketplace"`, or an object. Claude Code also accepts a trailing `@^range`. It strips the range.[^schema] | Both |
-| `engines` | <Undocumented /> | Names the hosts the plugin runs on. | `engines["claude-code"]` is a semver range such as `>=2.1.328`. Outside the range the plugin is not installed, updated, or loaded. Other keys are ignored. An invalid range is reported as `engine-range-invalid`.[^engines] | Manifest |
+| `engines` | <Undocumented /> | Names the hosts the plugin runs on. | `engines["claude-code"]` is a semver range such as `>=2.1.329`. Outside the range the plugin is not installed, updated, or loaded. Other keys are ignored. An invalid range is reported as `engine-range-invalid`.[^engines] | Manifest |
 | `settings` | <Documented /> | Applies settings while the plugin is enabled. | Only `agent` and `subagentStatusLine` take effect. Both are deprecated and will stop applying in a future release.[^settings-key] For each key, the last enabled plugin that sets it wins. If Claude Code cannot create the plugin data directory, the plugin `subagentStatusLine` command does not run.[^status-line] A `settings.json` in the plugin root wins. | Manifest |
 | `userConfig` | <Documented /> | Asks the user for values when the plugin is enabled. | See [`userConfig` Option Keys](#userconfig-option-keys). | Manifest |
 | `channels` | <Documented /> | Declares message channels. | Items have `server`, `displayName`, and `userConfig`. Strict. | Manifest |
@@ -159,7 +159,7 @@ flowchart TD
   F --> G["Ask for <code>userConfig</code> values"]
 ```
 
-A malformed display field, such as `author` or `homepage`, does not stop an enabled plugin from loading. Claude Code ignores the field. The plugin loads with its hooks and MCP servers, and `/plugin` and `claude plugin list` show a note.[^display-field] See [Plugin Commands](cli.md#how-it-works) for the note.
+A malformed display field, such as `author` or `homepage`, does not stop an enabled plugin from loading. Claude Code ignores the field. The plugin loads with its hooks and MCP servers. The note shows only for an enabled plugin. It shows on the "Errors" tab and the plugin detail screen of `/plugin`, and in the output of `claude plugin list`.[^display-field] See [Plugin Commands](cli.md#how-it-works) for the note.
 
 ## Related Pages
 
@@ -170,9 +170,9 @@ A malformed display field, such as `author` or `homepage`, does not stop an enab
 
 ## Sources
 
-[^schema]: The program, `chunk-jkpzhr7r.js:56021`, `chunk-jkpzhr7r.js:56215`, and `chunk-jkpzhr7r.js:104064`.
-[^engines]: The program, `chunk-jkpzhr7r.js:54138` and `chunk-a3rr42d2.js:24706`.
-[^settings-key]: The program, `chunk-a3rr42d2.js:148-154`.
-[^status-line]: The program, `chunk-56bhcxay.js:5597368` and `chunk-56bhcxay.js:5597567`.
-[^icon]: The program, `chunk-yj3yxnry.js:4680` and `chunk-yj3yxnry.js:33626`.
-[^display-field]: The program, `chunk-a3rr42d2.js:20037` (the note text) and `chunk-4prvwasd.js:26520` (the changelog line).
+[^schema]: The program, `chunk-t39fw2cy.js:2429` (`metadata`, which keeps a value only if it is an object), `chunk-t39fw2cy.js:4072` (the dependency pattern, with the `@^range` part), and `chunk-t39fw2cy.js:4080` (the range is removed), and `chunk-t39fw2cy.js:4082` (the object form, `name`).
+[^engines]: The program, `chunk-t39fw2cy.js:2361` (`claude-code` as a semver range) and `chunk-mf7vnf0k.js:663` (`engine-range-invalid`).
+[^settings-key]: The program, `chunk-mf7vnf0k.js:149-155`.
+[^status-line]: The program, `chunk-hg1yqkjk.js:246092` (`subagentStatusLine`, the last plugin that sets it) and `chunk-hg1yqkjk.js:246101` (the data directory error).
+[^icon]: The program, `chunk-wqygnvsa.js:152` (`ICON_MISSING` and its fix text) and `chunk-wqygnvsa.js:262` (the icon paths that the validator looks for, such as `.claude-plugin/icon.png`).
+[^display-field]: The program, `chunk-mf7vnf0k.js:576` (`manifest-field-ignored`: the note text `malformed and ignored`), `chunk-hg1yqkjk.js:242590` (the loader returns the `warnings`; `chunk-hg1yqkjk.js:243964` adds those of a plugin only when it is enabled), `chunk-4g68nm9m.js:14276` (the note is a row of the `errors` tab), `chunk-4g68nm9m.js:11430` (the plugin detail screen lists the `noun: "note"` entries of the plugin), and `chunk-kx248ng6.js:1242` (`claude plugin list` prints a `Note:` line).

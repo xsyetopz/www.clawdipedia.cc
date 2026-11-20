@@ -6,15 +6,15 @@ generated: false
 group: skills
 ---
 
-This is the verbatim text that Claude Code 2.1.328 uses for the built-in `/goal` skill.
+This is the verbatim text that Claude Code 2.1.329 uses for the built-in `/goal` skill.
 
 ## Where It Comes From
 
-The program, `chunk-m5tvvpnw.js:1541` (the text) and `chunk-zcykke27.js:7146` (the `Goal set` line). The text is the message after `/goal` sets a goal. It says a session-scoped Stop hook is active and blocks stopping until the condition holds. `PROBE-ARG` is the test's goal text.
+The program, `chunk-xhbck72j.js:73` (the text) and `chunk-g50r13jy.js:227` (the `Goal set` line). The text is the message after `/goal` sets a goal. It says a session-scoped Stop hook is active and blocks stopping until the condition holds. `PROBE-ARG` is the test's goal text.
 
 ## How to Override It
 
-Create `.claude/skills/goal/SKILL.md` with the same name. The program lists skill files from the skill folders before bundled skills and uses the first command with a matching name, so your file replaces this text (The program, `chunk-56bhcxay.js:2630374`, `chunk-458m0skd.js:2592`). It adds a `Base directory for this skill:` line above your skill text (The program, `chunk-56bhcxay.js:3885828`). See [Override a Prompt](../other/override.md).
+Create `.claude/skills/goal/SKILL.md` with the same name. The program lists skill files from the skill folders (`skillDirCommands`) before bundled skills (`bundledSkills`) and uses the first command with a matching name, so your file replaces this text (The program, `chunk-hg1yqkjk.js:190384`, `chunk-hg1yqkjk.js:190396`, `chunk-6d5r944q.js:117`). It adds a `Base directory for this skill:` line above your skill text (The program, `chunk-hg1yqkjk.js:99482`). See [Override a Prompt](../other/override.md).
 
 ## Full Text
 

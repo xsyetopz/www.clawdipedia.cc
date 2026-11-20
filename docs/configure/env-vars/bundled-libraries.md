@@ -164,7 +164,7 @@ A scan of the strings in the program found the names.[^scan] The list can miss n
 
 ## Sources
 
-[^scan]: The program, for example `chunk-90e2ybcp.js:5042`, variable names.
+[^scan]: The program, for example `GRPC_NODE_VERBOSITY` at `chunk-fb37em01.js:183`, variable names.
 [^bun-options]: Probes page, run with a bad `BUN_OPTIONS` value.
-[^repl-module]: The program, `chunk-nf409202.js:4103-4146`.
-[^teamcity]: The program, `chunk-0tagyyqy.js:2679-2680`.
+[^repl-module]: The program, `NODE_REPL_EXTERNAL_MODULE` at `chunk-y2f66fxn.js:4148`, `NODE_OPTIONS` at `chunk-y2f66fxn.js:4152`, `PYTHONSTARTUP` at `chunk-y2f66fxn.js:4154`, and `PERL5DB` at `chunk-y2f66fxn.js:4147`.
+[^teamcity]: The program, `chunk-2jhxnfds.js:2679-2680`.

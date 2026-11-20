@@ -6,7 +6,7 @@ generated: false
 group: context-and-memory
 ---
 
-This is the verbatim text that Claude Code 2.1.328 uses for the memory extraction subagent.
+This is the verbatim text that Claude Code 2.1.329 uses for the memory extraction subagent.
 
 ## Where It Comes From
 

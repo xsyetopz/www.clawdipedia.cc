@@ -89,7 +89,7 @@ sequenceDiagram
 
 | Pair | When it appears |
 | --- | --- |
-| `cc_version=2.1.328.<suffix>` | Always. The suffix is a short code that Claude Code computes. |
+| `cc_version=2.1.329.<suffix>` | Always. The suffix is a short code that Claude Code computes. |
 | `cc_entrypoint=<value>` | Always. The value is the entry point of the run, or `unknown`. |
 | `cch=00000` | First-party API requests that pass an internal test, and Vertex requests. |
 | `cc_workload=<value>` | A workload tag is set. |
@@ -106,11 +106,10 @@ The block has no cache marker.
 
 ## Output Limit Retry
 
-When `max_tokens` exceeds the model's limit, Claude Code retries the request with the maximum the Anthropic API reports.[^retry-notes] Status: <Undocumented /> in the official docs.
+When a model that Claude Code does not recognize refuses a request that asks for more than 32,000 output tokens, Claude Code sends the request again once with `max_tokens` set to 32,000.[^retry-notes] Status: <Undocumented /> in the official docs.
 
-- Claude Code matches the error text `max_tokens: <n> > <limit>, which is the maximum allowed number of output tokens for <model>`.[^retry-match]
-- It acts on the statuses `400`, `402`, `413`, `422`, and `429`, and it retries once.
-- The retry uses the limit that the API reports, when that limit is at least 4096. Otherwise it uses a cached or default limit.
+- It acts on an API error that is not a 401 and not a policy block, and it resends once.
+- The program does not read a limit from the error text. A model that is in the model list gets no resend: behind a gateway whose model takes fewer output tokens, set `CLAUDE_CODE_MAX_OUTPUT_TOKENS` to that limit.
 - After the provider accepts the resent request, Claude Code caps `max_tokens` for that model and warns: "Until the next /clear, compaction, resume or provider change, max_tokens for this model is capped at N. Set CLAUDE_CODE_MAX_OUTPUT_TOKENS to pick a different limit."[^retry-cap]
 
 ## Cache Lifetime
@@ -212,15 +211,14 @@ A local stub of the Messages API showed these facts. No model call left the mach
 
 ## Sources
 
-[^body-fields]: The official docs. The program, `chunk-56bhcxay.js:308210` (the `api-request` line with `params`).
-[^markers]: The program, `chunk-56bhcxay.js:3302796`.
-[^plain-markers]: The program, `chunk-56bhcxay.js:3302796` (`ttl` and `scope` are optional) and `chunk-56bhcxay.js:3303422` (the `5m` and `1h` choice).
-[^attribution]: The program, `chunk-xethrx83.js:978130`.
-[^retry-notes]: The program, `chunk-56bhcxay.js:3190601`.
-[^retry-match]: The program, `chunk-56bhcxay.js:3190601`.
-[^retry-cap]: The program, `chunk-56bhcxay.js:3191740`.
-[^overage]: The program, `chunk-56bhcxay.js:1076556`.
-[^env-wins]: The program, `chunk-56bhcxay.js:2642680`.
-[^ledger]: The program, `chunk-bdxkc0ze.js:207`.
-[^usage-line]: The program, `chunk-56bhcxay.js:1297720`.
-[^causes]: The program, `chunk-g78ks3d1.js:67339`.
+[^body-fields]: The official docs. The program, `chunk-hg1yqkjk.js:18924` (the `api-request` line with `params`).
+[^markers]: The program, `chunk-hg1yqkjk.js:160885` (`cache_control` on a block of the request) and `chunk-hg1yqkjk.js:160716` (the marker builder, `$849646`). The count of blocks and markers comes from a request that was observed.
+[^plain-markers]: The program, `chunk-hg1yqkjk.js:160718` (`ephemeral`, with `ttl` and `scope` only when set) and `chunk-hg1yqkjk.js:123470` (the `5m` and `1h` choice).
+[^attribution]: The program, `chunk-aq3ms068.js:46978`.
+[^retry-notes]: The program, `chunk-hg1yqkjk.js:154443` (`lowerAfter` resends only when the model is unrecognized and the sent `max_tokens` is above the cap), `chunk-hg1yqkjk.js:167204` (call site, skips 401 and policy-blocked errors), and `chunk-aq3ms068.js:24313` (the unrecognized-model check with `CLAUDE_CODE_MAX_OUTPUT_TOKENS`).
+[^retry-cap]: The program, `chunk-hg1yqkjk.js:154470` (the `[max_tokens]` warning text) and `chunk-aq3ms068.js:24066` (the `32000` value).
+[^overage]: The program, `chunk-hg1yqkjk.js:46690`.
+[^env-wins]: The program, `chunk-hg1yqkjk.js:123420`.
+[^ledger]: The program, `chunk-h1btt56e.js:5` (`300000` and `3600000`) and `chunk-nchg3ttk.js:3409` (the `5m` and `1h` ledger values, `$60cd29`).
+[^usage-line]: The program, `chunk-hg1yqkjk.js:116186`.
+[^causes]: The program, `chunk-nchg3ttk.js:3411` (the cause texts, from `system prompt changed`) and `chunk-nchg3ttk.js:3425` (`idle past the 5m TTL`).

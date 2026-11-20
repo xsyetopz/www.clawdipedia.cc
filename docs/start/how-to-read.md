@@ -74,7 +74,7 @@ A fact that no check settles is left out.
 
 ## One Release Only
 
-This site tracks only the newest release. The top bar shows the current release, for example "Tracks 2.1.328". The site keeps no old versions of the docs. The [What Changed](what-changed.md) page lists breaking changes in the current release, against the release before it. For an earlier release, read the official [Changelog](https://code.claude.com/docs/en/changelog).
+This site tracks only the newest release. The top bar shows the current release, for example "Tracks 2.1.329". The site keeps no old versions of the docs. The [What Changed](what-changed.md) page lists breaking changes in the current release, against the release before it. For an earlier release, read the official [Changelog](https://code.claude.com/docs/en/changelog).
 
 ## How the Text Is Written
 

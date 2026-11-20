@@ -127,6 +127,6 @@ The exact fields are in `https://clawdipedia.cc/schemas/claude-code-mcp.json`, w
 
 ## Sources
 
-[^server-options]: The program server schema, `chunk-jkpzhr7r.js:36780` and `chunk-t1zfnvbv.js:19994`, for the rows marked <Undocumented />.
-[^validator]: The program, `chunk-jkpzhr7r.js:35893`.
-[^always-load]: The program, `chunk-20bv8pca.js:251191` for the field text (the deferral, the exception, and the 5 s cap), `chunk-pg7hxy0j.js:6824` for the skipped deferral, and `chunk-6zfgjjkg.js:435` for the 5 s default (`MCP_CONNECT_TIMEOUT_MS` changes it).
+[^server-options]: The program server schema, `chunk-t39fw2cy.js:1551` (`discoveryCache` and `toolPermissions`) and `chunk-be81kym3.js:910` (`disableAutoBackground` and `autoModeVerdictTools`), for the rows marked <Undocumented />.
+[^validator]: The program, `chunk-t39fw2cy.js:1766` (the `mcpServers` key of the file schema).
+[^always-load]: The program, `chunk-w03c3634.js:10496` (`alwaysLoad`) for the field text (the deferral, the exception, and the 5 s cap), `chunk-tqa6k1p7.js:275` (`a1.alwaysLoad === !0` returns no deferral) for the skipped deferral, and `chunk-czax1965.js:17` for the 5 s default (`5000` at line 18) (`MCP_CONNECT_TIMEOUT_MS` changes it).

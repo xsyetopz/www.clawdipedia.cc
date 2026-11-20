@@ -124,7 +124,7 @@ Set these switches in the shell or in `env` in settings. See [Connect Claude Cod
 - A runtime check decides: `SuggestPluginInstall`, `SuggestSkills`, `SendUserFile`.
 - Not deferred: `Read`, `Write`, `Edit`, `Glob`, `Grep`, `Bash`, `PowerShell`, `Agent`, `Skill`, `AskUserQuestion`, `ListAgents`, `Workflow`, `ReportFindings`, `ToolSearch`, `StructuredOutput`, `SubagentHandback`, `ScheduleWakeup`, `memory_*`, and the rest of the gated tools.
 - The `Bash` tool shadows `find` and `grep` with the embedded `bfs` and `ugrep`.[^bfs-ugrep]
-- In the `2.1.328` capture, the main prompt lists 12 tools: `Agent`, `Bash`, `Edit`, `ListAgents`, `Read`, `ReportFindings`, `ScheduleWakeup`, `Skill`, `ToolSearch`, `Workflow`, `Write`, and the placeholder `DeferredToolPlaceholder`. `CronCreate`, `CronDelete`, `CronList`, `EnterWorktree`, `ExitWorktree`, `NotebookEdit`, `SendMessage`, `TaskStop`, `WebFetch`, and `WebSearch` sit behind `ToolSearch`. See [Tools per Variant](../../prompts/tools/tools-per-variant.md).
+- In the `2.1.329` capture, the main prompt lists 12 tools: `Agent`, `Bash`, `Edit`, `ListAgents`, `Read`, `ReportFindings`, `ScheduleWakeup`, `Skill`, `ToolSearch`, `Workflow`, `Write`, and the placeholder `DeferredToolPlaceholder`. `CronCreate`, `CronDelete`, `CronList`, `EnterWorktree`, `ExitWorktree`, `Monitor`, `NotebookEdit`, `SendMessage`, `TaskStop`, `WebFetch`, and `WebSearch` sit behind `ToolSearch`. See [Tools per Variant](../../prompts/tools/tools-per-variant.md).
 
 ## How It Works
 
@@ -147,7 +147,7 @@ It lists every field of this release. Build on the fields it names. Look each on
 
 ## Sources
 
-[^definitions]: The program, the tool definitions, `chunk-r1yxtgw6.js:201784`.
-[^toolsearch-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program, `chunk-pg7hxy0j.js:6534`.
-[^custom-base-url]: The program, `chunk-dnmy4w56.js:8148`: with the variable unset, the mode function returns `tst` (deferred).
-[^bfs-ugrep]: The program, `chunk-56bhcxay.js:3794148` (the shell snapshot comment `Shadow find/grep with embedded bfs/ugrep`) and `chunk-56bhcxay.js:3786010` (the `ugrep` options).
+[^definitions]: The program, the tool definitions, `chunk-b2932m4d.js:756-766` (`backgrounding`, `maxResultSizeChars`, and `isEnabled`) and `chunk-b2932m4d.js:4123-4125` (`strict` and `maxResultSizeChars` of `ReportFindings`).
+[^toolsearch-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program, `chunk-tqa6k1p7.js:268` (the query `select:Read,Edit,Grep`).
+[^custom-base-url]: The program, `chunk-y61sx1j8.js:214-225`: with the variable unset, the mode function returns `tst` (deferred).
+[^bfs-ugrep]: The program, `chunk-hg1yqkjk.js:246593` (the shell snapshot comment `Shadow find/grep with embedded bfs/ugrep`) and `chunk-hg1yqkjk.js:246296` (`ugrep`).

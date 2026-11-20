@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-control-protocol.json",
-	"title": "Claude Code control protocol (Claude Code 2.1.328)",
-	"$comment": "For the request and response of each control_request subtype in stream-json mode (definitions <subtype>Request and <subtype>Response, direction in x-direction). Generated from Claude Code 2.1.328 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, table of rows {request, originator, response}; the request union is described as \"Control requests a client sends to drive the loop\". Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code control protocol (Claude Code 2.1.329)",
+	"$comment": "For the request and response of each control_request subtype in stream-json mode (definitions <subtype>Request and <subtype>Response, direction in x-direction). Generated from Claude Code 2.1.329 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, table of rows {request, originator, response}; the request union is described as \"Control requests a client sends to drive the loop\". Do not edit by hand: run \"bun run schemas\".",
 	"$defs": {
 		"apply_flag_settingsRequest": {
 			"type": "object",
@@ -327,6 +327,11 @@
 					],
 					"description": "@internal A closed-set code for a reason a host can act on, beside decision_reason_type (whose values are unchanged, so type-keyed host policy decides as before): 'outside_reads_blocked', 'memory_paused', 'classifier_transcript_too_long', 'org_ask_ceiling' (the MCP tool's ceiling, toolPermissions, is 'ask', and an ask rule or the ceiling itself raised the ask: type 'rule' or 'other'; or the limit on the connector behind the ask is 'ask' or could not be read, with any type). The type also lists auto_mode_ values, which are sent on system/permission_denied only, never on this request. Absent for every other reason; new values are additive."
 				},
+				"auto_modes_check_raised": {
+					"type": "boolean",
+					"const": true,
+					"description": "@internal Set when the ask goes to a person after the auto mode classifier's block or flag, or over a transcript too long for it, and decision_reason_type and decision_reason_code do not say so, because the ask keeps a reason of its own. A host tells most asks that the check raised by decision_reason_type 'classifier', decision_reason_code 'classifier_transcript_too_long', or this field."
+				},
 				"decision_reason_rule_source": {
 					"type": "string",
 					"description": "@internal With decision_reason_type 'rule': the source of the rule in the decision reason (a PermissionRuleSource word). It names the first rule that matched, not the strongest, and says nothing of what that rule hides. For the host's logs: a host should not decide by it."
@@ -346,7 +351,7 @@
 				},
 				"server_policy_ask_only": {
 					"type": "boolean",
-					"description": "@internal Sent with decision_reason_type 'rule', for an MCP tool's ask that has none, for the default prompt of Write or Edit with no reason type, and for that of Read, Write or Edit with 'workingDir' and the plain outside-the-working-directories decision_reason. true = when the frame was built, nothing asked for a person on this call but the default prompt for a tool that no rule allows and, at most, a tool policy that the host itself pushed (permission_policy 'always_ask'): no other ask rule that the permission check applies to the call, no hook's or plugin's ask, no PermissionRequest hook, no organization ceiling, no plan-mode floor, no safety check, no ask or veto on a standing grant of the tool's own, no auto-mode classifier active for the call. false = something else did, or may have. It says nothing of WHY the host pushed that policy, which only the host knows; nothing of whose server the tool is (see mcp_server), so a host answers only for a tool that it holds a person's grant for (a file tool apart, below); and nothing of what changes after the frame is sent. For a file tool it says nothing of where the path lies, so a host answers only for a path that it has judged itself. Absent on other reason types, on any other tool's ask without a reason type (Read's included), wherever a request is listed, mirrored or passed on again (pending_permission_requests), and from older versions."
+					"description": "@internal Sent with decision_reason_type 'rule', and for an MCP tool's ask that has none. true = when the frame was built, nothing asked for a person on this call but the default prompt for a tool that no rule allows and, at most, a tool policy that the host itself pushed (permission_policy 'always_ask'): no other ask rule that the permission check applies to the call, no hook's or plugin's ask, no PermissionRequest hook, no organization ceiling, no plan-mode floor, no safety check, no ask or veto on a standing grant of the tool's own, no auto-mode classifier active for the call. false = something else did, or may have. It says nothing of WHY the host pushed that policy, which only the host knows; nothing of whose server the tool is (see mcp_server), so a host answers only for a tool that it holds a person's grant for; and nothing of what changes after the frame is sent. Absent on other reason types, on another tool's ask without a reason type, wherever a request is listed, mirrored or passed on again (pending_permission_requests), and from older versions."
 				},
 				"classifier_approvable": {
 					"type": "boolean",
@@ -378,7 +383,7 @@
 						}
 					},
 					"required": ["source", "tool_name"],
-					"description": "Set when a user-configured ask RULE (permissions.ask) forced this prompt but the ask carries the tool's own decision_reason — the ask-rule substitution keeps the richer tool-minted ask, so the rule rides here instead of decision_reason_type 'rule'. May also be set, whatever the decision_reason, when an ask rule reaches an MCP tool only under another name of its server (such as a connector's id or its claude.ai name), not under the name in tool_name: a host that looks for the rule by that name does not find it. Hosts making policy on decision_reason_type (e.g. auto-deny safetyCheck) or running host-side auto-approval should treat asks carrying this field as rule-forced: the user's stated intent is a human prompt. Values are producer-authored but render-unsafe like decision_reason; sanitize before display."
+					"description": "Set when a user-configured ask RULE (permissions.ask) forced this prompt but the ask carries the tool's own decision_reason — the ask-rule substitution keeps the richer tool-minted ask, so the rule rides here instead of decision_reason_type 'rule'. May also be set, whatever the decision_reason, when an ask rule reaches an MCP tool only under another name (such as a connector's id, its claude.ai name, or Artifact for the Artifacts server's tools), not under the name in tool_name: a host that looks for the rule by that name does not find it. Hosts making policy on decision_reason_type (e.g. auto-deny safetyCheck) or running host-side auto-approval should treat asks carrying this field as rule-forced: the user's stated intent is a human prompt. Values are producer-authored but render-unsafe like decision_reason; sanitize before display."
 				},
 				"title": {
 					"type": "string"
@@ -2695,7 +2700,7 @@
 					"items": {
 						"type": "string"
 					},
-					"description": "The managed (policy) settings sources at this read, as codes; empty when there are none. Absent from a Claude Code older than this field: treat that as another source. First the sources, highest precedence first. 'helper': a policy helper armed on this machine (one armed by server-managed settings counts as 'remote'); the codes after it are the sources beneath it, which may take no part. 'remote': server-managed settings. 'plist' or 'hklm': MDM. 'file': the managed settings file or its drop-ins. 'parent': --managed-settings or the SDK's managedSettings, where they take part; it stands for all the host passed: where that includes a hybrid organization's settings, the policy is not the host's alone. 'hkcu': the user's registry block, unless empty: listed where it serves and where 'parent', 'helper' or 'remote' displaces it; beneath 'hklm' or 'file' it is not read at all. Then two that say a source is missing. 'remote_unknown': this session counts as due server-managed settings and has none (the fetch failed, or is under way with no cached copy that holds settings); under any other verdict of the process on whether it is due them, or none, there is no code for what is missing, though its organization may have set some (desktop-host-contract.md D19a). 'unreadable': a document of the machine's administrator that exists and did not load (unreadable, or not valid JSON). Every administrator source that holds a setting is listed, even where a higher source leaves it unapplied; a source holding only the managedSourcesBehavior or wslInheritsWindowsSettings knob is not, nor one of whose policy this client reads nothing where another is listed, and one passed over for authoring nothing always has a listed one beneath it. New sources get new codes: treat an unknown code as another source."
+					"description": "The managed (policy) settings sources at this read, as codes; empty when there are none. Absent from a Claude Code older than this field: treat that as another source. First the sources, highest precedence first. 'helper': a policy helper armed on this machine (one armed by server-managed settings counts as 'remote'); the codes after it are the sources beneath it, which may take no part. 'remote': server-managed settings. 'plist' or 'hklm': MDM. 'file': the managed settings file or its drop-ins. 'parent': --managed-settings or the SDK's managedSettings, where they take part; it stands for all the host passed: where that includes the settings of an organization sign-in (not a claude.ai login), the policy is not the host's alone. 'hkcu': the user's registry block, unless empty: listed where it serves and where 'parent', 'helper' or 'remote' displaces it; beneath 'hklm' or 'file' it is not read at all. Then two that say a source is missing. 'remote_unknown': this session counts as due server-managed settings and has none (the fetch failed, or is under way with no cached copy that holds settings); under any other verdict of the process on whether it is due them, or none, there is no code for what is missing, though its organization may have set some (desktop-host-contract.md D19a). 'unreadable': a document of the machine's administrator that exists and did not load (unreadable, or not valid JSON). Every administrator source that holds a setting is listed, even where a higher source leaves it unapplied; a source holding only the managedSourcesBehavior or wslInheritsWindowsSettings knob is not, nor one of whose policy this client reads nothing where another is listed, and one passed over for authoring nothing always has a listed one beneath it. New sources get new codes: treat an unknown code as another source."
 				},
 				"enabled": {
 					"type": "boolean",
@@ -2804,7 +2809,7 @@
 							"items": {
 								"type": "string"
 							},
-							"description": "Unix socket paths allowed (allowUnixSockets), as enforced: while managed settings mandate the sandbox, from managed, --settings and user settings only."
+							"description": "Unix socket paths allowed (allowUnixSockets), as enforced: while managed settings mandate the sandbox, from managed, --settings and user settings only; none on Linux and WSL, where the sandbox cannot allow a socket by path."
 						},
 						"allow_all_unix_sockets": {
 							"type": "boolean",
@@ -2816,6 +2821,13 @@
 								"type": "string"
 							},
 							"description": "Patterns the Linux sandbox ignores (globs it does not support)."
+						},
+						"ignored_unix_sockets": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "allowUnixSockets entries that have no effect, because the Linux sandbox cannot allow a socket by path. Absent from a Claude Code older than this field."
 						}
 					},
 					"required": [
@@ -2970,6 +2982,42 @@
 						"outsideBlocksCountLaunchFoldersOnly": {
 							"type": "boolean",
 							"description": "@internal True only where permissions.blockFileToolReadsOutsideWorkingDirectories is in force: the read and write blocks then count only the starting directory, --add-dir, and permissions.additionalDirectories (fully qualified, or ~ or ~/…; a relative entry does not count) in --settings or in a push, and none that a policy tier adds. Never true in a background session, whose launch is replayed from files that the account can write, nor while the starting directory has moved outside both the one that headless start-up began with (after any --worktree) and the added folders named above. False or absent: do not rely on this. docs/desktop-host-contract.md D112 lists what can still move those blocks."
+						},
+						"additionalDirectoryConfigRootsWithheld": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"dir": {
+										"type": "string"
+									},
+									"root": {
+										"type": ["string", "null"]
+									},
+									"reads": {
+										"type": "string",
+										"enum": ["root_less_entries", "nothing"]
+									},
+									"reason": {
+										"type": "string",
+										"enum": [
+											"root_unusable",
+											"match_lost",
+											"root_moved",
+											"inside_writable",
+											"entry_is_link",
+											"unreadable",
+											"too_many_entries",
+											"settings_dropped"
+										]
+									},
+									"entriesWithheld": {
+										"type": "number"
+									}
+								},
+								"required": ["dir", "root", "reads", "reason"]
+							},
+							"description": "@internal The added folders (dir, as given) whose configuration root, named by additionalDirectoryConfigRoots, supplied less than all of its configuration at a read made for this answer: reads \"nothing\" = the folder supplies no skills, commands, agents or plugin settings at all; \"root_less_entries\" = the root is read but entriesWithheld distinct entries under its .claude (a file or folder; inside a skill package, the whole package) are left out. root is the named root, or null where it was unusable or the settings carrying the key were dropped. reason is the main one, as a token: root_unusable (not an absolute, local, existing folder), match_lost (the link that matched the folder to its key no longer does), root_moved (the root is gone, or a link or another directory now stands at it or at a folder above it), inside_writable (the root lies inside a folder a sandboxed command may write; listed only where the root has a .claude), entry_is_link (a link or hard-linked file where none may be), unreadable (an entry could not be examined), too_many_entries (its .claude holds more entries than are examined, 20,000), settings_dropped (the settings that carried the key were invalid as a whole; then every folder they left without configuration is listed, named or not). Other folders whose root is read whole, or that no entry names, are not listed; absent or empty means nothing to report. Not sent on a connection whose answers may be stored off the machine, nor where the session withholds its folders. docs/desktop-host-contract.md D176."
 						},
 						"launchEnvLeftOwnFilesInPlace": {
 							"type": "boolean",
@@ -3170,6 +3218,22 @@
 				"task_id": {
 					"type": "string",
 					"description": "A shell or Monitor task of this session, running or ended: the task_id from task_started or background_tasks_changed."
+				},
+				"liveReply": {
+					"type": "boolean",
+					"description": "@internal With an agent's task_id, on a Remote Control session whose newest system/init lists agent_messages_v1: in place of all that this request does otherwise, the agent's messages are sent, in replies under this request_id that go to the clients attached at that moment and are not stored. Without after or before, the newest of them. A last reply says done, or unavailable. Of a task that is no agent, agent_messages_v1 promises nothing."
+				},
+				"follow": {
+					"type": "boolean",
+					"description": "@internal With liveReply and no before: each further message of the agent is sent in replies that say live (a call or result as it is recorded, words together with the call after them), under the request_id of the newest such request for the agent, whichever client made it. It starts once a reply says following; four agents at most, one that runs ahead of one that has ended. It stops by itself, which a reply says (follow_stopped), or with the connection, which nothing says. It is not stopped by the end of the agent, which task_notification says: ask once more then, with after."
+				},
+				"after": {
+					"type": "string",
+					"description": "@internal With liveReply: the uuid of a message of the agent (a page's last). What follows it is sent, up to about 1 MiB."
+				},
+				"before": {
+					"type": "string",
+					"description": "@internal With liveReply: the uuid of a message of the agent. The newest of those ahead of it are sent."
 				}
 			},
 			"required": ["subtype", "task_id"],
@@ -3190,6 +3254,115 @@
 				"truncated": {
 					"type": "boolean",
 					"description": "Whether output holds only the end of a longer output (the last 8 KiB)."
+				},
+				"task_id": {
+					"type": "string",
+					"description": "@internal The request's task_id, in a reply about an agent. output is then empty, and total_bytes 0: see messages."
+				},
+				"follow": {
+					"oneOf": [
+						{
+							"type": "object",
+							"properties": {
+								"status": {
+									"type": "string",
+									"const": "following"
+								}
+							},
+							"required": ["status"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"status": {
+									"type": "string",
+									"const": "unavailable"
+								},
+								"reason": {
+									"type": "string",
+									"description": "For logs."
+								}
+							},
+							"required": ["status", "reason"]
+						},
+						{
+							"type": "object",
+							"properties": {
+								"status": {
+									"type": "string",
+									"const": "follow_stopped"
+								},
+								"reason": {
+									"type": "string",
+									"enum": ["no_client_attached", "reply_limit", "replaced"]
+								},
+								"may_follow_again": {
+									"type": "boolean",
+									"description": "True: ask again if the agent is still shown."
+								}
+							},
+							"required": ["status", "reason", "may_follow_again"]
+						}
+					],
+					"description": "@internal What became of the request, or of its follow."
+				},
+				"messages": {
+					"type": "object",
+					"properties": {
+						"frames": {
+							"type": "array",
+							"items": {},
+							"description": "The agent's messages in the order to show them, one content block each, in the form of a foreground agent's assistant and user messages: parent_tool_use_id and uuid are set. They are its tool calls, their results, and its words: a text block, or a thinking block that narration_block_indexes lists. Words are sent only just ahead of the next call of their response, and only if that call is sent, so a run's closing words are not; a run that ends without any can have a task_notification whose summary repeats words sent here. Also left out are what it was told, its reasoning, and SubagentHandback and StructuredOutput calls, which hold its report. Long texts are cut; images and tool_use_result are left out, citations and signatures are blanked."
+						},
+						"after": {
+							"anyOf": [
+								{
+									"type": "string"
+								},
+								{
+									"type": "null"
+								}
+							],
+							"description": "The uuid of the agent's message just ahead of these; null if there is none. If a live page's after is not the last uuid that a client holds, the client missed a page and asks again with after."
+						},
+						"last": {
+							"anyOf": [
+								{
+									"type": "string"
+								},
+								{
+									"type": "null"
+								}
+							],
+							"description": "This page's last message, even if it is left out of frames; equals after on an empty page."
+						},
+						"earlier": {
+							"type": "number",
+							"description": "On each page of an answer: how many messages come ahead of it, which before asks for."
+						},
+						"live": {
+							"type": "boolean",
+							"description": "Sent by a follow, not in answer to a request."
+						},
+						"reset": {
+							"type": "boolean",
+							"description": "The request's cursor names no message of the agent: these are its newest, in place of what the client has."
+						}
+					},
+					"required": ["frames", "after", "last"],
+					"description": "@internal A page of an agent's messages."
+				},
+				"done": {
+					"type": "boolean",
+					"description": "@internal In a reply about an agent: every page that answers the request has been sent."
+				},
+				"last": {
+					"type": ["string", "null"],
+					"description": "@internal With done: the last of the answer's last page. A client that does not have it missed a page."
+				},
+				"more": {
+					"type": "boolean",
+					"description": "@internal With done: more messages follow those sent. Ask again, with after; a follow does not start until then."
 				}
 			},
 			"required": ["output", "total_bytes", "truncated"],
@@ -3206,6 +3379,10 @@
 				"skip_behaviors": {
 					"type": "boolean",
 					"description": "Skip the scan of local transcripts that produces the response's behaviors section (it is null in the answer). For callers that need only the plan rate limits, such as a usage meter; the scan reads every transcript touched in the last seven days."
+				},
+				"detached": {
+					"type": "boolean",
+					"description": "@internal With skip_behaviors, later messages (a prompt, an interrupt) do not wait for this answer, so it can arrive after theirs. Its session totals are read when the answer is sent, and its rate limits are those of the account signed in when the read began. Ignored without skip_behaviors; a CLI that does not list the capability get_usage_detached_v1 may ignore it."
 				}
 			},
 			"required": ["subtype"],
@@ -3964,7 +4141,7 @@
 				}
 			},
 			"required": ["subtype"],
-			"description": "@internal Requests the workspace diff for the thin-client /diff dialog. The worker resolves one base ref for both stats and hunks (the merge-base with the base branch the session names, else the default branch, when HEAD is on another branch with commits beyond it, so committed and uncommitted changes show together, uncommitted rows first; otherwise working tree vs HEAD) and applies the standard caps (5s git timeout, 50 files, 1MB/file).",
+			"description": "@internal Requests the workspace diff for the thin-client /diff dialog. The worker resolves one base ref for both stats and hunks (the merge-base with the base branch the session names, else the default branch, when HEAD is on another branch with commits beyond it, so committed and uncommitted changes show together, uncommitted rows first; otherwise working tree vs HEAD) and applies the standard caps (5s git timeout, 50 files, plus a second row for each renamed file with uncommitted edits whose old path cannot be read or is binary, 1MB/file).",
 			"x-direction": "client"
 		},
 		"get_workspace_diffResponse": {
@@ -4033,11 +4210,11 @@
 											},
 											"previousPath": {
 												"type": "string",
-												"description": "Renamed and copied rows: the old path as plain text, for display only. Absent, with newPath, when either name holds a character the CLI's path display refuses (controls, bidi and format characters, default-ignorables, non-ASCII spaces, U+FFFD) or could be read as another path (a backslash, a drive prefix or leading slash, a '..' part, ' => ')."
+												"description": "Renamed and copied rows: the old path as plain text, for display only. Absent, with newPath, when either name holds a character the CLI's path display refuses (controls, bidi and format characters, default-ignorables, non-ASCII spaces, U+FFFD) or could be read as another path (a backslash, a drive prefix or leading slash, a '..' part, ' => '), and on the renames and copies made since HEAD that newPath's description names."
 											},
 											"newPath": {
 												"type": "string",
-												"description": "The path as plain text where it differs from path: the new path of a renamed or copied row (whose path is git's rename form), or the name of a row git quoted (a name with non-ASCII or special characters); for display only, never to join to a directory. Absent otherwise, and for the names previousPath lists."
+												"description": "The file's path as plain text where path does not show it plainly: the new path of a renamed or copied row (whose path is git's rename form, such as 'old => new' or 'dir/{old => new}.txt'), or the decoded name of a row git quoted (non-ASCII or special characters). Absent on every other row, when a name holds anything previousPath's description lists, and, when source.kind is 'branch', on a rename or copy made since HEAD that no row of the branch comparison replaced. To open the file of a row that is not removed, send this value, or path on a row that is neither renamed, copied nor quoted, as read_file's path with anchor {kind: 'diff_root'} and this answer's rootId. A renamed, copied or quoted row with no newPath cannot be opened. read_file trims spaces from both ends of its path, so a path that starts or ends with a space opens a different file, or none."
 											}
 										},
 										"required": [
@@ -12995,7 +13172,7 @@
 				}
 			},
 			"required": ["subtype", "surface", "client_id", "plugin", "text"],
-			"description": "@internal Agent-originated: a plugin's `$.ui.copy({ text, surface })` naming a remote surface reached the bottom of the `ui.copy` chain; the app writes `text` to its clipboard and answers `{copied}`. `client_id` is the first client attached on that surface that answers `ui_copy`. Sent only to a client whose ui_attach named `ui_copy` under `answers`; unanswered within 5 s, or an unparsable answer, resolves the plugin `{isCopied: false, reason: 'no-clipboard'}`; an error-shaped reply is another client's refusal and does not settle it. Over a remote session transport it is sent only while the session service states that the owner's account alone writes to the session, an answer is taken only as a client's own write, at the floor the session's policy enforces, in the owner's own session, and a client that gives no answer in 5 s hands the request to the next attached client that named it.",
+			"description": "@internal Agent-originated: a plugin's `$.ui.copy({ text, surface })` naming a remote surface reached the bottom of the `ui.copy` chain; the app writes `text` to its clipboard and answers `{copied}`. `client_id` is a client attached on that surface that answers `ui_copy`: over the remote transport the client whose press the copy answers, when it is attached there and did not miss its last ask, and otherwise the first that did not. Sent only to a client whose ui_attach named `ui_copy` under `answers`; unanswered within 5 s resolves the plugin `{isCopied: false, reason: 'unanswered'}`, and an unparsable answer `reason: 'no-clipboard'`; an error-shaped reply does not settle it, and is another client's refusal over a remote session transport, the host's own (`no-clipboard` at the 5 s) over its pipes. Over a remote session transport it is sent only while the session service states that the owner's account alone writes to the session, an answer is taken only as a client's own write, at the floor the session's policy enforces, in the owner's own session, and a client that gives no answer in 5 s hands the request to another attached client that named it.",
 			"x-direction": "agent"
 		},
 		"ui_copyResponse": {
@@ -13601,7 +13778,7 @@
 				"client_id": {
 					"type": "string",
 					"pattern": "^[A-Za-z0-9._-]{1,64}$",
-					"description": "@internal The pressing client, as its ui_attach named it; optional, and the press runs the same with or without it."
+					"description": "@internal The pressing client, as its ui_attach named it; optional, and the press runs the same with or without it. A fill or copy its handler makes over the remote transport is asked of this client ahead of the others, if it answers such requests and did not miss its last one."
 				},
 				"press_id": {
 					"type": "string",
@@ -13644,7 +13821,7 @@
 								"Placed",
 								"Theme"
 							],
-							"description": "@internal What to draw, or `Theme`, the session's theme, by `instance_id`. Under `theme` and `image:<id>:<n>` no hook draws: the engine answers itself, `props` of `plugin` with whichever of `colors`, `overrideColorScheme` and a still `backdrop` stands, or `data`, `index`, `of`, `hash` and `bytes` for a piece of an image, to `desktop` and `mobile`, and `{}` with none standing, with a scene and no `colors`, under another id or to any other surface. Under `backdrop` a mod's `ui.render` hook for `Backdrop` draws the scene that stands, with `props` of `scene`, `plugin`, `glass` and `overrideColorScheme` where a plugin said it."
+							"description": "@internal What to draw, or `Theme`, the session's theme, by `instance_id`. Under `theme` and `image:<id>:<n>` no hook draws: the engine answers itself, `props` of `plugin` with whichever of `colors`, `overrideColorScheme` and a still `backdrop` stands, or `data`, `index`, `of`, `hash` and `bytes` for a piece of an image, to `desktop` and `mobile`, and `{}` with none standing, with a scene and no `colors`, under another id or to any other surface. To `desktop` alone, `theme` also carries `plugin` and `soundHash` wherever the theme has a sound, and `sound:<soundHash>` answers `sound` for any of the last 8 hashes that a `theme` answer gave. A style travels the same way, as `styleHash`, and `style:<styleHash>` answers `style`. Under `backdrop` a mod's `ui.render` hook for `Backdrop` draws the scene that stands, with `props` of `scene`, `plugin`, `glass` and `overrideColorScheme` where a plugin said it."
 						},
 						"liveReply": {
 							"type": "boolean",
@@ -14709,7 +14886,7 @@
 				}
 			},
 			"required": ["subtype", "surface", "client_id", "text", "mode"],
-			"description": "@internal Agent-originated: `prompt.fill` reached its core in a headless session (a plugin's `$.prompt.fill`); the app places the text in its composer as the person's draft and answers `{filled}` (false while a dialog holds the keys or the composer is unavailable). Sent only to a client whose ui_attach named `ui_prompt_fill`; unanswered within 5 s, or unparsable, resolves `{isFilled: false}`; an error-shaped reply does not settle it. Over a remote session transport it is sent only while the session service states that the owner's account alone writes to the session, an answer is taken only as a client's own write, at the floor the session's policy enforces, in the owner's own session, and a client that gives no answer in 5 s hands the request to the next attached client that named it.",
+			"description": "@internal Agent-originated: `prompt.fill` reached its core in a headless session (a plugin's `$.prompt.fill`); the app places the text in its composer as the person's draft and answers `{filled}` (false while a dialog holds the keys or the composer is unavailable). Sent only to a client whose ui_attach named `ui_prompt_fill`; unanswered within 5 s resolves `{isFilled: false, refusal: 'unanswered'}`, and unparsable `{isFilled: false}`; an error-shaped reply does not settle it, and over the host's pipes leaves no `refusal`. Over a remote session transport it is sent only while the session service states that the owner's account alone writes to the session, an answer is taken only as a client's own write, at the floor the session's policy enforces, in the owner's own session, and a client that gives no answer in 5 s hands the request to another attached client that named it.",
 			"x-direction": "agent"
 		},
 		"ui_prompt_fillResponse": {
@@ -14975,7 +15152,7 @@
 						"Placed",
 						"Theme"
 					],
-					"description": "@internal What to draw, or `Theme`, the session's theme, by `instance_id`. Under `theme` and `image:<id>:<n>` no hook draws: the engine answers itself, `props` of `plugin` with whichever of `colors`, `overrideColorScheme` and a still `backdrop` stands, or `data`, `index`, `of`, `hash` and `bytes` for a piece of an image, to `desktop` and `mobile`, and `{}` with none standing, with a scene and no `colors`, under another id or to any other surface. Under `backdrop` a mod's `ui.render` hook for `Backdrop` draws the scene that stands, with `props` of `scene`, `plugin`, `glass` and `overrideColorScheme` where a plugin said it."
+					"description": "@internal What to draw, or `Theme`, the session's theme, by `instance_id`. Under `theme` and `image:<id>:<n>` no hook draws: the engine answers itself, `props` of `plugin` with whichever of `colors`, `overrideColorScheme` and a still `backdrop` stands, or `data`, `index`, `of`, `hash` and `bytes` for a piece of an image, to `desktop` and `mobile`, and `{}` with none standing, with a scene and no `colors`, under another id or to any other surface. To `desktop` alone, `theme` also carries `plugin` and `soundHash` wherever the theme has a sound, and `sound:<soundHash>` answers `sound` for any of the last 8 hashes that a `theme` answer gave. A style travels the same way, as `styleHash`, and `style:<styleHash>` answers `style`. Under `backdrop` a mod's `ui.render` hook for `Backdrop` draws the scene that stands, with `props` of `scene`, `plugin`, `glass` and `overrideColorScheme` where a plugin said it."
 				},
 				"liveReply": {
 					"type": "boolean",

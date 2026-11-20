@@ -6,7 +6,7 @@ generated: false
 group: agents
 ---
 
-This is the verbatim text that Claude Code 2.1.328 uses for coordinator mode.
+This is the verbatim text that Claude Code 2.1.329 uses for coordinator mode.
 
 ## Where It Comes From
 

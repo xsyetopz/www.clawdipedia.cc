@@ -73,8 +73,8 @@ The meanings come from the program and its type file where they are clear.
 
 | `type` | Main keys | Meaning |
 | --- | --- | --- |
-| `user` | `message`, `promptId`, `permissionMode`, `permissionDecision`, `toolUseResult`, `sourceToolAssistantUUID`, `origin`, `promptSource`, `turnOrigin`, `turnPosition`, `sandboxed`, `madeBy` | A user turn or a tool result. A shell tool result can carry `sandboxed`, whether the command ran in the sandbox (the program, `chunk-56bhcxay.js:4628744`). A tool result can carry `connectorFileLines` (`chunk-56bhcxay.js:4881750`, `chunk-nvmgxppz.js:42448`): an array of rows, one per file that a connector tool fetched to or sent from the machine, which the screen shows under the result. A row has `direction` (`fetching` or `sending`), `state`, `fileName`, `bytesDone`, `bytesTotal`, `connectorName`, `fileIndex`, and `fileCount` (integer, 1 or more). `state` is `done`, `stopped`, `stopped-maybe-saved`, or an object `{refused: string, leftBehind?: true}`. The optional keys are `place` (a folder), `savedAs` (the saved path), and `groupedFiles` (integer, 2 or more, how many files the row stands for). The screen drops a row that does not match this shape. |
-| `assistant` | `message`, `requestId`, `requestRef`, `requestedModel`, `effort`, `perTurnEffort`, `advisorModel`, `apiBlockIndex`, `madeBy` | A reply of the model. An entry can have `madeBy`, which tells what made it: `model` (the model wrote it), `input` (the entry was made from user input; the program also sets it on a `system` `local_command` entry), or `other` (Claude Code made the entry, not the model). The program counts an `other` entry as a model reply only when it is also `handedOff` (`chunk-601pwdc9.js:703` and `chunk-601pwdc9.js:1262`, `chunk-5699r6rq.js:197108`). On a `user` entry the value is `other` (the transcript schema). |
+| `user` | `message`, `promptId`, `permissionMode`, `permissionDecision`, `toolUseResult`, `sourceToolAssistantUUID`, `origin`, `promptSource`, `turnOrigin`, `turnPosition`, `sandboxed`, `madeBy` | A user turn or a tool result. A shell tool result can carry `sandboxed`, whether the command ran in the sandbox (the program, `chunk-hg1yqkjk.js:295368`). A tool result can carry `connectorFileLines` (`chunk-hg1yqkjk.js:295369`, `chunk-41vf3dk5.js:1685`): an array of rows, one per file that a connector tool fetched to or sent from the machine, which the screen shows under the result. A row has `direction` (`fetching` or `sending`), `state`, `fileName`, `bytesDone`, `bytesTotal`, `connectorName`, `fileIndex`, and `fileCount` (integer, 1 or more). `state` is `done`, `stopped`, `stopped-maybe-saved`, or an object `{refused: string, leftBehind?: true}`. The optional keys are `place` (a folder), `savedAs` (the saved path), and `groupedFiles` (integer, 2 or more, how many files the row stands for). The screen drops a row that does not match this shape. |
+| `assistant` | `message`, `requestId`, `requestRef`, `requestedModel`, `effort`, `perTurnEffort`, `advisorModel`, `apiBlockIndex`, `madeBy` | A reply of the model. An entry can have `madeBy`, which tells what made it: `model` (the model wrote it), `input` (the entry was made from user input; the program also sets it on a `system` `local_command` entry), or `other` (Claude Code made the entry, not the model). The program counts an `other` entry as a model reply only when it is also `handedOff` (`chunk-dn6qb495.js:42` and `chunk-dn6qb495.js:42`, `chunk-614w915w.js:11006`). On a `user` entry the value is `other` (the transcript schema). |
 | `system` | `subtype`, `content`, `level`, `durationMs`, `messageCount` | A note that the model never reads. |
 | `attachment` | `attachment`, `rendered`, `renderedRole`, `renderedInHumanTurn`, `renderedBesideToolResult` | Context that Claude Code adds beside the conversation. `rendered` is the text the model sees and `renderedRole` is `user` or `system`. `renderedBesideToolResult` is `true` on a `remote_session_change` attachment, and `renderedInHumanTurn` is on a `queued_command` attachment whose text differs inside a human turn (the program). |
 | `queue-operation` | `operation`, `content`, `commandUuid`, `deliveryId`, `reason` | A prompt or command that waits in the queue. |
@@ -87,7 +87,7 @@ The meanings come from the program and its type file where they are clear.
 | `ai-title` | `aiTitle` | The title that the model made for the session. |
 | `mode` | `mode` | The mode of the session. Seen value: `normal`. |
 | `permission-mode` | `permissionMode` | The permission mode. Seen value: `auto`. |
-| `cost-state` | `totalCostUSD`, `totalAPIDuration`, `totalAPIDurationWithoutRetries`, `totalToolDuration`, `totalDuration`, `totalLinesAdded`, `totalLinesRemoved`, `modelUsage`, `hasUnknownModelCost`, `startTime`, `modelCallCostUSD` | Totals for cost and time. The line can have `modelCallCostUSD`, the cost of the model calls that the cost ledger counts apart. The program writes it only when it is above 0 (`chunk-56bhcxay.js:1293506`, `chunk-0fvmdxeb.js:32705`). Each `modelUsage` entry also has `cacheCreationEphemeral5mInputTokens` and `cacheCreationEphemeral1hInputTokens` (see [Stream JSON Messages](../extend/headless/stream-json.md#usage-error-and-process-fields)). |
+| `cost-state` | `totalCostUSD`, `totalAPIDuration`, `totalAPIDurationWithoutRetries`, `totalToolDuration`, `totalDuration`, `totalLinesAdded`, `totalLinesRemoved`, `modelUsage`, `hasUnknownModelCost`, `startTime`, `modelCallCostUSD` | Totals for cost and time. The line can have `modelCallCostUSD`, the cost of the model calls that the cost ledger counts apart. The program writes it only when it is above 0 (`chunk-hg1yqkjk.js:23853`, `chunk-kgzzwvwc.js:1881`). Each `modelUsage` entry also has `cacheCreationEphemeral5mInputTokens` and `cacheCreationEphemeral1hInputTokens` (see [Stream JSON Messages](../extend/headless/stream-json.md#usage-error-and-process-fields)). |
 | `atis-latch` | `atis` | The `atis` value of the session's feature-flag client, Claude Code keeps it once per conversation, so it stays the same. Claude Code sends it as the `x-cc-atis` header. Empty without a flag value (it was empty in our stub run). |
 
 Lines of types `file-history-snapshot`, `file-history-delta`, `last-prompt`, `ai-title`, `mode`, `permission-mode`, `cost-state`, `atis-latch`, and `queue-operation` carry `sessionId` but not the chain fields.
@@ -102,20 +102,20 @@ These names are in the program next to the writer. The meanings come from the wr
 | `agent-name`, `agent-color` | | The name and color of the session's agent. `/rename`, `/color`, or an agent sets them. |
 | `agent-setting` | | The agent definition that the session runs as, for example from `--agent`. |
 | `tag` | `tag` | A tag on the session. |
-| `worktree-state` | `worktreeSession` | The worktree that the session works in. `null` after it ends. `worktreeSession` can have `extensionRoot`: the project root of the session before `EnterWorktree` made the worktree. The program sets it only when the session was in that root and the worktree is in the same repo. While the session is in the worktree and has not moved out, the program loads skills, plugins, and commands from this root, not from the worktree (`chunk-r1yxtgw6.js:160312`, `chunk-hxze30mt.js:11534`). |
-| `tools-used` | `tools`, `sessionId`, `uuid` | The names of the tools that the session used, written again when the set grows. Last line wins. The first such line of a session file can have `uuid`, a new ID. The program adds it only when it also sends the line to its internal event writer (`chunk-56bhcxay.js:562090`). |
+| `worktree-state` | `worktreeSession` | The worktree that the session works in. `null` after it ends. `worktreeSession` can have `extensionRoot`: the project root of the session before `EnterWorktree` made the worktree. The program sets it only when the session was in that root and the worktree is in the same repo. While the session is in the worktree and has not moved out, the program loads skills, plugins, and commands from this root, not from the worktree (`chunk-b2932m4d.js:7433`, `chunk-5ghdkswv.js:521`). |
+| `tools-used` | `tools`, `sessionId`, `uuid` | The names of the tools that the session used, written again when the set grows. Last line wins. The first such line of a session file can have `uuid`, a new ID. The program adds it only when it also sends the line to its internal event writer (`chunk-hg1yqkjk.js:32700`). |
 | `pr-link` | `prNumber`, `prUrl`, `prRepository`, `timestamp` | Ties the session to a pull request. |
 | `bridge-session` | `bridgeSessionId`, `lastSequenceNum`, `sessionGroupingId`, owner ids | The Remote Control link. |
 | `content-replacement` | `replacements`, `agentId` | Records which large tool results a short stand-in replaced. A resume then uses the same stand-ins. |
-| `attribution-snapshot` | `messageId` | A snapshot of file-contribution data for commits. On load the program keeps only the last one (`chunk-56bhcxay.js:702428`) and trims a large one. |
+| `attribution-snapshot` | `messageId` | A snapshot of file-contribution data for commits. On load the program keeps only the last one (`chunk-hg1yqkjk.js:40475`) and trims a large one. |
 | `fork-context-ref` | `agentId`, `parentSessionId`, `parentLastUuid`, `contextLength` | A forked agent's pointer to its parent. The fork reads the parent's lines and does not copy them. |
 | `observer-ref` | `observerTaskId`, `observerAgentType`, `agentId`, `timestamp` | An observer agent's pointer. |
-| `session-owner` | `sessionId`, `accountUuid`, `organizationUuid` | The account and organization that own the session. The program writes it only when it has an account with an `accountUuid` (`chunk-56bhcxay.js:535598`, `chunk-qar0r4mv.js:413`). |
-| `data-flow-records` | `v`, `sessionId`, `agentId`, `records`, `snapshot` | Records of which responses and tool calls fed the work of the main loop or of an agent (`agentId`). Each record has a `response_id`, or a `tool_name` with `tool_use_id` or `event_id`. `snapshot` is `true` when the line holds all records, not only the new ones (`chunk-56bhcxay.js:529875`, `chunk-56bhcxay.js:536974`). |
-| `data-flow-incomplete` | `v`, `sessionId`, `agentId` | Marks that the records of the main loop or of an agent are not complete, for example after a server tool with a bad name (`chunk-56bhcxay.js:529738`). |
-| `derived-from` | `v`, `sessionId`, `sessions` | The sessions that this one came from. Each item has `type`, `id`, `via` (for example `clear`, `fork`, `resume`, or `import`), and can have `started`. A child process reads them from `CLAUDE_CODE_LAUNCHED_BY_SESSION_IDS` (`chunk-56bhcxay.js:537154`, `chunk-he41ebgj.js:979`). |
-| `resume-head-vouch` | `sessionId`, `sum` | A hex `sum` that vouches for `resume-head.jsonl`. The program calls this file "the side file that speeds up loading" the transcript. It writes the file in the session folder when you resume a large session file (`chunk-56bhcxay.js:682193`, `chunk-56bhcxay.js:714220`). See the conditions below the table. |
-| `progress` | `toolUseID`, `parentToolUseID`, `data` | Progress of a running tool, hook, skill, or agent. `data.type` is `hook_progress`, `tool_heartbeat`, `bash_progress`, `powershell_progress`, `agent_progress`, `agent_api_retry`, `skill_progress`, `search_results_received`, `query_update`, `workflow_log`, `workflow_phase`, `workflow_agent`, or `artifact_publish_retry`. The transcript writer drops each `progress` row before it writes (`chunk-56bhcxay.js:732887` for the filter, and `chunk-56bhcxay.js:734907`, where the writer applies it to each line it writes). The schema lists only the shared fields for this type. |
+| `session-owner` | `sessionId`, `accountUuid`, `organizationUuid` | The account and organization that own the session. The program writes it only when it has an account with an `accountUuid` (`chunk-hg1yqkjk.js:31260`, `chunk-1mpmvcta.js:29`). |
+| `data-flow-records` | `v`, `sessionId`, `agentId`, `records`, `snapshot` | Records of which responses and tool calls fed the work of the main loop or of an agent (`agentId`). Each record has a `response_id`, or a `tool_name` with `tool_use_id` or `event_id`. `snapshot` is `true` when the line holds all records, not only the new ones (`chunk-hg1yqkjk.js:30969`, `chunk-hg1yqkjk.js:31330`). |
+| `data-flow-incomplete` | `v`, `sessionId`, `codes`, `agentId` | Marks that the records of the main loop or of an agent are not complete. `codes` lists the loss codes, which are integers from 1 to 255 when the program replays a saved session. `agentId` is present only when the record is for an agent (`chunk-hg1yqkjk.js:37492`, `chunk-hg1yqkjk.js:30964`, `chunk-hg1yqkjk.js:32743`, `chunk-p8wkx145.js:161`). |
+| `derived-from` | `v`, `sessionId`, `sessions` | The sessions that this one came from. Each item has `type`, `id`, `via` (for example `clear`, `fork`, `resume`, or `import`), and can have `started`. A child process reads them from `CLAUDE_CODE_LAUNCHED_BY_SESSION_IDS` (`chunk-hg1yqkjk.js:32726`, `chunk-8e89z79d.js:43`). |
+| `resume-head-vouch` | `sessionId`, `sum` | A hex `sum` that vouches for `resume-head.jsonl`. The program calls this file "the side file that speeds up loading" the transcript. It writes the file in the session folder when you resume a large session file (`chunk-hg1yqkjk.js:39396`, `chunk-hg1yqkjk.js:41158`). See the conditions below the table. |
+| `progress` | `toolUseID`, `parentToolUseID`, `data` | Progress of a running tool, hook, skill, or agent. `data.type` is `hook_progress`, `tool_heartbeat`, `bash_progress`, `powershell_progress`, `agent_progress`, `agent_api_retry`, `skill_progress`, `search_results_received`, `query_update`, `workflow_log`, `workflow_phase`, `workflow_agent`, or `artifact_publish_retry`. The transcript writer drops each `progress` row before it writes (`chunk-hg1yqkjk.js:42129` for the filter, and `chunk-hg1yqkjk.js:33598`, where the writer applies it before it calls `insertMessageChain`). The schema lists only the shared fields for this type. |
 | `isolation-latch` | `side` | Records a one-time choice about where the session runs, kept for resume. |
 | `memory-mode` | `mode`, `afterUuid`, `reason`, `account` | A stamp that auto memory switched mode. One per switch. |
 | `dev-mods` | `folder` | The folder of a mod under development that the session uses. |
@@ -124,18 +124,19 @@ These names are in the program next to the writer. The meanings come from the wr
 | `line-withheld` | `bytes` | Not a stored type. When a transcript is uploaded, `{"type":"line-withheld","bytes":N}` replaces a line that could not be read or was too large. |
 | `artifact-autoreact-ledger` | `artifacts`, `accountUuid`, `v` | Bookkeeping for automatic replies to artifact comments. |
 | `relocated` | `relocatedCwd` | The working folder was moved. |
-| `summary` | `leafUuid`, `summary` | A summary line. The program reads these lines on load (`chunk-56bhcxay.js:410770`). |
+| `summary` | `leafUuid`, `summary` | A summary line. The program reads these lines on load (`chunk-hg1yqkjk.js:40288`). |
 | `continued-in` | `continuedInSessionId` | Points to the session that continued this one. |
 | `history-suppression`, `artifact-comment-monitor` | | Also in the program's table. We read no further meaning. |
 
-The program writes the `data-flow-records`, `data-flow-incomplete`, and `derived-from` lines only when a feature flag and an organization policy allow data-flow records (`chunk-xethrx83.js:711407`).
+The program writes the `data-flow-records`, `data-flow-incomplete`, and `derived-from` lines only when a feature flag and an organization policy (`allow_data_flow`) allow data-flow records (`chunk-aq3ms068.js:33627`).
 
 The program writes `resume-head-vouch` on `--resume` when all of these are true (the program):
 
 - `CLAUDE_CODE_TRANSCRIPT_TAIL_LOAD` is `on` or `verify`.
-- The session file is larger than 5 MiB (`chunk-grkhn49z.js:21448`).
-- The file has a `compact_boundary` line at 4 MiB or more from the start, and no `user`, `assistant`, `system`, `attachment`, or `progress` line comes before it (`chunk-56bhcxay.js:408287`, `chunk-56bhcxay.js:420855`, `chunk-56bhcxay.js:678488`).
-- The `compact_boundary` line is at most 1 MiB (`chunk-56bhcxay.js:420855`).
+- The platform is not Windows. On `"windows"`, tail loading is off (`chunk-hg1yqkjk.js:28927`).
+- The session file is larger than 5 MiB, the size from which the program can write `resume-head-vouch` (`chunk-hg1yqkjk.js:28897`, `chunk-hg1yqkjk.js:39396`).
+- The file has a `compact_boundary` line at 4 MiB or more from the start, and no `user`, `assistant`, `system`, `attachment`, or `progress` line comes before it (`chunk-hg1yqkjk.js:24525`, `chunk-hg1yqkjk.js:38695`).
+- The `compact_boundary` line is at most 1 MiB (`boundaryLength`, `chunk-hg1yqkjk.js:24773`).
 
 `proactivity` and `language` are not line types. They are kinds of `attachment` (`attachment.type`). `proactivity` carries `status`, `level`, and `tools`. `language` carries the reply `language`.
 
@@ -193,7 +194,7 @@ Content block types seen: `text`, `thinking`, `tool_use` (in `assistant` lines),
 | `requestId` | The request ID from the API. |
 | `requestRef` | A reference to the matching `api-request` line. |
 | `requestedModel` | The model Claude Code asked for. The `message.model` field shows the model that answered. |
-| `effort`, `perTurnEffort` | The effort level of the call. The program reads `effort` from `output_config.effort` of the request it built (`chunk-56bhcxay.js:3382703` and `chunk-56bhcxay.js:3195306`). |
+| `effort`, `perTurnEffort` | The effort level of the call. The program reads `effort` from `output_config.effort` of the request it built (`chunk-hg1yqkjk.js:165236` and `chunk-hg1yqkjk.js:167447`). |
 | `advisorModel` | The advisor model, if the advisor tool was on. |
 | `apiBlockIndex` | The index of this block in the API reply. One reply can produce several lines. |
 | `thinkingDisplay`, `thinkingDurationMs` | How Claude Code showed the thinking text, and how long it took. |
@@ -210,7 +211,7 @@ Content block types seen: `text`, `thinking`, `tool_use` (in `assistant` lines),
 
 ## Compaction Rows
 
-Source: the program (`chunk-56bhcxay.js:6061939` for the boundary line, `chunk-56bhcxay.js:3024993` for the summary line, and `chunk-56bhcxay.js:403248` and `chunk-56bhcxay.js:403712` for the loader).
+Source: the program (`chunk-hg1yqkjk.js:302937` for the `compact_boundary` line, `chunk-hg1yqkjk.js:130575` for the `isCompactSummary` line, and `chunk-hg1yqkjk.js:24230` and `chunk-hg1yqkjk.js:24255` for the loader aborts `preserved_uuid_missing` and `preserved_walk_broken`).
 
 A compaction writes a `system` line with `subtype: compact_boundary` and the content `Conversation compacted`. Its `compactMetadata` object holds these keys.
 
@@ -222,7 +223,7 @@ A compaction writes a `system` line with `subtype: compact_boundary` and the con
 | `messagesSummarized` | At creation | How many messages the summary covers. |
 | `postTokens` | After the summary exists | The token count of the new context. |
 | `durationMs` | After the summary exists | The time the compaction took. |
-| `cumulativeDroppedTokens` | After the summary exists | The tokens dropped by all compactions so far. It adds `preTokens - postTokens` to the largest earlier value (`chunk-56bhcxay.js:1965613-1965822`). |
+| `cumulativeDroppedTokens` | After the summary exists | The tokens dropped by all compactions so far. It adds `preTokens - postTokens` to the largest earlier value (`chunk-hg1yqkjk.js:91722`). |
 | `preservedSegment` | Partial compaction | The `headUuid` and `tailUuid` of the kept messages. |
 | `preservedMessages` | Hook-built compaction | The `uuids` of the kept messages. |
 
@@ -233,7 +234,7 @@ If a listed `uuid` is missing, or the walk does not reach `headUuid`, the load a
 
 ## Subagent Lines
 
-A subagent writes its lines to its own file, `<session>/subagents/agent-<agentId>.jsonl`, and not to the session transcript. A search of the session file alone finds no subagent line. A line in that file can carry `attributionAgent`. It holds the agent name, for the sources `agent:builtin:<name>` and `agent:custom:<name>`. Lines caused by a skill carry `attributionSkill`, and `attributionPlugin` when the skill belongs to a plugin (the program, `chunk-xethrx83.js:958958`).
+A subagent writes its lines to its own file, `<session>/subagents/agent-<agentId>.jsonl`, and not to the session transcript. A search of the session file alone finds no subagent line. A line in that file can carry `attributionAgent`. It holds the agent name, for the sources `agent:builtin:<name>` and `agent:custom:<name>`. Lines caused by a skill carry `attributionSkill`, and `attributionPlugin` when the skill belongs to a plugin (the program, `chunk-aq3ms068.js:46003` and `chunk-aq3ms068.js:46016`).
 
 ## `attachment` Types
 
@@ -241,7 +242,7 @@ An `attachment` line holds an object in `attachment` with a `type` key.
 
 | `attachment.type` | Meaning |
 | --- | --- |
-| `total_tokens_reminder` | A reminder of the token budget. Only for a model that carries the `total_tokens_reminder` capability, (`chunk-jkpzhr7r.js:288928`). |
+| `total_tokens_reminder` | A reminder of the token budget. Only for a model that carries the `total_tokens_reminder` capability, (`chunk-t39fw2cy.js:9360`). |
 | `output_limit_note` | A note that the output hit a limit. The program has no code that builds it. Only the reader, the renderer, and the kind lists remain, so the kind still parses in an older transcript.[^output-limit-note] |
 | `output_style`, `output_style_instructions` | The active output style. |
 | `queued_command` | A prompt that was queued while a turn ran. |
@@ -297,9 +298,9 @@ The exact fields are in this schema: `https://clawdipedia.cc/schemas/claude-code
 
 Details of some typed fields in the program:
 
-- `api-request.cut.markAddresses`: the program writes `cut` with an integer `markAddresses` (`chunk-56bhcxay.js:308084`).
-- `api-request.renderedWithdrawn`: the program sets it for a rendered `file` attachment that has `overTokenLimit` (`chunk-56bhcxay.js:6016902`).
-- `attachment.attachment.hooks` is not in the schema. The display builds the `async_hook_response_batch` and `teammate_shutdown_batch` attachments (`chunk-4d4nzary.js:94980`, `chunk-4d4nzary.js:96946`).
+- `api-request.cut.markAddresses`: the program writes `cut` with an integer `markAddresses` (`chunk-hg1yqkjk.js:18913`).
+- `api-request.renderedWithdrawn`: the program sets it for a rendered `file` attachment that has `overTokenLimit` (`chunk-hg1yqkjk.js:301253`).
+- `attachment.attachment.hooks` is not in the schema. The display builds the `async_hook_response_batch` and `teammate_shutdown_batch` attachments (`chunk-h2e446cb.js:6346`, `chunk-h2e446cb.js:6464`).
 
 An array field states the type of its items where the code shows it, for example `api-request.withheld`, `api-request.cacheControl`, `user.sandboxViolations`, and the hook lists of `stop_hook_summary` lines. Only `toolUseResult.content` keeps items of any type, because it holds the result of any tool.
 It lists every field of this release. Build on the fields it names. Look each one up there before you rely on it.
@@ -313,4 +314,4 @@ It lists every field of this release. Build on the fields it names. Look each on
 
 ## Sources
 
-[^output-limit-note]: The program, `chunk-56bhcxay.js:1721582` (the kind list), `chunk-56bhcxay.js:5945210` (the reader), and `chunk-56bhcxay.js:6004019` (the renderer).
+[^output-limit-note]: The program, `chunk-hg1yqkjk.js:100999` (the kind list), `chunk-hg1yqkjk.js:298489` (the reader), and `chunk-hg1yqkjk.js:300738` (the renderer).

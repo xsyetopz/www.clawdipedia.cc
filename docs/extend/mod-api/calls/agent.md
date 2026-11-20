@@ -1,10 +1,10 @@
 ---
 title: Agent
-description: The $.agent noun that starts, lists, and registers subagents, the agent.offer and agent.spawn events, and the agent types.
+description: The $.agent noun that starts, lists, and registers subagents, the agent.offer, agent.spawn, and agent.report events, and the agent types.
 sidebar_position: 12
 ---
 
-`$.agent` starts and lists subagents and teammates, and it registers new agent types. Two events cover the life of an agent. `agent.offer` decides which agent types the model sees. `agent.spawn` picks the model of a new agent or refuses it.
+`$.agent` starts and lists subagents and teammates, and it registers new agent types. Three events cover the life of an agent. `agent.offer` decides which agent types the model sees. `agent.spawn` picks the model of a new agent or refuses it. `agent.report` lets a hook rewrite a subagent's report or hold it back.
 
 Use a hook to change what agents do. Hook `agent.spawn` to pick a model or refuse a spawn. Hook `agent.offer` to hide a type. Return `{ deny }` to refuse a spawn, or `{ isOffered: false }` to hide a type.
 
@@ -27,6 +27,7 @@ on("agent.spawn", async ($, e, next) =>
 | Item | Status | What it does | How it works | Where it can be used |
 | --- | --- | --- | --- | --- |
 | `$.agent.spawn` | <Documented /> | Spawns a subagent. It is the event `agent.spawn`, the same call the engine makes when the Agent tool starts one. | `(input: AgentSpawnArgs) => Promise<AgentSpawnResult>`. Starts a subagent in the background and resolves `{ model, agentId }` or `{ deny }`. | Run time. |
+| `$.agent.report` | <Undocumented /> | Raises `agent.report`. | The member sits beside `$.agent.offer` and `$.agent.spawn`.[^agent-report] | See `agent.report`. |
 | `$.agent.list` | <Documented /> | Returns the agents of the session so far, subagents and teammates, whoever spawned them. | `() => Promise<AgentInfo[]>`. One entry for each agent until the engine drops its task. The list omits a workflow's agents. | Run time. |
 | `$.agent.register` | <Documented /> | Defines an agent type, named `<plugin>:<name>`, that the Agent tool dispatches from the next turn on. | `(spec: AgentSpec) => Promise<...>`. Takes the same fields as an agent file. A second call with the same name replaces the first. Rejects on an invalid spec. | After the session binds at `session.start` (rejects before). |
 | `$.agent.call` | <Documented /> | Runs a tool as an agent's own call. It is the event `agent.call`, and `tool.call` runs beneath it in the loop of that agent. `$.tool.call` is unchanged. | `(args: AgentCallArgs, options?: AgentCallOptions) => Promise<...>`. `args` holds `tool`, `input`, and `agentId` (absent: the main conversation). The call has the tools, folder, mode, and rules of the agent. It meets the hooks, the dialog, and the classifier of auto mode as a call of the model does. Nothing joins the conversation of the agent. Resolves the tool's result, or `{ deny }` for a refusal, a tool the agent lacks, an agent the session cannot run from, or a cut by `options.signal`. Rejects on a deny from an `agent.call` hook. `Workflow` is refused.[^call-workflow] | Run time. |
@@ -38,6 +39,7 @@ on("agent.spawn", async ($, e, next) =>
 | --- | --- | --- | --- | --- |
 | `agent.offer` | <Documented /> | Fires when the engine offers an agent type to the model, in the agent listing and again at dispatch. `next(e)` resolves to `{ isOffered: true }`. | Input `AgentOfferInput`. Result `AgentOfferResult`. Return `{ isOffered: false }` to hide the type from the model and refuse its dispatch. A hook that refuses, or a `{ deny }` result, gives `{ isOffered: false }`.[^offer-refuse] The engine checks that the hook kept `agent`, `description`, and `source` and did not change `provider`.[^offer-check] The offer to resume an agent of the type carries that agent's `agentId`.[^v328-offer-id] | `on('agent.offer', ...)`. In tests: `$.agent.offer(...)` on the test engine (not on a hook's `$`). |
 | `agent.spawn` | <Documented /> | Fires when the Agent tool, or a workflow script's `agent()` call, is about to start an agent, before the engine resolves the model. | Input `AgentSpawnInput`. Result `AgentSpawnResult`: `{ model }` or `{ deny }`. The engine skips a guard that fails, and the subagent starts. | `on('agent.spawn', ...)`. Also `$.agent.spawn(...)`. |
+| `agent.report` | <Undocumented /> | Fires when a subagent's report is about to reach its parent. | Input has `text`, `agentId`, `parentAgentId`, `subagentType`, `provider`, and `status`. Result is `{ text }` to rewrite the report or `{ consumed: reason }` to hold it back. The result from core also carries `review` (`cleared`, `flagged`, `refused`, `unavailable`, `none`, or `off`: what the hand-off review of auto mode made of the report) and, for `flagged`, `refused`, or `unavailable`, a `warning` that the parent reads above the report. A hook that throws is skipped: before its `next`, the report goes on without it, and after its `next`, what `next` answered is delivered. If the whole chain rejects, the program logs a warning and delivers the original `text`.[^agent-report] | `on('agent.report', ...)`. Also `$.agent.report(...)`. |
 
 ## Events Raised by Agent Calls
 
@@ -169,12 +171,13 @@ A hook may rewrite the content keys of `AgentSpawnInput`. The type pins every ot
 
 ## Sources
 
-[^types]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `AgentCallArgs`, `AgentCallOptions`, `AgentCallRecord`, `AgentInfo`, `AgentLimits`, `AgentLoop`, `AgentOfferInput`, `AgentOfferResult`, `AgentRequest`, `AgentSpawnArgs`, `AgentSpawnInput`, `AgentSpawnResult`, `AgentSpec`, `AgentStatus`, and `AgentTeammateRecord`.
-[^call-workflow]: The program, `chunk-56bhcxay.js:4977795` (the op table) and `chunk-yznsjrsv.js:27771` (the plugin-facing hook).
-[^limits]: The program, `chunk-56bhcxay.js:4597135`.
-[^offer-refuse]: The program, `chunk-syremzmn.js:77801`.
-[^offer-check]: The program, `chunk-syremzmn.js:210297`.
-[^kind]: The program, `chunk-56bhcxay.js:1061597`.
-[^parent-agent]: The program, `chunk-56bhcxay.js:4898831` (the refusal) and `chunk-56bhcxay.js:4977974` (the op).
+[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, `AgentCallArgs`, `AgentCallOptions`, `AgentCallRecord`, `AgentInfo`, `AgentLimits`, `AgentLoop`, `AgentOfferInput`, `AgentOfferResult`, `AgentRequest`, `AgentSpawnArgs`, `AgentSpawnInput`, `AgentSpawnResult`, `AgentSpec`, `AgentStatus`, and `AgentTeammateRecord`.
+[^call-workflow]: The program, `chunk-hg1yqkjk.js:192073` (the refusal text for `Workflow`) and `chunk-kvgd8rb3.js:1295` (the plugin-facing hook).
+[^limits]: The program, `chunk-hg1yqkjk.js:194395` (`concurrent`, 20 unless `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` is set), `chunk-hg1yqkjk.js:194398` (the result with `depth` and `isBackgroundEnabled`), and `chunk-j9a179b2.js:10` (`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH`).
+[^offer-refuse]: The program, `chunk-qsd8sbe8.js:3171`.
+[^offer-check]: The program, `chunk-qsd8sbe8.js:9188`.
+[^kind]: The program, `chunk-hg1yqkjk.js:194494` (`local_agent` and `in_process_teammate`).
+[^parent-agent]: The program, `chunk-hg1yqkjk.js:210354` (the refusal, `{ deny }` for a parent the session cannot use) and `chunk-hg1yqkjk.js:210358` (the parent is stored on the spawn).
 [^v328-compact-window]: The type file `schemas/claude-code.d.ts`, `AgentSpec`.
 [^v328-offer-id]: The type file `schemas/claude-code.d.ts`, `agent.offer`.
+[^agent-report]: The program, `chunk-hg1yqkjk.js:304777` (`report` beside `offer` and `spawn`), `chunk-nxwpaxwj.js:6265` (the hook raise and "not delivered"), `chunk-qsd8sbe8.js:9211` (the checked fields), and `chunk-f00gew3e.js:11737` (`review` is `off`), `chunk-f00gew3e.js:11752` (`review` is `cleared`), and `chunk-f00gew3e.js:11791` (`review` is `none` or the kind with its `warning`).

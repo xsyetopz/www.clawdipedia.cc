@@ -15,7 +15,7 @@ Official pages: [Marketplace Reference](https://code.claude.com/docs/en/plugins/
 
 | Key | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
-| `name` | <Documented /> | Sets the marketplace id. | Letters, digits, `.`, `_`, `-`. Many names are reserved: official names, `inline`, `builtin`, `skills-dir`, `synced`, `claude-plugin-test`, and the `claudeai-` prefix. Names such as `npm` and `github` are no longer reserved.[^reserved] |
+| `name` | <Documented /> | Sets the marketplace id. | Letters, digits, `.`, `_`, `-`. Many names are reserved: official names, `inline`, `builtin`, `skills-dir`, `synced`, `claude-plugin-test`, and the `claudeai-` prefix.[^reserved] |
 | `owner` | <Documented /> | Names the maintainer. | `name` is required. `email` and `url` are optional. |
 | `plugins` | <Documented /> | Lists the plugin entries. | An invalid entry becomes a stub with source `unsupported`. The other entries still load. |
 | `$schema`, `description`, `version` | <Documented /> | Info about the marketplace. | `metadata.description` and `metadata.version` work as alternates. |
@@ -91,7 +91,7 @@ These keys sit in an entry of `extraKnownMarketplaces` and its alias `additional
 
 | Key | Status | What It Does | How It Works |
 | --- | --- | --- | --- |
-| `extraKnownMarketplaces.*.autoUpdate`, `additionalMarketplaces.*.autoUpdate` | <Documented /> | Turns background updates on or off for this marketplace and its installed plugins. | Boolean. See [`extraKnownMarketplaces`](https://code.claude.com/docs/en/settings-reference#extraknownmarketplaces) and [Set update policy](https://code.claude.com/docs/en/plugins/org#set-update-policy). |
+| `extraKnownMarketplaces.*.autoUpdate`, `additionalMarketplaces.*.autoUpdate` | <Documented /> | Turns background updates on or off for this marketplace and its installed plugins. | Boolean. See [`extraKnownMarketplaces`](https://code.claude.com/docs/en/settings-reference#extraknownmarketplaces) and [Set update policy](https://code.claude.com/docs/en/plugins/org#set-update-policy). For a marketplace that managed settings name and that gets no automatic updates, `/status` shows a "Marketplace auto-update" row. It reads `off for <name> (<reason>)`.[^status-mkt-autoupdate] |
 | `extraKnownMarketplaces.*.installLocation`, `additionalMarketplaces.*.installLocation` | <Undocumented /> | Sets the local cache path where the marketplace manifest is stored. | Claude Code makes the path when you leave it out.[^settings-schema] |
 
 The rows for these keys, with types, scopes, and details, are on [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plugins.md#keys).
@@ -198,23 +198,24 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^reserved]: The program, `chunk-jkpzhr7r.js:52423`.
-[^renames]: The program, `chunk-jkpzhr7r.js:99701`.
-[^pin]: The program, `chunk-jkpzhr7r.js:79222`.
-[^npm-wild]: The program, `chunk-jkpzhr7r.js:81729`.
-[^npm-opts]: The program, `chunk-jkpzhr7r.js:82029`, its bundled settings schema.
-[^digest-tier]: The program, `chunk-jkpzhr7r.js:206396` for the schema text and `chunk-56bhcxay.js:1037990` for the record check.
-[^digest-warn]: The program, `chunk-56bhcxay.js:1037144` and `chunk-56bhcxay.js:1037235`.
-[^digest-schema]: The program, `chunk-jkpzhr7r.js:206396`, its bundled settings schema. The generated `schemas/claude-code-settings.json` and `schemas/claude-code-managed-settings.json` both hold the field.
-[^digest-limits]: The program, `chunk-56bhcxay.js:1032821` for the limits, `chunk-56bhcxay.js:1033282` for the folder walk, and `chunk-56bhcxay.js:970462` for the root names.
-[^digest-refuse]: The program, `chunk-56bhcxay.js:1037990`.
-[^digest-line]: The program, `chunk-jkpzhr7r.js:341578` for the key and `chunk-jkpzhr7r.js:355482` for the line. The marketplaces come from `chunk-jkpzhr7r.js:347843` (`Uy`).
-[^settings-schema]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:206143`.
-[^copy]: The program, `chunk-4681nt26.js:1837` and `chunk-56bhcxay.js:5468117`.
-[^withdraw]: The program, `chunk-56bhcxay.js:5151901`.
-[^take-back]: The program, `chunk-56bhcxay.js:5250622`.
-[^list-unread]: The program, `chunk-56bhcxay.js:5251037` and `chunk-56bhcxay.js:5326483`.
-[^copy-proof]: The program, `chunk-56bhcxay.js:938352`.
-[^submodule]: The program, `chunk-56bhcxay.js:5161967`. The gate is the server-side flag `tengu_tidal_kestrel`.
-[^run-code-add]: The program, `chunk-ejmpea1g.js:61928`.
-[^run-code-install]: The program, `chunk-ejmpea1g.js:42010` (install warning), `chunk-ejmpea1g.js:113009`, and `chunk-j2wfp6sf.js:1229511` (recommendation prompt).
+[^reserved]: The program, `claude-plugins-official` (`chunk-t39fw2cy.js:2159`), `skills-dir` and `claude-plugin-test` (`chunk-t39fw2cy.js:2287`), and `claudeai-` (`chunk-t39fw2cy.js:4245`).
+[^renames]: The program, `chunk-t39fw2cy.js:3898`.
+[^pin]: The program, `chunk-t39fw2cy.js:3316` (the `ref` text: "A full commit id (40 or 64 lowercase hex digits) holds the marketplace at that commit"; the same text is at `chunk-t39fw2cy.js:3340`).
+[^npm-wild]: The program, `chunk-t39fw2cy.js:3363`.
+[^npm-opts]: The program, `chunk-t39fw2cy.js:3375`, its bundled settings schema.
+[^digest-tier]: The program, `chunk-t39fw2cy.js:7667` for the schema text (`pluginDigests`) and `chunk-hg1yqkjk.js:89010` for the record check ("its install record holds no hash").
+[^digest-warn]: The program, `chunk-hg1yqkjk.js:89010` ("its install record holds no hash") and `chunk-hg1yqkjk.js:89015` ("its folder is not the copy its install record holds").
+[^digest-schema]: The program, `chunk-t39fw2cy.js:7667` (`pluginDigests` and its schema text), its bundled settings schema. The generated `schemas/claude-code-settings.json` and `schemas/claude-code-managed-settings.json` both hold the field.
+[^digest-limits]: The program, `chunk-hg1yqkjk.js:88828` and `chunk-hg1yqkjk.js:88862` for the limits (`node_modules`), `chunk-hg1yqkjk.js:88830` for the folder walk, `chunk-hg1yqkjk.js:85989` for the root names (`.git`, `.mcpb-cache`), and `chunk-hg1yqkjk.js:88846` for the `.git` check.
+[^digest-refuse]: The program, `chunk-hg1yqkjk.js:89051` ("is not treated as the organization's, and does not load").
+[^digest-line]: The program, `chunk-t39fw2cy.js:11540` for the key (`listedMods`) and `chunk-t39fw2cy.js:12341` for the line ("code from your organization will run"). The marketplaces come from `chunk-t39fw2cy.js:11539`.
+[^settings-schema]: The program, its bundled settings schema, `chunk-t39fw2cy.js:7657` (`installLocation`).
+[^copy]: The program, `chunk-dnaxttmk.js:92` (`Refusing to copy ${…}: it is no longer a regular file (swapped during the copy).`), `chunk-3j2w55tq.js:437` (`a write made no progress; copy stopped`), and `chunk-3j2w55tq.js:704` (the `/import` skill copy adds "A partial copy may remain at" and "remove that directory and run the import again" to the error).
+[^withdraw]: The program, `chunk-hg1yqkjk.js:223624`.
+[^take-back]: The program, `chunk-hg1yqkjk.js:228719`.
+[^list-unread]: The program, `chunk-hg1yqkjk.js:228724` and `chunk-hg1yqkjk.js:232318`.
+[^copy-proof]: The program, `chunk-hg1yqkjk.js:84306`.
+[^submodule]: The program, `chunk-hg1yqkjk.js:224201`. The gate is the server-side flag `tengu_tidal_kestrel`.
+[^run-code-add]: The program, `chunk-4g68nm9m.js:4190`.
+[^run-code-install]: The program, `chunk-4g68nm9m.js:2760` (install warning), `chunk-4g68nm9m.js:7473`, and `chunk-zs9k1w9q.js:78051` (recommendation prompt).
+[^status-mkt-autoupdate]: The program, `chunk-tfqdysxa.js:170` (the "Marketplace auto-update" row label) and `chunk-tfqdysxa.js:132` (the four reasons).

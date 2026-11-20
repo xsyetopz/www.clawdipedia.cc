@@ -41,7 +41,7 @@ Use it for short-lived tokens.
 | Working folder | <Documented /> | Resolves relative paths. | The plugin folder, the project folder, the primary working folder, or `~/.claude` (user, managed, connector). It depends on where you configure the server. |
 | Env scrub | <Documented /> | Hides credential variables. | Project `.mcp.json`, plugin, and project agent servers receive no variables with `TOKEN`, `SECRET`, `PASSWORD`, `KEY`, or `AUTH` in the name, plus a fixed list. |
 | Trust rule | <Documented /> | Runs the helper late. | Project and local servers run it only after the trust dialog for the folder that declares them. Until then, Claude Code uses only static `headers`. |
-| Failed helper | <Documented /> | Keeps other sessions connecting. | A helper that fails, or does not run in an untrusted folder, no longer marks a server as needing sign-in for other sessions when no OAuth refresh token is stored. This holds for most servers.[^helper-failed] |
+| Failed helper | <Documented /> | Keeps other sessions connecting. | A `headersHelper` that fails, or does not run in an untrusted folder, does not mark a server as needing sign-in for other sessions when no OAuth refresh token is stored. This holds for most servers, but not for a server with `oauth.xaa`. The server-side flag `tengu_lazy_ladybug` turns it on, and the flag defaults to on.[^helper-failed] |
 | `${user_config.*}` | <Documented /> | Plugin options. | Not allowed. Claude Code reports the server as misconfigured. The error says the substituted value would be passed to a shell.[^user-config-helper] |
 | Policy refusal | <Documented /> | Refuses a plugin helper. | A marketplace entry with `headersHelper` must inline its full manifest with `strict: false`. Otherwise Claude Code refuses to run it. |
 
@@ -133,12 +133,12 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^auth-rows]: The program, `chunk-dkr45esb.js:33533` and `chunk-dkr45esb.js:44816`, for the rows marked <Undocumented /> or <Gated />.
-[^cimd-env]: The program, `chunk-dkr45esb.js:44816`.
-[^xaa-gate]: The program, `chunk-dkr45esb.js:33533`.
-[^xaa-changed]: The program, `chunk-dkr45esb.js:14153`.
-[^list-timeout]: The program, `chunk-56bhcxay.js:4707447`.
-[^settings-check]: The program, `chunk-56bhcxay.js:4707447` and `chunk-dkr45esb.js:3281`. The flag is `require_connector_block_on_plugin_servers`.
-[^many-hosts]: The program, `chunk-bgtq9pxy.js:5087`.
-[^helper-failed]: The program, `chunk-dkr45esb.js:7274`, `chunk-dkr45esb.js:6113`, and `chunk-mt0sg9yk.js:288844`.
-[^user-config-helper]: The program, `chunk-56bhcxay.js:4693907`.
+[^auth-rows]: The program, `chunk-6gddh60b.js:1684` (`CLAUDE_CODE_ENABLE_XAA` and `oauth.xaa`) and `chunk-6gddh60b.js:2254` (`Using CIMD URL from env`), for the rows marked <Undocumented /> or <Gated />.
+[^cimd-env]: The program, `chunk-6gddh60b.js:2254` (`Using CIMD URL from env`; the variable `MCP_OAUTH_CLIENT_METADATA_URL` is read at `chunk-6gddh60b.js:1103`).
+[^xaa-gate]: The program, `chunk-6gddh60b.js:1684` (`Remove 'oauth.xaa'`).
+[^xaa-changed]: The program, `chunk-6gddh60b.js:694`.
+[^list-timeout]: The program, `chunk-g4jweshk.js:25749` (the text when the wait for the list times out) and `chunk-g4jweshk.js:25740` (the wait for the list that failed gives another text).
+[^settings-check]: The program, `chunk-g4jweshk.js:25728` (the first form, which names the server) and `chunk-6gddh60b.js:202` (the second form). The flag is `require_connector_block_on_plugin_servers`, `chunk-6gddh60b.js:199`.
+[^many-hosts]: The program, `chunk-9jhe03x4.js:280`.
+[^helper-failed]: The program, `chunk-6gddh60b.js:312` (the helper does not run in an untrusted folder), `chunk-6gddh60b.js:329` (the helper fails), `chunk-6gddh60b.js:374` (`headersHelper` gives no headers, so the program calls the callback), `chunk-w3gpg1a5.js:7992` (the call to `$2046ba`, whose callback sets the flag), `chunk-w3gpg1a5.js:6604` (the flag `tengu_lazy_ladybug` and the `oauth.xaa` check; the cache write by `$a1721f` at `chunk-w3gpg1a5.js:6615` is skipped), and `chunk-hrrs5w99.js:479` (the `refreshToken` check).
+[^user-config-helper]: The program, `chunk-hg1yqkjk.js:200498`.

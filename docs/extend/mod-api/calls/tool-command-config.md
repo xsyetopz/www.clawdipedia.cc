@@ -102,16 +102,16 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 
 ## Sources
 
-[^types]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`: `ToolInfo`, `ToolSpec`, `RegisteredToolSpec`, `ToolCallInput`, `ToolCheckArgs`, `ToolCheckInput`, `ToolCheckResult`, `ToolJudgeInput`, `ToolJudgeResult`, `ToolDescribeInput`, `CommandInfo`, `CommandSpec`, `CommandRunArgs`, `CommandRunInput`, `CommandRunResult`, `CommandDescribeInput`, `ConfigRow`, `ConfigSetArgs`, `ConfigSetInput`, `ConfigSetResult`, `ConfigDescribeInput`, and the `$.tool`, `$.command`, and `$.config` text.
-[^tool-call]: The type file `schemas/claude-code.d.ts`, `$.tool.call`. The program, `chunk-56bhcxay.js:4896906` and `chunk-56bhcxay.js:62541`.
-[^tool-call-ask]: The type file `schemas/claude-code.d.ts`, `$.tool.call`. The program, `chunk-56bhcxay.js:1689984` (the allow, with the reason `plugin-origin: <plugin>`) and `chunk-56bhcxay.js:3655563` (the ask of a mod's own call turns into that allow).
+[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`: `ToolInfo`, `ToolSpec`, `RegisteredToolSpec`, `ToolCallInput`, `ToolCheckArgs`, `ToolCheckInput`, `ToolCheckResult`, `ToolJudgeInput`, `ToolJudgeResult`, `ToolDescribeInput`, `CommandInfo`, `CommandSpec`, `CommandRunArgs`, `CommandRunInput`, `CommandRunResult`, `CommandDescribeInput`, `ConfigRow`, `ConfigSetArgs`, `ConfigSetInput`, `ConfigSetResult`, `ConfigDescribeInput`, and the `$.tool`, `$.command`, and `$.config` text.
+[^tool-call]: The type file `schemas/claude-code.d.ts`, `$.tool.call`. The program, `chunk-hg1yqkjk.js:304740` and `chunk-hg1yqkjk.js:62541`.
+[^tool-call-ask]: The type file `schemas/claude-code.d.ts`, `$.tool.call`. The program, `chunk-hg1yqkjk.js:194640` (the allow, with the reason `plugin-origin: <plugin>`) and `chunk-hg1yqkjk.js:194640` (the ask of a mod's own call turns into that allow).
 [^tool-call-org]: The type file `schemas/claude-code.d.ts`, `$.tool.call` (an organization's mod and a person's mod).
-[^judge]: The program, `chunk-syremzmn.js:218951`.
-[^v2327]: The program, `chunk-sxssbh0v.js:3186`: the list of reasons that Code Mode does not start has no case for a mod that hooks tool calls.
-[^run]: The program, `chunk-syremzmn.js:219890`.
-[^describe-resolve]: The program, `chunk-xethrx83.js:556073`, `resolveToolDescription`.
-[^resolver]: The program, `chunk-xethrx83.js:556073` holds the resolver. `chunk-56bhcxay.js:1933443` holds the request builder.
-[^tool-list]: The program, `chunk-56bhcxay.js:3725123`.
-[^tool-offer]: The type file `schemas/claude-code.d.ts`, `tool.offer`. The program, `chunk-56bhcxay.js:62685` (the input pass), `chunk-56bhcxay.js:112441` (the core answer), and `chunk-56bhcxay.js:6095317` (the call), and `chunk-56bhcxay.js:4847751` (the refusal message).
+[^judge]: The program, `chunk-qsd8sbe8.js:9643` (`tool.judge`, the check of `{ decision }` and the settle of `reason` and `plugin`).
+[^v2327]: The program, `chunk-mjpt6p5c.js:58` (`$e2d52d`, the switch on the reason, such as `"bad_value"` and `"unattended"`): the list of reasons that Code Mode does not start has no case for a mod that hooks tool calls.
+[^run]: The program, `chunk-qsd8sbe8.js:9695`.
+[^describe-resolve]: The program, `chunk-aq3ms068.js:25653`, `resolveToolDescription`.
+[^resolver]: The program, `chunk-aq3ms068.js:25653` holds the resolver (`resolveToolDescription`, which answers `{ description, isDeferred }`). `chunk-hg1yqkjk.js:109320` holds the request builder (`description` and `input_schema`).
+[^tool-list]: The program, `chunk-hg1yqkjk.js:214602`.
+[^tool-offer]: The type file `schemas/claude-code.d.ts`, `tool.offer`. The program, `chunk-hg1yqkjk.js:8488` (the input pass), `chunk-hg1yqkjk.js:10734` (the core answer, `isOffered`), and `chunk-hg1yqkjk.js:304745` (the call), and `chunk-hg1yqkjk.js:207667` (the refusal message).
 [^v328-command-run]: The type file `schemas/claude-code.d.ts`, `$.command.run`.
 [^v328-check-origin]: The type file `schemas/claude-code.d.ts`, `tool.check`.

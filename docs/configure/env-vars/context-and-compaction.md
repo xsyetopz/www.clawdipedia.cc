@@ -27,7 +27,7 @@ The table is sorted by name.[^names] See [Environment Variables](index.md#how-to
 
 | Variable | Status | What it does | Values and default | Notes |
 | --- | --- | --- | --- | --- |
-| `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` | <Documented /> | Lowers the percentage of the window at which auto-compaction starts. | Text. Also used for the fork compaction check | Main sessions and subagents. Project `env` can set it before trust |
+| `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` | <Documented /> | Lowers the percentage of the window at which auto-compaction starts. | Text. Also used for the fork compaction check | Main sessions and subagents. Project `env` can set it before trust. When you remove it from settings in a running session, Claude Code puts it back to its startup value, or removes it.[^pct-put-back] |
 | `CLAUDE_BG_MEMORY_TOGGLED_OFF` | <Undocumented /> | Tells a background session that memory was turned off. The session then calls its memory-off handler. | Text. Acts only when the value is `1` and `CLAUDE_CODE_SESSION_KIND` is `bg`. The dispatcher sets it | Background sessions. Not set from project `env` before trust |
 | `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD` | <Documented /> | Loads memory files from `--add-dir` directories. | On or off. The remote `add_directory` request also needs it set in the container | All sessions. Not set from project `env` before trust |
 | `CLAUDE_CODE_AUTO_COMPACT_WINDOW` | <Documented /> | Sets the auto-compact window in tokens. It is capped at the model context window. | Text. Accepts `k` and `M` suffixes, such as `200k`, like `--autocompact`. Claude Code warns when a value is out of range or ignored. Project `env` may set it before trust | All sessions, allowed in. Project `env` can set it before trust |
@@ -91,8 +91,9 @@ Claude Code counts the tokens in the conversation. When the count passes a limit
 
 ## Sources
 
-[^names]: The program, `chunk-7343wm3k.js:26213`, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^trinket]: The program, `chunk-56bhcxay.js:2681484`. Probe case `env319b.curried-trinket.set` (a stub answers the second model request with the 400 "prompt is too long"): the third request, the compact request, held the text. Probe cases `unset` and `no-summary-tag` held none.
-[^max-context]: The program, `chunk-xethrx83.js:27200` and `chunk-xethrx83.js:27330`.
-[^memory-push]: The program, `chunk-4h0jyvmx.js:114945` (the mode), `chunk-4h0jyvmx.js:116463` (the `recorded` check), and `chunk-4h0jyvmx.js:116720` (the id and hash match).
+[^names]: The program, `chunk-gvhwnc7g.js:808` (`CLAUDE_AUTOCOMPACT_PCT_OVERRIDE`), and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^trinket]: The program, `chunk-hg1yqkjk.js:130330`. Probe case `env319b.curried-trinket.set` (a stub answers the second model request with the 400 "prompt is too long"): the third request, the compact request, held the text. Probe cases `unset` and `no-summary-tag` held none.
+[^max-context]: The program, `chunk-aq3ms068.js:24133` and `chunk-aq3ms068.js:24263`.
+[^memory-push]: The program, `chunk-g4jweshk.js:6858` (the mode), `chunk-g4jweshk.js:6952` (the `recorded` check), and `chunk-g4jweshk.js:6952` (the id and hash match).
 [^juniper]: [Probes](../../reference/probes.md).
+[^pct-put-back]: The program, `chunk-tsby2qjm.js:1934` (the debug text "put back to its startup value, or removed").

@@ -1,4 +1,4 @@
-// The program checks a token with GET /api/oauth/profile (`TA`, chunk-xethrx83.js:324748 in 2.1.328).
+// The program checks a token with GET /api/oauth/profile (chunk-aq3ms068.js:14683 in 2.1.329).
 // A live run makes the same request first: with a refused login every case gets HTTP 401 from the
 // server, and the cases would still record results that look valid.
 const PROFILE_URL = "https://api.anthropic.com/api/oauth/profile";

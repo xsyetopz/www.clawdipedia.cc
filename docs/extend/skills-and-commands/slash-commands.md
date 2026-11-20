@@ -1,6 +1,6 @@
 ---
 title: Slash Commands
-description: Every built-in slash command in Claude Code 2.1.328, grouped by job, with aliases, arguments, and gates.
+description: Every built-in slash command in Claude Code 2.1.329, grouped by job, with aliases, arguments, and gates.
 sidebar_position: 5
 ---
 
@@ -35,7 +35,7 @@ Each line is a separate command. The text after the name is the argument.
 | --- | --- | --- | --- |
 | `/add-dir` `<path>` | <Documented /> | Adds a working folder. | Panel. Runs at once when you give a path. Loads `.claude/skills`, `.claude/commands`, and `.claude/agents` of that folder. A text form runs for some SDK entry points. |
 | `/cd` `<path>` | <Documented /> | Moves this session to a new working folder. | Panel. In fullscreen mode, when the trust prompt does not fit the window, `Yes` is refused and the line `To trust this folder, first make the window taller` shows.[^cd-taller] |
-| `/clear` (aliases `/reset`, `/new`) `[name]` | <Documented /> | Starts a new session with empty context. | The old session stays on disk. `/resume` opens it. Works non-interactive too. |
+| `/clear` (aliases `/reset`, `/new`) `[name]` | <Documented /> | Starts a new session with empty context. | The old session stays on disk. `/resume` opens it. Loops carry over to the new session. Works non-interactive too.[^clear-loops] |
 | `/compact` `<optional custom summarization instructions>` | <Documented /> | Summarizes the conversation to free context. | Off when env var `DISABLE_COMPACT` is truthy. See [Context and Compaction](../../how-it-works/context-and-compaction.md). |
 | `/autocompact` `[auto\|<tokens>]` | <Documented /> | Sets how full the context gets before it auto-summarizes. | Panel in interactive mode. A text form, "Configure the auto-compact window size", runs non-interactive or in a remote workspace. |
 | `/context` | <Documented /> | Shows current context use. | Found only as a text command, enabled in non-interactive mode. |
@@ -55,7 +55,7 @@ Each line is a separate command. The text after the name is the argument.
 | `/exit` (alias `/quit`) | <Documented /> | Exits the CLI. In a background session, it detaches. The session keeps running. | Panel and text form. |
 | `/restart` (alias `/update`) | <Gated note="Interactive terminal on macOS or Linux, native install only, and a server-side feature flag." /> | Restarts Claude Code on the newly installed version. Resumes this session. | Interactive only. See [How `/restart` Works](#how-restart-works). |
 | `/rewind` (aliases `/checkpoint`, `/undo`) | <Documented /> | Restores the code, the conversation, or both to an earlier point. | Interactive only. Each point says what code it can restore. A turn whose changes were not tracked reads `Code changes unknown` instead of `No code changes`, and a file that a shell command changed reads `Can't restore <file> changed while a command ran`.[^rewind] A restore leaves some files untouched: a link or other file that is not regular, a file whose folder changed since the checkpoint, a file behind a link in a folder that sandboxed commands can write, and a file whose backup cannot be read safely. The result says `Restored the code, but skipped N file(s): <reason>`, and `--debug` lists the paths.[^rewind-skip] |
-| `/tasks` (alias `/bashes`) | <Documented /> | Shows and manages everything that runs in the background. | Panel. |
+| `/tasks` (alias `/bashes`) | <Documented /> | Shows and manages this session's background work. | Panel. It has sections for scheduled tasks, the goal, and forks. Press `x` to stop an item. Claude Code asks first. The count in the header includes scheduled tasks. The footer shows the background count as `N bg`, with the same kinds of work in one number: background tasks, remote background tasks, and scheduled tasks. The exit dialog "Background work is running" offers "Exit and stop tasks", which also stops scheduled tasks.[^tasks-panel] |
 | `/list-agents` (alias `/peers`) | <Documented /> | Lists subagents, teammates, and other sessions you can message. | Off when the org setting `messagingBeyondOwnAgentsDisabled` is set. <Gated note="The server flag bot_protected_tengu_virtual_quilt." /> When the flag is on, the list is shown to you alone, and Claude gets a note that it did not see it. Claude calls its own tool to list sessions when it needs them.[^v328-list-agents] |
 | `/focus` `[on\|off]` | <Documented /> | Toggles focus view: only your prompt, a summary, and the reply. | Needs the fullscreen renderer (`/tui fullscreen` or `CLAUDE_CODE_NO_FLICKER=1`). The setting `viewMode: "focus"` does the same. |
 | `/diff` | <Documented /> | Shows uncommitted changes and per-turn diffs. | Panel. Off when a mod provides its own diff view. The panel hint reads "/diff to close".[^diff] |
@@ -68,7 +68,7 @@ Each line is a separate command. The text after the name is the argument.
 
 | Command | Status | What it does | Notes |
 | --- | --- | --- | --- |
-| `/config` (alias `/settings`) `key=value` | <Documented /> | Sets a setting by key. | The text form works in non-interactive mode only. The notice after you change the theme and close the panel says `Set theme to <name>`.[^config-theme] |
+| `/config` (alias `/settings`) `key=value` | <Documented /> | Sets a setting by key. | The text form works in non-interactive mode only. After you close the panel, a notice lists each setting that you changed, such as `Set theme to <name>`. With no change it says "Config dialog dismissed".[^config-theme][^config-notice] |
 | `/memory` | <Documented /> | Edits `CLAUDE.md` files and memory settings. | Panel. A read-only file opens with the warning `This file is read-only, so your changes may not save. Check its permissions.` On a read-only file system the warning says to make that file system writable.[^memory] |
 | `/permissions` (alias `/allowed-tools`) | <Documented /> | Manages allow and deny rules. | Panel. |
 | `/hooks` | <Documented /> | Shows your hook configuration. | Panel. Needs no workspace. See [Hooks](../hooks/index.md). |
@@ -84,14 +84,14 @@ Each line is a separate command. The text after the name is the argument.
 | `/color` `[color\|default]` | <Documented /> | Sets the prompt bar color for this session. | Panel and text form. |
 | `/brief` | <Gated note="Remote config flag enable_slash_command, and the account needs the Brief tool." /> | Toggles brief-only mode. | Panel. |
 | `/scroll-speed` | <Documented /> | Adjusts mouse wheel scroll speed. | Needs the fullscreen renderer. Off in some terminals, including JetBrains. |
-| `/terminal-setup` | <Documented /> | Installs the Shift+Enter key binding. | The text changes with the terminal. On Terminal.app, the success text adds a dim note after "Enabled "Use Option as Meta key"": the Option key no longer types characters such as é, or on some keyboard layouts the at sign, pipe, brackets, braces, and backslash. To undo it, uncheck "Use Option as Meta key" in Terminal → Settings → Profiles → Keyboard, for your default and startup profiles.[^terminal-note] Inside tmux the text names the two `~/.tmux.conf` lines that Shift+Enter needs: `set -s extended-keys on` and `set -as terminal-features 'xterm*:extkeys'`. In Windows Terminal before `1.25`, where Shift+Enter sends the prompt, it says to press Ctrl+J or type a backslash and press Enter, or to update Windows Terminal.[^terminal-setup] |
+| `/terminal-setup` | <Documented /> | Installs the Shift+Enter key binding. | The text changes with the terminal. On Terminal.app below macOS 27, the success text adds a dim note after "Turned on "Use Option as Meta key"": the Option key no longer types characters such as é, or on some keyboard layouts the at sign, pipe, brackets, braces, and backslash. To undo it, uncheck "Use Option as Meta key" in Terminal → Settings → Profiles → Keyboard, for your default and startup profiles.[^terminal-note] On macOS 27 and later, `/terminal-setup` does not turn that setting on, and the text says "Shift+Return will now enter a newline." If screen-reader mode is also on, it says "No Terminal.app changes needed."[^terminal-27] The Shift+Enter tip says "Press Option+Enter to send a multi-line message" below macOS 27 and names Shift+Enter otherwise.[^terminal-27-tip] Inside tmux the text names the two `~/.tmux.conf` lines that Shift+Enter needs: `set -s extended-keys on` and `set -as terminal-features 'xterm*:extkeys'`. In Windows Terminal before `1.25`, where Shift+Enter sends the prompt, it says to press Ctrl+J or type a backslash and press Enter, or to update Windows Terminal.[^terminal-setup] |
 | `/keybindings` | <Documented /> | Opens your keyboard shortcuts file. | Interactive only. Needs keybinding customization on. |
 | `/ide` `[open]` | <Documented /> | Manages IDE integrations and shows status. | Panel. |
 | `/init` | <Documented /> | Creates a `CLAUDE.md` file with codebase notes. | A prompt command. With env var `CLAUDE_CODE_NEW_INIT` it also configures skills and hooks. Claude can call it through the `Skill` tool. |
 | `/auto-mode-setup` `[--request-id <uuid>] (--wizard ... --propose \| --expect-sha256 <hex> --apply-file <path>)` | <Gated note="An environment-onboarding policy flag." /> | Teaches auto mode about your environment. The text form can also apply rule changes. It reads your project and recent sessions. | Panel. The text form is non-interactive. The panel description does not say "plus optional rule tweaks"; the text form does. `skillOverrides["auto-mode-setup"]: "off"` turns it off.[^auto-setup] |
 | `/import` `[codex\|gemini\|cursor] [--dry-run]` | <Gated note="Server flag tengu_import, off by default. You cannot enable it" /> | Imports config from another AI coding agent. | Panel and text form. |
 | `/help` | <Documented /> | Shows help and the command list. | Panel. Terminal only. It takes an optional `[command]` argument. Typing `/<command> --help` or `/<command> -h` for a built-in command runs `/help <command>`, unless that command answers `--help` itself. `/help <command>` for such a command runs `/<command> --help`.[^help] |
-| `/status` | <Documented /> | Shows version, model, account, API connectivity, and tool status. | Panel. Lists skills whose `allowed-tools` were ignored. A `Features` row says when your provider or an environment variable turns features off, such as "some aren't available while `DISABLE_TELEMETRY` is set", with a link to the official page.[^status-features] |
+| `/status` | <Documented /> | Shows version, model, account, API connectivity, and tool status. | Panel. Lists skills whose `allowed-tools` were ignored. With `opusplan` or `haiku`, the model line adds the model that plan mode uses, such as `<model> · <plan model> in plan mode`.[^status-plan-model] A `Features` row says when your provider or an environment variable turns features off, such as "some aren't available while `DISABLE_TELEMETRY` is set", with a link to the official page.[^status-features] |
 | `/usage` (aliases `/cost`, `/stats`) | <Documented /> | Shows session cost, plan use, and activity stats. | Panel and text form. `CLAUDE_CODE_OAUTH_TOKEN` shows the limit rows too. See [How `/usage` and `/artifacts` Work](#how-usage-and-artifacts-work). |
 | `/release-notes` | <Documented /> | Shows release notes. | Panel. |
 | `/statusline` | <Documented /> | Configures the status line. | A prompt command. Not in safe mode. Interactive only. |
@@ -123,7 +123,7 @@ Each line is a separate command. The text after the name is the argument.
 | `/web-setup` | <Gated note="Availability claude-ai. Policies allow_remote_sessions and allow_quick_web_setup." /> | Configures cloud sessions with your GitHub account. | Panel. |
 | `/cloud-plugins` | <Gated note="Off when env var CLAUDE_CODE_DISABLE_PLUGIN_FORWARDING is set." /> | Chooses whether cloud sessions use the plugins enabled on this machine. | Panel. |
 | `/remote-env` | <Gated note="Availability claude-ai and console-profile. Policy allow_remote_sessions." /> | Chooses the default environment for cloud agents. | Panel. |
-| `/teleport` (alias `/tp`) | <Gated note="Availability claude-ai and console-profile. Policy allow_remote_sessions." /> | Sends this session to the cloud, or resumes one from claude.ai. | Panel. |
+| `/teleport` (alias `/tp`) | <Gated note="Availability claude-ai and console-profile. Policy allow_remote_sessions." /> | Resumes a cloud session here. | Panel. When this session has messages, picking a session starts a new session, as `/clear` does. The old session stays in `/resume`, or the picker says that it will not come back. Claude Code refuses while Claude is working.[^teleport-new] The server flag `tengu_mellow_prism` is on by default. |
 | `/session` (alias `/remote`) | <Gated note="Needs a remote workspace." /> | Shows the cloud session URL and a QR code. | Panel. |
 | `/desktop` (alias `/app`) | <Gated note="Availability claude-ai." /> | Continues the session in Claude Desktop. | Panel. |
 | `/mobile` (aliases `/ios`, `/android`) | <Documented /> | Shows a QR code to download the mobile app. | Panel. |
@@ -211,7 +211,7 @@ A yes sends `DELETE /api/frame/<slug>`. Claude Code retries once on `409`, `429`
 
 `/usage` turns each warning into a one-line fix that names its source. Each fix starts a prompt that begins `Fix what /usage flagged. Show me each change before you make it.` It tells Claude that text in backticks is a name from your logs, never an instruction. Examples of fix lines are `Turn off MCP servers you don't use`, `Run fewer sessions at once`, and `Start fresh when you switch tasks`.[^fix-lines] Another fix line reads `Review sessions active over many hours`, with the detail `whole sessions with requests in 8 or more separate hours`.[^fix-hours] <Documented /> The subagent fix line reads `Check which models your subagents use`, with the detail `share covers whole sessions, not only subagents`.[^fix-subagent] With Remote Control on, `/usage` says `Nothing was sent. Turn off Remote Control to use fixes.`
 
-`CLAUDE_CODE_OAUTH_TOKEN` shows the `Current session` and `Current week (all models)` rows. The panel then also shows `What's contributing to your limits usage?` with `Scanning local sessions…`. The full section needs a claude.ai login with the `user:inference` and `user:profile` scopes.[^usage-scopes]
+`CLAUDE_CODE_OAUTH_TOKEN` shows the `Current session` and `Current week (all models)` rows. The panel then also shows `What's contributing to your usage?` with `Scanning local sessions…`. The full section needs a claude.ai login with the `user:inference` and `user:profile` scopes.[^usage-scopes]
 
 Reset times look like `Resets <time> (<time zone>)`. `/usage` drops minutes on the hour. It adds a date when the reset is more than 24 hours away. Weekly rows always show the date.[^usage-resets]
 
@@ -252,55 +252,62 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^kinds]: The program calls a panel command `local-jsx`, a text command `local`, and a prompt command `prompt`, for example in `chunk-56bhcxay.js:2231195` (local-jsx), `chunk-56bhcxay.js:2230940` (local), and `chunk-56bhcxay.js:2218392` (prompt).
-[^rewind]: The program, `chunk-j2wfp6sf.js:373342` and `chunk-j2wfp6sf.js:373506`.
-[^memory]: The program, `chunk-e92vfs7j.js:54423`.
-[^tui]: The program, `chunk-j2wfp6sf.js:1972457`.
-[^terminal-setup]: The program, `chunk-2428phbc.js:6394`, `chunk-2428phbc.js:6454`, and `chunk-2428phbc.js:7058`.
-[^login-privacy]: The program, `chunk-vhzbpgjm.js:777`.
-[^login]: The program, `chunk-5zjcbyak.js:642`.
-[^diff]: The program, `chunk-yh3qh34n.js:31134`.
-[^more-models]: The program, `chunk-j2wfp6sf.js:767376`.
-[^fast-vertex]: The program, `chunk-xethrx83.js:386847`.
-[^fast-notice]: The program, `chunk-43kcvxxw.js:4033`.
-[^fast-labels]: The program, `chunk-xethrx83.js:387848`, `chunk-79nt6zzq.js:19715`.
-[^terminal-note]: The program, `chunk-2428phbc.js:13985`.
-[^auto-setup]: The program, `chunk-56bhcxay.js:2231966` (text form) and `chunk-56bhcxay.js:2232342` (panel).
-[^help]: The program, `chunk-56bhcxay.js:2243997` and `chunk-j2wfp6sf.js:1791843`.
-[^upgrade]: The program, `chunk-pqenrb12.js:4188`. The flag is `tengu_idle_amber_finch`.
-[^project]: The program, `chunk-56bhcxay.js:2233291`.
-[^use-case]: The program, `chunk-56bhcxay.js:2608524`, the command table: `isEnabled:()=>n1()&&!Et()`. The flag is `tengu_federated_possum`, `chunk-20bv8pca.js:219960`.
-[^remote-bang]: The program, `chunk-5699r6rq.js:240423`.
-[^spawn-mode]: The program, `chunk-kfzma69d.js:124920`.
-[^stickers]: The program, `chunk-56bhcxay.js:2601644`. The output is in `chunk-g6wjpbcr.js:1370`.
-[^name-rule]: The program, `chunk-56bhcxay.js:72413`, `chunk-56bhcxay.js:72417`, and `chunk-56bhcxay.js:195851`.
-[^name-type]: The program, `chunk-56bhcxay.js:1285281`.
-[^file-errors]: The program, `chunk-56bhcxay.js:196537`.
-[^delete]: The program, the `/artifacts` panel: `chunk-4685cqv3.js:2396` and `chunk-2fg7f6yw.js:44251`. The confirmation is at `chunk-2fg7f6yw.js:2046-2094`, the `d` key at `chunk-2fg7f6yw.js:2374-2383`, and the owner and remote check at `chunk-2fg7f6yw.js:1414`.
-[^fix-lines]: The program, the `/usage` fix lines: `chunk-65ne6cqk.js:7666` (`Start fresh when you switch tasks`), `chunk-65ne6cqk.js:8117` (`Run fewer sessions at once`), `chunk-65ne6cqk.js:8565` (`Turn off MCP servers you don't use`), and `chunk-56bhcxay.js:4075743`.
-[^fix-hours]: The program, `chunk-65ne6cqk.js:8256`.
-[^fix-subagent]: The program, `chunk-65ne6cqk.js:7798`.
-[^usage-scopes]: The program, the `/usage` panel: `chunk-hf20h63w.js:45392` and `chunk-hf20h63w.js:48171`. The usage report calls the usage endpoint only when the login is a claude.ai login with `user:inference` (`Pt()`, `chunk-xethrx83.js:632812`, scope test at `chunk-vhzbpgjm.js:786`) and also has `user:profile` (`rf()`, `chunk-xethrx83.js:633221`): `chunk-7x0smkn1.js:3709`. The breakdown also needs the organization policy `allow_usage_transcript_scan` (`chunk-q6qpd9yd.js:892`), and its title is `What's contributing to your usage?` (`chunk-hf20h63w.js:48184`).
-[^usage-resets]: The program, `chunk-hf20h63w.js:52271` (the `Resets` line), `chunk-hf20h63w.js:51828` (weekly rows always show the date), and `chunk-n5310r48.js:19177` (`Y0`: no minutes on the hour, and a date past 24 hours).
-[^usage-hold-text]: The program, `chunk-hf20h63w.js:58347` (`xn`: the time, rounded up to the minute, or `requests temporarily limited — try again in a moment` with no end time).
-[^usage-texts]: The program, `chunk-hf20h63w.js:59766` (the forms with bars and the cache form), `chunk-hf20h63w.js:60317` (the forms with no data), and `chunk-g78ks3d1.js:28867` (`vQn`: the test for a per-model weekly limit).
-[^usage-fail]: The program, `chunk-hf20h63w.js:58205` (`Couldn't load usage data`) and `chunk-hf20h63w.js:59766` (`(couldn't refresh)` and `Couldn't refresh usage data`).
-[^usage-hold]: The program, `chunk-g78ks3d1.js:33307` (`Vn`: the status codes, the 5-minute default, and the 1-hour cap), `chunk-g78ks3d1.js:23379` (the rejected-login test), `chunk-g78ks3d1.js:23855` (`Retry-After`), and `chunk-g78ks3d1.js:29408` (the in-memory store for each token).
-[^usage-fresh]: The program, `chunk-g78ks3d1.js:49642` (`zt=60000`).
-[^channel-api]: The program, `chunk-6hhzbe1q.js:41`.
-[^cd-taller]: The program, `chunk-t5ty4t2x.js:6441`.
-[^rewind-skip]: The program, `chunk-j2wfp6sf.js:364922`.
-[^status-features]: The program, `chunk-pqenrb12.js:3325`.
-[^off-commands]: The program, `chunk-pqenrb12.js:3325` and `chunk-pqenrb12.js:4188`.
-[^skills-exit]: The program, `chunk-8mj3s5dy.js:10488` (`Press <key> again to close`).
-[^export]: The program, `chunk-64zn2qx5.js:35206`.
-[^plugin-cmd]: The program, `chunk-4prvwasd.js:17763`.
-[^tui-classic]: The program, `chunk-56bhcxay.js:2589728`.
-[^gh-app]: The program, `chunk-c7bxfej7.js:69175`.
-[^usage-error-mark]: The program, `chunk-hf20h63w.js:60317` for the text, `chunk-1pcqgphq.js:12-48` for the line that shows it with `status: "error"`, and `chunk-30554tfb.js:31-45` for the mark and its `failed:` label.
-[^artifacts-gate]: The program, `chunk-56bhcxay.js:119414-119418` for the `isEnabled` check of the command and `chunk-3h2rfbf3.js:18848` for the artifact policy check, which holds the `adminAllowed` answer.
-[^resend-hint]: The program, `chunk-j2wfp6sf.js:591238` (the hint text).
-[^config-theme]: The program, `chunk-hf20h63w.js:22501`.
-[^artifacts-list]: The program, `chunk-2fg7f6yw.js:48292` (the warning), `chunk-2fg7f6yw.js:48695` (the empty text), `chunk-2fg7f6yw.js:29940` (the delays), `chunk-2fg7f6yw.js:33830` (the retry), `chunk-kkscdchq.js:37043` (the status codes), and `chunk-15vjjfkn.js:203` (each delay varies by up to a quarter).
-[^v328-list-agents]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-djw7n09x.js:310` (the note to Claude), `chunk-5699r6rq.js:10421` (the display check), and `chunk-p90ry0yq.js:7` (the flag).
-[^v328-chrome]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-ytavvbnp.js:1240`.
+[^kinds]: The program calls a panel command `local-jsx`, a text command `local`, and a prompt command `prompt`, for example in `chunk-hg1yqkjk.js:100523` (local-jsx), `chunk-hg1yqkjk.js:100501` (local), and `chunk-hg1yqkjk.js:99417` (prompt).
+[^rewind]: The program, `chunk-zs9k1w9q.js:24446` and `chunk-zs9k1w9q.js:24446`.
+[^memory]: The program, `chunk-tfr8jd6e.js:2213`.
+[^tui]: The program, `chunk-zs9k1w9q.js:123516`.
+[^terminal-setup]: The program, `chunk-qqbf4af6.js:490` (Windows Terminal "1.25" text), `chunk-qqbf4af6.js:808` (the Terminal.app version test), and `chunk-qqbf4af6.js:859` ("Turned on").
+[^login-privacy]: The program, `chunk-3q5b9bqc.js:33`.
+[^login]: The program, `chunk-xn4my045.js:9`.
+[^diff]: The program, `chunk-d69x2ckn.js:1505`.
+[^more-models]: The program, `chunk-zs9k1w9q.js:46698`.
+[^fast-vertex]: The program, `chunk-aq3ms068.js:17821`.
+[^fast-notice]: The program, `chunk-1kc5sfs8.js:216`.
+[^fast-labels]: The program, `chunk-aq3ms068.js:17862` (`$12abfe`: your model if it supports fast mode, else the default model), `chunk-zs9k1w9q.js:47044` (the label in the `/fast` hint), and `chunk-1yfzbet8.js:1144` (the `Fast mode` row in `/config`).
+[^terminal-note]: The program, `chunk-qqbf4af6.js:760` (the note text "Use Option as Meta key").
+[^auto-setup]: The program, `chunk-hg1yqkjk.js:175849` (text form) and `chunk-hg1yqkjk.js:175849` (panel).
+[^help]: The program, `chunk-hg1yqkjk.js:176383` and `chunk-zs9k1w9q.js:113024`.
+[^upgrade]: The program, `chunk-76t3g1yn.js:11065` (`DISABLE_UPGRADE_COMMAND` and the `enterprise` test) and `chunk-42vkrmcg.js:171` (`/upgrade needs a Claude subscription.`). The flag is `tengu_idle_amber_finch`, `chunk-76t3g1yn.js:11061`.
+[^project]: The program, `chunk-hg1yqkjk.js:175913`.
+[^use-case]: The program, `chunk-hg1yqkjk.js:189140`, the command table: `isEnabled:()=>n1()&&!Et()`. The flag is `tengu_federated_possum`, `chunk-w03c3634.js:8890`.
+[^remote-bang]: The program, `chunk-614w915w.js:13284`.
+[^spawn-mode]: The program, `chunk-2kt0fcxt.js:6769`.
+[^stickers]: The program, `chunk-hg1yqkjk.js:188785`. The output is in `chunk-bn9t79jx.js:37`.
+[^name-rule]: The program, `chunk-hg1yqkjk.js:48542`, `chunk-hg1yqkjk.js:48546`, and `chunk-hg1yqkjk.js:48553` (the `[names]` log line; `chunk-hg1yqkjk.js:280101` calls it with `is not offered`).
+[^name-type]: The program, `chunk-hg1yqkjk.js:75831`.
+[^file-errors]: The program, `chunk-hg1yqkjk.js:280788`.
+[^delete]: The program, the `/artifacts` panel: `chunk-1f8gh9zn.js:77` (the `DELETE` request with `/api/frame/`), `chunk-1f8gh9zn.js:88` (the retry on `409`, `429`, or `503`), and `chunk-p2schvsw.js:1761` (`Artifact deleted`). The confirmation is at `chunk-p2schvsw.js:2079` (`confirm-delete`), the `d` key at `chunk-p2schvsw.js:2413` (`case "d"`), and the owner and remote check at `chunk-p2schvsw.js:1446` (`canDelete`).
+[^fix-lines]: The program, the `/usage` fix lines: `chunk-34g06jj5.js:454` (`Start fresh when you switch tasks`), `chunk-34g06jj5.js:470` (`Run fewer sessions at once`), `chunk-34g06jj5.js:470` (`Turn off MCP servers you don't use`), and `chunk-hg1yqkjk.js:255613`.
+[^fix-hours]: The program, `chunk-34g06jj5.js:470`.
+[^fix-subagent]: The program, `chunk-34g06jj5.js:470`.
+[^usage-scopes]: The program, the `/usage` panel: `chunk-vxkg9ahh.js:2964` and `chunk-vxkg9ahh.js:2964`. The usage report calls the usage endpoint only when the login is a claude.ai login with `user:inference` (`$c2ce40`, `chunk-aq3ms068.js:29698`, scope test at `chunk-3q5b9bqc.js:40`) and also has `user:profile` (`$cbe556`, `chunk-aq3ms068.js:29727`): `chunk-d3rc7j4x.js:232` (`$663fdf() && $0a9155()`). Without `user:profile` the report has the status `no_profile_scope` (`chunk-d3rc7j4x.js:169`) and uses the rate-limit headers. The `CLAUDE_CODE_OAUTH_TOKEN` login gets the scopes `user:inference`, `user:ccr_inference`, and `user:file_upload` unless `CLAUDE_CODE_OAUTH_SCOPES` is set (`chunk-aq3ms068.js:28438-28445`). The rows `Current session` and `Current week (all models)` are at `chunk-vxkg9ahh.js:3964` and `chunk-vxkg9ahh.js:3970`, and `Scanning local sessions…` is at `chunk-vxkg9ahh.js:2750`. The breakdown also needs the organization policy `allow_usage_transcript_scan` (`chunk-rz82e4b4.js:56`), and its title is `What's contributing to your usage?` (`chunk-vxkg9ahh.js:2964`).
+[^usage-resets]: The program, `chunk-vxkg9ahh.js:3282` (the `Resets` line), `chunk-vxkg9ahh.js:3972` (the `alwaysShowDateInReset` flag of the week row: weekly rows always show the date), and `chunk-r3zpj4t6.js:1126` (`$b79071`: a date past 24 hours or for weekly rows, and no minutes on the hour).
+[^usage-hold-text]: The program, `chunk-vxkg9ahh.js:3742` (`$ecf601`: the time, rounded up to the minute, or `requests temporarily limited — try again in a moment` with no end time).
+[^usage-texts]: The program, `chunk-vxkg9ahh.js:3830` (the cache form, `Showing last-known usage`), `chunk-vxkg9ahh.js:3832` (the forms with bars, `Partial usage data` and `Per-model breakdown unavailable`), `chunk-vxkg9ahh.js:3847` (the forms with no data, `The usage page is`), `chunk-vxkg9ahh.js:3740` (`$ecf601`: `rate limited until` and `requests temporarily limited`), and `chunk-nchg3ttk.js:1479` (`$a260d5`: the test for a per-model weekly limit).
+[^usage-fail]: The program, `chunk-vxkg9ahh.js:3735` (`Couldn't load usage data`) and `chunk-vxkg9ahh.js:3833` (`(couldn't refresh)` and `Couldn't refresh usage data`).
+[^usage-hold]: The program, `chunk-nchg3ttk.js:1720` (`Vn`: the status codes, the 5-minute default, and the 1-hour cap), `chunk-nchg3ttk.js:1218` (the rejected-login test), `chunk-nchg3ttk.js:1218` (`Retry-After`), and `chunk-nchg3ttk.js:1520` (the in-memory store for each token).
+[^usage-fresh]: The program, `chunk-nchg3ttk.js:2493` (`$6091bb = 60000`).
+[^channel-api]: The program, `chunk-m086wc89.js:41`.
+[^cd-taller]: The program, `chunk-za64d5aq.js:392`.
+[^rewind-skip]: The program, `chunk-zs9k1w9q.js:23572`.
+[^status-features]: The program, `chunk-42vkrmcg.js:124` (`some aren't available while ... is set` for the `Features` row) and `chunk-42vkrmcg.js:112` (the provider form).
+[^off-commands]: The program, `chunk-42vkrmcg.js:140` (`isn't available with`, the provider form), `chunk-42vkrmcg.js:146` (`isn't available while` and `Your admin set it.`), and `chunk-42vkrmcg.js:171` (`needs a Claude subscription.`), each shown instead of `Unknown command`.
+[^skills-exit]: The program, `chunk-qrgrs867.js:539` (`Press <key> again to close`).
+[^export]: The program, `chunk-bvd3mmvh.js:911`.
+[^plugin-cmd]: The program, `chunk-4g68nm9m.js:7506` (the `Remove marketplace` question) and `chunk-4g68nm9m.js:7524` (`settings and saved data`).
+[^tui-classic]: The program, `chunk-zs9k1w9q.js:13970` (`/tui <classic|fullscreen>`).
+[^gh-app]: The program, `chunk-kh1heyzv.js:1513` (the confirm button "Yes, make these changes").
+[^usage-error-mark]: The program, `chunk-vxkg9ahh.js:3918` for the call that passes the text, `chunk-3gfnp70y.js:38` for the line that shows it with `status: "error"`, and `chunk-sg4b5ghb.js:31-45` for the mark and its `failed:` label.
+[^artifacts-gate]: The program, `chunk-hg1yqkjk.js:175868-175872` for the `isEnabled` check of the command and `chunk-2nvq6he9.js:822` for the artifact policy check, which holds the `adminAllowed` answer.
+[^resend-hint]: The program, `chunk-zs9k1w9q.js:37007` (the hint text).
+[^config-theme]: The program, `chunk-vxkg9ahh.js:1351`.
+[^artifacts-list]: The program, `chunk-p2schvsw.js:2041` (the warning), `chunk-p2schvsw.js:2041` (the empty text), `chunk-p2schvsw.js:926` (the delays `[1000, 5000]`), `chunk-p2schvsw.js:1121` (the retry loop over `$c95db6`), `chunk-0jd48asd.js:1780` (the status codes: `500` or higher, `429`, and `408`), and `chunk-jsbj869z.js:9` (each delay varies by up to a quarter, `ratio: 0.25`).
+[^v328-list-agents]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-etkss5a5.js:17` (the note to Claude, `/list-agents`), `chunk-614w915w.js:11027` (the display check, `list-agents`), and `chunk-etkss5a5.js:9` (the flag `bot_protected_tengu_virtual_quilt`).
+[^v328-chrome]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-pjv8v536.js:1272`.
+[^tasks-panel]: The program, `chunk-hg1yqkjk.js:177501` (the description "View and manage this session's background work"), `chunk-zs9k1w9q.js:52281` ("Stop this scheduled task?", "Stop the goal?", "Stop this fork?"), `chunk-jhjdqtx5.js:80` (the "scheduled" count text), `chunk-zs9k1w9q.js:117129` ("Exit and stop tasks"), and `chunk-zs9k1w9q.js:117057` ("Background work is running"), `chunk-zs9k1w9q.js:57310` (the footer text `${a2} bg`), and `chunk-q0chk9t9.js:104` (`$533f3d`: tasks, remote background tasks, and scheduled tasks added into one number).
+[^clear-loops]: The program, `chunk-hg1yqkjk.js:175946` (the description "loops carry over, and the old one stays in /resume").
+[^config-notice]: The program, `chunk-vxkg9ahh.js:1344` (each changed row is added to the notice, then `Config dialog dismissed` at line 1351), `chunk-vxkg9ahh.js:2378` (`Set ${a3} to`), and `chunk-vxkg9ahh.js:1351` ("Config dialog dismissed").
+[^status-plan-model]: The program, `chunk-fn9dv1zs.js:843` ("in plan mode") and `chunk-aq3ms068.js:22416` (`opusplan` and `haiku`).
+[^teleport-new]: The program, `chunk-hg1yqkjk.js:178033` (the description "Resume a cloud session here"), `chunk-bjya12sm.js:94` (`clearConversation` before the pull), and `chunk-bjya12sm.js:316` (the picker text).
+[^terminal-27]: The program, `chunk-qqbf4af6.js:808` (the version test), `chunk-qqbf4af6.js:811` ("No Terminal.app changes needed."), `chunk-qqbf4af6.js:870` ("Shift+Return will now enter a newline."), and `chunk-rvqem0xc.js:2818` (the test for a version below 27).
+[^terminal-27-tip]: The program, `chunk-hqhjcxtn.js:1304` ("Press Option+Enter to send a multi-line message").

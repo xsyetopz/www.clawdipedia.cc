@@ -97,6 +97,6 @@ When a plugin that runs first skips one of your mod's hooks, the transcript show
 
 ## Sources
 
-[^skipped]: The program, `chunk-56bhcxay.js:5051319`, the text of the transcript line.
-[^budget-ms]: The program, `chunk-syremzmn.js:194600`.
+[^skipped]: The program, `chunk-hg1yqkjk.js:218305`, the text of the transcript line.
+[^budget-ms]: The program, `chunk-qsd8sbe8.js:8505`.
 [^v328-next-origin]: The type file `schemas/claude-code.d.ts`, `NextOrigin`.

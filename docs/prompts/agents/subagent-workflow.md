@@ -6,7 +6,7 @@ generated: false
 group: agents
 ---
 
-This is the verbatim text that Claude Code 2.1.328 uses for subagents that a workflow orchestration script starts.
+This is the verbatim text that Claude Code 2.1.329 uses for subagents that a workflow orchestration script starts.
 
 ## Where It Comes From
 

@@ -6,7 +6,7 @@ sidebar_position: 3
 
 These types map an event name to its input, its result, and its call on `$`. Your editor uses them to know the shape of `e` and `next` for each event. For example, `$.fs.read(...)` is both a call and the event `fs.read`, so a hook can answer it.
 
-A plugin can add its own nouns by declaration merging into `EngineInterface`. The shapes follow the Mod API type file of the `2.1.328` program.[^type-file] See [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference) for the official page.
+A plugin can add its own nouns by declaration merging into `EngineInterface`. The shapes follow the Mod API type file of the `2.1.329` program.[^type-file] See [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference) for the official page.
 
 ## Example
 
@@ -29,7 +29,7 @@ declare module "claude-code" {
 }
 ```
 
-Now `voice.say` is also an event, and a hook can use `on('voice.say', ...)`.
+`voice.say` is also an event, and a hook can use `on('voice.say', ...)`.
 
 ## How It Works
 
@@ -62,7 +62,7 @@ These types are aliases, unions, or plain shapes. Each row gives its use and its
 | `DeclaredStateChange` | <Documented /> | What a `state.set` on one declared value carries beside its reference. It carries the value to write and the value that stood there, of the declared type. | Object with fields `value`, `previous`, `ifVersion?`. |
 | `EngineEventOf` | <Documented /> | The events that the engine raises at its call sites, and `engine.create`. The events of the classic settings hooks are in ClassicEventOf. | Object. One key for each event that hooks can handle. The engine skips a hook that fails, and the next hook runs. So a guard needs a `.catch` to fail closed. |
 | `EngineResultOf` | <Documented /> | The results of the events of the engine. | Object. One key for each event. Its value is the result type that a hook for the event may return. |
-| `EventCalls` | <Documented /> | The events of the engine as calls on `$`, with one signature each. `$.<noun>.<event>(input)` resolves to its result, or to its stream. | Object with one key for each noun that raises events (`tool`, `command`, `config`, `prompt`, and more). A plugin's call runs the same chain, and the chain skips the calling hook. 10 calls use it, such as `$.session.compact`. |
+| `EventCalls` | <Documented /> | The events of the engine as calls on `$`, with one signature each. `$.<noun>.<event>(input)` resolves to its result, or to its stream. | Object with one key for each noun that raises events (`tool`, `command`, `config`, `prompt`, and more). A plugin's call runs the same chain, and the chain skips the calling hook. A call such as `$.session.compact` uses it. |
 | `EventName` | <Documented /> | The name of an event: a key of EventOf. It covers the engine's own events (CoreEventName) and the events of the declared plugin nouns (NounEventName). | Alias of `keyof EventOf`. |
 | `EventOf` | <Documented /> | The argument of each event, by event name. A hook receives it as `e`, and the call on `$` takes it. It is plain data, frozen to every depth. | Alias of `CoreEventOf & NounEventOf`. The engine's own events plus the methods of the nouns that plugins add. |
 | `EventResult` | <Documented /> | The result of event `N`: what its hooks return and what their `next(e)` resolves to. | Generic alias of `ResultOf[N]`. |
@@ -96,4 +96,4 @@ These types are aliases, unions, or plain shapes. Each row gives its use and its
 
 ## Sources
 
-[^type-file]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`. The types on this page are the ones it declares under the same names, from `AnyEventHook` to `ValueOrDeny`.
+[^type-file]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`. The types on this page are the ones it declares under the same names, from `AnyEventHook` to `ValueOrDeny`.

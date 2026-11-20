@@ -20,16 +20,16 @@ The prompt that the built-in Claude Code guide subagent gets. The main agent cal
 
 ## Where It Comes From
 
-Captured from a real interactive session of Claude Code 2.1.328 against a local stub server, with a fake key (see [Interactive Probes](../../reference/probes.md#interactive-probes)). The stub answered the first turn with an `Agent` call, and this is the request that the subagent sent.
+Captured from a real interactive session of Claude Code 2.1.329 against a local stub server, with a fake key (see [Interactive Probes](../../reference/probes.md#interactive-probes)). The stub answered the first turn with an `Agent` call, and this is the request that the subagent sent.
 
 - Model: `haiku`.[^model]
 - Tools: 4 in the captured request.
 - The program offers this agent only when the entry point is not `sdk-ts`, `sdk-py`, or `sdk-cli`. A `-p` run reports `sdk-cli`, so the agent does not exist in print mode.[^entry]
-- The program builds the end of the prompt for each session. It lists your custom skills, custom agents, MCP server names, and plugin skills.[^model] The list at the end of the text below came from a clean config.
+- The program builds the end of the prompt for each session. It lists your custom skills, custom agents, MCP server names, plugin skills, and the names of your settings keys (without values).[^model] The list at the end of the text below came from a clean config.
 
 ## How to Override It
 
-A user agent file with the same name replaces it. Put the file in `.claude/agents/claude-code-guide.md`. The shared agent merge code applies to it (The program, `chunk-56bhcxay.js:2961409`). See [Override a Prompt](../other/override.md).
+A user agent file with the same name replaces it. Put the file in `.claude/agents/claude-code-guide.md`. The shared agent merge code applies to it, with `built-in`, `plugin`, `userSettings`, `projectSettings`, `flagSettings`, and `policySettings` sources (The program, `chunk-hg1yqkjk.js:140332`). See [Override a Prompt](../other/override.md).
 
 ## Full Text
 
@@ -189,5 +189,5 @@ Notes:
 
 ## Sources
 
-[^model]: The program, `chunk-56bhcxay.js:2937063`.
-[^entry]: The program, `chunk-56bhcxay.js:2959151`.
+[^model]: The program, `chunk-hg1yqkjk.js:139860`.
+[^entry]: The program, `chunk-hg1yqkjk.js:140207`.

@@ -179,7 +179,7 @@ Every `PostToolUse` input has `hook_event_name`, `tool_name`, `tool_input`, `too
 ## Sources
 
 [^interactive]: Interactive probe on the `PermissionRequest` hook.
-[^denied-code]: The program, the retry text at `chunk-56bhcxay.js:4867700` and the reason text at `chunk-rs68es1f.js:9187`.
-[^shapes-code]: The program, for `Glob` at `chunk-56bhcxay.js:1855972`, for `Grep` at `chunk-56bhcxay.js:1863863`, for `WebSearch` at `chunk-r1yxtgw6.js:67789`, and for `NotebookEdit` at `chunk-56bhcxay.js:5638923`.
-[^bash-diff]: The program, `chunk-jkpzhr7r.js:250770`, `chunk-56bhcxay.js:5666691` and `chunk-56bhcxay.js:5754663` (the caps 5 and 200).
-[^several-hooks]: The program, `chunk-56bhcxay.js:58141-58206` and the changelog text `chunk-4prvwasd.js:57546`.
+[^denied-code]: The program, the retry text at `chunk-e9fhcxkx.js:231` and its use at `chunk-hg1yqkjk.js:208759-208771` (`retry`, the verdict check, and the end of the turn), and the reason text at `chunk-hg1yqkjk.js:208748` (`reason`).
+[^shapes-code]: The program, for `Glob` at `chunk-hg1yqkjk.js:105855-105873` (`$592d5a`), for `Grep` at `chunk-hg1yqkjk.js:106217-106222` (`$ca64fc`), for `WebSearch` at `chunk-b2932m4d.js:3453-3462` (`$87540b`), and for `NotebookEdit` at `chunk-hg1yqkjk.js:282643-282666` (`$1c1830`).
+[^bash-diff]: The program, `chunk-t39fw2cy.js:8657` (`bashEditDiffEnabled`), `chunk-hg1yqkjk.js:289051-289052` (the caps 5 and 200), `chunk-hg1yqkjk.js:289385` (`moreFiles` and `changedFiles`), and `chunk-hg1yqkjk.js:284069` (`skipped`).
+[^several-hooks]: The program, `chunk-hg1yqkjk.js:88221-88286` and the changelog text `chunk-zthba38p.js:136` (`updatedInput`).

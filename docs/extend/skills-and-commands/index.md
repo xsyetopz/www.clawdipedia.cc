@@ -37,7 +37,7 @@ When two skills share a name, the one in the higher place wins.
 | Enterprise `<managed dir>/.claude/skills/<name>/SKILL.md` | <Documented /> | Skills for all users on a machine. | Wins over personal and project skills of the same name. |
 | Personal `~/.claude/skills/<name>/SKILL.md` | <Documented /> | Skills for all your projects. | Wins over project skills. |
 | Project `.claude/skills/<name>/SKILL.md` | <Documented /> | Skills for one repository. | Loaded from the start folder and each parent up to the repository root. |
-| Nested `.claude/skills/` below the start folder | <Documented /> | Skills for a sub-project. | Loads when Claude first reads or edits a file there, or after `/add-dir <subdir>`. On a clash the nested skill is `/apps/web:deploy`. A `.claude/skills` folder inside `~/.claude/plugins` no longer loads when Claude works on files there. Claude Code skips the `plugins` and `cowork_plugins` folders of the config folder.[^plugin-skip] |
+| Nested `.claude/skills/` below the start folder | <Documented /> | Skills for a sub-project. | Loads when Claude first reads or edits a file there, or after `/add-dir <subdir>`. On a clash the nested skill is `/apps/web:deploy`. A `.claude/skills` folder inside `~/.claude/plugins` does not load when Claude works on files there. Claude Code skips the `plugins` and `cowork_plugins` folders of the config folder.[^plugin-skip] |
 | `--add-dir` or `/add-dir` folder | <Documented /> | Skills, `commands/`, and `agents/` of another folder. | `permissions.additionalDirectories` grants file access only and loads none of these. Needs the `project` setting source. |
 | Plugin `skills/<name>/SKILL.md` | <Documented /> | Skills of a plugin. | The command name is `/<plugin>:<skill>`. A plugin root `SKILL.md` with no `skills/` folder loads as one skill. |
 | Synced skills `~/.claude/skills/synced/` | <Documented /> | Skills turned on in your claude.ai account. | Downloaded in the background. Checked about every 10 minutes while active and every 40 minutes while idle.[^sync] Never uploaded. The name `anthropic-skills` is reserved. Needs a claude.ai sign-in. Not in bare mode or `--safe-mode`. |
@@ -110,12 +110,12 @@ See [Substitutions](substitutions.md#invocation-control) for what compaction kee
 
 ## Sources
 
-[^plugin-skip]: The program, `chunk-56bhcxay.js:3906056` and `chunk-md9n15jc.js:3396`.
-[^sync]: The program, `chunk-h4qx6hbn.js:4463` (10 minutes by default, and 4 intervals when idle) and `chunk-jkpzhr7r.js:6080` (the reserved name `anthropic-skills`).
-[^disable-slash]: The program, `chunk-gywceass.js:77563`.
-[^loaded-from]: The program, the skill loader and its `loadedFrom` tags, `chunk-zjfjwhvb.js:1906` and `chunk-56bhcxay.js:1280809`.
-[^budget]: The program, the skill loader, `chunk-56bhcxay.js:2904280-2906664`. The server flag minimum, `tengu_typed_pebble`, is read at `chunk-56bhcxay.js:2904410`.
-[^overrides]: The program, the skill loader, `chunk-56bhcxay.js:4040587-4042231`. Setting text from `schemas/claude-code-settings.json`.
+[^plugin-skip]: The program, `chunk-hg1yqkjk.js:281342` (the log text `Skipped the nested skills search for a file in a sync-owned or plugin folder`) and `chunk-38jz3ehd.js:208` (the `plugins` and `cowork_plugins` folders).
+[^sync]: The program, `chunk-dy11tw28.js:297` (10 minutes by default, set by `tengu_claudeai_skills_sync_interval_minutes`, and 4 intervals when idle, set by `tengu_claudeai_skills_sync_idle_intervals`) and `chunk-t39fw2cy.js:307` (the reserved name `anthropic-skills`).
+[^disable-slash]: The program, `chunk-txash88y.js:3921`.
+[^loaded-from]: The program, the skill loader and its `loadedFrom` tags, `chunk-bxxahqqj.js:84` and `chunk-hg1yqkjk.js:100432`.
+[^budget]: The program, the skill loader, `chunk-hg1yqkjk.js:138888-139002`. The server flag minimum, `tengu_typed_pebble`, is read at `chunk-hg1yqkjk.js:138888`.
+[^overrides]: The program, the skill loader: `chunk-hg1yqkjk.js:100121` (the values `on`, `name-only`, `user-invocable-only`, and `off`), `chunk-hg1yqkjk.js:139088` (`name-only` lists no description), `chunk-hg1yqkjk.js:254645` (`disable_model_invocation`), `chunk-hg1yqkjk.js:254670` (`off` and `user-invocable-only`), `chunk-hg1yqkjk.js:254683` (`is disabled for model invocation` and `in skillOverrides settings`), and `chunk-hg1yqkjk.js:254593` (`is a ${a2} command, not a skill`, with `UI` or `built-in CLI` at `chunk-hg1yqkjk.js:254691`). Setting text from `schemas/claude-code-settings.json`.
 [^schema]: Description of `disableSkillShellExecution` in `schemas/claude-code-settings.json`.
 
 Official pages: [Extend Claude with Skills](https://code.claude.com/docs/en/skills) and [Settings Reference](https://code.claude.com/docs/en/settings-reference).

@@ -58,7 +58,7 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 | `ui.close` | <Documented /> | `$.ui.close({ id })` with `origin` `plugin`. The engine raises it too, for the person (`person`) and for an unload (`unload`). | Input `PaneCloseInput`. Value `void`. |
 | `ui.panes` | <Documented /> | `$.ui.panes()` | Input `NoArgs`. Value `readonly UiPane[]`. |
 | `ui.place` | <Undocumented /> | `$.ui.place({ id })` | Input `UiPlaceArgs`. Value `UiPlaceResult`. |
-| `theme.set` | <Undocumented /> | `$.theme.set({ backdrop })`. `backdrop` is a scene (`{ scene }`) or a still ground, and the scheme is the top-level `overrideColorScheme`. | Input `ThemeSetArgs`. Value `ThemeResult`.[^theme-case] |
+| `theme.set` | <Undocumented /> | `$.theme.set({ backdrop })`. `backdrop` is a scene (`{ scene }`) or a still ground, and the scheme is the top-level `overrideColorScheme`. The call also takes `colors`, `sound`, and `style`. | Input `ThemeSetArgs`. Value `ThemeResult`.[^theme-case] |
 | `theme.clear` | <Undocumented /> | `$.theme.clear()` | Input `NoArgs`. Value `ThemeResult`.[^theme-case] |
 | `ui.selection` | <Documented /> | `$.ui.selection()` | Input `NoArgs`. Value `UiSelection \| undefined`. |
 | `ui.copy` | <Documented /> | `$.ui.copy({ text, surface })`. `surface` takes the session's first surface when left out. | Input `UiCopyArgs`. Value `UiCopyResult`. |
@@ -76,7 +76,7 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 
 ## Sources
 
-[^types-322]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, the maps `EngineEventOf`, `EngineResultOf`, `OpEventOf`, and `OpValueOf`.
-[^pointer]: The Mod API type file, `schemas/claude-code.d.ts`, `UiPointerInput`. The program, `chunk-ae9zb02s.js:10557`.
+[^types-322]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, the maps `EngineEventOf`, `EngineResultOf`, `OpEventOf`, and `OpValueOf`.
+[^pointer]: The Mod API type file, `schemas/claude-code.d.ts`, `UiPointerInput`. The program, `chunk-jst4ts9e.js:287`.
 [^theme-case]: The Mod API type file, `schemas/claude-code.d.ts`, `ThemeSetArgs` and `ThemeResult`.
-[^cancel-notify]: The program, `chunk-56bhcxay.js:4982259`.
+[^cancel-notify]: The program, `chunk-hg1yqkjk.js:214851`.

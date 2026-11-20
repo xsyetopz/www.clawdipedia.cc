@@ -98,6 +98,7 @@ Each row is a family of messages. The backticked text is the start that every me
 | Various | <Undocumented /> | **Built-in `gh api`.** The built-in `gh api` refused a call. | The endpoint, method, header, or field is not valid. `{owner}`, `{repo}`, or `{branch}` cannot be filled in. `--paginate` is used with a non-GET request. `--jq` needs `jq`. The session's GitHub proxy cannot set a header. Nonessential network traffic is disabled. |
 | `Failed to execute PowerShell command: Cannot safely quote` | <Undocumented /> | **PowerShell paths.** `PowerShell` puts the temp-directory path in a single-quoted PowerShell string. A path with a character from U+2018 to U+201F stops the call before PowerShell starts, because PowerShell reads those characters as quotes. Set `CLAUDE_CODE_TMPDIR` to a path without them. | The tool result reads `Failed to execute PowerShell command: Cannot safely quote the temp-directory path (override with CLAUDE_CODE_TMPDIR) in a PowerShell single-quoted string literal: it contains U+2018, which PowerShell's tokenizer treats as a quote delimiter`.[^ps-quote] |
 | `WebFetch was refused after its check had passed` | <Undocumented /> | **WebFetch.** At call time, `WebFetch` checks `CLAUDE_CODE_DISABLE_WEB_FETCH` and the `allow_web_fetch` org policy again, and one of them now refuses. | The tool was on when the call began, but the switch is set or the policy is off at call time. The error code is `web_fetch_refused`. The check text is `WebFetch is turned off by CLAUDE_CODE_DISABLE_WEB_FETCH.` for the variable, or the policy text for `allow_web_fetch`.[^fetch-refused] |
+| `The fetch tool returned no text for this page.` | <Undocumented /> | **WebFetch.** A fetch tool of the session (error id `web-fetch-mcp-tool`) fetched the page and gave back empty text. | `WebFetch` fails with this text. Call it again, or try another page.[^fetch-no-text] |
 | `The small, fast model that reads the content gave no answer.` | <Undocumented /> | **WebFetch.** The small model that applies the prompt to the fetched page returned empty text. | The page was fetched, but the second step gave an empty answer. The text goes on: `Trying again may work.` Call `WebFetch` again, or word the prompt another way.[^fetch-empty] |
 | `The search was cut off before any results arrived. Try again.` | <Undocumented /> | **WebSearch.** A `WebSearch` call ended with no results because the search was cut off. | The text appears in two cases. A search function that the session holds returned no results. Or the reply of the API stopped after it had begun. Call `WebSearch` again.[^search-cut] |
 | `No task found with ID:` | <Undocumented /> | **TaskStop.** `TaskStop` found no task for the ID. | The text can add `Did you mean`, the running teammates, and the running named agents. A stop request from a client with an ID of the shape of a shell task ID, that no task holds, gets a shorter text: `An ID of this shape is not looked up as an agent's name: send the agent's task ID.` Use the task ID, not an agent name, in that case.[^no-task] |
@@ -111,31 +112,32 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^tools-source]: The program, `chunk-r1yxtgw6.js:201784`.
-[^taskstop-trunc]: The program, `chunk-y8xf3hk8.js:54556`.
-[^bash-schema]: The program, the `Bash` input schema, `chunk-56bhcxay.js:5817629`.
-[^monitor-schema]: The program, the `Monitor` input schema, `chunk-jd85xpd4.js:18243`.
-[^disk-full]: The program, `chunk-56bhcxay.js:3842798` (the text) and `chunk-56bhcxay.js:363250` (the volume path).
-[^edquot]: The program, `chunk-56bhcxay.js:3842798`.
-[^monitor-flag]: The program, `chunk-jd85xpd4.js:17088` (`isEnabled` calls the check) and `chunk-d0qhd3r0.js:2637` (the check). The check returns true off Windows. On Windows it returns false when the build withholds `Bash`, and else true only if Git Bash is found. It has no flag.
-[^monitor-stderr]: The program, `chunk-b8ns6r8h.js:3067`.
-[^sleep]: The program, `chunk-56bhcxay.js:5822181`, `chunk-56bhcxay.js:3853975`, and `chunk-56bhcxay.js:5814673`.
-[^cap]: The program, `chunk-eb9kp9gc.js:843`, `chunk-56bhcxay.js:5810462`, and `chunk-56bhcxay.js:3856388`.
-[^bg-output]: The program, `chunk-56bhcxay.js:3856092-3856435`. The notice reads `Command did not complete within its Ns timeout and was moved to the background (ID: ...). Output is being written to: ...`.
-[^bash-hook]: The program, `chunk-56bhcxay.js:1109965` (`Bash` is another name of `Monitor` for hook matchers), `chunk-56bhcxay.js:4280877` (the hook input is rewritten as a `Bash` call), and `chunk-56bhcxay.js:4315926` (the skipped `if` condition). The same code is at `chunk-56bhcxay.js:62539-62550`, `chunk-56bhcxay.js:214448-214453`, and `chunk-56bhcxay.js:230017-230027`.
-[^fetch-long]: The program, `chunk-56bhcxay.js:2779077` and the limit in `chunk-p9hbdxgr.js:400`.
-[^bash-diff]: The program, `chunk-h6ctx9dd.js:2951`. The diff view lists the changed files that it cannot show, and its text for files that did not get a diff reads `... changed (binary, mode only or too large to show)`, followed by the file names.
-[^ps-ask]: The program, `chunk-cg4whsgy.js:73630` (the prompt text), `chunk-cg4whsgy.js:82590-82931` (the names `get-module`, `gmo`, and `module`, and the ask with `ruleProof`), `chunk-cg4whsgy.js:94835` (no saved-rule suggestion), `chunk-cg4whsgy.js:101875` (the ask that a rule cannot override), and `chunk-sgx8zvyg.js:17399` (the server flag `bot_protected_tengu_sienna_grebe`).
-[^head-start]: The program, `chunk-56bhcxay.js:1151300`, `chunk-56bhcxay.js:3819604`, `chunk-2b3eg071.js:71530`.
-[^which]: The program, `chunk-56bhcxay.js:3803438`. The flag is `tengu_swirling_koala`.
-[^git-grep]: The program, `chunk-56bhcxay.js:3783614`.
-[^snapshot]: The program, `chunk-56bhcxay.js:3788286`, `chunk-56bhcxay.js:3790840`, and `chunk-56bhcxay.js:3791809`.
-[^auto-bg]: The program, `chunk-7fpae888.js:16383`.
-[^monitor-ws]: The program, `chunk-jd85xpd4.js:3072`.
-[^ps-quote]: The program, `chunk-y5jn7kpt.js:395` (the check and the message) and `chunk-56bhcxay.js:1158896` (the temp-directory call).
-[^fetch-refused]: The program, `chunk-56bhcxay.js:2780514`.
-[^fetch-empty]: The program, `chunk-56bhcxay.js:2776673`.
-[^no-task]: The program, `chunk-r1yxtgw6.js:43516` for the list form and `chunk-r1yxtgw6.js:44766` for the short form.
-[^commit-secrets]: The program, `chunk-56bhcxay.js:1909489` (the short git guidance of `Bash`) and `chunk-ws3ynpc3.js:6062` (the `PowerShell` text).
-[^ps-locate]: The program, `chunk-pvg3xde6.js:3087`.
-[^search-cut]: The program, `chunk-r1yxtgw6.js:73349` (no results) and `chunk-r1yxtgw6.js:77147` (the reply stopped after output began).
+[^tools-source]: The program, `chunk-d1scfh43.js:54` (the tool names `TaskStop`, `WebFetch`, and `WebSearch` in the list of tool names).
+[^taskstop-trunc]: The program, `chunk-krh304mc.js:3588` (`$c2bb4a`: over 1000 characters, `500` first and `300` last).
+[^bash-schema]: The program, the `Bash` input schema, `chunk-hg1yqkjk.js:291945` (`command`, `timeout`, `description`, `run_in_background`).
+[^monitor-schema]: The program, the `Monitor` input schema, `chunk-3en7bpzn.js:513` (`description`, `timeout_ms`, `persistent`).
+[^disk-full]: The program, `chunk-hg1yqkjk.js:249046` (the text) and `chunk-hg1yqkjk.js:22062` (the volume path).
+[^edquot]: The program, `chunk-hg1yqkjk.js:249044` (`EDQUOT` and `the user's disk quota is used up`).
+[^monitor-flag]: The program, `chunk-3en7bpzn.js:941` (`isEnabled` calls the check) and `chunk-v16rzw0k.js:116` (the check `$4491e5`). The check returns true off Windows. On Windows it returns false when the build withholds `Bash`, and else true only if Git Bash is found. It has no flag.
+[^monitor-stderr]: The program, `chunk-a4cww0eh.js:78` (`stderr, which isn't delivered as events and may mean it failed`).
+[^sleep]: The program, `chunk-hg1yqkjk.js:292213` (the `sleep` pattern), `chunk-hg1yqkjk.js:292220` (the limit, a constant with the value `25`), `chunk-hg1yqkjk.js:292668` (the refusal text with `sleep`), and `chunk-hg1yqkjk.js:108403` (the `Bash` prompt text that names `Monitor` and the until-loop).
+[^cap]: The program, `chunk-qe4gckzg.js:36` (the cap, where `subagentCapMs` of 0 or less means no cap and `2000` is the least timeout), `chunk-hg1yqkjk.js:293635` (`subagentCapApplied`), and `chunk-hg1yqkjk.js:249587` (the two notices, `Command was moved to the background (ID: ...) after running for Ns` and `Command did not complete within its Ns timeout`).
+[^bg-output]: The program, `chunk-hg1yqkjk.js:249588`. The notice reads `Command did not complete within its Ns timeout and was moved to the background (ID: ...). Output is being written to: ...`.
+[^bash-hook]: The program, `chunk-avkdw0az.js:2469` (`Bash` is another name of `Monitor` for hook matchers, when the call has a `command`), `chunk-avkdw0az.js:2459` (the hook input is rewritten as a `Bash` call with `command` and `description`), and `chunk-hg1yqkjk.js:268038` (the skipped `if` condition). The same code is at `chunk-hg1yqkjk.js:266283-266290` (`tool_name` and `tool_input` are rewritten).
+[^fetch-long]: The program, `chunk-hg1yqkjk.js:134184` (`URL is longer than`) and the limit in `chunk-tz4tgxyb.js:23`.
+[^bash-diff]: The program, `chunk-73abjwvb.js:164`. The diff view lists the changed files that it cannot show, and its text for files that did not get a diff reads `... changed (binary, mode only or too large to show)`, followed by the file names.
+[^ps-ask]: The program, `chunk-xzd0knvp.js:3517` (the prompt text), `chunk-xzd0knvp.js:4077` (the names `get-module`, `gmo`, and `module`, and the ask with `ruleProof`), `chunk-xzd0knvp.js:4642` (`ruleProof` gives no saved-rule suggestion), `chunk-xzd0knvp.js:4959` (the ask that a rule cannot override), and `chunk-g4ytdnfz.js:1073` (the server flag `bot_protected_tengu_sienna_grebe`).
+[^head-start]: The program, `chunk-hg1yqkjk.js:70428` (`CLAUDE_CODE_DISABLE_SHELL_HEAD_START`), `chunk-hg1yqkjk.js:247807`, `chunk-hg1yqkjk.js:247807`, `chunk-wm04tzdx.js:4812`.
+[^which]: The program, `chunk-hg1yqkjk.js:247072`. The flag is `tengu_swirling_koala`.
+[^git-grep]: The program, `chunk-hg1yqkjk.js:246183`.
+[^snapshot]: The program, `chunk-hg1yqkjk.js:246395` (`eval --` and `declare -f --` for a name that starts with `-` or `+`), `chunk-hg1yqkjk.js:246470`, `chunk-hg1yqkjk.js:246470` (the `set -o` step), and `chunk-hg1yqkjk.js:246484` (`\alias -p` and the `alias --` prefix).
+[^auto-bg]: The program, `chunk-rjy0ddvf.js:1103`.
+[^monitor-ws]: The program, `chunk-3en7bpzn.js:161` (`could not resolve <host>: <error>` for a `ws` URL, the text `could not resolve`).
+[^ps-quote]: The program, `chunk-ykw467c0.js:15` (the check and the message) and `chunk-hg1yqkjk.js:70793` (the temp-directory call).
+[^fetch-refused]: The program, `chunk-hg1yqkjk.js:134250`.
+[^fetch-empty]: The program, `chunk-hg1yqkjk.js:134078`.
+[^no-task]: The program, `chunk-b2932m4d.js:2268` for the list form and `chunk-b2932m4d.js:2322` for the short form.
+[^commit-secrets]: The program, `chunk-hg1yqkjk.js:108243` (the short git guidance of `Bash`, with `.env`) and `chunk-rbrxn03m.js:187` (the `PowerShell` text).
+[^ps-locate]: The program, `chunk-d1h5mdmm.js:163`.
+[^search-cut]: The program, `chunk-b2932m4d.js:3726` (no results) and `chunk-b2932m4d.js:3935` (the reply stopped after output began).
+[^fetch-no-text]: The program, `chunk-hg1yqkjk.js:133844` (the text "The fetch tool returned no text for this page." with the id `web-fetch-mcp-tool`).

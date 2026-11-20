@@ -81,14 +81,14 @@ Claude Code also refuses to write over a stored copy that is not a regular file,
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:279143`.
-[^reply-check]: The program, `chunk-gywceass.js:34660` (the debug line), `chunk-sm9djeyx.js:106245` (the list of vouched tiers), and `chunk-2b3eg071.js:127183` (the "Reply gate" log line).
-[^windows-split]: The settings schema. The program sets the flag only from the policy tier, `chunk-jkpzhr7r.js:463456`, and formats the type error as `Expected <type>, but received <type>`, `chunk-jkpzhr7r.js:415742`. The Bash command path checks the platform (`windows`), the command length, and `policySettings.disableWindowsBashCommandSplit`. The path cannot run on macOS, so no run shows the split.
-[^helper-env]: The program, `chunk-sm9djeyx.js:82361`.
-[^internal]: The program, `chunk-jkpzhr7r.js:223337`.
-[^policy-default]: The program, `chunk-jkpzhr7r.js:8398-9752`.
-[^policy-entry]: The settings schema and the program, `chunk-jkpzhr7r.js:8441-9739`.
-[^approval]: The program, `chunk-vz5h5htj.js:3592` and `chunk-vz5h5htj.js:34411`, `chunk-mmyeqkh1.js:6835`, `chunk-yjm9fsrg.js:293`, and `chunk-jkpzhr7r.js:349223`.
-[^version-range]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:285404` (`requiredMinimumVersion`) and `chunk-jkpzhr7r.js:266991` (`managedSourcesBehavior`).
+[^schema]: The program, its bundled settings schema, for example `chunk-t39fw2cy.js:7868` (`timeoutMs` and `refreshIntervalMs`), `chunk-t39fw2cy.js:7872` (`replace` and `merge`), `chunk-t39fw2cy.js:7881` (`continue` and `refuse`), and `chunk-t39fw2cy.js:7892` (`retries`).
+[^reply-check]: The program, `chunk-txash88y.js:1960` (the debug line), `chunk-txash88y.js:1957` (the sources checked for `disableReplyCheck`), and `chunk-wm04tzdx.js:7653` (the "Reply gate" log line).
+[^windows-split]: The settings schema. The program reads the flag only from the policy tier (`policySettings`, `chunk-hg1yqkjk.js:68450`), and formats the type error as `Expected <type>, but received <type>` (`chunk-zryj96fm.js:2161`). The schema entry is at `chunk-t39fw2cy.js:8645`. The Bash command path checks the platform (`windows`), the command length, and `policySettings.disableWindowsBashCommandSplit`. The path cannot run on macOS, so no run shows the split.
+[^helper-env]: The program, `chunk-pxy9yt8m.js:4763`.
+[^internal]: The program, `chunk-t39fw2cy.js:8179` (the `@internal` text of `policyHelpers`).
+[^policy-default]: The program, `chunk-t39fw2cy.js:7977-9346`.
+[^policy-entry]: The settings schema and the program, `chunk-t39fw2cy.js:8020-9333`.
+[^approval]: The program, `chunk-7vfh1k4y.js:333` (the `oauth` login and the same organization), `chunk-7vfh1k4y.js:340` (the profile store), `chunk-7vfh1k4y.js:361` (the organization pin check, `org_pin_unknown` and `org_pin_mismatch`), `chunk-x6ejkj5y.js:36` (no other review open, `hasOpenReview`), `chunk-x6ejkj5y.js:354` ("Managed settings were not approved; exiting without applying them.") and `chunk-x6ejkj5y.js:356` ("Your organization's managed settings need your approval"), `chunk-pm16xtb3.js:17` (the `forceLoginOrgUUID` pin read and its errors), and `chunk-t39fw2cy.js:5306` and `chunk-t39fw2cy.js:5315` ("the stored copy is not a regular file").
+[^version-range]: The program, its bundled settings schema, `chunk-t39fw2cy.js:9273` (`requiredMinimumVersion`) and `chunk-t39fw2cy.js:8887` (`managedSourcesBehavior`).
 
-[^checksum-header]: The program, `chunk-y5weakn8.js:238761` (hint headers on) `chunk-y5weakn8.js:322501` (the conditions), `chunk-ee3jzhc1.js:685` (the direct `api.anthropic.com` test that stops the header), and `chunk-b60sxmve.js:36464` (the host test). The [gateway compatibility guide](https://code.claude.com/docs/en/llm-gateway-protocol#gateway-hint-headers) names the hint headers but not this header, and the [settings page](https://code.claude.com/docs/en/settings) and [network page](https://code.claude.com/docs/en/network-config) do not mention it.
+[^checksum-header]: The program, `chunk-76t3g1yn.js:13907` (hint headers on) `chunk-76t3g1yn.js:18565` (the conditions), `chunk-0vn9q90x.js:44` (the direct `api.anthropic.com` test that stops the header), and `chunk-cd3hqxcc.js:1762` (the host test). The [gateway compatibility guide](https://code.claude.com/docs/en/llm-gateway-protocol#gateway-hint-headers) names the hint headers but not this header, and the [settings page](https://code.claude.com/docs/en/settings) and [network page](https://code.claude.com/docs/en/network-config) do not mention it.

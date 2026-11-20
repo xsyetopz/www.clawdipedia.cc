@@ -10,7 +10,7 @@ A smaller start leaves more room for your work and costs less on each request. T
 For compaction and what fills the window later, see [Context and Compaction](context-and-compaction.md).
 
 :::note[Your Numbers May Differ]
-All numbers come from one subscription account, with Claude Code `2.1.328`. The token counts use the default model, `claude-sonnet-5-5`. The character counts use the captured request for `claude-opus-5-5`.
+All numbers come from one subscription account, with Claude Code `2.1.329`. The token counts use the default model, `claude-sonnet-5-5`. The character counts use the captured request for `claude-opus-5-5`.
 Anthropic turns some tools on or off per account from its servers.
 For example, `ListAgents` and `ScheduleWakeup` are gated. A server-side list can defer `Workflow` and `ReportFindings` (see [Tools](../reference/tools/index.md)).
 Another account, plan, or date can get a different tool list and different totals.
@@ -19,23 +19,23 @@ Run `/context` to see your own numbers.
 
 ## What an Empty Session Holds
 
-Method: a live run on `2.1.328` with a subscription login, a fresh config folder, and an empty project (a `README.md` only, no git repo).
+Method: a live run on `2.1.329` with a subscription login, a fresh config folder, and an empty project (a `README.md` only, no git repo).
 We ran `claude -p "/context" --output-format stream-json`. We read the `context_usage` object.
 For the second column we ran `claude -p "Reply with 'OK'."`. Then we ran `claude -p --continue "/context"`.
-The server refused the login (HTTP 401), so `/context` could not get counts from the token counting endpoint. It showed its local estimate instead. All numbers are these estimates, on the model the session reported, `claude-sonnet-5-5`.[^method] This breakdown is <Undocumented />.
+The server accepted the login, so `/context` got its counts from the token counting endpoint. The numbers are those counts, on the model the session reported, `claude-sonnet-5-5`.[^method] The first request of the run read 11,842 tokens from the cache (and wrote 5,281), so the cache was already warm. The counts do not depend on it. This breakdown is <Undocumented />.
 
 | Category | Empty | After `Reply with 'OK'.` |
 | --- | --- | --- |
-| System prompt | 2,252 | 2,252 |
-| System tools (loaded) | 8,432 | 8,432 |
-| System tools (deferred, not in the total) | 9,722 | 9,722 |
-| Skills (listing) | 2,067 | 2,067 |
-| Messages | Not listed | 3,336 |
-| Total | 12,751 | 16,087 |
+| System prompt | 2,250 | 2,250 |
+| System tools (loaded) | 8,790 | 8,986 |
+| System tools (deferred, not in the total) | 10,474 | 10,474 |
+| Skills (listing) | 2,194 | 2,194 |
+| Messages | 10 | 3,695 |
+| Total | 13,244 | 17,125 |
 
 The autocompact buffer is 33,000 tokens. See [Context and Compaction](context-and-compaction.md) for the levels.
 
-Messages hold about 3,336 tokens (estimate) after the first turn.
+Messages hold 3,695 tokens after the first turn.
 The first request carries injected content as messages:
 
 - a system reminder about git attribution
@@ -58,7 +58,7 @@ A deferred tool costs nothing, apart from its name, until `ToolSearch` loads it.
 
 ### Definition Sizes in Characters
 
-The table below counts characters in the tool texts that the `2.1.328` probe captured (`print` captures with the stub API, model `claude-opus-5-5`, 12 tools). A denied tool leaves the request, so its description and schema characters are the saving. The request body also holds a little JSON framing around each tool.[^captures]
+The table below counts characters in the tool texts that the `2.1.329` probe captured (`print` captures with the stub API, model `claude-opus-5-5`, 12 tools). A denied tool leaves the request, so its description and schema characters are the saving. The request body also holds a little JSON framing around each tool.[^captures]
 
 | Tool | Description | Schema | Sum | Sent in the first request |
 | --- | --- | --- | --- | --- |
@@ -76,7 +76,7 @@ The table below counts characters in the tool texts that the `2.1.328` probe cap
 | `DeferredToolPlaceholder` | 83 | 33 | 116 | Yes |
 | `Monitor` | 6,357 | 1,040 | 7,397 | Deferred |
 | `SendMessage` | 4,761 | 1,306 | 6,067 | Deferred |
-| `CronCreate` | 3,399 | 958 | 4,357 | Deferred |
+| `CronCreate` | 3,438 | 958 | 4,396 | Deferred |
 | `EnterWorktree` | 3,220 | 692 | 3,912 | Deferred |
 | `ExitWorktree` | 2,149 | 653 | 2,802 | Deferred |
 | `NotebookEdit` | 619 | 940 | 1,559 | Deferred |
@@ -92,10 +92,10 @@ The table below counts characters in the tool texts that the `2.1.328` probe cap
 
 ### Deny-List Savings in Characters
 
-The 12 tools that `2.1.328` sends first hold 30,282 characters of description and schema in all (18,076 and 12,206). A deny rule removes the tool from this sum.
+The 12 tools that `2.1.329` sends first hold 30,282 characters of description and schema in all (18,076 and 12,206). A deny rule removes the tool from this sum.
 Denying `Workflow` and `ScheduleWakeup` removes the two sums in the table above (5,603 and 4,788), which is 10,391 characters.
 
-`Skill` brings the skills listing. It is 2,067 tokens for the 13 built-in skills.
+`Skill` brings the skills listing. It is 2,194 tokens for the 14 built-in skills.
 
 ## What Else Changes the Budget
 
@@ -198,7 +198,7 @@ See [Request and Cache](request-and-cache.md).
 
 ## Sources
 
-[^method]: The probe case `live.context-budget` on `2.1.328`; see [Probes](../reference/probes.md#context-budget). When the count request fails, `/context` logs `analyzeContext: count unavailable, estimating locally` and estimates from the text: the program, `chunk-56bhcxay.js:2973839`.
+[^method]: The probe case `live.context-budget` on `2.1.329`; see [Probes](../reference/probes.md#context-budget). When the count request fails (it did not in this run), `/context` logs `analyzeContext: count unavailable, estimating locally` and estimates from the text: the program, `chunk-hg1yqkjk.js:140954`.
 [^captures]: The probe captures, shown in [Tool Descriptions](../prompts/tools/tools.md).
 [^dsc]: Probe case `print.dsc.sizes`.
-[^ctx-count]: Probe case `print.misc.context-slash-command` on `2.1.328`. The case records the tools and message text of each count request.
+[^ctx-count]: Probe case `print.misc.context-slash-command` on `2.1.329`. The case records the tools and message text of each count request.

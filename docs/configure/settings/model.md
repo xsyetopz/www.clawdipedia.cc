@@ -58,7 +58,7 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 | `showThinkingSummaries` | <Documented /> | boolean | - | See summaries of Claude's thinking instead of a collapsed stub. | Any settings file |
 | `subagentPromptCacheTtl` | <Documented /> | string | - | Choose the prompt cache lifetime for subagent requests. The values are `5m` or `1h`. When unset, it is 5 minutes unless `ENABLE_PROMPT_CACHING_1H=1`. `CLAUDE_CODE_SUBAGENT_PROMPT_CACHE_TTL` wins. | Any settings file |
 | `switchModelsOnFlag` | <Documented /> | boolean | - | Switch models automatically or pause when a safety classifier flags a request. | Any settings file |
-| `totalTokensReminder` | <Undocumented /> | enum: `off`, `infinite`, `fixed`, `countdown`, `padded-countdown` | `padded-countdown`, else `off` | Add a "tokens left" reminder to the system prompt and after each tool result. Modes: `off`, `infinite`, `fixed`, `countdown`, `padded-countdown`. The default is `padded-countdown` for a model that carries the `total_tokens_reminder` capability, and `off` for one that does not. Sonnet 5.5 and Opus 5.5 do not carry that capability (`chunk-b60sxmve.js:8901` and `chunk-b60sxmve.js:15567`). `CLAUDE_CODE_TOTAL_TOKENS_REMINDER` wins. | Settings files |
+| `totalTokensReminder` | <Undocumented /> | enum: `off`, `infinite`, `fixed`, `countdown`, `padded-countdown` | `padded-countdown`, else `off` | Add a "tokens left" reminder to the system prompt and after each tool result. Modes: `off`, `infinite`, `fixed`, `countdown`, `padded-countdown`. The default is `padded-countdown` for a model that carries the `total_tokens_reminder` capability, and `off` for one that does not. Sonnet 5.5 and Opus 5.5 do not carry that capability (`chunk-cd3hqxcc.js:443` and `chunk-cd3hqxcc.js:751`, whose `capabilities` lists have no `total_tokens_reminder`, unlike `chunk-cd3hqxcc.js:169`). `CLAUDE_CODE_TOTAL_TOKENS_REMINDER` wins. | Settings files |
 | `totalTokensReminderAfterUserTurn` | <Undocumented /> | boolean | On | Repeat the "tokens left" reminder after each user prompt. When off, it shows only in the system prompt and after tool results. `CLAUDE_CODE_TOTAL_TOKENS_REMINDER_AFTER_USER_TURN` wins. | Settings files |
 | `totalTokensReminderBudget` | <Undocumented /> | integer | `15000000` | Set the starting token budget of `padded-countdown`. `CLAUDE_CODE_TOTAL_TOKENS_REMINDER_BUDGET` wins. | Settings files |
 
@@ -73,6 +73,6 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:279143`.
-[^vertex-fast]: The program, `chunk-jkpzhr7r.js:280952`.
-[^model-settings]: The program, `chunk-jkpzhr7r.js:279143`.
+[^schema]: The program, its bundled settings schema, for example `chunk-t39fw2cy.js:9091` (the entry for `effortLevel`).
+[^vertex-fast]: The program, `chunk-t39fw2cy.js:9155`.
+[^model-settings]: The program, `chunk-t39fw2cy.js:9103` (`modelSettings`), `chunk-t39fw2cy.js:9112` (`effortLevel`), `chunk-t39fw2cy.js:9120` (`maxEffortLevel`, where the lowest value wins across files), and `chunk-t39fw2cy.js:9122` (`autoCompactWindow`).

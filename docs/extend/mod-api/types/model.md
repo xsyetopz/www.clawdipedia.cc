@@ -287,7 +287,7 @@ What `$.audio.speak` resolves with after the utterance ends. Used by `$.audio.sp
 
 ## Sources
 
-[^fork-type]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`. Its `ModelForkRequest` and `ModelForkResult`.
+[^fork-type]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`. Its `ModelForkRequest` and `ModelForkResult`.
 [^fork-cases]: Probe cases `print.fork319.model-fork.*`.
 [^fork-per-message]: Probe cases `print.fork319.model-fork.per-message` and `print.fork319.model-fork.session-max`.
 [^fork-bad]: Probe case `print.fork319.model-fork.bad-value`.

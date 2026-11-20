@@ -25,6 +25,7 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 
 | Key | Status | Type | Default | What It Does | Where to Set It |
 | --- | --- | --- | --- | --- | --- |
+| `additionalDirectoryConfigRoots` | <Undocumented /> | object of string to string | - | Maps an added folder (from `--add-dir`) to the checkout whose `.claude` skills, commands, agents, and plugin settings that folder reads instead of its own. File access stays with the added folder. The schema marks it for the host program only.[^dir-config-roots] | Only `--settings` and settings that the host program sends. Settings files ignore it |
 | `agent` | <Documented /> | string | - | Start every session as a named subagent with its prompt, tools, and model. | Any settings file |
 | `agentPushNotifEnabled` | <Documented /> | boolean | - | Let Claude send a push notification to your phone when it decides to. | Any settings file |
 | `askUserQuestionTimeout` | <Documented /> | enum: `60s`, `5m`, `10m`, `never` | `never` | Let an unanswered question auto-continue after idle time. Auto-continue runs only when you set `60s`, `5m`, or `10m`. | User or managed settings |
@@ -69,9 +70,10 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:279143`.
-[^workflow-reasons]: The program, `chunk-fe4d6pve.js:2109-2378`.
-[^ssh-host]: The settings schema, `chunk-jkpzhr7r.js:292300`. The type in the program is `unknown` with the type tag `array`, and its text says "Claude Code itself does not use it". The Desktop and Windows parts cannot run here.
-[^subagent-status]: The program, `chunk-jkpzhr7r.js:9188`.
-[^auto-continue]: The program, `chunk-322fww3s.js:5444` and `chunk-322fww3s.js:7892`.
-[^receipts]: The program, its bundled settings schema, `chunk-jkpzhr7r.js:10054`. The read: `chunk-8hgq720g.js:12-15`.
+[^schema]: The program, its bundled settings schema, for example `chunk-t39fw2cy.js:8782` (the entry for `subagentStatusLine`).
+[^workflow-reasons]: The program, `chunk-b3bkn4gj.js:58-76`.
+[^ssh-host]: The settings schema, `chunk-t39fw2cy.js:9455`. The type in the program is `unknown` with the type tag `array`, and its text says "Claude Code itself does not use it". The Desktop and Windows parts cannot run here.
+[^subagent-status]: The program, `chunk-t39fw2cy.js:8782`.
+[^auto-continue]: The program, `chunk-ev45d3pa.js:347` (the text "Automatic continue stopped" and `$69e981`) and `chunk-ev45d3pa.js:483` (the `login-changed` case that shows it).
+[^receipts]: The program, its bundled settings schema, `chunk-t39fw2cy.js:9648`. The read: `chunk-bgfff9yf.js:12-15`.
+[^dir-config-roots]: The program, `chunk-c9fmfd5h.js:359` (the read of `additionalDirectoryConfigRoots` from the host settings) and `chunk-c9fmfd5h.js:379` (the check of the key).

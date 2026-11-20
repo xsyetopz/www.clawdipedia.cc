@@ -1,6 +1,6 @@
 ---
 title: "Session Title and Branch Name"
-description: "How Claude Code 2.1.328 gets a session title and a git branch name."
+description: "How Claude Code 2.1.329 gets a session title and a git branch name."
 sidebar_position: 5
 generated: false
 group: other
@@ -18,4 +18,4 @@ No override found. See [Override a Prompt](./override.md).
 
 ## Sources
 
-[^source]: The program, `chunk-56bhcxay.js:2494111`.
+[^source]: The program, `chunk-hg1yqkjk.js:183275`.

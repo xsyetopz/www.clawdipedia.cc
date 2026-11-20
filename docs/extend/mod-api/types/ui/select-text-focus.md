@@ -87,7 +87,7 @@ The `Text` props that a `hover` may override (its colors and styles, not its wra
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `scope` | <Documented /> | Names a hover group of this plugin. Every element that it draws with the same `scope`, in any site on the surface, lights while any is hovered. | Type: `string`. Optional. A scope is 1 to 64 characters with no control characters. The elements of other plugins with the same string are a different group. |
+| `scope` | <Documented /> | Names a hover group of this plugin. Every element that it draws with the same `scope`, in any site but a `Backdrop`, lights while any is hovered.[^scope-site] | Type: `string`. Optional. A scope is 1 to 64 characters with no control characters. The elements of other plugins with the same string are a different group. |
 | `color` | <Documented /> | The text color. | Type: `Color`. Optional. |
 | `backgroundColor` | <Documented /> | The background color. | Type: `Color`. Optional. |
 | `dimColor` | <Documented /> | `true` dims the color. | Type: `boolean`. Optional. |
@@ -168,7 +168,7 @@ What `$.ui.copy` resolves to and what the `{ value }` of a `ui.copy` hook holds.
 | --- | --- | --- | --- |
 | `isCopied` | <Documented /> | True: the surface took the text. The clipboard tool of the terminal or its OSC 52 write took it, or the app of a remote surface wrote its own clipboard. | Type: `true`. OSC 52 does not report back. A terminal that drops it, with no tool on the machine (pbcopy, wl-copy, xclip, PowerShell, the buffer of tmux), still reads true. |
 | `isCopied` | <Documented /> | False: nothing was copied. | Type: `false`. |
-| `reason` | <Documented /> | Why not. It is a closed set: `no-surface`, `no-clipboard` or `refused`. A hook above that answers without copying says `refused`. | Type: `'no-surface' \| 'no-clipboard' \| 'refused'`. `no-surface` means nothing draws. `no-clipboard` means no clipboard tool ran and nothing was written. |
+| `reason` | <Documented /> | Why not. It is a closed set: `no-surface`, `no-clipboard`, `unanswered` or `refused`. A hook above that answers without copying says `refused`. | Type: `'no-surface' \| 'no-clipboard' \| 'unanswered' \| 'refused'`. `no-surface` means nothing draws. `no-clipboard` means no clipboard tool ran and nothing was written. `unanswered` means a remote app was asked and none answered, so the copy may have landed.[^copy-unanswered] |
 
 ### `UiFaultInput`
 
@@ -231,4 +231,6 @@ What a `ui.focus` hook returns, what `next(e)` resolves to, and what `$.ui.focus
 ## Sources
 
 [^focus-input]: The Mod API type file, `schemas/claude-code.d.ts`, `UiFocusInput`.
-[^maxlines]: The program, `chunk-syremzmn.js:88217` (the value sets), `chunk-syremzmn.js:90160` (the check of `maxLines`), and `chunk-syremzmn.js:123162` (the rewrite).
+[^maxlines]: The program, `chunk-qsd8sbe8.js:3666` (the value sets), `chunk-qsd8sbe8.js:3777` (the check of `maxLines`), and `chunk-qsd8sbe8.js:5153` (the rewrite).
+[^scope-site]: The Mod API type file, `schemas/claude-code.d.ts`, `TextHoverProps` (`scope`: "in any site but a `Backdrop`").
+[^copy-unanswered]: The program, `chunk-hg1yqkjk.js:212985` (`"unanswered"` becomes the `reason`). The Mod API type file, `schemas/claude-code.d.ts`, `UiCopyResult`.

@@ -165,7 +165,7 @@ Executes a bash command and returns its output.
 
 ### `CronCreate`
 
-Sent in full by default: ❌ No, deferred. Description: 3,399 characters. Schema: 958 characters.
+Sent in full by default: ❌ No, deferred. Description: 3,438 characters. Schema: 958 characters.
 
 ```text
 Schedule a prompt to be enqueued at a future time. Use for both recurring schedules and one-shot reminders.
@@ -203,7 +203,7 @@ CronCreate re-runs a prompt at fixed wall-clock intervals. To watch a log file, 
 
 ## Runtime behavior
 
-Jobs only fire while the REPL is idle (not mid-query). Durable jobs persist to .claude/scheduled_tasks.json and survive session restarts — on next launch they resume automatically. One-shot durable tasks that were missed while the REPL was closed are surfaced for catch-up. Session-only jobs die with the process. The scheduler shifts each job by a fixed per-job offset on top of whatever you pick: by default a recurring job runs up to 50% of its period late (max 30 min), and a one-shot job landing on :00 or :30 runs up to 90 s early. The result of this tool and of CronList gives each job's actual next run time: when you tell the user when a job will run, give that time, not the minute in the cron expression. Picking an off-minute is still the bigger lever.
+Jobs only fire while the REPL is idle (not mid-query). Durable jobs persist to .claude/scheduled_tasks.json and survive session restarts — on the next launch signed in to the same organization they resume automatically. One-shot durable tasks that were missed while the REPL was closed are surfaced for catch-up. Session-only jobs die with the process. The scheduler shifts each job by a fixed per-job offset on top of whatever you pick: by default a recurring job runs up to 50% of its period late (max 30 min), and a one-shot job landing on :00 or :30 runs up to 90 s early. The result of this tool and of CronList gives each job's actual next run time: when you tell the user when a job will run, give that time, not the minute in the cron expression. Picking an off-minute is still the bigger lever.
 
 Recurring tasks auto-expire after 7 days — they fire one final time, then are deleted. This bounds session lifetime. Tell the user about the 7-day limit when scheduling recurring jobs.
 

@@ -427,16 +427,16 @@ export default shader({ fps: 30, passes: [sky] });
 
 ## Sources
 
-[^types]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `Elements` (the element tables of the surfaces) and `RenderPropsOf`.
-[^types-323]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, the `AskUserQuestion` and `Pane` members of `RenderPropsOf`.
-[^waiting]: The Mod API type file, `schemas/claude-code.d.ts`, `WaitingFor` and `WaitingAgent`. The program, `chunk-bjgpjqze.js:208659`.
-[^above-prompt]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-syremzmn.js:199009`.
-[^collapsed]: The program, `chunk-j2wfp6sf.js:548379`.
-[^list]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-syremzmn.js:172050` and `chunk-syremzmn.js:199009`.
-[^covered]: The program, `chunk-j2wfp6sf.js:560910`.
-[^jsx-files]: The program, `chunk-4nwbbh6e.js:1641` (`Utt`). It loads a `.js`, `.mjs`, or `.cjs` file as it is, and compiles a `.ts`, `.mts`, or `.cts` file without the JSX pragma. Only `.tsx` and `.jsx` files are compiled with `h` and `Fragment`.
-[^anchored]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-syremzmn.js:169348`.
-[^agent-row]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, the `AgentRow` member of `RenderPropsOf`.
-[^context-menu]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, the `ContextMenu` member of `RenderPropsOf`.
+[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, `Elements` (the element tables of the surfaces) and `RenderPropsOf`.
+[^types-323]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, the `AskUserQuestion` and `Pane` members of `RenderPropsOf`.
+[^waiting]: The Mod API type file, `schemas/claude-code.d.ts`, `WaitingFor` and `WaitingAgent`. The program, `chunk-x69e1gmt.js:15116`.
+[^above-prompt]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-qsd8sbe8.js:8702`.
+[^collapsed]: The program, `chunk-zs9k1w9q.js:34200`.
+[^list]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-qsd8sbe8.js:7510` ("a row the hook was not handed (a rewrite of rows drops or reorders them; answer around next(e)") and `chunk-qsd8sbe8.js:8702` (`AbovePromptList: ["terminal", "desktop", "mobile"]`).
+[^covered]: The program, `chunk-zs9k1w9q.js:35033` (`isPromptCovered`, left out while false).
+[^jsx-files]: The program, `chunk-q02wqt75.js:101` (`Utt`). It loads a `.js`, `.mjs`, or `.cjs` file as it is, and compiles a `.ts`, `.mts`, or `.cts` file without the JSX pragma. Only `.tsx` and `.jsx` files are compiled with `h` and `Fragment`.
+[^anchored]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-qsd8sbe8.js:7412`.
+[^agent-row]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, the `AgentRow` member of `RenderPropsOf`.
+[^context-menu]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, the `ContextMenu` member of `RenderPropsOf`.
 [^placed]: The Mod API type file, `schemas/claude-code.d.ts`, the `Placed` member of `RenderPropsOf`. [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference.md).
-[^shader]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `ShaderProps` and the module `claude-code/shader`.
+[^shader]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, `ShaderProps` and the module `claude-code/shader`.

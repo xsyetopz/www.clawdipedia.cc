@@ -166,6 +166,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_RUNNER_DEBUG_LOG_PATH` | <Undocumented /> | Gives the post-session hook the path of the debug log of the session. The help text of the runner says to copy the log from the hook if you need it locally. | A path | Self-hosted runner post-session hook |
 | `CLAUDE_RUNNER_DISABLE_AWAITING_ACTION_OVERRIDE` | <Undocumented /> | Stops the runner from reporting `awaiting-action` when the child waits at a prompt after a turn ends. | - | - |
 | `CLAUDE_RUNNER_DISABLE_RENEWAL_WARNING` | <Undocumented /> | Stops the runner from posting a warning to the session when the server refuses again and again to renew the access of the session to the model. Without it, the runner posts one warning after 5 refusals in a row. The warning says that messages fail until a renewal works. | Set it to `1`. Off by default | Self-hosted runner. In a probe where a stub refused the session config fetch 5 times with HTTP 400, an unset variable gave 1 warning event and `1` gave 0.[^renewal] |
+| `CLAUDE_RUNNER_DISABLE_START_HEARTBEATS` | <Undocumented /> | A true value stops the runner from sending start-up heartbeats while it prepares a session.[^runner-hb] | A true value. Off by default | Self-hosted runner |
 | `CLAUDE_RUNNER_DISABLE_TURN_BEGAN_BEFORE_INIT` | <Undocumented /> | Stops the runner from treating a turn that starts before the child finishes starting up as activity. `--startup-timeout-min` then keeps counting from the start. | On or off, off by default. | Self-hosted runner |
 | `CLAUDE_RUNNER_EXIT_REASON` | <Undocumented /> | Gives the post-session hook the reason that the session ended. | Text | Self-hosted runner post-session hook |
 | `CLAUDE_RUNNER_FETCH_DEPTH` | <Documented /> | Sets the `--depth` of the runner git fetch. | - | - |
@@ -235,6 +236,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `SELF_HOSTED_RUNNER_SERVER_AUTO_MODE_LISTS` | <Documented /> <Gated note="Works only behind a feature flag or server gate" /> | Chooses which server auto-mode classifier lists a session may receive. | Text. Another value stops the runner. Flag `--server-auto-mode-lists` | Self-hosted runner |
 | `SELF_HOSTED_RUNNER_SIGKILL_GRACE_MS` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Sets the SIGKILL grace of a runner session. The runner never uses less than the time of the post-session hook plus a margin. | A number of milliseconds. Default `30000`. The maximum is `2147483647` | `claude self-hosted-runner` only |
 | `SELF_HOSTED_RUNNER_SIGKILL_TIMEOUT_MS` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> <Caution note="Renamed. The runner stops at startup with a fatal error when this variable is set." /> | Old name of `SELF_HOSTED_RUNNER_SESSION_STOP_GRACE_MS`. The runner stops with an error that tells you to use the new name. | Do not set it | `claude self-hosted-runner` only |
+| `SELF_HOSTED_RUNNER_SKIP_AGENT_PROXY_CHECK` | <Undocumented /> | Set to `1` to skip the check that the proxy answers within 5 seconds and completes a TLS handshake.[^skip-proxy] | `1` skips the check. Off by default | `claude self-hosted-runner` only |
 | `SELF_HOSTED_RUNNER_USE_ANTHROPIC_GH` | <Undocumented /> | It works with the runner flag `--use-anthropic-gh`. The built-in `gh api` is the default on Linux and macOS, and `--use-anthropic-gh false` turns it off.[^anthropic-gh] | On or off | Self-hosted runner |
 | `SESSION_INGRESS_URL` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Sets the base URL of the session ingress for remote (CCR) sessions. It wins over `ANTHROPIC_BASE_URL`. | Text. Non-empty string. Reads as `SESSION_INGRESS_URL` first, else `ANTHROPIC_BASE_URL` | Remote sessions |
 | `VITALS_EMITTER_BIN` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Sets the path of the guest vitals emitter binary for remote sessions. | Must be an absolute path. Else the log says vitals are disabled | Remote sessions |
@@ -253,34 +255,36 @@ Check the Notes column. Claude Code itself sets some variables. Do not set them 
 
 ## Sources
 
-The program (variable names found in the `2.1.328` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+The program (variable names found in the `2.1.329` binary) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 
-[^bridge-host]: The program, `chunk-3t73a5wq.js:1422` and `chunk-b8xj7a9d.js:1344`.
-[^bridge-copy]: The program, `chunk-66v0f2xe.js:11083`.
-[^bridge-message]: The program, `chunk-66v0f2xe.js:16976`.
-[^start-dir]: The program sets it at `chunk-b2j77k2b.js:8628` and reads it at `chunk-b2ttx9wr.js:43283`. It did not show the condition `Gh()` that the check also needs.
-[^settings-binding]: The program sets it at `chunk-b2j77k2b.js:6813` and reads it at `chunk-fax8acnd.js:2297`.
-[^source-dir]: The program, `chunk-b2j77k2b.js:6664`.
+[^bridge-host]: The program, `chunk-rcdyaqs1.js:66` (the host is the override or `BASE_API_URL`) and `chunk-mcjkceg0.js:37` (the override function `$dfb550` returns nothing).
+[^bridge-copy]: The program, `chunk-ejcc803n.js:345`.
+[^bridge-message]: The program, `chunk-ejcc803n.js:597`.
+[^start-dir]: The program sets it at `chunk-2kt0fcxt.js:3321` (from `startDirChecked`) and reads it at `chunk-rwevfvv3.js:1476`. It did not show the condition `Gh()` that the check also needs.
+[^settings-binding]: The program sets it at `chunk-2kt0fcxt.js:3268` and reads it at `chunk-zgnhhsca.js:115`.
+[^source-dir]: The program, `chunk-2kt0fcxt.js:3265` (`sourceDir` goes into `CLAUDE_CODE_BRIDGE_SOURCE_DIR`).
 [^long-poll]: The feature flag is `tengu_ccr_sse_long_poll_fallback`.
-[^requests-by-fetch]: Nothing in the program reads it. The program, `chunk-thtytpkk.js:14749` and `chunk-xethrx83.js:673254`.
-[^held-message]: The program, `chunk-b8ves7hr.js:8485`. The gate is `tengu_mellow_heron`.
-[^host-spawn-env]: The program, `chunk-yqtvwrpy.js:15` and `chunk-yqtvwrpy.js:23`. The gate is `tengu_sleepy_wicket`.
+[^requests-by-fetch]: Nothing in the program reads it. The program, `chunk-59xdgreq.js:688` and `chunk-aq3ms068.js:31648`.
+[^held-message]: The program, `chunk-6dccy31z.js:725`. The gate is `tengu_mellow_heron`.
+[^host-spawn-env]: The program, `chunk-sa9s9shd.js:15` and `chunk-sa9s9shd.js:23`. The gate is `tengu_sleepy_wicket`.
 [^memory-no-wait]: The feature flag is `tengu_misty_anchor`.
-[^off-machine-mark]: The program, `chunk-374y7r0w.js:543`.
-[^off-machine-relay]: The program, `chunk-374y7r0w.js:555`.
-[^off-machine-child]: The program, `chunk-jyh23dg9.js:172`.
-[^pr-merged]: The program reads it at `chunk-12xf8vww.js:28723` and sets it at `chunk-56xwrs9q.js:2699`. It did not show the check that decides if the merged review is available.
-[^withhold]: The program, `chunk-xethrx83.js:872562`.
-[^renewal]: Probe cases `runner.renewal-unset` and `runner.renewal-disabled`. The program, `chunk-gv1b3n3g.js:222603`.
-[^offers-machine]: Probe cases `runner.base` and `runner.offers-1`. The program sets it at `chunk-gv1b3n3g.js:252378` in the environment of each session process.
-[^spawn-reason]: Probe cases `orchestrator.reason-set`, `reason-none`, `reason-bad`, `reason-token`, `reason-long`, and `reason-upper-colon`. The program, `chunk-1ag7mmq0.js:59285`.
-[^anthropic-gh]: The program, `chunk-gv1b3n3g.js:1345` and `chunk-gv1b3n3g.js:14825`.
-[^proxy-limits]: The program, `chunk-pyzprv2x.js:4436` and `chunk-pyzprv2x.js:4613` (the variable is read), `chunk-pyzprv2x.js:4809-4812` (it sets `maxClientConnections` and `requestHeadTimeoutMs` to no limit), and `chunk-pyzprv2x.js:929-930` (the defaults, `8192` and `30000`). A client over the limit is refused at `chunk-pyzprv2x.js:1532-1534`.
-[^setup-wait]: The program, `chunk-gv1b3n3g.js:5683` (the constant `180`), `chunk-gv1b3n3g.js:5768` (the runner passes it as text), and `chunk-gv1b3n3g.js:5682` and `chunk-gv1b3n3g.js:5729` (the script limit of `600000` ms).
-[^result-first]: The program, `chunk-374y7r0w.js:733-744` (read once, then removed), `chunk-2b3eg071.js:7599-7609` (the desktop condition, the gate and the signal that a new message cuts the summary), `chunk-2b3eg071.js:7628` (the hold is `0`), and `chunk-2b3eg071.js:7658` (the `summary_follows_result` field of `tengu_turn_end_classifier_hold`). The gate is at `chunk-2b3eg071.js:7465`.
-[^desktop-app-host]: The program, `chunk-374y7r0w.js:12592` (the mark is set and the variable removed), `chunk-374y7r0w.js:10806` (the mark reader), and `chunk-0ark2042.js:446` (the mark makes remote tools forward mode count as on).
-[^tee-stdout]: The program, `chunk-wfswdcq7.js:4570` (the read), `chunk-wfswdcq7.js:4578-4586` and `chunk-wfswdcq7.js:5722-5728` (the activity pipe, or standard output), `chunk-wfswdcq7.js:5009-5011` (a system line), and `chunk-gv1b3n3g.js:11237` (the runner child gets `1`).
-[^checkpoint-url]: The program, `chunk-5699r6rq.js:37026` (the check), `chunk-5699r6rq.js:37037` (the reminder), and `chunk-56bhcxay.js:124941` (the reminder text). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
-[^affinity-key]: The program, `chunk-yee8s2pc.js:60-69`.
-[^repo-folder-env]: The program, `chunk-gv1b3n3g.js:14758` (the comma-separated parse), `chunk-gv1b3n3g.js:14857` (the read), and `chunk-gv1b3n3g.js:16125` (the help text). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
-[^v328-session-uuid]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-1ag7mmq0.js:1918-1921` (the pair), `chunk-1ag7mmq0.js:2114` and `chunk-1ag7mmq0.js:2469` (the hook env), and `chunk-1ag7mmq0.js:2752` (the session env).
+[^off-machine-mark]: The program, `chunk-0v6g5ynk.js:543`.
+[^off-machine-relay]: The program, `chunk-0v6g5ynk.js:555`.
+[^off-machine-child]: The program, `chunk-kz4vm224.js:173`.
+[^pr-merged]: The program reads it at `chunk-71kv8x50.js:1318` and sets it at `chunk-bt99ga19.js:157`. It did not show the check that decides if the merged review is available.
+[^withhold]: The program, `chunk-aq3ms068.js:40998` (the read, after the `CLAUDE_CODE_REMOTE` test).
+[^renewal]: Probe cases `runner.renewal-unset` and `runner.renewal-disabled`. The program, `chunk-3kp5jwr6.js:10426`.
+[^offers-machine]: Probe cases `runner.base` and `runner.offers-1`. The program sets it at `chunk-3kp5jwr6.js:11812` in the environment of each session process.
+[^spawn-reason]: Probe cases `orchestrator.reason-set`, `reason-none`, `reason-bad`, `reason-token`, `reason-long`, and `reason-upper-colon`. The program, `chunk-rgw7tzhp.js:2745`.
+[^anthropic-gh]: The program, `chunk-3kp5jwr6.js:1390` and `chunk-3kp5jwr6.js:15563`.
+[^proxy-limits]: The program, `chunk-d1h726az.js:4515` (the variable is read, next to `CCR_AGENT_PROXY_MAX_BUSY_TUNNELS`), `chunk-d1h726az.js:4888-4891` (it sets `maxClientConnections` and `requestHeadTimeoutMs` to no limit), and `chunk-d1h726az.js:939-940` (the defaults, `8192` and `30000`). A client over the limit is refused at `chunk-d1h726az.js:1542-1544`.
+[^setup-wait]: The program, `chunk-3kp5jwr6.js:5967` (the constant `180`), `chunk-3kp5jwr6.js:6052` (the runner passes it as text), and `chunk-3kp5jwr6.js:5966` (the script limit of `600000` ms) and `chunk-3kp5jwr6.js:6013` (the `timeoutMs` default).
+[^result-first]: The program, `chunk-0v6g5ynk.js:733-744` (read once, then removed), `chunk-wm04tzdx.js:7477-7487` (the `desktop` condition, the signal that a new message cuts the summary, and the gate `tengu_flint_orchard`), `chunk-wm04tzdx.js:7507` (the hold cap is `0`, before the `holdTurnEndSummary` call), and `chunk-wm04tzdx.js:7548` (the `summary_follows_result` field of `tengu_turn_end_classifier_hold`).
+[^desktop-app-host]: The program, `chunk-0v6g5ynk.js:698-701` (the mark is set and the variable removed), `chunk-0v6g5ynk.js:620` (the reader, `desktopAppHostMark`), and `chunk-cmxbjfas.js:10` (the mark makes `CLAUDE_CODE_REMOTE_TOOLS_FORWARD` count as on).
+[^tee-stdout]: The program, `chunk-4xqtbmaa.js:4780` (the read), `chunk-4xqtbmaa.js:4788-4796` and `chunk-4xqtbmaa.js:6058-6066` (the write of an activity line), `chunk-4xqtbmaa.js:5219-5221` (a system line), and `chunk-3kp5jwr6.js:11799` (the runner child gets `1`).
+[^checkpoint-url]: The program, `chunk-614w915w.js:38270` (the check), `chunk-614w915w.js:38281` (the reminder, type `critical_system_reminder`), and `chunk-hg1yqkjk.js:124842` (the reminder text, the variable `$cfcd2a`). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^affinity-key]: The program, `chunk-6wzr4jy0.js:60-69`.
+[^repo-folder-env]: The program, `chunk-3kp5jwr6.js:15496` (the comma-separated parse), `chunk-3kp5jwr6.js:15595` (the read), and `chunk-3kp5jwr6.js:16871` (the help text, with `SELF_HOSTED_RUNNER_REPOSITORY_FOLDER`). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^v328-session-uuid]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-rgw7tzhp.js:1932-1935` (the pair), `chunk-rgw7tzhp.js:2128` and `chunk-rgw7tzhp.js:2483` (the hook env), and `chunk-rgw7tzhp.js:2766` (the session env).
+[^runner-hb]: The program, `chunk-3kp5jwr6.js:10709` (the `CLAUDE_RUNNER_DISABLE_START_HEARTBEATS` test that cancels the heartbeats).
+[^skip-proxy]: The program, `chunk-3kp5jwr6.js:4940` (the `SELF_HOSTED_RUNNER_SKIP_AGENT_PROXY_CHECK` read) and `chunk-3kp5jwr6.js:16619` (the help text).

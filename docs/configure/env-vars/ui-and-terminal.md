@@ -135,13 +135,13 @@ The variables on this page override that guess.
 
 ## Sources
 
-[^source]: The program, `chunk-7343wm3k.js:26213` (the variable names) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^ax-env]: The program, `chunk-zq0j9amd.js:5077`.
-[^early-key]: The program, `chunk-5g8qs913.js:26261-26266` (the default test), `chunk-5g8qs913.js:27436` (it feeds the renderer's key timing), and `chunk-5g8qs913.js:23995` (the timing check). The server gate is `tengu_nifty_lemon`. Its default is off.
+[^source]: The program, `chunk-gvhwnc7g.js:301` (the variable names, for example `CLAUDE_CODE_DISABLE_EARLY_KEY_GUARD`) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^ax-env]: The program, `chunk-050v0fjh.js:264`.
+[^early-key]: The program, `chunk-0b3aev3g.js:26286-26291` (the default test), `chunk-0b3aev3g.js:27461` (it feeds the renderer's key timing as `timesPresses`), and `chunk-0b3aev3g.js:24003` (the timing check, `isTimingPresses`). The server gate is `tengu_nifty_lemon`. Its default is off.
 [^probes]: [Probes](../../reference/probes.md).
-[^new-renderer]: The program, `chunk-5g8qs913.js:449180`. The gates are `tengu_functional_pebble` and `tengu_kind_puzzle`. The `tengu_functional_pebble` value holds `add` and `remove` lists of terminal names. The second gate, `tengu_kind_puzzle`, has the same list shape. It decides whether the old renderer runs the cursor check (`chunk-5g8qs913.js:449380`). That check is on when the gate value is valid, `CLAUDE_CODE_NEW_RENDERER` is not off, the terminal is not in `remove` or Windows, and the session is not in tmux control mode. A value in `CLAUDE_CODE_NEW_RENDERER` wins over the first gate.
-[^notif-host]: The program, read at `chunk-5699r6rq.js:595700` and used at `chunk-5699r6rq.js:770583`.
-[^hidden-chars]: The program, `chunk-7q6bneac.js:318`. The gate is `tengu_bubbly_gadget`.
-[^tui-asked]: The program, `chunk-mc2z5m5k.js:88`.
-[^ysk-send]: The program, value parsed at `chunk-1kvfxjvh.js:78144` and read at `chunk-1kvfxjvh.js:78971`.
-[^layout-check]: The program, `chunk-5g8qs913.js:24198` (the variable turns the number check off), `chunk-5g8qs913.js:9482-9486` and `chunk-5g8qs913.js:10287-10288` (a value that is not a whole number marks damage only while the number check is on), `chunk-5g8qs913.js:20713-20716` and `chunk-5g8qs913.js:20788` (a damaged layout runs again), and `chunk-5g8qs913.js:20806-20814` (the number check turns off by itself after repeated damage). The program holds this as a number check that is on by default.
+[^new-renderer]: The program, `chunk-0b3aev3g.js:26369` (the first gate, `tengu_robust_pine`). The `tengu_robust_pine` value holds `add` and `remove` lists of terminal names. The second gate, `tengu_kind_puzzle`, has the same list shape. It decides whether the old renderer runs the cursor check (`chunk-0b3aev3g.js:26379`). That check is on when the gate value is valid, `CLAUDE_CODE_NEW_RENDERER` is not off, the terminal is not in `remove` or Windows, and the session is not in tmux control mode. A value in `CLAUDE_CODE_NEW_RENDERER` wins over the first gate.
+[^notif-host]: The program, read at `chunk-614w915w.js:42808` (`CLAUDE_CODE_NOTIFICATIONS_HOST`) and used at `chunk-614w915w.js:41533`.
+[^hidden-chars]: The program, `chunk-azzyxyps.js:318`. The gate is `tengu_bubbly_gadget`.
+[^tui-asked]: The program, `chunk-xh5mvvey.js:88`.
+[^ysk-send]: The program, value parsed at `chunk-v2byvq1b.js:2748` (`["1", "true", "yes", "on"]`) and read at `chunk-v2byvq1b.js:2790`.
+[^layout-check]: The program, `chunk-0b3aev3g.js:24206` (the variable turns the number check off), `chunk-0b3aev3g.js:9497-9501` and `chunk-0b3aev3g.js:10302-10303` (the `checksNumbers` test; a value that is not a whole number marks damage only while the number check is on), `chunk-0b3aev3g.js:20714-20717` (`onDamage`) and `chunk-0b3aev3g.js:20789` (`countDamagedLayout`; a damaged layout runs again), and `chunk-0b3aev3g.js:20807-20815` (`checksNumbers` set to false; the number check turns off by itself after repeated damage). The program holds this as a number check that is on by default.

@@ -84,6 +84,7 @@ The table is sorted by name.[^names] See [Environment Variables](index.md#how-to
 | `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY` | <Documented /> | Fills the `/model` picker from the gateway `/v1/models` endpoint. | On or off, off by default. Needs the `firstParty` provider and a non-Anthropic `ANTHROPIC_BASE_URL`. The `gateway` provider also checks it at bootstrap | Gateway setups |
 | `CLAUDE_CODE_FIRST_CALL_THINKING_TITLES` | <Undocumented /> | Turns on thinking titles in the request data (`thinkingTitles`).[^thinking-titles] A second check returns false when `showThinkingSummaries` is `true`. | On or off | Model requests |
 | `CLAUDE_CODE_FORCE_MID_CONVERSATION_SYSTEM` | <Undocumented /> | Forces mid-conversation system messages on for every model. | On or off, off by default. Skips the model checks and the flags for system turns | API requests |
+| `CLAUDE_CODE_LINKED_SPINDLE` | <Undocumented /> | Set to a false value so a subagent's effort step cannot reach the maximum level.[^spindle] | On or off. On by default | Subagent effort |
 | `CLAUDE_CODE_MAX_OUTPUT_TOKENS` | <Documented /> | Sets the maximum output tokens for most requests, clamped to the model cap. | A number. The default depends on the model. Claude Code lowers a value above the model cap to the cap | All sessions. Project `env` can set it before trust |
 | `CLAUDE_CODE_MESSAGES_PROMPT_CACHE_TTL` | <Undocumented /> | Forces the prompt cache TTL to `5m` for the requests that use this helper. | `enum` with the single value `5m`. Any other value leaves the chosen TTL as is | All sessions. Project `env` can set it before trust |
 | `CLAUDE_CODE_MODEL_CAPABILITIES` | <Undocumented /> | Overrides model capabilities. Syntax is `pattern=cap1,-cap2` entries split on a semicolon, and a leading `-` turns a capability off. | Text. A pattern ending in `*` matches by prefix. An entry with no `=` applies to all models. For example, `claude-opus-5-5=vertex_fast_mode` lets fast mode run on that model on Vertex [^fast-capability] | All sessions |
@@ -130,16 +131,17 @@ Claude Code picks the model in a fixed order: the `--model` flag or `/model` fir
 
 ## Sources
 
-[^names]: The program, `chunk-7343wm3k.js:26213`, variable names, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^names]: The program, `chunk-gvhwnc7g.js:341` (for example `CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK`), variable names, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 [^amber]: [Probes](../../reference/probes.md).
-[^fast-vertex]: The program, `chunk-xethrx83.js:384776`. Probe case `print.cli322.fast-vertex-disabled`.
-[^refusal-name]: The program, `chunk-y5weakn8.js:278030` (the `switchModelsOnFlag` gate), `chunk-y5weakn8.js:279347` (a recognized name that no rule flags gets no switch), and `chunk-xethrx83.js:500243` (the recognized-name check).
-[^ultrathink]: The program, `chunk-xethrx83.js:520974`, gate `tengu_turtle_carbon`.
-[^thinking-titles]: The program, `chunk-56bhcxay.js:3476383`. The second check is at `chunk-2b3eg071.js:217932`.
+[^fast-vertex]: The program, `chunk-aq3ms068.js:17733`. Probe case `print.cli322.fast-vertex-disabled`.
+[^refusal-name]: The program, `chunk-76t3g1yn.js:16023` (`CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK`), `chunk-76t3g1yn.js:16029` (the `switchModelsOnFlag` gate), and `chunk-76t3g1yn.js:16126` (`refusal_fallback`; a recognized name, `$d810cc`, that no rule flags gets no switch).
+[^ultrathink]: The program, `chunk-aq3ms068.js:24478`, gate `tengu_turtle_carbon`.
+[^thinking-titles]: The program, `chunk-hg1yqkjk.js:170331` (`thinkingTitles` and `CLAUDE_CODE_FIRST_CALL_THINKING_TITLES`). The second check is at `chunk-wm04tzdx.js:12724` (`showThinkingSummaries`).
 [^fast-capability]: Probe case `print.cli322.fast-vertex-capability-on`.
-[^canonical]: The program, `chunk-ynemm6ap.js:5734` (the name is canonicalized with `deterministic: true`).
-[^vertex-org]: The program, `chunk-xethrx83.js:385001`.
-[^subagent-effort]: The program, `chunk-8cme85wd.js:4246`, `chunk-56bhcxay.js:1841933`, and `chunk-1vrzmwm5.js:8787`. Flag `tengu_snappy_pelican`. Telemetry event `subagent_effort_default` records `unknown_level` for a bad value.
+[^canonical]: The program, `chunk-y3bkspwa.js:330` (the name is canonicalized with `deterministic: true`).
+[^vertex-org]: The program, `chunk-aq3ms068.js:17741`.
+[^subagent-effort]: The program, `chunk-fg6bvsxp.js:97` (`CLAUDE_CODE_SUBAGENT_EFFORT`), `chunk-xvh0qanc.js:1266` (`$98d823`, trim and lowercase), `chunk-hg1yqkjk.js:105163` (`tengu_snappy_pelican`), and `chunk-sm35x1rt.js:93` ("use the configured subagent default"). Flag `tengu_snappy_pelican`. Telemetry event `subagent_effort_default` records `unknown_level` for a bad value.
 [^workflow-model]: [Probes](../../reference/probes.md#subagents-and-hooks).
-[^thinking-resumption]: The program, `chunk-56bhcxay.js:159706-159714` (the read), `chunk-56bhcxay.js:159731` and `chunk-56bhcxay.js:159810` (the gate), and `chunk-gv1b3n3g.js:11208` (the runner).
-[^betas-managed]: The program, `chunk-jkpzhr7r.js:175263` (the message names managed settings as a place that sets it).
+[^thinking-resumption]: The program, `chunk-hg1yqkjk.js:152192` (`CLAUDE_CODE_THINKING_RESUMPTION`, the read), `chunk-hg1yqkjk.js:152223` and `chunk-hg1yqkjk.js:152302` (the gate), and `chunk-3kp5jwr6.js:11765` (the runner).
+[^betas-managed]: The program, `chunk-t39fw2cy.js:6469` (the message names managed settings as a place that sets it).
+[^spindle]: The program, `chunk-2ry3tbza.js:2187` (`mayReachMax` is true unless `CLAUDE_CODE_LINKED_SPINDLE` is false).

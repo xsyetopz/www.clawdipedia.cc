@@ -1,10 +1,10 @@
 ---
 title: JSON Schemas
-description: JSON Schemas and the Mod API type file for every Claude Code 2.1.328 payload and config file, made from the program, and how they differ from the SchemaStore copies.
+description: JSON Schemas and the Mod API type file for every Claude Code 2.1.329 payload and config file, made from the program, and how they differ from the SchemaStore copies.
 sidebar_position: 6
 ---
 
-This site publishes the exact fields of every Claude Code `2.1.328` payload and config file: 17 JSON Schemas and the Mod API type file.
+This site publishes the exact fields of every Claude Code `2.1.329` payload and config file: 17 JSON Schemas and the Mod API type file.
 Most are made by running the program's own validators, so they list every key that this release knows.
 To use one, add the `$schema` URL of a config file to the file. Your editor then suggests keys and flags mistakes.
 Look a field up in the schemas before you rely on it.
@@ -61,7 +61,7 @@ Those keys carry `"x-managed-only": true`.
 
 ## The Mod API Type File
 
-`https://clawdipedia.cc/schemas/claude-code.d.ts` is the Mod API type file that the `2.1.328` program carries, copied unchanged with a short header.
+`https://clawdipedia.cc/schemas/claude-code.d.ts` is the Mod API type file that the `2.1.329` program carries, copied unchanged with a short header.
 It declares every `$` call, every event, and their types, with their doc comments.
 It does not hold the fields of the built-in tools. `BuiltinToolInputs` and `BuiltinToolResults` are empty in it. The program writes them beside each mod it loads, as `claude-code-tools/index.d.ts`.
 Read it for the exact fields of a payload. It names every one.
@@ -85,7 +85,7 @@ Two parts need extra steps:
 ## Regenerate
 
 ```sh
-bun run schemas        # rewrite schemas/ from the installed 2.1.328 program
+bun run schemas        # rewrite schemas/ from the installed 2.1.329 program
 bun run schemas:check  # check the files, and check the good and bad examples in tools/schemas/fixtures
 ```
 
@@ -94,7 +94,7 @@ The check runs as part of `bun run verify`.
 ## Limits
 
 - The program also runs checks written as code, such as "a hooks file needs `hooks` or `modules`". A JSON Schema cannot hold them. So the schemas lack them.
-- The program does not list which settings keys only work in managed settings. The generator reads that from each key's description. So a key with unusual wording can be missed. The current run found 25 top-level keys and 3 nested ones (`sandbox.bwrapPath`, `sandbox.socatPath`, `sandbox.network.allowManagedDomainsOnly`).
+- The program does not list which settings keys only work in managed settings. The generator reads that from each key's description. So a key with unusual wording can be missed. The current run found 26 top-level keys and 3 nested ones (`sandbox.bwrapPath`, `sandbox.socatPath`, `sandbox.network.allowManagedDomainsOnly`).
 - The schemas allow keys they do not know in settings files, as the program does. A typo in a key name is not an error.
 - The `xaaIdp` setting exists only when you set `CLAUDE_CODE_ENABLE_XAA=1` in the environment. The generator sets it. So the key is in the schema. Its description says so.
 - The program uses `starts_with` and `ends_with` as `format` values for some path fields. They are not standard JSON Schema formats, so editors ignore them. They do not check those rules.
@@ -102,18 +102,18 @@ The check runs as part of `bun run verify`.
 
 ## Differences From SchemaStore
 
-We compared the files with the copies on [SchemaStore](https://json.schemastore.org/claude-code-settings.json) on 2026-11-18, by downloading [`claude-code-settings.json`](https://www.schemastore.org/claude-code-settings.json) and the other files from the same host (`json.schemastore.org` redirects there), and by counting the keys under `properties`. Key counts are top-level keys and include `$schema`.
+We compared the files with the copies on [SchemaStore](https://json.schemastore.org/claude-code-settings.json) on 2026-11-20, by downloading [`claude-code-settings.json`](https://www.schemastore.org/claude-code-settings.json) and the other files from the same host (`json.schemastore.org` redirects there), and by counting the keys under `properties`. Key counts are top-level keys and include `$schema`.
 
 | Schema | SchemaStore | This site | Notes |
 | --- | --- | --- | --- |
-| Settings | 142 | 178 (203 with managed-only keys) | SchemaStore lacks `syncClaudeAiSkills`, `syncClaudeAiPlugins`, `modelSettings`, `remote`, `timeZone`, `quietHours`, and 55 more (61 keys in all, 74 when you count managed-only keys). The keys `allowNestedModelAccessUnderForceLogin`, `autoCompactRaisedForLoad`, and `autoCompactOfferAnswer` are in the `2.1.328` program and in this schema, and not in SchemaStore.[^new-keys] |
+| Settings | 142 | 179 (205 with managed-only keys) | SchemaStore lacks `syncClaudeAiSkills`, `syncClaudeAiPlugins`, `modelSettings`, `remote`, `timeZone`, `quietHours`, and 56 more (62 keys in all, 76 when you count managed-only keys). The keys `allowNestedModelAccessUnderForceLogin`, `autoCompactRaisedForLoad`, and `autoCompactOfferAnswer` are in the `2.1.329` program and in this schema, and not in SchemaStore.[^new-keys] |
 | Plugin manifest | 22 | 31 | SchemaStore lacks `displayName`, `defaultEnabled`, `metadata`, `engines`, `workflows`, `binaries`, `types`, `experimental`, `network`. |
 | Marketplace | 9 | 10 | SchemaStore lacks `renames`. |
 | Keybindings | 3 | 3 | Same keys. SchemaStore forbids unknown top-level keys. This schema does not. |
 | Plugin hooks | none | 5 | SchemaStore has no schema for this file; `https://www.schemastore.org/claude-code-plugin-hooks.json` answers 404. |
 
 SchemaStore has 25 settings keys that this site's settings schema does not. 12 of them are managed-only keys, such as `policyHelper` and `allowManagedHooksOnly`, which this site's managed schema has.
-The other 13 are not in the `2.1.328` validator at all, for example `autoConnectIde`, `diffTool`, `skippedPlugins`, and `sshHostAllowlist`. Four are keys of the global config file `~/.claude.json`: `autoConnectIde`, `autoInstallIdeExtension`, `diffTool`, and `externalEditorContext`. Five are desktop-app fields that the program carries: `browserExternalPageTools`, `disableBrowserExternalNavigation`, `disableMobileSimulatorTools`, `requireCoworkFullVmSandbox`, and `sshHostAllowlist`. Four have no string in the `2.1.328` program:[^no-string] `permissionExplainerEnabled`, `skippedMarketplaces`, `skippedPlugins`, and `teammateDefaultModel`.
+The other 13 are not in the `2.1.329` validator at all, for example `autoConnectIde`, `diffTool`, `skippedPlugins`, and `sshHostAllowlist`. Four are keys of the global config file `~/.claude.json`: `autoConnectIde`, `autoInstallIdeExtension`, `diffTool`, and `externalEditorContext`. Five are desktop-app fields that the program carries: `browserExternalPageTools`, `disableBrowserExternalNavigation`, `disableMobileSimulatorTools`, `requireCoworkFullVmSandbox`, and `sshHostAllowlist`. Four have no string in the `2.1.329` program:[^no-string] `permissionExplainerEnabled`, `skippedMarketplaces`, `skippedPlugins`, and `teammateDefaultModel`.
 
 SchemaStore also has [`claude-code-launch.json`](https://json.schemastore.org/claude-code-launch.json), the Launch Preview file for preview servers in Claude Code Desktop.
 This site has no copy of it. It belongs to the Desktop app, and we found no validator for it in the `claude` program.[^launch-validator] So there is nothing to export from the binary.
@@ -129,6 +129,6 @@ This site has no copy of it. It belongs to the Desktop app, and we found no vali
 ## Sources
 
 [^comment-strings]: The generator, `tools/schemas/code.ts`.
-[^no-string]: The `2.1.328` program holds none of the four key names.
-[^new-keys]: The program, `chunk-xethrx83.js:322618` (`allowNestedModelAccessUnderForceLogin`), `chunk-0qfycjch.js:2560` and `chunk-jkpzhr7r.js:296007` (`autoCompactRaisedForLoad`), and `chunk-5699r6rq.js:620145` and `chunk-jkpzhr7r.js:296330` (`autoCompactOfferAnswer`). The counts come from `schemas/claude-code-settings.json` and the SchemaStore files that were downloaded on 2026-11-18 and again on 2026-11-19. The WebFetch tool read only the first 100,000 of the 231,532 characters of the settings file, so a script counted the keys of the whole file.
-[^launch-validator]: The `2.1.328` program has no validator for `claude-code-launch.json`.
+[^no-string]: The `2.1.329` program holds none of the four key names.
+[^new-keys]: The program, `chunk-aq3ms068.js:14576` (`allowNestedModelAccessUnderForceLogin`), `chunk-zamn1mv0.js:146` and `chunk-t39fw2cy.js:9537` (`autoCompactRaisedForLoad`), and `chunk-614w915w.js:33647` and `chunk-t39fw2cy.js:9537` (`autoCompactOfferAnswer`). The counts come from `schemas/claude-code-settings.json` and the SchemaStore files that were downloaded on 2026-11-20. The WebFetch tool read only the first 100,000 of the 231,532 characters of the settings file, so a script counted the keys of the whole file.
+[^launch-validator]: The `2.1.329` program has no validator for `claude-code-launch.json`.

@@ -173,7 +173,7 @@ The server has 4 tools. Each takes an `action` or a `kind` that picks what it do
 | `sessions` | `action: "list"` | Lists the transcripts in `projects/` of the config folder (`CLAUDE_CONFIG_DIR`, or `~/.claude`), newest first. Pass `project` to narrow it. |
 | `sessions` | `action: "read"` | Gives the lines of one `session`. Pass `type` to keep one line type. Pass `offset` to page. A session id prefix works. |
 | `sessions` | `action: "search"` | Finds a `query` (text, or a regular expression with `regex`) in one session or in all of them. |
-| `sessions` | `action: "validate"` | Checks each line against the [transcript schema](../reference/schemas.md) of its `type`, and lists the lines that do not fit. The schema is the one for Claude Code `2.1.328`. |
+| `sessions` | `action: "validate"` | Checks each line against the [transcript schema](../reference/schemas.md) of its `type`, and lists the lines that do not fit. The schema is the one for Claude Code `2.1.329`. |
 | `sessions` | `action: "tool-calls"` | Counts the tool calls of assistant lines by tool name. Pass `query` (text, or a regular expression with `regex`) to keep matching names and to get up to `limit` sample inputs each. |
 | `code` | `action: "installs"` | Lists the versions in `~/.local/share/claude/versions`. Marks the one that `~/.local/bin/claude` runs. |
 | `code` | `action: "modules"` | Lists the files inside a binary. |
@@ -189,7 +189,7 @@ The server has 4 tools. Each takes an `action` or a `kind` that picks what it do
 | `surface` | `kind: "event-keys"` | Lists the OpenTelemetry events of a binary. With `name`, it merges the attribute keys of every place the program emits that event. |
 | `surface` | `kind: "tool-gates"` | Lists the built-in tools of a binary. Each tool comes with the code in the tool list that turns it on or off. It also comes with its own `isEnabled()` check, when it has one. It also comes with the source of the functions they call. The list does not include the filters of each session. So a listed tool may still be off. |
 | `release` | `action: "diff"` | Lists the functions changed, added, and gone between two versions (`from` and `to`), each with the changed lines of its cleaned code. Pass `name` to keep the changes that hold a text. |
-| `release` | `action: "explain"` | For a `name` (a string, a command such as `/loops`, or a tool name), gives where its code is and who uses it. It also gives the gates and env reads that guard it, and whether each function is a no-op, a stub, or handled. |
+| `release` | `action: "explain"` | For a `name` (a string, a command such as `/loop`, or a tool name), gives where its code is and who uses it. It also gives the gates and env reads that guard it, and whether each function is a no-op, a stub, or handled. |
 | `release` | `action: "notes"` | Marks each line of the release notes of `version` as matched (a changed function or a `release:diff` item holds its code span or words), gated (the match reads a server-side gate)[^gated], or unmatched. It compares against `from` (else the newest older install). Read the code of each match before you state it. |
 
 The server also has 2 MCP prompts. They give an agent the steps of a task. `release_review` (with `from` and `to`) runs `prepare`, `diff`, and `notes`. Then it runs `find` and `explain` for each gated or unmatched line. `explain_change` (with `name`) runs `find` and `explain` for one name.

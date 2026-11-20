@@ -36,7 +36,7 @@ Claude Code adds these keys itself, so the schema files do not list them.[^progr
 | `disableDeepLinkRegistration` | <Documented /> | enum: `disable` | - | Stop Claude Code from registering the `claude-cli://` link handler with the operating system. | Any settings file |
 | `voiceEnabled` | <Documented /> | boolean | - | Turn on voice dictation (hold to talk). See also `voice` in [Interface Settings](ui.md). | Any settings file |
 | `defaultView` | <Undocumented /> | enum: `chat`, `transcript` | - | Choose the default transcript view. `chat` shows only `SendUserMessage` checkpoints. `transcript` shows everything. | Settings files |
-| `axScreenReader` | <Documented /> | boolean | - | Render screen-reader friendly output. The `CLAUDE_AX_SCREEN_READER` variable and the `--ax-screen-reader` flag win. Claude Code ignores it in project and local settings, and says "Screen reader mode is off: project settings can't turn it on" if only they ask (the program, `chunk-zq0j9amd.js:5204`). | Any settings file |
+| `axScreenReader` | <Documented /> | boolean | - | Render screen-reader friendly output. The `CLAUDE_AX_SCREEN_READER` variable and the `--ax-screen-reader` flag win. Claude Code ignores it in project and local settings, and says "Screen reader mode is off: project settings can't turn it on" if only they ask (the program, `chunk-050v0fjh.js:283`). | Any settings file |
 
 ## Other Keys
 
@@ -90,6 +90,6 @@ These keys live in `~/.claude.json`, not in a settings file. The `/config` comma
 
 ## Sources
 
-[^program]: The program, `chunk-jkpzhr7r.js:183917`.
-[^fast-key]: The program, `chunk-xethrx83.js:392774` and `chunk-xethrx83.js:393073`.
-[^subkeys]: The program, `chunk-jkpzhr7r.js:298375`.
+[^program]: The program, `chunk-t39fw2cy.js:6972` (the group `$f3d708`, with `skipAutoPermissionPrompt` and `useAutoModeDuringPlan`).
+[^fast-key]: The program, `chunk-aq3ms068.js:18113` and `chunk-aq3ms068.js:18135` (`fastModeChosenOnFableOrMythos`).
+[^subkeys]: The program, `chunk-t39fw2cy.js:9615` (`shareHostProfile`).

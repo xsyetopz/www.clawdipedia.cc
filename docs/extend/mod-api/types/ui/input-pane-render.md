@@ -209,7 +209,7 @@ What a render hook returns, and what `next(e)` resolves to: a plain-data tree of
 | `type` | <Documented /> | A vector drawing, for the remote surfaces alone. The SVG markup is the data of the element, drawn in an isolated box, off the page. | Type: `'Svg'`. A leaf. A surface whose table lacks it refuses the tree. Put a press that others should see on an enclosing `Button`. |
 | `props` | <Documented /> | The props of the element, typed `SvgProps`. | Type: `SvgProps`. |
 | `children` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
-| `type` | <Documented /> | How far along a task is, or that it is still running. Hooks above wrap it, replace it, or rewrite its props. | Type: `'Progress'`. A leaf. A mobile client that names it in `draws` is sent this node. Any other client, on any surface, gets its Box and Text. A surface module cannot draw one.[^progress-node] |
+| `type` | <Documented /> | How far along a task is, or that it is still running. Hooks above wrap it, replace it, or rewrite its props. | Type: `'Progress'`. A leaf. A mobile client that names it in `draws` is sent this node. Any other mobile client gets its Box and Text. The other surfaces receive the node unchanged.[^progress-node] |
 | `props` | <Documented /> | The props of the element, typed `ProgressProps`. | Type: `ProgressProps`. |
 | `children` | <Documented /> | Never set in this form. | Type: `undefined`. Optional. |
 | `type` | <Documented /> | The scene of a `Backdrop`, played on the GPU over the one `Svg` that shows wherever the scene does not play. | Type: `'Shader'`. |
@@ -265,10 +265,10 @@ The size that a surface draws into, in character cells of the monospace metric o
 
 ## Sources
 
-[^notify-read]: The program, checks `chunk-56bhcxay.js:4954411` (`kri`), call `chunk-syremzmn.js:316642`, and the `ui_notify` message `chunk-20bv8pca.js:568257`.
-[^dock]: The program, `chunk-j2wfp6sf.js:553915`.
-[^placement]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-20bv8pca.js:572891`.
-[^progress-props]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-syremzmn.js:22137`. Its table of the tags of each surface is at `chunk-syremzmn.js:52168`. A surface other than mobile gets a `Progress` as Box and Text, and mobile gets the `Progress` with its own `value`, at `chunk-syremzmn.js:145078`.
-[^progress-node]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-20bv8pca.js:891741`.
-[^shader-props]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `ShaderProps`.
-[^render-plugin]: The Mod API type file, `schemas/claude-code.d.ts`, `RenderInputOf`. The program, `chunk-syremzmn.js:176620`.
+[^notify-read]: The program, checks `chunk-hg1yqkjk.js:213442` (`kri`), call `chunk-qsd8sbe8.js:13908`, and the `ui_notify` message `chunk-w03c3634.js:15513`.
+[^dock]: The program, `chunk-zs9k1w9q.js:34558` (`$afb933`: the cap is the lesser of 45% of the columns and the columns minus 60, the floor is 24, and below `$f573b7` the dock is 0) and `chunk-zs9k1w9q.js:125687` (`"under_110"`, the 110 columns).
+[^placement]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-w03c3634.js:15631`.
+[^progress-props]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-qsd8sbe8.js:4313` (the props `label`, `value`, `max`, `valueText`, and `color`). Its table of the tags of each surface starts at `chunk-qsd8sbe8.js:1767` (`Progress`). A surface other than mobile gets a `Progress` as Box and Text, and mobile gets the `Progress` with its own `value`, at `chunk-qsd8sbe8.js:6220`.
+[^progress-node]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-87crjpw7.js:157` (`$204e86`: on `"mobile"`, a `Progress` stays whole when the client names it in `draws`, else it becomes the Box and Text of `$3624f1`; other surfaces get it unchanged).
+[^shader-props]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, `ShaderProps`.
+[^render-plugin]: The Mod API type file, `schemas/claude-code.d.ts`, `RenderInputOf`. The program, `chunk-qsd8sbe8.js:7736`.

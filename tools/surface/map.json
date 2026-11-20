@@ -275,6 +275,10 @@
 		"route": "/extend/mod-api/calls/testing",
 		"anchor": "errors"
 	},
+	"error:${…} ${…} You are signed in to that organization now. But earlier in this session, you were signed in to a different organization. Parts of the connection to the other organization's cloud provider ca…": {
+		"route": "/how-it-works/sessions-and-storage",
+		"anchor": "errors"
+	},
 	"error:${…} ${…} could not be resolved (${…}) — refusing to write there": {
 		"route": "/extend/mod-api/calls/testing",
 		"anchor": "errors"
@@ -323,8 +327,8 @@
 		"route": "/extend/skills-and-commands/slash-commands",
 		"anchor": "errors"
 	},
-	"error:${…} Input messages: ${…}": {
-		"route": "/extend/headless",
+	"error:${…} It could not read your saved sign-in to your organization's gateway · Try again in a moment": {
+		"route": "/configure/settings/auth",
 		"anchor": "errors"
 	},
 	"error:${…} No backup was available to restore from.": {
@@ -355,12 +359,32 @@
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
 	},
+	"error:${…} This computer has its own managed settings, and they take priority over that organization's settings. ${…} To change this, ask the administrator of this computer.": {
+		"route": "/how-it-works/sessions-and-storage",
+		"anchor": "errors"
+	},
 	"error:${…} This install runs that command; confirm it by running `claude plugin install` in a terminal (or with -y/--yes).": {
 		"route": "/extend/plugins/loading",
 		"anchor": "errors"
 	},
+	"error:${…} This session does not run under that organization. ${…} To resume it, sign in to that organization. In a terminal, run ${…}.${…}": {
+		"route": "/how-it-works/sessions-and-storage",
+		"anchor": "errors"
+	},
+	"error:${…} This session runs through ${…} and does not use that organization's settings. Claude Code does not continue the conversation here. Start a new conversation.": {
+		"route": "/how-it-works/sessions-and-storage",
+		"anchor": "errors"
+	},
 	"error:${…} This tool cannot find the doc's whole current text in your context. Call project_read on this path. If it shows the whole text, send the blocks again against that text. If it does not, follow wha…": {
 		"route": "/reference/tools/gated-and-other",
+		"anchor": "errors"
+	},
+	"error:${…} You are signed in to that organization, but this session does not use that organization's settings. This can happen if the session started before you signed in, with --bare, through a gateway, or…": {
+		"route": "/how-it-works/sessions-and-storage",
+		"anchor": "errors"
+	},
+	"error:${…} Your organization sends Claude Code's requests through its gateway, and this process may not use the sign-ins that this computer keeps · Start `claude` in a terminal instead": {
+		"route": "/configure/settings/auth",
 		"anchor": "errors"
 	},
 	"error:${…} Your settings have been restored from backup.": {
@@ -447,9 +471,17 @@
 		"route": "/extend/plugins/cli",
 		"anchor": "errors"
 	},
+	"error:${…} draws an edge ${…} points wide, and the most is 48": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
+	},
 	"error:${…} edits cannot be used from a script, or with content or local_path. Instead, ${…}": {
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
+	},
+	"error:${…} ends with one of ${…}, for when no font before it is there": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
 	},
 	"error:${…} failed validation: ${…}": {
 		"route": "/configure/memory-and-rules",
@@ -535,13 +567,41 @@
 		"route": "/extend/plugins/cli",
 		"anchor": "errors"
 	},
+	"error:${…} is a color: #hex, rgb(), hsl(), transparent or a ThemeColorName such as text-primary": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
+	},
 	"error:${…} is a folder link or a bundled copy": {
 		"route": "/extend/plugins/marketplace",
 		"anchor": "errors"
 	},
+	"error:${…} is a list of ${…}": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
+	},
+	"error:${…} is a list of 1 to ${…}": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "sound-values"
+	},
+	"error:${…} is a note name such as \"C5\" or \"F#3\", a pitch of 20 to 10000 hertz, or 0 for a rest": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "sound-values"
+	},
+	"error:${…} is a number of ${…}, ${…} to ${…}": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
+	},
+	"error:${…} is a number, ${…} to ${…}": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "sound-values"
+	},
 	"error:${…} is a symlink (or its path loops through symlinks); use a regular file at a plain path": {
 		"route": "/extend/plugins/cli",
 		"anchor": "errors"
+	},
+	"error:${…} is an object with any of ${…}": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
 	},
 	"error:${…} is blocked by your organization. ${…}": {
 		"route": "/extend/plugins/marketplace",
@@ -595,13 +655,33 @@
 		"route": "/configure/settings/auth",
 		"anchor": "errors"
 	},
+	"error:${…} is one of ${…}": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
+	},
 	"error:${…} is one of ${…}'s own MCP tools; the session runs it on that machine and it cannot run here.": {
 		"route": "/extend/mcp/cli",
 		"anchor": "errors"
 	},
+	"error:${…} is out of place: stops run in order, from 0 to 1": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
+	},
 	"error:${…} is over the size a folder may hold": {
 		"route": "/extend/plugins/marketplace",
 		"anchor": "errors"
+	},
+	"error:${…} is true or false": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
+	},
+	"error:${…} lasts ${…} seconds, and the most is 4: shorten its notes, step or release": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "sound-values"
+	},
+	"error:${…} leaves no middle: opposite cuts must add up to less than the viewBox's side": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
 	},
 	"error:${…} may only contain letters, digits, hyphens, and underscores — it is interpolated into the claude.googleapis.com request path, so URL metacharacters in its value would rewrite the project/workspace…": {
 		"route": "/configure/settings/auth",
@@ -635,6 +715,14 @@
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
+	"error:${…} needs exactly one of drone: true and scatter": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "sound-values"
+	},
+	"error:${…} needs exactly one of gradient and vector": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
+	},
 	"error:${…} no longer holds what this run wrote — something else is writing into ${…}": {
 		"route": "/extend/plugins/cli",
 		"anchor": "errors"
@@ -655,6 +743,10 @@
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
+	"error:${…} scatters about ${…} hits at once, and the most is 24: lower a scatter, a release or the reverb": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "sound-values"
+	},
 	"error:${…} serializes to ${…} characters, over the ${…} limit; not sent": {
 		"route": "/configure/cli/flags",
 		"anchor": "errors"
@@ -670,6 +762,18 @@
 	"error:${…} takes a function, ($, e, next)": {
 		"route": "/extend/mod-api",
 		"anchor": "errors"
+	},
+	"error:${…} takes no \"${…}\": it takes ${…}": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
+	},
+	"error:${…} takes no ${…}: ${…}": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "sound-values"
+	},
+	"error:${…} takes one of ${…} alone, such as [\"mono\"]": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
 	},
 	"error:${…} vanished from ${…}/ while being read; try again": {
 		"route": "/extend/plugins/cli",
@@ -690,6 +794,10 @@
 	"error:${…} without a plan_token: this batch includes paths that always require per-batch approval — use finalize_plan with writes (and deletes if needed), then pass the returned plan_token.": {
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
+	},
+	"error:${…} would take ${…} seconds of audio to render, and the most is ${…}. Use fewer or shorter notes, or less reverb": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "sound-values"
 	},
 	"error:${…} — ${…} is unavailable (${…})${…}": {
 		"route": "/configure/cli/subcommands",
@@ -731,9 +839,29 @@
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
 	},
+	"error:${…}.drone is true, or left out": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "sound-values"
+	},
+	"error:${…}.fontWeight is one of ${…}": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
+	},
+	"error:${…}.lineHeight is less than its fontSize, so lines would overlap": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
+	},
+	"error:${…}.lineHeight is points, not a multiple of the font size: 24, not 1.5": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
+	},
 	"error:${…}.op is not a write_db operation": {
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
+	},
+	"error:${…}.shape is linear or radial": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
 	},
 	"error:${…}/ has ${…} .md entries (cap: ${…})": {
 		"route": "/extend/plugins/cli",
@@ -1479,6 +1607,10 @@
 		"route": "/extend/plugins/marketplace",
 		"anchor": "errors"
 	},
+	"error:${…}[${…}] is a font name: 1 to 64 letters, digits, spaces, _ and -, starting with a letter or digit": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
+	},
 	"error:${…}data and file_path are not accepted with db_op \"${…}\"": {
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
@@ -1626,6 +1758,10 @@
 	"error:--release-idle-session-min must be a non-negative number of minutes (0 disables, max ${…}), got: ${…}": {
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
+	},
+	"error:--repository-folder ${…} cannot be used: it lies in the base folder, where no named folder may lie at --capacity above 1": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "folder-and-worktree-messages"
 	},
 	"error:--repository-folder cannot be used: ${…} cannot be looked at (${…})": {
 		"route": "/configure/cli/self-hosted-runner",
@@ -2643,6 +2779,10 @@
 		"route": "/configure/memory-and-rules",
 		"anchor": "errors"
 	},
+	"error:Files API is unavailable at your organization's gateway, which doesn't accept your own Anthropic sign-in": {
+		"route": "/configure/settings/auth",
+		"anchor": "errors"
+	},
 	"error:Files API is unavailable on third-party providers (data-residency)": {
 		"route": "/configure/memory-and-rules",
 		"anchor": "errors"
@@ -3575,10 +3715,6 @@
 		"route": "/configure/settings/auth",
 		"anchor": "errors"
 	},
-	"error:Source '*": {
-		"route": "/how-it-works/sessions-and-storage",
-		"anchor": "errors"
-	},
 	"error:Source f*": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
@@ -3711,6 +3847,10 @@
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
+	"error:The fetch tool returned no text for this page.": {
+		"route": "/reference/tools/shell-and-web",
+		"anchor": "errors"
+	},
 	"error:The file t*": {
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
@@ -3795,6 +3935,14 @@
 		"route": "/reference/tools/shell-and-web",
 		"anchor": "errors"
 	},
+	"error:The session did not start: an earlier start on this runner has not finished moving ${…} aside. Ask whoever runs this runner to check that disk and, once it answers, to restart the runner.": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "folder-and-worktree-messages"
+	},
+	"error:The sign-in methods that this computer's policy allows have changed. Claude Code didn't sign you in. Choose a sign-in method again.": {
+		"route": "/configure/settings/auth",
+		"anchor": "errors"
+	},
 	"error:The skill \"${…}\" was not loaded because of a fault in Claude Code: it has no record of the files that the skill was verified against. Do not try again.": {
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
@@ -3841,6 +3989,10 @@
 	},
 	"error:This command is run by the VS Code extension, not by hand. To sign in from a terminal, run /login in Claude Code.": {
 		"route": "/configure/settings/auth",
+		"anchor": "errors"
+	},
+	"error:This conversation ran under more than one organization. Claude Code does not resume it under any of them. Start a new conversation.": {
+		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
 	"error:This eval run stubs artifact publishing locally*": {
@@ -3985,6 +4137,10 @@
 	},
 	"error:Unable to resize image — image processing is unavailable and dimensions could not be read from the file header. Please convert the image to PNG, JPEG, GIF, or WebP.": {
 		"route": "/reference/tools/files",
+		"anchor": "errors"
+	},
+	"error:Under your organization sign-in, Claude Code did not resume the session from a URL, because it would upload the session's new content to that URL. Start a new session.": {
+		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
 	"error:Unexpected $*": {
@@ -4233,6 +4389,10 @@
 	},
 	"error:Your cloud-sessions sign-in could not be renewed (${…}). Try again.": {
 		"route": "/how-it-works/sessions-and-storage",
+		"anchor": "errors"
+	},
+	"error:Your organization's credential helper didn't run, and the request wasn't sent: ${…}. ${…}": {
+		"route": "/configure/settings/auth",
 		"anchor": "errors"
 	},
 	"error:Your session has expired*": {
@@ -4550,6 +4710,10 @@
 	"error:auth setup failed: ${…}": {
 		"route": "/configure/settings/auth",
 		"anchor": "errors"
+	},
+	"error:auth token must be at least 32 characters": {
+		"route": "/configure/env-vars/plugins-and-mcp",
+		"anchor": "variables"
 	},
 	"error:authServerMetadataUrl must use https:// (got: ${…})": {
 		"route": "/extend/mcp/auth",
@@ -5051,6 +5215,10 @@
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
 	},
+	"error:get_usage: detached must be a boolean": {
+		"route": "/extend/headless/control-protocol",
+		"anchor": "subtypes"
+	},
 	"error:get_usage: skip_behaviors must be a boolean": {
 		"route": "/extend/headless",
 		"anchor": "errors"
@@ -5218,6 +5386,10 @@
 	"error:it holds more than ${…} files": {
 		"route": "/extend/plugins/marketplace",
 		"anchor": "errors"
+	},
+	"error:it names no git server": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "folder-and-worktree-messages"
 	},
 	"error:it patches its dependencies (patchedDependencies), which this install does not apply": {
 		"route": "/extend/plugins/marketplace",
@@ -5827,6 +5999,10 @@
 		"route": "/reference/tools/shell-and-web",
 		"anchor": "errors"
 	},
+	"error:sandbox.windows.backend is not set. Whoever manages the sandbox settings can set it to \"mxc\" (no set-up, PowerShell only, needs Windows 11 24H2 or later with the November 2026 update) or to \"sandboxus…": {
+		"route": "/configure/permissions/sandbox",
+		"anchor": "core-keys"
+	},
 	"error:sandbox: the task output directory chain under the temp root is no longer plain directories (${…}); refusing to run sandboxed commands until it is restored": {
 		"route": "/configure/permissions/sandbox",
 		"anchor": "errors"
@@ -5903,6 +6079,14 @@
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
 	},
+	"error:sound may hold at most 1500 values, counting every field and list entry": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "sound-values"
+	},
+	"error:sound needs an ambience or at least one cue": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "sound-values"
+	},
 	"error:sparse arrays not allowed": {
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
@@ -5946,6 +6130,14 @@
 	"error:streamUpload: unsupported request body type": {
 		"route": "/configure/settings/auth",
 		"anchor": "errors"
+	},
+	"error:style may hold at most 1500 values, counting every field and list entry, and 65536 characters of text": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
+	},
+	"error:style needs at least one of ${…}": {
+		"route": "/extend/mod-api/ui/ui",
+		"anchor": "style-values"
 	},
 	"error:sub-agent listing incomplete": {
 		"route": "/reference/tools/agents-and-tasks",
@@ -6078,6 +6270,10 @@
 	"error:the files m*": {
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
+	},
+	"error:the folder is a link or a file, or cannot be made": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "folder-and-worktree-messages"
 	},
 	"error:the harness is running as root, which a directory mode does not bind": {
 		"route": "/extend/plugins/cli",
@@ -6479,10 +6675,6 @@
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
 	},
-	"error:┌─────────────────────────────────────┐ │ Claude Code Gateway │ └─────────────────────────────────────┘": {
-		"route": "/configure/cli/subcommands",
-		"anchor": "errors"
-	},
 	"error:⚠ ${…} ${…} `claude doctor` lists every entry.": {
 		"route": "/configure/permissions/sandbox",
 		"anchor": "errors"
@@ -6628,6 +6820,10 @@
 		"anchor": "commands"
 	},
 	"flag:auth login --gateway-json": {
+		"route": "/configure/cli/subcommands",
+		"anchor": "commands"
+	},
+	"flag:auth login --organization-gateway": {
 		"route": "/configure/cli/subcommands",
 		"anchor": "commands"
 	},
@@ -7843,6 +8039,10 @@
 		"route": "/configure/keybindings/default-keys",
 		"anchor": "chat"
 	},
+	"keybinding:chat:decreaseEffort": {
+		"route": "/configure/keybindings/default-keys",
+		"anchor": "chat"
+	},
 	"keybinding:chat:defaultToNewerModel": {
 		"route": "/configure/keybindings/default-keys",
 		"anchor": "chat"
@@ -7856,6 +8056,10 @@
 		"anchor": "chat"
 	},
 	"keybinding:chat:imagePaste": {
+		"route": "/configure/keybindings/default-keys",
+		"anchor": "chat"
+	},
+	"keybinding:chat:increaseEffort": {
 		"route": "/configure/keybindings/default-keys",
 		"anchor": "chat"
 	},

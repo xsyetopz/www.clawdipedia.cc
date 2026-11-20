@@ -187,17 +187,17 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^schemas]: The published schema files `schemas/claude-code-managed-settings.json` (203 keys under `properties`) and `schemas/claude-code-settings.json` (178 keys). The 25 managed-only keys are the ones in the first file and not in the second.
-[^config-note]: The program, `chunk-79nt6zzq.js:8484` (the notice "override what you save here") and `chunk-79nt6zzq.js:33773`.
-[^save-fail]: The program, `chunk-j2wfp6sf.js:201826` (the `/tui` command shows `Couldn't save this setting`), `chunk-79nt6zzq.js:41018` (`/config` with `key=value` shows `Couldn't save <name>: <reason>`), and `chunk-79nt6zzq.js:51421` (the same text for a panel row). The program does not show where the message sits on screen.
-[^gitignore]: The program, `chunk-sm9djeyx.js:28838`, called from `chunk-sm9djeyx.js:112100`.
-[^seed]: The program, `chunk-sm9djeyx.js:114454` (the write reads the file first and falls back to the last parse when it is "still empty, broken or locked") and `chunk-sm9djeyx.js:115269-115639` (a `ConfigChange` hook that blocked the latest change, or is still deciding).
-[^sources]: The program, `chunk-0fvmdxeb.js:83723`.
-[^managed-reread]: The program, `chunk-xethrx83.js:548431` (the 5000 ms limit), `chunk-xethrx83.js:548869`, and `chunk-xethrx83.js:551192` (the timeout message "the managed settings already read are kept").
-[^left-out-keys]: The program, `chunk-jkpzhr7r.js:251607` and `chunk-jkpzhr7r.js:294588`.
-[^strict]: The program lists them as keys with a strict value, `chunk-jkpzhr7r.js:163308-163567`.
-[^nesting]: The program, `chunk-jkpzhr7r.js:405691` (the limit of 64) and `chunk-jkpzhr7r.js:430771-430983` (the warning and the fatal `hooks` case).
-[^file-error]: The program, `chunk-j2wfp6sf.js:1970732-1970797`..
-[^connector]: The program, `chunk-5699r6rq.js:511397` (the message), `chunk-jkpzhr7r.js:394897` (the folder name), and `chunk-jkpzhr7r.js:397467` (the `.gitignore` check).
-[^json-position]: The program, `chunk-h9zb4hpp.js:13258` and `chunk-jkpzhr7r.js:414026`.
-[^left-out]: The program, `chunk-sm9djeyx.js:93654` (reading a source that is not enabled returns nothing), with its use for auto mode rules at `chunk-sm9djeyx.js:123536` and for the saved bypass-permissions consent at `chunk-sm9djeyx.js:121639`.
-[^managed-edit-ask]: The program (`2.1.328`). The file name is `remote-settings.json` (`chunk-jkpzhr7r.js:355865`), placed in the configuration folder by `chunk-jkpzhr7r.js:368489`. `chunk-wchmynj9.js:144986` builds the protected set from those paths, `chunk-wchmynj9.js:231313` tests a path against it, and `chunk-wchmynj9.js:231882` turns the test into the result `certain`, `possible`, or `none`. The write check `chunk-wchmynj9.js:252637` returns an unsafe result with the message "but you haven't granted it yet" and the breaker `claudeSettingsFile` when the result is not `none` (`chunk-wchmynj9.js:253457`).
+[^config-note]: The program, `chunk-1yfzbet8.js:474` (the notice "override what you save here").
+[^save-fail]: The program, `chunk-zs9k1w9q.js:14025` (the `/tui` command shows `Couldn't save this setting`), `chunk-1yfzbet8.js:2306` (`/config` with `key=value` shows `Couldn't save <name>: <reason>`), and `chunk-1yfzbet8.js:2927` (the same text, "Couldn't save", for a panel row). The program does not show where the message sits on screen.
+[^gitignore]: The program, `chunk-pxy9yt8m.js:1829` (the line `**/${b2}`, built from the path of the local settings file), called from `chunk-pxy9yt8m.js:6422` with `localSettings` and the flag that also writes outside a git repository.
+[^seed]: The program, `chunk-pxy9yt8m.js:6560` (the write reads the file first and falls back to the last parse when it is "still empty, broken or locked") and `chunk-pxy9yt8m.js:6560-6596` (a `ConfigChange` hook that blocked the latest change, or is still deciding).
+[^sources]: The program, `chunk-kgzzwvwc.js:4743`.
+[^managed-reread]: The program, `chunk-aq3ms068.js:25274` (the limit `5000` ms), `chunk-aq3ms068.js:25320` (the `managed-settings.d` folder), and `chunk-aq3ms068.js:25423` (the timeout message "the managed settings already read are kept").
+[^left-out-keys]: The program, `chunk-t39fw2cy.js:8672` and `chunk-t39fw2cy.js:9495`.
+[^strict]: The program lists them as keys with a strict value, `chunk-wb0pe3gv.js:98-103` (`modelProposedGoals`, `feedbackDrafts`, `availableModelsMatch`, `askUserQuestionTimeout`, and `dialogExpiry`).
+[^nesting]: The program, `chunk-zryj96fm.js:1698` (the limit `$e275e0 = 64`) and `chunk-zryj96fm.js:2909-2923` (the warning and the fatal `hooks` case).
+[^file-error]: The program, `chunk-zs9k1w9q.js:123378`..
+[^connector]: The program, `chunk-614w915w.js:28172` (the message), `chunk-zryj96fm.js:1061` (the folder name `connector-downloads`), and `chunk-zryj96fm.js:1194` (the `.gitignore` check).
+[^json-position]: The program, `chunk-pwxp2pn6.js:867` (`line` and `column` are the zero-based position plus 1), `chunk-zryj96fm.js:2087` (the suffix "(line …, column …)"), and `chunk-zryj96fm.js:2160` ("Invalid or malformed JSON").
+[^left-out]: The program, `chunk-pxy9yt8m.js:5365` (reading a source that is not enabled returns `null`), with its use for the `autoMode` rules at `chunk-pxy9yt8m.js:7039` and for the saved bypass-permissions consent `skipDangerousModePermissionPrompt` at `chunk-pxy9yt8m.js:6944`.
+[^managed-edit-ask]: The program. The file name is `remote-settings.json` (`chunk-t39fw2cy.js:12358`), placed in the configuration folder by `$b326fe` at `chunk-t39fw2cy.js:13351`. `$953404` at `chunk-32gs4rex.js:10661` builds the protected set from those paths (the configuration folder and `~/.claude`, with `remote-settings.json` added at `chunk-32gs4rex.js:6393`, where `$2e067a` is the file name), `$36ab4a` at `chunk-32gs4rex.js:10658` tests a path against it, and `chunk-32gs4rex.js:10694` turns the test into the result `certain`, `possible`, or `none`. The write check `chunk-32gs4rex.js:11788` returns an unsafe result with the message "but you haven't granted it yet" and the breaker `claudeSettingsFile` when the result is not `none` (`chunk-32gs4rex.js:11808-11810`).

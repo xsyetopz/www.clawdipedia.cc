@@ -6,7 +6,7 @@ sidebar_position: 1
 
 A mod is a plugin whose code runs inside Claude Code. Claude Code calls the code when an event happens, such as a tool call or a submitted prompt. The code can watch the event, change it, or answer it.
 
-The object `$` is the Mod API. The type file that Claude Code publishes marks it as early access, so it may change between releases. These pages cover `2.1.328`. To load a mod, put it in a plugin folder with a `hooks/hooks.json` file. See [A First Mod](#a-first-mod).
+The object `$` is the Mod API. The type file that Claude Code publishes marks it as early access, so it may change between releases. These pages cover `2.1.329`. To load a mod, put it in a plugin folder with a `hooks/hooks.json` file. See [A First Mod](#a-first-mod).
 
 Official pages: [Mods Overview](https://code.claude.com/docs/en/plugins/mods/overview), [Create a Mod](https://code.claude.com/docs/en/plugins/mods/create), [Use the Mods API](https://code.claude.com/docs/en/plugins/mods/api), [React to Events](https://code.claude.com/docs/en/plugins/mods/events), [Draw in the Interface](https://code.claude.com/docs/en/plugins/mods/interface), [Test a Mod](https://code.claude.com/docs/en/plugins/mods/test), [Troubleshoot a Mod](https://code.claude.com/docs/en/plugins/mods/troubleshoot), and [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference).
 
@@ -177,12 +177,12 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^tier-327]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, the text of `Tier`.
-[^types]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `Tier`, `RenderSurface`, `PluginRegisterUses`, `SessionCost`, `ToolDescribeInput`, and `UiPointerResult`.
-[^prompt-edit]: The program, `chunk-syremzmn.js:194600`.
-[^rollout]: The program, `chunk-xethrx83.js:728152`. The server flag is `tengu_plugin_hooks_modules`.
-[^re-entry]: The program, `chunk-9nv3z5ae.js:6443`.
-[^paint]: The program, `chunk-syremzmn.js:304985`.
-[^env-set-codes]: The program, `chunk-r240nspa.js:10652` (`OUT_OF_STEP`), `chunk-r240nspa.js:10703` (`HOST_RULE`), `chunk-r240nspa.js:10748` (`PINNED`), `chunk-r240nspa.js:10823` (`HELD`), `chunk-r240nspa.js:11376` (`NO_ROW`, `LOCKED`, `NOT_WRITTEN`, and the `config.set: <code>` text), and `chunk-r240nspa.js:13748` (`NOT_WRITTEN` again, in the `config.set` source branch).
-[^hooks-name]: The program, `chunk-56bhcxay.js:999067` (`next.to`), `chunk-56bhcxay.js:1016778` (policy or scan), and `chunk-56bhcxay.js:1041381` (the engine's own chain member, and the name that starts with a prefix). The prefix is the constant `hook:` at `chunk-syremzmn.js:64862`. The type file `schemas/claude-code.d.ts`, `ToolCheckInput`, names the prefix `hook:`.
-[^handle-codes]: The program, `chunk-r240nspa.js:12180` (`UNKNOWN_HANDLE`) and `chunk-r240nspa.js:12679` (`NOT_SYNCED`).
+[^tier-327]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, the text of `Tier`.
+[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, `Tier`, `RenderSurface`, `PluginRegisterUses`, `SessionCost`, `ToolDescribeInput`, and `UiPointerResult`.
+[^prompt-edit]: The program, `chunk-qsd8sbe8.js:8505`.
+[^rollout]: The program, `chunk-aq3ms068.js:34650`. The server flag is `tengu_plugin_hooks_modules`.
+[^re-entry]: The program, `chunk-6h88xj3m.js:351`.
+[^paint]: The program, `chunk-qsd8sbe8.js:13334`.
+[^env-set-codes]: The program, `chunk-g8fcpzhr.js:568` (`OUT_OF_STEP`), `chunk-g8fcpzhr.js:568` (`HOST_RULE`), `chunk-g8fcpzhr.js:568` (`PINNED`), `chunk-g8fcpzhr.js:568` (`HELD`), `chunk-g8fcpzhr.js:606` (`NO_ROW`, `LOCKED`, `NOT_WRITTEN`, and the `config.set: <code>` text), and `chunk-g8fcpzhr.js:739` (`NOT_WRITTEN` again, in the `config.set` source branch).
+[^hooks-name]: The program, `chunk-hg1yqkjk.js:87387` (`next.to`), `chunk-hg1yqkjk.js:88210` (`hooks module not loaded`, `policy/scan`), and `chunk-hg1yqkjk.js:89238` (`the engine's own chain member`) and `chunk-hg1yqkjk.js:89242` (`a name that starts with`). The prefix is the constant `hook:` at `chunk-qsd8sbe8.js:2395`. The type file `schemas/claude-code.d.ts`, `ToolCheckInput`, names the prefix `hook:`.
+[^handle-codes]: The program, `chunk-g8fcpzhr.js:644` (`UNKNOWN_HANDLE`) and `chunk-g8fcpzhr.js:644` (`NOT_SYNCED`).

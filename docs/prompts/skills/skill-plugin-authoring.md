@@ -6,21 +6,21 @@ generated: false
 group: skills
 ---
 
-This is the verbatim text that Claude Code 2.1.328 uses for the built-in `/plugin-authoring` skill.
+This is the verbatim text that Claude Code 2.1.329 uses for the built-in `/plugin-authoring` skill.
 
 ## Where It Comes From
 
-Bundled skill. The program stores the text in the module `SKILL-de696a17.md.zst`. The `PROBE-ARG` below stands for the argument in place of your input.
+Bundled skill. The program stores the text in the module `SKILL-558b9a0c.md.zst`. The `PROBE-ARG` below stands for the argument in place of your input.
 
 ## How to Override It
 
-Create `.claude/skills/plugin-authoring/SKILL.md` with the same name. The program lists skill files from the skill folders before bundled skills and uses the first command with a matching name, so your file replaces this text (The program, `chunk-56bhcxay.js:2630374`, `chunk-458m0skd.js:2592`). It adds a `Base directory for this skill:` line above your skill text (The program, `chunk-56bhcxay.js:3885828`). See [Override a Prompt](../other/override.md).
+Create `.claude/skills/plugin-authoring/SKILL.md` with the same name. The program lists skill files from the skill folders (`skillDirCommands`) before bundled skills (`bundledSkills`) and uses the first command with a matching name, so your file replaces this text (The program, `chunk-hg1yqkjk.js:190384`, `chunk-6d5r944q.js:115`). It adds a `Base directory for this skill:` line above your skill text (The program, `chunk-hg1yqkjk.js:279997`). See [Override a Prompt](../other/override.md).
 
 ## Full Text
 
 Temp folder paths were replaced with `<temp-dir>` or `<bundled-skill-dir>`, and emoji not on the site's allow-list are shown in brackets. `PROBE-ARG` is the test's argument.
 
-The program fills `${CLAUDE_DEV_MODS_DIR}` and `${CLAUDE_SKILL_DIR}` when it loads the skill. The text of the paragraph that starts `THIS SESSION` is the one for a `-p` session, from `chunk-z4411sqa.js:6829`.
+The program fills `${CLAUDE_DEV_MODS_DIR}` and `${CLAUDE_SKILL_DIR}` when it loads the skill. The text of the paragraph that starts `THIS SESSION` is the one for a `-p` session, from `chunk-c183zp3n.js:162`.
 
 ````text
 <command-message>plugin-authoring</command-message>
@@ -62,7 +62,7 @@ Each example, in `<bundled-skill-dir>/plugin-authoring/examples/`, is one comple
 | something on or under a tool call's row | a `ui.render` hook on `{ component: 'ToolUse' }` with `await next(e)` in its tree to keep the row. Mobile apps draw it as one quiet line, or as a card under the row when `borderStyle` or `backgroundColor` is on the Box that holds the row and your content. Use a card for what a person should see without a tap, such as a chart, a list or a report | its doc in the types |
 | a row in the desktop app's right-click menu | a `ui.render` hook on `{ component: 'ContextMenu' }` returning a `Button` or `Link` for each row, or `next(e)` for none; `e.props` says what was clicked | `menu.tsx`, its test `menu.test.tsx` |
 | a status line entry | `$.ui.status(text)` from any hook; `undefined` clears it | `tool-call.ts` |
-| a theme or a look | `$.theme.set({ colors, backdrop })` at `session.start`: read `<bundled-skill-dir>/plugin-authoring/look.md` first | `look.ts` |
+| a theme | `$.theme.set({ colors, backdrop, sound, style })` at `session.start`: read `<bundled-skill-dir>/plugin-authoring/look.md` first | `look.ts` |
 | a toast | `$.ui.toast(text)` from any hook | `band.tsx` |
 | block, rewrite or react to a tool call | `on('tool.call', { tool }, hook)`: return `{ deny }`, call `next({ ...e, ... })`, or `await next(e)` and act on the result | `tool-call.ts` |
 | change or react to a prompt | `on('prompt.submit', hook)`: `next({ ...e, text })` | `band.tsx` |

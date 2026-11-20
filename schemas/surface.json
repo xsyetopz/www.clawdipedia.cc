@@ -1,5 +1,5 @@
 {
-	"version": "2.1.328",
+	"version": "2.1.329",
 	"kinds": {
 		"beta": [
 			{ "name": "advanced-tool-use-2025-11-20", "detail": "tool_search" },
@@ -409,6 +409,10 @@
 			{ "name": "/v1/design/consent", "detail": "path" },
 			{ "name": "/v1/design/grants", "detail": "path" },
 			{ "name": "/v1/design/mcp", "detail": "path" },
+			{
+				"name": "/v1/desktop/orgs/${…}/claude_code/bootstrap",
+				"detail": "path"
+			},
 			{ "name": "/v1/dreams/${…}/archive?beta=true", "detail": "path" },
 			{ "name": "/v1/dreams/${…}/cancel?beta=true", "detail": "path" },
 			{ "name": "/v1/dreams/${…}?beta=true", "detail": "path" },
@@ -1171,7 +1175,7 @@
 				"name": "CCR_AGENT_PROXY_CONNECTION_LIMITS_DISABLED",
 				"detail": "bool"
 			},
-			{ "name": "CCR_AGENT_PROXY_ENABLED", "detail": "bool" },
+			{ "name": "CCR_AGENT_PROXY_ENABLED", "detail": "triBool" },
 			{ "name": "CCR_AGENT_PROXY_FRAME_HOSTS", "detail": "str" },
 			{ "name": "CCR_AGENT_PROXY_INCLUDE_HOSTS", "detail": "str" },
 			{
@@ -1396,7 +1400,7 @@
 			},
 			{ "name": "CLAUDE_CODE_AUTH_FAIL_EXIT_MS", "detail": "int{min:0}" },
 			{ "name": "CLAUDE_CODE_AUTOMOUNT_ROOTS", "detail": "str" },
-			{ "name": "CLAUDE_CODE_AUTOUPDATER_DISABLED_BY_HOST", "detail": "bool" },
+			{ "name": "CLAUDE_CODE_AUTOUPDATER_DISABLED_BY_HOST", "detail": "str" },
 			{ "name": "CLAUDE_CODE_AUTO_BACKGROUND_TIMEOUT_MS", "detail": "listed" },
 			{ "name": "CLAUDE_CODE_AUTO_COMPACT_WINDOW", "detail": "str" },
 			{ "name": "CLAUDE_CODE_AUTO_CONNECT_IDE", "detail": "triBool" },
@@ -1498,6 +1502,7 @@
 			{ "name": "CLAUDE_CODE_CCR_SURFACE", "detail": "str" },
 			{ "name": "CLAUDE_CODE_CCR_WORKER_SOCKET", "detail": "str" },
 			{ "name": "CLAUDE_CODE_CERT_STORE", "detail": "str" },
+			{ "name": "CLAUDE_CODE_CFC_REFUSED", "detail": "str" },
 			{ "name": "CLAUDE_CODE_CHILD_NOTES_DIR", "detail": "str" },
 			{ "name": "CLAUDE_CODE_CHILD_SESSION", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_CHROME_LATE_MCP_SERVER", "detail": "bool" },
@@ -1850,7 +1855,6 @@
 					"no_setup",
 					"provider",
 					"model",
-					"no_flags",
 					"gate"
 				],
 				"detail": "enum"
@@ -1984,6 +1988,7 @@
 				"name": "CLAUDE_CODE_HOST_HTTP_PROXY_PORT",
 				"detail": "set for a child process"
 			},
+			{ "name": "CLAUDE_CODE_HOST_HYBRID_ORGANIZATION_UUID" },
 			{ "name": "CLAUDE_CODE_HOST_OWNED_CONFIG_DIR", "detail": "rawStr" },
 			{ "name": "CLAUDE_CODE_HOST_OWNED_SPAWN_ENV", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_HOST_PLATFORM", "detail": "str" },
@@ -1991,6 +1996,7 @@
 			{ "name": "CLAUDE_CODE_HOST_SCHEDULED_RUN", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_HOST_SESSION_ID", "detail": "str" },
 			{ "name": "CLAUDE_CODE_HOST_SHORT_TEMP_DIRS", "detail": "triBool" },
+			{ "name": "CLAUDE_CODE_HOST_SHOWS_CONNECTION_NOTICE", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_HOST_SKILL_CATALOG", "detail": "str" },
 			{
 				"name": "CLAUDE_CODE_HOST_SOCKS_PROXY_PORT",
@@ -2035,6 +2041,7 @@
 			{ "name": "CLAUDE_CODE_LAUNCHED_BY_SESSION_IDS", "detail": "str" },
 			{ "name": "CLAUDE_CODE_LAUNCHER_RUNS_API_KEY_HELPER", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_LEGACY_BUNDLE", "detail": "bool" },
+			{ "name": "CLAUDE_CODE_LINKED_SPINDLE", "detail": "triBool" },
 			{ "name": "CLAUDE_CODE_LOOP_KEEPALIVE", "detail": "triBool" },
 			{ "name": "CLAUDE_CODE_LOOP_PERSISTENT", "detail": "bool" },
 			{
@@ -2147,8 +2154,7 @@
 			},
 			{ "name": "CLAUDE_CODE_MESSAGING_SOCKET" },
 			{ "name": "CLAUDE_CODE_MESSAGING_TOKEN", "detail": "listed" },
-			{ "name": "CLAUDE_CODE_MOCK_REMOTE_SETTINGS", "detail": "str" },
-			{ "name": "CLAUDE_CODE_MOCK_TRIAL", "detail": "bool" },
+			{ "name": "CLAUDE_CODE_MOCK_REMOTE_SETTINGS", "detail": "listed" },
 			{ "name": "CLAUDE_CODE_MODEL_CAPABILITIES", "detail": "str" },
 			{ "name": "CLAUDE_CODE_MODEL_CATALOG", "detail": "str" },
 			{ "name": "CLAUDE_CODE_MODEL_CATALOG_URL", "detail": "str" },
@@ -2297,6 +2303,7 @@
 				"detail": "bool"
 			},
 			{ "name": "CLAUDE_CODE_QUESTION_PREVIEW_FORMAT", "detail": "str" },
+			{ "name": "CLAUDE_CODE_QUEUED_NOTIFICATIONS_BY_POLL", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_RATE_LIMIT_TIER", "detail": "str" },
 			{ "name": "CLAUDE_CODE_RC_PERMISSION_NUDGE" },
 			{ "name": "CLAUDE_CODE_REFUSAL_FALLBACK_CATCH_ALL", "detail": "triBool" },
@@ -2348,6 +2355,7 @@
 			{ "name": "CLAUDE_CODE_REPL", "detail": "triBool" },
 			{ "name": "CLAUDE_CODE_REPLY_GATE_POLICY", "detail": "str" },
 			{ "name": "CLAUDE_CODE_REPORT_FINDINGS", "detail": "bool" },
+			{ "name": "CLAUDE_CODE_REPORT_REPO_PROVENANCE", "detail": "triBool" },
 			{ "name": "CLAUDE_CODE_REPO_CHECKOUTS", "detail": "str" },
 			{ "name": "CLAUDE_CODE_REQUIRED_PLUGINS_HOLD", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_RESTRICTED", "detail": "bool" },
@@ -2410,6 +2418,7 @@
 				"name": "CLAUDE_CODE_SANDBOX_LEAVE_PARENT_FOLDERS_ALONE",
 				"detail": "bool"
 			},
+			{ "name": "CLAUDE_CODE_SCRATCHPAD_DIR", "detail": "str" },
 			{ "name": "CLAUDE_CODE_SCRIPT_CAPS", "detail": "int" },
 			{ "name": "CLAUDE_CODE_SCROLL_SPEED", "detail": "str" },
 			{ "name": "CLAUDE_CODE_SDK_HAS_HOST_AUTH_REFRESH", "detail": "bool" },
@@ -2594,11 +2603,6 @@
 			{ "name": "CLAUDE_CODE_TELEPORT_MOVE", "detail": "str" },
 			{ "name": "CLAUDE_CODE_TERMINAL_MCP_TOOLS", "detail": "str" },
 			{ "name": "CLAUDE_CODE_TERMINAL_RECORDING", "detail": "str" },
-			{ "name": "CLAUDE_CODE_TEST_ALLOW_REAL_NETWORK", "detail": "bool" },
-			{ "name": "CLAUDE_CODE_TEST_FIXTURES_ROOT", "detail": "str" },
-			{ "name": "CLAUDE_CODE_TEST_FORCE_DENY", "detail": "rawStr" },
-			{ "name": "CLAUDE_CODE_TEST_NO_GIT_BASH", "detail": "str" },
-			{ "name": "CLAUDE_CODE_TEST_NO_PWSH", "detail": "str" },
 			{ "name": "CLAUDE_CODE_TETHER_LIVE" },
 			{ "name": "CLAUDE_CODE_THINKING_DISPLAY_UPDATES", "detail": "triBool" },
 			{ "name": "CLAUDE_CODE_THINKING_RESUMPTION", "detail": "triBool" },
@@ -2642,9 +2646,7 @@
 			{ "name": "CLAUDE_CODE_TURN_UPDATES", "detail": "triBool" },
 			{ "name": "CLAUDE_CODE_TWO_STAGE_CLASSIFIER", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_ULTRAREVIEW_LAUNCH_RECORD", "detail": "str" },
-			{ "name": "CLAUDE_CODE_ULTRAREVIEW_PREFLIGHT_FIXTURE", "detail": "str" },
 			{ "name": "CLAUDE_CODE_ULTRAREVIEW_PR_AS_MERGED", "detail": "bool" },
-			{ "name": "CLAUDE_CODE_ULTRAREVIEW_QUOTA_FIXTURE", "detail": "str" },
 			{ "name": "CLAUDE_CODE_ULTRAREVIEW_REVIEW_MD_FILE", "detail": "str" },
 			{
 				"name": "CLAUDE_CODE_UNWATCHED_REPLY_HOLD_MS",
@@ -2698,6 +2700,7 @@
 				"name": "CLAUDE_CODE_WEBFETCH_DEADLINE_MS",
 				"detail": "int{min:0,digitsOnly:!0}"
 			},
+			{ "name": "CLAUDE_CODE_WEBFETCH_MCP_TOOL", "detail": "str" },
 			{ "name": "CLAUDE_CODE_WEBFETCH_USE_CCR_PROXY", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_WEBSEARCH_CITATIONS", "detail": "bool" },
 			{ "name": "CLAUDE_CODE_WEBSEARCH_USE_CCR_PROXY", "detail": "bool" },
@@ -2768,7 +2771,6 @@
 			{ "name": "CLAUDE_LOCAL_OAUTH_APPS_BASE", "detail": "str" },
 			{ "name": "CLAUDE_LOCAL_OAUTH_CONSOLE_BASE", "detail": "str" },
 			{ "name": "CLAUDE_MEMORY_STORES", "detail": "str" },
-			{ "name": "CLAUDE_MOCK_HEADERLESS_429", "detail": "bool" },
 			{ "name": "CLAUDE_PID", "detail": "listed" },
 			{ "name": "CLAUDE_PLUGIN_DATA", "detail": "listed" },
 			{ "name": "CLAUDE_PLUGIN_ROOT", "detail": "set for a child process" },
@@ -2820,6 +2822,7 @@
 				"detail": "bool"
 			},
 			{ "name": "CLAUDE_RUNNER_DISABLE_RENEWAL_WARNING", "detail": "bool" },
+			{ "name": "CLAUDE_RUNNER_DISABLE_START_HEARTBEATS", "detail": "bool" },
 			{
 				"name": "CLAUDE_RUNNER_DISABLE_TURN_BEGAN_BEFORE_INIT",
 				"detail": "bool"
@@ -3025,7 +3028,6 @@
 			{ "name": "FORCE_COLOR", "detail": "rawStr" },
 			{ "name": "FORCE_HYPERLINK" },
 			{ "name": "FORCE_PROMPT_CACHING_5M", "detail": "bool" },
-			{ "name": "FORCE_VCR", "detail": "bool" },
 			{ "name": "FUNCTION_NAME" },
 			{ "name": "FUNCTION_TARGET" },
 			{ "name": "GAE_MODULE_NAME" },
@@ -3340,6 +3342,7 @@
 			{ "name": "NUGET_AUTH_TOKEN", "detail": "listed" },
 			{ "name": "NoDefaultCurrentDirectoryInExePath", "detail": "str" },
 			{ "name": "OAUTH_TOKEN", "detail": "set for a child process" },
+			{ "name": "OLDPWD" },
 			{ "name": "OPENJ9_JAVA_OPTIONS", "detail": "listed" },
 			{ "name": "OPENSSL_CONF", "detail": "listed" },
 			{ "name": "OPENSSL_CONF_INCLUDE", "detail": "listed" },
@@ -3575,6 +3578,7 @@
 			{ "name": "SELF_HOSTED_RUNNER_SESSION_STOP_GRACE_MS" },
 			{ "name": "SELF_HOSTED_RUNNER_SIGKILL_GRACE_MS" },
 			{ "name": "SELF_HOSTED_RUNNER_SIGKILL_TIMEOUT_MS" },
+			{ "name": "SELF_HOSTED_RUNNER_SKIP_AGENT_PROXY_CHECK" },
 			{ "name": "SELF_HOSTED_RUNNER_STARTUP_TIMEOUT_MS" },
 			{ "name": "SELF_HOSTED_RUNNER_TRUST_WORKSPACE" },
 			{ "name": "SELF_HOSTED_RUNNER_USE_ANTHROPIC_GH" },
@@ -3628,7 +3632,6 @@
 			{ "name": "TERMUX_VERSION", "detail": "str" },
 			{ "name": "TERM_PROGRAM", "detail": "str" },
 			{ "name": "TERM_PROGRAM_VERSION", "detail": "str" },
-			{ "name": "TEST_ENABLE_SESSION_PERSISTENCE", "detail": "bool" },
 			{ "name": "TF_CLI_CONFIG_FILE" },
 			{ "name": "TILIX_ID", "detail": "str" },
 			{ "name": "TIME_STYLE", "detail": "listed" },
@@ -3672,7 +3675,6 @@
 			{ "name": "VAULT_ROLE_ID", "detail": "listed" },
 			{ "name": "VAULT_SECRET_ID", "detail": "listed" },
 			{ "name": "VAULT_TOKEN", "detail": "listed" },
-			{ "name": "VCR_RECORD", "detail": "bool" },
 			{ "name": "VERCEL", "detail": "str" },
 			{ "name": "VERTEX_REGION_CLAUDE_3_5_HAIKU", "detail": "listed" },
 			{ "name": "VERTEX_REGION_CLAUDE_3_5_SONNET", "detail": "listed" },
@@ -3809,10 +3811,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "\"alg\" (Algorithm) Header Parameter value not allowed",
-				"detail": "throw Error"
-			},
-			{
 				"name": "\"alg\" argument is required when \"jwk.alg\" is not present",
 				"detail": "throw TypeError"
 			},
@@ -3821,34 +3819,11 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "\"enc\" (Encryption Algorithm) Header Parameter value not allowed",
-				"detail": "throw Error"
-			},
-			{ "name": "\"exp\" claim must be a number", "detail": "throw Error" },
-			{
-				"name": "\"exp\" claim timestamp check failed",
-				"detail": "throw Error"
-			},
-			{ "name": "\"iat\" claim must be a number", "detail": "throw Error" },
-			{
-				"name": "\"iat\" claim timestamp check failed (it should be in the past)",
-				"detail": "throw Error"
-			},
-			{
-				"name": "\"iat\" claim timestamp check failed (too far in the past)",
-				"detail": "throw Error"
-			},
-			{
 				"name": "\"kty\" (Key Type) Parameter missing or unsupported",
 				"detail": "throw Error"
 			},
 			{
 				"name": "\"main\" is a reserved recipient name (SendMessage routes it to the main conversation) — choose another teammate name.",
-				"detail": "throw Error"
-			},
-			{ "name": "\"nbf\" claim must be a number", "detail": "throw Error" },
-			{
-				"name": "\"nbf\" claim timestamp check failed",
 				"detail": "throw Error"
 			},
 			{
@@ -3973,10 +3948,18 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "$/cancelRequest names no request",
+				"detail": "throw TypeError"
+			},
+			{
 				"name": "$data keyword must have \"code\" or \"validate\" function",
 				"detail": "throw Error"
 			},
 			{ "name": "$schema must be a string", "detail": "throw Error" },
+			{
+				"name": "${…} ${…} You are signed in to that organization now. But earlier in this session, you were signed in to a different organization. Parts of the connection to the other organization's cloud provider ca…",
+				"detail": "throw Error"
+			},
 			{
 				"name": "${…} ${…} could not be resolved (${…}) — refusing to write there",
 				"detail": "throw Error"
@@ -4026,7 +4009,10 @@
 				"name": "${…} HTTP method does not support ${…} client authentication",
 				"detail": "throw Error"
 			},
-			{ "name": "${…} Input messages: ${…}", "detail": "throw Error" },
+			{
+				"name": "${…} It could not read your saved sign-in to your organization's gateway · Try again in a moment",
+				"detail": "throw Error"
+			},
 			{
 				"name": "${…} No backup was available to restore from.",
 				"detail": "throw Error"
@@ -4056,11 +4042,31 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "${…} This computer has its own managed settings, and they take priority over that organization's settings. ${…} To change this, ask the administrator of this computer.",
+				"detail": "throw Error"
+			},
+			{
 				"name": "${…} This install runs that command; confirm it by running `claude plugin install` in a terminal (or with -y/--yes).",
 				"detail": "throw Error"
 			},
 			{
+				"name": "${…} This session does not run under that organization. ${…} To resume it, sign in to that organization. In a terminal, run ${…}.${…}",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…} This session runs through ${…} and does not use that organization's settings. Claude Code does not continue the conversation here. Start a new conversation.",
+				"detail": "throw Error"
+			},
+			{
 				"name": "${…} This tool cannot find the doc's whole current text in your context. Call project_read on this path. If it shows the whole text, send the blocks again against that text. If it does not, follow wha…",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…} You are signed in to that organization, but this session does not use that organization's settings. This can happen if the session started before you signed in, with --bare, through a gateway, or…",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…} Your organization sends Claude Code's requests through its gateway, and this process may not use the sign-ins that this computer keeps · Start `claude` in a terminal instead",
 				"detail": "throw Error"
 			},
 			{
@@ -4096,7 +4102,6 @@
 				"name": "${…} called twice: a registration takes one .catch",
 				"detail": "throw Error"
 			},
-			{ "name": "${…} can only be called once", "detail": "throw TypeError" },
 			{ "name": "${…} cannot be NaN or Infinity", "detail": "throw Error" },
 			{
 				"name": "${…} cannot be combined with --proxy-authorization-command / --proxy-authorization-file: sessions would reach that proxy without the egress listener. Remove one of the two.",
@@ -4173,7 +4178,15 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "${…} draws an edge ${…} points wide, and the most is 48",
+				"detail": "throw Error"
+			},
+			{
 				"name": "${…} edits cannot be used from a script, or with content or local_path. Instead, ${…}",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…} ends with one of ${…}, for when no font before it is there",
 				"detail": "throw Error"
 			},
 			{ "name": "${…} failed validation: ${…}", "detail": "throw Error" },
@@ -4254,15 +4267,31 @@
 				"detail": "throw Error"
 			},
 			{ "name": "${…} is ${…} bytes (cap: ${…})", "detail": "throw Error" },
+			{
+				"name": "${…} is a color: #hex, rgb(), hsl(), transparent or a ThemeColorName such as text-primary",
+				"detail": "throw Error"
+			},
 			{ "name": "${…} is a directory, not a file", "detail": "throw Error" },
 			{
 				"name": "${…} is a folder link or a bundled copy",
 				"detail": "throw Error"
 			},
+			{ "name": "${…} is a list of ${…}", "detail": "throw Error" },
+			{ "name": "${…} is a list of 1 to ${…}", "detail": "throw Error" },
+			{
+				"name": "${…} is a note name such as \"C5\" or \"F#3\", a pitch of 20 to 10000 hertz, or 0 for a rest",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…} is a number of ${…}, ${…} to ${…}",
+				"detail": "throw Error"
+			},
+			{ "name": "${…} is a number, ${…} to ${…}", "detail": "throw Error" },
 			{
 				"name": "${…} is a symlink (or its path loops through symlinks); use a regular file at a plain path",
 				"detail": "throw Error"
 			},
+			{ "name": "${…} is an object with any of ${…}", "detail": "throw Error" },
 			{
 				"name": "${…} is blocked by your organization. ${…}",
 				"detail": "throw Error"
@@ -4331,8 +4360,13 @@
 				"name": "${…} is on the declared network ${…}, which Claude Code checks over a direct connection, not through an HTTP proxy. Add ${…} to NO_PROXY and try again.",
 				"detail": "throw Error"
 			},
+			{ "name": "${…} is one of ${…}", "detail": "throw Error" },
 			{
 				"name": "${…} is one of ${…}'s own MCP tools; the session runs it on that machine and it cannot run here.",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…} is out of place: stops run in order, from 0 to 1",
 				"detail": "throw Error"
 			},
 			{
@@ -4345,6 +4379,7 @@
 				"detail": "throw Error"
 			},
 			{ "name": "${…} is too long (over 64 KB).", "detail": "throw Error" },
+			{ "name": "${…} is true or false", "detail": "throw Error" },
 			{
 				"name": "${…} is unavailable. No underlying credential could be used. To troubleshoot, visit https://aka.ms/azsdk/js/identity/environmentcredential/troubleshoot.",
 				"detail": "throw Error"
@@ -4355,6 +4390,14 @@
 			},
 			{
 				"name": "${…} keys cannot be imported as CryptoKey instances",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…} lasts ${…} seconds, and the most is 4: shorten its notes, step or release",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…} leaves no middle: opposite cuts must add up to less than the viewBox's side",
 				"detail": "throw Error"
 			},
 			{ "name": "${…} links outside node_modules", "detail": "throw Error" },
@@ -4410,6 +4453,14 @@
 			},
 			{ "name": "${…} must have a value", "detail": "throw Error" },
 			{
+				"name": "${…} needs exactly one of drone: true and scatter",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…} needs exactly one of gradient and vector",
+				"detail": "throw Error"
+			},
+			{
 				"name": "${…} no longer holds what this run wrote — something else is writing into ${…}",
 				"detail": "throw Error"
 			},
@@ -4433,6 +4484,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "${…} scatters about ${…} hits at once, and the most is 24: lower a scatter, a release or the reverb",
+				"detail": "throw Error"
+			},
+			{
 				"name": "${…} serializes to ${…} characters, over the ${…} limit; not sent",
 				"detail": "throw Error"
 			},
@@ -4446,6 +4501,15 @@
 			},
 			{
 				"name": "${…} takes a function, ($, e, next)",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…} takes no \"${…}\": it takes ${…}",
+				"detail": "throw Error"
+			},
+			{ "name": "${…} takes no ${…}: ${…}", "detail": "throw Error" },
+			{
+				"name": "${…} takes one of ${…} alone, such as [\"mono\"]",
 				"detail": "throw Error"
 			},
 			{
@@ -4473,6 +4537,10 @@
 			{ "name": "${…} with ${…}", "detail": "throw Error" },
 			{
 				"name": "${…} without a plan_token: this batch includes paths that always require per-batch approval — use finalize_plan with writes (and deletes if needed), then pass the returned plan_token.",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…} would take ${…} seconds of audio to render, and the most is ${…}. Use fewer or shorter notes, or less reverb",
 				"detail": "throw Error"
 			},
 			{ "name": "${…} — ${…} is unavailable (${…})${…}", "detail": "stderr" },
@@ -4518,10 +4586,21 @@
 			},
 			{ "name": "${…}. Available agents: ${…}", "detail": "throw Error" },
 			{ "name": "${…}. Nothing was sent.", "detail": "throw Error" },
+			{ "name": "${…}.drone is true, or left out", "detail": "throw Error" },
+			{ "name": "${…}.fontWeight is one of ${…}", "detail": "throw Error" },
+			{
+				"name": "${…}.lineHeight is less than its fontSize, so lines would overlap",
+				"detail": "throw Error"
+			},
+			{
+				"name": "${…}.lineHeight is points, not a multiple of the font size: 24, not 1.5",
+				"detail": "throw Error"
+			},
 			{
 				"name": "${…}.op is not a write_db operation",
 				"detail": "throw Error"
 			},
+			{ "name": "${…}.shape is linear or radial", "detail": "throw Error" },
 			{
 				"name": "${…}/ has ${…} .md entries (cap: ${…})",
 				"detail": "throw Error"
@@ -5431,6 +5510,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "${…}[${…}] is a font name: 1 to 64 letters, digits, spaces, _ and -, starting with a letter or digit",
+				"detail": "throw Error"
+			},
+			{
 				"name": "${…}data and file_path are not accepted with db_op \"${…}\"",
 				"detail": "throw Error"
 			},
@@ -5762,6 +5845,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "--repository-folder ${…} cannot be used: it lies in the base folder, where no named folder may lie at --capacity above 1",
+				"detail": "throw Error"
+			},
+			{
 				"name": "--repository-folder cannot be used: ${…} cannot be looked at (${…})",
 				"detail": "throw Error"
 			},
@@ -6082,6 +6169,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "A check was asked for that is not made here",
+				"detail": "throw TypeError"
+			},
+			{
 				"name": "A credential source or AWS security credentials supplier must be specified.",
 				"detail": "throw Error"
 			},
@@ -6142,6 +6233,11 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "A part is missing, or a key came with the token",
+				"detail": "throw Error"
+			},
+			{ "name": "A range cuts an extglob in two", "detail": "throw TypeError" },
+			{
 				"name": "A read earlier in this same turn recorded this artifact's newer live version but returned only a summary of it, not its source, so nothing was published. ${…}",
 				"detail": "throw Error"
 			},
@@ -6153,6 +6249,7 @@
 				"name": "A shell tool was granted, but ${…}, so the Windows side could not be put out of the sandboxed shell's reach — the run was refused.",
 				"detail": "throw Error"
 			},
+			{ "name": "A signed token has three parts", "detail": "throw Error" },
 			{
 				"name": "A space or invisible character in the typed text was refused: another action is holding Control or Option, and together they can open an app launcher. Earlier characters may already have been typed, s…",
 				"detail": "throw Error"
@@ -6160,6 +6257,10 @@
 			{
 				"name": "A stoppedByPerson question is already installed",
 				"detail": "throw Error"
+			},
+			{
+				"name": "A time has to be a finite number",
+				"detail": "throw TypeError"
 			},
 			{
 				"name": "A tool server doesn't run a plugin's command on its own. The plugin was not installed or updated and its command was not run.",
@@ -6227,7 +6328,7 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "Agent ${…} stopped when the container was restarted and was not resumed: ${…}",
+				"name": "Agent ${…} was started by this chat's app for one run, so it cannot be continued. Work from its report, if it sent one.",
 				"detail": "throw Error"
 			},
 			{
@@ -6278,6 +6379,7 @@
 				"name": "An artifact's earlier versions are not available in this session.",
 				"detail": "throw Error"
 			},
+			{ "name": "An encrypted token has five parts", "detail": "throw Error" },
 			{
 				"name": "An entry needs a size of 1 or more",
 				"detail": "throw TypeError"
@@ -6498,7 +6600,6 @@
 				"name": "CLAUDE_STAGE_FILE_ROOT must be an absolute path",
 				"detail": "throw Error"
 			},
-			{ "name": "Call listen() first.", "detail": "throw Error" },
 			{
 				"name": "Can not add index to a parent that is no array",
 				"detail": "throw Error"
@@ -6508,7 +6609,7 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "Can not edit in a comment that is left open",
+				"name": "Can not edit inside a comment or string",
 				"detail": "throw Error"
 			},
 			{
@@ -6539,10 +6640,6 @@
 			},
 			{
 				"name": "Can't use the marketplace name ${…}: the registered marketplace ${…} downloads from GitHub into the folder ${…}${…}, so a marketplace named ${…} would stop ${…} from downloading. Ask the author of ${……",
-				"detail": "throw Error"
-			},
-			{
-				"name": "Cancellation over SharedArrayBuffer doesn't support cancellation events",
 				"detail": "throw Error"
 			},
 			{
@@ -6773,7 +6870,6 @@
 				"name": "Cannot read private member from an object whose class did not declare it",
 				"detail": "throw TypeError"
 			},
-			{ "name": "Cannot read so many bytes!", "detail": "throw Error" },
 			{
 				"name": "Cannot read this as an image: ${…} is a pipe or a device, not a regular file, and it sent more than ${…} without ending.",
 				"detail": "throw Error"
@@ -6884,7 +6980,6 @@
 				"detail": "throw Error"
 			},
 			{ "name": "Cannot write to terminated process", "detail": "throw Error" },
-			{ "name": "Capacity must be greater than 0", "detail": "throw Error" },
 			{
 				"name": "Cell with ID \"${…}\" not found in notebook",
 				"detail": "throw Error"
@@ -6935,6 +7030,10 @@
 				"detail": "throw TypeError"
 			},
 			{
+				"name": "Claude Code can't start the sign-in to your organization's gateway: ${…}",
+				"detail": "stderr"
+			},
+			{
 				"name": "Claude Code cannot read the existing sign-in on this machine, so it will not overwrite it. Check the permissions on your Anthropic config directory, then try again.",
 				"detail": "throw Error"
 			},
@@ -6948,6 +7047,30 @@
 			},
 			{
 				"name": "Claude Code did not reconnect to ${…}: sign-in data for the config in your settings is still stored, or the credential store could not be read. Restart Claude Code and use Clear authentication again.",
+				"detail": "throw Error"
+			},
+			{
+				"name": "Claude Code did not run the organization's AWS credential_process: an internal list of environment variables to remove from it was not set up. This is a bug in Claude Code.",
+				"detail": "throw Error"
+			},
+			{
+				"name": "Claude Code did not send this request. This computer's managed settings could not be read, so the Microsoft Foundry key or token in use may be theirs, for another Foundry resource than the one in use.…",
+				"detail": "throw Error"
+			},
+			{
+				"name": "Claude Code did not send this request. This computer's managed settings set the Microsoft Foundry key or token in use, which goes only to a Foundry resource that they set too. The resource in use come…",
+				"detail": "throw Error"
+			},
+			{
+				"name": "Claude Code did not send this request. Your organization sends Claude Code's requests through its gateway, and this part of Claude Code can't read your sign-in to it. This is a bug in Claude Code · St…",
+				"detail": "throw Error"
+			},
+			{
+				"name": "Claude Code did not send this request. Your organization sends Claude Code's requests through its gateway, and this process may not use the sign-ins that this computer keeps · Start `claude` in a term…",
+				"detail": "throw Error"
+			},
+			{
+				"name": "Claude Code did not send this request: this session's sign-in to your organization has ended. Start Claude Code again.",
 				"detail": "throw Error"
 			},
 			{
@@ -7195,6 +7318,7 @@
 				"name": "ComposerChrome: used before its screen bound a host",
 				"detail": "throw Error"
 			},
+			{ "name": "Compression is not supported", "detail": "throw Error" },
 			{
 				"name": "Computer use is not available in a session without a disk.",
 				"detail": "throw Error"
@@ -7472,11 +7596,6 @@
 				"detail": "throw TypeError"
 			},
 			{
-				"name": "CryptoKey does not support this operation, its usages must include ${…}.",
-				"detail": "throw TypeError"
-			},
-			{ "name": "CryptoKey instance expected", "detail": "throw Error" },
-			{
 				"name": "Cycle detected: #/${…}/<root> Set the `cycles` parameter to `\"ref\"` to resolve cyclical schemas with defs.",
 				"detail": "throw Error"
 			},
@@ -7527,10 +7646,6 @@
 				"detail": "throw Error"
 			},
 			{ "name": "Deadline is too far in the future", "detail": "throw Error" },
-			{
-				"name": "Decompressed plaintext exceeded the configured limit",
-				"detail": "throw Error"
-			},
 			{
 				"name": "Deep link cwd contains disallowed control characters",
 				"detail": "throw Error"
@@ -7610,6 +7725,10 @@
 			},
 			{
 				"name": "ECONNREFUSED_SSRF: blocked loopback/metadata host via proxy",
+				"detail": "throw Error"
+			},
+			{
+				"name": "ERR: contains `self` is not supported at the top-level of a language. See documentation.",
 				"detail": "throw Error"
 			},
 			{
@@ -7833,6 +7952,7 @@
 				"name": "Expected 32-bit float, got ${…}",
 				"detail": "throw TypeError"
 			},
+			{ "name": "Expected ASCII text", "detail": "throw TypeError" },
 			{
 				"name": "Expected CompleteRequestPrompt, but got ${…}",
 				"detail": "throw TypeError"
@@ -7889,6 +8009,10 @@
 			},
 			{
 				"name": "Expected object, got ${…}: ${…}",
+				"detail": "throw TypeError"
+			},
+			{
+				"name": "Expected pattern to be a non-empty string",
 				"detail": "throw TypeError"
 			},
 			{
@@ -7979,7 +8103,6 @@
 				"name": "Failed to clean up stale marketplace backup directory. Please manually delete the directory at ${…} and try again. Technical details: ${…}",
 				"detail": "throw Error"
 			},
-			{ "name": "Failed to compress plaintext", "detail": "throw Error" },
 			{
 				"name": "Failed to copy plugin ${…} to versioned cache: destination is empty after copy",
 				"detail": "throw Error"
@@ -8004,7 +8127,6 @@
 				"name": "Failed to decode bytes as string: ${…}",
 				"detail": "throw Error"
 			},
-			{ "name": "Failed to decompress plaintext", "detail": "throw Error" },
 			{
 				"name": "Failed to disable audio bell for any Terminal.app profile",
 				"detail": "throw Error"
@@ -8201,14 +8323,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "File is covered by a Read deny rule in your permission settings and cannot be edited.",
-				"detail": "throw Error"
-			},
-			{
-				"name": "File is covered by a Read deny rule in your permission settings and cannot be written.",
-				"detail": "throw Error"
-			},
-			{
 				"name": "File is too large to read as an image (the limit is ${…}): ${…}. If it is an image, resize it or export a smaller copy, then read that.",
 				"detail": "throw Error"
 			},
@@ -8237,6 +8351,10 @@
 			},
 			{
 				"name": "FileStore requires O_NOFOLLOW support on this platform",
+				"detail": "throw Error"
+			},
+			{
+				"name": "Files API is unavailable at your organization's gateway, which doesn't accept your own Anthropic sign-in",
 				"detail": "throw Error"
 			},
 			{
@@ -8440,6 +8558,10 @@
 				"detail": "throw TypeError"
 			},
 			{
+				"name": "Input length: ${…}, exceeds maximum allowed length: ${…}",
+				"detail": "throw Error"
+			},
+			{
 				"name": "Installed: ${…} Run 'claude daemon uninstall' to undo.",
 				"detail": "stderr"
 			},
@@ -8460,7 +8582,6 @@
 				"name": "Invalid ${…} header value${…}: ${…}.",
 				"detail": "throw Error"
 			},
-			{ "name": "Invalid ${…} input", "detail": "throw TypeError" },
 			{
 				"name": "Invalid ${…} listChanged options: ${…}",
 				"detail": "throw Error"
@@ -8605,10 +8726,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "Invalid clockTolerance option type",
-				"detail": "throw TypeError"
-			},
-			{
 				"name": "Invalid credential_source format \"${…}\"",
 				"detail": "throw Error"
 			},
@@ -8721,24 +8838,11 @@
 				"name": "Invalid issuer, expected one of [${…}], but got ${…}",
 				"detail": "throw Error"
 			},
-			{
-				"name": "Invalid key for this operation, its \"alg\" must be \"${…}\" when present",
-				"detail": "throw TypeError"
-			},
-			{
-				"name": "Invalid key for this operation, its \"key_ops\" must include \"${…}\" when present",
-				"detail": "throw TypeError"
-			},
-			{
-				"name": "Invalid key for this operation, its \"use\" must be \"${…}\" when present",
-				"detail": "throw TypeError"
-			},
 			{ "name": "Invalid key size for alg: ${…}", "detail": "throw TypeError" },
 			{
 				"name": "Invalid key type: ${…} for google.protobuf.Struct, expected string",
 				"detail": "throw Error"
 			},
-			{ "name": "Invalid list", "detail": "throw Error" },
 			{
 				"name": "Invalid loadBalancingConfig: load balancing policy name required",
 				"detail": "throw Error"
@@ -8884,10 +8988,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "Invalid or unsupported \"alg\" (Algorithm) value",
-				"detail": "throw Error"
-			},
-			{
 				"name": "Invalid or unsupported \"alg\" (JWE Algorithm) header value",
 				"detail": "throw Error"
 			},
@@ -8899,7 +8999,6 @@
 				"name": "Invalid or unsupported JWK \"kty\" (Key Type) Parameter value",
 				"detail": "throw Error"
 			},
-			{ "name": "Invalid or unsupported key format", "detail": "throw Error" },
 			{
 				"name": "Invalid parameter for \"defaultsMode\", expect ${…}, got ${…}",
 				"detail": "throw Error"
@@ -9131,18 +9230,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "JSON Web Key for symmetric algorithms must have JWK \"kty\" (Key Type) equal to \"oct\" and the JWK \"k\" (Key Value) present",
-				"detail": "throw TypeError"
-			},
-			{
-				"name": "JSON Web Key for this operation must be a private JWK",
-				"detail": "throw TypeError"
-			},
-			{
-				"name": "JSON Web Key for this operation must be a public JWK",
-				"detail": "throw TypeError"
-			},
-			{
 				"name": "JSON form must be an array of strings",
 				"detail": "throw Error"
 			},
@@ -9171,10 +9258,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "JWE \"zip\" (Compression Algorithm) Header Parameter MUST be in a protected header.",
-				"detail": "throw Error"
-			},
-			{
 				"name": "JWE \"zip\" (Compression Algorithm) Header Parameter is not supported by your javascript runtime. You need to use the `deflateRaw` encrypt option to provide Deflate Raw implementation.",
 				"detail": "throw Error"
 			},
@@ -9182,20 +9265,7 @@
 				"name": "JWE \"zip\" (Compression Algorithm) Header Parameter is not supported by your javascript runtime. You need to use the `inflateRaw` decrypt option to provide Inflate Raw implementation.",
 				"detail": "throw Error"
 			},
-			{
-				"name": "JWE \"zip\" (Compression Algorithm) Header Parameter is not supported.",
-				"detail": "throw Error"
-			},
-			{
-				"name": "JWE \"zip\" (Compression Algorithm) Header Parameter requires the ${…} API.",
-				"detail": "throw Error"
-			},
 			{ "name": "JWE AAD incorrect type", "detail": "throw Error" },
-			{
-				"name": "JWE Authentication Tag incorrect type",
-				"detail": "throw Error"
-			},
-			{ "name": "JWE Authentication Tag missing", "detail": "throw Error" },
 			{
 				"name": "JWE Authentication Tag missing or incorrect type",
 				"detail": "throw Error"
@@ -9206,11 +9276,6 @@
 			},
 			{ "name": "JWE Encrypted Key incorrect type", "detail": "throw Error" },
 			{ "name": "JWE Encrypted Key missing", "detail": "throw Error" },
-			{
-				"name": "JWE Initialization Vector incorrect type",
-				"detail": "throw Error"
-			},
-			{ "name": "JWE Initialization Vector missing", "detail": "throw Error" },
 			{
 				"name": "JWE Initialization Vector missing or incorrect type",
 				"detail": "throw Error"
@@ -9235,10 +9300,6 @@
 			{
 				"name": "JWE Shared Unprotected Header incorrect type",
 				"detail": "throw Error"
-			},
-			{
-				"name": "JWK alg and alg option value mismatch",
-				"detail": "throw TypeError"
 			},
 			{ "name": "JWK must be an object", "detail": "throw TypeError" },
 			{
@@ -9271,10 +9332,6 @@
 			{
 				"name": "JWT Claims Set MUST be an object",
 				"detail": "throw TypeError"
-			},
-			{
-				"name": "JWT Claims Set must be a top-level JSON object",
-				"detail": "throw Error"
 			},
 			{
 				"name": "JWTs MUST NOT use unencoded payload",
@@ -9343,10 +9400,6 @@
 				"detail": "throw TypeError"
 			},
 			{
-				"name": "LinkedMap got modified during iteration.",
-				"detail": "throw Error"
-			},
-			{
 				"name": "Linux HTTP bridge socket does not exist: ${…}. The bridge process may have died. Try reinitializing the sandbox.",
 				"detail": "throw Error"
 			},
@@ -9356,10 +9409,6 @@
 			},
 			{
 				"name": "Linux bridge process died unexpectedly",
-				"detail": "throw Error"
-			},
-			{
-				"name": "Listener not defined for signal: ${…}",
 				"detail": "throw Error"
 			},
 			{
@@ -9549,10 +9598,6 @@
 				"detail": "throw Error"
 			},
 			{ "name": "Message ${…} not found in registry", "detail": "throw Error" },
-			{
-				"name": "Message header must separate key and value using ':' ${…}",
-				"detail": "throw Error"
-			},
 			{ "name": "Message timestamp too new", "detail": "throw Error" },
 			{ "name": "Message timestamp too old", "detail": "throw Error" },
 			{
@@ -9652,6 +9697,7 @@
 				"name": "Native CLI binary for darwin-arm64 not found. Reinstall @anthropic-ai/claude-agent-sdk without --omit=optional, or set options.pathToClaudeCodeExecutable.",
 				"detail": "throw Error"
 			},
+			{ "name": "Neither crit nor zip is supported", "detail": "throw Error" },
 			{ "name": "No \"host\" provided", "detail": "throw TypeError" },
 			{
 				"name": "No Artifact at ${…} that the user can see — it may have been deleted, or it has not been shared with them. ${…}",
@@ -9708,6 +9754,7 @@
 				"name": "No agent available for forked execution",
 				"detail": "throw Error"
 			},
+			{ "name": "No algorithm", "detail": "throw Error" },
 			{ "name": "No assistant message found", "detail": "throw Error" },
 			{ "name": "No assistant messages found", "detail": "throw Error" },
 			{ "name": "No auth available", "detail": "throw Error" },
@@ -9805,14 +9852,6 @@
 				"name": "No root certificates are left to trust: every root built into this runtime is on the CLI's deny list. Update Claude Code.",
 				"detail": "throw Error"
 			},
-			{
-				"name": "No runtime abstraction layer installed",
-				"detail": "throw Error"
-			},
-			{
-				"name": "No runtime abstraction layer provided",
-				"detail": "throw Error"
-			},
 			{ "name": "No sed arguments", "detail": "throw Error" },
 			{
 				"name": "No session ID provided for teleport",
@@ -9865,12 +9904,9 @@
 				"name": "Node is not in a tree with a FocusManager",
 				"detail": "throw Error"
 			},
-			{
-				"name": "Non-string provided as watch path: ${…}",
-				"detail": "throw TypeError"
-			},
 			{ "name": "Not a CEL value: ${…}", "detail": "throw Error" },
 			{ "name": "Not a ZodError: ${…}", "detail": "throw Error" },
+			{ "name": "Not a token with a header", "detail": "throw TypeError" },
 			{ "name": "Not accepted", "detail": "throw Error" },
 			{ "name": "Not available in this build", "detail": "throw Error" },
 			{
@@ -9926,6 +9962,10 @@
 			},
 			{
 				"name": "Nothing to change once the invisible characters are removed and harness-tag text is defused in new_string: it then equals old_string. Nothing was written.",
+				"detail": "throw Error"
+			},
+			{
+				"name": "Nothing was saved in ${…}: part of that path is now a link. Check where it leads, then try again.",
 				"detail": "throw Error"
 			},
 			{
@@ -9990,6 +10030,10 @@
 			},
 			{
 				"name": "Only a teammate can approve a shutdown request, and this session is not running as one. Nothing was sent. To shut down a teammate, send that teammate a shutdown_request message. The teammate is the on…",
+				"detail": "throw Error"
+			},
+			{
+				"name": "Only an EC key for ES256 can be imported",
 				"detail": "throw Error"
 			},
 			{
@@ -10181,10 +10225,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "Plugin directory does not exist: ${…}${…}",
-				"detail": "throw Error"
-			},
-			{
 				"name": "Plugin directory has more than ${…} entries; refusing to install it as a plugin.",
 				"detail": "throw Error"
 			},
@@ -10346,10 +10386,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "Progress handler for token ${…} already registered",
-				"detail": "throw Error"
-			},
-			{
 				"name": "Project-scope MCP server changes are unavailable in a session started with --project-config-root. Use the local or user scope instead.",
 				"detail": "throw Error"
 			},
@@ -10436,6 +10472,10 @@
 				"detail": "throw TypeError"
 			},
 			{
+				"name": "RS256 requires key modulusLength to be 2048 bits or larger",
+				"detail": "throw TypeError"
+			},
+			{
 				"name": "RSA JWK \"oth\" (Other Primes Info) Parameter value is not supported",
 				"detail": "throw Error"
 			},
@@ -10497,14 +10537,6 @@
 				"detail": "throw TypeError"
 			},
 			{
-				"name": "Received ${…} parameters for 'by Name' notification parameter structure.",
-				"detail": "throw Error"
-			},
-			{
-				"name": "Received ${…} parameters for 'by Name' request parameter structure.",
-				"detail": "throw Error"
-			},
-			{
 				"name": "Received a Promise for \"${…}\"; await it first, e.g. `await toFile(...)`",
 				"detail": "throw TypeError"
 			},
@@ -10515,10 +10547,6 @@
 			{
 				"name": "Received null for \"${…}\"; to pass null in FormData, you must use the string 'null'",
 				"detail": "throw TypeError"
-			},
-			{
-				"name": "Received parameters by name but param is not an object literal.",
-				"detail": "throw Error"
 			},
 			{ "name": "Reconnecting to ${…}…", "detail": "stderr" },
 			{
@@ -10921,6 +10949,10 @@
 			},
 			{ "name": "Service not installed: ${…}", "detail": "stderr" },
 			{
+				"name": "Service not installed: ${…} Starting a temporary ${…} for now.",
+				"detail": "stderr"
+			},
+			{
 				"name": "Session ${…} /remote response is missing inference_auth.access_token",
 				"detail": "throw Error"
 			},
@@ -10992,7 +11024,6 @@
 				"name": "Shell command permission check failed for pattern \"${…}\": ${…}",
 				"detail": "throw Error"
 			},
-			{ "name": "Should never happen.", "detail": "throw Error" },
 			{ "name": "Side question cancelled", "detail": "throw Error" },
 			{
 				"name": "Sign in to claude.ai to add a marketplace it hosts",
@@ -11021,10 +11052,6 @@
 			},
 			{
 				"name": "Something in this environment — an API key helper, an injected token, or a third-party provider setting — takes precedence over a profile sign-in, so it would not be used here.",
-				"detail": "throw Error"
-			},
-			{
-				"name": "Source '${…}' resolved to an unsafe repo path (slug='${…}'). Check for path traversal in the URL.",
 				"detail": "throw Error"
 			},
 			{ "name": "Source code is missing.", "detail": "throw TypeError" },
@@ -11056,7 +11083,7 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "StdioServerTransport already started! If using Server class, note that connect() calls start() automatically.",
+				"name": "StdioServerTransport already started!",
 				"detail": "throw Error"
 			},
 			{ "name": "Stopped — finishing up…", "detail": "stderr" },
@@ -11220,6 +11247,7 @@
 				"name": "The IDE connection is managed automatically and can't be reconnected manually",
 				"detail": "throw Error"
 			},
+			{ "name": "The IV is not 96 bits", "detail": "throw Error" },
 			{
 				"name": "The JSON on stdin is over the limit of 1 MiB.",
 				"detail": "throw Error"
@@ -11237,6 +11265,7 @@
 				"name": "The account or conversation changed after this action was checked, or that check is no longer on record — nothing was done; retry so it is checked again",
 				"detail": "throw Error"
 			},
+			{ "name": "The algorithm is not allowed", "detail": "throw Error" },
 			{
 				"name": "The amount of data is too big to be stored in a QR Code",
 				"detail": "throw Error"
@@ -11266,6 +11295,12 @@
 				"detail": "throw TypeError"
 			},
 			{ "name": "The choice could not be saved", "detail": "throw Error" },
+			{ "name": "The claims are not a JSON object", "detail": "throw Error" },
+			{ "name": "The claims are not encoded", "detail": "throw Error" },
+			{
+				"name": "The claims have to be an object",
+				"detail": "throw TypeError"
+			},
 			{
 				"name": "The command did not run: the MXC command has no environment selection",
 				"detail": "throw Error"
@@ -11280,6 +11315,10 @@
 			},
 			{
 				"name": "The command was not run: the sandbox does not start until this pre-started process is in its session's folder.",
+				"detail": "throw Error"
+			},
+			{
+				"name": "The config file may be readable now, so the save starts over",
 				"detail": "throw Error"
 			},
 			{ "name": "The consent request was not sent", "detail": "throw Error" },
@@ -11305,6 +11344,10 @@
 			},
 			{
 				"name": "The engine reads a slash differently from the parser.",
+				"detail": "throw Error"
+			},
+			{
+				"name": "The fetch tool returned no text for this page.",
 				"detail": "throw Error"
 			},
 			{
@@ -11392,6 +11435,11 @@
 			{
 				"name": "The installed copy of this plugin version at ${…} could not be replaced: it is in use by another program (for example a running Claude Code session, or an editor or terminal inside that folder), or th…",
 				"detail": "throw Error"
+			},
+			{ "name": "The key is not 256 bits", "detail": "throw Error" },
+			{
+				"name": "The key is not of the kind that the algorithm takes",
+				"detail": "throw TypeError"
 			},
 			{
 				"name": "The last message must contain only tool_result content if any is present",
@@ -11554,6 +11602,10 @@
 				"detail": "throw TypeError"
 			},
 			{
+				"name": "The session did not start: an earlier start on this runner has not finished moving ${…} aside. Ask whoever runs this runner to check that disk and, once it answers, to restart the runner.",
+				"detail": "throw Error"
+			},
+			{
 				"name": "The session was not started, because the ${…} option can't be sent to Claude Code: ${…}. Fix that value and try again.",
 				"detail": "throw Error"
 			},
@@ -11561,6 +11613,11 @@
 				"name": "The sign-in changed, or may not use the consent service",
 				"detail": "throw Error"
 			},
+			{
+				"name": "The sign-in methods that this computer's policy allows have changed. Claude Code didn't sign you in. Choose a sign-in method again.",
+				"detail": "throw Error"
+			},
+			{ "name": "The signature is not good", "detail": "throw Error" },
 			{
 				"name": "The skill \"${…}\" was not loaded because of a fault in Claude Code: it has no record of the files that the skill was verified against. Do not try again.",
 				"detail": "throw Error"
@@ -11585,6 +11642,7 @@
 				"name": "The temp directory is unavailable in a diskless session: nothing is created, verified or written under the shared per-uid temp root",
 				"detail": "throw Error"
 			},
+			{ "name": "The token could not be decrypted", "detail": "throw Error" },
 			{
 				"name": "The tool call was interrupted before a result was received. It may or may not have completed on the server — verify before assuming it succeeded, and retry if needed.",
 				"detail": "throw Error"
@@ -11605,6 +11663,7 @@
 				"name": "The working directory no longer leads where it did when this call was permission-checked (it was deleted, a part of its path was replaced, or it can't be examined), so the call was not run. Make the c…",
 				"detail": "throw Error"
 			},
+			{ "name": "The zip lists too many entries", "detail": "throw Error" },
 			{
 				"name": "There is no JSON on stdin. Pipe it in, or pass it as the argument.",
 				"detail": "throw Error"
@@ -11626,10 +11685,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "This call stood for agent ${…}, which stopped when the container was restarted. This call does not resume it and launched nothing. Send agent ${…} a message, or launch a new agent, if you still need t…",
-				"detail": "throw Error"
-			},
-			{
 				"name": "This call was interrupted before the monitor started; nothing is running.",
 				"detail": "throw Error"
 			},
@@ -11644,6 +11699,10 @@
 			{
 				"name": "This command is run by the VS Code extension, not by hand. To sign in from a terminal, run /login in Claude Code.",
 				"detail": "stderr"
+			},
+			{
+				"name": "This conversation ran under more than one organization. Claude Code does not resume it under any of them. Start a new conversation.",
+				"detail": "throw Error"
 			},
 			{
 				"name": "This eval run stubs artifact publishing locally and has no artifact control plane: only publishing (the default action) is available here — list, delete, comments, replies, watches, database writes, a…",
@@ -11798,7 +11857,6 @@
 				"name": "TmuxBackend not registered. Import TmuxBackend.ts before using the registry.",
 				"detail": "throw Error"
 			},
-			{ "name": "To many thunks active", "detail": "throw Error" },
 			{ "name": "To remove from a specific scope, use:", "detail": "stderr" },
 			{
 				"name": "Token does not contain a Protected Header",
@@ -11954,6 +12012,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "Under your organization sign-in, Claude Code did not resume the session from a URL, because it would upload the session's new content to that URL. Start a new session.",
+				"detail": "throw Error"
+			},
+			{
 				"name": "Unexpected ${…} command. Expected 'prompt' command. Use /${…} directly in the main conversation.",
 				"detail": "throw Error"
 			},
@@ -12054,12 +12116,12 @@
 				"name": "Unknown hook permissionDecision type: ${…}. Valid types are: allow, deny, ask, defer",
 				"detail": "throw Error"
 			},
+			{ "name": "Unknown language", "detail": "throw Error" },
 			{ "name": "Unknown line ${…} ${…}", "detail": "throw Error" },
 			{
 				"name": "Unknown log level '${…}'. Acceptable values: ${…}",
 				"detail": "throw Error"
 			},
-			{ "name": "Unknown parameter structure ${…}", "detail": "throw Error" },
 			{ "name": "Unknown skill: ${…}", "detail": "throw Error" },
 			{
 				"name": "Unmergable intersection. Error path: ${…}",
@@ -12089,16 +12151,13 @@
 				"name": "Unsupported JWE \"zip\" (Compression Algorithm) Header Parameter value",
 				"detail": "throw Error"
 			},
-			{
-				"name": "Unsupported JWE \"zip\" (Compression Algorithm) Header Parameter value.",
-				"detail": "throw Error"
-			},
 			{ "name": "Unsupported JWE Algorithm: ${…}", "detail": "throw Error" },
 			{
 				"name": "Unsupported JWE Content Encryption Algorithm",
 				"detail": "throw Error"
 			},
 			{ "name": "Unsupported address family: ${…}", "detail": "throw Error" },
+			{ "name": "Unsupported algorithm", "detail": "throw Error" },
 			{
 				"name": "Unsupported certificate format ${…}",
 				"detail": "throw Error"
@@ -12125,7 +12184,6 @@
 			},
 			{ "name": "Unsupported git source type: ${…}", "detail": "throw Error" },
 			{ "name": "Unsupported input ${…}", "detail": "throw Error" },
-			{ "name": "Unsupported key algorithm", "detail": "throw Error" },
 			{
 				"name": "Unsupported marketplace source type",
 				"detail": "throw Error"
@@ -12134,7 +12192,6 @@
 				"name": "Unsupported marketplace source type for refresh",
 				"detail": "throw Error"
 			},
-			{ "name": "Unsupported named curve", "detail": "throw Error" },
 			{
 				"name": "Unsupported platform - Claude Desktop integration only works on macOS and WSL.",
 				"detail": "throw Error"
@@ -12201,7 +12258,15 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "WebFetch cannot fetch localhost or other hostnames without a dot. To reach a local server, use Bash with curl instead.",
+				"name": "WebFetch cannot fetch here. The organization routes pages through a fetch tool that this session cannot reach.",
+				"detail": "throw Error"
+			},
+			{
+				"name": "WebFetch cannot fetch localhost or other hostnames without a dot.${…}",
+				"detail": "throw Error"
+			},
+			{
+				"name": "WebFetch fetches only http and https addresses.",
 				"detail": "throw Error"
 			},
 			{
@@ -12214,10 +12279,6 @@
 			},
 			{
 				"name": "Webhook key must not be null or empty in order to unwrap",
-				"detail": "throw Error"
-			},
-			{
-				"name": "When adding a listener with a context, you should remove it with the same context",
 				"detail": "throw Error"
 			},
 			{
@@ -12431,6 +12492,10 @@
 			},
 			{
 				"name": "Your cloud-sessions sign-in could not be renewed (${…}). Try again.",
+				"detail": "throw Error"
+			},
+			{
+				"name": "Your organization's credential helper didn't run, and the request wasn't sent: ${…}. ${…}",
 				"detail": "throw Error"
 			},
 			{
@@ -12846,12 +12911,20 @@
 			},
 			{ "name": "a layout node is damaged", "detail": "throw TypeError" },
 			{
+				"name": "a list of expressions takes scopes by place, and stays put",
+				"detail": "throw Error"
+			},
+			{
 				"name": "a list of files needs the archive that holds them",
 				"detail": "throw Error"
 			},
 			{
 				"name": "a lossless WebP encode wrote a file that is not lossless",
 				"detail": "throw Error"
+			},
+			{
+				"name": "a mode holds itself without end",
+				"detail": "throw RangeError"
 			},
 			{ "name": "a name is in the list twice", "detail": "throw Error" },
 			{ "name": "a name under ${…} is not UTF-8", "detail": "throw Error" },
@@ -13138,10 +13211,6 @@
 				"detail": "throw Error"
 			},
 			{ "name": "another file has the name", "detail": "throw Error" },
-			{
-				"name": "anymatch: specify first argument",
-				"detail": "throw TypeError"
-			},
 			{ "name": "append to ${…} made no progress", "detail": "throw Error" },
 			{
 				"name": "appendEntryToExistingFileSync: short write",
@@ -13252,6 +13321,7 @@
 				"name": "awsCredentialExport did not return valid AWS STS output structure",
 				"detail": "throw Error"
 			},
+			{ "name": "b64 is not a boolean", "detail": "throw Error" },
 			{
 				"name": "backslash in a POSIX spelling: ${…}",
 				"detail": "throw Error"
@@ -13259,6 +13329,14 @@
 			{ "name": "basis write failed: ${…}", "detail": "throw Error" },
 			{
 				"name": "bedrock upstream: aws_access_key_id and aws_secret_access_key must be set together (and are required with aws_session_token)",
+				"detail": "throw Error"
+			},
+			{
+				"name": "beforeMatch cannot be used with starts",
+				"detail": "throw Error"
+			},
+			{
+				"name": "begin & end are not supported with match",
 				"detail": "throw Error"
 			},
 			{ "name": "bg manager failed to start: ${…}", "detail": "stderr" },
@@ -13833,6 +13911,7 @@
 				"name": "cri.jwks_url targets loopback but CLAUDE_GATEWAY_ALLOW_LOOPBACK is not set — safeFetch would block every JWKS fetch at runtime. Set the escape (tests) or remove the override.",
 				"detail": "throw Error"
 			},
+			{ "name": "crit names an unknown extension", "detail": "throw Error" },
 			{
 				"name": "cursor is not in the form that get_run_log hands out for this session_id, so nothing was read. A next_cursor from an older version of this tool, a typed number, another run's cursor or an edited one c…",
 				"detail": "throw Error"
@@ -14484,6 +14563,10 @@
 			},
 			{ "name": "get_run_log requires session_id", "detail": "throw Error" },
 			{
+				"name": "get_usage: detached must be a boolean",
+				"detail": "throw Error"
+			},
+			{
 				"name": "get_usage: skip_behaviors must be a boolean",
 				"detail": "throw Error"
 			},
@@ -14559,10 +14642,6 @@
 			{
 				"name": "github-ssh source for '${…}' is missing url — SSH URLs are not synthesizable from slug alone",
 				"detail": "throw Error"
-			},
-			{
-				"name": "given KeyObject instance cannot be used for this algorithm",
-				"detail": "throw TypeError"
 			},
 			{
 				"name": "glob \"${…}\" exceeds ${…} '*'/'**' wildcards",
@@ -14781,6 +14860,7 @@
 				"name": "illegal tag: varint overflows uint32",
 				"detail": "throw Error"
 			},
+			{ "name": "illegal takes expressions", "detail": "throw TypeError" },
 			{
 				"name": "import() is not available in workflow scripts.",
 				"detail": "throw SyntaxError"
@@ -14855,7 +14935,6 @@
 			{ "name": "invalid select", "detail": "throw Error" },
 			{ "name": "invalid select: ${…}", "detail": "throw Error" },
 			{ "name": "invalid state, fork stack empty", "detail": "throw Error" },
-			{ "name": "invalid throttle", "detail": "throw Error" },
 			{ "name": "invalid type url: ${…}", "detail": "throw Error" },
 			{ "name": "invalid uint32: ${…}", "detail": "throw Error" },
 			{ "name": "invalid uint64: ${…}", "detail": "throw Error" },
@@ -14875,6 +14954,7 @@
 				"name": "it leads to a device or process file, which this tool does not send",
 				"detail": "throw Error"
 			},
+			{ "name": "it names no git server", "detail": "throw Error" },
 			{
 				"name": "it opened at a different path than approved",
 				"detail": "throw Error"
@@ -15046,6 +15126,7 @@
 			},
 			{ "name": "link body is not valid UTF-8", "detail": "throw Error" },
 			{ "name": "link chain too long to vet", "detail": "throw Error" },
+			{ "name": "link in the plugin cache", "detail": "throw Error" },
 			{
 				"name": "list ${…}: 404 on page ${…} (cursor expired or store deleted mid-walk)",
 				"detail": "throw Error"
@@ -15127,10 +15208,6 @@
 				"detail": "throw RangeError"
 			},
 			{
-				"name": "maxDecompressedLength must be 0, a positive safe integer, or Infinity",
-				"detail": "throw TypeError"
-			},
-			{
 				"name": "mcp task outcome: the project folder is a storage scope and no storage backend can take it",
 				"detail": "throw Error"
 			},
@@ -15183,10 +15260,6 @@
 				"detail": "throw TypeError"
 			},
 			{
-				"name": "missing \"alg\" (Algorithm) Parameter value",
-				"detail": "throw TypeError"
-			},
-			{
 				"name": "missing \"k\" (Key Value) Parameter value",
 				"detail": "throw TypeError"
 			},
@@ -15198,7 +15271,6 @@
 				"name": "missing JWE Encryption Algorithm (enc) in JWE Header",
 				"detail": "throw Error"
 			},
-			{ "name": "missing required \"${…}\" claim", "detail": "throw Error" },
 			{ "name": "missing spec path", "detail": "throw Error" },
 			{ "name": "mocks is not a directory", "detail": "throw Error" },
 			{
@@ -15436,10 +15508,6 @@
 			{
 				"name": "no variant directories (baseline/, v1/, ...) under ${…}",
 				"detail": "throw Error"
-			},
-			{
-				"name": "non-ASCII string encountered in encode()",
-				"detail": "throw TypeError"
 			},
 			{ "name": "non-canonical base64url", "detail": "throw SyntaxError" },
 			{
@@ -16003,18 +16071,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "readdirp: Invalid type passed. Use one of ${…}",
-				"detail": "throw Error"
-			},
-			{
-				"name": "readdirp: root argument is required. Usage: readdirp(root, options)",
-				"detail": "throw Error"
-			},
-			{
-				"name": "readdirp: root argument must be a string. Usage: readdirp(root, options)",
-				"detail": "throw TypeError"
-			},
-			{
 				"name": "reading file_path is blocked by a Read permission rule",
 				"detail": "throw Error"
 			},
@@ -16230,18 +16286,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "replicated \"aud\" claim header parameter mismatch",
-				"detail": "throw Error"
-			},
-			{
-				"name": "replicated \"iss\" claim header parameter mismatch",
-				"detail": "throw Error"
-			},
-			{
-				"name": "replicated \"sub\" claim header parameter mismatch",
-				"detail": "throw Error"
-			},
-			{
 				"name": "repository config could not be vetted",
 				"detail": "throw Error"
 			},
@@ -16363,6 +16407,10 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "sandbox.windows.backend is not set. Whoever manages the sandbox settings can set it to \"mxc\" (no set-up, PowerShell only, needs Windows 11 24H2 or later with the November 2026 update) or to \"sandboxus…",
+				"detail": "throw Error"
+			},
+			{
 				"name": "sandbox: the task output directory chain under the temp root is no longer plain directories (${…}); refusing to run sandboxed commands until it is restored",
 				"detail": "throw Error"
 			},
@@ -16459,10 +16507,6 @@
 				"detail": "throw TypeError"
 			},
 			{
-				"name": "setContentEncryptionKey cannot be called with JWE \"alg\" (Algorithm) Header ${…}",
-				"detail": "throw TypeError"
-			},
-			{
 				"name": "setHoldStaleReauthEntryForTest is test-only",
 				"detail": "throw Error"
 			},
@@ -16473,6 +16517,10 @@
 			{
 				"name": "setKeyManagementParameters can only be called once",
 				"detail": "throw TypeError"
+			},
+			{
+				"name": "setMcpReauthDecisionSinkForTest is test-only",
+				"detail": "throw Error"
 			},
 			{
 				"name": "setModeRow: schema rejected a designed setMode update",
@@ -16543,6 +16591,10 @@
 				"detail": "throw RangeError"
 			},
 			{
+				"name": "settings fetch: a proxy now applies to the gateway, so the request was not sent again",
+				"detail": "throw Error"
+			},
+			{
 				"name": "settings file present but unreadable",
 				"detail": "throw Error"
 			},
@@ -16575,6 +16627,14 @@
 			{ "name": "snapshot copy failed: ${…}${…}", "detail": "throw Error" },
 			{
 				"name": "something that is not a directory is already named info there",
+				"detail": "throw Error"
+			},
+			{
+				"name": "sound may hold at most 1500 values, counting every field and list entry",
+				"detail": "throw Error"
+			},
+			{
+				"name": "sound needs an ambience or at least one cue",
 				"detail": "throw Error"
 			},
 			{ "name": "sparse arrays not allowed", "detail": "throw Error" },
@@ -16657,6 +16717,7 @@
 				"name": "start_shell_task: command is a non-empty string, args an array of strings, cwd a string, env an object of strings under variable names, and description a string without control characters",
 				"detail": "throw Error"
 			},
+			{ "name": "starts takes a mode", "detail": "throw TypeError" },
 			{
 				"name": "stats: transcript project listing failed",
 				"detail": "throw Error"
@@ -16692,7 +16753,6 @@
 				"name": "string ${…} doesn't start with prefix ${…}; this is a bug",
 				"detail": "throw Error"
 			},
-			{ "name": "string expected", "detail": "throw Error" },
 			{
 				"name": "string len ${…} greater than remaining buf len.",
 				"detail": "throw Error"
@@ -16709,6 +16769,11 @@
 				"name": "stub preview cannot render an over-bound parameter",
 				"detail": "throw Error"
 			},
+			{
+				"name": "style may hold at most 1500 values, counting every field and list entry, and 65536 characters of text",
+				"detail": "throw Error"
+			},
+			{ "name": "style needs at least one of ${…}", "detail": "throw Error" },
 			{ "name": "sub-agent listing incomplete", "detail": "throw Error" },
 			{
 				"name": "subfield coverage drift: \"${…}\" lacks subfield() metadata",
@@ -16856,6 +16921,14 @@
 				"name": "the `--paginate` option is not supported for non-GET requests; with fields the method is POST unless `-X GET` sends them as query parameters",
 				"detail": "throw Error"
 			},
+			{
+				"name": "the agent transcript cannot be read",
+				"detail": "throw Error"
+			},
+			{
+				"name": "the agent transcript is too large to read",
+				"detail": "throw Error"
+			},
 			{ "name": "the answer had no inputTokens", "detail": "throw Error" },
 			{
 				"name": "the answer holds a `then` that is not fixed",
@@ -16986,7 +17059,19 @@
 				"detail": "throw Error"
 			},
 			{
+				"name": "the folder is a link or a file, or cannot be made",
+				"detail": "throw Error"
+			},
+			{
 				"name": "the frontmatter is refused or does not parse",
+				"detail": "throw Error"
+			},
+			{
+				"name": "the grammar does not move on through the text",
+				"detail": "throw Error"
+			},
+			{
+				"name": "the groups of a match do not spell its text",
 				"detail": "throw Error"
 			},
 			{
@@ -17024,6 +17109,11 @@
 				"name": "the kit's ${…} imports ${…}, which is outside the kit",
 				"detail": "throw Error"
 			},
+			{
+				"name": "the languages to guess among are not a list",
+				"detail": "throw TypeError"
+			},
+			{ "name": "the last choice is null", "detail": "throw TypeError" },
 			{
 				"name": "the managed-settings path was overridden",
 				"detail": "throw Error"
@@ -17196,10 +17286,6 @@
 				"detail": "throw Error"
 			},
 			{
-				"name": "the session's label \"${…}\" has a value that --hook-label does not allow",
-				"detail": "throw Error"
-			},
-			{
 				"name": "the settings in force declare another source for marketplace ${…} than the one that lists it, which an administrator must settle",
 				"detail": "throw Error"
 			},
@@ -17261,6 +17347,11 @@
 				"name": "the tool.list hooks answered no list",
 				"detail": "throw Error"
 			},
+			{
+				"name": "the transcript changed size while it was read",
+				"detail": "throw Error"
+			},
+			{ "name": "the transcript could not be read", "detail": "throw Error" },
 			{
 				"name": "the transcript path is not a regular file with one link",
 				"detail": "throw Error"
@@ -17540,13 +17631,6 @@
 			},
 			{ "name": "uint32 out of range", "detail": "throw Error" },
 			{ "name": "undefined env var in config: ${…}", "detail": "throw Error" },
-			{ "name": "unexpected \"aud\" claim value", "detail": "throw Error" },
-			{ "name": "unexpected \"iss\" claim value", "detail": "throw Error" },
-			{ "name": "unexpected \"sub\" claim value", "detail": "throw Error" },
-			{
-				"name": "unexpected \"typ\" JWT header value",
-				"detail": "throw Error"
-			},
 			{
 				"name": "unexpected argument '${…}' — this command takes no positional arguments",
 				"detail": "throw Error"
@@ -17721,10 +17805,6 @@
 			},
 			{
 				"name": "value must be >= 0 and <= ${…}. Received ${…}",
-				"detail": "throw RangeError"
-			},
-			{
-				"name": "value must be >= 0 and <= 4294967295. Received ${…}",
 				"detail": "throw RangeError"
 			},
 			{
@@ -17936,10 +18016,6 @@
 			{ "name": "• Network problems", "detail": "stderr" },
 			{ "name": "• Run with --debug for details", "detail": "stderr" },
 			{ "name": "• npm registry is unreachable", "detail": "stderr" },
-			{
-				"name": "┌─────────────────────────────────────┐ │ Claude Code Gateway │ └─────────────────────────────────────┘",
-				"detail": "stderr"
-			},
 			{
 				"name": "⚠ ${…} ${…} `claude doctor` lists every entry.",
 				"detail": "stderr"
@@ -18389,7 +18465,7 @@
 			},
 			{
 				"name": "--name",
-				"detail": "-n, --name <name> | Set a display name for this session (shown in the prompt box, /resume picker, and terminal title)"
+				"detail": "-n, --name <name> | Set a display name for this session (shown in the prompt box, /resume picker, and terminal title). Also names a new cloud session."
 			},
 			{
 				"name": "--no-chrome",
@@ -18470,7 +18546,7 @@
 			},
 			{
 				"name": "--proactivity",
-				"gate": "hidden unless hEe()",
+				"gate": "hidden unless vCe()",
 				"detail": "--proactivity <level>"
 			},
 			{
@@ -18742,6 +18818,11 @@
 				"name": "auth login --gateway-json",
 				"gate": "hidden",
 				"detail": "--gateway-json | For a program that shows the Cloud gateway sign-in to a person: writes its questions as JSON lines and reads the answers from stdin"
+			},
+			{
+				"name": "auth login --organization-gateway",
+				"gate": "hidden",
+				"detail": "--organization-gateway | Sign in to your organization's gateway through its identity provider"
 			},
 			{ "name": "auth login --sso", "detail": "--sso | Log in with SSO" },
 			{
@@ -19793,7 +19874,6 @@
 			{ "name": "tengu_agents_md_mod", "default": "unknown" },
 			{ "name": "tengu_agentview_inherit_mode_demote", "default": "true" },
 			{ "name": "tengu_agile_glade", "default": "null" },
-			{ "name": "tengu_agile_ladybug" },
 			{ "name": "tengu_agile_sunbeam" },
 			{ "name": "tengu_agile_waffle", "default": "false" },
 			{ "name": "tengu_alder_compass", "default": "false" },
@@ -20065,6 +20145,7 @@
 			{ "name": "tengu_cobalt_plinth_sorrel", "default": "true" },
 			{ "name": "tengu_cobalt_plinth_tansy", "default": "false" },
 			{ "name": "tengu_cobalt_plinth_thrift", "default": "false" },
+			{ "name": "tengu_cobalt_plinth_whin", "default": "false" },
 			{ "name": "tengu_cobalt_plinth_willow", "default": "false" },
 			{ "name": "tengu_cobalt_plinth_yew", "default": "false" },
 			{ "name": "tengu_cobalt_ridge", "default": "false" },
@@ -20106,6 +20187,7 @@
 			},
 			{ "name": "tengu_cowork_chrome_automode_default", "default": "false" },
 			{ "name": "tengu_cozy_axolotl" },
+			{ "name": "tengu_cozy_balloon", "default": "false" },
 			{ "name": "tengu_cozy_dusk", "default": "unknown" },
 			{ "name": "tengu_cozy_eagle", "default": "true" },
 			{ "name": "tengu_cozy_fern", "default": "false" },
@@ -20117,6 +20199,7 @@
 			{ "name": "tengu_cozy_teapot", "default": "null" },
 			{ "name": "tengu_cozy_willow" },
 			{ "name": "tengu_crimson_vector", "default": "false" },
+			{ "name": "tengu_crispy_flame", "default": "false" },
 			{ "name": "tengu_crispy_glade", "default": "0" },
 			{ "name": "tengu_crispy_thunder" },
 			{ "name": "tengu_cryptic_horizon", "default": "false" },
@@ -20150,6 +20233,7 @@
 			{ "name": "tengu_dash_flame", "default": "false" },
 			{ "name": "tengu_dazzling_acorn", "default": "null" },
 			{ "name": "tengu_dazzling_garden", "default": "true" },
+			{ "name": "tengu_declarative_frog", "default": "\"\"" },
 			{ "name": "tengu_declarative_glacier", "default": "true" },
 			{ "name": "tengu_deep_acorn", "default": "false" },
 			{ "name": "tengu_deep_feather", "default": "true" },
@@ -20172,6 +20256,7 @@
 				"name": "tengu_disable_streaming_to_non_streaming_fallback",
 				"default": "false"
 			},
+			{ "name": "tengu_distant_bell", "default": "false" },
 			{ "name": "tengu_distributed_adleman", "default": "true" },
 			{ "name": "tengu_doorbell_agave", "default": "true" },
 			{ "name": "tengu_downy_plover", "default": "unknown" },
@@ -20193,10 +20278,12 @@
 			{ "name": "tengu_dusky_finch", "default": "false" },
 			{ "name": "tengu_dusky_paddock", "default": "true" },
 			{ "name": "tengu_dusky_sorrel" },
+			{ "name": "tengu_dynamic_flurry", "default": "true" },
 			{ "name": "tengu_eager_balloon" },
 			{ "name": "tengu_eager_brooks", "default": "false" },
 			{ "name": "tengu_eager_eagle", "default": "true" },
 			{ "name": "tengu_eager_fiddle", "default": "false" },
+			{ "name": "tengu_eager_hare", "default": "false" },
 			{ "name": "tengu_eager_lighthouse" },
 			{ "name": "tengu_eager_oasis", "default": "null" },
 			{ "name": "tengu_eager_pillow", "default": "false" },
@@ -20206,9 +20293,11 @@
 			{ "name": "tengu_eager_reef", "default": "false" },
 			{ "name": "tengu_eager_sutton", "default": "false" },
 			{ "name": "tengu_eager_thimble", "default": "false" },
+			{ "name": "tengu_eager_truffle" },
 			{ "name": "tengu_ebbing_tide" },
 			{ "name": "tengu_elegant_forest", "default": "false" },
 			{ "name": "tengu_elegant_meadow", "default": "true" },
+			{ "name": "tengu_elegant_milner", "default": "false" },
 			{ "name": "tengu_elegant_ocean", "default": "true" },
 			{ "name": "tengu_elegant_pancake", "default": "null" },
 			{ "name": "tengu_elegant_possum", "default": "false" },
@@ -20274,11 +20363,11 @@
 			{ "name": "tengu_flint_harbor_prompt" },
 			{ "name": "tengu_flint_harbor_share", "default": "false" },
 			{ "name": "tengu_flint_orchard", "default": "true" },
-			{ "name": "tengu_floating_bumblebee", "default": "false" },
 			{ "name": "tengu_floating_nova", "default": "[]" },
 			{ "name": "tengu_floating_raccoon" },
 			{ "name": "tengu_floating_steele", "default": "0" },
 			{ "name": "tengu_floating_wadler", "default": "true" },
+			{ "name": "tengu_floating_waffle", "default": "false" },
 			{ "name": "tengu_fluffy_brooks", "default": "false" },
 			{ "name": "tengu_fluffy_melody", "default": "false" },
 			{ "name": "tengu_fluffy_wren", "default": "false" },
@@ -20296,21 +20385,19 @@
 			{ "name": "tengu_foamy_whistle" },
 			{ "name": "tengu_framed_osprey", "default": "false" },
 			{ "name": "tengu_fresh_heron", "default": "unknown" },
-			{ "name": "tengu_frolicking_frost", "default": "false" },
 			{ "name": "tengu_frolicking_quasar", "default": "false" },
 			{ "name": "tengu_frolicking_riddle" },
 			{ "name": "tengu_frond_boric" },
 			{ "name": "tengu_frugal_lantern" },
-			{ "name": "tengu_functional_flute", "default": "false" },
 			{ "name": "tengu_functional_island", "default": "false" },
 			{ "name": "tengu_functional_llama", "default": "null" },
-			{ "name": "tengu_functional_pebble", "default": "false" },
 			{ "name": "tengu_fuzzy_corbato", "default": "null" },
 			{ "name": "tengu_fuzzy_oasis", "default": "false" },
 			{ "name": "tengu_gb_eval_authed_enable", "default": "false" },
 			{ "name": "tengu_gb_refresh_interval_minutes", "default": "null" },
 			{ "name": "tengu_generic_ember", "default": "false" },
 			{ "name": "tengu_generic_papert", "default": "unknown" },
+			{ "name": "tengu_generic_stonebraker", "default": "false" },
 			{ "name": "tengu_generic_yao", "default": "true" },
 			{ "name": "tengu_gentle_anchor", "default": "true" },
 			{ "name": "tengu_gentle_badger" },
@@ -20338,12 +20425,13 @@
 			{ "name": "tengu_glimmering_glacier", "default": "true" },
 			{ "name": "tengu_glimmering_glade", "default": "true" },
 			{ "name": "tengu_glimmering_newt" },
+			{ "name": "tengu_glistening_snowglobe", "default": "false" },
+			{ "name": "tengu_glittery_backus", "default": "false" },
 			{ "name": "tengu_glittery_finch" },
 			{ "name": "tengu_glittery_frost" },
 			{ "name": "tengu_glittery_mitten", "default": "true" },
 			{ "name": "tengu_glittery_tide", "default": "[]" },
 			{ "name": "tengu_glittery_tower_killswitch", "default": "false" },
-			{ "name": "tengu_glowing_goose", "default": "false" },
 			{ "name": "tengu_glowing_lark", "default": "unknown" },
 			{ "name": "tengu_glowing_nygaard" },
 			{ "name": "tengu_glowing_orbit", "default": "true" },
@@ -20361,7 +20449,6 @@
 				"name": "tengu_good_survey_transcript_ask_config",
 				"default": "unknown"
 			},
-			{ "name": "tengu_goofy_hare", "default": "false" },
 			{ "name": "tengu_goofy_jellyfish", "default": "\"\"" },
 			{ "name": "tengu_goofy_sunbeam", "default": "false" },
 			{ "name": "tengu_gorse_fathom", "default": "false" },
@@ -20416,7 +20503,7 @@
 			{ "name": "tengu_hazy_nova", "default": "false" },
 			{ "name": "tengu_hazy_origami", "default": "true" },
 			{ "name": "tengu_hazy_peach" },
-			{ "name": "tengu_hazy_possum", "default": "unknown" },
+			{ "name": "tengu_hazy_possum", "default": "true" },
 			{ "name": "tengu_hazy_prism", "default": "false" },
 			{ "name": "tengu_hazy_whale", "default": "unknown" },
 			{ "name": "tengu_hearth_member_relay_rows_enabled", "default": "false" },
@@ -20442,6 +20529,7 @@
 			{ "name": "tengu_humble_zephyr", "default": "false" },
 			{ "name": "tengu_humming_duckling", "default": "false" },
 			{ "name": "tengu_humming_locket", "default": "true" },
+			{ "name": "tengu_humming_mountain", "default": "false" },
 			{ "name": "tengu_humming_noodle", "default": "null" },
 			{ "name": "tengu_humming_quail" },
 			{ "name": "tengu_humming_squirrel" },
@@ -20477,6 +20565,7 @@
 			{ "name": "tengu_inherited_raven", "default": "false" },
 			{ "name": "tengu_inked_lantern", "default": "null" },
 			{ "name": "tengu_iridescent_boot", "default": "true" },
+			{ "name": "tengu_iridescent_coral", "default": "false" },
 			{ "name": "tengu_iridescent_crystal", "default": "false" },
 			{ "name": "tengu_iridescent_feather" },
 			{ "name": "tengu_iridescent_gem", "default": "0" },
@@ -20505,7 +20594,6 @@
 			{ "name": "tengu_jazzy_wren", "default": "true" },
 			{ "name": "tengu_jiggly_blossom", "default": "\"off\"" },
 			{ "name": "tengu_jiggly_harp", "default": "\"\"" },
-			{ "name": "tengu_jiggly_meteor", "default": "false" },
 			{ "name": "tengu_jiggly_mochi", "default": "false" },
 			{ "name": "tengu_jolly_aurora", "default": "false" },
 			{ "name": "tengu_jolly_bee", "default": "0" },
@@ -20537,10 +20625,12 @@
 			{ "name": "tengu_keen_pudding" },
 			{ "name": "tengu_keen_sloth", "default": "true" },
 			{ "name": "tengu_keen_sparrow" },
+			{ "name": "tengu_keen_teacup" },
 			{ "name": "tengu_keen_umbrella", "default": "false" },
 			{ "name": "tengu_kestrel_lantern", "default": "true" },
 			{ "name": "tengu_kestrel_moor", "default": "true" },
 			{ "name": "tengu_keybinding_customization_release", "default": "true" },
+			{ "name": "tengu_kind_barto", "default": "true" },
 			{ "name": "tengu_kind_bumblebee", "default": "true" },
 			{ "name": "tengu_kind_dewdrop" },
 			{ "name": "tengu_kind_flute" },
@@ -20586,26 +20676,24 @@
 			{ "name": "tengu_lilac_loom", "default": "null" },
 			{ "name": "tengu_linear_brook", "default": "true" },
 			{ "name": "tengu_linear_fog", "default": "\"off\"" },
-			{ "name": "tengu_linear_nebula", "default": "false" },
 			{ "name": "tengu_linear_owl", "default": "false" },
 			{ "name": "tengu_linear_quail", "default": "0" },
-			{ "name": "tengu_linear_swan", "default": "false" },
 			{ "name": "tengu_linen_heron" },
 			{ "name": "tengu_linen_orbit", "default": "false" },
 			{ "name": "tengu_linked_clover", "default": "true" },
 			{ "name": "tengu_linked_cocoa", "default": "true" },
 			{ "name": "tengu_linked_rose", "default": "true" },
+			{ "name": "tengu_linked_wreath" },
 			{ "name": "tengu_lively_avalanche" },
+			{ "name": "tengu_lively_beacon", "default": "\"off\"" },
 			{ "name": "tengu_lively_beaver", "default": "false" },
 			{ "name": "tengu_lively_cook", "default": "true" },
 			{ "name": "tengu_lively_crown", "default": "\"off\"" },
 			{ "name": "tengu_lively_waffle", "default": "true" },
-			{ "name": "tengu_lively_waterfall" },
 			{ "name": "tengu_log_datadog_events", "default": "false" },
 			{ "name": "tengu_loggia_denkbild", "default": "false" },
 			{ "name": "tengu_loggia_passage", "default": "false" },
 			{ "name": "tengu_loggia_roster", "default": "unknown" },
-			{ "name": "tengu_logical_clarke" },
 			{ "name": "tengu_logical_nebula", "default": "true" },
 			{ "name": "tengu_logical_pillow", "default": "false" },
 			{ "name": "tengu_long_context_survey_probability", "default": "\"\"" },
@@ -20626,7 +20714,6 @@
 			{ "name": "tengu_lucid_bittern", "default": "false" },
 			{ "name": "tengu_lucky_brooks", "default": "false" },
 			{ "name": "tengu_lucky_crane", "default": "false" },
-			{ "name": "tengu_lucky_dove", "default": "false" },
 			{ "name": "tengu_lucky_finch" },
 			{ "name": "tengu_lucky_nebula", "default": "false" },
 			{ "name": "tengu_lucky_quill", "default": "true" },
@@ -20688,6 +20775,7 @@
 			{ "name": "tengu_mcp_strip_trailing_xml_tags", "default": "false" },
 			{ "name": "tengu_mcp_subagent_prompt", "default": "false" },
 			{ "name": "tengu_mcp_task_worker_wake", "default": "false" },
+			{ "name": "tengu_mcp_tools_list_failure_retry", "default": "true" },
 			{ "name": "tengu_mcp_url_elicitation", "default": "true" },
 			{ "name": "tengu_measured_shelf", "default": "0" },
 			{ "name": "tengu_media_byte_cap" },
@@ -20700,10 +20788,9 @@
 			{ "name": "tengu_mellow_heron", "default": "false" },
 			{ "name": "tengu_mellow_kestrel", "default": "false" },
 			{ "name": "tengu_mellow_minsky", "default": "true" },
-			{ "name": "tengu_mellow_perlis" },
 			{ "name": "tengu_mellow_platypus" },
-			{ "name": "tengu_mellow_pond" },
 			{ "name": "tengu_mellow_popcorn", "default": "false" },
+			{ "name": "tengu_mellow_prism", "default": "true" },
 			{ "name": "tengu_mellow_pulse", "default": "true" },
 			{ "name": "tengu_mellow_rainbow" },
 			{ "name": "tengu_mellow_sphinx" },
@@ -20715,6 +20802,7 @@
 			{ "name": "tengu_melodic_mitten", "default": "true" },
 			{ "name": "tengu_melodic_octopus", "default": "true" },
 			{ "name": "tengu_melodic_pelican" },
+			{ "name": "tengu_melodic_seahorse" },
 			{ "name": "tengu_melodic_wolf", "default": "true" },
 			{ "name": "tengu_mem_push_delete_mode", "default": "\"corroborate\"" },
 			{ "name": "tengu_memdir_write_lint", "default": "false" },
@@ -20731,6 +20819,7 @@
 			{ "name": "tengu_mended_ribbon", "default": "unknown" },
 			{ "name": "tengu_mermaid_mod", "default": "unknown" },
 			{ "name": "tengu_merry_boot" },
+			{ "name": "tengu_merry_castle", "default": "true" },
 			{ "name": "tengu_merry_floyd", "default": "false" },
 			{ "name": "tengu_merry_hanrahan", "default": "false" },
 			{ "name": "tengu_merry_kite", "default": "1" },
@@ -20755,6 +20844,7 @@
 			{ "name": "tengu_misty_snowflake", "default": "true" },
 			{ "name": "tengu_misty_sunbeam", "default": "false" },
 			{ "name": "tengu_misty_twilight", "default": "true" },
+			{ "name": "tengu_modular_fog", "default": "false" },
 			{ "name": "tengu_modular_gizmo", "default": "false" },
 			{ "name": "tengu_modular_marble", "default": "false" },
 			{ "name": "tengu_modular_mochi", "default": "false" },
@@ -20768,6 +20858,7 @@
 			{ "name": "tengu_moonlit_kettle" },
 			{ "name": "tengu_moonlit_lagoon", "default": "true" },
 			{ "name": "tengu_moonlit_locket" },
+			{ "name": "tengu_moonlit_mountain", "default": "false" },
 			{ "name": "tengu_moonlit_panda", "default": "false" },
 			{ "name": "tengu_moonlit_peacock", "default": "false" },
 			{ "name": "tengu_moonlit_toucan", "default": "false" },
@@ -20806,6 +20897,7 @@
 			{ "name": "tengu_nifty_harbor", "default": "true" },
 			{ "name": "tengu_nifty_lemon", "default": "false" },
 			{ "name": "tengu_nifty_lemur" },
+			{ "name": "tengu_nifty_lobster", "default": "false" },
 			{ "name": "tengu_nifty_peach" },
 			{ "name": "tengu_nifty_pine" },
 			{ "name": "tengu_nifty_prism", "default": "false" },
@@ -20861,15 +20953,17 @@
 			{ "name": "tengu_partitioned_platypus", "default": "false" },
 			{ "name": "tengu_passport_quail", "default": "false" },
 			{ "name": "tengu_patient_beacon" },
+			{ "name": "tengu_patient_drawbridge", "default": "false" },
 			{ "name": "tengu_patient_finch", "default": "true" },
 			{ "name": "tengu_patient_harbor_killswitch" },
 			{ "name": "tengu_patient_lamport" },
 			{ "name": "tengu_patient_ledger", "default": "false" },
 			{ "name": "tengu_patient_limpet" },
-			{ "name": "tengu_patient_raccoon", "default": "false" },
 			{ "name": "tengu_patient_tide", "default": "0" },
 			{ "name": "tengu_patient_walnut", "default": "false" },
+			{ "name": "tengu_peaceful_kettle", "default": "false" },
 			{ "name": "tengu_peaceful_leaf", "default": "false" },
+			{ "name": "tengu_peaceful_valiant", "default": "false" },
 			{ "name": "tengu_peaceful_wigderson", "default": "false" },
 			{ "name": "tengu_pebble_harbor", "default": "0" },
 			{ "name": "tengu_pencil_farmer", "default": "false" },
@@ -20879,7 +20973,7 @@
 			{ "name": "tengu_peppy_muffin", "default": "true" },
 			{ "name": "tengu_peppy_nautilus" },
 			{ "name": "tengu_peppy_nest", "default": "false" },
-			{ "name": "tengu_peppy_pixel", "default": "false" },
+			{ "name": "tengu_peppy_pony", "default": "true" },
 			{ "name": "tengu_peppy_spindle", "default": "false" },
 			{ "name": "tengu_peppy_squirrel" },
 			{ "name": "tengu_peppy_starlight", "default": "true" },
@@ -20972,7 +21066,6 @@
 			{ "name": "tengu_purring_aurora", "default": "false" },
 			{ "name": "tengu_purring_breeze", "default": "false" },
 			{ "name": "tengu_purring_micali", "default": "true" },
-			{ "name": "tengu_purring_pebble", "default": "false" },
 			{ "name": "tengu_purring_pine", "default": "true" },
 			{ "name": "tengu_quartz_pipit", "default": "true" },
 			{ "name": "tengu_quartz_thimble", "default": "true" },
@@ -20991,8 +21084,10 @@
 			{ "name": "tengu_quiet_larkspur", "default": "true" },
 			{ "name": "tengu_quiet_locket", "default": "true" },
 			{ "name": "tengu_quiet_marten" },
+			{ "name": "tengu_quiet_ocean", "default": "false" },
 			{ "name": "tengu_quiet_pike", "default": "false" },
 			{ "name": "tengu_quiet_sextant" },
+			{ "name": "tengu_quiet_trellis", "default": "false" },
 			{ "name": "tengu_quiet_turnstile", "default": "true" },
 			{ "name": "tengu_quill_marten", "default": "false" },
 			{ "name": "tengu_quill_meadow", "default": "\"today\"" },
@@ -21001,9 +21096,11 @@
 			{ "name": "tengu_quirky_teacup", "default": "true" },
 			{ "name": "tengu_quirky_volcano", "default": "0" },
 			{ "name": "tengu_quirky_wall" },
+			{ "name": "tengu_quizzical_cerf" },
 			{ "name": "tengu_quizzical_giraffe", "default": "false" },
 			{ "name": "tengu_quizzical_globe" },
 			{ "name": "tengu_quizzical_knuth" },
+			{ "name": "tengu_quizzical_lampson", "default": "false" },
 			{ "name": "tengu_quizzical_locket", "default": "false" },
 			{ "name": "tengu_quizzical_mango", "default": "true" },
 			{ "name": "tengu_quizzical_piglet", "default": "false" },
@@ -21011,6 +21108,7 @@
 			{ "name": "tengu_quizzical_toucan", "default": "true" },
 			{ "name": "tengu_quizzical_wirth", "default": "true" },
 			{ "name": "tengu_quizzical_zebra" },
+			{ "name": "tengu_radiant_breeze", "default": "true" },
 			{ "name": "tengu_radiant_fern", "default": "[]" },
 			{ "name": "tengu_radiant_finch", "default": "false" },
 			{ "name": "tengu_radiant_fox", "default": "false" },
@@ -21051,9 +21149,9 @@
 			{ "name": "tengu_rippling_orbit", "default": "false" },
 			{ "name": "tengu_rippling_sketch", "default": "true" },
 			{ "name": "tengu_rippling_tulip", "default": "unknown" },
-			{ "name": "tengu_rippling_waffle", "default": "false" },
 			{ "name": "tengu_riveted_lantern" },
 			{ "name": "tengu_robust_nova", "default": "false" },
+			{ "name": "tengu_robust_pine", "default": "false" },
 			{ "name": "tengu_roomy_burrow", "default": "true" },
 			{ "name": "tengu_rosy_crab", "default": "true" },
 			{ "name": "tengu_rosy_donut", "default": "true" },
@@ -21061,12 +21159,13 @@
 			{ "name": "tengu_rosy_finch", "default": "false" },
 			{ "name": "tengu_rosy_flute", "default": "true" },
 			{ "name": "tengu_rosy_llama", "default": "false" },
+			{ "name": "tengu_rosy_quail", "default": "false" },
 			{ "name": "tengu_rosy_rocket", "default": "true" },
 			{ "name": "tengu_russet_abacus", "default": "false" },
 			{ "name": "tengu_russet_envelope", "default": "false" },
 			{ "name": "tengu_russet_hawthorn" },
 			{ "name": "tengu_russet_whimbrel", "default": "0" },
-			{ "name": "tengu_rustling_blossom", "default": "false" },
+			{ "name": "tengu_rustling_blossom", "default": "true" },
 			{ "name": "tengu_rustling_crescent", "default": "true" },
 			{ "name": "tengu_rustling_gizmo", "default": "0" },
 			{ "name": "tengu_rustling_juggling_acorn" },
@@ -21100,7 +21199,7 @@
 			{ "name": "tengu_sequential_cloud", "default": "false" },
 			{ "name": "tengu_sequential_puffin", "default": "true" },
 			{ "name": "tengu_sequential_summit", "default": "false" },
-			{ "name": "tengu_serene_curry", "default": "unknown" },
+			{ "name": "tengu_serene_curry", "default": "true" },
 			{ "name": "tengu_serene_flurry" },
 			{ "name": "tengu_serene_frog", "default": "false" },
 			{ "name": "tengu_serene_rain", "default": "false" },
@@ -21138,6 +21237,7 @@
 			{ "name": "tengu_silent_heron", "default": "0" },
 			{ "name": "tengu_silk_hinge", "default": "false" },
 			{ "name": "tengu_silly_glacier", "default": "false" },
+			{ "name": "tengu_silly_hamster", "default": "true" },
 			{ "name": "tengu_silly_phoenix", "default": "false" },
 			{ "name": "tengu_silly_waterfall", "default": "false" },
 			{ "name": "tengu_skills_dashboard_enabled", "default": "false" },
@@ -21165,25 +21265,26 @@
 			{ "name": "tengu_smooth_pelican", "default": "false" },
 			{ "name": "tengu_smooth_wolf" },
 			{ "name": "tengu_snappy_lighthouse", "default": "false" },
-			{ "name": "tengu_snappy_nautilus", "default": "false" },
 			{ "name": "tengu_snappy_noodle", "default": "unknown" },
 			{ "name": "tengu_snappy_pelican", "default": "false" },
-			{ "name": "tengu_snappy_pinwheel", "default": "false" },
 			{ "name": "tengu_snappy_plum", "default": "false" },
 			{ "name": "tengu_snappy_sunrise_killswitch" },
 			{ "name": "tengu_snappy_sutton" },
 			{ "name": "tengu_snappy_tower" },
+			{ "name": "tengu_snazzy_graham", "default": "true" },
 			{ "name": "tengu_snazzy_hare", "default": "false" },
 			{ "name": "tengu_snazzy_octopus", "default": "false" },
 			{ "name": "tengu_snazzy_prism" },
 			{ "name": "tengu_snoopy_creek", "default": "false" },
 			{ "name": "tengu_snoopy_thimble", "default": "false" },
+			{ "name": "tengu_snug_balloon", "default": "false" },
 			{ "name": "tengu_snug_catmull", "default": "true" },
 			{ "name": "tengu_snug_cocoa", "default": "false" },
 			{ "name": "tengu_snug_crab", "default": "false" },
 			{ "name": "tengu_snug_crystal", "default": "false" },
 			{ "name": "tengu_snug_ember" },
 			{ "name": "tengu_snug_hippo", "default": "null" },
+			{ "name": "tengu_snug_meteor", "default": "true" },
 			{ "name": "tengu_snug_nautilus", "default": "null" },
 			{ "name": "tengu_snug_orbit", "default": "[]" },
 			{ "name": "tengu_snug_platypus" },
@@ -21198,7 +21299,6 @@
 			{ "name": "tengu_soft_kurzweil", "default": "true" },
 			{ "name": "tengu_soft_spark", "default": "unknown" },
 			{ "name": "tengu_soft_spindle", "default": "true" },
-			{ "name": "tengu_soft_sundae", "default": "false" },
 			{ "name": "tengu_soft_tulip", "default": "false" },
 			{ "name": "tengu_sorrel_avocet", "default": "false" },
 			{ "name": "tengu_sorrel_trellis", "default": "true" },
@@ -21214,6 +21314,7 @@
 				"name": "tengu_sorted_plum",
 				"default": "\"client_cleared_connector_results\""
 			},
+			{ "name": "tengu_sorted_sunrise", "default": "null" },
 			{ "name": "tengu_sorted_tide", "default": "true" },
 			{ "name": "tengu_sorted_truffle", "default": "true" },
 			{ "name": "tengu_sorted_zebra", "default": "false" },
@@ -21222,23 +21323,27 @@
 			{ "name": "tengu_sparkling_hanrahan", "default": "unknown" },
 			{ "name": "tengu_spicy_blossom", "default": "false" },
 			{ "name": "tengu_spicy_oboe" },
+			{ "name": "tengu_spicy_origami", "default": "false" },
 			{ "name": "tengu_splendid_horizon" },
 			{ "name": "tengu_splendid_sutton", "default": "false" },
 			{ "name": "tengu_splendid_zephyr", "default": "true" },
 			{ "name": "tengu_sprightly_anchor" },
 			{ "name": "tengu_sprightly_orbit", "default": "true" },
+			{ "name": "tengu_squishy_deer", "default": "false" },
 			{ "name": "tengu_squishy_magpie" },
 			{ "name": "tengu_squishy_pearl", "default": "unknown" },
 			{ "name": "tengu_squishy_prism" },
 			{ "name": "tengu_squishy_snail" },
 			{ "name": "tengu_squishy_spring", "default": "true" },
 			{ "name": "tengu_squishy_ullman", "default": "false" },
+			{ "name": "tengu_staged_clover", "default": "0" },
 			{ "name": "tengu_staged_ladybug", "default": "true" },
 			{ "name": "tengu_staged_pudding" },
 			{ "name": "tengu_staged_pumpkin", "default": "true" },
 			{ "name": "tengu_staged_storm", "default": "false" },
 			{ "name": "tengu_staged_waffle", "default": "\"off\"" },
 			{ "name": "tengu_stalwart_quince" },
+			{ "name": "tengu_starry_beacon", "default": "false" },
 			{ "name": "tengu_starry_breeze", "default": "0" },
 			{ "name": "tengu_starry_crescent", "default": "false" },
 			{ "name": "tengu_starry_fox", "default": "null" },
@@ -21257,6 +21362,7 @@
 			{ "name": "tengu_steady_canyon" },
 			{ "name": "tengu_steady_glacier" },
 			{ "name": "tengu_steady_heron", "default": "true" },
+			{ "name": "tengu_steady_lintel", "default": "false" },
 			{ "name": "tengu_steady_marshmallow" },
 			{ "name": "tengu_steady_metcalfe" },
 			{ "name": "tengu_steady_mitten", "default": "false" },
@@ -21265,6 +21371,7 @@
 			{ "name": "tengu_steady_plover", "default": "true" },
 			{ "name": "tengu_steady_puppy", "default": "false" },
 			{ "name": "tengu_steady_quail", "default": "false" },
+			{ "name": "tengu_steady_quill", "default": "false" },
 			{ "name": "tengu_steady_scroll", "default": "null" },
 			{ "name": "tengu_steady_sunbeam" },
 			{ "name": "tengu_steady_treehouse" },
@@ -21295,7 +21402,6 @@
 			{ "name": "tengu_swift_glade" },
 			{ "name": "tengu_swift_pelican", "default": "null" },
 			{ "name": "tengu_swift_whistle", "default": "false" },
-			{ "name": "tengu_swirling_boot", "default": "0" },
 			{ "name": "tengu_swirling_koala" },
 			{ "name": "tengu_swirling_meteor", "default": "true" },
 			{ "name": "tengu_swirling_squid", "default": "false" },
@@ -21330,7 +21436,6 @@
 			{ "name": "tengu_tethered_buoy", "default": "true" },
 			{ "name": "tengu_thinking_block_resumption", "default": "false" },
 			{ "name": "tengu_thistle_grebe", "default": "null" },
-			{ "name": "tengu_thistle_orrery", "default": "\"\"" },
 			{ "name": "tengu_thrifty_sonic", "default": "false" },
 			{ "name": "tengu_ticklish_fern", "default": "false" },
 			{ "name": "tengu_ticklish_pnueli", "default": "false" },
@@ -21346,6 +21451,7 @@
 			{ "name": "tengu_tidy_eclipse", "default": "true" },
 			{ "name": "tengu_tidy_fern", "default": "true" },
 			{ "name": "tengu_tidy_frost", "default": "false" },
+			{ "name": "tengu_tidy_lake", "default": "false" },
 			{ "name": "tengu_tidy_lantern", "default": "true" },
 			{ "name": "tengu_tidy_panda", "default": "false" },
 			{ "name": "tengu_tidy_shelf", "default": "\"tell\"" },
@@ -21354,6 +21460,7 @@
 			{ "name": "tengu_tidy_swing", "default": "false" },
 			{ "name": "tengu_tidy_thimble", "default": "false" },
 			{ "name": "tengu_tidy_toast" },
+			{ "name": "tengu_tidy_truffle" },
 			{ "name": "tengu_tidy_widget", "default": "true" },
 			{ "name": "tengu_tingly_flute", "default": "\"\"" },
 			{ "name": "tengu_tingly_grove" },
@@ -21371,6 +21478,7 @@
 			{ "name": "tengu_toasty_owl", "default": "false" },
 			{ "name": "tengu_toasty_phoenix", "default": "false" },
 			{ "name": "tengu_toasty_planet", "default": "false" },
+			{ "name": "tengu_toasty_robin", "default": "true" },
 			{ "name": "tengu_toasty_turtle" },
 			{ "name": "tengu_toasty_zephyr", "default": "false" },
 			{ "name": "tengu_tool_cgroup_exclude_classes", "default": "null" },
@@ -21403,8 +21511,8 @@
 			{ "name": "tengu_twinkling_cosmos", "default": "false" },
 			{ "name": "tengu_twinkling_crown", "default": "false" },
 			{ "name": "tengu_twinkling_globe" },
+			{ "name": "tengu_twinkling_grove", "default": "false" },
 			{ "name": "tengu_twinkling_hoare", "default": "false" },
-			{ "name": "tengu_twinkling_melody" },
 			{ "name": "tengu_twinkling_robin", "default": "true" },
 			{ "name": "tengu_twinkling_thunder", "default": "false" },
 			{ "name": "tengu_twinkly_breeze" },
@@ -21443,7 +21551,9 @@
 			{ "name": "tengu_valiant_sphinx", "default": "true" },
 			{ "name": "tengu_valiant_teapot", "default": "false" },
 			{ "name": "tengu_validated_clover" },
+			{ "name": "tengu_vast_acorn", "default": "false" },
 			{ "name": "tengu_vast_frost", "default": "0" },
+			{ "name": "tengu_vast_hammock", "default": "false" },
 			{ "name": "tengu_vast_jellyfish", "default": "false" },
 			{ "name": "tengu_vast_meteor" },
 			{ "name": "tengu_vast_muffin" },
@@ -21537,11 +21647,11 @@
 			{ "name": "tengu_virtual_pancake", "default": "unknown" },
 			{ "name": "tengu_virtual_parasol", "default": "unknown" },
 			{ "name": "tengu_virtual_pine" },
+			{ "name": "tengu_virtual_quiche", "default": "false" },
 			{ "name": "tengu_virtual_toast", "default": "false" },
 			{ "name": "tengu_vivid_alpaca" },
 			{ "name": "tengu_vivid_crayon", "default": "true" },
 			{ "name": "tengu_vivid_crown", "default": "false" },
-			{ "name": "tengu_vivid_key" },
 			{ "name": "tengu_vivid_peach", "default": "undefined" },
 			{ "name": "tengu_vivid_treehouse", "default": "0" },
 			{ "name": "tengu_vivid_wreath", "default": "true" },
@@ -21560,6 +21670,7 @@
 			{ "name": "tengu_warm_crescent", "default": "false" },
 			{ "name": "tengu_warm_mochi", "default": "true" },
 			{ "name": "tengu_warm_sunrise", "default": "true" },
+			{ "name": "tengu_warm_twilight", "default": "false" },
 			{ "name": "tengu_wary_ladle" },
 			{
 				"name": "tengu_watchdog_skip_nonstreaming_fallback",
@@ -21592,6 +21703,7 @@
 			{ "name": "tengu_wise_newt", "default": "unknown" },
 			{ "name": "tengu_wise_origami", "default": "false" },
 			{ "name": "tengu_wise_pearl", "default": "null" },
+			{ "name": "tengu_wise_pillow", "default": "false" },
 			{ "name": "tengu_wise_salamander", "default": "0" },
 			{ "name": "tengu_wise_starlight", "default": "false" },
 			{ "name": "tengu_witty_dove" },
@@ -21604,6 +21716,7 @@
 			{ "name": "tengu_wobbly_fern", "default": "unknown" },
 			{ "name": "tengu_wobbly_journal" },
 			{ "name": "tengu_wobbly_pinwheel", "default": "true" },
+			{ "name": "tengu_wobbly_sundae", "default": "false" },
 			{ "name": "tengu_wondrous_acorn", "default": "null" },
 			{ "name": "tengu_wondrous_haven", "default": "false" },
 			{ "name": "tengu_wondrous_island", "default": "false" },
@@ -21619,6 +21732,7 @@
 			{ "name": "tengu_woolly_owl", "default": "false" },
 			{ "name": "tengu_woolly_thimble" },
 			{ "name": "tengu_woolly_toast", "default": "false" },
+			{ "name": "tengu_woolly_umbrella", "default": "true" },
 			{ "name": "tengu_worker_owner_rows_killswitch", "default": "false" },
 			{ "name": "tengu_workflow_schema_lint_enforce", "default": "true" },
 			{ "name": "tengu_workflows_enabled", "default": "true" },
@@ -21632,18 +21746,18 @@
 			{ "name": "tengu_zany_book" },
 			{ "name": "tengu_zany_flask", "default": "2" },
 			{ "name": "tengu_zany_oasis" },
+			{ "name": "tengu_zesty_beacon", "default": "false" },
 			{ "name": "tengu_zesty_feather" },
 			{ "name": "tengu_zesty_horizon_wait", "default": "true" },
 			{ "name": "tengu_zesty_muffin" },
 			{ "name": "tengu_zesty_pearl", "default": "false" },
+			{ "name": "tengu_zesty_pudding", "default": "false" },
 			{ "name": "tengu_zinc_harbor", "default": "false" },
 			{ "name": "tengu_zippy_avalanche" },
 			{ "name": "tengu_zippy_cocoa" },
 			{ "name": "tengu_zippy_goose" },
 			{ "name": "tengu_zippy_gosling", "default": "0" },
-			{ "name": "tengu_zippy_mist", "default": "false" },
 			{ "name": "tengu_zippy_piglet", "default": "false" },
-			{ "name": "tengu_zippy_quilt", "default": "false" },
 			{ "name": "tengu_zippy_sparrow", "default": "false" },
 			{ "name": "tengu_zippy_spindle", "default": "false" }
 		],
@@ -21993,6 +22107,7 @@
 			{ "name": "agent.list", "detail": "event" },
 			{ "name": "agent.offer", "detail": "event" },
 			{ "name": "agent.register", "detail": "event" },
+			{ "name": "agent.report", "detail": "event" },
 			{ "name": "agent.spawn", "detail": "event" },
 			{ "name": "attribution.text", "detail": "event" },
 			{ "name": "audio.play", "detail": "event" },
@@ -22254,7 +22369,7 @@
 			{ "name": "system_prompt", "detail": "1 call sites" },
 			{ "name": "tool", "detail": "1 call sites" },
 			{ "name": "tool_decision", "detail": "2 call sites" },
-			{ "name": "tool_result", "detail": "2 call sites" },
+			{ "name": "tool_result", "detail": "1 call sites" },
 			{ "name": "user_prompt", "detail": "1 call sites" }
 		],
 		"permission-rule": [
@@ -22269,6 +22384,10 @@
 			{
 				"name": "$schema",
 				"detail": "JSON Schema reference for Claude Code settings"
+			},
+			{
+				"name": "additionalDirectoryConfigRoots",
+				"detail": "@internal For the program that starts Claude Code only: read from --settings and from settings that program sends while the session runs; ignored in settings files. Maps an added folder (--add-dir, or…"
 			},
 			{ "name": "additionalMarketplaces" },
 			{
@@ -22475,6 +22594,10 @@
 			{
 				"name": "deniedModels",
 				"detail": "Models users cannot select, even when availableModels allows them. A family alias (\"opus\") blocks that family. A model ID blocks that version in every spelling: dates, -fast and provider prefixes are …"
+			},
+			{
+				"name": "desktopMcpServersListScope",
+				"detail": "Claude desktop app only. Where your allow list and deny list apply to MCP servers added in the Claude desktop app. \"code\" (default): Your allow list also governs MCP servers added in the Claude deskto…"
 			},
 			{
 				"name": "desktopSessionCleanupPeriodDays",
@@ -23315,6 +23438,10 @@
 				"detail": "For the program that starts Claude Code: read only from --settings and from settings that program sends while the session runs; ignored in user, project, local and managed settings. Absolute paths of …"
 			},
 			{
+				"name": "permissions.workingDirectoriesExclude",
+				"detail": "For the program that starts Claude Code: read only from --settings and from settings that program sends while the session runs; ignored in user, project, local and managed settings. Absolute paths, ea…"
+			},
+			{
 				"name": "pluginConfigs.*.mcpServers",
 				"detail": "User configuration values for MCP servers keyed by server name"
 			},
@@ -23548,12 +23675,12 @@
 		"slash-command": [
 			{
 				"name": "/add-dir",
-				"gate": "isEnabled ()=>Se()&&tSo()",
+				"gate": "isEnabled ()=>Se()&&Afn()",
 				"detail": "local-jsx | Add a working directory"
 			},
 			{
 				"name": "/advisor",
-				"gate": "isEnabled ()=>Se()&&II()",
+				"gate": "isEnabled ()=>Se()&&SM()",
 				"detail": "local | Let Claude consult a stronger model at key moments"
 			},
 			{
@@ -23563,37 +23690,37 @@
 			},
 			{
 				"name": "/artifact-capabilities",
-				"gate": "isEnabled es",
+				"gate": "isEnabled us",
 				"detail": "prompt"
 			},
 			{
 				"name": "/artifact-design",
-				"gate": "isEnabled is",
+				"gate": "isEnabled gs",
 				"detail": "prompt | Design guidance and fundamentals for Artifacts."
 			},
 			{
 				"name": "/artifact-diagramming",
-				"gate": "isEnabled ls",
+				"gate": "isEnabled ws",
 				"detail": "prompt | Diagramming know-how for Artifacts - when a picture earns its place, how to draw one that shows the real mechanism, and the inline-SVG mechanics that keep it legible in both themes."
 			},
 			{
 				"name": "/artifacts",
-				"gate": "isEnabled ()=>fA()&&ff()===null",
+				"gate": "isEnabled ()=>nT()&&af()===null",
 				"detail": "local-jsx | Browse your published and shared artifacts"
 			},
 			{
 				"name": "/auto-mode-setup",
-				"gate": "isEnabled ()=>Hwt()&&!Se()",
+				"gate": "isEnabled ()=>VCt()&&!Se()",
 				"detail": "local-jsx | Teach auto mode about your environment"
 			},
 			{
 				"name": "/autocompact",
-				"gate": "isEnabled (){return Se()||xn()}",
+				"gate": "isEnabled (){return Se()||On()}",
 				"detail": "local | Set how full the context gets before auto-summarizing"
 			},
 			{
 				"name": "/autofix-pr",
-				"gate": "availability claude-ai, console-profile; isEnabled ()=>ZGn()&&!Se()",
+				"gate": "availability claude-ai, console-profile; isEnabled ()=>I8n()&&!Se()",
 				"detail": "local | Monitor and autofix any issues with the current PR"
 			},
 			{
@@ -23628,7 +23755,7 @@
 			},
 			{
 				"name": "/chrome",
-				"gate": "availability claude-ai; isEnabled ()=>!Se()&&tL()",
+				"gate": "availability claude-ai; isEnabled ()=>!Se()&&qD()",
 				"detail": "local-jsx | Open Claude in Chrome settings"
 			},
 			{ "name": "/claude-api", "gate": "isEnabled ()=>!n", "detail": "prompt" },
@@ -23639,16 +23766,16 @@
 			},
 			{
 				"name": "/claude-in-chrome",
-				"gate": "isEnabled ()=>!e&&(t6e()||Yt())",
+				"gate": "isEnabled ()=>!e&&(bqe()||Xt())",
 				"detail": "prompt | Automates your Chrome browser to interact with web pages - clicking elements, filling forms, capturing screenshots, reading console logs, and navigating sites. Opens pages in new tabs within …"
 			},
 			{
 				"name": "/clear",
-				"detail": "local (aliases reset, new) | Start a new session with empty context; previous session stays on disk (resumable with /resume)"
+				"detail": "local (aliases reset, new) | Start a new session with empty context; loops carry over, and the old one stays in /resume"
 			},
 			{
 				"name": "/cloud-plugins",
-				"gate": "isEnabled ()=>Uur()&&!s.CLAUDE_CODE_DISABLE_PLUGIN_FORWARDING",
+				"gate": "isEnabled ()=>iSr()&&!s.CLAUDE_CODE_DISABLE_PLUGIN_FORWARDING",
 				"detail": "local-jsx | Choose whether cloud sessions use the plugins enabled on this machine"
 			},
 			{ "name": "/code-review", "detail": "prompt (aliases review)" },
@@ -23659,7 +23786,7 @@
 			},
 			{
 				"name": "/commit",
-				"gate": "isEnabled ()=>hds()",
+				"gate": "isEnabled ()=>PSs()",
 				"detail": "prompt | Create a git commit. Use whenever you are about to create a commit, whether the user asked for one or it is a step in your current task — it gathers git context and applies the required commi…"
 			},
 			{
@@ -23687,7 +23814,7 @@
 			},
 			{
 				"name": "/cowork-plugin",
-				"gate": "isEnabled ()=>rm()||P_()||s.CLAUDE_CODE_COWORK_PLUGIN_SKILL&&!yZ()",
+				"gate": "isEnabled ()=>Hm()||Wy()||s.CLAUDE_CODE_COWORK_PLUGIN_SKILL&&!bK()",
 				"detail": "prompt | Create a new Cowork plugin from scratch, or customize an installed plugin for a specific organization. Use when: customize plugin, set up plugin, configure plugin, tailor plugin, adjust plugi…"
 			},
 			{
@@ -23709,32 +23836,32 @@
 			},
 			{
 				"name": "/design-consent",
-				"gate": "hidden; isEnabled ()=>o9()",
+				"gate": "hidden; isEnabled ()=>E8()",
 				"detail": "local | Grant Claude agent access to your Design projects"
 			},
 			{
 				"name": "/design-login",
-				"gate": "isEnabled ()=>o9()",
+				"gate": "isEnabled ()=>E8()",
 				"detail": "local-jsx | Authorize design-system access for /design-sync with your claude.ai account"
 			},
 			{
 				"name": "/design-revoke",
-				"gate": "hidden; isEnabled ()=>o9()",
+				"gate": "hidden; isEnabled ()=>E8()",
 				"detail": "local | Revoke Claude agent access to your Design projects"
 			},
 			{
 				"name": "/design-sync",
-				"gate": "isEnabled o9",
+				"gate": "isEnabled E8",
 				"detail": "prompt | Push a React design system to claude.ai/design. This runs a converter that bundles the real component code (from Storybook or a bare package) and uploads it. Use when the user runs /design-sy…"
 			},
 			{
 				"name": "/desktop",
-				"gate": "availability claude-ai; isEnabled ()=>tze()||Iur()!==null",
+				"gate": "availability claude-ai; isEnabled ()=>CKe()||Zyr()!==null",
 				"detail": "local-jsx (aliases app) | Continue the current session in Claude Desktop"
 			},
 			{
 				"name": "/diff",
-				"gate": "isEnabled ()=>!R6r()",
+				"gate": "isEnabled ()=>!w8r()",
 				"detail": "local-jsx"
 			},
 			{
@@ -23750,7 +23877,7 @@
 			{ "name": "/exit", "detail": "local" },
 			{
 				"name": "/explain-usage",
-				"gate": "isEnabled ()=>rm()||P_()",
+				"gate": "isEnabled ()=>Hm()||Wy()",
 				"detail": "prompt | Explain where this session's tokens went, with one simple chart in plain language. Use when: explain usage, explain my usage, where did my tokens go, token usage breakdown, what used the most…"
 			},
 			{
@@ -23759,7 +23886,7 @@
 			},
 			{
 				"name": "/extra-usage",
-				"gate": "hidden; isEnabled ()=>U0()&&Se()",
+				"gate": "hidden; isEnabled ()=>RH()&&Se()",
 				"detail": "local | Renamed to /usage-credits"
 			},
 			{ "name": "/fast", "gate": "isEnabled ()=>Se()", "detail": "local" },
@@ -23778,12 +23905,12 @@
 			},
 			{
 				"name": "/fork",
-				"gate": "isEnabled ()=>!qa()",
+				"gate": "isEnabled ()=>!rl()",
 				"detail": "local-jsx | Copy this conversation into a new background session and keep working here"
 			},
 			{
 				"name": "/goal",
-				"gate": "isEnabled ()=>Se()||xn()",
+				"gate": "isEnabled ()=>Se()||On()",
 				"detail": "local | Set a goal — keep working until the condition is met"
 			},
 			{
@@ -23805,7 +23932,7 @@
 			},
 			{
 				"name": "/import",
-				"gate": "isEnabled ()=>FXe()&&Se()&&!J()",
+				"gate": "isEnabled ()=>yet()&&Se()&&!X()",
 				"detail": "local | Import config from another AI coding agent"
 			},
 			{ "name": "/init", "detail": "prompt" },
@@ -23829,27 +23956,27 @@
 			},
 			{
 				"name": "/keybindings",
-				"gate": "isEnabled ()=>Jme()",
+				"gate": "isEnabled ()=>T_e()",
 				"detail": "local | Open your keyboard shortcuts file"
 			},
 			{
 				"name": "/keybindings-help",
-				"gate": "isEnabled Jme",
+				"gate": "isEnabled T_e",
 				"detail": "prompt | Use when the user wants to customize keyboard shortcuts, rebind keys, add chord bindings, or modify ~/.claude/keybindings.json. Examples: \"rebind ctrl+s\", \"add a chord shortcut\", \"change the …"
 			},
 			{
 				"name": "/limit-reset",
-				"gate": "hidden; isEnabled ()=>Lt()&&(jHe()||Jbe())",
+				"gate": "hidden; isEnabled ()=>Ot()&&(Z1e()||VEe())",
 				"detail": "local-jsx"
 			},
 			{
 				"name": "/list-agents",
-				"gate": "isEnabled ()=>xl()",
+				"gate": "isEnabled ()=>Nl()",
 				"detail": "local (aliases peers) | List subagents, teammates, and other Claude sessions you can message"
 			},
 			{
 				"name": "/login",
-				"gate": "isEnabled ()=>{let e=hr();return!s.DISABLE_LOGIN_COMMAND&&(e===null||e.sessionId!==void 0)}",
+				"gate": "isEnabled ()=>{let e=_r();return!s.DISABLE_LOGIN_COMMAND&&(e===null||e.sessionId!==void 0)}",
 				"detail": "local-jsx"
 			},
 			{
@@ -23859,17 +23986,12 @@
 			},
 			{
 				"name": "/loop",
-				"gate": "isEnabled zF",
+				"gate": "isEnabled rU",
 				"detail": "prompt (aliases proactive) | Run a prompt or slash command on a recurring interval (e.g. /loop 5m /foo). Omit the interval to let the model self-pace."
 			},
 			{
-				"name": "/loops",
-				"gate": "isEnabled ()=>!1",
-				"detail": "local-jsx | List, create, and delete loops"
-			},
-			{
 				"name": "/low-priority",
-				"gate": "hidden; isEnabled ()=>Lt()&&(JH()||Y7t())",
+				"gate": "hidden; isEnabled ()=>Ot()&&(eF()||ntn())",
 				"detail": "local | Continue now at lower priority after reaching your 5-hour limit; run again to stop"
 			},
 			{
@@ -23888,7 +24010,7 @@
 			{ "name": "/model", "gate": "isEnabled ()=>Se()", "detail": "local-jsx" },
 			{
 				"name": "/output-style",
-				"gate": "isEnabled ()=>Se()||!nze()||yzn()",
+				"gate": "isEnabled ()=>Se()||!AKe()||X8n()",
 				"detail": "local | List output styles or switch to one"
 			},
 			{ "name": "/passes", "detail": "local-jsx" },
@@ -23915,12 +24037,12 @@
 			},
 			{
 				"name": "/pr",
-				"gate": "isEnabled ()=>hds()",
+				"gate": "isEnabled ()=>PSs()",
 				"detail": "prompt | Create a GitHub pull request. Use whenever you are about to open a PR, whether the user asked for one or it is a step in your current task — it gathers branch context and applies the required…"
 			},
 			{
 				"name": "/privacy-settings",
-				"gate": "isEnabled ()=>PP()",
+				"gate": "isEnabled ()=>JA()",
 				"detail": "local-jsx | View and update your privacy settings"
 			},
 			{
@@ -23930,13 +24052,13 @@
 			},
 			{
 				"name": "/project",
-				"gate": "isEnabled ()=>Eai()&&b(Ecs,!1)",
+				"gate": "isEnabled ()=>$vi()&&b(GPs,!1)",
 				"detail": "local | Set the claude.ai Project for this session's usage reports"
 			},
 			{ "name": "/radio", "detail": "local | Listen to Claude FM lo-fi radio" },
 			{
 				"name": "/rate-limit-options",
-				"gate": "isEnabled ()=>Lt()||!1",
+				"gate": "isEnabled ()=>Ot()||!1",
 				"detail": "local-jsx | Manage usage limits and upgrade options"
 			},
 			{
@@ -23959,7 +24081,7 @@
 			},
 			{
 				"name": "/remote-env",
-				"gate": "availability claude-ai, console-profile; isEnabled ()=>Lt()||KDn()",
+				"gate": "availability claude-ai, console-profile; isEnabled ()=>Ot()||f$n()",
 				"detail": "local-jsx | Choose the default environment for cloud agents"
 			},
 			{
@@ -23969,12 +24091,12 @@
 			},
 			{
 				"name": "/restart",
-				"gate": "isEnabled Q2n",
+				"gate": "isEnabled sto",
 				"detail": "local (aliases update)"
 			},
 			{
 				"name": "/resume",
-				"gate": "isEnabled hfs",
+				"gate": "isEnabled OMs",
 				"detail": "local-jsx (aliases continue)"
 			},
 			{
@@ -23992,12 +24114,12 @@
 			{ "name": "/sandbox", "detail": "local-jsx" },
 			{
 				"name": "/schedule",
-				"gate": "isEnabled ()=>Bn()&&Lt()&&!s.CLAUDE_CODE_REMOTE&&Cn(mne)",
+				"gate": "isEnabled ()=>Bn()&&Ot()&&!s.CLAUDE_CODE_REMOTE&&Cn(coe)",
 				"detail": "local (aliases routines) | Create and manage scheduled remote Claude Code agents"
 			},
 			{
 				"name": "/scroll-speed",
-				"gate": "isEnabled ()=>{if(!rf())return!1;let e=Uu();return!(e?L0e.includes(e.terminal??\"\"):dT.isJetBrainsIdeTerminal())}",
+				"gate": "isEnabled ()=>{if(!kf())return!1;let e=Ju();return!(e?JLe.includes(e.terminal??\"\"):FT.isJetBrainsIdeTerminal())}",
 				"detail": "local-jsx | Adjust mouse wheel scroll speed"
 			},
 			{
@@ -24006,27 +24128,27 @@
 			},
 			{
 				"name": "/send-to-project",
-				"gate": "isEnabled n5r",
+				"gate": "isEnabled PQr",
 				"detail": "local | Send a message from this session to a Claude Project"
 			},
 			{
 				"name": "/session",
-				"gate": "isEnabled ()=>xn()",
+				"gate": "isEnabled ()=>On()",
 				"detail": "local-jsx (aliases remote) | Show cloud session URL and QR code"
 			},
 			{
 				"name": "/setup-bedrock",
-				"gate": "isEnabled ()=>l_e(\"bedrock\")===void 0&&!0",
+				"gate": "isEnabled ()=>Z2(\"bedrock\")===void 0&&!0",
 				"detail": "local-jsx | Change Amazon Bedrock authentication, region, or pinned models"
 			},
 			{
 				"name": "/setup-claude",
-				"gate": "isEnabled ()=>rm()||P_()",
+				"gate": "isEnabled ()=>Hm()||Wy()",
 				"detail": "prompt (aliases setup-cowork) | Guided setup — pick a role, install a matching plugin, try a skill, connect tools. Use when: set up claude, setup claude, set up cowork, setup cowork, get started with …"
 			},
 			{
 				"name": "/setup-vertex",
-				"gate": "isEnabled ()=>l_e(\"vertex\")===void 0&&!0",
+				"gate": "isEnabled ()=>Z2(\"vertex\")===void 0&&!0",
 				"detail": "local-jsx | Change Google Vertex AI authentication, project, region, or pinned models"
 			},
 			{
@@ -24050,27 +24172,27 @@
 			},
 			{
 				"name": "/stop",
-				"gate": "isEnabled nn",
+				"gate": "isEnabled Zt",
 				"detail": "local | Stop this background session; transcript and worktree are kept"
 			},
 			{
 				"name": "/subtask",
-				"gate": "isEnabled ()=>!qa()",
+				"gate": "isEnabled ()=>!rl()",
 				"detail": "local-jsx | Send a subagent off with your full context; its result comes back here"
 			},
 			{
 				"name": "/tasks",
-				"detail": "local-jsx (aliases bashes) | View and manage everything running in the background"
+				"detail": "local-jsx (aliases bashes) | View and manage this session's background work"
 			},
 			{
 				"name": "/team-onboarding",
-				"gate": "isEnabled x6r",
+				"gate": "isEnabled k8r",
 				"detail": "prompt | Help teammates ramp on Claude Code with a guide from your usage"
 			},
 			{
 				"name": "/teleport",
-				"gate": "availability claude-ai, console-profile; isEnabled ()=>Lt()||KDn()",
-				"detail": "local (aliases tp) | Send this session to the cloud, or resume one from claude.ai"
+				"gate": "availability claude-ai, console-profile; isEnabled ()=>Ot()||f$n()",
+				"detail": "local (aliases tp) | Resume a cloud session here"
 			},
 			{ "name": "/terminal-setup", "detail": "local-jsx" },
 			{ "name": "/theme", "detail": "local-jsx | Change the theme" },
@@ -24080,12 +24202,12 @@
 			},
 			{
 				"name": "/ultraplan",
-				"gate": "availability claude-ai; isEnabled ()=>nre()",
+				"gate": "availability claude-ai; isEnabled ()=>ese()",
 				"detail": "local | A cloud session drafts a plan you can edit and approve"
 			},
 			{
 				"name": "/ultrareview",
-				"gate": "isEnabled ()=>Se()&&kG()",
+				"gate": "isEnabled ()=>Se()&&hz()",
 				"detail": "local | Find and verify bugs in your branch using a cloud session"
 			},
 			{
@@ -24094,7 +24216,7 @@
 			},
 			{
 				"name": "/upgrade",
-				"gate": "availability claude-ai; isEnabled NPe",
+				"gate": "availability claude-ai; isEnabled BMe",
 				"detail": "local-jsx | Upgrade your plan for higher rate limits and more Opus"
 			},
 			{
@@ -24104,12 +24226,12 @@
 			},
 			{
 				"name": "/usage-credits",
-				"gate": "isEnabled ()=>U0()&&Se()",
+				"gate": "isEnabled ()=>RH()&&Se()",
 				"detail": "local | Configure usage credits or request them from your admin when you hit a limit"
 			},
 			{
 				"name": "/use-case",
-				"gate": "availability claude-ai; isEnabled ()=>H1()&&!Et()",
+				"gate": "availability claude-ai; isEnabled ()=>XU()&&!bt()",
 				"detail": "local-jsx | Choose the Life Sciences use case that applies to your requests"
 			},
 			{
@@ -24128,7 +24250,7 @@
 			},
 			{
 				"name": "/web-setup",
-				"gate": "availability claude-ai; isEnabled wQe",
+				"gate": "availability claude-ai; isEnabled Qtt",
 				"detail": "local-jsx | Set up cloud sessions with your GitHub account"
 			},
 			{
@@ -24138,7 +24260,7 @@
 			},
 			{
 				"name": "/workflow-authoring",
-				"gate": "isEnabled ()=>_g()",
+				"gate": "isEnabled ()=>Mg()",
 				"detail": "prompt"
 			},
 			{
@@ -24148,7 +24270,7 @@
 			},
 			{
 				"name": "/workflows",
-				"gate": "isEnabled ()=>_g()",
+				"gate": "isEnabled ()=>Mg()",
 				"detail": "local-jsx | Browse running and completed workflows"
 			}
 		],
@@ -24252,232 +24374,232 @@
 			{ "name": "Agent" },
 			{
 				"name": "AppifactRepl",
-				"gate": "Vi (=import.meta.require(\"/$bunfs/root/chunk-scewn76d.js\").AppifactReplTool)",
-				"detail": "isEnabled(){return Qmi()&&fA()&&!Ql()}"
+				"gate": "Vi (=import.meta.require(\"/$bunfs/root/chunk-2nq52gmc.js\").AppifactReplTool)",
+				"detail": "isEnabled(){return QTi()&&nT()&&!Fl()}"
 			},
 			{
 				"name": "Artifact",
-				"gate": "Ki (=xi(import.meta.require(\"/$bunfs/root/chunk-hds82wsh.js\").ARTIFACT_TOOL_HEAD,()=>import.meta.require(\"/$bunfs/root/chunk-ksycv8y0.js\").ArtifactTool))",
-				"detail": "isEnabled(){rwi();let e=POn();return owi(e),e===null&&!Ql()}"
+				"gate": "Ki (=Pi(import.meta.require(\"/$bunfs/root/chunk-mdz2egch.js\").ARTIFACT_TOOL_HEAD,()=>import.meta.require(\"/$bunfs/root/chunk-tq1h1q3n.js\").ArtifactTool))",
+				"detail": "isEnabled(){mPi();let e=tDn();return hPi(e),e===null&&!Fl()}"
 			},
 			{ "name": "ArtifactCheck" },
 			{ "name": "ArtifactComments" },
 			{ "name": "ArtifactData" },
-			{ "name": "AskUserQuestion", "detail": "isEnabled(){return R9()}" },
-			{ "name": "Bash", "gate": "Ud()" },
+			{ "name": "AskUserQuestion", "detail": "isEnabled(){return Z8()}" },
+			{ "name": "Bash", "gate": "Jd()" },
 			{
 				"name": "ClaudeDesign",
-				"gate": "e (=vu())",
-				"detail": "isEnabled:ult"
+				"gate": "e (=Iu())",
+				"detail": "isEnabled:rft"
 			},
-			{ "name": "CronCreate", "detail": "isEnabled(){return zF()}" },
-			{ "name": "CronDelete", "detail": "isEnabled(){return Ctr()}" },
-			{ "name": "CronList", "detail": "isEnabled(){return Ctr()}" },
-			{ "name": "DesignSync", "detail": "isEnabled(){return o9()}" },
+			{ "name": "CronCreate", "detail": "isEnabled(){return rU()}" },
+			{ "name": "CronDelete", "detail": "isEnabled(){return Rlr()}" },
+			{ "name": "CronList", "detail": "isEnabled(){return Rlr()}" },
+			{ "name": "DesignSync", "detail": "isEnabled(){return E8()}" },
 			{ "name": "Edit" },
 			{
 				"name": "EndConversation",
-				"gate": "Ui (=import.meta.require(\"/$bunfs/root/chunk-vcdsv9tn.js\").EndConversationTool)",
-				"detail": "isEnabled(){let e=EFt();return e!==void 0&&aHo(e)}"
+				"gate": "Ui (=import.meta.require(\"/$bunfs/root/chunk-a92t9em6.js\").EndConversationTool)",
+				"detail": "isEnabled(){let e=$Bt();return e!==void 0&&ujo(e)}"
 			},
 			{
 				"name": "EnterPlanMode",
-				"detail": "isEnabled(){return kne.isEnabled()}"
+				"detail": "isEnabled(){return yoe.isEnabled()}"
 			},
-			{ "name": "EnterWorktree", "gate": "Sfn()" },
+			{ "name": "EnterWorktree", "gate": "oyn()" },
 			{
 				"name": "ExitPlanMode",
-				"detail": "isEnabled(){return Du()?api():R9()}"
+				"detail": "isEnabled(){return Iu()?sAi():Z8()}"
 			},
-			{ "name": "ExitWorktree", "gate": "Sfn()" },
+			{ "name": "ExitWorktree", "gate": "oyn()" },
 			{
 				"name": "FetchInboxMessage",
-				"detail": "isEnabled(){return Xd()||Xar()!==void 0}"
+				"detail": "isEnabled(){return lc()||shr()!==void 0}"
 			},
-			{ "name": "GetGoal", "detail": "isEnabled(){return Glt()!==void 0}" },
+			{ "name": "GetGoal", "detail": "isEnabled(){return Fft()!==void 0}" },
 			{ "name": "GetTask", "detail": "isEnabled(){return!1}" },
-			{ "name": "Glob", "gate": "(r)=>!L5().has(r.name)" },
-			{ "name": "Grep", "gate": "(r)=>!L5().has(r.name)" },
-			{ "name": "LSP", "gate": "ypt()", "detail": "isEnabled(){return Ect()}" },
+			{ "name": "Glob", "gate": "(r)=>!JG().has(r.name)" },
+			{ "name": "Grep", "gate": "(r)=>!JG().has(r.name)" },
+			{ "name": "LSP", "gate": "f_t()", "detail": "isEnabled(){return mmt()}" },
 			{
 				"name": "ListAgents",
-				"gate": "ta (=import.meta.require(\"/$bunfs/root/chunk-aey1cypd.js\").ListAgentsTool)",
-				"detail": "isEnabled(){return Sp().messagingBeyondOwnAgentsDisabled||xl()}"
+				"gate": "oa (=import.meta.require(\"/$bunfs/root/chunk-tbq5qa4m.js\").ListAgentsTool)",
+				"detail": "isEnabled(){return Mp().messagingBeyondOwnAgentsDisabled||Nl()}"
 			},
 			{
 				"name": "ListConnectors",
-				"gate": "zi (=import.meta.require(\"/$bunfs/root/chunk-fd5bfd98.js\").ListConnectorsTool)",
-				"detail": "isEnabled:i7e"
+				"gate": "Bi (=import.meta.require(\"/$bunfs/root/chunk-6ff3mbbj.js\").ListConnectorsTool)",
+				"detail": "isEnabled:DQe"
 			},
 			{ "name": "ListMcpResourcesTool" },
 			{ "name": "ListPlugins" },
 			{ "name": "ListSkills" },
 			{
 				"name": "McpTaskResumePolling",
-				"gate": "Gi (=import.meta.require(\"/$bunfs/root/chunk-ayyfbsnd.js\").McpTaskResumePollingTool)",
-				"detail": "isEnabled:tCn"
+				"gate": "Gi (=import.meta.require(\"/$bunfs/root/chunk-qwd1kgkt.js\").McpTaskResumePollingTool)",
+				"detail": "isEnabled:i0n"
 			},
 			{
 				"name": "MonitorTool",
-				"gate": "Wi (=import.meta.require(\"/$bunfs/root/chunk-1rr11rkk.js\").MonitorTool)"
+				"gate": "Wi (=import.meta.require(\"/$bunfs/root/chunk-zvdya5d8.js\").MonitorTool)"
 			},
 			{ "name": "NotebookEdit" },
-			{ "name": "OfferChromeSetup", "detail": "isEnabled:Pxo" },
-			{ "name": "PauseGoal", "detail": "isEnabled(){return Glt()!==void 0}" },
+			{ "name": "OfferChromeSetup", "detail": "isEnabled:BNo" },
+			{ "name": "PauseGoal", "detail": "isEnabled(){return Fft()!==void 0}" },
 			{
 				"name": "Poll",
-				"gate": "Ke (=import.meta.require(\"/$bunfs/root/chunk-6hn9rz3m.js\").PollTool)",
-				"detail": "isEnabled(){return wO()}"
+				"gate": "Ye (=import.meta.require(\"/$bunfs/root/chunk-a7gfbt1r.js\").PollTool)",
+				"detail": "isEnabled(){return HR()}"
 			},
 			{
 				"name": "PowerShell",
-				"gate": "rr()",
+				"gate": "nr()",
 				"detail": "isEnabled(){return!0}"
 			},
 			{
 				"name": "Projects",
-				"detail": "isEnabled(){return Cn(\"allow_projects_tool\")&&Qe()!==void 0}"
+				"detail": "isEnabled(){return Cn(\"allow_projects_tool\")&&ot()!==void 0}"
 			},
-			{ "name": "PublishPlugin", "detail": "isEnabled(){return aLr()}" },
+			{ "name": "PublishPlugin", "detail": "isEnabled(){return DBr()}" },
 			{
 				"name": "PushNotification",
-				"gate": "ji (=import.meta.require(\"/$bunfs/root/chunk-t94s3xy2.js\").PushNotificationTool)",
-				"detail": "isEnabled(){return $ee(\"tengu_kairos_push_notifications\",!1,R)}"
+				"gate": "ji (=import.meta.require(\"/$bunfs/root/chunk-fcpsf9hj.js\").PushNotificationTool)",
+				"detail": "isEnabled(){return Ane(\"tengu_kairos_push_notifications\",!1,R)}"
 			},
 			{
 				"name": "REPL",
-				"gate": "o (=ra())",
-				"detail": "isEnabled(){return Ba()}"
+				"gate": "o (=na())",
+				"detail": "isEnabled(){return Xa()}"
 			},
 			{ "name": "Read" },
 			{ "name": "ReadMcpResourceDirTool" },
 			{ "name": "ReadMcpResourceTool" },
-			{ "name": "ReadNotifications", "detail": "isEnabled:PLr" },
-			{ "name": "ReadWidgetContext", "detail": "isEnabled:z4t" },
+			{ "name": "ReadNotifications", "detail": "isEnabled:EWr" },
+			{ "name": "ReadWidgetContext", "detail": "isEnabled:q8t" },
 			{
 				"name": "RefreshMcpTools",
 				"gate": "s.CLAUDE_CODE_ENABLE_REFRESH_MCP_TOOLS",
-				"detail": "isEnabled(){let e=pg();return e!==void 0&&e.length>0}"
+				"detail": "isEnabled(){let e=vg();return e!==void 0&&e.length>0}"
 			},
 			{
 				"name": "RemoteTrigger",
-				"gate": "Di (=import.meta.require(\"/$bunfs/root/chunk-xzm9e865.js\").RemoteTriggerTool)",
-				"detail": "isEnabled(){return Bn()&&Lt()&&!s.CLAUDE_CODE_REMOTE&&!0&&Cn(\"allow_remote_sessions\")&&Cn(mne)}"
+				"gate": "Li (=import.meta.require(\"/$bunfs/root/chunk-b5h76n9n.js\").RemoteTriggerTool)",
+				"detail": "isEnabled(){return Bn()&&Ot()&&!s.CLAUDE_CODE_REMOTE&&!0&&Cn(\"allow_remote_sessions\")&&Cn(coe)}"
 			},
 			{ "name": "ReportFindings" },
 			{ "name": "ScheduleWakeup", "detail": "isEnabled(){return!0}" },
 			{
 				"name": "SearchMcpRegistry",
-				"gate": "Fi (=import.meta.require(\"/$bunfs/root/chunk-1557vhj0.js\").SearchMcpRegistryTool)",
-				"detail": "isEnabled:i7e"
+				"gate": "Mi (=import.meta.require(\"/$bunfs/root/chunk-gjzj8a8x.js\").SearchMcpRegistryTool)",
+				"detail": "isEnabled:DQe"
 			},
 			{ "name": "SearchPlugins" },
 			{ "name": "SearchSkills" },
-			{ "name": "SendFeedback", "detail": "isEnabled(){return Tne()}" },
-			{ "name": "SendFile", "detail": "isEnabled(){return Bpt()}" },
+			{ "name": "SendFeedback", "detail": "isEnabled(){return woe()}" },
+			{ "name": "SendFile", "detail": "isEnabled(){return L_t()}" },
 			{ "name": "SendMessage" },
 			{
 				"name": "SendToProject",
-				"gate": "Hi (=import.meta.require(\"/$bunfs/root/chunk-0jv086f5.js\").ContinueInProjectsTool)",
-				"detail": "isEnabled(){return yVn()}"
+				"gate": "Hi (=import.meta.require(\"/$bunfs/root/chunk-mtjyx587.js\").ContinueInProjectsTool)",
+				"detail": "isEnabled(){return n8n()}"
 			},
 			{
 				"name": "SendToProjectContext",
-				"gate": "qi (=import.meta.require(\"/$bunfs/root/chunk-0jv086f5.js\").ContinueInProjectsContextTool)",
-				"detail": "isEnabled(){return yVn()}"
+				"gate": "qi (=import.meta.require(\"/$bunfs/root/chunk-mtjyx587.js\").ContinueInProjectsContextTool)",
+				"detail": "isEnabled(){return n8n()}"
 			},
 			{
 				"name": "SendUserFile",
-				"detail": "isEnabled(){let t=!s.CLAUDE_CODE_ATTACHMENTS_BY_PATH;if(t&&(Te()!==\"firstParty\"||wt()))return!1;if(t&&!Cn(\"allow_send_file\"))return!1;if(!b(\"tengu_send_user_file\",!0))return!1;return(Xd()||P())&&!tW()…"
+				"detail": "isEnabled(){let t=!s.CLAUDE_CODE_ATTACHMENTS_BY_PATH;if(t&&(Ee()!==\"firstParty\"||wt()))return!1;if(t&&!Cn(\"allow_send_file\"))return!1;if(!b(\"tengu_send_user_file\",!0))return!1;return(lc()||P())&&!nU()…"
 			},
 			{
 				"name": "SendUserMessage",
-				"detail": "isEnabled(){return tW()||xpt()}"
+				"detail": "isEnabled(){return nU()||u_t()}"
 			},
 			{
 				"name": "SetGoal",
-				"detail": "isEnabled(){let e=Glt();if(e===void 0)return!1;return M(e),!0}"
+				"detail": "isEnabled(){let e=Fft();if(e===void 0)return!1;return M(e),!0}"
 			},
-			{ "name": "ShareOnboardingGuide", "detail": "isEnabled(){return XSn()}" },
+			{ "name": "ShareOnboardingGuide", "detail": "isEnabled(){return ZTn()}" },
 			{ "name": "ShowOnboardingRolePicker", "detail": "isEnabled:Ea" },
-			{ "name": "Skill", "detail": "isEnabled(){return!Vg()}" },
+			{ "name": "Skill", "detail": "isEnabled(){return!dg()}" },
 			{
 				"name": "SuggestConnectors",
-				"gate": "$i (=import.meta.require(\"/$bunfs/root/chunk-xmwehb6f.js\").SuggestConnectorsTool)",
-				"detail": "isEnabled:i7e"
+				"gate": "Fi (=import.meta.require(\"/$bunfs/root/chunk-j7m85ex4.js\").SuggestConnectorsTool)",
+				"detail": "isEnabled:DQe"
 			},
-			{ "name": "SuggestPluginInstall", "detail": "isEnabled:TAt" },
-			{ "name": "SuggestSkills", "detail": "isEnabled:TAt" },
+			{ "name": "SuggestPluginInstall", "detail": "isEnabled:xOt" },
+			{ "name": "SuggestSkills", "detail": "isEnabled:xOt" },
 			{
 				"name": "TaskCreate",
-				"gate": "T$()",
-				"detail": "isEnabled(){return $Re()}"
+				"gate": "$B()",
+				"detail": "isEnabled(){return UOe()}"
 			},
 			{
 				"name": "TaskGet",
-				"gate": "T$()",
-				"detail": "isEnabled(){return $Re()}"
+				"gate": "$B()",
+				"detail": "isEnabled(){return UOe()}"
 			},
 			{
 				"name": "TaskList",
-				"gate": "T$()",
-				"detail": "isEnabled(){return $Re()}"
+				"gate": "$B()",
+				"detail": "isEnabled(){return UOe()}"
 			},
 			{ "name": "TaskStop" },
 			{
 				"name": "TaskUpdate",
-				"gate": "T$()",
-				"detail": "isEnabled(){return $Re()}"
+				"gate": "$B()",
+				"detail": "isEnabled(){return UOe()}"
 			},
-			{ "name": "TodoWrite", "detail": "isEnabled(){return!T$()&&Kne()}" },
+			{ "name": "TodoWrite", "detail": "isEnabled(){return!$B()&&zoe()}" },
 			{
 				"name": "ToolSearch",
-				"gate": "t_()",
-				"detail": "isEnabled(){return t_()}"
+				"gate": "__()",
+				"detail": "isEnabled(){return __()}"
 			},
 			{
 				"name": "WaitForMcpServers",
-				"detail": "isEnabled(){return RCs(dt(),pg()??[])}"
+				"detail": "isEnabled(){return tws(ct(),vg()??[])}"
 			},
 			{
 				"name": "WebFetch",
-				"detail": "isEnabled(){return!s.CLAUDE_CODE_DISABLE_WEB_FETCH&&Cn(c4e)}"
+				"detail": "isEnabled(){return!s.CLAUDE_CODE_DISABLE_WEB_FETCH&&Cn(ECe)}"
 			},
 			{
 				"name": "WebSearch",
-				"detail": "isEnabled(){if(!Cn(Kqa))return!1;let e=Te();if(e===\"firstParty\"||sD(e))return!0;if(e===\"gateway\")return!1;if(e===\"vertex\")return Ils(ht(dt()));if(e===\"foundry\")return!0;return!1}"
+				"detail": "isEnabled(){if(!Cn(oll))return!1;let e=Ee();if(e===\"firstParty\"||xO(e))return!0;if(e===\"gateway\")return!1;if(e===\"vertex\")return qys(_t(ct()));if(e===\"foundry\")return!0;return!1}"
 			},
-			{ "name": "Workflow", "detail": "isEnabled:()=>_g()" },
+			{ "name": "Workflow", "detail": "isEnabled:()=>Mg()" },
 			{
 				"name": "WrapUp",
-				"detail": "isEnabled(){return N2i()&&!q7()&&Gt(ja,!1)&&(!U2i()||Gt(Ua,!1))}"
+				"detail": "isEnabled(){return eQi()&&!pJ()&&Ht(Ua,!1)&&(!nQi()||Ht(Ha,!1))}"
 			},
 			{ "name": "Write" },
 			{
 				"name": "Yield",
-				"gate": "tr (=import.meta.require(\"/$bunfs/root/chunk-y12rem8e.js\").YieldTool)",
-				"detail": "isEnabled:zvn"
+				"gate": "or (=import.meta.require(\"/$bunfs/root/chunk-h40jhrmz.js\").YieldTool)",
+				"detail": "isEnabled:VPn"
 			},
 			{ "name": "enable__mcp__claude-in-chrome" },
 			{ "name": "enable__mcp__remote-devices__Claude_Browser" },
 			{ "name": "enable__mcp__remote-devices__computer" },
-			{ "name": "memory_list", "detail": "isEnabled(){return jKe()}" },
-			{ "name": "memory_read", "detail": "isEnabled(){return jKe()}" },
-			{ "name": "memory_write", "detail": "isEnabled(){return jKe()}" },
+			{ "name": "memory_list", "detail": "isEnabled(){return h5e()}" },
+			{ "name": "memory_read", "detail": "isEnabled(){return h5e()}" },
+			{ "name": "memory_write", "detail": "isEnabled(){return h5e()}" },
 			{
 				"name": "propose_skills",
-				"detail": "isEnabled(){if(yZ())return!1;if(P_())return s.CLAUDE_CODE_SYNC_SKILLS&&!jx();if(!rm()&&!s.CLAUDE_CODE_SKILL_PROPOSALS&&!Kh())return!1;if(!s.CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE&&!(ft()&&s.CLAUDE_CODE_S…"
+				"detail": "isEnabled(){if(bK())return!1;if(Wy())return s.CLAUDE_CODE_SYNC_SKILLS&&!EP();if(!Hm()&&!s.CLAUDE_CODE_SKILL_PROPOSALS&&!Dm())return!1;if(!s.CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE&&!(at()&&s.CLAUDE_CODE_S…"
 			},
 			{ "name": "request_computer" },
-			{ "name": "self_hosted_runner_get_pool", "gate": "Pi()" },
-			{ "name": "self_hosted_runner_list_runners", "gate": "Pi()" },
-			{ "name": "self_hosted_runner_list_secrets", "gate": "Pi()" },
-			{ "name": "self_hosted_runner_list_sessions", "gate": "Pi()" },
-			{ "name": "self_hosted_runner_read_health", "gate": "Pi()" },
-			{ "name": "self_hosted_runner_read_metrics", "gate": "Pi()" },
-			{ "name": "self_hosted_runner_requeue_session", "gate": "Pi()" },
-			{ "name": "self_hosted_runner_spawn_local", "gate": "Pi()" },
-			{ "name": "self_hosted_runner_tail_log", "gate": "Pi()" }
+			{ "name": "self_hosted_runner_get_pool", "gate": "Di()" },
+			{ "name": "self_hosted_runner_list_runners", "gate": "Di()" },
+			{ "name": "self_hosted_runner_list_secrets", "gate": "Di()" },
+			{ "name": "self_hosted_runner_list_sessions", "gate": "Di()" },
+			{ "name": "self_hosted_runner_read_health", "gate": "Di()" },
+			{ "name": "self_hosted_runner_read_metrics", "gate": "Di()" },
+			{ "name": "self_hosted_runner_requeue_session", "gate": "Di()" },
+			{ "name": "self_hosted_runner_spawn_local", "gate": "Di()" },
+			{ "name": "self_hosted_runner_tail_log", "gate": "Di()" }
 		]
 	}
 }

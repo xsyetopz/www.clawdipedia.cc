@@ -38,12 +38,15 @@ The `ultrathink` boost works on models whose catalog entry has the capability `p
 The boost needs all of these:
 
 - Ultrathink is on. `CLAUDE_CODE_DISABLE_ULTRATHINK` is not set, and the `tengu_turtle_carbon` flag is on (it defaults to on).
-- The session is interactive, or it runs from the VS Code extension or from Claude Desktop.
+- The session is interactive, or it runs from the VS Code extension or from Claude Desktop, and that host is not a child session.
+- The effort level in use is below `xhigh`. At `xhigh` or `max` the turn already runs at that level, and no boost is sent.
 - The session is not remote, and `CLAUDE_CODE_EFFORT_LEVEL` is not set. A value of `auto` or `unset` also turns the boost off.
 - The model accepts effort levels, has the `per_turn_effort` capability, and has the `xhigh_effort` capability.
 - The provider is the Anthropic API, Claude Platform on AWS, Claude Platform on Google Cloud, or Foundry. Bedrock, Vertex, Mantle, and gateways do not pass.
 - `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS` is not set, and HIPAA mode is off.
 - The server has not refused the `per-turn-control-2026-07-01` beta or the mid-conversation system beta in this session.[^ultrathink-conditions]
+
+A prompt that a remote client marks with `ultrathink_typed` uses a wider session test. A session that is not interactive also passes when it has a remote entrypoint (`remote`, `remote_desktop`, or `remote_mobile`) or when `CLAUDE_CODE_ENVIRONMENT_KIND` is `bridge` and the session is not a child session. All other conditions stay the same.[^ultrathink-remote]
 
 The flag for the note is true when the request sent a level, no turn effort is set, the sent level differs from the shown level, and the model passes the per-turn check.[^note-flag] The note clears when one of these stops being true. Claude Code then removes the `effort-level` notification.[^note-clear] Claude Code builds the prompt text in one place.[^prompt-text]
 
@@ -127,21 +130,22 @@ Both rows are about a model name that Claude Code does not recognize, such as a 
 
 ## Sources
 
-[^effort-field]: The program, `chunk-56bhcxay.js:3400171-3400439`. A background request that the program marks as leaving effort support alone keeps its effort field for the next requests to that model.
-[^cache-warning]: The program, `chunk-j2wfp6sf.js:1032133` (the title) and `chunk-j2wfp6sf.js:1032729` (the text; a hook reason replaces it).
-[^per-turn]: The program, `chunk-b60sxmve.js:4270`, `chunk-b60sxmve.js:9693`, `chunk-b60sxmve.js:16334`, `chunk-b60sxmve.js:18424`, `chunk-b60sxmve.js:19536`, `chunk-b60sxmve.js:21659`. Also the [Claude Code changelog](https://code.claude.com/docs/en/changelog).
-[^ultrathink-submit]: The program (`2.1.328`), `chunk-yv54xvss.js:64577` for the submit, where the turn effort is `xhigh` when the model passes the gate, and `chunk-2b3eg071.js:108454` for a prompt that joins the turn while it runs.
-[^ultrathink-gate]: The program. The prompt input colors a word only when the gate `chunk-hscvkewq.js:29250` passes for the model (it needs ultrathink on, and `chunk-hscvkewq.js:29511` checks that the model can run the turn at `xhigh`): `chunk-j2wfp6sf.js:988273` picks the words, and `chunk-j2wfp6sf.js:992053` paints each letter with a rainbow color. The word finder is `chunk-82x5drqv.js:21183`. The SDK schema says "The terminal colors the word by this rule", `chunk-20bv8pca.js:485138`.
-[^ultrathink-conditions]: The program (`2.1.328`). The gate `DOe` is `chunk-hscvkewq.js:29259`: ultrathink on (`chunk-xethrx83.js:520950`), then `!Se()||D0e()`, then `ce`. `Se` is "not interactive" (`chunk-0fvmdxeb.js:120103`). `D0e` is true for the `claude-vscode` entrypoint, or for `claude-desktop` and `claude-desktop-3p` (`chunk-374y7r0w.js:2892`, `chunk-374y7r0w.js:10112`). `ce` needs `de` (`chunk-hscvkewq.js:22046`: model accepts effort, session not remote through `chunk-dnb2wmj7.js:907`, and `CLAUDE_CODE_EFFORT_LEVEL` read by `chunk-hscvkewq.js:23597` is `undefined`), then `kFt` (`chunk-xethrx83.js:371925`), then a turn effort of `xhigh` that resolves to `xhigh`, which needs `xhigh_effort` (`chunk-hscvkewq.js:19182`). `kFt` needs `Itn` (`chunk-xethrx83.js:371585`: the `per_turn_effort` capability and the provider check `tte`) and that the beta is not in the rejected set. The provider list is `xb` and `rTe` (`chunk-20bv8pca.js:173097`, `chunk-20bv8pca.js:173411`) joined with `tte` (`chunk-b60sxmve.js:35305`), which reads the provider from `Te` (`chunk-b60sxmve.js:34347`). The beta names are at `chunk-20bv8pca.js:171188`.
-[^note-flag]: The program, `chunk-j2wfp6sf.js:1074720`.
-[^note-clear]: The program, `chunk-j2wfp6sf.js:1074952`.
-[^prompt-text]: The program, `chunk-j2wfp6sf.js:192721`.
-[^request-level]: The program, `chunk-56bhcxay.js:3375110` and `chunk-56bhcxay.js:3451575`.
-[^sent-level]: The program, `chunk-9520eh70.js:8060`.
-[^spinner-level]: The program, `chunk-hscvkewq.js:30416` and `chunk-6zjv20ap.js:7304`.
-[^model-settings]: The program, `chunk-hscvkewq.js:26662`, `chunk-hscvkewq.js:27065`.
-[^effort-source]: [Model Configuration](https://code.claude.com/docs/en/model-config), section "Adjust effort level", and the program, `chunk-hscvkewq.js:26662`.
-[^should-retry]: The program, `chunk-56bhcxay.js:167955`.
-[^overload-delay]: The program, `chunk-7343wm3k.js:80843`. The default is in `chunk-xethrx83.js:299823`.
-[^max-wait]: The program, `chunk-7343wm3k.js:80949` and `chunk-56bhcxay.js:3263033`. The gate is `tengu_steady_heron`.
-[^refusal]: The program, `chunk-y5weakn8.js:16007-16016`, which reads the variable and the `switchModelsOnFlag` setting.
+[^effort-field]: The program, `chunk-hg1yqkjk.js:166157-166162` (`leavesEffortSupportAlone` and the `output_config.effort` retry). A background request that the program marks as leaving effort support alone keeps its effort field for the next requests to that model.
+[^cache-warning]: The program, `chunk-zs9k1w9q.js:64639` (the title) and `chunk-zs9k1w9q.js:64675-64680` (the text; a hook reason replaces it).
+[^per-turn]: The program, `chunk-cd3hqxcc.js:224`, `chunk-cd3hqxcc.js:451`, `chunk-cd3hqxcc.js:758`, `chunk-cd3hqxcc.js:852`, `chunk-cd3hqxcc.js:901`, and `chunk-cd3hqxcc.js:1007` (the `per_turn_effort` capability of six catalog entries). Also the [Claude Code changelog](https://code.claude.com/docs/en/changelog).
+[^ultrathink-submit]: The program, `chunk-abjbjs57.js:3875-3876` for the submit, where the turn effort is `xhigh` when the model passes the gate, and `chunk-wm04tzdx.js:6651-6655` (`ultrathink_effort`) for a prompt that joins the turn while it runs.
+[^ultrathink-gate]: The program. The prompt input colors a word only when the gate `chunk-zs9k1w9q.js:61658` (`$94e4a7`) passes for the model, which is the check `chunk-xvh0qanc.js:1613-1615`. `chunk-rvqem0xc.js:1265` finds the word `ultrathink`, and `chunk-zs9k1w9q.js:61944` (`$3dc64d`) paints each letter with a rainbow color. The SDK schema says "The terminal colors the word by this rule", `chunk-w03c3634.js:14105`.
+[^ultrathink-conditions]: The program. The check is `chunk-xvh0qanc.js:1613-1615` for a typed word that the prompt colors, and `chunk-xvh0qanc.js:1627-1632` (`$4a1414`, which checks that the level is below `xhigh`) for the submit and for a word typed while a turn runs. For a normal prompt it uses the same test as the color. Ultrathink on is `chunk-aq3ms068.js:24476-24480` (`CLAUDE_CODE_DISABLE_ULTRATHINK` and `tengu_turtle_carbon`). The session is interactive through `chunk-kgzzwvwc.js:6916-6917` (`isInteractive`), or it is the `claude-vscode` entrypoint (`chunk-0v6g5ynk.js:578-582`), or it is `claude-desktop` or `claude-desktop-3p` (`chunk-0v6g5ynk.js:139-143`). The model check is `chunk-xvh0qanc.js:1635-1641`: it needs a model that accepts effort, a session that is not remote (`chunk-0yzsvyn8.js:53-54`), and `CLAUDE_CODE_EFFORT_LEVEL` read by `chunk-xvh0qanc.js:1303-1307` to be undefined (`auto` and `unset` give `null`). The turn effort `xhigh` must stay `xhigh`, which needs `xhigh_effort` (`chunk-xvh0qanc.js:1052-1054`). The `per_turn_effort` capability and the provider are at `chunk-aq3ms068.js:17217-17219`. The provider list is `chunk-w03c3634.js:6959-6961` (first-party, Claude Platform on AWS and Google Cloud, and Foundry), and `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS` and HIPAA mode switch the beta off at `chunk-w03c3634.js:6963-6967`. The refused-beta check is `chunk-aq3ms068.js:17232-17233` (`$e5f633`), with the names `per-turn-control-2026-07-01` at `chunk-w03c3634.js:6813` and `mid-conversation-system-2026-04-07` at `chunk-w03c3634.js:6812`.
+[^ultrathink-remote]: The program. `$4a1414` takes a third argument. When it is true, it uses `$fb1f22` (`chunk-xvh0qanc.js:1616-1625`) in place of `$2de35a` (`chunk-xvh0qanc.js:1613-1615`). The only callers that pass true give it the `ultrathinkTyped` value of a user message. The submit does this at `chunk-abjbjs57.js:3875-3876` (it sets `xhigh`; the value is `ultrathinkTyped` at `chunk-abjbjs57.js:2471`), and a message that joins a running turn does it at `chunk-wm04tzdx.js:6651`. The value comes from the `ultrathink_typed` field of the message (`chunk-nxwpaxwj.js:7673-7676`). The schema marks the field "@internal" and says the sender claims it, `chunk-w03c3634.js:12443`. The extra branch is a remote entrypoint (`chunk-0v6g5ynk.js:64`, `chunk-0v6g5ynk.js:522-529`) or `CLAUDE_CODE_ENVIRONMENT_KIND` of `bridge` outside a child session (`chunk-92h2y9s9.js:123-127`).
+[^note-flag]: The program, `chunk-zs9k1w9q.js:67654` (`a376` holds the `sentEffort` and `turnEffort` test).
+[^note-clear]: The program, `chunk-zs9k1w9q.js:67668` (`a211($b5c745)` removes the `effort-level` notification when `a376` is false).
+[^prompt-text]: The program, `chunk-zs9k1w9q.js:13486`.
+[^request-level]: The program, `chunk-hg1yqkjk.js:165191` (`output_config`) and `chunk-hg1yqkjk.js:169058` (`sentEffort` on the `message_start` event).
+[^sent-level]: The program, `chunk-kkty3tcc.js:446` (`sentEffort` set by `setSentEffort`) and `chunk-zs9k1w9q.js:107374` (`setSentEffort`).
+[^spinner-level]: The program, `chunk-xvh0qanc.js:1688-1695` (`$6e1da6`, the level `a4` that the spinner gets comes before the resolved level) and `chunk-3z86622w.js:595` (`sentEffort` goes in as `a20`).
+[^model-settings]: The program, `chunk-xvh0qanc.js:1456` and `chunk-xvh0qanc.js:1139` (`modelSettings`).
+[^effort-source]: [Model Configuration](https://code.claude.com/docs/en/model-config), section "Adjust effort level", and the program, `chunk-xvh0qanc.js:1456` (`effortLevel` inside `modelSettings`).
+[^should-retry]: The program, `chunk-hg1yqkjk.js:160380`.
+[^overload-delay]: The program, `chunk-gvhwnc7g.js:3464-3465` (`min: 500, max: 32000` and `min: 32000, max: 300000`). The defaults are in `chunk-aq3ms068.js:13737` (`500`) and `chunk-aq3ms068.js:13752` (`32000`).
+[^max-wait]: The program, `chunk-gvhwnc7g.js:3466` (`min: 300000, max: 3600000`) and `chunk-hg1yqkjk.js:158391-158398` (`CLAUDE_CODE_OVERLOADED_RETRY_MAX_WAIT_MS`). The gate is `tengu_steady_heron`.
+[^refusal]: The program, `chunk-76t3g1yn.js:16022-16031`, which reads the variable and the `switchModelsOnFlag` setting.

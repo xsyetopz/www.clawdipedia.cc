@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-transcript.json",
-	"title": "Claude Code transcript JSONL entry (Claude Code 2.1.328)",
-	"$comment": "For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.328 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to \"transcript\"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:\"<entry type>\" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
+	"title": "Claude Code transcript JSONL entry (Claude Code 2.1.329)",
+	"$comment": "For one line of a session transcript (.jsonl). Generated from Claude Code 2.1.329 by tools/schemas/code.ts. Anchors: the entry type registry (an object literal whose first keys are user, assistant, system, attachment, mapped to \"transcript\"); the literal built in the writer's insertMessageChain (key logicalParentUuid) and its two spreads for the common fields of message lines; every object literal with a top-level type:\"<entry type>\" (non-message types need a sessionId key), with its spreads resolved in the module that declares each function (imports followed); and, for a key a probe saw that no such literal has, the later write: a copy of the line ({...line, key}), a function spread into one, or last a property assignment. Keys are the union over all write sites; a string value that differs between sites is an enum, and one that is a literal at one site and computed at another is x-unverified. Probe print/transcripts.lines.json marks the observed keys. Do not edit by hand. A field that is still x-unverified may carry x-observed-type: the JSON types that real payloads had there, from the fixtures in tools/schemas/observed/ (stub probes and local files, no value kept). It is a note, not a check.",
 	"type": "object",
 	"oneOf": [
 		{
@@ -1106,6 +1106,9 @@
 				"isUnmetered": {
 					"type": "boolean"
 				},
+				"closesQuietTurn": {
+					"type": "boolean"
+				},
 				"modWroteCall": {
 					"type": "boolean"
 				},
@@ -1142,25 +1145,6 @@
 				},
 				"attributionMcpTool": {
 					"type": "string"
-				},
-				"cutInUnfinishedBlock": {
-					"const": true
-				},
-				"toolCallCutAtOutputLimit": {
-					"const": true
-				},
-				"healsDistinctCarrier": {
-					"type": "boolean",
-					"enum": [true]
-				},
-				"refusedToolUseIds": {
-					"type": "array",
-					"items": {
-						"type": "string"
-					}
-				},
-				"isAbortedMidStream": {
-					"type": "boolean"
 				},
 				"batchToolUses": {
 					"type": "array",
@@ -1255,9 +1239,15 @@
 				"thinkingDisplay": {
 					"type": "string"
 				},
+				"isAbortedMidStream": {
+					"type": "boolean"
+				},
 				"toolInputStreamMs": {
 					"type": "number",
 					"x-observed": true
+				},
+				"staysIfReplyIsCut": {
+					"type": "boolean"
 				},
 				"resumedFromIncompleteThinking": {
 					"type": "boolean"
@@ -1334,9 +1324,68 @@
 				},
 				"slug": {
 					"type": "string"
+				},
+				"healsDistinctCarrier": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"refusedToolUseIds": {
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment.",
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"scriptErrorCopy": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"failedResponseHadNoToolCall": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"cutInUnfinishedBlock": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"oauthRefreshDiskFull": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"refusedMessageId": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"refusingModel": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"streamCutCause": {
+					"type": "string",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"streamCutError": {
+					"type": "object",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"streamWatchdogGaveUp": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"summaryMessages": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"retractedMessageUuids": {
+					"type": "array",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"toolCallCutAtOutputLimit": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
 				}
 			},
-			"$comment": "Registry policy: transcript. Code sites used: 10."
+			"$comment": "Registry policy: transcript. Code sites used: 9."
 		},
 		"atis-latch": {
 			"type": "object",
@@ -1638,6 +1687,34 @@
 				},
 				"slug": {
 					"type": "string"
+				},
+				"tools": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"system": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"messages": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"fastModeSent": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"durationMs": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"summaryMessages": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"virtualInResumeRun": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
 				}
 			},
 			"$comment": "Registry policy: transcript. Code sites used: 9."
@@ -1854,12 +1931,20 @@
 				"sessionId": {
 					"type": "string"
 				},
+				"codes": {
+					"type": "array",
+					"items": {
+						"type": "integer",
+						"minimum": 1,
+						"maximum": 255
+					}
+				},
 				"agentId": {
-					"type": "string",
-					"minLength": 1
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment.",
+					"type": "string"
 				}
 			},
-			"$comment": "Registry policy: accumulate. Code sites used: 7."
+			"$comment": "Registry policy: accumulate. Code sites used: 2."
 		},
 		"data-flow-records": {
 			"type": "object",
@@ -2911,6 +2996,74 @@
 						"required": ["key", "path", "content"]
 					}
 				},
+				"error": {
+					"type": "object",
+					"properties": {
+						"message": {
+							"type": "string"
+						},
+						"status": {
+							"type": "number"
+						},
+						"requestId": {
+							"type": "string"
+						},
+						"formatted": {
+							"type": "string"
+						},
+						"connection": {
+							"properties": {
+								"code": {
+									"type": "string"
+								},
+								"message": {
+									"type": "string"
+								},
+								"isSSLError": {
+									"type": "boolean"
+								}
+							}
+						},
+						"isNetworkDown": {
+							"type": "boolean"
+						},
+						"rateLimits": {
+							"properties": {
+								"rateLimitType": {
+									"type": "string"
+								},
+								"resetsAt": {
+									"type": "integer"
+								}
+							}
+						},
+						"noResponse": {
+							"properties": {
+								"waitedMs": {
+									"type": "number"
+								},
+								"retryWaitMs": {
+									"type": "number"
+								}
+							}
+						},
+						"isCloudCredentialError": {
+							"type": "boolean"
+						}
+					}
+				},
+				"retryInMs": {
+					"type": "number"
+				},
+				"retryAttempt": {
+					"type": "number"
+				},
+				"maxRetries": {
+					"type": "number"
+				},
+				"source": {
+					"type": "string"
+				},
 				"direction": {
 					"enum": ["retry", "revert", "sticky"]
 				},
@@ -3352,74 +3505,6 @@
 						}
 					]
 				},
-				"error": {
-					"type": "object",
-					"properties": {
-						"message": {
-							"type": "string"
-						},
-						"status": {
-							"type": "number"
-						},
-						"requestId": {
-							"type": "string"
-						},
-						"formatted": {
-							"type": "string"
-						},
-						"connection": {
-							"properties": {
-								"code": {
-									"type": "string"
-								},
-								"message": {
-									"type": "string"
-								},
-								"isSSLError": {
-									"type": "boolean"
-								}
-							}
-						},
-						"isNetworkDown": {
-							"type": "boolean"
-						},
-						"rateLimits": {
-							"properties": {
-								"rateLimitType": {
-									"type": "string"
-								},
-								"resetsAt": {
-									"type": "integer"
-								}
-							}
-						},
-						"noResponse": {
-							"properties": {
-								"waitedMs": {
-									"type": "number"
-								},
-								"retryWaitMs": {
-									"type": "number"
-								}
-							}
-						},
-						"isCloudCredentialError": {
-							"type": "boolean"
-						}
-					}
-				},
-				"retryInMs": {
-					"type": "number"
-				},
-				"retryAttempt": {
-					"type": "number"
-				},
-				"maxRetries": {
-					"type": "number"
-				},
-				"source": {
-					"type": "string"
-				},
 				"message": {
 					"type": "string"
 				},
@@ -3460,14 +3545,14 @@
 				"launchedAgentId": {
 					"type": "string"
 				},
+				"source_uuid": {
+					"type": "string"
+				},
 				"fromRemoteErrorResult": {
 					"type": "boolean"
 				},
 				"preventContinuation": {
 					"type": "boolean"
-				},
-				"source_uuid": {
-					"type": "string"
 				},
 				"parentUuid": {
 					"x-observed": true,
@@ -3528,6 +3613,46 @@
 				},
 				"slug": {
 					"type": "string"
+				},
+				"connectorFileLines": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"persist": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"teamCount": {
+					"type": "number",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"verb": {
+					"type": "string",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"promptSubmitEnding": {
+					"type": "object",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"modelRestriction": {
+					"type": "object",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"tag": {
+					"type": "string",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"detail": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"aboutLine": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"virtualInResumeRun": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
 				}
 			},
 			"$comment": "Registry policy: transcript. Code sites used: 42."
@@ -4482,6 +4607,114 @@
 					"type": ["object", "string"],
 					"$comment": "Added after the line is built, by a copy of the line or a spread into one.",
 					"x-observed": true
+				},
+				"userContextReminder": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"verifiedSlackHumanTurn": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"dispatchEcho": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"notificationsRead": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"hiddenToolUseIds": {
+					"type": "array",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"detachedToolUseIds": {
+					"type": "array",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"projectsUserTurn": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"emailSenderTurn": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"answeredPost": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"interruptedBySendNow": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"appendToToolResult": {
+					"type": "string",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"durationMs": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"retractedMessageUuids": {
+					"type": "array",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"refusedUserMessageUuid": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"length": {
+					"type": "number",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"retractedWireUuids": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"sharedHeadBlocks": {
+					"type": "number",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"queueSkipSlashCommands": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"remoteSourced": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"persist": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"planContent": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"queueSkipAttachments": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"remoteToolResult": {
+					"type": "object",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"withheldScriptToolUseId": {
+					"x-unverified": true,
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"afterNotePass": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"retiredByStop": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
+				},
+				"retiredByNoPersonsInput": {
+					"type": "boolean",
+					"$comment": "Added after a constructor builds the line, by a spread literal or a member assignment."
 				}
 			},
 			"$comment": "Registry policy: transcript. Code sites used: 5."

@@ -1,13 +1,13 @@
 ---
 title: All Flags
-description: Every claude flag in 2.1.328, with the ones that claude --help hides, grouped by job.
+description: Every claude flag in 2.1.329, with the ones that claude --help hides, grouped by job.
 sidebar_position: 2
 ---
 
 A flag changes how one `claude` run behaves.
-`claude --help` shows 66 flags. Another 70 work but stay hidden from the help text.
+`claude --help` shows 66 flags. Another 73 work but stay hidden from the help text.[^count]
 This page lists both kinds in one place, grouped by what they do.
-One hidden flag has no row, because no code reads it: `--agents-view-if-allowed`. The program reads the hidden `--runner-declares`, so it has a row.[^no-row]
+The program reads the hidden `--agents-view-if-allowed` and `--runner-declares`, so each has a row.[^no-row]
 
 Pass a flag after `claude`, for example `claude --model opus`. Most flags last for one run only. A flag is on when you pass it. Some flags have a `--no-` twin, such as `--no-chrome`.
 
@@ -152,7 +152,7 @@ Flags that continue, fork, name, or rewind a session, or run it in a worktree or
 | `--fork-session` | <Documented /> | ✅ | Creates a new session ID when you resume, with `--resume` or `--continue`. |
 | `--from-pr` `[value]` | <Documented /> | ✅ | Resumes a session that links to a pull request. |
 | `--session-id` `<uuid>` | <Documented /> | ✅ | Uses a UUID that you give as the session ID. |
-| `-n`, `--name` `<name>` | <Documented /> | ✅ | Sets the display name of the session. |
+| `-n`, `--name` `<name>` | <Documented /> | ✅ | Sets the display name of the session. It also names a new cloud session.[^name-cloud] |
 | `--resume-session-at` `<message id>` | <Undocumented /> | ❌ | Resumes only up to one message of the chain, with `--resume` in print mode. |
 | `--resume-drops-turn` `<message id>` | <Undocumented /> | ❌ | Names the turn that a truncating resume drops. The resume fails if more would go. |
 | `--reply-on-resume` | <Undocumented /> | ❌ | Asks the model to reply at once when the transcript ends with a user message. |
@@ -170,6 +170,7 @@ Flags that add agents, plugins, MCP servers, folders, and files.
 | --- | --- | --- | --- |
 | `--agent` `<agent>` | <Documented /> | ✅ | Sets the agent of the session and overrides the `agent` setting. |
 | `--agents` `<json-or-file>` | <Documented /> | ✅ | Defines custom agents with JSON or a file. |
+| `--agents-view-if-allowed` | <Undocumented /> | ❌ | Hidden, with no description. In `2.1.329` the program reads it. With the flag, a start opens the agent view, as `claude agents` does, unless the agent view is off. The agent view is off when `CLAUDE_CODE_DISABLE_AGENT_VIEW` is set or the `disableAgentView` setting is `true`. Then the program starts a normal session. The flag does nothing while the program shuts down.[^agents-view] |
 | `--mcp-config <configs...>` | <Documented /> | ✅ | Loads MCP servers from JSON files or strings. |
 | `--strict-mcp-config` | <Documented /> | ✅ | Uses only the MCP servers from `--mcp-config`. |
 | `--plugin-dir <path>` | <Documented /> | ✅ | Loads a plugin from a folder or a `.zip` file for this session only. |
@@ -260,30 +261,34 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^no-row]: The program. `--agents-view-if-allowed` is defined at `chunk-gywceass.js:3850` with no description. The only other places that name it are two lists of flag names, `chunk-f3hhf7m1.js:271` and `chunk-phtcecxx.js:63`. No code reads its value. `--runner-declares` is defined at `chunk-gywceass.js:3944`, and the runner builds it at `chunk-f9zwgkcw.js:5-11`.
-[^managed-init]: The program, `chunk-gywceass.js:1503-1534` (the error text), `chunk-gywceass.js:1577` (the check), and `chunk-a3jsps34.js:418-420` (the field check).
-[^initialize-fields]: The program, `chunk-gywceass.js:3966` (the flag), `chunk-gywceass.js:1548-1607` (the checks), and `chunk-a3jsps34.js:434-444` (the field rules). `settings` must be a JSON object, and `disallowedTools` a list of strings. The settings apply like `--settings`, before any settings are read, and the program exits with code `1` if they cannot (`chunk-gywceass.js:1604-1607`).
-[^runner-declares]: The program, `chunk-gywceass.js:82268`, `chunk-f9zwgkcw.js:361`, and `chunk-gv1b3n3g.js:353615`. The start module of the program (`cli`, offset 4603) takes `process.argv[2]` only when it starts with `--runner-declares=`. The notice `YPs` is at `chunk-jytr69d4.js:497`. The runner-session check `lp` is at `chunk-427dvgs1.js:2624`, and the check that the first argument took effect, `aCe`, is at `chunk-427dvgs1.js:3059`.
-[^autocompact]: The program, `chunk-gywceass.js:79486`: "Auto-compact window size (auto, or at least 100k tokens)".
-[^persisted-trust]: The program, `chunk-sm9djeyx.js:32872` and `chunk-xethrx83.js:58018`. The program reads the flag from the arguments.
-[^setting-sources]: The program, `chunk-gywceass.js:76711`. The program text lists `user`, `project`, and `local`.
-[^allowed-warn]: The program, `chunk-2v0j7fr6.js:85856`, `chunk-2v0j7fr6.js:86021`, and `chunk-2v0j7fr6.js:86571`.
-[^disallowed-warn]: The program, `chunk-2v0j7fr6.js:85856`, `chunk-2v0j7fr6.js:86021`, and `chunk-2v0j7fr6.js:86571`.
-[^tools-warn]: The program, `chunk-2v0j7fr6.js:86617`.
+[^count]: The program. The help builder, `chunk-txash88y.js:3338` to `chunk-txash88y.js:4249`, defines 136 options with `.option(` or `new $4a5cfa(`. Of these, 64 show in the help text. The other 72 call `.hideHelp()`, for example `--advisor` at `chunk-txash88y.js:4019`; `--proactivity` (`chunk-txash88y.js:4043`) calls it unless the check `$0ec298()` passes. `-h, --help` and `-v, --version` (`chunk-txash88y.js:4006`) add 2 shown flags, which gives 66. `--ignore-persisted-trust` is not an option of the builder; `chunk-pxy9yt8m.js:2102` reads it from the arguments, and it adds the 73rd hidden flag.
+
+[^no-row]: The program. `--agents-view-if-allowed` is defined at `chunk-txash88y.js:4046` with no description, and `chunk-txash88y.js:3972` reads it (`agentsViewIfAllowed`). `2.1.328` has no reader. `--runner-declares` is defined at `chunk-txash88y.js:4140`, and the runner builds it at `chunk-0d8wgy6w.js:10`.
+[^managed-init]: The program, `chunk-txash88y.js:1530-1561` (the error text), `chunk-txash88y.js:1604` (the check), and `chunk-spjam3kz.js:418-420` (the field check).
+[^initialize-fields]: The program, `chunk-txash88y.js:4162` (the flag), `chunk-txash88y.js:1575-1634` (the checks), and `chunk-spjam3kz.js:434-444` (the field rules). `settings` must be a JSON object, and `disallowedTools` a list of strings. The settings apply like `--settings`, before any settings are read, and the program exits with code `1` if they cannot (`chunk-txash88y.js:1631-1634`).
+[^agents-view]: The program, `chunk-txash88y.js:3972` (`agentsViewIfAllowed`, the early return, the `isAgentsFleetEnabled` check, and `agentsCommandHandler`, the handler of `claude agents`) and `chunk-wtmc4k02.js:13` (the `CLAUDE_CODE_DISABLE_AGENT_VIEW` and `disableAgentView` checks that decide `isAgentsFleetEnabled`). The early return is the shutdown check `isShuttingDown` at `chunk-hg1yqkjk.js:23719`. When the check fails, the code goes on to the normal session at `chunk-txash88y.js:3984`. A server flag does not decide the gate.
+[^runner-declares]: The program, `chunk-txash88y.js:4140` (the option and its once-only notice), `chunk-0d8wgy6w.js:10` (the runner form), and `chunk-3kp5jwr6.js:11641` (the runner adds it before `--print`). The start module of the program (`cli`, offset 4632) takes `process.argv[2]` only when it starts with `--runner-declares=`. The notice `$32f110` is at `chunk-phc9kyv6.js:10`. The runner-session check is at `chunk-92h2y9s9.js:59` (it tests `CLAUDE_CODE_ENVIRONMENT_KIND`), and the check that the first argument took effect is `$126cfa() && $daecc9()` at `chunk-92h2y9s9.js:91`. Both run in the `--runner-declares` option at `chunk-txash88y.js:4141`.
+[^autocompact]: The program, `chunk-txash88y.js:4026`: "Auto-compact window size (auto, or at least 100k tokens)".
+[^persisted-trust]: The program, `chunk-pxy9yt8m.js:2105` and `chunk-aq3ms068.js:3506`. The program reads the flag from the arguments.
+[^setting-sources]: The program, `chunk-txash88y.js:3889`. The program text lists `user`, `project`, and `local`.
+[^allowed-warn]: The program, `chunk-mjwpm8mh.js:4360` (`$de171b`, the test for a rule that looks incomplete), `chunk-mjwpm8mh.js:4373` (the `--allowedTools` warning text), and `chunk-mjwpm8mh.js:4405` (`more like it`: the count of further bad rules).
+[^disallowed-warn]: The program, `chunk-mjwpm8mh.js:4360` (`$de171b`, the test for a rule that looks incomplete), `chunk-mjwpm8mh.js:4378` (the `--disallowedTools` warning text), and `chunk-mjwpm8mh.js:4405` (`more like it`: the count of further bad rules).
+[^tools-warn]: The program, `chunk-mjwpm8mh.js:4383` (the `--tools` warning text).
 [^fast-vertex]: Probe case `print.cli322.fast-vertex-flag`.
-[^copy-flag]: The program, `chunk-gywceass.js:83034` and `chunk-gywceass.js:83347`.
-[^hold-repo]: The program, `chunk-gywceass.js:3954` (the flag and its help text) and `chunk-2v0j7fr6.js:7909` (the check). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
-[^metadata-flag]: The program, `chunk-gywceass.js:4024` (the flag and its help text) and `chunk-2v0j7fr6.js:3149` (the key check). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
-[^lead-key]: The program, `chunk-gywceass.js:3915-3920` (the flag), `chunk-5mqqj21b.js:1065` and `chunk-5mqqj21b.js:1238` (the lead passes it), and `chunk-2v0j7fr6.js:6481-6482` (the teammate reads it).
-[^chrome-restart]: The program, `chunk-j2wfp6sf.js:1450452` and `chunk-tsfj8qb8.js:42287`.
-[^ccr-host]: The program, `chunk-xethrx83.js:940402-968912`; the `--gateway-json` check is `chunk-00wezk9v.js:27369`.
+[^copy-flag]: The program, `chunk-txash88y.js:4156` (the `--session-began-as-copy` flag and its help text) and `chunk-614w915w.js:52425` (`CLAUDE_CODE_SESSION_BEGAN_AS_COPY` or the flag value `"1"`).
+[^hold-repo]: The program, `chunk-txash88y.js:4150` (the flag and its help text) and `chunk-mjwpm8mh.js:7804` (the check).
+[^metadata-flag]: The program, `chunk-txash88y.js:4220` (the flag and its help text) and `chunk-mjwpm8mh.js:3180` (the key check). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^lead-key]: The program, `chunk-txash88y.js:4111-4116` (the flag), `chunk-a4sw59pz.js:1069` and `chunk-a4sw59pz.js:1069` (the lead passes it), and `chunk-mjwpm8mh.js:6354-6355` (the teammate reads `leadVerifyKey`).
+[^chrome-restart]: The program, `chunk-zs9k1w9q.js:92845` and `chunk-z758pdbe.js:1314`.
+[^ccr-host]: The program, `chunk-aq3ms068.js:45040` (`ccr-session host requires --sdk-url`) and `chunk-aq3ms068.js:45045` (`ccr-session --sdk-url rejected`); the `--gateway-json` check is `chunk-f5q1yhhc.js:878`.
 [^auto-refused]: Probe case `print.err319.auto-mode-print-refused`.
 [^chrome-live]: Live run, case `live.err319`, with `--chrome` and a subscription token.
 [^chrome-fake]: Probe case `print.err319.chrome-no-extension`.
-[^add-dir-trust]: The program, `chunk-avyyrx5p.js:48013`.
-[^rewind-skip]: The program, `chunk-5699r6rq.js:36574-36855`. The reasons are in `chunk-0fvmdxeb.js:3235`.
-[^worktree-add-dir]: The program, `chunk-56bhcxay.js:76745-76755` (pins each relative `--add-dir` to the launch folder), `chunk-56bhcxay.js:76787-76803` (the path rule), and `chunk-q1ptn8v8.js:1177` (the call after the worktree is made). The code runs only when the flag `bot_protected_tengu_rosy_fog` is on (`chunk-56bhcxay.js:1396419`). The code shows only the `--add-dir` folders, not the Bash sandbox.
-[^catch-up]: The program, `chunk-j2wfp6sf.js:20940-20945` (the terminal view of a cloud session shows the warning), `chunk-b2ttx9wr.js:4425` and `chunk-sb3gk6vj.js:1199` (the `--cloud` start and the attach path give the view its session settings), and `chunk-7akrs0e7.js:6019-6029` (the `--attach-serve` helper).
-[^worktree-kept]: The program, `chunk-j2wfp6sf.js:1871949` (the keep choice and its message), `chunk-j2wfp6sf.js:1880305` (the exit passes the message on as `finalMessage`), and `chunk-56bhcxay.js:390231` (the exit writes `finalMessage` to file descriptor 2).
-[^chrome-credentials]: The program, `chunk-2sytsqdh.js:6357` (the refusal text), `chunk-2sytsqdh.js:1685` (the credential error that selects it), `chunk-2sytsqdh.js:13207` (the upload check passes `secretStores`), `chunk-e47vyy42.js:10803` (the `secretStores` check), `chunk-e47vyy42.js:9255` and `chunk-e47vyy42.js:10051` (the names and folders), and `chunk-2sytsqdh.js:22142` with `chunk-djtbwk7p.js:288` and `chunk-esjrthb7.js:190` (the default comes from the flag `tengu_squishy_magpie`, which is on unless the server turns it off).
-[^flag-parse-errors]: The program, `chunk-gywceass.js:3337` (`--max-budget-usd`), `chunk-gywceass.js:3350` (`--task-budget`), `chunk-gywceass.js:3318` and `chunk-gywceass.js:3326` with `chunk-gywceass.js:4071` (`must be a number`), `chunk-gywceass.js:3835` (`--autocompact`), `chunk-gywceass.js:3455` (`--system-prompt-snapshot`), `chunk-gywceass.js:3370` (`--prompt-suggestions`), `chunk-gywceass.js:1045` and `chunk-gywceass.js:3495` (`--permission-mode`), and `chunk-gywceass.js:1554` (`--initialize-fields`).
+[^add-dir-trust]: The program, `chunk-7kvz9y39.js:2043`.
+[^rewind-skip]: The program, `chunk-614w915w.js:37810` (the warning text, with `--debug`). The reasons are in `chunk-kgzzwvwc.js:3273` ("the tracked path is (or became) a link").
+[^worktree-add-dir]: The program, `chunk-hg1yqkjk.js:52875-52885` (pins each relative `--add-dir` to the launch folder), `chunk-hg1yqkjk.js:52917-52932` (the path rule: "elsewhere" stands in for each `..` part), and `chunk-5x1km07w.js:1209` (the call `$513424(a1, a4)` after the worktree is made). The code runs only when the flag `bot_protected_tengu_rosy_fog` is on (`chunk-hg1yqkjk.js:52869`). The code shows only the `--add-dir` folders, not the Bash sandbox.
+[^catch-up]: The program, `chunk-zs9k1w9q.js:21128-21133` (the terminal view of a cloud session shows the warning), `chunk-rwevfvv3.js:4504` and `chunk-yt61000x.js:1228` (the `--cloud` start and the attach path give the view its `remoteSessionConfig`), and `chunk-6bcbe254.js:6016-6026` (the `--attach-serve` helper).
+[^worktree-kept]: The program, `chunk-zs9k1w9q.js:117665` (the keep choice and its message), `chunk-zs9k1w9q.js:118066` (the exit passes the message on as `finalMessage`), and `chunk-hg1yqkjk.js:23517` (the exit writes `finalMessage` to file descriptor 2).
+[^chrome-credentials]: The program, `chunk-z1czbrcf.js:336` (the refusal text), `chunk-z1czbrcf.js:115` (the credential error that selects it), `chunk-z1czbrcf.js:663` (the upload check passes `secretStores`), `chunk-3yar3476.js:569` (the `secretStores` check), `chunk-3yar3476.js:481` and `chunk-3yar3476.js:514` (the names and folders), and `chunk-z1czbrcf.js:1055` (the flag `tengu_squishy_magpie`, read with `safe: !0`) and `chunk-tm564aw8.js:6` (the default holds unless a server `payload` value says the opposite, so the check is on unless the server turns it off).
+[^flag-parse-errors]: The program, `chunk-txash88y.js:3500` (`--max-budget-usd`), `chunk-txash88y.js:3513` (`--task-budget`), `chunk-txash88y.js:3481` and `chunk-txash88y.js:3489` with `chunk-txash88y.js:4267` (`must be a number`), `chunk-txash88y.js:4031` (`--autocompact`), `chunk-txash88y.js:3618` (`--system-prompt-snapshot`), `chunk-txash88y.js:3533` (`--prompt-suggestions`), `chunk-txash88y.js:1072` and `chunk-txash88y.js:3658` (`--permission-mode`), and `chunk-txash88y.js:1581` (`--initialize-fields`).
+[^name-cloud]: The program, `chunk-txash88y.js:3882` (the help text "Also names a new cloud session.").

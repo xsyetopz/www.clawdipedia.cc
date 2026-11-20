@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-settings.json",
-	"title": "Claude Code settings.json (Claude Code 2.1.328)",
-	"$comment": "For settings.json (user, project, local). Generated from Claude Code 2.1.328 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code settings.json (Claude Code 2.1.329)",
+	"$comment": "For settings.json (user, project, local). Generated from Claude Code 2.1.329 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
 	"type": "object",
 	"properties": {
 		"$schema": {
@@ -532,6 +532,13 @@
 						"type": "string"
 					}
 				},
+				"workingDirectoriesExclude": {
+					"description": "For the program that starts Claude Code: read only from --settings and from settings that program sends while the session runs; ignored in user, project, local and managed settings. Absolute paths, each a folder with all below it or one file, that blockReadsOutsideWorkingDirectories, blockFileToolReadsOutsideWorkingDirectories and blockWritesOutsideWorkingDirectories count as outside every working directory that holds them. A path is refused if it, or where its links lead, lies in a listed path, in any letter case, or above one that no Read deny rule covers (a Grep or Glob rooted there would walk into it; a deny rule keeps those two out, unless a \"!\" rule is also in force); for a search the path judged is its root, not each file found below it. Still let through: a working directory, or for reads a path of blockReadsExemptPaths, that is the listed path or lies inside it, and the files that Claude Code keeps for the session. It allows nothing, binds what those three settings bind, and does nothing with all of them off. Each path counts as written: a link in it is not followed, so list every spelling. Once listed, a path stays listed for the life of the process. Ignored: a relative path, and one that starts with ~, has a \"..\" segment or has white space at either end. Does not change what sandboxed commands may read or write.",
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
 				"disableAutoMode": {
 					"description": "Disable auto mode",
 					"type": "string",
@@ -550,6 +557,16 @@
 				}
 			},
 			"additionalProperties": {}
+		},
+		"additionalDirectoryConfigRoots": {
+			"description": "@internal For the program that starts Claude Code only: read from --settings and from settings that program sends while the session runs; ignored in settings files. Maps an added folder (--add-dir, or a claim's additional_directories) by its absolute path, also matched by its real path, to the absolute path of the checkout whose .claude skills, commands, agents and plugin settings that folder then reads instead of its own; file access stays with the folder. Full contract, with when to send it and what makes a root unusable: apps/cli/docs/desktop-host-contract.md, entry additionalDirectoryConfigRoots.",
+			"type": "object",
+			"propertyNames": {
+				"type": "string"
+			},
+			"additionalProperties": {
+				"type": "string"
+			}
 		},
 		"model": {
 			"description": "Override the default model used by Claude Code",
@@ -829,6 +846,10 @@
 											},
 											"asyncRewake": {
 												"description": "If true, hook runs in background and wakes the model on exit code 2 (blocking error). Implies async.",
+												"type": "boolean"
+											},
+											"holdsTools": {
+												"description": "@internal UserPromptSubmit hooks of the official security-guidance plugin only. If true, the prompt goes to the model without waiting for this hook, the hook's output is ignored, and tools wait until it exits or times out.",
 												"type": "boolean"
 											},
 											"rewakeMessage": {
@@ -3479,7 +3500,7 @@
 										}
 									},
 									"injectHosts": {
-										"description": "Optional narrowing of where the proxy substitutes this credential. Only meaningful when mode is `mask`; accepted but ignored for `deny`. If unset, defaults to `network.allowedDomains` — the credential is injected at every reachable host. Each entry must be reachable via `network.allowedDomains` (sandbox-runtime validates this).",
+										"description": "Optional narrowing of where the proxy substitutes this credential. Only meaningful when mode is `mask`; accepted but ignored for `deny`. If unset, defaults to `network.allowedDomains` — the credential is injected at every reachable host. A masked AWS secret key that signs requests is the exception: with no list it is never injected. Each entry must be reachable via `network.allowedDomains` (sandbox-runtime validates this).",
 										"type": "array",
 										"items": {
 											"type": "string"
@@ -3546,7 +3567,7 @@
 					"type": "object",
 					"properties": {
 						"backend": {
-							"description": "Windows only: how sandboxed commands are confined. \"sandboxuser\" (default) runs them as the dedicated sandbox account that the sandbox set-up creates. \"mxc\" runs them in a Microsoft eXecution Container (BaseContainer) through the MXC SDK, with no install step; experimental. Claude Code ignores \"mxc\" and uses the sandbox account, with a note in /sandbox, when this build lacks the MXC SDK, when a higher settings tier or another managed source sets network.tlsTerminate, or when an administrator requires the sandbox or locks reads (filesystem.allowManagedReadPathsOnly) unless managed settings picked \"mxc\" and no other managed source sets network.allowManagedDomainsOnly. On \"mxc\" only the PowerShell tool is enabled and Bash commands are refused (MXC cannot run Git Bash yet); network.tlsTerminate and network.allowLocalBinding do not apply. Read from user, managed/policy or --settings settings only; a value in project settings (.claude/settings.json and .claude/settings.local.json) is ignored.",
+							"description": "Windows only: how sandboxed commands are confined. There is no default: until it is set, sandboxed commands are refused. \"sandboxuser\" runs them as the dedicated sandbox account that the sandbox set-up creates. \"mxc\" runs them in a Microsoft eXecution Container (BaseContainer) through the MXC SDK, with no install step; experimental. Managed settings decide over --settings, and --settings over user settings. On \"mxc\" only the PowerShell tool is enabled and Bash commands are refused (MXC cannot run Git Bash yet); network.allowLocalBinding does not apply, and sandboxed commands are refused while network.tlsTerminate is set, or while managed settings lock reads (filesystem.allowManagedReadPathsOnly) without picking \"mxc\" themselves. Read from user, managed/policy or --settings settings only; a value in project settings (.claude/settings.json and .claude/settings.local.json) is ignored.",
 							"type": "string",
 							"enum": ["sandboxuser", "mxc"]
 						}

@@ -162,14 +162,14 @@ Cloud sessions forward only your own hooks of kind `command` and `http` from use
 
 ## Sources
 
-[^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the program (handler schemas for `command` at `chunk-jkpzhr7r.js:19808`, `prompt` at `chunk-jkpzhr7r.js:21432`, `mcp_tool` at `chunk-jkpzhr7r.js:22347`, `http` at `chunk-jkpzhr7r.js:24148`, and `agent` at `chunk-jkpzhr7r.js:25375`).
-[^mcp-limit]: The program, `chunk-56bhcxay.js:4204891`.
-[^script-probe]: The program, `chunk-jkpzhr7r.js:22347` for the schema and `chunk-jkpzhr7r.js:28059` for the message.
-[^powershell-suffix]: The program, `chunk-56bhcxay.js:4268865` and `chunk-56bhcxay.js:1157772`.
-[^headers]: The program, `chunk-56bhcxay.js:4195555`.
-[^stop-wrap]: The program, `chunk-56bhcxay.js:4174767`.
-[^stop-cap]: The program, `chunk-2b3eg071.js:296619`, for the warning and for the main-session-only notice.
-[^calls]: The program, `chunk-56bhcxay.js:4174767` for the `prompt` hook and `chunk-56bhcxay.js:4186875` for the `agent` hook.
-[^concurrency]: The program, `chunk-56bhcxay.js:1261936`: the constants 12, 24, and 12 and the `model hooks` and `overdue model hooks` counts. We did not trace that a subagent shares the session host of its parent.
-[^cloud]: We read these rules in the program, `chunk-20bv8pca.js:790032`. We did not run them, because a cloud session needs a login.
-[^mcp-onfailure]: The program, `chunk-56bhcxay.js:68285`. [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the program (handler schemas for `command` at `chunk-t39fw2cy.js:854`, `prompt` at `chunk-t39fw2cy.js:915`, `mcp_tool` at `chunk-t39fw2cy.js:944`, `http` at `chunk-t39fw2cy.js:977`, and `agent` at `chunk-t39fw2cy.js:1011`).
+[^mcp-limit]: The program, `chunk-hg1yqkjk.js:262714` ("a message from the server was too large") and `chunk-hg1yqkjk.js:262690` (`isError`).
+[^script-probe]: The program, `chunk-t39fw2cy.js:944` for the schema and `chunk-t39fw2cy.js:1121` for the message (`Unknown hook type`).
+[^powershell-suffix]: The program, `chunk-hg1yqkjk.js:265572` and `chunk-hg1yqkjk.js:70729` (`dynamicparam`).
+[^headers]: The program, `chunk-hg1yqkjk.js:262181`.
+[^stop-wrap]: The program, `chunk-hg1yqkjk.js:261162` ("stopping condition" for `Stop` and `SubagentStop`).
+[^stop-cap]: The program, `chunk-wm04tzdx.js:17291`, for the warning and for the main-session-only notice.
+[^calls]: The program, `chunk-hg1yqkjk.js:261168` for the `prompt` hook and `chunk-hg1yqkjk.js:261734` for the `agent` hook (the timeout `60000` at line 261739 and the `50` turn cap at line 261878).
+[^concurrency]: The program, `chunk-hg1yqkjk.js:75048`: the constants 12, 24, and 12 and the `model hooks` and `overdue model hooks` counts. We did not trace that a subagent shares the session host of its parent.
+[^cloud]: We read these rules in the program: `chunk-w03c3634.js:19146` (`kind_unsupported`: `prompt`, `agent`, and `mcp_tool` are never forwarded; `plugin` and `managed` hooks are not forwarded), `chunk-w03c3634.js:19194` (`lease_s`, 60 to 3600, default 600), `chunk-w03c3634.js:19209` (`hooks`, up to 128), and `chunk-w03c3634.js:19028` (`hook_callback`). We did not run them, because a cloud session needs a login.
+[^mcp-onfailure]: The program, `chunk-hg1yqkjk.js:73668`. [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).

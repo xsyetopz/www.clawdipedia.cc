@@ -75,7 +75,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_MCP_PREWAIT_SERVERS_MS` | <Undocumented /> | Sets how long to wait for the servers in `CLAUDE_CODE_MCP_PREWAIT_SERVERS`. | A number of milliseconds. Whole number min `0`, digits only. Read only for sessions with an SDK URL | Remote SDK-URL sessions |
 | `CLAUDE_CODE_MCP_PREWAIT_SERVERS_MS_BY_NAME` | <Undocumented /> | Sets the wait time for single servers that `CLAUDE_CODE_MCP_PREWAIT_SERVERS` names .[^prewait-list] | Text such as `name=ms,name2=ms`. A name must appear in `CLAUDE_CODE_MCP_PREWAIT_SERVERS`. A value must be digits, above `0`, and below the total budget. Only `ccr_worker` sessions read it.[^prewait-reader] | Remote SDK-URL sessions |
 | `CLAUDE_CODE_MCP_REGISTRY_FETCH_AT_STARTUP` | <Undocumented /> | Fetches the list of official MCP registry URLs at startup. Without it, some cloud sessions wait for the first `https://` MCP server URL check. | On or off, off by default. The wait applies in a tool container daemon, a ccs tenant, or a hosted worker session. Elsewhere the list is fetched at once | Cloud sessions |
-| `CLAUDE_CODE_MCP_SERVE_AUTH_TOKEN` | <Undocumented /> | Gives the MCP serve mode a bearer value for its auth. Without it the mode uses a stdout reader. | Text (a secret). Claude Code reads it from the env once and then removes it. It also clears it from the child process env | MCP serve mode |
+| `CLAUDE_CODE_MCP_SERVE_AUTH_TOKEN` | <Undocumented /> | Gives the MCP serve mode a bearer value for its auth. Without it the mode uses a stdout reader. | Text (a secret). Claude Code reads it from the env once and then removes it. It also clears it from the child process env. With `claude mcp serve --transport http`, the value must have at least 32 characters. A shorter value stops the server with the error `auth token must be at least 32 characters`. Without the variable, the server makes a token of 32 random bytes in hex, and the stdout reader prints it. The `stdio` transport does not read the variable.[^serve-token] | MCP serve mode |
 | `CLAUDE_CODE_MCP_SERVE_GARBAGE_COLLECTIONS` | <Undocumented /> | Sets when the tool server of `mcp serve` makes its own garbage collections with `bun:jsc`. A full collection runs `fullGC`. A young collection runs `edenGC`. | Parts split by commas: `first=listen`, `first=rest`, `first=skip`, or `first=never`; `later=young` or `later=full`; `rest_delay_ms=N`; `min_growth_mib=N`; `between_growth_mib=N` or `between_growth_mib=off`. `N` has one to six digits. Defaults are `first=listen`, `later=full`, `rest_delay_ms=1500`, `min_growth_mib=16`, `between_growth_mib=8`. `first=never` in any part turns the collections off. A part that fails to parse gives a warning in the debug log, and the server acts as if the variable were unset | `mcp serve` tool server. What an unset variable means is not known, because a second check decides it.[^serve-gc] |
 | `CLAUDE_CODE_MCP_SERVE_INTERFACE_MIN_VERSION` | <Undocumented /> | Asks for a minimum `anthropic/toolHostInterface` version. Claude Code ignores and logs a value that differs from the real one. | Text. The log event is `launch_min_version_ignored` | MCP serve mode |
 | `CLAUDE_CODE_MCP_SERVE_MEMORY_WALKS_DEADLINE_MS` | <Undocumented /> | Sets the time limit for the memory file walks of the `mcp serve` tool server. | A number of milliseconds, `2000` by default. When the limit passes or a walk fails, the walk stops and the server logs `memory_walks_late` or `memory_walks_failed`.[^memory-walks] | `mcp serve` tool server |
@@ -164,21 +164,22 @@ Claude Code passes some variables to MCP server and hook processes. It can strip
 
 The program and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 
-[^one-plugin-load]: The program, `chunk-kz52sv6r.js:3007`.
-[^cowork-skill]: The program, `chunk-tsfj8qb8.js:108649`. Probe cases `env319a.cowork-plugin-skill.*`.
-[^room-count]: The program, `chunk-mt0sg9yk.js:41373`.
-[^mcp-tasks]: The program, `chunk-138kd0er.js:596`, `chunk-j8d1ddrx.js:2100`, and `chunk-avyyrx5p.js:39235` (child processes). The feature flag is `tengu_glowing_lark`. Probe cases `env319a.disable-mcp-tasks.unset` and `.v1`.
-[^mcp-task-bg]: The program, `chunk-138kd0er.js:1293` and `chunk-mt0sg9yk.js:230550`. Probe case `print.env319a.disable-mcp-task-background.unset`, and `.v1` for the value `1`.
-[^apps-route]: The program, `chunk-j8d1ddrx.js:1641`.
-[^prewait-list]: The program, `chunk-5699r6rq.js:14906`.
-[^prewait-reader]: The program, `chunk-5699r6rq.js:15822`.
-[^serve-gc]: The program parses the value at `chunk-jdfvev1y.js:1817` and uses it at `chunk-jdfvev1y.js:5080`. It did not show what an unset variable means.
-[^memory-walks]: The program, `chunk-jqrk2dtf.js:4670`.
-[^startup-wait]: The program, `chunk-5699r6rq.js:345454` and `chunk-5699r6rq.js:778284` (the servers that the permission context requires).
-[^dir-watch]: The program, `chunk-9nv3z5ae.js:9681` (the defaults), `chunk-9nv3z5ae.js:9995` (the folders that get types, none when the var is `0`), `chunk-56bhcxay.js:5118351` (the watch log line), `chunk-56bhcxay.js:5140743` (types written at each plugin load), `chunk-56bhcxay.js:5117724` (types written after a watched reload), and `chunk-pa2309ca.js:1141` (the types folder).
-[^mcpb-dir]: The program, `chunk-md9n15jc.js:3007`.
-[^required-hold]: The program, `chunk-nvx1skdx.js:129`.
-[^sorted-otter]: The program, `chunk-dnmy4w56.js:11006`. The feature flag is `tengu_sorted_otter`.
-[^tool-picture]: The program, `chunk-56bhcxay.js:4670870`. The minified names `q5n`, `Ob`, and `Sf` hold the other checks, which the program did not show.
-[^no-redial]: The program, `chunk-56bhcxay.js:277846`.
-[^sdk-generation]: The program, `chunk-1qvw449x.js:720`.
+[^one-plugin-load]: The program, `chunk-08j3rk83.js:157-161` (`CLAUDE_CODE_CCR_ONE_PLUGIN_LOAD_PER_RELOAD`, `CLAUDE_CODE_SYNC_PLUGIN_INSTALL`, and the running load count) and `chunk-08j3rk83.js:162` (the cache clear reason `caller`).
+[^cowork-skill]: The program, `chunk-z758pdbe.js:3340` (`CLAUDE_CODE_COWORK_PLUGIN_SKILL` in `isEnabled`). Probe cases `env319a.cowork-plugin-skill.*`.
+[^room-count]: The program, `chunk-w3gpg1a5.js:2095-2100` (the check of `CLAUDE_CODE_DIAGNOSTICS_FILE`).
+[^mcp-tasks]: The program, `chunk-4nxhg5gt.js:26` (the variable check), `chunk-rjbg8qd0.js:83-86` (the extension object `$35316a`), `chunk-q9am2cmd.js:9` (the extension name `io.modelcontextprotocol/tasks`), and `chunk-7kvz9y39.js:1654` (child processes). The feature flag is `tengu_glowing_lark`. Probe cases `env319a.disable-mcp-tasks.unset` and `.v1`.
+[^mcp-task-bg]: The program, `chunk-4nxhg5gt.js:72-81` (the variable check and `CLAUDE_CODE_MCP_AUTO_BACKGROUND_MS`) and `chunk-w3gpg1a5.js:11987` (the use, `$eb6867`). Probe case `print.env319a.disable-mcp-task-background.unset`, and `.v1` for the value `1`.
+[^apps-route]: The program, `chunk-rjbg8qd0.js:62-64` (`CLAUDE_CODE_MCP_APPS_NO_TOOL_ROUTE` and the host check at `chunk-rjbg8qd0.js:59-61`).
+[^prewait-list]: The program, `chunk-614w915w.js:16556` (the variable passed) and `chunk-614w915w.js:15641-15667` (the parser `$4f150d`).
+[^prewait-reader]: The program, `chunk-614w915w.js:16558`.
+[^serve-gc]: The program parses the value at `chunk-7eg08t0v.js:70` and uses it at `chunk-7eg08t0v.js:70`. It did not show what an unset variable means.
+[^memory-walks]: The program, `chunk-91km3pay.js:251`.
+[^startup-wait]: The program, `chunk-614w915w.js:16535-16542` (the variable, `host_wait`, and `host_no_wait`) and `chunk-614w915w.js:41979` (`toolPermissionContext`, the servers that the permission context requires).
+[^dir-watch]: The program, `chunk-6h88xj3m.js:510-513` and `chunk-6h88xj3m.js:525` (the defaults), `chunk-hg1yqkjk.js:221953` (the watch log line), `chunk-hg1yqkjk.js:221821-221822` (the types and `tsconfig.json` written with `$882b9e`), `chunk-hg1yqkjk.js:222093-222097` (written at each plugin load by `$7d74c7`), `chunk-hg1yqkjk.js:221909` (written after a watched reload by `$ccb379`), and `chunk-yhw39npf.js:19-25` (the types folder and `tsconfig.json`).
+[^mcpb-dir]: The program, `chunk-38jz3ehd.js:175-185` (`CLAUDE_CODE_PLUGIN_MCPB_DIR`, the `mcpb` default, and the nesting check).
+[^required-hold]: The program, `chunk-bj9p89mj.js:129`.
+[^sorted-otter]: The program, `chunk-y61sx1j8.js:363`. The feature flag is `tengu_sorted_otter`.
+[^tool-picture]: The program, `chunk-hg1yqkjk.js:199071`. The minified names `q5n`, `Ob`, and `Sf` hold the other checks, which the program did not show.
+[^no-redial]: The program, `chunk-hg1yqkjk.js:17463` (256 hosts), `chunk-hg1yqkjk.js:17467` (`CLAUDE_CODE_MCP_NO_REDIAL_AFTER_POLICY_REFUSAL`), `chunk-hg1yqkjk.js:17476` (first 1024 bytes), and `chunk-hg1yqkjk.js:17479-17484` (oldest dropped).
+[^sdk-generation]: The program, `chunk-h6st6xmx.js:27`.
+[^serve-token]: The program, `chunk-pg7apw6b.js:82` (the env read, the unset, and `authToken` of a `bearer-minter`), `chunk-cd06ynv6.js:937` (32 random bytes in hex), `chunk-cd06ynv6.js:939` ("auth token must be at least 32 characters"), `chunk-cd06ynv6.js:1131` (the stdout reader prints "MCP server auth token"), and `chunk-e9cv4r14.js:345` (`startMCPServerHttp` is the `http` branch; the other branch, `startMCPServer`, takes no token).

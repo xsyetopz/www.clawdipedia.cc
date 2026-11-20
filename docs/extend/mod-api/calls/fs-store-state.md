@@ -78,6 +78,6 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 
 ## Sources
 
-[^fs-range]: The program, `chunk-syremzmn.js:298467` (the mod side sends `offset` and `length`), `chunk-56bhcxay.js:4567234` (the host passes them on), `chunk-56bhcxay.js:4564236` (the range read, its refusal of a pipe, socket, device or directory, and its UTF-8 decode), and `chunk-yg8ff21f.js:229` (the 4194304-byte limit).
+[^fs-range]: The program, `chunk-qsd8sbe8.js:13000` (the mod side sends `offset` and `length`), `chunk-hg1yqkjk.js:192921` (the host passes them on), `chunk-hg1yqkjk.js:192741` (the range read, its refusal of a pipe, socket, device or directory, and its UTF-8 decode), and `chunk-ydjn02g5.js:5` (the limit, `4194304` bytes).
 
-[^types]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `FsReadCall`, `FsReadOptions`, `FsEntry`, `FsStat`, `FsAncestor`, `FsAncestorsRequest`, `StateRead`, `StateSetResult`, `AtomFunction`, `DeriveFunction`, `MemberOfFunction`, `ReadFunction`, `UpdateFunction`, and the `fs.*`, `store.*`, and `state.*` entries of `EventOf` and `ResultOf`.
+[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, `FsReadCall`, `FsReadOptions`, `FsEntry`, `FsStat`, `FsAncestor`, `FsAncestorsRequest`, `StateRead`, `StateSetResult`, `AtomFunction`, `DeriveFunction`, `MemberOfFunction`, `ReadFunction`, `UpdateFunction`, and the `fs.*`, `store.*`, and `state.*` entries of `EventOf` and `ResultOf`.

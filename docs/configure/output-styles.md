@@ -102,9 +102,9 @@ The captures linked above hold the full text of each built-in style prompt. They
 
 ## Where the Style Text Goes
 
-Claude Code sends the style text as a message that starts with the line `# Output Style: <name>`. The program, `chunk-56bhcxay.js:140073`. See [Style Custom](../prompts/output-styles/style-custom.md).
+Claude Code sends the style text as a message that starts with the line `# Output Style: <name>`. The program, `chunk-hg1yqkjk.js:11940`. See [Style Custom](../prompts/output-styles/style-custom.md).
 The first line of the body, `You are an agent working with the user ...`, becomes `You are an interactive agent that helps users according to your "Output Style", which describes how you should respond to user queries.` when a style is active and keeps no coding instructions.
-A reminder line reads `<name> output style is active. Remember to follow the specific guidelines for this style.` It comes from the `output_style` attachment. A style with a `turnReminder` gives that text in place of the second sentence. The program, `chunk-56bhcxay.js:6002643`.
+A reminder line reads `<name> output style is active. Remember to follow the specific guidelines for this style.` It comes from the `output_style` attachment. A style with a `turnReminder` gives that text in place of the second sentence. The program, `chunk-hg1yqkjk.js:300691`.
 
 ## Exact Fields
 
@@ -120,7 +120,7 @@ It lists every field of this release. Build on the fields it names. Look each on
 
 ## Sources
 
-[^built-in]: The program, `chunk-56bhcxay.js:1097395`, sets `keepCodingInstructions: true` and `source: "built-in"` for the four styles.
+[^built-in]: The program, `chunk-hg1yqkjk.js:91239`, sets `keepCodingInstructions: true` and `source: "built-in"` for the four styles.
 [^official]: [Output Styles](https://code.claude.com/docs/en/output-styles).
-[^init-message]: The program, `chunk-syremzmn.js:156635`, string `no { outputStyle } (null, or { name, isKeepingCodingInstructions })`.
+[^init-message]: The program, `chunk-qsd8sbe8.js:6823`, string `no { outputStyle } (null, or { name, isKeepingCodingInstructions })`.
 [^probe-force]: Probes: [Configure and Memory](../reference/probes.md#configure-and-memory) and [Managed Folder Probe](../reference/probes.md#managed-folder-probe).

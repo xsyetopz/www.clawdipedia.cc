@@ -175,7 +175,7 @@ Fires when the main agent finishes. It does not fire on a user interrupt. It has
 | --- | --- | --- | --- |
 | `stop_hook_active` | <Documented /> | Input | `true` when a stop hook already continued the turn. Check it to avoid loops. |
 | `last_assistant_message` | <Documented /> | Input | The text of the final reply. Use it instead of the transcript. |
-| `background_tasks` | <Documented /> | Input | Tasks still running. Each has `id`, `type`, `status`, `description`, and some of `command`, `agent_type`, `server`, `tool`, `name` by type. Claude Code cuts text at 1000 characters. |
+| `background_tasks` | <Documented /> | Input | Tasks still running. Each has `id`, `type`, `status`, `description`, and some of `command`, `agent_type`, `server`, `tool`, `name` by type. `type` is a label such as `shell`, `subagent`, `monitor`, `workflow`, or `MCP task`. A Monitor script has `type` `monitor`, not `shell`.[^bg-type] Claude Code cuts text at 1000 characters. |
 | `session_crons` | <Documented /> | Input | Scheduled wakeups. Each has `id`, `schedule`, `recurring`, `prompt`. |
 | `decision`, `reason` | <Documented /> | Output | `block` stops Claude from stopping. You must give `reason`. It becomes the next instruction. |
 | `additionalContext` | <Documented /> | Output, in `hookSpecificOutput` | Feedback that continues the turn. Claude Code labels it `Stop hook feedback`, not an error. |
@@ -198,10 +198,11 @@ Fires instead of `Stop` when the turn ends on an API error. The matcher is `erro
 
 ## Sources
 
-[^notif-types]: The program, the type list at `chunk-eczrspp8.js:370` and `chunk-eczrspp8.js:547`. It holds all three `quota_auto_resume_*` names and `plugin_notification`.
-[^plugin-notif]: The program, `chunk-56bhcxay.js:4955366`.
-[^agent-needs-input]: The program, `chunk-j2wfp6sf.js:403033` (the billing notice), `chunk-j2wfp6sf.js:403281` (the dialog), and `chunk-j2wfp6sf.js:402657` (the teammate setup question). Probe cases `pty.notifications.agent-needs-input` and `pty.notifications.agent-needs-input-refused`.
-[^worker-message]: The program, `chunk-j2wfp6sf.js:1847749` and `chunk-j2wfp6sf.js:1851616`.
-[^push]: A reading of the program, `chunk-t94s3xy2.js:9791` and `chunk-t94s3xy2.js:9928`.
-[^not-seen]: Readings of the program, `chunk-deg3e0xc.js:20888` and `chunk-6w92w3rt.js:12980`, not live results.
-[^refusal]: A reading of the program, `chunk-eczrspp8.js:602`, not a live result.
+[^notif-types]: The program, the type list at `chunk-0wbf18qr.js:28` and `chunk-0wbf18qr.js:28`. It holds all three `quota_auto_resume_*` names and `plugin_notification`.
+[^plugin-notif]: The program, `chunk-hg1yqkjk.js:213494`.
+[^agent-needs-input]: The program, `chunk-zs9k1w9q.js:26168` (the billing notice), `chunk-zs9k1w9q.js:26168` (the dialog), and `chunk-zs9k1w9q.js:26158` (the teammate setup question). Probe cases `pty.notifications.agent-needs-input` and `pty.notifications.agent-needs-input-refused`.
+[^worker-message]: The program, `chunk-zs9k1w9q.js:116222` and `chunk-zs9k1w9q.js:116404`.
+[^push]: A reading of the program, `chunk-fcpsf9hj.js:326` and `chunk-fcpsf9hj.js:326`.
+[^not-seen]: Readings of the program, `chunk-z9j6gvtc.js:1391` (the `auth_storage_failure` type and its message) and `chunk-6aw22znh.js:353` (the `computer_use_enter` type and its message), not live results.
+[^refusal]: A reading of the program, `chunk-0wbf18qr.js:29`, not a live result.
+[^bg-type]: The program, `chunk-496v3ed2.js:112` (the "monitor" label for a `local_bash` task of kind `monitor`) and `chunk-496v3ed2.js:97` (`local_bash: "shell"`).

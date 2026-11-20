@@ -291,16 +291,16 @@ These cases show more detail.[^evalcreds-more]
 
 ## Sources
 
-[^jvm-probe]: The program, `chunk-dt7h21xf.js:223586` (the option keys and the files they hide) and `chunk-2a85tfcs.js:25399` (the list of keys).
-[^krb5-probe]: The program, `chunk-dt7h21xf.js:225615` (the `FILE:`, `WRFILE:`, and `DIR:` forms and the relative path error).
-[^kube-probe]: The program, `chunk-dt7h21xf.js:153642` (the value splits at the path delimiter, and a relative path stops the run).
-[^netrc-probe]: The program, `chunk-dt7h21xf.js:149264`.
-[^all-proxy]: The program, `chunk-vz5h5htj.js:2878`.
-[^bash-env-gate]: The server gate is `tengu_golden_wirth`.
-[^bash-env]: The program, `chunk-56bhcxay.js:1111077`.
-[^system-drive]: The program, `chunk-kwkzbftg.js:42856` (read) and `chunk-sm9djeyx.js:3192` (set).
-[^evalcreds]: The program, `chunk-dt7h21xf.js:149264` (`NETRC`), `chunk-dt7h21xf.js:153642` (`KUBECONFIG`), and `chunk-dt7h21xf.js:147207` (the pointer text).
-[^evalcreds-more]: The program, `chunk-dt7h21xf.js:215446` (profile name), `chunk-dt7h21xf.js:235821` (AWS), `chunk-dt7h21xf.js:222163` (`ssh_config`), and `chunk-2a85tfcs.js:37254` (URL with a user and password).
-[^variable-names]: The program, `chunk-7343wm3k.js:26213`, variable names found in the `2.1.328` binary. The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^ci-color]: The program, `chunk-0tagyyqy.js:2663-2678`.
-[^programfiles]: The program, `chunk-56bhcxay.js:64600` (the order) and `chunk-56bhcxay.js:77639` (the list of names).
+[^jvm-probe]: The program, `chunk-ty48xb2f.js:9895` (`maven.repo.local` and `sbt.boot.directory` hide nothing), `chunk-ty48xb2f.js:9897` (`gradle.user.home`), `chunk-ty48xb2f.js:9904` (`user.home`), and `chunk-rjw4t165.js:1192` (the list of keys).
+[^krb5-probe]: The program, `chunk-ty48xb2f.js:9985` (the `FILE:`, `WRFILE:`, and `DIR:` forms, `WRFILE`) and `chunk-ty48xb2f.js:9990` (the relative path error, `isAbsolute`).
+[^kube-probe]: The program, `chunk-ty48xb2f.js:6463` (the value splits at the path delimiter, and a relative path stops the run).
+[^netrc-probe]: The program, `chunk-ty48xb2f.js:6283`.
+[^all-proxy]: The program, `chunk-akf14v62.js:1646` (the order `HTTPS_PROXY`, `https_proxy`, `ALL_PROXY`, `all_proxy`, and the `remote.origin.proxy` and `http.proxy` values passed to `git`) and `chunk-7vfh1k4y.js:3030` (`ALL_PROXY` does not load the settings of an organization).
+[^bash-env-gate]: The server gate is `tengu_golden_wirth`. The program, `chunk-hg1yqkjk.js:68432` (the gate) and `chunk-hg1yqkjk.js:68424` (the `pkill`, `pgrep`, and `pidwait` check).
+[^bash-env]: The program, `chunk-hg1yqkjk.js:68418` (the text that tells Claude to run the command again) and `chunk-hg1yqkjk.js:248210` (the check that `BASH_ENV` is unset).
+[^system-drive]: The program, `chunk-f7fdz8jz.js:41484` (read) and `chunk-pxy9yt8m.js:3272` (set).
+[^evalcreds]: The program, `chunk-ty48xb2f.js:6283` (`NETRC`), `chunk-ty48xb2f.js:6469` (`KUBECONFIG`), and `chunk-ty48xb2f.js:6199` (the pointer text).
+[^evalcreds-more]: The program, `chunk-ty48xb2f.js:9504` (the profile name error, `isAbsolute`), `chunk-ty48xb2f.js:10453` (`credential_process` and `credential_source`), `chunk-ty48xb2f.js:10457` (`web_identity_token_file`), `chunk-ty48xb2f.js:9820` (`ssh_config`), and `chunk-rjw4t165.js:798` (the user and password check of a URL, `username` and `password`).
+[^variable-names]: Variable names found in the `2.1.329` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^ci-color]: The program, `chunk-2jhxnfds.js:2663-2678`.
+[^programfiles]: The program, `chunk-hg1yqkjk.js:70654` (the order) and `chunk-hg1yqkjk.js:53776` (the list of names).

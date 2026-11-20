@@ -92,4 +92,4 @@ Paths and variables are in [Plugin Loading](loading.md).
 - [Plugin Manifest Reference](https://code.claude.com/docs/en/plugins/manifest-reference) describes `plugin.json`.
 - Facts that no official page states come from the bundled manifest schema and the plugin loader.[^program]
 
-[^program]: The program, `chunk-jkpzhr7r.js:56021` (manifest schema) and `chunk-56bhcxay.js:5515967` (plugin loader).
+[^program]: The program, `chunk-t39fw2cy.js:2787` (manifest schema, `userConfig`) and `chunk-hg1yqkjk.js:232589` (plugin loader, `plugin.json`).

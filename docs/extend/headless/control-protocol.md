@@ -27,7 +27,7 @@ The schema does not mark the direction of each request. Only the Agent SDK pages
 | `get_context_usage` | <Undocumented /> | Asks for the use of the context window by category. The reply can have `loadRaise` (`{fromWindow, toWindow}`, internal). It is present while the auto-compact window of the conversation is raised from `fromWindow` to `toWindow`, which happens when what stays in each request after a summary fills more than half of the size at which it would compact. The other fields measure against `toWindow`.[^v2327-rules] |
 | `get_session_cost` | <Undocumented /> | Asks for the cost summary that `/usage` prints in print mode. |
 | `list_models` | <Undocumented /> | Asks for the models that the worker lets you choose. |
-| `get_usage` | <Undocumented /> | Asks for the data of `/usage`, with plan limits when they are known. Each entry of `session.model_usage` in the reply also has `cacheCreationEphemeral5mInputTokens` and `cacheCreationEphemeral1hInputTokens` (integers, see [Stream JSON Messages](stream-json.md)). |
+| `get_usage` | <Undocumented /> | Asks for the data of `/usage`, with plan limits when they are known. Each entry of `session.model_usage` in the reply also has `cacheCreationEphemeral5mInputTokens` and `cacheCreationEphemeral1hInputTokens` (integers, see [Stream JSON Messages](stream-json.md)). The request fields `skip_behaviors` and `detached` must be booleans, else the program says `get_usage: skip_behaviors must be a boolean` or `get_usage: detached must be a boolean`.[^get-usage-fields] |
 | `get_status` | <Undocumented /> | Asks for the rows of the `/status` screen as text. |
 | `export_conversation` | <Undocumented /> | Asks for the conversation as the text that `/export` writes. |
 | `list_cloud_sessions` | <Undocumented /> | Asks for the cloud sessions of the signed-in account. The CLI reads them with its own sign-in. Refused in a cloud-hosted session. The request can have `only_runs` (`true` lists only the sessions that routines of the account started, which the plain list leaves out), `only_archived` (`true` lists archived sessions only), and `cursor` (the `next_cursor` of the page before, asked the same way). The reply has `next_cursor`. An older CLI answers the plain list, and the reply has no `only_runs` or `only_archived`.[^v2327-cloud] |
@@ -137,7 +137,7 @@ The examples use `claude -p --input-format stream-json --output-format stream-js
 ```
 
 ```json skip-lint title="Reply"
-{"type":"control_response","response":{"subtype":"success","request_id":"req-2","response":{"version":"2.1.328","buildTime":"2026-11-18T21:07:35Z"}}}
+{"type":"control_response","response":{"subtype":"success","request_id":"req-2","response":{"version":"2.1.329","buildTime":"2026-11-19T16:23:05Z"}}}
 ```
 
 ```json skip-lint title="A request that fails"
@@ -178,16 +178,17 @@ The exact fields are in `https://clawdipedia.cc/schemas/claude-code-control-prot
 
 ## Sources
 
-[^subtypes]: The program, the bundled schema: `chunk-20bv8pca.js:23409` for `ui_prompt_paint`, `chunk-20bv8pca.js:23276` for the `ui_attach` list, `chunk-20bv8pca.js:21142` for `turn_handoff`, `chunk-20bv8pca.js:22221` for `oauth_token_refresh`, `chunk-20bv8pca.js:21997` for `mcpMount`, `chunk-20bv8pca.js:17188` for `background_color`, and `chunk-20bv8pca.js:19521` for the transcript note.
-[^initialize]: The program, `chunk-20bv8pca.js:652557` and `chunk-20bv8pca.js:18481-18488` for `auth_conflict` and `chunk-20bv8pca.js:655931` for `other_hook_ask_outranks_host`.
-[^interrupt]: The program, `chunk-20bv8pca.js:676059`.
-[^denied-tools]: The program, `chunk-20bv8pca.js:822730`. The warning is at `chunk-5699r6rq.js:870024`.
-[^apply-flag]: The program, `chunk-b8ves7hr.js:73661`.
-[^elicitation]: The program, `chunk-20bv8pca.js:953945`.
-[^builders]: The program, the strings of the request and response builders, `chunk-20bv8pca.js:699301`, `chunk-20bv8pca.js:702692`, and `chunk-20bv8pca.js:963969`.
-[^validators]: The schema is made from the program's own validators, for example `chunk-20bv8pca.js:699301`.
-[^v2326]: The program, `chunk-20bv8pca.js:740973` for `oldestDesktopSdk`, `chunk-20bv8pca.js:19503-19512` for `limit`, `chunk-20bv8pca.js:22045-22051` for `withheld`, `chunk-20bv8pca.js:22226-22242` for `refused_bearer_sha256` and `refused_call`, and `chunk-nr7kzzye.js:3215` and `chunk-nr7kzzye.js:3227` for where the CLI sends them.
-[^v2327-init]: The program, `chunk-20bv8pca.js:644555` for `settings` and `disallowedTools`, `chunk-20bv8pca.js:658523` for `settings_applied` and `disallowed_tools_applied`, `chunk-20bv8pca.js:629634` for `contextOnly` and `replacedByFrame`, and `chunk-20bv8pca.js:299711` for `requiredByOrganization`.
-[^v2327-rules]: The program, `chunk-20bv8pca.js:693393` for `rule_usually_offered`, `chunk-20bv8pca.js:744972` for `loadRaise`, `chunk-20bv8pca.js:760038` for the `rootId` of the `read_file` anchor, `chunk-20bv8pca.js:781102` for the `rootId` of the reply, and `chunk-20bv8pca.js:879818` for `token_state`.
-[^v2327-cloud]: The program, `chunk-20bv8pca.js:715683` for `list_cloud_sessions`, `chunk-20bv8pca.js:720759` and `chunk-20bv8pca.js:721980` for `get_cloud_session`, `chunk-20bv8pca.js:723248` for `agent_id`, `chunk-20bv8pca.js:724510` for `update_cloud_session`, and `chunk-20bv8pca.js:839752` for `reload_connectors`.
-[^v2327-fork]: The program, `chunk-20bv8pca.js:820319` for the request and `chunk-20bv8pca.js:821357` for the reply.
+[^subtypes]: The program, the bundled schema: `chunk-w03c3634.js:21964` for `ui_prompt_paint`, `chunk-w03c3634.js:21831` for the `ui_attach` list, `chunk-w03c3634.js:19588` for `turn_handoff`, `chunk-w03c3634.js:20776` for `oauth_token_refresh`, `chunk-w03c3634.js:20552` for `mcpMount`, `chunk-w03c3634.js:15614` for `background_color`, and `chunk-w03c3634.js:17944` for `get_cloud_session_transcript` and its note.
+[^initialize]: The program, `chunk-w03c3634.js:16918` and `chunk-w03c3634.js:16912-16919` for `auth_conflict` and `chunk-w03c3634.js:16957` for `other_hook_ask_outranks_host`.
+[^interrupt]: The program, `chunk-w03c3634.js:17133`.
+[^denied-tools]: The program, `denied_tools` at `chunk-w03c3634.js:19712`. The warning is at `chunk-614w915w.js:47233`.
+[^apply-flag]: The program, `chunk-6dccy31z.js:4595`.
+[^elicitation]: The program, `chunk-w03c3634.js:22570`.
+[^builders]: The program, the strings of the request and response builders, `set_model` at `chunk-w03c3634.js:17320`, `subtype` at `chunk-w03c3634.js:22536` (success), and `error_code` at `chunk-w03c3634.js:22552` (error). The `set_model` handler replies with `model` at `chunk-614w915w.js:45440`.
+[^validators]: The schema is made from the program's own validators, for example `request_id` at `chunk-w03c3634.js:22537`.
+[^v2326]: The program, `chunk-w03c3634.js:18379` for `oldestDesktopSdk`, `chunk-w03c3634.js:17944-17953` for `limit`, `chunk-w03c3634.js:20600-20606` for `withheld`, `chunk-w03c3634.js:20781-20797` for `refused_bearer_sha256` and `refused_call`, and `chunk-c30das3s.js:3252` and `chunk-c30das3s.js:3264` for where the CLI sends them.
+[^v2327-init]: The program, `chunk-w03c3634.js:16817` for `settings` and `disallowedTools`, `chunk-w03c3634.js:16980` for `settings_applied` and `disallowed_tools_applied`, `chunk-w03c3634.js:16670` for `contextOnly` and `replacedByFrame`, and `chunk-w03c3634.js:11974` for `requiredByOrganization`.
+[^v2327-rules]: The program, `chunk-w03c3634.js:17234` for `rule_usually_offered`, `chunk-w03c3634.js:18547` for `loadRaise`, `chunk-w03c3634.js:18750` for the `rootId` of the `read_file` anchor, `chunk-w03c3634.js:18979` for the `rootId` of the reply, and `chunk-w03c3634.js:20824` for `token_state`.
+[^v2327-cloud]: The program, `chunk-w03c3634.js:17936` for `list_cloud_sessions`, `chunk-w03c3634.js:17875` and `chunk-w03c3634.js:17936` for `get_cloud_session`, `chunk-w03c3634.js:17944` for `agent_id`, `chunk-w03c3634.js:17988` for `update_cloud_session`, and `chunk-w03c3634.js:19972` for `reload_connectors`.
+[^v2327-fork]: The program, `chunk-w03c3634.js:19638` for the request and `chunk-w03c3634.js:19675` for the reply.
+[^get-usage-fields]: The program, `chunk-yzbs7cc9.js:2449` (`skip_behaviors`) and `chunk-yzbs7cc9.js:2451` (`detached`).

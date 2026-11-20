@@ -70,7 +70,7 @@ A host starts `claude` with its own environment. When `CLAUDE_CODE_ENTRYPOINT` i
 
 The program and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 
-[^entrypoint-on-requests]: The program strings only, `chunk-xethrx83.js:978563`. Not run.
+[^entrypoint-on-requests]: The program strings only, `chunk-aq3ms068.js:46996` (the read, `CLAUDE_CODE_ENTRYPOINT_ON_REQUESTS`). Not run.
 [^heartbeat]: The `tengu_mellow_pulse` feature flag turns the heartbeat on.
 [^reply-gate]: Probe cases `env319b.reply-gate.unset`, `valid`, and `invalid`.
-[^no-subscriber]: The program, `chunk-nr7kzzye.js:11599`. Probe cases `env319b.stream-hold.spaced-false-0` (8 lines), `spaced-false-3000` (2 lines, the deltas joined), `spaced-true-3000`, `spaced-null-3000`, and `spaced-untold-3000` (8 lines each).
+[^no-subscriber]: The program, `chunk-c30das3s.js:614`. Probe cases `env319b.stream-hold.spaced-false-0` (8 lines), `spaced-false-3000` (2 lines, the deltas joined), `spaced-true-3000`, `spaced-null-3000`, and `spaced-untold-3000` (8 lines each).

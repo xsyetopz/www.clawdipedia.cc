@@ -163,21 +163,21 @@ Claude Code reads shell variables once at startup, so restart after a change. Cl
 
 ## Sources
 
-[^names]: The program, `chunk-7343wm3k.js:901` (the table of variable names), and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^bg-gateway]: The program, `chunk-fcdwedb2.js:18784` (the dispatcher sets it), `chunk-vn6cvxdx.js:712` (the session reads it), and `chunk-vn6cvxdx.js:1351` and `chunk-vn6cvxdx.js:1372` (the stop messages). Gate `tengu_bg_gateway_mark`, default on, at `chunk-vn6cvxdx.js:685`.
-[^https-agent]: The program, `chunk-0tagyyqy.js:8393-8404` (the signature), `chunk-0tagyyqy.js:10009-10010` (the log text), and `chunk-0tagyyqy.js:10301-10307` (the agent options).
-[^cross-cert]: The program, `chunk-0tagyyqy.js:8782` (the log text), `chunk-0tagyyqy.js:9772-9775` (the switch and the client certificate check), and `chunk-0tagyyqy.js:9472-9476` (the client certificate flag).
-[^self-named]: The program, `chunk-0tagyyqy.js:9556-9562` (the switch), `chunk-0tagyyqy.js:9657` (the log text), and `chunk-0tagyyqy.js:9472-9476` (the client certificate flag).
-[^bun-tls]: The program, `chunk-x7g75ktc.js:332-335` (the two TLS variable names) and `chunk-0tagyyqy.js:8385-8387` (a value other than `1` counts).
-[^cert-store]: The program, `chunk-0tagyyqy.js:8509-8519` (the variable), `chunk-0tagyyqy.js:9270-9277` (the startup messages), and `chunk-0tagyyqy.js:9740` (the message that names the variable).
-[^proxy-hosts]: The program, `chunk-0tagyyqy.js:10681-10684` (the proxy agent `lookup`), `chunk-jd85xpd4.js:146-149` (the WebSocket path), `chunk-jyh23dg9.js:150` (the host-managed list), and `chunk-tjre0aph.js:906-920` (the `Ignoring` log). Probe cases `print.env319a.proxy-resolves-hosts-from-settings.unset` and `.v1`.
-[^steady-heron]: The program, `chunk-56bhcxay.js:165998-166006`. Feature flag `tengu_steady_heron`.
-[^kurzweil]: The program, `chunk-56bhcxay.js:3209315` (feature flag `tengu_soft_kurzweil`) and `chunk-56bhcxay.js:3211129` (the first-party and `output_format` checks).
-[^fgts]: The program, `chunk-56bhcxay.js:1928407` (the setting) and `chunk-b60sxmve.js:38708` (the Amazon Bedrock host check).
+[^names]: The program, `chunk-gvhwnc7g.js:909` (the table of variable names, for example `CLAUDE_CODE_DISABLE_HTTPS_AGENT_KEEPING`), and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^bg-gateway]: The program, `chunk-6g525c94.js:1145` (the dispatcher sets it when `gatewayRouted` is true), `chunk-rqs3939j.js:631` (the variable name `CLAUDE_BG_GATEWAY_ROUTED`), `chunk-xqqrjdg5.js:20` (the session reads it), and `chunk-xqqrjdg5.js:61` and `chunk-xqqrjdg5.js:61` (the stop messages). Gate `tengu_bg_gateway_mark`, default on, at `chunk-xqqrjdg5.js:20`.
+[^https-agent]: The program, `chunk-2jhxnfds.js:8392-8394` (the signature, `CLAUDE_CODE_DISABLE_HTTPS_AGENT_KEEPING`), `chunk-2jhxnfds.js:10017-10018` (the log text), and `chunk-2jhxnfds.js:10305-10312` (the agent options, `keepAlive`).
+[^cross-cert]: The program, `chunk-2jhxnfds.js:8782` (the log text), `chunk-2jhxnfds.js:9780-9783` (the switch and the client certificate check), and `chunk-2jhxnfds.js:9480-9484` (the client certificate flag).
+[^self-named]: The program, `chunk-2jhxnfds.js:9564-9570` (the switch), `chunk-2jhxnfds.js:9665` (the log text), and `chunk-2jhxnfds.js:9480-9484` (the client certificate flag).
+[^bun-tls]: The program, `chunk-rqs3939j.js:395-398` (the two TLS variable names, `NODE_TLS_REJECT_UNAUTHORIZED` and `BUN_TLS_REFUSE_DISTRUSTED_KEYS`) and `chunk-2jhxnfds.js:8386` (a value other than `1` counts, `!== "1"`).
+[^cert-store]: The program, `chunk-2jhxnfds.js:8509-8519` (the variable), `chunk-2jhxnfds.js:9270-9277` (the startup messages), and `chunk-2jhxnfds.js:9748` (the message that names the variable).
+[^proxy-hosts]: The program, `chunk-2jhxnfds.js:10689-10692` (the proxy agent `lookup`), `chunk-3en7bpzn.js:147-150` (the WebSocket path), `chunk-kz4vm224.js:151` (the host-managed list), and `chunk-tsby2qjm.js:977-991` (the `Ignoring` log). Probe cases `print.env319a.proxy-resolves-hosts-from-settings.unset` and `.v1`.
+[^steady-heron]: The program, `chunk-hg1yqkjk.js:158390-158398`. Feature flag `tengu_steady_heron`.
+[^kurzweil]: The program, `chunk-hg1yqkjk.js:155515` (feature flag `tengu_soft_kurzweil`) and `chunk-hg1yqkjk.js:155608` (the first-party and `output_format` checks).
+[^fgts]: The program, `chunk-hg1yqkjk.js:108998` (the setting) and `chunk-cd3hqxcc.js:1886` (the Amazon Bedrock host check on `ANTHROPIC_BEDROCK_BASE_URL`).
 [^assume-first-party]: [Probes](../../reference/probes.md).
-[^ca-faults]: The program, `chunk-0tagyyqy.js:175598` (the ignored-file message), `chunk-0tagyyqy.js:175131` (the partial-use message), `chunk-0tagyyqy.js:196714` (the unreadable certificate count), and `chunk-0tagyyqy.js:163931` and `chunk-0tagyyqy.js:193372` (the failed read).
-[^name-constraint]: The program, `chunk-xethrx83.js:304545` (the code set and the message function) and `chunk-xethrx83.js:313380` (the error text that carries them).
-[^signature]: The program, `chunk-xethrx83.js:120953` (message start and IT team wording), `chunk-xethrx83.js:120168` (the code check), `chunk-xethrx83.js:308243` (the SSL certificate error wrapper), and `chunk-xethrx83.js:313588` (the error text).
-[^all-proxy]: The program, `chunk-0tagyyqy.js:214897` (`ALL_PROXY` as the only proxy), `chunk-0tagyyqy.js:215293` (the proxy URL check), and `chunk-0tagyyqy.js:215445` (the 25000 ms timeout and its error text).
-[^stream-idle-limit]: The program, `chunk-y5weakn8.js:18016` (the 5-minute and 30-minute values), `chunk-y5weakn8.js:18018` (the raised limit), and `chunk-y5weakn8.js:18645` (the request option). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
-[^scheme-repair]: The program, `chunk-t76jkbzv.js:10137`.
+[^ca-faults]: The program, `chunk-2jhxnfds.js:8992` (the ignored-file message), `chunk-2jhxnfds.js:8990` (the partial-use message), `chunk-2jhxnfds.js:9986` (the unreadable certificate count), and `chunk-2jhxnfds.js:8497` and `chunk-2jhxnfds.js:9820` (the failed read).
+[^name-constraint]: The program, `chunk-aq3ms068.js:13982` (the code set, `PERMITTED_VIOLATION`), `chunk-aq3ms068.js:13988` (the message function), and `chunk-aq3ms068.js:14200` (the error text that carries them, `verification failed`).
+[^signature]: The program, `chunk-0a2wm2a2.js:1778` (the message with the IT team wording, `authority key identifiers`), `chunk-aq3ms068.js:14105` (the code check, `CERT_SIGNATURE_FAILURE`), `chunk-aq3ms068.js:14106` (the SSL certificate error wrapper), and `chunk-aq3ms068.js:14202` (the error text, `verification failed`).
+[^all-proxy]: The program, `chunk-2jhxnfds.js:10922` (`ALL_PROXY` as the only proxy), `chunk-2jhxnfds.js:10941` (the proxy URL check), and `chunk-2jhxnfds.js:10946` (the 25000 ms timeout) and `chunk-2jhxnfds.js:10959` (its error text).
+[^stream-idle-limit]: The program, `chunk-76t3g1yn.js:18022` (the 5-minute and 30-minute values, `300000` and `1800000`), `chunk-76t3g1yn.js:18025` (the raised limit, `Math.min`), `chunk-76t3g1yn.js:18656` (the request option, `raisedBodyIdleTimeoutMs`), and `chunk-76t3g1yn.js:19225` (the variable, `CLAUDE_STREAM_IDLE_TIMEOUT_MS`).
+[^scheme-repair]: The program, `chunk-j3j6zah9.js:466`.

@@ -95,9 +95,9 @@ The folder where `.mcpb` bundles are unpacked is `<config>/plugins/mcpb`, and th
 
 `claude plugin uninstall` also deletes the files that Claude Code unpacked from the plugin's `.mcpb` and `.dxt` bundles. It keeps them while another plugin uses the same bundle. It does not delete them when `CLAUDE_CODE_PLUGIN_USE_ZIP_CACHE` is set. It also does not delete them when `CLAUDE_CODE_PLUGIN_MCPB_DIR` holds a usable folder. A folder is usable when its path is absolute, it is not the same as or inside the folder that Claude Code started in, and that starting folder is not inside it. Claude Code compares the paths after it resolves them, and the comparison ignores case. When the variable holds a relative path or an overlapping folder, Claude Code ignores it, uses `<config>/plugins/mcpb`, and deletes as usual.[^mcpb-uninstall]
 
-A plugin whose `plugin.json` has a malformed display field, such as `author` or `homepage`, loads with its hooks and MCP servers. Claude Code ignores the field. `/plugin` and `claude plugin list` show a note that names the field. The note says to disable the plugin from `/plugin` if you did not expect it to run, unless your organization requires it. Administrators should check the plugins they deploy. To see the fault, run `claude plugin validate <path>`.[^field-ignored]
+A plugin whose `plugin.json` has a malformed display field, such as `author` or `homepage`, loads with its hooks and MCP servers. Claude Code ignores the field. The note shows only for an enabled plugin. It shows on the "Errors" tab and the plugin detail screen of `/plugin`, and in the output of `claude plugin list`. It names the field. The note says to disable the plugin from `/plugin` if you did not expect it to run, unless your organization requires it. Administrators should check the plugins they deploy. To see the fault, run `claude plugin validate <path>`.[^field-ignored]
 
-The `/plugin` questions to uninstall a plugin, remove a marketplace, and switch a plugin to another copy are lists. Move with the arrow keys and press Enter to answer, or press Esc to cancel. The keys `y`, `n`, and `u` no longer answer them.[^plugin-lists]
+The `/plugin` questions to uninstall a plugin, remove a marketplace, and switch a plugin to another copy are lists. Move with the arrow keys and press Enter to answer, or press Esc to cancel.[^plugin-lists]
 
 ## Validate JSON Report
 
@@ -154,19 +154,19 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^cowork]: The program, `chunk-j7t77bhv.js:1864`.
-[^install-json]: The program, `chunk-rdsw4yg9.js:17475`.
-[^restore]: The program, `chunk-bvs4hre6.js:22583`.
-[^validate]: The program, `chunk-yj3yxnry.js:4238` and `chunk-yj3yxnry.js:12112`.
-[^validate-report]: The program, the Mod API type file loaded at `chunk-wkbr4m8m.js:257`, published as `schemas/claude-code.d.ts`, `PluginValidateReport`, `PluginValidateFile`, `PluginValidateFinding`, `PluginValidateAdvice`, `PluginValidateDirectory`, `PluginValidateDirectoryFinding`, `PluginValidateGatingHook`, `PluginValidateWasm`, `PluginValidateWasmFile`, `PluginValidateModule`, `PluginValidateHook`, `PluginValidateMatcher`, `PluginValidateNouns`, `PluginValidateShader`, `PluginValidateShaderCost`, and `PluginProvides`.
-[^validate-ts]: The program, `chunk-eyez668q.js:60543`.
-[^engine-create]: The program, `chunk-eyez668q.js:44999`.
-[^agent-dep]: The program, `chunk-a3rr42d2.js:4473`.
-[^output-dir]: The program, `chunk-dt7h21xf.js:306050`.
-[^clone]: The program, `chunk-56bhcxay.js:5226365`.
-[^mcpb]: The program, `chunk-md9n15jc.js:3007`.
-[^mcpb-uninstall]: The program, `chunk-md9n15jc.js:3007`, `chunk-9nv3z5ae.js:23663`, and `chunk-md9n15jc.js:3094`. The program checks the variable with `isAbsolute` and with a containment test on the resolved paths (`chunk-vznb3hn3.js:21345`) against the starting folder. The function lists the unpacked bundles, takes the plugin id off each, and deletes a bundle when no other plugin id is left.
-[^field-ignored]: The program, `chunk-56bhcxay.js:5507187` for the load, and `chunk-a3rr42d2.js:20037` and `chunk-a3rr42d2.js:24853` for the note and its advice. The same note says "Earlier versions of Claude Code refused this plugin". The load rule sits behind a server flag.
-[^plugin-lists]: The program, `chunk-ejmpea1g.js:113847` (remove marketplace), `chunk-ejmpea1g.js:194089` (switch copy), and `chunk-ejmpea1g.js:196136` (uninstall). The lists turn off the printable-key shortcuts, and the cancel entry has the focus at the start.
-[^unsafe-paths]: The program, `chunk-yj3yxnry.js:5449` and `chunk-p23hnf0p.js:3532`. The loading side is on [Plugin Loading](loading.md#unsafe-paths-and-links).
-[^eval-327]: The program, `chunk-20bv8pca.js:329130`.
+[^cowork]: The program, `chunk-71qhfr8d.js:127`.
+[^install-json]: The program, `chunk-d32c1n9p.js:852`.
+[^restore]: The program, `chunk-kx248ng6.js:1203`.
+[^validate]: The program, `chunk-wqygnvsa.js:146` and `chunk-wqygnvsa.js:491`.
+[^validate-report]: The program, `chunk-kx248ng6.js:744` (the validate command, `cli_plugin_validate`), the Mod API type file published as `schemas/claude-code.d.ts` (`PluginValidateReport` at line 9986), `PluginValidateReport`, `PluginValidateFile`, `PluginValidateFinding`, `PluginValidateAdvice`, `PluginValidateDirectory`, `PluginValidateDirectoryFinding`, `PluginValidateGatingHook`, `PluginValidateWasm`, `PluginValidateWasmFile`, `PluginValidateModule`, `PluginValidateHook`, `PluginValidateMatcher`, `PluginValidateNouns`, `PluginValidateShader`, `PluginValidateShaderCost`, and `PluginProvides`.
+[^validate-ts]: The program, `chunk-wae3ndpy.js:2887` (`typeCheckInChild`), `chunk-wae3ndpy.js:2916` (the findings become `warnings`), and `chunk-wae3ndpy.js:2946` (the "not type-checked" note).
+[^engine-create]: The program, `chunk-wae3ndpy.js:2186`.
+[^agent-dep]: The program, `chunk-mf7vnf0k.js:142`.
+[^output-dir]: The program, `chunk-ty48xb2f.js:13532`.
+[^clone]: The program, `chunk-hg1yqkjk.js:227505` (the message "Claude Code runs this clone with terminal prompts and askpass programs turned off").
+[^mcpb]: The program, `chunk-38jz3ehd.js:176` (`mcpb` under the config folder) and `chunk-38jz3ehd.js:180` (`CLAUDE_CODE_PLUGIN_MCPB_DIR`).
+[^mcpb-uninstall]: The program, `chunk-6h88xj3m.js:1265` for the uninstall function (`$976585`). It returns early when `CLAUDE_CODE_PLUGIN_USE_ZIP_CACHE` is set (`chunk-6h88xj3m.js:699` to `chunk-6h88xj3m.js:701`) or when the variable holds a usable folder. The `.mcpb` and `.dxt` check is at `chunk-6h88xj3m.js:917`. The program checks `CLAUDE_CODE_PLUGIN_MCPB_DIR` with `isAbsolute` and with a containment test on the resolved paths against the starting folder (`chunk-38jz3ehd.js:179` to `chunk-38jz3ehd.js:186`). The test (`$f077cd`) is at `chunk-ca90c7br.js:1297` and ignores case by default (`foldCase`, `chunk-ca90c7br.js:1280`). The function lists the unpacked bundles, takes the plugin id off each (`pluginIds`, `chunk-6h88xj3m.js:1288`), and deletes a bundle when no other plugin id is left.
+[^field-ignored]: The program, `chunk-hg1yqkjk.js:240718` for the load (`ignoredFields`, and the warning "the plugin still loads" at `chunk-hg1yqkjk.js:240701`), and `chunk-mf7vnf0k.js:577` and `chunk-mf7vnf0k.js:666` for the note and its advice. The same note says "Earlier versions of Claude Code refused this plugin". The load rule sits behind a server flag (`refusesDisplayFaults`, `chunk-hg1yqkjk.js:240681`).
+[^plugin-lists]: The program, `chunk-4g68nm9m.js:7538` (remove marketplace), `chunk-4g68nm9m.js:12204` (switch copy), and `chunk-4g68nm9m.js:12353` (uninstall). The lists set `disablePrintableKeybindings`, and the cancel entry has the focus at the start (`focus` and `defaultFocusValue`).
+[^unsafe-paths]: The program, `chunk-q02wqt75.js:185` ("resolves outside the plugin's folder") and `chunk-hg1yqkjk.js:221449`. The loading side is on [Plugin Loading](loading.md#unsafe-paths-and-links).
+[^eval-327]: The program, `chunk-ty48xb2f.js:12684` (`plugin_hook_approvals`, read per run), `chunk-ty48xb2f.js:12688` (the notice for refused calls, `refused`) and `chunk-ty48xb2f.js:12693` (the notice for calls that the hook approved, `approved`).

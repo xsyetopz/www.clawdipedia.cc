@@ -76,8 +76,8 @@ What `$.prompt.fill` resolves to: whether the box took the text, and the box aft
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `isFilled` | <Documented /> | True once the box holds the text. False where no box could take it or a hook kept it out (PromptFillResult). | Type: `boolean`. |
-| `refusal` | <Documented /> | Why the engine refused the text: `no_composer` (no box) or `dialog` (a dialog holds the keys). A refusal by a hook carries no cause. | Type: `'no_composer' \| 'dialog'`. Optional. |
+| `isFilled` | <Documented /> | True once the box holds the text. False where no box could take it, no app answered, or a hook kept it out (PromptFillResult). | Type: `boolean`. |
+| `refusal` | <Documented /> | Why the engine refused the text: `no_composer` (no box), `dialog` (a dialog holds the keys), or `unanswered` (an app was asked and none answered, so the text may have landed). A refusal by a hook carries no cause. | Type: `'no_composer' \| 'dialog' \| 'unanswered'`. Optional.[^fill-unanswered] |
 | `text` | <Documented /> | The draft after the fill. It is unchanged when `isFilled` is false. It is `''` where no box is drawn or the caller may not read it (see above). | Type: `string`. |
 | `cursor` | <Documented /> | Where the person types next: an offset into `text`. It is where the `cursor` of the call put it. Without that, it is past the text of the fill for `insert`, and at the end for `replace` and `append`. | Type: `number`. |
 
@@ -109,8 +109,8 @@ What a `prompt.fill` hook returns, and what `next(e)` resolves to: whether the t
 
 | Field | Status | What it is for | Type and limits |
 | --- | --- | --- | --- |
-| `isFilled` | <Documented /> | True once the box holds the text. False where no box can take it (a dialog holds the keys, a headless session has none). | Type: `boolean`. A hook that answers `{ isFilled: false }` without `next` keeps the text out. |
-| `refusal` | <Documented /> | Why the engine refused the text: `no_composer` (no prompt box) or `dialog` (a dialog holds the keys). A refusal by a hook carries none. Treat an absent cause as unknown. | Type: `'no_composer' \| 'dialog'`. Optional. |
+| `isFilled` | <Documented /> | True once the box holds the text. False where no box can take it (a dialog holds the keys, a headless session has none, or no app answered). | Type: `boolean`. A hook that answers `{ isFilled: false }` without `next` keeps the text out. |
+| `refusal` | <Documented /> | Why the engine refused the text: `no_composer` (no prompt box), `dialog` (a dialog holds the keys), or `unanswered` (an app was asked and none answered, so the text may have landed). A refusal by a hook carries none. Treat an absent cause as unknown. | Type: `'no_composer' \| 'dialog' \| 'unanswered'`. Optional.[^fill-unanswered] |
 
 ### `PromptMedia`
 
@@ -285,5 +285,6 @@ What a `prompt.submit` hook returns, and what `next(e)` resolves to: the prompt 
 
 ## Sources
 
-[^shared-sections]: The program, `chunk-56bhcxay.js:2891246` and `chunk-56bhcxay.js:2892500` (the shared sections are plain entries of the compose list; only session sections get a decision). The type file names `lean_body` in `PromptComposeSection`.
-[^media-hold]: The program, `chunk-601pwdc9.js:3447`, gives each attachment its `id` before the `prompt.submit` hooks run (cap 4194304 bytes, at `chunk-yg8ff21f.js:198`). `chunk-56bhcxay.js:4961217` and `chunk-56bhcxay.js:4961290` answer only when the hook in flight lists that `id` (`chunk-56bhcxay.js:5074781`). No step checks where the mod was installed.
+[^shared-sections]: The program, `chunk-hg1yqkjk.js:138504` and `chunk-hg1yqkjk.js:138504` (`lean_body`, in the shared list; the shared sections are plain entries of the compose list; only session sections get a decision). The type file names `lean_body` in `PromptComposeSection`.
+[^media-hold]: The program, `chunk-dn6qb495.js:150`, gives each attachment its `id` before the `prompt.submit` hooks run (cap `4194304` bytes, at `chunk-ydjn02g5.js:5`). `chunk-hg1yqkjk.js:213794` and `chunk-hg1yqkjk.js:213788` answer only when the hook in flight lists that `id` (`chunk-hg1yqkjk.js:214554`). No step checks where the mod was installed.
+[^fill-unanswered]: The program, `chunk-hg1yqkjk.js:212910` (`refusal: "unanswered"` when no app answered).

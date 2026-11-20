@@ -123,11 +123,11 @@ Claude Code sets some variables on this page for remote sessions and refreshes t
 
 ## Sources
 
-[^variable-names]: The program (variable names read in `chunk-xethrx83.js:668108`) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^delegated-models]: The program, read at `chunk-56bhcxay.js:1363685` and set at `chunk-gv1b3n3g.js:251015`.
-[^delegated-direct]: The program, read at `chunk-56bhcxay.js:1362812`, background check at `chunk-avyyrx5p.js:78817`, set at `chunk-gv1b3n3g.js:250616`.
-[^local-oauth]: The program, `chunk-vhzbpgjm.js:415`.
-[^use-local]: The program, `chunk-hfmp90ez.js:23787` and `chunk-7nh7p3mh.js:9062`.
-[^use-staging]: The program, `chunk-hfmp90ez.js:23787`.
-[^key-and-profile]: The program, `chunk-4d4nzary.js:74552` and `chunk-4d4nzary.js:74661` (the notice and the steps) and `chunk-xethrx83.js:581301` (the `/config` step text). The shorter `Both <A> and <B> set` notice shows for other pairs of sources, `chunk-4d4nzary.js:75014`.
-[^scopes]: The program, `chunk-x7g75ktc.js:15518`.
+[^variable-names]: The program (variable names read in `chunk-aq3ms068.js:31490` (for example `CLAUDE_CODE_USER_DELEGATED_SESSION_DIRECT_API`)) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^delegated-models]: The program, read and defaulted at `chunk-avkdw0az.js:1220` (`CLAUDE_CODE_USER_DELEGATED_SESSION_ALLOWED_CHECK_MODELS`, the 600000 ms limit) and set at `chunk-3kp5jwr6.js:11767`.
+[^delegated-direct]: The program, read at `chunk-avkdw0az.js:1182` (`CLAUDE_CODE_USER_DELEGATED_SESSION_DIRECT_API`), background check at `chunk-7kvz9y39.js:3673`, set at `chunk-3kp5jwr6.js:11749`.
+[^local-oauth]: The program, `chunk-3q5b9bqc.js:90`.
+[^use-local]: The program, `chunk-zyv1p0zv.js:685` and `chunk-4aw737ds.js:535`.
+[^use-staging]: The program, `chunk-zyv1p0zv.js:687`.
+[^key-and-profile]: The program, `chunk-h2e446cb.js:4884` and `chunk-h2e446cb.js:4884` (the notice and the steps) and `chunk-aq3ms068.js:26899` (the `/config` step text). The shorter `Both <A> and <B> set` notice shows for other pairs of sources, `chunk-h2e446cb.js:4884`.
+[^scopes]: The program, `chunk-rqs3939j.js:748`.

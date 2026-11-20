@@ -16,7 +16,7 @@ Official page: [Plugin Loading Reference](https://code.claude.com/docs/en/plugin
 | --- | --- | --- | --- |
 | `~/.claude/plugins/` | <Documented /> | The plugins root. | `CLAUDE_CODE_PLUGIN_CACHE_DIR` sets this parent folder, not the cache itself. |
 | `plugins/data/<id>/` | <Documented /> | The folder behind `${CLAUDE_PLUGIN_DATA}`. | First use makes it. It survives updates. In `<id>`, every character other than letters, digits, `_`, and `-` becomes `-`. The last uninstall removes it, unless you use `--keep-data`. |
-| `plugins/cache/<marketplace>/<plugin>/<version>/` | <Undocumented /> | One copy of each installed version. | Claude Code parses a cache path with these three parts this way. It excludes a `.zip` version.[^cache-path] |
+| `plugins/cache/<marketplace>/<plugin>/<version>/` | <Undocumented /> | One copy of each installed version. | Claude Code parses a cache path with these three parts this way. It accepts only a directory at that path.[^cache-path] |
 | `.orphaned_at`, `.in_use`, `.gcs-sha`, `.links_materialized` | <Documented /> | State marker files in a version folder. | Claude Code writes `.orphaned_at` only inside the cache root, and not on a symlinked version. |
 | `plugins/installed_plugins.json` | <Undocumented /> | Install records. | Fields: `version`, `installedAt`, `lastUpdated`, `installPath`, `gitCommitSha`, `resolvedVersion`, `auto` (set for a dependency install). |
 | `plugins/known_marketplaces.json` | <Undocumented /> | Marketplace records. | Fields: `source`, `installLocation`, `lastUpdated`, `autoUpdate`. Clones live in `plugins/marketplaces/<name>`. |
@@ -53,7 +53,7 @@ Official page: [Environment Variables](https://code.claude.com/docs/en/env-vars)
 | `CLAUDE_CODE_PLUGIN_KEEP_MARKETPLACE_ON_FAILURE` | <Documented /> | Keeps the old checkout when a refresh fails. | Set to `1`. |
 | `CLAUDE_CODE_PLUGIN_PREFER_HTTPS` | <Documented /> | Clones GitHub shorthand over HTTPS. | Set to `1`. |
 | `CLAUDE_CODE_PLUGIN_SEED_DIR` | <Documented /> | Gives read-only seed folders. | Registers marketplaces at start. Uses the plugins already cached there. |
-| `CLAUDE_CODE_PLUGIN_DIR_WATCH` | <Documented /> | Reloads a mod when its file changes. Also writes TypeScript types into the mod folder: `.claude-plugin/types/` and `tsconfig.json`. | On by default in interactive sessions and off in print mode for `--plugin-dir` folders. `1` turns it on in print mode. `0` turns it off everywhere. Print mode reloads mods in `.claude/skills` unless this is `0`.[^watch] |
+| `CLAUDE_CODE_PLUGIN_DIR_WATCH` | <Documented /> | Reloads a mod when its file changes. Also writes TypeScript types into the mod folder: `.claude-plugin/types/` and `tsconfig.json`. | On by default in interactive sessions and off in print mode for `--plugin-dir` folders. `1` turns it on in print mode. `0` turns it off everywhere. Print mode also watches `skills-dir` plugins that have a `modulePath` unless this is `0`.[^watch] |
 | `FORCE_AUTOUPDATE_PLUGINS` | <Documented /> | Updates plugins even when `DISABLE_AUTOUPDATER` is set. | Set to `1`. |
 | `CLAUDE_CODE_SYNC_PLUGINS`, `CLAUDE_CODE_SYNC_PLUGIN_INSTALL` and their `_TIMEOUT_MS` forms | <Documented /> | Sync claude.ai plugins in headless runs. | The exact effects are not documented. In print mode, `CLAUDE_CODE_SYNC_PLUGIN_INSTALL` makes the stream carry [`plugin_install`](../headless/stream-json.md) messages. |
 | `CLAUDE_CODE_PLUGIN_USE_ZIP_CACHE`, `CLAUDE_CODE_PLUGIN_BINARY_ASSETS`, `CLAUDE_CODE_PLUGIN_ATTRIBUTION`, `CLAUDE_CODE_PLUGIN_ARCHIVE_URL`, `CLAUDE_CODE_PLUGIN_NAME` | <Undocumented /> | Plugin env names found in the program. | Only the names are known. A message in the program mentions "zip cache mode".[^zip] |
@@ -121,13 +121,13 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^undoc]: The program, for the rows marked <Undocumented />: `chunk-m4k9cyf3.js:1509`, `chunk-7343wm3k.js:16704`, and `chunk-56bhcxay.js:926779`.
-[^cache-path]: The program, `chunk-56bhcxay.js:926779` and `chunk-56bhcxay.js:932323`.
-[^registry]: The program, `chunk-m4k9cyf3.js:1509`.
-[^bash-bin]: The program, `chunk-56bhcxay.js:3821492` (the `bin/` folders that go on `PATH`). Probe case `print.plugindata.bash-bin`.
-[^watch]: The program, `chunk-9nv3z5ae.js:9741` for the default, `chunk-56bhcxay.js:5115300` for the type files that a reload writes, `chunk-56bhcxay.js:5115879` for the `tsconfig.json`, and `chunk-56bhcxay.js:5118119` for the `.claude/skills` watch in print mode. Probe cases `print.cli319.plugin-dir-watch.unset`, `print.cli319.plugin-dir-watch.v1`, `pty.cli319.plugin-dir-watch.unset`, and `pty.cli319.plugin-dir-watch.v0`.
-[^zip]: The program, `chunk-7343wm3k.js:16704`, `chunk-7343wm3k.js:34679`, `chunk-yvbbcep1.js:32311`, and `chunk-2svep2wm.js:2845`.
-[^not-installed]: The program, `chunk-a3rr42d2.js:14734`.
-[^lsp]: The program, `chunk-a3rr42d2.js:12500`.
-[^unsafe-paths]: The program, `chunk-56bhcxay.js:804423` and `chunk-56bhcxay.js:804665` (the path and link check), `chunk-56bhcxay.js:4688391` (the MCPB source), `chunk-56bhcxay.js:4688696` (the MCP source), and `chunk-56bhcxay.js:5109173` (the `validate` text for a file that resolves outside the plugin folder).
-[^agents-327]: The program, `chunk-2v0j7fr6.js:20100` (the merge at load), `chunk-ntraaf3w.js:8418` (the merge at reload), and `chunk-ntraaf3w.js:8679` (the reload on resume).
+[^undoc]: The program, for the rows marked <Undocumented />: `chunk-v1ke29af.js:72` (`inUseSweep`), `chunk-gvhwnc7g.js:451` (`CLAUDE_CODE_PLUGIN_USE_ZIP_CACHE`), and `chunk-hg1yqkjk.js:238765` (`a3.length !== 3`).
+[^cache-path]: The program, `chunk-hg1yqkjk.js:238765` (`a3.length !== 3`, the path must have three parts) and `chunk-hg1yqkjk.js:238772` (`isDirectory`, the path must be a directory).
+[^registry]: The program, `chunk-v1ke29af.js:72` (`inUseSweep`).
+[^bash-bin]: The program, `chunk-hg1yqkjk.js:248011` (the `bin/` folders that go on `PATH`). Probe case `print.plugindata.bash-bin`.
+[^watch]: The program, `chunk-6h88xj3m.js:510` for the default, `chunk-hg1yqkjk.js:221441` for the type files (`./types/index.d.ts`), `chunk-hg1yqkjk.js:221502` for the `tsconfig.json` (`tsconfig`), `chunk-hg1yqkjk.js:221166` for the plugins that have a `modulePath` and a `skills-dir` source (`chunk-t39fw2cy.js:4249`), and `chunk-hg1yqkjk.js:221944` for the print mode watch (`plugin_dir_watch_headless_skills`). Probe cases `print.cli319.plugin-dir-watch.unset`, `print.cli319.plugin-dir-watch.v1`, `pty.cli319.plugin-dir-watch.unset`, and `pty.cli319.plugin-dir-watch.v0`.
+[^zip]: The program, `chunk-gvhwnc7g.js:445` and `chunk-gvhwnc7g.js:451` (`CLAUDE_CODE_PLUGIN_BINARY_ASSETS`, `CLAUDE_CODE_PLUGIN_USE_ZIP_CACHE`), `chunk-tsby2qjm.js:648` (`CLAUDE_CODE_PLUGIN_ATTRIBUTION`), `chunk-c9fmfd5h.js:2245` (`CLAUDE_CODE_PLUGIN_NAME`, `CLAUDE_CODE_PLUGIN_ARCHIVE_URL`), and `chunk-emh2g06d.js:160` ("zip cache mode").
+[^not-installed]: The program, `chunk-mf7vnf0k.js:459`.
+[^lsp]: The program, `chunk-mf7vnf0k.js:427`.
+[^unsafe-paths]: The program, `chunk-hg1yqkjk.js:82358` and `chunk-hg1yqkjk.js:82358` (the path and link check), `chunk-hg1yqkjk.js:200254` (the MCPB source), `chunk-hg1yqkjk.js:200254` (the MCP source), and `chunk-q02wqt75.js:185` (the `"resolves outside the plugin's folder"` text of `validate` for a file that resolves outside the plugin folder).
+[^agents-327]: The program, `chunk-mjwpm8mh.js:8149` (the merge at load), `chunk-jgr0v596.js:475` (the merge at reload, `cliAgents`), and `chunk-jgr0v596.js:478` (the reload on resume, `cliAgents`).
